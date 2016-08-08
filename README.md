@@ -1,40 +1,38 @@
 # Welcome to PortAIO v2!
+
+I'd like to welcome everyone to PortAIO v2, a complete reboot of PortAIO. We took the time to re-port every single script we had in the older version of PortAIO and then some! We have a whole new common that supports L#'s Menu, TargetSelector, Orbwalker, and Prediction.
+
 - https://github.com/berbb/PortAIO is the official GitHub.
 - https://discord.gg/0zNgmm6ziPDoOfbZ is the official PortAIO discord channel.
 
-###### - Berb : Creator of project, porter, github maker maintainer guy, bug fixer and developer
-###### - Muse30 : Active Porter, supporter, bug fixer and developer, just think of him as a Berb v2
-###### - CttBot : Active Porter, supporter, bug fixer and developer, just think of him as a Berb v2
+###### - Berb : Creator of PortAIO, he basically maintains everything (porting, bug fixing, managing discord/git)
+###### - CttBot : A PortAIO dev that developed/ported the common that we use today, without him none of PortAIO v2 would be possible.
 ###### - SidaRevamped : Active Supporter and bug fixer
+###### - Muse30 : Currenlty MIA (Come back plsss we miss you)
 
-### - Installation Instructions
+---
+
+## - Installation Instructions (This may change in the future)
 #### 1. Install and make sure PortAIO.Common is installed. The link for PortAIO.Common is here : https://github.com/berbb/PortAIO-Common
 #### 1a. If you get compile errors on PortAIO.Common go here : https://www.elobuddy.net/topic/21274-installing-ms-build-tools-140/
 #### 2. Install PortAIO like any other addon.
 
 ---
 
-### - How to report Bugs/Suggestions/Requests/Comments
-1. Make a GitHub account if you don't have one already.
-2. Sign in and go to : https://github.com/berbb/PortAIO/issues
-3. Make a new issue and state the title and what you need/want to report.
+## - How to report Bugs/Suggestions/Requests/Comments
+1. Issues are currently disabled as we go into a major overhaul of certain things (mainly the common).
 ##### Don't buy ported addons, ask via an issue and we'll do it for free.
 
 ---
 
-### - Crashing & Other Bugs
-Make sure you're playing on BORDERLESS and not FULLSCREEN.
-
-If the addon you are using isn't working, clear your AppData. If it doesn't work, make a new issue.
-
-### - Frequently Asked Questions :
+## - Frequently Asked Questions :
 1. What is a port? : A port is code used from another script from a completely different scripting platform and making it compatible in our case, EloBuddy.
 
-2. Does PortAIO support all the champions? : Yes, we support all 131 champions with the last champion being Taliyah (as of 6.14)
+2. Does PortAIO support all the champions? : Yes, we support all 131 champions with the last champion being Taliyah (as of 6.15).
 
 3. Will PortAIO ever have BoL scripts? : As of now no, converting code from LUA to C# is fairly difficult but its currently not any where on our agenda.
 
-4. What is a dual-port? : The dual-port feature allows for you to change the port you are using for your champion/utility, as of 6.14 patch the dual-port feature only supports 85 champions and 4 utility scripts.
+4. What is a dual-port? : The dual-port feature allows for you to change the port you are using for your champion/utility, as of 6.15 patch the dual-port feature only supports 111 champions and 4 utility scripts.
 
 5. Why is PortAIO not on EB? : The rules forbid ported addons on their forums but when I started this project the rule wasn't present, what does that tell you?
 
