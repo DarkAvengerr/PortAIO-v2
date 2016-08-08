@@ -1,0 +1,431 @@
+﻿using System;
+using System.Linq;
+using LeagueSharp;
+using LeagueSharp.Common;
+using SharpDX;
+using SebbyLib;
+using EloBuddy;
+
+namespace OneKeyToWin_AIO_Sebby
+{
+    class Lucian
+    {
+        private Menu Config = Program.Config;
+        public static SebbyLib.Orbwalking.Orbwalker Orbwalker = Program.Orbwalker;
+
+        private Spell E, Q, Q1, R, R1, W, W1;
+
+        private float QMANA = 0, WMANA = 0, EMANA = 0, RMANA = 0;
+        private bool passRdy = false;
+        private float castR = Game.Time;
+        public AIHeroClient Player {get { return ObjectManager.Player; }}
+        public static Core.OKTWdash Dash;
+
+        public void LoadOKTW()
+        {
+            Q = new Spell(SpellSlot.Q, 675f);
+            Q1 = new Spell(SpellSlot.Q, 900f);
+            W = new Spell(SpellSlot.W, 1100);
+            E = new Spell(SpellSlot.E, 475f);
+            R = new Spell(SpellSlot.R, 1200f);
+            R1 = new Spell(SpellSlot.R, 1200f);
+
+            Q1.SetSkillshot(0.40f, 10f, float.MaxValue, true, SkillshotType.SkillshotLine);
+            Q.SetTargetted(0.25f, 1400f);
+            W.SetSkillshot(0.30f, 80f, 1600f, true, SkillshotType.SkillshotLine);
+            R.SetSkillshot(0.1f, 110, 2800, true, SkillshotType.SkillshotLine);
+            R1.SetSkillshot(0.1f, 110, 2800, false, SkillshotType.SkillshotLine);
+
+            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("onlyRdy", "Draw only ready spells", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("qRange", "Q range", true).SetValue(false));
+            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("wRange", "W range", true).SetValue(false));
+            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("eRange", "E range", true).SetValue(false));
+            Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("rRange", "R range", true).SetValue(false));
+
+            Config.SubMenu(Player.ChampionName).SubMenu("Q Config").AddItem(new MenuItem("autoQ", "Auto Q", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Q Config").AddItem(new MenuItem("harasQ", "Use Q on minion", true).SetValue(true));
+
+            Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("autoW", "Auto W", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("ignoreCol", "Ignore collision", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("wInAaRange", "Cast only in AA range", true).SetValue(true));
+
+            Config.SubMenu(Player.ChampionName).SubMenu("E Config").AddItem(new MenuItem("autoE", "Auto E", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("E Config").AddItem(new MenuItem("slowE", "Auto SlowBuff E", true).SetValue(true));
+            Dash = new Core.OKTWdash(E);
+
+            Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("autoR", "Auto R", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("useR", "Semi-manual cast R key", true).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press))); //32 == space
+
+            Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("farmQ", "LaneClear Q", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("farmW", "LaneClear W", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("Mana", "LaneClear Mana", true).SetValue(new Slider(80, 100, 30)));
+            foreach (var enemy in HeroManager.Enemies)
+                Config.SubMenu(Player.ChampionName).SubMenu("Harras").AddItem(new MenuItem("harras" + enemy.ChampionName, enemy.ChampionName).SetValue(true));
+            
+            Game.OnUpdate += Game_OnGameUpdate;
+            Drawing.OnDraw += Drawing_OnDraw;
+            SebbyLib.Orbwalking.AfterAttack += afterAttack;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Spellbook.OnCastSpell +=Spellbook_OnCastSpell;
+        }
+
+        private void Spellbook_OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
+        {
+            if (args.Slot == SpellSlot.Q || args.Slot == SpellSlot.W || args.Slot == SpellSlot.E)
+            {
+                passRdy = true;
+            }
+        }
+       
+        private void afterAttack(AttackableUnit unit, AttackableUnit target)
+        {
+            if (!unit.IsMe)
+                return;
+        }
+
+        private void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (sender.IsMe)
+            {
+                if (args.SData.Name == "LucianW" || args.SData.Name == "LucianE" || args.SData.Name == "LucianQ")
+                {
+                    passRdy = true;
+                }
+                else
+                    passRdy = false;
+
+                if (args.SData.Name == "LucianR")
+                    castR = Game.Time;
+            }
+        }
+
+        private void Game_OnGameUpdate(EventArgs args)
+        {
+            if (Player.IsChannelingImportantSpell() && (int)(Game.Time * 10) % 2 == 0)
+            {
+                Console.WriteLine("chaneling");
+                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+            }
+
+            if (R1.LSIsReady() && Game.Time - castR > 5 && Config.Item("useR", true).GetValue<KeyBind>().Active)
+            {
+                var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
+                if (t.LSIsValidTarget(R1.Range))
+                {
+                    R1.Cast(t);
+                    return;
+                }
+            }
+            if (Program.LagFree(0))
+            {
+                SetMana();
+                
+            }
+            if (Program.LagFree(1) && Q.LSIsReady() && !passRdy && !SpellLock )
+                LogicQ();
+            if (Program.LagFree(2) && W.LSIsReady() && !passRdy && !SpellLock && Config.Item("autoW", true).GetValue<bool>())
+                LogicW();
+            if (Program.LagFree(3) && E.LSIsReady() )
+                LogicE();
+            if (Program.LagFree(4))
+            {
+                if (R.LSIsReady() && Game.Time - castR > 5 && Config.Item("autoR", true).GetValue<bool>())
+                    LogicR();
+
+                if (!passRdy && !SpellLock)
+                    farm();
+            }
+        }
+
+        private double AaDamage(AIHeroClient target)
+        {
+            if (Player.Level > 12)
+                return Player.LSGetAutoAttackDamage(target) * 1.3;
+            else if (Player.Level > 6)
+                return Player.LSGetAutoAttackDamage(target) * 1.4;
+            else if (Player.Level > 0)
+                return Player.LSGetAutoAttackDamage(target) * 1.5;
+            return 0;
+        }
+
+        private void LogicQ()
+        {
+            var t = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
+            var t1 = TargetSelector.GetTarget(Q1.Range, TargetSelector.DamageType.Physical);
+            if (t.LSIsValidTarget(Q.Range))
+            {
+                if (OktwCommon.GetKsDamage(t, Q) + AaDamage(t) > t.Health)
+                    Q.Cast(t);
+                else if (Program.Combo && Player.Mana > RMANA + QMANA)
+                    Q.Cast(t);
+                else if (Program.Farm && Config.Item("harras" + t.ChampionName).GetValue<bool>() && Player.Mana > RMANA + QMANA + EMANA + WMANA)
+                    Q.Cast(t);
+            }
+            else if ((Program.Farm || Program.Combo) && Config.Item("harasQ", true).GetValue<bool>() && t1.LSIsValidTarget(Q1.Range) && Config.Item("harras" + t1.ChampionName).GetValue<bool>() && Player.LSDistance(t1.ServerPosition) > Q.Range + 100)
+            {
+                if (Program.Combo && Player.Mana < RMANA + QMANA)
+                    return;
+                if (Program.Farm && Player.Mana < RMANA + QMANA + EMANA + WMANA )
+                    return;
+                if (!OktwCommon.CanHarras())
+                    return;
+                var prepos = Prediction.GetPrediction(t1, Q1.Delay); 
+                if ((int)prepos.Hitchance < 5)
+                    return;
+                var distance = Player.LSDistance(prepos.CastPosition);
+                var minions = Cache.GetMinions(Player.ServerPosition, Q.Range);
+                
+                foreach (var minion in minions.Where(minion => minion.LSIsValidTarget(Q.Range)))
+                {
+                    if (prepos.CastPosition.LSDistance(Player.Position.LSExtend(minion.Position, distance)) < 25)
+                    {
+                        Q.Cast(minion);
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void LogicW()
+        {
+            var t = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
+            if (t.LSIsValidTarget())
+            {
+                if (Config.Item("ignoreCol", true).GetValue<bool>() && SebbyLib.Orbwalking.InAutoAttackRange(t))
+                    W.Collision=false;
+                else
+                    W.Collision=true;
+
+                var qDmg = Q.GetDamage(t);
+                var wDmg = OktwCommon.GetKsDamage(t, W);
+
+                if (SebbyLib.Orbwalking.InAutoAttackRange(t))
+                {
+                    qDmg += (float)AaDamage(t);
+                    wDmg += (float)AaDamage(t);
+                }
+
+                if (wDmg > t.Health) 
+                    Program.CastSpell(W, t);
+                else if (wDmg + qDmg > t.Health && Q.LSIsReady() && Player.Mana > RMANA + WMANA + QMANA)
+                    Program.CastSpell(W, t);
+
+                var orbT = Orbwalker.GetTarget() as AIHeroClient;
+                if (orbT == null)
+                {
+                    if (Config.Item("wInAaRange", true).GetValue<bool>())
+                    {
+                        return;
+                    }
+                }
+                else if (orbT.LSIsValidTarget())
+                {
+                    t = orbT;
+                }
+
+                
+                if (Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Combo && Player.Mana > RMANA + WMANA + EMANA + QMANA)
+                    Program.CastSpell(W, t);
+                else if (Program.Farm && Config.Item("harras" + t.ChampionName).GetValue<bool>() && !Player.LSUnderTurret(true) && Player.Mana > Player.MaxMana * 0.8 && Player.Mana > RMANA + WMANA + EMANA + QMANA + WMANA)
+                    Program.CastSpell(W, t);
+                else if ((Program.Combo || Program.Farm) && Player.Mana > RMANA + WMANA + EMANA)
+                {
+                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(W.Range) && !OktwCommon.CanMove(enemy)))
+                        W.Cast(enemy, true);
+                }
+            }
+        }
+        
+        private void LogicR()
+        {
+            var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
+
+            if (t.LSIsValidTarget(R.Range) && t.LSCountAlliesInRange(500) == 0 && OktwCommon.ValidUlt(t) && !SebbyLib.Orbwalking.InAutoAttackRange(t))
+            {
+                var rDmg = R.GetDamage(t,1) * (10 + 5 * R.Level);
+
+                var tDis = Player.LSDistance(t.ServerPosition);
+                if (rDmg * 0.8 > t.Health && tDis < 700 && !Q.LSIsReady())
+                    R.Cast(t, true, true);
+                else if (rDmg * 0.7 > t.Health && tDis < 800)
+                    R.Cast(t, true, true);
+                else if (rDmg * 0.6 > t.Health && tDis < 900)
+                    R.Cast(t, true, true);
+                else if (rDmg * 0.5 > t.Health && tDis < 1000)
+                    R.Cast(t, true, true);
+                else if (rDmg * 0.4 > t.Health && tDis < 1100)
+                    R.Cast(t, true, true);
+                else if (rDmg * 0.3 > t.Health && tDis < 1200)
+                    R.Cast(t, true, true);
+                return;
+            }
+        }
+
+        private void LogicE()
+        {
+            if (Player.Mana < RMANA + EMANA || !Config.Item("autoE", true).GetValue<bool>())
+                return;
+
+            if (HeroManager.Enemies.Any(target => target.LSIsValidTarget(270) && target.IsMelee))
+            {
+                var dashPos = Dash.CastDash(true);
+                if (!dashPos.IsZero)
+                {
+                    E.Cast(dashPos);
+                }
+            }
+            else
+            {
+                if (!Program.Combo || passRdy || SpellLock)
+                    return;
+
+                var dashPos = Dash.CastDash();
+                if (!dashPos.IsZero)
+                {
+                    E.Cast(dashPos);
+                }
+            }
+        }
+
+        public void farm()
+        {
+            if (Program.LaneClear && Player.Mana > RMANA + QMANA)
+            {
+                var mobs = Cache.GetMinions(Player.ServerPosition, Q.Range, MinionTeam.Neutral);
+                if (mobs.Count > 0 )
+                {
+                    var mob = mobs[0];
+                    if (Q.LSIsReady())
+                    {
+                        Q.Cast(mob);
+                        return;
+                    }
+
+                    if (W.LSIsReady())
+                    {
+                        W.Cast(mob);
+                        return;
+                    }
+                }
+
+                if (Player.ManaPercent > Config.Item("Mana", true).GetValue<Slider>().Value)
+                {
+                    
+                    if (Q.LSIsReady() && Config.Item("farmQ", true).GetValue<bool>())
+                    {
+                        var minions = Cache.GetMinions(Player.ServerPosition, Q1.Range);
+                        foreach (var minion in minions)
+                        {
+                            var poutput = Q1.GetPrediction(minion);
+                            var col = poutput.CollisionObjects;
+                            
+                            if (col.Count() > 2)
+                            {
+                                var minionQ = col.First();
+                                if (minionQ.LSIsValidTarget(Q.Range))
+                                {
+                                    Q.Cast(minion);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+                    if (W.LSIsReady() && Config.Item("farmW", true).GetValue<bool>())
+                    {
+                        var minions = Cache.GetMinions(Player.ServerPosition, Q1.Range);
+                        var Wfarm = W.GetCircularFarmLocation(minions, 150);
+                        if (Wfarm.MinionsHit > 3 )
+                            W.Cast(Wfarm.Position);
+                    }
+                }
+            }
+        }
+
+
+        private bool SpellLock
+        {
+            get
+            {
+                if (Player.HasBuff("lucianpassivebuff"))
+                    return true;
+                else
+                    return false;
+            }
+        }
+
+        private void SetMana()
+        {
+            if ((Config.Item("manaDisable", true).GetValue<bool>() && Program.Combo) || Player.HealthPercent < 20)
+            {
+                QMANA = 0;
+                WMANA = 0;
+                EMANA = 0;
+                RMANA = 0;
+                return;
+            }
+
+            QMANA = Q.Instance.SData.Mana;
+            WMANA = W.Instance.SData.Mana;
+            EMANA = E.Instance.SData.Mana;
+
+            if (!R.LSIsReady())
+                RMANA = QMANA - Player.PARRegenRate * Q.Instance.Cooldown;
+            else
+                RMANA = R.Instance.SData.Mana;
+        }
+
+        public static void drawText(string msg, Vector3 Hero, System.Drawing.Color color)
+        {
+            var wts = Drawing.WorldToScreen(Hero);
+            Drawing.DrawText(wts[0] - (msg.Length) * 5, wts[1] - 200, color, msg);
+        }
+
+        private void Drawing_OnDraw(EventArgs args)
+        {
+
+            if (Config.Item("qRange", true).GetValue<bool>())
+            {
+                if (Config.Item("onlyRdy", true).GetValue<bool>())
+                {
+                    if (Q.LSIsReady())
+                        LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, Q1.Range, System.Drawing.Color.Cyan, 1, 1);
+                }
+                else
+                    LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, Q1.Range, System.Drawing.Color.Cyan, 1, 1);
+            }
+
+            if (Config.Item("wRange", true).GetValue<bool>())
+            {
+                if (Config.Item("onlyRdy", true).GetValue<bool>())
+                {
+                    if (W.LSIsReady())
+                        LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, W.Range, System.Drawing.Color.Orange, 1, 1);
+                }
+                else
+                    LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, W.Range, System.Drawing.Color.Orange, 1, 1);
+            }
+
+            if (Config.Item("eRange", true).GetValue<bool>())
+            {
+                if (Config.Item("onlyRdy", true).GetValue<bool>())
+                {
+                    if (E.LSIsReady())
+                        LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, E.Range, System.Drawing.Color.Orange, 1, 1);
+                }
+                else
+                    LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, E.Range, System.Drawing.Color.Orange, 1, 1);
+            }
+
+            if (Config.Item("rRange", true).GetValue<bool>())
+            {
+                if (Config.Item("onlyRdy", true).GetValue<bool>())
+                {
+                    if (R.LSIsReady())
+                        LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, R.Range, System.Drawing.Color.Gray, 1, 1);
+                }
+                else
+                    LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, R.Range, System.Drawing.Color.Gray, 1, 1);
+            }
+        }
+    }
+}

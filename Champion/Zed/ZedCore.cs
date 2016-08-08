@@ -1,0 +1,720 @@
+using EloBuddy; namespace KoreanZed
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using LeagueSharp;
+    using LeagueSharp.Common;
+
+    using KoreanZed.QueueActions;
+    using KoreanZed.Enumerators;
+
+    using SharpDX;
+    using SharpDX.Direct3D9;
+
+    using Color = System.Drawing.Color;
+
+    class ZedCore
+    {
+        private Orbwalking.Orbwalker ZedOrbwalker { get; set; }
+
+        private readonly ZedMenu zedMenu;
+
+        private readonly ZedSpell q;
+
+        private readonly ZedSpell w;
+
+        private readonly ZedSpell e;
+
+        private readonly ZedSpell r;
+
+        private readonly AIHeroClient player;
+
+        private readonly ZedOffensiveItems zedItems;
+
+        private readonly ZedEnergyChecker energy;
+
+        private readonly ActionQueueList harasQueue;
+
+        private readonly ActionQueueList comboQueue;
+
+        private readonly ActionQueueList laneClearQueue;
+
+        private readonly ActionQueueList lastHitQueue;
+
+        private readonly ActionQueueCheckAutoAttack checkAutoAttack;
+
+        private readonly ZedShadows shadows;
+
+        private readonly ActionQueue actionQueue;
+
+        private readonly ZedComboSelector zedComboSelector;
+
+        public ZedCore(ZedSpells zedSpells, Orbwalking.Orbwalker zedOrbwalker, ZedMenu zedMenu, ZedShadows zedShadows, ZedEnergyChecker zedEnergy)
+        {
+            q = zedSpells.Q;
+            w = zedSpells.W;
+            e = zedSpells.E;
+            r = zedSpells.R;
+
+            player = ObjectManager.Player;
+            ZedOrbwalker = zedOrbwalker;
+            this.zedMenu = zedMenu;
+            energy = zedEnergy;
+
+            actionQueue = new ActionQueue();
+            harasQueue = new ActionQueueList();
+            comboQueue = new ActionQueueList();
+            laneClearQueue = new ActionQueueList();
+            lastHitQueue = new ActionQueueList();
+            checkAutoAttack = new ActionQueueCheckAutoAttack();
+            zedItems = new ZedOffensiveItems(zedMenu);
+            shadows = zedShadows;
+            zedComboSelector = new ZedComboSelector(zedMenu);
+
+            Game.OnUpdate += Game_OnUpdate;
+        }
+
+        private void Game_OnUpdate(EventArgs args)
+        {
+            switch (ZedOrbwalker.ActiveMode)
+            {
+                case Orbwalking.OrbwalkingMode.Combo:
+                    Combo();
+                    break;
+                case Orbwalking.OrbwalkingMode.Mixed:
+                    Harass();
+                    break;
+                case Orbwalking.OrbwalkingMode.LaneClear:
+                    LaneClear();
+                    break;
+                case Orbwalking.OrbwalkingMode.LastHit:
+                    LastHit();
+                    break;
+                default:
+                    return;
+            }
+        }
+
+        private void Combo()
+        {
+            if (actionQueue.ExecuteNextAction(comboQueue))
+            {
+                return;
+            }
+
+            AIHeroClient itemsTarget = TargetSelector.GetTarget(player.AttackRange, TargetSelector.DamageType.Physical);
+            if (itemsTarget != null)
+            {
+                zedItems.UseItems(itemsTarget);
+            }
+
+            shadows.Combo();
+
+            if (w.UseOnCombo && shadows.CanCast && player.LSHasBuff("zedr2"))
+            {
+                AIHeroClient target = TargetSelector.GetTarget(w.Range + e.Range, TargetSelector.DamageType.Physical);
+
+                if (target != null)
+                {
+                    actionQueue.EnqueueAction(comboQueue,
+                        () => true,
+                        () => shadows.Cast(w.GetPrediction(target).CastPosition),
+                        () => true);
+                    return;
+                }
+            }
+
+            float maxRange = float.MaxValue;
+
+            if (r.UseOnCombo && r.LSIsReady() && r.Instance.ToggleState == 0)
+            {
+                AIHeroClient target = null;
+
+                maxRange = Math.Min(maxRange, r.Range);
+
+                if (zedMenu.GetParamBool("koreanzed.combo.ronselected"))
+                {
+                    if (TargetSelector.SelectedTarget != null && TargetSelector.SelectedTarget.LSIsValidTarget(maxRange))
+                    {
+                        target = TargetSelector.SelectedTarget;
+                    }
+                }
+                else
+                {
+                    List<AIHeroClient> ignoredChamps = zedMenu.GetBlockList(BlockListType.Ultimate);
+                    target = TargetSelector.GetTarget(maxRange, r.DamageType, true, ignoredChamps);
+                }
+
+                if (target != null)
+                {
+                    switch (zedMenu.GetCombo())
+                    {
+                        case ComboType.AllStar:
+                            AllStarCombo(target);
+                            break;
+                        case ComboType.TheLine:
+                            TheLineCombo(target);
+                            break;
+                    }
+                    return;
+                }
+            }
+            else if (w.UseOnCombo && shadows.CanCast && (!r.UseOnCombo || (r.UseOnCombo && !r.LSIsReady()))
+                && (player.Mana > w.ManaCost + (q.UseOnCombo && q.LSIsReady() ? q.ManaCost : 0F) + (e.UseOnCombo && e.LSIsReady() ? e.ManaCost : 0F)))
+            {
+                maxRange = Math.Min(maxRange, w.Range + e.Range);
+                AIHeroClient target = TargetSelector.GetTarget(maxRange, TargetSelector.DamageType.Physical);
+                if (target != null)
+                {
+                    actionQueue.EnqueueAction(
+                        comboQueue,
+                        () => shadows.CanCast,
+                        () => shadows.Cast(w.GetPrediction(target).CastPosition),
+                        () => !shadows.CanCast);
+                    actionQueue.EnqueueAction(
+                        comboQueue,
+                        () => w.Instance.ToggleState != 0,
+                        () => shadows.Combo(),
+                        () => true);
+                    actionQueue.EnqueueAction(
+                        comboQueue,
+                        () => shadows.CanSwitch && target.LSDistance(shadows.Instance.Position) <= player.AttackRange,
+                        () => shadows.Switch(),
+                        () => !shadows.CanSwitch || target.LSDistance(shadows.Instance.Position) > player.AttackRange || !w.LSIsReady());
+                    actionQueue.EnqueueAction(
+                        comboQueue,
+                        () => player.LSDistance(target) <= Orbwalking.GetRealAutoAttackRange(target),
+                        () => EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, target),
+                        () => target.IsDead || target.IsZombie || player.LSDistance(target) > Orbwalking.GetRealAutoAttackRange(target) || checkAutoAttack.Status);
+                    return;
+                }
+            }
+
+            if (q.UseOnCombo && q.LSIsReady() && player.Mana > q.ManaCost)
+            {
+                maxRange = Math.Min(maxRange, q.Range);
+                AIHeroClient target = TargetSelector.GetTarget(maxRange, q.DamageType);
+
+                PredictionOutput predictionOutput = q.GetPrediction(target);
+
+                if (predictionOutput.Hitchance >= HitChance.Medium)
+                {
+                    q.Cast(predictionOutput.CastPosition);
+                }
+            }
+
+            if (e.UseOnCombo && e.LSIsReady() && player.Mana > e.ManaCost)
+            {
+                maxRange = Math.Min(maxRange, e.Range);
+                AIHeroClient target = TargetSelector.GetTarget(maxRange, e.DamageType);
+                if (target != null)
+                {
+                    actionQueue.EnqueueAction(comboQueue,
+                        () => e.LSIsReady(),
+                        () => e.Cast(),
+                        () => true);
+                    return;
+                }
+            }
+
+            if (w.UseOnCombo && w.LSIsReady() && shadows.CanSwitch)
+            {
+                List<Obj_AI_Base> shadowList = shadows.GetShadows();
+
+                foreach (Obj_AI_Base objAiBase in shadowList)
+                {
+                    AIHeroClient target = TargetSelector.GetTarget(2000F, TargetSelector.DamageType.Physical);
+
+                    if (target != null && player.LSDistance(target) > Orbwalking.GetRealAutoAttackRange(target) + 50F &&
+                        objAiBase.LSDistance(target) < player.LSDistance(target))
+                    {
+                        shadows.Switch();
+                    }
+                }
+            }
+        }
+
+        private void AllStarCombo(AIHeroClient target)
+        {
+            actionQueue.EnqueueAction(
+                comboQueue,
+                () => r.LSIsReady() && r.Instance.ToggleState == 0 && player.IsVisible,
+                () =>
+                    {
+                        zedComboSelector.AllStarAnimation();
+                        r.Cast(target);
+                    },
+                () => r.LSIsReady() && r.Instance.ToggleState != 0 && player.IsVisible);
+            actionQueue.EnqueueAction(
+                comboQueue, 
+                () => true, 
+                () => zedItems.UseItems(target), 
+                () => true);
+            actionQueue.EnqueueAction(
+                comboQueue,
+                () => w.UseOnCombo && shadows.CanCast && player.Mana > w.ManaCost,
+                () => shadows.Cast(target.ServerPosition),
+                () => target.IsDead || target.IsZombie || w.Instance.ToggleState != 0 || !w.UseOnCombo || player.Mana <= w.ManaCost);
+            actionQueue.EnqueueAction(
+                comboQueue,
+                () => q.UseOnCombo && q.LSIsReady(),
+                () => ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Q, q.GetPrediction(target).CastPosition),
+                () => target.IsDead || target.IsZombie || !q.LSIsReady() || !q.UseOnCombo);
+            actionQueue.EnqueueAction(
+                comboQueue,
+                () => w.Instance.ToggleState != 0 && e.UseOnCombo && e.LSIsReady() && e.CanCast(target),
+                () => e.Cast(),
+                () => target.IsDead || target.IsZombie || w.Instance.ToggleState == 0 || !e.LSIsReady() || !e.UseOnCombo || !e.CanCast(target));
+        }
+
+        private void TheLineCombo(AIHeroClient target)
+        {
+            actionQueue.EnqueueAction(
+                comboQueue,
+                () => r.LSIsReady() && r.Instance.ToggleState == 0 && player.IsVisible,
+                () =>
+                {
+                    zedComboSelector.TheLineAnimation();
+                    r.Cast(target);
+                },
+                () => r.LSIsReady() && r.Instance.ToggleState != 0 && player.IsVisible);
+            actionQueue.EnqueueAction(
+                comboQueue, 
+                () => true, 
+                () => zedItems.UseItems(target), 
+                () => true);
+            actionQueue.EnqueueAction(
+                comboQueue,
+                () => w.UseOnCombo && shadows.CanCast && player.Mana > w.ManaCost,
+                () => shadows.Cast(target.Position.LSExtend(shadows.Instance.Position, -1000F)),
+                () => target.IsDead || target.IsZombie || w.Instance.ToggleState != 0 || !w.UseOnCombo || player.Mana <= w.ManaCost);
+            actionQueue.EnqueueAction(
+                comboQueue,
+                () => e.UseOnCombo && e.LSIsReady() && e.CanCast(target),
+                () => e.Cast(),
+                () => target.IsDead || target.IsZombie || !e.LSIsReady() || !e.UseOnCombo || !e.CanCast(target));
+            actionQueue.EnqueueAction(
+                comboQueue,
+                () => q.UseOnCombo && q.LSIsReady() && q.CanCast(target),
+                () => q.Cast(q.GetPrediction(target).CastPosition),
+                () => target.IsDead || target.IsZombie || !q.LSIsReady() || !q.UseOnCombo || !q.CanCast(target) || player.Mana <= q.ManaCost);
+        }
+
+        private void Harass()
+        {
+            if (actionQueue.ExecuteNextAction(harasQueue))
+            {
+                return;
+            }
+
+            shadows.Harass();
+
+            float maxRange = float.MaxValue;
+
+            if (!energy.ReadyToHaras)
+            {
+                return;
+            }
+
+            List<AIHeroClient> blackList = zedMenu.GetBlockList(BlockListType.Harass);
+
+            if ((w.UseOnHarass && w.LSIsReady() && w.Instance.ToggleState == 0)
+                && (player.HealthPercent
+                    > zedMenu.GetParamSlider("koreanzed.harasmenu.wusage.dontuselowlife")
+                    && HeroManager.Enemies.Count(
+                        hero => !hero.IsDead && !hero.IsZombie && player.LSDistance(hero) < 2000F)
+                    < zedMenu.GetParamSlider("koreanzed.harasmenu.wusage.dontuseagainst")))
+            {
+                if (q.UseOnHarass && q.LSIsReady() && (player.Mana > q.ManaCost + w.ManaCost))
+                {
+                    switch ((ShadowHarassTrigger)zedMenu.GetParamStringList("koreanzed.harasmenu.wusage.trigger"))
+                    {
+                        case ShadowHarassTrigger.MaxRange:
+                            maxRange = Math.Min(maxRange, q.Range + w.Range);
+                            break;
+
+                        case ShadowHarassTrigger.MaxDamage:
+                            maxRange = Math.Min(maxRange, w.Range + e.Range);
+                            break;
+                    }
+
+                    AIHeroClient target = TargetSelector.GetTarget(maxRange, q.DamageType, true, blackList);
+
+                    if (target != null)
+                    {
+                        actionQueue.EnqueueAction(
+                            harasQueue,
+                            () => shadows.CanCast,
+                            () => shadows.Cast(target),
+                            () => !shadows.CanCast);
+                        actionQueue.EnqueueAction(
+                            harasQueue,
+                            () => true,
+                            () => shadows.Harass(),
+                            () => true);
+                        return;
+                    }
+                }
+
+                else if (e.UseOnHarass && e.LSIsReady() && (player.Mana > e.ManaCost + w.ManaCost))
+                {
+                    maxRange = Math.Min(maxRange, e.Range + w.Range);
+                    AIHeroClient target = TargetSelector.GetTarget(maxRange, e.DamageType, true, blackList);
+
+                    if (target != null)
+                    {
+                        actionQueue.EnqueueAction(
+                            harasQueue,
+                            () => shadows.CanCast,
+                            () => shadows.Cast(target),
+                            () => !shadows.CanCast);
+                        actionQueue.EnqueueAction(
+                            harasQueue,
+                            () => true,
+                            () => shadows.Harass(),
+                            () => true);
+                        return;
+                    }
+                }
+            }
+
+            if (q.UseOnHarass && energy.ReadyToHaras)
+            {
+                maxRange = Math.Min(maxRange, q.Range);
+                AIHeroClient target = TargetSelector.GetTarget(maxRange, q.DamageType, true, blackList);
+
+                if (target != null)
+                {
+                    PredictionOutput predictionOutput = q.GetPrediction(target);
+
+                    bool checkColision = zedMenu.GetParamBool("koreanzed.harasmenu.checkcollisiononq");
+
+                    if (predictionOutput.Hitchance >= HitChance.High
+                        && (!checkColision
+                            || !q.GetCollision(
+                                player.Position.LSTo2D(),
+                                new List<Vector2>() { predictionOutput.CastPosition.LSTo2D() }).Any()))
+                    {
+                        q.Cast(predictionOutput.CastPosition);
+                    }
+                }
+            }
+
+            if (e.UseOnHarass && energy.ReadyToHaras)
+            {
+                if (TargetSelector.GetTarget(e.Range, e.DamageType) != null)
+                {
+                    e.Cast();
+                }
+            }
+
+            if ((zedMenu.GetParamBool("koreanzed.harasmenu.items.hydra")
+                || zedMenu.GetParamBool("koreanzed.harasmenu.items.tiamat")) &&
+                (HeroManager.Enemies.Any(enemy => player.LSDistance(enemy) <= player.AttackRange)))
+            {
+                actionQueue.EnqueueAction(harasQueue, () => true, () => zedItems.UseHarasItems(), () => true);
+            }
+
+            LastHit();
+        }
+
+        private void JungleClear()
+        {
+            if (q.UseOnLaneClear && q.LSIsReady() && energy.ReadyToLaneClear)
+            {
+                Obj_AI_Base jungleMob =
+                    MinionManager.GetMinions(
+                        q.Range / 1.5F,
+                        MinionTypes.All,
+                        MinionTeam.Neutral,
+                        MinionOrderTypes.MaxHealth).FirstOrDefault();
+
+                if (jungleMob != null)
+                {
+                    q.Cast(q.GetPrediction(jungleMob).CastPosition);
+                }
+            }
+
+            if (e.UseOnLaneClear && e.LSIsReady() && energy.ReadyToLaneClear)
+            {
+                if (
+                    MinionManager.GetMinions(e.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth)
+                        .Any())
+                {
+                    e.Cast();
+                }
+            }
+        }
+
+        private void LaneClear()
+        {
+            if (actionQueue.ExecuteNextAction(laneClearQueue))
+            {
+                return;
+            }
+
+            LastHit();
+
+            JungleClear();
+
+            if ((zedMenu.GetParamBool("koreanzed.laneclearmenu.items.hydra")
+                || zedMenu.GetParamBool("koreanzed.laneclearmenu.items.tiamat")) &&
+                (MinionManager.GetMinions(300F).Count() >= zedMenu.GetParamSlider("koreanzed.laneclearmenu.items.when")
+                || MinionManager.GetMinions(300F, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).Any()))
+            {
+                zedItems.UseItemsLaneClear();
+            }
+
+            if (shadows.GetShadows().Any())
+            {
+                shadows.LaneClear(actionQueue, laneClearQueue);
+                return;
+            }
+
+            if (w.UseOnLaneClear)
+            {
+                WlaneClear();
+                return;
+            }
+            else
+            {
+                if (e.UseOnLaneClear && e.LSIsReady())
+                {
+                    int willHit = MinionManager.GetMinions(e.Range).Count;
+                    int param = zedMenu.GetParamSlider("koreanzed.laneclearmenu.useeif");
+
+                    if (willHit >= param)
+                    {
+                        actionQueue.EnqueueAction(
+                            laneClearQueue,
+                            () => true,
+                            () => e.Cast(),
+                            () => !e.LSIsReady());
+                        return;
+                    }
+                }
+
+                if (q.UseOnLaneClear && q.LSIsReady())
+                {
+                    var farmLocation = q.GetLineFarmLocation(MinionManager.GetMinions(q.Range));
+
+                    int willHit = farmLocation.MinionsHit;
+                    int param = zedMenu.GetParamSlider("koreanzed.laneclearmenu.useqif");
+
+                    if (willHit >= param)
+                    {
+                        actionQueue.EnqueueAction(
+                            laneClearQueue,
+                            () => q.LSIsReady(),
+                            () => q.Cast(farmLocation.Position),
+                            () => !q.LSIsReady());
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void WlaneClear()
+        {
+            if (!energy.ReadyToLaneClear)
+            {
+                return;
+            }
+
+            var minionsLong = MinionManager.GetMinions(w.Range + q.Range);
+            var minionsShort = minionsLong.Where(minion => player.LSDistance(minion) <= w.Range + e.Range).ToList();
+            bool attackingMinion = minionsShort.Any(minion => player.LSDistance(minion) <= player.AttackRange);
+
+            if (!attackingMinion)
+            {
+                return;
+            }
+
+            var theChosen =
+                MinionManager.GetMinions(e.Range + w.Range)
+                    .OrderByDescending(
+                        minion =>
+                        MinionManager.GetMinions(player.Position.LSExtend(minion.Position, e.Range + 130F), e.Range)
+                            .Count())
+                    .FirstOrDefault();
+            if (theChosen == null)
+            {
+                return;
+            }
+
+            Vector3 shadowPosition = player.Position.LSExtend(theChosen.Position, e.Range + 130F);
+
+            if (player.LSDistance(shadowPosition) <= w.Range - 100F)
+            {
+                shadowPosition = Vector3.Zero;
+            }
+
+            bool canUse = HeroManager.Enemies.Count(enemy => !enemy.IsDead && !enemy.IsZombie && enemy.LSDistance(player) < 2500F)
+                          <= zedMenu.GetParamSlider("koreanzed.laneclearmenu.dontuseeif");
+
+            if (e.UseOnLaneClear && e.LSIsReady())
+            {
+                int extendedWillHit = MinionManager.GetMinions(shadowPosition, e.Range).Count();
+                int shortenWillHit = MinionManager.GetMinions(e.Range).Count;
+                int param = zedMenu.GetParamSlider("koreanzed.laneclearmenu.useeif");
+
+                if (canUse && shadows.CanCast && shadowPosition != Vector3.Zero && extendedWillHit >= param
+                    && player.Mana > w.ManaCost + e.ManaCost)
+                {
+                    actionQueue.EnqueueAction(
+                        laneClearQueue,
+                        () => shadows.CanCast,
+                        () => shadows.Cast(shadowPosition),
+                        () => !shadows.CanCast);
+                    actionQueue.EnqueueAction(
+                        laneClearQueue,
+                        () => w.Instance.ToggleState != 0,
+                        () => e.Cast(),
+                        () => !e.LSIsReady());
+                    return;
+                }
+                else if (shortenWillHit >= param)
+                {
+                    actionQueue.EnqueueAction(
+                        laneClearQueue,
+                        () => e.LSIsReady(),
+                        () => e.Cast(),
+                        () => !e.LSIsReady());
+                    return;
+                }
+            }
+
+            if (q.UseOnLaneClear && q.LSIsReady())
+            {
+                int extendedWillHit = 0;
+                Vector3 extendedFarmLocation = Vector3.Zero;
+                foreach (Obj_AI_Base objAiBase in MinionManager.GetMinions(shadowPosition, q.Range))
+                {
+                    var colisionList = q.GetCollision(
+                        shadowPosition.LSTo2D(),
+                        new List<Vector2>() { objAiBase.Position.LSTo2D() },
+                        w.Delay);
+
+                    if (colisionList.Count > extendedWillHit)
+                    {
+                        extendedFarmLocation =
+                            colisionList.OrderByDescending(c => c.LSDistance(shadowPosition)).FirstOrDefault().Position;
+                        extendedWillHit = colisionList.Count;
+                    }
+                }
+
+                var shortenFarmLocation = q.GetLineFarmLocation(MinionManager.GetMinions(q.Range));
+
+                int shortenWillHit = shortenFarmLocation.MinionsHit;
+                int param = zedMenu.GetParamSlider("koreanzed.laneclearmenu.useqif");
+
+                if (canUse && shadows.CanCast && shadowPosition != Vector3.Zero && extendedWillHit >= param
+                    && player.Mana > w.ManaCost + q.ManaCost)
+                {
+                    actionQueue.EnqueueAction(
+                        laneClearQueue,
+                        () => shadows.CanCast,
+                        () => shadows.Cast(shadowPosition),
+                        () => !shadows.CanCast);
+                    actionQueue.EnqueueAction(
+                        laneClearQueue,
+                        () => w.Instance.ToggleState != 0,
+                        () => q.Cast(extendedFarmLocation),
+                        () => !q.LSIsReady());
+                    return;
+                }
+                else if (shortenWillHit >= param)
+                {
+                    actionQueue.EnqueueAction(
+                        laneClearQueue,
+                        () => q.LSIsReady(),
+                        () => q.Cast(shortenFarmLocation.Position),
+                        () => !q.LSIsReady());
+                    return;
+                }
+            }
+        }
+
+        private void LastHit()
+        {
+            if (actionQueue.ExecuteNextAction(lastHitQueue))
+            {
+                return;
+            }
+
+            if (q.UseOnLastHit && q.LSIsReady() && energy.ReadyToLastHit)
+            {
+                Obj_AI_Base target =
+                    MinionManager.GetMinions(q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth)
+                        .FirstOrDefault(
+                            minion =>
+                            minion.LSDistance(player) > Orbwalking.GetRealAutoAttackRange(minion) + 10F && !minion.IsDead
+                            && q.GetDamage(minion) / 2
+                            >= HealthPrediction.GetHealthPrediction(
+                                minion,
+                                (int)(player.LSDistance(minion) / q.Speed) * 1000,
+                                (int)q.Delay * 1000));
+
+                if (target != null)
+                {
+                    PredictionOutput predictionOutput = q.GetPrediction(target);
+                    actionQueue.EnqueueAction(lastHitQueue, () => q.LSIsReady(), () => q.Cast(predictionOutput.CastPosition), () => !q.LSIsReady());
+                    return;
+                }
+            }
+
+            if (e.UseOnLastHit && e.LSIsReady() && energy.ReadyToLastHit)
+            {
+                if (MinionManager.GetMinions(e.Range).Count(minion => e.IsKillable(minion))
+                    >= zedMenu.GetParamSlider("koreanzed.lasthitmenu.useeif"))
+                {
+                    actionQueue.EnqueueAction(lastHitQueue, () => e.LSIsReady(), () => e.Cast(), () => !e.LSIsReady());
+                    return;
+                }
+            }
+        }
+
+        public float ComboDamage(AIHeroClient target)
+        {
+            float result = q.UseOnCombo && q.LSIsReady()
+                               ? (q.GetCollision(player.Position.LSTo2D(), new List<Vector2>() { target.Position.LSTo2D() })
+                                      .Any()
+                                      ? q.GetDamage(target) / 2
+                                      : q.GetDamage(target))
+                               : 0F;
+
+            result += e.UseOnCombo && e.LSIsReady() ? e.GetDamage(target) : 0F;
+
+            result += w.UseOnCombo && w.LSIsReady() && player.LSDistance(target) < w.Range + Orbwalking.GetRealAutoAttackRange(target)
+                          ? (float)player.LSGetAutoAttackDamage(target, true)
+                          : 0F;
+
+            float multiplier = 0.3F;
+            if (r.Instance.Level == 2) multiplier = 0.4F;
+            else if (r.Instance.Level == 3) multiplier = 0.5F;
+
+            result += r.UseOnCombo && r.LSIsReady()
+                          ? (float)
+                            (r.GetDamage(target) + player.LSGetAutoAttackDamage(target, true)
+                             + (q.LSIsReady() ? q.GetDamage(target) * multiplier : 0F)
+                             + (e.LSIsReady() ? e.GetDamage(target) * multiplier : 0F))
+                          : 0F;
+
+            return result;
+        }
+
+        public void ForceUltimate(AIHeroClient target = null)
+        {
+            if (target != null && r.CanCast(target))
+            {
+                r.Cast(target);
+            }
+            else
+            {
+                r.Cast(TargetSelector.GetTarget(r.Range, r.DamageType));
+            }
+        }
+    }
+}

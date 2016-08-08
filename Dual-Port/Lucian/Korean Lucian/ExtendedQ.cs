@@ -1,0 +1,167 @@
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace KoreanLucian
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using KoreanCommon;
+
+    using LeagueSharp;
+    using LeagueSharp.Common;
+
+    using SharpDX;
+
+    internal static class ExtendedQ
+    {
+        private static readonly Spell AdvancedQ = new Spell(SpellSlot.Q, 1100);
+
+        private static readonly Func<AIHeroClient, Obj_AI_Base, bool> CheckDistance =
+            (champ, minion) =>
+            Math.Abs(
+                champ.LSDistance(ObjectManager.Player) - (minion.LSDistance(ObjectManager.Player) + minion.LSDistance(champ)))
+            <= 2;
+
+        private static readonly Func<Vector3, Vector3, Vector3, bool> CheckLine = (v1, v2, v3) =>
+            {
+                float valor =
+                    Math.Abs(
+                        (v1.X * v2.Y) + (v1.Y * v3.X) + (v2.X * v3.Y) - (v1.Y * v2.X) - (v1.X * v3.Y) - (v2.Y * v3.X));
+
+                return valor > 500 && valor <= 2000;
+            };
+
+        public static void Load(CommonChampion lucian)
+        {
+            if (KoreanUtils.GetParamKeyBind(lucian.MainMenu, "toggleextendedq"))
+            {
+                Game.OnUpdate += AutoExtendedQ;
+            }
+        }
+
+        public static void AutoExtendedQ(EventArgs args)
+        {
+            Program.ChampionLucian.CastExtendedQ(true);
+        }
+
+        private static bool CheckHaras(CommonChampion lucian, AIHeroClient target)
+        {
+            if (target == null)
+            {
+                return false;
+            }
+
+            return KoreanUtils.GetParamBool(lucian.MainMenu, target.ChampionName.ToLowerInvariant());
+        }
+
+        private static bool ExtendedQIsReady(CommonChampion lucian, bool laneclear = false)
+        {
+            Spell q = lucian.Spells.Q;
+
+            if (!KoreanUtils.GetParamBool(lucian.MainMenu, "extendedq") || !q.LSIsReady())
+            {
+                return false;
+            }
+
+            List<Obj_AI_Base> minions = MinionManager.GetMinions(AdvancedQ.Range);
+
+            if (minions.Count == 0)
+            {
+                return false;
+            }
+
+            if (!laneclear)
+            {
+                if (lucian.Player.LSCountEnemiesInRange(AdvancedQ.Range) == 0)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool CastExtendedQ(this CommonChampion lucian, bool Haras = false)
+        {
+            if (!ExtendedQIsReady(lucian))
+            {
+                return false;
+            }
+
+            if (Haras && ((Lucian)lucian).core.HaveManaToHaras() == false)
+            {
+                return false;
+            }
+
+            Spell q = lucian.Spells.Q;
+
+            AdvancedQ.SetSkillshot(0.55f, 75f, float.MaxValue, false, SkillshotType.SkillshotLine);
+
+            foreach (AIHeroClient target in lucian.Player.LSGetEnemiesInRange(AdvancedQ.Range))
+            {
+                if (!CheckHaras(lucian, target))
+                {
+                    continue;
+                }
+
+                List<Vector2> position = new List<Vector2> { target.Position.LSTo2D() };
+
+                Obj_AI_Base colisionMinion =
+                    AdvancedQ.GetCollision(lucian.Player.Position.LSTo2D(), position)
+                        .FirstOrDefault(
+                            minion =>
+                            q.CanCast(minion) && q.IsInRange(minion)
+                            && CheckLine(lucian.Player.Position, minion.Position, target.ServerPosition)
+                            && CheckDistance(target, minion)
+                            && target.LSDistance(lucian.Player) > minion.LSDistance(lucian.Player)
+                            && lucian.Player.LSDistance(minion) + minion.LSDistance(target)
+                            <= lucian.Player.LSDistance(target) + 10f);
+
+                if (colisionMinion != null)
+                {
+                    return q.CastOnUnit(colisionMinion);
+                }
+            }
+
+            return false;
+        }
+
+        public static bool CastExtendedQToLaneClear(this CommonChampion lucian)
+        {
+            if (!ExtendedQIsReady(lucian, true) || !lucian.Spells.Q.UseOnLaneClear)
+            {
+                return false;
+            }
+
+            AdvancedQ.SetSkillshot(0.55f, 75f, float.MaxValue, false, SkillshotType.SkillshotLine);
+
+            List<Obj_AI_Base> minionsBase = MinionManager.GetMinions(
+                lucian.Player.Position,
+                AdvancedQ.Range,
+                MinionTypes.All,
+                MinionTeam.NotAlly,
+                MinionOrderTypes.MaxHealth);
+
+            if (minionsBase.Count == 0)
+            {
+                return false;
+            }
+
+            Spell q = lucian.Spells.Q;
+
+            foreach (Obj_AI_Base minion in minionsBase.Where(x => q.IsInRange(x)))
+            {
+                if (AdvancedQ.CountHits(minionsBase, minion.Position)
+                    >= KoreanUtils.GetParamSlider(lucian.MainMenu, "qcounthit"))
+                {
+                    q.CastOnUnit(minion);
+                    Orbwalking.ResetAutoAttackTimer();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+}

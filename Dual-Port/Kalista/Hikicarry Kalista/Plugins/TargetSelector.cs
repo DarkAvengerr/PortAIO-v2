@@ -1,0 +1,522 @@
+#region LICENSE
+
+/*
+ Copyright 2014 - 2014 LeagueSharp
+ TargetSelector.cs is part of LeagueSharp.Common.
+ 
+ LeagueSharp.Common is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
+ 
+ LeagueSharp.Common is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ GNU General Public License for more details.
+ 
+ You should have received a copy of the GNU General Public License
+ along with LeagueSharp.Common. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#endregion
+
+#region
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using SharpDX;
+using Color = System.Drawing.Color;
+using LeagueSharp;
+using LeagueSharp.Common;
+
+
+#endregion
+
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace HikiCarry_Kalista.Plugins
+{
+
+    public class CustomTargetSelector
+    {
+        public static string[] highP = { "Ahri", "Anivia", "Annie", "Ashe", "Azir", "Brand", "Caitlyn", "Cassiopeia", "Corki", "Draven",
+                "Ezreal", "Graves", "Jinx", "Kalista", "Karma", "Karthus", "Katarina", "Kennen", "KogMaw", "Leblanc",
+                "Lucian", "Lux", "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra", "Talon",
+                "Teemo", "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne", "Veigar", "VelKoz", "Viktor", "Xerath",
+                "Zed", "Ziggs" };
+
+        #region Main
+
+        static CustomTargetSelector()
+        {
+            Game.OnWndProc += GameOnOnWndProc;
+            Drawing.OnDraw += DrawingOnOnDraw;
+        }
+
+        #endregion
+
+        #region Enum
+
+        public enum DamageType
+        {
+            Magical,
+            Physical,
+            True
+        }
+
+        public enum TargetingMode
+        {
+            AutoPriority,
+            LowHP,
+            MostAD,
+            MostAP,
+            Closest,
+            NearMouse,
+            LessAttack,
+            LessCast,
+            Kalista
+        }
+
+        #endregion
+
+        #region Vars
+
+        public static TargetingMode Mode = TargetingMode.AutoPriority;
+        private static Menu _configMenu;
+        private static AIHeroClient _selectedTargetObjAiHero;
+
+        #endregion
+
+        #region EventArgs
+
+        private static void DrawingOnOnDraw(EventArgs args)
+        {
+            if (_selectedTargetObjAiHero.LSIsValidTarget() && _configMenu != null &&
+                _configMenu.Item("FocusSelected").GetValue<bool>() &&
+                _configMenu.Item("SelTColor").GetValue<Circle>().Active)
+            {
+                Render.Circle.DrawCircle(
+                    _selectedTargetObjAiHero.Position, 150, _configMenu.Item("SelTColor").GetValue<Circle>().Color, 7,
+                    true);
+            }
+        }
+
+        private static void GameOnOnWndProc(WndEventArgs args)
+        {
+            if (args.Msg != (uint)WindowsMessages.WM_LBUTTONDOWN)
+            {
+                return;
+            }
+            _selectedTargetObjAiHero =
+                HeroManager.Enemies
+                    .FindAll(hero => hero.LSIsValidTarget() && hero.LSDistance(Game.CursorPos, true) < 40000) // 200 * 200
+                    .OrderBy(h => h.LSDistance(Game.CursorPos, true)).FirstOrDefault();
+        }
+
+        #endregion
+
+        #region Functions
+
+        public static AIHeroClient SelectedTarget
+        {
+            get
+            {
+                return (_configMenu != null && _configMenu.Item("FocusSelected").GetValue<bool>()
+                    ? _selectedTargetObjAiHero
+                    : null);
+            }
+        }
+
+        /// <summary>
+        ///     Sets the priority of the hero
+        /// </summary>
+        public static void SetPriority(AIHeroClient hero, int newPriority)
+        {
+            if (_configMenu == null || _configMenu.Item("TargetSelector" + hero.ChampionName + "Priority") == null)
+            {
+                return;
+            }
+            var p = _configMenu.Item("TargetSelector" + hero.ChampionName + "Priority").GetValue<Slider>();
+            p.Value = Math.Max(1, Math.Min(5, newPriority));
+            _configMenu.Item("TargetSelector" + hero.ChampionName + "Priority").SetValue(p);
+        }
+
+        /// <summary>
+        ///     Returns the priority of the hero
+        /// </summary>
+        public static float GetPriority(AIHeroClient hero)
+        {
+            var p = 1;
+            if (_configMenu != null && _configMenu.Item("TargetSelector" + hero.ChampionName + "Priority") != null)
+            {
+                p = _configMenu.Item("TargetSelector" + hero.ChampionName + "Priority").GetValue<Slider>().Value;
+            }
+
+            switch (p)
+            {
+                case 2:
+                    return 1.5f;
+                case 3:
+                    return 1.75f;
+                case 4:
+                    return 2f;
+                case 5:
+                    return 2.5f;
+                default:
+                    return 1f;
+            }
+        }
+
+        private static int GetPriorityFromDb(string championName)
+        {
+            string[] p1 =
+            {
+                "Alistar", "Amumu", "Bard", "Blitzcrank", "Braum", "Cho'Gath", "Dr. Mundo", "Garen", "Gnar",
+                "Hecarim", "Janna", "Jarvan IV", "Leona", "Lulu", "Malphite", "Nami", "Nasus", "Nautilus", "Nunu",
+                "Olaf", "Rammus", "Renekton", "Sejuani", "Shen", "Shyvana", "Singed", "Sion", "Skarner", "Sona",
+                "Soraka", "Taric", "Thresh", "Volibear", "Warwick", "MonkeyKing", "Yorick", "Zac", "Zyra"
+            };
+
+            string[] p2 =
+            {
+                "Aatrox", "Darius", "Elise", "Evelynn", "Galio", "Gangplank", "Gragas", "Irelia", "Jax",
+                "Lee Sin", "Maokai", "Morgana", "Nocturne", "Pantheon", "Poppy", "Rengar", "Rumble", "Ryze", "Swain",
+                "Trundle", "Tryndamere", "Udyr", "Urgot", "Vi", "XinZhao", "RekSai"
+            };
+
+            string[] p3 =
+            {
+                "Akali", "Diana", "Ekko", "Fiddlesticks", "Fiora", "Fizz", "Heimerdinger", "Jayce", "Kassadin",
+                "Kayle", "Kha'Zix", "Lissandra", "Mordekaiser", "Nidalee", "Riven", "Shaco", "Vladimir", "Yasuo",
+                "Zilean"
+            };
+
+            string[] p4 =
+            {
+                "Ahri", "Anivia", "Annie", "Ashe", "Azir", "Brand", "Caitlyn", "Cassiopeia", "Corki", "Draven",
+                "Ezreal", "Graves", "Jinx", "Kalista", "Karma", "Karthus", "Katarina", "Kennen", "KogMaw", "Leblanc",
+                "Lucian", "Lux", "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra", "Talon",
+                "Teemo", "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne", "Veigar", "VelKoz", "Viktor", "Xerath",
+                "Zed", "Ziggs"
+            };
+
+            if (p1.Contains(championName))
+            {
+                return 1;
+            }
+            if (p2.Contains(championName))
+            {
+                return 2;
+            }
+            if (p3.Contains(championName))
+            {
+                return 3;
+            }
+            return p4.Contains(championName) ? 4 : 1;
+        }
+
+        public static void AddToMenu(Menu config)
+        {
+            _configMenu = config;
+            config.AddItem(new MenuItem("FocusSelected", "Focus selected target").SetShared().SetValue(true));
+            config.AddItem(
+                new MenuItem("ForceFocusSelected", "Only attack selected target").SetShared().SetValue(false)).Permashow();
+            config.AddItem(
+                new MenuItem("SelTColor", "Selected target color").SetShared().SetValue(new Circle(true, Color.Red)));
+            config.AddItem(new MenuItem("Sep", "").SetShared());
+            var autoPriorityItem = new MenuItem("AutoPriority", "Auto arrange priorities").SetShared().SetValue(false);
+            autoPriorityItem.ValueChanged += autoPriorityItem_ValueChanged;
+
+            foreach (var enemy in HeroManager.Enemies)
+            {
+                config.AddItem(
+                    new MenuItem("TargetSelector" + enemy.ChampionName + "Priority", enemy.ChampionName).SetShared()
+                        .SetValue(
+                            new Slider(
+                                autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1)));
+                if (autoPriorityItem.GetValue<bool>())
+                {
+                    config.Item("TargetSelector" + enemy.ChampionName + "Priority")
+                        .SetValue(
+                            new Slider(
+                                autoPriorityItem.GetValue<bool>() ? GetPriorityFromDb(enemy.ChampionName) : 1, 5, 1));
+                }
+            }
+            config.AddItem(autoPriorityItem);
+            config.AddItem(
+                new MenuItem("TargetingMode", "Target Mode").SetShared()
+                    .SetValue(new StringList(Enum.GetNames(typeof(TargetingMode)))));
+            config.AddItem(
+               new MenuItem("kalista.stack.focus", "Stack Focus [Only Works Kalista Target Mode]").SetValue(new Slider(5, 1, 20)));
+
+            config.AddItem(
+               new MenuItem("kalista.stack.enemy.hp.percent", "Enemy HP Percent < ... [Only Works Kalista Target Mode]").SetValue(new Slider(50, 1, 99)));
+        }
+
+        private static void autoPriorityItem_ValueChanged(object sender, OnValueChangeEventArgs e)
+        {
+            if (!e.GetNewValue<bool>())
+            {
+                return;
+            }
+            foreach (var enemy in HeroManager.Enemies)
+            {
+                _configMenu.Item("TargetSelector" + enemy.ChampionName + "Priority")
+                    .SetValue(new Slider(GetPriorityFromDb(enemy.ChampionName), 5, 1));
+            }
+        }
+
+        public static bool IsInvulnerable(Obj_AI_Base target, DamageType damageType, bool ignoreShields = true)
+        {
+            // Tryndamere's Undying Rage (R)
+            if (target.LSHasBuff("Undying Rage") && target.Health <= target.MaxHealth * 0.10f)
+            {
+                return true;
+            }
+
+            // Kayle's Intervention (R)
+            if (target.LSHasBuff("JudicatorIntervention"))
+            {
+                return true;
+            }
+
+            // Poppy's Diplomatic Immunity (R)
+            if (target.LSHasBuff("DiplomaticImmunity") && !ObjectManager.Player.LSHasBuff("poppyulttargetmark"))
+            {
+                //TODO: Get the actual target mark buff name
+                return true;
+            }
+
+            if (ignoreShields)
+            {
+                return false;
+            }
+
+            // Morgana's Black Shield (E)
+            if (damageType.Equals(DamageType.Magical) && target.LSHasBuff("BlackShield"))
+            {
+                return true;
+            }
+
+            // Banshee's Veil (PASSIVE)
+            if (damageType.Equals(DamageType.Magical) && target.LSHasBuff("BansheesVeil"))
+            {
+                // TODO: Get exact Banshee's Veil buff name.
+                return true;
+            }
+
+            // Sivir's Spell Shield (E)
+            if (damageType.Equals(DamageType.Magical) && target.LSHasBuff("SivirShield"))
+            {
+                // TODO: Get exact Sivir's Spell Shield buff name
+                return true;
+            }
+
+            // Nocturne's Shroud of Darkness (W)
+            if (damageType.Equals(DamageType.Magical) && target.LSHasBuff("ShroudofDarkness"))
+            {
+                // TODO: Get exact Nocturne's Shourd of Darkness buff name
+                return true;
+            }
+
+            return false;
+        }
+
+
+        public static void SetTarget(AIHeroClient hero)
+        {
+            if (hero.LSIsValidTarget())
+            {
+                _selectedTargetObjAiHero = hero;
+            }
+        }
+
+        public static AIHeroClient GetSelectedTarget()
+        {
+            return SelectedTarget;
+        }
+
+        public static AIHeroClient GetTarget(float range,
+            DamageType damageType,
+            bool ignoreShield = true,
+            IEnumerable<AIHeroClient> ignoredChamps = null,
+            Vector3? rangeCheckFrom = null)
+        {
+            return GetTarget(ObjectManager.Player, range, damageType, ignoreShield, ignoredChamps, rangeCheckFrom);
+        }
+
+        public static AIHeroClient GetTargetNoCollision(Spell spell,
+            bool ignoreShield = true,
+            IEnumerable<AIHeroClient> ignoredChamps = null,
+            Vector3? rangeCheckFrom = null)
+        {
+            var t = GetTarget(ObjectManager.Player, spell.Range,
+                DamageType.Physical, ignoreShield, ignoredChamps, rangeCheckFrom);
+
+            if (spell.Collision && spell.GetPrediction(t).Hitchance != HitChance.Collision)
+            {
+                return t;
+            }
+
+            return null;
+        }
+
+        private static bool IsValidTarget(Obj_AI_Base target,
+            float range,
+            DamageType damageType,
+            bool ignoreShieldSpells = true,
+            Vector3? rangeCheckFrom = null)
+        {
+            return target.LSIsValidTarget() &&
+                   target.LSDistance(rangeCheckFrom ?? ObjectManager.Player.ServerPosition, true) <
+                   Math.Pow(range <= 0 ? Orbwalking.GetRealAutoAttackRange(target) : range, 2) &&
+                   !IsInvulnerable(target, damageType, ignoreShieldSpells);
+        }
+
+        public static AIHeroClient GetTarget(Obj_AI_Base champion,
+            float range,
+            DamageType type,
+            bool ignoreShieldSpells = true,
+            IEnumerable<AIHeroClient> ignoredChamps = null,
+            Vector3? rangeCheckFrom = null)
+        {
+
+            try
+            {
+                if (ignoredChamps == null)
+                {
+                    ignoredChamps = new List<AIHeroClient>();
+                }
+
+                var damageType = (Damage.DamageType)Enum.Parse(typeof(Damage.DamageType), type.ToString());
+
+                if (_configMenu != null && IsValidTarget(
+                    SelectedTarget, _configMenu.Item("ForceFocusSelected").GetValue<bool>() ? float.MaxValue : range,
+                    type, ignoreShieldSpells, rangeCheckFrom))
+                {
+                    return SelectedTarget;
+                }
+
+                if (_configMenu != null && _configMenu.Item("TargetingMode") != null &&
+                    Mode == TargetingMode.AutoPriority)
+                {
+                    var menuItem = _configMenu.Item("TargetingMode").GetValue<StringList>();
+                    Enum.TryParse(menuItem.SList[menuItem.SelectedIndex], out Mode);
+                }
+
+                var targets =
+                    HeroManager.Enemies
+                        .FindAll(
+                            hero =>
+                                ignoredChamps.All(ignored => ignored.NetworkId != hero.NetworkId) &&
+                                IsValidTarget(hero, range, type, ignoreShieldSpells, rangeCheckFrom));
+
+                switch (Mode)
+                {
+                    case TargetingMode.LowHP:
+                        return targets.MinOrDefault(hero => hero.Health);
+
+                    case TargetingMode.MostAD:
+                        return targets.MaxOrDefault(hero => hero.BaseAttackDamage + hero.FlatPhysicalDamageMod);
+
+
+                    case TargetingMode.MostAP:
+                        return targets.MaxOrDefault(hero => hero.BaseAbilityDamage + hero.FlatMagicDamageMod);
+
+                    case TargetingMode.Closest:
+                        return
+                            targets.MinOrDefault(
+                                hero =>
+                                    (rangeCheckFrom.HasValue ? rangeCheckFrom.Value : champion.ServerPosition).LSDistance(
+                                        hero.ServerPosition, true));
+
+                    case TargetingMode.NearMouse:
+                        return targets.Find(hero => hero.LSDistance(Game.CursorPos, true) < 22500); // 150 * 150
+
+                    case TargetingMode.AutoPriority:
+                        return
+                            targets.MaxOrDefault(
+                                hero =>
+                                    champion.CalcDamage(hero, damageType, 100) / (1 + hero.Health) * GetPriority(hero));
+
+                    case TargetingMode.LessAttack:
+                        return
+                            targets.MaxOrDefault(
+                                hero =>
+                                    champion.CalcDamage(hero, Damage.DamageType.Physical, 100) / (1 + hero.Health) *
+                                    GetPriority(hero));
+
+                    case TargetingMode.LessCast:
+                        return
+                            targets.MaxOrDefault(
+                                hero =>
+                                    champion.CalcDamage(hero, Damage.DamageType.Magical, 100) / (1 + hero.Health) *
+                                    GetPriority(hero));
+                    case TargetingMode.Kalista://
+                        return targets.MaxOrDefault(hero => hero.HealthPercent < _configMenu.Item("kalista.stack.enemy.hp.percent").GetValue<Slider>().Value && hero.GetBuffCount("KalistaExpungeMarker") > _configMenu.Item("kalista.stack.focus").GetValue<Slider>().Value && highP.Contains(hero.ChampionName));
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            return null;
+        }
+
+        #endregion
+    }
+
+    /// <summary>
+    ///     This TS attempts to always lock the same target, useful for people getting targets for each spell, or for champions
+    ///     that have to burst 1 target.
+    /// </summary>
+    public class LockedTargetSelector
+    {
+        public static AIHeroClient _lastTarget;
+        private static TargetSelector.DamageType _lastDamageType;
+
+        public static AIHeroClient GetTarget(float range,
+            TargetSelector.DamageType damageType,
+            bool ignoreShield = true,
+            IEnumerable<AIHeroClient> ignoredChamps = null,
+            Vector3? rangeCheckFrom = null)
+        {
+            if (_lastTarget == null || !_lastTarget.LSIsValidTarget() || _lastDamageType != damageType)
+            {
+                var newTarget = TargetSelector.GetTarget(range, damageType, ignoreShield, ignoredChamps, rangeCheckFrom);
+
+                _lastTarget = newTarget;
+                _lastDamageType = damageType;
+
+                return newTarget;
+            }
+
+            if (_lastTarget.LSIsValidTarget(range) && damageType == _lastDamageType)
+            {
+                return _lastTarget;
+            }
+
+            var newTarget2 = TargetSelector.GetTarget(range, damageType, ignoreShield, ignoredChamps, rangeCheckFrom);
+
+            _lastTarget = newTarget2;
+            _lastDamageType = damageType;
+
+            return newTarget2;
+        }
+
+        /// <summary>
+        ///     Unlocks the currently locked target.
+        /// </summary>
+        public static void UnlockTarget()
+        {
+            _lastTarget = null;
+        }
+
+        public static void AddToMenu(Menu menu)
+        {
+            TargetSelector.AddToMenu(menu);
+        }
+    }
+}
