@@ -6,7 +6,7 @@ I'd like to welcome everyone to PortAIO v2, a complete reboot of PortAIO. We too
 - https://discord.gg/0zNgmm6ziPDoOfbZ is the official PortAIO discord channel.
 
 ###### - Berb : Creator of PortAIO, he basically maintains everything (porting, bug fixing, managing discord/git)
-###### - CttBot : A PortAIO dev that developed/ported the common that we use today, without him none of PortAIO v2 would be possible.
+###### - CTTBot : A PortAIO dev that developed/ported the common that we use today, without him none of PortAIO v2 would be possible.
 ###### - SidaRevamped : Active Supporter and bug fixer
 ###### - Muse30 : Currenlty MIA (Come back plsss we miss you)
 
