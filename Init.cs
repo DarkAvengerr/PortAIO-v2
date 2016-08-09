@@ -12,14 +12,9 @@ using LeagueSharp.Common;
 
 namespace PortAIO
 {
-    internal static class Init
+    public static class Init
     {
-        private static void Main()
-        {
-            Loading.OnLoadingComplete += Initialize;
-        }
-
-        private static void Initialize(EventArgs args)
+        public static void Initialize()
         {
             //LeagueSharp.SDK.Bootstrap.Init(); - SDK is not yet added so it is not yet needed.
             Misc.Load();
