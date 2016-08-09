@@ -85,14 +85,14 @@ namespace SAutoCarry.Champions
             }
             else
             {
-                if (Spells[Q].LSIsReady() && ComboUseQ)
+                if (Spells[Q].IsReady() && ComboUseQ)
                 {
                     var t = TargetSelector.GetTarget(Spells[Q].Range, TargetSelector.DamageType.Physical);
                     if (t != null)
                         Spells[Q].CastOnUnit(t);
                 }
 
-                if (Spells[W].LSIsReady() && ComboUseW)
+                if (Spells[W].IsReady() && ComboUseW)
                 {
                     var t = TargetSelector.GetTarget(Spells[W].Range, TargetSelector.DamageType.Physical);
                     if (t != null && (!ComboUseWMarked || t.HasBuff("jhinespotteddebuff")))
@@ -100,7 +100,7 @@ namespace SAutoCarry.Champions
                         var pred = Spells[W].GetSPrediction(t);
                         if (pred.HitChance >= HitChance.High)
                         {
-                            if (pred.UnitPosition.LSDistance(ObjectManager.Player.ServerPosition) < Spells[E].Range)
+                            if (pred.UnitPosition.Distance(ObjectManager.Player.ServerPosition) < Spells[E].Range)
                                 Spells[E].Cast(pred.UnitPosition);
 
                             Spells[W].Cast(pred.CastPosition);
@@ -108,9 +108,9 @@ namespace SAutoCarry.Champions
                     }
                 }
 
-                if (Spells[E].LSIsReady() && (ComboUseEDashing || ComboUseEImmobile) && Spells[E].Instance.Ammo != 0)
+                if (Spells[E].IsReady() && (ComboUseEDashing || ComboUseEImmobile) && Spells[E].Instance.Ammo != 0)
                 {
-                    var t = HeroManager.Enemies.Where(p => p.LSIsValidTarget(Spells[E].Range) && ((p.IsImmobilized() && ComboUseEImmobile) || (p.LSIsDashing() && ComboUseEDashing))).OrderBy(q => q.GetPriority()).FirstOrDefault();
+                    var t = HeroManager.Enemies.Where(p => p.IsValidTarget(Spells[E].Range) && ((p.IsImmobilized() && ComboUseEImmobile) || (p.IsDashing() && ComboUseEDashing))).OrderBy(q => q.GetPriority()).FirstOrDefault();
                     if (t != null)
                         Spells[E].Cast(t.ServerPosition);
                 }
@@ -126,11 +126,11 @@ namespace SAutoCarry.Champions
                 var minions = MinionManager.GetMinions(Spells[Q].Range * 2f);
                 foreach (var minion in minions)
                 {
-                    if (minion.LSIsValidTarget(Spells[Q].Range) && minion.LSDistance(t.ServerPosition) <= Spells[Q].Range)
+                    if (minion.IsValidTarget(Spells[Q].Range) && minion.Distance(t.ServerPosition) <= Spells[Q].Range)
                     {
-                        var hitbox = ClipperWrapper.DefineCircle(minion.ServerPosition.LSTo2D(), Spells[Q].Range);
-                        var possibleBounces = minions.Where(p => !hitbox.IsOutside(p.ServerPosition.LSTo2D())).OrderBy(q => q.LSDistance(minion.ServerPosition));
-                        if (possibleBounces.Count() < 3 || possibleBounces.FirstOrDefault().LSDistance(minion.ServerPosition) > t.LSDistance(minion.ServerPosition)) // <= 3 ?
+                        var hitbox = ClipperWrapper.DefineCircle(minion.ServerPosition.To2D(), Spells[Q].Range);
+                        var possibleBounces = minions.Where(p => !hitbox.IsOutside(p.ServerPosition.To2D())).OrderBy(q => q.Distance(minion.ServerPosition));
+                        if (possibleBounces.Count() < 3 || possibleBounces.FirstOrDefault().Distance(minion.ServerPosition) > t.Distance(minion.ServerPosition)) // <= 3 ?
                         {
                             Spells[Q].CastOnUnit(minion);
                             return;
@@ -139,7 +139,7 @@ namespace SAutoCarry.Champions
                         {
                             for(int i = 0; i < 3; i++) // < 4 ? 
                             {
-                                if (possibleBounces.ElementAt(i).LSDistance(minion.ServerPosition) > t.LSDistance(minion.ServerPosition))
+                                if (possibleBounces.ElementAt(i).Distance(minion.ServerPosition) > t.Distance(minion.ServerPosition))
                                 {
                                     Spells[Q].CastOnUnit(minion);
                                     return;
@@ -151,7 +151,7 @@ namespace SAutoCarry.Champions
             }
 
 
-            if (Spells[W].LSIsReady() && HarassUseW)
+            if (Spells[W].IsReady() && HarassUseW)
             {
                 t = TargetSelector.GetTarget(Spells[W].Range, TargetSelector.DamageType.Physical);
                 if (t != null)
@@ -163,15 +163,15 @@ namespace SAutoCarry.Champions
         {
             if (IsRShootCastable)
             {
-                foreach (AIHeroClient target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(3500f) && !x.HasBuffOfType(BuffType.Invulnerability)))
+                foreach (AIHeroClient target in HeroManager.Enemies.Where(x => x.IsValidTarget(3500f) && !x.HasBuffOfType(BuffType.Invulnerability)))
                 {
                     if (CalculateDamageR(target) > target.Health + 20)
                         Spells[R].SPredictionCast(target, HitChance.High);
                 }
             }
-            else if (Spells[W].LSIsReady())
+            else if (Spells[W].IsReady())
             {
-                foreach (AIHeroClient target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(2500f) && !x.HasBuffOfType(BuffType.Invulnerability)))
+                foreach (AIHeroClient target in HeroManager.Enemies.Where(x => x.IsValidTarget(2500f) && !x.HasBuffOfType(BuffType.Invulnerability)))
                 {
                     if (CalculateDamageW(target) > target.Health + 20)
                         Spells[W].SPredictionCast(target, HitChance.High);
@@ -181,7 +181,7 @@ namespace SAutoCarry.Champions
 
         public override double CalculateDamageW(AIHeroClient target)
         {
-            if (!Spells[W].LSIsReady())
+            if (!Spells[W].IsReady())
                 return 0.0d;
 
             return ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical, new[] { 50, 85, 120, 155, 190 }[Spells[W].Level] + ObjectManager.Player.TotalAttackDamage * 0.7);
@@ -189,7 +189,7 @@ namespace SAutoCarry.Champions
 
         public override double CalculateDamageR(AIHeroClient target)
         {
-            if (!Spells[R].LSIsReady())
+            if (!Spells[R].IsReady())
                 return 0.0d;
 
             return ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical, (new[] { 50, 125, 200 }[Spells[R].Level] + ObjectManager.Player.TotalAttackDamage * 0.25) * ((100f - target.HealthPercent) * 0.02f + (IsLastRShoot ? 1f : 0f)));

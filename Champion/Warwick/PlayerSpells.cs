@@ -78,7 +78,7 @@ using EloBuddy; namespace Warwick
 
             var t = TargetSelector.GetTarget(Program.Q.Range, TargetSelector.DamageType.Magical);
 
-            if (!t.LSIsValidTarget())
+            if (!t.IsValidTarget())
                 return;
 
             if (IgniteSlot != SpellSlot.Unknown && Program.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready)
@@ -108,7 +108,7 @@ using EloBuddy; namespace Warwick
 
         private static void SetIgniteSlot()
         {
-            IgniteSlot = Program.Player.LSGetSpellSlot("SummonerDot");
+            IgniteSlot = Program.Player.GetSpellSlot("SummonerDot");
         }
 
         private static void SmiteOnTarget()
@@ -118,14 +118,14 @@ using EloBuddy; namespace Warwick
 
             var t = TargetSelector.GetTarget(Program.Q.Range, TargetSelector.DamageType.Magical);
 
-            if (!t.LSIsValidTarget())
+            if (!t.IsValidTarget())
                 return;
 
             var range = 700f;
 
             var itemCheck = SmiteBlue.Any(i => Items.HasItem(i)) || SmiteRed.Any(i => Items.HasItem(i));
             if (itemCheck && Program.Player.Spellbook.CanUseSpell(SmiteSlot) == SpellState.Ready &&
-                t.LSDistance(Program.Player.Position) < range)
+                t.Distance(Program.Player.Position) < range)
             {
                 Program.Player.Spellbook.CastSpell(SmiteSlot, t);
             }
@@ -179,7 +179,7 @@ using EloBuddy; namespace Warwick
             var range = 550f;
             var use = menu.Item("Spells.Ignite").GetValue<bool>();
             if (use && Program.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready &&
-                t.LSDistance(Program.Player.Position) < range &&
+                t.Distance(Program.Player.Position) < range &&
                 Program.Player.GetSummonerSpellDamage(t, Damage.SummonerSpell.Ignite) > t.Health)
             {
                 Program.Player.Spellbook.CastSpell(IgniteSlot, t);

@@ -15,7 +15,7 @@ using EloBuddy; namespace Sebby_Ban_War
         public static Font Tahoma13;
         public static Menu Config;
         public static int LastMouseTime = Utils.TickCount;
-        public static Vector2 LastMousePos = Game.CursorPos.LSTo2D();
+        public static Vector2 LastMousePos = Game.CursorPos.To2D();
         public static int NewPathTime = Utils.TickCount;
         public static int LastType = 0; // 0 Move , 1 Attack, 2 Cast spell
         public static bool LastUserClickTime = false;
@@ -47,7 +47,7 @@ using EloBuddy; namespace Sebby_Ban_War
 
         private static void Game_OnSendPacket(GamePacketEventArgs args)
         {
-            if(args.LSGetPacketId() == 270)
+            if(args.GetPacketId() == 270)
             {
                 PathPerSecCounter++;
             }
@@ -112,17 +112,17 @@ using EloBuddy; namespace Sebby_Ban_War
             var spell = ObjectManager.Player.Spellbook.Spells.FirstOrDefault(x => x.Slot == args.Slot);
 
             // LINE CUT SPELL RANGE
-            if (Config.Item("cut").GetValue<bool>() && spell != null && spell.SData.LineWidth != 0 && spellPosition.LSDistance(args.StartPosition) > 700)
+            if (Config.Item("cut").GetValue<bool>() && spell != null && spell.SData.LineWidth != 0 && spellPosition.Distance(args.StartPosition) > 700)
             {
                 Random rnd = new Random();
-                ObjectManager.Player.Spellbook.CastSpell(args.Slot, args.StartPosition.LSExtend(spellPosition, rnd.Next(400, 600)));
+                ObjectManager.Player.Spellbook.CastSpell(args.Slot, args.StartPosition.Extend(spellPosition, rnd.Next(400, 600)));
                 Console.WriteLine("CUT SPELL");
                 args.Process = false;
                 return;
             }
             
             var screenPos = Drawing.WorldToScreen(spellPosition);    
-            if (Config.Item("skill").GetValue<bool>() && Utils.TickCount - LastMouseTime < LastMousePos.LSDistance(screenPos) / 20)
+            if (Config.Item("skill").GetValue<bool>() && Utils.TickCount - LastMouseTime < LastMousePos.Distance(screenPos) / 20)
             {
                 Console.WriteLine("BLOCK SPELL");
                 args.Process = false;
@@ -139,7 +139,7 @@ using EloBuddy; namespace Sebby_Ban_War
                 return;
 
             var screenPos = Drawing.WorldToScreen(args.TargetPosition);
-            var mouseDis = LastMousePos.LSDistance(screenPos);
+            var mouseDis = LastMousePos.Distance(screenPos);
             if (LastUserClickTime)
             {
                 LastUserClickTime = false;
@@ -163,7 +163,7 @@ using EloBuddy; namespace Sebby_Ban_War
                 return;
             }
 
-            //Console.WriteLine("DIS " + LastMousePos.LSDistance(screenPos) + " TIME " + (Utils.TickCount - LastMouseTime));
+            //Console.WriteLine("DIS " + LastMousePos.Distance(screenPos) + " TIME " + (Utils.TickCount - LastMouseTime));
             if (args.Order == GameObjectOrder.AttackUnit)
             {
                 if (Config.Item("blockOut").GetValue<bool>() && !Render.OnScreen(screenPos))

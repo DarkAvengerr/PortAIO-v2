@@ -106,7 +106,7 @@ using EloBuddy;
         static void Interrupter_OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
             if (!unit.IsValid || unit.IsDead || !unit.IsTargetable || unit.IsStunned) return;
-            if (R.LSIsReady() && R.IsInRange(unit.Position) && spell.DangerLevel >= InterruptableDangerLevel.High)
+            if (R.IsReady() && R.IsInRange(unit.Position) && spell.DangerLevel >= InterruptableDangerLevel.High)
             {
                 R.Cast(unit.Position, true);
                 return;
@@ -114,10 +114,10 @@ using EloBuddy;
             else
             {
                 if (!_menu.Item("vodka.sona.misc.exhaust").GetValue<bool>()) return;
-                if (unit.LSDistance(Player.Position) > 600) return;
-                if (Player.LSGetSpellSlot("SummonerExhaust") != SpellSlot.Unknown && Player.Spellbook.CanUseSpell(Player.LSGetSpellSlot("SummonerExhaust")) == SpellState.Ready)
-                    Player.Spellbook.CastSpell(Player.LSGetSpellSlot("SummonerExhaust"), unit);
-                if ((W.LSIsReady() && GetPassiveCount() == 2) || (Player.LSHasBuff("sonapassiveattack") && Player.LastCastedSpellName() == "SonaW" && W.LSIsReady() || (Player.LSHasBuff("sonapassiveattack") && W.LSIsReady())))
+                if (unit.Distance(Player.Position) > 600) return;
+                if (Player.GetSpellSlot("SummonerExhaust") != SpellSlot.Unknown && Player.Spellbook.CanUseSpell(Player.GetSpellSlot("SummonerExhaust")) == SpellState.Ready)
+                    Player.Spellbook.CastSpell(Player.GetSpellSlot("SummonerExhaust"), unit);
+                if ((W.IsReady() && GetPassiveCount() == 2) || (Player.HasBuff("sonapassiveattack") && Player.LastCastedSpellName() == "SonaW" && W.IsReady() || (Player.HasBuff("sonapassiveattack") && W.IsReady())))
                 {
                     W.Cast();
                     EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, unit);
@@ -145,10 +145,10 @@ using EloBuddy;
             var menuItem3 = _menu.Item("DrawW").GetValue<Circle>();
             var menuItem4 = _menu.Item("DrawR").GetValue<Circle>();
 
-            if (menuItem1.Active && Q.LSIsReady()) Render.Circle.DrawCircle(Player.Position, Q.Range, Color.SpringGreen);
-            if (menuItem2.Active && E.LSIsReady()) Render.Circle.DrawCircle(Player.Position, E.Range, Color.Crimson);
-            if (menuItem3.Active && W.LSIsReady()) Render.Circle.DrawCircle(Player.Position, W.Range, Color.Aqua);
-            if (menuItem4.Active && R.LSIsReady()) Render.Circle.DrawCircle(Player.Position, R.Range, Color.Firebrick);
+            if (menuItem1.Active && Q.IsReady()) Render.Circle.DrawCircle(Player.Position, Q.Range, Color.SpringGreen);
+            if (menuItem2.Active && E.IsReady()) Render.Circle.DrawCircle(Player.Position, E.Range, Color.Crimson);
+            if (menuItem3.Active && W.IsReady()) Render.Circle.DrawCircle(Player.Position, W.Range, Color.Aqua);
+            if (menuItem4.Active && R.IsReady()) Render.Circle.DrawCircle(Player.Position, R.Range, Color.Firebrick);
         }
 
         private static void Game_OnUpdate(EventArgs args)
@@ -178,7 +178,7 @@ using EloBuddy;
         // laneclear not needed
         private static void Laneclear()
         {
-            if (E.LSIsReady() && _menu.Item("vodka.sona.combo.usee").GetValue<bool>())
+            if (E.IsReady() && _menu.Item("vodka.sona.combo.usee").GetValue<bool>())
             {
                 
             }
@@ -187,10 +187,10 @@ using EloBuddy;
         // da real combo intelligent
         private static void Combo()
         {
-            bool vQ = Q.LSIsReady() && _menu.Item("vodka.sona.combo.useq").GetValue<bool>();
-            bool vW = W.LSIsReady() && _menu.Item("vodka.sona.combo.usew").GetValue<bool>();
-            bool vE = E.LSIsReady() && _menu.Item("vodka.sona.combo.usee").GetValue<bool>();
-            bool vR = R.LSIsReady() && _menu.Item("vodka.sona.combo.user").GetValue<bool>();
+            bool vQ = Q.IsReady() && _menu.Item("vodka.sona.combo.useq").GetValue<bool>();
+            bool vW = W.IsReady() && _menu.Item("vodka.sona.combo.usew").GetValue<bool>();
+            bool vE = E.IsReady() && _menu.Item("vodka.sona.combo.usee").GetValue<bool>();
+            bool vR = R.IsReady() && _menu.Item("vodka.sona.combo.user").GetValue<bool>();
 
             AIHeroClient tsQ = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
             AIHeroClient tsR = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
@@ -225,9 +225,9 @@ using EloBuddy;
 
                 if (target.Path.Length == 0 || !target.IsMoving)
                     return;
-                Vector2 nextEnemPath = target.Path[0].LSTo2D();
-                var dist = Player.Position.LSTo2D().LSDistance(target.Position.LSTo2D());
-                var distToNext = nextEnemPath.LSDistance(Player.Position.LSTo2D());
+                Vector2 nextEnemPath = target.Path[0].To2D();
+                var dist = Player.Position.To2D().Distance(target.Position.To2D());
+                var distToNext = nextEnemPath.Distance(Player.Position.To2D());
                 if (distToNext <= dist)
                     return;
                 var msDif = Player.MoveSpeed - target.MoveSpeed;

@@ -34,7 +34,7 @@ using EloBuddy; namespace ADCPackage.Plugins
 
             if (Menu.Config.Item("ks.r").IsActive())
             {
-                var r2 = Player.LSHasBuff("corkimissilebarragecounterbig");
+                var r2 = Player.HasBuff("corkimissilebarragecounterbig");
 
                 if (r2)
                 {
@@ -79,10 +79,10 @@ using EloBuddy; namespace ADCPackage.Plugins
                 {
                     if (Q.CanCast(target))
                     {
-                        if (target.IsMoving && target.LSGetWaypoints().Count >= 2)
+                        if (target.IsMoving && target.GetWaypoints().Count >= 2)
                         {
                             //var qpred = Q.GetPrediction(target);
-                            var x = target.Position.LSExtend(Prediction.GetPrediction(target, Q.Delay).UnitPosition, 300);
+                            var x = target.Position.Extend(Prediction.GetPrediction(target, Q.Delay).UnitPosition, 300);
 
                             if (Q.IsInRange(x))
                             {
@@ -101,7 +101,7 @@ using EloBuddy; namespace ADCPackage.Plugins
 
                 if (Menu.Config.Item("e.combo").IsActive())
                 {
-                    if (E.LSIsReady() && Player.LSIsFacing(target))
+                    if (E.IsReady() && Player.IsFacing(target))
                     {
                         E.Cast(target);
                     }
@@ -110,9 +110,9 @@ using EloBuddy; namespace ADCPackage.Plugins
 
             if (Menu.Config.Item("r.combo").IsActive() && Menu.Config.Item("r.combo.stacks").GetValue<Slider>().Value < R.Instance.Ammo)
             {
-                if (R.LSIsReady())
+                if (R.IsReady())
                 {
-                    var r2 = Player.LSHasBuff("corkimissilebarragecounterbig");
+                    var r2 = Player.HasBuff("corkimissilebarragecounterbig");
                     if (!r2)
                     {
                         var rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
@@ -129,8 +129,8 @@ using EloBuddy; namespace ADCPackage.Plugins
                                     break;
                                 case HitChance.Collision:
                                     var colliding =
-                                        pred.CollisionObjects.OrderBy(o => o.LSDistance(Player.ServerPosition)).ToList();
-                                    if (colliding[0].LSDistance(rtarget.ServerPosition) <= 200 + colliding[0].BoundingRadius)
+                                        pred.CollisionObjects.OrderBy(o => o.Distance(Player.ServerPosition)).ToList();
+                                    if (colliding[0].Distance(rtarget.ServerPosition) <= 200 + colliding[0].BoundingRadius)
                                     {
                                         R.Cast(pred.CastPosition);
                                     }
@@ -155,8 +155,8 @@ using EloBuddy; namespace ADCPackage.Plugins
 
                                 case HitChance.Collision:
                                     var colliding =
-                                        pred.CollisionObjects.OrderBy(o => o.LSDistance(Player.ServerPosition)).ToList();
-                                    if (colliding[0].LSDistance(rtarget.ServerPosition) <= 200 + colliding[0].BoundingRadius)
+                                        pred.CollisionObjects.OrderBy(o => o.Distance(Player.ServerPosition)).ToList();
+                                    if (colliding[0].Distance(rtarget.ServerPosition) <= 200 + colliding[0].BoundingRadius)
                                     {
                                         R.Cast(pred.CastPosition);
                                     }
@@ -183,7 +183,7 @@ using EloBuddy; namespace ADCPackage.Plugins
                         if (target.IsMoving)
                         {
                             //var qpred = Q.GetPrediction(target);
-                            var x = target.Position.LSExtend(Prediction.GetPrediction(target, Q.Delay).UnitPosition, 300);
+                            var x = target.Position.Extend(Prediction.GetPrediction(target, Q.Delay).UnitPosition, 300);
 
                             if (Q.IsInRange(x))
                             {
@@ -202,7 +202,7 @@ using EloBuddy; namespace ADCPackage.Plugins
 
                 if (Menu.Config.Item("e.harass").IsActive())
                 {
-                    if (E.LSIsReady() && Player.LSIsFacing(target))
+                    if (E.IsReady() && Player.IsFacing(target))
                     {
                         E.Cast(target);
                     }
@@ -211,9 +211,9 @@ using EloBuddy; namespace ADCPackage.Plugins
 
             if (Menu.Config.Item("r.harass").IsActive() && Menu.Config.Item("r.harass.stacks").GetValue<Slider>().Value < R.Instance.Ammo)
             {
-                if (R.LSIsReady())
+                if (R.IsReady())
                 {
-                    var r2 = Player.LSHasBuff("corkimissilebarragecounterbig");
+                    var r2 = Player.HasBuff("corkimissilebarragecounterbig");
                     if (!r2)
                     {
                         var rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
@@ -230,8 +230,8 @@ using EloBuddy; namespace ADCPackage.Plugins
                                     break;
                                 case HitChance.Collision:
                                     var colliding =
-                                        pred.CollisionObjects.OrderBy(o => o.LSDistance(Player.ServerPosition)).ToList();
-                                    if (colliding[0].LSDistance(rtarget.ServerPosition) <= 200 + colliding[0].BoundingRadius)
+                                        pred.CollisionObjects.OrderBy(o => o.Distance(Player.ServerPosition)).ToList();
+                                    if (colliding[0].Distance(rtarget.ServerPosition) <= 200 + colliding[0].BoundingRadius)
                                     {
                                         R.Cast(pred.CastPosition);
                                     }
@@ -256,8 +256,8 @@ using EloBuddy; namespace ADCPackage.Plugins
 
                                 case HitChance.Collision:
                                     var colliding =
-                                        pred.CollisionObjects.OrderBy(o => o.LSDistance(Player.ServerPosition)).ToList();
-                                    if (colliding[0].LSDistance(rtarget.ServerPosition) <= 200 + colliding[0].BoundingRadius)
+                                        pred.CollisionObjects.OrderBy(o => o.Distance(Player.ServerPosition)).ToList();
+                                    if (colliding[0].Distance(rtarget.ServerPosition) <= 200 + colliding[0].BoundingRadius)
                                     {
                                         R2.Cast(pred.CastPosition);
                                     }
@@ -271,7 +271,7 @@ using EloBuddy; namespace ADCPackage.Plugins
 
         public static void LaneClear()
         {
-            if (Q.LSIsReady() && Menu.Config.Item("q.laneclear").IsActive())
+            if (Q.IsReady() && Menu.Config.Item("q.laneclear").IsActive())
             {
                 var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q.Range);
                 var qfarm = Q.GetCircularFarmLocation(minions);
@@ -282,18 +282,18 @@ using EloBuddy; namespace ADCPackage.Plugins
                 }
             }
 
-            if (E.LSIsReady() && Menu.Config.Item("e.laneclear").IsActive())
+            if (E.IsReady() && Menu.Config.Item("e.laneclear").IsActive())
             {
                 var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, E.Range);
 
                 if (minions.Count >= Menu.Config.Item("e.laneclear.minions").GetValue<Slider>().Value)
                 {
-                    if (Player.LSIsFacing(minions.FirstOrDefault()))
+                    if (Player.IsFacing(minions.FirstOrDefault()))
                         E.Cast(Game.CursorPos);
                 }
             }
 
-            if (R.LSIsReady() && Menu.Config.Item("r.laneclear").IsActive() && Menu.Config.Item("r.laneclear.stacks").GetValue<Slider>().Value < R.Instance.Ammo)
+            if (R.IsReady() && Menu.Config.Item("r.laneclear").IsActive() && Menu.Config.Item("r.laneclear.stacks").GetValue<Slider>().Value < R.Instance.Ammo)
             {
                 var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, R.Range);
                 var rfarm = R.GetCircularFarmLocation(minions, 150);

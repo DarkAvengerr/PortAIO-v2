@@ -95,7 +95,7 @@ namespace SAutoCarry.Champions
 
         public void Combo()
         {
-            if (Spells[E].LSIsReady() && ComboUseE)
+            if (Spells[E].IsReady() && ComboUseE)
             {
                 var t = TargetSelector.GetTarget(Spells[E].Range + m_laserLenght, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
@@ -107,12 +107,12 @@ namespace SAutoCarry.Champions
                 }
             }
 
-            if (Spells[R].LSIsReady() && ComboUseR)
+            if (Spells[R].IsReady() && ComboUseR)
             {
                 if (ComboUseRMin == 1)
                 {
                     var t = TargetSelector.GetTarget(Spells[R].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
-                    if (t != null && t.Health - CalculateComboDamage(t) - (Spells[Q].LSIsReady(1000) ? CalculateViktorPassiveAADamage(t) : 0) < 200)
+                    if (t != null && t.Health - CalculateComboDamage(t) - (Spells[Q].IsReady(1000) ? CalculateViktorPassiveAADamage(t) : 0) < 200)
                     {
                         if (SCommon.Orbwalking.Utility.InAARange(t) && ObjectManager.Player.HasBuff("viktorpowertransferreturn") && Orbwalker.CanAttack(250))
                             return;
@@ -123,7 +123,7 @@ namespace SAutoCarry.Champions
                     Spells[R].SPredictionCastAoe(ComboUseRMin);
             }
 
-            if(Spells[Q].LSIsReady() && ComboUseQ && !ComboUseQOnlyAA)
+            if(Spells[Q].IsReady() && ComboUseQ && !ComboUseQOnlyAA)
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
@@ -136,7 +136,7 @@ namespace SAutoCarry.Champions
             if (ObjectManager.Player.ManaPercent < HarassMinMana)
                 return;
 
-            if (Spells[E].LSIsReady() && HarassUseE)
+            if (Spells[E].IsReady() && HarassUseE)
             {
                 var t = TargetSelector.GetTarget(Spells[E].Range + m_laserLenght, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
@@ -167,7 +167,7 @@ namespace SAutoCarry.Champions
             if (LaneClearUseE)
             {
                 var fromPosition = GetLaneClearLaserStart();
-                if (fromPosition.LSIsValid())
+                if (fromPosition.IsValid())
                 {
                     var farmLocation = GetBestLaserFarmLocation(fromPosition, MinionManager.GetMinionsPredictedPositions(MinionManager.GetMinions(fromPosition.To3D(), 700), 0, 80, 1200f, fromPosition.To3D(), 700, false, SkillshotType.SkillshotLine), 80, 700);
 
@@ -184,11 +184,11 @@ namespace SAutoCarry.Champions
             Vector2 endPos = new Vector2(0, 0);
             foreach (var minion in MinionManager.GetMinions(ObjectManager.Player.ServerPosition, 700))
             {
-                var farmLocation = GetBestLaserFarmLocation(minion.Position.LSTo2D(), (from mnion in MinionManager.GetMinions(minion.Position, 700) select mnion.Position.LSTo2D()).ToList<Vector2>(), 80, 700);
+                var farmLocation = GetBestLaserFarmLocation(minion.Position.To2D(), (from mnion in MinionManager.GetMinions(minion.Position, 700) select mnion.Position.To2D()).ToList<Vector2>(), 80, 700);
                 if (farmLocation.MinionsHit > hitNum)
                 {
                     hitNum = farmLocation.MinionsHit;
-                    startPos = minion.Position.LSTo2D();
+                    startPos = minion.Position.To2D();
                     endPos = farmLocation.Position;
                 }
             }
@@ -216,12 +216,12 @@ namespace SAutoCarry.Champions
 
             foreach (var pos in minionPositions)
             {
-                if (pos.LSDistance(startPos, true) <= range * range)
+                if (pos.Distance(startPos, true) <= range * range)
                 {
-                    var endPos = startPos + range * (pos - startPos).LSNormalized();
+                    var endPos = startPos + range * (pos - startPos).Normalized();
 
                     var count =
-                        minionPositions.Count(pos2 => pos2.LSDistance(startPos, endPos, true, true) <= width * width);
+                        minionPositions.Count(pos2 => pos2.Distance(startPos, endPos, true, true) <= width * width);
 
                     if (count >= minionCount)
                     {
@@ -250,7 +250,7 @@ namespace SAutoCarry.Champions
 
         private void AutoImmobileW()
         {
-            var target = HeroManager.Enemies.Where(p => p.Buffs.Any(q => Data.IsImmobilizeBuff(q.Type)) && p.LSIsValidTarget(Spells[W].Range)).FirstOrDefault();
+            var target = HeroManager.Enemies.Where(p => p.Buffs.Any(q => Data.IsImmobilizeBuff(q.Type)) && p.IsValidTarget(Spells[W].Range)).FirstOrDefault();
             if (target != null)
                 Spells[W].Cast(target.ServerPosition);
         }
@@ -266,7 +266,7 @@ namespace SAutoCarry.Champions
             {
                 if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo)
                 {
-                    if (Spells[Q].LSIsReady() && ComboUseQ)
+                    if (Spells[Q].IsReady() && ComboUseQ)
                     {
                         Spells[Q].CastOnUnit(args.Target as AIHeroClient);
                         args.Process = false;
@@ -274,7 +274,7 @@ namespace SAutoCarry.Champions
                 }
                 else if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Mixed)
                 {
-                    if (Spells[Q].LSIsReady() && HarassUseQ)
+                    if (Spells[Q].IsReady() && HarassUseQ)
                     {
                         Spells[Q].CastOnUnit(args.Target as AIHeroClient);
                         args.Process = false;
@@ -285,7 +285,7 @@ namespace SAutoCarry.Champions
 
         protected override void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (AntiGapW & gapcloser.End.LSDistance(ObjectManager.Player.ServerPosition) < Spells[W].Range)
+            if (AntiGapW & gapcloser.End.Distance(ObjectManager.Player.ServerPosition) < Spells[W].Range)
                 Spells[W].Cast(gapcloser.End);
         }
 
@@ -293,12 +293,12 @@ namespace SAutoCarry.Champions
         {
             if (InterruptR && args.MovementInterrupts && args.DangerLevel == Interrupter2.DangerLevel.High)
             {
-                if (sender.LSIsValidTarget(Spells[R].Range))
+                if (sender.IsValidTarget(Spells[R].Range))
                     Spells[R].Cast(sender.ServerPosition);
             }
             else if (InterruptW && args.MovementInterrupts)
             {
-                if (sender.LSIsValidTarget(Spells[W].Range))
+                if (sender.IsValidTarget(Spells[W].Range))
                     Spells[W].Cast(sender.ServerPosition);
             }
         }

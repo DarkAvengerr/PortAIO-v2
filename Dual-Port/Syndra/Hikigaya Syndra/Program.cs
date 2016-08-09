@@ -49,7 +49,7 @@ using EloBuddy;
             Qe = new Spell(SpellSlot.E, 1290);
             Qe.SetSkillshot(0.6f, 100f, 2500f, false, SkillshotType.SkillshotLine);
 
-            IgniteSlot = Player.LSGetSpellSlot("SummonerDot");
+            IgniteSlot = Player.GetSpellSlot("SummonerDot");
 
             Config = new Menu("Hikigaya Syndra", "Hikigaya Syndra", true);
             {
@@ -273,31 +273,31 @@ using EloBuddy;
         }
         private static void Combo()
         {
-            if (Q.LSIsReady() && Config.Item("q.combo").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("q.combo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= HikiChance("q.hit.chance")))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= HikiChance("q.hit.chance")))
                 {
                     Q.Cast(enemy);
                 }
             }
-            if (W.LSIsReady() && Config.Item("w.combo").GetValue<bool>())
+            if (W.IsReady() && Config.Item("w.combo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range + W.Width) && W.GetPrediction(x).Hitchance >= HikiChance("w.hit.chance")))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range + W.Width) && W.GetPrediction(x).Hitchance >= HikiChance("w.hit.chance")))
                 {
                     Helper.UseW(enemy,enemy);
                 }
             }
-            if (Q.LSIsReady() && E.LSIsReady() && Config.Item("qe.combo").GetValue<bool>())
+            if (Q.IsReady() && E.IsReady() && Config.Item("qe.combo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Qe.Range) && Qe.GetPrediction(x).Hitchance >= HikiChance("qe.hit.chance")))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Qe.Range) && Qe.GetPrediction(x).Hitchance >= HikiChance("qe.hit.chance")))
                 {
                     Helper.UseQe(enemy);
                 }
             }  
 
-            if (R.LSIsReady() && Config.Item("r.combo").GetValue<bool>())
+            if (R.IsReady() && Config.Item("r.combo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) && !Helper.BuffCheck(x) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !Helper.BuffCheck(x) &&
                     Config.Item("r.combo."+x.ChampionName).GetValue<bool>()))
                 {
                     if (enemy.Health < R.GetDamage(enemy))
@@ -310,7 +310,7 @@ using EloBuddy;
 
             if (IgniteSlot != SpellSlot.Unknown && Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready && Config.Item("use.ignite").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Player.Spellbook.GetSpell(IgniteSlot).SData.CastRange)
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Player.Spellbook.GetSpell(IgniteSlot).SData.CastRange)
                     && x.Health < Q.GetDamage(x) + W.GetDamage(x)))
                 {
                     Player.Spellbook.CastSpell(IgniteSlot, enemy);
@@ -326,29 +326,29 @@ using EloBuddy;
 
             if (Config.Item("disable.harass.under.turret").GetValue<bool>())
             {
-                if (ObjectManager.Get<Obj_AI_Turret>().Any(x => ObjectManager.Player.LSDistance(x) < x.AttackRange && x.Team != ObjectManager.Player.Team))
+                if (ObjectManager.Get<Obj_AI_Turret>().Any(x => ObjectManager.Player.Distance(x) < x.AttackRange && x.Team != ObjectManager.Player.Team))
                 {
                     return;
                 }
             }
 
-			if (Q.LSIsReady() && Config.Item("q.harass").GetValue<bool>())
+			if (Q.IsReady() && Config.Item("q.harass").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= HikiChance("q.hit.chance")))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= HikiChance("q.hit.chance")))
                 {
                     Q.Cast(enemy);
                 }
             }
-            if (W.LSIsReady() && Config.Item("w.harass").GetValue<bool>())
+            if (W.IsReady() && Config.Item("w.harass").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range + W.Width) && W.GetPrediction(x).Hitchance >= HikiChance("w.hit.chance")))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range + W.Width) && W.GetPrediction(x).Hitchance >= HikiChance("w.hit.chance")))
                 {
                     Helper.UseW(enemy,enemy);
                 }
             }
-            if (Q.LSIsReady() && E.LSIsReady() && Config.Item("qe.harass").GetValue<bool>())
+            if (Q.IsReady() && E.IsReady() && Config.Item("qe.harass").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Qe.Range) && Qe.GetPrediction(x).Hitchance >= HikiChance("qe.hit.chance")))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Qe.Range) && Qe.GetPrediction(x).Hitchance >= HikiChance("qe.hit.chance")))
                 {
                     Helper.UseQe(enemy);
                 }
@@ -361,7 +361,7 @@ using EloBuddy;
             {
                 return;
             }
-            if (Q.LSIsReady() && Config.Item("q.clear").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("q.clear").GetValue<bool>())
             {
                 var min = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q.Range + Q.Width + 30);
                 var minion = Q.GetCircularFarmLocation(min, Q.Width);
@@ -370,7 +370,7 @@ using EloBuddy;
                     Q.Cast(minion.Position);
                 }
             }
-            if (W.LSIsReady() && Config.Item("w.clear").GetValue<bool>())
+            if (W.IsReady() && Config.Item("w.clear").GetValue<bool>())
             {
                 var rangedMinionsW = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, W.Range + W.Width + 30,
             MinionTypes.Ranged);
@@ -379,7 +379,7 @@ using EloBuddy;
                 {
                     //WObject
                     var gObjectPos = Helper.GetGrabableObjectPos(false);
-                    if (gObjectPos.LSTo2D().LSIsValid() && Environment.TickCount - W.LastCastAttemptT > Game.Ping + 150)
+                    if (gObjectPos.To2D().IsValid() && Environment.TickCount - W.LastCastAttemptT > Game.Ping + 150)
                     {
                         W.Cast(gObjectPos);
                     }
@@ -405,17 +405,17 @@ using EloBuddy;
             {
                 return;
             }
-            if (Q.LSIsReady() && Config.Item("q.jungle").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("q.jungle").GetValue<bool>())
             {
                 var mobs = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, W.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
                 W.Cast(mobs[0]);
             }
-            if (W.LSIsReady() && Config.Item("w.jungle").GetValue<bool>() && Environment.TickCount - Q.LastCastAttemptT > 800)
+            if (W.IsReady() && Config.Item("w.jungle").GetValue<bool>() && Environment.TickCount - Q.LastCastAttemptT > 800)
             {
                 var mobs = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, W.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
                 W.Cast(mobs[0]);
             }
-            if (E.LSIsReady() && Config.Item("e.jungle").GetValue<bool>())
+            if (E.IsReady() && Config.Item("e.jungle").GetValue<bool>())
             {
                 var mobs = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, W.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
                 E.Cast(mobs[0]);
@@ -423,25 +423,25 @@ using EloBuddy;
         }
         private static void KillSteal()
         {
-            if (Q.LSIsReady() && Config.Item("q.ks").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("q.ks").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(Q.Range) && x.Health < Q.GetDamage(x)
+                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(Q.Range) && x.Health < Q.GetDamage(x)
                     && Q.GetPrediction(x).Hitchance >= HikiChance("q.hit.chance")))
                 {
                     Q.Cast(enemy);
                 }
             }
-            if (W.LSIsReady() && Config.Item("w.ks").GetValue<bool>())
+            if (W.IsReady() && Config.Item("w.ks").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range + W.Width) && W.GetPrediction(x).Hitchance >= HikiChance("q.hit.chance")
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range + W.Width) && W.GetPrediction(x).Hitchance >= HikiChance("q.hit.chance")
                     && x.Health < W.GetDamage(x)))
                 {
                     Helper.UseW(enemy, enemy);
                 }
             }
-            if (E.LSIsReady() && Config.Item("e.ks").GetValue<bool>())
+            if (E.IsReady() && Config.Item("e.ks").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range) && E.GetPrediction(x).Hitchance >= HikiChance("e.hit.chance")
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && E.GetPrediction(x).Hitchance >= HikiChance("e.hit.chance")
                     && x.Health < E.GetDamage(x)))
                 {
                     E.Cast(enemy);
@@ -457,9 +457,9 @@ using EloBuddy;
                     return;
                 }
 
-                if (Q.LSIsReady() && Config.Item("q.toggle").GetValue<bool>())
+                if (Q.IsReady() && Config.Item("q.toggle").GetValue<bool>())
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) &&
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) &&
                         Q.GetPrediction(x).Hitchance >= HikiChance("toggle.hit.chance")))
                     {
                         Q.Cast(enemy);

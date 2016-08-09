@@ -72,14 +72,14 @@ using EloBuddy;
 
         public static bool IsEnabledAndReady(this Spell Spell, bool checkMana = true)
         {
-            if (!Spell.LSIsReady())
+            if (!Spell.IsReady())
             {
                 return false;
             }
 
             var Mode = Variables.Orbwalker.ActiveMode;
             var slot = Spell.Slot;
-            var readyCondition = Spell.LSIsReady();
+            var readyCondition = Spell.IsReady();
             var menuItem =
                 Variables.Menu.Item(
                     $"iseriesr.{ObjectManager.Player.ChampionName.ToLower()}.{Mode.ToString().ToLower()}.{slot.ToString().ToLower()}");

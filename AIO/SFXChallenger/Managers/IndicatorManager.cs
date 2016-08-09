@@ -142,7 +142,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                     var sharpColor = new ColorBGRA(color.R, color.G, color.B, alpha);
                     foreach (var unit in
                         GameObjects.EnemyHeroes.Where(
-                            u => u.IsHPBarRendered && u.Position.IsOnScreen() && u.LSIsValidTarget()))
+                            u => u.IsHPBarRendered && u.Position.IsOnScreen() && u.IsValidTarget()))
                     {
                         var damage = CalculateDamage(unit);
                         if (damage <= 0)
@@ -200,7 +200,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                     new MenuItem(_menu.Name + "." + spell.Slot, spell.Slot.ToString().ToUpper()).SetValue(enabled));
                 if (readyCheck)
                 {
-                    Functions.Add(spell.Slot.ToString(), hero => spell.LSIsReady() ? spell.GetDamage(hero) : 0);
+                    Functions.Add(spell.Slot.ToString(), hero => spell.IsReady() ? spell.GetDamage(hero) : 0);
                 }
                 else
                 {
@@ -221,8 +221,8 @@ using EloBuddy; namespace SFXChallenger.Managers
                 var aa = _menu.Item(_menu.Name + ".attacks").GetValue<Slider>().Value;
                 if (aa > 0)
                 {
-                    damage += (float) ObjectManager.Player.LSGetAutoAttackDamage(target, true);
-                    damage += (float) (ObjectManager.Player.LSGetAutoAttackDamage(target) * (aa - 1));
+                    damage += (float) ObjectManager.Player.GetAutoAttackDamage(target, true);
+                    damage += (float) (ObjectManager.Player.GetAutoAttackDamage(target) * (aa - 1));
                 }
                 damage +=
                     Functions.Where(function => _menu.Item(_menu.Name + "." + function.Key).GetValue<bool>())

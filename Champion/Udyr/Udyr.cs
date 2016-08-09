@@ -87,7 +87,7 @@ namespace BrianSharp.Plugin
 
         private static void OnUpdate(EventArgs args)
         {
-            if (Player.IsDead || MenuGUI.IsChatOpen || Player.LSIsRecalling())
+            if (Player.IsDead || MenuGUI.IsChatOpen || Player.IsRecalling())
             {
                 if (Player.IsDead)
                 {
@@ -164,7 +164,7 @@ namespace BrianSharp.Plugin
             {
                 return;
             }
-            if (GetValue<bool>("Combo", "E") && E.LSIsReady() && CanCastE(target) && E.Cast(PacketCast))
+            if (GetValue<bool>("Combo", "E") && E.IsReady() && CanCastE(target) && E.Cast(PacketCast))
             {
                 return;
             }
@@ -175,13 +175,13 @@ namespace BrianSharp.Plugin
                 {
                     return;
                 }
-                if (GetValue<bool>("Combo", "R") && R.LSIsReady() &&
+                if (GetValue<bool>("Combo", "R") && R.IsReady() &&
                     (!GetValue<bool>("Combo", "Q") || Q.Level == 0 || (CurStance == Stance.Tiger && _aaCount > 1)) &&
                     R.Cast(PacketCast))
                 {
                     return;
                 }
-                if (GetValue<bool>("Combo", "W") && W.LSIsReady() &&
+                if (GetValue<bool>("Combo", "W") && W.IsReady() &&
                     Player.HealthPercent < GetValue<Slider>("Combo", "WHpU").Value &&
                     ((CurStance == Stance.Tiger && _aaCount > 1) ||
                      (CurStance == Stance.Phoenix && (_aaCount > 2 || _phoenixActive)) || (Q.Level == 0 && R.Level == 0)))
@@ -203,13 +203,13 @@ namespace BrianSharp.Plugin
             {
                 return;
             }
-            if (GetValue<bool>("Clear", "R") && R.LSIsReady() &&
+            if (GetValue<bool>("Clear", "R") && R.IsReady() &&
                 (!GetValue<bool>("Clear", "Q") || Q.Level == 0 || (CurStance == Stance.Tiger && _aaCount > 1)) &&
                 R.Cast(PacketCast))
             {
                 return;
             }
-            if (GetValue<bool>("Clear", "W") && W.LSIsReady() &&
+            if (GetValue<bool>("Clear", "W") && W.IsReady() &&
                 Player.HealthPercent < GetValue<Slider>("Clear", "WHpU").Value &&
                 ((CurStance == Stance.Tiger && _aaCount > 1) ||
                  (CurStance == Stance.Phoenix && (_aaCount > 2 || _phoenixActive)) || (Q.Level == 0 && R.Level == 0)) &&
@@ -225,7 +225,7 @@ namespace BrianSharp.Plugin
                     var minionObj = GetMinions(
                         item.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth);
                     if (minionObj.Count > 2 ||
-                        minionObj.Any(i => i.MaxHealth >= 1200 && i.LSDistance(Player) < item.Range - 80))
+                        minionObj.Any(i => i.MaxHealth >= 1200 && i.Distance(Player) < item.Range - 80))
                     {
                         item.Cast();
                     }
@@ -244,21 +244,21 @@ namespace BrianSharp.Plugin
             {
                 return;
             }
-            if (Q.LSIsReady() &&
+            if (Q.IsReady() &&
                 ((Q.Level > W.Level && Q.Level > R.Level) || (Q.Level == W.Level && Q.Level > R.Level) ||
                  (Q.Level == R.Level && Q.Level > W.Level) || (Q.Level == W.Level && Q.Level == R.Level)) &&
                 Q.Cast(PacketCast))
             {
                 return;
             }
-            if (W.LSIsReady() &&
+            if (W.IsReady() &&
                 ((W.Level > Q.Level && W.Level > R.Level) || (W.Level == Q.Level && W.Level > R.Level) ||
                  (W.Level == R.Level && W.Level > Q.Level) || (W.Level == Q.Level && W.Level == R.Level)) &&
                 W.Cast(PacketCast))
             {
                 return;
             }
-            if (R.LSIsReady() &&
+            if (R.IsReady() &&
                 ((R.Level > Q.Level && R.Level > W.Level) || (R.Level == Q.Level && R.Level > W.Level) ||
                  (R.Level == W.Level && R.Level > Q.Level) || (R.Level == Q.Level && R.Level == W.Level)))
             {
@@ -269,14 +269,14 @@ namespace BrianSharp.Plugin
         private static void StunCycle()
         {
             var obj =
-                HeroManager.Enemies.Where(i => i.LSIsValidTarget(E.Range) && CanCastE(i))
-                    .MinOrDefault(i => i.LSDistance(Player));
+                HeroManager.Enemies.Where(i => i.IsValidTarget(E.Range) && CanCastE(i))
+                    .MinOrDefault(i => i.Distance(Player));
             if (obj == null)
             {
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
                 return;
             }
-            if (E.LSIsReady() && E.Cast(PacketCast))
+            if (E.IsReady() && E.Cast(PacketCast))
             {
                 return;
             }
@@ -292,7 +292,7 @@ namespace BrianSharp.Plugin
 
         private static void KillSteal()
         {
-            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.LSIsReady())
+            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.IsReady())
             {
                 var target = TargetSelector.GetTarget(600, TargetSelector.DamageType.True);
                 if (target != null && CastIgnite(target))

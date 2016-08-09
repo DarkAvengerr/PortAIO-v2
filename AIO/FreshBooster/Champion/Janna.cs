@@ -125,12 +125,12 @@ using EloBuddy;
                 if (enemy != null)
                 {
                     float damage = 0;
-                    if (_Q.LSIsReady())
+                    if (_Q.IsReady())
                         damage += _Q.GetDamage(enemy);
-                    if (_W.LSIsReady())
+                    if (_W.IsReady())
                         damage += _W.GetDamage(enemy);
                     if (!Player.Spellbook.IsAutoAttacking)
-                        damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                        damage += (float)Player.GetAutoAttackDamage(enemy, true);
                     return damage;
                 }
                 return 0;
@@ -150,7 +150,7 @@ using EloBuddy;
             try
             {
                 if (Player.IsDead) return;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
                 {
                     if (_MainMenu.Item("Janna_Indicator").GetValue<bool>())
                     {
@@ -203,8 +203,8 @@ using EloBuddy;
                 }
                 if (_MainMenu.Item("Janna_AutoREnable").GetValue<bool>())
                 {
-                    var AutoR = ObjectManager.Get<AIHeroClient>().OrderByDescending(x => x.Health).FirstOrDefault(x => x.HealthPercent < _MainMenu.Item("Janna_AutoRHP").GetValue<Slider>().Value && x.LSDistance(Player.ServerPosition) < _R.Range && !x.IsDead && x.IsAlly);
-                    if (AutoR != null && _R.LSIsReady() && !Player.LSIsRecalling())
+                    var AutoR = ObjectManager.Get<AIHeroClient>().OrderByDescending(x => x.Health).FirstOrDefault(x => x.HealthPercent < _MainMenu.Item("Janna_AutoRHP").GetValue<Slider>().Value && x.Distance(Player.ServerPosition) < _R.Range && !x.IsDead && x.IsAlly);
+                    if (AutoR != null && _R.IsReady() && !Player.IsRecalling())
                     {
                         _R.Cast(true);
                         RTime = TickCount(2000);
@@ -213,13 +213,13 @@ using EloBuddy;
                 if (_MainMenu.Item("Janna_Flee").GetValue<KeyBind>().Active) // Flee
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-                    if (WTarget != null && _W.LSIsReady() && WTarget.LSDistance(Player.ServerPosition) < 400)
+                    if (WTarget != null && _W.IsReady() && WTarget.Distance(Player.ServerPosition) < 400)
                         _W.CastOnUnit(WTarget, true);
                 }
 
                 if (_MainMenu.Item("CKey").GetValue<KeyBind>().Active) // Combo
                 {
-                    if (QTarget != null && _MainMenu.Item("Janna_CUse_Q").GetValue<bool>() && _Q.LSIsReady())
+                    if (QTarget != null && _MainMenu.Item("Janna_CUse_Q").GetValue<bool>() && _Q.IsReady())
                     {
                         var Prediction = _Q.GetPrediction(QTarget);
                         if (!_Q.IsCharging && Prediction.Hitchance >= HitChance.Medium)
@@ -231,7 +231,7 @@ using EloBuddy;
                             _Q.Cast(true);
                         }
                     }
-                    if (WTarget != null && _W.LSIsReady())
+                    if (WTarget != null && _W.IsReady())
                         _W.Cast(WTarget, true);
                 }
             }
@@ -248,14 +248,14 @@ using EloBuddy;
         {
             try
             {
-                if (_MainMenu.Item("Janna_GapQ").GetValue<bool>() && _Q.LSIsReady() && gapcloser.Sender.ServerPosition.LSDistance(Player.ServerPosition) < 850 && !_Q.IsCharging)
+                if (_MainMenu.Item("Janna_GapQ").GetValue<bool>() && _Q.IsReady() && gapcloser.Sender.ServerPosition.Distance(Player.ServerPosition) < 850 && !_Q.IsCharging)
                 {
                     _Q.Cast(gapcloser.Sender.ServerPosition, true);
                     QSpell = true;
                     SpellTime = TickCount(1000);
                 }
 
-                if (_MainMenu.Item("Janna_GapR").GetValue<bool>() && _R.LSIsReady() && gapcloser.Sender.ServerPosition.LSDistance(Player.ServerPosition) < 875 && SpellTime < Environment.TickCount && !Player.LSIsRecalling())
+                if (_MainMenu.Item("Janna_GapR").GetValue<bool>() && _R.IsReady() && gapcloser.Sender.ServerPosition.Distance(Player.ServerPosition) < 875 && SpellTime < Environment.TickCount && !Player.IsRecalling())
                 {
                     _R.Cast(true);
                     RTime = TickCount(2000);
@@ -277,30 +277,30 @@ using EloBuddy;
 
                 if (args.Target is Obj_AI_Minion || !(sender is AIHeroClient))
                     return;
-                if (_MainMenu.Item("Janna_AutoE").GetValue<bool>() && _E.LSIsReady())
+                if (_MainMenu.Item("Janna_AutoE").GetValue<bool>() && _E.IsReady())
                 {
                     if (sender.IsEnemy)
                     {                        
                         var StartPos = args.Start;
                         var EndPos = args.End;
                         var NonTRange = new Geometry.Polygon.Rectangle(StartPos, EndPos, sender.BoundingRadius + 30);
-                        var Target = HeroManager.Allies.FirstOrDefault(f => f.Position.LSDistance(Player.Position) <= _E.Range && NonTRange.IsInside(f.Position));
+                        var Target = HeroManager.Allies.FirstOrDefault(f => f.Position.Distance(Player.Position) <= _E.Range && NonTRange.IsInside(f.Position));
                         if (Target == Player && _MainMenu.Item("Janna_AutoE1").GetValue<bool>()) return;
                         if (Target != null)
                         {
                             _E.CastOnUnit(Target, true);
                             return;
                         }
-                        if (args.Target != null && args.Target.Position.LSDistance(Player.Position) <= _E.Range && args.Target is AIHeroClient)
+                        if (args.Target != null && args.Target.Position.Distance(Player.Position) <= _E.Range && args.Target is AIHeroClient)
                         {
-                            var ShieldTarget = HeroManager.Allies.FirstOrDefault(f => f.Position.LSDistance(args.Target.Position) <= 10);
+                            var ShieldTarget = HeroManager.Allies.FirstOrDefault(f => f.Position.Distance(args.Target.Position) <= 10);
                             _E.CastOnUnit(ShieldTarget, true);
                             return;
                         }
                     }
                     if (sender.IsAlly && args.Target is AIHeroClient)
                     {
-                        if (sender.Position.LSDistance(Player.Position) <= _E.Range && args.Target != null && args.SData.Name.ToLower().Contains("attack"))
+                        if (sender.Position.Distance(Player.Position) <= _E.Range && args.Target != null && args.SData.Name.ToLower().Contains("attack"))
                         {
                             _E.CastOnUnit(sender, true);
                             return;
@@ -324,14 +324,14 @@ using EloBuddy;
             {
                 if (!sender.IsEnemy || !sender.IsValid<AIHeroClient>())
                     return;
-                if (_MainMenu.Item("Janna_InterQ").GetValue<bool>() && _Q.LSIsReady() && sender.ServerPosition.LSDistance(Player.ServerPosition) < 850 && !_Q.IsCharging)
+                if (_MainMenu.Item("Janna_InterQ").GetValue<bool>() && _Q.IsReady() && sender.ServerPosition.Distance(Player.ServerPosition) < 850 && !_Q.IsCharging)
                 {
                     _Q.Cast(sender.ServerPosition, true);
                     QSpell = true;
                     SpellTime = TickCount(1000);
                 }
 
-                if (_MainMenu.Item("Janna_InterR").GetValue<bool>() && _R.LSIsReady() && sender.ServerPosition.LSDistance(Player.ServerPosition) < 875 && SpellTime < Environment.TickCount && !Player.LSIsRecalling())
+                if (_MainMenu.Item("Janna_InterR").GetValue<bool>() && _R.IsReady() && sender.ServerPosition.Distance(Player.ServerPosition) < 875 && SpellTime < Environment.TickCount && !Player.IsRecalling())
                 {
                     _R.Cast(true);
                     RTime = TickCount(2000);

@@ -122,13 +122,13 @@ using EloBuddy;
             if (Program.Config.Item("AssassinSetClick").GetValue<bool>())
             {
                 foreach (var objAiHero in from hero in ObjectManager.Get<AIHeroClient>()
-                                          where hero.LSIsValidTarget()
+                                          where hero.IsValidTarget()
                                           select hero
                                               into h
-                                              orderby h.LSDistance(Game.CursorPos) descending
+                                              orderby h.Distance(Game.CursorPos) descending
                                               select h
                                                   into enemy
-                                                  where enemy.LSDistance(Game.CursorPos) < 150f
+                                                  where enemy.Distance(Game.CursorPos) < 150f
                                                   select enemy)
                 {
                     if (objAiHero != null && objAiHero.IsVisible && !objAiHero.IsDead)
@@ -214,13 +214,13 @@ using EloBuddy;
                         .Where(
                             enemy => Program.Config.Item("Assassin" + enemy.ChampionName).GetValue<bool>()))
             {
-                if (ObjectManager.Player.LSDistance(enemy) < drawSearchRange)
+                if (ObjectManager.Player.Distance(enemy) < drawSearchRange)
                 {
                     if (drawActive.Active)
                         Render.Circle.DrawCircle(enemy.Position, 115f, drawActive.Color, 1);
                 }
-                else if (ObjectManager.Player.LSDistance(enemy) > drawSearchRange &&
-                         ObjectManager.Player.LSDistance(enemy) < drawSearchRange + 400)
+                else if (ObjectManager.Player.Distance(enemy) > drawSearchRange &&
+                         ObjectManager.Player.Distance(enemy) < drawSearchRange + 400)
                 {
                     if (drawNearest.Active)
                         Render.Circle.DrawCircle(enemy.Position, 115f, drawNearest.Color, 1);

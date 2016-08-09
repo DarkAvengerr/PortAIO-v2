@@ -60,14 +60,14 @@ using EloBuddy;
 
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (!menu.Item("gapclose").GetValue<bool>() || !E.LSIsReady()) return;
+            if (!menu.Item("gapclose").GetValue<bool>() || !E.IsReady()) return;
             E.Cast();
         }
 
         static void Interrupter_OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
             if (!unit.IsValid || unit.IsDead || !unit.IsTargetable || unit.IsStunned) return;
-            if (R.LSIsReady() && R.IsInRange(unit.Position) && spell.DangerLevel >= InterruptableDangerLevel.High)
+            if (R.IsReady() && R.IsInRange(unit.Position) && spell.DangerLevel >= InterruptableDangerLevel.High)
             {
                 R.Cast(unit.Position, true);
                 return;
@@ -75,12 +75,12 @@ using EloBuddy;
             else
             {
                 if (!menu.Item("exhaust").GetValue<bool>()) return;
-				if(unit.LSDistance(player.Position) > 600) return;
-                if (player.LSGetSpellSlot("SummonerExhaust") != SpellSlot.Unknown && player.Spellbook.CanUseSpell(player.LSGetSpellSlot("SummonerExhaust")) == SpellState.Ready)
-                    player.Spellbook.CastSpell(player.LSGetSpellSlot("SummonerExhaust"), unit);
-                if ((W.LSIsReady() && GetPassiveCount() == 2) || (LeagueSharp.Common.Utility.LSHasBuff(player, "sonapassiveattack") && player.LastCastedSpellName() == "SonaW") || (LeagueSharp.Common.Utility.LSHasBuff(player, "sonapassiveattack") && W.LSIsReady()))
+				if(unit.Distance(player.Position) > 600) return;
+                if (player.GetSpellSlot("SummonerExhaust") != SpellSlot.Unknown && player.Spellbook.CanUseSpell(player.GetSpellSlot("SummonerExhaust")) == SpellState.Ready)
+                    player.Spellbook.CastSpell(player.GetSpellSlot("SummonerExhaust"), unit);
+                if ((W.IsReady() && GetPassiveCount() == 2) || (LeagueSharp.Common.Utility.HasBuff(player, "sonapassiveattack") && player.LastCastedSpellName() == "SonaW") || (LeagueSharp.Common.Utility.HasBuff(player, "sonapassiveattack") && W.IsReady()))
                 {
-                    if (W.LSIsReady()) W.Cast();
+                    if (W.IsReady()) W.Cast();
                     EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, unit);
                 }
             }
@@ -112,10 +112,10 @@ using EloBuddy;
         
         static void Combo()
         {
-            bool useQ = Q.LSIsReady() && menu.Item("UseQC").GetValue<bool>();
-            bool useW = W.LSIsReady() && menu.Item("UseWC").GetValue<bool>();
-            bool useE = E.LSIsReady() && menu.Item("UseEC").GetValue<bool>();
-            bool useR = R.LSIsReady() && menu.Item("UseRC").GetValue<bool>();
+            bool useQ = Q.IsReady() && menu.Item("UseQC").GetValue<bool>();
+            bool useW = W.IsReady() && menu.Item("UseWC").GetValue<bool>();
+            bool useE = E.IsReady() && menu.Item("UseEC").GetValue<bool>();
+            bool useR = R.IsReady() && menu.Item("UseRC").GetValue<bool>();
             AIHeroClient targetQ = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
             AIHeroClient targetR = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
             foreach (var item in player.InventoryItems)
@@ -136,10 +136,10 @@ using EloBuddy;
 
         static void Harass()
         {
-            bool useQ = Q.LSIsReady() && menu.Item("UseQH").GetValue<bool>();
-            bool useW = W.LSIsReady() && menu.Item("UseWH").GetValue<bool>();
+            bool useQ = Q.IsReady() && menu.Item("UseQH").GetValue<bool>();
+            bool useW = W.IsReady() && menu.Item("UseWH").GetValue<bool>();
             AIHeroClient targetQ = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-            if (useQ && targetQ != null && (LeagueSharp.Common.Utility.LSCountEnemiesInRange(player.Position, (int)Q.Range) > 1 || !menu.Item("UseQHF").GetValue<bool>()))
+            if (useQ && targetQ != null && (LeagueSharp.Common.Utility.CountEnemiesInRange(player.Position, (int)Q.Range) > 1 || !menu.Item("UseQHF").GetValue<bool>()))
                 Q.Cast();
 
             if (useW)
@@ -168,9 +168,9 @@ using EloBuddy;
 
                 if (target.Path.Length == 0 || !target.IsMoving)
                     return;
-                Vector2 nextEnemPath = target.Path[0].LSTo2D();
-                var dist = player.Position.LSTo2D().LSDistance(target.Position.LSTo2D());
-                var distToNext = nextEnemPath.LSDistance(player.Position.LSTo2D());
+                Vector2 nextEnemPath = target.Path[0].To2D();
+                var dist = player.Position.To2D().Distance(target.Position.To2D());
+                var distToNext = nextEnemPath.Distance(player.Position.To2D());
                 if (distToNext <= dist)
                     return;
                 var msDif = player.MoveSpeed - target.MoveSpeed;
@@ -202,7 +202,7 @@ using EloBuddy;
         {
             //The best way to do it it's LINQ...
             //Realization taken from h3h3's Support AIO
-            if (!Items.HasItem((int)ItemId.Mikaels_Crucible, player) || !Items.CanUseItem((int)ItemId.Mikaels_Crucible) || LeagueSharp.Common.Utility.LSCountEnemiesInRange(player.Position, 1000) < 1) return;
+            if (!Items.HasItem((int)ItemId.Mikaels_Crucible, player) || !Items.CanUseItem((int)ItemId.Mikaels_Crucible) || LeagueSharp.Common.Utility.CountEnemiesInRange(player.Position, 1000) < 1) return;
             foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(h => h.IsAlly && !h.IsDead && Vector3.Distance(player.Position, h.Position) <= 800).OrderByDescending(h => h.FlatPhysicalDamageMod))
                 foreach (var buff in CcTypes)
                     if (hero.HasBuffOfType(buff))

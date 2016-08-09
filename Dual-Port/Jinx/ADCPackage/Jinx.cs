@@ -25,7 +25,7 @@ using EloBuddy; namespace ADCPackage.Plugins
         private static bool EnemyInRange
             => TargetSelector.GetTarget(525 + Player.BoundingRadius, TargetSelector.DamageType.Physical) != null;
 
-        public static bool FishBones => Player.LSHasBuff("JinxQ");
+        public static bool FishBones => Player.HasBuff("JinxQ");
         private static AIHeroClient Player => ObjectManager.Player;
 
         public static void Load()
@@ -44,7 +44,7 @@ using EloBuddy; namespace ADCPackage.Plugins
         private static void Drawing_OnDraw(EventArgs args)
         {
             if (!Menu.Config.Item("draw.w").IsActive()) return;
-            switch (W.LSIsReady())
+            switch (W.IsReady())
             {
                 case true:
                     Drawing.DrawCircle(Player.Position, W.Range, Color.Sienna);
@@ -65,10 +65,10 @@ using EloBuddy; namespace ADCPackage.Plugins
                     return;
                 }
 
-                if (target.Health <= Player.LSGetAutoAttackDamage(target, true) &&
-                    target.Health >= Player.LSGetAutoAttackDamage(target))
+                if (target.Health <= Player.GetAutoAttackDamage(target, true) &&
+                    target.Health >= Player.GetAutoAttackDamage(target))
                 {
-                    if (!FishBones && Q.LSIsReady())
+                    if (!FishBones && Q.IsReady())
                     {
                         Q.Cast();
                     }
@@ -76,14 +76,14 @@ using EloBuddy; namespace ADCPackage.Plugins
 
                 if (Menu.Config.SubMenu("adcpackage.jinx").SubMenu("combo").Item("q.aoe").GetValue<Slider>().Value != 6)
                 {
-                    if (target.LSCountEnemiesInRange(150) >=
+                    if (target.CountEnemiesInRange(150) >=
                         Menu.Config.SubMenu("adcpackage.jinx")
                             .SubMenu("combo")
                             .Item("q.aoe")
                             .GetValue<Slider>()
                             .Value)
                     {
-                        if (!FishBones && Q.LSIsReady())
+                        if (!FishBones && Q.IsReady())
                         {
                             Q.Cast();
                         }
@@ -94,7 +94,7 @@ using EloBuddy; namespace ADCPackage.Plugins
 
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (gapcloser.Sender.LSIsValidTarget(E.Range) && E.LSIsReady())
+            if (gapcloser.Sender.IsValidTarget(E.Range) && E.IsReady())
             {
                 if (Menu.Config.SubMenu("adcpackage.jinx").SubMenu("extras").Item("agc.e").GetValue<bool>())
                 {
@@ -102,7 +102,7 @@ using EloBuddy; namespace ADCPackage.Plugins
                 }
             }
 
-            if (gapcloser.Sender.LSIsValidTarget(W.Range) && W.LSIsReady())
+            if (gapcloser.Sender.IsValidTarget(W.Range) && W.IsReady())
             {
                 if (Menu.Config.SubMenu("adcpackage.jinx").SubMenu("extras").Item("agc.w").GetValue<bool>())
                 {
@@ -143,7 +143,7 @@ using EloBuddy; namespace ADCPackage.Plugins
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (E.LSIsReady() && ShouldUseE(args.SData.Name) && sender.LSIsValidTarget(E.Range))
+            if (E.IsReady() && ShouldUseE(args.SData.Name) && sender.IsValidTarget(E.Range))
             {
                 E.Cast(sender.Position);
             }
@@ -151,29 +151,29 @@ using EloBuddy; namespace ADCPackage.Plugins
 
         private static void PermaActive(EventArgs args)
         {
-            if (E.LSIsReady() || W.LSIsReady())
+            if (E.IsReady() || W.IsReady())
             {
                 foreach (
                     var enemy in
-                        HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(W.Range))
+                        HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(W.Range))
                             .OrderBy(TargetSelector.GetPriority))
                 {
-                    if (E.LSIsReady() && E.IsInRange(enemy)) /* e Logic */
+                    if (E.IsReady() && E.IsInRange(enemy)) /* e Logic */
                     {
                         if (Menu.Config.SubMenu("adcpackage.jinx").SubMenu("extras").Item("cc.e").GetValue<bool>())
                         {
-                            if (enemy.LSHasBuff("RocketGrab") || enemy.LSHasBuff("rocketgrab2"))
+                            if (enemy.HasBuff("RocketGrab") || enemy.HasBuff("rocketgrab2"))
                             {
                                 var blitzcrank = HeroManager.Allies.FirstOrDefault(a => a.ChampionName == "Blitzcrank");
 
                                 if (blitzcrank != null)
                                 {
-                                    E.Cast(blitzcrank.Position.LSExtend(enemy.Position, 30));
+                                    E.Cast(blitzcrank.Position.Extend(enemy.Position, 30));
                                 }
                                 return;
                             }
 
-                            if (CantMove(enemy) && !enemy.LSHasBuff("RocketGrab") && !enemy.LSHasBuff("rocketgrab2"))
+                            if (CantMove(enemy) && !enemy.HasBuff("RocketGrab") && !enemy.HasBuff("rocketgrab2"))
                             {
                                 E.Cast(enemy.Position);
                                 return;
@@ -194,7 +194,7 @@ using EloBuddy; namespace ADCPackage.Plugins
                         }
                     }
 
-                    if (W.LSIsReady())
+                    if (W.IsReady())
                     {
                         if (Menu.Config.SubMenu("adcpackage.jinx").SubMenu("extras").Item("ks.w").GetValue<bool>())
                         {
@@ -205,7 +205,7 @@ using EloBuddy; namespace ADCPackage.Plugins
                             }
                         }
 
-                        if (enemy.LSHasBuff("RocketGrab") || enemy.LSHasBuff("rocketgrab2"))
+                        if (enemy.HasBuff("RocketGrab") || enemy.HasBuff("rocketgrab2"))
                         {
                             var blitzcrank = HeroManager.Allies.FirstOrDefault(a => a.ChampionName == "Blitzcrank");
 
@@ -228,7 +228,7 @@ using EloBuddy; namespace ADCPackage.Plugins
                     }
                 }
             }
-            //if (W.LSIsReady())
+            //if (W.IsReady())
             //{
             //    AutoW();
             //}
@@ -237,12 +237,12 @@ using EloBuddy; namespace ADCPackage.Plugins
             {
                 foreach (
                     var enemy in
-                        HeroManager.Enemies.Where(e => e.LSDistance(Player) <= 2500)
-                            .Where(enemy => R.LSIsReady() && enemy.LSIsValidTarget(R.Range)))
+                        HeroManager.Enemies.Where(e => e.Distance(Player) <= 2500)
+                            .Where(enemy => R.IsReady() && enemy.IsValidTarget(R.Range)))
                 {
                     var pred = R.GetPrediction(enemy);
 
-                    if (W.LSIsReady() && W.GetDamage(enemy) >= enemy.Health && W.IsInRange(enemy) &&
+                    if (W.IsReady() && W.GetDamage(enemy) >= enemy.Health && W.IsInRange(enemy) &&
                         W.GetPrediction(enemy).Hitchance >= HitChance.VeryHigh)
                     {
                         return;
@@ -273,23 +273,23 @@ using EloBuddy; namespace ADCPackage.Plugins
         //{
         //    foreach (
         //        var enemy in
-        //            HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(E.Range))
+        //            HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(E.Range))
         //                .OrderBy(TargetSelector.GetPriority))
         //    {
         //        if (Menu.Config.SubMenu("adcpackage.jinx").SubMenu("extras").Item("cc.e").GetValue<bool>())
         //        {
-        //            if (enemy.LSHasBuff("RocketGrab") || enemy.LSHasBuff("rocketgrab2"))
+        //            if (enemy.HasBuff("RocketGrab") || enemy.HasBuff("rocketgrab2"))
         //            {
         //                var blitzcrank = HeroManager.Allies.FirstOrDefault(a => a.ChampionName == "Blitzcrank");
 
         //                if (blitzcrank != null)
         //                {
-        //                    E.Cast(blitzcrank.Position.LSExtend(enemy.Position, 30));
+        //                    E.Cast(blitzcrank.Position.Extend(enemy.Position, 30));
         //                }
         //                return;
         //            }
 
-        //            if (CantMove(enemy) && !enemy.LSHasBuff("RocketGrab") && enemy.LSHasBuff("rocketgrab2"))
+        //            if (CantMove(enemy) && !enemy.HasBuff("RocketGrab") && enemy.HasBuff("rocketgrab2"))
         //            {
         //                E.Cast(enemy.Position);
         //                return;
@@ -315,7 +315,7 @@ using EloBuddy; namespace ADCPackage.Plugins
         //{
         //    foreach (
         //        var enemy in
-        //            HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(W.Range))
+        //            HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(W.Range))
         //                .OrderBy(TargetSelector.GetPriority))
         //    {
         //        if (Menu.Config.SubMenu("adcpackage.jinx").SubMenu("extras").Item("ks.w").GetValue<bool>())
@@ -327,7 +327,7 @@ using EloBuddy; namespace ADCPackage.Plugins
         //            }
         //        }
 
-        //        if (enemy.LSHasBuff("RocketGrab") || enemy.LSHasBuff("rocketgrab2"))
+        //        if (enemy.HasBuff("RocketGrab") || enemy.HasBuff("rocketgrab2"))
         //        {
         //            var blitzcrank = HeroManager.Allies.FirstOrDefault(a => a.ChampionName == "Blitzcrank");
 
@@ -352,12 +352,12 @@ using EloBuddy; namespace ADCPackage.Plugins
 
         internal static Spell.CastStates CastWithExtraTrapLogic(this Spell spell)
         {
-            if (spell.LSIsReady())
+            if (spell.IsReady())
             {
                 var teleport = MinionManager.GetMinions(spell.Range).FirstOrDefault(x => x.HasBuff("teleport_target"));
                 var zhonya =
                     HeroManager.Enemies.FirstOrDefault(
-                        x => ObjectManager.Player.LSDistance(x) <= spell.Range && x.HasBuff("zhonyasringshield"));
+                        x => ObjectManager.Player.Distance(x) <= spell.Range && x.HasBuff("zhonyasringshield"));
 
                 if (teleport != null)
                     return spell.Cast(teleport);
@@ -373,7 +373,7 @@ using EloBuddy; namespace ADCPackage.Plugins
             return ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical,
                 new double[] {0, 25, 30, 35}[R.Level]/100*(target.MaxHealth - target.Health) +
                 ((new double[] {0, 25, 35, 45}[R.Level] + 0.1*ObjectManager.Player.FlatPhysicalDamageMod)*
-                 Math.Min((1 + ObjectManager.Player.LSDistance(target.ServerPosition)/15*0.09d), 10)));
+                 Math.Min((1 + ObjectManager.Player.Distance(target.ServerPosition)/15*0.09d), 10)));
         }
 
         private static bool HitsEnemyInTravel(Obj_AI_Base source)
@@ -418,8 +418,8 @@ using EloBuddy; namespace ADCPackage.Plugins
 
             // todo: W casting
             if (Menu.Config.SubMenu("adcpackage.jinx").SubMenu("combo").Item("w.range").GetValue<Slider>().Value != -1 &&
-                W.LSIsReady() &&
-                !Player.Spellbook.IsAutoAttacking && target.LSDistance(Player) >
+                W.IsReady() &&
+                !Player.Spellbook.IsAutoAttacking && target.Distance(Player) >
                 Menu.Config.SubMenu("adcpackage.jinx").SubMenu("combo").Item("w.range").GetValue<Slider>().Value &&
                 W.GetPrediction(target).Hitchance >= HitChance.VeryHigh)
             {
@@ -427,7 +427,7 @@ using EloBuddy; namespace ADCPackage.Plugins
             }
 
             // todo: E casting
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
                 if (Menu.Config.SubMenu("adcpackage.jinx").SubMenu("combo").Item("e.slowed").GetValue<bool>())
                 {
@@ -449,7 +449,7 @@ using EloBuddy; namespace ADCPackage.Plugins
 
                 if (Menu.Config.SubMenu("adcpackage.jinx").SubMenu("combo").Item("e.moreally").GetValue<bool>())
                 {
-                    if (E.IsInRange(target) && Player.LSCountAlliesInRange(1000) > Player.LSCountEnemiesInRange(1500))
+                    if (E.IsInRange(target) && Player.CountAlliesInRange(1000) > Player.CountEnemiesInRange(1500))
                     {
                         E.Cast(target);
                         return;
@@ -458,7 +458,7 @@ using EloBuddy; namespace ADCPackage.Plugins
 
                 if (Menu.Config.SubMenu("adcpackage.jinx").SubMenu("combo").Item("e.aoe").GetValue<Slider>().Value != 6)
                 {
-                    if (target.LSCountEnemiesInRange(300) >=
+                    if (target.CountEnemiesInRange(300) >=
                         Menu.Config.SubMenu("adcpackage.jinx")
                             .SubMenu("combo")
                             .Item("e.aoe")
@@ -470,7 +470,7 @@ using EloBuddy; namespace ADCPackage.Plugins
                 }
             }
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 if (Menu.Config.SubMenu("adcpackage.jinx")
                     .SubMenu("combo")
@@ -498,8 +498,8 @@ using EloBuddy; namespace ADCPackage.Plugins
 
             // todo: W casting
             if (Menu.Config.SubMenu("adcpackage.jinx").SubMenu("harass").Item("w.range").GetValue<Slider>().Value != -1 &&
-                W.LSIsReady() &&
-                !Player.Spellbook.IsAutoAttacking && target.LSDistance(Player) >
+                W.IsReady() &&
+                !Player.Spellbook.IsAutoAttacking && target.Distance(Player) >
                 Menu.Config.SubMenu("adcpackage.jinx").SubMenu("harass").Item("w.range").GetValue<Slider>().Value &&
                 W.GetPrediction(target).Hitchance >= HitChance.VeryHigh)
             {
@@ -509,7 +509,7 @@ using EloBuddy; namespace ADCPackage.Plugins
 
         public static void LaneClear()
         {
-            if (!Player.Spellbook.IsAutoAttacking && FishBones && Q.LSIsReady())
+            if (!Player.Spellbook.IsAutoAttacking && FishBones && Q.IsReady())
             {
                 Q.Cast();
             }
@@ -525,7 +525,7 @@ using EloBuddy; namespace ADCPackage.Plugins
             if (Menu.Orbwalker.ActiveMode == CustomOrbwalker.OrbwalkingMode.Mixed && Menu.Orbwalker.GetTarget() != null &&
                 Menu.Orbwalker.GetTarget().Type == GameObjectType.obj_AI_Minion)
             {
-                if (Q.LSIsReady() && FishBones)
+                if (Q.IsReady() && FishBones)
                 {
                     Q.Cast();
                 }
@@ -540,7 +540,7 @@ using EloBuddy; namespace ADCPackage.Plugins
                 Menu.Config.SubMenu("adcpackage.jinx").SubMenu("harass").Item("q.range").GetValue<bool>() &&
                 Menu.Orbwalker.ActiveMode == CustomOrbwalker.OrbwalkingMode.Mixed)
             {
-                if (!EnemyInRange && !FishBones && Q.LSIsReady()) // go rocket
+                if (!EnemyInRange && !FishBones && Q.IsReady()) // go rocket
                 {
                     if (Menu.Orbwalker.ActiveMode == CustomOrbwalker.OrbwalkingMode.Mixed &&
                         Menu.Orbwalker.GetTarget() == null)
@@ -562,11 +562,11 @@ using EloBuddy; namespace ADCPackage.Plugins
                 foreach (
                     var enemy in
                         HeroManager.Enemies.Where(
-                            a => a.LSIsValidTarget(525 + (50 + ((Q.Level)*25) + Player.BoundingRadius + 50)))
+                            a => a.IsValidTarget(525 + (50 + ((Q.Level)*25) + Player.BoundingRadius + 50)))
                             .OrderBy(TargetSelector.GetPriority)
                             .Where(
                                 enemy =>
-                                    enemy.LSCountEnemiesInRange(150) >= (Menu.Orbwalker.ActiveMode ==
+                                    enemy.CountEnemiesInRange(150) >= (Menu.Orbwalker.ActiveMode ==
                                                                        CustomOrbwalker.OrbwalkingMode.Combo
                                         ? Menu.Config.SubMenu("adcpackage.jinx")
                                             .SubMenu("combo")
@@ -597,14 +597,14 @@ using EloBuddy; namespace ADCPackage.Plugins
                 Menu.Config.SubMenu("adcpackage.jinx").SubMenu("harass").Item("q.range").GetValue<bool>() &&
                 Menu.Orbwalker.ActiveMode == CustomOrbwalker.OrbwalkingMode.Mixed)
             {
-                if (qtarget != null && target != null && qtarget != target && !FishBones && Q.LSIsReady())
+                if (qtarget != null && target != null && qtarget != target && !FishBones && Q.IsReady())
                     // maybe just switch to if qtarget isnt in range..? idk
                 {
                     Q.Cast();
                 }
                 else
                 {
-                    if (target != null && qtarget == target && FishBones && Q.LSIsReady())
+                    if (target != null && qtarget == target && FishBones && Q.IsReady())
                     {
                         Q.Cast();
                     }

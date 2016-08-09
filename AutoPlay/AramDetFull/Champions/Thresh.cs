@@ -49,7 +49,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             if (FollowQBlock)
             {
@@ -67,13 +67,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (W.LSIsReady())
+            if (W.IsReady())
                 EngageFriendLatern();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             if (AllyBelowHp(25, E.Range) != null)
             {
@@ -91,7 +91,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             if (target == null)
                 return;
-            if (target.LSIsValidTarget(R.Range) && R.LSIsReady() && EnemyInRange(2,500))
+            if (target.IsValidTarget(R.Range) && R.IsReady() && EnemyInRange(2,500))
             {
                 R.Cast();
             }
@@ -123,7 +123,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public static bool EnemyInRange(int numOfEnemy, float range)
         {
-            return LeagueSharp.Common.Utility.LSCountEnemysInRange(ObjectManager.Player, (int)range) >= numOfEnemy;
+            return LeagueSharp.Common.Utility.CountEnemysInRange(ObjectManager.Player, (int)range) >= numOfEnemy;
         }
 
         public static Vector3 ReversePosition(Vector3 positionMe, Vector3 positionEnemy)
@@ -163,14 +163,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
             {
                 return;
             }
-            if (E.LSIsReady() && E.IsInRange(unit))
+            if (E.IsReady() && E.IsInRange(unit))
                 E.Cast(unit.Position);
         }
 
 
         private void EngageFriendLatern()
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
             {
                 return;
             }
@@ -180,8 +180,8 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 HeroManager.Allies
                     .Where(
                         hero =>
-                            hero.IsAlly && hero.LSDistance(player) <= W.Range + 200  && hero.Health / hero.MaxHealth * 100 >= 10 &&
-                            hero.LSCountEnemysInRange(550) >= 1))
+                            hero.IsAlly && hero.Distance(player) <= W.Range + 200  && hero.Health / hero.MaxHealth * 100 >= 10 &&
+                            hero.CountEnemysInRange(550) >= 1))
             {
                  W.Cast(friend.Position);
                  return;

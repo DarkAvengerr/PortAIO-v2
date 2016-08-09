@@ -145,8 +145,8 @@ using EloBuddy;
 
         private static void LuxOnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (Q.LSIsReady() && MenuCheck("lux.anti", Config) && Q.GetPrediction(gapcloser.Sender).Hitchance > HitChance.High
-                && gapcloser.Sender.LSIsValidTarget(1175))
+            if (Q.IsReady() && MenuCheck("lux.anti", Config) && Q.GetPrediction(gapcloser.Sender).Hitchance > HitChance.High
+                && gapcloser.Sender.IsValidTarget(1175))
             {
                 Q.Cast(gapcloser.Sender);
             }
@@ -164,17 +164,17 @@ using EloBuddy;
                     break;
             }
 
-            if (!MenuCheck("lux.shield.disable", Config) && W.LSIsReady())
+            if (!MenuCheck("lux.shield.disable", Config) && W.IsReady())
             {
                 WManager();
             }
 
-            if (MenuCheck("lux.r.killsteal", Config) && R.LSIsReady())
+            if (MenuCheck("lux.r.killsteal", Config) && R.IsReady())
             {
                 Killsteal();
             }
 
-            if (LuxE.Position.LSCountEnemiesInRange(350) >= 1 && E.Instance.Name != "LuxLightStrikeKugel")
+            if (LuxE.Position.CountEnemiesInRange(350) >= 1 && E.Instance.Name != "LuxLightStrikeKugel")
             {
                 E.Cast();
             }
@@ -188,7 +188,7 @@ using EloBuddy;
                 return;
             }
 
-            foreach (var shield in ObjectManager.Get<AIHeroClient>().Where(x => x.IsAlly && !x.IsMe && x.LSDistance(ObjectManager.Player.Position) < W.Range && !x.IsDead && x.IsVisible && !x.IsZombie))
+            foreach (var shield in ObjectManager.Get<AIHeroClient>().Where(x => x.IsAlly && !x.IsMe && x.Distance(ObjectManager.Player.Position) < W.Range && !x.IsDead && x.IsVisible && !x.IsZombie))
             {
                 if (MenuCheck("lux.shield" + shield.ChampionName, Config) && shield.HealthPercent < SliderCheck("lux.shield.percent" + shield.ChampionName, Config)
                     && ObjectManager.Player.HealthPercent > SliderCheck("lux.shield.limit", Config))
@@ -205,9 +205,9 @@ using EloBuddy;
                 return;
             }
 
-            if (MenuCheck("lux.r.killsteal", Config) && R.LSIsReady())
+            if (MenuCheck("lux.r.killsteal", Config) && R.IsReady())
             {
-                foreach (var target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) && !x.IsDead && !x.IsZombie))
+                foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsDead && !x.IsZombie))
                 {
                     if (R.GetDamage(target) > target.Health)
                     {
@@ -219,25 +219,25 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (MenuCheck("lux.q.combo", Config) && Q.LSIsReady())
+            if (MenuCheck("lux.q.combo", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie))
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "lux.hitchance"));
                 }
             }
 
-            if (MenuCheck("lux.e.combo", Config) && E.LSIsReady())
+            if (MenuCheck("lux.e.combo", Config) && E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range) && !x.IsDead && !x.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && !x.IsDead && !x.IsZombie))
                 {
                     E.SPredictionCast(enemy, SpellHitChance(Config, "lux.hitchance"));
                 }
             }
 
-            if (MenuCheck("lux.r.combo", Config) && R.LSIsReady())
+            if (MenuCheck("lux.r.combo", Config) && R.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) && !x.IsDead && !x.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsDead && !x.IsZombie))
                 {
                     R.SPredictionCast(enemy, SpellHitChance(Config, "lux.hitchance"));
                 }
@@ -251,17 +251,17 @@ using EloBuddy;
                 return;
             }
 
-            if (MenuCheck("lux.q.harass", Config) && Q.LSIsReady())
+            if (MenuCheck("lux.q.harass", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "lux.hitchance"));
                 }
             }
 
-            if (MenuCheck("lux.e.harass", Config) && E.LSIsReady())
+            if (MenuCheck("lux.e.harass", Config) && E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
                 {
                     E.SPredictionCast(enemy, SpellHitChance(Config, "lux.hitchance"));
                 }
@@ -270,22 +270,22 @@ using EloBuddy;
 
         private static void LuxOnDraw(EventArgs args)
         {
-            if (Q.LSIsReady() && ActiveCheck("lux.q.draw", Config))
+            if (Q.IsReady() && ActiveCheck("lux.q.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, GetColor("lux.q.draw", Config));
             }
 
-            if (W.LSIsReady() && ActiveCheck("lux.w.draw", Config))
+            if (W.IsReady() && ActiveCheck("lux.w.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, GetColor("lux.w.draw", Config));
             }
 
-            if (E.LSIsReady() && ActiveCheck("lux.e.draw", Config))
+            if (E.IsReady() && ActiveCheck("lux.e.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, GetColor("lux.e.draw", Config));
             }
 
-            if (R.LSIsReady() && ActiveCheck("lux.r.draw", Config))
+            if (R.IsReady() && ActiveCheck("lux.r.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, GetColor("lux.r.draw", Config));
             }

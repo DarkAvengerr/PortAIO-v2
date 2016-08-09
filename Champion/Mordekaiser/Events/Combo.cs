@@ -35,7 +35,7 @@ namespace Mordekaiser.Events
                 return
                     ObjectManager
                         .Get<Obj_AI_Base>(
-                            ).FirstOrDefault(m => m.LSDistance(Utils.Player.Self.Position) < 15000 && !m.Name.Contains("inion") && m.IsAlly &&
+                            ).FirstOrDefault(m => m.Distance(Utils.Player.Self.Position) < 15000 && !m.Name.Contains("inion") && m.IsAlly &&
                                 m.HasBuff("mordekaisercotgpetbuff2"));
             }
         }
@@ -55,7 +55,7 @@ namespace Mordekaiser.Events
                 CastItems();
 
                 var t = TargetSelector.GetTarget(4500, TargetSelector.DamageType.Physical);
-                if (t.LSIsValidTarget())
+                if (t.IsValidTarget())
                 {
                     if (HowToTrainYourDragon != null)
                     {
@@ -90,7 +90,7 @@ namespace Mordekaiser.Events
 
         private static void ExecuteQ()
         {
-            if (!Spells.Q.LSIsReady())
+            if (!Spells.Q.IsReady())
                 return;
             
             if (!Menu.MenuQ.Item("UseQ.Combo").GetValue<bool>())
@@ -105,7 +105,7 @@ namespace Mordekaiser.Events
 
             var t = GetTarget;
 
-            if (!t.LSIsValidTarget(Utils.Player.AutoAttackRange))
+            if (!t.IsValidTarget(Utils.Player.AutoAttackRange))
             {
                 return;
             }
@@ -115,10 +115,10 @@ namespace Mordekaiser.Events
 
         private static void ExecuteW()
         {
-            if (!Spells.W.LSIsReady() || Utils.Player.Self.Spellbook.GetSpell(SpellSlot.W).Name == "mordekaisercreepingdeath2")
+            if (!Spells.W.IsReady() || Utils.Player.Self.Spellbook.GetSpell(SpellSlot.W).Name == "mordekaisercreepingdeath2")
                 return;
 
-            if (Utils.Player.Self.LSCountEnemiesInRange(Spells.WDamageRadius) > 0)
+            if (Utils.Player.Self.CountEnemiesInRange(Spells.WDamageRadius) > 0)
             {
                 if (Menu.MenuW.Item("Selected" + Utils.Player.Self.ChampionName).GetValue<StringList>().SelectedIndex == 1)
                 {
@@ -133,7 +133,7 @@ namespace Mordekaiser.Events
             var ghost = Utils.HowToTrainYourDragon;
             if (ghost != null)
             {
-                if (ghost.LSCountEnemiesInRange(Spells.WDamageRadius) == 0)
+                if (ghost.CountEnemiesInRange(Spells.WDamageRadius) == 0)
                     return;
 
                 if (Menu.MenuW.Item("SelectedGhost").GetValue<StringList>().SelectedIndex == 1)
@@ -143,8 +143,8 @@ namespace Mordekaiser.Events
             }
 
             foreach (var ally in HeroManager.Allies.Where(
-                a => !a.IsDead && !a.IsMe && a.Position.LSDistance(Utils.Player.Self.Position) < Spells.W.Range)
-                .Where(ally => ally.LSCountEnemiesInRange(Spells.WDamageRadius) > 0)
+                a => !a.IsDead && !a.IsMe && a.Position.Distance(Utils.Player.Self.Position) < Spells.W.Range)
+                .Where(ally => ally.CountEnemiesInRange(Spells.WDamageRadius) > 0)
                 .Where(ally => Menu.MenuW.Item("Selected" + ally.ChampionName).GetValue<StringList>().SelectedIndex == 1)
                 )
             {
@@ -155,7 +155,7 @@ namespace Mordekaiser.Events
 
         private static void ExecuteE()
         {
-            if (!Spells.E.LSIsReady())
+            if (!Spells.E.IsReady())
             {
                 return;
             }
@@ -167,7 +167,7 @@ namespace Mordekaiser.Events
             
             var t = GetTarget;
 
-            if (!t.LSIsValidTarget(Spells.E.Range))
+            if (!t.IsValidTarget(Spells.E.Range))
             {
                 return;
             }
@@ -180,18 +180,18 @@ namespace Mordekaiser.Events
             if (!Menu.MenuR.Item("UseR.Active").GetValue<bool>())
                 return;
 
-            if (!Spells.R.LSIsReady()) 
+            if (!Spells.R.IsReady()) 
                 return;
 
             var t = TargetSelector.GetTarget(Spells.R.Range, TargetSelector.DamageType.Magical);
-            if (t.LSIsValidTarget()
-                && t.Health <= ObjectManager.Player.LSGetSpellDamage(t, SpellSlot.R) * (100 / (100 + t.SpellBlock))) Spells.R.CastOnUnit(t);
+            if (t.IsValidTarget()
+                && t.Health <= ObjectManager.Player.GetSpellDamage(t, SpellSlot.R) * (100 / (100 + t.SpellBlock))) Spells.R.CastOnUnit(t);
         }
 
         private static void CastItems()
         {
             var t = TargetSelector.GetTarget(750, TargetSelector.DamageType.Physical);
-            if (!t.LSIsValidTarget())
+            if (!t.IsValidTarget())
                 return;
 
             foreach (var item in Items.ItemDb)
@@ -199,13 +199,13 @@ namespace Mordekaiser.Events
                 if (item.Value.ItemType == Items.EnumItemType.AoE &&
                     item.Value.TargetingType == Items.EnumItemTargettingType.EnemyHero)
                 {
-                    if (t.LSIsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
+                    if (t.IsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
                         item.Value.Item.Cast();
                 }
                 if (item.Value.ItemType == Items.EnumItemType.Targeted &&
                     item.Value.TargetingType == Items.EnumItemTargettingType.EnemyHero)
                 {
-                    if (t.LSIsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
+                    if (t.IsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
                         item.Value.Item.Cast(t);
                 }
             }

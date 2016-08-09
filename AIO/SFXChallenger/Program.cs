@@ -25,7 +25,7 @@ using EloBuddy; namespace SFXChallenger
     internal class Program
     {
         // ReSharper disable once UnusedParameter.Local
-        private static void Main(string[] args)
+        public static void Main()
         {
             Bootstrap.Init();
         }

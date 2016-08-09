@@ -119,13 +119,13 @@ using EloBuddy;
         private static void Interrupter2_OnInterruptableTarget(AIHeroClient sender,
             Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (R.LSIsReady() && sender.LSIsValidTarget(R.Range) && Config.Item("interrupt").GetValue<bool>())
+            if (R.IsReady() && sender.IsValidTarget(R.Range) && Config.Item("interrupt").GetValue<bool>())
                 R.CastIfHitchanceEquals(sender, HitChance.High);
         }
 
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (W.LSIsReady() && gapcloser.Sender.LSIsValidTarget(Q.Range) && Config.Item("antigap").GetValue<bool>())
+            if (W.IsReady() && gapcloser.Sender.IsValidTarget(Q.Range) && Config.Item("antigap").GetValue<bool>())
                 W.Cast();
         }
 
@@ -135,11 +135,11 @@ using EloBuddy;
             {
                 float ComboDamage = new float();
 
-                ComboDamage += Q.LSIsReady() ? Q.GetDamage(Target) : 0;
-                ComboDamage += W.LSIsReady() ? W.GetDamage(Target) : 0;
-                ComboDamage += E.LSIsReady() ? E.GetDamage(Target) : 0;
-                ComboDamage += _smite.LSIsReady() ? GetSmiteDmg() : 0;
-                ComboDamage += Ignite.LSIsReady() ? IgniteDamage(Target) : 0;
+                ComboDamage += Q.IsReady() ? Q.GetDamage(Target) : 0;
+                ComboDamage += W.IsReady() ? W.GetDamage(Target) : 0;
+                ComboDamage += E.IsReady() ? E.GetDamage(Target) : 0;
+                ComboDamage += _smite.IsReady() ? GetSmiteDmg() : 0;
+                ComboDamage += Ignite.IsReady() ? IgniteDamage(Target) : 0;
                 ComboDamage += player.TotalAttackDamage;
                 return ComboDamage;
             }
@@ -187,24 +187,24 @@ using EloBuddy;
         private static void combo()
         {
             var target = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-            var enemys = target.LSCountEnemiesInRange(R.Range);
-            if (target == null || !target.LSIsValidTarget())
+            var enemys = target.CountEnemiesInRange(R.Range);
+            if (target == null || !target.IsValidTarget())
                 return;
 
-            if (R.LSIsReady() && Config.Item("UseR").GetValue<bool>() && target.LSIsValidTarget(R.Range))
-                if (!target.LSHasBuff("JudicatorIntervention") && !target.LSHasBuff("Undying Rage") &&
+            if (R.IsReady() && Config.Item("UseR").GetValue<bool>() && target.IsValidTarget(R.Range))
+                if (!target.HasBuff("JudicatorIntervention") && !target.HasBuff("Undying Rage") &&
                 (Config.Item("Rene").GetValue<Slider>().Value <= enemys))
                     R.CastIfHitchanceEquals(target, HitChance.High);
 
             UseSmite(target);
 
-            if (W.LSIsReady() && target.LSIsValidTarget(W.Range) && Config.Item("UseW").GetValue<bool>())
+            if (W.IsReady() && target.IsValidTarget(W.Range) && Config.Item("UseW").GetValue<bool>())
                 W.Cast();
 
-            if (E.LSIsReady() && target.LSIsValidTarget(E.Range) && Config.Item("UseE").GetValue<bool>())
+            if (E.IsReady() && target.IsValidTarget(E.Range) && Config.Item("UseE").GetValue<bool>())
                 E.CastIfHitchanceEquals(target, HitChance.VeryHigh);
 
-            if (Q.LSIsReady() && Config.Item("UseQ").GetValue<bool>() & target.LSIsValidTarget(player.AttackRange))
+            if (Q.IsReady() && Config.Item("UseQ").GetValue<bool>() & target.IsValidTarget(player.AttackRange))
                 Q.Cast();
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
@@ -213,11 +213,11 @@ using EloBuddy;
         
         private static int CalcDamage(Obj_AI_Base target)
         {
-            var aa = player.LSGetAutoAttackDamage(target, true)*(1 + player.Crit);
+            var aa = player.GetAutoAttackDamage(target, true)*(1 + player.Crit);
             var damage = aa;
-            Ignite = player.LSGetSpellSlot("summonerdot");
+            Ignite = player.GetSpellSlot("summonerdot");
 
-            if (Ignite.LSIsReady())
+            if (Ignite.IsReady())
                 damage += player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
 
             if (Items.HasItem(3153) && Items.CanUseItem(3153))
@@ -226,33 +226,33 @@ using EloBuddy;
             if (Items.HasItem(3144) && Items.CanUseItem(3144))
                 damage += player.GetItemDamage(target, Damage.DamageItems.Bilgewater); //ITEM BOTRK
 
-            if (R.LSIsReady() && Config.Item("UseR").GetValue<bool>()) // rdamage
+            if (R.IsReady() && Config.Item("UseR").GetValue<bool>()) // rdamage
             {
-                if (R.LSIsReady())
+                if (R.IsReady())
                 {
                     damage += R.GetDamage(target);
                 }
             }
 
-            if (Q.LSIsReady() && Config.Item("UseQ").GetValue<KeyBind>().Active) // qdamage
+            if (Q.IsReady() && Config.Item("UseQ").GetValue<KeyBind>().Active) // qdamage
             {
 
                 damage += Q.GetDamage(target);
             }
 
-            if (E.LSIsReady() && Config.Item("UseE").GetValue<KeyBind>().Active) // edamage
+            if (E.IsReady() && Config.Item("UseE").GetValue<KeyBind>().Active) // edamage
             {
 
                 damage += E.GetDamage(target);
             }
 
-            if (_smite.LSIsReady() && Config.Item("UseS").GetValue<KeyBind>().Active) // edamage
+            if (_smite.IsReady() && Config.Item("UseS").GetValue<KeyBind>().Active) // edamage
             {
 
                 damage += GetSmiteDmg();
             }
 
-            if (W.LSIsReady() && Config.Item("UseW").GetValue<KeyBind>().Active) // wdamage
+            if (W.IsReady() && Config.Item("UseW").GetValue<KeyBind>().Active) // wdamage
             {
 
                 damage += W.GetDamage(target);
@@ -273,16 +273,16 @@ using EloBuddy;
                 ObjectManager.Get<AIHeroClient>()
                     .Where(
                         hero =>
-                            hero.LSIsValidTarget(Q.Range) && !hero.HasBuffOfType(BuffType.Invulnerability) && hero.IsEnemy)
+                            hero.IsValidTarget(Q.Range) && !hero.HasBuffOfType(BuffType.Invulnerability) && hero.IsEnemy)
                 )
             {
-                var qDmg = player.LSGetSpellDamage(target, SpellSlot.Q);
-                if (Config.Item("ksQ").GetValue<bool>() && target.LSIsValidTarget(player.AttackRange) && target.Health <= qDmg)
+                var qDmg = player.GetSpellDamage(target, SpellSlot.Q);
+                if (Config.Item("ksQ").GetValue<bool>() && target.IsValidTarget(player.AttackRange) && target.Health <= qDmg)
                 {
                     Q.Cast();
                 }
-                var eDmg = player.LSGetSpellDamage(target, SpellSlot.E);
-                if (Config.Item("ksE").GetValue<bool>() && target.LSIsValidTarget(E.Range) && target.Health <= eDmg)
+                var eDmg = player.GetSpellDamage(target, SpellSlot.E);
+                if (Config.Item("ksE").GetValue<bool>() && target.IsValidTarget(E.Range) && target.Health <= eDmg)
                 {
                     E.CastIfHitchanceEquals(target, HitChance.VeryHigh);
                 }
@@ -291,9 +291,9 @@ using EloBuddy;
 
         private static void items()
         {
-            Ignite = player.LSGetSpellSlot("summonerdot");
+            Ignite = player.GetSpellSlot("summonerdot");
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
                 return;
 
             var botrk = ItemData.Blade_of_the_Ruined_King.GetItem();
@@ -318,19 +318,19 @@ using EloBuddy;
 
                 cutlass.Cast(target);
 
-            if (Ghost.IsReady() && Ghost.IsOwned(player) && target.LSIsValidTarget(E.Range)
+            if (Ghost.IsReady() && Ghost.IsOwned(player) && target.IsValidTarget(E.Range)
                 && Config.Item("useGhostblade").GetValue<bool>())
 
                 Ghost.Cast();
 
-            if (player.LSDistance(target.Position) <= 600 && IgniteDamage(target) >= target.Health &&
+            if (player.Distance(target.Position) <= 600 && IgniteDamage(target) >= target.Health &&
                 Config.Item("UseIgnite").GetValue<bool>())
                 player.Spellbook.CastSpell(Ignite, target);
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (player.IsDead || MenuGUI.IsChatOpen || player.LSIsRecalling())
+            if (player.IsDead || MenuGUI.IsChatOpen || player.IsRecalling())
             {
                 return;
             }
@@ -357,26 +357,26 @@ using EloBuddy;
         private static void AutoHarass()
         {
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
                 return;
             
-            if (E.LSIsReady() && Config.Item("aE").GetValue<bool>() && target.LSIsValidTarget(E.Range))
+            if (E.IsReady() && Config.Item("aE").GetValue<bool>() && target.IsValidTarget(E.Range))
                 E.CastIfHitchanceEquals(target, HitChance.High);
         }
 
         private static void harass()
         {
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
                 return;
 
-            if (W.LSIsReady() && Config.Item("hW").GetValue<bool>() && target.LSIsValidTarget(W.Range))
+            if (W.IsReady() && Config.Item("hW").GetValue<bool>() && target.IsValidTarget(W.Range))
                W.Cast();
 
-            if (Q.LSIsReady() && Config.Item("hQ").GetValue<bool>() && target.LSIsValidTarget(player.AttackRange))
+            if (Q.IsReady() && Config.Item("hQ").GetValue<bool>() && target.IsValidTarget(player.AttackRange))
                 Q.Cast();
 
-            if (E.LSIsReady() && Config.Item("hE").GetValue<bool>() && target.LSIsValidTarget(E.Range))
+            if (E.IsReady() && Config.Item("hE").GetValue<bool>() && target.IsValidTarget(E.Range))
                 E.CastIfHitchanceEquals(target, HitChance.VeryHigh);
         }
 
@@ -388,24 +388,24 @@ using EloBuddy;
                 foreach (var minion in minionCount)
                 {
                     if (Config.Item("lQ").GetValue<bool>()
-                        && Q.LSIsReady()
-                        && minion.LSIsValidTarget(125)
+                        && Q.IsReady()
+                        && minion.IsValidTarget(125)
                         )
                     {
                         Q.Cast();
                     }
 
                     if (Config.Item("lW").GetValue<bool>()
-                        && W.LSIsReady()
-                        && minion.LSIsValidTarget(W.Range)
+                        && W.IsReady()
+                        && minion.IsValidTarget(W.Range)
                        )
                     {
                         W.Cast();
                     }
 
                     if (Config.Item("lE").GetValue<bool>()
-                        && E.LSIsReady()
-                        && minion.LSIsValidTarget(E.Range)
+                        && E.IsReady()
+                        && minion.IsValidTarget(E.Range)
                         )
                     {
                         E.Cast(minion);
@@ -449,7 +449,7 @@ using EloBuddy;
             var itemscheck = SmiteBlue.Any(i => Items.HasItem(i)) || SmiteRed.Any(i => Items.HasItem(i));
             if (itemscheck && usesmite &&
                 ObjectManager.Player.Spellbook.CanUseSpell(_smiteSlot) == SpellState.Ready &&
-                target.LSDistance(player.Position) < _smite.Range)
+                target.Distance(player.Position) < _smite.Range)
             {
                 ObjectManager.Player.Spellbook.CastSpell(_smiteSlot, target);
             }

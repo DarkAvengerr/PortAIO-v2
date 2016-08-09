@@ -37,16 +37,16 @@
         {
             var PacketCast = SkyLv_Taric.Menu.Item("Taric.UsePacketCast").GetValue<bool>();
 
-            if (Player.LSIsRecalling()) return;
+            if (Player.IsRecalling()) return;
 
-            if (SkyLv_Taric.Menu.Item("Taric.AutoEInterrupt").GetValue<bool>() && E.LSIsReady() && sender.LSIsValidTarget(E.Range))
+            if (SkyLv_Taric.Menu.Item("Taric.AutoEInterrupt").GetValue<bool>() && E.IsReady() && sender.IsValidTarget(E.Range))
                 E.Cast(sender, PacketCast);
 
-            if (SkyLv_Taric.Menu.Item("Taric.UseEFromAlly").GetValue<bool>() && E.LSIsReady() && Player.Mana >= E.ManaCost)
+            if (SkyLv_Taric.Menu.Item("Taric.UseEFromAlly").GetValue<bool>() && E.IsReady() && Player.Mana >= E.ManaCost)
             {
-                foreach (var AllyHero in ObjectManager.Get<AIHeroClient>().Where(a => !a.IsMe && !a.IsDead && a.Team == ObjectManager.Player.Team && Player.LSDistance(a) < 1600 && (a.HasBuff("TaricWAllyBuff") || a.HasBuff("TaricW"))))
+                foreach (var AllyHero in ObjectManager.Get<AIHeroClient>().Where(a => !a.IsMe && !a.IsDead && a.Team == ObjectManager.Player.Team && Player.Distance(a) < 1600 && (a.HasBuff("TaricWAllyBuff") || a.HasBuff("TaricW"))))
                 {
-                    var Allytarget = ObjectManager.Get<AIHeroClient>().Where(t => !t.IsDead && t.Team != ObjectManager.Player.Team && AllyHero.LSDistance(t) < E.Range).FirstOrDefault();
+                    var Allytarget = ObjectManager.Get<AIHeroClient>().Where(t => !t.IsDead && t.Team != ObjectManager.Player.Team && AllyHero.Distance(t) < E.Range).FirstOrDefault();
 
                     if (SkyLv_Taric.Menu.Item(AllyHero.ChampionName + "TargetInterruptEComboFromAlly", true).GetValue<bool>() && Allytarget.NetworkId == sender.NetworkId)
                     {

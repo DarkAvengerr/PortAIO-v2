@@ -28,7 +28,7 @@ using EloBuddy;
 
         private void UseQ(Obj_AI_Base target)
         {
-            if (target != null && Q.LSIsReady() && Q.IsInRange(target))
+            if (target != null && Q.IsReady() && Q.IsInRange(target))
             {
                 Q.Cast(target);
             }
@@ -47,12 +47,12 @@ using EloBuddy;
                         minion =>
                             !champion.Player.CanAttack ||
                             (champion.Player.CanAttack &&
-                             champion.Player.LSDistance(minion) > Orbwalking.GetRealAutoAttackRange(champion.Player)))
+                             champion.Player.Distance(minion) > Orbwalking.GetRealAutoAttackRange(champion.Player)))
                     .FirstOrDefault(
                         minion =>
                             Q.GetDamage(minion) >
                             HealthPrediction.GetHealthPrediction(minion,
-                                (int) (champion.Player.LSDistance(minion)/Q.Speed)*1000, (int) Q.Delay*1000));
+                                (int) (champion.Player.Distance(minion)/Q.Speed)*1000, (int) Q.Delay*1000));
 
             if (target != null)
             {
@@ -64,7 +64,7 @@ using EloBuddy;
         {
             AIHeroClient target;
 
-            if (Q.UseOnHaras && Q.LSIsReady() &&
+            if (Q.UseOnHaras && Q.IsReady() &&
                 champion.Player.ManaPercent > KoreanUtils.GetParamSlider(champion.MainMenu, "minenergytoharas"))
             {
                 target = TargetSelector.GetTarget(Q.Range, Q.DamageType);
@@ -74,7 +74,7 @@ using EloBuddy;
                 }
             }
 
-            if (E.UseOnHaras && E.LSIsReady() &&
+            if (E.UseOnHaras && E.IsReady() &&
                 champion.Player.ManaPercent > KoreanUtils.GetParamSlider(champion.MainMenu, "minenergytoharas"))
             {
                 target = TargetSelector.GetTarget(E.Range, E.DamageType);
@@ -89,7 +89,7 @@ using EloBuddy;
 
         public override void LaneClearMode()
         {
-            if (Q.UseOnLaneClear && Q.LSIsReady() &&
+            if (Q.UseOnLaneClear && Q.IsReady() &&
                 champion.Player.ManaPercent > KoreanUtils.GetParamSlider(champion.MainMenu, "minenergytolaneclear"))
             {
                 if (KoreanUtils.GetParamBool(champion.MainMenu, "saveqtofarm"))
@@ -102,7 +102,7 @@ using EloBuddy;
                 }
             }
 
-            if (E.UseOnLaneClear && E.LSIsReady() &&
+            if (E.UseOnLaneClear && E.IsReady() &&
                 champion.Player.ManaPercent > KoreanUtils.GetParamSlider(champion.MainMenu, "minenergytolaneclear") &&
                 MinionManager.GetMinions(E.Range).Count >=
                 KoreanUtils.GetParamSlider(champion.MainMenu, "minminionstoe"))
@@ -162,13 +162,13 @@ using EloBuddy;
 
         private bool FullComboIsReady()
         {
-            if (Q.UseOnCombo && !Q.LSIsReady())
+            if (Q.UseOnCombo && !Q.IsReady())
                 return false;
-            if (W.UseOnCombo && !W.LSIsReady())
+            if (W.UseOnCombo && !W.IsReady())
                 return false;
-            if (E.UseOnCombo && !E.LSIsReady())
+            if (E.UseOnCombo && !E.IsReady())
                 return false;
-            if (R.UseOnCombo && (!E.LSIsReady() || R.Instance.Ammo == 1))
+            if (R.UseOnCombo && (!E.IsReady() || R.Instance.Ammo == 1))
                 return false;
 
             return true;
@@ -247,13 +247,13 @@ using EloBuddy;
         {
             AIHeroClient target;
 
-            if (R.UseOnCombo && R.LSIsReady())
+            if (R.UseOnCombo && R.IsReady())
             {
                 target =
                     HeroManager.Enemies.FirstOrDefault(
                         champ =>
                             R.IsInRange(champ) &&
-                            R.GetDamage(champ) + champion.Player.LSGetAutoAttackDamage(champ) > champ.Health);
+                            R.GetDamage(champ) + champion.Player.GetAutoAttackDamage(champ) > champ.Health);
 
                 if (target != null)
                 {
@@ -266,7 +266,7 @@ using EloBuddy;
                 return;
             }
 
-            if (R.UseOnCombo && R.LSIsReady() && R.Instance.Ammo >= 2)
+            if (R.UseOnCombo && R.IsReady() && R.Instance.Ammo >= 2)
             {
                 target = TargetSelector.GetTarget(R.Range, R.DamageType);
 
@@ -275,7 +275,7 @@ using EloBuddy;
                     EnqueueItems(target);
 
                     EnqueueSpell(R, target);
-                    if (W.UseOnCombo && W.LSIsReady())
+                    if (W.UseOnCombo && W.IsReady())
                     {
                         EnqueueSpell(W, target);
                     }
@@ -283,7 +283,7 @@ using EloBuddy;
                 }
             }
 
-            if (W.UseOnCombo && Q.UseOnCombo && W.LSIsReady() && Q.LSIsReady())
+            if (W.UseOnCombo && Q.UseOnCombo && W.IsReady() && Q.IsReady())
             {
                 target = TargetSelector.GetTarget(Q.Range, Q.DamageType);
 
@@ -295,13 +295,13 @@ using EloBuddy;
                 }
             }
 
-            if (Q.UseOnCombo && Q.LSIsReady())
+            if (Q.UseOnCombo && Q.IsReady())
             {
                 EnqueueSpell(Q, null);
                 return;
             }
 
-            if (E.UseOnCombo && E.LSIsReady())
+            if (E.UseOnCombo && E.IsReady())
             {
                 EnqueueSpell(E, null);
                 return;

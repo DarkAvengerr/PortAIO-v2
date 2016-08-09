@@ -33,7 +33,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Mixed
         public void OnUpdate(EventArgs args)
         {
             if (Variables.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed
-                || !Variables.Spells[SpellSlot.Q].LSIsReady()) return;
+                || !Variables.Spells[SpellSlot.Q].IsReady()) return;
 
             if (this.Menu.Item(this.Menu.Name + "QMana").GetValue<Slider>().Value > Variables.Player.ManaPercent) return;
 

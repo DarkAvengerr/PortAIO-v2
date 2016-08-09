@@ -21,7 +21,7 @@ using EloBuddy;
         public bool ShouldGetExecuted()
         {
             return Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.sivir.extra.autoQKS") &&
-                   ObjectManager.Player.ManaPercent > 35 && Variables.Spells[SpellSlot.Q].LSIsReady();
+                   ObjectManager.Player.ManaPercent > 35 && Variables.Spells[SpellSlot.Q].IsReady();
 
         }
 
@@ -33,7 +33,7 @@ using EloBuddy;
         public void OnExecute()
         {
             var target = HeroManager.Enemies.FirstOrDefault(enemy => enemy.Health + 5 < GetRealDamage(enemy)
-                && enemy.LSIsValidTarget(Variables.Spells[SpellSlot.Q].Range));
+                && enemy.IsValidTarget(Variables.Spells[SpellSlot.Q].Range));
 
             if (target != null
                 && (target.NetworkId != Variables.Orbwalker.GetTarget().NetworkId))

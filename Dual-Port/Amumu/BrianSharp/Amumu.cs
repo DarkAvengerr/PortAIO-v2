@@ -114,7 +114,7 @@ namespace BrianSharp.Plugin
 
         private static void OnUpdate(EventArgs args)
         {
-            if (Player.IsDead || MenuGUI.IsChatOpen || Player.LSIsRecalling())
+            if (Player.IsDead || MenuGUI.IsChatOpen || Player.IsRecalling())
             {
                 return;
             }
@@ -145,26 +145,26 @@ namespace BrianSharp.Plugin
             }
             if (GetValue<bool>("Draw", "Q") && Q.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, Q.Range, Q.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, Q.Range, Q.IsReady() ? Color.Green : Color.Red);
             }
             if (GetValue<bool>("Draw", "W") && W.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, W.Range, W.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, W.Range, W.IsReady() ? Color.Green : Color.Red);
             }
             if (GetValue<bool>("Draw", "E") && E.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, E.Range, E.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.Green : Color.Red);
             }
             if (GetValue<bool>("Draw", "R") && R.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, R.Range, R.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, R.Range, R.IsReady() ? Color.Green : Color.Red);
             }
         }
 
         private static void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (Player.IsDead || !GetValue<bool>("AntiGap", "Q") ||
-                !GetValue<bool>("AntiGap", gapcloser.Sender.ChampionName + "_" + gapcloser.Slot) || !Q.LSIsReady())
+                !GetValue<bool>("AntiGap", gapcloser.Sender.ChampionName + "_" + gapcloser.Slot) || !Q.IsReady())
             {
                 return;
             }
@@ -185,7 +185,7 @@ namespace BrianSharp.Plugin
         {
             if (mode == "Combo")
             {
-                if (GetValue<bool>(mode, "R") && R.LSIsReady() && !Player.LSIsDashing())
+                if (GetValue<bool>(mode, "R") && R.IsReady() && !Player.IsDashing())
                 {
                     var obj = GetRTarget();
                     if (((obj.Count > 1 && obj.Any(i => R.IsKillable(i))) ||
@@ -195,13 +195,13 @@ namespace BrianSharp.Plugin
                         return;
                     }
                 }
-                if (GetValue<bool>(mode, "Q") && Q.LSIsReady())
+                if (GetValue<bool>(mode, "Q") && Q.IsReady())
                 {
-                    if (GetValue<bool>(mode, "R") && R.LSIsReady(100))
+                    if (GetValue<bool>(mode, "R") && R.IsReady(100))
                     {
                         var nearObj = new List<Obj_AI_Base>();
                         nearObj.AddRange(GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly));
-                        nearObj.AddRange(HeroManager.Enemies.Where(i => i.LSIsValidTarget(Q.Range)));
+                        nearObj.AddRange(HeroManager.Enemies.Where(i => i.IsValidTarget(Q.Range)));
                         if ((from i in nearObj
                             let enemy = GetRTarget(i.ServerPosition)
                             where
@@ -210,7 +210,7 @@ namespace BrianSharp.Plugin
                                 enemy.Count >= GetValue<Slider>(mode, "RCountA").Value
                             orderby enemy.Count descending
                             where Q.GetPrediction(i).Hitchance >= Q.MinHitChance
-                            select i).Any(i => Q.Cast(i, PacketCast).LSIsCasted()))
+                            select i).Any(i => Q.Cast(i, PacketCast).IsCasted()))
                         {
                             return;
                         }
@@ -219,7 +219,7 @@ namespace BrianSharp.Plugin
                     if (target != null && !Orbwalk.InAutoAttackRange(target))
                     {
                         var state = Q.Cast(target, PacketCast);
-                        if (state.LSIsCasted())
+                        if (state.IsCasted())
                         {
                             return;
                         }
@@ -237,11 +237,11 @@ namespace BrianSharp.Plugin
                     }
                 }
             }
-            if (GetValue<bool>(mode, "E") && E.LSIsReady() && E.GetTarget() != null && E.Cast(PacketCast))
+            if (GetValue<bool>(mode, "E") && E.IsReady() && E.GetTarget() != null && E.Cast(PacketCast))
             {
                 return;
             }
-            if (GetValue<bool>(mode, "W") && W.LSIsReady())
+            if (GetValue<bool>(mode, "W") && W.IsReady())
             {
                 if (Player.ManaPercent >= GetValue<Slider>(mode, "WMpA").Value &&
                     W.GetTarget(GetValue<Slider>("Misc", "WExtraRange").Value) != null)
@@ -264,17 +264,17 @@ namespace BrianSharp.Plugin
             var minionObj = GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth);
             if (!minionObj.Any())
             {
-                if (GetValue<bool>("Clear", "W") && W.LSIsReady() && HaveW)
+                if (GetValue<bool>("Clear", "W") && W.IsReady() && HaveW)
                 {
                     W.Cast(PacketCast);
                 }
                 return;
             }
-            if (GetValue<bool>("Clear", "E") && E.LSIsReady() && minionObj.Any(i => E.IsInRange(i)) && E.Cast(PacketCast))
+            if (GetValue<bool>("Clear", "E") && E.IsReady() && minionObj.Any(i => E.IsInRange(i)) && E.Cast(PacketCast))
             {
                 return;
             }
-            if (GetValue<bool>("Clear", "W") && W.LSIsReady())
+            if (GetValue<bool>("Clear", "W") && W.IsReady())
             {
                 if (Player.ManaPercent >= GetValue<Slider>("Clear", "WMpA").Value &&
                     (minionObj.Count(i => W.IsInRange(i, W.Range + GetValue<Slider>("Misc", "WExtraRange").Value)) > 1 ||
@@ -293,7 +293,7 @@ namespace BrianSharp.Plugin
                     return;
                 }
             }
-            if (GetValue<bool>("Clear", "Q") && Q.LSIsReady())
+            if (GetValue<bool>("Clear", "Q") && Q.IsReady())
             {
                 var obj =
                     minionObj.Where(i => Q.IsKillable(i) || !Orbwalk.InAutoAttackRange(i))
@@ -307,7 +307,7 @@ namespace BrianSharp.Plugin
 
         private static void KillSteal()
         {
-            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.LSIsReady())
+            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.IsReady())
             {
                 var target = TargetSelector.GetTarget(600, TargetSelector.DamageType.True);
                 if (target != null && CastIgnite(target))
@@ -324,15 +324,15 @@ namespace BrianSharp.Plugin
                     return;
                 }
             }
-            if (GetValue<bool>("KillSteal", "Q") && Q.LSIsReady())
+            if (GetValue<bool>("KillSteal", "Q") && Q.IsReady())
             {
                 var target = Q.GetTarget();
-                if (target != null && Q.IsKillable(target) && Q.Cast(target, PacketCast).LSIsCasted())
+                if (target != null && Q.IsKillable(target) && Q.Cast(target, PacketCast).IsCasted())
                 {
                     return;
                 }
             }
-            if (GetValue<bool>("KillSteal", "E") && E.LSIsReady())
+            if (GetValue<bool>("KillSteal", "E") && E.IsReady())
             {
                 var target = E.GetTarget();
                 if (target != null && E.IsKillable(target) && E.Cast(PacketCast))
@@ -340,7 +340,7 @@ namespace BrianSharp.Plugin
                     return;
                 }
             }
-            if (GetValue<bool>("KillSteal", "R") && R.LSIsReady())
+            if (GetValue<bool>("KillSteal", "R") && R.IsReady())
             {
                 var target = GetRTarget().FirstOrDefault(i => R.IsKillable(i));
                 if (target != null)
@@ -355,8 +355,8 @@ namespace BrianSharp.Plugin
             return
                 HeroManager.Enemies.Where(
                     i =>
-                        i.LSIsValidTarget() &&
-                        (from.LSIsValid() ? from : Player.ServerPosition).LSDistance(
+                        i.IsValidTarget() &&
+                        (from.IsValid() ? from : Player.ServerPosition).Distance(
                             Prediction.GetPrediction(i, 0.25f).UnitPosition) < R.Range).ToList();
         }
     }

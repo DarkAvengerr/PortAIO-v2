@@ -171,18 +171,18 @@ using EloBuddy; namespace xSaliceResurrected.Top
         {
             double comboDamage = 0;
 
-            if (Q.LSIsReady())
-                comboDamage += GetCurrentHeat() > 50 ? Player.LSGetSpellDamage(target, SpellSlot.Q) * 2 : Player.LSGetSpellDamage(target, SpellSlot.Q);
+            if (Q.IsReady())
+                comboDamage += GetCurrentHeat() > 50 ? Player.GetSpellDamage(target, SpellSlot.Q) * 2 : Player.GetSpellDamage(target, SpellSlot.Q);
 
-            if (E.LSIsReady())
-                comboDamage += GetCurrentHeat() > 50 ? Player.LSGetSpellDamage(target, SpellSlot.E) * 1.5 : Player.LSGetSpellDamage(target, SpellSlot.E);
+            if (E.IsReady())
+                comboDamage += GetCurrentHeat() > 50 ? Player.GetSpellDamage(target, SpellSlot.E) * 1.5 : Player.GetSpellDamage(target, SpellSlot.E);
 
-            if (R.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.R) * 3;
+            if (R.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.R) * 3;
 
             comboDamage = ItemManager.CalcDamage(target, comboDamage);
 
-            return (float)(comboDamage + Player.LSGetAutoAttackDamage(target));
+            return (float)(comboDamage + Player.GetAutoAttackDamage(target));
         }
 
         private void Combo()
@@ -207,7 +207,7 @@ using EloBuddy; namespace xSaliceResurrected.Top
             if (useQ && ShouldQ(target))
                 Q.Cast(target);
 
-            if (useW && menu.Item("W_Always", true).GetValue<bool>() && W.LSIsReady())
+            if (useW && menu.Item("W_Always", true).GetValue<bool>() && W.IsReady())
                 W.Cast();
 
             //items
@@ -262,7 +262,7 @@ using EloBuddy; namespace xSaliceResurrected.Top
             List<Obj_AI_Base> allMinionsE = MinionManager.GetMinions(Player.ServerPosition, E.Range,
                 MinionTypes.All, MinionTeam.NotAlly);
 
-            if (allMinionsE.Count > 0 && E.LSIsReady())
+            if (allMinionsE.Count > 0 && E.IsReady())
             {
                 foreach (var minion in allMinionsE)
                 {
@@ -275,16 +275,16 @@ using EloBuddy; namespace xSaliceResurrected.Top
 
         private bool ShouldQ(AIHeroClient target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return false;
 
-            if (Player.LSDistance(target.Position) > Q.Range)
+            if (Player.Distance(target.Position) > Q.Range)
                 return false;
 
             if (!menu.Item("Q_Over_Heat", true).GetValue<bool>() && GetCurrentHeat() > 80)
                 return false;
 
-            if (GetCurrentHeat() > 80 && !(Player.LSGetSpellDamage(target, SpellSlot.Q, 1) + Player.LSGetAutoAttackDamage(target) * 2 > target.Health))
+            if (GetCurrentHeat() > 80 && !(Player.GetSpellDamage(target, SpellSlot.Q, 1) + Player.GetAutoAttackDamage(target) * 2 > target.Health))
                 return false;
 
             return true;
@@ -292,10 +292,10 @@ using EloBuddy; namespace xSaliceResurrected.Top
 
         private bool ShouldE(AIHeroClient target, string source)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return false;
 
-            if (Player.LSDistance(target.Position) > E.Range)
+            if (Player.Distance(target.Position) > E.Range)
                 return false;
 
             if (E.GetPrediction(target).Hitchance < HitChanceManager.GetEHitChance(source))
@@ -303,7 +303,7 @@ using EloBuddy; namespace xSaliceResurrected.Top
                 if (!menu.Item("E_Over_Heat", true).GetValue<bool>() && GetCurrentHeat() > 80)
                     return false;
 
-            if (GetCurrentHeat() > 80 && !(Player.LSGetSpellDamage(target, SpellSlot.E, 1) + Player.LSGetAutoAttackDamage(target) * 2 > target.Health))
+            if (GetCurrentHeat() > 80 && !(Player.GetSpellDamage(target, SpellSlot.E, 1) + Player.GetAutoAttackDamage(target) * 2 > target.Health))
                 return false;
 
             return true;
@@ -311,27 +311,27 @@ using EloBuddy; namespace xSaliceResurrected.Top
 
         private void StayInDangerZone()
         {
-            if (Player.LSInFountain() || Player.LSIsRecalling())
+            if (Player.InFountain() || Player.IsRecalling())
                 return;
 
-            if (GetCurrentHeat() < 31 && W.LSIsReady() && menu.Item("W_Auto_Heat", true).GetValue<bool>())
+            if (GetCurrentHeat() < 31 && W.IsReady() && menu.Item("W_Auto_Heat", true).GetValue<bool>())
             {
                 W.Cast();
                 return;
             }
 
-            if (GetCurrentHeat() < 31 && Q.LSIsReady() && menu.Item("Q_Auto_Heat", true).GetValue<bool>())
+            if (GetCurrentHeat() < 31 && Q.IsReady() && menu.Item("Q_Auto_Heat", true).GetValue<bool>())
             {
-                var enemy = ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy).OrderBy(x => Player.LSDistance(x.Position)).FirstOrDefault();
+                var enemy = ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy).OrderBy(x => Player.Distance(x.Position)).FirstOrDefault();
 
                 if (enemy != null)
                     Q.Cast(enemy.ServerPosition);
                 return;
             }
 
-            if (GetCurrentHeat() < 31 && E.LSIsReady() && menu.Item("E_Auto_Heat", true).GetValue<bool>())
+            if (GetCurrentHeat() < 31 && E.IsReady() && menu.Item("E_Auto_Heat", true).GetValue<bool>())
             {
-                var enemy = ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsDead).OrderBy(x => Player.LSDistance(x.Position)).FirstOrDefault();
+                var enemy = ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsDead).OrderBy(x => Player.Distance(x.Position)).FirstOrDefault();
 
                 if (enemy != null)
                     E.Cast(enemy);
@@ -379,9 +379,9 @@ using EloBuddy; namespace xSaliceResurrected.Top
 
         protected override void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs args)
         {
-            if (unit.IsEnemy && unit.Type == GameObjectType.AIHeroClient && W.LSIsReady() && menu.Item("W_Block_Spell", true).GetValue<bool>())
+            if (unit.IsEnemy && unit.Type == GameObjectType.AIHeroClient && W.IsReady() && menu.Item("W_Block_Spell", true).GetValue<bool>())
             {
-                if (Player.LSDistance(args.End) < 400 && GetCurrentHeat() < 70)
+                if (Player.Distance(args.End) < 400 && GetCurrentHeat() < 70)
                 {
                     //Chat.Print("shielding");
                     W.Cast();
@@ -393,7 +393,7 @@ using EloBuddy; namespace xSaliceResurrected.Top
         {
             if (!menu.Item("E_Gap_Closer", true).GetValue<bool>()) return;
 
-            if (E.LSIsReady() && gapcloser.Sender.LSIsValidTarget(E.Range))
+            if (E.IsReady() && gapcloser.Sender.IsValidTarget(E.Range))
                 E.Cast(gapcloser.Sender);
         }
 
@@ -405,22 +405,22 @@ using EloBuddy; namespace xSaliceResurrected.Top
 
             if (menu.Item("Draw_Q", true).GetValue<bool>())
                 if (Q.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, Q.Range, Q.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, Q.Range, Q.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_W", true).GetValue<bool>())
                 if (W.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, W.Range - 2, W.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, W.Range - 2, W.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_E", true).GetValue<bool>())
                 if (E.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, E.Range, E.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_R", true).GetValue<bool>())
                 if (R.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, R.Range, R.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, R.Range, R.IsReady() ? Color.Green : Color.Red);
 
 
-            if (menu.Item("Draw_R_Pred", true).GetValue<bool>() && R.LSIsReady())
+            if (menu.Item("Draw_R_Pred", true).GetValue<bool>() && R.IsReady())
             {
                 SpellCastManager.DrawBestLine(R, R2, (int)(R2.Range/2), .9f);
             }

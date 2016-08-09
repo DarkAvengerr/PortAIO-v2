@@ -42,19 +42,19 @@ namespace FioraProject.Evade
                 {
                     var sideStart = poly.Points[i];
                     var sideEnd = poly.Points[(i == poly.Points.Count - 1) ? 0 : i + 1];
-                    var originalCandidate = myPosition.LSProjectOn(sideStart, sideEnd).SegmentPoint;
+                    var originalCandidate = myPosition.ProjectOn(sideStart, sideEnd).SegmentPoint;
                     var distanceToEvadePoint = Vector2.DistanceSquared(originalCandidate, myPosition);
                     if (distanceToEvadePoint < 600 * 600)
                     {
                         var sideDistance = Vector2.DistanceSquared(sideEnd, sideStart);
-                        var direction = (sideEnd - sideStart).LSNormalized();
+                        var direction = (sideEnd - sideStart).Normalized();
                         var s = (distanceToEvadePoint < 200 * 200 && sideDistance > 90 * 90)
                                     ? Config.DiagonalEvadePointsCount
                                     : 0;
                         for (var j = -s; j <= s; j++)
                         {
                             var candidate = originalCandidate + j * Config.DiagonalEvadePointsStep * direction;
-                            var pathToPoint = ObjectManager.Player.GetPath(candidate.To3D()).ToList().LSTo2D();
+                            var pathToPoint = ObjectManager.Player.GetPath(candidate.To3D()).ToList().To2D();
                             if (!isBlink)
                             {
                                 if (Evade.IsSafePath(pathToPoint, Config.EvadingFirstTimeOffset, speed, delay).IsSafe)
@@ -93,12 +93,12 @@ namespace FioraProject.Evade
                 if (goodCandidates.Count > 0)
                 {
                     goodCandidates = new List<Vector2>
-                                         { goodCandidates.MinOrDefault(i => ObjectManager.Player.LSDistance(i,true)) };
+                                         { goodCandidates.MinOrDefault(i => ObjectManager.Player.Distance(i,true)) };
                 }
                 if (badCandidates.Count > 0)
                 {
                     badCandidates = new List<Vector2>
-                                        { badCandidates.MinOrDefault(i => ObjectManager.Player.LSDistance(i,true)) };
+                                        { badCandidates.MinOrDefault(i => ObjectManager.Player.Distance(i,true)) };
                 }
             }
             return goodCandidates.Count > 0 ? goodCandidates : (onlyGood ? new List<Vector2>() : badCandidates);
@@ -121,63 +121,63 @@ namespace FioraProject.Evade
                 switch (targetType)
                 {
                     case SpellValidTargets.AllyChampions:
-                        allTargets.AddRange(HeroManager.Allies.Where(i => i.LSIsValidTarget(range, false) && !i.IsMe));
+                        allTargets.AddRange(HeroManager.Allies.Where(i => i.IsValidTarget(range, false) && !i.IsMe));
                         break;
                     case SpellValidTargets.AllyMinions:
                         allTargets.AddRange(
                             ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsAlly).Where(
                                 i =>
-                                    i.LSIsValidTarget(range, false, ObjectManager.Player.Position) &&
+                                    i.IsValidTarget(range, false, ObjectManager.Player.Position) &&
                                     MinionManager.IsMinion(i)));
                         break;
                     case SpellValidTargets.AllyWards:
                         allTargets.AddRange(
                             ObjectManager.Get<Obj_AI_Minion>()
                                 .Where(x => x.IsAlly && MinionManager.IsWard(x.CharData.BaseSkinName))
-                                .Where(i => i.LSIsValidTarget(range, false)));
+                                .Where(i => i.IsValidTarget(range, false)));
                         break;
                     case SpellValidTargets.EnemyChampions:
-                        allTargets.AddRange(HeroManager.Enemies.Where(i => i.LSIsValidTarget(range)));
+                        allTargets.AddRange(HeroManager.Enemies.Where(i => i.IsValidTarget(range)));
                         break;
                     case SpellValidTargets.EnemyMinions:
                         allTargets.AddRange(
                             ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsEnemy).Where(
                                 i =>
-                                    i.LSIsValidTarget(range, true, ObjectManager.Player.Position) &&
+                                    i.IsValidTarget(range, true, ObjectManager.Player.Position) &&
                                     MinionManager.IsMinion(i)));
                         allTargets.AddRange(
                             ObjectManager.Get<Obj_AI_Minion>()
                                 .Where(x => x.Team == GameObjectTeam.Neutral)
-                                .Where(i => i.LSIsValidTarget(range, true, ObjectManager.Player.Position)));
+                                .Where(i => i.IsValidTarget(range, true, ObjectManager.Player.Position)));
                         break;
                     case SpellValidTargets.EnemyWards:
                         allTargets.AddRange(
                             ObjectManager.Get<Obj_AI_Minion>()
                                 .Where(x => x.IsEnemy && MinionManager.IsWard(x.CharData.BaseSkinName))
-                                .Where(i => i.LSIsValidTarget(range)));
+                                .Where(i => i.IsValidTarget(range)));
                         break;
 
                 }
             }
             foreach (var target in
-                allTargets.Where(i => dontCheckForSafety || Evade.IsSafePoint(i.ServerPosition.LSTo2D()).IsSafe))
+                allTargets.Where(i => dontCheckForSafety || Evade.IsSafePoint(i.ServerPosition.To2D()).IsSafe))
             {
                 if (isBlink)
                 {
                     if (Utils.GameTimeTickCount - Evade.LastWardJumpAttempt < 250
-                        || Evade.IsSafeToBlink(target.ServerPosition.LSTo2D(), Config.EvadingFirstTimeOffset, delay))
+                        || Evade.IsSafeToBlink(target.ServerPosition.To2D(), Config.EvadingFirstTimeOffset, delay))
                     {
                         goodTargets.Add(target);
                     }
                     if (Utils.GameTimeTickCount - Evade.LastWardJumpAttempt < 250
-                        || Evade.IsSafeToBlink(target.ServerPosition.LSTo2D(), Config.EvadingSecondTimeOffset, delay))
+                        || Evade.IsSafeToBlink(target.ServerPosition.To2D(), Config.EvadingSecondTimeOffset, delay))
                     {
                         badTargets.Add(target);
                     }
                 }
                 else
                 {
-                    var pathToTarget = new List<Vector2> { Evade.PlayerPosition, target.ServerPosition.LSTo2D() };
+                    var pathToTarget = new List<Vector2> { Evade.PlayerPosition, target.ServerPosition.To2D() };
                     if (Utils.GameTimeTickCount - Evade.LastWardJumpAttempt < 250
                         || Evade.IsSafePath(pathToTarget, Config.EvadingFirstTimeOffset, speed, delay).IsSafe)
                     {

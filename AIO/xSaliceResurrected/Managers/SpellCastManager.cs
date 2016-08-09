@@ -17,10 +17,10 @@ using EloBuddy; namespace xSaliceResurrected.Managers
         {
             var target = TargetSelector.GetTarget(range, type);
 
-            if (target == null || !spell.LSIsReady())
+            if (target == null || !spell.IsReady())
                 return;
 
-            if (towerCheck && target.LSUnderTurret(true))
+            if (towerCheck && target.UnderTurret(true))
                 return;
 
             spell.UpdateSourcePosition();
@@ -41,7 +41,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
 
         public static void CastBasicFarm(Spell spell)
         {
-            if (!spell.LSIsReady())
+            if (!spell.IsReady())
                 return;
             var minion = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, spell.Range, MinionTypes.All, MinionTeam.NotAlly);
 
@@ -73,7 +73,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
         private static int _lastCast;
         public static void CastSingleLine(Spell spell, Spell spell2, bool wallCheck, float extraPrerange = 1)
         {
-            if (!spell.LSIsReady() || Utils.TickCount - _lastCast < 0)
+            if (!spell.IsReady() || Utils.TickCount - _lastCast < 0)
                 return;
 
             //-------------------------------Single---------------------------
@@ -87,17 +87,17 @@ using EloBuddy; namespace xSaliceResurrected.Managers
             spell2.UpdateSourcePosition(vector1, vector1);
 
             var pred = Prediction.GetPrediction(target, spell.Delay);
-            Geometry.Polygon.Rectangle rec1 = new Geometry.Polygon.Rectangle(vector1, vector1.LSExtend(pred.CastPosition, spell2.Range), spell.Width);
+            Geometry.Polygon.Rectangle rec1 = new Geometry.Polygon.Rectangle(vector1, vector1.Extend(pred.CastPosition, spell2.Range), spell.Width);
 
-            if (Player.ServerPosition.LSDistance(target.ServerPosition) < spell.Range)
+            if (Player.ServerPosition.Distance(target.ServerPosition) < spell.Range)
             {
-                var vector2 = pred.CastPosition.LSExtend(target.ServerPosition, spell2.Range*.3f);
-                Geometry.Polygon.Rectangle rec2 = new Geometry.Polygon.Rectangle(vector2, vector2.LSExtend(pred.CastPosition, spell2.Range), spell.Width);
+                var vector2 = pred.CastPosition.Extend(target.ServerPosition, spell2.Range*.3f);
+                Geometry.Polygon.Rectangle rec2 = new Geometry.Polygon.Rectangle(vector2, vector2.Extend(pred.CastPosition, spell2.Range), spell.Width);
 
                 if ((!rec2.Points.Exists(Util.IsWall) || !wallCheck) && pred.Hitchance >= HitChance.Medium && target.IsMoving)
                 {
                     spell2.UpdateSourcePosition(vector2, vector2);
-                    CastLineSpell(vector2, vector2.LSExtend(pred.CastPosition, spell2.Range));
+                    CastLineSpell(vector2, vector2.Extend(pred.CastPosition, spell2.Range));
                     _lastCast = Utils.TickCount + 500;
                 }
 
@@ -114,7 +114,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
 
         public static void CastBestLine(bool forceUlt, Spell spell, Spell spell2, int midPointRange, Menu menu, float extraPrerange = 1, bool wallCheck = true)
         {
-            if (!spell.LSIsReady())
+            if (!spell.IsReady())
                 return;
 
             int maxHit = 0;
@@ -122,13 +122,13 @@ using EloBuddy; namespace xSaliceResurrected.Managers
             Vector3 end = Vector3.Zero;
 
             //loop one
-            foreach (var target in ObjectManager.Get<AIHeroClient>().Where(x => x.LSIsValidTarget(spell.Range)))
+            foreach (var target in ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(spell.Range)))
             {
                //loop 2
                 var target1 = target;
                 var target2 = target;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.LSIsValidTarget(spell.Range + spell2.Range) && x.NetworkId != target1.NetworkId
-                    && x.LSDistance(target1.Position) < spell2.Range - 100).OrderByDescending(x => x.LSDistance(target2.Position)))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(spell.Range + spell2.Range) && x.NetworkId != target1.NetworkId
+                    && x.Distance(target1.Position) < spell2.Range - 100).OrderByDescending(x => x.Distance(target2.Position)))
                 {
                     int hit = 2;
 
@@ -142,19 +142,19 @@ using EloBuddy; namespace xSaliceResurrected.Managers
 
                     Geometry.Polygon.Rectangle rec1 = new Geometry.Polygon.Rectangle(startpos, endPos, spell.Width);
 
-                    if (!rec1.Points.Exists(Util.IsWall) && Player.LSCountEnemiesInRange(spell.Range + spell2.Range) > 2)
+                    if (!rec1.Points.Exists(Util.IsWall) && Player.CountEnemiesInRange(spell.Range + spell2.Range) > 2)
                     {
                         //loop 3
                         var target3 = target;
                         var enemy1 = enemy;
-                        foreach (var enemy2 in ObjectManager.Get<AIHeroClient>().Where(x => x.LSIsValidTarget(spell.Range + spell2.Range) && x.NetworkId != target3.NetworkId && x.NetworkId != enemy1.NetworkId && x.LSDistance(target3.Position) < 1000))
+                        foreach (var enemy2 in ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(spell.Range + spell2.Range) && x.NetworkId != target3.NetworkId && x.NetworkId != enemy1.NetworkId && x.Distance(target3.Position) < 1000))
                         {
                             var enemy2Pred = Prediction.GetPrediction(enemy2, spell.Delay);
-                            Object[] obj = Util.VectorPointProjectionOnLineSegment(startpos.LSTo2D(), endPos.LSTo2D(), enemy2Pred.CastPosition.LSTo2D());
+                            Object[] obj = Util.VectorPointProjectionOnLineSegment(startpos.To2D(), endPos.To2D(), enemy2Pred.CastPosition.To2D());
                             var isOnseg = (bool)obj[2];
                             var pointLine = (Vector2)obj[1];
 
-                            if (pointLine.LSDistance(enemy2Pred.CastPosition.LSTo2D()) < spell.Width && isOnseg)
+                            if (pointLine.Distance(enemy2Pred.CastPosition.To2D()) < spell.Width && isOnseg)
                             {
                                 hit++;
                             }
@@ -170,7 +170,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
                 }
             }
 
-            if (start != Vector3.Zero && end != Vector3.Zero && spell.LSIsReady())
+            if (start != Vector3.Zero && end != Vector3.Zero && spell.IsReady())
             {
                 spell2.UpdateSourcePosition(start, start);
                 if (forceUlt)
@@ -196,13 +196,13 @@ using EloBuddy; namespace xSaliceResurrected.Managers
             Vector3 end = Vector3.Zero;
 
             //loop one
-            foreach (var target in ObjectManager.Get<AIHeroClient>().Where(x => x.LSIsValidTarget(spell.Range)))
+            foreach (var target in ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(spell.Range)))
             {
                 //loop 2
                 var target1 = target;
                 var target2 = target;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.LSIsValidTarget(spell.Range + spell2.Range) && x.NetworkId != target1.NetworkId
-                    && x.LSDistance(target1.Position) < spell2.Range - 100).OrderByDescending(x => x.LSDistance(target2.Position)))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(spell.Range + spell2.Range) && x.NetworkId != target1.NetworkId
+                    && x.Distance(target1.Position) < spell2.Range - 100).OrderByDescending(x => x.Distance(target2.Position)))
                 {
                     int hit = 2;
 
@@ -216,19 +216,19 @@ using EloBuddy; namespace xSaliceResurrected.Managers
 
                     Geometry.Polygon.Rectangle rec1 = new Geometry.Polygon.Rectangle(startpos, endPos, spell.Width);
 
-                    if (!rec1.Points.Exists(Util.IsWall) && Player.LSCountEnemiesInRange(spell.Range + spell2.Range) > 2)
+                    if (!rec1.Points.Exists(Util.IsWall) && Player.CountEnemiesInRange(spell.Range + spell2.Range) > 2)
                     {
                         //loop 3
                         var target3 = target;
                         var enemy1 = enemy;
-                        foreach (var enemy2 in ObjectManager.Get<AIHeroClient>().Where(x => x.LSIsValidTarget(spell.Range + spell2.Range) && x.NetworkId != target3.NetworkId && x.NetworkId != enemy1.NetworkId && x.LSDistance(target3.Position) < spell2.Range))
+                        foreach (var enemy2 in ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(spell.Range + spell2.Range) && x.NetworkId != target3.NetworkId && x.NetworkId != enemy1.NetworkId && x.Distance(target3.Position) < spell2.Range))
                         {
                             var enemy2Pred = Prediction.GetPrediction(enemy2, spell.Delay);
-                            Object[] obj = Util.VectorPointProjectionOnLineSegment(startpos.LSTo2D(), endPos.LSTo2D(), enemy2Pred.CastPosition.LSTo2D());
+                            Object[] obj = Util.VectorPointProjectionOnLineSegment(startpos.To2D(), endPos.To2D(), enemy2Pred.CastPosition.To2D());
                             var isOnseg = (bool)obj[2];
                             var pointLine = (Vector2)obj[1];
 
-                            if (pointLine.LSDistance(enemy2Pred.CastPosition.LSTo2D()) < spell.Width && isOnseg)
+                            if (pointLine.Distance(enemy2Pred.CastPosition.To2D()) < spell.Width && isOnseg)
                             {
                                 hit++;
                             }
@@ -263,12 +263,12 @@ using EloBuddy; namespace xSaliceResurrected.Managers
                 var vector1 = Player.ServerPosition + Vector3.Normalize(target.ServerPosition - Player.ServerPosition) * (spell.Range * extraPrerange);
 
                 var pred = Prediction.GetPrediction(target, spell.Delay);
-                Geometry.Polygon.Rectangle rec1 = new Geometry.Polygon.Rectangle(vector1, vector1.LSExtend(pred.CastPosition, spell2.Range), spell.Width);
+                Geometry.Polygon.Rectangle rec1 = new Geometry.Polygon.Rectangle(vector1, vector1.Extend(pred.CastPosition, spell2.Range), spell.Width);
 
-                if (Player.ServerPosition.LSDistance(target.ServerPosition) < spell.Range)
+                if (Player.ServerPosition.Distance(target.ServerPosition) < spell.Range)
                 {
-                    vector1 = pred.CastPosition.LSExtend(target.ServerPosition, spell2.Range * .3f);
-                    Geometry.Polygon.Rectangle rec2 = new Geometry.Polygon.Rectangle(vector1, vector1.LSExtend(pred.CastPosition, spell2.Range), spell.Width);
+                    vector1 = pred.CastPosition.Extend(target.ServerPosition, spell2.Range * .3f);
+                    Geometry.Polygon.Rectangle rec2 = new Geometry.Polygon.Rectangle(vector1, vector1.Extend(pred.CastPosition, spell2.Range), spell.Width);
 
                     if ((!rec2.Points.Exists(Util.IsWall) || !wallCheck) && pred.Hitchance >= HitChance.Medium && target.IsMoving)
                     {
@@ -295,7 +295,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
 
         public static void CastLineSpell(Vector3 start, Vector3 end)
         {
-            if (!SpellManager.P.LSIsReady())
+            if (!SpellManager.P.IsReady())
                 return;
 
             SpellManager.P.Cast(start, end);

@@ -27,7 +27,7 @@ using EloBuddy; namespace Activator.Spells.Shields
                 if (!Parent.Item(Parent.Name + "useon" + hero.Player.NetworkId).GetValue<bool>())
                     continue;
 
-                if (hero.Player.LSDistance(Player.ServerPosition) <= Range)
+                if (hero.Player.Distance(Player.ServerPosition) <= Range)
                 {
                     if (hero.IncomeDamage / hero.Player.MaxHealth * 100 >=
                         Menu.Item("selfmuchhp" + Name + "pct").GetValue<Slider>().Value)

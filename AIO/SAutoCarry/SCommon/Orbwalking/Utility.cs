@@ -80,12 +80,12 @@ namespace SCommon.Orbwalking
         /// <returns>true if in auto attack range</returns>
         public static bool InAARange(AttackableUnit target, Obj_AI_Base _unit = null)
         {
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
                 return false;
 
             Obj_AI_Base unit = CorrectUnit(_unit);
             float range = GetRealAARange(target, _unit);
-            return Vector2.DistanceSquared(target.Position.LSTo2D(), unit.ServerPosition.LSTo2D()) <= range * range;
+            return Vector2.DistanceSquared(target.Position.To2D(), unit.ServerPosition.To2D()) <= range * range;
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace SCommon.Orbwalking
         /// <returns></returns>
         public static float GetScalingRange(this AIHeroClient unit)
         {
-            return Math.Max(0, (unit.BBox.Minimum.LSDistance(unit.BBox.Maximum) - unit.GetOrginalHitBox())) / 2f;
+            return Math.Max(0, (unit.BBox.Minimum.Distance(unit.BBox.Maximum) - unit.GetOrginalHitBox())) / 2f;
         }
 
         /// <summary>

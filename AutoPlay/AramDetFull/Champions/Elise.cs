@@ -127,7 +127,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void Interrupter_OnPosibleToInterrupt(Obj_AI_Base target, InterruptableSpell spell)
         {
-            if (player.LSDistance(target) < _humanE.Range && target != null && _humanE.GetPrediction(target).Hitchance >= HitChance.Low)
+            if (player.Distance(target) < _humanE.Range && target != null && _humanE.GetPrediction(target).Hitchance >= HitChance.Low)
             {
                 _humanE.Cast(target);
             }
@@ -135,11 +135,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (_spiderE.LSIsReady() && _spider && gapcloser.Sender.LSIsValidTarget(_spiderE.Range))
+            if (_spiderE.IsReady() && _spider && gapcloser.Sender.IsValidTarget(_spiderE.Range))
             {
                 _spiderE.Cast(gapcloser.Sender);
             }
-            if (_humanE.LSIsReady() && _human && gapcloser.Sender.LSIsValidTarget(_humanE.Range))
+            if (_humanE.IsReady() && _human && gapcloser.Sender.IsValidTarget(_humanE.Range))
             {
                 _humanE.Cast(gapcloser.Sender);
             }
@@ -167,11 +167,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var target = ARAMTargetSelector.getBestTarget(_humanW.Range);
             if (target == null) return; //buffelisecocoon
             CheckSpells();
-            var qdmg = player.LSGetSpellDamage(target, SpellSlot.Q);
-            var wdmg = player.LSGetSpellDamage(target, SpellSlot.W);
+            var qdmg = player.GetSpellDamage(target, SpellSlot.Q);
+            var wdmg = player.GetSpellDamage(target, SpellSlot.W);
             if (_human)
             {
-                if (target.LSDistance(player.Position) < _humanE.Range  && _humanE.LSIsReady())
+                if (target.Distance(player.Position) < _humanE.Range  && _humanE.IsReady())
                 {
                     if (_humanE.GetPrediction(target).Hitchance >= HitChance.High)
                     {
@@ -179,50 +179,50 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     }
                 }
 
-                if (player.LSDistance(target) <= _humanQ.Range  && _humanQ.LSIsReady())
+                if (player.Distance(target) <= _humanQ.Range  && _humanQ.IsReady())
                 {
                     _humanQ.Cast(target);
                 }
-                if (player.LSDistance(target) <= _humanW.Range && _humanW.LSIsReady())
+                if (player.Distance(target) <= _humanW.Range && _humanW.IsReady())
                 {
                     _humanW.Cast(target);
                 }
-                if (!_humanQ.LSIsReady() && !_humanW.LSIsReady() && !_humanE.LSIsReady() && _r.LSIsReady())
+                if (!_humanQ.IsReady() && !_humanW.IsReady() && !_humanE.IsReady() && _r.IsReady())
                 {
                     _r.Cast();
                 }
-                if (!_humanQ.LSIsReady() && !_humanW.LSIsReady() && player.LSDistance(target) <= _spiderQ.Range && _r.LSIsReady())
+                if (!_humanQ.IsReady() && !_humanW.IsReady() && player.Distance(target) <= _spiderQ.Range && _r.IsReady())
                 {
                     _r.Cast();
                 }
             }
             if (!_spider) return;
-            if (player.LSDistance(target) <= _spiderQ.Range && _spiderQ.LSIsReady())
+            if (player.Distance(target) <= _spiderQ.Range && _spiderQ.IsReady())
             {
                 _spiderQ.Cast(target);
             }
-            if (player.LSDistance(target) <= 200&& _spiderW.LSIsReady())
+            if (player.Distance(target) <= 200&& _spiderW.IsReady())
             {
                 _spiderW.Cast();
             }
-            if (player.LSDistance(target) <= _spiderE.Range && player.LSDistance(target) > _spiderQ.Range && _spiderE.LSIsReady() && !_spiderQ.LSIsReady())
+            if (player.Distance(target) <= _spiderE.Range && player.Distance(target) > _spiderQ.Range && _spiderE.IsReady() && !_spiderQ.IsReady())
             {
-                if ((safeGap(target)) || target.LSDistance(ARAMSimulator.fromNex.Position, true) < player.LSDistance(ARAMSimulator.fromNex.Position, true))
+                if ((safeGap(target)) || target.Distance(ARAMSimulator.fromNex.Position, true) < player.Distance(ARAMSimulator.fromNex.Position, true))
                     _spiderE.Cast(target);
             }
-            if (player.LSDistance(target) > _spiderQ.Range && !_spiderE.LSIsReady() && _r.LSIsReady() && !_spiderQ.LSIsReady() )
+            if (player.Distance(target) > _spiderQ.Range && !_spiderE.IsReady() && _r.IsReady() && !_spiderQ.IsReady() )
             {
                 _r.Cast();
             }
-            if (_humanQ.LSIsReady() && _humanW.LSIsReady() && _r.LSIsReady())
+            if (_humanQ.IsReady() && _humanW.IsReady() && _r.IsReady())
             {
                 _r.Cast();
             }
-            if (_humanQ.LSIsReady() && _humanW.LSIsReady() && _r.LSIsReady() )
+            if (_humanQ.IsReady() && _humanW.IsReady() && _r.IsReady() )
             {
                 _r.Cast();
             }
-            if ((_humanQ.LSIsReady() && qdmg >= target.Health || _humanW.LSIsReady() && wdmg >= target.Health) )
+            if ((_humanQ.IsReady() && qdmg >= target.Health || _humanW.IsReady() && wdmg >= target.Health) )
             {
                 _r.Cast();
             }
@@ -237,29 +237,29 @@ using EloBuddy; namespace ARAMDetFull.Champions
             foreach (var minion in MinionManager.GetMinions(player.ServerPosition, _humanQ.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health))
                 if (_human)
                 {
-                    if ( _humanQ.LSIsReady() && minion.LSIsValidTarget() &&
-                        player.LSDistance(minion) <= _humanQ.Range)
+                    if ( _humanQ.IsReady() && minion.IsValidTarget() &&
+                        player.Distance(minion) <= _humanQ.Range)
                     {
                         _humanQ.Cast(minion);
                     }
-                    if (_humanW.LSIsReady() && minion.LSIsValidTarget() &&
-                        player.LSDistance(minion) <= _humanW.Range)
+                    if (_humanW.IsReady() && minion.IsValidTarget() &&
+                        player.Distance(minion) <= _humanW.Range)
                     {
                         _humanW.Cast(minion);
                     }
-                    if (_r.LSIsReady())
+                    if (_r.IsReady())
                     {
                         _r.Cast();
                     }
                 }else if (_spider)
                 {
-                    if (_spiderQ.LSIsReady() && minion.LSIsValidTarget() &&
-                        player.LSDistance(minion) <= _spiderQ.Range)
+                    if (_spiderQ.IsReady() && minion.IsValidTarget() &&
+                        player.Distance(minion) <= _spiderQ.Range)
                     {
                         _spiderQ.Cast(minion);
                     }
-                    if (_spiderW.LSIsReady() && minion.LSIsValidTarget() &&
-                        player.LSDistance(minion) <= 125)
+                    if (_spiderW.IsReady() && minion.IsValidTarget() &&
+                        player.Distance(minion) <= 125)
                     {
                         _spiderW.Cast();
                     }
@@ -274,19 +274,19 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var target = ARAMTargetSelector.getBestTarget(_humanQ.Range);
             if(target == null) return;
             var igniteDmg = player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
-            var qhDmg = player.LSGetSpellDamage(target, SpellSlot.Q);
-            var wDmg = player.LSGetSpellDamage(target, SpellSlot.W);
+            var qhDmg = player.GetSpellDamage(target, SpellSlot.Q);
+            var wDmg = player.GetSpellDamage(target, SpellSlot.W);
 
             if (_human)
             {
-                if (_humanQ.LSIsReady() && player.LSDistance(target) <= _humanQ.Range && target != null)
+                if (_humanQ.IsReady() && player.Distance(target) <= _humanQ.Range && target != null)
                 {
                     if (target.Health <= qhDmg)
                     {
                         _humanQ.Cast(target);
                     }
                 }
-                if (_humanW.LSIsReady() && player.LSDistance(target) <= _humanW.Range && target != null)
+                if (_humanW.IsReady() && player.Distance(target) <= _humanW.Range && target != null)
                 {
                     if (target.Health <= wDmg)
                     {
@@ -294,7 +294,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     }
                 }
             }
-            if (_spider && _spiderQ.LSIsReady() && player.LSDistance(target) <= _spiderQ.Range && target != null)
+            if (_spider && _spiderQ.IsReady() && player.Distance(target) <= _spiderQ.Range && target != null)
             {
                 if (target.Health <= qhDmg)
                 {

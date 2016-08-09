@@ -15,15 +15,15 @@ using EloBuddy;
         public static bool AsunasUndyBuff(AIHeroClient target)
         {
             if (target.ChampionName == "Tryndamere" &&
-                target.Buffs.Any(b => b.Caster.NetworkId == target.NetworkId && b.LSIsValidBuff() && b.DisplayName == "Undying Rage"))
+                target.Buffs.Any(b => b.Caster.NetworkId == target.NetworkId && b.IsValidBuff() && b.DisplayName == "Undying Rage"))
             {
                 return true;
             }
-            if (target.Buffs.Any(b => b.LSIsValidBuff() && b.DisplayName == "Chrono Shift"))
+            if (target.Buffs.Any(b => b.IsValidBuff() && b.DisplayName == "Chrono Shift"))
             {
                 return true;
             }
-            if (target.Buffs.Any(b => b.LSIsValidBuff() && b.DisplayName == "JudicatorIntervention"))
+            if (target.Buffs.Any(b => b.IsValidBuff() && b.DisplayName == "JudicatorIntervention"))
             {
                 return true;
             }
@@ -31,7 +31,7 @@ using EloBuddy;
             {
                 if (HeroManager.Allies.Any(o =>
                     !o.IsMe &&
-                    o.Buffs.Any(b => b.Caster.NetworkId == target.NetworkId && b.LSIsValidBuff() && b.DisplayName == "PoppyDITarget")))
+                    o.Buffs.Any(b => b.Caster.NetworkId == target.NetworkId && b.IsValidBuff() && b.DisplayName == "PoppyDITarget")))
                 {
                     return true;
                 }
@@ -40,7 +40,7 @@ using EloBuddy;
         }
         public static void PierceCombo(int collisionObject, HitChance hChance)
         {
-            foreach (var enemy in HeroManager.Enemies.Where(hero => hero.LSIsValidTarget(Program.Q.Range) && hero.IsVisible && !hero.IsDead && !hero.IsZombie))
+            foreach (var enemy in HeroManager.Enemies.Where(hero => hero.IsValidTarget(Program.Q.Range) && hero.IsVisible && !hero.IsDead && !hero.IsZombie))
             {
                 if (Program.Q.GetPrediction(enemy).Hitchance >= hChance && Program.Q.GetPrediction(enemy).CollisionObjects.Count == 0)
                 {
@@ -63,7 +63,7 @@ using EloBuddy;
         }
         public static void RendCombo()
         {
-            foreach (var enemy in HeroManager.Enemies.Where(hero => hero.LSIsValidTarget(Program.E.Range) &&
+            foreach (var enemy in HeroManager.Enemies.Where(hero => hero.IsValidTarget(Program.E.Range) &&
                     !AsunasUndyBuff(hero) && !hero.HasBuffOfType(BuffType.SpellShield)))
             {
                 if (enemy.Health < Calculators.ChampionTotalDamage(enemy))
@@ -74,7 +74,7 @@ using EloBuddy;
         }
         public static void RendHarass(int spearcount)
         {
-            foreach (var enemy in HeroManager.Enemies.Where(hero => hero.LSIsValidTarget(Program.E.Range)))
+            foreach (var enemy in HeroManager.Enemies.Where(hero => hero.IsValidTarget(Program.E.Range)))
             {
                 int enemyStack = enemy.Buffs.FirstOrDefault(x => x.DisplayName == "KalistaExpungeMarker").Count;
                 if (enemyStack > 0 && enemyStack > spearcount)
@@ -116,7 +116,7 @@ using EloBuddy;
         }
         public static void FatesCall(int healthpercent)
         {
-            foreach (var support in ObjectManager.Get<AIHeroClient>().Where(x=> x.IsAlly && !x.IsMe && x.LSDistance(ObjectManager.Player.Position) < Program.R.Range &&
+            foreach (var support in ObjectManager.Get<AIHeroClient>().Where(x=> x.IsAlly && !x.IsMe && x.Distance(ObjectManager.Player.Position) < Program.R.Range &&
                 x.HasBuff("kalistacoopstrikeally")))
             {
                 if (support.Health < healthpercent)
@@ -131,7 +131,7 @@ using EloBuddy;
         }
         public static void BlueOrb(int level)
         {
-            if (ObjectManager.Player.Level >= level && ObjectManager.Player.LSInShop() && !(Items.HasItem(3342) || Items.HasItem(3363)))
+            if (ObjectManager.Player.Level >= level && ObjectManager.Player.InShop() && !(Items.HasItem(3342) || Items.HasItem(3363)))
             {
                 Shop.BuyItem(ItemId.Farsight_Alteration);
             }
@@ -140,7 +140,7 @@ using EloBuddy;
         {
             foreach (var target in HeroManager.Enemies.OrderByDescending(x => x.Health))
             {
-                if (target.LSDistance(ObjectManager.Player.Position) < Program.Q.Range && Program.Q.GetPrediction(target).Hitchance >= hChance
+                if (target.Distance(ObjectManager.Player.Position) < Program.Q.Range && Program.Q.GetPrediction(target).Hitchance >= hChance
                     && Program.Q.GetDamage(target) > target.Health)
                 {
                     Program.Q.Cast(target);
@@ -159,7 +159,7 @@ using EloBuddy;
         }
         public static void Bitterlogic(int hppercent)
         {
-            foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(Program.E.Range) && !o.IsDead && !o.IsZombie))
+            foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(Program.E.Range) && !o.IsDead && !o.IsZombie))
             {
                 float spearDamage = Calculators.ChampionTotalDamage(enemy);
                 float killableSpearCount = enemy.Health / spearDamage;
@@ -184,7 +184,7 @@ using EloBuddy;
         }
         public static void ImmobilePierce(HitChance hChance, int collisionObject)
         {
-            foreach (var enemy in HeroManager.Enemies.Where(hero => hero.LSIsValidTarget(Program.Q.Range)))
+            foreach (var enemy in HeroManager.Enemies.Where(hero => hero.IsValidTarget(Program.Q.Range)))
             {
                 if (ImmobileDetector(enemy) && Program.Q.GetPrediction(enemy).Hitchance >= hChance && Program.Q.GetPrediction(enemy).CollisionObjects.Count == collisionObject)
                 {
@@ -194,22 +194,22 @@ using EloBuddy;
         }
         public static void Balista(int minrange,int maxrange, Spell spell)
         {
-            if (!spell.LSIsReady())
+            if (!spell.IsReady())
             {
                 return;
             }
             var blitz = ObjectManager.Get<Obj_AI_Base>().FirstOrDefault(x => x.IsAlly && x.CharData.BaseSkinName == "Blitzcrank" && x.HasBuff("kalistacoopstrikeally"));
-            if (blitz != null && spell.LSIsReady())
+            if (blitz != null && spell.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsEnemy && o.LSIsValidTarget(2450f)))
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsEnemy && o.IsValidTarget(2450f)))
                 {
-                    if (blitz.LSDistance(enemy.Position) <= 950f &&
-                        blitz.LSDistance(ObjectManager.Player.Position) >= minrange &&
-                        blitz.LSDistance(ObjectManager.Player.Position) <= maxrange)
+                    if (blitz.Distance(enemy.Position) <= 950f &&
+                        blitz.Distance(ObjectManager.Player.Position) >= minrange &&
+                        blitz.Distance(ObjectManager.Player.Position) <= maxrange)
                     {
-                        if (enemy.Buffs != null && enemy.LSHasBuff("rocketgrab2"))
+                        if (enemy.Buffs != null && enemy.HasBuff("rocketgrab2"))
                         {
-                            if (spell.LSIsReady())
+                            if (spell.IsReady())
                             {
                                 spell.Cast();
                             }
@@ -220,24 +220,24 @@ using EloBuddy;
         }
         public static void SKalista(int minrange, int maxrange, Spell spell)
         {
-            if (!spell.LSIsReady())
+            if (!spell.IsReady())
             {
                 return;
             }
             var skarner = ObjectManager.Get<Obj_AI_Base>().FirstOrDefault(o => o.IsAlly && o.CharData.BaseSkinName == "Skarner" &&
-                o.LSHasBuff("kalistacoopstrikeally"));
-            if (skarner != null && spell.LSIsReady())
+                o.HasBuff("kalistacoopstrikeally"));
+            if (skarner != null && spell.IsReady())
             {
                 foreach (var enemy in HeroManager.Enemies.Where(o => o.IsEnemy 
-                    && o.LSIsValidTarget(1849))) // Kalista R Range + Skarner R Range - 1
+                    && o.IsValidTarget(1849))) // Kalista R Range + Skarner R Range - 1
                 {
-                    if (skarner.LSDistance(enemy.Position) <= 350 &&
-                        skarner.LSDistance(ObjectManager.Player.Position) >= minrange &&
-                        skarner.LSDistance(ObjectManager.Player.Position) <= maxrange)
+                    if (skarner.Distance(enemy.Position) <= 350 &&
+                        skarner.Distance(ObjectManager.Player.Position) >= minrange &&
+                        skarner.Distance(ObjectManager.Player.Position) <= maxrange)
                     {
-                        if (enemy.Buffs != null && enemy.LSHasBuff("SkarnerImpale"))
+                        if (enemy.Buffs != null && enemy.HasBuff("SkarnerImpale"))
                         {
-                            if (spell.LSIsReady())
+                            if (spell.IsReady())
                             {
                                 spell.Cast();
                             }
@@ -248,7 +248,7 @@ using EloBuddy;
         }
         public static void SupportProtector(Spell spell)
         {
-            foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(x => x.IsAlly && !x.IsMe && x.HasBuff("kalistacoopstrikeally") && x.LSDistance(ObjectManager.Player.Position) < Program.R.Range &&
+            foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(x => x.IsAlly && !x.IsMe && x.HasBuff("kalistacoopstrikeally") && x.Distance(ObjectManager.Player.Position) < Program.R.Range &&
                 x.HealthPercent <= Program.Config.Item("savePercent").GetValue<Slider>().Value))
             {
                 spell.Cast();

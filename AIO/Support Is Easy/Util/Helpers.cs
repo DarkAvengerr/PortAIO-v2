@@ -45,14 +45,14 @@ using EloBuddy; namespace Support.Util
             return
                 HeroManager.Allies.Where(
                     h =>
-                    ObjectManager.Player.LSDistance(h.Position) < range && h.IsAlly && !h.IsMe && h.IsValid && !h.IsDead)
-                           .OrderBy(h => ObjectManager.Player.LSDistance(h.Position))
+                    ObjectManager.Player.Distance(h.Position) < range && h.IsAlly && !h.IsMe && h.IsValid && !h.IsDead)
+                           .OrderBy(h => ObjectManager.Player.Distance(h.Position))
                            .ToList();
         }
 
         public static bool EnemyInRange(int numOfEnemy, float range)
         {
-            return ObjectManager.Player.LSCountEnemiesInRange((int)range) >= numOfEnemy;
+            return ObjectManager.Player.CountEnemiesInRange((int)range) >= numOfEnemy;
         }
 
         public static void PrintMessage(string message)

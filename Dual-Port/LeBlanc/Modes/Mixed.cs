@@ -20,17 +20,17 @@ using EloBuddy;
                 return;
             }
 
-            if (Spells.Q.LSIsReady() && Utilities.Enabled("q.harass"))
+            if (Spells.Q.IsReady() && Utilities.Enabled("q.harass"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(Spells.Q.Range - 50)))
+                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(Spells.Q.Range - 50)))
                 {
                     Spells.Q.CastOnUnit(enemy);
                 }
             }
 
-            if (Spells.W.LSIsReady() && Utilities.Enabled("w.harass") && !Spells.Q.LSIsReady())
+            if (Spells.W.IsReady() && Utilities.Enabled("w.harass") && !Spells.Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(Spells.W.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(Spells.W.Range)))
                 {
                     var hit = Spells.W.GetPrediction(enemy);
                     if (hit.Hitchance >= HitChance.Medium)

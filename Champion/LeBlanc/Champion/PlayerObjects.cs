@@ -99,7 +99,7 @@ namespace Leblanc.Champion
                 return;
             }
 
-            foreach (var eObjects in ObjectManager.Get<Obj_AI_Base>().Where(e => e.IsEnemy && !e.IsDead && e.LSIsValidTarget(1500)))
+            foreach (var eObjects in ObjectManager.Get<Obj_AI_Base>().Where(e => e.IsEnemy && !e.IsDead && e.IsValidTarget(1500)))
             {
                 BuffInstance beam = null;
                 if (DrawWObject)
@@ -135,13 +135,13 @@ namespace Leblanc.Champion
                 return;
             }
 
-            foreach (var eObjects in ObjectManager.Get<Obj_AI_Base>().Where(e => e.IsEnemy && !e.IsDead && e.LSIsValidTarget(1500)))
+            foreach (var eObjects in ObjectManager.Get<Obj_AI_Base>().Where(e => e.IsEnemy && !e.IsDead && e.IsValidTarget(1500)))
             {
                 if (DrawWObject)
                 { 
                     if (LeblancSoulShackle.EndTime >= Game.Time && eObjects.NetworkId == LeblancSoulShackle.Object.NetworkId)
                     {
-                        var circle = new Geometry.Circle2(LeblancSoulShackle.Object.Position.LSTo2D(), (LeblancSoulShackle.Object.BoundingRadius * 2) - 20, Game.Time * 300 - LeblancSoulShackle.StartTime * 300, LeblancSoulShackle.EndTime * 300 - LeblancSoulShackle.StartTime * 300).ToPolygon();
+                        var circle = new Geometry.Circle2(LeblancSoulShackle.Object.Position.To2D(), (LeblancSoulShackle.Object.BoundingRadius * 2) - 20, Game.Time * 300 - LeblancSoulShackle.StartTime * 300, LeblancSoulShackle.EndTime * 300 - LeblancSoulShackle.StartTime * 300).ToPolygon();
                         circle.Draw(Color.GreenYellow, 5);
                     }
                 }
@@ -150,7 +150,7 @@ namespace Leblanc.Champion
                 {
                     if (LeblancSoulShackleM.EndTime >= Game.Time && eObjects.NetworkId == LeblancSoulShackleM.Object.NetworkId)
                     {
-                        var circle = new Geometry.Circle2(LeblancSoulShackleM.Object.Position.LSTo2D(), LeblancSoulShackleM.Object.BoundingRadius * 2, Game.Time * 300 - LeblancSoulShackleM.StartTime * 300, LeblancSoulShackleM.EndTime * 300 - LeblancSoulShackleM.StartTime * 300).ToPolygon();
+                        var circle = new Geometry.Circle2(LeblancSoulShackleM.Object.Position.To2D(), LeblancSoulShackleM.Object.BoundingRadius * 2, Game.Time * 300 - LeblancSoulShackleM.StartTime * 300, LeblancSoulShackleM.EndTime * 300 - LeblancSoulShackleM.StartTime * 300).ToPolygon();
                         circle.Draw(Color.DarkRed, 5);
                     }
                 }
@@ -185,15 +185,15 @@ namespace Leblanc.Champion
             var color = slide.Type == 1 ? Color.DarkRed : Color.DeepPink;
             var width = 4;
             
-            var circle = new Geometry.Circle2(slide.Position.LSTo2D(), 150f, Game.Time * 300 - slide.StartTime * 300, slide.EndTime * 300 - slide.StartTime * 300).ToPolygon();
+            var circle = new Geometry.Circle2(slide.Position.To2D(), 150f, Game.Time * 300 - slide.StartTime * 300, slide.EndTime * 300 - slide.StartTime * 300).ToPolygon();
             circle.Draw(color, width);
 
             var startpos = ObjectManager.Player.Position;
             var endpos = slide.Position;
-            if (startpos.LSDistance(endpos) > 100)
+            if (startpos.Distance(endpos) > 100)
             {
-                var endpos1 = slide.Position + (startpos - endpos).LSTo2D().LSNormalized().LSRotated(25 * (float)Math.PI / 180).To3D() * 75;
-                var endpos2 = slide.Position + (startpos - endpos).LSTo2D().LSNormalized().LSRotated(-25 * (float)Math.PI / 180).To3D() * 75;
+                var endpos1 = slide.Position + (startpos - endpos).To2D().Normalized().Rotated(25 * (float)Math.PI / 180).To3D() * 75;
+                var endpos2 = slide.Position + (startpos - endpos).To2D().Normalized().Rotated(-25 * (float)Math.PI / 180).To3D() * 75;
 
                 var x1 = new LeagueSharp.Common.Geometry.Polygon.Line(startpos, endpos);
                 x1.Draw(color, width - 2);

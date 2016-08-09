@@ -67,7 +67,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
         private void OnUpdate(EventArgs args)
         {
             if (Variable.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
-                || !Variable.Spells[SpellSlot.Q].LSIsReady()) return;
+                || !Variable.Spells[SpellSlot.Q].IsReady()) return;
 
             if (this.Menu.Item(this.Menu.Name + "QMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
 
@@ -76,7 +76,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
 
         private void RangersFocus()
         {
-            var target = HeroManager.Enemies.Where(Orbwalking.InAutoAttackRange).FirstOrDefault(x => !x.LSHasBuff(""));
+            var target = HeroManager.Enemies.Where(Orbwalking.InAutoAttackRange).FirstOrDefault(x => !x.HasBuff(""));
 
             if (target == null || !target.IsValid) return;
 

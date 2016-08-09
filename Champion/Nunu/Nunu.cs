@@ -75,7 +75,7 @@ namespace LSharpNunu
 
         private static void OnGameUpdate(EventArgs args)
         {
-            _smiteSlot = Player.LSGetSpellSlot(Smitetype());
+            _smiteSlot = Player.GetSpellSlot(Smitetype());
 
             switch (Orbwalker.ActiveMode)
             {
@@ -127,14 +127,14 @@ namespace LSharpNunu
 
         private static void Smiter()
         {
-            var minion = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(a => Buffandepics.Contains(a.BaseSkinName) && a.LSDistance(Player) <= 1300);
+            var minion = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(a => Buffandepics.Contains(a.BaseSkinName) && a.Distance(Player) <= 1300);
             if (minion != null)
             {
                 if (NunuMenu._menu.Item(minion.BaseSkinName).GetValue<bool>())
                 {
                     Minionerimo = minion;
-                    if (SmiteDmg() > minion.Health && minion.LSIsValidTarget(780) && ParamBool("Nunu.normalSmite")) Player.Spellbook.CastSpell(_smiteSlot, minion);
-                    if (minion.LSDistance(Player) < 100 && _checkSmite)
+                    if (SmiteDmg() > minion.Health && minion.IsValidTarget(780) && ParamBool("Nunu.normalSmite")) Player.Spellbook.CastSpell(_smiteSlot, minion);
+                    if (minion.Distance(Player) < 100 && _checkSmite)
                     {
                         _checkSmite = false;
                         Player.Spellbook.CastSpell(_smiteSlot, minion);
@@ -146,14 +146,14 @@ namespace LSharpNunu
 
         private static void QSteal()
         {
-            var minion = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(a => Buffandepics.Contains(a.BaseSkinName) && a.LSDistance(Player) <= 220);
+            var minion = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(a => Buffandepics.Contains(a.BaseSkinName) && a.Distance(Player) <= 220);
             if (minion != null)
             {
                 if (NunuMenu._menu.Item(minion.BaseSkinName).GetValue<bool>())
                 {
                     Minionerimo = minion;
-                    if (spells[Spells.Q].GetDamage(minion) > minion.Health && minion.LSIsValidTarget(780) && ParamBool("Nunu.stealq")) spells[Spells.Q].CastOnUnit(minion);
-                    if (minion.LSDistance(Player) < 100 && spells[Spells.Q].LSIsReady())
+                    if (spells[Spells.Q].GetDamage(minion) > minion.Health && minion.IsValidTarget(780) && ParamBool("Nunu.stealq")) spells[Spells.Q].CastOnUnit(minion);
+                    if (minion.Distance(Player) < 100 && spells[Spells.Q].IsReady())
                     {
                         spells[Spells.Q].CastOnUnit(minion);
                     }
@@ -179,7 +179,7 @@ namespace LSharpNunu
         {
             var target = TargetSelector.GetTarget(spells[Spells.E].Range, TargetSelector.DamageType.Magical);
 
-            if (NunuMenu._menu.Item("Nunu.Harass.E").GetValue<bool>() && spells[Spells.E].LSIsReady())
+            if (NunuMenu._menu.Item("Nunu.Harass.E").GetValue<bool>() && spells[Spells.E].IsReady())
             {
                 spells[Spells.E].Cast(target);
             }
@@ -223,20 +223,20 @@ namespace LSharpNunu
                 return;
             }
 
-            if (autoQ && spells[Spells.Q].LSIsReady())
+            if (autoQ && spells[Spells.Q].IsReady())
             {
                 AutoQ();
             }
 
-            if (eCombo && Player.LSDistance(target) <= spells[Spells.E].Range && spells[Spells.E].LSIsReady())
+            if (eCombo && Player.Distance(target) <= spells[Spells.E].Range && spells[Spells.E].IsReady())
             {
                 spells[Spells.E].Cast(target);
             }
-            if (wCombo && Player.LSDistance(target) <= spells[Spells.W].Range && spells[Spells.W].LSIsReady())
+            if (wCombo && Player.Distance(target) <= spells[Spells.W].Range && spells[Spells.W].IsReady())
             {
                 spells[Spells.W].CastOnUnit(Player);
             }
-            if (rCombo && Player.LSDistance(target) <= spells[Spells.R].Range / 2 && spells[Spells.R].LSIsReady())
+            if (rCombo && Player.Distance(target) <= spells[Spells.R].Range / 2 && spells[Spells.R].IsReady())
             {
                 CastR();
             }
@@ -244,10 +244,10 @@ namespace LSharpNunu
 
         private static void CastR()
         {
-            if (!spells[Spells.R].LSIsReady())
+            if (!spells[Spells.R].IsReady())
                 return;
 
-            var Rcount = LeagueSharp.Common.Utility.LSCountEnemiesInRange(Player, spells[Spells.R].Range);
+            var Rcount = LeagueSharp.Common.Utility.CountEnemiesInRange(Player, spells[Spells.R].Range);
             var ReqRcount = NunuMenu._menu.Item("Nunu.Combo.RCount").GetValue<Slider>().Value;
 
             if (ReqRcount <= Rcount)
@@ -283,17 +283,17 @@ namespace LSharpNunu
         {
             float damage = 0;
 
-            if (spells[Spells.E].LSIsReady())
+            if (spells[Spells.E].IsReady())
             {
                 damage += spells[Spells.E].GetDamage(enemy);
             }
 
-            if (spells[Spells.R].LSIsReady())
+            if (spells[Spells.R].IsReady())
             {
                 damage += spells[Spells.R].GetDamage(enemy);
             }
 
-            return (float)(damage + Player.LSGetAutoAttackDamage(enemy));
+            return (float)(damage + Player.GetAutoAttackDamage(enemy));
         }
     }
 }

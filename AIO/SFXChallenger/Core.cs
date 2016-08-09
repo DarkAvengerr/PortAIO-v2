@@ -67,7 +67,7 @@ using EloBuddy; namespace SFXChallenger
                 {
                     _lastTick = Environment.TickCount;
 
-                    if (ObjectManager.Player.IsDead || ObjectManager.Player.LSHasBuff("Recall"))
+                    if (ObjectManager.Player.IsDead || ObjectManager.Player.HasBuff("Recall"))
                     {
                         return;
                     }

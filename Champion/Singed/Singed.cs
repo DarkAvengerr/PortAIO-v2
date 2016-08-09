@@ -65,13 +65,13 @@ namespace UnderratedAIO.Champions
 
         private void Unit_OnDash(Obj_AI_Base sender, Dash.DashItem args)
         {
-            if (sender.IsEnemy && sender is AIHeroClient && config.Item("OnDash", true).GetValue<bool>() && E.LSIsReady() &&
-                args.StartPos.LSDistance(player.Position) < E.Range)
+            if (sender.IsEnemy && sender is AIHeroClient && config.Item("OnDash", true).GetValue<bool>() && E.IsReady() &&
+                args.StartPos.Distance(player.Position) < E.Range)
             {
                 E.CastOnUnit(sender);
             }
             if (config.Item("GapCloser", true).GetValue<bool>() && sender.IsEnemy && sender is AIHeroClient &&
-                args.EndPos.LSDistance(player.Position) < E.Range && !forcedPos.LSIsValid())
+                args.EndPos.Distance(player.Position) < E.Range && !forcedPos.IsValid())
             {
                 forcedPos = args.StartPos.To3D();
                 cgTarg = sender;
@@ -88,7 +88,7 @@ namespace UnderratedAIO.Champions
         private void Interrupter2_OnInterruptableTarget(AIHeroClient sender,
             Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (E.LSIsReady() && config.Item("Interrupt", true).GetValue<bool>() && sender.LSDistance(player) < 500)
+            if (E.IsReady() && config.Item("Interrupt", true).GetValue<bool>() && sender.Distance(player) < 500)
             {
                 if (E.CanCast(sender))
                 {
@@ -172,15 +172,15 @@ namespace UnderratedAIO.Champions
             {
                 return;
             }
-            if (forcedPos.LSIsValid() && !ToCursor)
+            if (forcedPos.IsValid() && !ToCursor)
             {
-                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, cgTarg.Position.LSExtend(forcedPos, 50));
+                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, cgTarg.Position.Extend(forcedPos, 50));
             }
-            if (forcedPos.LSIsValid() && ToCursor)
+            if (forcedPos.IsValid() && ToCursor)
             {
-                var pos = cgTarg.Position.LSExtend(forcedPos, 115);
+                var pos = cgTarg.Position.Extend(forcedPos, 115);
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, pos);
-                if (player.LSDistance(pos) < 10)
+                if (player.Distance(pos) < 10)
                 {
                     E.CastOnUnit(cgTarg);
 
@@ -211,7 +211,7 @@ namespace UnderratedAIO.Champions
                     break;
             }
             Throw();
-            if (config.Item("autoW", true).GetValue<bool>() && W.LSIsReady() && !player.LSIsRecalling())
+            if (config.Item("autoW", true).GetValue<bool>() && W.IsReady() && !player.IsRecalling())
             {
                 var targ =
                     HeroManager.Enemies.Where(
@@ -240,12 +240,12 @@ namespace UnderratedAIO.Champions
             {
                 return;
             }
-            if (config.Item("useEkey", true).GetValue<KeyBind>().Active && E.LSIsReady() &&
-                player.LSDistance(target) < config.Item("targRange", true).GetValue<Slider>().Value && !target.IsMoving)
+            if (config.Item("useEkey", true).GetValue<KeyBind>().Active && E.IsReady() &&
+                player.Distance(target) < config.Item("targRange", true).GetValue<Slider>().Value && !target.IsMoving)
             {
                 var pos =
                     GetEpoints(target)
-                        .OrderBy(p => p.LSDistance(target.Position.LSExtend(Game.CursorPos, 125)))
+                        .OrderBy(p => p.Distance(target.Position.Extend(Game.CursorPos, 125)))
                         .FirstOrDefault();
                 Orbwalking.Move = false;
                 if (!ToCursor)
@@ -265,7 +265,7 @@ namespace UnderratedAIO.Champions
             {
                 return;
             }
-            if (config.Item("useqH", true).GetValue<bool>() && target.LSDistance(player) < 200 && Q.LSIsReady())
+            if (config.Item("useqH", true).GetValue<bool>() && target.Distance(player) < 200 && Q.IsReady())
             {
                 Q.Cast();
             }
@@ -275,7 +275,7 @@ namespace UnderratedAIO.Champions
         {
             float perc = config.Item("minmana", true).GetValue<Slider>().Value / 100f;
             var buff = Jungle.GetNearest(player.Position);
-            if (buff != null && config.Item("useeLCsteal", true).GetValue<bool>() && E.LSIsReady())
+            if (buff != null && config.Item("useeLCsteal", true).GetValue<bool>() && E.IsReady())
             {
                 var dmg = new double[] { 50, 65, 80, 95, 110 }[E.Level] + 0.75 * player.FlatMagicDamageMod +
                           Math.Min(300, new double[] { 6, 6.5, 7, 7.5, 8 }[E.Level] / 100 * buff.MaxHealth);
@@ -290,29 +290,29 @@ namespace UnderratedAIO.Champions
             }
             var pos = Prediction.GetPrediction(player, 1);
             var coll = Qp.GetCollision(
-                player.Position.LSTo2D(),
+                player.Position.To2D(),
                 new List<Vector2>
                 {
-                    player.Position.LSExtend(pos.UnitPosition, player.LSDistance(pos.CastPosition) * -1).LSTo2D()
+                    player.Position.Extend(pos.UnitPosition, player.Distance(pos.CastPosition) * -1).To2D()
                 });
             if ((coll.Count > 0 || Environment.Minion.countMinionsInrange(player.Position, 250f) > 0) &&
                 config.Item("useqLC", true).GetValue<bool>())
             {
                 CastQ();
             }
-            if (config.Item("moveLC", true).GetValue<bool>() && player.LSCountEnemiesInRange(1000) < 1 &&
+            if (config.Item("moveLC", true).GetValue<bool>() && player.CountEnemiesInRange(1000) < 1 &&
                 Orbwalking.CanMove(100) && player.Mana > 30 && !player.Spellbook.IsAutoAttacking)
             {
                 var mini =
                     MinionManager.GetMinions(600, MinionTypes.All, MinionTeam.NotAlly)
-                        .Where(m => !m.HasBuff("poisontrailtarget") && !m.LSUnderTurret(true))
-                        .OrderBy(m => m.LSDistance(player))
+                        .Where(m => !m.HasBuff("poisontrailtarget") && !m.UnderTurret(true))
+                        .OrderBy(m => m.Distance(player))
                         .FirstOrDefault();
 
                 if (mini != null && !Environment.Minion.KillableMinion(player.AttackRange))
                 {
                     EloBuddy.Player.IssueOrder(
-                        GameObjectOrder.MoveTo, player.Position.LSExtend(mini.Position, player.LSDistance(mini) + 100));
+                        GameObjectOrder.MoveTo, player.Position.Extend(mini.Position, player.Distance(mini) + 100));
                     Orbwalking.Attack = false;
                     Orbwalking.Move = false;
                 }
@@ -341,7 +341,7 @@ namespace UnderratedAIO.Champions
                     var rand = new Random();
                     if (ChaseFix)
                     {
-                        pos = target.Position.LSExtend(
+                        pos = target.Position.Extend(
                             Prediction.GetPrediction(target, 0.6f).UnitPosition, rand.Next(480, 550));
                     }
                     else
@@ -349,7 +349,7 @@ namespace UnderratedAIO.Champions
                         var positions = CombatHelper.PointsAroundTheTargetOuterRing(target.ServerPosition, 130, 16);
                         pos = positions[rand.Next(positions.Count)];
                     }
-                    if (player.LSDistance(pos) < 90)
+                    if (player.Distance(pos) < 90)
                     {
                         if (!ChaseFix)
                         {
@@ -367,7 +367,7 @@ namespace UnderratedAIO.Champions
                 }
                 if (Orbwalking.CanMove(100))
                 {
-                    if (player.LSDistance(pos) > 40 && pos.LSIsValid())
+                    if (player.Distance(pos) > 40 && pos.IsValid())
                     {
                         Orbwalking.Move = false;
                         Orbwalking.Attack = false;
@@ -378,28 +378,28 @@ namespace UnderratedAIO.Champions
             var qTarget =
                 HeroManager.Enemies.FirstOrDefault(
                     enemy =>
-                        enemy.LSIsValidTarget() && enemy.LSDistance(player) < 200 &&
+                        enemy.IsValidTarget() && enemy.Distance(player) < 200 &&
                         CombatHelper.IsFacing(enemy, player.Position, 90f) &&
                         !CombatHelper.IsFacing(player, enemy.Position, 90f) && player.IsMoving && enemy.IsMoving);
             if (config.Item("useq", true).GetValue<bool>() &&
-                (qTarget != null || target.HasBuff("poisontrailtarget") || player.LSDistance(target) <= 500))
+                (qTarget != null || target.HasBuff("poisontrailtarget") || player.Distance(target) <= 500))
             {
                 CastQ();
             }
             if (config.Item("usew", true).GetValue<bool>() && !config.Item("WwithE", true).GetValue<bool>() &&
-                W.LSIsReady() && W.CanCast(target))
+                W.IsReady() && W.CanCast(target))
             {
                 var tarPered = W.GetPrediction(target);
-                if (W.Range - 80 > tarPered.CastPosition.LSDistance(player.Position) &&
+                if (W.Range - 80 > tarPered.CastPosition.Distance(player.Position) &&
                     tarPered.Hitchance >= HitChance.VeryHigh)
                 {
                     W.Cast(tarPered.CastPosition);
                 }
             }
-            if (R.LSIsReady() && config.Item("user", true).GetValue<bool>() &&
+            if (R.IsReady() && config.Item("user", true).GetValue<bool>() &&
                 (((config.Item("rUnderHealt", true).GetValue<Slider>().Value > player.HealthPercent &&
-                   0 < player.LSCountEnemiesInRange(750)) ||
-                  config.Item("rMinEnemy", true).GetValue<Slider>().Value <= player.LSCountEnemiesInRange(750)) &&
+                   0 < player.CountEnemiesInRange(750)) ||
+                  config.Item("rMinEnemy", true).GetValue<Slider>().Value <= player.CountEnemiesInRange(750)) &&
                  (!config.Item("rkeepManaE", true).GetValue<bool>() ||
                   (config.Item("rkeepManaE", true).GetValue<bool>() &&
                    player.Mana - R.Instance.SData.Mana > E.Instance.SData.Mana))))
@@ -407,23 +407,23 @@ namespace UnderratedAIO.Champions
                 R.Cast();
             }
             var ignitedmg = (float) player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
-            bool hasIgnite = player.Spellbook.CanUseSpell(player.LSGetSpellSlot("SummonerDot")) == SpellState.Ready;
+            bool hasIgnite = player.Spellbook.CanUseSpell(player.GetSpellSlot("SummonerDot")) == SpellState.Ready;
             if (config.Item("useIgnite", true).GetValue<bool>() && ignitedmg > target.Health && hasIgnite)
             {
-                player.Spellbook.CastSpell(player.LSGetSpellSlot("SummonerDot"), target);
+                player.Spellbook.CastSpell(player.GetSpellSlot("SummonerDot"), target);
             }
             var blockOrb = false;
-            var throwPos = target.Position.LSExtend(player.Position, 500);
-            if (config.Item("usee", true).GetValue<bool>() && E.LSIsReady() &&
-                ((throwPos.LSCountAlliesInRange(700) > target.LSCountAlliesInRange(700) &&
-                  HeroManager.Allies.FirstOrDefault(a => a.LSDistance(throwPos) < 700 && a.HealthPercent < 25) == null) ||
+            var throwPos = target.Position.Extend(player.Position, 500);
+            if (config.Item("usee", true).GetValue<bool>() && E.IsReady() &&
+                ((throwPos.CountAlliesInRange(700) > target.CountAlliesInRange(700) &&
+                  HeroManager.Allies.FirstOrDefault(a => a.Distance(throwPos) < 700 && a.HealthPercent < 25) == null) ||
                  W.GetDamage(target) > target.Health || !target.HasBuff("poisontrailtarget") ||
                  config.Item("WwithE", true).GetValue<bool>()))
             {
                 var pos = Prediction.GetPrediction(target, W.Delay / 2)
-                    .UnitPosition.LSExtend(player.Position, 515 + player.LSDistance(target.Position));
-                if (config.Item("WwithE", true).GetValue<bool>() && E.CanCast(target) && W.LSIsReady() &&
-                    player.Mana > E.Instance.SData.Mana + W.Instance.SData.Mana + 15 && !pos.LSIsWall() &&
+                    .UnitPosition.Extend(player.Position, 515 + player.Distance(target.Position));
+                if (config.Item("WwithE", true).GetValue<bool>() && E.CanCast(target) && W.IsReady() &&
+                    player.Mana > E.Instance.SData.Mana + W.Instance.SData.Mana + 15 && !pos.IsWall() &&
                     target.Health > E.GetDamage(target) + Q.GetDamage(target))
                 {
                     W.Cast(pos);
@@ -433,7 +433,7 @@ namespace UnderratedAIO.Champions
                 {
                     E.CastOnUnit(target);
                 }
-                else if (target.LSDistance(player) < E.Range + 100)
+                else if (target.Distance(player) < E.Range + 100)
                 {
                     blockOrb = true;
                 }
@@ -468,15 +468,15 @@ namespace UnderratedAIO.Champions
             double damage = 0;
             if (config.Item("drawcomboQ", true).GetValue<bool>())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.Q) * 5;
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.Q) * 5;
             }
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.E);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.E);
             }
             //damage += ItemHandler.GetItemsDamage(hero);
             var ignitedmg = player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
-            if (player.Spellbook.CanUseSpell(player.LSGetSpellSlot("summonerdot")) == SpellState.Ready &&
+            if (player.Spellbook.CanUseSpell(player.GetSpellSlot("summonerdot")) == SpellState.Ready &&
                 hero.Health < damage + ignitedmg)
             {
                 damage += ignitedmg;

@@ -176,9 +176,9 @@ using EloBuddy;
         private static void Killsteal()
         {
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-            var QDamage = Player.LSGetSpellDamage(target, SpellSlot.Q) * 0.96;
+            var QDamage = Player.GetSpellDamage(target, SpellSlot.Q) * 0.96;
 
-            if (target.LSIsValidTarget() && Config.Item("KS").GetValue<bool>() && Q.LSIsReady() && Player.LSDistance(target) <= Q.Range && target.Health < QDamage)
+            if (target.IsValidTarget() && Config.Item("KS").GetValue<bool>() && Q.IsReady() && Player.Distance(target) <= Q.Range && target.Health < QDamage)
             {
                 Q.Cast(target, true);
             }
@@ -191,7 +191,7 @@ using EloBuddy;
             var CountHarass = Config.Item("CountHarass").GetValue<Slider>().Value;
             var HealthPer = Player.Health * 100 / Player.MaxHealth;
 
-            if (target.LSIsValidTarget() && Q.LSIsReady() && HealthPer >= CountHarass && Player.LSDistance(target) <= Q.Range)
+            if (target.IsValidTarget() && Q.IsReady() && HealthPer >= CountHarass && Player.Distance(target) <= Q.Range)
             {
                 PredictionOutput Qpredict = Q.GetPrediction(target);
                 if (Qpredict.Hitchance >= HitChance.High)
@@ -206,7 +206,7 @@ using EloBuddy;
             var CountHarass = Config.Item("CountHarass").GetValue<Slider>().Value;
             var HealthPer = Player.Health * 100 / Player.MaxHealth;
 
-            if (target.LSIsValidTarget() && Q.LSIsReady() && HealthPer >= CountHarass && Player.LSDistance(target) <= Q.Range)
+            if (target.IsValidTarget() && Q.IsReady() && HealthPer >= CountHarass && Player.Distance(target) <= Q.Range)
             {
                 Q.Cast(target, true);
             }
@@ -216,7 +216,7 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
             bool ActiveW = false;
-            if (Player.LSHasBuff("BurningAgony"))
+            if (Player.HasBuff("BurningAgony"))
             {
                 ActiveW = true;
             }
@@ -225,51 +225,51 @@ using EloBuddy;
                 ActiveW = false;
             }
 
-            if (target.LSIsValidTarget() && Config.Item("UseQCombo").GetValue<bool>() && Q.LSIsReady() && Player.LSDistance(target) <= Q.Range)
+            if (target.IsValidTarget() && Config.Item("UseQCombo").GetValue<bool>() && Q.IsReady() && Player.Distance(target) <= Q.Range)
             {
                 Q.Cast(target, true);
             }
 
-            if (target.LSIsValidTarget() && Config.Item("UseWCombo").GetValue<bool>() && W.LSIsReady() && Player.LSDistance(target) <= W.Range && !ActiveW)
+            if (target.IsValidTarget() && Config.Item("UseWCombo").GetValue<bool>() && W.IsReady() && Player.Distance(target) <= W.Range && !ActiveW)
             {
                 W.Cast();
             }
-            if (target.LSIsValidTarget() && Config.Item("UseWCombo").GetValue<bool>() && W.LSIsReady() && Player.LSDistance(target) > 700f && ActiveW)
+            if (target.IsValidTarget() && Config.Item("UseWCombo").GetValue<bool>() && W.IsReady() && Player.Distance(target) > 700f && ActiveW)
             {
                 W.Cast();
             }
 
-            if (Config.Item("UseECombo").GetValue<bool>() && E.LSIsReady() && Player.LSDistance(target) <= E.Range)
+            if (Config.Item("UseECombo").GetValue<bool>() && E.IsReady() && Player.Distance(target) <= E.Range)
             {
                 E.Cast();
             }
             if (Config.Item("UseItems").GetValue<bool>())
             {
-                if (Player.LSDistance(target) <= RDO.Range)
+                if (Player.Distance(target) <= RDO.Range)
                 {
                     RDO.Cast(target);
                 }
-                if (Player.LSDistance(target) <= HYD.Range)
+                if (Player.Distance(target) <= HYD.Range)
                 {
                     HYD.Cast(target);
                 }
-                if (Player.LSDistance(target) <= DFG.Range)
+                if (Player.Distance(target) <= DFG.Range)
                 {
                     DFG.Cast(target);
                 }
-                if (Player.LSDistance(target) <= BOTK.Range)
+                if (Player.Distance(target) <= BOTK.Range)
                 {
                     BOTK.Cast(target);
                 }
-                if (Player.LSDistance(target) <= CUT.Range)
+                if (Player.Distance(target) <= CUT.Range)
                 {
                     CUT.Cast(target);
                 }
-                if (Player.LSDistance(target) <= 125f)
+                if (Player.Distance(target) <= 125f)
                 {
                     YOY.Cast();
                 }
-                if (Player.LSDistance(target) <= TYM.Range)
+                if (Player.Distance(target) <= TYM.Range)
                 {
                     TYM.Cast(target);
                 }
@@ -280,7 +280,7 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
 
-            if (Player.Health < (Player.Health * Config.Item("Rhp").GetValue<Slider>().Value * 0.01) && R.LSIsReady() && CountR(target) >= 1 || CountR(target) == 1)
+            if (Player.Health < (Player.Health * Config.Item("Rhp").GetValue<Slider>().Value * 0.01) && R.IsReady() && CountR(target) >= 1 || CountR(target) == 1)
             {
                 R.Cast();
             }
@@ -291,7 +291,7 @@ using EloBuddy;
             var Minions = MinionManager.GetMinions(Player.ServerPosition, Q.Range);
 
             bool ActiveW = false;
-            if (Player.LSHasBuff("BurningAgony"))
+            if (Player.HasBuff("BurningAgony"))
             {
                 ActiveW = true;
             }
@@ -308,21 +308,21 @@ using EloBuddy;
 
             if (minions.Count > 0)
             {
-                if (useQ && Q.LSIsReady() && minions[0].LSIsValidTarget() && Player.LSDistance(minions[0]) <= Q.Range)
+                if (useQ && Q.IsReady() && minions[0].IsValidTarget() && Player.Distance(minions[0]) <= Q.Range)
                 {
                     Q.Cast(minions[0].Position);
                 }
 
-                if (useW && W.LSIsReady() && minions[0].LSIsValidTarget() && !ActiveW && Player.LSDistance(minions[0]) <= 700)
+                if (useW && W.IsReady() && minions[0].IsValidTarget() && !ActiveW && Player.Distance(minions[0]) <= 700)
                 {
                     W.Cast();
                 }
-                if (useW && W.LSIsReady() && minions[0].LSIsValidTarget() && ActiveW && Player.LSDistance(minions[0]) > 700)
+                if (useW && W.IsReady() && minions[0].IsValidTarget() && ActiveW && Player.Distance(minions[0]) > 700)
                 {
                     W.Cast();
                 }
 
-                if (useE && E.LSIsReady() && minions[0].LSIsValidTarget() && Player.LSDistance(minions[0]) <= E.Range)
+                if (useE && E.IsReady() && minions[0].IsValidTarget() && Player.Distance(minions[0]) <= E.Range)
                 {
                     E.Cast();
                 }
@@ -333,7 +333,7 @@ using EloBuddy;
         {
 
             bool ActiveW = false;
-            if (Player.LSHasBuff("BurningAgony"))
+            if (Player.HasBuff("BurningAgony"))
             {
                 ActiveW = true;
             }
@@ -350,22 +350,22 @@ using EloBuddy;
 
             if (allminions.Count > 0)
             {
-                if (useQ && Q.LSIsReady() && allminions[0].LSIsValidTarget() && Player.LSDistance(allminions[0]) <= Q.Range)
+                if (useQ && Q.IsReady() && allminions[0].IsValidTarget() && Player.Distance(allminions[0]) <= Q.Range)
                 {
                     Q.Cast(allminions[0].Position);
                 }
 
-                if (useW && W.LSIsReady() && allminions[0].LSIsValidTarget() && Player.LSDistance(allminions[0]) <= 700 && !ActiveW)
+                if (useW && W.IsReady() && allminions[0].IsValidTarget() && Player.Distance(allminions[0]) <= 700 && !ActiveW)
                 {
                     W.Cast();
                 }
 
-                if (useW && W.LSIsReady() && allminions[0].LSIsValidTarget() && Player.LSDistance(allminions[0]) > 700 && ActiveW)
+                if (useW && W.IsReady() && allminions[0].IsValidTarget() && Player.Distance(allminions[0]) > 700 && ActiveW)
                 {
                     W.Cast();
                 }
 
-                if (useE && E.LSIsReady() && allminions[0].LSIsValidTarget() && Player.LSDistance(allminions[0]) <= E.Range)
+                if (useE && E.IsReady() && allminions[0].IsValidTarget() && Player.Distance(allminions[0]) <= E.Range)
                 {
                     E.Cast();
                 }

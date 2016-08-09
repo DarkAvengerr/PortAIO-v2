@@ -77,8 +77,8 @@ namespace Pantheon
 
         private void OnUpdate(EventArgs args)
         {
-            if (ObjectManager.Player.HasBuff("Recall") || ObjectManager.Player.LSInFountain() ||
-                ObjectManager.Player.LSInShop())
+            if (ObjectManager.Player.HasBuff("Recall") || ObjectManager.Player.InFountain() ||
+                ObjectManager.Player.InShop())
                 return;
 
             try

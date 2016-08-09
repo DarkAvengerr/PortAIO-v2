@@ -68,7 +68,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Flee
             var jump =
                 this.fleeLogic.JumpPos.FirstOrDefault(
                     x =>
-                    x.Value.LSDistance(ObjectManager.Player.Position) < 300f && x.Value.LSDistance(Game.CursorPos) < 700f);
+                    x.Value.Distance(ObjectManager.Player.Position) < 300f && x.Value.Distance(Game.CursorPos) < 700f);
 
             var monster =
                 MinionManager.GetMinions(900f, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.Health)
@@ -76,16 +76,16 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Flee
 
             var mobs = MinionManager.GetMinions(900, MinionTypes.All, MinionTeam.NotAlly);
 
-            if (jump.Value.LSIsValid() && this.Menu.Item(this.Menu.Name + "FleeVector").GetValue<bool>())
+            if (jump.Value.IsValid() && this.Menu.Item(this.Menu.Name + "FleeVector").GetValue<bool>())
             {
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, jump.Value);
 
                 foreach (var junglepos in
                     this.fleeLogic.JunglePos.Where(
                         junglepos =>
-                        Game.CursorPos.LSDistance(junglepos) <= 350
-                        && ObjectManager.Player.Position.LSDistance(junglepos) <= 825
-                        && Variables.Spells[SpellSlot.Q].LSIsReady() && Variables.Spells[SpellSlot.R].LSIsReady()))
+                        Game.CursorPos.Distance(junglepos) <= 350
+                        && ObjectManager.Player.Position.Distance(junglepos) <= 825
+                        && Variables.Spells[SpellSlot.Q].IsReady() && Variables.Spells[SpellSlot.R].IsReady()))
                 {
                     Variables.Spells[SpellSlot.Q].Cast(junglepos);
 
@@ -102,16 +102,16 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Flee
 
             foreach (var junglepos in this.fleeLogic.JunglePos)
             {
-                if (Game.CursorPos.LSDistance(junglepos) <= 350
-                    && ObjectManager.Player.Position.LSDistance(junglepos) <= 900
-                    && Variables.Spells[SpellSlot.Q].LSIsReady() && Variables.Spells[SpellSlot.R].LSIsReady())
+                if (Game.CursorPos.Distance(junglepos) <= 350
+                    && ObjectManager.Player.Position.Distance(junglepos) <= 900
+                    && Variables.Spells[SpellSlot.Q].IsReady() && Variables.Spells[SpellSlot.R].IsReady())
                 {
                     Variables.Spells[SpellSlot.Q].Cast(junglepos);
                     Variables.Spells[SpellSlot.R].Cast(monster);
                 }
-                else if (Variables.Spells[SpellSlot.R].LSIsReady() && !Variables.Spells[SpellSlot.Q].LSIsReady()
-                         && monster.LSDistance(ObjectManager.Player.Position) > 600f
-                         && monster.LSDistance(Game.CursorPos) <= 350f)
+                else if (Variables.Spells[SpellSlot.R].IsReady() && !Variables.Spells[SpellSlot.Q].IsReady()
+                         && monster.Distance(ObjectManager.Player.Position) > 600f
+                         && monster.Distance(Game.CursorPos) <= 350f)
                 {
                     Variables.Spells[SpellSlot.R].Cast(monster);
                 }
@@ -121,9 +121,9 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Flee
 
             var mob = mobs.MaxOrDefault(x => x.MaxHealth);
 
-            if (!(mob.LSDistance(Game.CursorPos) <= 750) || !(mob.LSDistance(ObjectManager.Player) >= 475)) return;
+            if (!(mob.Distance(Game.CursorPos) <= 750) || !(mob.Distance(ObjectManager.Player) >= 475)) return;
 
-            if (Variables.Spells[SpellSlot.Q].LSIsReady() && Variables.Spells[SpellSlot.R].LSIsReady()
+            if (Variables.Spells[SpellSlot.Q].IsReady() && Variables.Spells[SpellSlot.R].IsReady()
                 && ObjectManager.Player.Mana
                 > Variables.Spells[SpellSlot.R].ManaCost + Variables.Spells[SpellSlot.Q].ManaCost
                 && mob.Health > Variables.Spells[SpellSlot.Q].GetDamage(mob))
@@ -133,7 +133,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Flee
             }
             else
             {
-                if (Variables.Spells[SpellSlot.R].LSIsReady())
+                if (Variables.Spells[SpellSlot.R].IsReady())
                 {
                     Variables.Spells[SpellSlot.R].Cast(mob);
                 }

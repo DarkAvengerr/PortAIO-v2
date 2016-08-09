@@ -153,35 +153,35 @@ using EloBuddy;
         {
             /*mountain protect from skillshots*/
             if (sender is AIHeroClient && args.Target.IsAlly && args.Target.Type == GameObjectType.AIHeroClient
-                && !args.SData.LSIsAutoAttack() && ((_config.Item("mountain.protect." + args.SData.Name).GetValue<bool>() && _config.Item("mountain.protect." + args.SData.Name) != null))
-                && sender.IsEnemy && sender.LSGetSpellDamage(((AIHeroClient)args.Target), args.SData.Name) > ((AIHeroClient)args.Target).Health && Items.HasItem(MountainId) && Items.CanUseItem(MountainId)
-                && ((AIHeroClient)args.Target).LSDistance(ObjectManager.Player.Position) < MountainRange && !((AIHeroClient)args.Target).IsDead)
+                && !args.SData.IsAutoAttack() && ((_config.Item("mountain.protect." + args.SData.Name).GetValue<bool>() && _config.Item("mountain.protect." + args.SData.Name) != null))
+                && sender.IsEnemy && sender.GetSpellDamage(((AIHeroClient)args.Target), args.SData.Name) > ((AIHeroClient)args.Target).Health && Items.HasItem(MountainId) && Items.CanUseItem(MountainId)
+                && ((AIHeroClient)args.Target).Distance(ObjectManager.Player.Position) < MountainRange && !((AIHeroClient)args.Target).IsDead)
             {
                 Items.UseItem(MountainId, ((AIHeroClient)args.Target));
             }
 
             /*mountain protect from targetted spells*/
             if (sender is AIHeroClient && args.Target.IsAlly && args.Target.Type == GameObjectType.AIHeroClient
-                && !args.SData.LSIsAutoAttack() && ((_config.Item("mountain.protect.targetted." + args.SData.Name).GetValue<bool>() && _config.Item("mountain.protect.targetted." + args.SData.Name) != null))
-                && sender.IsEnemy && sender.LSGetSpellDamage(((AIHeroClient)args.Target), args.SData.Name) > ((AIHeroClient)args.Target).Health && Items.HasItem(MountainId) && Items.CanUseItem(MountainId)
-                && ((AIHeroClient)args.Target).LSDistance(ObjectManager.Player.Position) < MountainRange && !((AIHeroClient)args.Target).IsDead && args.SData.TargettingType == SpellDataTargetType.Unit)
+                && !args.SData.IsAutoAttack() && ((_config.Item("mountain.protect.targetted." + args.SData.Name).GetValue<bool>() && _config.Item("mountain.protect.targetted." + args.SData.Name) != null))
+                && sender.IsEnemy && sender.GetSpellDamage(((AIHeroClient)args.Target), args.SData.Name) > ((AIHeroClient)args.Target).Health && Items.HasItem(MountainId) && Items.CanUseItem(MountainId)
+                && ((AIHeroClient)args.Target).Distance(ObjectManager.Player.Position) < MountainRange && !((AIHeroClient)args.Target).IsDead && args.SData.TargettingType == SpellDataTargetType.Unit)
             {
                 Items.UseItem(MountainId, ((AIHeroClient)args.Target));
             }
 
             /*iron solari protect from skillshots*/
             if (sender is AIHeroClient && args.Target.IsAlly && args.Target.Type == GameObjectType.AIHeroClient
-                && !args.SData.LSIsAutoAttack() && ((_config.Item("solari.protect." + args.SData.Name).GetValue<bool>() && _config.Item("solari.protect." + args.SData.Name) != null))
-                && sender.IsEnemy && sender.LSGetSpellDamage(((AIHeroClient)args.Target), args.SData.Name) > ((AIHeroClient)args.Target).Health && Items.HasItem(SolariItemId) && Items.CanUseItem(SolariItemId)
-                && ((AIHeroClient)args.Target).LSDistance(ObjectManager.Player.Position) < SolariRange && !((AIHeroClient)args.Target).IsDead)
+                && !args.SData.IsAutoAttack() && ((_config.Item("solari.protect." + args.SData.Name).GetValue<bool>() && _config.Item("solari.protect." + args.SData.Name) != null))
+                && sender.IsEnemy && sender.GetSpellDamage(((AIHeroClient)args.Target), args.SData.Name) > ((AIHeroClient)args.Target).Health && Items.HasItem(SolariItemId) && Items.CanUseItem(SolariItemId)
+                && ((AIHeroClient)args.Target).Distance(ObjectManager.Player.Position) < SolariRange && !((AIHeroClient)args.Target).IsDead)
             {
                 Items.UseItem(SolariItemId, ((AIHeroClient)args.Target));
             }
             /*iron solari protect from targetted spells*/
             if (sender is AIHeroClient && args.Target.IsAlly && args.Target.Type == GameObjectType.AIHeroClient
-                && !args.SData.LSIsAutoAttack() && ((_config.Item("solari.protect.targetted." + args.SData.Name).GetValue<bool>() && _config.Item("solari.protect.targetted." + args.SData.Name) != null))
-                && sender.IsEnemy && sender.LSGetSpellDamage(((AIHeroClient)args.Target), args.SData.Name) > ((AIHeroClient)args.Target).Health && Items.HasItem(SolariItemId) && Items.CanUseItem(SolariItemId)
-                && ((AIHeroClient)args.Target).LSDistance(ObjectManager.Player.Position) < SolariRange && !((AIHeroClient)args.Target).IsDead && args.SData.TargettingType == SpellDataTargetType.Unit)
+                && !args.SData.IsAutoAttack() && ((_config.Item("solari.protect.targetted." + args.SData.Name).GetValue<bool>() && _config.Item("solari.protect.targetted." + args.SData.Name) != null))
+                && sender.IsEnemy && sender.GetSpellDamage(((AIHeroClient)args.Target), args.SData.Name) > ((AIHeroClient)args.Target).Health && Items.HasItem(SolariItemId) && Items.CanUseItem(SolariItemId)
+                && ((AIHeroClient)args.Target).Distance(ObjectManager.Player.Position) < SolariRange && !((AIHeroClient)args.Target).IsDead && args.SData.TargettingType == SpellDataTargetType.Unit)
             {
                 Items.UseItem(SolariItemId, ((AIHeroClient)args.Target));
             }
@@ -190,33 +190,33 @@ using EloBuddy;
         {
             if (Items.HasItem(MikaelItemId) && Items.CanUseItem(MikaelItemId) && Helper.MenuCheck("mikael", _config))
             {
-                foreach (var ally in HeroManager.Allies.Where(x => x.LSIsValidTarget(MikaelRange) && Helper.MenuCheck("mikael." + x.ChampionName, _config)))
+                foreach (var ally in HeroManager.Allies.Where(x => x.IsValidTarget(MikaelRange) && Helper.MenuCheck("mikael." + x.ChampionName, _config)))
                 {
-                    if (ally.LSHasBuff("summonerexhaust") && Helper.MenuCheck("mikael.exhaust", _config))
+                    if (ally.HasBuff("summonerexhaust") && Helper.MenuCheck("mikael.exhaust", _config))
                     {
                         Items.UseItem(MikaelItemId, ally);
                     }
-                    else if (ally.LSHasBuff("summonerdot") && Helper.MenuCheck("mikael.ignite", _config))
+                    else if (ally.HasBuff("summonerdot") && Helper.MenuCheck("mikael.ignite", _config))
                     {
                         Items.UseItem(MikaelItemId, ally);
                     }
-                    else if (ally.LSHasBuff("zedulttargetmark") && Helper.MenuCheck("mikael.zed", _config))
+                    else if (ally.HasBuff("zedulttargetmark") && Helper.MenuCheck("mikael.zed", _config))
                     {
                         Items.UseItem(MikaelItemId, ally);
                     }
-                    else if (ally.LSHasBuff("FizzMarinerDoom") && Helper.MenuCheck("mikael.fizz", _config))
+                    else if (ally.HasBuff("FizzMarinerDoom") && Helper.MenuCheck("mikael.fizz", _config))
                     {
                         Items.UseItem(MikaelItemId, ally);
                     }
-                    else if (ally.LSHasBuff("AlZaharNetherGrasp") && Helper.MenuCheck("mikael.malzahar", _config))
+                    else if (ally.HasBuff("AlZaharNetherGrasp") && Helper.MenuCheck("mikael.malzahar", _config))
                     {
                         Items.UseItem(MikaelItemId, ally);
                     }
-                    else if (ally.LSHasBuff("VladimirHemoplague") && Helper.MenuCheck("mikael.vladimir", _config))
+                    else if (ally.HasBuff("VladimirHemoplague") && Helper.MenuCheck("mikael.vladimir", _config))
                     {
                         Items.UseItem(MikaelItemId, ally);
                     }
-                    else if (ally.LSHasBuff("summonerexhaust") && Helper.MenuCheck("mikael.exhaust", _config))
+                    else if (ally.HasBuff("summonerexhaust") && Helper.MenuCheck("mikael.exhaust", _config))
                     {
                         Items.UseItem(MikaelItemId, ally);
                     }

@@ -13,13 +13,13 @@ namespace DZLib.Positioning
     {
         public static bool IsSafe(this Vector3 position, float range)
         {
-            if (position.LSUnderTurret(true) && !ObjectManager.Player.LSUnderTurret(true))
+            if (position.UnderTurret(true) && !ObjectManager.Player.UnderTurret(true))
             {
                 return false;
             }
 
-            var allies = position.LSCountAlliesInRange(ObjectManager.Player.AttackRange);
-            var enemies = position.LSCountEnemiesInRange(ObjectManager.Player.AttackRange);
+            var allies = position.CountAlliesInRange(ObjectManager.Player.AttackRange);
+            var enemies = position.CountEnemiesInRange(ObjectManager.Player.AttackRange);
             var lhEnemies = position.GetLhEnemiesNear(ObjectManager.Player.AttackRange, 15).Count();
 
             if (enemies <= 1) ////It's a 1v1, safe to assume I can Q
@@ -27,9 +27,9 @@ namespace DZLib.Positioning
                 return true;
             }
 
-            if (position.LSUnderAllyTurret())
+            if (position.UnderAllyTurret())
             {
-                var nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().Where(a => a.IsAlly).OrderBy(d => d.LSDistance(position, true)).FirstOrDefault();
+                var nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().Where(a => a.IsAlly).OrderBy(d => d.Distance(position, true)).FirstOrDefault();
 
                 if (nearestAllyTurret != null)
                 {
@@ -41,7 +41,7 @@ namespace DZLib.Positioning
             var normalCheck = (allies + 1 > enemies - lhEnemies);
             var PositionEnemiesCheck = true;
 
-            var Vector2Position = position.LSTo2D();
+            var Vector2Position = position.To2D();
             var enemyPoints = PositioningHelper.GetEnemyZoneList(false);
             if (enemyPoints.Contains(Vector2Position))
             {
@@ -51,7 +51,7 @@ namespace DZLib.Positioning
 
             if (!closeEnemies.All(
                     enemy =>
-                        position.LSCountEnemiesInRange(enemy.AttackRange) <= 1))
+                        position.CountEnemiesInRange(enemy.AttackRange) <= 1))
             {
                 PositionEnemiesCheck = false;
             }

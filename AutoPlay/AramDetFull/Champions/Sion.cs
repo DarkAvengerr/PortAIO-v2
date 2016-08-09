@@ -39,9 +39,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void onIssueOrder(Obj_AI_Base sender, PlayerIssueOrderEventArgs args)
         {
-            if (sender.IsMe && RTarg != null && args.Order == GameObjectOrder.MoveTo && player.LSHasBuff("SionR"))
+            if (sender.IsMe && RTarg != null && args.Order == GameObjectOrder.MoveTo && player.HasBuff("SionR"))
             {
-                if (args.TargetPosition.LSDistance(Game.CursorPos, true) < 10000)
+                if (args.TargetPosition.Distance(Game.CursorPos, true) < 10000)
                 {
                     args.Process = false;
                     if (RTarg != null)
@@ -54,7 +54,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             if (sender.IsMe && args.SData.Name == "SionQ")
             {
-                QCastPos = args.End.LSTo2D();
+                QCastPos = args.End.To2D();
             }
 
 
@@ -68,7 +68,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (Q.LSIsReady() && !player.IsChannelingImportantSpell() && safeGap(player))
+            if (Q.IsReady() && !player.IsChannelingImportantSpell() && safeGap(player))
             {
                 Q.StartCharging(target.ServerPosition);
             }
@@ -76,27 +76,27 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
-            //if (!Q.LSIsReady(4500) && player.Mana > 200)
+            //if (!Q.IsReady(4500) && player.Mana > 200)
             W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.Cast(target);
         }
 
         public void useE1(Obj_AI_Base target)
         {
-            if (!E1.LSIsReady() || target == null)
+            if (!E1.IsReady() || target == null)
                 return;
             var pred = E1.GetPrediction(target);
             if (pred.Hitchance>= HitChance.High &&
                 pred.CollisionObjects.Any(
-                    obj => !obj.IsDead && obj is Obj_AI_Minion && obj.LSDistance(player, true) < E.Range*E.Range))
+                    obj => !obj.IsDead && obj is Obj_AI_Minion && obj.Distance(player, true) < E.Range*E.Range))
                 E1.Cast(target);
         }
 
@@ -104,13 +104,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (player.LSHasBuff("SionR"))
+            if (player.HasBuff("SionR"))
             {
-                if (target.LSDistance(player) < 150)
+                if (target.Distance(player) < 150)
                     R.Cast();
             }
 
-            if (target == null || !R.LSIsReady() || !safeGap(target))
+            if (target == null || !R.IsReady() || !safeGap(target))
                 return;
             RTarg = target;
             R.Cast(target.Position);
@@ -121,10 +121,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             if (Q.IsCharging)
             {
-                var start = ObjectManager.Player.ServerPosition.LSTo2D();
-                var end = start.LSExtend(QCastPos, Q.Range);
-                var direction = (end - start).LSNormalized();
-                var normal = direction.LSPerpendicular();
+                var start = ObjectManager.Player.ServerPosition.To2D();
+                var end = start.Extend(QCastPos, Q.Range);
+                var direction = (end - start).Normalized();
+                var normal = direction.Perpendicular();
                 var points = new List<Vector2>();
                 points.Add(start + normal * (Q.Width));
                 points.Add(start - normal * (Q.Width));
@@ -132,7 +132,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 points.Add(end + normal * (Q.Width));
                 
                 Polygon pol = new Polygon(points);
-                var enesInside = HeroManager.Enemies.Where(ene => !ene.IsDead && pol.pointInside(ene.Position.LSTo2D())).ToList();
+                var enesInside = HeroManager.Enemies.Where(ene => !ene.IsDead && pol.pointInside(ene.Position.To2D())).ToList();
                 if(enesInside.Count == 0)
                     Q.Cast();
                 /*
@@ -141,7 +141,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     var A = points[i];
                     var B = points[i == points.Count - 1 ? 0 : i + 1];
 
-                    if (enesInside.Any(targ => targ.ServerPosition.LSTo2D().LSDistance(A, B, true, true) < 55 * 55))
+                    if (enesInside.Any(targ => targ.ServerPosition.To2D().Distance(A, B, true, true) < 55 * 55))
                     {
                         Q.Cast();
                     }
@@ -188,7 +188,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void alwaysCheck()
         {
-            if (sionZombie() && Q.LSIsReady() && player.LSCountEnemiesInRange(350) != 0)
+            if (sionZombie() && Q.IsReady() && player.CountEnemiesInRange(350) != 0)
             {
                 Console.WriteLine("Zombie Q cast");
                 Q.Cast();
@@ -203,7 +203,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var AllMinions = MinionManager.GetMinions(player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
             foreach (var minion in AllMinions)
             {
-                if (E.LSIsReady() && E.GetDamage(minion) > minion.Health)
+                if (E.IsReady() && E.GetDamage(minion) > minion.Health)
                 {
                     E.Cast(minion);
                 }

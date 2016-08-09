@@ -221,9 +221,9 @@
         {
             if (!IsSpider)
             {
-                if (IsActive("GFUELElise.Misc.Antigapcloser") && E.LSIsReady())
+                if (IsActive("GFUELElise.Misc.Antigapcloser") && E.IsReady())
                 {
-                    if (gapcloser.Sender.LSIsValidTarget(E.Range))
+                    if (gapcloser.Sender.IsValidTarget(E.Range))
                     {
                         E.Cast(gapcloser.Sender);
                     }
@@ -235,9 +235,9 @@
         {
             if (IsHuman)
             {
-                if (E.LSIsReady() && IsActive("GFUELElise.Auto.E"))
+                if (E.IsReady() && IsActive("GFUELElise.Auto.E"))
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range) && !x.IsDead))
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && !x.IsDead))
                     {
                         var pred = E.GetPrediction(enemy);
                         if (pred.Hitchance >= HitChance.Immobile)
@@ -265,12 +265,12 @@
                 if (IsHuman)
                 {
 
-                    if (IsActive("GFUELElise.Combo.Q") && Q.LSIsReady() && target.LSIsValidTarget(Q.Range))
+                    if (IsActive("GFUELElise.Combo.Q") && Q.IsReady() && target.IsValidTarget(Q.Range))
                     {
                         Q.CastOnUnit(target);
                     }
 
-                    if (IsActive("GFUELElise.Combo.E") && target.LSDistance(Player.Position) <= E.Range && E.LSIsReady())
+                    if (IsActive("GFUELElise.Combo.E") && target.Distance(Player.Position) <= E.Range && E.IsReady())
                     {
                         var prediction = E.GetPrediction(target);
                         if (prediction.Hitchance >= HitChance.High)
@@ -279,12 +279,12 @@
                         }
                     }
 
-                    if (target.HasBuff("buffelisecocoon") && SpiderQ.LSIsReady() && target.LSIsValidTarget(SpiderQ.Range))
+                    if (target.HasBuff("buffelisecocoon") && SpiderQ.IsReady() && target.IsValidTarget(SpiderQ.Range))
                     {
                         R.Cast();
                     }
 
-                    if (IsActive("GFUELElise.Combo.W") && W.LSIsReady() && target.LSIsValidTarget(W.Range))
+                    if (IsActive("GFUELElise.Combo.W") && W.IsReady() && target.IsValidTarget(W.Range))
                     {
                         var prediction = W.GetPrediction(target);
                         if (prediction.CollisionObjects.Count == 0)
@@ -300,15 +300,15 @@
                             R.Cast();
                         }
 
-                        if (Player.LSDistance(target) <= 750 && R.LSIsReady()
-                            && (!Q.LSIsReady() && !W.LSIsReady() && !E.LSIsReady()
-                                || !Q.LSIsReady() && !W.LSIsReady() && !E.LSIsReady()))
+                        if (Player.Distance(target) <= 750 && R.IsReady()
+                            && (!Q.IsReady() && !W.IsReady() && !E.IsReady()
+                                || !Q.IsReady() && !W.IsReady() && !E.IsReady()))
                         {
                             R.Cast();
                         }
 
-                        if (SpiderQ.LSIsReady() && target.LSIsValidTarget(SpiderQ.Range)
-                            && target.LSIsValidTarget(SpiderQ.Range))
+                        if (SpiderQ.IsReady() && target.IsValidTarget(SpiderQ.Range)
+                            && target.IsValidTarget(SpiderQ.Range))
                         {
                             R.Cast();
                         }
@@ -317,26 +317,26 @@
 
                 if (IsSpider)
                 {
-                    if (IsActive("GFUELElise.ComboSpider.Q") && SpiderQ.LSIsReady())
+                    if (IsActive("GFUELElise.ComboSpider.Q") && SpiderQ.IsReady())
                     {
-                        if (target.LSIsValidTarget(SpiderQ.Range))
+                        if (target.IsValidTarget(SpiderQ.Range))
                         {
                             SpiderQ.Cast(target);
                         }
                     }
 
-                    if (IsActive("GFUELElise.ComboSpider.W") && Player.LSDistance(target) <= 140 && SpiderW.LSIsReady())
+                    if (IsActive("GFUELElise.ComboSpider.W") && Player.Distance(target) <= 140 && SpiderW.IsReady())
                     {
-                        if (target.LSIsValidTarget(SpiderW.Range))
+                        if (target.IsValidTarget(SpiderW.Range))
                         {
                             SpiderW.Cast();
                         }
                     }
 
-                    if (IsActive("GFUELElise.ComboSpider.E") && Player.LSDistance(target) <= SpiderE.Range
-                        && Player.LSDistance(target) > SpiderQ.Range && SpiderE.LSIsReady())
+                    if (IsActive("GFUELElise.ComboSpider.E") && Player.Distance(target) <= SpiderE.Range
+                        && Player.Distance(target) > SpiderQ.Range && SpiderE.IsReady())
                     {
-                        if (target.LSIsValidTarget(SpiderQ.Range))
+                        if (target.IsValidTarget(SpiderQ.Range))
                         {
                             return;
                         }
@@ -345,7 +345,7 @@
 
                     if (IsActive("GFUELElise.Combo.R"))
                     {
-                        if (target.LSIsValidTarget(SpiderQ.Range) || (E.LSIsReady() && target.LSIsValidTarget(E.Range)))
+                        if (target.IsValidTarget(SpiderQ.Range) || (E.IsReady() && target.IsValidTarget(E.Range)))
                         {
                             return;
                         }
@@ -355,25 +355,25 @@
                             return;
                         }
 
-                        if (R.LSIsReady() && !target.LSIsValidTarget(SpiderQ.Range) && !SpiderE.LSIsReady())
+                        if (R.IsReady() && !target.IsValidTarget(SpiderQ.Range) && !SpiderE.IsReady())
                         {
                             R.Cast();
                         }
 
-                        if (!SpiderQ.LSIsReady() && !SpiderW.LSIsReady() && R.LSIsReady())
+                        if (!SpiderQ.IsReady() && !SpiderW.IsReady() && R.IsReady())
                         {
                             R.Cast();
                         }
 
-                        if (!SpiderQ.LSIsReady() && !SpiderE.LSIsReady() && !SpiderW.LSIsReady()
-                            || !SpiderQ.LSIsReady() && Q.LSIsReady() && Q.GetDamage(target) > target.Health)
+                        if (!SpiderQ.IsReady() && !SpiderE.IsReady() && !SpiderW.IsReady()
+                            || !SpiderQ.IsReady() && Q.IsReady() && Q.GetDamage(target) > target.Health)
                         {
                             R.Cast();
                         }
                     }
 
-                    if (IsActive("GFUELElise.ComboSpider.E") && Player.LSDistance(target) > SpiderQ.Range
-                        && SpiderE.LSIsReady())
+                    if (IsActive("GFUELElise.ComboSpider.E") && Player.Distance(target) > SpiderQ.Range
+                        && SpiderE.IsReady())
                     {
                         SpiderE.Cast(target);
                     }
@@ -381,11 +381,11 @@
 
                 if (IsActive("GFUELElise.Combo.R"))
                 {
-                    if (!Q.LSIsReady() && !W.LSIsReady() && !R.LSIsReady()
-                        || (Q.LSIsReady() && Q.GetDamage(target) >= target.Health)
-                        || W.LSIsReady() && W.GetDamage(target) >= target.Health)
+                    if (!Q.IsReady() && !W.IsReady() && !R.IsReady()
+                        || (Q.IsReady() && Q.GetDamage(target) >= target.Health)
+                        || W.IsReady() && W.GetDamage(target) >= target.Health)
                     {
-                        if (SpiderQ.LSIsReady() && target.LSIsValidTarget(SpiderQ.Range))
+                        if (SpiderQ.IsReady() && target.IsValidTarget(SpiderQ.Range))
                         {
                             return;
                         }
@@ -415,12 +415,12 @@
 
                 if (!IsSpider)
                 {
-                    if (IsActive("GFUELElise.Harass.Q") && Q.LSIsReady() && target.LSIsValidTarget(Q.Range))
+                    if (IsActive("GFUELElise.Harass.Q") && Q.IsReady() && target.IsValidTarget(Q.Range))
                     {
                         Q.Cast(target);
                     }
 
-                    if (IsActive("GFUELElise.Harass.W") && W.LSIsReady() && target.LSIsValidTarget(W.Range))
+                    if (IsActive("GFUELElise.Harass.W") && W.IsReady() && target.IsValidTarget(W.Range))
                     {
                         var prediction = W.GetPrediction(target);
                         if (prediction.CollisionObjects.Count == 0)
@@ -455,17 +455,17 @@
 
                 if (!IsSpider)
                 {
-                    if (IsActive("GFUELElise.jungleclear.Q") && Q.LSIsReady())
+                    if (IsActive("GFUELElise.jungleclear.Q") && Q.IsReady())
                     {
                         Q.Cast(minion);
                     }
 
-                    if (IsActive("GFUELElise.jungleclear.W") && W.LSIsReady() && minion.LSIsValidTarget(W.Range))
+                    if (IsActive("GFUELElise.jungleclear.W") && W.IsReady() && minion.IsValidTarget(W.Range))
                     {
                         W.Cast(minion.Position);
                     }
 
-                    if (IsActive("GFUELElise.jungleclear.SwitchR") && (!Q.LSIsReady() && !W.LSIsReady())
+                    if (IsActive("GFUELElise.jungleclear.SwitchR") && (!Q.IsReady() && !W.IsReady())
                         || Player.ManaPercent < Menu.Item("GFUELElise.jungleclear.Mana").GetValue<Slider>().Value)
                     {
                         R.Cast();
@@ -474,18 +474,18 @@
 
                 if (IsSpider)
                 {
-                    if (IsActive("GFUELElise.jungleclear.SpiderQ") && SpiderQ.LSIsReady())
+                    if (IsActive("GFUELElise.jungleclear.SpiderQ") && SpiderQ.IsReady())
                     {
                         SpiderQ.Cast(minion);
                     }
 
-                    if (IsActive("GFUELElise.jungleclear.SpiderW") && W.LSIsReady() && minion.LSIsValidTarget(SpiderW.Range))
+                    if (IsActive("GFUELElise.jungleclear.SpiderW") && W.IsReady() && minion.IsValidTarget(SpiderW.Range))
                     {
                         SpiderW.Cast();
                     }
 
-                    if (IsActive("GFUELElise.jungleclear.SwitchR") && R.LSIsReady() && Q.LSIsReady() && !SpiderQ.LSIsReady()
-                        && !SpiderW.LSIsReady())
+                    if (IsActive("GFUELElise.jungleclear.SwitchR") && R.IsReady() && Q.IsReady() && !SpiderQ.IsReady()
+                        && !SpiderW.IsReady())
                     {
                         R.Cast();
                     }
@@ -511,22 +511,22 @@
                 {
                     if (Player.ManaPercent < Menu.Item("GFUELElise.laneclear.Mana").GetValue<Slider>().Value)
                     {
-                        if (IsActive("GFUELElise.laneclear.SwitchR") && R.LSIsReady())
+                        if (IsActive("GFUELElise.laneclear.SwitchR") && R.IsReady())
                         {
                             R.Cast();
                         }
                     }
 
-                    if (IsActive("GFUELElise.laneclear.Q") && Q.LSIsReady())
+                    if (IsActive("GFUELElise.laneclear.Q") && Q.IsReady())
                     {
                         Q.Cast(minion);
                     }
 
-                    if (IsActive("GFUELElise.laneclear.W") && W.LSIsReady() && minion.LSIsValidTarget(W.Range))
+                    if (IsActive("GFUELElise.laneclear.W") && W.IsReady() && minion.IsValidTarget(W.Range))
                     {
                         W.Cast(minion.Position);
                     }
-                    if (IsActive("GFUELElise.laneclear.SwitchR") && (!Q.LSIsReady() && !W.LSIsReady())
+                    if (IsActive("GFUELElise.laneclear.SwitchR") && (!Q.IsReady() && !W.IsReady())
                         || Player.ManaPercent < Menu.Item("GFUELElise.laneclear.Mana").GetValue<Slider>().Value)
                     {
                         R.Cast();
@@ -535,18 +535,18 @@
 
                 if (IsSpider)
                 {
-                    if (IsActive("GFUELElise.laneclear.SpiderQ") && SpiderQ.LSIsReady())
+                    if (IsActive("GFUELElise.laneclear.SpiderQ") && SpiderQ.IsReady())
                     {
                         SpiderQ.Cast(minion);
                     }
 
-                    if (IsActive("GFUELElise.laneclear.SpiderW") && W.LSIsReady() && minion.LSIsValidTarget(SpiderW.Range))
+                    if (IsActive("GFUELElise.laneclear.SpiderW") && W.IsReady() && minion.IsValidTarget(SpiderW.Range))
                     {
                         SpiderW.Cast();
                     }
 
-                    if (IsActive("GFUELElise.laneclear.SwitchR") && R.LSIsReady() && Q.LSIsReady() && !SpiderQ.LSIsReady()
-                        && !SpiderW.LSIsReady())
+                    if (IsActive("GFUELElise.laneclear.SwitchR") && R.IsReady() && Q.IsReady() && !SpiderQ.IsReady()
+                        && !SpiderW.IsReady())
                     {
                         R.Cast();
                     }
@@ -705,25 +705,25 @@
 
             if (!Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float)ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float)ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 damage += Q.GetDamage(enemy);
             }
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 damage += W.GetDamage(enemy);
             }
 
-            if (SpiderQ.LSIsReady())
+            if (SpiderQ.IsReady())
             {
                 damage += SpiderQ.GetDamage(enemy);
             }
 
-            if (SpiderW.LSIsReady())
+            if (SpiderW.IsReady())
             {
                 damage += SpiderW.GetDamage(enemy);
             }
@@ -737,9 +737,9 @@
         {
             if (!IsSpider)
             {
-                if (IsActive("GFUELElise.Misc.Interrupter") && E.LSIsReady())
+                if (IsActive("GFUELElise.Misc.Interrupter") && E.IsReady())
                 {
-                    if (sender.LSIsValidTarget(E.Range))
+                    if (sender.IsValidTarget(E.Range))
                     {
                         E.Cast(sender);
                     }
@@ -859,14 +859,14 @@
             Orbwalk(Game.CursorPos);
 
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
             {
                 return;
             }
 
             Orbwalking.Orbwalk(target ?? null, Game.CursorPos);
 
-            if (!E.LSIsReady() || !target.LSIsValidTarget(E.Range))
+            if (!E.IsReady() || !target.IsValidTarget(E.Range))
             {
                 return;
             }

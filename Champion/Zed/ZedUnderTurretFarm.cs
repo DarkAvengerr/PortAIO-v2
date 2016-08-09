@@ -61,35 +61,35 @@ using EloBuddy; namespace KoreanZed
             {
                 if (targetUnderTurret.IsValid)
                 {
-                    if (ObjectManager.Player.LSDistance(targetUnderTurret)
+                    if (ObjectManager.Player.Distance(targetUnderTurret)
                         < Orbwalking.GetRealAutoAttackRange(targetUnderTurret) + 20F
                         && (targetUnderTurret.Health
-                            < (ObjectManager.Player.LSGetAutoAttackDamage(targetUnderTurret) * 2)
-                            + turrent.LSGetAutoAttackDamage(targetUnderTurret)
+                            < (ObjectManager.Player.GetAutoAttackDamage(targetUnderTurret) * 2)
+                            + turrent.GetAutoAttackDamage(targetUnderTurret)
                             && targetUnderTurret.Health
-                            > turrent.LSGetAutoAttackDamage(targetUnderTurret)
-                            + ObjectManager.Player.LSGetAutoAttackDamage(targetUnderTurret)))
+                            > turrent.GetAutoAttackDamage(targetUnderTurret)
+                            + ObjectManager.Player.GetAutoAttackDamage(targetUnderTurret)))
                     {
                         EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, targetUnderTurret);
                     }
 
-                    if (q.LSIsReady() && q.CanCast(targetUnderTurret)
-                        && ObjectManager.Player.LSDistance(targetUnderTurret)
+                    if (q.IsReady() && q.CanCast(targetUnderTurret)
+                        && ObjectManager.Player.Distance(targetUnderTurret)
                         < Orbwalking.GetRealAutoAttackRange(targetUnderTurret) + 20F
                         && targetUnderTurret.Health
                         < q.GetDamage(targetUnderTurret)
-                        + ObjectManager.Player.LSGetAutoAttackDamage(targetUnderTurret, true))
+                        + ObjectManager.Player.GetAutoAttackDamage(targetUnderTurret, true))
                     {
                         q.Cast(targetUnderTurret);
                         return;
                     }
 
-                    if (e.LSIsReady() && e.CanCast(targetUnderTurret) && !q.LSIsReady()
-                        && ObjectManager.Player.LSDistance(targetUnderTurret)
+                    if (e.IsReady() && e.CanCast(targetUnderTurret) && !q.IsReady()
+                        && ObjectManager.Player.Distance(targetUnderTurret)
                         < Orbwalking.GetRealAutoAttackRange(targetUnderTurret) + 20F
                         && targetUnderTurret.Health
                         < e.GetDamage(targetUnderTurret)
-                        + ObjectManager.Player.LSGetAutoAttackDamage(targetUnderTurret, true))
+                        + ObjectManager.Player.GetAutoAttackDamage(targetUnderTurret, true))
                     {
                         e.Cast(targetUnderTurret);
                     }

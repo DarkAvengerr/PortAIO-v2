@@ -99,26 +99,26 @@ namespace UnderratedAIO.Champions
             }
             if (config.Item("autoq", true).GetValue<bool>())
             {
-                if (Q.CanCast(target) && !target.LSIsDashing() &&
-                    (MarkOfStorm(target) > 1 || (MarkOfStorm(target) > 0 && player.LSDistance(target) < W.Range)))
+                if (Q.CanCast(target) && !target.IsDashing() &&
+                    (MarkOfStorm(target) > 1 || (MarkOfStorm(target) > 0 && player.Distance(target) < W.Range)))
                 {
                     Q.Cast(target);
                 }
             }
-            if (config.Item("autow", true).GetValue<bool>() && W.LSIsReady() && MarkOfStorm(target) > 1 &&
+            if (config.Item("autow", true).GetValue<bool>() && W.IsReady() && MarkOfStorm(target) > 1 &&
                 !player.HasBuff("KennenShurikenStorm"))
             {
-                if (player.LSDistance(target) < W.Range)
+                if (player.Distance(target) < W.Range)
                 {
                     W.Cast();
                 }
             }
-            if (config.Item("KenAutoQ", true).GetValue<KeyBind>().Active && Q.LSIsReady() &&
+            if (config.Item("KenAutoQ", true).GetValue<KeyBind>().Active && Q.IsReady() &&
                 config.Item("KenminmanaaQ", true).GetValue<Slider>().Value < player.ManaPercent &&
                 orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && Orbwalking.CanMove(100) &&
-                !player.LSUnderTurret(true))
+                !player.UnderTurret(true))
             {
-                if (target != null && Q.CanCast(target) && target.LSIsValidTarget())
+                if (target != null && Q.CanCast(target) && target.IsValidTarget())
                 {
                     Q.CastIfHitchanceEquals(
                         target, CombatHelper.GetHitChance(config.Item("qHit", true).GetValue<Slider>().Value));
@@ -137,8 +137,8 @@ namespace UnderratedAIO.Champions
                     .FirstOrDefault(
                         m =>
                             m.HasBuff("kennenmarkofstorm") && m.Health < W.GetDamage(m, 1) &&
-                            player.LSDistance(m) < W.Range);
-            if (config.Item("usewLH", true).GetValue<bool>() && W.LSIsReady() && targetW != null)
+                            player.Distance(m) < W.Range);
+            if (config.Item("usewLH", true).GetValue<bool>() && W.IsReady() && targetW != null)
             {
                 W.Cast();
             }
@@ -151,21 +151,21 @@ namespace UnderratedAIO.Champions
                     .Where(m => m.HasBuff("kennenmarkofstorm"));
             var targetE =
                 MinionManager.GetMinions(W.Range, MinionTypes.All, MinionTeam.NotAlly)
-                    .Where(m => m.Health > 5 && !m.IsDead && !m.HasBuff("kennenmarkofstorm") && !m.LSUnderTurret(true))
-                    .OrderBy(m => player.LSDistance(m));
-            if (config.Item("useeClear", true).GetValue<bool>() && E.LSIsReady() &&
-                ((targetE.FirstOrDefault() != null && player.Position.LSCountEnemiesInRange(1200f) < 1 &&
+                    .Where(m => m.Health > 5 && !m.IsDead && !m.HasBuff("kennenmarkofstorm") && !m.UnderTurret(true))
+                    .OrderBy(m => player.Distance(m));
+            if (config.Item("useeClear", true).GetValue<bool>() && E.IsReady() &&
+                ((targetE.FirstOrDefault() != null && player.Position.CountEnemiesInRange(1200f) < 1 &&
                   !player.HasBuff("KennenLightningRush") && targetE.Count() > 1) ||
                  (player.HasBuff("KennenLightningRush") && targetE.FirstOrDefault() == null)))
             {
                 E.Cast();
                 return;
             }
-            if (config.Item("useqClear", true).GetValue<bool>() && Q.LSIsReady())
+            if (config.Item("useqClear", true).GetValue<bool>() && Q.IsReady())
             {
                 LastHitQ();
             }
-            if (W.LSIsReady() && targetW.Count() >= config.Item("minw", true).GetValue<Slider>().Value &&
+            if (W.IsReady() && targetW.Count() >= config.Item("minw", true).GetValue<Slider>().Value &&
                 !player.HasBuff("KennenLightningRush"))
             {
                 W.Cast();
@@ -195,7 +195,7 @@ namespace UnderratedAIO.Champions
                         m =>
                             m.Health > 5 && m.IsEnemy && m.Health < Q.GetDamage(m) && Q.CanCast(m) &&
                             HealthPrediction.GetHealthPrediction(
-                                m, (int) ((player.LSDistance(m) / Q.Speed * 1000) + Q.Delay)) > 0);
+                                m, (int) ((player.Distance(m) / Q.Speed * 1000) + Q.Delay)) > 0);
             if (targetQ.Any() && LastAttackedminiMinion != null)
             {
                 foreach (var target in
@@ -205,17 +205,17 @@ namespace UnderratedAIO.Champions
                             (m.NetworkId == LastAttackedminiMinion.NetworkId &&
                              Utils.GameTimeTickCount - LastAttackedminiMinionTime > 700)))
                 {
-                    if (target.LSDistance(player) < Orbwalking.GetRealAutoAttackRange(target) && !Orbwalking.CanAttack() &&
+                    if (target.Distance(player) < Orbwalking.GetRealAutoAttackRange(target) && !Orbwalking.CanAttack() &&
                         Orbwalking.CanMove(100))
                     {
-                        if (Q.Cast(target).LSIsCasted())
+                        if (Q.Cast(target).IsCasted())
                         {
                             Orbwalking.Orbwalker.AddToBlackList(target.NetworkId);
                         }
                     }
-                    else if (target.LSDistance(player) > Orbwalking.GetRealAutoAttackRange(target))
+                    else if (target.Distance(player) > Orbwalking.GetRealAutoAttackRange(target))
                     {
-                        if (Q.Cast(target).LSIsCasted())
+                        if (Q.Cast(target).IsCasted())
                         {
                             Orbwalking.Orbwalker.AddToBlackList(target.NetworkId);
                         }
@@ -226,7 +226,7 @@ namespace UnderratedAIO.Champions
 
         private void Harass()
         {
-            if (config.Item("useqLH", true).GetValue<bool>() && Q.LSIsReady())
+            if (config.Item("useqLH", true).GetValue<bool>() && Q.IsReady())
             {
                 LastHitQ();
             }
@@ -236,11 +236,11 @@ namespace UnderratedAIO.Champions
                 return;
             }
             if (config.Item("useqLC", true).GetValue<bool>() && Q.CanCast(target) && Orbwalking.CanMove(100) &&
-                !target.LSIsDashing())
+                !target.IsDashing())
             {
                 Q.Cast(target);
             }
-            if (config.Item("usewLC", true).GetValue<bool>() && W.LSIsReady() && W.Range < player.LSDistance(target) &&
+            if (config.Item("usewLC", true).GetValue<bool>() && W.IsReady() && W.Range < player.Distance(target) &&
                 target.HasBuff("kennenmarkofstorm"))
             {
                 W.Cast();
@@ -259,22 +259,22 @@ namespace UnderratedAIO.Champions
                 ItemHandler.UseItems(target, config, ComboDamage(target));
             }
             if (config.Item("usee", true).GetValue<bool>() && player.HasBuff("KennenLightningRush") &&
-                player.Health > target.Health && !target.LSUnderTurret(true) && target.LSDistance(Game.CursorPos) < 250f)
+                player.Health > target.Health && !target.UnderTurret(true) && target.Distance(Game.CursorPos) < 250f)
             {
                 orbwalker.SetMovement(false);
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, target);
             }
-            bool hasIgnite = player.Spellbook.CanUseSpell(player.LSGetSpellSlot("SummonerDot")) == SpellState.Ready;
+            bool hasIgnite = player.Spellbook.CanUseSpell(player.GetSpellSlot("SummonerDot")) == SpellState.Ready;
             var combodamage = ComboDamage(target);
             var ignitedmg = (float) player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
             if (config.Item("useIgnite").GetValue<bool>() && ignitedmg > target.Health && hasIgnite &&
-                !Q.CanCast(target) && !W.LSIsReady())
+                !Q.CanCast(target) && !W.IsReady())
             {
-                player.Spellbook.CastSpell(player.LSGetSpellSlot("SummonerDot"), target);
+                player.Spellbook.CastSpell(player.GetSpellSlot("SummonerDot"), target);
             }
 
             if (config.Item("useq", true).GetValue<bool>() && Q.CanCast(target) && Orbwalking.CanMove(100) &&
-                !target.LSIsDashing())
+                !target.IsDashing())
             {
                 if (Program.IsSPrediction)
                 {
@@ -285,23 +285,23 @@ namespace UnderratedAIO.Champions
                     Q.CastIfHitchanceEquals(target, HitChance.High);
                 }
             }
-            if (config.Item("usew", true).GetValue<bool>() && W.LSIsReady())
+            if (config.Item("usew", true).GetValue<bool>() && W.IsReady())
             {
                 if (player.HasBuff("KennenShurikenStorm"))
                 {
-                    if (HeroManager.Enemies.Count(e => e.LSDistance(player) < R.Range && MarkOfStorm(e) > 0) ==
-                        player.LSCountEnemiesInRange(R.Range))
+                    if (HeroManager.Enemies.Count(e => e.Distance(player) < R.Range && MarkOfStorm(e) > 0) ==
+                        player.CountEnemiesInRange(R.Range))
                     {
                         W.Cast();
                     }
                 }
-                else if (W.Range > player.LSDistance(target) && MarkOfStorm(target) > 0)
+                else if (W.Range > player.Distance(target) && MarkOfStorm(target) > 0)
                 {
                     W.Cast();
                 }
             }
-            if (config.Item("usee", true).GetValue<bool>() && !target.LSUnderTurret(true) && E.LSIsReady() &&
-                (player.LSDistance(target) < 80 ||
+            if (config.Item("usee", true).GetValue<bool>() && !target.UnderTurret(true) && E.IsReady() &&
+                (player.Distance(target) < 80 ||
                  (!player.HasBuff("KennenLightningRush") && !Q.CanCast(target) &&
                   config.Item("useemin", true).GetValue<Slider>().Value < player.Health / player.MaxHealth * 100 &&
                   MarkOfStorm(target) > 0 &&
@@ -310,17 +310,17 @@ namespace UnderratedAIO.Champions
                 E.Cast();
             }
 
-            if (R.LSIsReady() && !player.HasBuffOfType(BuffType.Snare) &&
+            if (R.IsReady() && !player.HasBuffOfType(BuffType.Snare) &&
                 (config.Item("user", true).GetValue<Slider>().Value <=
-                 player.LSCountEnemiesInRange(config.Item("userrange", true).GetValue<Slider>().Value) ||
+                 player.CountEnemiesInRange(config.Item("userrange", true).GetValue<Slider>().Value) ||
                  (config.Item("usertarget", true).GetValue<bool>() &&
-                  player.LSCountEnemiesInRange(config.Item("userrange", true).GetValue<Slider>().Value) == 1 &&
-                  combodamage + player.LSGetAutoAttackDamage(target) * 3 > target.Health && !Q.CanCast(target) &&
-                  player.LSDistance(target) < config.Item("userrange", true).GetValue<Slider>().Value)) ||
+                  player.CountEnemiesInRange(config.Item("userrange", true).GetValue<Slider>().Value) == 1 &&
+                  combodamage + player.GetAutoAttackDamage(target) * 3 > target.Health && !Q.CanCast(target) &&
+                  player.Distance(target) < config.Item("userrange", true).GetValue<Slider>().Value)) ||
                 (config.Item("userLow", true).GetValue<Slider>().Value <=
                  HeroManager.Enemies.Count(
                      e =>
-                         e.LSIsValidTarget(config.Item("userrange", true).GetValue<Slider>().Value) &&
+                         e.IsValidTarget(config.Item("userrange", true).GetValue<Slider>().Value) &&
                          e.HealthPercent < 75)))
             {
                 R.Cast();
@@ -348,18 +348,18 @@ namespace UnderratedAIO.Champions
         private float ComboDamage(AIHeroClient hero)
         {
             double damage = 0;
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.R) * 2;
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.R) * 2;
             }
             damage += ItemHandler.GetItemsDamage(hero);
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.Q);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.Q);
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.W, 1);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.W, 1);
             }
             if ((Items.HasItem(ItemHandler.Bft.Id) && Items.CanUseItem(ItemHandler.Bft.Id)) ||
                 (Items.HasItem(ItemHandler.Dfg.Id) && Items.CanUseItem(ItemHandler.Dfg.Id)))
@@ -367,7 +367,7 @@ namespace UnderratedAIO.Champions
                 damage = (float) (damage * 1.2);
             }
             var ignitedmg = player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
-            if (player.Spellbook.CanUseSpell(player.LSGetSpellSlot("summonerdot")) == SpellState.Ready &&
+            if (player.Spellbook.CanUseSpell(player.GetSpellSlot("summonerdot")) == SpellState.Ready &&
                 hero.Health < damage + ignitedmg)
             {
                 damage += ignitedmg;

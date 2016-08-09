@@ -77,9 +77,9 @@ using EloBuddy;
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                 GravesCombo();
 
-            if (MainMenu.Item("autosmoke").GetValue<bool>() && Smokescreen.LSIsReady())
+            if (MainMenu.Item("autosmoke").GetValue<bool>() && Smokescreen.IsReady())
             {
-                foreach (var hero in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Smokescreen.Range)))
+                foreach (var hero in HeroManager.Enemies.Where(x => x.IsValidTarget(Smokescreen.Range)))
                 {
                     if (!Me.Spellbook.IsAutoAttacking && Utils.GameTimeTickCount - LE > 1100)
                         Smokescreen.CastIfHitchanceEquals(hero, HitChance.Immobile);
@@ -94,10 +94,10 @@ using EloBuddy;
                     LM = Utils.GameTimeTickCount;
                 }
 
-                if (Smokescreen.LSIsReady() && Target.LSIsValidTarget(Smokescreen.Range))
+                if (Smokescreen.IsReady() && Target.IsValidTarget(Smokescreen.Range))
                     Smokescreen.CastIfHitchanceEquals(Target, HitChance.Medium);
 
-                else if (Quickdraw.LSIsReady())
+                else if (Quickdraw.IsReady())
                 {
                     if (Utils.GameTimeTickCount - LE > 500)
                         Quickdraw.Cast(Game.CursorPos);
@@ -109,12 +109,12 @@ using EloBuddy;
                 if (!Me.Spellbook.IsCastingSpell)
                      Orbwalking.Orbwalk(Target, Game.CursorPos);
 
-                if (Target.LSIsValidTarget(Chargeshot.Range))
+                if (Target.IsValidTarget(Chargeshot.Range))
                 {
                     var rpred = Prediction.GetPrediction(Target, 0.25f).UnitPosition;
-                    if (rpred.LSDistance(Me.ServerPosition) <= Quickdraw.Range + 200)
+                    if (rpred.Distance(Me.ServerPosition) <= Quickdraw.Range + 200)
                     {
-                        if (Chargeshot.LSIsReady() && Quickdraw.LSIsReady() && Buckshot.LSIsReady())
+                        if (Chargeshot.IsReady() && Quickdraw.IsReady() && Buckshot.IsReady())
                         {
                             Chargeshot.CastIfHitchanceEquals(Target, HitChance.High);
                         }
@@ -122,7 +122,7 @@ using EloBuddy;
                 }
             }
 
-            if (Target.LSIsValidTarget() && Chargeshot.LSIsReady())
+            if (Target.IsValidTarget() && Chargeshot.IsReady())
             {
                 if (MainMenu.Item("shootr").GetValue<KeyBind>().Active)
                     Chargeshot.CastIfHitchanceEquals(Target, HitChance.VeryHigh);
@@ -134,16 +134,16 @@ using EloBuddy;
                     {
                         if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                         {
-                            if (Target.LSCountAlliesInRange(750) >= 2)
+                            if (Target.CountAlliesInRange(750) >= 2)
                                 Chargeshot.CastIfHitchanceEquals(Target, HitChance.High);
                         }
                     }
                 }
             }
 
-            if (Chargeshot.LSIsReady())
+            if (Chargeshot.IsReady())
             {
-                foreach (var hero in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Chargeshot.Range)))
+                foreach (var hero in HeroManager.Enemies.Where(x => x.IsValidTarget(Chargeshot.Range)))
                 {
                     if (CanR(hero) && GetRDamage(hero) >= hero.Health && MainMenu.Item("secure").GetValue<bool>())
                     {
@@ -157,15 +157,15 @@ using EloBuddy;
         static void GravesReverseGapclose(ActiveGapcloser gapcloser)
         {
             var attacker = gapcloser.Sender;
-            if (attacker.LSIsValidTarget())
+            if (attacker.IsValidTarget())
             {
-                if (Buckshot.LSIsReady() && attacker.LSDistance(Me.ServerPosition) <= 475)
+                if (Buckshot.IsReady() && attacker.Distance(Me.ServerPosition) <= 475)
                     Buckshot.Cast(attacker);
 
-                if (Smokescreen.LSIsReady() && MainMenu.Item("usewongap").GetValue<bool>())
+                if (Smokescreen.IsReady() && MainMenu.Item("usewongap").GetValue<bool>())
                 {
-                    if (attacker.LSDistance(Me.ServerPosition) < 420 &&
-                        attacker.LSDistance(Me.ServerPosition) > 300)
+                    if (attacker.Distance(Me.ServerPosition) < 420 &&
+                        attacker.Distance(Me.ServerPosition) > 300)
                     {
                         Smokescreen.Cast(attacker);
                     }
@@ -189,7 +189,7 @@ using EloBuddy;
             {
                 if (hero.Mana/hero.MaxMana*100 > MainMenu.Item("harasspct").GetValue<Slider>().Value)
                 {
-                    if (hero.LSIsValidTarget() && Buckshot.LSIsReady())
+                    if (hero.IsValidTarget() && Buckshot.IsReady())
                     {
                         if (MainMenu.Item("harassq").GetValue<bool>())
                             Buckshot.CastIfHitchanceEquals(hero, HitChance.High);
@@ -199,18 +199,18 @@ using EloBuddy;
 
             if (MainMenu.Item("allin").GetValue<KeyBind>().Active)
             {
-                if (hero.LSIsValidTarget() && Buckshot.LSIsReady())
+                if (hero.IsValidTarget() && Buckshot.IsReady())
                     Buckshot.CastIfHitchanceEquals(hero, HitChance.High);
             }
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if (hero.LSIsValidTarget() && Buckshot.LSIsReady())
+                if (hero.IsValidTarget() && Buckshot.IsReady())
                     Buckshot.CastIfHitchanceEquals(hero, HitChance.High);
 
                 if (MainMenu.Item("useecombo").GetValue<bool>())
                 {
-                    if (hero.LSIsValidTarget() && !Buckshot.LSIsReady())
+                    if (hero.IsValidTarget() && !Buckshot.IsReady())
                         if (MainMenu.Item("useeafter").GetValue<bool>())
                             CastE(hero);
                 }
@@ -231,7 +231,7 @@ using EloBuddy;
             {
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                 {
-                    if (Target.LSIsValidTarget(Quickdraw.Range + 450))
+                    if (Target.IsValidTarget(Quickdraw.Range + 450))
                     {
                         LeagueSharp.Common.Utility.DelayAction.Add(Game.Ping + 250, () => CastE(Target));
                     }
@@ -242,7 +242,7 @@ using EloBuddy;
             {
                 if (MainMenu.Item("fleekey").GetValue<KeyBind>().Active)
                 {
-                    if (Target.LSIsValidTarget(Quickdraw.Range + 450))
+                    if (Target.IsValidTarget(Quickdraw.Range + 450))
                     {
                         LeagueSharp.Common.Utility.DelayAction.Add(Game.Ping + 250, () => Quickdraw.Cast(Game.CursorPos));
                     }
@@ -250,7 +250,7 @@ using EloBuddy;
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                 {
-                    if (Target.LSIsValidTarget(Quickdraw.Range + 450) && !Quickdraw.LSIsReady())
+                    if (Target.IsValidTarget(Quickdraw.Range + 450) && !Quickdraw.IsReady())
                     {
                         LeagueSharp.Common.Utility.DelayAction.Add(Game.Ping + 250, () => CastE(Target));
                     }
@@ -259,7 +259,7 @@ using EloBuddy;
 
             if (sender.IsEnemy && sender.Type == Me.Type)
             {
-                if (sender.LSDistance(Me.ServerPosition) <= Smokescreen.Range)
+                if (sender.Distance(Me.ServerPosition) <= Smokescreen.Range)
                 {
                     if ((args.SData.CastFrame / 30) * 1000 > 500)
                     {
@@ -276,13 +276,13 @@ using EloBuddy;
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo ||
                     MainMenu.Item("allin").GetValue<KeyBind>().Active)
                 {
-                    if (Target.LSDistance(Me.ServerPosition) <= Chargeshot.Range)
+                    if (Target.Distance(Me.ServerPosition) <= Chargeshot.Range)
                     {
                         LeagueSharp.Common.Utility.DelayAction.Add(Game.Ping + 250, () =>
                         {
-                            if (Target.LSDistance(Me.ServerPosition) > Quickdraw.Range - 55f)
+                            if (Target.Distance(Me.ServerPosition) > Quickdraw.Range - 55f)
                             {
-                                if (Target.LSCountEnemiesInRange(Me.AttackRange) <= 2 && !Target.ServerPosition.LSUnderTurret(true))
+                                if (Target.CountEnemiesInRange(Me.AttackRange) <= 2 && !Target.ServerPosition.UnderTurret(true))
                                 {
                                     Quickdraw.Cast(Target.ServerPosition);
                                 }
@@ -306,7 +306,7 @@ using EloBuddy;
             if (!MainMenu.Item("drawfill").GetValue<bool>())
                 return;
 
-            foreach (var enemy in HeroManager.Enemies.Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+            foreach (var enemy in HeroManager.Enemies.Where(ene => ene.IsValidTarget() && !ene.IsZombie))
             {
                 HPi.unit = enemy;
                 HPi.drawDmg(GetRDamage(enemy), new ColorBGRA(255, 255, 0, 90));
@@ -334,12 +334,12 @@ using EloBuddy;
         #region Combo
         internal static void GravesCombo()
         {
-            if (Target.LSIsValidTarget(Chargeshot.Range))
+            if (Target.IsValidTarget(Chargeshot.Range))
             {
                 var rpred = Prediction.GetPrediction(Target, 0.25f).UnitPosition;
-                if (rpred.LSDistance(Me.ServerPosition) <= Quickdraw.Range * 2)
+                if (rpred.Distance(Me.ServerPosition) <= Quickdraw.Range * 2)
                 {
-                    if (Target.LSCountAlliesInRange(400) >= 2)
+                    if (Target.CountAlliesInRange(400) >= 2)
                     {
                         if (CanR(Target) && GetComboDamage(Target) >= Target.Health)
                             Chargeshot.CastIfHitchanceEquals(Target, HitChance.High);
@@ -348,12 +348,12 @@ using EloBuddy;
             }
 
             var qtarget = TargetSelector.GetTarget(Buckshot.Range, TargetSelector.DamageType.Physical);    
-            if (qtarget.LSIsValidTarget())
+            if (qtarget.IsValidTarget())
             {
                 var predpros = Prediction.GetPrediction(qtarget, 0.25f).UnitPosition;
-                if (predpros.LSDistance(Me.ServerPosition) > 535)
+                if (predpros.Distance(Me.ServerPosition) > 535)
                 {
-                    if (qtarget.LSDistance(Me.ServerPosition) <= 675)
+                    if (qtarget.Distance(Me.ServerPosition) <= 675)
                     {
                         if (Utils.GameTimeTickCount - LR < 1500)
                         {
@@ -364,15 +364,15 @@ using EloBuddy;
             }
 
             var wtarget = TargetSelector.GetTarget(Smokescreen.Range, TargetSelector.DamageType.Magical);
-            if (wtarget.LSIsValidTarget() && wtarget.LSDistance(Me.ServerPosition) <= Smokescreen.Range)
+            if (wtarget.IsValidTarget() && wtarget.Distance(Me.ServerPosition) <= Smokescreen.Range)
             {
                 if (MainMenu.Item("usew").GetValue<bool>())
                 {
-                    if (Smokescreen.LSIsReady() && Utils.GameTimeTickCount - LR >= 1200)
+                    if (Smokescreen.IsReady() && Utils.GameTimeTickCount - LR >= 1200)
                     {
-                        if (Me.LSGetAutoAttackDamage(qtarget)*3 < qtarget.Health)
+                        if (Me.GetAutoAttackDamage(qtarget)*3 < qtarget.Health)
                         {
-                            if (!Quickdraw.LSIsReady() && !Buckshot.LSIsReady() && !Me.Spellbook.IsAutoAttacking)
+                            if (!Quickdraw.IsReady() && !Buckshot.IsReady() && !Me.Spellbook.IsAutoAttacking)
                             {
                                 if (Utils.GameTimeTickCount - LE >= 1100)
                                 {
@@ -384,13 +384,13 @@ using EloBuddy;
                 }
             }
 
-            if (qtarget.LSIsValidTarget() && qtarget.LSDistance(Me.ServerPosition) > 535)
+            if (qtarget.IsValidTarget() && qtarget.Distance(Me.ServerPosition) > 535)
             {
-                if (qtarget.LSDistance(Me.ServerPosition) <= 535 + Quickdraw.Range)
+                if (qtarget.Distance(Me.ServerPosition) <= 535 + Quickdraw.Range)
                 {
-                    if (Quickdraw.LSIsReady() && Utils.GameTimeTickCount - LR >= 1200)
+                    if (Quickdraw.IsReady() && Utils.GameTimeTickCount - LR >= 1200)
                     {
-                        if (Me.LSGetAutoAttackDamage(qtarget)*3 >= qtarget.Health)
+                        if (Me.GetAutoAttackDamage(qtarget)*3 >= qtarget.Health)
                         {
                             CastE(qtarget);
                         }
@@ -408,13 +408,13 @@ using EloBuddy;
                 return 0f;
 
             // impact physical damage
-            var irdmg = Chargeshot.LSIsReady() && Proj2(target.ServerPosition, Chargeshot.Width, Chargeshot.Range) <= 1
+            var irdmg = Chargeshot.IsReady() && Proj2(target.ServerPosition, Chargeshot.Width, Chargeshot.Range) <= 1
                 ? (float) Me.CalcDamage(target, Damage.DamageType.Physical,
                     new double[] { 250, 400, 550 }[Chargeshot.Level - 1] + 1.5 * Me.FlatPhysicalDamageMod)
                 : 0;
 
             // explosion damage
-            var erdmg = Chargeshot.LSIsReady() && Proj2(target.ServerPosition, Chargeshot.Width, Chargeshot.Range) > 1
+            var erdmg = Chargeshot.IsReady() && Proj2(target.ServerPosition, Chargeshot.Width, Chargeshot.Range) > 1
                 ? (float) Me.CalcDamage(target, Damage.DamageType.Physical,
                     new double[] { 200, 320, 440 }[Chargeshot.Level - 1] + 1.2 * Me.FlatPhysicalDamageMod)
                 : 0;
@@ -427,42 +427,42 @@ using EloBuddy;
             if (target == null)
                 return 0f;
 
-            var edmg = Quickdraw.LSIsReady() ? (float) (Me.LSGetAutoAttackDamage(target) * 3) : 0;
+            var edmg = Quickdraw.IsReady() ? (float) (Me.GetAutoAttackDamage(target) * 3) : 0;
 
             // buckshot damage
-            var qdmg = Buckshot.LSIsReady() ? (float) (Me.LSGetSpellDamage(target, SpellSlot.Q)) : 0;
+            var qdmg = Buckshot.IsReady() ? (float) (Me.GetSpellDamage(target, SpellSlot.Q)) : 0;
 
             // smokescreen damage
-            var wdmg = Smokescreen.LSIsReady() ? (float) (Me.LSGetSpellDamage(target, SpellSlot.W)) : 0;
+            var wdmg = Smokescreen.IsReady() ? (float) (Me.GetSpellDamage(target, SpellSlot.W)) : 0;
 
             // impact physical damage
-            var irdmg = Chargeshot.LSIsReady() && Proj2(target.ServerPosition, Chargeshot.Width, Chargeshot.Range) <= 1
+            var irdmg = Chargeshot.IsReady() && Proj2(target.ServerPosition, Chargeshot.Width, Chargeshot.Range) <= 1
                 ? (float) Me.CalcDamage(target, Damage.DamageType.Physical,
                     new double[] { 250, 400, 550 }[Chargeshot.Level - 1] + 1.5 * Me.FlatPhysicalDamageMod)
                 : 0;
                 
             // explosion damage
-            var erdmg = Chargeshot.LSIsReady() && Proj2(target.ServerPosition, Chargeshot.Width, Chargeshot.Range) > 1
+            var erdmg = Chargeshot.IsReady() && Proj2(target.ServerPosition, Chargeshot.Width, Chargeshot.Range) > 1
                 ? (float) Me.CalcDamage(target, Damage.DamageType.Physical,
                     new double[] { 200, 320, 440 }[Chargeshot.Level - 1] + 1.2 * Me.FlatPhysicalDamageMod)
                 : 0;
 
-            return (float) (qdmg + edmg + wdmg + irdmg + erdmg + (Me.LSGetAutoAttackDamage(target, true) * 2));
+            return (float) (qdmg + edmg + wdmg + irdmg + erdmg + (Me.GetAutoAttackDamage(target, true) * 2));
         }
 
         // Counts the number of enemy objects in path of player and the spell.
         internal static int Proj1(Vector3 endpos, float width, float range, bool minion = false)
         {
-            var end = endpos.LSTo2D();
-            var start = Me.ServerPosition.LSTo2D();
-            var direction = (end - start).LSNormalized();
+            var end = endpos.To2D();
+            var start = Me.ServerPosition.To2D();
+            var direction = (end - start).Normalized();
             var endposition = start + direction * range;
 
             return (from unit in ObjectManager.Get<Obj_AI_Base>().Where(b => b.Team != Me.Team)
-                where Me.ServerPosition.LSDistance(unit.ServerPosition) <= range
+                where Me.ServerPosition.Distance(unit.ServerPosition) <= range
                 where unit is AIHeroClient || unit is Obj_AI_Minion && minion
-                let proj = unit.ServerPosition.LSTo2D().LSProjectOn(start, endposition)
-                let projdist = unit.LSDistance(proj.SegmentPoint)
+                let proj = unit.ServerPosition.To2D().ProjectOn(start, endposition)
+                let projdist = unit.Distance(proj.SegmentPoint)
                 where unit.BoundingRadius + width > projdist
                 select unit).Count();
         }
@@ -470,16 +470,16 @@ using EloBuddy;
         // Counts the number of enemy objects in front of the player from the local player.
         internal static int Proj2(Vector3 endpos, float width, float range, bool minion = false)
         {
-            var end = endpos.LSTo2D();
-            var start = Me.ServerPosition.LSTo2D();
-            var direction = (end - start).LSNormalized();
-            var endposition = start + direction * start.LSDistance(endpos);
+            var end = endpos.To2D();
+            var start = Me.ServerPosition.To2D();
+            var direction = (end - start).Normalized();
+            var endposition = start + direction * start.Distance(endpos);
 
             return (from unit in ObjectManager.Get<Obj_AI_Base>().Where(b => b.Team != Me.Team)
-                    where Me.ServerPosition.LSDistance(unit.ServerPosition) <= range
+                    where Me.ServerPosition.Distance(unit.ServerPosition) <= range
                     where unit is AIHeroClient || unit is Obj_AI_Minion && minion
-                    let proj = unit.ServerPosition.LSTo2D().LSProjectOn(start, endposition)
-                    let projdist = unit.LSDistance(proj.SegmentPoint)
+                    let proj = unit.ServerPosition.To2D().ProjectOn(start, endposition)
+                    let projdist = unit.Distance(proj.SegmentPoint)
                     where unit.BoundingRadius + width > projdist
                     select unit).Count();
         }
@@ -489,7 +489,7 @@ using EloBuddy;
         #region E Logic
         internal static void CastE(Obj_AI_Base target)
         {
-            if (!MainMenu.Item("useecombo").GetValue<bool>() || !Quickdraw.LSIsReady())
+            if (!MainMenu.Item("useecombo").GetValue<bool>() || !Quickdraw.IsReady())
             {
                 return;
             }
@@ -505,25 +505,25 @@ using EloBuddy;
                 return;
             }
 
-            if (Me.LSGetAutoAttackDamage(target, true) * 2 >= target.Health)
+            if (Me.GetAutoAttackDamage(target, true) * 2 >= target.Health)
             {
                 Quickdraw.Cast(target.ServerPosition);
                 return;
             }
 
             var range = Orbwalking.GetRealAutoAttackRange(target);
-            var path = Geometry.LSCircleCircleIntersection(Me.ServerPosition.LSTo2D(),
-                Prediction.GetPrediction(target, 0.25f).UnitPosition.LSTo2D(), Quickdraw.Range, range);
+            var path = Geometry.CircleCircleIntersection(Me.ServerPosition.To2D(),
+                Prediction.GetPrediction(target, 0.25f).UnitPosition.To2D(), Quickdraw.Range, range);
 
             if (path.Count() > 0)
             {
-                var epos = path.MinOrDefault(x => x.LSDistance(Game.CursorPos));
-                if (epos.To3D().LSUnderTurret(true) || epos.To3D().LSIsWall())
+                var epos = path.MinOrDefault(x => x.Distance(Game.CursorPos));
+                if (epos.To3D().UnderTurret(true) || epos.To3D().IsWall())
                 {
                     return;
                 }
 
-                if (epos.To3D().LSCountEnemiesInRange(Quickdraw.Range - 100) > 0)
+                if (epos.To3D().CountEnemiesInRange(Quickdraw.Range - 100) > 0)
                 {
                     return;
                 }
@@ -534,17 +534,17 @@ using EloBuddy;
 
             if (path.Count() == 0)
             {
-                if (Buckshot.LSIsReady() && target.LSDistance(Me.ServerPosition) <= 475)
+                if (Buckshot.IsReady() && target.Distance(Me.ServerPosition) <= 475)
                     Buckshot.CastIfHitchanceEquals(target, HitChance.High);
 
-                var epos = Me.ServerPosition.LSExtend(target.ServerPosition, -Quickdraw.Range);
-                if (epos.LSUnderTurret(true) || epos.LSIsWall())
+                var epos = Me.ServerPosition.Extend(target.ServerPosition, -Quickdraw.Range);
+                if (epos.UnderTurret(true) || epos.IsWall())
                 {
                     return;
                 }
 
                 // no intersection or target to close
-                Quickdraw.Cast(Me.ServerPosition.LSExtend(target.ServerPosition, -Quickdraw.Range));
+                Quickdraw.Cast(Me.ServerPosition.Extend(target.ServerPosition, -Quickdraw.Range));
             }
         }
 
@@ -554,7 +554,7 @@ using EloBuddy;
 
         internal static bool CanR(AIHeroClient unit)
         {
-            if (Me.HealthPercent <= 35 && unit.LSDistance(Me.ServerPosition) <= Me.AttackRange + 65)
+            if (Me.HealthPercent <= 35 && unit.Distance(Me.ServerPosition) <= Me.AttackRange + 65)
             {
                 return true;
             }
@@ -564,26 +564,26 @@ using EloBuddy;
                 return false;
             }
 
-            if (unit.LSCountAlliesInRange(400) >= 2 &&
-                Me.LSGetAutoAttackDamage(unit, true) * 6 >= unit.Health)
+            if (unit.CountAlliesInRange(400) >= 2 &&
+                Me.GetAutoAttackDamage(unit, true) * 6 >= unit.Health)
             {
                 return false;
             }
 
             if (Orbwalking.InAutoAttackRange(unit) && 
-                Me.LSGetAutoAttackDamage(unit, true) * 3 >= unit.Health)
+                Me.GetAutoAttackDamage(unit, true) * 3 >= unit.Health)
             {
                 return false;
             }
 
-            if (Buckshot.LSIsReady() && unit.LSDistance(Me.ServerPosition) <= Buckshot.Range && 
+            if (Buckshot.IsReady() && unit.Distance(Me.ServerPosition) <= Buckshot.Range && 
                 Buckshot.GetDamage(unit) >= unit.Health)
             {
                 return false;
             }
 
-            if (Quickdraw.LSIsReady() && unit.LSDistance(Me.ServerPosition) <= Quickdraw.Range + 25 &&
-                Me.LSGetAutoAttackDamage(unit, true) * 3 >= unit.Health)
+            if (Quickdraw.IsReady() && unit.Distance(Me.ServerPosition) <= Quickdraw.Range + 25 &&
+                Me.GetAutoAttackDamage(unit, true) * 3 >= unit.Health)
             {
                 return false;
             }

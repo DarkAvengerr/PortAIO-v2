@@ -21,12 +21,12 @@ using EloBuddy; namespace Activator.Summoners
                 if (!Parent.Item(Parent.Name + "useon" + hero.Player.NetworkId).GetValue<bool>())
                     continue;
 
-                if (hero.Player.LSDistance(Player.ServerPosition) <= Range)
+                if (hero.Player.Distance(Player.ServerPosition) <= Range)
                 {
                     if (hero.Player.Health / hero.Player.MaxHealth * 100 <=
                         Menu.Item("selflowhp" + Name + "pct").GetValue<Slider>().Value)
                     {
-                        if (hero.IncomeDamage > 0 && !hero.Player.LSIsRecalling() && !hero.Player.LSInFountain())
+                        if (hero.IncomeDamage > 0 && !hero.Player.IsRecalling() && !hero.Player.InFountain())
                             UseSpell(Menu.Item("mode" + Name).GetValue<StringList>().SelectedIndex == 1);
 
                         if (hero.TowerDamage > 0 && Menu.Item("use" + Name + "tower").GetValue<bool>())
@@ -38,7 +38,7 @@ using EloBuddy; namespace Activator.Summoners
                     {
                         if (hero.Player.MaxHealth - hero.Player.Health > 75 + 15 * Math.Min(Activator.Player.Level, 18))
                         {
-                            if (!hero.Player.LSIsRecalling() && !hero.Player.LSInFountain())
+                            if (!hero.Player.IsRecalling() && !hero.Player.InFountain())
                                 UseSpell(Menu.Item("mode" + Name).GetValue<StringList>().SelectedIndex == 1);
                         }
                     }

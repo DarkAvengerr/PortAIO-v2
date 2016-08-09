@@ -26,23 +26,23 @@ using EloBuddy;
         {
             if (sender.IsEnemy)
             {
-                if (_connectedAlly != null && Program.R.LSIsReady())
+                if (_connectedAlly != null && Program.R.IsReady())
                 {
-                    if ((!(sender is AIHeroClient) || args.SData.LSIsAutoAttack()) && args.Target != null &&
+                    if ((!(sender is AIHeroClient) || args.SData.IsAutoAttack()) && args.Target != null &&
                         args.Target.NetworkId == _connectedAlly.NetworkId)
                     {
                         _incomingDamage.Add(
-                            _connectedAlly.ServerPosition.LSDistance(sender.ServerPosition)/args.SData.MissileSpeed +
-                            Game.Time, (float) sender.LSGetAutoAttackDamage(_connectedAlly));
+                            _connectedAlly.ServerPosition.Distance(sender.ServerPosition)/args.SData.MissileSpeed +
+                            Game.Time, (float) sender.GetAutoAttackDamage(_connectedAlly));
                     }
                     else if (sender is AIHeroClient)
                     {
                         var attacker = (AIHeroClient) sender;
-                        var slot = attacker.LSGetSpellSlot(args.SData.Name);
+                        var slot = attacker.GetSpellSlot(args.SData.Name);
 
                         if (slot != SpellSlot.Unknown)
                         {
-                            if (slot == attacker.LSGetSpellSlot("SummonerDot") && args.Target != null &&
+                            if (slot == attacker.GetSpellSlot("SummonerDot") && args.Target != null &&
                                 args.Target.NetworkId == _connectedAlly.NetworkId)
                             {
                                 _instantDamage.Add(Game.Time + 2,
@@ -50,10 +50,10 @@ using EloBuddy;
                             }
                             else if (slot.HasFlag(SpellSlot.Q | SpellSlot.W | SpellSlot.E | SpellSlot.R) &&
                                      ((args.Target != null && args.Target.NetworkId == _connectedAlly.NetworkId) ||
-                                      args.End.LSDistance(_connectedAlly.ServerPosition) <
+                                      args.End.Distance(_connectedAlly.ServerPosition) <
                                       Math.Pow(args.SData.LineWidth, 2)))
                             {
-                                _instantDamage.Add(Game.Time + 2, (float) attacker.LSGetSpellDamage(_connectedAlly, slot));
+                                _instantDamage.Add(Game.Time + 2, (float) attacker.GetSpellDamage(_connectedAlly, slot));
                             }
                         }
                     }
@@ -71,17 +71,17 @@ using EloBuddy;
 
         public static void OnUpdate(EventArgs args)
         {
-            if (!Program.ComboMenu.Item("RComboSupport").GetValue<bool>() || ObjectManager.Player.LSIsRecalling() || ObjectManager.Player.LSInFountain())
+            if (!Program.ComboMenu.Item("RComboSupport").GetValue<bool>() || ObjectManager.Player.IsRecalling() || ObjectManager.Player.InFountain())
                 return;
 
             if (_connectedAlly == null)
             {
-                _connectedAlly = HeroManager.Allies.FirstOrDefault(a => a.LSHasBuff("kalistacoopstrikeally"));
+                _connectedAlly = HeroManager.Allies.FirstOrDefault(a => a.HasBuff("kalistacoopstrikeally"));
                 return;
             }
             else
             {
-                if (IncomingDamage > _connectedAlly.Health && _connectedAlly.LSCountEnemiesInRange(500) > 0)
+                if (IncomingDamage > _connectedAlly.Health && _connectedAlly.CountEnemiesInRange(500) > 0)
                 {
                     Program.R.Cast();
                 }
@@ -94,14 +94,14 @@ using EloBuddy;
                             var unit in
                                 ObjectManager.Get<AIHeroClient>()
                                     .Where(
-                                        h => h.IsEnemy && h.IsHPBarRendered && _connectedAlly.LSDistance(h.Position) > 800)
+                                        h => h.IsEnemy && h.IsHPBarRendered && _connectedAlly.Distance(h.Position) > 800)
                             )
                         {
                             // Get buffs
                             for (int i = 0; i < unit.Buffs.Count(); i++)
                             {
                                 // Check if the Soulbound is in a good range
-                                var enemy = HeroManager.Enemies.Where(x => _connectedAlly.LSDistance(unit.Position) > 800);
+                                var enemy = HeroManager.Enemies.Where(x => _connectedAlly.Distance(unit.Position) > 800);
                                 // Check if the Soulbound is a Blitzcrank
                                 // Check if the enemy is hooked
                                 // Check if target was far enough for ult

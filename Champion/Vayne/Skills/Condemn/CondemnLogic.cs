@@ -40,7 +40,7 @@ namespace VayneHunter_Reborn.Skills.Condemn
 
             /**
             var CondemnTarget = GetCondemnTarget(ObjectManager.Player.ServerPosition);
-            if (CondemnTarget.LSIsValidTarget())
+            if (CondemnTarget.IsValidTarget())
             {
                // var AAForE = MenuExtensions.GetItemValue<Slider>("dz191.vhr.misc.condemn.noeaa").Value;
 
@@ -65,7 +65,7 @@ namespace VayneHunter_Reborn.Skills.Condemn
                 var PushEx = pushDistance;
                 pushDistance -= (10 + (PushEx - 410)/2);
             }
-            foreach (var target in HeroManager.Enemies.Where(en => en.LSIsValidTarget(E.Range) && !en.LSIsDashing()))
+            foreach (var target in HeroManager.Enemies.Where(en => en.IsValidTarget(E.Range) && !en.IsDashing()))
             {
                 //Yasuo Windwall check
                 if (WindWall.CollidesWithWall(ObjectManager.Player.ServerPosition, target.ServerPosition))
@@ -80,25 +80,25 @@ namespace VayneHunter_Reborn.Skills.Condemn
                 }
 
                 if (target.Health + 10 <=
-                    ObjectManager.Player.LSGetAutoAttackDamage(target) *
+                    ObjectManager.Player.GetAutoAttackDamage(target) *
                     MenuExtensions.GetItemValue<Slider>("dz191.vhr.misc.condemn.noeaa").Value)
                 {
                     continue;
                 }
                 var Prediction = Variables.spells[SpellSlot.E].GetPrediction(target);
-                var endPosition = Prediction.UnitPosition.LSExtend(ObjectManager.Player.ServerPosition, -pushDistance);
+                var endPosition = Prediction.UnitPosition.Extend(ObjectManager.Player.ServerPosition, -pushDistance);
 
                 if (Prediction.Hitchance >= HitChance.VeryHigh)
                 {
-                    if (endPosition.LSIsWall())
+                    if (endPosition.IsWall())
                     {
-                        var condemnRectangle = new VHRPolygon(VHRPolygon.Rectangle(target.ServerPosition.LSTo2D(), endPosition.LSTo2D(), target.BoundingRadius));
+                        var condemnRectangle = new VHRPolygon(VHRPolygon.Rectangle(target.ServerPosition.To2D(), endPosition.To2D(), target.BoundingRadius));
 
                         if (condemnRectangle.Points
                             .Count(point => NavMesh.GetCollisionFlags(point.X, point.Y).HasFlag(CollisionFlags.Wall)) >= condemnRectangle.Points.Count() * (20 / 100f))
                         {
                             E.CastOnUnit(target);
-                            TrinketBush(target.ServerPosition.LSExtend(ObjectManager.Player.ServerPosition, -450f));
+                            TrinketBush(target.ServerPosition.Extend(ObjectManager.Player.ServerPosition, -450f));
                         }
                     }
                     else
@@ -107,16 +107,16 @@ namespace VayneHunter_Reborn.Skills.Condemn
                         var step = pushDistance / 5f;
                         for (float i = 0; i < pushDistance; i += step)
                         {
-                            var endPositionEx = Prediction.UnitPosition.LSExtend(ObjectManager.Player.ServerPosition, -i);
-                            if (endPositionEx.LSIsWall())
+                            var endPositionEx = Prediction.UnitPosition.Extend(ObjectManager.Player.ServerPosition, -i);
+                            if (endPositionEx.IsWall())
                             {
-                                var condemnRectangle = new VHRPolygon(VHRPolygon.Rectangle(target.ServerPosition.LSTo2D(), endPosition.LSTo2D(), target.BoundingRadius));
+                                var condemnRectangle = new VHRPolygon(VHRPolygon.Rectangle(target.ServerPosition.To2D(), endPosition.To2D(), target.BoundingRadius));
                                 
                                 if (condemnRectangle.Points
                                     .Count(point => NavMesh.GetCollisionFlags(point.X, point.Y).HasFlag(CollisionFlags.Wall)) >= condemnRectangle.Points.Count() * (20 / 100f))
                                 {
                                         E.CastOnUnit(target);
-                                        TrinketBush(target.ServerPosition.LSExtend(ObjectManager.Player.ServerPosition, -450f));
+                                        TrinketBush(target.ServerPosition.Extend(ObjectManager.Player.ServerPosition, -450f));
 
                                 }
                                 return;
@@ -129,9 +129,9 @@ namespace VayneHunter_Reborn.Skills.Condemn
 
         private static void TrinketBush(Vector3 endPosition)
         {
-            if (TrinketSpell.LSIsReady())
+            if (TrinketSpell.IsReady())
             {
-                var extended = ObjectManager.Player.ServerPosition.LSExtend(endPosition, 400f);
+                var extended = ObjectManager.Player.ServerPosition.Extend(endPosition, 400f);
                 if (NavMesh.IsWallOfGrass(extended, 130f) && !NavMesh.IsWallOfGrass(ObjectManager.Player.ServerPosition, 65f))
                 {
                     LeagueSharp.Common.Utility.DelayAction.Add((int)(Game.Ping / 2f + 250), () =>

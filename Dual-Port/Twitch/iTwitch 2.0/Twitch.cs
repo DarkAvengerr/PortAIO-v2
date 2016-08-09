@@ -109,7 +109,7 @@ using EloBuddy;
 
         public void OnCombo()
         {
-            if (Menu.Item("com.itwitch.combo.useW").GetValue<bool>() && Spells[SpellSlot.W].LSIsReady())
+            if (Menu.Item("com.itwitch.combo.useW").GetValue<bool>() && Spells[SpellSlot.W].IsReady())
             {
                 if (Menu.Item("com.itwitch.misc.saveManaE").GetValue<bool>()
                     && ObjectManager.Player.Mana <= Spells[SpellSlot.E].ManaCost + Spells[SpellSlot.W].ManaCost)
@@ -117,7 +117,7 @@ using EloBuddy;
                     return;
                 }
 
-                if (Menu.Item("com.itwitch.misc.noWTurret").GetValue<bool>() && ObjectManager.Player.LSUnderTurret(true))
+                if (Menu.Item("com.itwitch.misc.noWTurret").GetValue<bool>() && ObjectManager.Player.UnderTurret(true))
                 {
                     return;
                 }
@@ -126,11 +126,11 @@ using EloBuddy;
 
                 if (wTarget != null
                     && wTarget.Health
-                    < ObjectManager.Player.LSGetAutoAttackDamage(wTarget, true)
+                    < ObjectManager.Player.GetAutoAttackDamage(wTarget, true)
                     * Menu.Item("com.itwitch.misc.noWAA").GetValue<Slider>().Value) return;
 
-                if (wTarget.LSIsValidTarget(Spells[SpellSlot.W].Range)
-                    && !ObjectManager.Player.LSHasBuff("TwitchHideInShadows"))
+                if (wTarget.IsValidTarget(Spells[SpellSlot.W].Range)
+                    && !ObjectManager.Player.HasBuff("TwitchHideInShadows"))
                 {
                     var prediction = Spells[SpellSlot.W].GetPrediction(wTarget);
                     if (prediction.Hitchance >= HitChance.High)
@@ -152,7 +152,7 @@ using EloBuddy;
 
             Spellbook.OnCastSpell += (sender, eventArgs) =>
                 {
-                    if (eventArgs.Slot == SpellSlot.Recall && Spells[SpellSlot.Q].LSIsReady()
+                    if (eventArgs.Slot == SpellSlot.Recall && Spells[SpellSlot.Q].IsReady()
                         && Menu.Item("com.itwitch.misc.recall").GetValue<KeyBind>().Active)
                     {
                         Spells[SpellSlot.Q].Cast();
@@ -165,7 +165,7 @@ using EloBuddy;
 
                     if (eventArgs.Slot == SpellSlot.R && Menu.Item("com.itwitch.misc.autoYo").GetValue<bool>())
                     {
-                        if (!HeroManager.Enemies.Any(x => ObjectManager.Player.LSDistance(x) <= Spells[SpellSlot.R].Range)) return;
+                        if (!HeroManager.Enemies.Any(x => ObjectManager.Player.Distance(x) <= Spells[SpellSlot.R].Range)) return;
 
                         if (Items.HasItem(ItemData.Youmuus_Ghostblade.Id))
                         {
@@ -200,10 +200,10 @@ using EloBuddy;
 
         public void OnHarass()
         {
-            if (Menu.Item("com.itwitch.harass.useW").GetValue<bool>() && Spells[SpellSlot.W].LSIsReady())
+            if (Menu.Item("com.itwitch.harass.useW").GetValue<bool>() && Spells[SpellSlot.W].IsReady())
             {
                 var wTarget = TargetSelector.GetTarget(Spells[SpellSlot.W].Range, TargetSelector.DamageType.Physical);
-                if (wTarget.LSIsValidTarget(Spells[SpellSlot.W].Range))
+                if (wTarget.IsValidTarget(Spells[SpellSlot.W].Range))
                 {
                     var prediction = Spells[SpellSlot.W].GetPrediction(wTarget);
                     if (prediction.Hitchance >= HitChance.High)
@@ -233,7 +233,7 @@ using EloBuddy;
             }
 
             if (Menu.Item("com.itwitch.drawing.drawQTime").GetValue<bool>()
-                && ObjectManager.Player.LSHasBuff("TwitchHideInShadows"))
+                && ObjectManager.Player.HasBuff("TwitchHideInShadows"))
             {
                 var position = new Vector3(
                     ObjectManager.Player.Position.X, 
@@ -245,7 +245,7 @@ using EloBuddy;
             }
 
             if (Menu.Item("com.itwitch.drawing.drawRTime").GetValue<bool>()
-                && ObjectManager.Player.LSHasBuff("TwitchFullAutomatic"))
+                && ObjectManager.Player.HasBuff("TwitchFullAutomatic"))
             {
                 ObjectManager.Player.Position.DrawTextOnScreen(
                     "Ultimate:  " + $"{ObjectManager.Player.GetRemainingBuffTime("TwitchFullAutomatic"):0.0}", 
@@ -282,9 +282,9 @@ using EloBuddy;
                 ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Recall);
             }
 
-            if (Menu.Item("com.itwitch.combo.useEKillable").GetValue<bool>() && Spells[SpellSlot.E].LSIsReady())
+            if (Menu.Item("com.itwitch.combo.useEKillable").GetValue<bool>() && Spells[SpellSlot.E].IsReady())
             {
-                if (HeroManager.Enemies.Any(x => x.IsPoisonKillable() && x.LSIsValidTarget(Spells[SpellSlot.E].Range)))
+                if (HeroManager.Enemies.Any(x => x.IsPoisonKillable() && x.IsValidTarget(Spells[SpellSlot.E].Range)))
                 {
                     Spells[SpellSlot.E].Cast();
                 }

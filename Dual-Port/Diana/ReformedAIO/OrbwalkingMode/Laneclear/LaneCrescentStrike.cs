@@ -53,7 +53,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Laneclear
 
             if (this.Menu.Item(this.Menu.Name + "LaneQEnemy").GetValue<bool>())
             {
-                if (minions.Any(m => m.LSCountEnemiesInRange(1500) > 0))
+                if (minions.Any(m => m.CountEnemiesInRange(1500) > 0))
                 {
                     return;
                 }
@@ -70,7 +70,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Laneclear
         private void OnUpdate(EventArgs args)
         {
             if (Variables.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
-                || !Variables.Spells[SpellSlot.Q].LSIsReady()) return;
+                || !Variables.Spells[SpellSlot.Q].IsReady()) return;
 
             if (this.Menu.Item(this.Menu.Name + "LaneQMana").GetValue<Slider>().Value > Variables.Player.ManaPercent) return;
 

@@ -66,13 +66,13 @@ namespace SharpShooter.Plugins
                             break;
                         case Orbwalking.OrbwalkingMode.Combo:
                             if (MenuProvider.Champion.Combo.UseQ)
-                                if (target.LSIsValidTarget(_q.Range))
+                                if (target.IsValidTarget(_q.Range))
                                     if (_q.IsReadyPerfectly())
                                         _q.CastOnUnit(target as Obj_AI_Base);
                             break;
                         case Orbwalking.OrbwalkingMode.None:
                             if (MenuProvider.Champion.Harass.UseQ)
-                                if (target.LSIsValidTarget(_q.Range))
+                                if (target.IsValidTarget(_q.Range))
                                     if (_q.IsReadyPerfectly())
                                         _q.CastOnUnit(target as Obj_AI_Base);
                             break;
@@ -104,7 +104,7 @@ namespace SharpShooter.Plugins
 
                             if (MenuProvider.Champion.Combo.UseW)
                                 if (_w.IsReadyPerfectly())
-                                    if (ObjectManager.Player.LSCountEnemiesInRange(1000f) >= 1)
+                                    if (ObjectManager.Player.CountEnemiesInRange(1000f) >= 1)
                                         _w.Cast();
 
                             if (MenuProvider.Champion.Combo.UseR)
@@ -113,7 +113,7 @@ namespace SharpShooter.Plugins
                                     var target =
                                         HeroManager.Enemies.FirstOrDefault(
                                             x =>
-                                                x.LSIsValidTarget(_r.Range) && !x.LSIsFacing(ObjectManager.Player) &&
+                                                x.IsValidTarget(_r.Range) && !x.IsFacing(ObjectManager.Player) &&
                                                 !x.HasBuff("bantamtraptarget") &&
                                                 _r.GetPrediction(x).Hitchance >= _r.MinHitChance);
                                     if (target != null)
@@ -159,7 +159,7 @@ namespace SharpShooter.Plugins
                                     {
                                         var target =
                                             MinionManager.GetMinions(600, MinionTypes.All, MinionTeam.Neutral,
-                                                MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.LSIsValidTarget(600));
+                                                MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.IsValidTarget(600));
                                         if (target != null)
                                             _q.CastOnUnit(target);
                                     }
@@ -174,14 +174,14 @@ namespace SharpShooter.Plugins
         {
             if (MenuProvider.Champion.Misc.UseAntiGapcloser)
             {
-                if (gapcloser.Sender.LSIsValidTarget(_q.Range))
+                if (gapcloser.Sender.IsValidTarget(_q.Range))
                     if (_q.IsReadyPerfectly())
                         _q.CastOnUnit(gapcloser.Sender);
 
                 if (_w.IsReadyPerfectly())
                     _w.Cast();
 
-                if (gapcloser.End.LSDistance(ObjectManager.Player.Position) <= 300)
+                if (gapcloser.End.Distance(ObjectManager.Player.Position) <= 300)
                     if (_r.IsReadyPerfectly())
                         _r.Cast(ObjectManager.Player.Position);
             }
@@ -207,7 +207,7 @@ namespace SharpShooter.Plugins
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float) ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float) ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
             if (_q.IsReadyPerfectly())

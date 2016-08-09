@@ -51,7 +51,7 @@ using EloBuddy;
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             ModeConfig.Orbwalker.SetAttack(!ModeConfig.MenuKeys.Item("Key.Flee").GetValue<KeyBind>().Active);
 
-            if (Champion.PlayerSpells.Q.LSIsReady())
+            if (Champion.PlayerSpells.Q.IsReady())
             {
                 if (Champion.PlayerSpells.Q.IsCharging && Champion.PlayerSpells.Q.Range >= Champion.PlayerSpells.Q.ChargedMaxRange)
                 {

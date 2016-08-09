@@ -20,7 +20,7 @@ namespace Olaf.Modes
         private static Spell E => Champion.PlayerSpells.E;
         private static Spell R => Champion.PlayerSpells.R;
 
-        public static SpellSlot IgniteSlot = ObjectManager.Player.LSGetSpellSlot("SummonerDot");
+        public static SpellSlot IgniteSlot = ObjectManager.Player.GetSpellSlot("SummonerDot");
         public static void Init()
         {
             MenuLocal = new Menu("Combo", "Combo").SetFontStyle(FontStyle.Regular, Color.Aqua);
@@ -40,7 +40,7 @@ namespace Olaf.Modes
                 return;
             }
 
-            if (!W.LSIsReady() || Modes.ModeConfig.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo || MenuLocal.Item("Combo.W").GetValue<StringList>().SelectedIndex == 0)
+            if (!W.IsReady() || Modes.ModeConfig.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo || MenuLocal.Item("Combo.W").GetValue<StringList>().SelectedIndex == 0)
             {
                 return;
             }
@@ -71,7 +71,7 @@ namespace Olaf.Modes
             }
 
             var t = CommonTargetSelector.GetTarget(Q.Range);
-            if (!t.LSIsValidTarget())
+            if (!t.IsValidTarget())
             {
                 return;
             }
@@ -79,7 +79,7 @@ namespace Olaf.Modes
             if (IgniteSlot != SpellSlot.Unknown &&
                 ObjectManager.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready)
             {
-                if (t.LSIsValidTarget(650) && !t.HaveImmortalBuff() && ObjectManager.Player.GetSummonerSpellDamage(t, Damage.SummonerSpell.Ignite) + 150 >= t.Health)
+                if (t.IsValidTarget(650) && !t.HaveImmortalBuff() && ObjectManager.Player.GetSummonerSpellDamage(t, Damage.SummonerSpell.Ignite) + 150 >= t.Health)
                 {
                     ObjectManager.Player.Spellbook.CastSpell(IgniteSlot, t);
                 }

@@ -58,7 +58,7 @@
             spells[Spells.Q].SetTargetted(0.25f, spells[Spells.Q].Instance.SData.MissileSpeed);
             spells[Spells.R].SetSkillshot(0.25f, 175, 700, false, SkillshotType.SkillshotCircle);
 
-            ignite = Player.LSGetSpellSlot("summonerdot");
+            ignite = Player.GetSpellSlot("summonerdot");
 
             ElVladimirMenu.Initialize();
             Game.OnUpdate += OnUpdate;
@@ -74,9 +74,9 @@
         {
             var gapCloserActive = ElVladimirMenu.Menu.Item("ElVladimir.Settings.AntiGapCloser.Active").GetValue<bool>();
 
-            if (gapCloserActive && spells[Spells.W].LSIsReady()
-                && gapcloser.Sender.LSDistance(Player) < spells[Spells.W].Range
-                && Player.LSCountEnemiesInRange(spells[Spells.Q].Range) >= 1)
+            if (gapCloserActive && spells[Spells.W].IsReady()
+                && gapcloser.Sender.Distance(Player) < spells[Spells.W].Range
+                && Player.CountEnemiesInRange(spells[Spells.Q].Range) >= 1)
             {
                 spells[Spells.W].Cast();
             }
@@ -90,7 +90,7 @@
 
         private static void AreaOfEffectUltimate()
         {
-            if (CheckMenu("ElVladimir.Combo.R") && spells[Spells.R].LSIsReady())
+            if (CheckMenu("ElVladimir.Combo.R") && spells[Spells.R].IsReady())
             {
                 var target = TargetSelector.GetTarget(spells[Spells.R].Range, TargetSelector.DamageType.Magical);
                 if (target == null)
@@ -98,7 +98,7 @@
                     return;
                 }
 
-                var hits = HeroManager.Enemies.Where(x => x.LSDistance(target) <= 400f).ToList();
+                var hits = HeroManager.Enemies.Where(x => x.Distance(target) <= 400f).ToList();
                 if (
                     hits.Any(
                         hit =>
@@ -119,22 +119,22 @@
                 return;
             }
 
-            if (CheckMenu("ElVladimir.Combo.Q") && spells[Spells.Q].LSIsReady()
-                && target.LSIsValidTarget(spells[Spells.Q].Range))
+            if (CheckMenu("ElVladimir.Combo.Q") && spells[Spells.Q].IsReady()
+                && target.IsValidTarget(spells[Spells.Q].Range))
             {
                 spells[Spells.Q].CastOnUnit(target);
             }
 
-            if (CheckMenu("ElVladimir.Combo.E") && spells[Spells.E].LSIsReady() && target.LSIsValidTarget(800))
+            if (CheckMenu("ElVladimir.Combo.E") && spells[Spells.E].IsReady() && target.IsValidTarget(800))
             {
-                if (Player.LSDistance(target) > 300 && Player.LSDistance(target) < spells[Spells.E].Range)
+                if (Player.Distance(target) > 300 && Player.Distance(target) < spells[Spells.E].Range)
                 {
                     spells[Spells.E].StartCharging(Game.CursorPos);
                 }
             }
 
-            if (CheckMenu("ElVladimir.Combo.W") && spells[Spells.W].LSIsReady()
-                && target.LSIsValidTarget(spells[Spells.W].Range))
+            if (CheckMenu("ElVladimir.Combo.W") && spells[Spells.W].IsReady()
+                && target.IsValidTarget(spells[Spells.W].Range))
             {
                 spells[Spells.W].Cast();
             }
@@ -143,13 +143,13 @@
             {
                 if (CheckMenu("ElVladimir.Combo.SmartUlt"))
                 {
-                    if (spells[Spells.Q].LSIsReady() && target.LSIsValidTarget(spells[Spells.Q].Range)
+                    if (spells[Spells.Q].IsReady() && target.IsValidTarget(spells[Spells.Q].Range)
                         && spells[Spells.Q].GetDamage(target) >= target.Health)
                     {
                         spells[Spells.Q].Cast();
                     }
 
-                    if (spells[Spells.R].LSIsReady() && spells[Spells.R].GetDamage(target) >= target.Health && !target.IsDead)
+                    if (spells[Spells.R].IsReady() && spells[Spells.R].GetDamage(target) >= target.Health && !target.IsDead)
                     {
                         var pred = spells[Spells.R].GetPrediction(target);
                         if (pred.Hitchance >= HitChance.VeryHigh)
@@ -160,7 +160,7 @@
                 }
             }
 
-            if (CheckMenu("ElVladimir.Combo.Ignite") && Player.LSDistance(target) <= 600
+            if (CheckMenu("ElVladimir.Combo.Ignite") && Player.Distance(target) <= 600
                 && Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) >= target.Health)
             {
                 Player.Spellbook.CastSpell(ignite, target);
@@ -175,15 +175,15 @@
                 return;
             }
 
-            if (CheckMenu("ElVladimir.Harass.Q") && spells[Spells.Q].LSIsReady()
-                && target.LSIsValidTarget(spells[Spells.Q].Range))
+            if (CheckMenu("ElVladimir.Harass.Q") && spells[Spells.Q].IsReady()
+                && target.IsValidTarget(spells[Spells.Q].Range))
             {
                 spells[Spells.Q].CastOnUnit(target);
             }
 
-            if (CheckMenu("ElVladimir.Harass.E") && spells[Spells.E].LSIsReady() && target.LSIsValidTarget(800)) // 
+            if (CheckMenu("ElVladimir.Harass.E") && spells[Spells.E].IsReady() && target.IsValidTarget(800)) // 
             {
-                if (Player.LSDistance(target) < 800)
+                if (Player.Distance(target) < 800)
                 {
                     spells[Spells.E].StartCharging(Game.CursorPos);
                 }
@@ -196,7 +196,7 @@
             var useE = ElVladimirMenu.Menu.Item("ElVladimir.JungleClear.E").GetValue<bool>();
             var playerHp = ElVladimirMenu.Menu.Item("ElVladimir.WaveClear.Health.E").GetValue<Slider>().Value;
 
-            if (spells[Spells.Q].LSIsReady() && useQ)
+            if (spells[Spells.Q].IsReady() && useQ)
             {
                 var allMinions = MinionManager.GetMinions(
                     ObjectManager.Player.ServerPosition,
@@ -206,7 +206,7 @@
                     MinionOrderTypes.MaxHealth);
                 {
                     foreach (var minion in
-                        allMinions.Where(minion => minion.LSIsValidTarget()))
+                        allMinions.Where(minion => minion.IsValidTarget()))
                     {
                         spells[Spells.Q].CastOnUnit(minion);
                         return;
@@ -214,7 +214,7 @@
                 }
             }
 
-            if (spells[Spells.E].LSIsReady() && (Player.Health / Player.MaxHealth) * 100 >= playerHp && useE)
+            if (spells[Spells.E].IsReady() && (Player.Health / Player.MaxHealth) * 100 >= playerHp && useE)
             {
                 var minions = MinionManager.GetMinions(
                     ObjectManager.Player.ServerPosition,
@@ -240,15 +240,15 @@
             var useE = ElVladimirMenu.Menu.Item("ElVladimir.WaveClear.E").GetValue<bool>();
             var playerHp = ElVladimirMenu.Menu.Item("ElVladimir.WaveClear.Health.E").GetValue<Slider>().Value;
 
-            if (spells[Spells.Q].LSIsReady() && useQ)
+            if (spells[Spells.Q].IsReady() && useQ)
             {
                 var allMinions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, spells[Spells.Q].Range);
                 {
                     foreach (var minion in
                         allMinions.Where(
-                            minion => minion.Health <= ObjectManager.Player.LSGetSpellDamage(minion, SpellSlot.Q)))
+                            minion => minion.Health <= ObjectManager.Player.GetSpellDamage(minion, SpellSlot.Q)))
                     {
-                        if (minion.LSIsValidTarget())
+                        if (minion.IsValidTarget())
                         {
                             spells[Spells.Q].CastOnUnit(minion);
                             return;
@@ -257,7 +257,7 @@
                 }
             }
 
-            if (spells[Spells.E].LSIsReady() && (Player.Health / Player.MaxHealth) * 100 >= playerHp && useE)
+            if (spells[Spells.E].IsReady() && (Player.Health / Player.MaxHealth) * 100 >= playerHp && useE)
             {
                 var minions = MinionManager.GetMinions(Player.ServerPosition, 800);
                 if (minions.Count <= 0)

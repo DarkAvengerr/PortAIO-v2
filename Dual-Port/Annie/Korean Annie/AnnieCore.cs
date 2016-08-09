@@ -50,14 +50,14 @@ using EloBuddy;
             {
                 return true;
             }
-            else if (annie.Player.LSGetEnemiesInRange(1100f).Count == 1)
+            else if (annie.Player.GetEnemiesInRange(1100f).Count == 1)
             {
                 return true;
             }
             else
             {
                 return
-                    !HeroManager.Enemies.Where(x => x.LSDistance(Champion.Player) < 1100f && !x.IsDead && !x.IsZombie)
+                    !HeroManager.Enemies.Where(x => x.Distance(Champion.Player) < 1100f && !x.IsDead && !x.IsZombie)
                         .Any(
                             x =>
                                 x.ChampionName != enemy.ChampionName &&
@@ -74,8 +74,8 @@ using EloBuddy;
                 return;
             }
 
-            if (annie.GetParamBool("usertocombo") && spells.R.LSIsReady() && spells.R.CanCast()
-                && target.LSIsValidTarget(spells.R.Range) && !spells.CheckOverkill(target))
+            if (annie.GetParamBool("usertocombo") && spells.R.IsReady() && spells.R.CanCast()
+                && target.IsValidTarget(spells.R.Range) && !spells.CheckOverkill(target))
             {
                 int minEnemiesToR = annie.GetParamSlider("minenemiestor");
 
@@ -87,7 +87,7 @@ using EloBuddy;
                 {
                     foreach (PredictionOutput pred in
                         ObjectManager.Get<AIHeroClient>()
-                            .Where(x => x.LSIsValidTarget(spells.R.Range))
+                            .Where(x => x.IsValidTarget(spells.R.Range))
                             .Select(x => spells.R.GetPrediction(x, true))
                             .Where(pred => pred.Hitchance >= HitChance.High && pred.AoeTargetsHitCount >= minEnemiesToR)
                         )
@@ -97,15 +97,15 @@ using EloBuddy;
                 }
             }
             if (!annie.GetParamBool("supportmode") && spells.R.GetDamage(target) > target.Health + 50f
-                && spells.R.LSIsReady() && spells.R.CanCast() && spells.R.CanCast(target) && !spells.CheckOverkill(target))
+                && spells.R.IsReady() && spells.R.CanCast() && spells.R.CanCast(target) && !spells.CheckOverkill(target))
             {
                 spells.R.Cast(target.Position);
             }
-            if ((spells.W.LSIsReady()) && (annie.GetParamBool("usewtocombo")) && (target.LSIsValidTarget(spells.W.Range)))
+            if ((spells.W.IsReady()) && (annie.GetParamBool("usewtocombo")) && (target.IsValidTarget(spells.W.Range)))
             {
                 spells.W.Cast(target.Position);
             }
-            if ((spells.Q.LSIsReady()) && (annie.GetParamBool("useqtocombo")) && (target.LSIsValidTarget(spells.Q.Range)))
+            if ((spells.Q.IsReady()) && (annie.GetParamBool("useqtocombo")) && (target.IsValidTarget(spells.Q.Range)))
             {
                 spells.Q.Cast(target);
             }
@@ -132,7 +132,7 @@ using EloBuddy;
             {
                 bool manaLimitReached = annie.Player.ManaPercent < annie.GetParamSlider("manalimittolaneclear");
 
-                if ((annie.GetParamBool("useqtolaneclear")) && (spells.Q.LSIsReady()))
+                if ((annie.GetParamBool("useqtolaneclear")) && (spells.Q.IsReady()))
                 {
                     if (annie.GetParamBool("saveqtofarm"))
                     {
@@ -156,7 +156,7 @@ using EloBuddy;
 
                 if (!manaLimitReached)
                 {
-                    if ((annie.GetParamBool("usewtolaneclear")) && (spells.W.LSIsReady()))
+                    if ((annie.GetParamBool("usewtolaneclear")) && (spells.W.IsReady()))
                     {
                         List<Obj_AI_Base> minions = MinionManager.GetMinions(annie.Player.Position, spells.W.Range);
 
@@ -217,12 +217,12 @@ using EloBuddy;
                 return;
             }
 
-            if ((spells.Q.LSIsReady()) && (annie.GetParamBool("useqtoharas")) && (target.LSIsValidTarget(spells.Q.Range)))
+            if ((spells.Q.IsReady()) && (annie.GetParamBool("useqtoharas")) && (target.IsValidTarget(spells.Q.Range)))
             {
                 spells.Q.Cast(target);
             }
 
-            if ((spells.W.LSIsReady()) && (annie.GetParamBool("usewtoharas")) && (target.LSIsValidTarget(spells.W.Range)))
+            if ((spells.W.IsReady()) && (annie.GetParamBool("usewtoharas")) && (target.IsValidTarget(spells.W.Range)))
             {
                 spells.W.Cast(target.Position);
             }
@@ -230,7 +230,7 @@ using EloBuddy;
 
         private void QFarmLogic()
         {
-            if (annie.SaveStun() || !annie.CanFarm() || !spells.Q.LSIsReady() || !annie.GetParamBool("useqtofarm"))
+            if (annie.SaveStun() || !annie.CanFarm() || !spells.Q.IsReady() || !annie.GetParamBool("useqtofarm"))
             {
                 return;
             }
@@ -245,7 +245,7 @@ using EloBuddy;
                         minion =>
                             spells.Q.GetDamage(minion) >
                             HealthPrediction.GetHealthPrediction(minion,
-                                (int) (annie.Player.LSDistance(minion)/spells.Q.Speed)*1000, (int) spells.Q.Delay*1000))
+                                (int) (annie.Player.Distance(minion)/spells.Q.Speed)*1000, (int) spells.Q.Delay*1000))
                 );
         }
 

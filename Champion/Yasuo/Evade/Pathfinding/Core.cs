@@ -99,8 +99,8 @@ using EloBuddy; namespace EvadeYas.Pathfinding
                     return result;
                 }
 
-                Func<Node, Node, double> distance = (node1, node2) => node1.Point.LSDistance(node2.Point);
-                Func<Node, double> estimate = t => t.Point.LSDistance(endNode.Point);
+                Func<Node, Node, double> distance = (node1, node2) => node1.Point.Distance(node2.Point);
+                Func<Node, double> estimate = t => t.Point.Distance(endNode.Point);
 
                 var foundPath = FindPath(startNode, endNode, distance, estimate);
 

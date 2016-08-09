@@ -37,7 +37,7 @@ using EloBuddy;
 
         public static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (gapcloser.End.LSDistance(Player.ServerPosition) < Q.Range && SkyLv_AurelionSol.Menu.Item("AurelionSol.AutoQEGC").GetValue<bool>())
+            if (gapcloser.End.Distance(Player.ServerPosition) < Q.Range && SkyLv_AurelionSol.Menu.Item("AurelionSol.AutoQEGC").GetValue<bool>())
             {
                 var prediction = Q.GetPrediction(gapcloser.Sender);
                 if (prediction.Hitchance >= HitChance.High)

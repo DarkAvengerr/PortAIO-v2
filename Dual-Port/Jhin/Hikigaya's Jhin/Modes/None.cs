@@ -15,9 +15,9 @@ using EloBuddy;
     {
         public static void ImmobileExecute()
         {
-            if (Spells.E.LSIsReady() && Menus.Config.Item("auto.e.immobile").GetValue<bool>())
+            if (Spells.E.IsReady() && Menus.Config.Item("auto.e.immobile").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Spells.E.Range) && x.IsEnemyImmobile()))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.E.Range) && x.IsEnemyImmobile()))
                 {
                     Spells.E.Cast(enemy);
                 }
@@ -26,18 +26,18 @@ using EloBuddy;
 
         public static void KillSteal()
         {
-            if (Spells.Q.LSIsReady() && Menus.Config.Item("q.ks").GetValue<bool>())
+            if (Spells.Q.IsReady() && Menus.Config.Item("q.ks").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Spells.Q.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.Q.Range) &&
                     x.Health < Spells.Q.GetDamage(x)))
                 {
                     Spells.Q.CastOnUnit(enemy);
                 }
             }
-            if (Spells.W.LSIsReady() && Menus.Config.Item("w.ks").GetValue<bool>())
+            if (Spells.W.IsReady() && Menus.Config.Item("w.ks").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSDistance(ObjectManager.Player) < Menus.Config.Item("w.combo.max.distance").GetValue<Slider>().Value
-                        && x.LSDistance(ObjectManager.Player) > Menus.Config.Item("w.combo.min.distance").GetValue<Slider>().Value
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.Distance(ObjectManager.Player) < Menus.Config.Item("w.combo.max.distance").GetValue<Slider>().Value
+                        && x.Distance(ObjectManager.Player) > Menus.Config.Item("w.combo.min.distance").GetValue<Slider>().Value
                         && x.IsValid && Spells.W.GetPrediction(x).Hitchance >= Menus.Config.HikiChance("w.hit.chance")
                         && x.Health < Spells.W.GetDamage(x) && !x.IsDead && !x.IsZombie && x.IsValid))
                 {
@@ -48,9 +48,9 @@ using EloBuddy;
 
         public static void TeleportE()
         {
-            if (Spells.E.LSIsReady() && Menus.Config.Item("e.combo").GetValue<bool>() && Menus.Config.Item("e.combo.teleport").GetValue<bool>())
+            if (Spells.E.IsReady() && Menus.Config.Item("e.combo").GetValue<bool>() && Menus.Config.Item("e.combo.teleport").GetValue<bool>())
             {
-                foreach (var obj in ObjectManager.Get<Obj_AI_Base>().Where(x => x.Team != ObjectManager.Player.Team && x.LSDistance(ObjectManager.Player) < Spells.E.Range
+                foreach (var obj in ObjectManager.Get<Obj_AI_Base>().Where(x => x.Team != ObjectManager.Player.Team && x.Distance(ObjectManager.Player) < Spells.E.Range
                     && x.HasBuff("teleport_target") && !x.IsDead && !x.IsZombie))
                 {
                     Spells.E.Cast(obj);

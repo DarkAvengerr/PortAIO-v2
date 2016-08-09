@@ -25,19 +25,19 @@ using EloBuddy;
         public static bool ShouldSaveCondemn()
         {
             var katarina =
-                HeroManager.Enemies.FirstOrDefault(h => h.CharData.BaseSkinName == "Katarina" && h.LSIsValidTarget(1400));
+                HeroManager.Enemies.FirstOrDefault(h => h.CharData.BaseSkinName == "Katarina" && h.IsValidTarget(1400));
             if (katarina != null)
             {
                 var kataR = katarina.GetSpell(SpellSlot.R);
-                return kataR.LSIsReady() ||
+                return kataR.IsReady() ||
                        (katarina.Spellbook.CanUseSpell(SpellSlot.R) == SpellState.Ready);
             }
             var galio =
-                HeroManager.Enemies.FirstOrDefault(h => h.CharData.BaseSkinName == "Galio" && h.LSIsValidTarget(1400));
+                HeroManager.Enemies.FirstOrDefault(h => h.CharData.BaseSkinName == "Galio" && h.IsValidTarget(1400));
             if (galio != null)
             {
                 var galioR = galio.GetSpell(SpellSlot.R);
-                return galioR.LSIsReady() ||
+                return galioR.IsReady() ||
                        (galio.Spellbook.CanUseSpell(SpellSlot.R) == SpellState.Ready);
             }
             return false;

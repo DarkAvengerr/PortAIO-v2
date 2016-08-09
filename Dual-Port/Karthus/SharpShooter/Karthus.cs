@@ -101,7 +101,7 @@ namespace SharpShooter.Plugins
 
                             if (MenuProvider.Champion.Combo.UseE)
                                 if (_e.IsReadyPerfectly())
-                                    ESwitch(ObjectManager.Player.LSCountEnemiesInRange(_e.Range) > 0);
+                                    ESwitch(ObjectManager.Player.CountEnemiesInRange(_e.Range) > 0);
                             break;
                         }
                         case Orbwalking.OrbwalkingMode.Mixed:
@@ -130,7 +130,7 @@ namespace SharpShooter.Plugins
 
                             if (MenuProvider.Champion.Harass.UseE)
                                 if (_e.IsReadyPerfectly())
-                                    ESwitch(ObjectManager.Player.LSCountEnemiesInRange(_e.Range) > 0);
+                                    ESwitch(ObjectManager.Player.CountEnemiesInRange(_e.Range) > 0);
                             break;
                         }
                         case Orbwalking.OrbwalkingMode.LaneClear:
@@ -152,7 +152,7 @@ namespace SharpShooter.Plugins
                                     {
                                         var target =
                                             MinionManager.GetMinions(600, MinionTypes.All, MinionTeam.Neutral,
-                                                MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.LSIsValidTarget(600));
+                                                MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.IsValidTarget(600));
                                         if (target != null)
                                             _q.Cast(target);
                                     }
@@ -215,8 +215,8 @@ namespace SharpShooter.Plugins
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (MenuProvider.Champion.Misc.UseAntiGapcloser)
-                if (gapcloser.End.LSDistance(ObjectManager.Player.Position) <= 200)
-                    if (gapcloser.Sender.LSIsValidTarget())
+                if (gapcloser.End.Distance(ObjectManager.Player.Position) <= 200)
+                    if (gapcloser.Sender.IsValidTarget())
                         if (_w.IsReadyPerfectly())
                             _w.Cast(gapcloser.Sender);
         }
@@ -279,7 +279,7 @@ namespace SharpShooter.Plugins
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float) ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float) ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
             if (_q.IsReadyPerfectly())

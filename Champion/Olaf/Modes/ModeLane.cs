@@ -71,38 +71,38 @@ namespace Olaf.Modes
                 return;
             }
          
-            if (Q.LSIsReady() && MenuLocal.Item("Lane.UseQ").GetValue<StringList>().SelectedIndex != 0)
+            if (Q.IsReady() && MenuLocal.Item("Lane.UseQ").GetValue<StringList>().SelectedIndex != 0)
             {
                 var qCount = MenuLocal.Item("Lane.UseQ").GetValue<StringList>().SelectedIndex;
 
                 var objAiHero = from x1 in ObjectManager.Get<Obj_AI_Minion>()
-                                where x1.LSIsValidTarget() && x1.IsEnemy
+                                where x1.IsValidTarget() && x1.IsEnemy
                                 select x1
                                      into h
-                                orderby h.LSDistance(ObjectManager.Player) descending
+                                orderby h.Distance(ObjectManager.Player) descending
                                 select h
                                          into x2
-                                where x2.LSDistance(ObjectManager.Player) < Q.Range - 20 && !x2.IsDead
+                                where x2.Distance(ObjectManager.Player) < Q.Range - 20 && !x2.IsDead
                                 select x2;
 
                 var aiMinions = objAiHero as Obj_AI_Minion[] ?? objAiHero.ToArray();
 
                 var lastMinion = aiMinions.First();
 
-                var qMinions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, ObjectManager.Player.LSDistance(lastMinion.Position));
+                var qMinions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, ObjectManager.Player.Distance(lastMinion.Position));
 
                 if (qMinions.Count > 0)
                 {
                     var locQ = Q.GetLineFarmLocation(qMinions, Q.Width);
 
-                    if (qMinions.Count == qMinions.Count(m => ObjectManager.Player.LSDistance(m) < Q.Range) && locQ.MinionsHit >= qCount && locQ.Position.LSIsValid())
+                    if (qMinions.Count == qMinions.Count(m => ObjectManager.Player.Distance(m) < Q.Range) && locQ.MinionsHit >= qCount && locQ.Position.IsValid())
                     {
                         Q.Cast(lastMinion.Position);
                     }
                 }
             }
 
-            if (MenuLocal.Item("Lane.UseW").GetValue<StringList>().SelectedIndex != 0 && W.LSIsReady())
+            if (MenuLocal.Item("Lane.UseW").GetValue<StringList>().SelectedIndex != 0 && W.IsReady())
             {
                 var wCount = MenuLocal.Item("Lane.UseW").GetValue<StringList>().SelectedIndex;
 
@@ -111,7 +111,7 @@ namespace Olaf.Modes
                         .Where(
                             m =>
                                 m.IsEnemy && !m.IsDead &&
-                                m.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null)))
+                                m.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null)))
                         .Sum(mob => (int)mob.Health);
 
                 totalAa = (int)(totalAa / ObjectManager.Player.TotalAttackDamage);
@@ -122,7 +122,7 @@ namespace Olaf.Modes
             }
 
             var useE = MenuLocal.Item("Lane.UseE").GetValue<StringList>().SelectedIndex;
-            if (useE != 0 && E.LSIsReady())
+            if (useE != 0 && E.IsReady())
             {
                 var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, E.Range);
 

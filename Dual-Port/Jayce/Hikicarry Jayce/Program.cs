@@ -152,7 +152,7 @@ using EloBuddy;
             {
                 if (Config.Item("ainterrupt").GetValue<bool>())
                 {
-                    if (sender.LSIsValidTarget(1000))
+                    if (sender.IsValidTarget(1000))
                     {
                         Render.Circle.DrawCircle(sender.Position, sender.BoundingRadius, Color.Gold, 5);
                         var targetpos = Drawing.WorldToScreen(sender.Position);
@@ -171,7 +171,7 @@ using EloBuddy;
             {
                 if (Config.Item("agapcloser").GetValue<bool>())
                 {
-                    if (gapcloser.Sender.LSIsValidTarget(1000))
+                    if (gapcloser.Sender.IsValidTarget(1000))
                     {
                         Render.Circle.DrawCircle(gapcloser.Sender.Position, gapcloser.Sender.BoundingRadius, Color.Gold, 5);
                         var targetpos = Drawing.WorldToScreen(gapcloser.Sender.Position);
@@ -213,14 +213,14 @@ using EloBuddy;
         {
             if (Cannon || !Jayce.IsMelee)
             {
-                if (Helper.MenuCheck("q.cannon") && Helper.MenuCheck("e.cannon") && CannonQ.LSIsReady() && CannonE.LSIsReady())
+                if (Helper.MenuCheck("q.cannon") && Helper.MenuCheck("e.cannon") && CannonQ.IsReady() && CannonE.IsReady())
                 {
                     Helper.Ext();
                 }
 
-                if (Helper.MenuCheck("q.cannon") && CannonQ.LSIsReady() && !CannonE.LSIsReady())
+                if (Helper.MenuCheck("q.cannon") && CannonQ.IsReady() && !CannonE.IsReady())
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(CannonQ.Range)))
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(CannonQ.Range)))
                     {
                         if (CannonQ.GetPrediction(enemy).Hitchance >= HitChance.VeryHigh)
                         {
@@ -229,43 +229,43 @@ using EloBuddy;
                     }
                 }
 
-                if (Helper.MenuCheck("w.cannon") && CannonW.LSIsReady()) 
+                if (Helper.MenuCheck("w.cannon") && CannonW.IsReady()) 
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(600)))
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(600)))
                     {
                         CannonW.Cast();
                     }
                 }
 
-                if (Helper.MenuCheck("combo.switch") && !CannonQ.LSIsReady() && !CannonE.LSIsReady() && !CannonW.LSIsReady())
+                if (Helper.MenuCheck("combo.switch") && !CannonQ.IsReady() && !CannonE.IsReady() && !CannonW.IsReady())
                 {
                     R.Cast();
                 }
             }
             if (Hammer || Jayce.IsMelee)
             {
-                if (Helper.MenuCheck("q.hammer") && HammerQ.LSIsReady())
+                if (Helper.MenuCheck("q.hammer") && HammerQ.IsReady())
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(HammerQ.Range)))
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(HammerQ.Range)))
                     {
                         HammerQ.Cast(enemy);
                     }
                 }
-                if (Helper.MenuCheck("w.hammer") && HammerW.LSIsReady())
+                if (Helper.MenuCheck("w.hammer") && HammerW.IsReady())
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(600)))
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(600)))
                     {
                         HammerW.Cast();
                     }
                 }
-                if (Helper.MenuCheck("e.hammer") && HammerE.LSIsReady())
+                if (Helper.MenuCheck("e.hammer") && HammerE.IsReady())
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(HammerE.Range)))
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(HammerE.Range)))
                     {
                         HammerE.Cast(enemy);
                     }
                 }
-                if (Helper.MenuCheck("combo.switch") && !HammerQ.LSIsReady() && !HammerW.LSIsReady() && !HammerE.LSIsReady())
+                if (Helper.MenuCheck("combo.switch") && !HammerQ.IsReady() && !HammerW.IsReady() && !HammerE.IsReady())
                 {
                     R.Cast();
                 }
@@ -281,14 +281,14 @@ using EloBuddy;
 
             if (Cannon || !Jayce.IsMelee)
             {
-                if (Helper.MenuCheck("q.cannon.harass") && Helper.MenuCheck("e.cannon.harass") && CannonQ.LSIsReady() &&
-                    CannonE.LSIsReady())
+                if (Helper.MenuCheck("q.cannon.harass") && Helper.MenuCheck("e.cannon.harass") && CannonQ.IsReady() &&
+                    CannonE.IsReady())
                 {
                     Helper.Ext();
                 }
-                if (Helper.MenuCheck("q.cannon.harass") && CannonQ.LSIsReady() && !CannonE.LSIsReady())
+                if (Helper.MenuCheck("q.cannon.harass") && CannonQ.IsReady() && !CannonE.IsReady())
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(CannonQ.Range)))
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(CannonQ.Range)))
                     {
                         if (CannonQ.GetPrediction(enemy).Hitchance >= HitChance.VeryHigh)
                         {
@@ -331,7 +331,7 @@ using EloBuddy;
                 {
                     HammerQ.CastOnUnit(mob[0]);
                 }
-                if (Jayce.LSDistance(mob[0].Position) < 600 && Helper.MenuCheck("w.hammer.jungle"))
+                if (Jayce.Distance(mob[0].Position) < 600 && Helper.MenuCheck("w.hammer.jungle"))
                 {
                     HammerW.Cast();
                 }
@@ -339,7 +339,7 @@ using EloBuddy;
                 {
                     HammerE.CastOnUnit(mob[0]);
                 }
-                if (!HammerQ.LSIsReady() && !HammerW.LSIsReady() && !HammerE.LSIsReady() && Helper.MenuCheck("jungle.switch"))
+                if (!HammerQ.IsReady() && !HammerW.IsReady() && !HammerE.IsReady() && Helper.MenuCheck("jungle.switch"))
                 {
                     R.Cast();
                 }
@@ -351,19 +351,19 @@ using EloBuddy;
                 {
                     return;
                 }
-                if (CannonQ.LSIsReady() && CannonE.LSIsReady() && Helper.MenuCheck("q.cannon.jungle") && Helper.MenuCheck("e.cannon.jungle"))
+                if (CannonQ.IsReady() && CannonE.IsReady() && Helper.MenuCheck("q.cannon.jungle") && Helper.MenuCheck("e.cannon.jungle"))
                 {
                     Helper.JungleExt();
                 }
-                if (CannonQ.LSIsReady() && !CannonE.LSIsReady() && CannonQ.CanCast(mob[0]) && Helper.MenuCheck("q.cannon.jungle"))
+                if (CannonQ.IsReady() && !CannonE.IsReady() && CannonQ.CanCast(mob[0]) && Helper.MenuCheck("q.cannon.jungle"))
                 {
                     CannonQ.CastOnUnit(mob[0]);
                 }
-                if (Jayce.LSDistance(mob[0].Position) < 600 && Helper.MenuCheck("w.cannon.jungle"))
+                if (Jayce.Distance(mob[0].Position) < 600 && Helper.MenuCheck("w.cannon.jungle"))
                 {
                     CannonW.Cast();
                 }
-                if (!CannonQ.LSIsReady() && !CannonW.LSIsReady() && !CannonE.LSIsReady() && Helper.MenuCheck("jungle.switch"))
+                if (!CannonQ.IsReady() && !CannonW.IsReady() && !CannonE.IsReady() && Helper.MenuCheck("jungle.switch"))
                 {
                     R.Cast();
                 }
@@ -371,7 +371,7 @@ using EloBuddy;
         }
         private static void Drawing_OnDraw(EventArgs args)
         {
-            if (Config.Item("q.draw").GetValue<Circle>().Active && CannonQ.LSIsReady() || HammerQ.LSIsReady())
+            if (Config.Item("q.draw").GetValue<Circle>().Active && CannonQ.IsReady() || HammerQ.IsReady())
             {
                 Helper.SkillDraw(RangeQ, Config.Item("q.draw").GetValue<Circle>().Color, 5);
                 if (Cannon)
@@ -379,11 +379,11 @@ using EloBuddy;
                     Helper.SkillDraw(RangeQExt, Config.Item("q.draw").GetValue<Circle>().Color, 5);
                 }
             }
-            if (Config.Item("w.draw").GetValue<Circle>().Active && CannonW.LSIsReady() || HammerW.LSIsReady())
+            if (Config.Item("w.draw").GetValue<Circle>().Active && CannonW.IsReady() || HammerW.IsReady())
             {
                 Helper.SkillDraw(RangeW, Config.Item("w.draw").GetValue<Circle>().Color, 5);
             }
-            if (Config.Item("e.draw").GetValue<Circle>().Active && CannonE.LSIsReady() || HammerE.LSIsReady())
+            if (Config.Item("e.draw").GetValue<Circle>().Active && CannonE.IsReady() || HammerE.IsReady())
             {
                 Helper.SkillDraw(RangeQ, Config.Item("e.draw").GetValue<Circle>().Color, 5);
             }

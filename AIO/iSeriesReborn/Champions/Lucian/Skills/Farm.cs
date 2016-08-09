@@ -19,15 +19,15 @@ using EloBuddy;
 
                 if (farmLocation.MinionsHit >= 3)
                 {
-                    var adjacentMinions = minionsAround.Where(m => m.LSDistance(farmLocation.Position) <= 45);
+                    var adjacentMinions = minionsAround.Where(m => m.Distance(farmLocation.Position) <= 45);
                     if (!adjacentMinions.Any())
                     {
                         return;
                     }
 
-                    var firstMinion = adjacentMinions.OrderBy(m => m.LSDistance(farmLocation.Position)).First();
+                    var firstMinion = adjacentMinions.OrderBy(m => m.Distance(farmLocation.Position)).First();
 
-                    if (firstMinion.LSIsValidTarget(Variables.spells[SpellSlot.Q].Range))
+                    if (firstMinion.IsValidTarget(Variables.spells[SpellSlot.Q].Range))
                     {
                         if (!LucianHooks.HasPassive && Orbwalking.InAutoAttackRange(firstMinion))
                         {

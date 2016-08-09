@@ -49,341 +49,341 @@ using EloBuddy;
         public static float LastMoveC;
         public static void WallJump()
         {
-            if (Program.myHero.LSDistance(spot1) <= 150)
+            if (Program.myHero.Distance(spot1) <= 150)
             {
                 MoveToLimited(spot1.To3D());          
                     
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.Q3.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot1.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot1.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
-                if (Program.myHero.ServerPosition.Equals(spot1.To3D()) && Program.W.LSIsReady())
+                if (Program.myHero.ServerPosition.Equals(spot1.To3D()) && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(7110, 5612).To3D(), true);
                 }
             }
-            if (Program.myHero.LSDistance(spot2) <= 150)
+            if (Program.myHero.Distance(spot2) <= 150)
             {
                 MoveToLimited(spot2.To3D());
                 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.Q3.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot2.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot2.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
-                if (Program.myHero.ServerPosition.Equals(spot2.To3D()) && Program.W.LSIsReady())
+                if (Program.myHero.ServerPosition.Equals(spot2.To3D()) && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(8372, 2908).To3D(), true);
                 }
             }
-            if (Program.myHero.LSDistance(spot3) <= 150)
+            if (Program.myHero.Distance(spot3) <= 150)
             {
                 MoveToLimited(spot3.To3D());
                 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.Q3.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot3.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot3.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
-                if (Program.myHero.ServerPosition.Equals(spot3.To3D()) && Program.W.LSIsReady())
+                if (Program.myHero.ServerPosition.Equals(spot3.To3D()) && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(3674, 6708).To3D(), true);
                 }
             }
-            if (Program.myHero.LSDistance(spot4) <= 150)
+            if (Program.myHero.Distance(spot4) <= 150)
             {
                 MoveToLimited(spot4.To3D());
                 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.Q3.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot4.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot4.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
-                if (Program.myHero.ServerPosition.Equals(spot4.To3D()) && Program.W.LSIsReady())
+                if (Program.myHero.ServerPosition.Equals(spot4.To3D()) && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(3774, 7706).To3D(), true);
                 }
             }
-            if (Program.myHero.LSDistance(spot5) <= 150)
+            if (Program.myHero.Distance(spot5) <= 150)
             {
                 MoveToLimited(spot5.To3D());
                 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.Q3.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot5.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot5.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
-                if (Program.myHero.ServerPosition.Equals(spot5.To3D()) && Program.W.LSIsReady())
+                if (Program.myHero.ServerPosition.Equals(spot5.To3D()) && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(7923, 9351).To3D(), true);
                 }
             }
-            if (Program.myHero.LSDistance(spot6) <= 150)
+            if (Program.myHero.Distance(spot6) <= 150)
             {
                 MoveToLimited(spot6.To3D());
-                if (Program.myHero.ServerPosition.Equals(spot6.To3D()) && Program.W.LSIsReady())
+                if (Program.myHero.ServerPosition.Equals(spot6.To3D()) && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(6426, 12138).To3D(), true);
                 }
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.Q3.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot6.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot6.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
-                if (Program.myHero.ServerPosition.Equals(spot6.To3D()) && Program.W.LSIsReady())
+                if (Program.myHero.ServerPosition.Equals(spot6.To3D()) && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(6426, 12138).To3D(), true);
                 }
             }
-            if (Program.myHero.LSDistance(spot7) <= 150)
+            if (Program.myHero.Distance(spot7) <= 150)
             {
                 MoveToLimited(spot7.To3D());
                 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.Q3.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot7.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot7.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
-                if (Program.myHero.ServerPosition.Equals(spot7.To3D()) && Program.W.LSIsReady())
+                if (Program.myHero.ServerPosition.Equals(spot7.To3D()) && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(2050, 8416).To3D(), true);
                 }
             }
-            if (Program.myHero.LSDistance(spot8) <= 150)
+            if (Program.myHero.Distance(spot8) <= 150)
             {
                 MoveToLimited(spot8.To3D());
                 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.Q3.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot8.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot8.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
-                if (Program.myHero.ServerPosition.Equals(spot8.To3D()) && Program.W.LSIsReady())
+                if (Program.myHero.ServerPosition.Equals(spot8.To3D()) && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(10894, 7192).To3D(), true);
                 }
             }
-            if (Program.myHero.LSDistance(spot9) <= 150)
+            if (Program.myHero.Distance(spot9) <= 150)
             {
                 MoveToLimited(spot9.To3D());
                 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.Q3.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot9.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot9.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
-                if (Program.myHero.ServerPosition.Equals(spot9.To3D()) && Program.W.LSIsReady())
+                if (Program.myHero.ServerPosition.Equals(spot9.To3D()) && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(11172, 7208).To3D(), true);
                 }
             }
-            if (Program.myHero.LSDistance(spot10) <= 150)
+            if (Program.myHero.Distance(spot10) <= 150)
             {
                 MoveToLimited(spot10.To3D());
                 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.Q3.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot10.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot10.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
-                if (Program.myHero.ServerPosition.Equals(spot10.To3D()) && Program.W.LSIsReady())
+                if (Program.myHero.ServerPosition.Equals(spot10.To3D()) && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(6824, 5308).To3D(), true);
                 }
             }
-            if (Program.myHero.LSDistance(spot11) <= 150)
+            if (Program.myHero.Distance(spot11) <= 150)
             {
                 MoveToLimited(spot11.To3D());
                 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.Q3.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot11.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot11.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
-                if (Program.myHero.ServerPosition.Equals(spot11.To3D()) && Program.W.LSIsReady())
+                if (Program.myHero.ServerPosition.Equals(spot11.To3D()) && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(12772, 6458).To3D(), true);
                 }
             }
-            if (Program.myHero.LSDistance(spot12) <= 150)
+            if (Program.myHero.Distance(spot12) <= 150)
             {
                 MoveToLimited(spot12.To3D());
                 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.Q3.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot12.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot12.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
-                if (Program.myHero.ServerPosition.Equals(spot12.To3D()) && Program.W.LSIsReady())
+                if (Program.myHero.ServerPosition.Equals(spot12.To3D()) && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(11072, 8156).To3D(), true);
                 }
             }
-            if (Program.myHero.LSDistance(spot13) <= 150)
+            if (Program.myHero.Distance(spot13) <= 150)
             {
                 MoveToLimited(spot13.To3D());
                 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.Q3.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot13.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot13.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
-                if (Program.myHero.ServerPosition.Equals(spot13.To3D()) && Program.W.LSIsReady())
+                if (Program.myHero.ServerPosition.Equals(spot13.To3D()) && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(10772, 8456).To3D(), true);
                 }
             }
-            if (Program.myHero.LSDistance(spot14) <= 150)
+            if (Program.myHero.Distance(spot14) <= 150)
             {
                 MoveToLimited(spot14.To3D());
                 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.Q3.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot14.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot14.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
-                if (Program.myHero.ServerPosition.Equals(spot14.To3D()) && Program.W.LSIsReady())
+                if (Program.myHero.ServerPosition.Equals(spot14.To3D()) && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(4024, 6358).To3D(), true);
                 }
             }
-            if (Program.myHero.LSDistance(spot15) <= 150)
+            if (Program.myHero.Distance(spot15) <= 150)
             {
                 MoveToLimited(spot15.To3D());
                 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.Q3.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot15.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot15.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
-                if (Program.myHero.ServerPosition.Equals(spot15.To3D()) && Program.W.LSIsReady())
+                if (Program.myHero.ServerPosition.Equals(spot15.To3D()) && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(66986, 10910).To3D(), true);
                 }
             }
-            if (Program.myHero.LSDistance(spot16) <= 150)
+            if (Program.myHero.Distance(spot16) <= 150)
             {
                 MoveToLimited(spot16.To3D());
                 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.Q3.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.Q3.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot16.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot16.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
-                if (Program.myHero.ServerPosition.Equals(spot16.To3D()) && Program.W.LSIsReady())
+                if (Program.myHero.ServerPosition.Equals(spot16.To3D()) && Program.W.IsReady())
                 {
                     Program.W.Cast(new Vector2(7822, 9306).To3D(), true);
                 }
@@ -392,239 +392,239 @@ using EloBuddy;
 
         public static void WallDash()
         {
-            if (Program.myHero.LSDistance(spotA) <= 600)
+            if (Program.myHero.Distance(spotA) <= 600)
             {
                 MoveToLimited(spotA.To3D());
 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.myHero.AttackRange)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.myHero.AttackRange)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotA.To3D()) && jungleMobs.CharData.BaseSkinName == "SRU_Blue" && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotA.To3D()) && jungleMobs.CharData.BaseSkinName == "SRU_Blue" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
             }
-            if (Program.myHero.LSDistance(spotB) <= 600)
+            if (Program.myHero.Distance(spotB) <= 600)
             {
                 MoveToLimited(spotB.To3D());
 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.myHero.AttackRange)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.myHero.AttackRange)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotB.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Red" && jungleMobs.CharData.BaseSkinName != "SRU_RedMini4.1.3" && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotB.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Red" && jungleMobs.CharData.BaseSkinName != "SRU_RedMini4.1.3" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
             }
-            if (Program.myHero.LSDistance(spotC) <= 600)
+            if (Program.myHero.Distance(spotC) <= 600)
             {
                 MoveToLimited(spotC.To3D());
 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.E.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.E.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotC.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotC.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
             }
-            if (Program.myHero.LSDistance(spotD) <= 600)
+            if (Program.myHero.Distance(spotD) <= 600)
             {
                 MoveToLimited(spotD.To3D());
 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(100)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(100)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotD.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Razorbreak" && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini3.1.2" && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini3.1.4" && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotD.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Razorbreak" && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini3.1.2" && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini3.1.4" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
             }
-            if (Program.myHero.LSDistance(spotE) <= 600)
+            if (Program.myHero.Distance(spotE) <= 600)
             {
                 MoveToLimited(spotE.To3D());
 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.E.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.E.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotE.To3D()) && jungleMobs.CharData.BaseSkinName == "SRU_KrugMini" && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotE.To3D()) && jungleMobs.CharData.BaseSkinName == "SRU_KrugMini" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
             }
-            if (Program.myHero.LSDistance(spotF) <= 400)
+            if (Program.myHero.Distance(spotF) <= 400)
             {
                 MoveToLimited(spotF.To3D());
 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.E.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.E.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotF.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Blue" && jungleMobs.CharData.BaseSkinName != "SRU_BlueMini1.1.2" && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotF.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Blue" && jungleMobs.CharData.BaseSkinName != "SRU_BlueMini1.1.2" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
             }
-            if (Program.myHero.LSDistance(spotG) <= 600)
+            if (Program.myHero.Distance(spotG) <= 600)
             {
                 MoveToLimited(spotG.To3D());
 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.myHero.AttackRange)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.myHero.AttackRange)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotG.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Murkwolf" && jungleMobs.CharData.BaseSkinName != "SRU_MurkwolfMini2.1.3" && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotG.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Murkwolf" && jungleMobs.CharData.BaseSkinName != "SRU_MurkwolfMini2.1.3" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
             }
-            if (Program.myHero.LSDistance(spotH) <= 600)
+            if (Program.myHero.Distance(spotH) <= 600)
             {
                 MoveToLimited(spotH.To3D());
 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.E.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.E.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotH.To3D()) && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotH.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
             }
-            if (Program.myHero.LSDistance(spotI) <= 120)
+            if (Program.myHero.Distance(spotI) <= 120)
             {
                 MoveToLimited(spotI.To3D());
 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(100)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(100)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotI.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Murkwolf" && jungleMobs.CharData.BaseSkinName != "SRU_MurkwolfMini8.1.3" && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotI.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Murkwolf" && jungleMobs.CharData.BaseSkinName != "SRU_MurkwolfMini8.1.3" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
             }
-            if (Program.myHero.LSDistance(spotJ) <= 120)
+            if (Program.myHero.Distance(spotJ) <= 120)
             {
                 MoveToLimited(spotJ.To3D());
 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.E.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.E.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotJ.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Murkwolf" && jungleMobs.CharData.BaseSkinName != "SRU_MurkwolfMini8.1.2" && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotJ.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Murkwolf" && jungleMobs.CharData.BaseSkinName != "SRU_MurkwolfMini8.1.2" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
             }
-            if (Program.myHero.LSDistance(spotL) <= 600)
+            if (Program.myHero.Distance(spotL) <= 600)
             {
                 MoveToLimited(spotL.To3D());
 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.E.Range)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.E.Range)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotL.To3D()) && jungleMobs.CharData.BaseSkinName == "SRU_KrugMini" && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotL.To3D()) && jungleMobs.CharData.BaseSkinName == "SRU_KrugMini" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
             }
-            if (Program.myHero.LSDistance(spotM) <= 200)
+            if (Program.myHero.Distance(spotM) <= 200)
             {
                 MoveToLimited(spotM.To3D());
 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.myHero.AttackRange)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.myHero.AttackRange)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotM.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Red" && jungleMobs.CharData.BaseSkinName != "SRU_RedMini10.1.3" && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotM.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Red" && jungleMobs.CharData.BaseSkinName != "SRU_RedMini10.1.3" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
             }
-            if (Program.myHero.LSDistance(spotN) <= 600)
+            if (Program.myHero.Distance(spotN) <= 600)
             {
                 MoveToLimited(spotN.To3D());
 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(100)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(100)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotN.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini9.1.2" && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini9.1.4" && jungleMobs.CharData.BaseSkinName != "SRU_Razorbreak" && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotN.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini9.1.2" && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini9.1.4" && jungleMobs.CharData.BaseSkinName != "SRU_Razorbreak" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
                 }
             }
-            if (Program.myHero.LSDistance(spotO) <= 200)
+            if (Program.myHero.Distance(spotO) <= 200)
             {
                 MoveToLimited(spotO.To3D());
 
                 var jminions = MinionManager.GetMinions(Program.myHero.ServerPosition, Program.E.Range, MinionTypes.All, MinionTeam.Neutral);
-                foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Program.myHero.AttackRange)))
+                foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Program.myHero.AttackRange)))
                 {
                     if (jungleMobs == null)
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotO.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Red" && jungleMobs.CharData.BaseSkinName != "SRU_RedMini10.1.2" && jungleMobs.IsVisible && Program.E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotO.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Red" && jungleMobs.CharData.BaseSkinName != "SRU_RedMini10.1.2" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }

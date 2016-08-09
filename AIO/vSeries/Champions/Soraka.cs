@@ -124,7 +124,7 @@ using EloBuddy;
 
         private static void SorakaOnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (E.LSIsReady() && sender.LSIsValidTarget(1000) && MenuCheck("soraka.inter",Config))
+            if (E.IsReady() && sender.IsValidTarget(1000) && MenuCheck("soraka.inter",Config))
             {
                 E.CastIfHitchanceEquals(sender, HitChance.High);
             }
@@ -132,8 +132,8 @@ using EloBuddy;
 
         private static void SorakaOnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (E.LSIsReady() && MenuCheck("soraka.anti",Config) && E.GetPrediction(gapcloser.Sender).Hitchance > HitChance.High
-                && gapcloser.Sender.LSIsValidTarget(1000))
+            if (E.IsReady() && MenuCheck("soraka.anti",Config) && E.GetPrediction(gapcloser.Sender).Hitchance > HitChance.High
+                && gapcloser.Sender.IsValidTarget(1000))
             {
                 E.Cast(gapcloser.End);
             }
@@ -152,11 +152,11 @@ using EloBuddy;
                     Harass();
                     break;
             }
-            if (!MenuCheck("soraka.heal.disable",Config) && W.LSIsReady())
+            if (!MenuCheck("soraka.heal.disable",Config) && W.IsReady())
             {
                 WManager();
             }
-            if (!MenuCheck("soraka.r.disable",Config) && R.LSIsReady())
+            if (!MenuCheck("soraka.r.disable",Config) && R.IsReady())
             {
                 RManager();
             }
@@ -169,7 +169,7 @@ using EloBuddy;
                 return;
             }
 
-            if (ObjectManager.Player.LSInFountain() || ObjectManager.Player.LSIsRecalling())
+            if (ObjectManager.Player.InFountain() || ObjectManager.Player.IsRecalling())
             {
                 return;
             }
@@ -202,16 +202,16 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (MenuCheck("soraka.q.combo",Config) && Q.LSIsReady())
+            if (MenuCheck("soraka.q.combo",Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "soraka.hitchance"));
                 }
             }
-            if (MenuCheck("soraka.e.combo", Config) && E.LSIsReady())
+            if (MenuCheck("soraka.e.combo", Config) && E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
                 {
                     E.SPredictionCast(enemy, SpellHitChance(Config, "soraka.hitchance"));
                 }
@@ -225,9 +225,9 @@ using EloBuddy;
                 return;
             }
 
-            if (MenuCheck("soraka.q.harass",Config) && Q.LSIsReady())
+            if (MenuCheck("soraka.q.harass",Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "soraka.hitchance"));
                 }
@@ -238,19 +238,19 @@ using EloBuddy;
 
         private static void SorakaOnDraw(EventArgs args)
         {
-            if (Q.LSIsReady() && ActiveCheck("soraka.q.draw", Config))
+            if (Q.IsReady() && ActiveCheck("soraka.q.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, GetColor("soraka.q.draw", Config));
             }
-            if (W.LSIsReady() && ActiveCheck("soraka.w.draw", Config))
+            if (W.IsReady() && ActiveCheck("soraka.w.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, GetColor("soraka.w.draw", Config));
             }
-            if (E.LSIsReady() && ActiveCheck("soraka.e.draw", Config))
+            if (E.IsReady() && ActiveCheck("soraka.e.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, GetColor("soraka.e.draw", Config));
             }
-            if (R.LSIsReady() && ActiveCheck("soraka.r.draw", Config))
+            if (R.IsReady() && ActiveCheck("soraka.r.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, GetColor("soraka.r.draw", Config));
             }

@@ -58,12 +58,8 @@ using EloBuddy;
         private static readonly int[] SmiteRed = { 3715, 3718, 3717, 3716, 3714 };
         private static readonly int[] SmiteBlue = { 3706, 3710, 3709, 3708, 3707 };
 
-        static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
-        }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
 
             _player = ObjectManager.Player;
@@ -91,7 +87,7 @@ using EloBuddy;
 
 
             SetSmiteSlot();
-            _igniteSlot = _player.LSGetSpellSlot("SummonerDot");
+            _igniteSlot = _player.GetSpellSlot("SummonerDot");
 
             _config = new Menu("D-Elise", "D-Elise", true);
 
@@ -337,7 +333,7 @@ using EloBuddy;
             var itemscheck = SmiteBlue.Any(i => Items.HasItem(i)) || SmiteRed.Any(i => Items.HasItem(i));
             if (itemscheck && usesmite &&
                 ObjectManager.Player.Spellbook.CanUseSpell(_smiteSlot) == SpellState.Ready &&
-                target.LSDistance(_player.Position) < _smite.Range)
+                target.Distance(_player.Position) < _smite.Range)
             {
                 ObjectManager.Player.Spellbook.CastSpell(_smiteSlot, target);
             }
@@ -359,18 +355,18 @@ using EloBuddy;
             var iusemppotion = _config.Item("usemppotions").GetValue<bool>();
             var iusepotionmp = _player.Mana <=
                                (_player.MaxMana * (_config.Item("usepotionmp").GetValue<Slider>().Value) / 100);
-            if (_player.LSInFountain() || ObjectManager.Player.LSHasBuff("Recall")) return;
+            if (_player.InFountain() || ObjectManager.Player.HasBuff("Recall")) return;
 
-            if (_player.LSCountEnemysInRange(800f) > 0 ||
+            if (_player.CountEnemysInRange(800f) > 0 ||
                 (mobs.Count > 0 && _config.Item("ActiveJungle").GetValue<KeyBind>().Active && (Items.HasItem(1039) ||
                  SmiteBlue.Any(i => Items.HasItem(i)) || SmiteRed.Any(i => Items.HasItem(i)) || SmitePurple.Any(i => Items.HasItem(i)) ||
                   SmiteBlue.Any(i => Items.HasItem(i)) || SmiteGrey.Any(i => Items.HasItem(i))
                      )))
             {
                 if (iusepotionhp && iusehppotion &&
-                     !(ObjectManager.Player.LSHasBuff("RegenerationPotion", true) ||
-                       ObjectManager.Player.LSHasBuff("ItemCrystalFlask", true) ||
-                       ObjectManager.Player.LSHasBuff("ItemMiniRegenPotion", true)))
+                     !(ObjectManager.Player.HasBuff("RegenerationPotion", true) ||
+                       ObjectManager.Player.HasBuff("ItemCrystalFlask", true) ||
+                       ObjectManager.Player.HasBuff("ItemMiniRegenPotion", true)))
                 {
                     if (Items.HasItem(2041) && Items.CanUseItem(2041))
                     {
@@ -388,9 +384,9 @@ using EloBuddy;
 
 
                 if (iusepotionmp && iusemppotion &&
-                    !(ObjectManager.Player.LSHasBuff("FlaskOfCrystalWater", true) ||
-                      ObjectManager.Player.LSHasBuff("ItemCrystalFlask", true) ||
-                      ObjectManager.Player.LSHasBuff("ItemMiniRegenPotion", true)))
+                    !(ObjectManager.Player.HasBuff("FlaskOfCrystalWater", true) ||
+                      ObjectManager.Player.HasBuff("ItemCrystalFlask", true) ||
+                      ObjectManager.Player.HasBuff("ItemMiniRegenPotion", true)))
                 {
                     if (Items.HasItem(2041) && Items.CanUseItem(2041))
                     {
@@ -421,7 +417,7 @@ using EloBuddy;
             var iBlademyhp = _player.Health <=
                              (_player.MaxHealth * (_config.Item("Blademyhp").GetValue<Slider>().Value) / 100);
             var iOmen = _config.Item("Omen").GetValue<bool>();
-            var iOmenenemys = ObjectManager.Get<AIHeroClient>().Count(hero => hero.LSIsValidTarget(450)) >=
+            var iOmenenemys = ObjectManager.Get<AIHeroClient>().Count(hero => hero.IsValidTarget(450)) >=
                               _config.Item("Omenenemys").GetValue<Slider>().Value;
             var iTiamat = _config.Item("Tiamat").GetValue<bool>();
             var iHydra = _config.Item("Hydra").GetValue<bool>();
@@ -429,22 +425,22 @@ using EloBuddy;
             var iZhonyas = _config.Item("Zhonyas").GetValue<bool>();
             var iZhonyashp = _player.Health <=
                              (_player.MaxHealth * (_config.Item("Zhonyashp").GetValue<Slider>().Value) / 100);
-            if (_player.LSDistance(target) <= 450 && iBilge && (iBilgeEnemyhp || iBilgemyhp) && _bilge.IsReady())
+            if (_player.Distance(target) <= 450 && iBilge && (iBilgeEnemyhp || iBilgemyhp) && _bilge.IsReady())
             {
                 _bilge.Cast(target);
 
             }
-            if (_player.LSDistance(target) <= 450 && iBlade && (iBladeEnemyhp || iBlademyhp) && _blade.IsReady())
+            if (_player.Distance(target) <= 450 && iBlade && (iBladeEnemyhp || iBlademyhp) && _blade.IsReady())
             {
                 _blade.Cast(target);
 
             }
-            if (iTiamat && _tiamat.IsReady() && target.LSIsValidTarget(_tiamat.Range))
+            if (iTiamat && _tiamat.IsReady() && target.IsValidTarget(_tiamat.Range))
             {
                 _tiamat.Cast();
 
             }
-            if (iHydra && _hydra.IsReady() && target.LSIsValidTarget(_hydra.Range))
+            if (iHydra && _hydra.IsReady() && target.IsValidTarget(_hydra.Range))
             {
                 _hydra.Cast();
 
@@ -459,11 +455,11 @@ using EloBuddy;
                 foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsAlly || hero.IsMe))
                 {
                     if (hero.Health <= (hero.MaxHealth * (_config.Item("lotisminhp").GetValue<Slider>().Value) / 100) &&
-                        hero.LSDistance(_player.ServerPosition) <= _lotis.Range && _lotis.IsReady())
+                        hero.Distance(_player.ServerPosition) <= _lotis.Range && _lotis.IsReady())
                         _lotis.Cast();
                 }
             }
-            if (iZhonyas && iZhonyashp && _player.LSCountEnemysInRange(1000f) >= 1)
+            if (iZhonyas && iZhonyashp && _player.CountEnemysInRange(1000f) >= 1)
             {
                 _zhonya.Cast(_player);
 
@@ -474,13 +470,13 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(_humanW.Range, TargetSelector.DamageType.Magical);
             var sReady = (_smiteSlot != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(_smiteSlot) == SpellState.Ready);
-            var qdmg = _player.LSGetSpellDamage(target, SpellSlot.Q);
-            var wdmg = _player.LSGetSpellDamage(target, SpellSlot.W);
+            var qdmg = _player.GetSpellDamage(target, SpellSlot.Q);
+            var wdmg = _player.GetSpellDamage(target, SpellSlot.W);
             if (target == null) return; //buffelisecocoon
             Smiteontarget(target);
             if (_human)
             {
-                if (target.LSDistance(_player.Position) < _humanE.Range && _config.Item("UseHumanE").GetValue<bool>() && _humanE.LSIsReady())
+                if (target.Distance(_player.Position) < _humanE.Range && _config.Item("UseHumanE").GetValue<bool>() && _humanE.IsReady())
                 {
                     if (sReady && _config.Item("Smiteeee").GetValue<bool>() &&
                         _humanE.GetPrediction(target).CollisionObjects.Count == 1)
@@ -494,49 +490,49 @@ using EloBuddy;
                     }
                 }
 
-                if (_player.LSDistance(target) <= _humanQ.Range && _config.Item("UseHumanQ").GetValue<bool>() && _humanQ.LSIsReady())
+                if (_player.Distance(target) <= _humanQ.Range && _config.Item("UseHumanQ").GetValue<bool>() && _humanQ.IsReady())
                 {
                     _humanQ.Cast(target, Packets());
                 }
-                if (_player.LSDistance(target) <= _humanW.Range && _config.Item("UseHumanW").GetValue<bool>() && _humanW.LSIsReady())
+                if (_player.Distance(target) <= _humanW.Range && _config.Item("UseHumanW").GetValue<bool>() && _humanW.IsReady())
                 {
                     _humanW.Cast(target, Packets());
                 }
-                if (!_humanQ.LSIsReady() && !_humanW.LSIsReady() && !_humanE.LSIsReady() && _config.Item("UseRCombo").GetValue<bool>() && _r.LSIsReady())
+                if (!_humanQ.IsReady() && !_humanW.IsReady() && !_humanE.IsReady() && _config.Item("UseRCombo").GetValue<bool>() && _r.IsReady())
                 {
                     _r.Cast();
                 }
-                if (!_humanQ.LSIsReady() && !_humanW.LSIsReady() && _player.LSDistance(target) <= _spiderQ.Range && _config.Item("UseRCombo").GetValue<bool>() && _r.LSIsReady())
+                if (!_humanQ.IsReady() && !_humanW.IsReady() && _player.Distance(target) <= _spiderQ.Range && _config.Item("UseRCombo").GetValue<bool>() && _r.IsReady())
                 {
                     _r.Cast();
                 }
             }
             if (!_spider) return;
-            if (_player.LSDistance(target) <= _spiderQ.Range && _config.Item("UseSpiderQ").GetValue<bool>() && _spiderQ.LSIsReady())
+            if (_player.Distance(target) <= _spiderQ.Range && _config.Item("UseSpiderQ").GetValue<bool>() && _spiderQ.IsReady())
             {
                 _spiderQ.Cast(target, Packets());
             }
-            if (_player.LSDistance(target) <= 200 && _config.Item("UseSpiderW").GetValue<bool>() && _spiderW.LSIsReady())
+            if (_player.Distance(target) <= 200 && _config.Item("UseSpiderW").GetValue<bool>() && _spiderW.IsReady())
             {
                 _spiderW.Cast();
             }
-            if (_player.LSDistance(target) <= _spiderE.Range && _player.LSDistance(target) > _spiderQ.Range && _config.Item("UseSpiderE").GetValue<bool>() && _spiderE.LSIsReady() && !_spiderQ.LSIsReady())
+            if (_player.Distance(target) <= _spiderE.Range && _player.Distance(target) > _spiderQ.Range && _config.Item("UseSpiderE").GetValue<bool>() && _spiderE.IsReady() && !_spiderQ.IsReady())
             {
                 _spiderE.Cast(target, Packets());
             }
-            if (_player.LSDistance(target) > _spiderQ.Range && !_spiderE.LSIsReady() && _r.LSIsReady() && !_spiderQ.LSIsReady() && _config.Item("UseRCombo").GetValue<bool>())
+            if (_player.Distance(target) > _spiderQ.Range && !_spiderE.IsReady() && _r.IsReady() && !_spiderQ.IsReady() && _config.Item("UseRCombo").GetValue<bool>())
             {
                 _r.Cast();
             }
-            if (_humanQ.LSIsReady() && _humanW.LSIsReady() && _r.LSIsReady() && _config.Item("UseRCombo").GetValue<bool>())
+            if (_humanQ.IsReady() && _humanW.IsReady() && _r.IsReady() && _config.Item("UseRCombo").GetValue<bool>())
             {
                 _r.Cast();
             }
-            if (_humanQ.LSIsReady() && _humanW.LSIsReady() && _r.LSIsReady() && _config.Item("UseRCombo").GetValue<bool>())
+            if (_humanQ.IsReady() && _humanW.IsReady() && _r.IsReady() && _config.Item("UseRCombo").GetValue<bool>())
             {
                 _r.Cast();
             }
-            if ((_humanQ.LSIsReady() && qdmg >= target.Health || _humanW.LSIsReady() && wdmg >= target.Health) && _config.Item("UseRCombo").GetValue<bool>())
+            if ((_humanQ.IsReady() && qdmg >= target.Health || _humanW.IsReady() && wdmg >= target.Health) && _config.Item("UseRCombo").GetValue<bool>())
             {
                 _r.Cast();
             }
@@ -549,12 +545,12 @@ using EloBuddy;
             if (target != null)
             {
 
-                if (_human && _player.LSDistance(target) <= _humanQ.Range && _config.Item("UseQHarass").GetValue<bool>() && _humanQ.LSIsReady())
+                if (_human && _player.Distance(target) <= _humanQ.Range && _config.Item("UseQHarass").GetValue<bool>() && _humanQ.IsReady())
                 {
                     _humanQ.Cast(target, Packets());
                 }
 
-                if (_human && _player.LSDistance(target) <= _humanW.Range && _config.Item("UseWHarass").GetValue<bool>() && _humanW.LSIsReady())
+                if (_human && _player.Distance(target) <= _humanW.Range && _config.Item("UseWHarass").GetValue<bool>() && _humanW.IsReady())
                 {
                     _humanW.Cast(target, Packets());
                 }
@@ -575,15 +571,15 @@ using EloBuddy;
                 foreach (var minion in mobs)
                     if (_human)
                     {
-                        if (jungleQ && _humanQ.LSIsReady() && minion.LSIsValidTarget() && _player.LSDistance(minion) <= _humanQ.Range)
+                        if (jungleQ && _humanQ.IsReady() && minion.IsValidTarget() && _player.Distance(minion) <= _humanQ.Range)
                         {
                             _humanQ.Cast(minion, Packets());
                         }
-                        if (jungleW && _humanW.LSIsReady() && !_humanQ.LSIsReady() && minion.LSIsValidTarget() && _player.LSDistance(minion) <= _humanW.Range)
+                        if (jungleW && _humanW.IsReady() && !_humanQ.IsReady() && minion.IsValidTarget() && _player.Distance(minion) <= _humanW.Range)
                         {
                             _humanW.Cast(minion, Packets());
                         }
-                        if ((!_humanQ.LSIsReady() && !_humanW.LSIsReady()) || switchR)
+                        if ((!_humanQ.IsReady() && !_humanW.IsReady()) || switchR)
                         {
                             _r.Cast();
                         }
@@ -592,16 +588,16 @@ using EloBuddy;
                 {
                     if (_spider)
                     {
-                        if (spiderjungleQ && _spiderQ.LSIsReady() && minion.LSIsValidTarget() && _player.LSDistance(minion) <= _spiderQ.Range)
+                        if (spiderjungleQ && _spiderQ.IsReady() && minion.IsValidTarget() && _player.Distance(minion) <= _spiderQ.Range)
                         {
                             _spiderQ.Cast(minion, Packets());
                         }
-                        if (spiderjungleW && _spiderW.LSIsReady() && minion.LSIsValidTarget() && _player.LSDistance(minion) <= 150)
+                        if (spiderjungleW && _spiderW.IsReady() && minion.IsValidTarget() && _player.Distance(minion) <= 150)
                         {
                             _orbwalker.SetAttack(true);
                             _spiderW.Cast();
                         }
-                        if (_r.LSIsReady() && _humanQ.LSIsReady() && !_spiderQ.LSIsReady() && !_spiderW.LSIsReady() && _spider)
+                        if (_r.IsReady() && _humanQ.IsReady() && !_spiderQ.IsReady() && !_spiderW.IsReady() && _spider)
                         {
                             _r.Cast();
                         }
@@ -618,8 +614,8 @@ using EloBuddy;
                            (100 * (_player.Mana / _player.MaxMana)) > _config.Item("Lanemana").GetValue<Slider>().Value);
             var useHumW = (_config.Item("HumanWFarm").GetValue<bool>() &&
                            (100 * (_player.Mana / _player.MaxMana)) > _config.Item("Lanemana").GetValue<Slider>().Value);
-            var useSpiQFarm = (_spiderQ.LSIsReady() && _config.Item("SpiderQFarm").GetValue<bool>());
-            var useSpiWFarm = (_spiderW.LSIsReady() && _config.Item("SpiderWFarm").GetValue<bool>());
+            var useSpiQFarm = (_spiderQ.IsReady() && _config.Item("SpiderQFarm").GetValue<bool>());
+            var useSpiWFarm = (_spiderW.IsReady() && _config.Item("SpiderWFarm").GetValue<bool>());
             var allminions = MinionManager.GetMinions(_player.ServerPosition, _humanQ.Range, MinionTypes.All,
                 MinionTeam.Enemy, MinionOrderTypes.Health);
             {
@@ -628,17 +624,17 @@ using EloBuddy;
                     foreach (var minion in allminions)
                         if (_human)
                         {
-                            if (useHumQ && _humanQ.LSIsReady() && minion.LSIsValidTarget() &&
-                                _player.LSDistance(minion) <= _humanQ.Range)
+                            if (useHumQ && _humanQ.IsReady() && minion.IsValidTarget() &&
+                                _player.Distance(minion) <= _humanQ.Range)
                             {
                                 _humanQ.Cast(minion);
                             }
-                            if (useHumW && _humanW.LSIsReady() && minion.LSIsValidTarget() &&
-                                _player.LSDistance(minion) <= _humanW.Range)
+                            if (useHumW && _humanW.IsReady() && minion.IsValidTarget() &&
+                                _player.Distance(minion) <= _humanW.Range)
                             {
                                 _humanW.Cast(minion);
                             }
-                            if (useR && _r.LSIsReady())
+                            if (useR && _r.IsReady())
                             {
                                 _r.Cast();
                             }
@@ -646,13 +642,13 @@ using EloBuddy;
                     foreach (var minion in allminions)
                         if (_spider)
                         {
-                            if (useSpiQFarm && _spiderQ.LSIsReady() && minion.LSIsValidTarget() &&
-                                _player.LSDistance(minion) <= _spiderQ.Range)
+                            if (useSpiQFarm && _spiderQ.IsReady() && minion.IsValidTarget() &&
+                                _player.Distance(minion) <= _spiderQ.Range)
                             {
                                 _spiderQ.Cast(minion);
                             }
-                            if (useSpiWFarm && _spiderW.LSIsReady() && minion.LSIsValidTarget() &&
-                                _player.LSDistance(minion) <= 125)
+                            if (useSpiWFarm && _spiderW.IsReady() && minion.IsValidTarget() &&
+                                _player.Distance(minion) <= 125)
                             {
                                 _spiderW.Cast();
                             }
@@ -663,17 +659,17 @@ using EloBuddy;
                                     foreach (var minion in allminions)
                                         if (_human)
                                         {
-                                            if (useHumQ && _player.LSGetSpellDamage(minion, SpellSlot.Q) > minion.Health &&
-                                                _humanQ.LSIsReady() && minion.LSIsValidTarget() && _player.LSDistance(minion) <= _humanQ.Range)
+                                            if (useHumQ && _player.GetSpellDamage(minion, SpellSlot.Q) > minion.Health &&
+                                                _humanQ.IsReady() && minion.IsValidTarget() && _player.Distance(minion) <= _humanQ.Range)
                                             {
                                                 _humanQ.Cast(minion);
                                             }
-                                            if (useHumW && _player.LSGetSpellDamage(minion, SpellSlot.W) > minion.Health &&
-                                                _humanW.LSIsReady() && minion.LSIsValidTarget() && _player.LSDistance(minion) <= _humanW.Range)
+                                            if (useHumW && _player.GetSpellDamage(minion, SpellSlot.W) > minion.Health &&
+                                                _humanW.IsReady() && minion.IsValidTarget() && _player.Distance(minion) <= _humanW.Range)
                                             {
                                                 _humanW.Cast(minion);
                                             }
-                                            if (useR && _r.LSIsReady())
+                                            if (useR && _r.IsReady())
                                             {
                                                 _r.Cast();
                                             }
@@ -681,14 +677,14 @@ using EloBuddy;
                                     foreach (var minion in allminions)
                                         if (_spider)
                                         {
-                                            if (useSpiQFarm && _spiderQ.LSIsReady() &&
-                                                _player.LSGetSpellDamage(minion, SpellSlot.Q) > minion.Health && _spiderQ.LSIsReady() &&
-                                                minion.LSIsValidTarget() && _player.LSDistance(minion) <= _spiderQ.Range)
+                                            if (useSpiQFarm && _spiderQ.IsReady() &&
+                                                _player.GetSpellDamage(minion, SpellSlot.Q) > minion.Health && _spiderQ.IsReady() &&
+                                                minion.IsValidTarget() && _player.Distance(minion) <= _spiderQ.Range)
                                             {
                                                 _spiderQ.Cast(minion);
                                             }
-                                            if (useSpiQFarm && _spiderW.LSIsReady() && minion.LSIsValidTarget() &&
-                                                _player.LSDistance(minion) <= 125)
+                                            if (useSpiQFarm && _spiderW.IsReady() && minion.IsValidTarget() &&
+                                                _player.Distance(minion) <= 125)
                                             {
                                                 _spiderW.Cast();
                                             }
@@ -802,7 +798,7 @@ using EloBuddy;
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             var target = TargetSelector.GetTarget(_humanE.Range, TargetSelector.DamageType.Magical);
 
-            if (_human && _player.LSDistance(target) < _humanE.Range && _humanE.LSIsReady() && _humanE.GetPrediction(target).Hitchance >= HitChance.VeryHigh)
+            if (_human && _player.Distance(target) < _humanE.Range && _humanE.IsReady() && _humanE.GetPrediction(target).Hitchance >= HitChance.VeryHigh)
             {
                 _humanE.Cast(target, Packets());
             }
@@ -815,7 +811,7 @@ using EloBuddy;
         private static void Interrupter_OnPosibleToInterrupt(Obj_AI_Base target, InterruptableSpell spell)
         {
             if (!_config.Item("UseEInt").GetValue<bool>()) return;
-            if (_player.LSDistance(target) < _humanE.Range && target != null && _humanE.GetPrediction(target).Hitchance >= HitChance.Low)
+            if (_player.Distance(target) < _humanE.Range && target != null && _humanE.GetPrediction(target).Hitchance >= HitChance.Low)
             {
                 _humanE.Cast(target, Packets());
             }
@@ -823,11 +819,11 @@ using EloBuddy;
 
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (_spiderE.LSIsReady() && _spider && gapcloser.Sender.LSIsValidTarget(_spiderE.Range) && _config.Item("Spidergapcloser").GetValue<bool>())
+            if (_spiderE.IsReady() && _spider && gapcloser.Sender.IsValidTarget(_spiderE.Range) && _config.Item("Spidergapcloser").GetValue<bool>())
             {
                 _spiderE.Cast(gapcloser.Sender, Packets());
             }
-            if (_humanE.LSIsReady() && _human && gapcloser.Sender.LSIsValidTarget(_humanE.Range) && _config.Item("Humangapcloser").GetValue<bool>())
+            if (_humanE.IsReady() && _human && gapcloser.Sender.IsValidTarget(_humanE.Range) && _config.Item("Humangapcloser").GetValue<bool>())
             {
                 _humanE.Cast(gapcloser.Sender, Packets());
             }
@@ -891,12 +887,12 @@ using EloBuddy;
         {
             foreach (var col in MinionManager.GetMinions(_player.Position, 1500, MinionTypes.All, MinionTeam.NotAlly))
             {
-                var segment = Geometry.LSProjectOn(col.ServerPosition.LSTo2D(), _player.ServerPosition.LSTo2D(),
-                    col.Position.LSTo2D());
+                var segment = Geometry.ProjectOn(col.ServerPosition.To2D(), _player.ServerPosition.To2D(),
+                    col.Position.To2D());
                 if (segment.IsOnSegment &&
-                    target.ServerPosition.LSTo2D().LSDistance(segment.SegmentPoint) <= GetHitBox(col) + 40)
+                    target.ServerPosition.To2D().Distance(segment.SegmentPoint) <= GetHitBox(col) + 40)
                 {
-                    if (col.LSDistance(_player.Position) < _smite.Range &&
+                    if (col.Distance(_player.Position) < _smite.Range &&
                         col.Health < _player.GetSummonerSpellDamage(col, Damage.SummonerSpell.Smite))
                     {
                         _player.Spellbook.CastSpell(_smiteSlot, col);
@@ -922,8 +918,8 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(_humanQ.Range, TargetSelector.DamageType.Magical);
             var igniteDmg = _player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
-            var qhDmg = _player.LSGetSpellDamage(target, SpellSlot.Q);
-            var wDmg = _player.LSGetSpellDamage(target, SpellSlot.W);
+            var qhDmg = _player.GetSpellDamage(target, SpellSlot.Q);
+            var wDmg = _player.GetSpellDamage(target, SpellSlot.W);
 
             if (target != null && _config.Item("UseIgnite").GetValue<bool>() && _igniteSlot != SpellSlot.Unknown &&
             _player.Spellbook.CanUseSpell(_igniteSlot) == SpellState.Ready)
@@ -935,14 +931,14 @@ using EloBuddy;
             }
             if (_human)
             {
-                if (_humanQ.LSIsReady() && _player.LSDistance(target) <= _humanQ.Range && target != null && _config.Item("HumanQKs").GetValue<bool>())
+                if (_humanQ.IsReady() && _player.Distance(target) <= _humanQ.Range && target != null && _config.Item("HumanQKs").GetValue<bool>())
                 {
                     if (target.Health <= qhDmg)
                     {
                         _humanQ.Cast(target);
                     }
                 }
-                if (_humanW.LSIsReady() && _player.LSDistance(target) <= _humanW.Range && target != null && _config.Item("HumanWKs").GetValue<bool>())
+                if (_humanW.IsReady() && _player.Distance(target) <= _humanW.Range && target != null && _config.Item("HumanWKs").GetValue<bool>())
                 {
                     if (target.Health <= wDmg)
                     {
@@ -950,7 +946,7 @@ using EloBuddy;
                     }
                 }
             }
-            if (_spider && _spiderQ.LSIsReady() && _player.LSDistance(target) <= _spiderQ.Range && target != null && _config.Item("SpiderQKs").GetValue<bool>())
+            if (_spider && _spiderQ.IsReady() && _player.Distance(target) <= _spiderQ.Range && target != null && _config.Item("SpiderQKs").GetValue<bool>())
             {
                 if (target.Health <= qhDmg)
                 {

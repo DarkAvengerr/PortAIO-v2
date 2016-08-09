@@ -169,7 +169,7 @@ using EloBuddy; namespace ShadowTracker
                             Sender = sender,
                             ExpireTime = TickCount(3000),
                             StartPosition = args.Start,
-                            EndPosition = args.Start.LSExtend(args.End, MovingSkillInfo.MaxRange)
+                            EndPosition = args.Start.Extend(args.End, MovingSkillInfo.MaxRange)
                         });
                     }
                     if (StopSkillInfo != null)

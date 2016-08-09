@@ -170,7 +170,7 @@
             {
                 var pos = Player.GetDashInfo().EndPos.To3D();
                 var target = TargetSelector.GetTarget(QCirWidth, TargetSelector.DamageType.Physical, true, null, pos);
-                return target != null && Player.LSDistance(pos) < 150 ? target : null;
+                return target != null && Player.Distance(pos) < 150 ? target : null;
             }
         }
 
@@ -180,7 +180,7 @@
 
         private static void AutoQ()
         {
-            if (!GetValue<KeyBind>("Harass", "AutoQ").Active || Player.LSIsDashing()
+            if (!GetValue<KeyBind>("Harass", "AutoQ").Active || Player.IsDashing()
                 || (HaveQ3 && !GetValue<bool>("Harass", "AutoQ3"))
                 || (UnderTower(Player.ServerPosition) && !GetValue<bool>("Harass", "AutoQTower")))
             {
@@ -206,12 +206,12 @@
 
         private static bool CastQCir(Obj_AI_Base target)
         {
-            return target.LSIsValidTarget(QCirWidthMin - target.BoundingRadius) && Q.Cast(Game.CursorPos, PacketCast);
+            return target.IsValidTarget(QCirWidthMin - target.BoundingRadius) && Q.Cast(Game.CursorPos, PacketCast);
         }
 
         private static void Clear()
         {
-            if (GetValue<bool>("Clear", "E") && E.LSIsReady())
+            if (GetValue<bool>("Clear", "E") && E.IsReady())
             {
                 var minionObj =
                     GetMinions(E.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth)
@@ -220,14 +220,14 @@
                 if (minionObj.Any())
                 {
                     var obj = minionObj.FirstOrDefault(i => CanKill(i, GetEDmg(i)));
-                    if (obj == null && GetValue<bool>("Clear", "Q") && Q.LSIsReady(50)
+                    if (obj == null && GetValue<bool>("Clear", "Q") && Q.IsReady(50)
                         && (!HaveQ3 || GetValue<bool>("Clear", "Q3")))
                     {
                         obj = (from i in minionObj
                                let sub = GetMinions(PosAfterE(i), QCirWidth, MinionTypes.All, MinionTeam.NotAlly)
                                where
                                    i.Team == GameObjectTeam.Neutral
-                                   || (i.LSDistance(PosAfterE(i)) < QCirWidthMin && CanKill(i, GetEDmg(i) + GetQDmg(i)))
+                                   || (i.Distance(PosAfterE(i)) < QCirWidthMin && CanKill(i, GetEDmg(i) + GetQDmg(i)))
                                    || sub.Any(a => CanKill(a, GetQDmg(a))) || sub.Count > 1
                                select i).MaxOrDefault(
                                    i => GetMinions(PosAfterE(i), QCirWidth, MinionTypes.All, MinionTeam.NotAlly).Count);
@@ -238,9 +238,9 @@
                     }
                 }
             }
-            if (GetValue<bool>("Clear", "Q") && Q.LSIsReady() && (!HaveQ3 || GetValue<bool>("Clear", "Q3")))
+            if (GetValue<bool>("Clear", "Q") && Q.IsReady() && (!HaveQ3 || GetValue<bool>("Clear", "Q3")))
             {
-                if (Player.LSIsDashing())
+                if (Player.IsDashing())
                 {
                     var minionObj = GetMinions(
                         Player.GetDashInfo().EndPos.To3D(),
@@ -248,8 +248,8 @@
                         MinionTypes.All,
                         MinionTeam.NotAlly);
                     if ((minionObj.Any(i => CanKill(i, GetQDmg(i)) || i.Team == GameObjectTeam.Neutral)
-                         || minionObj.Count > 1) && Player.LSDistance(Player.GetDashInfo().EndPos) < 150
-                        && CastQCir(minionObj.MinOrDefault(i => i.LSDistance(Player))))
+                         || minionObj.Count > 1) && Player.Distance(Player.GetDashInfo().EndPos) < 150
+                        && CastQCir(minionObj.MinOrDefault(i => i.Distance(Player))))
                     {
                         return;
                     }
@@ -266,7 +266,7 @@
                         if (!HaveQ3)
                         {
                             var obj = minionObj.FirstOrDefault(i => CanKill(i, GetQDmg(i)));
-                            if (obj != null && Q.Cast(obj, PacketCast).LSIsCasted())
+                            if (obj != null && Q.Cast(obj, PacketCast).IsCasted())
                             {
                                 return;
                             }
@@ -290,7 +290,7 @@
                     MinionTeam.NotAlly);
                 if (minionObj.Count > 2
                     || minionObj.Any(
-                        i => i.MaxHealth >= 1200 && i.LSDistance(Player) < (Hydra.IsReady() ? Hydra : Tiamat).Range - 80))
+                        i => i.MaxHealth >= 1200 && i.Distance(Player) < (Hydra.IsReady() ? Hydra : Tiamat).Range - 80))
                 {
                     if (Tiamat.IsReady())
                     {
@@ -308,10 +308,10 @@
         {
             if (mode == "Combo")
             {
-                if (GetValue<bool>(mode, "R") && R.LSIsReady())
+                if (GetValue<bool>(mode, "R") && R.IsReady())
                 {
                     var obj = (from enemy in HeroManager.Enemies.Where(i => R.IsInRange(i) && CanCastR(i))
-                               let sub = enemy.LSGetEnemiesInRange(RWidth).Where(CanCastR).ToList()
+                               let sub = enemy.GetEnemiesInRange(RWidth).Where(CanCastR).ToList()
                                where
                                    (sub.Count > 1 && R.IsKillable(enemy))
                                    || sub.Any(i => i.HealthPercent < GetValue<Slider>(mode, "RHpU").Value)
@@ -330,9 +330,9 @@
                         }
                     }
                 }
-                if (GetValue<bool>(mode, "E") && E.LSIsReady())
+                if (GetValue<bool>(mode, "E") && E.IsReady())
                 {
-                    if (GetValue<bool>(mode, "EDmg") && GetValue<bool>(mode, "Q") && HaveQ3 && Q.LSIsReady(50))
+                    if (GetValue<bool>(mode, "EDmg") && GetValue<bool>(mode, "Q") && HaveQ3 && Q.IsReady(50))
                     {
                         var target = TargetSelector.GetTarget(QRange, TargetSelector.DamageType.Physical);
                         if (target != null)
@@ -353,7 +353,7 @@
                             var obj = GetNearObj(target);
                             if (obj != null
                                 && (obj.NetworkId != target.NetworkId
-                                        ? Player.LSDistance(target) > GetValue<Slider>(mode, "EGapRange").Value
+                                        ? Player.Distance(target) > GetValue<Slider>(mode, "EGapRange").Value
                                         : !Orbwalk.InAutoAttackRange(target))
                                 && (!UnderTower(PosAfterE(obj)) || GetValue<bool>(mode, "EGapTower"))
                                 && E.CastOnUnit(obj, PacketCast))
@@ -364,13 +364,13 @@
                     }
                 }
             }
-            if (GetValue<bool>(mode, "Q") && Q.LSIsReady())
+            if (GetValue<bool>(mode, "Q") && Q.IsReady())
             {
                 if (mode == "Combo"
                     || ((!HaveQ3 || GetValue<bool>(mode, "Q3"))
                         && (!UnderTower(Player.ServerPosition) || GetValue<bool>(mode, "QTower"))))
                 {
-                    if (Player.LSIsDashing())
+                    if (Player.IsDashing())
                     {
                         if (QCirTarget != null && CastQCir(QCirTarget))
                         {
@@ -384,8 +384,8 @@
                                 QCirWidth,
                                 MinionTypes.All,
                                 MinionTeam.NotAlly);
-                            if (minionObj.Any() && Player.LSDistance(Player.GetDashInfo().EndPos) < 150
-                                && CastQCir(minionObj.MinOrDefault(i => i.LSDistance(Player))))
+                            if (minionObj.Any() && Player.Distance(Player.GetDashInfo().EndPos) < 150
+                                && CastQCir(minionObj.MinOrDefault(i => i.Distance(Player))))
                             {
                                 return;
                             }
@@ -400,7 +400,7 @@
                         {
                             if (!HaveQ3)
                             {
-                                if (Q.Cast(target, PacketCast, true).LSIsCasted())
+                                if (Q.Cast(target, PacketCast, true).IsCasted())
                                 {
                                     return;
                                 }
@@ -409,7 +409,7 @@
                             {
                                 var hit = -1;
                                 var predPos = new Vector3();
-                                foreach (var hero in HeroManager.Enemies.Where(i => i.LSIsValidTarget(Q2Range)))
+                                foreach (var hero in HeroManager.Enemies.Where(i => i.IsValidTarget(Q2Range)))
                                 {
                                     var pred = Q2.GetPrediction(hero, true);
                                     if (pred.Hitchance >= Q2.MinHitChance && pred.AoeTargetsHitCount > hit)
@@ -418,14 +418,14 @@
                                         predPos = pred.CastPosition;
                                     }
                                 }
-                                if (predPos.LSIsValid())
+                                if (predPos.IsValid())
                                 {
                                     if (Q2.Cast(predPos, PacketCast))
                                     {
                                         return;
                                     }
                                 }
-                                else if (Q2.Cast(target, PacketCast, true).LSIsCasted())
+                                else if (Q2.Cast(target, PacketCast, true).IsCasted())
                                 {
                                     return;
                                 }
@@ -434,7 +434,7 @@
                     }
                 }
                 if (mode == "Harass" && GetValue<bool>(mode, "QLastHit") && Q.GetTarget(100) == null && !HaveQ3
-                    && !Player.LSIsDashing())
+                    && !Player.IsDashing())
                 {
                     var obj =
                         GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth)
@@ -453,7 +453,7 @@
             {
                 return;
             }
-            if (GetValue<bool>("Flee", "EStackQ") && Q.LSIsReady() && !HaveQ3 && Player.LSIsDashing())
+            if (GetValue<bool>("Flee", "EStackQ") && Q.IsReady() && !HaveQ3 && Player.IsDashing())
             {
                 if (QCirTarget != null && CastQCir(QCirTarget))
                 {
@@ -464,14 +464,14 @@
                     QCirWidth,
                     MinionTypes.All,
                     MinionTeam.NotAlly);
-                if (minionObj.Any() && Player.LSDistance(Player.GetDashInfo().EndPos) < 150
-                    && CastQCir(minionObj.MinOrDefault(i => i.LSDistance(Player))))
+                if (minionObj.Any() && Player.Distance(Player.GetDashInfo().EndPos) < 150
+                    && CastQCir(minionObj.MinOrDefault(i => i.Distance(Player))))
                 {
                     return;
                 }
             }
             var obj = GetNearObj();
-            if (obj == null || !E.LSIsReady())
+            if (obj == null || !E.IsReady())
             {
                 return;
             }
@@ -494,13 +494,13 @@
                           : Game.CursorPos;
             var obj = new List<Obj_AI_Base>();
             obj.AddRange(GetMinions(E.Range, MinionTypes.All, MinionTeam.NotAlly));
-            obj.AddRange(HeroManager.Enemies.Where(i => i.LSIsValidTarget(E.Range)));
+            obj.AddRange(HeroManager.Enemies.Where(i => i.IsValidTarget(E.Range)));
             return
                 obj.Where(
                     i =>
-                    CanCastE(i) && pos.LSDistance(PosAfterE(i)) < (inQCir ? QCirWidthMin : Player.LSDistance(pos))
-                    && EvadeSkillshot.IsSafePoint(PosAfterE(i).LSTo2D()).IsSafe)
-                    .MinOrDefault(i => pos.LSDistance(PosAfterE(i)));
+                    CanCastE(i) && pos.Distance(PosAfterE(i)) < (inQCir ? QCirWidthMin : Player.Distance(pos))
+                    && EvadeSkillshot.IsSafePoint(PosAfterE(i).To2D()).IsSafe)
+                    .MinOrDefault(i => pos.Distance(PosAfterE(i)));
         }
 
         private static double GetQDmg(Obj_AI_Base target)
@@ -559,7 +559,7 @@
 
         private static void KillSteal()
         {
-            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.LSIsReady())
+            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.IsReady())
             {
                 var target = TargetSelector.GetTarget(600, TargetSelector.DamageType.True);
                 if (target != null && CastIgnite(target))
@@ -567,9 +567,9 @@
                     return;
                 }
             }
-            if (GetValue<bool>("KillSteal", "Q") && Q.LSIsReady())
+            if (GetValue<bool>("KillSteal", "Q") && Q.IsReady())
             {
-                if (Player.LSIsDashing())
+                if (Player.IsDashing())
                 {
                     var target = QCirTarget;
                     if (target != null && CanKill(target, GetQDmg(target)) && CastQCir(target))
@@ -583,24 +583,24 @@
                         !HaveQ3 ? QRange : Q2Range,
                         TargetSelector.DamageType.Physical);
                     if (target != null && CanKill(target, GetQDmg(target))
-                        && (!HaveQ3 ? Q : Q2).Cast(target, PacketCast).LSIsCasted())
+                        && (!HaveQ3 ? Q : Q2).Cast(target, PacketCast).IsCasted())
                     {
                         return;
                     }
                 }
             }
-            if (GetValue<bool>("KillSteal", "E") && E.LSIsReady())
+            if (GetValue<bool>("KillSteal", "E") && E.IsReady())
             {
                 var target = E.GetTarget(0, HeroManager.Enemies.Where(i => !CanCastE(i)));
                 if (target != null
                     && (CanKill(target, GetEDmg(target))
-                        || (GetValue<bool>("KillSteal", "Q") && Q.LSIsReady(50)
+                        || (GetValue<bool>("KillSteal", "Q") && Q.IsReady(50)
                             && CanKill(target, GetEDmg(target) + GetQDmg(target)))) && E.CastOnUnit(target, PacketCast))
                 {
                     return;
                 }
             }
-            if (GetValue<bool>("KillSteal", "R") && R.LSIsReady())
+            if (GetValue<bool>("KillSteal", "R") && R.IsReady())
             {
                 var target = R.GetTarget(0, HeroManager.Enemies.Where(i => !CanCastR(i)));
                 if (target != null && R.IsKillable(target))
@@ -612,7 +612,7 @@
 
         private static void LastHit()
         {
-            if (GetValue<bool>("LastHit", "Q") && Q.LSIsReady() && !Player.LSIsDashing()
+            if (GetValue<bool>("LastHit", "Q") && Q.IsReady() && !Player.IsDashing()
                 && (!HaveQ3 || GetValue<bool>("LastHit", "Q3")))
             {
                 var obj =
@@ -621,19 +621,19 @@
                         MinionTypes.All,
                         MinionTeam.NotAlly,
                         MinionOrderTypes.MaxHealth).FirstOrDefault(i => CanKill(i, GetQDmg(i)));
-                if (obj != null && (!HaveQ3 ? Q : Q2).Cast(obj, PacketCast, true).LSIsCasted())
+                if (obj != null && (!HaveQ3 ? Q : Q2).Cast(obj, PacketCast, true).IsCasted())
                 {
                     return;
                 }
             }
-            if (GetValue<bool>("LastHit", "E") && E.LSIsReady())
+            if (GetValue<bool>("LastHit", "E") && E.IsReady())
             {
                 var obj =
                     GetMinions(E.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth)
                         .Where(
                             i =>
                             CanCastE(i)
-                            && (!Orbwalk.InAutoAttackRange(i) || i.Health > Player.LSGetAutoAttackDamage(i, true))
+                            && (!Orbwalk.InAutoAttackRange(i) || i.Health > Player.GetAutoAttackDamage(i, true))
                             && (!UnderTower(PosAfterE(i)) || GetValue<bool>("LastHit", "ETower")))
                         .FirstOrDefault(i => CanKill(i, GetEDmg(i)));
                 if (obj != null)
@@ -658,16 +658,16 @@
             {
                 Render.Circle.DrawCircle(
                     Player.Position,
-                    Player.LSIsDashing() ? QCirWidth : (!HaveQ3 ? Q : Q2).Range,
-                    Q.LSIsReady() ? Color.Green : Color.Red);
+                    Player.IsDashing() ? QCirWidth : (!HaveQ3 ? Q : Q2).Range,
+                    Q.IsReady() ? Color.Green : Color.Red);
             }
             if (GetValue<bool>("Draw", "E") && E.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, E.Range, E.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.Green : Color.Red);
             }
             if (GetValue<bool>("Draw", "R") && R.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, R.Range, R.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, R.Range, R.IsReady() ? Color.Green : Color.Red);
             }
         }
 
@@ -678,9 +678,9 @@
             {
                 return;
             }
-            if (E.LSIsReady() && Q.LSIsReady(50))
+            if (E.IsReady() && Q.IsReady(50))
             {
-                if (E.IsInRange(unit) && CanCastE(unit) && unit.LSDistance(PosAfterE(unit)) < QCirWidthMin
+                if (E.IsInRange(unit) && CanCastE(unit) && unit.Distance(PosAfterE(unit)) < QCirWidthMin
                     && E.CastOnUnit(unit, PacketCast))
                 {
                     return;
@@ -694,14 +694,14 @@
                     }
                 }
             }
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
             {
                 return;
             }
-            if (Player.LSIsDashing())
+            if (Player.IsDashing())
             {
                 var pos = Player.GetDashInfo().EndPos;
-                if (Player.LSDistance(pos) < 150 && unit.LSDistance(pos) < QCirWidth)
+                if (Player.Distance(pos) < 150 && unit.Distance(pos) < QCirWidth)
                 {
                     CastQCir(unit);
                 }
@@ -722,7 +722,7 @@
             {
                 Q2.Delay = GetQ2Delay;
             }
-            if (Player.IsDead || MenuGUI.IsChatOpen || Player.LSIsRecalling())
+            if (Player.IsDead || MenuGUI.IsChatOpen || Player.IsRecalling())
             {
                 return;
             }
@@ -751,14 +751,14 @@
 
         private static Vector3 PosAfterE(Obj_AI_Base target)
         {
-            return Player.ServerPosition.LSExtend(
+            return Player.ServerPosition.Extend(
                 target.ServerPosition,
-                Player.LSDistance(target) < 410 ? E.Range : Player.LSDistance(target) + 65);
+                Player.Distance(target) < 410 ? E.Range : Player.Distance(target) + 65);
         }
 
         private static void StackQ()
         {
-            if (!GetValue<KeyBind>("Misc", "StackQ").Active || !Q.LSIsReady() || Player.LSIsDashing() || HaveQ3)
+            if (!GetValue<KeyBind>("Misc", "StackQ").Active || !Q.IsReady() || Player.IsDashing() || HaveQ3)
             {
                 return;
             }
@@ -775,7 +775,7 @@
                     return;
                 }
                 var obj = minionObj.FirstOrDefault(i => CanKill(i, GetQDmg(i)))
-                          ?? minionObj.MinOrDefault(i => i.LSDistance(Player));
+                          ?? minionObj.MinOrDefault(i => i.Distance(Player));
                 if (obj != null)
                 {
                     Q.CastIfHitchanceEquals(obj, HitChance.Medium, PacketCast);
@@ -793,7 +793,7 @@
         {
             return
                 ObjectManager.Get<Obj_AI_Turret>()
-                    .Any(i => i.IsEnemy && !i.IsDead && i.LSDistance(pos) < 850 + Player.BoundingRadius);
+                    .Any(i => i.IsEnemy && !i.IsDead && i.Distance(pos) < 850 + Player.BoundingRadius);
         }
 
         #endregion
@@ -881,7 +881,7 @@
                     {
                         case SpellTargets.AllyChampions:
                             allTargets.AddRange(
-                                HeroManager.Allies.Where(i => i.LSIsValidTarget(spell.MaxRange, false) && !i.IsMe));
+                                HeroManager.Allies.Where(i => i.IsValidTarget(spell.MaxRange, false) && !i.IsMe));
                             break;
                         case SpellTargets.AllyMinions:
                             allTargets.AddRange(GetMinions(spell.MaxRange, MinionTypes.All, MinionTeam.Ally));
@@ -891,10 +891,10 @@
                                 ObjectManager.Get<Obj_AI_Minion>()
                                     .Where(
                                         i =>
-                                        IsWard(i) && i.LSIsValidTarget(spell.MaxRange, false) && i.Team == Player.Team));
+                                        IsWard(i) && i.IsValidTarget(spell.MaxRange, false) && i.Team == Player.Team));
                             break;
                         case SpellTargets.EnemyChampions:
-                            allTargets.AddRange(HeroManager.Enemies.Where(i => i.LSIsValidTarget(spell.MaxRange)));
+                            allTargets.AddRange(HeroManager.Enemies.Where(i => i.IsValidTarget(spell.MaxRange)));
                             break;
                         case SpellTargets.EnemyMinions:
                             allTargets.AddRange(GetMinions(spell.MaxRange, MinionTypes.All, MinionTeam.NotAlly));
@@ -902,18 +902,18 @@
                         case SpellTargets.EnemyWards:
                             allTargets.AddRange(
                                 ObjectManager.Get<Obj_AI_Minion>()
-                                    .Where(i => IsWard(i) && i.LSIsValidTarget(spell.MaxRange)));
+                                    .Where(i => IsWard(i) && i.IsValidTarget(spell.MaxRange)));
                             break;
                     }
                 }
                 foreach (var target in
-                    allTargets.Where(i => dontCheckForSafety || IsSafePoint(i.ServerPosition.LSTo2D()).IsSafe))
+                    allTargets.Where(i => dontCheckForSafety || IsSafePoint(i.ServerPosition.To2D()).IsSafe))
                 {
                     if (spell.Name == "YasuoDashWrapper" && target.HasBuff("YasuoDashWrapper"))
                     {
                         continue;
                     }
-                    var pathToTarget = new List<Vector2> { Player.ServerPosition.LSTo2D(), target.ServerPosition.LSTo2D() };
+                    var pathToTarget = new List<Vector2> { Player.ServerPosition.To2D(), target.ServerPosition.To2D() };
                     if (IsSafePath(pathToTarget, Configs.EvadingFirstTimeOffset, spell.Speed, spell.Delay).IsSafe)
                     {
                         goodTargets.Add(target);
@@ -963,8 +963,8 @@
                             DetectionType.ProcessSpell,
                             spellData,
                             Utils.GameTimeTickCount,
-                            missile.Position.LSTo2D(),
-                            missile.Position.LSTo2D() + i * skillshot.Perpendicular * spellData.Range,
+                            missile.Position.To2D(),
+                            missile.Position.To2D() + i * skillshot.Perpendicular * spellData.Range,
                             skillshot.Unit));
                 }
             }
@@ -976,13 +976,13 @@
                         i =>
                         i.SpellData.SpellName == skillshot.SpellData.SpellName
                         && i.Unit.NetworkId == skillshot.Unit.NetworkId
-                        && skillshot.Direction.LSAngleBetween(i.Direction) < 5
-                        && (skillshot.Start.LSDistance(i.Start) < 100 || skillshot.SpellData.FromObjects.Length == 0));
+                        && skillshot.Direction.AngleBetween(i.Direction) < 5
+                        && (skillshot.Start.Distance(i.Start) < 100 || skillshot.SpellData.FromObjects.Length == 0));
                 if (skillshot.Unit.Team == Player.Team)
                 {
                     return;
                 }
-                if (skillshot.Start.LSDistance(Player.ServerPosition.LSTo2D())
+                if (skillshot.Start.Distance(Player.ServerPosition.To2D())
                     > (skillshot.SpellData.Range + skillshot.SpellData.Radius + 1000) * 1.5)
                 {
                     return;
@@ -1008,7 +1008,7 @@
                                     skillshot.Start,
                                     skillshot.Start
                                     + skillshot.SpellData.Range
-                                    * originalDirection.LSRotated(skillshot.SpellData.MultipleAngle * i),
+                                    * originalDirection.Rotated(skillshot.SpellData.MultipleAngle * i),
                                     skillshot.Unit));
                         }
                         return;
@@ -1030,8 +1030,8 @@
                                 skillshot.StartTick,
                                 skillshot.Start,
                                 skillshot.Start
-                                + -(skillshot.End - skillshot.Start).LSNormalized()
-                                * skillshot.Start.LSDistance(skillshot.End),
+                                + -(skillshot.End - skillshot.Start).Normalized()
+                                * skillshot.Start.Distance(skillshot.End),
                                 skillshot.Unit));
                         return;
                     }
@@ -1051,24 +1051,24 @@
                     {
                         const int Angle = 60;
                         var edge1 =
-                            (skillshot.End - skillshot.Unit.ServerPosition.LSTo2D()).LSRotated(
+                            (skillshot.End - skillshot.Unit.ServerPosition.To2D()).Rotated(
                                 -Angle / 2f * (float)Math.PI / 180);
-                        var edge2 = edge1.LSRotated(Angle * (float)Math.PI / 180);
+                        var edge2 = edge1.Rotated(Angle * (float)Math.PI / 180);
                         foreach (var skillshotToAdd in from minion in ObjectManager.Get<Obj_AI_Minion>()
                                                        let v =
-                                                           (minion.ServerPosition - skillshot.Unit.ServerPosition).LSTo2D(
+                                                           (minion.ServerPosition - skillshot.Unit.ServerPosition).To2D(
                                                                )
                                                        where
-                                                           minion.Name == "Seed" && edge1.LSCrossProduct(v) > 0
-                                                           && v.LSCrossProduct(edge2) > 0
-                                                           && minion.LSDistance(skillshot.Unit) < 800
+                                                           minion.Name == "Seed" && edge1.CrossProduct(v) > 0
+                                                           && v.CrossProduct(edge2) > 0
+                                                           && minion.Distance(skillshot.Unit) < 800
                                                            && minion.Team != Player.Team
-                                                       let start = minion.ServerPosition.LSTo2D()
+                                                       let start = minion.ServerPosition.To2D()
                                                        let end =
-                                                           skillshot.Unit.ServerPosition.LSExtend(
+                                                           skillshot.Unit.ServerPosition.Extend(
                                                                minion.ServerPosition,
-                                                               skillshot.Unit.LSDistance(minion) > 200 ? 1300 : 1000)
-                                                           .LSTo2D()
+                                                               skillshot.Unit.Distance(minion) > 200 ? 1300 : 1000)
+                                                           .To2D()
                                                        select
                                                            new Skillshot(
                                                            skillshot.DetectionType,
@@ -1107,7 +1107,7 @@
                     }
                     if (skillshot.SpellData.SpellName == "ZiggsQ")
                     {
-                        var d1 = skillshot.Start.LSDistance(skillshot.End);
+                        var d1 = skillshot.Start.Distance(skillshot.End);
                         var d2 = d1 * 0.4f;
                         var d3 = d2 * 0.69f;
                         var bounce1SpellData = SpellDatabase.GetByName("ZiggsQBounce1");
@@ -1138,7 +1138,7 @@
                     if (skillshot.SpellData.SpellName == "ZiggsR")
                     {
                         skillshot.SpellData.Delay =
-                            (int)(1500 + 1500 * skillshot.End.LSDistance(skillshot.Start) / skillshot.SpellData.Range);
+                            (int)(1500 + 1500 * skillshot.End.Distance(skillshot.Start) / skillshot.SpellData.Range);
                     }
                     if (skillshot.SpellData.SpellName == "JarvanIVDragonStrike")
                     {
@@ -1172,21 +1172,21 @@
                                     skillshot.Start,
                                     skillshot.End + skillshot.Direction * 100,
                                     skillshot.Unit);
-                                if (!extendedE.IsSafePoint(m.Position.LSTo2D()))
+                                if (!extendedE.IsSafePoint(m.Position.To2D()))
                                 {
-                                    endPos = m.Position.LSTo2D();
+                                    endPos = m.Position.To2D();
                                 }
                                 break;
                             }
                         }
-                        if (endPos.LSIsValid())
+                        if (endPos.IsValid())
                         {
                             skillshot = new Skillshot(
                                 DetectionType.ProcessSpell,
                                 SpellDatabase.GetByName("JarvanIVEQ"),
                                 Utils.GameTimeTickCount,
                                 skillshot.Start,
-                                endPos + 200 * (endPos - skillshot.Start).LSNormalized(),
+                                endPos + 200 * (endPos - skillshot.Start).Normalized(),
                                 skillshot.Unit);
                         }
                     }
@@ -1224,11 +1224,11 @@
                 {
                     return;
                 }
-                var safePoint = IsSafePoint(Player.ServerPosition.LSTo2D());
-                var safePath = IsSafePath(Player.LSGetWaypoints(), 100);
+                var safePoint = IsSafePoint(Player.ServerPosition.To2D());
+                var safePath = IsSafePath(Player.GetWaypoints(), 100);
                 if (!safePath.IsSafe && !safePoint.IsSafe)
                 {
-                    TryToEvade(safePoint.SkillshotList, Game.CursorPos.LSTo2D());
+                    TryToEvade(safePoint.SkillshotList, Game.CursorPos.To2D());
                 }
             }
 
@@ -1248,12 +1248,12 @@
                             GetEvadeTargets(evadeSpell)
                                 .Where(
                                     i =>
-                                    IsSafePoint(PosAfterE(i).LSTo2D()).IsSafe
+                                    IsSafePoint(PosAfterE(i).To2D()).IsSafe
                                     && (!UnderTower(PosAfterE(i)) || GetValue<bool>("ESSS_" + evadeSpell.Name, "ETower")))
                                 .ToList();
                         if (targets.Count > 0)
                         {
-                            var closestTarget = targets.MinOrDefault(i => PosAfterE(i).LSTo2D().LSDistance(to));
+                            var closestTarget = targets.MinOrDefault(i => PosAfterE(i).To2D().Distance(to));
                             Player.Spellbook.CastSpell(evadeSpell.Slot, closestTarget);
                             return;
                         }
@@ -1271,7 +1271,7 @@
                                    i =>
                                    Player.Spellbook.CastSpell(
                                        evadeSpell.Slot,
-                                       Player.ServerPosition.LSExtend(i.Start.To3D(), 100))))
+                                       Player.ServerPosition.Extend(i.Start.To3D(), 100))))
                     {
                         return;
                     }
@@ -1366,15 +1366,15 @@
                     return false;
                 }
                 var wallWidth = 300 + 50 * Convert.ToInt32(Wall.Name.Substring(Wall.Name.Length - 6, 1));
-                var wallDirection = (Wall.Position.LSTo2D() - wallCastedPos).LSNormalized().LSPerpendicular();
-                var wallStart = Wall.Position.LSTo2D() + wallWidth / 2f * wallDirection;
+                var wallDirection = (Wall.Position.To2D() - wallCastedPos).Normalized().Perpendicular();
+                var wallStart = Wall.Position.To2D() + wallWidth / 2f * wallDirection;
                 var wallEnd = wallStart - wallWidth * wallDirection;
                 var wallPolygon = new Geometry.Polygon.Rectangle(wallStart, wallEnd, 75);
                 var intersections = new List<Vector2>();
                 for (var i = 0; i < wallPolygon.Points.Count; i++)
                 {
                     var inter =
-                        wallPolygon.Points[i].LSIntersection(
+                        wallPolygon.Points[i].Intersection(
                             wallPolygon.Points[i != wallPolygon.Points.Count - 1 ? i + 1 : 0],
                             pos1,
                             pos2);
@@ -1547,7 +1547,7 @@
                         i.SpellNames.Contains(missile.SData.Name.ToLower())
                         && GetItem("ET_" + i.ChampionName, i.MissileName) != null
                         && GetValue<bool>("ET_" + i.ChampionName, i.MissileName));
-                if (spellData == null && missile.SData.LSIsAutoAttack()
+                if (spellData == null && missile.SData.IsAutoAttack()
                     && (!missile.SData.Name.ToLower().Contains("crit")
                             ? GetValue<bool>("EvadeTarget", "BAttack")
                               && Player.HealthPercent < GetValue<Slider>("EvadeTarget", "BAttackHpU").Value
@@ -1583,7 +1583,7 @@
                 {
                     return;
                 }
-                wallCastedPos = sender.ServerPosition.LSTo2D();
+                wallCastedPos = sender.ServerPosition.To2D();
             }
 
             private static void OnUpdateTarget(EventArgs args)
@@ -1596,36 +1596,36 @@
                 {
                     return;
                 }
-                if (!W.LSIsReady(300) && (Wall == null || !E.LSIsReady(200)))
+                if (!W.IsReady(300) && (Wall == null || !E.IsReady(200)))
                 {
                     return;
                 }
                 foreach (var target in
-                    DetectedTargets.Where(i => Player.LSDistance(i.Obj.Position) < 700))
+                    DetectedTargets.Where(i => Player.Distance(i.Obj.Position) < 700))
                 {
-                    if (E.LSIsReady() && GetValue<bool>("EvadeTarget", "E") && Wall != null
+                    if (E.IsReady() && GetValue<bool>("EvadeTarget", "E") && Wall != null
                         && Utils.TickCount - W.LastCastAttemptT > 1000
-                        && !GoThroughWall(Player.ServerPosition.LSTo2D(), target.Obj.Position.LSTo2D())
+                        && !GoThroughWall(Player.ServerPosition.To2D(), target.Obj.Position.To2D())
                         && W.IsInRange(target.Obj, 250))
                     {
                         var obj = new List<Obj_AI_Base>();
                         obj.AddRange(GetMinions(E.Range, MinionTypes.All, MinionTeam.NotAlly));
-                        obj.AddRange(HeroManager.Enemies.Where(i => i.LSIsValidTarget(E.Range)));
+                        obj.AddRange(HeroManager.Enemies.Where(i => i.IsValidTarget(E.Range)));
                         if (
                             obj.Where(
                                 i =>
-                                CanCastE(i) && EvadeSkillshot.IsSafePoint(i.ServerPosition.LSTo2D()).IsSafe
-                                && EvadeSkillshot.IsSafePoint(PosAfterE(i).LSTo2D()).IsSafe
+                                CanCastE(i) && EvadeSkillshot.IsSafePoint(i.ServerPosition.To2D()).IsSafe
+                                && EvadeSkillshot.IsSafePoint(PosAfterE(i).To2D()).IsSafe
                                 && (!UnderTower(PosAfterE(i)) || GetValue<bool>("EvadeTarget", "ETower"))
-                                && GoThroughWall(Player.ServerPosition.LSTo2D(), PosAfterE(i).LSTo2D()))
-                                .OrderBy(i => PosAfterE(i).LSDistance(Game.CursorPos))
+                                && GoThroughWall(Player.ServerPosition.To2D(), PosAfterE(i).To2D()))
+                                .OrderBy(i => PosAfterE(i).Distance(Game.CursorPos))
                                 .Any(i => E.CastOnUnit(i, PacketCast)))
                         {
                             return;
                         }
                     }
-                    if (W.LSIsReady() && GetValue<bool>("EvadeTarget", "W") && W.IsInRange(target.Obj, 500)
-                        && W.Cast(Player.ServerPosition.LSExtend(target.Start, 100), PacketCast))
+                    if (W.IsReady() && GetValue<bool>("EvadeTarget", "W") && W.IsInRange(target.Obj, 500)
+                        && W.Cast(Player.ServerPosition.Extend(target.Start, 100), PacketCast))
                     {
                         return;
                     }

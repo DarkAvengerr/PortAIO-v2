@@ -69,8 +69,8 @@ using EloBuddy;
             }
 
             var targetAsHero = (AIHeroClient) target;
-            if (ProSeries.Player.LSGetSpellDamage(targetAsHero, SpellSlot.W) / W.Delay >
-                ProSeries.Player.LSGetAutoAttackDamage(targetAsHero, true) * (1 / ProSeries.Player.AttackDelay))
+            if (ProSeries.Player.GetSpellDamage(targetAsHero, SpellSlot.W) / W.Delay >
+                ProSeries.Player.GetAutoAttackDamage(targetAsHero, true) * (1 / ProSeries.Player.AttackDelay))
             {
                 W.Cast(targetAsHero);
             }
@@ -81,7 +81,7 @@ using EloBuddy;
             if (ProSeries.CanCombo())
             {
                 var etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-                if (etarget.LSIsValidTarget() && E.LSIsReady())
+                if (etarget.IsValidTarget() && E.IsReady())
                 {
                     foreach (var buff in etarget.Buffs)
                     {
@@ -94,7 +94,7 @@ using EloBuddy;
                 }
 
                 var wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
-                if (wtarget.LSIsValidTarget() && W.LSIsReady())
+                if (wtarget.IsValidTarget() && W.IsReady())
                 {
                     if (ProSeries.Config.Item("usecombow", true).GetValue<bool>())
                         W.Cast(wtarget);
@@ -104,7 +104,7 @@ using EloBuddy;
             if (ProSeries.CanHarass())
             {
                 var etarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-                if (etarget.LSIsValidTarget() && E.LSIsReady() && ProSeries.IsWhiteListed(etarget))
+                if (etarget.IsValidTarget() && E.IsReady() && ProSeries.IsWhiteListed(etarget))
                 {
                     foreach (var buff in etarget.Buffs)
                     {
@@ -117,25 +117,25 @@ using EloBuddy;
                 }
 
                 var wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
-                if (wtarget.LSIsValidTarget() && W.LSIsReady() && ProSeries.IsWhiteListed(wtarget))
+                if (wtarget.IsValidTarget() && W.IsReady() && ProSeries.IsWhiteListed(wtarget))
                 {
                     if (ProSeries.Config.Item("useharassw", true).GetValue<bool>())
                         W.Cast(wtarget);
                 }
             }
 
-            if (ProSeries.CanClear() && E.LSIsReady())
+            if (ProSeries.CanClear() && E.IsReady())
             {
-                var minionList = MinionManager.GetMinions(E.Range).Where(m => m.LSHasBuff("twitchdeadlyvenom", true));
-                if (minionList.Count(m => m.Health <= ProSeries.Player.LSGetSpellDamage(m, SpellSlot.E)) >= 3)
+                var minionList = MinionManager.GetMinions(E.Range).Where(m => m.HasBuff("twitchdeadlyvenom", true));
+                if (minionList.Count(m => m.Health <= ProSeries.Player.GetSpellDamage(m, SpellSlot.E)) >= 3)
                 {
                     E.Cast();
                 }
             }
 
-            if (W.LSIsReady() && !ProSeries.Player.LSHasBuff("twitchhideinshadows", true))
+            if (W.IsReady() && !ProSeries.Player.HasBuff("twitchhideinshadows", true))
             {
-                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.LSIsValidTarget(W.Range)))
+                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.IsValidTarget(W.Range)))
                 {
                     if (ProSeries.Config.Item("usewimm", true).GetValue<bool>())
                         W.CastIfHitchanceEquals(target, HitChance.Immobile);

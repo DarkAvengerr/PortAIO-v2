@@ -20,14 +20,14 @@ using EloBuddy;
             if (hero != null)
             {
                 if (sender.IsValid && sender.IsEnemy && args.SData.Name == "YasuoWMovingWall" &&
-                    sender.LSDistance(EntryPoint.Player) < 1500)
+                    sender.Distance(EntryPoint.Player) < 1500)
                 {
                     CollisionObjects.Add(
                         new CollisionArgs
                         {
                             Sender = hero,
                             WallCastTick = (int) (Game.Time * 0x3E8),
-                            WallCastedPos = hero.ServerPosition.LSTo2D()
+                            WallCastedPos = hero.ServerPosition.To2D()
                         });
                 }
             }
@@ -35,14 +35,14 @@ using EloBuddy;
 
         public static void OnCreate(GameObject sender, EventArgs args)
         {
-            if (EntryPoint.Player.LSDistance(sender.Position) < 1500 && sender.IsValid &&
+            if (EntryPoint.Player.Distance(sender.Position) < 1500 && sender.IsValid &&
                 Regex.IsMatch(sender.Name, "_w_windwall.\\.troy", RegexOptions.IgnoreCase))
             {
                 var closestObject =
                     CollisionObjects.Where(o => o.WallGameObject == null)
-                        .OrderBy(o => o.WallCastedPos.LSDistance(sender.Position))
+                        .OrderBy(o => o.WallCastedPos.Distance(sender.Position))
                         .FirstOrDefault();
-                if (closestObject != null && closestObject.Sender.IsValid && closestObject.WallCastedPos.LSIsValid())
+                if (closestObject != null && closestObject.Sender.IsValid && closestObject.WallCastedPos.IsValid())
                 {
                     closestObject.WallGameObject = sender;
                 }
@@ -51,7 +51,7 @@ using EloBuddy;
 
         public static void OnDelete(GameObject sender, EventArgs args)
         {
-            if (EntryPoint.Player.LSDistance(sender.Position) < 1500 && sender.IsValid &&
+            if (EntryPoint.Player.Distance(sender.Position) < 1500 && sender.IsValid &&
                 Regex.IsMatch(sender.Name, "_w_windwall.\\.troy", RegexOptions.IgnoreCase))
             {
                 var closestObject =
@@ -72,12 +72,12 @@ using EloBuddy;
                 let level = Convert.ToInt32(collisionObject.Name.Substring(collisionObject.Name.Length - 6, 1))
                 let wallWidth = (300 + 50 * level)
                 let wallDirection =
-                    (collisionObject.Position.LSTo2D() - collisionArgs.WallCastedPos).LSNormalized().LSPerpendicular()
-                let wallStart = collisionObject.Position.LSTo2D() + (wallWidth / 2f) * wallDirection
+                    (collisionObject.Position.To2D() - collisionArgs.WallCastedPos).Normalized().Perpendicular()
+                let wallStart = collisionObject.Position.To2D() + (wallWidth / 2f) * wallDirection
                 let wallEnd = wallStart - wallWidth * wallDirection
                 select
-                    !wallStart.LSIntersection(wallEnd, EntryPoint.Player.Position.LSTo2D(), gameObject.Position.LSTo2D())
-                        .Point.LSIsValid() ||
+                    !wallStart.Intersection(wallEnd, EntryPoint.Player.Position.To2D(), gameObject.Position.To2D())
+                        .Point.IsValid() ||
                     !((int) (Game.Time * 0x3E8) + Game.Ping + Mechanics.Spells[SpellSlot.R].Delay -
                       collisionArgs.WallCastTick < 4000)).Any(flag => flag);
         }

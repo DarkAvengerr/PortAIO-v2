@@ -95,7 +95,7 @@ namespace UnderratedAIO.Helpers
                     }
                     if (player.IsMoving && options.Item("petFollow", true).GetValue<bool>())
                     {
-                        var movePos = player.Position.LSExtend(Prediction.GetPrediction(player, 0.5f).UnitPosition, -250);
+                        var movePos = player.Position.Extend(Prediction.GetPrediction(player, 0.5f).UnitPosition, -250);
                         MoveTo(movePos);
                         SetPetDelay();
                     }
@@ -106,7 +106,7 @@ namespace UnderratedAIO.Helpers
                         options.Item("petMovementType", true).GetValue<StringList>().SelectedIndex == 1 ||
                         player.HealthPercent < 25)
                     {
-                        if (Pet.LSDistance(gtarget) < Pet.AttackRange + gtarget.BoundingRadius + Pet.BoundingRadius)
+                        if (Pet.Distance(gtarget) < Pet.AttackRange + gtarget.BoundingRadius + Pet.BoundingRadius)
                         {
                             Attack(gtarget);
                         }
@@ -121,7 +121,7 @@ namespace UnderratedAIO.Helpers
                             gtarget, options.Item("petOrbPos", true).GetValue<StringList>().SelectedIndex == 1);
                         if (isLastHit || isFarm)
                         {
-                            pos = gtarget.Position.LSExtend(Pet.Position, Pet.AttackRange);
+                            pos = gtarget.Position.Extend(Pet.Position, Pet.AttackRange);
                         }
                         MoveTo(pos);
                     }
@@ -142,14 +142,14 @@ namespace UnderratedAIO.Helpers
                         break;
                     case 1:
                         gtarget =
-                            HeroManager.Enemies.Where(i => player.LSDistance(i) <= range)
+                            HeroManager.Enemies.Where(i => player.Distance(i) <= range)
                                 .OrderBy(i => i.Health)
                                 .FirstOrDefault();
                         break;
                     case 2:
                         gtarget =
-                            HeroManager.Enemies.Where(i => player.LSDistance(i) <= range)
-                                .OrderBy(i => player.LSDistance(i))
+                            HeroManager.Enemies.Where(i => player.Distance(i) <= range)
+                                .OrderBy(i => player.Distance(i))
                                 .FirstOrDefault();
                         break;
                     default:
@@ -162,27 +162,27 @@ namespace UnderratedAIO.Helpers
                     MinionManager.GetMinions(1000, MinionTypes.All, MinionTeam.NotAlly)
                         .Where(
                             m =>
-                                HealthPrediction.GetHealthPrediction(m, 2000) > Pet.LSGetAutoAttackDamage(m) ||
-                                m.Health < Pet.LSGetAutoAttackDamage(m))
+                                HealthPrediction.GetHealthPrediction(m, 2000) > Pet.GetAutoAttackDamage(m) ||
+                                m.Health < Pet.GetAutoAttackDamage(m))
                         .Select(m => m as AttackableUnit)
                         .ToList()
                         .Concat(
                             ObjectManager.Get<Obj_AI_Turret>()
-                                .Where(t => t.LSIsValidTarget() && t.Position.LSDistance(player.Position) < range))
+                                .Where(t => t.IsValidTarget() && t.Position.Distance(player.Position) < range))
                         .ToList();
                 if (isFarm)
                 {
                     gtarget =
-                        otherTarget.OrderByDescending(m => Pet.LSGetAutoAttackDamage((Obj_AI_Base) m) > m.Health)
+                        otherTarget.OrderByDescending(m => Pet.GetAutoAttackDamage((Obj_AI_Base) m) > m.Health)
                             .ThenByDescending(m => m.MaxHealth)
-                            .ThenByDescending(m => player.LSDistance(m))
+                            .ThenByDescending(m => player.Distance(m))
                             .FirstOrDefault();
                 }
                 if (isLastHit)
                 {
                     gtarget =
-                        otherTarget.Where(m => Pet.LSGetAutoAttackDamage((Obj_AI_Base) m) > m.Health)
-                            .OrderByDescending(m => player.LSDistance(m))
+                        otherTarget.Where(m => Pet.GetAutoAttackDamage((Obj_AI_Base) m) > m.Health)
+                            .OrderByDescending(m => player.Distance(m))
                             .FirstOrDefault();
                 }
             }
@@ -205,31 +205,31 @@ namespace UnderratedAIO.Helpers
 
             if (!Pet.IsMelee)
             {
-                if (Pet.AttackRange < player.LSDistance(Gtarget) && !IsSafe)
+                if (Pet.AttackRange < player.Distance(Gtarget) && !IsSafe)
                 {
-                    pos = Gtarget.Position.LSExtend(player.Position, Pet.AttackRange);
+                    pos = Gtarget.Position.Extend(player.Position, Pet.AttackRange);
                 }
                 else
                 {
                     var safePos =
                         CombatHelper.PointsAroundTheTargetOuterRing(
                             Gtarget.Position, Pet.AttackRange + Gtarget.BoundingRadius)
-                            .Where(p => !p.LSIsWall() && p.LSIsValid())
-                            .OrderByDescending(p => !p.LSUnderTurret(true))
-                            .ThenBy(p => p.LSCountEnemiesInRange(700))
+                            .Where(p => !p.IsWall() && p.IsValid())
+                            .OrderByDescending(p => !p.UnderTurret(true))
+                            .ThenBy(p => p.CountEnemiesInRange(700))
                             .FirstOrDefault();
-                    pos = Gtarget.Position.LSExtend(safePos, Pet.AttackRange);
+                    pos = Gtarget.Position.Extend(safePos, Pet.AttackRange);
                 }
             }
             else
             {
                 if (IsSafe)
                 {
-                    pos = Gtarget.Position.LSExtend(predictionPos, Pet.AttackRange);
+                    pos = Gtarget.Position.Extend(predictionPos, Pet.AttackRange);
                 }
                 else
                 {
-                    pos = Gtarget.Position.LSExtend(player.Position, Pet.AttackRange);
+                    pos = Gtarget.Position.Extend(player.Position, Pet.AttackRange);
                 }
             }
             return pos;
@@ -280,7 +280,7 @@ namespace UnderratedAIO.Helpers
 
         private static void MoveTo(Vector3 pos)
         {
-            if ((Pet.Path.LastOrDefault().LSDistance(pos) > 50 || !Pet.IsMoving) && pos.LSIsValid())
+            if ((Pet.Path.LastOrDefault().Distance(pos) > 50 || !Pet.IsMoving) && pos.IsValid())
             {
                 if (debug)
                 {

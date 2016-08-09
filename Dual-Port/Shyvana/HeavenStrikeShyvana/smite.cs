@@ -19,11 +19,11 @@ using EloBuddy;
     {
         public static void UpdateSmite()
         {
-            if (AutoSmite && Smite.LSIsReady())
+            if (AutoSmite && Smite.IsReady())
             {
                 var creep = MinionManager.GetMinions(800, MinionTypes.All, MinionTeam.Neutral).
                     Where(x => x.CharData.BaseSkinName == "SRU_Dragon" || x.CharData.BaseSkinName == "SRU_Baron");
-                foreach (var x in creep.Where(y => Player.LSDistance(y.Position) <= Player.BoundingRadius + 500 + y.BoundingRadius))
+                foreach (var x in creep.Where(y => Player.Distance(y.Position) <= Player.BoundingRadius + 500 + y.BoundingRadius))
                 {
                     if (x != null && x.Health <= GetSmiteDamage())
                         Player.Spellbook.CastSpell(Smite, x);

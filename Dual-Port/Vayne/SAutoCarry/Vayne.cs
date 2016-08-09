@@ -68,7 +68,7 @@ namespace SAutoCarry.Champions
             if (ComboUseE)
             {
                 var t = TargetSelector.GetTarget(Spells[E].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
-                if (t != null && Spells[E].LSIsReady() && Helpers.Condemn.IsValidTarget(t))
+                if (t != null && Spells[E].IsReady() && Helpers.Condemn.IsValidTarget(t))
                     Spells[E].CastOnUnit(t);
             }
         }
@@ -78,9 +78,9 @@ namespace SAutoCarry.Champions
             if (HarassUseE)
             {
                 var t = TargetSelector.GetTarget(Spells[E].Range + 300, LeagueSharp.Common.TargetSelector.DamageType.Physical);
-                if (t != null && Spells[E].LSIsReady())
+                if (t != null && Spells[E].IsReady())
                 {
-                    if (HarassUseE3RdW && t.LSIsValidTarget(Spells[E].Range) && t.GetBuffCount("vaynesilvereddebuff") == 2)
+                    if (HarassUseE3RdW && t.IsValidTarget(Spells[E].Range) && t.GetBuffCount("vaynesilvereddebuff") == 2)
                         Spells[E].CastOnUnit(t);
 
                     if (Helpers.Condemn.IsValidTarget(t))
@@ -91,15 +91,15 @@ namespace SAutoCarry.Champions
 
         public void LaneClear()
         {
-            if (Helpers.Condemn.CondemnJungleMinions && Spells[E].LSIsReady())
+            if (Helpers.Condemn.CondemnJungleMinions && Spells[E].IsReady())
             {
                 var mob = MinionManager.GetMinions(Spells[E].Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(p => p.GetJunglePriority() == 1);
                 if (mob != null)
                 {
-                    var direction = (mob.ServerPosition - ObjectManager.Player.ServerPosition).LSNormalized();
+                    var direction = (mob.ServerPosition - ObjectManager.Player.ServerPosition).Normalized();
                     for (int i = 0; i < 400; i += 10)
                     {
-                        if ((mob.ServerPosition + direction * i).LSIsWall())
+                        if ((mob.ServerPosition + direction * i).IsWall())
                             Spells[E].CastOnUnit(mob);
                     }
                 }
@@ -112,7 +112,7 @@ namespace SAutoCarry.Champions
             {
                 foreach (var enemy in HeroManager.Enemies)
                 {
-                    if (enemy.LSIsValidTarget(1200))
+                    if (enemy.IsValidTarget(1200))
                     {
                         float autoAttackDamage = SCommon.Damage.AutoAttack.GetDamage(enemy);
                         int aaCount = (int)Math.Ceiling(Math.Max(1, enemy.Health - Spells[Q].GetDamage(enemy)) / autoAttackDamage);
@@ -144,9 +144,9 @@ namespace SAutoCarry.Champions
         {
             if (DontAAStealth && ObjectManager.Player.HasBuff("vaynetumblefade"))
             {
-                if (ObjectManager.Player.ServerPosition.LSCountEnemiesInRange(1000) > DontAAStealthCount)
+                if (ObjectManager.Player.ServerPosition.CountEnemiesInRange(1000) > DontAAStealthCount)
                 {
-                    if (args.Target is AIHeroClient && args.Target.Health <= SCommon.Damage.AutoAttack.GetDamage(args.Target as Obj_AI_Base, true) * 2 && ObjectManager.Player.Health > (args.Target as AIHeroClient).LSGetAutoAttackDamage(ObjectManager.Player, true)) //can killable
+                    if (args.Target is AIHeroClient && args.Target.Health <= SCommon.Damage.AutoAttack.GetDamage(args.Target as Obj_AI_Base, true) * 2 && ObjectManager.Player.Health > (args.Target as AIHeroClient).GetAutoAttackDamage(ObjectManager.Player, true)) //can killable
                         return;
 
                     args.Process = false;
@@ -158,17 +158,17 @@ namespace SAutoCarry.Champions
         {
             if (args.Target is AIHeroClient)
             {
-                if (Spells[Q].LSIsReady() && ((Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo && ComboUseQ) || (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Mixed && HarassUseQ)))
+                if (Spells[Q].IsReady() && ((Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo && ComboUseQ) || (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Mixed && HarassUseQ)))
                 {
                     Vector3 pos = Helpers.Tumble.FindTumblePosition(args.Target as AIHeroClient);
 
-                    if (pos.LSIsValid())
+                    if (pos.IsValid())
                         Spells[Q].Cast(pos);
                 }
             }
             else if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.LaneClear)
             {
-                if (Spells[Q].LSIsReady())
+                if (Spells[Q].IsReady())
                 {
                     var jungleMob = MinionManager.GetMinions(600, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
                     if (jungleMob != null)
@@ -177,11 +177,11 @@ namespace SAutoCarry.Champions
                     {
                         if (LaneClearQ && args.Target.Health - SCommon.Damage.AutoAttack.GetDamage(args.Target as Obj_AI_Base, true) <= 0)
                         {
-                            var minion = MinionManager.GetMinions(ObjectManager.Player.AttackRange).Where(p => p.NetworkId != args.Target.NetworkId && p.Health < SCommon.Damage.AutoAttack.GetDamage(p) + ObjectManager.Player.LSGetSpellDamage(p, SpellSlot.Q)).FirstOrDefault();
+                            var minion = MinionManager.GetMinions(ObjectManager.Player.AttackRange).Where(p => p.NetworkId != args.Target.NetworkId && p.Health < SCommon.Damage.AutoAttack.GetDamage(p) + ObjectManager.Player.GetSpellDamage(p, SpellSlot.Q)).FirstOrDefault();
                             if(minion != null)
                             {
                                 Orbwalker.ForcedTarget = minion;
-                                Spells[Q].Cast(SCommon.Maths.Geometry.Deviation(ObjectManager.Player.ServerPosition.LSTo2D(), minion.ServerPosition.LSTo2D(), 50).To3D2());
+                                Spells[Q].Cast(SCommon.Maths.Geometry.Deviation(ObjectManager.Player.ServerPosition.To2D(), minion.ServerPosition.To2D(), 50).To3D2());
                             }
                         }
                     }

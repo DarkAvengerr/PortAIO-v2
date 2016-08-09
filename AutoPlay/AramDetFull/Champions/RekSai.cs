@@ -71,7 +71,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (QBurrowed.LSIsReady() || !player.IsBurrowed())
+            if (QBurrowed.IsReady() || !player.IsBurrowed())
                 return;
             QBurrowed.Cast(target);
         }
@@ -115,7 +115,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useSpells()
         {
-            //if (!player.IsBurrowed() && W.LSIsReady())
+            //if (!player.IsBurrowed() && W.IsReady())
             //    _wNormal.Cast();
 
 
@@ -149,18 +149,18 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public float GetFullDamage(AIHeroClient target)
         {
             // AA damage
-            float damage = (float)player.LSGetAutoAttackDamage(target);
+            float damage = (float)player.GetAutoAttackDamage(target);
 
             // Q
-            if (SpellManager.Q.LSIsReady() || player.HasQActive())
+            if (SpellManager.Q.IsReady() || player.HasQActive())
                 damage += GetRealDamage(SpellSlot.Q, target);
 
             // W
-            if (SpellManager.W.LSIsReady())
+            if (SpellManager.W.IsReady())
                 damage += GetRealDamage(SpellManager.W,target);
 
             // E
-            if (SpellManager.E.LSIsReady())
+            if (SpellManager.E.IsReady())
                 damage += GetRealDamage(SpellManager.E,target);
 
             return damage;
@@ -199,7 +199,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     {
                         // Rek'Sai's next 3 basic attacks within 5 seconds deal 15/35/55/75/95 (+0.4) bonus Physical Damage to nearby enemies.
                         damage = new float[] { 15, 35, 55, 75, 95 }[spellLevel] + 0.4f * player.TotalAttackDamage();
-                        extraDamage = (float)player.LSGetAutoAttackDamage(target);
+                        extraDamage = (float)player.GetAutoAttackDamage(target);
                     }
                     else
                     {
@@ -291,35 +291,35 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
 
                 // Validate spells we wanna use
-                if ((useQ ? !Q.LSIsReady() : true) && (useW ? !W.LSIsReady() : true) && (useE ? !E.LSIsReady() : true))
+                if ((useQ ? !Q.IsReady() : true) && (useW ? !W.IsReady() : true) && (useE ? !E.IsReady() : true))
                     return;
 
                 // Get a low range target, since we don't have much range with our spells
-                var target = ARAMTargetSelector.getBestTarget(useQ && Q.LSIsReady() ? Q.Range : E.Range);
+                var target = ARAMTargetSelector.getBestTarget(useQ && Q.IsReady() ? Q.Range : E.Range);
 
                 if (target != null)
                 {
 
                     // General Q usage, we can safely spam that I guess
-                    if (afterAttack && useQ && Q.LSIsReady())
+                    if (afterAttack && useQ && Q.IsReady())
                         Q.Cast(true);
 
                     // E usage, only cast on secure kill, full fury or our health is low
-                    if (useE && E.LSIsReady() && (target.Health < E.GetDamage(target) || player.HasMaxFury() || player.IsLowHealth()))
+                    if (useE && E.IsReady() && (target.Health < E.GetDamage(target) || player.HasMaxFury() || player.IsLowHealth()))
                         E.Cast(target);
                 }
 
                 // Burrow usage
-                if (target != null && useW && W.LSIsReady() && !player.HasQActive())
+                if (target != null && useW && W.IsReady() && !player.HasQActive())
                 {
                     if (target.CanBeKnockedUp())
                     {
                         W.Cast();
                     }
-                    else if ((!useQ || !Q.LSIsReady()) && useBurrowQ && SpellManager.QBurrowed.IsReallyReady())
+                    else if ((!useQ || !Q.IsReady()) && useBurrowQ && SpellManager.QBurrowed.IsReallyReady())
                     {
                         // Check if the player could make more attack attack damage than the Q damage, else cast W
-                        if (Math.Floor(player.AttackSpeed()) * player.LSGetAutoAttackDamage(target) < SpellManager.QBurrowed.GetRealDamage(target))
+                        if (Math.Floor(player.AttackSpeed()) * player.GetAutoAttackDamage(target) < SpellManager.QBurrowed.GetRealDamage(target))
                             W.Cast();
                     }
                 }
@@ -338,7 +338,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 var useNormalE = true;
 
                 // General Q usage
-                if (useQ && Q.LSIsReady())
+                if (useQ && Q.IsReady())
                 {
                     // Get a target at Q range
                     var target = ARAMTargetSelector.getBestTarget(Q.Range);
@@ -348,17 +348,17 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 }
 
                 // Gapclose with E, only for (almost) secured kills
-                if (useE && E.LSIsReady())
+                if (useE && E.IsReady())
                 {
                     // Get targets that could be valid for our combo
-                    var validRangeTargets = ObjectManager.Get<AIHeroClient>().Where(h => h.LSDistance(player, true) < Math.Pow(Q.Range + 150, 2) && h.LSDistance(player, true) > Math.Pow(Q.Range - 150, 2));
+                    var validRangeTargets = ObjectManager.Get<AIHeroClient>().Where(h => h.Distance(player, true) < Math.Pow(Q.Range + 150, 2) && h.Distance(player, true) > Math.Pow(Q.Range - 150, 2));
 
                     // Get a target that could die with our combo
                     var target = validRangeTargets.FirstOrDefault(t =>
                         t.Health <
                         W.GetRealDamage(t) +
                             // Let's say 2 AAs without Q and 4 AAs with Q
-                        (SpellManager.QNormal.IsReallyReady(1000) ? SpellManager.QNormal.GetRealDamage(t) * 3 + player.LSGetAutoAttackDamage(t) : player.LSGetAutoAttackDamage(t) * 2) +
+                        (SpellManager.QNormal.IsReallyReady(1000) ? SpellManager.QNormal.GetRealDamage(t) * 3 + player.GetAutoAttackDamage(t) : player.GetAutoAttackDamage(t) * 2) +
                         (SpellManager.ENormal.IsReallyReady(1000) ? SpellManager.ENormal.GetRealDamage(t) : 0)
                     );
 
@@ -416,7 +416,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     Console.WriteLine("FarmLine");
 
                     // Validate spells we wanna use
-                    if ((useQ ? !Q.LSIsReady() : true) && (useE ? !E.LSIsReady() : true))
+                    if ((useQ ? !Q.IsReady() : true) && (useE ? !E.IsReady() : true))
                         return;
 
                     // Get surrounding minions
@@ -424,16 +424,16 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     if (minions.Count > 0)
                     {
                         // Q usage
-                        if (useQ && Q.LSIsReady())
+                        if (useQ && Q.IsReady())
                         {
                             // Check the number of Minions we would hit with Q,
                             // Bounce radius is 450 according to RitoDecode (thanks Husky Kappa)
-                            if (minions.Where(m => m.LSDistance(player, true) < 450 * 450).Count() >= 2)
+                            if (minions.Where(m => m.Distance(player, true) < 450 * 450).Count() >= 2)
                                 Q.Cast();
                         }
 
                         // E usage
-                        if (useE && E.LSIsReady())
+                        if (useE && E.IsReady())
                         {
                             var target = minions.FirstOrDefault(m => player.HasMaxFury() || m.Health < E.GetRealDamage(m));
                             if (target != null)
@@ -448,10 +448,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 // Disable auto attacks
                // DeathWalker.setAttack(true);
 
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                 {
                     // Get the best position to shoot the Q
-                    var location = MinionManager.GetBestCircularFarmLocation(MinionManager.GetMinions(Q.Range).Select(m => m.ServerPosition.LSTo2D()).ToList(), Q.Width, Q.Range);
+                    var location = MinionManager.GetBestCircularFarmLocation(MinionManager.GetMinions(Q.Range).Select(m => m.ServerPosition.To2D()).ToList(), Q.Width, Q.Range);
                     if (location.MinionsHit > 0)
                         Q.Cast(location.Position);
                 }
@@ -511,7 +511,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     {
                         // Rek'Sai's next 3 basic attacks within 5 seconds deal 15/35/55/75/95 (+0.4) bonus Physical Damage to nearby enemies.
                         damage = new float[] { 15, 35, 55, 75, 95 }[spellLevel] + 0.4f * player.TotalAttackDamage();
-                        extraDamage = (float)player.LSGetAutoAttackDamage(target);
+                        extraDamage = (float)player.GetAutoAttackDamage(target);
                     }
                     else
                     {
@@ -570,7 +570,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public static bool IsBurrowed(this AIHeroClient target)
         {
-            return ObjectManager.Player.LSHasBuff("RekSaiW");
+            return ObjectManager.Player.HasBuff("RekSaiW");
         }
 
         public static float TotalAttackDamage(this Obj_AI_Base target)
@@ -610,12 +610,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (!target.IsMe)
                 return false;
 
-            return target.LSHasBuff(Q_ACTIVE_NAME);
+            return target.HasBuff(Q_ACTIVE_NAME);
         }
 
         public static bool HasBurrowBuff(this Obj_AI_Base target)
         {
-            return target.LSHasBuff(TARGET_BURROW_NAME);
+            return target.HasBuff(TARGET_BURROW_NAME);
         }
 
         public static BuffInstance GetBurrowBuff(this Obj_AI_Base target)
@@ -626,7 +626,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public static int GetAliveEnemiesInRange(this Vector3 pos, float range)
         {
             return ObjectManager.Get<AIHeroClient>()
-                    .Count(ene => ene.IsEnemy && ene.IsValid && !ene.IsDead && ene.LSDistance(pos, true) < range * range); ;
+                    .Count(ene => ene.IsEnemy && ene.IsValid && !ene.IsDead && ene.Distance(pos, true) < range * range); ;
         }
 
         public static float GetBurrowBuffDuration(this Obj_AI_Base target)
@@ -640,11 +640,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public static bool IsUnder(this AIHeroClient player, Obj_AI_Base target)
         {
             return player.IsBurrowed()
-                && target.LSDistance(player.Position) < 260;
+                && target.Distance(player.Position) < 260;
         }
         public static bool QActive(this AIHeroClient Hero)
         {
-            return Hero.Buffs.Any(buff => buff.LSIsValidBuff()
+            return Hero.Buffs.Any(buff => buff.IsValidBuff()
                 && buff.DisplayName.ToLowerInvariant() == "reksaiq"
                 && Hero.NetworkId == buff.Caster.NetworkId);
         }

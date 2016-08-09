@@ -61,14 +61,14 @@
 
         public static FastPredResult FastPrediction(Vector2 from, Obj_AI_Base unit, int delay, int speed)
         {
-            var tDelay = delay / 1000f + (unit.LSDistance(from) / speed);
+            var tDelay = delay / 1000f + (unit.Distance(from) / speed);
             var d = tDelay * unit.MoveSpeed;
-            var path = unit.LSGetWaypoints();
-            if (path.LSPathLength() > d)
+            var path = unit.GetWaypoints();
+            if (path.PathLength() > d)
             {
                 return new FastPredResult
                            {
-                               IsMoving = true, CurrentPos = unit.ServerPosition.LSTo2D(),
+                               IsMoving = true, CurrentPos = unit.ServerPosition.To2D(),
                                PredictedPos = path.CutPath((int)d)[0]
                            };
             }
@@ -87,11 +87,11 @@
                 {
                     case CollisionObjectTypes.Minion:
                         var minions = new List<Obj_AI_Minion>();
-                        minions.AddRange(ObjectManager.Get<Obj_AI_Minion>().Where(x=> x.Team == GameObjectTeam.Neutral).Where(i => i.LSIsValidTarget(1200, true, from.To3D())));
+                        minions.AddRange(ObjectManager.Get<Obj_AI_Minion>().Where(x=> x.Team == GameObjectTeam.Neutral).Where(i => i.IsValidTarget(1200, true, from.To3D())));
                         minions.AddRange(
                             ObjectManager.Get<Obj_AI_Minion>().Where(
                                 i =>
-                                i.LSIsValidTarget(1200, false, @from.To3D())
+                                i.IsValidTarget(1200, false, @from.To3D())
                                 && (skillshot.Unit.Team == ObjectManager.Player.Team
                                         ? i.Team != ObjectManager.Player.Team
                                         : i.Team == ObjectManager.Player.Team) && MinionManager.IsMinion(i)));
@@ -106,21 +106,21 @@
                             let pos = pred.PredictedPos
                             let w =
                                 skillshot.SpellData.RawRadius + (!pred.IsMoving ? (minion.BoundingRadius - 15) : 0)
-                                - pos.LSDistance(@from, skillshot.End, true)
+                                - pos.Distance(@from, skillshot.End, true)
                             where w > 0
                             select
                                 new DetectedCollision
                                     {
                                         Position =
-                                            pos.LSProjectOn(skillshot.End, skillshot.Start).LinePoint
+                                            pos.ProjectOn(skillshot.End, skillshot.Start).LinePoint
                                             + skillshot.Direction * 30,
                                         Unit = minion,
-                                        Type = CollisionObjectTypes.Minion, Distance = pos.LSDistance(@from), Diff = w
+                                        Type = CollisionObjectTypes.Minion, Distance = pos.Distance(@from), Diff = w
                                     });
                         break;
                     case CollisionObjectTypes.Champions:
                         collisions.AddRange(
-                            from hero in HeroManager.Allies.Where(i => i.LSIsValidTarget(1200, false) && !i.IsMe)
+                            from hero in HeroManager.Allies.Where(i => i.IsValidTarget(1200, false) && !i.IsMe)
                             let pred =
                                 FastPrediction(
                                     @from,
@@ -128,22 +128,22 @@
                                     Math.Max(0, skillshot.SpellData.Delay - (Utils.GameTimeTickCount - skillshot.StartTick)),
                                     skillshot.SpellData.MissileSpeed)
                             let pos = pred.PredictedPos
-                            let w = skillshot.SpellData.RawRadius + 30 - pos.LSDistance(@from, skillshot.End, true)
+                            let w = skillshot.SpellData.RawRadius + 30 - pos.Distance(@from, skillshot.End, true)
                             where w > 0
                             select
                                 new DetectedCollision
                                     {
                                         Position =
-                                            pos.LSProjectOn(skillshot.End, skillshot.Start).LinePoint
+                                            pos.ProjectOn(skillshot.End, skillshot.Start).LinePoint
                                             + skillshot.Direction * 30,
                                         Unit = hero, Type = CollisionObjectTypes.Minion,
-                                        Distance = pos.LSDistance(@from), Diff = w
+                                        Distance = pos.Distance(@from), Diff = w
                                     });
                         break;
                     case CollisionObjectTypes.YasuoWall:
                         if (
                             !HeroManager.Allies.Any(
-                                i => i.LSIsValidTarget(float.MaxValue, false) && i.ChampionName == "Yasuo"))
+                                i => i.IsValidTarget(float.MaxValue, false) && i.ChampionName == "Yasuo"))
                         {
                             break;
                         }
@@ -161,15 +161,15 @@
                         }
                         var level = wall.Name.Substring(wall.Name.Length - 6, 1);
                         var wallWidth = (300 + 50 * Convert.ToInt32(level));
-                        var wallDirection = (wall.Position.LSTo2D() - wallCastedPos).LSNormalized().LSPerpendicular();
-                        var wallStart = wall.Position.LSTo2D() + wallWidth / 2f * wallDirection;
+                        var wallDirection = (wall.Position.To2D() - wallCastedPos).Normalized().Perpendicular();
+                        var wallStart = wall.Position.To2D() + wallWidth / 2f * wallDirection;
                         var wallEnd = wallStart - wallWidth * wallDirection;
                         var wallPolygon = new Geometry.Rectangle(wallStart, wallEnd, 75).ToPolygon();
                         var intersections = new List<Vector2>();
                         for (var i = 0; i < wallPolygon.Points.Count; i++)
                         {
                             var inter =
-                                wallPolygon.Points[i].LSIntersection(
+                                wallPolygon.Points[i].Intersection(
                                     wallPolygon.Points[i != wallPolygon.Points.Count - 1 ? i + 1 : 0],
                                     from,
                                     skillshot.End);
@@ -180,13 +180,13 @@
                         }
                         if (intersections.Count > 0)
                         {
-                            var intersection = intersections.OrderBy(item => item.LSDistance(@from)).ToList()[0];
+                            var intersection = intersections.OrderBy(item => item.Distance(@from)).ToList()[0];
                             var collisionT = Utils.GameTimeTickCount
                                              + Math.Max(
                                                  0,
                                                  skillshot.SpellData.Delay - (Utils.GameTimeTickCount - skillshot.StartTick))
                                              + 100
-                                             + (1000 * intersection.LSDistance(from)) / skillshot.SpellData.MissileSpeed;
+                                             + (1000 * intersection.Distance(from)) / skillshot.SpellData.MissileSpeed;
                             if (collisionT - wallCastT < 4000)
                             {
                                 if (skillshot.SpellData.Type != SkillShotType.SkillshotMissileLine)
@@ -212,7 +212,7 @@
                         return;
                     }
                     wallCastT = Utils.GameTimeTickCount;
-                    wallCastedPos = sender.ServerPosition.LSTo2D();
+                    wallCastedPos = sender.ServerPosition.To2D();
                 };
         }
 

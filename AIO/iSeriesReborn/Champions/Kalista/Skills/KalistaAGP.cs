@@ -12,7 +12,7 @@ using EloBuddy;
         internal static void OnGapclose(ActiveGapcloser gapcloser)
         {
             var spells = Variables.CurrentChampion.GetSpells();
-            if (spells[SpellSlot.Q].LSIsReady())
+            if (spells[SpellSlot.Q].IsReady())
             {
                 var senderEndPoint = gapcloser.End;
                 var mousePosition = Game.CursorPos;

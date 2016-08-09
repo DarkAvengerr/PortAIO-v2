@@ -23,7 +23,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.Logic
 
         public bool CanExplodeQ(Obj_AI_Base target)
         {
-            return this.GragasQ != null && target.LSDistance(this.GragasQ.Position) <= 250;
+            return this.GragasQ != null && target.Distance(this.GragasQ.Position) <= 250;
         }
 
         public bool CanThrowQ()
@@ -73,7 +73,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.Logic
 
         private float QDelay(Obj_AI_Base target)
         {
-            var time = target.LSDistance(Variable.Player) / Variable.Spells[SpellSlot.R].Speed;
+            var time = target.Distance(Variable.Player) / Variable.Spells[SpellSlot.R].Speed;
 
             return time + Variable.Spells[SpellSlot.R].Delay;
         }

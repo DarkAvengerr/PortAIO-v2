@@ -22,19 +22,19 @@ using EloBuddy;
             {
                 return;
             }
-            if (GravesMenu.Config.Item("graves.q.draw").GetValue<Circle>().Active && GravesSpells.Q.LSIsReady())
+            if (GravesMenu.Config.Item("graves.q.draw").GetValue<Circle>().Active && GravesSpells.Q.IsReady())
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, GravesSpells.Q.Range, GravesMenu.Config.Item("graves.q.draw").GetValue<Circle>().Color);
             }
-            if (GravesMenu.Config.Item("graves.w.draw").GetValue<Circle>().Active && GravesSpells.W.LSIsReady())
+            if (GravesMenu.Config.Item("graves.w.draw").GetValue<Circle>().Active && GravesSpells.W.IsReady())
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, GravesSpells.W.Range, GravesMenu.Config.Item("graves.w.draw").GetValue<Circle>().Color);
             }
-            if (GravesMenu.Config.Item("graves.e.draw").GetValue<Circle>().Active && GravesSpells.E.LSIsReady())
+            if (GravesMenu.Config.Item("graves.e.draw").GetValue<Circle>().Active && GravesSpells.E.IsReady())
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, GravesSpells.E.Range, GravesMenu.Config.Item("graves.e.draw").GetValue<Circle>().Color);
             }
-            if (GravesMenu.Config.Item("graves.r.draw").GetValue<Circle>().Active && GravesSpells.R.LSIsReady())
+            if (GravesMenu.Config.Item("graves.r.draw").GetValue<Circle>().Active && GravesSpells.R.IsReady())
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, GravesSpells.R.Range, GravesMenu.Config.Item("graves.r.draw").GetValue<Circle>().Color);
             }
@@ -80,7 +80,7 @@ using EloBuddy;
                         if (Catcher.GapcloseCalculte(selectedtarget, GravesSpells.E) < 0 && Catcher.Calculate(selectedtarget) < 0)
                         {
                             Drawing.DrawText(playerposition.X, playerposition.Y, Color.LawnGreen, "Catch (Time): " + (int)Catcher.Calculate(selectedtarget));
-                            if (GravesSpells.E.LSIsReady())
+                            if (GravesSpells.E.IsReady())
                             {
                                 Drawing.DrawText(playerposition.X - 20, playerposition.Y - 20, Color.LawnGreen, "Catch With Gapclose (Time): " + (int)Catcher.GapcloseCalculte(selectedtarget, GravesSpells.E));
                             }
@@ -88,7 +88,7 @@ using EloBuddy;
                         if (Catcher.GapcloseCalculte(selectedtarget, GravesSpells.E) > 0 && Catcher.Calculate(selectedtarget) > 0)
                         {
                             Drawing.DrawText(playerposition.X, playerposition.Y, Color.Red, "Catch (Time): " + (int)Catcher.Calculate(selectedtarget));
-                            if (GravesSpells.E.LSIsReady())
+                            if (GravesSpells.E.IsReady())
                             {
                                 Drawing.DrawText(playerposition.X - 20, playerposition.Y - 20, Color.Red, "Catch With Gapclose (Time): " + (int)Catcher.GapcloseCalculte(selectedtarget, GravesSpells.E));
                             }
@@ -96,7 +96,7 @@ using EloBuddy;
                         if (Catcher.GapcloseCalculte(selectedtarget, GravesSpells.E) < 0 && Catcher.Calculate(selectedtarget) > 0)
                         {
                             Drawing.DrawText(playerposition.X, playerposition.Y, Color.Orange, "Catch (Time): " + (int)Catcher.Calculate(selectedtarget));
-                            if (GravesSpells.E.LSIsReady())
+                            if (GravesSpells.E.IsReady())
                             {
                                 Drawing.DrawText(playerposition.X - 20, playerposition.Y - 20, Color.Orange, "Catch With Gapclose (Time): " + (int)Catcher.GapcloseCalculte(selectedtarget, GravesSpells.E));
                             }

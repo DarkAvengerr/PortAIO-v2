@@ -89,7 +89,7 @@ namespace S_Plus_Class_Kalista.Handlers
             if (!SMenu.Item(_MenuItemBase + "Boolean.MinonOrbwalk").GetValue<bool>()) return;
             if (CommonOrbwalker.GetTarget() != null) return;
 
-            var enemiesHero = HeroManager.Enemies.Where(x => x.IsEnemy && ObjectManager.Player.LSDistance(x) <= Orbwalking.GetRealAutoAttackRange(x));
+            var enemiesHero = HeroManager.Enemies.Where(x => x.IsEnemy && ObjectManager.Player.Distance(x) <= Orbwalking.GetRealAutoAttackRange(x));
             if (enemiesHero.Any()) return; // There is a champion we can attack
 
             var target = TargetSelector.GetTarget(Champion.E.Range * 1.2f, TargetSelector.DamageType.Physical); // Champion in E range
@@ -164,7 +164,7 @@ namespace S_Plus_Class_Kalista.Handlers
         private static void LaneClear()
         {
 
-            if (SMenu.Item(_MenuItemBase + "Clear.Boolean.Rend.Minions").GetValue<bool>() && Champion.E.LSIsReady())
+            if (SMenu.Item(_MenuItemBase + "Clear.Boolean.Rend.Minions").GetValue<bool>() && Champion.E.IsReady())
             {
                 if (!Humanizer.Limiter.CheckDelay($"{Humanizer.DelayItemBase}Slider.RendDelay"))
                 {
@@ -202,11 +202,11 @@ namespace S_Plus_Class_Kalista.Handlers
                     {
                         if (SMenu.Item(_MenuItemBase + "Mixed.Boolean.UseQ.Reset").GetValue<bool>())
                         {
-                            if (Player.Spellbook.IsAutoAttacking || Player.LSIsDashing())
+                            if (Player.Spellbook.IsAutoAttacking || Player.IsDashing())
                                 Champion.Q.Cast(predictionPosition.CastPosition);
                         }
 
-                        else if (!Player.Spellbook.IsAutoAttacking && !Player.LSIsDashing())
+                        else if (!Player.Spellbook.IsAutoAttacking && !Player.IsDashing())
                             Champion.Q.Cast(predictionPosition.CastPosition);
                     }
                 }
@@ -218,7 +218,7 @@ namespace S_Plus_Class_Kalista.Handlers
                 {
                     foreach (var stacks in from target in HeroManager.Enemies
                         where target.IsValid
-                        where target.LSIsValidTarget(Champion.E.Range)
+                        where target.IsValidTarget(Champion.E.Range)
                         where !Damage.DamageCalc.CheckNoDamageBuffs(target)
                         select target.GetBuffCount("kalistaexpungemarker")
                         into stacks
@@ -251,11 +251,11 @@ namespace S_Plus_Class_Kalista.Handlers
                     {
                         if (SMenu.Item(_MenuItemBase + "Combo.Boolean.UseQ.Reset").GetValue<bool>())
                         {
-                            if (Player.Spellbook.IsAutoAttacking || Player.LSIsDashing())
+                            if (Player.Spellbook.IsAutoAttacking || Player.IsDashing())
                                 Champion.Q.Cast(predictionPosition.CastPosition);
                         }
 
-                        else if (!Player.Spellbook.IsAutoAttacking && !Player.LSIsDashing())
+                        else if (!Player.Spellbook.IsAutoAttacking && !Player.IsDashing())
                             Champion.Q.Cast(predictionPosition.CastPosition);
                     }
                 }

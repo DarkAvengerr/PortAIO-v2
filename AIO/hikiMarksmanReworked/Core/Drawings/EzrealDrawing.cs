@@ -22,19 +22,19 @@ using EloBuddy;
             {
                 return;
             }
-            if (EzrealMenu.Config.Item("ezreal.q.draw").GetValue<Circle>().Active && EzrealSpells.Q.LSIsReady())
+            if (EzrealMenu.Config.Item("ezreal.q.draw").GetValue<Circle>().Active && EzrealSpells.Q.IsReady())
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, EzrealSpells.Q.Range, EzrealMenu.Config.Item("ezreal.q.draw").GetValue<Circle>().Color);
             }
-            if (EzrealMenu.Config.Item("ezreal.w.draw").GetValue<Circle>().Active && EzrealSpells.W.LSIsReady())
+            if (EzrealMenu.Config.Item("ezreal.w.draw").GetValue<Circle>().Active && EzrealSpells.W.IsReady())
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, EzrealSpells.W.Range, EzrealMenu.Config.Item("ezreal.w.draw").GetValue<Circle>().Color);
             }
-            if (EzrealMenu.Config.Item("ezreal.e.draw").GetValue<Circle>().Active && EzrealSpells.E.LSIsReady())
+            if (EzrealMenu.Config.Item("ezreal.e.draw").GetValue<Circle>().Active && EzrealSpells.E.IsReady())
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, EzrealSpells.E.Range, EzrealMenu.Config.Item("ezreal.e.draw").GetValue<Circle>().Color);
             }
-            if (EzrealMenu.Config.Item("ezreal.r.draw").GetValue<Circle>().Active && EzrealSpells.R.LSIsReady())
+            if (EzrealMenu.Config.Item("ezreal.r.draw").GetValue<Circle>().Active && EzrealSpells.R.IsReady())
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, EzrealSpells.R.Range, EzrealMenu.Config.Item("ezreal.r.draw").GetValue<Circle>().Color);
             }
@@ -80,7 +80,7 @@ using EloBuddy;
                         if (Catcher.GapcloseCalculte(selectedtarget, EzrealSpells.E) < 0 && Catcher.Calculate(selectedtarget) < 0)
                         {
                             Drawing.DrawText(playerposition.X, playerposition.Y, Color.LawnGreen, "Catch (Time): " + (int)Catcher.Calculate(selectedtarget));
-                            if (EzrealSpells.E.LSIsReady())
+                            if (EzrealSpells.E.IsReady())
                             {
                                 Drawing.DrawText(playerposition.X - 20, playerposition.Y - 20, Color.LawnGreen, "Catch With Gapclose (Time): " + (int)Catcher.GapcloseCalculte(selectedtarget, EzrealSpells.E));
                             }
@@ -88,7 +88,7 @@ using EloBuddy;
                         if (Catcher.GapcloseCalculte(selectedtarget, EzrealSpells.E) > 0 && Catcher.Calculate(selectedtarget) > 0)
                         {
                             Drawing.DrawText(playerposition.X, playerposition.Y, Color.Red, "Catch (Time): " + (int)Catcher.Calculate(selectedtarget));
-                            if (EzrealSpells.E.LSIsReady())
+                            if (EzrealSpells.E.IsReady())
                             {
                                 Drawing.DrawText(playerposition.X - 20, playerposition.Y - 20, Color.Red, "Catch With Gapclose (Time): " + (int)Catcher.GapcloseCalculte(selectedtarget, EzrealSpells.E));
                             }
@@ -96,7 +96,7 @@ using EloBuddy;
                         if (Catcher.GapcloseCalculte(selectedtarget, EzrealSpells.E) < 0 && Catcher.Calculate(selectedtarget) > 0)
                         {
                             Drawing.DrawText(playerposition.X, playerposition.Y, Color.Orange, "Catch (Time): " + (int)Catcher.Calculate(selectedtarget));
-                            if (EzrealSpells.E.LSIsReady())
+                            if (EzrealSpells.E.IsReady())
                             {
                                 Drawing.DrawText(playerposition.X - 20, playerposition.Y - 20, Color.Orange, "Catch With Gapclose (Time): " + (int)Catcher.GapcloseCalculte(selectedtarget, EzrealSpells.E));
                             }

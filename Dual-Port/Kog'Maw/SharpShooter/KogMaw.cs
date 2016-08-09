@@ -93,7 +93,7 @@ namespace SharpShooter.Plugins
 
                             if (MenuProvider.Champion.Combo.UseW)
                                 if (_w.IsReadyPerfectly())
-                                    if (HeroManager.Enemies.Any(x => x.LSIsValidTarget(_w.Range)))
+                                    if (HeroManager.Enemies.Any(x => x.IsValidTarget(_w.Range)))
                                         _w.Cast();
 
                             if (MenuProvider.Champion.Combo.UseE)
@@ -198,7 +198,7 @@ namespace SharpShooter.Plugins
                                     {
                                         var target =
                                             MinionManager.GetMinions(600, MinionTypes.All, MinionTeam.Neutral,
-                                                MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.LSIsValidTarget(600));
+                                                MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.IsValidTarget(600));
                                         if (target != null)
                                             _e.Cast(target);
                                     }
@@ -212,7 +212,7 @@ namespace SharpShooter.Plugins
                                             var target =
                                                 MinionManager.GetMinions(600, MinionTypes.All, MinionTeam.Neutral,
                                                     MinionOrderTypes.MaxHealth)
-                                                    .FirstOrDefault(x => x.LSIsValidTarget(600));
+                                                    .FirstOrDefault(x => x.IsValidTarget(600));
                                             if (target != null)
                                                 _r.Cast(target);
                                         }
@@ -235,7 +235,7 @@ namespace SharpShooter.Plugins
                 case Orbwalking.OrbwalkingMode.Combo:
                     if (_w.IsReadyPerfectly())
                         if (MenuProvider.Champion.Combo.UseW)
-                            if (args.Target.LSIsValidTarget(_w.Range))
+                            if (args.Target.IsValidTarget(_w.Range))
                                 _w.Cast();
                     break;
                 case Orbwalking.OrbwalkingMode.LaneClear:
@@ -278,7 +278,7 @@ namespace SharpShooter.Plugins
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float)ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float)ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
             if (_q.IsReadyPerfectly())

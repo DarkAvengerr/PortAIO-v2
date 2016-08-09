@@ -272,7 +272,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 "Q", delegate(AIHeroClient hero)
                 {
                     var damage = 0f;
-                    if (Q.LSIsReady())
+                    if (Q.IsReady())
                     {
                         damage += Q.GetDamage(hero);
                         damage += CalcPassiveDamage(hero);
@@ -292,7 +292,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             IndicatorManager.Add(
                 "R Burst", delegate(AIHeroClient hero)
                 {
-                    if (R.LSIsReady() && (_rObject == null || !_rObject.IsValid))
+                    if (R.IsReady() && (_rObject == null || !_rObject.IsValid))
                     {
                         return R.GetDamage(hero) + R.GetDamage(hero, 1);
                     }
@@ -309,7 +309,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             {
                 RFollowLogic();
             }
-            if (Ultimate.IsActive(UltimateModeType.Assisted) && R.LSIsReady())
+            if (Ultimate.IsActive(UltimateModeType.Assisted) && R.IsReady())
             {
                 if (Ultimate.ShouldMove(UltimateModeType.Assisted))
                 {
@@ -322,7 +322,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 }
             }
 
-            if (Ultimate.IsActive(UltimateModeType.Auto) && R.LSIsReady())
+            if (Ultimate.IsActive(UltimateModeType.Auto) && R.IsReady())
             {
                 var target = TargetSelector.GetTarget(R);
                 if (target != null && !RLogic(UltimateModeType.Auto, target))
@@ -334,7 +334,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit ||
                 Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-                if (Menu.Item(Menu.Name + ".lasthit.q-unkillable").GetValue<bool>() && Q.LSIsReady() &&
+                if (Menu.Item(Menu.Name + ".lasthit.q-unkillable").GetValue<bool>() && Q.IsReady() &&
                     ResourceManager.Check("lasthit"))
                 {
                     var canAttack = Game.Time >= _lastAutoAttack + Player.AttackDelay;
@@ -412,7 +412,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     return;
                 }
                 var forced = Orbwalker.ForcedTarget();
-                if (forced != null && forced.LSIsValidTarget() && forced is AIHeroClient &&
+                if (forced != null && forced.IsValidTarget() && forced is AIHeroClient &&
                     Orbwalking.InAutoAttackRange(forced))
                 {
                     return;
@@ -421,12 +421,12 @@ using EloBuddy; namespace SFXChallenger.Champions
                 {
                     if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     {
-                        if ((_rObject == null || !_rObject.IsValid) && R.LSIsReady() &&
+                        if ((_rObject == null || !_rObject.IsValid) && R.IsReady() &&
                             Ultimate.IsActive(UltimateModeType.Combo) &&
                             R.Instance.Name.Equals("ViktorChaosStorm", StringComparison.OrdinalIgnoreCase) &&
                             GameObjects.EnemyHeroes.Any(Orbwalking.InAutoAttackRange) &&
                             (RLogicSingle(UltimateModeType.Combo, true) ||
-                             GameObjects.EnemyHeroes.Where(e => e.LSIsValidTarget(R.Range + R.Width))
+                             GameObjects.EnemyHeroes.Where(e => e.IsValidTarget(R.Range + R.Width))
                                  .Any(e => RLogic(UltimateModeType.Combo, e, true))))
                         {
                             args.Process = false;
@@ -460,8 +460,8 @@ using EloBuddy; namespace SFXChallenger.Champions
                     if (args.Target is AIHeroClient &&
                         (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo ||
                          Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) &&
-                        (Q.LSIsReady() && Player.Mana >= Q.Instance.SData.Mana ||
-                         E.LSIsReady() && Player.Mana >= E.Instance.SData.Mana))
+                        (Q.IsReady() && Player.Mana >= Q.Instance.SData.Mana ||
+                         E.IsReady() && Player.Mana >= E.Instance.SData.Mana))
                     {
                         args.Process = false;
                     }
@@ -473,7 +473,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     if (minion != null &&
                         HealthPrediction.LaneClearHealthPrediction(
                             minion, (int) (Player.AttackDelay * 1000), Game.Ping / 2) <
-                        Player.LSGetAutoAttackDamage(minion))
+                        Player.GetAutoAttackDamage(minion))
                     {
                         _lastBeforeFarmTarget = minion;
                     }
@@ -519,7 +519,7 @@ using EloBuddy; namespace SFXChallenger.Champions
         {
             try
             {
-                if (W.LSIsReady())
+                if (W.IsReady())
                 {
                     if (args.UniqueId.Equals("w-immobile") && BestTargetOnlyManager.Check("w-immobile", W, args.Hero) &&
                         W.IsInRange(args.Position))
@@ -542,10 +542,10 @@ using EloBuddy; namespace SFXChallenger.Champions
         {
             try
             {
-                if (args.UniqueId.Equals("w-gapcloser") && W.LSIsReady() &&
+                if (args.UniqueId.Equals("w-gapcloser") && W.IsReady() &&
                     BestTargetOnlyManager.Check("w-gapcloser", W, args.Hero))
                 {
-                    if (args.End.LSDistance(Player.Position) <= W.Range)
+                    if (args.End.Distance(Player.Position) <= W.Range)
                     {
                         W.Cast(args.End);
                     }
@@ -567,7 +567,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     LeagueSharp.Common.Utility.DelayAction.Add(
                         DelayManager.Get("ultimate-interrupt-delay"), delegate
                         {
-                            if (R.LSIsReady())
+                            if (R.IsReady())
                             {
                                 var pred = CPrediction.Circle(R, sender, HitChance.High, false);
                                 if (pred.TotalHits > 0)
@@ -586,16 +586,16 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         private bool HasQBuff()
         {
-            return Player.LSHasBuff("ViktorPowerTransferReturn");
+            return Player.HasBuff("ViktorPowerTransferReturn");
         }
 
         protected override void Combo()
         {
             var single = false;
-            var q = Menu.Item(Menu.Name + ".combo.q").GetValue<bool>() && Q.LSIsReady();
-            var w = Menu.Item(Menu.Name + ".combo.w").GetValue<bool>() && W.LSIsReady();
-            var e = Menu.Item(Menu.Name + ".combo.e").GetValue<bool>() && E.LSIsReady();
-            var r = Ultimate.IsActive(UltimateModeType.Combo) && R.LSIsReady();
+            var q = Menu.Item(Menu.Name + ".combo.q").GetValue<bool>() && Q.IsReady();
+            var w = Menu.Item(Menu.Name + ".combo.w").GetValue<bool>() && W.IsReady();
+            var e = Menu.Item(Menu.Name + ".combo.e").GetValue<bool>() && E.IsReady();
+            var r = Ultimate.IsActive(UltimateModeType.Combo) && R.IsReady();
 
             var qCasted = false;
             if (e)
@@ -640,7 +640,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             var rTarget = TargetSelector.GetTarget(R);
             if (r)
             {
-                if (rTarget != null && (HasQBuff() || qCasted || !q || !Q.LSIsReady() || R.IsKillable(rTarget)))
+                if (rTarget != null && (HasQBuff() || qCasted || !q || !Q.IsReady() || R.IsKillable(rTarget)))
                 {
                     if (!RLogic(UltimateModeType.Combo, rTarget))
                     {
@@ -726,7 +726,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 var damage = 0f;
                 var totalMana = 0f;
 
-                if (r && R.LSIsReady() && (!rangeCheck || R.IsInRange(target, R.Range + R.Width)))
+                if (r && R.IsReady() && (!rangeCheck || R.IsInRange(target, R.Range + R.Width)))
                 {
                     var rMana = R.ManaCost * resMulti;
                     if (totalMana + rMana <= Player.Mana)
@@ -762,7 +762,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                         damage += R.GetDamage(target, 1) * stacks;
                     }
                 }
-                if (e && E.LSIsReady() && (!rangeCheck || E.IsInRange(target, E.Range + ELength)))
+                if (e && E.IsReady() && (!rangeCheck || E.IsInRange(target, E.Range + ELength)))
                 {
                     var eMana = E.ManaCost * resMulti;
                     if (totalMana + eMana <= Player.Mana)
@@ -771,7 +771,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                         damage += E.GetDamage(target);
                     }
                 }
-                if (q && Q.LSIsReady() && (!rangeCheck || Q.IsInRange(target)))
+                if (q && Q.IsReady() && (!rangeCheck || Q.IsInRange(target)))
                 {
                     var qMana = Q.ManaCost * resMulti;
                     if (totalMana + qMana <= Player.Mana)
@@ -913,7 +913,7 @@ using EloBuddy; namespace SFXChallenger.Champions
         {
             try
             {
-                if (GameObjects.EnemyHeroes.Any(e => e.LSIsValidTarget() && e.LSDistance(Player) < W.Width * 1.1f))
+                if (GameObjects.EnemyHeroes.Any(e => e.IsValidTarget() && e.Distance(Player) < W.Width * 1.1f))
                 {
                     W.Cast(Player.ServerPosition);
                 }
@@ -958,14 +958,14 @@ using EloBuddy; namespace SFXChallenger.Champions
                 var startPos = Vector3.Zero;
                 var endPos = Vector3.Zero;
                 var hits = 0;
-                targets = targets.Where(t => t.LSIsValidTarget(E.Range + ELength + E.Width * 1.1f)).ToList();
+                targets = targets.Where(t => t.IsValidTarget(E.Range + ELength + E.Width * 1.1f)).ToList();
                 var targetCount = targets.Count;
 
                 foreach (var target in targets)
                 {
                     bool containsTarget;
                     var lTarget = target;
-                    if (target.LSDistance(Player.Position) <= E.Range)
+                    if (target.Distance(Player.Position) <= E.Range)
                     {
                         containsTarget = mainTarget == null || lTarget.NetworkId == mainTarget.NetworkId;
                         var cCastPos = target.Position;
@@ -985,7 +985,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                                     containsTarget = t.NetworkId == mainTarget.NetworkId;
                                 }
                                 var rect = new Geometry.Polygon.Rectangle(
-                                    cCastPos.LSTo2D(), cCastPos.LSExtend(pred.CastPosition, ELength).LSTo2D(), E.Width);
+                                    cCastPos.To2D(), cCastPos.Extend(pred.CastPosition, ELength).To2D(), E.Width);
                                 foreach (var c in
                                     targets.Where(
                                         c => c.NetworkId != cTarget.NetworkId && c.NetworkId != lTarget.NetworkId))
@@ -1012,7 +1012,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                                 {
                                     hits = count;
                                     startPos = cCastPos;
-                                    endPos = cCastPos.LSExtend(pred.CastPosition, ELength);
+                                    endPos = cCastPos.Extend(pred.CastPosition, ELength);
                                     if (hits == targetCount)
                                     {
                                         break;
@@ -1022,10 +1022,10 @@ using EloBuddy; namespace SFXChallenger.Champions
                         }
                         if (endPos.Equals(Vector3.Zero) && containsTarget)
                         {
-                            startPos = target.LSIsFacing(Player) && IsSpellUpgraded(E)
-                                ? Player.Position.LSExtend(cCastPos, Player.LSDistance(cCastPos) - ELength / 10f)
+                            startPos = target.IsFacing(Player) && IsSpellUpgraded(E)
+                                ? Player.Position.Extend(cCastPos, Player.Distance(cCastPos) - ELength / 10f)
                                 : cCastPos;
-                            endPos = Player.Position.LSExtend(cCastPos, ELength);
+                            endPos = Player.Position.Extend(cCastPos, ELength);
                             hits = 1;
                         }
                     }
@@ -1033,12 +1033,12 @@ using EloBuddy; namespace SFXChallenger.Champions
                     {
                         input2.Unit = lTarget;
                         var castPos = Prediction.GetPrediction(input2).CastPosition;
-                        var sCastPos = Player.Position.LSExtend(castPos, E.Range);
+                        var sCastPos = Player.Position.Extend(castPos, E.Range);
 
                         var extDist = ELength / 4f;
                         var circle =
-                            new Geometry.Polygon.Circle(Player.Position, sCastPos.LSDistance(Player.Position), 45).Points
-                                .Where(p => p.LSDistance(sCastPos) < extDist).OrderBy(p => p.LSDistance(lTarget));
+                            new Geometry.Polygon.Circle(Player.Position, sCastPos.Distance(Player.Position), 45).Points
+                                .Where(p => p.Distance(sCastPos) < extDist).OrderBy(p => p.Distance(lTarget));
                         foreach (var point in circle)
                         {
                             input2.From = point.To3D();
@@ -1050,7 +1050,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                                 containsTarget = mainTarget == null || lTarget.NetworkId == mainTarget.NetworkId;
                                 var count = 1;
                                 var rect = new Geometry.Polygon.Rectangle(
-                                    point, point.To3D().LSExtend(pred2.CastPosition, ELength).LSTo2D(), E.Width);
+                                    point, point.To3D().Extend(pred2.CastPosition, ELength).To2D(), E.Width);
                                 foreach (var c in targets.Where(t => t.NetworkId != lTarget.NetworkId))
                                 {
                                     input2.Unit = c;
@@ -1073,11 +1073,11 @@ using EloBuddy; namespace SFXChallenger.Champions
                                 }
                                 if (count > hits && containsTarget ||
                                     count == hits && containsTarget && mainTarget != null &&
-                                    point.LSDistance(mainTarget.Position) < startPos.LSDistance(mainTarget.Position))
+                                    point.Distance(mainTarget.Position) < startPos.Distance(mainTarget.Position))
                                 {
                                     hits = count;
                                     startPos = point.To3D();
-                                    endPos = startPos.LSExtend(pred2.CastPosition, ELength);
+                                    endPos = startPos.Extend(pred2.CastPosition, ELength);
                                     if (hits == targetCount)
                                     {
                                         break;
@@ -1093,13 +1093,13 @@ using EloBuddy; namespace SFXChallenger.Champions
                 }
                 if (hits >= minHits && !startPos.Equals(Vector3.Zero) && !endPos.Equals(Vector3.Zero))
                 {
-                    if (startPos.LSDistance(Player.Position) > E.Range)
+                    if (startPos.Distance(Player.Position) > E.Range)
                     {
-                        startPos = Player.Position.LSExtend(startPos, E.Range);
+                        startPos = Player.Position.Extend(startPos, E.Range);
                     }
-                    if (startPos.LSDistance(endPos) > ELength)
+                    if (startPos.Distance(endPos) > ELength)
                     {
-                        endPos = startPos.LSExtend(endPos, ELength);
+                        endPos = startPos.Extend(endPos, ELength);
                     }
                     E.Cast(startPos, endPos);
                     return true;
@@ -1143,8 +1143,8 @@ using EloBuddy; namespace SFXChallenger.Champions
                 var startPosition = Vector3.Zero;
                 var endPosition = Vector3.Zero;
                 var targets =
-                    GameObjects.EnemyHeroes.Where(t => t.LSIsValidTarget((E.Range + ELength + E.Width) * 1.25f)).ToList();
-                if (mainTarget.ServerPosition.LSDistance(Player.ServerPosition) <= E.Range)
+                    GameObjects.EnemyHeroes.Where(t => t.IsValidTarget((E.Range + ELength + E.Width) * 1.25f)).ToList();
+                if (mainTarget.ServerPosition.Distance(Player.ServerPosition) <= E.Range)
                 {
                     var castPosition = mainTarget.ServerPosition;
                     var maxAdditionalHits = 0;
@@ -1160,7 +1160,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                         {
                             additionalHits++;
                             var rect = new Geometry.Polygon.Rectangle(
-                                castPosition, castPosition.LSExtend(pred.CastPosition, ELength), E.Width);
+                                castPosition, castPosition.Extend(pred.CastPosition, ELength), E.Width);
                             foreach (var target2 in
                                 targets.Where(
                                     t => t.NetworkId != mainTarget.NetworkId && t.NetworkId != lTarget.NetworkId))
@@ -1184,34 +1184,34 @@ using EloBuddy; namespace SFXChallenger.Champions
                     startPosition = castPosition;
                     if (endPosition.Equals(Vector3.Zero))
                     {
-                        if (startPosition.LSDistance(Player.ServerPosition) > E.Range)
+                        if (startPosition.Distance(Player.ServerPosition) > E.Range)
                         {
-                            startPosition = Player.ServerPosition.LSExtend(startPosition, E.Range);
+                            startPosition = Player.ServerPosition.Extend(startPosition, E.Range);
                         }
                         if (mainTarget.Path.Length > 0 && IsSpellUpgraded(E))
                         {
                             var newPos = mainTarget.Path[0];
                             if (mainTarget.Path.Length > 1 &&
-                                newPos.LSDistance(mainTarget.ServerPosition) <= mainTarget.BoundingRadius * 4f)
+                                newPos.Distance(mainTarget.ServerPosition) <= mainTarget.BoundingRadius * 4f)
                             {
-                                var nnPos = newPos.LSExtend(
+                                var nnPos = newPos.Extend(
                                     mainTarget.Path[1],
-                                    Math.Min(mainTarget.BoundingRadius * 1.5f, newPos.LSDistance(mainTarget.Path[1])));
-                                if (startPosition.LSTo2D().LSAngleBetween(nnPos.LSTo2D()) < 30)
+                                    Math.Min(mainTarget.BoundingRadius * 1.5f, newPos.Distance(mainTarget.Path[1])));
+                                if (startPosition.To2D().AngleBetween(nnPos.To2D()) < 30)
                                 {
                                     newPos = nnPos;
                                 }
                             }
-                            endPosition = startPosition.LSExtend(newPos, ELength);
+                            endPosition = startPosition.Extend(newPos, ELength);
                         }
-                        else if (mainTarget.LSIsFacing(Player))
+                        else if (mainTarget.IsFacing(Player))
                         {
-                            endPosition = startPosition.LSExtend(Player.ServerPosition, ELength);
+                            endPosition = startPosition.Extend(Player.ServerPosition, ELength);
                         }
                         else
                         {
-                            endPosition = Player.ServerPosition.LSExtend(
-                                startPosition, startPosition.LSDistance(Player.ServerPosition) + ELength);
+                            endPosition = Player.ServerPosition.Extend(
+                                startPosition, startPosition.Distance(Player.ServerPosition) + ELength);
                         }
                     }
                 }
@@ -1226,17 +1226,17 @@ using EloBuddy; namespace SFXChallenger.Champions
                             new[] { E.Range }.Concat(
                                 targets.Where(
                                     t =>
-                                        t.ServerPosition.LSDistance(Player.ServerPosition) < E.Range &&
-                                        t.ServerPosition.LSDistance(mainTarget.ServerPosition) < ELength * 1.25f)
-                                    .Select(t => t.ServerPosition.LSDistance(Player.ServerPosition)));
+                                        t.ServerPosition.Distance(Player.ServerPosition) < E.Range &&
+                                        t.ServerPosition.Distance(mainTarget.ServerPosition) < ELength * 1.25f)
+                                    .Select(t => t.ServerPosition.Distance(Player.ServerPosition)));
                         var maxDistance = (ELength + E.Width + mainTarget.BoundingRadius) * 1.1f;
                         foreach (var range in ranges)
                         {
                             var circle =
                                 new Geometry.Polygon.Circle(Player.ServerPosition, Math.Min(E.Range, range), 50).Points
-                                    .Where(p => p.LSDistance(pred.UnitPosition) <= maxDistance)
+                                    .Where(p => p.Distance(pred.UnitPosition) <= maxDistance)
                                     .Select(p => p.To3D())
-                                    .OrderBy(p => p.LSDistance(pred.CastPosition));
+                                    .OrderBy(p => p.Distance(pred.CastPosition));
                             foreach (var point in circle)
                             {
                                 var hits = 0;
@@ -1247,14 +1247,14 @@ using EloBuddy; namespace SFXChallenger.Champions
                                 if (pred2.Hitchance >= hitChance)
                                 {
                                     var rect = new Geometry.Polygon.Rectangle(
-                                        point, point.LSExtend(pred2.CastPosition, ELength), E.Width);
+                                        point, point.Extend(pred2.CastPosition, ELength), E.Width);
                                     foreach (var target in targets)
                                     {
                                         input.Unit = target;
                                         var pred3 = Prediction.GetPrediction(input);
                                         if (!pred3.UnitPosition.Equals(Vector3.Zero) &&
                                             (target.NetworkId.Equals(mainTarget.NetworkId) ||
-                                             pred3.UnitPosition.LSDistance(point) <=
+                                             pred3.UnitPosition.Distance(point) <=
                                              maxMultiDistance + target.BoundingRadius * 0.8f) &&
                                             new Geometry.Polygon.Circle(
                                                 pred3.UnitPosition,
@@ -1267,12 +1267,12 @@ using EloBuddy; namespace SFXChallenger.Champions
                                     }
                                     if (hits > totalHits ||
                                         hits > 0 && hits == totalHits &&
-                                        point.LSDistance(mainTarget.ServerPosition) <
-                                        startPosition.LSDistance(mainTarget.ServerPosition))
+                                        point.Distance(mainTarget.ServerPosition) <
+                                        startPosition.Distance(mainTarget.ServerPosition))
                                     {
                                         totalHits = hits;
                                         startPosition = point;
-                                        endPosition = point.LSExtend(pred2.CastPosition, ELength);
+                                        endPosition = point.Extend(pred2.CastPosition, ELength);
                                     }
                                     if (totalHits == targets.Count)
                                     {
@@ -1289,13 +1289,13 @@ using EloBuddy; namespace SFXChallenger.Champions
                 }
                 if (!startPosition.Equals(Vector3.Zero) && !endPosition.Equals(Vector3.Zero))
                 {
-                    if (startPosition.LSDistance(Player.ServerPosition) > E.Range)
+                    if (startPosition.Distance(Player.ServerPosition) > E.Range)
                     {
-                        startPosition = Player.ServerPosition.LSExtend(startPosition, E.Range);
+                        startPosition = Player.ServerPosition.Extend(startPosition, E.Range);
                     }
-                    if (endPosition.LSDistance(startPosition) > ELength)
+                    if (endPosition.Distance(startPosition) > ELength)
                     {
-                        endPosition = startPosition.LSExtend(endPosition, ELength);
+                        endPosition = startPosition.Extend(endPosition, ELength);
                     }
                     E.Cast(startPosition, endPosition);
                     return true;
@@ -1310,9 +1310,9 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void LaneClear()
         {
-            var useE = Menu.Item(Menu.Name + ".lane-clear.e").GetValue<bool>() && E.LSIsReady() &&
+            var useE = Menu.Item(Menu.Name + ".lane-clear.e").GetValue<bool>() && E.IsReady() &&
                        ResourceManager.Check("lane-clear-e");
-            var useQ = Menu.Item(Menu.Name + ".lane-clear.q").GetValue<bool>() && Q.LSIsReady() &&
+            var useQ = Menu.Item(Menu.Name + ".lane-clear.q").GetValue<bool>() && Q.IsReady() &&
                        ResourceManager.Check("lane-clear-q");
 
             if (useE)
@@ -1339,9 +1339,9 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void JungleClear()
         {
-            var useE = Menu.Item(Menu.Name + ".jungle-clear.e").GetValue<bool>() && E.LSIsReady() &&
+            var useE = Menu.Item(Menu.Name + ".jungle-clear.e").GetValue<bool>() && E.IsReady() &&
                        ResourceManager.Check("jungle-clear-e");
-            var useQ = Menu.Item(Menu.Name + ".jungle-clear.q").GetValue<bool>() && Q.LSIsReady() &&
+            var useQ = Menu.Item(Menu.Name + ".jungle-clear.q").GetValue<bool>() && Q.IsReady() &&
                        ResourceManager.Check("jungle-clear-q");
 
             if (useE)
@@ -1369,22 +1369,22 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void Flee()
         {
-            if (Menu.Item(Menu.Name + ".flee.w").GetValue<bool>() && W.LSIsReady())
+            if (Menu.Item(Menu.Name + ".flee.w").GetValue<bool>() && W.IsReady())
             {
                 var near =
                     GameObjects.EnemyHeroes.Where(e => W.CanCast(e))
-                        .OrderBy(e => e.LSDistance(Player.Position))
+                        .OrderBy(e => e.Distance(Player.Position))
                         .FirstOrDefault();
                 if (near != null)
                 {
                     Casting.SkillShot(near, W, HitChance.High);
                 }
             }
-            if (Menu.Item(Menu.Name + ".flee.q-upgraded").GetValue<bool>() && Q.LSIsReady() && IsSpellUpgraded(Q))
+            if (Menu.Item(Menu.Name + ".flee.q-upgraded").GetValue<bool>() && Q.IsReady() && IsSpellUpgraded(Q))
             {
                 var near =
                     GameObjects.EnemyHeroes.Where(e => Q.CanCast(e))
-                        .OrderBy(e => e.LSDistance(Player.Position))
+                        .OrderBy(e => e.Distance(Player.Position))
                         .FirstOrDefault();
                 if (near != null)
                 {
@@ -1403,10 +1403,10 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void Killsteal()
         {
-            if (Menu.Item(Menu.Name + ".killsteal.q-aa").GetValue<bool>() && Q.LSIsReady())
+            if (Menu.Item(Menu.Name + ".killsteal.q-aa").GetValue<bool>() && Q.IsReady())
             {
                 var target =
-                    GameObjects.EnemyHeroes.FirstOrDefault(t => t.LSIsValidTarget() && Orbwalking.InAutoAttackRange(t));
+                    GameObjects.EnemyHeroes.FirstOrDefault(t => t.IsValidTarget() && Orbwalking.InAutoAttackRange(t));
                 if (target != null)
                 {
                     var damage = CalcPassiveDamage(target) + Q.GetDamage(target);
@@ -1417,12 +1417,12 @@ using EloBuddy; namespace SFXChallenger.Champions
                     }
                 }
             }
-            if (Menu.Item(Menu.Name + ".killsteal.e").GetValue<bool>() && E.LSIsReady())
+            if (Menu.Item(Menu.Name + ".killsteal.e").GetValue<bool>() && E.IsReady())
             {
                 var eLogicNew = Menu.Item(Menu.Name + ".miscellaneous.e-logic").GetValue<StringList>().SelectedIndex ==
                                 1;
                 foreach (var target in
-                    GameObjects.EnemyHeroes.Where(t => t.LSIsValidTarget(E.Range + ELength)))
+                    GameObjects.EnemyHeroes.Where(t => t.IsValidTarget(E.Range + ELength)))
                 {
                     var damage = E.GetDamage(target);
                     if (damage * 0.95f > target.Health)
@@ -1455,13 +1455,13 @@ using EloBuddy; namespace SFXChallenger.Champions
                 var count = 0;
                 var moveDistance = -1f;
                 var maxRelocation = IsSpellUpgraded(R) ? R.Width * 1.2f : R.Width * 0.8f;
-                var targets = GameObjects.EnemyHeroes.Where(t => t.LSIsValidTarget(1500f)).ToList();
+                var targets = GameObjects.EnemyHeroes.Where(t => t.IsValidTarget(1500f)).ToList();
                 var circle = new Geometry.Polygon.Circle(position, R.Width);
                 if (targets.Any())
                 {
                     var minDistance = targets.Any(t => circle.IsInside(t)) ? targets.Min(t => t.BoundingRadius) * 2 : 0;
                     var possibilities =
-                        ListExtensions.ProduceEnumeration(targets.Select(t => t.Position.LSTo2D()).ToList())
+                        ListExtensions.ProduceEnumeration(targets.Select(t => t.Position.To2D()).ToList())
                             .Where(p => p.Count > 1)
                             .ToList();
                     if (possibilities.Any())
@@ -1469,13 +1469,13 @@ using EloBuddy; namespace SFXChallenger.Champions
                         foreach (var possibility in possibilities)
                         {
                             var mec = MEC.GetMec(possibility);
-                            var distance = position.LSDistance(mec.Center.To3D());
+                            var distance = position.Distance(mec.Center.To3D());
                             if (mec.Radius < R.Width && distance < maxRelocation && distance > minDistance)
                             {
                                 if (possibility.Count > count ||
                                     possibility.Count == count && (mec.Radius < radius || distance < moveDistance))
                                 {
-                                    moveDistance = position.LSDistance(mec.Center.To3D());
+                                    moveDistance = position.Distance(mec.Center.To3D());
                                     center = mec.Center;
                                     radius = mec.Radius;
                                     count = possibility.Count;
@@ -1487,8 +1487,8 @@ using EloBuddy; namespace SFXChallenger.Champions
                             return center.To3D();
                         }
                     }
-                    var dTarget = targets.OrderBy(t => t.LSDistance(position)).FirstOrDefault();
-                    if (dTarget != null && position.LSDistance(dTarget.Position) > minDistance)
+                    var dTarget = targets.OrderBy(t => t.Distance(position)).FirstOrDefault();
+                    if (dTarget != null && position.Distance(dTarget.Position) > minDistance)
                     {
                         return dTarget.Position;
                     }

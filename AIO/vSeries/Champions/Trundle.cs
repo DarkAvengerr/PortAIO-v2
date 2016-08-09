@@ -102,7 +102,7 @@ using EloBuddy;
 
         private static void TrundleInterrupter(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (sender.IsEnemy && MenuCheck("trundle.interrupter", Config) && sender.LSIsValidTarget(E.Range) &&
+            if (sender.IsEnemy && MenuCheck("trundle.interrupter", Config) && sender.IsValidTarget(E.Range) &&
                 args.DangerLevel >= Interrupter2.DangerLevel.High)
             {
                 E.Cast(sender.Position);
@@ -116,20 +116,20 @@ using EloBuddy;
             {
                 if (args.Target.IsMe)
                 {
-                    if (args.SData.Name == "CaitlynEntrapment" && args.End.LSDistance(ObjectManager.Player.Position) < E.Range - 50
-                        && sender.LSDistance(ObjectManager.Player.Position) < E.Range - 50)
+                    if (args.SData.Name == "CaitlynEntrapment" && args.End.Distance(ObjectManager.Player.Position) < E.Range - 50
+                        && sender.Distance(ObjectManager.Player.Position) < E.Range - 50)
                     {
-                        E.Cast(args.End.LSExtend(ObjectManager.Player.Position, -50));
+                        E.Cast(args.End.Extend(ObjectManager.Player.Position, -50));
                     }
-                    else if (args.SData.Name == "BlindMonkQOne" && ObjectManager.Player.LSHasBuff("BlindMonkQOne") && sender.LSHasBuff("lee sin q fly buff. just i need"))
+                    else if (args.SData.Name == "BlindMonkQOne" && ObjectManager.Player.HasBuff("BlindMonkQOne") && sender.HasBuff("lee sin q fly buff. just i need"))
                     {
-                        E.Cast(ObjectManager.Player.Position.LSExtend(sender.Position, 100));
+                        E.Cast(ObjectManager.Player.Position.Extend(sender.Position, 100));
                     }
                 }
 
-                if (args.SData.Name == "RocketJump" && sender.LSDistance(ObjectManager.Player.Position) < E.Range - 50)
+                if (args.SData.Name == "RocketJump" && sender.Distance(ObjectManager.Player.Position) < E.Range - 50)
                 {
-                    E.Cast(ObjectManager.Player.Position.LSExtend(args.End, 50));
+                    E.Cast(ObjectManager.Player.Position.Extend(args.End, 50));
                 }
 
             }
@@ -151,26 +151,26 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (Q.LSIsReady() && MenuCheck("trundle.q.combo", Config))
+            if (Q.IsReady() && MenuCheck("trundle.q.combo", Config))
             {
                 // ReSharper disable once UnusedVariable
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                 {
                     Q.Cast();
                 }
             }
 
-            if (W.LSIsReady() && MenuCheck("trundle.w.combo", Config))
+            if (W.IsReady() && MenuCheck("trundle.w.combo", Config))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)))
                 {
                     W.Cast(enemy);
                 }
             }
 
-            if (E.LSIsReady() && MenuCheck("trundle.e.combo", Config))
+            if (E.IsReady() && MenuCheck("trundle.e.combo", Config))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range)))
                 {
                     var pred = E.GetPrediction(enemy);
                     if (pred.Hitchance >= HitChance.High)
@@ -180,9 +180,9 @@ using EloBuddy;
                 }
             }
 
-            if (R.LSIsReady() && MenuCheck("trundle.r.combo", Config) && SliderCheck("trundle.r.slider", Config) > ObjectManager.Player.Health)
+            if (R.IsReady() && MenuCheck("trundle.r.combo", Config) && SliderCheck("trundle.r.slider", Config) > ObjectManager.Player.Health)
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) && MenuCheck("trundle.r." + x.ChampionName, Config)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && MenuCheck("trundle.r." + x.ChampionName, Config)))
                 {
                     R.Cast(enemy);
                 }
@@ -195,26 +195,26 @@ using EloBuddy;
             {
                 return;
             }
-            if (Q.LSIsReady() && MenuCheck("trundle.q.harass", Config))
+            if (Q.IsReady() && MenuCheck("trundle.q.harass", Config))
             {
                 // ReSharper disable once UnusedVariable
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                 {
                     Q.Cast();
                 }
             }
 
-            if (W.LSIsReady() && MenuCheck("trundle.w.harass", Config))
+            if (W.IsReady() && MenuCheck("trundle.w.harass", Config))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)))
                 {
                     W.Cast(enemy);
                 }
             }
 
-            if (E.LSIsReady() && MenuCheck("trundle.e.harass", Config))
+            if (E.IsReady() && MenuCheck("trundle.e.harass", Config))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range)))
                 {
                     E.Cast(PillarPos(enemy));
                 }
@@ -223,28 +223,28 @@ using EloBuddy;
 
         private static Vector3 PillarPos(AIHeroClient enemy)
         {
-            return enemy.Position.LSTo2D().LSExtend(ObjectManager.Player.Position.LSTo2D(), -E.Width / 2).To3D();
+            return enemy.Position.To2D().Extend(ObjectManager.Player.Position.To2D(), -E.Width / 2).To3D();
         }
 
         private static void TrundleOnDraw(EventArgs args)
         {
-            if (Q.LSIsReady() && ActiveCheck("trundle.q.draw", Config))
+            if (Q.IsReady() && ActiveCheck("trundle.q.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, GetColor("trundle.q.draw", Config));
             }
-            if (W.LSIsReady() && ActiveCheck("trundle.w.draw", Config))
+            if (W.IsReady() && ActiveCheck("trundle.w.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, GetColor("trundle.w.draw", Config));
             }
-            if (E.LSIsReady() && ActiveCheck("trundle.e.draw", Config))
+            if (E.IsReady() && ActiveCheck("trundle.e.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, GetColor("trundle.e.draw", Config));
             }
-            if (R.LSIsReady() && ActiveCheck("trundle.r.draw", Config))
+            if (R.IsReady() && ActiveCheck("trundle.r.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, GetColor("trundle.r.draw", Config));
             }
-            foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(1000)))
+            foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(1000)))
             {
                 Render.Circle.DrawCircle(PillarPos(enemy), 50, Color.Gold);
             }

@@ -63,7 +63,7 @@ using EloBuddy;
 
                 foreach (var target in ObjectManager.Get<Obj_AI_Base>().Where(target => Monsters.Contains(target.BaseSkinName)))
                 {
-                    if (useQKS && Q.LSIsReady() && target.Health < CustomLib.QDamage(target) && Player.LSDistance(target) < Q.Range && !target.IsDead && target.LSIsValidTarget())
+                    if (useQKS && Q.IsReady() && target.Health < CustomLib.QDamage(target) && Player.Distance(target) < Q.Range && !target.IsDead && target.IsValidTarget())
                     {
                         var prediction = Q.GetPrediction(target);
                         if (prediction.Hitchance >= HitChance.High)

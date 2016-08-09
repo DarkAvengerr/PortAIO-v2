@@ -84,7 +84,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void Orbwalking_BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
         {
-            if(Program.Combo && W.LSIsReady() && FindCard == 1 && W.Instance.Name != "PickACard" &&  Config.Item("WblockAA", true).GetValue<bool>())
+            if(Program.Combo && W.IsReady() && FindCard == 1 && W.Instance.Name != "PickACard" &&  Config.Item("WblockAA", true).GetValue<bool>())
             {
                 args.Process = false;
             }
@@ -96,7 +96,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             if (!Config.Item("ignoreW", true).GetValue<bool>())
                 cardok = true;
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 if(Config.Item("Wmode", true).GetValue<StringList>().SelectedIndex == 0)
                     LogicW();
@@ -109,15 +109,15 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 cardok = false;
             }
 
-            if(Program.LagFree(2)  && Q.LSIsReady() && Config.Item("autoQ", true).GetValue<bool>())
+            if(Program.LagFree(2)  && Q.IsReady() && Config.Item("autoQ", true).GetValue<bool>())
                 LogicQ();
 
-            if (Program.LagFree(4) && Q.LSIsReady())
+            if (Program.LagFree(4) && Q.IsReady())
                 Jungle();
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
-                if(Program.LagFree(3) && W.LSIsReady() && Config.Item("autoR", true).GetValue<bool>())
+                if(Program.LagFree(3) && W.IsReady() && Config.Item("autoR", true).GetValue<bool>())
                     LogicR();
 
                 if (Config.Item("useR", true).GetValue<KeyBind>().Active)
@@ -125,7 +125,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     if (Player.HasBuff("destiny_marker"))
                     {
                         var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-                        if (t.LSIsValidTarget())
+                        if (t.IsValidTarget())
                         {
                             R.Cast(t);
                         }
@@ -144,7 +144,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             var wName = W.Instance.Name;
             if (wName == "PickACard" && Utils.TickCount - W.LastCastAttemptT > 150)
             {
-                if (R.LSIsReady() && (Player.HasBuff("destiny_marker") || Player.HasBuff("gate")))
+                if (R.IsReady() && (Player.HasBuff("destiny_marker") || Player.HasBuff("gate")))
                 {
                     FindCard = 1;
                     W.Cast();
@@ -174,7 +174,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
                 if (cardok)
                 {
-                    if (R.LSIsReady() && (Player.HasBuff("destiny_marker") || Player.HasBuff("gate")))
+                    if (R.IsReady() && (Player.HasBuff("destiny_marker") || Player.HasBuff("gate")))
                     {
                         FindCard = 1;
                         if (wName == "GoldCardLock")
@@ -205,9 +205,9 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             var t = TargetSelector.GetTarget(1100, TargetSelector.DamageType.Magical);
             if (wName == "PickACard" && Utils.TickCount - W.LastCastAttemptT > 150)
             {
-                if (R.LSIsReady() && (Player.HasBuff("destiny_marker") || Player.HasBuff("gate")))
+                if (R.IsReady() && (Player.HasBuff("destiny_marker") || Player.HasBuff("gate")))
                     W.Cast();
-                else if (t.LSIsValidTarget() && Program.Combo)
+                else if (t.IsValidTarget() && Program.Combo)
                     W.Cast();
                 else if ( Orbwalker.GetTarget() != null)
                 {
@@ -234,13 +234,13 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                         orbTarget = (AIHeroClient)getTarget;
                     }
 
-                    if (R.LSIsReady() && (Player.HasBuff("destiny_marker") || Player.HasBuff("gate")))
+                    if (R.IsReady() && (Player.HasBuff("destiny_marker") || Player.HasBuff("gate")))
                     {
                         FindCard = 1;
                         if (wName == "GoldCardLock")
                             W.Cast();
                     }
-                    else if (Program.Combo && orbTarget.LSIsValidTarget() &&  W.GetDamage(orbTarget) + Player.LSGetAutoAttackDamage(orbTarget) > orbTarget.Health)
+                    else if (Program.Combo && orbTarget.IsValidTarget() &&  W.GetDamage(orbTarget) + Player.GetAutoAttackDamage(orbTarget) > orbTarget.Health)
                     {
                         W.Cast();
                         Program.debug("1" + wName);
@@ -251,7 +251,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                         if (wName == "BlueCardLock")
                             W.Cast();
                     }
-                    else if (Program.Farm && orbTarget.LSIsValidTarget())
+                    else if (Program.Farm && orbTarget.IsValidTarget())
                     {
                         FindCard = 1;
                         if (wName == "GoldCardLock")
@@ -288,7 +288,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 {
                     var mob = mobs[0];
 
-                    if (Q.LSIsReady() && Config.Item("jungleQ", true).GetValue<bool>())
+                    if (Q.IsReady() && Config.Item("jungleQ", true).GetValue<bool>())
                     {
                         Q.Cast(mob);
                         return;
@@ -299,17 +299,17 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void LogicR()
         {
-            if (Player.LSCountEnemiesInRange(Config.Item("Renemy", true).GetValue<Slider>().Value) == 0)
+            if (Player.CountEnemiesInRange(Config.Item("Renemy", true).GetValue<Slider>().Value) == 0)
             {
                 var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-                if (t.LSIsValidTarget() && t.LSDistance(Player.Position) > Q.Range && t.LSCountAlliesInRange(Config.Item("RenemyA", true).GetValue<Slider>().Value) == 0)
+                if (t.IsValidTarget() && t.Distance(Player.Position) > Q.Range && t.CountAlliesInRange(Config.Item("RenemyA", true).GetValue<Slider>().Value) == 0)
                 {
-                    if (Q.GetDamage(t) + W.GetDamage(t) + Player.LSGetAutoAttackDamage(t) * 3 > t.Health && t.LSCountEnemiesInRange(1000) < 3)
+                    if (Q.GetDamage(t) + W.GetDamage(t) + Player.GetAutoAttackDamage(t) * 3 > t.Health && t.CountEnemiesInRange(1000) < 3)
                     {
                         var rPos = R.GetPrediction(t).CastPosition;
                         if (Config.Item("turetR", true).GetValue<bool>())
                         {
-                            if (!rPos.LSUnderTurret(true))
+                            if (!rPos.UnderTurret(true))
                                 R.Cast(rPos);
                         }
                         else
@@ -324,12 +324,12 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         private void LogicQ()
         {
             var t = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-            if (t.LSIsValidTarget())
+            if (t.IsValidTarget())
             {
                     if (OktwCommon.GetKsDamage(t, Q)> t.Health && !SebbyLib.Orbwalking.InAutoAttackRange(t))
                         Program.CastSpell(Q, t);
 
-                    if (W.Instance.CooldownExpires - Game.Time < W.Instance.Cooldown - 1.3 && W.Instance.Name == "PickACard" && (W.Instance.CooldownExpires - Game.Time > 3 || Player.LSCountEnemiesInRange(950) == 0))
+                    if (W.Instance.CooldownExpires - Game.Time < W.Instance.Cooldown - 1.3 && W.Instance.Name == "PickACard" && (W.Instance.CooldownExpires - Game.Time > 3 || Player.CountEnemiesInRange(950) == 0))
                     {
                         if (Program.Combo && Player.Mana > RMANA + QMANA)
                             Program.CastSpell(Q, t);
@@ -337,7 +337,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                             Program.CastSpell(Q, t);
                     }
 
-                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(Q.Range) && !OktwCommon.CanMove(enemy)))
+                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(Q.Range) && !OktwCommon.CanMove(enemy)))
                         Q.Cast(enemy, true, true);
                 
             }
@@ -365,7 +365,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             WMANA = W.Instance.SData.Mana;
             EMANA = E.Instance.SData.Mana;
 
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 RMANA = WMANA - Player.PARRegenRate * W.Instance.Cooldown;
             else
                 RMANA = R.Instance.SData.Mana;
@@ -373,7 +373,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void Drawing_OnEndScene(EventArgs args)
         {
-            if (R.LSIsReady() && Config.Item("rRangeMini", true).GetValue<bool>())
+            if (R.IsReady() && Config.Item("rRangeMini", true).GetValue<bool>())
             {
                 LeagueSharp.Common.Utility.DrawCircle(Player.Position, R.Range, System.Drawing.Color.Aqua, 1, 20, true);
             }
@@ -391,7 +391,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 if (Config.Item("onlyRdy", true).GetValue<bool>())
                 {
-                    if (Q.LSIsReady())
+                    if (Q.IsReady())
                         LeagueSharp.Common.Utility.DrawCircle(Player.Position, Q.Range, System.Drawing.Color.Cyan, 1, 1);
                 }
                 else
@@ -410,12 +410,12 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             }
 
 
-            if (R.LSIsReady() && Config.Item("notR", true).GetValue<bool>() )
+            if (R.IsReady() && Config.Item("notR", true).GetValue<bool>() )
             {
                 var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-                if (t.LSIsValidTarget() )
+                if (t.IsValidTarget() )
                 {
-                    var comboDMG = Q.GetDamage(t) + W.GetDamage(t) + Player.LSGetAutoAttackDamage(t) * 3;
+                    var comboDMG = Q.GetDamage(t) + W.GetDamage(t) + Player.GetAutoAttackDamage(t) * 3;
                     if (Player.HasBuff("destiny_marker"))
                         Drawing.DrawText(Drawing.Width * 0.1f, Drawing.Height * 0.5f, System.Drawing.Color.Yellow, "AUTO R TARGET: " + t.ChampionName + " Heal " + t.Health + " My damage: " + comboDMG);
                     else if (comboDMG > t.Health)

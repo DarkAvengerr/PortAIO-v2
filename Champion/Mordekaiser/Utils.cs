@@ -29,7 +29,7 @@ namespace Mordekaiser
                 return
                     ObjectManager
                         .Get<Obj_AI_Base>(
-                            ).FirstOrDefault(m => m.LSDistance(Player.Self.Position) < 15000 && !m.Name.Contains("inion") && m.IsAlly &&
+                            ).FirstOrDefault(m => m.Distance(Player.Self.Position) < 15000 && !m.Name.Contains("inion") && m.IsAlly &&
                                 m.HasBuff("mordekaisercotgpetbuff2"));
             }
         }
@@ -171,7 +171,7 @@ namespace Mordekaiser
 
                         var vMax =
                             HeroManager.Enemies.Where(
-                                e => !e.IsDead && e.IsVisible && e.LSIsValidTarget(Spells.R.Range) && !e.IsZombie)
+                                e => !e.IsDead && e.IsVisible && e.IsValidTarget(Spells.R.Range) && !e.IsZombie)
                                 .Max(
                                     h =>
                                         Menu.MenuR.Item("Selected" + h.ChampionName)
@@ -183,7 +183,7 @@ namespace Mordekaiser
                             var enemy =
                                 HeroManager.Enemies.Where(
                                     e =>
-                                        !e.IsDead && e.IsVisible && e.LSIsValidTarget(Spells.R.Range) && !e.IsZombie
+                                        !e.IsDead && e.IsVisible && e.IsValidTarget(Spells.R.Range) && !e.IsZombie
                                         &&
                                         Menu.MenuR.Item("Selected" + e.ChampionName)
                                             .GetValue<StringList>()
@@ -249,7 +249,7 @@ namespace Mordekaiser
 
                     if (oMob != null)
                     {
-                        if (oMob.LSIsValidTarget(range))
+                        if (oMob.IsValidTarget(range))
                         {
                             oneMinion = (Obj_AI_Minion) oMob;
                         }
@@ -300,7 +300,7 @@ namespace Mordekaiser
 
                     if (oMob != null)
                     {
-                        if (oMob.LSIsValidTarget(spellRange))
+                        if (oMob.IsValidTarget(spellRange))
                         {
                             return oMob;
                         }

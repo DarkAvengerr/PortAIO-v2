@@ -22,13 +22,13 @@ using EloBuddy; namespace Activator.Spells.Health
 
             var cooptarget =
                 ObjectManager.Get<AIHeroClient>()
-                    .FirstOrDefault(hero => hero.LSHasBuff("kalistacoopstrikeally"));
+                    .FirstOrDefault(hero => hero.HasBuff("kalistacoopstrikeally"));
 
             foreach (var hero in Activator.Allies())
             {
                 if (cooptarget?.NetworkId == hero.Player.NetworkId)
                 {
-                    if (hero.Player.LSDistance(cooptarget.ServerPosition) <= Range)
+                    if (hero.Player.Distance(cooptarget.ServerPosition) <= Range)
                     {
                         if (!Parent.Item(Parent.Name + "useon" + hero.Player.NetworkId).GetValue<bool>())
                             continue;

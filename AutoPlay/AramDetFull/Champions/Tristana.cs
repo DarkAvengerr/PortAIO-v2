@@ -33,7 +33,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
             Q.Cast();
             Aggresivity.addAgresiveMove(new AgresiveMove(90));
@@ -41,16 +41,16 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
 
             if (EnemyInRange(2, 500) || (EnemyInRange(1, 500) && player.HealthPercent<35))
-                W.Cast(player.Position.LSTo2D().LSExtend(ARAMSimulator.fromNex.Position.LSTo2D(), 900));
+                W.Cast(player.Position.To2D().Extend(ARAMSimulator.fromNex.Position.To2D(), 900));
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
             E.Cast(target);
 
@@ -58,9 +58,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
-            if (R.GetDamage(target) > target.Health || (player.HealthPercent < 40 || target.LSDistance(player)<400))
+            if (R.GetDamage(target) > target.Health || (player.HealthPercent < 40 || target.Distance(player)<400))
                 R.CastOnUnit(target);
         }
 
@@ -91,7 +91,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public static bool EnemyInRange(int numOfEnemy, float range)
         {
-            return LeagueSharp.Common.Utility.LSCountEnemysInRange(ObjectManager.Player, (int)range) >= numOfEnemy;
+            return LeagueSharp.Common.Utility.CountEnemysInRange(ObjectManager.Player, (int)range) >= numOfEnemy;
         }
     }
 }

@@ -89,7 +89,7 @@ namespace GragasTheDrunkCarry
             {
                 if (Config.Item("Insec").GetValue<KeyBind>().Active)
                 {
-                    InsecCombo(sender.Position.LSTo2D());
+                    InsecCombo(sender.Position.To2D());
                 }
             }
             if (sender.Name == "Gragas_Base_Q_Ally.troy")
@@ -121,26 +121,26 @@ namespace GragasTheDrunkCarry
             if (Orbwalker.ActiveMode.ToString().ToLower() == "combo")
             {
 
-                if (Config.Item("UseQ").GetValue<bool>() && Q.LSIsReady() && ((Environment.TickCount - LastMove) > 50))
+                if (Config.Item("UseQ").GetValue<bool>() && Q.IsReady() && ((Environment.TickCount - LastMove) > 50))
                 {
                     Qcast(vTarget);
                     LastMove = Environment.TickCount;
                 }
 
 
-                if (E.LSIsReady() && Player.LSDistance(vTarget) <= E.Range && Config.Item("UseE").GetValue<bool>() && ((Environment.TickCount - LastMove) > 50))
+                if (E.IsReady() && Player.Distance(vTarget) <= E.Range && Config.Item("UseE").GetValue<bool>() && ((Environment.TickCount - LastMove) > 50))
                 {
                     E.Cast(vTarget, true);
                     LastMove = Environment.TickCount;
                 }
 
-                if (Config.Item("UseW").GetValue<bool>() && W.LSIsReady() && ((Environment.TickCount - LastMove) > 50))
+                if (Config.Item("UseW").GetValue<bool>() && W.IsReady() && ((Environment.TickCount - LastMove) > 50))
                 {
                     W.Cast();
                     LastMove = Environment.TickCount;
                 }
 
-                if (Config.Item("UseR").GetValue<bool>() && R.LSIsReady() && GetCDamage(vTarget) >= vTarget.Health && ((Environment.TickCount - LastMove) > 50))
+                if (Config.Item("UseR").GetValue<bool>() && R.IsReady() && GetCDamage(vTarget) >= vTarget.Health && ((Environment.TickCount - LastMove) > 50))
                 {
                     R.Cast(vTarget);
                     LastMove = Environment.TickCount;
@@ -158,12 +158,12 @@ namespace GragasTheDrunkCarry
 
             if (Orbwalker.ActiveMode.ToString().ToLower() == "mixed")
             {
-                if (Config.Item("UseQH").GetValue<bool>() && Q.LSIsReady())
+                if (Config.Item("UseQH").GetValue<bool>() && Q.IsReady())
                 {
                     Qcast(vTarget);
                 }
 
-                if (Config.Item("UseEH").GetValue<bool>() && E.LSIsReady() && Player.LSDistance(vTarget) <= E.Range)
+                if (Config.Item("UseEH").GetValue<bool>() && E.IsReady() && Player.Distance(vTarget) <= E.Range)
                 {
                     E.Cast(vTarget, true);
                 }
@@ -173,7 +173,7 @@ namespace GragasTheDrunkCarry
 
             if (Config.Item("AutoB").GetValue<bool>() && Bomb != null)
             {
-                foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsEnemy && hero.LSDistance(Bomb.Position) <= 250))
+                foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsEnemy && hero.Distance(Bomb.Position) <= 250))
                 {
                     Qcast(hero);
                 }
@@ -189,15 +189,15 @@ namespace GragasTheDrunkCarry
         private static int GetCDamage(Obj_AI_Base target)
         {
             var damage = 0;
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 damage += (int)Q.GetDamage(target);
             }
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
                 damage += (int)E.GetDamage(target);
             }
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 damage += (int)R.GetDamage(target);
             }
@@ -208,13 +208,13 @@ namespace GragasTheDrunkCarry
         private static void Qcast(Obj_AI_Base target)
         {
             if (!Config.Item("UseQ").GetValue<bool>()) return;
-            if (!(target.LSDistance(Player) <= Q.Range)) return;
+            if (!(target.Distance(Player) <= Q.Range)) return;
             if (Bomb == null)
             {
                 Q.Cast(target, true);
             }
 
-            if (Bomb != null && target.LSDistance(Bomb.Position) <= 250)
+            if (Bomb != null && target.Distance(Bomb.Position) <= 250)
             {
                 Q.Cast();
             }
@@ -223,8 +223,8 @@ namespace GragasTheDrunkCarry
         private static void InsecCombo(Vector2 pos)
         {
             var vTarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-            if (!(vTarget.LSDistance(pos) <= 600)) return;
-            var newpos = pos.LSExtend(vTarget.Position.LSTo2D(), 900);
+            if (!(vTarget.Distance(pos) <= 600)) return;
+            var newpos = pos.Extend(vTarget.Position.To2D(), 900);
             if (((Environment.TickCount - LastMove) > 50))
             {
                 Q.Cast(newpos, true);
@@ -239,10 +239,10 @@ namespace GragasTheDrunkCarry
 
         public static void Insec(AIHeroClient target)
         {
-            Rpos = Player.Position.LSTo2D().LSExtend(target.Position.LSTo2D(), Player.LSDistance(target) + 300);
-            if (Rpos.LSDistance(Player.Position) < R.Range-20)
+            Rpos = Player.Position.To2D().Extend(target.Position.To2D(), Player.Distance(target) + 300);
+            if (Rpos.Distance(Player.Position) < R.Range-20)
             {
-                if (Player.LSDistance(Rpos.LSExtend(target.Position.LSTo2D(), 900 - target.LSDistance(Rpos))) < E.Range && !IsWall(Rpos.To3D()) && target.LSIsFacing(Player))
+                if (Player.Distance(Rpos.Extend(target.Position.To2D(), 900 - target.Distance(Rpos))) < E.Range && !IsWall(Rpos.To3D()) && target.IsFacing(Player))
                 {
                     R.Cast(Rpos);
                 }
@@ -256,7 +256,7 @@ namespace GragasTheDrunkCarry
         static void Drawing_OnEndScene(EventArgs args)
         {
             var vTarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-            if (vTarget != null && R.LSIsReady() && Config.Item("DrawIN").GetValue<bool>())
+            if (vTarget != null && R.IsReady() && Config.Item("DrawIN").GetValue<bool>())
             {
                 Render.Circle.DrawCircle(Rpos.To3D(), 50, Color.Red);
             }
@@ -280,25 +280,25 @@ namespace GragasTheDrunkCarry
             if (!Config.Item("smartKS", true).GetValue<bool>())
                 return;
 
-            foreach (AIHeroClient target in ObjectManager.Get<AIHeroClient>().Where(x => x.LSIsValidTarget(700) && !x.HasBuffOfType(BuffType.Invulnerability)).OrderByDescending(GetCDamage))
+            foreach (AIHeroClient target in ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(700) && !x.HasBuffOfType(BuffType.Invulnerability)).OrderByDescending(GetCDamage))
             {
                 if (target != null)
                 {
                     //R
-                    if ((Player.LSGetSpellDamage(target, SpellSlot.R)) > target.Health + 20 && Player.LSDistance(target) < R.Range && Config.Item("RKS", true).GetValue<bool>())
+                    if ((Player.GetSpellDamage(target, SpellSlot.R)) > target.Health + 20 && Player.Distance(target) < R.Range && Config.Item("RKS", true).GetValue<bool>())
                     {
                         R.Cast(target);
                     }
 
 
                     //Q
-                    if ((Player.LSGetSpellDamage(target, SpellSlot.Q)) > target.Health + 20 && Player.LSDistance(target) < Q.Range && Config.Item("QKS", true).GetValue<bool>())
+                    if ((Player.GetSpellDamage(target, SpellSlot.Q)) > target.Health + 20 && Player.Distance(target) < Q.Range && Config.Item("QKS", true).GetValue<bool>())
                     {
                         Qcast(target);
                     }
 
                     //E
-                    if ((Player.LSGetSpellDamage(target, SpellSlot.E)) > target.Health + 20 && Player.LSDistance(target) < E.Range && Config.Item("EKS", true).GetValue<bool>())
+                    if ((Player.GetSpellDamage(target, SpellSlot.E)) > target.Health + 20 && Player.Distance(target) < E.Range && Config.Item("EKS", true).GetValue<bool>())
                     {
                         E.Cast(target);
                     }
@@ -311,18 +311,18 @@ namespace GragasTheDrunkCarry
         {
             var minion = MinionManager.GetMinions(Player.Position, 600, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
 
-            if (Q.LSIsReady() && Config.Item("JQ").GetValue<bool>() && ((Environment.TickCount - LastMove) > 50))
+            if (Q.IsReady() && Config.Item("JQ").GetValue<bool>() && ((Environment.TickCount - LastMove) > 50))
             {
-                if (minion.LSIsValidTarget(Q.Range))
+                if (minion.IsValidTarget(Q.Range))
                 {
                     Qcast(minion);
                     LastMove = Environment.TickCount;
                 }
             }
 
-            if (E.LSIsReady() && Config.Item("JE").GetValue<bool>() && ((Environment.TickCount - LastMove) > 50))
+            if (E.IsReady() && Config.Item("JE").GetValue<bool>() && ((Environment.TickCount - LastMove) > 50))
             {
-                if (minion.LSIsValidTarget(E.Range))
+                if (minion.IsValidTarget(E.Range))
                 {
                     E.Cast(minion.Position);
                     LastMove = Environment.TickCount;
@@ -330,7 +330,7 @@ namespace GragasTheDrunkCarry
             }
 
 
-            if (W.LSIsReady() && Config.Item("JW").GetValue<bool>() && ((Environment.TickCount - LastMove) > 50))
+            if (W.IsReady() && Config.Item("JW").GetValue<bool>() && ((Environment.TickCount - LastMove) > 50))
             {
                 W.Cast();
                 LastMove = Environment.TickCount;
@@ -344,9 +344,9 @@ namespace GragasTheDrunkCarry
         {
             var minion = MinionManager.GetMinions(Player.Position, 600, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault();
 
-            if (Q.LSIsReady() && Config.Item("WQ").GetValue<bool>() && ((Environment.TickCount - LastMove) > 50))
+            if (Q.IsReady() && Config.Item("WQ").GetValue<bool>() && ((Environment.TickCount - LastMove) > 50))
             {
-                if (minion.LSIsValidTarget(Q.Range))
+                if (minion.IsValidTarget(Q.Range))
                 {
                     Qcast(minion);
                     LastMove = Environment.TickCount;
@@ -354,9 +354,9 @@ namespace GragasTheDrunkCarry
             }
 
 
-            if (E.LSIsReady() && Config.Item("WE").GetValue<bool>() && ((Environment.TickCount - LastMove) > 50))
+            if (E.IsReady() && Config.Item("WE").GetValue<bool>() && ((Environment.TickCount - LastMove) > 50))
             {
-                if (minion.LSIsValidTarget(E.Range))
+                if (minion.IsValidTarget(E.Range))
                 {
                     E.Cast(minion.Position);
                     LastMove = Environment.TickCount;
@@ -364,7 +364,7 @@ namespace GragasTheDrunkCarry
             }
 
 
-            if (W.LSIsReady() && Config.Item("WW").GetValue<bool>() && ((Environment.TickCount - LastMove) > 50))
+            if (W.IsReady() && Config.Item("WW").GetValue<bool>() && ((Environment.TickCount - LastMove) > 50))
             {
                 W.Cast();
                 LastMove = Environment.TickCount;

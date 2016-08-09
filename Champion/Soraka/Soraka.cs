@@ -54,7 +54,7 @@ namespace SephSoraka
             {SpellSlot.W, new Spell(SpellSlot.W, 550f)},
             {SpellSlot.E, new Spell(SpellSlot.E, 920f, TargetSelector.DamageType.Magical)},
             {SpellSlot.R, new Spell(SpellSlot.R) },
-            {IgniteSlot, new Spell(ObjectManager.Player.LSGetSpellSlot("summonerdot"), 550f) }
+            {IgniteSlot, new Spell(ObjectManager.Player.GetSpellSlot("summonerdot"), 550f) }
             };
 
             Spells[SpellSlot.Q].SetSkillshot(0.500f, 300f, 1750f, false, SkillshotType.SkillshotCircle);
@@ -148,7 +148,7 @@ namespace SephSoraka
 
 		private static bool CheckSumm(this AIHeroClient hero, string summoner)
 		{
-			return hero.LSGetSpellSlot(summoner) != SpellSlot.Unknown;
+			return hero.GetSpellSlot(summoner) != SpellSlot.Unknown;
 		}
 
 		#endregion DetectAdc
@@ -159,7 +159,7 @@ namespace SephSoraka
 
 		private static void OnUpdate(EventArgs args)
 		{
-			if (Player.IsDead || Player.LSIsRecalling())
+			if (Player.IsDead || Player.IsRecalling())
 			{
 				return;
 			}
@@ -219,7 +219,7 @@ namespace SephSoraka
 		{
 			if (Misc.Active("Farm.Disableauto") && args.Target.Type == GameObjectType.obj_AI_Minion && SorakaMenu.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LastHit)
 			{
-				var alliesinrange = HeroManager.Allies.Count(x => !x.IsMe && x.LSDistance(Player) <= FarmRange);
+				var alliesinrange = HeroManager.Allies.Count(x => !x.IsMe && x.Distance(Player) <= FarmRange);
 				if (alliesinrange > 0)
 				{
 					args.Process = false;
@@ -239,7 +239,7 @@ namespace SephSoraka
 			{
 				var ally = args.Target as AIHeroClient;
 				if (sender is AIHeroClient && sender.Team != Player.Team && ally != null && ally.IsAlly &&
-				    (!Misc.Active("Misc.Nohealshop") || !ally.LSInShop()))
+				    (!Misc.Active("Misc.Nohealshop") || !ally.InShop()))
 				{
 					if (!(ally.HealthPercent >= Misc.GetSlider("Healing.MinHP")) || Player.HealthPercent <= Misc.GetSlider("Healing.MinHPME"))
 					{
@@ -247,10 +247,10 @@ namespace SephSoraka
 					}
 						if (Misc.Active("Healing.UseW"))
 					{
-						if (Spells[SpellSlot.W].LSIsReady() && !ally.IsMe && Misc.Active("w" + ally.ChampionName) && !ally.IsZombie &&
-						    ally.LSDistance(Player) <= Spells[SpellSlot.W].Range) 
+						if (Spells[SpellSlot.W].IsReady() && !ally.IsMe && Misc.Active("w" + ally.ChampionName) && !ally.IsZombie &&
+						    ally.Distance(Player) <= Spells[SpellSlot.W].Range) 
 						{
-							var damage = sender.LSGetSpellDamage(ally, args.SData.Name);
+							var damage = sender.GetSpellDamage(ally, args.SData.Name);
 							var afterdmg = ((ally.Health - damage)/(ally.MaxHealth))*100f;
 							if (ally.HealthPercent < Misc.GetSlider("wpct" + ally.ChampionName) ||
 							    Misc.Active("wcheckdmgafter") && afterdmg < Misc.GetSlider("wpct" + ally.ChampionName))
@@ -258,7 +258,7 @@ namespace SephSoraka
 								if (Misc.Active("wonlyadc") &&
 								    (ally.NetworkId == myADC.NetworkId || myADC.HealthPercent <= Misc.GetSlider("wpct" + myADC.ChampionName)))
 								{
-                                    if (myADC.LSDistance(Player) <= Spells[SpellSlot.W].Range)
+                                    if (myADC.Distance(Player) <= Spells[SpellSlot.W].Range)
                                     {
                                         Spells[SpellSlot.W].CastOnUnit(myADC);
                                     }
@@ -272,7 +272,7 @@ namespace SephSoraka
 					}
 					if (Misc.Active("Healing.UseR") && Misc.Active("r" + ally.ChampionName) && !ally.IsZombie)
 					{
-						var damage = sender.LSGetSpellDamage(ally, args.SData.Name);
+						var damage = sender.GetSpellDamage(ally, args.SData.Name);
 						var afterdmg = ((ally.Health - damage)/(ally.MaxHealth))*100f;
 						if (ally.HealthPercent < Misc.GetSlider("rpct" + ally.ChampionName) ||
 						    (Misc.Active("rcheckdmgafter") && afterdmg < Misc.GetSlider("rpct" + ally.ChampionName)))
@@ -329,11 +329,11 @@ namespace SephSoraka
 				return;
 			}
 
-			if (Spells[SpellSlot.W].LSIsReady())
+			if (Spells[SpellSlot.W].IsReady())
 			{
 				var alliesinneed =
 					HeroManager.Allies.Where(
-						hero => !hero.IsMe && !hero.IsDead && (!Misc.Active("Misc.Nohealshop") || !hero.LSInShop()) && !hero.IsZombie && hero.LSDistance(Player) <= Spells[SpellSlot.W].Range &&
+						hero => !hero.IsMe && !hero.IsDead && (!Misc.Active("Misc.Nohealshop") || !hero.InShop()) && !hero.IsZombie && hero.Distance(Player) <= Spells[SpellSlot.W].Range &&
 								Misc.Active("w" + hero.ChampionName) &&
 								hero.HealthPercent <= Misc.GetSlider("wpct" + hero.ChampionName) && hero.HealthPercent >= Misc.GetSlider("Healing.MinHP"))
 						.ToList();
@@ -359,7 +359,7 @@ namespace SephSoraka
 
 		private static void UseR()
 		{
-			if (Spells[SpellSlot.R].LSIsReady())
+			if (Spells[SpellSlot.R].IsReady())
 			{
 				switch (GetUltMode())
 				{
@@ -377,7 +377,7 @@ namespace SephSoraka
 		{
 			List<AIHeroClient> alliesinneed = HeroManager.Allies.Where(
 		  hero =>
-			  !hero.IsDead && !hero.IsZombie && (!Misc.Active("Misc.Nohealshop") || !hero.LSInShop()) && hero.LSDistance(Player) <= Spells[SpellSlot.W].Range &&
+			  !hero.IsDead && !hero.IsZombie && (!Misc.Active("Misc.Nohealshop") || !hero.InShop()) && hero.Distance(Player) <= Spells[SpellSlot.W].Range &&
 			  hero.HealthPercent <= Misc.GetSlider("rpct" + hero.ChampionName) && hero.HealthPercent >= Misc.GetSlider("Healing.MinHP"))
 		  .ToList();
 
@@ -399,11 +399,11 @@ namespace SephSoraka
 		{
 			List<AIHeroClient> alliesinneed = HeroManager.Allies.Where(
 	  hero =>
-		  !hero.IsDead && !hero.IsZombie && (!Misc.Active("Misc.Nohealshop") || !hero.LSInShop()) && hero.LSDistance(Player) <= Spells[SpellSlot.W].Range && Misc.Active("r" + hero.ChampionName) &&
+		  !hero.IsDead && !hero.IsZombie && (!Misc.Active("Misc.Nohealshop") || !hero.InShop()) && hero.Distance(Player) <= Spells[SpellSlot.W].Range && Misc.Active("r" + hero.ChampionName) &&
 		  hero.HealthPercent <= Misc.GetSlider("rpct" + hero.ChampionName) && hero.HealthPercent >= Misc.GetSlider("Healing.MinHP"))
 	  .ToList();
 
-			var indanger = alliesinneed.Count(x => x.LSCountEnemiesInRange(600) > 0);
+			var indanger = alliesinneed.Count(x => x.CountEnemiesInRange(600) > 0);
 			if (alliesinneed.Count >= Misc.GetSlider("minallies") && indanger >= 1)
 			{
 				if (Misc.Active("ultonlyadc") && alliesinneed.Any(x => x.NetworkId == myADC.NetworkId))
@@ -420,7 +420,7 @@ namespace SephSoraka
 
 		private static void Combo(AIHeroClient target)
 		{
-			if (Spells[SpellSlot.Q].LSIsReady() && Misc.Active("Combo.UseQ") && target.LSDistance(Player) < Spells[SpellSlot.Q].Range)
+			if (Spells[SpellSlot.Q].IsReady() && Misc.Active("Combo.UseQ") && target.Distance(Player) < Spells[SpellSlot.Q].Range)
 			{
 				Spells[SpellSlot.Q].SPredictionCast(target, Misc.GetHitChance("Hitchance.Q"));
 				/*
@@ -433,7 +433,7 @@ namespace SephSoraka
 			}
 			
 
-				if (Spells[SpellSlot.E].LSIsReady() && Misc.Active("Combo.UseE") && target.LSDistance(Player) < Spells[SpellSlot.E].Range)
+				if (Spells[SpellSlot.E].IsReady() && Misc.Active("Combo.UseE") && target.Distance(Player) < Spells[SpellSlot.E].Range)
 				{
 					Spells[SpellSlot.E].SPredictionCast(target, Misc.GetHitChance("Hitchance.E"));
 					/*
@@ -457,13 +457,13 @@ namespace SephSoraka
 				ObjectManager.Get<Obj_AI_Minion>()
 					.Where(
 						m =>
-							m.LSIsValidTarget(Spells[SpellSlot.Q].Range) && m.IsMinion && MinionManager.IsMinion(m));
+							m.IsValidTarget(Spells[SpellSlot.Q].Range) && m.IsMinion && MinionManager.IsMinion(m));
 
-			if (SpellSlot.Q.LSIsReady() && Misc.Active("Farm.UseQ"))
+			if (SpellSlot.Q.IsReady() && Misc.Active("Farm.UseQ"))
 			{
 				MinionManager.FarmLocation QLocation =
 					MinionManager.GetBestCircularFarmLocation(
-						minions.Select(m => m.ServerPosition.LSTo2D()).ToList(), Spells[SpellSlot.Q].Width,
+						minions.Select(m => m.ServerPosition.To2D()).ToList(), Spells[SpellSlot.Q].Width,
 						Spells[SpellSlot.Q].Range);
 				if (QLocation.MinionsHit >= 1)
 				{
@@ -493,7 +493,7 @@ namespace SephSoraka
             {
                 return;
             }
-            if (Spells[SpellSlot.Q].LSIsReady() && Misc.Active("Harass.UseQ") && Player.ManaPercent > Misc.GetSlider("Harass.Mana") && target.LSDistance(Player) < Spells[SpellSlot.Q].Range)
+            if (Spells[SpellSlot.Q].IsReady() && Misc.Active("Harass.UseQ") && Player.ManaPercent > Misc.GetSlider("Harass.Mana") && target.Distance(Player) < Spells[SpellSlot.Q].Range)
 			{
 				Spells[SpellSlot.Q].SPredictionCast(target, Misc.GetHitChance("Hitchance.Q"));
 				/*
@@ -504,7 +504,7 @@ namespace SephSoraka
 				}
 				*/
 			}
-			if (Spells[SpellSlot.E].LSIsReady() && Misc.Active("Harass.UseE") && target.LSDistance(Player) < Spells[SpellSlot.E].Range)
+			if (Spells[SpellSlot.E].IsReady() && Misc.Active("Harass.UseE") && target.Distance(Player) < Spells[SpellSlot.E].Range)
 			{
 				Spells[SpellSlot.E].SPredictionCast(target, Misc.GetHitChance("Hitchance.E"), (byte)Misc.GetSlider("Harass.Eminhit"));
 				/*
@@ -527,16 +527,16 @@ namespace SephSoraka
 				return;
 			}
 
-			var targets = HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsInvulnerable & !x.IsZombie);
+			var targets = HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsInvulnerable & !x.IsZombie);
 
-			if (Spells[SpellSlot.Q].LSIsReady() && Misc.Active("Killsteal.UseQ"))
+			if (Spells[SpellSlot.Q].IsReady() && Misc.Active("Killsteal.UseQ"))
 			{
 				AIHeroClient qtarget =
-					targets.Where(x => x.LSDistance(Player.Position) < Spells[SpellSlot.Q].Range)
+					targets.Where(x => x.Distance(Player.Position) < Spells[SpellSlot.Q].Range)
 						.MinOrDefault(x => x.Health);
 				if (qtarget != null)
 				{
-					var qdmg = Player.LSGetSpellDamage(qtarget, SpellSlot.Q);
+					var qdmg = Player.GetSpellDamage(qtarget, SpellSlot.Q);
 					if (qtarget.Health < qdmg)
 					{
 						Spells[SpellSlot.Q].SPredictionCast(qtarget, Misc.GetHitChance("Hitchance.Q"));
@@ -552,14 +552,14 @@ namespace SephSoraka
 					}
 				}
 
-				if (Spells[SpellSlot.E].LSIsReady() && Misc.Active("Killsteal.UseE"))
+				if (Spells[SpellSlot.E].IsReady() && Misc.Active("Killsteal.UseE"))
 				{
 					AIHeroClient etarget =
-						targets.Where(x => x.LSDistance(Player.Position) < Spells[SpellSlot.E].Range)
+						targets.Where(x => x.Distance(Player.Position) < Spells[SpellSlot.E].Range)
 							.MinOrDefault(x => x.Health);
 					if (etarget != null)
 					{
-						var edmg = Player.LSGetSpellDamage(etarget, SpellSlot.E);
+						var edmg = Player.GetSpellDamage(etarget, SpellSlot.E);
 						if (etarget.Health < edmg)
 						{
 							Spells[SpellSlot.E].SPredictionCast(qtarget, Misc.GetHitChance("Hitchance.E"));
@@ -567,11 +567,11 @@ namespace SephSoraka
 					}
 				}
 
-				if (Spells[SpellSlot.E].LSIsReady() && Misc.Active("Killsteal.UseE") && Spells[SpellSlot.Q].LSIsReady() &&
+				if (Spells[SpellSlot.E].IsReady() && Misc.Active("Killsteal.UseE") && Spells[SpellSlot.Q].IsReady() &&
 				    Misc.Active("Killsteal.UseQ"))
 				{
 					AIHeroClient eqtarget =
-						targets.Where(x => x.LSDistance(Player.Position) < Spells[SpellSlot.E].Range && x.LSDistance(Player.Position) < Spells[SpellSlot.Q].Range && x.Health < Player.LSGetSpellDamage(x, SpellSlot.E) + Player.LSGetSpellDamage(x, SpellSlot.Q))
+						targets.Where(x => x.Distance(Player.Position) < Spells[SpellSlot.E].Range && x.Distance(Player.Position) < Spells[SpellSlot.Q].Range && x.Health < Player.GetSpellDamage(x, SpellSlot.E) + Player.GetSpellDamage(x, SpellSlot.Q))
 							.MinOrDefault(x => x.Health);
 					if (eqtarget != null)
 					{
@@ -580,10 +580,10 @@ namespace SephSoraka
 					}
 				}
 
-				if (Spells[IgniteSlot].LSIsReady() && Misc.Active("Killsteal.UseIgnite"))
+				if (Spells[IgniteSlot].IsReady() && Misc.Active("Killsteal.UseIgnite"))
 				{
 					var targ =
-						HeroManager.Enemies.FirstOrDefault(x => x.LSIsValidTarget() &&
+						HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget() &&
 																Vector3.Distance(Player.ServerPosition, x.ServerPosition) <
 																Spells[IgniteSlot].Range &&
 																x.Health <
@@ -608,7 +608,7 @@ namespace SephSoraka
 					var ally in
 						HeroManager.Allies.Where(
 							x =>
-								!x.IsMe && x.LSDistance(Player) <= 750 &&
+								!x.IsMe && x.Distance(Player) <= 750 &&
 								x.GetSetPriority() == Misc.GetSlider("Priorities.Mikaels")))
 				{
 					if (ally.HasBuffOfType(BuffType.Fear) || ally.HasBuffOfType(BuffType.Stun) ||
@@ -629,7 +629,7 @@ namespace SephSoraka
 		private static void AutoUltIgniteADC()
 		{
 			var sethealth = Misc.GetSlider("adcignitedhealth");
-			if (Spells[SpellSlot.R].LSIsReady() && myADC.HasBuff("summonerdot") && myADC.HealthPercent <= sethealth)
+			if (Spells[SpellSlot.R].IsReady() && myADC.HasBuff("summonerdot") && myADC.HealthPercent <= sethealth)
 			{
 				Spells[SpellSlot.R].Cast();
 			}
@@ -657,7 +657,7 @@ namespace SephSoraka
 
 		static void OnGapClose(ActiveGapcloser args)
 		{
-			if (Player.IsDead || Player.LSIsRecalling())
+			if (Player.IsDead || Player.IsRecalling())
 			{
 				return;
 			}
@@ -665,20 +665,20 @@ namespace SephSoraka
 
 			if (Misc.Active("Interrupter.AG.ADConly"))
 			{
-				if (!(args.End.LSDistance(myADC.ServerPosition) <= 250) && !(args.End.LSDistance(Player.ServerPosition) <= 250))
+				if (!(args.End.Distance(myADC.ServerPosition) <= 250) && !(args.End.Distance(Player.ServerPosition) <= 250))
 				{
 					return;
 				}
 			}
 
-			if (sender.LSIsValidTarget())
+			if (sender.IsValidTarget())
 			{
 				if (Misc.Active("Interrupter.AG.UseQ") && Vector3.Distance(args.End, Player.ServerPosition) <= Spells[SpellSlot.Q].Range)
 				{
 					Spells[SpellSlot.Q].Cast(sender.ServerPosition);
 				}
 			}
-			if (sender.LSIsValidTarget())
+			if (sender.IsValidTarget())
 			{
 				if (Misc.Active("Interrupter.AG.UseE") && Vector3.Distance(args.End, Player.ServerPosition) <= Spells[SpellSlot.E].Range)
 				{
@@ -692,11 +692,11 @@ namespace SephSoraka
 		#region Interrupter
 		static void OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
 		{
-			if (Player.IsDead || Player.LSIsRecalling())
+			if (Player.IsDead || Player.IsRecalling())
 			{
 				return;
 			}
-			if (sender.LSIsValidTarget())
+			if (sender.IsValidTarget())
 			{
 				if (Misc.Active("Interrupter.UseQ") && Vector3.Distance(sender.ServerPosition, Player.ServerPosition) <= Spells[SpellSlot.Q].Range)
 				{
@@ -716,7 +716,7 @@ namespace SephSoraka
 
 		static void OnDraw(EventArgs args)
 		{
-			if (Player.IsDead || Player.LSIsRecalling() || Misc.Active("Drawing.Disable"))
+			if (Player.IsDead || Player.IsRecalling() || Misc.Active("Drawing.Disable"))
 			{
 				return;
 			}

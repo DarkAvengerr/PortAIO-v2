@@ -198,9 +198,9 @@
         {
             try
             {
-                if (IsActive("GFUELTalon.Misc.Antigapcloser") && E.LSIsReady())
+                if (IsActive("GFUELTalon.Misc.Antigapcloser") && E.IsReady())
                 {
-                    if (gapcloser.Sender.LSIsValidTarget(E.Range))
+                    if (gapcloser.Sender.IsValidTarget(E.Range))
                     {
                         E.CastOnUnit(gapcloser.Sender);
                     }
@@ -225,11 +225,11 @@
                     return;
                 }
 
-                if (IsActive("GFUELTalon.Combo.E") && target.LSIsValidTarget(E.Range) && E.LSIsReady())
+                if (IsActive("GFUELTalon.Combo.E") && target.IsValidTarget(E.Range) && E.IsReady())
                 {
                     if (IsActive("GFUELTalon.Combo.Towercheck"))
                     {
-                        var underTower = target.LSUnderTurret();
+                        var underTower = target.UnderTurret();
                         if (underTower)
                         {
                             return;
@@ -239,20 +239,20 @@
                     E.Cast(target);
                 }
 
-                if (IsActive("GFUELTalon.Combo.R") && R.LSIsReady())
+                if (IsActive("GFUELTalon.Combo.R") && R.IsReady())
                 {
                     if (IsActive("GFUELTalon.Combo.Killability"))
                     {
                         if (IsActive("GFUELTalon.Combo.Overkill.R"))
                         {
-                            if (Player.LSGetSpellDamage(target, SpellSlot.R) > target.Health + 75
-                                && (Q.LSIsReady() || E.LSIsReady() || W.LSIsReady()))
+                            if (Player.GetSpellDamage(target, SpellSlot.R) > target.Health + 75
+                                && (Q.IsReady() || E.IsReady() || W.IsReady()))
                             {
                                 return;
                             }
                         }
 
-                        if (GetComboDamage(target) > target.Health && target.LSIsValidTarget(R.Range - 50))
+                        if (GetComboDamage(target) > target.Health && target.IsValidTarget(R.Range - 50))
                         {
                             R.Cast();
                         }
@@ -262,7 +262,7 @@
                     {
                         foreach (
                             var x in
-                                HeroManager.Enemies.Where((hero => !hero.IsDead && hero.LSIsValidTarget(R.Range - 50))))
+                                HeroManager.Enemies.Where((hero => !hero.IsDead && hero.IsValidTarget(R.Range - 50))))
                         {
                             var pred = R.GetPrediction(x);
                             if (pred.AoeTargetsHitCount >= Menu.Item("GFUELTalon.Combo.Count").GetValue<Slider>().Value)
@@ -273,7 +273,7 @@
                     }
                 }
 
-                if (IsActive("GFUELTalon.Combo.W") && target.LSDistance(Player.Position) < W.Range && W.LSIsReady())
+                if (IsActive("GFUELTalon.Combo.W") && target.Distance(Player.Position) < W.Range && W.IsReady())
                 {
                     var prediction = W.GetPrediction(target);
                     if (prediction.Hitchance >= HitChance.High)
@@ -282,7 +282,7 @@
                     }
                 }
 
-                if (IsActive("GFUELTalon.Combo.Q") && target.LSIsValidTarget(Q.Range) && Q.LSIsReady())
+                if (IsActive("GFUELTalon.Combo.Q") && target.IsValidTarget(Q.Range) && Q.IsReady())
                 {
                     Q.Cast();
                 }
@@ -314,7 +314,7 @@
                     return;
                 }
 
-                if (IsActive("GFUELTalon.Harass.W") && target.LSDistance(Player.Position) < W.Range && W.LSIsReady())
+                if (IsActive("GFUELTalon.Harass.W") && target.Distance(Player.Position) < W.Range && W.IsReady())
                 {
                     var prediction = W.GetPrediction(target);
                     if (prediction.Hitchance >= HitChance.High)
@@ -352,17 +352,17 @@
                 }
 
 
-                if (IsActive("GFUELTalon.jungleclear.E") && E.LSIsReady())
+                if (IsActive("GFUELTalon.jungleclear.E") && E.IsReady())
                 {
                     E.CastOnUnit(minion);
                 }
 
-                if (IsActive("GFUELTalon.jungleclear.W") && W.LSIsReady() && minion.LSIsValidTarget(W.Range)) 
+                if (IsActive("GFUELTalon.jungleclear.W") && W.IsReady() && minion.IsValidTarget(W.Range)) 
                 {
                     W.Cast(minion);
                 }
 
-                if (IsActive("GFUELTalon.jungleclear.Q") && Q.LSIsReady() && minion.LSIsValidTarget(Q.Range))
+                if (IsActive("GFUELTalon.jungleclear.Q") && Q.IsReady() && minion.IsValidTarget(Q.Range))
                 {
                     Q.Cast();
                 }
@@ -407,9 +407,9 @@
                     return;
                 }
 
-                if (IsActive("GFUELTalon.laneclear.W") && W.LSIsReady())
+                if (IsActive("GFUELTalon.laneclear.W") && W.IsReady())
                 {
-                    if (GetCenterMinion().LSIsValidTarget())
+                    if (GetCenterMinion().IsValidTarget())
                     {
                         W.Cast(GetCenterMinion());
                     }
@@ -434,7 +434,7 @@
                     }
                 }
 
-                if (IsActive("GFUELTalon.laneclear.E") && E.LSIsReady())
+                if (IsActive("GFUELTalon.laneclear.E") && E.IsReady())
                 {
                     if (E.GetDamage(minion) > minion.Health)
                     {
@@ -580,11 +580,11 @@
         {
             var minions = MinionManager.GetMinions(E.Range);
             var centerlocation =
-                MinionManager.GetBestCircularFarmLocation(minions.Select(x => x.Position.LSTo2D()).ToList(), 500, E.Range);
+                MinionManager.GetBestCircularFarmLocation(minions.Select(x => x.Position.To2D()).ToList(), 500, E.Range);
 
             return centerlocation.MinionsHit >= Menu.Item("GFUELTalon.laneclear.count").GetValue<Slider>().Value
                        ? MinionManager.GetMinions(1000)
-                             .OrderBy(x => x.LSDistance(centerlocation.Position))
+                             .OrderBy(x => x.Distance(centerlocation.Position))
                              .FirstOrDefault()
                        : null;
         }
@@ -597,10 +597,10 @@
 
                 if (!Player.Spellbook.IsAutoAttacking)
                 {
-                    damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                    damage += (float)Player.GetAutoAttackDamage(enemy, true);
                 }
 
-                if (IgniteSpell.LSIsReady() && IgniteSpell.Slot != SpellSlot.Unknown)
+                if (IgniteSpell.IsReady() && IgniteSpell.Slot != SpellSlot.Unknown)
                 {
                     damage += (float)Player.GetSummonerSpellDamage(enemy, Damage.SummonerSpell.Ignite);
                 }
@@ -617,25 +617,25 @@
 
                 if (Youmuu.IsReady())
                 {
-                    damage += (float)Player.LSGetAutoAttackDamage(enemy, true) * 2;
+                    damage += (float)Player.GetAutoAttackDamage(enemy, true) * 2;
                 }
 
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                 {
                     damage += Q.GetDamage(enemy);
                 }
 
-                if (E.LSIsReady())
+                if (E.IsReady())
                 {
                     damage += E.GetDamage(enemy);
                 }
 
-                if (W.LSIsReady())
+                if (W.IsReady())
                 {
                     damage += W.GetDamage(enemy);
                 }
 
-                if (R.LSIsReady())
+                if (R.IsReady())
                 {
                     damage += R.GetDamage(enemy);
                 }
@@ -674,11 +674,11 @@
                     return;
                 }
 
-                if (IsActive("GFUELTalon.Draw.W") && W.LSIsReady())
+                if (IsActive("GFUELTalon.Draw.W") && W.IsReady())
                 {
                     var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
 
-                    if (target.LSIsValidTarget() == false)
+                    if (target.IsValidTarget() == false)
                     {
                         return;
                     }
@@ -706,9 +706,9 @@
             try
             {
                 foreach (
-                    var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range) && !x.IsDead && !x.IsZombie))
+                    var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range) && !x.IsDead && !x.IsZombie))
                 {
-                    if (enemy.LSIsValidTarget(W.Range) && enemy.Health < W.GetDamage(enemy))
+                    if (enemy.IsValidTarget(W.Range) && enemy.Health < W.GetDamage(enemy))
                     {
                         var prediction = W.GetPrediction(enemy);
                         if (prediction.Hitchance >= HitChance.High)
@@ -774,7 +774,7 @@
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
                     || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                 {
-                    if (target.LSIsValidTarget(Q.Range))
+                    if (target.IsValidTarget(Q.Range))
                     {
                         Q.Cast();
                     }
@@ -794,7 +794,7 @@
         //Credits to Trees
         private static bool UseItems(Obj_AI_Base target)
         {
-            if (Player.LSIsDashing() || Player.Spellbook.IsAutoAttacking)
+            if (Player.IsDashing() || Player.Spellbook.IsAutoAttacking)
             {
                 return false;
             }
@@ -805,7 +805,7 @@
                 return true;
             }
 
-            var heroes = Player.LSGetEnemiesInRange(385).Count;
+            var heroes = Player.GetEnemiesInRange(385).Count;
             var count = heroes;
 
             var tiamat = Tiamat;

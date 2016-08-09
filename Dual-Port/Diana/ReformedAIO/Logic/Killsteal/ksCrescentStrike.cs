@@ -57,7 +57,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.Logic.Killsteal
             var target =
                 HeroManager.Enemies.FirstOrDefault(
                     x =>
-                    !x.IsDead && x.LSIsValidTarget(this.Menu.Item(this.Menu.Name + "QRange").GetValue<Slider>().Value));
+                    !x.IsDead && x.IsValidTarget(this.Menu.Item(this.Menu.Name + "QRange").GetValue<Slider>().Value));
 
             if (this.Menu.Item(this.Menu.Name + "QMana").GetValue<Slider>().Value > Variables.Player.ManaPercent) return;
 

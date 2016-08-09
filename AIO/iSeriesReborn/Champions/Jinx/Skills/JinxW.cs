@@ -22,7 +22,7 @@ using EloBuddy;
                 //the average of theirs then don't fire W. 
                 //We only get heroes with a priority of 2 or higher, as they are more likely to do more damage to us.
 
-                var enemiesAround = ObjectManager.Player.LSGetEnemiesInRange(JinxUtility.GetMinigunRange(null));
+                var enemiesAround = ObjectManager.Player.GetEnemiesInRange(JinxUtility.GetMinigunRange(null));
 
 
                 if (enemiesAround.Any())
@@ -40,12 +40,12 @@ using EloBuddy;
 
                     if (enemiesAround.Count() == 1)
                     {
-                        var killableEnemy = enemiesAround.FirstOrDefault(k => k.LSIsValidTarget());
+                        var killableEnemy = enemiesAround.FirstOrDefault(k => k.IsValidTarget());
                         if (killableEnemy != null)
                         {
 
                             //We are lower health than a tankier enemy and enemy is in melee range. Better put some distance before casting W.
-                            if (ObjectManager.Player.Health * 1.4f < killableEnemy.Health && killableEnemy.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition) <= 350f)
+                            if (ObjectManager.Player.Health * 1.4f < killableEnemy.Health && killableEnemy.ServerPosition.Distance(ObjectManager.Player.ServerPosition) <= 350f)
                             {
                                 return;
                             }
@@ -70,7 +70,7 @@ using EloBuddy;
                         (ObjectManager.Player.HealthPercent * 1.5f <=
                         enemiesAround.Where(m => ProrityHelper.GetPriorityFromDb(m.ChampionName) >= 2)
                             .Average(m => m.HealthPercent)
-                        || enemiesAround.Average(enemy => enemy.GetComboDamage(ObjectManager.Player, spellsList) + enemy.LSGetAutoAttackDamage(ObjectManager.Player) * 2f) >= ObjectManager.Player.Health * 0.60f))
+                        || enemiesAround.Average(enemy => enemy.GetComboDamage(ObjectManager.Player, spellsList) + enemy.GetAutoAttackDamage(ObjectManager.Player) * 2f) >= ObjectManager.Player.Health * 0.60f))
                     {
                         return;
                     }
@@ -85,7 +85,7 @@ using EloBuddy;
                 var selectedTarget = TargetSelector.GetTarget(Variables.spells[SpellSlot.W].Range * 0.65f,
                     TargetSelector.DamageType.Physical);
 
-                if (selectedTarget.LSIsValidTarget())
+                if (selectedTarget.IsValidTarget())
                 {
                     //Since we already determined  the conditions for not firing W when enemies are in our AA range
                     //We can now not do any check here and just fire W.
@@ -94,7 +94,7 @@ using EloBuddy;
                     if (WPrediction.Hitchance >= defaultHitchance)
                     {
                         //Don't use W to poke under enemy turret unless the target is killable.
-                        if (ObjectManager.Player.LSUnderTurret(true) 
+                        if (ObjectManager.Player.UnderTurret(true) 
                             && HealthPrediction.GetHealthPrediction(selectedTarget, 300) + 5 > Variables.spells[SpellSlot.W].GetDamage(selectedTarget))
                         {
                             return;

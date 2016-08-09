@@ -241,9 +241,9 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                                      {
                                          Slot =
                                              () =>
-                                             Player.LSGetSpellSlot("summonerboost") == SpellSlot.Unknown
+                                             Player.GetSpellSlot("summonerboost") == SpellSlot.Unknown
                                                  ? SpellSlot.Unknown
-                                                 : Player.LSGetSpellSlot("summonerboost"),
+                                                 : Player.GetSpellSlot("summonerboost"),
                                          WorksOn =
                                              new[]
                                                  {
@@ -343,7 +343,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                     continue;
                 }
 
-                if (!item.Spell.LSIsReady() || !item.Spell.IsInRange(ally) || item.Spell.Slot == SpellSlot.Unknown)
+                if (!item.Spell.IsReady() || !item.Spell.IsInRange(ally) || item.Spell.Slot == SpellSlot.Unknown)
                 {
                     continue;
                 }

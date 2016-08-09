@@ -20,7 +20,7 @@ namespace PandaTeemo
             }
 
             var enemies =
-                HeroManager.Enemies.FirstOrDefault(t => t.LSIsValidTarget() && Essentials.Orbwalker.InAutoAttackRange(t));
+                HeroManager.Enemies.FirstOrDefault(t => t.IsValidTarget() && Essentials.Orbwalker.InAutoAttackRange(t));
             var rtarget = TargetSelector.GetTarget(Essentials.R.Range, TargetSelector.DamageType.Magical);
             var useW = Essentials.Config.SubMenu("Combo").Item("wcombo").GetValue<bool>();
             var useR = Essentials.Config.SubMenu("Combo").Item("rcombo").GetValue<bool>();
@@ -28,7 +28,7 @@ namespace PandaTeemo
             var rCount = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Ammo;
             var rCharge = Essentials.Config.SubMenu("Combo").Item("rCharge").GetValue<Slider>().Value;
 
-            if (Essentials.W.LSIsReady() && useW && !wCombat)
+            if (Essentials.W.IsReady() && useW && !wCombat)
             {
                 Essentials.W.Cast();
             }
@@ -40,26 +40,26 @@ namespace PandaTeemo
 
             if (useW && wCombat)
             {
-                if (Essentials.W.LSIsReady())
+                if (Essentials.W.IsReady())
                 {
                     Essentials.W.Cast();
                 }
             }
 
-            if (Essentials.R.LSIsReady() && useR && Essentials.R.IsInRange(rtarget) && rCharge <= rCount &&
-                rtarget.LSIsValidTarget() &&
+            if (Essentials.R.IsReady() && useR && Essentials.R.IsInRange(rtarget) && rCharge <= rCount &&
+                rtarget.IsValidTarget() &&
                 !Essentials.IsShroomed(rtarget.Position))
             {
                 Essentials.R.CastIfHitchanceEquals(rtarget, HitChance.VeryHigh);
             }
-            else if (Essentials.R.LSIsReady() && useR && rCharge <= rCount)
+            else if (Essentials.R.IsReady() && useR && rCharge <= rCount)
             {
                 var shroom = ObjectManager.Get<Obj_AI_Base>().FirstOrDefault(t => t.Name == "Noxious Trap");
 
                 if (shroom != null)
                 {
                     var shroomPosition = shroom.Position;
-                    var predictionPosition = shroomPosition.LSExtend(rtarget.Position,
+                    var predictionPosition = shroomPosition.Extend(rtarget.Position,
                         Essentials.Player.CharData.AcquisitionRange*Essentials.R.Level + 2);
 
                     if (Essentials.R.IsInRange(rtarget, Essentials.Player.CharData.AcquisitionRange*Essentials.R.Level + 2) &&
@@ -81,13 +81,13 @@ namespace PandaTeemo
 
             if (ksq)
             {
-                var target = HeroManager.Enemies.Where(t => t.LSIsValidTarget()
+                var target = HeroManager.Enemies.Where(t => t.IsValidTarget()
                                                             && Essentials.Q.IsInRange(t)
                                                             && Essentials.Q.GetDamage(t) >= t.Health)
                     .OrderBy(t => t.Health)
                     .FirstOrDefault();
 
-                if (target != null && Essentials.Q.LSIsReady())
+                if (target != null && Essentials.Q.IsReady())
                 {
                     Essentials.Q.Cast(target);
                 }
@@ -99,13 +99,13 @@ namespace PandaTeemo
 
             if (ksr)
             {
-                var target = HeroManager.Enemies.Where(t => t.LSIsValidTarget()
+                var target = HeroManager.Enemies.Where(t => t.IsValidTarget()
                                                             && Essentials.R.IsInRange(t)
                                                             && Essentials.R.GetDamage(t) >= t.Health)
                     .OrderBy(t => t.Health)
                     .FirstOrDefault();
 
-                if (target != null && Essentials.R.LSIsReady())
+                if (target != null && Essentials.R.IsReady())
                 {
                     Essentials.R.CastIfHitchanceEquals(target, HitChance.VeryHigh);
                 }
@@ -121,7 +121,7 @@ namespace PandaTeemo
             var qMinion = MinionManager.GetMinions(ObjectManager.Player.Position, Essentials.Q.Range);
             var qManaManager = Essentials.Config.SubMenu("LaneClear").Item("qManaManager").GetValue<Slider>().Value;
 
-            if (useQ && Essentials.Q.LSIsReady() && qMinion != null)
+            if (useQ && Essentials.Q.IsReady() && qMinion != null)
             {
                 foreach (var m in qMinion)
                 {
@@ -150,8 +150,8 @@ namespace PandaTeemo
                 {
                     foreach (var minion in allMinionsR)
                     {
-                        if (minion.Health <= ObjectManager.Player.LSGetSpellDamage(minion, SpellSlot.R)
-                            && Essentials.R.LSIsReady()
+                        if (minion.Health <= ObjectManager.Player.GetSpellDamage(minion, SpellSlot.R)
+                            && Essentials.R.IsReady()
                             && Essentials.R.IsInRange(rLocation.Position.To3D())
                             && !Essentials.IsShroomed(rLocation.Position.To3D())
                             && minionR <= rLocation.MinionsHit)
@@ -160,8 +160,8 @@ namespace PandaTeemo
                             return;
                         }
 
-                        if (minion.Health <= ObjectManager.Player.LSGetSpellDamage(minion, SpellSlot.R)
-                            && Essentials.R.LSIsReady()
+                        if (minion.Health <= ObjectManager.Player.GetSpellDamage(minion, SpellSlot.R)
+                            && Essentials.R.IsReady()
                             && Essentials.R.IsInRange(r2Location.Position.To3D())
                             && !Essentials.IsShroomed(r2Location.Position.To3D())
                             && minionR <= r2Location.MinionsHit)
@@ -173,14 +173,14 @@ namespace PandaTeemo
                 }
                 else
                 {
-                    if (Essentials.R.LSIsReady()
+                    if (Essentials.R.IsReady()
                         && Essentials.R.IsInRange(rLocation.Position.To3D())
                         && !Essentials.IsShroomed(rLocation.Position.To3D())
                         && minionR <= rLocation.MinionsHit)
                     {
                         Essentials.R.Cast(rLocation.Position);
                     }
-                    else if (Essentials.R.LSIsReady()
+                    else if (Essentials.R.IsReady()
                              && Essentials.R.IsInRange(r2Location.Position.To3D())
                              && !Essentials.IsShroomed(r2Location.Position.To3D())
                              && minionR <= r2Location.MinionsHit)
@@ -205,18 +205,18 @@ namespace PandaTeemo
             {
                 var jungleMobQ =
                     ObjectManager.Get<Obj_AI_Base>()
-                        .Where(t => Essentials.Q.IsInRange(t) && t.Team == GameObjectTeam.Neutral && t.LSIsValidTarget())
+                        .Where(t => Essentials.Q.IsInRange(t) && t.Team == GameObjectTeam.Neutral && t.IsValidTarget())
                         .OrderBy(t => t.MaxHealth)
                         .FirstOrDefault();
                 var jungleMobR =
                     ObjectManager.Get<Obj_AI_Base>()
-                        .Where(t => Essentials.R.IsInRange(t) && t.Team == GameObjectTeam.Neutral && t.LSIsValidTarget())
+                        .Where(t => Essentials.R.IsInRange(t) && t.Team == GameObjectTeam.Neutral && t.IsValidTarget())
                         .OrderBy(t => t.MaxHealth)
                         .FirstOrDefault();
 
                 if (useQ && jungleMobQ != null)
                 {
-                    if (Essentials.Q.LSIsReady() && qManaManager <= (int) Essentials.Player.ManaPercent)
+                    if (Essentials.Q.IsReady() && qManaManager <= (int) Essentials.Player.ManaPercent)
                     {
                         Essentials.Q.CastOnUnit(jungleMobQ);
                     }
@@ -224,7 +224,7 @@ namespace PandaTeemo
 
                 if (useR && jungleMobR != null)
                 {
-                    if (Essentials.R.LSIsReady() && ammoR >= 1)
+                    if (Essentials.R.IsReady() && ammoR >= 1)
                     {
                         Essentials.R.Cast(jungleMobR.Position);
                     }
@@ -247,13 +247,13 @@ namespace PandaTeemo
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
             // Uses W if avaliable and if toggle is on
-            if (useW && Essentials.W.LSIsReady())
+            if (useW && Essentials.W.IsReady())
             {
                 Essentials.W.Cast(Essentials.Player);
             }
 
             // Uses R if avaliable and if toggle is on
-            if (useR && Essentials.R.LSIsReady() && rCharge <= ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Ammo)
+            if (useR && Essentials.R.IsReady() && rCharge <= ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Ammo)
             {
                 Essentials.R.Cast(Essentials.Player.Position);
             }

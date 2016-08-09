@@ -106,7 +106,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
                     Vector3 prepos = enemy.Position;
 
                     if (enemy.IsMoving)
-                        prepos = prepos.LSExtend(enemy.LSGetWaypoints().Last().To3D(), 125);
+                        prepos = prepos.Extend(enemy.GetWaypoints().Last().To3D(), 125);
 
                     if (ChampionInfoOne == null)
                     {

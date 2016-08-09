@@ -75,9 +75,9 @@ namespace SAutoCarry.Champions
         public void BeforeOrbwalk()
         {
 
-            if (Spells[Q].LSIsReady() && ObjectManager.Player.HealthPercent < AutoQHP)
+            if (Spells[Q].IsReady() && ObjectManager.Player.HealthPercent < AutoQHP)
             {
-                if (HeroManager.Enemies.Any(p => p.LSIsValidTarget(Spells[Q].Range)))
+                if (HeroManager.Enemies.Any(p => p.IsValidTarget(Spells[Q].Range)))
                     Spells[Q].Cast();
             }
 
@@ -88,23 +88,23 @@ namespace SAutoCarry.Champions
         public void Combo()
         {
 
-            if (Spells[E].LSIsReady() && ComboUseR)
+            if (Spells[E].IsReady() && ComboUseR)
             {
                 var t = TargetSelector.GetTarget(Spells[E].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
                 if (t != null)
                     Spells[E].SPredictionCast(t, HitChance.High);
             }
 
-            if (Spells[Q].LSIsReady() && ComboUseQ)
+            if (Spells[Q].IsReady() && ComboUseQ)
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
                 if (t != null)
                     Spells[Q].Cast(t);
             }
 
-            if (Spells[R].LSIsReady() && ComboUseR)
+            if (Spells[R].IsReady() && ComboUseR)
             {
-                var t = HeroManager.Enemies.Where(p => p.LSIsValidTarget(Spells[R].Range) && p.Health < CalculateDamageR(p)).OrderBy(q => q.GetPriority()).FirstOrDefault();
+                var t = HeroManager.Enemies.Where(p => p.IsValidTarget(Spells[R].Range) && p.Health < CalculateDamageR(p)).OrderBy(q => q.GetPriority()).FirstOrDefault();
                 if (t != null)
                     Spells[R].CastOnUnit(t);
             }
@@ -115,14 +115,14 @@ namespace SAutoCarry.Champions
             if (ObjectManager.Player.ManaPercent < HarassMinMana)
                 return;
 
-            if (Spells[Q].LSIsReady() && HarassUseQ)
+            if (Spells[Q].IsReady() && HarassUseQ)
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
                     Spells[Q].SPredictionCast(t, HitChance.High);
             }
 
-            if (Spells[E].LSIsReady() && HarassUseE)
+            if (Spells[E].IsReady() && HarassUseE)
             {
                 var t = TargetSelector.GetTarget(Spells[E].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
@@ -138,13 +138,13 @@ namespace SAutoCarry.Champions
             var minion = MinionManager.GetMinions(Spells[Q].Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).FirstOrDefault();
             if (minion != null)
 
-                if (Spells[Q].LSIsReady() && LaneClearQ)
+                if (Spells[Q].IsReady() && LaneClearQ)
                 {
                     if (MinionManager.GetMinions(Spells[Q].Range + 100, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).Count() > 4)
                         Spells[Q].Cast();
                 }
 
-            if (Spells[W].LSIsReady() && LaneClearW)
+            if (Spells[W].IsReady() && LaneClearW)
             {
                 if (Spells[W].GetDamage(minion) > minion.Health)
                 {
@@ -156,10 +156,10 @@ namespace SAutoCarry.Champions
 
         public void KillSteal()
         {
-            if (!Spells[R].LSIsReady())
+            if (!Spells[R].IsReady())
                 return;
 
-            foreach (AIHeroClient target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Spells[R].Range) && !x.HasBuffOfType(BuffType.Invulnerability)))
+            foreach (AIHeroClient target in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells[R].Range) && !x.HasBuffOfType(BuffType.Invulnerability)))
             {
                 if (CalculateDamageR(target) > target.Health + 20)
                     Spells[R].CastOnUnit(target);
@@ -170,7 +170,7 @@ namespace SAutoCarry.Champions
         {
             if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Mixed)
             {
-                if (Spells[W].LSIsReady() && HarassUseW)
+                if (Spells[W].IsReady() && HarassUseW)
                 {
                     Spells[W].Cast();
                     return;
@@ -179,7 +179,7 @@ namespace SAutoCarry.Champions
 
             if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo)
             {
-                if (Spells[W].LSIsReady() && ComboUseW)
+                if (Spells[W].IsReady() && ComboUseW)
                 {
                     Spells[W].Cast();
                     return;
@@ -201,8 +201,8 @@ namespace SAutoCarry.Champions
 
         public override double CalculateDamageR(AIHeroClient target)
         {
-            if (Spells[R].LSIsReady())
-                return ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.R) * (1f + ObjectManager.Player.GetBuffCount("dariushemo") * 0.2f);
+            if (Spells[R].IsReady())
+                return ObjectManager.Player.GetSpellDamage(target, SpellSlot.R) * (1f + ObjectManager.Player.GetBuffCount("dariushemo") * 0.2f);
 
             return 0.0d;
         }

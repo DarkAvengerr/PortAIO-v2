@@ -39,7 +39,7 @@ namespace JaxQx
                             MinionTypes.All,
                             MinionTeam.Enemy,
                             MinionOrderTypes.MaxHealth)
-                            .Where(xMinion => Program.Player.LSGetAutoAttackDamage(xMinion, true) >= xMinion.Health))
+                            .Where(xMinion => Program.Player.GetAutoAttackDamage(xMinion, true) >= xMinion.Health))
                 {
                     Render.Circle.DrawCircle(xMinion.Position, xMinion.BoundingRadius, drawMinionLastHit.Color);
                 }
@@ -48,7 +48,7 @@ namespace JaxQx
             if (menuExtra.Item("Extra.DrawKillableEnemy").GetValue<bool>())
             {
                 var t = KillableEnemyAA;
-                if (t.Item1 != null && t.Item1.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 800) && t.Item2 > 0)
+                if (t.Item1 != null && t.Item1.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 800) && t.Item2 > 0)
                 {
                     Utils.DrawText(
                         Utils.Text,
@@ -67,7 +67,7 @@ namespace JaxQx
                 var x = 0;
                 var t = TargetSelector.GetTarget(Orbwalking.GetRealAutoAttackRange(null) + 800, TargetSelector.DamageType.Physical);
                 {
-                    if (t.LSIsValidTarget())
+                    if (t.IsValidTarget())
                     {
                         if (t.Health
                             < ObjectManager.Player.TotalAttackDamage

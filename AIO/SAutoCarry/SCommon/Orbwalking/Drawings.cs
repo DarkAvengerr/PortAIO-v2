@@ -33,7 +33,7 @@ namespace SCommon.Orbwalking
 
             if(m_Instance.Configuration.EnemyAACircle.Active)
             {
-                foreach (var target in HeroManager.Enemies.FindAll(target => target.LSIsValidTarget(1200)))
+                foreach (var target in HeroManager.Enemies.FindAll(target => target.IsValidTarget(1200)))
                     Render.Circle.DrawCircle(target.Position, Utility.GetAARange(target), m_Instance.Configuration.EnemyAACircle.Color, m_Instance.Configuration.LineWidth);
             }
 

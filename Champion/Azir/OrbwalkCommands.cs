@@ -41,7 +41,7 @@ namespace HeavenStrikeAzir
         {
             if (!sender.IsMe)
                 return;
-            if (args.SData.LSIsAutoAttack())
+            if (args.SData.IsAutoAttack())
                 LeagueSharp.Common.Utility.DelayAction.Add(50 - Game.Ping, () => OnFinishAttack = true);
         }
 
@@ -68,7 +68,7 @@ namespace HeavenStrikeAzir
         {
             if (Utils.GameTimeTickCount - lastMovecommandTick < 150)
                 return;
-            if (Player.Position.LSDistance(Position) <= 80)
+            if (Player.Position.Distance(Position) <= 80)
                 return;
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Position);
             lastMovecommandTick = Utils.GameTimeTickCount;
@@ -100,15 +100,15 @@ namespace HeavenStrikeAzir
                 Soldiers.autoattackminions
                     .Any(
                         minion =>
-                            minion.LSIsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
+                            minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                             HealthPrediction.LaneClearHealthPrediction(
                             minion, (int)attackcastdelay + (int)attackdelay * 2, 0) <=
-                            Player.LSGetAutoAttackDamage(minion))
+                            Player.GetAutoAttackDamage(minion))
                 ||
                 Soldiers.soldierattackminions
                     .Any(
                         minion =>
-                            minion.LSIsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
+                            minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                             HealthPrediction.LaneClearHealthPrediction(
                             minion, (int)attackcastdelay + (int)attackdelay * 2, 0) <=
                             Program.Wdamage(minion))
@@ -118,7 +118,7 @@ namespace HeavenStrikeAzir
                         minions => minions.SplashAutoAttackMinions
                             .Any(
                                 minion =>
-                                    minion.LSIsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
+                                    minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                                     HealthPrediction.LaneClearHealthPrediction(
                                     minion, (int)attackcastdelay + (int)attackdelay * 2, 0) <=
                                     Program.Wdamage(minion)))
@@ -149,7 +149,7 @@ namespace HeavenStrikeAzir
 
                     if (minion.Team != GameObjectTeam.Neutral)
                     {
-                        if (predHealth > 0 && predHealth <= Player.LSGetAutoAttackDamage(minion, true))
+                        if (predHealth > 0 && predHealth <= Player.GetAutoAttackDamage(minion, true))
                         {
                             return minion;
                         }
@@ -183,21 +183,21 @@ namespace HeavenStrikeAzir
             {
                 /* turrets */
                 foreach (var turret in
-                    ObjectManager.Get<Obj_AI_Turret>().Where(t => t.LSIsValidTarget() && Orbwalking.InAutoAttackRange(t)))
+                    ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && Orbwalking.InAutoAttackRange(t)))
                 {
                     return turret;
                 }
 
                 /* inhibitor */
                 foreach (var turret in
-                    ObjectManager.Get<Obj_BarracksDampener>().Where(t => t.LSIsValidTarget() && Orbwalking.InAutoAttackRange(t)))
+                    ObjectManager.Get<Obj_BarracksDampener>().Where(t => t.IsValidTarget() && Orbwalking.InAutoAttackRange(t)))
                 {
                     return turret;
                 }
 
                 /* nexus */
                 foreach (var nexus in
-                    ObjectManager.Get<Obj_HQ>().Where(t => t.LSIsValidTarget() && Orbwalking.InAutoAttackRange(t)))
+                    ObjectManager.Get<Obj_HQ>().Where(t => t.IsValidTarget() && Orbwalking.InAutoAttackRange(t)))
                 {
                     return nexus;
                 }
@@ -208,7 +208,7 @@ namespace HeavenStrikeAzir
                 if (Soldiers.enemies.Any())
                 {
                     var target = Soldiers.enemies.OrderByDescending(x => x.Health).LastOrDefault();
-                    if (target.LSIsValidTarget())
+                    if (target.IsValidTarget())
                         return target;
                 }
                 if (Soldiers.splashautoattackchampions.Any())
@@ -218,14 +218,14 @@ namespace HeavenStrikeAzir
                     if (splashAutoAttackChampion != null)
                     {
                         var target = splashAutoAttackChampion.MainMinion;
-                        if (target.LSIsValidTarget())
+                        if (target.IsValidTarget())
                             return target;
                     }
                 }
                 if (!Soldiers.enemies.Any() && !Soldiers.splashautoattackchampions.Any())
                 {
                     var target = Program._orbwalker.GetTarget();
-                    if (target.LSIsValidTarget() && !target.IsZombie && target is AIHeroClient)
+                    if (target.IsValidTarget() && !target.IsZombie && target is AIHeroClient)
                     {
                         return target;
                     }
@@ -238,7 +238,7 @@ namespace HeavenStrikeAzir
                     MinionList
                         .Where(
                             mob =>
-                                mob.LSIsValidTarget() && mob.Team == GameObjectTeam.Neutral && mob.CharData.BaseSkinName != "gangplankbarrel")
+                                mob.IsValidTarget() && mob.Team == GameObjectTeam.Neutral && mob.CharData.BaseSkinName != "gangplankbarrel")
                         .MaxOrDefault(mob => mob.MaxHealth);
                 if (result != null)
                 {
@@ -278,7 +278,7 @@ namespace HeavenStrikeAzir
                     foreach (var minion in arrangedattack)
                     {
                         var predHealth = HealthPrediction.LaneClearHealthPrediction(minion, t + t2, 0);
-                        if (predHealth >= Player.LSGetAutoAttackDamage(minion) * 2 || Math.Abs(predHealth - minion.Health) < float.Epsilon)
+                        if (predHealth >= Player.GetAutoAttackDamage(minion) * 2 || Math.Abs(predHealth - minion.Health) < float.Epsilon)
                             return minion;
                     }
                 }

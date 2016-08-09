@@ -58,7 +58,7 @@ using EloBuddy; namespace RethoughtLib.LogicProvider
         {
             try
             {
-                if (!position.LSUnderTurret(true))
+                if (!position.UnderTurret(true))
                 {
                     return true;
                 }
@@ -69,14 +69,14 @@ using EloBuddy; namespace RethoughtLib.LogicProvider
 
                 foreach (var entry in turretCache)
                 {
-                    if (entry.Value.LSDistance(Variables.Player) <= smallestDistance)
+                    if (entry.Value.Distance(Variables.Player) <= smallestDistance)
                     {
-                        smallestDistance = entry.Value.LSDistance(Variables.Player);
+                        smallestDistance = entry.Value.Distance(Variables.Player);
                         turret = entry.Value;
                     }
                 }
 
-                if (position.LSDistance(turret.ServerPosition) >= turret.AttackRange)
+                if (position.Distance(turret.ServerPosition) >= turret.AttackRange)
                 {
                     return true;
                 }
@@ -85,13 +85,13 @@ using EloBuddy; namespace RethoughtLib.LogicProvider
                 {
                     var target = turretTarget[turret.NetworkId];
 
-                    if (LeagueSharp.Common.Utility.LSIsValidTarget(target, float.MaxValue, false))
+                    if (LeagueSharp.Common.Utility.IsValidTarget(target, float.MaxValue, false))
                     {
                         // We can onehit the turret, there are not much enemies near and we won't die from the next turret shot
-                        if (turret.Health + turret.AttackShield <= Variables.Player.LSGetAutoAttackDamage(turret)
-                            && turret.LSCountEnemiesInRange(turret.AttackRange) < 2
-                            && Variables.Player.Health > turret.LSGetAutoAttackDamage(Variables.Player) * 2
-                            && Geometry.LSDistance(position, turret.ServerPosition) <= Variables.Player.AttackRange)
+                        if (turret.Health + turret.AttackShield <= Variables.Player.GetAutoAttackDamage(turret)
+                            && turret.CountEnemiesInRange(turret.AttackRange) < 2
+                            && Variables.Player.Health > turret.GetAutoAttackDamage(Variables.Player) * 2
+                            && Geometry.Distance(position, turret.ServerPosition) <= Variables.Player.AttackRange)
                         {
                             return true;
                         }
@@ -99,7 +99,7 @@ using EloBuddy; namespace RethoughtLib.LogicProvider
                         // Turret is focusing something else and there are new targets that are not we in range
                         if (target != null && !target.IsMe
                             && this.CountAttackableUnitsInRange(turret.Position, turret.AttackRange) > 1
-                            && target.Health >= turret.LSGetAutoAttackDamage((Obj_AI_Base)target))
+                            && target.Health >= turret.GetAutoAttackDamage((Obj_AI_Base)target))
                         {
                             return true;
                         }
@@ -144,11 +144,11 @@ using EloBuddy; namespace RethoughtLib.LogicProvider
         {
             var minions =
                 MinionManager.GetMinions(position, range, MinionTypes.All, MinionTeam.NotAllyForEnemy)
-                    .Where(minion => minion.LSIsValidTarget());
+                    .Where(minion => minion.IsValidTarget());
             var heroes =
                 HeroManager.Allies.Where(
                     ally =>
-                    Geometry.LSDistance(ally, position) <= range + ally.BoundingRadius && LeagueSharp.Common.Utility.LSIsValidTarget(ally)
+                    Geometry.Distance(ally, position) <= range + ally.BoundingRadius && LeagueSharp.Common.Utility.IsValidTarget(ally)
                     && !ally.IsMe);
 
             return minions.Count() + heroes.Count();

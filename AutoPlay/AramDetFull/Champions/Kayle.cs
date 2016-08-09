@@ -48,12 +48,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             bool triggered = false;
 
-            if (W.LSIsReady()  && (target.HealthPercent <= setvaluehealth))
+            if (W.IsReady()  && (target.HealthPercent <= setvaluehealth))
             {
                 HealUltManager(true, false, target);
                 triggered = true;
             }
-            if (R.LSIsReady()  && (target.HealthPercent <= setvaluehealth))
+            if (R.IsReady()  && (target.HealthPercent <= setvaluehealth))
             {
                 HealUltManager(false, true, target);
                 triggered = true;
@@ -64,15 +64,15 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 return;
             }
 
-            var damage = sender.LSGetSpellDamage(target, args.SData.Name);
+            var damage = sender.GetSpellDamage(target, args.SData.Name);
             var afterdmg = ((target.Health - damage) / (target.MaxHealth)) * 100f;
 
-            if (W.LSIsReady() && player.LSDistance(target) <= W.Range  && (target.HealthPercent <= setvaluehealth || ( afterdmg <= setvaluehealth)))
+            if (W.IsReady() && player.Distance(target) <= W.Range  && (target.HealthPercent <= setvaluehealth || ( afterdmg <= setvaluehealth)))
             {
                     HealUltManager(true, false, target);
             }
 
-            if (R.LSIsReady() && player.LSDistance(target) <= R.Range && (target.HealthPercent <= setvalueult || (afterdmg <= setvalueult)) && (senderhero != null || senderturret != null || target.HealthPercent < 5f))
+            if (R.IsReady() && player.Distance(target) <= R.Range && (target.HealthPercent <= setvalueult || (afterdmg <= setvalueult)) && (senderhero != null || senderturret != null || target.HealthPercent < 5f))
             {
                 HealUltManager(false, true, target);
             }
@@ -81,12 +81,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         void HealUltManager(bool forceheal = false, bool forceult = false, AIHeroClient target = null)
         {
-            if (forceheal && target != null && W.LSIsReady() && player.LSDistance(target) <= W.Range)
+            if (forceheal && target != null && W.IsReady() && player.Distance(target) <= W.Range)
             {
                 W.CastOnUnit(target);
                 return;
             }
-            if (forceult && target != null && R.LSIsReady() && player.LSDistance(target) <= R.Range)
+            if (forceult && target != null && R.IsReady() && player.Distance(target) <= R.Range)
             {
                 R.CastOnUnit(target);
                 return;
@@ -96,11 +96,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
                                 .Where(
                                     h =>
                                         (h.IsAlly || h.IsMe) && !h.IsZombie && !h.IsDead &&
-                                        h.HealthPercent <= 55 && player.LSDistance(h) <= R.Range).OrderByDescending(i => i == player).ThenBy(i => i);
+                                        h.HealthPercent <= 55 && player.Distance(h) <= R.Range).OrderByDescending(i => i == player).ThenBy(i => i);
 
-                if (W.LSIsReady())
+                if (W.IsReady())
                 {
-                    if (herolistheal.Contains(player) && !player.LSIsRecalling() && !player.LSInFountain())
+                    if (herolistheal.Contains(player) && !player.IsRecalling() && !player.InFountain())
                     {
                         W.CastOnUnit(player);
                         return;
@@ -109,7 +109,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     {
                         var hero = herolistheal.FirstOrDefault();
 
-                        if (player.LSDistance(hero) <= R.Range && !player.LSIsRecalling() && !hero.LSIsRecalling() && !hero.LSInFountain())
+                        if (player.Distance(hero) <= R.Range && !player.IsRecalling() && !hero.IsRecalling() && !hero.InFountain())
                         {
                             W.CastOnUnit(hero);
                             return;
@@ -122,9 +122,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
                         h =>
                             (h.IsAlly || h.IsMe) && !h.IsZombie && !h.IsDead  &&
                             h.HealthPercent <=35 &&
-                            player.LSDistance(h) <= R.Range && player.LSCountEnemiesInRange(500) > 0).OrderByDescending(i => i == player).ThenBy(i => i);
+                            player.Distance(h) <= R.Range && player.CountEnemiesInRange(500) > 0).OrderByDescending(i => i == player).ThenBy(i => i);
 
-                if (R.LSIsReady())
+                if (R.IsReady())
                 {
                     if (herolist.Contains(player))
                     {
@@ -136,7 +136,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     {
                         var hero = herolist.FirstOrDefault();
 
-                        if (player.LSDistance(hero) <= R.Range)
+                        if (player.Distance(hero) <= R.Range)
                         {
                             R.CastOnUnit(hero);
                             return;
@@ -156,20 +156,20 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (E.LSIsReady())
+            if (E.IsReady())
                 E.Cast();
         }
 
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
         }
 
         public override void useSpells()
         {
-            if(E.LSIsReady() && player.LSCountEnemiesInRange(650)>0)
+            if(E.IsReady() && player.CountEnemiesInRange(650)>0)
                 E.Cast();
             var tar = ARAMTargetSelector.getBestTarget(Q.Range);
             if (tar != null) useQ(tar);
@@ -188,7 +188,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void farm()
         {
-            if (E.LSIsReady() && MinionManager.GetMinions(700).Count>2)
+            if (E.IsReady() && MinionManager.GetMinions(700).Count>2)
                 E.Cast();
         }
     }

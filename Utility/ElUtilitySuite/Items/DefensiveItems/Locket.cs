@@ -81,9 +81,9 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
                     return;
                 }
 
-                foreach (var ally in HeroManager.Allies.Where(a => a.LSIsValidTarget(600f, false) && !a.LSIsRecalling()))
+                foreach (var ally in HeroManager.Allies.Where(a => a.IsValidTarget(600f, false) && !a.IsRecalling()))
                 {
-                    var enemies = ally.LSCountEnemiesInRange(600f);
+                    var enemies = ally.CountEnemiesInRange(600f);
                     var totalDamage = IncomingDamageManager.GetDamage(ally) * 1.1f;
 
                     if (ally.HealthPercent <= this.Menu.Item("locket-min-health").GetValue<Slider>().Value

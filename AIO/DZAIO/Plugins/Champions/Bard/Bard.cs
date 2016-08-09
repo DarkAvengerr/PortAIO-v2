@@ -95,7 +95,7 @@ using EloBuddy;
             && (Variables.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             && Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.bard.extra.supportmode"))
             {
-                if (ObjectManager.Player.LSCountAlliesInRange(Variables.AssemblyMenu.GetItemValue<Slider>("dz191.bard.misc.attackMinionRange").Value) > 0)
+                if (ObjectManager.Player.CountAlliesInRange(Variables.AssemblyMenu.GetItemValue<Slider>("dz191.bard.misc.attackMinionRange").Value) > 0)
                 {
                     args.Process = false;
                 }
@@ -105,9 +105,9 @@ using EloBuddy;
         private void OnGapcloser(DZLib.Core.ActiveGapcloser gapcloser)
         {
             if (Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.bard.extra.antigapcloser") 
-                && Variables.Spells[SpellSlot.Q].LSIsReady()
-                && gapcloser.Sender.LSIsValidTarget()
-                && gapcloser.End.LSDistance(ObjectManager.Player.ServerPosition) < gapcloser.Start.LSDistance(ObjectManager.Player.ServerPosition))
+                && Variables.Spells[SpellSlot.Q].IsReady()
+                && gapcloser.Sender.IsValidTarget()
+                && gapcloser.End.Distance(ObjectManager.Player.ServerPosition) < gapcloser.Start.Distance(ObjectManager.Player.ServerPosition))
             {
                 HandleQ(gapcloser.Sender);
             }
@@ -116,8 +116,8 @@ using EloBuddy;
         private void OnInterrupter(AIHeroClient sender, DZInterrupter.InterruptableTargetEventArgs args)
         {
             if (Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.bard.extra.interrupter") 
-                && Variables.Spells[SpellSlot.Q].LSIsReady()
-                && sender.LSIsValidTarget()
+                && Variables.Spells[SpellSlot.Q].IsReady()
+                && sender.IsValidTarget()
                 && args.DangerLevel >= DZInterrupter.DangerLevel.High)
             {
                 HandleQ(sender);
@@ -152,7 +152,7 @@ using EloBuddy;
 
         private void DoFlee()
         {
-            if (!Variables.Spells[SpellSlot.E].LSIsReady() || TunnelObjectNetworkID == -1)
+            if (!Variables.Spells[SpellSlot.E].IsReady() || TunnelObjectNetworkID == -1)
             {
                 Orbwalking.MoveTo(Game.CursorPos);
             }
@@ -167,17 +167,17 @@ using EloBuddy;
 
             var ComboTarget = TargetSelector.GetTarget(Variables.Spells[SpellSlot.Q].Range / 1.3f, TargetSelector.DamageType.Magical);
 
-            if (Variables.Spells[SpellSlot.Q].LSIsReady() && ComboTarget.LSIsValidTarget())
+            if (Variables.Spells[SpellSlot.Q].IsReady() && ComboTarget.IsValidTarget())
             {
                 HandleQ(ComboTarget);
             }
 
             //E
 
-            var dir = ObjectManager.Player.ServerPosition.LSTo2D() + ObjectManager.Player.Direction.LSTo2D().LSPerpendicular() * (ObjectManager.Player.BoundingRadius * 2.5f);
+            var dir = ObjectManager.Player.ServerPosition.To2D() + ObjectManager.Player.Direction.To2D().Perpendicular() * (ObjectManager.Player.BoundingRadius * 2.5f);
             var Extended = Game.CursorPos;
 
-            if (dir.LSIsWall() 
+            if (dir.IsWall() 
                  && PositioningHelper.GetWallLength(ObjectManager.Player.ServerPosition, Extended) >= 200f 
                  && PositioningHelper.DoPositionsCrossWall(ObjectManager.Player.ServerPosition, Extended))
             {
@@ -189,7 +189,7 @@ using EloBuddy;
         {
             var ComboTarget = TargetSelector.GetTarget(Variables.Spells[SpellSlot.Q].Range / 1.3f, TargetSelector.DamageType.Magical);
 
-            if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo) && ComboTarget.LSIsValidTarget())
+            if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo) && ComboTarget.IsValidTarget())
             {
                 HandleQ(ComboTarget);
             }
@@ -204,7 +204,7 @@ using EloBuddy;
         {
             var ComboTarget = TargetSelector.GetTarget(Variables.Spells[SpellSlot.Q].Range / 1.3f, TargetSelector.DamageType.Magical);
 
-            if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass) && ComboTarget.LSIsValidTarget())
+            if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass) && ComboTarget.IsValidTarget())
             {
                 HandleQ(ComboTarget);
             }
@@ -226,20 +226,20 @@ using EloBuddy;
         {
             var HealthPercent = 30f;
 
-            if (ObjectManager.Player.LSIsRecalling() || ObjectManager.Player.LSInShop() || !Variables.Spells[SpellSlot.W].LSIsReady())
+            if (ObjectManager.Player.IsRecalling() || ObjectManager.Player.InShop() || !Variables.Spells[SpellSlot.W].IsReady())
             {
                 return;
             }
 
             if (ObjectManager.Player.HealthPercent <= HealthPercent)
             {
-                var castPosition = ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, ObjectManager.Player.BoundingRadius * 1.3f);
+                var castPosition = ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, ObjectManager.Player.BoundingRadius * 1.3f);
                 Variables.Spells[SpellSlot.W].Cast(castPosition);
                 return;
             }
 
             var LHAlly = HeroManager.Allies
-                .Where(ally => ally.LSIsValidTarget(Variables.Spells[SpellSlot.W].Range, false)
+                .Where(ally => ally.IsValidTarget(Variables.Spells[SpellSlot.W].Range, false)
                     && ally.HealthPercent <= HealthPercent
                     && TargetSelector.GetPriority(ally) > 3)
                 .OrderBy(ally => ally.Health)
@@ -270,7 +270,7 @@ using EloBuddy;
                         comboTarget.Position
                     };
 
-                if (comboTarget.LSIsDashing())
+                if (comboTarget.IsDashing())
                 {
                     BeamStartPositions.Add(comboTarget.GetDashInfo().EndPos.To3D());
                 }
@@ -280,13 +280,13 @@ using EloBuddy;
 
                 foreach (var position in BeamStartPositions)
                 {
-                    var collisionableObjects = Variables.Spells[SpellSlot.Q].GetCollision(position.LSTo2D(),
-                        new List<Vector2>() { position.LSExtend(PlayerPosition, -QPushDistance).LSTo2D() });
+                    var collisionableObjects = Variables.Spells[SpellSlot.Q].GetCollision(position.To2D(),
+                        new List<Vector2>() { position.Extend(PlayerPosition, -QPushDistance).To2D() });
 
                     if (collisionableObjects.Any())
                     {
                         if (collisionableObjects.Any(h => h is AIHeroClient) &&
-                            (collisionableObjects.All(h => h.LSIsValidTarget())))
+                            (collisionableObjects.All(h => h.IsValidTarget())))
                         {
                             Variables.Spells[SpellSlot.Q].Cast(QPrediction.CastPosition);
                             break;
@@ -294,20 +294,20 @@ using EloBuddy;
 
                         for (var i = 0; i < QPushDistance; i += (int)comboTarget.BoundingRadius)
                         {
-                            CollisionPositions.Add(position.LSExtend(PlayerPosition, -i));
+                            CollisionPositions.Add(position.Extend(PlayerPosition, -i));
                         }
                     }
 
                     for (var i = 0; i < QPushDistance; i += (int)comboTarget.BoundingRadius)
                     {
-                        PositionsList.Add(position.LSExtend(PlayerPosition, -i));
+                        PositionsList.Add(position.Extend(PlayerPosition, -i));
                     }
                 }
 
                 if (PositionsList.Any())
                 {
                     //We don't want to divide by 0 Kappa
-                    var WallNumber = PositionsList.Count(p => p.LSIsWall()) * 1.3f;
+                    var WallNumber = PositionsList.Count(p => p.IsWall()) * 1.3f;
                     var CollisionPositionCount = CollisionPositions.Count;
                     var Percent = (WallNumber + CollisionPositionCount) / PositionsList.Count;
                     var AccuracyEx = QAccuracy / 100f;

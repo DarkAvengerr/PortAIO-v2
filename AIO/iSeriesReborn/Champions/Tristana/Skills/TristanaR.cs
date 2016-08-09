@@ -17,12 +17,12 @@ using EloBuddy;
             {
                 var selectedTarget = TargetSelector.GetTarget(
                     TristanaUtility.GetERRange(), TargetSelector.DamageType.Physical);
-                if (selectedTarget.LSIsValidTarget())
+                if (selectedTarget.IsValidTarget())
                 {
                     var selectedTargetHealth = HealthPrediction.GetHealthPrediction(
                         selectedTarget,
                         (int)
-                            (250 + Game.Ping / 2f + ObjectManager.Player.LSDistance(selectedTarget.ServerPosition) / 2000f));
+                            (250 + Game.Ping / 2f + ObjectManager.Player.Distance(selectedTarget.ServerPosition) / 2000f));
                     if (selectedTargetHealth > 0 && selectedTargetHealth < TristanaUtility.GetRDamage(selectedTarget))
                     {
                         Variables.spells[SpellSlot.R].Cast(selectedTarget);
@@ -30,7 +30,7 @@ using EloBuddy;
                     }
 
                     var enemiesClose =
-                        ObjectManager.Player.LSGetEnemiesInRange(250f).Where(m => m.LSIsValidTarget()).OrderBy(m => m.LSDistance(ObjectManager.Player)).ThenByDescending(m => m.GetComboDamage(ObjectManager.Player, new List<SpellSlot>{SpellSlot.Q, SpellSlot.W, SpellSlot.E, SpellSlot.R}));
+                        ObjectManager.Player.GetEnemiesInRange(250f).Where(m => m.IsValidTarget()).OrderBy(m => m.Distance(ObjectManager.Player)).ThenByDescending(m => m.GetComboDamage(ObjectManager.Player, new List<SpellSlot>{SpellSlot.Q, SpellSlot.W, SpellSlot.E, SpellSlot.R}));
 
                     var firstEnemy = enemiesClose.FirstOrDefault();
                     
@@ -43,7 +43,7 @@ using EloBuddy;
                     if (firstEnemy != null 
                         && firstEnemy.Health > ObjectManager.Player.Health * 2.0f 
                         && ObjectManager.Player.HealthPercent < 8
-                        && !(firstEnemy.Health + 5 < TristanaUtility.GetRDamage(selectedTarget) + ObjectManager.Player.LSGetAutoAttackDamage(firstEnemy) * 4))
+                        && !(firstEnemy.Health + 5 < TristanaUtility.GetRDamage(selectedTarget) + ObjectManager.Player.GetAutoAttackDamage(firstEnemy) * 4))
                     {
                         Variables.spells[SpellSlot.R].Cast(firstEnemy);
                     }

@@ -106,7 +106,7 @@ using EloBuddy;
                 if (CanCastOnEnemy && summoners.Item("SMITEENABLE").GetValue<KeyBind>().Active && summoners.Item("SMITEENEMY").GetValue<bool>() && IsReady())
                 {
                     var t = TargetSelector.GetTarget(this.Range, DamageType);
-                    if (t != null && t.LSIsValidTarget())
+                    if (t != null && t.IsValidTarget())
                         Cast(t);
 
                 }

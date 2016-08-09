@@ -78,7 +78,7 @@ namespace OneKeyToWin_AIO_Sebby
         public void Orbwalker_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             
-            if ( E.LSIsReady() && Config.Item("autoE", true).GetValue<bool>())
+            if ( E.IsReady() && Config.Item("autoE", true).GetValue<bool>())
                 LogicE();
         }
 
@@ -87,9 +87,9 @@ namespace OneKeyToWin_AIO_Sebby
             if (Player.Mana > RMANA + EMANA )
             {
                 var t = gapcloser.Sender;
-                if (t.LSIsValidTarget(E.Range) )
+                if (t.IsValidTarget(E.Range) )
                 {
-                    if (W.LSIsReady() && Config.Item("AGCW", true).GetValue<bool>())
+                    if (W.IsReady() && Config.Item("AGCW", true).GetValue<bool>())
                     {
                         W.Cast(gapcloser.End);
                         Program.debug("W AGC");
@@ -100,10 +100,10 @@ namespace OneKeyToWin_AIO_Sebby
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if (Config.Item("useR", true).GetValue<KeyBind>().Active && R.LSIsReady())
+            if (Config.Item("useR", true).GetValue<KeyBind>().Active && R.IsReady())
             {
                 var t = TargetSelector.GetTarget(1800, TargetSelector.DamageType.Physical);
-                if (t.LSIsValidTarget())
+                if (t.IsValidTarget())
                     R1.Cast(t, true);
             }
 
@@ -115,12 +115,12 @@ namespace OneKeyToWin_AIO_Sebby
             
             if (!Config.Item("QWlogic", true).GetValue<bool>() || !Player.HasBuff("gravesbasicattackammo1"))
             {
-                if (Program.LagFree(2) && Q.LSIsReady() && !Player.Spellbook.IsAutoAttacking && Config.Item("autoQ", true).GetValue<bool>())
+                if (Program.LagFree(2) && Q.IsReady() && !Player.Spellbook.IsAutoAttacking && Config.Item("autoQ", true).GetValue<bool>())
                     LogicQ();
-                if (Program.LagFree(3) && W.LSIsReady() && !Player.Spellbook.IsAutoAttacking && Config.Item("autoW", true).GetValue<bool>())
+                if (Program.LagFree(3) && W.IsReady() && !Player.Spellbook.IsAutoAttacking && Config.Item("autoW", true).GetValue<bool>())
                     LogicW();
             }
-            if (Program.LagFree(4) && R.LSIsReady() && Config.Item("autoR", true).GetValue<bool>())
+            if (Program.LagFree(4) && R.IsReady() && Config.Item("autoR", true).GetValue<bool>())
                 LogicR();
         }
 
@@ -132,12 +132,12 @@ namespace OneKeyToWin_AIO_Sebby
                 if (mobs.Count > 0)
                 {
                     var mob = mobs[0];
-                    if (Q.LSIsReady() && Config.Item("jungleQ", true).GetValue<bool>() )
+                    if (Q.IsReady() && Config.Item("jungleQ", true).GetValue<bool>() )
                     {
                         Q.Cast(mob.Position);
                         return;
                     }
-                    if (W.LSIsReady() && Config.Item("jungleW", true).GetValue<bool>())
+                    if (W.IsReady() && Config.Item("jungleW", true).GetValue<bool>())
                     {
                         W.Cast(mob.Position);
                         return;
@@ -149,13 +149,13 @@ namespace OneKeyToWin_AIO_Sebby
         private void LogicQ()
         {
             var t = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
-            if (t.LSIsValidTarget())
+            if (t.IsValidTarget())
             {
-                var step = t.LSDistance(Player) / 20;
+                var step = t.Distance(Player) / 20;
                 for (var i = 0; i < 20; i++)
                 {
-                    var p = Player.Position.LSExtend(t.Position, step * i);
-                    if (p.LSIsWall())
+                    var p = Player.Position.Extend(t.Position, step * i);
+                    if (p.IsWall())
                     {
                         return;
                     }
@@ -175,7 +175,7 @@ namespace OneKeyToWin_AIO_Sebby
                         OverKill = Game.Time;
                         Program.debug("Q ks");
                     }
-                    else if (qDmg + rDmg > t.Health && R.LSIsReady() && Player.Mana > RMANA + QMANA)
+                    else if (qDmg + rDmg > t.Health && R.IsReady() && Player.Mana > RMANA + QMANA)
                     {
                         Program.CastSpell(Q, t);
                         if (Config.Item("fastR", true).GetValue<bool>() && rDmg < t.Health)
@@ -186,7 +186,7 @@ namespace OneKeyToWin_AIO_Sebby
 
                 if (!Program.None && Player.Mana > RMANA + QMANA + EMANA)
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(Q.Range) && !OktwCommon.CanMove(enemy)))
+                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(Q.Range) && !OktwCommon.CanMove(enemy)))
                         Q.Cast(enemy);
                 }
             }
@@ -202,7 +202,7 @@ namespace OneKeyToWin_AIO_Sebby
         private void LogicW()
         {
             var t = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-            if (t.LSIsValidTarget())
+            if (t.IsValidTarget())
             {
                 var wDmg = OktwCommon.GetKsDamage(t, W);
                 if (wDmg > t.Health)
@@ -216,11 +216,11 @@ namespace OneKeyToWin_AIO_Sebby
                 }
                 else if (Program.Combo && Player.Mana > RMANA + WMANA + QMANA)
                 {
-                    if (!SebbyLib.Orbwalking.InAutoAttackRange(t) || Player.LSCountEnemiesInRange(300) > 0 || t.LSCountEnemiesInRange(250) > 1 || Player.HealthPercent < 50)
+                    if (!SebbyLib.Orbwalking.InAutoAttackRange(t) || Player.CountEnemiesInRange(300) > 0 || t.CountEnemiesInRange(250) > 1 || Player.HealthPercent < 50)
                         W.Cast(t, true, true);
                     else if (Player.Mana > RMANA + WMANA + QMANA + EMANA)
                     {
-                        foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(W.Range) && !OktwCommon.CanMove(enemy)))
+                        foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(W.Range) && !OktwCommon.CanMove(enemy)))
                             W.Cast(enemy, true, true);
                     }
                 }
@@ -229,7 +229,7 @@ namespace OneKeyToWin_AIO_Sebby
 
         private void LogicE()
         {
-            if (HeroManager.Enemies.Any(target => target.LSIsValidTarget(270) && target.IsMelee))
+            if (HeroManager.Enemies.Any(target => target.IsValidTarget(270) && target.IsMelee))
             {
                 var dashPos = Dash.CastDash(true);
                 if (!dashPos.IsZero)
@@ -249,7 +249,7 @@ namespace OneKeyToWin_AIO_Sebby
 
         private void LogicR()
         {
-            foreach (var target in HeroManager.Enemies.Where(target => target.LSIsValidTarget(R1.Range) && OktwCommon.ValidUlt(target)))
+            foreach (var target in HeroManager.Enemies.Where(target => target.IsValidTarget(R1.Range) && OktwCommon.ValidUlt(target)))
             {
                 double rDmg = OktwCommon.GetKsDamage(target,R);
 
@@ -260,13 +260,13 @@ namespace OneKeyToWin_AIO_Sebby
                 {
                     if(SebbyLib.Orbwalking.InAutoAttackRange(target))
                         continue;
-                    if (target.LSCountAlliesInRange(400) > 0)
+                    if (target.CountAlliesInRange(400) > 0)
                         continue;
                 }
 
                 double rDmg2 = rDmg * 0.8;
                 
-                if(target.LSIsValidTarget(R.Range) && !OktwCommon.IsSpellHeroCollision(target, R) && rDmg > target.Health)
+                if(target.IsValidTarget(R.Range) && !OktwCommon.IsSpellHeroCollision(target, R) && rDmg > target.Health)
                 {
                     Program.CastSpell(R, target);
                     Program.debug("Rdmg");
@@ -278,7 +278,7 @@ namespace OneKeyToWin_AIO_Sebby
                         Program.CastSpell(R1, target);
                         Program.debug("Rdmg2");
                     }
-                    else if (target.LSIsValidTarget(1200))
+                    else if (target.IsValidTarget(1200))
                     {
                         Program.CastSpell(R1, target);
                         Program.debug("Rdmg2 collision");
@@ -302,7 +302,7 @@ namespace OneKeyToWin_AIO_Sebby
             WMANA = W.Instance.SData.Mana;
             EMANA = E.Instance.SData.Mana;
 
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 RMANA = QMANA - Player.PARRegenRate * Q.Instance.Cooldown;
             else
                 RMANA = R.Instance.SData.Mana;
@@ -313,7 +313,7 @@ namespace OneKeyToWin_AIO_Sebby
             {
                 if (Config.Item("onlyRdy", true).GetValue<bool>())
                 {
-                    if (Q.LSIsReady())
+                    if (Q.IsReady())
                         LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, Q.Range, System.Drawing.Color.Cyan, 1, 1);
                 }
                 else
@@ -323,7 +323,7 @@ namespace OneKeyToWin_AIO_Sebby
             {
                 if (Config.Item("onlyRdy", true).GetValue<bool>())
                 {
-                    if (W.LSIsReady())
+                    if (W.IsReady())
                         LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, W.Range, System.Drawing.Color.Orange, 1, 1);
                 }
                 else
@@ -333,7 +333,7 @@ namespace OneKeyToWin_AIO_Sebby
             {
                 if (Config.Item("onlyRdy", true).GetValue<bool>())
                 {
-                    if (E.LSIsReady())
+                    if (E.IsReady())
                         LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, E.Range, System.Drawing.Color.Yellow, 1, 1);
                 }
                 else
@@ -343,7 +343,7 @@ namespace OneKeyToWin_AIO_Sebby
             {
                 if (Config.Item("onlyRdy", true).GetValue<bool>())
                 {
-                    if (R.LSIsReady())
+                    if (R.IsReady())
                         LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, R.Range, System.Drawing.Color.Gray, 1, 1);
                 }
                 else

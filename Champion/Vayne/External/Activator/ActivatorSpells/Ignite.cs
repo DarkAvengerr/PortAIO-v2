@@ -11,7 +11,7 @@ namespace VayneHunter_Reborn.External.Activator.ActivatorSpells
     {
         private SpellSlot IgniteSlot
         {
-            get { return ObjectManager.Player.LSGetSpellSlot("summonerdot"); }
+            get { return ObjectManager.Player.GetSpellSlot("summonerdot"); }
         }
 
         public void OnLoad()
@@ -43,11 +43,11 @@ namespace VayneHunter_Reborn.External.Activator.ActivatorSpells
                 var hero =
                     ObjectManager.Get<AIHeroClient>()
                         .Where(
-                            h => h.LSIsValidTarget(465f)).OrderBy(m => m.Health);
+                            h => h.IsValidTarget(465f)).OrderBy(m => m.Health);
                     var myHero = hero.FirstOrDefault();
                     if (myHero != null)
                     {
-                        var healSlot = myHero.LSGetSpellSlot("summonerheal");
+                        var healSlot = myHero.GetSpellSlot("summonerheal");
                         var health = myHero.Health + 10;
 
                         if (healSlot != SpellSlot.Unknown && myHero.Spellbook.GetSpell(healSlot).State == SpellState.Ready)

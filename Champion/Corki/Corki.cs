@@ -90,7 +90,7 @@
             spells[Spells.E].SetSkillshot(0f, (float)(45 * Math.PI / 180), 1500, false, SkillshotType.SkillshotCone);
             spells[Spells.R1].SetSkillshot(0.2f, 40f, 2000f, true, SkillshotType.SkillshotLine);
             spells[Spells.R2].SetSkillshot(0.2f, 40f, 2000f, true, SkillshotType.SkillshotLine);
-            _ignite = Player.LSGetSpellSlot("summonerdot");
+            _ignite = Player.GetSpellSlot("summonerdot");
 
             ElCorkiMenu.Initialize();
             Game.OnUpdate += OnUpdate;
@@ -106,7 +106,7 @@
             var target = TargetSelector.GetTarget(spells[Spells.Q].Range, TargetSelector.DamageType.Physical);
             var rTarget = TargetSelector.GetTarget(spells[Spells.R1].Range, TargetSelector.DamageType.Magical);
 
-            if (target == null || !target.LSIsValidTarget() || rTarget == null || !rTarget.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget() || rTarget == null || !rTarget.IsValidTarget())
             {
                 return;
             }
@@ -122,7 +122,7 @@
                     return;
                 }
 
-                if (r && spells[Spells.R1].LSIsReady() && spells[Spells.R1].IsInRange(rTarget)
+                if (r && spells[Spells.R1].IsReady() && spells[Spells.R1].IsInRange(rTarget)
                     || spells[Spells.R2].IsInRange(rTarget))
                 {
                     var bigR = HasBigRocket();
@@ -143,7 +143,7 @@
                     }
                 }
 
-                if (q && spells[Spells.Q].LSIsReady() && target.LSIsValidTarget(spells[Spells.Q].Range))
+                if (q && spells[Spells.Q].IsReady() && target.IsValidTarget(spells[Spells.Q].Range))
                 {
                     spells[Spells.Q].Cast(target);
                 }
@@ -157,7 +157,7 @@
 
         private static void Combo(Obj_AI_Base target)
         {
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
             {
                 return;
             }
@@ -177,7 +177,7 @@
 
             Items(target);
 
-            if (comboQ && spells[Spells.Q].LSIsReady())
+            if (comboQ && spells[Spells.Q].IsReady())
             {
                 var pred = spells[Spells.Q].GetPrediction(target);
                 if (pred.Hitchance >= HitChance.VeryHigh)
@@ -186,7 +186,7 @@
                 }
             }
 
-            if (comboE && spells[Spells.E].LSIsReady())
+            if (comboE && spells[Spells.E].IsReady())
             {
                 spells[Spells.E].Cast(target);
             }
@@ -195,21 +195,21 @@
             {
                 if (!bigR)
                 {
-                    if (target.LSIsValidTarget(spells[Spells.R1].Range))
+                    if (target.IsValidTarget(spells[Spells.R1].Range))
                     {
                         spells[Spells.R1].Cast(target);
                     }
                 }
                 else
                 {
-                    if (target.LSIsValidTarget(spells[Spells.R2].Range))
+                    if (target.IsValidTarget(spells[Spells.R2].Range))
                     {
                         spells[Spells.R2].Cast(target);
                     }
                 }
             }
 
-            if (Player.LSDistance(target) <= 600 && IgniteDamage(target) >= target.Health && useIgnite)
+            if (Player.Distance(target) <= 600 && IgniteDamage(target) >= target.Health && useIgnite)
             {
                 Player.Spellbook.CastSpell(_ignite, target);
             }
@@ -234,7 +234,7 @@
 
         private static void Harass(Obj_AI_Base target)
         {
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
             {
                 return;
             }
@@ -250,17 +250,17 @@
                 return;
             }
 
-            if (harassQ && spells[Spells.Q].LSIsReady())
+            if (harassQ && spells[Spells.Q].IsReady())
             {
                 spells[Spells.Q].Cast(target);
             }
 
-            if (harassE && spells[Spells.E].LSIsReady())
+            if (harassE && spells[Spells.E].IsReady())
             {
                 spells[Spells.E].CastOnBestTarget();
             }
 
-            if (harassR && spells[Spells.R1].LSIsReady()
+            if (harassR && spells[Spells.R1].IsReady()
                 && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Ammo > rStacks)
             {
                 spells[Spells.R1].CastIfHitchanceEquals(target, CustomHitChance, true);
@@ -307,7 +307,7 @@
                 cutlass.Cast(target);
             }
 
-            if (ghost.IsReady() && ghost.IsOwned(Player) && target.LSIsValidTarget(spells[Spells.Q].Range) && useYoumuu)
+            if (ghost.IsReady() && ghost.IsOwned(Player) && target.IsValidTarget(spells[Spells.Q].Range) && useYoumuu)
             {
                 ghost.Cast();
             }
@@ -333,17 +333,17 @@
 
             foreach (var minion in minions)
             {
-                if (spells[Spells.Q].LSIsReady() && useQ)
+                if (spells[Spells.Q].IsReady() && useQ)
                 {
                     spells[Spells.Q].Cast(minion);
                 }
 
-                if (spells[Spells.E].LSIsReady() && useE)
+                if (spells[Spells.E].IsReady() && useE)
                 {
                     spells[Spells.E].Cast(minion);
                 }
 
-                if (spells[Spells.R1].LSIsReady() && useR)
+                if (spells[Spells.R1].IsReady() && useR)
                 {
                     spells[Spells.R1].Cast(minion);
                 }
@@ -385,7 +385,7 @@
                         x.Health <= spells[Spells.E].GetDamage(x)
                         && (x.BaseSkinName.ToLower().Contains("siege") || x.BaseSkinName.ToLower().Contains("super")));
 
-            if (spells[Spells.R1].LSIsReady() && spells[Spells.R1].CanCast(minion))
+            if (spells[Spells.R1].IsReady() && spells[Spells.R1].CanCast(minion))
             {
                 spells[Spells.R1].Cast(minion);
             }
@@ -406,7 +406,7 @@
                     && spells[Spells.R1].CanCast(x)
                     && (x.Health + (x.HPRegenRate / 2)) <= spells[Spells.R1].GetDamage(x));
 
-            if (spells[Spells.R1].LSIsReady() && spells[Spells.R1].CanCast(target))
+            if (spells[Spells.R1].IsReady() && spells[Spells.R1].CanCast(target))
             {
                 spells[Spells.R1].Cast(target);
             }
@@ -434,7 +434,7 @@
                 return;
             }
 
-            if (spells[Spells.Q].LSIsReady() && useQ)
+            if (spells[Spells.Q].IsReady() && useQ)
             {
                 foreach (var minion in minions.Where(x => x.Health <= spells[Spells.Q].GetDamage(x)))
                 {
@@ -458,7 +458,7 @@
                 }
             }
 
-            if (!useE || !spells[Spells.E].LSIsReady())
+            if (!useE || !spells[Spells.E].IsReady())
             {
                 return;
             }
@@ -474,7 +474,7 @@
                 }
             }
 
-            if (!useR || !spells[Spells.R1].LSIsReady())
+            if (!useR || !spells[Spells.R1].IsReady())
             {
                 return;
             }

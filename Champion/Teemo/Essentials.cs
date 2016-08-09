@@ -68,7 +68,7 @@ namespace PandaTeemo
             return
                 ObjectManager.Get<Obj_AI_Base>()
                     .Where(obj => obj.Name == "Noxious Trap")
-                    .Any(obj => position.LSDistance(obj.Position) <= 250);
+                    .Any(obj => position.Distance(obj.Position) <= 250);
         }
 
         /// <summary>

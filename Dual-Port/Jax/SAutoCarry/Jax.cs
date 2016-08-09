@@ -91,7 +91,7 @@ namespace SAutoCarry.Champions
 
         public void Combo()
         {
-            if (Spells[E].LSIsReady() && ComboUseE)
+            if (Spells[E].IsReady() && ComboUseE)
             {
                 var t = TargetSelector.GetTarget(Spells[E].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
                 if (t != null)
@@ -101,17 +101,17 @@ namespace SAutoCarry.Champions
                 }
             }
 
-            if (Spells[Q].LSIsReady() && ComboUseQ)
+            if (Spells[Q].IsReady() && ComboUseQ)
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
                 if (t != null)
                 {
                     if (ComboEBeforeQ)
                     {
-                        if (Spells[E].LSIsReady() && ComboUseE && !ObjectManager.Player.HasBuff("jaxleapstrike"))
+                        if (Spells[E].IsReady() && ComboUseE && !ObjectManager.Player.HasBuff("jaxleapstrike"))
                             Spells[E].Cast();
                     }
-                    if (!t.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(t)) || Spells[Q].IsKillable(t))
+                    if (!t.IsValidTarget(Orbwalking.GetRealAutoAttackRange(t)) || Spells[Q].IsKillable(t))
                         Spells[Q].CastOnUnit(t);
                 }
             }
@@ -119,14 +119,14 @@ namespace SAutoCarry.Champions
 
         public void Harass()
         {
-            if (Spells[Q].LSIsReady() && HarassUseQ)
+            if (Spells[Q].IsReady() && HarassUseQ)
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
                 if (t != null)
                     Spells[Q].CastOnUnit(t);
             }
 
-            if (Spells[E].LSIsReady() && HarassUseE)
+            if (Spells[E].IsReady() && HarassUseE)
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
                 if (t != null && !ObjectManager.Player.HasBuff("jaxleapstrike"))
@@ -141,17 +141,17 @@ namespace SAutoCarry.Champions
             {
                 if (minion.IsJungleMinion())
                 {
-                    if (Spells[Q].LSIsReady() && minion.IsJungleMinion() && JungleClearQ)
+                    if (Spells[Q].IsReady() && minion.IsJungleMinion() && JungleClearQ)
                         Spells[Q].CastOnUnit(minion);
                 }
                 else
                 {
-                    if (Spells[Q].LSIsReady() && Spells[Q].IsKillable(minion) && LaneClearQ)
+                    if (Spells[Q].IsReady() && Spells[Q].IsKillable(minion) && LaneClearQ)
                         Spells[Q].CastOnUnit(minion);
                 }
             }
 
-            if (Spells[E].LSIsReady())
+            if (Spells[E].IsReady())
             {
                 if (LaneClearE)
                 {
@@ -171,14 +171,14 @@ namespace SAutoCarry.Champions
         {
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
-            if (Spells[Q].LSIsReady())
+            if (Spells[Q].IsReady())
             {
-                var poly = ClipperWrapper.DefineCircle(ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, Spells[Q].Range - 300).LSTo2D(), 300);
+                var poly = ClipperWrapper.DefineCircle(ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, Spells[Q].Range - 300).To2D(), 300);
                 var unit = ObjectManager.Get<Obj_AI_Base>()
                     .Where(p => p.IsAlly && !p.IsMe && p.IsTargetable && !p.Name.Contains("turret")
-                        && p.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition) < Spells[Q].Range 
-                        && !poly.IsOutside(p.ServerPosition.LSTo2D()))
-                    .OrderByDescending(q => q.LSDistance(ObjectManager.Player.ServerPosition))
+                        && p.ServerPosition.Distance(ObjectManager.Player.ServerPosition) < Spells[Q].Range 
+                        && !poly.IsOutside(p.ServerPosition.To2D()))
+                    .OrderByDescending(q => q.Distance(ObjectManager.Player.ServerPosition))
                     .FirstOrDefault();
 
                 if (unit != null)
@@ -189,7 +189,7 @@ namespace SAutoCarry.Champions
 
                 var slot = Items.GetWardSlot().SpellSlot;
                 if (slot != SpellSlot.Unknown)
-                    ObjectManager.Player.Spellbook.CastSpell(slot, ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, 600));
+                    ObjectManager.Player.Spellbook.CastSpell(slot, ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 600));
             }
         }
 
@@ -197,7 +197,7 @@ namespace SAutoCarry.Champions
         {
             if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Mixed)
             {
-                if (Spells[W].LSIsReady() && HarassUseW)
+                if (Spells[W].IsReady() && HarassUseW)
                 {
                     Spells[W].Cast();
                     return;
@@ -205,7 +205,7 @@ namespace SAutoCarry.Champions
             }
             else if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo)
             {
-                if (Spells[W].LSIsReady() && ComboUseW)
+                if (Spells[W].IsReady() && ComboUseW)
                 {
                     Spells[W].Cast();
                     return;
@@ -225,7 +225,7 @@ namespace SAutoCarry.Champions
             }
             else if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.LaneClear)
             {
-                if (args.Target is Obj_AI_Base && Spells[W].LSIsReady() && args.Target.Health > ObjectManager.Player.LSGetAutoAttackDamage(args.Target as Obj_AI_Base))
+                if (args.Target is Obj_AI_Base && Spells[W].IsReady() && args.Target.Health > ObjectManager.Player.GetAutoAttackDamage(args.Target as Obj_AI_Base))
                 {
                     if (args.Target.IsJungleMinion())
                     {

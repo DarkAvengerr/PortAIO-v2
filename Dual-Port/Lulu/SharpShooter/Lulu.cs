@@ -152,7 +152,7 @@ namespace SharpShooter.Plugins
                                     var target =
                                         HeroManager.Enemies.Where(
                                             x =>
-                                                x.LSIsValidTarget(_w.Range) &&
+                                                x.IsValidTarget(_w.Range) &&
                                                 MenuProvider.ChampionMenuInstance.Item(
                                                     "Combo.W Targets." + x.ChampionName, true).GetValue<bool>())
                                             .OrderByDescending(x => TargetSelector.GetPriority(x))
@@ -166,7 +166,7 @@ namespace SharpShooter.Plugins
                                     {
                                         if (_w.IsReadyPerfectly())
                                         {
-                                            if (ObjectManager.Player.LSCountEnemiesInRange(1000f) >= 1)
+                                            if (ObjectManager.Player.CountEnemiesInRange(1000f) >= 1)
                                                 _w.Cast(ObjectManager.Player);
                                         }
                                     }
@@ -185,9 +185,9 @@ namespace SharpShooter.Plugins
 
                             if (_r.IsReadyPerfectly())
                             {
-                                foreach (var target in HeroManager.Allies.Where(x => x.LSIsValidTarget(_r.Range, false)))
+                                foreach (var target in HeroManager.Allies.Where(x => x.IsValidTarget(_r.Range, false)))
                                 {
-                                    if (target.LSCountEnemiesInRange(350) >=
+                                    if (target.CountEnemiesInRange(350) >=
                                         MenuProvider.Champion.Combo.GetSliderValue("Use R if Will Hit (Airborne) >=")
                                             .Value)
                                         _r.CastOnUnit(target);
@@ -268,7 +268,7 @@ namespace SharpShooter.Plugins
                     if (MenuProvider.Champion.Harass.AutoHarass)
                         if (MenuProvider.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo &&
                             MenuProvider.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed)
-                            if (!ObjectManager.Player.LSIsRecalling())
+                            if (!ObjectManager.Player.IsRecalling())
                                 if (ObjectManager.Player.IsManaPercentOkay(MenuProvider.Champion.Harass.IfMana))
                                 {
                                     if (MenuProvider.Champion.Harass.UseQ)
@@ -313,7 +313,7 @@ namespace SharpShooter.Plugins
                                 MenuProvider.ChampionMenuInstance.Item("Misc.Auto R.Health", true)
                                     .GetValue<Slider>()
                                     .Value)
-                                if (ObjectManager.Player.LSCountEnemiesInRange(800f) >= 2)
+                                if (ObjectManager.Player.CountEnemiesInRange(800f) >= 2)
                                     _r.CastOnUnit(ObjectManager.Player);
                         }
 
@@ -323,8 +323,8 @@ namespace SharpShooter.Plugins
                             var target in
                                 HeroManager.Allies.Where(
                                     x =>
-                                        x.LSIsValidTarget(_r.Range, false) && !x.IsZombie && !x.IsMe &&
-                                        x.LSCountEnemiesInRange(800f) >= 2 &&
+                                        x.IsValidTarget(_r.Range, false) && !x.IsZombie && !x.IsMe &&
+                                        x.CountEnemiesInRange(800f) >= 2 &&
                                         MenuProvider.ChampionMenuInstance.Item("Misc.Auto R.For" + x.ChampionName, true)
                                             .GetValue<bool>() &&
                                         x.HealthPercent <
@@ -404,7 +404,7 @@ namespace SharpShooter.Plugins
                                             MenuProvider.ChampionMenuInstance.Item(
                                                 "Misc.Auto E.For" + target.ChampionName, true).GetValue<bool>())
                                         {
-                                            if (target.LSIsValidTarget(_e.Range, false))
+                                            if (target.IsValidTarget(_e.Range, false))
                                             {
                                                 _e.CastOnUnit(target);
                                             }
@@ -427,7 +427,7 @@ namespace SharpShooter.Plugins
                                                     .GetValue<Slider>()
                                                     .Value)
                                             {
-                                                if (target.LSIsValidTarget(_r.Range, false))
+                                                if (target.IsValidTarget(_r.Range, false))
                                                 {
                                                     _r.CastOnUnit(target);
                                                 }
@@ -448,7 +448,7 @@ namespace SharpShooter.Plugins
             {
                 if (_w.IsReadyPerfectly())
                 {
-                    if (gapcloser.Sender.LSIsValidTarget(_w.Range))
+                    if (gapcloser.Sender.IsValidTarget(_w.Range))
                     {
                         _w.CastOnUnit(gapcloser.Sender);
                     }
@@ -463,7 +463,7 @@ namespace SharpShooter.Plugins
             {
                 if (_w.IsReadyPerfectly())
                 {
-                    if (sender.LSIsValidTarget(_w.Range))
+                    if (sender.IsValidTarget(_w.Range))
                     {
                         _w.CastOnUnit(sender);
                     }
@@ -508,7 +508,7 @@ namespace SharpShooter.Plugins
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float) ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float) ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
             if (_q.IsReadyPerfectly())
@@ -528,12 +528,12 @@ namespace SharpShooter.Plugins
         {
             _qTargets.Clear();
 
-            foreach (var target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(_q.Range)))
+            foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(_q.Range)))
             {
                 _qTargets.Add(new QTarget {Target = target, Pix = false});
             }
 
-            foreach (var target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(_q.Range, true, MyPix.Position)))
+            foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(_q.Range, true, MyPix.Position)))
             {
                 _qTargets.Add(new QTarget {Target = target, Pix = true});
             }

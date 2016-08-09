@@ -335,7 +335,7 @@ namespace Olaf.Modes
                 {
                     var circle1 = new CommonGeometry.Circle2(new Vector2(ObjectManager.Player.Position.X + 3, ObjectManager.Player.Position.Y - 3), 190f, Game.Time * 100 - OlafViciousStrikes.StartTime * 100, OlafViciousStrikes.EndTime * 100 - OlafViciousStrikes.StartTime * 100).ToPolygon();
                     circle1.Draw(Color.Black, 4);
-                    var circle = new CommonGeometry.Circle2(ObjectManager.Player.Position.LSTo2D(), 190f, Game.Time * 100 - OlafViciousStrikes.StartTime * 100, OlafViciousStrikes.EndTime * 100 - OlafViciousStrikes.StartTime * 100).ToPolygon();
+                    var circle = new CommonGeometry.Circle2(ObjectManager.Player.Position.To2D(), 190f, Game.Time * 100 - OlafViciousStrikes.StartTime * 100, OlafViciousStrikes.EndTime * 100 - OlafViciousStrikes.StartTime * 100).ToPolygon();
                     circle.Draw(Color.GreenYellow, 4);
 
                 }
@@ -351,7 +351,7 @@ namespace Olaf.Modes
                     var circle1 = new CommonGeometry.Circle2(new Vector2(ObjectManager.Player.Position.X + 3, ObjectManager.Player.Position.Y - 3), 220f, Game.Time * 100 - OlafRagnarok.StartTime * 100, OlafRagnarok.EndTime * 100 - OlafRagnarok.StartTime * 100).ToPolygon();
                     circle1.Draw(Color.Black, 4);
 
-                    var circle = new CommonGeometry.Circle2(ObjectManager.Player.Position.LSTo2D(), 220f, Game.Time * 100 - OlafRagnarok.StartTime * 100, OlafRagnarok.EndTime * 100 - OlafRagnarok.StartTime * 100).ToPolygon();
+                    var circle = new CommonGeometry.Circle2(ObjectManager.Player.Position.To2D(), 220f, Game.Time * 100 - OlafRagnarok.StartTime * 100, OlafRagnarok.EndTime * 100 - OlafRagnarok.StartTime * 100).ToPolygon();
                     circle.Draw(Color.DarkRed, 4);
                 }
             }
@@ -375,18 +375,18 @@ namespace Olaf.Modes
                         var circle1 = new CommonGeometry.Circle2(new Vector2(PlayerObjects.AxeObject.Position.X +3, PlayerObjects.AxeObject.Position.Y -3), 150f, Game.Time * 100 - Champion.PlayerObjects.StartTime * 100, Champion.PlayerObjects.EndTime * 100 - Champion.PlayerObjects.StartTime * 100).ToPolygon();
                         circle1.Draw(Color.Black, 4);
 
-                        var circle = new CommonGeometry.Circle2(PlayerObjects.AxeObject.Position.LSTo2D(), 150f, Game.Time * 100 - Champion.PlayerObjects.StartTime * 100, Champion.PlayerObjects.EndTime * 100 - Champion.PlayerObjects.StartTime * 100).ToPolygon();
+                        var circle = new CommonGeometry.Circle2(PlayerObjects.AxeObject.Position.To2D(), 150f, Game.Time * 100 - Champion.PlayerObjects.StartTime * 100, Champion.PlayerObjects.EndTime * 100 - Champion.PlayerObjects.StartTime * 100).ToPolygon();
                         circle.Draw(TimeSpan.FromSeconds(PlayerObjects.EndTime - Game.Time).TotalSeconds > 4 ? Color.White : Color.Red, 4);
                         break;
                     }
                 case 2:
                     {
-                        var startpos = ObjectManager.Player.Position.LSTo2D();
-                        var endpos = Champion.PlayerObjects.AxeObject.Position.LSTo2D();
-                        if (startpos.LSDistance(endpos) > 100)
+                        var startpos = ObjectManager.Player.Position.To2D();
+                        var endpos = Champion.PlayerObjects.AxeObject.Position.To2D();
+                        if (startpos.Distance(endpos) > 100)
                         {
-                            var endpos1 = Champion.PlayerObjects.AxeObject.Position + (startpos - endpos).LSNormalized().LSRotated(25 * (float)Math.PI / 180).To3D() * 75;
-                            var endpos2 = Champion.PlayerObjects.AxeObject.Position + (startpos - endpos).LSNormalized().LSRotated(-25 * (float)Math.PI / 180).To3D() * 75;
+                            var endpos1 = Champion.PlayerObjects.AxeObject.Position + (startpos - endpos).Normalized().Rotated(25 * (float)Math.PI / 180).To3D() * 75;
+                            var endpos2 = Champion.PlayerObjects.AxeObject.Position + (startpos - endpos).Normalized().Rotated(-25 * (float)Math.PI / 180).To3D() * 75;
 
                             var x1 = new LeagueSharp.Common.Geometry.Polygon.Line(startpos, endpos);
                             x1.Draw(color, 1);
@@ -403,15 +403,15 @@ namespace Olaf.Modes
                         var circle1 = new CommonGeometry.Circle2(new Vector2(PlayerObjects.AxeObject.Position.X + 3, PlayerObjects.AxeObject.Position.Y - 3), 150f, Game.Time * 100 - Champion.PlayerObjects.StartTime * 100, Champion.PlayerObjects.EndTime * 100 - Champion.PlayerObjects.StartTime * 100).ToPolygon();
                         circle1.Draw(Color.Black, 4);
 
-                        var circle = new CommonGeometry.Circle2(PlayerObjects.AxeObject.Position.LSTo2D(), 150f, Game.Time * 100 - Champion.PlayerObjects.StartTime * 100, Champion.PlayerObjects.EndTime * 100 - Champion.PlayerObjects.StartTime * 100).ToPolygon();
+                        var circle = new CommonGeometry.Circle2(PlayerObjects.AxeObject.Position.To2D(), 150f, Game.Time * 100 - Champion.PlayerObjects.StartTime * 100, Champion.PlayerObjects.EndTime * 100 - Champion.PlayerObjects.StartTime * 100).ToPolygon();
                         circle.Draw(TimeSpan.FromSeconds(PlayerObjects.EndTime - Game.Time).TotalSeconds > 4 ? Color.White : Color.Red, 4);
 
-                        var startpos = ObjectManager.Player.Position.LSTo2D();
-                        var endpos = Champion.PlayerObjects.AxeObject.Position.LSTo2D();
-                        if (startpos.LSDistance(endpos) > 100)
+                        var startpos = ObjectManager.Player.Position.To2D();
+                        var endpos = Champion.PlayerObjects.AxeObject.Position.To2D();
+                        if (startpos.Distance(endpos) > 100)
                         {
-                            var endpos1 = Champion.PlayerObjects.AxeObject.Position + (startpos - endpos).LSNormalized().LSRotated(25 * (float)Math.PI / 180).To3D() * 75;
-                            var endpos2 = Champion.PlayerObjects.AxeObject.Position + (startpos - endpos).LSNormalized().LSRotated(-25 * (float)Math.PI / 180).To3D() * 75;
+                            var endpos1 = Champion.PlayerObjects.AxeObject.Position + (startpos - endpos).Normalized().Rotated(25 * (float)Math.PI / 180).To3D() * 75;
+                            var endpos2 = Champion.PlayerObjects.AxeObject.Position + (startpos - endpos).Normalized().Rotated(-25 * (float)Math.PI / 180).To3D() * 75;
 
                             var x1 = new LeagueSharp.Common.Geometry.Polygon.Line(startpos, endpos);
                             x1.Draw(color, 1);
@@ -421,7 +421,7 @@ namespace Olaf.Modes
                             z1.Draw(color, 2);
                         }
 
-                        var line = new Geometry.Polygon.Line(ObjectManager.Player.Position,PlayerObjects.AxeObject.Position,ObjectManager.Player.LSDistance(PlayerObjects.AxeObject.Position));
+                        var line = new Geometry.Polygon.Line(ObjectManager.Player.Position,PlayerObjects.AxeObject.Position,ObjectManager.Player.Distance(PlayerObjects.AxeObject.Position));
                         line.Draw(color, 2);
                         break;
                     }
@@ -450,7 +450,7 @@ namespace Olaf.Modes
                     var circle1 = new CommonGeometry.Circle2(new Vector2(ObjectManager.Player.Position.X + 3, ObjectManager.Player.Position.Y - 3), 170f, Game.Time - BlueBuff.StartTime, BlueBuff.EndTime - BlueBuff.StartTime).ToPolygon();
                     circle1.Draw(Color.Black, 4);
 
-                    var circle = new CommonGeometry.Circle2(ObjectManager.Player.Position.LSTo2D(), 170f, Game.Time - BlueBuff.StartTime, BlueBuff.EndTime - BlueBuff.StartTime ).ToPolygon();
+                    var circle = new CommonGeometry.Circle2(ObjectManager.Player.Position.To2D(), 170f, Game.Time - BlueBuff.StartTime, BlueBuff.EndTime - BlueBuff.StartTime ).ToPolygon();
                     circle.Draw(Color.Blue, 4);
                 }
             }
@@ -462,7 +462,7 @@ namespace Olaf.Modes
                     var circle1 = new CommonGeometry.Circle2(new Vector2(ObjectManager.Player.Position.X + 3, ObjectManager.Player.Position.Y - 3), 150f, Game.Time - RedBuff.StartTime, RedBuff.EndTime - RedBuff.StartTime).ToPolygon();
                     circle1.Draw(Color.Black, 4);
 
-                    var circle = new CommonGeometry.Circle2(ObjectManager.Player.Position.LSTo2D(), 150f, Game.Time - RedBuff.StartTime, RedBuff.EndTime - RedBuff.StartTime).ToPolygon();
+                    var circle = new CommonGeometry.Circle2(ObjectManager.Player.Position.To2D(), 150f, Game.Time - RedBuff.StartTime, RedBuff.EndTime - RedBuff.StartTime).ToPolygon();
                     circle.Draw(Color.Red, 4);
                 }
             }
@@ -491,7 +491,7 @@ namespace Olaf.Modes
         private static void DrawSpells()
         {
             var t = TargetSelector.GetTarget(Q.Range + 500, TargetSelector.DamageType.Physical);
-            if (t.LSIsValidTarget())
+            if (t.IsValidTarget())
             {
                 var targetBehind = t.Position + Vector3.Normalize(t.ServerPosition - ObjectManager.Player.Position)*80;
                 Render.Circle.DrawCircle(targetBehind, 75f, Color.Red, 2);
@@ -504,18 +504,18 @@ namespace Olaf.Modes
                 {
                     case 1:
                     {
-                        Render.Circle.DrawCircle(ObjectManager.Player.Position, Modes.ModeHarass.MenuLocal.Item("Harass.Q.SmallRange").GetValue<Slider>().Value, Q.LSIsReady() ? Color.Coral : Color.LightGray, Q.LSIsReady() ? 5 : 1);
+                        Render.Circle.DrawCircle(ObjectManager.Player.Position, Modes.ModeHarass.MenuLocal.Item("Harass.Q.SmallRange").GetValue<Slider>().Value, Q.IsReady() ? Color.Coral : Color.LightGray, Q.IsReady() ? 5 : 1);
                         break;
                     }
                     case 2:
                     {
-                        Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, Q.LSIsReady() ? Color.Coral : Color.LightGray, Q.LSIsReady() ? 5 : 1);
+                        Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, Q.IsReady() ? Color.Coral : Color.LightGray, Q.IsReady() ? 5 : 1);
                         break;
                     }
                     case 3:
                     {
-                        Render.Circle.DrawCircle(ObjectManager.Player.Position, Modes.ModeHarass.MenuLocal.Item("Harass.Q.SmallRange").GetValue<Slider>().Value, Q.LSIsReady() ? Color.Coral : Color.LightGray, Q.LSIsReady() ? 5 : 1);
-                        Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, Q.LSIsReady() ? Color.Coral : Color.LightGray, Q.LSIsReady() ? 5 : 1);
+                        Render.Circle.DrawCircle(ObjectManager.Player.Position, Modes.ModeHarass.MenuLocal.Item("Harass.Q.SmallRange").GetValue<Slider>().Value, Q.IsReady() ? Color.Coral : Color.LightGray, Q.IsReady() ? 5 : 1);
+                        Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, Q.IsReady() ? Color.Coral : Color.LightGray, Q.IsReady() ? 5 : 1);
                         break;
                     }
                 }
@@ -524,7 +524,7 @@ namespace Olaf.Modes
             var drawE = MenuLocal.Item(GetPcModeStringValue + "Draw.E").GetValue<Circle>();
             if (drawE.Active && E.Level > 0)
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, E.LSIsReady() ? drawE.Color: Color.LightGray, E.LSIsReady() ? 5 : 1);
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, E.IsReady() ? drawE.Color: Color.LightGray, E.IsReady() ? 5 : 1);
             }
         }
 
@@ -545,7 +545,7 @@ namespace Olaf.Modes
             if (MenuLocal.Item(GetPcModeStringValue + "DrawKillableEnemy").GetValue<bool>())
             {
                 var t = KillableEnemyAa;
-                if (t.Item1 != null && t.Item1.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 800) && t.Item2 > 0)
+                if (t.Item1 != null && t.Item1.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 800) && t.Item2 > 0)
                 {
                     //CommonHelper.DrawText(CommonHelper.Text, $"{t.Item1.ChampionName}: {t.Item2} x AA Damage = Kill", (int)t.Item1.HPBarPosition.X + 65, (int)t.Item1.HPBarPosition.Y + 5, SharpDX.Color.White);
                     CommonHelper.DrawText(CommonHelper.Text, $"{t.Item1.ChampionName}: {t.Item2} Combo = Kill", (int)t.Item1.HPBarPosition.X + 7, (int)t.Item1.HPBarPosition.Y + 36, SharpDX.Color.GreenYellow);
@@ -566,7 +566,7 @@ namespace Olaf.Modes
                             MinionTypes.All,
                             MinionTeam.Enemy,
                             MinionOrderTypes.MaxHealth)
-                            .Where(xMinion => ObjectManager.Player.LSGetAutoAttackDamage(xMinion, true) >= xMinion.Health))
+                            .Where(xMinion => ObjectManager.Player.GetAutoAttackDamage(xMinion, true) >= xMinion.Health))
                 {
                     Render.Circle.DrawCircle(xMinion.Position, xMinion.BoundingRadius, drawMinionLastHit.Color);
                 }
@@ -579,7 +579,7 @@ namespace Olaf.Modes
                 var x = 0;
                 var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
                 {
-                    if (t.LSIsValidTarget())
+                    if (t.IsValidTarget())
                     {
                         //if (t.Health < ObjectManager.Player.TotalAttackDamage * (1 / ObjectManager.Player.AttackCastDelay > 1500 ? 12 : 8))
                             if (t.Health <= Common.CommonMath.GetComboDamage(t))
@@ -626,7 +626,7 @@ namespace Olaf.Modes
             {
                 var t = ModeDraw.GetKillableEnemy;
 
-                if (t.LSIsValidTarget())
+                if (t.IsValidTarget())
                     return t;
 
                 return null;

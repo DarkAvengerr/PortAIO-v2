@@ -76,10 +76,10 @@ using EloBuddy; namespace xSaliceResurrected.Managers
 
         private static void CastMec(Spell spell, int minHit)
         {
-            if (!spell.LSIsReady() || ObjectManager.Player.HealthPercent <= 10)
+            if (!spell.IsReady() || ObjectManager.Player.HealthPercent <= 10)
                 return;
 
-            foreach (var target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(spell.Range)))
+            foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(spell.Range)))
             {
                 var pred = spell.GetPrediction(target, true);
 
@@ -110,12 +110,12 @@ using EloBuddy; namespace xSaliceResurrected.Managers
 
         private static void CastComboMec(Spell spell, int minHit)
         {
-            if (!spell.LSIsReady() || !E.LSIsReady() || ObjectManager.Player.HealthPercent <= 10)
+            if (!spell.IsReady() || !E.IsReady() || ObjectManager.Player.HealthPercent <= 10)
                 return;
 
             const int gateDis = 200;
 
-            foreach (var target in ObjectManager.Get<AIHeroClient>().Where(x => x.LSIsValidTarget(spell.Range)))
+            foreach (var target in ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(spell.Range)))
             {
                 var tarPred = spell.GetPrediction(target, true);
                 
@@ -127,9 +127,9 @@ using EloBuddy; namespace xSaliceResurrected.Managers
 
                 nearByEnemies += HeroManager.Enemies.Where(x => x.NetworkId != target.NetworkId).Count(enemy => poly.IsInside(enemy.ServerPosition));
 
-                if (ObjectManager.Player.LSDistance(tarPred.CastPosition) < spell.Range + 100 && nearByEnemies >= minHit)
+                if (ObjectManager.Player.Distance(tarPred.CastPosition) < spell.Range + 100 && nearByEnemies >= minHit)
                 {
-                    if (Jayce.HammerTime && R.LSIsReady() && Jayce.CanQcd == 0 && Jayce.CanEcd == 0)
+                    if (Jayce.HammerTime && R.IsReady() && Jayce.CanQcd == 0 && Jayce.CanEcd == 0)
                         R.Cast();
                     else if(Jayce.HammerTime)
                         return;

@@ -68,8 +68,8 @@ using EloBuddy;
         public static Obj_AI_Base GetFindObj(string name, float range, Vector3 Pos)
         {
             var CusPos = Pos;
-            if (ObjectManager.Player.LSDistance(CusPos) > range) CusPos = ObjectManager.Player.Position.LSExtend(Game.CursorPos, range);
-            var GetObj = ObjectManager.Get<Obj_AI_Base>().FirstOrDefault(f => f.IsAlly && !f.IsMe && f.Position.LSDistance(ObjectManager.Player.Position) < range && f.LSDistance(CusPos) < 150);
+            if (ObjectManager.Player.Distance(CusPos) > range) CusPos = ObjectManager.Player.Position.Extend(Game.CursorPos, range);
+            var GetObj = ObjectManager.Get<Obj_AI_Base>().FirstOrDefault(f => f.IsAlly && !f.IsMe && f.Position.Distance(ObjectManager.Player.Position) < range && f.Distance(CusPos) < 150);
             if (GetObj != null)
                 return GetObj;
             return null;

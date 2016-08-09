@@ -25,7 +25,7 @@ using EloBuddy;
 
         public bool ShouldRun()
         {
-            return Variables.spells[SpellSlot.Q].LSIsReady() &&
+            return Variables.spells[SpellSlot.Q].IsReady() &&
                     MenuExtensions.GetItemValue<bool>("iseriesr.ezreal.misc.autoq.immobile");
         }
 
@@ -34,14 +34,14 @@ using EloBuddy;
             var selectedTarget = TargetSelector.GetTarget(Variables.spells[SpellSlot.Q].Range * 0.80f, TargetSelector.DamageType.Physical);
             var QSpell = Variables.spells[SpellSlot.Q];
 
-            if (selectedTarget.LSIsValidTarget())
+            if (selectedTarget.IsValidTarget())
             {
                 //The selected target is valid.
                 var healthPrediction =
                     HealthPrediction.GetHealthPrediction(
                         selectedTarget,
                         250 + Game.Ping / 2 +
-                        (int) (ObjectManager.Player.LSDistance(selectedTarget) / QSpell.Speed) * 1000);
+                        (int) (ObjectManager.Player.Distance(selectedTarget) / QSpell.Speed) * 1000);
                 var prediction = QSpell.GetPrediction(selectedTarget);
 
                 if (healthPrediction + 5 <= QSpell.GetDamage(selectedTarget) && healthPrediction > 0)

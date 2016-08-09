@@ -8,11 +8,11 @@ using LeagueSharp.Common;
 
 using EloBuddy; namespace ARAMDetFull.Champions
 {
-    class Karma : Champion
+    class KarmaA : Champion
     {
 
 
-        public Karma()
+        public KarmaA()
         {
             ARAMSimulator.champBuild = new Build
             {
@@ -35,9 +35,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                if (R.LSIsReady())
+                if (R.IsReady())
                     R.Cast();
                 Q.Cast(target);
             }
@@ -48,7 +48,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if ((player.Health / ObjectManager.Player.MaxHealth) /
                     (target.Health / target.MaxHealth) < 1)
             {
-                if (R.LSIsReady())
+                if (R.IsReady())
                     R.Cast();
 
                 W.Cast(target);
@@ -77,16 +77,16 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public override void killSteal()
         {
             base.killSteal();
-            if(E.LSIsReady())
+            if(E.IsReady())
             foreach (var hero in
                     DeathWalker.AllAllys
                         .Where(
                             hero =>
-                                hero.LSIsValidTarget(E.Range, false) && hero.IsAlly &&
-                                ObjectManager.Get<AIHeroClient>().Count(h => h.LSIsValidTarget() && h.LSDistance(hero) < 400) >
+                                hero.IsValidTarget(E.Range, false) && hero.IsAlly &&
+                                ObjectManager.Get<AIHeroClient>().Count(h => h.IsValidTarget() && h.Distance(hero) < 400) >
                                 1))
             {
-                if (R.LSIsReady())
+                if (R.IsReady())
                     R.Cast();
                 E.Cast(hero);
             }

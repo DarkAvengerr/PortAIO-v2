@@ -54,17 +54,17 @@ using EloBuddy;
 
         public static bool HasMaliceBuff(this AIHeroClient enemy) // Q DEBUFF
         {
-            return enemy.LSHasBuff("leblancchaosorb");
+            return enemy.HasBuff("leblancchaosorb");
         }
 
         public static bool HasChainBuff(this AIHeroClient enemy) // E DEBUFF
         {
-            return enemy.LSHasBuff("leblancsoulshackle");
+            return enemy.HasBuff("leblancsoulshackle");
         }
 
         public static bool HasSecondMaliceBuff(this AIHeroClient enemy)
         {
-            return enemy.LSHasBuff("leblancchaosorbm");
+            return enemy.HasBuff("leblancchaosorbm");
         }
 
         public static string[] HighChamps =

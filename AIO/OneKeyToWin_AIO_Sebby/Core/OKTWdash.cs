@@ -34,29 +34,29 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (DashSpell.LSIsReady() && Config.Item("EGCchampion" + gapcloser.Sender.ChampionName, true).GetValue<bool>())
+            if (DashSpell.IsReady() && Config.Item("EGCchampion" + gapcloser.Sender.ChampionName, true).GetValue<bool>())
             {
                 int GapcloserMode = Config.Item("GapcloserMode", true).GetValue<StringList>().SelectedIndex;
                 if (GapcloserMode == 0)
                 {
-                    var bestpoint = Player.Position.LSExtend(Game.CursorPos, DashSpell.Range);
+                    var bestpoint = Player.Position.Extend(Game.CursorPos, DashSpell.Range);
                     if (IsGoodPosition(bestpoint))
                         DashSpell.Cast(bestpoint);
                 }
                 else if (GapcloserMode == 1)
                 {
                     var points = OktwCommon.CirclePoints(10, DashSpell.Range, Player.Position);
-                    var bestpoint = Player.Position.LSExtend(gapcloser.Sender.Position, -DashSpell.Range);
-                    int enemies = bestpoint.LSCountEnemiesInRange(DashSpell.Range);
+                    var bestpoint = Player.Position.Extend(gapcloser.Sender.Position, -DashSpell.Range);
+                    int enemies = bestpoint.CountEnemiesInRange(DashSpell.Range);
                     foreach (var point in points)
                     {
-                        int count = point.LSCountEnemiesInRange(DashSpell.Range);
+                        int count = point.CountEnemiesInRange(DashSpell.Range);
                         if (count < enemies)
                         {
                             enemies = count;
                             bestpoint = point;
                         }
-                        else if (count == enemies && Game.CursorPos.LSDistance(point) < Game.CursorPos.LSDistance(bestpoint))
+                        else if (count == enemies && Game.CursorPos.Distance(point) < Game.CursorPos.Distance(bestpoint))
                         {
                             enemies = count;
                             bestpoint = point;
@@ -75,45 +75,45 @@ namespace OneKeyToWin_AIO_Sebby.Core
             Vector3 bestpoint = Vector3.Zero;
             if (DashMode == 0)
             {
-                bestpoint = Player.Position.LSExtend(Game.CursorPos, DashSpell.Range);
+                bestpoint = Player.Position.Extend(Game.CursorPos, DashSpell.Range);
             }
             else if (DashMode == 1)
             {
                 var orbT = Orbwalker.GetTarget();
                 if(orbT != null && orbT is AIHeroClient)
                 {
-                    Vector2 start = Player.Position.LSTo2D();
-                    Vector2 end = orbT.Position.LSTo2D();
-                    var dir = (end - start).LSNormalized();
-                    var pDir = dir.LSPerpendicular();
+                    Vector2 start = Player.Position.To2D();
+                    Vector2 end = orbT.Position.To2D();
+                    var dir = (end - start).Normalized();
+                    var pDir = dir.Perpendicular();
 
-                    var rightEndPos = end + pDir * Player.LSDistance(orbT);
-                    var leftEndPos = end - pDir * Player.LSDistance(orbT);
+                    var rightEndPos = end + pDir * Player.Distance(orbT);
+                    var leftEndPos = end - pDir * Player.Distance(orbT);
 
                     var rEndPos = new Vector3(rightEndPos.X, rightEndPos.Y, Player.Position.Z);
                     var lEndPos = new Vector3(leftEndPos.X, leftEndPos.Y, Player.Position.Z);
 
-                    if (Game.CursorPos.LSDistance(rEndPos) < Game.CursorPos.LSDistance(lEndPos))
+                    if (Game.CursorPos.Distance(rEndPos) < Game.CursorPos.Distance(lEndPos))
                     {
-                        bestpoint = Player.Position.LSExtend(rEndPos, DashSpell.Range);
+                        bestpoint = Player.Position.Extend(rEndPos, DashSpell.Range);
                     }
                     else
                     {
-                        bestpoint = Player.Position.LSExtend(lEndPos, DashSpell.Range);
+                        bestpoint = Player.Position.Extend(lEndPos, DashSpell.Range);
                     }
                 }
             }
             else if (DashMode == 2)
             {
                 var points = OktwCommon.CirclePoints(15, DashSpell.Range, Player.Position);
-                bestpoint = Player.Position.LSExtend(Game.CursorPos, DashSpell.Range);
-                int enemies = bestpoint.LSCountEnemiesInRange(350);
+                bestpoint = Player.Position.Extend(Game.CursorPos, DashSpell.Range);
+                int enemies = bestpoint.CountEnemiesInRange(350);
                 foreach (var point in points)
                 {
-                    int count = point.LSCountEnemiesInRange(350);
+                    int count = point.CountEnemiesInRange(350);
                     if (!InAARange(point))
                         continue;
-                    if (point.LSUnderAllyTurret())
+                    if (point.UnderAllyTurret())
                     {
                         bestpoint = point;
                         enemies = count - 1;
@@ -123,7 +123,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
                         enemies = count;
                         bestpoint = point;
                     }
-                    else if (count == enemies && Game.CursorPos.LSDistance(point) < Game.CursorPos.LSDistance(bestpoint))
+                    else if (count == enemies && Game.CursorPos.Distance(point) < Game.CursorPos.Distance(bestpoint))
                     {
                         enemies = count;
                         bestpoint = point;
@@ -153,11 +153,11 @@ namespace OneKeyToWin_AIO_Sebby.Core
                 return true;
             else if (Orbwalker.GetTarget() != null && Orbwalker.GetTarget().Type == GameObjectType.AIHeroClient)
             {
-                return point.LSDistance(Orbwalker.GetTarget().Position) < Player.AttackRange;
+                return point.Distance(Orbwalker.GetTarget().Position) < Player.AttackRange;
             }
             else
             {
-                return point.LSCountEnemiesInRange(Player.AttackRange) > 0;
+                return point.CountEnemiesInRange(Player.AttackRange) > 0;
             }
         }
 
@@ -168,24 +168,24 @@ namespace OneKeyToWin_AIO_Sebby.Core
                 float segment = DashSpell.Range / 5;
                 for (int i = 1; i <= 5; i++)
                 {
-                    if (Player.Position.LSExtend(dashPos, i * segment).LSIsWall())
+                    if (Player.Position.Extend(dashPos, i * segment).IsWall())
                         return false;
                 }
             }
 
             if (Config.Item("TurretCheck", true).GetValue<bool>())
             {
-                if(dashPos.LSUnderTurret(true))
+                if(dashPos.UnderTurret(true))
                     return false;
             }
 
             var enemyCheck = Config.Item("EnemyCheck", true).GetValue<Slider>().Value;
-            var enemyCountDashPos = dashPos.LSCountEnemiesInRange(600);
+            var enemyCountDashPos = dashPos.CountEnemiesInRange(600);
             
             if (enemyCheck > enemyCountDashPos)
                 return true;
 
-            var enemyCountPlayer = Player.LSCountEnemiesInRange(400);
+            var enemyCountPlayer = Player.CountEnemiesInRange(400);
 
             if(enemyCountDashPos <= enemyCountPlayer)
                 return true;

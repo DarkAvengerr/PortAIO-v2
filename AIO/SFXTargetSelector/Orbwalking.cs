@@ -318,7 +318,7 @@ namespace SFXTargetSelector
         /// <param name="target">The target.</param>
         private static void FireAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (AfterAttack != null && target.LSIsValidTarget())
+            if (AfterAttack != null && target.IsValidTarget())
             {
                 AfterAttack(unit, target);
             }
@@ -330,7 +330,7 @@ namespace SFXTargetSelector
         /// <param name="newTarget">The new target.</param>
         private static void FireOnTargetSwitch(AttackableUnit newTarget)
         {
-            if (OnTargetChange != null && (!_lastTarget.LSIsValidTarget() || _lastTarget != newTarget))
+            if (OnTargetChange != null && (!_lastTarget.IsValidTarget() || _lastTarget != newTarget))
             {
                 OnTargetChange(_lastTarget, newTarget);
             }
@@ -387,7 +387,7 @@ namespace SFXTargetSelector
         public static float GetRealAutoAttackRange(AttackableUnit target)
         {
             var result = Player.AttackRange + Player.BoundingRadius;
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 var aiBase = target as Obj_AI_Base;
                 if (aiBase != null && Player.ChampionName == "Caitlyn")
@@ -420,15 +420,15 @@ namespace SFXTargetSelector
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public static bool InAutoAttackRange(AttackableUnit target)
         {
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return false;
             }
             var myRange = GetRealAutoAttackRange(target);
             return
                 Vector2.DistanceSquared(
-                    target is Obj_AI_Base ? ((Obj_AI_Base) target).ServerPosition.LSTo2D() : target.Position.LSTo2D(),
-                    Player.ServerPosition.LSTo2D()) <= myRange * myRange;
+                    target is Obj_AI_Base ? ((Obj_AI_Base) target).ServerPosition.To2D() : target.Position.To2D(),
+                    Player.ServerPosition.To2D()) <= myRange * myRange;
         }
 
         /// <summary>
@@ -628,7 +628,7 @@ namespace SFXTargetSelector
         {
             var playerPosition = Player.ServerPosition;
 
-            if (playerPosition.LSDistance(position, true) < holdAreaRadius * holdAreaRadius)
+            if (playerPosition.Distance(position, true) < holdAreaRadius * holdAreaRadius)
             {
                 if (Player.Path.Length > 0)
                 {
@@ -641,14 +641,14 @@ namespace SFXTargetSelector
 
             var point = position;
 
-            if (Player.LSDistance(point, true) < 150 * 150)
+            if (Player.Distance(point, true) < 150 * 150)
             {
-                point = playerPosition.LSExtend(
+                point = playerPosition.Extend(
                     position, randomizeMinDistance ? (Random.NextFloat(0.6f, 1) + 0.2f) * _minDistance : _minDistance);
             }
             var angle = 0f;
-            var currentPath = Player.LSGetWaypoints();
-            if (currentPath.Count > 1 && currentPath.LSPathLength() > 100)
+            var currentPath = Player.GetWaypoints();
+            if (currentPath.Count > 1 && currentPath.PathLength() > 100)
             {
                 var movePath = Player.GetPath(point);
 
@@ -656,8 +656,8 @@ namespace SFXTargetSelector
                 {
                     var v1 = currentPath[1] - currentPath[0];
                     var v2 = movePath[1] - movePath[0];
-                    angle = v1.LSAngleBetween(v2.LSTo2D());
-                    var distance = movePath.Last().LSTo2D().LSDistance(currentPath.Last(), true);
+                    angle = v1.AngleBetween(v2.To2D());
+                    var distance = movePath.Last().To2D().Distance(currentPath.Last(), true);
 
                     if ((angle < 10 && distance < 500 * 500) || distance < 50 * 50)
                     {
@@ -714,7 +714,7 @@ namespace SFXTargetSelector
             try
             {
                 var randomize = Randomizes[OrbwalkingRandomize.Attack];
-                if (target.LSIsValidTarget() && CanAttack(randomize.Current))
+                if (target.IsValidTarget() && CanAttack(randomize.Current))
                 {
                     SetRandomizeCurrent(randomize);
                     DisableNextAttack = false;
@@ -1328,7 +1328,7 @@ namespace SFXTargetSelector
                                 InAutoAttackRange(minion) &&
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay) <=
-                                Player.LSGetAutoAttackDamage(minion));
+                                Player.GetAutoAttackDamage(minion));
             }
 
             private bool ShouldWaitUnderTurret(Obj_AI_Minion noneKillableMinion)
@@ -1339,7 +1339,7 @@ namespace SFXTargetSelector
                         .Any(
                             minion =>
                                 (noneKillableMinion == null || noneKillableMinion.NetworkId != minion.NetworkId) &&
-                                minion.LSIsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
+                                minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                                 InAutoAttackRange(minion) && MinionManager.IsMinion(minion) &&
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion,
@@ -1350,7 +1350,7 @@ namespace SFXTargetSelector
                                              : Player.AttackCastDelay * 1000 +
                                                1000 * (Player.AttackRange + 2 * Player.BoundingRadius) /
                                                Player.BasicAttack.MissileSpeed)), FarmDelay) <=
-                                Player.LSGetAutoAttackDamage(minion));
+                                Player.GetAutoAttackDamage(minion));
             }
 
             /// <summary>
@@ -1382,7 +1382,7 @@ namespace SFXTargetSelector
                     ActiveMode == OrbwalkingMode.LastHit)
                 {
                     var minionList =
-                        minions.Where(minion => minion.LSIsValidTarget() && InAutoAttackRange(minion))
+                        minions.Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
                             .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                             .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                             .ThenBy(minion => minion.Health)
@@ -1391,7 +1391,7 @@ namespace SFXTargetSelector
                     foreach (var minion in minionList)
                     {
                         var t = (int) (_player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
-                                1000 * (int) Math.Max(0, _player.LSDistance(minion) - _player.BoundingRadius) /
+                                1000 * (int) Math.Max(0, _player.Distance(minion) - _player.BoundingRadius) /
                                 (int) GetMyProjectileSpeed();
                         if (minion.MaxHealth <= 10)
                         {
@@ -1408,7 +1408,7 @@ namespace SFXTargetSelector
                                 FireOnNonKillableMinion(minion);
                             }
 
-                            if (predHealth > 0 && predHealth <= Player.LSGetAutoAttackDamage(minion, true))
+                            if (predHealth > 0 && predHealth <= Player.GetAutoAttackDamage(minion, true))
                             {
                                 return minion;
                             }
@@ -1417,7 +1417,7 @@ namespace SFXTargetSelector
                 }
 
                 //Forced target
-                if (_forcedTarget.LSIsValidTarget() && InAutoAttackRange(_forcedTarget))
+                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget))
                 {
                     return _forcedTarget;
                 }
@@ -1428,20 +1428,20 @@ namespace SFXTargetSelector
                 {
                     /* turrets */
                     foreach (var turret in
-                        GameObjects.EnemyTurrets.Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+                        GameObjects.EnemyTurrets.Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                     {
                         return turret;
                     }
 
                     /* inhibitor */
                     foreach (var inhib in
-                        GameObjects.EnemyInhibitors.Where(i => i.LSIsValidTarget() && InAutoAttackRange(i)))
+                        GameObjects.EnemyInhibitors.Where(i => i.IsValidTarget() && InAutoAttackRange(i)))
                     {
                         return inhib;
                     }
 
                     /* nexus */
-                    if (GameObjects.EnemyNexus != null && GameObjects.EnemyNexus.LSIsValidTarget() &&
+                    if (GameObjects.EnemyNexus != null && GameObjects.EnemyNexus.IsValidTarget() &&
                         InAutoAttackRange(GameObjects.EnemyNexus))
                     {
                         return GameObjects.EnemyNexus;
@@ -1452,7 +1452,7 @@ namespace SFXTargetSelector
                 if (ActiveMode != OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, DamageType.Physical);
-                    if (target.LSIsValidTarget() && InAutoAttackRange(target))
+                    if (target.IsValidTarget() && InAutoAttackRange(target))
                     {
                         return target;
                     }
@@ -1480,7 +1480,7 @@ namespace SFXTargetSelector
                     // return all the minions underturret in auto attack range
                     var turretMinions =
                         minions.Where(
-                            minion => minion.MaxHealth > 10 && InAutoAttackRange(minion) && minion.LSUnderAllyTurret())
+                            minion => minion.MaxHealth > 10 && InAutoAttackRange(minion) && minion.UnderAllyTurret())
                             .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                             .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                             .ThenByDescending(minion => minion.MaxHealth);
@@ -1505,7 +1505,7 @@ namespace SFXTargetSelector
                                                      1000 *
                                                      Math.Max(
                                                          0,
-                                                         (int) (turretMinion.LSDistance(turret) - turret.BoundingRadius)) /
+                                                         (int) (turretMinion.Distance(turret) - turret.BoundingRadius)) /
                                                      (int) (turret.BasicAttack.MissileSpeed + 70);
                                 // calculate the HP before try to balance it
                                 for (float i = turretLandTick + 50;
@@ -1530,7 +1530,7 @@ namespace SFXTargetSelector
                                 // calculate the hits is needed and possibilty to balance
                                 if (hpLeft == 0 && turretAttackCount != 0 && hpLeftBeforeDie != 0)
                                 {
-                                    var damage = (int) Player.LSGetAutoAttackDamage(turretMinion, true);
+                                    var damage = (int) Player.GetAutoAttackDamage(turretMinion, true);
                                     var hits = hpLeftBeforeDie / damage;
                                     var timeBeforeDie = turretLandTick +
                                                         (turretAttackCount + 1) * (int) (turret.AttackDelay * 1000) -
@@ -1544,7 +1544,7 @@ namespace SFXTargetSelector
                                     var timeToLandAttack = Player.IsMelee
                                         ? Player.AttackCastDelay * 1000
                                         : Player.AttackCastDelay * 1000 +
-                                          1000 * Math.Max(0, turretMinion.LSDistance(Player) - Player.BoundingRadius) /
+                                          1000 * Math.Max(0, turretMinion.Distance(Player) - Player.BoundingRadius) /
                                           Player.BasicAttack.MissileSpeed;
                                     if (hits >= 1 &&
                                         hits * Player.AttackDelay * 1000 + timeUntilAttackReady + timeToLandAttack <
@@ -1579,8 +1579,8 @@ namespace SFXTargetSelector
                                                 x.NetworkId != turretMinion.NetworkId &&
                                                 !HealthPrediction.HasMinionAggro(x))
                                         where
-                                            (int) minion.Health % (int) turret.LSGetAutoAttackDamage(minion, true) >
-                                            (int) Player.LSGetAutoAttackDamage(minion)
+                                            (int) minion.Health % (int) turret.GetAutoAttackDamage(minion, true) >
+                                            (int) Player.GetAutoAttackDamage(minion)
                                         select minion).FirstOrDefault();
                             }
                         }
@@ -1596,11 +1596,11 @@ namespace SFXTargetSelector
                                     turretMinions.Where(x => (x != null) && !HealthPrediction.HasMinionAggro(x))
                                     let turret =
                                         GameObjects.AllyTurrets.FirstOrDefault(
-                                            x => x.LSIsValidTarget(950, false, minion.Position))
+                                            x => x.IsValidTarget(950, false, minion.Position))
                                     where
                                         turret != null &&
-                                        (int) minion.Health % (int) turret.LSGetAutoAttackDamage(minion, true) >
-                                        (int) Player.LSGetAutoAttackDamage(minion)
+                                        (int) minion.Health % (int) turret.GetAutoAttackDamage(minion, true) >
+                                        (int) Player.GetAutoAttackDamage(minion)
                                     select minion).FirstOrDefault();
                         }
                         return null;
@@ -1612,7 +1612,7 @@ namespace SFXTargetSelector
                 {
                     if (!ShouldWait())
                     {
-                        if (_prevMinion.LSIsValidTarget() && InAutoAttackRange(_prevMinion))
+                        if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion))
                         {
                             if (_prevMinion.MaxHealth <= 10)
                             {
@@ -1620,7 +1620,7 @@ namespace SFXTargetSelector
                             }
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 _prevMinion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay);
-                            if (predHealth >= 2 * _player.LSGetAutoAttackDamage(_prevMinion) ||
+                            if (predHealth >= 2 * _player.GetAutoAttackDamage(_prevMinion) ||
                                 Math.Abs(predHealth - _prevMinion.Health) < float.Epsilon)
                             {
                                 return _prevMinion;
@@ -1636,7 +1636,7 @@ namespace SFXTargetSelector
                             {
                                 var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                     minion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay);
-                                if (predHealth >= 2 * Player.LSGetAutoAttackDamage(minion) ||
+                                if (predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
                                     Math.Abs(predHealth - minion.Health) < float.Epsilon)
                                 {
                                     if (result == null || minion.Health > result.Health && result.MaxHealth > 10)
@@ -1659,7 +1659,7 @@ namespace SFXTargetSelector
                         !GameObjects.EnemyHeroes.Any(
                             e =>
                                 e.IsValid && !e.IsDead && e.IsVisible &&
-                                e.LSDistance(Player) <= GetRealAutoAttackRange(e) * 2f))
+                                e.Distance(Player) <= GetRealAutoAttackRange(e) * 2f))
                     {
                         return minions.FirstOrDefault();
                     }
@@ -1677,7 +1677,7 @@ namespace SFXTargetSelector
                 var units = IsAttackableObject("ward")
                     ? GameObjects.EnemyMinions.Concat(GameObjects.EnemyWards)
                     : GameObjects.EnemyMinions;
-                foreach (var unit in units.Where(u => u.LSIsValidTarget() && InAutoAttackRange(u)))
+                foreach (var unit in units.Where(u => u.IsValidTarget() && InAutoAttackRange(u)))
                 {
                     var baseName = unit.CharData.BaseSkinName.ToLower();
                     if (minion) //minions
@@ -1790,7 +1790,7 @@ namespace SFXTargetSelector
                 {
                     finalTargets =
                         finalTargets.Concat(minions)
-                            .Concat(GameObjects.Jungle.Where(u => u.LSIsValidTarget() && InAutoAttackRange(u)))
+                            .Concat(GameObjects.Jungle.Where(u => u.IsValidTarget() && InAutoAttackRange(u)))
                             .ToList();
                 }
                 return finalTargets.Concat(clones).ToList();
@@ -1817,7 +1817,7 @@ namespace SFXTargetSelector
 
                     var target = GetTarget();
                     Orbwalk(
-                        target, _orbwalkingPoint.LSTo2D().LSIsValid() ? _orbwalkingPoint : Game.CursorPos,
+                        target, _orbwalkingPoint.To2D().IsValid() ? _orbwalkingPoint : Game.CursorPos,
                         _config.Item("ExtraWindup").GetValue<Slider>().Value,
                         Math.Max(_config.Item("HoldPosRadius").GetValue<Slider>().Value, 30));
                 }
@@ -1845,7 +1845,7 @@ namespace SFXTargetSelector
                 if (aaCircle2.Active)
                 {
                     foreach (var target in
-                        HeroManager.Enemies.FindAll(target => target.LSIsValidTarget(1175)))
+                        HeroManager.Enemies.FindAll(target => target.IsValidTarget(1175)))
                     {
                         Render.Circle.DrawCircle(
                             target.Position, GetAttackRange(target), aaCircle2.Color, circleThickness);
@@ -1867,9 +1867,9 @@ namespace SFXTargetSelector
                 if (helperCircle.Active)
                 {
                     foreach (var minion in
-                        GameObjects.EnemyMinions.Where(x => x.IsHPBarRendered && x.LSIsValidTarget(1000)))
+                        GameObjects.EnemyMinions.Where(x => x.IsHPBarRendered && x.IsValidTarget(1000)))
                     {
-                        if (minion.Health < ObjectManager.Player.LSGetAutoAttackDamage(minion, true))
+                        if (minion.Health < ObjectManager.Player.GetAutoAttackDamage(minion, true))
                         {
                             Render.Circle.DrawCircle(minion.Position, 50, helperCircle.Color);
                         }

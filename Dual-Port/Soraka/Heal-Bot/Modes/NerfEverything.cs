@@ -62,14 +62,14 @@ using EloBuddy;
 
         public static void Interrupts(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsEnemy || !Spells.E.LSIsReady())
+            if (!sender.IsEnemy || !Spells.E.IsReady())
             {
                 return;
             }
 
             if (NonMoving.Any(x => x.SDataName == args.SData.Name) && Config.IsChecked("autoe." + args.SData.Name))
             {
-                if (sender.LSDistance(ObjectManager.Player) <= Spells.E.Range)
+                if (sender.Distance(ObjectManager.Player) <= Spells.E.Range)
                 {
                     if (Config.IsChecked("autoe.humanize"))
                     {
@@ -86,7 +86,7 @@ using EloBuddy;
 
             if (TargettedMoving.Any(x => x.SDataName == args.SData.Name) && Config.IsChecked("autoe." + args.SData.Name))
             {
-                if (ObjectManager.Player.LSDistance(args.Target.Position) <= Spells.E.Range)
+                if (ObjectManager.Player.Distance(args.Target.Position) <= Spells.E.Range)
                 {
                     if (Config.IsChecked("autoe.humanize"))
                     {
@@ -103,7 +103,7 @@ using EloBuddy;
 
             if (NonTargetMoving.Any(x => x.SDataName == args.SData.Name) && Config.IsChecked("autoe." + args.SData.Name))
             {
-                if (ObjectManager.Player.LSDistance(args.End) <= Spells.E.Range)
+                if (ObjectManager.Player.Distance(args.End) <= Spells.E.Range)
                 {
                     if (Config.IsChecked("autoe.humanize"))
                     {
@@ -125,7 +125,7 @@ using EloBuddy;
 
         internal static void Execute()
         {
-            if (!Spells.E.LSIsReady())
+            if (!Spells.E.IsReady())
             {
                 return;
             }
@@ -135,8 +135,8 @@ using EloBuddy;
                 var lantern = Enumerable.FirstOrDefault(
                     ThreshLanterns, 
                     x =>
-                    x.Position.LSDistance(ObjectManager.Player.Position) < Spells.E.Range
-                    && x.Position.LSCountEnemiesInRange(Spells.E.Width) > 0);
+                    x.Position.Distance(ObjectManager.Player.Position) < Spells.E.Range
+                    && x.Position.CountEnemiesInRange(Spells.E.Width) > 0);
                 if (lantern != null)
                 {
                     Spells.E.Cast(lantern.Position);

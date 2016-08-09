@@ -65,9 +65,9 @@ using EloBuddy;
 
         private static void Clear()
         {
-            if (VayneSpells.E.LSIsReady() && Helper.VEnabled("vayne.condemn.jungle.mobs"))
+            if (VayneSpells.E.IsReady() && Helper.VEnabled("vayne.condemn.jungle.mobs"))
             {
-                foreach (var junglemobs in ObjectManager.Get<Obj_AI_Minion>().Where(x=> x.LSIsValidTarget(VayneSpells.E.Range) && x.Team == GameObjectTeam.Neutral &&
+                foreach (var junglemobs in ObjectManager.Get<Obj_AI_Minion>().Where(x=> x.IsValidTarget(VayneSpells.E.Range) && x.Team == GameObjectTeam.Neutral &&
                     (x.CharData.BaseSkinName == "SRU_Razorbeak" || x.CharData.BaseSkinName == "SRU_Red" ||
                      x.CharData.BaseSkinName == "SRU_Blue" || x.CharData.BaseSkinName == "SRU_Gromp" ||
                      x.CharData.BaseSkinName == "SRU_Krug" || x.CharData.BaseSkinName == "SRU_Murkwolf" ||
@@ -85,17 +85,17 @@ using EloBuddy;
                 return;
             }
 
-            if (VayneMenu.Config.Item("harass.type").GetValue<StringList>().SelectedIndex == 0 && VayneSpells.Q.LSIsReady())
+            if (VayneMenu.Config.Item("harass.type").GetValue<StringList>().SelectedIndex == 0 && VayneSpells.Q.IsReady())
             {
-                foreach (var qTarget in HeroManager.Enemies.Where(x => x.LSIsValidTarget(ObjectManager.Player.AttackRange)
+                foreach (var qTarget in HeroManager.Enemies.Where(x => x.IsValidTarget(ObjectManager.Player.AttackRange)
                     && x.Buffs.Any(buff => buff.Name == "vaynesilvereddebuff" && buff.Count == 2)))
                 {
                     VayneHelper.TumbleCast();
                 }
             }
-            if (VayneMenu.Config.Item("harass.type").GetValue<StringList>().SelectedIndex == 1 && VayneSpells.E.LSIsReady())
+            if (VayneMenu.Config.Item("harass.type").GetValue<StringList>().SelectedIndex == 1 && VayneSpells.E.IsReady())
             {
-                foreach (var etarget in HeroManager.Enemies.Where(x => x.LSIsValidTarget(ObjectManager.Player.AttackRange)
+                foreach (var etarget in HeroManager.Enemies.Where(x => x.IsValidTarget(ObjectManager.Player.AttackRange)
                     && x.Buffs.Any(buff => buff.Name == "vaynesilvereddebuff" && buff.Count == 2)))
                 {
                     VayneSpells.E.CastOnUnit(etarget);
@@ -105,13 +105,13 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (VayneSpells.E.LSIsReady() && Helper.VEnabled("vayne.e.combo"))
+            if (VayneSpells.E.IsReady() && Helper.VEnabled("vayne.e.combo"))
             {
                 VayneHelper.CondemnCast();
             }
 
-            if (VayneSpells.R.LSIsReady() && Helper.VEnabled("vayne.r.combo") 
-                && ObjectManager.Player.LSCountEnemiesInRange(Helper.VSlider("vayne.auto.r.search.range")) >= Helper.VSlider("vayne.auto.r.enemy.count")
+            if (VayneSpells.R.IsReady() && Helper.VEnabled("vayne.r.combo") 
+                && ObjectManager.Player.CountEnemiesInRange(Helper.VSlider("vayne.auto.r.search.range")) >= Helper.VSlider("vayne.auto.r.enemy.count")
                 && ObjectManager.Player.HealthPercent <= Helper.VSlider("vayne.auto.r.minimum.health"))
             {
                 VayneSpells.R.Cast();
@@ -120,7 +120,7 @@ using EloBuddy;
 
         private static void VayneOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (VayneSpells.E.LSIsReady())
+            if (VayneSpells.E.IsReady())
             {
                 Helper.VayneAntiGapcloser(sender,args);
             }

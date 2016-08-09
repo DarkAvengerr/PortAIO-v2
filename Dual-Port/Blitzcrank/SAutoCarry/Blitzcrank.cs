@@ -97,8 +97,8 @@ namespace SAutoCarry.Champions
 
         public void BeforeOrbwalk()
         {
-            Spells[Q].From = (ObjectManager.Player.ServerPosition.LSTo2D() + ((ObjectManager.Player.Direction.LSTo2D() + ObjectManager.Player.Direction.LSTo2D().LSNormalized().LSPerpendicular()) * ObjectManager.Player.BoundingRadius)).To3D();
-            if (Spells[Q].LSIsReady() && AutoGrabEnabled && AutoGrabMinHealth <= ObjectManager.Player.HealthPercent && !ObjectManager.Player.LSUnderTurret(true))
+            Spells[Q].From = (ObjectManager.Player.ServerPosition.To2D() + ((ObjectManager.Player.Direction.To2D() + ObjectManager.Player.Direction.To2D().Normalized().Perpendicular()) * ObjectManager.Player.BoundingRadius)).To3D();
+            if (Spells[Q].IsReady() && AutoGrabEnabled && AutoGrabMinHealth <= ObjectManager.Player.HealthPercent && !ObjectManager.Player.UnderTurret(true))
             {
                 var t = TargetSelector.GetTarget(AutoGrabRange, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null && !IsBlacklistedAutoGrab(t))
@@ -108,21 +108,21 @@ namespace SAutoCarry.Champions
 
         public void Combo()
         {
-            if (Spells[W].LSIsReady() && ComboUseW)
+            if (Spells[W].IsReady() && ComboUseW)
             {
                 var t = TargetSelector.GetTarget(1000, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
                     Spells[W].Cast();
             }
 
-            if (Spells[Q].LSIsReady() && ComboUseQ)
+            if (Spells[Q].IsReady() && ComboUseQ)
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null && !IsBlacklistedComboGrab(t))
                     Spells[Q].SPredictionCast(t, HitChance.High);
             }
 
-            if (Spells[R].LSIsReady() && ComboUseR)
+            if (Spells[R].IsReady() && ComboUseR)
             {
                 var t = TargetSelector.GetTarget(Spells[R].Range - 10, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
@@ -132,7 +132,7 @@ namespace SAutoCarry.Champions
 
         public void Harass()
         {
-            if (Spells[Q].LSIsReady() && HarassUseQ)
+            if (Spells[Q].IsReady() && HarassUseQ)
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
                 if (t != null)
@@ -145,7 +145,7 @@ namespace SAutoCarry.Champions
             if (ObjectManager.Player.ManaPercent < LaneClearMinMana)
                 return;
 
-            if (Spells[R].LSIsReady() && LaneClearR)
+            if (Spells[R].IsReady() && LaneClearR)
             {
                 if (MinionManager.GetMinions(Spells[R].Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).Count() > 4)
                     Spells[R].Cast();
@@ -166,7 +166,7 @@ namespace SAutoCarry.Champions
         {
             if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Mixed)
             {
-                if (Spells[E].LSIsReady() && HarassUseE)
+                if (Spells[E].IsReady() && HarassUseE)
                 {
                     Spells[E].Cast();
                     args.Process = false;
@@ -176,7 +176,7 @@ namespace SAutoCarry.Champions
 
             if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo)
             {
-                if (Spells[E].LSIsReady() && ComboUseE)
+                if (Spells[E].IsReady() && ComboUseE)
                 {
                     Spells[E].Cast();
                     args.Process = false;
@@ -189,17 +189,17 @@ namespace SAutoCarry.Champions
         {
             if (sender.IsEnemy && sender.IsChampion() && Data.IsImmobilizeBuff(args.Buff.Type) && AutoGrabMinHealth <= ObjectManager.Player.HealthPercent)
             {
-                if (Spells[Q].LSIsReady() && sender.LSIsValidTarget(Spells[Q].Range) && AutoGrabImmobile && !IsBlacklistedAutoGrab(sender as AIHeroClient) && !Spells[Q].GetCollisionFlags(ObjectManager.Player.ServerPosition.LSTo2D(), sender.ServerPosition.LSTo2D()).HasFlag(SCommon.Prediction.Collision.Flags.Minions))
+                if (Spells[Q].IsReady() && sender.IsValidTarget(Spells[Q].Range) && AutoGrabImmobile && !IsBlacklistedAutoGrab(sender as AIHeroClient) && !Spells[Q].GetCollisionFlags(ObjectManager.Player.ServerPosition.To2D(), sender.ServerPosition.To2D()).HasFlag(SCommon.Prediction.Collision.Flags.Minions))
                     Spells[Q].Cast(sender.ServerPosition);
             }
         }
 
         protected override void Interrupter_OnPossibleToInterrupt(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (InterruptQ && Spells[Q].LSIsReady() && sender.LSIsValidTarget(Spells[Q].Range) && AutoGrabMinHealth <= ObjectManager.Player.HealthPercent)
+            if (InterruptQ && Spells[Q].IsReady() && sender.IsValidTarget(Spells[Q].Range) && AutoGrabMinHealth <= ObjectManager.Player.HealthPercent)
                 Spells[Q].SPredictionCast(sender, HitChance.High);
 
-            if (InterruptR && Spells[R].LSIsReady() && sender.LSIsValidTarget(Spells[R].Range))
+            if (InterruptR && Spells[R].IsReady() && sender.IsValidTarget(Spells[R].Range))
                 Spells[R].Cast();
         }
 

@@ -18,7 +18,7 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
         public bool ShouldGetExecuted()
         {
             return MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.condemn.eks") &&
-                   Variables.spells[SpellSlot.E].LSIsReady();
+                   Variables.spells[SpellSlot.E].IsReady();
         }
 
         public ModuleType GetModuleType()
@@ -28,9 +28,9 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
 
         public void OnExecute()
         {
-            var target =HeroManager.Enemies.Find(en => en.LSIsValidTarget(Variables.spells[SpellSlot.E].Range) && en.Has2WStacks());
-            if (target.LSIsValidTarget(Variables.spells[SpellSlot.E].Range)
-                && target.Health + 45 <= (ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.E) + ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.W)))
+            var target =HeroManager.Enemies.Find(en => en.IsValidTarget(Variables.spells[SpellSlot.E].Range) && en.Has2WStacks());
+            if (target.IsValidTarget(Variables.spells[SpellSlot.E].Range)
+                && target.Health + 45 <= (ObjectManager.Player.GetSpellDamage(target, SpellSlot.E) + ObjectManager.Player.GetSpellDamage(target, SpellSlot.W)))
             {
                 Variables.spells[SpellSlot.E].CastOnUnit(target);
             }

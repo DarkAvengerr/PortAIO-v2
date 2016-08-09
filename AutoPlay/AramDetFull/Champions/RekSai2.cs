@@ -49,7 +49,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         private void afterAttack(AttackableUnit unit, AttackableUnit target)
         {
             if (unit.IsMe && !player.IsBurrowed()
-                && E1.LSIsReady()
+                && E1.IsReady()
                 && player.ManaPercent > 99f)
             {
                 E1.CastOnUnit((Obj_AI_Base)target);
@@ -58,36 +58,36 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q1.LSIsReady() || target == null || player.IsBurrowed())
+            if (!Q1.IsReady() || target == null || player.IsBurrowed())
                 return;
             Q1.Cast();
         }
 
         public void useQ2(Obj_AI_Base target)
         {
-            if (!Q2.LSIsReady() || target == null || !player.IsBurrowed())
+            if (!Q2.IsReady() || target == null || !player.IsBurrowed())
                 return;
             Q2.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
-            //if (!Q.LSIsReady(4500) && player.Mana > 200)
+            //if (!Q.IsReady(4500) && player.Mana > 200)
             //      W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            //if (!E.LSIsReady() || target == null || !player.IsBurrowed() || !safeGap(target))
+            //if (!E.IsReady() || target == null || !player.IsBurrowed() || !safeGap(target))
             //    return;
            // E2.Cast(target);
         }
 
         public void useE2(Obj_AI_Base target)
         {
-            if (!E2.LSIsReady() || target == null || !player.IsBurrowed() || !safeGap(player.Position.LSExtend(target.Position,E2.Range).LSTo2D()))
+            if (!E2.IsReady() || target == null || !player.IsBurrowed() || !safeGap(player.Position.Extend(target.Position,E2.Range).To2D()))
                 return;
             E2.Cast(target);
         }
@@ -136,10 +136,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void farm()
         {
-            var minions = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsEnemy && x.LSDistance(player.Position) <= 250f);
+            var minions = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsEnemy && x.Distance(player.Position) <= 250f);
             if (minions.Count() >= 2
                 && !player.IsBurrowed()
-                && Q1.LSIsReady())
+                && Q1.IsReady())
             {
                 Q1.Cast();
             }
@@ -150,20 +150,20 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var target = ARAMTargetSelector.getBestTarget(1400f);
             manageW();
             if (!player.IsBurrowed()
-                && target.LSIsValidTarget(Q1.Range)
-                && Q1.LSIsReady())
+                && target.IsValidTarget(Q1.Range)
+                && Q1.IsReady())
             {
                 Q1.Cast();
             }
             if (player.IsBurrowed()
-                && target.LSIsValidTarget(Q2.Range)
-                && Q2.LSIsReady())
+                && target.IsValidTarget(Q2.Range)
+                && Q2.IsReady())
             {
                     Q2.CastIfHitchanceEquals(target, HitChance.High);
             }
             if (player.IsBurrowed()
-                && target.LSIsValidTarget(E2.Range)
-                && E2.LSIsReady())
+                && target.IsValidTarget(E2.Range)
+                && E2.IsReady())
             {
                     E2.CastIfHitchanceEquals(target, HitChance.High);
             }
@@ -176,22 +176,22 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (target == null) return;
             if (!player.IsBurrowed())
             {
-                if ( W1.LSIsReady()
+                if ( W1.IsReady()
                         && player.HealthPercent < 9
                         && player.Mana > 0)
                 {
                     W1.Cast();
                 }
 
-                    if (W1.LSIsReady()
+                    if (W1.IsReady()
                         && !player.QActive())
                     {
                         W1.Cast();
                     }
 
                     if (!E1.IsInRange(target)
-                        && player.LSDistance(target.Position) < E2.Range
-                        && W1.LSIsReady())
+                        && player.Distance(target.Position) < E2.Range
+                        && W1.IsReady())
                     {
                         W1.Cast();
                    }
@@ -199,7 +199,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
             else if (player.IsBurrowed())
             {
-                    if ( W2.LSIsReady()
+                    if ( W2.IsReady()
                         && player.IsUnder(target))
                     {
                         W2.Cast();

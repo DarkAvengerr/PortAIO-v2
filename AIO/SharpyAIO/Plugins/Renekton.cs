@@ -154,7 +154,7 @@ using EloBuddy;
             {
                 if (W.IsReadyPerfectly())
                 {
-                    if (sender.LSIsValidTarget(W.Range))
+                    if (sender.IsValidTarget(W.Range))
                     {
                         W.Cast();
                         EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, sender);
@@ -169,7 +169,7 @@ using EloBuddy;
             {
                 if (W.IsReadyPerfectly())
                 {
-                    if (gapcloser.Sender.LSIsValidTarget(W.Range))
+                    if (gapcloser.Sender.IsValidTarget(W.Range))
                     {
                         W.Cast();
                         EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, gapcloser.Sender);
@@ -196,7 +196,7 @@ using EloBuddy;
                 {
                     if (Q.IsReadyPerfectly())
                     {
-                        if (starget != null && Player.Position.LSDistance(starget.Position) <= Q.Range)
+                        if (starget != null && Player.Position.Distance(starget.Position) <= Q.Range)
                         {
                             if (!starget.IsZombie)
                             {
@@ -236,22 +236,22 @@ using EloBuddy;
                         {
                              if (Menu.Item("HE1").GetValue<bool>())
                              {
-                                 if (E.IsReadyPerfectly() && !Player.LSHasBuff("renektonsliceanddicedelay"))
+                                 if (E.IsReadyPerfectly() && !Player.HasBuff("renektonsliceanddicedelay"))
                                  {
-                                     if (starget != null && Player.Position.LSDistance(starget.Position) <= E.Range + W.Range)
+                                     if (starget != null && Player.Position.Distance(starget.Position) <= E.Range + W.Range)
                                      {
                                          if (!starget.IsZombie)
                                          {
-                                             var minions = MinionManager.GetMinions(starget.Position, Player.Position.LSDistance(starget.Position)).FirstOrDefault(x => x.LSIsValidTarget(E.Range));
+                                             var minions = MinionManager.GetMinions(starget.Position, Player.Position.Distance(starget.Position)).FirstOrDefault(x => x.IsValidTarget(E.Range));
                                              if (minions != null)
                                              {
-                                                 if (minions.Position.LSDistance(starget.Position) <= W.Range)
+                                                 if (minions.Position.Distance(starget.Position) <= W.Range)
                                                  {
                                                      E.Cast(minions);
                                                  }
                                                  else
                                                  {
-                                                     if (starget.Position.LSDistance(Player.Position) <= E.Range)
+                                                     if (starget.Position.Distance(Player.Position) <= E.Range)
                                                      {
                                                          E.Cast(starget);
                                                      }
@@ -259,7 +259,7 @@ using EloBuddy;
                                              }
                                              else
                                              {
-                                                 if (starget.Position.LSDistance(Player.Position) <= E.Range)
+                                                 if (starget.Position.Distance(Player.Position) <= E.Range)
                                                  {
                                                      E.Cast(starget);
                                                  }
@@ -271,16 +271,16 @@ using EloBuddy;
                                          var target = TargetSelector.GetTarget(E.Range + W.Range, TargetSelector.DamageType.Physical);
                                          if (target != null)
                                          {
-                                             var minions = MinionManager.GetMinions(target.Position, Player.Position.LSDistance(target.Position)).FirstOrDefault(x => x.LSIsValidTarget(E.Range));
+                                             var minions = MinionManager.GetMinions(target.Position, Player.Position.Distance(target.Position)).FirstOrDefault(x => x.IsValidTarget(E.Range));
                                              if (minions != null)
                                              {
-                                                 if (minions.Position.LSDistance(target.Position) <= W.Range)
+                                                 if (minions.Position.Distance(target.Position) <= W.Range)
                                                  {
                                                      E.Cast(minions);
                                                  }
                                                  else
                                                  {
-                                                     if (target.Position.LSDistance(Player.Position) <= E.Range)
+                                                     if (target.Position.Distance(Player.Position) <= E.Range)
                                                      {
                                                          E.Cast(target);
                                                      }
@@ -288,7 +288,7 @@ using EloBuddy;
                                              }
                                              else
                                              {
-                                                 if (target.Position.LSDistance(Player.Position) <= E.Range)
+                                                 if (target.Position.Distance(Player.Position) <= E.Range)
                                                  {
                                                      E.Cast(target);
                                                  }
@@ -302,7 +302,7 @@ using EloBuddy;
                             {
                                 if (W.IsReadyPerfectly())
                                 {
-                                    if (starget != null && Player.Position.LSDistance(starget.Position) <= W.Range)
+                                    if (starget != null && Player.Position.Distance(starget.Position) <= W.Range)
                                     {
                                         if (!starget.IsZombie)
                                         {
@@ -332,7 +332,7 @@ using EloBuddy;
                                 {
                                     if (W.Instance.State == SpellState.Cooldown || W.Instance.State == SpellState.NotLearned)
                                     {
-                                        if (starget != null && Player.Position.LSDistance(starget.Position) <= Q.Range)
+                                        if (starget != null && Player.Position.Distance(starget.Position) <= Q.Range)
                                         {
                                             if (!starget.IsZombie)
                                             {
@@ -355,12 +355,12 @@ using EloBuddy;
                             {
                                 if (Menu.Item("HE2").GetValue<KeyBind>().Active)
                                 {
-                                    if (E.IsReadyPerfectly() && Player.LSHasBuff("renektonsliceanddicedelay"))
+                                    if (E.IsReadyPerfectly() && Player.HasBuff("renektonsliceanddicedelay"))
                                     {
                                         if (!Q.IsReadyPerfectly() && !W.IsReadyPerfectly())
                                         {
                                             var tower = ObjectManager.Get<Obj_Turret>().FirstOrDefault(x => x.IsAlly);
-                                            if (tower.Position.LSDistance(blue) < tower.Position.LSDistance(red))
+                                            if (tower.Position.Distance(blue) < tower.Position.Distance(red))
                                             {
                                                 E.Cast(blue);
                                             }
@@ -373,11 +373,11 @@ using EloBuddy;
                                 }
                                 else
                                 {
-                                    if (E.IsReadyPerfectly() && Player.LSHasBuff("renektonsliceanddicedelay"))
+                                    if (E.IsReadyPerfectly() && Player.HasBuff("renektonsliceanddicedelay"))
                                     {
                                         if (!Q.IsReadyPerfectly() && !W.IsReadyPerfectly())
                                         {
-                                            if (starget != null && Player.Position.LSDistance(starget.Position) <= E.Range)
+                                            if (starget != null && Player.Position.Distance(starget.Position) <= E.Range)
                                             {
                                                 if (!starget.IsZombie)
                                                 {
@@ -404,7 +404,7 @@ using EloBuddy;
                             {
                                 if (Menu.Item("LCQ").GetValue<bool>())
                                 {
-                                    var target = MinionManager.GetMinions(Q.Range).FirstOrDefault(x => x.LSIsValidTarget(Q.Range));
+                                    var target = MinionManager.GetMinions(Q.Range).FirstOrDefault(x => x.IsValidTarget(Q.Range));
                                     if (target != null)
                                     {
                                         Q.Cast();
@@ -413,7 +413,7 @@ using EloBuddy;
 
                                 if (Menu.Item("JCQ").GetValue<bool>())
                                 {
-                                    var target = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.LSIsValidTarget(Q.Range));
+                                    var target = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.IsValidTarget(Q.Range));
                                     if (target != null)
                                     {
                                         Q.Cast();
@@ -428,7 +428,7 @@ using EloBuddy;
                             {
                                 if (Q.IsReadyPerfectly())
                                 {
-                                    if (starget != null && Player.Position.LSDistance(starget.Position) <= Q.Range)
+                                    if (starget != null && Player.Position.Distance(starget.Position) <= Q.Range)
                                     {
                                         if (!starget.IsZombie)
                                         {
@@ -452,7 +452,7 @@ using EloBuddy;
                             {
                                 if (W.IsReadyPerfectly())
                                 {
-                                    if (starget != null && Player.Position.LSDistance(starget.Position) <= W.Range)
+                                    if (starget != null && Player.Position.Distance(starget.Position) <= W.Range)
                                     {
                                         if (!starget.IsZombie)
                                         {
@@ -486,7 +486,7 @@ using EloBuddy;
             {
                 if (Player.HealthPercent <= Menu.Item("CH").GetValue<Slider>().Value)
                 {
-                    if (!Player.LSHasBuff("Recall"))
+                    if (!Player.HasBuff("Recall"))
                     {
                         if (R.IsReadyPerfectly())
                         {

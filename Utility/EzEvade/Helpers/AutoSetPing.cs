@@ -70,7 +70,7 @@ using EloBuddy; namespace ezEvade
                 return;
             }
 
-            //lastSpellCastServerPos = myHero.Position.LSTo2D();
+            //lastSpellCastServerPos = myHero.Position.To2D();
         }
 
         private void Game_OnDraw(EventArgs args)
@@ -96,7 +96,7 @@ using EloBuddy; namespace ezEvade
             if (myHero.IsMoving && myHero.Path.Count() > 0)
             {
                 lastSpellCastServerPos = EvadeUtils.GetGamePosition(myHero, Game.Ping);
-                lastSpellCastEndPos = myHero.Path.Last().LSTo2D();
+                lastSpellCastEndPos = myHero.Path.Last().To2D();
                 checkPing = true;
 
                 Draw.RenderObjects.Add(new Draw.RenderCircle(lastSpellCastServerPos, 1000, Color.Green, 10));
@@ -113,9 +113,9 @@ using EloBuddy; namespace ezEvade
                     )
                 {
                     //Draw.RenderObjects.Add(new Draw.RenderPosition(lastSpellCastServerPos, 1000, System.Drawing.Color.Red, 10));
-                    Draw.RenderObjects.Add(new Draw.RenderCircle(missile.StartPosition.LSTo2D(), 1000, System.Drawing.Color.Red, 10));
+                    Draw.RenderObjects.Add(new Draw.RenderCircle(missile.StartPosition.To2D(), 1000, System.Drawing.Color.Red, 10));
 
-                    var distance = lastSpellCastServerPos.LSDistance(missile.StartPosition.LSTo2D());
+                    var distance = lastSpellCastServerPos.Distance(missile.StartPosition.To2D());
                     float moveTime = 1000 * distance / myHero.MoveSpeed;
                     Console.WriteLine("Extra Delay: " + moveTime);
                 }
@@ -144,7 +144,7 @@ using EloBuddy; namespace ezEvade
         {
             checkPing = false;
 
-            var distance = myHero.Position.LSTo2D().LSDistance(myHero.ServerPosition.LSTo2D());
+            var distance = myHero.Position.To2D().Distance(myHero.ServerPosition.To2D());
             float moveTime = 1000 * distance / myHero.MoveSpeed;
             //Console.WriteLine("Extra Delay: " + moveTime);
 
@@ -164,8 +164,8 @@ using EloBuddy; namespace ezEvade
             {
                 if (myHero.IsMoving && myHero.Path.Count() > 0)
                 {
-                    lastMoveToServerPos = myHero.ServerPosition.LSTo2D();
-                    lastPathEndPos = myHero.Path.Last().LSTo2D();
+                    lastMoveToServerPos = myHero.ServerPosition.To2D();
+                    lastPathEndPos = myHero.Path.Last().To2D();
                     checkPing = true;
                 }
             }
@@ -187,24 +187,24 @@ using EloBuddy; namespace ezEvade
 
             if (path.Length > 1 && !args.IsDash)
             {
-                var movePos = path.Last().LSTo2D();
+                var movePos = path.Last().To2D();
 
                 if (checkPing
                     && lastIssueOrderArgs.Process == true
                     && lastIssueOrderArgs.Order == GameObjectOrder.MoveTo
-                    && lastIssueOrderArgs.TargetPosition.LSTo2D().LSDistance(movePos) < 3
+                    && lastIssueOrderArgs.TargetPosition.To2D().Distance(movePos) < 3
                     && myHero.Path.Count() == 1
                     && args.Path.Count() == 2
                     && myHero.IsMoving)
                 {
-                    //Draw.RenderObjects.Add(new Draw.RenderPosition(myHero.Path.Last().LSTo2D(), 1000));
+                    //Draw.RenderObjects.Add(new Draw.RenderPosition(myHero.Path.Last().To2D(), 1000));
 
-                    Draw.RenderObjects.Add(new Draw.RenderLine(args.Path.First().LSTo2D(), args.Path.Last().LSTo2D(), 1000));
-                    Draw.RenderObjects.Add(new Draw.RenderLine(myHero.Position.LSTo2D(), myHero.Path.Last().LSTo2D(), 1000));
+                    Draw.RenderObjects.Add(new Draw.RenderLine(args.Path.First().To2D(), args.Path.Last().To2D(), 1000));
+                    Draw.RenderObjects.Add(new Draw.RenderLine(myHero.Position.To2D(), myHero.Path.Last().To2D(), 1000));
 
                     //Draw.RenderObjects.Add(new Draw.RenderCircle(lastMoveToServerPos, 1000, System.Drawing.Color.Red, 10));
 
-                    var distanceTillEnd = myHero.Path.Last().LSTo2D().LSDistance(myHero.Position.LSTo2D());
+                    var distanceTillEnd = myHero.Path.Last().To2D().Distance(myHero.Position.To2D());
                     float moveTimeTillEnd = 1000 * distanceTillEnd / myHero.MoveSpeed;
 
                     if (moveTimeTillEnd < 500)
@@ -212,26 +212,26 @@ using EloBuddy; namespace ezEvade
                         return;
                     }
 
-                    var dir1 = (myHero.Path.Last().LSTo2D() - myHero.Position.LSTo2D()).LSNormalized();
-                    var ray1 = new Ray(myHero.Position.LSSetZ(0), new Vector3(dir1.X, dir1.Y, 0));
+                    var dir1 = (myHero.Path.Last().To2D() - myHero.Position.To2D()).Normalized();
+                    var ray1 = new Ray(myHero.Position.SetZ(0), new Vector3(dir1.X, dir1.Y, 0));
 
-                    var dir2 = (args.Path.First().LSTo2D() - args.Path.Last().LSTo2D()).LSNormalized();
+                    var dir2 = (args.Path.First().To2D() - args.Path.Last().To2D()).Normalized();
                     var pos2 = new Vector3(args.Path.First().X, args.Path.First().Y, 0);
-                    var ray2 = new Ray(args.Path.First().LSSetZ(0), new Vector3(dir2.X, dir2.Y, 0));
+                    var ray2 = new Ray(args.Path.First().SetZ(0), new Vector3(dir2.X, dir2.Y, 0));
 
                     Vector3 intersection3;
                     if (ray2.Intersects(ref ray1, out intersection3))
                     {
-                        var intersection = intersection3.LSTo2D();
+                        var intersection = intersection3.To2D();
 
-                        var projection = intersection.LSProjectOn(myHero.Path.Last().LSTo2D(), myHero.Position.LSTo2D());
+                        var projection = intersection.ProjectOn(myHero.Path.Last().To2D(), myHero.Position.To2D());
 
-                        if (projection.IsOnSegment && dir1.LSAngleBetween(dir2) > 20 && dir1.LSAngleBetween(dir2) < 160)
+                        if (projection.IsOnSegment && dir1.AngleBetween(dir2) > 20 && dir1.AngleBetween(dir2) < 160)
                         {
                             Draw.RenderObjects.Add(new Draw.RenderCircle(intersection, 1000, System.Drawing.Color.Red, 10));
 
-                            var distance = //args.Path.First().LSTo2D().LSDistance(intersection);
-                                lastMoveToServerPos.LSDistance(intersection);
+                            var distance = //args.Path.First().To2D().Distance(intersection);
+                                lastMoveToServerPos.Distance(intersection);
                             float moveTime = 1000 * distance / myHero.MoveSpeed;
 
                             //Console.WriteLine("waa: " + distance);

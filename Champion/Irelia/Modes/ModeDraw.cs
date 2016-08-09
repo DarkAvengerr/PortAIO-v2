@@ -291,7 +291,7 @@ namespace Irelia.Modes
                 return;
             }
 
-            foreach (var t in HeroManager.Enemies.Where(e => !e.IsDead && e.LSIsValidTarget(Q.Range * 2)).Where(t => t.CanStun()))
+            foreach (var t in HeroManager.Enemies.Where(e => !e.IsDead && e.IsValidTarget(Q.Range * 2)).Where(t => t.CanStun()))
             {
                 //Render.Circle.DrawCircle(t.Position, 105, Color.White);
                 CommonHelper.DrawText(CommonHelper.TextStatus, "Can Stun!", (int)t.HPBarPosition.X + 145, (int)t.HPBarPosition.Y + 5, SharpDX.Color.White);
@@ -315,7 +315,7 @@ namespace Irelia.Modes
                     var circle1 = new CommonGeometry.Circle2(new Vector2(ObjectManager.Player.Position.X + 3, ObjectManager.Player.Position.Y - 3), 170f, Game.Time - BlueBuff.StartTime, BlueBuff.EndTime - BlueBuff.StartTime).ToPolygon();
                     circle1.Draw(Color.Black, 4);
 
-                    var circle = new CommonGeometry.Circle2(ObjectManager.Player.Position.LSTo2D(), 170f, Game.Time - BlueBuff.StartTime, BlueBuff.EndTime - BlueBuff.StartTime ).ToPolygon();
+                    var circle = new CommonGeometry.Circle2(ObjectManager.Player.Position.To2D(), 170f, Game.Time - BlueBuff.StartTime, BlueBuff.EndTime - BlueBuff.StartTime ).ToPolygon();
                     circle.Draw(Color.Blue, 4);
                 }
             }
@@ -327,7 +327,7 @@ namespace Irelia.Modes
                     var circle1 = new CommonGeometry.Circle2(new Vector2(ObjectManager.Player.Position.X + 3, ObjectManager.Player.Position.Y - 3), 150f, Game.Time - RedBuff.StartTime, RedBuff.EndTime - RedBuff.StartTime).ToPolygon();
                     circle1.Draw(Color.Black, 4);
 
-                    var circle = new CommonGeometry.Circle2(ObjectManager.Player.Position.LSTo2D(), 150f, Game.Time - RedBuff.StartTime, RedBuff.EndTime - RedBuff.StartTime).ToPolygon();
+                    var circle = new CommonGeometry.Circle2(ObjectManager.Player.Position.To2D(), 150f, Game.Time - RedBuff.StartTime, RedBuff.EndTime - RedBuff.StartTime).ToPolygon();
                     circle.Draw(Color.Red, 4);
                 }
             }
@@ -356,7 +356,7 @@ namespace Irelia.Modes
         private static void DrawSpells()
         {
             var t = TargetSelector.GetTarget(Q.Range + 500, TargetSelector.DamageType.Physical);
-            if (t.LSIsValidTarget())
+            if (t.IsValidTarget())
             {
                 var targetBehind = t.Position + Vector3.Normalize(t.ServerPosition - ObjectManager.Player.Position)*80;
                 Render.Circle.DrawCircle(targetBehind, 75f, Color.Red, 2);
@@ -365,19 +365,19 @@ namespace Irelia.Modes
             var drawQ = MenuLocal.Item(GetPcModeStringValue + "Draw.Q").GetValue<Circle>();
             if (drawQ.Active && Q.Level > 0)
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, Q.LSIsReady() ? drawQ.Color: Color.LightGray, Q.LSIsReady() ? 5 : 1);
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, Q.IsReady() ? drawQ.Color: Color.LightGray, Q.IsReady() ? 5 : 1);
             }
 
             var drawE = MenuLocal.Item(GetPcModeStringValue + "Draw.E").GetValue<Circle>();
             if (drawE.Active && E.Level > 0)
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, E.LSIsReady() ? drawE.Color: Color.LightGray, E.LSIsReady() ? 5 : 1);
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, E.IsReady() ? drawE.Color: Color.LightGray, E.IsReady() ? 5 : 1);
             }
 
             var drawR = MenuLocal.Item(GetPcModeStringValue + "Draw.R").GetValue<Circle>();
             if (drawR.Active && R.Level > 0)
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, E.LSIsReady() ? drawR.Color : Color.LightGray, E.LSIsReady() ? 5 : 1);
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, E.IsReady() ? drawR.Color : Color.LightGray, E.IsReady() ? 5 : 1);
             }
         }
 
@@ -398,7 +398,7 @@ namespace Irelia.Modes
             if (MenuLocal.Item(GetPcModeStringValue + "DrawKillableEnemy").GetValue<bool>())
             {
                 var t = KillableEnemyAa;
-                if (t.Item1 != null && t.Item1.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 800) && t.Item2 > 0)
+                if (t.Item1 != null && t.Item1.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 800) && t.Item2 > 0)
                 {
                     CommonHelper.DrawText(CommonHelper.Text, $"{t.Item1.ChampionName}: {t.Item2} Combo = Kill", (int)t.Item1.HPBarPosition.X + 85, (int)t.Item1.HPBarPosition.Y + 5, SharpDX.Color.GreenYellow);
                 }
@@ -443,7 +443,7 @@ namespace Irelia.Modes
                 var x = 0;
                 var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
                 {
-                    if (t.LSIsValidTarget())
+                    if (t.IsValidTarget())
                     {
                             if (t.Health <= Common.CommonMath.GetComboDamage(t))
                             {
@@ -489,7 +489,7 @@ namespace Irelia.Modes
             {
                 var t = ModeDraw.GetKillableEnemy;
 
-                if (t.LSIsValidTarget())
+                if (t.IsValidTarget())
                     return t;
 
                 return null;

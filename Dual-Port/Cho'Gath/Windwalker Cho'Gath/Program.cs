@@ -70,13 +70,13 @@ using EloBuddy;
 
         static void Interrupter2_OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (sender.IsEnemy && W.LSIsReady() && sender.LSDistance(Player) <= W.Range)
+            if (sender.IsEnemy && W.IsReady() && sender.Distance(Player) <= W.Range)
             {
                 W.Cast(sender);
             }
             else
             {
-                if (sender.IsEnemy && Q.LSIsReady() && sender.LSDistance(Player) <= Q.Range)
+                if (sender.IsEnemy && Q.IsReady() && sender.Distance(Player) <= Q.Range)
                 {
                     Q.Cast(sender);
                 }
@@ -117,14 +117,14 @@ using EloBuddy;
         {
             if (shouldBeOn)
             {
-                if (!Player.LSHasBuff("VorpalSpikes", true))
+                if (!Player.HasBuff("VorpalSpikes", true))
                 {
                     E.Cast();
                 }
             }
             else
             {
-                if (Player.LSHasBuff("VorpalSpikes", true))
+                if (Player.HasBuff("VorpalSpikes", true))
                 {
                     E.Cast();
                 }
@@ -133,15 +133,15 @@ using EloBuddy;
 
         private static void farmQ()
         {
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 foreach (
                     var enemyMinion in
-                        ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsEnemy && x.LSDistance(Player) <= Q.Range))
+                        ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsEnemy && x.Distance(Player) <= Q.Range))
                 {
                     var enemyMinionsInRange =
                         ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(x => x.IsEnemy && x.LSDistance(enemyMinion) <= 185)
+                            .Where(x => x.IsEnemy && x.Distance(enemyMinion) <= 185)
                             .Count();
                     if (enemyMinionsInRange >= Menu.Item("qFarm").GetValue<Slider>().Value)
                     {
@@ -153,16 +153,16 @@ using EloBuddy;
 
         private static void farmW()
         {
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 var minionPos =
                     ObjectManager.Get<Obj_AI_Minion>()
-                        .Where(x => x.IsEnemy && x.LSDistance(Player) <= W.Range)
-                        .Select(y => y.Position.LSTo2D())
+                        .Where(x => x.IsEnemy && x.Distance(Player) <= W.Range)
+                        .Select(y => y.Position.To2D())
                         .ToList();
                 //foreach (
                 //    var enemyMinion in
-                //        ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsEnemy && x.LSDistance(Player) <= W.Range))
+                //        ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsEnemy && x.Distance(Player) <= W.Range))
                 //{
                 var wFarmPred = MinionManager.GetBestCircularFarmLocation(minionPos, W.Width, W.Range);
                 if (wFarmPred.MinionsHit >= Menu.Item("wFarm").GetValue<Slider>().Value)
@@ -176,7 +176,7 @@ using EloBuddy;
 
         private static void CastQ()
         {
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 var qPrediction = Q.GetPrediction(target);
 
@@ -190,7 +190,7 @@ using EloBuddy;
 
         private static void CastW()
         {
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 W.Cast(target);
             }
@@ -198,9 +198,9 @@ using EloBuddy;
 
         private static void CastR()
         {
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
-                if (Player.LSGetSpellDamage(target, SpellSlot.R, 0) > target.Health)
+                if (Player.GetSpellDamage(target, SpellSlot.R, 0) > target.Health)
                 {
                     R.Cast(target);
                 }
@@ -216,7 +216,7 @@ using EloBuddy;
                 Drawing.DrawText(y[0], y[1], System.Drawing.Color.Red, qPrediction.Hitchance.ToString());
             }
 
-            if (Q.LSIsReady() && Menu.Item("drawQ").GetValue<bool>())
+            if (Q.IsReady() && Menu.Item("drawQ").GetValue<bool>())
             {
                 Drawing.DrawCircle(Player.Position, Q.Range, Color.Green);
             }
@@ -226,7 +226,7 @@ using EloBuddy;
                     Drawing.DrawCircle(Player.Position, Q.Range, Color.Red);
             }
 
-            if (W.LSIsReady() && Menu.Item("drawW").GetValue<bool>())
+            if (W.IsReady() && Menu.Item("drawW").GetValue<bool>())
             {
                 Drawing.DrawCircle(Player.Position, W.Range, Color.Green);
             }
@@ -236,7 +236,7 @@ using EloBuddy;
                     Drawing.DrawCircle(Player.Position, W.Range, Color.Red);
             }
             
-            if (R.LSIsReady() && Menu.Item("drawR").GetValue<bool>())
+            if (R.IsReady() && Menu.Item("drawR").GetValue<bool>())
             {
                 Drawing.DrawCircle(Player.Position, R.Range, Color.Green);
             }

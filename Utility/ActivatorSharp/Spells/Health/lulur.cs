@@ -21,7 +21,7 @@ using EloBuddy; namespace Activator.Spells.Health
 
             foreach (var hero in Activator.Allies())
             {
-                if (hero.Player.LSDistance(Player.ServerPosition) <= Range)
+                if (hero.Player.Distance(Player.ServerPosition) <= Range)
                 {
                     if (!Parent.Item(Parent.Name + "useon" + hero.Player.NetworkId).GetValue<bool>())
                         continue;
@@ -35,7 +35,7 @@ using EloBuddy; namespace Activator.Spells.Health
                                 UseSpellOn(hero.Player);
                         }
 
-                        if (hero.Player.LSCountEnemiesInRange(300) >=
+                        if (hero.Player.CountEnemiesInRange(300) >=
                             Menu.Item("selfcount" + Name).GetValue<Slider>().Value)
                             UseSpellOn(hero.Player);
                     }

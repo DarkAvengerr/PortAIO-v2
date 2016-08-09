@@ -83,12 +83,12 @@ using EloBuddy; namespace Activator.Handlers
 
                 foreach (var item in Troydata.Troys.Where(x => x.Name == troy.Name))
                 {
-                    if (hero.Player.LSDistance(troy.Obj.Position) <= item.Radius + hero.Player.BoundingRadius)
+                    if (hero.Player.Distance(troy.Obj.Position) <= item.Radius + hero.Player.BoundingRadius)
                     {                  
                         // check delay (e.g fizz bait)
                         if (Utils.GameTimeTickCount - troy.Start >= item.DelayFromStart)
                         {
-                            if (hero.Player.LSIsValidTarget(float.MaxValue, false))
+                            if (hero.Player.IsValidTarget(float.MaxValue, false))
                             {
                                 if (!hero.Player.IsZombie && !hero.Immunity)
                                 {

@@ -160,7 +160,7 @@ using EloBuddy;
                     var ETarget = TargetSelector.GetTarget(_E.Range, TargetSelector.DamageType.Magical);
                     if (ETarget != null)
                     {
-                        var FinalPosition = ETarget.Position.LSExtend(ObjectManager.Player.Position, -360);
+                        var FinalPosition = ETarget.Position.Extend(ObjectManager.Player.Position, -360);
                         Drawing.DrawCircle(FinalPosition, 75, Color.Gold);
                     }
                 }
@@ -188,12 +188,12 @@ using EloBuddy;
                 if (enemy != null)
                 {
                     float damage = 0;
-                    if (_Q.LSIsReady())
+                    if (_Q.IsReady())
                         damage += _Q.GetDamage(enemy);
-                    if (_E.LSIsReady())
+                    if (_E.IsReady())
                     {
-                        var FinalPosition = enemy.BoundingRadius + enemy.Position.LSExtend(ObjectManager.Player.Position, -360);
-                        if (FinalPosition.LSIsWall())
+                        var FinalPosition = enemy.BoundingRadius + enemy.Position.Extend(ObjectManager.Player.Position, -360);
+                        if (FinalPosition.IsWall())
                         {
                             damage += (_E.GetDamage(enemy) * 2);
                         }
@@ -202,10 +202,10 @@ using EloBuddy;
                             damage += _E.GetDamage(enemy);
                         }
                     }
-                    if (_R.LSIsReady())
+                    if (_R.IsReady())
                         damage += _R.GetDamage(enemy);
                     if (!Player.Spellbook.IsAutoAttacking)
-                        damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                        damage += (float)Player.GetAutoAttackDamage(enemy, true);
                     return damage;
                 }
                 return 0;
@@ -225,7 +225,7 @@ using EloBuddy;
             try
             {
                 if (Player.IsDead) return;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
                 {
                     if (_MainMenu.Item("Poppy_Indicator").GetValue<bool>())
                     {
@@ -270,34 +270,34 @@ using EloBuddy;
                 var QTarget = TargetSelector.GetTarget(_Q.Range, TargetSelector.DamageType.True);
                 var ETarget = TargetSelector.GetTarget(_E.Range, TargetSelector.DamageType.Physical);
                 //var RTarget = TargetSelector.GetTarget(_R.Range, TargetSelector.DamageType.Physical);
-                //var RTarget = ObjectManager.Get<AIHeroClient>().OrderByDescending(x => x.Health).FirstOrDefault(x => x.IsEnemy && x.LSDistance(Player) < 1200);                
-                PoppyPassive = ObjectManager.Player.Buffs.Find(DrawFX => DrawFX.Name == "poppypassiveshield" && DrawFX.LSIsValidBuff());
+                //var RTarget = ObjectManager.Get<AIHeroClient>().OrderByDescending(x => x.Health).FirstOrDefault(x => x.IsEnemy && x.Distance(Player) < 1200);                
+                PoppyPassive = ObjectManager.Player.Buffs.Find(DrawFX => DrawFX.Name == "poppypassiveshield" && DrawFX.IsValidBuff());
                 if (PoppyPassive != null)
                     shield.ShieldMe = null;
 
-                if (Rsender.Enable == true && _R.LSIsReady() && _R.IsCharging && Rsender.Type == "gap")
+                if (Rsender.Enable == true && _R.IsReady() && _R.IsCharging && Rsender.Type == "gap")
                     _R.Cast(Rsender.Sender, true);
-                if (Rsender.Enable == true && _R.LSIsReady() && _R.IsCharging && Rsender.Type == "KillSteal" && Player.LSDistance(Rsender.Sender) < 1200)
+                if (Rsender.Enable == true && _R.IsReady() && _R.IsCharging && Rsender.Type == "KillSteal" && Player.Distance(Rsender.Sender) < 1200)
                     _R.Cast(Rsender.Sender, true);
-                if (Rsender.Enable == true && _R.LSIsReady() && _R.IsCharging && Rsender.Type == "Combo" && Player.LSDistance(Rsender.Sender) < 1200)
+                if (Rsender.Enable == true && _R.IsReady() && _R.IsCharging && Rsender.Type == "Combo" && Player.Distance(Rsender.Sender) < 1200)
                     _R.Cast(Rsender.Sender, true);
 
                 // KillSteal
-                if (_MainMenu.Item("Poppy_KUse_Q").GetValue<bool>() && QTarget != null && QTarget.Health < _Q.GetDamage(QTarget) && _Q.LSIsReady())
+                if (_MainMenu.Item("Poppy_KUse_Q").GetValue<bool>() && QTarget != null && QTarget.Health < _Q.GetDamage(QTarget) && _Q.IsReady())
                     _Q.Cast(QTarget, true);
-                if (_MainMenu.Item("Poppy_KUse_E").GetValue<bool>() && ETarget != null && _E.LSIsReady())
+                if (_MainMenu.Item("Poppy_KUse_E").GetValue<bool>() && ETarget != null && _E.IsReady())
                 {
-                    var FinalPosition = ETarget.BoundingRadius + ETarget.Position.LSExtend(ObjectManager.Player.Position, -360);
-                    if (FinalPosition.LSIsWall() && ETarget.Health < (_E.GetDamage(ETarget) * 2))
+                    var FinalPosition = ETarget.BoundingRadius + ETarget.Position.Extend(ObjectManager.Player.Position, -360);
+                    if (FinalPosition.IsWall() && ETarget.Health < (_E.GetDamage(ETarget) * 2))
                         _E.Cast(ETarget, true);
                     if (ETarget.Health < _E.GetDamage(ETarget))
                         _E.Cast(ETarget, true);
                 }
-                if (_MainMenu.Item("Poppy_KUse_R").GetValue<bool>() && _R.LSIsReady() && !Rsender.Enable)
+                if (_MainMenu.Item("Poppy_KUse_R").GetValue<bool>() && _R.IsReady() && !Rsender.Enable)
                 {
                     foreach (var item in ObjectManager.Get<AIHeroClient>().OrderByDescending(x => x.Health))
                     {
-                        if (item.IsEnemy && !item.IsDead && item.LSDistance(Player) < 1200 && !_R.IsCharging && item.Health < _R.GetDamage(item))
+                        if (item.IsEnemy && !item.IsDead && item.Distance(Player) < 1200 && !_R.IsCharging && item.Health < _R.GetDamage(item))
                         {
                             _R.StartCharging();
                             Rsender.Sender = item;
@@ -312,11 +312,11 @@ using EloBuddy;
                 if (_MainMenu.Item("Poppy_CC").GetValue<KeyBind>().Active)
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-                    if (_R.LSIsReady())
+                    if (_R.IsReady())
                     {
                         foreach (var item in ObjectManager.Get<AIHeroClient>().OrderByDescending(x => x.IsEnemy))
                         {
-                            if (item.LSDistance(Player) < 600 && item.LSDistance(Game.CursorPos) < 200)
+                            if (item.Distance(Player) < 600 && item.Distance(Game.CursorPos) < 200)
                             {
                                 if (_R.IsCharging)
                                 {
@@ -333,13 +333,13 @@ using EloBuddy;
 
                 if (_MainMenu.Item("CKey").GetValue<KeyBind>().Active) // Combo
                 {
-                    if (_MainMenu.Item("Poppy_CUse_R").GetValue<bool>() && _R.LSIsReady() && !Rsender.Enable)
+                    if (_MainMenu.Item("Poppy_CUse_R").GetValue<bool>() && _R.IsReady() && !Rsender.Enable)
                     {
                         if (_MainMenu.Item("Poppy_CUse_R_Enable").GetValue<bool>())
                         {
                             foreach (var item in ObjectManager.Get<AIHeroClient>().OrderBy(x => x.MaxHealth))
                             {
-                                if (item.IsEnemy && !item.IsDead && _MainMenu.Item("Poppy_CUse" + item.ChampionName).GetValue<bool>() && item.LSDistance(Player) < 1200)
+                                if (item.IsEnemy && !item.IsDead && _MainMenu.Item("Poppy_CUse" + item.ChampionName).GetValue<bool>() && item.Distance(Player) < 1200)
                                 {
                                     _R.StartCharging();
                                     Rsender.Sender = item;
@@ -350,20 +350,20 @@ using EloBuddy;
                         }
                         else
                         {
-                            var RTarget = ObjectManager.Get<AIHeroClient>().OrderBy(x => x.MaxHealth).FirstOrDefault(x => x.IsEnemy && x.LSDistance(Player) < 1200);
+                            var RTarget = ObjectManager.Get<AIHeroClient>().OrderBy(x => x.MaxHealth).FirstOrDefault(x => x.IsEnemy && x.Distance(Player) < 1200);
                             _R.StartCharging();
                             Rsender.Sender = RTarget;
                             Rsender.Enable = true;
                             Rsender.Type = "Combo";
                         }
                     }
-                    if (_MainMenu.Item("Poppy_CUse_Q").GetValue<bool>() && QTarget != null && _Q.LSIsReady())
+                    if (_MainMenu.Item("Poppy_CUse_Q").GetValue<bool>() && QTarget != null && _Q.IsReady())
                         _Q.Cast(QTarget, true);
                     //벽꿍
-                    if (_MainMenu.Item("Poppy_CUse_E").GetValue<bool>() && ETarget != null && _E.LSIsReady())
+                    if (_MainMenu.Item("Poppy_CUse_E").GetValue<bool>() && ETarget != null && _E.IsReady())
                     {
-                        var FinalPosition = ETarget.BoundingRadius + ETarget.Position.LSExtend(ObjectManager.Player.Position, -360);
-                        if (FinalPosition.LSIsWall())
+                        var FinalPosition = ETarget.BoundingRadius + ETarget.Position.Extend(ObjectManager.Player.Position, -360);
+                        if (FinalPosition.IsWall())
                         {
                             _E.Cast(ETarget, true);
                         }
@@ -375,12 +375,12 @@ using EloBuddy;
                     var MinionTarget = MinionManager.GetMinions(1100, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
                     foreach (var minion in MinionTarget)
                     {
-                        if (_Q.LSIsReady() && _MainMenu.Item("Poppy_LUse_Q").GetValue<bool>() && minion != null && !Orbwalking.CanAttack() && Orbwalking.CanMove(5))
+                        if (_Q.IsReady() && _MainMenu.Item("Poppy_LUse_Q").GetValue<bool>() && minion != null && !Orbwalking.CanAttack() && Orbwalking.CanMove(5))
                         {
                             _Q.Cast(minion, true);
 
                         }
-                        if (_E.LSIsReady() && _MainMenu.Item("Poppy_LUse_E").GetValue<bool>() && minion != null && !Orbwalking.CanAttack() && Orbwalking.CanMove(5))
+                        if (_E.IsReady() && _MainMenu.Item("Poppy_LUse_E").GetValue<bool>() && minion != null && !Orbwalking.CanAttack() && Orbwalking.CanMove(5))
                         {
                             _E.Cast(minion, true);
                         }
@@ -391,11 +391,11 @@ using EloBuddy;
                     var JungleTarget = MinionManager.GetMinions(1100, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
                     foreach (var minion in JungleTarget)
                     {
-                        if (_Q.LSIsReady() && _MainMenu.Item("Poppy_JUse_Q").GetValue<bool>() && minion != null && !Orbwalking.CanAttack() && Orbwalking.CanMove(5))
+                        if (_Q.IsReady() && _MainMenu.Item("Poppy_JUse_Q").GetValue<bool>() && minion != null && !Orbwalking.CanAttack() && Orbwalking.CanMove(5))
                         {
                             _Q.Cast(minion, true);
                         }
-                        if (_E.LSIsReady() && _MainMenu.Item("Poppy_JUse_E").GetValue<bool>() && minion != null && !Orbwalking.CanAttack() && Orbwalking.CanMove(5))
+                        if (_E.IsReady() && _MainMenu.Item("Poppy_JUse_E").GetValue<bool>() && minion != null && !Orbwalking.CanAttack() && Orbwalking.CanMove(5))
                         {
                             _E.Cast(minion, true);
                         }
@@ -415,20 +415,20 @@ using EloBuddy;
         {
             try
             {
-                if (_MainMenu.Item("Poppy_Gap_W").GetValue<bool>() && _W.LSIsReady())
+                if (_MainMenu.Item("Poppy_Gap_W").GetValue<bool>() && _W.IsReady())
                 {
                     _W.Cast();
                     return;
                 }
 
-                if (_MainMenu.Item("Poppy_Gap_E").GetValue<bool>() && _E.LSIsReady())
+                if (_MainMenu.Item("Poppy_Gap_E").GetValue<bool>() && _E.IsReady())
                 {
-                    var FinalPosition = gapcloser.Sender.BoundingRadius + gapcloser.Sender.Position.LSExtend(ObjectManager.Player.Position, -360);
-                    if (FinalPosition.LSIsWall())
+                    var FinalPosition = gapcloser.Sender.BoundingRadius + gapcloser.Sender.Position.Extend(ObjectManager.Player.Position, -360);
+                    if (FinalPosition.IsWall())
                         _E.Cast(gapcloser.Sender, true);
                     return;
                 }
-                if (_MainMenu.Item(gapcloser.Sender.ChampionName).GetValue<bool>() && _R.LSIsReady())
+                if (_MainMenu.Item(gapcloser.Sender.ChampionName).GetValue<bool>() && _R.IsReady())
                 {
                     if (!_R.IsCharging)
                     {
@@ -474,11 +474,11 @@ using EloBuddy;
             {
                 if (sender.IsEnemy && sender.IsValid<AIHeroClient>())
                 {
-                    if (_MainMenu.Item("Poppy_inter_E").GetValue<bool>() && _E.LSIsReady() && Player.LSDistance(sender) < 525)
+                    if (_MainMenu.Item("Poppy_inter_E").GetValue<bool>() && _E.IsReady() && Player.Distance(sender) < 525)
                     {
                         _E.Cast(sender, true);
                     }
-                    if (_MainMenu.Item("Poppy_inter_R").GetValue<bool>() && _R.LSIsReady() && Player.LSDistance(sender) < 1200)
+                    if (_MainMenu.Item("Poppy_inter_R").GetValue<bool>() && _R.IsReady() && Player.Distance(sender) < 1200)
                     {
                         if (_R.IsCharging)
                         {

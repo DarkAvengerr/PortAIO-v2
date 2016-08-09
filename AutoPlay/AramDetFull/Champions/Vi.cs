@@ -35,17 +35,17 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void DeathWalkerOnBeforeAttack(DeathWalker.BeforeAttackEventArgs args)
         {
-            if (E.LSIsReady() && args.Target is AIHeroClient)
+            if (E.IsReady() && args.Target is AIHeroClient)
                 E.Cast();
         }
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             if (safeGap(target))
             {
-                if (target.LSIsValidTarget(Q.Range))
+                if (target.IsValidTarget(Q.Range))
                 {
                     if (Q.IsCharging)
                     {
@@ -65,9 +65,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
-            if (target.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(target)))
+            if (target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(target)))
             {
                 E.Cast();
             }
@@ -76,30 +76,30 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base t)
         {
-            if (!R.LSIsReady() || t == null)
+            if (!R.IsReady() || t == null)
                 return;
             if (t.HealthPercent < 60 && safeGap(t))
                 R.CastOnUnit(t);
-            var qDamage = player.LSGetSpellDamage(t, SpellSlot.Q);
-            var eDamage = player.LSGetSpellDamage(t, SpellSlot.E) * E.Instance.Ammo;
-            var rDamage = player.LSGetSpellDamage(t, SpellSlot.R);
+            var qDamage = player.GetSpellDamage(t, SpellSlot.Q);
+            var eDamage = player.GetSpellDamage(t, SpellSlot.E) * E.Instance.Ammo;
+            var rDamage = player.GetSpellDamage(t, SpellSlot.R);
 
-            if (Q.LSIsReady() && t.Health < qDamage)
+            if (Q.IsReady() && t.Health < qDamage)
                 return;
 
-            if (E.LSIsReady() && Orbwalking.InAutoAttackRange(t) && t.Health < eDamage)
+            if (E.IsReady() && Orbwalking.InAutoAttackRange(t) && t.Health < eDamage)
                 return;
 
-            if (Q.LSIsReady() && E.LSIsReady() && t.Health < qDamage + eDamage)
+            if (Q.IsReady() && E.IsReady() && t.Health < qDamage + eDamage)
                 return;
 
             if (t.Health > rDamage)
             {
-                if (Q.LSIsReady() && E.LSIsReady() && t.Health < rDamage + qDamage + eDamage)
+                if (Q.IsReady() && E.IsReady() && t.Health < rDamage + qDamage + eDamage)
                     R.CastOnUnit(t);
-                else if (E.LSIsReady() && t.Health < rDamage + eDamage)
+                else if (E.IsReady() && t.Health < rDamage + eDamage)
                     R.CastOnUnit(t);
-                else if (Q.LSIsReady() && t.Health < rDamage + qDamage)
+                else if (Q.IsReady() && t.Health < rDamage + qDamage)
                     R.CastOnUnit(t);
             }
             else

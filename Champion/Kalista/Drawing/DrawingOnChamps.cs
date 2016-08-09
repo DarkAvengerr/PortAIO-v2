@@ -123,7 +123,7 @@ namespace S_Plus_Class_Kalista.Drawing
                 if (SMenu.Item(SentinelHandler._MenuItemBase + "Boolean.UseSentinel").GetValue<bool>()) //enabled
                 {
                     var playerPos = EloBuddy.Drawing.WorldToScreen(Player.Position);
-                    var vColor = GetColor(Champion.W.LSIsReady());
+                    var vColor = GetColor(Champion.W.IsReady());
                     var text = "Sentinel Mode:" + SentinelHandler.GetSentinelSelected();
                     EloBuddy.Drawing.DrawText(playerPos.X - 30 + 50,
                         playerPos.Y - 80 + 60, vColor, text);

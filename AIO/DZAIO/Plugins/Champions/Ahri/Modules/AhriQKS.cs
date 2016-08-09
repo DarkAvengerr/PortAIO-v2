@@ -19,7 +19,7 @@ using EloBuddy;
         public bool ShouldGetExecuted()
         {
             return Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.ahri.extra.autoQKS") &&
-                   Variables.Spells[SpellSlot.Q].LSIsReady();
+                   Variables.Spells[SpellSlot.Q].IsReady();
 
         }
 
@@ -32,13 +32,13 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(Variables.Spells[SpellSlot.Q].Range, TargetSelector.DamageType.Magical);
 
-            if (target.LSIsValidTarget()
+            if (target.IsValidTarget()
                 && TargetSelector.GetPriority(target) > 1)
             {
                 
                 if (target.Health + 5 < Variables.Spells[SpellSlot.Q].GetDamage(target) 
                     && (Variables.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo 
-                    || !Variables.Orbwalker.GetTarget().LSIsValidTarget()))
+                    || !Variables.Orbwalker.GetTarget().IsValidTarget()))
                 {
                     Variables.Spells[SpellSlot.Q].CastIfHitchanceEquals(target, HitChance.High);
                 }

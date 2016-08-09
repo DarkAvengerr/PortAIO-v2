@@ -21,7 +21,7 @@ using EloBuddy;
                     GameObjects.EnemyHeroes.Where(
                         enemy =>
                             enemy.IsMelee &&
-                            enemy.LSDistance(ObjectManager.Player.ServerPosition) < enemy.AttackRange + 65f).ToList();
+                            enemy.Distance(ObjectManager.Player.ServerPosition) < enemy.AttackRange + 65f).ToList();
                 var lowHealth = ObjectManager.Player.HealthPercent < 15;
 
                 if (meleeEnemiesOnMe.Any(m => !m.IsRunningAway()) && lowHealth)
@@ -32,16 +32,16 @@ using EloBuddy;
 
                 var selectedTarget = TargetSelector.GetTarget(Variables.spells[SpellSlot.E].Range * 0.75f, TargetSelector.DamageType.Physical);
 
-                if (selectedTarget.LSIsValidTarget())
+                if (selectedTarget.IsValidTarget())
                 {
                     //The selected target is valid. Is moving and is not coming towards us while we are facing them.
                     if (selectedTarget.HasBuffOfType(BuffType.Slow) 
                         && selectedTarget.Path.Count() > 1)
                     {
                         //We are facing the target, we have a high"ish" health and the target is coming towards us. No point in using E:
-                        if (ObjectManager.Player.LSIsFacing(selectedTarget) &&
-                            ObjectManager.Player.LSDistance(selectedTarget) >
-                            ObjectManager.Player.LSDistance(selectedTarget.GetPositionInFront(300f))
+                        if (ObjectManager.Player.IsFacing(selectedTarget) &&
+                            ObjectManager.Player.Distance(selectedTarget) >
+                            ObjectManager.Player.Distance(selectedTarget.GetPositionInFront(300f))
                             && ObjectManager.Player.HealthPercent > 35)
                         {
                             return;
@@ -62,11 +62,11 @@ using EloBuddy;
                         {
                             ESpell.CastIfHitchanceEquals(selectedTarget, HitChance.VeryHigh);
                         }
-                    } else if (selectedTarget.LSGetEnemiesInRange(350f).Count() >= 2 
+                    } else if (selectedTarget.GetEnemiesInRange(350f).Count() >= 2 
                         && ESpell.GetPrediction(selectedTarget).Hitchance >= HitChance.High)
                     {
                         //We can almost certainly hit our targets and also at least 2 other targets.
-                        var enemiesInRange = selectedTarget.LSGetEnemiesInRange(350f);
+                        var enemiesInRange = selectedTarget.GetEnemiesInRange(350f);
                         if (enemiesInRange.Count(enemy => ESpell.GetPrediction(enemy).Hitchance >= HitChance.High) >= 2)
                         {
                             //Cast E.
@@ -79,17 +79,17 @@ using EloBuddy;
 
         internal static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsEnemy && sender.LSIsValidTarget() 
+            if (sender.IsEnemy && sender.IsValidTarget() 
                 && sender is AIHeroClient 
                 && MenuExtensions.GetItemValue<bool>("iseriesr.jinx.e.ops")
-                && Variables.spells[SpellSlot.E].LSIsReady())
+                && Variables.spells[SpellSlot.E].IsReady())
             {
                 if (JinxUtility.GetESpellDict().ContainsKey((sender as AIHeroClient).ChampionName))
                 {
                     if (args.Slot == JinxUtility.GetESpellDict()[(sender as AIHeroClient).ChampionName])
                     {
                         const int ESpeed = 2000;
-                        var distance = ObjectManager.Player.LSDistance(sender);
+                        var distance = ObjectManager.Player.Distance(sender);
                         //Do the calculations for E speed. If it will reach in time then cast E.
                         if (distance / ESpeed < 0.4f)
                         {
@@ -102,8 +102,8 @@ using EloBuddy;
 
         internal static void OnGapcloser(ActiveGapcloser gapcloser)
         {
-            if (gapcloser.Sender.LSIsValidTarget()
-                && Variables.spells[SpellSlot.E].LSIsReady()
+            if (gapcloser.Sender.IsValidTarget()
+                && Variables.spells[SpellSlot.E].IsReady()
                 && MenuExtensions.GetItemValue<bool>("iseriesr.jinx.e.agp")
                 && ObjectManager.Player.ManaPercent > 30)
             {

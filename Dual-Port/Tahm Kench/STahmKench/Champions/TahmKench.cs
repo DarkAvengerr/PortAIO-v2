@@ -155,7 +155,7 @@ using EloBuddy;
 
             public static void CastSpell(Spell spell, Obj_AI_Base target, HitChance hitchance)
             {
-                if (target.LSIsValidTarget(spell.Range) && spell.GetPrediction(target).Hitchance >= hitchance)
+                if (target.IsValidTarget(spell.Range) && spell.GetPrediction(target).Hitchance >= hitchance)
                 {
                     spell.Cast(target);
                 }
@@ -249,7 +249,7 @@ using EloBuddy;
                                .Item("SAssembliesChampionsTahmKenchWInterrupt")
                                .GetValue<bool>())
                     {
-                        if (Orbwalking.InAutoAttackRange(unit) && CustomSpell.Q.LSIsReady() && (CustomSpell.W.LSIsReady()
+                        if (Orbwalking.InAutoAttackRange(unit) && CustomSpell.Q.IsReady() && (CustomSpell.W.IsReady()
                             && this.swallowedUnit == SwallowedUnit.None))
                         {
                             EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, unit);
@@ -260,25 +260,25 @@ using EloBuddy;
                     break;
 
                 case 2:
-                    if ((CustomSpell.Q.LSIsReady() && TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchQ")
+                    if ((CustomSpell.Q.IsReady() && TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchQ")
                             .Item("SAssembliesChampionsTahmKenchQInterrupt")
-                            .GetValue<bool>()) || (CustomSpell.W.LSIsReady() && TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchW")
+                            .GetValue<bool>()) || (CustomSpell.W.IsReady() && TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchW")
                                .Item("SAssembliesChampionsTahmKenchWInterrupt")
                                .GetValue<bool>() && this.swallowedUnit == SwallowedUnit.None))
                     {
                         if (Orbwalking.InAutoAttackRange(unit))
                         {
                             EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, unit);
-                            if (CustomSpell.Q.LSIsReady())
+                            if (CustomSpell.Q.IsReady())
                             {
                                 LeagueSharp.Common.Utility.DelayAction.Add(100, () => CustomSpell.Q.Cast(unit));
                             }
-                            else if (CustomSpell.W.LSIsReady())
+                            else if (CustomSpell.W.IsReady())
                             {
                                 LeagueSharp.Common.Utility.DelayAction.Add(100, () => CustomSpell.W.CastOnUnit(unit));
                             }
                         }
-                        else if (CustomSpell.Q.LSIsReady() && CustomSpell.W.LSIsReady())
+                        else if (CustomSpell.Q.IsReady() && CustomSpell.W.IsReady())
                         {
                             CustomSpell.Q.Cast(unit);
                             LeagueSharp.Common.Utility.DelayAction.Add(100, () => CustomSpell.W.CastOnUnit(unit));
@@ -287,17 +287,17 @@ using EloBuddy;
                     break;
 
                 case 3:
-                    if ((CustomSpell.Q.LSIsReady() && TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchQ")
+                    if ((CustomSpell.Q.IsReady() && TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchQ")
                             .Item("SAssembliesChampionsTahmKenchQInterrupt")
-                            .GetValue<bool>()) || (CustomSpell.W.LSIsReady() && TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchW")
+                            .GetValue<bool>()) || (CustomSpell.W.IsReady() && TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchW")
                                .Item("SAssembliesChampionsTahmKenchWInterrupt")
                                .GetValue<bool>() && this.swallowedUnit == SwallowedUnit.None))
                     {
-                        if (CustomSpell.Q.LSIsReady())
+                        if (CustomSpell.Q.IsReady())
                         {
                             CustomSpell.Q.Cast(unit);
                         }
-                        else if (CustomSpell.W.LSIsReady())
+                        else if (CustomSpell.W.IsReady())
                         {
                             CustomSpell.W.CastOnUnit(unit);
                         }
@@ -400,17 +400,17 @@ using EloBuddy;
                 switch (buffCount)
                 {
                     case 3:
-                        if (CustomSpell.W.LSIsReady()
+                        if (CustomSpell.W.IsReady()
                             && this.swallowedUnit == SwallowedUnit.None
-                            && target.LSDistance(ObjectManager.Player) <= CustomSpell.W.Range
+                            && target.Distance(ObjectManager.Player) <= CustomSpell.W.Range
                             && TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchCombo")
                                    .Item("SAssembliesChampionsTahmKenchComboW")
                                    .GetValue<bool>())
                         {
                             CustomSpell.W.CastOnUnit(target);
                         }
-                        else if (CustomSpell.Q.LSIsReady() 
-                            && target.LSDistance(ObjectManager.Player) <= CustomSpell.Q.Range
+                        else if (CustomSpell.Q.IsReady() 
+                            && target.Distance(ObjectManager.Player) <= CustomSpell.Q.Range
                                  && TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchCombo")
                                         .Item("SAssembliesChampionsTahmKenchComboQ")
                                         .GetValue<bool>())
@@ -419,7 +419,7 @@ using EloBuddy;
                         }
                         break;
                     default:
-                        if (CustomSpell.W.LSIsReady() && !Orbwalking.InAutoAttackRange(target)
+                        if (CustomSpell.W.IsReady() && !Orbwalking.InAutoAttackRange(target)
                             && TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchCombo")
                                 .Item("SAssembliesChampionsTahmKenchComboW")
                                 .GetValue<bool>())
@@ -440,8 +440,8 @@ using EloBuddy;
                                 CustomSpell.W2.CastIfHitchanceEquals(target, HitChance.High);
                             }
                         }
-                        if (CustomSpell.Q.LSIsReady()
-                            && target.LSDistance(ObjectManager.Player) <= CustomSpell.Q.Range
+                        if (CustomSpell.Q.IsReady()
+                            && target.Distance(ObjectManager.Player) <= CustomSpell.Q.Range
                                  && TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchCombo")
                                         .Item("SAssembliesChampionsTahmKenchComboQ")
                                         .GetValue<bool>())
@@ -458,20 +458,20 @@ using EloBuddy;
                         .GetValue<bool>())
             {
                 var hero = HeroManager.Allies
-                    .OrderBy(x => ObjectManager.Player.LSDistance(x.Position))
-                    .FirstOrDefault(x => !x.IsMe && ObjectManager.Player.LSDistance(x.Position) < 2000);
+                    .OrderBy(x => ObjectManager.Player.Distance(x.Position))
+                    .FirstOrDefault(x => !x.IsMe && ObjectManager.Player.Distance(x.Position) < 2000);
                 var turret =
                     ObjectManager.Get<Obj_AI_Turret>()
-                        .OrderBy(x => ObjectManager.Player.LSDistance(x.Position))
-                        .FirstOrDefault(x => ObjectManager.Player.LSDistance(x.Position) < 2000
+                        .OrderBy(x => ObjectManager.Player.Distance(x.Position))
+                        .FirstOrDefault(x => ObjectManager.Player.Distance(x.Position) < 2000
                         && x.IsAlly);
                 if (hero != null && turret != null)
                 {
-                    if (ObjectManager.Player.LSDistance(hero) < ObjectManager.Player.LSDistance(turret))
+                    if (ObjectManager.Player.Distance(hero) < ObjectManager.Player.Distance(turret))
                     {
                         orbwalker.SetOrbwalkingPoint(hero.ServerPosition);
                     }
-                    else if (ObjectManager.Player.LSDistance(hero) > ObjectManager.Player.LSDistance(turret))
+                    else if (ObjectManager.Player.Distance(hero) > ObjectManager.Player.Distance(turret))
                     {
                         orbwalker.SetOrbwalkingPoint(turret.ServerPosition);
                     }
@@ -498,7 +498,7 @@ using EloBuddy;
                 return; 
             }
 
-            if (CustomSpell.Q.LSIsReady() &&
+            if (CustomSpell.Q.IsReady() &&
                 TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchHarass")
                     .Item("SAssembliesChampionsTahmKenchHarassQ")
                     .GetValue<bool>())
@@ -512,7 +512,7 @@ using EloBuddy;
             }
 
             var closestMinion = MinionManager.GetMinions(250, MinionTypes.All, MinionTeam.NotAlly).FirstOrDefault();
-            if (CustomSpell.W.LSIsReady()
+            if (CustomSpell.W.IsReady()
                 && TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchHarass")
                                 .Item("SAssembliesChampionsTahmKenchHarassW")
                                 .GetValue<bool>())
@@ -546,11 +546,11 @@ using EloBuddy;
             }
 
             var minion = MinionManager.GetMinions(CustomSpell.Q.Range, MinionTypes.All, MinionTeam.NotAlly)
-                    .FirstOrDefault(target => ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.Q) >= target.Health);
+                    .FirstOrDefault(target => ObjectManager.Player.GetSpellDamage(target, SpellSlot.Q) >= target.Health);
 
             if (minion != null)
             {
-                if (CustomSpell.Q.LSIsReady() && minion.LSDistance(ObjectManager.Player) >= ObjectManager.Player.AttackRange &&
+                if (CustomSpell.Q.IsReady() && minion.Distance(ObjectManager.Player) >= ObjectManager.Player.AttackRange &&
                 TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchFarm")
                     .SubMenu("SAssembliesChampionsTahmKenchFarmLasthit")
                     .Item("SAssembliesChampionsTahmKenchFarmLasthitQ")
@@ -566,7 +566,7 @@ using EloBuddy;
             if (TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchFarm")
                     .SubMenu("SAssembliesChampionsTahmKenchFarmLane")
                     .Item("SAssembliesChampionsTahmKenchFarmLaneQ")
-                    .GetValue<bool>() && CustomSpell.Q.LSIsReady() &&
+                    .GetValue<bool>() && CustomSpell.Q.IsReady() &&
                     ObjectManager.Player.ManaPercent
                     >= TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchFarm")
                       .SubMenu("SAssembliesChampionsTahmKenchFarmLane")
@@ -579,7 +579,7 @@ using EloBuddy;
 
                 if (minion != null)
                 {
-                    if (CustomSpell.Q.LSIsReady())
+                    if (CustomSpell.Q.IsReady())
                     {
                         CustomSpell.CastSpell(CustomSpell.Q, minion, HitChance.High);
                     }
@@ -589,7 +589,7 @@ using EloBuddy;
             if (TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchFarm")
                     .SubMenu("SAssembliesChampionsTahmKenchFarmLane")
                     .Item("SAssembliesChampionsTahmKenchFarmLaneW")
-                    .GetValue<bool>() && CustomSpell.W.LSIsReady())
+                    .GetValue<bool>() && CustomSpell.W.IsReady())
             {
 
                 if (ObjectManager.Player.ManaPercent
@@ -624,7 +624,7 @@ using EloBuddy;
             if (TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchFarm")
                     .SubMenu("SAssembliesChampionsTahmKenchFarmJungle")
                     .Item("SAssembliesChampionsTahmKenchFarmJungleQ")
-                    .GetValue<bool>() && CustomSpell.Q.LSIsReady() &&
+                    .GetValue<bool>() && CustomSpell.Q.IsReady() &&
                     ObjectManager.Player.ManaPercent
                     >= TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchFarm")
                       .SubMenu("SAssembliesChampionsTahmKenchFarmJungle")
@@ -637,7 +637,7 @@ using EloBuddy;
 
                 if (minion != null)
                 {
-                    if (CustomSpell.Q.LSIsReady())
+                    if (CustomSpell.Q.IsReady())
                     {
                         CustomSpell.CastSpell(CustomSpell.Q, minion, HitChance.High);
                     }
@@ -647,7 +647,7 @@ using EloBuddy;
             if (TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchFarm")
                     .SubMenu("SAssembliesChampionsTahmKenchFarmJungle")
                     .Item("SAssembliesChampionsTahmKenchFarmJungleW")
-                    .GetValue<bool>() && CustomSpell.W.LSIsReady())
+                    .GetValue<bool>() && CustomSpell.W.IsReady())
             {
 
                 if (ObjectManager.Player.ManaPercent
@@ -681,10 +681,10 @@ using EloBuddy;
         {
             if (TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchQ")
                     .Item("SAssembliesChampionsTahmKenchQKillsteal")
-                    .GetValue<bool>() && CustomSpell.Q.LSIsReady())
+                    .GetValue<bool>() && CustomSpell.Q.IsReady())
             {
-                var target = HeroManager.Enemies.FirstOrDefault(enemy => enemy.LSIsValidTarget(CustomSpell.Q.Range) && 
-                    enemy.Health < ObjectManager.Player.LSGetSpellDamage(enemy, SpellSlot.Q));
+                var target = HeroManager.Enemies.FirstOrDefault(enemy => enemy.IsValidTarget(CustomSpell.Q.Range) && 
+                    enemy.Health < ObjectManager.Player.GetSpellDamage(enemy, SpellSlot.Q));
 
                 if (target != null)
                 {
@@ -694,10 +694,10 @@ using EloBuddy;
 
             if (TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchW")
                     .Item("SAssembliesChampionsTahmKenchWKillsteal")
-                    .GetValue<bool>() && CustomSpell.W.LSIsReady())
+                    .GetValue<bool>() && CustomSpell.W.IsReady())
             {
-                var target = HeroManager.Enemies.FirstOrDefault(enemy => enemy.LSIsValidTarget(CustomSpell.W.Range) &&
-                    enemy.Health < ObjectManager.Player.LSGetSpellDamage(enemy, SpellSlot.W));
+                var target = HeroManager.Enemies.FirstOrDefault(enemy => enemy.IsValidTarget(CustomSpell.W.Range) &&
+                    enemy.Health < ObjectManager.Player.GetSpellDamage(enemy, SpellSlot.W));
 
                 if (target != null)
                 {
@@ -718,7 +718,7 @@ using EloBuddy;
                     ObjectManager.Player.HealthPercent <= 
                     TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchE")
                     .Item("SAssembliesChampionsTahmKenchEShieldPercent")
-                    .GetValue<Slider>().Value && CustomSpell.E.LSIsReady())
+                    .GetValue<Slider>().Value && CustomSpell.E.IsReady())
             {
                 CustomSpell.E.Cast();
             }
@@ -729,12 +729,12 @@ using EloBuddy;
             if (TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchW")
                     .Item("SAssembliesChampionsTahmKenchWAutoShieldAlly")
                     .GetValue<bool>() && this.swallowedUnit == SwallowedUnit.None
-                    && CustomSpell.W.LSIsReady())
+                    && CustomSpell.W.IsReady())
             {
                 var target = HeroManager.Allies.FirstOrDefault(ally => !ally.IsMe && !ally.IsDead &&
                    ally.HealthPercent <= TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchW")
                     .Item("SAssembliesChampionsTahmKenchWAutoShieldAllyPercent")
-                    .GetValue<Slider>().Value && ObjectManager.Player.LSDistance(ally) < 500);
+                    .GetValue<Slider>().Value && ObjectManager.Player.Distance(ally) < 500);
 
                 if (target != null)
                 {
@@ -748,25 +748,25 @@ using EloBuddy;
         {
             if (!TahmKenchChampion.GetSubMenu("SAssembliesChampionsTahmKenchTroll")
                      .Item("SAssembliesChampionsTahmKenchTrollW")
-                     .GetValue<KeyBind>().Active || !CustomSpell.W.LSIsReady())
+                     .GetValue<KeyBind>().Active || !CustomSpell.W.IsReady())
             {
                 return;
             }
 
             var hero = HeroManager.Enemies
-                .OrderBy(x => ObjectManager.Player.LSDistance(x.Position))
-                .FirstOrDefault(x => !x.IsMe && ObjectManager.Player.LSDistance(x.Position) < 2000);
+                .OrderBy(x => ObjectManager.Player.Distance(x.Position))
+                .FirstOrDefault(x => !x.IsMe && ObjectManager.Player.Distance(x.Position) < 2000);
             var turret =
                 ObjectManager.Get<Obj_AI_Turret>()
-                    .OrderBy(x => ObjectManager.Player.LSDistance(x.Position))
-                    .FirstOrDefault(x => ObjectManager.Player.LSDistance(x.Position) < 2000
+                    .OrderBy(x => ObjectManager.Player.Distance(x.Position))
+                    .FirstOrDefault(x => ObjectManager.Player.Distance(x.Position) < 2000
                     && x.IsEnemy);
 
             if (hero != null || turret != null)
             {
                 var allyHero = HeroManager.Allies
-                    .OrderBy(x => ObjectManager.Player.LSDistance(x.Position))
-                    .FirstOrDefault(x => !x.IsMe && ObjectManager.Player.LSDistance(x.Position) < CustomSpell.W.Range + 200);
+                    .OrderBy(x => ObjectManager.Player.Distance(x.Position))
+                    .FirstOrDefault(x => !x.IsMe && ObjectManager.Player.Distance(x.Position) < CustomSpell.W.Range + 200);
 
                 if (allyHero != null && this.swallowedUnit == SwallowedUnit.None)
                 {
@@ -785,11 +785,11 @@ using EloBuddy;
                         .Item("SAssembliesChampionsTahmKenchTrollWToEnemyTurret")
                         .GetValue<bool>())
                     {
-                        if (ObjectManager.Player.LSDistance(hero) < ObjectManager.Player.LSDistance(turret))
+                        if (ObjectManager.Player.Distance(hero) < ObjectManager.Player.Distance(turret))
                         {
                             target = hero;
                         }
-                        else if (ObjectManager.Player.LSDistance(hero) > ObjectManager.Player.LSDistance(turret))
+                        else if (ObjectManager.Player.Distance(hero) > ObjectManager.Player.Distance(turret))
                         {
                             target = turret;
                         }
@@ -809,7 +809,7 @@ using EloBuddy;
 
                     if (target != null)
                     {
-                        if (ObjectManager.Player.LSDistance(target) < CustomSpell.W2.Range)
+                        if (ObjectManager.Player.Distance(target) < CustomSpell.W2.Range)
                         {
                             EloBuddy.Player.IssueOrder(GameObjectOrder.Stop, ObjectManager.Player.ServerPosition);
                             CustomSpell.W.Cast(target.ServerPosition);

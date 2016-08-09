@@ -22,11 +22,11 @@ using EloBuddy;
 
                 var eHero =
                     HeroManager.Enemies.FirstOrDefault(
-                        m => m.LSIsValidTarget(Variables.spells[SpellSlot.E].Range) && m.LSHasBuff("twitchdeadlyvenom"));
+                        m => m.IsValidTarget(Variables.spells[SpellSlot.E].Range) && m.HasBuff("twitchdeadlyvenom"));
                 if (eHero != null)
                 {
                     var buffCount = eHero.GetBuff("twitchdeadlyvenom").Count;
-                    var distance = ObjectManager.Player.LSDistance(eHero);
+                    var distance = ObjectManager.Player.Distance(eHero);
                     if (buffCount == 6)
                     {
                         Variables.spells[SpellSlot.E].Cast();
@@ -44,12 +44,12 @@ using EloBuddy;
         {
             var baseDamage = Variables.spells[SpellSlot.E].GetDamage(hero);
 
-            if (ObjectManager.Player.LSHasBuff("summonerexhaust"))
+            if (ObjectManager.Player.HasBuff("summonerexhaust"))
             {
                 baseDamage *= 0.4f;
             }
 
-            if (hero.LSHasBuff("FerociousHowl"))
+            if (hero.HasBuff("FerociousHowl"))
             {
                 baseDamage *= 0.35f;
             }

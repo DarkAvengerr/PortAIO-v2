@@ -20,7 +20,7 @@ using EloBuddy;
         private Orbwalking.Orbwalker Orbwalker;
         private AIHeroClient Player = ObjectManager.Player;
         private Spell Q, W, E, R;
-        private SpellSlot Ignite = ObjectManager.Player.LSGetSpellSlot("summonerDot");
+        private SpellSlot Ignite = ObjectManager.Player.GetSpellSlot("summonerDot");
         private int LastSwitch;
         private Obj_AI_Minion shadow
         {
@@ -348,7 +348,7 @@ using EloBuddy;
                         if (Menu.Item("UO").GetValue<bool>())
                         {
                             var target = TargetSelector.GetSelectedTarget();
-                            if (Player.Position.LSDistance(target.Position) <= R.Range && !target.IsZombie)
+                            if (Player.Position.Distance(target.Position) <= R.Range && !target.IsZombie)
                             {
                                 R.CastOnUnit(target);
                             }
@@ -404,7 +404,7 @@ using EloBuddy;
                                         var target = MinionManager.GetMinions(Q.Range).FirstOrDefault(x => x.IsKillableAndValidTarget(Q.GetDamage(x), Q.DamageType, Q.Range));
                                         if (target != null)
                                         {
-                                            if (Player.Position.LSDistance(target.Position) > E.Range)
+                                            if (Player.Position.Distance(target.Position) > E.Range)
                                             {
                                                 Q.UpdateSourcePosition(Player.Position, Player.Position);
                                                 Q.Cast(target);
@@ -442,7 +442,7 @@ using EloBuddy;
                                     {
                                         if (Player.Mana >= WEQMana)
                                         {
-                                            if (starget != null && starget.LSIsValidTarget(W.Range) && !starget.IsDead)
+                                            if (starget != null && starget.IsValidTarget(W.Range) && !starget.IsDead)
                                             {
                                                 if (!starget.IsZombie)
                                                 {
@@ -468,7 +468,7 @@ using EloBuddy;
                                 {
                                     if (shadow != null)
                                     {
-                                        if (starget != null && starget.LSIsValidTarget(E.Range) && !starget.IsDead || starget != null && starget.LSIsValidTarget(E.Range,true,shadow.Position) && !starget.IsDead)
+                                        if (starget != null && starget.IsValidTarget(E.Range) && !starget.IsDead || starget != null && starget.IsValidTarget(E.Range,true,shadow.Position) && !starget.IsDead)
                                         {
                                             if (!starget.IsZombie)
                                             {
@@ -496,7 +496,7 @@ using EloBuddy;
                                     {
                                         if (!W.IsReadyPerfectly() || Player.Mana < WEQMana || !Menu.Item("HW1").GetValue<KeyBind>().Active)
                                         {
-                                            if (starget != null && starget.LSIsValidTarget(E.Range) && !starget.IsDead)
+                                            if (starget != null && starget.IsValidTarget(E.Range) && !starget.IsDead)
                                             {
                                                 if (!starget.IsZombie)
                                                 {
@@ -522,18 +522,18 @@ using EloBuddy;
                                 {
                                     if (shadow != null)
                                     {
-                                        if (starget != null && starget.LSIsValidTarget(Q.Range) && !starget.IsDead || starget != null && starget.LSIsValidTarget(Q.Range, true, shadow.Position) && !starget.IsDead)
+                                        if (starget != null && starget.IsValidTarget(Q.Range) && !starget.IsDead || starget != null && starget.IsValidTarget(Q.Range, true, shadow.Position) && !starget.IsDead)
                                         {
                                             if (!starget.IsZombie)
                                             {
-                                                if (starget.LSIsValidTarget(Q.Range, true, shadow.Position)) 
+                                                if (starget.IsValidTarget(Q.Range, true, shadow.Position)) 
                                                 {
                                                     Q.UpdateSourcePosition(shadow.Position, shadow.Position);
                                                     Q.Cast(starget);
                                                 }
                                                 else
                                                 {
-                                                    if (starget.LSIsValidTarget(Q.Range))
+                                                    if (starget.IsValidTarget(Q.Range))
                                                     {
                                                         Q.UpdateSourcePosition(Player.Position, Player.Position);
                                                         Q.Cast(starget);
@@ -564,7 +564,7 @@ using EloBuddy;
                                     {
                                         if (!W.IsReadyPerfectly() || Player.Mana < WEQMana || !Menu.Item("HW1").GetValue<KeyBind>().Active)
                                         {
-                                            if (starget != null && starget.LSIsValidTarget(Q.Range) && !starget.IsDead)
+                                            if (starget != null && starget.IsValidTarget(Q.Range) && !starget.IsDead)
                                             {
                                                 if (!starget.IsZombie)
                                                 {
@@ -588,11 +588,11 @@ using EloBuddy;
 
                             if (Menu.Item("HW2").GetValue<bool>())
                             {
-                                if (Player.LSHasBuff("zedwhandler"))
+                                if (Player.HasBuff("zedwhandler"))
                                 {
                                     if (W.IsReadyPerfectly() && wReady == wCheck.Second)
                                     {
-                                        if (starget != null && starget.LSIsValidTarget(Player.AttackRange, true, shadow.Position) && !starget.IsDead)
+                                        if (starget != null && starget.IsValidTarget(Player.AttackRange, true, shadow.Position) && !starget.IsDead)
                                         {
                                             if (!starget.IsZombie)
                                             {
@@ -615,7 +615,7 @@ using EloBuddy;
 
                             if (Menu.Item("HI").GetValue<bool>())
                             {
-                                if (starget != null && starget.LSIsValidTarget(550f) && !starget.IsDead)
+                                if (starget != null && starget.IsValidTarget(550f) && !starget.IsDead)
                                 {
                                     if (!starget.IsZombie)
                                     {
@@ -631,7 +631,7 @@ using EloBuddy;
                                     }
                                 }
 
-                                if (starget != null && starget.LSIsValidTarget(350f) && !starget.IsDead)
+                                if (starget != null && starget.IsValidTarget(350f) && !starget.IsDead)
                                 {
                                     if (!starget.IsZombie)
                                     {
@@ -657,7 +657,7 @@ using EloBuddy;
                                 {
                                     if (Menu.Item("LCQ").GetValue<bool>())
                                     {
-                                        var target = MinionManager.GetMinions(Q.Range).FirstOrDefault(x => x.LSIsValidTarget(Q.Range));
+                                        var target = MinionManager.GetMinions(Q.Range).FirstOrDefault(x => x.IsValidTarget(Q.Range));
                                         if (target != null)
                                         {
                                             Q.UpdateSourcePosition(Player.Position, Player.Position);
@@ -668,7 +668,7 @@ using EloBuddy;
                                     if (Menu.Item("JCQ").GetValue<bool>())
                                     {
                                         var target = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth)
-                                            .FirstOrDefault(x => x.LSIsValidTarget(Q.Range));
+                                            .FirstOrDefault(x => x.IsValidTarget(Q.Range));
                                         if (target != null)
                                         {
                                             Q.UpdateSourcePosition(Player.Position, Player.Position);
@@ -684,7 +684,7 @@ using EloBuddy;
                                 {
                                     if (Menu.Item("LCE").GetValue<bool>())
                                     {
-                                        var target = MinionManager.GetMinions(E.Range).FirstOrDefault(x => x.LSIsValidTarget(E.Range));
+                                        var target = MinionManager.GetMinions(E.Range).FirstOrDefault(x => x.IsValidTarget(E.Range));
                                         if (target != null)
                                         {
                                             E.Cast();
@@ -694,7 +694,7 @@ using EloBuddy;
                                     if (Menu.Item("JCE").GetValue<bool>())
                                     {
                                         var target = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth)
-                                            .FirstOrDefault(x => x.LSIsValidTarget(E.Range));
+                                            .FirstOrDefault(x => x.IsValidTarget(E.Range));
                                         if (target != null)
                                         {
                                             E.Cast();
@@ -705,7 +705,7 @@ using EloBuddy;
 
                             if (Menu.Item("LCI").GetValue<bool>())
                             {
-                                var target = MinionManager.GetMinions(400f).FirstOrDefault(x => x.LSIsValidTarget(400f));
+                                var target = MinionManager.GetMinions(400f).FirstOrDefault(x => x.IsValidTarget(400f));
                                 if (target != null)
                                 {
                                     castHydra();
@@ -715,7 +715,7 @@ using EloBuddy;
                             if (Menu.Item("JCI").GetValue<bool>())
                             {
                                 var target = MinionManager.GetMinions(400f, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth)
-                                    .FirstOrDefault(x => x.LSIsValidTarget(400f));
+                                    .FirstOrDefault(x => x.IsValidTarget(400f));
                                 if (target != null)
                                 {
                                     castHydra();
@@ -728,7 +728,7 @@ using EloBuddy;
                             var starget = TargetSelector.GetSelectedTarget();
                             if (Menu.Item("CI").GetValue<bool>())
                             {
-                                if (starget != null && starget.LSIsValidTarget(1500f) && !starget.IsDead)
+                                if (starget != null && starget.IsValidTarget(1500f) && !starget.IsDead)
                                 {
                                     if (!starget.IsZombie)
                                     {
@@ -744,7 +744,7 @@ using EloBuddy;
                                     }
                                 }
 
-                                if (starget != null && starget.LSIsValidTarget(550f) && !starget.IsDead)
+                                if (starget != null && starget.IsValidTarget(550f) && !starget.IsDead)
                                 {
                                     if (!starget.IsZombie)
                                     {
@@ -769,7 +769,7 @@ using EloBuddy;
                                     {
                                         if (E.IsReadyPerfectly())
                                         {
-                                            if (starget != null && starget.LSIsValidTarget(E.Range) && !starget.IsDead || starget != null && starget.LSIsValidTarget(E.Range, true, shadow.Position) && !starget.IsDead)
+                                            if (starget != null && starget.IsValidTarget(E.Range) && !starget.IsDead || starget != null && starget.IsValidTarget(E.Range, true, shadow.Position) && !starget.IsDead)
                                             {
                                                 if (!starget.IsZombie)
                                                 {
@@ -799,18 +799,18 @@ using EloBuddy;
                                     {
                                         if (Q.IsReadyPerfectly())
                                         {
-                                            if (starget != null && starget.LSIsValidTarget(Q.Range) && !starget.IsDead || starget != null && starget.LSIsValidTarget(Q.Range, true, shadow.Position))
+                                            if (starget != null && starget.IsValidTarget(Q.Range) && !starget.IsDead || starget != null && starget.IsValidTarget(Q.Range, true, shadow.Position))
                                             {
                                                 if (!starget.IsZombie)
                                                 {
-                                                    if (starget.LSIsValidTarget(Q.Range, true, shadow.Position))
+                                                    if (starget.IsValidTarget(Q.Range, true, shadow.Position))
                                                     {
                                                         Q.UpdateSourcePosition(shadow.Position, shadow.Position);
                                                         Q.Cast(starget);
                                                     }
                                                     else
                                                     {
-                                                        if (starget.LSIsValidTarget(Q.Range))
+                                                        if (starget.IsValidTarget(Q.Range))
                                                         {
                                                             Q.UpdateSourcePosition(Player.Position, Player.Position);
                                                             Q.Cast(starget);
@@ -845,7 +845,7 @@ using EloBuddy;
                                     {
                                         if (Q.IsReadyPerfectly())
                                         {
-                                            if (starget != null && starget.LSIsValidTarget(Q.Range) && !starget.IsDead)
+                                            if (starget != null && starget.IsValidTarget(Q.Range) && !starget.IsDead)
                                             {
                                                 if (!starget.IsZombie)
                                                 {
@@ -869,7 +869,7 @@ using EloBuddy;
                                     {
                                         if (E.IsReadyPerfectly())
                                         {
-                                            if (starget != null && starget.LSIsValidTarget(E.Range) && !starget.IsDead)
+                                            if (starget != null && starget.IsValidTarget(E.Range) && !starget.IsDead)
                                             {
                                                 if (!starget.IsZombie)
                                                 {
@@ -890,7 +890,7 @@ using EloBuddy;
 
                                 if (Menu.Item("CI").GetValue<bool>())
                                 {
-                                    if (starget != null && starget.LSIsValidTarget(350f) && !starget.IsDead)
+                                    if (starget != null && starget.IsValidTarget(350f) && !starget.IsDead)
                                     {
                                         if (!starget.IsZombie)
                                         {
@@ -915,7 +915,7 @@ using EloBuddy;
                                     {
                                         if (E.IsReadyPerfectly())
                                         {
-                                            if (starget != null && starget.LSIsValidTarget(E.Range) && !starget.IsDead)
+                                            if (starget != null && starget.IsValidTarget(E.Range) && !starget.IsDead)
                                             {
                                                 if (!starget.IsZombie)
                                                 {
@@ -936,11 +936,11 @@ using EloBuddy;
 
                                         if (W.IsReadyPerfectly())
                                         {
-                                            if (starget != null && starget.LSIsValidTarget(W.Range) && !starget.IsDead)
+                                            if (starget != null && starget.IsValidTarget(W.Range) && !starget.IsDead)
                                             {
                                                 if (!starget.IsZombie)
                                                 {
-                                                    var spos = starget.Position.LSExtend(Player.Position, -650f);
+                                                    var spos = starget.Position.Extend(Player.Position, -650f);
                                                     W.Cast(spos);
                                                 }
                                             }
@@ -949,7 +949,7 @@ using EloBuddy;
                                                 var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
                                                 if (target != null)
                                                 {
-                                                    var wpos = target.Position.LSExtend(Player.Position, -650f);
+                                                    var wpos = target.Position.Extend(Player.Position, -650f);
                                                     W.Cast(wpos);
                                                 }
                                             }
@@ -961,7 +961,7 @@ using EloBuddy;
                                         {
                                             if (Q.IsReadyPerfectly())
                                             {
-                                                if (starget != null && starget.LSIsValidTarget(Q.Range) && !starget.IsDead)
+                                                if (starget != null && starget.IsValidTarget(Q.Range) && !starget.IsDead)
                                                 {
                                                     if (!starget.IsZombie)
                                                     {
@@ -982,7 +982,7 @@ using EloBuddy;
 
                                             if (Menu.Item("CI").GetValue<bool>())
                                             {
-                                                if (starget != null && starget.LSIsValidTarget(350f) && !starget.IsDead)
+                                                if (starget != null && starget.IsValidTarget(350f) && !starget.IsDead)
                                                 {
                                                     if (!starget.IsZombie)
                                                     {
@@ -1028,13 +1028,13 @@ using EloBuddy;
                             {
                                 if (Q.IsReadyPerfectly())
                                 {
-                                    if (starget != null && starget.LSIsValidTarget(Q.Range + W.Range) && !starget.IsDead)
+                                    if (starget != null && starget.IsValidTarget(Q.Range + W.Range) && !starget.IsDead)
                                     {
                                         if (!starget.IsZombie)
                                         {
-                                            if (Player.Position.LSDistance(starget.Position) > W.Range)
+                                            if (Player.Position.Distance(starget.Position) > W.Range)
                                             {
-                                                var spos = starget.Position.LSExtend(Player.Position, -(starget.Position.LSDistance(Player.Position) + W.Range));
+                                                var spos = starget.Position.Extend(Player.Position, -(starget.Position.Distance(Player.Position) + W.Range));
                                                 W.Cast(spos);
                                             }
                                         }
@@ -1044,9 +1044,9 @@ using EloBuddy;
                                         var target = TargetSelector.GetTarget(Q.Range + W.Range, TargetSelector.DamageType.Physical);
                                         if (target != null)
                                         {
-                                            if (Player.Position.LSDistance(target.Position) > W.Range)
+                                            if (Player.Position.Distance(target.Position) > W.Range)
                                             {
-                                                var wpos = target.Position.LSExtend(Player.Position, -(target.Position.LSDistance(Player.Position) + W.Range));
+                                                var wpos = target.Position.Extend(Player.Position, -(target.Position.Distance(Player.Position) + W.Range));
                                                 W.Cast(wpos);
                                             }
                                         }
@@ -1059,7 +1059,7 @@ using EloBuddy;
                         {
                             if (shadow != null)
                             {
-                                if (starget != null && starget.LSIsValidTarget(Q.Range, true, shadow.Position) && !starget.IsDead)
+                                if (starget != null && starget.IsValidTarget(Q.Range, true, shadow.Position) && !starget.IsDead)
                                 {
                                     if (!starget.IsZombie)
                                     {
@@ -1088,7 +1088,7 @@ using EloBuddy;
                         if (shadow != null)
                         {
                             var starget = TargetSelector.GetSelectedTarget();
-                            if (starget != null && starget.LSIsValidTarget(E.Range, true, shadow.Position))
+                            if (starget != null && starget.IsValidTarget(E.Range, true, shadow.Position))
                             {
                                 if (!starget.IsZombie)
                                 {
@@ -1120,12 +1120,12 @@ using EloBuddy;
                     {
                         if (Q.IsReadyPerfectly())
                         {
-                            var target = ObjectManager.Get<AIHeroClient>().FirstOrDefault(x => x.IsKillableAndValidTarget(Q.GetDamage(x), Q.DamageType, Q.Range + Player.Position.LSDistance(shadow.Position)));
+                            var target = ObjectManager.Get<AIHeroClient>().FirstOrDefault(x => x.IsKillableAndValidTarget(Q.GetDamage(x), Q.DamageType, Q.Range + Player.Position.Distance(shadow.Position)));
                             if (target != null)
                             {
                                 if (!target.IsDead)
                                 {
-                                    if (shadow.Position.LSDistance(target.Position) <= Q.Range)
+                                    if (shadow.Position.Distance(target.Position) <= Q.Range)
                                     {
                                         Q.UpdateSourcePosition(shadow.Position, shadow.Position);
                                         Q.Cast(target);
@@ -1139,12 +1139,12 @@ using EloBuddy;
                     {
                         if (E.IsReadyPerfectly())
                         {
-                            var target = ObjectManager.Get<AIHeroClient>().FirstOrDefault(x => x.IsKillableAndValidTarget(E.GetDamage(x), E.DamageType, Player.Position.LSDistance(shadow.Position) + E.Range));
+                            var target = ObjectManager.Get<AIHeroClient>().FirstOrDefault(x => x.IsKillableAndValidTarget(E.GetDamage(x), E.DamageType, Player.Position.Distance(shadow.Position) + E.Range));
                             if (target != null)
                             {
                                 if (!target.IsDead)
                                 {
-                                    if (shadow.Position.LSDistance(target.Position) <= E.Range)
+                                    if (shadow.Position.Distance(target.Position) <= E.Range)
                                     {
                                         E.Cast();
                                     }
@@ -1163,7 +1163,7 @@ using EloBuddy;
                         {
                             if (Ignite != SpellSlot.Unknown)
                             {
-                                if (Ignite.LSIsReady())
+                                if (Ignite.IsReady())
                                 {
                                     Player.Spellbook.CastSpell(Ignite, target.Position);
                                 }
@@ -1242,7 +1242,7 @@ using EloBuddy;
 
             if (!Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float)Player.LSGetAutoAttackDamage(enemy);
+                damage += (float)Player.GetAutoAttackDamage(enemy);
             }
 
             if (Q.IsReadyPerfectly())

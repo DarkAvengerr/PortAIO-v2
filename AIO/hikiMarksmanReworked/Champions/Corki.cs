@@ -73,25 +73,25 @@ namespace hikiMarksmanRework.Champions
 
         private static void Combo()
         {
-            if (CorkiSpells.Q.LSIsReady() && Helper.CEnabled("corki.q.combo"))
+            if (CorkiSpells.Q.IsReady() && Helper.CEnabled("corki.q.combo"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(CorkiSpells.Q.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(CorkiSpells.Q.Range) &&
                     CorkiSpells.Q.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     CorkiSpells.Q.Cast(enemy);
                 }
             }
-            if (CorkiSpells.R.LSIsReady() && Helper.CEnabled("corki.r.combo"))
+            if (CorkiSpells.R.IsReady() && Helper.CEnabled("corki.r.combo"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(CorkiSpells.R.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(CorkiSpells.R.Range) &&
                     CorkiSpells.R.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     CorkiSpells.R.Cast(enemy);
                 }
             }
-            if (CorkiSpells.R.LSIsReady() && Helper.CEnabled("corki.r.combo"))
+            if (CorkiSpells.R.IsReady() && Helper.CEnabled("corki.r.combo"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(CorkiSpells.BIG.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(CorkiSpells.BIG.Range) &&
                     CorkiSpells.BIG.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     CorkiSpells.BIG.Cast(enemy);
@@ -105,25 +105,25 @@ namespace hikiMarksmanRework.Champions
             {
                 return;
             }
-            if (CorkiSpells.Q.LSIsReady() && Helper.CEnabled("corki.q.harass"))
+            if (CorkiSpells.Q.IsReady() && Helper.CEnabled("corki.q.harass"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(CorkiSpells.Q.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(CorkiSpells.Q.Range) &&
                     CorkiSpells.Q.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     CorkiSpells.Q.Cast(enemy);
                 }
             }
-            if (CorkiSpells.R.LSIsReady() && Helper.CEnabled("corki.r.harass"))
+            if (CorkiSpells.R.IsReady() && Helper.CEnabled("corki.r.harass"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(CorkiSpells.R.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(CorkiSpells.R.Range) &&
                     CorkiSpells.R.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     CorkiSpells.R.Cast(enemy);
                 }
             }
-            if (CorkiSpells.R.LSIsReady() && Helper.CEnabled("corki.r.harass"))
+            if (CorkiSpells.R.IsReady() && Helper.CEnabled("corki.r.harass"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(CorkiSpells.BIG.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(CorkiSpells.BIG.Range) &&
                     CorkiSpells.BIG.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     CorkiSpells.BIG.Cast(enemy);
@@ -152,7 +152,7 @@ namespace hikiMarksmanRework.Champions
                 return;
             }
 
-            if (CorkiSpells.Q.LSIsReady() && Helper.CEnabled("corki.q.jungle"))
+            if (CorkiSpells.Q.IsReady() && Helper.CEnabled("corki.q.jungle"))
             {
                 CorkiSpells.Q.Cast(
                     MinionManager.GetMinions(ObjectManager.Player.ServerPosition,
@@ -160,7 +160,7 @@ namespace hikiMarksmanRework.Champions
                         MinionTeam.Neutral, MinionOrderTypes.MaxHealth)[0]);
             }
 
-            if (CorkiSpells.E.LSIsReady() && Helper.CEnabled("corki.e.jungle"))
+            if (CorkiSpells.E.IsReady() && Helper.CEnabled("corki.e.jungle"))
             {
                 CorkiSpells.E.Cast(
                     MinionManager.GetMinions(ObjectManager.Player.ServerPosition,
@@ -168,7 +168,7 @@ namespace hikiMarksmanRework.Champions
                         MinionTeam.Neutral, MinionOrderTypes.MaxHealth)[0].Position);
             }
 
-            if (CorkiSpells.R.LSIsReady() && Helper.CEnabled("corki.r.jungle"))
+            if (CorkiSpells.R.IsReady() && Helper.CEnabled("corki.r.jungle"))
             {
                 CorkiSpells.R.Cast(
                     MinionManager.GetMinions(ObjectManager.Player.ServerPosition,
@@ -187,8 +187,8 @@ namespace hikiMarksmanRework.Champions
 
         private static void CorkiAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (CorkiMenu.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Helper.CEnabled("corki.e.combo") && CorkiSpells.E.LSIsReady()
-                && target.LSIsValidTarget(CorkiSpells.E.Range-100))
+            if (CorkiMenu.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Helper.CEnabled("corki.e.combo") && CorkiSpells.E.IsReady()
+                && target.IsValidTarget(CorkiSpells.E.Range-100))
             {
                 CorkiSpells.E.Cast(target.Position);
             }

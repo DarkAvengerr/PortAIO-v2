@@ -64,14 +64,14 @@ using EloBuddy;
             if (ProSeries.CanCombo())
             {
                 var qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-                if (qtarget.LSIsValidTarget() && Q.LSIsReady())
+                if (qtarget.IsValidTarget() && Q.IsReady())
                 {
                     if (ProSeries.Config.Item("usecomboq", true).GetValue<bool>())
                         Q.CastIfHitchanceEquals(qtarget, HitChance.High);
                 }
 
-                var etarget = HeroManager.Enemies.FirstOrDefault(h => h.LSIsValidTarget(E.Range));
-                if (etarget.LSIsValidTarget() && E.LSIsReady())
+                var etarget = HeroManager.Enemies.FirstOrDefault(h => h.IsValidTarget(E.Range));
+                if (etarget.IsValidTarget() && E.IsReady())
                 {
                     if (ProSeries.Config.Item("usecomboe", true).GetValue<bool>() &&
                         E.Cast(etarget) == Spell.CastStates.SuccessfullyCasted)
@@ -81,7 +81,7 @@ using EloBuddy;
                 }
 
                 var rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-                if (rtarget.LSIsValidTarget() && R.LSIsReady())
+                if (rtarget.IsValidTarget() && R.IsReady())
                 {
                     if (ProSeries.Config.Item("usecombor", true).GetValue<bool>())
                         R.CastIfHitchanceEquals(rtarget, HitChance.High);
@@ -91,14 +91,14 @@ using EloBuddy;
             if (ProSeries.CanHarass())
             {
                 var qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-                if (qtarget.LSIsValidTarget() && Q.LSIsReady() && ProSeries.IsWhiteListed(qtarget))
+                if (qtarget.IsValidTarget() && Q.IsReady() && ProSeries.IsWhiteListed(qtarget))
                 {
                     if (ProSeries.Config.Item("useharassq", true).GetValue<bool>())
                         Q.CastIfHitchanceEquals(qtarget, HitChance.High);
                 }
 
-                var etarget = HeroManager.Enemies.FirstOrDefault(h => h.LSIsValidTarget(E.Range));
-                if (etarget.LSIsValidTarget() && E.LSIsReady() && ProSeries.IsWhiteListed(etarget))
+                var etarget = HeroManager.Enemies.FirstOrDefault(h => h.IsValidTarget(E.Range));
+                if (etarget.IsValidTarget() && E.IsReady() && ProSeries.IsWhiteListed(etarget))
                 {
                     if (ProSeries.Config.Item("useharasse", true).GetValue<bool>())
                         if (E.Cast(etarget) == Spell.CastStates.SuccessfullyCasted)
@@ -106,7 +106,7 @@ using EloBuddy;
                 }
 
                 var rtarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-                if (rtarget.LSIsValidTarget() && R.LSIsReady() && ProSeries.IsWhiteListed(rtarget))
+                if (rtarget.IsValidTarget() && R.IsReady() && ProSeries.IsWhiteListed(rtarget))
                 {
                     if (ProSeries.Config.Item("useharassr", true).GetValue<bool>() && R.Instance.Ammo > 3)
                         R.CastIfHitchanceEquals(rtarget, HitChance.High);
@@ -117,22 +117,22 @@ using EloBuddy;
             {
                 foreach (var neutral in ProSeries.JungleMobsInRange(650))
                 {
-                    if (ProSeries.Config.Item("useclearq", true).GetValue<bool>() && Q.LSIsReady())
+                    if (ProSeries.Config.Item("useclearq", true).GetValue<bool>() && Q.IsReady())
                         Q.Cast(neutral);
-                    if (ProSeries.Config.Item("usecleare", true).GetValue<bool>() && E.LSIsReady())
+                    if (ProSeries.Config.Item("usecleare", true).GetValue<bool>() && E.IsReady())
                         if (E.Cast(neutral) == Spell.CastStates.SuccessfullyCasted)
                             return;
                 }
 
-                if (E.LSIsReady() && ProSeries.Config.Item("usecleare", true).GetValue<bool>())
+                if (E.IsReady() && ProSeries.Config.Item("usecleare", true).GetValue<bool>())
                 {
-                    if (ObjectManager.Get<Obj_AI_Minion>().Count(h => h.LSIsValidTarget(E.Range) && !h.Name.Contains("Ward")) >= 3)
-                        if (E.Cast(ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(h => h.LSIsValidTarget(E.Range))) ==
+                    if (ObjectManager.Get<Obj_AI_Minion>().Count(h => h.IsValidTarget(E.Range) && !h.Name.Contains("Ward")) >= 3)
+                        if (E.Cast(ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(h => h.IsValidTarget(E.Range))) ==
                             Spell.CastStates.SuccessfullyCasted)
                             return;
                 }
 
-                if (Q.LSIsReady() && ProSeries.Config.Item("useclearq", true).GetValue<bool>())
+                if (Q.IsReady() && ProSeries.Config.Item("useclearq", true).GetValue<bool>())
                 {
                     var farmLocation = Q.GetCircularFarmLocation(MinionManager.GetMinions(Q.Range));
                     if (farmLocation.MinionsHit >= 3)

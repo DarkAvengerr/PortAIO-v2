@@ -23,7 +23,7 @@ using EloBuddy; namespace Activator.Items.Defensives
             if (!Menu.Item("use" + Name).GetValue<bool>() || !IsReady())
                 return;
 
-            if (Player.LSCountEnemiesInRange(Range) >= Menu.Item("selfcount" + Name).GetValue<Slider>().Value)
+            if (Player.CountEnemiesInRange(Range) >= Menu.Item("selfcount" + Name).GetValue<Slider>().Value)
             {
                 UseItem();
             }
@@ -50,7 +50,7 @@ using EloBuddy; namespace Activator.Items.Defensives
 
                 if (hero.HitTypes.Contains(HitType.Ultimate) || hero.HitTypes.Contains(HitType.Danger))
                 {
-                    if (attacker.LSDistance(hero.Player) <= Range / 2f)
+                    if (attacker.Distance(hero.Player) <= Range / 2f)
                     {
                         UseItem(Tar.Player, true);
                     }
@@ -58,7 +58,7 @@ using EloBuddy; namespace Activator.Items.Defensives
 
                 if (!Menu.Item("enemygapdanger" + Name).GetValue<bool>())
                 {
-                    if (attacker.LSDistance(hero.Player) <= Range / 2f)
+                    if (attacker.Distance(hero.Player) <= Range / 2f)
                     {
                         UseItem(Tar.Player, true);
                     }

@@ -77,7 +77,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo
         private void OnUpdate(EventArgs args)
         {
             if (Variable.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
-                || !Variable.Spells[SpellSlot.Q].LSIsReady()) return;
+                || !Variable.Spells[SpellSlot.Q].IsReady()) return;
 
             if (this.Menu.Item(this.Menu.Name + "QMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
 

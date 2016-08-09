@@ -189,8 +189,8 @@ using EloBuddy;
                 {
                     float damage = 0;
 
-                    if (_Q.LSIsReady())
-                        if (_R.LSIsReady() || _W.LSIsReady() || _E.LSIsReady())
+                    if (_Q.IsReady())
+                        if (_R.IsReady() || _W.IsReady() || _E.IsReady())
                         {
                             damage += (_Q.GetDamage(enemy) * 2);
                         }
@@ -198,12 +198,12 @@ using EloBuddy;
                         {
                             damage += _Q.GetDamage(enemy);
                         }
-                    if (_W.LSIsReady())
+                    if (_W.IsReady())
                         damage += _W.GetDamage(enemy);
-                    if (_E.LSIsReady())
+                    if (_E.IsReady())
                         damage += (_E.GetDamage(enemy));
-                    if (_R.LSIsReady())
-                        if (_Q.LSIsReady())
+                    if (_R.IsReady())
+                        if (_Q.IsReady())
                         {
                             damage += (_Q.GetDamage(enemy) * 1.5f * 2f);
                         }
@@ -212,7 +212,7 @@ using EloBuddy;
                             damage += _R.GetDamage(enemy);
                         }
                     if (!Player.Spellbook.IsAutoAttacking)
-                        damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                        damage += (float)Player.GetAutoAttackDamage(enemy, true);
                     return damage;
                 }
                 return 0;
@@ -232,7 +232,7 @@ using EloBuddy;
             try
             {
                 if (Player.IsDead) return;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
                 {
                     if (_MainMenu.Item("Leblanc_Indicator").GetValue<bool>())
                     {
@@ -275,9 +275,9 @@ using EloBuddy;
                 if (_MainMenu.Item("Leblanc_Flee").GetValue<KeyBind>().Active)
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);  // 커서방향 이동
-                    if (_W.LSIsReady() && Player.Spellbook.GetSpell(SpellSlot.W).Name.ToLower() == "leblancslide")
+                    if (_W.IsReady() && Player.Spellbook.GetSpell(SpellSlot.W).Name.ToLower() == "leblancslide")
                         _W.Cast(Game.CursorPos, true);
-                    if (_R.LSIsReady() && Player.Spellbook.GetSpell(SpellSlot.R).Name.ToLower() == "leblancslidem")
+                    if (_R.IsReady() && Player.Spellbook.GetSpell(SpellSlot.R).Name.ToLower() == "leblancslidem")
                         _R.Cast(Game.CursorPos, true);
                 }
 
@@ -285,11 +285,11 @@ using EloBuddy;
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);  // 커서방향 이동
                     var ETarget = TargetSelector.GetTarget(_E.Range, TargetSelector.DamageType.Magical);
-                    if (_E.LSIsReady() && ETarget != null && Environment.TickCount > ERTIME)
+                    if (_E.IsReady() && ETarget != null && Environment.TickCount > ERTIME)
                     {
                         _E.CastIfHitchanceEquals(ETarget, HitChance.Low, true);
                     }
-                    else if (ETarget != null && _R.LSIsReady() && Player.Spellbook.GetSpell(SpellSlot.R).Name.ToLower() == "leblancsoulshacklem" && Environment.TickCount > ERTIME)
+                    else if (ETarget != null && _R.IsReady() && Player.Spellbook.GetSpell(SpellSlot.R).Name.ToLower() == "leblancsoulshacklem" && Environment.TickCount > ERTIME)
                     {
                         _R.CastIfHitchanceEquals(ETarget, HitChance.Low, true);
                     }
@@ -298,9 +298,9 @@ using EloBuddy;
                 // Pet
                 if (_MainMenu.Item("Leblanc_Pet").GetValue<bool>() && Player.Pet != null && Player.Pet.IsValid && !Player.Pet.IsDead)
                 {
-                    var Enemy = ObjectManager.Get<AIHeroClient>().OrderBy(x => x.LSDistance(Player)).FirstOrDefault(x => x.IsEnemy && !x.IsDead);
+                    var Enemy = ObjectManager.Get<AIHeroClient>().OrderBy(x => x.Distance(Player)).FirstOrDefault(x => x.IsEnemy && !x.IsDead);
                     Random Ran = new Random();
-                    var PetLocate = Player.ServerPosition.LSExtend(Enemy.ServerPosition, Ran.Next(150, 300));
+                    var PetLocate = Player.ServerPosition.Extend(Enemy.ServerPosition, Ran.Next(150, 300));
                     PetLocate.X = PetLocate.X + Ran.Next(0, 20);
                     PetLocate.Y = PetLocate.Y + Ran.Next(0, 20);
                     PetLocate.Z = PetLocate.Z + Ran.Next(0, 20);
@@ -312,7 +312,7 @@ using EloBuddy;
 
                 }
 
-                if (_MainMenu.Item("Leblanc_KUse_Q").GetValue<bool>() && _Q.LSIsReady())
+                if (_MainMenu.Item("Leblanc_KUse_Q").GetValue<bool>() && _Q.IsReady())
                 {
                     var QTarget = TargetSelector.GetTarget(_Q.Range, TargetSelector.DamageType.Magical);
                     if (QTarget == null) return;
@@ -322,7 +322,7 @@ using EloBuddy;
                         return;
                     }
                 }
-                if (_MainMenu.Item("Leblanc_KUse_W").GetValue<bool>() && _W.LSIsReady() && Player.Spellbook.GetSpell(SpellSlot.W).Name.ToLower() == "leblancslide")
+                if (_MainMenu.Item("Leblanc_KUse_W").GetValue<bool>() && _W.IsReady() && Player.Spellbook.GetSpell(SpellSlot.W).Name.ToLower() == "leblancslide")
                 {
                     var WTarget = TargetSelector.GetTarget(_W.Range, TargetSelector.DamageType.Magical);
                     if (WTarget == null) return;
@@ -332,7 +332,7 @@ using EloBuddy;
                         return;
                     }
                 }
-                if (_MainMenu.Item("Leblanc_KUse_E").GetValue<bool>() && _E.LSIsReady())
+                if (_MainMenu.Item("Leblanc_KUse_E").GetValue<bool>() && _E.IsReady())
                 {
                     var ETarget = TargetSelector.GetTarget(_E.Range, TargetSelector.DamageType.Magical);
                     if (ETarget == null) return;
@@ -342,7 +342,7 @@ using EloBuddy;
                         return;
                     }
                 }
-                if (_MainMenu.Item("Leblanc_KUse_Q2").GetValue<bool>() && _R.LSIsReady() && Player.Spellbook.GetSpell(SpellSlot.R).Name.ToLower() == "leblancchaosorbm")
+                if (_MainMenu.Item("Leblanc_KUse_Q2").GetValue<bool>() && _R.IsReady() && Player.Spellbook.GetSpell(SpellSlot.R).Name.ToLower() == "leblancchaosorbm")
                 {
                     var QTarget = TargetSelector.GetTarget(_Q.Range, TargetSelector.DamageType.Magical);
                     if (QTarget == null) return;
@@ -352,7 +352,7 @@ using EloBuddy;
                         return;
                     }
                 }
-                if (_MainMenu.Item("Leblanc_KUse_W2").GetValue<bool>() && _R.LSIsReady() && Player.Spellbook.GetSpell(SpellSlot.R).Name.ToLower() == "leblancslidem")
+                if (_MainMenu.Item("Leblanc_KUse_W2").GetValue<bool>() && _R.IsReady() && Player.Spellbook.GetSpell(SpellSlot.R).Name.ToLower() == "leblancslidem")
                 {
                     var QTarget = TargetSelector.GetTarget(_W.Range, TargetSelector.DamageType.Magical);
                     if (QTarget == null) return;
@@ -362,7 +362,7 @@ using EloBuddy;
                         return;
                     }
                 }
-                if (_MainMenu.Item("Leblanc_KUse_E2").GetValue<bool>() && _R.LSIsReady() && Player.Spellbook.GetSpell(SpellSlot.R).Name.ToLower() == "leblancsoulshacklem")
+                if (_MainMenu.Item("Leblanc_KUse_E2").GetValue<bool>() && _R.IsReady() && Player.Spellbook.GetSpell(SpellSlot.R).Name.ToLower() == "leblancsoulshacklem")
                 {
                     var QTarget = TargetSelector.GetTarget(_E.Range, TargetSelector.DamageType.Magical);
                     if (QTarget == null) return;
@@ -383,7 +383,7 @@ using EloBuddy;
 
                     // Q
                     if (QTarget != null
-                            && _MainMenu.Item("Leblanc_CUse_Q").GetValue<bool>() && _Q.LSIsReady()
+                            && _MainMenu.Item("Leblanc_CUse_Q").GetValue<bool>() && _Q.IsReady()
                             && Player.Spellbook.GetSpell(SpellSlot.Q).Name.ToLower() == "leblancchaosorb"
                             )
                     {
@@ -396,7 +396,7 @@ using EloBuddy;
                     {
                         // W
                         if (WTarget != null
-                                && _MainMenu.Item("Leblanc_CUse_W").GetValue<bool>() && _W.LSIsReady()
+                                && _MainMenu.Item("Leblanc_CUse_W").GetValue<bool>() && _W.IsReady()
                                 && Player.Spellbook.GetSpell(SpellSlot.W).Name.ToLower() == "leblancslide"
                                 )
                         {
@@ -406,7 +406,7 @@ using EloBuddy;
 
                         // W2
                         if (WTarget != null
-                                && _MainMenu.Item("Leblanc_CUse_W2").GetValue<bool>() && _R.LSIsReady()
+                                && _MainMenu.Item("Leblanc_CUse_W2").GetValue<bool>() && _R.IsReady()
                                 && Player.Spellbook.GetSpell(SpellSlot.R).Name.ToLower() == "leblancslidem")
                         {
                             _R.Cast(WTarget.ServerPosition, true);
@@ -416,7 +416,7 @@ using EloBuddy;
 
                     // Q2
                     if (QTarget != null
-                            && _MainMenu.Item("Leblanc_CUse_Q2").GetValue<bool>() && _R.LSIsReady()
+                            && _MainMenu.Item("Leblanc_CUse_Q2").GetValue<bool>() && _R.IsReady()
                             && Player.Spellbook.GetSpell(SpellSlot.R).Name.ToLower() == "leblancchaosorbm"
                             )
                     {
@@ -425,7 +425,7 @@ using EloBuddy;
                     }
                     // W
                     if (WTarget != null
-                            && _MainMenu.Item("Leblanc_CUse_W").GetValue<bool>() && _W.LSIsReady()
+                            && _MainMenu.Item("Leblanc_CUse_W").GetValue<bool>() && _W.IsReady()
                             && Player.Spellbook.GetSpell(SpellSlot.W).Name.ToLower() == "leblancslide"
                             )
                     {
@@ -435,7 +435,7 @@ using EloBuddy;
 
                     // W2
                     if (WTarget != null
-                            && _MainMenu.Item("Leblanc_CUse_W2").GetValue<bool>() && _R.LSIsReady()
+                            && _MainMenu.Item("Leblanc_CUse_W2").GetValue<bool>() && _R.IsReady()
                             && Player.Spellbook.GetSpell(SpellSlot.R).Name.ToLower() == "leblancslidem")
                     {
                         _R.Cast(WTarget.ServerPosition, true);
@@ -444,7 +444,7 @@ using EloBuddy;
 
                     // E
                     if (ETarget != null
-                            && _MainMenu.Item("Leblanc_CUse_E").GetValue<bool>() && _E.LSIsReady()
+                            && _MainMenu.Item("Leblanc_CUse_E").GetValue<bool>() && _E.IsReady()
                             && Player.Spellbook.GetSpell(SpellSlot.E).Name.ToLower() == "leblancsoulshackle" && Player.Spellbook.GetSpell(SpellSlot.R).Name.ToLower() != "leblancslidem"
                             )
                     {
@@ -454,7 +454,7 @@ using EloBuddy;
 
                     // E2
                     if (ETarget != null
-                            && _MainMenu.Item("CUse_E2").GetValue<bool>() && _E.LSIsReady()
+                            && _MainMenu.Item("CUse_E2").GetValue<bool>() && _E.IsReady()
                             && Player.Spellbook.GetSpell(SpellSlot.E).Name.ToLower() == "leblancsoulshacklem"
                             )
                     {
@@ -463,18 +463,18 @@ using EloBuddy;
                     }
 
                     // WReturn
-                    if (ETarget.Buffs.Find(buff => (buff.Name.ToLower() == "leblancsoulshackle" || buff.Name.ToLower() == "leblancsoulshacklem") && buff.LSIsValidBuff()) == null
+                    if (ETarget.Buffs.Find(buff => (buff.Name.ToLower() == "leblancsoulshackle" || buff.Name.ToLower() == "leblancsoulshacklem") && buff.IsValidBuff()) == null
                         && _MainMenu.Item("Leblanc_CUse_WReturn").GetValue<bool>()
-                        && _W.LSIsReady() && Player.Spellbook.GetSpell(SpellSlot.W).Name.ToLower() == "leblancslidereturn" && !_Q.LSIsReady() && !_R.LSIsReady() && ReturnTime < Environment.TickCount)
+                        && _W.IsReady() && Player.Spellbook.GetSpell(SpellSlot.W).Name.ToLower() == "leblancslidereturn" && !_Q.IsReady() && !_R.IsReady() && ReturnTime < Environment.TickCount)
                     {
                         _W.Cast(true);
                         return;
                     }
 
                     // WR Return
-                    if (ETarget.Buffs.Find(buff => (buff.Name.ToLower() == "leblancsoulshackle" || buff.Name.ToLower() == "leblancsoulshacklem") && buff.LSIsValidBuff()) == null
+                    if (ETarget.Buffs.Find(buff => (buff.Name.ToLower() == "leblancsoulshackle" || buff.Name.ToLower() == "leblancsoulshacklem") && buff.IsValidBuff()) == null
                         && _MainMenu.Item("Leblanc_CUse_W2Return").GetValue<bool>()
-                        && _W.LSIsReady() && Player.Spellbook.GetSpell(SpellSlot.R).Name.ToLower() == "leblancslidereturnm" && !_Q.LSIsReady() && !_W.LSIsReady() && ReturnTime < Environment.TickCount)
+                        && _W.IsReady() && Player.Spellbook.GetSpell(SpellSlot.R).Name.ToLower() == "leblancslidereturnm" && !_Q.IsReady() && !_W.IsReady() && ReturnTime < Environment.TickCount)
                     {
                         _R.Cast(true);
                         return;
@@ -489,7 +489,7 @@ using EloBuddy;
                     var ETarget = TargetSelector.GetTarget(_E.Range, TargetSelector.DamageType.Magical);
                     // Q
                     if (QTarget != null
-                            && _MainMenu.Item("Leblanc_AUse_Q").GetValue<bool>() && _Q.LSIsReady()
+                            && _MainMenu.Item("Leblanc_AUse_Q").GetValue<bool>() && _Q.IsReady()
                             && Player.Spellbook.GetSpell(SpellSlot.Q).Name.ToLower() == "leblancchaosorb"
                             )
                     {
@@ -499,7 +499,7 @@ using EloBuddy;
 
                     // W
                     if (WTarget != null
-                            && _MainMenu.Item("Leblanc_AUse_W").GetValue<bool>() && _W.LSIsReady()
+                            && _MainMenu.Item("Leblanc_AUse_W").GetValue<bool>() && _W.IsReady()
                             && Player.Spellbook.GetSpell(SpellSlot.W).Name.ToLower() == "leblancslide"
                             )
                     {
@@ -509,7 +509,7 @@ using EloBuddy;
 
                     // E
                     if (ETarget != null
-                            && _MainMenu.Item("Leblanc_AUse_E").GetValue<bool>() && _E.LSIsReady()
+                            && _MainMenu.Item("Leblanc_AUse_E").GetValue<bool>() && _E.IsReady()
                             && Player.Spellbook.GetSpell(SpellSlot.E).Name.ToLower() == "leblancsoulshackle"
                             )
                     {
@@ -519,7 +519,7 @@ using EloBuddy;
 
                     // WW
                     if (WTarget != null
-                            && _MainMenu.Item("Leblanc_AUse_W").GetValue<bool>() && _W.LSIsReady()
+                            && _MainMenu.Item("Leblanc_AUse_W").GetValue<bool>() && _W.IsReady()
                             && Player.Spellbook.GetSpell(SpellSlot.W).Name.ToLower() == "leblancslidereturn"
                             )
                     {

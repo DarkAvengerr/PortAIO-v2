@@ -406,7 +406,7 @@ using EloBuddy; namespace SFXChallenger.Managers
             }
             try
             {
-                var distance = target.LSDistance(ObjectManager.Player.Position, true);
+                var distance = target.Distance(ObjectManager.Player.Position, true);
                 if (rangeCheck && distance >= Math.Pow(MaxRange, 2))
                 {
                     return 0f;
@@ -420,7 +420,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                                 i.Item.IsReady() &&
                                 (!rangeCheck ||
                                  distance <= Math.Pow(i.Range, 2) &&
-                                 ObjectManager.Player.LSCountEnemiesInRange(i.Range) >=
+                                 ObjectManager.Player.CountEnemiesInRange(i.Range) >=
                                  _menu.Item(_menu.Name + "." + i.Name + ".min-enemies-range").GetValue<Slider>().Value))
                             .Sum(item => ObjectManager.Player.GetItemDamage(target, item.Damage)) +
                     CalculateLichBaneDamage(target);
@@ -440,7 +440,7 @@ using EloBuddy; namespace SFXChallenger.Managers
             }
             try
             {
-                var distance = target == null ? 0 : target.LSDistance(ObjectManager.Player.Position, true);
+                var distance = target == null ? 0 : target.Distance(ObjectManager.Player.Position, true);
                 if (distance >= Math.Pow(MaxRange, 2))
                 {
                     return;
@@ -453,7 +453,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                             _menu.Item(_menu.Name + "." + i.Name + ".combo").GetValue<bool>() && i.Item.IsOwned() &&
                             i.Item.IsReady() && distance <= Math.Pow(i.Range, 2) &&
                             (killSteal ||
-                             ObjectManager.Player.LSCountEnemiesInRange(i.Range) >=
+                             ObjectManager.Player.CountEnemiesInRange(i.Range) >=
                              _menu.Item(_menu.Name + "." + i.Name + ".min-enemies-range").GetValue<Slider>().Value &&
                              ObjectManager.Player.HealthPercent <=
                              _menu.Item(_menu.Name + "." + i.Name + ".player-health-below").GetValue<Slider>().Value &&
@@ -497,16 +497,16 @@ using EloBuddy; namespace SFXChallenger.Managers
         {
             try
             {
-                var muramana = ObjectManager.Player.LSGetSpellSlot("Muramana");
-                if (muramana == SpellSlot.Unknown || !muramana.LSIsReady())
+                var muramana = ObjectManager.Player.GetSpellSlot("Muramana");
+                if (muramana == SpellSlot.Unknown || !muramana.IsReady())
                 {
                     return;
                 }
-                var hasBuff = ObjectManager.Player.LSHasBuff("Muramana");
+                var hasBuff = ObjectManager.Player.HasBuff("Muramana");
                 if ((activate && !hasBuff &&
                      (_menu == null ||
                       _menu.Item(_menu.Name + ".muramana.combo").GetValue<bool>() &&
-                      ObjectManager.Player.LSCountEnemiesInRange(
+                      ObjectManager.Player.CountEnemiesInRange(
                           overrideRange > 0 ? overrideRange : Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)) >=
                       _menu.Item(_menu.Name + ".muramana.min-enemies-range").GetValue<Slider>().Value &&
                       ObjectManager.Player.ManaPercent >=
@@ -580,7 +580,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                             i.Flags.HasFlag(ItemFlags.Flee) &&
                             _menu.Item(_menu.Name + "." + i.Name + ".flee").GetValue<bool>() && i.Item.IsOwned() &&
                             i.Item.IsReady() && i.Item.IsOwned() && i.Item.IsReady() &&
-                            ObjectManager.Player.LSCountEnemiesInRange(i.Range) >=
+                            ObjectManager.Player.CountEnemiesInRange(i.Range) >=
                             _menu.Item(_menu.Name + "." + i.Name + ".min-enemies-range").GetValue<Slider>().Value &&
                             ObjectManager.Player.HealthPercent <=
                             _menu.Item(_menu.Name + "." + i.Name + ".player-health-below").GetValue<Slider>().Value &&
@@ -594,7 +594,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                         foreach (var enemy in
                             GameObjects.EnemyHeroes.Where(
                                 t =>
-                                    t.LSIsValidTarget() && !Invulnerable.Check(t) &&
+                                    t.IsValidTarget() && !Invulnerable.Check(t) &&
                                     t.HealthPercent <=
                                     _menu.Item(_menu.Name + "." + lItem.Name + ".target-health-below")
                                         .GetValue<Slider>()
@@ -605,7 +605,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                                         .Value)
                                 .OrderByDescending(
                                     t =>
-                                        t.Position.LSDistance(ObjectManager.Player.Position, true) <
+                                        t.Position.Distance(ObjectManager.Player.Position, true) <
                                         Math.Pow(localItem.Range, 2)))
                         {
                             if (!Utils.IsImmobile(enemy) && !Utils.IsSlowed(enemy))
@@ -632,7 +632,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                     }
                     else
                     {
-                        if (ObjectManager.Player.LSCountEnemiesInRange(item.Range) >
+                        if (ObjectManager.Player.CountEnemiesInRange(item.Range) >
                             _menu.Item(_menu.Name + "." + item.Name + ".min-enemies-range").GetValue<Slider>().Value)
                         {
                             item.Item.Cast();

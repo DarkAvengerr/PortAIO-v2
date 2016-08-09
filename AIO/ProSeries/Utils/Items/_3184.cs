@@ -28,7 +28,7 @@ using EloBuddy;
 
             var targetHero = (AIHeroClient) target;
 
-            if (targetHero.LSIsValidTarget())
+            if (targetHero.IsValidTarget())
             {
                 LeagueSharp.Common.Items.UseItem(Id, ProSeries.Player);
             }

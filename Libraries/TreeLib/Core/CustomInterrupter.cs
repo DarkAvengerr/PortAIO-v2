@@ -207,7 +207,7 @@ namespace TreeLib.Core
                     // Get the interruptable spell
                     var spell =
                         InterruptableSpells[target.ChampionName].Find(
-                            s => s.Slot == target.LSGetSpellSlot(args.SData.Name));
+                            s => s.Slot == target.GetSpellSlot(args.SData.Name));
                     if (spell != null && spell.Enabled)
                     {
                         // Mark champ as casting interruptable spell

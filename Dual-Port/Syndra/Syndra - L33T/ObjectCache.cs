@@ -60,7 +60,7 @@ using EloBuddy;
                 return;
             }
 
-            foreach (var minion in GetMinions().Where(m => !m.LSIsValidTarget()))
+            foreach (var minion in GetMinions().Where(m => !m.IsValidTarget()))
             {
                 EnemyMinions.Remove(minion);
             }
@@ -83,7 +83,7 @@ using EloBuddy;
             MinionOrderTypes order = MinionOrderTypes.Health)
         {
             var result = (from minion in GetMinions()
-                where minion.LSIsValidTarget(range, false, @from)
+                where minion.IsValidTarget(range, false, @from)
                 let minionTeam = minion.Team
                 where
                     team == MinionTeam.Neutral && minionTeam == GameObjectTeam.Neutral ||

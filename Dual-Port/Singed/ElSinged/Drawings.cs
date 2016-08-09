@@ -25,15 +25,15 @@ using EloBuddy;
 
             if (drawQ.Active)
                 if (Singed.spells[Spells.Q].Level > 0)
-                    Render.Circle.DrawCircle(ObjectManager.Player.Position, Singed.spells[Spells.Q].Range, Singed.spells[Spells.Q].LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(ObjectManager.Player.Position, Singed.spells[Spells.Q].Range, Singed.spells[Spells.Q].IsReady() ? Color.Green : Color.Red);
 
             if (drawW.Active)
                 if (Singed.spells[Spells.W].Level > 0)
-                    Render.Circle.DrawCircle(ObjectManager.Player.Position, Singed.spells[Spells.W].Range, Singed.spells[Spells.W].LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(ObjectManager.Player.Position, Singed.spells[Spells.W].Range, Singed.spells[Spells.W].IsReady() ? Color.Green : Color.Red);
 
             if (drawE.Active)
                 if (Singed.spells[Spells.E].Level > 0)
-                    Render.Circle.DrawCircle(ObjectManager.Player.Position, Singed.spells[Spells.E].Range, Singed.spells[Spells.E].LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(ObjectManager.Player.Position, Singed.spells[Spells.E].Range, Singed.spells[Spells.E].IsReady() ? Color.Green : Color.Red);
         }
     }
 }

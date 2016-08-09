@@ -96,7 +96,7 @@ using EloBuddy; namespace Support.Plugins
                 this.Q.Cast(target);
             }
 
-            if (!this.Q.LSIsReady() && this.R.CastCheck(target, "InterruptR"))
+            if (!this.Q.IsReady() && this.R.CastCheck(target, "InterruptR"))
             {
                 this.R.Cast(target);
             }
@@ -113,7 +113,7 @@ using EloBuddy; namespace Support.Plugins
                         this.Q.Cast(this.Target);
                     }
 
-                    if (this.W.LSIsReady() && this.ConfigValue<bool>("ComboW"))
+                    if (this.W.IsReady() && this.ConfigValue<bool>("ComboW"))
                     {
                         this.HealLogic();
                     }
@@ -131,7 +131,7 @@ using EloBuddy; namespace Support.Plugins
                         this.Q.Cast(this.Target);
                     }
 
-                    if (this.W.LSIsReady() && this.ConfigValue<bool>("HarassW"))
+                    if (this.W.IsReady() && this.ConfigValue<bool>("HarassW"))
                     {
                         this.HealLogic();
                     }
@@ -152,11 +152,11 @@ using EloBuddy; namespace Support.Plugins
                 return;
             }
 
-            if (this.Player.LSDistance(this.Target) > this.W.Range) // target out of range try bounce
+            if (this.Player.Distance(this.Target) > this.W.Range) // target out of range try bounce
             {
                 var bounceTarget =
                     HeroManager.Enemies.SingleOrDefault(
-                        hero => hero.IsValidAlly(this.W.Range) && hero.LSDistance(this.Target) < this.W.Range);
+                        hero => hero.IsValidAlly(this.W.Range) && hero.Distance(this.Target) < this.W.Range);
 
                 if (bounceTarget != null && bounceTarget.MaxHealth - bounceTarget.Health > this.WHeal)
                     // use bounce & heal
@@ -194,7 +194,7 @@ using EloBuddy; namespace Support.Plugins
 
             var caster = (AIHeroClient)missile.SpellCaster;
 
-            if (this.E.LSIsReady() && this.E.IsInRange(missile.SpellCaster)
+            if (this.E.IsReady() && this.E.IsInRange(missile.SpellCaster)
                 && this.ConfigValue<bool>("Misc.E.AA." + caster.ChampionName))
             {
                 this.E.CastOnUnit(caster); // add delay

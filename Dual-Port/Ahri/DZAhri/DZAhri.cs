@@ -50,40 +50,40 @@ using EloBuddy;
                 return;
             }
             var comboTarget = TargetSelector.GetTarget(_spells[SpellSlot.E].Range, TargetSelector.DamageType.Magical);
-            var charmedUnit = HeroManager.Enemies.Find(h => h.HasBuffOfType(BuffType.Charm) && h.LSIsValidTarget(_spells[SpellSlot.Q].Range));
+            var charmedUnit = HeroManager.Enemies.Find(h => h.HasBuffOfType(BuffType.Charm) && h.IsValidTarget(_spells[SpellSlot.Q].Range));
             AIHeroClient target = comboTarget;
             if (charmedUnit != null)
             {
                 target = charmedUnit;
             }
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 switch (Menu.Item("dz191.ahri.combo.mode").GetValue<StringList>().SelectedIndex)
                 {
                     case 0:
-                        if (!target.IsCharmed() && Helpers.IsMenuEnabled("dz191.ahri.combo.usee") && _spells[SpellSlot.E].LSIsReady() && _spells[SpellSlot.Q].LSIsReady())
+                        if (!target.IsCharmed() && Helpers.IsMenuEnabled("dz191.ahri.combo.usee") && _spells[SpellSlot.E].IsReady() && _spells[SpellSlot.Q].IsReady())
                         {
                             _spells[SpellSlot.E].CastIfHitchanceEquals(target, HitChance.High);
                         }
-                        if (Helpers.IsMenuEnabled("dz191.ahri.combo.useq") && _spells[SpellSlot.Q].LSIsReady() && (!_spells[SpellSlot.E].LSIsReady() || ObjectManager.Player.ManaPercent <= 25))
+                        if (Helpers.IsMenuEnabled("dz191.ahri.combo.useq") && _spells[SpellSlot.Q].IsReady() && (!_spells[SpellSlot.E].IsReady() || ObjectManager.Player.ManaPercent <= 25))
                         {
                             _spells[SpellSlot.Q].CastIfHitchanceEquals(target, HitChance.High);
                         }
-                        if (Helpers.IsMenuEnabled("dz191.ahri.combo.usew") && _spells[SpellSlot.W].LSIsReady() && ObjectManager.Player.LSDistance(target) <= _spells[SpellSlot.W].Range && (target.IsCharmed() || (_spells[SpellSlot.W].GetDamage(target) + _spells[SpellSlot.Q].GetDamage(target) > target.Health + 25)))
+                        if (Helpers.IsMenuEnabled("dz191.ahri.combo.usew") && _spells[SpellSlot.W].IsReady() && ObjectManager.Player.Distance(target) <= _spells[SpellSlot.W].Range && (target.IsCharmed() || (_spells[SpellSlot.W].GetDamage(target) + _spells[SpellSlot.Q].GetDamage(target) > target.Health + 25)))
                         {
                             _spells[SpellSlot.W].Cast();
                         }
                         break;
                     case 1:
-                        if (!target.IsCharmed() && Helpers.IsMenuEnabled("dz191.ahri.combo.usee") && _spells[SpellSlot.E].LSIsReady() && _spells[SpellSlot.Q].LSIsReady())
+                        if (!target.IsCharmed() && Helpers.IsMenuEnabled("dz191.ahri.combo.usee") && _spells[SpellSlot.E].IsReady() && _spells[SpellSlot.Q].IsReady())
                         {
                             _spells[SpellSlot.E].CastIfHitchanceEquals(target, HitChance.High);
                         }
-                        if (Helpers.IsMenuEnabled("dz191.ahri.combo.useq") && _spells[SpellSlot.Q].LSIsReady())
+                        if (Helpers.IsMenuEnabled("dz191.ahri.combo.useq") && _spells[SpellSlot.Q].IsReady())
                         {
                             _spells[SpellSlot.Q].CastIfHitchanceEquals(target, HitChance.High);
                         }
-                        if (Helpers.IsMenuEnabled("dz191.ahri.combo.usew") && _spells[SpellSlot.W].LSIsReady() && ObjectManager.Player.LSDistance(target) <= _spells[SpellSlot.W].Range && ((_spells[SpellSlot.W].GetDamage(target) + _spells[SpellSlot.Q].GetDamage(target) > target.Health + 25)))
+                        if (Helpers.IsMenuEnabled("dz191.ahri.combo.usew") && _spells[SpellSlot.W].IsReady() && ObjectManager.Player.Distance(target) <= _spells[SpellSlot.W].Range && ((_spells[SpellSlot.W].GetDamage(target) + _spells[SpellSlot.Q].GetDamage(target) > target.Health + 25)))
                         {
                             _spells[SpellSlot.W].Cast();
                         }
@@ -101,19 +101,19 @@ using EloBuddy;
                 return;
             }
             var comboTarget = TargetSelector.GetTarget(_spells[SpellSlot.E].Range, TargetSelector.DamageType.Magical);
-            var charmedUnit = HeroManager.Enemies.Find(h => h.IsCharmed() && h.LSIsValidTarget(_spells[SpellSlot.Q].Range));
+            var charmedUnit = HeroManager.Enemies.Find(h => h.IsCharmed() && h.IsValidTarget(_spells[SpellSlot.Q].Range));
             AIHeroClient target = comboTarget;
             if (charmedUnit != null)
             {
                 target = charmedUnit;
             }
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
-                if (!target.IsCharmed() && Helpers.IsMenuEnabled("dz191.ahri.harass.usee") && _spells[SpellSlot.E].LSIsReady() && _spells[SpellSlot.Q].LSIsReady())
+                if (!target.IsCharmed() && Helpers.IsMenuEnabled("dz191.ahri.harass.usee") && _spells[SpellSlot.E].IsReady() && _spells[SpellSlot.Q].IsReady())
                 {
                     _spells[SpellSlot.E].CastIfHitchanceEquals(target, HitChance.High);
                 }
-                if (Helpers.IsMenuEnabled("dz191.ahri.harass.useq") && _spells[SpellSlot.Q].LSIsReady())
+                if (Helpers.IsMenuEnabled("dz191.ahri.harass.useq") && _spells[SpellSlot.Q].IsReady())
                 {
                     if (Helpers.IsMenuEnabled("dz191.ahri.harass.onlyqcharm") && !target.IsCharmed())
                     {
@@ -121,7 +121,7 @@ using EloBuddy;
                     }
                     _spells[SpellSlot.Q].CastIfHitchanceEquals(target, HitChance.High);
                 }
-                if (Helpers.IsMenuEnabled("dz191.ahri.harass.usew") && _spells[SpellSlot.W].LSIsReady() && ObjectManager.Player.LSDistance(target) <= _spells[SpellSlot.W].Range)
+                if (Helpers.IsMenuEnabled("dz191.ahri.harass.usew") && _spells[SpellSlot.W].IsReady() && ObjectManager.Player.Distance(target) <= _spells[SpellSlot.W].Range)
                 {
                     _spells[SpellSlot.W].Cast();
                 }
@@ -172,7 +172,7 @@ using EloBuddy;
         }
         private static void HandleRCombo(AIHeroClient target)
         {
-            if (_spells[SpellSlot.R].LSIsReady() && Helpers.IsMenuEnabled("dz191.ahri.combo.user"))
+            if (_spells[SpellSlot.R].IsReady() && Helpers.IsMenuEnabled("dz191.ahri.combo.user"))
             {
                 //User chose not to initiate with R.
                 if (Helpers.IsMenuEnabled("dz191.ahri.combo.initr"))
@@ -180,14 +180,14 @@ using EloBuddy;
                     return;
                 }
                 //Neither Q or E are ready in <= 2 seconds and we can't kill the enemy with 1 R stack. Don't use R
-                if ((!_spells[SpellSlot.Q].LSIsReady(2) && !_spells[SpellSlot.E].LSIsReady(2)) || !(Helpers.GetComboDamage(target) >= target.Health + 20))
+                if ((!_spells[SpellSlot.Q].IsReady(2) && !_spells[SpellSlot.E].IsReady(2)) || !(Helpers.GetComboDamage(target) >= target.Health + 20))
                 {
                     return;
                 }
                 //Set the test position to the Cursor Position
                 var testPosition = Game.CursorPos;
                 //Extend from out position towards there
-                var extendedPosition = ObjectManager.Player.Position.LSExtend(testPosition, 500f);
+                var extendedPosition = ObjectManager.Player.Position.Extend(testPosition, 500f);
                 //Safety checks
                 if (extendedPosition.IsSafe())
                 {
@@ -209,7 +209,7 @@ using EloBuddy;
                     //This tryhard tho
                     if (rBuff.EndTime - Game.Time <= 1.0f + (Game.Ping / (2f * 1000f)))
                     {
-                        var extendedPosition = ObjectManager.Player.Position.LSExtend(Game.CursorPos, _spells[SpellSlot.R].Range);
+                        var extendedPosition = ObjectManager.Player.Position.Extend(Game.CursorPos, _spells[SpellSlot.R].Range);
                         if (extendedPosition.IsSafe())
                         {
                             _spells[SpellSlot.R].Cast(extendedPosition);
@@ -219,7 +219,7 @@ using EloBuddy;
             }
             if (Helpers.IsMenuEnabled("dz191.ahri.misc.autoq"))
             {
-                var charmedUnit = HeroManager.Enemies.Find(h => h.IsCharmed() && h.LSIsValidTarget(_spells[SpellSlot.Q].Range));
+                var charmedUnit = HeroManager.Enemies.Find(h => h.IsCharmed() && h.IsValidTarget(_spells[SpellSlot.Q].Range));
                 if (charmedUnit != null)
                 {
                     _spells[SpellSlot.Q].Cast(charmedUnit);
@@ -228,16 +228,16 @@ using EloBuddy;
             if (Helpers.IsMenuEnabled("dz191.ahri.combo.autoq2"))
             {
                 var qMana = Menu.Item("dz191.ahri.combo.autoq2mana").GetValue<Slider>().Value;
-                if (ObjectManager.Player.ManaPercent >= qMana && _spells[SpellSlot.Q].LSIsReady())
+                if (ObjectManager.Player.ManaPercent >= qMana && _spells[SpellSlot.Q].IsReady())
                 {
                     var target = TargetSelector.GetTarget(_spells[SpellSlot.Q].Range, TargetSelector.DamageType.Magical);
-                    if (target != null && ObjectManager.Player.LSDistance(target) >= _spells[SpellSlot.Q].Range * 0.7f)
+                    if (target != null && ObjectManager.Player.Distance(target) >= _spells[SpellSlot.Q].Range * 0.7f)
                     {
                         _spells[SpellSlot.Q].CastIfHitchanceEquals(target, HitChance.High);
                     }
                 }
             }
-            if (Menu.Item("dz191.ahri.misc.instacharm").GetValue<KeyBind>().Active && _spells[SpellSlot.E].LSIsReady())
+            if (Menu.Item("dz191.ahri.misc.instacharm").GetValue<KeyBind>().Active && _spells[SpellSlot.E].IsReady())
             {
                 var target = TargetSelector.GetTarget(_spells[SpellSlot.E].Range, TargetSelector.DamageType.Magical);
                 if (target != null)
@@ -250,19 +250,19 @@ using EloBuddy;
         }
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (Helpers.IsMenuEnabled("dz191.ahri.misc.egp") && gapcloser.Sender.LSIsValidTarget(_spells[SpellSlot.E].Range) && _spells[SpellSlot.E].LSIsReady())
+            if (Helpers.IsMenuEnabled("dz191.ahri.misc.egp") && gapcloser.Sender.IsValidTarget(_spells[SpellSlot.E].Range) && _spells[SpellSlot.E].IsReady())
             {
                 _spells[SpellSlot.E].Cast(gapcloser.Sender);
             }
-            if (Helpers.IsMenuEnabled("dz191.ahri.misc.rgap") && !_spells[SpellSlot.E].LSIsReady() &&
-                _spells[SpellSlot.R].LSIsReady())
+            if (Helpers.IsMenuEnabled("dz191.ahri.misc.rgap") && !_spells[SpellSlot.E].IsReady() &&
+                _spells[SpellSlot.R].IsReady())
             {
-                _spells[SpellSlot.R].Cast(ObjectManager.Player.ServerPosition.LSExtend(gapcloser.End, -400f));
+                _spells[SpellSlot.R].Cast(ObjectManager.Player.ServerPosition.Extend(gapcloser.End, -400f));
             }
         }
         static void Interrupter2_OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (Helpers.IsMenuEnabled("dz191.ahri.misc.eint") && args.DangerLevel >= Interrupter2.DangerLevel.Medium && _spells[SpellSlot.E].LSIsReady())
+            if (Helpers.IsMenuEnabled("dz191.ahri.misc.eint") && args.DangerLevel >= Interrupter2.DangerLevel.Medium && _spells[SpellSlot.E].IsReady())
             {
                 _spells[SpellSlot.E].Cast(sender.ServerPosition);
             }

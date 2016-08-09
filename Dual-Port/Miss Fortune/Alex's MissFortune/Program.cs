@@ -25,7 +25,7 @@ using EloBuddy;
         public static float RCastTime { get; set; }
         public static bool IsCastingR
         {
-            get { return ObjectManager.Player.LSHasBuff("missfortunebulletsound"); }
+            get { return ObjectManager.Player.HasBuff("missfortunebulletsound"); }
         }
 
         public static void OnLoad()
@@ -116,7 +116,7 @@ using EloBuddy;
 
         private static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (!unit.IsMe || Player.IsChannelingImportantSpell() || Player.LSHasBuff("missfortunebulletsound") || Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
+            if (!unit.IsMe || Player.IsChannelingImportantSpell() || Player.HasBuff("missfortunebulletsound") || Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
             {
                 return;
             }
@@ -137,7 +137,7 @@ using EloBuddy;
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (Player.LSHasBuff("MissFortuneBulletTime"))
+            if (Player.HasBuff("MissFortuneBulletTime"))
             {
                 Orbwalker.SetAttack(false);
                 Orbwalker.SetMovement(false);
@@ -172,8 +172,8 @@ using EloBuddy;
 
         private static bool IsSafe()
         {
-            return ObjectManager.Player.LSCountEnemiesInRange(ObjectManager.Player.AttackRange) <=
-                   ObjectManager.Player.LSCountAlliesInRange(ObjectManager.Player.AttackRange);
+            return ObjectManager.Player.CountEnemiesInRange(ObjectManager.Player.AttackRange) <=
+                   ObjectManager.Player.CountAlliesInRange(ObjectManager.Player.AttackRange);
         }
 
 
@@ -181,22 +181,22 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
 
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return;
             }
 
-            if (W.LSIsReady() && Config.Item("wCombo").GetValue<bool>() && target.LSIsValidTarget(500))
+            if (W.IsReady() && Config.Item("wCombo").GetValue<bool>() && target.IsValidTarget(500))
             {
                 W.Cast();
             }
 
             //Ardud Q logic
-            if (Q.LSIsReady())
+            if (Q.IsReady())
 
                 target = TargetSelector.GetTarget(Q.Range + 500, TargetSelector.DamageType.Physical);
             var allMinion = MinionManager.GetMinions(target.Position, Q.Range, MinionTypes.All, MinionTeam.NotAlly);
-            if (target.LSIsValidTarget(Q.Range))
+            if (target.IsValidTarget(Q.Range))
             {
                 Q.Cast(target.Position);
 
@@ -204,12 +204,12 @@ using EloBuddy;
             Obj_AI_Base nearestMinion =
                 allMinion.Where(
                 minion =>
-                minion.LSDistance(ObjectManager.Player) <= target.LSDistance(ObjectManager.Player) &&
-                        target.LSDistance(minion) < 450)
-                    .OrderBy(minion => minion.LSDistance(ObjectManager.Player))
+                minion.Distance(ObjectManager.Player) <= target.Distance(ObjectManager.Player) &&
+                        target.Distance(minion) < 450)
+                    .OrderBy(minion => minion.Distance(ObjectManager.Player))
                     .FirstOrDefault();
             {
-                if (nearestMinion != null && nearestMinion.LSIsValidTarget(Q.Range))
+                if (nearestMinion != null && nearestMinion.IsValidTarget(Q.Range))
                 {
                     Q.CastOnUnit(nearestMinion);
                 }
@@ -220,8 +220,8 @@ using EloBuddy;
                 E.Cast(target);
             }
 
-            if (R.CanCast(target) && Config.Item("rCombo").GetValue<bool>() && !Q.LSIsReady() && !W.LSIsReady()
-                && !E.LSIsReady())
+            if (R.CanCast(target) && Config.Item("rCombo").GetValue<bool>() && !Q.IsReady() && !W.IsReady()
+                && !E.IsReady())
             {
                 var slidercount = Config.Item("rComboxEnemy").GetValue<Slider>().Value;
 
@@ -270,7 +270,7 @@ using EloBuddy;
                 }
 
             }
-            if (E.LSIsReady() && Config.Item("eLaneclear").GetValue<bool>())
+            if (E.IsReady() && Config.Item("eLaneclear").GetValue<bool>())
             {
                 var efarm = E.GetCircularFarmLocation(allMinions, 200);
                 if (efarm.MinionsHit >= 3)
@@ -288,13 +288,13 @@ using EloBuddy;
 
             if (mobs.Count > 0)
             {
-                if (Config.Item("qJungle").GetValue<bool>() && Q.LSIsReady())
+                if (Config.Item("qJungle").GetValue<bool>() && Q.IsReady())
                     Q.CastOnUnit(mobs[0]);
 
-                if (Config.Item("wJungle").GetValue<bool>() && W.LSIsReady())
+                if (Config.Item("wJungle").GetValue<bool>() && W.IsReady())
                     W.CastOnUnit(mobs[0]);
 
-                if (Config.Item("eJungle").GetValue<bool>() && E.LSIsReady())
+                if (Config.Item("eJungle").GetValue<bool>() && E.IsReady())
                     E.Cast(mobs[0].Position);
             }
         }
@@ -305,10 +305,10 @@ using EloBuddy;
             var menuItem2 = Config.Item("eDraw").GetValue<Circle>();
             var menuItem3 = Config.Item("rDraw").GetValue<Circle>();
 
-            if (menuItem1.Active && Q.LSIsReady()) Render.Circle.DrawCircle(Player.Position, Q.Range, Color.SpringGreen);
-            if (menuItem2.Active && E.LSIsReady()) Render.Circle.DrawCircle(Player.Position, E.Range, Color.Crimson);
+            if (menuItem1.Active && Q.IsReady()) Render.Circle.DrawCircle(Player.Position, Q.Range, Color.SpringGreen);
+            if (menuItem2.Active && E.IsReady()) Render.Circle.DrawCircle(Player.Position, E.Range, Color.Crimson);
 
-            if (menuItem3.Active && R.LSIsReady()) Render.Circle.DrawCircle(Player.Position, R.Range, Color.Gold);
+            if (menuItem3.Active && R.IsReady()) Render.Circle.DrawCircle(Player.Position, R.Range, Color.Gold);
         }
 
         public struct Spells

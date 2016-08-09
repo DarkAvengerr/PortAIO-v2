@@ -34,26 +34,26 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if(Q.LSIsReady())
+            if(Q.IsReady())
                 Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (W.LSIsReady())
+            if (W.IsReady())
                 W.Cast(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (E.LSIsReady())
+            if (E.IsReady())
                 E.CastOnUnit(target);
         }
 
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             R.Cast();
         }
@@ -90,40 +90,40 @@ using EloBuddy; namespace ARAMDetFull.Champions
             {
                 foreach (var minion in minionCount)
                 {
-                    if ( Q.LSIsReady()
-                        && minion.LSIsValidTarget(Q.Range)
+                    if ( Q.IsReady()
+                        && minion.IsValidTarget(Q.Range)
                         && minion.Health > Q.GetDamage(minion))
                     {
                         Q.Cast(minion);
                     }
 
-                    if (W.LSIsReady()
-                        && minion.LSIsValidTarget(W.Range)
+                    if (W.IsReady()
+                        && minion.IsValidTarget(W.Range)
                         && minion.Health > W.GetDamage(minion))
                     {
                         W.CastOnUnit(minion);
                     }
 
-                    if (E.LSIsReady()
-                        && minion.LSIsValidTarget(E.Range)
+                    if (E.IsReady()
+                        && minion.IsValidTarget(E.Range)
                         && minion.Health > E.GetDamage(minion))
                     {
                         E.CastOnUnit(minion);
                     }
 
-                    if (Q.LSIsReady()
-                        && minion.LSIsValidTarget(Q.Range))
+                    if (Q.IsReady()
+                        && minion.IsValidTarget(Q.Range))
                     {
                         Q.Cast(minion);
                     }
 
-                    if (E.LSIsReady()
-                        && minion.LSIsValidTarget(E.Range))
+                    if (E.IsReady()
+                        && minion.IsValidTarget(E.Range))
                     {
                         E.CastOnUnit(minion);
                     }
-                    if (W.LSIsReady()
-                        && minion.LSIsValidTarget(W.Range))
+                    if (W.IsReady()
+                        && minion.IsValidTarget(W.Range))
                     {
                         W.CastOnUnit(minion);
                     }

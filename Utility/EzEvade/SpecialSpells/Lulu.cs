@@ -66,7 +66,7 @@ using EloBuddy; namespace ezEvade.SpecialSpells
                         }
                         else
                         {
-                            Vector3 endPos2 = info.obj.Position.LSExtend(args.End, spellData.range);
+                            Vector3 endPos2 = info.obj.Position.Extend(args.End, spellData.range);
                             SpellDetector.CreateSpellData(hero, info.obj.Position, endPos2, spellData, null, 0, false);
                         }
                     }

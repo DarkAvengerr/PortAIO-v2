@@ -141,7 +141,7 @@ using EloBuddy; namespace ADCPackage
 
         private static void FireAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (AfterAttack != null && target.LSIsValidTarget())
+            if (AfterAttack != null && target.IsValidTarget())
             {
                 AfterAttack(unit, target);
             }
@@ -149,7 +149,7 @@ using EloBuddy; namespace ADCPackage
 
         private static void FireOnTargetSwitch(AttackableUnit newTarget)
         {
-            if (OnTargetChange != null && (!_lastTarget.LSIsValidTarget() || _lastTarget != newTarget))
+            if (OnTargetChange != null && (!_lastTarget.IsValidTarget() || _lastTarget != newTarget))
             {
                 OnTargetChange(_lastTarget, newTarget);
             }
@@ -194,7 +194,7 @@ using EloBuddy; namespace ADCPackage
         public static float GetRealAutoAttackRange(AttackableUnit target)
         {
             var result = Player.AttackRange + Player.BoundingRadius;
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 return result + target.BoundingRadius;
             }
@@ -215,15 +215,15 @@ using EloBuddy; namespace ADCPackage
         /// </summary>
         public static bool InAutoAttackRange(AttackableUnit target)
         {
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return false;
             }
             var myRange = GetRealAutoAttackRange(target);
             return
                 Vector2.DistanceSquared(
-                    (target is Obj_AI_Base) ? ((Obj_AI_Base)target).ServerPosition.LSTo2D() : target.Position.LSTo2D(),
-                    Player.ServerPosition.LSTo2D()) <= myRange * myRange;
+                    (target is Obj_AI_Base) ? ((Obj_AI_Base)target).ServerPosition.To2D() : target.Position.To2D(),
+                    Player.ServerPosition.To2D()) <= myRange * myRange;
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ using EloBuddy; namespace ADCPackage
         /// </summary>
         public static float GetMyProjectileSpeed()
         {
-            return IsMelee(Player) || _championName == "Azir" || _championName == "Velkoz" || _championName == "Viktor" && Player.LSHasBuff("ViktorPowerTransferReturn") ? float.MaxValue : Player.BasicAttack.MissileSpeed;
+            return IsMelee(Player) || _championName == "Azir" || _championName == "Velkoz" || _championName == "Viktor" && Player.HasBuff("ViktorPowerTransferReturn") ? float.MaxValue : Player.BasicAttack.MissileSpeed;
         }
 
         /// <summary>
@@ -258,7 +258,7 @@ using EloBuddy; namespace ADCPackage
             }
 
             var localExtraWindup = 0;
-            if (_championName == "Rengar" && (Player.LSHasBuff("rengarqbase") || Player.LSHasBuff("rengarqemp")))
+            if (_championName == "Rengar" && (Player.HasBuff("rengarqbase") || Player.HasBuff("rengarqemp")))
             {
                 localExtraWindup = 200;
             }
@@ -294,7 +294,7 @@ using EloBuddy; namespace ADCPackage
         {
             var playerPosition = Player.ServerPosition;
 
-            if (playerPosition.LSDistance(position, true) < holdAreaRadius * holdAreaRadius)
+            if (playerPosition.Distance(position, true) < holdAreaRadius * holdAreaRadius)
             {
                 if (Player.Path.Length > 0)
                 {
@@ -307,13 +307,13 @@ using EloBuddy; namespace ADCPackage
 
             var point = position;
 
-            if (Player.LSDistance(point, true) < 150 * 150)
+            if (Player.Distance(point, true) < 150 * 150)
             {
-                point = playerPosition.LSExtend(position, (randomizeMinDistance ? (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance : _minDistance));
+                point = playerPosition.Extend(position, (randomizeMinDistance ? (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance : _minDistance));
             }
             var angle = 0f;
-            var currentPath = Player.LSGetWaypoints();
-            if (currentPath.Count > 1 && currentPath.LSPathLength() > 100)
+            var currentPath = Player.GetWaypoints();
+            if (currentPath.Count > 1 && currentPath.PathLength() > 100)
             {
                 var movePath = Player.GetPath(point);
 
@@ -321,8 +321,8 @@ using EloBuddy; namespace ADCPackage
                 {
                     var v1 = currentPath[1] - currentPath[0];
                     var v2 = movePath[1] - movePath[0];
-                    angle = v1.LSAngleBetween(v2.LSTo2D());
-                    var distance = movePath.Last().LSTo2D().LSDistance(currentPath.Last(), true);
+                    angle = v1.AngleBetween(v2.To2D());
+                    var distance = movePath.Last().To2D().Distance(currentPath.Last(), true);
 
                     if ((angle < 10 && distance < 500 * 500) || distance < 50 * 50)
                     {
@@ -364,7 +364,7 @@ using EloBuddy; namespace ADCPackage
         {
             try
             {
-                if (target.LSIsValidTarget() && EloBuddy.SDK.Orbwalker.CanAutoAttack)
+                if (target.IsValidTarget() && EloBuddy.SDK.Orbwalker.CanAutoAttack)
                 {
                     DisableNextAttack = false;
                     FireBeforeAttack(target);
@@ -376,7 +376,7 @@ using EloBuddy; namespace ADCPackage
                             LastAATick = Utils.GameTimeTickCount + Game.Ping + 100 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
 
                             var d = GetRealAutoAttackRange(target) - 65;
-                            if (Player.LSDistance(target, true) > d * d && !Player.IsMelee)
+                            if (Player.Distance(target, true) > d * d && !Player.IsMelee)
                             {
                                 LastAATick = Utils.GameTimeTickCount + Game.Ping + 400 - (int)(ObjectManager.Player.AttackCastDelay * 1000f);
                             }
@@ -480,10 +480,10 @@ using EloBuddy; namespace ADCPackage
                         }
                         else
                         {
-                            _fix = (Player.AttackDelay*750) /* - ((1000*Player.LSDistance(Spell.Target.Position))/GetMyProjectileSpeed() + Player.AttackCastDelay)*/ - Game.Ping; //todo: had * 705 works perfectly // 800 = good on common 800 is actually bad now? try 750, not sure if distance to target impacts anything, but the - is wrong
-                            _fix = (Player.AttackDelay*750) /* - ((1000*Player.LSDistance(Spell.Target.Position))/GetMyProjectileSpeed() + Player.AttackCastDelay)*/ - Game.Ping; //todo: had * 705 works perfectly // 800 = good on common 800 is actually bad now? try 750, not sure if distance to target impacts anything, but the - is wrong
+                            _fix = (Player.AttackDelay*750) /* - ((1000*Player.Distance(Spell.Target.Position))/GetMyProjectileSpeed() + Player.AttackCastDelay)*/ - Game.Ping; //todo: had * 705 works perfectly // 800 = good on common 800 is actually bad now? try 750, not sure if distance to target impacts anything, but the - is wrong
+                            _fix = (Player.AttackDelay*750) /* - ((1000*Player.Distance(Spell.Target.Position))/GetMyProjectileSpeed() + Player.AttackCastDelay)*/ - Game.Ping; //todo: had * 705 works perfectly // 800 = good on common 800 is actually bad now? try 750, not sure if distance to target impacts anything, but the - is wrong
                             //Console.WriteLine((Player.AttackDelay * 1000));
-                            //Console.WriteLine(((1000 * Player.LSDistance(Spell.Target.Position)) / GetMyProjectileSpeed() + Player.AttackCastDelay));
+                            //Console.WriteLine(((1000 * Player.Distance(Spell.Target.Position)) / GetMyProjectileSpeed() + Player.AttackCastDelay));
                         }
                     }
                     else
@@ -720,11 +720,11 @@ using EloBuddy; namespace ADCPackage
                     ObjectManager.Get<Obj_AI_Minion>()
                         .Any(
                             minion =>
-                                minion.LSIsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
+                                minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                                 InAutoAttackRange(minion) && MinionManager.IsMinion(minion, false) &&
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay) <=
-                                Player.LSGetAutoAttackDamage(minion));
+                                Player.GetAutoAttackDamage(minion));
             }
 
             public virtual AttackableUnit GetTarget()
@@ -749,7 +749,7 @@ using EloBuddy; namespace ADCPackage
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 minion =>
-                                    minion.LSIsValidTarget() && InAutoAttackRange(minion))
+                                    minion.IsValidTarget() && InAutoAttackRange(minion))
                                     .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                                     .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                                     .ThenBy(minion => minion.Health)
@@ -758,7 +758,7 @@ using EloBuddy; namespace ADCPackage
                     foreach (var minion in MinionList)
                     {
                         var t = (int)(Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
-                                1000 * (int)Math.Max(0, Player.LSDistance(minion) - Player.BoundingRadius) / (int)GetMyProjectileSpeed();
+                                1000 * (int)Math.Max(0, Player.Distance(minion) - Player.BoundingRadius) / (int)GetMyProjectileSpeed();
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
 
                         if (minion.Team != GameObjectTeam.Neutral && (_config.Item("AttackPetsnTraps").GetValue<bool>() && minion.BaseSkinName != "jarvanivstandard" || MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())))
@@ -768,7 +768,7 @@ using EloBuddy; namespace ADCPackage
                                 FireOnNonKillableMinion(minion);
                             }
 
-                            if (predHealth > 0 && predHealth <= Player.LSGetAutoAttackDamage(minion, true))
+                            if (predHealth > 0 && predHealth <= Player.GetAutoAttackDamage(minion, true))
                             {
                                 return minion;
                             }
@@ -777,7 +777,7 @@ using EloBuddy; namespace ADCPackage
                 }
 
                 //Forced target
-                if (_forcedTarget.LSIsValidTarget() && InAutoAttackRange(_forcedTarget))
+                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget))
                 {
                     return _forcedTarget;
                 }
@@ -787,21 +787,21 @@ using EloBuddy; namespace ADCPackage
                 {
                     /* turrets */
                     foreach (var turret in
-                        ObjectManager.Get<Obj_AI_Turret>().Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+                        ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                     {
                         return turret;
                     }
 
                     /* inhibitor */
                     foreach (var turret in
-                        ObjectManager.Get<Obj_BarracksDampener>().Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+                        ObjectManager.Get<Obj_BarracksDampener>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                     {
                         return turret;
                     }
 
                     /* nexus */
                     foreach (var nexus in
-                        ObjectManager.Get<Obj_HQ>().Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+                        ObjectManager.Get<Obj_HQ>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                     {
                         return nexus;
                     }
@@ -811,7 +811,7 @@ using EloBuddy; namespace ADCPackage
                 if (ActiveMode != OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target.LSIsValidTarget() && InAutoAttackRange(target))
+                    if (target.IsValidTarget() && InAutoAttackRange(target))
                     {
                         return target;
                     }
@@ -824,7 +824,7 @@ using EloBuddy; namespace ADCPackage
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 mob =>
-                                    mob.LSIsValidTarget() && mob.Team == GameObjectTeam.Neutral && InAutoAttackRange(mob) &&
+                                    mob.IsValidTarget() && mob.Team == GameObjectTeam.Neutral && InAutoAttackRange(mob) &&
                                     mob.CharData.BaseSkinName != "gangplankbarrel");
 
                     result = _config.Item("Smallminionsprio").GetValue<bool>() ? jminions.MinOrDefault(mob => mob.MaxHealth) : jminions.MaxOrDefault(mob => mob.MaxHealth);
@@ -840,11 +840,11 @@ using EloBuddy; namespace ADCPackage
                 {
                     if (!ShouldWait())
                     {
-                        if (_prevMinion.LSIsValidTarget() && InAutoAttackRange(_prevMinion))
+                        if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion))
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 _prevMinion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
-                            if (predHealth >= 2 * Player.LSGetAutoAttackDamage(_prevMinion) ||
+                            if (predHealth >= 2 * Player.GetAutoAttackDamage(_prevMinion) ||
                                 Math.Abs(predHealth - _prevMinion.Health) < float.Epsilon)
                             {
                                 return _prevMinion;
@@ -853,7 +853,7 @@ using EloBuddy; namespace ADCPackage
 
                         result = (from minion in
                                       ObjectManager.Get<Obj_AI_Minion>()
-                                          .Where(minion => minion.LSIsValidTarget() && InAutoAttackRange(minion) &&
+                                          .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) &&
                                           (_config.Item("AttackWards").GetValue<bool>() || !MinionManager.IsWard(minion.CharData.BaseSkinName.ToLower())) &&
                                           (_config.Item("AttackPetsnTraps").GetValue<bool>() && minion.CharData.BaseSkinName != "jarvanivstandard" || MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())) &&
                                           minion.CharData.BaseSkinName != "gangplankbarrel")
@@ -861,7 +861,7 @@ using EloBuddy; namespace ADCPackage
                                       HealthPrediction.LaneClearHealthPrediction(
                                           minion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay)
                                   where
-                                      predHealth >= 2 * Player.LSGetAutoAttackDamage(minion) ||
+                                      predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
                                       Math.Abs(predHealth - minion.Health) < float.Epsilon
                                   select minion).MaxOrDefault(m => !MinionManager.IsMinion(m, true) ? float.MaxValue : m.Health);
 
@@ -891,7 +891,7 @@ using EloBuddy; namespace ADCPackage
 
                     var target = GetTarget();
                     Orbwalk(
-                        target, (_orbwalkingPoint.LSTo2D().LSIsValid()) ? _orbwalkingPoint : Game.CursorPos,
+                        target, (_orbwalkingPoint.To2D().IsValid()) ? _orbwalkingPoint : Game.CursorPos,
                         200,
                         _config.Item("HoldPosRadius").GetValue<Slider>().Value);
                 }
@@ -914,7 +914,7 @@ using EloBuddy; namespace ADCPackage
                 if (_config.Item("AACircle2").GetValue<Circle>().Active)
                 {
                     foreach (var target in
-                        HeroManager.Enemies.FindAll(target => target.LSIsValidTarget(1175)))
+                        HeroManager.Enemies.FindAll(target => target.IsValidTarget(1175)))
                     {
                         Render.Circle.DrawCircle(
                             target.Position, GetAttackRange(target),

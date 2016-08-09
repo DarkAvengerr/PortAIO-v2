@@ -72,9 +72,9 @@ using EloBuddy;
         {
             if (Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.ahri.extra.antigapcloser")
                 && ObjectManager.Player.ManaPercent > 20
-                && gapcloser.End.LSDistance(ObjectManager.Player.ServerPosition) < 400
-                && gapcloser.Sender.LSIsValidTarget(Variables.Spells[SpellSlot.E].Range)
-                && Variables.Spells[SpellSlot.E].LSIsReady())
+                && gapcloser.End.Distance(ObjectManager.Player.ServerPosition) < 400
+                && gapcloser.Sender.IsValidTarget(Variables.Spells[SpellSlot.E].Range)
+                && Variables.Spells[SpellSlot.E].IsReady())
             {
                 Variables.Spells[SpellSlot.E].CastIfHitchanceEquals(gapcloser.Sender, HitChance.Medium);
             }
@@ -85,8 +85,8 @@ using EloBuddy;
             if (Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.ahri.extra.interrupter")
                 && ObjectManager.Player.ManaPercent > 20
                 && args.DangerLevel > DZInterrupter.DangerLevel.Medium
-                && sender.LSIsValidTarget(Variables.Spells[SpellSlot.E].Range)
-                && Variables.Spells[SpellSlot.E].LSIsReady())
+                && sender.IsValidTarget(Variables.Spells[SpellSlot.E].Range)
+                && Variables.Spells[SpellSlot.E].IsReady())
             {
                 Variables.Spells[SpellSlot.E].CastIfHitchanceEquals(sender, HitChance.High);
             }
@@ -119,11 +119,11 @@ using EloBuddy;
         public void OnCombo()
         {
             var comboTarget = TargetSelector.GetTarget(Variables.Spells[SpellSlot.E].Range, TargetSelector.DamageType.Magical);
-            var charmedUnit = HeroManager.Enemies.Find(h => h.HasBuffOfType(BuffType.Charm) && h.LSIsValidTarget(Variables.Spells[SpellSlot.Q].Range));
+            var charmedUnit = HeroManager.Enemies.Find(h => h.HasBuffOfType(BuffType.Charm) && h.IsValidTarget(Variables.Spells[SpellSlot.Q].Range));
 
             var finalTarget = charmedUnit ?? comboTarget;
 
-            if (finalTarget.LSIsValidTarget())
+            if (finalTarget.IsValidTarget())
             {
                 if (Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.ahri.combo.waitforE"))
                 {
@@ -143,7 +143,7 @@ using EloBuddy;
                     }
 
                     if (Variables.Spells[SpellSlot.W].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo) &&
-                        finalTarget.LSIsValidTarget(Variables.Spells[SpellSlot.W].Range) &&
+                        finalTarget.IsValidTarget(Variables.Spells[SpellSlot.W].Range) &&
                         (finalTarget.IsCharmed ||
                          (Variables.Spells[SpellSlot.W].GetDamage(finalTarget) +
                           Variables.Spells[SpellSlot.Q].GetDamage(finalTarget) > finalTarget.Health + 25)))
@@ -166,7 +166,7 @@ using EloBuddy;
                     }
 
                     if (Variables.Spells[SpellSlot.W].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo) &&
-                        finalTarget.LSIsValidTarget(Variables.Spells[SpellSlot.W].Range) &&
+                        finalTarget.IsValidTarget(Variables.Spells[SpellSlot.W].Range) &&
                         ((Variables.Spells[SpellSlot.W].GetDamage(finalTarget) +
                           Variables.Spells[SpellSlot.Q].GetDamage(finalTarget) > finalTarget.Health + 25)))
                     {
@@ -187,7 +187,7 @@ using EloBuddy;
             if (CanUltiSafely())
             {
                 var mousePosition = Game.CursorPos;
-                var extendedPosition = ObjectManager.Player.ServerPosition.LSExtend(mousePosition, 450f);
+                var extendedPosition = ObjectManager.Player.ServerPosition.Extend(mousePosition, 450f);
 
                 Variables.Spells[SpellSlot.R].Cast(extendedPosition);
             }
@@ -195,23 +195,23 @@ using EloBuddy;
 
         private bool CanUltiSafely()
         {
-            if (ObjectManager.Player.LSCountEnemiesInRange(550f) > 0)
+            if (ObjectManager.Player.CountEnemiesInRange(550f) > 0)
             {
                 return true;
             }
 
-            if (ObjectManager.Player.LSHasBuff("AhriTumble") &&
+            if (ObjectManager.Player.HasBuff("AhriTumble") &&
                 Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.ahri.combo.onlyInitR"))
             {
                 return false;
             }
 
             var mousePosition = Game.CursorPos;
-            var extendedPosition = ObjectManager.Player.ServerPosition.LSExtend(mousePosition, 450f);
+            var extendedPosition = ObjectManager.Player.ServerPosition.Extend(mousePosition, 450f);
 
-            if (extendedPosition.LSGetEnemiesInRange(625f).Any())
+            if (extendedPosition.GetEnemiesInRange(625f).Any())
             {
-                if (ObjectManager.Player.LSHasBuff("AhriTumble"))
+                if (ObjectManager.Player.HasBuff("AhriTumble"))
                 {
                     return true;
                 }
@@ -241,7 +241,7 @@ using EloBuddy;
                 return;
             }
             var comboTarget = TargetSelector.GetTarget(Variables.Spells[SpellSlot.E].Range, TargetSelector.DamageType.Magical);
-            var charmedUnit = HeroManager.Enemies.Find(h => h.HasBuffOfType(BuffType.Charm) && h.LSIsValidTarget(Variables.Spells[SpellSlot.Q].Range));
+            var charmedUnit = HeroManager.Enemies.Find(h => h.HasBuffOfType(BuffType.Charm) && h.IsValidTarget(Variables.Spells[SpellSlot.Q].Range));
 
             var finalTarget = charmedUnit ?? comboTarget;
 
@@ -251,7 +251,7 @@ using EloBuddy;
             }
 
             if (Variables.Spells[SpellSlot.W].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo) &&
-                finalTarget.LSIsValidTarget(Variables.Spells[SpellSlot.W].Range) &&
+                finalTarget.IsValidTarget(Variables.Spells[SpellSlot.W].Range) &&
                 ((Variables.Spells[SpellSlot.W].GetDamage(finalTarget) +
                   Variables.Spells[SpellSlot.Q].GetDamage(finalTarget) > finalTarget.Health + 25)))
             {
@@ -276,7 +276,7 @@ using EloBuddy;
                     MinionTypes.All, MinionTeam.NotAlly,
                     MinionOrderTypes.MaxHealth)
                     .Where(m => Variables.Spells[SpellSlot.Q].GetDamage(m) >= m.Health + 5)
-                    .Select(m => m.ServerPosition.LSTo2D()).ToList();
+                    .Select(m => m.ServerPosition.To2D()).ToList();
 
                 var lineFarmLocation = Variables.Spells[SpellSlot.Q].GetLineFarmLocation(positions);
 
@@ -292,7 +292,7 @@ using EloBuddy;
                     MinionTypes.All, MinionTeam.NotAlly,
                     MinionOrderTypes.MaxHealth)
                     .Where(m => Variables.Spells[SpellSlot.W].GetDamage(m) >= m.Health + 5)
-                    .Select(m => m.ServerPosition.LSTo2D()).ToList();
+                    .Select(m => m.ServerPosition.To2D()).ToList();
                 if (positions.Count() >=
                     Variables.AssemblyMenu.GetItemValue<Slider>("dzaio.champion.ahri.farm.w.min").Value)
                 {

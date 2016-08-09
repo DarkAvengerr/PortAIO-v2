@@ -25,7 +25,7 @@ namespace SAutoCarry.Champions
         }
 
         public TargetedSpellEvader m_targetedEvader;
-        public SpellSlot SummonerFlash = ObjectManager.Player.LSGetSpellSlot("summonerflash");
+        public SpellSlot SummonerFlash = ObjectManager.Player.GetSpellSlot("summonerflash");
         private Dictionary<string, StringList> ComboMethodBackup = new Dictionary<string, StringList>();
 
         public Riven()
@@ -132,13 +132,13 @@ namespace SAutoCarry.Champions
 
         public void BeforeOrbwalk()
         {
-            if (!Spells[Q].LSIsReady(1000))
+            if (!Spells[Q].IsReady(1000))
             {
                 Animation.QStacks = 0;
                 IsDoingFastQ = false;
             }
 
-            if (!Spells[R].LSIsReady())
+            if (!Spells[R].IsReady())
                 Animation.UltActive = false;
 
             if (ConfigMenu.Item("MFLEEKEY").GetValue<KeyBind>().Active)
@@ -226,7 +226,7 @@ namespace SAutoCarry.Champions
             var minion = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, 400, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).FirstOrDefault();
             if (minion != null)
             {
-                if (ConfigMenu.Item("LUSEQ").GetValue<bool>() && Spells[Q].LSIsReady())
+                if (ConfigMenu.Item("LUSEQ").GetValue<bool>() && Spells[Q].IsReady())
                 {
                     Animation.SetAttack(true);
                     if (!IsDoingFastQ && !SCommon.Orbwalking.Utility.InAARange(minion))
@@ -234,7 +234,7 @@ namespace SAutoCarry.Champions
                     IsDoingFastQ = true;
                 }
 
-                if (ConfigMenu.Item("LUSEW").GetValue<bool>() && Spells[W].LSIsReady() && (ObjectManager.Get<Obj_AI_Minion>().Count(p => MinionManager.IsMinion(p) && p.LSIsValidTarget(Spells[W].Range)) >= ConfigMenu.Item("LMINW").GetValue<Slider>().Value || minion.IsJungleMinion()))
+                if (ConfigMenu.Item("LUSEW").GetValue<bool>() && Spells[W].IsReady() && (ObjectManager.Get<Obj_AI_Minion>().Count(p => MinionManager.IsMinion(p) && p.IsValidTarget(Spells[W].Range)) >= ConfigMenu.Item("LMINW").GetValue<Slider>().Value || minion.IsJungleMinion()))
                 {
                     if (ConfigMenu.Item("LUSETIAMAT").GetValue<bool>())
                         CastCrescent();
@@ -250,7 +250,7 @@ namespace SAutoCarry.Champions
                 var minion = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, 400, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).FirstOrDefault();
                 if (minion != null)
                 {
-                    float dist = minion.LSDistance(ObjectManager.Player.ServerPosition);
+                    float dist = minion.Distance(ObjectManager.Player.ServerPosition);
                     double dmg = (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod) * (1 - dist * 0.001);
                     if (minion.Health <= dmg)
                         CastCrescent();
@@ -260,17 +260,17 @@ namespace SAutoCarry.Champions
 
         public void Flee()
         {
-            if (Spells[Q].LSIsReady() && Animation.QStacks != 2)
+            if (Spells[Q].IsReady() && Animation.QStacks != 2)
                 Spells[Q].Cast(Game.CursorPos);
 
             if (ConfigMenu.Item("MFLEEWJ").GetValue<bool>())
             {
-                if (Spells[Q].LSIsReady())
+                if (Spells[Q].IsReady())
                 {
                     var curSpot = WallJump.GetSpot(ObjectManager.Player.ServerPosition);
                     if (curSpot.Start != Vector3.Zero && Animation.QStacks == 2)
                     {
-                        if (Spells[E].LSIsReady())
+                        if (Spells[E].IsReady())
                             Spells[E].Cast(curSpot.End);
                         else
                             if (Items.GetWardSlot() != null)
@@ -290,10 +290,10 @@ namespace SAutoCarry.Champions
             }
             else
             {
-                if (Spells[Q].LSIsReady() && Animation.QStacks == 2)
+                if (Spells[Q].IsReady() && Animation.QStacks == 2)
                     Spells[Q].Cast(Game.CursorPos);
 
-                if (Spells[E].LSIsReady())
+                if (Spells[E].IsReady())
                     Spells[E].Cast(Game.CursorPos);
             }
 
@@ -302,7 +302,7 @@ namespace SAutoCarry.Champions
 
         public void FastQCombo(bool dontCheckQ = false)
         {
-            if (Spells[Q].LSIsReady() || dontCheckQ)
+            if (Spells[Q].IsReady() || dontCheckQ)
             {
                 var t = Target.Get(Spells[Q].Range);
                 if (t != null)
@@ -312,9 +312,9 @@ namespace SAutoCarry.Champions
                     Animation.SetAttack(true);
                     if (!IsDoingFastQ && !SCommon.Orbwalking.Utility.InAARange(t))
                     {
-                        if (!Spells[W].LSIsReady(1000))
+                        if (!Spells[W].IsReady(1000))
                             CastCrescent();
-                        if (Spells[E].LSIsReady() && ObjectManager.Player.LSDistance(t.ServerPosition) > 125 && ConfigMenu.Item("CALWAYSE").GetValue<bool>())
+                        if (Spells[E].IsReady() && ObjectManager.Player.Distance(t.ServerPosition) > 125 && ConfigMenu.Item("CALWAYSE").GetValue<bool>())
                             Spells[E].Cast(t.ServerPosition);
                         Spells[Q].Cast(t.ServerPosition);
                     }
@@ -325,12 +325,12 @@ namespace SAutoCarry.Champions
 
         public bool CheckR1(AIHeroClient t)
         {
-            if (!ObjectManager.Player.HasBuff("RivenFengShuiEngine") && !ConfigMenu.Item("CDISABLER").GetValue<KeyBind>().Active && Spells[R].LSIsReady() && t.LSDistance(ObjectManager.Player.ServerPosition) < 500 && Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo)
+            if (!ObjectManager.Player.HasBuff("RivenFengShuiEngine") && !ConfigMenu.Item("CDISABLER").GetValue<KeyBind>().Active && Spells[R].IsReady() && t.Distance(ObjectManager.Player.ServerPosition) < 500 && Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo)
             {
-                if (ObjectManager.Player.LSGetSpellDamage(t, SpellSlot.Q) * 2 + ObjectManager.Player.LSGetSpellDamage(t, SpellSlot.W) + CalculateAADamage(t, 2) >= t.Health && ObjectManager.Player.LSCountEnemiesInRange(1000) == 1)
+                if (ObjectManager.Player.GetSpellDamage(t, SpellSlot.Q) * 2 + ObjectManager.Player.GetSpellDamage(t, SpellSlot.W) + CalculateAADamage(t, 2) >= t.Health && ObjectManager.Player.CountEnemiesInRange(1000) == 1)
                     return false;
 
-                if (ObjectManager.Player.ServerPosition.LSCountEnemiesInRange(500) > 1)
+                if (ObjectManager.Player.ServerPosition.CountEnemiesInRange(500) > 1)
                     return true;
 
                 switch (ConfigMenu.Item("CR1MODE").GetValue<StringList>().SelectedIndex)
@@ -347,15 +347,15 @@ namespace SAutoCarry.Champions
 
         public bool CheckR2(AIHeroClient t)
         {
-            if (ObjectManager.Player.HasBuff("RivenFengShuiEngine") && !ConfigMenu.Item("CDISABLER").GetValue<KeyBind>().Active && Spells[R].LSIsReady() && t.LSDistance(ObjectManager.Player.ServerPosition) < 900 && Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo)
+            if (ObjectManager.Player.HasBuff("RivenFengShuiEngine") && !ConfigMenu.Item("CDISABLER").GetValue<KeyBind>().Active && Spells[R].IsReady() && t.Distance(ObjectManager.Player.ServerPosition) < 900 && Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo)
             {
                 switch (ConfigMenu.Item("CR2MODE").GetValue<StringList>().SelectedIndex)
                 {
-                    case 1: if (t.Health - CalculateDamageR2(t) > 0 || t.LSDistance(ObjectManager.Player.ServerPosition) > 650f) return false;
+                    case 1: if (t.Health - CalculateDamageR2(t) > 0 || t.Distance(ObjectManager.Player.ServerPosition) > 650f) return false;
                         break;
-                    case 2: if (t.LSDistance(ObjectManager.Player.ServerPosition) < 600) return false;
+                    case 2: if (t.Distance(ObjectManager.Player.ServerPosition) < 600) return false;
                         break;
-                    case 3: if ((t.HealthPercent > 25 && t.Health - CalculateDamageR2(t) - CalculateComboDamage(t) - CalculateAADamage(t, 2) > 0) || t.LSDistance(ObjectManager.Player.ServerPosition) > 650f) return false;
+                    case 3: if ((t.HealthPercent > 25 && t.Health - CalculateDamageR2(t) - CalculateComboDamage(t) - CalculateAADamage(t, 2) > 0) || t.Distance(ObjectManager.Player.ServerPosition) > 650f) return false;
                         break;
                 }
                 return true;
@@ -365,7 +365,7 @@ namespace SAutoCarry.Champions
 
         public void CastCrescent()
         {
-            if (ObjectManager.Player.LSCountEnemiesInRange(500) > 0 || Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.LaneClear)
+            if (ObjectManager.Player.CountEnemiesInRange(500) > 0 || Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.LaneClear)
             {
                 if (Items.HasItem(3077) && Items.CanUseItem(3077)) //tiamat
                     Items.UseItem(3077);
@@ -387,7 +387,7 @@ namespace SAutoCarry.Champions
 
         public override double CalculateDamageQ(AIHeroClient target)
         {
-            if (!Spells[Q].LSIsReady())
+            if (!Spells[Q].IsReady())
                 return 0.0d;
 
             return base.CalculateDamageQ(target) * (3 - Animation.QStacks);
@@ -395,14 +395,14 @@ namespace SAutoCarry.Champions
 
         public override double CalculateDamageR(AIHeroClient target)
         {
-            if (!Spells[R].LSIsReady())
+            if (!Spells[R].IsReady())
                 return 0.0d;
             return ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical, ObjectManager.Player.FlatPhysicalDamageMod * 0.2 * 3);
         }
 
         public double CalculateDamageR2(AIHeroClient target)
         {
-            if (Spells[R].LSIsReady())
+            if (Spells[R].IsReady())
                 return ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical, (new[] { 80, 120, 160 }[Spells[R].Level - 1] + ObjectManager.Player.FlatPhysicalDamageMod * 0.6) * (1 + ((100 - target.HealthPercent) > 75 ? 75 : (100 - target.HealthPercent)) * 0.0267d));
             return 0.0d;
         }
@@ -411,7 +411,7 @@ namespace SAutoCarry.Champions
         {
             if (sender.IsMe)
             {
-                if (args.SData.LSIsAutoAttack())
+                if (args.SData.IsAutoAttack())
                     Animation.SetLastAATick(Utils.TickCount);
                 else if (args.SData.Name == "RivenTriCleave" || args.SData.Name == "rivenizunablade")
                     Orbwalker.ResetAATimer();
@@ -420,7 +420,7 @@ namespace SAutoCarry.Champions
             {
                 if (args.SData.Name == "summonerflash")
                 {
-                    if (args.End.LSDistance(ObjectManager.Player.ServerPosition) > 300 && args.End.LSDistance(ObjectManager.Player.ServerPosition) < 500 && !Spells[E].LSIsReady())
+                    if (args.End.Distance(ObjectManager.Player.ServerPosition) > 300 && args.End.Distance(ObjectManager.Player.ServerPosition) < 500 && !Spells[E].IsReady())
                         Target.SetFlashed();
                 }
             }
@@ -428,7 +428,7 @@ namespace SAutoCarry.Champions
 
         protected override void Interrupter_OnPossibleToInterrupt(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (Spells[W].LSIsReady() && sender.IsEnemy && sender.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition) <= Spells[W].Range && ConfigMenu.Item("MAUTOINTRW").GetValue<bool>())
+            if (Spells[W].IsReady() && sender.IsEnemy && sender.ServerPosition.Distance(ObjectManager.Player.ServerPosition) <= Spells[W].Range && ConfigMenu.Item("MAUTOINTRW").GetValue<bool>())
                 Spells[W].Cast();
         }
 
@@ -437,17 +437,17 @@ namespace SAutoCarry.Champions
             if (!gapcloser.Sender.IsEnemy)
                 return;
 
-            if (Spells[W].LSIsReady() && gapcloser.End.LSDistance(ObjectManager.Player.ServerPosition) <= Spells[W].Range && ConfigMenu.Item("MANTIGAPW").GetValue<bool>())
+            if (Spells[W].IsReady() && gapcloser.End.Distance(ObjectManager.Player.ServerPosition) <= Spells[W].Range && ConfigMenu.Item("MANTIGAPW").GetValue<bool>())
                 LeagueSharp.Common.Utility.DelayAction.Add(100 + Game.Ping, () => Spells[W].Cast());              
             
             if (ConfigMenu.Item("MANTIGAPQ").GetValue<bool>() && Animation.QStacks == 2)
             {
                 if (gapcloser.Sender.Spellbook.GetSpell(gapcloser.Slot).SData.MissileSpeed != 0)
                 {
-                    LeagueSharp.Common.Utility.DelayAction.Add((int)(gapcloser.End.LSDistance(gapcloser.Start) / gapcloser.Sender.Spellbook.GetSpell(gapcloser.Slot).SData.MissileSpeed * 1000f) - Game.Ping, () =>
+                    LeagueSharp.Common.Utility.DelayAction.Add((int)(gapcloser.End.Distance(gapcloser.Start) / gapcloser.Sender.Spellbook.GetSpell(gapcloser.Slot).SData.MissileSpeed * 1000f) - Game.Ping, () =>
                     {
                         if (Items.GetWardSlot() != null)
-                            Items.UseItem((int)Items.GetWardSlot().Id, ObjectManager.Player.ServerPosition + (gapcloser.End - gapcloser.Start).LSNormalized() * 40);
+                            Items.UseItem((int)Items.GetWardSlot().Id, ObjectManager.Player.ServerPosition + (gapcloser.End - gapcloser.Start).Normalized() * 40);
                         Spells[Q].Cast(ObjectManager.Player.ServerPosition);
                     });
                 }
@@ -456,28 +456,28 @@ namespace SAutoCarry.Champions
 
         private void TargetedSpell_Evade(DetectedTargetedSpellArgs data)
         {
-            if (Spells[E].LSIsReady())
+            if (Spells[E].IsReady())
             {
                 if (Orbwalker.ActiveMode != SCommon.Orbwalking.Orbwalker.Mode.Combo || !m_targetedEvader.DisableInComboMode)
                 {
                     var pos = Vector2.Zero;
                     if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo && Orbwalker.GetTarget().NetworkId == data.Caster.NetworkId)
                     {
-                        if (data.Caster.ServerPosition.LSCountEnemiesInRange(1000) <= 1 || !data.SpellData.IsDangerous)
-                            pos = Orbwalker.GetTarget().Position.LSTo2D();
+                        if (data.Caster.ServerPosition.CountEnemiesInRange(1000) <= 1 || !data.SpellData.IsDangerous)
+                            pos = Orbwalker.GetTarget().Position.To2D();
                         else if (data.SpellData.IsDangerous)
-                            pos = SCommon.Maths.Geometry.Deviation(ObjectManager.Player.ServerPosition.LSTo2D(), data.Caster.ServerPosition.LSTo2D(), 90);
+                            pos = SCommon.Maths.Geometry.Deviation(ObjectManager.Player.ServerPosition.To2D(), data.Caster.ServerPosition.To2D(), 90);
                         else
-                            pos = ObjectManager.Player.ServerPosition.LSExtend(data.Caster.ServerPosition, -400).LSTo2D();
+                            pos = ObjectManager.Player.ServerPosition.Extend(data.Caster.ServerPosition, -400).To2D();
                     }
                     else
                     {
                         if (data.SpellData.IsDangerous)
-                            pos = ObjectManager.Player.ServerPosition.LSExtend(data.Caster.ServerPosition, -400).LSTo2D();
+                            pos = ObjectManager.Player.ServerPosition.Extend(data.Caster.ServerPosition, -400).To2D();
                         else
-                            pos = SCommon.Maths.Geometry.Deviation(ObjectManager.Player.ServerPosition.LSTo2D(), data.Caster.ServerPosition.LSTo2D(), 90);
+                            pos = SCommon.Maths.Geometry.Deviation(ObjectManager.Player.ServerPosition.To2D(), data.Caster.ServerPosition.To2D(), 90);
                     }
-                    if (pos.LSIsValid())
+                    if (pos.IsValid())
                         Spells[E].Cast(pos);
                 }                
             }
@@ -488,8 +488,8 @@ namespace SAutoCarry.Champions
             if (args.Msg == (uint)WindowsMessages.WM_LBUTTONDBLCLK)
             {
                 var clickedTarget = HeroManager.Enemies
-                    .FindAll(hero => hero.LSIsValidTarget() && hero.LSDistance(Game.CursorPos, true) < 40000) // 200 * 200
-                    .OrderBy(h => h.LSDistance(Game.CursorPos, true)).FirstOrDefault();
+                    .FindAll(hero => hero.IsValidTarget() && hero.Distance(Game.CursorPos, true) < 40000) // 200 * 200
+                    .OrderBy(h => h.Distance(Game.CursorPos, true)).FirstOrDefault();
 
                 if (clickedTarget != null)
                 {

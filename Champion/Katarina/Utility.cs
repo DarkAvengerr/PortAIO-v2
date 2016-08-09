@@ -28,15 +28,15 @@ namespace Staberina
         {
             return
                 GetETargets(unit.ServerPosition)
-                    .Where(o => o.NetworkId != unit.NetworkId && unit.LSDistance(o) < SpellManager.Q.Range)
-                    .MinOrDefault(o => o.LSDistance(unit));
+                    .Where(o => o.NetworkId != unit.NetworkId && unit.Distance(o) < SpellManager.Q.Range)
+                    .MinOrDefault(o => o.Distance(unit));
         }
 
         public static Obj_AI_Base GetClosestETarget(Vector3 position)
         {
             return
                 GetETargets()
-                    .OrderBy(t => t.LSDistance(position))
+                    .OrderBy(t => t.Distance(position))
                     .ThenByDescending(t => t.DistanceToPlayer())
                     .FirstOrDefault();
         }
@@ -47,20 +47,20 @@ namespace Staberina
                 ObjectManager.Get<Obj_AI_Base>()
                     .Where(
                         o =>
-                            o.LSIsValidTarget(SpellManager.E.Range, false, position) && !o.IsMe &&
+                            o.IsValidTarget(SpellManager.E.Range, false, position) && !o.IsMe &&
                             SpellManager.E.IsInRange(o));
         }
 
         public static bool IsRReady()
         {
             var slot = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R);
-            return SpellManager.R.LSIsReady() || (slot.Level > 0 && slot.State.Equals(SpellState.Surpressed));
+            return SpellManager.R.IsReady() || (slot.Level > 0 && slot.State.Equals(SpellState.Surpressed));
         }
 
         public static SpellSlot GetReadyWard()
         {
             var ward =
-                ObjectManager.Player.InventoryItems.Where(s => WardIds.Contains(s.Id) && s.SpellSlot.LSIsReady())
+                ObjectManager.Player.InventoryItems.Where(s => WardIds.Contains(s.Id) && s.SpellSlot.IsReady())
                     .Select(s => s.SpellSlot)
                     .ToList();
 
@@ -74,31 +74,31 @@ namespace Staberina
 
         public static float GetGapcloseDamage(this Obj_AI_Base target, Obj_AI_Base gapclose)
         {
-            var q = SpellManager.Q.LSIsReady() && gapclose.LSDistance(target) < SpellManager.Q.Range &&
+            var q = SpellManager.Q.IsReady() && gapclose.Distance(target) < SpellManager.Q.Range &&
                     SpellManager.Q.IsActive(true);
-            var w = SpellManager.W.LSIsReady() && gapclose.LSDistance(target) < SpellManager.W.Range &&
+            var w = SpellManager.W.IsReady() && gapclose.Distance(target) < SpellManager.W.Range &&
                     SpellManager.W.IsActive(true);
-            var r = IsRReady() && gapclose.LSDistance(target) < SpellManager.R.Range && SpellManager.R.IsActive(true);
+            var r = IsRReady() && gapclose.Distance(target) < SpellManager.R.Range && SpellManager.R.IsActive(true);
             return GetComboDamage(target, q, w, false, r, true);
         }
 
         public static float GetGapcloseDamage(this Obj_AI_Base target, Vector3 position)
         {
-            var q = SpellManager.Q.LSIsReady() && target.LSDistance(position) + 15 <= SpellManager.Q.Range &&
+            var q = SpellManager.Q.IsReady() && target.Distance(position) + 15 <= SpellManager.Q.Range &&
                     SpellManager.Q.IsActive(true);
-            var w = SpellManager.W.LSIsReady() && target.LSDistance(position) + 15 <= SpellManager.W.Range &&
+            var w = SpellManager.W.IsReady() && target.Distance(position) + 15 <= SpellManager.W.Range &&
                     SpellManager.W.IsActive(true);
-            var r = IsRReady() && target.LSDistance(position) + 15 <= SpellManager.R.Range &&
+            var r = IsRReady() && target.Distance(position) + 15 <= SpellManager.R.Range &&
                     SpellManager.R.IsActive(true);
             return GetComboDamage(target, q, w, false, r, true);
         }
 
         public static float GetKSDamage(this Obj_AI_Base target, bool gapcloseE = false)
         {
-            var q = SpellManager.Q.LSIsReady() && SpellManager.Q.IsActive(true);
-            var w = SpellManager.W.LSIsReady() && SpellManager.W.IsActive(true);
-            var e = !gapcloseE && SpellManager.E.LSIsReady() && SpellManager.E.IsActive(true);
-            var r = SpellManager.R.LSIsReady() && SpellManager.R.IsActive(true);
+            var q = SpellManager.Q.IsReady() && SpellManager.Q.IsActive(true);
+            var w = SpellManager.W.IsReady() && SpellManager.W.IsActive(true);
+            var e = !gapcloseE && SpellManager.E.IsReady() && SpellManager.E.IsActive(true);
+            var r = SpellManager.R.IsReady() && SpellManager.R.IsActive(true);
             return target.GetComboDamage(q, w, e, r, true);
         }
 
@@ -116,7 +116,7 @@ namespace Staberina
             bool calculateUltTick = false,
             bool damageIndicator = false)
         {
-            if (!unit.LSIsValidTarget())
+            if (!unit.IsValidTarget())
             {
                 return 0;
             }
@@ -155,7 +155,7 @@ namespace Staberina
                 }
             }
 
-            d += (float) ObjectManager.Player.LSGetAutoAttackDamage(unit, true);
+            d += (float) ObjectManager.Player.GetAutoAttackDamage(unit, true);
 
             var dl = ObjectManager.Player.GetMastery(MasteryData.Ferocity.DoubleEdgedSword);
             if (dl != null && dl.IsActive())
@@ -164,13 +164,13 @@ namespace Staberina
             }
 
             var assasin = ObjectManager.Player.GetMastery((MasteryData.Cunning) 83);
-            if (assasin != null && assasin.IsActive() && ObjectManager.Player.LSCountAlliesInRange(800) == 0)
+            if (assasin != null && assasin.IsActive() && ObjectManager.Player.CountAlliesInRange(800) == 0)
             {
                 d *= 1.015f;
             }
 
             var ignite = TreeLib.Managers.SpellManager.Ignite;
-            if (ignite != null && ignite.LSIsReady())
+            if (ignite != null && ignite.IsReady())
             {
                 d += (float) ObjectManager.Player.GetSummonerSpellDamage(unit, Damage.SummonerSpell.Ignite);
             }
@@ -200,7 +200,7 @@ namespace Staberina
         public static float GetComboDamage(Obj_AI_Base unit)
         {
             return unit.GetComboDamage(
-                SpellManager.Q.LSIsReady(), SpellManager.W.LSIsReady(), SpellManager.E.LSIsReady(), IsRReady(), true, true);
+                SpellManager.Q.IsReady(), SpellManager.W.IsReady(), SpellManager.E.IsReady(), IsRReady(), true, true);
         }
 
         public static float GetTimeToUnit(Obj_AI_Base unit)
@@ -216,7 +216,7 @@ namespace Staberina
             var lastPoint = path.FirstOrDefault();
             foreach (var point in path)
             {
-                d += lastPoint.LSDistance(point);
+                d += lastPoint.Distance(point);
                 lastPoint = point;
             }
 
@@ -225,7 +225,7 @@ namespace Staberina
 
         public static float GetCalculatedRDamage(this Obj_AI_Base target, int ticks)
         {
-            var dmg = ObjectManager.Player.LSGetDamageSpell(target, SpellSlot.R).CalculatedDamage;
+            var dmg = ObjectManager.Player.GetDamageSpell(target, SpellSlot.R).CalculatedDamage;
             return (float) (dmg * ticks);
         }
     }

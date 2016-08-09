@@ -23,8 +23,8 @@ using EloBuddy; namespace KoreanZed
             if (zedMenu.GetParamBool("koreanzed.miscmenu.pot.active")
                 && ObjectManager.Player.HealthPercent
                 < zedMenu.GetParamSlider("koreanzed.miscmenu.pot.when")
-                && !ObjectManager.Player.LSHasBuff("RegenerationPotion")
-                && !ObjectManager.Player.LSInShop())
+                && !ObjectManager.Player.HasBuff("RegenerationPotion")
+                && !ObjectManager.Player.InShop())
             {
                 ItemData.Health_Potion.GetItem().Cast();
             }

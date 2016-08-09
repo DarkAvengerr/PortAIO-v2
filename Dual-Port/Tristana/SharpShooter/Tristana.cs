@@ -92,7 +92,7 @@ namespace SharpShooter.Plugins
                                     var target =
                                         HeroManager.Enemies.Where(
                                             x =>
-                                                x.LSIsValidTarget(_e.Range) &&
+                                                x.IsValidTarget(_e.Range) &&
                                                 MenuProvider.ChampionMenuInstance.Item(
                                                     "Combo.E Targets." + x.ChampionName, true).GetValue<bool>())
                                             .OrderByDescending(x => TargetSelector.GetPriority(x))
@@ -139,7 +139,7 @@ namespace SharpShooter.Plugins
                                     {
                                         var target =
                                             MinionManager.GetMinions(600, MinionTypes.All, MinionTeam.Neutral,
-                                                MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.LSIsValidTarget(600));
+                                                MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.IsValidTarget(600));
                                         if (target != null)
                                             _e.CastOnUnit(target);
                                     }
@@ -194,8 +194,8 @@ namespace SharpShooter.Plugins
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (MenuProvider.Champion.Misc.UseAntiGapcloser)
-                if (gapcloser.End.LSDistance(ObjectManager.Player.Position) <= 200)
-                    if (gapcloser.Sender.LSIsValidTarget(_r.Range))
+                if (gapcloser.End.Distance(ObjectManager.Player.Position) <= 200)
+                    if (gapcloser.Sender.IsValidTarget(_r.Range))
                         if (_r.IsReadyPerfectly())
                             _r.CastOnUnit(gapcloser.Sender);
         }
@@ -205,7 +205,7 @@ namespace SharpShooter.Plugins
         {
             if (MenuProvider.Champion.Misc.UseInterrupter)
                 if (args.DangerLevel >= Interrupter2.DangerLevel.High)
-                    if (sender.LSIsValidTarget(_r.Range))
+                    if (sender.IsValidTarget(_r.Range))
                         if (_r.IsReadyPerfectly())
                             _r.CastOnUnit(sender);
         }
@@ -229,7 +229,7 @@ namespace SharpShooter.Plugins
 
                 var drawEKillable = MenuProvider.Champion.Drawings.GetCircleValue("Draw E Killable");
                 if (drawEKillable.Active)
-                    foreach (var target in HeroManager.Enemies.Where(x => x.LSIsValidTarget() && x.IsWillDieByTristanaE())
+                    foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget() && x.IsWillDieByTristanaE())
                         )
                     {
                         var targetPos = Drawing.WorldToScreen(target.Position);
@@ -257,7 +257,7 @@ namespace SharpShooter.Plugins
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float)ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float)ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
             if (enemy.HasBuff("tristanaecharge"))

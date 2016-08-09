@@ -36,9 +36,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
-            if (!player.LSHasBuff("Poison Trail"))
+            if (!player.HasBuff("Poison Trail"))
             {
                 Q.Cast();
             }
@@ -46,14 +46,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || player.LSUnderTurret(true) || MapControl.fightIsOn() == null)
+            if (!W.IsReady() || player.UnderTurret(true) || MapControl.fightIsOn() == null)
                 return;
             W.Cast(target.Position);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
             E.CastOnUnit(target);
 
@@ -61,7 +61,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || player.HealthPercent>70 )
+            if (!R.IsReady() || player.HealthPercent>70 )
                 return;
             R.Cast();
         }
@@ -79,7 +79,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public override void useSpells()
         {
             var tar = ARAMTargetSelector.getBestTarget(550);
-            if (tar != null) useQ(tar); else if (player.LSHasBuff("Poison Trail")) {if(Q.LSIsReady())Q.Cast();}
+            if (tar != null) useQ(tar); else if (player.HasBuff("Poison Trail")) {if(Q.IsReady())Q.Cast();}
             tar = ARAMTargetSelector.getBestTarget(E.Range);
             if (tar != null) useE(tar);
             tar = ARAMTargetSelector.getBestTarget(W.Range);
@@ -90,7 +90,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public static bool EnemyInRange(int numOfEnemy, float range)
         {
-            return LeagueSharp.Common.Utility.LSCountEnemysInRange(ObjectManager.Player, (int)range) >= numOfEnemy;
+            return LeagueSharp.Common.Utility.CountEnemysInRange(ObjectManager.Player, (int)range) >= numOfEnemy;
         }
 
     }

@@ -37,7 +37,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (target is AIHeroClient && Q.LSIsReady())
+            if (target is AIHeroClient && Q.IsReady())
             {
                 Q.Cast();
                 EloBuddy.Player.IssueOrder(GameObjectOrder.AutoAttack, target);
@@ -56,7 +56,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.Cast(target);
         }
@@ -64,7 +64,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             if (target.HealthPercent < 35)
                 R.Cast(target);
@@ -77,10 +77,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
             tar = ARAMTargetSelector.getBestTarget(W.Range);
             if (tar != null) useW(tar);
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 foreach (var enem in ObjectManager.Get<AIHeroClient>()
-                    .Where(ene => ene.IsEnemy && ene.LSDistance(player, true) < R.Range * R.Range).Where(enem => enem.HealthPercent < 35))
+                    .Where(ene => ene.IsEnemy && ene.Distance(player, true) < R.Range * R.Range).Where(enem => enem.HealthPercent < 35))
                 {
                     R.Cast(enem);
                     return;
@@ -88,11 +88,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
 
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                foreach (var enem in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSDistance(player, true) < W.Range * W.Range))
+                foreach (var enem in ObjectManager.Get<AIHeroClient>().Where(ene => ene.Distance(player, true) < W.Range * W.Range))
                 {
-                    if (enem.LSGetEnemiesInRange(330).Count > 1)
+                    if (enem.GetEnemiesInRange(330).Count > 1)
                     {
                         W.CastOnUnit(enem);
                         return;
@@ -117,7 +117,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public void Game_OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
-            if (spell.DangerLevel == InterruptableDangerLevel.High && R.LSIsReady() && unit.LSIsValidTarget(1500))
+            if (spell.DangerLevel == InterruptableDangerLevel.High && R.IsReady() && unit.IsValidTarget(1500))
             {
                 R.Cast(unit);
             }
@@ -127,15 +127,15 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             var fComboDamage = 0f;
 
-            if (W.LSIsReady())
-                fComboDamage += (float)ObjectManager.Player.LSGetSpellDamage(t, SpellSlot.W);
+            if (W.IsReady())
+                fComboDamage += (float)ObjectManager.Player.GetSpellDamage(t, SpellSlot.W);
 
-            if (R.LSIsReady())
-                fComboDamage += (float)ObjectManager.Player.LSGetSpellDamage(t, SpellSlot.R);
+            if (R.IsReady())
+                fComboDamage += (float)ObjectManager.Player.GetSpellDamage(t, SpellSlot.R);
 
-            if (ObjectManager.Player.LSGetSpellSlot("summonerdot") != SpellSlot.Unknown &&
-                ObjectManager.Player.Spellbook.CanUseSpell(ObjectManager.Player.LSGetSpellSlot("summonerdot")) ==
-                SpellState.Ready && ObjectManager.Player.LSDistance(t) < 550)
+            if (ObjectManager.Player.GetSpellSlot("summonerdot") != SpellSlot.Unknown &&
+                ObjectManager.Player.Spellbook.CanUseSpell(ObjectManager.Player.GetSpellSlot("summonerdot")) ==
+                SpellState.Ready && ObjectManager.Player.Distance(t) < 550)
                 fComboDamage += (float)ObjectManager.Player.GetSummonerSpellDamage(t, Damage.SummonerSpell.Ignite);
 
 
@@ -153,12 +153,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private bool AsheQCastReady
         {
-            get { return ObjectManager.Player.LSHasBuff("AsheQCastReady", true); }
+            get { return ObjectManager.Player.HasBuff("AsheQCastReady", true); }
         }
 
         public bool IsQActive
         {
-            get { return ObjectManager.Player.LSHasBuff("FrostShot"); }
+            get { return ObjectManager.Player.HasBuff("FrostShot"); }
         }
     }
 }

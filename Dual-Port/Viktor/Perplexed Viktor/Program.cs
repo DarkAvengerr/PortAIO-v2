@@ -35,7 +35,7 @@ using EloBuddy;
 
         static void Game_OnUpdate(EventArgs args)
         {
-            if (Player.IsDead || Player.LSIsRecalling() || args == null)
+            if (Player.IsDead || Player.IsRecalling() || args == null)
                 return;
 
             AutoHarass();
@@ -59,14 +59,14 @@ using EloBuddy;
 
         static void Combo()
         {
-            if(SpellManager.IgniteSlot != SpellSlot.Unknown && Player.GetSpell(SpellManager.IgniteSlot).LSIsReady())
+            if(SpellManager.IgniteSlot != SpellSlot.Unknown && Player.GetSpell(SpellManager.IgniteSlot).IsReady())
             {
                 var enemy = TargetSelector.GetTarget(600, TargetSelector.DamageType.True);
                 if (enemy != null)
                     if (DamageCalc.GetTotalDamage(enemy) > enemy.Health)
                         Player.Spellbook.CastSpell(SpellManager.IgniteSlot, enemy);
             }
-            if (SpellManager.Q.LSIsReady() && Config.ComboQ)
+            if (SpellManager.Q.IsReady() && Config.ComboQ)
             {
                 var enemy = TargetSelector.GetTarget(SpellManager.Q.Range, TargetSelector.DamageType.Magical);
                 if (enemy != null)
@@ -77,7 +77,7 @@ using EloBuddy;
                     }
             }
 
-            if(SpellManager.W.LSIsReady() && Config.ComboW)
+            if(SpellManager.W.IsReady() && Config.ComboW)
             {
                 var enemy = TargetSelector.GetTarget(SpellManager.W.Range, TargetSelector.DamageType.Magical);
                 if (enemy != null)
@@ -87,14 +87,14 @@ using EloBuddy;
                 }
             }
 
-            if (SpellManager.E.LSIsReady() && Config.ComboE)
+            if (SpellManager.E.IsReady() && Config.ComboE)
             {
                 var enemy = TargetSelector.GetTarget(SpellManager.E.Range + SpellManager.E2.Range, TargetSelector.DamageType.Magical);
                 if (enemy != null)
                     CastE(enemy);
             }
 
-            if (SpellManager.R.LSIsReady() && Config.ComboR && !SpellManager.UltHasBeenCasted)
+            if (SpellManager.R.IsReady() && Config.ComboR && !SpellManager.UltHasBeenCasted)
             {
                 var enemy = TargetSelector.GetTarget(SpellManager.R.Range, TargetSelector.DamageType.Magical);
                 if(enemy != null)
@@ -102,10 +102,10 @@ using EloBuddy;
                     if (DamageCalc.GetTotalDamage(enemy) > enemy.Health)
                         LeagueSharp.Common.Utility.DelayAction.Add(200, () => SpellManager.CastSpell(SpellManager.R, enemy));
                 }
-                var enemies = HeroManager.Enemies.Where(x => x.LSIsValidTarget(SpellManager.R.Range));
+                var enemies = HeroManager.Enemies.Where(x => x.IsValidTarget(SpellManager.R.Range));
                 foreach(var t in enemies)
                 {
-                    if (t.LSGetEnemiesInRange(SpellManager.R.Width).Count >= Config.ComboRHit)
+                    if (t.GetEnemiesInRange(SpellManager.R.Width).Count >= Config.ComboRHit)
                         SpellManager.CastSpell(SpellManager.R, t);
                 }
             }
@@ -113,16 +113,16 @@ using EloBuddy;
 
         static void CastE(Obj_AI_Base enemy)
         {
-            if (Player.ServerPosition.LSDistance(enemy.ServerPosition) < SpellManager.E2.Range)
+            if (Player.ServerPosition.Distance(enemy.ServerPosition) < SpellManager.E2.Range)
             {
                 SpellManager.E.UpdateSourcePosition(enemy.ServerPosition, enemy.ServerPosition);
                 var prediction = SpellManager.E.GetPrediction(enemy, true);
                 if (prediction.Hitchance >= HitChance.High)
                     SpellManager.CastSpell(SpellManager.E, enemy.ServerPosition, prediction.CastPosition);
             }
-            else if (Player.ServerPosition.LSDistance(enemy.ServerPosition) < SpellManager.E.Range + SpellManager.E2.Range)
+            else if (Player.ServerPosition.Distance(enemy.ServerPosition) < SpellManager.E.Range + SpellManager.E2.Range)
             {
-                var castStartPos = Player.ServerPosition.LSExtend(enemy.ServerPosition, SpellManager.E2.Range);
+                var castStartPos = Player.ServerPosition.Extend(enemy.ServerPosition, SpellManager.E2.Range);
                 SpellManager.E.UpdateSourcePosition(castStartPos, castStartPos);
                 var prediction = SpellManager.E.GetPrediction(enemy, true);
                 if (prediction.Hitchance >= HitChance.High)
@@ -135,7 +135,7 @@ using EloBuddy;
             if (Player.ManaPercent < Config.HarassMana)
                 return;
 
-            if (SpellManager.Q.LSIsReady() && Config.HarassQ)
+            if (SpellManager.Q.IsReady() && Config.HarassQ)
             {
                 var enemy = TargetSelector.GetTarget(SpellManager.Q.Range, TargetSelector.DamageType.Magical);
                 if (enemy != null)
@@ -146,7 +146,7 @@ using EloBuddy;
                     }
             }
 
-            if (SpellManager.E.LSIsReady() && Config.HarassE)
+            if (SpellManager.E.IsReady() && Config.HarassE)
             {
                 var enemy = TargetSelector.GetTarget(SpellManager.E.Range + SpellManager.E2.Range, TargetSelector.DamageType.Magical);
                 if (enemy != null)
@@ -159,29 +159,29 @@ using EloBuddy;
             if (Player.ManaPercent < Config.ClearMana)
                 return;
 
-            if (SpellManager.Q.LSIsReady() && Config.ClearQ)
+            if (SpellManager.Q.IsReady() && Config.ClearQ)
             {
                 var minion = MinionManager.GetMinions(SpellManager.Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
                 if (minion != null)
                     SpellManager.CastSpell(SpellManager.Q, minion);
             }
 
-            if (SpellManager.E.LSIsReady() && Config.ClearE)
+            if (SpellManager.E.IsReady() && Config.ClearE)
             {
                 //Jungle
                 var jungleCreep = MinionManager.GetMinions(SpellManager.E.Range + SpellManager.E2.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
                 if (jungleCreep != null)
                 {
-                    if (jungleCreep.LSDistance(Player) > SpellManager.E2.Range)
-                        SpellManager.CastSpell(SpellManager.E, Player.ServerPosition.LSExtend(jungleCreep.ServerPosition, SpellManager.E2.Range), jungleCreep.ServerPosition);
+                    if (jungleCreep.Distance(Player) > SpellManager.E2.Range)
+                        SpellManager.CastSpell(SpellManager.E, Player.ServerPosition.Extend(jungleCreep.ServerPosition, SpellManager.E2.Range), jungleCreep.ServerPosition);
                     else
-                        SpellManager.CastSpell(SpellManager.E, jungleCreep.ServerPosition.LSExtend(Player.ServerPosition, 50), jungleCreep.ServerPosition);
+                        SpellManager.CastSpell(SpellManager.E, jungleCreep.ServerPosition.Extend(Player.ServerPosition, 50), jungleCreep.ServerPosition);
                 }
                 else //Lane
                 {
                     foreach (var minion in MinionManager.GetMinions(Player.ServerPosition, SpellManager.E2.Range))
                     {
-                        var location = MinionManager.GetBestLineFarmLocation(MinionManager.GetMinions(minion.ServerPosition, SpellManager.E.Range).Select(x => x.ServerPosition.LSTo2D()).ToList(), SpellManager.E.Width, SpellManager.E.Range);
+                        var location = MinionManager.GetBestLineFarmLocation(MinionManager.GetMinions(minion.ServerPosition, SpellManager.E.Range).Select(x => x.ServerPosition.To2D()).ToList(), SpellManager.E.Width, SpellManager.E.Range);
                         if (location.MinionsHit >= Config.ClearEHit)
                             SpellManager.CastSpell(SpellManager.E, minion.ServerPosition, location.Position.To3D());
                     }
@@ -194,12 +194,12 @@ using EloBuddy;
             if (!Config.ToggleAuto.Active)
                 return;
 
-            if (SpellManager.E.LSIsReady() && Config.AutoE)
+            if (SpellManager.E.IsReady() && Config.AutoE)
             {
                 var enemy = TargetSelector.GetTarget(SpellManager.E.Range + SpellManager.E2.Range, TargetSelector.DamageType.Magical);
                 if(enemy != null)
                 {
-                    if (Config.ShouldAuto(enemy.ChampionName) && (!enemy.LSUnderTurret(true) && !Player.LSUnderTurret(true) && Config.AutoTurret))
+                    if (Config.ShouldAuto(enemy.ChampionName) && (!enemy.UnderTurret(true) && !Player.UnderTurret(true) && Config.AutoTurret))
                         CastE(enemy);
                 }
             }
@@ -207,9 +207,9 @@ using EloBuddy;
 
         static void Killsteal()
         {
-            if (SpellManager.E.LSIsReady() && Config.KillstealE)
+            if (SpellManager.E.IsReady() && Config.KillstealE)
             {
-                var enemy = HeroManager.Enemies.FirstOrDefault(x => x.LSIsValidTarget(SpellManager.E.Range + SpellManager.E2.Range) && x.Health < Player.LSGetSpellDamage(x, SpellSlot.E));
+                var enemy = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(SpellManager.E.Range + SpellManager.E2.Range) && x.Health < Player.GetSpellDamage(x, SpellSlot.E));
                 if (enemy != null)
                     CastE(enemy);
             }
@@ -219,7 +219,7 @@ using EloBuddy;
         {
             if (SpellManager.UltHasBeenCasted && Config.AutoFollow)
             {
-                var t = HeroManager.Enemies.Where(x => x.LSIsValidTarget(SpellManager.R.Range) && DamageCalc.RemainingUltCanKill(x)).FirstOrDefault();
+                var t = HeroManager.Enemies.Where(x => x.IsValidTarget(SpellManager.R.Range) && DamageCalc.RemainingUltCanKill(x)).FirstOrDefault();
                 if (t != null) //Killable first
                     LeagueSharp.Common.Utility.DelayAction.Add(100, () => SpellManager.CastSpell(SpellManager.R, t));
                 else //Then target
@@ -233,14 +233,14 @@ using EloBuddy;
 
         static void AutoW()
         {
-            if (SpellManager.W.LSIsReady() && Config.WCC)
+            if (SpellManager.W.IsReady() && Config.WCC)
             {
-                var enemies = HeroManager.Enemies.Where(x => x.LSIsValidTarget(SpellManager.W.Range));
+                var enemies = HeroManager.Enemies.Where(x => x.IsValidTarget(SpellManager.W.Range));
                 foreach (var enemy in enemies)
                 {
                     if (enemy.HasBuffOfType(BuffType.Charm) || enemy.HasBuffOfType(BuffType.Fear) || enemy.HasBuffOfType(BuffType.Knockup) || enemy.HasBuffOfType(BuffType.Slow)
                         || enemy.HasBuffOfType(BuffType.Snare) || enemy.HasBuffOfType(BuffType.Stun) || enemy.HasBuffOfType(BuffType.Suppression) || enemy.HasBuffOfType(BuffType.Taunt)
-                        || enemy.IsStunned || enemy.IsRooted || enemy.LSIsRecalling())
+                        || enemy.IsStunned || enemy.IsRooted || enemy.IsRecalling())
                     {
                         SpellManager.CastSpell(SpellManager.W, enemy);
                         return;
@@ -264,7 +264,7 @@ using EloBuddy;
         {
             if (args.DangerLevel >= Interrupter2.DangerLevel.High)
             {
-                if (SpellManager.W.LSIsReady() && Config.InterruptW)
+                if (SpellManager.W.IsReady() && Config.InterruptW)
                 {
                     if (Game.Time + SpellManager.W.Delay < args.EndTime)
                     {
@@ -273,7 +273,7 @@ using EloBuddy;
                     }
                 }
 
-                if (SpellManager.R.LSIsReady() && Config.InterruptR)
+                if (SpellManager.R.IsReady() && Config.InterruptR)
                 {
                     if (Game.Time + SpellManager.R.Delay < args.EndTime)
                     {
@@ -286,9 +286,9 @@ using EloBuddy;
 
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (SpellManager.W.LSIsReady() && Config.GapcloseW)
+            if (SpellManager.W.IsReady() && Config.GapcloseW)
             {
-                if (Player.LSDistance(gapcloser.Sender) < SpellManager.W.Range)
+                if (Player.Distance(gapcloser.Sender) < SpellManager.W.Range)
                     SpellManager.CastSpell(SpellManager.W, gapcloser.End);
             }
         }

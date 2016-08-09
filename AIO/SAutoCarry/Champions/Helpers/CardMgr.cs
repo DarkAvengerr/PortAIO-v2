@@ -46,7 +46,7 @@ namespace SAutoCarry.Champions.Helpers
 
         public static void Select(Card card)
         {
-            if (!s_isSelecting && s_Champion.Spells[1].LSIsReady() && s_Champion.Spells[1].Instance.Name == "PickACard")
+            if (!s_isSelecting && s_Champion.Spells[1].IsReady() && s_Champion.Spells[1].Instance.Name == "PickACard")
             {
                 s_CardToSelect = card;
                 if (Utils.TickCount - s_lastWSent > 170 + Game.Ping / 2)

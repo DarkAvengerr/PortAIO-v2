@@ -35,9 +35,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 if (!castStunQ(target))
                 {
@@ -48,10 +48,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             if (player.Mana > 270)
-                W.Cast(player.Position.LSExtend(ARAMSimulator.fromNex.Position, 645));
+                W.Cast(player.Position.Extend(ARAMSimulator.fromNex.Position, 645));
         }
 
         public override void useE(Obj_AI_Base target)
@@ -62,7 +62,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             if (GetEnemys(target) >= 3)
             {
@@ -116,10 +116,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             var prediction = stunQ.GetPrediction(target);
 
-            var direction = (player.ServerPosition - prediction.UnitPosition).LSNormalized();
+            var direction = (player.ServerPosition - prediction.UnitPosition).Normalized();
             var endOfQ = (Q.Range) * direction;
 
-            var checkPoint = prediction.UnitPosition.LSExtend(player.ServerPosition, -Q.Range / 4);
+            var checkPoint = prediction.UnitPosition.Extend(player.ServerPosition, -Q.Range / 4);
 
             if ((prediction.UnitPosition.GetFirstWallPoint(checkPoint).HasValue) || (prediction.CollisionObjects.Count == 1))
             {
@@ -135,9 +135,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
     {
         public static Vector3? GetFirstWallPoint(this Vector3 from, Vector3 to, float step = 25)
         {
-            var direction = (to - from).LSNormalized();
+            var direction = (to - from).Normalized();
 
-            for (float d = 0; d < from.LSDistance(to); d = d + step)
+            for (float d = 0; d < from.Distance(to); d = d + step)
             {
                 var testPoint = from + d * direction;
                 if (NavMesh.GetCollisionFlags(testPoint.X, testPoint.Y).HasFlag(CollisionFlags.Wall) ||
@@ -152,9 +152,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public static Vector2? GetFirstWallPoint(this Vector2 from, Vector2 to, float step = 25)
         {
-            var direction = (to - from).LSNormalized();
+            var direction = (to - from).Normalized();
 
-            for (float d = 0; d < from.LSDistance(to); d = d + step)
+            for (float d = 0; d < from.Distance(to); d = d + step)
             {
                 var testPoint = from + d * direction;
                 if (NavMesh.GetCollisionFlags(testPoint.X, testPoint.Y).HasFlag(CollisionFlags.Wall) ||

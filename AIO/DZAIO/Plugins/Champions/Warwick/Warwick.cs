@@ -79,7 +79,7 @@ using EloBuddy;
                 if (smiteSlot != SpellSlot.Unknown)
                 {
                     var smiteSpell = ObjectManager.Player.GetSpell(smiteSlot);
-                    if (smiteSpell.LSIsReady() && args.Target.Position.LSDistance(ObjectManager.Player.ServerPosition) < 550f)
+                    if (smiteSpell.IsReady() && args.Target.Position.Distance(ObjectManager.Player.ServerPosition) < 550f)
                     {
                         ObjectManager.Player.Spellbook.CastSpell(smiteSlot, args.Target);
                     }
@@ -100,12 +100,12 @@ using EloBuddy;
 
         private void OnInterrupter(AIHeroClient sender, DZInterrupter.InterruptableTargetEventArgs args)
         {
-            if (Variables.Spells[SpellSlot.R].LSIsReady() &&
+            if (Variables.Spells[SpellSlot.R].IsReady() &&
                 Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.warwick.extra.interruptR") &&
                 args.DangerLevel >= DZInterrupter.DangerLevel.High)
             {
                 var interruptPosition = sender.ServerPosition;
-                if (interruptPosition.IsSafe() && sender.LSIsValidTarget(Variables.Spells[SpellSlot.R].Range))
+                if (interruptPosition.IsSafe() && sender.IsValidTarget(Variables.Spells[SpellSlot.R].Range))
                 {
                     Variables.Spells[SpellSlot.R].CastOnUnit(sender);
                 }
@@ -144,20 +144,20 @@ using EloBuddy;
         {
             if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo))
             {
-                if (ObjectManager.Player.LSUnderTurret(true) &&
+                if (ObjectManager.Player.UnderTurret(true) &&
                     !Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.warwick.extra.QUnderTurret"))
                 {
                     return;
                 }
 
                 var qTarget = Variables.Spells[SpellSlot.Q].GetTarget();
-                if (qTarget.LSIsValidTarget())
+                if (qTarget.IsValidTarget())
                 {
                     Variables.Spells[SpellSlot.Q].CastOnUnit(qTarget);
                 }
             }
 
-            if (Variables.Spells[SpellSlot.W].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo) && ObjectManager.Player.LSCountEnemiesInRange(Variables.Spells[SpellSlot.W].Range) > 0)
+            if (Variables.Spells[SpellSlot.W].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo) && ObjectManager.Player.CountEnemiesInRange(Variables.Spells[SpellSlot.W].Range) > 0)
             {
                     Variables.Spells[SpellSlot.W].Cast();
             }
@@ -165,13 +165,13 @@ using EloBuddy;
             if (Variables.Spells[SpellSlot.R].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo))
             {
                 var rTarget = Variables.Spells[SpellSlot.R].GetTarget();
-                if (rTarget.LSIsValidTarget())
+                if (rTarget.IsValidTarget())
                 {
                     var rPosition = rTarget.ServerPosition;
                     var targetPriority = TargetSelector.GetPriority(rTarget);
-                    var enemiesAroundPosition = rPosition.LSGetEnemiesInRange(550f).Count();
-                    var alliesAroundPosition = rPosition.LSGetAlliesInRange(550f).Count();
-                    if (!rPosition.LSUnderTurret(true) && ObjectManager.Player.HealthPercent >= 15 &&
+                    var enemiesAroundPosition = rPosition.GetEnemiesInRange(550f).Count();
+                    var alliesAroundPosition = rPosition.GetAlliesInRange(550f).Count();
+                    if (!rPosition.UnderTurret(true) && ObjectManager.Player.HealthPercent >= 15 &&
                         ((targetPriority > 4 && enemiesAroundPosition < 3 && alliesAroundPosition > 0) ||
                          (enemiesAroundPosition < 3 && alliesAroundPosition > 0 &&
                           Variables.Spells[SpellSlot.R].IsKillable(rTarget))))
@@ -193,21 +193,21 @@ using EloBuddy;
 
             if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass))
             {
-                if (ObjectManager.Player.LSUnderTurret(true) &&
+                if (ObjectManager.Player.UnderTurret(true) &&
                     !Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.warwick.extra.QUnderTurret"))
                 {
                     return;
                 }
 
                 var qTarget = Variables.Spells[SpellSlot.Q].GetTarget();
-                if (qTarget.LSIsValidTarget())
+                if (qTarget.IsValidTarget())
                 {
                     Variables.Spells[SpellSlot.Q].CastOnUnit(qTarget);
                 }
             }
 
             if (Variables.Spells[SpellSlot.W].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass) 
-                && ObjectManager.Player.LSCountEnemiesInRange(Variables.Spells[SpellSlot.W].Range) > 0)
+                && ObjectManager.Player.CountEnemiesInRange(Variables.Spells[SpellSlot.W].Range) > 0)
             {
                 Variables.Spells[SpellSlot.W].Cast();
             }

@@ -18,7 +18,7 @@ using EloBuddy;
             try
             {
                 var enabledCondition = Variables.AssemblyMenu.Item("dzaio.champion." + ObjectManager.Player.ChampionName.ToLowerInvariant() + ".use" + DZLib.Menu.ModesMenuExtensions.GetStringFromSpellSlot(spell.Slot).ToLowerInvariant() + GetStringFromMode(mode)).GetValue<bool>();
-                return (spell.LSIsReady() && enabledCondition);
+                return (spell.IsReady() && enabledCondition);
             }
             catch (Exception e)
             {
@@ -54,7 +54,7 @@ using EloBuddy;
         /// <returns></returns>
         public static float GetBaronReduction(this Spell spell, Obj_AI_Base target)
         {
-            return ObjectManager.Player.LSHasBuff("barontarget")
+            return ObjectManager.Player.HasBuff("barontarget")
                        ? spell.GetDamage(target) * 0.5f
                        : spell.GetDamage(target);
         }
@@ -68,7 +68,7 @@ using EloBuddy;
         /// <returns></returns>
         public static float GetDragonReduction(this Spell spell, Obj_AI_Base target)
         {
-            return ObjectManager.Player.LSHasBuff("s5test_dragonslayerbuff")
+            return ObjectManager.Player.HasBuff("s5test_dragonslayerbuff")
                        ? spell.GetDamage(target)
                          * (1 - (.07f * ObjectManager.Player.GetBuffCount("s5test_dragonslayerbuff")))
                        : spell.GetDamage(target);

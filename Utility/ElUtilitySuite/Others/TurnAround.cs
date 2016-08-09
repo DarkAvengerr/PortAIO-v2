@@ -151,15 +151,15 @@ using EloBuddy; namespace ElUtilitySuite.Others
                 }
 
                 if ((spellInfo.Target && args.Target == this.Player)
-                    || this.Player.LSDistance(sender.ServerPosition) + this.Player.BoundingRadius <= spellInfo.Range)
+                    || this.Player.Distance(sender.ServerPosition) + this.Player.BoundingRadius <= spellInfo.Range)
                 {
                     var moveTo = this.lastMove;
 
                     EloBuddy.Player.IssueOrder(
                         GameObjectOrder.MoveTo,
-                        sender.ServerPosition.LSExtend(
+                        sender.ServerPosition.Extend(
                             this.Player.ServerPosition,
-                            this.Player.ServerPosition.LSDistance(sender.ServerPosition)
+                            this.Player.ServerPosition.Distance(sender.ServerPosition)
                             + (spellInfo.TurnOpposite ? 100 : -100)));
 
                     this.blockMovementTime = Game.Time + spellInfo.CastTime;

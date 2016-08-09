@@ -148,7 +148,7 @@ namespace Olaf.Modes
                 return;
             }
 
-            if (Q.LSIsReady() && MenuLocal.Item("Jungle.Simple.UseQ").GetValue<StringList>().SelectedIndex != 0)
+            if (Q.IsReady() && MenuLocal.Item("Jungle.Simple.UseQ").GetValue<StringList>().SelectedIndex != 0)
             {
                 var qCount = MenuLocal.Item("Jungle.Simple.UseQ").GetValue<StringList>().SelectedIndex;
 
@@ -168,7 +168,7 @@ namespace Olaf.Modes
                 }
             }
 
-            if (W.LSIsReady() && mobs[0].LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 165) && MenuLocal.Item("Jungle.Simple.UseW").GetValue<StringList>().SelectedIndex != 0)
+            if (W.IsReady() && mobs[0].IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 165) && MenuLocal.Item("Jungle.Simple.UseW").GetValue<StringList>().SelectedIndex != 0)
             {
                 var wCount = MenuLocal.Item("Jungle.Simple.UseW").GetValue<StringList>().SelectedIndex;
                 if (wCount == 1)
@@ -180,7 +180,7 @@ namespace Olaf.Modes
                 }
                 else
                 {
-                    var totalAa = ObjectManager.Get<Obj_AI_Minion>().Where(m =>m.Team == GameObjectTeam.Neutral &&m.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 165)).Sum(mob => (int)mob.Health);
+                    var totalAa = ObjectManager.Get<Obj_AI_Minion>().Where(m =>m.Team == GameObjectTeam.Neutral &&m.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 165)).Sum(mob => (int)mob.Health);
 
                     totalAa = (int)(totalAa / ObjectManager.Player.TotalAttackDamage);
                     if (totalAa >= wCount + 2 || CommonManaManager.GetMobType(mobs[0], CommonManaManager.FromMobClass.ByType) == CommonManaManager.MobTypes.Big)
@@ -225,13 +225,13 @@ namespace Olaf.Modes
                 return;
             }
             
-            if (Champion.PlayerSpells.Q.LSIsReady() && mob.LSIsValidTarget(Champion.PlayerSpells.Q.Range))
+            if (Champion.PlayerSpells.Q.IsReady() && mob.IsValidTarget(Champion.PlayerSpells.Q.Range))
             {
                 if (MenuLocal.Item("Jungle.Advanced.UseQ.Big1").GetValue<StringList>().SelectedIndex != 0)
                 {
                     if (CommonManaManager.GetMobType(mob) == CommonManaManager.MobTypes.Blue || CommonManaManager.GetMobType(mob) == CommonManaManager.MobTypes.Red)
                     {
-                        if (Champion.PlayerSpells.Q.LSIsReady())
+                        if (Champion.PlayerSpells.Q.IsReady())
                         {
                             Champion.PlayerSpells.Q.Cast(mob);
                         }
@@ -242,7 +242,7 @@ namespace Olaf.Modes
                 {
                     if (CommonManaManager.GetMobType(mob) == CommonManaManager.MobTypes.Baron || CommonManaManager.GetMobType(mob) == CommonManaManager.MobTypes.Dragon)
                     {
-                        if (Champion.PlayerSpells.Q.LSIsReady())
+                        if (Champion.PlayerSpells.Q.IsReady())
                         {
                             Champion.PlayerSpells.Q.Cast(mob);
                         }
@@ -259,7 +259,7 @@ namespace Olaf.Modes
                                 || CommonManaManager.GetMobType(mob) != CommonManaManager.MobTypes.Red || CommonManaManager.GetMobType(mob) != CommonManaManager.MobTypes.Blue)
                             )
                         {
-                            if (Champion.PlayerSpells.Q.LSIsReady())
+                            if (Champion.PlayerSpells.Q.IsReady())
                             {
                                 Champion.PlayerSpells.Q.Cast(mob);
                             }
@@ -272,7 +272,7 @@ namespace Olaf.Modes
                         {
                             if (mobs.Count >= MenuLocal.Item("Jungle.Advanced.UseQ.Small").GetValue<StringList>().SelectedIndex)
                             {
-                                if (Champion.PlayerSpells.Q.LSIsReady())
+                                if (Champion.PlayerSpells.Q.IsReady())
                                 {
                                     Champion.PlayerSpells.Q.Cast(mob);
                                 }
@@ -282,13 +282,13 @@ namespace Olaf.Modes
                 }
             }
 
-            if (Champion.PlayerSpells.E.LSIsReady() && mob.LSIsValidTarget(Champion.PlayerSpells.E.Range) && mob.Health > ObjectManager.Player.TotalAttackDamage * 3)
+            if (Champion.PlayerSpells.E.IsReady() && mob.IsValidTarget(Champion.PlayerSpells.E.Range) && mob.Health > ObjectManager.Player.TotalAttackDamage * 3)
             {
                 if (MenuLocal.Item("Jungle.Advanced.UseE.Big1").GetValue<StringList>().SelectedIndex != 0)
                 {
                     if (CommonManaManager.GetMobType(mob) == CommonManaManager.MobTypes.Blue || CommonManaManager.GetMobType(mob) == CommonManaManager.MobTypes.Red)
                     {
-                        if (Champion.PlayerSpells.E.LSIsReady())
+                        if (Champion.PlayerSpells.E.IsReady())
                         {
                             Champion.PlayerSpells.E.Cast(mob);
                         }
@@ -299,7 +299,7 @@ namespace Olaf.Modes
                 {
                     if (CommonManaManager.GetMobType(mob) == CommonManaManager.MobTypes.Baron || CommonManaManager.GetMobType(mob) == CommonManaManager.MobTypes.Dragon)
                     {
-                        if (Champion.PlayerSpells.E.LSIsReady())
+                        if (Champion.PlayerSpells.E.IsReady())
                         {
                             Champion.PlayerSpells.E.Cast(mob);
                         }
@@ -314,7 +314,7 @@ namespace Olaf.Modes
                             || CommonManaManager.GetMobType(mob) != CommonManaManager.MobTypes.Red || CommonManaManager.GetMobType(mob) != CommonManaManager.MobTypes.Blue)
                         )
                     {
-                        if (Champion.PlayerSpells.E.LSIsReady())
+                        if (Champion.PlayerSpells.E.IsReady())
                         {
                             Champion.PlayerSpells.E.Cast(mob);
                         }
@@ -325,7 +325,7 @@ namespace Olaf.Modes
                 {
                     if (CommonManaManager.GetMobType(mob, CommonManaManager.FromMobClass.ByType) != CommonManaManager.MobTypes.Big)
                     {
-                        if (Champion.PlayerSpells.E.LSIsReady())
+                        if (Champion.PlayerSpells.E.IsReady())
                         {
                             Champion.PlayerSpells.E.Cast(mob);
                         }

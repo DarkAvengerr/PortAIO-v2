@@ -33,7 +33,7 @@ using EloBuddy;
 
             var targetHero = (AIHeroClient) target;
 
-            if (targetHero.LSIsValidTarget(Range) &&
+            if (targetHero.IsValidTarget(Range) &&
                 ProSeries.Player.Health + ProSeries.Player.GetItemDamage(targetHero, Damage.DamageItems.Botrk) <
                 ProSeries.Player.MaxHealth)
             {

@@ -48,7 +48,7 @@ namespace Akali
             SpellList.Add(E);
             SpellList.Add(R);
 
-            IgniteSlot = Player.LSGetSpellSlot("SummonerDot");
+            IgniteSlot = Player.GetSpellSlot("SummonerDot");
             Hex = new Items.Item(3146, 700);
             Cutlass = new Items.Item(3144, 450);
 
@@ -139,7 +139,7 @@ namespace Akali
             {
                 return
                     (from enemy in
-                        ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.IsEnemy && enemy.LSIsValidTarget(R.Range))
+                        ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.IsEnemy && enemy.IsValidTarget(R.Range))
                         from buff in enemy.Buffs
                         where buff.DisplayName == "AkaliMota"
                         select enemy).FirstOrDefault();
@@ -150,14 +150,14 @@ namespace Akali
         {
             var fComboDamage = 0d;
 
-            if (Q.LSIsReady())
-                fComboDamage += Player.LSGetSpellDamage(vTarget, SpellSlot.Q) +
-                                Player.LSGetSpellDamage(vTarget, SpellSlot.Q, 1);
-            if (E.LSIsReady())
-                fComboDamage += Player.LSGetSpellDamage(vTarget, SpellSlot.E);
+            if (Q.IsReady())
+                fComboDamage += Player.GetSpellDamage(vTarget, SpellSlot.Q) +
+                                Player.GetSpellDamage(vTarget, SpellSlot.Q, 1);
+            if (E.IsReady())
+                fComboDamage += Player.GetSpellDamage(vTarget, SpellSlot.E);
 
-            if (R.LSIsReady())
-                fComboDamage += Player.LSGetSpellDamage(vTarget, SpellSlot.R) * R.Instance.Ammo;
+            if (R.IsReady())
+                fComboDamage += Player.GetSpellDamage(vTarget, SpellSlot.R) * R.Instance.Ammo;
 
             if (Items.CanUseItem(3146))
                 fComboDamage += Player.GetItemDamage(vTarget, Damage.DamageItems.Hexgun);
@@ -171,14 +171,14 @@ namespace Akali
 
         private static void Game_OnUpdate(EventArgs args)
         {
-            if (W.LSIsReady() && Player.LSCountEnemiesInRange(W.Range / 2 + 100) >= 2)
+            if (W.IsReady() && Player.CountEnemiesInRange(W.Range / 2 + 100) >= 2)
             {
                 W.Cast(Player.Position);
             }
 
-            if (Player.LSHasBuff("zedulttargetmark", true))
+            if (Player.HasBuff("zedulttargetmark", true))
             {
-                if (W.LSIsReady())
+                if (W.IsReady())
                 {
                     W.Cast(Player.Position);
                 }
@@ -189,7 +189,7 @@ namespace Akali
             {
                 if (t1.Name.ToLower().Contains("zedulttargetmark"))
                 {
-                    if (W.LSIsReady())
+                    if (W.IsReady())
                     {
                         W.Cast(Player.Position);
                         Chat.Print("Zed Ulti Used");
@@ -231,7 +231,7 @@ namespace Akali
 
         private static void Combo()
         {
-            var t = GetTarget((R.LSIsReady() ? R.Range: Q.Range), TargetSelector.DamageType.Magical);
+            var t = GetTarget((R.IsReady() ? R.Range: Q.Range), TargetSelector.DamageType.Magical);
 
             if (GetComboDamage(t) > t.Health && IgniteSlot != SpellSlot.Unknown &&
                 Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready)
@@ -239,31 +239,31 @@ namespace Akali
                 Player.Spellbook.CastSpell(IgniteSlot, t);
             }
 
-            if (Q.LSIsReady() && t.LSIsValidTarget(Q.Range))
+            if (Q.IsReady() && t.IsValidTarget(Q.Range))
             {
                 Q.CastOnUnit(t);
             }
 
-            if (Hex.IsReady() && t.LSIsValidTarget(Hex.Range))
+            if (Hex.IsReady() && t.IsValidTarget(Hex.Range))
             {
                 Hex.Cast(t);
             }
 
-            if (Cutlass.IsReady() && t.LSIsValidTarget(Cutlass.Range))
+            if (Cutlass.IsReady() && t.IsValidTarget(Cutlass.Range))
             {
                 Cutlass.Cast(t);
             }
 
             var motaEnemy = enemyHaveMota;
-            if (motaEnemy != null && motaEnemy.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(t)))
+            if (motaEnemy != null && motaEnemy.IsValidTarget(Orbwalking.GetRealAutoAttackRange(t)))
                 return;
 
-            if (E.LSIsReady() && t.LSIsValidTarget(E.Range))
+            if (E.IsReady() && t.IsValidTarget(E.Range))
             {
                 E.Cast();
             }
 
-            if (R.LSIsReady() && t.LSIsValidTarget(R.Range))
+            if (R.IsReady() && t.IsValidTarget(R.Range))
             {
                 R.CastOnUnit(t);
             }
@@ -271,16 +271,16 @@ namespace Akali
 
         private static void Harass()
         {
-            var useQ = Config.Item("UseQHarass").GetValue<bool>() && Q.LSIsReady();
-            var useE = Config.Item("UseEHarass").GetValue<bool>() && E.LSIsReady();
+            var useQ = Config.Item("UseQHarass").GetValue<bool>() && Q.IsReady();
+            var useE = Config.Item("UseEHarass").GetValue<bool>() && E.IsReady();
             var t = GetTarget(Q.Range, TargetSelector.DamageType.Magical);
 
-            if (useQ && t.LSIsValidTarget(Q.Range))
+            if (useQ && t.IsValidTarget(Q.Range))
             {
                 Q.CastOnUnit(t);
             }
 
-            if (useE && t.LSIsValidTarget(E.Range))
+            if (useE && t.IsValidTarget(E.Range))
             {
                 E.Cast();
             }
@@ -297,13 +297,13 @@ namespace Akali
             var useQ = (laneClear && (useQi == 1 || useQi == 2)) || (!laneClear && (useQi == 0 || useQi == 2));
             var useE = (laneClear && (useEi == 1 || useEi == 2)) || (!laneClear && (useEi == 0 || useEi == 2));
 
-            if (useQ && Q.LSIsReady())
+            if (useQ && Q.IsReady())
             {
                 foreach (var minion in allMinions)
                 {
-                    if (minion.LSIsValidTarget() &&
-                        HealthPrediction.GetHealthPrediction(minion, (int) (Player.LSDistance(minion) * 1000 / 1400)) <
-                        0.75 * Player.LSGetSpellDamage(minion, SpellSlot.Q))
+                    if (minion.IsValidTarget() &&
+                        HealthPrediction.GetHealthPrediction(minion, (int) (Player.Distance(minion) * 1000 / 1400)) <
+                        0.75 * Player.GetSpellDamage(minion, SpellSlot.Q))
                     {
                         Q.CastOnUnit(minion);
                         return;
@@ -311,14 +311,14 @@ namespace Akali
                 }
             }
 
-            if (useE && E.LSIsReady())
+            if (useE && E.IsReady())
             {
                 if (
                     allMinions.Any(
                         minion =>
-                            minion.LSIsValidTarget(E.Range) &&
-                            minion.Health < 0.75 * Player.LSGetSpellDamage(minion, SpellSlot.E) &&
-                            minion.LSIsValidTarget(E.Range)))
+                            minion.IsValidTarget(E.Range) &&
+                            minion.Health < 0.75 * Player.GetSpellDamage(minion, SpellSlot.E) &&
+                            minion.IsValidTarget(E.Range)))
                 {
                     E.Cast();
                     return;
@@ -332,7 +332,7 @@ namespace Akali
                     if (useQ)
                         Q.CastOnUnit(minion);
 
-                    if (useE && minion.LSIsValidTarget(E.Range) )
+                    if (useE && minion.IsValidTarget(E.Range) )
                         E.Cast();
                 }
             }
@@ -346,23 +346,23 @@ namespace Akali
             {
                 var mob = mobs[0];
 
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                     Q.CastOnUnit(mob);
 
-                if (E.LSIsReady())
+                if (E.IsReady())
                     E.Cast();
             }
         }
 
         private static void Killsteal()
         {
-            var useR = Config.Item("KillstealR").GetValue<bool>() && R.LSIsReady();
+            var useR = Config.Item("KillstealR").GetValue<bool>() && R.IsReady();
             if (useR)
             {
-                foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.LSIsValidTarget(R.Range)))
+                foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsValidTarget(R.Range)))
                 {
-                    if (hero.LSDistance(ObjectManager.Player) <= R.Range &&
-                        Player.LSGetSpellDamage(hero, SpellSlot.R) >= hero.Health)
+                    if (hero.Distance(ObjectManager.Player) <= R.Range &&
+                        Player.GetSpellDamage(hero, SpellSlot.R) >= hero.Health)
                         R.CastOnUnit(hero, true);
                 }
             }
@@ -385,7 +385,7 @@ namespace Akali
                             enemy.Team != Player.Team && !enemy.IsDead && enemy.IsVisible &&
                             Config.Item("Assassin" + enemy.ChampionName) != null &&
                             Config.Item("Assassin" + enemy.ChampionName).GetValue<bool>() &&
-                            Player.LSDistance(enemy) < assassinRange);
+                            Player.Distance(enemy) < assassinRange);
 
             if (Config.Item("AssassinSelectOption").GetValue<StringList>().SelectedIndex == 1)
             {

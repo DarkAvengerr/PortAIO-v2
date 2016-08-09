@@ -21,15 +21,15 @@ using EloBuddy;
         {
             if (BlueSmite.Any(id => Items.HasItem(id)))
             {
-                Smite = Player.LSGetSpellSlot("s5_summonersmiteplayerganker");
+                Smite = Player.GetSpellSlot("s5_summonersmiteplayerganker");
                 return;
             }
             if (RedSmite.Any(id => Items.HasItem(id)))
             {
-                Smite = Player.LSGetSpellSlot("s5_summonersmiteduel");
+                Smite = Player.GetSpellSlot("s5_summonersmiteduel");
                 return;
             }
-            Smite = Player.LSGetSpellSlot("summonersmite");
+            Smite = Player.GetSpellSlot("summonersmite");
         }
         public static void SmiteJungle()
         {
@@ -38,7 +38,7 @@ using EloBuddy;
                 var StealDmg = Player.Spellbook.GetSpell(Smite).State == SpellState.Ready
                     ? (float)Player.GetSummonerSpellDamage(minion, Damage.SummonerSpell.Smite)
                     : 0;
-                if (minion.LSDistance(Player.ServerPosition) <= 550)
+                if (minion.Distance(Player.ServerPosition) <= 550)
                 {
                     if ((minion.CharData.BaseSkinName.Contains("Dragon") || minion.CharData.BaseSkinName.Contains("Baron")))
                     {

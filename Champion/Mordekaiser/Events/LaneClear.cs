@@ -35,7 +35,7 @@ namespace Mordekaiser.Events
             if (Utils.Player.Self.HealthPercent <= Menu.MenuQ.Item("UseQ.Lane.MinHeal").GetValue<Slider>().Value)
                 return;
 
-            if (!Spells.Q.LSIsReady())
+            if (!Spells.Q.IsReady())
                 return;
 
             var lMode = Menu.MenuQ.Item("UseQ.Lane").GetValue<StringList>().SelectedIndex;
@@ -96,7 +96,7 @@ namespace Mordekaiser.Events
             if (Utils.Player.Self.HealthPercent <= Menu.MenuE.Item("UseE.Lane.MinHeal").GetValue<Slider>().Value)
                 return;
 
-            if (!Spells.E.LSIsReady())
+            if (!Spells.E.IsReady())
                 return;
 
             if (!Menu.MenuE.Item("UseE.Lane").GetValue<bool>())
@@ -111,7 +111,7 @@ namespace Mordekaiser.Events
 
             if (minionOutOfAutoAttackRange != null)
             {
-                if (Utils.Player.Self.LSDistance(minionOutOfAutoAttackRange) > Utils.Player.AutoAttackRange)
+                if (Utils.Player.Self.Distance(minionOutOfAutoAttackRange) > Utils.Player.AutoAttackRange)
                 {
                     Spells.E.Cast(minionOutOfAutoAttackRange);
                     return;
@@ -142,7 +142,7 @@ namespace Mordekaiser.Events
                 let iMinions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, item.Value.Item.Range)
                 where
                     iMinions.Count >= 2 && item.Value.Item.IsReady() &&
-                    iMinions[0].LSDistance(Utils.Player.Self.Position) < item.Value.Item.Range
+                    iMinions[0].Distance(Utils.Player.Self.Position) < item.Value.Item.Range
                 select item)
             {
                 item.Value.Item.Cast();
@@ -167,7 +167,7 @@ namespace Mordekaiser.Events
 
         public static void CastQ(Obj_AI_Base t)
         {
-            if (!t.LSIsValidTarget(Utils.Player.AutoAttackRange))
+            if (!t.IsValidTarget(Utils.Player.AutoAttackRange))
                 return;
 
             Spells.Q.Cast();

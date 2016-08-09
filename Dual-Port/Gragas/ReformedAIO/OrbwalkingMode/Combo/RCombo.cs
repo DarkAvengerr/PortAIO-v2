@@ -94,31 +94,31 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo
         // Need to fix this to make better QRQ Combo
         //private void OnProcessSpellCast(GameObject sender, GameObjectProcessSpellCastEventArgs args)
         //{
-        //    if (!Menu.Item(Menu.Name + "QRQ").GetValue<bool>() || !Variable.Spells[SpellSlot.Q].LSIsReady() ||
+        //    if (!Menu.Item(Menu.Name + "QRQ").GetValue<bool>() || !Variable.Spells[SpellSlot.Q].IsReady() ||
         //        Variable.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo) return;
 
         //    var target = args.Target as AIHeroClient;
         //    // args.SData.Name == "Gragas_Base_Q_Ally.troy"
 
-        //    if (target == null || !target.LSIsValidTarget(1150) || !sender.IsMe) return;
+        //    if (target == null || !target.IsValidTarget(1150) || !sender.IsMe) return;
 
         //    var pred = LeagueSharp.Common.Prediction.GetPrediction(target, Variable.Spells[SpellSlot.R].Delay
-        //        + Variable.Player.Position.LSDistance(args.End) / Variable.Spells[SpellSlot.R].Speed).CastPosition;
+        //        + Variable.Player.Position.Distance(args.End) / Variable.Spells[SpellSlot.R].Speed).CastPosition;
 
-        //    Variable.Spells[SpellSlot.Q].Cast(args.End.LSExtend(pred, Variable.Spells[SpellSlot.R].Width));
+        //    Variable.Spells[SpellSlot.Q].Cast(args.End.Extend(pred, Variable.Spells[SpellSlot.R].Width));
         //}
 
         private void ExplosiveCask()
         {
             var target = TargetSelector.GetSelectedTarget();
 
-            if (target == null || !target.LSIsValidTarget() || target.LSIsDashing()) return;
+            if (target == null || !target.IsValidTarget() || target.IsDashing()) return;
 
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, target);
 
-            if (this.Menu.Item(this.Menu.Name + "QRQ").GetValue<bool>() && Variable.Spells[SpellSlot.Q].LSIsReady()
+            if (this.Menu.Item(this.Menu.Name + "QRQ").GetValue<bool>() && Variable.Spells[SpellSlot.Q].IsReady()
                 && this.Menu.Item(this.Menu.Name + "QRQDistance").GetValue<Slider>().Value
-                >= target.LSDistance(Variable.Player))
+                >= target.Distance(Variable.Player))
             {
                 Variable.Spells[SpellSlot.Q].Cast(this.InsecQ(target));
             }
@@ -130,7 +130,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo
         private Vector3 InsecQ(AIHeroClient target)
         {
             var rPred = this.rLogic.RPred(target)
-                .LSExtend(
+                .Extend(
                     Variable.Player.Position,
                     Variable.Spells[SpellSlot.R].Width
                     - this.Menu.Item(this.Menu.Name + "RRangePred").GetValue<Slider>().Value);
@@ -149,13 +149,13 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo
                     var ally =
                         HeroManager.Allies.Where(
                             x =>
-                            x.LSIsValidTarget(
+                            x.IsValidTarget(
                                 this.Menu.Item(this.Menu.Name + "AllyRange").GetValue<Slider>().Value,
                                 false,
-                                target.ServerPosition) && x.LSDistance(target) > 325 && !x.IsMe && x.IsAlly)
+                                target.ServerPosition) && x.Distance(target) > 325 && !x.IsMe && x.IsAlly)
                             .MaxOrDefault(
                                 x =>
-                                x.LSCountAlliesInRange(
+                                x.CountAlliesInRange(
                                     this.Menu.Item(this.Menu.Name + "AllyRange").GetValue<Slider>().Value));
 
                     if (ally != null)
@@ -167,10 +167,10 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo
                         ObjectManager.Get<Obj_AI_Turret>()
                             .Where(
                                 x =>
-                                x.IsAlly && x.LSDistance(target) > 325
-                                && x.LSDistance(target)
+                                x.IsAlly && x.Distance(target) > 325
+                                && x.Distance(target)
                                 < this.Menu.Item(this.Menu.Name + "TurretRange").GetValue<Slider>().Value && !x.IsEnemy)
-                            .OrderBy(x => x.LSDistance(Variable.Player.Position))
+                            .OrderBy(x => x.Distance(Variable.Player.Position))
                             .FirstOrDefault();
 
                     if (turret != null)
@@ -189,8 +189,8 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo
 
             var pos =
                 Variable.Spells[SpellSlot.R].GetVectorSPrediction(target, 980)
-                    .CastTargetPosition.LSExtend(
-                        mePos.LSTo2D(),
+                    .CastTargetPosition.Extend(
+                        mePos.To2D(),
                         -this.Menu.Item(this.Menu.Name + "RRangePred").GetValue<Slider>().Value);
 
             return pos.To3D();
@@ -215,7 +215,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo
         private void OnUpdate(EventArgs args)
         {
             if (Variable.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
-                || !Variable.Spells[SpellSlot.R].LSIsReady()
+                || !Variable.Spells[SpellSlot.R].IsReady()
                 || this.Menu.Item(this.Menu.Name + "RMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
 
             this.ExplosiveCask();

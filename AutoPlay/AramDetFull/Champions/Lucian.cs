@@ -50,12 +50,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var hero = target as AIHeroClient;
             if (hero == null ) return;
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 useQonTarg((AIHeroClient)target, QhitChance.medium);
             }
 
-            if (W.LSIsReady() && !Q.LSIsReady() && player.Mana >= 120 && !tooEasyKill(hero))
+            if (W.IsReady() && !Q.IsReady() && player.Mana >= 120 && !tooEasyKill(hero))
             {
                 W.Cast(hero.Position);
             }
@@ -66,30 +66,30 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             useQonTarg((AIHeroClient)target, QhitChance.medium,true);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             W.Cast(player.Position);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
-            if(target.HealthPercent < 50 && safeGap(player.Position.LSExtend(target.Position,400).LSTo2D()))
+            if(target.HealthPercent < 50 && safeGap(player.Position.Extend(target.Position,400).To2D()))
                 E.Cast(target);
         }
 
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             R.Cast(target.Position);
         }
@@ -124,17 +124,17 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public float fullComboOn(Obj_AI_Base targ)
         {
-            float dmg = (float)player.LSGetAutoAttackDamage(targ) * 3;
-            if (Q.LSIsReady())
+            float dmg = (float)player.GetAutoAttackDamage(targ) * 3;
+            if (Q.IsReady())
                 dmg += Q.GetDamage(targ);
-            if (W.LSIsReady())
+            if (W.IsReady())
                 dmg += W.GetDamage(targ);
             return dmg;
         }
 
         public bool tooEasyKill(Obj_AI_Base target)
         {
-            return target.Health < player.LSGetAutoAttackDamage(target) * 1.5f;
+            return target.Health < player.GetAutoAttackDamage(target) * 1.5f;
         }
 
         public bool enemIsOnMe(Obj_AI_Base target)
@@ -142,15 +142,15 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (!target.IsMelee() || target.IsAlly || target.IsDead)
                 return false;
 
-            float distTo = target.LSDistance(player, true);
+            float distTo = target.Distance(player, true);
             float targetReack = target.AttackRange + target.BoundingRadius + player.BoundingRadius + 100;
             if (distTo > targetReack * targetReack)
                 return false;
 
-            var per = target.Direction.LSTo2D().LSPerpendicular();
+            var per = target.Direction.To2D().Perpendicular();
             var dir = new Vector3(per, 0);
             var enemDir = target.Position + dir * 40;
-            if (distTo < enemDir.LSDistance(player.Position, true))
+            if (distTo < enemDir.Distance(player.Position, true))
                 return false;
 
             return true;
@@ -158,16 +158,16 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public void eAwayFrom()
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
-            Vector2 backTo = player.Position.LSTo2D();
+            Vector2 backTo = player.Position.To2D();
             AIHeroClient targ = null;
             int count = 0;
             foreach (var enem in ObjectManager.Get<AIHeroClient>().Where(enemIsOnMe))
             {
                 targ = enem;
                 count++;
-                backTo -= (enem.Position - player.Position).LSTo2D();
+                backTo -= (enem.Position - player.Position).To2D();
             }
 
             if (count == 1 && targ.Health > fullComboOn(targ))
@@ -175,7 +175,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             if (count > 1 || (count == 1 && targ.Health > fullComboOn(targ)))
             {
-                var awayTo = player.Position.LSTo2D().LSExtend(backTo, 425);
+                var awayTo = player.Position.To2D().Extend(backTo, 425);
                 if (!inTowerRange(awayTo))
                     E.Cast(awayTo);
             }
@@ -184,7 +184,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             foreach (Obj_AI_Turret tur in ObjectManager.Get<Obj_AI_Turret>().Where(tur => tur.IsEnemy && tur.Health > 0))
             {
-                if (pos.LSDistance(tur.Position.LSTo2D()) < (850 + player.BoundingRadius))
+                if (pos.Distance(tur.Position.To2D()) < (850 + player.BoundingRadius))
                     return true;
             }
             return false;
@@ -192,23 +192,23 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public void useItems(AIHeroClient target)
         {
-            if (target.LSDistance(player) < 500)
+            if (target.Distance(player) < 500)
             {
                 sumItems.cast(SummonerItems.ItemIds.Ghostblade);
             }
-            if (target.LSDistance(player) < 300)
+            if (target.Distance(player) < 300)
             {
                 sumItems.cast(SummonerItems.ItemIds.Hydra);
             }
-            if (target.LSDistance(player) < 300)
+            if (target.Distance(player) < 300)
             {
                 sumItems.cast(SummonerItems.ItemIds.Tiamat);
             }
-            if (target.LSDistance(player) < 300)
+            if (target.Distance(player) < 300)
             {
                 sumItems.cast(SummonerItems.ItemIds.Cutlass, target);
             }
-            if (target.LSDistance(player) < 500 && (player.Health / player.MaxHealth) * 100 < 85)
+            if (target.Distance(player) < 500 && (player.Health / player.MaxHealth) * 100 < 85)
             {
                 sumItems.cast(SummonerItems.ItemIds.BotRK, target);
             }
@@ -216,7 +216,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public bool useQonTarg(AIHeroClient target, QhitChance hitChance, bool minionsOnly = false)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return false;
 
             if (targValidForQ(target) && !minionsOnly)
@@ -244,7 +244,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 return false;
             if (targ.IsAlly)
                 return false;
-            var dist = targ.Position.LSTo2D().LSDistance(player.Position.LSTo2D(), true);
+            var dist = targ.Position.To2D().Distance(player.Position.To2D(), true);
             var realQRange = Q.Range + targ.BoundingRadius;
             if (dist > realQRange * realQRange)
                 return false;
@@ -257,8 +257,8 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 return QhitChance.himself;
 
             var poly = getPolygonOn(onTarg, target.BoundingRadius * 0.6f);
-            var predTarPos = Prediction.GetPrediction(target, 0.35f).UnitPosition.LSTo2D();
-            var nowPos = target.Position.LSTo2D();
+            var predTarPos = Prediction.GetPrediction(target, 0.35f).UnitPosition.To2D();
+            var nowPos = target.Position.To2D();
 
             bool nowInside = poly.pointInside(nowPos);
             bool predInsode = poly.pointInside(predTarPos);
@@ -276,12 +276,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public Polygon getPolygonOn(Obj_AI_Base target, float bonusW = 0)
         {
             List<Vector2> points = new List<Vector2>();
-            Vector2 rTpos = Prediction.GetPrediction(target, 0.10f).UnitPosition.LSTo2D();
-            Vector2 startP = player.ServerPosition.LSTo2D();
-            Vector2 endP = startP.LSExtend(rTpos, 900 + bonusW);
+            Vector2 rTpos = Prediction.GetPrediction(target, 0.10f).UnitPosition.To2D();
+            Vector2 startP = player.ServerPosition.To2D();
+            Vector2 endP = startP.Extend(rTpos, 900 + bonusW);
 
             Vector2 p = (rTpos - startP);
-            var per = p.LSPerpendicular().LSNormalized() * (Q.Width / 2 + bonusW);
+            var per = p.Perpendicular().Normalized() * (Q.Width / 2 + bonusW);
             points.Add(startP + per);
             points.Add(startP - per);
             points.Add(endP - per);

@@ -27,13 +27,13 @@ using EloBuddy;
 
         public bool ShouldRun()
         {
-            return Variables.spells[SpellSlot.E].LSIsReady() &&
+            return Variables.spells[SpellSlot.E].IsReady() &&
                    MenuExtensions.GetItemValue<bool>("iseriesr.kalista.misc.kse");
         }
 
         public void Run()
         {
-            var killableRendTarget = HeroManager.Enemies.FirstOrDefault(enemy => enemy.LSIsValidTarget(Variables.spells[SpellSlot.E].Range) && KalistaE.CanBeRendKilled(enemy));
+            var killableRendTarget = HeroManager.Enemies.FirstOrDefault(enemy => enemy.IsValidTarget(Variables.spells[SpellSlot.E].Range) && KalistaE.CanBeRendKilled(enemy));
 
             if (killableRendTarget != null && (killableRendTarget.NetworkId != Variables.Orbwalker.GetTarget().NetworkId) && (Environment.TickCount - LastCastTime > 250))
             {

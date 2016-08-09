@@ -56,30 +56,28 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Berb.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Berb.Common\Berb.Common\bin\Debug\Berb.Common.dll</HintPath>
+    <Reference Include="Berb.Common">
+      <HintPath>..\Git\Berb.Common\Berb.Common\bin\Debug\Berb.Common.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy">
-      <HintPath>..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.dll</HintPath>
+      <HintPath>..\Git\Berb.Common\Berb.Common\bin\Debug\EloBuddy.dll</HintPath>
     </Reference>
-    <Reference Include="EloBuddy.Sandbox, Version=1.0.6047.40853, Culture=neutral, PublicKeyToken=d671ef5d8e7e69a5, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.Sandbox.dll</HintPath>
+    <Reference Include="EloBuddy.Sandbox">
+      <HintPath>..\Git\Berb.Common\Berb.Common\bin\Debug\EloBuddy.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.SDK">
-      <HintPath>..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.SDK.dll</HintPath>
+      <HintPath>..\Git\Berb.Common\Berb.Common\bin\Debug\EloBuddy.SDK.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\Git\Berb.Common\Berb.Common\bin\Debug\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX, Version=2.6.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\EloBuddy\System\SharpDX.dll</HintPath>
+      <HintPath>..\Git\Berb.Common\Berb.Common\bin\Debug\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9, Version=2.6.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\EloBuddy\System\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>..\Git\Berb.Common\Berb.Common\bin\Debug\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -436,6 +434,7 @@
     <Compile Include="AIO\vSeries\Core\Plugins\Orbwalker.cs" />
     <Compile Include="AIO\vSeries\Core\Plugins\VersionChecker.cs" />
     <Compile Include="AIO\vSeries\Program.cs" />
+    <Compile Include="Champion\Karma\Program.cs" />
     <Compile Include="Dual-Port\Ahri\DZAhri\DZAhri.cs" />
     <Compile Include="Dual-Port\Ahri\DZAhri\Helpers.cs" />
     <Compile Include="Dual-Port\Ahri\DZAhri\Program.cs" />
@@ -2808,7 +2807,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AIO\SharpShooter\Plugins\" />
-    <Folder Include="Champion\Karma\" />
     <Folder Include="Dual-Port\Amumu\StonedAmumu\" />
     <Folder Include="Dual-Port\JarvanIV\StonedJarvan\" />
   </ItemGroup>

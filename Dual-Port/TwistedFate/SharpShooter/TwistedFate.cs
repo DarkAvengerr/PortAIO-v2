@@ -19,7 +19,7 @@ namespace SharpShooter.Plugins
 
         public TwistedFate()
         {
-            _flash = ObjectManager.Player.LSGetSpellSlot("SummonerFlash");
+            _flash = ObjectManager.Player.GetSpellSlot("SummonerFlash");
 
             _q = new Spell(SpellSlot.Q, 1450f, TargetSelector.DamageType.Magical) { MinHitChance = HitChance.VeryHigh };
             _w = new Spell(SpellSlot.W, 1200f, TargetSelector.DamageType.Magical);
@@ -110,7 +110,7 @@ namespace SharpShooter.Plugins
                                                 var target =
                                                     HeroManager.Enemies.Where(
                                                         x =>
-                                                            x.LSIsValidTarget(_q.Range) &&
+                                                            x.IsValidTarget(_q.Range) &&
                                                             _q.GetPrediction(x).Hitchance >= HitChance.Immobile)
                                                         .OrderByDescending(x => TargetSelector.GetPriority(x))
                                                         .FirstOrDefault();
@@ -255,7 +255,7 @@ namespace SharpShooter.Plugins
 
                 if (MenuProvider.Champion.Misc.UseKillsteal)
                 {
-                    foreach (var target in HeroManager.Enemies.Where(x => x.LSIsValidTarget()))
+                    foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget()))
                     {
                         if (target.IsKillableAndValidTarget(_q.GetDamage(target), TargetSelector.DamageType.Physical,
                             _q.Range))
@@ -347,7 +347,7 @@ namespace SharpShooter.Plugins
         {
             if (MenuProvider.Champion.Misc.UseAntiGapcloser)
             {
-                if (gapcloser.Sender.LSIsValidTarget(_w.Range))
+                if (gapcloser.Sender.IsValidTarget(_w.Range))
                 {
                     PickACard(Cards.Gold);
 
@@ -370,7 +370,7 @@ namespace SharpShooter.Plugins
         {
             if (MenuProvider.Champion.Misc.UseInterrupter)
             {
-                if (sender.LSIsValidTarget(_w.Range))
+                if (sender.IsValidTarget(_w.Range))
                 {
                     PickACard(Cards.Gold);
 
@@ -413,12 +413,12 @@ namespace SharpShooter.Plugins
                     var target = TargetSelector.GetTarget(Orbwalking.GetRealAutoAttackRange(null) + 65 + 400,
                         TargetSelector.DamageType.Magical);
 
-                    if (target != null && _flash != SpellSlot.Unknown && _flash.LSIsReady())
+                    if (target != null && _flash != SpellSlot.Unknown && _flash.IsReady())
                     {
                         Render.Circle.DrawCircle(ObjectManager.Player.Position,
                             Orbwalking.GetRealAutoAttackRange(null) + 65 + 400, Color.Gold, 5);
 
-                        if (!target.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
+                        if (!target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
                         {
                             Render.Circle.DrawCircle(target.Position, target.BoundingRadius, Color.Gold);
 
@@ -442,7 +442,7 @@ namespace SharpShooter.Plugins
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float)ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float)ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
             if (_q.IsReadyPerfectly())

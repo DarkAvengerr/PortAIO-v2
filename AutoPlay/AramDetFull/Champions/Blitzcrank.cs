@@ -36,22 +36,22 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
-            if (player.LSInShop())
+            if (player.InShop())
                 W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || W.LSIsReady())
+            if (!E.IsReady() || W.IsReady())
                 return;
             E.Cast();
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
                 R.Cast();
 
@@ -80,23 +80,23 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
             {
                 return;
             }
 
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return;
             }
 
-            if (target.LSHasBuff("BlackShield"))
+            if (target.HasBuff("BlackShield"))
             {
                 return;
             }
 
             if (AllyInRange(1200)
-                .Any(ally => ally.LSDistance(target) < ally.AttackRange + ally.BoundingRadius))
+                .Any(ally => ally.Distance(target) < ally.AttackRange + ally.BoundingRadius))
             {
                 return;
             }
@@ -115,9 +115,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 ObjectManager.Get<AIHeroClient>()
                     .Where(
                         h =>
-                            Geometry.LSDistance(ObjectManager.Player, h.Position) < range && h.IsAlly && !h.IsMe &&
+                            Geometry.Distance(ObjectManager.Player, h.Position) < range && h.IsAlly && !h.IsMe &&
                             h.IsValid && !h.IsDead)
-                    .OrderBy(h => Geometry.LSDistance(ObjectManager.Player, h.Position))
+                    .OrderBy(h => Geometry.Distance(ObjectManager.Player, h.Position))
                     .ToList();
         }
 
@@ -133,7 +133,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 return;
             }
 
-            if (!E.LSIsReady())
+            if (!E.IsReady())
             {
                 return;
             }
@@ -151,17 +151,17 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 return;
             }
 
-            if (E.LSIsReady() && E.Cast())
+            if (E.IsReady() && E.Cast())
             {
                 EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, unit);
             }
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 Q.Cast(unit);
             }
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 R.Cast();
             }

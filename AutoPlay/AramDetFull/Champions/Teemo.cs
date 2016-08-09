@@ -35,14 +35,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
         
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 W.Cast();
         }
 
@@ -56,7 +56,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             if (target == null)
                 return;
-            if (target.LSIsValidTarget(R.Range) && R.LSIsReady() )
+            if (target.IsValidTarget(R.Range) && R.IsReady() )
             {
                 R.Cast(target.Position);
             }
@@ -73,14 +73,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             Obj_AI_Base.OnBuffGain += (sender, args) =>
             {
-                if (R.LSIsReady())
+                if (R.IsReady())
                 {
                     BuffInstance aBuff =
                         (from fBuffs in
                              sender.Buffs.Where(
                                  s =>
                                  sender.Team != ObjectManager.Player.Team
-                                 && sender.LSDistance(ObjectManager.Player.Position) < R.Range)
+                                 && sender.Distance(ObjectManager.Player.Position) < R.Range)
                          from b in new[]
                                            {
                                                "teleport", /* Teleport */ "pantheon_grandskyfall_jump", /* Pantheon */ 

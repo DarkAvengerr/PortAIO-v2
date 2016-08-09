@@ -68,7 +68,7 @@ namespace UnderratedAIO.Champions
                     break;
             }
             var enemyForKs = HeroManager.Enemies.FirstOrDefault(h => W.CanCast(h) && Wdmg(h) > h.Health);
-            if (enemyForKs != null && W.LSIsReady() && config.Item("ksW").GetValue<bool>())
+            if (enemyForKs != null && W.IsReady() && config.Item("ksW").GetValue<bool>())
             {
                 W.CastOnUnit(enemyForKs);
             }
@@ -117,7 +117,7 @@ namespace UnderratedAIO.Champions
                 return;
             }
             var minions = MinionManager.GetMinions(W.Range, MinionTypes.All, MinionTeam.NotAlly);
-            if (config.Item("useeLC").GetValue<bool>() && E.LSIsReady() &&
+            if (config.Item("useeLC").GetValue<bool>() && E.IsReady() &&
                 config.Item("ehitLC").GetValue<Slider>().Value <= minions.Count)
             {
                 E.Cast();
@@ -128,11 +128,11 @@ namespace UnderratedAIO.Champions
         {
             float msBonus = 1f;
 
-            if (Q.LSIsReady() && !QEnabled)
+            if (Q.IsReady() && !QEnabled)
             {
                 if (
                     ObjectManager.Get<AIHeroClient>()
-                        .FirstOrDefault(h => h.IsEnemy && player.LSDistance(h) < 2000 && player.LSIsFacing(h)) != null)
+                        .FirstOrDefault(h => h.IsEnemy && player.Distance(h) < 2000 && player.IsFacing(h)) != null)
                 {
                     msBonus += MsBuff[Q.Level - 1];
                 }
@@ -160,9 +160,9 @@ namespace UnderratedAIO.Champions
             {
                 ItemHandler.UseItems(target, config, ComboDamage(target));
             }
-            if (config.Item("useq").GetValue<bool>() && Q.LSIsReady() && !QEnabled &&
-                player.LSDistance(target) >= config.Item("useqmin").GetValue<Slider>().Value &&
-                player.LSDistance(target) < (player.MoveSpeed * MsBonus(target)) * 3.0f)
+            if (config.Item("useq").GetValue<bool>() && Q.IsReady() && !QEnabled &&
+                player.Distance(target) >= config.Item("useqmin").GetValue<Slider>().Value &&
+                player.Distance(target) < (player.MoveSpeed * MsBonus(target)) * 3.0f)
             {
                 Q.Cast();
             }
@@ -180,19 +180,19 @@ namespace UnderratedAIO.Champions
             {
                 E.Cast();
             }
-            if (R.LSIsReady() && player.HealthPercent > 20 &&
-                ((config.Item("user").GetValue<bool>() && player.LSDistance(target) < 200 &&
+            if (R.IsReady() && player.HealthPercent > 20 &&
+                ((config.Item("user").GetValue<bool>() && player.Distance(target) < 200 &&
                   ComboDamage(target) + R.GetDamage(target) * 10 > target.Health && ComboDamage(target) < target.Health) ||
-                 (config.Item("usertf").GetValue<Slider>().Value <= player.LSCountEnemiesInRange(300))))
+                 (config.Item("usertf").GetValue<Slider>().Value <= player.CountEnemiesInRange(300))))
             {
                 R.Cast();
             }
             var ignitedmg = (float) player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
-            bool hasIgnite = player.Spellbook.CanUseSpell(player.LSGetSpellSlot("SummonerDot")) == SpellState.Ready;
+            bool hasIgnite = player.Spellbook.CanUseSpell(player.GetSpellSlot("SummonerDot")) == SpellState.Ready;
             if (config.Item("useIgnite").GetValue<bool>() && ignitedmg > target.Health && hasIgnite &&
                 !W.CanCast(target))
             {
-                player.Spellbook.CastSpell(player.LSGetSpellSlot("SummonerDot"), target);
+                player.Spellbook.CastSpell(player.GetSpellSlot("SummonerDot"), target);
             }
         }
 
@@ -209,11 +209,11 @@ namespace UnderratedAIO.Champions
         private void Game_OnDraw(EventArgs args)
         {
             float msBonus = 1f;
-            if (Q.LSIsReady() && !QEnabled)
+            if (Q.IsReady() && !QEnabled)
             {
                 if (
                     ObjectManager.Get<AIHeroClient>()
-                        .FirstOrDefault(h => h.IsEnemy && player.LSDistance(h) < 2000 && player.LSIsFacing(h)) != null)
+                        .FirstOrDefault(h => h.IsEnemy && player.Distance(h) < 2000 && player.IsFacing(h)) != null)
                 {
                     msBonus += MsBuff[Q.Level - 1];
                 }
@@ -274,24 +274,24 @@ namespace UnderratedAIO.Champions
         private static float ComboDamage(AIHeroClient hero)
         {
             double damage = 0;
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.Q);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.Q);
             }
-            if (W.LSIsReady() || player.GetSpell(SpellSlot.W).State == SpellState.Surpressed)
+            if (W.IsReady() || player.GetSpell(SpellSlot.W).State == SpellState.Surpressed)
             {
                 damage += player.CalcDamage(hero, Damage.DamageType.Physical, Wdmg(hero));
             }
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.E);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.E);
             }
             if ((Items.HasItem(ItemHandler.Bft.Id) && Items.CanUseItem(ItemHandler.Bft.Id)) ||
                 (Items.HasItem(ItemHandler.Dfg.Id) && Items.CanUseItem(ItemHandler.Dfg.Id)))
             {
                 damage = (damage * 1.2);
             }
-            if (player.Spellbook.CanUseSpell(player.LSGetSpellSlot("summonerdot")) == SpellState.Ready &&
+            if (player.Spellbook.CanUseSpell(player.GetSpellSlot("summonerdot")) == SpellState.Ready &&
                 hero.Health < damage + player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite))
             {
                 damage += player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);

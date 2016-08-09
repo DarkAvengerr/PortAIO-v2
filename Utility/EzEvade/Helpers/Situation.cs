@@ -68,7 +68,7 @@ using EloBuddy; namespace ezEvade
                     continue;
                 }
 
-                var distToTurret = pos.LSDistance(turret.Position.LSTo2D());
+                var distToTurret = pos.Distance(turret.Position.To2D());
                 if (distToTurret <= turretRange)
                 {
                     return true;
@@ -140,21 +140,21 @@ using EloBuddy; namespace ezEvade
                 || myHero.IsTargetable == false
                 || HasSpellShield(myHero)
                 || ChampionSpecificChecks()
-                || myHero.LSIsDashing()
+                || myHero.IsDashing()
                 || Evade.hasGameEnded == true;
         }
 
         public static bool ChampionSpecificChecks()
         {
-            return (myHero.ChampionName == "Sion" && myHero.LSHasBuff("SionR"))
+            return (myHero.ChampionName == "Sion" && myHero.HasBuff("SionR"))
                 ;
 
             //Untargetable
-            //|| (myHero.ChampionName == "KogMaw" && myHero.LSHasBuff("kogmawicathiansurprise"))
-            //|| (myHero.ChampionName == "Karthus" && myHero.LSHasBuff("KarthusDeathDefiedBuff"))
+            //|| (myHero.ChampionName == "KogMaw" && myHero.HasBuff("kogmawicathiansurprise"))
+            //|| (myHero.ChampionName == "Karthus" && myHero.HasBuff("KarthusDeathDefiedBuff"))
 
             //Invulnerable
-            //|| myHero.LSHasBuff("kalistarallyspelllock"); 
+            //|| myHero.HasBuff("kalistarallyspelllock"); 
         }
 
         //from Evade by Esk0r

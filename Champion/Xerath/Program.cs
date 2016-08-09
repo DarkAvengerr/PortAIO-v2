@@ -54,7 +54,7 @@ using EloBuddy; namespace Xerath
 
                 if (Config.Item("ComboActive").GetValue<KeyBind>().Active)
                 {
-                    return IsPassiveUp || (!Q.LSIsReady() && !W.LSIsReady() && !E.LSIsReady());
+                    return IsPassiveUp || (!Q.IsReady() && !W.IsReady() && !E.IsReady());
                 }
                     
 
@@ -64,14 +64,14 @@ using EloBuddy; namespace Xerath
 
         public static bool IsPassiveUp
         {
-            get { return ObjectManager.Player.LSHasBuff("xerathascended2onhit"); }
+            get { return ObjectManager.Player.HasBuff("xerathascended2onhit"); }
         }
 
         public static bool IsCastingR
         {
             get
             {
-                return ObjectManager.Player.LSHasBuff("XerathLocusOfPower2") ||
+                return ObjectManager.Player.HasBuff("XerathLocusOfPower2") ||
                        (ObjectManager.Player.LastCastedSpellName().Equals("XerathLocusOfPower2", StringComparison.InvariantCultureIgnoreCase) &&
                         Utils.TickCount - ObjectManager.Player.LastCastedSpellT() < 500);
             }
@@ -195,7 +195,7 @@ using EloBuddy; namespace Xerath
 
             //Damage after combo:
             var dmgAfterComboItem = new MenuItem("DamageAfterR", "Draw damage after (3 - 5)xR").SetValue(true);
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit += hero => (float)Player.LSGetSpellDamage(hero, SpellSlot.R) * new int[] {0, 3, 4, 5 }[Player.GetSpell(SpellSlot.R).Level];
+            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit += hero => (float)Player.GetSpellDamage(hero, SpellSlot.R) * new int[] {0, 3, 4, 5 }[Player.GetSpell(SpellSlot.R).Level];
             LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = dmgAfterComboItem.GetValue<bool>();
             dmgAfterComboItem.ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
             {
@@ -240,7 +240,7 @@ using EloBuddy; namespace Xerath
         {
             if (!Config.Item("InterruptSpells").GetValue<bool>()) return;
                   
-            if (Player.LSDistance(sender) < E.Range)
+            if (Player.Distance(sender) < E.Range)
             {
                 E.Cast(sender);
             }
@@ -263,7 +263,7 @@ using EloBuddy; namespace Xerath
         {
             if (!Config.Item("AutoEGC").GetValue<bool>()) return;
 
-            if (Player.LSDistance(gapcloser.Sender) < E.Range)
+            if (Player.Distance(gapcloser.Sender) < E.Range)
             {
                 E.Cast(gapcloser.Sender);
             }
@@ -318,27 +318,27 @@ using EloBuddy; namespace Xerath
 
             //Hacks.DisableCastIndicator = Q.IsCharging && useQ;
 
-            if (eTarget != null && useE && E.LSIsReady())
+            if (eTarget != null && useE && E.IsReady())
             {
-                if (Player.LSDistance(eTarget) < E.Range * 0.4f)
+                if (Player.Distance(eTarget) < E.Range * 0.4f)
                     E.Cast(eTarget);
-                else if ((!useW || !W.LSIsReady()))
+                else if ((!useW || !W.IsReady()))
                     E.Cast(eTarget);
             }
 
-            if (useQ && Q.LSIsReady() && qTarget != null)
+            if (useQ && Q.IsReady() && qTarget != null)
             {
                 if (Q.IsCharging)
                 {
                     Q.Cast(qTarget, false, false);
                 }
-                else if (!useW || !W.LSIsReady() || Player.LSDistance(qTarget) > W.Range)
+                else if (!useW || !W.IsReady() || Player.Distance(qTarget) > W.Range)
                 {
                     Q.StartCharging();
                 }
             }
 
-            if (wTarget != null && useW && W.LSIsReady())
+            if (wTarget != null && useW && W.IsReady())
                 W.Cast(wTarget, false, true);
         }
 
@@ -347,15 +347,15 @@ using EloBuddy; namespace Xerath
             AIHeroClient bestTarget = null;
             var bestRatio = 0f;
 
-            if (TargetSelector.SelectedTarget.LSIsValidTarget() && !TargetSelector.IsInvulnerable(TargetSelector.SelectedTarget, TargetSelector.DamageType.Magical, true) &&
-                (Game.CursorPos.LSDistance(TargetSelector.SelectedTarget.ServerPosition) < distance && ObjectManager.Player.LSDistance(TargetSelector.SelectedTarget) < R.Range))
+            if (TargetSelector.SelectedTarget.IsValidTarget() && !TargetSelector.IsInvulnerable(TargetSelector.SelectedTarget, TargetSelector.DamageType.Magical, true) &&
+                (Game.CursorPos.Distance(TargetSelector.SelectedTarget.ServerPosition) < distance && ObjectManager.Player.Distance(TargetSelector.SelectedTarget) < R.Range))
             {
                 return TargetSelector.SelectedTarget;
             }
 
             foreach (var hero in ObjectManager.Get<AIHeroClient>())
             {
-                if (!hero.LSIsValidTarget(R.Range) || TargetSelector.IsInvulnerable(hero, TargetSelector.DamageType.Magical, true) || Game.CursorPos.LSDistance(hero.ServerPosition) > distance)
+                if (!hero.IsValidTarget(R.Range) || TargetSelector.IsInvulnerable(hero, TargetSelector.DamageType.Magical, true) || Game.CursorPos.Distance(hero.ServerPosition) > distance)
                 {
                     continue;
                 }
@@ -386,8 +386,8 @@ using EloBuddy; namespace Xerath
                 if(rTarget.Health - R.GetDamage(rTarget) < 0)
                     if (Utils.TickCount - RCharge.CastT <= 700) return;
 
-                if ((RCharge.Index != 0 && rTarget.LSDistance(RCharge.Position) > 1000))
-                    if (Utils.TickCount - RCharge.CastT <= Math.Min(2500, rTarget.LSDistance(RCharge.Position) - 1000)) return;
+                if ((RCharge.Index != 0 && rTarget.Distance(RCharge.Position) > 1000))
+                    if (Utils.TickCount - RCharge.CastT <= Math.Min(2500, rTarget.Distance(RCharge.Position) - 1000)) return;
 
                 switch (rMode)
                 {
@@ -423,7 +423,7 @@ using EloBuddy; namespace Xerath
 
             //Hacks.DisableCastIndicator = Q.IsCharging && useQi != 0;
 
-            if (useW && W.LSIsReady())
+            if (useW && W.IsReady())
             {
                 var locW = W.GetCircularFarmLocation(rangedMinionsW, W.Width * 0.75f);
                 if (locW.MinionsHit >= 3 && W.IsInRange(locW.Position.To3D()))
@@ -443,12 +443,12 @@ using EloBuddy; namespace Xerath
                 }
             }
 
-            if (useQ && Q.LSIsReady())
+            if (useQ && Q.IsReady())
             {
                 if (Q.IsCharging)
                 {
                     var locQ = Q.GetLineFarmLocation(allMinionsQ);
-                    if (allMinionsQ.Count == allMinionsQ.Count(m => Player.LSDistance(m) < Q.Range) && locQ.MinionsHit > 0 && locQ.Position.LSIsValid())
+                    if (allMinionsQ.Count == allMinionsQ.Count(m => Player.Distance(m) < Q.Range) && locQ.MinionsHit > 0 && locQ.Position.IsValid())
                         Q.Cast(locQ.Position);
                 }
                 else if (allMinionsQ.Count > 0)
@@ -466,11 +466,11 @@ using EloBuddy; namespace Xerath
             if (mobs.Count > 0)
             {
                 var mob = mobs[0];
-                if (useW && W.LSIsReady())
+                if (useW && W.IsReady())
                 {
                     W.Cast(mob);
                 }
-                else if (useQ && Q.LSIsReady())
+                else if (useQ && Q.IsReady())
                 {
                     if (!Q.IsCharging)
                         Q.StartCharging();
@@ -532,11 +532,11 @@ using EloBuddy; namespace Xerath
                 return;
             }
 
-            if (R.LSIsReady() && Config.Item("PingRKillable").GetValue<bool>())
+            if (R.IsReady() && Config.Item("PingRKillable").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(h => h.LSIsValidTarget() && (float)Player.LSGetSpellDamage(h, SpellSlot.R) * new int[] { 0, 3, 4, 5 }[Player.GetSpell(SpellSlot.R).Level] > h.Health))
+                foreach (var enemy in HeroManager.Enemies.Where(h => h.IsValidTarget() && (float)Player.GetSpellDamage(h, SpellSlot.R) * new int[] { 0, 3, 4, 5 }[Player.GetSpell(SpellSlot.R).Level] > h.Health))
                 {
-                    Ping(enemy.Position.LSTo2D());
+                    Ping(enemy.Position.To2D());
                 }
             }
 

@@ -91,13 +91,13 @@ namespace UnderratedAIO.Champions
             if (unit.IsMe && target is AIHeroClient && orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed &&
                 config.Item("useCH", true).GetValue<StringList>().SelectedIndex == 0)
             {
-                if (W.LSIsReady())
+                if (W.IsReady())
                 {
                     W.Cast();
                     Orbwalking.ResetAutoAttackTimer();
                     return;
                 }
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                 {
                     Q.Cast();
                     return;
@@ -112,11 +112,11 @@ namespace UnderratedAIO.Champions
 
         private void beforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
-            if (args.Unit.IsMe && W.LSIsReady() && orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo &&
+            if (args.Unit.IsMe && W.IsReady() && orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo &&
                 args.Target is AIHeroClient && checkFuryMode(SpellSlot.W, (Obj_AI_Base) args.Target) &&
                 config.Item("usew", true).GetValue<bool>())
             {
-                if ((player.Mana > 40 && !fury) || (Q.LSIsReady() && canBeOpWIthQ(player.Position)))
+                if ((player.Mana > 40 && !fury) || (Q.IsReady() && canBeOpWIthQ(player.Position)))
                 {
                     return;
                 }
@@ -124,7 +124,7 @@ namespace UnderratedAIO.Champions
                 W.Cast();
                 return;
             }
-            if (args.Unit.IsMe && W.LSIsReady() && orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed &&
+            if (args.Unit.IsMe && W.IsReady() && orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed &&
                 config.Item("usewH", true).GetValue<bool>() && args.Target is AIHeroClient &&
                 config.Item("useCH", true).GetValue<StringList>().SelectedIndex != 0)
             {
@@ -158,22 +158,22 @@ namespace UnderratedAIO.Champions
             {
                 ItemHandler.UseItems(target, config, ComboDamage(target));
             }
-            bool hasIgnite = player.Spellbook.CanUseSpell(player.LSGetSpellSlot("SummonerDot")) == SpellState.Ready;
-            var FuryQ = Damage.LSGetSpellDamage(player, target, SpellSlot.Q) * 0.5;
-            var FuryW = Damage.LSGetSpellDamage(player, target, SpellSlot.W) * 0.5;
-            var eDmg = Damage.LSGetSpellDamage(player, target, SpellSlot.E);
+            bool hasIgnite = player.Spellbook.CanUseSpell(player.GetSpellSlot("SummonerDot")) == SpellState.Ready;
+            var FuryQ = Damage.GetSpellDamage(player, target, SpellSlot.Q) * 0.5;
+            var FuryW = Damage.GetSpellDamage(player, target, SpellSlot.W) * 0.5;
+            var eDmg = Damage.GetSpellDamage(player, target, SpellSlot.E);
             var combodamage = ComboDamage(target);
             if (config.Item("useIgnite").GetValue<bool>() && hasIgnite &&
                 player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) > target.Health)
             {
-                player.Spellbook.CastSpell(player.LSGetSpellSlot("SummonerDot"), target);
+                player.Spellbook.CastSpell(player.GetSpellSlot("SummonerDot"), target);
             }
-            if (player.LSDistance(target) > E.Range && E.LSIsReady() && (W.LSIsReady() || Q.LSIsReady()) && lastE.Equals(0) &&
+            if (player.Distance(target) > E.Range && E.IsReady() && (W.IsReady() || Q.IsReady()) && lastE.Equals(0) &&
                 config.Item("usee", true).GetValue<bool>())
             {
                 var closeGapTarget =
                     MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.NotAlly)
-                        .Where(i => i.LSDistance(target.ServerPosition) < Q.Range - 40)
+                        .Where(i => i.Distance(target.ServerPosition) < Q.Range - 40)
                         .OrderByDescending(i => Environment.Minion.countMinionsInrange(i.Position, Q.Range))
                         .FirstOrDefault();
                 if (closeGapTarget != null)
@@ -189,29 +189,29 @@ namespace UnderratedAIO.Champions
                     }
                 }
             }
-            if (config.Item("useq", true).GetValue<bool>() && Q.CanCast(target) && !renw && !player.LSIsDashing() &&
+            if (config.Item("useq", true).GetValue<bool>() && Q.CanCast(target) && !renw && !player.IsDashing() &&
                 checkFuryMode(SpellSlot.Q, target))
             {
                 Q.Cast();
             }
-            var distance = player.LSDistance(target.Position);
+            var distance = player.Distance(target.Position);
             if (config.Item("usee", true).GetValue<bool>() && lastE.Equals(0) && E.CanCast(target) &&
                 (eDmg > target.Health ||
-                 (((W.LSIsReady() && canBeOpWIthQ(target.Position) && !rene) ||
-                   (distance > target.LSDistance(player.Position.LSExtend(target.Position, E.Range)) - distance)))))
+                 (((W.IsReady() && canBeOpWIthQ(target.Position) && !rene) ||
+                   (distance > target.Distance(player.Position.Extend(target.Position, E.Range)) - distance)))))
             {
                 E.Cast(target.Position);
                 lastE = System.Environment.TickCount;
                 return;
             }
             if (config.Item("usee", true).GetValue<bool>() && checkFuryMode(SpellSlot.E, target) && !lastE.Equals(0) &&
-                (eDmg + player.LSGetAutoAttackDamage(target) > target.Health ||
-                 (((W.LSIsReady() && canBeOpWIthQ(target.Position) && !rene) ||
-                   (distance < target.LSDistance(player.Position.LSExtend(target.Position, E.Range)) - distance) ||
-                   player.LSDistance(target) > E.Range - 100))))
+                (eDmg + player.GetAutoAttackDamage(target) > target.Health ||
+                 (((W.IsReady() && canBeOpWIthQ(target.Position) && !rene) ||
+                   (distance < target.Distance(player.Position.Extend(target.Position, E.Range)) - distance) ||
+                   player.Distance(target) > E.Range - 100))))
             {
                 var time = System.Environment.TickCount - lastE;
-                if (time > 3600f || combodamage > target.Health || (player.LSDistance(target) > E.Range - 100))
+                if (time > 3600f || combodamage > target.Health || (player.Distance(target) > E.Range - 100))
                 {
                     E.Cast(target.Position);
                     lastE = 0;
@@ -220,7 +220,7 @@ namespace UnderratedAIO.Champions
             var data = Program.IncDamages.GetAllyData(player.NetworkId);
             if (((player.Health * 100 / player.MaxHealth) <= config.Item("user", true).GetValue<Slider>().Value &&
                  data.DamageTaken > 30) ||
-                config.Item("userindanger", true).GetValue<Slider>().Value <= player.LSCountEnemiesInRange(R.Range))
+                config.Item("userindanger", true).GetValue<Slider>().Value <= player.CountEnemiesInRange(R.Range))
             {
                 R.Cast();
             }
@@ -233,9 +233,9 @@ namespace UnderratedAIO.Champions
                 return false;
             }
             if ((player.Mana > 45 && !fury) ||
-                (Q.LSIsReady() &&
+                (Q.IsReady() &&
                  player.Mana + Environment.Minion.countMinionsInrange(vector3, Q.Range) * 2.5 +
-                 player.LSCountEnemiesInRange(Q.Range) * 10 > 50))
+                 player.CountEnemiesInRange(Q.Range) * 10 > 50))
             {
                 return true;
             }
@@ -261,16 +261,16 @@ namespace UnderratedAIO.Champions
             switch (config.Item("useCH", true).GetValue<StringList>().SelectedIndex)
             {
                 case 1:
-                    if (Q.LSIsReady() && E.LSIsReady() && lastE.Equals(0) && fury && !rene)
+                    if (Q.IsReady() && E.IsReady() && lastE.Equals(0) && fury && !rene)
                     {
                         if (config.Item("donteqwebtower", true).GetValue<bool>() &&
-                            player.Position.LSExtend(target.Position, E.Range).LSUnderTurret(true))
+                            player.Position.Extend(target.Position, E.Range).UnderTurret(true))
                         {
                             return;
                         }
                         var closeGapTarget =
                             MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.NotAlly)
-                                .Where(i => i.LSDistance(target.ServerPosition) < Q.Range - 40)
+                                .Where(i => i.Distance(target.ServerPosition) < Q.Range - 40)
                                 .OrderByDescending(i => Environment.Minion.countMinionsInrange(i.Position, Q.Range))
                                 .FirstOrDefault();
                         if (closeGapTarget != null)
@@ -290,18 +290,18 @@ namespace UnderratedAIO.Champions
                             return;
                         }
                     }
-                    if (player.LSDistance(target) < Orbwalking.GetRealAutoAttackRange(target) && Q.LSIsReady() &&
-                        E.LSIsReady() && E.LSIsReady())
+                    if (player.Distance(target) < Orbwalking.GetRealAutoAttackRange(target) && Q.IsReady() &&
+                        E.IsReady() && E.IsReady())
                     {
                         orbwalker.ForceTarget(target);
                     }
                     return;
                     break;
                 case 0:
-                    if (Q.LSIsReady() && W.LSIsReady() && !rene && E.CanCast(target))
+                    if (Q.IsReady() && W.IsReady() && !rene && E.CanCast(target))
                     {
                         if (config.Item("donteqwebtower", true).GetValue<bool>() &&
-                            player.Position.LSExtend(target.Position, E.Range).LSUnderTurret(true))
+                            player.Position.Extend(target.Position, E.Range).UnderTurret(true))
                         {
                             return;
                         }
@@ -314,8 +314,8 @@ namespace UnderratedAIO.Champions
                     {
                         E.CastIfHitchanceEquals(target, HitChance.High);
                     }
-                    if (player.LSDistance(target) < Orbwalking.GetRealAutoAttackRange(target) && Q.LSIsReady() &&
-                        E.LSIsReady() && E.LSIsReady())
+                    if (player.Distance(target) < Orbwalking.GetRealAutoAttackRange(target) && Q.IsReady() &&
+                        E.IsReady() && E.IsReady())
                     {
                         orbwalker.ForceTarget(target);
                     }
@@ -331,11 +331,11 @@ namespace UnderratedAIO.Champions
             }
 
             if (config.Item("useCH", true).GetValue<StringList>().SelectedIndex == 0 && !lastE.Equals(0) && rene &&
-                !Q.LSIsReady() && !renw)
+                !Q.IsReady() && !renw)
             {
-                if (lastEpos.LSIsValid())
+                if (lastEpos.IsValid())
                 {
-                    E.Cast(player.Position.LSExtend(lastEpos, 350f));
+                    E.Cast(player.Position.Extend(lastEpos, 350f));
                 }
             }
         }
@@ -346,7 +346,7 @@ namespace UnderratedAIO.Champions
             {
                 return;
             }
-            if (config.Item("useqLC", true).GetValue<bool>() && Q.LSIsReady() && !player.LSIsDashing())
+            if (config.Item("useqLC", true).GetValue<bool>() && Q.IsReady() && !player.IsDashing())
             {
                 var minis = MinionManager.GetMinions(player.AttackRange + 50, MinionTypes.All, MinionTeam.NotAlly);
                 if (Environment.Minion.countMinionsInrange(player.Position, Q.Range) >=
@@ -358,14 +358,14 @@ namespace UnderratedAIO.Champions
                     return;
                 }
             }
-            if (config.Item("useeLC", true).GetValue<bool>() && E.LSIsReady())
+            if (config.Item("useeLC", true).GetValue<bool>() && E.IsReady())
             {
                 var minionsForE = MinionManager.GetMinions(
                     ObjectManager.Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.NotAlly);
                 MinionManager.FarmLocation bestPosition = E.GetLineFarmLocation(minionsForE);
-                if (bestPosition.Position.LSIsValid() &&
-                    !player.Position.LSExtend(bestPosition.Position.To3D(), E.Range).LSUnderTurret(true) &&
-                    !bestPosition.Position.LSIsWall())
+                if (bestPosition.Position.IsValid() &&
+                    !player.Position.Extend(bestPosition.Position.To3D(), E.Range).UnderTurret(true) &&
+                    !bestPosition.Position.IsWall())
                 {
                     if (bestPosition.MinionsHit >= 2)
                     {
@@ -386,23 +386,23 @@ namespace UnderratedAIO.Champions
         private float ComboDamage(AIHeroClient hero)
         {
             double damage = 0;
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.Q);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.Q);
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.W);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.W);
             }
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.E);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.E);
             }
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 if (config.Item("rDamage", true).GetValue<bool>())
                 {
-                    damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.R) * 15;
+                    damage += Damage.GetSpellDamage(player, hero, SpellSlot.R) * 15;
                 }
             }
 
@@ -415,7 +415,7 @@ namespace UnderratedAIO.Champions
             }
 
             var ignitedmg = player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
-            if (player.Spellbook.CanUseSpell(player.LSGetSpellSlot("summonerdot")) == SpellState.Ready &&
+            if (player.Spellbook.CanUseSpell(player.GetSpellSlot("summonerdot")) == SpellState.Ready &&
                 hero.Health < damage + ignitedmg)
             {
                 damage += ignitedmg;
@@ -425,7 +425,7 @@ namespace UnderratedAIO.Champions
 
         public bool checkFuryMode(SpellSlot spellSlot, Obj_AI_Base target)
         {
-            if (Damage.LSGetSpellDamage(player, target, spellSlot) > target.Health)
+            if (Damage.GetSpellDamage(player, target, spellSlot) > target.Health)
             {
                 return true;
             }
@@ -447,19 +447,19 @@ namespace UnderratedAIO.Champions
                     return true;
                     break;
                 case 1:
-                    if (spellSlot != SpellSlot.Q && Q.LSIsReady(500))
+                    if (spellSlot != SpellSlot.Q && Q.IsReady(500))
                     {
                         return false;
                     }
                     break;
                 case 2:
-                    if (spellSlot != SpellSlot.W && (W.LSIsReady(500) || renw) && target.IsInAttackRange())
+                    if (spellSlot != SpellSlot.W && (W.IsReady(500) || renw) && target.IsInAttackRange())
                     {
                         return false;
                     }
                     break;
                 case 3:
-                    if (spellSlot != SpellSlot.E && rene && E.LSIsReady(500))
+                    if (spellSlot != SpellSlot.E && rene && E.IsReady(500))
                     {
                         return false;
                     }

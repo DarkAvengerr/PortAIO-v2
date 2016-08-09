@@ -164,13 +164,13 @@ namespace SPrediction
             /// <param name="spell">The spell.</param>
             internal void Process(Spell spell)
             {
-                float arrivalT = Prediction.GetArrivalTime(spell.From.LSDistance(this.Unit.ServerPosition), spell.Delay, spell.Speed) * 1000f;
+                float arrivalT = Prediction.GetArrivalTime(spell.From.Distance(this.Unit.ServerPosition), spell.Delay, spell.Speed) * 1000f;
                 if (Utils.TickCount - this.StartTick >= this.Duration - arrivalT)
                 {
                     var pred = new Prediction.Result();
                     pred.Input = new Prediction.Input(this.Unit, spell.Delay, spell.Speed, spell.Width, spell.Range, spell.Collision, spell.Type, spell.From, spell.RangeCheckFrom);
                     pred.Unit = this.Unit;
-                    pred.CastPosition = this.Unit.ServerPosition.LSTo2D();
+                    pred.CastPosition = this.Unit.ServerPosition.To2D();
                     pred.UnitPosition = pred.CastPosition;
                     pred.HitChance = HitChance.VeryHigh;
                     pred.Lock(false);

@@ -134,21 +134,21 @@ using EloBuddy; namespace xSaliceResurrected.ADC
         {
             double comboDamage = 0;
 
-            if (Q.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.Q);
+            if (Q.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.Q);
 
-            if (W.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.W);
+            if (W.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.W);
 
-            if (E.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.E);
+            if (E.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.E);
 
-            if (R.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.R);
+            if (R.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.R);
 
             comboDamage = ItemManager.CalcDamage(target, comboDamage);
 
-            return (float)(comboDamage + Player.LSGetAutoAttackDamage(target) * 2);
+            return (float)(comboDamage + Player.GetAutoAttackDamage(target) * 2);
         }
 
         private void Combo()
@@ -183,16 +183,16 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                 }
             }
 
-            if (useR && R.LSIsReady())
+            if (useR && R.IsReady())
                 Cast_R(source);
-            if (useQ && Q.LSIsReady())
+            if (useQ && Q.IsReady())
                 SpellCastManager.CastBasicSkillShot(Q, Q.Range, TargetSelector.DamageType.Magical, HitChanceManager.GetQHitChance(source));
-            if (useE && E.LSIsReady())
+            if (useE && E.IsReady())
                 SpellCastManager.CastBasicSkillShot(E, E.Range, TargetSelector.DamageType.Physical, HitChanceManager.GetEHitChance(source));
-            if (useW && W.LSIsReady())
+            if (useW && W.IsReady())
             {
                 var target = TargetSelector.GetTarget(Player.AttackRange + new[] { 130 , 150 , 170 , 190 , 210 }[W.Level - 1], TargetSelector.DamageType.Magical);
-                if (target.LSIsValidTarget(Player.AttackRange + new[] { 90, 120, 150, 180, 210 }[W.Level - 1]))
+                if (target.IsValidTarget(Player.AttackRange + new[] { 90, 120, 150, 180, 210 }[W.Level - 1]))
                     W.Cast();
             }
         }
@@ -239,24 +239,24 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
         private void CheckKs()
         {
-            foreach (AIHeroClient target in ObjectManager.Get<AIHeroClient>().Where(x => x.LSIsValidTarget(R.Range)).OrderByDescending(GetComboDamage))
+            foreach (AIHeroClient target in ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(R.Range)).OrderByDescending(GetComboDamage))
             {
                 //Q
-                if (Player.ServerPosition.LSDistance(target.ServerPosition) <= Q.Range && Player.LSGetSpellDamage(target, SpellSlot.Q) > target.Health && Q.LSIsReady())
+                if (Player.ServerPosition.Distance(target.ServerPosition) <= Q.Range && Player.GetSpellDamage(target, SpellSlot.Q) > target.Health && Q.IsReady())
                 {
                     Q.Cast(target);
                     return;
                 }
 
                 //E
-                if (Player.ServerPosition.LSDistance(target.ServerPosition) <= E.Range && Player.LSGetSpellDamage(target, SpellSlot.E) > target.Health && E.LSIsReady())
+                if (Player.ServerPosition.Distance(target.ServerPosition) <= E.Range && Player.GetSpellDamage(target, SpellSlot.E) > target.Health && E.IsReady())
                 {
                     E.Cast(target);
                     return;
                 }
 
                 //R
-                if (Player.ServerPosition.LSDistance(target.ServerPosition) <= R.Range && Player.LSGetSpellDamage(target, SpellSlot.R) > target.Health && R.LSIsReady())
+                if (Player.ServerPosition.Distance(target.ServerPosition) <= R.Range && Player.GetSpellDamage(target, SpellSlot.R) > target.Health && R.IsReady())
                 {
                     R.Cast(target);
                     return;
@@ -271,7 +271,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
             if (Player.IsDead) return;
 
             //no aa canceling option
-            Orbwalker.SetMovement(menu.Item("NoMovementDuringW").GetValue<bool>() && Player.LSHasBuff("KogMawBioArcaneBarrage") && ObjectManager.Get<AIHeroClient>().Count(h=>h.IsEnemy && !h.IsDead && h.IsVisible && h.CanAttack && h.LSDistance(Player) < h.AttackRange) == 0);
+            Orbwalker.SetMovement(menu.Item("NoMovementDuringW").GetValue<bool>() && Player.HasBuff("KogMawBioArcaneBarrage") && ObjectManager.Get<AIHeroClient>().Count(h=>h.IsEnemy && !h.IsDead && h.IsVisible && h.CanAttack && h.Distance(Player) < h.AttackRange) == 0);
 
             if (menu.Item("smartKS", true).GetValue<bool>())
                 CheckKs();
@@ -297,7 +297,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
         {
             if (!menu.Item("UseGap", true).GetValue<bool>()) return;
 
-            if (E.LSIsReady() && gapcloser.Sender.LSIsValidTarget(E.Range))
+            if (E.IsReady() && gapcloser.Sender.IsValidTarget(E.Range))
                 E.Cast(gapcloser.Sender);
         }
 
@@ -308,19 +308,19 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
             if (menu.Item("Draw_Q", true).GetValue<bool>())
                 if (Q.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, Q.Range, Q.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, Q.Range, Q.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_W", true).GetValue<bool>())
                 if (W.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, Player.AttackRange + new[] { 130, 150, 170, 190, 210 }[W.Level - 1], W.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, Player.AttackRange + new[] { 130, 150, 170, 190, 210 }[W.Level - 1], W.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_E", true).GetValue<bool>())
                 if (E.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, E.Range, E.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_R", true).GetValue<bool>())
                 if (R.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, new[] { 1200f, 1500f, 1800f }[R.Level - 1], R.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, new[] { 1200f, 1500f, 1800f }[R.Level - 1], R.IsReady() ? Color.Green : Color.Red);
         }
 
     }

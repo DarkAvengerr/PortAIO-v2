@@ -132,14 +132,14 @@ using EloBuddy; namespace SFXUtility.Features.Activators
 
         private void OnGameObjectCreate(GameObject sender, EventArgs args)
         {
-            if (ObjectManager.Player.IsDead || _spell == null || _rengar == null || _rengar.IsDead || !_spell.LSIsReady() ||
+            if (ObjectManager.Player.IsDead || _spell == null || _rengar == null || _rengar.IsDead || !_spell.IsReady() ||
                 !sender.IsEnemy || !sender.Name.Equals("Rengar_LeapSound.troy", StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }
 
             var menuItem = Menu.Item(Name + "Spells" + ObjectManager.Player.ChampionName);
-            if (menuItem != null && menuItem.GetValue<bool>() && _rengar.LSDistance(ObjectManager.Player) < _spell.Range)
+            if (menuItem != null && menuItem.GetValue<bool>() && _rengar.Distance(ObjectManager.Player) < _spell.Range)
             {
                 _spell.Cast(_rengar);
             }

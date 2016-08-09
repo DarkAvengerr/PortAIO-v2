@@ -22,7 +22,7 @@ namespace ElRengarRevamped
         {
             var target = TargetSelector.GetSelectedTarget()
                              ?? TargetSelector.GetTarget(spells[Spells.E].Range, TargetSelector.DamageType.Physical);
-            if (target.LSIsValidTarget() == false)
+            if (target.IsValidTarget() == false)
             {
                 return;
             }
@@ -36,8 +36,8 @@ namespace ElRengarRevamped
 
             if (Ferocity <= 4)
             {
-                if (spells[Spells.Q].LSIsReady() && IsActive("Combo.Use.Q")
-                    && Player.LSCountEnemiesInRange(Player.AttackRange + Player.BoundingRadius + 100) != 0)
+                if (spells[Spells.Q].IsReady() && IsActive("Combo.Use.Q")
+                    && Player.CountEnemiesInRange(Player.AttackRange + Player.BoundingRadius + 100) != 0)
                 {
                     spells[Spells.Q].Cast();
                 }
@@ -46,16 +46,16 @@ namespace ElRengarRevamped
                 {
                     if (!HasPassive)
                     {
-                        if (spells[Spells.E].LSIsReady() && IsActive("Combo.Use.E"))
+                        if (spells[Spells.E].IsReady() && IsActive("Combo.Use.E"))
                         {
                             CastE(target);
                         }
                     }
                     else
                     {
-                        if (spells[Spells.E].LSIsReady() && IsActive("Combo.Use.E"))
+                        if (spells[Spells.E].IsReady() && IsActive("Combo.Use.E"))
                         {
-                            if (Player.LSIsDashing())
+                            if (Player.IsDashing())
                             {
                                 CastE(target);
                             }
@@ -65,7 +65,7 @@ namespace ElRengarRevamped
 
                 CastItems(target);
 
-                if (spells[Spells.W].LSIsReady() && IsActive("Combo.Use.W"))
+                if (spells[Spells.W].IsReady() && IsActive("Combo.Use.W"))
                 {
                     CastW();
                 }
@@ -78,7 +78,7 @@ namespace ElRengarRevamped
                     case 0:
                         if (!RengarR)
                         {
-                            if (spells[Spells.E].LSIsReady() && !HasPassive)
+                            if (spells[Spells.E].IsReady() && !HasPassive)
                             {
                                 CastE(target);
 
@@ -93,9 +93,9 @@ namespace ElRengarRevamped
                         }
                         else
                         {
-                            if (spells[Spells.E].LSIsReady() && IsActive("Combo.Use.E"))
+                            if (spells[Spells.E].IsReady() && IsActive("Combo.Use.E"))
                             {
-                                if (Player.LSIsDashing())
+                                if (Player.IsDashing())
                                 {
                                     CastE(target);
                                 }
@@ -103,14 +103,14 @@ namespace ElRengarRevamped
                         }
                         break;
                     case 1:
-                        if (IsActive("Combo.Use.W") && spells[Spells.W].LSIsReady())
+                        if (IsActive("Combo.Use.W") && spells[Spells.W].IsReady())
                         {
                             CastW();
                         }
                         break;
                     case 2:
-                        if (spells[Spells.Q].LSIsReady() && IsActive("Combo.Use.Q")
-                            && Player.LSCountEnemiesInRange(Player.AttackRange + Player.BoundingRadius + 100) != 0)
+                        if (spells[Spells.Q].IsReady() && IsActive("Combo.Use.Q")
+                            && Player.CountEnemiesInRange(Player.AttackRange + Player.BoundingRadius + 100) != 0)
                         {
                             spells[Spells.Q].Cast();
                         }
@@ -120,12 +120,12 @@ namespace ElRengarRevamped
 
             #region Summoner spells
 
-            if (Youmuu.IsReady() && Youmuu.IsOwned() && target.LSIsValidTarget(spells[Spells.Q].Range))
+            if (Youmuu.IsReady() && Youmuu.IsOwned() && target.IsValidTarget(spells[Spells.Q].Range))
             {
                 Youmuu.Cast();
             }
 
-            if (IsActive("Combo.Use.Ignite") && target.LSIsValidTarget(600f) && IgniteDamage(target) >= target.Health)
+            if (IsActive("Combo.Use.Ignite") && target.IsValidTarget(600f) && IgniteDamage(target) >= target.Health)
             {
                 Player.Spellbook.CastSpell(Ignite, target);
             }
@@ -145,7 +145,7 @@ namespace ElRengarRevamped
         /// <param name="target"></param>
         private static void CastE(Obj_AI_Base target)
         {
-            if (!spells[Spells.E].LSIsReady() || !target.LSIsValidTarget(spells[Spells.E].Range))
+            if (!spells[Spells.E].IsReady() || !target.IsValidTarget(spells[Spells.E].Range))
             {
                 return;
             }
@@ -162,7 +162,7 @@ namespace ElRengarRevamped
         /// </summary>
         private static void CastW()
         {
-            if (!spells[Spells.W].LSIsReady())
+            if (!spells[Spells.W].IsReady())
             {
                 return;
             }
@@ -184,8 +184,8 @@ namespace ElRengarRevamped
                 var hits =
                     HeroManager.Enemies.Where(
                         e =>
-                        e.LSIsValidTarget() && e.LSDistance(Player) < 450f
-                        || e.LSDistance(Player) < 450f).ToList();
+                        e.IsValidTarget() && e.Distance(Player) < 450f
+                        || e.Distance(Player) < 450f).ToList();
 
                 return new Tuple<int, List<AIHeroClient>>(hits.Count, hits);
             }
@@ -208,7 +208,7 @@ namespace ElRengarRevamped
                              ? TargetSelector.GetSelectedTarget()
                              : TargetSelector.GetTarget(spells[Spells.Q].Range, TargetSelector.DamageType.Physical);
 
-            if (target.LSIsValidTarget() == false)
+            if (target.IsValidTarget() == false)
             {
                 return;
             }
@@ -220,14 +220,14 @@ namespace ElRengarRevamped
                 switch (IsListActive("Harass.Prio").SelectedIndex)
                 {
                     case 0:
-                        if (!HasPassive && IsActive("Harass.Use.E") && spells[Spells.E].LSIsReady())
+                        if (!HasPassive && IsActive("Harass.Use.E") && spells[Spells.E].IsReady())
                         {
                             CastE(target);
                         }
                         break;
 
                     case 1:
-                        if (IsActive("Harass.Use.Q") && target.LSIsValidTarget(spells[Spells.Q].Range))
+                        if (IsActive("Harass.Use.Q") && target.IsValidTarget(spells[Spells.Q].Range))
                         {
                             spells[Spells.Q].Cast();
                         }
@@ -237,7 +237,7 @@ namespace ElRengarRevamped
 
             if (Ferocity <= 4)
             {
-                if (IsActive("Harass.Use.Q") && target.LSIsValidTarget(spells[Spells.Q].Range))
+                if (IsActive("Harass.Use.Q") && target.IsValidTarget(spells[Spells.Q].Range))
                 {
                     spells[Spells.Q].Cast();
                 }
@@ -249,7 +249,7 @@ namespace ElRengarRevamped
 
                 CastItems(target);
 
-                if (!HasPassive && IsActive("Harass.Use.E") && spells[Spells.E].LSIsReady())
+                if (!HasPassive && IsActive("Harass.Use.E") && spells[Spells.E].IsReady())
                 {
                     CastE(target);
                 }
@@ -285,15 +285,15 @@ namespace ElRengarRevamped
 
                 if (Ferocity == 5 && IsActive("Jungle.Save.Ferocity"))
                 {
-                    if (minion.LSIsValidTarget(spells[Spells.W].Range) && !HasPassive)
+                    if (minion.IsValidTarget(spells[Spells.W].Range) && !HasPassive)
                     {
                         LaneItems(minion);
                     }
                     return;
                 }
 
-                if (IsActive("Jungle.Use.Q") && spells[Spells.Q].LSIsReady()
-                    && minion.LSIsValidTarget(spells[Spells.Q].Range + 100))
+                if (IsActive("Jungle.Use.Q") && spells[Spells.Q].IsReady()
+                    && minion.IsValidTarget(spells[Spells.Q].Range + 100))
                 {
                     spells[Spells.Q].Cast();
                 }
@@ -307,10 +307,10 @@ namespace ElRengarRevamped
 
                 if (!HasPassive)
                 {
-                    if (IsActive("Jungle.Use.W") && spells[Spells.W].LSIsReady()
-                        && minion.LSIsValidTarget(spells[Spells.W].Range))
+                    if (IsActive("Jungle.Use.W") && spells[Spells.W].IsReady()
+                        && minion.IsValidTarget(spells[Spells.W].Range))
                     {
-                        if (Ferocity == 5 && spells[Spells.Q].LSIsReady())
+                        if (Ferocity == 5 && spells[Spells.Q].IsReady())
                         {
                             return;
                         }
@@ -318,8 +318,8 @@ namespace ElRengarRevamped
                     }
                 }
 
-                if (IsActive("Jungle.Use.E") && spells[Spells.E].LSIsReady()
-                    && minion.LSIsValidTarget(spells[Spells.E].Range))
+                if (IsActive("Jungle.Use.E") && spells[Spells.E].IsReady()
+                    && minion.IsValidTarget(spells[Spells.E].Range))
                 {
                     if (Ferocity == 5)
                     {
@@ -353,29 +353,29 @@ namespace ElRengarRevamped
 
             if (Ferocity == 5 && IsActive("Clear.Save.Ferocity"))
             {
-                if (minion.LSIsValidTarget(spells[Spells.W].Range))
+                if (minion.IsValidTarget(spells[Spells.W].Range))
                 {
                     LaneItems(minion);
                 }
                 return;
             }
 
-            if (IsActive("Clear.Use.Q") && spells[Spells.Q].LSIsReady()
-                && minion.LSIsValidTarget(spells[Spells.Q].Range))
+            if (IsActive("Clear.Use.Q") && spells[Spells.Q].IsReady()
+                && minion.IsValidTarget(spells[Spells.Q].Range))
             {
                 spells[Spells.Q].Cast();
             }
 
             LaneItems(minion);
 
-            if (IsActive("Clear.Use.W") && spells[Spells.W].LSIsReady()
-                && minion.LSIsValidTarget(spells[Spells.W].Range))
+            if (IsActive("Clear.Use.W") && spells[Spells.W].IsReady()
+                && minion.IsValidTarget(spells[Spells.W].Range))
             {
                 spells[Spells.W].Cast();
             }
 
-            if (IsActive("Clear.Use.E") && spells[Spells.E].LSIsReady()
-                && minion.LSIsValidTarget(spells[Spells.E].Range))
+            if (IsActive("Clear.Use.E") && spells[Spells.E].IsReady()
+                && minion.IsValidTarget(spells[Spells.E].Range))
             {
                 if (Ferocity == 5)
                 {
@@ -449,12 +449,12 @@ namespace ElRengarRevamped
         /// <returns>true or false</returns>
         public static bool CastItems(Obj_AI_Base target)
         {
-            if (Player.LSIsDashing() || Player.Spellbook.IsAutoAttacking || RengarR)
+            if (Player.IsDashing() || Player.Spellbook.IsAutoAttacking || RengarR)
             {
                 return false;
             }
 
-            var heroes = Player.LSGetEnemiesInRange(385).Count;
+            var heroes = Player.GetEnemiesInRange(385).Count;
             var count = heroes;
 
             var tiamat = Tiamat;

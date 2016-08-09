@@ -50,9 +50,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if ( E.CanCast(target) && (Q.LSIsReady() || R.LSIsReady()))
+            if ( E.CanCast(target) && (Q.IsReady() || R.IsReady()))
             {
-                if ((MapControl.balanceAroundPoint(player.Position.LSTo2D(), 700) >= -1 || (MapControl.fightIsOn() != null && MapControl.fightIsOn().NetworkId == target.NetworkId)))
+                if ((MapControl.balanceAroundPoint(player.Position.To2D(), 700) >= -1 || (MapControl.fightIsOn() != null && MapControl.fightIsOn().NetworkId == target.NetworkId)))
      
                 E.Cast(target.ServerPosition);
             }
@@ -60,7 +60,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (R.CanCast(target) && (!Q.IsKillable(target) || !Q.LSIsReady()))
+            if (R.CanCast(target) && (!Q.IsKillable(target) || !Q.IsReady()))
             {
                 CastR(target);
             }
@@ -95,21 +95,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void CastR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
 
-            foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.LSIsValidTarget(R.Range)))
+            foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsValidTarget(R.Range)))
             {
-                if (player.LSGetSpellDamage(target, SpellSlot.R) -50 > hero.Health)
+                if (player.GetSpellDamage(target, SpellSlot.R) -50 > hero.Health)
                 {
                     R.Cast(target);
                 }
 
-                else if (player.LSGetSpellDamage(target, SpellSlot.R) -50 < hero.Health)
+                else if (player.GetSpellDamage(target, SpellSlot.R) -50 < hero.Health)
                 {
                     foreach (var buff in hero.Buffs.Where(buff => buff.Name == "dariushemo"))
                     {
-                        if (player.LSGetSpellDamage(target, SpellSlot.R, 1) * (1 + buff.Count / 5) -50> target.Health)
+                        if (player.GetSpellDamage(target, SpellSlot.R, 1) * (1 + buff.Count / 5) -50> target.Health)
                         {
                             R.CastOnUnit(target, true);
                         }

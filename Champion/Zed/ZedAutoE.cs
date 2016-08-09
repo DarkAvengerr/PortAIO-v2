@@ -25,7 +25,7 @@ using EloBuddy; namespace KoreanZed
 
         private void Game_OnUpdate(EventArgs args)
         {
-            if (!e.LSIsReady() || ObjectManager.Player.Mana < e.ManaCost || !zedMenu.GetParamBool("koreanzed.miscmenu.autoe"))
+            if (!e.IsReady() || ObjectManager.Player.Mana < e.ManaCost || !zedMenu.GetParamBool("koreanzed.miscmenu.autoe"))
             {
                 return;
             }
@@ -33,15 +33,15 @@ using EloBuddy; namespace KoreanZed
             if (
                 HeroManager.Enemies.Any(
                     enemy =>
-                    !enemy.IsDead && !enemy.IsZombie && enemy.LSDistance(ObjectManager.Player) < e.Range
-                    && enemy.LSIsValidTarget())
+                    !enemy.IsDead && !enemy.IsZombie && enemy.Distance(ObjectManager.Player) < e.Range
+                    && enemy.IsValidTarget())
                 || zedShadows.GetShadows()
                        .Any(
                            shadow =>
                            HeroManager.Enemies.Any(
                                enemy =>
-                               !enemy.IsDead && !enemy.IsZombie && enemy.LSDistance(shadow) < e.Range
-                               && enemy.LSIsValidTarget())))
+                               !enemy.IsDead && !enemy.IsZombie && enemy.Distance(shadow) < e.Range
+                               && enemy.IsValidTarget())))
             {
                 e.Cast();
             }

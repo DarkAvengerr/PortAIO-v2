@@ -24,7 +24,7 @@ namespace TophSharp
         public static void OnLoad()
         {
             MenuConfig.MenuLoaded();
-            Ignite = Player.LSGetSpellSlot("SummonerDot");
+            Ignite = Player.GetSpellSlot("SummonerDot");
             // thanks to Shine for spell values!
 
             _q = new Spell(SpellSlot.Q, 900f);
@@ -48,7 +48,7 @@ namespace TophSharp
         {
             var usee = GetBool("usee", typeof(bool));
             var target = TargetSelector.GetTarget(Player, _q.Range, TargetSelector.DamageType.Magical);
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
                 return;
 
             if (CanUse(_e, target) && (CanUse(_w, target) || SpellUpSoon(SpellSlot.W) < 0.5f) && usee)
@@ -71,19 +71,19 @@ namespace TophSharp
 
             if (_q.Level > 0 && drawq)
             {
-                var color = _q.LSIsReady() ? Color.CadetBlue : Color.Red;
+                var color = _q.IsReady() ? Color.CadetBlue : Color.Red;
                 Render.Circle.DrawCircle(Player.Position, _q.Range, color, 3);
             }
 
             if (_w.Level > 0 && draww)
             {
-                var color = _w.LSIsReady() ? Color.Green : Color.Red;
+                var color = _w.IsReady() ? Color.Green : Color.Red;
                 Render.Circle.DrawCircle(Player.Position, _w.Range, color, 3);
             }
 
             if (_e.Level > 0 && drawe)
             {
-                var color = _e.LSIsReady() ? Color.DarkOrchid : Color.Red;
+                var color = _e.IsReady() ? Color.DarkOrchid : Color.Red;
                 Render.Circle.DrawCircle(Player.Position, _e.Range, color, 3);
             }
         }
@@ -99,7 +99,7 @@ namespace TophSharp
 
         private static void OnGapClose(ActiveGapcloser gapcloser)
         {
-            if (gapcloser.End.LSDistance(Player.Position) <= _w.Range && CanUse(_w, gapcloser.Sender))
+            if (gapcloser.End.Distance(Player.Position) <= _w.Range && CanUse(_w, gapcloser.Sender))
             {
                 _w.Cast(gapcloser.End);
             }
@@ -107,7 +107,7 @@ namespace TophSharp
 
         private static void OnDash(Obj_AI_Base sender, Dash.DashItem args)
         {
-            if (Player.LSDistance(args.EndPos) <= _w.Range && CanUse(_w, args.Unit))
+            if (Player.Distance(args.EndPos) <= _w.Range && CanUse(_w, args.Unit))
             {
                 _w.Cast(args.Unit);
             }
@@ -153,11 +153,11 @@ MinionOrderTypes.MaxHealth);
 
             foreach (var minion in minions)
             {
-                if (minion.Health <= _q.GetDamage(minion) && useqlasthit && _q.LSIsReady())
+                if (minion.Health <= _q.GetDamage(minion) && useqlasthit && _q.IsReady())
                 {
                     _q.Cast(minion);
                 }
-                if (minion.Health <= _w.GetDamage(minion) && usewlasthit && _w.LSIsReady() && minion.LSDistance(Player) <= _w.Range)
+                if (minion.Health <= _w.GetDamage(minion) && usewlasthit && _w.IsReady() && minion.Distance(Player) <= _w.Range)
                 {
                     _w.Cast(minion);
                 }
@@ -181,16 +181,16 @@ MinionOrderTypes.MaxHealth);
 
             foreach (var minion in minions)
             {
-                if (minion.Health <= _q.GetDamage(minion) && useqlasthit && _q.LSIsReady())
+                if (minion.Health <= _q.GetDamage(minion) && useqlasthit && _q.IsReady())
                 {
                     _q.Cast(minion);
                 }
-                if (minion.Health <= _w.GetDamage(minion) && usewlasthit && _w.LSIsReady() && minion.LSDistance(Player) <= _w.Range)
+                if (minion.Health <= _w.GetDamage(minion) && usewlasthit && _w.IsReady() && minion.Distance(Player) <= _w.Range)
                 {
                     _w.Cast(minion);
                 }
 
-                if (qlaneclear && _q.LSIsReady())
+                if (qlaneclear && _q.IsReady())
                 {
                     _q.Cast(minion);
                 }
@@ -199,7 +199,7 @@ MinionOrderTypes.MaxHealth);
 
 
             var circularposition = _w.GetCircularFarmLocation(minions);
-            if (qlaneclear && circularposition.MinionsHit >= minminionsw && _w.LSIsReady())
+            if (qlaneclear && circularposition.MinionsHit >= minminionsw && _w.IsReady())
             {
                 _w.Cast(circularposition.Position);
             }
@@ -214,7 +214,7 @@ MinionOrderTypes.MaxHealth);
 
         private static bool CanUse(Spell spell, AttackableUnit target)
         {
-            return spell.LSIsReady() && Player.Mana >= spell.ManaCost && target.LSIsValidTarget(spell.Range);
+            return spell.IsReady() && Player.Mana >= spell.ManaCost && target.IsValidTarget(spell.Range);
         }
 
         public static float SpellUpSoon(SpellSlot slot)
@@ -234,7 +234,7 @@ MinionOrderTypes.MaxHealth);
             var usew = GetBool("usewh", typeof(bool));
 
             var target = TargetSelector.GetTarget(Player, _q.Range, TargetSelector.DamageType.Magical);
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
                 return;
 
             var wpred = _w.GetPrediction(target);
@@ -259,16 +259,16 @@ MinionOrderTypes.MaxHealth);
 
 
             var target = TargetSelector.GetTarget(Player, _q.Range, TargetSelector.DamageType.Magical);
-            if (!target.LSIsValidTarget()) return;
+            if (!target.IsValidTarget()) return;
 
             if (GetBool("useignite", typeof(bool)))
             {
-                if (_q.LSIsReady() && Ignite.LSIsReady() && (target.Health <= _q.GetDamage(target) + IgniteDamage(target)))
+                if (_q.IsReady() && Ignite.IsReady() && (target.Health <= _q.GetDamage(target) + IgniteDamage(target)))
                 {
                     Player.Spellbook.CastSpell(Ignite, target);
                 }
 
-                if (Ignite.LSIsReady() && (target.Health <= IgniteDamage(target) - 30))
+                if (Ignite.IsReady() && (target.Health <= IgniteDamage(target) - 30))
                 {
                     Player.Spellbook.CastSpell(Ignite, target);
                 }
@@ -282,7 +282,7 @@ MinionOrderTypes.MaxHealth);
                 _q.Cast(qpred.CastPosition);
             }
 
-            if ((CanUse(_w, target) || SpellUpSoon(SpellSlot.W) < 0.5f) && usee && _e.LSIsReady() && target.LSIsValidTarget(_q.Range))
+            if ((CanUse(_w, target) || SpellUpSoon(SpellSlot.W) < 0.5f) && usee && _e.IsReady() && target.IsValidTarget(_q.Range))
             {         
                       
                 _e.Cast(target);              

@@ -37,13 +37,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             if (args.Target.NetworkId != player.NetworkId)
                 return;
-            if (R.LSIsReady() && player.HealthPercent<25)
+            if (R.IsReady() && player.HealthPercent<25)
             {
                 R.Cast();
                 Aggresivity.addAgresiveMove(new AgresiveMove(9999,5000,true));
             }
 
-            if (Q.LSIsReady() && player.HealthPercent < 30 && !player.LSHasBuff("UndyingRage"))
+            if (Q.IsReady() && player.HealthPercent < 30 && !player.HasBuff("UndyingRage"))
             {
                 Q.Cast();
             }
@@ -51,23 +51,23 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
-            if(player.HealthPercent<30 && !player.LSHasBuff("UndyingRage"))
+            if(player.HealthPercent<30 && !player.HasBuff("UndyingRage"))
                 Q.Cast();
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
-            if(player.LSIsFacing(target) && !target.LSIsFacing(player))
+            if(player.IsFacing(target) && !target.IsFacing(player))
                 W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null || !safeGap(target))
+            if (!E.IsReady() || target == null || !safeGap(target))
                 return;
             E.Cast(target);
         }

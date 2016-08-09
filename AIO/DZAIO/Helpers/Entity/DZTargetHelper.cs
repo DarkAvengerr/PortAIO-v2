@@ -17,12 +17,12 @@ using EloBuddy;
             var targetSelectorTarget = TargetSelector.GetTarget(Spell.Range, TargetSelector.DamageType.Magical);
             var targetSelectorTargetIsKillable = Spell.GetDamage(targetSelectorTarget) > targetSelectorTarget.Health + 5;
             
-            foreach (var target in HeroManager.Enemies.Where(n => n.LSIsValidTarget(Spell.Range)))
+            foreach (var target in HeroManager.Enemies.Where(n => n.IsValidTarget(Spell.Range)))
             {
                 var SpellDamage = Spell.GetDamage(target);
                 if (target.Health + 5 > SpellDamage 
                     && target.Health + 5 < SpellDamage 
-                    + ObjectManager.Player.LSGetAutoAttackDamage(target) 
+                    + ObjectManager.Player.GetAutoAttackDamage(target) 
                     + ObjectManager.Player.GetComboDamage(target, slots
                     .Except(new List<SpellSlot>() { Spell.Slot }).ToList()))
                 {

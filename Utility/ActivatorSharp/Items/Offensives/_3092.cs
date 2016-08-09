@@ -23,12 +23,12 @@ using EloBuddy; namespace Activator.Items.Offensives
 
             foreach (var hero in Activator.Allies())
            {
-               if (hero.Attacker != null && hero.Attacker.LSIsValidTarget(900))
+               if (hero.Attacker != null && hero.Attacker.IsValidTarget(900))
                {
                    if (!Parent.Item(Parent.Name + "useon" + hero.Attacker.NetworkId).GetValue<bool>())
                        return;
 
-                   if (hero.Player.LSDistance(Player.ServerPosition) <= Range)
+                   if (hero.Player.Distance(Player.ServerPosition) <= Range)
                    {
                        if (hero.Player.Health / hero.Player.MaxHealth * 100 <=
                            Menu.Item("selflowhp" + Name + "pct").GetValue<Slider>().Value)

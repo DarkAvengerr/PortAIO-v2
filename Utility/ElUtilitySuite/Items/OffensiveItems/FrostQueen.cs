@@ -49,7 +49,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
                    && (HeroManager.Enemies.Any(
                        x =>
                        x.HealthPercent < this.Menu.Item("FrostQueenEnemyHp").GetValue<Slider>().Value
-                       && x.LSDistance(this.Player) < 1500)
+                       && x.Distance(this.Player) < 1500)
                        || this.Player.HealthPercent < this.Menu.Item("FrostQueenMyHp").GetValue<Slider>().Value);
         }
 

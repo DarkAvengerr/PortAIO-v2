@@ -52,7 +52,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Jungleclear
 
             if (mobs == null) return;
 
-            if (!mobs.LSHasBuff("dianamoonlight")) return;
+            if (!mobs.HasBuff("dianamoonlight")) return;
 
             Variables.Spells[SpellSlot.R].Cast(mobs);
         }
@@ -60,7 +60,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Jungleclear
         private void OnUpdate(EventArgs args)
         {
             if (Variables.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
-                || !Variables.Spells[SpellSlot.R].LSIsReady()) return;
+                || !Variables.Spells[SpellSlot.R].IsReady()) return;
 
             if (this.Menu.Item(this.Menu.Name + "JungleRMana").GetValue<Slider>().Value > Variables.Player.ManaPercent) return;
 

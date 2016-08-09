@@ -35,7 +35,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (target is AIHeroClient && Q.LSIsReady())
+            if (target is AIHeroClient && Q.IsReady())
             {
                 Q.Cast();
                 EloBuddy.Player.IssueOrder(GameObjectOrder.AutoAttack, target);
@@ -54,7 +54,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.Cast(target);
         }
@@ -62,7 +62,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             if (target.HealthPercent < 35)
                 R.CastOnUnit(target);
@@ -75,10 +75,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
             tar = ARAMTargetSelector.getBestTarget(W.Range);
             if (tar != null) useW(tar);
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 foreach (var enem in ObjectManager.Get<AIHeroClient>()
-                    .Where(ene => ene.IsEnemy && ene.LSDistance(player, true) < R.Range*R.Range).Where(enem => enem.HealthPercent < 35))
+                    .Where(ene => ene.IsEnemy && ene.Distance(player, true) < R.Range*R.Range).Where(enem => enem.HealthPercent < 35))
                 {
                     R.CastOnUnit(enem);
                     return;
@@ -86,11 +86,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
 
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                foreach (var enem in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSDistance(player,true)<W.Range*W.Range))
+                foreach (var enem in ObjectManager.Get<AIHeroClient>().Where(ene => ene.Distance(player,true)<W.Range*W.Range))
                 {
-                    if (enem.LSGetEnemiesInRange(330).Count > 1)
+                    if (enem.GetEnemiesInRange(330).Count > 1)
                     {
                         W.CastOnUnit(enem);
                         return;

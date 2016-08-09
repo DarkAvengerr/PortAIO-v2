@@ -25,7 +25,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 if (Q.IsCharging)
                     return false;
 
-                return IsPassiveUp || (!Q.LSIsReady() && !W.LSIsReady() && !E.LSIsReady());
+                return IsPassiveUp || (!Q.IsReady() && !W.IsReady() && !E.IsReady());
 
                 return true;
             }
@@ -33,14 +33,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public bool IsPassiveUp
         {
-            get { return ObjectManager.Player.LSHasBuff("xerathascended2onhit", true); }
+            get { return ObjectManager.Player.HasBuff("xerathascended2onhit", true); }
         }
 
         public bool IsCastingR
         {
             get
             {
-                return ObjectManager.Player.LSHasBuff("XerathLocusOfPower2") ||
+                return ObjectManager.Player.HasBuff("XerathLocusOfPower2") ||
                        (ObjectManager.Player.LastCastedSpellName().Equals("XerathLocusOfPower2", StringComparison.InvariantCultureIgnoreCase) &&
                         Utils.TickCount - ObjectManager.Player.LastCastedSpellT() < 500);
             }
@@ -92,7 +92,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         void Interrupter2_OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
 
-            if (player.LSDistance(sender) < E.Range)
+            if (player.Distance(sender) < E.Range)
             {
                 E.Cast(sender);
             }
@@ -109,7 +109,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (player.LSDistance(gapcloser.Sender) < E.Range)
+            if (player.Distance(gapcloser.Sender) < E.Range)
             {
                 E.Cast(gapcloser.Sender);
             }
@@ -121,7 +121,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            //  if (!W.LSIsReady())
+            //  if (!W.IsReady())
             //      return;
             //  W.Cast(target);
         }
@@ -165,9 +165,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     DeathWalker.setMovement(true);
                 }
 
-                if (R.LSIsReady())
+                if (R.IsReady())
                 {
-                    foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(h => h.LSIsValidTarget() && R.IsInRange(h) && (float)player.LSGetSpellDamage(h, SpellSlot.R) * 3 > h.Health))
+                    foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(h => h.IsValidTarget() && R.IsInRange(h) && (float)player.GetSpellDamage(h, SpellSlot.R) * 3 > h.Health))
                     {
                         R.Cast();
                     }
@@ -208,27 +208,27 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var wTarget = TargetSelector.GetTarget(W.Range + W.Width * 0.5f, TargetSelector.DamageType.Magical);
             var eTarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
 
-            if (eTarget != null && useE && E.LSIsReady())
+            if (eTarget != null && useE && E.IsReady())
             {
-                if (player.LSDistance(eTarget) < E.Range * 0.4f)
+                if (player.Distance(eTarget) < E.Range * 0.4f)
                     E.Cast(eTarget);
-                else if ((!useW || !W.LSIsReady()))
+                else if ((!useW || !W.IsReady()))
                     E.Cast(eTarget);
             }
 
-            if (useQ && Q.LSIsReady() && qTarget != null)
+            if (useQ && Q.IsReady() && qTarget != null)
             {
                 if (Q.IsCharging)
                 {
                     Q.Cast(qTarget, false, false);
                 }
-                else if (!useW || !W.LSIsReady() || player.LSDistance(qTarget) > W.Range)
+                else if (!useW || !W.IsReady() || player.Distance(qTarget) > W.Range)
                 {
                     Q.StartCharging();
                 }
             }
 
-            if (wTarget != null && useW && W.LSIsReady())
+            if (wTarget != null && useW && W.IsReady())
                 W.Cast(wTarget, false, true);
         }
 
@@ -244,8 +244,8 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 if (rTarget.Health - R.GetDamage(rTarget) < 0)
                     if (Utils.TickCount - RCharge.CastT <= 700) return;
 
-                if ((RCharge.Index != 0 && rTarget.LSDistance(RCharge.Position) > 1000))
-                    if (Utils.TickCount - RCharge.CastT <= Math.Min(2500, rTarget.LSDistance(RCharge.Position) - 1000)) return;
+                if ((RCharge.Index != 0 && rTarget.Distance(RCharge.Position) > 1000))
+                    if (Utils.TickCount - RCharge.CastT <= Math.Min(2500, rTarget.Distance(RCharge.Position) - 1000)) return;
 
                 R.Cast(rTarget, true);
             }
@@ -265,7 +265,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var useQ = (laneClear && (useQi == 1 || useQi == 2)) || (!laneClear && (useQi == 0 || useQi == 2));
             var useW = (laneClear && (useWi == 1 || useWi == 2)) || (!laneClear && (useWi == 0 || useWi == 2));
 
-            if (useW && W.LSIsReady())
+            if (useW && W.IsReady())
             {
                 var locW = W.GetCircularFarmLocation(rangedMinionsW, W.Width * 0.75f);
                 if (locW.MinionsHit >= 3 && W.IsInRange(locW.Position.To3D()))
@@ -285,12 +285,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 }
             }
 
-            if (useQ && Q.LSIsReady())
+            if (useQ && Q.IsReady())
             {
                 if (Q.IsCharging)
                 {
                     var locQ = Q.GetLineFarmLocation(allMinionsQ);
-                    if (allMinionsQ.Count == allMinionsQ.Count(m => player.LSDistance(m) < Q.Range) && locQ.MinionsHit > 0 && locQ.Position.LSIsValid())
+                    if (allMinionsQ.Count == allMinionsQ.Count(m => player.Distance(m) < Q.Range) && locQ.MinionsHit > 0 && locQ.Position.IsValid())
                         Q.Cast(locQ.Position);
                 }
                 else if (allMinionsQ.Count > 0)

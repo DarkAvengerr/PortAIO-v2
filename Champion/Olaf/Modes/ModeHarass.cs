@@ -70,12 +70,12 @@ namespace Olaf.Modes
             }
 
             var t = TargetSelector.GetTarget(useQ == 2 ? Q.Range : MenuLocal.Item("Harass.Q.SmallRange").GetValue<Slider>().Value, TargetSelector.DamageType.Physical);
-            if (!t.LSIsValidTarget())
+            if (!t.IsValidTarget())
             {
                 return;
             }
 
-            if (t.LSUnderTurret(true))
+            if (t.UnderTurret(true))
             {
                 return;
             }

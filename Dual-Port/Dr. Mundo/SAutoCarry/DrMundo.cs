@@ -76,35 +76,35 @@ namespace SAutoCarry.Champions
             if (KillStealQ)
                 KillSteal();
 
-            if (Spells[R].LSIsReady() && AutoR && ObjectManager.Player.HealthPercent < AutoRPercent)
+            if (Spells[R].IsReady() && AutoR && ObjectManager.Player.HealthPercent < AutoRPercent)
                 Spells[R].Cast();
 
             if (HarassToggle)
                 Harass();
 
-            if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.None && ObjectManager.Player.HasBuff("BurningAgony") && Spells[W].LSIsReady())
+            if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.None && ObjectManager.Player.HasBuff("BurningAgony") && Spells[W].IsReady())
                 Spells[W].Cast();
         }
 
         public void Combo()
         {
-            if (Spells[Q].LSIsReady() && ComboUseQ && ObjectManager.Player.HealthPercent > ComboUseQHP)
+            if (Spells[Q].IsReady() && ComboUseQ && ObjectManager.Player.HealthPercent > ComboUseQHP)
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
                 if (t != null)
                     Spells[Q].SPredictionCast(t, HitChance.Low);
             }
 
-            if (Spells[W].LSIsReady() && ComboUseW && !ObjectManager.Player.HasBuff("BurningAgony"))
+            if (Spells[W].IsReady() && ComboUseW && !ObjectManager.Player.HasBuff("BurningAgony"))
             {
                 var t = TargetSelector.GetTarget(Spells[W].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
                 if (t != null)
                     Spells[W].Cast();
             }
-            else if (Spells[W].LSIsReady() && ObjectManager.Player.HasBuff("BurningAgony") && !HeroManager.Enemies.Any(p => p.LSIsValidTarget(400f)))
+            else if (Spells[W].IsReady() && ObjectManager.Player.HasBuff("BurningAgony") && !HeroManager.Enemies.Any(p => p.IsValidTarget(400f)))
                 Spells[W].Cast();
 
-            if (Spells[R].LSIsReady() && ObjectManager.Player.HealthPercent < ComboUseRHP)
+            if (Spells[R].IsReady() && ObjectManager.Player.HealthPercent < ComboUseRHP)
                 Spells[R].Cast();
         }
 
@@ -113,7 +113,7 @@ namespace SAutoCarry.Champions
             if (ObjectManager.Player.HealthPercent < HarassMinHP)
                 return;
 
-            if (Spells[Q].LSIsReady() && HarassUseQ)
+            if (Spells[Q].IsReady() && HarassUseQ)
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
                 if (t != null)
@@ -126,37 +126,37 @@ namespace SAutoCarry.Champions
             var minion = MinionManager.GetMinions(Spells[Q].Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).FirstOrDefault();
             if (minion.IsJungleMinion())
             {
-                if (Spells[Q].LSIsReady())
+                if (Spells[Q].IsReady())
                     Spells[Q].Cast(minion.ServerPosition);
 
-                if (Spells[W].LSIsReady() && !ObjectManager.Player.HasBuff("BurningAgony"))
+                if (Spells[W].IsReady() && !ObjectManager.Player.HasBuff("BurningAgony"))
                     Spells[W].Cast();
             }
             else
             {
-                if (Spells[Q].LSIsReady() && LaneClearUseQ && Spells[Q].IsKillable(minion))
+                if (Spells[Q].IsReady() && LaneClearUseQ && Spells[Q].IsKillable(minion))
                     Spells[Q].Cast(minion.ServerPosition);
 
-                if (Spells[W].LSIsReady() && !ObjectManager.Player.HasBuff("BurningAgony") && LaneClearUseW && ObjectManager.Get<Obj_AI_Minion>().Count(p => p.LSIsValidTarget(Spells[W].Range) && MinionManager.IsMinion(p)) >= LaneClearUseWMinMinion)
+                if (Spells[W].IsReady() && !ObjectManager.Player.HasBuff("BurningAgony") && LaneClearUseW && ObjectManager.Get<Obj_AI_Minion>().Count(p => p.IsValidTarget(Spells[W].Range) && MinionManager.IsMinion(p)) >= LaneClearUseWMinMinion)
                     Spells[W].Cast();
             }
         }
 
         public void KillSteal()
         {
-            if (!Spells[Q].LSIsReady())
+            if (!Spells[Q].IsReady())
                 return;
 
-            foreach (AIHeroClient target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Spells[Q].Range) && !x.HasBuffOfType(BuffType.Invulnerability)))
+            foreach (AIHeroClient target in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells[Q].Range) && !x.HasBuffOfType(BuffType.Invulnerability)))
             {
-                if ((ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.Q)) > target.Health + 20)
+                if ((ObjectManager.Player.GetSpellDamage(target, SpellSlot.Q)) > target.Health + 20)
                     Spells[Q].SPredictionCast(target, HitChance.High);
             }
         }
 
         protected override void OrbwalkingEvents_AfterAttack(AfterAttackArgs args)
         {
-            if (Spells[E].LSIsReady() && !args.Target.IsDead)
+            if (Spells[E].IsReady() && !args.Target.IsDead)
             {
                 if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo && ComboUseE)
                     Spells[E].Cast();

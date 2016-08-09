@@ -145,7 +145,7 @@ namespace SharpShooter.Plugins
                                         var target =
                                             MinionManager.GetMinions(_q.Range, MinionTypes.All, MinionTeam.Neutral,
                                                 MinionOrderTypes.MaxHealth)
-                                                .FirstOrDefault(x => x.LSIsValidTarget(_q.Range));
+                                                .FirstOrDefault(x => x.IsValidTarget(_q.Range));
                                         if (target != null)
                                             _q.Cast(target);
                                     }
@@ -160,7 +160,7 @@ namespace SharpShooter.Plugins
                                             var target =
                                                 MinionManager.GetMinions(_r.Range, MinionTypes.All, MinionTeam.Neutral,
                                                     MinionOrderTypes.MaxHealth)
-                                                    .FirstOrDefault(x => x.LSIsValidTarget(_r.Range));
+                                                    .FirstOrDefault(x => x.IsValidTarget(_r.Range));
                                             if (target != null)
                                                 _r.Cast(target);
                                         }
@@ -200,7 +200,7 @@ namespace SharpShooter.Plugins
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float) ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float) ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
             if (_q.IsReadyPerfectly())

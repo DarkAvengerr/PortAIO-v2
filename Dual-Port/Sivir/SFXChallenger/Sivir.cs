@@ -179,7 +179,7 @@ using EloBuddy; namespace SFXChallenger.Champions
         {
             try
             {
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                 {
                     if (args.UniqueId.Equals("q-immobile") && BestTargetOnlyManager.Check("q-immobile", Q, args.Hero) &&
                         Q.IsInRange(args.Position))
@@ -218,33 +218,33 @@ using EloBuddy; namespace SFXChallenger.Champions
             {
                 E.Cast();
             }
-            else if (unit.ChampionName.Equals("Riven", StringComparison.OrdinalIgnoreCase) && unit.LSDistance(Player) < 400)
+            else if (unit.ChampionName.Equals("Riven", StringComparison.OrdinalIgnoreCase) && unit.Distance(Player) < 400)
             {
                 E.Cast();
             }
             else if (unit.ChampionName.Equals("Bard", StringComparison.OrdinalIgnoreCase) &&
-                     type.Equals(SpellDataTargetType.Location) && args.End.LSDistance(Player.ServerPosition) < 300)
+                     type.Equals(SpellDataTargetType.Location) && args.End.Distance(Player.ServerPosition) < 300)
             {
-                LeagueSharp.Common.Utility.DelayAction.Add(400 + (int) (unit.LSDistance(Player) / 7f), () => E.Cast());
+                LeagueSharp.Common.Utility.DelayAction.Add(400 + (int) (unit.Distance(Player) / 7f), () => E.Cast());
             }
-            else if (args.SData.LSIsAutoAttack() && args.Target != null && args.Target.IsMe)
+            else if (args.SData.IsAutoAttack() && args.Target != null && args.Target.IsMe)
             {
                 E.Cast();
             }
             else if (type.Equals(SpellDataTargetType.SelfAoe) &&
-                     unit.LSDistance(Player.ServerPosition) < args.SData.CastRange + args.SData.CastRadius / 2)
+                     unit.Distance(Player.ServerPosition) < args.SData.CastRange + args.SData.CastRadius / 2)
             {
                 E.Cast();
             }
             else if (type.Equals(SpellDataTargetType.Self))
             {
                 if (unit.ChampionName.Equals("Kalista", StringComparison.OrdinalIgnoreCase) &&
-                    Player.LSDistance(unit) < 350)
+                    Player.Distance(unit) < 350)
                 {
                     E.Cast();
                 }
                 if (unit.ChampionName.Equals("Zed", StringComparison.OrdinalIgnoreCase) &&
-                    Player.LSDistance(unit) < 300)
+                    Player.Distance(unit) < 300)
                 {
                     LeagueSharp.Common.Utility.DelayAction.Add(200, () => E.Cast());
                 }
@@ -258,7 +258,7 @@ using EloBuddy; namespace SFXChallenger.Champions
         {
             try
             {
-                if (unit.IsMe && W.LSIsReady())
+                if (unit.IsMe && W.IsReady())
                 {
                     var useW = false;
                     var wMin = 0;
@@ -294,7 +294,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                         var range = W.Range + Player.BoundingRadius * 2f;
                         var targets = laneclear || jungleClear
                             ? MinionManager.GetMinions(range + 450, MinionTypes.All, MinionTeam.NotAlly)
-                            : GameObjects.EnemyHeroes.Where(e => e.LSIsValidTarget(range + 450))
+                            : GameObjects.EnemyHeroes.Where(e => e.IsValidTarget(range + 450))
                                 .Cast<Obj_AI_Base>()
                                 .ToList();
                         if (targets.Count >= wMin && targets.Any(Orbwalking.InAutoAttackRange) &&
@@ -302,7 +302,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                              targets.Any(
                                  t =>
                                      Orbwalking.InAutoAttackRange(t) &&
-                                     targets.Any(t2 => t2.NetworkId != t.NetworkId && t2.LSDistance(t) <= 450))))
+                                     targets.Any(t2 => t2.NetworkId != t.NetworkId && t2.Distance(t) <= 450))))
                         {
                             W.Cast();
                             Orbwalking.ResetAutoAttackTimer();
@@ -318,8 +318,8 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void Combo()
         {
-            if (Menu.Item(Menu.Name + ".combo.q").GetValue<bool>() && Q.LSIsReady() &&
-                (!Menu.Item(Menu.Name + ".combo.w").GetValue<bool>() || W.Level == 0 || !W.LSIsReady() ||
+            if (Menu.Item(Menu.Name + ".combo.q").GetValue<bool>() && Q.IsReady() &&
+                (!Menu.Item(Menu.Name + ".combo.w").GetValue<bool>() || W.Level == 0 || !W.IsReady() ||
                  !GameObjects.EnemyHeroes.Any(Orbwalking.InAutoAttackRange)))
             {
                 Casting.SkillShot(Q, Q.GetHitChance("combo"));
@@ -333,8 +333,8 @@ using EloBuddy; namespace SFXChallenger.Champions
                 return;
             }
 
-            if (Menu.Item(Menu.Name + ".harass.q").GetValue<bool>() && Q.LSIsReady() &&
-                (!Menu.Item(Menu.Name + ".harass.w").GetValue<bool>() || W.Level == 0 || !W.LSIsReady() ||
+            if (Menu.Item(Menu.Name + ".harass.q").GetValue<bool>() && Q.IsReady() &&
+                (!Menu.Item(Menu.Name + ".harass.w").GetValue<bool>() || W.Level == 0 || !W.IsReady() ||
                  !GameObjects.EnemyHeroes.Any(Orbwalking.InAutoAttackRange)))
             {
                 Casting.SkillShot(Q, Q.GetHitChance("combo"));
@@ -343,7 +343,7 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void LaneClear()
         {
-            var useQ = Menu.Item(Menu.Name + ".lane-clear.q").GetValue<bool>() && Q.LSIsReady() &&
+            var useQ = Menu.Item(Menu.Name + ".lane-clear.q").GetValue<bool>() && Q.IsReady() &&
                        ResourceManager.Check("lane-clear-q");
             if (useQ)
             {
@@ -355,7 +355,7 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void JungleClear()
         {
-            var useQ = Menu.Item(Menu.Name + ".jungle-clear.q").GetValue<bool>() && Q.LSIsReady() &&
+            var useQ = Menu.Item(Menu.Name + ".jungle-clear.q").GetValue<bool>() && Q.IsReady() &&
                        ResourceManager.Check("jungle-clear-q");
             if (useQ)
             {
@@ -368,7 +368,7 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void Flee()
         {
-            if (Menu.Item(Menu.Name + ".flee.r").GetValue<bool>() && R.LSIsReady())
+            if (Menu.Item(Menu.Name + ".flee.r").GetValue<bool>() && R.IsReady())
             {
                 R.Cast();
             }

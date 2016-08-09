@@ -77,7 +77,7 @@
             if (SkyLv_Taric.Menu.Item("DrawOrbwalkTarget").GetValue<Circle>().Active)
             {
                 var orbT = SkyLv_Taric.Orbwalker.GetTarget();
-                if (orbT.LSIsValidTarget())
+                if (orbT.IsValidTarget())
                     Render.Circle.DrawCircle(orbT.Position, 100, SkyLv_Taric.Menu.Item("DrawOrbwalkTarget").GetValue<Circle>().Color, SkyLv_Taric.Menu.Item("OrbwalkDraw.Radius").GetValue<Slider>().Value);
             }
         }

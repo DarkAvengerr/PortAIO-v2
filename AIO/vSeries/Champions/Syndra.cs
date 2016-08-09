@@ -46,7 +46,7 @@ using EloBuddy;
             Qe = new Spell(SpellSlot.E, 1290);
             Qe.SetSkillshot(float.MaxValue, 55f, 2000f, false, SkillshotType.SkillshotCircle);
 
-            IgniteSlot = Player.LSGetSpellSlot("SummonerDot");
+            IgniteSlot = Player.GetSpellSlot("SummonerDot");
 
             Config = new Menu("vSupport Series: " + ObjectManager.Player.ChampionName, "vSupport Series", true);
             {
@@ -249,31 +249,31 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (Q.LSIsReady() && Config.Item("q.combo").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("q.combo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= SpellHitChance(Config,"q.hit.chance")))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= SpellHitChance(Config,"q.hit.chance")))
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "q.hit.chance"));
                 }
             }
-            if (W.LSIsReady() && Config.Item("w.combo").GetValue<bool>())
+            if (W.IsReady() && Config.Item("w.combo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range + W.Width) && W.GetSPrediction(x).HitChance >= SpellHitChance(Config, "w.hit.chance")))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range + W.Width) && W.GetSPrediction(x).HitChance >= SpellHitChance(Config, "w.hit.chance")))
                 {
                     UseW(enemy, enemy);
                 }
             }
-            if (Q.LSIsReady() && E.LSIsReady() && Config.Item("qe.combo").GetValue<bool>())
+            if (Q.IsReady() && E.IsReady() && Config.Item("qe.combo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Qe.Range) && Qe.GetSPrediction(x).HitChance >= SpellHitChance(Config, "qe.hit.chance")))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Qe.Range) && Qe.GetSPrediction(x).HitChance >= SpellHitChance(Config, "qe.hit.chance")))
                 {
                     UseQe(enemy);
                 }
             }
 
-            if (R.LSIsReady() && Config.Item("r.combo").GetValue<bool>())
+            if (R.IsReady() && Config.Item("r.combo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) && !BuffCheck(x) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !BuffCheck(x) &&
                     Config.Item("r.combo." + x.ChampionName).GetValue<bool>()))
                 {
                     if (enemy.Health < R.GetDamage(enemy))
@@ -286,7 +286,7 @@ using EloBuddy;
 
             if (IgniteSlot != SpellSlot.Unknown && Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready && Config.Item("use.ignite").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Player.Spellbook.GetSpell(IgniteSlot).SData.CastRange)
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Player.Spellbook.GetSpell(IgniteSlot).SData.CastRange)
                     && x.Health < Q.GetDamage(x) + W.GetDamage(x)))
                 {
                     Player.Spellbook.CastSpell(IgniteSlot, enemy);
@@ -303,29 +303,29 @@ using EloBuddy;
 
             if (Config.Item("disable.harass.under.turret").GetValue<bool>())
             {
-                if (ObjectManager.Get<Obj_AI_Turret>().Any(x => ObjectManager.Player.LSDistance(x) < x.AttackRange && x.Team != ObjectManager.Player.Team))
+                if (ObjectManager.Get<Obj_AI_Turret>().Any(x => ObjectManager.Player.Distance(x) < x.AttackRange && x.Team != ObjectManager.Player.Team))
                 {
                     return;
                 }
             }
 
-            if (Q.LSIsReady() && Config.Item("q.harass").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("q.harass").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "q.hit.chance"));
                 }
             }
-            if (W.LSIsReady() && Config.Item("w.harass").GetValue<bool>())
+            if (W.IsReady() && Config.Item("w.harass").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range + W.Width) && W.GetSPrediction(x).HitChance >= SpellHitChance(Config, "w.hit.chance")))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range + W.Width) && W.GetSPrediction(x).HitChance >= SpellHitChance(Config, "w.hit.chance")))
                 {
                     UseW(enemy, enemy);
                 }
             }
-            if (Q.LSIsReady() && E.LSIsReady() && Config.Item("qe.harass").GetValue<bool>())
+            if (Q.IsReady() && E.IsReady() && Config.Item("qe.harass").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Qe.Range) && Qe.GetSPrediction(x).HitChance >= SpellHitChance(Config, "qe.hit.chance")))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Qe.Range) && Qe.GetSPrediction(x).HitChance >= SpellHitChance(Config, "qe.hit.chance")))
                 {
                     UseQe(enemy);
                 }
@@ -338,7 +338,7 @@ using EloBuddy;
             {
                 return;
             }
-            if (Q.LSIsReady() && Config.Item("q.clear").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("q.clear").GetValue<bool>())
             {
                 var min = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q.Range + Q.Width + 30);
                 var minion = Q.GetCircularFarmLocation(min, Q.Width);
@@ -347,7 +347,7 @@ using EloBuddy;
                     Q.Cast(minion.Position);
                 }
             }
-            if (W.LSIsReady() && Config.Item("w.clear").GetValue<bool>())
+            if (W.IsReady() && Config.Item("w.clear").GetValue<bool>())
             {
                 var rangedMinionsW = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, W.Range + W.Width + 30,
             MinionTypes.Ranged);
@@ -356,7 +356,7 @@ using EloBuddy;
                 {
                     //WObject
                     var gObjectPos = GetGrabableObjectPos(false);
-                    if (gObjectPos.LSTo2D().LSIsValid() && Environment.TickCount - W.LastCastAttemptT > Game.Ping + 150)
+                    if (gObjectPos.To2D().IsValid() && Environment.TickCount - W.LastCastAttemptT > Game.Ping + 150)
                     {
                         W.Cast(gObjectPos);
                     }
@@ -383,17 +383,17 @@ using EloBuddy;
             {
                 return;
             }
-            if (Q.LSIsReady() && Config.Item("q.jungle").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("q.jungle").GetValue<bool>())
             {
                 var mobs = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, W.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
                 W.Cast(mobs[0]);
             }
-            if (W.LSIsReady() && Config.Item("w.jungle").GetValue<bool>() && Environment.TickCount - Q.LastCastAttemptT > 800)
+            if (W.IsReady() && Config.Item("w.jungle").GetValue<bool>() && Environment.TickCount - Q.LastCastAttemptT > 800)
             {
                 var mobs = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, W.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
                 W.Cast(mobs[0]);
             }
-            if (E.LSIsReady() && Config.Item("e.jungle").GetValue<bool>())
+            if (E.IsReady() && Config.Item("e.jungle").GetValue<bool>())
             {
                 var mobs = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, W.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
                 E.Cast(mobs[0]);
@@ -402,25 +402,25 @@ using EloBuddy;
 
         private static void KillSteal()
         {
-            if (Q.LSIsReady() && Config.Item("q.ks").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("q.ks").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && x.Health < Q.GetDamage(x)
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && x.Health < Q.GetDamage(x)
                     && Q.GetPrediction(x).Hitchance >= SpellHitChance(Config, "q.hit.chance")))
                 {
                     Q.Cast(enemy);
                 }
             }
-            if (W.LSIsReady() && Config.Item("w.ks").GetValue<bool>())
+            if (W.IsReady() && Config.Item("w.ks").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range + W.Width) && W.GetPrediction(x).Hitchance >= SpellHitChance(Config,"q.hit.chance")
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range + W.Width) && W.GetPrediction(x).Hitchance >= SpellHitChance(Config,"q.hit.chance")
                     && x.Health < W.GetDamage(x)))
                 {
                     UseW(enemy, enemy);
                 }
             }
-            if (E.LSIsReady() && Config.Item("e.ks").GetValue<bool>())
+            if (E.IsReady() && Config.Item("e.ks").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range) && E.GetPrediction(x).Hitchance >= SpellHitChance(Config,"e.hit.chance")
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && E.GetPrediction(x).Hitchance >= SpellHitChance(Config,"e.hit.chance")
                     && x.Health < E.GetDamage(x)))
                 {
                     E.Cast(enemy);
@@ -437,9 +437,9 @@ using EloBuddy;
                     return;
                 }
 
-                if (Q.LSIsReady() && Config.Item("q.toggle").GetValue<bool>())
+                if (Q.IsReady() && Config.Item("q.toggle").GetValue<bool>())
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) &&
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) &&
                         Q.GetSPrediction(x).HitChance >= SpellHitChance(Config, "toggle.hit.chance")))
                     {
                         Q.SPredictionCast(enemy, SpellHitChance(Config, "toggle.hit.chance"));
@@ -449,11 +449,11 @@ using EloBuddy;
         }
         public static void UseW(Obj_AI_Base grabObject, Obj_AI_Base enemy)
         {
-            if (grabObject != null && W.LSIsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1)
+            if (grabObject != null && W.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1)
             {
                 var gObjectPos = GetGrabableObjectPos(false);
 
-                if (gObjectPos.LSTo2D().LSIsValid() && Environment.TickCount - Q.LastCastAttemptT > Game.Ping + 150
+                if (gObjectPos.To2D().IsValid() && Environment.TickCount - Q.LastCastAttemptT > Game.Ping + 150
                     && Environment.TickCount - E.LastCastAttemptT > 750 + Game.Ping && Environment.TickCount - W.LastCastAttemptT > 750 + Game.Ping)
                 {
                     var grabsomething = false;
@@ -469,7 +469,7 @@ using EloBuddy;
 
                 }
             }
-            if (enemy != null && W.LSIsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 2)
+            if (enemy != null && W.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 2)
             {
                 var pos = W.GetPrediction(enemy, true);
                 if (pos.Hitchance >= HitChance.High)
@@ -482,18 +482,18 @@ using EloBuddy;
         {
             if (onlyOrbs)
                 return OrbManager.GetOrbToGrab((int)W.Range);
-            foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.LSIsValidTarget(W.Range)))
+            foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(W.Range)))
                 return minion.ServerPosition;
             return OrbManager.GetOrbToGrab((int)W.Range);
         }
         public static void UseQe(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || !E.LSIsReady() || target == null) return;
+            if (!Q.IsReady() || !E.IsReady() || target == null) return;
             var sPos = Prediction.GetPrediction(target, Q.Delay + E.Delay).UnitPosition;
-            if (ObjectManager.Player.LSDistance(sPos, true) > Math.Pow(E.Range, 2))
+            if (ObjectManager.Player.Distance(sPos, true) > Math.Pow(E.Range, 2))
             {
                 var orb = ObjectManager.Player.ServerPosition + Vector3.Normalize(sPos - ObjectManager.Player.ServerPosition) * E.Range;
-                Qe.Delay = Q.Delay + E.Delay + ObjectManager.Player.LSDistance(orb) / E.Speed;
+                Qe.Delay = Q.Delay + E.Delay + ObjectManager.Player.Distance(orb) / E.Speed;
                 var pos = Qe.GetPrediction(target);
                 if (pos.Hitchance >= HitChance.High)
                 {
@@ -516,14 +516,14 @@ using EloBuddy;
             {
                 return;
             }
-            foreach (var orb in OrbManager.GetOrbs(true).Where(orb => orb.LSTo2D().LSIsValid() && ObjectManager.Player.LSDistance(orb, true) < Math.Pow(E.Range, 2)))
+            foreach (var orb in OrbManager.GetOrbs(true).Where(orb => orb.To2D().IsValid() && ObjectManager.Player.Distance(orb, true) < Math.Pow(E.Range, 2)))
             {
-                var sp = orb.LSTo2D() + Vector2.Normalize(ObjectManager.Player.ServerPosition.LSTo2D() - orb.LSTo2D()) * 100f;
-                var ep = orb.LSTo2D() + Vector2.Normalize(orb.LSTo2D() - ObjectManager.Player.ServerPosition.LSTo2D()) * 592;
-                Qe.Delay = E.Delay + ObjectManager.Player.LSDistance(orb) / E.Speed;
+                var sp = orb.To2D() + Vector2.Normalize(ObjectManager.Player.ServerPosition.To2D() - orb.To2D()) * 100f;
+                var ep = orb.To2D() + Vector2.Normalize(orb.To2D() - ObjectManager.Player.ServerPosition.To2D()) * 592;
+                Qe.Delay = E.Delay + ObjectManager.Player.Distance(orb) / E.Speed;
                 Qe.UpdateSourcePosition(orb);
-                var pPo = Qe.GetPrediction(target).UnitPosition.LSTo2D();
-                if (pPo.LSDistance(sp, ep, true, true) <= Math.Pow(Qe.Width + target.BoundingRadius, 2))
+                var pPo = Qe.GetPrediction(target).UnitPosition.To2D();
+                if (pPo.Distance(sp, ep, true, true) <= Math.Pow(Qe.Width + target.BoundingRadius, 2))
                 {
                     E.Cast(orb);
                 }
@@ -532,24 +532,24 @@ using EloBuddy;
 
         public static void UseQe2(Obj_AI_Base target, Vector3 pos)
         {
-            if (target == null || !(ObjectManager.Player.LSDistance(pos, true) <= Math.Pow(E.Range, 2)))
+            if (target == null || !(ObjectManager.Player.Distance(pos, true) <= Math.Pow(E.Range, 2)))
             {
                 return;
             }
 
             var sp = pos + Vector3.Normalize(ObjectManager.Player.ServerPosition - pos) * 100f;
             var ep = pos + Vector3.Normalize(pos - ObjectManager.Player.ServerPosition) * 592;
-            Qe.Delay = Q.Delay + E.Delay + ObjectManager.Player.ServerPosition.LSDistance(pos) / E.Speed;
+            Qe.Delay = Q.Delay + E.Delay + ObjectManager.Player.ServerPosition.Distance(pos) / E.Speed;
             Qe.UpdateSourcePosition(pos);
-            var pPo = Qe.GetPrediction(target).UnitPosition.LSTo2D().LSProjectOn(sp.LSTo2D(), ep.LSTo2D());
+            var pPo = Qe.GetPrediction(target).UnitPosition.To2D().ProjectOn(sp.To2D(), ep.To2D());
 
             if (!pPo.IsOnSegment ||
-                !(pPo.SegmentPoint.LSDistance(target, true) <= Math.Pow(Qe.Width + target.BoundingRadius, 2)))
+                !(pPo.SegmentPoint.Distance(target, true) <= Math.Pow(Qe.Width + target.BoundingRadius, 2)))
             {
                 return;
             }
 
-            var delay = 280 - (int)(ObjectManager.Player.LSDistance(pos) / 2.5) + Config.Item("q.e.delay").GetValue<Slider>().Value;
+            var delay = 280 - (int)(ObjectManager.Player.Distance(pos) / 2.5) + Config.Item("q.e.delay").GetValue<Slider>().Value;
             LeagueSharp.Common.Utility.DelayAction.Add(Math.Max(0, delay), () => E.Cast(pos));
             Qe.LastCastAttemptT = Environment.TickCount;
             Q.Cast(pos);
@@ -557,35 +557,35 @@ using EloBuddy;
         }
         public static bool BuffCheck(Obj_AI_Base enemy)
         {
-            if (enemy.LSHasBuff("UndyingRage") && Config.Item("undy.tryn").GetValue<bool>())
+            if (enemy.HasBuff("UndyingRage") && Config.Item("undy.tryn").GetValue<bool>())
             {
                 return true;
             }
-            else if (enemy.LSHasBuff("JudicatorIntervention") && Config.Item("undy.kayle").GetValue<bool>())
+            else if (enemy.HasBuff("JudicatorIntervention") && Config.Item("undy.kayle").GetValue<bool>())
             {
                 return true;
             }
-            else if (enemy.LSHasBuff("ZacRebirthReady") && Config.Item("undy.zac").GetValue<bool>())
+            else if (enemy.HasBuff("ZacRebirthReady") && Config.Item("undy.zac").GetValue<bool>())
             {
                 return true;
             }
-            else if (enemy.LSHasBuff("AttroxPassiveReady") && Config.Item("undy.aatrox").GetValue<bool>())
+            else if (enemy.HasBuff("AttroxPassiveReady") && Config.Item("undy.aatrox").GetValue<bool>())
             {
                 return true;
             }
-            else if (enemy.LSHasBuff("Chrono Shift") && Config.Item("undy.aatrox").GetValue<bool>())
+            else if (enemy.HasBuff("Chrono Shift") && Config.Item("undy.aatrox").GetValue<bool>())
             {
                 return true;
             }
-            else if (enemy.LSHasBuff("Ferocious Howl") && Config.Item("undy.alistar").GetValue<bool>())
+            else if (enemy.HasBuff("Ferocious Howl") && Config.Item("undy.alistar").GetValue<bool>())
             {
                 return true;
             }
-            else if (enemy.LSHasBuff("Black Shield") && Config.Item("undy.morgana").GetValue<bool>())
+            else if (enemy.HasBuff("Black Shield") && Config.Item("undy.morgana").GetValue<bool>())
             {
                 return true;
             }
-            else if (enemy.LSHasBuff("Spell Shield") && Config.Item("undy.sivir").GetValue<bool>())
+            else if (enemy.HasBuff("Spell Shield") && Config.Item("undy.sivir").GetValue<bool>())
             {
                 return true;
             }

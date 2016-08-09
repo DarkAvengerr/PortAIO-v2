@@ -47,7 +47,7 @@ using EloBuddy; namespace RethoughtLib.Algorithm.ShortestPathAlgorithm
         /// <returns></returns>
         private static float MyFunc(Vector2 vector2, Vector2 vector3)
         {
-            return vector2.LSDistance(vector3);
+            return vector2.Distance(vector3);
         }
 
         /// <summary>

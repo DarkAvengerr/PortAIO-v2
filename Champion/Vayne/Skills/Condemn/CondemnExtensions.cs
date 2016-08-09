@@ -13,11 +13,11 @@ namespace VayneHunter_Reborn.Skills.Condemn
             var pushDistance = MenuExtensions.GetItemValue<Slider>("dz191.vhr.misc.condemn.pushdistance").Value;
             var targetPosition = target.ServerPosition;
             float checkDistance = pushDistance / 40f;
-            var pushDirection = (targetPosition - ObjectManager.Player.ServerPosition).LSNormalized();
+            var pushDirection = (targetPosition - ObjectManager.Player.ServerPosition).Normalized();
             for (int i = 0; i < 40; i++)
             {
                 Vector3 finalPosition = targetPosition + (pushDirection * checkDistance * i);
-                if (finalPosition.LSIsWall())
+                if (finalPosition.IsWall())
                 {
                     return true;
                 }

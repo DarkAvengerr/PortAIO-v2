@@ -56,8 +56,8 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
             bool ignoreShields = true,
             Vector3 from = default(Vector3))
         {
-            return target.LSIsValidTarget() &&
-                   target.LSDistance(@from.Equals(default(Vector3)) ? ObjectManager.Player.ServerPosition : @from, true) <
+            return target.IsValidTarget() &&
+                   target.Distance(@from.Equals(default(Vector3)) ? ObjectManager.Player.ServerPosition : @from, true) <
                    Math.Pow(range <= 0 ? Orbwalking.GetRealAutoAttackRange(target) : range, 2) &&
                    !Invulnerable.Check(target, damageType, ignoreShields);
         }

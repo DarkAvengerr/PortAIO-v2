@@ -42,7 +42,7 @@
 
                 Youmuu = new Items.Item(3142, 0f);
 
-                Ignite = Player.LSGetSpellSlot("summonerdot");
+                Ignite = Player.GetSpellSlot("summonerdot");
                 Chat.Print(
                     "[00:01] <font color='#CC0000'>HEEEEEEY!</font> Use ElUtilitySuite for optimal results! xo jQuery!!");
 
@@ -88,7 +88,7 @@
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
                 || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                if (Player.LSCountEnemiesInRange(Player.AttackRange + Player.BoundingRadius + 100) != 0)
+                if (Player.CountEnemiesInRange(Player.AttackRange + Player.BoundingRadius + 100) != 0)
                 {
                     spells[Spells.Q].Cast();
                     ActiveModes.CastItems(enemy);
@@ -103,11 +103,11 @@
                 return;
             }
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !HasPassive && spells[Spells.Q].LSIsReady()
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !HasPassive && spells[Spells.Q].IsReady()
                 && !(IsListActive("Combo.Prio").SelectedIndex == 0
                      || IsListActive("Combo.Prio").SelectedIndex == 1 && Ferocity == 5))
             {
-                if (Player.LSCountEnemiesInRange(Player.AttackRange + Player.BoundingRadius + 100) != 0)
+                if (Player.CountEnemiesInRange(Player.AttackRange + Player.BoundingRadius + 100) != 0)
                 {
                     args.Process = false;
                     spells[Spells.Q].Cast();
@@ -117,12 +117,12 @@
 
         private static void Heal()
         {
-            if (RengarR || Player.LSIsRecalling() || Player.LSInFountain() || Ferocity != 5)
+            if (RengarR || Player.IsRecalling() || Player.InFountain() || Ferocity != 5)
             {
                 return;
             }
 
-            if (Player.LSCountEnemiesInRange(1000) > 1 && spells[Spells.W].LSIsReady())
+            if (Player.CountEnemiesInRange(1000) > 1 && spells[Spells.W].IsReady())
             {
                 if (IsActive("Heal.AutoHeal")
                     && (Player.Health / Player.MaxHealth) * 100
@@ -135,12 +135,12 @@
 
         private static void KillstealHandler()
         {
-            if (!IsActive("Killsteal.On") || Player.LSIsRecalling())
+            if (!IsActive("Killsteal.On") || Player.IsRecalling())
             {
                 return;
             }
 
-            var target = Enemies.FirstOrDefault(x => x.LSIsValidTarget(spells[Spells.E].Range));
+            var target = Enemies.FirstOrDefault(x => x.IsValidTarget(spells[Spells.E].Range));
             if (target == null)
             {
                 return;
@@ -148,12 +148,12 @@
 
             if (!RengarR)
             {
-                if (spells[Spells.W].GetDamage(target) > target.Health && target.LSIsValidTarget(spells[Spells.W].Range))
+                if (spells[Spells.W].GetDamage(target) > target.Health && target.IsValidTarget(spells[Spells.W].Range))
                 {
                     spells[Spells.W].Cast();
                 }
 
-                if (spells[Spells.E].GetDamage(target) > target.Health && target.LSIsValidTarget(spells[Spells.E].Range))
+                if (spells[Spells.E].GetDamage(target) > target.Health && target.IsValidTarget(spells[Spells.E].Range))
                 {
                     var prediction = spells[Spells.E].GetPrediction(target);
                     if (prediction.Hitchance >= HitChance.VeryHigh)
@@ -172,7 +172,7 @@
             }
 
             var target = TargetSelector.GetTarget(1500f, TargetSelector.DamageType.Physical);
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return;
             }
@@ -191,13 +191,13 @@
                     switch (IsListActive("Combo.Prio").SelectedIndex)
                     {
                         case 0:
-                            if (spells[Spells.E].LSIsReady())
+                            if (spells[Spells.E].IsReady())
                             {
                                 var targetE = TargetSelector.GetTarget(
                                     spells[Spells.E].Range,
                                     TargetSelector.DamageType.Physical);
 
-                                if (targetE.LSIsValidTarget())
+                                if (targetE.IsValidTarget())
                                 {
                                     var pred = spells[Spells.E].GetPrediction(targetE);
                                     if (pred.Hitchance >= HitChance.High)
@@ -208,8 +208,8 @@
                             }
                             break;
                         case 2:
-                            if (spells[Spells.Q].LSIsReady()
-                                && Player.LSCountEnemiesInRange(Player.AttackRange + Player.BoundingRadius + 100) != 0)
+                            if (spells[Spells.Q].IsReady()
+                                && Player.CountEnemiesInRange(Player.AttackRange + Player.BoundingRadius + 100) != 0)
                             {
                                 spells[Spells.Q].Cast();
                             }
@@ -220,12 +220,12 @@
                 {
                     if (IsListActive("Combo.Prio").SelectedIndex != 0)
                     {
-                        if (spells[Spells.E].LSIsReady())
+                        if (spells[Spells.E].IsReady())
                         {
                             var targetE = TargetSelector.GetTarget(
                                 spells[Spells.E].Range,
                                 TargetSelector.DamageType.Physical);
-                            if (targetE.LSIsValidTarget(spells[Spells.E].Range))
+                            if (targetE.IsValidTarget(spells[Spells.E].Range))
                             {
                                 var pred = spells[Spells.E].GetPrediction(targetE);
                                 if (pred.Hitchance >= HitChance.VeryHigh)
@@ -240,7 +240,7 @@
                 switch (IsListActive("Combo.Prio").SelectedIndex)
                 {
                     case 0:
-                        if (spells[Spells.E].LSIsReady() && target.LSIsValidTarget(spells[Spells.E].Range))
+                        if (spells[Spells.E].IsReady() && target.IsValidTarget(spells[Spells.E].Range))
                         {
                             var pred = spells[Spells.E].GetPrediction(target);
                             LeagueSharp.Common.Utility.DelayAction.Add(300, () => spells[Spells.E].Cast(pred.CastPosition));
@@ -404,11 +404,11 @@
             KillstealHandler();
 
             // E on Immobile targets
-            if (IsActive("Misc.Root") && spells[Spells.E].LSIsReady())
+            if (IsActive("Misc.Root") && spells[Spells.E].IsReady())
             {
                 if (!RengarR)
                 {
-                    var target = HeroManager.Enemies.FirstOrDefault(h => h.LSIsValidTarget(spells[Spells.E].Range));
+                    var target = HeroManager.Enemies.FirstOrDefault(h => h.IsValidTarget(spells[Spells.E].Range));
                     if (target != null)
                     {
                         if (Ferocity == 5)
@@ -427,8 +427,8 @@
                 }
 
                 var searchrange = MenuInit.Menu.Item("Beta.searchrange").GetValue<Slider>().Value;
-                var target = HeroManager.Enemies.FirstOrDefault(h => h.LSIsValidTarget(searchrange, false));
-                if (!target.LSIsValidTarget())
+                var target = HeroManager.Enemies.FirstOrDefault(h => h.IsValidTarget(searchrange, false));
+                if (!target.IsValidTarget())
                 {
                     return;
                 }
@@ -437,7 +437,7 @@
                 if (RengarR)
                 {
                     // Check if the player distance <= than the set search range
-                    if (Player.LSDistance(target) <= MenuInit.Menu.Item("Beta.searchrange.Q").GetValue<Slider>().Value)
+                    if (Player.Distance(target) <= MenuInit.Menu.Item("Beta.searchrange.Q").GetValue<Slider>().Value)
                     {
                         // Cast Q with the set delay
                         LeagueSharp.Common.Utility.DelayAction.Add(

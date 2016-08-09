@@ -419,7 +419,7 @@ using EloBuddy; namespace SFXChallenger.Managers
         {
             try
             {
-                if (_menu == null || target == null || !target.LSIsValidTarget())
+                if (_menu == null || target == null || !target.IsValidTarget())
                 {
                     return false;
                 }
@@ -430,9 +430,9 @@ using EloBuddy; namespace SFXChallenger.Managers
                     if (Spells != null &&
                         !Spells.Any(
                             s =>
-                                s.Slot != SpellSlot.R && s.LSIsReady() && s.IsInRange(target) &&
+                                s.Slot != SpellSlot.R && s.IsReady() && s.IsInRange(target) &&
                                 s.GetDamage(target, 1) > 10 && Math.Abs(s.Speed - float.MaxValue) < 1 ||
-                                s.From.LSDistance(target.ServerPosition) / s.Speed + s.Delay <= 1.0f))
+                                s.From.Distance(target.ServerPosition) / s.Speed + s.Delay <= 1.0f))
                     {
                         minHealth = 0;
                     }
@@ -448,16 +448,16 @@ using EloBuddy; namespace SFXChallenger.Managers
                     var enemiesMax =
                         _menu.Item(_menu.Name + ".ultimate.single.max-add-enemies").GetValue<Slider>().Value;
 
-                    var pos = ObjectManager.Player.Position.LSExtend(
-                        target.Position, ObjectManager.Player.LSDistance(target) / 2f);
+                    var pos = ObjectManager.Player.Position.Extend(
+                        target.Position, ObjectManager.Player.Distance(target) / 2f);
                     var aCount =
                         GameObjects.AllyHeroes.Count(
-                            h => h.IsValid && !h.IsDead && !h.IsMe && h.LSDistance(pos) <= alliesRange);
+                            h => h.IsValid && !h.IsDead && !h.IsMe && h.Distance(pos) <= alliesRange);
                     var eCount =
                         GameObjects.EnemyHeroes.Count(
                             h =>
                                 h.IsValid && !h.IsDead && h.IsVisible && h.NetworkId != target.NetworkId &&
-                                h.LSDistance(pos) <= enemiesRange);
+                                h.Distance(pos) <= enemiesRange);
 
                     if (aCount > alliesMax || eCount > enemiesMax)
                     {
@@ -487,7 +487,7 @@ using EloBuddy; namespace SFXChallenger.Managers
             try
             {
                 var modeString = GetModeString(mode, true);
-                if (_menu == null || hits == null || !hits.Any(h => h.LSIsValidTarget()))
+                if (_menu == null || hits == null || !hits.Any(h => h.IsValidTarget()))
                 {
                     return false;
                 }
@@ -521,7 +521,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                             {
                                 var count =
                                     enabledHeroes.Where(
-                                        e => !e.IsDead && e.IsVisible && e.LSDistance(ObjectManager.Player) <= 2000)
+                                        e => !e.IsDead && e.IsVisible && e.Distance(ObjectManager.Player) <= 2000)
                                         .Count(e => hits.Any(h => h.NetworkId.Equals(e.NetworkId)));
                                 if (count < minReq)
                                 {

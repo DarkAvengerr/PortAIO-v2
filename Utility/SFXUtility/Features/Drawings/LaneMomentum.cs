@@ -575,17 +575,17 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                     _botChaosMinions.RemoveAll(m => !m.IsValid || m.IsDead);
                     _botOrderMinions.RemoveAll(m => !m.IsValid || m.IsDead);
 
-                    var topChaosMinion = _topChaosMinions.OrderBy(m => m.LSDistance(orderStart)).FirstOrDefault();
-                    var topOrderMinion = _topOrderMinions.OrderBy(m => m.LSDistance(chaosStart)).FirstOrDefault();
+                    var topChaosMinion = _topChaosMinions.OrderBy(m => m.Distance(orderStart)).FirstOrDefault();
+                    var topOrderMinion = _topOrderMinions.OrderBy(m => m.Distance(chaosStart)).FirstOrDefault();
 
-                    var midChaosMinion = _midChaosMinions.OrderBy(m => m.LSDistance(orderStart)).FirstOrDefault();
-                    var midOrderMinion = _midOrderMinions.OrderBy(m => m.LSDistance(chaosStart)).FirstOrDefault();
+                    var midChaosMinion = _midChaosMinions.OrderBy(m => m.Distance(orderStart)).FirstOrDefault();
+                    var midOrderMinion = _midOrderMinions.OrderBy(m => m.Distance(chaosStart)).FirstOrDefault();
 
-                    var botChaosMinion = _botChaosMinions.OrderBy(m => m.LSDistance(orderStart)).FirstOrDefault();
-                    var botOrderMinion = _botOrderMinions.OrderBy(m => m.LSDistance(chaosStart)).FirstOrDefault();
+                    var botChaosMinion = _botChaosMinions.OrderBy(m => m.Distance(orderStart)).FirstOrDefault();
+                    var botOrderMinion = _botOrderMinions.OrderBy(m => m.Distance(chaosStart)).FirstOrDefault();
 
                     var topChaosMinions =
-                        _topChaosMinions.Where(m => topOrderMinion == null || m.LSDistance(topOrderMinion) <= MaxDistance)
+                        _topChaosMinions.Where(m => topOrderMinion == null || m.Distance(topOrderMinion) <= MaxDistance)
                             .ToList();
                     _topChaosAverageDamage =
                         topChaosMinions.Select(m => m.TotalAttackDamage).DefaultIfEmpty(0).Average();
@@ -593,7 +593,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                         topChaosMinions.Sum(m => GetPoints(m)), GameObjectTeam.Chaos, Lane.Top);
 
                     var topOrderMinions =
-                        _topOrderMinions.Where(m => topChaosMinion == null || m.LSDistance(topChaosMinion) <= MaxDistance)
+                        _topOrderMinions.Where(m => topChaosMinion == null || m.Distance(topChaosMinion) <= MaxDistance)
                             .ToList();
                     _topOrderAverageDamage =
                         topOrderMinions.Select(m => m.TotalAttackDamage).DefaultIfEmpty(0).Average();
@@ -601,7 +601,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                         topOrderMinions.Sum(m => GetPoints(m)), GameObjectTeam.Order, Lane.Top);
 
                     var midChaosMinions =
-                        _midChaosMinions.Where(m => midOrderMinion == null || m.LSDistance(midOrderMinion) <= MaxDistance)
+                        _midChaosMinions.Where(m => midOrderMinion == null || m.Distance(midOrderMinion) <= MaxDistance)
                             .ToList();
                     _midChaosAverageDamage =
                         midChaosMinions.Select(m => m.TotalAttackDamage).DefaultIfEmpty(0).Average();
@@ -609,7 +609,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                         midChaosMinions.Sum(m => GetPoints(m)), GameObjectTeam.Chaos, Lane.Mid);
 
                     var midOrderMinions =
-                        _midOrderMinions.Where(m => midChaosMinion == null || m.LSDistance(midChaosMinion) <= MaxDistance)
+                        _midOrderMinions.Where(m => midChaosMinion == null || m.Distance(midChaosMinion) <= MaxDistance)
                             .ToList();
                     _midOrderAverageDamage =
                         midOrderMinions.Select(m => m.TotalAttackDamage).DefaultIfEmpty(0).Average();
@@ -617,7 +617,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                         midOrderMinions.Sum(m => GetPoints(m)), GameObjectTeam.Order, Lane.Mid);
 
                     var botChaosMinions =
-                        _botChaosMinions.Where(m => botOrderMinion == null || m.LSDistance(botOrderMinion) <= MaxDistance)
+                        _botChaosMinions.Where(m => botOrderMinion == null || m.Distance(botOrderMinion) <= MaxDistance)
                             .ToList();
                     _botChaosAverageDamage =
                         botChaosMinions.Select(m => m.TotalAttackDamage).DefaultIfEmpty(0).Average();
@@ -625,7 +625,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                         botChaosMinions.Sum(m => GetPoints(m)), GameObjectTeam.Chaos, Lane.Bot);
 
                     var botOrderMinions =
-                        _botOrderMinions.Where(m => botChaosMinion == null || m.LSDistance(botChaosMinion) <= MaxDistance)
+                        _botOrderMinions.Where(m => botChaosMinion == null || m.Distance(botChaosMinion) <= MaxDistance)
                             .ToList();
                     _botOrderAverageDamage =
                         botOrderMinions.Select(m => m.TotalAttackDamage).DefaultIfEmpty(0).Average();

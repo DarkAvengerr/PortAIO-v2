@@ -20,7 +20,7 @@ using EloBuddy;
         public static void Compares()
         {
             var enemy = HeroManager.Enemies.Where(x => MarksmanStrings.Contains(x.ChampionName)).ToList().FirstOrDefault();
-            var screenpos = Game.CursorPos.LSTo2D().To3D2();
+            var screenpos = Game.CursorPos.To2D().To3D2();
             Drawing.DrawText(screenpos.X,screenpos.Y,System.Drawing.Color.Gold,"Deneme");
         }
     }

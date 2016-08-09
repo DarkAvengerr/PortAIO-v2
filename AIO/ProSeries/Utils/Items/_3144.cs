@@ -33,7 +33,7 @@ using EloBuddy;
 
             var targetHero = (AIHeroClient) target;
 
-            if (targetHero.LSIsValidTarget(Range))
+            if (targetHero.IsValidTarget(Range))
             {
                 LeagueSharp.Common.Items.UseItem(Id, targetHero);
             }

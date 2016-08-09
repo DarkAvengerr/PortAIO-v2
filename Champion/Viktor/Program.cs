@@ -27,11 +27,11 @@ using EloBuddy; namespace Viktor
             {
                 if (keyLinks["comboActive"].Value.Active)
                 {
-                    return ((!Q.LSIsReady() || player.Mana < Q.Instance.SData.Mana) && (!E.LSIsReady() || player.Mana < E.Instance.SData.Mana) && (!boolLinks["qAuto"].Value || player.LSHasBuff("viktorpowertransferreturn")));
+                    return ((!Q.IsReady() || player.Mana < Q.Instance.SData.Mana) && (!E.IsReady() || player.Mana < E.Instance.SData.Mana) && (!boolLinks["qAuto"].Value || player.HasBuff("viktorpowertransferreturn")));
                 }
                 else if (keyLinks["harassActive"].Value.Active)
                 {
-                    return ((!Q.LSIsReady() || player.Mana < Q.Instance.SData.Mana) && (!E.LSIsReady() || player.Mana < E.Instance.SData.Mana));
+                    return ((!Q.IsReady() || player.Mana < Q.Instance.SData.Mana) && (!E.IsReady() || player.Mana < E.Instance.SData.Mana));
                 }
                 return true;
             }
@@ -97,7 +97,7 @@ using EloBuddy; namespace Viktor
             bool castQ = ((keyLinks["waveUseQLH"].Value.Active) || boolLinks["waveUseQ"].Value && keyLinks["waveActive"].Value.Active);
             if (castQ)
             {
-                var distance = Geometry.LSDistance(player, minion);
+                var distance = Geometry.Distance(player, minion);
                 var t = 250 + (int)distance / 2;
                 var predHealth = HealthPrediction.GetHealthPrediction(minion, t, 0);
                 // Console.WriteLine(" Distance: " + distance + " timer : " + t + " health: " + predHealth);
@@ -127,7 +127,7 @@ using EloBuddy; namespace Viktor
 
             if (keyLinks["forceR"].Value.Active)
             {
-                if (R.LSIsReady())
+                if (R.IsReady())
                 {
                     List<AIHeroClient> ignoredchamps = new List<AIHeroClient>();
 
@@ -162,12 +162,12 @@ using EloBuddy; namespace Viktor
             {
 
 
-                bool useQ = boolLinks["comboUseQ"].Value && Q.LSIsReady();
-                bool useW = boolLinks["comboUseW"].Value && W.LSIsReady();
-                bool useE = boolLinks["comboUseE"].Value && E.LSIsReady();
-                bool useR = boolLinks["comboUseR"].Value && R.LSIsReady();
+                bool useQ = boolLinks["comboUseQ"].Value && Q.IsReady();
+                bool useW = boolLinks["comboUseW"].Value && W.IsReady();
+                bool useE = boolLinks["comboUseE"].Value && E.IsReady();
+                bool useR = boolLinks["comboUseR"].Value && R.IsReady();
 
-                bool killpriority = boolLinks["spPriority"].Value && R.LSIsReady();
+                bool killpriority = boolLinks["spPriority"].Value && R.IsReady();
                 bool rKillSteal = boolLinks["rLastHit"].Value;
                 AIHeroClient Etarget = TargetSelector.GetTarget(maxRangeE, TargetSelector.DamageType.Magical);
                 AIHeroClient Qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
@@ -211,7 +211,7 @@ using EloBuddy; namespace Viktor
                                     if (W.Cast(t) == Spell.CastStates.SuccessfullyCasted)
                                         return;
                             }
-                            if (t.LSCountEnemiesInRange(250) > 2)
+                            if (t.CountEnemiesInRange(250) > 2)
                             {
                                 if (W.GetPrediction(t).Hitchance >= HitChance.VeryHigh)
                                     if (W.Cast(t) == Spell.CastStates.SuccessfullyCasted)
@@ -223,7 +223,7 @@ using EloBuddy; namespace Viktor
                 if (useR && R.Instance.Name == "ViktorChaosStorm" && player.CanCast && !player.Spellbook.IsCastingSpell)
                 {
 
-                    foreach (var unit in HeroManager.Enemies.Where(h => h.LSIsValidTarget(R.Range)))
+                    foreach (var unit in HeroManager.Enemies.Where(h => h.IsValidTarget(R.Range)))
                     {
                         R.CastIfWillHit(unit, stringLinks["HitR"].Value.SelectedIndex + 1);
 
@@ -239,17 +239,17 @@ using EloBuddy; namespace Viktor
         private static void Flee()
         {
             Orbwalking.MoveTo(Game.CursorPos);
-            if (!Q.LSIsReady() || !(player.LSHasBuff("viktorqaug") || player.LSHasBuff("viktorqeaug") || player.LSHasBuff("viktorqwaug") || player.LSHasBuff("viktorqweaug")))
+            if (!Q.IsReady() || !(player.HasBuff("viktorqaug") || player.HasBuff("viktorqeaug") || player.HasBuff("viktorqwaug") || player.HasBuff("viktorqweaug")))
             {
                 return;
             }
-            var closestminion = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly).MinOrDefault(m => player.LSDistance(m));
-            var closesthero = HeroManager.Enemies.MinOrDefault(m => player.LSDistance(m) < Q.Range);
-            if (closestminion.LSIsValidTarget(Q.Range))
+            var closestminion = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly).MinOrDefault(m => player.Distance(m));
+            var closesthero = HeroManager.Enemies.MinOrDefault(m => player.Distance(m) < Q.Range);
+            if (closestminion.IsValidTarget(Q.Range))
             {
                 Q.Cast(closestminion);
             }
-            else if (closesthero.LSIsValidTarget(Q.Range))
+            else if (closesthero.IsValidTarget(Q.Range))
             {
                 Q.Cast(closesthero);
 
@@ -262,8 +262,8 @@ using EloBuddy; namespace Viktor
             // Mana check
             if ((player.Mana / player.MaxMana) * 100 < sliderLinks["harassMana"].Value.Value)
                 return;
-            bool useE = boolLinks["harassUseE"].Value && E.LSIsReady();
-            bool useQ = boolLinks["harassUseQ"].Value && Q.LSIsReady();
+            bool useE = boolLinks["harassUseE"].Value && E.IsReady();
+            bool useQ = boolLinks["harassUseQ"].Value && Q.IsReady();
             if (useQ)
             {
                 var qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
@@ -286,8 +286,8 @@ using EloBuddy; namespace Viktor
             if ((player.Mana / player.MaxMana) * 100 < sliderLinks["waveMana"].Value.Value)
                 return;
 
-            bool useQ = boolLinks["waveUseQ"].Value && Q.LSIsReady();
-            bool useE = boolLinks["waveUseE"].Value && E.LSIsReady();
+            bool useQ = boolLinks["waveUseQ"].Value && Q.IsReady();
+            bool useE = boolLinks["waveUseE"].Value && E.IsReady();
 
             if (useQ)
             {
@@ -311,8 +311,8 @@ using EloBuddy; namespace Viktor
             if ((player.Mana / player.MaxMana) * 100 < sliderLinks["waveMana"].Value.Value)
                 return;
 
-            bool useQ = boolLinks["waveUseQ"].Value && Q.LSIsReady();
-            bool useE = boolLinks["waveUseE"].Value && E.LSIsReady();
+            bool useQ = boolLinks["waveUseQ"].Value && Q.IsReady();
+            bool useE = boolLinks["waveUseE"].Value && E.IsReady();
 
             if (useQ)
             {
@@ -342,7 +342,7 @@ using EloBuddy; namespace Viktor
             {
                 allminions = MinionManager.GetMinions(maxRangeE, MinionTypes.All, MinionTeam.Neutral);
             }
-            var minionslist = (from mnion in allminions select mnion.Position.LSTo2D()).ToList<Vector2>();
+            var minionslist = (from mnion in allminions select mnion.Position.To2D()).ToList<Vector2>();
             var posiblePositions = new List<Vector2>();
             posiblePositions.AddRange(minionslist);
             var max = posiblePositions.Count;
@@ -357,18 +357,18 @@ using EloBuddy; namespace Viktor
                 }
             }
 
-            foreach (var startposminion in allminions.Where(m => player.LSDistance(m) < rangeE))
+            foreach (var startposminion in allminions.Where(m => player.Distance(m) < rangeE))
             {
-                var startPos = startposminion.Position.LSTo2D();
+                var startPos = startposminion.Position.To2D();
 
                 foreach (var pos in posiblePositions)
                 {
-                    if (pos.LSDistance(startPos, true) <= lengthE * lengthE)
+                    if (pos.Distance(startPos, true) <= lengthE * lengthE)
                     {
-                        var endPos = startPos + lengthE * (pos - startPos).LSNormalized();
+                        var endPos = startPos + lengthE * (pos - startPos).Normalized();
 
                         var count =
-                            minionslist.Count(pos2 => pos2.LSDistance(startPos, endPos, true, true) <= 140 * 140);
+                            minionslist.Count(pos2 => pos2.Distance(startPos, endPos, true, true) <= 140 * 140);
 
                         if (count >= minionCount)
                         {
@@ -454,7 +454,7 @@ using EloBuddy; namespace Viktor
         private static void PredictCastE(AIHeroClient target)
         {
             // Helpers
-            bool inRange = Vector2.DistanceSquared(target.ServerPosition.LSTo2D(), player.Position.LSTo2D()) < E.Range * E.Range;
+            bool inRange = Vector2.DistanceSquared(target.ServerPosition.To2D(), player.Position.To2D()) < E.Range * E.Range;
             PredictionOutput prediction;
             bool spellCasted = false;
 
@@ -462,12 +462,12 @@ using EloBuddy; namespace Viktor
             Vector3 pos1, pos2;
 
             // Champs
-            var nearChamps = (from champ in ObjectManager.Get<AIHeroClient>() where champ.LSIsValidTarget(maxRangeE) && target != champ select champ).ToList();
+            var nearChamps = (from champ in ObjectManager.Get<AIHeroClient>() where champ.IsValidTarget(maxRangeE) && target != champ select champ).ToList();
             var innerChamps = new List<AIHeroClient>();
             var outerChamps = new List<AIHeroClient>();
             foreach (var champ in nearChamps)
             {
-                if (Vector2.DistanceSquared(champ.ServerPosition.LSTo2D(), player.Position.LSTo2D()) < E.Range * E.Range)
+                if (Vector2.DistanceSquared(champ.ServerPosition.To2D(), player.Position.To2D()) < E.Range * E.Range)
                     innerChamps.Add(champ);
                 else
                     outerChamps.Add(champ);
@@ -479,7 +479,7 @@ using EloBuddy; namespace Viktor
             var outerMinions = new List<Obj_AI_Base>();
             foreach (var minion in nearMinions)
             {
-                if (Vector2.DistanceSquared(minion.ServerPosition.LSTo2D(), player.Position.LSTo2D()) < E.Range * E.Range)
+                if (Vector2.DistanceSquared(minion.ServerPosition.To2D(), player.Position.To2D()) < E.Range * E.Range)
                     innerMinions.Add(minion);
                 else
                     outerMinions.Add(minion);
@@ -495,7 +495,7 @@ using EloBuddy; namespace Viktor
                 E.From = player.Position;
 
                 // Prediction in range, go on
-                if (prediction.CastPosition.LSDistance(player.Position) < E.Range)
+                if (prediction.CastPosition.Distance(player.Position) < E.Range)
                     pos1 = prediction.CastPosition;
                 // Prediction not in range, use exact position
                 else
@@ -521,7 +521,7 @@ using EloBuddy; namespace Viktor
                         // Get prediction
                         prediction = E.GetPrediction(enemy);
                         // Validate target
-                        if (prediction.Hitchance >= HitChance.High && Vector2.DistanceSquared(pos1.LSTo2D(), prediction.CastPosition.LSTo2D()) < (E.Range * E.Range) * 0.8)
+                        if (prediction.Hitchance >= HitChance.High && Vector2.DistanceSquared(pos1.To2D(), prediction.CastPosition.To2D()) < (E.Range * E.Range) * 0.8)
                             closeToPrediction.Add(enemy);
                     }
 
@@ -565,7 +565,7 @@ using EloBuddy; namespace Viktor
                 Vector3 startPoint = player.Position + Vector3.Normalize(target.ServerPosition - player.Position) * rangeE;
 
                 // Potential start from postitions
-                var targets = (from champ in nearChamps where Vector2.DistanceSquared(champ.ServerPosition.LSTo2D(), startPoint.LSTo2D()) < startPointRadius * startPointRadius && Vector2.DistanceSquared(player.Position.LSTo2D(), champ.ServerPosition.LSTo2D()) < rangeE * rangeE select champ).ToList();
+                var targets = (from champ in nearChamps where Vector2.DistanceSquared(champ.ServerPosition.To2D(), startPoint.To2D()) < startPointRadius * startPointRadius && Vector2.DistanceSquared(player.Position.To2D(), champ.ServerPosition.To2D()) < rangeE * rangeE select champ).ToList();
                 if (targets.Count > 0)
                 {
                     // Sort table by health DEC
@@ -577,7 +577,7 @@ using EloBuddy; namespace Viktor
                 }
                 else
                 {
-                    var minionTargets = (from minion in nearMinions where Vector2.DistanceSquared(minion.ServerPosition.LSTo2D(), startPoint.LSTo2D()) < startPointRadius * startPointRadius && Vector2.DistanceSquared(player.Position.LSTo2D(), minion.ServerPosition.LSTo2D()) < rangeE * rangeE select minion).ToList();
+                    var minionTargets = (from minion in nearMinions where Vector2.DistanceSquared(minion.ServerPosition.To2D(), startPoint.To2D()) < startPointRadius * startPointRadius && Vector2.DistanceSquared(player.Position.To2D(), minion.ServerPosition.To2D()) < rangeE * rangeE select minion).ToList();
                     if (minionTargets.Count > 0)
                     {
                         // Sort table by health DEC
@@ -629,13 +629,13 @@ using EloBuddy; namespace Viktor
                 var useW = boolLinks["wInterrupt"].Value;
                 var useR = boolLinks["rInterrupt"].Value;
 
-                if (useW && W.LSIsReady() && unit.LSIsValidTarget(W.Range) &&
+                if (useW && W.IsReady() && unit.IsValidTarget(W.Range) &&
                     (Game.Time + 1.5 + W.Delay) >= args.EndTime)
                 {
                     if (W.Cast(unit) == Spell.CastStates.SuccessfullyCasted)
                         return;
                 }
-                else if (useR && unit.LSIsValidTarget(R.Range) && R.Instance.Name == "ViktorChaosStorm")
+                else if (useR && unit.IsValidTarget(R.Range) && R.Instance.Name == "ViktorChaosStorm")
                 {
                     R.Cast(unit);
                 }
@@ -647,30 +647,30 @@ using EloBuddy; namespace Viktor
             if (boolLinks["miscGapcloser"].Value && W.IsInRange(gapcloser.End))
             {
                 GapCloserPos = gapcloser.End;
-                if (Geometry.LSDistance(gapcloser.Start, gapcloser.End) > gapcloser.Sender.Spellbook.GetSpell(gapcloser.Slot).SData.CastRangeDisplayOverride && gapcloser.Sender.Spellbook.GetSpell(gapcloser.Slot).SData.CastRangeDisplayOverride > 100)
+                if (Geometry.Distance(gapcloser.Start, gapcloser.End) > gapcloser.Sender.Spellbook.GetSpell(gapcloser.Slot).SData.CastRangeDisplayOverride && gapcloser.Sender.Spellbook.GetSpell(gapcloser.Slot).SData.CastRangeDisplayOverride > 100)
                 {
-                    GapCloserPos = Geometry.LSExtend(gapcloser.Start, gapcloser.End, gapcloser.Sender.Spellbook.GetSpell(gapcloser.Slot).SData.CastRangeDisplayOverride);
+                    GapCloserPos = Geometry.Extend(gapcloser.Start, gapcloser.End, gapcloser.Sender.Spellbook.GetSpell(gapcloser.Slot).SData.CastRangeDisplayOverride);
                 }
-                W.Cast(GapCloserPos.LSTo2D(), true);
+                W.Cast(GapCloserPos.To2D(), true);
             }
         }
         private static void AutoW()
         {
-            if (!W.LSIsReady() || !boolLinks["autoW"].Value)
+            if (!W.IsReady() || !boolLinks["autoW"].Value)
                 return;
 
-            var tPanth = HeroManager.Enemies.Find(h => h.LSIsValidTarget(W.Range) && h.LSHasBuff("Pantheon_GrandSkyfall_Jump"));
+            var tPanth = HeroManager.Enemies.Find(h => h.IsValidTarget(W.Range) && h.HasBuff("Pantheon_GrandSkyfall_Jump"));
             if (tPanth != null)
             {
                 if (W.Cast(tPanth) == Spell.CastStates.SuccessfullyCasted)
                     return;
             }
 
-            foreach (var enemy in HeroManager.Enemies.Where(h => h.LSIsValidTarget(W.Range)))
+            foreach (var enemy in HeroManager.Enemies.Where(h => h.IsValidTarget(W.Range)))
             {
-                if (enemy.LSHasBuff("rocketgrab2"))
+                if (enemy.HasBuff("rocketgrab2"))
                 {
-                    var t = HeroManager.Allies.Find(h => h.ChampionName.ToLower() == "blitzcrank" && h.LSDistance((AttackableUnit)player) < W.Range);
+                    var t = HeroManager.Allies.Find(h => h.ChampionName.ToLower() == "blitzcrank" && h.Distance((AttackableUnit)player) < W.Range);
                     if (t != null)
                     {
                         if (W.Cast(t) == Spell.CastStates.SuccessfullyCasted)
@@ -680,7 +680,7 @@ using EloBuddy; namespace Viktor
                 if (enemy.HasBuffOfType(BuffType.Stun) || enemy.HasBuffOfType(BuffType.Snare) ||
                          enemy.HasBuffOfType(BuffType.Charm) || enemy.HasBuffOfType(BuffType.Fear) ||
                          enemy.HasBuffOfType(BuffType.Taunt) || enemy.HasBuffOfType(BuffType.Suppression) ||
-                         enemy.IsStunned || enemy.LSIsRecalling())
+                         enemy.IsStunned || enemy.IsRecalling())
                 {
                     if (W.Cast(enemy) == Spell.CastStates.SuccessfullyCasted)
                         return;
@@ -722,32 +722,32 @@ using EloBuddy; namespace Viktor
             var rTicks = sliderLinks["rTicks"].Value.Value;
             bool inQRange = ((qRange && Orbwalking.InAutoAttackRange(enemy)) || qRange == false);
             //Base Q damage
-            if (useQ && Q.LSIsReady() && inQRange)
+            if (useQ && Q.IsReady() && inQRange)
             {
-                damage += player.LSGetSpellDamage(enemy, SpellSlot.Q);
+                damage += player.GetSpellDamage(enemy, SpellSlot.Q);
                 damage += player.CalcDamage(enemy, Damage.DamageType.Magical, qaaDmg[Q.Level - 1] + 0.5 * player.TotalMagicalDamage + player.TotalAttackDamage);
             }
 
             // Q damage on AA
-            if (useQ && !Q.LSIsReady() && player.LSHasBuff("viktorpowertransferreturn") && inQRange)
+            if (useQ && !Q.IsReady() && player.HasBuff("viktorpowertransferreturn") && inQRange)
             {
                 damage += player.CalcDamage(enemy, Damage.DamageType.Magical, qaaDmg[Q.Level - 1] + 0.5 * player.TotalMagicalDamage + player.TotalAttackDamage);
             }
 
             //E damage
-            if (useE && E.LSIsReady())
+            if (useE && E.IsReady())
             {
-                if (player.LSHasBuff("viktoreaug") || player.LSHasBuff("viktorqeaug") || player.LSHasBuff("viktorqweaug"))
-                    damage += player.LSGetSpellDamage(enemy, SpellSlot.E, 1);
+                if (player.HasBuff("viktoreaug") || player.HasBuff("viktorqeaug") || player.HasBuff("viktorqweaug"))
+                    damage += player.GetSpellDamage(enemy, SpellSlot.E, 1);
                 else
-                    damage += player.LSGetSpellDamage(enemy, SpellSlot.E);
+                    damage += player.GetSpellDamage(enemy, SpellSlot.E);
             }
 
             //R damage + 2 ticks
-            if (useR && R.Level > 0 && R.LSIsReady() && R.Instance.Name == "ViktorChaosStorm")
+            if (useR && R.Level > 0 && R.IsReady() && R.Instance.Name == "ViktorChaosStorm")
             {
-                damage += Damage.LSGetSpellDamage(player, enemy, SpellSlot.R, 1) * rTicks;
-                damage += Damage.LSGetSpellDamage(player, enemy, SpellSlot.R);
+                damage += Damage.GetSpellDamage(player, enemy, SpellSlot.R, 1) * rTicks;
+                damage += Damage.GetSpellDamage(player, enemy, SpellSlot.R);
             }
 
             // Ludens Echo damage

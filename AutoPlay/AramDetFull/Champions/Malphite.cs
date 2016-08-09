@@ -34,21 +34,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.CastOnUnit(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
             W.Cast(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.Cast(target);
         }
@@ -57,7 +57,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             if (target == null)
                 return;
-            if (target.LSIsValidTarget(R.Range+100) && R.LSIsReady())
+            if (target.IsValidTarget(R.Range+100) && R.IsReady())
             {
                 if(target.HealthPercent < 50 && safeGap(target) )
                     R.Cast(target);

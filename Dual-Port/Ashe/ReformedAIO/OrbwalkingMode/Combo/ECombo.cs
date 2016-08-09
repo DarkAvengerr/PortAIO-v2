@@ -76,10 +76,10 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
             var pos =
                 this.eLogic.Camp.FirstOrDefault(
                     x =>
-                    x.Value.LSDistance(Variable.Player.Position) > 1500
-                    && x.Value.LSDistance(Variable.Player.Position) < 7000);
+                    x.Value.Distance(Variable.Player.Position) > 1500
+                    && x.Value.Distance(Variable.Player.Position) < 7000);
 
-            if (!pos.Value.LSIsValid()) return;
+            if (!pos.Value.IsValid()) return;
 
             LeagueSharp.Common.Utility.DelayAction.Add(290, () => Variable.Spells[SpellSlot.E].Cast(pos.Value)); // Humanized
         }
@@ -89,18 +89,18 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
             var target = TargetSelector.GetTarget(Variable.Player.AttackRange, TargetSelector.DamageType.Physical);
 
             if (target == null || !target.IsValid
-                || target.LSDistance(Variable.Player)
+                || target.Distance(Variable.Player)
                 > this.Menu.Item(this.Menu.Name + "EDistance").GetValue<Slider>().Value || target.IsVisible) return;
 
             if (!this.eLogic.ComboE(target)) return;
 
-            foreach (var position in HeroManager.Enemies.Where(x => !x.IsDead && x.LSDistance(Variable.Player) < 1500))
+            foreach (var position in HeroManager.Enemies.Where(x => !x.IsDead && x.Distance(Variable.Player) < 1500))
             {
-                var path = position.LSGetWaypoints().LastOrDefault().To3D();
+                var path = position.GetWaypoints().LastOrDefault().To3D();
 
                 if (!NavMesh.IsWallOfGrass(path, 1)) return;
 
-                if (position.LSDistance(path) > 1500) return;
+                if (position.Distance(path) > 1500) return;
 
                 if (NavMesh.IsWallOfGrass(Variable.Player.Position, 1)) return; // Stil no proof wether or not this work yet.
 
@@ -115,15 +115,15 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
             var pos =
                 this.eLogic.Camp.FirstOrDefault(
                     x =>
-                    x.Value.LSDistance(Variable.Player.Position) > 1500
-                    && x.Value.LSDistance(Variable.Player.Position) < 7000);
+                    x.Value.Distance(Variable.Player.Position) > 1500
+                    && x.Value.Distance(Variable.Player.Position) < 7000);
 
-            Render.Circle.DrawCircle(pos.Value, 100, !pos.Value.LSIsValid() ? Color.Red : Color.Green);
+            Render.Circle.DrawCircle(pos.Value, 100, !pos.Value.IsValid() ? Color.Red : Color.Green);
         }
 
         private void OnUpdate(EventArgs args)
         {
-            if (!Variable.Spells[SpellSlot.E].LSIsReady() || Variable.Player.LSIsRecalling() || Variable.Player.LSInShop()) return;
+            if (!Variable.Spells[SpellSlot.E].IsReady() || Variable.Player.IsRecalling() || Variable.Player.InShop()) return;
 
             if (this.Menu.Item(this.Menu.Name + "ECount").GetValue<bool>() && this.eLogic.GetEAmmo() == 1) return;
 

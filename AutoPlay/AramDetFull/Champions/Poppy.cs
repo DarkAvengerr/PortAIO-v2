@@ -33,31 +33,31 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.CastIfHitchanceEquals(target, HitChance.High);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
-            var posAger = player.Position.LSExtend(target.Position, 370);
-            if (safeGap(posAger.LSTo2D()) || posAger.LSIsWall())
+            var posAger = player.Position.Extend(target.Position, 370);
+            if (safeGap(posAger.To2D()) || posAger.IsWall())
                 E.CastOnUnit(target);
         }
 
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             //if (player.HealthPercent < 35)
             R.CastIfHitchanceEquals(target, HitChance.Medium);
@@ -69,7 +69,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if(tar != null) useQ(tar);
             tar = ARAMTargetSelector.getBestTarget(W.Range);
             if (tar != null) useW(tar);
-            if(E.LSIsReady())
+            if(E.IsReady())
                 foreach (var enem in DeathWalker.AllEnemys)
                 {
                     useE(enem);

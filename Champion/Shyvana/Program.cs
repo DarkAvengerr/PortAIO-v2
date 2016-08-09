@@ -49,7 +49,7 @@ namespace D_Shyvana
             _rand = new Items.Item(3143, 490f);
             _lotis = new Items.Item(3190, 590f);
 
-            _igniteSlot = _player.LSGetSpellSlot("SummonerDot");
+            _igniteSlot = _player.GetSpellSlot("SummonerDot");
 
             if (_player.GetSpell(SpellSlot.Summoner1).Name.ToLower().Contains("smite"))
             {
@@ -325,18 +325,18 @@ namespace D_Shyvana
             if (Items.HasItem(3074) && Items.CanUseItem(3074)) damage += _player.GetItemDamage(enemy, Damage.DamageItems.Hydra);
             if (Items.HasItem(3153) && Items.CanUseItem(3153)) damage += _player.GetItemDamage(enemy, Damage.DamageItems.Botrk);
             if (Items.HasItem(3144) && Items.CanUseItem(3144)) damage += _player.GetItemDamage(enemy, Damage.DamageItems.Bilgewater);
-            if (_q.LSIsReady()) damage += _player.LSGetSpellDamage(enemy, SpellSlot.Q) * 1.2;
-            if (_q.LSIsReady()) damage += _player.LSGetSpellDamage(enemy, SpellSlot.W) * 3;
-            if (_e.LSIsReady()) damage += _player.LSGetSpellDamage(enemy, SpellSlot.E);
-            if (_r.LSIsReady()) damage += _player.LSGetSpellDamage(enemy, SpellSlot.R);
-            damage += _player.LSGetAutoAttackDamage(enemy, true) * 2;
+            if (_q.IsReady()) damage += _player.GetSpellDamage(enemy, SpellSlot.Q) * 1.2;
+            if (_q.IsReady()) damage += _player.GetSpellDamage(enemy, SpellSlot.W) * 3;
+            if (_e.IsReady()) damage += _player.GetSpellDamage(enemy, SpellSlot.E);
+            if (_r.IsReady()) damage += _player.GetSpellDamage(enemy, SpellSlot.R);
+            damage += _player.GetAutoAttackDamage(enemy, true) * 2;
             return (float)damage;
         }
 
         private static void Smiteontarget()
         {
             if (_smite == null) return;
-            var hero = HeroManager.Enemies.FirstOrDefault(x => x.LSIsValidTarget(570));
+            var hero = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(570));
             var smiteDmg = _player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Smite);
             var usesmite = _config.Item("smitecombo").GetValue<bool>();
             if (_player.GetSpell(_smiteSlot).Name.ToLower() == "s5_summonersmiteplayerganker" && usesmite
@@ -352,7 +352,7 @@ namespace D_Shyvana
                 }
             }
             if (_player.GetSpell(_smiteSlot).Name.ToLower() == "s5_summonersmiteduel" && usesmite
-                && ObjectManager.Player.Spellbook.CanUseSpell(_smiteSlot) == SpellState.Ready && hero.LSIsValidTarget(570))
+                && ObjectManager.Player.Spellbook.CanUseSpell(_smiteSlot) == SpellState.Ready && hero.IsValidTarget(570))
             {
                 ObjectManager.Player.Spellbook.CastSpell(_smiteSlot, hero);
             }
@@ -376,29 +376,29 @@ namespace D_Shyvana
                     _player.Spellbook.CastSpell(_igniteSlot, t);
                 }
             }
-            if (useR && _r.LSIsReady())
+            if (useR && _r.IsReady())
             {
                 if (t != null && _r.GetPrediction(t).Hitchance >= Rchange()) if (!t.HasBuff("JudicatorIntervention") && !t.HasBuff("Undying Rage") && ComboDamage(t) > t.Health) _r.CastIfHitchanceEquals(t, HitChance.Medium);
             }
-            if (useW && _w.LSIsReady())
+            if (useW && _w.IsReady())
             {
-                if (t != null && _player.LSDistance(t) < _e.Range) _w.Cast();
+                if (t != null && _player.Distance(t) < _e.Range) _w.Cast();
             }
 
-            if (useE && _e.LSIsReady())
+            if (useE && _e.IsReady())
             {
 
-                if (t != null && _player.LSDistance(t) < _e.Range && _e.GetPrediction(t).Hitchance >= Echange()) _e.Cast(t);
+                if (t != null && _player.Distance(t) < _e.Range && _e.GetPrediction(t).Hitchance >= Echange()) _e.Cast(t);
             }
 
-            if (useQ && _q.LSIsReady())
+            if (useQ && _q.IsReady())
             {
-                if (t != null && _player.LSDistance(t) < _w.Range) _q.Cast();
+                if (t != null && _player.Distance(t) < _w.Range) _q.Cast();
             }
 
-            if (_r.LSIsReady() && autoR)
+            if (_r.IsReady() && autoR)
             {
-                if (ObjectManager.Get<AIHeroClient>().Count(hero => hero.LSIsValidTarget(_r.Range))
+                if (ObjectManager.Get<AIHeroClient>().Count(hero => hero.IsValidTarget(_r.Range))
                     >= _config.Item("MinTargets").GetValue<Slider>().Value && _r.GetPrediction(t).Hitchance >= Rchange()) _r.Cast(t);
             }
 
@@ -412,26 +412,26 @@ namespace D_Shyvana
             var useW = _config.Item("UseWH").GetValue<bool>();
             var useE = _config.Item("UseEH").GetValue<bool>();
             var useItemsH = _config.Item("UseItemsharass").GetValue<bool>();
-            if (useQ && _q.LSIsReady())
+            if (useQ && _q.IsReady())
             {
                 var t = TargetSelector.GetTarget(_w.Range, TargetSelector.DamageType.Magical);
-                if (t != null && t.LSDistance(_player.Position) < _w.Range) _q.Cast();
+                if (t != null && t.Distance(_player.Position) < _w.Range) _q.Cast();
             }
-            if (useW && _w.LSIsReady())
+            if (useW && _w.IsReady())
             {
                 var t = TargetSelector.GetTarget(_w.Range, TargetSelector.DamageType.Magical);
-                if (t != null && _player.LSDistance(t) < _w.Range) _w.Cast();
+                if (t != null && _player.Distance(t) < _w.Range) _w.Cast();
             }
-            if (useE && _e.LSIsReady())
+            if (useE && _e.IsReady())
             {
                 var t = TargetSelector.GetTarget(_e.Range, TargetSelector.DamageType.Magical);
-                if (t != null && _player.LSDistance(t) < _e.Range && _e.GetPrediction(t).Hitchance >= Echange()) _e.Cast(t);
+                if (t != null && _player.Distance(t) < _e.Range && _e.GetPrediction(t).Hitchance >= Echange()) _e.Cast(t);
             }
-            if (useItemsH && _tiamat.IsReady() && target.LSIsValidTarget(_tiamat.Range))
+            if (useItemsH && _tiamat.IsReady() && target.IsValidTarget(_tiamat.Range))
             {
                 _tiamat.Cast();
             }
-            if (useItemsH && _hydra.IsReady() && target.LSIsValidTarget(_hydra.Range))
+            if (useItemsH && _hydra.IsReady() && target.IsValidTarget(_hydra.Range))
             {
                 _hydra.Cast();
             }
@@ -452,12 +452,12 @@ namespace D_Shyvana
             var useQl = _config.Item("UseQL").GetValue<bool>();
             var useWl = _config.Item("UseWL").GetValue<bool>();
             var useEl = _config.Item("UseEL").GetValue<bool>();
-            if (_q.LSIsReady() && useQl && allMinionsW.Count > 0)
+            if (_q.IsReady() && useQl && allMinionsW.Count > 0)
             {
                 _q.Cast();
             }
 
-            if (_w.LSIsReady() && useWl)
+            if (_w.IsReady() && useWl)
             {
 
                 if (allMinionsW.Count >= 2)
@@ -467,9 +467,9 @@ namespace D_Shyvana
                 else
                     foreach (var minion in allMinionsW)
                         if (!Orbwalking.InAutoAttackRange(minion)
-                            && minion.Health < 0.75 * _player.LSGetSpellDamage(minion, SpellSlot.W)) _w.Cast();
+                            && minion.Health < 0.75 * _player.GetSpellDamage(minion, SpellSlot.W)) _w.Cast();
             }
-            if (_e.LSIsReady() && useEl)
+            if (_e.IsReady() && useEl)
             {
                 var fl1 = _e.GetLineFarmLocation(rangedMinionsE, _e.Width);
                 var fl2 = _e.GetLineFarmLocation(allMinionsE, _e.Width);
@@ -485,15 +485,15 @@ namespace D_Shyvana
                 else
                     foreach (var minion in allMinionsE)
                         if (!Orbwalking.InAutoAttackRange(minion)
-                            && minion.Health < 0.75 * _player.LSGetSpellDamage(minion, SpellSlot.E)) _e.Cast(minion);
+                            && minion.Health < 0.75 * _player.GetSpellDamage(minion, SpellSlot.E)) _e.Cast(minion);
             }
             foreach (var minion in allMinionsE)
             {
-                if (useItemsl && _tiamat.IsReady() && minion.LSIsValidTarget(_tiamat.Range))
+                if (useItemsl && _tiamat.IsReady() && minion.IsValidTarget(_tiamat.Range))
                 {
                     _tiamat.Cast();
                 }
-                if (useItemsl && _hydra.IsReady() && minion.LSIsValidTarget(_hydra.Range))
+                if (useItemsl && _hydra.IsReady() && minion.IsValidTarget(_hydra.Range))
                 {
                     _hydra.Cast();
                 }
@@ -508,19 +508,19 @@ namespace D_Shyvana
             var useE = _config.Item("UseELH").GetValue<bool>();
             foreach (var minion in allMinions)
             {
-                if (useQ && _q.LSIsReady() && _player.LSDistance(minion) < 200
-                    && minion.Health < 0.75 * _player.LSGetSpellDamage(minion, SpellSlot.Q))
+                if (useQ && _q.IsReady() && _player.Distance(minion) < 200
+                    && minion.Health < 0.75 * _player.GetSpellDamage(minion, SpellSlot.Q))
                 {
                     _q.Cast();
                 }
 
-                if (_w.LSIsReady() && useW && _player.LSDistance(minion) < _w.Range
-                    && minion.Health < 0.75 * _player.LSGetSpellDamage(minion, SpellSlot.W))
+                if (_w.IsReady() && useW && _player.Distance(minion) < _w.Range
+                    && minion.Health < 0.75 * _player.GetSpellDamage(minion, SpellSlot.W))
                 {
                     _w.Cast();
                 }
-                if (_e.LSIsReady() && useE && _player.LSDistance(minion) < _e.Range
-                    && minion.Health < 0.75 * _player.LSGetSpellDamage(minion, SpellSlot.E))
+                if (_e.IsReady() && useE && _player.Distance(minion) < _e.Range
+                    && minion.Health < 0.75 * _player.GetSpellDamage(minion, SpellSlot.E))
                 {
                     _e.Cast(minion);
                 }
@@ -542,24 +542,24 @@ namespace D_Shyvana
             if (mobs.Count > 0)
             {
                 var mob = mobs[0];
-                if (useQ && _q.LSIsReady() && !mob.Name.Contains("Mini"))
+                if (useQ && _q.IsReady() && !mob.Name.Contains("Mini"))
                 {
                     _q.Cast();
                 }
-                if (_w.LSIsReady() && useW)
+                if (_w.IsReady() && useW)
                 {
                     _w.Cast();
                 }
-                if (_e.LSIsReady() && useE)
+                if (_e.IsReady() && useE)
                 {
                     _e.Cast(mob);
                 }
 
-                if (useItemsJ && _tiamat.IsReady() && mob.LSIsValidTarget(_tiamat.Range))
+                if (useItemsJ && _tiamat.IsReady() && mob.IsValidTarget(_tiamat.Range))
                 {
                     _tiamat.Cast();
                 }
-                if (useItemsJ && _hydra.IsReady() && mob.LSIsValidTarget(_hydra.Range))
+                if (useItemsJ && _hydra.IsReady() && mob.IsValidTarget(_hydra.Range))
                 {
                     _hydra.Cast();
                 }
@@ -609,14 +609,14 @@ namespace D_Shyvana
         {
             foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsEnemy))
             {
-                if (_e.LSIsReady() && _config.Item("UseEM").GetValue<bool>())
+                if (_e.IsReady() && _config.Item("UseEM").GetValue<bool>())
                 {
-                    if (_e.GetDamage(hero) > hero.Health && hero.LSIsValidTarget(_e.Range))
+                    if (_e.GetDamage(hero) > hero.Health && hero.IsValidTarget(_e.Range))
                     {
                         _e.CastIfHitchanceEquals(hero, Echange());
                     }
                 }
-                if (_r.LSIsReady() && _config.Item("UseRM").GetValue<bool>())
+                if (_r.IsReady() && _config.Item("UseRM").GetValue<bool>())
                 {
                     var t = TargetSelector.GetTarget(_r.Range, TargetSelector.DamageType.Magical);
                     if (t != null)
@@ -641,41 +641,41 @@ namespace D_Shyvana
                 var iBlademyhp = _player.Health
                                  <= (_player.MaxHealth * (_config.Item("Blademyhp").GetValue<Slider>().Value) / 100);
                 var iOmen = _config.Item("Omen").GetValue<bool>();
-                var iOmenenemys = hero.LSCountEnemiesInRange(450) >= _config.Item("Omenenemys").GetValue<Slider>().Value;
+                var iOmenenemys = hero.CountEnemiesInRange(450) >= _config.Item("Omenenemys").GetValue<Slider>().Value;
                 var iTiamat = _config.Item("Tiamat").GetValue<bool>();
                 var iHydra = _config.Item("Hydra").GetValue<bool>();
                 var iRighteous = _config.Item("Righteous").GetValue<bool>();
                 var iRighteousenemys =
-                    hero.LSCountEnemiesInRange(_config.Item("Righteousenemysrange").GetValue<Slider>().Value)
+                    hero.CountEnemiesInRange(_config.Item("Righteousenemysrange").GetValue<Slider>().Value)
                     >= _config.Item("Righteousenemys").GetValue<Slider>().Value;
 
 
-                if (hero.LSIsValidTarget(450) && iBilge && (iBilgeEnemyhp || iBilgemyhp) && _bilge.IsReady())
+                if (hero.IsValidTarget(450) && iBilge && (iBilgeEnemyhp || iBilgemyhp) && _bilge.IsReady())
                 {
                     _bilge.Cast(hero);
 
                 }
-                if (hero.LSIsValidTarget(450) && iBlade && (iBladeEnemyhp || iBlademyhp) && _blade.IsReady())
+                if (hero.IsValidTarget(450) && iBlade && (iBladeEnemyhp || iBlademyhp) && _blade.IsReady())
                 {
                     _blade.Cast(hero);
 
                 }
-                if (iTiamat && _tiamat.IsReady() && hero.LSIsValidTarget(_tiamat.Range))
+                if (iTiamat && _tiamat.IsReady() && hero.IsValidTarget(_tiamat.Range))
                 {
                     _tiamat.Cast();
 
                 }
-                if (iHydra && _hydra.IsReady() && hero.LSIsValidTarget(_hydra.Range))
+                if (iHydra && _hydra.IsReady() && hero.IsValidTarget(_hydra.Range))
                 {
                     _hydra.Cast();
 
                 }
-                if (iOmenenemys && iOmen && _rand.IsReady() && hero.LSIsValidTarget(450))
+                if (iOmenenemys && iOmen && _rand.IsReady() && hero.IsValidTarget(450))
                 {
                     _rand.Cast();
                 }
                 if (iRighteousenemys && iRighteous && Items.HasItem(3800) && Items.CanUseItem(3800)
-                    && hero.LSIsValidTarget(_config.Item("Righteousenemysrange").GetValue<Slider>().Value))
+                    && hero.IsValidTarget(_config.Item("Righteousenemysrange").GetValue<Slider>().Value))
                 {
                     Items.UseItem(3800);
                 }
@@ -686,7 +686,7 @@ namespace D_Shyvana
                 foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsAlly || hero.IsMe))
                 {
                     if (hero.Health <= (hero.MaxHealth * (_config.Item("lotisminhp").GetValue<Slider>().Value) / 100)
-                        && hero.LSDistance(_player.ServerPosition) <= _lotis.Range && _lotis.IsReady()) _lotis.Cast();
+                        && hero.Distance(_player.ServerPosition) <= _lotis.Range && _lotis.IsReady()) _lotis.Cast();
                 }
             }
         }
@@ -702,9 +702,9 @@ namespace D_Shyvana
             var iusehppotion = _config.Item("usehppotions").GetValue<bool>();
             var iusepotionhp = _player.Health
                                <= (_player.MaxHealth * (_config.Item("usepotionhp").GetValue<Slider>().Value) / 100);
-            if (_player.LSInFountain() || ObjectManager.Player.HasBuff("Recall")) return;
+            if (_player.InFountain() || ObjectManager.Player.HasBuff("Recall")) return;
 
-            if (LeagueSharp.Common.Utility.LSCountEnemiesInRange(800) > 0
+            if (LeagueSharp.Common.Utility.CountEnemiesInRange(800) > 0
                 || (mobs.Count > 0 && _config.Item("ActiveJungle").GetValue<KeyBind>().Active && _smite != null))
             {
                 if (iusepotionhp && iusehppotion
@@ -741,8 +741,8 @@ namespace D_Shyvana
 
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (_r.LSIsReady() && gapcloser.Sender.LSIsValidTarget(_r.Range) && _config.Item("Gap_E").GetValue<bool>())
-                if (!gapcloser.End.LSUnderTurret(true) && gapcloser.End.LSCountEnemiesInRange(700) < 1)
+            if (_r.IsReady() && gapcloser.Sender.IsValidTarget(_r.Range) && _config.Item("Gap_E").GetValue<bool>())
+                if (!gapcloser.End.UnderTurret(true) && gapcloser.End.CountEnemiesInRange(700) < 1)
                 {
                     _r.Cast(gapcloser.End);
                 }
@@ -751,7 +751,7 @@ namespace D_Shyvana
         private static void Interrupter_OnPosibleToInterrupt(Obj_AI_Base target, InterruptableSpell spell)
         {
             if (!_config.Item("UseRInt").GetValue<bool>()) return;
-            if (target.LSIsValidTarget(_r.Range) && spell.DangerLevel == InterruptableDangerLevel.High)
+            if (target.IsValidTarget(_r.Range) && spell.DangerLevel == InterruptableDangerLevel.High)
             {
                 _r.Cast(target);
             }
@@ -761,15 +761,15 @@ namespace D_Shyvana
         {
             var target = TargetSelector.GetTarget(_r.Range, TargetSelector.DamageType.Magical);
             Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-            if (_config.Item("UseRF").GetValue<bool>() && _r.LSIsReady() && target != null)
+            if (_config.Item("UseRF").GetValue<bool>() && _r.IsReady() && target != null)
             {
                 _r.Cast(Game.CursorPos);
             }
-            if (_config.Item("UseWF").GetValue<bool>() && _w.LSIsReady() && target != null)
+            if (_config.Item("UseWF").GetValue<bool>() && _w.IsReady() && target != null)
             {
                 _w.Cast();
             }
-            if (_config.Item("UseEF").GetValue<bool>() && _e.LSIsReady() && target != null)
+            if (_config.Item("UseEF").GetValue<bool>() && _e.IsReady() && target != null)
             {
                 _e.Cast(target);
             }

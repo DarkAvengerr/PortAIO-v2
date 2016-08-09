@@ -103,7 +103,7 @@ using EloBuddy; namespace EvadeYas
             get { return _evadePoint; }
             set
             {
-                if (value.LSIsValid())
+                if (value.IsValid())
                 {
                     ObjectManager.Player.SendMovePacket(value);
                 }
@@ -169,14 +169,14 @@ using EloBuddy; namespace EvadeYas
             if (skillshot.SpellData.SpellName == "VelkozQ")
             {
                 var spellData = SpellDatabase.GetByName("VelkozQSplit");
-                var direction = skillshot.Direction.LSPerpendicular();
+                var direction = skillshot.Direction.Perpendicular();
                 if (DetectedSkillshots.Count(s => s.SpellData.SpellName == "VelkozQSplit") == 0)
                 {
                     for (var i = -1; i <= 1; i = i + 2)
                     {
                         var skillshotToAdd = new Skillshot(
-                            DetectionType.ProcessSpell, spellData, Utils.TickCount, missile.Position.LSTo2D(),
-                            missile.Position.LSTo2D() + i * direction * spellData.Range, skillshot.Unit);
+                            DetectionType.ProcessSpell, spellData, Utils.TickCount, missile.Position.To2D(),
+                            missile.Position.To2D() + i * direction * spellData.Range, skillshot.Unit);
                         DetectedSkillshots.Add(skillshotToAdd);
                     }
                 }
@@ -197,8 +197,8 @@ using EloBuddy; namespace EvadeYas
             {
                 if (item.SpellData.SpellName == skillshot.SpellData.SpellName &&
                     (item.Unit.NetworkId == skillshot.Unit.NetworkId &&
-                     (skillshot.Direction).LSAngleBetween(item.Direction) < 5 &&
-                     (skillshot.Start.LSDistance(item.Start) < 100 || skillshot.SpellData.FromObjects.Length == 0)))
+                     (skillshot.Direction).AngleBetween(item.Direction) < 5 &&
+                     (skillshot.Start.Distance(item.Start) < 100 || skillshot.SpellData.FromObjects.Length == 0)))
                 {
                     alreadyAdded = true;
                 }
@@ -211,7 +211,7 @@ using EloBuddy; namespace EvadeYas
             }
 
             //Check if the skillshot is too far away.
-            if (skillshot.Start.LSDistance(PlayerPosition) >
+            if (skillshot.Start.Distance(PlayerPosition) >
                 (skillshot.SpellData.Range + skillshot.SpellData.Radius + 1000) * 1.5)
             {
                 return;
@@ -233,7 +233,7 @@ using EloBuddy; namespace EvadeYas
                         {
                             var end = skillshot.Start +
                                       skillshot.SpellData.Range *
-                                      originalDirection.LSRotated(skillshot.SpellData.MultipleAngle * i);
+                                      originalDirection.Rotated(skillshot.SpellData.MultipleAngle * i);
                             var skillshotToAdd = new Skillshot(
                                 skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, skillshot.Start, end,
                                 skillshot.Unit);
@@ -255,8 +255,8 @@ using EloBuddy; namespace EvadeYas
 
                     if (skillshot.SpellData.Invert)
                     {
-                        var newDirection = -(skillshot.End - skillshot.Start).LSNormalized();
-                        var end = skillshot.Start + newDirection * skillshot.Start.LSDistance(skillshot.End);
+                        var newDirection = -(skillshot.End - skillshot.Start).Normalized();
+                        var end = skillshot.Start + newDirection * skillshot.Start.Distance(skillshot.End);
                         var skillshotToAdd = new Skillshot(
                             skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, skillshot.Start, end,
                             skillshot.Unit);
@@ -279,22 +279,22 @@ using EloBuddy; namespace EvadeYas
                     {
                         var angle = 60;
                         var edge1 =
-                            (skillshot.End - skillshot.Unit.ServerPosition.LSTo2D()).LSRotated(
+                            (skillshot.End - skillshot.Unit.ServerPosition.To2D()).Rotated(
                                 -angle / 2 * (float) Math.PI / 180);
-                        var edge2 = edge1.LSRotated(angle * (float) Math.PI / 180);
+                        var edge2 = edge1.Rotated(angle * (float) Math.PI / 180);
 
                         foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
                         {
-                            var v = minion.ServerPosition.LSTo2D() - skillshot.Unit.ServerPosition.LSTo2D();
-                            if (minion.Name == "Seed" && edge1.LSCrossProduct(v) > 0 && v.LSCrossProduct(edge2) > 0 &&
-                                minion.LSDistance(skillshot.Unit) < 800 &&
+                            var v = minion.ServerPosition.To2D() - skillshot.Unit.ServerPosition.To2D();
+                            if (minion.Name == "Seed" && edge1.CrossProduct(v) > 0 && v.CrossProduct(edge2) > 0 &&
+                                minion.Distance(skillshot.Unit) < 800 &&
                                 (minion.Team != ObjectManager.Player.Team || Config.TestOnAllies))
                             {
-                                var start = minion.ServerPosition.LSTo2D();
-                                var end = skillshot.Unit.ServerPosition.LSTo2D()
-                                    .LSExtend(
-                                        minion.ServerPosition.LSTo2D(),
-                                        skillshot.Unit.LSDistance(minion) > 200 ? 1300 : 1000);
+                                var start = minion.ServerPosition.To2D();
+                                var end = skillshot.Unit.ServerPosition.To2D()
+                                    .Extend(
+                                        minion.ServerPosition.To2D(),
+                                        skillshot.Unit.Distance(minion) > 200 ? 1300 : 1000);
 
                                 var skillshotToAdd = new Skillshot(
                                     skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, start, end,
@@ -307,8 +307,8 @@ using EloBuddy; namespace EvadeYas
 
                     if (skillshot.SpellData.SpellName == "AlZaharCalloftheVoid")
                     {
-                        var start = skillshot.End - skillshot.Direction.LSPerpendicular() * 400;
-                        var end = skillshot.End + skillshot.Direction.LSPerpendicular() * 400;
+                        var start = skillshot.End - skillshot.Direction.Perpendicular() * 400;
+                        var end = skillshot.End + skillshot.Direction.Perpendicular() * 400;
                         var skillshotToAdd = new Skillshot(
                             skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, start, end,
                             skillshot.Unit);
@@ -327,7 +327,7 @@ using EloBuddy; namespace EvadeYas
 
                     if (skillshot.SpellData.SpellName == "ZiggsQ")
                     {
-                        var d1 = skillshot.Start.LSDistance(skillshot.End);
+                        var d1 = skillshot.Start.Distance(skillshot.End);
                         var d2 = d1 * 0.4f;
                         var d3 = d2 * 0.69f;
 
@@ -357,7 +357,7 @@ using EloBuddy; namespace EvadeYas
                     if (skillshot.SpellData.SpellName == "ZiggsR")
                     {
                         skillshot.SpellData.Delay =
-                            (int) (1500 + 1500 * skillshot.End.LSDistance(skillshot.Start) / skillshot.SpellData.Range);
+                            (int) (1500 + 1500 * skillshot.End.Distance(skillshot.Start) / skillshot.SpellData.Range);
                     }
 
                     if (skillshot.SpellData.SpellName == "JarvanIVDragonStrike")
@@ -387,19 +387,19 @@ using EloBuddy; namespace EvadeYas
                                 var extendedE = new Skillshot(
                                     skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, skillshot.Start,
                                     skillshot.End + skillshot.Direction * 100, skillshot.Unit);
-                                if (!extendedE.IsSafe(m.Position.LSTo2D()))
+                                if (!extendedE.IsSafe(m.Position.To2D()))
                                 {
-                                    endPos = m.Position.LSTo2D();
+                                    endPos = m.Position.To2D();
                                 }
                                 break;
                             }
                         }
 
-                        if (endPos.LSIsValid())
+                        if (endPos.IsValid())
                         {
                             skillshot = new Skillshot(DetectionType.ProcessSpell, SpellDatabase.GetByName("JarvanIVEQ"), Utils.TickCount, skillshot.Start, endPos, skillshot.Unit);
-                            skillshot.End = endPos + 200 * (endPos - skillshot.Start).LSNormalized();
-                            skillshot.Direction = (skillshot.End - skillshot.Start).LSNormalized();
+                            skillshot.End = endPos + 200 * (endPos - skillshot.Start).Normalized();
+                            skillshot.Direction = (skillshot.End - skillshot.Start).Normalized();
                         }
                     }
                 }
@@ -429,12 +429,12 @@ using EloBuddy; namespace EvadeYas
 
         private static void Game_OnOnGameUpdate(EventArgs args)
         {
-            PlayerPosition = ObjectManager.Player.ServerPosition.LSTo2D();
+            PlayerPosition = ObjectManager.Player.ServerPosition.To2D();
 
             /*
             //Set evading to false after blinking
-            if (PreviousTickPosition.LSIsValid() &&
-                PlayerPosition.LSDistance(PreviousTickPosition) > 200)
+            if (PreviousTickPosition.IsValid() &&
+                PlayerPosition.Distance(PreviousTickPosition) > 200)
             {
                 Evading = false;
             }
@@ -478,7 +478,7 @@ using EloBuddy; namespace EvadeYas
             }
 
             /*Avoid evading while dashing.*/
-            if (ObjectManager.Player.LSIsDashing())
+            if (ObjectManager.Player.IsDashing())
             {
                 Evading = false;
                 return;
@@ -487,12 +487,12 @@ using EloBuddy; namespace EvadeYas
             //Shield allies.
             foreach (var ally in ObjectManager.Get<AIHeroClient>())
             {
-                if (ally.LSIsValidTarget(1000, false))
+                if (ally.IsValidTarget(1000, false))
                 {
                     var shieldAlly = Config.Menu.Item("shield" + ally.ChampionName);
                     if (shieldAlly != null && shieldAlly.GetValue<bool>())
                     {
-                        var allySafeResult = IsSafe(ally.ServerPosition.LSTo2D());
+                        var allySafeResult = IsSafe(ally.ServerPosition.To2D());
 
                         if (!allySafeResult.IsSafe)
                         {
@@ -506,7 +506,7 @@ using EloBuddy; namespace EvadeYas
                             foreach (var evadeSpell in EvadeSpellDatabase.Spells)
                             {
                                 if (evadeSpell.IsShield && evadeSpell.CanShieldAllies &&
-                                    ally.LSDistance(ObjectManager.Player) < evadeSpell.MaxRange &&
+                                    ally.Distance(ObjectManager.Player) < evadeSpell.MaxRange &&
                                     dangerLevel >= evadeSpell.DangerLevel &&
                                     ObjectManager.Player.Spellbook.CanUseSpell(evadeSpell.Slot) == SpellState.Ready &&
                                     IsAboutToHit(ally, evadeSpell.Delay))
@@ -532,12 +532,12 @@ using EloBuddy; namespace EvadeYas
                 PathFollower.Stop();
             }
 
-            var currentPath = ObjectManager.Player.LSGetWaypoints();
+            var currentPath = ObjectManager.Player.GetWaypoints();
             var safeResult = IsSafe(PlayerPosition);
             var safePath = IsSafePath(currentPath, 100);
 
             /*FOLLOWPATH*/
-            if (FollowPath && !NoSolutionFound && (Keepfollowing || !Evading) && EvadeToPoint.LSIsValid() && safeResult.IsSafe)
+            if (FollowPath && !NoSolutionFound && (Keepfollowing || !Evading) && EvadeToPoint.IsValid() && safeResult.IsSafe)
             {
                 if (EvadeSpellDatabase.Spells.Any(evadeSpell => evadeSpell.Name == "Walking" && evadeSpell.Enabled))
                 {
@@ -587,7 +587,7 @@ using EloBuddy; namespace EvadeYas
                 if (!safeResult.IsSafe)
                 {
                     //Search for an evade point:
-                    //TryToEvade(safeResult.SkillshotList, EvadeToPoint.LSIsValid() ? EvadeToPoint : Game.CursorPos.LSTo2D());
+                    //TryToEvade(safeResult.SkillshotList, EvadeToPoint.IsValid() ? EvadeToPoint : Game.CursorPos.To2D());
                 }
                 //Outside the danger polygon.
                 else
@@ -702,7 +702,7 @@ using EloBuddy; namespace EvadeYas
                         if (points.Count > 0)
                         {
                             var to = new Vector2(args.TargetPosition.X, args.TargetPosition.Y);
-                            EvadePoint = to.LSClosest(points);
+                            EvadePoint = to.Closest(points);
                             Evading = true;
                             Config.LastEvadePointChangeT = Utils.TickCount;
                         }
@@ -729,7 +729,7 @@ using EloBuddy; namespace EvadeYas
             {
                 if (safePath.Intersection.Valid)
                 {
-                    if (ObjectManager.Player.LSDistance(safePath.Intersection.Point) > 75)
+                    if (ObjectManager.Player.Distance(safePath.Intersection.Point) > 75)
                     {
                         ObjectManager.Player.SendMovePacket(safePath.Intersection.Point);
                     }
@@ -749,7 +749,7 @@ using EloBuddy; namespace EvadeYas
                 if (target != null && target.IsValid<Obj_AI_Base>() && target.IsVisible)
                 {
                     //Out of attack range.
-                    if (PlayerPosition.LSDistance(((Obj_AI_Base)target).ServerPosition) >
+                    if (PlayerPosition.Distance(((Obj_AI_Base)target).ServerPosition) >
                         ObjectManager.Player.AttackRange + ObjectManager.Player.BoundingRadius +
                         target.BoundingRadius)
                     {
@@ -771,7 +771,7 @@ using EloBuddy; namespace EvadeYas
                 {
                     Console.WriteLine(
                         Utils.TickCount + "DASH: Speed: " + args.Speed + " Width:" +
-                        args.EndPos.LSDistance(args.StartPos));
+                        args.EndPos.Distance(args.StartPos));
                 }
 
                 //LeagueSharp.Common.Utility.DelayAction.Add(args.Duration, delegate { Evading = false; });
@@ -906,8 +906,8 @@ using EloBuddy; namespace EvadeYas
                         var points = Evader.GetEvadePoints();
                         if (points.Count > 0)
                         {
-                            EvadePoint = to.LSClosest(points);
-                            var nEvadePoint = EvadePoint.LSExtend(PlayerPosition, -100);
+                            EvadePoint = to.Closest(points);
+                            var nEvadePoint = EvadePoint.Extend(PlayerPosition, -100);
                             if (
                                 Program.IsSafePath(
                                     ObjectManager.Player.GetPath(nEvadePoint.To3D()).To2DList(),
@@ -930,7 +930,7 @@ using EloBuddy; namespace EvadeYas
 
                             if (points.Count > 0)
                             {
-                                EvadePoint = to.LSClosest(points);
+                                EvadePoint = to.Closest(points);
                                 Evading = true;
 
                                 if (evadeSpell.IsSummonerSpell)
@@ -960,7 +960,7 @@ using EloBuddy; namespace EvadeYas
                                 if (targets.Count > 0)
                                 {
                                     var closestTarget = Utils.Closest(targets, to);
-                                    EvadePoint = closestTarget.ServerPosition.LSTo2D();
+                                    EvadePoint = closestTarget.ServerPosition.To2D();
                                     Evading = true;
 
                                     if (evadeSpell.IsSummonerSpell)
@@ -992,7 +992,7 @@ using EloBuddy; namespace EvadeYas
 
                                         // Remove the points out of range
                                         points.RemoveAll(
-                                            item => item.LSDistance(ObjectManager.Player.ServerPosition) > 600);
+                                            item => item.Distance(ObjectManager.Player.ServerPosition) > 600);
 
                                         if (points.Count > 0)
                                         {
@@ -1002,20 +1002,20 @@ using EloBuddy; namespace EvadeYas
                                                 var k =
                                                     (int)
                                                         (600 -
-                                                         PlayerPosition.LSDistance(points[i]));
+                                                         PlayerPosition.Distance(points[i]));
 
                                                 k = k - new Random(Utils.TickCount).Next(k);
                                                 var extended = points[i] +
                                                                k *
                                                                (points[i] - PlayerPosition)
-                                                                   .LSNormalized();
+                                                                   .Normalized();
                                                 if (IsSafe(extended).IsSafe)
                                                 {
                                                     points[i] = extended;
                                                 }
                                             }
 
-                                            var ePoint = to.LSClosest(points);
+                                            var ePoint = to.Closest(points);
                                             ObjectManager.Player.Spellbook.CastSpell(wardSlot.SpellSlot, ePoint.To3D());
                                             LastWardJumpAttempt = Utils.TickCount;
                                             //Let the user move freely inside the skillshot.
@@ -1032,7 +1032,7 @@ using EloBuddy; namespace EvadeYas
 
                                 // Remove the points out of range
                                 points.RemoveAll(
-                                    item => item.LSDistance(ObjectManager.Player.ServerPosition) > evadeSpell.MaxRange);
+                                    item => item.Distance(ObjectManager.Player.ServerPosition) > evadeSpell.MaxRange);
 
                                 //If the spell has a fixed range (Vaynes Q), calculate the real dashing location. TODO: take into account walls in the future.
                                 if (evadeSpell.FixedRange)
@@ -1040,7 +1040,7 @@ using EloBuddy; namespace EvadeYas
                                     for (var i = 0; i < points.Count; i++)
                                     {
                                         points[i] = PlayerPosition
-                                            .LSExtend(points[i], evadeSpell.MaxRange);
+                                            .Extend(points[i], evadeSpell.MaxRange);
                                     }
 
                                     for (var i = points.Count - 1; i > 0; i--)
@@ -1058,12 +1058,12 @@ using EloBuddy; namespace EvadeYas
                                         var k =
                                             (int)
                                                 (evadeSpell.MaxRange -
-                                                 PlayerPosition.LSDistance(points[i]));
+                                                 PlayerPosition.Distance(points[i]));
                                         k -= Math.Max(RandomN.Next(k) - 100, 0);
                                         var extended = points[i] +
                                                        k *
                                                        (points[i] - PlayerPosition)
-                                                           .LSNormalized();
+                                                           .Normalized();
                                         if (IsSafe(extended).IsSafe)
                                         {
                                             points[i] = extended;
@@ -1073,7 +1073,7 @@ using EloBuddy; namespace EvadeYas
 
                                 if (points.Count > 0)
                                 {
-                                    EvadePoint = to.LSClosest(points);
+                                    EvadePoint = to.Closest(points);
                                     Evading = true;
 
                                     if (!evadeSpell.Invert)
@@ -1122,7 +1122,7 @@ using EloBuddy; namespace EvadeYas
                                     if (IsAboutToHit(ObjectManager.Player, evadeSpell.Delay))
                                     {
                                         var closestTarget = Utils.Closest(targets, to);
-                                        EvadePoint = closestTarget.ServerPosition.LSTo2D();
+                                        EvadePoint = closestTarget.ServerPosition.To2D();
                                         Evading = true;
 
                                         if (evadeSpell.IsSummonerSpell)
@@ -1158,7 +1158,7 @@ using EloBuddy; namespace EvadeYas
 
                                         // Remove the points out of range
                                         points.RemoveAll(
-                                            item => item.LSDistance(ObjectManager.Player.ServerPosition) > 600);
+                                            item => item.Distance(ObjectManager.Player.ServerPosition) > 600);
 
                                         if (points.Count > 0)
                                         {
@@ -1168,20 +1168,20 @@ using EloBuddy; namespace EvadeYas
                                                 var k =
                                                     (int)
                                                         (600 -
-                                                         PlayerPosition.LSDistance(points[i]));
+                                                         PlayerPosition.Distance(points[i]));
 
                                                 k = k - new Random(Utils.TickCount).Next(k);
                                                 var extended = points[i] +
                                                                k *
                                                                (points[i] - PlayerPosition)
-                                                                   .LSNormalized();
+                                                                   .Normalized();
                                                 if (IsSafe(extended).IsSafe)
                                                 {
                                                     points[i] = extended;
                                                 }
                                             }
 
-                                            var ePoint = to.LSClosest(points);
+                                            var ePoint = to.Closest(points);
                                             ObjectManager.Player.Spellbook.CastSpell(wardSlot.SpellSlot, ePoint.To3D());
                                             LastWardJumpAttempt = Utils.TickCount;
                                             //Let the user move freely inside the skillshot.
@@ -1199,7 +1199,7 @@ using EloBuddy; namespace EvadeYas
 
                                 // Remove the points out of range
                                 points.RemoveAll(
-                                    item => item.LSDistance(ObjectManager.Player.ServerPosition) > evadeSpell.MaxRange);
+                                    item => item.Distance(ObjectManager.Player.ServerPosition) > evadeSpell.MaxRange);
 
 
                                 //Dont blink just to the edge:
@@ -1208,12 +1208,12 @@ using EloBuddy; namespace EvadeYas
                                     var k =
                                         (int)
                                             (evadeSpell.MaxRange -
-                                             PlayerPosition.LSDistance(points[i]));
+                                             PlayerPosition.Distance(points[i]));
 
                                     k = k - new Random(Utils.TickCount).Next(k);
                                     var extended = points[i] +
                                                    k *
-                                                   (points[i] - PlayerPosition).LSNormalized();
+                                                   (points[i] - PlayerPosition).Normalized();
                                     if (IsSafe(extended).IsSafe)
                                     {
                                         points[i] = extended;
@@ -1225,7 +1225,7 @@ using EloBuddy; namespace EvadeYas
                                 {
                                     if (IsAboutToHit(ObjectManager.Player, evadeSpell.Delay))
                                     {
-                                        EvadePoint = to.LSClosest(points);
+                                        EvadePoint = to.Closest(points);
                                         Evading = true;
                                         if (evadeSpell.IsSummonerSpell)
                                         {
@@ -1258,7 +1258,7 @@ using EloBuddy; namespace EvadeYas
                                     if (IsAboutToHit(ObjectManager.Player, evadeSpell.Delay))
                                     {
                                         var closestTarget = Utils.Closest(targets, to);
-                                        EvadePoint = closestTarget.ServerPosition.LSTo2D();
+                                        EvadePoint = closestTarget.ServerPosition.To2D();
                                         Evading = true;
                                         ObjectManager.Player.Spellbook.CastSpell(evadeSpell.Slot, closestTarget);
                                     }

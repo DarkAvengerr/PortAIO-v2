@@ -22,7 +22,7 @@ namespace TheBrand.Commons.Items
 
         public void Update(AIHeroClient target)
         {
-            if (target.HealthPercent >= _minEnemyHealth && target.LSDistance(ObjectManager.Player) < 550)
+            if (target.HealthPercent >= _minEnemyHealth && target.Distance(ObjectManager.Player) < 550)
             {
                 Use(target);
             }

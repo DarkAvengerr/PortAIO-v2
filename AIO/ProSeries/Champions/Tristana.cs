@@ -57,25 +57,25 @@ using EloBuddy;
 
         internal static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
 
             if (ProSeries.Config.Item("usecombo").GetValue<KeyBind>().Active &&
                 ProSeries.Config.Item("usergap", true).GetValue<bool>())
             {
-                if (gapcloser.Sender.LSIsValidTarget() && Orbwalking.InAutoAttackRange(gapcloser.Sender))
+                if (gapcloser.Sender.IsValidTarget() && Orbwalking.InAutoAttackRange(gapcloser.Sender))
                     R.CastOnUnit(gapcloser.Sender);
             }
         }
 
         internal static void OnInterrupt2(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
 
             if (ProSeries.Config.Item("userint", true).GetValue<bool>())
             {
-                if (sender.LSIsValidTarget() && Orbwalking.InAutoAttackRange(sender))
+                if (sender.IsValidTarget() && Orbwalking.InAutoAttackRange(sender))
                     R.CastOnUnit(sender);
             }
         }
@@ -122,7 +122,7 @@ using EloBuddy;
             if (ProSeries.CanCombo())
             {
                 var etarget = TargetSelector.GetTarget(findTargetRange, TargetSelector.DamageType.Physical);
-                if (etarget.LSIsValidTarget() && E.LSIsReady() && Orbwalking.InAutoAttackRange(etarget))
+                if (etarget.IsValidTarget() && E.IsReady() && Orbwalking.InAutoAttackRange(etarget))
                 {
                     if (ProSeries.Config.Item("usecomboe", true).GetValue<bool>())
                     {
@@ -139,7 +139,7 @@ using EloBuddy;
                     return;
                 }
 
-                if (etarget.LSIsValidTarget() && E.LSIsReady() && Orbwalking.InAutoAttackRange(etarget))
+                if (etarget.IsValidTarget() && E.IsReady() && Orbwalking.InAutoAttackRange(etarget))
                 {
                     if (ProSeries.Config.Item("useharasse", true).GetValue<bool>())
                         E.CastOnUnit(etarget);
@@ -147,14 +147,14 @@ using EloBuddy;
 
             }
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 var target = TargetSelector.GetTarget(findTargetRange, TargetSelector.DamageType.Physical);
-                if (target.LSIsValidTarget() && !target.IsZombie && Orbwalking.InAutoAttackRange(target))
+                if (target.IsValidTarget() && !target.IsZombie && Orbwalking.InAutoAttackRange(target))
                 {
                     if (ProSeries.Config.Item("usecombor", true).GetValue<bool>())
                     {
-                        if (target.Health <= ProSeries.Player.LSGetSpellDamage(target, SpellSlot.R))
+                        if (target.Health <= ProSeries.Player.GetSpellDamage(target, SpellSlot.R))
                             R.CastOnUnit(target);
                     }
                 }

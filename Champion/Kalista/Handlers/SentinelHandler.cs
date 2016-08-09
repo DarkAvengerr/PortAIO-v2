@@ -93,7 +93,7 @@ namespace S_Plus_Class_Kalista.Handlers
 
         private static bool SentSentinel()
         {
-            if (!Champion.W.LSIsReady()) return false;
+            if (!Champion.W.IsReady()) return false;
             Vector2 location = location = Monster.MonsterLocations["Neutral.Dragon"];
 
             switch (_selectedLocation)
@@ -123,7 +123,7 @@ namespace S_Plus_Class_Kalista.Handlers
 
             }
 
-            if (!(ObjectManager.Player.LSDistance(location) <= Champion.W.Range)) return false; // not in range
+            if (!(ObjectManager.Player.Distance(location) <= Champion.W.Range)) return false; // not in range
 
             Champion.W.Cast(location);
                     return true;

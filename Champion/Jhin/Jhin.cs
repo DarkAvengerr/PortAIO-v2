@@ -124,7 +124,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 rPosCast = args.End;
             }
-            if (!E.LSIsReady() || sender.IsMinion || !sender.IsEnemy || !Config.Item("Espell", true).GetValue<bool>() || !sender.IsValid<AIHeroClient>() || !sender.LSIsValidTarget(E.Range))
+            if (!E.IsReady() || sender.IsMinion || !sender.IsEnemy || !Config.Item("Espell", true).GetValue<bool>() || !sender.IsValid<AIHeroClient>() || !sender.IsValidTarget(E.Range))
                 return;
 
             var foundSpell = Spells.Find(x => args.SData.Name.ToLower() == x);
@@ -136,10 +136,10 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (E.LSIsReady() && Player.Mana > RMANA + WMANA)
+            if (E.IsReady() && Player.Mana > RMANA + WMANA)
             {
                 var t = gapcloser.Sender;
-                if (t.LSIsValidTarget(W.Range) && Config.Item("EGCchampion" + t.ChampionName, true).GetValue<bool>())
+                if (t.IsValidTarget(W.Range) && Config.Item("EGCchampion" + t.ChampionName, true).GetValue<bool>())
                 {
                     if (Config.Item("EmodeGC", true).GetValue<StringList>().SelectedIndex == 0)
                         E.Cast(gapcloser.End);
@@ -158,7 +158,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 Jungle();
             }
 
-            if (Program.LagFree(1) && R.LSIsReady() && Config.Item("autoR", true).GetValue<bool>())
+            if (Program.LagFree(1) && R.IsReady() && Config.Item("autoR", true).GetValue<bool>())
                 LogicR();
 
             if (IsCastingR)
@@ -178,13 +178,13 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             }
 
 
-            if (Program.LagFree(4) && E.LSIsReady())
+            if (Program.LagFree(4) && E.IsReady())
                 LogicE();
 
-            if (Program.LagFree(2) && Q.LSIsReady() && Config.Item("autoQ", true).GetValue<bool>())
+            if (Program.LagFree(2) && Q.IsReady() && Config.Item("autoQ", true).GetValue<bool>())
                 LogicQ();
 
-            if (Program.LagFree(3) && W.LSIsReady() && !Player.Spellbook.IsAutoAttacking && Config.Item("autoW", true).GetValue<bool>())
+            if (Program.LagFree(3) && W.IsReady() && !Player.Spellbook.IsAutoAttacking && Config.Item("autoW", true).GetValue<bool>())
                 LogicW();
         }
 
@@ -196,7 +196,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 R.Range = 3500;
 
             var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
-            if (t.LSIsValidTarget())
+            if (t.IsValidTarget())
             {
                 rPosLast = R.GetPrediction(t).CastPosition;
                 if (Config.Item("useR", true).GetValue<KeyBind>().Active && !IsCastingR)
@@ -206,9 +206,9 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 }
                 
                 if (!IsCastingR && Config.Item("Rks", true).GetValue<bool>() 
-                    && GetRdmg(t) * 4 > t.Health && t.LSCountAlliesInRange(700) == 0 && Player.LSCountEnemiesInRange(Config.Item("Rsafe", true).GetValue<Slider>().Value) == 0 
-                    && Player.LSDistance(t) > Config.Item("MinRangeR", true).GetValue<Slider>().Value
-                    && !Player.LSUnderTurret(true) && OktwCommon.ValidUlt(t) && !OktwCommon.IsSpellHeroCollision(t, R))
+                    && GetRdmg(t) * 4 > t.Health && t.CountAlliesInRange(700) == 0 && Player.CountEnemiesInRange(Config.Item("Rsafe", true).GetValue<Slider>().Value) == 0 
+                    && Player.Distance(t) > Config.Item("MinRangeR", true).GetValue<Slider>().Value
+                    && !Player.UnderTurret(true) && OktwCommon.ValidUlt(t) && !OktwCommon.IsSpellHeroCollision(t, R))
                 {
                     R.Cast(rPosLast);
                     rTargetLast = t;
@@ -219,7 +219,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                         R.Cast(t);
                     else
                     {
-                        foreach(var enemy in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(R.Range) && InCone(t.ServerPosition)).OrderBy(enemy => enemy.Health))
+                        foreach(var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(R.Range) && InCone(t.ServerPosition)).OrderBy(enemy => enemy.Health))
                         {
                             R.Cast(t);
                             rPosLast = R.GetPrediction(enemy).CastPosition;
@@ -238,7 +238,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         private void LogicW()
         {
             var t = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-            if (t.LSIsValidTarget())
+            if (t.IsValidTarget())
             {
                 var wDmg = GetWdmg(t);
                 if (wDmg > t.Health - OktwCommon.GetIncomingDamage(t))
@@ -247,12 +247,12 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (Config.Item("autoWcombo", true).GetValue<bool>() && !Program.Combo)
                     return;
 
-                if (Player.LSCountEnemiesInRange(400) > 1 || Player.LSCountEnemiesInRange(250) > 0)
+                if (Player.CountEnemiesInRange(400) > 1 || Player.CountEnemiesInRange(250) > 0)
                     return;
 
                 if (t.HasBuff("jhinespotteddebuff") || !Config.Item("Wstun", true).GetValue<bool>() )
                 {
-                    if (Player.LSDistance(t) < Config.Item("MaxRangeW", true).GetValue<Slider>().Value)
+                    if (Player.Distance(t) < Config.Item("MaxRangeW", true).GetValue<Slider>().Value)
                     {
                         if (Program.Combo && Player.Mana > RMANA + WMANA)
                             Program.CastSpell(W, t);
@@ -269,7 +269,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                         W.CastIfWillHit(t, 2);
                     if (Config.Item("autoWcc", true).GetValue<bool>())
                     {
-                        foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(W.Range) && (!OktwCommon.CanMove(enemy) || enemy.HasBuff("jhinespotteddebuff"))))
+                        foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(W.Range) && (!OktwCommon.CanMove(enemy) || enemy.HasBuff("jhinespotteddebuff"))))
                             W.Cast(enemy);
                     }
                 }
@@ -292,27 +292,27 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (!trapPos.IsZero)
                     E.Cast(trapPos);
 
-                foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(E.Range) && !OktwCommon.CanMove(enemy)))
+                foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(E.Range) && !OktwCommon.CanMove(enemy)))
                     E.Cast(enemy);
             }
 
             var t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-            if (t.LSIsValidTarget() && Config.Item("EmodeCombo", true).GetValue<StringList>().SelectedIndex != 2)
+            if (t.IsValidTarget() && Config.Item("EmodeCombo", true).GetValue<StringList>().SelectedIndex != 2)
             {
                 if (Program.Combo && !Player.Spellbook.IsAutoAttacking)
                 {
                     if (Config.Item("EmodeCombo", true).GetValue<StringList>().SelectedIndex == 1)
                     {
-                        if (E.GetPrediction(t).CastPosition.LSDistance(t.Position) > 100)
+                        if (E.GetPrediction(t).CastPosition.Distance(t.Position) > 100)
                         {
-                            if (Player.Position.LSDistance(t.ServerPosition) > Player.Position.LSDistance(t.Position))
+                            if (Player.Position.Distance(t.ServerPosition) > Player.Position.Distance(t.Position))
                             {
-                                if (t.Position.LSDistance(Player.ServerPosition) < t.Position.LSDistance(Player.Position))
+                                if (t.Position.Distance(Player.ServerPosition) < t.Position.Distance(Player.Position))
                                     Program.CastSpell(E, t);
                             }
                             else
                             {
-                                if (t.Position.LSDistance(Player.ServerPosition) > t.Position.LSDistance(Player.Position))
+                                if (t.Position.Distance(Player.ServerPosition) > t.Position.Distance(Player.Position))
                                     Program.CastSpell(E, t);
                             }
                         }
@@ -344,11 +344,11 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (Config.Item("Qminion", true).GetValue<bool>())
                 {
                     var t = TargetSelector.GetTarget(Q.Range + 300, TargetSelector.DamageType.Physical);
-                    if (t.LSIsValidTarget() )
+                    if (t.IsValidTarget() )
                     {
                         
-                        var minion = Cache.GetMinions(Prediction.GetPrediction(t, 0.1f).CastPosition, 300).Where(minion2 => minion2.LSIsValidTarget(Q.Range)).OrderBy(x => x.LSDistance(t)).FirstOrDefault();
-                        if (minion.LSIsValidTarget())
+                        var minion = Cache.GetMinions(Prediction.GetPrediction(t, 0.1f).CastPosition, 300).Where(minion2 => minion2.IsValidTarget(Q.Range)).OrderBy(x => x.Distance(t)).FirstOrDefault();
+                        if (minion.IsValidTarget())
                         {
                             if (t.Health < GetQdmg(t))
                                 Q.CastOnUnit(minion);
@@ -378,7 +378,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (minionList.Count >= Config.Item("LCminions", true).GetValue<Slider>().Value)
                 {
                     var minionAttack = minionList.FirstOrDefault(x => Q.GetDamage(x) > SebbyLib.HealthPrediction.GetHealthPrediction(x, 300));
-                    if(minionAttack.LSIsValidTarget())
+                    if(minionAttack.IsValidTarget())
                         Q.CastOnUnit(minionAttack);
                 }
                     
@@ -390,12 +390,12 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         {
             var range = R.Range;
             var angle = 70f * (float)Math.PI / 180;
-            var end2 = rPosCast.LSTo2D() - Player.Position.LSTo2D();
-            var edge1 = end2.LSRotated(-angle / 2);
-            var edge2 = edge1.LSRotated(angle);
+            var end2 = rPosCast.To2D() - Player.Position.To2D();
+            var edge1 = end2.Rotated(-angle / 2);
+            var edge2 = edge1.Rotated(angle);
 
-            var point = Position.LSTo2D() - Player.Position.LSTo2D();
-            if (point.LSDistance(new Vector2(), true) < range * range && edge1.LSCrossProduct(point) > 0 && point.LSCrossProduct(edge2) > 0)
+            var point = Position.To2D() - Player.Position.To2D();
+            if (point.Distance(new Vector2(), true) < range * range && edge1.CrossProduct(point) > 0 && point.CrossProduct(edge2) > 0)
                 return true;
 
             return false;
@@ -410,17 +410,17 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 {
                     var mob = mobs[0];
 
-                    if (W.LSIsReady() && Config.Item("jungleW", true).GetValue<bool>())
+                    if (W.IsReady() && Config.Item("jungleW", true).GetValue<bool>())
                     {
                         W.Cast(mob.ServerPosition);
                         return;
                     }
-                    if (E.LSIsReady() && Config.Item("jungleE", true).GetValue<bool>())
+                    if (E.IsReady() && Config.Item("jungleE", true).GetValue<bool>())
                     {
                         E.Cast(mob.ServerPosition);
                         return;
                     }
-                    if (Q.LSIsReady() && Config.Item("jungleQ", true).GetValue<bool>())
+                    if (Q.IsReady() && Config.Item("jungleQ", true).GetValue<bool>())
                     {
                         Q.CastOnUnit(mob);
                         return;
@@ -466,7 +466,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             WMANA = W.Instance.SData.Mana;
             EMANA = E.Instance.SData.Mana;
 
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 RMANA = WMANA - Player.PARRegenRate * W.Instance.Cooldown;
             else
                 RMANA = R.Instance.SData.Mana;
@@ -486,7 +486,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 if (Config.Item("onlyRdy", true).GetValue<bool>())
                 {
-                    if (R.LSIsReady())
+                    if (R.IsReady())
                         LeagueSharp.Common.Utility.DrawCircle(Player.Position, R.Range, System.Drawing.Color.Aqua, 1, 20, true);
                 }
                 else
@@ -500,7 +500,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 if (Config.Item("onlyRdy", true).GetValue<bool>())
                 {
-                    if (Q.LSIsReady())
+                    if (Q.IsReady())
                         LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, Q.Range, System.Drawing.Color.Cyan, 1, 1);
                 }
                 else
@@ -510,7 +510,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 if (Config.Item("onlyRdy", true).GetValue<bool>())
                 {
-                    if (W.LSIsReady())
+                    if (W.IsReady())
                         LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, W.Range, System.Drawing.Color.Orange, 1, 1);
                 }
                 else
@@ -520,7 +520,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 if (Config.Item("onlyRdy", true).GetValue<bool>())
                 {
-                    if (E.LSIsReady())
+                    if (E.IsReady())
                         LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, E.Range, System.Drawing.Color.Yellow, 1, 1);
                 }
                 else
@@ -530,7 +530,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 if (Config.Item("onlyRdy", true).GetValue<bool>())
                 {
-                    if (R.LSIsReady())
+                    if (R.IsReady())
                         LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, R.Range, System.Drawing.Color.Gray, 1, 1);
                 }
                 else

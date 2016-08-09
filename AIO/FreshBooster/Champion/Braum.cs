@@ -137,12 +137,12 @@ using EloBuddy;
                 if (enemy != null)
                 {
                     float damage = 0;
-                    if (_Q.LSIsReady())
+                    if (_Q.IsReady())
                         damage += _Q.GetDamage(enemy);
-                    if (_R.LSIsReady())
+                    if (_R.IsReady())
                         damage += _R.GetDamage(enemy);
                     if (!Player.Spellbook.IsAutoAttacking)
-                        damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                        damage += (float)Player.GetAutoAttackDamage(enemy, true);
                     return damage;
                 }
                 return 0;
@@ -162,7 +162,7 @@ using EloBuddy;
             try
             {
                 if (Player.IsDead) return;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
                 {
                     if (_MainMenu.Item("Braum_Indicator").GetValue<bool>())
                     {
@@ -209,12 +209,12 @@ using EloBuddy;
                 var RTarget = TargetSelector.GetTarget(_R.Range, TargetSelector.DamageType.Magical);
 
                 // Kill
-                if (_MainMenu.Item("Braum_KUse_Q").GetValue<bool>() && QTarget != null && _Q.LSIsReady() && _Q.GetDamage(QTarget) > QTarget.Health)
+                if (_MainMenu.Item("Braum_KUse_Q").GetValue<bool>() && QTarget != null && _Q.IsReady() && _Q.GetDamage(QTarget) > QTarget.Health)
                 {
                     _Q.CastIfHitchanceEquals(QTarget, HitChance.Low, true);
                     return;
                 }
-                if (_MainMenu.Item("Braum_KUse_R").GetValue<bool>() && QTarget != null && _R.LSIsReady() && _R.GetDamage(RTarget) > RTarget.Health)
+                if (_MainMenu.Item("Braum_KUse_R").GetValue<bool>() && QTarget != null && _R.IsReady() && _R.GetDamage(RTarget) > RTarget.Health)
                 {
                     _R.CastIfHitchanceEquals(QTarget, HitChance.VeryHigh, true);
                     return;
@@ -224,16 +224,16 @@ using EloBuddy;
                 if (_MainMenu.Item("Braum_Flee").GetValue<KeyBind>().Active)
                 {
                     MovingPlayer(Game.CursorPos);
-                    if (QTarget != null && _Q.LSIsReady())
+                    if (QTarget != null && _Q.IsReady())
                         _Q.CastIfHitchanceEquals(QTarget, HitChance.Low, true);
                 }
 
                 // Combo
                 if (_MainMenu.Item("CKey").GetValue<KeyBind>().Active)
                 {
-                    if (_MainMenu.Item("Braum_CUse_R").GetValue<bool>() && _R.LSIsReady() && RTarget != null)
+                    if (_MainMenu.Item("Braum_CUse_R").GetValue<bool>() && _R.IsReady() && RTarget != null)
                         _R.CastIfHitchanceEquals(RTarget, HitChance.VeryHigh, true);
-                    if (_MainMenu.Item("Braum_CUse_Q").GetValue<bool>() && _Q.LSIsReady() && QTarget != null)
+                    if (_MainMenu.Item("Braum_CUse_Q").GetValue<bool>() && _Q.IsReady() && QTarget != null)
                         _Q.CastIfHitchanceEquals(QTarget, Hitchance("Braum_CUse_Q_Hit"), true);
                 }
 
@@ -241,7 +241,7 @@ using EloBuddy;
                 if ((_MainMenu.Item("HKey").GetValue<KeyBind>().Active || _MainMenu.Item("Braum_Auto_HEnable").GetValue<bool>())
                     && _MainMenu.Item("Braum_HMana").GetValue<Slider>().Value < Player.ManaPercent)
                 {
-                    if (_MainMenu.Item("Braum_HUse_Q").GetValue<bool>() && _Q.LSIsReady() && QTarget != null)
+                    if (_MainMenu.Item("Braum_HUse_Q").GetValue<bool>() && _Q.IsReady() && QTarget != null)
                         _Q.CastIfHitchanceEquals(QTarget, HitChance.VeryHigh, true);
                 }
             }
@@ -258,12 +258,12 @@ using EloBuddy;
         {
             try
             {
-                if (_MainMenu.Item("Braum_GapQ").GetValue<bool>() && _Q.LSIsReady() && gapcloser.Sender.Position.LSDistance(Player.Position) < _Q.Range)
+                if (_MainMenu.Item("Braum_GapQ").GetValue<bool>() && _Q.IsReady() && gapcloser.Sender.Position.Distance(Player.Position) < _Q.Range)
                 {
                     _Q.CastIfHitchanceEquals(gapcloser.Sender, HitChance.Low, true);
                     return;
                 }
-                if (_MainMenu.Item("Braum_GapR").GetValue<bool>() && _R.LSIsReady() && gapcloser.Sender.Position.LSDistance(Player.Position) < _R.Range)
+                if (_MainMenu.Item("Braum_GapR").GetValue<bool>() && _R.IsReady() && gapcloser.Sender.Position.Distance(Player.Position) < _R.Range)
                 {
                     _R.CastIfHitchanceEquals(gapcloser.Sender, HitChance.VeryHigh, true);
                     return;
@@ -282,15 +282,15 @@ using EloBuddy;
         {
             try
             {
-                if (!(sender is AIHeroClient) || Player.LSIsRecalling())
+                if (!(sender is AIHeroClient) || Player.IsRecalling())
                     return;
                 // Auto W
-                if (_MainMenu.Item("Braum_AutoW").GetValue<bool>() && _W.LSIsReady())
+                if (_MainMenu.Item("Braum_AutoW").GetValue<bool>() && _W.IsReady())
                 {
                     if (!(sender is AIHeroClient) || !sender.IsEnemy)
                         return;
                     if (args.Target != null)
-                        if (args.SData.Name.ToLower().Contains("attack") && args.Target.Position.LSDistance(Player.Position) < _W.Range)
+                        if (args.SData.Name.ToLower().Contains("attack") && args.Target.Position.Distance(Player.Position) < _W.Range)
                             if (args.Target.IsAlly && args.Target is AIHeroClient)
                             {
                                 if (args.Target.IsMe && Player.HealthPercent < 20)
@@ -304,22 +304,22 @@ using EloBuddy;
                             }
                 }
                 // Auto E
-                if (_MainMenu.Item("Braum_AutoE").GetValue<bool>() && _E.LSIsReady())
+                if (_MainMenu.Item("Braum_AutoE").GetValue<bool>() && _E.IsReady())
                 {
                     if (!(sender is AIHeroClient) || !sender.IsEnemy || !Orbwalking.CanAttack())
                         return;
                     var enemyskill = new Geometry.Polygon.Rectangle(args.Start, args.End, args.SData.BounceRadius + 20);
-                    var myteam = HeroManager.Allies.Where(f => f.LSDistance(Player.Position) < 200);
+                    var myteam = HeroManager.Allies.Where(f => f.Distance(Player.Position) < 200);
                     var count = myteam.Count(f => enemyskill.IsInside(f.Position));
-                    if (args.Target != null && args.Target.Position.LSDistance(Player.Position) < 200)
+                    if (args.Target != null && args.Target.Position.Distance(Player.Position) < 200)
                     {
                         if (args.Target.Name == Player.Name && Player.HealthPercent < 20)
                         {
                             _E.Cast(sender.Position, true);
                         }
-                        else if (args.Target.Position.LSDistance(Player.Position) < 200 && args.Target is AIHeroClient)
+                        else if (args.Target.Position.Distance(Player.Position) < 200 && args.Target is AIHeroClient)
                         {
-                            if (_W.LSIsReady() && args.Target.Position.LSDistance(Player.Position) < _W.Range)
+                            if (_W.IsReady() && args.Target.Position.Distance(Player.Position) < _W.Range)
                                 _W.CastOnUnit((Obj_AI_Base)args.Target, true);
                             _E.Cast(sender.Position, true);
                         }
@@ -351,7 +351,7 @@ using EloBuddy;
         {
             try
             {
-                if (_MainMenu.Item("Braum_InterR").GetValue<bool>() && _R.LSIsReady() && sender.IsEnemy && sender.Position.LSDistance(Player.Position) < _R.Range * 0.9)
+                if (_MainMenu.Item("Braum_InterR").GetValue<bool>() && _R.IsReady() && sender.IsEnemy && sender.Position.Distance(Player.Position) < _R.Range * 0.9)
                     _R.CastIfHitchanceEquals(sender, HitChance.VeryHigh, true);
             }
             catch (Exception)

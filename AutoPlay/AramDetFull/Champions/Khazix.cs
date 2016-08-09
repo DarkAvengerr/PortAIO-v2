@@ -37,23 +37,23 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.CastOnUnit(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             W.Cast(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
-            if (target.Health > E.GetDamage(target) && target.LSDistance(player,true)>350*350)
+            if (target.Health > E.GetDamage(target) && target.Distance(player,true)>350*350)
                 return;
 
             if (safeGap(target))
@@ -63,14 +63,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             R.Cast();
         }
 
         public override void useSpells()
         {
-            if (E.LSIsReady() && player.HealthPercent < 35 && player.LSGetEnemiesInRange(600).Count(ene => !ene.IsDead) > 1)
+            if (E.IsReady() && player.HealthPercent < 35 && player.GetEnemiesInRange(600).Count(ene => !ene.IsDead) > 1)
                 E.Cast(ARAMSimulator.fromNex.Position);
             CheckSpells();
             var tar = ARAMTargetSelector.getBestTarget(Q.Range);
@@ -100,18 +100,18 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
 
             //check for evolutions
-            if (ObjectManager.Player.LSHasBuff("khazixqevo", true) && !Qevolved)
+            if (ObjectManager.Player.HasBuff("khazixqevo", true) && !Qevolved)
             {
                 Q.Range = 375;
                 Qevolved = true;
             }
-            if (ObjectManager.Player.LSHasBuff("khazixwevo", true) && !Wevolved)
+            if (ObjectManager.Player.HasBuff("khazixwevo", true) && !Wevolved)
             {
                 Wevolved = true;
                 W.SetSkillshot(0.225f, 100f, 828.5f, true, SkillshotType.SkillshotLine);
             }
 
-            if (ObjectManager.Player.LSHasBuff("khazixeevo", true) && !Eevolved)
+            if (ObjectManager.Player.HasBuff("khazixeevo", true) && !Eevolved)
             {
                 E.Range = 1000;
                 Eevolved = true;

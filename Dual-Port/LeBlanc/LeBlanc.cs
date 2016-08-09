@@ -49,8 +49,8 @@ using EloBuddy;
 
         private static void OnGapcloser(ActiveGapcloser gapcloser)
         {
-            if (gapcloser.Sender.IsEnemy && gapcloser.Sender.LSIsValidTarget(Spells.E.Range) &&
-                (gapcloser.Sender.LastCastedSpellTarget().IsMe || ObjectManager.Player.LSDistance(gapcloser.End) < 100) && Spells.E.LSIsReady() // unsure
+            if (gapcloser.Sender.IsEnemy && gapcloser.Sender.IsValidTarget(Spells.E.Range) &&
+                (gapcloser.Sender.LastCastedSpellTarget().IsMe || ObjectManager.Player.Distance(gapcloser.End) < 100) && Spells.E.IsReady() // unsure
                 && Utilities.Enabled("anti-gapcloser.e"))
             {
                 Spells.E.Cast(gapcloser.Sender.Position);

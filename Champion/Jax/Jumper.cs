@@ -38,22 +38,22 @@ namespace JaxQx
         {
             Q = new Spell(SpellSlot.Q, 700);
 
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
             bool wardIs = false;
-            if (!InDistance(pos, Player.ServerPosition.LSTo2D(), Q.Range))
+            if (!InDistance(pos, Player.ServerPosition.To2D(), Q.Range))
             {
-                pos = Player.ServerPosition.LSTo2D() + Vector2.Normalize(pos - Player.ServerPosition.LSTo2D())*600;
+                pos = Player.ServerPosition.To2D() + Vector2.Normalize(pos - Player.ServerPosition.To2D())*600;
             }
 
-            if(!Q.LSIsReady())
+            if(!Q.IsReady())
                 return;
             foreach (Obj_AI_Base ally in ObjectManager.Get<Obj_AI_Base>().Where(ally => ally.IsAlly
-                && !(ally is Obj_AI_Turret) && InDistance(pos, ally.ServerPosition.LSTo2D(), 200)))
+                && !(ally is Obj_AI_Turret) && InDistance(pos, ally.ServerPosition.To2D(), 200)))
             {
                     wardIs = true;
                 moveTo(pos);
-                if (InDistance(Player.ServerPosition.LSTo2D(), ally.ServerPosition.LSTo2D(), Q.Range + ally.BoundingRadius))
+                if (InDistance(Player.ServerPosition.To2D(), ally.ServerPosition.To2D(), Q.Range + ally.BoundingRadius))
                 {
                     if (last < Environment.TickCount)
                     {
@@ -67,7 +67,7 @@ namespace JaxQx
             Polygon pol;
             if ((pol = Program.map.getInWhichPolygon(pos)) != null)
             {
-                if (InDistance(pol.getProjOnPolygon(pos), Player.ServerPosition.LSTo2D(), Q.Range) && !wardIs && InDistance(pol.getProjOnPolygon(pos), pos, 250))
+                if (InDistance(pol.getProjOnPolygon(pos), Player.ServerPosition.To2D(), Q.Range) && !wardIs && InDistance(pol.getProjOnPolygon(pos), pos, 250))
                 {
                     putWard(pos);
                 }

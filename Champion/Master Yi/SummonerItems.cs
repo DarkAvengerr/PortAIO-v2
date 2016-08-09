@@ -35,8 +35,8 @@ namespace MasterSharp
         {
             player = myHero;
             sumBook = player.Spellbook;
-            ignite = player.LSGetSpellSlot("summonerdot");
-            smite = player.LSGetSpellSlot("SummonerSmite");
+            ignite = player.GetSpellSlot("summonerdot");
+            smite = player.GetSpellSlot("SummonerSmite");
         }
 
         public void castIgnite(AIHeroClient target)

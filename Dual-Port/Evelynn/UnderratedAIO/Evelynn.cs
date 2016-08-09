@@ -35,12 +35,12 @@ namespace UnderratedAIO.Champions
 
         private void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (unit.IsMe && config.Item("useqH", true).GetValue<bool>() && Q.LSIsReady() &&
-                orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && !player.LSUnderTurret(true))
+            if (unit.IsMe && config.Item("useqH", true).GetValue<bool>() && Q.IsReady() &&
+                orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && !player.UnderTurret(true))
             {
                 var collision =
                     Collision.GetCollision(
-                        new List<Vector3>() { player.Position, player.Position.LSExtend(target.Position, Q.Range) },
+                        new List<Vector3>() { player.Position, player.Position.Extend(target.Position, Q.Range) },
                         new PredictionInput()
                         {
                             Aoe = true,
@@ -83,7 +83,7 @@ namespace UnderratedAIO.Champions
             var target =
                 MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly)
                     .Where(i => i.IsEnemy && !i.IsDead && Q.GetDamage(i) > i.Health)
-                    .OrderBy(i => player.LSDistance(i))
+                    .OrderBy(i => player.Distance(i))
                     .FirstOrDefault();
             if (target != null && (target.IsValid && Q.CanCast(target)))
             {
@@ -107,13 +107,13 @@ namespace UnderratedAIO.Champions
             {
                 ItemHandler.UseItems(target, config, ComboDamage(target));
             }
-            bool hasIgnite = player.Spellbook.CanUseSpell(player.LSGetSpellSlot("SummonerDot")) == SpellState.Ready;
+            bool hasIgnite = player.Spellbook.CanUseSpell(player.GetSpellSlot("SummonerDot")) == SpellState.Ready;
 
-            if (config.Item("useq", true).GetValue<bool>() && Q.LSIsReady())
+            if (config.Item("useq", true).GetValue<bool>() && Q.IsReady())
             {
                 Q.Cast();
             }
-            if (config.Item("usew", true).GetValue<bool>() && W.LSIsReady() && checkSlows())
+            if (config.Item("usew", true).GetValue<bool>() && W.IsReady() && checkSlows())
             {
                 W.Cast();
             }
@@ -123,9 +123,9 @@ namespace UnderratedAIO.Champions
             }
             var Ultpos = Environment.Hero.bestVectorToAoeSpell(
                 HeroManager.Enemies.Where(i => R.CanCast(i)), R.Range, 250f);
-            if (config.Item("user", true).GetValue<bool>() && R.LSIsReady() &&
-                config.Item("useRmin", true).GetValue<Slider>().Value <= Ultpos.LSCountEnemiesInRange(250f) &&
-                R.Range > player.LSDistance(Ultpos))
+            if (config.Item("user", true).GetValue<bool>() && R.IsReady() &&
+                config.Item("useRmin", true).GetValue<Slider>().Value <= Ultpos.CountEnemiesInRange(250f) &&
+                R.Range > player.Distance(Ultpos))
             {
                 R.Cast(Ultpos);
             }
@@ -133,7 +133,7 @@ namespace UnderratedAIO.Champions
             if (config.Item("useIgnite", true).GetValue<bool>() && ignitedmg > target.Health && hasIgnite &&
                 !E.CanCast(target))
             {
-                player.Spellbook.CastSpell(player.LSGetSpellSlot("SummonerDot"), target);
+                player.Spellbook.CastSpell(player.GetSpellSlot("SummonerDot"), target);
             }
         }
 
@@ -150,7 +150,7 @@ namespace UnderratedAIO.Champions
                 return;
             }
 
-            if (config.Item("useqLC", true).GetValue<bool>() && Q.LSIsReady())
+            if (config.Item("useqLC", true).GetValue<bool>() && Q.IsReady())
             {
                 Q.Cast();
             }
@@ -178,17 +178,17 @@ namespace UnderratedAIO.Champions
         private float ComboDamage(AIHeroClient hero)
         {
             double damage = 0;
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.Q);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.Q);
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.W);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.W);
             }
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.R);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.R);
             }
 
             damage += ItemHandler.GetItemsDamage(hero);
@@ -198,12 +198,12 @@ namespace UnderratedAIO.Champions
             {
                 damage = (float) (damage * 1.2);
             }
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.E);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.E);
             }
             var ignitedmg = player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
-            if (player.Spellbook.CanUseSpell(player.LSGetSpellSlot("summonerdot")) == SpellState.Ready &&
+            if (player.Spellbook.CanUseSpell(player.GetSpellSlot("summonerdot")) == SpellState.Ready &&
                 hero.Health < damage + ignitedmg)
             {
                 damage += ignitedmg;

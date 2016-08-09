@@ -192,7 +192,7 @@ using EloBuddy; namespace Support.Util
 
         public static bool CastCheck(this Items.Item item, Obj_AI_Base target)
         {
-            return item.IsReady() && target.LSIsValidTarget(item.Range);
+            return item.IsReady() && target.IsValidTarget(item.Range);
         }
 
         public static bool CastCheck(
@@ -202,13 +202,13 @@ using EloBuddy; namespace Support.Util
             bool range = true,
             bool team = true)
         {
-            return spell.LSIsReady() && target.LSIsValidTarget(range ? spell.Range : float.MaxValue, team)
+            return spell.IsReady() && target.IsValidTarget(range ? spell.Range : float.MaxValue, team)
                    && PluginBase.Config.Item(menu + ObjectManager.Player.ChampionName).GetValue<bool>();
         }
 
         public static bool CastCheck(this Spell spell, Obj_AI_Base target, bool range = true, bool team = true)
         {
-            return spell.LSIsReady() && target.LSIsValidTarget(range ? spell.Range : float.MaxValue, team);
+            return spell.IsReady() && target.IsValidTarget(range ? spell.Range : float.MaxValue, team);
         }
 
         public static bool CastWithHitChance(this Spell spell, Obj_AI_Base target, string menu)
@@ -252,33 +252,33 @@ using EloBuddy; namespace Support.Util
 
         public static bool IsInRange(this Spell spell, Obj_AI_Base target)
         {
-            return ObjectManager.Player.LSDistance(target) < spell.Range;
+            return ObjectManager.Player.Distance(target) < spell.Range;
         }
 
         public static bool IsInRange(this Items.Item item, Obj_AI_Base target)
         {
-            return ObjectManager.Player.LSDistance(target) < item.Range;
+            return ObjectManager.Player.Distance(target) < item.Range;
         }
 
         public static bool IsValidAlly(this Obj_AI_Base unit, float range = float.MaxValue)
         {
-            return unit.LSDistance(ObjectManager.Player) < range && unit.IsValid<AIHeroClient>() && unit.IsAlly
+            return unit.Distance(ObjectManager.Player) < range && unit.IsValid<AIHeroClient>() && unit.IsAlly
                    && !unit.IsDead && unit.IsTargetable;
         }
 
         public static bool WillKill(this Obj_AI_Base caster, Obj_AI_Base target, string spell, int buffer = 10)
         {
-            return caster.LSGetSpellDamage(target, spell) >= target.HealthBuffer(buffer);
+            return caster.GetSpellDamage(target, spell) >= target.HealthBuffer(buffer);
         }
 
         public static bool WillKill(this Obj_AI_Base caster, Obj_AI_Base target, SpellData spell, int buffer = 10)
         {
-            return caster.LSGetSpellDamage(target, spell.Name) >= target.HealthBuffer(buffer);
+            return caster.GetSpellDamage(target, spell.Name) >= target.HealthBuffer(buffer);
         }
 
         public static bool WillKill(this Obj_AI_Base caster, Obj_AI_Base target, Evade.SpellData spell, int buffer = 10)
         {
-            return caster.LSGetSpellDamage(target, spell.SpellName) >= target.HealthBuffer(buffer);
+            return caster.GetSpellDamage(target, spell.SpellName) >= target.HealthBuffer(buffer);
         }
     }
 }

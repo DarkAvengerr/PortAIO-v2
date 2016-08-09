@@ -58,7 +58,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.LaneClear
             if (minions == null) return;
 
             if (this.Menu.Item(this.Menu.Name + "LaneQEnemy").GetValue<bool>()
-                && minions.Any(m => m.LSCountEnemiesInRange(2500) > 0))
+                && minions.Any(m => m.CountEnemiesInRange(2500) > 0))
             {
                 return;
             }
@@ -69,7 +69,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.LaneClear
         private void OnUpdate(EventArgs args)
         {
             if (Variable.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
-                || !Variable.Spells[SpellSlot.W].LSIsReady()) return;
+                || !Variable.Spells[SpellSlot.W].IsReady()) return;
 
             if (this.Menu.Item(this.Menu.Name + "LaneQMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
 

@@ -246,7 +246,7 @@ using EloBuddy; namespace SFXChallenger.Champions
 
             TargetSelector.Weights.Register(
                 new TargetSelector.Weights.Item(
-                    "short-distance-ball", "Distance to Ball", 0, true, hero => hero.LSDistance(Ball.Position),
+                    "short-distance-ball", "Distance to Ball", 0, true, hero => hero.Distance(Ball.Position),
                     "Close to Ball = Higher Weight"));
 
             _ballPositionThickness = DrawingManager.Add("Ball Thickness", new Slider(7, 1, 10));
@@ -294,10 +294,10 @@ using EloBuddy; namespace SFXChallenger.Champions
         {
             try
             {
-                if (args.UniqueId.Equals("q-gapcloser") && Q.LSIsReady() &&
+                if (args.UniqueId.Equals("q-gapcloser") && Q.IsReady() &&
                     BestTargetOnlyManager.Check("q-gapcloser", Q, args.Hero))
                 {
-                    if (args.End.LSDistance(Player.Position) <= Q.Range)
+                    if (args.End.Distance(Player.Position) <= Q.Range)
                     {
                         var delay = (int) (args.EndTime - Game.Time - Q.Delay - 0.1f);
                         if (delay > 0)
@@ -339,17 +339,17 @@ using EloBuddy; namespace SFXChallenger.Champions
         {
             try
             {
-                if (!Menu.Item(Menu.Name + ".initiator.use-e").GetValue<bool>() || Ball.IsMoving || !E.LSIsReady() ||
+                if (!Menu.Item(Menu.Name + ".initiator.use-e").GetValue<bool>() || Ball.IsMoving || !E.IsReady() ||
                     (Ball.Hero != null && Ball.Hero.NetworkId.Equals(args.Hero.NetworkId)))
                 {
                     return;
                 }
-                if (args.Start.LSDistance(Player.Position) <= E.Range &&
-                    args.End.LSDistance(Player.Position) <= MaxBallDistance &&
+                if (args.Start.Distance(Player.Position) <= E.Range &&
+                    args.End.Distance(Player.Position) <= MaxBallDistance &&
                     GameObjects.EnemyHeroes.Any(
                         e =>
                             !e.IsDead &&
-                            (e.Position.LSDistance(args.End) < 600 || e.Position.LSDistance(args.Start) < args.Range + 300)))
+                            (e.Position.Distance(args.End) < 600 || e.Position.Distance(args.Start) < args.Range + 300)))
                 {
                     E.CastOnUnit(args.Hero);
                 }
@@ -382,8 +382,8 @@ using EloBuddy; namespace SFXChallenger.Champions
             {
                 return;
             }
-            if (Menu.Item(Menu.Name + ".shield.enabled").GetValue<bool>() && E.LSIsReady() &&
-                ResourceManager.Check("shield") && !Player.LSInFountain() && !Player.LSIsRecalling())
+            if (Menu.Item(Menu.Name + ".shield.enabled").GetValue<bool>() && E.IsReady() &&
+                ResourceManager.Check("shield") && !Player.InFountain() && !Player.IsRecalling())
             {
                 if (Player.HealthPercent <= Menu.Item(Menu.Name + ".shield.min-health").GetValue<Slider>().Value)
                 {
@@ -403,7 +403,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             Q.UpdateSourcePosition(Ball.Position, ObjectManager.Player.Position);
             E.UpdateSourcePosition(Ball.Position, ObjectManager.Player.Position);
 
-            if (Ultimate.IsActive(UltimateModeType.Flash) && R.LSIsReady() && SummonerManager.Flash.IsReady())
+            if (Ultimate.IsActive(UltimateModeType.Flash) && R.IsReady() && SummonerManager.Flash.IsReady())
             {
                 if (Ultimate.ShouldMove(UltimateModeType.Flash))
                 {
@@ -411,7 +411,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 }
                 if (Ball.Status != BallStatus.Me)
                 {
-                    if (E.LSIsReady())
+                    if (E.IsReady())
                     {
                         E.CastOnUnit(Player);
                     }
@@ -423,10 +423,10 @@ using EloBuddy; namespace SFXChallenger.Champions
                 }
                 var target = TargetSelector.GetTarget(
                     (R.Width + SummonerManager.Flash.Range) * 1.5f, DamageType.Magical);
-                if (target != null && !target.LSIsDashing() &&
-                    R.GetPrediction(target).UnitPosition.LSDistance(Player.Position) > R.Width)
+                if (target != null && !target.IsDashing() &&
+                    R.GetPrediction(target).UnitPosition.Distance(Player.Position) > R.Width)
                 {
-                    var flashPos = Player.Position.LSExtend(target.Position, SummonerManager.Flash.Range);
+                    var flashPos = Player.Position.Extend(target.Position, SummonerManager.Flash.Range);
                     var maxHits = GetHits(R, false, -1f, flashPos);
 
                     if (maxHits.Item1 > 0)
@@ -453,7 +453,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 }
             }
 
-            if (Ultimate.IsActive(UltimateModeType.Assisted) && R.LSIsReady() && !Ball.IsMoving)
+            if (Ultimate.IsActive(UltimateModeType.Assisted) && R.IsReady() && !Ball.IsMoving)
             {
                 if (Ultimate.ShouldMove(UltimateModeType.Assisted))
                 {
@@ -464,11 +464,11 @@ using EloBuddy; namespace SFXChallenger.Champions
                     var casted = RLogicSingle(UltimateModeType.Assisted);
                     if (!casted)
                     {
-                        if (E.LSIsReady())
+                        if (E.IsReady())
                         {
                             EComboLogic(R);
                         }
-                        if (Q.LSIsReady())
+                        if (Q.IsReady())
                         {
                             int hits;
                             var pos = AssistedQLogic(out hits);
@@ -481,7 +481,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 }
             }
 
-            if (Ultimate.IsActive(UltimateModeType.Auto) && R.LSIsReady() && !Ball.IsMoving)
+            if (Ultimate.IsActive(UltimateModeType.Auto) && R.IsReady() && !Ball.IsMoving)
             {
                 if (!RLogic(UltimateModeType.Auto))
                 {
@@ -496,7 +496,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             {
                 if (sender != null && sender.IsValid && sender.IsEnemy &&
                     args.DangerLevel == Interrupter2.DangerLevel.High &&
-                    Ultimate.IsActive(UltimateModeType.Interrupt, sender) && R.LSIsReady())
+                    Ultimate.IsActive(UltimateModeType.Interrupt, sender) && R.IsReady())
                 {
                     var hits = GetHits(R);
                     if (hits.Item2.Any(i => i.NetworkId.Equals(sender.NetworkId)))
@@ -523,7 +523,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             var e = Menu.Item(Menu.Name + ".combo.e").GetValue<bool>();
             var r = Ultimate.IsActive(UltimateModeType.Combo);
             var target = TargetSelector.GetTarget(Q);
-            if (r && R.LSIsReady())
+            if (r && R.IsReady())
             {
                 if (!RLogic(UltimateModeType.Combo))
                 {
@@ -531,15 +531,15 @@ using EloBuddy; namespace SFXChallenger.Champions
                     single = true;
                 }
             }
-            if (w && W.LSIsReady())
+            if (w && W.IsReady())
             {
                 WLogic(1);
             }
-            if (q && Q.LSIsReady())
+            if (q && Q.IsReady())
             {
                 QLogic(target, Q.GetHitChance("combo"), e);
             }
-            if (e && E.LSIsReady())
+            if (e && E.IsReady())
             {
                 ELogic();
             }
@@ -558,15 +558,15 @@ using EloBuddy; namespace SFXChallenger.Champions
             var w = Menu.Item(Menu.Name + ".harass.w").GetValue<bool>() && ResourceManager.Check("harass-w");
             var e = Menu.Item(Menu.Name + ".harass.e").GetValue<bool>();
 
-            if (w && W.LSIsReady())
+            if (w && W.IsReady())
             {
                 WLogic(1);
             }
-            if (q && Q.LSIsReady())
+            if (q && Q.IsReady())
             {
                 QLogic(TargetSelector.GetTarget(Q), Q.GetHitChance("combo"), e);
             }
-            if (e && E.LSIsReady())
+            if (e && E.IsReady())
             {
                 ELogic();
             }
@@ -590,7 +590,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 var damage = 0f;
                 var totalMana = 0f;
 
-                if (r && R.LSIsReady())
+                if (r && R.IsReady())
                 {
                     var rMana = R.ManaCost * resMulti;
                     if (totalMana + rMana <= Player.Mana)
@@ -600,7 +600,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     }
                 }
 
-                if (w && W.LSIsReady(2000))
+                if (w && W.IsReady(2000))
                 {
                     var wMana = W.ManaCost * resMulti;
                     if (totalMana + wMana <= Player.Mana)
@@ -615,7 +615,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 {
                     totalMana += qMana;
                     damage += Q.GetDamage(target);
-                    if (q && Q.LSIsReady())
+                    if (q && Q.IsReady())
                     {
                         if (totalMana + qMana <= Player.Mana)
                         {
@@ -625,7 +625,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     }
                 }
 
-                if (e && E.LSIsReady())
+                if (e && E.IsReady())
                 {
                     var eMana = E.ManaCost * resMulti;
                     if (totalMana + eMana <= Player.Mana)
@@ -633,9 +633,9 @@ using EloBuddy; namespace SFXChallenger.Champions
                         damage += E.GetDamage(target) * 0.75f;
                     }
                 }
-                if (!rangeCheck || target.LSDistance(Player) <= Orbwalking.GetRealAutoAttackRange(target) * 1.2f)
+                if (!rangeCheck || target.Distance(Player) <= Orbwalking.GetRealAutoAttackRange(target) * 1.2f)
                 {
-                    damage += 2 * (float) Player.LSGetAutoAttackDamage(target, true);
+                    damage += 2 * (float) Player.GetAutoAttackDamage(target, true);
                 }
                 damage += ItemManager.CalculateComboDamage(target, rangeCheck);
                 damage += SummonerManager.CalculateComboDamage(target, rangeCheck);
@@ -656,7 +656,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 {
                     return;
                 }
-                if (LeagueSharp.Common.Utility.LSCountEnemiesInRange((int) (Q.Range + R.Width)) >= 2)
+                if (LeagueSharp.Common.Utility.CountEnemiesInRange((int) (Q.Range + R.Width)) >= 2)
                 {
                     var qLoc = GetBestQLocation(target, hitChance);
                     if (qLoc.Item1 > 1)
@@ -670,25 +670,25 @@ using EloBuddy; namespace SFXChallenger.Champions
                 {
                     return;
                 }
-                if (useE && E.LSIsReady() && target.LSDistance(Ball.Position) >= 250)
+                if (useE && E.IsReady() && target.Distance(Ball.Position) >= 250)
                 {
-                    var directTravelTime = Ball.Position.LSDistance(pred.CastPosition) / Q.Speed;
+                    var directTravelTime = Ball.Position.Distance(pred.CastPosition) / Q.Speed;
                     var bestEqTravelTime = float.MaxValue;
                     var bestAlly =
-                        GameObjects.AllyHeroes.Where(h => h.LSIsValidTarget(E.Range, false))
-                            .OrderBy(h => h.LSDistance(pred.CastPosition))
+                        GameObjects.AllyHeroes.Where(h => h.IsValidTarget(E.Range, false))
+                            .OrderBy(h => h.Distance(pred.CastPosition))
                             .FirstOrDefault();
                     if (bestAlly != null)
                     {
-                        var t = Ball.Position.LSDistance(bestAlly.ServerPosition) / E.Speed +
-                                bestAlly.LSDistance(pred.CastPosition) / Q.Speed;
+                        var t = Ball.Position.Distance(bestAlly.ServerPosition) / E.Speed +
+                                bestAlly.Distance(pred.CastPosition) / Q.Speed;
                         if (t < bestEqTravelTime)
                         {
                             bestEqTravelTime = t;
                         }
                     }
                     if (bestAlly != null && bestEqTravelTime < directTravelTime * 1.3f &&
-                        (Ball.Position.LSDistance(bestAlly.ServerPosition, true) > 10000))
+                        (Ball.Position.Distance(bestAlly.ServerPosition, true) > 10000))
                     {
                         CastE(bestAlly);
                         return;
@@ -727,15 +727,15 @@ using EloBuddy; namespace SFXChallenger.Champions
                     return;
                 }
 
-                var ballEnemies = Ball.Position.LSCountEnemiesInRange(600);
+                var ballEnemies = Ball.Position.CountEnemiesInRange(600);
                 var playerEnemies = ballEnemies;
 
                 if (Ball.Status != BallStatus.Me)
                 {
-                    playerEnemies = Player.Position.LSCountEnemiesInRange(600);
+                    playerEnemies = Player.Position.CountEnemiesInRange(600);
                 }
 
-                if (!Q.LSIsReady() && W.Instance.CooldownExpires < Q.Instance.CooldownExpires &&
+                if (!Q.IsReady() && W.Instance.CooldownExpires < Q.Instance.CooldownExpires &&
                     (ballEnemies > playerEnemies || ballEnemies == playerEnemies))
                 {
                     return;
@@ -748,11 +748,11 @@ using EloBuddy; namespace SFXChallenger.Champions
                     return;
                 }
 
-                foreach (var ally in GameObjects.AllyHeroes.Where(h => h.LSIsValidTarget(E.Range, false)))
+                foreach (var ally in GameObjects.AllyHeroes.Where(h => h.IsValidTarget(E.Range, false)))
                 {
                     if ((Ball.Hero != null && Ball.Hero.NetworkId == ally.NetworkId
                         ? ballEnemies
-                        : ally.Position.LSCountEnemiesInRange(300)) >= 2)
+                        : ally.Position.CountEnemiesInRange(300)) >= 2)
                     {
                         CastE(ally);
                         return;
@@ -840,16 +840,16 @@ using EloBuddy; namespace SFXChallenger.Champions
                 var positions = new List<CPrediction.Position>();
                 foreach (var t in GameObjects.EnemyHeroes)
                 {
-                    if (t.LSIsValidTarget(width * 4, true, fromCheck))
+                    if (t.IsValidTarget(width * 4, true, fromCheck))
                     {
                         input.Unit = t;
                         var prediction = Prediction.GetPrediction(input);
                         if (prediction.Hitchance >= HitChance.High)
                         {
                             if (!advancedChecks || Utils.IsImmobile(t) || Utils.IsSlowed(t) ||
-                                t.LSDistance(fromCheck) < spell.Width * 0.75 ||
-                                t.LSDistance(fromCheck) < spell.Width &&
-                                (fromCheck.LSDistance(Ball.Position) > 100 || t.IsFacing(fromCheck, 120f)))
+                                t.Distance(fromCheck) < spell.Width * 0.75 ||
+                                t.Distance(fromCheck) < spell.Width &&
+                                (fromCheck.Distance(Ball.Position) > 100 || t.IsFacing(fromCheck, 120f)))
                             {
                                 positions.Add(new CPrediction.Position(t, prediction.UnitPosition));
                             }
@@ -862,10 +862,10 @@ using EloBuddy; namespace SFXChallenger.Champions
                     hits.AddRange(
                         from position in positions
                         where
-                            !advancedChecks || !position.Hero.LSIsDashing() ||
-                            (position.Hero.LSDistance(fromCheck) >= 100f &&
-                             position.Hero.Position.LSDistance(fromCheck) >
-                             position.Hero.GetDashInfo().EndPos.LSDistance(fromCheck) - 50f)
+                            !advancedChecks || !position.Hero.IsDashing() ||
+                            (position.Hero.Distance(fromCheck) >= 100f &&
+                             position.Hero.Position.Distance(fromCheck) >
+                             position.Hero.GetDashInfo().EndPos.Distance(fromCheck) - 50f)
                         where circle.IsInside(position.UnitPosition)
                         select position.Hero);
                     return new Tuple<int, List<AIHeroClient>>(hits.Count, hits);
@@ -883,9 +883,9 @@ using EloBuddy; namespace SFXChallenger.Champions
             try
             {
                 var hits = new List<AIHeroClient>();
-                foreach (var enemy in GameObjects.EnemyHeroes.Where(h => h.LSIsValidTarget(2000)))
+                foreach (var enemy in GameObjects.EnemyHeroes.Where(h => h.IsValidTarget(2000)))
                 {
-                    var pos = Ball.Position.LSExtend(enemy.Position, E.Width * 0.3f);
+                    var pos = Ball.Position.Extend(enemy.Position, E.Width * 0.3f);
                     E.UpdateSourcePosition(pos, pos);
                     if (E.WillHit(enemy, to))
                     {
@@ -927,13 +927,13 @@ using EloBuddy; namespace SFXChallenger.Champions
                     Type = R.Type
                 };
                 var points = new List<Vector2>();
-                foreach (var enemy in GameObjects.EnemyHeroes.Where(t => t.LSIsValidTarget(range)))
+                foreach (var enemy in GameObjects.EnemyHeroes.Where(t => t.IsValidTarget(range)))
                 {
                     input.Unit = enemy;
                     var pred = Prediction.GetPrediction(input);
                     if (pred.Hitchance >= HitChance.Low)
                     {
-                        points.Add(pred.UnitPosition.LSTo2D());
+                        points.Add(pred.UnitPosition.To2D());
                     }
                 }
                 if (points.Any())
@@ -944,7 +944,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                         foreach (var possibility in possibilities)
                         {
                             var mec = MEC.GetMec(possibility);
-                            if (mec.Radius < R.Width && Player.LSDistance(mec.Center) < range)
+                            if (mec.Radius < R.Width && Player.Distance(mec.Center) < range)
                             {
                                 if (possibility.Count > count || possibility.Count == count && mec.Radius < radius)
                                 {
@@ -960,7 +960,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                             return center.To3D();
                         }
                     }
-                    var dTarget = GameObjects.EnemyHeroes.FirstOrDefault(t => t.LSIsValidTarget(range));
+                    var dTarget = GameObjects.EnemyHeroes.FirstOrDefault(t => t.IsValidTarget(range));
                     if (dTarget != null)
                     {
                         hits = 1;
@@ -985,12 +985,12 @@ using EloBuddy; namespace SFXChallenger.Champions
                 foreach (var ally in
                     GameObjects.AllyHeroes.Where(
                         a =>
-                            (Ball.Hero == null || Ball.Hero.NetworkId != a.NetworkId) && a.LSDistance(Player) <= E.Range &&
+                            (Ball.Hero == null || Ball.Hero.NetworkId != a.NetworkId) && a.Distance(Player) <= E.Range &&
                             (a.IsMe || Menu.Item(Menu.Name + ".miscellaneous.e-allies").GetValue<bool>()) &&
                             (a.IsMe && Player.Mana > Q.ManaCost + W.ManaCost + E.ManaCost ||
                              !a.IsMe && ResourceManager.Check("e-allies"))))
                 {
-                    var hits = GameObjects.EnemyHeroes.Count(e => e.LSDistance(ally) < spell.Range);
+                    var hits = GameObjects.EnemyHeroes.Count(e => e.Distance(ally) < spell.Range);
                     if (hits > totalHits)
                     {
                         totalHits = hits;
@@ -1021,7 +1021,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 var radius = float.MaxValue;
                 var range = Q.Range + Q.Width + target.BoundingRadius * 0.85f;
                 var positions = (from t in GameObjects.EnemyHeroes
-                    where t.LSIsValidTarget(range, true, Q.RangeCheckFrom)
+                    where t.IsValidTarget(range, true, Q.RangeCheckFrom)
                     let prediction = Q.GetPrediction(t)
                     where prediction.Hitchance >= (t.NetworkId == target.NetworkId ? hitChance : hitChance - 1)
                     select new CPrediction.Position(t, prediction.UnitPosition)).ToList();
@@ -1030,16 +1030,16 @@ using EloBuddy; namespace SFXChallenger.Champions
                     var mainTarget = positions.FirstOrDefault(p => p.Hero.NetworkId == target.NetworkId);
                     var possibilities =
                         ListExtensions.ProduceEnumeration(
-                            positions.Where(p => p.UnitPosition.LSDistance(mainTarget.UnitPosition) <= R.Width * 0.85f)
+                            positions.Where(p => p.UnitPosition.Distance(mainTarget.UnitPosition) <= R.Width * 0.85f)
                                 .ToList())
                             .Where(p => p.Count > 0 && p.Any(t => t.Hero.NetworkId == mainTarget.Hero.NetworkId))
                             .ToList();
-                    var rReady = R.LSIsReady();
-                    var wReady = W.LSIsReady();
+                    var rReady = R.IsReady();
+                    var wReady = W.IsReady();
                     foreach (var possibility in possibilities)
                     {
-                        var mec = MEC.GetMec(possibility.Select(p => p.UnitPosition.LSTo2D()).ToList());
-                        var distance = Q.From.LSDistance(mec.Center.To3D());
+                        var mec = MEC.GetMec(possibility.Select(p => p.UnitPosition.To2D()).ToList());
+                        var distance = Q.From.Distance(mec.Center.To3D());
                         if (distance < range)
                         {
                             if (mec.Radius < R.Width * 0.85f && possibility.Count >= 3 && rReady ||
@@ -1049,7 +1049,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                                 var lHits = new List<AIHeroClient>();
                                 var circle =
                                     new Geometry.Polygon.Circle(
-                                        Q.From.LSExtend(mec.Center.To3D(), Q.Range > distance ? distance : Q.Range),
+                                        Q.From.Extend(mec.Center.To3D(), Q.Range > distance ? distance : Q.Range),
                                         Q.Width);
 
                                 lHits.AddRange(
@@ -1062,7 +1062,7 @@ using EloBuddy; namespace SFXChallenger.Champions
 
                                 if ((lHits.Count > hits.Count || lHits.Count == hits.Count && mec.Radius < radius ||
                                      lHits.Count == hits.Count &&
-                                     Q.From.LSDistance(circle.Center.To3D()) < Q.From.LSDistance(center)) &&
+                                     Q.From.Distance(circle.Center.To3D()) < Q.From.Distance(center)) &&
                                     lHits.Any(p => p.NetworkId == target.NetworkId))
                                 {
                                     center = circle.Center.To3D2();
@@ -1101,7 +1101,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             }
 
             var allMinions = MinionManager.GetMinions(Player.Position, Q.Range + W.Width);
-            if (q && Q.LSIsReady())
+            if (q && Q.IsReady())
             {
                 if (w)
                 {
@@ -1110,7 +1110,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     var q2Location = Q.GetCircularFarmLocation(rangedMinions, W.Width);
                     var bestLocation = qLocation.MinionsHit > q2Location.MinionsHit + 1 ? qLocation : q2Location;
 
-                    if (bestLocation.MinionsHit > 0 && bestLocation.Position.LSDistance(Ball.Position) > 25)
+                    if (bestLocation.MinionsHit > 0 && bestLocation.Position.Distance(Ball.Position) > 25)
                     {
                         Q.Cast(bestLocation.Position);
                         return;
@@ -1123,7 +1123,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                         if (
                             HealthPrediction.GetHealthPrediction(
                                 minion,
-                                Math.Max((int) (minion.Position.LSDistance(Ball.Position) / Q.Speed * 1000) - 100, 0)) <
+                                Math.Max((int) (minion.Position.Distance(Ball.Position) / Q.Speed * 1000) - 100, 0)) <
                             50)
                         {
                             Q.Cast(minion.Position);
@@ -1132,9 +1132,9 @@ using EloBuddy; namespace SFXChallenger.Champions
                     }
                 }
             }
-            if (w && W.LSIsReady())
+            if (w && W.IsReady())
             {
-                if (allMinions.Where(m => m.LSDistance(Ball.Position) <= W.Width).Count(m => W.GetDamage(m) > m.Health) >=
+                if (allMinions.Where(m => m.Distance(Ball.Position) <= W.Width).Count(m => W.GetDamage(m) > m.Health) >=
                     3)
                 {
                     W.Cast(Ball.Position);
@@ -1161,11 +1161,11 @@ using EloBuddy; namespace SFXChallenger.Champions
             if (mobs.Count > 0)
             {
                 var mob = mobs.First();
-                if (w && W.LSIsReady() && W.WillHit(mob.ServerPosition, Ball.Position))
+                if (w && W.IsReady() && W.WillHit(mob.ServerPosition, Ball.Position))
                 {
                     W.Cast(Ball.Position);
                 }
-                else if (q && Q.LSIsReady())
+                else if (q && Q.IsReady())
                 {
                     Q.Cast(mob.Position);
                 }
@@ -1175,13 +1175,13 @@ using EloBuddy; namespace SFXChallenger.Champions
         protected override void Flee()
         {
             if (Menu.Item(Menu.Name + ".flee.w").GetValue<bool>() &&
-                (Ball.Status == BallStatus.Me || Ball.Position.LSDistance(Player.Position) <= W.Width * 0.8f) &&
-                W.LSIsReady())
+                (Ball.Status == BallStatus.Me || Ball.Position.Distance(Player.Position) <= W.Width * 0.8f) &&
+                W.IsReady())
             {
                 W.Cast(Ball.Position);
             }
-            if (Menu.Item(Menu.Name + ".flee.e").GetValue<bool>() && E.LSIsReady() &&
-                (Ball.Status != BallStatus.Me || Player.LSCountEnemiesInRange(500) > 0))
+            if (Menu.Item(Menu.Name + ".flee.e").GetValue<bool>() && E.IsReady() &&
+                (Ball.Status != BallStatus.Me || Player.CountEnemiesInRange(500) > 0))
             {
                 CastE(Player);
             }
@@ -1264,7 +1264,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             {
                 try
                 {
-                    if (ObjectManager.Player.LSHasBuff("OrianaGhostSelf"))
+                    if (ObjectManager.Player.HasBuff("OrianaGhostSelf"))
                     {
                         Status = BallStatus.Me;
                         Hero = ObjectManager.Player;
@@ -1273,7 +1273,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     }
                     foreach (var hero in
                         GameObjects.AllyHeroes.Where(x => x.IsAlly && !x.IsDead && !x.IsMe)
-                            .Where(hero => hero.LSHasBuff("OrianaGhost")))
+                            .Where(hero => hero.HasBuff("OrianaGhost")))
                     {
                         Status = BallStatus.Ally;
                         Hero = hero;

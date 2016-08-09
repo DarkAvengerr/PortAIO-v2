@@ -24,7 +24,7 @@ using EloBuddy; namespace Activator.Items.Offensives
 
             if (Player.Health / Player.MaxHealth * 100 <= Menu.Item("selflowhp" + Name + "pct").GetValue<Slider>().Value)
             {
-                if (Utils.GameTimeTickCount - Activator.LastUsedTimeStamp >= 3000 || Player.LSCountEnemiesInRange(Range) >= 1)
+                if (Utils.GameTimeTickCount - Activator.LastUsedTimeStamp >= 3000 || Player.CountEnemiesInRange(Range) >= 1)
                 {
                     UseItem();
                 }
@@ -43,7 +43,7 @@ using EloBuddy; namespace Activator.Items.Offensives
                     {
                         UseItem();
                     }
-                    else if (Player.LSCountEnemiesInRange(Range) >= 1)
+                    else if (Player.CountEnemiesInRange(Range) >= 1)
                     {
                         UseItem(Menu.Item("mode" + Name).GetValue<StringList>().SelectedIndex == 1);
                     }

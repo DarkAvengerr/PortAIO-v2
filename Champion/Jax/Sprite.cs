@@ -34,7 +34,7 @@ namespace JaxQx
             {
                 var t = Program.AssassinManager.GetTarget(Program.E.Range);
 
-                if (t.LSIsValidTarget())
+                if (t.IsValidTarget())
                     return t;
 
                 return null;

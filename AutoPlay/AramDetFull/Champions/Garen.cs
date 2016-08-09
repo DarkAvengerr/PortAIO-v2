@@ -47,7 +47,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (unit.IsMe && target is AIHeroClient && Q.LSIsReady() && !GarenE)
+            if (unit.IsMe && target is AIHeroClient && Q.IsReady() && !GarenE)
             {
                 Q.Cast();
                 Aggresivity.addAgresiveMove(new AgresiveMove(1000, 2500, true));
@@ -57,7 +57,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (Q.LSIsReady() && !GarenE)
+            if (Q.IsReady() && !GarenE)
             {
                 Q.Cast();
                 Aggresivity.addAgresiveMove(new AgresiveMove(100, 2500, true));
@@ -66,7 +66,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 W.Cast();
                 Aggresivity.addAgresiveMove(new AgresiveMove(50, 2500, true));
@@ -75,7 +75,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null || GarenE)
+            if (!E.IsReady() || target == null || GarenE)
                 return;
             E.Cast();
             Aggresivity.addAgresiveMove(new AgresiveMove(150,3000,true));
@@ -84,7 +84,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             if (R.IsKillable(target))
                 R.CastOnUnit(target);
@@ -99,9 +99,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
             tar = ARAMTargetSelector.getBestTarget(W.Range);
             if (tar != null) useW(tar);
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
-                foreach (var enem in MapControl.enemy_champions.Where(ene => ene.hero.LSDistance(player)<R.Range))
+                foreach (var enem in MapControl.enemy_champions.Where(ene => ene.hero.Distance(player)<R.Range))
                 {
                     if (R.IsKillable(enem.hero))
                     {

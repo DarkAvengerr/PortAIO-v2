@@ -70,7 +70,7 @@ namespace SharpShooter.Plugins
                                     if (
                                         HeroManager.Enemies.Any(
                                             x =>
-                                                x.LSIsValidTarget(_e.Range) &&
+                                                x.IsValidTarget(_e.Range) &&
                                                 (x.GetBuffCount("twitchdeadlyvenom") >= 6 ||
                                                  x.IsKillableAndValidTarget(_e.GetDamage(x),
                                                      TargetSelector.DamageType.Physical))))
@@ -99,7 +99,7 @@ namespace SharpShooter.Plugins
                                                 MinionOrderTypes.MaxHealth)
                                                 .Any(
                                                     x =>
-                                                        x.LSIsValidTarget(_e.Range) &&
+                                                        x.IsValidTarget(_e.Range) &&
                                                         (x.GetBuffCount("twitchdeadlyvenom") >= 6 ||
                                                          x.IsKillableAndValidTarget(_e.GetDamage(x),
                                                              TargetSelector.DamageType.Physical))))
@@ -142,14 +142,14 @@ namespace SharpShooter.Plugins
                     if (ObjectManager.Player.HasBuff("TwitchFullAutomatic"))
                     {
                         var target = MenuProvider.Orbwalker.GetTarget() as Obj_AI_Base;
-                        if (target.LSIsValidTarget())
+                        if (target.IsValidTarget())
                         {
                             var from = Drawing.WorldToScreen(ObjectManager.Player.Position);
                             var dis = Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 300 -
-                                      ObjectManager.Player.LSDistance(target, false);
+                                      ObjectManager.Player.Distance(target, false);
                             var to =
                                 Drawing.WorldToScreen(dis > 0
-                                    ? target.ServerPosition.LSExtend(ObjectManager.Player.Position, -dis)
+                                    ? target.ServerPosition.Extend(ObjectManager.Player.Position, -dis)
                                     : target.ServerPosition);
                             Drawing.DrawLine(from[0], from[1], to[0], to[1], 10, Color.FromArgb(200, Color.GreenYellow));
                         }

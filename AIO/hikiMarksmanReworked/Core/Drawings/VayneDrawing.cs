@@ -22,11 +22,11 @@ using EloBuddy;
             {
                 return;
             }
-            if (VayneMenu.Config.Item("vayne.q.draw").GetValue<Circle>().Active && VayneSpells.Q.LSIsReady())
+            if (VayneMenu.Config.Item("vayne.q.draw").GetValue<Circle>().Active && VayneSpells.Q.IsReady())
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, VayneSpells.Q.Range, VayneMenu.Config.Item("vayne.q.draw").GetValue<Circle>().Color);
             }
-            if (VayneMenu.Config.Item("vayne.e.draw").GetValue<Circle>().Active && VayneSpells.Q.LSIsReady())
+            if (VayneMenu.Config.Item("vayne.e.draw").GetValue<Circle>().Active && VayneSpells.Q.IsReady())
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, VayneSpells.E.Range, VayneMenu.Config.Item("vayne.e.draw").GetValue<Circle>().Color);
             }
@@ -72,7 +72,7 @@ using EloBuddy;
                         if (Catcher.GapcloseCalculte(selectedtarget, VayneSpells.Q) < 0 && Catcher.Calculate(selectedtarget) < 0)
                         {
                             Drawing.DrawText(playerposition.X, playerposition.Y, Color.LawnGreen, "Catch (Time): " + (int)Catcher.Calculate(selectedtarget));
-                            if (VayneSpells.Q.LSIsReady())
+                            if (VayneSpells.Q.IsReady())
                             {
                                 Drawing.DrawText(playerposition.X - 20, playerposition.Y - 20, Color.LawnGreen, "Catch With Gapclose (Time): " + (int)Catcher.GapcloseCalculte(selectedtarget, VayneSpells.Q));
                             }
@@ -80,7 +80,7 @@ using EloBuddy;
                         if (Catcher.GapcloseCalculte(selectedtarget, VayneSpells.Q) > 0 && Catcher.Calculate(selectedtarget) > 0)
                         {
                             Drawing.DrawText(playerposition.X, playerposition.Y, Color.Red, "Catch (Time): " + (int)Catcher.Calculate(selectedtarget));
-                            if (VayneSpells.Q.LSIsReady())
+                            if (VayneSpells.Q.IsReady())
                             {
                                 Drawing.DrawText(playerposition.X - 20, playerposition.Y - 20, Color.Red, "Catch With Gapclose (Time): " + (int)Catcher.GapcloseCalculte(selectedtarget, VayneSpells.Q));
                             }
@@ -88,7 +88,7 @@ using EloBuddy;
                         if (Catcher.GapcloseCalculte(selectedtarget, VayneSpells.Q) < 0 && Catcher.Calculate(selectedtarget) > 0)
                         {
                             Drawing.DrawText(playerposition.X, playerposition.Y, Color.Orange, "Catch (Time): " + (int)Catcher.Calculate(selectedtarget));
-                            if (VayneSpells.Q.LSIsReady())
+                            if (VayneSpells.Q.IsReady())
                             {
                                 Drawing.DrawText(playerposition.X - 20, playerposition.Y - 20, Color.Orange, "Catch With Gapclose (Time): " + (int)Catcher.GapcloseCalculte(selectedtarget, VayneSpells.Q));
                             }

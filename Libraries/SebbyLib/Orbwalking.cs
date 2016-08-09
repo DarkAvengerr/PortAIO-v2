@@ -127,7 +127,7 @@ namespace SebbyLib
             {
                 if (missile.SpellCaster.IsMe)
                 {
-                    //Console.WriteLine(Player.BoundingRadius + " dis " + (missile.Position.LSDistance(Player.Position)));
+                    //Console.WriteLine(Player.BoundingRadius + " dis " + (missile.Position.Distance(Player.Position)));
                 }
             }
         }
@@ -137,7 +137,7 @@ namespace SebbyLib
             var missile = sender as MissileClient;
             if(DelayOnFire != 0 && missile != null && Player.AttackDelay > 1 / 2f)
             {
-                if(missile.SpellCaster.IsMe && missile.SData.LSIsAutoAttack() &&  DelayOnFireId == missile.Target.NetworkId)
+                if(missile.SpellCaster.IsMe && missile.SData.IsAutoAttack() &&  DelayOnFireId == missile.Target.NetworkId)
                 {
                     var x = Utils.TickCount - DelayOnFire;
 
@@ -150,7 +150,7 @@ namespace SebbyLib
                         BrainFarmInt += 2;
                     }
                     Console.WriteLine(BrainFarmInt + " ADJ " + (Utils.TickCount - DelayOnFire));
-                    //Console.WriteLine(missile.Target.BoundingRadius + " dis2 " + (missile.Position.LSDistance(missile.Target.Position)));
+                    //Console.WriteLine(missile.Target.BoundingRadius + " dis2 " + (missile.Position.Distance(missile.Target.Position)));
                 }
             }
         }
@@ -195,7 +195,7 @@ namespace SebbyLib
 
         private static void FireAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (AfterAttack != null && target.LSIsValidTarget())
+            if (AfterAttack != null && target.IsValidTarget())
             {
                 AfterAttack(unit, target);
             }
@@ -203,7 +203,7 @@ namespace SebbyLib
 
         private static void FireOnTargetSwitch(AttackableUnit newTarget)
         {
-            if (OnTargetChange != null && (!_lastTarget.LSIsValidTarget() || _lastTarget != newTarget))
+            if (OnTargetChange != null && (!_lastTarget.IsValidTarget() || _lastTarget != newTarget))
             {
                 OnTargetChange(_lastTarget, newTarget);
             }
@@ -236,7 +236,7 @@ namespace SebbyLib
         public static float GetRealAutoAttackRange(AttackableUnit target)
         {
             var result = Player.AttackRange + Player.BoundingRadius;
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 var aiBase = target as Obj_AI_Base;
                 if (aiBase != null && Player.ChampionName == "Caitlyn")
@@ -261,15 +261,15 @@ namespace SebbyLib
 
         public static bool InAutoAttackRange(AttackableUnit target)
         {
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return false;
             }
             var myRange = GetRealAutoAttackRange(target);
             return
                 Vector2.DistanceSquared(
-                    target is Obj_AI_Base ? ((Obj_AI_Base)target).ServerPosition.LSTo2D() : target.Position.LSTo2D(),
-                    Player.ServerPosition.LSTo2D()) <= myRange * myRange;
+                    target is Obj_AI_Base ? ((Obj_AI_Base)target).ServerPosition.To2D() : target.Position.To2D(),
+                    Player.ServerPosition.To2D()) <= myRange * myRange;
         }
 
         public static float GetMyProjectileSpeed()
@@ -351,7 +351,7 @@ namespace SebbyLib
         {
             var playerPosition = Player.ServerPosition;
 
-            if (playerPosition.LSDistance(position, true) < holdAreaRadius * holdAreaRadius)
+            if (playerPosition.Distance(position, true) < holdAreaRadius * holdAreaRadius)
             {
                 if (Player.Path.Length > 0)
                 {
@@ -364,14 +364,14 @@ namespace SebbyLib
 
             var point = position;
 
-            if (Player.LSDistance(point, true) < 150 * 150)
+            if (Player.Distance(point, true) < 150 * 150)
             {
-                point = playerPosition.LSExtend(
+                point = playerPosition.Extend(
                     position, randomizeMinDistance ? (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance : _minDistance);
             }
             var angle = 0f;
-            var currentPath = Player.LSGetWaypoints();
-            if (currentPath.Count > 1 && currentPath.LSPathLength() > 100)
+            var currentPath = Player.GetWaypoints();
+            if (currentPath.Count > 1 && currentPath.PathLength() > 100)
             {
                 var movePath = Player.GetPath(point);
 
@@ -379,8 +379,8 @@ namespace SebbyLib
                 {
                     var v1 = currentPath[1] - currentPath[0];
                     var v2 = movePath[1] - movePath[0];
-                    angle = v1.LSAngleBetween(v2.LSTo2D());
-                    var distance = movePath.Last().LSTo2D().LSDistance(currentPath.Last(), true);
+                    angle = v1.AngleBetween(v2.To2D());
+                    var distance = movePath.Last().To2D().Distance(currentPath.Last(), true);
 
                     if ((angle < 10 && distance < 500 * 500) || distance < 50 * 50)
                     {
@@ -419,7 +419,7 @@ namespace SebbyLib
 
             try
             {
-                if (target.LSIsValidTarget() && target.IsTargetable && target.IsVisible && !target.IsDead && EloBuddy.SDK.Orbwalker.CanAutoAttack && Attack)
+                if (target.IsValidTarget() && target.IsTargetable && target.IsVisible && !target.IsDead && EloBuddy.SDK.Orbwalker.CanAutoAttack && Attack)
                 {
                     DisableNextAttack = false;
                     FireBeforeAttack(target);
@@ -793,7 +793,7 @@ namespace SebbyLib
                 var attackCalc = (int)(Player.AttackDelay * 1000 * 1.2) + Game.Ping / 2 + 1000 * 500 / (int)GetMyProjectileSpeed() ;
                 return
                     MinionListAA.Any( 
-                        minion =>HealthPrediction.LaneClearHealthPrediction(minion, attackCalc, FarmDelay) <= Player.LSGetAutoAttackDamage(minion));
+                        minion =>HealthPrediction.LaneClearHealthPrediction(minion, attackCalc, FarmDelay) <= Player.GetAutoAttackDamage(minion));
             }
 
             private bool ShouldWaitUnderTurret(Obj_AI_Minion noneKillableMinion)
@@ -803,7 +803,7 @@ namespace SebbyLib
                 return
                     MinionListAA.Any( minion =>
                                 (noneKillableMinion != null ? noneKillableMinion.NetworkId != minion.NetworkId : true) &&
-                                HealthPrediction.LaneClearHealthPrediction( minion, attackCalc , FarmDelay) <= Player.LSGetAutoAttackDamage(minion));
+                                HealthPrediction.LaneClearHealthPrediction( minion, attackCalc , FarmDelay) <= Player.GetAutoAttackDamage(minion));
             }
 
             public virtual AttackableUnit GetTarget()
@@ -835,7 +835,7 @@ namespace SebbyLib
                             if (!ShouldAttackMinion(minion))
                                 continue;
 
-                            var t = (int)(Player.AttackCastDelay * 1000) + BrainFarmInt + Game.Ping / 2 + 1000 * (int)Math.Max(0, Player.ServerPosition.LSDistance(minion.ServerPosition)- Player.BoundingRadius) / (int)GetMyProjectileSpeed();
+                            var t = (int)(Player.AttackCastDelay * 1000) + BrainFarmInt + Game.Ping / 2 + 1000 * (int)Math.Max(0, Player.ServerPosition.Distance(minion.ServerPosition)- Player.BoundingRadius) / (int)GetMyProjectileSpeed();
 
                             if (mode == OrbwalkingMode.Freeze)
                             {
@@ -845,7 +845,7 @@ namespace SebbyLib
                             var predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay);
 
                             
-                            var damage = Player.LSGetAutoAttackDamage(minion, _config.Item("PassiveDmg", true).GetValue<bool>()) + _config.Item("DamageAdjust").GetValue<Slider>().Value;
+                            var damage = Player.GetAutoAttackDamage(minion, _config.Item("PassiveDmg", true).GetValue<bool>()) + _config.Item("DamageAdjust").GetValue<Slider>().Value;
                             
 
                             var killable = predHealth <= damage;
@@ -892,7 +892,7 @@ namespace SebbyLib
                     DelayOnFire = 0;
                 }
                 //Forced target
-                if (_forcedTarget.LSIsValidTarget() && InAutoAttackRange(_forcedTarget) && !_forcedTarget.IsDead && _forcedTarget.IsVisible && _forcedTarget.IsHPBarRendered && _forcedTarget.IsTargetable)
+                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget) && !_forcedTarget.IsDead && _forcedTarget.IsVisible && _forcedTarget.IsHPBarRendered && _forcedTarget.IsTargetable)
                 {
                     return _forcedTarget;
                 }
@@ -902,21 +902,21 @@ namespace SebbyLib
                 {
                     /* turrets */
                     foreach (var turret in
-                        Cache.TurretList.Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+                        Cache.TurretList.Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                     {
                         return turret;
                     }
 
                     /* inhibitor */
                     foreach (var turret in
-                        Cache.InhiList.Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+                        Cache.InhiList.Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                     {
                         return turret;
                     }
 
                     /* nexus */
                     foreach (var nexus in
-                        Cache.NexusList.Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+                        Cache.NexusList.Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                     {
                         return nexus;
                     }
@@ -926,9 +926,9 @@ namespace SebbyLib
                 if (mode != OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target.LSIsValidTarget() && InAutoAttackRange(target))
+                    if (target.IsValidTarget() && InAutoAttackRange(target))
                     {
-                        if(!ObjectManager.Player.LSUnderTurret(true) || mode == OrbwalkingMode.Combo)
+                        if(!ObjectManager.Player.UnderTurret(true) || mode == OrbwalkingMode.Combo)
                             return target;
                     }
                 }
@@ -953,15 +953,15 @@ namespace SebbyLib
                     mode == OrbwalkingMode.Freeze) && CanAttack())
                 {
                     var closestTower =
-                        ObjectManager.Get<Obj_AI_Turret>().MinOrDefault(t => t.IsAlly && !t.IsDead ? Player.LSDistance(t, true) : float.MaxValue);
+                        ObjectManager.Get<Obj_AI_Turret>().MinOrDefault(t => t.IsAlly && !t.IsDead ? Player.Distance(t, true) : float.MaxValue);
 
-                    if (closestTower != null && Player.LSDistance(closestTower, true) < 1500 * 1500)
+                    if (closestTower != null && Player.Distance(closestTower, true) < 1500 * 1500)
                     {
                         Obj_AI_Minion farmUnderTurretMinion = null;
                         Obj_AI_Minion noneKillableMinion = null;
                         // return all the minions underturret in auto attack range
                         var minions = MinionListAA.Where(minion => 
-                            closestTower.LSDistance(minion, true) < 900 * 900 && !minion.IsDead && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable)
+                            closestTower.Distance(minion, true) < 900 * 900 && !minion.IsDead && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable)
                             .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                             .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                             .ThenByDescending(minion => minion.MaxHealth)
@@ -989,7 +989,7 @@ namespace SebbyLib
                                                      Math.Max(
                                                          0,
                                                          (int)
-                                                             (turretMinion.LSDistance(closestTower) -
+                                                             (turretMinion.Distance(closestTower) -
                                                               closestTower.BoundingRadius)) /
                                                      (int)(closestTower.BasicAttack.MissileSpeed + 70);
                                 // calculate the HP before try to balance it
@@ -1015,7 +1015,7 @@ namespace SebbyLib
                                 // calculate the hits is needed and possibilty to balance
                                 if (hpLeft == 0 && turretAttackCount != 0 && hpLeftBeforeDie != 0)
                                 {
-                                    var damage = (int)Player.LSGetAutoAttackDamage(turretMinion, true);
+                                    var damage = (int)Player.GetAutoAttackDamage(turretMinion, true);
                                     var hits = hpLeftBeforeDie / damage;
                                     var timeBeforeDie = turretLandTick +
                                                         (turretAttackCount + 1) *
@@ -1029,7 +1029,7 @@ namespace SebbyLib
                                     var timeToLandAttack = Player.IsMelee
                                         ? Player.AttackCastDelay * 1000
                                         : Player.AttackCastDelay * 1000 +
-                                          1000 * Math.Max(0, turretMinion.LSDistance(Player) - Player.BoundingRadius) /
+                                          1000 * Math.Max(0, turretMinion.Distance(Player) - Player.BoundingRadius) /
                                           Player.BasicAttack.MissileSpeed;
                                     if (hits >= 1 &&
                                         hits * Player.AttackDelay * 1000 + timeUntilAttackReady + timeToLandAttack <
@@ -1064,8 +1064,8 @@ namespace SebbyLib
                                             x.NetworkId != turretMinion.NetworkId && x is Obj_AI_Minion &&
                                             !HealthPrediction.HasMinionAggro(x as Obj_AI_Minion)))
                                 {
-                                    var playerDamage = (int)Player.LSGetAutoAttackDamage(minion);
-                                    var turretDamage = (int)closestTower.LSGetAutoAttackDamage(minion, true);
+                                    var playerDamage = (int)Player.GetAutoAttackDamage(minion);
+                                    var turretDamage = (int)closestTower.GetAutoAttackDamage(minion, true);
                                     var leftHP = (int)minion.Health % turretDamage;
                                     if (leftHP > playerDamage)
                                     {
@@ -1080,7 +1080,7 @@ namespace SebbyLib
                                 {
                                     if (1f / Player.AttackDelay >= 1f &&
                                         (int)(turretAttackCount * closestTower.AttackDelay / Player.AttackDelay) *
-                                        Player.LSGetAutoAttackDamage(lastminion) > lastminion.Health)
+                                        Player.GetAutoAttackDamage(lastminion) > lastminion.Health)
                                     {
                                         return lastminion;
                                     }
@@ -1104,8 +1104,8 @@ namespace SebbyLib
                                 {
                                     if (closestTower != null)
                                     {
-                                        var playerDamage = (int)Player.LSGetAutoAttackDamage(minion);
-                                        var turretDamage = (int)closestTower.LSGetAutoAttackDamage(minion, true);
+                                        var playerDamage = (int)Player.GetAutoAttackDamage(minion);
+                                        var turretDamage = (int)closestTower.GetAutoAttackDamage(minion, true);
                                         var leftHP = (int)minion.Health % turretDamage;
                                         if (leftHP > playerDamage)
                                         {
@@ -1135,11 +1135,11 @@ namespace SebbyLib
                 {
                     if (!ShouldWait())
                     {
-                        if (_prevMinion.LSIsValidTarget() && InAutoAttackRange(_prevMinion) && !_prevMinion.IsDead && _prevMinion.IsVisible && _prevMinion.IsHPBarRendered && _prevMinion.IsTargetable)
+                        if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion) && !_prevMinion.IsDead && _prevMinion.IsVisible && _prevMinion.IsHPBarRendered && _prevMinion.IsTargetable)
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 _prevMinion, (int)(Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay);
-                            if (predHealth >= 2 * Player.LSGetAutoAttackDamage(_prevMinion) ||
+                            if (predHealth >= 2 * Player.GetAutoAttackDamage(_prevMinion) ||
                                 Math.Abs(predHealth - _prevMinion.Health) < float.Epsilon)
                             {
                                 return _prevMinion;
@@ -1153,7 +1153,7 @@ namespace SebbyLib
                                       HealthPrediction.LaneClearHealthPrediction(
                                           minion, (int)(Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay)
                                   where
-                                      predHealth >= 2 * Player.LSGetAutoAttackDamage(minion) ||
+                                      predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
                                       Math.Abs(predHealth - minion.Health) < float.Epsilon
                                   select minion).MaxOrDefault(
                                 m => m.Health);
@@ -1212,7 +1212,7 @@ namespace SebbyLib
                     var target = GetTarget();
                      
                     Orbwalk(
-                        target, _orbwalkingPoint.LSTo2D().LSIsValid() ? _orbwalkingPoint : Game.CursorPos,
+                        target, _orbwalkingPoint.To2D().IsValid() ? _orbwalkingPoint : Game.CursorPos,
                         _config.Item("ExtraWindup").GetValue<Slider>().Value,
                         Math.Max(_config.Item("HoldPosRadius").GetValue<Slider>().Value, 30));
                 }
@@ -1234,7 +1234,7 @@ namespace SebbyLib
                 if (_config.Item("AACircle2").GetValue<Circle>().Active)
                 {
                     foreach (var target in
-                        HeroManager.Enemies.FindAll(target => target.LSIsValidTarget(1175)))
+                        HeroManager.Enemies.FindAll(target => target.IsValidTarget(1175)))
                     {
                         Render.Circle.DrawCircle(
                             target.Position, GetAttackRange(target), _config.Item("AACircle2").GetValue<Circle>().Color,
@@ -1257,9 +1257,9 @@ namespace SebbyLib
                     foreach (var minion in
                         Cache.MinionsListEnemy
                             .Where(
-                                x => x.Name.ToLower().Contains("minion") && x.IsHPBarRendered && x.LSIsValidTarget(1000)))
+                                x => x.Name.ToLower().Contains("minion") && x.IsHPBarRendered && x.IsValidTarget(1000)))
                     {
-                        if (minion.Health < ObjectManager.Player.LSGetAutoAttackDamage(minion, true))
+                        if (minion.Health < ObjectManager.Player.GetAutoAttackDamage(minion, true))
                         {
                             Render.Circle.DrawCircle(minion.Position, 50, Color.LimeGreen);
                         }

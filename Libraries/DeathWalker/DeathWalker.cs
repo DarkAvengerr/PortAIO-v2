@@ -242,7 +242,7 @@ namespace DetuksSharp
                     //
                 }
                 var spell = player.Spellbook.GetSpell(args.Slot);
-                if (spell.LSIsAutoAttack() || args.SData.LSIsAutoAttack())
+                if (spell.IsAutoAttack() || args.SData.IsAutoAttack())
                 {
                     /*if(player.IsMelee)
                         Utility.DelayAction.Add((int)(player.AttackDelay * 1000), delegate { afterAttack(sender, (AttackableUnit)args.Target); });
@@ -309,7 +309,7 @@ namespace DetuksSharp
         {
             if (args.Source.NetworkId != player.NetworkId)
                 return;
-            Console.WriteLine("dmg: "+sender.Health+"  : "+player.LSGetAutoAttackDamage((Obj_AI_Base)sender));
+            Console.WriteLine("dmg: "+sender.Health+"  : "+player.GetAutoAttackDamage((Obj_AI_Base)sender));
 
 
         }
@@ -326,7 +326,7 @@ namespace DetuksSharp
            // }
           
             return;
-            foreach (var enemy in ObjectManager.Get<Obj_AI_Base>().Where(ene => ene != null && ene.LSIsValidTarget(1000) && ene.IsEnemy && ene.LSDistance(player,true)<1000*1000))
+            foreach (var enemy in ObjectManager.Get<Obj_AI_Base>().Where(ene => ene != null && ene.IsValidTarget(1000) && ene.IsEnemy && ene.Distance(player,true)<1000*1000))
             {
                 //var timeToHit = timeTillDamageOn(enemy);
 
@@ -391,7 +391,7 @@ namespace DetuksSharp
             {
                 if (target != null && (CurrentMode == Mode.Lasthit || CurrentMode == Mode.Harass))
                     killUnit = target;
-                if (killUnit != null && !(killUnit is AIHeroClient) && killUnit.IsValid && !killUnit.IsDead && killUnit.Position.LSDistance(player.Position) > getRealAutoAttackRange(killUnit) - 30)//Get in range
+                if (killUnit != null && !(killUnit is AIHeroClient) && killUnit.IsValid && !killUnit.IsDead && killUnit.Position.Distance(player.Position) > getRealAutoAttackRange(killUnit) - 30)//Get in range
                     moveTo(killUnit.Position);
                 moveTo(goalPosition);
             }
@@ -406,21 +406,21 @@ namespace DetuksSharp
             {
                 /* turrets */
                 foreach (var turret in
-                   EnemyTowers.Where(t => t.LSIsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
+                   EnemyTowers.Where(t => t.IsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
                 {
                     return turret;
                 }
 
                 /* inhibitor */
                 foreach (var turret in
-                    EnemyBarracs.Where(t => t.LSIsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
+                    EnemyBarracs.Where(t => t.IsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
                 {
                     return turret;
                 }
 
                 /* nexus */
                 foreach (var nexus in
-                    EnemyHQ.Where(t => t.LSIsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
+                    EnemyHQ.Where(t => t.IsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
                 {
                     return nexus;
                 }
@@ -443,7 +443,7 @@ namespace DetuksSharp
             else
             {
                 enemiesAround = ObjectManager.Get<Obj_AI_Base>()
-                    .Where(targ => targ.LSIsValidTarget(getTargetSearchDist()) && targ.IsEnemy && targ.IsHPBarRendered).ToList();
+                    .Where(targ => targ.IsValidTarget(getTargetSearchDist()) && targ.IsEnemy && targ.IsHPBarRendered).ToList();
             }
 
             Obj_AI_Base best = null;
@@ -514,21 +514,21 @@ namespace DetuksSharp
             {
                 /* turrets */
                 foreach (var turret in
-                   EnemyTowers.Where(t => t.LSIsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
+                   EnemyTowers.Where(t => t.IsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
                 {
                     return turret;
                 }
 
                 /* inhibitor */
                 foreach (var turret in
-                    EnemyBarracs.Where(t => t.LSIsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
+                    EnemyBarracs.Where(t => t.IsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
                 {
                     return turret;
                 }
 
                 /* nexus */
                 foreach (var nexus in
-                    EnemyHQ.Where(t => t.LSIsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
+                    EnemyHQ.Where(t => t.IsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
                 {
                     return nexus;
                 }
@@ -563,12 +563,12 @@ namespace DetuksSharp
                             continue;
                         var solAarange = 325;
                         solAarange *= solAarange;
-                        if (ene.ServerPosition.LSDistance(sol.ServerPosition, true) < solAarange)
+                        if (ene.ServerPosition.Distance(sol.ServerPosition, true) < solAarange)
                         {
                             soliderHit = true;
                             return ene;
                         }
-                        foreach (var around in enemiesAround.Where(arou => arou != null && arou.IsValid && !arou.IsDead && arou.Position.LSDistance(sol.Position, true) <= ((azirSoliderRange) * (azirSoliderRange))))
+                        foreach (var around in enemiesAround.Where(arou => arou != null && arou.IsValid && !arou.IsDead && arou.Position.Distance(sol.Position, true) <= ((azirSoliderRange) * (azirSoliderRange))))
                         {
                             if (around == null || around.IsDead || ene == null)
                                 continue;
@@ -578,7 +578,7 @@ namespace DetuksSharp
                             {
 
                                 if (posi != null &&
-                                    poly.pointInside(posi.UnitPosition.LSTo2D()))
+                                    poly.pointInside(posi.UnitPosition.To2D()))
                                 {
                                     soliderHit = true;
                                     return around;
@@ -614,13 +614,13 @@ namespace DetuksSharp
 
             bool enemySoonInRange = cEnemy != null &&
                                     inAutoAttackRange(cEnemy,
-                                        LeagueSharp.Common.Prediction.GetPrediction(cEnemy,player.AttackDelay*1000).UnitPosition.LSTo2D());
+                                        LeagueSharp.Common.Prediction.GetPrediction(cEnemy,player.AttackDelay*1000).UnitPosition.To2D());
             if (enemySoonInRange)
                 return true;*/
 
             foreach (var minion in MinionManager.GetMinions(getTargetSearchDist(),MinionTypes.All))
             {
-                if (minion.LSIsValidTarget())
+                if (minion.IsValidTarget())
                 {
                     //var hpKillable = HealthDeath.getLastHitPredPeriodic(minion, timeTillDamageOn(minion));
                    // if(hpKillable<0)
@@ -646,7 +646,7 @@ namespace DetuksSharp
         {
             return AllEnemys
                 .Where(ob => ob.IsValid && !ob.IsDead)
-                .OrderBy(ob => ob.LSDistance(player, true))
+                .OrderBy(ob => ob.Distance(player, true))
                 .FirstOrDefault();
         }
 
@@ -657,7 +657,7 @@ namespace DetuksSharp
 
         public static int timeTillDamageOn(Obj_AI_Base unit)
         {
-            var dist = unit.ServerPosition.LSDistance(player.ServerPosition);
+            var dist = unit.ServerPosition.Distance(player.ServerPosition);
             int addTime = -menu.Item("farmDelay").GetValue<Slider>().Value -((azir)?100:0);//some farm delay
             if (!inAutoAttackRange(unit))//+ check if want to move to killabel minion and range it wants to
             {
@@ -680,7 +680,7 @@ namespace DetuksSharp
 
         public static bool inAutoAttackRange(AttackableUnit unit)
         {
-            if (!unit.LSIsValidTarget())
+            if (!unit.IsValidTarget())
             {
                 return false;
             }
@@ -693,8 +693,8 @@ namespace DetuksSharp
             var myRange = getRealAutoAttackRange(unit);
             return
                 Vector2.DistanceSquared(
-                    (unit is Obj_AI_Base) ? ((Obj_AI_Base)unit).ServerPosition.LSTo2D() : unit.Position.LSTo2D(),
-                    player.ServerPosition.LSTo2D()) <= myRange * myRange;
+                    (unit is Obj_AI_Base) ? ((Obj_AI_Base)unit).ServerPosition.To2D() : unit.Position.To2D(),
+                    player.ServerPosition.To2D()) <= myRange * myRange;
         }
 
         public static bool isAutoAttackReset(string name)
@@ -716,7 +716,7 @@ namespace DetuksSharp
 
         public static bool inAutoAttackRange(AttackableUnit unit, Vector2 pos)
         {
-            if (!unit.LSIsValidTarget())
+            if (!unit.IsValidTarget())
             {
                 return false;
             }
@@ -730,12 +730,12 @@ namespace DetuksSharp
             return
                 Vector2.DistanceSquared(
                     pos,
-                    player.ServerPosition.LSTo2D()) <= myRange * myRange;
+                    player.ServerPosition.To2D()) <= myRange * myRange;
         }
 
         public static bool inAutoAttackRange(Obj_AI_Base source, AttackableUnit target)
         {
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return false;
             }
@@ -748,8 +748,8 @@ namespace DetuksSharp
             var myRange = getRealAutoAttackRange(source,target);
             return
                 Vector2.DistanceSquared(
-                    target.Position.LSTo2D(),
-                    source.ServerPosition.LSTo2D()) <= myRange * myRange;
+                    target.Position.To2D(),
+                    source.ServerPosition.To2D()) <= myRange * myRange;
         }
 
         public static float getRealAutoAttackRange(AttackableUnit unit)
@@ -760,7 +760,7 @@ namespace DetuksSharp
         public static float getRealAutoAttackRange(Obj_AI_Base source,AttackableUnit target)
         {
             var result = source.AttackRange + source.BoundingRadius;
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 return result + target.BoundingRadius;
             }
@@ -771,7 +771,7 @@ namespace DetuksSharp
         {
             if (now - lastmove < CustomMoveDelay+ CustomMoveDelayTemp)//Humanizer
                 return;
-            if (player.ServerPosition.LSDistance(goalPosition) < 100)
+            if (player.ServerPosition.Distance(goalPosition) < 100)
             {
                 if (!playerStoped)
                 {
@@ -956,11 +956,11 @@ namespace DetuksSharp
         public static float getRealAADmg(Obj_AI_Base targ)
         {
             if (!azir)
-                return (float)player.LSGetAutoAttackDamage(targ,true);
+                return (float)player.GetAutoAttackDamage(targ,true);
             var solAround = solidersAroundEnemy(targ);
 
             if (solAround == 0)
-                return (float)player.LSGetAutoAttackDamage(targ);
+                return (float)player.GetAutoAttackDamage(targ);
             int[] solBaseDmg = {50,55,60,65,70,75,80,85,90,95,100,110,120,130,140,150,160,170};
 
             var solDmg = solBaseDmg[player.Level - 1] + player.FlatMagicDamageMod*0.6f;
@@ -986,7 +986,7 @@ namespace DetuksSharp
 
         public static List<Obj_AI_Minion> getActiveSoliders()
         {
-            return azirSoldiers.Where(s => s.IsValid && !s.IsMoving && !s.IsDead && !s.IsMoving && s.ServerPosition.LSDistance(player.Position, true) <= 875 * 875 /*(!Animations.ContainsKey(s.NetworkId) || Animations[s.NetworkId] != "Inactive")*/).ToList();
+            return azirSoldiers.Where(s => s.IsValid && !s.IsMoving && !s.IsDead && !s.IsMoving && s.ServerPosition.Distance(player.Position, true) <= 875 * 875 /*(!Animations.ContainsKey(s.NetworkId) || Animations[s.NetworkId] != "Inactive")*/).ToList();
         }
 
         public static bool solisAreStill()
@@ -1006,7 +1006,7 @@ namespace DetuksSharp
             {
                 foreach (var sol in solis)
                 {
-                    if (ene.LSDistance(sol,true) < azirSoliderRange* azirSoliderRange)
+                    if (ene.Distance(sol,true) < azirSoliderRange* azirSoliderRange)
                     {
                         inRange.Add(ene);
                         break;
@@ -1020,14 +1020,14 @@ namespace DetuksSharp
         {
             var solis = getActiveSoliders();
 
-            return !ene.IsDead && solis.Count != 0 && solis.Where(sol => !sol.IsMoving && !sol.LSIsDashing()).Any(sol => ene.LSDistance(sol,true) < azirSoliderRange* azirSoliderRange);
+            return !ene.IsDead && solis.Count != 0 && solis.Where(sol => !sol.IsMoving && !sol.IsDashing()).Any(sol => ene.Distance(sol,true) < azirSoliderRange* azirSoliderRange);
         }
 
         public static int solidersAroundEnemy(Obj_AI_Base ene)
         {
             var solis = getActiveSoliders();
 
-            return solis.Count(sol => ene.LSDistance(sol,true) < azirSoliderRange* azirSoliderRange);
+            return solis.Count(sol => ene.Distance(sol,true) < azirSoliderRange* azirSoliderRange);
         }
 
         static void Obj_AI_Minion_OnPlayAnimation(GameObject sender, GameObjectPlayAnimationEventArgs args)

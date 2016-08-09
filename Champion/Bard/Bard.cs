@@ -53,7 +53,7 @@ namespace DZBard
                 && (BardOrbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                 && GetItemValue<bool>("dz191.bard.misc.attackMinions"))
             {
-                if (ObjectManager.Player.LSCountAlliesInRange(GetItemValue<Slider>("dz191.bard.misc.attackMinionRange").Value) > 0)
+                if (ObjectManager.Player.CountAlliesInRange(GetItemValue<Slider>("dz191.bard.misc.attackMinionRange").Value) > 0)
                 {
                     args.Process = false;
                 }
@@ -90,8 +90,8 @@ namespace DZBard
             switch (BardOrbwalker.ActiveMode)
             {
                 case Orbwalking.OrbwalkingMode.Combo:
-                    if (spells[SpellSlot.Q].LSIsReady() && GetItemValue<bool>(string.Format("dz191.bard.{0}.useq", BardOrbwalker.ActiveMode.ToString().ToLower())) &&
-                        ComboTarget.LSIsValidTarget())
+                    if (spells[SpellSlot.Q].IsReady() && GetItemValue<bool>(string.Format("dz191.bard.{0}.useq", BardOrbwalker.ActiveMode.ToString().ToLower())) &&
+                        ComboTarget.IsValidTarget())
                     {
                         HandleQ(ComboTarget);
                     }
@@ -103,8 +103,8 @@ namespace DZBard
 
                     break;
                 case Orbwalking.OrbwalkingMode.Mixed:
-                    if (spells[SpellSlot.Q].LSIsReady() && GetItemValue<bool>(string.Format("dz191.bard.{0}.useq", BardOrbwalker.ActiveMode.ToString().ToLower())) &&
-                        ComboTarget.LSIsValidTarget() && GetItemValue<bool>(string.Format("dz191.bard.qtarget.{0}", ComboTarget.ChampionName.ToLower())))
+                    if (spells[SpellSlot.Q].IsReady() && GetItemValue<bool>(string.Format("dz191.bard.{0}.useq", BardOrbwalker.ActiveMode.ToString().ToLower())) &&
+                        ComboTarget.IsValidTarget() && GetItemValue<bool>(string.Format("dz191.bard.qtarget.{0}", ComboTarget.ChampionName.ToLower())))
                     {
                         HandleQ(ComboTarget);
                     }
@@ -120,9 +120,9 @@ namespace DZBard
         private static void DoFlee()
         {
             if ((IsOverWall(ObjectManager.Player.ServerPosition, Game.CursorPos) 
-                && GetWallLength(ObjectManager.Player.ServerPosition, Game.CursorPos) >= 250f) && (spells[SpellSlot.E].LSIsReady() 
+                && GetWallLength(ObjectManager.Player.ServerPosition, Game.CursorPos) >= 250f) && (spells[SpellSlot.E].IsReady() 
                 || (TunnelNetworkID != -1 
-                && (ObjectManager.Player.ServerPosition.LSDistance(TunnelEntrance) < 250f))))
+                && (ObjectManager.Player.ServerPosition.Distance(TunnelEntrance) < 250f))))
             {
                 MoveToLimited(GetFirstWallPoint(ObjectManager.Player.ServerPosition, Game.CursorPos));
             }
@@ -136,8 +136,8 @@ namespace DZBard
                 var ComboTarget = TargetSelector.GetTarget(spells[SpellSlot.Q].Range/1.3f,
                     TargetSelector.DamageType.Magical);
 
-                if (spells[SpellSlot.Q].LSIsReady() &&
-                    ComboTarget.LSIsValidTarget())
+                if (spells[SpellSlot.Q].IsReady() &&
+                    ComboTarget.IsValidTarget())
                 {
                     HandleQ(ComboTarget);
                 }
@@ -145,20 +145,20 @@ namespace DZBard
 
             if (GetItemValue<bool>("dz191.bard.flee.w"))
             {
-                if (ObjectManager.Player.LSCountAlliesInRange(1000f) - 1 < ObjectManager.Player.LSCountEnemiesInRange(1000f)
-                    || (ObjectManager.Player.HealthPercent <= GetItemValue<Slider>("dz191.bard.wtarget.healthpercent").Value && ObjectManager.Player.LSCountEnemiesInRange(900f) >= 1))
+                if (ObjectManager.Player.CountAlliesInRange(1000f) - 1 < ObjectManager.Player.CountEnemiesInRange(1000f)
+                    || (ObjectManager.Player.HealthPercent <= GetItemValue<Slider>("dz191.bard.wtarget.healthpercent").Value && ObjectManager.Player.CountEnemiesInRange(900f) >= 1))
                 {
-                    var castPosition = ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, 65);
+                    var castPosition = ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 65);
                     spells[SpellSlot.W].Cast(castPosition);
                 }
             }
 
             if (GetItemValue<bool>("dz191.bard.flee.e"))
             {
-                var dir = ObjectManager.Player.ServerPosition.LSTo2D() + ObjectManager.Player.Direction.LSTo2D().LSPerpendicular() * (ObjectManager.Player.BoundingRadius * 2.5f);
+                var dir = ObjectManager.Player.ServerPosition.To2D() + ObjectManager.Player.Direction.To2D().Perpendicular() * (ObjectManager.Player.BoundingRadius * 2.5f);
                 var Extended = Game.CursorPos;
-                if (dir.LSIsWall() && IsOverWall(ObjectManager.Player.ServerPosition, Extended) 
-                    && spells[SpellSlot.E].LSIsReady()
+                if (dir.IsWall() && IsOverWall(ObjectManager.Player.ServerPosition, Extended) 
+                    && spells[SpellSlot.E].IsReady()
                     && GetWallLength(ObjectManager.Player.ServerPosition, Extended) >= 250f)
                 {
                     spells[SpellSlot.E].Cast(Extended);
@@ -190,7 +190,7 @@ namespace DZBard
                         comboTarget.Position
                     };
 
-                    if (comboTarget.LSIsDashing())
+                    if (comboTarget.IsDashing())
                     {
                         BeamStartPositions.Add(comboTarget.GetDashInfo().EndPos.To3D());
                     }
@@ -200,13 +200,13 @@ namespace DZBard
 
                     foreach (var position in BeamStartPositions)
                     {
-                        var collisionableObjects = spells[SpellSlot.Q].GetCollision(position.LSTo2D(),
-                            new List<Vector2>() {position.LSExtend(PlayerPosition, -QPushDistance).LSTo2D()});
+                        var collisionableObjects = spells[SpellSlot.Q].GetCollision(position.To2D(),
+                            new List<Vector2>() {position.Extend(PlayerPosition, -QPushDistance).To2D()});
 
                         if (collisionableObjects.Any())
                         {
                             if (collisionableObjects.Any(h => h is AIHeroClient) &&
-                                (collisionableObjects.All(h => h.LSIsValidTarget())))
+                                (collisionableObjects.All(h => h.IsValidTarget())))
                             {
                                 spells[SpellSlot.Q].Cast(QPrediction.CastPosition);
                                 break;
@@ -214,20 +214,20 @@ namespace DZBard
 
                             for (var i = 0; i < QPushDistance; i += (int) comboTarget.BoundingRadius)
                             {
-                                CollisionPositions.Add(position.LSExtend(PlayerPosition, -i));
+                                CollisionPositions.Add(position.Extend(PlayerPosition, -i));
                             }
                         }
 
                         for (var i = 0; i < QPushDistance; i += (int) comboTarget.BoundingRadius)
                         {
-                            PositionsList.Add(position.LSExtend(PlayerPosition, -i));
+                            PositionsList.Add(position.Extend(PlayerPosition, -i));
                         }
                     }
 
                     if (PositionsList.Any())
                     {
                         //We don't want to divide by 0 Kappa
-                        var WallNumber = PositionsList.Count(p => p.LSIsWall())*1.3f;
+                        var WallNumber = PositionsList.Count(p => p.IsWall())*1.3f;
                         var CollisionPositionCount = CollisionPositions.Count;
                         var Percent = (WallNumber + CollisionPositionCount)/PositionsList.Count;
                         var AccuracyEx = QAccuracy/100f;
@@ -250,20 +250,20 @@ namespace DZBard
 
         private static void HandleW()
         {
-            if (ObjectManager.Player.LSIsRecalling() || Shop.IsOpen || !spells[SpellSlot.W].LSIsReady())
+            if (ObjectManager.Player.IsRecalling() || Shop.IsOpen || !spells[SpellSlot.W].IsReady())
             {
                 return;
             }
 
             if (ObjectManager.Player.HealthPercent <= GetItemValue<Slider>("dz191.bard.wtarget.healthpercent").Value)
             {
-                var castPosition = ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, 65);
+                var castPosition = ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 65);
                 spells[SpellSlot.W].Cast(castPosition);
                 return;
             }
 
             var LowHealthAlly = HeroManager.Allies
-                .Where(ally => ally.LSIsValidTarget(spells[SpellSlot.W].Range, false)
+                .Where(ally => ally.IsValidTarget(spells[SpellSlot.W].Range, false)
                     && ally.HealthPercent <= GetItemValue<Slider>("dz191.bard.wtarget.healthpercent").Value
                     && GetItemValue<bool>(string.Format("dz191.bard.wtarget.{0}", ally.ChampionName.ToLower())))
                 //.OrderBy(TargetSelector.GetPriority)
@@ -288,8 +288,8 @@ namespace DZBard
             double distance = Vector3.Distance(start, end);
             for (uint i = 0; i < distance; i += 10)
             {
-                var tempPosition = start.LSExtend(end, i).LSTo2D();
-                if (tempPosition.LSIsWall())
+                var tempPosition = start.Extend(end, i).To2D();
+                if (tempPosition.IsWall())
                 {
                     return true;
                 }
@@ -303,10 +303,10 @@ namespace DZBard
             double distance = Vector3.Distance(start, end);
             for (uint i = 0; i < distance; i += 10)
             {
-                var tempPosition = start.LSExtend(end, i);
-                if (tempPosition.LSIsWall())
+                var tempPosition = start.Extend(end, i);
+                if (tempPosition.IsWall())
                 {
-                    return tempPosition.LSExtend(start, -35);
+                    return tempPosition.Extend(start, -35);
                 }
             }
 
@@ -321,13 +321,13 @@ namespace DZBard
 
             for (uint i = 0; i < distance; i += 10)
             {
-                var tempPosition = start.LSExtend(end, i);
-                if (tempPosition.LSIsWall() && firstPosition == Vector3.Zero)
+                var tempPosition = start.Extend(end, i);
+                if (tempPosition.IsWall() && firstPosition == Vector3.Zero)
                 {
                     firstPosition = tempPosition;
                 }
                 lastPosition = tempPosition;
-                if (!lastPosition.LSIsWall() && firstPosition != Vector3.Zero)
+                if (!lastPosition.IsWall() && firstPosition != Vector3.Zero)
                 {
                     break;
                 }

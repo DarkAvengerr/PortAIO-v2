@@ -45,7 +45,7 @@ namespace UnderratedAIO.Champions
         private void Obj_AI_Base_OnCreate(GameObject sender, EventArgs args)
         {
             if (sender.Name.ToLower().Contains("olaf_axe_totem_team_id_green.troy") &&
-                lastQCast.LSDistance(sender.Position) < 700)
+                lastQCast.Distance(sender.Position) < 700)
             {
                 lastQpos = sender.Position;
             }
@@ -55,7 +55,7 @@ namespace UnderratedAIO.Champions
         private void Obj_AI_Base_OnDelete(GameObject sender, EventArgs args)
         {
             if (sender.Name.ToLower().Contains("olaf_axe_totem_team_id_green.troy") &&
-                lastQpos.LSDistance(sender.Position) < 150)
+                lastQpos.Distance(sender.Position) < 150)
             {
                 lastQpos = Vector3.Zero;
             }
@@ -69,14 +69,14 @@ namespace UnderratedAIO.Champions
             }
             if (args.Slot == SpellSlot.Q)
             {
-                var pos = player.LSDistance(args.End) > 400 ? args.End : player.Position.LSExtend(args.End, 400);
+                var pos = player.Distance(args.End) > 400 ? args.End : player.Position.Extend(args.End, 400);
                 lastQCast = Environment.Map.ClosestWall(player.Position, pos);
             }
         }
 
         private void Drawing_OnDraw(EventArgs args)
         {
-            if (lastQpos.LSIsValid() && config.Item("drawaxe", true).GetValue<bool>())
+            if (lastQpos.IsValid() && config.Item("drawaxe", true).GetValue<bool>())
             {
                 Render.Circle.DrawCircle(
                     lastQpos, config.Item("gotoAxeMaxDist", true).GetValue<Slider>().Value, Color.Cyan, 5);
@@ -118,7 +118,7 @@ namespace UnderratedAIO.Champions
                 minis.Where(m => HealthPrediction.GetHealthPrediction(m, 245) < E.GetDamage(m))
                     .OrderByDescending(m => m.MaxHealth)
                     .FirstOrDefault();
-            if (config.Item("useeLC", true).GetValue<bool>() && E.LSIsReady() && killableWithE != null &&
+            if (config.Item("useeLC", true).GetValue<bool>() && E.IsReady() && killableWithE != null &&
                 (!player.Spellbook.IsAutoAttacking || killableWithE.MaxHealth > 2000))
             {
                 E.Cast(killableWithE);
@@ -132,7 +132,7 @@ namespace UnderratedAIO.Champions
             {
                 return;
             }
-            if (config.Item("useqLC", true).GetValue<bool>() && Q.LSIsReady())
+            if (config.Item("useqLC", true).GetValue<bool>() && Q.IsReady())
             {
                 var minisForQ = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly);
                 var farmLocation = Q.GetLineFarmLocation(minisForQ);
@@ -141,13 +141,13 @@ namespace UnderratedAIO.Champions
                 {
                     targetMini =
                         minisForQ.Where(m => Q.CountHits(minisForQ, m.Position) >= farmLocation.MinionsHit)
-                            .OrderBy(m => m.LSDistance(player))
+                            .OrderBy(m => m.Distance(player))
                             .FirstOrDefault();
                 }
                 if (targetMini == null)
                 {
                     targetMini =
-                        minisForQ.Where(m => minisForQ.Where(b => b.LSDistance(m) < Q.Width).Sum(b => b.Health) > 700)
+                        minisForQ.Where(m => minisForQ.Where(b => b.Distance(m) < Q.Width).Sum(b => b.Health) > 700)
                             .OrderByDescending(b => Q.CountHits(minisForQ, b.Position))
                             .FirstOrDefault();
                 }
@@ -156,7 +156,7 @@ namespace UnderratedAIO.Champions
                     Q.Cast(targetMini.Position);
                 }
             }
-            if (config.Item("usewLC", true).GetValue<bool>() && W.LSIsReady())
+            if (config.Item("usewLC", true).GetValue<bool>() && W.IsReady())
             {
                 if (minis.Sum(m => m.Health) > 750 || minis.Count > 3 || player.HealthPercent < 50)
                 {
@@ -182,7 +182,7 @@ namespace UnderratedAIO.Champions
             {
                 return;
             }
-            if (config.Item("useqH", true).GetValue<bool>() && Q.LSIsReady())
+            if (config.Item("useqH", true).GetValue<bool>() && Q.IsReady())
             {
                 CastQ(target);
             }
@@ -205,16 +205,16 @@ namespace UnderratedAIO.Champions
             {
                 E.Cast(target);
             }
-            if (config.Item("usew", true).GetValue<bool>() && W.LSIsReady() &&
-                player.LSDistance(target) < Orbwalking.GetRealAutoAttackRange(target) + 50)
+            if (config.Item("usew", true).GetValue<bool>() && W.IsReady() &&
+                player.Distance(target) < Orbwalking.GetRealAutoAttackRange(target) + 50)
             {
                 W.Cast();
             }
-            if (config.Item("userCCed", true).GetValue<bool>() && R.LSIsReady() && CombatHelper.IsCCed(player))
+            if (config.Item("userCCed", true).GetValue<bool>() && R.IsReady() && CombatHelper.IsCCed(player))
             {
                 R.Cast();
             }
-            if (config.Item("userbeforeCCed", true).GetValue<bool>() && R.LSIsReady() &&
+            if (config.Item("userbeforeCCed", true).GetValue<bool>() && R.IsReady() &&
                 Program.IncDamages.GetAllyData(player.NetworkId).AnyCC)
             {
                 R.Cast();
@@ -228,26 +228,26 @@ namespace UnderratedAIO.Champions
                 ItemHandler.UseItems(target, config, ComboDamage(target));
             }
             var ignitedmg = (float) player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
-            bool hasIgnite = player.Spellbook.CanUseSpell(player.LSGetSpellSlot("SummonerDot")) == SpellState.Ready;
+            bool hasIgnite = player.Spellbook.CanUseSpell(player.GetSpellSlot("SummonerDot")) == SpellState.Ready;
             if (config.Item("useIgnite", true).GetValue<bool>() &&
                 ignitedmg > HealthPrediction.GetHealthPrediction(target, 1000) && hasIgnite &&
                 !CombatHelper.CheckCriticalBuffs(target) &&
-                target.LSDistance(player) > Orbwalking.GetRealAutoAttackRange(target) + 25)
+                target.Distance(player) > Orbwalking.GetRealAutoAttackRange(target) + 25)
             {
-                player.Spellbook.CastSpell(player.LSGetSpellSlot("SummonerDot"), target);
+                player.Spellbook.CastSpell(player.GetSpellSlot("SummonerDot"), target);
             }
         }
 
         private void GotoAxe(Vector3 target)
         {
-            if (!lastQpos.LSIsValid())
+            if (!lastQpos.IsValid())
             {
                 return;
             }
             var maxDist = config.Item("gotoAxeMaxDist", true).GetValue<Slider>().Value;
-            var orig = player.LSDistance(target);
-            var ext = player.LSDistance(lastQpos) + lastQpos.LSDistance(target);
-            if (player.LSDistance(lastQpos) < maxDist && !lastQpos.LSUnderTurret(true))
+            var orig = player.Distance(target);
+            var ext = player.Distance(lastQpos) + lastQpos.Distance(target);
+            if (player.Distance(lastQpos) < maxDist && !lastQpos.UnderTurret(true))
                 //ext - orig < maxDist && Orbwalking.CanMove(100)
             {
                 orbwalker.SetOrbwalkingPoint(lastQpos);
@@ -258,7 +258,7 @@ namespace UnderratedAIO.Champions
         private void CastQ(AIHeroClient target)
         {
             var ext = 0;
-            if (player.LSDistance(target.ServerPosition) > 400)
+            if (player.Distance(target.ServerPosition) > 400)
             {
                 ext = 100;
             }
@@ -268,15 +268,15 @@ namespace UnderratedAIO.Champions
                 if (pred.HitChance >= HitChance.Medium)
                 {
                     //Console.WriteLine(1);
-                    Q.Cast(player.Position.LSExtend(pred.CastPosition.To3D(), player.LSDistance(pred.CastPosition) + ext));
+                    Q.Cast(player.Position.Extend(pred.CastPosition.To3D(), player.Distance(pred.CastPosition) + ext));
                 }
             }
             else
             {
                 var pred = Q.GetPrediction(target, true);
-                var pos = player.Position.LSExtend(pred.CastPosition, player.LSDistance(pred.CastPosition) + ext);
-                if (pred.CastPosition.LSIsValid() && target.LSDistance(pos) < player.LSDistance(target) &&
-                    ((pred.Hitchance >= HitChance.Medium && player.LSDistance(target) < 500) ||
+                var pos = player.Position.Extend(pred.CastPosition, player.Distance(pred.CastPosition) + ext);
+                if (pred.CastPosition.IsValid() && target.Distance(pos) < player.Distance(target) &&
+                    ((pred.Hitchance >= HitChance.Medium && player.Distance(target) < 500) ||
                      pred.Hitchance >= HitChance.High ||
                      (pred.Hitchance >= HitChance.Low && Q.CountHits(new List<Obj_AI_Base>() { target }, pos) > 0)))
                 {
@@ -348,17 +348,17 @@ namespace UnderratedAIO.Champions
         private static float ComboDamage(AIHeroClient hero)
         {
             double damage = 0;
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.Q);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.Q);
             }
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.E);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.E);
             }
             damage += ItemHandler.GetItemsDamage(hero);
             var ignitedmg = player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
-            if (player.Spellbook.CanUseSpell(player.LSGetSpellSlot("summonerdot")) == SpellState.Ready &&
+            if (player.Spellbook.CanUseSpell(player.GetSpellSlot("summonerdot")) == SpellState.Ready &&
                 hero.Health < damage + ignitedmg)
             {
                 damage += ignitedmg;

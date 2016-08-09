@@ -203,7 +203,7 @@ namespace SCommon.PluginBase
 
         public virtual void Game_OnUpdate(EventArgs args)
         {
-            if (ObjectManager.Player.IsDead || ObjectManager.Player.LSIsRecalling() || args == null)
+            if (ObjectManager.Player.IsDead || ObjectManager.Player.IsRecalling() || args == null)
                 return;
 
             if (OnUpdate != null)
@@ -330,7 +330,7 @@ namespace SCommon.PluginBase
         /// <returns>true if combo is ready</returns>
         public bool ComboReady()
         {
-            return Spells[Q].LSIsReady() && Spells[W].LSIsReady() && Spells[E].LSIsReady() && Spells[R].LSIsReady();
+            return Spells[Q].IsReady() && Spells[W].IsReady() && Spells[E].IsReady() && Spells[R].IsReady();
         }
 
         #region Damage Calculation Funcitons
@@ -353,8 +353,8 @@ namespace SCommon.PluginBase
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual double CalculateDamageQ(AIHeroClient target)
         {
-            if (Spells[Q].LSIsReady())
-                return ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.Q);
+            if (Spells[Q].IsReady())
+                return ObjectManager.Player.GetSpellDamage(target, SpellSlot.Q);
 
             return 0.0;
         }
@@ -367,8 +367,8 @@ namespace SCommon.PluginBase
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual double CalculateDamageW(AIHeroClient target)
         {
-            if (Spells[W].LSIsReady())
-                return ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.W);
+            if (Spells[W].IsReady())
+                return ObjectManager.Player.GetSpellDamage(target, SpellSlot.W);
 
             return 0.0;
         }
@@ -381,8 +381,8 @@ namespace SCommon.PluginBase
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual double CalculateDamageE(AIHeroClient target)
         {
-            if (Spells[E].LSIsReady())
-                return ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.E);
+            if (Spells[E].IsReady())
+                return ObjectManager.Player.GetSpellDamage(target, SpellSlot.E);
 
             return 0.0;
         }
@@ -395,8 +395,8 @@ namespace SCommon.PluginBase
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual double CalculateDamageR(AIHeroClient target)
         {
-            if (Spells[R].LSIsReady())
-                return ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.R);
+            if (Spells[R].IsReady())
+                return ObjectManager.Player.GetSpellDamage(target, SpellSlot.R);
 
             return 0.0;
         }
@@ -420,8 +420,8 @@ namespace SCommon.PluginBase
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public double CalculateSummonersDamage(AIHeroClient target)
         {
-            var ignite = ObjectManager.Player.LSGetSpellSlot("summonerdot");
-            if (ignite != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(ignite) == SpellState.Ready && ObjectManager.Player.LSDistance(target, false) < 550)
+            var ignite = ObjectManager.Player.GetSpellSlot("summonerdot");
+            if (ignite != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(ignite) == SpellState.Ready && ObjectManager.Player.Distance(target, false) < 550)
                 return ObjectManager.Player.GetSummonerSpellDamage(target, LeagueSharp.Common.Damage.SummonerSpell.Ignite); //ignite
 
             return 0.0;
@@ -437,10 +437,10 @@ namespace SCommon.PluginBase
         {
             double dmg = 0.0;
 
-            if (Items.CanUseItem(3144) && ObjectManager.Player.LSDistance(target, false) < 550)
+            if (Items.CanUseItem(3144) && ObjectManager.Player.Distance(target, false) < 550)
                 dmg += ObjectManager.Player.GetItemDamage(target, LeagueSharp.Common.Damage.DamageItems.Bilgewater); //bilgewater cutlass
 
-            if (Items.CanUseItem(3153) && ObjectManager.Player.LSDistance(target, false) < 550)
+            if (Items.CanUseItem(3153) && ObjectManager.Player.Distance(target, false) < 550)
                 dmg += ObjectManager.Player.GetItemDamage(target, LeagueSharp.Common.Damage.DamageItems.Botrk); //botrk
 
             if (Items.HasItem(3057))

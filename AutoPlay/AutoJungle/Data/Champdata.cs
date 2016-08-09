@@ -269,7 +269,7 @@ using EloBuddy; namespace AutoJungle
             var target = Program._GameInfo.Target;
             var igniteDmg = Program.player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
             if (target != null && Program.menu.Item("UseIgniteG").GetValue<Boolean>() &&
-                target.LSDistance(Program.player) < 600 && target.Health < igniteDmg - 15)
+                target.Distance(Program.player) < 600 && target.Health < igniteDmg - 15)
             {
                 GameInfo.CastSpell(Program._GameInfo.Ignite, target);
             }
@@ -323,19 +323,19 @@ using EloBuddy; namespace AutoJungle
                 return false;
             }
             ItemHandler.UseItemsCombo(targetHero, true);
-            if (Q.LSIsReady() && targetHero.LSIsValidTarget(900) || Hero.ManaPercent > 50)
+            if (Q.IsReady() && targetHero.IsValidTarget(900) || Hero.ManaPercent > 50)
             {
                 Q.CastIfHitchanceEquals(targetHero, HitChance.High);
             }
-            if (W.LSIsReady() && targetHero.LSIsValidTarget(710))
+            if (W.IsReady() && targetHero.IsValidTarget(710))
             {
                 W.Cast();
             }
-            if (E.LSIsReady() && targetHero.LSIsValidTarget(1000))
+            if (E.IsReady() && targetHero.IsValidTarget(1000))
             {
                 E.Cast(targetHero);
             }
-            if (R.LSIsReady() && Hero.ManaPercent > 60 && !Hero.LSHasBuff("KogMawBioArcaneBarrage"))
+            if (R.IsReady() && Hero.ManaPercent > 60 && !Hero.HasBuff("KogMawBioArcaneBarrage"))
             {
                 R.CastIfHitchanceEquals(targetHero, HitChance.High);
             }
@@ -356,21 +356,21 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (Q.LSIsReady() && Hero.LSDistance(targetMob) < Q.Range &&
+            if (Q.IsReady() && Hero.Distance(targetMob) < Q.Range &&
                 (Helpers.getMobs(Hero.Position, Q.Range).Count >= 1 || targetMob.MaxHealth > 125))
             {
                 Q.Cast(targetMob);
             }
-            if (W.LSIsReady() && (Helpers.getMobs(Hero.Position, Q.Range).Count >= 1 || targetMob.MaxHealth > 700))
+            if (W.IsReady() && (Helpers.getMobs(Hero.Position, Q.Range).Count >= 1 || targetMob.MaxHealth > 700))
             {
                 W.Cast();
             }
-            if (E.LSIsReady() && Hero.LSDistance(targetMob) < E.Range &&
+            if (E.IsReady() && Hero.Distance(targetMob) < E.Range &&
                 (Helpers.getMobs(Hero.Position, E.Range).Count >= 2 || targetMob.MaxHealth > 700))
             {
                 E.Cast(targetMob);
             }
-            if (R.LSIsReady() && Hero.ManaPercent > 70 &&
+            if (R.IsReady() && Hero.ManaPercent > 70 &&
                 (Helpers.getMobs(Hero.Position, R.Range).Count >= 2 || targetMob.MaxHealth > 700))
             {
                 R.Cast(targetMob);
@@ -400,15 +400,15 @@ using EloBuddy; namespace AutoJungle
                 return false;
             }
             ItemHandler.UseItemsCombo(targetHero, true);
-            if (E.LSIsReady() && targetHero.LSIsValidTarget(700))
+            if (E.IsReady() && targetHero.IsValidTarget(700))
             {
                 E.Cast();
             }
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 R.Cast();
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 W.Cast();
             }
@@ -429,11 +429,11 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (R.LSIsReady() && Hero.LSDistance(targetMob) < 135 || targetMob.MaxHealth > 700)
+            if (R.IsReady() && Hero.Distance(targetMob) < 135 || targetMob.MaxHealth > 700)
             {
                 R.Cast();
             }
-            if (W.LSIsReady() && Hero.HealthPercent < 75)
+            if (W.IsReady() && Hero.HealthPercent < 75)
             {
                 W.Cast();
             }
@@ -462,21 +462,21 @@ using EloBuddy; namespace AutoJungle
                 return false;
             }
             /*
-            if (Q.LSIsReady() && targetmob != null && Hero.LSDistance(targetmob) < 700 || Hero.HealthPercent > 97)
+            if (Q.IsReady() && targetmob != null && Hero.Distance(targetmob) < 700 || Hero.HealthPercent > 97)
             {
                 Q.Cast();
             }
             */
             ItemHandler.UseItemsCombo(targetHero, true);
-            if (W.LSIsReady() && !Hero.LSHasBuff("AbsoluteZero"))
+            if (W.IsReady() && !Hero.HasBuff("AbsoluteZero"))
             {
                 W.Cast();
             }
-            if (E.LSIsReady() && !Hero.LSHasBuff("AbsoluteZero") && E.CanCast(targetHero))
+            if (E.IsReady() && !Hero.HasBuff("AbsoluteZero") && E.CanCast(targetHero))
             {
                 E.CastOnUnit(targetHero);
             }
-            if (R.LSIsReady() && !Hero.LSHasBuff("AbsoluteZero") && targetHero.LSIsValidTarget(125))
+            if (R.IsReady() && !Hero.HasBuff("AbsoluteZero") && targetHero.IsValidTarget(125))
             {
                 R.Cast();
             }
@@ -497,16 +497,16 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (Q.LSIsReady() && Hero.LSDistance(targetMob) < Q.Range &&
+            if (Q.IsReady() && Hero.Distance(targetMob) < Q.Range &&
                 (Helpers.getMobs(Hero.Position, Q.Range).Count >= 1 || targetMob.MaxHealth > 125))
             {
                 Q.Cast(targetMob);
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 W.Cast();
             }
-            if (E.LSIsReady() && E.CanCast(targetMob) && (Hero.ManaPercent > 60 || targetMob.MaxHealth > 700))
+            if (E.IsReady() && E.CanCast(targetMob) && (Hero.ManaPercent > 60 || targetMob.MaxHealth > 700))
             {
                 E.CastOnUnit(targetMob);
             }
@@ -534,16 +534,16 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (Q.LSIsReady() && targetHero.LSIsValidTarget(1000))
+            if (Q.IsReady() && targetHero.IsValidTarget(1000))
             {
                 Q.Cast(targetHero);
             }
-            if (E.LSIsReady() && Hero.HealthPercent > 30 && targetHero.LSIsValidTarget(325))
+            if (E.IsReady() && Hero.HealthPercent > 30 && targetHero.IsValidTarget(325))
             {
                 E.Cast(targetHero);
             }
             ItemHandler.UseItemsCombo(targetHero, true);
-            if (W.LSIsReady() && targetHero.LSIsValidTarget(325))
+            if (W.IsReady() && targetHero.IsValidTarget(325))
             {
                 W.Cast();
             }
@@ -564,18 +564,18 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (Q.LSIsReady() && targetMob.LSIsValidTarget(325))
+            if (Q.IsReady() && targetMob.IsValidTarget(325))
             {
                 Q.Cast(targetMob);
             }
             ItemHandler.UseItemsJungle();
-            if (E.LSIsReady() && Hero.LSDistance(targetMob) < 300 &&
+            if (E.IsReady() && Hero.Distance(targetMob) < 300 &&
                 (Program._GameInfo.SmiteableMob != null || Program._GameInfo.MinionsAround > 3 || structure != null))
                 if (Hero.HealthPercent > 45)
                 {
                     E.Cast(targetMob);
                 }
-            if (W.LSIsReady() && Hero.LSDistance(targetMob) < 300 &&
+            if (W.IsReady() && Hero.Distance(targetMob) < 300 &&
                 (Program._GameInfo.SmiteableMob != null || Program._GameInfo.MinionsAround > 3 || structure != null))
             {
                 if (Hero.Mana > Q.ManaCost + W.ManaCost || Hero.HealthPercent > 45)
@@ -606,20 +606,20 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (E.LSIsReady() && targetHero.LSIsValidTarget(600))
+            if (E.IsReady() && targetHero.IsValidTarget(600))
             {
                 E.Cast(targetHero);
             }
             ItemHandler.UseItemsCombo(targetHero, true);
-            if (W.LSIsReady() && targetHero.LSIsValidTarget(850))
+            if (W.IsReady() && targetHero.IsValidTarget(850))
             {
                 W.Cast();
             }
-            if (Q.LSIsReady() && !Hero.LSHasBuff("UndyingRage") && Hero.HealthPercent < 20)
+            if (Q.IsReady() && !Hero.HasBuff("UndyingRage") && Hero.HealthPercent < 20)
             {
                 Q.Cast();
             }
-            if (R.LSIsReady() && Hero.HealthPercent < 15 && targetHero.LSCountEnemiesInRange(700) >= 1)
+            if (R.IsReady() && Hero.HealthPercent < 15 && targetHero.CountEnemiesInRange(700) >= 1)
             {
                 R.Cast();
             }
@@ -641,11 +641,11 @@ using EloBuddy; namespace AutoJungle
                 return false;
             }
             ItemHandler.UseItemsJungle();
-            if (E.LSIsReady() && targetMob.LSIsValidTarget(600))
+            if (E.IsReady() && targetMob.IsValidTarget(600))
             {
                 E.Cast(targetMob);
             }
-            if (Q.LSIsReady() && Hero.HealthPercent < 30)
+            if (Q.IsReady() && Hero.HealthPercent < 30)
             {
                 Q.Cast();
             }
@@ -673,19 +673,19 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (Q.LSIsReady() && targetHero.LSIsValidTarget(550))
+            if (Q.IsReady() && targetHero.IsValidTarget(550))
             {
                 Q.Cast();
             }
-            if (E.LSIsReady() && targetHero.LSIsValidTarget(425))
+            if (E.IsReady() && targetHero.IsValidTarget(425))
             {
                 E.Cast();
             }
-            if (R.LSIsReady() && Hero.LSDistance(targetHero) < 400 && Hero.Mana > 100)
+            if (R.IsReady() && Hero.Distance(targetHero) < 400 && Hero.Mana > 100)
             {
                 R.Cast();
             }
-            if (W.LSIsReady() && targetHero.LSIsValidTarget(400))
+            if (W.IsReady() && targetHero.IsValidTarget(400))
             {
                 W.CastOnUnit(targetHero);
             }
@@ -707,15 +707,15 @@ using EloBuddy; namespace AutoJungle
                 return false;
             }
             ItemHandler.UseItemsJungle();
-            if (E.LSIsReady() && targetMob.LSIsValidTarget(425) && (Hero.ManaPercent > 60 || Hero.HealthPercent < 50))
+            if (E.IsReady() && targetMob.IsValidTarget(425) && (Hero.ManaPercent > 60 || Hero.HealthPercent < 50))
             {
                 E.Cast();
             }
-            if (Q.LSIsReady() && targetMob.LSIsValidTarget(550))
+            if (Q.IsReady() && targetMob.IsValidTarget(550))
             {
                 Q.Cast();
             }
-            if (W.LSIsReady() && targetMob.LSIsValidTarget(400))
+            if (W.IsReady() && targetMob.IsValidTarget(400))
             {
                 W.CastOnUnit(targetMob);
             }
@@ -742,20 +742,20 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (Q.LSIsReady() && Q.CanCast(targetHero))
+            if (Q.IsReady() && Q.CanCast(targetHero))
             {
                 Q.CastOnUnit(targetHero);
             }
             ItemHandler.UseItemsCombo(targetHero, true);
-            if (W.LSIsReady() && targetHero.LSIsValidTarget(750))
+            if (W.IsReady() && targetHero.IsValidTarget(750))
             {
                 W.Cast();
             }
-            if (R.LSIsReady() && Hero.LSDistance(targetHero) < 650 && Hero.Mana > 100)
+            if (R.IsReady() && Hero.Distance(targetHero) < 650 && Hero.Mana > 100)
             {
                 R.Cast(targetHero);
             }
-            if (E.LSIsReady() && E.CanCast(targetHero))
+            if (E.IsReady() && E.CanCast(targetHero))
             {
                 E.CastOnUnit(targetHero);
             }
@@ -777,12 +777,12 @@ using EloBuddy; namespace AutoJungle
                 return false;
             }
             ItemHandler.UseItemsJungle();
-            if (Q.LSIsReady() && Hero.LSDistance(targetMob) < Q.Range &&
+            if (Q.IsReady() && Hero.Distance(targetMob) < Q.Range &&
                 (Helpers.getMobs(Hero.Position, Q.Range).Count >= 2 || targetMob.MaxHealth > 700))
             {
                 Q.Cast(targetMob);
             }
-            if (E.LSIsReady() && E.CanCast(targetMob) && (Hero.ManaPercent > 60 || targetMob.MaxHealth > 700))
+            if (E.IsReady() && E.CanCast(targetMob) && (Hero.ManaPercent > 60 || targetMob.MaxHealth > 700))
             {
                 E.CastOnUnit(targetMob);
             }
@@ -801,21 +801,21 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (R.LSIsReady() && Hero.LSDistance(targetHero) < 300 && Hero.Mana > 250)
+            if (R.IsReady() && Hero.Distance(targetHero) < 300 && Hero.Mana > 250)
             {
                 R.Cast();
             }
-            if (W.LSIsReady() && targetHero.LSIsValidTarget(300))
+            if (W.IsReady() && targetHero.IsValidTarget(300))
             {
                 W.Cast();
             }
-            ItemHandler.UseItemsCombo(targetHero, !Q.LSIsReady());
+            ItemHandler.UseItemsCombo(targetHero, !Q.IsReady());
             if (Hero.Spellbook.IsAutoAttacking)
             {
                 return false;
             }
-            if (Q.LSIsReady() && Q.CanCast(targetHero) &&
-                (targetHero.LSDistance(Hero) > Orbwalking.GetRealAutoAttackRange(targetHero) || Hero.HealthPercent < 40))
+            if (Q.IsReady() && Q.CanCast(targetHero) &&
+                (targetHero.Distance(Hero) > Orbwalking.GetRealAutoAttackRange(targetHero) || Hero.HealthPercent < 40))
             {
                 Q.CastOnUnit(targetHero);
             }
@@ -836,16 +836,16 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (W.LSIsReady() && targetMob.LSIsValidTarget(300) && (Hero.ManaPercent > 60 || Hero.HealthPercent < 50))
+            if (W.IsReady() && targetMob.IsValidTarget(300) && (Hero.ManaPercent > 60 || Hero.HealthPercent < 50))
             {
                 W.Cast();
             }
             ItemHandler.UseItemsJungle();
-            if (Q.LSIsReady() && targetMob.LSIsValidTarget(300))
+            if (Q.IsReady() && targetMob.IsValidTarget(300))
             {
                 Q.Cast();
             }
-            if (E.LSIsReady() && E.CanCast(targetMob) && (Hero.ManaPercent > 60 || Hero.HealthPercent < 50))
+            if (E.IsReady() && E.CanCast(targetMob) && (Hero.ManaPercent > 60 || Hero.HealthPercent < 50))
             {
                 E.CastOnUnit(targetMob);
             }
@@ -864,27 +864,27 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (R.LSIsReady() && Hero.LSDistance(targetHero) < R.Range && targetHero.LSHasBuff("xenzhaointimidate") &&
-                targetHero.Health > R.GetDamage(targetHero) + Hero.LSGetAutoAttackDamage(targetHero, true) * 4)
+            if (R.IsReady() && Hero.Distance(targetHero) < R.Range && targetHero.HasBuff("xenzhaointimidate") &&
+                targetHero.Health > R.GetDamage(targetHero) + Hero.GetAutoAttackDamage(targetHero, true) * 4)
             {
                 R.Cast();
             }
-            if (W.LSIsReady() && targetHero.LSIsValidTarget(300))
+            if (W.IsReady() && targetHero.IsValidTarget(300))
             {
                 W.Cast();
             }
-            ItemHandler.UseItemsCombo(targetHero, !E.LSIsReady());
+            ItemHandler.UseItemsCombo(targetHero, !E.IsReady());
             if (Hero.Spellbook.IsAutoAttacking)
             {
                 return false;
             }
-            if (Q.LSIsReady() && targetHero.LSDistance(Hero) < Orbwalking.GetRealAutoAttackRange(targetHero) + 50)
+            if (Q.IsReady() && targetHero.Distance(Hero) < Orbwalking.GetRealAutoAttackRange(targetHero) + 50)
             {
                 Q.Cast();
             }
-            if (E.LSIsReady() && E.CanCast(targetHero) &&
-                (Hero.HealthPercent < 40 || targetHero.LSDistance(Hero) > Orbwalking.GetRealAutoAttackRange(targetHero) ||
-                 Prediction.GetPrediction(targetHero, 1f).UnitPosition.LSUnderTurret(true)))
+            if (E.IsReady() && E.CanCast(targetHero) &&
+                (Hero.HealthPercent < 40 || targetHero.Distance(Hero) > Orbwalking.GetRealAutoAttackRange(targetHero) ||
+                 Prediction.GetPrediction(targetHero, 1f).UnitPosition.UnderTurret(true)))
             {
                 E.CastOnUnit(targetHero);
             }
@@ -905,12 +905,12 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (W.LSIsReady() && targetMob.LSIsValidTarget(300))
+            if (W.IsReady() && targetMob.IsValidTarget(300))
             {
                 W.Cast();
             }
             ItemHandler.UseItemsJungle();
-            if (Q.LSIsReady() && Q.CanCast(targetMob) && (Hero.ManaPercent > 60 || Hero.HealthPercent < 50))
+            if (Q.IsReady() && Q.CanCast(targetMob) && (Hero.ManaPercent > 60 || Hero.HealthPercent < 50))
             {
                 Q.CastOnUnit(targetMob);
             }
@@ -925,13 +925,13 @@ using EloBuddy; namespace AutoJungle
         private bool SkarnerCombo()
         {
             var targetHero = Program._GameInfo.Target;
-            var rActive = Hero.LSHasBuff("skarnerimpalevo");
-            if (W.LSIsReady() && targetHero != null && Hero.LSDistance(targetHero) < 700)
+            var rActive = Hero.HasBuff("skarnerimpalevo");
+            if (W.IsReady() && targetHero != null && Hero.Distance(targetHero) < 700)
             {
                 W.Cast();
             }
-            ItemHandler.UseItemsCombo(targetHero, !E.LSIsReady());
-            if (Q.LSIsReady() && ((targetHero != null && Q.CanCast(targetHero)) || rActive))
+            ItemHandler.UseItemsCombo(targetHero, !E.IsReady());
+            if (Q.IsReady() && ((targetHero != null && Q.CanCast(targetHero)) || rActive))
             {
                 Q.Cast();
             }
@@ -939,33 +939,33 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (E.LSIsReady() && !rActive && targetHero != null && E.CanCast(targetHero) &&
-                Hero.LSDistance(targetHero) < 700)
+            if (E.IsReady() && !rActive && targetHero != null && E.CanCast(targetHero) &&
+                Hero.Distance(targetHero) < 700)
             {
                 E.CastIfHitchanceEquals(targetHero, HitChance.High);
             }
-            if (R.LSIsReady() && targetHero != null && R.CanCast(targetHero) && !targetHero.LSHasBuff("SkarnerImpale"))
+            if (R.IsReady() && targetHero != null && R.CanCast(targetHero) && !targetHero.HasBuff("SkarnerImpale"))
             {
                 R.CastOnUnit(targetHero);
             }
             if (rActive)
             {
                 var allyTower =
-                    Program._GameInfo.AllyStructures.OrderBy(a => a.LSDistance(Hero.Position)).FirstOrDefault();
-                if (allyTower != null && allyTower.LSDistance(Hero.Position) < 2000 &&
-                    allyTower.LSDistance(Hero.Position) > 300)
+                    Program._GameInfo.AllyStructures.OrderBy(a => a.Distance(Hero.Position)).FirstOrDefault();
+                if (allyTower != null && allyTower.Distance(Hero.Position) < 2000 &&
+                    allyTower.Distance(Hero.Position) > 300)
                 {
                     Console.WriteLine(2);
-                    Console.WriteLine(allyTower.LSDistance(Hero.Position));
-                    EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, allyTower.LSExtend(Program._GameInfo.SpawnPoint, 300));
-                    Program.pos = allyTower.LSExtend(Program._GameInfo.SpawnPoint, 300);
+                    Console.WriteLine(allyTower.Distance(Hero.Position));
+                    EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, allyTower.Extend(Program._GameInfo.SpawnPoint, 300));
+                    Program.pos = allyTower.Extend(Program._GameInfo.SpawnPoint, 300);
                     return false;
                 }
                 var ally =
-                    HeroManager.Allies.Where(a => a.LSDistance(Hero.Position) < 1500)
-                        .OrderBy(a => a.LSDistance(Hero))
+                    HeroManager.Allies.Where(a => a.Distance(Hero.Position) < 1500)
+                        .OrderBy(a => a.Distance(Hero))
                         .FirstOrDefault();
-                if (ally != null && ally.LSDistance(Hero) > 300)
+                if (ally != null && ally.Distance(Hero) > 300)
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, ally.Position);
                     Console.WriteLine(1);
@@ -973,13 +973,13 @@ using EloBuddy; namespace AutoJungle
                     return false;
                 }
                 var enemyTower =
-                    Program._GameInfo.EnemyStructures.OrderBy(a => a.LSDistance(Hero.Position)).FirstOrDefault();
-                if (enemyTower != null && enemyTower.LSDistance(Hero.Position) < 2000 &&
-                    enemyTower.LSDistance(Hero.Position) > 300)
+                    Program._GameInfo.EnemyStructures.OrderBy(a => a.Distance(Hero.Position)).FirstOrDefault();
+                if (enemyTower != null && enemyTower.Distance(Hero.Position) < 2000 &&
+                    enemyTower.Distance(Hero.Position) > 300)
                 {
                     Console.WriteLine(3);
-                    Program.pos = targetHero.Position.LSExtend(enemyTower, 2500);
-                    EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Hero.Position.LSExtend(enemyTower, 2500));
+                    Program.pos = targetHero.Position.Extend(enemyTower, 2500);
+                    EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Hero.Position.Extend(enemyTower, 2500));
                     return false;
                 }
             }
@@ -1003,14 +1003,14 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (W.LSIsReady() && Hero.LSDistance(targetMob) < Q.Range &&
+            if (W.IsReady() && Hero.Distance(targetMob) < Q.Range &&
                 (Helpers.getMobs(Hero.Position, W.Range).Count >= 2 ||
-                 targetMob.Health > Hero.LSGetAutoAttackDamage(targetMob, true) * 5))
+                 targetMob.Health > Hero.GetAutoAttackDamage(targetMob, true) * 5))
             {
                 W.Cast();
             }
             ItemHandler.UseItemsJungle();
-            if (Q.LSIsReady() && Q.CanCast(targetMob))
+            if (Q.IsReady() && Q.CanCast(targetMob))
             {
                 Q.Cast();
             }
@@ -1018,10 +1018,10 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (E.LSIsReady() && E.CanCast(targetMob))
+            if (E.IsReady() && E.CanCast(targetMob))
             {
                 var pred = E.GetLineFarmLocation(Helpers.getMobs(Hero.Position, E.Range));
-                if (pred.MinionsHit >= 2 || targetMob.Health > Hero.LSGetAutoAttackDamage(targetMob, true) * 5)
+                if (pred.MinionsHit >= 2 || targetMob.Health > Hero.GetAutoAttackDamage(targetMob, true) * 5)
                 {
                     E.CastIfHitchanceEquals(targetMob, HitChance.VeryHigh);
                 }
@@ -1037,7 +1037,7 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (W.LSIsReady() && Hero.LSDistance(targetHero) < W.Range + 100)
+            if (W.IsReady() && Hero.Distance(targetHero) < W.Range + 100)
             {
                 W.Cast();
             }
@@ -1046,18 +1046,18 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (Q.LSIsReady() && Orbwalking.GetRealAutoAttackRange(targetHero) > Hero.LSDistance(targetHero))
+            if (Q.IsReady() && Orbwalking.GetRealAutoAttackRange(targetHero) > Hero.Distance(targetHero))
             {
                 Q.Cast();
             }
-            if (E.LSIsReady() && E.CanCast(targetHero))
+            if (E.IsReady() && E.CanCast(targetHero))
             {
                 E.Cast(targetHero);
             }
-            if (R.LSIsReady() && Hero.Mana == 100 &&
-                targetHero.LSCountEnemiesInRange(GameInfo.ChampionRange) <=
-                targetHero.LSCountAlliesInRange(GameInfo.ChampionRange) &&
-                !Hero.Position.LSExtend(targetHero.Position, GameInfo.ChampionRange).LSUnderTurret(true))
+            if (R.IsReady() && Hero.Mana == 100 &&
+                targetHero.CountEnemiesInRange(GameInfo.ChampionRange) <=
+                targetHero.CountAlliesInRange(GameInfo.ChampionRange) &&
+                !Hero.Position.Extend(targetHero.Position, GameInfo.ChampionRange).UnderTurret(true))
             {
                 R.CastIfHitchanceEquals(targetHero, HitChance.VeryHigh);
             }
@@ -1083,9 +1083,9 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (W.LSIsReady() && Hero.LSDistance(targetMob) < W.Range &&
+            if (W.IsReady() && Hero.Distance(targetMob) < W.Range &&
                 (Helpers.getMobs(Hero.Position, W.Range).Count >= 2 ||
-                 targetMob.Health > W.GetDamage(targetMob) * 7 + Hero.LSGetAutoAttackDamage(targetMob, true) * 2))
+                 targetMob.Health > W.GetDamage(targetMob) * 7 + Hero.GetAutoAttackDamage(targetMob, true) * 2))
             {
                 W.Cast();
             }
@@ -1094,12 +1094,12 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 Q.Cast();
                 EloBuddy.Player.IssueOrder(GameObjectOrder.AutoAttack, targetMob);
             }
-            if (E.LSIsReady() && E.CanCast(targetMob))
+            if (E.IsReady() && E.CanCast(targetMob))
             {
                 E.Cast(targetMob);
             }
@@ -1122,26 +1122,26 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (Q.LSIsReady() && Q.CanCast(targetHero))
+            if (Q.IsReady() && Q.CanCast(targetHero))
             {
                 Q.CastOnUnit(targetHero);
             }
-            if (W.LSIsReady() && Hero.LSDistance(targetHero) < 300)
+            if (W.IsReady() && Hero.Distance(targetHero) < 300)
             {
                 if (Hero.Mana > Q.ManaCost + W.ManaCost || Hero.HealthPercent > 70)
                 {
                     W.Cast();
                 }
             }
-            if (R.LSIsReady() && R.CanCast(targetHero) && !targetHero.MagicImmune)
+            if (R.IsReady() && R.CanCast(targetHero) && !targetHero.MagicImmune)
             {
                 R.CastOnUnit(targetHero);
             }
-            if (E.LSIsReady() && Hero.Spellbook.GetSpell(SpellSlot.E).ToggleState == 1 && Hero.LSDistance(targetHero) < 1000)
+            if (E.IsReady() && Hero.Spellbook.GetSpell(SpellSlot.E).ToggleState == 1 && Hero.Distance(targetHero) < 1000)
             {
                 E.Cast();
             }
-            ItemHandler.UseItemsCombo(targetHero, !R.LSIsReady());
+            ItemHandler.UseItemsCombo(targetHero, !R.IsReady());
             OrbwalkingForBots.Orbwalk(targetHero);
             return false;
         }
@@ -1167,12 +1167,12 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (Q.LSIsReady() && Q.CanCast(targetMob) &&
+            if (Q.IsReady() && Q.CanCast(targetMob) &&
                 (Hero.ManaPercent > 50 || Hero.MaxHealth - Hero.Health > Q.GetDamage(targetMob) * 0.8f))
             {
                 Q.CastOnUnit(targetMob);
             }
-            if (W.LSIsReady() && Hero.LSDistance(targetMob) < 300 &&
+            if (W.IsReady() && Hero.Distance(targetMob) < 300 &&
                 (Program._GameInfo.SmiteableMob != null || Program._GameInfo.MinionsAround > 3 || structure != null))
             {
                 if (Hero.Mana > Q.ManaCost + W.ManaCost || Hero.HealthPercent > 70)
@@ -1180,7 +1180,7 @@ using EloBuddy; namespace AutoJungle
                     W.Cast();
                 }
             }
-            if (E.LSIsReady() && Hero.Spellbook.GetSpell(SpellSlot.E).ToggleState != 1 && Hero.LSDistance(targetMob) < 500)
+            if (E.IsReady() && Hero.Spellbook.GetSpell(SpellSlot.E).ToggleState != 1 && Hero.Distance(targetMob) < 500)
             {
                 E.Cast();
             }
@@ -1196,7 +1196,7 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (E.LSIsReady() && Hero.Spellbook.IsAutoAttacking)
+            if (E.IsReady() && Hero.Spellbook.IsAutoAttacking)
             {
                 E.Cast();
             }
@@ -1210,7 +1210,7 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (R.LSIsReady() && Hero.Position.LSDistance(Hero.Position) < 300 &&
+            if (R.IsReady() && Hero.Position.Distance(Hero.Position) < 300 &&
                 Jungle.bosses.Any(n => targetMob.Name.Contains(n)))
             {
                 R.Cast();
@@ -1219,11 +1219,11 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (Q.LSIsReady() && Q.CanCast(targetMob) && targetMob.Health < targetMob.MaxHealth)
+            if (Q.IsReady() && Q.CanCast(targetMob) && targetMob.Health < targetMob.MaxHealth)
             {
                 Q.CastOnUnit(targetMob);
             }
-            if (W.LSIsReady() && Hero.HealthPercent < 50)
+            if (W.IsReady() && Hero.HealthPercent < 50)
             {
                 W.Cast();
             }
@@ -1236,7 +1236,7 @@ using EloBuddy; namespace AutoJungle
         {
             var targetHero = Program._GameInfo.Target;
             if (Hero.Spellbook.IsChanneling &&
-                targetHero.Health > Program.player.LSGetAutoAttackDamage(targetHero, true) * 2)
+                targetHero.Health > Program.player.GetAutoAttackDamage(targetHero, true) * 2)
             {
                 return false;
             }
@@ -1244,11 +1244,11 @@ using EloBuddy; namespace AutoJungle
             {
                 Jungle.CastSmiteHero((AIHeroClient) targetHero);
             }
-            if (E.LSIsReady() && Hero.Spellbook.IsAutoAttacking)
+            if (E.IsReady() && Hero.Spellbook.IsAutoAttacking)
             {
                 E.Cast();
             }
-            if (R.LSIsReady() && Hero.LSDistance(targetHero) < 600)
+            if (R.IsReady() && Hero.Distance(targetHero) < 600)
             {
                 R.Cast();
             }
@@ -1256,16 +1256,16 @@ using EloBuddy; namespace AutoJungle
             {
                 return false;
             }
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 Q.CastOnUnit(targetHero);
             }
             if ((Hero.Spellbook.IsChanneling &&
-                 targetHero.Health > Program.player.LSGetAutoAttackDamage(targetHero, true) * 2) || targetHero == null)
+                 targetHero.Health > Program.player.GetAutoAttackDamage(targetHero, true) * 2) || targetHero == null)
             {
                 W.Cast();
             }
-            ItemHandler.UseItemsCombo(targetHero, !Q.LSIsReady());
+            ItemHandler.UseItemsCombo(targetHero, !Q.IsReady());
             OrbwalkingForBots.Orbwalk(targetHero);
             return false;
         }
@@ -1286,27 +1286,27 @@ using EloBuddy; namespace AutoJungle
                 return false;
             }
             /* check under tower? r active 1sec delay move to target
-                        if (R.LSIsReady() && Hero.LSDistance(targetHero) < 1300 &&
-                            (targetHero.LSDistance(Hero) > Orbwalking.GetRealAutoAttackRange(targetHero) &&
-                            targetHero.LSUnderTurret(true))
+                        if (R.IsReady() && Hero.Distance(targetHero) < 1300 &&
+                            (targetHero.Distance(Hero) > Orbwalking.GetRealAutoAttackRange(targetHero) &&
+                            targetHero.UnderTurret(true))
             {
                 R.CastOnUnit(targetHero);
             }
             */
-            if (R.LSIsReady() && Hero.LSDistance(targetHero) < 900)
+            if (R.IsReady() && Hero.Distance(targetHero) < 900)
             {
                 R.CastOnUnit(targetHero);
             }
             ItemHandler.UseItemsCombo(targetHero, true);
-            if (Q.LSIsReady() && Q.CanCast(targetHero))
+            if (Q.IsReady() && Q.CanCast(targetHero))
             {
                 Q.Cast(targetHero);
             }
-            if (W.LSIsReady() && targetHero.LSIsValidTarget(300))
+            if (W.IsReady() && targetHero.IsValidTarget(300))
             {
                 W.Cast();
             }
-            if (E.LSIsReady() && E.CanCast(targetHero))
+            if (E.IsReady() && E.CanCast(targetHero))
             {
                 E.CastOnUnit(targetHero);
             }
@@ -1328,11 +1328,11 @@ using EloBuddy; namespace AutoJungle
                 return false;
             }
             ItemHandler.UseItemsJungle();
-            if (Q.LSIsReady() && targetMob.LSIsValidTarget(400))
+            if (Q.IsReady() && targetMob.IsValidTarget(400))
             {
                 Q.Cast(targetMob);
             }
-            if (E.LSIsReady() && E.CanCast(targetMob) && (Hero.ManaPercent > 60 || Hero.HealthPercent < 50))
+            if (E.IsReady() && E.CanCast(targetMob) && (Hero.ManaPercent > 60 || Hero.HealthPercent < 50))
             {
                 E.CastOnUnit(targetMob);
             }

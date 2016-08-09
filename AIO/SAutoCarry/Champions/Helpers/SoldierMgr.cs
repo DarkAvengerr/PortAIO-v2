@@ -40,7 +40,7 @@ namespace SAutoCarry.Champions.Helpers
         public static float GetAADamage(Obj_AI_Base target)
         {
             float dmg = (float)ObjectManager.Player.CalcDamage(target, LeagueSharp.Common.Damage.DamageType.Magical, new[] { 50, 55, 60, 65, 70, 75, 80, 85, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180 }[ObjectManager.Player.Level - 1] + 0.6f * ObjectManager.Player.TotalMagicalDamage);
-            dmg += dmg * 0.25f * (ActiveSoldiers.Count(p => p.Position.LSDistance(target.Position) < SoldierAttackRange) - 1);
+            dmg += dmg * 0.25f * (ActiveSoldiers.Count(p => p.Position.Distance(target.Position) < SoldierAttackRange) - 1);
             return dmg;
         }
 
@@ -48,7 +48,7 @@ namespace SAutoCarry.Champions.Helpers
         {
             foreach(var soldier in s_Soldiers)
             {
-                if (Vector2.DistanceSquared(target.Position.LSTo2D(), soldier.Position.LSTo2D()) <= SoldierAttackRange * SoldierAttackRange)
+                if (Vector2.DistanceSquared(target.Position.To2D(), soldier.Position.To2D()) <= SoldierAttackRange * SoldierAttackRange)
                     return true;
             }
             return false;
@@ -97,7 +97,7 @@ namespace SAutoCarry.Champions.Helpers
             {
                 foreach(var soldier in s_Soldiers)
                 {
-                    if (ObjectManager.Player.ServerPosition.LSDistance(soldier.Position) < 1000f)
+                    if (ObjectManager.Player.ServerPosition.Distance(soldier.Position) < 1000f)
                         Render.Circle.DrawCircle(soldier.Position, SoldierAttackRange, it.Color);
                 }
             }

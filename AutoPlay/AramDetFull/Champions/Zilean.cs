@@ -33,22 +33,22 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
-            if (!Q.LSIsReady(3500) && player.Mana>150)
+            if (!Q.IsReady(3500) && player.Mana>150)
                 W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
                 E.CastOnUnit(target);
         }
@@ -85,17 +85,17 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void UltAlly()
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
             var allyMinHP = 30;
 
             foreach (var hero in HeroManager.Allies)
             {
 
-                if (player.LSHasBuff("Recall") || player.LSInFountain()) return;
-                if ((hero.HealthPercent <= allyMinHP) && R.LSIsReady() &&
-                    hero.LSCountEnemiesInRange(700) > 0 &&
-                    (hero.LSDistance(player.ServerPosition) <= R.Range))
+                if (player.HasBuff("Recall") || player.InFountain()) return;
+                if ((hero.HealthPercent <= allyMinHP) && R.IsReady() &&
+                    hero.CountEnemiesInRange(700) > 0 &&
+                    (hero.Distance(player.ServerPosition) <= R.Range))
                 {
                     R.Cast(hero);
                 }

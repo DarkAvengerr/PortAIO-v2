@@ -77,14 +77,14 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                         ? HealthPrediction.GetHealthPrediction(
                             minion,
                             (int) (ObjectManager.Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
-                            1000 * (int) ObjectManager.Player.LSDistance(minion) /
+                            1000 * (int) ObjectManager.Player.Distance(minion) /
                             (int)
                                 (ObjectManager.Player.CombatType == GameObjectCombatType.Melee ||
                                  ObjectManager.Player.ChampionName == "Azir"
                                     ? float.MaxValue
                                     : ObjectManager.Player.BasicAttack.MissileSpeed), 0)
                         : minion.Health;
-                    var aaDamage = ObjectManager.Player.LSGetAutoAttackDamage(minion, true);
+                    var aaDamage = ObjectManager.Player.GetAutoAttackDamage(minion, true);
                     var killable = health <= aaDamage;
                     if (hpBar)
                     {
@@ -171,7 +171,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
         {
             try
             {
-                _minions = GameObjects.EnemyMinions.Where(m => m.IsHPBarRendered && m.LSIsValidTarget());
+                _minions = GameObjects.EnemyMinions.Where(m => m.IsHPBarRendered && m.IsValidTarget());
             }
             catch (Exception ex)
             {

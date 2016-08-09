@@ -17,7 +17,7 @@ namespace S_Plus_Class_Kalista.Libaries
 
         private static void OnUpdate(EventArgs args)
         {
-            if (!Champion.E.LSIsReady()) return;
+            if (!Champion.E.IsReady()) return;
             //if (!ManaHandler.UseAutoE()) return;
             if (!Humanizer.Limiter.CheckDelay($"{Humanizer.DelayItemBase}Slider.EventDelay")) return;
 
@@ -69,7 +69,7 @@ namespace S_Plus_Class_Kalista.Libaries
                 if (!SMenu.Item(RendHandler._MenuItemBase + "Boolean.RendNonKillables").GetValue<bool>()) return;
                 if (!Humanizer.Limiter.CheckDelay($"{Humanizer.DelayItemBase}Slider.NonKillableDelay")) return;
                 if (!(minion.Health <= Damage.DamageCalc.CalculateRendDamage((Obj_AI_Base)minion)) || minion.Health > 60) return;
-                if (!minion.LSIsValidTarget(Champion.E.Range))return;
+                if (!minion.IsValidTarget(Champion.E.Range))return;
                 Humanizer.Limiter.UseTick($"{Humanizer.DelayItemBase}Slider.NonKillableDelay");
                 Champion.E.Cast();
         }
@@ -100,7 +100,7 @@ namespace S_Plus_Class_Kalista.Libaries
 
             foreach (var target in HeroManager.Enemies)
             {
-                if (!target.LSIsValidTarget(Champion.E.Range)) continue;
+                if (!target.IsValidTarget(Champion.E.Range)) continue;
                 if (Damage.DamageCalc.CheckNoDamageBuffs(target)) continue;
                 if (Damage.DamageCalc.CalculateRendDamage(target) < target.Health) continue;
                 if (target.IsDead) continue;
@@ -167,7 +167,7 @@ namespace S_Plus_Class_Kalista.Libaries
 
             foreach (var target in HeroManager.Enemies)
             {
-                if (!target.LSIsValidTarget(Champion.E.Range)) continue;
+                if (!target.IsValidTarget(Champion.E.Range)) continue;
                 if (Damage.DamageCalc.CheckNoDamageBuffs(target)) continue;
                 var stacks = target.GetBuffCount("kalistaexpungemarker");
                 if (stacks < SMenu.Item(RendHandler._MenuItemBase + "Boolean.RendHarrassKill.Slider.Stacks").GetValue<Slider>().Value) continue;
@@ -225,7 +225,7 @@ namespace S_Plus_Class_Kalista.Libaries
             // ReSharper disable once LoopCanBePartlyConvertedToQuery
             foreach (var target in HeroManager.Enemies)
             {
-                if (!target.LSIsValidTarget(Champion.E.Range)) continue;
+                if (!target.IsValidTarget(Champion.E.Range)) continue;
                 if (!target.HasBuff("KalistaExpungeMarker")) continue;
                 if (ObjectManager.Player.HealthPercent > SMenu.Item(RendHandler._MenuItemBase + "Boolean.RendBeforeDeath.Slider.PercentHP").GetValue<Slider>().Value) continue;
                 if (target.GetBuffCount("kalistaexpungemarker") < SMenu.Item(RendHandler._MenuItemBase + "Boolean.RendBeforeDeath.Slider.Stacks").GetValue<Slider>().Value) continue;
@@ -250,10 +250,10 @@ namespace S_Plus_Class_Kalista.Libaries
 
             foreach (var target in HeroManager.Enemies)
             {
-                if (!target.LSIsValidTarget(Champion.E.Range)) continue;
+                if (!target.IsValidTarget(Champion.E.Range)) continue;
                 if (Damage.DamageCalc.CheckNoDamageBuffs(target)) continue;
                 if (target.IsDead) continue;
-                if (target.LSDistance(Player) < Champion.E.Range - 50) continue;
+                if (target.Distance(Player) < Champion.E.Range - 50) continue;
                 var stacks = target.GetBuffCount("kalistaexpungemarker");
                 if (stacks <= SMenu.Item(RendHandler._MenuItemBase + "Boolean.RendOnLeave.Slider.Stacks").GetValue<Slider>().Value) continue;
 

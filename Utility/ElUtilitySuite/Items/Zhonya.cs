@@ -614,7 +614,7 @@ using EloBuddy; namespace ElUtilitySuite.Items
         /// <returns></returns>
         private bool CanEvadeMissile(MissileClient missile, Obj_AI_Base hero)
         {
-            var heroPos = hero.ServerPosition.LSTo2D();
+            var heroPos = hero.ServerPosition.To2D();
             float evadeTime = 0;
             float spellHitTime = 0;
 
@@ -622,14 +622,14 @@ using EloBuddy; namespace ElUtilitySuite.Items
                 && !missile.SData.TargettingType.ToString().Contains("Aoe"))
             {
                 var projection =
-                    heroPos.LSProjectOn(missile.StartPosition.LSTo2D(), missile.EndPosition.LSTo2D()).SegmentPoint;
-                evadeTime = 1000 * (missile.SData.LineWidth - heroPos.LSDistance(projection) + hero.BoundingRadius)
+                    heroPos.ProjectOn(missile.StartPosition.To2D(), missile.EndPosition.To2D()).SegmentPoint;
+                evadeTime = 1000 * (missile.SData.LineWidth - heroPos.Distance(projection) + hero.BoundingRadius)
                             / hero.MoveSpeed;
                 spellHitTime = this.GetSpellHitTime(missile, projection);
             }
             else if (missile.SData.TargettingType == SpellDataTargetType.LocationAoe)
             {
-                evadeTime = 1000 * (missile.SData.CastRadius - heroPos.LSDistance(missile.EndPosition)) / hero.MoveSpeed;
+                evadeTime = 1000 * (missile.SData.CastRadius - heroPos.Distance(missile.EndPosition)) / hero.MoveSpeed;
                 spellHitTime = this.GetSpellHitTime(missile, heroPos);
             }
 
@@ -671,17 +671,17 @@ using EloBuddy; namespace ElUtilitySuite.Items
             // Correct the end position
             var endPosition = missile.EndPosition;
 
-            if (missile.StartPosition.LSDistance(endPosition) > sdata.CastRange)
+            if (missile.StartPosition.Distance(endPosition) > sdata.CastRange)
             {
                 endPosition = missile.StartPosition
                               + Vector3.Normalize(endPosition - missile.StartPosition) * sdata.CastRange;
             }
 
             if (missile.SData.LineWidth + Player.BoundingRadius
-                > Player.ServerPosition.LSTo2D()
-                      .LSDistance(
-                          Player.ServerPosition.LSTo2D()
-                      .LSProjectOn(missile.StartPosition.LSTo2D(), endPosition.LSTo2D())
+                > Player.ServerPosition.To2D()
+                      .Distance(
+                          Player.ServerPosition.To2D()
+                      .ProjectOn(missile.StartPosition.To2D(), endPosition.To2D())
                       .SegmentPoint))
             {
                 if (!(this.Menu.Item("NoZhonyaEvade").IsActive() && this.CanEvadeMissile(missile, Player)))
@@ -706,7 +706,7 @@ using EloBuddy; namespace ElUtilitySuite.Items
                            ? Math.Max(
                                0,
                                missile.SData.CastFrame / 30 * 1000
-                               + missile.StartPosition.LSDistance(missile.EndPosition) / missile.SData.MissileSpeed * 1000
+                               + missile.StartPosition.Distance(missile.EndPosition) / missile.SData.MissileSpeed * 1000
                                - Environment.TickCount - Game.Ping)
                            : float.MaxValue;
             }
@@ -718,12 +718,12 @@ using EloBuddy; namespace ElUtilitySuite.Items
                 return Math.Max(
                     0,
                     missile.SData.CastFrame / 30 * 1000
-                    + missile.StartPosition.LSDistance(missile.EndPosition) / missile.SData.MissileSpeed * 1000
+                    + missile.StartPosition.Distance(missile.EndPosition) / missile.SData.MissileSpeed * 1000
                     - Environment.TickCount - Game.Ping);
             }
 
-            var spellPos = missile.Position.LSTo2D();
-            return 1000 * spellPos.LSDistance(pos) / missile.SData.MissileAccel;
+            var spellPos = missile.Position.To2D();
+            return 1000 * spellPos.Distance(pos) / missile.SData.MissileAccel;
         }
 
         /// <summary>
@@ -734,17 +734,17 @@ using EloBuddy; namespace ElUtilitySuite.Items
         {
             try
             {
-                if (Player.IsDead || Player.LSInFountain() || Player.LSIsRecalling())
+                if (Player.IsDead || Player.InFountain() || Player.IsRecalling())
                 {
                     return;
                 }
 
-                if (!this.ZhonyaLowHp || !zhonyaItem.IsReady() || Player.LSHasBuff("ChronoShift"))
+                if (!this.ZhonyaLowHp || !zhonyaItem.IsReady() || Player.HasBuff("ChronoShift"))
                 {
                     return;
                 }
 
-                var enemies = Player.LSCountEnemiesInRange(875f);
+                var enemies = Player.CountEnemiesInRange(875f);
                 var totalDamage = IncomingDamageManager.GetDamage(Player) * 1.1f;
                 if (totalDamage <= 0)
                 {
@@ -787,12 +787,12 @@ using EloBuddy; namespace ElUtilitySuite.Items
             }
 
             if (!this.Menu.Item($"Zhonya{spellData.SDataName}").IsActive()
-                || !this.Menu.Item("ZhonyaDangerous").IsActive() || Player.LSHasBuff("ChronoShift"))
+                || !this.Menu.Item("ZhonyaDangerous").IsActive() || Player.HasBuff("ChronoShift"))
             {
                 return;
             }
 
-            if (Player.LSDistance(args.Start) > spellData.CastRange)
+            if (Player.Distance(args.Start) > spellData.CastRange)
             {
                 return;
             }
@@ -802,7 +802,7 @@ using EloBuddy; namespace ElUtilitySuite.Items
                 || args.SData.TargettingType == SpellDataTargetType.SelfAndUnit && args.Target.IsMe
                 || args.SData.TargettingType == SpellDataTargetType.Self
                 || args.SData.TargettingType == SpellDataTargetType.SelfAoe
-                && Player.LSDistance(sender) < spellData.CastRange)
+                && Player.Distance(sender) < spellData.CastRange)
             {
                 LeagueSharp.Common.Utility.DelayAction.Add((int)spellData.Delay, () => zhonyaItem.Cast());
                 return;
@@ -818,7 +818,7 @@ using EloBuddy; namespace ElUtilitySuite.Items
             // Correct the end position
             var endPosition = args.End;
 
-            if (args.Start.LSDistance(endPosition) > spellData.CastRange)
+            if (args.Start.Distance(endPosition) > spellData.CastRange)
             {
                 endPosition = args.Start + Vector3.Normalize(endPosition - args.Start) * spellData.CastRange;
             }
@@ -831,10 +831,10 @@ using EloBuddy; namespace ElUtilitySuite.Items
 
             if ((isLinear
                  && width + Player.BoundingRadius
-                 > Player.ServerPosition.LSTo2D()
-                       .LSDistance(
-                           Player.ServerPosition.LSTo2D().LSProjectOn(args.Start.LSTo2D(), endPosition.LSTo2D()).SegmentPoint))
-                || (!isLinear && Player.LSDistance(endPosition) <= width + Player.BoundingRadius))
+                 > Player.ServerPosition.To2D()
+                       .Distance(
+                           Player.ServerPosition.To2D().ProjectOn(args.Start.To2D(), endPosition.To2D()).SegmentPoint))
+                || (!isLinear && Player.Distance(endPosition) <= width + Player.BoundingRadius))
             {
                 // Let missile client event handle it
                 if (this.Menu.Item("NoZhonyaEvade").IsActive() && spellData.MissileName != null)

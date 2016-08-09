@@ -30,12 +30,12 @@ using EloBuddy; namespace Activator.Items.Offensives
 
                 if ((Tar.Player.Health / Tar.Player.MaxHealth * 100) <= Menu.Item("enemylowhp" + Name + "pct").GetValue<Slider>().Value)
                 {
-                    if (Tar.Player.LSDistance(Player.ServerPosition) > Range - 100)
+                    if (Tar.Player.Distance(Player.ServerPosition) > Range - 100)
                     {
-                        if (!Tar.Player.LSIsFacing(Player) && Player.LSIsFacing(Tar.Player))
+                        if (!Tar.Player.IsFacing(Player) && Player.IsFacing(Tar.Player))
                         {
-                            var endpos = Player.ServerPosition.LSTo2D() + Player.Direction.LSTo2D().LSPerpendicular() * Range;
-                            if (endpos.To3D().LSCountEnemiesInRange(Range + (1 + Player.AttackRange + Player.LSDistance(Player.BBox.Minimum))) > 0)
+                            var endpos = Player.ServerPosition.To2D() + Player.Direction.To2D().Perpendicular() * Range;
+                            if (endpos.To3D().CountEnemiesInRange(Range + (1 + Player.AttackRange + Player.Distance(Player.BBox.Minimum))) > 0)
                             {
                                 UseItem(Tar.Player.ServerPosition, true);
                             }
@@ -45,10 +45,10 @@ using EloBuddy; namespace Activator.Items.Offensives
 
                 if ((Player.Health / Player.MaxHealth * 100) <= Menu.Item("selflowhp" + Name + "pct").GetValue<Slider>().Value)
                 {
-                    if (!Player.LSIsFacing(Tar.Player))
+                    if (!Player.IsFacing(Tar.Player))
                     {
-                        var endpos = Player.ServerPosition.LSTo2D() + Player.Direction.LSTo2D().LSPerpendicular() * Range;
-                        if (endpos.To3D().LSCountEnemiesInRange(Range + (1 + Player.AttackRange + Player.LSDistance(Player.BBox.Minimum))) <= 1)
+                        var endpos = Player.ServerPosition.To2D() + Player.Direction.To2D().Perpendicular() * Range;
+                        if (endpos.To3D().CountEnemiesInRange(Range + (1 + Player.AttackRange + Player.Distance(Player.BBox.Minimum))) <= 1)
                         {
                             UseItem(Game.CursorPos, true);
                         }

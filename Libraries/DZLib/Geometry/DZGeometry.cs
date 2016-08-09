@@ -23,8 +23,8 @@ namespace DZLib.Geometry
             double distance = Vector3.Distance(start, end);
             for (uint i = 0; i < distance; i += 10)
             {
-                var tempPosition = start.LSExtend(end, i).LSTo2D();
-                if (tempPosition.LSIsWall())
+                var tempPosition = start.Extend(end, i).To2D();
+                if (tempPosition.IsWall())
                 {
                     return true;
                 }
@@ -119,8 +119,8 @@ namespace DZLib.Geometry
                 RStart = start;
                 REnd = end;
                 Width = width;
-                Direction = (end - start).LSNormalized();
-                Perpendicular = Direction.LSPerpendicular();
+                Direction = (end - start).Normalized();
+                Perpendicular = Direction.Perpendicular();
             }
 
             public Polygon ToPolygon(int offset = 0, float overrideWidth = -1)

@@ -21,14 +21,14 @@ namespace SAutoCarry.Champions.Helpers
             if (Program.Champion.ConfigMenu.Item("CSHYKEY").GetValue<KeyBind>().Active || Program.Champion.ConfigMenu.Item("CFLASHKEY").GetValue<KeyBind>().Active)
                 return TargetSelector.SelectedTarget;
 
-            if (TargetSelector.SelectedTarget != null && TargetSelector.SelectedTarget.LSIsValidTarget(inRange))
+            if (TargetSelector.SelectedTarget != null && TargetSelector.SelectedTarget.IsValidTarget(inRange))
             {
                 Set(TargetSelector.SelectedTarget);
                 return TargetSelector.SelectedTarget;
             }
             if (s_Target != null)
             {
-                if (!s_Target.LSIsValidTarget())
+                if (!s_Target.IsValidTarget())
                 {
                     s_Target = null;
                 }
@@ -36,7 +36,7 @@ namespace SAutoCarry.Champions.Helpers
                 {
                     if (s_Target.IsDead || !s_Target.IsTargetable)
                         s_Target = null;
-                    else if (s_Target.LSDistance(ObjectManager.Player.ServerPosition) > inRange)
+                    else if (s_Target.Distance(ObjectManager.Player.ServerPosition) > inRange)
                     {
                         if (locked)
                             return s_Target;
@@ -50,7 +50,7 @@ namespace SAutoCarry.Champions.Helpers
                 Set(TargetSelector.GetTarget(inRange, dtype));
             else
             {
-                if (TargetSelector.SelectedTarget != null && TargetSelector.SelectedTarget != s_Target && TargetSelector.SelectedTarget.LSIsValidTarget(inRange))
+                if (TargetSelector.SelectedTarget != null && TargetSelector.SelectedTarget != s_Target && TargetSelector.SelectedTarget.IsValidTarget(inRange))
                     Set(TargetSelector.SelectedTarget);
             }
 

@@ -15,7 +15,7 @@ using EloBuddy;
 
         public static BuffInstance GetRendBuff(this Obj_AI_Base target)
         {
-            return target.Buffs.FirstOrDefault(b => b.Caster.IsMe && b.LSIsValidBuff() && b.DisplayName == "KalistaExpungeMarker");
+            return target.Buffs.FirstOrDefault(b => b.Caster.IsMe && b.IsValidBuff() && b.DisplayName == "KalistaExpungeMarker");
         }
 
         public static bool IsRendAboutToExpire(this Obj_AI_Base target)

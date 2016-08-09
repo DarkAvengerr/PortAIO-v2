@@ -32,7 +32,7 @@ namespace DZLib.EvadeIntegration
         // ReSharper disable once InconsistentNaming
         public static Vector3 SwitchYZ(this Vector3 v)
         {
-            return LeagueSharp.Common.Geometry.LSSwitchYZ(v);
+            return LeagueSharp.Common.Geometry.SwitchYZ(v);
         }
 
         public static List<Polygon> ToPolygons(this List<List<IntPoint>> polygonList)
@@ -50,10 +50,10 @@ namespace DZLib.EvadeIntegration
             {
                 var segmentStart = self[i];
                 var segmentEnd = self[i + 1];
-                var distance1 = (int) segmentEnd.LSDistance(segmentStart);
+                var distance1 = (int) segmentEnd.Distance(segmentStart);
                 if (distance1 > distance)
                 {
-                    return segmentStart + distance * (segmentEnd - segmentStart).LSNormalized();
+                    return segmentStart + distance * (segmentEnd - segmentStart).Normalized();
                 }
                 distance -= distance1;
             }
@@ -174,8 +174,8 @@ namespace DZLib.EvadeIntegration
                 RStart = start;
                 REnd = end;
                 Width = width;
-                Direction = (end - start).LSNormalized();
-                Perpendicular = Direction.LSPerpendicular();
+                Direction = (end - start).Normalized();
+                Perpendicular = Direction.Perpendicular();
             }
 
             public Polygon ToPolygon(int offset = 0, float overrideWidth = -1)
@@ -259,11 +259,11 @@ namespace DZLib.EvadeIntegration
                 var outRadius = (Radius + offset) / (float) Math.Cos(2 * Math.PI / CircleLineSegment);
 
                 result.Add(Center);
-                var side1 = Direction.LSRotated(-Angle * 0.5f);
+                var side1 = Direction.Rotated(-Angle * 0.5f);
 
                 for (var i = 0; i <= CircleLineSegment; i++)
                 {
-                    var cDirection = side1.LSRotated(i * Angle / CircleLineSegment).LSNormalized();
+                    var cDirection = side1.Rotated(i * Angle / CircleLineSegment).Normalized();
                     result.Add(new Vector2(Center.X + outRadius * cDirection.X, Center.Y + outRadius * cDirection.Y));
                 }
 

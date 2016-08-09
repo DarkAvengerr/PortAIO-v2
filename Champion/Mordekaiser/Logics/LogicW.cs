@@ -19,13 +19,13 @@ namespace Mordekaiser.Logics
             if (Utils.Player.Self.Spellbook.GetSpell(SpellSlot.W).Name != "mordekaisercreepingdeath2")
                 return;
 
-            var countEnemy = Utils.Player.Self.LSCountAlliesInRange(Spells.WDamageRadius);
+            var countEnemy = Utils.Player.Self.CountAlliesInRange(Spells.WDamageRadius);
 
             if (countEnemy == 0)
                 return;
 
             var t = TargetSelector.GetTarget(Spells.WDamageRadius, TargetSelector.DamageType.Magical);
-            if (!t.LSIsValidTarget()) 
+            if (!t.IsValidTarget()) 
                 return;
 
             var targetMovementSpeed = t.MoveSpeed;
@@ -33,8 +33,8 @@ namespace Mordekaiser.Logics
 
             if (myMovementSpeed <= targetMovementSpeed)
             {
-                if (!t.LSIsFacing(Utils.Player.Self) && t.Path.Count() >= 1 &&
-                    t.LSDistance(Utils.Player.Self) > Spells.WDamageRadius - 20)
+                if (!t.IsFacing(Utils.Player.Self) && t.Path.Count() >= 1 &&
+                    t.Distance(Utils.Player.Self) > Spells.WDamageRadius - 20)
                 {
                     Spells.W.Cast();
                     return;

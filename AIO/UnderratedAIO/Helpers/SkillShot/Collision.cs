@@ -55,22 +55,22 @@ namespace UnderratedAIO.Helpers.SkillShot
             if (sender.IsValid && sender.Team == ObjectManager.Player.Team && args.SData.Name == "YasuoWMovingWall")
             {
                 _wallCastT = System.Environment.TickCount;
-                _yasuoWallCastedPos = sender.ServerPosition.LSTo2D();
+                _yasuoWallCastedPos = sender.ServerPosition.To2D();
             }
         }
 
         public static FastPredResult FastPrediction(Vector2 from, Obj_AI_Base unit, int delay, int speed)
         {
-            var tDelay = delay / 1000f + (from.LSDistance(unit) / speed);
+            var tDelay = delay / 1000f + (from.Distance(unit) / speed);
             var d = tDelay * unit.MoveSpeed;
-            var path = unit.LSGetWaypoints();
+            var path = unit.GetWaypoints();
 
-            if (path.LSPathLength() > d)
+            if (path.PathLength() > d)
             {
                 return new FastPredResult
                 {
                     IsMoving = true,
-                    CurrentPos = unit.ServerPosition.LSTo2D(),
+                    CurrentPos = unit.ServerPosition.To2D(),
                     PredictedPos = path.CutPath((int) d)[0],
                 };
             }
@@ -79,8 +79,8 @@ namespace UnderratedAIO.Helpers.SkillShot
                 return new FastPredResult
                 {
                     IsMoving = false,
-                    CurrentPos = unit.ServerPosition.LSTo2D(),
-                    PredictedPos = unit.ServerPosition.LSTo2D(),
+                    CurrentPos = unit.ServerPosition.To2D(),
+                    PredictedPos = unit.ServerPosition.To2D(),
                 };
             }
             return new FastPredResult
@@ -118,18 +118,18 @@ namespace UnderratedAIO.Helpers.SkillShot
                             var pos = pred.PredictedPos;
                             var w = skillshot.SkillshotData.RawRadius +
                                     (!pred.IsMoving ? (minion.BoundingRadius - 15) : 0) -
-                                    pos.LSDistance(from, skillshot.EndPosition, true);
+                                    pos.Distance(from, skillshot.EndPosition, true);
                             if (w > 0)
                             {
                                 collisions.Add(
                                     new DetectedCollision
                                     {
                                         Position =
-                                            pos.LSProjectOn(skillshot.EndPosition, skillshot.StartPosition).LinePoint +
+                                            pos.ProjectOn(skillshot.EndPosition, skillshot.StartPosition).LinePoint +
                                             skillshot.Direction * 30,
                                         Unit = minion,
                                         Type = CollisionObjectTypes.Minion,
-                                        Distance = pos.LSDistance(from),
+                                        Distance = pos.Distance(from),
                                         Diff = w,
                                     });
                             }
@@ -142,7 +142,7 @@ namespace UnderratedAIO.Helpers.SkillShot
                             ObjectManager.Get<AIHeroClient>()
                                 .Where(
                                     h =>
-                                        (h.LSIsValidTarget(1200, false) && h.Team == ObjectManager.Player.Team && !h.IsMe ||
+                                        (h.IsValidTarget(1200, false) && h.Team == ObjectManager.Player.Team && !h.IsMe ||
                                          h.Team != ObjectManager.Player.Team)))
                         {
                             var pred = FastPrediction(
@@ -154,18 +154,18 @@ namespace UnderratedAIO.Helpers.SkillShot
                             var pos = pred.PredictedPos;
 
                             var w = skillshot.SkillshotData.RawRadius + 30 -
-                                    pos.LSDistance(from, skillshot.EndPosition, true);
+                                    pos.Distance(from, skillshot.EndPosition, true);
                             if (w > 0)
                             {
                                 collisions.Add(
                                     new DetectedCollision
                                     {
                                         Position =
-                                            pos.LSProjectOn(skillshot.EndPosition, skillshot.StartPosition).LinePoint +
+                                            pos.ProjectOn(skillshot.EndPosition, skillshot.StartPosition).LinePoint +
                                             skillshot.Direction * 30,
                                         Unit = hero,
                                         Type = CollisionObjectTypes.Minion,
-                                        Distance = pos.LSDistance(from),
+                                        Distance = pos.Distance(from),
                                         Diff = w,
                                     });
                             }
@@ -177,7 +177,7 @@ namespace UnderratedAIO.Helpers.SkillShot
                             !ObjectManager.Get<AIHeroClient>()
                                 .Any(
                                     hero =>
-                                        hero.LSIsValidTarget(float.MaxValue, false) &&
+                                        hero.IsValidTarget(float.MaxValue, false) &&
                                         hero.Team == ObjectManager.Player.Team && hero.ChampionName == "Yasuo"))
                         {
                             break;
@@ -199,8 +199,8 @@ namespace UnderratedAIO.Helpers.SkillShot
                         var wallWidth = (300 + 50 * Convert.ToInt32(level));
 
 
-                        var wallDirection = (wall.Position.LSTo2D() - _yasuoWallCastedPos).LSNormalized().LSPerpendicular();
-                        var wallStart = wall.Position.LSTo2D() + wallWidth / 2 * wallDirection;
+                        var wallDirection = (wall.Position.To2D() - _yasuoWallCastedPos).Normalized().Perpendicular();
+                        var wallStart = wall.Position.To2D() + wallWidth / 2 * wallDirection;
                         var wallEnd = wallStart - wallWidth * wallDirection;
                         var wallPolygon = new SkillshotGeometry.Rectangle(wallStart, wallEnd, 75).ToPolygon();
                         var intersection = new Vector2();
@@ -209,7 +209,7 @@ namespace UnderratedAIO.Helpers.SkillShot
                         for (var i = 0; i < wallPolygon.Points.Count; i++)
                         {
                             var inter =
-                                wallPolygon.Points[i].LSIntersection(
+                                wallPolygon.Points[i].Intersection(
                                     wallPolygon.Points[i != wallPolygon.Points.Count - 1 ? i + 1 : 0], from,
                                     skillshot.EndPosition);
                             if (inter.Intersects)
@@ -220,13 +220,13 @@ namespace UnderratedAIO.Helpers.SkillShot
 
                         if (intersections.Count > 0)
                         {
-                            intersection = intersections.OrderBy(item => item.LSDistance(from)).ToList()[0];
+                            intersection = intersections.OrderBy(item => item.Distance(from)).ToList()[0];
                             var collisionT = System.Environment.TickCount +
                                              Math.Max(
                                                  0,
                                                  skillshot.SkillshotData.Delay -
                                                  (System.Environment.TickCount - skillshot.StartTick)) + 100 +
-                                             (1000 * intersection.LSDistance(from)) / skillshot.SkillshotData.MissileSpeed;
+                                             (1000 * intersection.Distance(from)) / skillshot.SkillshotData.MissileSpeed;
                             if (collisionT - _wallCastT < 4000)
                             {
                                 if (skillshot.SkillshotData.Type != SkillShotType.SkillshotMissileLine)

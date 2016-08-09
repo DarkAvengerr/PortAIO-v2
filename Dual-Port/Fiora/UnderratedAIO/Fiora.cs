@@ -43,8 +43,8 @@ namespace UnderratedAIO.Champions
             if (passiveType != PassiveType.NULL)
             {
                 var enemy =
-                    HeroManager.Enemies.Where(e => e.LSIsValidTarget() && e.LSDistance(sender.Position) < 50)
-                        .OrderBy(e => sender.Position.LSDistance(e.Position))
+                    HeroManager.Enemies.Where(e => e.IsValidTarget() && e.Distance(sender.Position) < 50)
+                        .OrderBy(e => sender.Position.Distance(e.Position))
                         .FirstOrDefault();
                 if (enemy == null)
                 {
@@ -72,7 +72,7 @@ namespace UnderratedAIO.Champions
             var passiveType = GetPassive(sender.Name);
             if (passiveType != PassiveType.NULL)
             {
-                var enemy = HeroManager.Enemies.OrderBy(e => sender.Position.LSDistance(e.Position)).FirstOrDefault();
+                var enemy = HeroManager.Enemies.OrderBy(e => sender.Position.Distance(e.Position)).FirstOrDefault();
                 if (enemy == null)
                 {
                     return;
@@ -117,11 +117,11 @@ namespace UnderratedAIO.Champions
                     break;
             }
             var data = Program.IncDamages.GetAllyData(player.NetworkId);
-            if (data != null && W.LSIsReady() && config.Item("autoW", true).GetValue<bool>() &&
+            if (data != null && W.IsReady() && config.Item("autoW", true).GetValue<bool>() &&
                 config.Item("minmanaP", true).GetValue<Slider>().Value < player.ManaPercent)
             {
                 AIHeroClient enemy = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
-                if (enemy != null && data.ProjectileDamageTaken >= enemy.LSGetAutoAttackDamage(player) - 5)
+                if (enemy != null && data.ProjectileDamageTaken >= enemy.GetAutoAttackDamage(player) - 5)
                 {
                     W.Cast(enemy);
                 }
@@ -150,29 +150,29 @@ namespace UnderratedAIO.Champions
             }
             AIHeroClient targ = (AIHeroClient) targetO;
             List<Vector3> passivePositions = GetPassivePositions(targetO);
-            bool rapid = player.LSGetAutoAttackDamage(targ) * 3 + ComboDamage(targ) > targ.Health ||
+            bool rapid = player.GetAutoAttackDamage(targ) * 3 + ComboDamage(targ) > targ.Health ||
                          (player.Health < targ.Health && player.Health < player.MaxHealth / 2);
-            if (unit.IsMe && E.LSIsReady() && orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo &&
+            if (unit.IsMe && E.IsReady() && orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo &&
                 (config.Item("usee", true).GetValue<bool>() ||
                  (unit.IsMe && config.Item("RapidAttack", true).GetValue<KeyBind>().Active || rapid)) &&
                 !Orbwalking.CanAttack())
             {
                 E.Cast();
             }
-            if (unit.IsMe && orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Q.LSIsReady() &&
+            if (unit.IsMe && orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Q.IsReady() &&
                 (config.Item("RapidAttack", true).GetValue<KeyBind>().Active || rapid) && !Orbwalking.CanAttack() &&
                 passivePositions.Any())
             {
                 var passive = GetClosestPassivePosition(targ);
                 var pos = GetQpoint(targ, passive);
-                if (pos.LSIsValid())
+                if (pos.IsValid())
                 {
                     Q.Cast(pos);
                 }
                 else
                 {
                     var pos2 = GetQpoint(targ, Prediction.GetPrediction(targ, 2).UnitPosition);
-                    if (pos2.LSIsValid())
+                    if (pos2.IsValid())
                     {
                         Q.Cast(pos2);
                     }
@@ -183,12 +183,12 @@ namespace UnderratedAIO.Champions
                 var pos = GetClosestPassivePosition(targetO);
                 AIHeroClient target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
                 if (orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && targetO.NetworkId == target.NetworkId &&
-                    R.LSIsReady() && R.CanCast(target) &&
-                    HealthPrediction.GetHealthPrediction(target, 1000) > player.LSGetAutoAttackDamage(target) &&
-                    ComboDamage(target) + player.LSGetAutoAttackDamage(target) * 5 > target.Health &&
+                    R.IsReady() && R.CanCast(target) &&
+                    HealthPrediction.GetHealthPrediction(target, 1000) > player.GetAutoAttackDamage(target) &&
+                    ComboDamage(target) + player.GetAutoAttackDamage(target) * 5 > target.Health &&
                     ((config.Item("userally", true).GetValue<Slider>().Value <=
                       HeroManager.Allies.Count(
-                          a => a.IsValid && !a.IsDead && a.LSDistance(target) < 600 && a.HealthPercent < 90) &&
+                          a => a.IsValid && !a.IsDead && a.Distance(target) < 600 && a.HealthPercent < 90) &&
                       config.Item("usertf", true).GetValue<bool>()) ||
                      (player.HealthPercent < 75 && config.Item("user", true).GetValue<bool>())))
                 {
@@ -199,9 +199,9 @@ namespace UnderratedAIO.Champions
 
         private bool CheckQusage(Vector3 pos, AIHeroClient target)
         {
-            return pos.LSIsValid() && pos.LSDistance(player.Position) < Q.Range &&
-                   (target.HasBuff("fiorapassivemanager") || target.HasBuff("fiorarmark")) && !pos.LSIsWall() &&
-                   Qradius > pos.LSDistance(target.Position);
+            return pos.IsValid() && pos.Distance(player.Position) < Q.Range &&
+                   (target.HasBuff("fiorapassivemanager") || target.HasBuff("fiorarmark")) && !pos.IsWall() &&
+                   Qradius > pos.Distance(target.Position);
         }
 
         private List<Vector3> GetPassivePositions(AttackableUnit target)
@@ -218,7 +218,7 @@ namespace UnderratedAIO.Champions
         private Vector3 GetClosestPassivePosition(AttackableUnit target)
         {
             List<Vector3> temp = GetPassivePositions(target);
-            return temp.OrderBy(p => p.LSDistance(player.Position)).FirstOrDefault();
+            return temp.OrderBy(p => p.Distance(player.Position)).FirstOrDefault();
         }
 
         private void Combo()
@@ -229,31 +229,31 @@ namespace UnderratedAIO.Champions
                 return;
             }
             var data = Program.IncDamages.GetAllyData(player.NetworkId);
-            if (config.Item("usewCC", true).GetValue<bool>() && W.LSIsReady() && data.AnyCC)
+            if (config.Item("usewCC", true).GetValue<bool>() && W.IsReady() && data.AnyCC)
             {
                 W.Cast(target.Position);
             }
             var closestPassive = GetClosestPassivePosition(target);
-            if (closestPassive.LSIsValid() && config.Item("MoveToVitals", true).GetValue<bool>() &&
+            if (closestPassive.IsValid() && config.Item("MoveToVitals", true).GetValue<bool>() &&
                 Orbwalking.CanMove(300) && !Orbwalking.CanAttack() && !player.Spellbook.IsAutoAttacking &&
-                Game.CursorPos.LSDistance(target.Position) < 350)
+                Game.CursorPos.Distance(target.Position) < 350)
             {
                 orbwalker.SetMovement(false);
                 EloBuddy.Player.IssueOrder(
                     GameObjectOrder.MoveTo,
-                    target.Position.LSExtend(closestPassive, Math.Max(player.BoundingRadius + target.BoundingRadius, 100)));
+                    target.Position.Extend(closestPassive, Math.Max(player.BoundingRadius + target.BoundingRadius, 100)));
             }
             if (config.Item("useItems").GetValue<bool>())
             {
                 ItemHandler.UseItems(target, config, ComboDamage(target));
             }
-            bool hasIgnite = player.Spellbook.CanUseSpell(player.LSGetSpellSlot("SummonerDot")) == SpellState.Ready;
-            if (config.Item("useq", true).GetValue<bool>() && Q.LSIsReady() && Orbwalking.CanMove(100) &&
-                config.Item("useqMin", true).GetValue<Slider>().Value <= player.LSDistance(target) &&
-                (closestPassive.LSIsValid() || (target.HealthPercent < 30)) && !player.Spellbook.IsAutoAttacking)
+            bool hasIgnite = player.Spellbook.CanUseSpell(player.GetSpellSlot("SummonerDot")) == SpellState.Ready;
+            if (config.Item("useq", true).GetValue<bool>() && Q.IsReady() && Orbwalking.CanMove(100) &&
+                config.Item("useqMin", true).GetValue<Slider>().Value <= player.Distance(target) &&
+                (closestPassive.IsValid() || (target.HealthPercent < 30)) && !player.Spellbook.IsAutoAttacking)
             {
                 var pos = GetQpoint(target, closestPassive);
-                if (pos.LSIsValid())
+                if (pos.IsValid())
                 {
                     Q.Cast(pos);
                 }
@@ -261,20 +261,20 @@ namespace UnderratedAIO.Champions
                 {
                     if (
                         CheckQusage(
-                            target.Position.LSExtend(
-                                Prediction.GetPrediction(target, player.LSDistance(target) / 1600).UnitPosition, Qradius),
+                            target.Position.Extend(
+                                Prediction.GetPrediction(target, player.Distance(target) / 1600).UnitPosition, Qradius),
                             target))
                     {
                         Q.Cast(
-                            target.Position.LSExtend(
-                                Prediction.GetPrediction(target, player.LSDistance(target) / 1600).UnitPosition, Qradius));
+                            target.Position.Extend(
+                                Prediction.GetPrediction(target, player.Distance(target) / 1600).UnitPosition, Qradius));
                     }
                 }
             }
-            if (W.LSIsReady() && config.Item("usew", true).GetValue<bool>())
+            if (W.IsReady() && config.Item("usew", true).GetValue<bool>())
             {
-                var killable = (target.LSDistance(player) > 350f && W.GetDamage(target) > target.Health);
-                var incAA = data.ProjectileDamageTaken >= target.LSGetAutoAttackDamage(player) - 5;
+                var killable = (target.Distance(player) > 350f && W.GetDamage(target) > target.Health);
+                var incAA = data.ProjectileDamageTaken >= target.GetAutoAttackDamage(player) - 5;
                 var dangerous = incAA && data.DamageTaken >= player.Health * 0.4f;
                 if (killable || (incAA && !config.Item("usewDangerous", true).GetValue<bool>()) ||
                     (config.Item("usewDangerous", true).GetValue<bool>() && dangerous))
@@ -283,10 +283,10 @@ namespace UnderratedAIO.Champions
                 }
             }
             if (config.Item("useIgnite").GetValue<bool>() && hasIgnite && ComboDamage(target) > target.Health &&
-                !Q.LSIsReady() &&
-                (target.LSDistance(player) > Orbwalking.GetRealAutoAttackRange(target) || player.HealthPercent < 15))
+                !Q.IsReady() &&
+                (target.Distance(player) > Orbwalking.GetRealAutoAttackRange(target) || player.HealthPercent < 15))
             {
-                player.Spellbook.CastSpell(player.LSGetSpellSlot("SummonerDot"), target);
+                player.Spellbook.CastSpell(player.GetSpellSlot("SummonerDot"), target);
             }
         }
 
@@ -350,7 +350,7 @@ namespace UnderratedAIO.Champions
                 return;
             }
             var pas = GetQpoint(target, GetClosestPassivePosition(target));
-            if (pas.LSIsValid())
+            if (pas.IsValid())
             {
                 Render.Circle.DrawCircle(pas, 100, Color.BlueViolet, 7);
             }
@@ -359,21 +359,21 @@ namespace UnderratedAIO.Champions
         private static float ComboDamage(AIHeroClient hero)
         {
             double damage = 0;
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.Q);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.Q);
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.W);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.W);
             }
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 damage += GetPassiveDamage(hero, 4);
             }
             damage += ItemHandler.GetItemsDamage(hero);
             var ignitedmg = player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
-            if (player.Spellbook.CanUseSpell(player.LSGetSpellSlot("summonerdot")) == SpellState.Ready &&
+            if (player.Spellbook.CanUseSpell(player.GetSpellSlot("summonerdot")) == SpellState.Ready &&
                 hero.Health < damage + ignitedmg)
             {
                 damage += ignitedmg;
@@ -425,15 +425,15 @@ namespace UnderratedAIO.Champions
         public Vector3 GetQpoint(AIHeroClient target, Vector3 passive)
         {
             var ponts = new List<Vector3>();
-            var predEnemy = Prediction.GetPrediction(target, ObjectManager.Player.LSDistance(target) / 1600).UnitPosition;
+            var predEnemy = Prediction.GetPrediction(target, ObjectManager.Player.Distance(target) / 1600).UnitPosition;
             for (int i = 2; i < 8; i++)
             {
-                ponts.Add(predEnemy.LSTo2D().LSExtend(passive.LSTo2D(), i * 25).To3D());
+                ponts.Add(predEnemy.To2D().Extend(passive.To2D(), i * 25).To3D());
             }
 
             return
                 ponts.Where(p => CheckQusage(p, target))
-                    .OrderByDescending(p => p.LSDistance(target.Position))
+                    .OrderByDescending(p => p.Distance(target.Position))
                     .FirstOrDefault();
         }
 
@@ -517,7 +517,7 @@ namespace UnderratedAIO.Champions
         public List<Vector3> getPositions()
         {
             List<Vector3> list = new List<Vector3>();
-            var predEnemy = Prediction.GetPrediction(Enemy, ObjectManager.Player.LSDistance(Enemy) / 1600).UnitPosition;
+            var predEnemy = Prediction.GetPrediction(Enemy, ObjectManager.Player.Distance(Enemy) / 1600).UnitPosition;
             foreach (var passive in passives)
             {
                 switch (passive.Type)

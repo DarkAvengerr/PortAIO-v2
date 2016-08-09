@@ -65,8 +65,8 @@ namespace SFXTargetSelector
 
                 Target =
                     Targets.Items.Select(t => t.Hero)
-                        .Where(h => h.LSIsValidTarget() && h.LSDistance(Game.CursorPos) < h.BoundingRadius + ClickBuffer)
-                        .OrderBy(h => h.LSDistance(Game.CursorPos))
+                        .Where(h => h.IsValidTarget() && h.Distance(Game.CursorPos) < h.BoundingRadius + ClickBuffer)
+                        .OrderBy(h => h.Distance(Game.CursorPos))
                         .FirstOrDefault();
             }
         }

@@ -56,14 +56,14 @@ using EloBuddy;
             
             if (useTiamat && Items.HasItem(3077) && Items.CanUseItem(3077))
             {
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsZombie && x.LSIsValidTarget(250f)))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsZombie && x.IsValidTarget(250f)))
                 {
                     Items.UseItem(3077);
                 }
             }
             if (useHydra && Items.HasItem(3074) && Items.CanUseItem(3074))
             {
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsZombie && x.LSIsValidTarget(250f)))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsZombie && x.IsValidTarget(250f)))
                 {
                     Items.UseItem(3074);
                 }

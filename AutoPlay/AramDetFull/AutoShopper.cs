@@ -130,9 +130,9 @@ using EloBuddy; namespace ARAMDetFull
                 {
                     if (inventoryFull() && chain.Count == 0)
                     {
-                        if (player.Level >= 9 && !player.LSHasBuff("ElixirOfIron"))
+                        if (player.Level >= 9 && !player.HasBuff("ElixirOfIron"))
                             return (int)ItemId.Elixir_of_Iron;
-                        if (!player.LSHasBuff("OracleExtractSight"))
+                        if (!player.HasBuff("OracleExtractSight"))
                             return (int)ItemId.Oracles_Extract;
                     }
                     return -1;

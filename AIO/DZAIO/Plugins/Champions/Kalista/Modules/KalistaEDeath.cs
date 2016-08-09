@@ -25,7 +25,7 @@ using EloBuddy;
         public bool ShouldGetExecuted()
         {
             return Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.kalista.kalista.autoEDeath") &&
-                   Variables.Spells[SpellSlot.E].LSIsReady();
+                   Variables.Spells[SpellSlot.E].IsReady();
 
         }
 
@@ -39,12 +39,12 @@ using EloBuddy;
                 if (HealthPrediction.GetHealthPrediction(ObjectManager.Player, 250) <= 0 
                     || 
                     (ObjectManager.Player.HealthPercent < 5 
-                    && ObjectManager.Player.LSGetEnemiesInRange(Orbwalking.GetRealAutoAttackRange(null)).Any(h => h.HealthPercent > 4 * ObjectManager.Player.HealthPercent))
+                    && ObjectManager.Player.GetEnemiesInRange(Orbwalking.GetRealAutoAttackRange(null)).Any(h => h.HealthPercent > 4 * ObjectManager.Player.HealthPercent))
                     )
                 {
                     
                     if ((Environment.TickCount - LastECastTime >= 250f) 
-                        && HeroManager.Enemies.Any(m => m.LSIsValidTarget(Variables.Spells[SpellSlot.E].Range) && m.HasRend())
+                        && HeroManager.Enemies.Any(m => m.IsValidTarget(Variables.Spells[SpellSlot.E].Range) && m.HasRend())
                         )
                     {
                         Variables.Spells[SpellSlot.E].Cast();

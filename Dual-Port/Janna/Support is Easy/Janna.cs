@@ -123,7 +123,7 @@ using EloBuddy; namespace Support.Plugins
                 }
             }
 
-            if (!this.Q.LSIsReady() && Environment.TickCount - this.LastQInterrupt > 1000
+            if (!this.Q.IsReady() && Environment.TickCount - this.LastQInterrupt > 1000
                 && this.R.CastCheck(target, "Interrupt.R"))
             {
                 this.R.Cast();
@@ -170,7 +170,7 @@ using EloBuddy; namespace Support.Plugins
                     }
 
                     var ally = Helpers.AllyBelowHp(this.ConfigValue<Slider>("Combo.R.Health").Value, this.R.Range);
-                    if (this.R.CastCheck(ally, "Combo.R", true, false) && this.Player.LSCountEnemiesInRange(1000) > 0)
+                    if (this.R.CastCheck(ally, "Combo.R", true, false) && this.Player.CountEnemiesInRange(1000) > 0)
                     {
                         this.R.Cast();
                     }
@@ -199,7 +199,7 @@ using EloBuddy; namespace Support.Plugins
                 this.IsUltChanneling = true;
             }
 
-            if (!this.E.LSIsReady() || !this.E.IsInRange(sender))
+            if (!this.E.IsReady() || !this.E.IsInRange(sender))
             {
                 return;
             }
@@ -211,7 +211,7 @@ using EloBuddy; namespace Support.Plugins
                 var spell = args.SData.Name;
                 var caster = (AIHeroClient)sender;
 
-                if (DamageBoostDatabase.Spells.Any(s => s.Spell == spell) && caster.LSCountEnemiesInRange(2000) > 0)
+                if (DamageBoostDatabase.Spells.Any(s => s.Spell == spell) && caster.CountEnemiesInRange(2000) > 0)
                 {
                     switch (this.ConfigValue<Slider>("Misc.E.Spell." + args.SData.Name).Value) // prio 0 = disabled
                     {
@@ -243,7 +243,7 @@ using EloBuddy; namespace Support.Plugins
 
         private void RangeAttackOnCreate(GameObject sender, EventArgs args)
         {
-            if (!sender.IsValid<MissileClient>() || !this.E.LSIsReady())
+            if (!sender.IsValid<MissileClient>() || !this.E.IsReady())
             {
                 return;
             }
@@ -276,7 +276,7 @@ using EloBuddy; namespace Support.Plugins
 
         private void TowerAttackOnCreate(GameObject sender, EventArgs args)
         {
-            if (!this.E.LSIsReady() || !this.ConfigValue<bool>("Misc.E.Tower"))
+            if (!this.E.IsReady() || !this.ConfigValue<bool>("Misc.E.Tower"))
             {
                 return;
             }

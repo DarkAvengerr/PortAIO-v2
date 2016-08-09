@@ -38,7 +38,7 @@ namespace SCommon.Prediction
         /// <returns>Prediction result as <see cref="Prediction.Result"/></returns>
         public static Prediction.Result GetPrediction(Prediction.Input input, float ringRadius)
         {
-            return GetPrediction(input.Target, input.SpellWidth, ringRadius, input.SpellDelay, input.SpellMissileSpeed, input.SpellRange, input.SpellCollisionable, input.Path, input.AvgReactionTime, input.LastMovChangeTime, input.AvgPathLenght, input.From.LSTo2D(), input.RangeCheckFrom.LSTo2D());
+            return GetPrediction(input.Target, input.SpellWidth, ringRadius, input.SpellDelay, input.SpellMissileSpeed, input.SpellRange, input.SpellCollisionable, input.Path, input.AvgReactionTime, input.LastMovChangeTime, input.AvgPathLenght, input.From.To2D(), input.RangeCheckFrom.To2D());
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace SCommon.Prediction
         /// <returns>Prediction result as <see cref="Prediction.Result"/></returns>
         public static Prediction.Result GetPrediction(AIHeroClient target, float radius, float ringRadius, float delay, float missileSpeed, float range, bool collisionable)
         {
-            return GetPrediction(target, radius, ringRadius, delay, missileSpeed, range, collisionable, target.LSGetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), ObjectManager.Player.ServerPosition.LSTo2D(), ObjectManager.Player.ServerPosition.LSTo2D());
+            return GetPrediction(target, radius, ringRadius, delay, missileSpeed, range, collisionable, target.GetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), ObjectManager.Player.ServerPosition.To2D(), ObjectManager.Player.ServerPosition.To2D());
         }
 
         /// <summary>
@@ -81,10 +81,10 @@ namespace SCommon.Prediction
             Prediction.Result result = CirclePrediction.GetPrediction(target, ringRadius, delay, missileSpeed, range + radius, collisionable, path, avgt, movt, avgp, 360, from, rangeCheckFrom);
             if (result.HitChance > HitChance.Low)
             {
-                Vector2 direction = (result.CastPosition - from + target.Direction.LSTo2D()).LSNormalized();
+                Vector2 direction = (result.CastPosition - from + target.Direction.To2D()).Normalized();
                 result.CastPosition -= direction * (radius - ringRadius / 2f);
 
-                if (result.CastPosition.LSDistance(from) > range)
+                if (result.CastPosition.Distance(from) > range)
                     result.HitChance = HitChance.OutOfRange;
             }
 

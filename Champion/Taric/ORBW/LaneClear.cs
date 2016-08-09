@@ -86,11 +86,11 @@
 
             var Minion = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy).FirstOrDefault();
 
-            if (Minion.LSIsValidTarget() && SkyLv_Taric.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            if (Minion.IsValidTarget() && SkyLv_Taric.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-                if (SkyLv_Taric.Menu.Item("Taric.SafeLaneClear").GetValue<bool>() && Player.LSCountEnemiesInRange(1500) > 0) return;
+                if (SkyLv_Taric.Menu.Item("Taric.SafeLaneClear").GetValue<bool>() && Player.CountEnemiesInRange(1500) > 0) return;
 
-                if (UseELaneClear && Player.ManaPercent > EMiniManaLaneClear && E.LSIsReady() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveLaneClear").GetValue<bool>()))
+                if (UseELaneClear && Player.ManaPercent > EMiniManaLaneClear && E.IsReady() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveLaneClear").GetValue<bool>()))
                 {
                     var allMinionsE = MinionManager.GetMinions(Player.Position, E.Range, MinionTypes.All, MinionTeam.Enemy);
 
@@ -105,13 +105,13 @@
                     }
                 }
 
-                if (UseWLaneClear && CustomLib.EnemyMinionInPlayerRange(E.Range) >= WMiniMinimionAroundLaneClear && Player.ManaPercent > WMiniManaLaneClear && W.LSIsReady() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveLaneClear").GetValue<bool>()) && (!E.LSIsReady() || !UseELaneClear))
+                if (UseWLaneClear && CustomLib.EnemyMinionInPlayerRange(E.Range) >= WMiniMinimionAroundLaneClear && Player.ManaPercent > WMiniManaLaneClear && W.IsReady() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveLaneClear").GetValue<bool>()) && (!E.IsReady() || !UseELaneClear))
                 {
                     W.Cast(Player, PacketCast);
                     return;
                 }
 
-                if (UseQLaneClear && CustomLib.EnemyMinionInPlayerRange(E.Range) >= QMiniMinimionAroundLaneClear && Player.ManaPercent > QMiniManaLaneClear && Q.LSIsReady() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveLaneClear").GetValue<bool>()) && (!E.LSIsReady() || !UseELaneClear) && (Player.HealthPercent < 100 || (!W.LSIsReady() || !UseWLaneClear)))
+                if (UseQLaneClear && CustomLib.EnemyMinionInPlayerRange(E.Range) >= QMiniMinimionAroundLaneClear && Player.ManaPercent > QMiniManaLaneClear && Q.IsReady() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveLaneClear").GetValue<bool>()) && (!E.IsReady() || !UseELaneClear) && (Player.HealthPercent < 100 || (!W.IsReady() || !UseWLaneClear)))
                 {
                     Q.Cast(Player, PacketCast);
                     return;

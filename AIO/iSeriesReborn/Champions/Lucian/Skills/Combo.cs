@@ -29,7 +29,7 @@ using EloBuddy;
                     ExtendedQ();
                 }
 
-                if (qReady && (target_ex.LSDistance(ObjectManager.Player) < Variables.spells[SpellSlot.Q].Range - 65f + 0.25f * target_ex.MoveSpeed) && !LucianHooks.HasPassive)
+                if (qReady && (target_ex.Distance(ObjectManager.Player) < Variables.spells[SpellSlot.Q].Range - 65f + 0.25f * target_ex.MoveSpeed) && !LucianHooks.HasPassive)
                 {
                     Variables.spells[SpellSlot.Q].CastOnUnit(target_ex);
                     LeagueSharp.Common.Utility.DelayAction.Add((int)(250 + Game.Ping / 2f + ObjectManager.Player.AttackCastDelay + 560f),
@@ -42,7 +42,7 @@ using EloBuddy;
 
                 if (wReady 
                     && !qReady 
-                    && target_ex.LSIsValidTarget(Variables.spells[SpellSlot.W].Range) 
+                    && target_ex.IsValidTarget(Variables.spells[SpellSlot.W].Range) 
                     && !LucianHooks.HasPassive)
                 {
                     Variables.spells[SpellSlot.W].Cast(Variables.spells[SpellSlot.W].GetPrediction(target_ex).CastPosition);
@@ -54,13 +54,13 @@ using EloBuddy;
                 }
 
                 if (eReady 
-                    && target_ex.LSIsValidTarget(Variables.spells[SpellSlot.Q].Range + 300f + 65) 
+                    && target_ex.IsValidTarget(Variables.spells[SpellSlot.Q].Range + 300f + 65) 
                     && !LucianHooks.HasPassive 
                     && !ObjectManager.Player.Spellbook.IsAutoAttacking)
                 {
                     var eProvider = new EPositionProvider();;
                     var eEndPosition = eProvider.GetEPosition();
-                    if (eEndPosition != Vector3.Zero && eEndPosition.LSDistance(target_ex.ServerPosition) < Orbwalking.GetRealAutoAttackRange(target_ex))
+                    if (eEndPosition != Vector3.Zero && eEndPosition.Distance(target_ex.ServerPosition) < Orbwalking.GetRealAutoAttackRange(target_ex))
                     {
                         Variables.spells[SpellSlot.E].Cast(eEndPosition);
                         LeagueSharp.Common.Utility.DelayAction.Add((int)(250 + Game.Ping / 2f + ObjectManager.Player.AttackCastDelay + 560f),
@@ -79,19 +79,19 @@ using EloBuddy;
         public static void LucianRLock()
         {
             var currentTarget = Variables.spells[SpellSlot.R].GetTarget();
-            if (currentTarget.LSIsValidTarget())
+            if (currentTarget.IsValidTarget())
             {
                 var predictedPosition = Variables.spells[SpellSlot.R].GetPrediction(currentTarget).UnitPosition;
-                var directionVector = (currentTarget.ServerPosition - ObjectManager.Player.ServerPosition).LSNormalized();
+                var directionVector = (currentTarget.ServerPosition - ObjectManager.Player.ServerPosition).Normalized();
                 var RRangeCoefficient = 0.95f;
                 var RRangeAdjusted = Variables.spells[SpellSlot.R].Range * RRangeCoefficient;
                 var REndPointXCoordinate = predictedPosition.X + directionVector.X * RRangeAdjusted;
                 var REndPointYCoordinate = predictedPosition.Y + directionVector.Y * RRangeAdjusted;
                 var REndPoint = new Vector2(REndPointXCoordinate, REndPointYCoordinate).To3D();
 
-                if (REndPoint.LSIsValid() &&
-                    REndPoint.LSDistance(ObjectManager.Player.ServerPosition) < Variables.spells[SpellSlot.R].Range
-                    && !REndPoint.LSIsWall())
+                if (REndPoint.IsValid() &&
+                    REndPoint.Distance(ObjectManager.Player.ServerPosition) < Variables.spells[SpellSlot.R].Range
+                    && !REndPoint.IsWall())
                 {
                     Variables.Orbwalker.SetOrbwalkingPoint(REndPoint);
                 }
@@ -100,11 +100,11 @@ using EloBuddy;
 
         private static void ExtendedQ()
         {
-            foreach (var collisionMinion in from target in ObjectManager.Player.LSGetEnemiesInRange(Variables.qExtended.Range)
-                                            let position = new List<Vector2> { target.Position.LSTo2D() }
+            foreach (var collisionMinion in from target in ObjectManager.Player.GetEnemiesInRange(Variables.qExtended.Range)
+                                            let position = new List<Vector2> { target.Position.To2D() }
                                             select
                                                 Variables.qExtended.GetCollision(
-                                                    ObjectManager.Player.Position.LSTo2D(),
+                                                    ObjectManager.Player.Position.To2D(),
                                                     position)
                                                 .FirstOrDefault(
                                                     minion =>
@@ -114,9 +114,9 @@ using EloBuddy;
                                                         ObjectManager.Player.Position,
                                                         minion.Position,
                                                         target.ServerPosition) && checkDistance(target, minion)
-                                                    && target.LSDistance(ObjectManager.Player) > minion.LSDistance(ObjectManager.Player)
-                                                    && ObjectManager.Player.LSDistance(minion) + minion.LSDistance(target)
-                                                    <= ObjectManager.Player.LSDistance(target) + 10f)
+                                                    && target.Distance(ObjectManager.Player) > minion.Distance(ObjectManager.Player)
+                                                    && ObjectManager.Player.Distance(minion) + minion.Distance(target)
+                                                    <= ObjectManager.Player.Distance(target) + 10f)
                                                 into collisionMinion
                                                 where collisionMinion != null
                                                 select collisionMinion)
@@ -132,7 +132,7 @@ using EloBuddy;
         private static readonly Func<AIHeroClient, Obj_AI_Base, bool> checkDistance =
             (champ, minion) =>
             Math.Abs(
-                champ.LSDistance(ObjectManager.Player) - (minion.LSDistance(ObjectManager.Player) + minion.LSDistance(champ)))
+                champ.Distance(ObjectManager.Player) - (minion.Distance(ObjectManager.Player) + minion.Distance(champ)))
             <= 2;
 
         /// <summary>

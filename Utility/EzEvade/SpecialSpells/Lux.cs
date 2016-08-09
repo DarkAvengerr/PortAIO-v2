@@ -38,8 +38,8 @@ using EloBuddy; namespace ezEvade.SpecialSpells
                 if (objList.Count() > 3)
                 {
                     var dir = ObjectTracker.GetLastHiuOrientation();
-                    var pos1 = obj.Position.LSTo2D() - dir * 1750;
-                    var pos2 = obj.Position.LSTo2D() + dir * 1750;
+                    var pos1 = obj.Position.To2D() - dir * 1750;
+                    var pos2 = obj.Position.To2D() + dir * 1750;
 
                     SpellDetector.CreateSpellData(hero, pos1.To3D(), pos2.To3D(), spellData, null, 0);
 

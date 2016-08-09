@@ -104,7 +104,7 @@ using EloBuddy; namespace Support.Plugins
 
         private void CastShield(Vector3 v)
         {
-            if (!this.E.LSIsReady())
+            if (!this.E.IsReady())
             {
                 return;
             }
@@ -131,24 +131,24 @@ using EloBuddy; namespace Support.Plugins
                         s.SpellData.Type == SkillShotType.SkillshotMissileLine
                         || s.SpellData.Type == SkillShotType.SkillshotMissileCone))
                 {
-                    if (spell.Unit.LSGetSpellDamage(target, spell.SpellData.SpellName)
-                        > max.Unit.LSGetSpellDamage(target, max.SpellData.SpellName))
+                    if (spell.Unit.GetSpellDamage(target, spell.SpellData.SpellName)
+                        > max.Unit.GetSpellDamage(target, max.SpellData.SpellName))
                     {
                         max = spell;
                     }
                 }
 
-                if (target.IsMe && this.E.LSIsReady())
+                if (target.IsMe && this.E.IsReady())
                 {
                     this.CastShield(max.Start.To3D());
                 }
 
-                if (!target.IsMe && this.W.LSIsReady() && this.W.IsInRange(target)
-                    && (this.IsShieldActive || this.E.LSIsReady()))
+                if (!target.IsMe && this.W.IsReady() && this.W.IsInRange(target)
+                    && (this.IsShieldActive || this.E.IsReady()))
                 {
-                    var jumpTime = (this.Player.LSDistance(target) * 1000 / this.W.Instance.SData.MissileSpeed)
+                    var jumpTime = (this.Player.Distance(target) * 1000 / this.W.Instance.SData.MissileSpeed)
                                    + (this.W.Instance.SData.SpellCastTime * 1000);
-                    var missileTime = target.LSDistance(max.MissilePosition) * 1000 / max.SpellData.MissileSpeed;
+                    var missileTime = target.Distance(max.MissilePosition) * 1000 / max.SpellData.MissileSpeed;
 
                     if (jumpTime > missileTime)
                     {
@@ -188,17 +188,17 @@ using EloBuddy; namespace Support.Plugins
 
                 // TODO: blacklist FiddleQ, FioraQ/R, LeonaE, VladQ, ZileanQ
 
-                if (target.IsMe && this.E.LSIsReady())
+                if (target.IsMe && this.E.IsReady())
                 {
                     this.CastShield(caster.Position);
                 }
 
-                if (!target.IsMe && this.W.LSIsReady() && this.W.IsInRange(target)
-                    && (this.IsShieldActive || this.E.LSIsReady()))
+                if (!target.IsMe && this.W.IsReady() && this.W.IsInRange(target)
+                    && (this.IsShieldActive || this.E.IsReady()))
                 {
-                    var jumpTime = (this.Player.LSDistance(target) * 1000 / this.W.Instance.SData.MissileSpeed)
+                    var jumpTime = (this.Player.Distance(target) * 1000 / this.W.Instance.SData.MissileSpeed)
                                    + (this.W.Instance.SData.SpellCastTime * 1000);
-                    var missileTime = caster.LSDistance(target) * 1000 / spell.MissileSpeed;
+                    var missileTime = caster.Distance(target) * 1000 / spell.MissileSpeed;
 
                     if (jumpTime > missileTime)
                     {

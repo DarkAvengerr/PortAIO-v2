@@ -61,13 +61,13 @@ using EloBuddy; namespace Support.Plugins
                         this.Q.Cast(this.Target);
                     }
 
-                    if (this.W.LSIsReady() && !this.Q.LSIsReady() && this.ConfigValue<bool>("ComboW"))
+                    if (this.W.IsReady() && !this.Q.IsReady() && this.ConfigValue<bool>("ComboW"))
                     {
                         this.W.Cast();
                     }
 
                     // TODO: speed adc/jungler/engage
-                    if (this.E.LSIsReady() && this.Player.LSCountEnemiesInRange(2000) > 0
+                    if (this.E.IsReady() && this.Player.CountEnemiesInRange(2000) > 0
                         && this.ConfigValue<bool>("ComboE"))
                     {
                         this.E.Cast(this.Player);
@@ -81,7 +81,7 @@ using EloBuddy; namespace Support.Plugins
                         this.Q.Cast(this.Target);
                     }
 
-                    if (this.W.LSIsReady() && !this.Q.LSIsReady() && this.ConfigValue<bool>("HarassW"))
+                    if (this.W.IsReady() && !this.Q.IsReady() && this.ConfigValue<bool>("HarassW"))
                     {
                         this.W.Cast();
                     }

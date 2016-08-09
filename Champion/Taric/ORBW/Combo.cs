@@ -108,26 +108,26 @@
             {
                var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
 
-                if (target.LSIsValidTarget(E.Range))
+                if (target.IsValidTarget(E.Range))
                 {
-                    if (useE && E.LSIsReady() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveCombo").GetValue<bool>() || Player.LSDistance(target) > Orbwalking.GetRealAutoAttackRange(Player)))
+                    if (useE && E.IsReady() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveCombo").GetValue<bool>() || Player.Distance(target) > Orbwalking.GetRealAutoAttackRange(Player)))
                     {
-                        if (Player.LSDistance(target) < E.Range)
+                        if (Player.Distance(target) < E.Range)
                         {
                             E.CastIfHitchanceEquals(target, HitChance.VeryHigh, PacketCast);
                             return;
                         }
                     }
 
-                    if (target.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
+                    if (target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
                     {
-                        if (!SkyLv_Taric.Menu.Item("Taric.UseWIncomingDamageCombo").GetValue<bool>() && useW && W.LSIsReady() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveCombo").GetValue<bool>()) && (!E.LSIsReady() || !useE))
+                        if (!SkyLv_Taric.Menu.Item("Taric.UseWIncomingDamageCombo").GetValue<bool>() && useW && W.IsReady() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveCombo").GetValue<bool>()) && (!E.IsReady() || !useE))
                         {
                             W.Cast(Player, PacketCast);
                             return;
                         }
 
-                        if (useQ && Q.LSIsReady() && Q.Instance.Ammo >= MinimumStackSelfQCombo && Player.HealthPercent <= MinimumHpPercentSelfQCombo && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveCombo").GetValue<bool>()) && (!E.LSIsReady() || !useE) && (Player.HealthPercent < 100 || (!W.LSIsReady() || !useW)))
+                        if (useQ && Q.IsReady() && Q.Instance.Ammo >= MinimumStackSelfQCombo && Player.HealthPercent <= MinimumHpPercentSelfQCombo && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveCombo").GetValue<bool>()) && (!E.IsReady() || !useE) && (Player.HealthPercent < 100 || (!W.IsReady() || !useW)))
                         {
                             Q.Cast(Player, PacketCast);
                             return;
@@ -136,13 +136,13 @@
                 }
 
                 #region Ally E
-                if (SkyLv_Taric.Menu.Item("Taric.UseEFromAlly").GetValue<bool>() && E.LSIsReady() && Player.Mana >= E.ManaCost)
+                if (SkyLv_Taric.Menu.Item("Taric.UseEFromAlly").GetValue<bool>() && E.IsReady() && Player.Mana >= E.ManaCost)
                 {
-                    foreach (var AllyHeroE in ObjectManager.Get<AIHeroClient>().Where(a => !a.IsMe && !a.IsDead && a.Team == ObjectManager.Player.Team && Player.LSDistance(a) < 1600 && (a.HasBuff("TaricWAllyBuff") || a.HasBuff("TaricW"))))
+                    foreach (var AllyHeroE in ObjectManager.Get<AIHeroClient>().Where(a => !a.IsMe && !a.IsDead && a.Team == ObjectManager.Player.Team && Player.Distance(a) < 1600 && (a.HasBuff("TaricWAllyBuff") || a.HasBuff("TaricW"))))
                     {
-                        var Allytarget = ObjectManager.Get<AIHeroClient>().Where(t => !t.IsDead && t.Team != ObjectManager.Player.Team && AllyHeroE.LSDistance(t) < E.Range).FirstOrDefault();
+                        var Allytarget = ObjectManager.Get<AIHeroClient>().Where(t => !t.IsDead && t.Team != ObjectManager.Player.Team && AllyHeroE.Distance(t) < E.Range).FirstOrDefault();
 
-                        if (Allytarget.LSIsValidTarget())
+                        if (Allytarget.IsValidTarget())
                         {
                             if (SkyLv_Taric.Menu.Item(AllyHeroE.ChampionName + "AllyCCEComboFromAlly", true).GetValue<bool>() && (AllyHeroE.IsCharmed || AllyHeroE.IsStunned || AllyHeroE.IsRooted || AllyHeroE.Spellbook.IsAutoAttacking))
                             {
@@ -169,13 +169,13 @@
                 #region UseQAlly
                 if (SkyLv_Taric.Menu.Item("Taric.UseQAlly").GetValue<bool>() && SkyLv_Taric.Menu.Item("Taric.UseQAllyMode").GetValue<StringList>().SelectedIndex == 0)
                 {
-                    if (Q.LSIsReady() && Player.Mana >= Q.ManaCost)
+                    if (Q.IsReady() && Player.Mana >= Q.ManaCost)
                     {
-                        foreach (var AllyHeroQ in HeroManager.Allies.Where(x => !x.IsMe && !x.IsDead && Player.LSDistance(x) < Q.Range &&
+                        foreach (var AllyHeroQ in HeroManager.Allies.Where(x => !x.IsMe && !x.IsDead && Player.Distance(x) < Q.Range &&
                         Q.Instance.Ammo >= SkyLv_Taric.Menu.Item(x.ChampionName + "MinimumStacksQAlly").GetValue<Slider>().Value &&
                         x.HealthPercent <= SkyLv_Taric.Menu.Item(x.ChampionName + "MinimumHpQAlly").GetValue<Slider>().Value))
                         {
-                            if (AllyHeroQ.LSIsValidTarget())
+                            if (AllyHeroQ.IsValidTarget())
                             {
                                 Q.Cast(PacketCast);
                                 return;
@@ -188,13 +188,13 @@
                 #region UseWAlly
                 if (SkyLv_Taric.Menu.Item("Taric.UseWAlly").GetValue<bool>() && SkyLv_Taric.Menu.Item("Taric.UseWAllyMode").GetValue<StringList>().SelectedIndex == 0)
                 {
-                    if (W.LSIsReady() && Player.Mana >= W.ManaCost)
+                    if (W.IsReady() && Player.Mana >= W.ManaCost)
                     {
-                        var AllyHeroW = HeroManager.Allies.Where(x => !x.IsMe && !x.IsDead && Player.LSDistance(x) <= W.Range &&
+                        var AllyHeroW = HeroManager.Allies.Where(x => !x.IsMe && !x.IsDead && Player.Distance(x) <= W.Range &&
                         !SkyLv_Taric.Menu.Item(x.ChampionName + "IncomingDamageWAlly", true).GetValue<bool>() &&
                         x.HealthPercent <= SkyLv_Taric.Menu.Item(x.ChampionName + "MinimumHpWAlly").GetValue<Slider>().Value).MinOrDefault(t => t.HealthPercent);
 
-                        if (AllyHeroW.LSIsValidTarget())
+                        if (AllyHeroW.IsValidTarget())
                         {
                             W.Cast(AllyHeroW, PacketCast);
                             return;

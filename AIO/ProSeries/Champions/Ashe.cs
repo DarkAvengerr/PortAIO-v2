@@ -64,7 +64,7 @@ using EloBuddy;
 
         void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsMe || !args.SData.LSIsAutoAttack())
+            if (!sender.IsMe || !args.SData.IsAutoAttack())
             {
                 return;
             }
@@ -74,10 +74,10 @@ using EloBuddy;
                 return;
             }
 
-            if (ProSeries.CanHarass() && Q.LSIsReady())
+            if (ProSeries.CanHarass() && Q.IsReady())
             {
                 var qtarget = ObjectManager.Get<AIHeroClient>().First(x => x.NetworkId == args.Target.NetworkId);
-                if (qtarget.LSIsValidTarget() && ProSeries.IsWhiteListed(qtarget))
+                if (qtarget.IsValidTarget() && ProSeries.IsWhiteListed(qtarget))
                 {
                     if (ProSeries.Config.Item("useharassq", true).GetValue<bool>())
                     {
@@ -90,10 +90,10 @@ using EloBuddy;
                 }
             }
 
-            if (ProSeries.CanCombo() && Q.LSIsReady())
+            if (ProSeries.CanCombo() && Q.IsReady())
             {
                 var qtarget = ObjectManager.Get<AIHeroClient>().First(x => x.NetworkId == args.Target.NetworkId);
-                if (qtarget.LSIsValidTarget() && ProSeries.Player.LSHasBuff("asheqcastready", true))
+                if (qtarget.IsValidTarget() && ProSeries.Player.HasBuff("asheqcastready", true))
                 {
                     if (ProSeries.Config.Item("usecomboq", true).GetValue<bool>())
                         Q.Cast();
@@ -107,7 +107,7 @@ using EloBuddy;
             if (ProSeries.CanCombo())
             {        
                 var wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
-                if (wtarget.LSIsValidTarget() && W.LSIsReady())
+                if (wtarget.IsValidTarget() && W.IsReady())
                 {
                     if (ProSeries.Config.Item("usecombow", true).GetValue<bool>())
                         W.Cast(wtarget);
@@ -117,16 +117,16 @@ using EloBuddy;
             if (ProSeries.CanHarass())
             {
                 var wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
-                if (wtarget.LSIsValidTarget() && W.LSIsReady() && ProSeries.IsWhiteListed(wtarget))
+                if (wtarget.IsValidTarget() && W.IsReady() && ProSeries.IsWhiteListed(wtarget))
                 {
                     if (ProSeries.Config.Item("useharassw", true).GetValue<bool>())
                         W.Cast(wtarget);
                 }
             }
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.LSIsValidTarget(W.Range)))
+                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.IsValidTarget(W.Range)))
                 {
                     if (ProSeries.Config.Item("usewimm", true).GetValue<bool>())
                         W.CastIfHitchanceEquals(target, HitChance.Immobile);
@@ -139,14 +139,14 @@ using EloBuddy;
             if (ProSeries.CanCombo() || ProSeries.Config.Item("usesemir", true).GetValue<KeyBind>().Active)
             {
                 var maxDistance = ProSeries.Config.Item("maxrdist", true).GetValue<Slider>().Value;
-                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.LSIsValidTarget(maxDistance)))
+                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.IsValidTarget(maxDistance)))
                 {
                     var aaDamage = Orbwalking.InAutoAttackRange(target)
-                        ? ProSeries.Player.LSGetAutoAttackDamage(target, true)
+                        ? ProSeries.Player.GetAutoAttackDamage(target, true)
                         : 0;
 
-                    if (!target.IsZombie && R.LSIsReady() &&
-                       (ProSeries.Player.LSGetSpellDamage(target, SpellSlot.R) >= target.Health - aaDamage ||
+                    if (!target.IsZombie && R.IsReady() &&
+                       (ProSeries.Player.GetSpellDamage(target, SpellSlot.R) >= target.Health - aaDamage ||
                         ProSeries.Config.Item("usesemir", true).GetValue<KeyBind>().Active))
                     {
                         var units = new List<Obj_AI_Base>();

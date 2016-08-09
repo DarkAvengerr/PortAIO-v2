@@ -46,7 +46,7 @@ using EloBuddy;
             R = new Spell(SpellSlot.R, 755);
 
             SettingupSmite();
-            _ignite = Player.LSGetSpellSlot("summonerdot");
+            _ignite = Player.GetSpellSlot("summonerdot");
 
             _menu = new Menu("Kyon's " + Player.ChampionName, Player.ChampionName, true);
 
@@ -156,7 +156,7 @@ using EloBuddy;
 
         private static void Interrupter2OnOnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (sender.IsEnemy && sender.LSDistance(Player) <= Q.Range && args.DangerLevel == Interrupter2.DangerLevel.High || args.DangerLevel == Interrupter2.DangerLevel.Medium )
+            if (sender.IsEnemy && sender.Distance(Player) <= Q.Range && args.DangerLevel == Interrupter2.DangerLevel.High || args.DangerLevel == Interrupter2.DangerLevel.Medium )
             {
                 var hitchance = Q.GetPrediction(sender, false, 0,
                     new[]
@@ -213,31 +213,31 @@ using EloBuddy;
 
         private static int CalcDamage(Obj_AI_Base target)
         {
-            var aa = Player.LSGetAutoAttackDamage(target, true) * (1 + Player.Crit);
+            var aa = Player.GetAutoAttackDamage(target, true) * (1 + Player.Crit);
             var damage = aa;
-            _ignite = Player.LSGetSpellSlot("summonerdot");
+            _ignite = Player.GetSpellSlot("summonerdot");
 
-            if (_ignite.LSIsReady())
+            if (_ignite.IsReady())
                 damage += Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
 
-            if (R.LSIsReady()) // rdamage
+            if (R.IsReady()) // rdamage
             {
                     damage += R.GetDamage(target);
             }
 
-            if (Q.LSIsReady()) // qdamage
+            if (Q.IsReady()) // qdamage
             {
 
                 damage += Q.GetDamage(target);
             }
 
-            if (E.LSIsReady()) // edamage
+            if (E.IsReady()) // edamage
             {
 
                 damage += E.GetDamage(target);
             }
 
-            if (_smite.LSIsReady()) // edamage
+            if (_smite.IsReady()) // edamage
             {
 
                 damage += GetSmiteDmg();
@@ -262,12 +262,12 @@ using EloBuddy;
             if(Player.ManaPercent <= _menu.Item("laneuntilmana").GetValue<Slider>().Value)
                 return;
 
-            if (minion.Count >= _menu.Item("laneE").GetValue<Slider>().Value && E.LSIsReady() && minion.First().LSIsValidTarget(E.Range - 50) && _menu.Item("laneuseE").GetValue<bool>())
+            if (minion.Count >= _menu.Item("laneE").GetValue<Slider>().Value && E.IsReady() && minion.First().IsValidTarget(E.Range - 50) && _menu.Item("laneuseE").GetValue<bool>())
             {
                 E.Cast(true);
             }
 
-            if (Q.LSIsReady() && _menu.Item("laneuseQ").GetValue<bool>())
+            if (Q.IsReady() && _menu.Item("laneuseQ").GetValue<bool>())
             {
                 var jungleMobs = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
                 if (jungleMobs.Count >= 3)
@@ -277,7 +277,7 @@ using EloBuddy;
                 }
             }
 
-            if (W.LSIsReady() && Player.HealthPercent <= 75 && _menu.Item("laneuseE").GetValue<bool>())
+            if (W.IsReady() && Player.HealthPercent <= 75 && _menu.Item("laneuseE").GetValue<bool>())
             {
                 W.Cast(true);
             }
@@ -286,11 +286,11 @@ using EloBuddy;
 
         private static void Combo()
         {
-            bool vQ = Q.LSIsReady() && _menu.Item("CombouseQ").GetValue<bool>();
-            bool vW = W.LSIsReady() && _menu.Item("CombouseW").GetValue<bool>();
-            bool vE = E.LSIsReady() && _menu.Item("CombouseE").GetValue<bool>();
-            bool vR = R.LSIsReady() && _menu.Item("CombouseR").GetValue<bool>();
-            bool ign = _ignite.LSIsReady() && _menu.Item("CombouseIgnite").GetValue<bool>();
+            bool vQ = Q.IsReady() && _menu.Item("CombouseQ").GetValue<bool>();
+            bool vW = W.IsReady() && _menu.Item("CombouseW").GetValue<bool>();
+            bool vE = E.IsReady() && _menu.Item("CombouseE").GetValue<bool>();
+            bool vR = R.IsReady() && _menu.Item("CombouseR").GetValue<bool>();
+            bool ign = _ignite.IsReady() && _menu.Item("CombouseIgnite").GetValue<bool>();
  
             var tsQ = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
             var tsR = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
@@ -298,7 +298,7 @@ using EloBuddy;
             if (tsQ == null|| tsR == null)
                 return;
 
-            if (vR && tsR.LSIsValidTarget(R.Range) && tsR.Health > R.GetDamage(tsR))
+            if (vR && tsR.IsValidTarget(R.Range) && tsR.Health > R.GetDamage(tsR))
             {
                 var useR = (_menu.Item("DontR" + tsR.ChampionName) != null &&
                            _menu.Item("DontR" + tsR.ChampionName).GetValue<bool>() == false);
@@ -310,7 +310,7 @@ using EloBuddy;
                 
             UseSmite(tsQ);
 
-            if (vQ && tsQ.LSIsValidTarget())
+            if (vQ && tsQ.IsValidTarget())
             {
                 var qpred = Q.GetPrediction(tsQ);
                 if (qpred.CollisionObjects.Count(c => c.IsEnemy && !c.IsDead) < 4 && qpred.Hitchance >= HitChance.High)
@@ -319,13 +319,13 @@ using EloBuddy;
                 }
             }
 
-            if (vW && tsQ.LSIsValidTarget(W.Range))
+            if (vW && tsQ.IsValidTarget(W.Range))
                 W.Cast();
 
-            if (vE && tsQ.LSIsValidTarget(E.Range))
+            if (vE && tsQ.IsValidTarget(E.Range))
                 E.Cast();
 
-            if (Player.LSDistance(tsQ.Position) <= 600 && IgniteDamage(tsQ) >= tsQ.Health && ign)
+            if (Player.Distance(tsQ.Position) <= 600 && IgniteDamage(tsQ) >= tsQ.Health && ign)
                 Player.Spellbook.CastSpell(_ignite, tsQ);
 
         }
@@ -346,18 +346,18 @@ using EloBuddy;
                 ObjectManager.Get<AIHeroClient>()
                     .Where(
                         hero =>
-                            hero.LSIsValidTarget(Q.Range) && !hero.HasBuffOfType(BuffType.Invulnerability) && hero.IsEnemy)
+                            hero.IsValidTarget(Q.Range) && !hero.HasBuffOfType(BuffType.Invulnerability) && hero.IsEnemy)
                 )
             {
-                var qDmg = Player.LSGetSpellDamage(target, SpellSlot.Q);
-                if (_menu.Item("ksQ").GetValue<bool>() && target.LSIsValidTarget(Q.Range) && target.Health <= qDmg)
+                var qDmg = Player.GetSpellDamage(target, SpellSlot.Q);
+                if (_menu.Item("ksQ").GetValue<bool>() && target.IsValidTarget(Q.Range) && target.Health <= qDmg)
                 {
                     var qpred = Q.GetPrediction(target);
                     if (qpred.Hitchance >= HitChance.High && qpred.CollisionObjects.Count(h => h.IsEnemy && !h.IsDead && h is Obj_AI_Minion) < 2)
                         Q.Cast(qpred.CastPosition);
                 }
-                var eDmg = Player.LSGetSpellDamage(target, SpellSlot.E);
-                if (_menu.Item("ksE").GetValue<bool>() && target.LSIsValidTarget(E.Range) && target.Health <= eDmg)
+                var eDmg = Player.GetSpellDamage(target, SpellSlot.E);
+                if (_menu.Item("ksE").GetValue<bool>() && target.IsValidTarget(E.Range) && target.Health <= eDmg)
                 {
                     E.Cast();
                 }
@@ -370,7 +370,7 @@ using EloBuddy;
             var itemscheck = SmiteBlue.Any(i => Items.HasItem(i)) || SmiteRed.Any(i => Items.HasItem(i));
             if (itemscheck && usesmite &&
                 ObjectManager.Player.Spellbook.CanUseSpell(_smiteSlot) == SpellState.Ready &&
-                target.LSDistance(Player.Position) < _smite.Range)
+                target.Distance(Player.Position) < _smite.Range)
             {
                 ObjectManager.Player.Spellbook.CastSpell(_smiteSlot, target);
             }
@@ -380,14 +380,14 @@ using EloBuddy;
         {
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos, false);
 
-            bool vQ = Q.LSIsReady() && _menu.Item("fleeuseQ").GetValue<bool>();
-            bool vW = W.LSIsReady() && _menu.Item("fleeuseW").GetValue<bool>();
+            bool vQ = Q.IsReady() && _menu.Item("fleeuseQ").GetValue<bool>();
+            bool vW = W.IsReady() && _menu.Item("fleeuseW").GetValue<bool>();
 
-            var minions = ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.LSIsValidTarget(Q.Range)).ToList(); // Hopefully this is enough...
+            var minions = ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(Q.Range)).ToList(); // Hopefully this is enough...
             var step = Q.Range / 2; // Or whatever step value...
             for (var i = step; i <= Q.Range; i += step)
             {
-                if (ObjectManager.Player.Position.LSExtend(Game.CursorPos, i).LSIsWall() && Player.LSDistance(Game.CursorPos) >= Q.Range/2 && vQ)
+                if (ObjectManager.Player.Position.Extend(Game.CursorPos, i).IsWall() && Player.Distance(Game.CursorPos) >= Q.Range/2 && vQ)
                 {
                     Q.Cast(Game.CursorPos);
                 }
@@ -395,19 +395,19 @@ using EloBuddy;
                 var target =
                     minions.FirstOrDefault(
                      minion =>
-                       Geometry.LSCircleCircleIntersection(
-                                Player.Position.LSTo2D(),
-                                minion.Position.LSTo2D(),
+                       Geometry.CircleCircleIntersection(
+                                Player.Position.To2D(),
+                                minion.Position.To2D(),
                                 Q.Range,
                                 minion.BoundingRadius).Count() > 0);
 
-                if (target != null && target.LSDistance(Player.Position) >= Q.Range/2 && vQ )
+                if (target != null && target.Distance(Player.Position) >= Q.Range/2 && vQ )
                 {
                     Q.Cast(target.Position);
                 }
             }
 
-            if (vW && ObjectManager.Get<Obj_AI_Base>().Any(x => x.IsEnemy && x.LSDistance(Player.Position) <= Q.Range && Player.IsTargetable))
+            if (vW && ObjectManager.Get<Obj_AI_Base>().Any(x => x.IsEnemy && x.Distance(Player.Position) <= Q.Range && Player.IsTargetable))
             {
                 W.Cast();
             }
@@ -417,22 +417,22 @@ using EloBuddy;
         {
             if(Player.IsDead) return;
 
-            if (Q.LSIsReady() && _menu.Item("drawingsdrawQ").GetValue<bool>())
+            if (Q.IsReady() && _menu.Item("drawingsdrawQ").GetValue<bool>())
             {
                 Render.Circle.DrawCircle(Player.Position, Q.Range, Color.Crimson);
             }
 
-            if (W.LSIsReady() && _menu.Item("drawingsdrawW").GetValue<bool>())
+            if (W.IsReady() && _menu.Item("drawingsdrawW").GetValue<bool>())
             {
                 Render.Circle.DrawCircle(Player.Position, W.Range, Color.CornflowerBlue);
             }
 
-            if (E.LSIsReady() && _menu.Item("drawingsdrawE").GetValue<bool>())
+            if (E.IsReady() && _menu.Item("drawingsdrawE").GetValue<bool>())
             {
                 Render.Circle.DrawCircle(Player.Position, E.Range, Color.FloralWhite);
             }
 
-            if (R.LSIsReady() && _menu.Item("drawingsdrawR").GetValue<bool>())
+            if (R.IsReady() && _menu.Item("drawingsdrawR").GetValue<bool>())
             {
                 Render.Circle.DrawCircle(Player.Position, R.Range, Color.Orange);
             }

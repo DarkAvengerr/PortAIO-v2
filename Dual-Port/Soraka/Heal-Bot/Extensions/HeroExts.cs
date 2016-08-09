@@ -15,12 +15,12 @@ using EloBuddy;
         {
             var fullDmg = 0.0;
             var slots = new[] { SpellSlot.Q, SpellSlot.W, SpellSlot.E, SpellSlot.R };
-            foreach (var ally in HeroManager.Allies.Where(al => al.LSDistance(enemy) <= range))
+            foreach (var ally in HeroManager.Allies.Where(al => al.Distance(enemy) <= range))
             {
                 fullDmg +=
-                    ally.Spellbook.Spells.Where(spell => spell.LSIsReady() && slots.Contains(spell.Slot))
-                        .Sum(spell => ally.LSGetSpellDamage(enemy, spell.Slot));
-                fullDmg += ally.LSGetAutoAttackDamage(enemy);
+                    ally.Spellbook.Spells.Where(spell => spell.IsReady() && slots.Contains(spell.Slot))
+                        .Sum(spell => ally.GetSpellDamage(enemy, spell.Slot));
+                fullDmg += ally.GetAutoAttackDamage(enemy);
             }
 
             return fullDmg * percent;
@@ -30,12 +30,12 @@ using EloBuddy;
         {
             var fullDmg = 0.0;
             var slots = new[] { SpellSlot.Q, SpellSlot.W, SpellSlot.E, SpellSlot.R };
-            foreach (var enemy in HeroManager.Enemies.Where(en => en.LSDistance(ally) <= range))
+            foreach (var enemy in HeroManager.Enemies.Where(en => en.Distance(ally) <= range))
             {
                 fullDmg +=
-                    enemy.Spellbook.Spells.Where(spell => spell.LSIsReady() && slots.Contains(spell.Slot))
-                        .Sum(spell => enemy.LSGetSpellDamage(ally, spell.Slot));
-                fullDmg += enemy.LSGetAutoAttackDamage(ally);
+                    enemy.Spellbook.Spells.Where(spell => spell.IsReady() && slots.Contains(spell.Slot))
+                        .Sum(spell => enemy.GetSpellDamage(ally, spell.Slot));
+                fullDmg += enemy.GetAutoAttackDamage(ally);
             }
 
             return fullDmg * percent;
@@ -45,9 +45,9 @@ using EloBuddy;
         {
             var slots = new[] { SpellSlot.Q, SpellSlot.W, SpellSlot.E, SpellSlot.R };
             var spellDmg =
-                attacker.Spellbook.Spells.Where(spell => spell.LSIsReady() && slots.Contains(spell.Slot))
-                    .Sum(spell => attacker.LSGetSpellDamage(defender, spell.Slot));
-            var aaDmg = attacker.CanAttack ? attacker.LSGetAutoAttackDamage(defender) : 0f;
+                attacker.Spellbook.Spells.Where(spell => spell.IsReady() && slots.Contains(spell.Slot))
+                    .Sum(spell => attacker.GetSpellDamage(defender, spell.Slot));
+            var aaDmg = attacker.CanAttack ? attacker.GetAutoAttackDamage(defender) : 0f;
             var fulldmg = spellDmg + aaDmg;
             return fulldmg;
         }

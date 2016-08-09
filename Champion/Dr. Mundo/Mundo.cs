@@ -33,7 +33,7 @@ namespace Mundo
         {
             if ((ConfigMenu.orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || ConfigMenu.orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && unit.IsMe)
             {
-                if (ConfigMenu.config.Item("useE").GetValue<bool>() && e.LSIsReady() && target is AIHeroClient && target.LSIsValidTarget(e.Range))
+                if (ConfigMenu.config.Item("useE").GetValue<bool>() && e.IsReady() && target is AIHeroClient && target.IsValidTarget(e.Range))
                 {
                     e.Cast();
                 }
@@ -42,7 +42,7 @@ namespace Mundo
 
             if (ConfigMenu.orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && unit.IsMe)
             {
-                if (ConfigMenu.config.Item("useEj").GetValue<bool>() && e.LSIsReady() && target is Obj_AI_Minion && target.LSIsValidTarget(e.Range))
+                if (ConfigMenu.config.Item("useEj").GetValue<bool>() && e.IsReady() && target is Obj_AI_Minion && target.IsValidTarget(e.Range))
                 {
                     e.Cast();
                 }
@@ -53,8 +53,8 @@ namespace Mundo
                  ConfigMenu.orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && unit.IsMe)
             {
                 if ((ConfigMenu.config.Item("titanicC").GetValue<bool>() || ConfigMenu.config.Item("ravenousC").GetValue<bool>() ||
-                     ConfigMenu.config.Item("tiamatC").GetValue<bool>()) && !e.LSIsReady() && target is AIHeroClient &&
-                    target.LSIsValidTarget(e.Range) && CommonUtilities.CheckItem())
+                     ConfigMenu.config.Item("tiamatC").GetValue<bool>()) && !e.IsReady() && target is AIHeroClient &&
+                    target.IsValidTarget(e.Range) && CommonUtilities.CheckItem())
                 {
                     CommonUtilities.UseItem();
                 }
@@ -64,8 +64,8 @@ namespace Mundo
             if (ConfigMenu.orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && unit.IsMe)
             {
                 if ((ConfigMenu.config.Item("titanicF").GetValue<bool>() || ConfigMenu.config.Item("ravenousF").GetValue<bool>() ||
-                     ConfigMenu.config.Item("tiamatF").GetValue<bool>()) && !e.LSIsReady() && target is Obj_AI_Minion &&
-                    target.LSIsValidTarget(e.Range) && CommonUtilities.CheckItem())
+                     ConfigMenu.config.Item("tiamatF").GetValue<bool>()) && !e.IsReady() && target is Obj_AI_Minion &&
+                    target.IsValidTarget(e.Range) && CommonUtilities.CheckItem())
                 {
                     CommonUtilities.UseItem();
                 }
@@ -119,18 +119,18 @@ namespace Mundo
             if (target == null || !target.IsValid)
                 return;
 
-            var castQ = ConfigMenu.config.Item("useQ").GetValue<bool>() && q.LSIsReady();
-            var castW = ConfigMenu.config.Item("useW").GetValue<bool>() && w.LSIsReady();
+            var castQ = ConfigMenu.config.Item("useQ").GetValue<bool>() && q.IsReady();
+            var castW = ConfigMenu.config.Item("useW").GetValue<bool>() && w.IsReady();
 
             var qHealth = ConfigMenu.config.Item("QHealthCombo").GetValue<Slider>().Value;
             var wHealth = ConfigMenu.config.Item("WHealthCombo").GetValue<Slider>().Value;
 
-            if (castQ && ObjectManager.Player.HealthPercent >= qHealth && target.LSIsValidTarget(q.Range))
+            if (castQ && ObjectManager.Player.HealthPercent >= qHealth && target.IsValidTarget(q.Range))
             {
                 q.CastIfHitchanceEquals(target, CommonUtilities.GetHitChance("hitchanceQ"));
             }
 
-            if (castW && ObjectManager.Player.HealthPercent >= wHealth && !IsBurning() && target.LSIsValidTarget(400))
+            if (castW && ObjectManager.Player.HealthPercent >= wHealth && !IsBurning() && target.IsValidTarget(400))
             {
                 w.Cast();
             }
@@ -147,11 +147,11 @@ namespace Mundo
             if (target == null || !target.IsValid)
                 return;
 
-            var castQ = ConfigMenu.config.Item("useQHarass").GetValue<bool>() && q.LSIsReady();
+            var castQ = ConfigMenu.config.Item("useQHarass").GetValue<bool>() && q.IsReady();
 
             var qHealth = ConfigMenu.config.Item("useQHarassHP").GetValue<Slider>().Value;
 
-            if (castQ && ObjectManager.Player.HealthPercent >= qHealth && target.LSIsValidTarget(q.Range))
+            if (castQ && ObjectManager.Player.HealthPercent >= qHealth && target.IsValidTarget(q.Range))
             {
                 q.CastIfHitchanceEquals(target, CommonUtilities.GetHitChance("hitchanceQ"));
             }
@@ -159,7 +159,7 @@ namespace Mundo
 
         private void LastHit()
         {
-            var castQ = ConfigMenu.config.Item("useQlh").GetValue<bool>() && q.LSIsReady();
+            var castQ = ConfigMenu.config.Item("useQlh").GetValue<bool>() && q.IsReady();
 
             var qHealth = ConfigMenu.config.Item("useQlhHP").GetValue<Slider>().Value;
 
@@ -174,14 +174,14 @@ namespace Mundo
                 {
                     if (ConfigMenu.config.Item("qRange").GetValue<bool>())
                     {
-                        if (HealthPrediction.GetHealthPrediction(minion, (int) (q.Delay + (minion.LSDistance(ObjectManager.Player.Position)/q.Speed))) < ObjectManager.Player.LSGetSpellDamage(minion, SpellSlot.Q) && ObjectManager.Player.LSDistance(minion) > ObjectManager.Player.AttackRange*2)
+                        if (HealthPrediction.GetHealthPrediction(minion, (int) (q.Delay + (minion.Distance(ObjectManager.Player.Position)/q.Speed))) < ObjectManager.Player.GetSpellDamage(minion, SpellSlot.Q) && ObjectManager.Player.Distance(minion) > ObjectManager.Player.AttackRange*2)
                         {
                             q.Cast(minion);
                         }
                     }
                     else
                     {
-                        if (HealthPrediction.GetHealthPrediction(minion, (int) (q.Delay + (minion.LSDistance(ObjectManager.Player.Position)/q.Speed))) < ObjectManager.Player.LSGetSpellDamage(minion, SpellSlot.Q))
+                        if (HealthPrediction.GetHealthPrediction(minion, (int) (q.Delay + (minion.Distance(ObjectManager.Player.Position)/q.Speed))) < ObjectManager.Player.GetSpellDamage(minion, SpellSlot.Q))
                         {
                             q.Cast(minion);
                         }
@@ -192,8 +192,8 @@ namespace Mundo
 
         private void LaneClear()
         {
-            var castQ = ConfigMenu.config.Item("useQlc").GetValue<bool>() && q.LSIsReady();
-            var castW = ConfigMenu.config.Item("useWlc").GetValue<bool>() && w.LSIsReady();
+            var castQ = ConfigMenu.config.Item("useQlc").GetValue<bool>() && q.IsReady();
+            var castW = ConfigMenu.config.Item("useWlc").GetValue<bool>() && w.IsReady();
 
             var qHealth = ConfigMenu.config.Item("useQlcHP").GetValue<Slider>().Value;
             var wHealth = ConfigMenu.config.Item("useWlcHP").GetValue<Slider>().Value;
@@ -211,7 +211,7 @@ namespace Mundo
                 {
                     foreach (var minion in minions)
                     {
-                        if (HealthPrediction.GetHealthPrediction(minion, (int) (q.Delay + (minion.LSDistance(ObjectManager.Player.Position)/q.Speed))) < ObjectManager.Player.LSGetSpellDamage(minion, SpellSlot.Q))
+                        if (HealthPrediction.GetHealthPrediction(minion, (int) (q.Delay + (minion.Distance(ObjectManager.Player.Position)/q.Speed))) < ObjectManager.Player.GetSpellDamage(minion, SpellSlot.Q))
                         {
                             q.Cast(minion);
                         }
@@ -234,8 +234,8 @@ namespace Mundo
 
         private void JungleClear()
         {
-            var castQ = ConfigMenu.config.Item("useQj").GetValue<bool>() && q.LSIsReady();
-            var castW = ConfigMenu.config.Item("useWj").GetValue<bool>() && w.LSIsReady();
+            var castQ = ConfigMenu.config.Item("useQj").GetValue<bool>() && q.IsReady();
+            var castW = ConfigMenu.config.Item("useWj").GetValue<bool>() && w.IsReady();
 
             var qHealth = ConfigMenu.config.Item("useQjHP").GetValue<Slider>().Value;
             var wHealth = ConfigMenu.config.Item("useWjHP").GetValue<Slider>().Value;
@@ -275,17 +275,17 @@ namespace Mundo
             if (!ConfigMenu.config.Item("killsteal").GetValue<bool>())
                 return;
 
-            if (ConfigMenu.config.Item("useQks").GetValue<bool>() && q.LSIsReady())
+            if (ConfigMenu.config.Item("useQks").GetValue<bool>() && q.IsReady())
             {
-                foreach (var target in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(q.Range) && !enemy.HasBuffOfType(BuffType.Invulnerability)).Where(target => target.Health < ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.Q)))
+                foreach (var target in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(q.Range) && !enemy.HasBuffOfType(BuffType.Invulnerability)).Where(target => target.Health < ObjectManager.Player.GetSpellDamage(target, SpellSlot.Q)))
                 {
                     q.CastIfHitchanceEquals(target, CommonUtilities.GetHitChance("hitchanceQ"));
                 }
             }
 
-            if (ConfigMenu.config.Item("useIks").GetValue<bool>() && ignite.Slot.LSIsReady() && ignite != null && ignite.Slot != SpellSlot.Unknown)
+            if (ConfigMenu.config.Item("useIks").GetValue<bool>() && ignite.Slot.IsReady() && ignite != null && ignite.Slot != SpellSlot.Unknown)
             {
-                foreach (var target in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(ignite.SData.CastRange) && !enemy.HasBuffOfType(BuffType.Invulnerability)).Where(target => target.Health < ObjectManager.Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite)))
+                foreach (var target in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(ignite.SData.CastRange) && !enemy.HasBuffOfType(BuffType.Invulnerability)).Where(target => target.Health < ObjectManager.Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite)))
                 {
                     ObjectManager.Player.Spellbook.CastSpell(ignite.Slot, target);
                 }
@@ -294,13 +294,13 @@ namespace Mundo
 
         private void AutoQ()
         {
-            var autoQ = ConfigMenu.config.Item("autoQ").GetValue<KeyBind>().Active && q.LSIsReady();
+            var autoQ = ConfigMenu.config.Item("autoQ").GetValue<KeyBind>().Active && q.IsReady();
 
             var qHealth = ConfigMenu.config.Item("autoQhp").GetValue<Slider>().Value;
 
             var target = TargetSelector.GetTarget(q.Range, TargetSelector.DamageType.Magical);
 
-            if (autoQ && ObjectManager.Player.HealthPercent >= qHealth && target.LSIsValidTarget(q.Range))
+            if (autoQ && ObjectManager.Player.HealthPercent >= qHealth && target.IsValidTarget(q.Range))
             {
                 q.CastIfHitchanceEquals(target, CommonUtilities.GetHitChance("hitchanceQ"));
             }
@@ -308,19 +308,19 @@ namespace Mundo
 
         private void AutoR()
         {
-            var castR = ConfigMenu.config.Item("useR").GetValue<bool>() && r.LSIsReady();
+            var castR = ConfigMenu.config.Item("useR").GetValue<bool>() && r.IsReady();
 
             var rHealth = ConfigMenu.config.Item("RHealth").GetValue<Slider>().Value;
             var rEnemies = ConfigMenu.config.Item("RHealthEnemies").GetValue<bool>();
 
-            if (rEnemies && castR && ObjectManager.Player.HealthPercent <= rHealth && !ObjectManager.Player.LSInFountain())
+            if (rEnemies && castR && ObjectManager.Player.HealthPercent <= rHealth && !ObjectManager.Player.InFountain())
             {
                 if (FoundEnemies(q.Range))
                 {
                     r.Cast();
                 }
             }
-            else if (!rEnemies && castR && ObjectManager.Player.HealthPercent <= rHealth && !ObjectManager.Player.LSInFountain())
+            else if (!rEnemies && castR && ObjectManager.Player.HealthPercent <= rHealth && !ObjectManager.Player.InFountain())
             {
                 r.Cast();
             }
@@ -330,10 +330,10 @@ namespace Mundo
         {
             var target = TargetSelector.GetTarget(q.Range, TargetSelector.DamageType.Magical);
 
-            var useQ = ConfigMenu.config.Item("qFlee").GetValue<bool>() && q.LSIsReady();
-            var useR = ConfigMenu.config.Item("rFlee").GetValue<bool>() && r.LSIsReady();
+            var useQ = ConfigMenu.config.Item("qFlee").GetValue<bool>() && q.IsReady();
+            var useR = ConfigMenu.config.Item("rFlee").GetValue<bool>() && r.IsReady();
 
-            if (useQ && target.LSIsValidTarget(q.Range))
+            if (useQ && target.IsValidTarget(q.Range))
             {
                 q.CastIfHitchanceEquals(target, CommonUtilities.GetHitChance("hitchanceQ"));
             }
@@ -351,7 +351,7 @@ namespace Mundo
 
         public bool FoundEnemies(float range)
         {
-            return HeroManager.Enemies.Any(enemy => enemy.LSIsValidTarget(range));
+            return HeroManager.Enemies.Any(enemy => enemy.IsValidTarget(range));
         }
 
         private void BurningManager()
@@ -359,7 +359,7 @@ namespace Mundo
             if (!ConfigMenu.config.Item("handleW").GetValue<bool>())
                 return;
             
-            if (IsBurning() && w.LSIsReady())
+            if (IsBurning() && w.IsReady())
             {
                 w.Cast();
             }

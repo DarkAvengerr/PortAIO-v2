@@ -53,7 +53,7 @@ using EloBuddy; namespace Activator.Summoners
                 if (hero.Player.IsDead || !hero.Player.IsValid || hero.Player.IsZombie)
                     continue;
 
-                if (hero.Player.LSDistance(Player.ServerPosition) > 3000 && hero.Player.LSDistance(Game.CursorPos) > 3000)
+                if (hero.Player.Distance(Player.ServerPosition) > 3000 && hero.Player.Distance(Game.CursorPos) > 3000)
                 {
                     if (hero.HitTypes.Contains(HitType.Ultimate) && Menu.Item("teleulthp2").GetValue<bool>())
                     {

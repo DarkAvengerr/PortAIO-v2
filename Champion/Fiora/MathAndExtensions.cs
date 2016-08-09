@@ -31,9 +31,9 @@ namespace FioraProject
         }
         public static double AngleBetween(Vector2 a, Vector2 center, Vector2 c)
         {
-            float a1 = c.LSDistance(center);
-            float b1 = a.LSDistance(c);
-            float c1 = center.LSDistance(a);
+            float a1 = c.Distance(center);
+            float b1 = a.Distance(c);
+            float c1 = center.Distance(a);
             if (a1 == 0 || c1 == 0) { return 0; }
             else
             {

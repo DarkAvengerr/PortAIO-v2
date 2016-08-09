@@ -155,8 +155,8 @@ using EloBuddy; namespace SFXUtility.Features.Activators
                 objects.Concat(GameObjects.Jungle)
                     .Where(
                         o =>
-                            !o.IsMe && o.LSIsValidTarget(_spell.Range, false) &&
-                            o.ServerPosition.LSDistance(position) <= existingRange);
+                            !o.IsMe && o.IsValidTarget(_spell.Range, false) &&
+                            o.ServerPosition.Distance(position) <= existingRange);
         }
 
         private void OnGameUpdate(EventArgs args)
@@ -168,13 +168,13 @@ using EloBuddy; namespace SFXUtility.Features.Activators
                     return;
                 }
 
-                if (_spell != null && _heroJump != null && _spell.LSIsReady() && _heroJump.CustomCheck != null &&
+                if (_spell != null && _heroJump != null && _spell.IsReady() && _heroJump.CustomCheck != null &&
                     _heroJump.CustomCheck(_spell))
                 {
-                    var jumpPosition = ObjectManager.Player.ServerPosition.LSExtend(
-                        Game.CursorPos, Math.Min(_spell.Range, ObjectManager.Player.Position.LSDistance(Game.CursorPos)));
-                    var castPosition = ObjectManager.Player.ServerPosition.LSExtend(
-                        Game.CursorPos, Math.Min(600, ObjectManager.Player.Position.LSDistance(Game.CursorPos)));
+                    var jumpPosition = ObjectManager.Player.ServerPosition.Extend(
+                        Game.CursorPos, Math.Min(_spell.Range, ObjectManager.Player.Position.Distance(Game.CursorPos)));
+                    var castPosition = ObjectManager.Player.ServerPosition.Extend(
+                        Game.CursorPos, Math.Min(600, ObjectManager.Player.Position.Distance(Game.CursorPos)));
 
                     var possibleJumps = GetPossibleObjects(jumpPosition);
                     var target = possibleJumps.FirstOrDefault();

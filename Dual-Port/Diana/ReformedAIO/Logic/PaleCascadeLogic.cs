@@ -33,9 +33,9 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.Logic
 
             var dmg = 0f;
 
-            if (Variables.Player.LSHasBuff("SummonerExhaust")) dmg = dmg * 0.6f;
+            if (Variables.Player.HasBuff("SummonerExhaust")) dmg = dmg * 0.6f;
 
-            if (Variables.Spells[SpellSlot.Q].LSIsReady()) dmg = dmg + Variables.Spells[SpellSlot.R].GetDamage(x);
+            if (Variables.Spells[SpellSlot.Q].IsReady()) dmg = dmg + Variables.Spells[SpellSlot.R].GetDamage(x);
 
             return dmg;
         }

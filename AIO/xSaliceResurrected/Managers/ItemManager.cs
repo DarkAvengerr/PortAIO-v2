@@ -27,7 +27,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
         private static readonly List<ItemManager> ItemList = new List<ItemManager>();
 
         //summoners
-        private static readonly SpellSlot IgniteSlot = ObjectManager.Player.LSGetSpellSlot("SummonerDot");
+        private static readonly SpellSlot IgniteSlot = ObjectManager.Player.GetSpellSlot("SummonerDot");
 
         public static bool UseTargetted;
 
@@ -208,7 +208,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
         private static void Game_OnGameUpdate(EventArgs args)
         {
             //muramana
-            if (ObjectManager.Player.LSHasBuff("Muramana") && Items.CanUseItem(3042) && Utils.TickCount - _lastMura > 5000)
+            if (ObjectManager.Player.HasBuff("Muramana") && Items.CanUseItem(3042) && Utils.TickCount - _lastMura > 5000)
             {
                 CastMuraMana();
             }
@@ -220,7 +220,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
                     Items.HasItem(x.ActiveId) &&
                     Items.CanUseItem(x.ActiveId) &&
                     ShouldUse(x.ActiveName))
-                    where !ObjectManager.Player.LSIsRecalling() && !ObjectManager.Player.LSInFountain()
+                    where !ObjectManager.Player.IsRecalling() && !ObjectManager.Player.InFountain()
                     where ObjectManager.Player.HealthPercent <= UsePotAtHp(potion.ActiveName)
                     select potion)
                 {
@@ -234,7 +234,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
                     Items.HasItem(x.ActiveId) &&
                     Items.CanUseItem(x.ActiveId) &&
                     ShouldUse(x.ActiveName))
-                    where !ObjectManager.Player.LSIsRecalling() && !ObjectManager.Player.LSInFountain()
+                    where !ObjectManager.Player.IsRecalling() && !ObjectManager.Player.InFountain()
                     where ObjectManager.Player.ManaPercent <= UsePotAtMp(potion.ActiveName)
                     select potion)
                 {
@@ -320,7 +320,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
 
             foreach (var item in ItemList.Where(x => x.Mode == 2 && Items.CanUseItem(x.ActiveId) && ShouldUse(x.ActiveName)))
             {
-                if (!ObjectManager.Player.LSHasBuff("Muramana"))
+                if (!ObjectManager.Player.HasBuff("Muramana"))
                 {
                     //Chat.Print("RAWR");
                     if (AlwaysUse(item.ActiveName))
@@ -347,7 +347,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
                         _lastMura = Utils.TickCount;
                     }
                 }
-                else if (ObjectManager.Player.LSHasBuff("Muramana"))
+                else if (ObjectManager.Player.HasBuff("Muramana"))
                 {
                     _lastMura = Utils.TickCount;
                 }
@@ -359,12 +359,12 @@ using EloBuddy; namespace xSaliceResurrected.Managers
             if (!sender.IsMe || !(args.Target is AIHeroClient))
                 return;
 
-            if (!args.SData.HaveHitEffect && !args.SData.LSIsAutoAttack())
+            if (!args.SData.HaveHitEffect && !args.SData.IsAutoAttack())
                 return;
 
             foreach (var item in ItemList.Where(x => x.Mode == 2 && Items.CanUseItem(x.ActiveId) && ShouldUse(x.ActiveName)))
             {
-                if (!ObjectManager.Player.LSHasBuff("Muramana"))
+                if (!ObjectManager.Player.HasBuff("Muramana"))
                 {
                     if (AlwaysUse(item.ActiveName))
                     {
@@ -390,7 +390,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
                         _lastMura = Utils.TickCount;
                     }
                 }
-                else if (ObjectManager.Player.LSHasBuff("Muramana"))
+                else if (ObjectManager.Player.HasBuff("Muramana"))
                 {
                     _lastMura = Utils.TickCount;
                 }
@@ -470,14 +470,14 @@ using EloBuddy; namespace xSaliceResurrected.Managers
 
         private static void Use_Ignite(AIHeroClient target)
         {
-            if (target != null && IgniteSlot != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready && ObjectManager.Player.LSDistance(target.Position) < 650)
+            if (target != null && IgniteSlot != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready && ObjectManager.Player.Distance(target.Position) < 650)
                 ObjectManager.Player.Spellbook.CastSpell(IgniteSlot, target);
         }
 
         private static void CastMuraMana()
         {
-            var mura = ObjectManager.Player.LSGetSpellSlot("Muramana");
-            if (mura != SpellSlot.Unknown && mura.LSIsReady())
+            var mura = ObjectManager.Player.GetSpellSlot("Muramana");
+            if (mura != SpellSlot.Unknown && mura.IsReady())
             {
                 ObjectManager.Player.Spellbook.CastSpell(mura);
             }
@@ -529,7 +529,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
             {
                 return
                     ItemList.Where(x => (x.Mode == 3 || x.Mode == 4))
-                        .Any(x => ObjectManager.Player.LSHasBuff(x.BuffName, true));
+                        .Any(x => ObjectManager.Player.HasBuff(x.BuffName, true));
             }
         }
 
@@ -539,7 +539,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
             {
                 return
                     ItemList.Where(x => (x.Mode == 3 || x.Mode == 5))
-                        .Any(x => ObjectManager.Player.LSHasBuff(x.BuffName, true));
+                        .Any(x => ObjectManager.Player.HasBuff(x.BuffName, true));
             }
         }
     }

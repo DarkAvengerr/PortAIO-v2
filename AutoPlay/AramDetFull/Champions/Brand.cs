@@ -85,9 +85,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var minions = MinionManager.GetMinions(player.Position, W.Range + W.Width / 2);
 
             // Spell usage
-            bool useQ = Q.LSIsReady();
-            bool useW = W.LSIsReady();
-            bool useE = E.LSIsReady();
+            bool useQ = Q.IsReady();
+            bool useW = W.IsReady();
+            bool useE = E.IsReady();
 
             if (useQ)
             {
@@ -102,7 +102,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                         target = minion;
 
                         // Break if killlable
-                        if (minion.Health > player.LSGetAutoAttackDamage(minion) && IsSpellKillable(minion,SpellSlot.Q))
+                        if (minion.Health > player.GetAutoAttackDamage(minion) && IsSpellKillable(minion,SpellSlot.Q))
                             break;
                     }
                 }
@@ -115,7 +115,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (useW)
             {
                 // Get farm location
-                var farmLocation = MinionManager.GetBestCircularFarmLocation(minions.Select(minion => minion.ServerPosition.LSTo2D()).ToList(), W.Width, W.Range);
+                var farmLocation = MinionManager.GetBestCircularFarmLocation(minions.Select(minion => minion.ServerPosition.To2D()).ToList(), W.Width, W.Range);
 
                 // Check required hitnumber and cast
                 if (farmLocation.MinionsHit >= 2)
@@ -128,10 +128,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 foreach (var minion in minions)
                 {
                     // Distance check
-                    if (minion.ServerPosition.LSDistance(player.Position, true) < E.Range * E.Range)
+                    if (minion.ServerPosition.Distance(player.Position, true) < E.Range * E.Range)
                     {
                         // E only on targets that are ablaze or killable
-                        if (IsAblazed(minion) || minion.Health > player.LSGetAutoAttackDamage(minion) && IsSpellKillable(minion,SpellSlot.E))
+                        if (IsAblazed(minion) || minion.Health > player.GetAutoAttackDamage(minion) && IsSpellKillable(minion,SpellSlot.E))
                         {
                             E.CastOnUnit(minion);
                             break;
@@ -161,7 +161,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             // Killable status
             bool mainComboKillable = IsMainComboKillable(target);
             bool bounceComboKillable = IsBounceComboKillable(target);
-            bool inMinimumRange = target.ServerPosition.LSDistance(player.Position, true) < E.Range * E.Range;
+            bool inMinimumRange = target.ServerPosition.Distance(player.Position, true) < E.Range * E.Range;
 
             // Ignite auto cast if killable, bitch please
 
@@ -169,44 +169,44 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 // Continue if spell not ready
 
                 // Q
-                if (Q.LSIsReady() && useQ)
+                if (Q.IsReady() && useQ)
                 {
                     if ((mainComboKillable && inMinimumRange) || // Main combo killable
                         (!useW && !useE) || // Casting when not using W and E
                         (IsAblazed(target)) || // Ablazed
-                        (player.LSGetSpellDamage(target, SpellSlot.Q) > target.Health) || // Killable
-                        (useW && !useE && !W.LSIsReady() && W.LSIsReady((int)(player.Spellbook.GetSpell(SpellSlot.Q).Cooldown * 1000))) || // Cooldown substraction W ready
-                        ((useE && !useW || useW && useE) && !E.LSIsReady() && E.LSIsReady((int)(player.Spellbook.GetSpell(SpellSlot.Q).Cooldown * 1000)))) // Cooldown substraction E ready
+                        (player.GetSpellDamage(target, SpellSlot.Q) > target.Health) || // Killable
+                        (useW && !useE && !W.IsReady() && W.IsReady((int)(player.Spellbook.GetSpell(SpellSlot.Q).Cooldown * 1000))) || // Cooldown substraction W ready
+                        ((useE && !useW || useW && useE) && !E.IsReady() && E.IsReady((int)(player.Spellbook.GetSpell(SpellSlot.Q).Cooldown * 1000)))) // Cooldown substraction E ready
                     {
                         // Cast Q on high hitchance
                         Q.CastIfHitchanceEquals(target, HitChance.VeryHigh);
                     }
                 }
                 // W
-                if (W.LSIsReady() && useW)
+                if (W.IsReady() && useW)
                 {
                     if ((mainComboKillable && inMinimumRange) || // Main combo killable
                         (!useE) || // Casting when not using E
                         (IsAblazed(target)) || // Ablazed
-                        (player.LSGetSpellDamage(target, SpellSlot.W) > target.Health) || // Killable
-                        (target.ServerPosition.LSDistance(player.Position, true) > E.Range * E.Range) ||
-                        (!E.LSIsReady() && E.LSIsReady((int)(player.Spellbook.GetSpell(SpellSlot.W).Cooldown * 1000)))) // Cooldown substraction E ready
+                        (player.GetSpellDamage(target, SpellSlot.W) > target.Health) || // Killable
+                        (target.ServerPosition.Distance(player.Position, true) > E.Range * E.Range) ||
+                        (!E.IsReady() && E.IsReady((int)(player.Spellbook.GetSpell(SpellSlot.W).Cooldown * 1000)))) // Cooldown substraction E ready
                     {
                         // Cast W on high hitchance
                         W.CastIfHitchanceEquals(target, HitChance.VeryHigh);
                     }
                 }
                 // E
-               if (E.LSIsReady() && useE)
+               if (E.IsReady() && useE)
                 {
                     // Distance check
-                    if (Vector2.DistanceSquared(target.ServerPosition.LSTo2D(), player.Position.LSTo2D()) < E.Range * E.Range)
+                    if (Vector2.DistanceSquared(target.ServerPosition.To2D(), player.Position.To2D()) < E.Range * E.Range)
                     {
                         if ((mainComboKillable) || // Main combo killable
                             (!useQ && !useW) || // Casting when not using Q and W
                             (E.Level >= 4) || // E level high, damage output higher
-                            (useQ && (Q.LSIsReady() || player.Spellbook.GetSpell(SpellSlot.Q).Cooldown < 5)) || // Q ready
-                            (useW && W.LSIsReady())) // W ready
+                            (useQ && (Q.IsReady() || player.Spellbook.GetSpell(SpellSlot.Q).Cooldown < 5)) || // Q ready
+                            (useW && W.IsReady())) // W ready
                         {
                             // Cast E on target
                             E.CastOnUnit(target);
@@ -214,22 +214,22 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     }
                 }
                 // R
-                if (R.LSIsReady() && useR)
+                if (R.IsReady() && useR)
                 {
                     // Distance check
-                    if (target.ServerPosition.LSDistance(player.Position, true) < R.Range * R.Range)
+                    if (target.ServerPosition.Distance(player.Position, true) < R.Range * R.Range)
                     {
                         // Logic prechecks
-                        if ((useQ && Q.LSIsReady() && Q.GetPrediction(target).Hitchance == HitChance.VeryHigh || useW && W.LSIsReady()) && player.Health / player.MaxHealth > 0.4f)
+                        if ((useQ && Q.IsReady() && Q.GetPrediction(target).Hitchance == HitChance.VeryHigh || useW && W.IsReady()) && player.Health / player.MaxHealth > 0.4f)
                             return;
 
                         // Single hit
-                        if (mainComboKillable && inMinimumRange || player.LSGetSpellDamage(target, SpellSlot.R) > target.Health)
+                        if (mainComboKillable && inMinimumRange || player.GetSpellDamage(target, SpellSlot.R) > target.Health)
                             R.CastOnUnit(target);
                         // Double bounce combo
-                        else if (bounceComboKillable && inMinimumRange || player.LSGetSpellDamage(target, SpellSlot.R) * 2 > target.Health)
+                        else if (bounceComboKillable && inMinimumRange || player.GetSpellDamage(target, SpellSlot.R) * 2 > target.Health)
                         {
-                            if (ObjectManager.Get<Obj_AI_Base>().Count(enemy => (enemy.Type == GameObjectType.obj_AI_Minion || enemy.NetworkId != target.NetworkId && enemy.Type == GameObjectType.AIHeroClient) && enemy.LSIsValidTarget() && enemy.ServerPosition.LSDistance(target.ServerPosition, true) < BOUNCE_RADIUS * BOUNCE_RADIUS) > 0)
+                            if (ObjectManager.Get<Obj_AI_Base>().Count(enemy => (enemy.Type == GameObjectType.obj_AI_Minion || enemy.NetworkId != target.NetworkId && enemy.Type == GameObjectType.AIHeroClient) && enemy.IsValidTarget() && enemy.ServerPosition.Distance(target.ServerPosition, true) < BOUNCE_RADIUS * BOUNCE_RADIUS) > 0)
                                 R.CastOnUnit(target);
                         }
                     }
@@ -241,19 +241,19 @@ using EloBuddy; namespace ARAMDetFull.Champions
         // TODO: DFG handling and so on :P
         public double GetMainComboDamage(Obj_AI_Base target)
         {
-            double damage = player.LSGetAutoAttackDamage(target);
+            double damage = player.GetAutoAttackDamage(target);
 
-            if (Q.LSIsReady())
-                damage += player.LSGetSpellDamage(target, SpellSlot.Q);
+            if (Q.IsReady())
+                damage += player.GetSpellDamage(target, SpellSlot.Q);
 
-            if (W.LSIsReady())
-                damage += player.LSGetSpellDamage(target, SpellSlot.W) * (IsAblazed(target) ? 2 : 1);
+            if (W.IsReady())
+                damage += player.GetSpellDamage(target, SpellSlot.W) * (IsAblazed(target) ? 2 : 1);
 
-            if (E.LSIsReady())
-                damage += player.LSGetSpellDamage(target, SpellSlot.E);
+            if (E.IsReady())
+                damage += player.GetSpellDamage(target, SpellSlot.E);
 
-            if (R.LSIsReady())
-                damage += player.LSGetSpellDamage(target, SpellSlot.R);
+            if (R.IsReady())
+                damage += player.GetSpellDamage(target, SpellSlot.R);
 
 
             return damage;
@@ -268,8 +268,8 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             double damage = GetMainComboDamage(target);
 
-            if (R.LSIsReady())
-                damage += player.LSGetSpellDamage(target, SpellSlot.R);
+            if (R.IsReady())
+                damage += player.GetSpellDamage(target, SpellSlot.R);
 
             return damage;
         }
@@ -281,19 +281,19 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public static bool IsAblazed(Obj_AI_Base target)
         {
-            return target.LSHasBuff("brandablaze", true);
+            return target.HasBuff("brandablaze", true);
         }
 
         public static bool IsSpellKillable(Obj_AI_Base target, SpellSlot spellSlot)
         {
-            return player.LSGetSpellDamage(target, spellSlot) > target.Health;
+            return player.GetSpellDamage(target, spellSlot) > target.Health;
         }
 
         public static bool HasIgnite(AIHeroClient target)
         {
             if (target.IsMe)
             {
-                var ignite = player.Spellbook.GetSpell(player.LSGetSpellSlot("SummonerDot"));
+                var ignite = player.Spellbook.GetSpell(player.GetSpellSlot("SummonerDot"));
                 return ignite != null && ignite.Slot != SpellSlot.Unknown;
             }
             return false;

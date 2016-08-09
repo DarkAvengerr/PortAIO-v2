@@ -27,7 +27,7 @@ using EloBuddy; namespace Activator.Spells.Evaders
                 if (!Parent.Item(Parent.Name + "useon" + hero.Player.NetworkId).GetValue<bool>())
                     continue;
 
-                if (hero.Player.LSDistance(Player.ServerPosition) > Range)
+                if (hero.Player.Distance(Player.ServerPosition) > Range)
                     continue;
 
                 if (Menu.Item("ss" + Name + "all").GetValue<bool>())

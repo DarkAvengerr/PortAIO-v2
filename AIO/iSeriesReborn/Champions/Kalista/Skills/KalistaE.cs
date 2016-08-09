@@ -22,13 +22,13 @@ using EloBuddy;
             {
                 var killableRendTarget= HeroManager.Enemies.FirstOrDefault(CanBeRendKilled);
 
-                if (killableRendTarget.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(killableRendTarget)))
+                if (killableRendTarget.IsValidTarget(Orbwalking.GetRealAutoAttackRange(killableRendTarget)))
                 {
                     //The target is in E range, let's execute the logic.
                     var heroWithRendStack =
                         HeroManager.Enemies.Where(
                             target =>
-                                target.LSIsValidTarget(Variables.CurrentChampion.GetSpells()[SpellSlot.E].Range) &&
+                                target.IsValidTarget(Variables.CurrentChampion.GetSpells()[SpellSlot.E].Range) &&
                                 target.HasRend()).OrderByDescending(GetRendDamage).FirstOrDefault();
 
                     if (killableRendTarget != null && (Environment.TickCount - LastCastTime > 250))
@@ -44,7 +44,7 @@ using EloBuddy;
                         if (rendBuffCount >= MenuExtensions.GetItemValue<Slider>($"iseriesr.kalista.{Variables.Orbwalker.ActiveMode.ToString().ToLower()}.e.minstacks").Value)
                         {
                             //The target has the minimum required rend buff count.
-                            var distance = ObjectManager.Player.LSDistance(heroWithRendStack);
+                            var distance = ObjectManager.Player.Distance(heroWithRendStack);
 
                             if (distance > spells[SpellSlot.E].Range * 0.85f ||
                                 (heroWithRendStack.IsRendAboutToExpire()))
@@ -67,7 +67,7 @@ using EloBuddy;
         public static bool CanBeRendKilled(Obj_AI_Base target)
         {
             return target.HasRend() 
-                    && target.LSIsValidTarget(Variables.CurrentChampion.GetSpells()[SpellSlot.E].Range) &&
+                    && target.IsValidTarget(Variables.CurrentChampion.GetSpells()[SpellSlot.E].Range) &&
                    (HealthPrediction.GetHealthPrediction(target, 250) > 0 &&
                     HealthPrediction.GetHealthPrediction(target, 250) + 20 <= GetRendDamage(target)) &&
                    (CanBeDamaged(target));
@@ -83,12 +83,12 @@ using EloBuddy;
             var spells = Variables.CurrentChampion.GetSpells();
             var baseDamage = spells[SpellSlot.E].GetDamage(target);
 
-            if (ObjectManager.Player.LSHasBuff("summonerexhaust"))
+            if (ObjectManager.Player.HasBuff("summonerexhaust"))
             {
                 baseDamage *= 0.4f;
             }
 
-            if (target.LSHasBuff("FerociousHowl"))
+            if (target.HasBuff("FerociousHowl"))
             {
                 baseDamage *= 0.35f;
             }

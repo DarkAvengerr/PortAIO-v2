@@ -19,21 +19,21 @@ using EloBuddy;
         private Menu Menu;
         private Orbwalking.Orbwalker Orbwalker;
         private AIHeroClient Player = ObjectManager.Player;
-        private SpellSlot Flash = ObjectManager.Player.LSGetSpellSlot("summonerFlash");
+        private SpellSlot Flash = ObjectManager.Player.GetSpellSlot("summonerFlash");
         private GameObject Tibbers;
         private Spell Q, W, E, R;
         private bool HaveTibbers
         {
             get
             {
-                return ObjectManager.Player.LSHasBuff("infernalguardintimer");
+                return ObjectManager.Player.HasBuff("infernalguardintimer");
             }
         }
         private bool HaveWave
         {
             get
             {
-                return ObjectManager.Player.LSHasBuff("pyromania_particle");
+                return ObjectManager.Player.HasBuff("pyromania_particle");
             }
         }
 
@@ -198,7 +198,7 @@ using EloBuddy;
                 var DF = Menu.Item("DF").GetValue<Circle>();
                 if (DF.Active)
                 {
-                    if (R.IsReadyPerfectly() && !HaveTibbers && Flash.LSIsReady())
+                    if (R.IsReadyPerfectly() && !HaveTibbers && Flash.IsReady())
                     {
                         Render.Circle.DrawCircle(Player.Position, R.Range + 425f, DF.Color, 3);
                     }
@@ -214,7 +214,7 @@ using EloBuddy;
                 {
                     if (W.IsReadyPerfectly())
                     {
-                        if (sender.LSIsValidTarget(W.Range))
+                        if (sender.IsValidTarget(W.Range))
                         {
                             W.Cast(sender);
                         }
@@ -223,7 +223,7 @@ using EloBuddy;
                     {
                         if (Q.IsReadyPerfectly())
                         {
-                            if (sender.LSIsValidTarget(Q.Range))
+                            if (sender.IsValidTarget(Q.Range))
                             {
                                 Q.CastOnUnit(sender);
                             }
@@ -248,7 +248,7 @@ using EloBuddy;
                 {
                     if (W.IsReadyPerfectly())
                     {
-                        if (gapcloser.Sender.LSIsValidTarget(W.Range))
+                        if (gapcloser.Sender.IsValidTarget(W.Range))
                         {
                             W.Cast(gapcloser.Sender);
                         }
@@ -257,7 +257,7 @@ using EloBuddy;
                     {
                         if (Q.IsReadyPerfectly())
                         {
-                            if (gapcloser.Sender.LSIsValidTarget(Q.Range))
+                            if (gapcloser.Sender.IsValidTarget(Q.Range))
                             {
                                 Q.CastOnUnit(gapcloser.Sender);
                             }
@@ -266,7 +266,7 @@ using EloBuddy;
                         {
                             if (R.IsReadyPerfectly() && !HaveTibbers)
                             {
-                                if (gapcloser.Sender.LSIsValidTarget(R.Range))
+                                if (gapcloser.Sender.IsValidTarget(R.Range))
                                 {
                                     R.Cast(gapcloser.Sender);
                                 }
@@ -365,7 +365,7 @@ using EloBuddy;
                                             var target = TargetSelector.GetTarget(W.Range, W.DamageType);
                                             if (target != null)
                                             {
-                                                var otarget = HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range)).ToList();
+                                                var otarget = HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)).ToList();
                                                 if (otarget.Count >= 3)
                                                 {
                                                     W.Cast(target, false, true);
@@ -444,7 +444,7 @@ using EloBuddy;
                                     if (W.IsReadyPerfectly())
                                     {
                                         var target = MinionManager.GetMinions(W.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth)
-                                            .FirstOrDefault(x => x.LSIsValidTarget(W.Range) && W.GetPrediction(x).Hitchance >= W.MinHitChance);
+                                            .FirstOrDefault(x => x.IsValidTarget(W.Range) && W.GetPrediction(x).Hitchance >= W.MinHitChance);
                                         if (target != null)
                                         {
                                             W.Cast(target);
@@ -457,7 +457,7 @@ using EloBuddy;
                                     if (Q.IsReadyPerfectly())
                                     {
                                         var target = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth)
-                                            .FirstOrDefault(x => x.LSIsValidTarget(Q.Range));
+                                            .FirstOrDefault(x => x.IsValidTarget(Q.Range));
                                         if (target != null)
                                         {
                                             Q.CastOnUnit(target);
@@ -474,7 +474,7 @@ using EloBuddy;
                                 var target = TargetSelector.GetTarget(R.Range, R.DamageType);
                                 if (target != null)
                                 {
-                                    var otarget = HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range)).ToList();
+                                    var otarget = HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range)).ToList();
                                     if (otarget.Count >= Menu.Item("CC").GetValue<Slider>().Value)
                                     {
                                         R.Cast(target, false, true);
@@ -489,7 +489,7 @@ using EloBuddy;
                                     var target = TargetSelector.GetTarget(W.Range, W.DamageType);
                                     if (target != null)
                                     {
-                                        var otarget = HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range)).ToList();
+                                        var otarget = HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)).ToList();
                                         if (otarget.Count >= 3)
                                         {
                                             W.Cast(target, false, true);
@@ -533,7 +533,7 @@ using EloBuddy;
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
                     var target = TargetSelector.GetSelectedTarget();
-                    if (target != null && Player.Position.LSDistance(target.Position) < 425f + R.Range)
+                    if (target != null && Player.Position.Distance(target.Position) < 425f + R.Range)
                     {
                         if (!target.IsZombie)
                         {
@@ -541,7 +541,7 @@ using EloBuddy;
                             {
                                 if (R.IsReadyPerfectly() && !HaveTibbers)
                                 {
-                                    if (Flash.LSIsReady())
+                                    if (Flash.IsReady())
                                     {
                                         Player.Spellbook.CastSpell(Flash, target.Position);
                                     }                                    
@@ -556,7 +556,7 @@ using EloBuddy;
 
             if (Menu.Item("ME").GetValue<KeyBind>().Active)
             {
-                if (!Player.LSHasBuff("Recall"))
+                if (!Player.HasBuff("Recall"))
                 {
                     if (E.IsReadyPerfectly())
                     {
@@ -570,7 +570,7 @@ using EloBuddy;
 
             if (Menu.Item("TE").GetValue<bool>())
             {
-                if (!Player.LSHasBuff("Recall"))
+                if (!Player.HasBuff("Recall"))
                 {
                     if (Tibbers != null)
                     {

@@ -31,12 +31,12 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.Drawings
         {
             if (Variable.Player.IsDead) return;
 
-            if (this.Menu.Item(this.Menu.Name + "WReady").GetValue<bool>() && !Variable.Spells[SpellSlot.W].LSIsReady()) return;
+            if (this.Menu.Item(this.Menu.Name + "WReady").GetValue<bool>() && !Variable.Spells[SpellSlot.W].IsReady()) return;
 
             Render.Circle.DrawCircle(
                 Variable.Player.Position,
                 1275,
-                Variable.Spells[SpellSlot.W].LSIsReady() 
+                Variable.Spells[SpellSlot.W].IsReady() 
                 ? Color.White
                 : Color.DarkSlateGray);
         }

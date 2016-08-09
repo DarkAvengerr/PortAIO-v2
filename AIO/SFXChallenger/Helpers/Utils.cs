@@ -60,7 +60,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
         {
             try
             {
-                return GameObjects.Turrets.Any(turret => turret.LSIsValidTarget(900f + extraRange, true, target.Position));
+                return GameObjects.Turrets.Any(turret => turret.IsValidTarget(900f + extraRange, true, target.Position));
             }
 
             catch (Exception ex)
@@ -78,7 +78,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
                     GameObjects.Turrets.Any(
                         t =>
                             t.Health > 1 && !t.IsDead && (ally && t.IsAlly || !ally && t.IsEnemy) &&
-                            position.LSDistance(t.Position) < 900f))
+                            position.Distance(t.Position) < 900f))
                 {
                     return true;
                 }
@@ -94,13 +94,13 @@ using EloBuddy; namespace SFXChallenger.Helpers
         public static Vector2 PositionAfter(Obj_AI_Base unit, float t, float speed = float.MaxValue)
         {
             var distance = t * speed;
-            var path = unit.LSGetWaypoints();
+            var path = unit.GetWaypoints();
 
             for (var i = 0; i < path.Count - 1; i++)
             {
                 var a = path[i];
                 var b = path[i + 1];
-                var d = a.LSDistance(b);
+                var d = a.Distance(b);
 
                 if (d < distance)
                 {
@@ -108,7 +108,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
                 }
                 else
                 {
-                    return a + distance * (b - a).LSNormalized();
+                    return a + distance * (b - a).Normalized();
                 }
             }
 
@@ -128,10 +128,10 @@ using EloBuddy; namespace SFXChallenger.Helpers
                 {
                     var predTarget = Prediction.GetPrediction(
                         target,
-                        delay + sender.ServerPosition.LSDistance(target.ServerPosition) * 1.1f / speed + additional);
-                    return delay + (sender.ServerPosition.LSDistance(predTarget.UnitPosition) * 1.1f / speed + additional);
+                        delay + sender.ServerPosition.Distance(target.ServerPosition) * 1.1f / speed + additional);
+                    return delay + (sender.ServerPosition.Distance(predTarget.UnitPosition) * 1.1f / speed + additional);
                 }
-                return delay + (sender.ServerPosition.LSDistance(target.ServerPosition) / speed + additional);
+                return delay + (sender.ServerPosition.Distance(target.ServerPosition) / speed + additional);
             }
             catch (Exception ex)
             {
@@ -171,13 +171,13 @@ using EloBuddy; namespace SFXChallenger.Helpers
         public static bool UnderAllyTurret(Vector3 position)
         {
             return
-                GameObjects.AllyTurrets.Any(t => t.IsValid && !t.IsDead && t.Health > 1 && t.LSDistance(position) < 925f);
+                GameObjects.AllyTurrets.Any(t => t.IsValid && !t.IsDead && t.Health > 1 && t.Distance(position) < 925f);
         }
 
         public static bool UnderEnemyTurret(Vector3 position)
         {
             return
-                GameObjects.EnemyTurrets.Any(t => t.IsValid && !t.IsDead && t.Health > 1 && t.LSDistance(position) < 925f);
+                GameObjects.EnemyTurrets.Any(t => t.IsValid && !t.IsDead && t.Health > 1 && t.Distance(position) < 925f);
         }
 
         public static bool IsImmobile(Obj_AI_Base t)
@@ -213,7 +213,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
             {
                 return false;
             }
-            return source.Direction.LSTo2D().LSPerpendicular().LSAngleBetween((position - source.Position).LSTo2D()) < angle;
+            return source.Direction.To2D().Perpendicular().AngleBetween((position - source.Position).To2D()) < angle;
         }
 
         public static bool ShouldDraw(bool checkScreen = false)
@@ -224,29 +224,29 @@ using EloBuddy; namespace SFXChallenger.Helpers
 
         public static Vector3 GetDashPosition(Spell spell, AIHeroClient target, float safetyDistance)
         {
-            var distance = target.LSDistance(ObjectManager.Player);
+            var distance = target.Distance(ObjectManager.Player);
             var dashPoints = new Geometry.Polygon.Circle(ObjectManager.Player.Position, spell.Range).Points;
             if (distance < safetyDistance)
             {
                 dashPoints.AddRange(
                     new Geometry.Polygon.Circle(ObjectManager.Player.Position, safetyDistance - distance).Points);
             }
-            dashPoints = dashPoints.Where(p => !p.LSIsWall()).OrderBy(p => p.LSDistance(Game.CursorPos)).ToList();
+            dashPoints = dashPoints.Where(p => !p.IsWall()).OrderBy(p => p.Distance(Game.CursorPos)).ToList();
             foreach (var point in dashPoints)
             {
                 var allies =
                     GameObjects.AllyHeroes.Where(
-                        hero => !hero.IsDead && hero.LSDistance(point.To3D()) < ObjectManager.Player.AttackRange).ToList();
+                        hero => !hero.IsDead && hero.Distance(point.To3D()) < ObjectManager.Player.AttackRange).ToList();
                 var enemies =
                     GameObjects.EnemyHeroes.Where(
-                        hero => hero.LSIsValidTarget(ObjectManager.Player.AttackRange, true, point.To3D())).ToList();
+                        hero => hero.IsValidTarget(ObjectManager.Player.AttackRange, true, point.To3D())).ToList();
                 var lowEnemies = enemies.Where(hero => hero.HealthPercent <= 15).ToList();
 
                 if (!point.To3D().IsUnderTurret(false))
                 {
                     if (enemies.Count == 1 &&
                         (!target.IsMelee || target.HealthPercent <= ObjectManager.Player.HealthPercent - 25 ||
-                         target.Position.LSDistance(point.To3D()) >= safetyDistance) ||
+                         target.Position.Distance(point.To3D()) >= safetyDistance) ||
                         allies.Count >
                         enemies.Count -
                         (ObjectManager.Player.HealthPercent >= 10 * lowEnemies.Count ? lowEnemies.Count : 0))
@@ -295,12 +295,12 @@ using EloBuddy; namespace SFXChallenger.Helpers
 
         public static bool IsWallBetween(Vector3 start, Vector3 end, int step = 3)
         {
-            if (start.LSIsValid() && end.LSIsValid() && step > 0)
+            if (start.IsValid() && end.IsValid() && step > 0)
             {
-                var distance = start.LSDistance(end);
+                var distance = start.Distance(end);
                 for (var i = 0; i < distance; i = i + step)
                 {
-                    if (NavMesh.GetCollisionFlags(start.LSExtend(end, i)) == CollisionFlags.Wall)
+                    if (NavMesh.GetCollisionFlags(start.Extend(end, i)) == CollisionFlags.Wall)
                     {
                         return true;
                     }

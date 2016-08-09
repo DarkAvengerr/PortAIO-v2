@@ -100,7 +100,7 @@ using EloBuddy;
 
         private static void TahmKenchOnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (Q.LSIsReady() && MenuCheck("tahm.anti.q", Config) && gapcloser.Sender.LSIsValidTarget(Q.Range))
+            if (Q.IsReady() && MenuCheck("tahm.anti.q", Config) && gapcloser.Sender.IsValidTarget(Q.Range))
             {
                 Q.Cast(gapcloser.Sender);
             }
@@ -131,20 +131,20 @@ using EloBuddy;
                 return;
             }
 
-            if (MenuCheck("tahm.q.harass", Config) && Q.LSIsReady())
+            if (MenuCheck("tahm.q.harass", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "tahm.hitchance"));
                 }
             }
 
-            if (MenuCheck("tahm.w.harass", Config) && W.LSIsReady())
+            if (MenuCheck("tahm.w.harass", Config) && W.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(650)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(650)))
                 {
                     // Swallowed logic needs adding
-                    var minion = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsEnemy && x.LSDistance(Player, true) < 250).FirstOrDefault();
+                    var minion = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsEnemy && x.Distance(Player, true) < 250).FirstOrDefault();
                     W.CastOnUnit(minion);
 
                     LeagueSharp.Common.Utility.DelayAction.Add(
@@ -165,17 +165,17 @@ using EloBuddy;
 
         private static void TahmKenchOnDraw(EventArgs args)
         {
-            if (Q.LSIsReady() && ActiveCheck("tahm.q.draw", Config))
+            if (Q.IsReady() && ActiveCheck("tahm.q.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, GetColor("tahm.q.draw", Config));
             }
 
-            if (W.LSIsReady() && ActiveCheck("tahm.w.draw", Config))
+            if (W.IsReady() && ActiveCheck("tahm.w.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, GetColor("tahm.w.draw", Config));
             }
 
-            if (R.LSIsReady() && ActiveCheck("tahm.r.draw", Config))
+            if (R.IsReady() && ActiveCheck("tahm.r.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, GetColor("tahm.r.draw", Config));
             }

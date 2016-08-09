@@ -26,12 +26,12 @@ using EloBuddy;
                 return;
             }
 
-            if (Spells.Q.LSIsReady() && Menus.Config.Item("q.clear").GetValue<bool>())
+            if (Spells.Q.IsReady() && Menus.Config.Item("q.clear").GetValue<bool>())
             {
                 Spells.Q.Cast(mobs[0]);
             }
 
-            if (Spells.W.LSIsReady() && Menus.Config.Item("w.clear").GetValue<bool>())
+            if (Spells.W.IsReady() && Menus.Config.Item("w.clear").GetValue<bool>())
             {
                 Spells.W.Cast(mobs[0]);
             }

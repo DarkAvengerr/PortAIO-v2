@@ -80,14 +80,14 @@
                     average.Y += prediction.Y;
                     average.X /= 2;
                     average.Y /= 2;
-                    bias += lastPrediction.LSDistance(average);
+                    bias += lastPrediction.Distance(average);
                     count++;
                     lastPrediction = prediction;
                 }
             }
 
             bias = bias / count;
-            if (bias > limitBias || average.LSDistance(Target.Position) > PredictionSpell.Width * 2.5f)
+            if (bias > limitBias || average.Distance(Target.Position) > PredictionSpell.Width * 2.5f)
             {
                 return Vector3.Zero;
             }
@@ -114,7 +114,7 @@
         private void ProcessPrediction(EventArgs args)
         {
             if (!Target.IsVisible && Target.IsDead
-                && Target.LSDistance(ObjectManager.Player.Position) > PredictionSpell.Range + 150f)
+                && Target.Distance(ObjectManager.Player.Position) > PredictionSpell.Range + 150f)
             {
                 predictionList.Clear();
                 return;
@@ -140,9 +140,9 @@
                     predictedPosiction.X /= 2;
                     predictedPosiction.Y /= 2;
 
-                    if (Target.LSDistance(predictedPosiction)
+                    if (Target.Distance(predictedPosiction)
                         < (Target.MoveSpeed * (PredictionSpell.Delay + 0.4f))
-                        + ObjectManager.Player.LSDistance(predictedPosiction) / PredictionSpell.Speed)
+                        + ObjectManager.Player.Distance(predictedPosiction) / PredictionSpell.Speed)
                     {
                         break;
                     }

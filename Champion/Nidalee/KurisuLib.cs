@@ -51,7 +51,7 @@ namespace KurisuNidalee
         internal static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             var attacker = gapcloser.Sender;
-            if (attacker.LSIsValidTarget(275f) && !Player.LSUnderTurret(true))
+            if (attacker.IsValidTarget(275f) && !Player.UnderTurret(true))
             {
                 if (CatForm())
                 {
@@ -77,7 +77,7 @@ namespace KurisuNidalee
             var missile = sender as MissileClient;
             if (missile != null && missile.SpellCaster.IsMe)
             {
-                if (missile.SData.LSIsAutoAttack())
+                if (missile.SData.IsAutoAttack())
                     MissileCount += 1;
             }
         }
@@ -199,13 +199,13 @@ namespace KurisuNidalee
             var damage = 0d;
 
             if (SpellTimer["Takedown"].IsReady())
-                damage += Player.LSGetSpellDamage(target, SpellSlot.Q, 1);
+                damage += Player.GetSpellDamage(target, SpellSlot.Q, 1);
             if (SpellTimer["Pounce"].IsReady())
-                damage += Player.LSGetSpellDamage(target, SpellSlot.W, 1);
+                damage += Player.GetSpellDamage(target, SpellSlot.W, 1);
             if (SpellTimer["Swipe"].IsReady())
-                damage += Player.LSGetSpellDamage(target, SpellSlot.E, 1);
+                damage += Player.GetSpellDamage(target, SpellSlot.E, 1);
 
-            return (float) (damage + Player.LSGetAutoAttackDamage(target) * 2);
+            return (float) (damage + Player.GetAutoAttackDamage(target) * 2);
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace KurisuNidalee
         {
             var minionpositions =
                 MinionManager.GetMinions(Player.ServerPosition, 500f, MinionTypes.All, MinionTeam.NotAllyForEnemy)
-                    .Select(x => x.Position.LSTo2D())
+                    .Select(x => x.Position.To2D())
                     .ToList();
 
             var swipelocation = MinionManager.GetBestCircularFarmLocation(minionpositions, 275f, 375f);
@@ -341,10 +341,10 @@ namespace KurisuNidalee
                 {
                     if (sender.IsEnemy && sender.Type == GameObjectType.AIHeroClient && SpellTimer["Javelin"].IsReady())
                     {
-                        if (args.End.LSIsValid() && args.End.LSDistance(KN.Player.ServerPosition) <= KN.Player.BoundingRadius * 2)
+                        if (args.End.IsValid() && args.End.Distance(KN.Player.ServerPosition) <= KN.Player.BoundingRadius * 2)
                         {
                             var hero = sender as AIHeroClient;
-                            if (hero == null || !hero.LSIsValidTarget(Spells["Bushwhack"].Range))
+                            if (hero == null || !hero.IsValidTarget(Spells["Bushwhack"].Range))
                             {
                                 return;
                             }
@@ -397,7 +397,7 @@ namespace KurisuNidalee
                     Orbwalking.ResetAutoAttackTimer();
                 }
 
-                if (sender.IsMe && args.SData.LSIsAutoAttack() && Player.LSHasBuff("Takedown", true))
+                if (sender.IsMe && args.SData.IsAutoAttack() && Player.HasBuff("Takedown", true))
                 {
                     LastBite = Utils.GameTimeTickCount;
                     TimeStamp["Takedown"] = Game.Time + (5 + (5 * Player.PercentCooldownMod));
@@ -510,14 +510,14 @@ namespace KurisuNidalee
 
         internal static Vector2? GetFirstWallPoint(Vector3 from, Vector3 to, float step = 25)
         {
-            return GetFirstWallPoint(from.LSTo2D(), to.LSTo2D(), step);
+            return GetFirstWallPoint(from.To2D(), to.To2D(), step);
         }
 
         internal static Vector2? GetFirstWallPoint(Vector2 from, Vector2 to, float step = 25)
         {
-            var direction = (to - from).LSNormalized();
+            var direction = (to - from).Normalized();
 
-            for (float d = 0; d < from.LSDistance(to); d = d + step)
+            for (float d = 0; d < from.Distance(to); d = d + step)
             {
                 var testPoint = from + d * direction;
                 var flags = NavMesh.GetCollisionFlags(testPoint.X, testPoint.Y);
@@ -541,7 +541,7 @@ namespace KurisuNidalee
                     ? (float) Player.GetSummonerSpellDamage(minion, Damage.SummonerSpell.Smite)
                     : 0;
 
-                if (minion.LSDistance(Player.ServerPosition) > 500 + minion.BoundingRadius + Player.BoundingRadius)
+                if (minion.Distance(Player.ServerPosition) > 500 + minion.BoundingRadius + Player.BoundingRadius)
                     return;
 
                 if (LargeList.Any(name => minion.Name.StartsWith(name) && !minion.Name.Contains("Mini")))
@@ -550,7 +550,7 @@ namespace KurisuNidalee
                     {
                         if (KN.Root.Item("jgsmitetd").GetValue<bool>())
                         {
-                            if (Player.LSGetSpellDamage(minion, SpellSlot.Q, 1) + damage >= minion.Health)
+                            if (Player.GetSpellDamage(minion, SpellSlot.Q, 1) + damage >= minion.Health)
                                 CM.CastTakedown(minion, "jg");
                         }
                             
@@ -567,7 +567,7 @@ namespace KurisuNidalee
                     {                       
                         if (KN.Root.Item("jgsmitetd").GetValue<bool>())
                         {
-                            if (Player.LSGetSpellDamage(minion, SpellSlot.Q, 1) + damage >= minion.Health)
+                            if (Player.GetSpellDamage(minion, SpellSlot.Q, 1) + damage >= minion.Health)
                                 CM.CastTakedown(minion, "jg");
                         }
 
@@ -582,7 +582,7 @@ namespace KurisuNidalee
                 {
                     if (KN.Root.Item("jgsmitetd").GetValue<bool>())
                     {
-                        if (Player.LSGetSpellDamage(minion, SpellSlot.Q, 1) + damage >= minion.Health)
+                        if (Player.GetSpellDamage(minion, SpellSlot.Q, 1) + damage >= minion.Health)
                             CM.CastTakedown(minion, "jg");
                     }
 
@@ -610,7 +610,7 @@ namespace KurisuNidalee
                         var hero in
                             HeroManager.Enemies.Where(
                                 h =>
-                                    h.LSIsValidTarget(500) && !h.IsZombie &&
+                                    h.IsValidTarget(500) && !h.IsZombie &&
                                     h.Health <= 20 + 8 * Player.Level))
                     {
                         Player.Spellbook.CastSpell(Smite, hero);
@@ -624,8 +624,8 @@ namespace KurisuNidalee
                     foreach (
                         var hero in
                             HeroManager.Enemies
-                                .Where(h => h.LSIsValidTarget(500) && !h.IsZombie)
-                                .OrderBy(h => h.LSDistance(Game.CursorPos)))
+                                .Where(h => h.IsValidTarget(500) && !h.IsZombie)
+                                .OrderBy(h => h.Distance(Game.CursorPos)))
                     {
                         Player.Spellbook.CastSpell(Smite, hero);
                     }

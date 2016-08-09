@@ -61,10 +61,10 @@ using EloBuddy; namespace Support.Plugins
         {
             if (this.ComboMode)
             {
-                if (this.Q.CastCheck(this.Target, "Combo.Q") && this.R.LSIsReady()
+                if (this.Q.CastCheck(this.Target, "Combo.Q") && this.R.IsReady()
                     && this.Q.GetPrediction(this.Target).Hitchance >= HitChance.High
                     && this.Q.GetPrediction(this.Target).CollisionObjects.Count == 0
-                    && this.Q.GetPrediction(this.Target).UnitPosition.LSCountEnemiesInRange(250)
+                    && this.Q.GetPrediction(this.Target).UnitPosition.CountEnemiesInRange(250)
                     >= this.ConfigValue<Slider>("Misc.Q.Count").Value)
                 {
                     this.R.CastOnUnit(this.Player);
@@ -75,7 +75,7 @@ using EloBuddy; namespace Support.Plugins
                     this.Q.Cast(this.Target);
                 }
 
-                if (this.W.CastCheck(this.Target, "Combo.W") && this.R.LSIsReady()
+                if (this.W.CastCheck(this.Target, "Combo.W") && this.R.IsReady()
                     && this.Player.HealthPercent <= this.ConfigValue<Slider>("Misc.W.Hp").Value)
                 {
                     this.R.CastOnUnit(this.Player);
@@ -86,7 +86,7 @@ using EloBuddy; namespace Support.Plugins
                     this.W.CastOnUnit(this.Target);
                 }
 
-                if (this.E.LSIsReady() && this.R.LSIsReady()
+                if (this.E.IsReady() && this.R.IsReady()
                     && Helpers.AllyInRange(600).Count >= this.ConfigValue<Slider>("Misc.E.Count").Value)
                 {
                     this.R.CastOnUnit(this.Player);
@@ -96,10 +96,10 @@ using EloBuddy; namespace Support.Plugins
 
             if (this.HarassMode)
             {
-                if (this.Q.CastCheck(this.Target, "Harass.Q") && this.R.LSIsReady()
+                if (this.Q.CastCheck(this.Target, "Harass.Q") && this.R.IsReady()
                     && this.Q.GetPrediction(this.Target).Hitchance >= HitChance.High
                     && this.Q.GetPrediction(this.Target).CollisionObjects.Count == 0
-                    && this.Q.GetPrediction(this.Target).UnitPosition.LSCountEnemiesInRange(250)
+                    && this.Q.GetPrediction(this.Target).UnitPosition.CountEnemiesInRange(250)
                     >= this.ConfigValue<Slider>("Misc.Q.Count").Value)
                 {
                     this.R.CastOnUnit(this.Player);
@@ -110,7 +110,7 @@ using EloBuddy; namespace Support.Plugins
                     this.Q.Cast(this.Target);
                 }
 
-                if (this.E.LSIsReady() && this.R.LSIsReady()
+                if (this.E.IsReady() && this.R.IsReady()
                     && Helpers.AllyInRange(600).Count >= this.ConfigValue<Slider>("Misc.E.Count").Value)
                 {
                     this.R.CastOnUnit(this.Player);

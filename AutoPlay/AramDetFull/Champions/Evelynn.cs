@@ -36,7 +36,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (target is AIHeroClient && Q.LSIsReady())
+            if (target is AIHeroClient && Q.IsReady())
             {
                 Q.Cast();
                 EloBuddy.Player.IssueOrder(GameObjectOrder.AutoAttack, target);
@@ -74,10 +74,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 if (ObjectManager.Player.HasBuffOfType(BuffType.Slow))
                     W.Cast();
 
-                if (E.LSIsReady())
+                if (E.IsReady())
                     E.CastOnUnit(target);
 
-                if (R.LSIsReady() && GetComboDamage(target) > target.Health)
+                if (R.IsReady() && GetComboDamage(target) > target.Health)
                     R.Cast(target, false, true);
             }
 
@@ -90,8 +90,8 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 if (ObjectManager.Get<AIHeroClient>()
                 .Count(
                     hero =>
-                        hero.LSIsValidTarget() &&
-                        hero.LSDistance(new Vector2(args.EndPosition.X, args.EndPosition.Y)) <= R.Range) == 0)
+                        hero.IsValidTarget() &&
+                        hero.Distance(new Vector2(args.EndPosition.X, args.EndPosition.Y)) <= R.Range) == 0)
                     args.Process = false;
             }
         }
@@ -114,12 +114,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 return;
             var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q.Range);
 
-            foreach (var minion in minions.Where(minion => minion.LSIsValidTarget(Q.Range)))
+            foreach (var minion in minions.Where(minion => minion.IsValidTarget(Q.Range)))
             {
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                     Q.Cast();
 
-                if (E.LSIsReady())
+                if (E.IsReady())
                     E.CastOnUnit(minion);
             }
         }
@@ -130,9 +130,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             if ((ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level) > 0)
                 comboDamage += Q.GetDamage(target) * 3;
-            if (E.LSIsReady())
+            if (E.IsReady())
                 comboDamage += E.GetDamage(target);
-            if (R.LSIsReady())
+            if (R.IsReady())
                 comboDamage += R.GetDamage(target);
 
             return comboDamage;

@@ -69,7 +69,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void afterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if(Config.Item("afterAA", true).GetValue<bool>() && R.LSIsReady() && target is AIHeroClient )
+            if(Config.Item("afterAA", true).GetValue<bool>() && R.IsReady() && target is AIHeroClient )
             {
                 R.Cast();
             }
@@ -77,7 +77,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void Interrupter2_OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (R.LSIsReady() && Config.Item("inter", true).GetValue<bool>() && sender.LSIsValidTarget(R.Range))
+            if (R.IsReady() && Config.Item("inter", true).GetValue<bool>() && sender.IsValidTarget(R.Range))
                 R.Cast();
         }
 
@@ -103,7 +103,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 if (Config.Item("onlyRdy", true).GetValue<bool>())
                 {
-                    if (Q.LSIsReady())
+                    if (Q.IsReady())
                         LeagueSharp.Common.Utility.DrawCircle(Player.Position, (float)Config.Item("maxGrab", true).GetValue<Slider>().Value, System.Drawing.Color.Cyan, 1, 1);
                 }
                 else
@@ -113,7 +113,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 if (Config.Item("onlyRdy", true).GetValue<bool>())
                 {
-                    if (R.LSIsReady())
+                    if (R.IsReady())
                         LeagueSharp.Common.Utility.DrawCircle(Player.Position, R.Range, System.Drawing.Color.Gray, 1, 1);
                 }
                 else
@@ -123,20 +123,20 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (R.LSIsReady() && Config.Item("Gap", true).GetValue<bool>() && gapcloser.Sender.LSIsValidTarget(R.Range))
+            if (R.IsReady() && Config.Item("Gap", true).GetValue<bool>() && gapcloser.Sender.IsValidTarget(R.Range))
                 R.Cast();
         }
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if (Program.LagFree(1) && Q.LSIsReady())
+            if (Program.LagFree(1) && Q.IsReady())
                 LogicQ();
-            if (Program.LagFree(2) && R.LSIsReady())
+            if (Program.LagFree(2) && R.IsReady())
                 LogicR();
-            if (Program.LagFree(3) && W.LSIsReady() && Config.Item("autoW", true).GetValue<bool>())
+            if (Program.LagFree(3) && W.IsReady() && Config.Item("autoW", true).GetValue<bool>())
                 LogicW();
 
-            if (!Q.LSIsReady() && Game.Time - grabW > 2)
+            if (!Q.IsReady() && Game.Time - grabW > 2)
             {
                 foreach (var t in HeroManager.Enemies.Where(t => t.HasBuff("rocketgrab2")))
                 {
@@ -149,7 +149,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
         {
-            if (E.LSIsReady() && args.Target.IsValid<AIHeroClient>() && Config.Item("autoE", true).GetValue<bool>())
+            if (E.IsReady() && args.Target.IsValid<AIHeroClient>() && Config.Item("autoE", true).GetValue<bool>())
                 E.Cast();   
         }
 
@@ -158,20 +158,20 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             float maxGrab = Config.Item("maxGrab", true).GetValue<Slider>().Value;
             float minGrab =  Config.Item("minGrab", true).GetValue<Slider>().Value;
             var ts = Config.Item("ts", true).GetValue<bool>();
-            var qTur = Player.LSUnderAllyTurret() && Config.Item("qTur", true).GetValue<bool>();
+            var qTur = Player.UnderAllyTurret() && Config.Item("qTur", true).GetValue<bool>();
             var qCC = Config.Item("qCC", true).GetValue<bool>();
 
             if (Program.Combo && ts)
             {
                 var t = TargetSelector.GetTarget(maxGrab, TargetSelector.DamageType.Physical);
 
-                if (t.LSIsValidTarget(maxGrab) && !t.HasBuffOfType(BuffType.SpellImmunity) && !t.HasBuffOfType(BuffType.SpellShield) && Config.Item("grab" + t.ChampionName).GetValue<bool>() && Player.LSDistance(t.ServerPosition) > minGrab)
+                if (t.IsValidTarget(maxGrab) && !t.HasBuffOfType(BuffType.SpellImmunity) && !t.HasBuffOfType(BuffType.SpellShield) && Config.Item("grab" + t.ChampionName).GetValue<bool>() && Player.Distance(t.ServerPosition) > minGrab)
                     Program.CastSpell(Q, t);
             }
 
-            foreach (var t in HeroManager.Enemies.Where(t => t.LSIsValidTarget(maxGrab) && Config.Item("grab" + t.ChampionName).GetValue<bool>()))
+            foreach (var t in HeroManager.Enemies.Where(t => t.IsValidTarget(maxGrab) && Config.Item("grab" + t.ChampionName).GetValue<bool>()))
             {
-                if (!t.HasBuffOfType(BuffType.SpellImmunity) && !t.HasBuffOfType(BuffType.SpellShield) && Player.LSDistance(t.ServerPosition) > minGrab)
+                if (!t.HasBuffOfType(BuffType.SpellImmunity) && !t.HasBuffOfType(BuffType.SpellShield) && Player.Distance(t.ServerPosition) > minGrab)
                 {
                     if (Program.Combo && !ts)
                         Program.CastSpell(Q,t);
@@ -193,19 +193,19 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         {
             bool rKs = Config.Item("rKs", true).GetValue<bool>();
             bool afterGrab = Config.Item("afterGrab", true).GetValue<bool>();
-            foreach (var target in HeroManager.Enemies.Where(target => target.LSIsValidTarget(R.Range)))
+            foreach (var target in HeroManager.Enemies.Where(target => target.IsValidTarget(R.Range)))
             {
                 if (rKs && R.GetDamage(target) > target.Health)
                     R.Cast();
-                if (afterGrab && target.LSIsValidTarget(400) && target.HasBuff("rocketgrab2"))
+                if (afterGrab && target.IsValidTarget(400) && target.HasBuff("rocketgrab2"))
                     R.Cast();
             }
-            if (Player.LSCountEnemiesInRange(R.Range) >= Config.Item("rCount", true).GetValue<Slider>().Value && Config.Item("rCount", true).GetValue<Slider>().Value > 0)
+            if (Player.CountEnemiesInRange(R.Range) >= Config.Item("rCount", true).GetValue<Slider>().Value && Config.Item("rCount", true).GetValue<Slider>().Value > 0)
                 R.Cast();
         }
         private void LogicW()
         {
-            foreach (var target in HeroManager.Enemies.Where(target => target.LSIsValidTarget(R.Range) && target.HasBuff("rocketgrab2")))
+            foreach (var target in HeroManager.Enemies.Where(target => target.IsValidTarget(R.Range) && target.HasBuff("rocketgrab2")))
                 W.Cast();
         }
     }

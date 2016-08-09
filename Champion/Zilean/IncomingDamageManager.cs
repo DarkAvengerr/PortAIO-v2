@@ -45,28 +45,28 @@ using EloBuddy; namespace ElZilean
                         continue;
                     }
 
-                    if (enemy != null && enemy.IsValid && enemy.IsEnemy && enemy.LSDistance(hero) <= 2000f)
+                    if (enemy != null && enemy.IsValid && enemy.IsEnemy && enemy.Distance(hero) <= 2000f)
                     {
                         if (args.Target != null && args.Target.NetworkId.Equals(hero.NetworkId))
                         {
-                            if (args.SData.LSIsAutoAttack())
+                            if (args.SData.IsAutoAttack())
                             {
                                 AddDamage(
                                     hero, (int)(GetTime(sender, hero, args.SData) * 0.3f),
-                                    (float)sender.LSGetAutoAttackDamage(hero, true));
+                                    (float)sender.GetAutoAttackDamage(hero, true));
                             }
                             else if (args.SData.TargettingType == SpellDataTargetType.Unit ||
                                      args.SData.TargettingType == SpellDataTargetType.SelfAndUnit)
                             {
                                 AddDamage(
                                     hero, (int)(GetTime(sender, hero, args.SData) * 0.3f),
-                                    (float)sender.LSGetSpellDamage(hero, args.SData.Name));
+                                    (float)sender.GetSpellDamage(hero, args.SData.Name));
                             }
                         }
 
                         if (args.Target == null && Skillshots)
                         {
-                            var slot = enemy.LSGetSpellSlot(args.SData.Name);
+                            var slot = enemy.GetSpellSlot(args.SData.Name);
                             if (slot != SpellSlot.Unknown &&
                                 (slot == SpellSlot.Q || slot == SpellSlot.E || slot == SpellSlot.W ||
                                  slot == SpellSlot.R))
@@ -79,17 +79,17 @@ using EloBuddy; namespace ElZilean
                                         : (args.SData.CastRadius <= 0
                                             ? args.SData.CastRadiusSecondary
                                             : args.SData.CastRadius));
-                                if (args.End.LSDistance(hero.ServerPosition) <= Math.Pow(width, 2))
+                                if (args.End.Distance(hero.ServerPosition) <= Math.Pow(width, 2))
                                 {
                                     AddDamage(
                                         hero, (int)(GetTime(sender, hero, args.SData) * 0.6f),
-                                        (float)sender.LSGetSpellDamage(hero, args.SData.Name));
+                                        (float)sender.GetSpellDamage(hero, args.SData.Name));
                                 }
                             }
                         }
                     }
 
-                    if (turret != null && turret.IsValid && turret.IsEnemy && turret.LSDistance(hero) <= 1500f)
+                    if (turret != null && turret.IsValid && turret.IsEnemy && turret.Distance(hero) <= 1500f)
                     {
                         if (args.Target != null && args.Target.NetworkId.Equals(hero.NetworkId))
                         {
@@ -113,7 +113,7 @@ using EloBuddy; namespace ElZilean
         {
             try
             {
-                return !hero.LSIsValidTarget(float.MaxValue, false) || hero.IsZombie ||
+                return !hero.IsValidTarget(float.MaxValue, false) || hero.IsZombie ||
                        hero.HasBuffOfType(BuffType.Invulnerability) || hero.IsInvulnerable;
             }
             catch (Exception e)
@@ -128,7 +128,7 @@ using EloBuddy; namespace ElZilean
             try
             {
                 return (Math.Max(2, sData.CastFrame / 30f) - 100 + Game.Ping / 2000f +
-                        sender.LSDistance(hero.ServerPosition) / Math.Max(500, Math.Min(5000, sData.MissileSpeed))) *
+                        sender.Distance(hero.ServerPosition) / Math.Max(500, Math.Min(5000, sData.MissileSpeed))) *
                        1000f;
             }
             catch (Exception e)

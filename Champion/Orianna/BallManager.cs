@@ -26,7 +26,7 @@ namespace Orianna
                 switch (args.SData.Name)
                 {
                     case "OrianaIzunaCommand":
-                        LeagueSharp.Common.Utility.DelayAction.Add((int)(BallPosition.LSDistance(args.End) / 1.2 - 70 - Game.Ping), () => BallPosition = args.End);
+                        LeagueSharp.Common.Utility.DelayAction.Add((int)(BallPosition.Distance(args.End) / 1.2 - 70 - Game.Ping), () => BallPosition = args.End);
                         BallPosition = Vector3.Zero;
                         _sTick = Utils.GameTimeTickCount;
                         break;

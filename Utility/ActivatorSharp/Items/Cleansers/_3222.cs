@@ -28,7 +28,7 @@ using EloBuddy; namespace Activator.Items.Cleansers
                 if (!Parent.Item(Parent.Name + "useon" + hero.Player.NetworkId).GetValue<bool>())
                     continue;
 
-                if (hero.Player.LSDistance(Player.ServerPosition) > Range)
+                if (hero.Player.Distance(Player.ServerPosition) > Range)
                     continue;
 
                 if (hero.ForceQSS)

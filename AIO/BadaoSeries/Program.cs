@@ -81,8 +81,8 @@ using EloBuddy;
             {
                 Smite = spell.Slot;
             }
-            Ignite = Player.LSGetSpellSlot("summonerdot");
-            Flash = Player.LSGetSpellSlot("summonerflash");
+            Ignite = Player.GetSpellSlot("summonerdot");
+            Flash = Player.GetSpellSlot("summonerflash");
 
             MainMenu = new LeagueSharp.Common.Menu("BadaoSeries", "BadaoSeries", true);
             AddUI.Bool(MainMenu, "Enable", Player.ChampionName + " Enable", true).ValueChanged += Program_ValueChanged;

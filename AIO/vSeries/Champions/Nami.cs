@@ -115,9 +115,9 @@ using EloBuddy;
                 return;
             }
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && MenuCheck("nami.e.combo",Config) && E.LSIsReady())
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && MenuCheck("nami.e.combo",Config) && E.IsReady())
             {
-                foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(x => x.IsAlly && !x.IsMe && x.LSDistance(Player.Position) < E.Range && !x.IsDead && !x.IsZombie))
+                foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(x => x.IsAlly && !x.IsMe && x.Distance(Player.Position) < E.Range && !x.IsDead && !x.IsZombie))
                 {
                     if (MenuCheck("ewhite." + ally.ChampionName,Config))
                     {
@@ -144,16 +144,16 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (MenuCheck("nami.q.combo",Config) && Q.LSIsReady())
+            if (MenuCheck("nami.q.combo",Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "nami.q.hitchance"));
                 }
             }
-            if (MenuCheck("nami.w.combo",Config) && W.LSIsReady())
+            if (MenuCheck("nami.w.combo",Config) && W.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range) && !x.IsDead && !x.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range) && !x.IsDead && !x.IsZombie))
                 {
                     if (MenuCheck("wwhite." + enemy.ChampionName,Config))
                     {
@@ -161,11 +161,11 @@ using EloBuddy;
                     }
                 }
             }
-            if (MenuCheck("nami.r.combo",Config) && R.LSIsReady())
+            if (MenuCheck("nami.r.combo",Config) && R.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range)))
                 {
-                    if (Player.LSCountEnemiesInRange(R.Range) >= SliderCheck("nami.min.enemy.count",Config))
+                    if (Player.CountEnemiesInRange(R.Range) >= SliderCheck("nami.min.enemy.count",Config))
                     {
                         R.CastIfWillHit(enemy, SliderCheck("nami.min.enemy.count",Config));
                     }
@@ -180,16 +180,16 @@ using EloBuddy;
                 return;
             }
 
-            if (MenuCheck("nami.q.harass", Config) && Q.LSIsReady())
+            if (MenuCheck("nami.q.harass", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "nami.q.hitchance"));
                 }
             }
-            if (MenuCheck("nami.w.harass", Config) && W.LSIsReady())
+            if (MenuCheck("nami.w.harass", Config) && W.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range) && !x.IsDead && !x.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range) && !x.IsDead && !x.IsZombie))
                 {
                     if (MenuCheck("wwhite." + enemy.ChampionName, Config))
                     {
@@ -212,14 +212,14 @@ using EloBuddy;
                 return;
             }
 
-            if (Player.LSIsRecalling() || Player.LSInFountain())
+            if (Player.IsRecalling() || Player.InFountain())
             {
                 return; 
             }
 
-            if (W.LSIsReady() && !Player.IsDead && !Player.IsZombie)
+            if (W.IsReady() && !Player.IsDead && !Player.IsZombie)
             {
-                foreach (var ally in HeroManager.Allies.Where(x => x.LSDistance(Player.Position) < W.Range && !x.IsDead && !x.IsZombie))
+                foreach (var ally in HeroManager.Allies.Where(x => x.Distance(Player.Position) < W.Range && !x.IsDead && !x.IsZombie))
                 {
                     if (MenuCheck("heal." + ally.ChampionName, Config) && ally.HealthPercent < SliderCheck("heal.percent." + ally.ChampionName, Config))
                     {
@@ -231,19 +231,19 @@ using EloBuddy;
 
         private static void NamiOnDraw(EventArgs args)
         {
-            if (Q.LSIsReady() && ActiveCheck("nami.q.draw", Config))
+            if (Q.IsReady() && ActiveCheck("nami.q.draw", Config))
             {
                 Render.Circle.DrawCircle(Player.Position, Q.Range, GetColor("nami.q.draw", Config));
             }
-            if (W.LSIsReady() && ActiveCheck("nami.w.draw", Config))
+            if (W.IsReady() && ActiveCheck("nami.w.draw", Config))
             {
                 Render.Circle.DrawCircle(Player.Position, W.Range, GetColor("nami.w.draw", Config));
             }
-            if (E.LSIsReady() && ActiveCheck("nami.e.draw", Config))
+            if (E.IsReady() && ActiveCheck("nami.e.draw", Config))
             {
                 Render.Circle.DrawCircle(Player.Position, E.Range, GetColor("nami.e.draw", Config));
             }
-            if (R.LSIsReady() && ActiveCheck("nami.r.draw", Config))
+            if (R.IsReady() && ActiveCheck("nami.r.draw", Config))
             {
                 Render.Circle.DrawCircle(Player.Position, R.Range, GetColor("nami.r.draw", Config));
             }

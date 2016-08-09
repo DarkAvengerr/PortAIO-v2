@@ -311,8 +311,8 @@ using EloBuddy; namespace ezEvade
             //P1 = d(p1, P1) > d(p1, p1end) ? p1end : P1;
             //P2 = d(p2, P2) > d(p2, p2end) ? p2end : P2;
 
-            p1out = P1;//P1.LSProjectOn(p1, p1end).SegmentPoint;//P1;
-            p2out = P2;//P2.LSProjectOn(p2, p2end).SegmentPoint;
+            p1out = P1;//P1.ProjectOn(p1, p1end).SegmentPoint;//P1;
+            p2out = P2;//P2.ProjectOn(p2, p2end).SegmentPoint;
 
             return d(P1, P2);
         }

@@ -183,7 +183,7 @@ using EloBuddy;
 
         private bool UltimateUp()
         {
-            bool b = ((ObjectManager.Player.GetSpell(SpellSlot.R).LSIsReady())
+            bool b = ((ObjectManager.Player.GetSpell(SpellSlot.R).IsReady())
                       && (champion.MainMenu.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo));
             b = b && (KoreanUtils.GetParamBool(champion.MainMenu, "forceultusingmouse"));
 

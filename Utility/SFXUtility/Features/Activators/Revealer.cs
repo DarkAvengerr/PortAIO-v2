@@ -174,7 +174,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
                 _championObjects.Where(
                     c =>
                         !c.Hero.IsVisible && !c.Hero.IsDead && Game.Time - c.LastSeen <= 2 &&
-                        c.Hero.LSDistance(ObjectManager.Player) < 1000))
+                        c.Hero.Distance(ObjectManager.Player) < 1000))
             {
                 var pos = GetWardPos(championObject.Hero.ServerPosition, 165, 2);
                 if (!pos.Equals(championObject.Hero.ServerPosition) && !pos.Equals(Vector3.Zero))
@@ -230,7 +230,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
         {
             try
             {
-                if (pos.LSDistance(ObjectManager.Player.Position) > (!bush ? MaxRange + 200 : MaxRange) ||
+                if (pos.Distance(ObjectManager.Player.Position) > (!bush ? MaxRange + 200 : MaxRange) ||
                     _lastReveal + Delay > Game.Time)
                 {
                     return;
@@ -238,7 +238,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
                 var slot = GetRevealSlot(bush);
                 if (slot != SpellSlot.Unknown)
                 {
-                    ObjectManager.Player.Spellbook.CastSpell(slot, ObjectManager.Player.Position.LSExtend(pos, MaxRange));
+                    ObjectManager.Player.Spellbook.CastSpell(slot, ObjectManager.Player.Position.Extend(pos, MaxRange));
                     _lastReveal = Game.Time;
                 }
             }
@@ -360,7 +360,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
                 {
                     if (sender.Name.Contains("Rengar_Base_R_Alert"))
                     {
-                        if (ObjectManager.Player.LSHasBuff("rengarralertsound") && !_rengar.IsVisible && !_rengar.IsDead)
+                        if (ObjectManager.Player.HasBuff("rengarralertsound") && !_rengar.IsVisible && !_rengar.IsDead)
                         {
                             CastLogic(ObjectManager.Player.Position, false);
                         }
@@ -369,7 +369,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
                 if (_leBlanc != null && Menu.Item(Menu.Name + "Invisibleleblanc").GetValue<bool>())
                 {
                     if (sender.Name == "LeBlanc_Base_P_poof.troy" &&
-                        ObjectManager.Player.LSDistance(sender.Position) <= MaxRange)
+                        ObjectManager.Player.Distance(sender.Position) <= MaxRange)
                     {
                         if (!_leBlanc.IsVisible && !_leBlanc.IsDead)
                         {

@@ -78,7 +78,7 @@
             }
 
             spells[Spells.E].SetSkillshot(0.5f, 188f, 1600f, false, SkillshotType.SkillshotCircle);
-            ignite = Player.LSGetSpellSlot("summonerdot");
+            ignite = Player.GetSpellSlot("summonerdot");
 
             Notifications.AddNotification(string.Format("ElTrundle by jQuery v{0}", ScriptVersion), 8000);
             Chat.Print(
@@ -96,14 +96,14 @@
 
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (gapcloser.Sender.LSDistance(Player) > spells[Spells.E].Range || !IsActive("ElTrundle.Antigapcloser"))
+            if (gapcloser.Sender.Distance(Player) > spells[Spells.E].Range || !IsActive("ElTrundle.Antigapcloser"))
             {
                 return;
             }
 
-            if (gapcloser.Sender.LSIsValidTarget(spells[Spells.E].Range))
+            if (gapcloser.Sender.IsValidTarget(spells[Spells.E].Range))
             {
-                if (spells[Spells.E].LSIsReady())
+                if (spells[Spells.E].IsReady())
                 {
                     spells[Spells.E].Cast(gapcloser.Sender);
                 }
@@ -114,7 +114,7 @@
         {
             pillarPosition = Player.Position;
 
-            return V2E(pillarPosition, target.Position, target.LSDistance(pillarPosition) + 230).To3D();
+            return V2E(pillarPosition, target.Position, target.Distance(pillarPosition) + 230).To3D();
         }
 
         private static float IgniteDamage(AIHeroClient target)
@@ -135,7 +135,7 @@
                 return;
             }
 
-            if (args.DangerLevel != Interrupter2.DangerLevel.High || sender.LSDistance(Player) > spells[Spells.E].Range)
+            if (args.DangerLevel != Interrupter2.DangerLevel.High || sender.Distance(Player) > spells[Spells.E].Range)
             {
                 return;
             }
@@ -173,15 +173,15 @@
                 return;
             }
 
-            if (IsActive("ElTrundle.JungleClear.Q") && spells[Spells.Q].LSIsReady()
-                && minion.LSIsValidTarget(spells[Spells.Q].Range))
+            if (IsActive("ElTrundle.JungleClear.Q") && spells[Spells.Q].IsReady()
+                && minion.IsValidTarget(spells[Spells.Q].Range))
             {
                 spells[Spells.Q].Cast();
                 return;
             }
 
-            if (IsActive("ElTrundle.JungleClear.W") && spells[Spells.W].LSIsReady()
-                && minion.LSIsValidTarget(700))
+            if (IsActive("ElTrundle.JungleClear.W") && spells[Spells.W].IsReady()
+                && minion.IsValidTarget(700))
             {
                 spells[Spells.W].Cast(minion.Position);
             }
@@ -202,8 +202,8 @@
                 return;
             }
 
-            if (IsActive("ElTrundle.LaneClear.Q") && spells[Spells.Q].LSIsReady()
-                && minion.LSIsValidTarget(spells[Spells.Q].Range))
+            if (IsActive("ElTrundle.LaneClear.Q") && spells[Spells.Q].IsReady()
+                && minion.IsValidTarget(spells[Spells.Q].Range))
             {
                 if (IsActive("ElTrundle.LaneClear.Q.Lasthit") && minion.Health < spells[Spells.Q].GetDamage(minion))
                 {
@@ -215,8 +215,8 @@
                 return;
             }
 
-            if (IsActive("ElTrundle.LaneClear.W") && spells[Spells.W].LSIsReady()
-                && minion.LSIsValidTarget(700))
+            if (IsActive("ElTrundle.LaneClear.W") && spells[Spells.W].IsReady()
+                && minion.IsValidTarget(700))
             {
                 spells[Spells.W].Cast(minion.Position);
             }
@@ -225,31 +225,31 @@
         private static void OnCombo()
         {
             var target = TargetSelector.GetTarget(spells[Spells.E].Range, TargetSelector.DamageType.Physical);
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
             {
                 return;
             }
 
-            if (IsActive("ElTrundle.Combo.E") && spells[Spells.E].LSIsReady()
-                && target.LSIsValidTarget(spells[Spells.E].Range))
+            if (IsActive("ElTrundle.Combo.E") && spells[Spells.E].IsReady()
+                && target.IsValidTarget(spells[Spells.E].Range))
             {
                 spells[Spells.E].Cast(GetPillarPosition(target));
             }
 
             UseItems(target);
 
-            if (IsActive("ElTrundle.Combo.W") && spells[Spells.W].LSIsReady()
-                && target.LSIsValidTarget(spells[Spells.W].Range))
+            if (IsActive("ElTrundle.Combo.W") && spells[Spells.W].IsReady()
+                && target.IsValidTarget(spells[Spells.W].Range))
             {
                 spells[Spells.W].Cast(target.Position);
             }
 
-            if (IsActive("ElTrundle.Combo.Q") && target.LSIsValidTarget(spells[Spells.Q].Range))
+            if (IsActive("ElTrundle.Combo.Q") && target.IsValidTarget(spells[Spells.Q].Range))
             {
                 spells[Spells.Q].Cast();
             }
 
-            if (spells[Spells.R].LSIsReady() && IsActive("ElTrundle.Combo.R"))
+            if (spells[Spells.R].IsReady() && IsActive("ElTrundle.Combo.R"))
             {
                 foreach (var hero in ObjectManager.Get<AIHeroClient>())
                 {
@@ -261,7 +261,7 @@
                             spells[Spells.R].Cast(hero);
                         }
 
-                        if (getEnemies != null && !getEnemies.GetValue<bool>() && Player.LSCountEnemiesInRange(1500) == 1)
+                        if (getEnemies != null && !getEnemies.GetValue<bool>() && Player.CountEnemiesInRange(1500) == 1)
                         {
                             spells[Spells.R].Cast(hero);
                         }
@@ -269,7 +269,7 @@
                 }
             }
 
-            if (Player.LSDistance(target) <= 600 && IgniteDamage(target) >= target.Health
+            if (Player.Distance(target) <= 600 && IgniteDamage(target) >= target.Health
                 && IsActive("ElTrundle.Combo.Ignite"))
             {
                 Player.Spellbook.CastSpell(ignite, target);
@@ -285,8 +285,8 @@
             var drawE = ElTrundleMenu.Menu.Item("ElTrundle.Draw.E").GetValue<Circle>();
             var drawR = ElTrundleMenu.Menu.Item("ElTrundle.Draw.R").GetValue<Circle>();
 
-            if (newTarget != null && newTarget.IsVisible && newTarget.LSIsValidTarget() && !newTarget.IsDead
-                && Player.LSDistance(newTarget) < 3000)
+            if (newTarget != null && newTarget.IsVisible && newTarget.IsValidTarget() && !newTarget.IsDead
+                && Player.Distance(newTarget) < 3000)
             {
                 Drawing.DrawCircle(GetPillarPosition(newTarget), 188, Color.DeepPink);
             }
@@ -332,7 +332,7 @@
         private static void OnHarass()
         {
             var target = TargetSelector.GetTarget(spells[Spells.E].Range, TargetSelector.DamageType.Physical);
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
             {
                 return;
             }
@@ -342,19 +342,19 @@
                 return;
             }
 
-            if (IsActive("ElTrundle.Harass.Q") && target.LSIsValidTarget(spells[Spells.Q].Range))
+            if (IsActive("ElTrundle.Harass.Q") && target.IsValidTarget(spells[Spells.Q].Range))
             {
                 spells[Spells.Q].Cast();
             }
 
-            if (IsActive("ElTrundle.Harass.E") && spells[Spells.E].LSIsReady()
-                && target.LSIsValidTarget(spells[Spells.E].Range))
+            if (IsActive("ElTrundle.Harass.E") && spells[Spells.E].IsReady()
+                && target.IsValidTarget(spells[Spells.E].Range))
             {
                 spells[Spells.E].Cast(GetPillarPosition(target));
             }
 
-            if (IsActive("ElTrundle.Harass.W") && spells[Spells.W].LSIsReady()
-                && target.LSIsValidTarget(spells[Spells.W].Range))
+            if (IsActive("ElTrundle.Harass.W") && spells[Spells.W].IsReady()
+                && target.IsValidTarget(spells[Spells.W].Range))
             {
                 spells[Spells.W].Cast(target.Position);
             }
@@ -362,7 +362,7 @@
 
         private static void OnUpdate(EventArgs args)
         {
-            if (Player.IsDead || Player.LSIsRecalling() || MenuGUI.IsChatOpen || Shop.IsOpen)
+            if (Player.IsDead || Player.IsRecalling() || MenuGUI.IsChatOpen || Shop.IsOpen)
             {
                 return;
             }
@@ -389,12 +389,12 @@
             if (IsActive("ElTrundle.Items.Hydra"))
             {
                 if (ItemData.Ravenous_Hydra_Melee_Only.GetItem().IsReady()
-                    && ItemData.Ravenous_Hydra_Melee_Only.Range < Player.LSDistance(target))
+                    && ItemData.Ravenous_Hydra_Melee_Only.Range < Player.Distance(target))
                 {
                     ItemData.Ravenous_Hydra_Melee_Only.GetItem().Cast();
                 }
                 if (ItemData.Tiamat_Melee_Only.GetItem().IsReady()
-                    && ItemData.Tiamat_Melee_Only.Range < Player.LSDistance(target))
+                    && ItemData.Tiamat_Melee_Only.Range < Player.Distance(target))
                 {
                     ItemData.Tiamat_Melee_Only.GetItem().Cast();
                 }
@@ -402,7 +402,7 @@
 
             if (IsActive("ElTrundle.Items.Titanic"))
             {
-                if (Items.HasItem(3748) && Player.LSDistance(target) < 400)
+                if (Items.HasItem(3748) && Player.Distance(target) < 400)
                 {
                     Items.UseItem(3748, target);
                 }
@@ -411,13 +411,13 @@
             if (IsActive("ElTrundle.Items.Blade"))
             {
                 if (ItemData.Blade_of_the_Ruined_King.GetItem().IsReady()
-                    && ItemData.Blade_of_the_Ruined_King.Range < Player.LSDistance(target))
+                    && ItemData.Blade_of_the_Ruined_King.Range < Player.Distance(target))
                 {
                     ItemData.Blade_of_the_Ruined_King.GetItem().Cast(target);
                 }
 
                 if (ItemData.Bilgewater_Cutlass.GetItem().IsReady()
-                    && ItemData.Bilgewater_Cutlass.Range < Player.LSDistance(target))
+                    && ItemData.Bilgewater_Cutlass.Range < Player.Distance(target))
                 {
                     ItemData.Bilgewater_Cutlass.GetItem().Cast(target);
                 }
@@ -428,7 +428,7 @@
                 if (IsActive("ElTrundle.Items.Youmuu"))
                 {
                     if (ItemData.Youmuus_Ghostblade.GetItem().IsReady()
-                        && Orbwalking.GetRealAutoAttackRange(Player) < Player.LSDistance(target))
+                        && Orbwalking.GetRealAutoAttackRange(Player) < Player.Distance(target))
                     {
                         ItemData.Youmuus_Ghostblade.GetItem().Cast();
                     }
@@ -438,7 +438,7 @@
 
         private static Vector2 V2E(Vector3 from, Vector3 direction, float distance)
         {
-            return from.LSTo2D() + distance * Vector3.Normalize(direction - from).LSTo2D();
+            return from.To2D() + distance * Vector3.Normalize(direction - from).To2D();
         }
 
         #endregion

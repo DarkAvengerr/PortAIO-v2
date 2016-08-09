@@ -135,8 +135,8 @@ using EloBuddy;
                 RStart = start;
                 REnd = end;
                 Width = width;
-                Direction = (end - start).LSNormalized();
-                Perpendicular = Direction.LSPerpendicular();
+                Direction = (end - start).Normalized();
+                Perpendicular = Direction.Perpendicular();
             }
 
             /// <summary>
@@ -195,11 +195,11 @@ using EloBuddy;
                     var outRadius = Radius / (float)Math.Cos(2 * Math.PI / CircleLineSegmentN);
 
                     result.Add(Center);
-                    var Side1 = Direction.LSRotated(-Angle * 0.5f);
+                    var Side1 = Direction.Rotated(-Angle * 0.5f);
 
                     for (var i = 0; i <= CircleLineSegmentN; i++)
                     {
-                        var cDirection = Side1.LSRotated(i * Angle / CircleLineSegmentN).LSNormalized();
+                        var cDirection = Side1.Rotated(i * Angle / CircleLineSegmentN).Normalized();
                         result.Add(new Vector2(Center.X + outRadius * cDirection.X, Center.Y + outRadius * cDirection.Y));
                     }
 
@@ -288,7 +288,7 @@ using EloBuddy;
 
                     float rotAngle = (float)Math.Atan2(Direction.Y - v1.Y, Direction.X - v1.X) - (float)(Math.PI * 180.0 / 180.0);
                     for (double a = 0; a <= Angle; a += aStep)
-                        result.Add(new Vector2(Center.X + (float)Math.Cos(a) * Width, Center.Y - (float)Math.Sin(a) * Height).LSRotateAroundPoint(v1, rotAngle));
+                        result.Add(new Vector2(Center.X + (float)Math.Cos(a) * Width, Center.Y - (float)Math.Sin(a) * Height).RotateAroundPoint(v1, rotAngle));
 
                     return result;
                 }
@@ -309,10 +309,10 @@ using EloBuddy;
             {
                 var from = self[i];
                 var to = self[i + 1];
-                var d = (int)to.LSDistance(from);
+                var d = (int)to.Distance(from);
                 if (d > distance)
                 {
-                    return from + distance * (to - from).LSNormalized();
+                    return from + distance * (to - from).Normalized();
                 }
                 distance -= d;
             }
@@ -330,7 +330,7 @@ using EloBuddy;
         internal static Vector2 ClosestCirclePoint(Vector2 center, float radius, Vector2 pointStart, Vector2 pointEnd)
         {
             Vector2 point;
-            if (pointStart.LSDistance(center) < pointEnd.LSDistance(center))
+            if (pointStart.Distance(center) < pointEnd.Distance(center))
                 point = pointStart;
             else
                 point = pointEnd;

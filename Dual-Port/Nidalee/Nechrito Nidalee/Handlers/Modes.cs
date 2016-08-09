@@ -19,42 +19,42 @@ using EloBuddy;
             var SwipePred = Champion.Swipe.GetPrediction(Target);
             var PouncePred = Champion.Pounce.GetPrediction(Target);
             var bushW = Champion.Bushwack.GetPrediction(Target).UnitPosition;
-            var Hunted = Player.LSHasBuff("NidaleePassiveHunted") || Player.LSHasBuff("exposeweaknessdebuff") || Target.LSHasBuff("NidaleePassiveHunted") || Target.LSHasBuff("exposeweaknessdebuff");
+            var Hunted = Player.HasBuff("NidaleePassiveHunted") || Player.HasBuff("exposeweaknessdebuff") || Target.HasBuff("NidaleePassiveHunted") || Target.HasBuff("exposeweaknessdebuff");
 
             // The full 1v1 rotation
-            if ((Player.LSDistance(Target.Position) <= 1500) && Target != null && Target.LSIsValidTarget())
+            if ((Player.Distance(Target.Position) <= 1500) && Target != null && Target.IsValidTarget())
             {
-                if (CatForm() && Champion.Aspect.LSIsReady() && !Hunted)
+                if (CatForm() && Champion.Aspect.IsReady() && !Hunted)
                 {
                     Champion.Aspect.Cast();
                 }
-                if (CatForm() && Champion.Pounce.LSIsReady() && !Target.LSUnderTurret() && Target.LSDistance(Player) <= 750 && Hunted)
+                if (CatForm() && Champion.Pounce.IsReady() && !Target.UnderTurret() && Target.Distance(Player) <= 750 && Hunted)
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Target);
                     Champion.Pounce.Cast(Target);
                 }
-                if (!CatForm() && Champion.Bushwack.LSIsReady() && Player.ManaPercent >= 30 && (Player.LSDistance(Target.Position) <= Champion.Bushwack.Range))
+                if (!CatForm() && Champion.Bushwack.IsReady() && Player.ManaPercent >= 30 && (Player.Distance(Target.Position) <= Champion.Bushwack.Range))
                 {
                     Champion.Bushwack.Cast(Target.ServerPosition - 75);
                 }
-               if (!CatForm() && Champion.Javelin.LSIsReady() && QPred.Hitchance >= HitChance.VeryHigh && QPred.Hitchance != HitChance.Collision)
+               if (!CatForm() && Champion.Javelin.IsReady() && QPred.Hitchance >= HitChance.VeryHigh && QPred.Hitchance != HitChance.Collision)
                 {
                     Champion.Javelin.Cast(QPred.CastPosition);
                 }
-                if(!CatForm() && Champion.Primalsurge.LSIsReady() && Player.HealthPercent <= 85)
+                if(!CatForm() && Champion.Primalsurge.IsReady() && Player.HealthPercent <= 85)
                 {
                     Champion.Primalsurge.Cast(Player);
                 }
-                if (!CatForm() && Champion.Aspect.LSIsReady() && !Champion.Javelin.LSIsReady() && (Player.LSDistance(Target.Position) <= 325) || Hunted)
+                if (!CatForm() && Champion.Aspect.IsReady() && !Champion.Javelin.IsReady() && (Player.Distance(Target.Position) <= 325) || Hunted)
                 {
                     Champion.Aspect.Cast();
                 }
-                if (CatForm() && Target.LSDistance(Player) <= 300 && Champion.Swipe.LSIsReady())
+                if (CatForm() && Target.Distance(Player) <= 300 && Champion.Swipe.IsReady())
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Target);
                     Champion.Swipe.Cast(SwipePred.CastPosition);
                 }
-                if (CatForm() && Champion.Pounce.LSIsReady() && !Target.LSUnderTurret() && Target.LSDistance(Player) <= 370 && !Hunted)
+                if (CatForm() && Champion.Pounce.IsReady() && !Target.UnderTurret() && Target.Distance(Player) <= 370 && !Hunted)
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Target);
                     Champion.Pounce.Cast(PouncePred.CastPosition);
@@ -69,9 +69,9 @@ using EloBuddy;
         {
             var Target = TargetSelector.GetTarget(1500, TargetSelector.DamageType.Magical);
             var QPred = Champion.Javelin.GetPrediction(Target);
-            if (Target != null && Target.LSIsValidTarget() && !Target.IsZombie)
+            if (Target != null && Target.IsValidTarget() && !Target.IsZombie)
             {
-                if (!CatForm() && Champion.Javelin.LSIsReady() && QPred.Hitchance >= HitChance.VeryHigh && QPred.Hitchance != HitChance.Collision)
+                if (!CatForm() && Champion.Javelin.IsReady() && QPred.Hitchance >= HitChance.VeryHigh && QPred.Hitchance != HitChance.Collision)
                 {
                     Champion.Javelin.Cast(QPred.CastPosition);
                 }
@@ -82,7 +82,7 @@ using EloBuddy;
             var minions = MinionManager.GetMinions(600f).FirstOrDefault();
             if (minions == null) return;
 
-            if (!CatForm() && minions.LSDistance(Player) <= 325)
+            if (!CatForm() && minions.Distance(Player) <= 325)
             { Champion.Aspect.Cast(); }
 
             if (!CatForm()) return;
@@ -113,7 +113,7 @@ using EloBuddy;
 
             foreach (var m in mobs)
             {
-                if(CatForm() && m.Health < (float)Program.Player.LSGetAutoAttackDamage(m) && m.LSDistance(Player) > 300)
+                if(CatForm() && m.Health < (float)Program.Player.GetAutoAttackDamage(m) && m.Distance(Player) > 300)
                 {
                     Champion.Aspect.Cast();
                 }
@@ -122,32 +122,32 @@ using EloBuddy;
                 if (!CatForm() && Player.HealthPercent <= MenuConfig.jnglHeal.Value)
                     Champion.Primalsurge.Cast(Player);
 
-                if (!CatForm() && Champion.Bushwack.LSIsReady() && (float)Player.LSGetAutoAttackDamage(m) > m.Health)
+                if (!CatForm() && Champion.Bushwack.IsReady() && (float)Player.GetAutoAttackDamage(m) > m.Health)
                 {
                     Champion.Bushwack.Cast(m.ServerPosition);
                 }
-                if (!CatForm() && Champion.Aspect.LSIsReady())
+                if (!CatForm() && Champion.Aspect.IsReady())
                 {
                     Champion.Aspect.Cast();
                 }
-                if (CatForm() && Champion.Swipe.LSIsReady() && m.LSDistance(Player) < 200)
+                if (CatForm() && Champion.Swipe.IsReady() && m.Distance(Player) < 200)
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, m);
                     Champion.Swipe.Cast(m.ServerPosition);
                 }
-                if (CatForm() && Champion.Pounce.LSIsReady())
+                if (CatForm() && Champion.Pounce.IsReady())
                 {
                     Champion.Pounce.Cast(m);
                 }
-                if (CatForm() && Champion.Takedown.LSIsReady())
+                if (CatForm() && Champion.Takedown.IsReady())
                 {
                     Champion.Takedown.Cast(m);
                 }
-                if (CatForm() && Champion.Aspect.LSIsReady())
+                if (CatForm() && Champion.Aspect.IsReady())
                 {
                     Champion.Aspect.Cast();
                 }
-                if (!CatForm() && Champion.Aspect.LSIsReady())
+                if (!CatForm() && Champion.Aspect.IsReady())
                 {
                     Champion.Aspect.Cast();
                 }
@@ -160,21 +160,21 @@ using EloBuddy;
                 return;
             }
             var IsWallDash = FleeLogic.IsWallDash(Player.ServerPosition, Champion.Pounce.Range);
-            var end = Player.ServerPosition.LSExtend(Game.CursorPos, Champion.Pounce.Range);
+            var end = Player.ServerPosition.Extend(Game.CursorPos, Champion.Pounce.Range);
             var WallPoint = FleeLogic.GetFirstWallPoint(Player.ServerPosition, end);
 
 
-            if (IsWallDash && Champion.Pounce.LSIsReady())
+            if (IsWallDash && Champion.Pounce.IsReady())
             {
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, WallPoint);
             }
-            if (IsWallDash && Champion.Pounce.LSIsReady() && WallPoint.LSDistance(Player.ServerPosition) <= 800)
+            if (IsWallDash && Champion.Pounce.IsReady() && WallPoint.Distance(Player.ServerPosition) <= 800)
             {
-                if (!(WallPoint.LSDistance(Player.ServerPosition) <= 600)) return;
+                if (!(WallPoint.Distance(Player.ServerPosition) <= 600)) return;
 
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, WallPoint);
 
-                if (!(WallPoint.LSDistance(Player.ServerPosition) < 50) || !Champion.Pounce.LSIsReady()) return;
+                if (!(WallPoint.Distance(Player.ServerPosition) < 50) || !Champion.Pounce.IsReady()) return;
 
                 if (!CatForm())
                 {

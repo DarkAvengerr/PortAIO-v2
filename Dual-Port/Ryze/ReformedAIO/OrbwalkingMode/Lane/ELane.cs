@@ -63,7 +63,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Lane
             if (minions == null) return;
 
             if (this.Menu.Item(this.Menu.Name + "LaneEEnemy").GetValue<bool>()
-                && minions.Any(m => m.LSCountEnemiesInRange(1750) > 0))
+                && minions.Any(m => m.CountEnemiesInRange(1750) > 0))
             {
                 return;
             }
@@ -71,7 +71,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Lane
             foreach (var m in minions)
             {
                 if (this.eLogic.RyzeE(m)
-                    || m.Health > Variable.Player.LSGetAutoAttackDamage(m)
+                    || m.Health > Variable.Player.GetAutoAttackDamage(m)
                     && m.Health > Variable.Spells[SpellSlot.E].GetDamage(m))
                 {
                     Variable.Spells[SpellSlot.E].Cast(m);
@@ -82,7 +82,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Lane
         private void OnUpdate(EventArgs args)
         {
             if (Variable.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
-                || !Variable.Spells[SpellSlot.E].LSIsReady()) return;
+                || !Variable.Spells[SpellSlot.E].IsReady()) return;
 
             if (this.Menu.Item(this.Menu.Name + "LaneEMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
 

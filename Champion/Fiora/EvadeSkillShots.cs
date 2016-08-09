@@ -36,15 +36,15 @@ namespace FioraProject
             if (skillshot != null)
             {
                 var target = GetTarget(W.Range);
-                if (target.LSIsValidTarget(W.Range))
+                if (target.IsValidTarget(W.Range))
                     Player.Spellbook.CastSpell(parry.Slot, target.Position);
                 else
                 {
-                    var hero = HeroManager.Enemies.FirstOrDefault(x => x.LSIsValidTarget(W.Range));
+                    var hero = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(W.Range));
                     if (hero != null)
                         Player.Spellbook.CastSpell(parry.Slot, hero.Position);
                     else
-                        Player.Spellbook.CastSpell(parry.Slot, Player.ServerPosition.LSExtend(skillshot.Start.To3D(), 100));
+                        Player.Spellbook.CastSpell(parry.Slot, Player.ServerPosition.Extend(skillshot.Start.To3D(), 100));
                 }
             }
         }

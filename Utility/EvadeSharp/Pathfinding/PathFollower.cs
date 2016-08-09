@@ -27,7 +27,7 @@ using EloBuddy; namespace Evade.Pathfinding
         {
             if (Path.Count > 0)
             {
-                while (Path.Count > 0 && Program.PlayerPosition.LSDistance(Path[0]) < 80)
+                while (Path.Count > 0 && Program.PlayerPosition.Distance(Path[0]) < 80)
                 {
                     Path.RemoveAt(0);
                 }

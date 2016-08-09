@@ -84,7 +84,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                             Menu.Item(Name + "DrawAlly").GetValue<bool>() && hero.IsAlly ||
                             Menu.Item(Name + "DrawEnemy").GetValue<bool>() && hero.IsEnemy))
                 {
-                    _waypoints[hero.NetworkId] = hero.LSGetWaypoints();
+                    _waypoints[hero.NetworkId] = hero.GetWaypoints();
                 }
             }
             catch (Exception ex)
@@ -105,7 +105,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                     var arrivalTime = 0.0f;
                     for (int i = 0, l = waypoints.Count - 1; i < l; i++)
                     {
-                        if (!waypoints[i].LSIsValid() || !waypoints[i + 1].LSIsValid())
+                        if (!waypoints[i].IsValid() || !waypoints[i + 1].IsValid())
                         {
                             continue;
                         }

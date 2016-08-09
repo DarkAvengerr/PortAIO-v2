@@ -107,7 +107,7 @@ using EloBuddy;
             var barcolor = System.Drawing.Color.FromArgb(100, 0, 220, 0);
             var barcolorline = System.Drawing.Color.WhiteSmoke;
             if (combodamage + Mechanics.Spells[SpellSlot.Q].Damage(enemy) +
-                EntryPoint.Player.LSGetAutoAttackDamage(enemy) * 2 > enemy.Health)
+                EntryPoint.Player.GetAutoAttackDamage(enemy) * 2 > enemy.Health)
             {
                 killText = "Killable by: Full Combo + 1Q + 2AA";
                 if (combodamage >= enemy.Health)
@@ -165,13 +165,13 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(
                         Mechanics.Spells[SpellSlot.SphereE].Range, TargetSelector.DamageType.Magical);
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 if (classic)
                 {
                     Drawing.DrawCircle(
                         Game.CursorPos, 150f,
-                        (target.LSDistance(Game.CursorPos, true) <= 22500)
+                        (target.Distance(Game.CursorPos, true) <= 22500)
                             ? System.Drawing.Color.Red
                             : EntryPoint.Menu.Item("l33t.stds.drawing.drawQEC").GetValue<Circle>().Color);
                 }
@@ -179,7 +179,7 @@ using EloBuddy;
                 {
                     Render.Circle.DrawCircle(
                         Game.CursorPos, 150f,
-                        (target.LSDistance(Game.CursorPos, true) <= 22500)
+                        (target.Distance(Game.CursorPos, true) <= 22500)
                             ? System.Drawing.Color.Red
                             : EntryPoint.Menu.Item("l33t.stds.drawing.drawQEC").GetValue<Circle>().Color);
                 }
@@ -218,7 +218,7 @@ using EloBuddy;
         {
             var qeTarget = TargetSelector.GetTarget(
                         Mechanics.Spells[SpellSlot.SphereE].Range, TargetSelector.DamageType.Magical);
-            if (qeTarget.LSIsValidTarget())
+            if (qeTarget.IsValidTarget())
             {
                 var sPos =
                     Prediction.GetPrediction(
@@ -226,7 +226,7 @@ using EloBuddy;
                         .UnitPosition;
                 var tPos = Mechanics.Spells[SpellSlot.SphereE].Instance.GetPrediction(qeTarget);
                 if (tPos != null &&
-                    EntryPoint.Player.LSDistance(sPos, true) > Math.Pow(Mechanics.Spells[SpellSlot.E].Range, 2) &&
+                    EntryPoint.Player.Distance(sPos, true) > Math.Pow(Mechanics.Spells[SpellSlot.E].Range, 2) &&
                     (Mechanics.Spells[SpellSlot.E].IsReady() ||
                      Mechanics.Spells[SpellSlot.E].Instance.Instance.CooldownExpires - Game.Time < 2) &&
                     Mechanics.Spells[SpellSlot.E].Level > 0)
@@ -237,7 +237,7 @@ using EloBuddy;
                               Mechanics.Spells[SpellSlot.E].Range;
                     Mechanics.Spells[SpellSlot.SphereE].Instance.Delay = Mechanics.Spells[SpellSlot.Q].Delay +
                                                                          Mechanics.Spells[SpellSlot.E].Delay +
-                                                                         EntryPoint.Player.LSDistance(orb) /
+                                                                         EntryPoint.Player.Distance(orb) /
                                                                          Mechanics.Spells[SpellSlot.E].Instance
                                                                              .Speed;
                     if (tPos.Hitchance >= HitChance.Medium)
@@ -279,7 +279,7 @@ using EloBuddy;
                 TargetSelector.GetTarget(
                     Mechanics.Spells[SpellSlot.W].Range + Mechanics.Spells[SpellSlot.W].Instance.Width,
                     TargetSelector.DamageType.Magical);
-            if (wTarget.LSIsValidTarget())
+            if (wTarget.IsValidTarget())
             {
                 var pos2 = Mechanics.Spells[SpellSlot.W].Instance.GetPrediction(wTarget, true);
                 if (pos2.Hitchance >= HitChance.High)
@@ -307,7 +307,7 @@ using EloBuddy;
 
             Font.DrawText(
                 Sprite,
-                "Close Minion Count: " + (minions != null ? minions.Count(m => m.LSIsValidTarget(475f)) : 0),
+                "Close Minion Count: " + (minions != null ? minions.Count(m => m.IsValidTarget(475f)) : 0),
                 (int)(Drawing.Width * 0.90f), (int)(Drawing.Height * 0.64f), Color.White);
             Font.DrawText(
                 Sprite, "Minion Count: " + (minions != null ? minions.Count() : 0),

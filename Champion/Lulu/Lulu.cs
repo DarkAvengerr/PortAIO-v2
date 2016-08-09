@@ -200,7 +200,7 @@ namespace LuluLicious
 
         public override void OnCombo(Orbwalking.OrbwalkingMode mode)
         {
-            if (W.IsActive() && !W.HasManaCondition() && W.LSIsReady() && Menu.Item("WPriority").IsActive())
+            if (W.IsActive() && !W.HasManaCondition() && W.IsReady() && Menu.Item("WPriority").IsActive())
             {
                 var wTarg = Utility.GetBestWTarget();
                 if (wTarg != null && W.CanCast(wTarg) && W.CastOnUnit(wTarg))
@@ -212,7 +212,7 @@ namespace LuluLicious
 
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical) ?? Pix.GetTarget();
 
-            if (!target.LSIsValidTarget() || !SpellManager.Q.IsInRange(target))
+            if (!target.IsValidTarget() || !SpellManager.Q.IsInRange(target))
             {
                 PixCombo();
                 return;
@@ -229,18 +229,18 @@ namespace LuluLicious
                 return;
             }
 
-            if (Q.LSIsReady() && W.IsActive() && !W.HasManaCondition() && W.CanCast(target) && W.CastOnUnit(target))
+            if (Q.IsReady() && W.IsActive() && !W.HasManaCondition() && W.CanCast(target) && W.CastOnUnit(target))
             {
                 Console.WriteLine("[Combo] Cast W");
                 return;
             }
 
-            if (!Q.IsActive() || !Q.LSIsReady() || Q.HasManaCondition())
+            if (!Q.IsActive() || !Q.IsReady() || Q.HasManaCondition())
             {
                 return;
             }
 
-            if (Q.Cast(target).LSIsCasted())
+            if (Q.Cast(target).IsCasted())
             {
                 Console.WriteLine("[Combo] Cast Q");
             }
@@ -248,16 +248,16 @@ namespace LuluLicious
 
         private static bool PixCombo(AIHeroClient target, bool useQ, bool useE, bool killSteal = false)
         {
-            if (!target.LSIsValidTarget() || !Pix.IsValid())
+            if (!target.IsValidTarget() || !Pix.IsValid())
             {
                 return false;
             }
 
-            useQ &= Q.LSIsReady() && (killSteal || !Q.HasManaCondition());
-            useE &= useQ && E.LSIsReady() && (killSteal || !E.HasManaCondition()) &&
+            useQ &= Q.IsReady() && (killSteal || !Q.HasManaCondition());
+            useE &= useQ && E.IsReady() && (killSteal || !E.HasManaCondition()) &&
                     Player.Mana > ManaCostDictionary[Q.Slot][Q.Level] + ManaCostDictionary[E.Slot][E.Level];
 
-            if (useQ && SpellManager.PixQ.IsInRange(target) && SpellManager.PixQ.Cast(target).LSIsCasted())
+            if (useQ && SpellManager.PixQ.IsInRange(target) && SpellManager.PixQ.Cast(target).IsCasted())
             {
                 Console.WriteLine("[Pix] Cast Q");
                 return true;
@@ -287,7 +287,7 @@ namespace LuluLicious
 
         public override void OnFarm(Orbwalking.OrbwalkingMode mode)
         {
-            if (!Menu.Item("QFarm").IsActive() || !Q.LSIsReady() || Q.HasManaCondition())
+            if (!Menu.Item("QFarm").IsActive() || !Q.IsReady() || Q.HasManaCondition())
             {
                 return;
             }
@@ -302,7 +302,7 @@ namespace LuluLicious
             var qMinions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly);
             var killable = qMinions.FirstOrDefault(o => o.Health < Q.GetDamage(o));
 
-            if (killable != null && !killable.CanAAKill() && Q.Cast(killable).LSIsCasted())
+            if (killable != null && !killable.CanAAKill() && Q.Cast(killable).IsCasted())
             {
                 return;
             }
@@ -311,7 +311,7 @@ namespace LuluLicious
             killable = pixMinions.FirstOrDefault(o => o.Health < Q.GetDamage(o));
 
             if (Pix.IsValid() && killable != null && !killable.CanAAKill() &&
-                SpellManager.PixQ.Cast(killable).LSIsCasted())
+                SpellManager.PixQ.Cast(killable).IsCasted())
             {
                 return;
             }
@@ -342,7 +342,7 @@ namespace LuluLicious
                 return;
             }
 
-            if (Player.LSIsRecalling())
+            if (Player.IsRecalling())
             {
                 return;
             }
@@ -383,8 +383,8 @@ namespace LuluLicious
             }
 
             var mana = Player.Mana;
-            var useQ = Menu.Item("KSQ").IsActive() && Q.LSIsReady();
-            var useE = Menu.Item("KSE").IsActive() && E.LSIsReady();
+            var useQ = Menu.Item("KSQ").IsActive() && Q.IsReady();
+            var useE = Menu.Item("KSE").IsActive() && E.IsReady();
             var useEQ = Menu.Item("KSEQ").IsActive() && Player.Mana > Q.ManaCost + E.ManaCost;
 
             if (!useQ && !useE)
@@ -393,7 +393,7 @@ namespace LuluLicious
             }
 
             foreach (var enemy in
-                Enemies.Where(e => e.LSIsValidTarget(E.Range + Q.Range) && !e.IsZombie).OrderBy(e => e.Health))
+                Enemies.Where(e => e.IsValidTarget(E.Range + Q.Range) && !e.IsZombie).OrderBy(e => e.Health))
             {
                 var qDmg = Q.GetDamage(enemy);
                 var eDmg = E.GetDamage(enemy);
@@ -413,7 +413,7 @@ namespace LuluLicious
                 }
 
 
-                if (useQ && qDmg > enemy.Health && Q.IsInRange(enemy) && Q.Cast(enemy).LSIsCasted())
+                if (useQ && qDmg > enemy.Health && Q.IsInRange(enemy) && Q.Cast(enemy).IsCasted())
                 {
                     return true;
                 }
@@ -429,20 +429,20 @@ namespace LuluLicious
 
         private static bool Saver()
         {
-            if (Player.LSInFountain())
+            if (Player.InFountain())
             {
                 return false;
             }
 
-            var useE = Menu.Item("EAuto").IsActive() && E.LSIsReady();
-            var useR = Menu.Item("RAuto").IsActive() && R.LSIsReady();
+            var useE = Menu.Item("EAuto").IsActive() && E.IsReady();
+            var useR = Menu.Item("RAuto").IsActive() && R.IsReady();
 
             if (!useE && !useR)
             {
                 return false;
             }
 
-            foreach (var ally in Allies.Where(h => h.LSIsValidTarget(R.Range, false) && h.LSCountEnemiesInRange(300) > 0))
+            foreach (var ally in Allies.Where(h => h.IsValidTarget(R.Range, false) && h.CountEnemiesInRange(300) > 0))
             {
                 var hp = ally.GetPredictedHealthPercent();
 
@@ -464,13 +464,13 @@ namespace LuluLicious
 
         private static bool AutoQ()
         {
-            return Menu.Item("QImpaired").IsActive() && Q.LSIsReady() &&
-                   Enemies.Any(e => e.LSIsValidTarget(Q.Range) && e.IsMovementImpaired() && Q.Cast(e).LSIsCasted());
+            return Menu.Item("QImpaired").IsActive() && Q.IsReady() &&
+                   Enemies.Any(e => e.IsValidTarget(Q.Range) && e.IsMovementImpaired() && Q.Cast(e).IsCasted());
         }
 
         private static bool Superman()
         {
-            if (!Menu.Item("Superman").IsActive() || !(W.LSIsReady() || E.LSIsReady()))
+            if (!Menu.Item("Superman").IsActive() || !(W.IsReady() || E.IsReady()))
             {
                 return false;
             }
@@ -483,20 +483,20 @@ namespace LuluLicious
                 return false;
             }
 
-            if (W.LSIsReady() && W.IsInRange(target) && W.CastOnUnit(target)) {}
+            if (W.IsReady() && W.IsInRange(target) && W.CastOnUnit(target)) {}
 
-            return E.LSIsReady() && E.IsInRange(target) && E.CastOnUnit(target);
+            return E.IsReady() && E.IsInRange(target) && E.CastOnUnit(target);
         }
 
         private static bool AutoR()
         {
-            if (!R.LSIsReady() || Player.LSInFountain())
+            if (!R.IsReady() || Player.InFountain())
             {
                 return false;
             }
 
             if (Menu.Item("RForce").IsActive() &&
-                Allies.Where(h => h.LSIsValidTarget(R.Range, false)).OrderBy(o => o.Health).Any(o => R.CastOnUnit(o)))
+                Allies.Where(h => h.IsValidTarget(R.Range, false)).OrderBy(o => o.Health).Any(o => R.CastOnUnit(o)))
             {
                 return true;
             }
@@ -509,9 +509,9 @@ namespace LuluLicious
 
             var count = 0;
             var bestAlly = Player;
-            foreach (var ally in Allies.Where(a => a.LSIsValidTarget(R.Range, false)))
+            foreach (var ally in Allies.Where(a => a.IsValidTarget(R.Range, false)))
             {
-                var c = ally.LSCountEnemiesInRange(RRadius);
+                var c = ally.CountEnemiesInRange(RRadius);
 
                 if (c <= count)
                 {
@@ -532,19 +532,19 @@ namespace LuluLicious
                 return false;
             }
 
-            if (Player.LSIsDashing())
+            if (Player.IsDashing())
             {
                 return true;
             }
 
             Orbwalker.ActiveMode = Orbwalking.OrbwalkingMode.None;
 
-            if (Menu.Item("FleeW").IsActive() && W.LSIsReady() && W.CastOnUnit(Player))
+            if (Menu.Item("FleeW").IsActive() && W.IsReady() && W.CastOnUnit(Player))
             {
                 return true;
             }
 
-            if (!Menu.Item("FleeMove").IsActive() || Player.LSGetWaypoints().Last().LSDistance(Game.CursorPos) < 100)
+            if (!Menu.Item("FleeMove").IsActive() || Player.GetWaypoints().Last().Distance(Game.CursorPos) < 100)
             {
                 return true;
             }
@@ -574,7 +574,7 @@ namespace LuluLicious
                 return;
             }
 
-            if (!(Menu.Item("EAuto").IsActive() && E.LSIsReady()) || !(Menu.Item("RAuto").IsActive() && R.LSIsReady()))
+            if (!(Menu.Item("EAuto").IsActive() && E.IsReady()) || !(Menu.Item("RAuto").IsActive() && R.IsReady()))
             {
                 return;
             }
@@ -596,7 +596,7 @@ namespace LuluLicious
             var damage = 0d;
             try
             {
-                damage = caster.LSGetSpellDamage(target, args.SData.Name);
+                damage = caster.GetSpellDamage(target, args.SData.Name);
                 Console.WriteLine("DMG : " + damage);
             }
             catch {}
@@ -635,7 +635,7 @@ namespace LuluLicious
         public override void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if (!Menu.Item("Support").GetValue<bool>() ||
-                !HeroManager.Allies.Any(x => x.LSIsValidTarget(1000, false) && !x.IsMe))
+                !HeroManager.Allies.Any(x => x.IsValidTarget(1000, false) && !x.IsMe))
             {
                 return;
             }
@@ -647,7 +647,7 @@ namespace LuluLicious
             }
 
             var minion = args.Target as Obj_AI_Base;
-            if (minion != null && minion.IsMinion && minion.LSIsValidTarget())
+            if (minion != null && minion.IsMinion && minion.IsValidTarget())
             {
                 args.Process = false;
             }
@@ -656,7 +656,7 @@ namespace LuluLicious
         public void CustomInterrupter_OnInterruptableTarget(AIHeroClient sender,
             CustomInterrupter.InterruptableTargetEventArgs args)
         {
-            if (sender == null || !sender.LSIsValidTarget())
+            if (sender == null || !sender.IsValidTarget())
             {
                 return;
             }
@@ -671,19 +671,19 @@ namespace LuluLicious
                 return;
             }
 
-            if (!Menu.Item("RInterrupter").IsActive() || !R.LSIsReady())
+            if (!Menu.Item("RInterrupter").IsActive() || !R.IsReady())
             {
                 return;
             }
 
             if (
-                Allies.OrderBy(h => h.LSDistance(sender))
-                    .Any(h => h.LSIsValidTarget(R.Range, false) && h.LSDistance(sender) < RRadius && R.CastOnUnit(h))) {}
+                Allies.OrderBy(h => h.Distance(sender))
+                    .Any(h => h.IsValidTarget(R.Range, false) && h.Distance(sender) < RRadius && R.CastOnUnit(h))) {}
         }
 
         private static void CustomAntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (!gapcloser.Sender.LSIsValidTarget())
+            if (!gapcloser.Sender.IsValidTarget())
             {
                 return;
             }

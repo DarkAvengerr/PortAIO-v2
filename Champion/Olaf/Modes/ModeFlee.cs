@@ -52,9 +52,9 @@ namespace Olaf.Modes
             
 
             var t = TargetSelector.GetTarget(Champion.PlayerSpells.Q.Range, TargetSelector.DamageType.Physical);
-            if (t.LSIsValidTarget())
+            if (t.IsValidTarget())
             {
-                if (MenuLocal.Item("Flee.UseQ").GetValue<StringList>().SelectedIndex == 1 && Champion.PlayerSpells.Q.LSIsReady())
+                if (MenuLocal.Item("Flee.UseQ").GetValue<StringList>().SelectedIndex == 1 && Champion.PlayerSpells.Q.IsReady())
                 {
                     Champion.PlayerSpells.CastQ(t, Champion.PlayerSpells.Q.Range);
                 }

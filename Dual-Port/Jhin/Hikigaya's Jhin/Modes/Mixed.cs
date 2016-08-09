@@ -14,7 +14,7 @@ using EloBuddy;
         /// </summary>
         private static void ExecuteW()
         {
-            foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Spells.W.Range)))
+            foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.W.Range)))
             {
                 var pred = Spells.W.GetPrediction(enemy);
                 if (pred.Hitchance >= Menus.Config.HikiChance("w.hit.chance"))
@@ -34,7 +34,7 @@ using EloBuddy;
                 return;
             }
 
-            if (Spells.W.LSIsReady() && Menus.Config.Item("w.harass").GetValue<bool>())
+            if (Spells.W.IsReady() && Menus.Config.Item("w.harass").GetValue<bool>())
             {
                 ExecuteW();
             }

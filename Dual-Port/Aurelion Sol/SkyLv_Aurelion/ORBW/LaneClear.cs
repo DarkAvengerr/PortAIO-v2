@@ -81,11 +81,11 @@ using EloBuddy;
 
             var Minion = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy).FirstOrDefault();
 
-            if (Minion.LSIsValidTarget() && SkyLv_AurelionSol.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            if (Minion.IsValidTarget() && SkyLv_AurelionSol.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-                if (SkyLv_AurelionSol.Menu.Item("AurelionSol.SafeLaneClear").GetValue<bool>() && Player.LSCountEnemiesInRange(1500) > 0) return;
+                if (SkyLv_AurelionSol.Menu.Item("AurelionSol.SafeLaneClear").GetValue<bool>() && Player.CountEnemiesInRange(1500) > 0) return;
 
-                if (useQ && Player.ManaPercent > MiniManaQ && Q.LSIsReady())
+                if (useQ && Player.ManaPercent > MiniManaQ && Q.IsReady())
                 {
                     var allMinionsQ = MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Enemy);
 
@@ -99,7 +99,7 @@ using EloBuddy;
                     }
                 }
 
-                if (useW && W1.LSIsReady())
+                if (useW && W1.IsReady())
                 {
                     var allMinionsW1 = MinionManager.GetMinions(Player.Position + W1.Range - 20, W1.Range + 20, MinionTypes.All, MinionTeam.Enemy);
                     var allMinionsW2 = MinionManager.GetMinions(Player.Position + W2.Range - 20, W2.Range + 20, MinionTypes.All, MinionTeam.Enemy);

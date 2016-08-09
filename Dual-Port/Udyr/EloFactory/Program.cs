@@ -164,30 +164,30 @@ using EloBuddy; namespace EloFactory_Udyr
             ManaManager();
             PotionManager();
 
-            if (!Player.LSInFountain() && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LastHit && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed &&
-                Config.Item("Udyr.AutoEMovement").GetValue<bool>() && Player.ManaPercent >= Config.Item("Udyr.AutoEMovementMana").GetValue<Slider>().Value && E.LSIsReady() && Player.LSCountEnemiesInRange(700) == 0)
+            if (!Player.InFountain() && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LastHit && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed &&
+                Config.Item("Udyr.AutoEMovement").GetValue<bool>() && Player.ManaPercent >= Config.Item("Udyr.AutoEMovementMana").GetValue<Slider>().Value && E.IsReady() && Player.CountEnemiesInRange(700) == 0)
             {
                 E.Cast();
             }
 
-            if (Config.Item("Udyr.StackPassiveInFountain").GetValue<bool>() && ObjectManager.Player.LSInFountain() && Player.ManaPercent >= Config.Item("Udyr.StackPassiveInFountainMinMana").GetValue<Slider>().Value)
+            if (Config.Item("Udyr.StackPassiveInFountain").GetValue<bool>() && ObjectManager.Player.InFountain() && Player.ManaPercent >= Config.Item("Udyr.StackPassiveInFountainMinMana").GetValue<Slider>().Value)
             {
 
                 var buffEndTime = Config.Item("Udyr.StackPassiveInFountainKeepBuffUp").GetValue<bool>() ? float.MaxValue : GetPassiveBuffTimer(Player);
 
-                if (Q.LSIsReady() && (MonkeyAgility != 3 || buffEndTime > Game.Time + (buffEndTime / 2)))
+                if (Q.IsReady() && (MonkeyAgility != 3 || buffEndTime > Game.Time + (buffEndTime / 2)))
                 {
                     Q.Cast();
                     return;
                 }
 
-                if (W.LSIsReady() && !Q.LSIsReady() && (MonkeyAgility != 3 || buffEndTime > Game.Time + (buffEndTime / 2)))
+                if (W.IsReady() && !Q.IsReady() && (MonkeyAgility != 3 || buffEndTime > Game.Time + (buffEndTime / 2)))
                 {
                     W.Cast();
                     return;
                 }
 
-                if (R.LSIsReady() && !Q.LSIsReady() && !W.LSIsReady() && (MonkeyAgility != 3 || buffEndTime > Game.Time + (buffEndTime / 2)))
+                if (R.IsReady() && !Q.IsReady() && !W.IsReady() && (MonkeyAgility != 3 || buffEndTime > Game.Time + (buffEndTime / 2)))
                 {
                     R.Cast();
                     return;
@@ -224,10 +224,10 @@ using EloBuddy; namespace EloFactory_Udyr
         {
 
             double InterruptOn = SpellToInterrupt(args.SData.Name);
-            if (unit.Team != ObjectManager.Player.Team && InterruptOn >= 0f && unit.LSIsValidTarget(800))
+            if (unit.Team != ObjectManager.Player.Team && InterruptOn >= 0f && unit.IsValidTarget(800))
             {
 
-                if (Config.Item("Udyr.EInterrupt").GetValue<bool>() && E.LSIsReady() && Player.Mana > QMANA && Player.LSDistance(unit) <= 800)
+                if (Config.Item("Udyr.EInterrupt").GetValue<bool>() && E.IsReady() && Player.Mana > QMANA && Player.Distance(unit) <= 800)
                 {
                     if (!isInEStance)
                     {
@@ -240,7 +240,7 @@ using EloBuddy; namespace EloFactory_Udyr
 
             }
 
-            if (Config.Item("Udyr.AutoWWhenEnemyCast").GetValue<bool>() && (unit.IsValid<AIHeroClient>() && !unit.IsValid<Obj_AI_Turret>()) && unit.IsEnemy && args.Target.IsMe && W.LSIsReady() && Player.LSDistance(unit) < 1000)
+            if (Config.Item("Udyr.AutoWWhenEnemyCast").GetValue<bool>() && (unit.IsValid<AIHeroClient>() && !unit.IsValid<Obj_AI_Turret>()) && unit.IsEnemy && args.Target.IsMe && W.IsReady() && Player.Distance(unit) < 1000)
             {
                 if (Player.HealthPercent < Config.Item("Udyr.AutoWWhenEnemyCastMiniHp").GetValue<Slider>().Value && !isInEStance)
                 {
@@ -256,12 +256,12 @@ using EloBuddy; namespace EloFactory_Udyr
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
 
-            if (Config.Item("Udyr.AutoEEGC").GetValue<bool>() && E.LSIsReady() && Player.Mana > EMANA && Player.LSDistance(gapcloser.Sender) <= E.Range && !isInEStance)
+            if (Config.Item("Udyr.AutoEEGC").GetValue<bool>() && E.IsReady() && Player.Mana > EMANA && Player.Distance(gapcloser.Sender) <= E.Range && !isInEStance)
             {
                 E.Cast(gapcloser.Sender, true);
             }
 
-            else if (Config.Item("Udyr.AutoWEGC").GetValue<bool>() && W.LSIsReady() && !isInEStance && Player.Mana > WMANA && Player.LSDistance(gapcloser.Sender) < 600)
+            else if (Config.Item("Udyr.AutoWEGC").GetValue<bool>() && W.IsReady() && !isInEStance && Player.Mana > WMANA && Player.Distance(gapcloser.Sender) < 600)
             {
                 W.Cast();
             }
@@ -278,22 +278,22 @@ using EloBuddy; namespace EloFactory_Udyr
             var useR = Program.Config.Item("Udyr.UseRCombo").GetValue<bool>();
 
             var target = TargetSelector.GetTarget(Player.AttackRange + 800, TargetSelector.DamageType.Physical);
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
 
                 if (Config.Item("Udyr.ComboSettings").GetValue<StringList>().SelectedIndex == 1)
                 {
 
                     #region Sort E combo mode
-                    if (useE && E.LSIsReady() && Player.Mana > EMANA)
+                    if (useE && E.IsReady() && Player.Mana > EMANA)
                     {
 
-                        if (Player.LSDistance(target) > E.Range)
+                        if (Player.Distance(target) > E.Range)
                         {
                             E.Cast();
                         }
 
-                        else if (Player.LSDistance(target) <= E.Range && !target.LSHasBuff("udyrbearstuncheck"))
+                        else if (Player.Distance(target) <= E.Range && !target.HasBuff("udyrbearstuncheck"))
                         {
                             E.Cast();
                         }
@@ -302,14 +302,14 @@ using EloBuddy; namespace EloFactory_Udyr
                     #endregion
 
                     #region Sort R combo mode
-                    if (useR && R.LSIsReady() && Player.Mana >= RMANA && !HavePhoenixAoe && Player.LSDistance(target) <= R.Range && target.LSHasBuff("udyrbearstuncheck"))
+                    if (useR && R.IsReady() && Player.Mana >= RMANA && !HavePhoenixAoe && Player.Distance(target) <= R.Range && target.HasBuff("udyrbearstuncheck"))
                     {
                         R.Cast();
                     }
                     #endregion
 
                     #region Sort Q combo mode
-                    if (useQ && Q.LSIsReady() && Player.Mana >= QMANA && Player.LSDistance(target) <= Q.Range && target.LSHasBuff("udyrbearstuncheck"))
+                    if (useQ && Q.IsReady() && Player.Mana >= QMANA && Player.Distance(target) <= Q.Range && target.HasBuff("udyrbearstuncheck"))
                     {
                         Q.Cast();
                     }
@@ -321,14 +321,14 @@ using EloBuddy; namespace EloFactory_Udyr
                 {
 
                     #region Sort E combo mode
-                    if (useE && E.LSIsReady() && Player.Mana > EMANA)
+                    if (useE && E.IsReady() && Player.Mana > EMANA)
                     {
-                        if (Player.LSDistance(target) > E.Range)
+                        if (Player.Distance(target) > E.Range)
                         {
                             E.Cast();
                         }
 
-                        else if (Player.LSDistance(target) <= E.Range && !target.LSHasBuff("udyrbearstuncheck"))
+                        else if (Player.Distance(target) <= E.Range && !target.HasBuff("udyrbearstuncheck"))
                         {
                             E.Cast();
 
@@ -338,14 +338,14 @@ using EloBuddy; namespace EloFactory_Udyr
                     #endregion
 
                     #region Sort Q combo mode
-                    if (useQ && Q.LSIsReady() && Player.Mana >= QMANA && Player.LSDistance(target) <= Q.Range && target.LSHasBuff("udyrbearstuncheck"))
+                    if (useQ && Q.IsReady() && Player.Mana >= QMANA && Player.Distance(target) <= Q.Range && target.HasBuff("udyrbearstuncheck"))
                     {
                         Q.Cast();
                     }
                     #endregion
 
                     #region Sort R combo mode
-                    if (useR && R.LSIsReady() && Player.Mana >= RMANA && !HavePhoenixAoe && Player.LSDistance(target) <= R.Range && target.LSHasBuff("udyrbearstuncheck"))
+                    if (useR && R.IsReady() && Player.Mana >= RMANA && !HavePhoenixAoe && Player.Distance(target) <= R.Range && target.HasBuff("udyrbearstuncheck"))
                     {
                         R.Cast();
                     }
@@ -372,12 +372,12 @@ using EloBuddy; namespace EloFactory_Udyr
 
             var MinionQ = MinionManager.GetMinions(Player.AttackRange, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault();
 
-            if (useQ && !isInQStance && Q.LSIsReady() && MinionQ.Health < Q.GetDamage(MinionQ) * 0.9 && Player.ManaPercent >= QMinMana && (Player.HealthPercent > WMinHp || !useW))
+            if (useQ && !isInQStance && Q.IsReady() && MinionQ.Health < Q.GetDamage(MinionQ) * 0.9 && Player.ManaPercent >= QMinMana && (Player.HealthPercent > WMinHp || !useW))
             {
                 Q.Cast();
             }
 
-            else if (useW && !isInWStance && W.LSIsReady() && Player.ManaPercent >= WMinMana && Player.HealthPercent <= WMinHp)
+            else if (useW && !isInWStance && W.IsReady() && Player.ManaPercent >= WMinMana && Player.HealthPercent <= WMinHp)
             {
                 W.Cast();
             }
@@ -404,7 +404,7 @@ using EloBuddy; namespace EloFactory_Udyr
 
             var allMinionsQ = MinionManager.GetMinions(Q.Range, MinionTypes.All);
 
-            if (useR && !isInRStance && R.LSIsReady() && Player.ManaPercent >= RMinMana && (Player.HealthPercent > WMinHp || !useW))
+            if (useR && !isInRStance && R.IsReady() && Player.ManaPercent >= RMinMana && (Player.HealthPercent > WMinHp || !useW))
             {
 
                 var Rfarm = R.GetCircularFarmLocation(allMinionsQ, R.Range);
@@ -413,12 +413,12 @@ using EloBuddy; namespace EloFactory_Udyr
 
             }
 
-            if (useQ && !isInQStance && Q.LSIsReady() && Player.ManaPercent >= QMinMana && (Player.HealthPercent > WMinHp || !useW))
+            if (useQ && !isInQStance && Q.IsReady() && Player.ManaPercent >= QMinMana && (Player.HealthPercent > WMinHp || !useW))
             {
                 Q.Cast();
             }
 
-            else if (useW && !isInWStance && W.LSIsReady() && Player.ManaPercent >= WMinMana && Player.HealthPercent <= WMinHp)
+            else if (useW && !isInWStance && W.IsReady() && Player.ManaPercent >= WMinMana && Player.HealthPercent <= WMinHp)
             {
                 W.Cast();
             }
@@ -445,9 +445,9 @@ using EloBuddy; namespace EloFactory_Udyr
             var allMinionsR = MinionManager.GetMinions(Player.AttackRange * 2, MinionTypes.All, MinionTeam.Neutral);
             var MinionN = MinionManager.GetMinions(Player.AttackRange * 2, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
 
-            if (Config.Item("Udyr.SafeJungleClear").GetValue<bool>() && Player.LSCountEnemiesInRange(1500) > 0) return;
+            if (Config.Item("Udyr.SafeJungleClear").GetValue<bool>() && Player.CountEnemiesInRange(1500) > 0) return;
 
-            if (!MinionN.LSIsValidTarget() || MinionN == null)
+            if (!MinionN.IsValidTarget() || MinionN == null)
             {
                 LaneClear();
                 return;
@@ -456,22 +456,22 @@ using EloBuddy; namespace EloFactory_Udyr
             if (Config.Item("Udyr.ComboSettings").GetValue<StringList>().SelectedIndex == 1)
             {
 
-                if (useE && E.LSIsReady() && Player.LSDistance(MinionN) < Player.AttackRange && Player.Mana > EMANA && Player.ManaPercent >= EMinMana && !MinionN.LSHasBuff("udyrbearstuncheck"))
+                if (useE && E.IsReady() && Player.Distance(MinionN) < Player.AttackRange && Player.Mana > EMANA && Player.ManaPercent >= EMinMana && !MinionN.HasBuff("udyrbearstuncheck"))
                 {
                     E.Cast(MinionN, true);
                 }
 
-                else if (useW && W.LSIsReady() && Player.LSDistance(MinionN) < Player.AttackRange && Player.Mana > WMANA && Player.ManaPercent >= WMinMana && Player.HealthPercent <= WMinHp)
+                else if (useW && W.IsReady() && Player.Distance(MinionN) < Player.AttackRange && Player.Mana > WMANA && Player.ManaPercent >= WMinMana && Player.HealthPercent <= WMinHp)
                 {
                     W.Cast(MinionN, true);
                 }
 
-                else if (useR && R.LSIsReady() && Player.LSDistance(MinionN) < Player.AttackRange && Player.Mana > RMANA && Player.ManaPercent >= RMinMana)
+                else if (useR && R.IsReady() && Player.Distance(MinionN) < Player.AttackRange && Player.Mana > RMANA && Player.ManaPercent >= RMinMana)
                 {
                     R.Cast(MinionN, true);
                 }
 
-                else if (useQ && Q.LSIsReady() && Player.LSDistance(MinionN) < Player.AttackRange && Player.Mana > QMANA && Player.ManaPercent >= QMinMana)
+                else if (useQ && Q.IsReady() && Player.Distance(MinionN) < Player.AttackRange && Player.Mana > QMANA && Player.ManaPercent >= QMinMana)
                 {
                     Q.Cast(MinionN, true);
                 }
@@ -481,22 +481,22 @@ using EloBuddy; namespace EloFactory_Udyr
             if (Config.Item("Udyr.ComboSettings").GetValue<StringList>().SelectedIndex != 1)
             {
 
-                if (useE && E.LSIsReady() && Player.LSDistance(MinionN) < Player.AttackRange && Player.Mana > EMANA && Player.ManaPercent >= EMinMana && !MinionN.LSHasBuff("udyrbearstuncheck"))
+                if (useE && E.IsReady() && Player.Distance(MinionN) < Player.AttackRange && Player.Mana > EMANA && Player.ManaPercent >= EMinMana && !MinionN.HasBuff("udyrbearstuncheck"))
                 {
                     E.Cast(MinionN, true);
                 }
 
-                else if (useW && W.LSIsReady() && Player.LSDistance(MinionN) < Player.AttackRange && Player.Mana > WMANA && Player.ManaPercent >= WMinMana && Player.HealthPercent <= WMinHp)
+                else if (useW && W.IsReady() && Player.Distance(MinionN) < Player.AttackRange && Player.Mana > WMANA && Player.ManaPercent >= WMinMana && Player.HealthPercent <= WMinHp)
                 {
                     W.Cast(MinionN, true);
                 }
 
-                else if (useQ && Q.LSIsReady() && Player.LSDistance(MinionN) < Player.AttackRange && Player.Mana > WMANA && Player.ManaPercent >= QMinMana)
+                else if (useQ && Q.IsReady() && Player.Distance(MinionN) < Player.AttackRange && Player.Mana > WMANA && Player.ManaPercent >= QMinMana)
                 {
                     Q.Cast(MinionN, true);
                 }
 
-                else if (useR && R.LSIsReady() && Player.LSDistance(MinionN) < Player.AttackRange && Player.Mana > RMANA && Player.ManaPercent >= RMinMana)
+                else if (useR && R.IsReady() && Player.Distance(MinionN) < Player.AttackRange && Player.Mana > RMANA && Player.ManaPercent >= RMinMana)
                 {
                     R.Cast(MinionN, true);
                 }
@@ -513,28 +513,28 @@ using EloBuddy; namespace EloFactory_Udyr
         #region Check Q Stance
         private static bool isInQStance
         {
-            get { return ObjectManager.Player.LSHasBuff("UdyrTigerStance"); }
+            get { return ObjectManager.Player.HasBuff("UdyrTigerStance"); }
         }
         #endregion
 
         #region Check W Stance
         private static bool isInWStance
         {
-            get { return ObjectManager.Player.LSHasBuff("UdyrTurtleStance"); }
+            get { return ObjectManager.Player.HasBuff("UdyrTurtleStance"); }
         }
         #endregion
 
         #region Check E Stance
         private static bool isInEStance
         {
-            get { return ObjectManager.Player.LSHasBuff("UdyrBearStance"); }
+            get { return ObjectManager.Player.HasBuff("UdyrBearStance"); }
         }
         #endregion
 
         #region Check R Stance
         private static bool isInRStance
         {
-            get { return ObjectManager.Player.LSHasBuff("UdyrPhoenixStance"); }
+            get { return ObjectManager.Player.HasBuff("UdyrPhoenixStance"); }
         }
         #endregion
 
@@ -543,7 +543,7 @@ using EloBuddy; namespace EloFactory_Udyr
         #region Check Phoenix Buff Activation
         private static bool HavePhoenixAoe
         {
-            get { return ObjectManager.Player.LSHasBuff("UdyrPhoenixActivation"); }
+            get { return ObjectManager.Player.HasBuff("UdyrPhoenixActivation"); }
         }
         #endregion
 
@@ -567,10 +567,10 @@ using EloBuddy; namespace EloFactory_Udyr
                 int Muramanaitem = Items.HasItem(Muramana) ? 3042 : 3043;
                 if (args.Target.IsValid<AIHeroClient>() && args.Target.IsEnemy && Items.HasItem(Muramanaitem) && Items.CanUseItem(Muramanaitem) && Player.ManaPercent > Config.Item("Udyr.AutoMuramanaMiniMana").GetValue<Slider>().Value)
                 {
-                    if (!ObjectManager.Player.LSHasBuff("Muramana"))
+                    if (!ObjectManager.Player.HasBuff("Muramana"))
                         Items.UseItem(Muramanaitem);
                 }
-                else if (ObjectManager.Player.LSHasBuff("Muramana") && Items.HasItem(Muramanaitem) && Items.CanUseItem(Muramanaitem))
+                else if (ObjectManager.Player.HasBuff("Muramana") && Items.HasItem(Muramanaitem) && Items.CanUseItem(Muramanaitem))
                     Items.UseItem(Muramanaitem);
             }
 
@@ -581,19 +581,19 @@ using EloBuddy; namespace EloFactory_Udyr
         public static float ComboDamage(AIHeroClient hero)
         {
             double damage = 0;
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
-                damage += (float)Damage.LSGetSpellDamage(Player, hero, SpellSlot.R);
+                damage += (float)Damage.GetSpellDamage(Player, hero, SpellSlot.R);
             }
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(Player, hero, SpellSlot.Q);
+                damage += Damage.GetSpellDamage(Player, hero, SpellSlot.Q);
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                damage += (float)Damage.LSGetSpellDamage(Player, hero, SpellSlot.W);
+                damage += (float)Damage.GetSpellDamage(Player, hero, SpellSlot.W);
             }
-            if (Player.Spellbook.CanUseSpell(Player.LSGetSpellSlot("summonerdot")) == SpellState.Ready)
+            if (Player.Spellbook.CanUseSpell(Player.GetSpellSlot("summonerdot")) == SpellState.Ready)
             {
                 damage += (float)Player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
             }
@@ -694,22 +694,22 @@ using EloBuddy; namespace EloFactory_Udyr
         #region PotionManager
         public static void PotionManager()
         {
-            if (Player.Level == 1 && Player.LSCountEnemiesInRange(1000) == 1 && Player.Health >= Player.MaxHealth * 0.35) return;
-            if (Player.Level == 1 && Player.LSCountEnemiesInRange(1000) == 2 && Player.Health >= Player.MaxHealth * 0.50) return;
+            if (Player.Level == 1 && Player.CountEnemiesInRange(1000) == 1 && Player.Health >= Player.MaxHealth * 0.35) return;
+            if (Player.Level == 1 && Player.CountEnemiesInRange(1000) == 2 && Player.Health >= Player.MaxHealth * 0.50) return;
 
-            if (Config.Item("Udyr.AutoPotion").GetValue<bool>() && !Player.LSInFountain() && !Player.LSIsRecalling() && !Player.IsDead)
+            if (Config.Item("Udyr.AutoPotion").GetValue<bool>() && !Player.InFountain() && !Player.IsRecalling() && !Player.IsDead)
             {
                 #region BiscuitofRejuvenation
-                if (BiscuitofRejuvenation.IsReady() && !Player.LSHasBuff("ItemMiniRegenPotion") && !Player.LSHasBuff("ItemCrystalFlask"))
+                if (BiscuitofRejuvenation.IsReady() && !Player.HasBuff("ItemMiniRegenPotion") && !Player.HasBuff("ItemCrystalFlask"))
                 {
 
-                    if (Player.MaxHealth > Player.Health + 170 && Player.MaxMana > Player.Mana + 10 && Player.LSCountEnemiesInRange(1000) > 0 &&
+                    if (Player.MaxHealth > Player.Health + 170 && Player.MaxMana > Player.Mana + 10 && Player.CountEnemiesInRange(1000) > 0 &&
                         Player.Health < Player.MaxHealth * 0.75)
                     {
                         BiscuitofRejuvenation.Cast();
                     }
 
-                    else if (Player.MaxHealth > Player.Health + 170 && Player.MaxMana > Player.Mana + 10 && Player.LSCountEnemiesInRange(1000) == 0 &&
+                    else if (Player.MaxHealth > Player.Health + 170 && Player.MaxMana > Player.Mana + 10 && Player.CountEnemiesInRange(1000) == 0 &&
                         Player.Health < Player.MaxHealth * 0.6)
                     {
                         BiscuitofRejuvenation.Cast();
@@ -719,16 +719,16 @@ using EloBuddy; namespace EloFactory_Udyr
                 #endregion
 
                 #region HealthPotion
-                else if (HealthPotion.IsReady() && !Player.LSHasBuff("RegenerationPotion") && !Player.LSHasBuff("ItemCrystalFlask"))
+                else if (HealthPotion.IsReady() && !Player.HasBuff("RegenerationPotion") && !Player.HasBuff("ItemCrystalFlask"))
                 {
 
-                    if (Player.MaxHealth > Player.Health + 150 && Player.LSCountEnemiesInRange(1000) > 0 &&
+                    if (Player.MaxHealth > Player.Health + 150 && Player.CountEnemiesInRange(1000) > 0 &&
                         Player.Health < Player.MaxHealth * 0.75)
                     {
                         HealthPotion.Cast();
                     }
 
-                    else if (Player.MaxHealth > Player.Health + 150 && Player.LSCountEnemiesInRange(1000) == 0 &&
+                    else if (Player.MaxHealth > Player.Health + 150 && Player.CountEnemiesInRange(1000) == 0 &&
                         Player.Health < Player.MaxHealth * 0.6)
                     {
                         HealthPotion.Cast();
@@ -738,16 +738,16 @@ using EloBuddy; namespace EloFactory_Udyr
                 #endregion
 
                 #region CrystallineFlask
-                else if (CrystallineFlask.IsReady() && !Player.LSHasBuff("ItemCrystalFlask") && !Player.LSHasBuff("RegenerationPotion") && !Player.LSHasBuff("FlaskOfCrystalWater") && !Player.LSHasBuff("ItemMiniRegenPotion"))
+                else if (CrystallineFlask.IsReady() && !Player.HasBuff("ItemCrystalFlask") && !Player.HasBuff("RegenerationPotion") && !Player.HasBuff("FlaskOfCrystalWater") && !Player.HasBuff("ItemMiniRegenPotion"))
                 {
 
-                    if (Player.MaxHealth > Player.Health + 120 && Player.MaxMana > Player.Mana + 60 && Player.LSCountEnemiesInRange(1000) > 0 &&
+                    if (Player.MaxHealth > Player.Health + 120 && Player.MaxMana > Player.Mana + 60 && Player.CountEnemiesInRange(1000) > 0 &&
                         (Player.Health < Player.MaxHealth * 0.85 || Player.Mana < Player.MaxMana * 0.65))
                     {
                         CrystallineFlask.Cast();
                     }
 
-                    else if (Player.MaxHealth > Player.Health + 120 && Player.MaxMana > Player.Mana + 60 && Player.LSCountEnemiesInRange(1000) == 0 &&
+                    else if (Player.MaxHealth > Player.Health + 120 && Player.MaxMana > Player.Mana + 60 && Player.CountEnemiesInRange(1000) == 0 &&
                         (Player.Health < Player.MaxHealth * 0.7 || Player.Mana < Player.MaxMana * 0.5))
                     {
                         CrystallineFlask.Cast();
@@ -757,16 +757,16 @@ using EloBuddy; namespace EloFactory_Udyr
                 #endregion
 
                 #region ManaPotion
-                else if (ManaPotion.IsReady() && !Player.LSHasBuff("FlaskOfCrystalWater") && !Player.LSHasBuff("ItemCrystalFlask"))
+                else if (ManaPotion.IsReady() && !Player.HasBuff("FlaskOfCrystalWater") && !Player.HasBuff("ItemCrystalFlask"))
                 {
 
-                    if (Player.MaxMana > Player.Mana + 100 && Player.LSCountEnemiesInRange(1000) > 0 &&
+                    if (Player.MaxMana > Player.Mana + 100 && Player.CountEnemiesInRange(1000) > 0 &&
                         Player.Mana < Player.MaxMana * 0.7)
                     {
                         ManaPotion.Cast();
                     }
 
-                    else if (Player.MaxMana > Player.Mana + 100 && Player.LSCountEnemiesInRange(1000) == 0 &&
+                    else if (Player.MaxMana > Player.Mana + 100 && Player.CountEnemiesInRange(1000) == 0 &&
                         Player.Mana < Player.MaxMana * 0.4)
                     {
                         ManaPotion.Cast();
@@ -783,7 +783,7 @@ using EloBuddy; namespace EloFactory_Udyr
         {
 
             if (Config.Item("GapCloseRange").GetValue<bool>())
-                LeagueSharp.Common.Utility.DrawCircle(Player.Position, Player.AttackRange + 800, (Player.LSCountEnemiesInRange(Player.AttackRange + 800) > 0 && isInEStance) ? Color.OrangeRed : Color.Green, 10, 10);
+                LeagueSharp.Common.Utility.DrawCircle(Player.Position, Player.AttackRange + 800, (Player.CountEnemiesInRange(Player.AttackRange + 800) > 0 && isInEStance) ? Color.OrangeRed : Color.Green, 10, 10);
 
             foreach (var spell in SpellList)
             {
@@ -795,7 +795,7 @@ using EloBuddy; namespace EloFactory_Udyr
             if (Config.Item("DrawOrbwalkTarget").GetValue<bool>())
             {
                 var orbT = Orbwalker.GetTarget();
-                if (orbT.LSIsValidTarget())
+                if (orbT.IsValidTarget())
                     Render.Circle.DrawCircle(orbT.Position, 100, System.Drawing.Color.Pink);
             }
 

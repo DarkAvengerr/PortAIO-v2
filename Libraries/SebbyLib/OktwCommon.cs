@@ -75,7 +75,7 @@ namespace SebbyLib
 
         public static bool CanHarras()
         {
-            if (!Player.Spellbook.IsAutoAttacking && !Player.LSUnderTurret(true) && Orbwalking.CanMove(50))
+            if (!Player.Spellbook.IsAutoAttacking && !Player.UnderTurret(true) && Orbwalking.CanMove(50))
                 return true;
             else
                 return false;
@@ -85,7 +85,7 @@ namespace SebbyLib
             var attackCalc = (int)(Player.AttackDelay * 1000);
             return
                 Cache.GetMinions(Player.Position, 0).Any(
-                    minion => HealthPrediction.LaneClearHealthPrediction(minion, attackCalc, 30) <= Player.LSGetAutoAttackDamage(minion));
+                    minion => HealthPrediction.LaneClearHealthPrediction(minion, attackCalc, 30) <= Player.GetAutoAttackDamage(minion));
         }
 
 
@@ -105,15 +105,15 @@ namespace SebbyLib
 
         public static bool IsSpellHeroCollision(AIHeroClient t, Spell QWER, int extraWith = 50)
         {
-            foreach (var hero in HeroManager.Enemies.FindAll(hero => hero.LSIsValidTarget(QWER.Range + QWER.Width, true, QWER.RangeCheckFrom) && t.NetworkId != hero.NetworkId))
+            foreach (var hero in HeroManager.Enemies.FindAll(hero => hero.IsValidTarget(QWER.Range + QWER.Width, true, QWER.RangeCheckFrom) && t.NetworkId != hero.NetworkId))
             {
                 var prediction = QWER.GetPrediction(hero);
                 var powCalc = Math.Pow((QWER.Width + extraWith + hero.BoundingRadius), 2);
-                if (prediction.UnitPosition.LSTo2D().LSDistance(QWER.From.LSTo2D(), QWER.GetPrediction(t).CastPosition.LSTo2D(), true, true) <= powCalc)
+                if (prediction.UnitPosition.To2D().Distance(QWER.From.To2D(), QWER.GetPrediction(t).CastPosition.To2D(), true, true) <= powCalc)
                 {
                     return true;
                 }
-                else if (prediction.UnitPosition.LSTo2D().LSDistance(QWER.From.LSTo2D(), t.ServerPosition.LSTo2D(), true, true) <= powCalc)
+                else if (prediction.UnitPosition.To2D().Distance(QWER.From.To2D(), t.ServerPosition.To2D(), true, true) <= powCalc)
                 {
                     return true;
                 }
@@ -124,7 +124,7 @@ namespace SebbyLib
 
         public static bool CanHitSkillShot(Obj_AI_Base target, GameObjectProcessSpellCastEventArgs args)
         {
-            if (args.Target == null && target.LSIsValidTarget(float.MaxValue,false))
+            if (args.Target == null && target.IsValidTarget(float.MaxValue,false))
             {
 
                 var pred = Prediction.Prediction.GetPrediction(target, 0.25f).CastPosition;
@@ -134,12 +134,12 @@ namespace SebbyLib
                 if (args.SData.LineWidth > 0)
                 {
                     var powCalc = Math.Pow(args.SData.LineWidth + target.BoundingRadius, 2);
-                    if (pred.LSTo2D().LSDistance(args.End.LSTo2D(), args.Start.LSTo2D(), true, true) <= powCalc || target.ServerPosition.LSTo2D().LSDistance(args.End.LSTo2D(), args.Start.LSTo2D(), true, true) <= powCalc)
+                    if (pred.To2D().Distance(args.End.To2D(), args.Start.To2D(), true, true) <= powCalc || target.ServerPosition.To2D().Distance(args.End.To2D(), args.Start.To2D(), true, true) <= powCalc)
                     {
                         return true;
                     } 
                 }
-                else if (target.LSDistance(args.End) < 50 + target.BoundingRadius || pred.LSDistance(args.End) < 50 + target.BoundingRadius)
+                else if (target.Distance(args.End) < 50 + target.BoundingRadius || pred.Distance(args.End) < 50 + target.BoundingRadius)
                 {
                     return true;
                 }  
@@ -224,12 +224,12 @@ namespace SebbyLib
 
         public static Vector3 GetTrapPos(float range)
         {
-            foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValid && enemy.LSDistance(Player.ServerPosition) < range && (enemy.HasBuff("zhonyasringshield") || enemy.HasBuff("BardRStasis"))))
+            foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValid && enemy.Distance(Player.ServerPosition) < range && (enemy.HasBuff("zhonyasringshield") || enemy.HasBuff("BardRStasis"))))
             {
                 return enemy.Position;
             }
 
-            foreach (var obj in ObjectManager.Get<Obj_GeneralParticleEmitter>().Where(obj => obj.IsValid && obj.Position.LSDistance(Player.Position) < range ))
+            foreach (var obj in ObjectManager.Get<Obj_GeneralParticleEmitter>().Where(obj => obj.IsValid && obj.Position.Distance(Player.Position) < range ))
             {
                 var name = obj.Name.ToLower();
                 
@@ -251,11 +251,11 @@ namespace SebbyLib
 
             var level = yasuoWall.WallLvl;
             var wallWidth = (350 + 50 * level);
-            var wallDirection = (yasuoWall.CastPosition.LSTo2D() - yasuoWall.YasuoPosition.LSTo2D()).LSNormalized().LSPerpendicular();
-            var wallStart = yasuoWall.CastPosition.LSTo2D() + wallWidth / 2f * wallDirection;
+            var wallDirection = (yasuoWall.CastPosition.To2D() - yasuoWall.YasuoPosition.To2D()).Normalized().Perpendicular();
+            var wallStart = yasuoWall.CastPosition.To2D() + wallWidth / 2f * wallDirection;
             var wallEnd = wallStart - wallWidth * wallDirection;
 
-            if (wallStart.LSIntersection(wallEnd, to.LSTo2D(), from.LSTo2D()).Intersects)
+            if (wallStart.Intersection(wallEnd, to.To2D(), from.To2D()).Intersects)
             {
                 return true;
             }
@@ -276,10 +276,10 @@ namespace SebbyLib
 
         public static void DrawLineRectangle(Vector3 start2, Vector3 end2, int radius, float width, System.Drawing.Color color)
         {
-            Vector2 start = start2.LSTo2D();
-            Vector2 end = end2.LSTo2D();
-            var dir = (end - start).LSNormalized();
-            var pDir = dir.LSPerpendicular();
+            Vector2 start = start2.To2D();
+            Vector2 end = end2.To2D();
+            var dir = (end - start).Normalized();
+            var pDir = dir.Perpendicular();
 
             var rightStartPos = start + pDir * radius;
             var leftStartPos = start - pDir * radius;
@@ -327,7 +327,7 @@ namespace SebbyLib
             {
                 if (args.Target.Type == GameObjectType.AIHeroClient && !sender.IsMelee && args.Target.Team != sender.Team)
                 {
-                    IncomingDamageList.Add(new UnitIncomingDamage { Damage = sender.LSGetSpellDamage((Obj_AI_Base)args.Target, args.SData.Name), TargetNetworkId = args.Target.NetworkId, Time = Game.Time, Skillshot = false });
+                    IncomingDamageList.Add(new UnitIncomingDamage { Damage = sender.GetSpellDamage((Obj_AI_Base)args.Target, args.SData.Name), TargetNetworkId = args.Target.NetworkId, Time = Game.Time, Skillshot = false });
                 }
             }
         }
@@ -351,29 +351,29 @@ namespace SebbyLib
             {
                 if (targed.Type == GameObjectType.AIHeroClient && targed.Team != sender.Team && sender.IsMelee)
                 {
-                    IncomingDamageList.Add(new UnitIncomingDamage { Damage = sender.LSGetSpellDamage(targed, args.SData.Name), TargetNetworkId = args.Target.NetworkId, Time = Game.Time, Skillshot = false });
+                    IncomingDamageList.Add(new UnitIncomingDamage { Damage = sender.GetSpellDamage(targed, args.SData.Name), TargetNetworkId = args.Target.NetworkId, Time = Game.Time, Skillshot = false });
                 }
             }
             else
             {
-                foreach (var champion in ChampionList.Where(champion => !champion.IsDead && champion.IsVisible && champion.Team != sender.Team && champion.LSDistance(sender) < 2000))
+                foreach (var champion in ChampionList.Where(champion => !champion.IsDead && champion.IsVisible && champion.Team != sender.Team && champion.Distance(sender) < 2000))
                 {
                     if (CanHitSkillShot(champion,args))
                     {
-                        IncomingDamageList.Add(new UnitIncomingDamage { Damage = sender.LSGetSpellDamage(champion, args.SData.Name), TargetNetworkId = champion.NetworkId, Time = Game.Time, Skillshot = true });
+                        IncomingDamageList.Add(new UnitIncomingDamage { Damage = sender.GetSpellDamage(champion, args.SData.Name), TargetNetworkId = champion.NetworkId, Time = Game.Time, Skillshot = true });
                     }
                 }
 
                 if (!YasuoInGame)
                     return;
 
-                if (!sender.IsEnemy || sender.IsMinion || args.SData.LSIsAutoAttack() || sender.Type != GameObjectType.AIHeroClient)
+                if (!sender.IsEnemy || sender.IsMinion || args.SData.IsAutoAttack() || sender.Type != GameObjectType.AIHeroClient)
                     return;
 
                 if (args.SData.Name == "YasuoWMovingWall")
                 {
                     yasuoWall.CastTime = Game.Time;
-                    yasuoWall.CastPosition = sender.Position.LSExtend(args.End, 400);
+                    yasuoWall.CastPosition = sender.Position.Extend(args.End, 400);
                     yasuoWall.YasuoPosition = sender.Position;
                     yasuoWall.WallLvl = sender.Spellbook.Spells[1].Level;
                 }

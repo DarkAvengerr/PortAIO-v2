@@ -64,9 +64,9 @@ using EloBuddy;
         {
             if (Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.trundle.extra.antigapcloser")
                 && ObjectManager.Player.ManaPercent > 20
-                && gapcloser.End.LSDistance(ObjectManager.Player.ServerPosition) < 400
-                && gapcloser.Sender.LSIsValidTarget(Variables.Spells[SpellSlot.E].Range)
-                && Variables.Spells[SpellSlot.E].LSIsReady())
+                && gapcloser.End.Distance(ObjectManager.Player.ServerPosition) < 400
+                && gapcloser.Sender.IsValidTarget(Variables.Spells[SpellSlot.E].Range)
+                && Variables.Spells[SpellSlot.E].IsReady())
             {
                 Variables.Spells[SpellSlot.E].Cast(gapcloser.Sender.ServerPosition);
             }
@@ -77,8 +77,8 @@ using EloBuddy;
             if (Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.trundle.extra.interrupter")
                 && ObjectManager.Player.ManaPercent > 20
                 && args.DangerLevel > DZInterrupter.DangerLevel.Medium
-                && sender.LSIsValidTarget(Variables.Spells[SpellSlot.E].Range)
-                && Variables.Spells[SpellSlot.E].LSIsReady())
+                && sender.IsValidTarget(Variables.Spells[SpellSlot.E].Range)
+                && Variables.Spells[SpellSlot.E].IsReady())
             {
                 Variables.Spells[SpellSlot.E].Cast(sender.ServerPosition);
             }
@@ -111,20 +111,20 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(Variables.Spells[SpellSlot.E].Range,
                 TargetSelector.DamageType.Physical);
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
 
                 if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo)
-                    && target.LSIsValidTarget(Variables.Spells[SpellSlot.Q].Range))
+                    && target.IsValidTarget(Variables.Spells[SpellSlot.Q].Range))
                 {
                     Variables.Spells[SpellSlot.Q].Cast();
                 }
 
                 if (Variables.Spells[SpellSlot.W].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo)
-                    && target.LSIsValidTarget(Variables.Spells[SpellSlot.W].Range))
+                    && target.IsValidTarget(Variables.Spells[SpellSlot.W].Range))
                 {
-                    var optimalWPosition = ObjectManager.Player.ServerPosition.LSExtend(target.Position,
-                        ObjectManager.Player.LSDistance(target) / 2f);
+                    var optimalWPosition = ObjectManager.Player.ServerPosition.Extend(target.Position,
+                        ObjectManager.Player.Distance(target) / 2f);
 
                     Variables.Spells[SpellSlot.W].Cast(optimalWPosition);
                 }
@@ -136,10 +136,10 @@ using EloBuddy;
 
                 if (Variables.Spells[SpellSlot.R].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo))
                 {
-                    var bestRTarget = Variables.Orbwalker.GetTarget().IsValid<AIHeroClient>() && Variables.Orbwalker.GetTarget().LSIsValidTarget(Variables.Spells[SpellSlot.R].Range)
+                    var bestRTarget = Variables.Orbwalker.GetTarget().IsValid<AIHeroClient>() && Variables.Orbwalker.GetTarget().IsValidTarget(Variables.Spells[SpellSlot.R].Range)
                         ? Variables.Orbwalker.GetTarget() as AIHeroClient
                         : GetBestRTarget();
-                    if (bestRTarget.LSIsValidTarget())
+                    if (bestRTarget.IsValidTarget())
                     {
                         Variables.Spells[SpellSlot.R].Cast(bestRTarget);
                     }
@@ -157,19 +157,19 @@ using EloBuddy;
 
             var target = TargetSelector.GetTarget(Variables.Spells[SpellSlot.E].Range,
                 TargetSelector.DamageType.Physical);
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass)
-                    && target.LSIsValidTarget(Variables.Spells[SpellSlot.Q].Range))
+                    && target.IsValidTarget(Variables.Spells[SpellSlot.Q].Range))
                 {
                     Variables.Spells[SpellSlot.Q].Cast();
                 }
 
                 if (Variables.Spells[SpellSlot.W].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass)
-                    && target.LSIsValidTarget(Variables.Spells[SpellSlot.W].Range))
+                    && target.IsValidTarget(Variables.Spells[SpellSlot.W].Range))
                 {
-                    var optimalWPosition = ObjectManager.Player.ServerPosition.LSExtend(target.Position,
-                        ObjectManager.Player.LSDistance(target)/2f);
+                    var optimalWPosition = ObjectManager.Player.ServerPosition.Extend(target.Position,
+                        ObjectManager.Player.Distance(target)/2f);
 
                     Variables.Spells[SpellSlot.W].Cast(optimalWPosition);
                 }
@@ -216,13 +216,13 @@ using EloBuddy;
             var target = Minion ?? PlayerMonitor.GetLastTarget();
 
             if (Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.trundle.jungleclear.w")
-                && Variables.Spells[SpellSlot.W].LSIsReady() && target.LSIsValidTarget(675f))
+                && Variables.Spells[SpellSlot.W].IsReady() && target.IsValidTarget(675f))
             {
-                Variables.Spells[SpellSlot.W].Cast(ObjectManager.Player.ServerPosition.LSExtend(target.Position, ObjectManager.Player.LSDistance(target) / 2f));
+                Variables.Spells[SpellSlot.W].Cast(ObjectManager.Player.ServerPosition.Extend(target.Position, ObjectManager.Player.Distance(target) / 2f));
             }
 
             if (Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.trundle.jungleclear.q")
-                && Variables.Spells[SpellSlot.Q].LSIsReady() && target.LSIsValidTarget(Variables.Spells[SpellSlot.Q].Range))
+                && Variables.Spells[SpellSlot.Q].IsReady() && target.IsValidTarget(Variables.Spells[SpellSlot.Q].Range))
             {
                 Variables.Spells[SpellSlot.Q].Cast();
             }
@@ -231,7 +231,7 @@ using EloBuddy;
         private AIHeroClient GetBestRTarget()
         {
             return
-                ObjectManager.Player.LSGetEnemiesInRange(Variables.Spells[SpellSlot.R].Range).OrderBy(m => m.PercentArmorMod)
+                ObjectManager.Player.GetEnemiesInRange(Variables.Spells[SpellSlot.R].Range).OrderBy(m => m.PercentArmorMod)
                     .ThenBy(m => m.PercentMagicReduction)
                     .FirstOrDefault();
         }
@@ -239,7 +239,7 @@ using EloBuddy;
         private Vector3 GetPillarOptimalPosition(AIHeroClient target)
         {
             var targetPrediction = Prediction.GetPrediction(target, 0.25f);
-            var extendedVector = targetPrediction.UnitPosition.LSExtend(ObjectManager.Player.ServerPosition, -310f);
+            var extendedVector = targetPrediction.UnitPosition.Extend(ObjectManager.Player.ServerPosition, -310f);
             return extendedVector;
         }
     }

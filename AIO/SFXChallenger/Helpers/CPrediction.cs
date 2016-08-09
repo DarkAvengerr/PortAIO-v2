@@ -65,7 +65,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
                 var range = spell.Range + (extended ? spell.Width * 0.85f : 0) +
                             (boundingRadius ? target.BoundingRadius * BoundingRadiusMultiplicator : 0);
                 var positions = (from t in GameObjects.EnemyHeroes
-                    where t.LSIsValidTarget(range * 1.5f, true, spell.RangeCheckFrom)
+                    where t.IsValidTarget(range * 1.5f, true, spell.RangeCheckFrom)
                     let prediction = spell.GetPrediction(t)
                     where prediction.Hitchance >= hitChance
                     select new Position(t, prediction.UnitPosition)).ToList();
@@ -76,19 +76,19 @@ using EloBuddy; namespace SFXChallenger.Helpers
                     var possibilities =
                         ListExtensions.ProduceEnumeration(
                             positions.Where(
-                                p => p.UnitPosition.LSDistance(mainTarget.UnitPosition) <= spell.Width * 0.85f).ToList())
+                                p => p.UnitPosition.Distance(mainTarget.UnitPosition) <= spell.Width * 0.85f).ToList())
                             .Where(p => p.Count > 0 && p.Any(t => t.Hero.NetworkId == mainTarget.Hero.NetworkId))
                             .ToList();
                     foreach (var possibility in possibilities)
                     {
-                        var mec = MEC.GetMec(possibility.Select(p => p.UnitPosition.LSTo2D()).ToList());
-                        var distance = spell.From.LSDistance(mec.Center.To3D());
+                        var mec = MEC.GetMec(possibility.Select(p => p.UnitPosition.To2D()).ToList());
+                        var distance = spell.From.Distance(mec.Center.To3D());
                         if (mec.Radius < spellWidth && distance < range)
                         {
                             var lHits = new List<AIHeroClient>();
                             var circle =
                                 new Geometry.Polygon.Circle(
-                                    spell.From.LSExtend(
+                                    spell.From.Extend(
                                         mec.Center.To3D(), spell.Range > distance ? distance : spell.Range), spell.Width);
 
                             if (boundingRadius)
@@ -112,7 +112,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
 
                             if ((lHits.Count > hits.Count || lHits.Count == hits.Count && mec.Radius < radius ||
                                  lHits.Count == hits.Count &&
-                                 spell.From.LSDistance(circle.Center.To3D()) < spell.From.LSDistance(center)) &&
+                                 spell.From.Distance(circle.Center.To3D()) < spell.From.Distance(center)) &&
                                 lHits.Any(p => p.NetworkId == target.NetworkId))
                             {
                                 center = circle.Center.To3D2();
@@ -151,7 +151,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
                             spell.Width * 0.9f +
                             (boundingRadius ? target.BoundingRadius * BoundingRadiusMultiplicator : 0);
                 var positions = (from t in GameObjects.EnemyHeroes
-                    where t.LSIsValidTarget(range, true, spell.RangeCheckFrom)
+                    where t.IsValidTarget(range, true, spell.RangeCheckFrom)
                     let prediction = spell.GetPrediction(t)
                     where prediction.Hitchance >= hitChance
                     select new Position(t, prediction.UnitPosition)).ToList();
@@ -163,7 +163,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
                     {
                         hits.Add(target);
                         var rect = new Geometry.Polygon.Rectangle(
-                            spell.From, spell.From.LSExtend(pred.CastPosition, range), spell.Width);
+                            spell.From, spell.From.Extend(pred.CastPosition, range), spell.Width);
                         if (boundingRadius)
                         {
                             hits.AddRange(

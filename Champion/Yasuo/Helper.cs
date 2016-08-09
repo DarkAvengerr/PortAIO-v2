@@ -58,7 +58,7 @@ using EloBuddy; namespace YasuoPro
             { 3, new Spell(SpellSlot.W, 450f) },
             { 4, new Spell(SpellSlot.E, 475f) },
             { 5, new Spell(SpellSlot.R, 1250f) },
-            { 6, new Spell(ObjectManager.Player.LSGetSpellSlot("summonerdot"), 600) }
+            { 6, new Spell(ObjectManager.Player.GetSpellSlot("summonerdot"), 600) }
             };
 
             Spells[Q].SetSkillshot(GetQ1Delay, 20f, float.MaxValue, false, SkillshotType.SkillshotLine);
@@ -108,7 +108,7 @@ using EloBuddy; namespace YasuoPro
 
         internal bool TornadoReady
         {
-            get { return Yasuo.LSHasBuff("yasuoq3w"); }
+            get { return Yasuo.HasBuff("yasuoq3w"); }
         }
 
         internal static int DashCount
@@ -153,7 +153,7 @@ using EloBuddy; namespace YasuoPro
                 return false;
             }
 
-            if (Yasuo.LSIsDashing() || InDash)
+            if (Yasuo.IsDashing() || InDash)
             {
                 return false;
             }
@@ -169,10 +169,10 @@ using EloBuddy; namespace YasuoPro
             {
                 if (tready && GetBool("Combo.UseEQ"))
                 {
-                    if (Spells[E].LSIsReady() && target.IsDashable(500))
+                    if (Spells[E].IsReady() && target.IsDashable(500))
                     {
                         var dashPos = GetDashPos(target);
-                        if (dashPos.To3D().LSCountEnemiesInRange(QRadius) >= 1)
+                        if (dashPos.To3D().CountEnemiesInRange(QRadius) >= 1)
                         {
                             //Cast E to trigger EQ 
                             if (GetBool("Misc.saveQ4QE") && isHealthy && GetBool("Combo.UseE") &&
@@ -222,7 +222,7 @@ using EloBuddy; namespace YasuoPro
 
         internal static bool isHealthy
         {
-            get { return Yasuo.IsInvulnerable || Yasuo.HasBuffOfType(BuffType.Invulnerability) || Yasuo.HasBuffOfType(BuffType.SpellShield) || Yasuo.HasBuffOfType(BuffType.SpellImmunity) || Yasuo.HealthPercent > GetSliderFloat("Misc.Healthy") || Yasuo.LSHasBuff("yasuopassivemovementshield") && Yasuo.HealthPercent > 30; }
+            get { return Yasuo.IsInvulnerable || Yasuo.HasBuffOfType(BuffType.Invulnerability) || Yasuo.HasBuffOfType(BuffType.SpellShield) || Yasuo.HasBuffOfType(BuffType.SpellImmunity) || Yasuo.HealthPercent > GetSliderFloat("Misc.Healthy") || Yasuo.HasBuff("yasuopassivemovementshield") && Yasuo.HealthPercent > 30; }
         }
 
         internal static bool GetBool(string name)
@@ -260,7 +260,7 @@ using EloBuddy; namespace YasuoPro
 
         internal static Vector2 GetDashPos(Obj_AI_Base @base)
         {
-            var predictedposition = Yasuo.ServerPosition.LSExtend(@base.Position, Yasuo.LSDistance(@base) + 475 - Yasuo.LSDistance(@base)).LSTo2D();
+            var predictedposition = Yasuo.ServerPosition.Extend(@base.Position, Yasuo.Distance(@base) + 475 - Yasuo.Distance(@base)).To2D();
             DashPosition = predictedposition;
             return predictedposition;
         }
@@ -268,14 +268,14 @@ using EloBuddy; namespace YasuoPro
         internal static Vector2 GetDashPosFrom(Vector2 startPos, Obj_AI_Base @base)
         {
             var startPos3D = startPos.To3D();
-            var predictedposition = startPos3D.LSExtend(@base.Position, startPos.LSDistance(@base) + 475 - startPos.LSDistance(@base)).LSTo2D();
+            var predictedposition = startPos3D.Extend(@base.Position, startPos.Distance(@base) + 475 - startPos.Distance(@base)).To2D();
             DashPosition = predictedposition;
             return predictedposition;
         }
 
         internal static double GetProperEDamage(Obj_AI_Base target)
         {
-            double dmg = Yasuo.LSGetSpellDamage(target, SpellSlot.E);
+            double dmg = Yasuo.GetSpellDamage(target, SpellSlot.E);
             float amplifier = 0;
             if (DashCount == 0)
             {
@@ -391,12 +391,12 @@ using EloBuddy; namespace YasuoPro
         internal bool targInKnockupRadius(AIHeroClient targ)
         {
             var dpos = GetDashPos(targ).To3D();
-            return dpos.LSCountEnemiesInRange(QRadius) > 0;
+            return dpos.CountEnemiesInRange(QRadius) > 0;
         }
 
         internal bool targInKnockupRadius(Vector3 dpos)
         {
-            return dpos.LSCountEnemiesInRange(QRadius) > 0;
+            return dpos.CountEnemiesInRange(QRadius) > 0;
         }
 
         internal Modes GetMode()

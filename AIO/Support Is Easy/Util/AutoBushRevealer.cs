@@ -69,13 +69,13 @@ using EloBuddy; namespace Support.Util
                     this._enemyInfo.Where(
                         x =>
                         x.Player.IsValid && !x.Player.IsVisible && !x.Player.IsDead
-                        && x.Player.LSDistance(ObjectManager.Player.ServerPosition) < 1000 && time - x.LastSeen < 2500)
+                        && x.Player.Distance(ObjectManager.Player.ServerPosition) < 1000 && time - x.LastSeen < 2500)
                         .Select(x => x.Player))
                 {
                     var bestWardPos = this.GetWardPos(enemy.ServerPosition, 165, 2);
 
                     if (bestWardPos != enemy.ServerPosition && bestWardPos != Vector3.Zero
-                        && bestWardPos.LSDistance(ObjectManager.Player.ServerPosition) <= 600)
+                        && bestWardPos.Distance(ObjectManager.Player.ServerPosition) <= 600)
                     {
                         var timedif = Environment.TickCount - this._lastTimeWarded;
 
@@ -99,7 +99,7 @@ using EloBuddy; namespace Support.Util
         private Obj_AI_Base GetNearObject(string name, Vector3 pos, int maxDistance)
         {
             return ObjectManager.Get<Obj_AI_Base>()
-                                .FirstOrDefault(x => x.Name == name && x.LSDistance(pos) <= maxDistance);
+                                .FirstOrDefault(x => x.Name == name && x.Distance(pos) <= maxDistance);
         }
 
         private Vector3 GetWardPos(Vector3 lastPos, int radius = 165, int precision = 3)

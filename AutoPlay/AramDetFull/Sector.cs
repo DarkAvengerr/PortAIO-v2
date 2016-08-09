@@ -41,7 +41,7 @@ using EloBuddy; namespace ARAMDetFull
             List<Vector2> points = new List<Vector2>();
 
             Vector2 p = (end - start);
-            var per = p.LSPerpendicular().LSNormalized() * (W);
+            var per = p.Perpendicular().Normalized() * (W);
             points.Add(start + per);
             points.Add(start - per);
             points.Add(end - per);
@@ -75,7 +75,7 @@ using EloBuddy; namespace ARAMDetFull
                     continue;
 
                 if((!containsAlly || !containsAllyMinion) && obj.IsAlly && !obj.IsDead )
-                    if (polig.pointInside(obj.Position.LSTo2D()))
+                    if (polig.pointInside(obj.Position.To2D()))
                     {
                         containsAlly = true;
                         if (obj is Obj_AI_Minion)
@@ -83,7 +83,7 @@ using EloBuddy; namespace ARAMDetFull
                     }
 
                 if (!containsEnemy && obj.IsEnemy && obj is Obj_AI_Minion && !MapControl.fightIsClose() && !ARAMTargetSelector.IsInvulnerable(ObjectManager.Player) && !Aggresivity.getIgnoreMinions())
-                    if (!obj.IsDead && ((Obj_AI_Minion)obj).BaseSkinName != "GangplankBarrel" && obj.Health > 0 && obj.LSIsValidTarget() && polig.pointInside(obj.Position.LSTo2D()))
+                    if (!obj.IsDead && ((Obj_AI_Minion)obj).BaseSkinName != "GangplankBarrel" && obj.Health > 0 && obj.IsValidTarget() && polig.pointInside(obj.Position.To2D()))
                     {
                         containsEnemy = true;
                         enem = obj;
@@ -97,8 +97,8 @@ using EloBuddy; namespace ARAMDetFull
                 
                 en_chemp.getReach();
                 //Console.WriteLine(en_chemp.reach);
-                if (!en_chemp.hero.IsDead  && (en_chemp.hero.IsVisible || ARAMSimulator.deepestAlly.IsMe || NavMesh.GetCollisionFlags(en_chemp.hero.Position) == CollisionFlags.Grass) && (sectorInside(en_chemp.hero.Position.LSTo2D(), en_chemp.hero.AttackRange + 120) ||
-                    sectorInside(en_chemp.hero.Position.LSTo2D(), en_chemp.reach)))
+                if (!en_chemp.hero.IsDead  && (en_chemp.hero.IsVisible || ARAMSimulator.deepestAlly.IsMe || NavMesh.GetCollisionFlags(en_chemp.hero.Position) == CollisionFlags.Grass) && (sectorInside(en_chemp.hero.Position.To2D(), en_chemp.hero.AttackRange + 120) ||
+                    sectorInside(en_chemp.hero.Position.To2D(), en_chemp.reach)))
                 {
                     dangLVL++;
                     containsEnemyChamp = true;
@@ -109,7 +109,7 @@ using EloBuddy; namespace ARAMDetFull
 
             foreach (var al_chemp in MapControl.ally_champions)
             {
-                if (al_chemp.hero.LSIsValidTarget() && !al_chemp.hero.IsDead && polig.pointInside(al_chemp.hero.Position.LSTo2D()))
+                if (al_chemp.hero.IsValidTarget() && !al_chemp.hero.IsDead && polig.pointInside(al_chemp.hero.Position.To2D()))
                 {
                     dangLVL--;
                     containsAllyChamp = true;
@@ -120,9 +120,9 @@ using EloBuddy; namespace ARAMDetFull
 
             foreach (var turret in ObjectManager.Get<Obj_AI_Turret>())
             {
-                if (turret.IsEnemy && !turret.IsDead && turret.IsValid && sectorInside(turret.Position.LSTo2D(), 1050))
+                if (turret.IsEnemy && !turret.IsDead && turret.IsValid && sectorInside(turret.Position.To2D(), 1050))
                 {
-                    if (polig.pointInside(turret.Position.LSTo2D()))
+                    if (polig.pointInside(turret.Position.To2D()))
                     {
                         enemyTowerIn = turret;
                         dangerPolig = true;
@@ -144,7 +144,7 @@ using EloBuddy; namespace ARAMDetFull
             int count = 0;
             foreach (var mins in ObjectManager.Get<Obj_AI_Base>().Where(ob => ob.IsAlly && !ob.IsDead && ob.IsTargetable && !ob.IsMe))
             {
-                if (mins.LSDistance(tow, true) < 900 * 900)
+                if (mins.Distance(tow, true) < 900 * 900)
                     count += (mins is AIHeroClient) ? 2 : 1;
             }
             return count>1;
@@ -154,28 +154,28 @@ using EloBuddy; namespace ARAMDetFull
         {
             //  if (!YasuoSharp.Config.Item("djTur").GetValue<bool>())
             //      return false;
-            return pos.To3D().LSUnderTurret(true);
+            return pos.To3D().UnderTurret(true);
            
         }
 
 
         public bool sectorInside(Vector2 pos, float range)
         {
-            return center.LSDistance(pos, true) <= range*range;
+            return center.Distance(pos, true) <= range*range;
         }
 
         public Vector2 getRandomPointIn(bool rand = false)
         {
             if (enemyTowerIn != null && ARAMSimulator.player.IsMelee)
-                return enemyTowerIn.Position.LSTo2D().LSExtend(ARAMSimulator.player.Position.LSTo2D(), ARAMSimulator.player.AttackRange * 0.7f);
+                return enemyTowerIn.Position.To2D().Extend(ARAMSimulator.player.Position.To2D(), ARAMSimulator.player.AttackRange * 0.7f);
 
-            if (enemyChampIn != null && !enemyChampIn.IsZombie && ARAMSimulator.player.IsMelee && !enemyChampIn.Position.LSUnderTurret(true))
-                return enemyChampIn.Position.LSTo2D().LSExtend(ARAMSimulator.player.Position.LSTo2D(),ARAMSimulator.player.AttackRange * 0.7f);
+            if (enemyChampIn != null && !enemyChampIn.IsZombie && ARAMSimulator.player.IsMelee && !enemyChampIn.Position.UnderTurret(true))
+                return enemyChampIn.Position.To2D().Extend(ARAMSimulator.player.Position.To2D(),ARAMSimulator.player.AttackRange * 0.7f);
 
 
             Vector2 result = new Vector2();
             if (containsEnemy && enem != null && ARAMSimulator.player.IsMelee() && !rand)
-                result = enem.Position.LSTo2D();
+                result = enem.Position.To2D();
             else
             {
                 Random r = new Random();

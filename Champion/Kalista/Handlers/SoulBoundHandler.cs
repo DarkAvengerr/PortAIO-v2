@@ -29,7 +29,7 @@ namespace S_Plus_Class_Kalista.Handlers
 
         private static void OnCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (Player.LSInFountain()) return;
+            if (Player.InFountain()) return;
 
             // Sender and args checks
             if (sender.Type != GameObjectType.AIHeroClient)return;
@@ -37,7 +37,7 @@ namespace S_Plus_Class_Kalista.Handlers
             if (args.Target != null) return;
             {
                
-                if (!Champion.R.LSIsReady()) return;
+                if (!Champion.R.IsReady()) return;
                 //if (!ManaHandler.UseAutoR()) return;
 
                     if (!SMenu.Item(_MenuItemBase + "AutoSave.Boolean.AutoSavePercent").GetValue<bool>())
@@ -51,7 +51,7 @@ namespace S_Plus_Class_Kalista.Handlers
 
                 var healthPercent = SMenu.Item(_MenuItemBase + "AutoSave.Slider.PercentHp").GetValue<Slider>().Value;
 
-                if (SoulBoundHero.LSCountEnemiesInRange(800) <= 0) return; // No enimies in range
+                if (SoulBoundHero.CountEnemiesInRange(800) <= 0) return; // No enimies in range
 
                 if (!(SoulBoundHero.HealthPercent <= healthPercent) || SoulBoundHero == null) return;
 
@@ -64,7 +64,7 @@ namespace S_Plus_Class_Kalista.Handlers
 
         private static bool GetValidSoulMate()
         {
-            foreach (var soulMate in ObjectManager.Get<AIHeroClient>().Where(x => x.IsAlly && !x.IsMe && x.HasBuff("kalistacoopstrikeally") && x.LSDistance(ObjectManager.Player.Position) < Champion.R.Range && !x.LSInFountain() && !x.LSIsRecalling()))
+            foreach (var soulMate in ObjectManager.Get<AIHeroClient>().Where(x => x.IsAlly && !x.IsMe && x.HasBuff("kalistacoopstrikeally") && x.Distance(ObjectManager.Player.Position) < Champion.R.Range && !x.InFountain() && !x.IsRecalling()))
             {
                 SoulBoundHero = soulMate;
                 return true;

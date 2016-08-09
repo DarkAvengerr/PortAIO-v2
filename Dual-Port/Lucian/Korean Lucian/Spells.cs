@@ -46,7 +46,7 @@ using EloBuddy;
             if (lucian.Spells != null && lucian.Spells.SpellList.Count > 0)
             {
                 List<CommonSpell> Spells =
-                    lucian.Spells.SpellList.Where(x => x.UseOnCombo && x.LSIsReady() && x.CanCast()).ToList();
+                    lucian.Spells.SpellList.Where(x => x.UseOnCombo && x.IsReady() && x.CanCast()).ToList();
                 if (Spells.Count > 0)
                 {
                     foreach (CommonSpell spell in Spells)
@@ -54,7 +54,7 @@ using EloBuddy;
                         damage += spell.GetDamage(target);
                         if (spell.Slot == SpellSlot.E)
                         {
-                            damage += (float)lucian.Player.LSGetAutoAttackDamage(target) * 1.4f;
+                            damage += (float)lucian.Player.GetAutoAttackDamage(target) * 1.4f;
                         }
                     }
                 }

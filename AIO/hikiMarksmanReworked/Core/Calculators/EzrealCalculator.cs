@@ -17,15 +17,15 @@ using EloBuddy;
     {
         public static float EzrealTotalDamage(AIHeroClient enemy)
         {
-            if (EzrealSpells.Q.LSIsReady() && Helper.EEnabled("ezreal.q.combo"))
+            if (EzrealSpells.Q.IsReady() && Helper.EEnabled("ezreal.q.combo"))
             {
                 return EzrealSpells.Q.GetDamage(enemy);
             }
-            if (EzrealSpells.W.LSIsReady() && Helper.EEnabled("ezreal.w.combo"))
+            if (EzrealSpells.W.IsReady() && Helper.EEnabled("ezreal.w.combo"))
             {
                 return EzrealSpells.W.GetDamage(enemy);
             }
-            if (EzrealSpells.R.LSIsReady() && Helper.EEnabled("ezreal.r.combo"))
+            if (EzrealSpells.R.IsReady() && Helper.EEnabled("ezreal.r.combo"))
             {
                 return EzrealSpells.R.GetDamage(enemy);
             }

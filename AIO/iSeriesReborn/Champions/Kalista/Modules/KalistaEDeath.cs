@@ -27,7 +27,7 @@ using EloBuddy;
 
         public bool ShouldRun()
         {
-            return Variables.spells[SpellSlot.E].LSIsReady() &&
+            return Variables.spells[SpellSlot.E].IsReady() &&
                     MenuExtensions.GetItemValue<bool>("iseriesr.kalista.misc.edeath");
         }
 
@@ -39,11 +39,11 @@ using EloBuddy;
                     && skillshot.SpellData.DangerValue >= 3
                     && skillshot.IsAboutToHit(250, ObjectManager.Player.ServerPosition)).ToList();
 
-            if (Variables.spells[SpellSlot.E].LSIsReady())
+            if (Variables.spells[SpellSlot.E].IsReady())
             {
                  if (skillshots.Any(
                      skillshot =>
-                         skillshot.Caster.LSGetSpellDamage(ObjectManager.Player, skillshot.SpellData.SpellName) >=
+                         skillshot.Caster.GetSpellDamage(ObjectManager.Player, skillshot.SpellData.SpellName) >=
                          HealthPrediction.GetHealthPrediction(ObjectManager.Player, 250) + 5))
                  {
                      if ((Environment.TickCount - LastCastTime > 250))

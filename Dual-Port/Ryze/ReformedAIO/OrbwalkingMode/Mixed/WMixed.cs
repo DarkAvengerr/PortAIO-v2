@@ -55,7 +55,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Mixed
         private void OnUpdate(EventArgs args)
         {
             if (Variable.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed
-                || !Variable.Spells[SpellSlot.W].LSIsReady()) return;
+                || !Variable.Spells[SpellSlot.W].IsReady()) return;
 
             var target = TargetSelector.GetTarget(
                 this.Menu.Item(this.Menu.Name + "WRange").GetValue<Slider>().Value,

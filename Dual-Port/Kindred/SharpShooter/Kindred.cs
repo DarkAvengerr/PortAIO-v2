@@ -75,9 +75,9 @@ namespace SharpShooter.Plugins
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (MenuProvider.Champion.Misc.UseAntiGapcloser)
-                if (gapcloser.End.LSDistance(ObjectManager.Player.Position) <= 200)
+                if (gapcloser.End.Distance(ObjectManager.Player.Position) <= 200)
                     if (_e.IsReadyPerfectly())
-                        if (gapcloser.Sender.LSIsValidTarget(_e.Range))
+                        if (gapcloser.Sender.IsValidTarget(_e.Range))
                             _e.CastOnUnit(gapcloser.Sender);
         }
 
@@ -136,7 +136,7 @@ namespace SharpShooter.Plugins
                             MenuProvider.ChampionMenuInstance.Item("Misc.Auto R.ifHealth", true)
                                 .GetValue<Slider>()
                                 .Value)
-                            if (ObjectManager.Player.LSCountEnemiesInRange(800f) >= 2)
+                            if (ObjectManager.Player.CountEnemiesInRange(800f) >= 2)
                                 _r.Cast(ObjectManager.Player);
                     }
 
@@ -147,8 +147,8 @@ namespace SharpShooter.Plugins
                             var target in
                                 HeroManager.Allies.Where(
                                     x =>
-                                        x.LSIsValidTarget(_r.Range) && !x.IsZombie && !x.IsMe &&
-                                        x.LSCountEnemiesInRange(800f) >= 2 &&
+                                        x.IsValidTarget(_r.Range) && !x.IsZombie && !x.IsMe &&
+                                        x.CountEnemiesInRange(800f) >= 2 &&
                                         x.HealthPercent <
                                         MenuProvider.ChampionMenuInstance.Item("Misc.Auto R.ifHealth", true)
                                             .GetValue<Slider>()
@@ -174,8 +174,8 @@ namespace SharpShooter.Plugins
                             if (MenuProvider.Champion.Combo.UseQ)
                                 if (_q.IsReadyPerfectly())
                                     if (
-                                        ObjectManager.Player.Position.LSExtend(Game.CursorPos, 400)
-                                            .LSCountEnemiesInRange(400) <= 1)
+                                        ObjectManager.Player.Position.Extend(Game.CursorPos, 400)
+                                            .CountEnemiesInRange(400) <= 1)
                                         if (_q.Cast(Game.CursorPos))
                                             if (MenuProvider.Champion.Combo.UseW)
                                                 if (_w.IsReadyPerfectly())
@@ -193,8 +193,8 @@ namespace SharpShooter.Plugins
                                 if (ObjectManager.Player.IsManaPercentOkay(MenuProvider.Champion.Harass.IfMana))
                                     if (_q.IsReadyPerfectly())
                                         if (
-                                            ObjectManager.Player.Position.LSExtend(Game.CursorPos, 400)
-                                                .LSCountEnemiesInRange(400) <= 1)
+                                            ObjectManager.Player.Position.Extend(Game.CursorPos, 400)
+                                                .CountEnemiesInRange(400) <= 1)
                                             if (_q.Cast(Game.CursorPos))
                                                 if (MenuProvider.Champion.Harass.UseW)
                                                     if (_w.IsReadyPerfectly())
@@ -215,8 +215,8 @@ namespace SharpShooter.Plugins
                                     if (ObjectManager.Player.IsManaPercentOkay(MenuProvider.Champion.Laneclear.IfMana))
                                         if (_q.IsReadyPerfectly())
                                             if (
-                                                ObjectManager.Player.Position.LSExtend(Game.CursorPos, 400)
-                                                    .LSCountEnemiesInRange(400) <= 1)
+                                                ObjectManager.Player.Position.Extend(Game.CursorPos, 400)
+                                                    .CountEnemiesInRange(400) <= 1)
                                                 if (_q.Cast(Game.CursorPos))
                                                     if (MenuProvider.Champion.Laneclear.UseW)
                                                         if (_w.IsReadyPerfectly())
@@ -237,8 +237,8 @@ namespace SharpShooter.Plugins
                                     if (ObjectManager.Player.IsManaPercentOkay(MenuProvider.Champion.Jungleclear.IfMana))
                                         if (_q.IsReadyPerfectly())
                                             if (
-                                                ObjectManager.Player.Position.LSExtend(Game.CursorPos, 400)
-                                                    .LSCountEnemiesInRange(400) <= 1)
+                                                ObjectManager.Player.Position.Extend(Game.CursorPos, 400)
+                                                    .CountEnemiesInRange(400) <= 1)
                                                 if (_q.Cast(Game.CursorPos))
                                                     if (MenuProvider.Champion.Jungleclear.UseW)
                                                         if (_w.IsReadyPerfectly())
@@ -276,7 +276,7 @@ namespace SharpShooter.Plugins
                                                 MenuProvider.ChampionMenuInstance.Item("Misc.Auto R.ForMe", true)
                                                     .GetValue<bool>())
                                                 if (_r.IsReadyPerfectly())
-                                                    if (target.LSIsValidTarget(_r.Range))
+                                                    if (target.IsValidTarget(_r.Range))
                                                         _r.Cast(target);
                                         }
                                         else if (!target.IsMe && target.IsAlly && !target.IsZombie)
@@ -285,7 +285,7 @@ namespace SharpShooter.Plugins
                                                 MenuProvider.ChampionMenuInstance.Item("Misc.Auto R.ForAlly", true)
                                                     .GetValue<bool>())
                                                 if (_r.IsReadyPerfectly())
-                                                    if (target.LSIsValidTarget(_r.Range))
+                                                    if (target.IsValidTarget(_r.Range))
                                                         _r.Cast(target);
                                         }
                                     }
@@ -297,10 +297,10 @@ namespace SharpShooter.Plugins
                         if (sender.Type == GameObjectType.AIHeroClient)
                             if (sender.IsEnemy)
                                 if (sender.IsMelee)
-                                    if (args.SData.LSIsAutoAttack())
+                                    if (args.SData.IsAutoAttack())
                                         if (MenuProvider.Champion.Misc.GetBoolValue("Use Anti-Melee (Q)"))
                                             if (_q.IsReadyPerfectly())
-                                                _q.Cast(ObjectManager.Player.Position.LSExtend(sender.Position, -_q.Range));
+                                                _q.Cast(ObjectManager.Player.Position.Extend(sender.Position, -_q.Range));
 
             //if (sender.IsMe)
             //    if (args.Slot == SpellSlot.Q)
@@ -335,7 +335,7 @@ namespace SharpShooter.Plugins
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float) ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float) ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
             if (_e.IsReadyPerfectly())

@@ -53,21 +53,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null || bomb != null)
+            if (!Q.IsReady() || target == null || bomb != null)
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null || Q.LSIsReady())
+            if (!W.IsReady() || target == null || Q.IsReady())
                 return;
             W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             if (safeGap(target))
                 E.Cast(target);
@@ -76,9 +76,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
-            if (target.LSIsValidTarget(R.Range+200))
+            if (target.IsValidTarget(R.Range+200))
             {
                 R.CastIfWillHit(target, 2);
             }
@@ -95,7 +95,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             tar = ARAMTargetSelector.getBestTarget(R.Range);
             if (tar != null) useR(tar);
 
-            if (bomb != null && Q.LSIsReady() && LeagueSharp.Common.Utility.LSCountEnemysInRange(bomb.Position, (250))>0)
+            if (bomb != null && Q.IsReady() && LeagueSharp.Common.Utility.CountEnemysInRange(bomb.Position, (250))>0)
             {
                 Q.Cast();
             }

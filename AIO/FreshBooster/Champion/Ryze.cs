@@ -183,14 +183,14 @@ using EloBuddy;
                 {
                     float damage = 0;
 
-                    if (_Q.LSIsReady())
+                    if (_Q.IsReady())
                         damage += _Q.GetDamage(enemy);
-                    if (_W.LSIsReady())
+                    if (_W.IsReady())
                         damage += _W.GetDamage(enemy);
-                    if (_E.LSIsReady())
+                    if (_E.IsReady())
                         damage += (_E.GetDamage(enemy));
                     if (!Player.Spellbook.IsAutoAttacking)
-                        damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                        damage += (float)Player.GetAutoAttackDamage(enemy, true);
                     return damage;
                 }
                 return 0;
@@ -210,7 +210,7 @@ using EloBuddy;
             try
             {
                 if (Player.IsDead) return;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
                 {
                     if (_MainMenu.Item("Ryze_indicator").GetValue<bool>())
                     {
@@ -255,9 +255,9 @@ using EloBuddy;
                 var WTarget = TargetSelector.GetTarget(_W.Range, TargetSelector.DamageType.Magical);
                 var ETarget = TargetSelector.GetTarget(_E.Range, TargetSelector.DamageType.Magical);
                 
-                RyzePassive = ObjectManager.Player.Buffs.Find(DrawFX => DrawFX.Name.ToLower() == "ryzepassivestack" && DrawFX.LSIsValidBuff()); // 라이즈 스택
-                Ryzepassivecharged = ObjectManager.Player.Buffs.Find(DrawFX => DrawFX.Name.ToLower() == "ryzepassivecharged" && DrawFX.LSIsValidBuff());
-                Buff_Recall = ObjectManager.Player.LSIsRecalling();
+                RyzePassive = ObjectManager.Player.Buffs.Find(DrawFX => DrawFX.Name.ToLower() == "ryzepassivestack" && DrawFX.IsValidBuff()); // 라이즈 스택
+                Ryzepassivecharged = ObjectManager.Player.Buffs.Find(DrawFX => DrawFX.Name.ToLower() == "ryzepassivecharged" && DrawFX.IsValidBuff());
+                Buff_Recall = ObjectManager.Player.IsRecalling();
                 if (Buff_Recall)
                     Recall_Time = TickCount(1000);
                 if (RyzePassive != null)
@@ -273,28 +273,28 @@ using EloBuddy;
                 else
                     _Q.Collision = true;
 
-                if (_MainMenu.Item("Ryze_KUse_Q").GetValue<bool>() && QTarget != null && _Q.LSIsReady() && _Q.GetDamage(QTarget) > QTarget.Health)
+                if (_MainMenu.Item("Ryze_KUse_Q").GetValue<bool>() && QTarget != null && _Q.IsReady() && _Q.GetDamage(QTarget) > QTarget.Health)
                     _Q.CastIfHitchanceEquals(QTarget, HitChance.High);
-                if (_MainMenu.Item("Ryze_KUse_E").GetValue<bool>() && ETarget != null && _E.LSIsReady() && _E.GetDamage(ETarget) > ETarget.Health)
+                if (_MainMenu.Item("Ryze_KUse_E").GetValue<bool>() && ETarget != null && _E.IsReady() && _E.GetDamage(ETarget) > ETarget.Health)
                     _E.CastOnUnit(ETarget, true);
-                if (_MainMenu.Item("Ryze_KUse_W").GetValue<bool>() && WTarget != null && _W.LSIsReady() && _W.GetDamage(WTarget) > WTarget.Health)
+                if (_MainMenu.Item("Ryze_KUse_W").GetValue<bool>() && WTarget != null && _W.IsReady() && _W.GetDamage(WTarget) > WTarget.Health)
                     _W.CastOnUnit(WTarget, true);
 
                 if (_MainMenu.Item("CKey").GetValue<KeyBind>().Active) // Combo
                 {
                     if (SpeedTime > Environment.TickCount)
                         return;
-                    //if (_MainMenu.Item("Ryze_CUse_R").GetValue<bool>() && _R.LSIsReady() && WTarget != null
-                    //    && ((_Q.LSIsReady() || _W.LSIsReady() || _E.LSIsReady()) && RyzeStack > 2)
+                    //if (_MainMenu.Item("Ryze_CUse_R").GetValue<bool>() && _R.IsReady() && WTarget != null
+                    //    && ((_Q.IsReady() || _W.IsReady() || _E.IsReady()) && RyzeStack > 2)
                     //    || RyzeStack == 4 || Ryzepassivecharged != null)
                     //    _R.Cast(true);
-                    if (_MainMenu.Item("Ryze_CUse_E").GetValue<bool>() && _E.LSIsReady() && ETarget != null)
+                    if (_MainMenu.Item("Ryze_CUse_E").GetValue<bool>() && _E.IsReady() && ETarget != null)
                         _E.CastOnUnit(ETarget, true);
-                    if (_MainMenu.Item("Ryze_CUse_W").GetValue<bool>() && _W.LSIsReady() && WTarget != null)
+                    if (_MainMenu.Item("Ryze_CUse_W").GetValue<bool>() && _W.IsReady() && WTarget != null)
                         _W.CastOnUnit(WTarget, true);
-                    if (_MainMenu.Item("Ryze_CUse_Q").GetValue<bool>() && _Q.LSIsReady() && WTarget != null && _W.LSIsReady())
+                    if (_MainMenu.Item("Ryze_CUse_Q").GetValue<bool>() && _Q.IsReady() && WTarget != null && _W.IsReady())
                         _Q.Cast(WTarget, true);
-                    if (_MainMenu.Item("Ryze_CUse_Q").GetValue<bool>() && _Q.LSIsReady() && QTarget != null && !_W.LSIsReady())
+                    if (_MainMenu.Item("Ryze_CUse_Q").GetValue<bool>() && _Q.IsReady() && QTarget != null && !_W.IsReady())
                         _Q.Cast(QTarget, true);                    
                 }
 
@@ -303,38 +303,38 @@ using EloBuddy;
                 {
                     if (_MainMenu.Item("Ryze_HToggle").GetValue<bool>() && Recall_Time > Environment.TickCount)
                         return;
-                    if (_MainMenu.Item("Ryze_HUse_W").GetValue<bool>() && _W.LSIsReady() && WTarget != null)
+                    if (_MainMenu.Item("Ryze_HUse_W").GetValue<bool>() && _W.IsReady() && WTarget != null)
                         _W.CastOnUnit(WTarget, true);
-                    if (_MainMenu.Item("Ryze_HUse_Q").GetValue<bool>() && _Q.LSIsReady() && QTarget != null)
+                    if (_MainMenu.Item("Ryze_HUse_Q").GetValue<bool>() && _Q.IsReady() && QTarget != null)
                         _Q.CastIfHitchanceEquals(QTarget, HitChance.VeryHigh, true);
-                    if (_MainMenu.Item("Ryze_HUse_E").GetValue<bool>() && _E.LSIsReady() && ETarget != null)
+                    if (_MainMenu.Item("Ryze_HUse_E").GetValue<bool>() && _E.IsReady() && ETarget != null)
                         _E.CastOnUnit(ETarget, true);
                 }
 
                 if (_MainMenu.Item("LKey").GetValue<KeyBind>().Active && _MainMenu.Item("Ryze_LManaRate").GetValue<Slider>().Value < Player.ManaPercent) // LaneClear
                 {
-                    var MinionTarget = MinionManager.GetMinions(_W.Range, MinionTypes.All, MinionTeam.Enemy).OrderBy(x => x.ServerPosition.LSDistance(Player.ServerPosition));
+                    var MinionTarget = MinionManager.GetMinions(_W.Range, MinionTypes.All, MinionTeam.Enemy).OrderBy(x => x.ServerPosition.Distance(Player.ServerPosition));
                     foreach (var item in MinionTarget)
                     {
-                        if (_MainMenu.Item("Ryze_LUseW").GetValue<bool>() && _W.LSIsReady())
+                        if (_MainMenu.Item("Ryze_LUseW").GetValue<bool>() && _W.IsReady())
                             _W.CastOnUnit(item, true);
-                        if (_MainMenu.Item("Ryze_LUseQ").GetValue<bool>() && _Q.LSIsReady())
+                        if (_MainMenu.Item("Ryze_LUseQ").GetValue<bool>() && _Q.IsReady())
                             _Q.CastIfHitchanceEquals(item, HitChance.High, true);
-                        if (_MainMenu.Item("Ryze_LUseE").GetValue<bool>() && _E.LSIsReady())
+                        if (_MainMenu.Item("Ryze_LUseE").GetValue<bool>() && _E.IsReady())
                             _E.CastOnUnit(item, true);
                     }
                 }
 
                 if (_MainMenu.Item("JKey").GetValue<KeyBind>().Active && _MainMenu.Item("Ryze_JManaRate").GetValue<Slider>().Value < Player.ManaPercent) // JungleClear
                 {
-                    var MinionTarget = MinionManager.GetMinions(_W.Range, MinionTypes.All, MinionTeam.Neutral).OrderBy(x => x.ServerPosition.LSDistance(Player.ServerPosition));
+                    var MinionTarget = MinionManager.GetMinions(_W.Range, MinionTypes.All, MinionTeam.Neutral).OrderBy(x => x.ServerPosition.Distance(Player.ServerPosition));
                     foreach (var item in MinionTarget)
                     {
-                        if (_MainMenu.Item("Ryze_JUseW").GetValue<bool>() && _W.LSIsReady())
+                        if (_MainMenu.Item("Ryze_JUseW").GetValue<bool>() && _W.IsReady())
                             _W.CastOnUnit(item, true);
-                        if (_MainMenu.Item("Ryze_JUseQ").GetValue<bool>() && _Q.LSIsReady())
+                        if (_MainMenu.Item("Ryze_JUseQ").GetValue<bool>() && _Q.IsReady())
                             _Q.CastIfHitchanceEquals(item, HitChance.High, true);
-                        if (_MainMenu.Item("Ryze_JUseE").GetValue<bool>() && _E.LSIsReady())
+                        if (_MainMenu.Item("Ryze_JUseE").GetValue<bool>() && _E.IsReady())
                             _E.CastOnUnit(item, true);
                     }
                 }
@@ -343,11 +343,11 @@ using EloBuddy;
                     && Recall_Time < Environment.TickCount && RyzeStack < 4)
                 {
                     var MinionTarget = MinionManager.GetMinions(_W.Range, MinionTypes.All, MinionTeam.Enemy).OrderBy(x => x.Health).FirstOrDefault(x => !x.IsDead);
-                    if (_MainMenu.Item("Ryze_AutoLasthitQ").GetValue<bool>() && _Q.LSIsReady() && MinionTarget != null && _Q.GetDamage(MinionTarget) > MinionTarget.Health)
+                    if (_MainMenu.Item("Ryze_AutoLasthitQ").GetValue<bool>() && _Q.IsReady() && MinionTarget != null && _Q.GetDamage(MinionTarget) > MinionTarget.Health)
                         _Q.CastIfHitchanceEquals(MinionTarget, HitChance.High, true);
-                    if (_MainMenu.Item("Ryze_AutoLasthitE").GetValue<bool>() && _E.LSIsReady() && MinionTarget != null && _E.GetDamage(MinionTarget) > MinionTarget.Health)
+                    if (_MainMenu.Item("Ryze_AutoLasthitE").GetValue<bool>() && _E.IsReady() && MinionTarget != null && _E.GetDamage(MinionTarget) > MinionTarget.Health)
                         _E.CastOnUnit(MinionTarget, true);
-                    if (_MainMenu.Item("Ryze_AutoLasthitW").GetValue<bool>() && _W.LSIsReady() && MinionTarget != null && _W.GetDamage(MinionTarget) > MinionTarget.Health)
+                    if (_MainMenu.Item("Ryze_AutoLasthitW").GetValue<bool>() && _W.IsReady() && MinionTarget != null && _W.GetDamage(MinionTarget) > MinionTarget.Health)
                         _W.CastOnUnit(MinionTarget, true);
                 }
 
@@ -356,7 +356,7 @@ using EloBuddy;
                     && Recall_Time < Environment.TickCount && _MainMenu.Item("Ryze_AutoStack").GetValue<Slider>().Value > RyzeStack
                     && _MainMenu.Item("Ryze_AutoStack").GetValue<Slider>().Value != RyzeStack
                     && _MainMenu.Item("Ryze_AutoStack").GetValue<Slider>().Value != 0
-                    && _Q.LSIsReady() && PassiveEndTime <= Game.Time + 0.5f)
+                    && _Q.IsReady() && PassiveEndTime <= Game.Time + 0.5f)
                     _Q.Cast(Game.CursorPos, true);
             }
             catch (Exception)
@@ -372,7 +372,7 @@ using EloBuddy;
         {
             try
             {
-                if (_MainMenu.Item("Ryze_WGap").GetValue<bool>() && _W.LSIsReady() && gapcloser.Sender.IsEnemy && gapcloser.Sender.ServerPosition.LSDistance(Player.ServerPosition) < _W.Range)
+                if (_MainMenu.Item("Ryze_WGap").GetValue<bool>() && _W.IsReady() && gapcloser.Sender.IsEnemy && gapcloser.Sender.ServerPosition.Distance(Player.ServerPosition) < _W.Range)
                     _W.CastOnUnit(gapcloser.Sender, true);
             }
             catch (Exception)
@@ -444,7 +444,7 @@ using EloBuddy;
                 {
                     if (_MainMenu.Item("CKey").GetValue<KeyBind>().Active)
                     {
-                        if (_Q.LSIsReady() || _W.LSIsReady() || _E.LSIsReady())
+                        if (_Q.IsReady() || _W.IsReady() || _E.IsReady())
                             args.Process = false;
                         else
                             args.Process = true;

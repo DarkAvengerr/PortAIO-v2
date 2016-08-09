@@ -20,7 +20,7 @@ using EloBuddy;
             if (spells[SpellSlot.Q].IsEnabledAndReady())
             {
                 var TargetHero = TargetSelector.GetTarget(spells[SpellSlot.Q].Range * 0.75f, TargetSelector.DamageType.Physical);
-                if (TargetHero.LSIsValidTarget(spells[SpellSlot.Q].Range * 0.75f))
+                if (TargetHero.IsValidTarget(spells[SpellSlot.Q].Range * 0.75f))
                 {
                     var dashEndPos = ObjectManager.Player.GetDashInfo().EndPos;
                     var QNormalPrediction = spells[SpellSlot.Q].GetPrediction(TargetHero);
@@ -33,16 +33,16 @@ using EloBuddy;
 
                     if (QNormalPrediction.Hitchance >= HitChance.High)
                     {
-                        if (!ObjectManager.Player.LSIsDashing() && (!ObjectManager.Player.Spellbook.IsAutoAttacking || ObjectManager.Player.Spellbook.IsAutoAttacking) && (Environment.TickCount - LastCastTick > 500))
+                        if (!ObjectManager.Player.IsDashing() && (!ObjectManager.Player.Spellbook.IsAutoAttacking || ObjectManager.Player.Spellbook.IsAutoAttacking) && (Environment.TickCount - LastCastTick > 500))
                         {
                             spells[SpellSlot.Q].Cast(QNormalPrediction.CastPosition);
                             LastCastTick = Environment.TickCount;
                         }
-                    }else if (!TargetHero.LSIsValidTarget(spells[SpellSlot.E].Range)
-                        && TargetHero.LSIsValidTarget(spells[SpellSlot.E].Range + 285f) 
+                    }else if (!TargetHero.IsValidTarget(spells[SpellSlot.E].Range)
+                        && TargetHero.IsValidTarget(spells[SpellSlot.E].Range + 285f) 
                         && KalistaE.CanBeRendKilled(TargetHero))
                     {
-                        if (!ObjectManager.Player.LSIsDashing() && (!ObjectManager.Player.Spellbook.IsAutoAttacking || ObjectManager.Player.Spellbook.IsAutoAttacking) && (Environment.TickCount - LastCastTick > 500))
+                        if (!ObjectManager.Player.IsDashing() && (!ObjectManager.Player.Spellbook.IsAutoAttacking || ObjectManager.Player.Spellbook.IsAutoAttacking) && (Environment.TickCount - LastCastTick > 500))
                         {
                             spells[SpellSlot.Q].Cast(QNormalPrediction.CastPosition);
                             LastCastTick = Environment.TickCount;

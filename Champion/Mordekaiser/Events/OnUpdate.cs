@@ -61,10 +61,10 @@ namespace Mordekaiser.Events
 
         private static void ExecuteLogicW()
         {
-            if (!W.LSIsReady() || Player.Spellbook.GetSpell(SpellSlot.W).Name == "mordekaisercreepingdeath2")
+            if (!W.IsReady() || Player.Spellbook.GetSpell(SpellSlot.W).Name == "mordekaisercreepingdeath2")
                 return;
 
-            if (Player.LSCountEnemiesInRange(wHitRange) > 0)
+            if (Player.CountEnemiesInRange(wHitRange) > 0)
             {
                 if (Menu.MenuW.Item("Selected" + Player.ChampionName).GetValue<StringList>().SelectedIndex == 2)
                 {
@@ -75,7 +75,7 @@ namespace Mordekaiser.Events
             var ghost = Utils.HowToTrainYourDragon;
             if (ghost != null)
             {
-                if (ghost.LSCountEnemiesInRange(wHitRange) == 0)
+                if (ghost.CountEnemiesInRange(wHitRange) == 0)
                     return;
 
                 if (Menu.MenuW.Item("SelectedGhost").GetValue<StringList>().SelectedIndex == 2)
@@ -85,8 +85,8 @@ namespace Mordekaiser.Events
             }
 
             foreach (var ally in HeroManager.Allies.Where(
-                a => !a.IsDead && !a.IsMe && a.Position.LSDistance(Player.Position) < W.Range)
-                .Where(ally => ally.LSCountEnemiesInRange(wHitRange) > 0)
+                a => !a.IsDead && !a.IsMe && a.Position.Distance(Player.Position) < W.Range)
+                .Where(ally => ally.CountEnemiesInRange(wHitRange) > 0)
                 .Where(ally => Menu.MenuW.Item("Selected" + ally.ChampionName).GetValue<StringList>().SelectedIndex == 2)
                 )
             {

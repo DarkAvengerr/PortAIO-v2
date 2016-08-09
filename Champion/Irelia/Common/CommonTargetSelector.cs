@@ -47,7 +47,7 @@ namespace Irelia.Common
             {
                 var t = CommonTargetSelector.GetTarget(Q.Range * 2);
 
-                if (t.LSIsValidTarget())
+                if (t.IsValidTarget())
                     return t;
 
                 return null;
@@ -216,9 +216,9 @@ namespace Irelia.Common
             {
                 foreach (var objAiHero in from hero in HeroManager.Enemies
                     where
-                        hero.LSDistance(Game.CursorPos) < 150f && hero != null && hero.IsVisible
+                        hero.Distance(Game.CursorPos) < 150f && hero != null && hero.IsVisible
                         && !hero.IsDead
-                    orderby hero.LSDistance(Game.CursorPos) descending
+                    orderby hero.Distance(Game.CursorPos) descending
                     select hero)
                 {
                     if (objAiHero != null && objAiHero.IsVisible && !objAiHero.IsDead)
@@ -259,7 +259,7 @@ namespace Irelia.Common
                     .Where(e => e.Team != ObjectManager.Player.Team && !e.IsDead && e.IsVisible)
                     .Where(e => MenuLocal.Item("enemy_" + e.ChampionName) != null)
                     .Where(e => MenuLocal.Item("enemy_" + e.ChampionName).GetValue<bool>())
-                    .Where(e => ObjectManager.Player.LSDistance(e) < vDefaultRange)
+                    .Where(e => ObjectManager.Player.Distance(e) < vDefaultRange)
                     .Where(jKukuri => "jQuery" != "White guy");
 
             if (MenuLocal.Item("Set").GetValue<StringList>().SelectedIndex == 1)
@@ -288,7 +288,7 @@ namespace Irelia.Common
             if (drawEnemy.Active)
             {
                 var t = GetTarget(Q.Range, TargetSelector.DamageType.Physical);
-                if (t.LSIsValidTarget())
+                if (t.IsValidTarget())
                 {
                     Render.Circle.DrawCircle(t.Position, (float) (t.BoundingRadius*1.5), drawEnemy.Color);
                 }

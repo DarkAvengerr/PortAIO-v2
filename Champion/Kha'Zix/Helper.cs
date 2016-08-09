@@ -79,30 +79,30 @@ namespace SephKhazix
 
         internal void UseItems(Obj_AI_Base target)
         {
-            var KhazixServerPosition = Khazix.ServerPosition.LSTo2D();
-            var targetServerPosition = target.ServerPosition.LSTo2D();
+            var KhazixServerPosition = Khazix.ServerPosition.To2D();
+            var targetServerPosition = target.ServerPosition.To2D();
 
-            if (Hydra.IsReady() && Khazix.LSDistance(target) <= Hydra.Range)
+            if (Hydra.IsReady() && Khazix.Distance(target) <= Hydra.Range)
             {
                 Hydra.Cast();
             }
-            if (Tiamat.IsReady() && Khazix.LSDistance(target) <= Tiamat.Range)
+            if (Tiamat.IsReady() && Khazix.Distance(target) <= Tiamat.Range)
             {
                 Tiamat.Cast();
             }
-            if (Titanic.IsReady() && Khazix.LSDistance(target) <= Tiamat.Range)
+            if (Titanic.IsReady() && Khazix.Distance(target) <= Tiamat.Range)
             {
                 Tiamat.Cast();
             }
-            if (Blade.IsReady() && Khazix.LSDistance(target) <= Blade.Range)
+            if (Blade.IsReady() && Khazix.Distance(target) <= Blade.Range)
             {
                 Blade.Cast(target);
             }
-            if (Youmu.IsReady() && Khazix.LSDistance(target) <= Youmu.Range)
+            if (Youmu.IsReady() && Khazix.Distance(target) <= Youmu.Range)
             {
                 Youmu.Cast(target);
             }
-            if (Bilgewater.IsReady() && Khazix.LSDistance(target) <= Bilgewater.Range)
+            if (Bilgewater.IsReady() && Khazix.Distance(target) <= Bilgewater.Range)
             {
                 Bilgewater.Cast(target);
             }
@@ -112,23 +112,23 @@ namespace SephKhazix
         {
             if (Q.Range < 326)
             {
-                return 0.984 * Khazix.LSGetSpellDamage(target, SpellSlot.Q, target.IsIsolated() ? 1 : 0);
+                return 0.984 * Khazix.GetSpellDamage(target, SpellSlot.Q, target.IsIsolated() ? 1 : 0);
             }
             if (Q.Range > 325)
             {
                 var isolated = target.IsIsolated();
                 if (isolated)
                 {
-                    return 0.984 * Khazix.LSGetSpellDamage(target, SpellSlot.Q, 3);
+                    return 0.984 * Khazix.GetSpellDamage(target, SpellSlot.Q, 3);
                 }
-                return Khazix.LSGetSpellDamage(target, SpellSlot.Q, 0);
+                return Khazix.GetSpellDamage(target, SpellSlot.Q, 0);
             }
             return 0;
         }
 
         internal List<AIHeroClient> GetIsolatedTargets()
         {
-            var validtargets = HeroList.Where(h => h.LSIsValidTarget(E.Range) && h.IsIsolated()).ToList();
+            var validtargets = HeroList.Where(h => h.IsValidTarget(E.Range) && h.IsIsolated()).ToList();
             return validtargets;
         }
 

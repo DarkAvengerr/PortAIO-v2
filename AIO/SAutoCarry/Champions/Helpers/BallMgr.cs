@@ -83,7 +83,7 @@ namespace SAutoCarry.Champions.Helpers
             if (Position == to)
                 return false;
 
-            return Collision.CheckEnemyHeroCollision(Position.LSTo2D(), to.LSTo2D(), 130f, 0.25f);
+            return Collision.CheckEnemyHeroCollision(Position.To2D(), to.To2D(), 130f, 0.25f);
         }
 
         private static void AIHeroClient_OnCreate(GameObject sender, EventArgs args)

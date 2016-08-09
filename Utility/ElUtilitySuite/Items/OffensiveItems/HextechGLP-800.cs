@@ -48,7 +48,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
                    && HeroManager.Enemies.Any(
                        x =>
                        x.HealthPercent < this.Menu.Item("Hextech800EnemyHp").GetValue<Slider>().Value
-                       && x.LSDistance(this.Player) < 700 && !x.IsDead && !x.IsZombie);
+                       && x.Distance(this.Player) < 700 && !x.IsDead && !x.IsZombie);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         {
             var objAiHero = HeroManager.Enemies.FirstOrDefault(
                 x => x.HealthPercent < this.Menu.Item("Hextech800EnemyHp").GetValue<Slider>().Value 
-                && x.LSDistance(this.Player) < 500 && !x.IsDead && !x.IsZombie);
+                && x.Distance(this.Player) < 500 && !x.IsDead && !x.IsZombie);
 
             if (objAiHero != null)
             {

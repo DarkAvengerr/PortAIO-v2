@@ -197,8 +197,8 @@ using EloBuddy;
                     !ObjectManager.Get<Obj_AI_Base>()
                          .Any(
                              obj =>
-                             obj.LSIsValidTarget() && obj.LSDistance(this.lastCastPosition) <= this.Width * 2
-                             && obj.LSHasBuff("chilled")))
+                             obj.IsValidTarget() && obj.Distance(this.lastCastPosition) <= this.Width * 2
+                             && obj.HasBuff("chilled")))
                 {
                     this.SpellObject.Cast();
                 }

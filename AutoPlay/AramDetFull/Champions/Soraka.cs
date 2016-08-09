@@ -40,12 +40,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             var unit = gapcloser.Sender;
 
-            if ( unit.LSIsValidTarget(Q.Range) && Q.LSIsReady())
+            if ( unit.IsValidTarget(Q.Range) && Q.IsReady())
             {
                 Q.Cast(unit);
             }
 
-            if (unit.LSIsValidTarget(E.Range) && E.LSIsReady())
+            if (unit.IsValidTarget(E.Range) && E.IsReady())
             {
                 E.Cast(unit);
             }
@@ -57,11 +57,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var spell = args;
 
 
-            if (!unit.LSIsValidTarget(E.Range))
+            if (!unit.IsValidTarget(E.Range))
             {
                 return;
             }
-            if (!E.LSIsReady())
+            if (!E.IsReady())
             {
                 return;
             }
@@ -71,7 +71,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 Q.Cast(target);
             }
@@ -84,7 +84,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (E.LSIsReady())
+            if (E.IsReady())
                 E.Cast(target);
         }
 
@@ -106,7 +106,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             AutoR();
             AutoW();
-            if (player.ManaPercent < 55 || !Q.LSIsReady())
+            if (player.ManaPercent < 55 || !Q.IsReady())
                 return;
 
             foreach (var minion in MinionManager.GetMinions(Q.Range))
@@ -140,7 +140,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void AutoR()
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
             {
                 return;
             }
@@ -159,7 +159,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void AutoW()
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
             {
                 return;
             }

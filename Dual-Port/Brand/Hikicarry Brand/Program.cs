@@ -161,25 +161,25 @@ using EloBuddy;
 
         public static void KillSteal()
         {
-            if (Q.LSIsReady() && Config.Item("q.ks").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("q.ks").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(Q.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(Q.Range) &&
                     Q.GetPrediction(x).Hitchance >= HikiChance("hikiChance") && Q.GetDamage(x) > x.Health))
                 {
                     Q.Cast(enemy);
                 }
             }
-            if (W.LSIsReady() && Config.Item("w.ks").GetValue<bool>())
+            if (W.IsReady() && Config.Item("w.ks").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range) &&
                     W.GetPrediction(x).Hitchance >= HikiChance("hikiChance") && W.GetDamage(x) > x.Health))
                 {
                     W.Cast(enemy);
                 }
             }
-            if (E.LSIsReady() && Config.Item("e.ks").GetValue<bool>())
+            if (E.IsReady() && Config.Item("e.ks").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range) && 
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && 
                     E.GetDamage(x) > x.Health))
                 {
                     E.CastOnUnit(enemy);
@@ -198,7 +198,7 @@ using EloBuddy;
                 foreach (
                     var enemy in
                         HeroManager.Enemies.Where(
-                            x => x.LSIsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= HikiChance("hikiChance")
+                            x => x.IsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= HikiChance("hikiChance")
                                  && x.HasBuff("brandablaze") && Q.GetPrediction(x).CollisionObjects.Count == 0))
                 {
                     Q.Cast(enemy);
@@ -209,7 +209,7 @@ using EloBuddy;
                 foreach (
                     var enemy in
                         HeroManager.Enemies.Where(
-                            x => x.LSIsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= HikiChance("hikiChance")))
+                            x => x.IsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= HikiChance("hikiChance")))
                 {
                     Q.Cast(enemy);
                 }
@@ -217,29 +217,29 @@ using EloBuddy;
         }
         private static void Combo()
         {
-            if (Q.LSIsReady() && Config.Item("q.combo").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("q.combo").GetValue<bool>())
             {
                 QCast();
             }
-            if (W.LSIsReady() && Config.Item("w.combo").GetValue<bool>() && !E.LSIsReady())
+            if (W.IsReady() && Config.Item("w.combo").GetValue<bool>() && !E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range) && W.GetPrediction(x).Hitchance >= HikiChance("hikiChance")))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range) && W.GetPrediction(x).Hitchance >= HikiChance("hikiChance")))
                 {
                     W.Cast(enemy);
                 }
             }
-            if (E.LSIsReady() && Config.Item("e.combo").GetValue<bool>() && W.LSIsReady())
+            if (E.IsReady() && Config.Item("e.combo").GetValue<bool>() && W.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range)))
                 {
                     E.CastOnUnit(enemy);
                 }
             }
-            if (R.LSIsReady() && Config.Item("r.combo").GetValue<bool>())
+            if (R.IsReady() && Config.Item("r.combo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range)))
                 {
-                    if (Brand.LSCountEnemiesInRange(R.Range) >= Config.Item("r.hit.x.target").GetValue<Slider>().Value)
+                    if (Brand.CountEnemiesInRange(R.Range) >= Config.Item("r.hit.x.target").GetValue<Slider>().Value)
                     {
                         R.CastOnUnit(enemy);
                     }
@@ -256,16 +256,16 @@ using EloBuddy;
             {
                 return;
             }
-            if (W.LSIsReady() && Config.Item("w.harass").GetValue<bool>() && !E.LSIsReady())
+            if (W.IsReady() && Config.Item("w.harass").GetValue<bool>() && !E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range) && W.GetPrediction(x).Hitchance >= HikiChance("hikiChance")))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range) && W.GetPrediction(x).Hitchance >= HikiChance("hikiChance")))
                 {
                     W.Cast(enemy);
                 }
             }
-            if (E.LSIsReady() && Config.Item("e.harass").GetValue<bool>() && W.LSIsReady())
+            if (E.IsReady() && Config.Item("e.harass").GetValue<bool>() && W.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range)))
                 {
                     E.CastOnUnit(enemy);
                 }
@@ -278,7 +278,7 @@ using EloBuddy;
             {
                 return;
             }
-            if (W.LSIsReady() && Config.Item("w.clear").GetValue<bool>())
+            if (W.IsReady() && Config.Item("w.clear").GetValue<bool>())
             {
                 var wminion = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, W.Range, MinionTypes.All, MinionTeam.NotAlly).ToList();
                 var xx = W.GetCircularFarmLocation(wminion);
@@ -292,19 +292,19 @@ using EloBuddy;
         private static float TotalDamage(AIHeroClient hero)
         {
             var damage = 0d;
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 damage += Q.GetDamage(hero);
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 damage += W.GetDamage(hero);
             }
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
                 damage += W.GetDamage(hero);
             }
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 damage += R.GetDamage(hero);
             }
@@ -317,32 +317,32 @@ using EloBuddy;
             var edraw = Config.Item("e.draw").GetValue<Circle>();
             var rdraw = Config.Item("r.draw").GetValue<Circle>();
 
-            if (qdraw.Active && Q.LSIsReady())
+            if (qdraw.Active && Q.IsReady())
             {
                 Render.Circle.DrawCircle(Brand.Position, Q.Range, qdraw.Color);
             }
-            if (wdraw.Active && W.LSIsReady())
+            if (wdraw.Active && W.IsReady())
             {
                 Render.Circle.DrawCircle(Brand.Position, W.Range, qdraw.Color);
             }
-            if (edraw.Active && E.LSIsReady())
+            if (edraw.Active && E.IsReady())
             {
                 Render.Circle.DrawCircle(Brand.Position, E.Range, edraw.Color);
             }
-            if (rdraw.Active && R.LSIsReady())
+            if (rdraw.Active && R.IsReady())
             {
                 Render.Circle.DrawCircle(Brand.Position, R.Range, rdraw.Color);
             }
         }
         private static void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (gapcloser.Sender.LSHasBuff("brandablaze") && Q.LSIsReady())
+            if (gapcloser.Sender.HasBuff("brandablaze") && Q.IsReady())
             {
                 Q.Cast(gapcloser.Sender);
             }
             else
             {
-                if (E.LSIsReady() && Q.LSIsReady())
+                if (E.IsReady() && Q.IsReady())
                 {
                     E.Cast(gapcloser.Sender);
                 }
@@ -350,7 +350,7 @@ using EloBuddy;
         }
         private static void Interrupter2_OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (!Config.Item("e.q.interrupter").GetValue<bool>() || !sender.LSIsValidTarget()) return;
+            if (!Config.Item("e.q.interrupter").GetValue<bool>() || !sender.IsValidTarget()) return;
             Interrupter2.DangerLevel a;
             switch (Config.Item("min.interrupter.danger.level").GetValue<StringList>().SelectedValue)
             {
@@ -370,13 +370,13 @@ using EloBuddy;
                 args.DangerLevel == Interrupter2.DangerLevel.Medium && a != Interrupter2.DangerLevel.Medium &&
                 a != Interrupter2.DangerLevel.High)
             {
-                if (sender.LSHasBuff("brandablaze") && Q.LSIsReady())
+                if (sender.HasBuff("brandablaze") && Q.IsReady())
                 {
                     Q.Cast(sender);
                 }
                 else
                 {
-                    if (E.LSIsReady() && Q.LSIsReady())
+                    if (E.IsReady() && Q.IsReady())
                     {
                         E.Cast(sender);
                     }

@@ -67,9 +67,9 @@ using EloBuddy;
                     Jungle();
                     break;
             }
-            if (Helper.EEnabled("ezreal.q.harass") && EzrealSpells.Q.LSIsReady() && ObjectManager.Player.ManaPercent > Helper.ESlider("ezreal.harass.mana"))
+            if (Helper.EEnabled("ezreal.q.harass") && EzrealSpells.Q.IsReady() && ObjectManager.Player.ManaPercent > Helper.ESlider("ezreal.harass.mana"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(EzrealSpells.Q.Range) && Helper.EEnabled("ezreal.q.toggle." + x.ChampionName) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(EzrealSpells.Q.Range) && Helper.EEnabled("ezreal.q.toggle." + x.ChampionName) &&
                     EzrealSpells.Q.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     EzrealSpells.Q.Cast(enemy);
@@ -80,26 +80,26 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (EzrealSpells.Q.LSIsReady() && Helper.EEnabled("ezreal.q.combo"))
+            if (EzrealSpells.Q.IsReady() && Helper.EEnabled("ezreal.q.combo"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(EzrealSpells.Q.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(EzrealSpells.Q.Range) &&
                     EzrealSpells.Q.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     EzrealSpells.Q.Cast(enemy);
                 }
             }
-            if (EzrealSpells.W.LSIsReady() && Helper.EEnabled("ezreal.w.combo"))
+            if (EzrealSpells.W.IsReady() && Helper.EEnabled("ezreal.w.combo"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(EzrealSpells.W.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(EzrealSpells.W.Range) &&
                     EzrealSpells.W.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     EzrealSpells.W.Cast(enemy);
                 }
             }
-            if (EzrealSpells.R.LSIsReady() && Helper.EEnabled("ezreal.r.combo"))
+            if (EzrealSpells.R.IsReady() && Helper.EEnabled("ezreal.r.combo"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(EzrealSpells.R.Range) && ObjectManager.Player.LSDistance(o.Position) > Helper.ESlider("ezreal.min.ult.distance")
-                    && ObjectManager.Player.LSDistance(o.Position) < Helper.ESlider("ezreal.max.ult.distance") && EzrealSpells.R.GetPrediction(o).Hitchance >= HitChance.High
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(EzrealSpells.R.Range) && ObjectManager.Player.Distance(o.Position) > Helper.ESlider("ezreal.min.ult.distance")
+                    && ObjectManager.Player.Distance(o.Position) < Helper.ESlider("ezreal.max.ult.distance") && EzrealSpells.R.GetPrediction(o).Hitchance >= HitChance.High
                     && o.Health < EzrealSpells.R.GetDamage(o)))
                 {
                     EzrealSpells.R.Cast(enemy);
@@ -113,17 +113,17 @@ using EloBuddy;
             {
                 return;
             }
-            if (EzrealSpells.Q.LSIsReady() && Helper.EEnabled("ezreal.q.harass"))
+            if (EzrealSpells.Q.IsReady() && Helper.EEnabled("ezreal.q.harass"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(EzrealSpells.Q.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(EzrealSpells.Q.Range) &&
                     EzrealSpells.Q.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     EzrealSpells.Q.Cast(enemy);
                 }
             }
-            if (EzrealSpells.W.LSIsReady() && Helper.EEnabled("ezreal.w.harass"))
+            if (EzrealSpells.W.IsReady() && Helper.EEnabled("ezreal.w.harass"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(EzrealSpells.W.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(EzrealSpells.W.Range) &&
                     EzrealSpells.W.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     EzrealSpells.W.Cast(enemy);
@@ -138,7 +138,7 @@ using EloBuddy;
                 return;
             }
 
-            if (EzrealSpells.Q.LSIsReady() && Helper.EEnabled("ezreal.q.harass"))
+            if (EzrealSpells.Q.IsReady() && Helper.EEnabled("ezreal.q.harass"))
             {
                 foreach (var minion in MinionManager.GetMinions(ObjectManager.Player.Position, EzrealSpells.Q.Range, MinionTypes.All, MinionTeam.NotAlly)
                     .Where(x => x.Health < EzrealSpells.Q.GetDamage(x) && EzrealSpells.Q.GetPrediction(x).Hitchance >= HitChance.High))
@@ -156,14 +156,14 @@ using EloBuddy;
             {
                 return;
             }
-            if (EzrealSpells.Q.LSIsReady() && Helper.EEnabled("ezreal.q.jungle"))
+            if (EzrealSpells.Q.IsReady() && Helper.EEnabled("ezreal.q.jungle"))
             {
                 EzrealSpells.Q.Cast(
                     MinionManager.GetMinions(ObjectManager.Player.ServerPosition,
                         Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 100, MinionTypes.All,
                         MinionTeam.Neutral, MinionOrderTypes.MaxHealth)[0]);
             }
-            if (EzrealSpells.E.LSIsReady() && Helper.EEnabled("ezreal.e.jungle"))
+            if (EzrealSpells.E.IsReady() && Helper.EEnabled("ezreal.e.jungle"))
             {
                 EzrealSpells.E.Cast(
                     MinionManager.GetMinions(ObjectManager.Player.ServerPosition,

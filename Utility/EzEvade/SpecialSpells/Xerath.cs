@@ -33,8 +33,8 @@ using EloBuddy; namespace ezEvade.SpecialSpells
 
                 if (castTime > 0)
                 {
-                    var dir = (args.End.LSTo2D() - args.Start.LSTo2D()).LSNormalized();
-                    var endPos = args.Start.LSTo2D() + dir * Math.Min(spellData.range, 750 + castTime / 2);
+                    var dir = (args.End.To2D() - args.Start.To2D()).Normalized();
+                    var endPos = args.Start.To2D() + dir * Math.Min(spellData.range, 750 + castTime / 2);
                     SpellDetector.CreateSpellData(hero, args.Start, endPos.To3D(), spellData);
                 }
 

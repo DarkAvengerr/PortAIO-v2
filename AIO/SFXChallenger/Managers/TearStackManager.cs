@@ -104,7 +104,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                 {
                     _lastTick = Environment.TickCount;
 
-                    if (_menu.Item(_menu.Name + ".fountain").GetValue<bool>() && !ObjectManager.Player.LSInFountain())
+                    if (_menu.Item(_menu.Name + ".fountain").GetValue<bool>() && !ObjectManager.Player.InFountain())
                     {
                         return;
                     }
@@ -112,21 +112,21 @@ using EloBuddy; namespace SFXChallenger.Managers
                     if (ObjectManager.Player.ManaPercent >=
                         _menu.Item(_menu.Name + ".min-mana").GetValue<Slider>().Value)
                     {
-                        var tearSlot = ObjectManager.Player.LSGetSpellSlot("TearsDummySpell");
+                        var tearSlot = ObjectManager.Player.GetSpellSlot("TearsDummySpell");
                         if (tearSlot != SpellSlot.Unknown &&
                             Game.Time > ObjectManager.Player.GetSpell(tearSlot).CooldownExpires &&
-                            ObjectManager.Player.LSCountEnemiesInRange(
+                            ObjectManager.Player.CountEnemiesInRange(
                                 _menu.Item(_menu.Name + ".min-distance").GetValue<Slider>().Value) <= 0)
                         {
                             var spell =
                                 _spells.FirstOrDefault(
-                                    s => s.LSIsReady() && _menu.Item(_menu.Name + "." + s.Slot).GetValue<bool>());
+                                    s => s.IsReady() && _menu.Item(_menu.Name + "." + s.Slot).GetValue<bool>());
                             if (spell != null)
                             {
                                 if (spell.IsSkillshot)
                                 {
                                     var target =
-                                        GameObjects.EnemyHeroes.Where(e => e.LSIsValidTarget(spell.Range))
+                                        GameObjects.EnemyHeroes.Where(e => e.IsValidTarget(spell.Range))
                                             .Concat(MinionManager.GetMinions(spell.Range))
                                             .FirstOrDefault();
                                     if (target != null)
@@ -135,9 +135,9 @@ using EloBuddy; namespace SFXChallenger.Managers
                                     }
                                     else
                                     {
-                                        var position = ObjectManager.Player.Position.LSExtend(
+                                        var position = ObjectManager.Player.Position.Extend(
                                             Game.CursorPos, Math.Min(1000, spell.Range * 0.8f + Random.Next(1, 26)));
-                                        if (position.LSIsValid())
+                                        if (position.IsValid())
                                         {
                                             spell.Cast(position);
                                         }
@@ -152,7 +152,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                                     else
                                     {
                                         var target =
-                                            GameObjects.EnemyHeroes.Where(e => e.LSIsValidTarget(spell.Range))
+                                            GameObjects.EnemyHeroes.Where(e => e.IsValidTarget(spell.Range))
                                                 .Concat(MinionManager.GetMinions(spell.Range))
                                                 .FirstOrDefault();
                                         if (target != null)

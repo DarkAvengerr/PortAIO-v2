@@ -27,7 +27,7 @@ using EloBuddy; namespace Activator.Summoners
 
         public Menu Menu { get; private set; }
         public Menu Parent => Menu.Parent;
-        public SpellSlot Slot => Player.LSGetSpellSlot(Name);
+        public SpellSlot Slot => Player.GetSpellSlot(Name);
         public AIHeroClient Player => ObjectManager.Player;
 
         public CoreSum CreateMenu(Menu root)
@@ -184,8 +184,8 @@ using EloBuddy; namespace Activator.Summoners
 
         public bool IsReady()
         {
-            return Player.LSGetSpellSlot(Name).LSIsReady() || 
-                ExtraNames.Any(exname => Player.LSGetSpellSlot(exname).LSIsReady());
+            return Player.GetSpellSlot(Name).IsReady() || 
+                ExtraNames.Any(exname => Player.GetSpellSlot(exname).IsReady());
         }
 
         public string[] Excluded = { "summonerexhaust" };

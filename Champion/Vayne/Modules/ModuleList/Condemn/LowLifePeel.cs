@@ -18,8 +18,8 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
         public bool ShouldGetExecuted()
         {
             return MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.condemn.lowlifepeel") 
-                && Variables.spells[SpellSlot.E].LSIsReady()
-                && !Variables.spells[SpellSlot.Q].LSIsReady()
+                && Variables.spells[SpellSlot.E].IsReady()
+                && !Variables.spells[SpellSlot.Q].IsReady()
                 && (ObjectManager.Player.HealthPercent <= 25);
         }
 
@@ -30,11 +30,11 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
 
         public void OnExecute()
         {
-            var meleeEnemies = ObjectManager.Player.LSGetEnemiesInRange(400f).FindAll(m => m.IsMelee);
+            var meleeEnemies = ObjectManager.Player.GetEnemiesInRange(400f).FindAll(m => m.IsMelee);
 
             if (meleeEnemies.Any())
             {
-                var mostDangerous = meleeEnemies.OrderByDescending(m => m.LSGetAutoAttackDamage(ObjectManager.Player)).First();
+                var mostDangerous = meleeEnemies.OrderByDescending(m => m.GetAutoAttackDamage(ObjectManager.Player)).First();
                 //Variables.spells[SpellSlot.E].CastOnUnit(mostDangerous);
             }
         }

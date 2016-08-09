@@ -87,10 +87,10 @@ namespace SAutoCarry.Champions
             var t = TargetSelector.GetTarget(Spells[E].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
             if(t != null)
             {
-                if (Spells[E].LSIsReady() && ComboUseE)
+                if (Spells[E].IsReady() && ComboUseE)
                     Spells[E].SPredictionCast(t, HitChance.Low);
 
-                if(Spells[R].LSIsReady() && ComboUseR)
+                if(Spells[R].IsReady() && ComboUseR)
                 {
                     var aoePred = Spells[R].GetAoeSPrediction();
                     if(aoePred.HitCount >= ComboUseRHitCount)
@@ -99,14 +99,14 @@ namespace SAutoCarry.Champions
                         return;
                     }
 
-                    if(t.LSDistance(ObjectManager.Player.ServerPosition) > ComboUseRWhenRange)
+                    if(t.Distance(ObjectManager.Player.ServerPosition) > ComboUseRWhenRange)
                     {
                         if (ComboUseROnlyToWall)
                         {
                             var pred = Spells[R].GetSPrediction(t);
                             if (pred.HitChance >= HitChance.Medium)
                             {
-                                var endPosition = ObjectManager.Player.ServerPosition.LSTo2D() + (pred.CastPosition - ObjectManager.Player.ServerPosition.LSTo2D()).LSNormalized() * 1000f;
+                                var endPosition = ObjectManager.Player.ServerPosition.To2D() + (pred.CastPosition - ObjectManager.Player.ServerPosition.To2D()).Normalized() * 1000f;
                                 if (IsWallStunable(pred.UnitPosition, endPosition))
                                     Spells[R].Cast(pred.CastPosition);
                             }
@@ -123,14 +123,14 @@ namespace SAutoCarry.Champions
             var t = TargetSelector.GetTarget(Spells[E].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
             if (t != null)
             {
-                if (Spells[E].LSIsReady() && HarassUseE)
+                if (Spells[E].IsReady() && HarassUseE)
                     Spells[E].Cast(Spells[E].GetSPrediction(t).CastPosition);
             }
         }
 
         public void LaneClear()
         {
-            if (Spells[E].LSIsReady() && LaneClearUseE)
+            if (Spells[E].IsReady() && LaneClearUseE)
             {
                 var farm = Spells[E].GetLineFarmLocation(MinionManager.GetMinions(Spells[E].Range));
                 if (farm.MinionsHit > 2)
@@ -146,9 +146,9 @@ namespace SAutoCarry.Champions
 
         public void LastHit()
         {
-            if(Spells[E].LSIsReady() && LastHitE)
+            if(Spells[E].IsReady() && LastHitE)
             {
-                var minion = MinionManager.GetMinions(Spells[E].Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).Where(p => p.LSDistance(ObjectManager.Player.ServerPosition) > ObjectManager.Player.AttackRange && p.Health < Spells[E].GetDamage(p)).FirstOrDefault();
+                var minion = MinionManager.GetMinions(Spells[E].Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).Where(p => p.Distance(ObjectManager.Player.ServerPosition) > ObjectManager.Player.AttackRange && p.Health < Spells[E].GetDamage(p)).FirstOrDefault();
                 if (minion != null)
                     Spells[E].Cast(minion.ServerPosition);
             }
@@ -156,10 +156,10 @@ namespace SAutoCarry.Champions
 
         private bool IsWallStunable(Vector2 from, Vector2 to)
         {
-            float count = from.LSDistance(to);
+            float count = from.Distance(to);
             for (uint i = 0; i <= count; i += 25)
             {
-                Vector2 pos = from.LSExtend(ObjectManager.Player.ServerPosition.LSTo2D(), -i);
+                Vector2 pos = from.Extend(ObjectManager.Player.ServerPosition.To2D(), -i);
                 var colFlags = NavMesh.GetCollisionFlags(pos.X, pos.Y);
                 if (colFlags.HasFlag(CollisionFlags.Wall) || colFlags.HasFlag(CollisionFlags.Building))
                     return true;
@@ -173,12 +173,12 @@ namespace SAutoCarry.Champions
             {
                 if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo)
                 {
-                    if (Spells[W].LSIsReady() && ComboUseW)
+                    if (Spells[W].IsReady() && ComboUseW)
                         Spells[W].Cast();
                 }
                 else if(Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Mixed || HarassToggle)
                 {
-                    if (Spells[W].LSIsReady() && HarassUseW)
+                    if (Spells[W].IsReady() && HarassUseW)
                         Spells[W].Cast();
                 }
             }
@@ -186,7 +186,7 @@ namespace SAutoCarry.Champions
             {
                 if(Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.LaneClear)
                 {
-                    if (Spells[W].LSIsReady() && LaneClearUseW)
+                    if (Spells[W].IsReady() && LaneClearUseW)
                         Spells[W].Cast();
                 }
             }
@@ -206,7 +206,7 @@ namespace SAutoCarry.Champions
                         Items.UseItem(3748);
                 }
 
-                if (Spells[Q].LSIsReady() && ComboUseQ)
+                if (Spells[Q].IsReady() && ComboUseQ)
                     Spells[Q].Cast();
             }
             else if(Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Mixed || HarassToggle)
@@ -223,13 +223,13 @@ namespace SAutoCarry.Champions
                             Items.UseItem(3748);
                     }
 
-                    if (Spells[Q].LSIsReady() && HarassUseQ)
+                    if (Spells[Q].IsReady() && HarassUseQ)
                         Spells[Q].Cast();
                 }
             }
             else if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.LaneClear)
             {
-                if (!args.Target.IsDead && LaneClearUseQ && Spells[Q].LSIsReady())
+                if (!args.Target.IsDead && LaneClearUseQ && Spells[Q].IsReady())
                     Spells[Q].Cast();
             }
         }

@@ -24,16 +24,16 @@ using EloBuddy;
 
         public bool ShouldRun()
         {
-            return Variables.spells[SpellSlot.R].LSIsReady() &&
+            return Variables.spells[SpellSlot.R].IsReady() &&
                    MenuExtensions.GetItemValue<bool>("iseriesr.kogmaw.misc.r.ks");
         }
 
         public void Run()
         {
-            if (Variables.spells[SpellSlot.R].LSIsReady())
+            if (Variables.spells[SpellSlot.R].IsReady())
             {
                     var rTarget = TargetSelector.GetTarget(Variables.spells[SpellSlot.R].Range, TargetSelector.DamageType.Magical);
-                    if (rTarget.LSIsValidTarget() 
+                    if (rTarget.IsValidTarget() 
                         && HealthPrediction.GetHealthPrediction(rTarget, 300) > 0 
                         && HealthPrediction.GetHealthPrediction(rTarget, 300) + 5 < Variables.spells[SpellSlot.R].GetDamage(rTarget))
                     {

@@ -109,15 +109,15 @@ using EloBuddy; namespace SFXUtility.Features.Others
                 if (spellInfo != null)
                 {
                     if ((spellInfo.Target && args.Target == ObjectManager.Player) ||
-                        ObjectManager.Player.LSDistance(sender.ServerPosition) + ObjectManager.Player.BoundingRadius <=
+                        ObjectManager.Player.Distance(sender.ServerPosition) + ObjectManager.Player.BoundingRadius <=
                         spellInfo.Range)
                     {
                         var moveTo = _lastMove;
                         EloBuddy.Player.IssueOrder(
                             GameObjectOrder.MoveTo,
-                            sender.ServerPosition.LSExtend(
+                            sender.ServerPosition.Extend(
                                 ObjectManager.Player.ServerPosition,
-                                ObjectManager.Player.ServerPosition.LSDistance(sender.ServerPosition) +
+                                ObjectManager.Player.ServerPosition.Distance(sender.ServerPosition) +
                                 (spellInfo.TurnOpposite ? 100 : -100)));
                         _blockMovementTime = Game.Time + spellInfo.CastTime;
                         LeagueSharp.Common.Utility.DelayAction.Add(

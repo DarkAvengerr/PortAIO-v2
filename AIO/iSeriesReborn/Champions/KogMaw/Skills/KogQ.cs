@@ -13,12 +13,12 @@ using EloBuddy;
             var target = TargetSelector.GetTarget(Variables.spells[SpellSlot.Q].Range * 0.70f,
                 TargetSelector.DamageType.Magical);
 
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 var prediction = Variables.spells[SpellSlot.Q].GetPrediction(target);
 
                 var targetHealth = target.Health;
-                var AADamage = ObjectManager.Player.LSGetAutoAttackDamage(target);
+                var AADamage = ObjectManager.Player.GetAutoAttackDamage(target);
 
                 if (targetHealth <= AADamage * 4 && prediction.Hitchance > HitChance.Medium)
                 {

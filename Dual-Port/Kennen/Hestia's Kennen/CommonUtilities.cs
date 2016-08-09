@@ -51,17 +51,17 @@ using EloBuddy;
         {
             var comboDamage = 0d;
 
-            if (q.LSIsReady())
+            if (q.IsReady())
             {
                 comboDamage += q.GetDamage(target);
             }
 
-            if (w.LSIsReady())
+            if (w.IsReady())
             {
                 comboDamage += w.GetDamage(target);
             }
 
-            if (ignite.LSIsReady())
+            if (ignite.IsReady())
             {
                 comboDamage += ObjectManager.Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
             }

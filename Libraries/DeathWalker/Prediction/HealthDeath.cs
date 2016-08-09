@@ -66,7 +66,7 @@ namespace DetuksSharp.Prediction
 
             }
 
-            if (!args.SData.LSIsAutoAttack())
+            if (!args.SData.IsAutoAttack())
                 return;
             if (args.Target != null && args.Target is Obj_AI_Base && !sender.IsMe)
             {
@@ -259,7 +259,7 @@ namespace DetuksSharp.Prediction
                 }
                 else
                 {
-                    hitOn = now +  (int)((attacks.missle.Position.LSDistance(unit.Position)*1000) / attacks.sData.MissileSpeed)+100;
+                    hitOn = now +  (int)((attacks.missle.Position.Distance(unit.Position)*1000) / attacks.sData.MissileSpeed)+100;
                 }
 
                 if (now < hitOn && hitOn < now + msTime)
@@ -287,7 +287,7 @@ namespace DetuksSharp.Prediction
                 }
                 else
                 {
-                    hitOn = now + (int)((attacks.missle.Position.LSDistance(unit.Position) * 1000) / attacks.sData.MissileSpeed);
+                    hitOn = now + (int)((attacks.missle.Position.Distance(unit.Position) * 1000) / attacks.sData.MissileSpeed);
                 }
 
                 int timeTo = now + msTime;
@@ -398,8 +398,8 @@ namespace DetuksSharp.Prediction
             {
                 if (isValidTarget())
                     return target;
-                var predTarget = minionsAround.Where(min => !min.IsDead && min.LSDistance(source,true)<650*650)
-                        .OrderBy(min => min.LSDistance(source.Position, true))
+                var predTarget = minionsAround.Where(min => !min.IsDead && min.Distance(source,true)<650*650)
+                        .OrderBy(min => min.Distance(source.Position, true))
                         .FirstOrDefault();
                 setTarget(predTarget);
                 return predTarget;
@@ -411,7 +411,7 @@ namespace DetuksSharp.Prediction
                 if (tar == null || source == null)
                     return 0;
                // Console.WriteLine("Return damge");
-                return (float)source.LSGetAutoAttackDamage(tar, true);
+                return (float)source.GetAutoAttackDamage(tar, true);
             }
 
             private int hitOnTar(Obj_AI_Base tar)
@@ -433,7 +433,7 @@ namespace DetuksSharp.Prediction
                 }
                 else
                 {
-                    return createdTick + (int)((source.Position.LSDistance(tar.Position) * 1000) / (source.BasicAttack.MissileSpeed)) + ((source is Obj_AI_Turret) ? towerDamageDelay : 0) + addTime;//lil delay cus dunno l8er could try to values what says delay of dmg dealing
+                    return createdTick + (int)((source.Position.Distance(tar.Position) * 1000) / (source.BasicAttack.MissileSpeed)) + ((source is Obj_AI_Turret) ? towerDamageDelay : 0) + addTime;//lil delay cus dunno l8er could try to values what says delay of dmg dealing
                 }
             }
 
@@ -494,7 +494,7 @@ namespace DetuksSharp.Prediction
                         }
                         else
                         {
-                            return now + (int)((missle.Position.LSDistance(target.Position) * 1000) / (sData.MissileSpeed)) + ((source is Obj_AI_Turret)?towerDamageDelay:0);//lil delay cus dunno l8er could try to values what says delay of dmg dealing
+                            return now + (int)((missle.Position.Distance(target.Position) * 1000) / (sData.MissileSpeed)) + ((source is Obj_AI_Turret)?towerDamageDelay:0);//lil delay cus dunno l8er could try to values what says delay of dmg dealing
                         }
 
                     }
@@ -513,12 +513,12 @@ namespace DetuksSharp.Prediction
                 sData = dataIn;
                 melee = !meleeIn;
                 createdTick = now;
-                isAutoAtack = sData.LSIsAutoAttack();
+                isAutoAtack = sData.IsAutoAttack();
 
                 if (isAutoAtack)
                 {
 
-                    dealDamage = (float) source.LSGetAutoAttackDamage(target, true);
+                    dealDamage = (float) source.GetAutoAttackDamage(target, true);
                     if (source.IsMelee)
                         cycle = (int) (source.AttackDelay*1000);
                     else
@@ -545,7 +545,7 @@ namespace DetuksSharp.Prediction
                             try
                             {
 
-                                dealDamage = (float)((AIHeroClient)source).LSGetSpellDamage(target, tSpell.Spellslot);
+                                dealDamage = (float)((AIHeroClient)source).GetSpellDamage(target, tSpell.Spellslot);
                             }
                             catch (Exception)
                             {

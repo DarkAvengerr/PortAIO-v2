@@ -90,9 +90,9 @@ using EloBuddy;
 
         private static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (_orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None && !_q.LSIsReady() && HasItem())
+            if (_orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None && !_q.IsReady() && HasItem())
                 CastItem();
-            if (_orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None && _q.LSIsReady())
+            if (_orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None && _q.IsReady())
                 _q.Cast();
         }
 
@@ -129,27 +129,27 @@ using EloBuddy;
         private static void KS()
         {
             // ks e
-            if (!burrowed && _e.LSIsReady())
+            if (!burrowed && _e.IsReady())
             {
-                foreach (var target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(_e.Range) && !x.IsZombie))
+                foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(_e.Range) && !x.IsZombie))
                 {
                     if (target.Health < Player.CalcDamage(target, Player.Mana == 100 ? Damage.DamageType.True : Damage.DamageType.Physical, GetRawEDamage()))
                         _e.Cast(target);
                 }
             }
             // ks q
-            if (burrowed && _q2.LSIsReady())
+            if (burrowed && _q2.IsReady())
             {
-                foreach (var target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(_q2.Range) && !x.IsZombie))
+                foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(_q2.Range) && !x.IsZombie))
                 {
                     if (target.Health < _q2.GetDamage(target))
                         _q2.Cast(target);
                 }
             }
             // auto  q2 cast
-            if (burrowed && _q2.LSIsReady() && _menu.Item(autoq2).GetValue<bool>() && !Player.LSIsRecalling())
+            if (burrowed && _q2.IsReady() && _menu.Item(autoq2).GetValue<bool>() && !Player.IsRecalling())
             {
-                foreach (var target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(_q2.Range) && !x.IsZombie))
+                foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(_q2.Range) && !x.IsZombie))
                 {
                     _q2.Cast(target);
                 }
@@ -164,54 +164,54 @@ using EloBuddy;
         private static void Combo()
         {
             // w2 cast
-            if (burrowed && _w.LSIsReady())
+            if (burrowed && _w.IsReady())
             {
                 var target = TargetSelector.GetTarget(Player.BoundingRadius + 200, TargetSelector.DamageType.Physical);
-                if (target.LSIsValidTarget() && !target.IsZombie)
+                if (target.IsValidTarget() && !target.IsZombie)
                     _w.Cast();
             }
             // e cast
-            if (!burrowed && _e.LSIsReady() && Player.Mana >= _menu.Item(comboE1).GetValue<Slider>().Value)
+            if (!burrowed && _e.IsReady() && Player.Mana >= _menu.Item(comboE1).GetValue<Slider>().Value)
             {
                 var target = TargetSelector.GetTarget(_e.Range, TargetSelector.DamageType.Physical);
-                if (target.LSIsValidTarget() && !target.IsZombie)
+                if (target.IsValidTarget() && !target.IsZombie)
                     _e.Cast(target);
             }
             // q2 cast
-            if (burrowed && _q2.LSIsReady())
+            if (burrowed && _q2.IsReady())
             {
-                foreach (var target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(_q2.Range) && !x.IsZombie))
+                foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(_q2.Range) && !x.IsZombie))
                 {
                         _q2.Cast(target);
                 }
             }
             // W1 cast
-            if (!burrowed && _w.LSIsReady() && _menu.Item(comboW1).GetValue<bool>() && Orbwalking.CanMove(80))
+            if (!burrowed && _w.IsReady() && _menu.Item(comboW1).GetValue<bool>() && Orbwalking.CanMove(80))
             {
                 var target = _orbwalker.GetTarget();
-                if (target.LSIsValidTarget() && !target.IsZombie)
+                if (target.IsValidTarget() && !target.IsZombie)
                 {
-                    if (!(target as Obj_AI_Base).LSHasBuff("reksaiknockupimmune"))
+                    if (!(target as Obj_AI_Base).HasBuff("reksaiknockupimmune"))
                         _w.Cast();
                 }
                 else
                 {
                     var hero = TargetSelector.GetTarget(300, TargetSelector.DamageType.Physical);
-                    if (hero.LSIsValidTarget() && !hero.IsZombie && !hero.LSHasBuff("reksaiknockupimmune"))
+                    if (hero.IsValidTarget() && !hero.IsZombie && !hero.HasBuff("reksaiknockupimmune"))
                         _w.Cast();
                 }
             }
             //E2 cast
-            if (burrowed && _e.LSIsReady() && _menu.Item(comboE2).GetValue<bool>())
+            if (burrowed && _e.IsReady() && _menu.Item(comboE2).GetValue<bool>())
             {
-                if (Player.LSCountEnemiesInRange(300) == 0)
+                if (Player.CountEnemiesInRange(300) == 0)
                 {
                     var target = TargetSelector.GetTarget(600, TargetSelector.DamageType.Physical);
-                    if (target.LSIsValidTarget() && !target.IsZombie && Prediction.GetPrediction(target,10).UnitPosition
-                        .LSDistance(Player.Position) > target.LSDistance(Player.Position))
+                    if (target.IsValidTarget() && !target.IsZombie && Prediction.GetPrediction(target,10).UnitPosition
+                        .Distance(Player.Position) > target.Distance(Player.Position))
                     {
                         var x = Prediction.GetPrediction(target, 500).UnitPosition;
-                        var y = Player.Position.LSExtend(x, _e2.Range);
+                        var y = Player.Position.Extend(x, _e2.Range);
                         _e2.Cast(x);
                     }
                 }
@@ -222,7 +222,7 @@ using EloBuddy;
             var minionE = MinionManager.GetMinions(_e.Range,MinionTypes.All,MinionTeam.NotAlly).FirstOrDefault();
             var minionQ2 = MinionManager.GetMinions(_q2.Range,MinionTypes.All,MinionTeam.NotAlly);
             var minionW = MinionManager.GetMinions(Player.BoundingRadius + 200, MinionTypes.All,MinionTeam.NotAlly).FirstOrDefault();
-            if (minionE != null && !burrowed && _e.LSIsReady())
+            if (minionE != null && !burrowed && _e.IsReady())
             {
                 if (Player.CalcDamage(minionE, Player.Mana == 100 ? Damage.DamageType.True : Damage.DamageType.Physical, GetRawEDamage())
                     > minionE.Health)
@@ -230,14 +230,14 @@ using EloBuddy;
                 if (Player.Mana == 100)
                     _e.Cast(minionE);
             }
-            if (burrowed && _q2.LSIsReady())
+            if (burrowed && _q2.IsReady())
             {
                 foreach (var target in minionQ2)
                 {
                     _q2.Cast(target);
                 }
             }
-            if (minionW != null  && burrowed && _w.LSIsReady() && !_q2.LSIsReady())
+            if (minionW != null  && burrowed && _w.IsReady() && !_q2.IsReady())
             {
                 _w.Cast();
             }

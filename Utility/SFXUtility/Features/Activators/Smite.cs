@@ -261,13 +261,13 @@ using EloBuddy; namespace SFXUtility.Features.Activators
                     return;
                 }
 
-                var minion = _currentMinion != null && _currentMinion.LSIsValidTarget();
+                var minion = _currentMinion != null && _currentMinion.IsValidTarget();
 
                 if (_smiteSpell != null && Menu.Item(Name + "SpellSmiteDrawingRange").GetValue<bool>())
                 {
                     Render.Circle.DrawCircle(
                         ObjectManager.Player.Position, SmiteRange,
-                        minion && _smiteSpell.LSIsReady() && _smiteSpell.CanCast(_currentMinion)
+                        minion && _smiteSpell.IsReady() && _smiteSpell.CanCast(_currentMinion)
                             ? Menu.Item(Name + "SpellSmiteDrawingUseableColor").GetValue<Color>()
                             : Menu.Item(Name + "SpellSmiteDrawingUnusableColor").GetValue<Color>(),
                         Menu.Item(Name + "SpellSmiteDrawingThickness").GetValue<Slider>().Value);
@@ -296,7 +296,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
                             }
                             else if (heroSpell.Count > 1)
                             {
-                                spell = heroSpell.FirstOrDefault(s => s.Spell.LSIsReady()) ??
+                                spell = heroSpell.FirstOrDefault(s => s.Spell.IsReady()) ??
                                         heroSpell.OrderBy(h => h.Spell.Instance.CooldownExpires).First();
                             }
                             if (spell != null && spell.Spell.Instance.CooldownExpires - Game.Time < 3f)
@@ -348,9 +348,9 @@ using EloBuddy; namespace SFXUtility.Features.Activators
                     {
                         _currentMinion = ObjectManager.Player.ServerPosition.GetMinionFastByNames(SmiteRange, _mobNames);
                     }
-                    if (_smiteSpell.LSIsReady())
+                    if (_smiteSpell.IsReady())
                     {
-                        if (_currentMinion.LSIsValidTarget(SmiteRange))
+                        if (_currentMinion.IsValidTarget(SmiteRange))
                         {
                             if (
                                 ObjectManager.Player.GetSummonerSpellDamage(_currentMinion, Damage.SummonerSpell.Smite) >
@@ -623,7 +623,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
                     }
                 }
                 damage -= target.HPRegenRate / 2f;
-                if (ObjectManager.Player.LSHasBuff("summonerexhaust"))
+                if (ObjectManager.Player.HasBuff("summonerexhaust"))
                 {
                     damage *= 0.6f;
                 }
@@ -638,7 +638,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
 
         public bool CanCast(Obj_AI_Minion minion)
         {
-            return minion != null && minion.IsValid && Spell.LSIsReady() &&
+            return minion != null && minion.IsValid && Spell.IsReady() &&
                    Spell.GetPrediction(minion, false, Range + minion.BoundingRadius).Hitchance >= MinHitChance;
         }
 
@@ -656,7 +656,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
         public float CalculateHitDelay(Obj_AI_Base target)
         {
             return Delay +
-                   (Speed > 0 ? ObjectManager.Player.ServerPosition.LSDistance(target.ServerPosition) / (Speed / 1000) : 0) +
+                   (Speed > 0 ? ObjectManager.Player.ServerPosition.Distance(target.ServerPosition) / (Speed / 1000) : 0) +
                    Game.Ping / 2f;
         }
     }

@@ -21,10 +21,10 @@ using EloBuddy; namespace Activator.Spells.Health
 
             foreach (var hero in Activator.Allies())
             {
-                if (hero.Player.NetworkId != Player.NetworkId || Player.LSInFountain())
+                if (hero.Player.NetworkId != Player.NetworkId || Player.InFountain())
                     continue;
 
-                if (hero.Player.LSDistance(Player.ServerPosition) <= Range)
+                if (hero.Player.Distance(Player.ServerPosition) <= Range)
                 {
                     if (!Parent.Item(Parent.Name + "useon" + hero.Player.NetworkId).GetValue<bool>())
                         continue;

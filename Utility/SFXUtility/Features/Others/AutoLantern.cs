@@ -149,7 +149,7 @@ using EloBuddy; namespace SFXUtility.Features.Others
                 if (ObjectManager.Player.HealthPercent <= Menu.Item(Name + "Percent").GetValue<Slider>().Value ||
                     Menu.Item(Name + "Hotkey").GetValue<KeyBind>().Active)
                 {
-                    if (_lantern.Position.LSDistance(ObjectManager.Player.Position) <= 500)
+                    if (_lantern.Position.Distance(ObjectManager.Player.Position) <= 500)
                     {
                         ObjectManager.Player.Spellbook.CastSpell((SpellSlot) 62, _lantern);
                     }

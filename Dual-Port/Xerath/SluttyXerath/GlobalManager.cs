@@ -33,25 +33,25 @@ using EloBuddy;
 
         public static bool RCasted()
         {
-            return Environment.TickCount - lastrr < 250 || ObjectManager.Player.LSHasBuff("XerathLocusOfPower2");
+            return Environment.TickCount - lastrr < 250 || ObjectManager.Player.HasBuff("XerathLocusOfPower2");
         }
 
         public static float GetComboDamage(AIHeroClient enemy)
         {
             var damage = 0d;
-            if (Q.LSIsReady())
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.Q);
+            if (Q.IsReady())
+                damage += Player.GetSpellDamage(enemy, SpellSlot.Q);
 
-            if (E.LSIsReady())
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.E);
+            if (E.IsReady())
+                damage += Player.GetSpellDamage(enemy, SpellSlot.E);
 
-            if (W.LSIsReady())
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.W);
+            if (W.IsReady())
+                damage += Player.GetSpellDamage(enemy, SpellSlot.W);
 
-            if (R.LSIsReady())
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.R)*3;
+            if (R.IsReady())
+                damage += Player.GetSpellDamage(enemy, SpellSlot.R)*3;
 
-            if (Ignite.LSIsReady())
+            if (Ignite.IsReady())
                 damage += IgniteDamage(enemy);
 
 

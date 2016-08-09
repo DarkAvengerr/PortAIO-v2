@@ -41,7 +41,7 @@ using EloBuddy;
         
         private static void OnProcessSCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsMe && !args.SData.LSIsAutoAttack())
+            if (sender.IsMe && !args.SData.IsAutoAttack())
             {
                 IsRunning = false;
             }

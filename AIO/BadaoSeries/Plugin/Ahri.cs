@@ -59,15 +59,15 @@ using EloBuddy;
             float x = 0;
             if (Player.Mana > Q.Instance.SData.Mana)
             {
-                if (Q.LSIsReady()) x += Qdamage(target);
+                if (Q.IsReady()) x += Qdamage(target);
                 if (Player.Mana > Q.Instance.SData.Mana + R.Instance.SData.Mana)
                 {
-                    if (R.LSIsReady()) x += Rdamage(target) ;
+                    if (R.IsReady()) x += Rdamage(target) ;
                     if (Player.Mana > Q.Instance.SData.Mana + R.Instance.SData.Mana + E.Instance.SData.Mana)
                     {
-                        if (E.LSIsReady()) x += Edamage(target);
+                        if (E.IsReady()) x += Edamage(target);
                         if (Player.Mana > Q.Instance.SData.Mana + R.Instance.SData.Mana + E.Instance.SData.Mana + W.Instance.SData.Mana)
-                            if (W.LSIsReady()) x += Wdamage(target);
+                            if (W.IsReady()) x += Wdamage(target);
                     }
                 }
 
@@ -76,11 +76,11 @@ using EloBuddy;
             {
                 x = x + (float)Player.CalcDamage(target, Damage.DamageType.Magical, 100 + 0.1 * Player.FlatMagicDamageMod);
             }
-            if(Ignite.LSIsReady())
+            if(Ignite.IsReady())
             {
-                x = x + (float)Player.LSGetSpellDamage(target, Ignite);
+                x = x + (float)Player.GetSpellDamage(target, Ignite);
             }
-            x = x + (float)Player.LSGetAutoAttackDamage(target, true);
+            x = x + (float)Player.GetAutoAttackDamage(target, true);
             return x;
         }
         public Ahri()
@@ -194,7 +194,7 @@ using EloBuddy;
         {
             if (!Enable)
                 return;
-            if (sender.IsEnemy && sender.LSIsValidTarget(E.Range) && E.LSIsReady() && autointerrupt)
+            if (sender.IsEnemy && sender.IsValidTarget(E.Range) && E.IsReady() && autointerrupt)
             {
                 E.BadaoCast(sender);
             }
@@ -204,7 +204,7 @@ using EloBuddy;
         {
             if (!Enable)
                 return;
-            if (gapcloser.Sender.IsEnemy && gapcloser.Sender.LSIsValidTarget(E.Range) && E.LSIsReady() && autointerrupt)
+            if (gapcloser.Sender.IsEnemy && gapcloser.Sender.IsValidTarget(E.Range) && E.IsReady() && autointerrupt)
             {
                 E.BadaoCast(gapcloser.Sender);
             }
@@ -217,8 +217,8 @@ using EloBuddy;
             {
                 if (args.SData.Name == R.Instance.Name) Rcount = Utils.GameTimeTickCount;
             }
-            if (!activeAssasin && autoharassq && !sender.IsMe && sender.IsEnemy && (sender as AIHeroClient).LSIsValidTarget(Q.Range) &&
-                (args.SData.LSIsAutoAttack() || !args.SData.CanMoveWhileChanneling) && Player.ManaPercent >= manaharass)
+            if (!activeAssasin && autoharassq && !sender.IsMe && sender.IsEnemy && (sender as AIHeroClient).IsValidTarget(Q.Range) &&
+                (args.SData.IsAutoAttack() || !args.SData.CanMoveWhileChanneling) && Player.ManaPercent >= manaharass)
             {
                 Q.Cast(sender);
             }
@@ -229,17 +229,17 @@ using EloBuddy;
             if (!Enable)
                 return;
             // Q after attack
-            if (!E.LSIsReady() && Q.LSIsReady() && (IsCombo || IsHarass))
+            if (!E.IsReady() && Q.IsReady() && (IsCombo || IsHarass))
             {
-                foreach (var x in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range)))
+                foreach (var x in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                     Q.CastIfWillHit(x, 2);
-                if ((target as AIHeroClient).LSIsValidTarget())
+                if ((target as AIHeroClient).IsValidTarget())
                     Q.Cast(target as AIHeroClient);
             }
             // E after attack
-            if (E.LSIsReady() && (IsCombo || IsHarass))
+            if (E.IsReady() && (IsCombo || IsHarass))
             {
-                if ((target as AIHeroClient).LSIsValidTarget())
+                if ((target as AIHeroClient).IsValidTarget())
                 {
                     if (E.BadaoCast(target as AIHeroClient))
                         LeagueSharp.Common.Utility.DelayAction.Add(50, () => Q.Cast(target as AIHeroClient));
@@ -266,9 +266,9 @@ using EloBuddy;
         {
             if (!Enable)
                 return;
-            if (Player.LSIsDashing()) return;
+            if (Player.IsDashing()) return;
             var enemies = HeroManager.Enemies.Select(x => x.NetworkId).ToList();
-            if (enemies.Contains(sender.NetworkId) && sender.LSIsValidTarget())
+            if (enemies.Contains(sender.NetworkId) && sender.IsValidTarget())
             {
                 if (IsCombo)
                     LeagueSharp.Common.Utility.DelayAction.Add(50, () => comboonnewpath());
@@ -278,7 +278,7 @@ using EloBuddy;
             if (activeAssasin)
             {
                 var target = TargetSelector.GetSelectedTarget();
-                if (target.LSIsValidTarget() && target.NetworkId == sender.NetworkId)
+                if (target.IsValidTarget() && target.NetworkId == sender.NetworkId)
                 {
                     AssasinOnNewPath();
                 }
@@ -293,7 +293,7 @@ using EloBuddy;
                 return;
             }
             if ((IsCombo || IsHarass) && Orbwalking.CanMove(Orbwalking.Orbwalker._config.Item("ExtraWindup").GetValue<Slider>().Value)
-                && (Q.LSIsReady() || E.LSIsReady()) )
+                && (Q.IsReady() || E.IsReady()) )
             {
                 Orbwalker.SetAttack(false);
             }
@@ -312,15 +312,15 @@ using EloBuddy;
         private static void killstealUpdate()
         {
             var enemies = HeroManager.Enemies;
-            foreach (var x in enemies.Where(x => x.LSIsValidTarget(Q.Range) && Qdamage(x) > x.Health))
+            foreach (var x in enemies.Where(x => x.IsValidTarget(Q.Range) && Qdamage(x) > x.Health))
             {
                 Q.Cast(x);
             }
-            foreach (var x in enemies.Where(x => x.LSIsValidTarget(W.Range) && Wdamage(x) > x.Health))
+            foreach (var x in enemies.Where(x => x.IsValidTarget(W.Range) && Wdamage(x) > x.Health))
             {
                 W.Cast(x);
             }
-            foreach (var x in enemies.Where(x => x.LSIsValidTarget(E.Range) && Edamage(x) > x.Health))
+            foreach (var x in enemies.Where(x => x.IsValidTarget(E.Range) && Edamage(x) > x.Health))
             {
                 E.Cast(x);
             }
@@ -331,7 +331,7 @@ using EloBuddy;
             if (combow)
             {
                 var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-                if (W.LSIsReady() && target.LSIsValidTarget() && !target.IsZombie)
+                if (W.IsReady() && target.IsValidTarget() && !target.IsZombie)
                 {
                     W.Cast();
                 }
@@ -339,9 +339,9 @@ using EloBuddy;
             //use Q
             if (comboq)
             {
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                 {
-                    foreach (var x in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsZombie))
+                    foreach (var x in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsZombie))
                     {
                         if (x.HasBuffOfType(BuffType.Charm) || x.HasBuffOfType(BuffType.Stun) || x.HasBuffOfType(BuffType.Suppression))
                             if (Q.Cast(x) == Spell.CastStates.SuccessfullyCasted)
@@ -356,23 +356,23 @@ using EloBuddy;
             if (comboq)
             {
                 var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-                if (Q.LSIsReady() && target.LSIsValidTarget() && !target.IsZombie &&
-                    (!E.LSIsReady() || E.GetBadaoPrediction(target).CollisionObjects.Any()))
+                if (Q.IsReady() && target.IsValidTarget() && !target.IsZombie &&
+                    (!E.IsReady() || E.GetBadaoPrediction(target).CollisionObjects.Any()))
                 {
                     if (Q.Cast(target) == Spell.CastStates.SuccessfullyCasted)
                         return;
                 }
-                if (Q.LSIsReady() &&
-                    (!E.LSIsReady() || E.GetBadaoPrediction(target).CollisionObjects.Any()))
+                if (Q.IsReady() &&
+                    (!E.IsReady() || E.GetBadaoPrediction(target).CollisionObjects.Any()))
                 {
-                    foreach (var x in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsZombie))
+                    foreach (var x in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsZombie))
                     {
                         if (x.HasBuffOfType(BuffType.Charm) || x.HasBuffOfType(BuffType.Stun) || x.HasBuffOfType(BuffType.Suppression))
                             if (Q.Cast(x) == Spell.CastStates.SuccessfullyCasted)
                                 return;
                     }
                 }
-                if (!comboe && Q.LSIsReady() && target.LSIsValidTarget() && !target.IsZombie )
+                if (!comboe && Q.IsReady() && target.IsValidTarget() && !target.IsZombie )
                 {
                     if (Q.Cast(target) == Spell.CastStates.SuccessfullyCasted)
                         return;
@@ -382,17 +382,17 @@ using EloBuddy;
             if(comboe)
             {
                 var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-                if (E.LSIsReady() && target.LSIsValidTarget() && !target.IsZombie)
+                if (E.IsReady() && target.IsValidTarget() && !target.IsZombie)
                 {
-                    if (E.BadaoCast(target) && Q.LSIsReady() && comboq)
+                    if (E.BadaoCast(target) && Q.IsReady() && comboq)
                     {
                         LeagueSharp.Common.Utility.DelayAction.Add(50, () => Q.Cast(target));
                         return;
                     }
                 }
-                foreach (var x in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range) && !x.IsZombie))
+                foreach (var x in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && !x.IsZombie))
                 {
-                    if (E.BadaoCast(x) && Q.LSIsReady() && comboq)
+                    if (E.BadaoCast(x) && Q.IsReady() && comboq)
                     {
                         LeagueSharp.Common.Utility.DelayAction.Add(50, () => Q.Cast(target));
                         return;
@@ -407,7 +407,7 @@ using EloBuddy;
             if (harassw)
             {
                 var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-                if (W.LSIsReady() && target.LSIsValidTarget() && !target.IsZombie)
+                if (W.IsReady() && target.IsValidTarget() && !target.IsZombie)
                 {
                     W.Cast();
                 }
@@ -415,9 +415,9 @@ using EloBuddy;
             //use Q
             if (harassq)
             {
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                 {
-                    foreach (var x in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsZombie))
+                    foreach (var x in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsZombie))
                     {
                         if (x.HasBuffOfType(BuffType.Charm) || x.HasBuffOfType(BuffType.Stun) || x.HasBuffOfType(BuffType.Suppression))
                             if (Q.Cast(x) == Spell.CastStates.SuccessfullyCasted)
@@ -432,23 +432,23 @@ using EloBuddy;
             if (harassq)
             {
                 var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-                if (Q.LSIsReady() && target.LSIsValidTarget() && !target.IsZombie &&
-                    (!E.LSIsReady() || E.GetBadaoPrediction(target).CollisionObjects.Any()))
+                if (Q.IsReady() && target.IsValidTarget() && !target.IsZombie &&
+                    (!E.IsReady() || E.GetBadaoPrediction(target).CollisionObjects.Any()))
                 {
                     if (Q.Cast(target) == Spell.CastStates.SuccessfullyCasted)
                         return;
                 }
-                if (Q.LSIsReady() &&
-                    (!E.LSIsReady() || E.GetBadaoPrediction(target).CollisionObjects.Any()))
+                if (Q.IsReady() &&
+                    (!E.IsReady() || E.GetBadaoPrediction(target).CollisionObjects.Any()))
                 {
-                    foreach (var x in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsZombie))
+                    foreach (var x in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsZombie))
                     {
                         if (x.HasBuffOfType(BuffType.Charm) || x.HasBuffOfType(BuffType.Stun) || x.HasBuffOfType(BuffType.Suppression))
                             if (Q.Cast(x) == Spell.CastStates.SuccessfullyCasted)
                                 return;
                     }
                 }
-                if (!harasse && Q.LSIsReady() && target.LSIsValidTarget() && !target.IsZombie)
+                if (!harasse && Q.IsReady() && target.IsValidTarget() && !target.IsZombie)
                 {
                     if (Q.Cast(target) == Spell.CastStates.SuccessfullyCasted)
                         return;
@@ -458,17 +458,17 @@ using EloBuddy;
             if (harasse)
             {
                 var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-                if (E.LSIsReady() && target.LSIsValidTarget() && !target.IsZombie)
+                if (E.IsReady() && target.IsValidTarget() && !target.IsZombie)
                 {
-                    if (E.BadaoCast(target) && Q.LSIsReady() && harassq)
+                    if (E.BadaoCast(target) && Q.IsReady() && harassq)
                     {
                         LeagueSharp.Common.Utility.DelayAction.Add(50, () => Q.Cast(target));
                         return;
                     }
                 }
-                foreach (var x in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range) && !x.IsZombie))
+                foreach (var x in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && !x.IsZombie))
                 {
-                    if (E.BadaoCast(x) && Q.LSIsReady() && harassq)
+                    if (E.BadaoCast(x) && Q.IsReady() && harassq)
                     {
                         LeagueSharp.Common.Utility.DelayAction.Add(50, () => Q.Cast(target));
                         return;
@@ -480,7 +480,7 @@ using EloBuddy;
         private static void ClearOnUpdate()
         {
             var farmlocation = Q.GetLineFarmLocation(MinionManager.GetMinions(Q.Range));
-            if (clearq && Q.LSIsReady() && farmlocation.MinionsHit >= clearqhit)
+            if (clearq && Q.IsReady() && farmlocation.MinionsHit >= clearqhit)
                 Q.Cast(farmlocation.Position);
         }
         private static void AssasinMode()
@@ -488,32 +488,32 @@ using EloBuddy;
             var target = TargetSelector.GetSelectedTarget();
             if (Orbwalking.CanMove(Orbwalking.Orbwalker._config.Item("ExtraWindup").GetValue<Slider>().Value))
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-            if (target.LSIsValidTarget() && !target.IsZombie)
+            if (target.IsValidTarget() && !target.IsZombie)
             {
-                var targetpos = Prediction.GetPrediction(target, 0.25f).UnitPosition.LSTo2D();
-                var distance = targetpos.LSDistance(Player.Position.LSTo2D());
-                if (Ignite.LSIsReady() && target.LSIsValidTarget(450))
+                var targetpos = Prediction.GetPrediction(target, 0.25f).UnitPosition.To2D();
+                var distance = targetpos.Distance(Player.Position.To2D());
+                if (Ignite.IsReady() && target.IsValidTarget(450))
                 {
                     Player.Spellbook.CastSpell(Ignite, target);
                 }
-                if (!R.LSIsReady(3000) || Player.LSIsDashing())
+                if (!R.IsReady(3000) || Player.IsDashing())
                 {
-                    if (W.LSIsReady() && Player.LSDistance(target.Position) <= W.Range)
+                    if (W.IsReady() && Player.Distance(target.Position) <= W.Range)
                     {
                         W.Cast();
                     }
                 }
-                if (R.LSIsReady() && AhriOrbReturn == null && AhriOrb == null && Utils.GameTimeTickCount - Rcount >= 500)
+                if (R.IsReady() && AhriOrbReturn == null && AhriOrb == null && Utils.GameTimeTickCount - Rcount >= 500)
                 {
                     Vector2 intersec = new Vector2();
                     for (int i = 450; i >= 0; i = i - 50)
                     {
                         for (int j = 50;  j <= 600;  j = j + 50)
                         {
-                            var vectors = Geometry.LSCircleCircleIntersection(Player.Position.LSTo2D(),targetpos, i, j);
+                            var vectors = Geometry.CircleCircleIntersection(Player.Position.To2D(),targetpos, i, j);
                             foreach (var x in vectors)
                             {
-                                if (!Collide(x,target) && !x.LSIsWall())
+                                if (!Collide(x,target) && !x.IsWall())
                                 {
                                     intersec = x;
                                     goto ABC;
@@ -522,26 +522,26 @@ using EloBuddy;
                         }
                     }
                     ABC:
-                    if (intersec.LSIsValid())
+                    if (intersec.IsValid())
                         R.Cast(intersec.To3D());
                 }
-                else if (R.LSIsReady() && AhriOrbReturn != null &&
-                         Player.LSDistance(targetpos) < Player.LSDistance(AhriOrbReturn.Position.LSTo2D()) &&
+                else if (R.IsReady() && AhriOrbReturn != null &&
+                         Player.Distance(targetpos) < Player.Distance(AhriOrbReturn.Position.To2D()) &&
                          Utils.GameTimeTickCount - Rcount >= 0)
                 {
-                    var Orb = AhriOrbReturn.Position.LSTo2D();
-                    var dis = Orb.LSDistance(targetpos);
+                    var Orb = AhriOrbReturn.Position.To2D();
+                    var dis = Orb.Distance(targetpos);
                     Vector2 castpos = new Vector2();
                     for (int i = 450; i >= 200; i = i - 50)
                     {
-                        if (Orb.LSExtend(targetpos, dis + i).LSDistance(Player.Position.LSTo2D()) <= R.Range &&
-                            !Orb.LSExtend(targetpos, dis + i).LSIsWall())
+                        if (Orb.Extend(targetpos, dis + i).Distance(Player.Position.To2D()) <= R.Range &&
+                            !Orb.Extend(targetpos, dis + i).IsWall())
                         {
-                            castpos = Orb.LSExtend(targetpos, dis + i);
+                            castpos = Orb.Extend(targetpos, dis + i);
                             break;
                         }
                     }
-                    if (castpos.LSIsValid())
+                    if (castpos.IsValid())
                         R.Cast(castpos.To3D());
                 }
                 if (Orbwalking.CanAttack() && Orbwalking.InAutoAttackRange(target))
@@ -556,8 +556,8 @@ using EloBuddy;
             // use Q
             {
                 var target = TargetSelector.GetSelectedTarget();
-                if (Q.LSIsReady() && target.LSIsValidTarget() && !target.IsZombie &&
-                    (!E.LSIsReady() || E.GetBadaoPrediction(target).CollisionObjects.Any()))
+                if (Q.IsReady() && target.IsValidTarget() && !target.IsZombie &&
+                    (!E.IsReady() || E.GetBadaoPrediction(target).CollisionObjects.Any()))
                 {
                     if (Q.Cast(target) == Spell.CastStates.SuccessfullyCasted)
                     {
@@ -569,9 +569,9 @@ using EloBuddy;
             //use E
             {
                 var target = TargetSelector.GetSelectedTarget();
-                if (E.LSIsReady() && target.LSIsValidTarget() && !target.IsZombie &&  Utils.GameTimeTickCount >= Rcount + 400)
+                if (E.IsReady() && target.IsValidTarget() && !target.IsZombie &&  Utils.GameTimeTickCount >= Rcount + 400)
                 {
-                    if (E.BadaoCast(target) && Q.LSIsReady())
+                    if (E.BadaoCast(target) && Q.IsReady())
                     {
                         LeagueSharp.Common.Utility.DelayAction.Add(50, () => castQ(target));
                         return;

@@ -76,28 +76,28 @@ using EloBuddy;
 
             var MinionN = MinionManager.GetMinions(Q.Range + 200, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
 
-            if (MinionN.LSIsValidTarget() && SkyLv_AurelionSol.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            if (MinionN.IsValidTarget() && SkyLv_AurelionSol.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-                if (SkyLv_AurelionSol.Menu.Item("AurelionSol.SafeJungleClear").GetValue<bool>() && Player.LSCountEnemiesInRange(1500) > 0) return;
+                if (SkyLv_AurelionSol.Menu.Item("AurelionSol.SafeJungleClear").GetValue<bool>() && Player.CountEnemiesInRange(1500) > 0) return;
 
-                if (useQ && Player.ManaPercent > MiniManaQ && Q.LSIsReady())
+                if (useQ && Player.ManaPercent > MiniManaQ && Q.IsReady())
                 {
                     Q.CastIfHitchanceEquals(MinionN, HitChance.VeryHigh, PacketCast);
                 }
 
-                if (useW && W1.LSIsReady() && Player.ManaPercent > MiniManaW)
+                if (useW && W1.IsReady() && Player.ManaPercent > MiniManaW)
                 {
                     if (Player.ManaPercent <= MiniManaW && CustomLib.isWInLongRangeMode())
                     {
                         W2.Cast(PacketCast);
                     }
 
-                    if (Player.LSDistance(MinionN) > W1.Range - 20 && Player.LSDistance(MinionN) < W1.Range + 20 && CustomLib.isWInLongRangeMode())
+                    if (Player.Distance(MinionN) > W1.Range - 20 && Player.Distance(MinionN) < W1.Range + 20 && CustomLib.isWInLongRangeMode())
                     {
                         W2.Cast(PacketCast);
                     }
 
-                    if (Player.LSDistance(MinionN) > W2.Range - 20 && Player.LSDistance(MinionN) < W2.Range + 20 && !CustomLib.isWInLongRangeMode() && Player.ManaPercent > MiniManaW)
+                    if (Player.Distance(MinionN) > W2.Range - 20 && Player.Distance(MinionN) < W2.Range + 20 && !CustomLib.isWInLongRangeMode() && Player.ManaPercent > MiniManaW)
                     {
                         W1.Cast(PacketCast);
                     }

@@ -26,7 +26,7 @@ using EloBuddy;
         {
             if (azir.Menu.GetMenu.Item("UseRGapcloser").GetValue<bool>())
             {
-                if (gapcloser.End.LSDistance(azir.Hero.ServerPosition) < azir.Spells.R.Range)
+                if (gapcloser.End.Distance(azir.Hero.ServerPosition) < azir.Spells.R.Range)
                 {
                     for (int i = 0; i < azir.GapcloserNum; i++)
                     {
@@ -57,7 +57,7 @@ using EloBuddy;
 
                         if (args.SData.Name == azir.InterruptSpell[i])
                         {
-                            if (azir.Hero.LSDistance(sender) <= 550)
+                            if (azir.Hero.Distance(sender) <= 550)
                             {
                                 azir.Spells.R.Cast(sender);
                             }

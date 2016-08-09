@@ -28,7 +28,7 @@ namespace HeavenStrikeAzir
             if (OrbwalkCommands.CanDoAttack())
             {
                 var minion = OrbwalkCommands.GetClearMinionsAndBuildings();
-                if (minion.LSIsValidTarget())
+                if (minion.IsValidTarget())
                 {
                     OrbwalkCommands.AttackTarget(minion);
                 }

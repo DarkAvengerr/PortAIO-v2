@@ -181,7 +181,7 @@ using EloBuddy; namespace SFXChallenger.Abstracts
                     _nearestMinion =
                         MinionManager.GetMinions(
                             _minionSearchRange, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.None)
-                            .OrderBy(m => m.LSDistance(Player))
+                            .OrderBy(m => m.Distance(Player))
                             .FirstOrDefault();
                 }
                 if (!_useMuramana)
@@ -224,7 +224,7 @@ using EloBuddy; namespace SFXChallenger.Abstracts
                         ItemManager.Items.Where(
                             i => i.EffectFlags.HasFlag(EffectFlags.Damage) && i.Flags.HasFlag(ItemFlags.Offensive))
                             .Max(i => i.Range)));
-                if (ultimateTarget == null || Ultimate == null || !ultimateTarget.LSIsValidTarget(range))
+                if (ultimateTarget == null || Ultimate == null || !ultimateTarget.IsValidTarget(range))
                 {
                     var target = TargetSelector.GetTarget(range);
                     if (target != null)
@@ -374,9 +374,9 @@ using EloBuddy; namespace SFXChallenger.Abstracts
         {
             try
             {
-                if (sender.IsMe && !args.SData.LSIsAutoAttack())
+                if (sender.IsMe && !args.SData.IsAutoAttack())
                 {
-                    var slot = Player.LSGetSpellSlot(args.SData.Name);
+                    var slot = Player.GetSpellSlot(args.SData.Name);
                     if (args.Target is AIHeroClient || slot == SpellSlot.Q || slot == SpellSlot.W || slot == SpellSlot.E ||
                         slot == SpellSlot.R)
                     {

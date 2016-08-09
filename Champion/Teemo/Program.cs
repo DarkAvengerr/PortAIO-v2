@@ -315,7 +315,7 @@
 
                             if (turret != null && Orbwalker.InAutoAttackRange(ward) && attackWard)
                             {
-                                if (ward.LSIsValidTarget() && Orbwalker.InAutoAttackRange(ward) && ward.IsEnemy)
+                                if (ward.IsValidTarget() && Orbwalker.InAutoAttackRange(ward) && ward.IsEnemy)
                                 {
                                     Player.IssueOrder(GameObjectOrder.AttackUnit, ward);
                                 }
@@ -342,7 +342,7 @@
         {
             var gapR = Essentials.Config.SubMenu("Interrupt").Item("gapR").GetValue<bool>();
 
-            if (gapR && gapcloser.Sender.LSIsValidTarget() && gapcloser.Sender.LSIsFacing(Essentials.Player) &&
+            if (gapR && gapcloser.Sender.IsValidTarget() && gapcloser.Sender.IsFacing(Essentials.Player) &&
                 gapcloser.Sender.IsTargetable)
             {
                 Essentials.R.Cast(gapcloser.Sender.Position);
@@ -369,14 +369,14 @@
                 {
                     if (targetAdc)
                     {
-                        if (Essentials.Marksman.Contains(t.CharData.BaseSkinName) && useQCombo && Essentials.Q.LSIsReady() && Essentials.Q.IsInRange(t, -checkaaRange))
+                        if (Essentials.Marksman.Contains(t.CharData.BaseSkinName) && useQCombo && Essentials.Q.IsReady() && Essentials.Q.IsInRange(t, -checkaaRange))
                         {
                             Essentials.Q.Cast(t);
                         }
                     }
                     else
                     {
-                        if (useQCombo && Essentials.Q.LSIsReady() && Essentials.Q.IsInRange(t, -checkaaRange))
+                        if (useQCombo && Essentials.Q.IsReady() && Essentials.Q.IsInRange(t, -checkaaRange))
                         {
                             Essentials.Q.Cast(t);
                         }
@@ -386,14 +386,14 @@
                 {
                     if (targetAdc)
                     {
-                        if (Essentials.Marksman.Contains(t.CharData.BaseSkinName) && useQCombo && Essentials.Q.LSIsReady() && Essentials.Q.IsInRange(t))
+                        if (Essentials.Marksman.Contains(t.CharData.BaseSkinName) && useQCombo && Essentials.Q.IsReady() && Essentials.Q.IsInRange(t))
                         {
                             Essentials.Q.Cast(t);
                         }
                     }
                     else
                     {
-                        if (useQCombo && Essentials.Q.LSIsReady() && Essentials.Q.IsInRange(t))
+                        if (useQCombo && Essentials.Q.IsReady() && Essentials.Q.IsInRange(t))
                         {
                             Essentials.Q.Cast(t);
                         }
@@ -405,14 +405,14 @@
             {
                 if (checkAa)
                 {
-                    if (useQHarass && Essentials.Q.LSIsReady() && Essentials.Q.IsInRange(t, -checkaaRange))
+                    if (useQHarass && Essentials.Q.IsReady() && Essentials.Q.IsInRange(t, -checkaaRange))
                     {
                         Essentials.Q.Cast(t);
                     }
                 }
                 else
                 {
-                    if (useQHarass && Essentials.Q.LSIsReady() && Essentials.Q.IsInRange(t))
+                    if (useQHarass && Essentials.Q.IsReady() && Essentials.Q.IsInRange(t))
                     {
                         Essentials.Q.Cast(t);
                     }
@@ -431,21 +431,21 @@
         {
             var intq = Essentials.Config.SubMenu("Interrupt").Item("intq").GetValue<bool>();
             var intChance = Essentials.Config.SubMenu("Interrupt").Item("intChance").GetValue<StringList>().SelectedValue;
-            if (intChance == "High" && intq && Essentials.Q.LSIsReady() && args.DangerLevel == Interrupter2.DangerLevel.High)
+            if (intChance == "High" && intq && Essentials.Q.IsReady() && args.DangerLevel == Interrupter2.DangerLevel.High)
             {
                 if (sender != null)
                 {
                     Essentials.Q.Cast(sender);
                 }
             }
-            else if (intChance == "Medium" && intq && Essentials.Q.LSIsReady() && args.DangerLevel == Interrupter2.DangerLevel.Medium)
+            else if (intChance == "Medium" && intq && Essentials.Q.IsReady() && args.DangerLevel == Interrupter2.DangerLevel.Medium)
             {
                 if (sender != null)
                 {
                     Essentials.Q.Cast(sender);
                 }
             }
-            else if (intChance == "Low" && intq && Essentials.Q.LSIsReady() && args.DangerLevel == Interrupter2.DangerLevel.Low)
+            else if (intChance == "Low" && intq && Essentials.Q.IsReady() && args.DangerLevel == Interrupter2.DangerLevel.Low)
             {
                 if (sender != null)
                 {
@@ -499,22 +499,22 @@
 
             if (drawQ && colorBlind)
             {
-                Render.Circle.DrawCircle(player, Essentials.Q.Range, Essentials.Q.LSIsReady() ? Color.YellowGreen : Color.Red);
+                Render.Circle.DrawCircle(player, Essentials.Q.Range, Essentials.Q.IsReady() ? Color.YellowGreen : Color.Red);
             }
 
             if (drawQ && !colorBlind)
             {
-                Render.Circle.DrawCircle(player, Essentials.Q.Range, Essentials.Q.LSIsReady() ? Color.LightGreen : Color.Red);
+                Render.Circle.DrawCircle(player, Essentials.Q.Range, Essentials.Q.IsReady() ? Color.LightGreen : Color.Red);
             }
 
             if (drawR && colorBlind)
             {
-                Render.Circle.DrawCircle(player, Essentials.R.Range, Essentials.R.LSIsReady() ? Color.YellowGreen : Color.Red);
+                Render.Circle.DrawCircle(player, Essentials.R.Range, Essentials.R.IsReady() ? Color.YellowGreen : Color.Red);
             }
 
             if (drawR && !colorBlind)
             {
-                Render.Circle.DrawCircle(player, Essentials.R.Range, Essentials.R.LSIsReady() ? Color.LightGreen : Color.Red);
+                Render.Circle.DrawCircle(player, Essentials.R.Range, Essentials.R.IsReady() ? Color.LightGreen : Color.Red);
             }
 
             var drawautoR = Essentials.Config.SubMenu("Drawing").Item("drawautoR").GetValue<bool>();
@@ -525,7 +525,7 @@
                     var place in
                         Essentials.ShroomPositions.SummonersRift.Where(
                             pos =>
-                                pos.LSDistance(ObjectManager.Player.Position) <= Essentials.Config.SubMenu("Drawing").Item("DrawVision").GetValue<Slider>().Value))
+                                pos.Distance(ObjectManager.Player.Position) <= Essentials.Config.SubMenu("Drawing").Item("DrawVision").GetValue<Slider>().Value))
                 {
                     if (colorBlind)
                     {
@@ -544,7 +544,7 @@
                     var place in
                         Essentials.ShroomPositions.CrystalScar.Where(
                             pos =>
-                                pos.LSDistance(ObjectManager.Player.Position) <= Essentials.Config.SubMenu("Drawing").Item("DrawVision").GetValue<Slider>().Value))
+                                pos.Distance(ObjectManager.Player.Position) <= Essentials.Config.SubMenu("Drawing").Item("DrawVision").GetValue<Slider>().Value))
                 {
                     if (colorBlind)
                     {
@@ -564,7 +564,7 @@
                     var place in
                         Essentials.ShroomPositions.HowlingAbyss.Where(
                             pos =>
-                                pos.LSDistance(ObjectManager.Player.Position) <= Essentials.Config.SubMenu("Drawing").Item("DrawVision").GetValue<Slider>().Value))
+                                pos.Distance(ObjectManager.Player.Position) <= Essentials.Config.SubMenu("Drawing").Item("DrawVision").GetValue<Slider>().Value))
                 {
                     if (colorBlind)
                     {
@@ -584,7 +584,7 @@
                     var place in
                         Essentials.ShroomPositions.TwistedTreeline.Where(
                             pos =>
-                                pos.LSDistance(ObjectManager.Player.Position) <= Essentials.Config.SubMenu("Drawing").Item("DrawVision").GetValue<Slider>().Value))
+                                pos.Distance(ObjectManager.Player.Position) <= Essentials.Config.SubMenu("Drawing").Item("DrawVision").GetValue<Slider>().Value))
                 {
                     if (colorBlind)
                     {
@@ -604,7 +604,7 @@
                     var place in
                         Essentials.ShroomPositions.ButcherBridge.Where(
                             pos =>
-                                pos.LSDistance(ObjectManager.Player.Position) <= Essentials.Config.SubMenu("Drawing").Item("DrawVision").GetValue<Slider>().Value))
+                                pos.Distance(ObjectManager.Player.Position) <= Essentials.Config.SubMenu("Drawing").Item("DrawVision").GetValue<Slider>().Value))
                 {
                     if (colorBlind)
                     {

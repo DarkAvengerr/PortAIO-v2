@@ -42,7 +42,7 @@ namespace SPrediction
             if (ConfigMenu.SelectedPrediction.SelectedIndex == 1)
             {
                 var pred = s.GetPrediction(target);
-                var result = new Prediction.Result(new Prediction.Input(target, s), target, pred.CastPosition.LSTo2D(), pred.UnitPosition.LSTo2D(), pred.Hitchance, default(Collision.Result));
+                var result = new Prediction.Result(new Prediction.Input(target, s), target, pred.CastPosition.To2D(), pred.UnitPosition.To2D(), pred.Hitchance, default(Collision.Result));
                 result.Lock(false);
                 return result;
             }
@@ -51,11 +51,11 @@ namespace SPrediction
             switch (s.Type)
             {
                 case SkillshotType.SkillshotLine:
-                    return LinePrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, s.Collision, target.LSGetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), s.From.LSTo2D(), s.RangeCheckFrom.LSTo2D());
+                    return LinePrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, s.Collision, target.GetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D());
                 case SkillshotType.SkillshotCircle:
-                    return CirclePrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, s.Collision, target.LSGetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), s.From.LSTo2D(), s.RangeCheckFrom.LSTo2D());
+                    return CirclePrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, s.Collision, target.GetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D());
                 case SkillshotType.SkillshotCone:
-                    return ConePrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, s.Collision, target.LSGetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), s.From.LSTo2D(), s.RangeCheckFrom.LSTo2D());
+                    return ConePrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, s.Collision, target.GetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D());
             }
 
             throw new NotSupportedException("Unknown skill shot type");
@@ -68,7 +68,7 @@ namespace SPrediction
         /// <returns>Prediction result as <see cref="Prediction.Result"/></returns>
         public static Prediction.Result GetArcSPrediction(this Spell s, AIHeroClient target)
         {
-            return ArcPrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, s.Collision, target.LSGetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), s.From.LSTo2D(), s.RangeCheckFrom.LSTo2D());
+            return ArcPrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, s.Collision, target.GetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D());
         }
 
         /// <summary>
@@ -79,7 +79,7 @@ namespace SPrediction
         /// <returns>Prediction result as <see cref="Prediction.Vector.Result"/></returns>
         public static VectorPrediction.Result GetVectorSPrediction(this Spell s, AIHeroClient target, float vectorLenght)
         {
-            return VectorPrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, vectorLenght, target.LSGetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), s.RangeCheckFrom.LSTo2D());
+            return VectorPrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, vectorLenght, target.GetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), s.RangeCheckFrom.To2D());
         }
 
         /// <summary>
@@ -106,11 +106,11 @@ namespace SPrediction
             switch (s.Type)
             {
                 case SkillshotType.SkillshotLine:
-                    return LinePrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, s.From.LSTo2D(), s.RangeCheckFrom.LSTo2D());
+                    return LinePrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, s.From.To2D(), s.RangeCheckFrom.To2D());
                 case SkillshotType.SkillshotCircle:
-                    return CirclePrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, s.From.LSTo2D(), s.RangeCheckFrom.LSTo2D());
+                    return CirclePrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, s.From.To2D(), s.RangeCheckFrom.To2D());
                 case SkillshotType.SkillshotCone:
-                    return ConePrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, s.From.LSTo2D(), s.RangeCheckFrom.LSTo2D());
+                    return ConePrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, s.From.To2D(), s.RangeCheckFrom.To2D());
             }
 
             throw new NotSupportedException("Unknown skill shot type");
@@ -125,7 +125,7 @@ namespace SPrediction
             if (s.Collision)
                 throw new InvalidOperationException("Collisionable spell");
 
-            return ArcPrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, s.From.LSTo2D(), s.RangeCheckFrom.LSTo2D());
+            return ArcPrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, s.From.To2D(), s.RangeCheckFrom.To2D());
         }
 
         /// <summary>
@@ -138,7 +138,7 @@ namespace SPrediction
             if (s.Collision)
                 throw new InvalidOperationException("Collisionable spell");
 
-            return VectorPrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, vectorLenght, s.RangeCheckFrom.LSTo2D());
+            return VectorPrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, vectorLenght, s.RangeCheckFrom.To2D());
         }
         #endregion
 
@@ -156,7 +156,7 @@ namespace SPrediction
         /// <returns>true if collision found</returns>
         public static bool CheckCollision(this Spell s, Vector2 to, bool checkMinion = true, bool checkEnemyHero = false, bool checkYasuoWall = true, bool checkAllyHero = false, bool checkWall = false, bool isArc = false)
         {
-            return Collision.CheckCollision(s.From.LSTo2D(), to, s.Width, s.Delay, s.Speed, checkMinion, checkEnemyHero, checkYasuoWall, checkAllyHero, checkWall, isArc);
+            return Collision.CheckCollision(s.From.To2D(), to, s.Width, s.Delay, s.Speed, checkMinion, checkEnemyHero, checkYasuoWall, checkAllyHero, checkWall, isArc);
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace SPrediction
         /// <returns>true if collision found</returns>
         public static bool CheckMinionCollision(this Spell s, Vector2 to, bool isArc = false)
         {
-            return Collision.CheckMinionCollision(s.From.LSTo2D(), to, s.Width, s.Delay, s.Speed, isArc);
+            return Collision.CheckMinionCollision(s.From.To2D(), to, s.Width, s.Delay, s.Speed, isArc);
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace SPrediction
         /// <returns>true if collision found</returns>
         public static bool CheckEnemyHeroCollision(this Spell s, Vector2 to, bool isArc = false)
         {
-            return Collision.CheckEnemyHeroCollision(s.From.LSTo2D(), to, s.Width, s.Delay, s.Speed, isArc);
+            return Collision.CheckEnemyHeroCollision(s.From.To2D(), to, s.Width, s.Delay, s.Speed, isArc);
         }
 
         /// <summary>
@@ -189,7 +189,7 @@ namespace SPrediction
         /// <returns>true if collision found</returns>
         public static bool CheckAllyHeroCollision(this Spell s, Vector2 to, bool isArc = false)
         {
-            return Collision.CheckAllyHeroCollision(s.From.LSTo2D(), to, s.Width, s.Delay, s.Speed, isArc);
+            return Collision.CheckAllyHeroCollision(s.From.To2D(), to, s.Width, s.Delay, s.Speed, isArc);
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace SPrediction
         /// <returns>true if collision found</returns>
         public static bool CheckWallCollision(this Spell s, Vector2 to)
         {
-            return Collision.CheckWallCollision(s.From.LSTo2D(), to);
+            return Collision.CheckWallCollision(s.From.To2D(), to);
         }
 
         /// <summary>
@@ -210,7 +210,7 @@ namespace SPrediction
         /// <returns>true if collision found</returns>
         public static bool CheckYasuoWallCollision(this Spell s, Vector2 to, bool isArc = false)
         {
-            return Collision.CheckYasuoWallCollision(s.From.LSTo2D(), to, s.Width, isArc);
+            return Collision.CheckYasuoWallCollision(s.From.To2D(), to, s.Width, isArc);
         }
 
         /// <summary>
@@ -249,7 +249,7 @@ namespace SPrediction
         /// <returns>Collision result as <see cref="Collision.Result"/></returns>
         public static Collision.Result GetCollisions(this Spell s, Vector2 to, bool isArc = false)
         {
-            return Collision.GetCollisions(s.From.LSTo2D(), to, s.Range, s.Width, s.Delay, s.Speed, isArc);
+            return Collision.GetCollisions(s.From.To2D(), to, s.Range, s.Width, s.Delay, s.Speed, isArc);
         }
         #endregion
 
@@ -304,20 +304,20 @@ namespace SPrediction
             float avgt = t.AvgMovChangeTime() + reactionIgnoreDelay;
             float movt = t.LastMovChangeTime();
             float avgp = t.AvgPathLenght();
-            var waypoints = t.LSGetWaypoints();
+            var waypoints = t.GetWaypoints();
 
             Prediction.Result result;
 
             switch (s.Type)
             {
                 case SkillshotType.SkillshotLine:
-                    result = LinePrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range, s.Collision, waypoints, avgt, movt, avgp, t.LastAngleDiff(), s.From.LSTo2D(), s.RangeCheckFrom.LSTo2D());
+                    result = LinePrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range, s.Collision, waypoints, avgt, movt, avgp, t.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D());
                     break;
                 case SkillshotType.SkillshotCircle:
-                    result = CirclePrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range, s.Collision, waypoints, avgt, movt, avgp, t.LastAngleDiff(), s.From.LSTo2D(), s.RangeCheckFrom.LSTo2D());
+                    result = CirclePrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range, s.Collision, waypoints, avgt, movt, avgp, t.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D());
                     break;
                 case SkillshotType.SkillshotCone:
-                    result = ConePrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range, s.Collision, waypoints, avgt, movt, avgp, t.LastAngleDiff(), s.From.LSTo2D(), s.RangeCheckFrom.LSTo2D());
+                    result = ConePrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range, s.Collision, waypoints, avgt, movt, avgp, t.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D());
                     break;
                 default:
                     throw new InvalidOperationException("Unknown spell type");
@@ -326,7 +326,7 @@ namespace SPrediction
             Drawings.s_DrawTick = Utils.TickCount;
             Drawings.s_DrawPos = result.CastPosition;
             Drawings.s_DrawHitChance = result.HitChance.ToString();
-            Drawings.s_DrawDirection = (result.CastPosition - s.From.LSTo2D()).LSNormalized().LSPerpendicular();
+            Drawings.s_DrawDirection = (result.CastPosition - s.From.To2D()).Normalized().Perpendicular();
             Drawings.s_DrawWidth = (int)s.Width;
 
             if (result.HitChance >= hc)
@@ -367,7 +367,7 @@ namespace SPrediction
             float avgt = t.AvgMovChangeTime() + reactionIgnoreDelay;
             float movt = t.LastMovChangeTime();
             float avgp = t.AvgPathLenght();
-            var result = ArcPrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range, s.Collision, t.LSGetWaypoints(), avgt, movt, avgp, t.LastAngleDiff(), s.From.LSTo2D(), s.RangeCheckFrom.LSTo2D(), arconly);
+            var result = ArcPrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range, s.Collision, t.GetWaypoints(), avgt, movt, avgp, t.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D(), arconly);
 
             if (result.HitChance >= hc)
             {
@@ -409,7 +409,7 @@ namespace SPrediction
             float avgt = t.AvgMovChangeTime() + reactionIgnoreDelay;
             float movt = t.LastMovChangeTime();
             float avgp = t.AvgPathLenght();
-            var result = VectorPrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range, vectorLenght, t.LSGetWaypoints(), avgt, movt, avgp, s.RangeCheckFrom.LSTo2D());
+            var result = VectorPrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range, vectorLenght, t.GetWaypoints(), avgt, movt, avgp, s.RangeCheckFrom.To2D());
 
             if (result.HitChance >= hc)
             {
@@ -452,14 +452,14 @@ namespace SPrediction
             float avgp = t.AvgPathLenght();
             Prediction.Result result;
             if (onlyEdge)
-                result = RingPrediction.GetPrediction(t, s.Width, ringRadius, s.Delay, s.Speed, s.Range, s.Collision, t.LSGetWaypoints(), avgt, movt, avgp, s.From.LSTo2D(), rangeCheckFrom.Value.LSTo2D());
+                result = RingPrediction.GetPrediction(t, s.Width, ringRadius, s.Delay, s.Speed, s.Range, s.Collision, t.GetWaypoints(), avgt, movt, avgp, s.From.To2D(), rangeCheckFrom.Value.To2D());
             else
-                result = CirclePrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range + ringRadius, s.Collision, t.LSGetWaypoints(), avgt, movt, avgp, 360, s.From.LSTo2D(), rangeCheckFrom.Value.LSTo2D());
+                result = CirclePrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range + ringRadius, s.Collision, t.GetWaypoints(), avgt, movt, avgp, 360, s.From.To2D(), rangeCheckFrom.Value.To2D());
 
             Drawings.s_DrawTick = Utils.TickCount;
             Drawings.s_DrawPos = result.CastPosition;
             Drawings.s_DrawHitChance = result.HitChance.ToString();
-            Drawings.s_DrawDirection = (result.CastPosition - s.From.LSTo2D()).LSNormalized().LSPerpendicular();
+            Drawings.s_DrawDirection = (result.CastPosition - s.From.To2D()).Normalized().Perpendicular();
             Drawings.s_DrawWidth = (int)ringRadius;
             if (result.HitChance >= hc)
             {
@@ -487,11 +487,11 @@ namespace SPrediction
 
             switch (s.Type)
             {
-                case SkillshotType.SkillshotLine: result = LinePrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, s.From.LSTo2D(), s.RangeCheckFrom.LSTo2D());
+                case SkillshotType.SkillshotLine: result = LinePrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, s.From.To2D(), s.RangeCheckFrom.To2D());
                     break;
-                case SkillshotType.SkillshotCircle: result = CirclePrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, s.From.LSTo2D(), s.RangeCheckFrom.LSTo2D());
+                case SkillshotType.SkillshotCircle: result = CirclePrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, s.From.To2D(), s.RangeCheckFrom.To2D());
                     break;
-                case SkillshotType.SkillshotCone: result = ConePrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, s.From.LSTo2D(), s.RangeCheckFrom.LSTo2D());
+                case SkillshotType.SkillshotCone: result = ConePrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, s.From.To2D(), s.RangeCheckFrom.To2D());
                     break;
                 default:
                     throw new InvalidOperationException("Unknown spell type");
@@ -500,7 +500,7 @@ namespace SPrediction
             Drawings.s_DrawTick = Utils.TickCount;
             Drawings.s_DrawPos = result.CastPosition;
             Drawings.s_DrawHitChance = String.Format("Aoe Cast (Hits: {0})", result.HitCount);
-            Drawings.s_DrawDirection = (result.CastPosition - s.From.LSTo2D()).LSNormalized().LSPerpendicular();
+            Drawings.s_DrawDirection = (result.CastPosition - s.From.To2D()).Normalized().Perpendicular();
             Drawings.s_DrawWidth = (int)s.Width;
 
             if (result.HitCount >= minHit)
@@ -522,7 +522,7 @@ namespace SPrediction
             if (s.Collision)
                 throw new InvalidOperationException("Collisionable spell");
 
-            Prediction.AoeResult result = ArcPrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, s.From.LSTo2D(), s.RangeCheckFrom.LSTo2D());
+            Prediction.AoeResult result = ArcPrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, s.From.To2D(), s.RangeCheckFrom.To2D());
 
             if (result.HitCount >= minHit)
                 return s.Cast(result.CastPosition);
@@ -544,7 +544,7 @@ namespace SPrediction
             if (s.Collision)
                 throw new InvalidOperationException("Collisionable spell");
 
-            VectorPrediction.AoeResult result = VectorPrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, vectorLenght, s.RangeCheckFrom.LSTo2D());
+            VectorPrediction.AoeResult result = VectorPrediction.GetAoePrediction(s.Width, s.Delay, s.Speed, s.Range, vectorLenght, s.RangeCheckFrom.To2D());
 
 
             if (result.HitCount >= minHit)

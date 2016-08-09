@@ -22,12 +22,12 @@ namespace Olaf.Modes
 
         private static void GameOnOnUpdate(EventArgs args)
         {
-            if (Modes.ModeConfig.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && !ObjectManager.Player.LSIsRecalling())
+            if (Modes.ModeConfig.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && !ObjectManager.Player.IsRecalling())
             {
                 if (Modes.ModeSettings.MenuLocal.Item("Settings.E.Auto").GetValue<StringList>().SelectedIndex == 1)
                 {
                     var t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-                    if (t.LSIsValidTarget())
+                    if (t.IsValidTarget())
                     {
                         Champion.PlayerSpells.CastE(t);
                     }

@@ -44,7 +44,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void beforeAttack(DeathWalker.BeforeAttackEventArgs args)
         {
-            if (args.Unit.IsMe && args.Target is AIHeroClient && Q.LSIsReady())
+            if (args.Unit.IsMe && args.Target is AIHeroClient && Q.IsReady())
             {
                 Q.Cast();
                 Aggresivity.addAgresiveMove(new AgresiveMove(105, 3500, true));
@@ -53,7 +53,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.Cast();
             Aggresivity.addAgresiveMove(new AgresiveMove(145, 4000,true));
@@ -61,7 +61,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null || target.HealthPercent>65)
+            if (!W.IsReady() || target == null || target.HealthPercent>65)
                 return;
             
             W.CastOnUnit(target);
@@ -69,16 +69,16 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.Cast();
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if (target == null || !R.LSIsReady())
+            if (target == null || !R.IsReady())
                 return;
-            if (player.LSCountEnemiesInRange(450) > 1)
+            if (player.CountEnemiesInRange(450) > 1)
             {
                 R.Cast();
                 Aggresivity.addAgresiveMove(new AgresiveMove(105, 8000, false));
@@ -122,7 +122,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var AllMinions = MinionManager.GetMinions(player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
             foreach (var minion in AllMinions)
             {
-                if (E.LSIsReady() && E.GetDamage(minion) > minion.Health)
+                if (E.IsReady() && E.GetDamage(minion) > minion.Health)
                 {
                     E.Cast(minion);
                 }

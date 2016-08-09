@@ -23,7 +23,7 @@ using EloBuddy; namespace Activator.Spells.Shields
                 if (!Parent.Item(Parent.Name + "useon" + hero.Player.NetworkId).GetValue<bool>())
                     continue;
 
-                if (hero.Player.LSDistance(Player.ServerPosition) <= hero.Player.BoundingRadius)
+                if (hero.Player.Distance(Player.ServerPosition) <= hero.Player.BoundingRadius)
                 {
                     if (hero.IncomeDamage >= hero.Player.Health && hero.Attacker != null)
                         UseSpellTowards(hero.Attacker.ServerPosition);

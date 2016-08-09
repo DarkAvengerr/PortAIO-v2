@@ -51,7 +51,7 @@ using EloBuddy;
             {
                 var target = Variables.Orbwalker.GetTarget();
 
-                if (target.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null)) && (target is AIHeroClient))
+                if (target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null)) && (target is AIHeroClient))
                 {
                     var tg = target as AIHeroClient;
                     if (ObjectManager.Player.HealthPercent <=

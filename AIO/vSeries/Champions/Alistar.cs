@@ -103,7 +103,7 @@ using EloBuddy;
 
         private static void AlistarInterrupter(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (sender.IsEnemy && MenuCheck("alistar.inter",Config) && sender.LSIsValidTarget(W.Range) && 
+            if (sender.IsEnemy && MenuCheck("alistar.inter",Config) && sender.IsValidTarget(W.Range) && 
                 args.DangerLevel >= Interrupter2.DangerLevel.High)
             {
                 W.Cast(sender);
@@ -112,7 +112,7 @@ using EloBuddy;
 
         private static void AlistarGapcloser(ActiveGapcloser gapcloser)
         {
-            if (gapcloser.Sender.IsEnemy && gapcloser.Sender.LSIsValidTarget(W.Range) && MenuCheck("alistar.anti", Config))
+            if (gapcloser.Sender.IsEnemy && gapcloser.Sender.IsValidTarget(W.Range) && MenuCheck("alistar.anti", Config))
             {
                 W.Cast(gapcloser.Sender);
             }
@@ -140,12 +140,12 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (MenuCheck("alistar.w.combo", Config) && W.LSIsReady() && MenuCheck("alistar.q.combo", Config) && Q.LSIsReady())
+            if (MenuCheck("alistar.w.combo", Config) && W.IsReady() && MenuCheck("alistar.q.combo", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)))
                 {
                     W.Cast(enemy);
-                    foreach (var qenemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range)))
+                    foreach (var qenemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                     {
                         Q.Cast(qenemy);
                     }
@@ -173,7 +173,7 @@ using EloBuddy;
         private static void AutoUlt()
         {
             if (Player.HealthPercent < SliderCheck("alistar.min.ult", Config) &&
-                Player.LSCountEnemiesInRange(1500f) >= SliderCheck("alistar.min.enemy", Config) && R.LSIsReady())
+                Player.CountEnemiesInRange(1500f) >= SliderCheck("alistar.min.enemy", Config) && R.IsReady())
             {
                 R.Cast();
             }
@@ -181,11 +181,11 @@ using EloBuddy;
 
         private static void AlistarOnDraw(EventArgs args)
         {
-            if (W.LSIsReady() && ActiveCheck("alistar.w.draw", Config))
+            if (W.IsReady() && ActiveCheck("alistar.w.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, GetColor("alistar.w.draw", Config));
             }
-            if (E.LSIsReady() && ActiveCheck("alistar.e.draw", Config))
+            if (E.IsReady() && ActiveCheck("alistar.e.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, GetColor("alistar.e.draw", Config));
             }

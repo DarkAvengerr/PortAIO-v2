@@ -2042,7 +2042,7 @@ namespace SAssemblies
         //    }; 
         //}; 
 
-        // _effect.SetValue("ProjectionMatrix", Matrix.Translation(position.LSSwitchYZ()) * Drawing.View* Drawing.Projection);
+        // _effect.SetValue("ProjectionMatrix", Matrix.Translation(position.SwitchYZ()) * Drawing.View* Drawing.Projection);
 
         public static bool WorldToScreen(Vector3 vIn, ref Vector2 vOut)
         {
@@ -2114,8 +2114,8 @@ namespace SAssemblies
         {
             var vertices = new PositionColored[2];
             vertices[0] = new PositionColored(Vector3.Zero, color.ToArgb());
-            from = from.LSSwitchYZ();
-            to = to.LSSwitchYZ();
+            from = from.SwitchYZ();
+            to = to.SwitchYZ();
             vertices[1] = new PositionColored(to - from, color.ToArgb());
 
             InternalRender(from);
@@ -2128,8 +2128,8 @@ namespace SAssemblies
         {
             if (line != null)
             {
-                from = from.LSSwitchYZ();
-                to = to.LSSwitchYZ();
+                from = from.SwitchYZ();
+                to = to.SwitchYZ();
                 Matrix nMatrix = (scale != null ? Matrix.Scaling(scale[0], scale[1], 0) : Matrix.Scaling(1)) *
                                  Matrix.RotationZ(rotation) * Matrix.Translation(from);
                 Vector3[] vec = { from, to };

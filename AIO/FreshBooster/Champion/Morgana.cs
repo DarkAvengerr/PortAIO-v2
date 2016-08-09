@@ -144,14 +144,14 @@ using EloBuddy;
                 {
                     float damage = 0;
 
-                    if (_Q.LSIsReady())
+                    if (_Q.IsReady())
                         damage += _Q.GetDamage(enemy);
-                    if (_W.LSIsReady())
+                    if (_W.IsReady())
                         damage += _W.GetDamage(enemy);
-                    if (_R.LSIsReady())
+                    if (_R.IsReady())
                         damage += _R.GetDamage(enemy);
                     if (!Player.Spellbook.IsAutoAttacking)
-                        damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                        damage += (float)Player.GetAutoAttackDamage(enemy, true);
                     return damage;
                 }
                 return 0;
@@ -171,7 +171,7 @@ using EloBuddy;
             try
             {
                 if (Player.IsDead) return;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
                 {
                     if (_MainMenu.Item("Morgana_Indicator").GetValue<bool>())
                     {
@@ -220,22 +220,22 @@ using EloBuddy;
                 if (_MainMenu.Item("CKey").GetValue<KeyBind>().Active)
                 {
                     if (_MainMenu.Item("Morgana_CUse_Q").GetValue<bool>() && !_R.IsChanneling)
-                        if (_Q.LSIsReady())
+                        if (_Q.IsReady())
                             if (QTarget != null)
                                 if (_Q.GetPrediction(QTarget, false).Hitchance >= Hitchance("Morgana_CUse_Q_Hit"))
                                     _Q.CastIfHitchanceEquals(QTarget, _Q.GetPrediction(QTarget, false).Hitchance, true);
                     if (_MainMenu.Item("Morgana_CUse_W").GetValue<bool>())
-                        if (_W.LSIsReady())
+                        if (_W.IsReady())
                             if (WTarget != null)
                                 if (!WTarget.CanMove)
                                     _W.CastIfHitchanceEquals(WTarget, HitChance.Low, true);
                     if (_MainMenu.Item("Morgana_CUse_R").GetValue<bool>())
-                        if (_R.LSIsReady())
+                        if (_R.IsReady())
                         {
-                            int Count = HeroManager.Enemies.Where(f => f.LSDistance(Player.Position) < _R.Range + 500).Count(f => !f.IsDead && !f.IsZombie && f.LSDistance(Player.Position) < _R.Range);                            
+                            int Count = HeroManager.Enemies.Where(f => f.Distance(Player.Position) < _R.Range + 500).Count(f => !f.IsDead && !f.IsZombie && f.Distance(Player.Position) < _R.Range);                            
                             if (_MainMenu.Item("Morgana_MinR").GetValue<Slider>().Value <= Count)
                             {
-                                if (_E.LSIsReady())
+                                if (_E.IsReady())
                                     _E.CastOnUnit(Player, true);
                                 _R.Cast(true);
                             }   

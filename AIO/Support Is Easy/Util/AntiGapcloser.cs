@@ -519,9 +519,9 @@ using EloBuddy; namespace Support.Util
                     if (gapcloser.SkillType == GapcloserType.Targeted
                         || (gapcloser.SkillType == GapcloserType.Skillshot
                             && HeroManager.Allies.Any(
-                                h => !h.IsDead && (h.LSDistance(gapcloser.Start) < 800 || h.LSDistance(gapcloser.End) < 800))))
+                                h => !h.IsDead && (h.Distance(gapcloser.Start) < 800 || h.Distance(gapcloser.End) < 800))))
                     {
-                        if (gapcloser.Sender.LSIsValidTarget())
+                        if (gapcloser.Sender.IsValidTarget())
                         {
                             OnEnemyGapcloser(gapcloser);
                         }

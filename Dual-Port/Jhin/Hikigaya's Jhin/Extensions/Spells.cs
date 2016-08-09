@@ -67,19 +67,19 @@ using EloBuddy;
         public static float ComboDamage(this Spell spell1, Spell spell2, Spell spell3, Spell spell4, AIHeroClient unit)
         {
             var combodamage = 0f;
-            if (spell1.LSIsReady())
+            if (spell1.IsReady())
             {
                 combodamage += spell1.GetDamage(unit);
             }
-            if (spell2.LSIsReady())
+            if (spell2.IsReady())
             {
                 combodamage += spell2.GetDamage(unit);
             }
-            if (spell3.LSIsReady())
+            if (spell3.IsReady())
             {
                 combodamage += spell2.GetDamage(unit);
             }
-            if (spell4.LSIsReady())
+            if (spell4.IsReady())
             {
                 combodamage += spell2.GetDamage(unit);
             }

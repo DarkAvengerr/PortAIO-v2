@@ -84,21 +84,21 @@ namespace SAutoCarry.Champions
 
         public void Combo()
         {
-            if (Spells[Q].LSIsReady() && ComboUseQ)
+            if (Spells[Q].IsReady() && ComboUseQ)
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
                     Spells[Q].SPredictionCast(t, HitChance.High);
             }
 
-            if (!Spells[Q].LSIsReady() && Spells[W].LSIsReady() && ComboUseW)
+            if (!Spells[Q].IsReady() && Spells[W].IsReady() && ComboUseW)
             {
                 var t = TargetSelector.GetTarget(Spells[W].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
                     Spells[W].SPredictionCast(t, HitChance.High);
             }
 
-            if (Spells[E].LSIsReady() && ComboUseE)
+            if (Spells[E].IsReady() && ComboUseE)
             {
                 var t = TargetSelector.GetTarget(Spells[E].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null && t.HasBuffOfType(BuffType.Poison))
@@ -106,7 +106,7 @@ namespace SAutoCarry.Champions
             }
 
 
-            if (Spells[R].LSIsReady())
+            if (Spells[R].IsReady())
             {
                 if (ComboUseRMin == 1)
                 {
@@ -116,7 +116,7 @@ namespace SAutoCarry.Champions
                         var pred = Spells[R].GetSPrediction(t);
                         if (pred.HitChance >= HitChance.High)
                         {
-                            if (t.LSIsFacing(ObjectManager.Player))
+                            if (t.IsFacing(ObjectManager.Player))
                                 Spells[R].Cast(pred.CastPosition);
                         }
                     }
@@ -131,7 +131,7 @@ namespace SAutoCarry.Champions
                         {
                             if (col.Type == GameObjectType.AIHeroClient)
                             {
-                                if (col.LSIsFacing(ObjectManager.Player))
+                                if (col.IsFacing(ObjectManager.Player))
                                     c++;
                             }
                         }
@@ -149,21 +149,21 @@ namespace SAutoCarry.Champions
             if (ObjectManager.Player.ManaPercent < HarassMinMana)
                 return;
 
-            if (Spells[Q].LSIsReady() && HarassUseQ)
+            if (Spells[Q].IsReady() && HarassUseQ)
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
                     Spells[Q].SPredictionCast(t, HitChance.High);
             }
 
-            if (!Spells[Q].LSIsReady() && Spells[W].LSIsReady() && HarassUseW)
+            if (!Spells[Q].IsReady() && Spells[W].IsReady() && HarassUseW)
             {
                 var t = TargetSelector.GetTarget(Spells[W].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
                     Spells[W].SPredictionCast(t, HitChance.High);
             }
 
-            if (Spells[E].LSIsReady() && HarassUseE)
+            if (Spells[E].IsReady() && HarassUseE)
             {
                 var t = TargetSelector.GetTarget(Spells[E].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null && t.HasBuffOfType(BuffType.Poison))
@@ -176,21 +176,21 @@ namespace SAutoCarry.Champions
             if (ObjectManager.Player.ManaPercent < LaneClearMinMana || !LaneClearToggle)
                 return;
 
-            if (Spells[Q].LSIsReady() && LaneClearQ)
+            if (Spells[Q].IsReady() && LaneClearQ)
             {
                 var farm = Spells[Q].GetCircularFarmLocation(MinionManager.GetMinions(Spells[Q].Range + 100, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth));
                 if (farm.MinionsHit > 1)
                     Spells[Q].Cast(farm.Position);
             }
 
-            if (!Spells[Q].LSIsReady() && Spells[W].LSIsReady() && LaneClearW)
+            if (!Spells[Q].IsReady() && Spells[W].IsReady() && LaneClearW)
             {
                 var farm = Spells[W].GetCircularFarmLocation(MinionManager.GetMinions(Spells[W].Range + 100, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth));
                 if (farm.MinionsHit > 2)
                     Spells[W].Cast(farm.Position);
             }
 
-            if (Spells[E].LSIsReady() && LaneClearE)
+            if (Spells[E].IsReady() && LaneClearE)
             {
                 var minion = MinionManager.GetMinions(Spells[E].Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).Where(p => p.HasBuffOfType(BuffType.Poison) && Spells[E].IsKillable(p)).FirstOrDefault();
                 Spells[E].CastOnUnit(minion);
@@ -200,12 +200,12 @@ namespace SAutoCarry.Champions
 
         public void KillSteal()
         {
-            if (!Spells[E].LSIsReady())
+            if (!Spells[E].IsReady())
                 return;
 
-            foreach (AIHeroClient target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Spells[E].Range) && !x.HasBuffOfType(BuffType.Invulnerability) && (!KillStealOnlyPoison || x.HasBuffOfType(BuffType.Poison))))
+            foreach (AIHeroClient target in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells[E].Range) && !x.HasBuffOfType(BuffType.Invulnerability) && (!KillStealOnlyPoison || x.HasBuffOfType(BuffType.Poison))))
             {
-                if ((ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.E)) > target.Health + 20)
+                if ((ObjectManager.Player.GetSpellDamage(target, SpellSlot.E)) > target.Health + 20)
                     Spells[E].CastOnUnit(target);
             }
         }

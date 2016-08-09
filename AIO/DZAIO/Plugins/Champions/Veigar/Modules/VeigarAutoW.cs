@@ -20,7 +20,7 @@ using EloBuddy;
         public bool ShouldGetExecuted()
         {
             return Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.veigar.extra.autoW") 
-                && Variables.Spells[SpellSlot.W].LSIsReady();
+                && Variables.Spells[SpellSlot.W].IsReady();
 
         }
 
@@ -32,7 +32,7 @@ using EloBuddy;
         public void OnExecute()
         {
             var target = EntityHelper.GetStunnedTarget(Variables.Spells[SpellSlot.W].Range);
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                     var stunBuff = target.Buffs.Where(b => b.Type == BuffType.Stun)
                         .OrderByDescending(m => m.EndTime - Game.Time)

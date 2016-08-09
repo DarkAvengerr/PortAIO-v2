@@ -25,7 +25,7 @@ using EloBuddy;
 
         public bool ShouldGetExecuted()
         {
-            return Variables.Spells[SpellSlot.R].LSIsReady() &&
+            return Variables.Spells[SpellSlot.R].IsReady() &&
                   Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.kalista.kalista.autoRSoul");
         }
 
@@ -45,7 +45,7 @@ using EloBuddy;
             }
 
             if (SoulBound?.HealthPercent < 10
-                && (SoulBound.LSCountEnemiesInRange(500) > 0))
+                && (SoulBound.CountEnemiesInRange(500) > 0))
             {
                 Variables.Spells[SpellSlot.R].Cast();
             }

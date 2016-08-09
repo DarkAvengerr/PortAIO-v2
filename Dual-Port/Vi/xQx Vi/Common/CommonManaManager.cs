@@ -183,7 +183,7 @@ using EloBuddy;
                 mobTeams.Add(new Vector2(7830f, 9526f), GameObjectTeam.Chaos); // Red team :wariaths
                 mobTeams.Add(new Vector2(12568, 6274), GameObjectTeam.Chaos); // Red team : Frog jQuery
 
-                return mobTeams.Where(hp => mob.LSDistance(hp.Key) <= (range)).Select(hp => hp.Value).FirstOrDefault();
+                return mobTeams.Where(hp => mob.Distance(hp.Key) <= (range)).Select(hp => hp.Value).FirstOrDefault();
             }
 
             return GameObjectTeam.Unknown;
@@ -264,7 +264,7 @@ using EloBuddy;
             {
                 if (MenuLocal.Item("MinMana.Enable").GetValue<KeyBind>().Active)
                 {
-                    return HeroManager.Enemies.Find(e => e.LSIsValidTarget(2000) && !e.IsZombie) == null
+                    return HeroManager.Enemies.Find(e => e.IsValidTarget(2000) && !e.IsZombie) == null
                         ? MenuLocal.Item("MinMana.Lane.Alone").GetValue<Slider>().Value
                         : MenuLocal.Item("MinMana.Lane.Enemy").GetValue<Slider>().Value;
                 }

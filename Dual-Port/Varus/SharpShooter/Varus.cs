@@ -90,7 +90,7 @@ namespace SharpShooter.Plugins
                                     var killableTarget =
                                         HeroManager.Enemies.FirstOrDefault(
                                             x =>
-                                                x.LSIsValidTarget(_q.ChargedMaxRange) &&
+                                                x.IsValidTarget(_q.ChargedMaxRange) &&
                                                 x.IsKillableAndValidTarget(_q.GetDamage(x),
                                                     TargetSelector.DamageType.Physical, _q.Range) &&
                                                 _q.GetPrediction(x).Hitchance >= _q.MinHitChance);
@@ -98,7 +98,7 @@ namespace SharpShooter.Plugins
                                     {
                                         if (_q.IsCharging)
                                         {
-                                            if (killableTarget.LSIsValidTarget(_q.Range))
+                                            if (killableTarget.IsValidTarget(_q.Range))
                                                 _q.Cast(killableTarget, false, true);
                                         }
                                         else
@@ -111,7 +111,7 @@ namespace SharpShooter.Plugins
                                             var target =
                                                 HeroManager.Enemies.FirstOrDefault(
                                                     x =>
-                                                        x.LSIsValidTarget(_q.ChargedMaxRange) &&
+                                                        x.IsValidTarget(_q.ChargedMaxRange) &&
                                                         x.GetBuffCount("varuswdebuff") >= 3);
                                             if (target != null)
                                             {
@@ -120,7 +120,7 @@ namespace SharpShooter.Plugins
                                                     if (_q.Range >=
                                                         MenuProvider.Champion.Combo.GetSliderValue("Q Min Charge").Value)
                                                     {
-                                                        if (target.LSIsValidTarget(_q.Range))
+                                                        if (target.IsValidTarget(_q.Range))
                                                         {
                                                             if (ConfigMenu.SelectedPrediction.SelectedIndex == 0)
                                                                 _q.SPredictionCast(target, HitChance.High);
@@ -187,7 +187,7 @@ namespace SharpShooter.Plugins
                                             var target =
                                                 HeroManager.Enemies.FirstOrDefault(
                                                     x =>
-                                                        x.LSIsValidTarget(_e.Range) && x.GetBuffCount("varuswdebuff") >= 3);
+                                                        x.IsValidTarget(_e.Range) && x.GetBuffCount("varuswdebuff") >= 3);
                                             if (target != null)
                                                 _e.Cast(target, false, true);
                                             else
@@ -289,7 +289,7 @@ namespace SharpShooter.Plugins
                                 {
                                     var target =
                                         MinionManager.GetMinions(600, MinionTypes.All, MinionTeam.Neutral,
-                                            MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.LSIsValidTarget(600));
+                                            MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.IsValidTarget(600));
                                     if (target != null)
                                         if (_q.IsCharging)
                                         {
@@ -310,7 +310,7 @@ namespace SharpShooter.Plugins
                                             MinionManager.GetMinions(600, MinionTypes.All, MinionTeam.Neutral,
                                                 MinionOrderTypes.MaxHealth)
                                                 .FirstOrDefault(
-                                                    x => x.LSIsValidTarget(600) && x.GetBuffCount("varuswdebuff") >= 3);
+                                                    x => x.IsValidTarget(600) && x.GetBuffCount("varuswdebuff") >= 3);
                                         if (target != null)
                                             _e.Cast(target);
                                     }
@@ -330,13 +330,13 @@ namespace SharpShooter.Plugins
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (MenuProvider.Champion.Misc.UseAntiGapcloser)
-                if (gapcloser.End.LSDistance(ObjectManager.Player.Position) <= 200)
+                if (gapcloser.End.Distance(ObjectManager.Player.Position) <= 200)
                     if (_r.IsReadyPerfectly())
                     {
-                        if (gapcloser.Sender.LSIsValidTarget(_r.Range))
+                        if (gapcloser.Sender.IsValidTarget(_r.Range))
                             _r.Cast(gapcloser.Sender);
                     }
-                    else if (gapcloser.Sender.LSIsValidTarget(_e.Range))
+                    else if (gapcloser.Sender.IsValidTarget(_e.Range))
                         _e.Cast(gapcloser.Sender, false, true);
         }
 
@@ -345,7 +345,7 @@ namespace SharpShooter.Plugins
         {
             if (MenuProvider.Champion.Misc.UseInterrupter)
                 if (args.DangerLevel >= Interrupter2.DangerLevel.High)
-                    if (sender.LSIsValidTarget(_r.Range))
+                    if (sender.IsValidTarget(_r.Range))
                         if (_r.IsReadyPerfectly())
                             _r.CastOnUnit(sender);
         }
@@ -374,7 +374,7 @@ namespace SharpShooter.Plugins
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float) ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float) ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
             if (_q.IsReadyPerfectly())

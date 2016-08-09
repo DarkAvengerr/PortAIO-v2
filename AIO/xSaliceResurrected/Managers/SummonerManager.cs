@@ -6,8 +6,8 @@ using EloBuddy; namespace xSaliceResurrected.Managers
 {
     class SummonerManager
     {
-        private static readonly SpellSlot IgniteSlot = ObjectManager.Player.LSGetSpellSlot("SummonerDot");
-        private static readonly SpellSlot FlashSlot = ObjectManager.Player.LSGetSpellSlot("SummonerFlash");
+        private static readonly SpellSlot IgniteSlot = ObjectManager.Player.GetSpellSlot("SummonerDot");
+        private static readonly SpellSlot FlashSlot = ObjectManager.Player.GetSpellSlot("SummonerFlash");
         private static readonly AIHeroClient Player = ObjectManager.Player;
 
         public static bool Ignite_Ready()

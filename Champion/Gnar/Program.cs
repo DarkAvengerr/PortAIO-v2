@@ -47,7 +47,7 @@ namespace Gnar
             SpellQueue.Initialize();
 
             // Check if the player has ignite
-            HasIgnite = player.LSGetSpellSlot("SummonerDot") != SpellSlot.Unknown;
+            HasIgnite = player.GetSpellSlot("SummonerDot") != SpellSlot.Unknown;
 
             // Enable damage indicators
             LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = Damages.GetTotalDamage;
@@ -107,7 +107,7 @@ namespace Gnar
                 var exTime = TimeSpan.FromSeconds(gnarRock.ExpireTime - Game.Time).TotalSeconds;
                 var color = exTime > 4 ? System.Drawing.Color.Yellow : System.Drawing.Color.Red; Render.Circle.DrawCircle(gnarRock.Object.Position, 150, color, 6);
 
-                var line = new Geometry.Polygon.Line(ObjectManager.Player.Position, gnarRock.RockPos, ObjectManager.Player.LSDistance(gnarRock.RockPos));
+                var line = new Geometry.Polygon.Line(ObjectManager.Player.Position, gnarRock.RockPos, ObjectManager.Player.Distance(gnarRock.RockPos));
                 line.Draw(color, 2);
 
                 var time = TimeSpan.FromSeconds(gnarRock.ExpireTime - Game.Time);

@@ -298,23 +298,23 @@ namespace FioraProject
             {
                 return;
             }
-            if (!Menu.SubMenu("EvadeTarget").Item("W").GetValue<bool>() || !W.LSIsReady())
+            if (!Menu.SubMenu("EvadeTarget").Item("W").GetValue<bool>() || !W.IsReady())
             {
                 return;
             }
             foreach (var target in
-                DetectedTargets.Where(i => W.IsInRange(i.Obj, 150 + Game.Ping * i.Obj.SData.MissileSpeed / 1000)).OrderBy(i => i.Obj.Position.LSDistance(Player.Position)))
+                DetectedTargets.Where(i => W.IsInRange(i.Obj, 150 + Game.Ping * i.Obj.SData.MissileSpeed / 1000)).OrderBy(i => i.Obj.Position.Distance(Player.Position)))
             {
                 var tar = GetTarget(W.Range);
-                if (tar.LSIsValidTarget(W.Range))
+                if (tar.IsValidTarget(W.Range))
                     Player.Spellbook.CastSpell(SpellSlot.W, tar.Position);
                 else
                 {
-                    var hero = HeroManager.Enemies.FirstOrDefault(x => x.LSIsValidTarget(W.Range));
+                    var hero = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(W.Range));
                     if (hero != null)
                         Player.Spellbook.CastSpell(SpellSlot.W, hero.Position);
                     else
-                        Player.Spellbook.CastSpell(SpellSlot.W, Player.ServerPosition.LSExtend(target.Start, 100));
+                        Player.Spellbook.CastSpell(SpellSlot.W, Player.ServerPosition.Extend(target.Start, 100));
                 }
             }
         }

@@ -72,7 +72,7 @@ namespace SFXTargetSelector
         [Obsolete("Use SFXTargetSelector.TargetSelector.Selected.Target instead.")]
         public static void SetTarget(AIHeroClient hero)
         {
-            if (hero.LSIsValidTarget())
+            if (hero.IsValidTarget())
             {
                 Selected.Target = hero;
             }

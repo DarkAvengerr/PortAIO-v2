@@ -84,7 +84,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             if (target == null)
                 return;
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 R.Cast(target);
             }
@@ -99,7 +99,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             useR(targ);
             castWTarget(targ);
             castQTarget(targ);
-            if (targ.LSIsValidTarget(E.Range) && (targ.Health < E.GetDamage(targ) + Q.GetDamage(targ) + 100 || targ.LSDistance(ARAMSimulator.fromNex.Position, true) < player.LSDistance(ARAMSimulator.fromNex.Position, true)))
+            if (targ.IsValidTarget(E.Range) && (targ.Health < E.GetDamage(targ) + Q.GetDamage(targ) + 100 || targ.Distance(ARAMSimulator.fromNex.Position, true) < player.Distance(ARAMSimulator.fromNex.Position, true)))
                 castETarget(targ);
 
         }
@@ -134,7 +134,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public void castQTarget(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
 
             try
@@ -158,7 +158,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public void castWTarget(AIHeroClient target)
         {
-            if (!W.LSIsReady() || W.Instance.Ammo == 0)
+            if (!W.IsReady() || W.Instance.Ammo == 0)
                 return;
             PredictionOutput po = Prediction.GetPrediction(target, 0.2f);
             W.Cast(po.UnitPosition);
@@ -167,7 +167,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public void castETarget(AIHeroClient target)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
             if (player.HealthPercent>25 && !safeGap(target))
                 return;
@@ -177,14 +177,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 return;
             foreach (var sol in solis)
             {
-                float toSol = player.LSDistance(sol.Position);
+                float toSol = player.Distance(sol.Position);
 
                 //Collision.GetCollision(new List<Vector3>{sol.Position},getMyEPred(sol));
                 PredictionOutput po = Prediction.GetPrediction(target, toSol / 1500f);
 
 
-                if (sol.LSDistance(po.UnitPosition) < 325 && interact(player.Position.LSTo2D(), sol.Position.LSTo2D(), po.UnitPosition.LSTo2D(), 65)
-                    && interactsOnlyWithTarg(target, sol, player.LSDistance(po.UnitPosition)))
+                if (sol.Distance(po.UnitPosition) < 325 && interact(player.Position.To2D(), sol.Position.To2D(), po.UnitPosition.To2D(), 65)
+                    && interactsOnlyWithTarg(target, sol, player.Distance(po.UnitPosition)))
                 {
                     E.Cast(sol.Position);
                     return;
@@ -194,7 +194,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 /*if (po.CollisionObjects.Count == 0)
                     continue;
                 Console.WriteLine(po.CollisionObjects.Count);
-                Obj_AI_Base col = po.CollisionObjects.OrderBy(obj => obj.LSDistance(Player.Position)).First();
+                Obj_AI_Base col = po.CollisionObjects.OrderBy(obj => obj.Distance(Player.Position)).First();
                 if (col.NetworkId == target.NetworkId)
                 {
                     E.Cast(sol);
@@ -221,7 +221,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             {
                 foreach (var sol in solis)
                 {
-                    if (ene.LSDistance(sol) < 350)
+                    if (ene.Distance(sol) < 350)
                     {
                         inRange.Add(ene);
                         break;
@@ -250,10 +250,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             foreach (var hero in HeroManager.Enemies.Where(obj => obj != null && obj.IsValid && obj.NetworkId != target.NetworkId))
             {
-                float myDistToIt = player.LSDistance(hero);
+                float myDistToIt = player.Distance(hero);
                 PredictionOutput po = Prediction.GetPrediction(hero, myDistToIt / 1500f);
                 if (myDistToIt < distColser &&
-                    interact(sol.Position.LSTo2D(), player.Position.LSTo2D(), po.UnitPosition.LSTo2D(), 65))
+                    interact(sol.Position.To2D(), player.Position.To2D(), po.UnitPosition.To2D(), 65))
                 {
                     return false;
                 }
@@ -286,13 +286,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public float getMiddleDelay(Obj_AI_Base target)
         {
             float allRange = 0;
-            List<Obj_AI_Minion> solis = getUsableSoliders().Where(sol => (sol.LSDistance(target.ServerPosition) > 325
-                || sol.LSDistance(Prediction.GetPrediction(target, 0.7f).UnitPosition) > 325)).ToList();
+            List<Obj_AI_Minion> solis = getUsableSoliders().Where(sol => (sol.Distance(target.ServerPosition) > 325
+                || sol.Distance(Prediction.GetPrediction(target, 0.7f).UnitPosition) > 325)).ToList();
             if (solis.Count == 0)
                 return -1;
             foreach (var sol in solis)
             {
-                float dist = sol.LSDistance(target.ServerPosition);
+                float dist = sol.Distance(target.ServerPosition);
                 allRange += dist;
             }
             return (allRange / (1500f * solis.Count));

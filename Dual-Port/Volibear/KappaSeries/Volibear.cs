@@ -197,7 +197,7 @@ using EloBuddy; namespace KappaSeries
         {
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
-            if (_q.LSIsReady())
+            if (_q.IsReady())
             {
                 _q.Cast();
             }
@@ -210,17 +210,17 @@ using EloBuddy; namespace KappaSeries
             if (minion.Count < 2)
                 return;
 
-            if (_cfg.Item("UseQLane").IsActive() && _q.LSIsReady())
+            if (_cfg.Item("UseQLane").IsActive() && _q.IsReady())
             {
                 _q.Cast();
             }
 
-            if (_cfg.Item("UseWLane").IsActive() && _w.LSIsReady())
+            if (_cfg.Item("UseWLane").IsActive() && _w.IsReady())
             {
                 _w.Cast(minion[0]);
             }
 
-            if (_cfg.Item("UseELane").IsActive() && _e.LSIsReady())
+            if (_cfg.Item("UseELane").IsActive() && _e.IsReady())
             {
                 _e.Cast();
             }
@@ -231,17 +231,17 @@ using EloBuddy; namespace KappaSeries
             var junglemonster = MinionManager.GetMinions(_player.ServerPosition, _w.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
             if (junglemonster.Count == 0) return;
 
-            if (_cfg.Item("UseQJungle").IsActive() && _q.LSIsReady())
+            if (_cfg.Item("UseQJungle").IsActive() && _q.IsReady())
             {
                 _q.Cast();
             }
 
-            if (_cfg.Item("UseWJungle").IsActive() && _w.LSIsReady())
+            if (_cfg.Item("UseWJungle").IsActive() && _w.IsReady())
             {
                 _w.Cast(junglemonster[0]);
             }
 
-            if (_cfg.Item("UseEJungle").IsActive() && _e.LSIsReady())
+            if (_cfg.Item("UseEJungle").IsActive() && _e.IsReady())
             {
                 _e.Cast();
             }
@@ -251,19 +251,19 @@ using EloBuddy; namespace KappaSeries
         {
 
             var t = TargetSelector.GetTarget(400, TargetSelector.DamageType.Physical);
-            if (t == null || !t.LSIsValidTarget()) return;
+            if (t == null || !t.IsValidTarget()) return;
 
             var health = t.Health;
             var maxhealth = t.MaxHealth;
             float wcount = _cfg.Item("CountWHarass").GetValue<Slider>().Value;
 
-            if (_cfg.Item("HarassE").IsActive() && _player.LSDistance(t) <= _e.Range && _e.LSIsReady())
+            if (_cfg.Item("HarassE").IsActive() && _player.Distance(t) <= _e.Range && _e.IsReady())
             {
                 _e.Cast();
             }
 
             if (!(health < ((maxhealth*wcount)/100))) return;
-            if (_cfg.Item("HarassW").IsActive() && _player.LSDistance(t) <= _w.Range && _w.LSIsReady())
+            if (_cfg.Item("HarassW").IsActive() && _player.Distance(t) <= _w.Range && _w.IsReady())
             {
                 _w.Cast(t);
             }
@@ -272,19 +272,19 @@ using EloBuddy; namespace KappaSeries
         private static void SmartKs()
         {
             foreach (
-                var t in ObjectManager.Get<AIHeroClient>().Where(t => t.IsEnemy).Where(t => t.LSIsValidTarget(_w.Range)))
+                var t in ObjectManager.Get<AIHeroClient>().Where(t => t.IsEnemy).Where(t => t.IsValidTarget(_w.Range)))
             {
-                if (t.Health <= _w.GetDamage(t) && _w.LSIsReady() && _player.LSDistance(t) <= _w.Range && t.LSIsValidTarget())
+                if (t.Health <= _w.GetDamage(t) && _w.IsReady() && _player.Distance(t) <= _w.Range && t.IsValidTarget())
                 {
                     _w.Cast(t);
                 }
 
-                if (t.Health <= _e.GetDamage(t) && _e.LSIsReady() && _player.LSDistance(t) <= _e.Range && t.LSIsValidTarget())
+                if (t.Health <= _e.GetDamage(t) && _e.IsReady() && _player.Distance(t) <= _e.Range && t.IsValidTarget())
                 {
                     _e.Cast();
                 }
 
-                else if (t.Health <= (_e.GetDamage(t) + _w.GetDamage(t)) && _e.LSIsReady() && _w.LSIsReady() && t.LSIsValidTarget())
+                else if (t.Health <= (_e.GetDamage(t) + _w.GetDamage(t)) && _e.IsReady() && _w.IsReady() && t.IsValidTarget())
                 {
                     _w.Cast(t);
                     _e.Cast();
@@ -297,12 +297,12 @@ using EloBuddy; namespace KappaSeries
             var t = TargetSelector.GetTarget(_q.Range, TargetSelector.DamageType.Physical);
             if (t == null) return;
 
-            if (_player.LSDistance(t) <= _q.Range && _q.LSIsReady() && _cfg.Item("QCombo").IsActive() && t.LSIsValidTarget())
+            if (_player.Distance(t) <= _q.Range && _q.IsReady() && _cfg.Item("QCombo").IsActive() && t.IsValidTarget())
             {
                 _q.Cast();
             }
 
-            if (_player.LSDistance(t) <= _e.Range && _e.LSIsReady() && _cfg.Item("ECombo").IsActive() && t.LSIsValidTarget())
+            if (_player.Distance(t) <= _e.Range && _e.IsReady() && _cfg.Item("ECombo").IsActive() && t.IsValidTarget())
             {
                 _e.Cast();
             }
@@ -314,48 +314,48 @@ using EloBuddy; namespace KappaSeries
 
             if (health < ((maxhealth * wcount) / 100))
             {
-                if (_cfg.Item("WCombo").IsActive() && _w.LSIsReady() && _player.LSDistance(t) <= _w.Range && t.LSIsValidTarget())
+                if (_cfg.Item("WCombo").IsActive() && _w.IsReady() && _player.Distance(t) <= _w.Range && t.IsValidTarget())
                 {
                     _w.Cast(t);
                 }
             }
 
-            if (_cfg.Item("AutoR").IsActive() && _player.LSCountEnemiesInRange(_r.Range) >= _cfg.Item("CountR").GetValue<Slider>().Value && _r.LSIsReady() && t.LSIsValidTarget())
+            if (_cfg.Item("AutoR").IsActive() && _player.CountEnemiesInRange(_r.Range) >= _cfg.Item("CountR").GetValue<Slider>().Value && _r.IsReady() && t.IsValidTarget())
             {
                 _r.Cast();
             }
 
-            if (!_cfg.Item("UseItems").IsActive() || !t.LSIsValidTarget())
+            if (!_cfg.Item("UseItems").IsActive() || !t.IsValidTarget())
             {
                 return;
             }
-            if (_player.LSDistance(t) <= _rdo.Range && _rdo.IsReady() && _rdo.IsOwned())
+            if (_player.Distance(t) <= _rdo.Range && _rdo.IsReady() && _rdo.IsOwned())
             {
                 _rdo.Cast();
             }
 
-            if (_player.LSDistance(t) <= _hyd.Range && _hyd.IsReady() && _hyd.IsOwned())
+            if (_player.Distance(t) <= _hyd.Range && _hyd.IsReady() && _hyd.IsOwned())
             {
                 _hyd.Cast();
             }
 
-            if (_player.LSDistance(t) <= _botk.Range && _botk.IsReady() && _botk.IsOwned())
+            if (_player.Distance(t) <= _botk.Range && _botk.IsReady() && _botk.IsOwned())
             {
                 _botk.Cast(t);
                 
             }
 
-            if (_player.LSDistance(t) <= _cut.Range && _cut.IsReady() && _cut.IsOwned())
+            if (_player.Distance(t) <= _cut.Range && _cut.IsReady() && _cut.IsOwned())
             {
                 _cut.Cast(t);
             }
 
-            if (_player.LSDistance(t) <= 125f && _yoy.IsReady() && _yoy.IsOwned())
+            if (_player.Distance(t) <= 125f && _yoy.IsReady() && _yoy.IsOwned())
             {
                 _yoy.Cast();
             }
 
-            if (_player.LSDistance(t) <= 600f && _rg.IsReady() && _rg.IsOwned())
+            if (_player.Distance(t) <= 600f && _rg.IsReady() && _rg.IsOwned())
             {
                 _rg.Cast();
             }

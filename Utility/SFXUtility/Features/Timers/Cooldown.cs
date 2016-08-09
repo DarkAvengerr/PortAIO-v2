@@ -323,7 +323,7 @@ using EloBuddy; namespace SFXUtility.Features.Timers
                     try
                     {
                         var lHero = hero;
-                        if (!hero.Position.LSIsValid() || !hero.HPBarPosition.LSIsValid())
+                        if (!hero.Position.IsValid() || !hero.HPBarPosition.IsValid())
                         {
                             return;
                         }
@@ -346,7 +346,7 @@ using EloBuddy; namespace SFXUtility.Features.Timers
                                 }
                                 var t = teleportCd > 0.1f
                                     ? teleportCd - Game.Time
-                                    : (spell.LSIsReady() ? 0 : spell.CooldownExpires - Game.Time);
+                                    : (spell.IsReady() ? 0 : spell.CooldownExpires - Game.Time);
                                 var sCd = teleportCd > 0.1f ? TeleportCd : spell.Cooldown;
                                 var percent = Math.Abs(sCd) > float.Epsilon ? t / sCd : 1f;
                                 var n = t > 0 ? (int) (19 * (1f - percent)) : 19;

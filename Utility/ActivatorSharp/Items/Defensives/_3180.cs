@@ -30,7 +30,7 @@ using EloBuddy; namespace Activator.Items.Defensives
                 UseItem();
             }
 
-            if (Player.LSCountEnemiesInRange(Range) >= Menu.Item("selfcount" + Name).GetValue<Slider>().Value)
+            if (Player.CountEnemiesInRange(Range) >= Menu.Item("selfcount" + Name).GetValue<Slider>().Value)
             {
                 UseItem();
             }

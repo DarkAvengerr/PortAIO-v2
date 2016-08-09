@@ -58,7 +58,7 @@ namespace VayneHunter_Reborn.External.Activator.Items
 
                 if (currentValue || MenuExtensions.GetItemValue<bool>("dz191.vhr.activator.offensive.youmuu.always"))
                 {
-                    if (TargetHero.LSIsValidTarget(ObjectManager.Player.AttackRange + 65f + 65f + 150f))
+                    if (TargetHero.IsValidTarget(ObjectManager.Player.AttackRange + 65f + 65f + 150f))
                     {
                         LeagueSharp.Common.Items.UseItem(3142);
                     }

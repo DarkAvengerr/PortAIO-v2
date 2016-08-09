@@ -15,9 +15,9 @@ using EloBuddy;
     {
         internal static bool IsSafe(this Vector3 Position)
         {
-            if ((Position.LSUnderTurret(true) 
-                && !ObjectManager.Player.LSUnderTurret(true)) 
-                || (PositioningVariables.EnemiesClose.Count() > 1 && DZAIOGeometry.GetEnemyPoints().Contains(Position.LSTo2D())))
+            if ((Position.UnderTurret(true) 
+                && !ObjectManager.Player.UnderTurret(true)) 
+                || (PositioningVariables.EnemiesClose.Count() > 1 && DZAIOGeometry.GetEnemyPoints().Contains(Position.To2D())))
             {
                 return false;
             }
@@ -31,8 +31,8 @@ using EloBuddy;
             double distance = Vector3.Distance(start, end);
             for (uint i = 0; i < distance; i += 10)
             {
-                var tempPosition = start.LSExtend(end, i).LSTo2D();
-                if (tempPosition.LSIsWall())
+                var tempPosition = start.Extend(end, i).To2D();
+                if (tempPosition.IsWall())
                 {
                     return true;
                 }
@@ -46,10 +46,10 @@ using EloBuddy;
             double distance = Vector3.Distance(start, end);
             for (uint i = 0; i < distance; i += 10)
             {
-                var tempPosition = start.LSExtend(end, i);
-                if (tempPosition.LSIsWall())
+                var tempPosition = start.Extend(end, i);
+                if (tempPosition.IsWall())
                 {
-                    return tempPosition.LSExtend(start, -35);
+                    return tempPosition.Extend(start, -35);
                 }
             }
 
@@ -64,13 +64,13 @@ using EloBuddy;
 
             for (uint i = 0; i < distance; i += 10)
             {
-                var tempPosition = start.LSExtend(end, i);
-                if (tempPosition.LSIsWall() && firstPosition == Vector3.Zero)
+                var tempPosition = start.Extend(end, i);
+                if (tempPosition.IsWall() && firstPosition == Vector3.Zero)
                 {
                     firstPosition = tempPosition;
                 }
                 lastPosition = tempPosition;
-                if (!lastPosition.LSIsWall() && firstPosition != Vector3.Zero)
+                if (!lastPosition.IsWall() && firstPosition != Vector3.Zero)
                 {
                     break;
                 }

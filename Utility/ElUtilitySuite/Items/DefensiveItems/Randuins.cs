@@ -43,7 +43,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
         /// <returns></returns>
         public override bool ShouldUseItem()
         {
-            return this.Menu.Item("UseRanduinsCombo").IsActive() && this.Player.LSCountEnemiesInRange(500f) >= this.Menu.Item("RanduinsCount").GetValue<Slider>().Value;
+            return this.Menu.Item("UseRanduinsCombo").IsActive() && this.Player.CountEnemiesInRange(500f) >= this.Menu.Item("RanduinsCount").GetValue<Slider>().Value;
         }
 
         /// <summary>

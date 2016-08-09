@@ -272,11 +272,11 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (Q.LSIsReady() && Config.Item("qCombo").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("qCombo").GetValue<bool>())
             {
                 Helper.PierceCombo(0,HitChance.VeryHigh);
             }
-            if (E.LSIsReady() && Config.Item("eCombo").GetValue<bool>())
+            if (E.IsReady() && Config.Item("eCombo").GetValue<bool>())
             {
                 Helper.RendCombo();
             }
@@ -288,11 +288,11 @@ using EloBuddy;
             {
                 return;
             }
-            if (Q.LSIsReady() && Config.Item("qHarass").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("qHarass").GetValue<bool>())
             {
                 Helper.PierceCombo(0, HitChance.VeryHigh);
             }
-            if (E.LSIsReady() && Config.Item("eHarass").GetValue<bool>())
+            if (E.IsReady() && Config.Item("eHarass").GetValue<bool>())
             {
                 Helper.RendHarass(Config.Item("eSpearCount").GetValue<Slider>().Value);
             }
@@ -304,7 +304,7 @@ using EloBuddy;
             {
                 return;
             }
-            if (E.LSIsReady() && Config.Item("eClear").GetValue<bool>())
+            if (E.IsReady() && Config.Item("eClear").GetValue<bool>())
             {
                 Helper.RendClear(Config.Item("eClearCount").GetValue<Slider>().Value);
             }
@@ -316,11 +316,11 @@ using EloBuddy;
             {
                 return;
             }
-            if (Q.LSIsReady() && Config.Item("qJungle").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("qJungle").GetValue<bool>())
             {
                 Helper.PierceJungleClear(Q,HitChance.VeryHigh);
             }
-            if (E.LSIsReady() && Config.Item("eJungle").GetValue<bool>())
+            if (E.IsReady() && Config.Item("eJungle").GetValue<bool>())
             {
                 Helper.RendJungleClear();
             }
@@ -328,27 +328,27 @@ using EloBuddy;
 
         private static void Drawing_OnDraw(EventArgs args)
         {
-            if (Config.Item("qDraw").GetValue<Circle>().Active && Q.LSIsReady())
+            if (Config.Item("qDraw").GetValue<Circle>().Active && Q.IsReady())
             {
                 Draws.SkillDraw(Q, Config.Item("qDraw").GetValue<Circle>().Color,5);
             }
-            if (Config.Item("wDraw").GetValue<Circle>().Active && W.LSIsReady())
+            if (Config.Item("wDraw").GetValue<Circle>().Active && W.IsReady())
             {
                 Draws.SkillDraw(W, Config.Item("wDraw").GetValue<Circle>().Color, 5);
             }
-            if (Config.Item("eDraw").GetValue<Circle>().Active && E.LSIsReady())
+            if (Config.Item("eDraw").GetValue<Circle>().Active && E.IsReady())
             {
                 Draws.SkillDraw(E, Config.Item("eDraw").GetValue<Circle>().Color, 5);
             }
-            if (Config.Item("rDraw").GetValue<Circle>().Active && R.LSIsReady())
+            if (Config.Item("rDraw").GetValue<Circle>().Active && R.IsReady())
             {
                 Draws.SkillDraw(R, Config.Item("rDraw").GetValue<Circle>().Color, 5);
             }
-            if (Config.Item("ePercent").GetValue<Circle>().Active && E.LSIsReady())
+            if (Config.Item("ePercent").GetValue<Circle>().Active && E.IsReady())
             {
                 Draws.EPercentOnEnemy(Config.Item("ePercent").GetValue<Circle>().Color);
             }
-            if (Config.Item("e.percent.jungle.mobs").GetValue<Circle>().Active && E.LSIsReady())
+            if (Config.Item("e.percent.jungle.mobs").GetValue<Circle>().Active && E.IsReady())
             {
                 Draws.EPercentOnJungleMobs(Config.Item("e.percent.jungle.mobs").GetValue<Circle>().Color);
             }

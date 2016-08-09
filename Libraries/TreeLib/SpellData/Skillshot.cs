@@ -62,8 +62,8 @@ namespace TreeLib.SpellData
         {
             Distance = distance;
             ComingFrom = comingFrom;
-            Valid = point.LSIsValid();
-            Point = point + Config.GridSize * (ComingFrom - point).LSNormalized();
+            Valid = point.IsValid();
+            Point = point + Config.GridSize * (ComingFrom - point).Normalized();
             Time = time;
         }
 
@@ -100,7 +100,7 @@ namespace TreeLib.SpellData
             StartTick = startT;
             Start = start;
             End = end;
-            Direction = (end - start).LSNormalized();
+            Direction = (end - start).Normalized();
             Unit = unit;
             switch (spellData.Type)
             {
@@ -178,7 +178,7 @@ namespace TreeLib.SpellData
         {
             get
             {
-                if (collisionEnd.LSIsValid())
+                if (collisionEnd.IsValid())
                 {
                     return collisionEnd;
                 }
@@ -248,7 +248,7 @@ namespace TreeLib.SpellData
                     ? Utils.GameTimeTickCount <= StartTick + 5000
                     : Utils.GameTimeTickCount <=
                       StartTick + SpellData.Delay + SpellData.ExtraDuration +
-                      1000 * (Start.LSDistance(End) / SpellData.MissileSpeed);
+                      1000 * (Start.Distance(End) / SpellData.MissileSpeed);
             }
         }
 
@@ -304,14 +304,14 @@ namespace TreeLib.SpellData
                          (t - t1) / 1000d *
                          (SpellData.MissileAccel < 0 ? SpellData.MissileMaxSpeed : SpellData.MissileMinSpeed));
             }
-            t = (int) Math.Max(0, Math.Min(CollisionEnd.LSDistance(Start), x));
+            t = (int) Math.Max(0, Math.Min(CollisionEnd.Distance(Start), x));
             return Start + Direction * t;
         }
 
         public Vector2 GlobalGetMissilePosition(int time)
         {
             var t = Math.Max(0, Utils.GameTimeTickCount + time - StartTick - SpellData.Delay);
-            t = (int) Math.Max(0, Math.Min(End.LSDistance(Start), t * SpellData.MissileSpeed / 1000f));
+            t = (int) Math.Max(0, Math.Min(End.Distance(Start), t * SpellData.MissileSpeed / 1000f));
             return Start + Direction * t;
         }
 
@@ -321,14 +321,14 @@ namespace TreeLib.SpellData
             {
                 var missilePos = GetMissilePosition(0);
                 var missilePosAfterT = GetMissilePosition(time);
-                var projection = unit.ServerPosition.LSTo2D().LSProjectOn(missilePos, missilePosAfterT);
+                var projection = unit.ServerPosition.To2D().ProjectOn(missilePos, missilePosAfterT);
                 return projection.IsOnSegment &&
-                       projection.SegmentPoint.LSDistance(unit.ServerPosition) < SpellData.Radius;
+                       projection.SegmentPoint.Distance(unit.ServerPosition) < SpellData.Radius;
             }
-            if (!IsSafe(unit.ServerPosition.LSTo2D()))
+            if (!IsSafe(unit.ServerPosition.To2D()))
             {
                 var timeToExplode = SpellData.ExtraDuration + SpellData.Delay +
-                                    (int) (1000 * Start.LSDistance(End) / SpellData.MissileSpeed) -
+                                    (int) (1000 * Start.Distance(End) / SpellData.MissileSpeed) -
                                     (Utils.GameTimeTickCount - StartTick);
                 if (timeToExplode <= time)
                 {
@@ -363,19 +363,19 @@ namespace TreeLib.SpellData
                 {
                     var sideStart = Polygon.Points[j];
                     var sideEnd = Polygon.Points[j == Polygon.Points.Count - 1 ? 0 : j + 1];
-                    var intersection = from.LSIntersection(to, sideStart, sideEnd);
+                    var intersection = from.Intersection(to, sideStart, sideEnd);
                     if (intersection.Intersects)
                     {
                         segmentIntersections.Add(
                             new FoundIntersection(
-                                distance + intersection.Point.LSDistance(from),
-                                (int) ((distance + intersection.Point.LSDistance(from)) * 1000 / speed),
+                                distance + intersection.Point.Distance(from),
+                                (int) ((distance + intersection.Point.Distance(from)) * 1000 / speed),
                                 intersection.Point, from));
                     }
                 }
                 var sortedList = segmentIntersections.OrderBy(o => o.Distance).ToList();
                 allIntersections.AddRange(sortedList);
-                distance += from.LSDistance(to);
+                distance += from.Distance(to);
             }
             if (SpellData.Type == SkillShotType.SkillshotMissileLine ||
                 SpellData.Type == SkillShotType.SkillshotMissileCone || SpellData.Type == SkillShotType.SkillshotArc)
@@ -393,22 +393,22 @@ namespace TreeLib.SpellData
                     for (var i = 0; i <= allIntersections.Count - 1; i = i + 2)
                     {
                         var enterIntersection = allIntersections[i];
-                        var enterIntersectionProjection = enterIntersection.Point.LSProjectOn(Start, End).SegmentPoint;
+                        var enterIntersectionProjection = enterIntersection.Point.ProjectOn(Start, End).SegmentPoint;
                         if (i == allIntersections.Count - 1)
                         {
                             var missilePositionOnIntersection = GetMissilePosition(enterIntersection.Time - timeOffset);
                             return
                                 new SafePathResult(
-                                    (End.LSDistance(missilePositionOnIntersection) + 50 <=
-                                     End.LSDistance(enterIntersectionProjection)) &&
+                                    (End.Distance(missilePositionOnIntersection) + 50 <=
+                                     End.Distance(enterIntersectionProjection)) &&
                                     ObjectManager.Player.MoveSpeed < SpellData.MissileSpeed, allIntersections[0]);
                         }
                         var exitIntersection = allIntersections[i + 1];
-                        var exitIntersectionProjection = exitIntersection.Point.LSProjectOn(Start, End).SegmentPoint;
+                        var exitIntersectionProjection = exitIntersection.Point.ProjectOn(Start, End).SegmentPoint;
                         var missilePosOnEnter = GetMissilePosition(enterIntersection.Time - timeOffset);
                         var missilePosOnExit = GetMissilePosition(exitIntersection.Time + timeOffset);
-                        if (missilePosOnEnter.LSDistance(End) + 50 > enterIntersectionProjection.LSDistance(End) &&
-                            missilePosOnExit.LSDistance(End) <= exitIntersectionProjection.LSDistance(End))
+                        if (missilePosOnEnter.Distance(End) + 50 > enterIntersectionProjection.Distance(End) &&
+                            missilePosOnExit.Distance(End) <= exitIntersectionProjection.Distance(End))
                         {
                             return new SafePathResult(false, allIntersections[0]);
                         }
@@ -422,9 +422,9 @@ namespace TreeLib.SpellData
                 if (allIntersections.Count > 0)
                 {
                     var exitIntersection = allIntersections[0];
-                    var exitIntersectionProjection = exitIntersection.Point.LSProjectOn(Start, End).SegmentPoint;
+                    var exitIntersectionProjection = exitIntersection.Point.ProjectOn(Start, End).SegmentPoint;
                     var missilePosOnExit = GetMissilePosition(exitIntersection.Time + timeOffset);
-                    if (missilePosOnExit.LSDistance(End) <= exitIntersectionProjection.LSDistance(End))
+                    if (missilePosOnExit.Distance(End) <= exitIntersectionProjection.Distance(End))
                     {
                         return new SafePathResult(false, allIntersections[0]);
                     }
@@ -449,7 +449,7 @@ namespace TreeLib.SpellData
                 }
             }
             var timeToExplode = (SpellData.DontAddExtraDuration ? 0 : SpellData.ExtraDuration) + SpellData.Delay +
-                                (int) (1000 * Start.LSDistance(End) / SpellData.MissileSpeed) -
+                                (int) (1000 * Start.Distance(End) / SpellData.MissileSpeed) -
                                 (Utils.GameTimeTickCount - StartTick);
             var myPositionWhenExplodes = path.PositionAfter(timeToExplode, speed, delay);
             if (!IsSafe(myPositionWhenExplodes))
@@ -470,11 +470,11 @@ namespace TreeLib.SpellData
             if (SpellData.Type == SkillShotType.SkillshotMissileLine)
             {
                 var missilePositionAfterBlink = GetMissilePosition(delay + timeOffset);
-                var myPositionProjection = EvadeTree.PlayerPosition.LSProjectOn(Start, End);
-                return !(missilePositionAfterBlink.LSDistance(End) < myPositionProjection.SegmentPoint.LSDistance(End));
+                var myPositionProjection = EvadeTree.PlayerPosition.ProjectOn(Start, End);
+                return !(missilePositionAfterBlink.Distance(End) < myPositionProjection.SegmentPoint.Distance(End));
             }
             var timeToExplode = SpellData.ExtraDuration + SpellData.Delay +
-                                (int) (1000 * Start.LSDistance(End) / SpellData.MissileSpeed) -
+                                (int) (1000 * Start.Distance(End) / SpellData.MissileSpeed) -
                                 (Utils.GameTimeTickCount - StartTick);
             return timeToExplode > timeOffset + delay;
         }
@@ -495,8 +495,8 @@ namespace TreeLib.SpellData
             }
             if (SpellData.MissileFollowsUnit && Unit.IsVisible)
             {
-                End = Unit.ServerPosition.LSTo2D();
-                Direction = (End - Start).LSNormalized();
+                End = Unit.ServerPosition.To2D();
+                Direction = (End - Start).Normalized();
                 UpdatePolygon();
             }
             if (SpellData.SpellName == "SionR")
@@ -506,7 +506,7 @@ namespace TreeLib.SpellData
                     helperTick = StartTick;
                 }
                 SpellData.MissileSpeed = (int) Unit.MoveSpeed;
-                if (Unit.LSIsValidTarget(float.MaxValue, false))
+                if (Unit.IsValidTarget(float.MaxValue, false))
                 {
                     if (!Unit.HasBuff("SionR") && Utils.GameTimeTickCount - helperTick > 600)
                     {
@@ -515,9 +515,9 @@ namespace TreeLib.SpellData
                     else
                     {
                         StartTick = Utils.GameTimeTickCount - SpellData.Delay;
-                        Start = Unit.ServerPosition.LSTo2D();
-                        End = Unit.ServerPosition.LSTo2D() + 1000 * Unit.Direction.LSTo2D().LSPerpendicular();
-                        Direction = (End - Start).LSNormalized();
+                        Start = Unit.ServerPosition.To2D();
+                        End = Unit.ServerPosition.To2D() + 1000 * Unit.Direction.To2D().Perpendicular();
+                        Direction = (End - Start).Normalized();
                         UpdatePolygon();
                     }
                 }
@@ -528,7 +528,7 @@ namespace TreeLib.SpellData
             }
             if (SpellData.FollowCaster)
             {
-                Circle.Center = Unit.ServerPosition.LSTo2D();
+                Circle.Center = Unit.ServerPosition.To2D();
                 UpdatePolygon();
             }
         }

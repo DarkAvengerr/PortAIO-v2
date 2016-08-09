@@ -52,7 +52,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.JungleClear
         private void OnUpdate(EventArgs args)
         {
             if (Variable.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
-                || !Variable.Spells[SpellSlot.Q].LSIsReady() || Variable.Player.Spellbook.IsAutoAttacking) return;
+                || !Variable.Spells[SpellSlot.Q].IsReady() || Variable.Player.Spellbook.IsAutoAttacking) return;
 
             this.RangersFocus();
         }
@@ -69,7 +69,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.JungleClear
             if (mobs == null || !mobs.IsValid) return;
 
             if (this.Menu.Item(this.Menu.Name + "QOverkill").GetValue<bool>()
-                && mobs.Health < Variable.Player.LSGetAutoAttackDamage(mobs) * 2 && Variable.Player.HealthPercent >= 13) return;
+                && mobs.Health < Variable.Player.GetAutoAttackDamage(mobs) * 2 && Variable.Player.HealthPercent >= 13) return;
 
             Variable.Spells[SpellSlot.Q].Cast();
         }

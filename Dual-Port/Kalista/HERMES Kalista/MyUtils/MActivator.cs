@@ -95,7 +95,7 @@ using EloBuddy;
             {
                 try
                 {
-                    if (!_player.LSInFountain() && !Config.Item("justPredHeal").GetValue<bool>())
+                    if (!_player.InFountain() && !Config.Item("justPredHeal").GetValue<bool>())
                     {
                         teamCheckAndUse(heal, Config.Item("useWithHealDebuff").GetValue<bool>() ? "" : "summonerhealcheck");
                     }
@@ -149,7 +149,7 @@ using EloBuddy;
         {
             if (item.type == ItemTypeId.Ability || item.type == ItemTypeId.TeamAbility)
             {
-                var abilitySlot = LeagueSharp.Common.Utility.LSGetSpellSlot(_player, item.name);
+                var abilitySlot = LeagueSharp.Common.Utility.GetSpellSlot(_player, item.name);
                 if (abilitySlot != SpellSlot.Unknown && abilitySlot == item.abilitySlot)
                 {
                     var menu = new Menu(item.menuName, "menu" + item.menuVariable);
@@ -204,7 +204,7 @@ using EloBuddy;
             }
             else if (item.type == ItemTypeId.KSAbility)
             {
-                var abilitySlot = LeagueSharp.Common.Utility.LSGetSpellSlot(_player, item.name);
+                var abilitySlot = LeagueSharp.Common.Utility.GetSpellSlot(_player, item.name);
                 if (abilitySlot != SpellSlot.Unknown && abilitySlot == item.abilitySlot)
                 {
                     var ksAbMenu = new Menu(item.menuName, "menu" + item.menuVariable);
@@ -246,7 +246,7 @@ using EloBuddy;
                     if (item.type == ItemTypeId.DeffensiveSpell || item.type == ItemTypeId.ManaRegeneratorSpell || item.type == ItemTypeId.PurifierSpell)
                     {
                         //Console.WriteLine("TCandU-> " + item.name);
-                        var spellSlot = LeagueSharp.Common.Utility.LSGetSpellSlot(_player, item.menuVariable);
+                        var spellSlot = LeagueSharp.Common.Utility.GetSpellSlot(_player, item.menuVariable);
                         if (spellSlot != SpellSlot.Unknown)
                         {
                             var activeAllyHeros = getActiveAllyHeros(item);
@@ -257,7 +257,7 @@ using EloBuddy;
                                 foreach (AIHeroClient hero in activeAllyHeros)
                                 {
                                     //Console.WriteLine("Hero-> " + hero.BaseSkinName);
-                                    int enemyInRange = LeagueSharp.Common.Utility.LSCountEnemiesInRange(hero, 700);
+                                    int enemyInRange = LeagueSharp.Common.Utility.CountEnemiesInRange(hero, 700);
                                     if (enemyInRange >= 1)
                                     {
                                         int actualHeroHpPercent = (int)(((_player.Health - incDmg) / _player.MaxHealth) * 100); //after dmg not Actual ^^
@@ -286,9 +286,9 @@ using EloBuddy;
                                 return;
                             }
 
-                            if (_player.LSDistance(attacked, false) <= item.range)
+                            if (_player.Distance(attacked, false) <= item.range)
                             {
-                                var spellSlot = LeagueSharp.Common.Utility.LSGetSpellSlot(_player, item.name);
+                                var spellSlot = LeagueSharp.Common.Utility.GetSpellSlot(_player, item.name);
                                 if (spellSlot != SpellSlot.Unknown)
                                 {
                                     if (_player.Spellbook.CanUseSpell(spellSlot) == SpellState.Ready)
@@ -310,9 +310,9 @@ using EloBuddy;
                                                 // extend 20 to attacker direction THIS 20 COST RANGE
                                                 if (attacker != null)
                                                 {
-                                                    if (_player.LSDistance(attacked.Position.LSExtend(attacker.Position, 20), false) <= item.range)
+                                                    if (_player.Distance(attacked.Position.Extend(attacker.Position, 20), false) <= item.range)
                                                     {
-                                                        pos = attacked.Position.LSExtend(attacker.Position, 20);
+                                                        pos = attacked.Position.Extend(attacker.Position, 20);
                                                     }
                                                 }
                                                 _player.Spellbook.CastSpell(item.abilitySlot, pos);
@@ -357,7 +357,7 @@ using EloBuddy;
                                         #region Deffensive
                                         else if (item.type == ItemTypeId.Deffensive)
                                         {
-                                            int enemyInRange = LeagueSharp.Common.Utility.LSCountEnemiesInRange(hero, 700);
+                                            int enemyInRange = LeagueSharp.Common.Utility.CountEnemiesInRange(hero, 700);
                                             if (enemyInRange >= 1)
                                             {
                                                 int usePercent = Config.Item(item.menuVariable + "UseOnPercent").GetValue<Slider>().Value;
@@ -391,7 +391,7 @@ using EloBuddy;
             var activeAllyHeros = from hero in ObjectManager.Get<AIHeroClient>()
                                   where hero.Team == _player.Team &&
                                         Config.Item(hero.BaseSkinName).GetValue<bool>() &&
-                                        hero.LSDistance(_player, false) <= item.range &&
+                                        hero.Distance(_player, false) <= item.range &&
                                         !hero.IsDead
                                   select hero;
 
@@ -413,7 +413,7 @@ using EloBuddy;
                         #region DeffensiveSpell ManaRegeneratorSpell PurifierSpell OffensiveSpell KSAbility
                         if (item.type == ItemTypeId.DeffensiveSpell || item.type == ItemTypeId.ManaRegeneratorSpell || item.type == ItemTypeId.PurifierSpell || item.type == ItemTypeId.OffensiveSpell || item.type == ItemTypeId.KSAbility)
                         {
-                            var spellSlot = LeagueSharp.Common.Utility.LSGetSpellSlot(_player, item.menuVariable);
+                            var spellSlot = LeagueSharp.Common.Utility.GetSpellSlot(_player, item.menuVariable);
                             if (spellSlot != SpellSlot.Unknown)
                             {
                                 if (_player.Spellbook.CanUseSpell(spellSlot) == SpellState.Ready)
@@ -429,7 +429,7 @@ using EloBuddy;
                                     else if (item.type == ItemTypeId.ManaRegeneratorSpell)
                                     {
                                         int usePercent = Config.Item(item.menuVariable + "UseOnPercent").GetValue<Slider>().Value;
-                                        if (actualHeroManaPercent <= usePercent && !_player.LSInFountain())
+                                        if (actualHeroManaPercent <= usePercent && !_player.InFountain())
                                         {
                                             _player.Spellbook.CastSpell(spellSlot);
                                         }
@@ -479,10 +479,10 @@ using EloBuddy;
                                                 float aaleft = (dmgafter + target.Health / _player.FlatPhysicalDamageMod);
                                                 //var pScreen = Drawing.WorldToScreen(target.Position);
 
-                                                if (target.Health < (dmgafter + aadmg) && _player.LSDistance(target, false) <= item.range)
+                                                if (target.Health < (dmgafter + aadmg) && _player.Distance(target, false) <= item.range)
                                                 {
                                                     bool overIgnite = Config.Item("overIgnite").GetValue<bool>();
-                                                    if ((!overIgnite && !target.LSHasBuff("summonerdot")) || overIgnite)
+                                                    if ((!overIgnite && !target.HasBuff("summonerdot")) || overIgnite)
                                                     {
                                                         _player.Spellbook.CastSpell(spellSlot, target);
                                                         //Drawing.DrawText(pScreen[0], pScreen[1], System.Drawing.Color.Crimson, "Kill in " + aaleft);
@@ -521,7 +521,7 @@ using EloBuddy;
                                         if (checkTarget(item.range))
                                         {
                                             // FIX-ME: In frost case, we must check the affected area, not just ppl in range(item).
-                                            if (LeagueSharp.Common.Utility.LSCountEnemiesInRange(_player, (int)item.range) >= Config.Item(item.menuVariable + "UseXUnits").GetValue<Slider>().Value)
+                                            if (LeagueSharp.Common.Utility.CountEnemiesInRange(_player, (int)item.range) >= Config.Item(item.menuVariable + "UseXUnits").GetValue<Slider>().Value)
                                             {
                                                 useItem(item.id, (item.range == 0 || item.spellType == SpellType.Self) ? null : target);
                                             }
@@ -529,7 +529,7 @@ using EloBuddy;
                                     }
                                     else if (item.type == ItemTypeId.HPRegenerator)
                                     {
-                                        if (checkUsePercent(item, actualHeroHpPercent) && !_player.LSInFountain() && !LeagueSharp.Common.Utility.LSIsRecalling(_player))
+                                        if (checkUsePercent(item, actualHeroHpPercent) && !_player.InFountain() && !LeagueSharp.Common.Utility.IsRecalling(_player))
                                         {
                                             if ((buff != "" && !checkBuff(buff)) || buff == "")
                                             {
@@ -539,7 +539,7 @@ using EloBuddy;
                                     }
                                     else if (item.type == ItemTypeId.Deffensive)
                                     {
-                                        if (checkUsePercent(item, actualHeroHpPercent) && !_player.LSInFountain() && (Config.Item("useRecalling").GetValue<bool>() || !LeagueSharp.Common.Utility.LSIsRecalling(_player)))
+                                        if (checkUsePercent(item, actualHeroHpPercent) && !_player.InFountain() && (Config.Item("useRecalling").GetValue<bool>() || !LeagueSharp.Common.Utility.IsRecalling(_player)))
                                         {
                                             if ((buff != "" && !checkBuff(buff)) || buff == "")
                                             {
@@ -549,7 +549,7 @@ using EloBuddy;
                                     }
                                     else if (item.type == ItemTypeId.ManaRegenerator)
                                     {
-                                        if (checkUsePercent(item, actualHeroManaPercent) && !_player.LSInFountain() && !LeagueSharp.Common.Utility.LSIsRecalling(_player))
+                                        if (checkUsePercent(item, actualHeroManaPercent) && !_player.InFountain() && !LeagueSharp.Common.Utility.IsRecalling(_player))
                                         {
                                             if ((buff != "" && !checkBuff(buff)) || buff == "")
                                             {
@@ -824,7 +824,7 @@ using EloBuddy;
 
             if (Config.Item("zedultexecute").GetValue<bool>())
             {
-                if (hero.LSHasBuff("zedultexecute"))
+                if (hero.HasBuff("zedultexecute"))
                 {
                     cc = true;
                 }
@@ -832,7 +832,7 @@ using EloBuddy;
 
             if (Config.Item("dispellExhaust").GetValue<bool>())
             {
-                if (hero.LSHasBuff(exhaust.menuVariable))
+                if (hero.HasBuff(exhaust.menuVariable))
                 {
                     cc = true;
                 }
@@ -840,7 +840,7 @@ using EloBuddy;
 
             if (Config.Item("dispellEsNumeroUno").GetValue<bool>())
             {
-                if (hero.LSHasBuff("MordekaiserCOTGPet"))
+                if (hero.HasBuff("MordekaiserCOTGPet"))
                 {
                     cc = true;
                 }

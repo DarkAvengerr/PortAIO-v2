@@ -59,7 +59,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         /// <returns></returns>
         public void CreateMenu(Menu rootMenu)
         {
-            if (this.Player.LSGetSpellSlot("summonerexhaust") == SpellSlot.Unknown)
+            if (this.Player.GetSpellSlot("summonerexhaust") == SpellSlot.Unknown)
             {
                 return;
             }
@@ -90,7 +90,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         {
             try
             {
-                var exhaustSlot = this.Player.LSGetSpellSlot("summonerexhaust");
+                var exhaustSlot = this.Player.GetSpellSlot("summonerexhaust");
                 if (exhaustSlot == SpellSlot.Unknown)
                 {
                     return;
@@ -160,7 +160,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                 return;
             }
 
-            if (this.ExhaustSpell.LSIsReady())
+            if (this.ExhaustSpell.IsReady())
             {
                LeagueSharp.Common.Utility.DelayAction.Add(Random.Next(50, 100), () => this.ExhaustSpell.Cast(sender));
                Console.WriteLine($"Use exhaust on: {sender.CharData.BaseSkinName} - for spell {args.SData.Name}");

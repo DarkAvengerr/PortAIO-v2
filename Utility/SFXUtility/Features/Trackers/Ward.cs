@@ -205,8 +205,8 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
                 if (args.Msg == (ulong) WindowsMessages.WM_LBUTTONDBLCLK &&
                     Menu.Item(Name + "Hotkey").GetValue<KeyBind>().Active)
                 {
-                    var ward = _wardObjects.OrderBy(w => Game.CursorPos.LSDistance(w.Position)).FirstOrDefault();
-                    if (ward != null && Game.CursorPos.LSDistance(ward.Position) <= 300)
+                    var ward = _wardObjects.OrderBy(w => Game.CursorPos.Distance(w.Position)).FirstOrDefault();
+                    if (ward != null && Game.CursorPos.Distance(ward.Position) <= 300)
                     {
                         _wardObjects.Remove(ward);
                     }
@@ -269,7 +269,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
                     {
                         _sprite.DrawCentered(
                             ward.Data.Type == WardType.Green ? _greenWardTexture : _pinkWardTexture,
-                            ward.MinimapPosition.LSTo2D());
+                            ward.MinimapPosition.To2D());
                     }
                     if (hotkey || permaShow)
                     {
@@ -338,7 +338,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
                                     if (
                                         !_wardObjects.Any(
                                             w =>
-                                                w.Position.LSTo2D().LSDistance(sPos.LSTo2D(), ePos.LSTo2D(), false) < 300 &&
+                                                w.Position.To2D().Distance(sPos.To2D(), ePos.To2D(), false) < 300 &&
                                                 ((int) Game.Time - w.StartT < 2)))
                                     {
                                         var wObj = new WardObject(
@@ -366,7 +366,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
                             {
                                 _wardObjects.RemoveAll(
                                     w =>
-                                        w.Position.LSDistance(wardObject.Position) < 300 &&
+                                        w.Position.Distance(wardObject.Position) < 300 &&
                                         ((int) Game.Time - w.StartT < 0.5));
                                 var wObj = new WardObject(
                                     ward,
@@ -389,7 +389,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
         {
             return
                 GameObjects.EnemyHeroes.Where(hero => _heroNoWards.All(h => h.Hero.NetworkId != hero.NetworkId))
-                    .Any(hero => hero.LSDistance(start.LSExtend(end, start.LSDistance(end)/2f)) <= 1500f) &&
+                    .Any(hero => hero.Distance(start.Extend(end, start.Distance(end)/2f)) <= 1500f) &&
                 GameObjects.EnemyHeroes.Any(e => e.Level > 3)
                     ? _wardStructs[3]
                     : _wardStructs[0];
@@ -430,15 +430,15 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
                 {
                     foreach (var obj in _wardObjects.Where(w => w.Data.Duration != int.MaxValue).ToList())
                     {
-                        if (wObj.Position.LSDistance(obj.Position) < range)
+                        if (wObj.Position.Distance(obj.Position) < range)
                         {
                             _wardObjects.Remove(obj);
                             return;
                         }
                         if (obj.IsFromMissile && !obj.Corrected)
                         {
-                            var newPoint = obj.StartPosition.LSExtend(obj.EndPosition, -(range*1.5f));
-                            if (wObj.Position.LSDistance(newPoint) < range)
+                            var newPoint = obj.StartPosition.Extend(obj.EndPosition, -(range*1.5f));
+                            if (wObj.Position.Distance(newPoint) < range)
                             {
                                 _wardObjects.Remove(obj);
                                 return;
@@ -452,7 +452,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
                         _wardObjects.Where(
                             w =>
                                 w.Data.Duration != int.MaxValue && w.IsFromMissile &&
-                                w.Position.LSDistance(wObj.Position) < 100).ToList())
+                                w.Position.Distance(wObj.Position) < 100).ToList())
                     {
                         _wardObjects.Remove(obj);
                         return;
@@ -596,10 +596,10 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
                 try
                 {
                     var grass = new List<Vector3>();
-                    var distance = start.LSDistance(end);
+                    var distance = start.Distance(end);
                     for (var i = 0; i < distance; i++)
                     {
-                        var pos = start.LSExtend(end, i);
+                        var pos = start.Extend(end, i);
                         if (NavMesh.IsWallOfGrass(pos, 1))
                         {
                             grass.Add(pos);
@@ -618,12 +618,12 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
             {
                 try
                 {
-                    if (end.LSIsWall())
+                    if (end.IsWall())
                     {
                         for (var i = 0; i < 500; i = i + 5)
                         {
                             var c = new Geometry.Polygon.Circle(end, i, 15).Points;
-                            foreach (var item in c.OrderBy(p => p.LSDistance(end)).Where(item => !item.LSIsWall()))
+                            foreach (var item in c.OrderBy(p => p.Distance(end)).Where(item => !item.IsWall()))
                             {
                                 return new Vector3(item.X, item.Y, NavMesh.GetHeightForPosition(item.X, item.Y));
                             }

@@ -28,7 +28,7 @@ using EloBuddy;
         }
         public static bool IsWActive
         {
-            get { return ObjectManager.Player.LSHasBuff("fiddlebuff"); }
+            get { return ObjectManager.Player.HasBuff("fiddlebuff"); }
         }
         private static void FiddlestickOnLoad()
         {
@@ -162,30 +162,30 @@ using EloBuddy;
 
             }
 
-            if (MenuCheck("fid.auto.q.immobile", Config) && Q.LSIsReady())
+            if (MenuCheck("fid.auto.q.immobile", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && MenuCheck("fid.q.enemy." + x.ChampionName, Config) && IsEnemyImmobile(x)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && MenuCheck("fid.q.enemy." + x.ChampionName, Config) && IsEnemyImmobile(x)))
                 {
                     Q.Cast(enemy);
                 }
             }
-            if (MenuCheck("fid.auto.q.channeling", Config) && Q.LSIsReady())
+            if (MenuCheck("fid.auto.q.channeling", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && MenuCheck("fid.q.enemy." + x.ChampionName, Config) && x.IsChannelingImportantSpell()))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && MenuCheck("fid.q.enemy." + x.ChampionName, Config) && x.IsChannelingImportantSpell()))
                 {
                     Q.Cast(enemy);
                 }
             }
-            if (MenuCheck("fid.auto.e.immobile", Config) && E.LSIsReady())
+            if (MenuCheck("fid.auto.e.immobile", Config) && E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range) && MenuCheck("fid.e.enemy." + x.ChampionName, Config) && IsEnemyImmobile(x)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && MenuCheck("fid.e.enemy." + x.ChampionName, Config) && IsEnemyImmobile(x)))
                 {
                     E.Cast(enemy);
                 }
             }
-            if (MenuCheck("fid.auto.e.channeling", Config) && E.LSIsReady())
+            if (MenuCheck("fid.auto.e.channeling", Config) && E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range) && MenuCheck("fid.e.enemy." + x.ChampionName, Config) && x.IsChannelingImportantSpell()))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && MenuCheck("fid.e.enemy." + x.ChampionName, Config) && x.IsChannelingImportantSpell()))
                 {
                     E.Cast(enemy);
                 }
@@ -195,9 +195,9 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (Q.LSIsReady() && MenuCheck("fid.q.combo", Config))
+            if (Q.IsReady() && MenuCheck("fid.q.combo", Config))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(Q.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(Q.Range) && !o.IsDead && !o.IsZombie))
                 {
                     if (MenuCheck("fid.q.enemy." + enemy.ChampionName, Config))
                     {
@@ -205,9 +205,9 @@ using EloBuddy;
                     }
                 }
             }
-            if (W.LSIsReady() && MenuCheck("fid.w.combo", Config))
+            if (W.IsReady() && MenuCheck("fid.w.combo", Config))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(W.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(W.Range) && !o.IsDead && !o.IsZombie))
                 {
                     if (MenuCheck("fid.w.enemy." + enemy.ChampionName, Config))
                     {
@@ -215,11 +215,11 @@ using EloBuddy;
                     }
                 }
             }
-            if (E.LSIsReady() && MenuCheck("fid.e.combo", Config))
+            if (E.IsReady() && MenuCheck("fid.e.combo", Config))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(E.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(E.Range) && !o.IsDead && !o.IsZombie))
                 {
-                    if (MenuCheck("fid.e.enemy." + enemy.ChampionName, Config) && enemy.LSCountEnemiesInRange(E.Range) >= SliderCheck("fid.e.enemy.count", Config))
+                    if (MenuCheck("fid.e.enemy." + enemy.ChampionName, Config) && enemy.CountEnemiesInRange(E.Range) >= SliderCheck("fid.e.enemy.count", Config))
                     {
                         E.CastOnUnit(enemy);
                     }
@@ -234,9 +234,9 @@ using EloBuddy;
                 return;
             }
 
-            if (Q.LSIsReady() && MenuCheck("fid.q.harass", Config))
+            if (Q.IsReady() && MenuCheck("fid.q.harass", Config))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(Q.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(Q.Range) && !o.IsDead && !o.IsZombie))
                 {
                     if (MenuCheck("fid.q.enemy." + enemy.ChampionName, Config))
                     {
@@ -244,9 +244,9 @@ using EloBuddy;
                     }
                 }
             }
-            if (E.LSIsReady() && MenuCheck("fid.e.harass", Config))
+            if (E.IsReady() && MenuCheck("fid.e.harass", Config))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(E.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(E.Range) && !o.IsDead && !o.IsZombie))
                 {
                     if (MenuCheck("fid.e.enemy." + enemy.ChampionName, Config))
                     {
@@ -266,15 +266,15 @@ using EloBuddy;
             var mob = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
             if (mob.Count > 0)
             {
-                if (Q.LSIsReady() && MenuCheck("fid.q.jungle", Config))
+                if (Q.IsReady() && MenuCheck("fid.q.jungle", Config))
                 {
                     Q.CastOnUnit(mob[0]);
                 }
-                if (W.LSIsReady() && MenuCheck("fid.w.jungle", Config))
+                if (W.IsReady() && MenuCheck("fid.w.jungle", Config))
                 {
                     W.CastOnUnit(mob[0]);
                 }
-                if (E.LSIsReady() && MenuCheck("fid.e.jungle", Config))
+                if (E.IsReady() && MenuCheck("fid.e.jungle", Config))
                 {
                     E.CastOnUnit(mob[0]);
                 }
@@ -289,14 +289,14 @@ using EloBuddy;
             }
 
             var min = MinionManager.GetMinions(ObjectManager.Player.Position, Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
-            if (E.LSIsReady() && MenuCheck("fid.e.clear", Config))
+            if (E.IsReady() && MenuCheck("fid.e.clear", Config))
             {
                 if (min.Count > SliderCheck("fid.e.minion.hit.count", Config))
                 {
                     E.CastOnUnit(min[0]);
                 }
             }
-            if (W.LSIsReady() && MenuCheck("fid.w.clear", Config))
+            if (W.IsReady() && MenuCheck("fid.w.clear", Config))
             {
                 W.CastOnUnit(min[0]);
             }
@@ -304,19 +304,19 @@ using EloBuddy;
 
         private static void FiddleOnDraw(EventArgs args)
         {
-            if (Q.LSIsReady() && ActiveCheck("fid.q.draw", Config))
+            if (Q.IsReady() && ActiveCheck("fid.q.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, GetColor("fid.q.draw", Config));
             }
-            if (W.LSIsReady() && ActiveCheck("fid.w.draw", Config))
+            if (W.IsReady() && ActiveCheck("fid.w.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, GetColor("fid.w.draw", Config));
             }
-            if (E.LSIsReady() && ActiveCheck("fid.e.draw", Config))
+            if (E.IsReady() && ActiveCheck("fid.e.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, GetColor("fid.e.draw", Config));
             }
-            if (R.LSIsReady() && ActiveCheck("fid.r.draw", Config))
+            if (R.IsReady() && ActiveCheck("fid.r.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, GetColor("fid.r.draw", Config));
             }

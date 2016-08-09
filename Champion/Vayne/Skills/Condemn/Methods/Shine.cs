@@ -14,7 +14,7 @@ namespace VayneHunter_Reborn.Skills.Condemn.Methods
     {
         public static Obj_AI_Base GetTarget(Vector3 fromPosition)
         {
-            foreach (var target in HeroManager.Enemies.Where(h => h.LSIsValidTarget(Variables.spells[SpellSlot.E].Range)))
+            foreach (var target in HeroManager.Enemies.Where(h => h.IsValidTarget(Variables.spells[SpellSlot.E].Range)))
             {
                 var pushDistance = MenuExtensions.GetItemValue<Slider>("dz191.vhr.misc.condemn.pushdistance").Value;
                 var targetPosition = Vector3.Zero;
@@ -30,7 +30,7 @@ namespace VayneHunter_Reborn.Skills.Condemn.Methods
                     return null;
                 }
 
-                var pushDirection = (targetPosition - ObjectManager.Player.ServerPosition).LSNormalized();
+                var pushDirection = (targetPosition - ObjectManager.Player.ServerPosition).Normalized();
                 float checkDistance = pushDistance / 40f;
                 for (int i = 0; i < 40; i++)
                 {
@@ -46,7 +46,7 @@ namespace VayneHunter_Reborn.Skills.Condemn.Methods
                         }
 
                         if (target.Health + 10 <=
-                                        ObjectManager.Player.LSGetAutoAttackDamage(target) *
+                                        ObjectManager.Player.GetAutoAttackDamage(target) *
                                         MenuExtensions.GetItemValue<Slider>("dz191.vhr.misc.condemn.noeaa").Value)
                         {
                             return null;

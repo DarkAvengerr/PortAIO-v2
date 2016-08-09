@@ -82,7 +82,7 @@ using EloBuddy;
                 || (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass)
                 && ObjectManager.Player.ManaPercent >= Variables.AssemblyMenu.GetItemValue<Slider>("dzaio.champion.extra.mixed.mana").Value))
             {
-                if (target.IsValid<AIHeroClient>() && target.LSIsValidTarget())
+                if (target.IsValid<AIHeroClient>() && target.IsValidTarget())
                 {
                     Variables.Spells[SpellSlot.Q].CastIfHitchanceEquals(target as AIHeroClient, HitChance.High);
                 }
@@ -92,7 +92,7 @@ using EloBuddy;
                 || (Variables.Spells[SpellSlot.W].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass)
                 && ObjectManager.Player.ManaPercent >= Variables.AssemblyMenu.GetItemValue<Slider>("dzaio.champion.extra.mixed.mana").Value))
             {
-                if (target.IsValid<AIHeroClient>() && target.LSIsValidTarget())
+                if (target.IsValid<AIHeroClient>() && target.IsValidTarget())
                 {
                     Variables.Spells[SpellSlot.W].CastIfHitchanceEquals(target as AIHeroClient, HitChance.High);
                 }
@@ -106,18 +106,18 @@ using EloBuddy;
                 return;
             }
 
-            if (!gapcloser.Sender.LSIsValidTarget() ||
-                !(gapcloser.End.LSDistance(ObjectManager.Player.ServerPosition) <= 350f))
+            if (!gapcloser.Sender.IsValidTarget() ||
+                !(gapcloser.End.Distance(ObjectManager.Player.ServerPosition) <= 350f))
             {
                 return;
             }
             LeagueSharp.Common.Utility.DelayAction.Add(Variables.AssemblyMenu.GetItemValue<Slider>("dzaio.champion.ezreal.extra.e.antigpdelay").Value,
                 () =>
                 {
-                    var extendedPosition = ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, Variables.Spells[SpellSlot.E].Range);
+                    var extendedPosition = ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, Variables.Spells[SpellSlot.E].Range);
 
                     if (extendedPosition.IsSafe(Variables.Spells[SpellSlot.E].Range) &&
-                        extendedPosition.LSCountAlliesInRange(650f) >= 0)
+                        extendedPosition.CountAlliesInRange(650f) >= 0)
                     {
                         Variables.Spells[SpellSlot.E].Cast(extendedPosition);
                     }
@@ -160,7 +160,7 @@ using EloBuddy;
             if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo))
             {
                 var qTarget = Variables.Spells[SpellSlot.Q].GetTarget();
-                if (qTarget.LSIsValidTarget())
+                if (qTarget.IsValidTarget())
                 {
                     var qPrediction = Variables.Spells[SpellSlot.Q].GetPrediction(qTarget);
                     if (qPrediction.Hitchance >= HitChance.High)
@@ -173,7 +173,7 @@ using EloBuddy;
             if (Variables.Spells[SpellSlot.W].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo) && ObjectManager.Player.ManaPercent > 45)
             {
                 var wTarget = Variables.Spells[SpellSlot.W].GetTarget();
-                if (wTarget.LSIsValidTarget())
+                if (wTarget.IsValidTarget())
                 {
                     Variables.Spells[SpellSlot.W].CastIfHitchanceEquals(wTarget, HitChance.High);
                 }
@@ -183,12 +183,12 @@ using EloBuddy;
             {
                 var target = TargetSelector.GetTarget(2300f, TargetSelector.DamageType.Physical);
 
-                if (target.LSIsValidTarget(Variables.Spells[SpellSlot.R].Range)
-                    && ObjectManager.Player.LSDistance(target) >= Orbwalking.GetRealAutoAttackRange(null) * 0.85f
+                if (target.IsValidTarget(Variables.Spells[SpellSlot.R].Range)
+                    && ObjectManager.Player.Distance(target) >= Orbwalking.GetRealAutoAttackRange(null) * 0.85f
                     && !(target.Health + 5 <
-                      ObjectManager.Player.LSGetAutoAttackDamage(target) * 2f +
+                      ObjectManager.Player.GetAutoAttackDamage(target) * 2f +
                       Variables.Spells[SpellSlot.Q].GetDamage(target))
-                    && HeroManager.Enemies.Count(m => m.LSDistance(target.ServerPosition) < 200f) >= Variables.AssemblyMenu.Item("dzaio.champion.ezreal.combo.r.min").GetValue<Slider>().Value
+                    && HeroManager.Enemies.Count(m => m.Distance(target.ServerPosition) < 200f) >= Variables.AssemblyMenu.Item("dzaio.champion.ezreal.combo.r.min").GetValue<Slider>().Value
                     && CanExecuteTarget(target))
                 {
                     Variables.Spells[SpellSlot.R].CastIfHitchanceEquals(
@@ -208,7 +208,7 @@ using EloBuddy;
             if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass))
             {
                 var qTarget = Variables.Spells[SpellSlot.Q].GetTarget();
-                if (qTarget.LSIsValidTarget())
+                if (qTarget.IsValidTarget())
                 {
                     var qPrediction = Variables.Spells[SpellSlot.Q].GetPrediction(qTarget);
                     if (qPrediction.Hitchance >= HitChance.High)
@@ -221,7 +221,7 @@ using EloBuddy;
             if (Variables.Spells[SpellSlot.W].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass) && ObjectManager.Player.ManaPercent > 45)
             {
                 var wTarget = Variables.Spells[SpellSlot.W].GetTarget();
-                if (wTarget.LSIsValidTarget())
+                if (wTarget.IsValidTarget())
                 {
                     Variables.Spells[SpellSlot.W].CastIfHitchanceEquals(wTarget, HitChance.High);
                 }
@@ -248,7 +248,7 @@ using EloBuddy;
             var prediction = Variables.Spells[SpellSlot.R].GetPrediction(target);
             var count = prediction.CollisionObjects.Count;
 
-            damage += ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.R);
+            damage += ObjectManager.Player.GetSpellDamage(target, SpellSlot.R);
 
             if (count >= 7)
             {

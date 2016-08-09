@@ -57,12 +57,12 @@ namespace Leblanc.Modes
 
         private static int LastComboChangeKeyTick = 0;
 
-        public static SpellSlot IgniteSlot = ObjectManager.Player.LSGetSpellSlot("SummonerDot");
+        public static SpellSlot IgniteSlot = ObjectManager.Player.GetSpellSlot("SummonerDot");
 
         //public static AIHeroClient Target => GetTarget ?? TargetSelector.GetTarget(Q.Range * 2, TargetSelector.DamageType.Magical);
-        //public static AIHeroClient Target => HeroManager.Enemies.Where(e => !e.IsDead && e.IsVisible && e.LSIsValidTarget(E.Range) && !e.HasImmortalBuff()).OrderBy(e => e.Health - GetComboDamage(e)).FirstOrDefault();
+        //public static AIHeroClient Target => HeroManager.Enemies.Where(e => !e.IsDead && e.IsVisible && e.IsValidTarget(E.Range) && !e.HasImmortalBuff()).OrderBy(e => e.Health - GetComboDamage(e)).FirstOrDefault();
         public static AIHeroClient Target => CommonTargetSelector.GetTarget(E.Range);
-        //public static AIHeroClient Target => HeroManager.Enemies.Where(e => !e.IsDead && e.IsVisible && e.LSIsValidTarget(E.Range)).OrderBy(e => e.Health - GetComboDamage(e)).FirstOrDefault();
+        //public static AIHeroClient Target => HeroManager.Enemies.Where(e => !e.IsDead && e.IsVisible && e.IsValidTarget(E.Range)).OrderBy(e => e.Health - GetComboDamage(e)).FirstOrDefault();
 
 
         //public static AIHeroClient Target => TargetSelector.GetTarget(Q.Range * 2, TargetSelector.DamageType.Magical);
@@ -157,7 +157,7 @@ namespace Leblanc.Modes
         {
             if (targets != null && ComboMode == ComboMode.Mode2xW)
             {
-                targets = targets.Where(t => t.LSIsValidTarget((W.Range + W.Width))).ToList();
+                targets = targets.Where(t => t.IsValidTarget((W.Range + W.Width))).ToList();
                 var pred = W.GetPrediction(target);
                 if (pred.Hitchance >= HitChance.Medium)
                 {
@@ -197,7 +197,7 @@ namespace Leblanc.Modes
                 //if (MenuHunt.Item("Hunt." + e.ChampionName).GetValue<bool>())
                 //{
                 //    Common.CommonGeometry.DrawBox(new Vector2(e.HPBarPosition.X + 140, e.HPBarPosition.Y + 4), 65, 18, System.Drawing.Color.FromArgb(100, 255, 0, 0), 1, System.Drawing.Color.Black);
-                //    Common.CommonGeometry.DrawText(CommonGeometry.Text, "Hunt: On!", e.HPBarPosition.X + 145, e.HPBarPosition.Y + 6, SharpDX.Color.Wheat);if (e.LSIsValidTarget(W.Range*2 + Q.Range))
+                //    Common.CommonGeometry.DrawText(CommonGeometry.Text, "Hunt: On!", e.HPBarPosition.X + 145, e.HPBarPosition.Y + 6, SharpDX.Color.Wheat);if (e.IsValidTarget(W.Range*2 + Q.Range))
                 //    {
                 //        var pol = new LeagueSharp.Common.Geometry.Polygon.Line(ObjectManager.Player.Position, e.Position,
                 //            ObjectManager.Player.Distance(e.Position));
@@ -300,9 +300,9 @@ namespace Leblanc.Modes
                 return;
             }
 
-            //if (Target.LSIsValidTarget(Q.Range*2))
+            //if (Target.IsValidTarget(Q.Range*2))
             //{
-            //    var wComboHits = GetWHits(Target, HeroManager.Enemies.Where(e => e.LSIsValidTarget(W.Range + W.Width)).Cast<Obj_AI_Base>().ToList());
+            //    var wComboHits = GetWHits(Target, HeroManager.Enemies.Where(e => e.IsValidTarget(W.Range + W.Width)).Cast<Obj_AI_Base>().ToList());
             //}
             if (ObjectManager.Player.IsDead)
             {
@@ -316,7 +316,7 @@ namespace Leblanc.Modes
 
 
             var nTarget = CommonTargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-            if (nTarget.LSIsValidTarget() && nTarget.Health < ComboDamage2xW(nTarget))
+            if (nTarget.IsValidTarget() && nTarget.Health < ComboDamage2xW(nTarget))
             {
 
                 Render.Circle.DrawCircle(nTarget.Position, 105f, System.Drawing.Color.AliceBlue);
@@ -386,12 +386,12 @@ namespace Leblanc.Modes
 
             return;
             var t = CommonTargetSelector.GetTarget(W.Range + Q.Range - 20, TargetSelector.DamageType.Magical);
-            if (!t.LSIsValidTarget(W.Range + Q.Range - 20))
+            if (!t.IsValidTarget(W.Range + Q.Range - 20))
             {
                 return;
             }
 
-            if (t.LSIsValidTarget(W.Range))
+            if (t.IsValidTarget(W.Range))
             {
                 return;
             }
@@ -400,14 +400,14 @@ namespace Leblanc.Modes
 
             if (ComboMode == ComboMode.Mode2xQ)
             {
-                if ((t.Health < ComboDamage2xQ(t) && Q.LSIsReady() && R.LSIsReady()) ||
-                    (t.Health < Q.GetDamage(t) && Q.LSIsReady()))
+                if ((t.Health < ComboDamage2xQ(t) && Q.IsReady() && R.IsReady()) ||
+                    (t.Health < Q.GetDamage(t) && Q.IsReady()))
                 {
                     canJump = true;
                 }
             }
 
-            if (canJump && W.LSIsReady() && !W.StillJumped())
+            if (canJump && W.IsReady() && !W.StillJumped())
             {
                 var x = GetJumpPosition(t, W.Range);
                 if (Modes.ModeConfig.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
@@ -420,7 +420,7 @@ namespace Leblanc.Modes
 
         private static void GameOnOnUpdate(EventArgs args)
         {
-            //if (W.LSIsReady() && Target.LSIsValidTarget())
+            //if (W.IsReady() && Target.IsValidTarget())
             //{
             //    var pre = W.GetPrediction(Target, true);
             //    if (pre.Hitchance >= HitChance.High)
@@ -428,7 +428,7 @@ namespace Leblanc.Modes
             //}
             //return;
 
-            if (!Target.LSIsValidTarget(2000))
+            if (!Target.IsValidTarget(2000))
             {
                 return;
             }
@@ -439,7 +439,7 @@ namespace Leblanc.Modes
                 ExecuteComboMode();
             }
 
-            if (!Target.LSIsValidTarget() || Modes.ModeConfig.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
+            if (!Target.IsValidTarget() || Modes.ModeConfig.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
             {
                 return;
             }
@@ -450,12 +450,12 @@ namespace Leblanc.Modes
 
         static void ExecuteComboMode()
         {
-            if (Target.LSIsValidTarget(Q.Range) && CommonHelper.SpellRStatus == CommonHelper.SpellRName.R2xQ && Target.Health < ComboDamage2xQ(Target))
+            if (Target.IsValidTarget(Q.Range) && CommonHelper.SpellRStatus == CommonHelper.SpellRName.R2xQ && Target.Health < ComboDamage2xQ(Target))
             {
                 Q2.CastOnUnit(Target);
             }
 
-            if (Target.LSIsValidTarget(W.Range) && CommonHelper.SpellRStatus == CommonHelper.SpellRName.R2xW && Target.Health < ComboDamage2xW(Target))
+            if (Target.IsValidTarget(W.Range) && CommonHelper.SpellRStatus == CommonHelper.SpellRName.R2xW && Target.Health < ComboDamage2xW(Target))
             {
                 PlayerSpells.CastW2(Target.Position);
             }
@@ -467,9 +467,9 @@ namespace Leblanc.Modes
                 if (IgniteSlot != SpellSlot.Unknown &&
                     ObjectManager.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready)
                 {
-                    if (Target.LSIsValidTarget(650) &&
+                    if (Target.IsValidTarget(650) &&
                         ObjectManager.Player.GetSummonerSpellDamage(Target, Damage.SummonerSpell.Ignite) + 150 >=
-                        Target.Health && (!Q.LSIsReady() || W.StillJumped()))
+                        Target.Health && (!Q.IsReady() || W.StillJumped()))
                     {
                         ObjectManager.Player.Spellbook.CastSpell(IgniteSlot, Target);
                     }
@@ -505,12 +505,12 @@ namespace Leblanc.Modes
 
         static void ExecuteSpells()
         {
-            if (!Target.LSIsValidTarget())
+            if (!Target.IsValidTarget())
             {
                 return;
             }
 
-            if (!R.LSIsReady())
+            if (!R.IsReady())
             {
                 if (ActiveComboMode == ActiveComboMode.Mode2xQ)
                 {
@@ -544,7 +544,7 @@ namespace Leblanc.Modes
             }
             else
             {
-                if (!Q.LSIsReady() && ActiveComboMode == ActiveComboMode.Mode2xQ && CommonHelper.SpellRStatus != CommonHelper.SpellRName.R2xQ && Q.Cooldown > 1)
+                if (!Q.IsReady() && ActiveComboMode == ActiveComboMode.Mode2xQ && CommonHelper.SpellRStatus != CommonHelper.SpellRName.R2xQ && Q.Cooldown > 1)
                 {
                     if (MenuLocal.Item("Combo.UseW").GetValue<StringList>().SelectedIndex != 0)
                     {
@@ -572,17 +572,17 @@ namespace Leblanc.Modes
 
         static bool CanCastCombo(ComboMode comboMode)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
             {
                 return false;
             }
 
-            if (comboMode == ComboMode.Mode2xQ && Q.LSIsReady())
+            if (comboMode == ComboMode.Mode2xQ && Q.IsReady())
             {
                 return true;
             }
 
-            if (comboMode == ComboMode.Mode2xW && W.LSIsReady())
+            if (comboMode == ComboMode.Mode2xW && W.IsReady())
             {
                 return true;
             }
@@ -592,12 +592,12 @@ namespace Leblanc.Modes
 
         private static void ExecuteMode2xQ()
         {
-            if (!Target.LSIsValidTarget(Q.Range))
+            if (!Target.IsValidTarget(Q.Range))
             {
                 return;
             }
 
-            if (!Q.LSIsReady() && !Q2.LSIsReady())
+            if (!Q.IsReady() && !Q2.IsReady())
             {
                 return;
             }
@@ -608,12 +608,12 @@ namespace Leblanc.Modes
 
         private static void ExecuteCompleteCombo()
         {
-            if (ComboMode == ComboMode.Mode2xQ && !Q.LSIsReady() && Q2.LSIsReady() && !W2.StillJumped())
+            if (ComboMode == ComboMode.Mode2xQ && !Q.IsReady() && Q2.IsReady() && !W2.StillJumped())
             {
                 Champion.PlayerSpells.Q2.CastOnUnit(Target);
             }
 
-            if (ComboMode == ComboMode.Mode2xW && !W.LSIsReady() && W2.LSIsReady() && W2.StillJumped())
+            if (ComboMode == ComboMode.Mode2xW && !W.IsReady() && W2.IsReady() && W2.StillJumped())
             {
                 PlayerSpells.CastW2(Target.Position);
             }
@@ -621,12 +621,12 @@ namespace Leblanc.Modes
 
         private static void ExecuteMode2xW()
         {
-            if (!Target.LSIsValidTarget(W.Range))
+            if (!Target.IsValidTarget(W.Range))
             {
                 return;
             }
 
-            if (!W.LSIsReady() && !W2.LSIsReady() && !W2.StillJumped())
+            if (!W.IsReady() && !W2.IsReady() && !W2.StillJumped())
             {
                 return;
             }
@@ -638,18 +638,18 @@ namespace Leblanc.Modes
 
         private static void ExecuteModeAuto()
         {
-            if (!R.LSIsReady() || !Target.LSIsValidTarget())
+            if (!R.IsReady() || !Target.IsValidTarget())
             {
                 return;
             }
 
-            var nCount = HeroManager.Enemies.Count(e => e.LSDistance(Target) <= W.Width);
+            var nCount = HeroManager.Enemies.Count(e => e.Distance(Target) <= W.Width);
            
-            if (nCount >= MenuLocal.Item("Combo.Mode.Auto").GetValue<StringList>().SelectedIndex + 2 && Target.LSIsValidTarget(W.Range))
+            if (nCount >= MenuLocal.Item("Combo.Mode.Auto").GetValue<StringList>().SelectedIndex + 2 && Target.IsValidTarget(W.Range))
             {
                 ExecuteMode2xW();
             }
-            else if (nCount == 1 && Target.LSIsValidTarget(Q.Range))
+            else if (nCount == 1 && Target.IsValidTarget(Q.Range))
             {
                 ExecuteMode2xQ();
             }
@@ -684,7 +684,7 @@ namespace Leblanc.Modes
         {
             var result = new Vector2();
             var minionCount = 0;
-            var startPos = ObjectManager.Player.ServerPosition.LSTo2D();
+            var startPos = ObjectManager.Player.ServerPosition.To2D();
 
             range = range*range;
 
@@ -703,7 +703,7 @@ namespace Leblanc.Modes
                     {
                         var circle = MEC.GetMec(subGroup);
 
-                        if (circle.Radius <= width && circle.Center.LSDistance(startPos, true) <= range)
+                        if (circle.Radius <= width && circle.Center.Distance(startPos, true) <= range)
                         {
                             minionCount = subGroup.Count;
                             return new HitLocation(circle.Center, minionCount);
@@ -715,9 +715,9 @@ namespace Leblanc.Modes
             {
                 foreach (var pos in enemyPositions)
                 {
-                    if (pos.LSDistance(startPos, true) <= range)
+                    if (pos.Distance(startPos, true) <= range)
                     {
-                        var count = enemyPositions.Count(pos2 => pos.LSDistance(pos2, true) <= width*width);
+                        var count = enemyPositions.Count(pos2 => pos.Distance(pos2, true) <= width*width);
 
                         if (count >= minionCount)
                         {
@@ -741,18 +741,18 @@ namespace Leblanc.Modes
         {
             return;
             var nTarget = CommonTargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-            if (nTarget.LSIsValidTarget() && nTarget.Health < ComboDamage2xW(nTarget))
+            if (nTarget.IsValidTarget() && nTarget.Health < ComboDamage2xW(nTarget))
             {
                 
 
 
             }
 
-            IEnumerable<Vector2> rangedMinionsW = HeroManager.Enemies.Where(e => e.LSIsValidTarget(W.Range + W.Width + 30)).Select(a => a.Position.LSTo2D());
+            IEnumerable<Vector2> rangedMinionsW = HeroManager.Enemies.Where(e => e.IsValidTarget(W.Range + W.Width + 30)).Select(a => a.Position.To2D());
 
-            //rangedMinionsW.AddRange(HeroManager.Enemies.Where(e => e.LSIsValidTarget(W.Range + W.Width + 30)).Select(x => x.Position.To2D()));
+            //rangedMinionsW.AddRange(HeroManager.Enemies.Where(e => e.IsValidTarget(W.Range + W.Width + 30)).Select(x => x.Position.To2D()));
             //var rangedMinionsW =
-            //    HeroManager.Enemies.Where(e => e.LSIsValidTarget(W.Range + W.Width + 30)).Select(x => x.Position.To2D());
+            //    HeroManager.Enemies.Where(e => e.IsValidTarget(W.Range + W.Width + 30)).Select(x => x.Position.To2D());
 
             var locationW = W.GetCircularFarmLocation((List<Vector2>) rangedMinionsW, W.Width*0.75f);
 
@@ -761,15 +761,15 @@ namespace Leblanc.Modes
                 ExecuteMode2xW();
             }
 
-            if (Target.LSIsValidTarget(Q.Range))
+            if (Target.IsValidTarget(Q.Range))
             {
-                if (HeroManager.Enemies.Find(e => e.LSDistance(Target) < W.Range && e.NetworkId != Target.NetworkId) ==
+                if (HeroManager.Enemies.Find(e => e.Distance(Target) < W.Range && e.NetworkId != Target.NetworkId) ==
                     null)
                 {
                     ExecuteMode2xQ();
                 }
             }
-            else if (Target.LSIsValidTarget(Q.Range) && MenuHunt.Item("Hunt." + Target.ChampionName).GetValue<bool>())
+            else if (Target.IsValidTarget(Q.Range) && MenuHunt.Item("Hunt." + Target.ChampionName).GetValue<bool>())
             {
                 ExecuteMode2xQ();
             }
@@ -789,14 +789,14 @@ namespace Leblanc.Modes
                 if (item.Value.ItemType == Common.CommonItems.EnumItemType.AoE
                     && item.Value.TargetingType == Common.CommonItems.EnumItemTargettingType.EnemyHero)
                 {
-                    if (t is AIHeroClient && t.LSIsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
+                    if (t is AIHeroClient && t.IsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
                         item.Value.Item.Cast();
                 }
 
                 if (item.Value.ItemType == Common.CommonItems.EnumItemType.Targeted
                     && item.Value.TargetingType == Common.CommonItems.EnumItemTargettingType.EnemyHero)
                 {
-                    if (t.LSIsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
+                    if (t.IsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
                         item.Value.Item.Cast((AIHeroClient) t);
                 }
             }
@@ -806,11 +806,11 @@ namespace Leblanc.Modes
         {
             double fComboDamage = 0;
 
-            fComboDamage += Q.LSIsReady() ? Q.GetDamage(t as AIHeroClient) + Q.GetDamage(t as AIHeroClient, 1) : 0;
+            fComboDamage += Q.IsReady() ? Q.GetDamage(t as AIHeroClient) + Q.GetDamage(t as AIHeroClient, 1) : 0;
 
-            fComboDamage += W.LSIsReady() ? W.GetDamage(t as AIHeroClient) : 0;
+            fComboDamage += W.IsReady() ? W.GetDamage(t as AIHeroClient) : 0;
 
-            fComboDamage += E.LSIsReady() ? E.GetDamage(t as AIHeroClient) * 2 : 0;
+            fComboDamage += E.IsReady() ? E.GetDamage(t as AIHeroClient) * 2 : 0;
 
             if (ComboMode == ComboMode.Mode2xQ)
             {
@@ -840,11 +840,11 @@ namespace Leblanc.Modes
             double fComboDamage = 0;
 
             
-            fComboDamage += q && Q.LSIsReady() ? Q.GetDamage(t as AIHeroClient) * 2 : 0;
+            fComboDamage += q && Q.IsReady() ? Q.GetDamage(t as AIHeroClient) * 2 : 0;
 
-            fComboDamage += w && W.LSIsReady() ? W.GetDamage(t as AIHeroClient) : 0;
+            fComboDamage += w && W.IsReady() ? W.GetDamage(t as AIHeroClient) : 0;
 
-            fComboDamage += e && E.LSIsReady() ? E.GetDamage(t as AIHeroClient) * 2 : 0;
+            fComboDamage += e && E.IsReady() ? E.GetDamage(t as AIHeroClient) * 2 : 0;
 
             if (rQ && ComboMode == ComboMode.Mode2xQ)
             {
@@ -927,19 +927,19 @@ namespace Leblanc.Modes
         {
             List<Vector2> xList = new List<Vector2>();
 
-            Vector2 location = ObjectManager.Player.Position.LSTo2D() +
-                               Vector2.Normalize(t.Position.LSTo2D() - ObjectManager.Player.Position.LSTo2D())*W.Range;
+            Vector2 location = ObjectManager.Player.Position.To2D() +
+                               Vector2.Normalize(t.Position.To2D() - ObjectManager.Player.Position.To2D())*W.Range;
             Vector2 wCastPosition = location;
 
             //Render.Circle.DrawCircle(wCastPosition.To3D(), 105f, System.Drawing.Color.Red);
 
 
-            if (!wCastPosition.LSIsWall())
+            if (!wCastPosition.IsWall())
             {
                 xList.Add(wCastPosition);
             }
 
-            if (!wCastPosition.LSIsWall())
+            if (!wCastPosition.IsWall())
             {
                 ExistingJumpPositions.Add(new ListJumpPositions
                 {
@@ -950,22 +950,22 @@ namespace Leblanc.Modes
                 ListWJumpPositions.Add(wCastPosition);
             }
 
-            if (wCastPosition.LSIsWall())
+            if (wCastPosition.IsWall())
             {
                 for (int j = 20; j < 80; j += 20)
                 {
-                    Vector2 wcPositive = ObjectManager.Player.Position.LSTo2D() +
-                                         Vector2.Normalize(t.Position.LSTo2D() - ObjectManager.Player.Position.LSTo2D())
-                                             .LSRotated(j*(float) Math.PI/180)*W.Range;
-                    if (!wcPositive.LSIsWall())
+                    Vector2 wcPositive = ObjectManager.Player.Position.To2D() +
+                                         Vector2.Normalize(t.Position.To2D() - ObjectManager.Player.Position.To2D())
+                                             .Rotated(j*(float) Math.PI/180)*W.Range;
+                    if (!wcPositive.IsWall())
                     {
                         ListWJumpPositions.Add(wcPositive);
                     }
 
-                    Vector2 wcNegative = ObjectManager.Player.Position.LSTo2D() +
-                                         Vector2.Normalize(t.Position.LSTo2D() - ObjectManager.Player.Position.LSTo2D())
-                                             .LSRotated(-j*(float) Math.PI/180)*W.Range;
-                    if (!wcNegative.LSIsWall())
+                    Vector2 wcNegative = ObjectManager.Player.Position.To2D() +
+                                         Vector2.Normalize(t.Position.To2D() - ObjectManager.Player.Position.To2D())
+                                             .Rotated(-j*(float) Math.PI/180)*W.Range;
+                    if (!wcNegative.IsWall())
                     {
                         ListWJumpPositions.Add(wcNegative);
                     }
@@ -980,19 +980,19 @@ namespace Leblanc.Modes
             //{
             //    Render.Circle.DrawCircle(aa.To3D2(), 105f, System.Drawing.Color.White);
             //}
-            var al1 = xList.OrderBy(al => al.LSDistance(t.Position)).First();
+            var al1 = xList.OrderBy(al => al.Distance(t.Position)).First();
 
             var color = System.Drawing.Color.DarkRed;
             var width = 4;
 
             var startpos = ObjectManager.Player.Position;
             var endpos = al1.To3D();
-            if (startpos.LSDistance(endpos) > 100)
+            if (startpos.Distance(endpos) > 100)
             {
                 var endpos1 = al1.To3D() +
-                              (startpos - endpos).LSTo2D().LSNormalized().LSRotated(25*(float) Math.PI/180).To3D()*75;
+                              (startpos - endpos).To2D().Normalized().Rotated(25*(float) Math.PI/180).To3D()*75;
                 var endpos2 = al1.To3D() +
-                              (startpos - endpos).LSTo2D().LSNormalized().LSRotated(-25*(float) Math.PI/180).To3D()*75;
+                              (startpos - endpos).To2D().Normalized().Rotated(-25*(float) Math.PI/180).To3D()*75;
 
                 //var x1 = new LeagueSharp.Common.Geometry.Polygon.Line(startpos, endpos);
                 //x1.Draw(color, width - 2);

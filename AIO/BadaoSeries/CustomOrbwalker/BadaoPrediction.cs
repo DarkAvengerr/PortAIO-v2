@@ -29,7 +29,7 @@ using EloBuddy;
             if (sender.IsValid && sender.Team != ObjectManager.Player.Team && args.SData.Name == "YasuoWMovingWall")
             {
                 _wallCastT = Utils.TickCount;
-                _yasuoWallCastedPos = sender.ServerPosition.LSTo2D();
+                _yasuoWallCastedPos = sender.ServerPosition.To2D();
             }
         }
 
@@ -98,7 +98,7 @@ using EloBuddy;
             /// </summary>
             public Vector3 From
             {
-                get { return _from.LSTo2D().LSIsValid() ? _from : ObjectManager.Player.ServerPosition; }
+                get { return _from.To2D().IsValid() ? _from : ObjectManager.Player.ServerPosition; }
                 set { _from = value; }
             }
 
@@ -109,9 +109,9 @@ using EloBuddy;
             {
                 get
                 {
-                    return _rangeCheckFrom.LSTo2D().LSIsValid()
+                    return _rangeCheckFrom.To2D().IsValid()
                         ? _rangeCheckFrom
-                        : (From.LSTo2D().LSIsValid() ? From : ObjectManager.Player.ServerPosition);
+                        : (From.To2D().IsValid() ? From : ObjectManager.Player.ServerPosition);
                 }
                 set { _rangeCheckFrom = value; }
             }
@@ -152,8 +152,8 @@ using EloBuddy;
             {
                 get
                 {
-                    return _castPosition.LSIsValid() && _castPosition.LSTo2D().LSIsValid()
-                        ? _castPosition.LSSetZ()
+                    return _castPosition.IsValid() && _castPosition.To2D().IsValid()
+                        ? _castPosition.SetZ()
                         : Input.Unit.ServerPosition;
                 }
                 set { _castPosition = value; }
@@ -172,7 +172,7 @@ using EloBuddy;
             /// </summary>
             public Vector3 UnitPosition
             {
-                get { return _unitPosition.LSTo2D().LSIsValid() ? _unitPosition.LSSetZ() : Input.Unit.ServerPosition; }
+                get { return _unitPosition.To2D().IsValid() ? _unitPosition.SetZ() : Input.Unit.ServerPosition; }
                 set { _unitPosition = value; }
             }
         }
@@ -188,10 +188,10 @@ using EloBuddy;
         //public static Vector3 GetBadao2Prediction(this Spell spell, Obj_AI_Base target)
         //{
         //    Vector3 chuot = Prediction.GetPrediction(target, 1).UnitPosition;
-        //    float dis = spell.From.LSDistance(target.Position);
+        //    float dis = spell.From.Distance(target.Position);
         //    float rad = target.BoundingRadius + spell.Width - 50;
-        //    double x = math.t(target.MoveSpeed, spell.Speed, dis, spell.Delay + Game.Ping / 2 / 1000, rad, spell.From.LSTo2D(), target.Position.LSTo2D(), chuot.LSTo2D());
-        //    if (x != 0 && !target.LSIsDashing()) { return target.Position.LSExtend(chuot, (float)x * target.MoveSpeed - rad); }
+        //    double x = math.t(target.MoveSpeed, spell.Speed, dis, spell.Delay + Game.Ping / 2 / 1000, rad, spell.From.To2D(), target.Position.To2D(), chuot.To2D());
+        //    if (x != 0 && !target.IsDashing()) { return target.Position.Extend(chuot, (float)x * target.MoveSpeed - rad); }
         //    else return target.Position;
         //}
         public static bool BadaoCast(this Spell spell, Obj_AI_Base target)
@@ -207,15 +207,15 @@ using EloBuddy;
         {
             PredictionOutput result = null;
 
-            if (!target.LSIsValidTarget(float.MaxValue, false))
+            if (!target.IsValidTarget(float.MaxValue, false))
             {
                 return new PredictionOutput();
             }
-            if (target.LSIsDashing())
+            if (target.IsDashing())
             {
                 var dashDtata = target.GetDashInfo();
                 result = spell.GetBadaoStandarPrediction(target,
-                    new List<Vector2>() {target.ServerPosition.LSTo2D(), dashDtata.Path.Last()},dashDtata.Speed);
+                    new List<Vector2>() {target.ServerPosition.To2D(), dashDtata.Path.Last()},dashDtata.Speed);
                 if (result.Hitchance >= HitChance.High)
                     result.Hitchance = HitChance.Dashing;
             }
@@ -225,8 +225,8 @@ using EloBuddy;
                 var remainingImmobileT = UnitIsImmobileUntil(target);
                 if (remainingImmobileT >= 0d)
                 {
-                    var timeToReachTargetPosition = spell.Delay + target.Position.LSTo2D().LSDistance(spell.From.LSTo2D()) / spell.Speed;
-                    if (spell.RangeCheckFrom.LSTo2D().LSDistance(target.Position.LSTo2D()) <= spell.Range)
+                    var timeToReachTargetPosition = spell.Delay + target.Position.To2D().Distance(spell.From.To2D()) / spell.Speed;
+                    if (spell.RangeCheckFrom.To2D().Distance(target.Position.To2D()) <= spell.Range)
                     {
                         if (timeToReachTargetPosition <=
                             remainingImmobileT + (target.BoundingRadius + spell.Width - 40)/target.MoveSpeed)
@@ -256,7 +256,7 @@ using EloBuddy;
             //Normal prediction
             if (result == null)
             {
-                result = spell.GetBadaoStandarPrediction(target,target.LSGetWaypoints());
+                result = spell.GetBadaoStandarPrediction(target,target.GetWaypoints());
             }
             //Check for collision
             if (spell.Collision)
@@ -287,17 +287,17 @@ using EloBuddy;
             // check the unit speed input
             speed = (Math.Abs(speed - (-1)) < float.Epsilon) ? target.MoveSpeed : speed;
             // set standar output
-            Vector2 castpos = target.ServerPosition.LSTo2D();
-            Vector2 unitpos = target.ServerPosition.LSTo2D();
+            Vector2 castpos = target.ServerPosition.To2D();
+            Vector2 unitpos = target.ServerPosition.To2D();
             HitChance hitchance = HitChance.Impossible;
             // target standing like a statue (performing an attack, casting spell, afk, aimbush.....)
             if (path.Count <= 1)
             {
                 // set standar position
-                castpos = target.ServerPosition.LSTo2D();
-                unitpos = target.ServerPosition.LSTo2D();
+                castpos = target.ServerPosition.To2D();
+                unitpos = target.ServerPosition.To2D();
                 // target in range
-                if (spell.RangeCheckFrom.LSTo2D().LSDistance(castpos) <= spell.Range)
+                if (spell.RangeCheckFrom.To2D().Distance(castpos) <= spell.Range)
                     hitchance = HitChance.High;
                 // target out of range
                 else
@@ -306,15 +306,15 @@ using EloBuddy;
                     if (spell.Type == SkillshotType.SkillshotCircle)
                     {
                         // check for extra radius
-                        if (spell.RangeCheckFrom.LSTo2D().LSDistance(castpos) <=
+                        if (spell.RangeCheckFrom.To2D().Distance(castpos) <=
                             spell.Range + spell.Width + target.BoundingRadius - 40)
                         {
-                            castpos = spell.RangeCheckFrom.LSTo2D().LSExtend(castpos, spell.Range);
+                            castpos = spell.RangeCheckFrom.To2D().Extend(castpos, spell.Range);
                             hitchance = HitChance.Medium;
                         }
                         else
                         {
-                            castpos = spell.RangeCheckFrom.LSTo2D().LSExtend(castpos, spell.Range);
+                            castpos = spell.RangeCheckFrom.To2D().Extend(castpos, spell.Range);
                             hitchance = HitChance.OutOfRange;
                         }
                     }
@@ -333,7 +333,7 @@ using EloBuddy;
             {
                 var a = path[0];
                 var b = path[1];
-                var distance = a.LSDistance(b);
+                var distance = a.Distance(b);
                 // skillshot circle
                 if (spell.Type == SkillshotType.SkillshotCircle)
                 {
@@ -341,16 +341,16 @@ using EloBuddy;
                     var x = speed*(spell.Delay + Game.Ping/2000f + 0.06f);
                     // position 1 properties
                     var distance01 = x - (target.BoundingRadius + spell.Width)/2;
-                    var pos01 = a.LSExtend(b, distance01);
+                    var pos01 = a.Extend(b, distance01);
                     // position 2 properties
                     var distance02 = x;
-                    var pos02 = a.LSExtend(b, distance02);
+                    var pos02 = a.Extend(b, distance02);
                     // position 3 properties
                     var distance03 = x + (target.BoundingRadius + spell.Width)/2;
-                    var pos03 = pos02.LSExtend(spell.From.LSTo2D(), distance03);
+                    var pos03 = pos02.Extend(spell.From.To2D(), distance03);
                     // lines length
-                    var length01 = pos01.LSDistance(pos02);
-                    var length02 = pos02.LSDistance(pos03);
+                    var length01 = pos01.Distance(pos02);
+                    var length02 = pos02.Distance(pos03);
                     // set standar position
                     unitpos = pos02;
                     castpos = pos02;
@@ -358,13 +358,13 @@ using EloBuddy;
                     List<Vector2> poses = new List<Vector2>();
                     for (int i = 0; i <= 10; i++)
                     {
-                        poses.Add(i <= 5 ? pos01.LSExtend(pos02, i*length01/6) : pos02.LSExtend(pos03, (i - 5)*length02/5));
+                        poses.Add(i <= 5 ? pos01.Extend(pos02, i*length01/6) : pos02.Extend(pos03, (i - 5)*length02/5));
                     }
                     // check cast pos
                     for (int i = 0; i <= 10; i++)
                     {
-                        if (poses[i].LSDistance(spell.RangeCheckFrom.LSTo2D()) <= spell.Range &&
-                            poses[i].LSDistance(a) <= distance)
+                        if (poses[i].Distance(spell.RangeCheckFrom.To2D()) <= spell.Range &&
+                            poses[i].Distance(a) <= distance)
                         {
 
                             if (i <= 3)
@@ -401,8 +401,8 @@ using EloBuddy;
                     var x = speed*(spell.Delay + Game.Ping/2000f + 0.06f);
                     // position properties
                     var distance01 = x;
-                    var pos01 = a.LSExtend(b, distance01);
-                    var range01 = spell.RangeCheckFrom.LSTo2D().LSDistance(pos01);
+                    var pos01 = a.Extend(b, distance01);
+                    var range01 = spell.RangeCheckFrom.To2D().Distance(pos01);
                     // set standar position
                     unitpos = pos01;
                     castpos = pos01;
@@ -433,36 +433,36 @@ using EloBuddy;
             {
                 var a = path[0];
                 var b = path[1];
-                var distance = a.LSDistance(b);
+                var distance = a.Distance(b);
                 // standar prediction
-                float dis = spell.From.LSTo2D().LSDistance(a);
+                float dis = spell.From.To2D().Distance(a);
                 float rad = 0;
                 double time = math.t(speed, spell.Speed, dis, spell.Delay + Game.Ping/2f/1000 + 0.06f,
-                    0, spell.From.LSTo2D(), a, b);
-                var unitpos02 = !double.IsNaN(time) ? a.LSExtend(b, (float) time*speed) : new Vector2();
+                    0, spell.From.To2D(), a, b);
+                var unitpos02 = !double.IsNaN(time) ? a.Extend(b, (float) time*speed) : new Vector2();
                 var castpos02 = unitpos02;
                 // very high prediction
                 rad = (target.BoundingRadius + spell.Width)/2;
                 time = math.t(target.MoveSpeed, spell.Speed, dis, spell.Delay + Game.Ping/2f/1000 + 0.06f,
-                    rad, spell.From.LSTo2D(), a, b);
-                var unitpos01 = !double.IsNaN(time) ? a.LSExtend(b, (float) time*speed- rad) : new Vector2();
+                    rad, spell.From.To2D(), a, b);
+                var unitpos01 = !double.IsNaN(time) ? a.Extend(b, (float) time*speed- rad) : new Vector2();
                 var castpos01 = unitpos01;
                 // medium prediction
                 time = math.t(target.MoveSpeed, spell.Speed, dis, spell.Delay + Game.Ping/2f/1000 + 0.06f -rad/spell.Speed,
-                    0, spell.From.LSTo2D(), a, b);
-                var unitpos03 = !double.IsNaN(time) ? a.LSExtend(b, (float) time*speed) : new Vector2();
-                var castpos03 = unitpos03.LSIsValid()
-                    ? spell.From.LSTo2D().LSExtend(unitpos03, spell.From.LSTo2D().LSDistance(unitpos03) - rad)
+                    0, spell.From.To2D(), a, b);
+                var unitpos03 = !double.IsNaN(time) ? a.Extend(b, (float) time*speed) : new Vector2();
+                var castpos03 = unitpos03.IsValid()
+                    ? spell.From.To2D().Extend(unitpos03, spell.From.To2D().Distance(unitpos03) - rad)
                     : new Vector2();
-                if (castpos01.LSIsValid() && castpos02.LSIsValid() && castpos03.LSIsValid())
+                if (castpos01.IsValid() && castpos02.IsValid() && castpos03.IsValid())
                 {
-                    var length01 = castpos01.LSDistance(castpos02);
-                    var length02 = castpos02.LSDistance(castpos03);
+                    var length01 = castpos01.Distance(castpos02);
+                    var length02 = castpos02.Distance(castpos03);
                     var Acosb =
                         Math.Acos(
-                            Math.Abs(float.IsNaN(math.CosB(spell.From.LSTo2D(), a, b))
+                            Math.Abs(float.IsNaN(math.CosB(spell.From.To2D(), a, b))
                                 ? 0.99f
-                                : Math.Abs(math.CosB(spell.From.LSTo2D(), a, b))))*(180/Math.PI);
+                                : Math.Abs(math.CosB(spell.From.To2D(), a, b))))*(180/Math.PI);
                     // skillshot circle + line
                     if (spell.Type == SkillshotType.SkillshotCircle ||
                         (spell.Type == SkillshotType.SkillshotLine && Acosb <= 110 && Acosb >= 70))
@@ -471,14 +471,14 @@ using EloBuddy;
                         for (int i = 0; i <= 10; i++)
                         {
                             poses.Add(i <= 5
-                                ? castpos01.LSExtend(castpos02, i*length01/6)
-                                : castpos02.LSExtend(castpos03, (i - 5)*length02/5));
+                                ? castpos01.Extend(castpos02, i*length01/6)
+                                : castpos02.Extend(castpos03, (i - 5)*length02/5));
                         }
                         // check cast pos
                         for (int i = 0; i <= 10; i++)
                         {
-                            if (poses[i].LSDistance(spell.RangeCheckFrom.LSTo2D()) <= spell.Range &&
-                                poses[i].LSDistance(a) <= distance)
+                            if (poses[i].Distance(spell.RangeCheckFrom.To2D()) <= spell.Range &&
+                                poses[i].Distance(a) <= distance)
                             {
 
                                 if (i <= 3)
@@ -511,8 +511,8 @@ using EloBuddy;
                     // skillshot line + cone
                     else
                     {
-                        var distance02 = a.LSDistance(castpos02);
-                        var range01 = spell.RangeCheckFrom.LSTo2D().LSDistance(castpos02);
+                        var distance02 = a.Distance(castpos02);
+                        var range01 = spell.RangeCheckFrom.To2D().Distance(castpos02);
                         // hitchance high
                         if (distance02 < distance && range01 <= spell.Range)
                         {
@@ -568,15 +568,15 @@ using EloBuddy;
                                 ObjectManager.Get<Obj_AI_Minion>()
                                     .Where(
                                         minion =>
-                                            minion.LSIsValidTarget(
+                                            minion.IsValidTarget(
                                                 Math.Min(spell.Range + spell.Width + 100, 2000), true,
                                                 spell.RangeCheckFrom)))
                             {
                                 var target = minion;
-                                var minionPrediction = spell.GetBadaoStandarPrediction(target,target.LSGetWaypoints());
+                                var minionPrediction = spell.GetBadaoStandarPrediction(target,target.GetWaypoints());
                                 if (
-                                    minionPrediction.UnitPosition.LSTo2D()
-                                        .LSDistance(spell.From.LSTo2D(), position.LSTo2D(), true, true) <=
+                                    minionPrediction.UnitPosition.To2D()
+                                        .Distance(spell.From.To2D(), position.To2D(), true, true) <=
                                     Math.Pow((spell.Width + 15 + minion.BoundingRadius), 2))
                                 {
                                     result.Add(minion);
@@ -587,15 +587,15 @@ using EloBuddy;
                             foreach (var hero in
                                 HeroManager.Enemies.FindAll(
                                     hero =>
-                                        hero.LSIsValidTarget(
+                                        hero.IsValidTarget(
                                             Math.Min(spell.Range + spell.Width + 100, 2000), true, spell.RangeCheckFrom))
                                 )
                             {
                                 var target = hero;
-                                var prediction = spell.GetBadaoStandarPrediction(target, target.LSGetWaypoints());
+                                var prediction = spell.GetBadaoStandarPrediction(target, target.GetWaypoints());
                                 if (
-                                    prediction.UnitPosition.LSTo2D()
-                                        .LSDistance(spell.From.LSTo2D(), position.LSTo2D(), true, true) <=
+                                    prediction.UnitPosition.To2D()
+                                        .Distance(spell.From.To2D(), position.To2D(), true, true) <=
                                     Math.Pow((spell.Width + 50 + hero.BoundingRadius), 2))
                                 {
                                     result.Add(hero);
@@ -611,10 +611,10 @@ using EloBuddy;
                                 )
                             {
                                 var target = hero;
-                                var prediction = spell.GetBadaoStandarPrediction(target, target.LSGetWaypoints());
+                                var prediction = spell.GetBadaoStandarPrediction(target, target.GetWaypoints());
                                 if (
-                                    prediction.UnitPosition.LSTo2D()
-                                        .LSDistance(spell.From.LSTo2D(), position.LSTo2D(), true, true) <=
+                                    prediction.UnitPosition.To2D()
+                                        .Distance(spell.From.To2D(), position.To2D(), true, true) <=
                                     Math.Pow((spell.Width + 50 + hero.BoundingRadius), 2))
                                 {
                                     result.Add(hero);
@@ -624,10 +624,10 @@ using EloBuddy;
 
 
                         case CollisionableObjects.Walls:
-                            var step = position.LSDistance(spell.From) / 20;
+                            var step = position.Distance(spell.From) / 20;
                             for (var i = 0; i < 20; i++)
                             {
-                                var p = spell.From.LSTo2D().LSExtend(position.LSTo2D(), step * i);
+                                var p = spell.From.To2D().Extend(position.To2D(), step * i);
                                 if (NavMesh.GetCollisionFlags(p.X, p.Y).HasFlag(CollisionFlags.Wall))
                                 {
                                     result.Add(ObjectManager.Player);
@@ -662,15 +662,15 @@ using EloBuddy;
                             var wallWidth = (300 + 50 * Convert.ToInt32(level));
 
                             var wallDirection =
-                                (wall.Position.LSTo2D() - _yasuoWallCastedPos).LSNormalized().LSPerpendicular();
-                            var wallStart = wall.Position.LSTo2D() + wallWidth / 2f * wallDirection;
+                                (wall.Position.To2D() - _yasuoWallCastedPos).Normalized().Perpendicular();
+                            var wallStart = wall.Position.To2D() + wallWidth / 2f * wallDirection;
                             var wallEnd = wallStart - wallWidth * wallDirection;
 
-                            if (wallStart.LSIntersection(wallEnd, position.LSTo2D(), spell.From.LSTo2D()).Intersects)
+                            if (wallStart.Intersection(wallEnd, position.To2D(), spell.From.To2D()).Intersects)
                             {
                                 var t = Utils.TickCount +
-                                        (wallStart.LSIntersection(wallEnd, position.LSTo2D(), spell.From.LSTo2D())
-                                            .Point.LSDistance(spell.From) / spell.Speed + spell.Delay) * 1000;
+                                        (wallStart.Intersection(wallEnd, position.To2D(), spell.From.To2D())
+                                            .Point.Distance(spell.From) / spell.Speed + spell.Delay) * 1000;
                                 if (t < _wallCastT + 4000)
                                 {
                                     result.Add(ObjectManager.Player);
@@ -688,7 +688,7 @@ using EloBuddy;
         //{
         //    if (!spell.IsSkillshot)
         //        return float.NaN;
-        //    var x = spell.RangeCheckFrom.LSTo2D().LSDistance(position.LSTo2D());
+        //    var x = spell.RangeCheckFrom.To2D().Distance(position.To2D());
         //    if (x > spell.Range)
         //        return float.NaN;
         //    return
@@ -798,9 +798,9 @@ using EloBuddy;
         }
         public static float CosB(Vector2 a, Vector2 b, Vector2 c)
         {
-            float a1 = c.LSDistance(b);
-            float b1 = a.LSDistance(c);
-            float c1 = b.LSDistance(a);
+            float a1 = c.Distance(b);
+            float b1 = a.Distance(c);
+            float c1 = b.Distance(a);
             if (Math.Abs(a1) < float.Epsilon || Math.Abs(c1) < float.Epsilon) { return float.NaN; }
             else { return (a1 * a1 + c1 * c1 - b1 * b1) / (2 * a1 * c1); }
         }

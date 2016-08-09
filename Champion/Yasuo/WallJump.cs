@@ -62,7 +62,7 @@ using EloBuddy; namespace YasuoPro
 
             public bool Contains(Vector3 position)
             {
-                return position.LSDistance(From) <= player.BoundingRadius;
+                return position.Distance(From) <= player.BoundingRadius;
             }
         }
 
@@ -105,7 +105,7 @@ using EloBuddy; namespace YasuoPro
         {
             foreach (var point in Jumpspots)
             {
-                Render.Circle.DrawCircle(point.From.LSTo2D().To3D(), player.BoundingRadius, System.Drawing.Color.White);
+                Render.Circle.DrawCircle(point.From.To2D().To3D(), player.BoundingRadius, System.Drawing.Color.White);
             }
         }
 
@@ -117,15 +117,15 @@ using EloBuddy; namespace YasuoPro
             if (Jumping && jumpspot != null)
             {
                 LeagueSharp.Common.Utility.DelayAction.Add(500, delegate { Jumping = false;  });
-                var minion = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsValid && x.Team == GameObjectTeam.Neutral && x.IsVisible).MinOrDefault(x => x.LSDistance(jumpspot.From));
-                if (minion == null && !player.IsMoving && player.LSDistance(jumpspot.From) <= 0.25 * player.BoundingRadius)
+                var minion = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsValid && x.Team == GameObjectTeam.Neutral && x.IsVisible).MinOrDefault(x => x.Distance(jumpspot.From));
+                if (minion == null && !player.IsMoving && player.Distance(jumpspot.From) <= 0.25 * player.BoundingRadius)
                 {
-                    if (getItem != null && getItem.SpellSlot.LSIsReady() && jumpspot.CastPos.LSDistance(jumpspot.From) <= 400)
+                    if (getItem != null && getItem.SpellSlot.IsReady() && jumpspot.CastPos.Distance(jumpspot.From) <= 400)
                     {
                         player.Spellbook.CastSpell(getItem.SpellSlot, jumpspot.CastPos);
                     }
 
-                    else if (SpellSlot.W.LSIsReady())
+                    else if (SpellSlot.W.IsReady())
                     {
                         Helper.Spells[Helper.W].Cast(jumpspot.CastPos);
                     }
@@ -143,7 +143,7 @@ using EloBuddy; namespace YasuoPro
 
         internal static void OnWndProc(WndEventArgs args)
         {
-            if (args.Msg == (uint)WindowsMessages.WM_LBUTTONDOWN && SpellSlot.E.LSIsReady())
+            if (args.Msg == (uint)WindowsMessages.WM_LBUTTONDOWN && SpellSlot.E.IsReady())
             {
                 var jumpoint = Jumpspots.Find(x => x.Contains(Game.CursorPos));
                 if (jumpoint != null)

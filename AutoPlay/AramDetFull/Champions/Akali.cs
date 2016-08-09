@@ -33,22 +33,22 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
-            if(player.LSCountEnemiesInRange(500)>0)
+            if(player.CountEnemiesInRange(500)>0)
                 W.Cast(player.Position);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.Cast();
         }
@@ -56,7 +56,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             if (safeGap(target) || GetComboDamage(target)*0.8f>target.Health)
                 R.Cast(target);
@@ -76,10 +76,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void killSteal()
         {
-            foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.LSIsValidTarget(R.Range)))
+            foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsValidTarget(R.Range)))
             {
-                if (hero.LSDistance(ObjectManager.Player) <= R.Range &&
-                    player.LSGetSpellDamage(hero, SpellSlot.R) >= hero.Health)
+                if (hero.Distance(ObjectManager.Player) <= R.Range &&
+                    player.GetSpellDamage(hero, SpellSlot.R) >= hero.Health)
                         R.CastOnUnit(hero, true);
             }
         }
@@ -88,14 +88,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             var fComboDamage = 0d;
 
-            if (Q.LSIsReady())
-                fComboDamage += player.LSGetSpellDamage(vTarget, SpellSlot.Q) +
-                                player.LSGetSpellDamage(vTarget, SpellSlot.Q, 1);
-            if (E.LSIsReady())
-                fComboDamage += player.LSGetSpellDamage(vTarget, SpellSlot.E);
+            if (Q.IsReady())
+                fComboDamage += player.GetSpellDamage(vTarget, SpellSlot.Q) +
+                                player.GetSpellDamage(vTarget, SpellSlot.Q, 1);
+            if (E.IsReady())
+                fComboDamage += player.GetSpellDamage(vTarget, SpellSlot.E);
 
-            if (R.LSIsReady())
-                fComboDamage += player.LSGetSpellDamage(vTarget, SpellSlot.R) * R.Instance.Ammo;
+            if (R.IsReady())
+                fComboDamage += player.GetSpellDamage(vTarget, SpellSlot.R) * R.Instance.Ammo;
             
             
             return (float)fComboDamage;

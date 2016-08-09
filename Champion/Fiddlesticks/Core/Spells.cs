@@ -22,7 +22,7 @@ namespace Feedlesticks.Core
         /// <summary>
         /// Ignite Slot
         /// </summary>
-        public static readonly SpellSlot Ignite = ObjectManager.Player.LSGetSpellSlot("summonerdot");
+        public static readonly SpellSlot Ignite = ObjectManager.Player.GetSpellSlot("summonerdot");
         /// <summary>
         /// Fiddle
         /// </summary>
@@ -35,7 +35,7 @@ namespace Feedlesticks.Core
         {
             get
             {
-                return Ignite.LSIsReady() && Ignite != SpellSlot.Unknown &&
+                return Ignite.IsReady() && Ignite != SpellSlot.Unknown &&
                     FiddleStick.Spellbook.CanUseSpell(Ignite) == SpellState.Ready;
             }
         }
@@ -46,7 +46,7 @@ namespace Feedlesticks.Core
         {
             get
             {
-                return Q.LSIsReady() && W.LSIsReady() && E.LSIsReady() && R.LSIsReady();
+                return Q.IsReady() && W.IsReady() && E.IsReady() && R.IsReady();
             }
         }
 

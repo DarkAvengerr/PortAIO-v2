@@ -49,16 +49,16 @@ using EloBuddy; namespace Support.Evade
 
         public static FastPredResult FastPrediction(Vector2 from, Obj_AI_Base unit, int delay, int speed)
         {
-            var tDelay = delay / 1000f + (from.LSDistance(unit) / speed);
+            var tDelay = delay / 1000f + (from.Distance(unit) / speed);
             var d = tDelay * unit.MoveSpeed;
-            var path = unit.LSGetWaypoints();
+            var path = unit.GetWaypoints();
 
-            if (path.LSPathLength() > d)
+            if (path.PathLength() > d)
             {
                 return new FastPredResult
                     {
                         IsMoving = true,
-                        CurrentPos = unit.ServerPosition.LSTo2D(),
+                        CurrentPos = unit.ServerPosition.To2D(),
                         PredictedPos = path.CutPath((int)d)[0]
                     };
             }
@@ -67,8 +67,8 @@ using EloBuddy; namespace Support.Evade
                 return new FastPredResult
                     {
                         IsMoving = false,
-                        CurrentPos = unit.ServerPosition.LSTo2D(),
-                        PredictedPos = unit.ServerPosition.LSTo2D()
+                        CurrentPos = unit.ServerPosition.To2D(),
+                        PredictedPos = unit.ServerPosition.To2D()
                     };
             }
             return new FastPredResult
@@ -106,18 +106,18 @@ using EloBuddy; namespace Support.Evade
                                 skillshot.SpellData.MissileSpeed);
                             var pos = pred.PredictedPos;
                             var w = skillshot.SpellData.RawRadius + (!pred.IsMoving ? (minion.BoundingRadius - 15) : 0)
-                                    - pos.LSDistance(from, skillshot.End, true);
+                                    - pos.Distance(from, skillshot.End, true);
                             if (w > 0)
                             {
                                 collisions.Add(
                                     new DetectedCollision
                                         {
                                             Position =
-                                                pos.LSProjectOn(skillshot.End, skillshot.Start).LinePoint
+                                                pos.ProjectOn(skillshot.End, skillshot.Start).LinePoint
                                                 + skillshot.Direction * 30,
                                             Unit = minion,
                                             Type = CollisionObjectTypes.Minion,
-                                            Distance = pos.LSDistance(from),
+                                            Distance = pos.Distance(from),
                                             Diff = w
                                         });
                             }
@@ -129,7 +129,7 @@ using EloBuddy; namespace Support.Evade
                         foreach (var hero in
                             HeroManager.Enemies.Where(
                                 h =>
-                                (h.LSIsValidTarget(1200, false) && h.Team == ObjectManager.Player.Team && !h.IsMe
+                                (h.IsValidTarget(1200, false) && h.Team == ObjectManager.Player.Team && !h.IsMe
                                  || h.Team != ObjectManager.Player.Team)))
                         {
                             var pred = FastPrediction(
@@ -139,18 +139,18 @@ using EloBuddy; namespace Support.Evade
                                 skillshot.SpellData.MissileSpeed);
                             var pos = pred.PredictedPos;
 
-                            var w = skillshot.SpellData.RawRadius + 30 - pos.LSDistance(from, skillshot.End, true);
+                            var w = skillshot.SpellData.RawRadius + 30 - pos.Distance(from, skillshot.End, true);
                             if (w > 0)
                             {
                                 collisions.Add(
                                     new DetectedCollision
                                         {
                                             Position =
-                                                pos.LSProjectOn(skillshot.End, skillshot.Start).LinePoint
+                                                pos.ProjectOn(skillshot.End, skillshot.Start).LinePoint
                                                 + skillshot.Direction * 30,
                                             Unit = hero,
                                             Type = CollisionObjectTypes.Minion,
-                                            Distance = pos.LSDistance(from),
+                                            Distance = pos.Distance(from),
                                             Diff = w
                                         });
                             }
@@ -161,7 +161,7 @@ using EloBuddy; namespace Support.Evade
                         if (
                             !HeroManager.Enemies.Any(
                                 hero =>
-                                hero.LSIsValidTarget(float.MaxValue, false) && hero.Team == ObjectManager.Player.Team
+                                hero.IsValidTarget(float.MaxValue, false) && hero.Team == ObjectManager.Player.Team
                                 && hero.ChampionName == "Yasuo"))
                         {
                             break;
@@ -182,8 +182,8 @@ using EloBuddy; namespace Support.Evade
                         var level = wall.Name.Substring(wall.Name.Length - 6, 1);
                         var wallWidth = (300 + 50 * Convert.ToInt32(level));
 
-                        var wallDirection = (wall.Position.LSTo2D() - YasuoWallCastedPos).LSNormalized().LSPerpendicular();
-                        var wallStart = wall.Position.LSTo2D() + wallWidth / 2 * wallDirection;
+                        var wallDirection = (wall.Position.To2D() - YasuoWallCastedPos).Normalized().Perpendicular();
+                        var wallStart = wall.Position.To2D() + wallWidth / 2 * wallDirection;
                         var wallEnd = wallStart - wallWidth * wallDirection;
                         var wallPolygon = new Geometry.Rectangle(wallStart, wallEnd, 75).ToPolygon();
                         var intersection = new Vector2();
@@ -192,7 +192,7 @@ using EloBuddy; namespace Support.Evade
                         for (var i = 0; i < wallPolygon.Points.Count; i++)
                         {
                             var inter =
-                                wallPolygon.Points[i].LSIntersection(
+                                wallPolygon.Points[i].Intersection(
                                     wallPolygon.Points[i != wallPolygon.Points.Count - 1 ? i + 1 : 0],
                                     from,
                                     skillshot.End);
@@ -204,13 +204,13 @@ using EloBuddy; namespace Support.Evade
 
                         if (intersections.Count > 0)
                         {
-                            intersection = intersections.OrderBy(item => item.LSDistance(from)).ToList()[0];
+                            intersection = intersections.OrderBy(item => item.Distance(from)).ToList()[0];
                             var collisionT = Environment.TickCount
                                              + Math.Max(
                                                  0,
                                                  skillshot.SpellData.Delay
                                                  - (Environment.TickCount - skillshot.StartTick)) + 100
-                                             + (1000 * intersection.LSDistance(from)) / skillshot.SpellData.MissileSpeed;
+                                             + (1000 * intersection.Distance(from)) / skillshot.SpellData.MissileSpeed;
                             if (collisionT - WallCastT < 4000)
                             {
                                 if (skillshot.SpellData.Type != SkillShotType.SkillshotMissileLine)
@@ -248,7 +248,7 @@ using EloBuddy; namespace Support.Evade
             if (sender.IsValid && sender.Team == ObjectManager.Player.Team && args.SData.Name == "YasuoWMovingWall")
             {
                 WallCastT = Environment.TickCount;
-                YasuoWallCastedPos = sender.ServerPosition.LSTo2D();
+                YasuoWallCastedPos = sender.ServerPosition.To2D();
             }
         }
     }

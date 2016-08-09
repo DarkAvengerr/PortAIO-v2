@@ -22,7 +22,7 @@ using EloBuddy;
                 return;
             var senderH = sender as AIHeroClient;
             var targetH = args.Target as AIHeroClient;
-            var damage = Orbwalking.IsAutoAttack(args.SData.Name) ? sender.LSGetAutoAttackDamage(targetH) : GetDamage(senderH, targetH, senderH.LSGetSpellSlot(args.SData.Name));
+            var damage = Orbwalking.IsAutoAttack(args.SData.Name) ? sender.GetAutoAttackDamage(targetH) : GetDamage(senderH, targetH, senderH.GetSpellSlot(args.SData.Name));
 
             if (damage > targetH.Health + 15)
             {
@@ -35,7 +35,7 @@ using EloBuddy;
 
         static float GetDamage(AIHeroClient hero, AIHeroClient target, SpellSlot slot)
         {
-            return (float)hero.LSGetSpellDamage(target, slot);
+            return (float)hero.GetSpellDamage(target, slot);
         }
     }
 }

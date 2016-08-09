@@ -71,7 +71,7 @@ using EloBuddy; namespace ElKatarina
         {
             if (args.Unit.IsMe)
             {
-                args.Process = !Player.LSHasBuff("KatarinaR");
+                args.Process = !Player.HasBuff("KatarinaR");
             }
         }
 
@@ -109,7 +109,7 @@ using EloBuddy; namespace ElKatarina
         private static void Combo()
         {
             var target = TargetSelector.GetTarget(spells[Spells.Q].Range, TargetSelector.DamageType.Magical);
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
             {
                 return;
             }
@@ -120,12 +120,12 @@ using EloBuddy; namespace ElKatarina
 
             if (spells[Spells.Q].IsInRange(target))
             {
-                if (spells[Spells.Q].LSIsReady())
+                if (spells[Spells.Q].IsReady())
                 {
                     spells[Spells.Q].Cast(target);
                     return;
                 }
-                if (spells[Spells.E].LSIsReady())
+                if (spells[Spells.E].IsReady())
                 {
                     CastE(target);
                     return;
@@ -133,19 +133,19 @@ using EloBuddy; namespace ElKatarina
             }
             else
             {
-                if (spells[Spells.E].LSIsReady())
+                if (spells[Spells.E].IsReady())
                 {
                     CastE(target);
                     return;
                 }
-                if (spells[Spells.Q].LSIsReady())
+                if (spells[Spells.Q].IsReady())
                 {
                     spells[Spells.Q].Cast(target);
                     return;
                 }
             }
 
-            if (spells[Spells.W].LSIsReady() && spells[Spells.W].IsInRange(target))
+            if (spells[Spells.W].IsReady() && spells[Spells.W].IsInRange(target))
             {
                 spells[Spells.W].Cast();
                 return;
@@ -154,7 +154,7 @@ using EloBuddy; namespace ElKatarina
             //Smart R
             if (config.Item("smartR").GetValue<bool>())
             {
-                if (spells[Spells.R].LSIsReady() && target.Health - rdmg < 0 && !spells[Spells.E].LSIsReady())
+                if (spells[Spells.R].IsReady() && target.Health - rdmg < 0 && !spells[Spells.E].IsReady())
                 {
                     orbwalker.SetMovement(false);
                     orbwalker.SetAttack(false);
@@ -163,7 +163,7 @@ using EloBuddy; namespace ElKatarina
                     rStart = Environment.TickCount;
                 }
             }
-            else if (spells[Spells.R].LSIsReady() && !spells[Spells.E].LSIsReady())
+            else if (spells[Spells.R].IsReady() && !spells[Spells.E].IsReady())
             {
                 orbwalker.SetMovement(false);
                 orbwalker.SetAttack(false);
@@ -231,8 +231,8 @@ using EloBuddy; namespace ElKatarina
                 ObjectManager.Get<Obj_AI_Minion>()
                     .Where(
                         minion =>
-                        minion.LSIsValidTarget() && minion.IsEnemy
-                        && minion.LSDistance(Player.ServerPosition) < spells[Spells.E].Range))
+                        minion.IsValidTarget() && minion.IsEnemy
+                        && minion.Distance(Player.ServerPosition) < spells[Spells.E].Range))
             {
                 var qdmg = spells[Spells.Q].GetDamage(minion);
                 var wdmg = spells[Spells.W].GetDamage(minion);
@@ -243,28 +243,28 @@ using EloBuddy; namespace ElKatarina
                     Player.FlatMagicDamageMod * 0.15 + Player.Level * 15);
 
                 //Killable with Q
-                if (minion.Health - qdmg <= 0 && minion.LSDistance(Player.ServerPosition) <= spells[Spells.Q].Range
-                    && spells[Spells.Q].LSIsReady() && (config.Item("wFarm").GetValue<bool>()))
+                if (minion.Health - qdmg <= 0 && minion.Distance(Player.ServerPosition) <= spells[Spells.Q].Range
+                    && spells[Spells.Q].IsReady() && (config.Item("wFarm").GetValue<bool>()))
                 {
                     spells[Spells.Q].CastOnUnit(minion);
                 }
 
-                if (minion.Health - wdmg <= 0 && minion.LSDistance(Player.ServerPosition) <= spells[Spells.W].Range
-                    && spells[Spells.W].LSIsReady() && (config.Item("wFarm").GetValue<bool>()))
+                if (minion.Health - wdmg <= 0 && minion.Distance(Player.ServerPosition) <= spells[Spells.W].Range
+                    && spells[Spells.W].IsReady() && (config.Item("wFarm").GetValue<bool>()))
                 {
                     spells[Spells.Q].Cast();
                     return;
                 }
 
-                if (minion.Health - edmg <= 0 && minion.LSDistance(Player.ServerPosition) <= spells[Spells.E].Range
-                    && spells[Spells.E].LSIsReady() && (config.Item("eFarm").GetValue<bool>()))
+                if (minion.Health - edmg <= 0 && minion.Distance(Player.ServerPosition) <= spells[Spells.E].Range
+                    && spells[Spells.E].IsReady() && (config.Item("eFarm").GetValue<bool>()))
                 {
                     CastE(minion);
                     return;
                 }
 
-                if (minion.Health - wdmg - qdmg <= 0 && minion.LSDistance(Player.ServerPosition) <= spells[Spells.W].Range
-                    && spells[Spells.Q].LSIsReady() && spells[Spells.W].LSIsReady()
+                if (minion.Health - wdmg - qdmg <= 0 && minion.Distance(Player.ServerPosition) <= spells[Spells.W].Range
+                    && spells[Spells.Q].IsReady() && spells[Spells.W].IsReady()
                     && (config.Item("qFarm").GetValue<bool>()) && (config.Item("wFarm").GetValue<bool>()))
                 {
                     spells[Spells.Q].Cast(minion);
@@ -273,8 +273,8 @@ using EloBuddy; namespace ElKatarina
                 }
 
                 if (minion.Health - wdmg - qdmg - markDmg <= 0
-                    && minion.LSDistance(Player.ServerPosition) <= spells[Spells.W].Range && spells[Spells.Q].LSIsReady()
-                    && spells[Spells.W].LSIsReady() && (config.Item("qFarm").GetValue<bool>())
+                    && minion.Distance(Player.ServerPosition) <= spells[Spells.W].Range && spells[Spells.Q].IsReady()
+                    && spells[Spells.W].IsReady() && (config.Item("qFarm").GetValue<bool>())
                     && (config.Item("wFarm").GetValue<bool>()))
                 {
                     spells[Spells.Q].Cast(minion);
@@ -283,8 +283,8 @@ using EloBuddy; namespace ElKatarina
                 }
 
                 if (minion.Health - wdmg - qdmg - markDmg - edmg <= 0
-                    && minion.LSDistance(Player.ServerPosition) <= spells[Spells.W].Range && spells[Spells.E].LSIsReady()
-                    && spells[Spells.Q].LSIsReady() && spells[Spells.W].LSIsReady()
+                    && minion.Distance(Player.ServerPosition) <= spells[Spells.W].Range && spells[Spells.E].IsReady()
+                    && spells[Spells.Q].IsReady() && spells[Spells.W].IsReady()
                     && (config.Item("qFarm").GetValue<bool>()) && (config.Item("wFarm").GetValue<bool>())
                     && (config.Item("eFarm").GetValue<bool>()))
                 {
@@ -315,7 +315,7 @@ using EloBuddy; namespace ElKatarina
 
         private static void GameObject_OnCreate(GameObject sender, EventArgs args)
         {
-            if (!spells[Spells.E].LSIsReady() || !(sender is Obj_AI_Minion) || Environment.TickCount >= lastPlaced + 300)
+            if (!spells[Spells.E].IsReady() || !(sender is Obj_AI_Minion) || Environment.TickCount >= lastPlaced + 300)
             {
                 return;
             }
@@ -326,7 +326,7 @@ using EloBuddy; namespace ElKatarina
             }
             var ward = (Obj_AI_Minion)sender;
 
-            if (ward.Name.ToLower().Contains("ward") && ward.LSDistance(_lastWardPos) < 500)
+            if (ward.Name.ToLower().Contains("ward") && ward.Distance(_lastWardPos) < 500)
             {
                 spells[Spells.E].Cast(ward);
             }
@@ -336,22 +336,22 @@ using EloBuddy; namespace ElKatarina
         {
             float damage = 0;
 
-            if (spells[Spells.Q].LSIsReady())
+            if (spells[Spells.Q].IsReady())
             {
                 damage += spells[Spells.Q].GetDamage(enemy);
             }
 
-            if (spells[Spells.W].LSIsReady())
+            if (spells[Spells.W].IsReady())
             {
                 damage += spells[Spells.W].GetDamage(enemy);
             }
 
-            if (spells[Spells.E].LSIsReady())
+            if (spells[Spells.E].IsReady())
             {
                 damage += spells[Spells.E].GetDamage(enemy);
             }
 
-            if (spells[Spells.R].LSIsReady())
+            if (spells[Spells.R].IsReady())
             {
                 damage += spells[Spells.R].GetDamage(enemy);
             }
@@ -372,7 +372,7 @@ using EloBuddy; namespace ElKatarina
         private static void Harass()
         {
             var target = TargetSelector.GetTarget(spells[Spells.Q].Range, TargetSelector.DamageType.Magical);
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
             {
                 return;
             }
@@ -382,13 +382,13 @@ using EloBuddy; namespace ElKatarina
             switch (menuItem)
             {
                 case 0:
-                    if (spells[Spells.Q].LSIsReady())
+                    if (spells[Spells.Q].IsReady())
                     {
                         spells[Spells.Q].CastOnUnit(target);
                     }
                     break;
                 case 1:
-                    if (spells[Spells.Q].LSIsReady() && spells[Spells.W].LSIsReady())
+                    if (spells[Spells.Q].IsReady() && spells[Spells.W].IsReady())
                     {
                         spells[Spells.Q].Cast(target);
                         if (spells[Spells.W].IsInRange(target))
@@ -398,7 +398,7 @@ using EloBuddy; namespace ElKatarina
                     }
                     break;
                 case 2:
-                    if (spells[Spells.Q].LSIsReady() && spells[Spells.W].LSIsReady() && spells[Spells.E].LSIsReady())
+                    if (spells[Spells.Q].IsReady() && spells[Spells.W].IsReady() && spells[Spells.E].IsReady())
                     {
                         spells[Spells.Q].Cast(target);
                         CastE(target);
@@ -410,8 +410,8 @@ using EloBuddy; namespace ElKatarina
 
         private static bool HasRBuff()
         {
-            return Player.LSHasBuff("KatarinaR") || Player.IsChannelingImportantSpell()
-                   || Player.LSHasBuff("KatarinaRSound");
+            return Player.HasBuff("KatarinaR") || Player.IsChannelingImportantSpell()
+                   || Player.HasBuff("KatarinaRSound");
         }
 
         private static void JungleClear()
@@ -433,17 +433,17 @@ using EloBuddy; namespace ElKatarina
                 return;
             }
 
-            if (config.Item("qJungle").IsActive() && spells[Spells.Q].LSIsReady())
+            if (config.Item("qJungle").IsActive() && spells[Spells.Q].IsReady())
             {
                 spells[Spells.Q].CastOnUnit(mob);
             }
 
-            if (config.Item("wJungle").IsActive() && spells[Spells.W].LSIsReady())
+            if (config.Item("wJungle").IsActive() && spells[Spells.W].IsReady())
             {
                 spells[Spells.W].CastOnUnit(mob);
             }
 
-            if (config.Item("eJungle").IsActive() && spells[Spells.E].LSIsReady())
+            if (config.Item("eJungle").IsActive() && spells[Spells.E].IsReady())
             {
                 spells[Spells.E].CastOnUnit(mob);
             }
@@ -455,24 +455,24 @@ using EloBuddy; namespace ElKatarina
             {
                 foreach (var enemy in
                     HeroManager.Enemies.Where(
-                        x => x.LSIsValidTarget(spells[Spells.E].Range + spells[Spells.Q].Range) && !x.IsZombie)
+                        x => x.IsValidTarget(spells[Spells.E].Range + spells[Spells.Q].Range) && !x.IsZombie)
                         .OrderBy(x => x.Health))
                 {
                     if (spells[Spells.E].IsInRange(enemy))
                     {
-                        if (spells[Spells.Q].LSIsReady() && spells[Spells.Q].GetDamage(enemy) > enemy.Health)
+                        if (spells[Spells.Q].IsReady() && spells[Spells.Q].GetDamage(enemy) > enemy.Health)
                         {
                             spells[Spells.Q].Cast();
                             return;
                         }
 
-                        if (spells[Spells.E].LSIsReady() && spells[Spells.E].GetDamage(enemy) > enemy.Health)
+                        if (spells[Spells.E].IsReady() && spells[Spells.E].GetDamage(enemy) > enemy.Health)
                         {
                             spells[Spells.E].CastOnUnit(enemy);
                             return;
                         }
 
-                        if (spells[Spells.W].LSIsReady() && spells[Spells.W].GetDamage(enemy) > enemy.Health)
+                        if (spells[Spells.W].IsReady() && spells[Spells.W].GetDamage(enemy) > enemy.Health)
                         {
                             spells[Spells.W].Cast();
                             return;
@@ -494,21 +494,21 @@ using EloBuddy; namespace ElKatarina
                 return;
             }
 
-            if (spells[Spells.Q].LSIsReady() && useQ)
+            if (spells[Spells.Q].IsReady() && useQ)
             {
                 foreach (var minion in
                     ObjectManager.Get<Obj_AI_Minion>()
                         .Where(
                             minion =>
-                            minion.LSIsValidTarget() && minion.IsEnemy
-                            && minion.LSDistance(Player.ServerPosition) < spells[Spells.E].Range))
+                            minion.IsValidTarget() && minion.IsEnemy
+                            && minion.Distance(Player.ServerPosition) < spells[Spells.E].Range))
                 {
                     spells[Spells.Q].CastOnUnit(minion);
                     return;
                 }
             }
 
-            if (useW && spells[Spells.W].LSIsReady() && spells[Spells.W].IsInRange(minions.FirstOrDefault())) //check
+            if (useW && spells[Spells.W].IsReady() && spells[Spells.W].IsInRange(minions.FirstOrDefault())) //check
             {
                 if (minions.Count > 2)
                 {
@@ -521,13 +521,13 @@ using EloBuddy; namespace ElKatarina
                 ObjectManager.Get<Obj_AI_Minion>()
                     .Where(
                         minion =>
-                        minion.LSIsValidTarget() && minion.IsEnemy
-                        && minion.LSDistance(Player.ServerPosition) < spells[Spells.E].Range))
+                        minion.IsValidTarget() && minion.IsEnemy
+                        && minion.Distance(Player.ServerPosition) < spells[Spells.E].Range))
             {
                 var edmg = spells[Spells.E].GetDamage(minion);
 
                 if (useE && minion.Health - edmg <= 0
-                    && minion.LSDistance(Player.ServerPosition) <= spells[Spells.E].Range && spells[Spells.E].LSIsReady()
+                    && minion.Distance(Player.ServerPosition) <= spells[Spells.E].Range && spells[Spells.E].IsReady()
                     && (config.Item("eFarm").GetValue<bool>()))
                 {
                     CastE(minion);
@@ -661,7 +661,7 @@ using EloBuddy; namespace ElKatarina
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsMe || args.SData.Name != "KatarinaR" || !Player.LSHasBuff("katarinarsound"))
+            if (!sender.IsMe || args.SData.Name != "KatarinaR" || !Player.HasBuff("katarinarsound"))
             {
                 return;
             }
@@ -691,13 +691,13 @@ using EloBuddy; namespace ElKatarina
             var useQ = config.Item("ElKatarina.AutoHarass.Q").GetValue<bool>();
             var useW = config.Item("ElKatarina.AutoHarass.W").GetValue<bool>();
 
-            if (spells[Spells.Q].LSIsReady() && target.LSIsValidTarget() && useQ)
+            if (spells[Spells.Q].IsReady() && target.IsValidTarget() && useQ)
             {
                 spells[Spells.Q].Cast(target);
             }
             ;
 
-            if (spells[Spells.W].LSIsReady() && target.LSIsValidTarget(spells[Spells.W].Range) && useW)
+            if (spells[Spells.W].IsReady() && target.IsValidTarget(spells[Spells.W].Range) && useW)
             {
                 spells[Spells.W].Cast();
             }
@@ -710,7 +710,7 @@ using EloBuddy; namespace ElKatarina
                 return;
             }
 
-            igniteSlot = Player.LSGetSpellSlot("summonerdot");
+            igniteSlot = Player.GetSpellSlot("summonerdot");
 
             spells[Spells.R].SetCharged("KatarinaR", "KatarinaR", 550, 550, 1.0f);
 
@@ -725,7 +725,7 @@ using EloBuddy; namespace ElKatarina
 
         private static void OnUpdate(EventArgs args)
         {
-            if (Player.IsDead || Player.LSIsRecalling())
+            if (Player.IsDead || Player.IsRecalling())
             {
                 return;
             }
@@ -804,27 +804,27 @@ using EloBuddy; namespace ElKatarina
             bool minions = true,
             bool champions = true)
         {
-            if (!spells[Spells.E].LSIsReady())
+            if (!spells[Spells.E].IsReady())
             {
                 return;
             }
 
-            var basePos = Player.Position.LSTo2D();
-            var newPos = (pos.LSTo2D() - Player.Position.LSTo2D());
+            var basePos = Player.Position.To2D();
+            var newPos = (pos.To2D() - Player.Position.To2D());
 
             if (JumpPos == new Vector2())
             {
                 if (reqinMaxRange)
                 {
-                    JumpPos = pos.LSTo2D();
+                    JumpPos = pos.To2D();
                 }
-                else if (maxRange || Player.LSDistance(pos) > 590)
+                else if (maxRange || Player.Distance(pos) > 590)
                 {
-                    JumpPos = basePos + (newPos.LSNormalized() * (590));
+                    JumpPos = basePos + (newPos.Normalized() * (590));
                 }
                 else
                 {
-                    JumpPos = basePos + (newPos.LSNormalized() * (Player.LSDistance(pos)));
+                    JumpPos = basePos + (newPos.Normalized() * (Player.Distance(pos)));
                 }
             }
             if (JumpPos != new Vector2() && reCheckWard)
@@ -845,7 +845,7 @@ using EloBuddy; namespace ElKatarina
             {
                 Orbwalk(pos);
             }
-            if (!spells[Spells.E].LSIsReady() || reqinMaxRange && Player.LSDistance(pos) > spells[Spells.E].Range)
+            if (!spells[Spells.E].IsReady() || reqinMaxRange && Player.Distance(pos) > spells[Spells.E].Range)
             {
                 return;
             }
@@ -856,12 +856,12 @@ using EloBuddy; namespace ElKatarina
                 {
                     var champs = (from champ in ObjectManager.Get<AIHeroClient>()
                                   where
-                                      champ.IsAlly && champ.LSDistance(Player) < spells[Spells.E].Range
-                                      && champ.LSDistance(pos) < 200 && !champ.IsMe
+                                      champ.IsAlly && champ.Distance(Player) < spells[Spells.E].Range
+                                      && champ.Distance(pos) < 200 && !champ.IsMe
                                   select champ).ToList();
-                    if (champs.Count > 0 && spells[Spells.E].LSIsReady())
+                    if (champs.Count > 0 && spells[Spells.E].IsReady())
                     {
-                        if (500 >= Environment.TickCount - wcasttime || !spells[Spells.E].LSIsReady())
+                        if (500 >= Environment.TickCount - wcasttime || !spells[Spells.E].IsReady())
                         {
                             return;
                         }
@@ -874,12 +874,12 @@ using EloBuddy; namespace ElKatarina
                 {
                     var minion2 = (from minion in ObjectManager.Get<Obj_AI_Minion>()
                                    where
-                                       minion.IsAlly && minion.LSDistance(Player) < spells[Spells.E].Range
-                                       && minion.LSDistance(pos) < 200 && !minion.Name.ToLower().Contains("ward")
+                                       minion.IsAlly && minion.Distance(Player) < spells[Spells.E].Range
+                                       && minion.Distance(pos) < 200 && !minion.Name.ToLower().Contains("ward")
                                    select minion).ToList();
                     if (minion2.Count > 0)
                     {
-                        if (500 >= Environment.TickCount - wcasttime || !spells[Spells.E].LSIsReady())
+                        if (500 >= Environment.TickCount - wcasttime || !spells[Spells.E].IsReady())
                         {
                             return;
                         }
@@ -893,10 +893,10 @@ using EloBuddy; namespace ElKatarina
             var isWard = false;
             foreach (var ward in ObjectManager.Get<Obj_AI_Base>())
             {
-                if (ward.IsAlly && ward.Name.ToLower().Contains("ward") && ward.LSDistance(JumpPos) < 200)
+                if (ward.IsAlly && ward.Name.ToLower().Contains("ward") && ward.Distance(JumpPos) < 200)
                 {
                     isWard = true;
-                    if (500 >= Environment.TickCount - wcasttime || !spells[Spells.E].LSIsReady())
+                    if (500 >= Environment.TickCount - wcasttime || !spells[Spells.E].IsReady())
                     {
                         return;
                     }
@@ -909,7 +909,7 @@ using EloBuddy; namespace ElKatarina
             if (!isWard && castWardAgain)
             {
                 var ward = FindBestWardItem();
-                if (ward == null || !spells[Spells.E].LSIsReady())
+                if (ward == null || !spells[Spells.E].IsReady())
                 {
                     return;
                 }

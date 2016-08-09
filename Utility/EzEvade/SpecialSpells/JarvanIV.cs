@@ -77,11 +77,11 @@ using EloBuddy; namespace ezEvade.SpecialSpells
                                 continue;
                             }
 
-                            var objPosition = info.usePosition ? info.position.LSTo2D() : info.obj.Position.LSTo2D();
+                            var objPosition = info.usePosition ? info.position.To2D() : info.obj.Position.To2D();
 
-                            if (args.End.LSTo2D().LSDistance(objPosition) < 300)
+                            if (args.End.To2D().Distance(objPosition) < 300)
                             {
-                                var dir = (objPosition - args.Start.LSTo2D()).LSNormalized();
+                                var dir = (objPosition - args.Start.To2D()).Normalized();
                                 var endPosition = objPosition + dir * 110;
 
                                 SpellDetector.CreateSpellData(hero, args.Start, endPosition.To3D(), spellData);

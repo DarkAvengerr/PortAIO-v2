@@ -13,7 +13,7 @@ using EloBuddy; namespace xSaliceResurrected.Utilities
         public static bool UnderAllyTurret()
         {
             return
-                ObjectManager.Get<Obj_AI_Turret>().Any(turret => turret != null && (turret.IsAlly && !turret.IsDead && turret.LSDistance(Player) < 800));
+                ObjectManager.Get<Obj_AI_Turret>().Any(turret => turret != null && (turret.IsAlly && !turret.IsDead && turret.Distance(Player) < 800));
         }
 
         public static bool IsWall(Vector2 pos)
@@ -26,7 +26,7 @@ using EloBuddy; namespace xSaliceResurrected.Utilities
             double count = Vector3.Distance(start, end);
             for (uint i = 0; i <= count; i += 25)
             {
-                Vector2 pos = start.LSTo2D().LSExtend(Player.ServerPosition.LSTo2D(), -i);
+                Vector2 pos = start.To2D().Extend(Player.ServerPosition.To2D(), -i);
                 if (IsWall(pos))
                     return true;
             }
@@ -126,7 +126,7 @@ using EloBuddy; namespace xSaliceResurrected.Utilities
             var focusSelected = Champion.menu.Item("selected", true).GetValue<bool>();
 
             if (TargetSelector.GetSelectedTarget() != null)
-                if (focusSelected && TargetSelector.GetSelectedTarget().LSDistance(Player.ServerPosition) < range + 100 && TargetSelector.GetSelectedTarget().Type == GameObjectType.AIHeroClient)
+                if (focusSelected && TargetSelector.GetSelectedTarget().Distance(Player.ServerPosition) < range + 100 && TargetSelector.GetSelectedTarget().Type == GameObjectType.AIHeroClient)
                 {
                     //Chat.Print("Focusing: " + TargetSelector.GetSelectedTarget().Name);
                     return TargetSelector.GetSelectedTarget();

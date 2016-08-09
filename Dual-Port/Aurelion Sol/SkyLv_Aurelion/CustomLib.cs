@@ -39,7 +39,7 @@ using EloBuddy;
         public static int enemyChampionInRange(int Range)
         {
 
-                return ObjectManager.Get<AIHeroClient>().Where(target => !target.IsMe && target.Team != ObjectManager.Player.Team && target.LSDistance(Player) <= Range).Count();
+                return ObjectManager.Get<AIHeroClient>().Where(target => !target.IsMe && target.Team != ObjectManager.Player.Team && target.Distance(Player) <= Range).Count();
             
         }
 
@@ -57,7 +57,7 @@ using EloBuddy;
 
         public static bool isWInLongRangeMode()
         {
-            if (Player.LSHasBuff("AurelionSolWActive"))
+            if (Player.HasBuff("AurelionSolWActive"))
             {
                 return true;
             }

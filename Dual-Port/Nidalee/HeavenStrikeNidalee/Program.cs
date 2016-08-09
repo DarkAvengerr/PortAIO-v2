@@ -138,7 +138,7 @@ using EloBuddy;
             if (spell.Name == "Swipe")
             {
                 ecougarcount = Utils.GameTimeTickCount;
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Q.LSIsReady())
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Q.IsReady())
                 {
                     LeagueSharp.Common.Utility.DelayAction.Add(300-Game.Ping/2,() => Q.Cast(Player.Position));
                 }
@@ -171,30 +171,30 @@ using EloBuddy;
             if (!unit.IsMe) return;
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if(CougarForm && E.LSIsReady())
+                if(CougarForm && E.IsReady())
                 {
 
                     E.Cast(target.Position);
                 }
-                if(CougarForm && !E.LSIsReady() && Q.LSIsReady())
+                if(CougarForm && !E.IsReady() && Q.IsReady())
                 {
                     Q.Cast();
                 }
-                if(!CougarForm && Q.LSIsReady())
+                if(!CougarForm && Q.IsReady())
                 {
                    LeagueSharp.Common.Utility.DelayAction.Add(500,() => castQtarget(target));
                 }
             }
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-                if (CougarForm && !E.LSIsReady() && Q.LSIsReady() && qclear)
+                if (CougarForm && !E.IsReady() && Q.IsReady() && qclear)
                 {
                     Q.Cast();
                 }
             }
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && qharass && Player.Mana*100/Player.MaxHealth >= manaharass)
             {
-                if (!CougarForm && Q.LSIsReady())
+                if (!CougarForm && Q.IsReady())
                 {
                     LeagueSharp.Common.Utility.DelayAction.Add(500, () => castQtarget(target));
                 }
@@ -203,7 +203,7 @@ using EloBuddy;
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (!Player.LSIsRecalling())
+            if (!Player.IsRecalling())
                 Auto();
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                 Combo();
@@ -216,9 +216,9 @@ using EloBuddy;
         private static void Auto()
         {
             //ks with Q
-            if(!CougarForm && Q.LSIsReady() && qks)
+            if(!CougarForm && Q.IsReady() && qks)
             {
-                foreach(var x in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsZombie))
+                foreach(var x in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsZombie))
                 {
                     if (Qhumandamage(x) > x.Health)
                     {
@@ -227,9 +227,9 @@ using EloBuddy;
                 }
             }
             // switch form ks
-            if (CougarForm && QhumanReady && R.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None && rks)
+            if (CougarForm && QhumanReady && R.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None && rks)
             {
-                foreach (var x in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsZombie))
+                foreach (var x in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsZombie))
                 {
                     if (Qhumandamage(x) > x.Health)
                     {
@@ -238,9 +238,9 @@ using EloBuddy;
                 }
             }
             // heal
-            if (!CougarForm && E.LSIsReady() && heal)
+            if (!CougarForm && E.IsReady() && heal)
             {
-                foreach (var x in HeroManager.Allies.Where(x => x.LSIsValidTarget(E.Range,false) && !x.IsZombie))
+                foreach (var x in HeroManager.Allies.Where(x => x.IsValidTarget(E.Range,false) && !x.IsZombie))
                 {
                     if (x.Health*100/x.MaxHealth <= hpheal && Menu.Item(x.ChampionName).GetValue<bool>())
                     {
@@ -249,9 +249,9 @@ using EloBuddy;
                 }
             }
             // switch form heal
-            if (CougarForm && EhumanReady && R.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None && rheal)
+            if (CougarForm && EhumanReady && R.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None && rheal)
             {
-                foreach (var x in HeroManager.Allies.Where(x => x.LSIsValidTarget(E.Range, false) && !x.IsZombie))
+                foreach (var x in HeroManager.Allies.Where(x => x.IsValidTarget(E.Range, false) && !x.IsZombie))
                 {
                     if (x.Health * 100 / x.MaxHealth <= hpheal && Menu.Item(x.ChampionName).GetValue<bool>())
                     {
@@ -261,7 +261,7 @@ using EloBuddy;
             }
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && CougarForm)
             {
-                if (Orbwalker.GetTarget() != null && Orbwalker.GetTarget().Health <= Qcougardamage(Orbwalker.GetTarget()) + Shendamage(Orbwalker.GetTarget()) + Wcougardamage(Orbwalker.GetTarget()) + Ecougardamage(Orbwalker.GetTarget()) && Q.LSIsReady())
+                if (Orbwalker.GetTarget() != null && Orbwalker.GetTarget().Health <= Qcougardamage(Orbwalker.GetTarget()) + Shendamage(Orbwalker.GetTarget()) + Wcougardamage(Orbwalker.GetTarget()) + Ecougardamage(Orbwalker.GetTarget()) && Q.IsReady())
                     Q.Cast();
             }
         }
@@ -284,7 +284,7 @@ using EloBuddy;
                     E.Cast(target.Position);
             }
             // auto switch to cougar
-            if (!CougarForm && R.LSIsReady() && rclear)
+            if (!CougarForm && R.IsReady() && rclear)
             {
                 R.Cast();
             }
@@ -308,11 +308,11 @@ using EloBuddy;
         private static void Harass()
         {
             // use Q harass
-            if (!CougarForm && qharass && Player.Mana*100/Player.MaxHealth >= manaharass && Q.LSIsReady())
+            if (!CougarForm && qharass && Player.Mana*100/Player.MaxHealth >= manaharass && Q.IsReady())
             {
                 var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
                 var target2 = Orbwalker.GetTarget();
-                if (target.LSIsValidTarget() && !target.IsZombie)
+                if (target.IsValidTarget() && !target.IsZombie)
                 {
                     if (!Orbwalking.InAutoAttackRange(target))
                     {
@@ -329,11 +329,11 @@ using EloBuddy;
         private static void Combo()
         {
             // use Q combo
-            if(!CougarForm && qcombohuman && Q.LSIsReady())
+            if(!CougarForm && qcombohuman && Q.IsReady())
             {
                 var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
                 var target2 = Orbwalker.GetTarget();
-                if (target.LSIsValidTarget() && !target.IsZombie)
+                if (target.IsValidTarget() && !target.IsZombie)
                 {
                     if (!Orbwalking.InAutoAttackRange(target))
                     {
@@ -346,40 +346,40 @@ using EloBuddy;
                 }
             }
             // use W combo
-            if (!CougarForm && W.LSIsReady() && wcombohuman)
+            if (!CougarForm && W.IsReady() && wcombohuman)
             {
                 var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-                if (target.LSIsValidTarget() && !target.IsZombie)
+                if (target.IsValidTarget() && !target.IsZombie)
                     W.Cast(target.Position);
             }
 
             // transform always when a target is marked 
-            if (!CougarForm && R.LSIsReady() && rcomboalways)
+            if (!CougarForm && R.IsReady() && rcomboalways)
             {
-                var heroes = HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie && x.HasBuff("nidaleepassivehunted") && x.LSDistance(Player.Position) <= 750)
+                var heroes = HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie && x.HasBuff("nidaleepassivehunted") && x.Distance(Player.Position) <= 750)
                     .OrderByDescending(x => x.Health).LastOrDefault();
-                if (heroes.LSIsValidTarget() && WcougarReady && Orbwalking.CanMove(40 + Game.Ping / 2))
+                if (heroes.IsValidTarget() && WcougarReady && Orbwalking.CanMove(40 + Game.Ping / 2))
                 {
                     R.Cast();
                 }
             }
             // transform when a target is marked and is alone or 2 only
-            if (!CougarForm && R.LSIsReady() && rcombomarkedaloneor2)
+            if (!CougarForm && R.IsReady() && rcombomarkedaloneor2)
             {
-                var heroes = HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie && x.HasBuff("nidaleepassivehunted") && x.LSDistance(Player.Position) <= 750)
+                var heroes = HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie && x.HasBuff("nidaleepassivehunted") && x.Distance(Player.Position) <= 750)
                     .OrderByDescending(x => x.Health);
                 foreach (var x in heroes)
                 {
-                    if (x.LSCountEnemiesInRange(1000) <= 2)
+                    if (x.CountEnemiesInRange(1000) <= 2)
                     {
                         R.Cast();
                     }
                 }
             }
             // transform killable always
-            if (!CougarForm && R.LSIsReady() && rcomboalwayskillable)
+            if (!CougarForm && R.IsReady() && rcomboalwayskillable)
             {
-                var heroes = HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie && x.HasBuff("nidaleepassivehunted") && x.LSDistance(Player.Position) <= 750)
+                var heroes = HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie && x.HasBuff("nidaleepassivehunted") && x.Distance(Player.Position) <= 750)
                     .OrderByDescending(x => x.Health);
                 // marked target is killable
                 foreach (var x in heroes)
@@ -390,7 +390,7 @@ using EloBuddy;
                         return;
                     }
                 }
-                var targets = HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie && !x.HasBuff("nidaleepassivehunted") && x.LSDistance(Player.Position) <= 375 + Player.BoundingRadius);
+                var targets = HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie && !x.HasBuff("nidaleepassivehunted") && x.Distance(Player.Position) <= 375 + Player.BoundingRadius);
                 // unmarked target is killable
                 foreach (var x in targets)
                 {
@@ -402,24 +402,24 @@ using EloBuddy;
                 }
             }
             // transform killable and target is alone or 2 only
-            if (!CougarForm && R.LSIsReady() && rcombokillablealoneor2)
+            if (!CougarForm && R.IsReady() && rcombokillablealoneor2)
             {
-                var heroes = HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie && x.HasBuff("nidaleepassivehunted") && x.LSDistance(Player.Position) <= 750)
+                var heroes = HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie && x.HasBuff("nidaleepassivehunted") && x.Distance(Player.Position) <= 750)
                     .OrderByDescending(x => x.Health);
                 // marked target is killable
                 foreach (var x in heroes)
                 {
-                    if (x.Health - Shendamage(x) - Wcougardamage(x) * 2 - Ecougardamage(x) - Qcougardamage(x) < 0 && x.LSCountEnemiesInRange(1000) <= 2)
+                    if (x.Health - Shendamage(x) - Wcougardamage(x) * 2 - Ecougardamage(x) - Qcougardamage(x) < 0 && x.CountEnemiesInRange(1000) <= 2)
                     {
                         R.Cast();
                         return;
                     }
                 }
-                var targets = HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie && !x.HasBuff("nidaleepassivehunted") && x.LSDistance(Player.Position) <= 375 + Player.BoundingRadius);
+                var targets = HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie && !x.HasBuff("nidaleepassivehunted") && x.Distance(Player.Position) <= 375 + Player.BoundingRadius);
                 // unmarked target is killable
                 foreach (var x in targets)
                 {
-                    if (x.Health - Shendamage(x) - Wcougardamage(x) - Ecougardamage(x) - Qcougardamage(x) < 0 && x.LSCountEnemiesInRange(1000) <= 2)
+                    if (x.Health - Shendamage(x) - Wcougardamage(x) - Ecougardamage(x) - Qcougardamage(x) < 0 && x.CountEnemiesInRange(1000) <= 2)
                     {
                         R.Cast();
                         return;
@@ -427,16 +427,16 @@ using EloBuddy;
                 }
             }
             // W always (priority marked target)
-            if (CougarForm && W.LSIsReady() && wcomboalways)
+            if (CougarForm && W.IsReady() && wcomboalways)
             {
-                var heroes = HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie && x.HasBuff("nidaleepassivehunted") && x.LSDistance(Player.Position) <= 750)
+                var heroes = HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie && x.HasBuff("nidaleepassivehunted") && x.Distance(Player.Position) <= 750)
                     .OrderByDescending(x => 1 - (x.Health - Shendamage(x) - Wcougardamage(x) - Ecougardamage(x) - Qcougardamage(x)));
                 foreach (var x in heroes)
                 {
                     W.Cast(x.Position);
                     return;
                 }
-                var targets = HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie && !x.HasBuff("nidaleepassivehunted") && x.LSDistance(Player.Position) <= 375 + Player.BoundingRadius)
+                var targets = HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie && !x.HasBuff("nidaleepassivehunted") && x.Distance(Player.Position) <= 375 + Player.BoundingRadius)
                    .OrderByDescending(x => 1 - (x.Health - Shendamage(x) - Wcougardamage(x) * 2 - Ecougardamage(x) - Qcougardamage(x)));
                 foreach (var x in heroes)
                 {
@@ -445,23 +445,23 @@ using EloBuddy;
                 }
             }
             // W always if target is alone or 2 only (priority marked target)
-            if (CougarForm && W.LSIsReady() && wcomboalwaysaloneor2)
+            if (CougarForm && W.IsReady() && wcomboalwaysaloneor2)
             {
-                var heroes = HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie && x.HasBuff("nidaleepassivehunted") && x.LSDistance(Player.Position) <= 750)
+                var heroes = HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie && x.HasBuff("nidaleepassivehunted") && x.Distance(Player.Position) <= 750)
                     .OrderByDescending(x => 1 - (x.Health - Shendamage(x) - Wcougardamage(x) - Ecougardamage(x) - Qcougardamage(x)));
                 foreach (var x in heroes)
                 {
-                    if (x.LSCountEnemiesInRange(1000) <= 2)
+                    if (x.CountEnemiesInRange(1000) <= 2)
                     {
                         W.Cast(x.Position);
                         return;
                     }
                 }
-                var targets = HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie && !x.HasBuff("nidaleepassivehunted") && x.LSDistance(Player.Position) <= 375 + Player.BoundingRadius)
+                var targets = HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie && !x.HasBuff("nidaleepassivehunted") && x.Distance(Player.Position) <= 375 + Player.BoundingRadius)
                    .OrderByDescending(x => 1 - (x.Health - Shendamage(x) - Wcougardamage(x) * 2 - Ecougardamage(x) - Qcougardamage(x)));
                 foreach (var x in heroes)
                 {
-                    if (x.LSCountEnemiesInRange(1000) <= 2)
+                    if (x.CountEnemiesInRange(1000) <= 2)
                     {
                         W.Cast(x.Position);
                         return;
@@ -469,9 +469,9 @@ using EloBuddy;
                 }
             }
             // W to killable target
-            if (CougarForm && W.LSIsReady() && wcombokillable)
+            if (CougarForm && W.IsReady() && wcombokillable)
             {
-                var heroes = HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie && x.HasBuff("nidaleepassivehunted") && x.LSDistance(Player.Position) <= 750
+                var heroes = HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie && x.HasBuff("nidaleepassivehunted") && x.Distance(Player.Position) <= 750
                      && x.Health - Shendamage(x) - Wcougardamage(x) * 2 - Ecougardamage(x) - Qcougardamage(x) < 0)
                     .OrderByDescending(x => 1 - x.Health);
                 foreach (var x in heroes)
@@ -479,7 +479,7 @@ using EloBuddy;
                     W.Cast(x.Position);
                     return;
                 }
-                var targets = HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie && !x.HasBuff("nidaleepassivehunted") && x.LSDistance(Player.Position) <= 375 + Player.BoundingRadius
+                var targets = HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie && !x.HasBuff("nidaleepassivehunted") && x.Distance(Player.Position) <= 375 + Player.BoundingRadius
                     && x.Health - Shendamage(x) - Wcougardamage(x) * 2 - Ecougardamage(x) - Qcougardamage(x) < 0)
                     .OrderByDescending(x => 1 - x.Health);
                 foreach (var x in targets)
@@ -489,25 +489,25 @@ using EloBuddy;
                 }
             }
             // W to killable target alone or 2
-            if (CougarForm && W.LSIsReady() && wcombokillablealoneor2)
+            if (CougarForm && W.IsReady() && wcombokillablealoneor2)
             {
-                var heroes = HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie && x.HasBuff("nidaleepassivehunted") && x.LSDistance(Player.Position) <= 750
+                var heroes = HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie && x.HasBuff("nidaleepassivehunted") && x.Distance(Player.Position) <= 750
                      && x.Health - Shendamage(x) - Wcougardamage(x) * 2 - Ecougardamage(x) - Qcougardamage(x) < 0)
                     .OrderByDescending(x => 1 - x.Health);
                 foreach (var x in heroes)
                 {
-                    if (x.LSCountEnemiesInRange(1000) <= 2)
+                    if (x.CountEnemiesInRange(1000) <= 2)
                     {
                         W.Cast(x.Position);
                         return;
                     }
                 }
-                var targets = HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie && !x.HasBuff("nidaleepassivehunted") && x.LSDistance(Player.Position) <= 375 + Player.BoundingRadius
+                var targets = HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie && !x.HasBuff("nidaleepassivehunted") && x.Distance(Player.Position) <= 375 + Player.BoundingRadius
                     && x.Health - Shendamage(x) - Wcougardamage(x) * 2 - Ecougardamage(x) - Qcougardamage(x) < 0)
                     .OrderByDescending(x => 1 - x.Health);
                 foreach (var x in targets)
                 {
-                    if (x.LSCountEnemiesInRange(1000) <= 2)
+                    if (x.CountEnemiesInRange(1000) <= 2)
                     {
                         W.Cast(x.Position);
                         return;
@@ -515,9 +515,9 @@ using EloBuddy;
                 }
             }
             // R switch back to human
-            if (CougarForm && R.LSIsReady() && rcombobackhuman && !Q.LSIsReady() && !Player.LSHasBuff("Takedown"))
+            if (CougarForm && R.IsReady() && rcombobackhuman && !Q.IsReady() && !Player.HasBuff("Takedown"))
             {
-                if (!W.LSIsReady() && Orbwalker.GetTarget() == null && QhumanReady)
+                if (!W.IsReady() && Orbwalker.GetTarget() == null && QhumanReady)
                     R.Cast();
             }
         }
@@ -557,16 +557,16 @@ using EloBuddy;
         {
             get
             {
-                return (CougarForm && W.LSIsReady()) ? true : Utils.GameTimeTickCount - wcougarcount >= 5 * (1 - Player.PercentCooldownMod);
+                return (CougarForm && W.IsReady()) ? true : Utils.GameTimeTickCount - wcougarcount >= 5 * (1 - Player.PercentCooldownMod);
             }
         }
         private static void castQtarget(AttackableUnit target)
         {
-            if (target.LSIsValidTarget() && ! target.IsZombie)
+            if (target.IsValidTarget() && ! target.IsZombie)
             {
                 var castpos = Q.GetPrediction(target as Obj_AI_Base).CastPosition;
                 var collisions = Q.GetPrediction(target as Obj_AI_Base).CollisionObjects;
-                if (!collisions.Any() && Q.LSIsReady() && !CougarForm)
+                if (!collisions.Any() && Q.IsReady() && !CougarForm)
                     Q.Cast(castpos);
             }
         }
@@ -574,11 +574,11 @@ using EloBuddy;
         {
                 var raw =  new double[] { 50, 70, 90, 110, 130 }[Q.Instance.Level - 1 ]
                                     + 0.4 * Player.FlatMagicDamageMod;
-                return QhumanReady ? (Player.LSDistance(target.Position) < 525 ?
+                return QhumanReady ? (Player.Distance(target.Position) < 525 ?
                     Player.CalcDamage(target as Obj_AI_Base, Damage.DamageType.Magical, raw) :
-                    (Player.LSDistance(target.Position) >= 1300 ?
+                    (Player.Distance(target.Position) >= 1300 ?
                     Player.CalcDamage(target as Obj_AI_Base, Damage.DamageType.Magical, raw) * 3 :
-                    Player.CalcDamage(target as Obj_AI_Base, Damage.DamageType.Magical, raw) * (1 + (Player.LSDistance(target.Position)-525)/(1300-525)*2)
+                    Player.CalcDamage(target as Obj_AI_Base, Damage.DamageType.Magical, raw) * (1 + (Player.Distance(target.Position)-525)/(1300-525)*2)
                     )) : 0;
         }
         private static double Qcougardamage(AttackableUnit target)
@@ -589,7 +589,7 @@ using EloBuddy;
                                      + 0.75 * (Player.BaseAttackDamage + Player.FlatPhysicalDamageMod))
                                     * ((target.MaxHealth - (target.Health - Shendamage(target) -Wcougardamage(target)- Ecougardamage(target))) 
                                     * 1.5 / target.MaxHealth + 1);
-            return QcougarReady ? Player.CalcDamage(target as Obj_AI_Base, Damage.DamageType.Magical,(target as Obj_AI_Base).LSHasBuff("nidaleepassivehunted") ? raw * 1.33 : raw) : 0;
+            return QcougarReady ? Player.CalcDamage(target as Obj_AI_Base, Damage.DamageType.Magical,(target as Obj_AI_Base).HasBuff("nidaleepassivehunted") ? raw * 1.33 : raw) : 0;
         }
         private static double Wcougardamage(AttackableUnit target)
         {
@@ -603,7 +603,7 @@ using EloBuddy;
             var raw = new double[] { 70, 130, 190, 250 }[
                                         R.Instance.Level - 1]
                                     + 0.45 * Player.FlatMagicDamageMod;
-            return EcougarReady ? Player.CalcDamage(target as Obj_AI_Base, Damage.DamageType.Magical, (target as Obj_AI_Base).LSHasBuff("nidaleepassivehunted") ? raw * 1.33 : raw) : 0;
+            return EcougarReady ? Player.CalcDamage(target as Obj_AI_Base, Damage.DamageType.Magical, (target as Obj_AI_Base).HasBuff("nidaleepassivehunted") ? raw * 1.33 : raw) : 0;
         }
         private static double Shendamage(AttackableUnit target)
         {

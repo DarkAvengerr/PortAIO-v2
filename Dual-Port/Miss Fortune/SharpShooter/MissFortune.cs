@@ -159,7 +159,7 @@ namespace SharpShooter.Plugins
                                         {
                                             var target =
                                                 MinionManager.GetMinions(600, MinionTypes.All, MinionTeam.Neutral,
-                                                    MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.LSIsValidTarget(600));
+                                                    MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.IsValidTarget(600));
                                             if (target != null)
                                                 _q.Cast(target);
                                         }
@@ -170,7 +170,7 @@ namespace SharpShooter.Plugins
                                         {
                                             var target =
                                                 MinionManager.GetMinions(600, MinionTypes.All, MinionTeam.Neutral,
-                                                    MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.LSIsValidTarget(600));
+                                                    MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.IsValidTarget(600));
                                             if (target != null)
                                                 _e.Cast(target);
                                         }
@@ -181,7 +181,7 @@ namespace SharpShooter.Plugins
                     if (MenuProvider.Champion.Harass.AutoHarass)
                         if (MenuProvider.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo &&
                             MenuProvider.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed)
-                            if (!ObjectManager.Player.LSIsRecalling())
+                            if (!ObjectManager.Player.IsRecalling())
                             {
                                 if (ObjectManager.Player.IsManaPercentOkay(MenuProvider.Champion.Harass.IfMana))
                                     if (_q.IsReadyPerfectly())
@@ -241,14 +241,14 @@ namespace SharpShooter.Plugins
                     if (args.Target.Type == GameObjectType.AIHeroClient)
                     {
                         if (args.Target.Health + args.Target.AttackShield >
-                            ObjectManager.Player.LSGetAutoAttackDamage(args.Target as Obj_AI_Base, true) * 2)
+                            ObjectManager.Player.GetAutoAttackDamage(args.Target as Obj_AI_Base, true) * 2)
                         {
                             if (args.Target.NetworkId == _loveTapTargetNetworkId)
                             {
                                 var newTarget =
                                     HeroManager.Enemies.Where(
                                         x =>
-                                            x.LSIsValidTarget() && Orbwalking.InAutoAttackRange(x) &&
+                                            x.IsValidTarget() && Orbwalking.InAutoAttackRange(x) &&
                                             x.NetworkId != _loveTapTargetNetworkId)
                                         .OrderByDescending(x => TargetSelector.GetPriority(x))
                                         .FirstOrDefault();
@@ -277,7 +277,7 @@ namespace SharpShooter.Plugins
         {
             if (unit.IsMe)
             {
-                if (target.LSIsValidTarget())
+                if (target.IsValidTarget())
                 {
                     switch (MenuProvider.Orbwalker.ActiveMode)
                     {
@@ -377,13 +377,13 @@ namespace SharpShooter.Plugins
                     var targets = new List<Obj_AI_Base>();
                     targets.AddRange(
                         MinionManager.GetMinions(_q.Range, MinionTypes.All, MinionTeam.NotAlly)
-                            .Where(x => x.LSIsValidTarget()));
-                    targets.AddRange(HeroManager.Enemies.Where(x => x.LSIsValidTarget(_q.Range)));
+                            .Where(x => x.IsValidTarget()));
+                    targets.AddRange(HeroManager.Enemies.Where(x => x.IsValidTarget(_q.Range)));
                     targets.OrderBy(x => x.Health);
 
                     foreach (var target in targets)
                     {
-                        var direction = target.ServerPosition.LSExtend(ObjectManager.Player.ServerPosition, -500);
+                        var direction = target.ServerPosition.Extend(ObjectManager.Player.ServerPosition, -500);
                         var radian = (float)Math.PI / 180f;
                         var targetPosition = target.Position;
 
@@ -407,7 +407,7 @@ namespace SharpShooter.Plugins
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float)ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float)ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
             if (_q.IsReadyPerfectly())
@@ -454,8 +454,8 @@ namespace SharpShooter.Plugins
                     var targets = new List<Obj_AI_Base>();
                     targets.AddRange(
                         MinionManager.GetMinions(_q.Range, MinionTypes.All, MinionTeam.NotAlly)
-                            .Where(x => x.LSIsValidTarget()));
-                    targets.AddRange(HeroManager.Enemies.Where(x => x.LSIsValidTarget(_q.Range)));
+                            .Where(x => x.IsValidTarget()));
+                    targets.AddRange(HeroManager.Enemies.Where(x => x.IsValidTarget(_q.Range)));
                     targets.OrderBy(x => x.Health);
 
                     foreach (
@@ -465,10 +465,10 @@ namespace SharpShooter.Plugins
                                     x => x.IsKillableAndValidTarget(_q.GetDamage(x), _q.DamageType, _q.Range))
                                 : targets)
                     {
-                        var direction = target.ServerPosition.LSExtend(ObjectManager.Player.ServerPosition, -500);
+                        var direction = target.ServerPosition.Extend(ObjectManager.Player.ServerPosition, -500);
                         var radian = (float)Math.PI / 180f;
                         var targetServerPosition = target.ServerPosition;
-                        var time = ObjectManager.Player.ServerPosition.LSDistance(target.ServerPosition) / _q.Speed +
+                        var time = ObjectManager.Player.ServerPosition.Distance(target.ServerPosition) / _q.Speed +
                                    _q.Delay;
                         var predic = Prediction.GetPrediction(longRangeTarget, time);
 
@@ -487,12 +487,12 @@ namespace SharpShooter.Plugins
                                     !MinionManager.GetMinions(q2Range)
                                         .Where(
                                             x =>
-                                                x.LSIsValidTarget() && x.NetworkId != target.NetworkId &&
+                                                x.IsValidTarget() && x.NetworkId != target.NetworkId &&
                                                 cone40.IsInside(x))
                                         .Any(
                                             x =>
-                                                target.ServerPosition.LSDistance(longRangeTarget.ServerPosition) >=
-                                                target.ServerPosition.LSDistance(x.ServerPosition)))
+                                                target.ServerPosition.Distance(longRangeTarget.ServerPosition) >=
+                                                target.ServerPosition.Distance(x.ServerPosition)))
                                 {
                                     bestTarget = target;
                                     break;

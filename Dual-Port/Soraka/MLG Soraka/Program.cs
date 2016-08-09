@@ -209,16 +209,16 @@ using EloBuddy;
             var target = TargetSelector.GetTarget(Q.Range + 300, TargetSelector.DamageType.Magical);
             double qdelay = 1800;
 
-            if (target.LSIsValidTarget(Q.Range) && Player.LSDistance(target.Position) >= 150 && Player.LSDistance(target) <= 500)
+            if (target.IsValidTarget(Q.Range) && Player.Distance(target.Position) >= 150 && Player.Distance(target) <= 500)
             {
                 qdelay = 1000;
-                qdelay += - 0.5*Player.LSDistance(target.Position);
+                qdelay += - 0.5*Player.Distance(target.Position);
                 return (float) qdelay;
             }
-            if (target.LSIsValidTarget(Q.Range) && Player.LSDistance(target) >= 500)
+            if (target.IsValidTarget(Q.Range) && Player.Distance(target) >= 500)
             {
                 qdelay = 1000;
-                qdelay += -0.7 * Player.LSDistance(target.Position);
+                qdelay += -0.7 * Player.Distance(target.Position);
                 return (float)qdelay;
             }
 
@@ -234,7 +234,7 @@ using EloBuddy;
                 foreach (var hero in HeroManager.Allies)
                 {
                     if (Config.Item("mikael." + hero.ChampionName).GetValue<bool>() &&
-                        Player.LSDistance(hero) <= 750)
+                        Player.Distance(hero) <= 750)
                     {
                         if (hero.HasBuffOfType(BuffType.Stun) && Config.Item("stuns").GetValue<bool>() ||
                             hero.HasBuffOfType(BuffType.Charm) && Config.Item("charms").GetValue<bool>() ||
@@ -284,7 +284,7 @@ using EloBuddy;
         private static void Interrupter2_OnInterruptableTarget(AIHeroClient sender,
             Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (E.LSIsReady() && sender.LSIsValidTarget(E.Range) && Config.Item("interrupt").GetValue<bool>())
+            if (E.IsReady() && sender.IsValidTarget(E.Range) && Config.Item("interrupt").GetValue<bool>())
                 E.Cast(sender);
         }
 
@@ -301,21 +301,21 @@ using EloBuddy;
                     args.SData.Name == "InfiniteDuress" ||
                     args.SData.Name == "MissFortuneBulletTime" || args.SData.Name == "ThreshQ")
                 {
-                    if (E.LSIsReady() && Config.Item("Einterrupt").GetValue<bool>() &&
-                        sender.LSDistance(Player.Position) <= E.Range)
+                    if (E.IsReady() && Config.Item("Einterrupt").GetValue<bool>() &&
+                        sender.Distance(Player.Position) <= E.Range)
                         E.Cast(sender);
                 }
-                if (ThreshGameObject.Position.LSCountEnemiesInRange(250) >= 1)
+                if (ThreshGameObject.Position.CountEnemiesInRange(250) >= 1)
                     E.Cast(ThreshGameObject.Position);
             }
 
             //teleport arrival fuck up //Credits to Sebby. I 
             foreach (
                 var Object in
-                    ObjectManager.Get<Obj_AI_Base>().Where(Obj => Obj.LSDistance(Player.ServerPosition) < E.Range
+                    ObjectManager.Get<Obj_AI_Base>().Where(Obj => Obj.Distance(Player.ServerPosition) < E.Range
                                                                   && Obj.Team != Player.Team &&
-                                                                  (Obj.LSHasBuff("teleport_target", true) ||
-                                                                   Obj.LSHasBuff("Pantheon_GrandSkyfall_Jump", true))))
+                                                                  (Obj.HasBuff("teleport_target", true) ||
+                                                                   Obj.HasBuff("Pantheon_GrandSkyfall_Jump", true))))
             {
                 LeagueSharp.Common.Utility.DelayAction.Add(2500, () => { E.Cast(Object.Position); });
             }
@@ -323,18 +323,18 @@ using EloBuddy;
 
         private static void AutoE()
         {
-            foreach (var hero in HeroManager.Enemies.Where(e => e.IsEnemy && e.LSIsValidTarget(E.Range) && !e.IsDead))
+            foreach (var hero in HeroManager.Enemies.Where(e => e.IsEnemy && e.IsValidTarget(E.Range) && !e.IsDead))
             {
                 var cc = hero.HasBuffOfType(BuffType.Snare) ||
                          hero.HasBuffOfType(BuffType.Suppression) || hero.HasBuffOfType(BuffType.Taunt) ||
                          hero.HasBuffOfType(BuffType.Stun) || hero.HasBuffOfType(BuffType.Charm) ||
                          hero.HasBuffOfType(BuffType.Fear);
-                if (hero.LSIsValidTarget(E.Range) && E.LSIsReady() && cc && Config.Item("AutoE").GetValue<bool>())
+                if (hero.IsValidTarget(E.Range) && E.IsReady() && cc && Config.Item("AutoE").GetValue<bool>())
                     E.Cast(hero);
             }
-            foreach (var hero in HeroManager.Enemies.Where(e => e.IsEnemy && e.LSIsValidTarget(E.Range) && !e.IsDead))
+            foreach (var hero in HeroManager.Enemies.Where(e => e.IsEnemy && e.IsValidTarget(E.Range) && !e.IsDead))
             {
-                if (Config.Item("AutoEx").GetValue<bool>() && E.LSIsReady())
+                if (Config.Item("AutoEx").GetValue<bool>() && E.IsReady())
                     E.CastIfWillHit(hero, Config.Item("Eslider").GetValue<Slider>().Value);
             }
 
@@ -343,7 +343,7 @@ using EloBuddy;
         private static void AntiObject(GameObject sender, EventArgs args)
         {
 
-                if (sender.Name.Contains("Thresh_Base_Lantern") && Player.LSDistance(sender.Position) < E.Range &&
+                if (sender.Name.Contains("Thresh_Base_Lantern") && Player.Distance(sender.Position) < E.Range &&
                     sender.IsEnemy)
                 {
                     ThreshGameObject = sender;
@@ -353,7 +353,7 @@ using EloBuddy;
 
         private static void AntiGapCloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (E.LSIsReady() && gapcloser.Sender.LSIsValidTarget(E.Range) && Config.Item("antigap").GetValue<bool>())
+            if (E.IsReady() && gapcloser.Sender.IsValidTarget(E.Range) && Config.Item("antigap").GetValue<bool>())
                 LeagueSharp.Common.Utility.DelayAction.Add(50, () => { E.Cast(gapcloser.Sender); });
         }
 
@@ -365,19 +365,19 @@ using EloBuddy;
             if (Config.Item("Qdraw").GetValue<Circle>().Active)
                 if (Q.Level > 0)
                     Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range - 75,
-                        Q.LSIsReady() ? Config.Item("Qdraw").GetValue<Circle>().Color : Color.Red,
+                        Q.IsReady() ? Config.Item("Qdraw").GetValue<Circle>().Color : Color.Red,
                         Config.Item("CircleThickness").GetValue<Slider>().Value);
 
             if (Config.Item("Wdraw").GetValue<Circle>().Active)
                 if (W.Level > 0)
                     Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range - 50,
-                        W.LSIsReady() ? Config.Item("Wdraw").GetValue<Circle>().Color : Color.Red,
+                        W.IsReady() ? Config.Item("Wdraw").GetValue<Circle>().Color : Color.Red,
                         Config.Item("CircleThickness").GetValue<Slider>().Value);
 
             if (Config.Item("Edraw").GetValue<Circle>().Active)
                 if (E.Level > 0)
                     Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range - 75,
-                        E.LSIsReady() ? Config.Item("Edraw").GetValue<Circle>().Color : Color.Red,
+                        E.IsReady() ? Config.Item("Edraw").GetValue<Circle>().Color : Color.Red,
                         Config.Item("CircleThickness").GetValue<Slider>().Value);
 
         
@@ -409,29 +409,29 @@ using EloBuddy;
         private static void Game_OnGameUpdate(EventArgs args)
         {
 
-            if (E.LSIsReady())
+            if (E.IsReady())
                 AutoE();
 
             //Healing
             foreach (var hero in HeroManager.Allies)
             {
-                if (hero.Position.LSCountEnemiesInRange(1000) >= 1 &&
+                if (hero.Position.CountEnemiesInRange(1000) >= 1 &&
                     Config.Item("allyr." + hero.ChampionName).GetValue<Slider>().Value >= hero.HealthPercent
                     && Config.Item("allybr." + hero.ChampionName).GetValue<bool>() &&
-                    Config.Item("ronhp").GetValue<bool>() && !hero.IsDead && R.LSIsReady() && !hero.LSIsRecalling())
+                    Config.Item("ronhp").GetValue<bool>() && !hero.IsDead && R.IsReady() && !hero.IsRecalling())
                 {
                     R.Cast();
                 }
             }
 
 
-            if (!GetHealTarget().IsDead && GetHealTarget().LSDistance(Player.Position) < W.Range &&
+            if (!GetHealTarget().IsDead && GetHealTarget().Distance(Player.Position) < W.Range &&
                 GetHealTarget().HealthPercent <=
                 Config.Item("allyhp." + GetHealTarget().ChampionName).GetValue<Slider>().Value &&
                 Config.Item("wonhp").GetValue<bool>() &&
                 Config.Item("allywhitelist." + GetHealTarget().ChampionName).GetValue<bool>() &&
-                Player.HealthPercent >= Config.Item("playerhp").GetValue<Slider>().Value && !GetHealTarget().LSIsRecalling() &&
-                !GetHealTarget().LSInFountain())
+                Player.HealthPercent >= Config.Item("playerhp").GetValue<Slider>().Value && !GetHealTarget().IsRecalling() &&
+                !GetHealTarget().InFountain())
             {
                 W.Cast(GetHealTarget());
             }
@@ -443,23 +443,23 @@ using EloBuddy;
         {
             foreach (var hero in HeroManager.Allies)
             {
-                if (hero.Position.LSCountEnemiesInRange(800) >= 1 &&
+                if (hero.Position.CountEnemiesInRange(800) >= 1 &&
                     Config.Item("allyr." + hero.ChampionName).GetValue<Slider>().Value >= hero.HealthPercent
                     && Config.Item("allybr." + hero.ChampionName).GetValue<bool>() &&
-                    Config.Item("ronhp").GetValue<bool>() && !hero.IsDead && R.LSIsReady())
+                    Config.Item("ronhp").GetValue<bool>() && !hero.IsDead && R.IsReady())
                 {
                     R.Cast(hero);
                 }
             }
 
 
-            if (!GetHealTarget().IsDead && GetHealTarget().LSDistance(Player.Position) < W.Range &&
+            if (!GetHealTarget().IsDead && GetHealTarget().Distance(Player.Position) < W.Range &&
                 GetHealTarget().HealthPercent <=
                 Config.Item("allyhp." + GetHealTarget().ChampionName).GetValue<Slider>().Value &&
                 Config.Item("wonhp").GetValue<bool>() &&
                 Config.Item("allywhitelist." + GetHealTarget().ChampionName).GetValue<bool>() &&
                 Player.HealthPercent >= Config.Item("playerhp").GetValue<Slider>().Value &&
-                !GetHealTarget().LSInFountain())
+                !GetHealTarget().InFountain())
             {
                 W.Cast(GetHealTarget());
             }
@@ -470,28 +470,28 @@ using EloBuddy;
             {
                 case 0: // MostAD
                     return
-                        HeroManager.Allies.Where(ally => ally.LSIsValidTarget(W.Range, false) && !ally.IsDead && ally.HealthPercent <=
+                        HeroManager.Allies.Where(ally => ally.IsValidTarget(W.Range, false) && !ally.IsDead && ally.HealthPercent <=
                     Config.Item("allyhp." + ally.ChampionName).GetValue<Slider>().Value && !ally.IsMe && Config.Item("allywhitelist." + ally.ChampionName).GetValue<bool>())
                             .OrderByDescending(dmg => dmg.TotalAttackDamage())
                             .First();
                 case 1: // MostAP
                     return
-                        HeroManager.Allies.Where(ally => ally.LSIsValidTarget(W.Range, false) && !ally.IsDead && ally.HealthPercent <=
+                        HeroManager.Allies.Where(ally => ally.IsValidTarget(W.Range, false) && !ally.IsDead && ally.HealthPercent <=
                     Config.Item("allyhp." + ally.ChampionName).GetValue<Slider>().Value && !ally.IsMe && Config.Item("allywhitelist." + ally.ChampionName).GetValue<bool>())
                             .OrderByDescending(ap => ap.TotalMagicalDamage())
                             .First();
 
                 case 2: //LowestHP
                     return
-                        HeroManager.Allies.Where(ally => ally.LSIsValidTarget(W.Range, false) && !ally.IsDead && ally.HealthPercent <=
+                        HeroManager.Allies.Where(ally => ally.IsValidTarget(W.Range, false) && !ally.IsDead && ally.HealthPercent <=
                     Config.Item("allyhp." + ally.ChampionName).GetValue<Slider>().Value && !ally.IsMe && Config.Item("allywhitelist." + ally.ChampionName).GetValue<bool>())
                             .OrderBy(health => health.HealthPercent)
                             .First();
                 case 3: //Closest - ScienceARK please add
                     return
-                        HeroManager.Allies.Where(ally => ally.LSIsValidTarget(W.Range, false) && !ally.IsDead && ally.HealthPercent <=
+                        HeroManager.Allies.Where(ally => ally.IsValidTarget(W.Range, false) && !ally.IsDead && ally.HealthPercent <=
                     Config.Item("allyhp." + ally.ChampionName).GetValue<Slider>().Value && !ally.IsMe && Config.Item("allywhitelist." + ally.ChampionName).GetValue<bool>())
-                            .OrderBy(a => a.LSDistance(Player.Position)).FirstOrDefault();
+                            .OrderBy(a => a.Distance(Player.Position)).FirstOrDefault();
 
             }
             return null;
@@ -524,11 +524,11 @@ using EloBuddy;
             var harassmana = Config.Item("harassmana").GetValue<Slider>().Value;
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
 
-            if (Q.LSIsReady() && Config.Item("HarassQ").GetValue<bool>() &&
+            if (Q.IsReady() && Config.Item("HarassQ").GetValue<bool>() &&
                 Q.GetPrediction(target).Hitchance >= PredictionQ("hitchanceQ") && Player.ManaPercent >= harassmana)
                 Q.Cast(Q.GetPrediction(target).CastPosition);
 
-            if (E.LSIsReady() && Config.Item("HarassE").GetValue<bool>() &&
+            if (E.IsReady() && Config.Item("HarassE").GetValue<bool>() &&
                 E.GetPrediction(target).Hitchance >= PredictionE("hitchanceE") && Player.ManaPercent >= harassmana)
                 E.Cast(target);
         }
@@ -539,11 +539,11 @@ using EloBuddy;
             if (!target.IsValid && target.IsInvulnerable)
                 return;
 
-            if (Q.LSIsReady() && Config.Item("UseQ").GetValue<bool>() &&
+            if (Q.IsReady() && Config.Item("UseQ").GetValue<bool>() &&
                 Q.GetPrediction(target).Hitchance >= PredictionQ("hitchanceQ"))
                 Q.Cast(Q.GetPrediction(target).CastPosition);
 
-            if (E.LSIsReady() && Config.Item("UseE").GetValue<bool>() &&
+            if (E.IsReady() && Config.Item("UseE").GetValue<bool>() &&
                 E.GetPrediction(target).Hitchance >= PredictionE("hitchanceE"))
                 E.Cast(target);
 

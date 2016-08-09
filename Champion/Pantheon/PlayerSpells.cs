@@ -69,7 +69,7 @@ namespace Pantheon
         {
             var t = Program.AssassinManager.GetTarget(Program.Q.Range, TargetSelector.DamageType.Magical);
 
-            if (!t.LSIsValidTarget())
+            if (!t.IsValidTarget())
             {
                 return;
             }
@@ -100,7 +100,7 @@ namespace Pantheon
 
         private static void SetIgniteSlot()
         {
-            IgniteSlot = Program.Player.LSGetSpellSlot("SummonerDot");
+            IgniteSlot = Program.Player.GetSpellSlot("SummonerDot");
         }
 
         private static void SmiteOnTarget(AIHeroClient t)
@@ -110,7 +110,7 @@ namespace Pantheon
             var itemCheck = SmiteBlue.Any(i => LeagueSharp.Common.Items.HasItem(i)) || SmiteRed.Any(i => LeagueSharp.Common.Items.HasItem(i));
             if (itemCheck && use &&
                 Program.Player.Spellbook.CanUseSpell(SmiteSlot) == SpellState.Ready &&
-                t.LSDistance(Program.Player.Position) < range)
+                t.Distance(Program.Player.Position) < range)
             {
                 Program.Player.Spellbook.CastSpell(SmiteSlot, t);
             }
@@ -121,7 +121,7 @@ namespace Pantheon
             var range = 550f;
             var use = menu.Item("Spells.Ignite").GetValue<bool>();
             if (use && Program.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready &&
-                t.LSDistance(Program.Player.Position) < range &&
+                t.Distance(Program.Player.Position) < range &&
                 Program.Player.GetSummonerSpellDamage(t, Damage.SummonerSpell.Ignite) > t.Health)
             {
                 Program.Player.Spellbook.CastSpell(IgniteSlot, t);

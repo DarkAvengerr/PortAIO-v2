@@ -65,10 +65,10 @@ using EloBuddy; namespace EvadeYas
             {
                 var from = self[i];
                 var to = self[i + 1];
-                var d = (int) to.LSDistance(from);
+                var d = (int) to.Distance(from);
                 if (d > distance)
                 {
-                    return from + distance * (to - from).LSNormalized();
+                    return from + distance * (to - from).Normalized();
                 }
                 distance -= d;
             }
@@ -194,8 +194,8 @@ using EloBuddy; namespace EvadeYas
                 RStart = start;
                 REnd = end;
                 Width = width;
-                Direction = (end - start).LSNormalized();
-                Perpendicular = Direction.LSPerpendicular();
+                Direction = (end - start).Normalized();
+                Perpendicular = Direction.Perpendicular();
             }
 
             public Polygon ToPolygon(int offset = 0, float overrideWidth = -1)
@@ -272,7 +272,7 @@ using EloBuddy; namespace EvadeYas
                 Start = start;
                 End = end;
                 HitBox = hitbox;
-                Distance = Start.LSDistance(End);
+                Distance = Start.Distance(End);
             }
 
             public Polygon ToPolygon(int offset = 0)
@@ -285,36 +285,36 @@ using EloBuddy; namespace EvadeYas
 
                 outerRadius = outerRadius / (float)Math.Cos(2 * Math.PI / CircleLineSegmentN);
 
-                var innerCenters = LeagueSharp.Common.Geometry.LSCircleCircleIntersection(Start, End, innerRadius, innerRadius);
-                var outerCenters = LeagueSharp.Common.Geometry.LSCircleCircleIntersection(Start, End, outerRadius, outerRadius);
+                var innerCenters = LeagueSharp.Common.Geometry.CircleCircleIntersection(Start, End, innerRadius, innerRadius);
+                var outerCenters = LeagueSharp.Common.Geometry.CircleCircleIntersection(Start, End, outerRadius, outerRadius);
 
                 var innerCenter = innerCenters[0];
                 var outerCenter = outerCenters[0];
 
                 Render.Circle.DrawCircle(innerCenter.To3D(), 100, Color.White);
 
-                var direction = (End - outerCenter).LSNormalized();
-                var end = (Start - outerCenter).LSNormalized();
-                var maxAngle = (float)(direction.LSAngleBetween(end) * Math.PI / 180);
+                var direction = (End - outerCenter).Normalized();
+                var end = (Start - outerCenter).Normalized();
+                var maxAngle = (float)(direction.AngleBetween(end) * Math.PI / 180);
                 
                 var step = -maxAngle / CircleLineSegmentN;
                 //outercircle
                 for (int i = 0; i < CircleLineSegmentN; i++)
                 {
                     var angle = step * i;
-                    var point = outerCenter + (outerRadius + 15 + offset) * direction.LSRotated(angle);
+                    var point = outerCenter + (outerRadius + 15 + offset) * direction.Rotated(angle);
                     result.Add(point);
                 }
 
-                direction = (Start - innerCenter).LSNormalized();
-                end = (End - innerCenter).LSNormalized();
-                maxAngle = (float)(direction.LSAngleBetween(end) * Math.PI / 180);
+                direction = (Start - innerCenter).Normalized();
+                end = (End - innerCenter).Normalized();
+                maxAngle = (float)(direction.AngleBetween(end) * Math.PI / 180);
                 step = maxAngle / CircleLineSegmentN;
                 //outercircle
                 for (int i = 0; i < CircleLineSegmentN; i++)
                 {
                     var angle = step * i;
-                    var point = innerCenter + Math.Max(0, innerRadius - offset - 100) * direction.LSRotated(angle);
+                    var point = innerCenter + Math.Max(0, innerRadius - offset - 100) * direction.Rotated(angle);
                     result.Add(point);
                 }
 
@@ -343,11 +343,11 @@ using EloBuddy; namespace EvadeYas
                 var outRadius = (Radius + offset) / (float) Math.Cos(2 * Math.PI / CircleLineSegmentN);
 
                 result.Add(Center);
-                var Side1 = Direction.LSRotated(-Angle * 0.5f);
+                var Side1 = Direction.Rotated(-Angle * 0.5f);
 
                 for (var i = 0; i <= CircleLineSegmentN; i++)
                 {
-                    var cDirection = Side1.LSRotated(i * Angle / CircleLineSegmentN).LSNormalized();
+                    var cDirection = Side1.Rotated(i * Angle / CircleLineSegmentN).Normalized();
                     result.Add(new Vector2(Center.X + outRadius * cDirection.X, Center.Y + outRadius * cDirection.Y));
                 }
 

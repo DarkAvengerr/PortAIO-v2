@@ -26,7 +26,7 @@ using EloBuddy;
         private void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             //if (!KoreanUtils.GetParamBool(Akali.MainMenu, "usezhonyas") ||
-            //        !ItemData.Zhonyas_Hourglass.GetItem().LSIsReady())
+            //        !ItemData.Zhonyas_Hourglass.GetItem().IsReady())
             //{
             //    return;
             //}
@@ -36,8 +36,8 @@ using EloBuddy;
             //    return;
             //}
 
-            //if ((args.SData.LSIsAutoAttack() && sender.LSGetAutoAttackDamage(Akali.Player) + 100 >= Akali.Player.Health) ||
-            //    (sender.LSGetSpellDamage(Akali.Player, args.SData.Name) + 100 >= Akali.Player.Health))
+            //if ((args.SData.IsAutoAttack() && sender.GetAutoAttackDamage(Akali.Player) + 100 >= Akali.Player.Health) ||
+            //    (sender.GetSpellDamage(Akali.Player, args.SData.Name) + 100 >= Akali.Player.Health))
             //{
             //    ItemData.Zhonyas_Hourglass.GetItem().Cast();
             //}

@@ -37,9 +37,9 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.Menus.Draw
         public void OnEndScene(EventArgs args)
         {
             foreach (
-                var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget(1200) && !ene.IsZombie))
+                var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1200) && !ene.IsZombie))
             {
-                var easyKill = Variable.Spells[SpellSlot.R].LSIsReady()
+                var easyKill = Variable.Spells[SpellSlot.R].IsReady()
                                    ? new ColorBGRA(0, 255, 0, 120)
                                    : new ColorBGRA(255, 255, 0, 120);
 

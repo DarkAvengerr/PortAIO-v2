@@ -35,7 +35,7 @@ using EloBuddy; namespace YasuoPro
                 if (!farmcast)
                 {
                     if ((type == ItemCastType.SelfCast || type == ItemCastType.RangeCast) &&
-                        Player.LSCountEnemiesInRange(item.Range) >= eneinrangecount)
+                        Player.CountEnemiesInRange(item.Range) >= eneinrangecount)
                     {
                         item.Cast();
                         return true;
@@ -50,7 +50,7 @@ using EloBuddy; namespace YasuoPro
 
                 else if (farmcast)
                 {
-                    if ((type == ItemCastType.SelfCast || type == ItemCastType.RangeCast) && ObjectManager.Get<Obj_AI_Minion>().Count(x=> x.LSIsValidTarget(item.Range)) >= minioncount)
+                    if ((type == ItemCastType.SelfCast || type == ItemCastType.RangeCast) && ObjectManager.Get<Obj_AI_Minion>().Count(x=> x.IsValidTarget(item.Range)) >= minioncount)
                     {
                         item.Cast();
                         return true;

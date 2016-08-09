@@ -217,7 +217,7 @@ namespace Leblanc.Common
         private static Obj_AI_Base GetNearObject(String name, Vector3 pos, int maxDistance)
         {
             return ObjectManager.Get<Obj_AI_Base>()
-                .FirstOrDefault(x => x.Name == name && x.LSDistance(pos) <= maxDistance);
+                .FirstOrDefault(x => x.Name == name && x.Distance(pos) <= maxDistance);
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
@@ -231,13 +231,13 @@ namespace Leblanc.Common
                     AutoBushHelper.EnemyInfo.Where(
                         x =>
                             x.Player.IsValid && !x.Player.IsVisible && !x.Player.IsDead
-                            && x.Player.LSDistance(ObjectManager.Player.ServerPosition) < 1000 && time - x.LastSeen < 2500)
+                            && x.Player.Distance(ObjectManager.Player.ServerPosition) < 1000 && time - x.LastSeen < 2500)
                         .Select(x => x.Player))
                 {
                     var wardPosition = GetWardPos(enemy.ServerPosition, 165, 2);
 
                     if (wardPosition != enemy.ServerPosition && wardPosition != Vector3.Zero &&
-                        wardPosition.LSDistance(ObjectManager.Player.ServerPosition) <= 600)
+                        wardPosition.Distance(ObjectManager.Player.ServerPosition) <= 600)
                     {
                         int timedif = Environment.TickCount - lastTimeWarded;
 
@@ -259,7 +259,7 @@ namespace Leblanc.Common
                                  || ObjectManager.Player.ChampionName == "Ashe"
                                  || ObjectManager.Player.ChampionName == "Quinn"
                                  || ObjectManager.Player.ChampionName == "Kalista"
-                                 || ObjectManager.Player.ChampionName == "Jinx") && championSpell.LSIsReady())
+                                 || ObjectManager.Player.ChampionName == "Jinx") && championSpell.IsReady())
                             {
                                 championSpell.Cast(wardPosition);
                                 lastTimeWarded = Environment.TickCount;

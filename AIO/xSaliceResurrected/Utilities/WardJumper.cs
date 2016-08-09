@@ -17,41 +17,41 @@ using EloBuddy; namespace xSaliceResurrected.Utilities
         public static void JumpKs(AIHeroClient target)
         {
             foreach (Obj_AI_Minion ward in ObjectManager.Get<Obj_AI_Minion>().Where(ward =>
-                E.LSIsReady() && Q.LSIsReady() && ward.Name.ToLower().Contains("ward") &&
-                ward.LSDistance(target.ServerPosition) < Q.Range && ward.LSDistance(Player.Position) < E.Range))
+                E.IsReady() && Q.IsReady() && ward.Name.ToLower().Contains("ward") &&
+                ward.Distance(target.ServerPosition) < Q.Range && ward.Distance(Player.Position) < E.Range))
             {
                 E.Cast(ward);
                 return;
             }
 
             foreach (AIHeroClient hero in ObjectManager.Get<AIHeroClient>().Where(hero =>
-                E.LSIsReady() && Q.LSIsReady() && hero.LSDistance(target.ServerPosition) < Q.Range &&
-                hero.LSDistance(Player.Position) < E.Range && hero.LSIsValidTarget(E.Range)))
+                E.IsReady() && Q.IsReady() && hero.Distance(target.ServerPosition) < Q.Range &&
+                hero.Distance(Player.Position) < E.Range && hero.IsValidTarget(E.Range)))
             {
                 E.Cast(hero);
                 return;
             }
 
             foreach (Obj_AI_Minion minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion =>
-                E.LSIsReady() && Q.LSIsReady() && minion.LSDistance(target.ServerPosition) < Q.Range &&
-                minion.LSDistance(Player.Position) < E.Range && minion.LSIsValidTarget(E.Range)))
+                E.IsReady() && Q.IsReady() && minion.Distance(target.ServerPosition) < Q.Range &&
+                minion.Distance(Player.Position) < E.Range && minion.IsValidTarget(E.Range)))
             {
                 E.Cast(minion);
                 return;
             }
 
-            if (Player.LSDistance(target.Position) < Q.Range)
+            if (Player.Distance(target.Position) < Q.Range)
             {
                 Q.Cast(target);
                 return;
             }
 
-            if (E.LSIsReady() && Q.LSIsReady())
+            if (E.IsReady() && Q.IsReady())
             {
                 Vector3 position = Player.ServerPosition +
                                    Vector3.Normalize(target.ServerPosition - Player.ServerPosition) * 590;
 
-                if (target.LSDistance(position) < Q.Range)
+                if (target.Distance(position) < Q.Range)
                 {
                     InventorySlot invSlot = FindBestWardItem();
                     if (invSlot == null) return;
@@ -62,7 +62,7 @@ using EloBuddy; namespace xSaliceResurrected.Utilities
                 }
             }
 
-            if (Player.LSDistance(target.Position) < Q.Range)
+            if (Player.Distance(target.Position) < Q.Range)
             {
                 Q.Cast(target);
             }
@@ -73,9 +73,9 @@ using EloBuddy; namespace xSaliceResurrected.Utilities
             //wardWalk(Game.CursorPos);
 
             foreach (Obj_AI_Minion ward in ObjectManager.Get<Obj_AI_Minion>().Where(ward =>
-                ward.Name.ToLower().Contains("ward") && ward.LSDistance(Game.CursorPos) < 250))
+                ward.Name.ToLower().Contains("ward") && ward.Distance(Game.CursorPos) < 250))
             {
-                if (E.LSIsReady())
+                if (E.IsReady())
                 {
                     E.Cast(ward);
                     return;
@@ -83,9 +83,9 @@ using EloBuddy; namespace xSaliceResurrected.Utilities
             }
 
             foreach (
-                AIHeroClient hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.LSDistance(Game.CursorPos) < 250 && !hero.IsDead))
+                AIHeroClient hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.Distance(Game.CursorPos) < 250 && !hero.IsDead))
             {
-                if (E.LSIsReady())
+                if (E.IsReady())
                 {
                     E.Cast(hero);
                     return;
@@ -93,16 +93,16 @@ using EloBuddy; namespace xSaliceResurrected.Utilities
             }
 
             foreach (Obj_AI_Minion minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion =>
-                minion.LSDistance(Game.CursorPos) < 250))
+                minion.Distance(Game.CursorPos) < 250))
             {
-                if (E.LSIsReady())
+                if (E.IsReady())
                 {
                     E.Cast(minion);
                     return;
                 }
             }
 
-            if (Utils.TickCount <= LastPlaced + 3000 || !E.LSIsReady()) return;
+            if (Utils.TickCount <= LastPlaced + 3000 || !E.IsReady()) return;
 
             Vector3 cursorPos = Game.CursorPos;
             Vector3 myPos = Player.ServerPosition;

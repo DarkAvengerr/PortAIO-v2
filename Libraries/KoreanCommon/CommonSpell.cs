@@ -104,7 +104,7 @@
 
         public bool IsReadyToCastOn(AIHeroClient target, int maxToggleState = 1)
         {
-            return this.LSIsReady() && CanCast(maxToggleState) && CanCast(target) && target.LSIsValidTarget(Range) && !target.IsDead;
+            return this.IsReady() && CanCast(maxToggleState) && CanCast(target) && target.IsValidTarget(Range) && !target.IsDead;
         }
 
     }

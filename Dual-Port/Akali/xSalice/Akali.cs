@@ -150,33 +150,33 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
             if (mode == 0)
             {
-                if (Q.LSIsReady())
-                    comboDamage += (Player.LSGetSpellDamage(target, SpellSlot.Q) +
+                if (Q.IsReady())
+                    comboDamage += (Player.GetSpellDamage(target, SpellSlot.Q) +
                                     Player.CalcDamage(target, Damage.DamageType.Magical,
                                         (45 + 35 * Q.Level + 0.5 * Player.FlatMagicDamageMod)));
             }
-            else if (Q.LSIsReady())
+            else if (Q.IsReady())
             {
-                comboDamage += (Player.LSGetSpellDamage(target, SpellSlot.Q) + Player.CalcDamage(target, Damage.DamageType.Magical, (45 + 35 * Q.Level + 0.5 * Player.FlatMagicDamageMod))) * 2;
+                comboDamage += (Player.GetSpellDamage(target, SpellSlot.Q) + Player.CalcDamage(target, Damage.DamageType.Magical, (45 + 35 * Q.Level + 0.5 * Player.FlatMagicDamageMod))) * 2;
             }
 
-            if (E.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.E);
+            if (E.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.E);
 
-            if (target.LSHasBuff("AkaliMota"))
+            if (target.HasBuff("AkaliMota"))
                 comboDamage += Player.CalcDamage(target, Damage.DamageType.Magical, (45 + 35 * Q.Level + 0.5 * Player.FlatMagicDamageMod));
 
             comboDamage += Player.CalcDamage(target, Damage.DamageType.Magical, CalcPassiveDmg());
 
             if (rStacks > 0)
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.R) * rStacks;
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.R) * rStacks;
 
             if (SummonerManager.Ignite_Ready())
                 comboDamage += Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
 
             comboDamage = ItemManager.CalcDamage(target, comboDamage);
 
-            return (float)(comboDamage + Player.LSGetAutoAttackDamage(target));
+            return (float)(comboDamage + Player.GetAutoAttackDamage(target));
         }
 
         private double CalcPassiveDmg()
@@ -256,20 +256,20 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
         private AIHeroClient CheckMark(float range)
         {
-            return ObjectManager.Get<AIHeroClient>().FirstOrDefault(x => x.LSIsValidTarget(range) && x.HasBuff("AkaliMota") && x.IsVisible);
+            return ObjectManager.Get<AIHeroClient>().FirstOrDefault(x => x.IsValidTarget(range) && x.HasBuff("AkaliMota") && x.IsVisible);
         }
 
         private void Cast_Q(bool combo, int mode = 0)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
             if (combo)
             {
                 var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
 
-                if (!target.LSIsValidTarget(Q.Range))
+                if (!target.IsValidTarget(Q.Range))
                     return;
-                if (target.LSHasBuff("AkaliMota"))
+                if (target.HasBuff("AkaliMota"))
                     return;
 
                 if (CheckMark(Q.Range) != null)
@@ -281,38 +281,38 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 }
                 else if (mode == 1)
                 {
-                    if (!target.LSHasBuff("AkaliMota"))
+                    if (!target.HasBuff("AkaliMota"))
                         Q.Cast(target);
                 }
             }
             else
             {
-                if (MinionManager.GetMinions(Player.Position, Q.Range).Any(minion => minion.LSHasBuff("AkaliMota") && Orbwalker.InAutoAttackRange(minion)))
+                if (MinionManager.GetMinions(Player.Position, Q.Range).Any(minion => minion.HasBuff("AkaliMota") && Orbwalker.InAutoAttackRange(minion)))
                 {
                     return;
                 }
 
                 foreach (var minion in MinionManager.GetMinions(Player.Position, Q.Range).Where(minion => HealthPrediction.GetHealthPrediction(minion,
-                        (int)(E.Delay + (minion.LSDistance(Player.Position) / E.Speed)) * 1000) <
-                                                             Player.LSGetSpellDamage(minion, SpellSlot.Q) &&
+                        (int)(E.Delay + (minion.Distance(Player.Position) / E.Speed)) * 1000) <
+                                                             Player.GetSpellDamage(minion, SpellSlot.Q) &&
                                                              HealthPrediction.GetHealthPrediction(minion,
-                                                                 (int)(E.Delay + (minion.LSDistance(Player.Position) / E.Speed)) * 1000) > 0 &&
+                                                                 (int)(E.Delay + (minion.Distance(Player.Position) / E.Speed)) * 1000) > 0 &&
                                                              Orbwalker.InAutoAttackRange(minion)))
                     Q.Cast(minion);
 
                 foreach (var minion in MinionManager.GetMinions(Player.Position, Q.Range).Where(minion => HealthPrediction.GetHealthPrediction(minion,
-                        (int)(Q.Delay + (minion.LSDistance(Player.Position) / Q.Speed))) <
-                                                             Player.LSGetSpellDamage(minion, SpellSlot.Q)))
+                        (int)(Q.Delay + (minion.Distance(Player.Position) / Q.Speed))) <
+                                                             Player.GetSpellDamage(minion, SpellSlot.Q)))
                     Q.Cast(minion);
 
-                foreach (var minion in MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).Where(minion => Player.LSDistance(minion.Position) <= Q.Range))
+                foreach (var minion in MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).Where(minion => Player.Distance(minion.Position) <= Q.Range))
                     Q.Cast(minion);
             }
         }
 
         private void Cast_W()
         {
-            if (menu.Item("useW_enemyCount", true).GetValue<Slider>().Value > Player.LSCountEnemiesInRange(400) &&
+            if (menu.Item("useW_enemyCount", true).GetValue<Slider>().Value > Player.CountEnemiesInRange(400) &&
                 menu.Item("useW_Health", true).GetValue<Slider>().Value < (int)(Player.Health / Player.MaxHealth * 100))
                 return;
             W.Cast(Player.Position);
@@ -320,13 +320,13 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
         private void Cast_E(bool combo, int mode = 0)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
             if (combo)
             {
                 var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
 
-                if (target == null || !target.LSIsValidTarget(E.Range))
+                if (target == null || !target.IsValidTarget(E.Range))
                     return;
 
                 if (CheckMark(E.Range) != null)
@@ -341,9 +341,9 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 }
                 else if (mode == 1)
                 {
-                    if (target.LSHasBuff("AkaliMota"))
+                    if (target.HasBuff("AkaliMota"))
                         return;
-                    if (target.LSHasBuff("AkaliMota") && !Q.LSIsReady())
+                    if (target.HasBuff("AkaliMota") && !Q.IsReady())
                         return;
                     if (Player.Mana >= menu.Item("E_Energy", true).GetValue<Slider>().Value)
                         E.Cast();
@@ -355,7 +355,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             {
                 if (MinionManager.GetMinions(Player.Position, E.Range).Count >= menu.Item("LaneClear_useE_minHit", true).GetValue<Slider>().Value)
                     E.Cast();
-                foreach (var minion in MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).Where(minion => Player.LSDistance(minion.Position) <= E.Range))
+                foreach (var minion in MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).Where(minion => Player.Distance(minion.Position) <= E.Range))
                     if (E.GetDamage(minion) > minion.Health + 35)
                         E.Cast();
             }
@@ -365,14 +365,14 @@ using EloBuddy; namespace xSaliceResurrected.Mid
         {
             double dmg = 0;
 
-            if (Q.LSIsReady())
-                dmg += Player.LSGetSpellDamage(target, SpellSlot.Q) + Player.LSGetSpellDamage(target, SpellSlot.Q, 1);
-            if (target.LSHasBuff("AkaliMota"))
-                dmg += Player.LSGetSpellDamage(target, SpellSlot.Q, 1);
-            if (E.LSIsReady())
-                dmg += Player.LSGetSpellDamage(target, SpellSlot.E);
-            if (R.LSIsReady())
-                dmg += Player.LSGetSpellDamage(target, SpellSlot.R) * GetRStacks();
+            if (Q.IsReady())
+                dmg += Player.GetSpellDamage(target, SpellSlot.Q) + Player.GetSpellDamage(target, SpellSlot.Q, 1);
+            if (target.HasBuff("AkaliMota"))
+                dmg += Player.GetSpellDamage(target, SpellSlot.Q, 1);
+            if (E.IsReady())
+                dmg += Player.GetSpellDamage(target, SpellSlot.E);
+            if (R.IsReady())
+                dmg += Player.GetSpellDamage(target, SpellSlot.R) * GetRStacks();
 
             return dmg;
         }
@@ -387,25 +387,25 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             if (CheckMark(Q.Range) != null)
                 target = CheckMark(R.Range);
 
-            if (target.LSIsValidTarget(R.Range) && R.LSIsReady())
+            if (target.IsValidTarget(R.Range) && R.IsReady())
             {
                 if (R.IsKillable(target) && menu.Item("R_If_Killable", true).GetValue<bool>())
                     R.Cast(target);
-                else if (GetSimpleDmg(target) > target.Health && Player.LSDistance(target.Position) > Q.Range - 50)
+                else if (GetSimpleDmg(target) > target.Health && Player.Distance(target.Position) > Q.Range - 50)
                     R.Cast(target);
 
-                if (target.LSCountEnemiesInRange(500) >=
+                if (target.CountEnemiesInRange(500) >=
                     menu.Item("Dont_R_If", true).GetValue<Slider>().Value)
                     return;
 
-                if (Player.LSDistance(target.Position) < menu.Item("R_Min", true).GetValue<Slider>().Value)
+                if (Player.Distance(target.Position) < menu.Item("R_Min", true).GetValue<Slider>().Value)
                     return;
 
                 if (mode == 0)
                 {
                     if (menu.Item("R_Wait_For_Q", true).GetValue<bool>())
                     {
-                        if (target.LSHasBuff("AkaliMota"))
+                        if (target.HasBuff("AkaliMota"))
                         {
                             R.Cast(target);
                         }
@@ -417,7 +417,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 }
                 else if (mode == 1)
                 {
-                    if (target.LSHasBuff("AkaliMota") && Q.LSIsReady())
+                    if (target.HasBuff("AkaliMota") && Q.IsReady())
                     {
                         R.Cast(target);
                         menu.Item("Combo_mode", true).SetValue(new StringList(new[] { "Normal", "Q-Delay-R-AA-Q-AA" }));
@@ -479,19 +479,19 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
             if (menu.Item("Draw_Q", true).GetValue<bool>())
                 if (Q.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, Q.Range, Q.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, Q.Range, Q.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_W", true).GetValue<bool>())
                 if (W.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, W.Range - 2, W.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, W.Range - 2, W.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_E", true).GetValue<bool>())
                 if (E.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, E.Range, E.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_R", true).GetValue<bool>())
                 if (R.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, R.Range, R.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, R.Range, R.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Current_Mode", true).GetValue<bool>())
             {

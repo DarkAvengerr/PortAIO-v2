@@ -34,7 +34,7 @@ using EloBuddy; namespace ezEvade.SpecialSpells
                 {
                     if (obj != null && obj.IsValid && !obj.IsDead && obj.Name == "Ekko" && obj.IsEnemy)
                     {
-                        var blinkPos = obj.ServerPosition.LSTo2D();
+                        var blinkPos = obj.ServerPosition.To2D();
 
                         SpellDetector.CreateSpellData(hero, args.Start, blinkPos.To3D(), spellData);
                     }

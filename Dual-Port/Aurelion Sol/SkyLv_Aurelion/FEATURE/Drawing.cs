@@ -100,7 +100,7 @@ using EloBuddy;
             if (SkyLv_AurelionSol.Menu.Item("DrawOrbwalkTarget").GetValue<Circle>().Active)
             {
                 var orbT = SkyLv_AurelionSol.Orbwalker.GetTarget();
-                if (orbT.LSIsValidTarget())
+                if (orbT.IsValidTarget())
                     Render.Circle.DrawCircle(orbT.Position, 100, SkyLv_AurelionSol.Menu.Item("DrawOrbwalkTarget").GetValue<Circle>().Color, SkyLv_AurelionSol.Menu.Item("OrbwalkDraw.Radius").GetValue<Slider>().Value);
             }
 

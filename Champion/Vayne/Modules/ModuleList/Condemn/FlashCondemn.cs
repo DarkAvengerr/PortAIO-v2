@@ -18,7 +18,7 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
     {
         private static Spell E => Variables.spells[SpellSlot.E];
 
-        private static Spell Flash => new Spell(ObjectManager.Player.LSGetSpellSlot("SummonerFlash"), 425f);
+        private static Spell Flash => new Spell(ObjectManager.Player.GetSpellSlot("SummonerFlash"), 425f);
 
         public void OnLoad()
         {
@@ -27,7 +27,7 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
         public bool ShouldGetExecuted()
         {
             return MenuExtensions.GetItemValue<KeyBind>("dz191.vhr.misc.condemn.flashcondemn").Active
-                   && Variables.spells[SpellSlot.E].LSIsReady() && Flash.Slot != SpellSlot.Unknown && Flash.LSIsReady();
+                   && Variables.spells[SpellSlot.E].IsReady() && Flash.Slot != SpellSlot.Unknown && Flash.IsReady();
         }
 
         public ModuleType GetModuleType()
@@ -43,21 +43,21 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
                              ? TargetSelector.GetSelectedTarget()
                              : TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
 
-            var flashPosition = ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, Flash.Range);
+            var flashPosition = ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, Flash.Range);
 
             var prediction = E.GetPrediction(target);
 
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return;
             }
 
-            if (target.LSIsDashing() || !E.LSIsReady()) return;
+            if (target.IsDashing() || !E.IsReady()) return;
 
             if (prediction.Hitchance >= HitChance.VeryHigh)
             {
-                var endPosition = prediction.UnitPosition.LSExtend(flashPosition, -pushDistance);
-                if (endPosition.LSIsWall())
+                var endPosition = prediction.UnitPosition.Extend(flashPosition, -pushDistance);
+                if (endPosition.IsWall())
                 {
                     Variables.LastCondemnFlashTime = Environment.TickCount;
                     E.CastOnUnit(target);
@@ -69,8 +69,8 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
                     var step = pushDistance / 5f;
                     for (float i = 0; i < pushDistance; i += step)
                     {
-                        var endPositionEx = prediction.UnitPosition.LSExtend(flashPosition, -i);
-                        if (endPositionEx.LSIsWall())
+                        var endPositionEx = prediction.UnitPosition.Extend(flashPosition, -i);
+                        if (endPositionEx.IsWall())
                         {
                             Variables.LastCondemnFlashTime = Environment.TickCount;
                             E.CastOnUnit(target);

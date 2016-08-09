@@ -57,15 +57,15 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.Logic
             var pos =
                 this.Camp.FirstOrDefault(
                     x =>
-                    x.Value.LSDistance(Variable.Player.Position) > 1750
-                    && x.Value.LSDistance(Variable.Player.Position) < 6000);
+                    x.Value.Distance(Variable.Player.Position) > 1750
+                    && x.Value.Distance(Variable.Player.Position) < 6000);
 
-            return pos.Value.LSIsValid();
+            return pos.Value.IsValid();
         }
 
         public bool ComboE(AIHeroClient target)
         {
-            return !target.IsVisible && !target.IsDead && target.LSDistance(Variable.Player) < 1500f;
+            return !target.IsVisible && !target.IsDead && target.Distance(Variable.Player) < 1500f;
         }
 
         public int GetEAmmo()

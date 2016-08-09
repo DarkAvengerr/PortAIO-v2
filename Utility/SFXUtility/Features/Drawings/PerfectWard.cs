@@ -287,7 +287,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                     }
                     if (spot.SafeSpot &&
                         spot.MagneticPosition.IsOnScreen(
-                            Math.Max(radius, spot.MagneticPosition.LSDistance(spot.WardPosition))))
+                            Math.Max(radius, spot.MagneticPosition.Distance(spot.WardPosition))))
                     {
                         Render.Circle.DrawCircle(spot.MagneticPosition, radius, Color.White, thickness);
                         Drawing.DrawLine(
@@ -358,7 +358,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                 }
 
                 if (!Menu.Item(Name + "Hotkey").IsActive() && !Menu.Item(Name + "PermaShow").GetValue<bool>() &&
-                    args.EndPosition.LSDistance(spot.MagneticPosition) <=
+                    args.EndPosition.Distance(spot.MagneticPosition) <=
                     Menu.Item(Name + "DrawingRadius").GetValue<Slider>().Value)
                 {
                     args.Process = false;
@@ -372,7 +372,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
 
                 if (spot.SafeSpot)
                 {
-                    if (Game.CursorPos.LSDistance(spot.MagneticPosition) <=
+                    if (Game.CursorPos.Distance(spot.MagneticPosition) <=
                         Menu.Item(Name + "DrawingRadius").GetValue<Slider>().Value)
                     {
                         args.Process = false;
@@ -386,7 +386,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                 }
                 else
                 {
-                    if (Game.CursorPos.LSDistance(spot.MagneticPosition) <=
+                    if (Game.CursorPos.Distance(spot.MagneticPosition) <=
                         Menu.Item(Name + "DrawingRadius").GetValue<Slider>().Value)
                     {
                         args.Process = false;

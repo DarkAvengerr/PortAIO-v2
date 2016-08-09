@@ -25,16 +25,16 @@ using EloBuddy;
 
         public bool ShouldRun()
         {
-            return Variables.spells[SpellSlot.R].LSIsReady() &&
+            return Variables.spells[SpellSlot.R].IsReady() &&
                    MenuExtensions.GetItemValue<bool>("iseriesr.kogmaw.misc.r.slow");
         }
 
         public void Run()
         {
-            if (Variables.spells[SpellSlot.R].LSIsReady())
+            if (Variables.spells[SpellSlot.R].IsReady())
             {
                 var rTarget = TargetSelector.GetTarget(Variables.spells[SpellSlot.R].Range, TargetSelector.DamageType.Magical);
-                if (rTarget.LSIsValidTarget()
+                if (rTarget.IsValidTarget()
                     && (JinxUtility.IsHeavilyImpaired(rTarget) || JinxUtility.IsLightlyImpaired(rTarget)))
                 {
                     var prediction = Variables.spells[SpellSlot.R].GetPrediction(rTarget);

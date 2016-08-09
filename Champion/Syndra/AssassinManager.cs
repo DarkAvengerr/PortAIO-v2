@@ -185,9 +185,9 @@ namespace Syndra
             {
                 foreach (var objAiHero in from hero in HeroManager.Enemies
                                           where
-                                              hero.LSDistance(Game.CursorPos) < 150f && hero != null && hero.IsVisible
+                                              hero.Distance(Game.CursorPos) < 150f && hero != null && hero.IsVisible
                                               && !hero.IsDead
-                                          orderby hero.LSDistance(Game.CursorPos) descending
+                                          orderby hero.Distance(Game.CursorPos) descending
                                           select hero)
                 {
                     if (objAiHero != null && objAiHero.IsVisible && !objAiHero.IsDead)
@@ -224,7 +224,7 @@ namespace Syndra
                                 : this.Config.Item("Range").GetValue<Slider>().Value;
 
             var vEnemy =
-                HeroManager.Enemies.Where(e => e.LSIsValidTarget(vDefaultRange) && !e.IsZombie)
+                HeroManager.Enemies.Where(e => e.IsValidTarget(vDefaultRange) && !e.IsZombie)
                     .Where(e => this.Config.Item("enemy." + e.ChampionName) != null)
                     .Where(e => this.Config.Item("enemy." + e.ChampionName).GetValue<bool>());
 
@@ -251,7 +251,7 @@ namespace Syndra
             if (drawEnemy.Active)
             {
                 var t = this.GetTarget(Program.E.Range, TargetSelector.DamageType.Physical);
-                if (t.LSIsValidTarget())
+                if (t.IsValidTarget())
                 {
                     Render.Circle.DrawCircle(t.Position, (float)(t.BoundingRadius * 1.5), drawEnemy.Color);
                 }
@@ -338,7 +338,7 @@ namespace Syndra
             {
                 var t = Program.AssassinManager.GetTarget(Program.E.Range);
 
-                if (t.LSIsValidTarget()) return t;
+                if (t.IsValidTarget()) return t;
 
                 return null;
             }

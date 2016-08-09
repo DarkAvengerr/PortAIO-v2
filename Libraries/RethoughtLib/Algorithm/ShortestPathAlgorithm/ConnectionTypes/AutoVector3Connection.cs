@@ -16,7 +16,7 @@ using EloBuddy; namespace RethoughtLib.Algorithm.ShortestPathAlgorithm.Connectio
         {
             this.Start = start;
             this.End = end;
-            this.Cost = this.Start.LSDistance(end);
+            this.Cost = this.Start.Distance(end);
         }
 
         #endregion

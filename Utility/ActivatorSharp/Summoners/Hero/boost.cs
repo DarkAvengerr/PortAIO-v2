@@ -25,7 +25,7 @@ using EloBuddy; namespace Activator.Summoners
                     if (!Parent.Item(Parent.Name + "useon" + hero.Player.NetworkId).GetValue<bool>())
                         return;
 
-                    if (hero.Player.LSDistance(Player.ServerPosition) > Range)
+                    if (hero.Player.Distance(Player.ServerPosition) > Range)
                         return;
 
                     Helpers.CheckCleanse(hero.Player);

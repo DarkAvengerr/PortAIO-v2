@@ -20,7 +20,7 @@ using EloBuddy; namespace Activator.Summoners
 
             var hid = Activator.Heroes
                 .OrderByDescending(h => h.Player.TotalAttackDamage)
-                .FirstOrDefault(h => h.Player.LSIsValidTarget(Range + 250));
+                .FirstOrDefault(h => h.Player.IsValidTarget(Range + 250));
 
             foreach (var hero in Activator.Allies())
             {
@@ -28,10 +28,10 @@ using EloBuddy; namespace Activator.Summoners
                 if (attacker == null || hid == null)
                     continue;
 
-                if (hero.Player.LSDistance(Player.ServerPosition) > 1250)
+                if (hero.Player.Distance(Player.ServerPosition) > 1250)
                     continue;
 
-                if (attacker.LSDistance(hero.Player.ServerPosition) <= Range)
+                if (attacker.Distance(hero.Player.ServerPosition) <= Range)
                 {
                     if (hero.HitTypes.Contains(HitType.ForceExhaust))
                     {
@@ -65,7 +65,7 @@ using EloBuddy; namespace Activator.Summoners
 
                     if (hero.Player.Health / hero.Player.MaxHealth * 100 <= Menu.Item("a" + Name + "pct").GetValue<Slider>().Value)
                     {
-                        if (hero.Player.LSIsFacing(attacker))
+                        if (hero.Player.IsFacing(attacker))
                         {
                             if (attacker.NetworkId == hid.Player.NetworkId)
                             {
@@ -76,7 +76,7 @@ using EloBuddy; namespace Activator.Summoners
 
                     if (attacker.Health / attacker.MaxHealth * 100 <= Menu.Item("e" + Name + "pct").GetValue<Slider>().Value)
                     {
-                        if (!attacker.LSIsFacing(hero.Player))
+                        if (!attacker.IsFacing(hero.Player))
                         {
                             UseSpellOn(attacker, Menu.Item("mode" + Name).GetValue<StringList>().SelectedIndex == 1);
                         }

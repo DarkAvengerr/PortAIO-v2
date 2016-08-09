@@ -35,17 +35,17 @@ using EloBuddy;
 
         private static void OnDraw(EventArgs args)
         {
-            if (Config.IsChecked("wRangeDraw") && (!Config.IsChecked("onlyReady") || Spells.W.LSIsReady()))
+            if (Config.IsChecked("wRangeDraw") && (!Config.IsChecked("onlyReady") || Spells.W.IsReady()))
             {
                 Drawing.DrawCircle(ObjectManager.Player.Position, Spells.W.Range, Color.White);
             }
 
-            if (Config.IsChecked("qRange") && (!Config.IsChecked("onlyReady") || Spells.Q.LSIsReady()))
+            if (Config.IsChecked("qRange") && (!Config.IsChecked("onlyReady") || Spells.Q.IsReady()))
             {
                 Drawing.DrawCircle(ObjectManager.Player.Position, Spells.Q.Range, Color.White);
             }
 
-            if (Config.IsChecked("eRange") && (!Config.IsChecked("onlyReady") || Spells.E.LSIsReady()))
+            if (Config.IsChecked("eRange") && (!Config.IsChecked("onlyReady") || Spells.E.IsReady()))
             {
                 Drawing.DrawCircle(ObjectManager.Player.Position, Spells.E.Range, Color.White);
             }
@@ -58,17 +58,17 @@ using EloBuddy;
                 return;
             }
 
-            if (Config.IsChecked("autoR") && Spells.R.LSIsReady())
+            if (Config.IsChecked("autoR") && Spells.R.IsReady())
             {
                 HealBotR.Execute();
             }
 
-            if (Config.IsChecked("autoAssistKS") && Spells.R.LSIsReady())
+            if (Config.IsChecked("autoAssistKS") && Spells.R.IsReady())
             {
                 AssistKs.Execute();
             }
 
-            if (Spells.W.LSIsReady() && Config.IsChecked("autoW"))
+            if (Spells.W.IsReady() && Config.IsChecked("autoW"))
             {
                 HealBotW.Execute();
             }

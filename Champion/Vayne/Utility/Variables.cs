@@ -64,9 +64,9 @@ namespace VayneHunter_Reborn.Utility
             {
                 return
                     HeroManager.Enemies.FindAll(
-                        m => m.IsMelee() && m.LSDistance(ObjectManager.Player) <= PlayerHelper.GetRealAutoAttackRange(m, ObjectManager.Player)
-                            && (m.ServerPosition.LSTo2D() + (m.BoundingRadius + 25f) * m.Direction.LSTo2D().LSPerpendicular()).LSDistance(ObjectManager.Player.ServerPosition.LSTo2D()) <= m.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition)
-                            && m.LSIsValidTarget(Range, false));
+                        m => m.IsMelee() && m.Distance(ObjectManager.Player) <= PlayerHelper.GetRealAutoAttackRange(m, ObjectManager.Player)
+                            && (m.ServerPosition.To2D() + (m.BoundingRadius + 25f) * m.Direction.To2D().Perpendicular()).Distance(ObjectManager.Player.ServerPosition.To2D()) <= m.ServerPosition.Distance(ObjectManager.Player.ServerPosition)
+                            && m.IsValidTarget(Range, false));
             }
         }
 
@@ -77,8 +77,8 @@ namespace VayneHunter_Reborn.Utility
                 return
                     HeroManager.Enemies.Where(
                         m =>
-                            m.LSDistance(ObjectManager.Player, true) <= Math.Pow(1000, 2) && m.LSIsValidTarget(1500, false) &&
-                            m.LSCountEnemiesInRange(m.IsMelee() ? m.AttackRange * 1.5f : m.AttackRange + 20 * 1.5f) > 0);
+                            m.Distance(ObjectManager.Player, true) <= Math.Pow(1000, 2) && m.IsValidTarget(1500, false) &&
+                            m.CountEnemiesInRange(m.IsMelee() ? m.AttackRange * 1.5f : m.AttackRange + 20 * 1.5f) > 0);
             }
         }
 

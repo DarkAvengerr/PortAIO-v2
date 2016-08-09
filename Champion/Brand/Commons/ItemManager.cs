@@ -36,7 +36,7 @@ namespace TheBrand.Commons
         private static void Update(ComboProvider combo)
         {
             var target = combo.Target;
-            if (!target.LSIsValidTarget()) return;
+            if (!target.IsValidTarget()) return;
             if (combo.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && !_combo || combo.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && !_harass || (combo.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && combo.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed)) return;
             foreach (var item in _items)
                 if (item.Value)

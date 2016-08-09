@@ -21,7 +21,7 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
         public bool ShouldGetExecuted()
         {
             return MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.condemn.autoe") &&
-                   Variables.spells[SpellSlot.E].LSIsReady();
+                   Variables.spells[SpellSlot.E].IsReady();
         }
 
         public ModuleType GetModuleType()
@@ -33,14 +33,14 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
         {
             var pushDistance = MenuExtensions.GetItemValue<Slider>("dz191.vhr.misc.condemn.pushdistance").Value - 25;
 
-            foreach (var target in HeroManager.Enemies.Where(en => en.LSIsValidTarget(E.Range)))
+            foreach (var target in HeroManager.Enemies.Where(en => en.IsValidTarget(E.Range)))
             {
                 var Prediction = Variables.spells[SpellSlot.E].GetPrediction(target);
 
                 if (Prediction.Hitchance >= HitChance.VeryHigh)
                 {
-                    var endPosition = Prediction.UnitPosition.LSExtend(ObjectManager.Player.ServerPosition, -pushDistance);
-                    if (endPosition.LSIsWall())
+                    var endPosition = Prediction.UnitPosition.Extend(ObjectManager.Player.ServerPosition, -pushDistance);
+                    if (endPosition.IsWall())
                     {
                         E.CastOnUnit(target);
                     }
@@ -50,8 +50,8 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
                         var step = pushDistance / 5f;
                         for (float i = 0; i < pushDistance; i += step)
                         {
-                            var endPositionEx = Prediction.UnitPosition.LSExtend(ObjectManager.Player.ServerPosition, -i);
-                            if (endPositionEx.LSIsWall())
+                            var endPositionEx = Prediction.UnitPosition.Extend(ObjectManager.Player.ServerPosition, -i);
+                            if (endPositionEx.IsWall())
                             {
                                 E.CastOnUnit(target);
                                 return;

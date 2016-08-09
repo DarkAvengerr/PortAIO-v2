@@ -19,7 +19,7 @@ using EloBuddy;
     {
         public static void UpdateLaneClear()
         {
-            if (ELaneClear && E.LSIsReady())
+            if (ELaneClear && E.IsReady())
             {
                 var minion = MinionManager.GetMinions(E.Range).FirstOrDefault();
                 if (minion != null)
@@ -32,7 +32,7 @@ using EloBuddy;
         {
             if (target.Team == GameObjectTeam.Neutral)
                 return;
-            if (QLaneClear && Q.LSIsReady())
+            if (QLaneClear && Q.IsReady())
             {
                 Q.Cast();
             }
@@ -43,9 +43,9 @@ using EloBuddy;
         }
         public static void OnAttackLaneClear(AttackableUnit unit, AttackableUnit target)
         {
-            if (target.LSIsValidTarget() && target.Team == GameObjectTeam.Neutral)
+            if (target.IsValidTarget() && target.Team == GameObjectTeam.Neutral)
                 return;
-            if (WLaneClear && W.LSIsReady())
+            if (WLaneClear && W.IsReady())
             {
                 W.Cast();
             }

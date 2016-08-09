@@ -85,7 +85,7 @@ namespace Elvarus
 
             Items(target);
 
-            if (spells[Spells.E].LSIsReady() && !spells[Spells.Q].IsCharging
+            if (spells[Spells.E].IsReady() && !spells[Spells.Q].IsCharging
                 && ElVarusMenu.Menu.Item("ElVarus.Combo.E").IsActive())
             {
                 if (spells[Spells.E].IsKillable(target) || GetWStacks(target) >= 1)
@@ -98,10 +98,10 @@ namespace Elvarus
                 }
             }
 
-            if (spells[Spells.Q].LSIsReady() && ElVarusMenu.Menu.Item("ElVarus.Combo.Q").IsActive())
+            if (spells[Spells.Q].IsReady() && ElVarusMenu.Menu.Item("ElVarus.Combo.Q").IsActive())
             {
                 if (spells[Spells.Q].IsCharging || ElVarusMenu.Menu.Item("ElVarus.combo.always.Q").IsActive()
-                    || target.LSDistance(Player) > Orbwalking.GetRealAutoAttackRange(target) * 1.2f
+                    || target.Distance(Player) > Orbwalking.GetRealAutoAttackRange(target) * 1.2f
                     || GetWStacks(target) >= ElVarusMenu.Menu.Item("ElVarus.Combo.Stack.Count").GetValue<Slider>().Value
                     || spells[Spells.Q].IsKillable(target))
                 {
@@ -121,13 +121,13 @@ namespace Elvarus
                 }
             }
 
-            if (spells[Spells.R].LSIsReady() && !spells[Spells.Q].IsCharging
-                && target.LSIsValidTarget(spells[Spells.R].Range) && ElVarusMenu.Menu.Item("ElVarus.Combo.R").IsActive())
+            if (spells[Spells.R].IsReady() && !spells[Spells.Q].IsCharging
+                && target.IsValidTarget(spells[Spells.R].Range) && ElVarusMenu.Menu.Item("ElVarus.Combo.R").IsActive())
             {
                 var pred = spells[Spells.R].GetPrediction(target);
                 if (pred.Hitchance >= HitChance.VeryHigh)
                 {
-                    var ultimateHits = HeroManager.Enemies.Where(x => x.LSDistance(target) <= 450f).ToList();
+                    var ultimateHits = HeroManager.Enemies.Where(x => x.Distance(target) <= 450f).ToList();
                     if (ultimateHits.Count >= ElVarusMenu.Menu.Item("ElVarus.Combo.R.Count").GetValue<Slider>().Value)
                     {
                         spells[Spells.R].Cast(pred.CastPosition);
@@ -144,14 +144,14 @@ namespace Elvarus
         private static void Harass()
         {
             var target = TargetSelector.GetTarget(spells[Spells.Q].ChargedMaxRange, TargetSelector.DamageType.Physical);
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
             {
                 return;
             }
 
             if (Player.ManaPercent > ElVarusMenu.Menu.Item("minmanaharass").GetValue<Slider>().Value)
             {
-                if (ElVarusMenu.Menu.Item("ElVarus.Harass.E").IsActive() && spells[Spells.E].LSIsReady() && GetWStacks(target) >= 1)
+                if (ElVarusMenu.Menu.Item("ElVarus.Harass.E").IsActive() && spells[Spells.E].IsReady() && GetWStacks(target) >= 1)
                 {
                     var prediction = spells[Spells.E].GetPrediction(target);
                     if (prediction.Hitchance >= HitChance.VeryHigh)
@@ -160,7 +160,7 @@ namespace Elvarus
                     }
                 }
 
-                if (ElVarusMenu.Menu.Item("ElVarus.Harass.Q").IsActive() && spells[Spells.Q].LSIsReady())
+                if (ElVarusMenu.Menu.Item("ElVarus.Harass.Q").IsActive() && spells[Spells.Q].IsReady())
                 {
                     if (!spells[Spells.Q].IsCharging)
                     {
@@ -210,7 +210,7 @@ namespace Elvarus
                 cutlass.Cast(target);
             }
 
-            if (ghost.IsReady() && ghost.IsOwned(Player) && target.LSIsValidTarget(spells[Spells.Q].Range) && useYoumuu)
+            if (ghost.IsReady() && ghost.IsOwned(Player) && target.IsValidTarget(spells[Spells.Q].Range) && useYoumuu)
             {
                 ghost.Cast();
             }
@@ -232,7 +232,7 @@ namespace Elvarus
             {
                 foreach (var minion in minions)
                 {
-                    if (spells[Spells.Q].LSIsReady() && useQ)
+                    if (spells[Spells.Q].IsReady() && useQ)
                     {
                         if (!spells[Spells.Q].IsCharging)
                         {
@@ -245,7 +245,7 @@ namespace Elvarus
                         }
                     }
 
-                    if (spells[Spells.E].LSIsReady() && useE)
+                    if (spells[Spells.E].IsReady() && useE)
                     {
                         spells[Spells.E].CastOnUnit(minion);
                     }
@@ -256,13 +256,13 @@ namespace Elvarus
         //Credits to God :cat_lazy:
         private static void Killsteal()
         {
-            if (ElVarusMenu.Menu.Item("ElVarus.KSSS").IsActive() && spells[Spells.Q].LSIsReady())
+            if (ElVarusMenu.Menu.Item("ElVarus.KSSS").IsActive() && spells[Spells.Q].IsReady())
             {
                 foreach (var target in
                     HeroManager.Enemies.Where(
                         enemy =>
-                        enemy.LSIsValidTarget() && spells[Spells.Q].IsKillable(enemy)
-                        && Player.LSDistance(enemy.Position) <= spells[Spells.Q].ChargedMaxRange))
+                        enemy.IsValidTarget() && spells[Spells.Q].IsKillable(enemy)
+                        && Player.Distance(enemy.Position) <= spells[Spells.Q].ChargedMaxRange))
                 {
                     if (!spells[Spells.Q].IsCharging)
                     {
@@ -294,12 +294,12 @@ namespace Elvarus
                 return;
             }
 
-            if (spells[Spells.Q].LSIsReady() && ElVarusMenu.Menu.Item("useQFarm").IsActive())
+            if (spells[Spells.Q].IsReady() && ElVarusMenu.Menu.Item("useQFarm").IsActive())
             {
                 var allMinions = MinionManager.GetMinions(Player.ServerPosition, spells[Spells.Q].Range);
                 {
                     foreach (var minion in
-                        allMinions.Where(minion => minion.Health <= Player.LSGetSpellDamage(minion, SpellSlot.Q)))
+                        allMinions.Where(minion => minion.Health <= Player.GetSpellDamage(minion, SpellSlot.Q)))
                     {
                         var killcount = 0;
 
@@ -317,7 +317,7 @@ namespace Elvarus
 
                         if (killcount >= ElVarusMenu.Menu.Item("ElVarus.Count.Minions").GetValue<Slider>().Value)
                         {
-                            if (minion.LSIsValidTarget())
+                            if (minion.IsValidTarget())
                             {
                                 spells[Spells.Q].Cast(minion);
                                 return;
@@ -327,7 +327,7 @@ namespace Elvarus
                 }
             }
 
-            if (!ElVarusMenu.Menu.Item("useQFarm").IsActive() || !spells[Spells.E].LSIsReady())
+            if (!ElVarusMenu.Menu.Item("useQFarm").IsActive() || !spells[Spells.E].IsReady())
             {
                 return;
             }
@@ -363,7 +363,7 @@ namespace Elvarus
             Killsteal();
 
             var target = TargetSelector.GetTarget(spells[Spells.R].Range, TargetSelector.DamageType.Physical);
-            if (spells[Spells.R].LSIsReady() && target.LSIsValidTarget()
+            if (spells[Spells.R].IsReady() && target.IsValidTarget()
                 && ElVarusMenu.Menu.Item("ElVarus.SemiR").GetValue<KeyBind>().Active)
             {
                 spells[Spells.R].CastOnUnit(target);

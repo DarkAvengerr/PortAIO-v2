@@ -110,7 +110,7 @@ namespace Gnar
 
         public static bool IsEnabledAndReady(this Spell spell, string mode)
         {
-            return spell.IsEnabled(mode) && spell.LSIsReady();
+            return spell.IsEnabled(mode) && spell.IsReady();
         }
 
         public static AIHeroClient GetTarget(this Spell spell, float extraRange = 0)

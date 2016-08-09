@@ -799,12 +799,12 @@ namespace TreeLib.Core
             }
 
             foreach (var gapcloser in
-                ActiveGapclosers.Where(gapcloser => gapcloser.Sender.LSIsValidTarget())
+                ActiveGapclosers.Where(gapcloser => gapcloser.Sender.IsValidTarget())
                     .Where(
                         gapcloser =>
                             gapcloser.SkillType == GapcloserType.Targeted ||
                             (gapcloser.SkillType == GapcloserType.Skillshot &&
-                             ObjectManager.Player.LSDistance(gapcloser.Sender, true) < 250000))) // 500 * 500
+                             ObjectManager.Player.Distance(gapcloser.Sender, true) < 250000))) // 500 * 500
             {
                 OnEnemyGapcloser(gapcloser);
             }
@@ -831,7 +831,7 @@ namespace TreeLib.Core
                     TickCount = Utils.TickCount,
                     SkillType =
                         args.Target != null && args.Target.IsMe ? GapcloserType.Targeted : GapcloserType.Skillshot,
-                    Slot = ((AIHeroClient) sender).LSGetSpellSlot(args.SData.Name)
+                    Slot = ((AIHeroClient) sender).GetSpellSlot(args.SData.Name)
                 });
         }
 

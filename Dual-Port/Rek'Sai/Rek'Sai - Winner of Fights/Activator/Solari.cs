@@ -50,7 +50,7 @@ using EloBuddy;
             {
                 foreach (var ally in HeroManager.Allies)
                 {
-                    if (!ally.IsMe && !ally.LSIsRecalling() && ally.HealthPercent <= allyHP && ObjectManager.Player.LSDistance(ally.ServerPosition) <= 590f)
+                    if (!ally.IsMe && !ally.IsRecalling() && ally.HealthPercent <= allyHP && ObjectManager.Player.Distance(ally.ServerPosition) <= 590f)
                     {
                         Items.UseItem(3190);
                     }

@@ -52,7 +52,7 @@ using EloBuddy;
 
         public void Cast(Obj_AI_Base t)
         {
-            if (Slot != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Ready && t.LSDistance(ObjectManager.Player.ServerPosition) < Range)
+            if (Slot != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(Slot) == SpellState.Ready && t.Distance(ObjectManager.Player.ServerPosition) < Range)
                 ObjectManager.Player.Spellbook.CastSpell(Slot, t);
         }
     }

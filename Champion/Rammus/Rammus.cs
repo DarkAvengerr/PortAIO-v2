@@ -108,7 +108,7 @@ namespace BrianSharp.Plugin
 
         private static void OnUpdate(EventArgs args)
         {
-            if (Player.IsDead || MenuGUI.IsChatOpen || Player.LSIsRecalling())
+            if (Player.IsDead || MenuGUI.IsChatOpen || Player.IsRecalling())
             {
                 return;
             }
@@ -142,18 +142,18 @@ namespace BrianSharp.Plugin
             }
             if (GetValue<bool>("Draw", "E") && E.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, E.Range, E.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.Green : Color.Red);
             }
             if (GetValue<bool>("Draw", "R") && R.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, R.Range, R.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, R.Range, R.IsReady() ? Color.Green : Color.Red);
             }
         }
 
         private static void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (Player.IsDead || !GetValue<bool>("AntiGap", "Q") ||
-                !GetValue<bool>("AntiGap", gapcloser.Sender.ChampionName + "_" + gapcloser.Slot) || !Q.LSIsReady())
+                !GetValue<bool>("AntiGap", gapcloser.Sender.ChampionName + "_" + gapcloser.Slot) || !Q.IsReady())
             {
                 return;
             }
@@ -176,7 +176,7 @@ namespace BrianSharp.Plugin
 
         private static void Fight()
         {
-            if (GetValue<bool>("Combo", "R") && R.LSIsReady())
+            if (GetValue<bool>("Combo", "R") && R.IsReady())
             {
                 switch (GetValue<StringList>("Combo", "RMode").SelectedIndex)
                 {
@@ -187,7 +187,7 @@ namespace BrianSharp.Plugin
                         }
                         break;
                     case 1:
-                        if (Player.LSCountEnemiesInRange(R.Range) >= GetValue<Slider>("Combo", "RCountA").Value &&
+                        if (Player.CountEnemiesInRange(R.Range) >= GetValue<Slider>("Combo", "RCountA").Value &&
                             R.Cast(PacketCast))
                         {
                             return;
@@ -199,13 +199,13 @@ namespace BrianSharp.Plugin
             {
                 return;
             }
-            if (GetValue<bool>("Combo", "Q") && Q.LSIsReady() && Q.GetTarget(600) != null &&
-                ((GetValue<bool>("Combo", "E") && E.LSIsReady() && E.GetTarget() == null) || !HaveW) && Q.Cast(PacketCast))
+            if (GetValue<bool>("Combo", "Q") && Q.IsReady() && Q.GetTarget(600) != null &&
+                ((GetValue<bool>("Combo", "E") && E.IsReady() && E.GetTarget() == null) || !HaveW) && Q.Cast(PacketCast))
             {
                 return;
             }
             if (GetValue<bool>("Combo", "E") && (!GetValue<bool>("Combo", "EW") || HaveW) &&
-                E.CastOnBestTarget(0, PacketCast).LSIsCasted())
+                E.CastOnBestTarget(0, PacketCast).IsCasted())
             {
                 return;
             }
@@ -223,13 +223,13 @@ namespace BrianSharp.Plugin
             {
                 return;
             }
-            if (GetValue<bool>("Clear", "Q") && Q.LSIsReady() && !HaveW &&
+            if (GetValue<bool>("Clear", "Q") && Q.IsReady() && !HaveW &&
                 (minionObj.Count(i => Q.IsInRange(i)) > 2 || minionObj.Any(i => i.MaxHealth >= 1200 && Q.IsInRange(i)) ||
                  !minionObj.Any(i => Orbwalk.InAutoAttackRange(i, 40))) && Q.Cast(PacketCast))
             {
                 return;
             }
-            if (GetValue<bool>("Clear", "E") && E.LSIsReady() &&
+            if (GetValue<bool>("Clear", "E") && E.IsReady() &&
                 Player.HealthPercent >= GetValue<Slider>("Clear", "EHpA").Value &&
                 (!GetValue<bool>("Clear", "EW") || HaveW))
             {
@@ -239,7 +239,7 @@ namespace BrianSharp.Plugin
                     return;
                 }
             }
-            if (GetValue<bool>("Clear", "W") && W.LSIsReady() &&
+            if (GetValue<bool>("Clear", "W") && W.IsReady() &&
                 (minionObj.Count(i => Orbwalk.InAutoAttackRange(i)) > 2 ||
                  minionObj.Any(i => i.MaxHealth >= 1200 && Orbwalk.InAutoAttackRange(i))))
             {
@@ -249,7 +249,7 @@ namespace BrianSharp.Plugin
 
         private static void KillSteal()
         {
-            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.LSIsReady())
+            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.IsReady())
             {
                 var target = TargetSelector.GetTarget(600, TargetSelector.DamageType.True);
                 if (target != null && CastIgnite(target))

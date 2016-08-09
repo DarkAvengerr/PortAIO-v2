@@ -107,11 +107,11 @@ using EloBuddy; namespace SFXUtility.Features.Others
             }
             if (args.Path.Any())
             {
-                var first = args.Path.FirstOrDefault(p => p.LSDistance(_fountain.Position) < FountainRange);
+                var first = args.Path.FirstOrDefault(p => p.Distance(_fountain.Position) < FountainRange);
                 if (!first.Equals(default(Vector3)))
                 {
                     EloBuddy.Player.IssueOrder(
-                        GameObjectOrder.MoveTo, _fountain.Position.LSExtend(first, FountainRange));
+                        GameObjectOrder.MoveTo, _fountain.Position.Extend(first, FountainRange));
                 }
             }
         }

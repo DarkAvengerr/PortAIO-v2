@@ -331,7 +331,7 @@ namespace UnderratedAIO.Helpers
         /// <param name="target">The target.</param>
         private static void FireAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (AfterAttack != null && target.LSIsValidTarget())
+            if (AfterAttack != null && target.IsValidTarget())
             {
                 AfterAttack(unit, target);
             }
@@ -343,7 +343,7 @@ namespace UnderratedAIO.Helpers
         /// <param name="newTarget">The new target.</param>
         private static void FireOnTargetSwitch(AttackableUnit newTarget)
         {
-            if (OnTargetChange != null && (!_lastTarget.LSIsValidTarget() || _lastTarget != newTarget))
+            if (OnTargetChange != null && (!_lastTarget.IsValidTarget() || _lastTarget != newTarget))
             {
                 OnTargetChange(_lastTarget, newTarget);
             }
@@ -400,7 +400,7 @@ namespace UnderratedAIO.Helpers
         public static float GetRealAutoAttackRange(AttackableUnit target)
         {
             var result = Player.AttackRange + Player.BoundingRadius;
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 var aiBase = target as Obj_AI_Base;
                 if (aiBase != null && Player.ChampionName == "Caitlyn")
@@ -435,15 +435,15 @@ namespace UnderratedAIO.Helpers
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public static bool InAutoAttackRange(AttackableUnit target)
         {
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return false;
             }
             var myRange = GetRealAutoAttackRange(target);
             return
                 Vector2.DistanceSquared(
-                    target is Obj_AI_Base ? ((Obj_AI_Base) target).ServerPosition.LSTo2D() : target.Position.LSTo2D(),
-                    Player.ServerPosition.LSTo2D()) <= myRange * myRange;
+                    target is Obj_AI_Base ? ((Obj_AI_Base) target).ServerPosition.To2D() : target.Position.To2D(),
+                    Player.ServerPosition.To2D()) <= myRange * myRange;
         }
 
         /// <summary>
@@ -557,7 +557,7 @@ namespace UnderratedAIO.Helpers
         {
             var playerPosition = Player.ServerPosition;
 
-            if (playerPosition.LSDistance(position, true) < holdAreaRadius * holdAreaRadius)
+            if (playerPosition.Distance(position, true) < holdAreaRadius * holdAreaRadius)
             {
                 if (Player.Path.Length > 0)
                 {
@@ -567,20 +567,20 @@ namespace UnderratedAIO.Helpers
                 }
                 return;
             }
-            if (Game.CursorPos.LSDistance(LastMoveCommandPosition) < 20 && Player.IsMoving)
+            if (Game.CursorPos.Distance(LastMoveCommandPosition) < 20 && Player.IsMoving)
             {
                 return;
             }
             var point = position;
 
-            if (Player.LSDistance(point, true) < 150 * 150)
+            if (Player.Distance(point, true) < 150 * 150)
             {
-                point = playerPosition.LSExtend(
+                point = playerPosition.Extend(
                     position, randomizeMinDistance ? (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance : _minDistance);
             }
             var angle = 0f;
-            var currentPath = Player.LSGetWaypoints();
-            if (currentPath.Count > 1 && currentPath.LSPathLength() > 100)
+            var currentPath = Player.GetWaypoints();
+            if (currentPath.Count > 1 && currentPath.PathLength() > 100)
             {
                 var movePath = Player.GetPath(point);
 
@@ -588,8 +588,8 @@ namespace UnderratedAIO.Helpers
                 {
                     var v1 = currentPath[1] - currentPath[0];
                     var v2 = movePath[1] - movePath[0];
-                    angle = v1.LSAngleBetween(v2.LSTo2D());
-                    var distance = movePath.Last().LSTo2D().LSDistance(currentPath.Last(), true);
+                    angle = v1.AngleBetween(v2.To2D());
+                    var distance = movePath.Last().To2D().Distance(currentPath.Last(), true);
 
                     if ((angle < 10 && distance < 500 * 500) || distance < 50 * 50)
                     {
@@ -637,7 +637,7 @@ namespace UnderratedAIO.Helpers
             }
             try
             {
-                if (target.LSIsValidTarget() && !target.IsDead && target.IsTargetable && target.IsVisible && EloBuddy.SDK.Orbwalker.CanAutoAttack && Attack)
+                if (target.IsValidTarget() && !target.IsDead && target.IsTargetable && target.IsVisible && EloBuddy.SDK.Orbwalker.CanAutoAttack && Attack)
                 {
                     DisableNextAttack = false;
                     FireBeforeAttack(target);
@@ -667,8 +667,8 @@ namespace UnderratedAIO.Helpers
                         return;
                     }
                     if (Player.IsMelee() && meleePrediction && target != null &&
-                        target.Position.LSDistance(Player.Position) + 25 < GetRealAutoAttackRange(target) &&
-                        target is AIHeroClient && Game.CursorPos.LSDistance(target.Position) < 300)
+                        target.Position.Distance(Player.Position) + 25 < GetRealAutoAttackRange(target) &&
+                        target is AIHeroClient && Game.CursorPos.Distance(target.Position) < 300)
                     {
                         AIHeroClient tar = (AIHeroClient) target;
                         var prediction = AutoAttack.GetPrediction((Obj_AI_Base) target);
@@ -678,7 +678,7 @@ namespace UnderratedAIO.Helpers
                         {
                             pos = position;
                         }
-                        if (Player.LSDistance(target) > target.BoundingRadius &&
+                        if (Player.Distance(target) > target.BoundingRadius &&
                             !CombatHelper.IsFacing((Obj_AI_Base) target, Player.Position, 120f) && tar.IsMoving)
                         {
                             AutoAttack.Delay = Player.BasicAttack.SpellCastTime;
@@ -1134,11 +1134,11 @@ namespace UnderratedAIO.Helpers
                     ObjectManager.Get<Obj_AI_Minion>()
                         .Any(
                             minion =>
-                                minion.LSIsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
+                                minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                                 InAutoAttackRange(minion) && MinionManager.IsMinion(minion, false) &&
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay) <=
-                                Player.LSGetAutoAttackDamage(minion));
+                                Player.GetAutoAttackDamage(minion));
             }
 
             private bool ShouldWaitUnderTurret(Obj_AI_Minion noneKillableMinion)
@@ -1148,7 +1148,7 @@ namespace UnderratedAIO.Helpers
                         .Any(
                             minion =>
                                 (noneKillableMinion != null ? noneKillableMinion.NetworkId != minion.NetworkId : true) &&
-                                minion.LSIsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
+                                minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                                 InAutoAttackRange(minion) && MinionManager.IsMinion(minion, false) &&
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion,
@@ -1159,7 +1159,7 @@ namespace UnderratedAIO.Helpers
                                              : Player.AttackCastDelay * 1000 +
                                                1000 * (Player.AttackRange + 2 * Player.BoundingRadius) /
                                                Player.BasicAttack.MissileSpeed)), FarmDelay) <=
-                                Player.LSGetAutoAttackDamage(minion));
+                                Player.GetAutoAttackDamage(minion));
             }
 
             /// <summary>
@@ -1172,7 +1172,7 @@ namespace UnderratedAIO.Helpers
                 var mode = ActiveMode;
 
                 //Forced target
-                if (_forcedTarget.LSIsValidTarget() && InAutoAttackRange(_forcedTarget) && _forcedTarget.IsVisible && _forcedTarget.IsHPBarRendered && !_forcedTarget.IsDead && _forcedTarget.IsTargetable)
+                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget) && _forcedTarget.IsVisible && _forcedTarget.IsHPBarRendered && !_forcedTarget.IsDead && _forcedTarget.IsTargetable)
                 {
                     return _forcedTarget;
                 }
@@ -1189,14 +1189,14 @@ namespace UnderratedAIO.Helpers
                 /*Killable Minion*/
                 if ((mode == OrbwalkingMode.LaneClear || mode == OrbwalkingMode.Mixed || mode == OrbwalkingMode.LastHit ||
                      mode == OrbwalkingMode.Freeze) &&
-                    (!_config.Item("Support", true).GetValue<bool>() || (Player.LSCountAlliesInRange(1000) == 0 /*||
+                    (!_config.Item("Support", true).GetValue<bool>() || (Player.CountAlliesInRange(1000) == 0 /*||
                       Player.Buffs.Any(buff => buff.Name == "talentreaperdisplay" && buff.Count > 0))*/)))
                 {
                     var MinionList =
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 minion =>
-                                    minion.LSIsValidTarget() && InAutoAttackRange(minion) && minion.IsHPBarRendered && minion.IsVisible && !minion.IsDead && minion.IsTargetable &&
+                                    minion.IsValidTarget() && InAutoAttackRange(minion) && minion.IsHPBarRendered && minion.IsVisible && !minion.IsDead && minion.IsTargetable &&
                                     NetworkIDBlackList.All(n => n.networkId != minion.NetworkId))
                             .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                             .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
@@ -1206,7 +1206,7 @@ namespace UnderratedAIO.Helpers
                     foreach (var minion in MinionList)
                     {
                         var t = (int) (Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
-                                1000 * (int) Math.Max(0, Player.LSDistance(minion) - Player.BoundingRadius) /
+                                1000 * (int) Math.Max(0, Player.Distance(minion) - Player.BoundingRadius) /
                                 (int) GetMyProjectileSpeed();
 
                         if (mode == OrbwalkingMode.Freeze)
@@ -1221,7 +1221,7 @@ namespace UnderratedAIO.Helpers
                              minion.CharData.BaseSkinName != "jarvanivstandard" ||
                              MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())))
                         {
-                            var damage = Player.LSGetAutoAttackDamage(minion, true);
+                            var damage = Player.GetAutoAttackDamage(minion, true);
                             var killable = predHealth <= damage;
                             var dead = predHealth <= 0;
 
@@ -1266,21 +1266,21 @@ namespace UnderratedAIO.Helpers
                 {
                     /* turrets */
                     foreach (var turret in
-                        ObjectManager.Get<Obj_AI_Turret>().Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+                        ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                     {
                         return turret;
                     }
 
                     /* inhibitor */
                     foreach (var turret in
-                        ObjectManager.Get<Obj_BarracksDampener>().Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+                        ObjectManager.Get<Obj_BarracksDampener>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                     {
                         return turret;
                     }
 
                     /* nexus */
                     foreach (var nexus in
-                        ObjectManager.Get<Obj_HQ>().Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+                        ObjectManager.Get<Obj_HQ>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                     {
                         return nexus;
                     }
@@ -1290,7 +1290,7 @@ namespace UnderratedAIO.Helpers
                 if (mode != OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target.LSIsValidTarget() && InAutoAttackRange(target) && target.IsHPBarRendered && target.IsVisible && !target.IsDead && target.IsTargetable)
+                    if (target.IsValidTarget() && InAutoAttackRange(target) && target.IsHPBarRendered && target.IsVisible && !target.IsDead && target.IsTargetable)
                     {
                         return target;
                     }
@@ -1303,7 +1303,7 @@ namespace UnderratedAIO.Helpers
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 mob =>
-                                    mob.LSIsValidTarget() && mob.Team == GameObjectTeam.Neutral && InAutoAttackRange(mob) && mob.IsTargetable &&
+                                    mob.IsValidTarget() && mob.Team == GameObjectTeam.Neutral && InAutoAttackRange(mob) && mob.IsTargetable &&
                                     mob.CharData.BaseSkinName != "gangplankbarrel");
 
                     result = _config.Item("Smallminionsprio").GetValue<bool>()
@@ -1322,9 +1322,9 @@ namespace UnderratedAIO.Helpers
                 {
                     var closestTower =
                         ObjectManager.Get<Obj_AI_Turret>()
-                            .MinOrDefault(t => t.IsAlly && !t.IsDead ? Player.LSDistance(t, true) : float.MaxValue);
+                            .MinOrDefault(t => t.IsAlly && !t.IsDead ? Player.Distance(t, true) : float.MaxValue);
 
-                    if (closestTower != null && Player.LSDistance(closestTower, true) < 1500 * 1500)
+                    if (closestTower != null && Player.Distance(closestTower, true) < 1500 * 1500)
                     {
                         Obj_AI_Minion farmUnderTurretMinion = null;
                         Obj_AI_Minion noneKillableMinion = null;
@@ -1333,7 +1333,7 @@ namespace UnderratedAIO.Helpers
                             MinionManager.GetMinions(Player.Position, Player.AttackRange + 200)
                                 .Where(
                                     minion =>
-                                        InAutoAttackRange(minion) && closestTower.LSDistance(minion, true) < 900 * 900 && minion.IsTargetable && minion.IsVisible && minion.IsHPBarRendered && !minion.IsDead)
+                                        InAutoAttackRange(minion) && closestTower.Distance(minion, true) < 900 * 900 && minion.IsTargetable && minion.IsVisible && minion.IsHPBarRendered && !minion.IsDead)
                                 .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                                 .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                                 .ThenByDescending(minion => minion.MaxHealth)
@@ -1360,7 +1360,7 @@ namespace UnderratedAIO.Helpers
                                                      Math.Max(
                                                          0,
                                                          (int)
-                                                             (turretMinion.LSDistance(closestTower) -
+                                                             (turretMinion.Distance(closestTower) -
                                                               closestTower.BoundingRadius)) /
                                                      (int) (closestTower.BasicAttack.MissileSpeed + 70);
                                 // calculate the HP before try to balance it
@@ -1386,7 +1386,7 @@ namespace UnderratedAIO.Helpers
                                 // calculate the hits is needed and possibilty to balance
                                 if (hpLeft == 0 && turretAttackCount != 0 && hpLeftBeforeDie != 0)
                                 {
-                                    var damage = (int) Player.LSGetAutoAttackDamage(turretMinion, true);
+                                    var damage = (int) Player.GetAutoAttackDamage(turretMinion, true);
                                     var hits = hpLeftBeforeDie / damage;
                                     var timeBeforeDie = turretLandTick +
                                                         (turretAttackCount + 1) *
@@ -1400,7 +1400,7 @@ namespace UnderratedAIO.Helpers
                                     var timeToLandAttack = Player.IsMelee
                                         ? Player.AttackCastDelay * 1000
                                         : Player.AttackCastDelay * 1000 +
-                                          1000 * Math.Max(0, turretMinion.LSDistance(Player) - Player.BoundingRadius) /
+                                          1000 * Math.Max(0, turretMinion.Distance(Player) - Player.BoundingRadius) /
                                           Player.BasicAttack.MissileSpeed;
                                     if (hits >= 1 &&
                                         hits * Player.AttackDelay * 1000 + timeUntilAttackReady + timeToLandAttack <
@@ -1435,8 +1435,8 @@ namespace UnderratedAIO.Helpers
                                             x.NetworkId != turretMinion.NetworkId && x is Obj_AI_Minion &&
                                             !HealthPrediction.HasMinionAggro(x as Obj_AI_Minion)))
                                 {
-                                    var playerDamage = (int) Player.LSGetAutoAttackDamage(minion);
-                                    var turretDamage = (int) closestTower.LSGetAutoAttackDamage(minion, true);
+                                    var playerDamage = (int) Player.GetAutoAttackDamage(minion);
+                                    var turretDamage = (int) closestTower.GetAutoAttackDamage(minion, true);
                                     var leftHP = (int) minion.Health % turretDamage;
                                     if (leftHP > playerDamage)
                                     {
@@ -1453,7 +1453,7 @@ namespace UnderratedAIO.Helpers
                                 {
                                     if (1f / Player.AttackDelay >= 1f &&
                                         (int) (turretAttackCount * closestTower.AttackDelay / Player.AttackDelay) *
-                                        Player.LSGetAutoAttackDamage(lastminion) > lastminion.Health)
+                                        Player.GetAutoAttackDamage(lastminion) > lastminion.Health)
                                     {
                                         return lastminion;
                                     }
@@ -1477,8 +1477,8 @@ namespace UnderratedAIO.Helpers
                                 {
                                     if (closestTower != null)
                                     {
-                                        var playerDamage = (int) Player.LSGetAutoAttackDamage(minion);
-                                        var turretDamage = (int) closestTower.LSGetAutoAttackDamage(minion, true);
+                                        var playerDamage = (int) Player.GetAutoAttackDamage(minion);
+                                        var turretDamage = (int) closestTower.GetAutoAttackDamage(minion, true);
                                         var leftHP = (int) minion.Health % turretDamage;
                                         if (leftHP > playerDamage)
                                         {
@@ -1509,11 +1509,11 @@ namespace UnderratedAIO.Helpers
                 {
                     if (!ShouldWait())
                     {
-                        if (_prevMinion.LSIsValidTarget() && InAutoAttackRange(_prevMinion) && _prevMinion.IsHPBarRendered && _prevMinion.IsVisible && !_prevMinion.IsDead && _prevMinion.IsTargetable)
+                        if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion) && _prevMinion.IsHPBarRendered && _prevMinion.IsVisible && !_prevMinion.IsDead && _prevMinion.IsTargetable)
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 _prevMinion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay);
-                            if (predHealth >= 2 * Player.LSGetAutoAttackDamage(_prevMinion) ||
+                            if (predHealth >= 2 * Player.GetAutoAttackDamage(_prevMinion) ||
                                 Math.Abs(predHealth - _prevMinion.Health) < float.Epsilon)
                             {
                                 return _prevMinion;
@@ -1524,7 +1524,7 @@ namespace UnderratedAIO.Helpers
                             ObjectManager.Get<Obj_AI_Minion>()
                                 .Where(
                                     minion =>
-                                        minion.LSIsValidTarget() && InAutoAttackRange(minion) &&
+                                        minion.IsValidTarget() && InAutoAttackRange(minion) &&
                                         (_config.Item("AttackWards").GetValue<bool>() || !MinionManager.IsWard(minion)) && minion.IsHPBarRendered && minion.IsVisible && !minion.IsDead && minion.IsTargetable &&
                                         (_config.Item("AttackPetsnTraps").GetValue<bool>() &&
                                          minion.CharData.BaseSkinName != "jarvanivstandard" ||
@@ -1534,7 +1534,7 @@ namespace UnderratedAIO.Helpers
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay)
                             where
-                                predHealth >= 2 * Player.LSGetAutoAttackDamage(minion) ||
+                                predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
                                 Math.Abs(predHealth - minion.Health) < float.Epsilon
                             select minion).MaxOrDefault(
                                 m => !MinionManager.IsMinion(m, true) ? float.MaxValue : m.Health);
@@ -1574,7 +1574,7 @@ namespace UnderratedAIO.Helpers
                     NetworkIDBlackList.RemoveAll(e => System.Environment.TickCount - e.time > 1000);
                     var target = GetTarget();
                     Orbwalk(
-                        target, _orbwalkingPoint.LSTo2D().LSIsValid() ? _orbwalkingPoint : Game.CursorPos,
+                        target, _orbwalkingPoint.To2D().IsValid() ? _orbwalkingPoint : Game.CursorPos,
                         _config.Item("ExtraWindup").GetValue<Slider>().Value,
                         Math.Max(_config.Item("HoldPosRadius").GetValue<Slider>().Value, 30),
                         _config.Item("LastHitHelper").GetValue<bool>(), true,
@@ -1602,7 +1602,7 @@ namespace UnderratedAIO.Helpers
                 if (_config.Item("AACircle2").GetValue<Circle>().Active)
                 {
                     foreach (var target in
-                        HeroManager.Enemies.FindAll(target => target.LSIsValidTarget(1175)))
+                        HeroManager.Enemies.FindAll(target => target.IsValidTarget(1175)))
                     {
                         Render.Circle.DrawCircle(
                             target.Position, GetAttackRange(target), _config.Item("AACircle2").GetValue<Circle>().Color,
@@ -1625,17 +1625,17 @@ namespace UnderratedAIO.Helpers
                     foreach (var minion in
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
-                                x => x.Name.ToLower().Contains("minion") && x.IsHPBarRendered && x.LSIsValidTarget(1000)))
+                                x => x.Name.ToLower().Contains("minion") && x.IsHPBarRendered && x.IsValidTarget(1000)))
                     {
-                        if (minion.Health < ObjectManager.Player.LSGetAutoAttackDamage(minion, true))
+                        if (minion.Health < ObjectManager.Player.GetAutoAttackDamage(minion, true))
                         {
                             Render.Circle.DrawCircle(minion.Position, 50, Color.LimeGreen, 7);
                         }
-                        else if (minion.Health < ObjectManager.Player.LSGetAutoAttackDamage(minion, true) * 1.5f)
+                        else if (minion.Health < ObjectManager.Player.GetAutoAttackDamage(minion, true) * 1.5f)
                         {
                             Render.Circle.DrawCircle(minion.Position, 50, Color.Orange, 7);
                         }
-                        else if (minion.Health < ObjectManager.Player.LSGetAutoAttackDamage(minion, true) * 2f)
+                        else if (minion.Health < ObjectManager.Player.GetAutoAttackDamage(minion, true) * 2f)
                         {
                             Render.Circle.DrawCircle(minion.Position, 50, Color.Red, 7);
                         }

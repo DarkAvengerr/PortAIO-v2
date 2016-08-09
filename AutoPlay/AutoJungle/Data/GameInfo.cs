@@ -56,8 +56,8 @@ using EloBuddy; namespace AutoJungle
             CurrentMonster = 1;
 
             var last =
-                MonsterList.OrderBy(temp => temp.Position.LSDistance(ObjectManager.Player.Position)).FirstOrDefault();
-            if (!ObjectManager.Player.LSInFountain() && last != null && ObjectManager.Player.Level > 1)
+                MonsterList.OrderBy(temp => temp.Position.Distance(ObjectManager.Player.Position)).FirstOrDefault();
+            if (!ObjectManager.Player.InFountain() && last != null && ObjectManager.Player.Level > 1)
             {
                 CurrentMonster = last.Index;
             }
@@ -65,9 +65,9 @@ using EloBuddy; namespace AutoJungle
             {
                 CurrentMonster = 1;
             }
-            Ignite = Program.player.LSGetSpellSlot("summonerdot");
-            Barrier = Program.player.LSGetSpellSlot("summonerbarrier");
-            Heal = Program.player.LSGetSpellSlot("summonerheal");
+            Ignite = Program.player.GetSpellSlot("summonerdot");
+            Barrier = Program.player.GetSpellSlot("summonerbarrier");
+            Heal = Program.player.GetSpellSlot("summonerheal");
 
             Console.WriteLine("AutoJungle Loaded");
         }
@@ -80,7 +80,7 @@ using EloBuddy; namespace AutoJungle
         public bool CanBuyItem()
         {
         if (GameState != State.Positioning ||
-            (ObjectManager.Player.LSHasBuff("ElixirOfWrath") || ObjectManager.Player.LSHasBuff("ElixirOfIron") || ObjectManager.Player.LSHasBuff("ElixirOfSorcery")))
+            (ObjectManager.Player.HasBuff("ElixirOfWrath") || ObjectManager.Player.HasBuff("ElixirOfIron") || ObjectManager.Player.HasBuff("ElixirOfSorcery")))
             {
                 return false;
             }
@@ -110,12 +110,12 @@ using EloBuddy; namespace AutoJungle
 
         public int EnemiesAround
         {
-            get { return Champdata.Hero.LSCountEnemiesInRange(ChampionRange); }
+            get { return Champdata.Hero.CountEnemiesInRange(ChampionRange); }
         }
 
         public int AlliesAround
         {
-            get { return Champdata.Hero.LSCountAlliesInRange(ChampionRange); }
+            get { return Champdata.Hero.CountAlliesInRange(ChampionRange); }
         }
 
 

@@ -49,7 +49,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
                    && (HeroManager.Enemies.Any(
                        x =>
                        x.HealthPercent < this.Menu.Item("BotrkEnemyHp").GetValue<Slider>().Value
-                       && x.LSDistance(this.Player) < 550)
+                       && x.Distance(this.Player) < 550)
                        || this.Player.HealthPercent < this.Menu.Item("BotrkMyHp").GetValue<Slider>().Value);
         }
 
@@ -63,7 +63,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
                 HeroManager.Enemies.FirstOrDefault(
                     x =>
                     x.HealthPercent < this.Menu.Item("BotrkEnemyHp").GetValue<Slider>().Value
-                    && x.LSDistance(this.Player) < 550));
+                    && x.Distance(this.Player) < 550));
         }
 
         #endregion

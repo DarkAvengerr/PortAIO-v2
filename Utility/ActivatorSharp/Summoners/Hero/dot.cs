@@ -26,13 +26,13 @@ using EloBuddy; namespace Activator.Summoners
 
             foreach (var tar in Activator.Heroes)
             {
-                if (!tar.Player.LSIsValidTarget(1500))
+                if (!tar.Player.IsValidTarget(1500))
                 {
                     continue;
                 }
 
-                if (tar.Player.LSHasBuff("kindredrnodeathbuff") || tar.Player.IsZombie ||
-                    tar.Player.LSHasBuff("summonerdot"))
+                if (tar.Player.HasBuff("kindredrnodeathbuff") || tar.Player.IsZombie ||
+                    tar.Player.HasBuff("summonerdot"))
                 {
                     continue;
                 }
@@ -50,7 +50,7 @@ using EloBuddy; namespace Activator.Summoners
                 {
                     if (tar.Player.Health <= ignotedmg)
                     {
-                        if (tar.Player.LSDistance(Player.ServerPosition) <= 600)
+                        if (tar.Player.Distance(Player.ServerPosition) <= 600)
                             UseSpellOn(tar.Player);
                     }
                 }
@@ -68,27 +68,27 @@ using EloBuddy; namespace Activator.Summoners
                         case "Ahri":
                             if (!tar.Player.HasBuffOfType(BuffType.Charm) &&
                                 Menu.Item("ii" + Player.ChampionName).GetValue<bool>() &&
-                                E.LSIsReady())
+                                E.IsReady())
                                 continue;
 
-                            totaldmg += R.LSIsReady() ? R.GetDamage(tar.Player) * 2 : 0;
+                            totaldmg += R.IsReady() ? R.GetDamage(tar.Player) * 2 : 0;
                             break;
                         case "Cassiopeia":
                             if (!tar.Player.HasBuffOfType(BuffType.Poison) &&
                                 Menu.Item("ii" + Player.ChampionName).GetValue<bool>() &&
-                                (Q.LSIsReady() || W.LSIsReady()))
+                                (Q.IsReady() || W.IsReady()))
                                 continue;
 
                             var dmg = Math.Min(6, Player.Mana / E.ManaCost) * E.GetDamage(tar.Player);
                             totaldmg += tar.Player.HasBuffOfType(BuffType.Poison) ? dmg * 2 : dmg;
                             break;
                         case "Diana":
-                            if (!tar.Player.LSHasBuff("dianamoonlight") &&
+                            if (!tar.Player.HasBuff("dianamoonlight") &&
                                 Menu.Item("ii" + Player.ChampionName).GetValue<bool>() &&
-                                Q.LSIsReady())
+                                Q.IsReady())
                                 continue;
 
-                            totaldmg += tar.Player.LSHasBuff("dianamoonlight")
+                            totaldmg += tar.Player.HasBuff("dianamoonlight")
                                 ? R.GetDamage(tar.Player) * 2 : 0;
                             break;
                         case "Evelynn":
@@ -106,14 +106,14 @@ using EloBuddy; namespace Activator.Summoners
 
                     // aa dmg
                     totaldmg += Orbwalking.InAutoAttackRange(tar.Player)
-                        ? Player.LSGetAutoAttackDamage(tar.Player, true) * 3
+                        ? Player.GetAutoAttackDamage(tar.Player, true) * 3
                         : 0;
 
                     // combo damge
                     totaldmg +=
                         Gamedata.DamageLib.Sum(
                             entry =>
-                                Player.GetSpell(entry.Value).LSIsReady(2)
+                                Player.GetSpell(entry.Value).IsReady(2)
                                     ? entry.Key(Player, tar.Player, Player.GetSpell(entry.Value).Level - 1)
                                     : 0);
 
@@ -131,22 +131,22 @@ using EloBuddy; namespace Activator.Summoners
                     if (finaldmg + ignotedmg >= tar.Player.Health)
                     {
                         var nt = ObjectManager.Get<Obj_AI_Turret>().FirstOrDefault(
-                                x => !x.IsDead && x.IsValid && x.Team == tar.Player.Team && tar.Player.LSDistance(x.Position) <= 1250);
+                                x => !x.IsDead && x.IsValid && x.Team == tar.Player.Team && tar.Player.Distance(x.Position) <= 1250);
                         
                         if (nt != null && Menu.Item("itu").GetValue<bool>() && Player.Level <= Menu.Item("igtu").GetValue<Slider>().Value)
                         {
-                            if (Player.LSCountAlliesInRange(750) == 0 && (totaldmg + ignotedmg / 1.85) < tar.Player.Health)
+                            if (Player.CountAlliesInRange(750) == 0 && (totaldmg + ignotedmg / 1.85) < tar.Player.Health)
                                 continue;
                         }
 
-                        if (Orbwalking.InAutoAttackRange(tar.Player) && tar.Player.LSCountAlliesInRange(450) > 1)
+                        if (Orbwalking.InAutoAttackRange(tar.Player) && tar.Player.CountAlliesInRange(450) > 1)
                         {
                             if (totaldmg + ignotedmg / 2.5 >= tar.Player.Health)
                             {
                                 continue;
                             }
 
-                            if (nt != null && tar.Player.LSDistance(nt) <= 600)
+                            if (nt != null && tar.Player.Distance(nt) <= 600)
                             {
                                 continue;
                             }
@@ -158,7 +158,7 @@ using EloBuddy; namespace Activator.Summoners
                             continue;
                         }
 
-                        if (tar.Player.LSDistance(Player.ServerPosition) <= 600)
+                        if (tar.Player.Distance(Player.ServerPosition) <= 600)
                         {
                             UseSpellOn(tar.Player, true);
                         }

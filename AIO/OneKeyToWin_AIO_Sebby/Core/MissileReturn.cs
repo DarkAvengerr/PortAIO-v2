@@ -96,7 +96,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
         public Vector3 CalculateReturnPos()
         {
-            if (Missile != null && Missile.IsValid && Target.LSIsValidTarget())
+            if (Missile != null && Missile.IsValid && Target.IsValidTarget())
             {
                 var finishPosition = Missile.Position;
                 if (Missile.SData.Name.ToLower() == MissileName.ToLower())
@@ -104,19 +104,19 @@ namespace OneKeyToWin_AIO_Sebby.Core
                     finishPosition = MissileEndPos;
                 }
 
-                var misToPlayer = Player.LSDistance(finishPosition);
-                var tarToPlayer = Player.LSDistance(Target);
+                var misToPlayer = Player.Distance(finishPosition);
+                var tarToPlayer = Player.Distance(Target);
 
                 if (misToPlayer > tarToPlayer)
                 {
-                    var misToTarget = Target.LSDistance(finishPosition);
+                    var misToTarget = Target.Distance(finishPosition);
 
                     if (misToTarget < QWER.Range && misToTarget > 50)
                     {
-                        var cursorToTarget = Target.LSDistance(Player.Position.LSExtend(Game.CursorPos, 100));
-                        var ext = finishPosition.LSExtend(Target.ServerPosition, cursorToTarget + misToTarget);
+                        var cursorToTarget = Target.Distance(Player.Position.Extend(Game.CursorPos, 100));
+                        var ext = finishPosition.Extend(Target.ServerPosition, cursorToTarget + misToTarget);
 
-                        if (ext.LSDistance(Player.Position) < 800 && ext.LSCountEnemiesInRange(400) < 2)
+                        if (ext.Distance(Player.Position) < 800 && ext.CountEnemiesInRange(400) < 2)
                         {
                             if (Config.Item("drawHelper", true).GetValue<bool>())
                                 LeagueSharp.Common.Utility.DrawCircle(ext, 100, System.Drawing.Color.White, 1, 1);

@@ -38,7 +38,7 @@ using EloBuddy;
                 return;
             }
 
-            if (annie.GetParamKeyBind("flashtibbers") && (annie.Spells.R.LSIsReady())
+            if (annie.GetParamKeyBind("flashtibbers") && (annie.Spells.R.IsReady())
                 && (FlashSpell.IsReady(annie.Player)) && (annie.CheckStun()))
             {
                 Render.Circle.DrawCircle(annie.Player.Position, annie.Spells.RFlash.Range, Color.DarkGreen, 3);

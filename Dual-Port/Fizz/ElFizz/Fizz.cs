@@ -173,22 +173,22 @@ using EloBuddy;
 
                 var damage = 0f;
 
-                if (q && Q.LSIsReady())
+                if (q && Q.IsReady())
                 {
                     damage += Q.GetDamage(target);
                 }
 
-                if (w && W.LSIsReady())
+                if (w && W.IsReady())
                 {
                     damage += W.GetDamage(target);
                 }
 
-                if (e && E.LSIsReady())
+                if (e && E.IsReady())
                 {
                     damage += E.GetDamage(target);
                 }
 
-                if (r && R.LSIsReady())
+                if (r && R.IsReady())
                 {
                     damage += R.GetDamage(target);
                 }
@@ -211,25 +211,25 @@ using EloBuddy;
 
                 if (!Player.Spellbook.IsAutoAttacking)
                 {
-                    damage += (float)ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                    damage += (float)ObjectManager.Player.GetAutoAttackDamage(enemy, true);
                 }
 
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                 {
                     damage += Q.GetDamage(enemy);
                 }
 
-                if (W.LSIsReady())
+                if (W.IsReady())
                 {
                     damage += W.GetDamage(enemy);
                 }
 
-                if (E.LSIsReady())
+                if (E.IsReady())
                 {
                     damage += E.GetDamage(enemy);
                 }
 
-                if (Player.LSHasBuff("lichbane"))
+                if (Player.HasBuff("lichbane"))
                 {
                     damage +=
                         (float)
@@ -240,7 +240,7 @@ using EloBuddy;
                             + (Player.BaseAbilityDamage + Player.FlatMagicDamageMod) * 0.5);
                 }
 
-                if (R.LSIsReady())
+                if (R.IsReady())
                 {
                     damage += R.GetDamage(enemy);
                 }
@@ -417,8 +417,8 @@ using EloBuddy;
         {
             try
             {
-                return Player.LSDistance(Prediction.GetPrediction(target, 0.2f).UnitPosition) > E.Range
-                           ? Player.Position.LSExtend(Prediction.GetPrediction(target, 0.2f).UnitPosition, E.Range)
+                return Player.Distance(Prediction.GetPrediction(target, 0.2f).UnitPosition) > E.Range
+                           ? Player.Position.Extend(Prediction.GetPrediction(target, 0.2f).UnitPosition, E.Range)
                            : target.Position;
             }
             catch (Exception exception)
@@ -439,7 +439,7 @@ using EloBuddy;
                 var kSableEnemy =
                     HeroManager.Enemies.FirstOrDefault(
                         hero =>
-                        hero.LSIsValidTarget(550) && ShieldCheck(hero) && !hero.LSHasBuff("summonerdot") && !hero.IsZombie
+                        hero.IsValidTarget(550) && ShieldCheck(hero) && !hero.HasBuff("summonerdot") && !hero.IsZombie
                         && Player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite) >= hero.Health);
 
                 if (kSableEnemy != null && IgniteSpell.Slot != SpellSlot.Unknown)
@@ -477,7 +477,7 @@ using EloBuddy;
                     return;
                 }
 
-                if (IsActive("ElFizz.Combo.R.SingleKill") && R.LSIsReady())
+                if (IsActive("ElFizz.Combo.R.SingleKill") && R.IsReady())
                 {
                     if (Qkillable(target))
                     {
@@ -491,7 +491,7 @@ using EloBuddy;
                 if (IsActive("ElFizz.Combo.Gapclose.E")
                     && Player.ManaPercent < Menu.Item("ElFizz.Combo.Gapclose.E.Mana").GetValue<Slider>().Value)
                 {
-                    if (target.LSDistance(Player) > Q.Range && Q.GetDamage(target) > target.Health)
+                    if (target.Distance(Player) > Q.Range && Q.GetDamage(target) > target.Health)
                     {
                         E.Cast(target.Position);
                     }
@@ -500,17 +500,17 @@ using EloBuddy;
                 switch (Menu.Item("ElFizz.Combo.Type").GetValue<StringList>().SelectedIndex)
                 {
                     case 0:
-                        if (IsActive("ElFizz.Combo.Q") && Q.LSIsReady() && target.LSIsValidTarget(Q.Range))
+                        if (IsActive("ElFizz.Combo.Q") && Q.IsReady() && target.IsValidTarget(Q.Range))
                         {
-                            if (Q.Cast(target).LSIsCasted())
+                            if (Q.Cast(target).IsCasted())
                             {
-                                if (E.LSIsReady())
+                                if (E.IsReady())
                                 {
                                     E.Cast(target);
                                 }
                             }
 
-                            if (R.LSIsReady())
+                            if (R.IsReady())
                             {
                                 RCastLogic(target);
                             }
@@ -518,7 +518,7 @@ using EloBuddy;
                         break;
 
                     case 1:
-                        if (R.LSIsReady())
+                        if (R.IsReady())
                         {
                             /*if (Qkillable(target))
                             {
@@ -529,9 +529,9 @@ using EloBuddy;
                             RCastLogic(target);
                         }
 
-                        if (Q.Cast(target).LSIsCasted())
+                        if (Q.Cast(target).IsCasted())
                         {
-                            if (E.LSIsReady())
+                            if (E.IsReady())
                             {
                                 E.Cast(target);
                             }
@@ -540,7 +540,7 @@ using EloBuddy;
                 }
 
 
-                if (IsActive("ElFizz.Combo.Q") && Q.LSIsReady() && target.LSIsValidTarget(Q.Range))
+                if (IsActive("ElFizz.Combo.Q") && Q.IsReady() && target.IsValidTarget(Q.Range))
                 {
                     Q.Cast(target);
                 }
@@ -549,9 +549,9 @@ using EloBuddy;
                 {
                     if (Q.GetDamage(target) + IgniteSpell.GetDamage(target) > target.Health)
                     {
-                        if (target.LSIsValidTarget(Q.Range))
+                        if (target.IsValidTarget(Q.Range))
                         {
-                            if (Q.Cast(target).LSIsCasted())
+                            if (Q.Cast(target).IsCasted())
                             {
                                 Player.Spellbook.CastSpell(IgniteSpell.Slot, target);
                             }
@@ -559,16 +559,16 @@ using EloBuddy;
                     }
                 }
 
-                if (IsActive("ElFizz.Combo.W") && W.LSIsReady() && !Q.LSIsReady() && !E.LSIsReady()
-                    && target.LSIsValidTarget(W.Range))
+                if (IsActive("ElFizz.Combo.W") && W.IsReady() && !Q.IsReady() && !E.IsReady()
+                    && target.IsValidTarget(W.Range))
                 {
                     W.Cast(target);
                 }
 
-                if (IsActive("ElFizz.Combo.E") && E.LSIsReady() && target.LSIsValidTarget(E.Range)
+                if (IsActive("ElFizz.Combo.E") && E.IsReady() && target.IsValidTarget(E.Range)
                     && E.Instance.Name.ToLower() == "fizzjump")
                 {
-                    if (Prediction.GetPrediction(target, 0.5f).UnitPosition.LSDistance(Player.Position) <= E.Range + 450)
+                    if (Prediction.GetPrediction(target, 0.5f).UnitPosition.Distance(Player.Position) <= E.Range + 450)
                     {
                         E.Cast(GetEPosition(target));
                     }
@@ -644,13 +644,13 @@ using EloBuddy;
         {
             try
             {
-                if (E.LSIsReady() && Player.Mana > Menu.Item("ElFizz.Flee.Mana").GetValue<Slider>().Value)
+                if (E.IsReady() && Player.Mana > Menu.Item("ElFizz.Flee.Mana").GetValue<Slider>().Value)
                 {
-                    var fleePosition = Player.Position.LSExtend(Game.CursorPos, E.Range);
-                    if (fleePosition.LSIsWall())
+                    var fleePosition = Player.Position.Extend(Game.CursorPos, E.Range);
+                    if (fleePosition.IsWall())
                     {
                         var longestDash = Player.Position;
-                        if (longestDash.LSDistance(Game.CursorPos) <= 500f)
+                        if (longestDash.Distance(Game.CursorPos) <= 500f)
                         {
                             E.Cast(fleePosition);
                         }
@@ -690,17 +690,17 @@ using EloBuddy;
                     E.Cast((Vector3)LastHarassPos);
                 }
 
-                if (W.LSIsReady() && IsActive("ElFizz.Harass.W") && (Q.LSIsReady() || Orbwalker.InAutoAttackRange(target)))
+                if (W.IsReady() && IsActive("ElFizz.Harass.W") && (Q.IsReady() || Orbwalker.InAutoAttackRange(target)))
                 {
                     W.Cast();
                 }
 
-                if (Q.LSIsReady() && IsActive("ElFizz.Harass.Q"))
+                if (Q.IsReady() && IsActive("ElFizz.Harass.Q"))
                 {
                     Q.Cast(target);
                 }
 
-                if (E.LSIsReady() && IsActive("ElFizz.Harass.E")
+                if (E.IsReady() && IsActive("ElFizz.Harass.E")
                     && Menu.Item("ElFizz.Harass.Mode.E").GetValue<StringList>().SelectedIndex == 1)
                 {
                     E.Cast(target);
@@ -737,12 +737,12 @@ using EloBuddy;
                     return;
                 }
 
-                if (IsActive("ElFizz.jungleclear.Q") && Q.LSIsReady())
+                if (IsActive("ElFizz.jungleclear.Q") && Q.IsReady())
                 {
                     Q.Cast(minion);
                 }
 
-                if (IsActive("ElFizz.jungleclear.E") && E.LSIsReady())
+                if (IsActive("ElFizz.jungleclear.E") && E.IsReady())
                 {
                     E.Cast(minion.Position);
                 }
@@ -761,9 +761,9 @@ using EloBuddy;
             try
             {
                 foreach (
-                    var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) && !x.IsDead && !x.IsZombie))
+                    var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsDead && !x.IsZombie))
                 {
-                    if (enemy.LSIsValidTarget(Q.Range) && enemy.Health < Q.GetDamage(enemy))
+                    if (enemy.IsValidTarget(Q.Range) && enemy.Health < Q.GetDamage(enemy))
                     {
                         if (IsActive("ElFizz.killsteal.Tower") && TowerCheck(enemy))
                         {
@@ -808,17 +808,17 @@ using EloBuddy;
                     return;
                 }
 
-                if (IsActive("ElFizz.laneclear.Q") && Q.LSIsReady())
+                if (IsActive("ElFizz.laneclear.Q") && Q.IsReady())
                 {
-                    if (minion.Where(m => m.LSDistance(Player.Position) <= Q.Range).Count(x => Q.GetDamage(x) > x.Health)
+                    if (minion.Where(m => m.Distance(Player.Position) <= Q.Range).Count(x => Q.GetDamage(x) > x.Health)
                         >= 0)
                     {
                         Q.Cast(minion.FirstOrDefault());
                     }
                 }
 
-                if (IsActive("ElFizz.laneclear.E") && E.LSIsReady()
-                    && minion.Where(m => m.LSDistance(Player.Position) <= E.Width).Count(x => E.GetDamage(x) > x.Health)
+                if (IsActive("ElFizz.laneclear.E") && E.IsReady()
+                    && minion.Where(m => m.Distance(Player.Position) <= E.Width).Count(x => E.GetDamage(x) > x.Health)
                     >= Menu.Item("ElFizz.laneclear.minionshit").GetValue<Slider>().Value)
                 {
                     E.Cast(minion[0].Position);
@@ -841,7 +841,7 @@ using EloBuddy;
             {
                 if (args.SData.Name.ToLower() == "fizzjump" || args.SData.Name.ToLower() == "fizzpiercingstrike")
                 {
-                    if (IsActive("ElFizz.Combo.W") && W.LSIsReady()
+                    if (IsActive("ElFizz.Combo.W") && W.IsReady()
                         && (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
                             || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed))
                     {
@@ -922,7 +922,7 @@ using EloBuddy;
         {
             try
             {
-                return target.Health < Q.GetDamage(target) && target.LSIsValidTarget(Q.Range) && Q.LSIsReady()
+                return target.Health < Q.GetDamage(target) && target.IsValidTarget(Q.Range) && Q.IsReady()
                        && Player.Mana > Q.ManaCost;
             }
             catch (Exception exception)
@@ -947,7 +947,7 @@ using EloBuddy;
 
                 if (prediction.Hitchance >= HitChance.VeryHigh)
                 {
-                    if (!ShieldCheck(target) || IsActive("ElFizz.Combo.Overkill.R") && Player.LSGetSpellDamage(target, SpellSlot.R) > target.Health + target.AttackShield)
+                    if (!ShieldCheck(target) || IsActive("ElFizz.Combo.Overkill.R") && Player.GetSpellDamage(target, SpellSlot.R) > target.Health + target.AttackShield)
                     {
                         return;
                     }
@@ -969,7 +969,7 @@ using EloBuddy;
             try
             {
                 foreach (
-                    var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) && !x.IsDead && !x.IsZombie && ShieldCheck(x)))
+                    var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsDead && !x.IsZombie && ShieldCheck(x)))
                 {
                     if (enemy.Health < CalculateComboDamage(enemy, false, false, false, true))
                     {
@@ -990,9 +990,9 @@ using EloBuddy;
         {
             try
             {
-                return !hero.LSHasBuff("summonerbarrier") || !hero.LSHasBuff("BlackShield")
-                       || !hero.LSHasBuff("SivirShield") || !hero.LSHasBuff("BansheesVeil")
-                       || !hero.LSHasBuff("ShroudofDarkness");
+                return !hero.HasBuff("summonerbarrier") || !hero.HasBuff("BlackShield")
+                       || !hero.HasBuff("SivirShield") || !hero.HasBuff("BansheesVeil")
+                       || !hero.HasBuff("ShroudofDarkness");
             }
             catch (Exception exception)
             {
@@ -1049,7 +1049,7 @@ using EloBuddy;
                 var tower =
                     ObjectManager.Get<Obj_AI_Turret>()
                         .FirstOrDefault(
-                            x => x != null && x.LSDistance(target) <= 800 && x.Health > 0 && x.IsEnemy && x.IsValid);
+                            x => x != null && x.Distance(target) <= 800 && x.Health > 0 && x.IsEnemy && x.IsValid);
 
                 return tower != null;
             }

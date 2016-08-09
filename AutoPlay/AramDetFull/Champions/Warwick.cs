@@ -37,7 +37,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         
         private void aAtack(AttackableUnit unit, AttackableUnit target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
             {
                 return;
             }
@@ -48,7 +48,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (Q.LSIsReady() && target != null)
+            if (Q.IsReady() && target != null)
                 Q.CastOnUnit(target);
         }
 
@@ -63,10 +63,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null || target.MagicImmune)
+            if (!R.IsReady() || target == null || target.MagicImmune)
                 return;
-            if ((!Sector.inTowerRange(target.Position.LSTo2D()) &&
-                 MapControl.balanceAroundPoint(target.Position.LSTo2D(), 700) >= -1) ||
+            if ((!Sector.inTowerRange(target.Position.To2D()) &&
+                 MapControl.balanceAroundPoint(target.Position.To2D(), 700) >= -1) ||
                 (MapControl.fightIsOn() != null && MapControl.fightIsOn().NetworkId == target.NetworkId))
             {
                 R.Cast(target);

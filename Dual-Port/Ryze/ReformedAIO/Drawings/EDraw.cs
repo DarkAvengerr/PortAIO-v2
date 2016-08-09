@@ -31,7 +31,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.Drawings
             Render.Circle.DrawCircle(
                 Variables.Player.Position,
                 Variables.Spells[SpellSlot.E].Range,
-                Variables.Spells[SpellSlot.E].LSIsReady() ? Color.FromArgb(120, 0, 170, 255) : Color.IndianRed);
+                Variables.Spells[SpellSlot.E].IsReady() ? Color.FromArgb(120, 0, 170, 255) : Color.IndianRed);
         }
 
         #endregion

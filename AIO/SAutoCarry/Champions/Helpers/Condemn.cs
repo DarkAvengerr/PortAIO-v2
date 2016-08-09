@@ -17,7 +17,7 @@ namespace SAutoCarry.Champions.Helpers
         public static void Initialize(SCommon.PluginBase.Champion champ)
         {
             s_Champion = champ;
-            s_Flash = ObjectManager.Player.LSGetSpellSlot("summonerflash");
+            s_Flash = ObjectManager.Player.GetSpellSlot("summonerflash");
             Menu condemn = new Menu("Condemn Settings", "SAutoCarry.Helpers.Condemn.Root");
             condemn.AddItem(new MenuItem("SAutoCarry.Helpers.Condemn.Root.AntiGapCloser", "Use Condemn to Gapclosers").SetValue(false));
             condemn.AddItem(new MenuItem("SAutoCarry.Helpers.Condemn.Root.Interrupter", "Use Condemn to Interrupt spells").SetValue(false));
@@ -48,22 +48,22 @@ namespace SAutoCarry.Champions.Helpers
 
         static void Drawing_OnDraw(EventArgs args)
         {
-            if (s_Champion.ConfigMenu.Item("SAutoCarry.Helpers.Condemn.Root.Draw").GetValue<bool>() && s_Champion.Spells[2].LSIsReady())
+            if (s_Champion.ConfigMenu.Item("SAutoCarry.Helpers.Condemn.Root.Draw").GetValue<bool>() && s_Champion.Spells[2].IsReady())
             {
                 foreach (var enemy in HeroManager.Enemies)
                 {
-                    if (enemy.LSIsValidTarget(2000))
+                    if (enemy.IsValidTarget(2000))
                     {
-                        var targetPosition = Geometry.PositionAfter(enemy.LSGetWaypoints(), 300, (int)enemy.MoveSpeed);
-                        var pushDirection = (targetPosition - ObjectManager.Player.ServerPosition.LSTo2D()).LSNormalized();
+                        var targetPosition = Geometry.PositionAfter(enemy.GetWaypoints(), 300, (int)enemy.MoveSpeed);
+                        var pushDirection = (targetPosition - ObjectManager.Player.ServerPosition.To2D()).Normalized();
                         for (int i = 0; i < PushDistance - 20; i += 20)
                         {
                             var lastPost = targetPosition + (pushDirection * i);
                             var colFlags = NavMesh.GetCollisionFlags(lastPost.X, lastPost.Y);
                             if (colFlags.HasFlag(CollisionFlags.Wall) || colFlags.HasFlag(CollisionFlags.Building))
                             {
-                                var sideA = lastPost + pushDirection * 20f + (pushDirection.LSPerpendicular() * enemy.BoundingRadius);
-                                var sideB = lastPost + pushDirection * 20f - (pushDirection.LSPerpendicular() * enemy.BoundingRadius);
+                                var sideA = lastPost + pushDirection * 20f + (pushDirection.Perpendicular() * enemy.BoundingRadius);
+                                var sideB = lastPost + pushDirection * 20f - (pushDirection.Perpendicular() * enemy.BoundingRadius);
 
                                 var flagsA = NavMesh.GetCollisionFlags(sideA.X, sideA.Y);
                                 var flagsB = NavMesh.GetCollisionFlags(sideB.X, sideB.Y);
@@ -71,8 +71,8 @@ namespace SAutoCarry.Champions.Helpers
                                 bool condemn = (flagsA.HasFlag(CollisionFlags.Wall) || flagsA.HasFlag(CollisionFlags.Building)) && (flagsB.HasFlag(CollisionFlags.Wall) || flagsB.HasFlag(CollisionFlags.Building));
                                 if (condemn)
                                 {
-                                    Drawing.DrawLine(Drawing.WorldToScreen(targetPosition.To3D()), Drawing.WorldToScreen((targetPosition + pushDirection * PushDistance + (pushDirection.LSPerpendicular() * enemy.BoundingRadius)).To3D()), 3, System.Drawing.Color.Green);
-                                    Drawing.DrawLine(Drawing.WorldToScreen(targetPosition.To3D()), Drawing.WorldToScreen((targetPosition + pushDirection * PushDistance - (pushDirection.LSPerpendicular() * enemy.BoundingRadius)).To3D()), 3, System.Drawing.Color.Green);
+                                    Drawing.DrawLine(Drawing.WorldToScreen(targetPosition.To3D()), Drawing.WorldToScreen((targetPosition + pushDirection * PushDistance + (pushDirection.Perpendicular() * enemy.BoundingRadius)).To3D()), 3, System.Drawing.Color.Green);
+                                    Drawing.DrawLine(Drawing.WorldToScreen(targetPosition.To3D()), Drawing.WorldToScreen((targetPosition + pushDirection * PushDistance - (pushDirection.Perpendicular() * enemy.BoundingRadius)).To3D()), 3, System.Drawing.Color.Green);
                                     Render.Circle.DrawCircle(sideA.To3D(), 10, System.Drawing.Color.Green, 7);
                                     Render.Circle.DrawCircle(sideB.To3D(), 10, System.Drawing.Color.Green, 7);
                                     return;
@@ -80,8 +80,8 @@ namespace SAutoCarry.Champions.Helpers
                             }
                         }
                         var lastPos = targetPosition + pushDirection * PushDistance - 20;
-                        var sideAa = lastPos + pushDirection * 20f + pushDirection.LSPerpendicular() * enemy.BoundingRadius;
-                        var sideBb = lastPos + pushDirection * 20f - pushDirection.LSPerpendicular() * enemy.BoundingRadius;
+                        var sideAa = lastPos + pushDirection * 20f + pushDirection.Perpendicular() * enemy.BoundingRadius;
+                        var sideBb = lastPos + pushDirection * 20f - pushDirection.Perpendicular() * enemy.BoundingRadius;
                         Drawing.DrawLine(Drawing.WorldToScreen(targetPosition.To3D()), Drawing.WorldToScreen(sideAa.To3D()), 3, System.Drawing.Color.Red);
                         Drawing.DrawLine(Drawing.WorldToScreen(targetPosition.To3D()), Drawing.WorldToScreen(sideBb.To3D()), 3, System.Drawing.Color.Red);
                         Render.Circle.DrawCircle(sideAa.To3D(), 10, System.Drawing.Color.Red, 7);
@@ -96,9 +96,9 @@ namespace SAutoCarry.Champions.Helpers
             if (!IsWhitelisted(target))
                 return false;
 
-            var targetPosition = Geometry.PositionAfter(target.LSGetWaypoints(), 300, (int)target.MoveSpeed);
+            var targetPosition = Geometry.PositionAfter(target.GetWaypoints(), 300, (int)target.MoveSpeed);
 
-            if (target.LSDistance(ObjectManager.Player.ServerPosition) < 650f && IsCondemnable(ObjectManager.Player.ServerPosition.LSTo2D(), targetPosition, target.BoundingRadius))
+            if (target.Distance(ObjectManager.Player.ServerPosition) < 650f && IsCondemnable(ObjectManager.Player.ServerPosition.To2D(), targetPosition, target.BoundingRadius))
             {
                 if (target.Path.Length == 0)
                 {
@@ -112,7 +112,7 @@ namespace SAutoCarry.Champions.Helpers
                         var angle = i * 2 * Math.PI / Accuracy;
                         float x = target.Position.X + outRadius * (float)Math.Cos(angle);
                         float y = target.Position.Y + outRadius * (float)Math.Sin(angle);
-                        if (IsCondemnable(ObjectManager.Player.ServerPosition.LSTo2D(), new Vector2(x, y), target.BoundingRadius))
+                        if (IsCondemnable(ObjectManager.Player.ServerPosition.To2D(), new Vector2(x, y), target.BoundingRadius))
                             count++;
                     }
                     return count >= Accuracy / 3;
@@ -122,7 +122,7 @@ namespace SAutoCarry.Champions.Helpers
             }
             else
             {
-                if (TumbleCondemn && s_Champion.Spells[SCommon.PluginBase.Champion.Q].LSIsReady())
+                if (TumbleCondemn && s_Champion.Spells[SCommon.PluginBase.Champion.Q].IsReady())
                 {
                     var outRadius = 300 / (float)Math.Cos(2 * Math.PI / TumbleCondemnCount);
 
@@ -131,11 +131,11 @@ namespace SAutoCarry.Champions.Helpers
                         var angle = i * 2 * Math.PI / TumbleCondemnCount;
                         float x = ObjectManager.Player.Position.X + outRadius * (float)Math.Cos(angle);
                         float y = ObjectManager.Player.Position.Y + outRadius * (float)Math.Sin(angle);
-                        targetPosition = Geometry.PositionAfter(target.LSGetWaypoints(), 300, (int)target.MoveSpeed);
+                        targetPosition = Geometry.PositionAfter(target.GetWaypoints(), 300, (int)target.MoveSpeed);
                         var vec = new Vector2(x, y);
-                        if (targetPosition.LSDistance(vec) < 550f && IsCondemnable(vec, targetPosition, target.BoundingRadius, 300f))
+                        if (targetPosition.Distance(vec) < 550f && IsCondemnable(vec, targetPosition, target.BoundingRadius, 300f))
                         {
-                            if (!TumbleCondemnSafe || Tumble.IsSafe(target, vec.To3D2(), false).LSIsValid())
+                            if (!TumbleCondemnSafe || Tumble.IsSafe(target, vec.To3D2(), false).IsValid())
                             {
                                 s_Champion.Spells[SCommon.PluginBase.Champion.Q].Cast(vec);
                                 break;
@@ -155,17 +155,17 @@ namespace SAutoCarry.Champions.Helpers
             if (pushRange == -1)
                 pushRange = PushDistance - 20f;
 
-            var pushDirection = (targetPosition - from).LSNormalized();
+            var pushDirection = (targetPosition - from).Normalized();
             for (int i = 0; i < pushRange; i += 20)
             {
                 var lastPost = targetPosition + (pushDirection * i);
-                if (!lastPost.To3D2().LSUnderTurret(true) || !DontCondemnTurret)
+                if (!lastPost.To3D2().UnderTurret(true) || !DontCondemnTurret)
                 {
                     var colFlags = NavMesh.GetCollisionFlags(lastPost.X, lastPost.Y);
                     if (colFlags.HasFlag(CollisionFlags.Wall) || colFlags.HasFlag(CollisionFlags.Building))
                     {
-                        var sideA = lastPost + pushDirection * 20f + (pushDirection.LSPerpendicular() * boundingRadius);
-                        var sideB = lastPost + pushDirection * 20f - (pushDirection.LSPerpendicular() * boundingRadius);
+                        var sideA = lastPost + pushDirection * 20f + (pushDirection.Perpendicular() * boundingRadius);
+                        var sideB = lastPost + pushDirection * 20f - (pushDirection.Perpendicular() * boundingRadius);
 
                         var flagsA = NavMesh.GetCollisionFlags(sideA.X, sideA.Y);
                         var flagsB = NavMesh.GetCollisionFlags(sideB.X, sideB.Y);
@@ -180,13 +180,13 @@ namespace SAutoCarry.Champions.Helpers
 
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (AntiGapCloser && gapcloser.End.LSDistance(ObjectManager.Player.ServerPosition) < 200)
+            if (AntiGapCloser && gapcloser.End.Distance(ObjectManager.Player.ServerPosition) < 200)
                 s_Champion.Spells[SCommon.PluginBase.Champion.E].CastOnUnit(gapcloser.Sender);
         }
 
         private static void Interrupter2_OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (Interrupter && sender.LSIsValidTarget(s_Champion.Spells[SCommon.PluginBase.Champion.E].Range))
+            if (Interrupter && sender.IsValidTarget(s_Champion.Spells[SCommon.PluginBase.Champion.E].Range))
                 s_Champion.Spells[SCommon.PluginBase.Champion.E].CastOnUnit(sender);
         }
 
@@ -198,16 +198,16 @@ namespace SAutoCarry.Champions.Helpers
             if(FlashCondemn)
             {
                 //asuna's condemn flash
-                if(TargetSelector.SelectedTarget != null && TargetSelector.SelectedTarget.LSIsValidTarget(s_Champion.Spells[SCommon.PluginBase.Champion.E].Range))
+                if(TargetSelector.SelectedTarget != null && TargetSelector.SelectedTarget.IsValidTarget(s_Champion.Spells[SCommon.PluginBase.Champion.E].Range))
                 {
                     const int currentStep = 30;
-                    var direction = ObjectManager.Player.Direction.LSTo2D().LSPerpendicular();
+                    var direction = ObjectManager.Player.Direction.To2D().Perpendicular();
 
                     for (var i = -90; i <= 90; i += currentStep)
                     {
                         var angleRad = Geometry.DegreeToRadian(i);
-                        var rotatedPosition = ObjectManager.Player.Position.LSTo2D() + (425f * direction.LSRotated(angleRad));
-                        if(IsCondemnable(rotatedPosition, Geometry.PositionAfter(TargetSelector.SelectedTarget.LSGetWaypoints(), (int)300, (int)TargetSelector.SelectedTarget.MoveSpeed), TargetSelector.SelectedTarget.BoundingRadius))
+                        var rotatedPosition = ObjectManager.Player.Position.To2D() + (425f * direction.Rotated(angleRad));
+                        if(IsCondemnable(rotatedPosition, Geometry.PositionAfter(TargetSelector.SelectedTarget.GetWaypoints(), (int)300, (int)TargetSelector.SelectedTarget.MoveSpeed), TargetSelector.SelectedTarget.BoundingRadius))
                         {
                             s_Champion.Spells[SCommon.PluginBase.Champion.E].CastOnUnit(TargetSelector.SelectedTarget);
                             LeagueSharp.Common.Utility.DelayAction.Add((int)(250 + Game.Ping / 2f + 25), () =>

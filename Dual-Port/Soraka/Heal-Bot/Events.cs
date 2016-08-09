@@ -23,7 +23,7 @@ using EloBuddy;
             if (tar != null && Mainframe.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed
                 && Config.IsChecked("disableAAH"))
             {
-                var air = ObjectManager.Player.LSCountAlliesInRange(Config.GetSliderValue("allyRangeH"));
+                var air = ObjectManager.Player.CountAlliesInRange(Config.GetSliderValue("allyRangeH"));
                 if (air > 0)
                 {
                     Chat.Print("disable");
@@ -86,14 +86,14 @@ using EloBuddy;
                 return;
             }
 
-            var enemyDmg = enemy.LSGetSpellDamage(ally, args.Slot);
+            var enemyDmg = enemy.GetSpellDamage(ally, args.Slot);
             if (ally.Health > enemyDmg || ally.Health.Equals(ally.MaxHealth))
             {
                 return;
             }
 
-            if (Config.IsChecked("autoW") && Spells.W.LSIsReady() && Spells.W.Level > 0
-                && ally.LSDistance(ObjectManager.Player) <= Spells.W.Range
+            if (Config.IsChecked("autoW") && Spells.W.IsReady() && Spells.W.Level > 0
+                && ally.Distance(ObjectManager.Player) <= Spells.W.Range
                 && Config.IsChecked("autoW_" + ally.ChampionName))
             {
                 if (ally.Health + Spells.GetWHeal() > enemyDmg && ally.Health <= enemyDmg)
@@ -102,7 +102,7 @@ using EloBuddy;
                 }
             }
 
-            if (Config.IsChecked("autoR") && Spells.R.LSIsReady() && Spells.R.Level > 0
+            if (Config.IsChecked("autoR") && Spells.R.IsReady() && Spells.R.Level > 0
                 && Config.IsChecked("autoR_" + ally.ChampionName))
             {
                 if (ally.Health + Spells.GetUltHeal(ally) > enemyDmg && ally.Health <= enemyDmg)

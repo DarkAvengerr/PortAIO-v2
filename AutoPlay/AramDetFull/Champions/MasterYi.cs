@@ -35,7 +35,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             if (safeGap(target))
                 Q.CastOnUnit(target);
@@ -43,15 +43,15 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
-            if (player.HealthPercent < 35 && !Q.LSIsReady())
+            if (player.HealthPercent < 35 && !Q.IsReady())
                 W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.Cast();
         }
@@ -59,7 +59,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             if(R.Cast())
                 Aggresivity.addAgresiveMove(new AgresiveMove(565,6000,true));
@@ -88,14 +88,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void farm()
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
             if (player.ManaPercent < 45)
                 return;
 
             var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q.Range);
 
-            foreach (var minion in minions.Where(minion => minion.LSIsValidTarget(Q.Range) && minion.Health < Q.GetDamage(minion)))
+            foreach (var minion in minions.Where(minion => minion.IsValidTarget(Q.Range) && minion.Health < Q.GetDamage(minion)))
             {
                 Q.Cast(minion);
                 return;

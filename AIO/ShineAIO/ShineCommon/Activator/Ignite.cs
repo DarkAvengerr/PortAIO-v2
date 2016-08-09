@@ -40,7 +40,7 @@ using EloBuddy;
 
         public override void SetSlot()
         {
-            Slot = ObjectManager.Player.LSGetSpellSlot("SummonerDot");
+            Slot = ObjectManager.Player.GetSpellSlot("SummonerDot");
         }
 
         public override int GetDamage()
@@ -54,7 +54,7 @@ using EloBuddy;
             {
                 if (summoners.Item("IGNITEKS").GetValue<bool>() && this.IsReady())
                 {
-                    var t = HeroManager.Enemies.FirstOrDefault(p => !p.IsDead && p.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition) < 550f && HealthPrediction.GetHealthPrediction(p, 250) < this.GetDamage());
+                    var t = HeroManager.Enemies.FirstOrDefault(p => !p.IsDead && p.ServerPosition.Distance(ObjectManager.Player.ServerPosition) < 550f && HealthPrediction.GetHealthPrediction(p, 250) < this.GetDamage());
                     if (t != null)
                         this.Cast(t);
                 }
@@ -62,7 +62,7 @@ using EloBuddy;
                 if (summoners.Item("IGNITEENABLE").GetValue<KeyBind>().Active && summoners.Item("IGNITEENEMY").GetValue<bool>() && this.IsReady())
                 {
                     var t = TargetSelector.GetTarget(this.Range, DamageType);
-                    if (t != null && t.LSIsValidTarget() && t.HealthPercent < 40)
+                    if (t != null && t.IsValidTarget() && t.HealthPercent < 40)
                         Cast(t);
                 }
             }

@@ -30,7 +30,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.Menus.Draw
             Render.Circle.DrawCircle(
                 Variables.Player.Position,
                 Variables.Spells[SpellSlot.Q].Range,
-                Variables.Spells[SpellSlot.Q].LSIsReady() ? Color.FromArgb(120, 0, 170, 255) : Color.IndianRed);
+                Variables.Spells[SpellSlot.Q].IsReady() ? Color.FromArgb(120, 0, 170, 255) : Color.IndianRed);
         }
 
         #endregion

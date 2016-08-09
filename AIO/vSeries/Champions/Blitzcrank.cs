@@ -75,12 +75,12 @@ using EloBuddy;
 
         private static void BlitzcrankInterrupter(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (sender.IsEnemy && MenuCheck("blitzcrank.interrupter",Config) && sender.LSIsValidTarget(R.Range) && 
+            if (sender.IsEnemy && MenuCheck("blitzcrank.interrupter",Config) && sender.IsValidTarget(R.Range) && 
                 args.DangerLevel >= Interrupter2.DangerLevel.High)
             {
                 R.Cast();
             }
-            if (sender.IsEnemy && MenuCheck("blitzcrank.interrupter", Config) && sender.LSIsValidTarget(Q.Range) &&
+            if (sender.IsEnemy && MenuCheck("blitzcrank.interrupter", Config) && sender.IsValidTarget(Q.Range) &&
                 args.DangerLevel >= Interrupter2.DangerLevel.High)
             {
                 Q.Cast(sender.Position);
@@ -99,43 +99,43 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (MenuCheck("blitzcrank.q.combo",Config) && Q.LSIsReady())
+            if (MenuCheck("blitzcrank.q.combo",Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && MenuCheck("blitzcrank.q."+x.ChampionName,Config)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && MenuCheck("blitzcrank.q."+x.ChampionName,Config)))
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "blitzcrank.q.hitchance"));
                 }
             }
 
-            if (MenuCheck("blitzcrank.e.combo", Config) && E.LSIsReady())
+            if (MenuCheck("blitzcrank.e.combo", Config) && E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(E.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(E.Range)))
                 {
                     E.Cast(enemy);
                 }
             }
 
-            if (MenuCheck("blitzcrank.r.combo", Config) && R.LSIsReady() && 
-                ObjectManager.Player.LSCountEnemiesInRange(R.Range) >= SliderCheck("blitz.r.count",Config))
+            if (MenuCheck("blitzcrank.r.combo", Config) && R.IsReady() && 
+                ObjectManager.Player.CountEnemiesInRange(R.Range) >= SliderCheck("blitz.r.count",Config))
             {
                 R.Cast();
             }
         }
         private static void BlitzcrankOnDraw(EventArgs args)
         {
-            if (Q.LSIsReady() && ActiveCheck("blitzcrank.q.draw",Config))
+            if (Q.IsReady() && ActiveCheck("blitzcrank.q.draw",Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range ,GetColor("blitzcrank.q.draw",Config));
             }
-            if (W.LSIsReady() && ActiveCheck("blitzcrank.w.draw", Config))
+            if (W.IsReady() && ActiveCheck("blitzcrank.w.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, GetColor("blitzcrank.w.draw", Config));
             }
-            if (E.LSIsReady() && ActiveCheck("blitzcrank.e.draw", Config))
+            if (E.IsReady() && ActiveCheck("blitzcrank.e.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, GetColor("blitzcrank.e.draw", Config));
             }
-            if (R.LSIsReady() && ActiveCheck("blitzcrank.r.draw", Config))
+            if (R.IsReady() && ActiveCheck("blitzcrank.r.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, GetColor("blitzcrank.r.draw", Config));
             }

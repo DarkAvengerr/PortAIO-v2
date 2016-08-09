@@ -53,7 +53,7 @@ using EloBuddy;
                 }
             if (Program.Config.Item(clearignite).GetValue<bool>())
                 {
-                    if (ObjectManager.Player.LSHasBuff("summonerdot"))
+                    if (ObjectManager.Player.HasBuff("summonerdot"))
                     {
                         if (Items.HasItem(3140) && Items.CanUseItem(3140))
                         {
@@ -67,7 +67,7 @@ using EloBuddy;
                 }
             if (Program.Config.Item(clearexhaust).GetValue<bool>())
                 {
-                    if (ObjectManager.Player.LSHasBuff("summonerexhaust"))
+                    if (ObjectManager.Player.HasBuff("summonerexhaust"))
                     {
                         if (Items.HasItem(3140) && Items.CanUseItem(3140))
                         {
@@ -81,7 +81,7 @@ using EloBuddy;
                 }
             if (Program.Config.Item(zedult).GetValue<bool>())
                 {
-                    if (ObjectManager.Player.LSHasBuff("zedulttargetmark"))
+                    if (ObjectManager.Player.HasBuff("zedulttargetmark"))
                     {
                         if (Items.HasItem(3140) && Items.CanUseItem(3140))
                         {
@@ -95,7 +95,7 @@ using EloBuddy;
                 }
             if (Program.Config.Item(fizzr).GetValue<bool>())
                 {
-                    if (ObjectManager.Player.LSHasBuff("FizzMarinerDoom"))
+                    if (ObjectManager.Player.HasBuff("FizzMarinerDoom"))
                     {
                         if (Items.HasItem(3140) && Items.CanUseItem(3140))
                         {
@@ -110,7 +110,7 @@ using EloBuddy;
                 }
             if (Program.Config.Item(malzr).GetValue<bool>())
                 {
-                    if (ObjectManager.Player.LSHasBuff("AlZaharNetherGrasp"))
+                    if (ObjectManager.Player.HasBuff("AlZaharNetherGrasp"))
                     {
                         if (Items.HasItem(3140) && Items.CanUseItem(3140))
                         {
@@ -124,7 +124,7 @@ using EloBuddy;
                 }
             if (Program.Config.Item(vladr).GetValue<bool>())
                 {
-                    if (ObjectManager.Player.LSHasBuff("VladimirHemoplague"))
+                    if (ObjectManager.Player.HasBuff("VladimirHemoplague"))
                     {
                         if (Items.HasItem(3140) && Items.CanUseItem(3140))
                         {

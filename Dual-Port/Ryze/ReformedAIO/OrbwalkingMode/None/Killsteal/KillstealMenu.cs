@@ -44,11 +44,11 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.None.Killste
 
         private void OnUpdate(EventArgs args)
         {
-            var target = HeroManager.Enemies.FirstOrDefault(x => !x.IsDead && x.LSIsValidTarget(1000));
+            var target = HeroManager.Enemies.FirstOrDefault(x => !x.IsDead && x.IsValidTarget(1000));
 
             if (target == null) return;
 
-            if (Variable.Spells[SpellSlot.Q].LSIsReady() && this.Menu.Item(this.Menu.Name + "KsQ").GetValue<bool>())
+            if (Variable.Spells[SpellSlot.Q].IsReady() && this.Menu.Item(this.Menu.Name + "KsQ").GetValue<bool>())
             {
                 if (target.Health <= Variable.Spells[SpellSlot.Q].GetDamage(target))
                 {
@@ -56,7 +56,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.None.Killste
                 }
             }
 
-            if (Variable.Spells[SpellSlot.W].LSIsReady() && this.Menu.Item(this.Menu.Name + "KsW").GetValue<bool>())
+            if (Variable.Spells[SpellSlot.W].IsReady() && this.Menu.Item(this.Menu.Name + "KsW").GetValue<bool>())
             {
                 if (target.Health <= Variable.Spells[SpellSlot.W].GetDamage(target))
                 {
@@ -64,7 +64,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.None.Killste
                 }
             }
 
-            if (!Variable.Spells[SpellSlot.E].LSIsReady() || !this.Menu.Item(this.Menu.Name + "KsE").GetValue<bool>()) return;
+            if (!Variable.Spells[SpellSlot.E].IsReady() || !this.Menu.Item(this.Menu.Name + "KsE").GetValue<bool>()) return;
 
             if (target.Health <= Variable.Spells[SpellSlot.E].GetDamage(target))
             {

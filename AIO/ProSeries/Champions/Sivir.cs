@@ -84,7 +84,7 @@ using EloBuddy;
                 return;
             }
 
-            if (args.SData.LSIsAutoAttack())
+            if (args.SData.IsAutoAttack())
             {
                 return;
             }
@@ -133,7 +133,7 @@ using EloBuddy;
             if (ProSeries.CanCombo())
             {
                 var target = TargetSelector.GetTarget(QCombo.Range, TargetSelector.DamageType.Physical);
-                if (target.LSIsValidTarget() && ProSeries.Config.Item("usecomboq", true).GetValue<bool>())
+                if (target.IsValidTarget() && ProSeries.Config.Item("usecomboq", true).GetValue<bool>())
                 {
                     CastQ(false);
                 }
@@ -142,7 +142,7 @@ using EloBuddy;
             if (ProSeries.CanHarass())
             {
                 var target = TargetSelector.GetTarget(QHarass.Range, TargetSelector.DamageType.Physical);
-                if (target.LSIsValidTarget() && ProSeries.IsWhiteListed(target))
+                if (target.IsValidTarget() && ProSeries.IsWhiteListed(target))
                 {
                     if (ProSeries.Config.Item("useharassq", true).GetValue<bool>())
                     {
@@ -151,9 +151,9 @@ using EloBuddy;
                 }
             }
 
-            if (QCombo.LSIsReady())
+            if (QCombo.IsReady())
             {
-                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.LSIsValidTarget(QCombo.Range)))
+                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.IsValidTarget(QCombo.Range)))
                 {
                     if (ProSeries.Config.Item("useqimm", true).GetValue<bool>())
                         QCombo.CastIfHitchanceEquals(target, HitChance.Immobile);
@@ -168,7 +168,7 @@ using EloBuddy;
         {
             var spell = harass ? QHarass : QCombo;
 
-            if (!spell.LSIsReady())
+            if (!spell.IsReady())
             {
                 return;
             }

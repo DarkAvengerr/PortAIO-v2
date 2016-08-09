@@ -89,12 +89,12 @@ namespace ProFlash
 
         public static Vector3? GetFirstWallPoint(Vector3 from, Vector3 to, float step = 25)
         {
-            var direction = (to - from).LSNormalized();
+            var direction = (to - from).Normalized();
 
-            for (float d = 0; d < from.LSDistance(to); d = d + step)
+            for (float d = 0; d < from.Distance(to); d = d + step)
             {
                 var testPoint = from + (d * direction);
-                if (testPoint.LSIsWall())
+                if (testPoint.IsWall())
                 {
                     return from + ((d - step) * direction);
                 }
@@ -109,7 +109,7 @@ namespace ProFlash
 
         public static void Main()
         {
-            FlashSlot = ObjectManager.Player.LSGetSpellSlot("summonerflash");
+            FlashSlot = ObjectManager.Player.GetSpellSlot("summonerflash");
             if (FlashSlot == SpellSlot.Unknown)
             {
                 Console.WriteLine("ProFlash witout Flash, nice try dude...");
@@ -155,7 +155,7 @@ namespace ProFlash
                 return;
             }
 
-            if (ObjectManager.Player.Position.LSDistance(Game.CursorPos) > 850)
+            if (ObjectManager.Player.Position.Distance(Game.CursorPos) > 850)
             {
                 return;
             }
@@ -166,9 +166,9 @@ namespace ProFlash
 
             var firstWall = GetFirstWallPoint(ObjectManager.Player.Position, Game.CursorPos);
 
-            if (firstWall.HasValue && Game.CursorPos.LSIsWall()
-                && (ObjectManager.Player.LSDistance(firstWall.Value) > 100
-                    && ObjectManager.Player.LSDistance(firstWall.Value) < 850))
+            if (firstWall.HasValue && Game.CursorPos.IsWall()
+                && (ObjectManager.Player.Distance(firstWall.Value) > 100
+                    && ObjectManager.Player.Distance(firstWall.Value) < 850))
             {
                 args.Process = false;
 
@@ -180,17 +180,17 @@ namespace ProFlash
 
             var currentPosition = Game.CursorPos;
 
-            for (var distance = ObjectManager.Player.LSDistance(Game.CursorPos); distance < 850; distance += 50)
+            for (var distance = ObjectManager.Player.Distance(Game.CursorPos); distance < 850; distance += 50)
             {
-                currentPosition = ObjectManager.Player.Position.LSExtend(Game.CursorPos, distance);
+                currentPosition = ObjectManager.Player.Position.Extend(Game.CursorPos, distance);
 
-                if (!currentPosition.LSIsWall())
+                if (!currentPosition.IsWall())
                 {
                     break;
                 }
             }
 
-            if (!currentPosition.LSIsWall())
+            if (!currentPosition.IsWall())
             {
                 FlashPosition = currentPosition;
             }
@@ -206,7 +206,7 @@ namespace ProFlash
         {
             if (LastCastAttempt + 1000 > Utils.TickCount)
             {
-                Render.Circle.DrawCircle(FlashPosition, 100, FlashPosition.LSIsWall() ? Color.Red : Color.Green);
+                Render.Circle.DrawCircle(FlashPosition, 100, FlashPosition.IsWall() ? Color.Red : Color.Green);
                 Render.Circle.DrawCircle(WallPosition, 50, Color.Aqua);
             }
         }
@@ -243,12 +243,12 @@ namespace ProFlash
                 return;
             }
 
-            if (!ObjectManager.Player.GetSpell(FlashSlot).LSIsReady())
+            if (!ObjectManager.Player.GetSpell(FlashSlot).IsReady())
             {
                 return;
             }
 
-            FlashPosition = ObjectManager.Player.Position.LSExtend(sender.Position, 450);
+            FlashPosition = ObjectManager.Player.Position.Extend(sender.Position, 450);
             ObjectManager.Player.Spellbook.CastSpell(FlashSlot, FlashPosition, false);
         }
 

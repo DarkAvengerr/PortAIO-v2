@@ -51,14 +51,14 @@ using EloBuddy;
                 if (spellList != null && spellList.Count > 0)
                 {
                     CommonSpell ultimate = spellList.First(x => x.Slot == SpellSlot.R);
-                    if (ultimate != null && ultimate.UseOnCombo && ultimate.LSIsReady() && ultimate.CanCast())
+                    if (ultimate != null && ultimate.UseOnCombo && ultimate.IsReady() && ultimate.CanCast())
                     {
                         range = ultimate.Range;
                     }
                     else
                     {
                         List<CommonSpell> spells =
-                            spellList.Where(x => x.Slot != SpellSlot.R && x.UseOnCombo && x.LSIsReady() && x.CanCast())
+                            spellList.Where(x => x.Slot != SpellSlot.R && x.UseOnCombo && x.IsReady() && x.CanCast())
                                 .ToList();
                         if (spells.Count > 0)
                         {
@@ -82,7 +82,7 @@ using EloBuddy;
 
                 if (spellList != null && spellList.Count > 0)
                 {
-                    List<CommonSpell> spells = spellList.Where(x => x.UseOnHaras && x.LSIsReady() && x.CanCast()).ToList();
+                    List<CommonSpell> spells = spellList.Where(x => x.UseOnHaras && x.IsReady() && x.CanCast()).ToList();
                     if (spells.Count > 0)
                     {
                         foreach (CommonSpell spell in spells)
@@ -172,12 +172,12 @@ using EloBuddy;
         {
             float totalDamage = 0f;
 
-            if (R.LSIsReady() && R.CanCast() && target.LSIsValidTarget(R.Range))
+            if (R.IsReady() && R.CanCast() && target.IsValidTarget(R.Range))
             {
                 List<CommonSpell> spells =
                     spellList.Where(
                         x =>
-                        x.CanCast() && x.LSIsReady() && target.LSIsValidTarget(x.Range) && x.IsKillable(target)
+                        x.CanCast() && x.IsReady() && target.IsValidTarget(x.Range) && x.IsKillable(target)
                         && x.Slot != SpellSlot.R).ToList();
 
                 if (spells.Count > 0)
@@ -191,7 +191,7 @@ using EloBuddy;
 
         public bool ComboReady()
         {
-            return spellList.Count(x => x.UseOnCombo && x.LSIsReady() && x.CanCast())
+            return spellList.Count(x => x.UseOnCombo && x.IsReady() && x.CanCast())
                    == spellList.Count(x => x.UseOnCombo);
         }
 
@@ -202,7 +202,7 @@ using EloBuddy;
 
         public bool HarasReady()
         {
-            return spellList.Count(x => x.UseOnHaras && x.LSIsReady() && x.CanCast())
+            return spellList.Count(x => x.UseOnHaras && x.IsReady() && x.CanCast())
                    == spellList.Count(x => x.UseOnHaras);
         }
 
@@ -212,7 +212,7 @@ using EloBuddy;
 
             if (spellList != null && spellList.Count > 0)
             {
-                List<CommonSpell> spells = spellList.Where(x => x.UseOnCombo && x.LSIsReady() && x.CanCast()).ToList();
+                List<CommonSpell> spells = spellList.Where(x => x.UseOnCombo && x.IsReady() && x.CanCast()).ToList();
                 if (spells.Count > 0)
                 {
                     damage = spells.Sum(spell => spell.GetDamage(target));
@@ -229,7 +229,7 @@ using EloBuddy;
 
         public bool SomeSkillReady()
         {
-            return spellList.Count(x => x.Range > 0 && x.LSIsReady() && x.CanCast()) > 0;
+            return spellList.Count(x => x.Range > 0 && x.IsReady() && x.CanCast()) > 0;
         }
 
         #endregion

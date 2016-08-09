@@ -28,19 +28,19 @@ namespace FioraProject
         public static void Harass()
         {
             //Qcast
-            if (Q.LSIsReady() && Qharass && Player.ManaPercent >= Manaharass)
+            if (Q.IsReady() && Qharass && Player.ManaPercent >= Manaharass)
             {
                 if (CastQPassiveHarasss || CastQPrePassiveHarass || CastQGapCloseHarass)
                 {
                     if (TargetingMode == TargetMode.Normal)
                     {
-                        foreach (var hero in HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie)
-                            .OrderBy(x => x.LSDistance(Player.Position)))
+                        foreach (var hero in HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie)
+                            .OrderBy(x => x.Distance(Player.Position)))
                         {
                             var status = hero.GetPassiveStatus(0);
                             if (status.HasPassive
                                 && !(Orbwalking.InAutoAttackRange(hero)
-                                && status.PassivePredictedPositions.Any(x => Player.Position.LSTo2D()
+                                && status.PassivePredictedPositions.Any(x => Player.Position.To2D()
                                     .InTheCone(status.TargetPredictedPosition, x, 90))))
                             {
                                 if (CastQPassiveHarasss && status.PassiveType == PassiveType.UltiPassive
@@ -66,7 +66,7 @@ namespace FioraProject
                             var status = hero.GetPassiveStatus(0);
                             if (status.HasPassive
                                 && !(Orbwalking.InAutoAttackRange(hero)
-                                && status.PassivePredictedPositions.Any(x => Player.Position.LSTo2D()
+                                && status.PassivePredictedPositions.Any(x => Player.Position.To2D()
                                     .InTheCone(status.TargetPredictedPosition, x, 90))))
                             {
                                 if (CastQPassiveHarasss && status.PassiveType == PassiveType.UltiPassive
@@ -89,8 +89,8 @@ namespace FioraProject
                 {
                     if (TargetingMode == TargetMode.Normal)
                     {
-                        foreach (var hero in HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie)
-                            .OrderBy(x => x.LSDistance(Player.Position)))
+                        foreach (var hero in HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie)
+                            .OrderBy(x => x.Distance(Player.Position)))
                         {
                             if (castQtoGapClose(hero, getQGapClosedelay(hero)))
                                 goto Wcast;
@@ -110,7 +110,7 @@ namespace FioraProject
 
         Wcast:
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
 
             }
@@ -122,19 +122,19 @@ namespace FioraProject
         public static void Combo()
         {
             //Qcast
-            if (Q.LSIsReady() && Qcombo)
+            if (Q.IsReady() && Qcombo)
             {
                 if (CastQPassiveCombo || CastQPrePassiveCombo || CastQGapCloseCombo)
                 {
                     if (TargetingMode == TargetMode.Normal)
                     {
-                        foreach (var hero in HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie)
-                            .OrderBy(x => x.LSDistance(Player.Position)))
+                        foreach (var hero in HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie)
+                            .OrderBy(x => x.Distance(Player.Position)))
                         {
                             var status = hero.GetPassiveStatus(0);
                             if (status.HasPassive
                                 && !(Orbwalking.InAutoAttackRange(hero)
-                                && status.PassivePredictedPositions.Any(x => Player.Position.LSTo2D()
+                                && status.PassivePredictedPositions.Any(x => Player.Position.To2D()
                                     .InTheCone(status.TargetPredictedPosition, x, 90))))
                             {
                                 if (CastQPassiveCombo && status.PassiveType == PassiveType.UltiPassive
@@ -160,7 +160,7 @@ namespace FioraProject
                             var status = hero.GetPassiveStatus(0);
                             if (status.HasPassive
                                 && !(Orbwalking.InAutoAttackRange(hero)
-                                && status.PassivePredictedPositions.Any(x => Player.Position.LSTo2D()
+                                && status.PassivePredictedPositions.Any(x => Player.Position.To2D()
                                     .InTheCone(status.TargetPredictedPosition, x, 90))))
                             {
                                 if (CastQPassiveCombo && status.PassiveType == PassiveType.UltiPassive
@@ -183,8 +183,8 @@ namespace FioraProject
                 {
                     if (TargetingMode == TargetMode.Normal)
                     {
-                        foreach (var hero in HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie)
-                            .OrderBy(x => x.LSDistance(Player.Position)))
+                        foreach (var hero in HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie)
+                            .OrderBy(x => x.Distance(Player.Position)))
                         {
                             if (castQtoGapClose(hero, getQGapClosedelay(hero)))
                                 goto Wcast;
@@ -203,31 +203,31 @@ namespace FioraProject
                 if (CastQMinionGapCloseCombo && Math.Abs(Player.PercentCooldownMod) * 100 >= ValueQMinionGapCloseCombo)
                 {
                     var hero = GetTarget();
-                    if (hero != null && Player.Position.LSDistance(hero.Position) >= 500)
+                    if (hero != null && Player.Position.Distance(hero.Position) >= 500)
                     {
-                        if (Player.Position.LSExtend(hero.Position, 400).CountMinionsInRange(300, false) >= 1)
-                            Q.Cast(Player.Position.LSExtend(hero.Position, 400));
+                        if (Player.Position.Extend(hero.Position, 400).CountMinionsInRange(300, false) >= 1)
+                            Q.Cast(Player.Position.Extend(hero.Position, 400));
                     }
                 }
             }
 
         Wcast:
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
 
             }
 
         Rcast:
 
-            if (R.LSIsReady() && Rcombo)
+            if (R.IsReady() && Rcombo)
             {
                 var hero = GetTarget();
-                if (hero.LSIsValidTarget(500) && !hero.IsZombie)
+                if (hero.IsValidTarget(500) && !hero.IsZombie)
                 {
                     var status = hero.GetPassiveStatus(0);
                     if (!status.HasPassive || (status.HasPassive && !(Orbwalking.InAutoAttackRange(hero)
-                         && status.PassivePredictedPositions.Any(x => Player.Position.LSTo2D()
+                         && status.PassivePredictedPositions.Any(x => Player.Position.To2D()
                          .InTheCone(status.TargetPredictedPosition, x, 90)))))
                     {
                         if (UseRComboLowHP && Player.HealthPercent <= ValueRComboLowHP)
@@ -279,7 +279,7 @@ namespace FioraProject
         }
         public static float GetUltiDamage(AIHeroClient target)
         {
-            return GetUltiPassiveDamage(target) + (float)Player.LSGetAutoAttackDamage(target) * 4;
+            return GetUltiPassiveDamage(target) + (float)Player.GetAutoAttackDamage(target) * 4;
         }
         public static float GetFastDamage(AIHeroClient target)
         {
@@ -292,9 +292,9 @@ namespace FioraProject
             ////
             float damage = 0;
             damage += Q.GetDamage(target);
-            if (Q.LSIsReady())
+            if (Q.IsReady())
                 damage += Q.GetDamage(target);
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 damage += GetUltiDamage(target);
                 return damage;
@@ -304,14 +304,14 @@ namespace FioraProject
                 var status = target.GetPassiveStatus(0);
                 if (status.HasPassive)
                 {
-                    damage += status.PassivePredictedPositions.Count() * (float)(GetPassiveDamage(target) + Player.LSGetAutoAttackDamage(target));
+                    damage += status.PassivePredictedPositions.Count() * (float)(GetPassiveDamage(target) + Player.GetAutoAttackDamage(target));
                     if (status.PassivePredictedPositions.Count() < 3)
-                        damage += (3 - status.PassivePredictedPositions.Count()) * (float)Player.LSGetAutoAttackDamage(target);
+                        damage += (3 - status.PassivePredictedPositions.Count()) * (float)Player.GetAutoAttackDamage(target);
                     return damage;
                 }
                 else
                 {
-                    damage += (float)Player.LSGetAutoAttackDamage(target) * 2;
+                    damage += (float)Player.GetAutoAttackDamage(target) * 2;
                     return damage;
                 }
             }
@@ -331,9 +331,9 @@ namespace FioraProject
             if (target == null)
                 return 0;
             PassiveStatus targetStatus;
-            if (Prediction.GetPrediction(target, 0.25f).UnitPosition.LSTo2D().LSDistance(Player.Position.LSTo2D())
-                > Player.Position.LSTo2D().LSDistance(target.Position.LSTo2D()))
-                targetStatus = target.GetPassiveStatus(Player.Position.LSTo2D().LSDistance(target.Position.LSTo2D()) / 1100);
+            if (Prediction.GetPrediction(target, 0.25f).UnitPosition.To2D().Distance(Player.Position.To2D())
+                > Player.Position.To2D().Distance(target.Position.To2D()))
+                targetStatus = target.GetPassiveStatus(Player.Position.To2D().Distance(target.Position.To2D()) / 1100);
             else
                 targetStatus = target.GetPassiveStatus(0);
             if (!targetStatus.HasPassive)
@@ -343,21 +343,21 @@ namespace FioraProject
                 if (!targetStatus.PassivePredictedPositions.Any())
                     return 0;
                 var pos = targetStatus.PassivePredictedPositions.First();
-                return Player.Position.LSTo2D().LSDistance(pos) / 1100 + Game.Ping / 1000;
+                return Player.Position.To2D().Distance(pos) / 1100 + Game.Ping / 1000;
             }
             if (targetStatus.PassiveType == PassiveType.UltiPassive)
             {
                 if (!targetStatus.PassivePredictedPositions.Any())
                     return 0;
                 var poses = targetStatus.PassivePredictedPositions;
-                var pos = poses.OrderBy(x => Player.Position.LSTo2D().LSDistance(x)).First();
-                return Player.Position.LSTo2D().LSDistance(pos) / 1100 + Game.Ping / 1000;
+                var pos = poses.OrderBy(x => Player.Position.To2D().Distance(x)).First();
+                return Player.Position.To2D().Distance(pos) / 1100 + Game.Ping / 1000;
             }
             return 0;
         }
         private static float getQGapClosedelay(AIHeroClient target)
         {
-            var distance = Player.LSDistance(target.Position);
+            var distance = Player.Distance(target.Position);
             return
                 distance > 400 ?
                 400 / 1100 + Game.Ping / 1000 :
@@ -367,10 +367,10 @@ namespace FioraProject
         {
             if (target == null)
                 return false;
-            var targetpredictedpos = Prediction.GetPrediction(target, delay).UnitPosition.LSTo2D();
-            var pos = Player.Position.LSTo2D().LSDistance(targetpredictedpos) > 400 ?
-                Player.Position.LSTo2D().LSExtend(targetpredictedpos, 400) : targetpredictedpos;
-            if (targetpredictedpos.LSDistance(pos) <= 300 && !pos.LSIsWall())
+            var targetpredictedpos = Prediction.GetPrediction(target, delay).UnitPosition.To2D();
+            var pos = Player.Position.To2D().Distance(targetpredictedpos) > 400 ?
+                Player.Position.To2D().Extend(targetpredictedpos, 400) : targetpredictedpos;
+            if (targetpredictedpos.Distance(pos) <= 300 && !pos.IsWall())
             {
                 Q.Cast(pos);
                 return true;
@@ -388,9 +388,9 @@ namespace FioraProject
                 return false;
             var passivepos = targetStatus.PassivePredictedPositions.First();
             var poses = GetRadiusPoints(targetStatus.TargetPredictedPosition, passivepos);
-            var pos = poses.Where(x => x.LSDistance(Player.Position.LSTo2D()) <= 400 && !x.LSIsWall())
-                           .OrderBy(x => x.LSDistance(passivepos)).FirstOrDefault();
-            if (pos == null || !pos.LSIsValid())
+            var pos = poses.Where(x => x.Distance(Player.Position.To2D()) <= 400 && !x.IsWall())
+                           .OrderBy(x => x.Distance(passivepos)).FirstOrDefault();
+            if (pos == null || !pos.IsValid())
                 return false;
             Q.Cast(pos);
             return true;
@@ -408,9 +408,9 @@ namespace FioraProject
                 return false;
             var passivepos = targetStatus.PassivePredictedPositions.First();
             var poses = GetRadiusPoints(targetStatus.TargetPredictedPosition, passivepos);
-            var pos = poses.Where(x => x.LSDistance(Player.Position.LSTo2D()) <= 400 && !x.LSIsWall())
-                           .OrderBy(x => x.LSDistance(passivepos)).FirstOrDefault();
-            if (pos == null || !pos.LSIsValid())
+            var pos = poses.Where(x => x.Distance(Player.Position.To2D()) <= 400 && !x.IsWall())
+                           .OrderBy(x => x.Distance(passivepos)).FirstOrDefault();
+            if (pos == null || !pos.IsValid())
                 return false;
             Q.Cast(pos);
             return true;
@@ -427,11 +427,11 @@ namespace FioraProject
             if (!targetStatus.PassivePredictedPositions.Any())
                 return false;
             var passiveposes = targetStatus.PassivePredictedPositions;
-            var passivepos = passiveposes.OrderBy(x => Player.Position.LSTo2D().LSDistance(x)).First();
+            var passivepos = passiveposes.OrderBy(x => Player.Position.To2D().Distance(x)).First();
             var poses = GetRadiusPoints(targetStatus.TargetPredictedPosition, passivepos);
-            var pos = poses.Where(x => x.LSDistance(Player.Position.LSTo2D()) <= 400 && !x.LSIsWall())
-                           .OrderBy(x => x.LSDistance(passivepos)).FirstOrDefault();
-            if (pos == null || !pos.LSIsValid())
+            var pos = poses.Where(x => x.Distance(Player.Position.To2D()) <= 400 && !x.IsWall())
+                           .OrderBy(x => x.Distance(passivepos)).FirstOrDefault();
+            if (pos == null || !pos.IsValid())
                 return false;
             Q.Cast(pos);
             return true;

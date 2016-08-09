@@ -38,17 +38,17 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Misaya
 
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
-            if (Variables.Spells[SpellSlot.R].LSIsReady() || Variables.Spells[SpellSlot.Q].LSIsReady())
+            if (Variables.Spells[SpellSlot.R].IsReady() || Variables.Spells[SpellSlot.Q].IsReady())
             {
                 this.PaleCascade();
             }
 
-            if (Variables.Spells[SpellSlot.E].LSIsReady())
+            if (Variables.Spells[SpellSlot.E].IsReady())
             {
                 this.MoonFall();
             }
 
-            if (Variables.Spells[SpellSlot.W].LSIsReady())
+            if (Variables.Spells[SpellSlot.W].IsReady())
             {
                 this.LunarRush();
             }
@@ -124,8 +124,8 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Misaya
 
             if (target == null || !target.IsValid) return;
 
-            if (Variables.Spells[SpellSlot.Q].LSIsReady() && Variables.Spells[SpellSlot.R].LSIsReady()
-                && target.LSDistance(Variables.Player) >= 500)
+            if (Variables.Spells[SpellSlot.Q].IsReady() && Variables.Spells[SpellSlot.R].IsReady()
+                && target.Distance(Variables.Player) >= 500)
             {
                 Variables.Spells[SpellSlot.R].Cast(target);
             }

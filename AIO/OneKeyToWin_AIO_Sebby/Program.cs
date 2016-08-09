@@ -304,7 +304,7 @@ namespace OneKeyToWin_AIO_Sebby
                 return;
             }
 
-            foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsMelee && enemy.LSIsValidTarget(dodgeRange) && enemy.LSIsFacing(Player) && Config.Item("posAssistant" + enemy.ChampionName).GetValue<bool>()))
+            foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsMelee && enemy.IsValidTarget(dodgeRange) && enemy.IsFacing(Player) && Config.Item("posAssistant" + enemy.ChampionName).GetValue<bool>()))
             {
                 var points = OktwCommon.CirclePoints(20, 250, Player.Position);
 
@@ -316,26 +316,26 @@ namespace OneKeyToWin_AIO_Sebby
 
                 foreach (var point in points)
                 {
-                    if (point.LSIsWall() || point.LSUnderTurret(true))
+                    if (point.IsWall() || point.UnderTurret(true))
                     {
                         Orbwalker.SetOrbwalkingPoint(new Vector3());
                         return;
                     }
 
-                    if (enemy.LSDistance(point) > dodgeRange && (bestPoint == Vector3.Zero || Game.CursorPos.LSDistance(point) < Game.CursorPos.LSDistance(bestPoint)))
+                    if (enemy.Distance(point) > dodgeRange && (bestPoint == Vector3.Zero || Game.CursorPos.Distance(point) < Game.CursorPos.Distance(bestPoint)))
                     {
                         bestPoint = point;
                     }
                 }
 
-                if (enemy.LSDistance(bestPoint) > dodgeRange)
+                if (enemy.Distance(bestPoint) > dodgeRange)
                 {
                     Orbwalker.SetOrbwalkingPoint(bestPoint);
                 }
                 else
                 {
-                    var fastPoint = enemy.ServerPosition.LSExtend(Player.ServerPosition, dodgeRange);
-                    if (fastPoint.LSCountEnemiesInRange(dodgeRange) <= Player.LSCountEnemiesInRange(dodgeRange))
+                    var fastPoint = enemy.ServerPosition.Extend(Player.ServerPosition, dodgeRange);
+                    if (fastPoint.CountEnemiesInRange(dodgeRange) <= Player.CountEnemiesInRange(dodgeRange))
                     {
                         Orbwalker.SetOrbwalkingPoint(fastPoint);
                     }
@@ -358,7 +358,7 @@ namespace OneKeyToWin_AIO_Sebby
             if (Combo && Config.Item("comboDisableMode", true).GetValue<bool>())
             {
                 var t = (AIHeroClient)args.Target;
-                if (4 * Player.LSGetAutoAttackDamage(t) < t.Health - OktwCommon.GetIncomingDamage(t) && !t.HasBuff("luxilluminatingfraulein") && !Player.HasBuff("sheen") && !Player.HasBuff("Mastery6261"))
+                if (4 * Player.GetAutoAttackDamage(t) < t.Health - OktwCommon.GetIncomingDamage(t) && !t.HasBuff("luxilluminatingfraulein") && !Player.HasBuff("sheen") && !Player.HasBuff("Mastery6261"))
                     args.Process = false;
             }
 
@@ -397,7 +397,7 @@ namespace OneKeyToWin_AIO_Sebby
             {
                 if (jungler.IsDead)
                 {
-                    timer = (int)(enemySpawn.Position.LSDistance(Player.Position) / 370);
+                    timer = (int)(enemySpawn.Position.Distance(Player.Position) / 370);
                 }
                 else if (jungler.IsVisible && jungler.IsHPBarRendered)
                 {
@@ -408,7 +408,7 @@ namespace OneKeyToWin_AIO_Sebby
                         return;
                     foreach (var point in JunglerPath)
                     {
-                        var PSDistance = PointStart.LSDistance(point);
+                        var PSDistance = PointStart.Distance(point);
                         if (PSDistance > 0)
                         {
                             Way += PSDistance;
@@ -658,7 +658,7 @@ namespace OneKeyToWin_AIO_Sebby
                 if (DrawSpell.Type == SkillshotType.SkillshotCircle)
                     Render.Circle.DrawCircle(DrawSpellPos.CastPosition, DrawSpell.Width, System.Drawing.Color.DimGray, 1);
 
-                drawText("Aiming " + DrawSpellPos.Hitchance, Player.Position.LSExtend(DrawSpellPos.CastPosition, 400), System.Drawing.Color.Gray);
+                drawText("Aiming " + DrawSpellPos.Hitchance, Player.Position.Extend(DrawSpellPos.CastPosition, 400), System.Drawing.Color.Gray);
             }
 
             if (AIOmode != 1 && Config.Item("timer").GetValue<bool>() && jungler != null)

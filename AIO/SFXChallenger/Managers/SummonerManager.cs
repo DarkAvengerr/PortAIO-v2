@@ -44,7 +44,7 @@ using EloBuddy; namespace SFXChallenger.Managers
 
         public SpellSlot GetSlot(AIHeroClient hero)
         {
-            return (SpellSlot) (_slot ?? (_slot = hero.LSGetSpellSlot(Name)));
+            return (SpellSlot) (_slot ?? (_slot = hero.GetSpellSlot(Name)));
         }
     }
 
@@ -120,7 +120,7 @@ using EloBuddy; namespace SFXChallenger.Managers
         public static bool IsReady(this SummonerSpell spell, AIHeroClient sender = null)
         {
             return spell.GetSlot(sender ?? ObjectManager.Player) != SpellSlot.Unknown &&
-                   spell.GetSlot(sender ?? ObjectManager.Player).LSIsReady();
+                   spell.GetSlot(sender ?? ObjectManager.Player).IsReady();
         }
 
         public static List<SummonerSpell> AvailableSummoners()
@@ -189,7 +189,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                 {
                     return 0f;
                 }
-                var distance = target.Position.LSDistance(ObjectManager.Player.Position, true);
+                var distance = target.Position.Distance(ObjectManager.Player.Position, true);
 
                 var damage = 0f;
                 if (ignite && (!rangeCheck || distance <= Math.Pow(Ignite.Range, 2)))
@@ -257,7 +257,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                 {
                     return;
                 }
-                var distance = target.Position.LSDistance(ObjectManager.Player.Position, true);
+                var distance = target.Position.Distance(ObjectManager.Player.Position, true);
                 if (ignite && distance <= Math.Pow(Ignite.Range, 2))
                 {
                     Ignite.Cast(target);

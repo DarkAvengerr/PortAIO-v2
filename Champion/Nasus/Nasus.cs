@@ -167,7 +167,7 @@
         public void Load()
         {
             Console.WriteLine("Loaded Nasus");
-            Ignite = this.Player.LSGetSpellSlot("summonerdot");
+            Ignite = this.Player.GetSpellSlot("summonerdot");
             spells[Spells.E].SetSkillshot(
                 spells[Spells.E].Instance.SData.SpellCastTime,
                 spells[Spells.E].Instance.SData.LineWidth,
@@ -187,7 +187,7 @@
         private void AutoLastHit()
         {
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
-                || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed || this.Player.LSIsRecalling() || !spells[Spells.Q].LSIsReady())
+                || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed || this.Player.IsRecalling() || !spells[Spells.Q].IsReady())
             {
                 return;
             }
@@ -219,16 +219,16 @@
             if (Items.HasItem(Sheen) && (Items.CanUseItem(Sheen) || this.Player.HasBuff("sheen"))
                 && this.Player.BaseAttackDamage > dmgItem)
             {
-                dmgItem = this.Player.LSGetAutoAttackDamage(target);
+                dmgItem = this.Player.GetAutoAttackDamage(target);
             }
 
             if (Items.HasItem(Iceborn) && (Items.CanUseItem(Iceborn) || this.Player.HasBuff("itemfrozenfist"))
                 && this.Player.BaseAttackDamage * 1.25 > dmgItem)
             {
-                dmgItem = this.Player.LSGetAutoAttackDamage(target) * 1.25;
+                dmgItem = this.Player.GetAutoAttackDamage(target) * 1.25;
             }
 
-            return spells[Spells.Q].GetDamage(target) + this.Player.LSGetAutoAttackDamage(target) + dmgItem;
+            return spells[Spells.Q].GetDamage(target) + this.Player.GetAutoAttackDamage(target) + dmgItem;
         }
 
         private float IgniteDamage(AIHeroClient target)
@@ -257,15 +257,15 @@
                 return;
             }
 
-            if (useQ && spells[Spells.Q].LSIsReady())
+            if (useQ && spells[Spells.Q].IsReady())
             {
-                if (minions.Find(x => x.Health >= spells[Spells.Q].GetDamage(x) && x.LSIsValidTarget()) != null)
+                if (minions.Find(x => x.Health >= spells[Spells.Q].GetDamage(x) && x.IsValidTarget()) != null)
                 {
                     spells[Spells.Q].Cast();
                 }
             }
 
-            if (useE && spells[Spells.E].LSIsReady())
+            if (useE && spells[Spells.E].IsReady())
             {
                 if (minions.Count > 1)
                 {
@@ -286,15 +286,15 @@
                 return;
             }
 
-            if (spells[Spells.Q].LSIsReady() && useQ)
+            if (spells[Spells.Q].IsReady() && useQ)
             {
                 var allMinions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, spells[Spells.E].Range);
                 {
                     foreach (var minion in
                         allMinions.Where(
-                            minion => minion.Health <= ObjectManager.Player.LSGetSpellDamage(minion, SpellSlot.Q)))
+                            minion => minion.Health <= ObjectManager.Player.GetSpellDamage(minion, SpellSlot.Q)))
                     {
-                        if (minion.LSIsValidTarget())
+                        if (minion.IsValidTarget())
                         {
                             spells[Spells.Q].CastOnUnit(minion);
                             return;
@@ -303,7 +303,7 @@
                 }
             }
 
-            if (useE && spells[Spells.E].LSIsReady())
+            if (useE && spells[Spells.E].IsReady())
             {
                 if (minions.Count > 1)
                 {
@@ -330,7 +330,7 @@
         private void OnCombo()
         {
             var target = TargetSelector.GetTarget(spells[Spells.W].Range, TargetSelector.DamageType.Physical);
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return;
             }
@@ -343,18 +343,18 @@
             var countEnemies = this.Menu.Item("ElEasy.Nasus.Combo.Count.R").GetValue<Slider>().Value;
             var playerHp = this.Menu.Item("ElEasy.Nasus.Combo.HP").GetValue<Slider>().Value;
 
-            if (useW && spells[Spells.W].LSIsReady())
+            if (useW && spells[Spells.W].IsReady())
             {
                 spells[Spells.W].Cast(target);
             }
 
-            if (useQ && spells[Spells.Q].LSIsReady())
+            if (useQ && spells[Spells.Q].IsReady())
             {
                 spells[Spells.Q].Cast();
             }
 
 
-            if (useE && spells[Spells.E].LSIsReady() && target.LSIsValidTarget())
+            if (useE && spells[Spells.E].IsReady() && target.IsValidTarget())
             {
                 var pred = spells[Spells.E].GetPrediction(target);
                 if (pred.Hitchance >= HitChance.High)
@@ -363,14 +363,14 @@
                 }
             }
 
-            if (useR && spells[Spells.R].LSIsReady()
-                && this.Player.LSCountEnemiesInRange(spells[Spells.W].Range) >= countEnemies
+            if (useR && spells[Spells.R].IsReady()
+                && this.Player.CountEnemiesInRange(spells[Spells.W].Range) >= countEnemies
                 || (this.Player.Health / this.Player.MaxHealth) * 100 <= playerHp)
             {
                 spells[Spells.R].CastOnUnit(this.Player);
             }
 
-            if (this.Player.LSDistance(target) <= 600 && this.IgniteDamage(target) >= target.Health && useI)
+            if (this.Player.Distance(target) <= 600 && this.IgniteDamage(target) >= target.Health && useI)
             {
                 this.Player.Spellbook.CastSpell(Ignite, target);
             }
@@ -461,7 +461,7 @@
 
             var useE = this.Menu.Item("ElEasy.Nasus.Harass.E").GetValue<bool>();
 
-            if (useE && spells[Spells.E].LSIsReady() && eTarget.LSIsValidTarget() && spells[Spells.E].IsInRange(eTarget))
+            if (useE && spells[Spells.E].IsReady() && eTarget.IsValidTarget() && spells[Spells.E].IsInRange(eTarget))
             {
                 var pred = spells[Spells.E].GetPrediction(eTarget).Hitchance;
                 if (pred >= HitChance.High)
@@ -486,7 +486,7 @@
                 return;
             }
 
-            if (this.GetBonusDmg(minion) > minion.Health && spells[Spells.Q].LSIsReady())
+            if (this.GetBonusDmg(minion) > minion.Health && spells[Spells.Q].IsReady())
             {
                 Orbwalker.SetAttack(false);
                 EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, minion);

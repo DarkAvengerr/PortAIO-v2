@@ -160,22 +160,22 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             var damage = 0d;
 
             if (CanQcd == 0 && CanEcd == 0 && Q.Level > 0 && E.Level > 0)
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.Q) * 1.4;
+                damage += Player.GetSpellDamage(enemy, SpellSlot.Q) * 1.4;
             else if (CanQcd == 0 && Q.Level > 0)
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.Q);
+                damage += Player.GetSpellDamage(enemy, SpellSlot.Q);
 
             if (_hamQcd == 0 && Q.Level > 0)
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.Q, 1);
+                damage += Player.GetSpellDamage(enemy, SpellSlot.Q, 1);
 
             if (_hamWcd == 0 && W.Level > 0)
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.W);
+                damage += Player.GetSpellDamage(enemy, SpellSlot.W);
 
             if (_hamEcd == 0 && E.Level > 0)
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.E);
+                damage += Player.GetSpellDamage(enemy, SpellSlot.E);
 
             damage = ItemManager.CalcDamage(enemy, damage);
 
-            damage += Player.LSGetAutoAttackDamage(enemy) * 3;
+            damage += Player.GetAutoAttackDamage(enemy) * 3;
             return (float)damage;
         }
 
@@ -206,7 +206,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
                 if (qTarget != null)
                 {
-                    if (useQ && CanQcd == 0 && Player.LSDistance(qTarget.Position) <= QExtend.Range && !HammerTime)
+                    if (useQ && CanQcd == 0 && Player.Distance(qTarget.Position) <= QExtend.Range && !HammerTime)
                     {
                         CastQCannon(qTarget, useE, source);
                         return;
@@ -217,15 +217,15 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 {
                     if (q2Target != null)
                     {
-                        if (useW2 && Player.LSDistance(q2Target.Position) <= 300 && W.LSIsReady())
+                        if (useW2 && Player.Distance(q2Target.Position) <= 300 && W.IsReady())
                             W.Cast();
 
-                        if (useQ2 && Player.LSDistance(q2Target.Position) <= Q2.Range + q2Target.BoundingRadius && Q2.LSIsReady())
+                        if (useQ2 && Player.Distance(q2Target.Position) <= Q2.Range + q2Target.BoundingRadius && Q2.IsReady())
                             Q2.Cast(q2Target);
                     }
                     if (e2Target != null)
                     {
-                        if (useE2 && ECheck(e2Target, useQ, useW) && Player.LSDistance(e2Target.Position) <= E2.Range + e2Target.BoundingRadius && E2.LSIsReady())
+                        if (useE2 && ECheck(e2Target, useQ, useW) && Player.Distance(e2Target.Position) <= E2.Range + e2Target.BoundingRadius && E2.IsReady())
                             E2.Cast(q2Target);
                     }
                 }
@@ -251,7 +251,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             {
                 if (qTarget != null)
                 {
-                    if (useQ && CanQcd == 0 && Player.LSDistance(qTarget.Position) <= QExtend.Range && !HammerTime)
+                    if (useQ && CanQcd == 0 && Player.Distance(qTarget.Position) <= QExtend.Range && !HammerTime)
                     {
                         CastQCannon(qTarget, useE, source);
                         return;
@@ -261,16 +261,16 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 {
                     if (q2Target != null)
                     {
-                        if (useW2 && Player.LSDistance(q2Target.Position) <= 300 && W.LSIsReady())
+                        if (useW2 && Player.Distance(q2Target.Position) <= 300 && W.IsReady())
                             W.Cast();
 
-                        if (useQ2 && Player.LSDistance(q2Target.Position) <= Q2.Range + q2Target.BoundingRadius && Q2.LSIsReady())
+                        if (useQ2 && Player.Distance(q2Target.Position) <= Q2.Range + q2Target.BoundingRadius && Q2.IsReady())
                             Q2.Cast(q2Target);
                     }
 
                     if (q2Target != null)
                     {
-                        if (useE2 && Player.LSDistance(q2Target.Position) <= E2.Range + e2Target.BoundingRadius && E2.LSIsReady())
+                        if (useE2 && Player.Distance(q2Target.Position) <= E2.Range + e2Target.BoundingRadius && E2.IsReady())
                             E2.Cast(q2Target);
                     }
                 }
@@ -284,7 +284,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
         private bool ECheck(AIHeroClient target, bool useQ, bool useW)
         {
-            if (Player.LSGetSpellDamage(target, SpellSlot.E) >= target.Health)
+            if (Player.GetSpellDamage(target, SpellSlot.E) >= target.Health)
             {
                 return true;
             }
@@ -320,22 +320,22 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
         private void KsCheck()
         {
-            foreach (AIHeroClient enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.LSIsValidTarget(QExtend.Range) && x.IsEnemy && !x.IsDead).OrderByDescending(GetComboDamage))
+            foreach (AIHeroClient enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(QExtend.Range) && x.IsEnemy && !x.IsDead).OrderByDescending(GetComboDamage))
             {
                 //Q
-                if ((Player.LSGetSpellDamage(enemy, SpellSlot.Q) - 20) > enemy.Health && CanQcd == 0 && Player.LSDistance(enemy.ServerPosition) <= Q.Range)
+                if ((Player.GetSpellDamage(enemy, SpellSlot.Q) - 20) > enemy.Health && CanQcd == 0 && Player.Distance(enemy.ServerPosition) <= Q.Range)
                 {
-                    if (HammerTime && R.LSIsReady())
+                    if (HammerTime && R.IsReady())
                         R.Cast();
 
-                    if (!HammerTime && Q.LSIsReady())
+                    if (!HammerTime && Q.IsReady())
                         Q.Cast(enemy);
                 }
 
                 //QE
-                if ((Player.LSGetSpellDamage(enemy, SpellSlot.Q) * 1.4 - 20) > enemy.Health && CanQcd == 0 && CanEcd == 0 && Player.LSDistance(enemy.ServerPosition) <= QExtend.Range)
+                if ((Player.GetSpellDamage(enemy, SpellSlot.Q) * 1.4 - 20) > enemy.Health && CanQcd == 0 && CanEcd == 0 && Player.Distance(enemy.ServerPosition) <= QExtend.Range)
                 {
-                    if (HammerTime && R.LSIsReady())
+                    if (HammerTime && R.IsReady())
                         R.Cast();
 
                     if (!HammerTime)
@@ -343,13 +343,13 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 }
 
                 //Hammer QE
-                if ((Player.LSGetSpellDamage(enemy, SpellSlot.E) + Player.LSGetSpellDamage(enemy, SpellSlot.Q, 1) - 20) > enemy.Health
-                    && _hamEcd == 0 && _hamQcd == 0 && Player.LSDistance(enemy.ServerPosition) <= Q2.Range + enemy.BoundingRadius)
+                if ((Player.GetSpellDamage(enemy, SpellSlot.E) + Player.GetSpellDamage(enemy, SpellSlot.Q, 1) - 20) > enemy.Health
+                    && _hamEcd == 0 && _hamQcd == 0 && Player.Distance(enemy.ServerPosition) <= Q2.Range + enemy.BoundingRadius)
                 {
-                    if (!HammerTime && R.LSIsReady())
+                    if (!HammerTime && R.IsReady())
                         R.Cast();
 
-                    if (HammerTime && Q2.LSIsReady() && E2.LSIsReady())
+                    if (HammerTime && Q2.IsReady() && E2.IsReady())
                     {
                         Q2.Cast(enemy);
                         E2.Cast(enemy);
@@ -358,12 +358,12 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 }
 
                 //Hammer Q
-                if ((Player.LSGetSpellDamage(enemy, SpellSlot.Q, 1) - 20) > enemy.Health && _hamQcd == 0 && Player.LSDistance(enemy.ServerPosition) <= Q2.Range + enemy.BoundingRadius)
+                if ((Player.GetSpellDamage(enemy, SpellSlot.Q, 1) - 20) > enemy.Health && _hamQcd == 0 && Player.Distance(enemy.ServerPosition) <= Q2.Range + enemy.BoundingRadius)
                 {
-                    if (!HammerTime && R.LSIsReady())
+                    if (!HammerTime && R.IsReady())
                         R.Cast();
 
-                    if (HammerTime && Q2.LSIsReady())
+                    if (HammerTime && Q2.IsReady())
                     {
                         Q2.Cast(enemy);
                         return;
@@ -371,12 +371,12 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 }
 
                 //Hammer E
-                if ((Player.LSGetSpellDamage(enemy, SpellSlot.E) - 20) > enemy.Health && _hamEcd == 0 && Player.LSDistance(enemy.ServerPosition) <= E2.Range + enemy.BoundingRadius)
+                if ((Player.GetSpellDamage(enemy, SpellSlot.E) - 20) > enemy.Health && _hamEcd == 0 && Player.Distance(enemy.ServerPosition) <= E2.Range + enemy.BoundingRadius)
                 {
-                    if (!HammerTime && R.LSIsReady() && enemy.Health > 80)
+                    if (!HammerTime && R.IsReady() && enemy.Health > 80)
                         R.Cast();
 
-                    if (HammerTime && E2.LSIsReady())
+                    if (HammerTime && E2.IsReady())
                     {
                         E2.Cast(enemy);
                         return;
@@ -394,8 +394,8 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             {
                 //switch to hammer
                 if ((CanQcd != 0 || !useQ) &&
-                    (_canWcd != 0 && !HyperCharged() || !useW) && R.LSIsReady() &&
-                     HammerAllReady() && !HammerTime && Player.LSDistance(target.ServerPosition) < 650 &&
+                    (_canWcd != 0 && !HyperCharged() || !useW) && R.IsReady() &&
+                     HammerAllReady() && !HammerTime && Player.Distance(target.ServerPosition) < 650 &&
                      (useQ2 || useW2 || useE2))
                 {
                     //Chat.Print("Hammer Time");
@@ -405,7 +405,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             }
 
             //switch to cannon
-            if (((CanQcd == 0 && useQ) || (_canWcd == 0 && useW) && R.LSIsReady())
+            if (((CanQcd == 0 && useQ) || (_canWcd == 0 && useW) && R.IsReady())
                 && HammerTime)
             {
                 //Chat.Print("Cannon Time");
@@ -413,7 +413,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 return;
             }
 
-            if (_hamQcd != 0 && _hamWcd != 0 && _hamEcd != 0 && HammerTime && R.LSIsReady())
+            if (_hamQcd != 0 && _hamWcd != 0 && _hamEcd != 0 && HammerTime && R.IsReady())
             {
                 R.Cast();
             }
@@ -443,9 +443,9 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             {
                 var gateVector = Player.Position + Vector3.Normalize(target.ServerPosition - Player.Position) * gateDis;
 
-                if (Player.LSDistance(tarPred.CastPosition) < QExtend.Range + 100)
+                if (Player.Distance(tarPred.CastPosition) < QExtend.Range + 100)
                 {
-                    if (E.LSIsReady() && QExtend.LSIsReady())
+                    if (E.IsReady() && QExtend.IsReady())
                     {
                         E.Cast(gateVector);
                         QExtend.Cast(tarPred.CastPosition);
@@ -454,7 +454,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 }
             }
 
-            if ((menu.Item("UseQAlways", true).GetValue<bool>() || !useE) && CanQcd == 0 && Q.GetPrediction(target, true).Hitchance >= HitChanceManager.GetQHitChance(source) && Player.LSDistance(target.ServerPosition) <= Q.Range && Q.LSIsReady())
+            if ((menu.Item("UseQAlways", true).GetValue<bool>() || !useE) && CanQcd == 0 && Q.GetPrediction(target, true).Hitchance >= HitChanceManager.GetQHitChance(source) && Player.Distance(target.ServerPosition) <= Q.Range && Q.IsReady())
             {
                 Q.Cast(target);
             }
@@ -465,10 +465,10 @@ using EloBuddy; namespace xSaliceResurrected.Mid
         {
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
-            if (HammerTime && !R.LSIsReady())
+            if (HammerTime && !R.IsReady())
                 return;
 
-            if (HammerTime && R.LSIsReady())
+            if (HammerTime && R.IsReady())
             {
                 R.Cast();
                 return;
@@ -479,7 +479,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 var gateDis = menu.Item("gatePlace", true).GetValue<Slider>().Value;
                 var gateVector = Player.ServerPosition + Vector3.Normalize(Game.CursorPos - Player.ServerPosition) * gateDis;
 
-                if (E.LSIsReady() && Q.LSIsReady())
+                if (E.IsReady() && Q.IsReady())
                 {
                     E.Cast(gateVector);
                     Q.Cast(Game.CursorPos);
@@ -569,7 +569,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             {
                 if (menu.Item("ComboActive", true).GetValue<KeyBind>().Active)
                 {
-                    if (_canWcd == 0 && Player.LSDistance(target.Position) < 600 && !HammerTime && W.Level > 0 && W.LSIsReady())
+                    if (_canWcd == 0 && Player.Distance(target.Position) < 600 && !HammerTime && W.Level > 0 && W.IsReady())
                         if (useWCombo)
                         {
                             OrbwalkManager.ResetAutoAttackTimer();
@@ -579,7 +579,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
                 if (menu.Item("HarassActive", true).GetValue<KeyBind>().Active || menu.Item("HarassActiveT", true).GetValue<KeyBind>().Active)
                 {
-                    if (_canWcd == 0 && Player.LSDistance(target.Position) < 600 && !HammerTime && W.Level > 0 && W.LSIsReady() && target is AIHeroClient)
+                    if (_canWcd == 0 && Player.Distance(target.Position) < 600 && !HammerTime && W.Level > 0 && W.IsReady() && target is AIHeroClient)
                         if (useWHarass)
                         {
                             OrbwalkManager.ResetAutoAttackTimer();
@@ -596,23 +596,23 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
             if (menu.Item("Draw_Q", true).GetValue<bool>() && !HammerTime)
                 if (Q.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, Q.Range, Q.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, Q.Range, Q.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_QExtend", true).GetValue<bool>() && !HammerTime)
                 if (Q.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, QExtend.Range, Q.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, QExtend.Range, Q.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_Q2", true).GetValue<bool>() && HammerTime)
                 if (Q.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, Q2.Range, W.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, Q2.Range, W.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_E", true).GetValue<bool>() && !HammerTime)
                 if (E.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, E.Range, E.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_E2", true).GetValue<bool>() && HammerTime)
                 if (E.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, E2.Range, E.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, E2.Range, E.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("drawcds", true).GetValue<bool>())
             {
@@ -666,7 +666,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
             if (unit == Player.Name && name == "JayceShockBlastMis")
             {
-                if (menu.Item("forceGate", true).GetValue<bool>() && CanEcd == 0 && E.LSIsReady())
+                if (menu.Item("forceGate", true).GetValue<bool>() && CanEcd == 0 && E.IsReady())
                 {
                     var vec = spell.Position - Vector3.Normalize(Player.ServerPosition - spell.Position) * 100;
                     E.Cast(vec);
@@ -684,12 +684,12 @@ using EloBuddy; namespace xSaliceResurrected.Mid
         {
             if (!menu.Item("UseGap", true).GetValue<bool>()) return;
 
-            if (_hamEcd == 0 && gapcloser.Sender.LSIsValidTarget(E2.Range + gapcloser.Sender.BoundingRadius))
+            if (_hamEcd == 0 && gapcloser.Sender.IsValidTarget(E2.Range + gapcloser.Sender.BoundingRadius))
             {
-                if (!HammerTime && R.LSIsReady())
+                if (!HammerTime && R.IsReady())
                     R.Cast();
 
-                if (E2.LSIsReady())
+                if (E2.IsReady())
                     E2.Cast(gapcloser.Sender);
             }
         }
@@ -698,21 +698,21 @@ using EloBuddy; namespace xSaliceResurrected.Mid
         {
             if (!menu.Item("UseInt", true).GetValue<bool>()) return;
 
-            if (unit != null && Player.LSDistance(unit.Position) < Q2.Range + unit.BoundingRadius && _hamQcd == 0 && _hamEcd == 0)
+            if (unit != null && Player.Distance(unit.Position) < Q2.Range + unit.BoundingRadius && _hamQcd == 0 && _hamEcd == 0)
             {
-                if (!HammerTime && R.LSIsReady())
+                if (!HammerTime && R.IsReady())
                     R.Cast();
 
-                if (Q2.LSIsReady())
+                if (Q2.IsReady())
                     Q2.Cast(unit);
             }
 
-            if (unit != null && (Player.LSDistance(unit.Position) < E2.Range + unit.BoundingRadius && _hamEcd == 0))
+            if (unit != null && (Player.Distance(unit.Position) < E2.Range + unit.BoundingRadius && _hamEcd == 0))
             {
-                if (!HammerTime && R.LSIsReady())
+                if (!HammerTime && R.IsReady())
                     R.Cast();
 
-                if (E2.LSIsReady())
+                if (E2.IsReady())
                     E2.Cast(unit);
             }
         }

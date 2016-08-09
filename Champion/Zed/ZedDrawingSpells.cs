@@ -28,13 +28,13 @@ using EloBuddy; namespace KoreanZed
 
             float range = 0F;
 
-            if (zedSpells.R.UseOnCombo && zedSpells.R.LSIsReady() && zedSpells.R.Instance.ToggleState == 0)
+            if (zedSpells.R.UseOnCombo && zedSpells.R.IsReady() && zedSpells.R.Instance.ToggleState == 0)
             {
                 range = zedSpells.R.Range;
             }
-            else if (zedSpells.Q.UseOnCombo && zedSpells.Q.LSIsReady())
+            else if (zedSpells.Q.UseOnCombo && zedSpells.Q.IsReady())
             {
-                if (zedSpells.W.UseOnCombo && zedSpells.W.Instance.ToggleState == 0 && zedSpells.W.LSIsReady())
+                if (zedSpells.W.UseOnCombo && zedSpells.W.Instance.ToggleState == 0 && zedSpells.W.IsReady())
                 {
                     range = zedSpells.E.Range + zedSpells.W.Range;
                 }
@@ -43,9 +43,9 @@ using EloBuddy; namespace KoreanZed
                     range = zedSpells.Q.Range;
                 }
             }
-            else if (zedSpells.E.UseOnCombo && zedSpells.E.LSIsReady())
+            else if (zedSpells.E.UseOnCombo && zedSpells.E.IsReady())
             {
-                range = zedSpells.E.Range + (zedSpells.W.UseOnCombo ? zedSpells.W.LSIsReady() ? zedSpells.W.Range : 0F : 0F);
+                range = zedSpells.E.Range + (zedSpells.W.UseOnCombo ? zedSpells.W.IsReady() ? zedSpells.W.Range : 0F : 0F);
             }
 
             if (range > 0F)

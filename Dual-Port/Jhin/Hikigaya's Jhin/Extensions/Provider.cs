@@ -19,7 +19,7 @@ using EloBuddy;
         /// <returns></returns>
         public static bool IsStunnable(this AIHeroClient unit)
         {
-            return unit.LSHasBuff("jhinespotteddebuff");
+            return unit.HasBuff("jhinespotteddebuff");
         }
         /// <summary>
         /// Thats check if spell name equals to value
@@ -54,7 +54,7 @@ using EloBuddy;
         /// <returns></returns>
         public static bool HasTeleportBuff(this Obj_AI_Base unit)
         {
-            return unit.LSHasBuff("teleport_target") && unit.Team != ObjectManager.Player.Team;
+            return unit.HasBuff("teleport_target") && unit.Team != ObjectManager.Player.Team;
         }
 
         /// <summary>
@@ -85,7 +85,7 @@ using EloBuddy;
         /// <returns></returns>
         public static bool IsReloading(this AIHeroClient unit)
         {
-            return unit.LSHasBuff("JhinPassiveReload");
+            return unit.HasBuff("JhinPassiveReload");
         }
 
 

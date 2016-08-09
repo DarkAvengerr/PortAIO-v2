@@ -44,11 +44,11 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector.Others
                 new Item(
                     "Alistar", "FerociousHowl", null, false, -1,
                     (target, type) =>
-                        ObjectManager.Player.LSCountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(target)) > 1),
+                        ObjectManager.Player.CountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(target)) > 1),
                 new Item(
                     "MasterYi", "Meditate", null, false, -1,
                     (target, type) =>
-                        ObjectManager.Player.LSCountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(target)) > 1),
+                        ObjectManager.Player.CountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(target)) > 1),
                 new Item("Tryndamere", "UndyingRage", null, false, 1, (target, type) => target.HealthPercent <= 5),
                 new Item("Kayle", "JudicatorIntervention", null, false),
                 new Item("Fizz", "fizztrickslamsounddummy", null, false),
@@ -74,7 +74,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector.Others
                    (from invulnerable in Items
                        where invulnerable.Champion == null || invulnerable.Champion == target.ChampionName
                        where invulnerable.DamageType == null || invulnerable.DamageType == damageType
-                       where target.LSHasBuff(invulnerable.BuffName)
+                       where target.HasBuff(invulnerable.BuffName)
                        where !ignoreShields || !invulnerable.IsShield
                        select invulnerable).Any(
                            invulnerable =>
@@ -96,7 +96,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector.Others
                 {
                     if (invulnerable.DamageType == null || invulnerable.DamageType == damageType)
                     {
-                        if (target.LSHasBuff(invulnerable.BuffName))
+                        if (target.HasBuff(invulnerable.BuffName))
                         {
                             if (!ignoreShields || !invulnerable.IsShield)
                             {

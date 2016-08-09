@@ -112,7 +112,7 @@ using EloBuddy;
 
                 if (target != null)
                 {
-                    if (target.HasBuffUntil("chilled", ObjectManager.Player.LSDistance(target) / this.Speed)
+                    if (target.HasBuffUntil("chilled", ObjectManager.Player.Distance(target) / this.Speed)
                         || target.Health <= this.SpellObject.GetDamage(target))
                     {
                         this.SpellObject.Cast(target, false, this.Aoe);

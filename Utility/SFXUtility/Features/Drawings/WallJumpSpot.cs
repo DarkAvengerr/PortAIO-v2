@@ -76,8 +76,8 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                 foreach (var walljumpSpot in _walljumpSpots.Where(walljumpSpot => walljumpSpot.Start.IsOnScreen()))
                 {
                     Render.Circle.DrawCircle(walljumpSpot.Start, radius, fromColor, thickness);
-                    Drawing.DrawLine(walljumpSpot.Start.LSTo2D(), walljumpSpot.End.LSTo2D(), 2, toColor);
-                    Draw.Cross(walljumpSpot.End.LSTo2D(), 10f, 2f, toColor);
+                    Drawing.DrawLine(walljumpSpot.Start.To2D(), walljumpSpot.End.To2D(), 2, toColor);
+                    Draw.Cross(walljumpSpot.End.To2D(), 10f, 2f, toColor);
                 }
             }
             catch (Exception ex)

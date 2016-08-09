@@ -37,7 +37,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void InterrupterOnOnPossibleToInterrupt(AIHeroClient unit, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (!unit.LSIsValidTarget())
+            if (!unit.IsValidTarget())
             {
                 return;
             }
@@ -51,7 +51,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void AntiGapcloserOnOnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (!gapcloser.Sender.LSIsValidTarget())
+            if (!gapcloser.Sender.IsValidTarget())
             {
                 return;
             }
@@ -60,16 +60,16 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
-            if (target.LSIsValidTarget(W.Range))
+            if (target.IsValidTarget(W.Range))
             {
                 W.Cast();
             }
@@ -77,7 +77,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.CastOnUnit(target);
         }
@@ -85,7 +85,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             R.Cast(target);
         }
@@ -120,7 +120,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             if(player.ManaPercent<40)
                 return;
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
                 var mins = MinionManager.GetMinions(E.Range).Where(min => min.Health < E.GetDamage(min)).ToList();
                 if (mins.Count() != 0)

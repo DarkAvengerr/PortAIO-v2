@@ -42,12 +42,12 @@ using EloBuddy; namespace ezEvade
 
         public static void CheckDashing()
         {
-            if (EvadeUtils.TickCount - lastSpellEvadeCommand.timestamp < 250 && myHero.LSIsDashing()
+            if (EvadeUtils.TickCount - lastSpellEvadeCommand.timestamp < 250 && myHero.IsDashing()
                 && lastSpellEvadeCommand.evadeSpellData.evadeType == EvadeType.Dash)
             {
                 var dashInfo = myHero.GetDashInfo();
 
-                //Console.WriteLine("" + dashInfo.EndPos.LSDistance(lastSpellEvadeCommand.targetPosition));
+                //Console.WriteLine("" + dashInfo.EndPos.Distance(lastSpellEvadeCommand.targetPosition));
                 lastSpellEvadeCommand.targetPosition = dashInfo.EndPos;
             }
         }
@@ -219,7 +219,7 @@ using EloBuddy; namespace ezEvade
                         var path = myHero.Path;
                         if (path.Length > 0)
                         {
-                            var movePos = path[path.Length - 1].LSTo2D();
+                            var movePos = path[path.Length - 1].To2D();
                             var posInfo = EvadeHelper.CanHeroWalkToPos(movePos, ObjectCache.myHeroCache.moveSpeed, 0, 0);
 
                             if (GetSpellDangerLevel(evadeSpell) > posInfo.posDangerLevel)
@@ -285,8 +285,8 @@ using EloBuddy; namespace ezEvade
                         {
                             if (evadeSpell.isReversed)
                             {
-                                var dir = (posInfo.position - ObjectCache.myHeroCache.serverPos2D).LSNormalized();
-                                var range = ObjectCache.myHeroCache.serverPos2D.LSDistance(posInfo.position);
+                                var dir = (posInfo.position - ObjectCache.myHeroCache.serverPos2D).Normalized();
+                                var range = ObjectCache.myHeroCache.serverPos2D.Distance(posInfo.position);
                                 var pos = ObjectCache.myHeroCache.serverPos2D - dir * range;
 
                                 posInfo.position = pos;
@@ -312,7 +312,7 @@ using EloBuddy; namespace ezEvade
                 {
                     if (spell.hasProjectile() || evadeSpell.spellName == "FioraW") //temp fix, don't have fiora :'(
                     {
-                        var dir = (spell.startPos - ObjectCache.myHeroCache.serverPos2D).LSNormalized();
+                        var dir = (spell.startPos - ObjectCache.myHeroCache.serverPos2D).Normalized();
                         var pos = ObjectCache.myHeroCache.serverPos2D + dir * 100;
 
                         CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, pos), processSpell);

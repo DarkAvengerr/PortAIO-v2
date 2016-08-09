@@ -14,13 +14,13 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
         public static List<Vector3> GetRotatedQPositions()
         {
             const int currentStep = 30;
-            var direction = ObjectManager.Player.Direction.LSTo2D().LSPerpendicular();
+            var direction = ObjectManager.Player.Direction.To2D().Perpendicular();
 
             var list = new List<Vector3>();
             for (var i = -105; i <= 105; i += currentStep)
             {
                 var angleRad = Geometry.DegreeToRadian(i);
-                var rotatedPosition = ObjectManager.Player.Position.LSTo2D() + (300f * direction.LSRotated(angleRad));
+                var rotatedPosition = ObjectManager.Player.Position.To2D() + (300f * direction.Rotated(angleRad));
                 list.Add(rotatedPosition.To3D());
             }
             return list;
@@ -30,16 +30,16 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
         {
             var positions = GetRotatedQPositions();
             var enemyPositions = TumblePositioning.GetEnemyPoints();
-            var safePositions = positions.Where(pos => !enemyPositions.Contains(pos.LSTo2D())).ToList();
-            var BestPosition = ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, 300f);
+            var safePositions = positions.Where(pos => !enemyPositions.Contains(pos.To2D())).ToList();
+            var BestPosition = ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f);
             var AverageDistanceWeight = .65f;
             var ClosestDistanceWeight = .35f;
 
             var bestWeightedAvg = 0f;
             
-            if (ObjectManager.Player.LSCountEnemiesInRange(1300f) <= 1)
+            if (ObjectManager.Player.CountEnemiesInRange(1300f) <= 1)
             {
-                var position = ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, 300f);
+                var position = ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f);
                 return position.IsSafe(true) ? position : Vector3.Zero;
             }
 
@@ -52,15 +52,15 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
                     continue;
                 }
                 
-                if (ObjectManager.Player.LSDistance(enemy) < enemy.AttackRange - 85 && !enemy.IsMelee)
+                if (ObjectManager.Player.Distance(enemy) < enemy.AttackRange - 85 && !enemy.IsMelee)
                 {
-                    return ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, 300f);
+                    return ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f);
                 }
 
                 var avgDist = GetAvgDistance(position);
                 if (avgDist > -1)
                 {
-                    var closestDist = ObjectManager.Player.ServerPosition.LSDistance(enemy.ServerPosition);
+                    var closestDist = ObjectManager.Player.ServerPosition.Distance(enemy.ServerPosition);
                     var weightedAvg = closestDist * ClosestDistanceWeight + avgDist * AverageDistanceWeight;
                     if (weightedAvg > bestWeightedAvg && position.IsSafe())
                     {
@@ -78,7 +78,7 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
             if (Variables.Orbwalker.GetTarget() is AIHeroClient)
             {
                 var owAI = Variables.Orbwalker.GetTarget() as AIHeroClient;
-                if (owAI.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 120f, true, from))
+                if (owAI.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 120f, true, from))
                 {
                     return owAI;
                 }
@@ -88,18 +88,18 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
 
             return
                 HeroManager.Enemies
-                    .FirstOrDefault(en => en.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null), true, from));
+                    .FirstOrDefault(en => en.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null), true, from));
         }
 
         public static bool IsSafeEx(Vector3 position)
         {
             var closeEnemies =
-                    HeroManager.Enemies.FindAll(en => en.LSIsValidTarget(1500f) && !(en.LSDistance(ObjectManager.Player.ServerPosition) < en.AttackRange + 65f))
-                    .OrderBy(en => en.LSDistance(position));
+                    HeroManager.Enemies.FindAll(en => en.IsValidTarget(1500f) && !(en.Distance(ObjectManager.Player.ServerPosition) < en.AttackRange + 65f))
+                    .OrderBy(en => en.Distance(position));
 
             return closeEnemies.All(
                                 enemy =>
-                                    position.LSCountEnemiesInRange(
+                                    position.CountEnemiesInRange(
                                         MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.tumble.dynamicqsafety")
                                             ? enemy.AttackRange
                                             : 405f) <= 1);
@@ -107,22 +107,22 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
 
         public static float GetAvgDistance(Vector3 from)
         {
-            var numberOfEnemies = from.LSCountEnemiesInRange(1000f);
+            var numberOfEnemies = from.CountEnemiesInRange(1000f);
             if (numberOfEnemies != 0)
             {
-                var enemies = HeroManager.Enemies.Where(en => en.LSIsValidTarget(1000f, true, from)
+                var enemies = HeroManager.Enemies.Where(en => en.IsValidTarget(1000f, true, from)
                                                     &&
                                                     en.Health >
-                                                    ObjectManager.Player.LSGetAutoAttackDamage(en)*3 +
+                                                    ObjectManager.Player.GetAutoAttackDamage(en)*3 +
                                                     Variables.spells[SpellSlot.W].GetDamage(en) +
                                                     Variables.spells[SpellSlot.Q].GetDamage(en)).ToList();
-                var enemiesEx = HeroManager.Enemies.Where(en => en.LSIsValidTarget(1000f, true, from)).ToList();
+                var enemiesEx = HeroManager.Enemies.Where(en => en.IsValidTarget(1000f, true, from)).ToList();
                 var LHEnemies = enemiesEx.Count() - enemies.Count();
                 var totalDistance = 0f;
 
                 totalDistance = (LHEnemies > 1 && enemiesEx.Count() > 2) ? 
-                    enemiesEx.Sum(en => en.LSDistance(ObjectManager.Player.ServerPosition)) : 
-                    enemies.Sum(en => en.LSDistance(ObjectManager.Player.ServerPosition));
+                    enemiesEx.Sum(en => en.Distance(ObjectManager.Player.ServerPosition)) : 
+                    enemies.Sum(en => en.Distance(ObjectManager.Player.ServerPosition));
 
                 return totalDistance / numberOfEnemies;
             }

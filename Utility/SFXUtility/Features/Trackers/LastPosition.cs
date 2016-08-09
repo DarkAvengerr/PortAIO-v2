@@ -103,7 +103,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
                 foreach (var lp in _lastPositions)
                 {
                     if (!lp.Hero.IsDead && !lp.LastPosition.Equals(Vector3.Zero) &&
-                        lp.LastPosition.LSDistance(lp.Hero.Position) > 500)
+                        lp.LastPosition.Distance(lp.Hero.Position) > 500)
                     {
                         lp.Teleported = false;
                         lp.LastSeen = Game.Time;

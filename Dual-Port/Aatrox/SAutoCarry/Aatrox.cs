@@ -102,7 +102,7 @@ namespace SAutoCarry.Champions
         {
             if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Mixed)
             {
-                if (Spells[W].LSIsReady() && HarassUseW)
+                if (Spells[W].IsReady() && HarassUseW)
                 {
                     Spells[W].Cast();
                     return;

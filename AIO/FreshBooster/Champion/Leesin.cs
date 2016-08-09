@@ -138,14 +138,14 @@ using EloBuddy;
                     var GetTarget = TargetSelector.GetSelectedTarget();
                     if (GetTarget == null || GetTarget.IsDead) return;
                     var Turrets = ObjectManager.Get<Obj_Turret>()
-                    .OrderBy(obj => obj.Position.LSDistance(Player.Position))
+                    .OrderBy(obj => obj.Position.Distance(Player.Position))
                     .FirstOrDefault(obj => obj.IsAlly && !obj.IsDead);
-                    var AllyChampion = ObjectManager.Get<AIHeroClient>().FirstOrDefault(obj => obj.IsAlly && !obj.IsMe && !obj.IsDead && obj.LSDistance(Player.Position) < 2000);
+                    var AllyChampion = ObjectManager.Get<AIHeroClient>().FirstOrDefault(obj => obj.IsAlly && !obj.IsMe && !obj.IsDead && obj.Distance(Player.Position) < 2000);
                     if (Turrets == null && AllyChampion == null) return;
                     if (AllyChampion != null)
-                    { var InsecPOS = InsecST.LSExtend(InsecED, +InsecED.LSDistance(InsecST) + 230); }
+                    { var InsecPOS = InsecST.Extend(InsecED, +InsecED.Distance(InsecST) + 230); }
                     Render.Circle.DrawCircle(InsecPOS, 50, Color.Gold);
-                    if (GetTarget.LSDistance(Player.Position) < 625)
+                    if (GetTarget.Distance(Player.Position) < 625)
                     {
                         Render.Circle.DrawCircle(Player.Position, 525, Color.LightGreen);
                     }
@@ -155,9 +155,9 @@ using EloBuddy;
                     }
                     Drawing.DrawLine(Drawing.WorldToScreen(InsecST)[0], Drawing.WorldToScreen(InsecST)[1], Drawing.WorldToScreen(InsecED)[0], Drawing.WorldToScreen(InsecED)[1], 2, Color.Green);
                 }
-                if (_Q.LSIsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name == "blindmonkqtwo")
+                if (_Q.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name == "blindmonkqtwo")
                 {
-                    var target = ObjectManager.Get<AIHeroClient>().FirstOrDefault(f => f.IsEnemy && !f.IsZombie && f.LSDistance(Player.Position) <= _Q.Range && f.LSHasBuff("BlindMonkQOne"));
+                    var target = ObjectManager.Get<AIHeroClient>().FirstOrDefault(f => f.IsEnemy && !f.IsZombie && f.Distance(Player.Position) <= _Q.Range && f.HasBuff("BlindMonkQOne"));
                     if (target != null)
                         Render.Circle.DrawCircle(target.Position, 175, Color.YellowGreen);
                 }
@@ -180,17 +180,17 @@ using EloBuddy;
                 {
                     float damage = 0;
 
-                    if (_Q.LSIsReady())
+                    if (_Q.IsReady())
                         damage += _Q.GetDamage(enemy);
-                    if (_W.LSIsReady())
+                    if (_W.IsReady())
                         damage += _W.GetDamage(enemy);
-                    if (_E.LSIsReady())
+                    if (_E.IsReady())
                         damage += _E.GetDamage(enemy);
-                    if (_R.LSIsReady())
+                    if (_R.IsReady())
                         damage += _R.GetDamage(enemy);
 
                     if (!Player.Spellbook.IsAutoAttacking)
-                        damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                        damage += (float)Player.GetAutoAttackDamage(enemy, true);
 
                     return damage;
                 }
@@ -211,7 +211,7 @@ using EloBuddy;
             try
             {
                 if (Player.IsDead) return;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
                 {
                     if (_MainMenu.Item("LeeSin_Indicator").GetValue<bool>())
                     {
@@ -254,12 +254,12 @@ using EloBuddy;
             {
                 if (Player.IsDead) return;
                 //킬스틸 타겟
-                var KTarget = ObjectManager.Get<AIHeroClient>().OrderByDescending(x => x.Health).FirstOrDefault(x => x.IsEnemy && x.LSDistance(Player) < 375);
-                if (KTarget != null && _MainMenu.Item("LeeSin_KUse_R").GetValue<bool>() && KTarget.Health < _R.GetDamage(KTarget) && _R.LSIsReady())
+                var KTarget = ObjectManager.Get<AIHeroClient>().OrderByDescending(x => x.Health).FirstOrDefault(x => x.IsEnemy && x.Distance(Player) < 375);
+                if (KTarget != null && _MainMenu.Item("LeeSin_KUse_R").GetValue<bool>() && KTarget.Health < _R.GetDamage(KTarget) && _R.IsReady())
                     _R.Cast(KTarget, true);
                 if (InsecTime < Environment.TickCount) InsecType = "Wait"; // 인섹킥 초기화
                 if (Ward_Time < Environment.TickCount) WW = true;   // 와드방호 초기화
-                if (_MainMenu.Item("LeeSin_AutoKick").GetValue<Slider>().Value != 0 && _R.Level > 0 && _R.LSIsReady() && !_MainMenu.Item("LeeSin_InsecKick").GetValue<KeyBind>().Active)
+                if (_MainMenu.Item("LeeSin_AutoKick").GetValue<Slider>().Value != 0 && _R.Level > 0 && _R.IsReady() && !_MainMenu.Item("LeeSin_InsecKick").GetValue<KeyBind>().Active)
                 {
                     AutoKick();  // 오토 킥
                 }
@@ -267,7 +267,7 @@ using EloBuddy;
                 {
                     var QTarget = TargetSelector.GetTarget(_Q.Range, TargetSelector.DamageType.Physical);
                     var ETarget = TargetSelector.GetTarget(_E.Range, TargetSelector.DamageType.Physical);
-                    if (QTarget != null && _Q.LSIsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name == "BlindMonkQOne" && _MainMenu.Item("LeeSin_CUse_Q").GetValue<bool>() && QTime < Environment.TickCount)
+                    if (QTarget != null && _Q.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name == "BlindMonkQOne" && _MainMenu.Item("LeeSin_CUse_Q").GetValue<bool>() && QTime < Environment.TickCount)
                     {
                         var HC = HitChance.Medium;
                         switch (_MainMenu.Item("LeeSin_CUseQ_Hit").GetValue<Slider>().Value)
@@ -295,12 +295,12 @@ using EloBuddy;
                         _Q.CastIfHitchanceEquals(QTarget, HC, true);
                         QTime = TickCount(2000);
                     }
-                    if (ETarget != null && _E.LSIsReady() && !Orbwalking.CanAttack() && Orbwalking.CanMove(10) && ETime < Environment.TickCount && _MainMenu.Item("LeeSin_CUse_E").GetValue<bool>())
+                    if (ETarget != null && _E.IsReady() && !Orbwalking.CanAttack() && Orbwalking.CanMove(10) && ETime < Environment.TickCount && _MainMenu.Item("LeeSin_CUse_E").GetValue<bool>())
                     {
                         _E.Cast(true);
                         ETime = TickCount(1000);
                     }
-                    if (!_Q.LSIsReady() && !_E.LSIsReady() && !Orbwalking.CanAttack() && Orbwalking.CanMove(10) && WTime < Environment.TickCount && _MainMenu.Item("LeeSin_CUse_W").GetValue<bool>())
+                    if (!_Q.IsReady() && !_E.IsReady() && !Orbwalking.CanAttack() && Orbwalking.CanMove(10) && WTime < Environment.TickCount && _MainMenu.Item("LeeSin_CUse_W").GetValue<bool>())
                     {
                         _W.Cast(Player, true);
                         WTime = TickCount(1000);
@@ -310,18 +310,18 @@ using EloBuddy;
                 {
                     var QTarget = TargetSelector.GetTarget(_Q.Range, TargetSelector.DamageType.Physical);
                     var ETarget = TargetSelector.GetTarget(_E.Range, TargetSelector.DamageType.Physical);
-                    if (QTarget != null && _Q.LSIsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name == "BlindMonkQOne" && _MainMenu.Item("LeeSin_HUse_Q").GetValue<bool>() && QTime < Environment.TickCount)
+                    if (QTarget != null && _Q.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name == "BlindMonkQOne" && _MainMenu.Item("LeeSin_HUse_Q").GetValue<bool>() && QTime < Environment.TickCount)
                     {
                         var HC = HitChance.Medium;
                         _Q.CastIfHitchanceEquals(QTarget, HC, true);
                         QTime = TickCount(2000);
                     }
-                    if (ETarget != null && _E.LSIsReady() && !Orbwalking.CanAttack() && Orbwalking.CanMove(10) && ETime < Environment.TickCount && _MainMenu.Item("LeeSin_HUse_E").GetValue<bool>())
+                    if (ETarget != null && _E.IsReady() && !Orbwalking.CanAttack() && Orbwalking.CanMove(10) && ETime < Environment.TickCount && _MainMenu.Item("LeeSin_HUse_E").GetValue<bool>())
                     {
                         _E.Cast(true);
                         ETime = TickCount(1000);
                     }
-                    if (!_Q.LSIsReady() && !_E.LSIsReady() && !Orbwalking.CanAttack() && Orbwalking.CanMove(10) && WTime < Environment.TickCount && _MainMenu.Item("LeeSin_HUse_W").GetValue<bool>())
+                    if (!_Q.IsReady() && !_E.IsReady() && !Orbwalking.CanAttack() && Orbwalking.CanMove(10) && WTime < Environment.TickCount && _MainMenu.Item("LeeSin_HUse_W").GetValue<bool>())
                     {
                         _W.Cast(Player, true);
                         WTime = TickCount(1000);
@@ -332,18 +332,18 @@ using EloBuddy;
                     var MinionTarget = MinionManager.GetMinions(1100, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
                     foreach (var minion in MinionTarget)
                     {
-                        if (_Q.LSIsReady() && _MainMenu.Item("LeeSin_LUse_Q").GetValue<bool>() && minion != null && Environment.TickCount > QTime)
+                        if (_Q.IsReady() && _MainMenu.Item("LeeSin_LUse_Q").GetValue<bool>() && minion != null && Environment.TickCount > QTime)
                         {
                             _Q.CastIfHitchanceEquals(minion, HitChance.Medium, true);
                             QTime = TickCount(1000);
                         }
-                        if (_E.LSIsReady() && _MainMenu.Item("LeeSin_LUse_E").GetValue<bool>() && minion != null && Environment.TickCount > ETime
+                        if (_E.IsReady() && _MainMenu.Item("LeeSin_LUse_E").GetValue<bool>() && minion != null && Environment.TickCount > ETime
                             && !Orbwalking.CanAttack() && Orbwalking.CanMove(10))
                         {
                             _E.Cast(true);
                             ETime = TickCount(1000);
                         }
-                        if (_W.LSIsReady() && _MainMenu.Item("LeeSin_LUse_W").GetValue<bool>() && minion != null && Environment.TickCount > WTime
+                        if (_W.IsReady() && _MainMenu.Item("LeeSin_LUse_W").GetValue<bool>() && minion != null && Environment.TickCount > WTime
                             && !Orbwalking.CanAttack() && Orbwalking.CanMove(10))
                         {
                             _W.Cast(Player, true);
@@ -356,18 +356,18 @@ using EloBuddy;
                     var JungleTarget = MinionManager.GetMinions(1100, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
                     foreach (var minion in JungleTarget)
                     {
-                        if (_Q.LSIsReady() && _MainMenu.Item("LeeSin_JUse_Q").GetValue<bool>() && minion != null && Environment.TickCount > QTime)
+                        if (_Q.IsReady() && _MainMenu.Item("LeeSin_JUse_Q").GetValue<bool>() && minion != null && Environment.TickCount > QTime)
                         {
                             _Q.CastIfHitchanceEquals(minion, HitChance.Medium, true);
                             QTime = TickCount(1500);
                         }
-                        if (_E.LSIsReady() && _MainMenu.Item("LeeSin_JUse_E").GetValue<bool>() && minion != null && Environment.TickCount > ETime
+                        if (_E.IsReady() && _MainMenu.Item("LeeSin_JUse_E").GetValue<bool>() && minion != null && Environment.TickCount > ETime
                             && !Orbwalking.CanAttack() && Orbwalking.CanMove(10))
                         {
                             _E.Cast(true);
                             ETime = TickCount(1500);
                         }
-                        if (_W.LSIsReady() && _MainMenu.Item("LeeSin_JUse_W").GetValue<bool>() && minion != null && Environment.TickCount > WTime
+                        if (_W.IsReady() && _MainMenu.Item("LeeSin_JUse_W").GetValue<bool>() && minion != null && Environment.TickCount > WTime
                             && !Orbwalking.CanAttack() && Orbwalking.CanMove(10))
                         {
                             _W.Cast(Player, true);
@@ -379,12 +379,12 @@ using EloBuddy;
                 {
                     var GetTarget = TargetSelector.GetSelectedTarget();
                     if (GetTarget == null || GetTarget.IsDead) return;
-                    if (_Q.LSIsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name == "BlindMonkQOne" && _Q.GetPrediction(GetTarget).Hitchance >= HitChance.Low)
+                    if (_Q.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name == "BlindMonkQOne" && _Q.GetPrediction(GetTarget).Hitchance >= HitChance.Low)
                         _Q.CastOnUnit(GetTarget, true);
                     var Turrets = ObjectManager.Get<Obj_Turret>()
-                    .OrderBy(obj => obj.Position.LSDistance(Player.Position))
+                    .OrderBy(obj => obj.Position.Distance(Player.Position))
                     .FirstOrDefault(obj => obj.IsAlly && obj.Health > 1);
-                    var AllyChampion = ObjectManager.Get<AIHeroClient>().FirstOrDefault(obj => obj.IsAlly && !obj.IsMe && !obj.IsDead && obj.LSDistance(Player.Position) < 2000);
+                    var AllyChampion = ObjectManager.Get<AIHeroClient>().FirstOrDefault(obj => obj.IsAlly && !obj.IsMe && !obj.IsDead && obj.Distance(Player.Position) < 2000);
                     if (Turrets == null && AllyChampion == null) return;
                     if (AllyChampion != null)
                     {
@@ -395,14 +395,14 @@ using EloBuddy;
                         InsecST = Turrets.Position;
                     }
                     InsecED = GetTarget.Position;
-                    InsecPOS = InsecST.LSExtend(InsecED, +InsecED.LSDistance(InsecST) + 230);
+                    InsecPOS = InsecST.Extend(InsecED, +InsecED.Distance(InsecST) + 230);
                     MovingPlayer(InsecPOS);
-                    if (!_R.LSIsReady())
+                    if (!_R.IsReady())
                         return;
 
-                    if (_MainMenu.Item("LeeSin_KickAndFlash").GetValue<bool>() && InsecPOS.LSDistance(Player.Position) < 425
-                        && GetTarget.LSDistance(Player.Position) < 375 && InsecType == "Wait" && _R.Level > 0 && _R.LSIsReady() &&
-                        InsecType != "WF" && InsecType != "WF1" && Player.LSGetSpellSlot("SummonerFlash").LSIsReady())
+                    if (_MainMenu.Item("LeeSin_KickAndFlash").GetValue<bool>() && InsecPOS.Distance(Player.Position) < 425
+                        && GetTarget.Distance(Player.Position) < 375 && InsecType == "Wait" && _R.Level > 0 && _R.IsReady() &&
+                        InsecType != "WF" && InsecType != "WF1" && Player.GetSpellSlot("SummonerFlash").IsReady())
                     {
                         InsecTime = TickCount(2000);
                         InsecText = "Flash";
@@ -410,10 +410,10 @@ using EloBuddy;
                         _R.Cast(GetTarget, true);
                         return;
                     }
-                    if (InsecPOS.LSDistance(Player.Position) < 625 && _R.Level > 0 && _R.LSIsReady() && InsecType != "RF")
+                    if (InsecPOS.Distance(Player.Position) < 625 && _R.Level > 0 && _R.IsReady() && InsecType != "RF")
                     {
                         InsecText = "Ward";
-                        if (InsecType == "Wait" && InsecType != "WF" && InsecType != "WF1" && _W.LSIsReady())
+                        if (InsecType == "Wait" && InsecType != "WF" && InsecType != "WF1" && _W.IsReady())
                         {
                             if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "blindmonkwtwo") return;
                             InsecTime = TickCount(2000);
@@ -421,13 +421,13 @@ using EloBuddy;
                             var Ward = Items.GetWardSlot();
                             Player.Spellbook.CastSpell(Ward.SpellSlot, InsecPOS);
                         }
-                        if (InsecType == "WF" && _W.LSIsReady())
+                        if (InsecType == "WF" && _W.IsReady())
                         {
                             if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "blindmonkwtwo") return;
                             var WardObj = ObjectManager.Get<Obj_AI_Base>()  // 커서근처 와드 유무
-                                    .OrderBy(obj => obj.LSDistance(InsecPOS))
+                                    .OrderBy(obj => obj.Distance(InsecPOS))
                                     .FirstOrDefault(obj => obj.IsAlly && !obj.IsMe
-                                    && obj.LSDistance(InsecPOS) <= 110 && obj.Name.ToLower().Contains("ward"));
+                                    && obj.Distance(InsecPOS) <= 110 && obj.Name.ToLower().Contains("ward"));
                             if (WardObj != null)
                             {
                                 InsecType = "WF1";
@@ -436,7 +436,7 @@ using EloBuddy;
                         }
                         if (InsecType == "WF1")
                         {
-                            if (GetTarget.LSDistance(Player.Position) < 375)
+                            if (GetTarget.Distance(Player.Position) < 375)
                             {
                                 _R.Cast(GetTarget, true);
                             }
@@ -458,17 +458,17 @@ using EloBuddy;
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Cursor);
                     Console.WriteLine(ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name);
                     if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name.ToLower() == "blindmonkwtwo") return;
-                    if (Player.LSDistance(Cursor) > 700) Cursor = Game.CursorPos.LSExtend(Player.Position, +Player.LSDistance(Game.CursorPos) - 700);
+                    if (Player.Distance(Cursor) > 700) Cursor = Game.CursorPos.Extend(Player.Position, +Player.Distance(Game.CursorPos) - 700);
                     //Render.Circle.DrawCircle(Cursor, 50, Color.Black, 2);
                     //Drawing.DrawText(200, 200, Color.White, "WW is: " + WW.ToString());                    
-                    if (_W.LSIsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name.ToLower() == "blindmonkwone")
+                    if (_W.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name.ToLower() == "blindmonkwone")
                     {
-                        var Object = ObjectManager.Get<AIHeroClient>().FirstOrDefault(obj => obj.IsAlly && !obj.IsMe && obj.LSDistance(Cursor) < 110); // 커서근처 챔프유무
+                        var Object = ObjectManager.Get<AIHeroClient>().FirstOrDefault(obj => obj.IsAlly && !obj.IsMe && obj.Distance(Cursor) < 110); // 커서근처 챔프유무
                         var Minion = MinionManager.GetMinions(Cursor, 110, MinionTypes.All, MinionTeam.Ally); // 아군 미니언 유무
                         var WardObj = ObjectManager.Get<Obj_AI_Base>()  // 커서근처 와드 유무
-                                .OrderBy(obj => obj.LSDistance(Cursor))
+                                .OrderBy(obj => obj.Distance(Cursor))
                                 .FirstOrDefault(obj => obj.IsAlly && !obj.IsMe
-                                && obj.LSDistance(Cursor) <= 110 && obj.Name.ToLower().Contains("ward"));
+                                && obj.Distance(Cursor) <= 110 && obj.Name.ToLower().Contains("ward"));
                         if (WardObj != null && WTime < Environment.TickCount)
                         {
                             _W.Cast(WardObj, true);
@@ -499,7 +499,7 @@ using EloBuddy;
                                 }
                             }
                         }
-                        if (Player.LSDistance(Cursor) > 625) Cursor = Game.CursorPos.LSExtend(Player.Position, +Player.LSDistance(Game.CursorPos) - 625);
+                        if (Player.Distance(Cursor) > 625) Cursor = Game.CursorPos.Extend(Player.Position, +Player.Distance(Game.CursorPos) - 625);
                         //Render.Circle.DrawCircle(Cursor, 50, Color.Black, 2);                            
                         if (WW && Ward != null && Ward_Time < Environment.TickCount)
                         {
@@ -508,9 +508,9 @@ using EloBuddy;
                             Ward_Time = TickCount(2000);
                         }
                         WardObj = ObjectManager.Get<Obj_AI_Base>()  // 커서근처 와드 유무
-                                .OrderBy(obj => obj.LSDistance(Cursor))
+                                .OrderBy(obj => obj.Distance(Cursor))
                                 .FirstOrDefault(obj => obj.IsAlly && !obj.IsMe
-                                && obj.LSDistance(Cursor) <= 110 && obj.Name.ToLower().Contains("ward"));
+                                && obj.Distance(Cursor) <= 110 && obj.Name.ToLower().Contains("ward"));
                         if (WardObj != null && WTime < Environment.TickCount)
                         {
                             _W.Cast(WardObj, true);
@@ -535,12 +535,12 @@ using EloBuddy;
         {
             try
             {
-                if (_MainMenu.Item("LeeSin_AntiGab").GetValue<Slider>().Value == 0 || !_R.LSIsReady()) return;
+                if (_MainMenu.Item("LeeSin_AntiGab").GetValue<Slider>().Value == 0 || !_R.IsReady()) return;
                 var Anti = _MainMenu.Item("LeeSin_AntiGab").GetValue<Slider>().Value;
                 var Myhp = Player.HealthPercent;
                 var Target = gapcloser.Sender;
                 Console.Write(Target.ChampionName);
-                if (Target != null && Player.LSDistance(Target) < 375 && Myhp < Anti && _R.Level > 0 && _R.LSIsReady()) _R.Cast(Target, true);
+                if (Target != null && Player.Distance(Target) < 375 && Myhp < Anti && _R.Level > 0 && _R.IsReady()) _R.Cast(Target, true);
             }
             catch (Exception)
             {
@@ -563,7 +563,7 @@ using EloBuddy;
                         //if (MainMenu._MainMenu.Item("KickAndFlash").GetValue<KeyBind>().Active && args.SData.Name == "summonerflash") RF = true;
                         if (_MainMenu.Item("LeeSin_InsecKick").GetValue<KeyBind>().Active && args.SData.Name == "BlindMonkRKick" && InsecType == "RF" && InsecType != "WF" && InsecType != "WF1")
                         {
-                            var Flash = Player.LSGetSpellSlot("SummonerFlash");
+                            var Flash = Player.GetSpellSlot("SummonerFlash");
                             Player.Spellbook.CastSpell(Flash, InsecPOS, true);
                         }
                         //if (MainMenu._MainMenu.Item("InsecKick").GetValue<KeyBind>().Active && args.SData.Name == "blindmonkwtwo")
@@ -662,19 +662,19 @@ using EloBuddy;
             if (_MainMenu.Item("LeeSin_AutoKick").GetValue<Slider>().Value == 0 || _MainMenu.Item("LeeSin_InsecKick").GetValue<KeyBind>().Active) return;
 
             var target =
-                HeroManager.Enemies.Where(x => x.LSDistance(Player) < 375 && !x.IsDead && x.LSIsValidTarget(375))
-                    .OrderBy(x => x.LSDistance(Player)).FirstOrDefault();
+                HeroManager.Enemies.Where(x => x.Distance(Player) < 375 && !x.IsDead && x.IsValidTarget(375))
+                    .OrderBy(x => x.Distance(Player)).FirstOrDefault();
             if (target == null) return;
 
             var ultPoly = new Geometry.Polygon.Rectangle(Player.ServerPosition,
-                Player.ServerPosition.LSExtend(target.Position, 1100),
+                Player.ServerPosition.Extend(target.Position, 1100),
                 target.BoundingRadius + 10);
 
             var count =
-                HeroManager.Enemies.Where(x => x.LSDistance(Player) < 1100 && x.LSIsValidTarget(1100))
+                HeroManager.Enemies.Where(x => x.Distance(Player) < 1100 && x.IsValidTarget(1100))
                     .Count(h => h.NetworkId != target.NetworkId && ultPoly.IsInside(h.ServerPosition));
 
-            if (count >= _MainMenu.Item("LeeSin_AutoKick").GetValue<Slider>().Value && _R.LSIsReady())
+            if (count >= _MainMenu.Item("LeeSin_AutoKick").GetValue<Slider>().Value && _R.IsReady())
             {
                 _R.Cast(target);
             }

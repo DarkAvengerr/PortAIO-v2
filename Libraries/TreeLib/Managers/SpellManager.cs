@@ -39,7 +39,7 @@ namespace TreeLib.Managers
                 }
             }
 
-            var igniteSlot = ObjectManager.Player.LSGetSpellSlot("summonerdot");
+            var igniteSlot = ObjectManager.Player.GetSpellSlot("summonerdot");
 
             if (!igniteSlot.Equals(SpellSlot.Unknown))
             {

@@ -205,7 +205,7 @@ using EloBuddy; namespace ElUtilitySuite.Utility
                 {
                     if (sender.Name.ToLower().Contains("Rengar_Base_R_Alert"))
                     {
-                        if (this.Player.LSHasBuff("rengarralertsound") && !this.rengar.IsVisible && !this.rengar.IsDead)
+                        if (this.Player.HasBuff("rengarralertsound") && !this.rengar.IsVisible && !this.rengar.IsDead)
                         {
                             var item = this.GetBestWardItem();
                             if (item != null)
@@ -230,7 +230,7 @@ using EloBuddy; namespace ElUtilitySuite.Utility
         {
             foreach (var item in this.Items.OrderBy(x => x.Priority))
             {
-                if (!item.Spell.LSIsReady() || item.Spell.Slot == SpellSlot.Unknown)
+                if (!item.Spell.IsReady() || item.Spell.Slot == SpellSlot.Unknown)
                 {
                     continue;
                 }
@@ -256,7 +256,7 @@ using EloBuddy; namespace ElUtilitySuite.Utility
                     return;
                 }
 
-                if (this.Player.LSDistance(sender.Position) > 1000f || this.lastReveal + Delay > Game.Time)
+                if (this.Player.Distance(sender.Position) > 1000f || this.lastReveal + Delay > Game.Time)
                 {
                     return;
                 }
@@ -269,7 +269,7 @@ using EloBuddy; namespace ElUtilitySuite.Utility
                     var item = this.GetBestWardItem();
                     if (item != null)
                     {
-                        var spellCastPosition = this.Player.LSDistance(args.End) > 600 ? this.Player.Position : args.End;
+                        var spellCastPosition = this.Player.Distance(args.End) > 600 ? this.Player.Position : args.End;
                         this.Player.Spellbook.CastSpell(item.Slot, spellCastPosition);
                     }
                 }
@@ -285,7 +285,7 @@ using EloBuddy; namespace ElUtilitySuite.Utility
                     var item = this.GetBestWardItem();
                     if (item != null)
                     {
-                        this.Player.Spellbook.CastSpell(item.Slot, this.Player.Position.LSExtend(args.End, 600f));
+                        this.Player.Spellbook.CastSpell(item.Slot, this.Player.Position.Extend(args.End, 600f));
                         this.lastReveal = Game.Time;
                     }
                 }

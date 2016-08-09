@@ -189,7 +189,7 @@
         /// </summary>
         public void Load()
         {
-            ignite = this.Player.LSGetSpellSlot("summonerdot");
+            ignite = this.Player.GetSpellSlot("summonerdot");
             spells[Spells.E].SetSkillshot(0.30f, 80, int.MaxValue, false, SkillshotType.SkillshotCone);
 
             Game.OnUpdate += this.OnUpdate;
@@ -205,26 +205,26 @@
         {
             var damage = 0d;
 
-            if (spells[Spells.Q].LSIsReady())
+            if (spells[Spells.Q].IsReady())
             {
-                damage += this.Player.LSGetSpellDamage(enemy, SpellSlot.Q);
+                damage += this.Player.GetSpellDamage(enemy, SpellSlot.Q);
             }
 
-            if (spells[Spells.W].LSIsReady())
+            if (spells[Spells.W].IsReady())
             {
-                damage += this.Player.LSGetSpellDamage(enemy, SpellSlot.W);
+                damage += this.Player.GetSpellDamage(enemy, SpellSlot.W);
             }
 
-            if (spells[Spells.E].LSIsReady())
+            if (spells[Spells.E].IsReady())
             {
-                damage += this.Player.LSGetSpellDamage(enemy, SpellSlot.E);
+                damage += this.Player.GetSpellDamage(enemy, SpellSlot.E);
             }
 
-            if (spells[Spells.R].LSIsReady())
+            if (spells[Spells.R].IsReady())
             {
                 damage +=
                     enemy.Buffs.Where(buff => buff.Name == "dariushemo")
-                        .Sum(buff => this.Player.LSGetSpellDamage(enemy, SpellSlot.R, 1) * (1 + buff.Count / 5) - 1);
+                        .Sum(buff => this.Player.GetSpellDamage(enemy, SpellSlot.R, 1) * (1 + buff.Count / 5) - 1);
             }
 
             return (float)damage;
@@ -249,13 +249,13 @@
             }
 
             if (args.DangerLevel != Interrupter2.DangerLevel.High
-                || sender.LSDistance(this.Player) > spells[Spells.E].Range)
+                || sender.Distance(this.Player) > spells[Spells.E].Range)
             {
                 return;
             }
 
-            if (sender.LSIsValidTarget(spells[Spells.E].Range) && args.DangerLevel == Interrupter2.DangerLevel.High
-                && spells[Spells.E].LSIsReady())
+            if (sender.IsValidTarget(spells[Spells.E].Range) && args.DangerLevel == Interrupter2.DangerLevel.High
+                && spells[Spells.E].IsReady())
             {
                 spells[Spells.E].Cast(sender);
             }
@@ -292,7 +292,7 @@
                 cutlass.Cast(target);
             }
 
-            if (ghost.IsReady() && ghost.IsOwned(this.Player) && target.LSIsValidTarget(spells[Spells.Q].Range)
+            if (ghost.IsReady() && ghost.IsOwned(this.Player) && target.IsValidTarget(spells[Spells.Q].Range)
                 && useYoumuu)
             {
                 ghost.Cast();
@@ -313,40 +313,40 @@
             var useR = this.Menu.Item("ElEasy.Darius.Combo.R").IsActive();
             var useI = this.Menu.Item("ElEasy.Darius.Combo.Ignite").IsActive();
 
-            if (useE && spells[Spells.E].LSIsReady() && spells[Spells.E].IsInRange(target)
+            if (useE && spells[Spells.E].IsReady() && spells[Spells.E].IsInRange(target)
                 && !target.HasBuff("BlackShield") || !target.HasBuff("SivirShield") || !target.HasBuff("BansheesVeil")
                 || !target.HasBuff("ShroudofDarkness"))
             {
                 spells[Spells.E].Cast(target);
             }
 
-            if (useQ && spells[Spells.Q].LSIsReady() && spells[Spells.Q].IsInRange(target))
+            if (useQ && spells[Spells.Q].IsReady() && spells[Spells.Q].IsInRange(target))
             {
                 spells[Spells.Q].Cast();
             }
 
             this.Items(target);
 
-            if (useW && spells[Spells.W].LSIsReady())
+            if (useW && spells[Spells.W].IsReady())
             {
                 spells[Spells.W].Cast();
             }
 
-            if (useR && spells[Spells.R].LSIsReady() && target.LSIsValidTarget(spells[Spells.R].Range))
+            if (useR && spells[Spells.R].IsReady() && target.IsValidTarget(spells[Spells.R].Range))
             {
                 foreach (var hero in
-                    HeroManager.Enemies.Where(hero => hero.LSIsValidTarget(spells[Spells.R].Range)))
+                    HeroManager.Enemies.Where(hero => hero.IsValidTarget(spells[Spells.R].Range)))
                 {
-                    if (this.Player.LSGetSpellDamage(target, SpellSlot.R) > hero.Health)
+                    if (this.Player.GetSpellDamage(target, SpellSlot.R) > hero.Health)
                     {
                         spells[Spells.R].CastOnUnit(target);
                     }
 
-                    else if (this.Player.LSGetSpellDamage(target, SpellSlot.R) < hero.Health)
+                    else if (this.Player.GetSpellDamage(target, SpellSlot.R) < hero.Health)
                     {
                         foreach (var buff in hero.Buffs.Where(buff => buff.Name == "dariushemo"))
                         {
-                            if (this.Player.LSGetSpellDamage(target, SpellSlot.R, 1) * (1 + buff.Count / 5) - 1
+                            if (this.Player.GetSpellDamage(target, SpellSlot.R, 1) * (1 + buff.Count / 5) - 1
                                 > target.Health)
                             {
                                 spells[Spells.R].CastOnUnit(target);
@@ -356,7 +356,7 @@
                 }
             }
 
-            if (this.Player.LSDistance(target) <= 600 && this.IgniteDamage(target) >= target.Health && useI)
+            if (this.Player.Distance(target) <= 600 && this.IgniteDamage(target) >= target.Health && useI)
             {
                 this.Player.Spellbook.CastSpell(ignite, target);
             }
@@ -409,7 +409,7 @@
 
             var useQ = this.Menu.Item("ElEasy.Darius.Harass.Q").GetValue<bool>();
 
-            if (useQ && spells[Spells.Q].LSIsReady() && spells[Spells.Q].IsInRange(target))
+            if (useQ && spells[Spells.Q].IsReady() && spells[Spells.Q].IsInRange(target))
             {
                 spells[Spells.Q].Cast();
             }
@@ -439,12 +439,12 @@
                 return;
             }
 
-            if (useW && spells[Spells.W].LSIsReady())
+            if (useW && spells[Spells.W].IsReady())
             {
                 spells[Spells.W].Cast();
             }
 
-            if (useQ && spells[Spells.Q].LSIsReady())
+            if (useQ && spells[Spells.Q].IsReady())
             {
                 spells[Spells.Q].Cast();
             }
@@ -467,12 +467,12 @@
                 return;
             }
 
-            if (useW && spells[Spells.W].LSIsReady())
+            if (useW && spells[Spells.W].IsReady())
             {
                 spells[Spells.W].Cast();
             }
 
-            if (useQ && spells[Spells.Q].LSIsReady())
+            if (useQ && spells[Spells.Q].IsReady())
             {
                 spells[Spells.Q].Cast();
             }

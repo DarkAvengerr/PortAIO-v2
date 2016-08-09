@@ -28,12 +28,12 @@ namespace HeavenStrikeAzir
             if (OrbwalkCommands.CanDoAttack())
             {
                 var minion = OrbwalkCommands.GetClearMinionsAndBuildings();
-                if (minion.LSIsValidTarget())
+                if (minion.IsValidTarget())
                 {
                     OrbwalkCommands.AttackTarget(minion);
                 }
             }
-            if (Program._q.LSIsReady() && OrbwalkCommands.CanMove() && Program.qharass && (!Program.donotqharass || (!Soldiers.enemies.Any() && !Soldiers.splashautoattackchampions.Any())))
+            if (Program._q.IsReady() && OrbwalkCommands.CanMove() && Program.qharass && (!Program.donotqharass || (!Soldiers.enemies.Any() && !Soldiers.splashautoattackchampions.Any())))
             {
                 var target = TargetSelector.GetTarget(Program._q.Range, TargetSelector.DamageType.Magical);
                 foreach (var obj in Soldiers.soldier)
@@ -42,25 +42,25 @@ namespace HeavenStrikeAzir
                     Program._q.Cast(target);
                 }
             }
-            if (Program._w.LSIsReady() && OrbwalkCommands.CanMove() && !Soldiers.enemies.Any() && Program.wharass)
+            if (Program._w.IsReady() && OrbwalkCommands.CanMove() && !Soldiers.enemies.Any() && Program.wharass)
             {
                 var target = TargetSelector.GetTarget(Program._w.Range + 300, TargetSelector.DamageType.Magical);
-                if (target.LSIsValidTarget() && !target.IsZombie && !Soldiers.enemies.Contains(target))
+                if (target.IsValidTarget() && !target.IsZombie && !Soldiers.enemies.Contains(target))
                 {
-                    var x = Player.LSDistance(target.Position) > Program._w.Range ? Player.Position.LSExtend(target.Position, Program._w.Range)
+                    var x = Player.Distance(target.Position) > Program._w.Range ? Player.Position.Extend(target.Position, Program._w.Range)
                         : target.Position;
                     Program._w.Cast(x);
                 }
             }
-            if (Program._w.LSIsReady() && OrbwalkCommands.CanMove() && !Soldiers.enemies.Any() && !Soldiers.soldier.Any() && Program.wharass && Program.Qisready())
+            if (Program._w.IsReady() && OrbwalkCommands.CanMove() && !Soldiers.enemies.Any() && !Soldiers.soldier.Any() && Program.wharass && Program.Qisready())
             {
                 var target = TargetSelector.GetTarget(Program._w.Range + 300, TargetSelector.DamageType.Magical);
-                if (target == null || !target.LSIsValidTarget() || target.IsZombie)
+                if (target == null || !target.IsValidTarget() || target.IsZombie)
                 {
-                    var tar = HeroManager.Enemies.Where(x => x.LSIsValidTarget(Program._q.Range) && !x.IsZombie).OrderByDescending(x => Player.LSDistance(x.Position)).LastOrDefault();
-                    if (tar.LSIsValidTarget() && !tar.IsZombie)
+                    var tar = HeroManager.Enemies.Where(x => x.IsValidTarget(Program._q.Range) && !x.IsZombie).OrderByDescending(x => Player.Distance(x.Position)).LastOrDefault();
+                    if (tar.IsValidTarget() && !tar.IsZombie)
                     {
-                        var x = Player.LSDistance(tar.Position) > Program._w.Range ? Player.Position.LSExtend(tar.Position, Program._w.Range)
+                        var x = Player.Distance(tar.Position) > Program._w.Range ? Player.Position.Extend(tar.Position, Program._w.Range)
                             : tar.Position;
                         Program._w.Cast(x);
                     }

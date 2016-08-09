@@ -48,22 +48,22 @@ namespace Irelia.Modes
         {
 ;
             var t = ObjectManager.Get<Obj_AI_Base>()
-                     .OrderBy(obj => obj.LSDistance(ObjectManager.Player.ServerPosition))
+                     .OrderBy(obj => obj.Distance(ObjectManager.Player.ServerPosition))
                      .FirstOrDefault(
                          obj =>
                              !obj.IsAlly && !obj.IsMe && !obj.IsMinion && (obj is Obj_AI_Turret) &&
-                              Game.CursorPos.LSDistance(obj.ServerPosition) <= Q.Range * 8);
+                              Game.CursorPos.Distance(obj.ServerPosition) <= Q.Range * 8);
 
             if (t == null)
             {
                 return;
             }
-            var toPolygon = new Common.CommonGeometry.Rectangle(ObjectManager.Player.Position.LSTo2D(), ObjectManager.Player.Position.LSTo2D().LSExtend(t.Position.LSTo2D(), t.LSDistance(ObjectManager.Player.Position)), (E.Range / 2) + E.Range / 3).ToPolygon();
+            var toPolygon = new Common.CommonGeometry.Rectangle(ObjectManager.Player.Position.To2D(), ObjectManager.Player.Position.To2D().Extend(t.Position.To2D(), t.Distance(ObjectManager.Player.Position)), (E.Range / 2) + E.Range / 3).ToPolygon();
             toPolygon.Draw(System.Drawing.Color.Red, 1);
 
             var startPos = ObjectManager.Player.Position + Vector3.Normalize(ObjectManager.Player.Position- t.ServerPosition) * (Q.Range);
             
-            for (var i = 1; i < (ObjectManager.Player.LSDistance(t.Position) / Q.Range) + 1; i++)
+            for (var i = 1; i < (ObjectManager.Player.Distance(t.Position) / Q.Range) + 1; i++)
             {
                 var targetBehind = startPos + Vector3.Normalize(t.ServerPosition - startPos) * i * Q.Range;
 
@@ -73,10 +73,10 @@ namespace Irelia.Modes
                 var minions =
                     ObjectManager.Get<Obj_AI_Minion>()
                         .Where(m => m.IsAlly && !m.IsDead)
-                        .Where(m => toPolygon.IsInside(m) && m.LSDistance(targetBehind) < Q.Range && m.NetworkId != existsMinion
+                        .Where(m => toPolygon.IsInside(m) && m.Distance(targetBehind) < Q.Range && m.NetworkId != existsMinion
                         //&& m.Health < Q.GetDamage(m)
                         )
-                        .OrderByDescending(m => m.LSDistance(ObjectManager.Player.Position))
+                        .OrderByDescending(m => m.Distance(ObjectManager.Player.Position))
                         .FirstOrDefault();
 
                 if (minions != null)
@@ -101,35 +101,35 @@ namespace Irelia.Modes
             GetJumpingObjects();
         
             return;
-            //if (!Q.LSIsReady())
+            //if (!Q.IsReady())
             //{
             //    return;
             //}
 
             //var SearchRange = Q.Range * 4;
             //var t = CommonTargetSelector.GetTarget(SearchRange);
-            //if (!t.LSIsValidTarget())
+            //if (!t.IsValidTarget())
             //{
             //    return;
             //}
-            //if (t.LSIsValidTarget(Q.Range))
+            //if (t.IsValidTarget(Q.Range))
             //{
             //    return;
             //}
-            //var toPolygon = new Common.CommonGeometry.Rectangle(ObjectManager.Player.Position.LSTo2D(), ObjectManager.Player.Position.LSTo2D().LSExtend(t.Position.LSTo2D(), SearchRange), (E.Range / 2) + E.Range / 3).ToPolygon();
+            //var toPolygon = new Common.CommonGeometry.Rectangle(ObjectManager.Player.Position.To2D(), ObjectManager.Player.Position.To2D().Extend(t.Position.To2D(), SearchRange), (E.Range / 2) + E.Range / 3).ToPolygon();
             //toPolygon.Draw(System.Drawing.Color.Red, 1);
 
             //var minions =
             //    ObjectManager.Get<Obj_AI_Base>()
             //        .Where(m => !m.IsAlly && !m.IsDead)
             //        .Where(m => toPolygon.IsInside(m) && m.Health < Q.GetDamage(m))
-            //        .OrderByDescending(m => m.LSIsValidTarget(Q.Range + 150))
+            //        .OrderByDescending(m => m.IsValidTarget(Q.Range + 150))
             //        .FirstOrDefault();
 
             //if (minions != null)
             //{
             //    Render.Circle.DrawCircle(minions.Position, 115f, System.Drawing.Color.DarkRed);
-            //    if (minions.LSIsValidTarget(Q.Range))
+            //    if (minions.IsValidTarget(Q.Range))
             //    {
             //        Q.CastOnUnit(minions);
             //    }
@@ -155,7 +155,7 @@ namespace Irelia.Modes
                 return;
             }
 
-            if (!W.LSIsReady() || Modes.ModeConfig.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo || MenuLocal.Item("Combo.W").GetValue<StringList>().SelectedIndex == 0)
+            if (!W.IsReady() || Modes.ModeConfig.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo || MenuLocal.Item("Combo.W").GetValue<StringList>().SelectedIndex == 0)
             {
                 return;
             }
@@ -192,12 +192,12 @@ namespace Irelia.Modes
             }
 
             var t = CommonTargetSelector.GetTarget(R.Range);
-            if (!t.LSIsValidTarget())
+            if (!t.IsValidTarget())
             {
                 return;
             }
 
-            if (t.LSIsValidTarget(Q.Range) && MenuLocal.Item("Combo.Q.KillSteal").GetValue<StringList>().SelectedIndex == 1)
+            if (t.IsValidTarget(Q.Range) && MenuLocal.Item("Combo.Q.KillSteal").GetValue<StringList>().SelectedIndex == 1)
             {
                 var enemy = HeroManager.Enemies.Find(e => Q.CanCast(e) && e.Health < Q.GetDamage(e));
                 if (enemy != null)
@@ -206,16 +206,16 @@ namespace Irelia.Modes
                 }
             }
 
-            if (t.LSIsValidTarget(Q.Range) && MenuLocal.Item("Combo.Q").GetValue<StringList>().SelectedIndex == 1 && t.Health < Q.GetDamage(t))
+            if (t.IsValidTarget(Q.Range) && MenuLocal.Item("Combo.Q").GetValue<StringList>().SelectedIndex == 1 && t.Health < Q.GetDamage(t))
             {
 
                 var closesMinion =
                     MinionManager.GetMinions(Q.Range)
                         .Where(
                             m =>
-                                m.LSDistance(t.Position) < Orbwalking.GetRealAutoAttackRange(null) &&
+                                m.Distance(t.Position) < Orbwalking.GetRealAutoAttackRange(null) &&
                                 m.Health < Q.GetDamage(m) - 15)
-                        .OrderBy(m1 => m1.LSDistance(t.Position))
+                        .OrderBy(m1 => m1.Distance(t.Position))
                         .FirstOrDefault();
 
                 if (closesMinion != null)
@@ -228,12 +228,12 @@ namespace Irelia.Modes
                 }
             }
 
-            if (t.LSIsValidTarget(Q.Range) && MenuLocal.Item("Combo.Q").GetValue<StringList>().SelectedIndex == 1 && !t.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
+            if (t.IsValidTarget(Q.Range) && MenuLocal.Item("Combo.Q").GetValue<StringList>().SelectedIndex == 1 && !t.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
             {
                 Champion.PlayerSpells.CastQCombo(t);
             }
 
-            if (t.LSIsValidTarget(E.Range))
+            if (t.IsValidTarget(E.Range))
             {
                 switch (MenuLocal.Item("Combo.E").GetValue<StringList>().SelectedIndex)
                 {
@@ -253,32 +253,32 @@ namespace Irelia.Modes
                 }
             }
 
-            if (R.LSIsReady() && MenuLocal.Item("Combo.R").GetValue<StringList>().SelectedIndex == 1 && t.LSIsValidTarget(R.Range) && BladesSpellCount >= 0)
+            if (R.IsReady() && MenuLocal.Item("Combo.R").GetValue<StringList>().SelectedIndex == 1 && t.IsValidTarget(R.Range) && BladesSpellCount >= 0)
             {
-                if (!t.LSIsValidTarget(Q.Range + Orbwalking.GetRealAutoAttackRange(null)) && t.Health < R.GetDamage(t) * 4)
+                if (!t.IsValidTarget(Q.Range + Orbwalking.GetRealAutoAttackRange(null)) && t.Health < R.GetDamage(t) * 4)
                 {
                     PredictionOutput rPredictionOutput = R.GetPrediction(t);
-                    Vector3 castPosition = rPredictionOutput.CastPosition.LSExtend(ObjectManager.Player.Position, -(ObjectManager.Player.LSDistance(t.ServerPosition) >= 450 ? 80 : 120));
+                    Vector3 castPosition = rPredictionOutput.CastPosition.Extend(ObjectManager.Player.Position, -(ObjectManager.Player.Distance(t.ServerPosition) >= 450 ? 80 : 120));
 
                     if (rPredictionOutput.Hitchance >=
-                        (ObjectManager.Player.LSDistance(t.ServerPosition) >= R.Range / 2 ? HitChance.VeryHigh : HitChance.High) &&
-                        ObjectManager.Player.LSDistance(castPosition) < R.Range)
+                        (ObjectManager.Player.Distance(t.ServerPosition) >= R.Range / 2 ? HitChance.VeryHigh : HitChance.High) &&
+                        ObjectManager.Player.Distance(castPosition) < R.Range)
                     {
                         R.Cast(castPosition);
                     }
                 }
 
-                if (CommonMath.GetComboDamage(t) > t.Health && t.LSIsValidTarget(Q.Range) && Q.LSIsReady())
+                if (CommonMath.GetComboDamage(t) > t.Health && t.IsValidTarget(Q.Range) && Q.IsReady())
                 {
                     R.Cast(t, false, true);
                 }
 
                 if (BladesSpellCount > 0 && BladesSpellCount <= 3)
                 {
-                    var enemy = HeroManager.Enemies.Find(e => e.Health < R.GetDamage(e)*BladesSpellCount && e.LSIsValidTarget(R.Range));
+                    var enemy = HeroManager.Enemies.Find(e => e.Health < R.GetDamage(e)*BladesSpellCount && e.IsValidTarget(R.Range));
                     if (enemy == null)
                     {
-                        foreach (var e in HeroManager.Enemies.Where(e => e.LSIsValidTarget(R.Range)))
+                        foreach (var e in HeroManager.Enemies.Where(e => e.IsValidTarget(R.Range)))
                         {
                             R.Cast(e, false, true);
                         }

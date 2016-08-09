@@ -70,7 +70,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
         private void OnUpdate(EventArgs args)
         {
             if (Variables.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
-                || !Variables.Spells[SpellSlot.R].LSIsReady()) return;
+                || !Variables.Spells[SpellSlot.R].IsReady()) return;
 
             this.paleCascade();
         }
@@ -81,9 +81,9 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 
             if (target == null || !target.IsValid) return;
 
-            if (target.LSCountEnemiesInRange(1400) >= Menu.Item(Menu.Name + "REnemies").GetValue<Slider>().Value) return;
+            if (target.CountEnemiesInRange(1400) >= Menu.Item(Menu.Name + "REnemies").GetValue<Slider>().Value) return;
 
-            if (Menu.Item(Menu.Name + "RTurret").GetValue<bool>() && target.LSUnderTurret()) return;
+            if (Menu.Item(Menu.Name + "RTurret").GetValue<bool>() && target.UnderTurret()) return;
 
             if (Menu.Item(Menu.Name + "RKillable").GetValue<bool>() && this.logic.ComboDmg(target) < target.Health) return;
 

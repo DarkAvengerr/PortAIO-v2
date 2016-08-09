@@ -31,7 +31,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
             int i = 5;
 
-            foreach (var enemy in HeroManager.Enemies.OrderBy(enemy => enemy.MaxHealth / Player.LSGetAutoAttackDamage(enemy)))
+            foreach (var enemy in HeroManager.Enemies.OrderBy(enemy => enemy.MaxHealth / Player.GetAutoAttackDamage(enemy)))
             {
                 Config.SubMenu("Target Selector OKTW©").AddItem(new MenuItem("TsAaPriority" + enemy.ChampionName, enemy.ChampionName).SetValue(new Slider(i, 0, 5))).DontSave();
                 i--;
@@ -49,7 +49,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
             {
                 return;
             }
-            if (DrawInfo.LSIsValidTarget() && (int)(Game.Time * 10) % 2 == 0 && Config.Item("drawFocus").GetValue<bool>())
+            if (DrawInfo.IsValidTarget() && (int)(Game.Time * 10) % 2 == 0 && Config.Item("drawFocus").GetValue<bool>())
             {
                 LeagueSharp.Common.Utility.DrawCircle(Player.Position, Player.AttackRange + Player.BoundingRadius + Config.Item("extraRang").GetValue<Slider>().Value, System.Drawing.Color.Gray, 1, 1);
 
@@ -116,7 +116,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
             {
                 var newTarget = (AIHeroClient)args.Target;
                 var forceFocusEnemy = newTarget;
-               // if (newTarget.Health / Player.LSGetAutoAttackDamage(newTarget) > FocusTarget.Health / Player.LSGetAutoAttackDamage(FocusTarget))
+               // if (newTarget.Health / Player.GetAutoAttackDamage(newTarget) > FocusTarget.Health / Player.GetAutoAttackDamage(FocusTarget))
                 {
 
                 }
@@ -124,9 +124,9 @@ namespace OneKeyToWin_AIO_Sebby.Core
                 {
                     var aaRange = Player.AttackRange + Player.BoundingRadius + Config.Item("extraRang").GetValue<Slider>().Value;
 
-                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(aaRange)))
+                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(aaRange)))
                     {
-                        if (enemy.Health / Player.LSGetAutoAttackDamage(enemy) + 1 < forceFocusEnemy.Health / Player.LSGetAutoAttackDamage(forceFocusEnemy))
+                        if (enemy.Health / Player.GetAutoAttackDamage(enemy) + 1 < forceFocusEnemy.Health / Player.GetAutoAttackDamage(forceFocusEnemy))
                         {
                             forceFocusEnemy = enemy;
                         }
@@ -155,13 +155,13 @@ namespace OneKeyToWin_AIO_Sebby.Core
             if (orbT != null)
             {
                 var bestTarget = (AIHeroClient)orbT;
-                var hitToBestTarget = bestTarget.Health / Player.LSGetAutoAttackDamage(bestTarget);
+                var hitToBestTarget = bestTarget.Health / Player.GetAutoAttackDamage(bestTarget);
 
                 if (Config.Item("TsAa").GetValue<StringList>().SelectedIndex == 0)
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget() && Orbwalker.InAutoAttackRange(enemy)))
+                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget() && Orbwalker.InAutoAttackRange(enemy)))
                     {
-                        if (enemy.Health / Player.LSGetAutoAttackDamage(enemy) < hitToBestTarget)
+                        if (enemy.Health / Player.GetAutoAttackDamage(enemy) < hitToBestTarget)
                         {
                             bestTarget = enemy;
                         }
@@ -169,10 +169,10 @@ namespace OneKeyToWin_AIO_Sebby.Core
                 }
                 else
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget() && Orbwalker.InAutoAttackRange(enemy)))
+                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget() && Orbwalker.InAutoAttackRange(enemy)))
                     {
 
-                        if(enemy.Health / Player.LSGetAutoAttackDamage(enemy) < 3)
+                        if(enemy.Health / Player.GetAutoAttackDamage(enemy) < 3)
                         {
                             bestTarget = enemy;
                             break;

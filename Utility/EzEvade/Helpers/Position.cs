@@ -45,24 +45,24 @@ using EloBuddy; namespace ezEvade
                     return false;
                 }*/
 
-                var projection = position.LSProjectOn(spellPos, spellEndPos);
+                var projection = position.ProjectOn(spellPos, spellEndPos);
 
-                /*if (projection.SegmentPoint.LSDistance(spellEndPos) < 100) //Check Skillshot endpoints
+                /*if (projection.SegmentPoint.Distance(spellEndPos) < 100) //Check Skillshot endpoints
                 {
                     //unfinished
                 }*/
 
-                return projection.IsOnSegment && projection.SegmentPoint.LSDistance(position) <= spell.radius + radius;
+                return projection.IsOnSegment && projection.SegmentPoint.Distance(position) <= spell.radius + radius;
             }
             else if (spell.spellType == SpellType.Circular)
             {
                 if (spell.info.spellName == "VeigarEventHorizon")
                 {
-                    return position.LSDistance(spell.endPos) <= spell.radius + radius - ObjectCache.myHeroCache.boundingRadius
-                        && position.LSDistance(spell.endPos) >= spell.radius + radius - ObjectCache.myHeroCache.boundingRadius - 125;
+                    return position.Distance(spell.endPos) <= spell.radius + radius - ObjectCache.myHeroCache.boundingRadius
+                        && position.Distance(spell.endPos) >= spell.radius + radius - ObjectCache.myHeroCache.boundingRadius - 125;
                 }
 
-                return position.LSDistance(spell.endPos) <= spell.radius + radius - ObjectCache.myHeroCache.boundingRadius;
+                return position.Distance(spell.endPos) <= spell.radius + radius - ObjectCache.myHeroCache.boundingRadius;
             }
             else if (spell.spellType == SpellType.Arc)
             {
@@ -71,10 +71,10 @@ using EloBuddy; namespace ezEvade
                     return false;
                 }
 
-                var spellRange = spell.startPos.LSDistance(spell.endPos);
+                var spellRange = spell.startPos.Distance(spell.endPos);
                 var midPoint = spell.startPos + spell.direction * (spellRange/2);
 
-                return position.LSDistance(midPoint) <= spell.radius + radius - ObjectCache.myHeroCache.boundingRadius;
+                return position.Distance(midPoint) <= spell.radius + radius - ObjectCache.myHeroCache.boundingRadius;
             }
             else if (spell.spellType == SpellType.Cone)
             {
@@ -106,7 +106,7 @@ using EloBuddy; namespace ezEvade
                     continue;
                 }
 
-                var distToTurret = pos.LSDistance(turret.Position.LSTo2D());
+                var distToTurret = pos.Distance(turret.Position.To2D());
 
                 minDist = Math.Min(minDist, distToTurret);
             }
@@ -122,8 +122,8 @@ using EloBuddy; namespace ezEvade
             {
                 if (hero != null && hero.IsValid && !hero.IsDead && hero.IsVisible)
                 {
-                    var heroPos = hero.ServerPosition.LSTo2D();
-                    var dist = heroPos.LSDistance(pos);
+                    var heroPos = hero.ServerPosition.To2D();
+                    var dist = heroPos.Distance(pos);
 
                     minDist = Math.Min(minDist, dist);
                 }
@@ -161,8 +161,8 @@ using EloBuddy; namespace ezEvade
                 {
                     if (hero != null && hero.IsValid && !hero.IsDead && hero.IsVisible)
                     {
-                        var heroPos = hero.ServerPosition.LSTo2D();
-                        var dist = heroPos.LSDistance(pos);
+                        var heroPos = hero.ServerPosition.To2D();
+                        var dist = heroPos.Distance(pos);
 
                         if (minComfortDistance > dist)
                         {
@@ -177,7 +177,7 @@ using EloBuddy; namespace ezEvade
 
         public static float GetPositionValue(this Vector2 pos)
         {
-            float posValue = pos.LSDistance(Game.CursorPos.LSTo2D());
+            float posValue = pos.Distance(Game.CursorPos.To2D());
                         
             if (ObjectCache.menuCache.cache["PreventDodgingUnderTower"].GetValue<bool>())
             {
@@ -220,7 +220,7 @@ using EloBuddy; namespace ezEvade
             int radiusIndex = 0;
 
             Vector2 heroPoint = ObjectCache.myHeroCache.serverPos2D;
-            Vector2 lastMovePos = Game.CursorPos.LSTo2D();
+            Vector2 lastMovePos = Game.CursorPos.To2D();
 
             List<PositionInfo> posTable = new List<PositionInfo>();
 

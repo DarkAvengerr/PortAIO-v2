@@ -191,7 +191,7 @@ using EloBuddy; namespace Support.Plugins
         /// </summary>
         private void EngageFriendLatern()
         {
-            if (!this.W.LSIsReady())
+            if (!this.W.IsReady())
             {
                 return;
             }
@@ -201,9 +201,9 @@ using EloBuddy; namespace Support.Plugins
             foreach (var friend in
                 HeroManager.Allies.Where(
                     hero =>
-                    !hero.IsMe && hero.LSDistance(this.Player) <= this.W.Range + 300
-                    && hero.LSDistance(this.Player) <= this.W.Range - 300 && hero.Health / hero.MaxHealth * 100 >= 20
-                    && this.Player.LSCountEnemiesInRange(150) >= 1))
+                    !hero.IsMe && hero.Distance(this.Player) <= this.W.Range + 300
+                    && hero.Distance(this.Player) <= this.W.Range - 300 && hero.Health / hero.MaxHealth * 100 >= 20
+                    && this.Player.CountEnemiesInRange(150) >= 1))
             {
                 var center = this.Player.Position;
                 const int points = 36;
@@ -216,20 +216,20 @@ using EloBuddy; namespace Support.Plugins
                     var newX = (int)(center.X + radius * Math.Cos(angle));
                     var newY = (int)(center.Y + radius * Math.Sin(angle));
                     var p = new Vector3(newX, newY, 0);
-                    if (p.LSDistance(friend.Position) <= bestcastposition.LSDistance(friend.Position))
+                    if (p.Distance(friend.Position) <= bestcastposition.Distance(friend.Position))
                     {
                         bestcastposition = p;
                     }
                 }
 
-                if (friend.LSDistance(ObjectManager.Player) <= this.W.Range)
+                if (friend.Distance(ObjectManager.Player) <= this.W.Range)
                 {
                     this.W.Cast(bestcastposition, true);
                     return;
                 }
             }
 
-            if (bestcastposition.LSDistance(new Vector3(0f, 0f, 0f)) >= 100)
+            if (bestcastposition.Distance(new Vector3(0f, 0f, 0f)) >= 100)
             {
                 this.W.Cast(bestcastposition, true);
             }
@@ -241,7 +241,7 @@ using EloBuddy; namespace Support.Plugins
         /// </summary>
         private void SafeFriendLatern()
         {
-            if (!this.W.LSIsReady())
+            if (!this.W.IsReady())
             {
                 return;
             }
@@ -251,13 +251,13 @@ using EloBuddy; namespace Support.Plugins
             foreach (var friend in
                 HeroManager.Allies.Where(
                     hero =>
-                    !hero.IsMe && hero.LSDistance(ObjectManager.Player) <= this.W.Range + 300
-                    && hero.LSDistance(ObjectManager.Player) <= this.W.Range - 200
+                    !hero.IsMe && hero.Distance(ObjectManager.Player) <= this.W.Range + 300
+                    && hero.Distance(ObjectManager.Player) <= this.W.Range - 200
                     && hero.Health / hero.MaxHealth * 100 >= 20 && !hero.IsDead))
             {
                 foreach (var enemy in HeroManager.Enemies)
                 {
-                    if (friend == null || !(friend.LSDistance(enemy) <= 300))
+                    if (friend == null || !(friend.Distance(enemy) <= 300))
                     {
                         continue;
                     }
@@ -273,20 +273,20 @@ using EloBuddy; namespace Support.Plugins
                         var newX = (int)(center.X + radius * Math.Cos(angle));
                         var newY = (int)(center.Y + radius * Math.Sin(angle));
                         var p = new Vector3(newX, newY, 0);
-                        if (p.LSDistance(friend.Position) <= bestcastposition.LSDistance(friend.Position))
+                        if (p.Distance(friend.Position) <= bestcastposition.Distance(friend.Position))
                         {
                             bestcastposition = p;
                         }
                     }
 
-                    if (friend.LSDistance(ObjectManager.Player) <= this.W.Range)
+                    if (friend.Distance(ObjectManager.Player) <= this.W.Range)
                     {
                         this.W.Cast(bestcastposition, true);
                         return;
                     }
                 }
 
-                if (bestcastposition.LSDistance(new Vector3(0f, 0f, 0f)) >= 100)
+                if (bestcastposition.Distance(new Vector3(0f, 0f, 0f)) >= 100)
                 {
                     this.W.Cast(bestcastposition, true);
                 }

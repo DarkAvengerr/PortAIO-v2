@@ -4289,7 +4289,7 @@ namespace UnderratedAIO.Helpers.SkillShot
 
         public static bool AnyReadyCC(Vector3 pos, float range, bool enemyTeam, float time = 0.5f)
         {
-            return CcList.Any(cc => enemyTeam == cc.Champion.IsEnemy && cc.Champion.LSDistance(pos) < range && cc.IsReady(time));
+            return CcList.Any(cc => enemyTeam == cc.Champion.IsEnemy && cc.Champion.Distance(pos) < range && cc.IsReady(time));
         }
     }
 

@@ -130,7 +130,7 @@ using EloBuddy; namespace ElUtilitySuite.Utility
 
                 this.lastCheck = Environment.TickCount;
 
-                if (this.Player.LSInShop() || this.Player.IsDead)
+                if (this.Player.InShop() || this.Player.IsDead)
                 {
                     if (this.Player.Level >= 9)
                     {

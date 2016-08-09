@@ -171,7 +171,7 @@ namespace Leblanc.Common
             {
                 
                 var t = CommonTargetSelector.GetTarget(Champion.PlayerSpells.Q.Range);
-                if (!t.LSIsValidTarget())
+                if (!t.IsValidTarget())
                 {
                     return;
                 }
@@ -182,7 +182,7 @@ namespace Leblanc.Common
                             item =>
                                 item.Value.ItemType == EnumItemType.AoE &&
                                 (item.Value.TargetingType == EnumItemTargettingType.EnemyObjects || item.Value.TargetingType == EnumItemTargettingType.EnemyHero))
-                            .Where(item => t.LSIsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady()))
+                            .Where(item => t.IsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady()))
                 {
                     item.Value.Item.Cast();
                 }
@@ -193,7 +193,7 @@ namespace Leblanc.Common
                             item =>
                                 item.Value.ItemType == EnumItemType.Targeted &&
                                 (item.Value.TargetingType == EnumItemTargettingType.EnemyHero))
-                            .Where(item => t.LSIsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady()))
+                            .Where(item => t.IsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady()))
                 {
                     item.Value.Item.Cast(t);
                 }
@@ -205,7 +205,7 @@ namespace Leblanc.Common
                 //            item =>
                 //                item.Value.ItemType == EnumItemType.Targeted &&
                 //                item.Value.TargetingType == EnumItemTargettingType.EnemyHero)
-                //            .Where(item => t.LSIsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady()))
+                //            .Where(item => t.IsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady()))
                 //{
                 //    item.Value.Item.Cast(t);
                 //}
@@ -220,7 +220,7 @@ namespace Leblanc.Common
             }
 
             if (Modes.ModeLane.MenuLocal.Item("Lane.Item").GetValue<StringList>().SelectedIndex == 1 ||
-                ObjectManager.Player.LSUnderAllyTurret())
+                ObjectManager.Player.UnderAllyTurret())
             {
                 foreach (var item in from item in ItemDb
                     where
@@ -280,7 +280,7 @@ namespace Leblanc.Common
             }
 
 
-            if (Youmuu.IsReady() && mob.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
+            if (Youmuu.IsReady() && mob.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
             {
                 var youmuuBaron = Modes.ModeJungle.MenuLocal.Item("Jungle.Youmuu.BaronDragon").GetValue<StringList>().SelectedIndex;
                 var youmuuRed = Modes.ModeJungle.MenuLocal.Item("Jungle.Youmuu.BlueRed").GetValue<StringList>().SelectedIndex;

@@ -258,7 +258,7 @@ using EloBuddy;
                     }
                     var isSpell = _spells.Any(s => s.Equals(args.Slot));
                     var isItem = _items.Any(s => s.Equals(args.Slot));
-                    if (isSpell || isItem || args.SData.LSIsAutoAttack())
+                    if (isSpell || isItem || args.SData.IsAutoAttack())
                     {
                         _isCasting = false;
                     }
@@ -329,13 +329,13 @@ using EloBuddy;
 
                 var position = args.Target != null
                     ? args.Target.Position
-                    : (args.StartPosition.LSIsValid()
+                    : (args.StartPosition.IsValid()
                         ? args.StartPosition
-                        : (args.EndPosition.LSIsValid() ? args.EndPosition : ObjectManager.Player.Position));
+                        : (args.EndPosition.IsValid() ? args.EndPosition : ObjectManager.Player.Position));
 
                 #region Screen
 
-                if (_menu.Item(_menu.Name + ".spells.screen").GetValue<bool>() && position.LSIsValid() &&
+                if (_menu.Item(_menu.Name + ".spells.screen").GetValue<bool>() && position.IsValid() &&
                     !position.IsOnScreen())
                 {
                     args.Process = false;
@@ -399,7 +399,7 @@ using EloBuddy;
 
                 #endregion Delay
 
-                _lastCastPosition = position.LSIsValid() && _targetTypes.Any(t => type.Contains(t))
+                _lastCastPosition = position.IsValid() && _targetTypes.Any(t => type.Contains(t))
                     ? position
                     : Vector3.Zero;
 
@@ -412,27 +412,27 @@ using EloBuddy;
                     var startPos = Vector3.Zero;
                     var endPos = Vector3.Zero;
 
-                    if (args.StartPosition.LSIsValid())
+                    if (args.StartPosition.IsValid())
                     {
                         startPos = _random.Randomize(args.StartPosition, randomPosition);
                     }
-                    if (args.EndPosition.LSIsValid())
+                    if (args.EndPosition.IsValid())
                     {
                         endPos = _random.Randomize(args.EndPosition, randomPosition);
                     }
-                    if (startPos.LSIsValid() || endPos.LSIsValid())
+                    if (startPos.IsValid() || endPos.IsValid())
                     {
                         args.Process = false;
                         _randomizedSpells[args.Slot] = true;
-                        if (startPos.LSIsValid() && endPos.LSIsValid())
+                        if (startPos.IsValid() && endPos.IsValid())
                         {
                             ObjectManager.Player.Spellbook.CastSpell(args.Slot, startPos, endPos);
                         }
-                        else if (startPos.LSIsValid())
+                        else if (startPos.IsValid())
                         {
                             ObjectManager.Player.Spellbook.CastSpell(args.Slot, startPos);
                         }
-                        else if (endPos.LSIsValid())
+                        else if (endPos.IsValid())
                         {
                             ObjectManager.Player.Spellbook.CastSpell(args.Slot, endPos);
                         }
@@ -524,11 +524,11 @@ using EloBuddy;
                     {
                         if (args.Order == GameObjectOrder.AttackTo || args.Order == GameObjectOrder.AttackUnit)
                         {
-                            _lastAttackPosition = position.LSIsValid() ? position : Vector3.Zero;
+                            _lastAttackPosition = position.IsValid() ? position : Vector3.Zero;
                             _lastAttackTarget = args.Target;
                         }
                         sequence.Index++;
-                        if (args.Target == null && position.LSIsValid() && !_randomizedOrders[args.Order])
+                        if (args.Target == null && position.IsValid() && !_randomizedOrders[args.Order])
                         {
                             args.Process = false;
                             _randomizedOrders[args.Order] = true;
@@ -555,9 +555,9 @@ using EloBuddy;
 
         private int GetRangeDelay(Vector3 position, Vector3 lastPosition, int percent)
         {
-            if (percent > 0 && position.LSIsValid() && lastPosition.LSIsValid())
+            if (percent > 0 && position.IsValid() && lastPosition.IsValid())
             {
-                var distance = position.LSDistance(lastPosition);
+                var distance = position.Distance(lastPosition);
                 if (Helpers.AngleBetween(lastPosition, position) > _random.Next(15, 26) && distance > 200)
                 {
                     var rangeDelay = (int) (distance * _random.Next(75, 86) / 100 / 100 * percent);

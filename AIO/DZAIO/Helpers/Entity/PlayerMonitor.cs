@@ -16,7 +16,7 @@ using EloBuddy;
 
         internal static void AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (target.LSIsValidTarget() && unit.IsValid<AIHeroClient>() && unit.IsMe)
+            if (target.IsValidTarget() && unit.IsValid<AIHeroClient>() && unit.IsMe)
             {
                 LastTarget = target;
             }

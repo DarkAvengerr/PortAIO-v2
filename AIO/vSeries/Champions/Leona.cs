@@ -94,7 +94,7 @@ using EloBuddy;
         
         /*private static void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (Q.LSIsReady() || Player.Spellbook.GetSpell(SpellSlot.Q).State == SpellState.Surpressed)
+            if (Q.IsReady() || Player.Spellbook.GetSpell(SpellSlot.Q).State == SpellState.Surpressed)
             {
                 var ward =
                     ObjectManager
@@ -102,7 +102,7 @@ using EloBuddy;
                         )
                         .FirstOrDefault(
                             x =>
-                                x.IsEnemy && x.IsVisible && x.LSDistance(Player) < Player.AttackRange + x.BoundingRadius + Player.BoundingRadius &&
+                                x.IsEnemy && x.IsVisible && x.Distance(Player) < Player.AttackRange + x.BoundingRadius + Player.BoundingRadius &&
                                 (x.Name.ToLower().Contains("ward") || x.Name.ToLower().Contains("sight") ||
                                  x.Name.ToLower().Contains("vision"))); 
 
@@ -126,11 +126,11 @@ using EloBuddy;
 
         private static void LeonaOnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (Q.LSIsReady() && sender.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(Player) + 100) && MenuCheck("leona.inter", Config))
+            if (Q.IsReady() && sender.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player) + 100) && MenuCheck("leona.inter", Config))
             {
                 Q.CastIfHitchanceEquals(sender, HitChance.High);
             }
-            else if (E.LSIsReady() && sender.LSIsValidTarget(700) && MenuCheck("leona.inter", Config))
+            else if (E.IsReady() && sender.IsValidTarget(700) && MenuCheck("leona.inter", Config))
             {
                 E.CastIfHitchanceEquals(sender, HitChance.High);
             }
@@ -138,12 +138,12 @@ using EloBuddy;
 
         private static void LeonaOnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (Q.LSIsReady() && MenuCheck("leona.anti", Config) && gapcloser.Sender.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(Player) + 100))
+            if (Q.IsReady() && MenuCheck("leona.anti", Config) && gapcloser.Sender.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player) + 100))
             {
                 Q.Cast(gapcloser.Sender);
             }
-            else if (E.LSIsReady() && MenuCheck("leona.anti", Config) && E.GetPrediction(gapcloser.Sender).Hitchance > HitChance.High
-                && gapcloser.Sender.LSIsValidTarget(700))
+            else if (E.IsReady() && MenuCheck("leona.anti", Config) && E.GetPrediction(gapcloser.Sender).Hitchance > HitChance.High
+                && gapcloser.Sender.IsValidTarget(700))
             {
                 E.Cast(gapcloser.Sender);
             }
@@ -164,33 +164,33 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (MenuCheck("leona.q.combo", Config) && Q.LSIsReady())
+            if (MenuCheck("leona.q.combo", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie))
                 {
                     Q.Cast(enemy);
                 }
             }
 
-            if (MenuCheck("leona.w.combo", Config) && W.LSIsReady())
+            if (MenuCheck("leona.w.combo", Config) && W.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)))
                 {
                     W.Cast();
                 }
             }
 
-            if (MenuCheck("leona.e.combo", Config) && E.LSIsReady())
+            if (MenuCheck("leona.e.combo", Config) && E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range) && !x.IsDead && !x.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && !x.IsDead && !x.IsZombie))
                 {
                     E.SPredictionCast(enemy, SpellHitChance(Config, "leona.hitchance"));
                 }
             }
 
-            if (MenuCheck("leona.r.combo", Config) && R.LSIsReady())
+            if (MenuCheck("leona.r.combo", Config) && R.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) && !x.IsDead && !x.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsDead && !x.IsZombie))
                 {
                     R.SPredictionCastAoe(SliderCheck("leona.r.count", Config));
                 }
@@ -204,25 +204,25 @@ using EloBuddy;
                 return;
             }
 
-            if (MenuCheck("leona.q.harass", Config) && Q.LSIsReady())
+            if (MenuCheck("leona.q.harass", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
                 {
                     Q.Cast(enemy);
                 }
             }
 
-            if (MenuCheck("leona.w.harass", Config) && W.LSIsReady())
+            if (MenuCheck("leona.w.harass", Config) && W.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)))
                 {
                     W.Cast();
                 }
             }
 
-            if (MenuCheck("leona.e.harass", Config) && E.LSIsReady())
+            if (MenuCheck("leona.e.harass", Config) && E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
                 {
                     E.SPredictionCast(enemy, SpellHitChance(Config, "leona.hitchance"));
                 }
@@ -231,22 +231,22 @@ using EloBuddy;
 
         private static void LeonaOnDraw(EventArgs args)
         {
-            if (Q.LSIsReady() && ActiveCheck("leona.q.draw", Config))
+            if (Q.IsReady() && ActiveCheck("leona.q.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, GetColor("leona.q.draw", Config));
             }
 
-            if (W.LSIsReady() && ActiveCheck("leona.w.draw", Config))
+            if (W.IsReady() && ActiveCheck("leona.w.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, GetColor("leona.w.draw", Config));
             }
 
-            if (E.LSIsReady() && ActiveCheck("leona.e.draw", Config))
+            if (E.IsReady() && ActiveCheck("leona.e.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, GetColor("leona.e.draw", Config));
             }
 
-            if (R.LSIsReady() && ActiveCheck("leona.r.draw", Config))
+            if (R.IsReady() && ActiveCheck("leona.r.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, GetColor("leona.r.draw", Config));
             }

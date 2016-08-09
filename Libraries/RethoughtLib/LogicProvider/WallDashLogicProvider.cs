@@ -22,14 +22,14 @@ using EloBuddy; namespace RethoughtLib.LogicProvider
         /// <returns></returns>
         public Vector3 GetFirstWallPoint(Vector3 start, Vector3 end, int step = 1)
         {
-            if (start.LSIsValid() && end.LSIsValid())
+            if (start.IsValid() && end.IsValid())
             {
-                var distance = start.LSDistance(end);
+                var distance = start.Distance(end);
                 for (var i = 0; i < distance; i = i + step)
                 {
-                    var newPoint = start.LSExtend(end, i);
+                    var newPoint = start.Extend(end, i);
 
-                    if (NavMesh.GetCollisionFlags(newPoint) == CollisionFlags.Wall || newPoint.LSIsWall())
+                    if (NavMesh.GetCollisionFlags(newPoint) == CollisionFlags.Wall || newPoint.IsWall())
                     {
                         return newPoint;
                     }
@@ -51,15 +51,15 @@ using EloBuddy; namespace RethoughtLib.LogicProvider
         {
             var thickness = 0f;
 
-            if (!start.LSIsValid() || !direction.LSIsValid())
+            if (!start.IsValid() || !direction.IsValid())
             {
                 return thickness;
             }
 
             for (var i = 0; i < maxWallWidth; i = i + step)
             {
-                if (NavMesh.GetCollisionFlags(start.LSExtend(direction, i)) == CollisionFlags.Wall
-                    || start.LSExtend(direction, i).LSIsWall())
+                if (NavMesh.GetCollisionFlags(start.Extend(direction, i)) == CollisionFlags.Wall
+                    || start.Extend(direction, i).IsWall())
                 {
                     thickness += step;
                 }
@@ -93,7 +93,7 @@ using EloBuddy; namespace RethoughtLib.LogicProvider
         /// <returns></returns>
         public bool IsWallDash(Vector3 position, float dashRange, float minWallWidth = 50)
         {
-            var dashEndPos = ObjectManager.Player.Position.LSExtend(position, dashRange);
+            var dashEndPos = ObjectManager.Player.Position.Extend(position, dashRange);
             var firstWallPoint = this.GetFirstWallPoint(ObjectManager.Player.Position, dashEndPos);
 
             if (firstWallPoint.Equals(Vector3.Zero))
@@ -102,12 +102,12 @@ using EloBuddy; namespace RethoughtLib.LogicProvider
                 return false;
             }
               
-            if (dashEndPos.LSIsWall())
+            if (dashEndPos.IsWall())
                 // End Position is in Wall
             {
                 var wallWidth = this.GetWallWidth(firstWallPoint, dashEndPos);
 
-                if (wallWidth > minWallWidth && wallWidth - firstWallPoint.LSDistance(dashEndPos) < wallWidth * 0.6f)
+                if (wallWidth > minWallWidth && wallWidth - firstWallPoint.Distance(dashEndPos) < wallWidth * 0.6f)
                 {
                     return true;
                 }

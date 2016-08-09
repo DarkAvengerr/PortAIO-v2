@@ -102,9 +102,9 @@ using EloBuddy; namespace YasuoPro
             foreach (var ls in DetectedPolygons) {
                 if (Helper.TickCount - ls.StartTick >= ls.data.delay + Helper.GetSliderInt("Evade.Delay"))
                 {
-                    if (ls.poly.PointInPolygon(Helper.Yasuo.ServerPosition.LSTo2D()) == 1)
+                    if (ls.poly.PointInPolygon(Helper.Yasuo.ServerPosition.To2D()) == 1)
                     {
-                        var pos = Helper.Yasuo.ServerPosition.LSExtend(ls.argss.Target.Position, 50);
+                        var pos = Helper.Yasuo.ServerPosition.Extend(ls.argss.Target.Position, 50);
                         Helper.Spells[Helper.W].Cast(pos);
                     }
                 }
@@ -135,7 +135,7 @@ using EloBuddy; namespace YasuoPro
         {
             try
             {
-                if (!Helper.GetBool("Evade.WTS") || sender.IsAlly || !SpellSlot.W.LSIsReady() || (!Helper.GetBool("Evade.FOW") && !sender.IsVisible))
+                if (!Helper.GetBool("Evade.WTS") || sender.IsAlly || !SpellSlot.W.IsReady() || (!Helper.GetBool("Evade.FOW") && !sender.IsVisible))
                 {
                     return;
                 }
@@ -144,8 +144,8 @@ using EloBuddy; namespace YasuoPro
                     var ssdata = GetSpell(args.SData.Name);
                     if (ssdata.IsEnabled)
                     {
-                        var end = args.Start.LSTo2D().LSExtend(args.End.LSTo2D(), 1400);
-                        EvadeYas.Geometry.Rectangle rect = new EvadeYas.Geometry.Rectangle(args.Start.LSTo2D(), end, args.SData.LineWidth);
+                        var end = args.Start.To2D().Extend(args.End.To2D(), 1400);
+                        EvadeYas.Geometry.Rectangle rect = new EvadeYas.Geometry.Rectangle(args.Start.To2D(), end, args.SData.LineWidth);
                         var topoly = rect.ToPolygon();
                         var newls = new LittleStruct { poly = topoly, argss = args, RealEndPos = end, StartTick = Helper.TickCount, data = ssdata };
                         DetectedPolygons.Add(newls);
@@ -159,13 +159,13 @@ using EloBuddy; namespace YasuoPro
                 //Console.WriteLine(args.SData.Name + " " + sender.BaseSkinName);
                 var sdata = GetSpell(args.SData.Name);
                 var dist = Helper.Yasuo.BoundingRadius + rand.Next(0, 20);
-                if (sender.LSDistance(Helper.Yasuo) < dist)
+                if (sender.Distance(Helper.Yasuo) < dist)
                 {
                     return;
                 }
                 if (sdata != null && sdata.IsEnabled)
                 {
-                    var castpos = Helper.Yasuo.ServerPosition.LSExtend(args.Start, dist);
+                    var castpos = Helper.Yasuo.ServerPosition.Extend(args.Start, dist);
                     LeagueSharp.Common.Utility.DelayAction.Add((int) sdata.delay, () => Helper.Spells[Helper.W].Cast(castpos));
                 }
             }

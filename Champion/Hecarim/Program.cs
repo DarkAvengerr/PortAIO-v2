@@ -116,12 +116,12 @@ namespace JustHecarim
 
         static void Interrupter2_OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (E.LSIsReady() && sender.LSIsValidTarget(E.Range) && Config.Item("interrupte").GetValue<bool>())
+            if (E.IsReady() && sender.IsValidTarget(E.Range) && Config.Item("interrupte").GetValue<bool>())
             {
                 E.Cast();
             }
 
-            if (R.LSIsReady() && sender.LSIsValidTarget(R.Range) && Config.Item("interruptr").GetValue<bool>())
+            if (R.IsReady() && sender.IsValidTarget(R.Range) && Config.Item("interruptr").GetValue<bool>())
             {
                 var pred = R.GetPrediction(sender).Hitchance;
                 if (pred >= HitChance.High)
@@ -132,19 +132,19 @@ namespace JustHecarim
 
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (E.LSIsReady() && gapcloser.Sender.LSIsValidTarget(player.AttackRange) && Config.Item("antigap").GetValue<bool>())
+            if (E.IsReady() && gapcloser.Sender.IsValidTarget(player.AttackRange) && Config.Item("antigap").GetValue<bool>())
                 E.Cast();
         }
 
         private static void AutoR()
         {
-            if (!R.LSIsReady() || !Config.Item("AutoR").GetValue<bool>())
+            if (!R.IsReady() || !Config.Item("AutoR").GetValue<bool>())
                 return;
 
             var target = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
 
-            var enemys = target.LSCountEnemiesInRange(R.Range);
-            if (R.LSIsReady() && Config.Item("UseR").GetValue<bool>() && target.LSIsValidTarget(R.Range))
+            var enemys = target.CountEnemiesInRange(R.Range);
+            if (R.IsReady() && Config.Item("UseR").GetValue<bool>() && target.IsValidTarget(R.Range))
             {
                 var pred = R.GetPrediction(target).Hitchance;
                 if (pred >= HitChance.High)
@@ -156,22 +156,22 @@ namespace JustHecarim
         private static void combo()
         {
             var target = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
-            var enemys = target.LSCountEnemiesInRange(R.Range);
-            if (target == null || !target.LSIsValidTarget())
+            var enemys = target.CountEnemiesInRange(R.Range);
+            if (target == null || !target.IsValidTarget())
                 return;
 
-            if (E.LSIsReady() && target.LSIsValidTarget(2000) && Config.Item("UseE").GetValue<bool>())
+            if (E.IsReady() && target.IsValidTarget(2000) && Config.Item("UseE").GetValue<bool>())
                 E.Cast();
 
-            if (W.LSIsReady() && target.LSIsValidTarget(W.Range) && Config.Item("UseW").GetValue<bool>())
+            if (W.IsReady() && target.IsValidTarget(W.Range) && Config.Item("UseW").GetValue<bool>())
                 W.Cast();
            
-            if (Q.LSIsReady() && Config.Item("UseQ").GetValue<bool>() && target.LSIsValidTarget(Q.Range))
+            if (Q.IsReady() && Config.Item("UseQ").GetValue<bool>() && target.IsValidTarget(Q.Range))
             {
                 Q.Cast();
             }
 
-            if (R.LSIsReady() && Config.Item("UseR").GetValue<bool>() && target.LSIsValidTarget(R.Range))
+            if (R.IsReady() && Config.Item("UseR").GetValue<bool>() && target.IsValidTarget(R.Range))
                 if (Config.Item("Rene").GetValue<Slider>().Value <= enemys)
                     R.CastIfHitchanceEquals(target, HitChance.High);
 
@@ -185,9 +185,9 @@ namespace JustHecarim
             {
                 float ComboDamage = new float();
 
-                ComboDamage = Q.LSIsReady() ? Q.GetDamage(Target) : 0;
-                ComboDamage += W.LSIsReady() ? W.GetDamage(Target) : 0;
-                ComboDamage += R.LSIsReady() ? R.GetDamage(Target) : 0;
+                ComboDamage = Q.IsReady() ? Q.GetDamage(Target) : 0;
+                ComboDamage += W.IsReady() ? W.GetDamage(Target) : 0;
+                ComboDamage += R.IsReady() ? R.GetDamage(Target) : 0;
                 ComboDamage += player.TotalAttackDamage;
                 return ComboDamage;
             }
@@ -220,27 +220,27 @@ namespace JustHecarim
 
         private static void Killsteal()
         {
-            if (Config.Item("ksQ").GetValue<bool>() && Q.LSIsReady())
+            if (Config.Item("ksQ").GetValue<bool>() && Q.IsReady())
             {
                 var target =
                     ObjectManager.Get<AIHeroClient>()
                         .FirstOrDefault(
                             enemy =>
-                                enemy.LSIsValidTarget(Q.Range) && enemy.Health < player.LSGetSpellDamage(enemy, SpellSlot.Q));
-                if (target.LSIsValidTarget(Q.Range))
+                                enemy.IsValidTarget(Q.Range) && enemy.Health < player.GetSpellDamage(enemy, SpellSlot.Q));
+                if (target.IsValidTarget(Q.Range))
                 {
                     Q.Cast();
                 }
             }
 
-            if (Config.Item("ksR").GetValue<bool>() && R.LSIsReady())
+            if (Config.Item("ksR").GetValue<bool>() && R.IsReady())
             {
                 var target =
                     ObjectManager.Get<AIHeroClient>()
                         .FirstOrDefault(
                             enemy =>
-                                enemy.LSIsValidTarget(R.Range) && enemy.Health < player.LSGetSpellDamage(enemy, SpellSlot.R));
-                if (target.LSIsValidTarget(R.Range))
+                                enemy.IsValidTarget(R.Range) && enemy.Health < player.GetSpellDamage(enemy, SpellSlot.R));
+                if (target.IsValidTarget(R.Range))
                 {
                     R.CastIfHitchanceEquals(target, HitChance.High);
                 }
@@ -249,9 +249,9 @@ namespace JustHecarim
 
         private static void items()
         {
-            Ignite = player.LSGetSpellSlot("summonerdot");
+            Ignite = player.GetSpellSlot("summonerdot");
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
                 return;
 
             var botrk = ItemData.Blade_of_the_Ruined_King.GetItem();
@@ -276,19 +276,19 @@ namespace JustHecarim
 
                 cutlass.Cast(target);
 
-            if (Ghost.IsReady() && Ghost.IsOwned(player) && target.LSIsValidTarget(Q.Range)
+            if (Ghost.IsReady() && Ghost.IsOwned(player) && target.IsValidTarget(Q.Range)
                 && Config.Item("useGhostblade").GetValue<bool>())
 
                 Ghost.Cast();
 
-            if (player.LSDistance(target.Position) <= 600 && IgniteDamage(target) >= target.Health &&
+            if (player.Distance(target.Position) <= 600 && IgniteDamage(target) >= target.Health &&
                 Config.Item("UseIgnite").GetValue<bool>())
                 player.Spellbook.CastSpell(Ignite, target);
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (player.IsDead || MenuGUI.IsChatOpen || player.LSIsRecalling())
+            if (player.IsDead || MenuGUI.IsChatOpen || player.IsRecalling())
             {
                 return;
             }
@@ -322,18 +322,18 @@ namespace JustHecarim
             if (minions.Count <= 0)
                 return;
 
-            if (Q.LSIsReady() && Config.Item("fQ").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("fQ").GetValue<bool>())
             {
                 var qtarget =
                     minions.Where(
                         x =>
-                            x.LSDistance(player) < Q.Range &&
-                            (x.Health < player.LSGetSpellDamage(x, SpellSlot.Q) &&
-                             !(x.Health < player.LSGetAutoAttackDamage(x))))
+                            x.Distance(player) < Q.Range &&
+                            (x.Health < player.GetSpellDamage(x, SpellSlot.Q) &&
+                             !(x.Health < player.GetAutoAttackDamage(x))))
                         .OrderByDescending(x => x.Health)
                         .FirstOrDefault();
                 if (HealthPrediction.GetHealthPrediction(qtarget, (int)0.5) <=
-                    player.LSGetSpellDamage(qtarget, SpellSlot.Q))
+                    player.GetSpellDamage(qtarget, SpellSlot.Q))
                     Q.Cast();
             }
         }
@@ -341,10 +341,10 @@ namespace JustHecarim
         private static void AutoHarass()
         {
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
-            if (!Q.LSIsReady() || !Config.Item("hQA").GetValue<bool>() || player.LSIsRecalling() || target == null || !target.LSIsValidTarget())
+            if (!Q.IsReady() || !Config.Item("hQA").GetValue<bool>() || player.IsRecalling() || target == null || !target.IsValidTarget())
                 return;
 
-            if (Q.LSIsReady() && Config.Item("hQA").GetValue<bool>() && target.LSIsValidTarget(Q.Range - 10))
+            if (Q.IsReady() && Config.Item("hQA").GetValue<bool>() && target.IsValidTarget(Q.Range - 10))
             {
                 Q.Cast();
             }
@@ -376,18 +376,18 @@ namespace JustHecarim
         {
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
             var harassmana = Config.Item("harassmana").GetValue<Slider>().Value;
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
                 return;
 
-            if (E.LSIsReady() && player.ManaPercent >= harassmana &&
+            if (E.IsReady() && player.ManaPercent >= harassmana &&
                Config.Item("hE").GetValue<bool>())
                 E.Cast();
             
-            if (W.LSIsReady() && target.LSIsValidTarget(W.Range) && player.ManaPercent >= harassmana &&
+            if (W.IsReady() && target.IsValidTarget(W.Range) && player.ManaPercent >= harassmana &&
                Config.Item("hW").GetValue<bool>())
                 W.Cast();
             
-            if (Config.Item("hQ").GetValue<bool>() && target.LSIsValidTarget(Q.Range) &&
+            if (Config.Item("hQ").GetValue<bool>() && target.IsValidTarget(Q.Range) &&
                 player.ManaPercent >= harassmana)
                 Q.Cast();
             }

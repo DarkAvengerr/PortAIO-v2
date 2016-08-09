@@ -31,14 +31,14 @@ using EloBuddy;
             if(enemy != null)
             {
                 float dmg = 0;
-                    dmg = dmg + (float)Player.LSGetAutoAttackDamage(enemy);
+                    dmg = dmg + (float)Player.GetAutoAttackDamage(enemy);
 
-                    if (Champion.Pounce.LSIsReady()) dmg += Champion.Pounce.GetDamage(enemy);
-                    if (Champion.Swipe.LSIsReady()) dmg += Champion.Swipe.GetDamage(enemy);
-                    if (Champion.Takedown.LSIsReady()) dmg += Champion.Takedown.GetDamage(enemy);
+                    if (Champion.Pounce.IsReady()) dmg += Champion.Pounce.GetDamage(enemy);
+                    if (Champion.Swipe.IsReady()) dmg += Champion.Swipe.GetDamage(enemy);
+                    if (Champion.Takedown.IsReady()) dmg += Champion.Takedown.GetDamage(enemy);
 
-                    if (Champion.Bushwack.LSIsReady()) dmg += Champion.Bushwack.GetDamage(enemy);
-                    if (Champion.Javelin.LSIsReady()) dmg += Champion.Javelin.GetDamage(enemy);
+                    if (Champion.Bushwack.IsReady()) dmg += Champion.Bushwack.GetDamage(enemy);
+                    if (Champion.Javelin.IsReady()) dmg += Champion.Javelin.GetDamage(enemy);
               
                     return dmg;
             }

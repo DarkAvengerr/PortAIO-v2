@@ -172,7 +172,7 @@ using EloBuddy;
                 {
                     if (
                         HeroManager.Enemies.Any(
-                            hero => hero.LSIsValidTarget() & hero.ServerPosition.LSDistance(missile.Position) <= this.Width))
+                            hero => hero.IsValidTarget() & hero.ServerPosition.Distance(missile.Position) <= this.Width))
                     {
                         this.SpellObject.Cast();
                     }

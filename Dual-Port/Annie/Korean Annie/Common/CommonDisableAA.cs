@@ -17,7 +17,7 @@ using EloBuddy;
 
             if (KoreanUtils.GetParam(champion.MainMenu, "supportmode") != null) 
             {
-                if (KoreanUtils.GetParamBool(champion.MainMenu, "supportmode") && champion.Player.LSCountAlliesInRange(1500f) > 1)
+                if (KoreanUtils.GetParamBool(champion.MainMenu, "supportmode") && champion.Player.CountAlliesInRange(1500f) > 1)
                 {
                     canHit = false;
                 }

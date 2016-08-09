@@ -127,7 +127,7 @@ namespace BrianSharp.Plugin
 
         private static void OnUpdate(EventArgs args)
         {
-            if (Player.IsDead || MenuGUI.IsChatOpen || Player.LSIsRecalling())
+            if (Player.IsDead || MenuGUI.IsChatOpen || Player.IsRecalling())
             {
                 return;
             }
@@ -146,7 +146,7 @@ namespace BrianSharp.Plugin
                     LastHit();
                     break;
                 case Orbwalker.Mode.Flee:
-                    if (GetValue<bool>("Flee", "E") && E.LSIsReady() && E.Cast(Game.CursorPos, PacketCast))
+                    if (GetValue<bool>("Flee", "E") && E.IsReady() && E.Cast(Game.CursorPos, PacketCast))
                     {
                         return;
                     }
@@ -166,11 +166,11 @@ namespace BrianSharp.Plugin
             }
             if (GetValue<bool>("Draw", "Q") && Q.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, Q.Range, Q.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, Q.Range, Q.IsReady() ? Color.Green : Color.Red);
             }
             if (GetValue<bool>("Draw", "E") && E.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, E.Range, E.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.Green : Color.Red);
             }
         }
 
@@ -185,7 +185,7 @@ namespace BrianSharp.Plugin
             var predE = E.GetPrediction(gapcloser.Sender, true);
             if (predE.Hitchance >= E.MinHitChance)
             {
-                E.Cast(predE.CastPosition.LSExtend(Player.ServerPosition, -100), PacketCast);
+                E.Cast(predE.CastPosition.Extend(Player.ServerPosition, -100), PacketCast);
             }
         }
 
@@ -199,7 +199,7 @@ namespace BrianSharp.Plugin
             var predE = E.GetPrediction(unit, true);
             if (predE.Hitchance >= E.MinHitChance)
             {
-                E.Cast(predE.CastPosition.LSExtend(Player.ServerPosition, -100), PacketCast);
+                E.Cast(predE.CastPosition.Extend(Player.ServerPosition, -100), PacketCast);
             }
         }
 
@@ -213,9 +213,9 @@ namespace BrianSharp.Plugin
                 {
                     var predE = E.GetPrediction(target, true);
                     if (predE.Hitchance >= E.MinHitChance &&
-                        E.Cast(predE.CastPosition.LSExtend(Player.ServerPosition, -100), PacketCast))
+                        E.Cast(predE.CastPosition.Extend(Player.ServerPosition, -100), PacketCast))
                     {
-                        if (mode == "Combo" && GetValue<bool>(mode, "W") && W.LSIsReady())
+                        if (mode == "Combo" && GetValue<bool>(mode, "W") && W.IsReady())
                         {
                             W.Cast(PacketCast);
                         }
@@ -223,11 +223,11 @@ namespace BrianSharp.Plugin
                     }
                 }
             }
-            if (GetValue<bool>(mode, "Q") && Q.CastOnBestTarget(0, PacketCast).LSIsCasted())
+            if (GetValue<bool>(mode, "Q") && Q.CastOnBestTarget(0, PacketCast).IsCasted())
             {
                 return;
             }
-            if (mode == "Combo" && GetValue<bool>(mode, "W") && W.LSIsReady() && Q.GetTarget() != null &&
+            if (mode == "Combo" && GetValue<bool>(mode, "W") && W.IsReady() && Q.GetTarget() != null &&
                 Player.HealthPercent < GetValue<Slider>(mode, "WHpU").Value)
             {
                 W.Cast(PacketCast);
@@ -241,7 +241,7 @@ namespace BrianSharp.Plugin
             {
                 return;
             }
-            if (GetValue<bool>("Clear", "Q") && Q.LSIsReady())
+            if (GetValue<bool>("Clear", "Q") && Q.IsReady())
             {
                 var obj = minionObj.FirstOrDefault(i => Q.IsKillable(i)) ?? minionObj.MinOrDefault(i => i.Health);
                 if (obj != null && Q.CastOnUnit(obj, PacketCast))
@@ -249,7 +249,7 @@ namespace BrianSharp.Plugin
                     return;
                 }
             }
-            if (GetValue<bool>("Clear", "W") && W.LSIsReady() &&
+            if (GetValue<bool>("Clear", "W") && W.IsReady() &&
                 (minionObj.Count > 1 || minionObj.Any(i => i.MaxHealth >= 1200)))
             {
                 W.Cast(PacketCast);
@@ -258,7 +258,7 @@ namespace BrianSharp.Plugin
 
         private static void LastHit()
         {
-            if (!GetValue<bool>("LastHit", "Q") || !Q.LSIsReady())
+            if (!GetValue<bool>("LastHit", "Q") || !Q.IsReady())
             {
                 return;
             }
@@ -284,7 +284,7 @@ namespace BrianSharp.Plugin
 
         private static void KillSteal()
         {
-            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.LSIsReady())
+            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.IsReady())
             {
                 var target = TargetSelector.GetTarget(600, TargetSelector.DamageType.True);
                 if (target != null && CastIgnite(target))
@@ -292,7 +292,7 @@ namespace BrianSharp.Plugin
                     return;
                 }
             }
-            if (GetValue<bool>("KillSteal", "Q") && Q.LSIsReady())
+            if (GetValue<bool>("KillSteal", "Q") && Q.IsReady())
             {
                 var target = Q.GetTarget();
                 if (target != null && Q.IsKillable(target) && Q.CastOnUnit(target, PacketCast))
@@ -300,7 +300,7 @@ namespace BrianSharp.Plugin
                     return;
                 }
             }
-            if (GetValue<bool>("KillSteal", "E") && E.LSIsReady())
+            if (GetValue<bool>("KillSteal", "E") && E.IsReady())
             {
                 var target = E.GetTarget(E.Width);
                 if (target != null && E.IsKillable(target))
@@ -308,7 +308,7 @@ namespace BrianSharp.Plugin
                     var predE = E.GetPrediction(target, true);
                     if (predE.Hitchance >= E.MinHitChance)
                     {
-                        E.Cast(predE.CastPosition.LSExtend(Player.ServerPosition, -100), PacketCast);
+                        E.Cast(predE.CastPosition.Extend(Player.ServerPosition, -100), PacketCast);
                     }
                 }
             }
@@ -316,7 +316,7 @@ namespace BrianSharp.Plugin
 
         private static void UltimateAlert()
         {
-            if (!GetValue<bool>("Ultimate", "Alert") || !R.LSIsReady())
+            if (!GetValue<bool>("Ultimate", "Alert") || !R.IsReady())
             {
                 _alertAlly = null;
                 return;
@@ -326,9 +326,9 @@ namespace BrianSharp.Plugin
                 var obj =
                     HeroManager.Allies.Where(
                         i =>
-                            !i.IsMe && i.LSIsValidTarget(R.Range, false) && GetValue<bool>("Ally", i.ChampionName) &&
+                            !i.IsMe && i.IsValidTarget(R.Range, false) && GetValue<bool>("Ally", i.ChampionName) &&
                             i.HealthPercent < GetValue<Slider>("Ultimate", "AlertHpU").Value &&
-                            i.LSCountEnemiesInRange(E.Range) > 0).MinOrDefault(i => i.Health);
+                            i.CountEnemiesInRange(E.Range) > 0).MinOrDefault(i => i.Health);
                 if (obj != null)
                 {
                     AddNotif(string.Format("[Brian Sharp] - {0}: In Dangerous", obj.ChampionName), 5000);
@@ -344,7 +344,7 @@ namespace BrianSharp.Plugin
                 }
             }
             if (GetValue<bool>("Ultimate", "Save") && GetValue<KeyBind>("Ultimate", "SaveKey").Active &&
-                _alertAlly.LSIsValidTarget(R.Range, false))
+                _alertAlly.IsValidTarget(R.Range, false))
             {
                 R.CastOnUnit(_alertAlly, PacketCast);
             }
@@ -352,20 +352,20 @@ namespace BrianSharp.Plugin
 
         private static void AutoEUnderTower()
         {
-            if (!GetValue<bool>("Misc", "ETower") || !E.LSIsReady())
+            if (!GetValue<bool>("Misc", "ETower") || !E.IsReady())
             {
                 return;
             }
-            var target = HeroManager.Enemies.Where(i => i.LSIsValidTarget(E.Range)).MinOrDefault(i => i.LSDistance(Player));
+            var target = HeroManager.Enemies.Where(i => i.IsValidTarget(E.Range)).MinOrDefault(i => i.Distance(Player));
             var tower =
                 ObjectManager.Get<Obj_AI_Turret>()
-                    .FirstOrDefault(i => i.IsAlly && !i.IsDead && i.LSDistance(Player) <= 850);
-            if (target != null && tower != null && target.LSDistance(tower) <= 850)
+                    .FirstOrDefault(i => i.IsAlly && !i.IsDead && i.Distance(Player) <= 850);
+            if (target != null && tower != null && target.Distance(tower) <= 850)
             {
                 var predE = E.GetPrediction(target, true);
                 if (predE.Hitchance >= E.MinHitChance)
                 {
-                    E.Cast(predE.CastPosition.LSExtend(Player.ServerPosition, -100), PacketCast);
+                    E.Cast(predE.CastPosition.Extend(Player.ServerPosition, -100), PacketCast);
                 }
             }
         }

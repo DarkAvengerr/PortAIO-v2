@@ -27,7 +27,7 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
         public bool ShouldGetExecuted()
         {
             return MenuExtensions.GetItemValue<bool>("dz191.vhr.farm.condemnjungle") &&
-                   Variables.spells[SpellSlot.E].LSIsReady() && (Variables.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear);
+                   Variables.spells[SpellSlot.E].IsReady() && (Variables.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear);
         }
 
         public ModuleType GetModuleType()

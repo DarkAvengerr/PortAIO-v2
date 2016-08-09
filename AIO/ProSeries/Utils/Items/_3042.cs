@@ -28,8 +28,8 @@ using EloBuddy;
         {
             if (!Canmuramana)
             {
-                var manamune = ProSeries.Player.LSGetSpellSlot("Muramana");
-                if (manamune != SpellSlot.Unknown && ProSeries.Player.LSHasBuff("Muramana"))
+                var manamune = ProSeries.Player.GetSpellSlot("Muramana");
+                if (manamune != SpellSlot.Unknown && ProSeries.Player.HasBuff("Muramana"))
                 {
                     ProSeries.Player.Spellbook.CastSpell(manamune);
                 }
@@ -40,8 +40,8 @@ using EloBuddy;
         {
             if (Canmuramana)
             {
-                var manamune = ProSeries.Player.LSGetSpellSlot("Muramana");
-                if (manamune != SpellSlot.Unknown && !ProSeries.Player.LSHasBuff("Muramana"))
+                var manamune = ProSeries.Player.GetSpellSlot("Muramana");
+                if (manamune != SpellSlot.Unknown && !ProSeries.Player.HasBuff("Muramana"))
                 {
                     ProSeries.Player.Spellbook.CastSpell(manamune);
                     LeagueSharp.Common.Utility.DelayAction.Add(400, () => Canmuramana = false);
@@ -59,7 +59,7 @@ using EloBuddy;
             if (args.SData.HaveHitEffect)
                 Canmuramana = true;
 
-            if (args.SData.LSIsAutoAttack() &&
+            if (args.SData.IsAutoAttack() &&
                (ProSeries.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo ||
                 args.Target.Type == GameObjectType.AIHeroClient))
             {

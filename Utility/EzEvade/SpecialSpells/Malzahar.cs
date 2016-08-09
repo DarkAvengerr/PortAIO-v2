@@ -30,9 +30,9 @@ using EloBuddy; namespace ezEvade.SpecialSpells
         {
             if (spellData.spellName == "MalzaharQ")
             {
-                var direction = (args.End.LSTo2D() - args.Start.LSTo2D()).LSNormalized();
-                var pDirection = direction.LSPerpendicular();
-                var targetPoint = args.End.LSTo2D();
+                var direction = (args.End.To2D() - args.Start.To2D()).Normalized();
+                var pDirection = direction.Perpendicular();
+                var targetPoint = args.End.To2D();
 
                 var pos1 = targetPoint - pDirection * spellData.sideRadius;
                 var pos2 = targetPoint + pDirection * spellData.sideRadius;

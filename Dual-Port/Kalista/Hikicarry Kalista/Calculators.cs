@@ -66,7 +66,7 @@ using EloBuddy;
         {
             var damage = 0f;
 
-            if (Program.E.LSIsReady())
+            if (Program.E.IsReady())
             {
                 switch (Program.Config.Item("calculator").GetValue<StringList>().SelectedIndex)
                 {
@@ -85,7 +85,7 @@ using EloBuddy;
         {
             var damage = 0f;
 
-            if (Program.E.LSIsReady())
+            if (Program.E.IsReady())
             {
                 switch (Program.Config.Item("calculator").GetValue<StringList>().SelectedIndex)
                 {
@@ -103,7 +103,7 @@ using EloBuddy;
         {
             var damage = 0f;
 
-            if (Program.E.LSIsReady())
+            if (Program.E.IsReady())
             {
                 switch (Program.Config.Item("calculator").GetValue<StringList>().SelectedIndex)
                 {

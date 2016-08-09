@@ -49,7 +49,7 @@ using EloBuddy;
             _q.SetSkillshot(0, 70, 1600, false, SkillshotType.SkillshotCircle);
             _e.SetSkillshot(0, 100, 1700, false, SkillshotType.SkillshotLine);
             _r.SetSkillshot(0.5f, 0, 1400, false, SkillshotType.SkillshotLine);
-            //  ignite = ObjectManager.Player.LSGetSpellSlot("SummonerDot");
+            //  ignite = ObjectManager.Player.GetSpellSlot("SummonerDot");
         }
 
 
@@ -71,7 +71,7 @@ using EloBuddy;
             foreach (var point in points)
             {
                
-                    if (point.LSDistance(azir.Hero.ServerPosition) <= azir.Spells.Q.Range)
+                    if (point.Distance(azir.Hero.ServerPosition) <= azir.Spells.Q.Range)
                     {
                         _pointer.hits = Azir_Free_elo_Machine.Math.Geometry.Nattacks(azir, point, target);
                         _pointer.point = point;

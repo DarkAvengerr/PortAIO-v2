@@ -81,7 +81,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
                     return;
                 }
 
-                var enemies = this.Player.LSCountEnemiesInRange(800);
+                var enemies = this.Player.CountEnemiesInRange(800);
                 var totalDamage = IncomingDamageManager.GetDamage(this.Player) * 1.1f;
 
                 if (this.Player.HealthPercent <= this.Menu.Item("seraphs-min-health").GetValue<Slider>().Value && enemies >= 1)

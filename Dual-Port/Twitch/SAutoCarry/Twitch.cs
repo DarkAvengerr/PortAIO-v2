@@ -76,16 +76,16 @@ namespace SAutoCarry.Champions
 
         public void Combo()
         {
-            if (Spells[W].LSIsReady() && ComboUseW)
+            if (Spells[W].IsReady() && ComboUseW)
             {
                 var t = TargetSelector.GetTarget(Spells[W].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
                 if (t != null)
                     Spells[W].SPredictionCast(t, HitChance.High);
             }
 
-            if (Spells[E].LSIsReady() && ComboUseE)
+            if (Spells[E].IsReady() && ComboUseE)
             {
-                if (HeroManager.Enemies.Any(x => x.LSIsValidTarget(Spells[E].Range) && !x.IsInvulnerable && (x.GetBuffCount("twitchdeadlyvenom") >= 6 || Spells[E].IsKillable(x)) && IsWhitelisted(x)))
+                if (HeroManager.Enemies.Any(x => x.IsValidTarget(Spells[E].Range) && !x.IsInvulnerable && (x.GetBuffCount("twitchdeadlyvenom") >= 6 || Spells[E].IsKillable(x)) && IsWhitelisted(x)))
                     Spells[E].Cast();
             }
         }
@@ -93,16 +93,16 @@ namespace SAutoCarry.Champions
 
         public void Harass()
         {
-            if (Spells[W].LSIsReady() && HarassUseW)
+            if (Spells[W].IsReady() && HarassUseW)
             {
                 var t = TargetSelector.GetTarget(Spells[W].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
                 if (t != null)
                     Spells[W].SPredictionCast(t, HitChance.High);
             }
 
-            if (Spells[E].LSIsReady() && HarassUseE)
+            if (Spells[E].IsReady() && HarassUseE)
             {
-                 if (HeroManager.Enemies.Any(x => x.LSIsValidTarget(Spells[E].Range) && !x.IsInvulnerable && (x.GetBuffCount("twitchdeadlyvenom") >= 6 || Spells[E].IsKillable(x)) && IsWhitelisted(x)))
+                 if (HeroManager.Enemies.Any(x => x.IsValidTarget(Spells[E].Range) && !x.IsInvulnerable && (x.GetBuffCount("twitchdeadlyvenom") >= 6 || Spells[E].IsKillable(x)) && IsWhitelisted(x)))
                         Spells[E].Cast();
             }
         }
@@ -112,10 +112,10 @@ namespace SAutoCarry.Champions
             var minion = MinionManager.GetMinions(Spells[E].Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).FirstOrDefault();
             if (minion != null)
             {
-                if (Spells[W].LSIsReady() && minion.LSIsValidTarget(Spells[W].Range) && LaneClearW)
+                if (Spells[W].IsReady() && minion.IsValidTarget(Spells[W].Range) && LaneClearW)
                     Spells[W].Cast(minion.ServerPosition);
 
-                if (Spells[E].LSIsReady() && LaneClearE)
+                if (Spells[E].IsReady() && LaneClearE)
                 {
                     if ((minion.CharData.BaseSkinName.Contains("Dragon") || minion.CharData.BaseSkinName.Contains("Baron") || minion.CharData.BaseSkinName.Contains("Siege") || minion.IsJungleMinion()) && Spells[E].IsKillable(minion))
                         Spells[E].Cast();
@@ -125,7 +125,7 @@ namespace SAutoCarry.Champions
         
         public void RecallStealthQ()
         {
-            if (Spells[Q].LSIsReady() && RecallQ && !ObjectManager.Player.LSIsRecalling())
+            if (Spells[Q].IsReady() && RecallQ && !ObjectManager.Player.IsRecalling())
             {
                 Spells[Q].Cast();
                 ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Recall);
@@ -154,7 +154,7 @@ namespace SAutoCarry.Champions
 
         protected override void OrbwalkingEvents_BeforeAttack(BeforeAttackArgs args)
         {
-            if (Spells[Q].LSIsReady() && ComboUseQ && args.Target.Type == GameObjectType.AIHeroClient && Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo)
+            if (Spells[Q].IsReady() && ComboUseQ && args.Target.Type == GameObjectType.AIHeroClient && Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo)
             {
                 Spells[Q].Cast();
                 args.Process = false;

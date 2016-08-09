@@ -15,10 +15,10 @@ using EloBuddy;
             {
                 var target = TargetSelector.GetTarget(2500f, TargetSelector.DamageType.Physical);
 
-                if (target.LSIsValidTarget(Variables.spells[SpellSlot.R].Range) 
+                if (target.IsValidTarget(Variables.spells[SpellSlot.R].Range) 
                     && CanExecuteTarget(target) 
-                    && ObjectManager.Player.LSDistance(target) >= Orbwalking.GetRealAutoAttackRange(null) * 0.80f
-                    && !(target.Health + 5 < ObjectManager.Player.LSGetAutoAttackDamage(target) * 2 + Variables.spells[SpellSlot.Q].GetDamage(target)))
+                    && ObjectManager.Player.Distance(target) >= Orbwalking.GetRealAutoAttackRange(null) * 0.80f
+                    && !(target.Health + 5 < ObjectManager.Player.GetAutoAttackDamage(target) * 2 + Variables.spells[SpellSlot.Q].GetDamage(target)))
                 {
                     Variables.spells[SpellSlot.R].CastIfHitchanceEquals(
                       target, target.IsMoving ? HitChance.VeryHigh : HitChance.High);
@@ -39,7 +39,7 @@ using EloBuddy;
             var prediction = Variables.spells[SpellSlot.R].GetPrediction(target);
             var count = prediction.CollisionObjects.Count;
 
-            damage += ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.R);
+            damage += ObjectManager.Player.GetSpellDamage(target, SpellSlot.R);
 
             if (count >= 7)
             {

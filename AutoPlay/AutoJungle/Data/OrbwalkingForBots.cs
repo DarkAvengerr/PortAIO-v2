@@ -322,7 +322,7 @@ using EloBuddy; namespace AutoJungle.Data
         /// <param name="target">The target.</param>
         private static void FireAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (AfterAttack != null && target.LSIsValidTarget())
+            if (AfterAttack != null && target.IsValidTarget())
             {
                 AfterAttack(unit, target);
             }
@@ -334,7 +334,7 @@ using EloBuddy; namespace AutoJungle.Data
         /// <param name="newTarget">The new target.</param>
         private static void FireOnTargetSwitch(AttackableUnit newTarget)
         {
-            if (OnTargetChange != null && (!_lastTarget.LSIsValidTarget() || _lastTarget != newTarget))
+            if (OnTargetChange != null && (!_lastTarget.IsValidTarget() || _lastTarget != newTarget))
             {
                 OnTargetChange(_lastTarget, newTarget);
             }
@@ -391,12 +391,12 @@ using EloBuddy; namespace AutoJungle.Data
         public static float GetRealAutoAttackRange(AttackableUnit target)
         {
             var result = Player.AttackRange + Player.BoundingRadius;
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 var aiBase = target as Obj_AI_Base;
                 if (aiBase != null && Player.ChampionName == "Caitlyn")
                 {
-                    if (aiBase.LSHasBuff("caitlynyordletrapinternal"))
+                    if (aiBase.HasBuff("caitlynyordletrapinternal"))
                     {
                         result += 650;
                     }
@@ -426,15 +426,15 @@ using EloBuddy; namespace AutoJungle.Data
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public static bool InAutoAttackRange(AttackableUnit target)
         {
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return false;
             }
             var myRange = GetRealAutoAttackRange(target);
             return
                 Vector2.DistanceSquared(
-                    target is Obj_AI_Base ? ((Obj_AI_Base) target).ServerPosition.LSTo2D() : target.Position.LSTo2D(),
-                    Player.ServerPosition.LSTo2D()) <= myRange * myRange;
+                    target is Obj_AI_Base ? ((Obj_AI_Base) target).ServerPosition.To2D() : target.Position.To2D(),
+                    Player.ServerPosition.To2D()) <= myRange * myRange;
         }
 
         /// <summary>
@@ -444,7 +444,7 @@ using EloBuddy; namespace AutoJungle.Data
         public static float GetMyProjectileSpeed()
         {
             return IsMelee(Player) || _championName == "Azir" || _championName == "Velkoz" ||
-                   _championName == "Viktor" && Player.LSHasBuff("ViktorPowerTransferReturn")
+                   _championName == "Viktor" && Player.HasBuff("ViktorPowerTransferReturn")
                 ? float.MaxValue
                 : Player.BasicAttack.MissileSpeed;
         }
@@ -459,7 +459,7 @@ using EloBuddy; namespace AutoJungle.Data
             {
                 var attackDelay = 1.0740296828d * 1000 * Player.AttackDelay - 716.2381256175d;
                 if (Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + attackDelay &&
-                    Player.LSHasBuff("GravesBasicAttackAmmo1"))
+                    Player.HasBuff("GravesBasicAttackAmmo1"))
                 {
                     return true;
                 }
@@ -467,7 +467,7 @@ using EloBuddy; namespace AutoJungle.Data
             }
             if (Player.ChampionName == "Jhin")
             {
-                if (Player.LSHasBuff("JhinPassiveReload"))
+                if (Player.HasBuff("JhinPassiveReload"))
                 {
                     return false;
                 }
@@ -487,7 +487,7 @@ using EloBuddy; namespace AutoJungle.Data
                 return true;
             }
             var localExtraWindup = 0;
-            if (_championName == "Rengar" && (Player.LSHasBuff("rengarqbase") || Player.LSHasBuff("rengarqemp")))
+            if (_championName == "Rengar" && (Player.HasBuff("rengarqbase") || Player.HasBuff("rengarqemp")))
             {
                 localExtraWindup = 200;
             }
@@ -548,7 +548,7 @@ using EloBuddy; namespace AutoJungle.Data
         {
             var playerPosition = Player.ServerPosition;
 
-            if (playerPosition.LSDistance(position, true) < holdAreaRadius * holdAreaRadius)
+            if (playerPosition.Distance(position, true) < holdAreaRadius * holdAreaRadius)
             {
                 if (Player.Path.Length > 0)
                 {
@@ -558,20 +558,20 @@ using EloBuddy; namespace AutoJungle.Data
                 }
                 return;
             }
-            if (Game.CursorPos.LSDistance(LastMoveCommandPosition) < 20 && Player.IsMoving)
+            if (Game.CursorPos.Distance(LastMoveCommandPosition) < 20 && Player.IsMoving)
             {
                 return;
             }
             var point = position;
 
-            if (Player.LSDistance(point, true) < 150 * 150)
+            if (Player.Distance(point, true) < 150 * 150)
             {
-                point = playerPosition.LSExtend(
+                point = playerPosition.Extend(
                     position, randomizeMinDistance ? (_random.NextFloat(0.6f, 1) + 0.2f) * _minDistance : _minDistance);
             }
             var angle = 0f;
-            var currentPath = Player.LSGetWaypoints();
-            if (currentPath.Count > 1 && currentPath.LSPathLength() > 100)
+            var currentPath = Player.GetWaypoints();
+            if (currentPath.Count > 1 && currentPath.PathLength() > 100)
             {
                 var movePath = Player.GetPath(point);
 
@@ -579,8 +579,8 @@ using EloBuddy; namespace AutoJungle.Data
                 {
                     var v1 = currentPath[1] - currentPath[0];
                     var v2 = movePath[1] - movePath[0];
-                    angle = v1.LSAngleBetween(v2.LSTo2D());
-                    var distance = movePath.Last().LSTo2D().LSDistance(currentPath.Last(), true);
+                    angle = v1.AngleBetween(v2.To2D());
+                    var distance = movePath.Last().To2D().Distance(currentPath.Last(), true);
 
                     if ((angle < 10 && distance < 500 * 500) || distance < 50 * 50)
                     {
@@ -628,7 +628,7 @@ using EloBuddy; namespace AutoJungle.Data
             var position = target.Position;
             try
             {
-                if (target.LSIsValidTarget() && CanAttack() && Attack)
+                if (target.IsValidTarget() && CanAttack() && Attack)
                 {
                     DisableNextAttack = false;
                     FireBeforeAttack(target);
@@ -658,7 +658,7 @@ using EloBuddy; namespace AutoJungle.Data
                         return;
                     }
                     if (Player.IsMelee() && meleePrediction && target != null &&
-                        target.Position.LSDistance(Player.Position) + 25 < GetRealAutoAttackRange(target) &&
+                        target.Position.Distance(Player.Position) + 25 < GetRealAutoAttackRange(target) &&
                         target is AIHeroClient)
                     {
                         AIHeroClient tar = (AIHeroClient) target;
@@ -982,11 +982,11 @@ using EloBuddy; namespace AutoJungle.Data
                     ObjectManager.Get<Obj_AI_Minion>()
                         .Any(
                             minion =>
-                                minion.LSIsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
+                                minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                                 InAutoAttackRange(minion) && MinionManager.IsMinion(minion, false) &&
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay) <=
-                                Player.LSGetAutoAttackDamage(minion));
+                                Player.GetAutoAttackDamage(minion));
             }
 
             private bool ShouldWaitUnderTurret(Obj_AI_Minion noneKillableMinion)
@@ -996,7 +996,7 @@ using EloBuddy; namespace AutoJungle.Data
                         .Any(
                             minion =>
                                 (noneKillableMinion != null ? noneKillableMinion.NetworkId != minion.NetworkId : true) &&
-                                minion.LSIsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
+                                minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                                 InAutoAttackRange(minion) && MinionManager.IsMinion(minion, false) &&
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion,
@@ -1007,7 +1007,7 @@ using EloBuddy; namespace AutoJungle.Data
                                              : Player.AttackCastDelay * 1000 +
                                                1000 * (Player.AttackRange + 2 * Player.BoundingRadius) /
                                                Player.BasicAttack.MissileSpeed)), FarmDelay) <=
-                                Player.LSGetAutoAttackDamage(minion));
+                                Player.GetAutoAttackDamage(minion));
             }
 
             /// <summary>
@@ -1020,7 +1020,7 @@ using EloBuddy; namespace AutoJungle.Data
                 var mode = ActiveMode;
 
                 //Forced target
-                if (_forcedTarget.LSIsValidTarget() && InAutoAttackRange(_forcedTarget))
+                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget))
                 {
                     return _forcedTarget;
                 }
@@ -1039,7 +1039,7 @@ using EloBuddy; namespace AutoJungle.Data
                 {
                     var MinionList =
                         ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(minion => minion.LSIsValidTarget() && InAutoAttackRange(minion))
+                            .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
                             .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                             .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                             .ThenBy(minion => minion.Health)
@@ -1048,7 +1048,7 @@ using EloBuddy; namespace AutoJungle.Data
                     foreach (var minion in MinionList)
                     {
                         var t = (int) (Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
-                                1000 * (int) Math.Max(0, Player.LSDistance(minion) - Player.BoundingRadius) /
+                                1000 * (int) Math.Max(0, Player.Distance(minion) - Player.BoundingRadius) /
                                 (int) GetMyProjectileSpeed();
 
                         if (mode == OrbwalkingMode.Freeze)
@@ -1060,7 +1060,7 @@ using EloBuddy; namespace AutoJungle.Data
 
                         if (minion.Team != GameObjectTeam.Neutral)
                         {
-                            var damage = Player.LSGetAutoAttackDamage(minion, true);
+                            var damage = Player.GetAutoAttackDamage(minion, true);
                             var killable = predHealth <= damage;
                             var dead = predHealth <= 0;
 
@@ -1103,21 +1103,21 @@ using EloBuddy; namespace AutoJungle.Data
                 {
                     /* turrets */
                     foreach (var turret in
-                        ObjectManager.Get<Obj_AI_Turret>().Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+                        ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                     {
                         return turret;
                     }
 
                     /* inhibitor */
                     foreach (var turret in
-                        ObjectManager.Get<Obj_BarracksDampener>().Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+                        ObjectManager.Get<Obj_BarracksDampener>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                     {
                         return turret;
                     }
 
                     /* nexus */
                     foreach (var nexus in
-                        ObjectManager.Get<Obj_HQ>().Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+                        ObjectManager.Get<Obj_HQ>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                     {
                         return nexus;
                     }
@@ -1127,7 +1127,7 @@ using EloBuddy; namespace AutoJungle.Data
                 if (mode != OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target.LSIsValidTarget() && InAutoAttackRange(target))
+                    if (target.IsValidTarget() && InAutoAttackRange(target))
                     {
                         return target;
                     }
@@ -1140,7 +1140,7 @@ using EloBuddy; namespace AutoJungle.Data
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 mob =>
-                                    mob.LSIsValidTarget() && mob.Team == GameObjectTeam.Neutral && InAutoAttackRange(mob) &&
+                                    mob.IsValidTarget() && mob.Team == GameObjectTeam.Neutral && InAutoAttackRange(mob) &&
                                     mob.CharData.BaseSkinName != "gangplankbarrel");
 
                     result = jminions.MaxOrDefault(mob => mob.MaxHealth);
@@ -1157,9 +1157,9 @@ using EloBuddy; namespace AutoJungle.Data
                 {
                     var closestTower =
                         ObjectManager.Get<Obj_AI_Turret>()
-                            .MinOrDefault(t => t.IsAlly && !t.IsDead ? Player.LSDistance(t, true) : float.MaxValue);
+                            .MinOrDefault(t => t.IsAlly && !t.IsDead ? Player.Distance(t, true) : float.MaxValue);
 
-                    if (closestTower != null && Player.LSDistance(closestTower, true) < 1500 * 1500)
+                    if (closestTower != null && Player.Distance(closestTower, true) < 1500 * 1500)
                     {
                         Obj_AI_Minion farmUnderTurretMinion = null;
                         Obj_AI_Minion noneKillableMinion = null;
@@ -1168,7 +1168,7 @@ using EloBuddy; namespace AutoJungle.Data
                             MinionManager.GetMinions(Player.Position, Player.AttackRange + 200)
                                 .Where(
                                     minion =>
-                                        InAutoAttackRange(minion) && closestTower.LSDistance(minion, true) < 900 * 900)
+                                        InAutoAttackRange(minion) && closestTower.Distance(minion, true) < 900 * 900)
                                 .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                                 .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                                 .ThenByDescending(minion => minion.MaxHealth)
@@ -1195,7 +1195,7 @@ using EloBuddy; namespace AutoJungle.Data
                                                      Math.Max(
                                                          0,
                                                          (int)
-                                                             (turretMinion.LSDistance(closestTower) -
+                                                             (turretMinion.Distance(closestTower) -
                                                               closestTower.BoundingRadius)) /
                                                      (int) (closestTower.BasicAttack.MissileSpeed + 70);
                                 // calculate the HP before try to balance it
@@ -1221,7 +1221,7 @@ using EloBuddy; namespace AutoJungle.Data
                                 // calculate the hits is needed and possibilty to balance
                                 if (hpLeft == 0 && turretAttackCount != 0 && hpLeftBeforeDie != 0)
                                 {
-                                    var damage = (int) Player.LSGetAutoAttackDamage(turretMinion, true);
+                                    var damage = (int) Player.GetAutoAttackDamage(turretMinion, true);
                                     var hits = hpLeftBeforeDie / damage;
                                     var timeBeforeDie = turretLandTick +
                                                         (turretAttackCount + 1) *
@@ -1235,7 +1235,7 @@ using EloBuddy; namespace AutoJungle.Data
                                     var timeToLandAttack = Player.IsMelee
                                         ? Player.AttackCastDelay * 1000
                                         : Player.AttackCastDelay * 1000 +
-                                          1000 * Math.Max(0, turretMinion.LSDistance(Player) - Player.BoundingRadius) /
+                                          1000 * Math.Max(0, turretMinion.Distance(Player) - Player.BoundingRadius) /
                                           Player.BasicAttack.MissileSpeed;
                                     if (hits >= 1 &&
                                         hits * Player.AttackDelay * 1000 + timeUntilAttackReady + timeToLandAttack <
@@ -1270,8 +1270,8 @@ using EloBuddy; namespace AutoJungle.Data
                                             x.NetworkId != turretMinion.NetworkId && x is Obj_AI_Minion &&
                                             !HealthPrediction.HasMinionAggro(x as Obj_AI_Minion)))
                                 {
-                                    var playerDamage = (int) Player.LSGetAutoAttackDamage(minion);
-                                    var turretDamage = (int) closestTower.LSGetAutoAttackDamage(minion, true);
+                                    var playerDamage = (int) Player.GetAutoAttackDamage(minion);
+                                    var turretDamage = (int) closestTower.GetAutoAttackDamage(minion, true);
                                     var leftHP = (int) minion.Health % turretDamage;
                                     if (leftHP > playerDamage)
                                     {
@@ -1288,7 +1288,7 @@ using EloBuddy; namespace AutoJungle.Data
                                 {
                                     if (1f / Player.AttackDelay >= 1f &&
                                         (int) (turretAttackCount * closestTower.AttackDelay / Player.AttackDelay) *
-                                        Player.LSGetAutoAttackDamage(lastminion) > lastminion.Health)
+                                        Player.GetAutoAttackDamage(lastminion) > lastminion.Health)
                                     {
                                         return lastminion;
                                     }
@@ -1312,8 +1312,8 @@ using EloBuddy; namespace AutoJungle.Data
                                 {
                                     if (closestTower != null)
                                     {
-                                        var playerDamage = (int) Player.LSGetAutoAttackDamage(minion);
-                                        var turretDamage = (int) closestTower.LSGetAutoAttackDamage(minion, true);
+                                        var playerDamage = (int) Player.GetAutoAttackDamage(minion);
+                                        var turretDamage = (int) closestTower.GetAutoAttackDamage(minion, true);
                                         var leftHP = (int) minion.Health % turretDamage;
                                         if (leftHP > playerDamage)
                                         {
@@ -1344,11 +1344,11 @@ using EloBuddy; namespace AutoJungle.Data
                 {
                     if (!ShouldWait())
                     {
-                        if (_prevMinion.LSIsValidTarget() && InAutoAttackRange(_prevMinion))
+                        if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion))
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 _prevMinion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay);
-                            if (predHealth >= 2 * Player.LSGetAutoAttackDamage(_prevMinion) ||
+                            if (predHealth >= 2 * Player.GetAutoAttackDamage(_prevMinion) ||
                                 Math.Abs(predHealth - _prevMinion.Health) < float.Epsilon)
                             {
                                 return _prevMinion;
@@ -1359,7 +1359,7 @@ using EloBuddy; namespace AutoJungle.Data
                             ObjectManager.Get<Obj_AI_Minion>()
                                 .Where(
                                     minion =>
-                                        minion.LSIsValidTarget() && InAutoAttackRange(minion) &&
+                                        minion.IsValidTarget() && InAutoAttackRange(minion) &&
                                         !MinionManager.IsWard(minion) &&
                                         minion.CharData.BaseSkinName != "jarvanivstandard" &&
                                         minion.CharData.BaseSkinName != "gangplankbarrel")
@@ -1367,7 +1367,7 @@ using EloBuddy; namespace AutoJungle.Data
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay)
                             where
-                                predHealth >= 2 * Player.LSGetAutoAttackDamage(minion) ||
+                                predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
                                 Math.Abs(predHealth - minion.Health) < float.Epsilon
                             select minion).MaxOrDefault(
                                 m => !MinionManager.IsMinion(m, true) ? float.MaxValue : m.Health);

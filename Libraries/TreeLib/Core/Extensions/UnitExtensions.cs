@@ -8,8 +8,8 @@ namespace TreeLib.Core.Extensions
     {
         public static bool CanAAKill(this Obj_AI_Base unit)
         {
-            return unit.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)) &&
-                   ObjectManager.Player.LSGetAutoAttackDamage(unit) > unit.Health;
+            return unit.IsValidTarget(Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)) &&
+                   ObjectManager.Player.GetAutoAttackDamage(unit) > unit.Health;
         }
     }
 }

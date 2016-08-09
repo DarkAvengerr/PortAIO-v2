@@ -112,7 +112,7 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
                     {
                         _text.DrawTextCentered(
                             obj.Hero.ChampionName,
-                            Drawing.WorldToScreen(ObjectManager.Player.Position.LSExtend(obj.Hero.Position, 250f)), color);
+                            Drawing.WorldToScreen(ObjectManager.Player.Position.Extend(obj.Hero.Position, 250f)), color);
                     }
                 }
             }
@@ -139,7 +139,7 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
 
                 foreach (var obj in _championObjects.Where(c => c.Enabled && !c.Hero.IsDead && c.Hero.IsVisible))
                 {
-                    var distance = obj.Hero.LSDistance(ObjectManager.Player);
+                    var distance = obj.Hero.Distance(ObjectManager.Player);
                     if (obj.Distance > range && distance <= range && Game.Time > obj.LastTrigger + cooldown)
                     {
                         obj.LastTrigger = Game.Time;

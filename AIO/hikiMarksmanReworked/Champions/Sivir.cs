@@ -66,9 +66,9 @@ using EloBuddy;
                     Jungle();
                     break;
             }
-            if (Helper.SEnabled("sivir.q.harass") && SivirSpells.Q.LSIsReady() && ObjectManager.Player.ManaPercent > Helper.SSlider("sivir.harass.mana"))
+            if (Helper.SEnabled("sivir.q.harass") && SivirSpells.Q.IsReady() && ObjectManager.Player.ManaPercent > Helper.SSlider("sivir.harass.mana"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(SivirSpells.Q.Range) && Helper.SEnabled("sivir.q.toggle." + x.ChampionName) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(SivirSpells.Q.Range) && Helper.SEnabled("sivir.q.toggle." + x.ChampionName) &&
                     SivirSpells.Q.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     SivirSpells.Q.Cast(enemy);
@@ -78,9 +78,9 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (SivirSpells.Q.LSIsReady() && Helper.SEnabled("sivir.q.combo"))
+            if (SivirSpells.Q.IsReady() && Helper.SEnabled("sivir.q.combo"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(SivirSpells.Q.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(SivirSpells.Q.Range) &&
                     SivirSpells.Q.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     SivirSpells.Q.Cast(enemy);
@@ -94,9 +94,9 @@ using EloBuddy;
             {
                 return;
             }
-            if (SivirSpells.Q.LSIsReady() && Helper.SEnabled("sivir.q.harass"))
+            if (SivirSpells.Q.IsReady() && Helper.SEnabled("sivir.q.harass"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(SivirSpells.Q.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(SivirSpells.Q.Range) &&
                     SivirSpells.Q.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     SivirSpells.Q.Cast(enemy);
@@ -112,7 +112,7 @@ using EloBuddy;
                 return;
             }
 
-            if (SivirSpells.Q.LSIsReady() && Helper.SEnabled("sivir.q.harass") && MinionManager.GetMinions(ObjectManager.Player.Position, SivirSpells.Q.Range, MinionTypes.All, MinionTeam.NotAlly).Count >= Helper.SSlider("sivir.q.minion.hit.count")
+            if (SivirSpells.Q.IsReady() && Helper.SEnabled("sivir.q.harass") && MinionManager.GetMinions(ObjectManager.Player.Position, SivirSpells.Q.Range, MinionTypes.All, MinionTeam.NotAlly).Count >= Helper.SSlider("sivir.q.minion.hit.count")
                 && SivirSpells.Q.GetLineFarmLocation(MinionManager.GetMinions(ObjectManager.Player.Position, SivirSpells.Q.Range, MinionTypes.All, MinionTeam.NotAlly)).MinionsHit >= Helper.SSlider("sivir.q.minion.hit.count"))
             {
                 SivirSpells.Q.Cast(SivirSpells.Q.GetLineFarmLocation(MinionManager.GetMinions(ObjectManager.Player.Position, SivirSpells.Q.Range, MinionTypes.All, MinionTeam.NotAlly)).Position);
@@ -126,14 +126,14 @@ using EloBuddy;
             {
                 return;
             }
-            if (SivirSpells.Q.LSIsReady() && Helper.SEnabled("sivir.q.jungle"))
+            if (SivirSpells.Q.IsReady() && Helper.SEnabled("sivir.q.jungle"))
             {
                 SivirSpells.Q.Cast(
                     MinionManager.GetMinions(ObjectManager.Player.ServerPosition,
                         Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 100, MinionTypes.All,
                         MinionTeam.Neutral, MinionOrderTypes.MaxHealth)[0]);
             }
-            if (SivirSpells.W.LSIsReady() && Helper.SEnabled("sivir.w.jungle"))
+            if (SivirSpells.W.IsReady() && Helper.SEnabled("sivir.w.jungle"))
             {
                 SivirSpells.W.Cast(
                     MinionManager.GetMinions(ObjectManager.Player.ServerPosition,
@@ -149,8 +149,8 @@ using EloBuddy;
 
         private static void AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (SivirMenu.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Helper.SEnabled("sivir.w.combo") && SivirSpells.W.LSIsReady()
-                 && target.LSIsValidTarget(SivirSpells.W.Range))
+            if (SivirMenu.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Helper.SEnabled("sivir.w.combo") && SivirSpells.W.IsReady()
+                 && target.IsValidTarget(SivirSpells.W.Range))
             {
                 SivirSpells.W.Cast();
             }
@@ -158,7 +158,7 @@ using EloBuddy;
 
         private static void SivirOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs spell)
         {
-            if (ObjectManager.Player.LSDistance(spell.End) <= 250 && sender.IsEnemy)
+            if (ObjectManager.Player.Distance(spell.End) <= 250 && sender.IsEnemy)
             {
                 foreach (var block in EvadeDb.SpellData.SpellDatabase.Spells.Where(o => o.spellName == spell.SData.Name))
                 {

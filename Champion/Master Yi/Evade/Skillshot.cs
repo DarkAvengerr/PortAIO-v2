@@ -70,7 +70,7 @@ namespace MasterSharp
             Distance = distance;
             ComingFrom = comingFrom;
             Valid = (point.X != 0) && (point.Y != 0);
-            Point = point + Config.GridSize*(ComingFrom - point).LSNormalized();
+            Point = point + Config.GridSize*(ComingFrom - point).Normalized();
             Time = time;
         }
     }
@@ -114,7 +114,7 @@ namespace MasterSharp
             Start = start;
             End = end;
             MissilePosition = start;
-            Direction = (end - start).LSNormalized();
+            Direction = (end - start).Normalized();
 
             Unit = unit;
 
@@ -144,14 +144,14 @@ namespace MasterSharp
 
         public Vector2 Perpendicular
         {
-            get { return Direction.LSPerpendicular(); }
+            get { return Direction.Perpendicular(); }
         }
 
         public Vector2 CollisionEnd
         {
             get
             {
-                if (_collisionEnd.LSIsValid())
+                if (_collisionEnd.IsValid())
                 {
                     return _collisionEnd;
                 }
@@ -194,7 +194,7 @@ namespace MasterSharp
 
             return Environment.TickCount <=
                    StartTick + SpellData.Delay + SpellData.ExtraDuration +
-                   1000*(Start.LSDistance(End)/SpellData.MissileSpeed);
+                   1000*(Start.Distance(End)/SpellData.MissileSpeed);
         }
 
         //public bool Evade()
@@ -244,8 +244,8 @@ namespace MasterSharp
             {
                 if (Unit.IsVisible)
                 {
-                    End = Unit.ServerPosition.LSTo2D();
-                    Direction = (End - Start).LSNormalized();
+                    End = Unit.ServerPosition.To2D();
+                    Direction = (End - Start).Normalized();
                     UpdatePolygon();
                 }
             }
@@ -301,7 +301,7 @@ namespace MasterSharp
         public Vector2 GlobalGetMissilePosition(int time)
         {
             var t = Math.Max(0, Environment.TickCount + time - StartTick - SpellData.Delay);
-            t = (int) Math.Max(0, Math.Min(End.LSDistance(Start), t*SpellData.MissileSpeed/1000));
+            t = (int) Math.Max(0, Math.Min(End.Distance(Start), t*SpellData.MissileSpeed/1000));
             return Start + Direction*t;
         }
 
@@ -345,7 +345,7 @@ namespace MasterSharp
                 }
             }
 
-            t = (int) Math.Max(0, Math.Min(CollisionEnd.LSDistance(Start), x));
+            t = (int) Math.Max(0, Math.Min(CollisionEnd.Distance(Start), x));
             return Start + Direction*t;
         }
 
@@ -357,7 +357,7 @@ namespace MasterSharp
         {
             timeOffset /= 2;
 
-            if (IsSafe(ObjectManager.Player.ServerPosition.LSTo2D()))
+            if (IsSafe(ObjectManager.Player.ServerPosition.To2D()))
             {
                 return true;
             }
@@ -367,9 +367,9 @@ namespace MasterSharp
             {
                 var missilePositionAfterBlink = GetMissilePosition(delay + timeOffset);
                 var myPositionProjection =
-                    ObjectManager.Player.ServerPosition.LSTo2D().LSProjectOn(Start, End);
+                    ObjectManager.Player.ServerPosition.To2D().ProjectOn(Start, End);
 
-                if (missilePositionAfterBlink.LSDistance(End) < myPositionProjection.SegmentPoint.LSDistance(End))
+                if (missilePositionAfterBlink.Distance(End) < myPositionProjection.SegmentPoint.Distance(End))
                 {
                     return false;
                 }
@@ -379,7 +379,7 @@ namespace MasterSharp
 
             //skillshots without missile
             var timeToExplode = SpellData.ExtraDuration + SpellData.Delay +
-                                (int) (1000*Start.LSDistance(End)/SpellData.MissileSpeed) -
+                                (int) (1000*Start.Distance(End)/SpellData.MissileSpeed) -
                                 (Environment.TickCount - StartTick);
 
             return timeToExplode > timeOffset + delay;
@@ -416,15 +416,15 @@ namespace MasterSharp
                     var sideStart = Polygon.Points[j];
                     var sideEnd = Polygon.Points[j == (Polygon.Points.Count - 1) ? 0 : j + 1];
 
-                    var intersection = from.LSIntersection(to, sideStart,
+                    var intersection = from.Intersection(to, sideStart,
                         sideEnd);
 
                     if (intersection.Intersects)
                     {
                         segmentIntersections.Add(
                             new FoundIntersection(
-                                Distance + intersection.Point.LSDistance(from),
-                                (int) ((Distance + intersection.Point.LSDistance(from))*1000/speed),
+                                Distance + intersection.Point.Distance(from),
+                                (int) ((Distance + intersection.Point.Distance(from))*1000/speed),
                                 intersection.Point, from));
                     }
                 }
@@ -432,7 +432,7 @@ namespace MasterSharp
                 var sortedList = segmentIntersections.OrderBy(o => o.Distance).ToList();
                 allIntersections.AddRange(sortedList);
 
-                Distance += from.LSDistance(to);
+                Distance += from.Distance(to);
             }
 
             //Skillshot with missile.
@@ -440,7 +440,7 @@ namespace MasterSharp
                 SpellData.Type == SkillShotType.SkillshotMissileCone)
             {
                 //Outside the skillshot
-                if (IsSafe(ObjectManager.Player.ServerPosition.LSTo2D()))
+                if (IsSafe(ObjectManager.Player.ServerPosition.To2D()))
                 {
                     //No intersections -> Safe
                     if (allIntersections.Count == 0)
@@ -451,7 +451,7 @@ namespace MasterSharp
                     for (var i = 0; i <= allIntersections.Count - 1; i = i + 2)
                     {
                         var enterIntersection = allIntersections[i];
-                        var enterIntersectionProjection = enterIntersection.Point.LSProjectOn(Start, End).SegmentPoint;
+                        var enterIntersectionProjection = enterIntersection.Point.ProjectOn(Start, End).SegmentPoint;
 
                         //Intersection with no exit point.
                         if (i == allIntersections.Count - 1)
@@ -460,22 +460,22 @@ namespace MasterSharp
                                 GetMissilePosition(enterIntersection.Time - timeOffset);
                             return
                                 new SafePathResult(
-                                    (End.LSDistance(missilePositionOnIntersection) + 50 <=
-                                     End.LSDistance(enterIntersectionProjection)) &&
+                                    (End.Distance(missilePositionOnIntersection) + 50 <=
+                                     End.Distance(enterIntersectionProjection)) &&
                                     ObjectManager.Player.MoveSpeed < SpellData.MissileSpeed, allIntersections[0]);
                         }
 
 
                         var exitIntersection = allIntersections[i + 1];
-                        var exitIntersectionProjection = exitIntersection.Point.LSProjectOn(Start, End).SegmentPoint;
+                        var exitIntersectionProjection = exitIntersection.Point.ProjectOn(Start, End).SegmentPoint;
 
                         var missilePosOnEnter = GetMissilePosition(enterIntersection.Time - timeOffset);
                         var missilePosOnExit = GetMissilePosition(exitIntersection.Time + timeOffset);
 
                         //Missile didnt pass.
-                        if (missilePosOnEnter.LSDistance(End) + 50 > enterIntersectionProjection.LSDistance(End))
+                        if (missilePosOnEnter.Distance(End) + 50 > enterIntersectionProjection.Distance(End))
                         {
-                            if (missilePosOnExit.LSDistance(End) <= exitIntersectionProjection.LSDistance(End))
+                            if (missilePosOnExit.Distance(End) <= exitIntersectionProjection.Distance(End))
                             {
                                 return new SafePathResult(false, allIntersections[0]);
                             }
@@ -494,10 +494,10 @@ namespace MasterSharp
                 {
                     //Check only for the exit point
                     var exitIntersection = allIntersections[0];
-                    var exitIntersectionProjection = exitIntersection.Point.LSProjectOn(Start, End).SegmentPoint;
+                    var exitIntersectionProjection = exitIntersection.Point.ProjectOn(Start, End).SegmentPoint;
 
                     var missilePosOnExit = GetMissilePosition(exitIntersection.Time + timeOffset);
-                    if (missilePosOnExit.LSDistance(End) <= exitIntersectionProjection.LSDistance(End))
+                    if (missilePosOnExit.Distance(End) <= exitIntersectionProjection.Distance(End))
                     {
                         return new SafePathResult(false, allIntersections[0]);
                     }
@@ -505,7 +505,7 @@ namespace MasterSharp
             }
 
 
-            if (IsSafe(ObjectManager.Player.ServerPosition.LSTo2D()))
+            if (IsSafe(ObjectManager.Player.ServerPosition.To2D()))
             {
                 if (allIntersections.Count == 0)
                 {
@@ -526,7 +526,7 @@ namespace MasterSharp
             }
 
             var timeToExplode = (SpellData.DontAddExtraDuration ? 0 : SpellData.ExtraDuration) + SpellData.Delay +
-                                (int) (1000*Start.LSDistance(End)/SpellData.MissileSpeed) -
+                                (int) (1000*Start.Distance(End)/SpellData.MissileSpeed) -
                                 (Environment.TickCount - StartTick);
 
 
@@ -561,10 +561,10 @@ namespace MasterSharp
                 var missilePosAfterT = GetMissilePosition(time);
 
                 //TODO: Check for minion collision etc.. in the future.
-                var projection = unit.ServerPosition.LSTo2D()
-                    .LSProjectOn(missilePos, missilePosAfterT);
+                var projection = unit.ServerPosition.To2D()
+                    .ProjectOn(missilePos, missilePosAfterT);
 
-                if (projection.IsOnSegment && projection.SegmentPoint.LSDistance(unit.ServerPosition) < SpellData.Radius)
+                if (projection.IsOnSegment && projection.SegmentPoint.Distance(unit.ServerPosition) < SpellData.Radius)
                 {
                     return true;
                 }
@@ -572,10 +572,10 @@ namespace MasterSharp
                 return false;
             }
 
-            if (!IsSafe(unit.ServerPosition.LSTo2D()))
+            if (!IsSafe(unit.ServerPosition.To2D()))
             {
                 var timeToExplode = SpellData.ExtraDuration + SpellData.Delay +
-                                    (int) ((1000*Start.LSDistance(End))/SpellData.MissileSpeed) -
+                                    (int) ((1000*Start.Distance(End))/SpellData.MissileSpeed) -
                                     (Environment.TickCount - StartTick);
                 if (timeToExplode <= time)
                 {

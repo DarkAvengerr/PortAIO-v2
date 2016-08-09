@@ -147,7 +147,7 @@ using EloBuddy;
 
             if (!Config.Item("urfmode").GetValue<bool>())
             {
-                if (Q.LSIsReady()) return false;
+                if (Q.IsReady()) return false;
             }
             
             if (target.HasBuffOfType(BuffType.Slow) && W.GetPrediction(target).Hitchance >= HitChance.High)
@@ -167,7 +167,7 @@ using EloBuddy;
                 if (Player.Mana <= ManaLimit) return;
             }
             
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
                 E.Cast(target);
             }
@@ -219,7 +219,7 @@ using EloBuddy;
             var PredictWAllMinions = W.GetCircularFarmLocation(WAllMinions, W.Width*0.75f);
 
 
-            if (useW && W.LSIsReady())
+            if (useW && W.IsReady())
             {
                 if (PredictWRangedMinions.MinionsHit >= 3 && W.IsInRange(PredictWRangedMinions.Position.To3D()))
                 {
@@ -233,9 +233,9 @@ using EloBuddy;
                 }
             }
 
-            if (useR && R.LSIsReady())
+            if (useR && R.IsReady())
             {
-                if (minions.Count >= 3 && Player.LSDistance(minions[0]) <= R.Range)
+                if (minions.Count >= 3 && Player.Distance(minions[0]) <= R.Range)
                 {
                     if (!RavenForm)
                     {
@@ -260,7 +260,7 @@ using EloBuddy;
             {
                 if (useQ)
                 {
-                    if (minion.Health < Player.LSGetSpellDamage(minion, SpellSlot.Q) && Q.LSIsReady())
+                    if (minion.Health < Player.GetSpellDamage(minion, SpellSlot.Q) && Q.IsReady())
                     {
                         Q.Cast(minion);
                         return;
@@ -269,7 +269,7 @@ using EloBuddy;
 
                 if (useE)
                 {
-                    if (minion.Health < E.GetDamage(minion)/4 && E.LSIsReady())
+                    if (minion.Health < E.GetDamage(minion)/4 && E.IsReady())
                     {
                         E.Cast(minion);
                         return;
@@ -284,26 +284,26 @@ using EloBuddy;
             if (target == null) return;
 
             //E
-            if (E.LSIsReady() && useE)
+            if (E.IsReady() && useE)
             {
                 E.Cast(target);
             }
 
             //Q
-            if (Q.LSIsReady() && useQ)
+            if (Q.IsReady() && useQ)
             {
                 Q.Cast(target);
             }
 
             //W
-            if (target.LSIsValidTarget(W.Range) && W.LSIsReady() && SafeWCast(target) && useW)
+            if (target.IsValidTarget(W.Range) && W.IsReady() && SafeWCast(target) && useW)
             {
                 var prediction = W.GetPrediction(target);
                 W.Cast(prediction.CastPosition);
             }
 
             //R
-            if (R.LSIsReady() && target.LSIsValidTarget(R.Range) && !RavenForm && useR)
+            if (R.IsReady() && target.IsValidTarget(R.Range) && !RavenForm && useR)
             {
                 R.Cast();
             }

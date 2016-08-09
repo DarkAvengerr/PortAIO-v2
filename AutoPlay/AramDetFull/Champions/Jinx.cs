@@ -47,11 +47,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
         private void BeforeAttack(DeathWalker.BeforeAttackEventArgs args)
         {
             var t = ARAMTargetSelector.getBestTarget(bonusRange() + 50);
-            if (t.LSIsValidTarget() && Q.LSIsReady() && FishBoneActive)
+            if (t.IsValidTarget() && Q.IsReady() && FishBoneActive)
             {
                 var distance = GetRealDistance(t);
                 var powPowRange = GetRealPowPowRange(t);
-                if ((distance < powPowRange) && (ObjectManager.Player.Mana < RMANA + WMANA + 20 || ObjectManager.Player.LSGetAutoAttackDamage(t) * 2 < t.Health))
+                if ((distance < powPowRange) && (ObjectManager.Player.Mana < RMANA + WMANA + 20 || ObjectManager.Player.GetAutoAttackDamage(t) * 2 < t.Health))
                     Q.Cast();
                 else if (Farm && (distance > bonusRange() || distance < powPowRange || ObjectManager.Player.Mana < RMANA + EMANA + WMANA + WMANA))
                     Q.Cast();
@@ -60,21 +60,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return; 
             ManaMenager();
             if (Farm)
                 if (ObjectManager.Player.Mana > RMANA + WMANA + EMANA + 10 && !FishBoneActive)
                     farmQ();
             var t = ARAMTargetSelector.getBestTarget(bonusRange() + 50);
-            if (t.LSIsValidTarget())
+            if (t.IsValidTarget())
             {
                 var distance = GetRealDistance(t);
                 var powPowRange = GetRealPowPowRange(t);
 
                 if (!FishBoneActive && (distance > powPowRange))
                 {
-                    if ( (ObjectManager.Player.Mana > RMANA + WMANA + 20 || ObjectManager.Player.LSGetAutoAttackDamage(t) * 2 > t.Health))
+                    if ( (ObjectManager.Player.Mana > RMANA + WMANA + 20 || ObjectManager.Player.GetAutoAttackDamage(t) * 2 > t.Health))
                         Q.Cast();
                     else if (Farm && haras() && ObjectManager.Player.Mana > RMANA + WMANA + EMANA + WMANA && distance < bonusRange() + t.BoundingRadius)
                         Q.Cast();
@@ -84,21 +84,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             W.Cast(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
             E.Cast(target);
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
             if (target.Health < R.GetDamage(target))
                 R.Cast(target);
@@ -131,13 +131,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void afterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (!unit.IsMe || !Q.LSIsReady() || !FishBoneActive) return;
+            if (!unit.IsMe || !Q.IsReady() || !FishBoneActive) return;
             var t = ARAMTargetSelector.getBestTarget(bonusRange() + 50);
-            if (t.LSIsValidTarget())
+            if (t.IsValidTarget())
             {
                 var distance = GetRealDistance(t);
                 var powPowRange = GetRealPowPowRange(t);
-                if ( (distance < powPowRange) && (ObjectManager.Player.Mana < RMANA + WMANA + 20 || ObjectManager.Player.LSGetAutoAttackDamage(t) * 2 < t.Health))
+                if ( (distance < powPowRange) && (ObjectManager.Player.Mana < RMANA + WMANA + 20 || ObjectManager.Player.GetAutoAttackDamage(t) * 2 < t.Health))
                     Q.Cast();
                 else if (Farm && (distance > bonusRange() || distance < powPowRange || ObjectManager.Player.Mana < RMANA + EMANA + WMANA + WMANA))
                     Q.Cast();
@@ -150,7 +150,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var allMinionsQ = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, bonusRange() + 30, MinionTypes.All);
             foreach (var minion in allMinionsQ)
             {
-                if (!Orbwalking.InAutoAttackRange(minion) && minion.Health < ObjectManager.Player.LSGetAutoAttackDamage(minion) && GetRealPowPowRange(minion) < GetRealDistance(minion) && bonusRange() < GetRealDistance(minion))
+                if (!Orbwalking.InAutoAttackRange(minion) && minion.Health < ObjectManager.Player.GetAutoAttackDamage(minion) && GetRealPowPowRange(minion) < GetRealDistance(minion) && bonusRange() < GetRealDistance(minion))
                 {
                     Q.Cast();
                     return;
@@ -169,7 +169,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var haras = true;
             foreach (var minion in allMinionsQ)
             {
-                if (minion.Health < ObjectManager.Player.LSGetAutoAttackDamage(minion) * 1.5 && bonusRange() > GetRealDistance(minion))
+                if (minion.Health < ObjectManager.Player.GetAutoAttackDamage(minion) * 1.5 && bonusRange() > GetRealDistance(minion))
                     haras = false;
             }
             if (haras)
@@ -180,7 +180,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void farm()
         {
-            if (FishBoneActive && Q.LSIsReady())
+            if (FishBoneActive && Q.IsReady())
                 Q.Cast();
         }
 
@@ -200,8 +200,8 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 ObjectManager.Get<AIHeroClient>()
                     .Count(
                         hero =>
-                            hero.LSIsValidTarget() && hero.Team != ObjectManager.Player.Team &&
-                            hero.ServerPosition.LSDistance(target.ServerPosition) <= range);
+                            hero.IsValidTarget() && hero.Team != ObjectManager.Player.Team &&
+                            hero.ServerPosition.Distance(target.ServerPosition) <= range);
         }
         private int CountAlliesNearTarget(Obj_AI_Base target, float range)
         {
@@ -210,7 +210,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     .Count(
                         hero =>
                             hero.Team == ObjectManager.Player.Team &&
-                            hero.ServerPosition.LSDistance(target.ServerPosition) <= range);
+                            hero.ServerPosition.Distance(target.ServerPosition) <= range);
         }
 
         private float GetRealPowPowRange(GameObject target)
@@ -220,7 +220,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private float GetRealDistance(GameObject target)
         {
-            return ObjectManager.Player.ServerPosition.LSDistance(target.Position) + ObjectManager.Player.BoundingRadius +
+            return ObjectManager.Player.ServerPosition.Distance(target.Position) + ObjectManager.Player.BoundingRadius +
                    target.BoundingRadius;
         }
 
@@ -229,7 +229,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             QMANA = 10;
             WMANA = 40 + 10 * W.Level;
             EMANA = 50;
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 RMANA = WMANA - ObjectManager.Player.Level * 2;
             else
                 RMANA = 100;

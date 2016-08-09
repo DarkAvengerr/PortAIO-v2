@@ -174,7 +174,7 @@ namespace SCommon.Database
             s_HeroHitBoxes = new Dictionary<string, float>();
             foreach (var hero in HeroManager.AllHeroes)
                 if (!s_HeroHitBoxes.ContainsKey(hero.ChampionName))
-                    s_HeroHitBoxes.Add(hero.ChampionName, hero.BBox.Minimum.LSDistance(hero.BBox.Maximum));
+                    s_HeroHitBoxes.Add(hero.ChampionName, hero.BBox.Minimum.Distance(hero.BBox.Maximum));
         }
 
         /// <summary>

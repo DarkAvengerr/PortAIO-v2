@@ -20,7 +20,7 @@ using EloBuddy;
         {
             const float damage = 0f;
 
-            if (!slot.LSIsReady() || ObjectManager.Player.Spellbook.GetSpell(slot).State != SpellState.NotLearned)
+            if (!slot.IsReady() || ObjectManager.Player.Spellbook.GetSpell(slot).State != SpellState.NotLearned)
             {
                 return 0f;
             }
@@ -55,7 +55,7 @@ using EloBuddy;
         public static float TotalDamage(AIHeroClient hero)
         {
             var damage = 0d;
-            if (Spells.Q.LSIsReady())
+            if (Spells.Q.IsReady())
             {
                 damage += Spells.Q.GetDamage(hero);
                 if (hero.HasMaliceBuff() || hero.HasSecondMaliceBuff())
@@ -63,15 +63,15 @@ using EloBuddy;
                     damage += Spells.Q.GetDamage(hero);
                 }
             }
-            if (Spells.W.LSIsReady())
+            if (Spells.W.IsReady())
             {
                 damage += Spells.W.GetDamage(hero);
             }
-            if (Spells.E.LSIsReady())
+            if (Spells.E.IsReady())
             {
                 damage += Spells.W.GetDamage(hero);
             }
-            if (Spells.R.LSIsReady())
+            if (Spells.R.IsReady())
             {
                 damage += UltimateDamage(hero,SpellSlot.R);
             }

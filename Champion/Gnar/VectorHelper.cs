@@ -16,9 +16,9 @@ namespace Gnar
     {
         public static Vector3? GetFirstWallPoint(this Vector3 from, Vector3 to, float step = 25)
         {
-            var direction = (to - from).LSNormalized();
+            var direction = (to - from).Normalized();
 
-            for (float d = 0; d < from.LSDistance(to); d = d + step)
+            for (float d = 0; d < from.Distance(to); d = d + step)
             {
                 var testPoint = from + d * direction;
                 if (NavMesh.GetCollisionFlags(testPoint.X, testPoint.Y).HasFlag(CollisionFlags.Wall) ||
@@ -33,9 +33,9 @@ namespace Gnar
 
         public static Vector2? GetFirstWallPoint(this Vector2 from, Vector2 to, float step = 25)
         {
-            var direction = (to - from).LSNormalized();
+            var direction = (to - from).Normalized();
 
-            for (float d = 0; d < from.LSDistance(to); d = d + step)
+            for (float d = 0; d < from.Distance(to); d = d + step)
             {
                 var testPoint = from + d * direction;
                 if (NavMesh.GetCollisionFlags(testPoint.X, testPoint.Y).HasFlag(CollisionFlags.Wall) ||

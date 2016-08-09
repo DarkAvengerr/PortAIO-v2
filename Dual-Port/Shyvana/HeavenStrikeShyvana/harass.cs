@@ -20,7 +20,7 @@ using EloBuddy;
         public static void UpdateHarass()
         {
             var targetE = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-            if (EHarass && E.LSIsReady() && targetE.LSIsValidTarget() && !targetE.IsZombie
+            if (EHarass && E.IsReady() && targetE.IsValidTarget() && !targetE.IsZombie
                 && Orbwalking.CanMove(80))
             {
                 E.Cast(targetE);
@@ -30,7 +30,7 @@ using EloBuddy;
         {
             if (!(target is AIHeroClient))
                 return;
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 Q.Cast();
             }
@@ -45,10 +45,10 @@ using EloBuddy;
                 return;
             var target = args.Target as Obj_AI_Base;
             var x = Prediction.GetPrediction(args.Target as Obj_AI_Base, Player.AttackCastDelay + Game.Ping / 1000 + 0.02f);
-            var chasetime = (Player.Position.LSTo2D().LSDistance(x.UnitPosition.LSTo2D())
+            var chasetime = (Player.Position.To2D().Distance(x.UnitPosition.To2D())
                 - Player.BoundingRadius - target.BoundingRadius - Player.AttackRange)
                 / (Player.MoveSpeed - target.MoveSpeed);
-            if (Q.LSIsReady() && Player.Position.LSTo2D().LSDistance(x.UnitPosition.LSTo2D())
+            if (Q.IsReady() && Player.Position.To2D().Distance(x.UnitPosition.To2D())
                 >= Player.BoundingRadius + Player.AttackRange + args.Target.BoundingRadius
                 && (chasetime >= Player.AttackDelay || chasetime < 0))
             {

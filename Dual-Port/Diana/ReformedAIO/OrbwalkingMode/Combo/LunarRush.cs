@@ -81,7 +81,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
         private void OnUpdate(EventArgs args)
         {
             if (Variables.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
-                || !Variables.Spells[SpellSlot.W].LSIsReady()) return;
+                || !Variables.Spells[SpellSlot.W].IsReady()) return;
 
             this.Lunarrush();
         }

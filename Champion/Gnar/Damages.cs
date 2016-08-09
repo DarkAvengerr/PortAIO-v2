@@ -17,22 +17,22 @@ namespace Gnar
         public static float GetTotalDamage(AIHeroClient target)
         {
             // Auto attack
-            float damage = (float)player.LSGetAutoAttackDamage(target);
+            float damage = (float)player.GetAutoAttackDamage(target);
 
             // Q
-            if (SpellManager.Q.LSIsReady())
+            if (SpellManager.Q.IsReady())
                 damage += SpellManager.Q.GetRealDamage(target);
 
             // W
-            if (SpellManager.W.LSIsReady())
+            if (SpellManager.W.IsReady())
                 damage += SpellManager.W.GetRealDamage(target);
 
             // E
-            if (SpellManager.E.LSIsReady())
+            if (SpellManager.E.IsReady())
                 damage += SpellManager.E.GetRealDamage(target);
 
             // R
-            if (SpellManager.R.LSIsReady())
+            if (SpellManager.R.IsReady())
                 damage += SpellManager.R.GetRealDamage(target);
 
             return damage;

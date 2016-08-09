@@ -17,9 +17,9 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
 
         private void OnCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender is AIHeroClient && sender.LSIsValidTarget())
+            if (sender is AIHeroClient && sender.IsValidTarget())
             {
-                if (args.SData.Name.ToLower().Equals("summonerflash") && args.End.LSDistance(ObjectManager.Player.ServerPosition) <= 365f)
+                if (args.SData.Name.ToLower().Equals("summonerflash") && args.End.Distance(ObjectManager.Player.ServerPosition) <= 365f)
                 {
                     Variables.spells[SpellSlot.E].CastOnUnit((AIHeroClient)sender);
                 }
@@ -29,7 +29,7 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
         public bool ShouldGetExecuted()
         {
             return MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.condemn.repelflash") &&
-                   Variables.spells[SpellSlot.E].LSIsReady();
+                   Variables.spells[SpellSlot.E].IsReady();
         }
 
         public ModuleType GetModuleType()

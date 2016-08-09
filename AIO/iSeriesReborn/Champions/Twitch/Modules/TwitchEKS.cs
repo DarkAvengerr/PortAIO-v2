@@ -27,13 +27,13 @@ using EloBuddy;
 
         public bool ShouldRun()
         {
-            return Variables.spells[SpellSlot.E].LSIsReady() &&
+            return Variables.spells[SpellSlot.E].IsReady() &&
                    MenuExtensions.GetItemValue<bool>("iseriesr.twitch.misc.kse");
         }
 
         public void Run()
         {
-            var killableVenomTarget = HeroManager.Enemies.FirstOrDefault(enemy => enemy.LSIsValidTarget(Variables.spells[SpellSlot.E].Range) && Variables.spells[SpellSlot.E].GetDamage(enemy) > enemy.Health + 15);
+            var killableVenomTarget = HeroManager.Enemies.FirstOrDefault(enemy => enemy.IsValidTarget(Variables.spells[SpellSlot.E].Range) && Variables.spells[SpellSlot.E].GetDamage(enemy) > enemy.Health + 15);
 
             if (killableVenomTarget != null && (killableVenomTarget.NetworkId != Variables.Orbwalker.GetTarget().NetworkId) && (Environment.TickCount - LastCastTime > 250))
             {

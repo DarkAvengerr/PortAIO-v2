@@ -116,20 +116,20 @@ namespace FioraProject
                 {
                     return;
                 }
-                if (!Menu.SubMenu("EvadeTargetNone").Item("W").GetValue<bool>() || !W.LSIsReady())
+                if (!Menu.SubMenu("EvadeTargetNone").Item("W").GetValue<bool>() || !W.IsReady())
                 {
                     return;
                 }
                 var tar = GetTarget(W.Range);
-                if (tar.LSIsValidTarget(W.Range))
+                if (tar.IsValidTarget(W.Range))
                     Player.Spellbook.CastSpell(SpellSlot.W, tar.Position);
                 else
                 {
-                    var hero = HeroManager.Enemies.FirstOrDefault(x => x.LSIsValidTarget(W.Range));
+                    var hero = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(W.Range));
                     if (hero != null)
                         Player.Spellbook.CastSpell(SpellSlot.W, hero.Position);
                     else
-                        Player.Spellbook.CastSpell(SpellSlot.W, Player.ServerPosition.LSExtend(caster.Position, 100));
+                        Player.Spellbook.CastSpell(SpellSlot.W, Player.ServerPosition.Extend(caster.Position, 100));
                 }
             }
         }
@@ -139,7 +139,7 @@ namespace FioraProject
             DetectedDashes.RemoveAll(
                 x =>
                 x.Hero == null || !x.Hero.IsValid
-                || (!x.Hero.LSIsDashing() && Utils.GameTimeTickCount > x.TickCount + 500));
+                || (!x.Hero.IsDashing() && Utils.GameTimeTickCount > x.TickCount + 500));
 
             if (Player.IsDead)
             {
@@ -149,27 +149,27 @@ namespace FioraProject
             {
                 return;
             }
-            if (!Menu.SubMenu("EvadeTargetNone").Item("W").GetValue<bool>() || !W.LSIsReady())
+            if (!Menu.SubMenu("EvadeTargetNone").Item("W").GetValue<bool>() || !W.IsReady())
             {
                 return;
             }
             foreach (var target in
-                 DetectedDashes.OrderBy(i => i.Hero.Position.LSDistance(Player.Position)))
+                 DetectedDashes.OrderBy(i => i.Hero.Position.Distance(Player.Position)))
             {
                 var dashdata = target.Hero.GetDashInfo();
-                if (dashdata != null && target.Hero.Position.LSTo2D().LSDistance(Player.Position.LSTo2D())
+                if (dashdata != null && target.Hero.Position.To2D().Distance(Player.Position.To2D())
                     < target.DistanceDash + Game.Ping * dashdata.Speed / 1000)
                 {
                     var tar = GetTarget(W.Range);
-                    if (tar.LSIsValidTarget(W.Range))
+                    if (tar.IsValidTarget(W.Range))
                         Player.Spellbook.CastSpell(SpellSlot.W, tar.Position);
                     else
                     {
-                        var hero = HeroManager.Enemies.FirstOrDefault(x => x.LSIsValidTarget(W.Range));
+                        var hero = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(W.Range));
                         if (hero != null)
                             Player.Spellbook.CastSpell(SpellSlot.W, hero.Position);
                         else
-                            Player.Spellbook.CastSpell(SpellSlot.W, Player.ServerPosition.LSExtend(target.Hero.Position, 100));
+                            Player.Spellbook.CastSpell(SpellSlot.W, Player.ServerPosition.Extend(target.Hero.Position, 100));
                     }
                 }
             }

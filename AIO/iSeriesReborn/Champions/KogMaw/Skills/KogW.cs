@@ -22,7 +22,7 @@ using EloBuddy;
 
         internal static void OnBeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
-            if (Variables.spells[SpellSlot.W].LSIsReady())
+            if (Variables.spells[SpellSlot.W].IsReady())
             {
                 if (MenuExtensions.GetItemValue<bool>("iseriesr.kogmaw.misc.w.on.nexus") && args.Target is Obj_HQ)
                 {
@@ -46,7 +46,7 @@ using EloBuddy;
         {
             if (Variables.spells[SpellSlot.W].IsEnabledAndReady())
             {
-                var minionsInRange = GameObjects.EnemyMinions.Where(m => m.LSIsValidTarget(KogUtils.GetWRange()));
+                var minionsInRange = GameObjects.EnemyMinions.Where(m => m.IsValidTarget(KogUtils.GetWRange()));
                 if (minionsInRange.Count() > 6)
                 {
                     Variables.spells[SpellSlot.W].Cast();

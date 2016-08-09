@@ -17,7 +17,7 @@ using EloBuddy;
         public static float GetQDamage(Obj_AI_Base target)
         {
             float damage = 0f;
-            damage += (float) Player.LSGetSpellDamage(target, SpellSlot.Q);
+            damage += (float) Player.GetSpellDamage(target, SpellSlot.Q);
             if (SpellManager.HasQBuff)
             {
                 var afterQDmgs = new float[] { 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 110, 130, 150, 170, 190, 210 };
@@ -31,7 +31,7 @@ using EloBuddy;
 
         public static float GetEDamage(Obj_AI_Base target)
         {
-            return (float) Player.LSGetSpellDamage(target, SpellSlot.E);
+            return (float) Player.GetSpellDamage(target, SpellSlot.E);
         }
 
         public static float GetRemainingUltDamage(Obj_AI_Base target)
@@ -59,7 +59,7 @@ using EloBuddy;
 
         public static float GetUltInitialDamage(Obj_AI_Base target)
         {
-            return (float) Player.LSGetSpellDamage(target, SpellManager.R.Slot);
+            return (float) Player.GetSpellDamage(target, SpellManager.R.Slot);
         }
 
         public static float GetUltTickDamage(Obj_AI_Base target)
@@ -76,18 +76,18 @@ using EloBuddy;
         public static float GetTotalDamage(Obj_AI_Base target)
         {
             float damage = 0f;
-            if (SpellManager.Q.LSIsReady() && Config.ComboQ)
+            if (SpellManager.Q.IsReady() && Config.ComboQ)
                 damage += GetQDamage(target);
-            if (SpellManager.E.LSIsReady() && Config.ComboE)
+            if (SpellManager.E.IsReady() && Config.ComboE)
                 damage += GetEDamage(target);
-            if (SpellManager.R.LSIsReady() && Config.ComboR)
+            if (SpellManager.R.IsReady() && Config.ComboR)
             {
                 if (SpellManager.UltHasBeenCasted)
                     damage += GetRemainingUltDamage(target);
                 else
                     damage += GetUltInitialDamage(target) + GetUltTickDamage(target);
             }
-            if (SpellManager.IgniteSlot != SpellSlot.Unknown && Player.GetSpell(SpellManager.IgniteSlot).LSIsReady())
+            if (SpellManager.IgniteSlot != SpellSlot.Unknown && Player.GetSpell(SpellManager.IgniteSlot).IsReady())
                 damage += (float) Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
             return damage;
         }

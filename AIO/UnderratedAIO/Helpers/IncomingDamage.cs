@@ -117,16 +117,16 @@ namespace UnderratedAIO.Helpers
                     foreach (var Hero in
                         HeroManager.AllHeroes.Where(
                             h =>
-                                h.LSDistance(SkillshotDetector.ActiveSkillshots[i].Caster) <
+                                h.Distance(SkillshotDetector.ActiveSkillshots[i].Caster) <
                                 SkillshotDetector.ActiveSkillshots[i].SkillshotData.Range)
-                            .OrderBy(h => h.LSDistance(SkillshotDetector.ActiveSkillshots[i].Caster)))
+                            .OrderBy(h => h.Distance(SkillshotDetector.ActiveSkillshots[i].Caster)))
                     {
                         SkillshotDetector.ActiveSkillshots[i].Game_OnGameUpdate();
                         if (SkillshotDetector.ActiveSkillshots[i].Caster.NetworkId != Hero.NetworkId &&
                             SkillshotDetector.ActiveSkillshots[i].Caster.Team != Hero.Team &&
                             !SkillshotDetector.ActiveSkillshots[i].IsSafePath(
                                 0, -1, SkillshotDetector.ActiveSkillshots[i].SkillshotData.Delay, Hero).IsSafe &&
-                            Hero.LSIsValidTarget(1500, false, Hero.Position) &&
+                            Hero.IsValidTarget(1500, false, Hero.Position) &&
                             SkillshotDetector.ActiveSkillshots[i].IsAboutToHit(
                                 510, Hero, SkillshotDetector.ActiveSkillshots[i].Caster))
                         {
@@ -134,13 +134,13 @@ namespace UnderratedAIO.Helpers
                                 IncomingDamagesAlly.Concat(IncomingDamagesEnemy)
                                     .FirstOrDefault(h => h.Hero.NetworkId == Hero.NetworkId);
                             var missileSpeed =
-                                (SkillshotDetector.ActiveSkillshots[i].GetMissilePosition(0).LSDistance(Hero) /
+                                (SkillshotDetector.ActiveSkillshots[i].GetMissilePosition(0).Distance(Hero) /
                                  SkillshotDetector.ActiveSkillshots[i].SkillshotData.MissileSpeed);
                             missileSpeed = missileSpeed > 5f ? 5f : missileSpeed;
                             var newData = new Dmg(
                                 Hero,
                                 (float)
-                                    Damage.LSGetSpellDamage(
+                                    Damage.GetSpellDamage(
                                         (AIHeroClient) SkillshotDetector.ActiveSkillshots[i].Caster, Hero,
                                         SkillshotDetector.ActiveSkillshots[i].SkillshotData.Slot), missileSpeed, false,
                                 false, SkillshotDetector.ActiveSkillshots[i]);
@@ -231,14 +231,14 @@ namespace UnderratedAIO.Helpers
                                     .FirstOrDefault(i => i.Hero.NetworkId == target.NetworkId);
                             if (data != null)
                             {
-                                var missileSpeed = (sender.LSDistance(target) / args.SData.MissileSpeed) +
+                                var missileSpeed = (sender.Distance(target) / args.SData.MissileSpeed) +
                                                    args.SData.SpellCastTime;
                                 missileSpeed = missileSpeed > 1f ? 0.8f : missileSpeed;
                                 if (Orbwalking.IsAutoAttack(args.SData.Name))
                                 {
                                     var dmg =
                                         (float)
-                                            (sender.LSGetAutoAttackDamage(target, true) + ItemHandler.GetSheenDmg(target));
+                                            (sender.GetAutoAttackDamage(target, true) + ItemHandler.GetSheenDmg(target));
                                     if (args.SData.Name.ToLower().Contains("crit"))
                                     {
                                         dmg = dmg * 2;
@@ -265,7 +265,7 @@ namespace UnderratedAIO.Helpers
                                             new Dmg(
                                                 target,
                                                 (float)
-                                                    Damage.LSGetSpellDamage(hero, (Obj_AI_Base) args.Target, args.Slot),
+                                                    Damage.GetSpellDamage(hero, (Obj_AI_Base) args.Target, args.Slot),
                                                 missileSpeed, false,
                                                 SpellDatabase.CcList.Any(
                                                     cc =>

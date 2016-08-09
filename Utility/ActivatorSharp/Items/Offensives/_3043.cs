@@ -33,8 +33,8 @@ using EloBuddy; namespace Activator.Items.Offensives
                 if (Menu.Item("mode" + Name).GetValue<StringList>().SelectedIndex != 1 ||
                     Activator.Origin.Item("usecombo").GetValue<KeyBind>().Active)
                 {
-                    var manamune = Player.LSGetSpellSlot("Muramana");
-                    if (manamune != SpellSlot.Unknown && !Player.LSHasBuff("Muramana"))
+                    var manamune = Player.GetSpellSlot("Muramana");
+                    if (manamune != SpellSlot.Unknown && !Player.HasBuff("Muramana"))
                     {       
                         Player.Spellbook.CastSpell(manamune);
                         LeagueSharp.Common.Utility.DelayAction.Add(500, () => muramana = false);
@@ -44,8 +44,8 @@ using EloBuddy; namespace Activator.Items.Offensives
 
             if (!muramana && !Activator.Origin.Item("usecombo").GetValue<KeyBind>().Active)
             {
-                var manamune = Player.LSGetSpellSlot("Muramana");
-                if (manamune != SpellSlot.Unknown && Player.LSHasBuff("Muramana"))
+                var manamune = Player.GetSpellSlot("Muramana");
+                if (manamune != SpellSlot.Unknown && Player.HasBuff("Muramana"))
                 {
                     Player.Spellbook.CastSpell(manamune);
                 }
@@ -59,7 +59,7 @@ using EloBuddy; namespace Activator.Items.Offensives
                 return;
             }
 
-            var spellslot = Player.LSGetSpellSlot(args.SData.Name);
+            var spellslot = Player.GetSpellSlot(args.SData.Name);
 
             if (spellslot == SpellSlot.Q || spellslot == SpellSlot.W ||
                 spellslot == SpellSlot.E || spellslot == SpellSlot.R)
@@ -67,7 +67,7 @@ using EloBuddy; namespace Activator.Items.Offensives
                 muramana = true;
             }
 
-            if (!args.SData.LSIsAutoAttack())
+            if (!args.SData.IsAutoAttack())
             {
                 return;
             }

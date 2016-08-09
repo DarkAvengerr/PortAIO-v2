@@ -116,7 +116,7 @@
                     IgniteSpell = new Spell(igniteSlot, 600f);
                 }
 
-                FlashSlot = Player.LSGetSpellSlot("summonerflash");
+                FlashSlot = Player.GetSpellSlot("summonerflash");
 
                 Q = new Spell(SpellSlot.Q, 365f);
                 W = new Spell(SpellSlot.W, 650f);
@@ -274,7 +274,7 @@
                 var kSableEnemy =
                     HeroManager.Enemies.FirstOrDefault(
                         hero =>
-                        hero.LSIsValidTarget(550) && ShieldCheck(hero) && !hero.HasBuff("summonerdot") && !hero.IsZombie
+                        hero.IsValidTarget(550) && ShieldCheck(hero) && !hero.HasBuff("summonerdot") && !hero.IsZombie
                         && Player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite) >= hero.Health);
 
                 if (kSableEnemy != null && IgniteSpell.Slot != SpellSlot.Unknown)
@@ -330,32 +330,32 @@
                     return;
                 }
 
-                if (IsActive("ElAlistar.Combo.Q") && IsActive("ElAlistar.Combo.W") && Q.LSIsReady() && W.LSIsReady())
+                if (IsActive("ElAlistar.Combo.Q") && IsActive("ElAlistar.Combo.W") && Q.IsReady() && W.IsReady())
                 {
-                    if (target.LSIsValidTarget(W.Range) && HasEnoughMana())
+                    if (target.IsValidTarget(W.Range) && HasEnoughMana())
                     {
-                        if (target.LSIsValidTarget(Q.Range))
+                        if (target.IsValidTarget(Q.Range))
                         {
                             Q.Cast();
                             return;
                         }
 
-                        if (W.Cast(target).LSIsCasted())
+                        if (W.Cast(target).IsCasted())
                         {
-                            var comboTime = Math.Max(0, Player.LSDistance(target) - 365) / 1.2f - 25;
+                            var comboTime = Math.Max(0, Player.Distance(target) - 365) / 1.2f - 25;
                             LeagueSharp.Common.Utility.DelayAction.Add((int)comboTime, () => Q.Cast());
                         }
                     }
                 }
 
-                if (IsActive("ElAlistar.Combo.Q") && target.LSIsValidTarget(Q.Range))
+                if (IsActive("ElAlistar.Combo.Q") && target.IsValidTarget(Q.Range))
                 {
                     Q.Cast();
                 }
 
                 if (IsActive("ElAlistar.Combo.W"))
                 {
-                    if (target.LSIsValidTarget(W.Range) && W.GetDamage(target) > target.Health)
+                    if (target.IsValidTarget(W.Range) && W.GetDamage(target) > target.Health)
                     {
                         W.Cast(target);
                     }
@@ -371,17 +371,17 @@
             AIHeroClient sender,
             Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (args.DangerLevel != Interrupter2.DangerLevel.High || sender.LSDistance(Player) > W.Range)
+            if (args.DangerLevel != Interrupter2.DangerLevel.High || sender.Distance(Player) > W.Range)
             {
                 return;
             }
 
-            if (sender.LSIsValidTarget(Q.Range) && Q.LSIsReady() && IsActive("ElAlistar.Interrupter.Q"))
+            if (sender.IsValidTarget(Q.Range) && Q.IsReady() && IsActive("ElAlistar.Interrupter.Q"))
             {
                 Q.Cast();
             }
 
-            if (sender.LSIsValidTarget(W.Range) && W.LSIsReady() && IsActive("ElAlistar.Interrupter.W"))
+            if (sender.IsValidTarget(W.Range) && W.IsReady() && IsActive("ElAlistar.Interrupter.W"))
             {
                 W.Cast(sender);
             }
@@ -391,13 +391,13 @@
         {
             if (IsActive("ElAlistar.GapCloser"))
             {
-                if (Q.LSIsReady()
-                    && gapcloser.Sender.LSDistance(Player) < Q.Range)
+                if (Q.IsReady()
+                    && gapcloser.Sender.Distance(Player) < Q.Range)
                 {
                     Q.Cast();
                 }
 
-                if (W.LSIsReady() && gapcloser.Sender.LSDistance(Player) < W.Range)
+                if (W.IsReady() && gapcloser.Sender.Distance(Player) < W.Range)
                 {
                     W.Cast(gapcloser.Sender);
                 }
@@ -427,7 +427,7 @@
                             x =>
                             x.IsAlly && x.IsMe && !x.IsDead && ((int)(args.Damage / x.MaxHealth * 100)
                                 > Menu.Item("ElAlistar.Combo.RHeal.Damage").GetValue<Slider>().Value
-                                || x.HealthPercent < Menu.Item("ElAlistar.Combo.RHeal.HP").GetValue<Slider>().Value && x.LSCountEnemiesInRange(1000) >= 1)))
+                                || x.HealthPercent < Menu.Item("ElAlistar.Combo.RHeal.HP").GetValue<Slider>().Value && x.CountEnemiesInRange(1000) >= 1)))
                 {
                     R.Cast();
                 }
@@ -443,7 +443,7 @@
                             && ((int)(args.Damage / x.MaxHealth * 100)
                                 > Menu.Item("Heal.Damage").GetValue<Slider>().Value
                                 || x.HealthPercent < Menu.Item("Heal.HP").GetValue<Slider>().Value)
-                            && x.LSDistance(Player) < E.Range && x.LSCountEnemiesInRange(1000) >= 1))
+                            && x.Distance(Player) < E.Range && x.CountEnemiesInRange(1000) >= 1))
                 {
                     E.Cast();
                 }
@@ -458,7 +458,7 @@
         {
             try
             {
-                if (Player.IsDead || Player.LSIsRecalling() || Player.LSInFountain())
+                if (Player.IsDead || Player.IsRecalling() || Player.InFountain())
                 {
                     return;
                 }
@@ -475,7 +475,7 @@
                     HandleIgnite();
                 }
 
-                if (Menu.Item("ElAlistar.Combo.FlashQ").GetValue<KeyBind>().Active && Q.LSIsReady())
+                if (Menu.Item("ElAlistar.Combo.FlashQ").GetValue<KeyBind>().Active && Q.IsReady())
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
@@ -483,7 +483,7 @@
                                      ? TargetSelector.GetSelectedTarget()
                                      : TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
 
-                    if (!target.LSIsValidTarget(W.Range))
+                    if (!target.IsValidTarget(W.Range))
                     {
                         return;
                     }

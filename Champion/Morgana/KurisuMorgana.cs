@@ -153,9 +153,9 @@ namespace KurisuMorgana
                     _orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
                 {
                     var minion = args.Target as Obj_AI_Base;
-                    if (minion != null && minion.IsMinion && minion.LSIsValidTarget())
+                    if (minion != null && minion.IsMinion && minion.IsValidTarget())
                     {
-                        if (HeroManager.Allies.Any(x => x.LSIsValidTarget(1000, false) && !x.IsMe))
+                        if (HeroManager.Allies.Any(x => x.IsValidTarget(1000, false) && !x.IsMe))
                         {
                             args.Process = false;
                         }
@@ -166,7 +166,7 @@ namespace KurisuMorgana
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (!Me.LSIsValidTarget(300, false) || !Orbwalking.CanMove(100))
+            if (!Me.IsValidTarget(300, false) || !Orbwalking.CanMove(100))
             {
                 return;
             }
@@ -195,9 +195,9 @@ namespace KurisuMorgana
 
             if (_menu.Item("farmkey").GetValue<KeyBind>().Active)
             {
-                if (_menu.Item("farmw").GetValue<bool>() && _w.LSIsReady())
+                if (_menu.Item("farmw").GetValue<bool>() && _w.IsReady())
                 {
-                    var minionpositions = MinionManager.GetMinions(_w.Range).Select(x => x.Position.LSTo2D());
+                    var minionpositions = MinionManager.GetMinions(_w.Range).Select(x => x.Position.To2D());
                     var location = MinionManager.GetBestCircularFarmLocation(minionpositions.ToList(), _w.Width, _w.Range);
                     if (location.MinionsHit >= _menu.Item("farmcount").GetValue<Slider>().Value)
                     {
@@ -218,10 +218,10 @@ namespace KurisuMorgana
 
         private static void Combo(bool useq, bool usew, bool user)
         {
-            if (useq && _q.LSIsReady())
+            if (useq && _q.IsReady())
             {
                 var qtarget = TargetSelector.GetTargetNoCollision(_q);
-                if (qtarget.LSIsValidTarget())
+                if (qtarget.IsValidTarget())
                 {
                     var poutput = _q.GetPrediction(qtarget);
                     if (poutput.Hitchance >= (HitChance)_menu.Item("hitchanceq").GetValue<Slider>().Value + 2)
@@ -231,10 +231,10 @@ namespace KurisuMorgana
                 }
             }
 
-            if (usew && _w.LSIsReady())
+            if (usew && _w.IsReady())
             {
                 var wtarget = TargetSelector.GetTarget(_w.Range + 10, TargetSelector.DamageType.Magical);
-                if (wtarget.LSIsValidTarget())
+                if (wtarget.IsValidTarget())
                 {
                     if (!_menu.Item("waitfor").GetValue<bool>() || _mw * 1 >= wtarget.Health)
                     {
@@ -247,25 +247,25 @@ namespace KurisuMorgana
                 }
             }
 
-            if (user && _r.LSIsReady())
+            if (user && _r.IsReady())
             {
                 var ticks = _menu.Item("calcw").GetValue<Slider>().Value;
 
                 var rtarget = TargetSelector.GetTarget(_r.Range, TargetSelector.DamageType.Magical);
-                if (rtarget.LSIsValidTarget() && _menu.Item("rkill").GetValue<bool>())
+                if (rtarget.IsValidTarget() && _menu.Item("rkill").GetValue<bool>())
                 {
                     if (_mr + _mq + _mw * ticks + _ma * 3 + _mi + _guise >= rtarget.Health)
                     {
                         if (rtarget.Health > _mr + _ma * 2 + _mw * 2 && !rtarget.IsZombie)
                         {
-                            if (_e.LSIsReady()) _e.CastOnUnit(Me);
+                            if (_e.IsReady()) _e.CastOnUnit(Me);
                             _r.Cast();
                         }
                     }
 
-                    if (Me.LSCountEnemiesInRange(_r.Range) >= _menu.Item("rcount").GetValue<Slider>().Value)
+                    if (Me.CountEnemiesInRange(_r.Range) >= _menu.Item("rcount").GetValue<Slider>().Value)
                     {
-                        if (_e.LSIsReady())
+                        if (_e.IsReady())
                             _e.CastOnUnit(Me);
 
                         _r.Cast();
@@ -276,10 +276,10 @@ namespace KurisuMorgana
 
         private static void Harass(bool useq, bool usew)
         {
-            if (useq && _q.LSIsReady())
+            if (useq && _q.IsReady())
             {
                 var qtarget = TargetSelector.GetTargetNoCollision(_q);
-                if (qtarget.LSIsValidTarget())
+                if (qtarget.IsValidTarget())
                 {
                     if (Me.ManaPercent >= _menu.Item("harassmana").GetValue<Slider>().Value)
                     {
@@ -292,10 +292,10 @@ namespace KurisuMorgana
                 }
             }
 
-            if (usew && _w.LSIsReady())
+            if (usew && _w.IsReady())
             {
                 var wtarget = TargetSelector.GetTarget(_w.Range + 200, TargetSelector.DamageType.Magical);
-                if (wtarget.LSIsValidTarget())
+                if (wtarget.IsValidTarget())
                 {
                     if (Me.ManaPercent >= _menu.Item("harassmana").GetValue<Slider>().Value)
                     {
@@ -314,9 +314,9 @@ namespace KurisuMorgana
 
         private static void AutoCast(bool dashing, bool immobile, bool soil)
         {
-            if (_q.LSIsReady())
+            if (_q.IsReady())
             {
-                foreach (var itarget in HeroManager.Enemies.Where(h => h.LSIsValidTarget(_q.Range)))
+                foreach (var itarget in HeroManager.Enemies.Where(h => h.IsValidTarget(_q.Range)))
                 {
                     if (immobile && Immobile(itarget))
                         _q.Cast(itarget);
@@ -324,23 +324,23 @@ namespace KurisuMorgana
                     if (immobile)
                         _q.CastIfHitchanceEquals(itarget, HitChance.Immobile);
 
-                    if (dashing && itarget.LSDistance(Me.ServerPosition) <= 400f)
+                    if (dashing && itarget.Distance(Me.ServerPosition) <= 400f)
                         _q.CastIfHitchanceEquals(itarget, HitChance.Dashing);
                 }
             }
 
-            if (_w.LSIsReady() && soil)
+            if (_w.IsReady() && soil)
             {
-                foreach (var itarget in HeroManager.Enemies.Where(h => h.LSIsValidTarget(_w.Range)))
+                foreach (var itarget in HeroManager.Enemies.Where(h => h.IsValidTarget(_w.Range)))
                     if (immobile && Immobile(itarget))
                         _w.Cast(itarget.ServerPosition);
             }
 
-            if (_r.LSIsReady())
+            if (_r.IsReady())
             {
-                if (Me.LSCountEnemiesInRange(_r.Range) >= _menu.Item("useautor").GetValue<Slider>().Value)
+                if (Me.CountEnemiesInRange(_r.Range) >= _menu.Item("useautor").GetValue<Slider>().Value)
                 {
-                    if (_e.LSIsReady())
+                    if (_e.IsReady())
                         _e.CastOnUnit(Me);
 
                     _r.Cast();
@@ -350,7 +350,7 @@ namespace KurisuMorgana
 
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (gapcloser.Sender.LSIsValidTarget(250f))
+            if (gapcloser.Sender.IsValidTarget(250f))
             {
                 if (_menu.Item("useqanti").GetValue<bool>())
                     _q.Cast(gapcloser.Sender);
@@ -369,12 +369,12 @@ namespace KurisuMorgana
             var qready = Me.Spellbook.CanUseSpell(SpellSlot.Q) == SpellState.Ready;
             var wready = Me.Spellbook.CanUseSpell(SpellSlot.W) == SpellState.Ready;
             var rready = Me.Spellbook.CanUseSpell(SpellSlot.R) == SpellState.Ready;
-            var iready = Me.Spellbook.CanUseSpell(Me.LSGetSpellSlot("summonerdot")) == SpellState.Ready;
+            var iready = Me.Spellbook.CanUseSpell(Me.GetSpellSlot("summonerdot")) == SpellState.Ready;
 
-            _ma = (float)Me.LSGetAutoAttackDamage(target);
-            _mq = (float)(qready ? Me.LSGetSpellDamage(target, SpellSlot.Q) : 0);
-            _mw = (float)(wready ? Me.LSGetSpellDamage(target, SpellSlot.W) : 0);
-            _mr = (float)(rready ? Me.LSGetSpellDamage(target, SpellSlot.R) : 0);
+            _ma = (float)Me.GetAutoAttackDamage(target);
+            _mq = (float)(qready ? Me.GetSpellDamage(target, SpellSlot.Q) : 0);
+            _mw = (float)(wready ? Me.GetSpellDamage(target, SpellSlot.W) : 0);
+            _mr = (float)(rready ? Me.GetSpellDamage(target, SpellSlot.R) : 0);
             _mi = (float)(iready ? Me.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) : 0);
 
             _guise = (float)(Items.HasItem(3151)
@@ -384,12 +384,12 @@ namespace KurisuMorgana
 
         internal static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsEnemy && sender.Type == GameObjectType.AIHeroClient && _q.LSIsReady())
+            if (sender.IsEnemy && sender.Type == GameObjectType.AIHeroClient && _q.IsReady())
             {
-                if (args.End.LSIsValid() && args.End.LSDistance(Me.ServerPosition) <= 200 + Me.BoundingRadius)
+                if (args.End.IsValid() && args.End.Distance(Me.ServerPosition) <= 200 + Me.BoundingRadius)
                 {
                     var hero = sender as AIHeroClient;
-                    if (!hero.IsValid<AIHeroClient>() || !hero.LSIsValidTarget(_q.Range - 50))
+                    if (!hero.IsValid<AIHeroClient>() || !hero.IsValidTarget(_q.Range - 50))
                     {
                         return;
                     }
@@ -401,17 +401,17 @@ namespace KurisuMorgana
                 }
             }
 
-            if (sender.Type != Me.Type || !_e.LSIsReady() || !sender.IsEnemy || !_menu.Item("usemorge").GetValue<bool>())
+            if (sender.Type != Me.Type || !_e.IsReady() || !sender.IsEnemy || !_menu.Item("usemorge").GetValue<bool>())
                 return;
 
             var attacker = ObjectManager.Get<AIHeroClient>().First(x => x.NetworkId == sender.NetworkId);
-            foreach (var ally in HeroManager.Allies.Where(x => x.LSIsValidTarget(_e.Range, false)))
+            foreach (var ally in HeroManager.Allies.Where(x => x.IsValidTarget(_e.Range, false)))
             {
-                var detectRange = ally.ServerPosition + (args.End - ally.ServerPosition).LSNormalized() * ally.LSDistance(args.End);
-                if (detectRange.LSDistance(ally.ServerPosition) > ally.AttackRange - ally.BoundingRadius)
+                var detectRange = ally.ServerPosition + (args.End - ally.ServerPosition).Normalized() * ally.Distance(args.End);
+                if (detectRange.Distance(ally.ServerPosition) > ally.AttackRange - ally.BoundingRadius)
                     continue;
 
-                foreach (var lib in KurisuLib.CCList.Where(x => x.HeroName == attacker.ChampionName && x.Slot == attacker.LSGetSpellSlot(args.SData.Name)))
+                foreach (var lib in KurisuLib.CCList.Where(x => x.HeroName == attacker.ChampionName && x.Slot == attacker.GetSpellSlot(args.SData.Name)))
                 {
                     if (lib.Type == Skilltype.Unit && args.Target.NetworkId != ally.NetworkId)
                         return;

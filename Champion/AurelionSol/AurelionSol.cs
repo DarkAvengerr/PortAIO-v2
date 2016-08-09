@@ -120,7 +120,7 @@
                     return;
                 }
 
-                var igniteSlot = Player.LSGetSpellSlot("summonerdot");
+                var igniteSlot = Player.GetSpellSlot("summonerdot");
 
                 if (igniteSlot != SpellSlot.Unknown)
                 {   
@@ -271,7 +271,7 @@
                 var kSableEnemy =
                     HeroManager.Enemies.FirstOrDefault(
                         hero =>
-                        hero.LSIsValidTarget(550) && ShieldCheck(hero) && !hero.HasBuff("summonerdot") && !hero.IsZombie
+                        hero.IsValidTarget(550) && ShieldCheck(hero) && !hero.HasBuff("summonerdot") && !hero.IsZombie
                         && Player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite) >= hero.Health);
 
                 if (kSableEnemy != null && IgniteSpell.Slot != SpellSlot.Unknown)
@@ -334,7 +334,7 @@
                     return;
                 }
 
-                if (Q.LSIsReady() && IsActive("Combo.Q"))
+                if (Q.IsReady() && IsActive("Combo.Q"))
                 {
                     var prediction = Q.GetPrediction(target);
                     if (prediction.Hitchance >= HitChance.High)
@@ -343,35 +343,35 @@
                     }
                 }
 
-                if (W.LSIsReady() && IsActive("Combo.W"))
+                if (W.IsReady() && IsActive("Combo.W"))
                 {
                     if (!HasPassive())
                     {
-                        if (target.LSIsValidTarget(W1.Range))
+                        if (target.IsValidTarget(W1.Range))
                         {
                             return;
                         }
 
-                        if (Player.LSDistance(target) > W1.Range && Player.LSDistance(target) < W.Range)
+                        if (Player.Distance(target) > W1.Range && Player.Distance(target) < W.Range)
                         {
                             W.Cast();
                         }
                     }
                     else if(HasPassive())
                     {
-                        if (Player.LSDistance(target) > W1.Range && Player.LSDistance(target) < W.Range + 100)
+                        if (Player.Distance(target) > W1.Range && Player.Distance(target) < W.Range + 100)
                         {
                             return;
                         }
 
-                        if (Player.LSDistance(target) > W1.Range + 150)
+                        if (Player.Distance(target) > W1.Range + 150)
                         {
                             W.Cast();
                         }
                     }
                 }
 
-                if (R.LSIsReady() && IsActive("Combo.R") && RDamage(target) > target.Health + target.AttackShield) 
+                if (R.IsReady() && IsActive("Combo.R") && RDamage(target) > target.Health + target.AttackShield) 
                 {
                     var prediction = R.GetPrediction(target);
                     if (prediction.Hitchance >= HitChance.High)
@@ -401,8 +401,8 @@
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                 {
                     args.Process =
-                        !(Q.LSIsReady() 
-                          || Player.LSDistance(args.Target) >= 1000);
+                        !(Q.IsReady() 
+                          || Player.Distance(args.Target) >= 1000);
                 }
             }
         }
@@ -423,13 +423,13 @@
             }
 
             if (args.DangerLevel != Interrupter2.DangerLevel.High
-                || sender.LSDistance(Player) > Q.Range)
+                || sender.Distance(Player) > Q.Range)
             {
                 return;
             }
 
-            if (sender.LSIsValidTarget(Q.Range) && args.DangerLevel == Interrupter2.DangerLevel.High
-                && Q.LSIsReady())
+            if (sender.IsValidTarget(Q.Range) && args.DangerLevel == Interrupter2.DangerLevel.High
+                && Q.IsReady())
             {
                 var prediction = Q.GetPrediction(sender);
                 if (prediction.Hitchance >= HitChance.High)
@@ -450,9 +450,9 @@
                 return;
             }
 
-            if (Q.LSIsReady() && gapcloser.Sender.LSDistance(Player) < Q.Range)
+            if (Q.IsReady() && gapcloser.Sender.Distance(Player) < Q.Range)
             {
-                if (gapcloser.Sender.LSIsValidTarget(Q.Range) && Q.LSIsReady())
+                if (gapcloser.Sender.IsValidTarget(Q.Range) && Q.IsReady())
                 {
                     var prediction = Q.GetPrediction(gapcloser.Sender);
                     if (prediction.Hitchance >= HitChance.High)
@@ -531,7 +531,7 @@
                     return;
                 }
 
-                if (Q.LSIsReady() && IsActive("Harass.Q"))
+                if (Q.IsReady() && IsActive("Harass.Q"))
                 {
                     var prediction = Q.GetPrediction(target);
                     if (prediction.Hitchance >= HitChance.High)
@@ -571,7 +571,7 @@
                     return;
                 }
 
-                if (IsActive("jungleclear.Q") && Q.LSIsReady())
+                if (IsActive("jungleclear.Q") && Q.IsReady())
                 {
                     var prediction = Q.GetCircularFarmLocation(minion);
                     if (prediction.MinionsHit >= 1)
@@ -594,9 +594,9 @@
             try
             {
                 foreach (
-                    var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) && !x.IsDead && !x.IsZombie))
+                    var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsDead && !x.IsZombie))
                 {
-                    if (Q.LSIsReady() && enemy.LSIsValidTarget(Q.Range) && enemy.Health < QDamage(enemy))
+                    if (Q.IsReady() && enemy.IsValidTarget(Q.Range) && enemy.Health < QDamage(enemy))
                     {
                         var prediction = Q.GetPrediction(enemy);
                         if (prediction.Hitchance >= HitChance.High)
@@ -605,7 +605,7 @@
                         }
                     }
 
-                    if(R.LSIsReady() && enemy.LSIsValidTarget(R.Range) && enemy.Health < RDamage(enemy))
+                    if(R.IsReady() && enemy.IsValidTarget(R.Range) && enemy.Health < RDamage(enemy))
                     {
                         var prediction = R.GetPrediction(enemy);
                         if (prediction.Hitchance >= HitChance.High)
@@ -639,7 +639,7 @@
                     return;
                 }
 
-                if (IsActive("laneclear.Q") && Q.LSIsReady())
+                if (IsActive("laneclear.Q") && Q.IsReady())
                 {
                     var prediction = Q.GetCircularFarmLocation(minion);
                     if (prediction.MinionsHit >= 2)
@@ -693,7 +693,7 @@
 
                 if (IsActive("Misc.Auto.W"))
                 {
-                    if (HasPassive() && Player.LSGetEnemiesInRange(2000f).Count == 0)
+                    if (HasPassive() && Player.GetEnemiesInRange(2000f).Count == 0)
                     {
                         W.Cast();
                     }
@@ -707,7 +707,7 @@
                     foreach (var enemy in HeroManager.Enemies)
                     {
                         var startPos = enemy.ServerPosition;
-                        var endPos = Player.ServerPosition.LSExtend(startPos, Player.LSDistance(enemy) + RDistance);
+                        var endPos = Player.ServerPosition.Extend(startPos, Player.Distance(enemy) + RDistance);
                         var rectangle = new Geometry.Polygon.Rectangle(startPos, endPos, RWidth);
 
                         if (HeroManager.Enemies.Count(x => rectangle.IsInside(x)) >= minREnemies)

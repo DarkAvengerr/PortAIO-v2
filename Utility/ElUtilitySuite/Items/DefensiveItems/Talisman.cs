@@ -51,7 +51,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
                   && (HeroManager.Enemies.Any(
                       x =>
                       x.HealthPercent < this.Menu.Item("TalismanEnemyHp").GetValue<Slider>().Value
-                      && x.LSDistance(this.Player) < 550)
+                      && x.Distance(this.Player) < 550)
                       || this.Player.HealthPercent < this.Menu.Item("TalismanMyHp").GetValue<Slider>().Value);
         }
 

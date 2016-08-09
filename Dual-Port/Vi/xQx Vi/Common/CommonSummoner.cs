@@ -15,7 +15,7 @@ using EloBuddy;
         public static SpellSlot SmiteSlot = SpellSlot.Unknown;
         public static SpellSlot IgniteSlot = SpellSlot.Unknown;
         public static SpellSlot FlashSlot = SpellSlot.Unknown;
-        public static SpellSlot TeleportSlot = ObjectManager.Player.LSGetSpellSlot("SummonerTeleport");
+        public static SpellSlot TeleportSlot = ObjectManager.Player.GetSpellSlot("SummonerTeleport");
 
         private static readonly int[] SmitePurple = {3713, 3726, 3725, 3726, 3723};
         private static readonly int[] SmiteGrey = {3711, 3722, 3721, 3720, 3719};
@@ -79,7 +79,7 @@ using EloBuddy;
         {
             var t = TargetSelector.GetTarget(Champion.PlayerSpells.Q.Range, TargetSelector.DamageType.Magical);
 
-            if (!t.LSIsValidTarget())
+            if (!t.IsValidTarget())
                 return;
 
             if (SmiteSlot != SpellSlot.Unknown &&
@@ -92,7 +92,7 @@ using EloBuddy;
                 && ObjectManager.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready)
             {
                 if (ObjectManager.Player.GetSummonerSpellDamage(t, Damage.SummonerSpell.Ignite) > t.Health
-                    && ObjectManager.Player.LSDistance(t) <= 500)
+                    && ObjectManager.Player.Distance(t) <= 500)
                 {
                     ObjectManager.Player.Spellbook.CastSpell(IgniteSlot, t);
                 }
@@ -112,12 +112,12 @@ using EloBuddy;
 
         private static void SetIgniteSlot()
         {
-            IgniteSlot = ObjectManager.Player.LSGetSpellSlot("SummonerDot");
+            IgniteSlot = ObjectManager.Player.GetSpellSlot("SummonerDot");
         }
 
         private static void SetFlatSlot()
         {
-            FlashSlot = ObjectManager.Player.LSGetSpellSlot("SummonerFlash");
+            FlashSlot = ObjectManager.Player.GetSpellSlot("SummonerFlash");
         }
 
 
@@ -129,7 +129,7 @@ using EloBuddy;
                             SmiteRed.Any(i => LeagueSharp.Common.Items.HasItem(i));
             if (itemCheck && use &&
                 ObjectManager.Player.Spellbook.CanUseSpell(SmiteSlot) == SpellState.Ready &&
-                t.LSDistance(ObjectManager.Player.Position) < range)
+                t.Distance(ObjectManager.Player.Position) < range)
             {
                 ObjectManager.Player.Spellbook.CastSpell(SmiteSlot, t);
             }
@@ -140,7 +140,7 @@ using EloBuddy;
             var range = 550f;
             var use = Modes.ModeConfig.MenuConfig.Item("Spells.Ignite").GetValue<bool>();
             if (use && ObjectManager.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready &&
-                t.LSDistance(ObjectManager.Player.Position) < range &&
+                t.Distance(ObjectManager.Player.Position) < range &&
                 ObjectManager.Player.GetSummonerSpellDamage(t, Damage.SummonerSpell.Ignite) > t.Health)
             {
                 ObjectManager.Player.Spellbook.CastSpell(IgniteSlot, t);

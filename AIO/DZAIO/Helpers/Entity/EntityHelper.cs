@@ -27,7 +27,7 @@ using EloBuddy;
 
         internal static AIHeroClient GetStunnedTarget(float range)
         {
-            return HeroManager.Enemies.Where(en => LeagueSharp.Common.Utility.LSIsValidTarget(en, range) && en.HasBuffOfType(BuffType.Stun))
+            return HeroManager.Enemies.Where(en => LeagueSharp.Common.Utility.IsValidTarget(en, range) && en.HasBuffOfType(BuffType.Stun))
                 .OrderBy(LeagueSharp.Common.TargetSelector.GetPriority).FirstOrDefault();
 
         }
@@ -57,7 +57,7 @@ using EloBuddy;
 
             foreach (var name in smiteNames)
             {
-                var slot = LeagueSharp.Common.Utility.LSGetSpellSlot(entity, name);
+                var slot = LeagueSharp.Common.Utility.GetSpellSlot(entity, name);
 
                 if(slot != SpellSlot.Unknown)
                 {

@@ -39,22 +39,22 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
-            if (!Q.LSIsReady(4500) && player.Mana > 200)
+            if (!Q.IsReady(4500) && player.Mana > 200)
                 W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.CastOnUnit(target);
         }
@@ -150,21 +150,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             PredictionOutput prediction;
 
-            if (ObjectManager.Player.LSDistance(target) < E1.Range)
+            if (ObjectManager.Player.Distance(target) < E1.Range)
             {
                 var oldrange = E1.Range;
                 E1.Range = E2.Range;
                 prediction = E1.GetPrediction(target, true);
                 E1.Range = oldrange;
             }
-            else if (ObjectManager.Player.LSDistance(target) < E2.Range)
+            else if (ObjectManager.Player.Distance(target) < E2.Range)
             {
                 var oldrange = E2.Range;
                 E2.Range = E3.Range;
                 prediction = E2.GetPrediction(target, true);
                 E2.Range = oldrange;
             }
-            else if (ObjectManager.Player.LSDistance(target) < E3.Range)
+            else if (ObjectManager.Player.Distance(target) < E3.Range)
             {
                 prediction = E3.GetPrediction(target, true);
             }
@@ -175,14 +175,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             if (prediction.Hitchance >= HitChance.High)
             {
-                if (ObjectManager.Player.ServerPosition.LSDistance(prediction.CastPosition) <= E1.Range + E1.Width)
+                if (ObjectManager.Player.ServerPosition.Distance(prediction.CastPosition) <= E1.Range + E1.Width)
                 {
                     Vector3 p;
-                    if (ObjectManager.Player.ServerPosition.LSDistance(prediction.CastPosition) > 300)
+                    if (ObjectManager.Player.ServerPosition.Distance(prediction.CastPosition) > 300)
                     {
                         p = prediction.CastPosition -
                             100 *
-                            (prediction.CastPosition.LSTo2D() - ObjectManager.Player.ServerPosition.LSTo2D()).LSNormalized()
+                            (prediction.CastPosition.To2D() - ObjectManager.Player.ServerPosition.To2D()).Normalized()
                                 .To3D();
                     }
                     else
@@ -192,11 +192,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     R.Cast();
                     E1.Cast(p);
                 }
-                else if (ObjectManager.Player.ServerPosition.LSDistance(prediction.CastPosition) <=
+                else if (ObjectManager.Player.ServerPosition.Distance(prediction.CastPosition) <=
                          ((E1.Range + E1.Range) / 2))
                 {
-                    var p = ObjectManager.Player.ServerPosition.LSTo2D()
-                        .LSExtend(prediction.CastPosition.LSTo2D(), E1.Range - 100);
+                    var p = ObjectManager.Player.ServerPosition.To2D()
+                        .Extend(prediction.CastPosition.To2D(), E1.Range - 100);
                     {
                         R.Cast();
                         E1.Cast(p.To3D());
@@ -204,9 +204,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 }
                 else
                 {
-                    var p = ObjectManager.Player.ServerPosition.LSTo2D() +
+                    var p = ObjectManager.Player.ServerPosition.To2D() +
                             E1.Range *
-                            (prediction.CastPosition.LSTo2D() - ObjectManager.Player.ServerPosition.LSTo2D()).LSNormalized
+                            (prediction.CastPosition.To2D() - ObjectManager.Player.ServerPosition.To2D()).Normalized
                                 ();
 
                     {
@@ -243,12 +243,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 return;
             var wpred = W.GetPrediction(target);
 
-            if (E.LSIsReady() && target.LSIsValidTarget(E.Range))
+            if (E.IsReady() && target.IsValidTarget(E.Range))
             {
                 E.CastIfHitchanceEquals(target, HitChance.Medium, true);
             }
-            if (W.LSIsReady() &&
-                R.LSIsReady() && target.LSIsValidTarget(W.Range) &&
+            if (W.IsReady() &&
+                R.IsReady() && target.IsValidTarget(W.Range) &&
                 wpred.Hitchance >= HitChance.High && CalcDamage(target) > target.Health)
             {
                 R.Cast();
@@ -258,31 +258,31 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
             else
             {
-                if (W.LSIsReady() && target.LSIsValidTarget(W.Range))
+                if (W.IsReady() && target.IsValidTarget(W.Range))
                 {
                     W.CastIfHitchanceEquals(target, HitChance.High, true);
                 }
             }
 
-                if (Q.LSIsReady() && R.LSIsReady()  &&
-                     qtarget.LSIsValidTarget(650) &&
-                    player.Position.LSCountEnemiesInRange(650) >=
+                if (Q.IsReady() && R.IsReady()  &&
+                     qtarget.IsValidTarget(650) &&
+                    player.Position.CountEnemiesInRange(650) >=
                     2)
                 {
                     R.Cast();
-                    Q.Cast(player.Position.LSExtend(target.Position, +300));
+                    Q.Cast(player.Position.Extend(target.Position, +300));
                 }
                 else
                 {
-                    if (Q.LSIsReady()  && qtarget.LSIsValidTarget(650) &&
+                    if (Q.IsReady()  && qtarget.IsValidTarget(650) &&
 
-                        player.Position.LSCountEnemiesInRange(650) >= 1)
+                        player.Position.CountEnemiesInRange(650) >= 1)
                     {
-                        Q.Cast(player.Position.LSExtend(target.Position, +300));
+                        Q.Cast(player.Position.Extend(target.Position, +300));
                     }
                 }
-                if (E3.LSIsReady()  &&
-                    target.Position.LSCountEnemiesInRange(450 - 250) >=
+                if (E3.IsReady()  &&
+                    target.Position.CountEnemiesInRange(450 - 250) >=
                     2)
                 {
                     CastER(target);
@@ -304,29 +304,29 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             //Calculate Combo Damage
 
-            var aa = player.LSGetAutoAttackDamage(target, true);
+            var aa = player.GetAutoAttackDamage(target, true);
             var damage = aa;
 
 
 
-                if (E.LSIsReady())
+                if (E.IsReady())
                 {
                     damage += E.GetDamage(target);
                 }
 
-            if (E.LSIsReady() ) // rdamage
+            if (E.IsReady() ) // rdamage
             {
 
                 damage += E.GetDamage(target);
             }
 
-            if (W.LSIsReady() )
+            if (W.IsReady() )
             {
                 damage += W.GetDamage(target);
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                if (R.LSIsReady() )
+                if (R.IsReady() )
                     damage += W.GetDamage(target) * 2.2;
             }
             return (int)damage;
@@ -339,8 +339,8 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (target == null) return (float)0;
             double damage = 0d;
 
-            if (W.LSIsReady())
-                damage += player.LSGetSpellDamage(target, SpellSlot.W);
+            if (W.IsReady())
+                damage += player.GetSpellDamage(target, SpellSlot.W);
 
             return (float)damage * 2;
         }
@@ -351,8 +351,8 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (target == null) return (float)0;
             double damage = 0d;
 
-            if (W1.LSIsReady() && R.LSIsReady())
-                damage += player.LSGetSpellDamage(target, SpellSlot.W, 1);
+            if (W1.IsReady() && R.IsReady())
+                damage += player.GetSpellDamage(target, SpellSlot.W, 1);
 
             return (float)damage * 2;
         }
@@ -363,8 +363,8 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (target == null) return (float)0;
             double damage = 0d;
 
-            if (E.LSIsReady())
-                damage += player.LSGetSpellDamage(target, SpellSlot.E);
+            if (E.IsReady())
+                damage += player.GetSpellDamage(target, SpellSlot.E);
 
             return (float)damage * 2;
         }

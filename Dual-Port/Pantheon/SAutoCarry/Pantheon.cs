@@ -75,13 +75,13 @@ namespace SAutoCarry.Champions
             var t = TargetSelector.GetTarget(Spells[W].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
             if (t != null)
             {
-                if (Spells[Q].LSIsReady() && ComboUseQ)
+                if (Spells[Q].IsReady() && ComboUseQ)
                     Spells[Q].CastOnUnit(t);
 
-                if (Spells[W].LSIsReady() && ComboUseW)
+                if (Spells[W].IsReady() && ComboUseW)
                     Spells[W].CastOnUnit(t);
 
-                if (Spells[E].LSIsReady() && t.IsImmobilized() && ComboUseE)
+                if (Spells[E].IsReady() && t.IsImmobilized() && ComboUseE)
                     Spells[E].Cast(Spells[E].GetPrediction(t).CastPosition);
             }
         }
@@ -94,7 +94,7 @@ namespace SAutoCarry.Champions
             var t = TargetSelector.GetTarget(Spells[Q].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
             if (t != null)
             {
-                if (Spells[Q].LSIsReady() && HarassUseQ)
+                if (Spells[Q].IsReady() && HarassUseQ)
                     Spells[Q].CastOnUnit(t);
             }
         }
@@ -107,13 +107,13 @@ namespace SAutoCarry.Champions
             var minion = MinionManager.GetMinions(600f, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
             if(minion != null)
             {
-                if (Spells[W].LSIsReady())
+                if (Spells[W].IsReady())
                     Spells[W].CastOnUnit(minion);
 
-                if (Spells[E].LSIsReady())
+                if (Spells[E].IsReady())
                     Spells[E].Cast(minion.ServerPosition);
 
-                if (Spells[Q].LSIsReady())
+                if (Spells[Q].IsReady())
                     Spells[Q].CastOnUnit(minion);
             }
         }
@@ -134,12 +134,12 @@ namespace SAutoCarry.Champions
             }
             else if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.LaneClear)
             {
-                if (Spells[Q].LSIsReady() && LaneClearQ)
+                if (Spells[Q].IsReady() && LaneClearQ)
                 {
                     var minions = MinionManager.GetMinions(Spells[Q].Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.Health);
                     foreach (var minion in minions)
                     {
-                        if (minion.LSDistance(ObjectManager.Player.ServerPosition) > 150 && minion.Health < Spells[Q].GetDamage(minion))
+                        if (minion.Distance(ObjectManager.Player.ServerPosition) > 150 && minion.Health < Spells[Q].GetDamage(minion))
                         {
                             Spells[Q].CastOnUnit(minion);
                             return;
@@ -151,7 +151,7 @@ namespace SAutoCarry.Champions
 
         protected override void Interrupter_OnPossibleToInterrupt(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if(InterruptW && sender.LSIsValidTarget(Spells[W].Range) && Spells[W].LSIsReady())
+            if(InterruptW && sender.IsValidTarget(Spells[W].Range) && Spells[W].IsReady())
                 Spells[W].CastOnUnit(sender);
         }
 

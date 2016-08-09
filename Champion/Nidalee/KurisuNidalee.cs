@@ -247,7 +247,7 @@ namespace KurisuNidalee
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsEnemy || sender.Type != Player.Type || !args.SData.LSIsAutoAttack())
+            if (sender.IsEnemy || sender.Type != Player.Type || !args.SData.IsAutoAttack())
             {
                 return;
             }
@@ -264,10 +264,10 @@ namespace KurisuNidalee
                     // auto heal on ally hero attacking
                     if (KL.CanUse(KL.Spells["Primalsurge"], true, "on"))
                     {
-                        if (ally.LSIsValidTarget(KL.Spells["Primalsurge"].Range, false) &&
+                        if (ally.IsValidTarget(KL.Spells["Primalsurge"].Range, false) &&
                             ally.Health / ally.MaxHealth * 100 <= 90)
                         {
-                            if (!Player.Spellbook.IsChanneling && !Player.LSIsRecalling())
+                            if (!Player.Spellbook.IsChanneling && !Player.IsRecalling())
                             {
                                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None ||
                                     ally.Health / ally.MaxHealth * 100 <= 20 || !KL.CatForm())
@@ -289,11 +289,11 @@ namespace KurisuNidalee
 
         private static void Obj_AI_Base_OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsMe && args.SData.LSIsAutoAttack())
+            if (sender.IsMe && args.SData.IsAutoAttack())
             {
                 if (Root.Item("usecombo2").GetValue<KeyBind>().Active)
                 {
-                    if (KL.CatForm() && KL.Spells["Aspect"].LSIsReady() && KL.SpellTimer["Javelin"].IsReady())
+                    if (KL.CatForm() && KL.Spells["Aspect"].IsReady() && KL.SpellTimer["Javelin"].IsReady())
                     {
                         KL.Spells["Takedown"].Cast();
 
@@ -330,7 +330,7 @@ namespace KurisuNidalee
             var hero = sender as AIHeroClient;
             if (hero != null && hero.IsEnemy && KL.SpellTimer["Javelin"].IsReady() && Root.Item("ndhqimm").GetValue<bool>())
             {
-                if (hero.LSIsValidTarget(KL.Spells["Javelin"].Range))
+                if (hero.IsValidTarget(KL.Spells["Javelin"].Range))
                 {
                     if (args.Buff.Type == BuffType.Stun || args.Buff.Type == BuffType.Snare ||
                         args.Buff.Type == BuffType.Taunt || args.Buff.Type == BuffType.Knockback)
@@ -342,7 +342,7 @@ namespace KurisuNidalee
                         }
                         else
                         {
-                            if (KL.Spells["Aspect"].LSIsReady() &&
+                            if (KL.Spells["Aspect"].IsReady() &&
                                 KL.Spells["Javelin"].Cast(hero) == Spell.CastStates.Collision)
                                 KL.Spells["Aspect"].Cast();
                         }
@@ -352,7 +352,7 @@ namespace KurisuNidalee
 
             if (hero != null && hero.IsEnemy && KL.SpellTimer["Bushwhack"].IsReady() && Root.Item("ndhwimm").GetValue<bool>())
             {
-                if (hero.LSIsValidTarget(KL.Spells["Bushwhack"].Range))
+                if (hero.IsValidTarget(KL.Spells["Bushwhack"].Range))
                 {
                     if (args.Buff.Type == BuffType.Stun || args.Buff.Type == BuffType.Snare ||
                         args.Buff.Type == BuffType.Taunt || args.Buff.Type == BuffType.Knockback)
@@ -375,7 +375,7 @@ namespace KurisuNidalee
             }
 
             foreach (
-                var unit in ObjectManager.Get<Obj_AI_Minion>().Where(x => x.LSIsValidTarget(900) && x.PassiveRooted()))
+                var unit in ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsValidTarget(900) && x.PassiveRooted()))
             {
                 var b = unit.GetBuff("NidaleePassiveMonsterRoot");
                 if (b.Caster.IsMe && b.EndTime - Game.Time > 0)
@@ -473,7 +473,7 @@ namespace KurisuNidalee
             // auto heal on ally hero
             if (KL.CanUse(KL.Spells["Primalsurge"], true, "on"))
             {
-                if (!Player.Spellbook.IsChanneling && !Player.LSIsRecalling())
+                if (!Player.Spellbook.IsChanneling && !Player.IsRecalling())
                 {
                     if (Root.Item("flee").GetValue<KeyBind>().Active && KL.CatForm())
                         return;
@@ -482,7 +482,7 @@ namespace KurisuNidalee
                         var hero in
                             Allies().Where(
                                 h => Root.Item("xx" + h.ChampionName).GetValue<bool>() &&
-                                        h.LSIsValidTarget(KL.Spells["Primalsurge"].Range, false) &&
+                                        h.IsValidTarget(KL.Spells["Primalsurge"].Range, false) &&
                                         h.Health / h.MaxHealth * 100 <
                                         Root.Item("zz" + h.ChampionName).GetValue<Slider>().Value))
                     {
@@ -498,7 +498,7 @@ namespace KurisuNidalee
 
                             if (KL.CatForm() && Root.Item("ndhesw").GetValue<bool>() &&
                                 KL.SpellTimer["Primalsurge"].IsReady() &&
-                                KL.Spells["Aspect"].LSIsReady())
+                                KL.Spells["Aspect"].IsReady())
                                 KL.Spells["Aspect"].Cast();
                         }
                     }             
@@ -538,7 +538,7 @@ namespace KurisuNidalee
 
         internal static void Combo2()
         {
-            var target = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.LSDistance(Player.ServerPosition) <= 600 
+            var target = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.Distance(Player.ServerPosition) <= 600 
                         && x.IsEnemy && x.IsHPBarRendered
                         && !MinionManager.IsWard(x)).OrderByDescending(x => x.MaxHealth).FirstOrDefault();
 
@@ -553,7 +553,7 @@ namespace KurisuNidalee
             {
                 if (!KL.CanUse(KL.Spells["Javelin"], true, "jg") && KL.CanUse(KL.Spells["Swipe"], false, "jg"))
                 {
-                    if (KL.CatForm() && target.LSIsValidTarget(KL.Spells["Swipe"].Range))
+                    if (KL.CatForm() && target.IsValidTarget(KL.Spells["Swipe"].Range))
                     {
                         KL.Spells["Swipe"].Cast(target.ServerPosition);
                     }
@@ -562,7 +562,7 @@ namespace KurisuNidalee
                 if (!KL.CanUse(KL.Spells["Javelin"], true, "jg") &&
                     KL.CanUse(KL.Spells["Bushwhack"], false, "jg"))
                 {
-                    if (!KL.CatForm() && target.LSIsValidTarget(KL.Spells["Bushwhack"].Range) && KL.Player.ManaPercent > 40)
+                    if (!KL.CatForm() && target.IsValidTarget(KL.Spells["Bushwhack"].Range) && KL.Player.ManaPercent > 40)
                     {
                         KL.Spells["Bushwhack"].Cast(target.ServerPosition);
                     }
@@ -571,7 +571,7 @@ namespace KurisuNidalee
                 if (!KL.CanUse(KL.Spells["Javelin"], true, "jg") && KL.CanUse(KL.Spells["Pounce"], false, "jg"))
                 {
                     var r = target.IsHunted() ? KL.Spells["ExPounce"].Range : KL.Spells["Pounce"].Range;
-                    if (KL.CatForm() && target.LSIsValidTarget(r))
+                    if (KL.CatForm() && target.IsValidTarget(r))
                     {
                         KL.Spells["Pounce"].Cast(target.ServerPosition);
                     }
@@ -580,7 +580,7 @@ namespace KurisuNidalee
 
             if (KL.Spells["Takedown"].Level > 0 && KL.SpellTimer["Takedown"].IsReady() && !KL.CatForm())
             {
-                if (KL.Spells["Aspect"].LSIsReady())
+                if (KL.Spells["Aspect"].IsReady())
                 {
                     KL.Spells["Aspect"].Cast();
                 }
@@ -588,7 +588,7 @@ namespace KurisuNidalee
 
             if (KL.Spells["Javelin"].Level > 0 && !KL.SpellTimer["Javelin"].IsReady() && !KL.CatForm())
             {
-                if (KL.Spells["Aspect"].LSIsReady())
+                if (KL.Spells["Aspect"].IsReady())
                 {
                     KL.Spells["Aspect"].Cast();
                 }
@@ -627,7 +627,7 @@ namespace KurisuNidalee
                         CM.CastSwipe(unit, "jg");
 
                         if (unit.PassiveRooted() && Root.Item("jgaacount").GetValue<KeyBind>().Active &&
-                            Player.LSDistance(unit.ServerPosition) > 450)
+                            Player.Distance(unit.ServerPosition) > 450)
                         {
                             return;
                         }
@@ -653,7 +653,7 @@ namespace KurisuNidalee
         #region Walljumper @Hellsing
         internal static void Flee()
         {
-            if (!KL.CatForm() && KL.Spells["Aspect"].LSIsReady())
+            if (!KL.CatForm() && KL.Spells["Aspect"].IsReady())
             {
                 if (KL.SpellTimer["Pounce"].IsReady())
                     KL.Spells["Aspect"].Cast();
@@ -677,7 +677,7 @@ namespace KurisuNidalee
             {
                 var wallPosition = movePosition;
 
-                var direction = (Game.CursorPos.LSTo2D() - wallPosition.LSTo2D()).LSNormalized();
+                var direction = (Game.CursorPos.To2D() - wallPosition.To2D()).Normalized();
                 float maxAngle = 80f;
                 float step = maxAngle / 20;
                 float currentAngle = 0;
@@ -707,9 +707,9 @@ namespace KurisuNidalee
                     }
 
                     else
-                        checkPoint = wallPosition + KL.Spells["Pounce"].Range * direction.LSRotated(currentAngle).To3D();
+                        checkPoint = wallPosition + KL.Spells["Pounce"].Range * direction.Rotated(currentAngle).To3D();
 
-                    if (checkPoint.LSIsWall()) 
+                    if (checkPoint.IsWall()) 
                         continue;
 
                     wallCheck = KL.GetFirstWallPoint(checkPoint, wallPosition);
@@ -719,10 +719,10 @@ namespace KurisuNidalee
 
                     var wallPositionOpposite =  (Vector3) KL.GetFirstWallPoint((Vector3)wallCheck, wallPosition, 5);
 
-                    if (KL.Player.GetPath(wallPositionOpposite).ToList().LSTo2D().LSPathLength() -
-                        KL.Player.LSDistance(wallPositionOpposite) > 200)
+                    if (KL.Player.GetPath(wallPositionOpposite).ToList().To2D().PathLength() -
+                        KL.Player.Distance(wallPositionOpposite) > 200)
                     {
-                        if (KL.Player.LSDistance(wallPositionOpposite) < KL.Spells["Pounce"].Range - KL.Player.BoundingRadius / 2)
+                        if (KL.Player.Distance(wallPositionOpposite) < KL.Spells["Pounce"].Range - KL.Player.BoundingRadius / 2)
                         {
                             KL.Spells["Pounce"].Cast(wallPositionOpposite);
                             jumpTriggered = true;

@@ -20,7 +20,7 @@ using EloBuddy;
         private static readonly Func<AIHeroClient, Obj_AI_Base, bool> CheckDistance =
             (champ, minion) =>
             Math.Abs(
-                champ.LSDistance(ObjectManager.Player) - (minion.LSDistance(ObjectManager.Player) + minion.LSDistance(champ)))
+                champ.Distance(ObjectManager.Player) - (minion.Distance(ObjectManager.Player) + minion.Distance(champ)))
             <= 2;
 
         private static readonly Func<Vector3, Vector3, Vector3, bool> CheckLine = (v1, v2, v3) =>
@@ -59,7 +59,7 @@ using EloBuddy;
         {
             Spell q = lucian.Spells.Q;
 
-            if (!KoreanUtils.GetParamBool(lucian.MainMenu, "extendedq") || !q.LSIsReady())
+            if (!KoreanUtils.GetParamBool(lucian.MainMenu, "extendedq") || !q.IsReady())
             {
                 return false;
             }
@@ -73,7 +73,7 @@ using EloBuddy;
 
             if (!laneclear)
             {
-                if (lucian.Player.LSCountEnemiesInRange(AdvancedQ.Range) == 0)
+                if (lucian.Player.CountEnemiesInRange(AdvancedQ.Range) == 0)
                 {
                     return false;
                 }
@@ -98,25 +98,25 @@ using EloBuddy;
 
             AdvancedQ.SetSkillshot(0.55f, 75f, float.MaxValue, false, SkillshotType.SkillshotLine);
 
-            foreach (AIHeroClient target in lucian.Player.LSGetEnemiesInRange(AdvancedQ.Range))
+            foreach (AIHeroClient target in lucian.Player.GetEnemiesInRange(AdvancedQ.Range))
             {
                 if (!CheckHaras(lucian, target))
                 {
                     continue;
                 }
 
-                List<Vector2> position = new List<Vector2> { target.Position.LSTo2D() };
+                List<Vector2> position = new List<Vector2> { target.Position.To2D() };
 
                 Obj_AI_Base colisionMinion =
-                    AdvancedQ.GetCollision(lucian.Player.Position.LSTo2D(), position)
+                    AdvancedQ.GetCollision(lucian.Player.Position.To2D(), position)
                         .FirstOrDefault(
                             minion =>
                             q.CanCast(minion) && q.IsInRange(minion)
                             && CheckLine(lucian.Player.Position, minion.Position, target.ServerPosition)
                             && CheckDistance(target, minion)
-                            && target.LSDistance(lucian.Player) > minion.LSDistance(lucian.Player)
-                            && lucian.Player.LSDistance(minion) + minion.LSDistance(target)
-                            <= lucian.Player.LSDistance(target) + 10f);
+                            && target.Distance(lucian.Player) > minion.Distance(lucian.Player)
+                            && lucian.Player.Distance(minion) + minion.Distance(target)
+                            <= lucian.Player.Distance(target) + 10f);
 
                 if (colisionMinion != null)
                 {

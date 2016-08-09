@@ -124,7 +124,7 @@ using EloBuddy;
 
         private static void SonaOnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (R.LSIsReady() && sender.LSIsValidTarget(R.Range) && MenuCheck("sona.inter", Config))
+            if (R.IsReady() && sender.IsValidTarget(R.Range) && MenuCheck("sona.inter", Config))
             {
                 R.CastIfHitchanceEquals(sender, HitChance.High);
             }
@@ -132,8 +132,8 @@ using EloBuddy;
 
         private static void SonaOnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (R.LSIsReady() && MenuCheck("sona.anti", Config) && R.GetPrediction(gapcloser.Sender).Hitchance > HitChance.High
-                && gapcloser.Sender.LSIsValidTarget(1000))
+            if (R.IsReady() && MenuCheck("sona.anti", Config) && R.GetPrediction(gapcloser.Sender).Hitchance > HitChance.High
+                && gapcloser.Sender.IsValidTarget(1000))
             {
                 R.Cast(gapcloser.Sender);
             }
@@ -151,12 +151,12 @@ using EloBuddy;
                     break;
             }
 
-            if (!MenuCheck("sona.heal.disable", Config) && W.LSIsReady())
+            if (!MenuCheck("sona.heal.disable", Config) && W.IsReady())
             {
                 WManager();
             }
 
-            if (MenuCheck("sona.r.killsteal", Config) && R.LSIsReady())
+            if (MenuCheck("sona.r.killsteal", Config) && R.IsReady())
             {
                 Killsteal();
             }
@@ -169,13 +169,13 @@ using EloBuddy;
                 return;
             }
 
-            if (ObjectManager.Player.LSIsRecalling() || ObjectManager.Player.LSInFountain())
+            if (ObjectManager.Player.IsRecalling() || ObjectManager.Player.InFountain())
             {
                 return;
             }
 
             foreach (var shield in ObjectManager.Get<AIHeroClient>().Where(x => x.IsAlly && !x.IsMe && !x.IsDead 
-                && x.LSDistance(ObjectManager.Player.Position) < W.Range))
+                && x.Distance(ObjectManager.Player.Position) < W.Range))
             {
                 if (MenuCheck("sona.heal" + shield.ChampionName, Config) && shield.HealthPercent < SliderCheck("sona.heal.percent" + shield.ChampionName, Config)
                     && ObjectManager.Player.HealthPercent > SliderCheck("sona.heal.limit", Config))
@@ -192,9 +192,9 @@ using EloBuddy;
                 return;
             }
 
-            if (MenuCheck("sona.r.killsteal", Config) && R.LSIsReady())
+            if (MenuCheck("sona.r.killsteal", Config) && R.IsReady())
             {
-                foreach (var target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) && !x.IsDead && !x.IsZombie))
+                foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsDead && !x.IsZombie))
                 {
                     if (R.GetDamage(target) > target.Health)
                     {
@@ -206,17 +206,17 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (MenuCheck("sona.q.combo", Config) && Q.LSIsReady())
+            if (MenuCheck("sona.q.combo", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie))
                 {
                     Q.Cast(enemy);
                 }
             }
 
-            if (MenuCheck("sona.r.combo", Config) && R.LSIsReady())
+            if (MenuCheck("sona.r.combo", Config) && R.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) && !x.IsDead && !x.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsDead && !x.IsZombie))
                 {
                     R.SPredictionCast(enemy, SpellHitChance(Config, "sona.hitchance"));
                 }
@@ -230,9 +230,9 @@ using EloBuddy;
                 return;
             }
 
-            if (MenuCheck("sona.q.harass", Config) && Q.LSIsReady())
+            if (MenuCheck("sona.q.harass", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsDead 
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsDead 
                     && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
                 {
                     Q.Cast(enemy);
@@ -242,22 +242,22 @@ using EloBuddy;
 
         private static void SonaOnDraw(EventArgs args)
         {
-            if (Q.LSIsReady() && ActiveCheck("sona.q.draw", Config))
+            if (Q.IsReady() && ActiveCheck("sona.q.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, GetColor("sona.q.draw", Config));
             }
 
-            if (W.LSIsReady() && ActiveCheck("sona.w.draw", Config))
+            if (W.IsReady() && ActiveCheck("sona.w.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, GetColor("sona.w.draw", Config));
             }
 
-            if (E.LSIsReady() && ActiveCheck("sona.e.draw", Config))
+            if (E.IsReady() && ActiveCheck("sona.e.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, GetColor("sona.e.draw", Config));
             }
 
-            if (R.LSIsReady() && ActiveCheck("sona.r.draw", Config))
+            if (R.IsReady() && ActiveCheck("sona.r.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, GetColor("sona.r.draw", Config));
             }

@@ -56,7 +56,7 @@ using EloBuddy; namespace Support.Plugins
             }
             if (this.GetPassiveStacks() == 3)
             {
-                if (this.E.LSIsReady())
+                if (this.E.IsReady())
                 {
                     this.E.Cast();
                     if (this.Q.CastCheck(target, "Interrupt.Q"))
@@ -101,7 +101,7 @@ using EloBuddy; namespace Support.Plugins
 
         private void CastE()
         {
-            if (this.GetPassiveStacks() < 4 && !ObjectManager.Player.LSIsRecalling())
+            if (this.GetPassiveStacks() < 4 && !ObjectManager.Player.IsRecalling())
             {
                 this.E.Cast();
             }

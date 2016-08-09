@@ -33,23 +33,23 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
-            //if (!Sector.inTowerRange(target.Position.LSTo2D()) && (MapControl.balanceAroundPoint(target.Position.LSTo2D(), 700) >= -1 || (MapControl.fightIsOn() != null && MapControl.fightIsOn().NetworkId == target.NetworkId)))
+            //if (!Sector.inTowerRange(target.Position.To2D()) && (MapControl.balanceAroundPoint(target.Position.To2D(), 700) >= -1 || (MapControl.fightIsOn() != null && MapControl.fightIsOn().NetworkId == target.NetworkId)))
                 Q.CastOnUnit(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
-            if (player.LSCountEnemiesInRange(400) > 1 || (player.HealthPercent < 25 && player.LSCountEnemiesInRange(700)>0))
+            if (player.CountEnemiesInRange(400) > 1 || (player.HealthPercent < 25 && player.CountEnemiesInRange(700)>0))
                 W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.Cast();
         }
@@ -57,9 +57,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
-            if (target.LSIsValidTarget(R.Range))
+            if (target.IsValidTarget(R.Range))
             {
                 R.CastIfWillHit(target, 2);
             }
@@ -91,11 +91,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public override void farm()
         {
             var mins = MinionManager.GetMinions(W.Range - 50);
-            if (Q.LSIsReady() && mins.Count > 0)
+            if (Q.IsReady() && mins.Count > 0)
             {
                 Q.Cast(mins.FirstOrDefault());
             }
-            if (E.LSIsReady() && player.HealthPercent>30 && mins.Count>0)
+            if (E.IsReady() && player.HealthPercent>30 && mins.Count>0)
             {
                 E.Cast();
             }

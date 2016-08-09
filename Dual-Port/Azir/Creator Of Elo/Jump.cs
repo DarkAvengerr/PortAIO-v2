@@ -22,11 +22,11 @@ using EloBuddy;
 
         public void updateLogic(Vector3 position)
         {
-            if (azir.Spells.W.LSIsReady() && azir.Spells.Q.LSIsReady() && azir.Spells.E.LSIsReady()) //&&R.LSIsReady())
+            if (azir.Spells.W.IsReady() && azir.Spells.Q.IsReady() && azir.Spells.E.IsReady()) //&&R.IsReady())
             {
-                //   if (azir.soldierManager.ActiveSoldiers.Count == 0|| azir.soldierManager.ActiveSoldiers.Min(t=>t.LSDistance(Game.CursorPos))>azir.Hero.LSDistance(Game.CursorPos) )
+                //   if (azir.soldierManager.ActiveSoldiers.Count == 0|| azir.soldierManager.ActiveSoldiers.Min(t=>t.Distance(Game.CursorPos))>azir.Hero.Distance(Game.CursorPos) )
                 // {
-                azir.Spells.W.Cast(HeroManager.Player.Position.LSExtend(position, 450));
+                azir.Spells.W.Cast(HeroManager.Player.Position.Extend(position, 450));
                 LeagueSharp.Common.Utility.DelayAction.Add(Game.Ping + 150,
                     () =>
                         azir.Spells.E.Cast(
@@ -42,11 +42,11 @@ using EloBuddy;
         }
         public void updateLogicJumpInsec(Vector3 position)
         {
-            if (azir.Spells.W.LSIsReady() && azir.Spells.Q.LSIsReady() && azir.Spells.E.LSIsReady()) //&&R.LSIsReady())
+            if (azir.Spells.W.IsReady() && azir.Spells.Q.IsReady() && azir.Spells.E.IsReady()) //&&R.IsReady())
             {
-                //   if (azir.soldierManager.ActiveSoldiers.Count == 0|| azir.soldierManager.ActiveSoldiers.Min(t=>t.LSDistance(Game.CursorPos))>azir.Hero.LSDistance(Game.CursorPos) )
+                //   if (azir.soldierManager.ActiveSoldiers.Count == 0|| azir.soldierManager.ActiveSoldiers.Min(t=>t.Distance(Game.CursorPos))>azir.Hero.Distance(Game.CursorPos) )
                 // {
-                azir.Spells.W.Cast(HeroManager.Player.Position.LSExtend(position, 450));
+                azir.Spells.W.Cast(HeroManager.Player.Position.Extend(position, 450));
                 LeagueSharp.Common.Utility.DelayAction.Add(Game.Ping + 150,
                     () =>
                         azir.Spells.E.Cast(
@@ -63,21 +63,21 @@ using EloBuddy;
 
         private void fleeqToInsec(Vector3 position)
         {
-            if (Vector2.Distance(HeroManager.Player.ServerPosition.LSTo2D(), position.LSTo2D()) < azir.Spells.Q.Range)
+            if (Vector2.Distance(HeroManager.Player.ServerPosition.To2D(), position.To2D()) < azir.Spells.Q.Range)
             {
                 azir.Spells.Q.Cast(position);
             }
             else
             {
-                azir.Spells.Q.Cast(HeroManager.Player.Position.LSExtend(position, 1150));
+                azir.Spells.Q.Cast(HeroManager.Player.Position.Extend(position, 1150));
             }
         }
 
         public void fleeTopos(Vector3 position)
         {
-            if (azir.Spells.W.LSIsReady() && azir.Spells.Q.LSIsReady() && azir.Spells.E.LSIsReady()) //&&R.LSIsReady())
+            if (azir.Spells.W.IsReady() && azir.Spells.Q.IsReady() && azir.Spells.E.IsReady()) //&&R.IsReady())
             {
-                azir.Spells.W.Cast(HeroManager.Player.Position.LSExtend(position, 450));
+                azir.Spells.W.Cast(HeroManager.Player.Position.Extend(position, 450));
                 LeagueSharp.Common.Utility.DelayAction.Add(Game.Ping + 150,
                     () =>
                         azir.Spells.E.Cast(
@@ -88,13 +88,13 @@ using EloBuddy;
 
         public void fleeq()
         {
-            if (Vector2.Distance(HeroManager.Player.ServerPosition.LSTo2D(), Game.CursorPos.LSTo2D()) < azir.Spells.Q.Range)
+            if (Vector2.Distance(HeroManager.Player.ServerPosition.To2D(), Game.CursorPos.To2D()) < azir.Spells.Q.Range)
             {
                 azir.Spells.Q.Cast(Game.CursorPos);
             }
             else
             {
-                azir.Spells.Q.Cast(HeroManager.Player.Position.LSExtend(Game.CursorPos, 1150));
+                azir.Spells.Q.Cast(HeroManager.Player.Position.Extend(Game.CursorPos, 1150));
             }
         }
 
@@ -106,13 +106,13 @@ using EloBuddy;
         public void insec(AIHeroClient target)
         {
 
-            if (azir.Hero.LSDistance(target) <= azir.Spells.R.Range)
+            if (azir.Hero.Distance(target) <= azir.Spells.R.Range)
             {
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, target);
-                if (azir.Hero.LSDistance(target) < 220)
+                if (azir.Hero.Distance(target) < 220)
                 {
                     var tower =
-                        ObjectManager.Get<Obj_AI_Turret>().FirstOrDefault(it => it.IsAlly && it.LSIsValidTarget(1000));
+                        ObjectManager.Get<Obj_AI_Turret>().FirstOrDefault(it => it.IsAlly && it.IsValidTarget(1000));
 
                     if (tower != null)
                     {
@@ -126,7 +126,7 @@ using EloBuddy;
             }
             else
             {
-                var pos = Game.CursorPos.LSExtend(target.Position, Game.CursorPos.LSDistance(target.Position) - 250);
+                var pos = Game.CursorPos.Extend(target.Position, Game.CursorPos.Distance(target.Position) - 250);
 
                 fleeTopos(pos);
             }

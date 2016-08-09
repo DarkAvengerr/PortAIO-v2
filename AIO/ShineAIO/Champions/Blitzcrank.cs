@@ -103,7 +103,7 @@ using EloBuddy;
         {
             #region Auto Harass
 
-            if (Spells[Q].LSIsReady() && Config.Item("MAUTOQ").GetValue<bool>() && Config.Item("MAUTOQHP").GetValue<Slider>().Value <= ObjectManager.Player.HealthPercent && !ObjectManager.Player.LSUnderTurret())
+            if (Spells[Q].IsReady() && Config.Item("MAUTOQ").GetValue<bool>() && Config.Item("MAUTOQHP").GetValue<Slider>().Value <= ObjectManager.Player.HealthPercent && !ObjectManager.Player.UnderTurret())
             {
                 var t = TargetSelector.GetTarget(Config.Item("MAUTOQRANGE").GetValue<Slider>().Value, TargetSelector.DamageType.Magical);
                 if (t != null && !Config.Item("noautograb" + t.ChampionName).GetValue<bool>())
@@ -116,26 +116,26 @@ using EloBuddy;
         public void Combo()
         {
             bool chase = false;
-            if (Spells[R].LSIsReady() && Spells[Q].LSIsReady() && Config.Item("CUSERGRAB").GetValue<bool>())
+            if (Spells[R].IsReady() && Spells[Q].IsReady() && Config.Item("CUSERGRAB").GetValue<bool>())
             {
-                var t = HeroManager.Enemies.Where(p => p.LSIsValidTarget(Spells[R].Range + 100)).OrderBy(q => TargetSelector.GetPriority(q)).LastOrDefault();
+                var t = HeroManager.Enemies.Where(p => p.IsValidTarget(Spells[R].Range + 100)).OrderBy(q => TargetSelector.GetPriority(q)).LastOrDefault();
                 if (t != null)
                 {
                     if (Config.Item("nograb" + t.ChampionName).GetValue<bool>())
                         return;
                     chase = true;
-                    if(Spells[W].LSIsReady())
+                    if(Spells[W].IsReady())
                         Spells[W].Cast();
-                    if(t.LSIsValidTarget(Spells[R].Range - 10))
+                    if(t.IsValidTarget(Spells[R].Range - 10))
                         Spells[R].Cast();
                 }
             }
             if (!chase)
             {
-                if (Spells[Q].LSIsReady() && Config.Item("CUSEQ").GetValue<bool>())
+                if (Spells[Q].IsReady() && Config.Item("CUSEQ").GetValue<bool>())
                 {
                     var t = TargetSelector.GetTarget(Spells[Q].Range - 30, TargetSelector.DamageType.Magical);
-                    if (t != null && (!t.HasBuffOfType(BuffType.SpellImmunity) && !t.HasBuffOfType(BuffType.SpellShield)) && t.LSIsValidTarget(Spells[Q].Range - 30))
+                    if (t != null && (!t.HasBuffOfType(BuffType.SpellImmunity) && !t.HasBuffOfType(BuffType.SpellShield)) && t.IsValidTarget(Spells[Q].Range - 30))
                     {
                         if (Config.Item("nograb" + t.ChampionName).GetValue<bool>())
                             return;
@@ -143,12 +143,12 @@ using EloBuddy;
                     }
                 }
                 
-                if (Spells[R].LSIsReady())
+                if (Spells[R].IsReady())
                 {
-                    var t = HeroManager.Enemies.Where(p => p.LSIsValidTarget(Spells[R].Range)).OrderBy(q => q.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition)).FirstOrDefault();
+                    var t = HeroManager.Enemies.Where(p => p.IsValidTarget(Spells[R].Range)).OrderBy(q => q.ServerPosition.Distance(ObjectManager.Player.ServerPosition)).FirstOrDefault();
                     if (t != null)
                     {
-                        if (t.HasBuffOfType(BuffType.Knockup) && t.LSIsValidTarget(Spells[R].Range) && Config.Item("CUSERGRAB").GetValue<bool>())
+                        if (t.HasBuffOfType(BuffType.Knockup) && t.IsValidTarget(Spells[R].Range) && Config.Item("CUSERGRAB").GetValue<bool>())
                             Spells[R].Cast();
                         else
                             Spells[R].CastIfWillHit(t, Config.Item("CUSERHIT").GetValue<Slider>().Value);
@@ -162,12 +162,12 @@ using EloBuddy;
             if (ObjectManager.Player.ManaPercent < Config.Item("HMANA").GetValue<Slider>().Value)
                 return;
 
-            if (Spells[Q].LSIsReady() && Config.Item("HUSEQ").GetValue<bool>())
+            if (Spells[Q].IsReady() && Config.Item("HUSEQ").GetValue<bool>())
             {
                 AIHeroClient target = null;
                
                 //toggle grab
-                if (TargetSelector.SelectedTarget != null && TargetSelector.SelectedTarget.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition) <= Spells[Q].Range - 30)
+                if (TargetSelector.SelectedTarget != null && TargetSelector.SelectedTarget.ServerPosition.Distance(ObjectManager.Player.ServerPosition) <= Spells[Q].Range - 30)
                     target = TargetSelector.SelectedTarget;
                 else
                     target = TargetSelector.GetTarget(Spells[Q].Range - 30, TargetSelector.DamageType.Magical);
@@ -182,9 +182,9 @@ using EloBuddy;
             if (ObjectManager.Player.ManaPercent < Config.Item("LMANA").GetValue<Slider>().Value)
                 return;
 
-            if (Spells[R].LSIsReady() && Config.Item("LUSER").GetValue<bool>())
+            if (Spells[R].IsReady() && Config.Item("LUSER").GetValue<bool>())
             {
-                var t = (from minion in MinionManager.GetMinions(Spells[R].Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth) where minion.LSIsValidTarget(Spells[R].Range) && Spells[R].GetDamage(minion) >= minion.Health orderby minion.Health ascending select minion);
+                var t = (from minion in MinionManager.GetMinions(Spells[R].Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth) where minion.IsValidTarget(Spells[R].Range) && Spells[R].GetDamage(minion) >= minion.Health orderby minion.Health ascending select minion);
                 if (t != null && t.Count() >= 3)
                     Spells[R].Cast(t.FirstOrDefault().ServerPosition);
             }
@@ -194,7 +194,7 @@ using EloBuddy;
         {
             if (args.Unit.IsMe && HeroManager.Enemies.Exists(p => p.NetworkId == args.Target.NetworkId) && ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && combo.Item("CUSEE").GetValue<bool>()) || (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && harass.Item("HUSEE").GetValue<bool>())))
             {
-                if (Spells[E].LSIsReady())
+                if (Spells[E].IsReady())
                     Spells[E].Cast();
 
                 EloBuddy.Player.IssueOrder(GameObjectOrder.AutoAttack, args.Target);
@@ -205,7 +205,7 @@ using EloBuddy;
         {
             if (sender.IsEnemy && sender.IsChampion() && ShineCommon.Utility.IsImmobileTarget(sender as AIHeroClient) && Config.Item("MAUTOQHP").GetValue<Slider>().Value >= (ObjectManager.Player.Health / ObjectManager.Player.MaxHealth) * 100)
             {
-                if (Spells[Q].LSIsReady() && sender.LSIsValidTarget(Spells[Q].Range) && Config.Item("MAUTOQIMMO").GetValue<bool>() && !Config.Item("noautograb" + (sender as AIHeroClient).ChampionName).GetValue<bool>())
+                if (Spells[Q].IsReady() && sender.IsValidTarget(Spells[Q].Range) && Config.Item("MAUTOQIMMO").GetValue<bool>() && !Config.Item("noautograb" + (sender as AIHeroClient).ChampionName).GetValue<bool>())
                     Spells[Q].Cast(sender.ServerPosition);
             }
         }
@@ -214,16 +214,16 @@ using EloBuddy;
         {
             if (Config.Item("MINTEN").GetValue<bool>())
             {
-                if (Config.Item("MINTQ").GetValue<bool>() && Spells[Q].LSIsReady() && Config.Item("MAUTOQHP").GetValue<Slider>().Value >= (ObjectManager.Player.Health / ObjectManager.Player.MaxHealth) * 100)
+                if (Config.Item("MINTQ").GetValue<bool>() && Spells[Q].IsReady() && Config.Item("MAUTOQHP").GetValue<Slider>().Value >= (ObjectManager.Player.Health / ObjectManager.Player.MaxHealth) * 100)
                     CastSkillshot(sender, Spells[Q], HitChance.Low);
 
-                if (Config.Item("MINTE").GetValue<bool>() && Spells[E].LSIsReady() && sender.LSDistance(ObjectManager.Player.ServerPosition) <= Spells[E].RangeSqr)
+                if (Config.Item("MINTE").GetValue<bool>() && Spells[E].IsReady() && sender.Distance(ObjectManager.Player.ServerPosition) <= Spells[E].RangeSqr)
                 {
                     Spells[E].Cast();
                     EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, sender);
                 }
 
-                if (Config.Item("MINTR").GetValue<bool>() && Spells[R].LSIsReady() && sender.LSIsValidTarget(Spells[R].Range))
+                if (Config.Item("MINTR").GetValue<bool>() && Spells[R].IsReady() && sender.IsValidTarget(Spells[R].Range))
                     Spells[R].Cast();
             }
         }

@@ -26,7 +26,7 @@ using EloBuddy; namespace Activator.Items.Consumables
             {
                 if (hero.Player.NetworkId == Player.NetworkId)
                 {
-                    if (hero.Player.LSHasBuff("ItemMiniRegenPotion") || 
+                    if (hero.Player.HasBuff("ItemMiniRegenPotion") || 
                         hero.Player.MaxHealth - hero.Player.Health + hero.IncomeDamage <= 150)
                         return;
 
@@ -36,7 +36,7 @@ using EloBuddy; namespace Activator.Items.Consumables
                         if ((hero.IncomeDamage > 0 || hero.MinionDamage > 0 || hero.TowerDamage > 0) ||
                             !Menu.Item("use" + Name + "cbat").GetValue<bool>())
                         {
-                            if (!hero.Player.LSIsRecalling() && !hero.Player.LSInFountain())
+                            if (!hero.Player.IsRecalling() && !hero.Player.InFountain())
                                 UseItem();
                         }
                     }
@@ -47,7 +47,7 @@ using EloBuddy; namespace Activator.Items.Consumables
                     if (hero.Player.Mana / hero.Player.MaxMana * 100 <= 
                         Menu.Item("selflowmp" + Name + "pct").GetValue<Slider>().Value)
                     {
-                        if (!hero.Player.LSIsRecalling() && !hero.Player.LSInFountain())
+                        if (!hero.Player.IsRecalling() && !hero.Player.InFountain())
                             UseItem();     
                     }       
                 }

@@ -65,7 +65,7 @@ namespace SPrediction
         /// <returns>Prediction result as <see cref="Prediction.Vector.Result"/></returns>
         public static Result GetPrediction(Prediction.Input input, float vectorLenght)
         {
-            return GetPrediction(input.Target, input.SpellWidth, input.SpellDelay, input.SpellMissileSpeed, input.SpellRange, vectorLenght, input.Path, input.AvgReactionTime, input.LastMovChangeTime, input.AvgPathLenght, input.RangeCheckFrom.LSTo2D());
+            return GetPrediction(input.Target, input.SpellWidth, input.SpellDelay, input.SpellMissileSpeed, input.SpellRange, vectorLenght, input.Path, input.AvgReactionTime, input.LastMovChangeTime, input.AvgPathLenght, input.RangeCheckFrom.To2D());
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace SPrediction
         /// <returns>Prediction result as <see cref="Prediction.Vector.Result"/></returns>
         public static Result GetPrediction(AIHeroClient target, float width, float delay, float vectorSpeed, float range, float vectorLenght)
         {
-            return GetPrediction(target, width, delay, vectorSpeed, range, vectorSpeed, target.LSGetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), ObjectManager.Player.ServerPosition.LSTo2D());
+            return GetPrediction(target, width, delay, vectorSpeed, range, vectorSpeed, target.GetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), ObjectManager.Player.ServerPosition.To2D());
         }
 
         /// <summary>
@@ -107,42 +107,42 @@ namespace SPrediction
             //auto aoe hit (2 hits with using one target as from position)
             if (target.IsChampion()) //do these calcs if champion kappa
             {
-                if (ObjectManager.Player.LSCountEnemiesInRange(range) > 0 && ObjectManager.Player.LSCountEnemiesInRange(range + vectorLenght) > 1) //if there is at least 1 enemy in range && at least 2 enemy which laser can hit
+                if (ObjectManager.Player.CountEnemiesInRange(range) > 0 && ObjectManager.Player.CountEnemiesInRange(range + vectorLenght) > 1) //if there is at least 1 enemy in range && at least 2 enemy which laser can hit
                 {
                     Vector2 predPos1 = Prediction.GetFastUnitPosition(target, delay); //get target unit position after delay
                     foreach (var enemy in HeroManager.Enemies) //loop all enemies
                     {
-                        if (enemy.NetworkId != target.NetworkId && enemy.LSDistance(rangeCheckFrom) < range + vectorLenght) //if enemy is not given target and enemy is hitable by laser
+                        if (enemy.NetworkId != target.NetworkId && enemy.Distance(rangeCheckFrom) < range + vectorLenght) //if enemy is not given target and enemy is hitable by laser
                         {
                             Vector2 predPos2 = Prediction.GetFastUnitPosition(enemy, delay); //get enemy unit position after delay
-                            if (predPos1.LSDistance(rangeCheckFrom) < range) //if target is in range 
+                            if (predPos1.Distance(rangeCheckFrom) < range) //if target is in range 
                             {
-                                Prediction.Result predRes = LinePrediction.GetPrediction(enemy, width, delay, vectorSpeed, vectorLenght, false, enemy.LSGetWaypoints(), enemy.AvgMovChangeTime(), enemy.LastMovChangeTime(), enemy.AvgPathLenght(), 360, predPos1 - (predPos1 - rangeCheckFrom).LSNormalized().LSPerpendicular() * 30, predPos1 - (predPos1 - rangeCheckFrom).LSNormalized().LSPerpendicular() * 30); //get enemy prediciton with from = target's position (a bit backward)
+                                Prediction.Result predRes = LinePrediction.GetPrediction(enemy, width, delay, vectorSpeed, vectorLenght, false, enemy.GetWaypoints(), enemy.AvgMovChangeTime(), enemy.LastMovChangeTime(), enemy.AvgPathLenght(), 360, predPos1 - (predPos1 - rangeCheckFrom).Normalized().Perpendicular() * 30, predPos1 - (predPos1 - rangeCheckFrom).Normalized().Perpendicular() * 30); //get enemy prediciton with from = target's position (a bit backward)
                                 if(predRes.HitChance >= HitChance.Low)
-                                    return predRes.AsVectorResult(predPos1 - (predPos1 - rangeCheckFrom).LSNormalized().LSPerpendicular() * 30);
+                                    return predRes.AsVectorResult(predPos1 - (predPos1 - rangeCheckFrom).Normalized().Perpendicular() * 30);
                             }
-                            else if (predPos2.LSDistance(rangeCheckFrom) < range) //if enemy is in range
+                            else if (predPos2.Distance(rangeCheckFrom) < range) //if enemy is in range
                             {
-                                Prediction.Result predRes = LinePrediction.GetPrediction(target, width, delay, vectorSpeed, vectorLenght, false, path, avgt, movt, avgp, 360, predPos2 - (predPos2 - rangeCheckFrom).LSNormalized().LSPerpendicular() * 30, predPos2 - (predPos2 - rangeCheckFrom).LSNormalized().LSPerpendicular() * 30); //get target prediction with from = enemy's position (a bit backward)
+                                Prediction.Result predRes = LinePrediction.GetPrediction(target, width, delay, vectorSpeed, vectorLenght, false, path, avgt, movt, avgp, 360, predPos2 - (predPos2 - rangeCheckFrom).Normalized().Perpendicular() * 30, predPos2 - (predPos2 - rangeCheckFrom).Normalized().Perpendicular() * 30); //get target prediction with from = enemy's position (a bit backward)
                                 if (predRes.HitChance >= HitChance.Low)
-                                    return predRes.AsVectorResult(predPos2 - (predPos2 - rangeCheckFrom).LSNormalized().LSPerpendicular() * 30);
+                                    return predRes.AsVectorResult(predPos2 - (predPos2 - rangeCheckFrom).Normalized().Perpendicular() * 30);
                             }
                         }
                     }
                 }
             }
 
-            Vector2 immobileFrom = rangeCheckFrom + (target.ServerPosition.LSTo2D() - rangeCheckFrom).LSNormalized() * range;
+            Vector2 immobileFrom = rangeCheckFrom + (target.ServerPosition.To2D() - rangeCheckFrom).Normalized() * range;
 
             if (path.Count <= 1) //if target is not moving, easy to hit
             {
                 result.HitChance = HitChance.VeryHigh;
                 result.CastSourcePosition = immobileFrom;
-                result.CastTargetPosition = target.ServerPosition.LSTo2D();
+                result.CastTargetPosition = target.ServerPosition.To2D();
                 result.UnitPosition = result.CastTargetPosition;
                 result.CollisionResult = Collision.GetCollisions(immobileFrom, result.CastTargetPosition, range, width, delay, vectorSpeed);
 
-                if (immobileFrom.LSDistance(result.CastTargetPosition) > vectorLenght - Prediction.GetArrivalTime(immobileFrom.LSDistance(result.CastTargetPosition), delay, vectorSpeed) * target.MoveSpeed)
+                if (immobileFrom.Distance(result.CastTargetPosition) > vectorLenght - Prediction.GetArrivalTime(immobileFrom.Distance(result.CastTargetPosition), delay, vectorSpeed) * target.MoveSpeed)
                     result.HitChance = HitChance.OutOfRange;
 
                 return result;
@@ -154,12 +154,12 @@ namespace SPrediction
                 {
                     result.HitChance = HitChance.VeryHigh;
                     result.CastSourcePosition = immobileFrom;
-                    result.CastTargetPosition = target.ServerPosition.LSTo2D();
+                    result.CastTargetPosition = target.ServerPosition.To2D();
                     result.UnitPosition = result.CastTargetPosition;
                     result.CollisionResult = Collision.GetCollisions(immobileFrom, result.CastTargetPosition, range, width, delay, vectorSpeed);
 
                     //check if target can dodge with moving backward
-                    if (immobileFrom.LSDistance(result.CastTargetPosition) > range - Prediction.GetArrivalTime(immobileFrom.LSDistance(result.CastTargetPosition), delay, vectorSpeed) * target.MoveSpeed)
+                    if (immobileFrom.Distance(result.CastTargetPosition) > range - Prediction.GetArrivalTime(immobileFrom.Distance(result.CastTargetPosition), delay, vectorSpeed) * target.MoveSpeed)
                         result.HitChance = HitChance.OutOfRange;
 
                     return result;
@@ -169,20 +169,20 @@ namespace SPrediction
                 if (avgp < 400 && movt < 100)
                 {
                     result.HitChance = HitChance.High;
-                    result.CastTargetPosition = target.ServerPosition.LSTo2D();
+                    result.CastTargetPosition = target.ServerPosition.To2D();
                     result.CastSourcePosition = immobileFrom;
                     result.UnitPosition = result.CastTargetPosition;
                     result.CollisionResult = Collision.GetCollisions(immobileFrom, result.CastTargetPosition, range, width, delay, vectorSpeed);
 
                     //check if target can dodge with moving backward
-                    if (immobileFrom.LSDistance(result.CastTargetPosition) > range - Prediction.GetArrivalTime(immobileFrom.LSDistance(result.CastTargetPosition), delay, vectorSpeed) * target.MoveSpeed)
+                    if (immobileFrom.Distance(result.CastTargetPosition) > range - Prediction.GetArrivalTime(immobileFrom.Distance(result.CastTargetPosition), delay, vectorSpeed) * target.MoveSpeed)
                         result.HitChance = HitChance.OutOfRange;
 
                     return result;
                 }
             }
 
-            if (target.LSIsDashing())
+            if (target.IsDashing())
                 return Prediction.GetDashingPrediction(target, width, delay, vectorSpeed, range, false, SkillshotType.SkillshotLine, immobileFrom, rangeCheckFrom).AsVectorResult(immobileFrom);
 
             if (SPrediction.Utility.IsImmobileTarget(target))
@@ -191,7 +191,7 @@ namespace SPrediction
             for (int i = 0; i < path.Count - 1; i++)
             {
                 Vector2 point = Vector2.Zero;
-                if (path[i].LSDistance(ObjectManager.Player.ServerPosition) < range)
+                if (path[i].Distance(ObjectManager.Player.ServerPosition) < range)
                     point = path[i];
                 else
                     point = Geometry.ClosestCirclePoint(rangeCheckFrom, range, path[i]);
@@ -203,7 +203,7 @@ namespace SPrediction
             }
 
             result.CastSourcePosition = immobileFrom;
-            result.CastTargetPosition = target.ServerPosition.LSTo2D();
+            result.CastTargetPosition = target.ServerPosition.To2D();
             result.HitChance = HitChance.Impossible;
             return result;
         }
@@ -221,15 +221,15 @@ namespace SPrediction
         public static AoeResult GetAoePrediction(float width, float delay, float vectorSpeed, float range, float vectorLenght, Vector2 rangeCheckFrom)
         {
             AoeResult result = new AoeResult();
-            var enemies = HeroManager.Enemies.Where(p => p.LSIsValidTarget() && Prediction.GetFastUnitPosition(p, delay, 0, rangeCheckFrom).LSDistance(rangeCheckFrom) < range);
+            var enemies = HeroManager.Enemies.Where(p => p.IsValidTarget() && Prediction.GetFastUnitPosition(p, delay, 0, rangeCheckFrom).Distance(rangeCheckFrom) < range);
 
             foreach (AIHeroClient enemy in enemies)
             {
-                List<Vector2> path = enemy.LSGetWaypoints();
+                List<Vector2> path = enemy.GetWaypoints();
                 if (path.Count <= 1)
                 {
-                    Vector2 from = rangeCheckFrom + (enemy.ServerPosition.LSTo2D() - rangeCheckFrom).LSNormalized() * range;
-                    Vector2 to = from + (enemy.ServerPosition.LSTo2D() - from).LSNormalized() * vectorLenght;
+                    Vector2 from = rangeCheckFrom + (enemy.ServerPosition.To2D() - rangeCheckFrom).Normalized() * range;
+                    Vector2 to = from + (enemy.ServerPosition.To2D() - from).Normalized() * vectorLenght;
                     Collision.Result colResult = Collision.GetCollisions(from, to, range, width, delay, vectorSpeed);
 
                     if (colResult.Objects.HasFlag(Collision.Flags.EnemyChampions))
@@ -240,7 +240,7 @@ namespace SPrediction
                             result = new AoeResult
                                      {
                                          CastSourcePosition = from,
-                                         CastTargetPosition = enemy.ServerPosition.LSTo2D(),
+                                         CastTargetPosition = enemy.ServerPosition.To2D(),
                                          HitCount = collisionCount,
                                          CollisionResult = colResult
                                      };
@@ -249,7 +249,7 @@ namespace SPrediction
                 }
                 else
                 {
-                    if (!enemy.LSIsDashing())
+                    if (!enemy.IsDashing())
                     {
                         for (int i = 0; i < path.Count - 1; i++)
                         {
@@ -257,7 +257,7 @@ namespace SPrediction
                             Prediction.Result prediction = Prediction.GetPrediction(enemy, width, delay, vectorSpeed, vectorLenght, false, SkillshotType.SkillshotLine, path, enemy.AvgMovChangeTime(), enemy.LastMovChangeTime(), enemy.AvgPathLenght(), enemy.LastAngleDiff(), point, rangeCheckFrom);
                             if (prediction.HitChance > HitChance.Medium)
                             {
-                                Vector2 to = point + (prediction.CastPosition - point).LSNormalized() * vectorLenght;
+                                Vector2 to = point + (prediction.CastPosition - point).Normalized() * vectorLenght;
                                 Collision.Result colResult = Collision.GetCollisions(point, to, range, width, delay, vectorSpeed, false);
                                 if (colResult.Objects.HasFlag(Collision.Flags.EnemyChampions))
                                 {

@@ -32,7 +32,7 @@ using EloBuddy;
             e = champion.Spells.E;
             w = champion.Spells.W;
             aaRange = Orbwalking.GetRealAutoAttackRange(champion.Player);
-            aaDamage = target => (float)champion.Player.LSGetAutoAttackDamage(target);
+            aaDamage = target => (float)champion.Player.GetAutoAttackDamage(target);
 
             if (KoreanUtils.GetParamBool(champion.MainMenu, "killsteal"))
             {
@@ -49,7 +49,7 @@ using EloBuddy;
 
             List<AIHeroClient> targetList =
                 ObjectManager.Get<AIHeroClient>()
-                    .Where(target => target.HealthPercent < 20f && target.LSDistance(player) < w.Range && !target.IsDead)
+                    .Where(target => target.HealthPercent < 20f && target.Distance(player) < w.Range && !target.IsDead)
                     .ToList();
 
             if (targetList.Count == 0)
@@ -60,9 +60,9 @@ using EloBuddy;
             targetList =
                 targetList.Where(
                     target =>
-                    ((e.LSIsReady() && !target.IsDead && target.LSDistance(player) > aaRange
-                      && target.LSDistance(player) < e.Range + aaRange && aaDamage(target) * 1.4f > target.Health)
-                     || (w.LSIsReady() && w.CanCast(target) && w.IsKillable(target)))).ToList();
+                    ((e.IsReady() && !target.IsDead && target.Distance(player) > aaRange
+                      && target.Distance(player) < e.Range + aaRange && aaDamage(target) * 1.4f > target.Health)
+                     || (w.IsReady() && w.CanCast(target) && w.IsKillable(target)))).ToList();
 
             if (targetList.Count == 0)
             {
@@ -71,7 +71,7 @@ using EloBuddy;
 
             foreach (AIHeroClient target in targetList)
             {
-                if (w.LSIsReady() && w.CanCast(target) && w.IsKillable(target))
+                if (w.IsReady() && w.CanCast(target) && w.IsKillable(target))
                 {
                     w.Cast(target);
                 }

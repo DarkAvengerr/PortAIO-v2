@@ -91,7 +91,7 @@ using EloBuddy; namespace SFXUtility.Features.Timers
                     _relicObjs.Where(
                         h =>
                             !h.Picked && sender.Name.Equals(h.ObjectName, StringComparison.OrdinalIgnoreCase) &&
-                            h.Position.LSDistance(sender.Position) < 300f))
+                            h.Position.Distance(sender.Position) < 300f))
                 {
                     relic.Picked = true;
                     relic.NextRespawnTime = (int) Game.Time + relic.RespawnTime;
@@ -117,7 +117,7 @@ using EloBuddy; namespace SFXUtility.Features.Timers
                     _relicObjs.Where(
                         h =>
                             h.Picked && sender.Name.Equals(h.ObjectName, StringComparison.OrdinalIgnoreCase) &&
-                            h.Position.LSDistance(sender.Position) < 300f))
+                            h.Position.Distance(sender.Position) < 300f))
                 {
                     relic.Picked = false;
                 }

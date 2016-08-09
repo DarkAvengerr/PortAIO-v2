@@ -16,7 +16,7 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
         public bool ShouldGetExecuted()
         {
             return MenuExtensions.GetItemValue<KeyBind>("dz191.vhr.misc.condemn.enextauto").Active &&
-                   Variables.spells[SpellSlot.E].LSIsReady();
+                   Variables.spells[SpellSlot.E].IsReady();
         }
 
         public ModuleType GetModuleType()
@@ -27,7 +27,7 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
         public void OnExecute()
         {
             var target = Variables.Orbwalker.GetTarget();
-            if (target.LSIsValidTarget(Variables.spells[SpellSlot.E].Range) && (target is AIHeroClient))
+            if (target.IsValidTarget(Variables.spells[SpellSlot.E].Range) && (target is AIHeroClient))
             {
                 var menuKey = Variables.Menu.Item("dz191.vhr.misc.condemn.enextauto");
                 var key = menuKey.GetValue<KeyBind>().Key;

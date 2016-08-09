@@ -48,21 +48,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || current != SwallowedTarget.None)
+            if (!W.IsReady() || current != SwallowedTarget.None)
                 return;
 
-            if (target.LSDistance(player) <= 250 && target.GetBuffCount("TahmKenchPDebuffCounter") == 3 && current == SwallowedTarget.None)
+            if (target.Distance(player) <= 250 && target.GetBuffCount("TahmKenchPDebuffCounter") == 3 && current == SwallowedTarget.None)
                 W.CastOnUnit(target);
             else if (current == SwallowedTarget.None)
             {
-                W.CastOnUnit(ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsEnemy).OrderBy(x => x.LSDistance(player)).First());
+                W.CastOnUnit(ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsEnemy).OrderBy(x => x.Distance(player)).First());
             }
             else if (current == SwallowedTarget.Minion)
             {
@@ -72,7 +72,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
            // E.Cast();
         }
@@ -80,7 +80,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             
         }
@@ -119,7 +119,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             foreach (var minion in MinionManager.GetMinions(Q.Range))
             {
-                if (minion.Health > ObjectManager.Player.LSGetAutoAttackDamage(minion) && minion.Health < Q.GetDamage(minion))
+                if (minion.Health > ObjectManager.Player.GetAutoAttackDamage(minion) && minion.Health < Q.GetDamage(minion))
                 {
                     Q.Cast(minion);
                     return;
@@ -136,28 +136,28 @@ using EloBuddy; namespace ARAMDetFull.Champions
             try
             {
                 var hero = sender as AIHeroClient;
-                if (hero != null && hero.IsEnemy && !player.LSInFountain())
+                if (hero != null && hero.IsEnemy && !player.InFountain())
                 {
                     var swallowAlly =
                         HeroManager.Allies.FirstOrDefault(
                             x => x.HealthPercent < 25
                                 && ARAMSimulator.inDanger
-                                && x.IsAlly && player.LSDistance(x) <= 500
+                                && x.IsAlly && player.Distance(x) <= 500
                                 && !x.IsDead);
-                    if (swallowAlly != null && current == SwallowedTarget.None && W.LSIsReady())
+                    if (swallowAlly != null && current == SwallowedTarget.None && W.IsReady())
                     {
                         W.CastOnUnit(swallowAlly);
                         current = SwallowedTarget.Ally;
                     }
 
                     AIHeroClient enemy = hero;
-                    if (E.LSIsReady())
+                    if (E.IsReady())
                     {
                         SpellDataInst s =
                             enemy.Spellbook.Spells.FirstOrDefault(x => x.SData.Name.Equals(args.SData.Name));
                         if (s == null)
                             return;
-                        if (enemy.LSGetSpellDamage(player, s.Slot) > player.Health)
+                        if (enemy.GetSpellDamage(player, s.Slot) > player.Health)
                             E.Cast();
                         else if (player.HealthPercent <= 45)
                             E.Cast();

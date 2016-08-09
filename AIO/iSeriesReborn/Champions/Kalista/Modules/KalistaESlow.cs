@@ -28,7 +28,7 @@ using EloBuddy;
 
         public bool ShouldRun()
         {
-            return Variables.spells[SpellSlot.E].LSIsReady() &&
+            return Variables.spells[SpellSlot.E].IsReady() &&
                    MenuExtensions.GetItemValue<bool>("iseriesr.kalista.misc.useeslow");
         }
 
@@ -37,17 +37,17 @@ using EloBuddy;
             var minions =
                 GameObjects.EnemyMinions.Where(
                     minion =>
-                        minion.LSIsValidTarget(Variables.spells[SpellSlot.E].Range) && minion.HasRend() && KalistaE.CanBeRendKilled(minion));
+                        minion.IsValidTarget(Variables.spells[SpellSlot.E].Range) && minion.HasRend() && KalistaE.CanBeRendKilled(minion));
 
             var heroWithRendStack =
                         HeroManager.Enemies.Where(
                             target =>
-                                target.LSIsValidTarget(Variables.spells[SpellSlot.E].Range) &&
+                                target.IsValidTarget(Variables.spells[SpellSlot.E].Range) &&
                                 target.HasRend() && target.GetRendBuff().Count >= 3).OrderByDescending(KalistaE.GetRendDamage).FirstOrDefault();
 
             if (heroWithRendStack != null 
                 && minions.Any() 
-                &&  heroWithRendStack.LSDistance(ObjectManager.Player) < Orbwalking.GetRealAutoAttackRange(null) * 1.4f 
+                &&  heroWithRendStack.Distance(ObjectManager.Player) < Orbwalking.GetRealAutoAttackRange(null) * 1.4f 
                 && (Environment.TickCount - LastCastTime > 250) && heroWithRendStack.HealthPercent >= 35)
             {
                 Variables.spells[SpellSlot.E].Cast();

@@ -36,7 +36,7 @@ namespace Thresh___The_Chain_Warden
         {
             if (Player.ChampionName != "Thresh") return;
             Notifications.AddNotification("Thresh - The Chain Warden by DanZ Loaded!", 1000);
-            FlashSlot = Player.LSGetSpellSlot("SummonerFlash");
+            FlashSlot = Player.GetSpellSlot("SummonerFlash");
 
             Q = new Spell(SpellSlot.Q, 1100);
             Q2 = new Spell(SpellSlot.Q, 1400);
@@ -140,7 +140,7 @@ namespace Thresh___The_Chain_Warden
 
             }
             var enemy = TargetSelector.GetTarget(1500, TargetSelector.DamageType.Magical);
-            List<Vector2> waypoints = enemy.LSGetWaypoints();
+            List<Vector2> waypoints = enemy.GetWaypoints();
             for (int i = 0; i < waypoints.Count - 1; i++)
             {
 
@@ -180,7 +180,7 @@ namespace Thresh___The_Chain_Warden
                     var target2 = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
                     if (!Config.Item("EPush").GetValue<bool>())
                     {
-                        Render.Circle.DrawCircle(V2E(target2.Position, Player.Position, Player.LSDistance(target2.Position) + 400).To3D(), 100, Color.Red, 1);
+                        Render.Circle.DrawCircle(V2E(target2.Position, Player.Position, Player.Distance(target2.Position) + 400).To3D(), 100, Color.Red, 1);
                     }
                     else
                     {
@@ -199,12 +199,12 @@ namespace Thresh___The_Chain_Warden
 
         private static void ThrowLantern()
         {
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                var NearAllies = Player.LSGetAlliesInRange(W.Range) //W.Range instead of 1200, also there is no "On most damaged"
+                var NearAllies = Player.GetAlliesInRange(W.Range) //W.Range instead of 1200, also there is no "On most damaged"
                                 .Where(x => !x.IsMe)
                                 .Where(x => !x.IsDead)
-                                .Where(x => x.LSDistance(Player.Position) <= W.Range + 250)
+                                .Where(x => x.Distance(Player.Position) <= W.Range + 250)
                                 .FirstOrDefault();
 
                 if (NearAllies == null) return;
@@ -251,7 +251,7 @@ namespace Thresh___The_Chain_Warden
 
         private static void OnPossibleToInterrupt(AIHeroClient target, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (Config.Item("EInterrupt").GetValue<bool>() && E.LSIsReady() && E.IsInRange(target))
+            if (Config.Item("EInterrupt").GetValue<bool>() && E.IsReady() && E.IsInRange(target))
             {
                 E.Cast(target.ServerPosition);
             }
@@ -263,11 +263,11 @@ namespace Thresh___The_Chain_Warden
                 return;
             }
 
-            if (Config.Item("EGapCloser").GetValue<bool>() && E.LSIsReady() && E.IsInRange(gapcloser.Start))
+            if (Config.Item("EGapCloser").GetValue<bool>() && E.IsReady() && E.IsInRange(gapcloser.Start))
             {
-                E.Cast(Player.Position.LSExtend(gapcloser.Sender.Position, 250));
+                E.Cast(Player.Position.Extend(gapcloser.Sender.Position, 250));
             }
-            if (Config.Item("RGapCloser").GetValue<bool>() && R.LSIsReady() && R.IsInRange(gapcloser.Start))
+            if (Config.Item("RGapCloser").GetValue<bool>() && R.IsReady() && R.IsInRange(gapcloser.Start))
                 R.Cast();
             {
             }
@@ -293,23 +293,23 @@ namespace Thresh___The_Chain_Warden
 
         static Vector2 V2E(Vector3 from, Vector3 direction, float distance)
         {
-            return from.LSTo2D() + distance * Vector3.Normalize(direction - from).LSTo2D();
+            return from.To2D() + distance * Vector3.Normalize(direction - from).To2D();
         }
 
         private static void Pull()
         {
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
 
-            if (E.LSIsReady() && Player.LSDistance(target.Position) < E.Range)
+            if (E.IsReady() && Player.Distance(target.Position) < E.Range)
             {
-                E.Cast(target.Position.LSExtend(Player.Position, Vector3.Distance(target.Position, Player.Position) + 400));
+                E.Cast(target.Position.Extend(Player.Position, Vector3.Distance(target.Position, Player.Position) + 400));
             }
         }
 
         private static void Push()
         {
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-            if (E.LSIsReady() && Player.LSDistance(target.Position) < E.Range)
+            if (E.IsReady() && Player.Distance(target.Position) < E.Range)
             {
                 E.Cast(target.Position);
             }
@@ -319,7 +319,7 @@ namespace Thresh___The_Chain_Warden
         {
             var target = TargetSelector.GetTarget(1300, TargetSelector.DamageType.Magical);
 
-            if (Q.LSIsReady() && (Config.Item("UseQHarass").GetValue<bool>()))
+            if (Q.IsReady() && (Config.Item("UseQHarass").GetValue<bool>()))
             {
                 var Qprediction = Q.GetPrediction(target);
 
@@ -330,15 +330,15 @@ namespace Thresh___The_Chain_Warden
 
             }
 
-            if (E.LSIsReady() && Config.Item("UseEHarass").GetValue<bool>() && Player.LSDistance(target.Position) < E.Range)
+            if (E.IsReady() && Config.Item("UseEHarass").GetValue<bool>() && Player.Distance(target.Position) < E.Range)
             {
-                E.Cast(V2E(target.Position, Player.Position, Player.LSDistance(target.Position) + 400));
+                E.Cast(V2E(target.Position, Player.Position, Player.Distance(target.Position) + 400));
             }
         }
         private static void Combo()
         {
             var target = TargetSelector.GetTarget(1300, TargetSelector.DamageType.Magical);
-            if (Q.LSIsReady() && (Config.Item("UseQCombo").GetValue<bool>()))
+            if (Q.IsReady() && (Config.Item("UseQCombo").GetValue<bool>()))
             {
                 Q.CastIfHitchanceEquals(target, HitChance.Dashing, true);
                 Q.CastIfHitchanceEquals(target, HitChance.Immobile, true);
@@ -351,11 +351,11 @@ namespace Thresh___The_Chain_Warden
 
             }
 
-            if (E.LSIsReady() && Config.Item("UseECombo").GetValue<bool>() && Vector3.Distance(target.Position, Player.Position) < E.Range)
+            if (E.IsReady() && Config.Item("UseECombo").GetValue<bool>() && Vector3.Distance(target.Position, Player.Position) < E.Range)
             {
                 if (!Config.Item("EPush").GetValue<bool>())
                 {
-                    E.Cast(target.Position.LSExtend(Player.Position, Vector3.Distance(target.Position, Player.Position) + 400));
+                    E.Cast(target.Position.Extend(Player.Position, Vector3.Distance(target.Position, Player.Position) + 400));
                 }
                 else
                 {
@@ -363,7 +363,7 @@ namespace Thresh___The_Chain_Warden
                 }
             }
 
-            if (R.LSIsReady() && (Config.Item("UseRCombo").GetValue<bool>()) && Player.LSCountEnemiesInRange(R.Range) >= 1)
+            if (R.IsReady() && (Config.Item("UseRCombo").GetValue<bool>()) && Player.CountEnemiesInRange(R.Range) >= 1)
             {
                 R.Cast();
             }
@@ -377,7 +377,7 @@ namespace Thresh___The_Chain_Warden
 
             if (Player.Distance3D(target) > Q.Range)
             {
-                if (FlashSlot != SpellSlot.Unknown && Player.Spellbook.CanUseSpell(FlashSlot) == SpellState.Ready && Q.LSIsReady())
+                if (FlashSlot != SpellSlot.Unknown && Player.Spellbook.CanUseSpell(FlashSlot) == SpellState.Ready && Q.IsReady())
                 {
                     Q2.UpdateSourcePosition(V2E(ObjectManager.Player.Position, target.Position, FlashRange).To3D());
                     var predPos = Q2.GetPrediction(target);

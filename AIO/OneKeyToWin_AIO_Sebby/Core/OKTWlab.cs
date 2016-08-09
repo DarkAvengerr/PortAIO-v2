@@ -53,15 +53,15 @@ namespace OneKeyToWin_AIO_Sebby.Core
         private void Game_OnSendPacket(GamePacketEventArgs args)
         {
             return;
-            if (args.LSGetPacketId() == 166)
+            if (args.GetPacketId() == 166)
             {
                 //args.Process = false;
             }
 
-            if (args.LSGetPacketId() != 102 && args.LSGetPacketId() != 215)
+            if (args.GetPacketId() != 102 && args.GetPacketId() != 215)
             {
 
-                Program.debug(Game.Time + " PAck " + args.LSGetPacketId());
+                Program.debug(Game.Time + " PAck " + args.GetPacketId());
             }
 
         }
@@ -94,18 +94,18 @@ namespace OneKeyToWin_AIO_Sebby.Core
         {
             var angle = 60f * (float)Math.PI / 180;
             var range = 3500;
-            var end2 = end - ObjectManager.Player.Position.LSTo2D();
-            var edge1 = end2.LSRotated(-angle / 2);
-            var edge2 = edge1.LSRotated(angle);
+            var end2 = end - ObjectManager.Player.Position.To2D();
+            var edge1 = end2.Rotated(-angle / 2);
+            var edge2 = edge1.Rotated(angle);
 
 
-            var point = Game.CursorPos.LSTo2D() - ObjectManager.Player.Position.LSTo2D();
-            if (point.LSDistance(new Vector2(), true) < range * range)
+            var point = Game.CursorPos.To2D() - ObjectManager.Player.Position.To2D();
+            if (point.Distance(new Vector2(), true) < range * range)
             {
                 
-                if (edge1.LSCrossProduct(point) > 0)
+                if (edge1.CrossProduct(point) > 0)
                 {
-                    if (point.LSCrossProduct(edge2) > 0)
+                    if (point.CrossProduct(edge2) > 0)
                     {
                         Program.debug("dupa " + edge1);
                         Render.Circle.DrawCircle(Game.CursorPos, 50, System.Drawing.Color.Orange, 1);
@@ -118,10 +118,10 @@ namespace OneKeyToWin_AIO_Sebby.Core
         private void Drawing_OnDraw(EventArgs args)
         {
             return;
-            GetConeTarget(endPosG.LSTo2D());
+            GetConeTarget(endPosG.To2D());
             Render.Circle.DrawCircle(endPosG, 50, System.Drawing.Color.Red, 1);
             //OktwCommon.DrawLineRectangle(Game.CursorPos, ObjectManager.Player.Position, 75, 1, System.Drawing.Color.DimGray);
-            //drawText("Range " + ObjectManager.Player.LSDistance(Game.CursorPos), ObjectManager.Player.Position.LSExtend(Game.CursorPos, 400), System.Drawing.Color.Gray);
+            //drawText("Range " + ObjectManager.Player.Distance(Game.CursorPos), ObjectManager.Player.Position.Extend(Game.CursorPos, 400), System.Drawing.Color.Gray);
 
 
             int radius = 100;
@@ -129,10 +129,10 @@ namespace OneKeyToWin_AIO_Sebby.Core
             var end2 = Game.CursorPos;
 
 
-            Vector2 start = start2.LSTo2D();
-            Vector2 end = end2.LSTo2D();
-            var dir = (end - start).LSNormalized();
-            var pDir = dir.LSPerpendicular();
+            Vector2 start = start2.To2D();
+            Vector2 end = end2.To2D();
+            var dir = (end - start).Normalized();
+            var pDir = dir.Perpendicular();
 
             var rightEndPos = end + pDir * radius;
             var leftEndPos = end - pDir * radius;
@@ -142,11 +142,11 @@ namespace OneKeyToWin_AIO_Sebby.Core
             var lEndPos  =new Vector3(leftEndPos.X, leftEndPos.Y, ObjectManager.Player.Position.Z);
 
 
-            var step = start2.LSDistance(rEndPos) / 10;
+            var step = start2.Distance(rEndPos) / 10;
             for (var i = 0; i < 10; i++)
             {
-                var pr = start2.LSExtend(rEndPos, step * i);
-                var pl = start2.LSExtend(lEndPos, step * i);
+                var pr = start2.Extend(rEndPos, step * i);
+                var pl = start2.Extend(lEndPos, step * i);
                 Render.Circle.DrawCircle(pr, 50, System.Drawing.Color.Orange, 1);
                 Render.Circle.DrawCircle(pl, 50, System.Drawing.Color.Orange, 1);
             }
@@ -163,7 +163,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
         private void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             return;
-            if (sender.IsMe && !args.SData.LSIsAutoAttack())
+            if (sender.IsMe && !args.SData.IsAutoAttack())
             {
                 castTime = Game.Time;
                 //Program.debug("speed: " +args.SData.MissileSpeed);

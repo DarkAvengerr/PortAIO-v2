@@ -49,7 +49,7 @@ namespace Pantheon
 
                 if (oMob != null)
                 {
-                    if (oMob.LSIsValidTarget(spellRange))
+                    if (oMob.IsValidTarget(spellRange))
                     {
                         return oMob;
                     }

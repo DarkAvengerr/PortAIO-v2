@@ -53,22 +53,22 @@ using EloBuddy; namespace SFXUtility.Library.Extensions.SharpDX
             {
                 return true;
             }
-            if (start.LSIntersection(end, new Vector2(0, 0), new Vector2(Drawing.Width, 0)).Intersects)
+            if (start.Intersection(end, new Vector2(0, 0), new Vector2(Drawing.Width, 0)).Intersects)
             {
                 return true;
             }
-            if (start.LSIntersection(end, new Vector2(0, 0), new Vector2(0, Drawing.Height)).Intersects)
+            if (start.Intersection(end, new Vector2(0, 0), new Vector2(0, Drawing.Height)).Intersects)
             {
                 return true;
             }
             if (
-                start.LSIntersection(end, new Vector2(0, Drawing.Height), new Vector2(Drawing.Width, Drawing.Height))
+                start.Intersection(end, new Vector2(0, Drawing.Height), new Vector2(Drawing.Width, Drawing.Height))
                     .Intersects)
             {
                 return true;
             }
             return
-                start.LSIntersection(end, new Vector2(Drawing.Width, 0), new Vector2(Drawing.Width, Drawing.Height))
+                start.Intersection(end, new Vector2(Drawing.Width, 0), new Vector2(Drawing.Width, Drawing.Height))
                     .Intersects;
         }
 
@@ -102,8 +102,8 @@ using EloBuddy; namespace SFXUtility.Library.Extensions.SharpDX
             t = (float) ((-b - Math.Sqrt(det)) / (2 * a));
             var intersection2 = new Vector2(start.X + t * dx, start.Y + t * dy);
 
-            return Vector2.Distance(intersection1, ObjectManager.Player.Position.LSTo2D()) >
-                   Vector2.Distance(intersection2, ObjectManager.Player.Position.LSTo2D())
+            return Vector2.Distance(intersection1, ObjectManager.Player.Position.To2D()) >
+                   Vector2.Distance(intersection2, ObjectManager.Player.Position.To2D())
                 ? intersection2
                 : intersection1;
         }
@@ -138,7 +138,7 @@ using EloBuddy; namespace SFXUtility.Library.Extensions.SharpDX
 
         public static Obj_AI_Minion GetMinionFastByNames(this Vector3 position, float range, string[] names)
         {
-            return GameObjects.Jungle.FirstOrDefault(m => names.Any(n => m.Name.Equals(n)) && m.LSIsValidTarget(range));
+            return GameObjects.Jungle.FirstOrDefault(m => names.Any(n => m.Name.Equals(n)) && m.IsValidTarget(range));
         }
 
         public static Obj_AI_Minion GetNearestMinionByNames(this Vector2 position, string[] names)

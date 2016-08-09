@@ -56,7 +56,7 @@ namespace UnderratedAIO.Helpers.SkillShot
             Distance = distance;
             ComingFrom = comingFrom;
             Valid = (point.X != 0) && (point.Y != 0);
-            Point = point + 10 * (ComingFrom - point).LSNormalized();
+            Point = point + 10 * (ComingFrom - point).Normalized();
             Time = time;
         }
     }
@@ -178,7 +178,7 @@ namespace UnderratedAIO.Helpers.SkillShot
         {
             get
             {
-                if (_collisionEnd.LSIsValid())
+                if (_collisionEnd.IsValid())
                 {
                     return _collisionEnd;
                 }
@@ -215,7 +215,7 @@ namespace UnderratedAIO.Helpers.SkillShot
             StartPosition = startPosition;
             EndPosition = endPosition;
             MissilePosition = startPosition;
-            Direction = (endPosition - startPosition).LSNormalized();
+            Direction = (endPosition - startPosition).Normalized();
             Caster = caster;
 
             //Create the spatial object for each type of skillshot.
@@ -254,7 +254,7 @@ namespace UnderratedAIO.Helpers.SkillShot
 
                 return System.Environment.TickCount <=
                        StartTick + SkillshotData.Delay + SkillshotData.ExtraDuration +
-                       1000 * (StartPosition.LSDistance(EndPosition) / SkillshotData.MissileSpeed);
+                       1000 * (StartPosition.Distance(EndPosition) / SkillshotData.MissileSpeed);
             }
         }
 
@@ -280,8 +280,8 @@ namespace UnderratedAIO.Helpers.SkillShot
             {
                 if (Caster.IsVisible)
                 {
-                    EndPosition = Caster.ServerPosition.LSTo2D();
-                    Direction = (EndPosition - StartPosition).LSNormalized();
+                    EndPosition = Caster.ServerPosition.To2D();
+                    Direction = (EndPosition - StartPosition).Normalized();
                     UpdatePolygon();
                 }
             }
@@ -315,7 +315,7 @@ namespace UnderratedAIO.Helpers.SkillShot
         public Vector2 GlobalGetMissilePosition(int time)
         {
             var t = Math.Max(0, System.Environment.TickCount + time - StartTick - SkillshotData.Delay);
-            t = (int) Math.Max(0, Math.Min(EndPosition.LSDistance(StartPosition), t * SkillshotData.MissileSpeed / 1000));
+            t = (int) Math.Max(0, Math.Min(EndPosition.Distance(StartPosition), t * SkillshotData.MissileSpeed / 1000));
             return StartPosition + Direction * t;
         }
 
@@ -362,7 +362,7 @@ namespace UnderratedAIO.Helpers.SkillShot
                 }
             }
 
-            t = (int) Math.Max(0, Math.Min(CollisionEnd.LSDistance(StartPosition), x));
+            t = (int) Math.Max(0, Math.Min(CollisionEnd.Distance(StartPosition), x));
             return StartPosition + Direction * t;
         }
 
@@ -380,7 +380,7 @@ namespace UnderratedAIO.Helpers.SkillShot
                 unit = ObjectManager.Player;
             }
             speed = (speed == -1) ? (int) unit.MoveSpeed : speed;
-            var path = unit.Path.ToList().LSTo2D();
+            var path = unit.Path.ToList().To2D();
             var allIntersections = new List<FoundIntersection>();
             for (var i = 0; i <= path.Count - 2; i++)
             {
@@ -393,14 +393,14 @@ namespace UnderratedAIO.Helpers.SkillShot
                     var sideStart = Polygon.Points[j];
                     var sideEnd = Polygon.Points[j == (Polygon.Points.Count - 1) ? 0 : j + 1];
 
-                    var intersection = from.LSIntersection(to, sideStart, sideEnd);
+                    var intersection = from.Intersection(to, sideStart, sideEnd);
 
                     if (intersection.Intersects)
                     {
                         segmentIntersections.Add(
                             new FoundIntersection(
-                                Distance + intersection.Point.LSDistance(from),
-                                (int) ((Distance + intersection.Point.LSDistance(from)) * 1000 / speed),
+                                Distance + intersection.Point.Distance(from),
+                                (int) ((Distance + intersection.Point.Distance(from)) * 1000 / speed),
                                 intersection.Point, from));
                     }
                 }
@@ -408,7 +408,7 @@ namespace UnderratedAIO.Helpers.SkillShot
                 var sortedList = segmentIntersections.OrderBy(o => o.Distance).ToList();
                 allIntersections.AddRange(sortedList);
 
-                Distance += from.LSDistance(to);
+                Distance += from.Distance(to);
             }
 
             //Skillshot with missile.
@@ -419,7 +419,7 @@ namespace UnderratedAIO.Helpers.SkillShot
             }
 
 
-            if (IsSafe(ObjectManager.Player.ServerPosition.LSTo2D()))
+            if (IsSafe(ObjectManager.Player.ServerPosition.To2D()))
             {
                 if (allIntersections.Count == 0)
                 {
@@ -441,7 +441,7 @@ namespace UnderratedAIO.Helpers.SkillShot
 
             var timeToExplode = (SkillshotData.DontAddExtraDuration ? 0 : SkillshotData.ExtraDuration) +
                                 SkillshotData.Delay +
-                                (int) (1000 * StartPosition.LSDistance(EndPosition) / SkillshotData.MissileSpeed) -
+                                (int) (1000 * StartPosition.Distance(EndPosition) / SkillshotData.MissileSpeed) -
                                 (System.Environment.TickCount - StartTick);
 
 
@@ -484,12 +484,12 @@ namespace UnderratedAIO.Helpers.SkillShot
                         .Where(
                             o =>
                                 o.Health > 5 && o.NetworkId != unit.NetworkId && !o.IsDead && o.Team == unit.Team &&
-                                o.LSIsValidTarget(caster.LSDistance(unit), false, missilePos.To3D2()) &&
+                                o.IsValidTarget(caster.Distance(unit), false, missilePos.To3D2()) &&
                                 CheckUnitCollision(o) != CollisionObjectTypes.Null &&
                                 SkillshotData.CollisionObjects.Any(c => c == CheckUnitCollision(o))))
                 {
                     var mp = prob.ServerPosition.To2D().ProjectOn(missilePos, unit.ServerPosition.To2D());
-                    if (mp.IsOnSegment && mp.SegmentPoint.LSDistance(unit.ServerPosition) < SkillshotData.Radius)
+                    if (mp.IsOnSegment && mp.SegmentPoint.Distance(unit.ServerPosition) < SkillshotData.Radius)
                     {
                         collision = true;
                         break;
@@ -499,10 +499,10 @@ namespace UnderratedAIO.Helpers.SkillShot
                 {
                     Collision = true,
                     Aoe = false,
-                    Delay = missilePos.LSDistance(StartPosition) < 1 ? SkillshotData.Delay : 0,
+                    Delay = missilePos.Distance(StartPosition) < 1 ? SkillshotData.Delay : 0,
                     From = missilePos.To3D2(),
                     Radius = SkillshotData.Radius,
-                    Range = missilePos.LSDistance(missilePosAfterT),
+                    Range = missilePos.Distance(missilePosAfterT),
                     Speed = SkillshotData.MissileSpeed,
                     Type = SkillshotType.SkillshotLine,
                     Unit = unit,
@@ -512,12 +512,12 @@ namespace UnderratedAIO.Helpers.SkillShot
                     LeagueSharp.Common.Collision.GetCollision(
                         new List<Vector3>() { StartPosition.To3D2(), missilePosAfterT.To3D2() }, input);
 
-                var projection = unit.ServerPosition.LSTo2D().LSProjectOn(missilePos, missilePosAfterT);
+                var projection = unit.ServerPosition.To2D().ProjectOn(missilePos, missilePosAfterT);
                 var pred = Prediction.GetPrediction(input);
                 var poly = CombatHelper.GetPolyFromVector(
                     missilePos.To3D2(), missilePosAfterT.To3D2(), SkillshotData.Radius);
                 if (((projection.IsOnSegment &&
-                      projection.SegmentPoint.LSDistance(unit.ServerPosition) < SkillshotData.Radius) ||
+                      projection.SegmentPoint.Distance(unit.ServerPosition) < SkillshotData.Radius) ||
                      poly.IsInside(pred.UnitPosition)) && collisions.Count(c => c.NetworkId != unit.NetworkId) == 0)
                 {
                     return true;
@@ -526,10 +526,10 @@ namespace UnderratedAIO.Helpers.SkillShot
                 return false;
             }
 
-            if (!IsSafe(unit.ServerPosition.LSTo2D()))
+            if (!IsSafe(unit.ServerPosition.To2D()))
             {
                 var timeToExplode = SkillshotData.ExtraDuration + SkillshotData.Delay +
-                                    (int) ((1000 * StartPosition.LSDistance(EndPosition)) / SkillshotData.MissileSpeed) -
+                                    (int) ((1000 * StartPosition.Distance(EndPosition)) / SkillshotData.MissileSpeed) -
                                     (System.Environment.TickCount - StartTick);
                 if (timeToExplode <= time)
                 {

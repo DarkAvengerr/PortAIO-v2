@@ -64,13 +64,13 @@ namespace FioraProject
             if (!FocusUlted)
                 return null;
             return HeroManager.Enemies.FirstOrDefault(x => x != null && x.IsValid && FioraUltiPassiveObjects
-                                .Any(i => i != null && i.IsValid && i.Position.LSTo2D().LSDistance(x.Position.LSTo2D()) <= 50));
+                                .Any(i => i != null && i.IsValid && i.Position.To2D().Distance(x.Position.To2D()) <= 50));
         }
         #region Normal
         public static AIHeroClient GetStandarTarget(float range)
         {
             var ulted = GetUltedTarget();
-            if (ulted.LSIsValidTarget(500))
+            if (ulted.IsValidTarget(500))
                 return ulted;
             return TargetSelector.GetTarget(range, TargetSelector.DamageType.Physical);
         }
@@ -85,9 +85,9 @@ namespace FioraProject
         public static AIHeroClient GetPriorityTarget()
         {
             var ulted = GetUltedTarget();
-            if (ulted.LSIsValidTarget(PriorityRange))
+            if (ulted.IsValidTarget(PriorityRange))
                 return ulted;
-            return HeroManager.Enemies.Where(x => x.LSIsValidTarget(PriorityRange) && !x.IsZombie)
+            return HeroManager.Enemies.Where(x => x.IsValidTarget(PriorityRange) && !x.IsZombie)
                                     .OrderByDescending(x => PriorityValue(x))
                                     .ThenBy(x => x.Health)
                                     .FirstOrDefault();
@@ -100,10 +100,10 @@ namespace FioraProject
         public static AIHeroClient GetSelectedTarget()
         {
             var ulted = GetUltedTarget();
-            if (ulted.LSIsValidTarget(SelectedRange))
+            if (ulted.IsValidTarget(SelectedRange))
                 return ulted;
             var tar = TargetSelector.GetSelectedTarget();
-            var tarD = tar.LSIsValidTarget(SelectedRange) && !tar.IsZombie ? tar : null;
+            var tarD = tar.IsValidTarget(SelectedRange) && !tar.IsZombie ? tar : null;
             if (tarD != null)
                 return tarD;
             else
@@ -125,15 +125,15 @@ namespace FioraProject
         public static AIHeroClient GetOptionalTarget()
         {
             var ulted = GetUltedTarget();
-            if (ulted.LSIsValidTarget(OptionalRange))
+            if (ulted.IsValidTarget(OptionalRange))
             {
                 OptionalTarget = ulted;
                 return OptionalTarget;
             }
-            if (OptionalTarget.LSIsValidTarget(OptionalRange) && !OptionalTarget.IsZombie)
+            if (OptionalTarget.IsValidTarget(OptionalRange) && !OptionalTarget.IsZombie)
                 return OptionalTarget;
-            OptionalTarget = HeroManager.Enemies.Where(x => x.LSIsValidTarget(OptionalRange) && !x.IsZombie)
-                                .OrderBy(x => ObjectManager.Player.LSDistance(x.Position)).FirstOrDefault();
+            OptionalTarget = HeroManager.Enemies.Where(x => x.IsValidTarget(OptionalRange) && !x.IsZombie)
+                                .OrderBy(x => ObjectManager.Player.Distance(x.Position)).FirstOrDefault();
             return OptionalTarget;
         }
         public static void Game_OnWndProc(WndEventArgs args)
@@ -145,18 +145,18 @@ namespace FioraProject
                     OptionalTarget = GetOptionalTarget();
                     if (OptionalTarget == null)
                     {
-                        PreOptionalTarget = HeroManager.Enemies.Where(x => x.LSIsValidTarget(OptionalRange) && !x.IsZombie)
+                        PreOptionalTarget = HeroManager.Enemies.Where(x => x.IsValidTarget(OptionalRange) && !x.IsZombie)
                                                        .OrderBy(x => OldOptionalTarget != null ? x.NetworkId == OldOptionalTarget.NetworkId : x.IsEnemy)
-                                                       .ThenBy(x => ObjectManager.Player.LSDistance(x.Position)).FirstOrDefault();
+                                                       .ThenBy(x => ObjectManager.Player.Distance(x.Position)).FirstOrDefault();
                         if (PreOptionalTarget != null)
                         {
                             OptionalTarget = PreOptionalTarget;
                         }
                         return;
                     }
-                    PreOptionalTarget = HeroManager.Enemies.Where(x => x.LSIsValidTarget(OptionalRange) && !x.IsZombie && x.NetworkId != OptionalTarget.NetworkId)
+                    PreOptionalTarget = HeroManager.Enemies.Where(x => x.IsValidTarget(OptionalRange) && !x.IsZombie && x.NetworkId != OptionalTarget.NetworkId)
                                                    .OrderBy(x => OldOptionalTarget != null ? x.NetworkId == OldOptionalTarget.NetworkId : x.IsEnemy)
-                                                   .ThenBy(x => ObjectManager.Player.LSDistance(x.Position)).FirstOrDefault();
+                                                   .ThenBy(x => ObjectManager.Player.Distance(x.Position)).FirstOrDefault();
                     if (PreOptionalTarget != null)
                     {
                         OldOptionalTarget = OptionalTarget;
@@ -170,18 +170,18 @@ namespace FioraProject
                 OptionalTarget = GetOptionalTarget();
                 if (OptionalTarget == null)
                 {
-                    PreOptionalTarget = HeroManager.Enemies.Where(x => x.LSIsValidTarget(OptionalRange)
-                                                    && x.LSIsValidTarget(400, true, Game.CursorPos) && !x.IsZombie)
-                                                   .OrderBy(x => Game.CursorPos.LSTo2D().LSDistance(x.Position.LSTo2D())).FirstOrDefault();
+                    PreOptionalTarget = HeroManager.Enemies.Where(x => x.IsValidTarget(OptionalRange)
+                                                    && x.IsValidTarget(400, true, Game.CursorPos) && !x.IsZombie)
+                                                   .OrderBy(x => Game.CursorPos.To2D().Distance(x.Position.To2D())).FirstOrDefault();
                     if (PreOptionalTarget != null)
                     {
                         OptionalTarget = PreOptionalTarget;
                     }
                     return;
                 }
-                PreOptionalTarget = HeroManager.Enemies.Where(x => x.LSIsValidTarget(OptionalRange)
-                                                && x.LSIsValidTarget(400, true, Game.CursorPos) && !x.IsZombie)
-                                               .OrderBy(x => Game.CursorPos.LSTo2D().LSDistance(x.Position.LSTo2D())).FirstOrDefault();
+                PreOptionalTarget = HeroManager.Enemies.Where(x => x.IsValidTarget(OptionalRange)
+                                                && x.IsValidTarget(400, true, Game.CursorPos) && !x.IsZombie)
+                                               .OrderBy(x => Game.CursorPos.To2D().Distance(x.Position.To2D())).FirstOrDefault();
                 if (PreOptionalTarget != null)
                 {
                     OldOptionalTarget = OptionalTarget;

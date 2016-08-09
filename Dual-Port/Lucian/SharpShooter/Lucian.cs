@@ -80,7 +80,7 @@ namespace SharpShooter.Plugins
                             {
                                 if (MenuProvider.Champion.Combo.UseQ)
                                     if (_q.IsReadyPerfectly())
-                                        if (!ObjectManager.Player.LSIsDashing())
+                                        if (!ObjectManager.Player.IsDashing())
                                             if (_hasPassive == false)
                                             {
                                                 var target = TargetSelector.GetTarget(_q.Range, _q.DamageType);
@@ -100,7 +100,7 @@ namespace SharpShooter.Plugins
                                                             var box =
                                                                 new Geometry.Polygon.Rectangle(
                                                                     ObjectManager.Player.ServerPosition,
-                                                                    ObjectManager.Player.ServerPosition.LSExtend(
+                                                                    ObjectManager.Player.ServerPosition.Extend(
                                                                         minion.ServerPosition, _qExtended.Range),
                                                                     _qExtended.Width);
                                                             var prediction = _qExtended.GetPrediction(extendedTarget);
@@ -127,7 +127,7 @@ namespace SharpShooter.Plugins
 
                                 if (MenuProvider.Champion.Combo.UseW)
                                     if (_w.IsReadyPerfectly())
-                                        if (!ObjectManager.Player.LSIsDashing())
+                                        if (!ObjectManager.Player.IsDashing())
                                             if (_hasPassive == false)
                                             {
                                                 if (HeroManager.Enemies.Any(x => Orbwalking.InAutoAttackRange(x)))
@@ -162,7 +162,7 @@ namespace SharpShooter.Plugins
                                 if (MenuProvider.Champion.Harass.UseQ)
                                     if (_hasPassive == false)
                                         if (_q.IsReadyPerfectly())
-                                            if (!ObjectManager.Player.LSIsDashing())
+                                            if (!ObjectManager.Player.IsDashing())
                                                 if (
                                                     ObjectManager.Player.IsManaPercentOkay(
                                                         MenuProvider.Champion.Harass.IfMana))
@@ -185,7 +185,7 @@ namespace SharpShooter.Plugins
                                                                 var box =
                                                                     new Geometry.Polygon.Rectangle(
                                                                         ObjectManager.Player.ServerPosition,
-                                                                        ObjectManager.Player.ServerPosition.LSExtend(
+                                                                        ObjectManager.Player.ServerPosition.Extend(
                                                                             minion.ServerPosition, _qExtended.Range),
                                                                         _qExtended.Width);
                                                                 var prediction = _qExtended.GetPrediction(extendedTarget);
@@ -202,7 +202,7 @@ namespace SharpShooter.Plugins
 
                                 if (MenuProvider.Champion.Harass.UseW)
                                     if (_w.IsReadyPerfectly())
-                                        if (!ObjectManager.Player.LSIsDashing())
+                                        if (!ObjectManager.Player.IsDashing())
                                             if (ObjectManager.Player.IsManaPercentOkay(MenuProvider.Champion.Harass.IfMana))
                                                 if (_hasPassive == false)
                                                 {
@@ -240,7 +240,7 @@ namespace SharpShooter.Plugins
                                     if (_hasPassive == false)
                                         if (ObjectManager.Player.IsManaPercentOkay(MenuProvider.Champion.Laneclear.IfMana))
                                             if (_q.IsReadyPerfectly())
-                                                if (!ObjectManager.Player.LSIsDashing())
+                                                if (!ObjectManager.Player.IsDashing())
                                                 {
                                                     var minions =
                                                         MinionManager.GetMinions(ObjectManager.Player.ServerPosition,
@@ -250,7 +250,7 @@ namespace SharpShooter.Plugins
                                                         var box =
                                                             new Geometry.Polygon.Rectangle(
                                                                 ObjectManager.Player.ServerPosition,
-                                                                ObjectManager.Player.ServerPosition.LSExtend(
+                                                                ObjectManager.Player.ServerPosition.Extend(
                                                                     minion.ServerPosition, _qExtended.Range),
                                                                 _qExtended.Width);
                                                         if (minions.Count(x => box.IsInside(x.ServerPosition)) >= 3)
@@ -266,12 +266,12 @@ namespace SharpShooter.Plugins
                                     if (_hasPassive == false)
                                         if (ObjectManager.Player.IsManaPercentOkay(MenuProvider.Champion.Jungleclear.IfMana))
                                             if (_q.IsReadyPerfectly())
-                                                if (!ObjectManager.Player.LSIsDashing())
+                                                if (!ObjectManager.Player.IsDashing())
                                                 {
                                                     var target =
                                                         MinionManager.GetMinions(_q.Range, MinionTypes.All,
                                                             MinionTeam.Neutral, MinionOrderTypes.MaxHealth)
-                                                            .FirstOrDefault(x => x.LSIsValidTarget(_q.Range));
+                                                            .FirstOrDefault(x => x.IsValidTarget(_q.Range));
                                                     if (target != null)
                                                         _q.CastOnUnit(target);
                                                 }
@@ -280,12 +280,12 @@ namespace SharpShooter.Plugins
                                     if (_hasPassive == false)
                                         if (ObjectManager.Player.IsManaPercentOkay(MenuProvider.Champion.Jungleclear.IfMana))
                                             if (_w.IsReadyPerfectly())
-                                                if (!ObjectManager.Player.LSIsDashing())
+                                                if (!ObjectManager.Player.IsDashing())
                                                 {
                                                     var target =
                                                         MinionManager.GetMinions(_w.Range, MinionTypes.All,
                                                             MinionTeam.Neutral, MinionOrderTypes.MaxHealth)
-                                                            .FirstOrDefault(x => x.LSIsValidTarget(_w.Range));
+                                                            .FirstOrDefault(x => x.IsValidTarget(_w.Range));
                                                     if (target != null)
                                                         _w.Cast(target);
                                                 }
@@ -296,14 +296,14 @@ namespace SharpShooter.Plugins
                     if (MenuProvider.Champion.Harass.AutoHarass)
                         if (MenuProvider.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo &&
                             MenuProvider.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed)
-                            if (!ObjectManager.Player.LSIsRecalling())
+                            if (!ObjectManager.Player.IsRecalling())
                                 if (ObjectManager.Player.IsManaPercentOkay(MenuProvider.Champion.Harass.IfMana))
                                     if (MenuProvider.Champion.Harass.UseQ)
                                     {
                                         var extendedTarget = TargetSelector.GetTarget(_qExtended.Range, _q.DamageType);
                                         if (extendedTarget != null)
-                                            if (ObjectManager.Player.LSUnderTurret(true)
-                                                ? !extendedTarget.LSUnderTurret(true)
+                                            if (ObjectManager.Player.UnderTurret(true)
+                                                ? !extendedTarget.UnderTurret(true)
                                                 : true)
                                             {
                                                 var minions =
@@ -314,7 +314,7 @@ namespace SharpShooter.Plugins
                                                     var box =
                                                         new Geometry.Polygon.Rectangle(
                                                             ObjectManager.Player.ServerPosition,
-                                                            ObjectManager.Player.ServerPosition.LSExtend(
+                                                            ObjectManager.Player.ServerPosition.Extend(
                                                                 minion.ServerPosition, _qExtended.Range),
                                                             _qExtended.Width);
                                                     var prediction = _qExtended.GetPrediction(extendedTarget);
@@ -345,10 +345,10 @@ namespace SharpShooter.Plugins
                         if (sender.Type == GameObjectType.AIHeroClient)
                             if (sender.IsEnemy)
                                 if (sender.IsMelee)
-                                    if (args.SData.LSIsAutoAttack())
+                                    if (args.SData.IsAutoAttack())
                                         if (MenuProvider.Champion.Misc.GetBoolValue("Use Anti-Melee (E)"))
                                             if (_e.IsReadyPerfectly())
-                                                _e.Cast(ObjectManager.Player.Position.LSExtend(sender.Position, -_e.Range));
+                                                _e.Cast(ObjectManager.Player.Position.Extend(sender.Position, -_e.Range));
         }
 
         private void Obj_AI_Base_OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
@@ -380,9 +380,9 @@ namespace SharpShooter.Plugins
                             if (MenuProvider.Champion.Combo.UseE)
                                 if (_e.IsReadyPerfectly())
                                     if (
-                                        ObjectManager.Player.Position.LSExtend(Game.CursorPos, 700).LSCountEnemiesInRange(700) <=
+                                        ObjectManager.Player.Position.Extend(Game.CursorPos, 700).CountEnemiesInRange(700) <=
                                         1)
-                                        _e.Cast(ObjectManager.Player.Position.LSExtend(Game.CursorPos, 700));
+                                        _e.Cast(ObjectManager.Player.Position.Extend(Game.CursorPos, 700));
                             break;
                         }
                 }
@@ -399,11 +399,11 @@ namespace SharpShooter.Plugins
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (MenuProvider.Champion.Misc.UseAntiGapcloser)
-                if (gapcloser.End.LSDistance(ObjectManager.Player.Position) <= 200)
-                    if (gapcloser.Sender.LSIsValidTarget())
+                if (gapcloser.End.Distance(ObjectManager.Player.Position) <= 200)
+                    if (gapcloser.Sender.IsValidTarget())
                         if (gapcloser.Sender.ChampionName.ToLowerInvariant() != "masteryi")
                             if (_e.IsReadyPerfectly())
-                                _e.Cast(ObjectManager.Player.Position.LSExtend(gapcloser.Sender.Position, -_e.Range));
+                                _e.Cast(ObjectManager.Player.Position.Extend(gapcloser.Sender.Position, -_e.Range));
         }
 
         private void Drawing_OnDraw(EventArgs args)
@@ -434,24 +434,24 @@ namespace SharpShooter.Plugins
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float)ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float)ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
             if (_q.IsReadyPerfectly())
             {
                 damage += _q.GetDamage(enemy);
-                damage += (float)ObjectManager.Player.LSGetAutoAttackDamage(enemy) * 0.5f;
+                damage += (float)ObjectManager.Player.GetAutoAttackDamage(enemy) * 0.5f;
             }
 
             if (_w.IsReadyPerfectly())
             {
                 damage += _w.GetDamage(enemy);
-                damage += (float)ObjectManager.Player.LSGetAutoAttackDamage(enemy) * 1.5f;
+                damage += (float)ObjectManager.Player.GetAutoAttackDamage(enemy) * 1.5f;
             }
 
             if (_e.IsReadyPerfectly())
             {
-                damage += (float)ObjectManager.Player.LSGetAutoAttackDamage(enemy) * 1.5f;
+                damage += (float)ObjectManager.Player.GetAutoAttackDamage(enemy) * 1.5f;
             }
 
             return damage;

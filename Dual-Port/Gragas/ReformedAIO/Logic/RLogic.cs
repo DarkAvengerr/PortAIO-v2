@@ -19,7 +19,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.Logic
         {
             var pos =
                 Variable.Spells[SpellSlot.R].GetVectorSPrediction(target, 1150)
-                    .CastTargetPosition.LSExtend(Variable.Player.Position.LSTo2D(), 65);
+                    .CastTargetPosition.Extend(Variable.Player.Position.To2D(), 65);
 
             return pos.To3D() + this.RDelay(target);
         }
@@ -30,7 +30,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.Logic
 
         private float RDelay(Obj_AI_Base target)
         {
-            var time = target.LSDistance(Variable.Player) / Variable.Spells[SpellSlot.R].Speed;
+            var time = target.Distance(Variable.Player) / Variable.Spells[SpellSlot.R].Speed;
 
             return time + Variable.Spells[SpellSlot.R].Delay;
         }

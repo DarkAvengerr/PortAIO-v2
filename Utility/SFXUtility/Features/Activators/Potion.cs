@@ -131,7 +131,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
         {
             try
             {
-                if (ObjectManager.Player.IsDead || ObjectManager.Player.LSInFountain() ||
+                if (ObjectManager.Player.IsDead || ObjectManager.Player.InFountain() ||
                     ObjectManager.Player.Buffs.Any(
                         b =>
                             b.Name.Contains("Recall", StringComparison.OrdinalIgnoreCase) ||
@@ -142,7 +142,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
 
                 var enemyDist = Menu.Item(Name + "MaxEnemyDistance").GetValue<Slider>().Value;
                 if (enemyDist != 0 &&
-                    !GameObjects.EnemyHeroes.Any(e => e.Position.LSDistance(ObjectManager.Player.Position) <= enemyDist))
+                    !GameObjects.EnemyHeroes.Any(e => e.Position.Distance(ObjectManager.Player.Position) <= enemyDist))
                 {
                     return;
                 }

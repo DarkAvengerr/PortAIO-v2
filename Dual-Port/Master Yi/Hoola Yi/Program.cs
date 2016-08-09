@@ -75,23 +75,23 @@ using EloBuddy;
 
         private static void DetectBlink(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsMe || args.SData.LSIsAutoAttack()) return;
+            if (sender.IsMe || args.SData.IsAutoAttack()) return;
 
             if (Spelldatabase.list.Contains(args.SData.Name.ToLower()) &&
-                (((Player.LSDistance(args.End) >= Q.Range) && AutoQOnly) || !AutoQOnly) && Q.LSIsReady() && AutoQ)
+                (((Player.Distance(args.End) >= Q.Range) && AutoQOnly) || !AutoQOnly) && Q.IsReady() && AutoQ)
                 Q.Cast((Obj_AI_Base)args.Target);
         }
 
         private static void DetectSpell(EventArgs args)
         {
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
-            if (target.LSIsDashing() && (((Player.LSDistance(target.LSGetWaypoints().Last()) >= Q.Range) && AutoQOnly) || !AutoQOnly) && Q.LSIsReady() && AutoQ && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+            if (target.IsDashing() && (((Player.Distance(target.GetWaypoints().Last()) >= Q.Range) && AutoQOnly) || !AutoQOnly) && Q.IsReady() && AutoQ && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                 Q.Cast(target);
         }
 
         static void OnDraw(EventArgs args)
         {
-            if (DQ) Render.Circle.DrawCircle(Player.Position, Q.Range, Q.LSIsReady() ? Color.LimeGreen : Color.IndianRed);
+            if (DQ) Render.Circle.DrawCircle(Player.Position, Q.Range, Q.IsReady() ? Color.LimeGreen : Color.IndianRed);
         }
 
         static void BeforeAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -226,8 +226,8 @@ using EloBuddy;
                 {
                     if (Mobs[0].IsValid && Mobs.Count != 0)
                     {
-                        if (Q.LSIsReady() && JQ) Q.Cast(Mobs[0]);
-                        if (!Q.LSIsReady() || (Q.LSIsReady() && !JQ))
+                        if (Q.IsReady() && JQ) Q.Cast(Mobs[0]);
+                        if (!Q.IsReady() || (Q.IsReady() && !JQ))
                         {
                             if (JI) UseCastItem(300);
                             if (JW) LeagueSharp.Common.Utility.DelayAction.Add(1, () => W.Cast());
@@ -304,12 +304,12 @@ using EloBuddy;
 
         static void killsteal()
         {
-            if (KsQ && Q.LSIsReady())
+            if (KsQ && Q.IsReady())
             {
-                var targets = HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsZombie);
+                var targets = HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsZombie);
                 foreach (var target in targets)
                 {
-                    if (target.IsValid && target.Health < Q.GetDamage(target) && (!target.LSHasBuff("kindrednodeathbuff") || !target.LSHasBuff("Undying Rage") || !target.LSHasBuff("JudicatorIntervention")) && (!Orbwalking.InAutoAttackRange(target) || !Orbwalking.CanAttack))
+                    if (target.IsValid && target.Health < Q.GetDamage(target) && (!target.HasBuff("kindrednodeathbuff") || !target.HasBuff("Undying Rage") || !target.HasBuff("JudicatorIntervention")) && (!Orbwalking.InAutoAttackRange(target) || !Orbwalking.CanAttack))
                         Q.Cast(target);
                 }
             }
@@ -319,7 +319,7 @@ using EloBuddy;
             {
                 var targets =
                     HeroManager.Enemies.Where(
-                        x => x.LSIsValidTarget(ItemData.Blade_of_the_Ruined_King.Range) && !x.IsZombie);
+                        x => x.IsValidTarget(ItemData.Blade_of_the_Ruined_King.Range) && !x.IsZombie);
                 foreach (var target in targets)
                 {
                     if (target.Health < Damage.GetItemDamage(Player, target, Damage.DamageItems.Bilgewater)) ItemData.Bilgewater_Cutlass.GetItem().Cast(target);
@@ -332,7 +332,7 @@ using EloBuddy;
             {
                 var targets =
                     HeroManager.Enemies.Where(
-                        x => x.LSIsValidTarget(ItemData.Ravenous_Hydra_Melee_Only.Range) && !x.IsZombie);
+                        x => x.IsValidTarget(ItemData.Ravenous_Hydra_Melee_Only.Range) && !x.IsZombie);
                 foreach (var target in targets)
                 {
                     if (target.Health < Damage.GetItemDamage(Player, target, Damage.DamageItems.Tiamat)) ItemData.Tiamat_Melee_Only.GetItem().Cast();
@@ -351,13 +351,13 @@ using EloBuddy;
         static void Combo()
         {
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
-            if (Q.LSIsReady() && target.IsValid) Q.Cast(target);
+            if (Q.IsReady() && target.IsValid) Q.Cast(target);
         }
 
         static void Harass()
         {
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
-            if (Q.LSIsReady() && target.IsValid) Q.Cast(target);
+            if (Q.IsReady() && target.IsValid) Q.Cast(target);
         }
 
         static float getComboDamage(Obj_AI_Base enemy)
@@ -366,17 +366,17 @@ using EloBuddy;
             {
                 float damage = 0;
 
-                if (Q.LSIsReady())
-                    damage += Q.GetDamage(enemy) + (float)Player.LSGetAutoAttackDamage(enemy, true);
+                if (Q.IsReady())
+                    damage += Q.GetDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy, true);
 
-                if (E.LSIsReady())
+                if (E.IsReady())
                     damage += E.GetDamage(enemy);
 
-                if (W.LSIsReady())
-                    damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                if (W.IsReady())
+                    damage += (float)Player.GetAutoAttackDamage(enemy, true);
 
                 if (!Player.Spellbook.IsAutoAttacking)
-                    damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                    damage += (float)Player.GetAutoAttackDamage(enemy, true);
 
                 return damage;
             }
@@ -388,7 +388,7 @@ using EloBuddy;
             foreach (
                 var enemy in
                     ObjectManager.Get<AIHeroClient>()
-                        .Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                        .Where(ene => ene.IsValidTarget() && !ene.IsZombie))
             {
                 if (Dind)
                 {

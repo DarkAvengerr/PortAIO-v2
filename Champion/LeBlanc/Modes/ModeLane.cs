@@ -96,7 +96,7 @@ namespace Leblanc.Modes
             {
                 if (ModeConfig.MenuFarm.Item("Farm.MinMana.Enable").GetValue<KeyBind>().Active)
                 {
-                    return HeroManager.Enemies.Find(e => e.LSIsValidTarget(2000) && !e.IsZombie) == null
+                    return HeroManager.Enemies.Find(e => e.IsValidTarget(2000) && !e.IsZombie) == null
                         ? MenuLocal.Item("Lane.MinMana.Alone").GetValue<Slider>().Value
                         : MenuLocal.Item("Lane.MinMana.Enemy").GetValue<Slider>().Value;
                 }
@@ -127,7 +127,7 @@ namespace Leblanc.Modes
         private static void ExecuteQ()
         {
             var xUseQ = MenuLocal.Item("Lane.UseQ").GetValue<StringList>().SelectedIndex;
-            if (Q.LSIsReady() && xUseQ != 0)
+            if (Q.IsReady() && xUseQ != 0)
             {
                 var minionsQ = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.NotAlly);
 
@@ -135,10 +135,10 @@ namespace Leblanc.Modes
                 {
                     foreach (Obj_AI_Base vMinion in
                         from vMinion in minionsQ
-                        let vMinionQDamage = ObjectManager.Player.LSGetSpellDamage(vMinion, SpellSlot.Q)
+                        let vMinionQDamage = ObjectManager.Player.GetSpellDamage(vMinion, SpellSlot.Q)
                         where
                             vMinion.Health <= vMinionQDamage &&
-                            vMinion.Health > ObjectManager.Player.LSGetAutoAttackDamage(vMinion)
+                            vMinion.Health > ObjectManager.Player.GetAutoAttackDamage(vMinion)
                         select vMinion)
                     {
                         Q.CastOnUnit(vMinion);
@@ -172,7 +172,7 @@ namespace Leblanc.Modes
                 return;
             }
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q.Range);
 
@@ -185,7 +185,7 @@ namespace Leblanc.Modes
                 }
             }
 
-            if (!Q.LSIsReady() && E.LSIsReady())
+            if (!Q.IsReady() && E.IsReady())
             {
                 var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, E.Range);
 

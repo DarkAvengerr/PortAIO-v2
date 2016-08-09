@@ -44,8 +44,8 @@ using EloBuddy;
 
             Q.SetSkillshot(0f, 150f, float.MaxValue, false, SkillshotType.SkillshotLine);
             E.SetSkillshot(0.25f, 150f, float.MaxValue, false, SkillshotType.SkillshotLine);
-            IgniteSlot = ObjectManager.Player.LSGetSpellSlot("SummonerDot");
-            FlashSlot = ObjectManager.Player.LSGetSpellSlot("SummonerFlash");
+            IgniteSlot = ObjectManager.Player.GetSpellSlot("SummonerDot");
+            FlashSlot = ObjectManager.Player.GetSpellSlot("SummonerFlash");
 
             (_Menu = new Menu("Kimbaeng Shen", "kimbaengshen", true)).AddToMainMenu();
 
@@ -143,12 +143,12 @@ using EloBuddy;
 
         public static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (W.Level == 0 && !W.LSIsReady()) return;
+            if (W.Level == 0 && !W.IsReady()) return;
 
             if (_Menu.Item("autow").GetValue<bool>())
             {
 
-                if (W.LSIsReady() && !sender.IsMe && sender.IsEnemy && (sender is AIHeroClient || sender is Obj_AI_Turret)
+                if (W.IsReady() && !sender.IsMe && sender.IsEnemy && (sender is AIHeroClient || sender is Obj_AI_Turret)
                     && args.Target.IsMe)
                 {
                     W.Cast();
@@ -169,18 +169,18 @@ using EloBuddy;
             var useE = _Menu.Item("useCE").GetValue<bool>();
             var UseI = _Menu.Item("UseI").GetValue<bool>();
 
-            if (Q.LSIsReady() && useQ && Target.LSIsValidTarget(Q.Range))
+            if (Q.IsReady() && useQ && Target.IsValidTarget(Q.Range))
             {
                 Q.Cast(Target);
             }
-            if (E.LSIsReady() && useE && Target.LSIsValidTarget(E.Range))
+            if (E.IsReady() && useE && Target.IsValidTarget(E.Range))
             {
                 E.CastIfHitchanceEquals(Target, HitChance.High);
             }
 
             if (IgniteSlot != SpellSlot.Unknown &&
                 ObjectManager.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready &&
-                ObjectManager.Player.LSDistance(Target.ServerPosition) < 600 &&
+                ObjectManager.Player.Distance(Target.ServerPosition) < 600 &&
                 ObjectManager.Player.GetSummonerSpellDamage(Target, Damage.SummonerSpell.Ignite) > Target.Health && UseI)
             {
                 ObjectManager.Player.Spellbook.CastSpell(IgniteSlot, Target);
@@ -196,12 +196,12 @@ using EloBuddy;
             var useQ = _Menu.Item("useHQ").GetValue<bool>();
             var useE = _Menu.Item("useHE").GetValue<bool>();
 
-            if (Q.LSIsReady() && useQ && Target.LSIsValidTarget(Q.Range))
+            if (Q.IsReady() && useQ && Target.IsValidTarget(Q.Range))
             {
                 Q.Cast(Target);
             }
 
-            if (E.LSIsReady() && useE && Target.LSIsValidTarget(E.Range) && ObjectManager.Player.LSHasBuff("shenwayoftheninjaaura") && W.LSIsReady())
+            if (E.IsReady() && useE && Target.IsValidTarget(E.Range) && ObjectManager.Player.HasBuff("shenwayoftheninjaaura") && W.IsReady())
             {
                 E.Cast(Target.Position);
             }
@@ -216,7 +216,7 @@ using EloBuddy;
             var junglemobs = MinionManager.GetMinions(ObjectManager.Player.Position, Q.Range, MinionTypes.All,
                 MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
-            if (useQ && Q.LSIsReady() && Minions.Count > 0)
+            if (useQ && Q.IsReady() && Minions.Count > 0)
             {
                 Q.Cast();
 
@@ -227,7 +227,7 @@ using EloBuddy;
         {
             var useQ = _Menu.Item("useLHQ").GetValue<bool>();
 
-            if (!Q.LSIsReady() || !Orbwalking.CanMove(100))
+            if (!Q.IsReady() || !Orbwalking.CanMove(100))
             {
                 return;
             }
@@ -242,14 +242,14 @@ using EloBuddy;
             {
                 foreach (var minion in minions)
                 {
-                    if (ObjectManager.Player.LSDistance(minion) <= ObjectManager.Player.AttackRange)
+                    if (ObjectManager.Player.Distance(minion) <= ObjectManager.Player.AttackRange)
                     {
                         return;
                     }
                     if (HealthPrediction.GetHealthPrediction(
                         minion,
-                        (int)(Q.Delay + (minion.LSDistance(ObjectManager.Player.Position) * 0.7)))
-                        < ObjectManager.Player.LSGetSpellDamage(minion, SpellSlot.Q))
+                        (int)(Q.Delay + (minion.Distance(ObjectManager.Player.Position) * 0.7)))
+                        < ObjectManager.Player.GetSpellDamage(minion, SpellSlot.Q))
                     {
                         Q.Cast(minion);
                     }
@@ -266,12 +266,12 @@ using EloBuddy;
             if (EFTarget != null)
             {
 
-                if (ObjectManager.Player.LSIsDashing() && ObjectManager.Player.LSDistance(EFTarget.Position) < 420)
+                if (ObjectManager.Player.IsDashing() && ObjectManager.Player.Distance(EFTarget.Position) < 420)
                 {
                     ObjectManager.Player.Spellbook.CastSpell(FlashSlot, EFTarget.Position);
                 }
-                if (E.LSIsReady() && FlashSlot != SpellSlot.Unknown
-                    && ObjectManager.Player.Spellbook.CanUseSpell(FlashSlot) == SpellState.Ready && EFTarget.LSIsValidTarget(EFlash.Range))
+                if (E.IsReady() && FlashSlot != SpellSlot.Unknown
+                    && ObjectManager.Player.Spellbook.CanUseSpell(FlashSlot) == SpellState.Ready && EFTarget.IsValidTarget(EFlash.Range))
                 {
                     E.Cast(EFTarget.Position);
                 }
@@ -283,13 +283,13 @@ using EloBuddy;
             {
 
 
-                if (E.LSIsReady() && FlashSlot != SpellSlot.Unknown
-                    && ObjectManager.Player.Spellbook.CanUseSpell(FlashSlot) == SpellState.Ready && FTarget.LSDistance(STarget) < 410)
+                if (E.IsReady() && FlashSlot != SpellSlot.Unknown
+                    && ObjectManager.Player.Spellbook.CanUseSpell(FlashSlot) == SpellState.Ready && FTarget.Distance(STarget) < 410)
                 
-                    //var Endpos = ObjectManager.Player.Position.LSExtend(FTarget.Position, 600);
+                    //var Endpos = ObjectManager.Player.Position.Extend(FTarget.Position, 600);
                     //E.Cast(Endpos);
                     E.CastIfHitchanceEquals(FTarget, HitChance.High); 
-                if (FTarget.HasBuffOfType(BuffType.Taunt) && ObjectManager.Player.LSIsDashing() && ObjectManager.Player.LSDistance(STarget) < 420)
+                if (FTarget.HasBuffOfType(BuffType.Taunt) && ObjectManager.Player.IsDashing() && ObjectManager.Player.Distance(STarget) < 420)
 
                     ObjectManager.Player.Spellbook.CastSpell(FlashSlot, STarget.Position);
 
@@ -305,14 +305,14 @@ using EloBuddy;
         static void Auto()
         {
             var pos = Drawing.WorldToScreen(ObjectManager.Player.Position)[1] + 20;
-            if (R.Level != 0 && R.LSIsReady())
-                foreach (var hero in HeroManager.Allies.Where(x => x.LSIsValidTarget(R.Range, false) && _Menu.Item("ultnotifiy" + x.ChampionName).GetValue<bool>()))
+            if (R.Level != 0 && R.IsReady())
+                foreach (var hero in HeroManager.Allies.Where(x => x.IsValidTarget(R.Range, false) && _Menu.Item("ultnotifiy" + x.ChampionName).GetValue<bool>()))
                 {
 
                     if (hero.Health * 100 / hero.MaxHealth < _Menu.Item("HP" + hero.ChampionName).GetValue<Slider>().Value && !hero.IsMe)
                     {
                         if (_Menu.Item("ultping").GetValue<bool>())
-                            Ping(hero.Position.LSTo2D());
+                            Ping(hero.Position.To2D());
                         if (_Menu.Item("ulttext").GetValue<bool>())
                             Drawing.DrawText(Drawing.WorldToScreen(ObjectManager.Player.Position)[0] - 30
                                 , pos, System.Drawing.Color.Gold, hero.ChampionName + " Need Help!");

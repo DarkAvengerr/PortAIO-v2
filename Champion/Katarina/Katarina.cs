@@ -207,7 +207,7 @@ namespace Staberina
                 return;
             }
 
-            if (Menu.Item("RStealth").IsActive() && R.LSIsReady() && Player.LSCountEnemiesInRange(RRange) == 0 && R.Cast())
+            if (Menu.Item("RStealth").IsActive() && R.IsReady() && Player.CountEnemiesInRange(RRange) == 0 && R.Cast())
             {
                 LastStealthedUlt = Utils.TickCount;
                 return;
@@ -222,7 +222,7 @@ namespace Staberina
                     return;
                 }
 
-                if (Menu.Item("RCancelNoEnemies").IsActive() && Player.LSCountEnemiesInRange(RRange) == 0 &&
+                if (Menu.Item("RCancelNoEnemies").IsActive() && Player.CountEnemiesInRange(RRange) == 0 &&
                     !CancellingUlt && Utils.TickCount - LastStealthedUlt > 2500)
                 {
                     CancellingUlt = true;
@@ -230,7 +230,7 @@ namespace Staberina
                         300, () =>
                         {
                             CancellingUlt = false;
-                            if (Player.LSCountEnemiesInRange(RRange) == 0 && Utility.MoveRandomly()) {}
+                            if (Player.CountEnemiesInRange(RRange) == 0 && Utility.MoveRandomly()) {}
                         });
                 }
             }
@@ -242,7 +242,7 @@ namespace Staberina
                     return;
                 }
 
-                if (!E.LSIsReady())
+                if (!E.IsReady())
                 {
                     WardJumping = false;
                     return;
@@ -251,7 +251,7 @@ namespace Staberina
                 var ward =
                     ObjectManager.Get<Obj_AI_Minion>()
                         .Where(o => E.IsInRange(o) && MinionManager.IsWard(o) && o.Buffs.Any(b => b.Caster.IsMe))
-                        .OrderBy(o => o.LSDistance(Game.CursorPos))
+                        .OrderBy(o => o.Distance(Game.CursorPos))
                         .ThenByDescending(o => o.DistanceToPlayer())
                         .FirstOrDefault();
 
@@ -289,7 +289,7 @@ namespace Staberina
                 EvadeDisabler.EnableEvade();
             }
 
-            if (Menu.Item("WAuto").IsActive() && W.LSIsReady() && Enemies.Any(h => h.LSIsValidTarget(W.Range)) && W.Cast())
+            if (Menu.Item("WAuto").IsActive() && W.IsReady() && Enemies.Any(h => h.IsValidTarget(W.Range)) && W.Cast())
             {
                 Console.WriteLine("AUTO W");
             }
@@ -305,10 +305,10 @@ namespace Staberina
             var mode = Orbwalker.ActiveMode;
             var comboMode = Menu.Item("ComboMode").GetValue<StringList>().SelectedIndex;
             var d = comboMode == 0 ? E.Range : Q.Range;
-            var forceTarget = forcedTarget.LSIsValidTarget();
+            var forceTarget = forcedTarget.IsValidTarget();
             var target = forceTarget ? forcedTarget : TargetSelector.GetTarget(d, TargetSelector.DamageType.Magical);
 
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return false;
             }
@@ -316,7 +316,7 @@ namespace Staberina
             var q = Q.CanCast(target) && Q.IsActive(forceTarget);
             var w = W.CanCast(target) && W.IsActive(forceTarget);
             var e = E.CanCast(target) && E.IsActive(forceTarget) &&
-                    target.LSCountEnemiesInRange(200) <= Menu.Item("EEnemies").GetValue<Slider>().Value;
+                    target.CountEnemiesInRange(200) <= Menu.Item("EEnemies").GetValue<Slider>().Value;
 
             if (!forceTarget && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo &&
                 Menu.Item("ComboKillable").IsActive())
@@ -356,7 +356,7 @@ namespace Staberina
 
             if (Utility.IsRReady() && (forceTarget || mode == Orbwalking.OrbwalkingMode.Combo))
             {
-                if (!forceTarget && Menu.Item("RInCombo").IsActive() && target.LSIsValidTarget(R.Range) && R.Cast())
+                if (!forceTarget && Menu.Item("RInCombo").IsActive() && target.IsValidTarget(R.Range) && R.Cast())
                 {
                     return true;
                 }
@@ -367,7 +367,7 @@ namespace Staberina
                 }
 
                 var enemy =
-                    Enemies.FirstOrDefault(h => h.LSIsValidTarget(R.Range) && h.GetCalculatedRDamage(UltTicks) > h.Health);
+                    Enemies.FirstOrDefault(h => h.IsValidTarget(R.Range) && h.GetCalculatedRDamage(UltTicks) > h.Health);
                 if (enemy != null && R.Cast())
                 {
                     return true;
@@ -378,7 +378,7 @@ namespace Staberina
 
         private static bool CastE(Obj_AI_Base target, bool skipCheck = false)
         {
-            return (skipCheck || !Menu.Item("ETurret").IsActive() || !target.LSUnderTurret(true)) && E.CastOnUnit(target);
+            return (skipCheck || !Menu.Item("ETurret").IsActive() || !target.UnderTurret(true)) && E.CastOnUnit(target);
         }
 
         private static bool AutoKill()
@@ -402,7 +402,7 @@ namespace Staberina
                 return false;
             }
 
-            if (KSTarget != null && !KSTarget.LSIsValidTarget(E.Range))
+            if (KSTarget != null && !KSTarget.IsValidTarget(E.Range))
             {
                 KSTarget = null;
             }
@@ -410,7 +410,7 @@ namespace Staberina
             foreach (var enemy in
                 Enemies.Where(
                     h =>
-                        h.LSIsValidTarget(E.Range + Q.Range) && !h.IsZombie &&
+                        h.IsValidTarget(E.Range + Q.Range) && !h.IsZombie &&
                         (KSTarget == null || KSTarget.NetworkId == h.NetworkId)).OrderBy(h => h.Health))
             {
                 if (E.IsInRange(enemy))
@@ -455,7 +455,7 @@ namespace Staberina
                 }
 
                 // doing some gapclosers and hops here
-                if (!E.IsActive(true) || !E.LSIsReady())
+                if (!E.IsActive(true) || !E.IsReady())
                 {
                     continue;
                 }
@@ -465,8 +465,8 @@ namespace Staberina
                 {
                     var gapcloseDmg = enemy.GetGapcloseDamage(closestTarget);
                     if (enemy.Health < gapcloseDmg &&
-                        enemy.LSCountEnemiesInRange(300) <= Menu.Item("KSEnemies").GetValue<Slider>().Value &&
-                        (!Menu.Item("KSTurret").IsActive() || !closestTarget.LSUnderTurret(true)) &&
+                        enemy.CountEnemiesInRange(300) <= Menu.Item("KSEnemies").GetValue<Slider>().Value &&
+                        (!Menu.Item("KSTurret").IsActive() || !closestTarget.UnderTurret(true)) &&
                         E.CastOnUnit(closestTarget))
                     {
                         return true;
@@ -486,19 +486,19 @@ namespace Staberina
 
                 var range = Player.Spellbook.GetSpell(wardSlot).SData.CastRange;
 
-                if (!enemy.LSIsValidTarget(Q.Range + range))
+                if (!enemy.IsValidTarget(Q.Range + range))
                 {
                     continue;
                 }
 
-                var pos = Player.ServerPosition.LSExtend(enemy.ServerPosition, range);
+                var pos = Player.ServerPosition.Extend(enemy.ServerPosition, range);
 
-                if (Menu.Item("KSTurret").IsActive() && pos.LSUnderTurret(true))
+                if (Menu.Item("KSTurret").IsActive() && pos.UnderTurret(true))
                 {
                     continue;
                 }
 
-                if (pos.LSCountEnemiesInRange(300) - 1 > 2)
+                if (pos.CountEnemiesInRange(300) - 1 > 2)
                 {
                     continue;
                 }
@@ -522,11 +522,11 @@ namespace Staberina
 
             Orbwalker.ActiveMode = Orbwalking.OrbwalkingMode.None;
 
-            if (Menu.Item("FleeE").IsActive() && E.LSIsReady())
+            if (Menu.Item("FleeE").IsActive() && E.IsReady())
             {
                 var closestTarget = Utility.GetClosestETarget(Game.CursorPos);
 
-                if (closestTarget != null && closestTarget.LSDistance(Game.CursorPos) < 200)
+                if (closestTarget != null && closestTarget.Distance(Game.CursorPos) < 200)
                 {
                     return E.CastOnUnit(closestTarget);
                 }
@@ -536,7 +536,7 @@ namespace Staberina
                     LastWardPlacement.HasTimePassed(2000))
                 {
                     var range = Player.Spellbook.GetSpell(ward).SData.CastRange;
-                    if (Player.Spellbook.CastSpell(ward, Player.ServerPosition.LSExtend(Game.CursorPos, range)))
+                    if (Player.Spellbook.CastSpell(ward, Player.ServerPosition.Extend(Game.CursorPos, range)))
                     {
                         Console.WriteLine("PLACE WARD");
                         LastWardPlacement = Utils.TickCount;
@@ -546,9 +546,9 @@ namespace Staberina
                 }
             }
 
-            if (!Player.LSIsDashing() && Player.LSGetWaypoints().Last().LSDistance(Game.CursorPos) > 100)
+            if (!Player.IsDashing() && Player.GetWaypoints().Last().Distance(Game.CursorPos) > 100)
             {
-                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Player.ServerPosition.LSExtend(Game.CursorPos, 250), false);
+                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Player.ServerPosition.Extend(Game.CursorPos, 250), false);
             }
 
             return false;
@@ -584,7 +584,7 @@ namespace Staberina
                 EvadeDisabler.DisableEvade(2500);
             }
 
-            if (args.Slot.Equals(SpellSlot.E) && CastWAfterE && W.LSIsReady())
+            if (args.Slot.Equals(SpellSlot.E) && CastWAfterE && W.IsReady())
             {
                 CastWAfterE = false;
                 W.Cast();
@@ -600,12 +600,12 @@ namespace Staberina
 
             var minions = MinionManager.GetMinions(E.Range);
 
-            if (Menu.Item("WFarm").IsActive() && W.LSIsReady())
+            if (Menu.Item("WFarm").IsActive() && W.IsReady())
             {
-                var wKillableMinions = minions.Count(m => m.LSIsValidTarget(W.Range) && W.IsKillable(m));
+                var wKillableMinions = minions.Count(m => m.IsValidTarget(W.Range) && W.IsKillable(m));
                 if (wKillableMinions < Menu.Item("WMinionsHit").GetValue<Slider>().Value)
                 {
-                    if (Menu.Item("EFarm").IsActive() && E.LSIsReady()) // e->w
+                    if (Menu.Item("EFarm").IsActive() && E.IsReady()) // e->w
                     {
                         foreach (var target in from target in Utility.GetETargets()
                             let killableMinions =
@@ -628,13 +628,13 @@ namespace Staberina
                 }
             }
 
-            if (!Menu.Item("QFarm").IsActive() || !Q.LSIsReady())
+            if (!Menu.Item("QFarm").IsActive() || !Q.IsReady())
             {
                 return;
             }
 
-            var qKillableMinion = minions.FirstOrDefault(m => m.LSIsValidTarget(Q.Range) && Q.IsKillable(m));
-            var qMinion = minions.Where(m => m.LSIsValidTarget(Q.Range)).MinOrDefault(m => m.Health);
+            var qKillableMinion = minions.FirstOrDefault(m => m.IsValidTarget(Q.Range) && Q.IsKillable(m));
+            var qMinion = minions.Where(m => m.IsValidTarget(Q.Range)).MinOrDefault(m => m.Health);
 
             if (qKillableMinion == null)
             {

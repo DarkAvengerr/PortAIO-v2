@@ -53,7 +53,7 @@ namespace SAutoCarry.Champions
 
         public void BeforeOrbwalk()
         {
-            if (HaveFullFerocity && ObjectManager.Player.HealthPercent <= AutoHealPercent && Spells[W].LSIsReady())
+            if (HaveFullFerocity && ObjectManager.Player.HealthPercent <= AutoHealPercent && Spells[W].IsReady())
                 Spells[W].Cast();
         }
 
@@ -83,7 +83,7 @@ namespace SAutoCarry.Champions
             if (!WillLeap)
             {
                 var t = TargetSelector.GetTarget(Spells[E].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
-                if (t != null && t.LSIsValidTarget(Spells[E].Range) && Spells[E].LSIsReady() && (!HaveFullFerocity || !t.LSIsValidTarget(SCommon.Orbwalking.Utility.GetRealAARange(t))) && ComboUseE)
+                if (t != null && t.IsValidTarget(Spells[E].Range) && Spells[E].IsReady() && (!HaveFullFerocity || !t.IsValidTarget(SCommon.Orbwalking.Utility.GetRealAARange(t))) && ComboUseE)
                 {
                     if (HaveFullFerocity && OneShotComboActive)
                         return;
@@ -91,7 +91,7 @@ namespace SAutoCarry.Champions
                 }
 
                 t = TargetSelector.GetTarget(Spells[W].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
-                if (Spells[W].LSIsReady() && ComboUseW && t != null && t.LSIsValidTarget(Spells[W].Range) && !HaveFullFerocity)
+                if (Spells[W].IsReady() && ComboUseW && t != null && t.IsValidTarget(Spells[W].Range) && !HaveFullFerocity)
                     Spells[W].Cast();
             }
         }
@@ -100,7 +100,7 @@ namespace SAutoCarry.Champions
         {
             if (!LaneClearSaveFerocity || !HaveFullFerocity)
             {
-                if (Spells[W].LSIsReady() && LaneClearUseW)
+                if (Spells[W].IsReady() && LaneClearUseW)
                 {
                     var minion = MinionManager.GetMinions(400, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).FirstOrDefault();
                     if (minion != null)
@@ -121,7 +121,7 @@ namespace SAutoCarry.Champions
                     }
                 }
 
-                if (Spells[E].LSIsReady() && LaneClearUseE)
+                if (Spells[E].IsReady() && LaneClearUseE)
                 {
                     var minion = MinionManager.GetMinions(950, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).FirstOrDefault();
                     if (minion != null)
@@ -145,7 +145,7 @@ namespace SAutoCarry.Champions
                 leapTarget = args.Target as AIHeroClient;
                 if(Utils.TickCount - lastLeap < 100 && !HaveFullFerocity)
                 {
-                    if (Spells[Q].LSIsReady())
+                    if (Spells[Q].IsReady())
                         Spells[Q].Cast(true);
                     else
                         args.Process = false;
@@ -153,7 +153,7 @@ namespace SAutoCarry.Champions
                     lastLeap = 0;
                 }
 
-                if (Spells[Q].LSIsReady() || HaveFullFerocity)
+                if (Spells[Q].IsReady() || HaveFullFerocity)
                 {
                     float dmg = 0f;
                     if (HaveFullFerocity)
@@ -189,7 +189,7 @@ namespace SAutoCarry.Champions
                 else if (Items.HasItem(3748) && Items.CanUseItem(3748)) //titanic
                     Items.UseItem(3748);
 
-                if (leapTarget != null && leapTarget.LSIsValidTarget() && ComboUseE && Spells[E].LSIsReady() && (!HaveFullFerocity || !OneShotComboActive || ObjectManager.Player.HasBuff("rengarqbase") || ObjectManager.Player.HasBuff("rengarqemp")))
+                if (leapTarget != null && leapTarget.IsValidTarget() && ComboUseE && Spells[E].IsReady() && (!HaveFullFerocity || !OneShotComboActive || ObjectManager.Player.HasBuff("rengarqbase") || ObjectManager.Player.HasBuff("rengarqemp")))
                 {
                     LeagueSharp.Common.Utility.DelayAction.Add(Math.Max(1, args.Duration - 200), () =>
                     {
@@ -210,7 +210,7 @@ namespace SAutoCarry.Champions
         {
             if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo)
             {
-                if (Spells[Q].LSIsReady() && ComboUseQ)
+                if (Spells[Q].IsReady() && ComboUseQ)
                     Spells[Q].Cast(true);
             }
             else if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.LaneClear)
@@ -277,7 +277,7 @@ namespace SAutoCarry.Champions
 
         public bool WillLeap
         {
-            get { return ObjectManager.Player.Buffs.Any(p => p.Name.ToLower().Contains("rengarpassivebuff")) || ObjectManager.Player.LSIsDashing(); }
+            get { return ObjectManager.Player.Buffs.Any(p => p.Name.ToLower().Contains("rengarpassivebuff")) || ObjectManager.Player.IsDashing(); }
         }
     }
 }

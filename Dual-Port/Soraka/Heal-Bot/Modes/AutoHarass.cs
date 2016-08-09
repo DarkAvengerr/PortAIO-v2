@@ -17,8 +17,8 @@ using EloBuddy;
 
         internal static void AutoE()
         {
-            if (!Spells.E.LSIsReady() || !Orbwalking.CanAttack() || !ObjectManager.Player.CanCast
-                || ObjectManager.Player.LSHasBuff("Recall")
+            if (!Spells.E.IsReady() || !Orbwalking.CanAttack() || !ObjectManager.Player.CanCast
+                || ObjectManager.Player.HasBuff("Recall")
                 || ObjectManager.Player.ManaPercent <= Config.GetSliderValue("manaAutoHarass"))
             {
                 return;
@@ -40,9 +40,9 @@ using EloBuddy;
             {
                 var bush =
                     ObjectManager.Get<GrassObject>()
-                        .OrderBy(br => br.Position.LSDistance(ObjectManager.Player.Position))
+                        .OrderBy(br => br.Position.Distance(ObjectManager.Player.Position))
                         .FirstOrDefault();
-                if (bush != null && ObjectManager.Player.Position.LSDistance(bush.Position) <= bush.BoundingRadius)
+                if (bush != null && ObjectManager.Player.Position.Distance(bush.Position) <= bush.BoundingRadius)
                 {
                     return;
                 }
@@ -68,7 +68,7 @@ using EloBuddy;
 
         internal static void AutoQ()
         {
-            if (!Spells.Q.LSIsReady() || !ObjectManager.Player.CanCast || ObjectManager.Player.LSHasBuff("Recall")
+            if (!Spells.Q.IsReady() || !ObjectManager.Player.CanCast || ObjectManager.Player.HasBuff("Recall")
                 || ObjectManager.Player.ManaPercent <= Config.GetSliderValue("manaAutoHarass"))
             {
                 return;
@@ -90,9 +90,9 @@ using EloBuddy;
             {
                 var bush =
                     ObjectManager.Get<GrassObject>()
-                        .OrderBy(br => br.Position.LSDistance(ObjectManager.Player.Position))
+                        .OrderBy(br => br.Position.Distance(ObjectManager.Player.Position))
                         .FirstOrDefault();
-                if (bush != null && ObjectManager.Player.Position.LSDistance(bush.Position) <= bush.BoundingRadius)
+                if (bush != null && ObjectManager.Player.Position.Distance(bush.Position) <= bush.BoundingRadius)
                 {
                     return;
                 }

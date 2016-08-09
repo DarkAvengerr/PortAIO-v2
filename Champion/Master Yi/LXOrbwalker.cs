@@ -162,9 +162,9 @@ namespace MasterSharp
             if (Menu.Item("Move_target").GetValue<bool>() && target != null && target is AIHeroClient)
             {
                 if(target.Path.Count()==0)
-                    Orbwalk(target.Position.LSTo2D().LSExtend(target.Direction.LSTo2D(), 140).To3D(), target);
+                    Orbwalk(target.Position.To2D().Extend(target.Direction.To2D(), 140).To3D(), target);
                 else
-                    Orbwalk(target.Position.LSTo2D().LSExtend(target.Path[0].LSTo2D(),140).To3D(), target);
+                    Orbwalk(target.Position.To2D().Extend(target.Path[0].To2D(),140).To3D(), target);
             }
             else
             {
@@ -186,8 +186,8 @@ namespace MasterSharp
             }
             if (!CanMove() || !IsAllowedToMove())
                 return;
-            if (MyHero.IsMelee() && target != null && target.LSDistance(MyHero) < GetAutoAttackRange(MyHero, target) &&
-                Menu.Item("lxOrbwalker_Melee_Prediction").GetValue<bool>() && target is AIHeroClient && Game.CursorPos.LSDistance(target.Position) < 300)
+            if (MyHero.IsMelee() && target != null && target.Distance(MyHero) < GetAutoAttackRange(MyHero, target) &&
+                Menu.Item("lxOrbwalker_Melee_Prediction").GetValue<bool>() && target is AIHeroClient && Game.CursorPos.Distance(target.Position) < 300)
             {
                 _movementPrediction.Delay = MyHero.BasicAttack.SpellCastTime;
                 _movementPrediction.Speed = MyHero.BasicAttack.MissileSpeed;
@@ -208,18 +208,18 @@ namespace MasterSharp
                 return;
             if (holdAreaRadius < 0)
                 holdAreaRadius = Menu.Item("lxOrbwalker_Misc_Holdzone").GetValue<Slider>().Value;
-            if (MyHero.ServerPosition.LSDistance(position) < holdAreaRadius)
+            if (MyHero.ServerPosition.Distance(position) < holdAreaRadius)
             {
                 if (MyHero.Path.Count() > 1)
                     Player.IssueOrder(GameObjectOrder.HoldPosition, MyHero.ServerPosition);
                 return;
             }
-            if (position.LSDistance(MyHero.Position) < 200)
+            if (position.Distance(MyHero.Position) < 200)
                 Player.IssueOrder(GameObjectOrder.MoveTo, position);
             else
             {
                 var point = MyHero.ServerPosition +
-                200 * (position.LSTo2D() - MyHero.ServerPosition.LSTo2D()).LSNormalized().To3D();
+                200 * (position.To2D() - MyHero.ServerPosition.To2D()).Normalized().To3D();
                 Player.IssueOrder(GameObjectOrder.MoveTo, position);
             }
 
@@ -273,7 +273,7 @@ namespace MasterSharp
             if (Menu.Item("lxOrbwalker_Draw_AARange_Enemy").GetValue<Circle>().Active ||
                 Menu.Item("lxOrbwalker_Draw_hitbox").GetValue<Circle>().Active)
             {
-                foreach (var enemy in AllEnemys.Where(enemy => enemy.LSIsValidTarget(1500)))
+                foreach (var enemy in AllEnemys.Where(enemy => enemy.IsValidTarget(1500)))
                 {
                     if (Menu.Item("lxOrbwalker_Draw_AARange_Enemy").GetValue<Circle>().Active)
                         LeagueSharp.Common.Utility.DrawCircle(enemy.Position, GetAutoAttackRange(enemy, MyHero), Menu.Item("lxOrbwalker_Draw_AARange_Enemy").GetValue<Circle>().Color);
@@ -284,7 +284,7 @@ namespace MasterSharp
 
             if (Menu.Item("lxOrbwalker_Draw_AARange_Enemy").GetValue<Circle>().Active)
             {
-                foreach (var enemy in AllEnemys.Where(enemy => enemy.LSIsValidTarget(1500)))
+                foreach (var enemy in AllEnemys.Where(enemy => enemy.IsValidTarget(1500)))
                 {
                     LeagueSharp.Common.Utility.DrawCircle(enemy.Position, GetAutoAttackRange(enemy, MyHero), Menu.Item("lxOrbwalker_Draw_AARange_Enemy").GetValue<Circle>().Color);
 
@@ -301,12 +301,12 @@ namespace MasterSharp
                 Menu.Item("lxOrbwalker_Draw_nearKill").GetValue<Circle>().Active)
             {
                 var minionList = MinionManager.GetMinions(MyHero.Position, GetAutoAttackRange() + 500, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
-                foreach (var minion in minionList.Where(minion => minion.LSIsValidTarget(GetAutoAttackRange() + 500)))
+                foreach (var minion in minionList.Where(minion => minion.IsValidTarget(GetAutoAttackRange() + 500)))
                 {
-                    var attackToKill = Math.Ceiling(minion.MaxHealth / MyHero.LSGetAutoAttackDamage(minion, true));
+                    var attackToKill = Math.Ceiling(minion.MaxHealth / MyHero.GetAutoAttackDamage(minion, true));
                     var hpBarPosition = minion.HPBarPosition;
                     var barWidth = minion.IsMelee() ? 75 : 80;
-                    if (minion.LSHasBuff("turretshield", true))
+                    if (minion.HasBuff("turretshield", true))
                         barWidth = 70;
                     var barDistance = (float)(barWidth / attackToKill);
                     if (Menu.Item("lxOrbwalker_Draw_MinionHPBar").GetValue<Circle>().Active)
@@ -322,10 +322,10 @@ namespace MasterSharp
                         }
                     }
                     if (Menu.Item("lxOrbwalker_Draw_Lasthit").GetValue<Circle>().Active &&
-                        minion.Health <= MyHero.LSGetAutoAttackDamage(minion, true))
+                        minion.Health <= MyHero.GetAutoAttackDamage(minion, true))
                         LeagueSharp.Common.Utility.DrawCircle(minion.Position, minion.BoundingRadius, Menu.Item("lxOrbwalker_Draw_Lasthit").GetValue<Circle>().Color);
                     else if (Menu.Item("lxOrbwalker_Draw_nearKill").GetValue<Circle>().Active &&
-                             minion.Health <= MyHero.LSGetAutoAttackDamage(minion, true) * 2)
+                             minion.Health <= MyHero.GetAutoAttackDamage(minion, true) * 2)
                         LeagueSharp.Common.Utility.DrawCircle(minion.Position, minion.BoundingRadius, Menu.Item("lxOrbwalker_Draw_nearKill").GetValue<Circle>().Color);
                 }
             }
@@ -382,12 +382,12 @@ namespace MasterSharp
                 foreach (
                     var minion in
                         from minion in
-                            ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.LSIsValidTarget() && InAutoAttackRange(minion))
+                            ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
                         let t = (int)(MyHero.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
-                                1000 * (int)MyHero.LSDistance(minion) / (int)MyProjectileSpeed()
+                                1000 * (int)MyHero.Distance(minion) / (int)MyProjectileSpeed()
                         let predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay())
                         where minion.Team != GameObjectTeam.Neutral && predHealth > 0 &&
-                              predHealth <= MyHero.LSGetAutoAttackDamage(minion, true)
+                              predHealth <= MyHero.GetAutoAttackDamage(minion, true)
                         select minion)
                     return minion;
             }
@@ -396,7 +396,7 @@ namespace MasterSharp
             {
                 foreach (
                     var turret in
-                        ObjectManager.Get<Obj_AI_Turret>().Where(turret => turret.LSIsValidTarget(GetAutoAttackRange(MyHero, turret))))
+                        ObjectManager.Get<Obj_AI_Turret>().Where(turret => turret.IsValidTarget(GetAutoAttackRange(MyHero, turret))))
                     return turret;
             }
 
@@ -412,7 +412,7 @@ namespace MasterSharp
             {
                 maxhealth = new float[] { 0 };
                 var maxhealth1 = maxhealth;
-                foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.LSIsValidTarget(GetAutoAttackRange(MyHero, minion)) && minion.Team == GameObjectTeam.Neutral).Where(minion => minion.MaxHealth >= maxhealth1[0] || Math.Abs(maxhealth1[0] - float.MaxValue) < float.Epsilon))
+                foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(GetAutoAttackRange(MyHero, minion)) && minion.Team == GameObjectTeam.Neutral).Where(minion => minion.MaxHealth >= maxhealth1[0] || Math.Abs(maxhealth1[0] - float.MaxValue) < float.Epsilon))
                 {
                     tempTarget = minion;
                     maxhealth[0] = minion.MaxHealth;
@@ -425,10 +425,10 @@ namespace MasterSharp
                 return null;
             maxhealth = new float[] { 0 };
             foreach (var minion in from minion in ObjectManager.Get<Obj_AI_Minion>()
-                .Where(minion => minion.LSIsValidTarget(GetAutoAttackRange(MyHero, minion)))
+                .Where(minion => minion.IsValidTarget(GetAutoAttackRange(MyHero, minion)))
                                    let predHealth = HealthPrediction.LaneClearHealthPrediction(minion, (int)((MyHero.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay())
                                    where predHealth >=
-                                         2 * MyHero.LSGetAutoAttackDamage(minion, true) ||
+                                         2 * MyHero.GetAutoAttackDamage(minion, true) ||
                                          Math.Abs(predHealth - minion.Health) < float.Epsilon
                                    where minion.Health >= maxhealth[0] || Math.Abs(maxhealth[0] - float.MaxValue) < float.Epsilon
                                    select minion)
@@ -445,10 +445,10 @@ namespace MasterSharp
             ObjectManager.Get<Obj_AI_Minion>()
             .Any(
             minion =>
-            minion.LSIsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
+            minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
             InAutoAttackRange(minion) &&
             HealthPrediction.LaneClearHealthPrediction(
-            minion, (int)((MyHero.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay()) <= MyHero.LSGetAutoAttackDamage(minion));
+            minion, (int)((MyHero.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay()) <= MyHero.GetAutoAttackDamage(minion));
         }
 
         public static bool IsAutoAttack(string name)
@@ -501,7 +501,7 @@ namespace MasterSharp
         {
             AIHeroClient killableEnemy = null;
             var hitsToKill = double.MaxValue;
-            foreach (var enemy in AllEnemys.Where(hero => hero.LSIsValidTarget() && InAutoAttackRange(hero)))
+            foreach (var enemy in AllEnemys.Where(hero => hero.IsValidTarget() && InAutoAttackRange(hero)))
             {
                 var killHits = CountKillhits(enemy);
                 if (killableEnemy != null && !(killHits < hitsToKill))
@@ -514,7 +514,7 @@ namespace MasterSharp
 
         private static double CountKillhits(AIHeroClient enemy)
         {
-            return enemy.Health / MyHero.LSGetAutoAttackDamage(enemy);
+            return enemy.Health / MyHero.GetAutoAttackDamage(enemy);
         }
 
 
@@ -565,7 +565,7 @@ namespace MasterSharp
             if (target == null)
                 return false;
             var myRange = GetAutoAttackRange(MyHero, target);
-            return Vector2.DistanceSquared(target.ServerPosition.LSTo2D(), MyHero.ServerPosition.LSTo2D()) <= myRange * myRange;
+            return Vector2.DistanceSquared(target.ServerPosition.To2D(), MyHero.ServerPosition.To2D()) <= myRange * myRange;
         }
 
         public static Mode CurrentMode

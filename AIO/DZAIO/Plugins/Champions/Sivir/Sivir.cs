@@ -67,7 +67,7 @@ using EloBuddy;
 
         private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender is AIHeroClient && !args.SData.LSIsAutoAttack() && sender.IsEnemy &&
+            if (sender is AIHeroClient && !args.SData.IsAutoAttack() && sender.IsEnemy &&
                 (args.Target != null && args.Target.IsMe) && Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.sivir.extra.autoE"))
             {
                 LeagueSharp.Common.Utility.DelayAction.Add(Variables.AssemblyMenu.GetItemValue<Slider>("dzaio.champion.sivir.extra.autoE.Delay").Value,
@@ -87,7 +87,7 @@ using EloBuddy;
                 || (Variables.Spells[SpellSlot.W].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass) 
                 && ObjectManager.Player.ManaPercent >= Variables.AssemblyMenu.GetItemValue<Slider>("dzaio.champion.sivir.mixed.mana").Value))
             {
-                if (target.IsValid<AIHeroClient>() && target.LSIsValidTarget())
+                if (target.IsValid<AIHeroClient>() && target.IsValidTarget())
                 {
                     Variables.Spells[SpellSlot.W].Cast();
                 }
@@ -133,7 +133,7 @@ using EloBuddy;
             if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo))
             {
                 var qTarget = Variables.Spells[SpellSlot.Q].GetTarget();
-                if (qTarget.LSIsValidTarget())
+                if (qTarget.IsValidTarget())
                 {
                     var qPrediction = Variables.Spells[SpellSlot.Q].GetPrediction(qTarget);
                     if (qPrediction.Hitchance >= HitChance.High)
@@ -155,7 +155,7 @@ using EloBuddy;
             if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass))
             {
                 var qTarget = Variables.Spells[SpellSlot.Q].GetTarget();
-                if (qTarget.LSIsValidTarget())
+                if (qTarget.IsValidTarget())
                 {
                     var qPrediction = Variables.Spells[SpellSlot.Q].GetPrediction(qTarget);
                     if (qPrediction.Hitchance >= HitChance.High)
@@ -179,7 +179,7 @@ using EloBuddy;
             var positions = MinionManager.GetMinions(Variables.Spells[SpellSlot.Q].Range,
                     MinionTypes.All, MinionTeam.NotAlly,
                     MinionOrderTypes.MaxHealth)
-                    .Select(m => m.ServerPosition.LSTo2D()).ToList();
+                    .Select(m => m.ServerPosition.To2D()).ToList();
 
 
             if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Farm))

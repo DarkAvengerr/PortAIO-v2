@@ -20,7 +20,7 @@ namespace Mordekaiser.Events
             }
 
             if (Menu.MenuKeys.Item("Keys.Harass").GetValue<KeyBind>().Active ||
-                (Menu.MenuE.Item("UseE.Toggle").GetValue<KeyBind>().Active && !Utils.Player.Self.LSIsRecalling()))
+                (Menu.MenuE.Item("UseE.Toggle").GetValue<KeyBind>().Active && !Utils.Player.Self.IsRecalling()))
             {
                 ExecuteE();
             }
@@ -36,14 +36,14 @@ namespace Mordekaiser.Events
             if (!Menu.MenuE.Item("UseE.Harass").GetValue<bool>())
                 return;
 
-            if (!Spells.E.LSIsReady())
+            if (!Spells.E.IsReady())
             {
                 return;
             }
 
             var t = TargetSelector.GetTarget(Spells.E.Range, TargetSelector.DamageType.Magical);
 
-            if (!t.LSIsValidTarget())
+            if (!t.IsValidTarget())
             {
                 return;
             }

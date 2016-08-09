@@ -16,7 +16,7 @@ using EloBuddy;
     {
         public static void EPercentOnEnemy(Color color)
         {
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(o => o.IsHPBarRendered && o.IsEnemy && o.LSIsValidTarget(1000)))
+            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(o => o.IsHPBarRendered && o.IsEnemy && o.IsValidTarget(1000)))
             {
                 float getTotalDamage = Calculators.ChampionTotalDamage(enemy);
                 float tDamage = getTotalDamage * 100 / enemy.Health;
@@ -35,7 +35,7 @@ using EloBuddy;
                     ObjectManager.Get<Obj_AI_Minion>()
                         .Where(
                             o =>
-                                o.LSIsValidTarget(Program.E.Range) && o.Team == GameObjectTeam.Neutral && o.IsVisible && !o.IsDead)
+                                o.IsValidTarget(Program.E.Range) && o.Team == GameObjectTeam.Neutral && o.IsVisible && !o.IsDead)
                 )
             {
                 float tDamage = Calculators.JungleTotalDamage(jungleMobs) * 100 / jungleMobs.Health;
@@ -94,21 +94,21 @@ using EloBuddy;
             var heroPos = Drawing.WorldToScreen(ObjectManager.Player.Position);
             var kalistaSupport = ObjectManager.Get<Obj_AI_Base>().FirstOrDefault(x => x.IsAlly && x.HasBuff("kalistacoopstrikeally"));
 
-            if (kalistaSupport.LSDistance(ObjectManager.Player.Position) < 500 && !ObjectManager.Player.IsDead)
+            if (kalistaSupport.Distance(ObjectManager.Player.Position) < 500 && !ObjectManager.Player.IsDead)
             {
                 Drawing.DrawText(heroPos.X - 100, heroPos.Y + 25, color, "Support Connection Signal: Good");
             }
-            if (kalistaSupport.LSDistance(ObjectManager.Player.Position) > 500 && kalistaSupport.LSDistance(ObjectManager.Player.Position) < 1000
+            if (kalistaSupport.Distance(ObjectManager.Player.Position) > 500 && kalistaSupport.Distance(ObjectManager.Player.Position) < 1000
                 && !ObjectManager.Player.IsDead)
             {
                 Drawing.DrawText(heroPos.X - 100, heroPos.Y + 25, color, "Support Connection Signal: Medium");
             }
-            if (kalistaSupport.LSDistance(ObjectManager.Player.Position) > 1000 && kalistaSupport.LSDistance(ObjectManager.Player.Position) < 1500
+            if (kalistaSupport.Distance(ObjectManager.Player.Position) > 1000 && kalistaSupport.Distance(ObjectManager.Player.Position) < 1500
                 && !ObjectManager.Player.IsDead)
             {
                 Drawing.DrawText(heroPos.X - 100, heroPos.Y + 25, color, "Support Connection Signal: Low");
             }
-            if (kalistaSupport.LSDistance(ObjectManager.Player.Position) > 1500 && !ObjectManager.Player.IsDead)
+            if (kalistaSupport.Distance(ObjectManager.Player.Position) > 1500 && !ObjectManager.Player.IsDead)
             {
                 Drawing.DrawText(heroPos.X - 100, heroPos.Y + 25, color, "Support Connection Signal: Missed");
             }

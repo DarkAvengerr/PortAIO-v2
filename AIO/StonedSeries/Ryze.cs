@@ -164,15 +164,15 @@ using EloBuddy;
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
             if (target == null) return;
 
-            if (Q.LSIsReady() && target.LSDistance(Player) <= Q.Range && target.LSIsValidTarget() && Config.Item("UseQHarass").GetValue<bool>())
+            if (Q.IsReady() && target.Distance(Player) <= Q.Range && target.IsValidTarget() && Config.Item("UseQHarass").GetValue<bool>())
             {
                 Q.Cast(target);
             }
-            if (W.LSIsReady() && target.LSIsValidTarget() && target.LSDistance(Player) <= W.Range && Config.Item("UseWHarass").GetValue<bool>())
+            if (W.IsReady() && target.IsValidTarget() && target.Distance(Player) <= W.Range && Config.Item("UseWHarass").GetValue<bool>())
             {
                 W.Cast(target);
             }
-            if (E.LSIsReady() && target.LSIsValidTarget() && target.LSDistance(Player) <= E.Range && Config.Item("UseEHarass").GetValue<bool>())
+            if (E.IsReady() && target.IsValidTarget() && target.Distance(Player) <= E.Range && Config.Item("UseEHarass").GetValue<bool>())
             {
                 E.Cast(target);
             }
@@ -190,17 +190,17 @@ using EloBuddy;
 
             if (minions.Count > 0)
             {
-                if (useQ && Q.LSIsReady() && minions[0].LSIsValidTarget() && Player.LSDistance(minions[0]) <= Q.Range)
+                if (useQ && Q.IsReady() && minions[0].IsValidTarget() && Player.Distance(minions[0]) <= Q.Range)
                 {
                     Q.Cast(minions[0]);
                 }
 
-                if (useW && W.LSIsReady() && minions[0].LSIsValidTarget() && Player.LSDistance(minions[0]) <= W.Range)
+                if (useW && W.IsReady() && minions[0].IsValidTarget() && Player.Distance(minions[0]) <= W.Range)
                 {
                     W.Cast(minions[0]);
                 }
 
-                if (useE && E.LSIsReady() && minions[0].LSIsValidTarget() && Player.LSDistance(minions[0]) <= E.Range)
+                if (useE && E.IsReady() && minions[0].IsValidTarget() && Player.Distance(minions[0]) <= E.Range)
                 {
                     E.Cast(minions[0]);
                 }
@@ -217,17 +217,17 @@ using EloBuddy;
 
             if (allminions.Count > 0)
             {
-                if (useQ && Q.LSIsReady() && allminions[0].LSIsValidTarget() && Player.LSDistance(allminions[0]) <= Q.Range)
+                if (useQ && Q.IsReady() && allminions[0].IsValidTarget() && Player.Distance(allminions[0]) <= Q.Range)
                 {
                     Q.Cast(allminions[0]);
                 }
 
-                if (useW && W.LSIsReady() && allminions[0].LSIsValidTarget() && Player.LSDistance(allminions[0]) <= W.Range)
+                if (useW && W.IsReady() && allminions[0].IsValidTarget() && Player.Distance(allminions[0]) <= W.Range)
                 {
                     W.Cast(allminions[0]);
                 }
 
-                if (useE && E.LSIsReady() && allminions[0].LSIsValidTarget() && Player.LSDistance(allminions[0]) <= E.Range)
+                if (useE && E.IsReady() && allminions[0].IsValidTarget() && Player.Distance(allminions[0]) <= E.Range)
                 {
                     E.Cast(allminions[0]);
                 }
@@ -241,50 +241,50 @@ using EloBuddy;
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
             if (target == null) return;
 
-            if (Q.LSIsReady() && target.LSDistance(Player) <= Q.Range && target.LSIsValidTarget() && Config.Item("UseQCombo").GetValue<bool>())
+            if (Q.IsReady() && target.Distance(Player) <= Q.Range && target.IsValidTarget() && Config.Item("UseQCombo").GetValue<bool>())
             {
                 Q.Cast(target);
             }
-            if (W.LSIsReady() && target.LSIsValidTarget() && target.LSDistance(Player) <= W.Range && Config.Item("UseWCombo").GetValue<bool>())
+            if (W.IsReady() && target.IsValidTarget() && target.Distance(Player) <= W.Range && Config.Item("UseWCombo").GetValue<bool>())
             {
                 W.Cast(target);
             }
-            if (E.LSIsReady() && target.LSIsValidTarget() && target.LSDistance(Player) <= E.Range && Config.Item("UseECombo").GetValue<bool>())
+            if (E.IsReady() && target.IsValidTarget() && target.Distance(Player) <= E.Range && Config.Item("UseECombo").GetValue<bool>())
             {
                 E.Cast(target);
             }
-            if (R.LSIsReady() && target.LSIsValidTarget() && Player.HealthPercentage() <= Config.Item("RHP").GetValue<Slider>().Value && Config.Item("UseRCombo").GetValue<bool>())
+            if (R.IsReady() && target.IsValidTarget() && Player.HealthPercentage() <= Config.Item("RHP").GetValue<Slider>().Value && Config.Item("UseRCombo").GetValue<bool>())
             {
                 R.Cast();
             }
 
             if (Config.Item("UseItems").GetValue<bool>())
             {
-                if (Player.LSDistance(target) <= RDO.Range)
+                if (Player.Distance(target) <= RDO.Range)
                 {
                     RDO.Cast(target);
                 }
-                if (Player.LSDistance(target) <= HYD.Range)
+                if (Player.Distance(target) <= HYD.Range)
                 {
                     HYD.Cast(target);
                 }
-                if (Player.LSDistance(target) <= DFG.Range)
+                if (Player.Distance(target) <= DFG.Range)
                 {
                     DFG.Cast(target);
                 }
-                if (Player.LSDistance(target) <= BOTK.Range)
+                if (Player.Distance(target) <= BOTK.Range)
                 {
                     BOTK.Cast(target);
                 }
-                if (Player.LSDistance(target) <= CUT.Range)
+                if (Player.Distance(target) <= CUT.Range)
                 {
                     CUT.Cast(target);
                 }
-                if (Player.LSDistance(target) <= 125f)
+                if (Player.Distance(target) <= 125f)
                 {
                     YOY.Cast();
                 }
-                if (Player.LSDistance(target) <= TYM.Range)
+                if (Player.Distance(target) <= TYM.Range)
                 {
                     TYM.Cast(target);
                 }

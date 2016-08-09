@@ -21,7 +21,7 @@ using EloBuddy; namespace AutoJungle.Data
 
         public static void CastSmite(Obj_AI_Base target)
         {
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return;
             }
@@ -34,12 +34,12 @@ using EloBuddy; namespace AutoJungle.Data
                 bool smiteReady = ObjectManager.Player.Spellbook.CanUseSpell(smiteSlot) == SpellState.Ready;
                 if (target != null)
                 {
-                    if (smite.CanCast(target) && smiteReady && player.LSDistance(target.Position) <= smite.Range &&
+                    if (smite.CanCast(target) && smiteReady && player.Distance(target.Position) <= smite.Range &&
                         target.Health < target.MaxHealth)
                     {
                         if (smiteDamage(target) > target.Health ||
                             (((target.Name.Contains("Krug") || target.Name.Contains("Gromp")) &&
-                              player.LSCountEnemiesInRange(1000) == 0)) ||
+                              player.CountEnemiesInRange(1000) == 0)) ||
                             (target.Name.Contains("SRU_Red") && player.HealthPercent < 5))
                         {
                             smite.Cast(target);
@@ -51,7 +51,7 @@ using EloBuddy; namespace AutoJungle.Data
 
         public static void CastSmiteHero(AIHeroClient target)
         {
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return;
             }
@@ -64,9 +64,9 @@ using EloBuddy; namespace AutoJungle.Data
                 bool smiteReady = ObjectManager.Player.Spellbook.CanUseSpell(smiteSlot) == SpellState.Ready;
                 if (target != null)
                 {
-                    if (smite.CanCast(target) && smiteReady && player.LSDistance(target.Position) <= smite.Range &&
+                    if (smite.CanCast(target) && smiteReady && player.Distance(target.Position) <= smite.Range &&
                         target.Health > Helpers.GetComboDMG(player, target) * 0.7f &&
-                        player.LSDistance(target) < Orbwalking.GetRealAutoAttackRange(target) &&
+                        player.Distance(target) < Orbwalking.GetRealAutoAttackRange(target) &&
                         Program._GameInfo.SmiteableMob == null)
                     {
                         smite.Cast(target);

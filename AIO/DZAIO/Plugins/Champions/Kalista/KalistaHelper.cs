@@ -20,7 +20,7 @@ using EloBuddy;
 
         public static BuffInstance GetRendBuff(this Obj_AI_Base target)
         {
-            return target.Buffs.FirstOrDefault(b => b.Caster.IsMe && b.LSIsValidBuff() && b.DisplayName == "KalistaExpungeMarker");
+            return target.Buffs.FirstOrDefault(b => b.Caster.IsMe && b.IsValidBuff() && b.DisplayName == "KalistaExpungeMarker");
         }
 
         public static bool RendAboutToRunOut(this Obj_AI_Base target)
@@ -33,7 +33,7 @@ using EloBuddy;
             var rendBuffer = 25f;
 
             return target.HasRend()
-                    && target.LSIsValidTarget(Variables.CurrentChampion.GetSpells()[SpellSlot.E].Range) &&
+                    && target.IsValidTarget(Variables.CurrentChampion.GetSpells()[SpellSlot.E].Range) &&
                    (HealthPrediction.GetHealthPrediction(target, 280) > 0 &&
                     HealthPrediction.GetHealthPrediction(target, 280) + rendBuffer <= GetRendDamage(target)) &&
                    (IsNotInvulnerable(target));
@@ -55,13 +55,13 @@ using EloBuddy;
                 switch (t.Item3)
                 {
                     case ReductionType.Player:
-                        if (ObjectManager.Player.LSHasBuff(t.Item1))
+                        if (ObjectManager.Player.HasBuff(t.Item1))
                         {
                             baseDamage *= t.Item2;
                         }
                         break;
                     case ReductionType.Target:
-                        if (target.LSHasBuff(t.Item1))
+                        if (target.HasBuff(t.Item1))
                         {
                             baseDamage *= t.Item2;
                         }

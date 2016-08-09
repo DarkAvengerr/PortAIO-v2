@@ -32,8 +32,8 @@
             PredictionItem predictionItem = predictionItems.First(x => x.Target == target);
             Vector3 castPosition = predictionItem.GetPrediction();
 
-            if (predictionItem.PredictionSpell.LSIsReady() && predictionItem.PredictionSpell.IsInRange(castPosition)
-                && !castPosition.LSIsWall())
+            if (predictionItem.PredictionSpell.IsReady() && predictionItem.PredictionSpell.IsInRange(castPosition)
+                && !castPosition.IsWall())
             {
                 predictionItem.PredictionSpell.Cast(castPosition);
             }

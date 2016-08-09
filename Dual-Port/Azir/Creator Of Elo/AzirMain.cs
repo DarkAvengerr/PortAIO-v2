@@ -100,7 +100,7 @@ using EloBuddy;
                 
                     if (m.IsDead) continue;
 
-                    x += HeroManager.Enemies.Count(h => m.LSDistance(h) < 315);
+                    x += HeroManager.Enemies.Count(h => m.Distance(h) < 315);
 
                     Render.Circle.DrawCircle(m.Position, 315,
                         x > 0 ? System.Drawing.Color.GreenYellow : System.Drawing.Color.PaleVioletRed);
@@ -108,7 +108,7 @@ using EloBuddy;
                     var wtssxt = Drawing.WorldToScreen(HeroManager.Player.ServerPosition);
 
                      Drawing.DrawLine(wts[0], wts[1], wtssxt[0], wtssxt[1], 2f,
-                        m.LSDistance(HeroManager.Player) < 950
+                        m.Distance(HeroManager.Player) < 950
                             ? System.Drawing.Color.GreenYellow
                             : System.Drawing.Color.PaleVioletRed);
                 }

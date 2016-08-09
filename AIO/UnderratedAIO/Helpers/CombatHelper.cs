@@ -94,9 +94,9 @@ namespace UnderratedAIO.Helpers
                 for (int j = 1; j < 6; j++)
                 {
                     newPos = new Vector3(target.Position.X + 65 * j, target.Position.Y + 65 * j, target.Position.Z);
-                    var rotated = newPos.LSTo2D().LSRotateAroundPoint(target.Position.LSTo2D(), 45 * i).To3D();
-                    if (rotated.LSIsValid() && Environment.Map.CheckWalls(rotated, target.Position) &&
-                        player.LSDistance(rotated) < 400)
+                    var rotated = newPos.To2D().RotateAroundPoint(target.Position.To2D(), 45 * i).To3D();
+                    if (rotated.IsValid() && Environment.Map.CheckWalls(rotated, target.Position) &&
+                        player.Distance(rotated) < 400)
                     {
                         return rotated;
                     }
@@ -116,8 +116,8 @@ namespace UnderratedAIO.Helpers
                 PointsAroundTheTarget(target.Position, 500)
                     .Where(
                         p =>
-                            p.LSIsValid() && target.LSDistance(p) > 80 && target.LSDistance(p) < 485 &&
-                            player.LSDistance(p) < 400 && !p.LSIsWall() && Environment.Map.CheckWalls(p, target.Position))
+                            p.IsValid() && target.Distance(p) > 80 && target.Distance(p) < 485 &&
+                            player.Distance(p) < 400 && !p.IsWall() && Environment.Map.CheckWalls(p, target.Position))
                     .FirstOrDefault();
         }
 
@@ -131,10 +131,10 @@ namespace UnderratedAIO.Helpers
                 PointsAroundTheTarget(target.Position, 500)
                     .Where(
                         p =>
-                            p.LSDistance(player.Position) < 500 && p.LSIsValid() &&
-                            target.LSDistance(p) < Orbwalking.GetRealAutoAttackRange(player) && !p.LSIsWall() &&
+                            p.Distance(player.Position) < 500 && p.IsValid() &&
+                            target.Distance(p) < Orbwalking.GetRealAutoAttackRange(player) && !p.IsWall() &&
                             Environment.Map.CheckWalls(p, target.Position))
-                    .OrderBy(p => p.LSDistance(player.Position))
+                    .OrderBy(p => p.Distance(player.Position))
                     .FirstOrDefault();
         }
 
@@ -145,7 +145,7 @@ namespace UnderratedAIO.Helpers
         private static float RivenDamageQ(SpellDataInst spell, AIHeroClient src, AIHeroClient dsc)
         {
             double dmg = 0;
-            if (spell.LSIsReady())
+            if (spell.IsReady())
             {
                 dmg += src.CalcDamage(
                     dsc, Damage.DamageType.Physical,
@@ -163,7 +163,7 @@ namespace UnderratedAIO.Helpers
         {
             return
                 ObjectManager.Get<AIHeroClient>()
-                    .Where(i => i.IsEnemy && !i.IsDead && player.LSDistance(i) < p)
+                    .Where(i => i.IsEnemy && !i.IsDead && player.Distance(i) < p)
                     .SelectMany(enemy => enemy.Buffs)
                     .Count(buff => buff.Name == "sejuanifrost");
         }
@@ -172,7 +172,7 @@ namespace UnderratedAIO.Helpers
         {
             return
                 ObjectManager.Get<AIHeroClient>()
-                    .Where(i => i.IsEnemy && !i.IsDead && player.LSDistance(i) < p)
+                    .Where(i => i.IsEnemy && !i.IsDead && player.Distance(i) < p)
                     .SelectMany(enemy => enemy.Buffs)
                     .Count(buff => buff.Name == "KennenMarkOfStorm");
         }
@@ -180,7 +180,7 @@ namespace UnderratedAIO.Helpers
         public static int SejuaniCountFrostMinion(float p)
         {
             var num = 0;
-            foreach (var enemy in ObjectManager.Get<Obj_AI_Minion>().Where(i => !i.IsDead && player.LSDistance(i) < p))
+            foreach (var enemy in ObjectManager.Get<Obj_AI_Minion>().Where(i => !i.IsDead && player.Distance(i) < p))
             {
                 foreach (BuffInstance buff in enemy.Buffs)
                 {
@@ -221,10 +221,10 @@ namespace UnderratedAIO.Helpers
         public static bool CheckWalls(Vector3 from, Vector3 to)
         {
             var steps = 6f;
-            var stepLength = from.LSDistance(to) / steps;
+            var stepLength = from.Distance(to) / steps;
             for (int i = 1; i < steps + 1; i++)
             {
-                if (from.LSExtend(to, stepLength * i).LSIsWall())
+                if (from.Extend(to, stepLength * i).IsWall())
                 {
                     return true;
                 }
@@ -234,7 +234,7 @@ namespace UnderratedAIO.Helpers
 
         public static List<Vector3> PointsAroundTheTarget(Vector3 pos, float dist, float prec = 15, float prec2 = 6)
         {
-            if (!pos.LSIsValid())
+            if (!pos.IsValid())
             {
                 return new List<Vector3>();
             }
@@ -268,7 +268,7 @@ namespace UnderratedAIO.Helpers
 
         public static List<Vector3> PointsAroundTheTargetOuterRing(Vector3 pos, float dist, float width = 15)
         {
-            if (!pos.LSIsValid())
+            if (!pos.IsValid())
             {
                 return new List<Vector3>();
             }
@@ -288,25 +288,25 @@ namespace UnderratedAIO.Helpers
 
         public static bool IsFacing(Obj_AI_Base source, Vector3 target, float angle = 90)
         {
-            if (source == null || !target.LSIsValid())
+            if (source == null || !target.IsValid())
             {
                 return false;
             }
             return
                 (double)
-                    Geometry.LSAngleBetween(
-                        Geometry.LSPerpendicular(Geometry.LSTo2D(source.Direction)), Geometry.LSTo2D(target - source.Position)) <
+                    Geometry.AngleBetween(
+                        Geometry.Perpendicular(Geometry.To2D(source.Direction)), Geometry.To2D(target - source.Position)) <
                 angle;
         }
 
         public static double GetAngle(Obj_AI_Base source, Vector3 target)
         {
-            if (source == null || !target.LSIsValid())
+            if (source == null || !target.IsValid())
             {
                 return 0;
             }
-            return Geometry.LSAngleBetween(
-                Geometry.LSPerpendicular(Geometry.LSTo2D(source.Direction)), Geometry.LSTo2D(target - source.Position));
+            return Geometry.AngleBetween(
+                Geometry.Perpendicular(Geometry.To2D(source.Direction)), Geometry.To2D(target - source.Position));
             ;
         }
 
@@ -350,7 +350,7 @@ namespace UnderratedAIO.Helpers
                 ObjectManager.Get<AIHeroClient>()
                     .Where(
                         i =>
-                            i.LSDistance(player.Position) < 950 && i.IsEnemy && !i.IsAlly && !i.IsDead && !i.IsMinion &&
+                            i.Distance(player.Position) < 950 && i.IsEnemy && !i.IsAlly && !i.IsDead && !i.IsMinion &&
                             !i.IsMe)) {}
 
 
@@ -359,20 +359,20 @@ namespace UnderratedAIO.Helpers
 
         public static Geometry.Polygon GetPoly(Vector3 pos, float range, float widht)
         {
-            var POS = player.ServerPosition.LSExtend(pos, range);
-            var direction = (POS.LSTo2D() - player.ServerPosition.LSTo2D()).LSNormalized();
+            var POS = player.ServerPosition.Extend(pos, range);
+            var direction = (POS.To2D() - player.ServerPosition.To2D()).Normalized();
 
-            var pos1 = (player.ServerPosition.LSTo2D() - direction.LSPerpendicular() * widht / 2f).To3D();
+            var pos1 = (player.ServerPosition.To2D() - direction.Perpendicular() * widht / 2f).To3D();
 
             var pos2 =
-                (POS.LSTo2D() + (POS.LSTo2D() - player.ServerPosition.LSTo2D()).LSNormalized() +
-                 direction.LSPerpendicular() * widht / 2f).To3D();
+                (POS.To2D() + (POS.To2D() - player.ServerPosition.To2D()).Normalized() +
+                 direction.Perpendicular() * widht / 2f).To3D();
 
-            var pos3 = (player.ServerPosition.LSTo2D() + direction.LSPerpendicular() * widht / 2f).To3D();
+            var pos3 = (player.ServerPosition.To2D() + direction.Perpendicular() * widht / 2f).To3D();
 
             var pos4 =
-                (POS.LSTo2D() + (POS.LSTo2D() - player.ServerPosition.LSTo2D()).LSNormalized() -
-                 direction.LSPerpendicular() * widht / 2f).To3D();
+                (POS.To2D() + (POS.To2D() - player.ServerPosition.To2D()).Normalized() -
+                 direction.Perpendicular() * widht / 2f).To3D();
             var poly = new Geometry.Polygon();
             poly.Add(pos1);
             poly.Add(pos3);
@@ -383,18 +383,18 @@ namespace UnderratedAIO.Helpers
 
         public static Geometry.Polygon GetPolyFromVector(Vector3 from, Vector3 to, float width)
         {
-            var POS = to.LSExtend(from, from.LSDistance(to));
-            var direction = (POS.LSTo2D() - to.LSTo2D()).LSNormalized();
+            var POS = to.Extend(from, from.Distance(to));
+            var direction = (POS.To2D() - to.To2D()).Normalized();
 
-            var pos1 = (to.LSTo2D() - direction.LSPerpendicular() * width / 2f).To3D();
+            var pos1 = (to.To2D() - direction.Perpendicular() * width / 2f).To3D();
 
             var pos2 =
-                (POS.LSTo2D() + (POS.LSTo2D() - to.LSTo2D()).LSNormalized() + direction.LSPerpendicular() * width / 2f).To3D();
+                (POS.To2D() + (POS.To2D() - to.To2D()).Normalized() + direction.Perpendicular() * width / 2f).To3D();
 
-            var pos3 = (to.LSTo2D() + direction.LSPerpendicular() * width / 2f).To3D();
+            var pos3 = (to.To2D() + direction.Perpendicular() * width / 2f).To3D();
 
             var pos4 =
-                (POS.LSTo2D() + (POS.LSTo2D() - to.LSTo2D()).LSNormalized() - direction.LSPerpendicular() * width / 2f).To3D();
+                (POS.To2D() + (POS.To2D() - to.To2D()).Normalized() - direction.Perpendicular() * width / 2f).To3D();
             var poly = new Geometry.Polygon();
             poly.Add(pos1);
             poly.Add(pos3);
@@ -412,11 +412,11 @@ namespace UnderratedAIO.Helpers
             {
                 if (enemy.Crit > 0)
                 {
-                    basicDmg += enemy.LSGetAutoAttackDamage(player) * (1 + enemy.Crit / attacks);
+                    basicDmg += enemy.GetAutoAttackDamage(player) * (1 + enemy.Crit / attacks);
                 }
                 else
                 {
-                    basicDmg += enemy.LSGetAutoAttackDamage(player);
+                    basicDmg += enemy.GetAutoAttackDamage(player);
                 }
             }
             result += basicDmg;
@@ -431,154 +431,154 @@ namespace UnderratedAIO.Helpers
                         case "Ahri":
                             if (spell.Slot == SpellSlot.Q)
                             {
-                                result += (Damage.LSGetSpellDamage(enemy, player, spell.Slot));
-                                result += (Damage.LSGetSpellDamage(enemy, player, spell.Slot, 1));
+                                result += (Damage.GetSpellDamage(enemy, player, spell.Slot));
+                                result += (Damage.GetSpellDamage(enemy, player, spell.Slot, 1));
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         case "Akali":
                             if (spell.Slot == SpellSlot.R)
                             {
-                                result += (Damage.LSGetSpellDamage(enemy, player, spell.Slot) * spell.Ammo);
+                                result += (Damage.GetSpellDamage(enemy, player, spell.Slot) * spell.Ammo);
                             }
                             else if (spell.Slot == SpellSlot.Q)
                             {
-                                result += (Damage.LSGetSpellDamage(enemy, player, spell.Slot));
-                                result += (Damage.LSGetSpellDamage(enemy, player, spell.Slot, 1));
+                                result += (Damage.GetSpellDamage(enemy, player, spell.Slot));
+                                result += (Damage.GetSpellDamage(enemy, player, spell.Slot, 1));
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         case "Amumu":
                             if (spell.Slot == SpellSlot.W)
                             {
-                                result += (Damage.LSGetSpellDamage(enemy, player, spell.Slot) * 5);
+                                result += (Damage.GetSpellDamage(enemy, player, spell.Slot) * 5);
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         case "Cassiopeia":
                             if (spell.Slot == SpellSlot.Q || spell.Slot == SpellSlot.E || spell.Slot == SpellSlot.W)
                             {
-                                result += (Damage.LSGetSpellDamage(enemy, player, spell.Slot) * 2);
+                                result += (Damage.GetSpellDamage(enemy, player, spell.Slot) * 2);
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         case "Fiddlesticks":
                             if (spell.Slot == SpellSlot.W || spell.Slot == SpellSlot.E)
                             {
-                                result += (Damage.LSGetSpellDamage(enemy, player, spell.Slot) * 5);
+                                result += (Damage.GetSpellDamage(enemy, player, spell.Slot) * 5);
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         case "Garen":
                             if (spell.Slot == SpellSlot.E)
                             {
-                                result += (Damage.LSGetSpellDamage(enemy, player, spell.Slot) * 3);
+                                result += (Damage.GetSpellDamage(enemy, player, spell.Slot) * 3);
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         case "Irelia":
                             if (spell.Slot == SpellSlot.W)
                             {
-                                result += (Damage.LSGetSpellDamage(enemy, player, spell.Slot) * attacks);
+                                result += (Damage.GetSpellDamage(enemy, player, spell.Slot) * attacks);
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         case "Karthus":
                             if (spell.Slot == SpellSlot.Q)
                             {
-                                result += (Damage.LSGetSpellDamage(enemy, player, spell.Slot) * 4);
+                                result += (Damage.GetSpellDamage(enemy, player, spell.Slot) * 4);
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         case "KogMaw":
                             if (spell.Slot == SpellSlot.W)
                             {
-                                result += (Damage.LSGetSpellDamage(enemy, player, spell.Slot) * attacks);
+                                result += (Damage.GetSpellDamage(enemy, player, spell.Slot) * attacks);
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         case "LeeSin":
                             if (spell.Slot == SpellSlot.Q)
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot, 1);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot, 1);
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         case "Lucian":
                             if (spell.Slot == SpellSlot.R)
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot) * 4;
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot) * 4;
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         case "Nunu":
                             if (spell.Slot != SpellSlot.R && spell.Slot != SpellSlot.Q)
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         case "MasterYi":
                             if (spell.Slot != SpellSlot.E)
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot) * attacks;
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot) * attacks;
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         case "MonkeyKing":
                             if (spell.Slot != SpellSlot.R)
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot) * 4;
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot) * 4;
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         case "Pantheon":
                             if (spell.Slot == SpellSlot.E)
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot) * 3;
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot) * 3;
                             }
                             else if (spell.Slot == SpellSlot.R)
                             {
@@ -586,18 +586,18 @@ namespace UnderratedAIO.Helpers
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
 
                             break;
                         case "Rammus":
                             if (spell.Slot == SpellSlot.R)
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot) * 6;
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot) * 6;
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         case "Riven":
@@ -607,45 +607,45 @@ namespace UnderratedAIO.Helpers
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         case "Viktor":
                             if (spell.Slot == SpellSlot.R)
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot, 1) * 5;
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot, 1) * 5;
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         case "Vladimir":
                             if (spell.Slot == SpellSlot.E)
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot) * 2;
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot) * 2;
                             }
                             else
                             {
-                                result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                                result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             }
                             break;
                         default:
-                            result += Damage.LSGetSpellDamage(enemy, player, spell.Slot);
+                            result += Damage.GetSpellDamage(enemy, player, spell.Slot);
                             break;
                     }
                 }
             }
-            if (enemy.Spellbook.CanUseSpell(player.LSGetSpellSlot("summonerdot")) == SpellState.Ready)
+            if (enemy.Spellbook.CanUseSpell(player.GetSpellSlot("summonerdot")) == SpellState.Ready)
             {
                 result += enemy.GetSummonerSpellDamage(player, Damage.SummonerSpell.Ignite);
             }
             foreach (var minions in
                 ObjectManager.Get<Obj_AI_Minion>()
-                    .Where(i => i.LSDistance(player.Position) < 750 && i.IsMinion && !i.IsAlly && !i.IsDead))
+                    .Where(i => i.Distance(player.Position) < 750 && i.IsMinion && !i.IsAlly && !i.IsDead))
             {
-                result += minions.LSGetAutoAttackDamage(player, false);
+                result += minions.GetAutoAttackDamage(player, false);
             }
             return (float) result;
         }
@@ -671,7 +671,7 @@ namespace UnderratedAIO.Helpers
 
         public static bool IsPossibleToReachHim(AIHeroClient target, float moveSpeedBuff, float duration)
         {
-            var distance = player.LSDistance(target);
+            var distance = player.Distance(target);
             var diff = Math.Abs((player.MoveSpeed * (1 + moveSpeedBuff)) - target.MoveSpeed);
             if (diff * duration > distance)
             {
@@ -682,7 +682,7 @@ namespace UnderratedAIO.Helpers
 
         public static bool IsPossibleToReachHim2(AIHeroClient target, float moveSpeedBuff, float duration)
         {
-            var distance = player.LSDistance(target);
+            var distance = player.Distance(target);
             if (player.MoveSpeed * (1 + moveSpeedBuff) * duration > distance)
             {
                 return true;
@@ -724,7 +724,7 @@ namespace UnderratedAIO.Helpers
             return
                 !HeroManager.Enemies.Any(
                     e =>
-                        e.LSDistance(pos) < range &&
+                        e.Distance(pos) < range &&
                         (e.HasBuff("GarenQ") || e.HasBuff("powerfist") || e.HasBuff("JaxCounterStrike") ||
                          e.HasBuff("PowerBall") || e.HasBuff("renektonpreexecute") || e.HasBuff("xenzhaocombotarget") ||
                          (e.HasBuff("UdyrBearStance") && !player.HasBuff("UdyrBearStunCheck"))));
@@ -770,9 +770,9 @@ namespace UnderratedAIO.Helpers
         {
             var enemies = (from h in HeroManager.Enemies
                 let pred = Prediction.GetPrediction(h, delay)
-                where pred.UnitPosition.LSDistance(pos) < range
+                where pred.UnitPosition.Distance(pos) < range
                 select h);
-            return nowToo ? enemies.Count(h => h.LSDistance(pos) < range) : enemies.Count();
+            return nowToo ? enemies.Count(h => h.Distance(pos) < range) : enemies.Count();
         }
 
         public static List<string> dotsHighDmg =
@@ -845,7 +845,7 @@ namespace UnderratedAIO.Helpers
             }
             if (Slot != SpellSlot.Unknown)
             {
-                return Damage.LSGetSpellDamage(caster, target, Slot, Stage) * Multiplier;
+                return Damage.GetSpellDamage(caster, target, Slot, Stage) * Multiplier;
             }
             if (BuffName == "toxicshotparticle")
             {
@@ -878,12 +878,12 @@ namespace UnderratedAIO.Helpers
             }
             if (BuffName == "tristanaechargesound")
             {
-                var dmg = Damage.LSGetSpellDamage(caster, target, Slot, Stage) * buff.Count;
+                var dmg = Damage.GetSpellDamage(caster, target, Slot, Stage) * buff.Count;
                 return Damage.CalcDamage(caster, target, Damage.DamageType.Physical, dmg);
             }
             if (BuffName == "swainbeamdamage")
             {
-                var dmg = Damage.LSGetSpellDamage(caster, target, Slot, Stage) * 3;
+                var dmg = Damage.GetSpellDamage(caster, target, Slot, Stage) * 3;
                 return Damage.CalcDamage(caster, target, Damage.DamageType.Magical, dmg);
             }
             if (BuffName == "SwainTorment")
@@ -962,7 +962,7 @@ namespace UnderratedAIO.Helpers
             {
                 return false;
             }
-            return Orbwalking.GetRealAutoAttackRange(target) < ObjectManager.Player.LSDistance(target);
+            return Orbwalking.GetRealAutoAttackRange(target) < ObjectManager.Player.Distance(target);
         }
     }
 }

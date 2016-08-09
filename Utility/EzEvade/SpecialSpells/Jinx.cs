@@ -35,7 +35,7 @@ using EloBuddy; namespace ezEvade.SpecialSpells
                 && obj.IsEnemy && obj.Name.Contains("Jinx") && obj.Name.Contains("W_Cas"))
             {
                 var pos1 = hero.Position;
-                var dir = (obj.Position - ObjectManager.Player.Position).LSNormalized();
+                var dir = (obj.Position - ObjectManager.Player.Position).Normalized();
                 var pos2 = pos1 + dir * 500;
 
                 SpellDetector.CreateSpellData(hero, pos1, pos2, spellData, null, 0);

@@ -19,7 +19,7 @@ using EloBuddy;
                         $"iseriesr.kogmaw.{Variables.Orbwalker.ActiveMode.ToString().ToLower()}.r.limit").Value)
                 {
                     var rTarget = TargetSelector.GetTarget(Variables.spells[SpellSlot.R].Range, TargetSelector.DamageType.Magical);
-                    if (rTarget.LSIsValidTarget())
+                    if (rTarget.IsValidTarget())
                     {
                         var prediction = Variables.spells[SpellSlot.R].GetPrediction(rTarget);
 

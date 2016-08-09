@@ -16,9 +16,9 @@ namespace Leblanc.Common
         {
             var fComboDamage = 0d;
 
-            if (Champion.PlayerSpells.Q.LSIsReady())
+            if (Champion.PlayerSpells.Q.IsReady())
             {
-                fComboDamage += ObjectManager.Player.LSGetSpellDamage(t, SpellSlot.Q);
+                fComboDamage += ObjectManager.Player.GetSpellDamage(t, SpellSlot.Q);
             }
 
 
@@ -32,17 +32,17 @@ namespace Leblanc.Common
             //    fComboDamage += ObjectManager.Player.TotalAttackDamage * 7;
             //}
 
-            if (Champion.PlayerSpells.E.LSIsReady())
+            if (Champion.PlayerSpells.E.IsReady())
             {
-                fComboDamage += ObjectManager.Player.LSGetSpellDamage(t, SpellSlot.E);
+                fComboDamage += ObjectManager.Player.GetSpellDamage(t, SpellSlot.E);
             }
 
-            if (Champion.PlayerSpells.R.LSIsReady())
+            if (Champion.PlayerSpells.R.IsReady())
             {
-                fComboDamage += ObjectManager.Player.LSGetSpellDamage(t, SpellSlot.R) * 4;
+                fComboDamage += ObjectManager.Player.GetSpellDamage(t, SpellSlot.R) * 4;
             }
 
-            if (t.LSIsValidTarget(Champion.PlayerSpells.Q.Range + Champion.PlayerSpells.E.Range) && Champion.PlayerSpells.Q.LSIsReady() && Champion.PlayerSpells.R.LSIsReady())
+            if (t.IsValidTarget(Champion.PlayerSpells.Q.Range + Champion.PlayerSpells.E.Range) && Champion.PlayerSpells.Q.IsReady() && Champion.PlayerSpells.R.IsReady())
             {
                 fComboDamage += ObjectManager.Player.TotalAttackDamage * 2;
             }

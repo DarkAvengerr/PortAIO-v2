@@ -47,7 +47,7 @@ using EloBuddy;
             EMega.SetSkillshot(0.5f, 150, float.MaxValue, false, SkillshotType.SkillshotCircle);
             RMega.Delay = 0.25f;
 
-            SummonerDot = new Spell(ObjectManager.Player.LSGetSpellSlot("SummonerDot"), 550);
+            SummonerDot = new Spell(ObjectManager.Player.GetSpellSlot("SummonerDot"), 550);
             SummonerDot.SetTargetted(0.1f, float.MaxValue);
 
 
@@ -83,8 +83,8 @@ using EloBuddy;
         {
             return target.IsMiniGnar() &&
                    (target.Mana == target.MaxMana
-                    && (target.LSHasBuff("gnartransformsoon")
-                    || target.LSHasBuff("gnartransform")))
+                    && (target.HasBuff("gnartransformsoon")
+                    || target.HasBuff("gnartransform")))
                     || target.IsMegaGnar() && target.ManaPercent <= 0.1;
         }
     }

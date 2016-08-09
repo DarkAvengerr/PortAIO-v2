@@ -20,7 +20,7 @@ using EloBuddy; namespace Support.Evade
 
             foreach (var target in targetList)
             {
-                var distance = Vector2.DistanceSquared(from, target.ServerPosition.LSTo2D());
+                var distance = Vector2.DistanceSquared(from, target.ServerPosition.To2D());
                 if (distance < dist)
                 {
                     dist = distance;
@@ -61,7 +61,7 @@ using EloBuddy; namespace Support.Evade
 
         public static List<Vector2> To2DList(this Vector3[] v)
         {
-            return v.Select(point => point.LSTo2D()).ToList();
+            return v.Select(point => point.To2D()).ToList();
         }
     }
 

@@ -59,23 +59,23 @@ namespace MasterSharp
                 if(MasterSharp.Config.Item("useSmite").GetValue<bool>())
                     useSmiteOnTarget(target);
 
-                if (target.LSDistance(player) < 500)
+                if (target.Distance(player) < 500)
                 {
                     sumItems.cast(SummonerItems.ItemIds.Ghostblade);
                 }
-                if (target.LSDistance(player) < 300)
+                if (target.Distance(player) < 300)
                 {
                     sumItems.cast(SummonerItems.ItemIds.Hydra);
                 }
-                if (target.LSDistance(player) < 300)
+                if (target.Distance(player) < 300)
                 {
                     sumItems.cast(SummonerItems.ItemIds.Tiamat);
                 }
-                if (target.LSDistance(player) < 300 )
+                if (target.Distance(player) < 300 )
                 {
                     sumItems.cast(SummonerItems.ItemIds.Cutlass, target);
                 }
-                if (target.LSDistance(player) < 500 && (player.Health / player.MaxHealth) * 100 < 85)
+                if (target.Distance(player) < 500 && (player.Health / player.MaxHealth) * 100 < 85)
                 {
                     sumItems.cast(SummonerItems.ItemIds.BotRK, target);
                 }
@@ -96,19 +96,19 @@ namespace MasterSharp
 
         public static void useQtoKill(Obj_AI_Base target)
         {
-            if (Q.LSIsReady() && (target.Health <= Q.GetDamage(target) || iAmLow(0.20f)))
+            if (Q.IsReady() && (target.Health <= Q.GetDamage(target) || iAmLow(0.20f)))
                 Q.Cast(target, MasterSharp.Config.Item("packets").GetValue<bool>());
         }
 
         public static void useESmart(Obj_AI_Base target)
         {
-            if (DeathWalker.inAutoAttackRange(target) && E.LSIsReady() && (aaToKill(target)>2 || iAmLow()))
+            if (DeathWalker.inAutoAttackRange(target) && E.IsReady() && (aaToKill(target)>2 || iAmLow()))
                 E.Cast(MasterSharp.Config.Item("packets").GetValue<bool>());
         }
 
         public static void useRSmart(Obj_AI_Base target)
         {
-            if (DeathWalker.inAutoAttackRange(target) && R.LSIsReady() && aaToKill(target) > 5)
+            if (DeathWalker.inAutoAttackRange(target) && R.IsReady() && aaToKill(target) > 5)
                 R.Cast(MasterSharp.Config.Item("packets").GetValue<bool>());
         }
 
@@ -117,11 +117,11 @@ namespace MasterSharp
             try
             {
 
-                if (!Q.LSIsReady() || target.Path.Count() == 0 || !target.IsMoving)
+                if (!Q.IsReady() || target.Path.Count() == 0 || !target.IsMoving)
                     return;
-                Vector2 nextEnemPath = target.Path[0].LSTo2D();
-                var dist = player.Position.LSTo2D().LSDistance(target.Position.LSTo2D());
-                var distToNext = nextEnemPath.LSDistance(player.Position.LSTo2D());
+                Vector2 nextEnemPath = target.Path[0].To2D();
+                var dist = player.Position.To2D().Distance(target.Position.To2D());
+                var distToNext = nextEnemPath.Distance(player.Position.To2D());
                 if (distToNext <= dist)
                     return;
                 var msDif = player.MoveSpeed - target.MoveSpeed;
@@ -143,7 +143,7 @@ namespace MasterSharp
         {
             if (smite != SpellSlot.Unknown && player.Spellbook.CanUseSpell(smite) == SpellState.Ready)
             {
-                if (target.LSDistance(player,true)<=700*700 &&(yiGotItemRange(3714, 3718) || yiGotItemRange(3706, 3710)))
+                if (target.Distance(player,true)<=700*700 &&(yiGotItemRange(3714, 3718) || yiGotItemRange(3706, 3710)))
                 {
                
                     player.Spellbook.CastSpell(smite, target);
@@ -158,18 +158,18 @@ namespace MasterSharp
 
         public static int aaToKill(Obj_AI_Base target)
         {
-            return 1+(int)(target.Health/player.LSGetAutoAttackDamage(target));
+            return 1+(int)(target.Health/player.GetAutoAttackDamage(target));
         }
 
         public static void evadeBuff(BuffInstance buf,TargetedSkills.TargSkill skill)
         {
-            if (Q.LSIsReady() && jumpEnesAround() != 0 && buf.EndTime - Game.Time < skill.delay / 1000)
+            if (Q.IsReady() && jumpEnesAround() != 0 && buf.EndTime - Game.Time < skill.delay / 1000)
             {
 
                 //Console.WriteLine("evade buuf");
                 useQonBest();
             }
-            else if (W.LSIsReady() && (!Q.LSIsReady() || jumpEnesAround() != 0 )&& buf.EndTime - Game.Time < 0.4f)
+            else if (W.IsReady() && (!Q.IsReady() || jumpEnesAround() != 0 )&& buf.EndTime - Game.Time < 0.4f)
             {
                 var dontMove = 400;
                 DeathWalker.disableMovementFor(dontMove);
@@ -181,14 +181,14 @@ namespace MasterSharp
 
         public static void evadeDamage(int useQ, int useW,GameObjectProcessSpellCastEventArgs psCast,int delay = 250)
         {
-            if (useQ != 0 && Q.LSIsReady() && jumpEnesAround() != 0 && MasterSharp.Config.Item("smartQDogue").GetValue<bool>())
+            if (useQ != 0 && Q.IsReady() && jumpEnesAround() != 0 && MasterSharp.Config.Item("smartQDogue").GetValue<bool>())
             {
                 if (delay != 0)
                     LeagueSharp.Common.Utility.DelayAction.Add(delay, useQonBest);
                 else
                     useQonBest();
             }
-            else if (useW != 0 && W.LSIsReady() && MasterSharp.Config.Item("smartW").GetValue<bool>())
+            else if (useW != 0 && W.IsReady() && MasterSharp.Config.Item("smartW").GetValue<bool>())
             {
                 //var dontMove = (psCast.TimeCast > 2) ? 2000 : psCast.TimeCast*1000;
                 DeathWalker.disableMovementFor(500);
@@ -202,7 +202,7 @@ namespace MasterSharp
         {
 
             return ObjectManager.Get<Obj_AI_Base>().Count(ob => ob.IsEnemy && !(ob is FollowerObject) && (ob is Obj_AI_Minion || ob is AIHeroClient) &&
-                                                                ob.LSDistance(player) < 600 && !ob.IsDead);
+                                                                ob.Distance(player) < 600 && !ob.IsDead);
         }
 
         public static void evadeSkillShot(Skillshot sShot)
@@ -210,14 +210,14 @@ namespace MasterSharp
             var sd = SpellDatabase.GetByMissileName(sShot.SpellData.MissileSpellName);
             if (DeathWalker.CurrentMode == DeathWalker.Mode.Combo && (MasterSharp.skillShotMustBeEvaded(sd.MenuItemName) || MasterSharp.skillShotMustBeEvadedW(sd.MenuItemName)))
             {
-                float spellDamage = (float)sShot.Unit.LSGetSpellDamage(player, sd.SpellName);
+                float spellDamage = (float)sShot.Unit.GetSpellDamage(player, sd.SpellName);
                 int procHp = (int)((spellDamage / player.MaxHealth) * 100);
                 bool willKill = player.Health <= spellDamage;
-                if (Q.LSIsReady() && jumpEnesAround() != 0 && (MasterSharp.skillShotMustBeEvaded(sd.MenuItemName)) || willKill)
+                if (Q.IsReady() && jumpEnesAround() != 0 && (MasterSharp.skillShotMustBeEvaded(sd.MenuItemName)) || willKill)
                 {
                     useQonBest();
                 }
-                else if ((!Q.LSIsReady(150) || !MasterSharp.skillShotMustBeEvaded(sd.MenuItemName)) && W.LSIsReady() && (MasterSharp.skillShotMustBeEvadedW(sd.MenuItemName) || willKill))
+                else if ((!Q.IsReady(150) || !MasterSharp.skillShotMustBeEvaded(sd.MenuItemName)) && W.IsReady() && (MasterSharp.skillShotMustBeEvadedW(sd.MenuItemName) || willKill))
                 {
                     DeathWalker.disableMovementFor(500);
                     W.Cast();
@@ -226,14 +226,14 @@ namespace MasterSharp
 
             if (DeathWalker.CurrentMode != DeathWalker.Mode.None && (MasterSharp.skillShotMustBeEvadedAllways(sd.MenuItemName) || MasterSharp.skillShotMustBeEvadedWAllways(sd.MenuItemName)))
             {
-                float spellDamage = (float)sShot.Unit.LSGetSpellDamage(player, sd.SpellName);
+                float spellDamage = (float)sShot.Unit.GetSpellDamage(player, sd.SpellName);
                 bool willKill = player.Health <= spellDamage;
-                if (Q.LSIsReady() && jumpEnesAround() != 0 && (MasterSharp.skillShotMustBeEvadedAllways(sd.MenuItemName) || willKill))
+                if (Q.IsReady() && jumpEnesAround() != 0 && (MasterSharp.skillShotMustBeEvadedAllways(sd.MenuItemName) || willKill))
                 {
                     useQonBest();
                     return;
                 }
-                else if ((!Q.LSIsReady() || !MasterSharp.skillShotMustBeEvadedAllways(sd.MenuItemName)) && W.LSIsReady() && (MasterSharp.skillShotMustBeEvadedWAllways(sd.MenuItemName) || willKill))
+                else if ((!Q.IsReady() || !MasterSharp.skillShotMustBeEvadedAllways(sd.MenuItemName)) && W.IsReady() && (MasterSharp.skillShotMustBeEvadedWAllways(sd.MenuItemName) || willKill))
                 {
                     DeathWalker.disableMovementFor(500);
                     W.Cast();
@@ -250,7 +250,7 @@ namespace MasterSharp
         {
             try
             {
-                if (!Q.LSIsReady())
+                if (!Q.IsReady())
                 {
                     //Console.WriteLine("Fuk uo here ");
                     return;
@@ -258,7 +258,7 @@ namespace MasterSharp
                 if (selectedTarget != null)
                 {
 
-                    if (selectedTarget.LSDistance(player) < 600)
+                    if (selectedTarget.Distance(player) < 600)
                     {
                        // Console.WriteLine("Q on targ ");
                         Q.Cast(selectedTarget, MasterSharp.Config.Item("packets").GetValue<bool>());
@@ -270,8 +270,8 @@ namespace MasterSharp
                             .Where(
                                 ob =>
                                     ob.IsEnemy && (ob is Obj_AI_Minion || ob is AIHeroClient) &&
-                                    ob.LSDistance(player) < 600 && !ob.IsDead)
-                            .OrderBy(ob => ob.LSDistance(selectedTarget, true)).FirstOrDefault();
+                                    ob.Distance(player) < 600 && !ob.IsDead)
+                            .OrderBy(ob => ob.Distance(selectedTarget, true)).FirstOrDefault();
                     //Console.WriteLine("do shit? " + bestOther.Name);
 
                     if (bestOther != null)
@@ -286,8 +286,8 @@ namespace MasterSharp
                             .Where(
                                 ob =>
                                     ob.IsEnemy && !(ob is FollowerObject)  && (ob is Obj_AI_Minion || ob is AIHeroClient) &&
-                                    ob.LSDistance(player) < 600 && !ob.IsDead)
-                            .OrderBy(ob => ob.LSDistance(Game.CursorPos, true)).FirstOrDefault();
+                                    ob.Distance(player) < 600 && !ob.IsDead)
+                            .OrderBy(ob => ob.Distance(Game.CursorPos, true)).FirstOrDefault();
                     //Console.WriteLine("do shit? " + bestOther.Name);
 
                     if (bestOther != null)

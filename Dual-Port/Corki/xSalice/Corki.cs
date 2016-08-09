@@ -131,21 +131,21 @@ using EloBuddy; namespace xSaliceResurrected.ADC
         {
             double comboDamage = 0;
 
-            if (Q.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.Q);
+            if (Q.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.Q);
 
-            if (W.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.W);
+            if (W.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.W);
 
-            if (E.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.E);
+            if (E.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.E);
 
-            if (R.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.R);
+            if (R.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.R);
 
             comboDamage = ItemManager.CalcDamage(target, comboDamage);
 
-            return (float)(comboDamage + Player.LSGetAutoAttackDamage(target) * 2);
+            return (float)(comboDamage + Player.GetAutoAttackDamage(target) * 2);
         }
 
         private void Combo()
@@ -184,11 +184,11 @@ using EloBuddy; namespace xSaliceResurrected.ADC
             if ((target != null && source == "Combo") && menu.Item("Always_Use", true).GetValue<bool>())
                 return;
 
-            if (useR && R.LSIsReady())
+            if (useR && R.IsReady())
                 Cast_R(source);
-            if (useQ && Q.LSIsReady())
+            if (useQ && Q.IsReady())
                 SpellCastManager.CastBasicSkillShot(Q, Q.Range, TargetSelector.DamageType.Magical, HitChanceManager.GetQHitChance(source));
-            if (useE && E.LSIsReady())
+            if (useE && E.IsReady())
                 SpellCastManager.CastBasicSkillShot(E, E.Range, TargetSelector.DamageType.Physical, HitChance.Low);
         }
 
@@ -199,11 +199,11 @@ using EloBuddy; namespace xSaliceResurrected.ADC
             if (!menu.Item("ComboActive", true).GetValue<KeyBind>().Active || !unit.IsMe || !(target is AIHeroClient))
                 return;
 
-            if (menu.Item("UseRCombo", true).GetValue<bool>() && R.LSIsReady())
+            if (menu.Item("UseRCombo", true).GetValue<bool>() && R.IsReady())
                 R.Cast(target);
-            if (menu.Item("UseQCombo", true).GetValue<bool>() && Q.LSIsReady())
+            if (menu.Item("UseQCombo", true).GetValue<bool>() && Q.IsReady())
                 Q.Cast(target);
-            if (menu.Item("UseECombo", true).GetValue<bool>() && E.LSIsReady())
+            if (menu.Item("UseECombo", true).GetValue<bool>() && E.IsReady())
                 E.Cast();
 
         }
@@ -231,7 +231,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
         private void Cast_R(string mode)
         {
-            var range = Player.LSHasBuff("CorkiMissileBarrageCounterBig") ? 1500 : 1300;
+            var range = Player.HasBuff("CorkiMissileBarrageCounterBig") ? 1500 : 1300;
 
             if (mode == "Combo" && menu.Item("ComboR_Limit", true).GetValue<Slider>().Value < Player.Spellbook.GetSpell(SpellSlot.R).Ammo)
                 SpellCastManager.CastBasicSkillShot(R, range, TargetSelector.DamageType.Magical, HitChanceManager.GetRHitChance(mode));
@@ -243,17 +243,17 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
         private void CheckKs()
         {
-            foreach (AIHeroClient target in ObjectManager.Get<AIHeroClient>().Where(x => x.LSIsValidTarget(R.Range)).OrderByDescending(GetComboDamage))
+            foreach (AIHeroClient target in ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(R.Range)).OrderByDescending(GetComboDamage))
             {
                 //Q
-                if (Player.ServerPosition.LSDistance(target.ServerPosition) <= Q.Range && Player.LSGetSpellDamage(target, SpellSlot.Q) > target.Health && Q.LSIsReady())
+                if (Player.ServerPosition.Distance(target.ServerPosition) <= Q.Range && Player.GetSpellDamage(target, SpellSlot.Q) > target.Health && Q.IsReady())
                 {
                     Q.Cast(target);
                     return;
                 }
 
                 //R
-                if (Player.ServerPosition.LSDistance(target.ServerPosition) <= R.Range && Player.LSGetSpellDamage(target, SpellSlot.R) > target.Health && R.LSIsReady())
+                if (Player.ServerPosition.Distance(target.ServerPosition) <= R.Range && Player.GetSpellDamage(target, SpellSlot.R) > target.Health && R.IsReady())
                 {
                     R.Cast(target);
                     return;
@@ -294,19 +294,19 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
             if (menu.Item("Draw_Q", true).GetValue<bool>())
                 if (Q.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, Q.Range, Q.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, Q.Range, Q.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_W", true).GetValue<bool>())
                 if (W.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, W.Range, W.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, W.Range, W.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_E", true).GetValue<bool>())
                 if (E.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, E.Range, E.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_R", true).GetValue<bool>())
                 if (R.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, Player.LSHasBuff("CorkiMissileBarrageCounterBig") ? R.Range : 1300, R.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, Player.HasBuff("CorkiMissileBarrageCounterBig") ? R.Range : 1300, R.IsReady() ? Color.Green : Color.Red);
         }
 
     }

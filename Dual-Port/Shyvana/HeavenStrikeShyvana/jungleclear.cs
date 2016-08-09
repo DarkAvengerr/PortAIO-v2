@@ -19,7 +19,7 @@ using EloBuddy;
     {
         public static void UpdateJungleClear()
         {
-            if (EJungleClear && E.LSIsReady())
+            if (EJungleClear && E.IsReady())
             {
                 var minion = MinionManager.GetMinions(E.Range,MinionTypes.All,MinionTeam.Neutral,MinionOrderTypes.MaxHealth).FirstOrDefault();
                 if (minion != null)
@@ -32,7 +32,7 @@ using EloBuddy;
         {
             if (target.Team != GameObjectTeam.Neutral)
                 return;
-            if (QJungleClear && Q.LSIsReady())
+            if (QJungleClear && Q.IsReady())
             {
                 Q.Cast();
             }
@@ -43,9 +43,9 @@ using EloBuddy;
         }
         public static void OnAttackJungleClear(AttackableUnit unit, AttackableUnit target)
         {
-            if (target.LSIsValidTarget() && target.Team != GameObjectTeam.Neutral)
+            if (target.IsValidTarget() && target.Team != GameObjectTeam.Neutral)
                 return;
-            if (WJungleClear && W.LSIsReady())
+            if (WJungleClear && W.IsReady())
             {
                 W.Cast();
             }

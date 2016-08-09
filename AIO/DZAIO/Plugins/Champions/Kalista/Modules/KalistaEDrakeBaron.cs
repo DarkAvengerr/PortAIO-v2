@@ -25,7 +25,7 @@ using EloBuddy;
         public bool ShouldGetExecuted()
         {
             return Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.kalista.kalista.autoESteal") &&
-                   Variables.Spells[SpellSlot.E].LSIsReady();
+                   Variables.Spells[SpellSlot.E].IsReady();
 
         }
 
@@ -44,7 +44,7 @@ using EloBuddy;
                        MinionTeam.Neutral,
                        MinionOrderTypes.MaxHealth)
                        .FirstOrDefault(
-                           x => x.LSIsValidTarget() && HealthPrediction.GetHealthPrediction(x, 250) + 5 < Variables.Spells[SpellSlot.E].GetBaronReduction(x) && x.Name.Contains("Baron"));
+                           x => x.IsValidTarget() && HealthPrediction.GetHealthPrediction(x, 250) + 5 < Variables.Spells[SpellSlot.E].GetBaronReduction(x) && x.Name.Contains("Baron"));
 
             var dragon =
                 MinionManager.GetMinions(
@@ -54,10 +54,10 @@ using EloBuddy;
                     MinionTeam.Neutral,
                     MinionOrderTypes.MaxHealth)
                     .FirstOrDefault(
-                        x => x.LSIsValidTarget() && HealthPrediction.GetHealthPrediction(x, 250) + 5 < Variables.Spells[SpellSlot.E].GetDragonReduction(x) && x.Name.Contains("Dragon"));
+                        x => x.IsValidTarget() && HealthPrediction.GetHealthPrediction(x, 250) + 5 < Variables.Spells[SpellSlot.E].GetDragonReduction(x) && x.Name.Contains("Dragon"));
 
-            if (((dragon.LSIsValidTarget() && Variables.Spells[SpellSlot.E].CanCast(dragon))
-               || (baron.LSIsValidTarget() && Variables.Spells[SpellSlot.E].CanCast(baron)))
+            if (((dragon.IsValidTarget() && Variables.Spells[SpellSlot.E].CanCast(dragon))
+               || (baron.IsValidTarget() && Variables.Spells[SpellSlot.E].CanCast(baron)))
                && (Environment.TickCount - LastECastTime >= 500))
             {
                 Variables.Spells[SpellSlot.E].Cast();

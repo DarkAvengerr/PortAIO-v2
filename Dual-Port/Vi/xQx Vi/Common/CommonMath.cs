@@ -28,19 +28,19 @@ using EloBuddy;
             //}
 
             var comboMode = Modes.ModeCombo.MenuLocal.Item("Combo.Mode").GetValue<StringList>().SelectedIndex;
-            if (Champion.PlayerSpells.Q.LSIsReady())
+            if (Champion.PlayerSpells.Q.IsReady())
             {
                 fComboDamage += Champion.PlayerSpells.Q.GetDamage(t) * Champion.PlayerSpells.E.Instance.Ammo;
                 fComboDamage += comboMode == 1 ? ObjectManager.Player.TotalAttackDamage : 0;
             }
 
-            if (Champion.PlayerSpells.E.LSIsReady())
+            if (Champion.PlayerSpells.E.IsReady())
             {
                 fComboDamage += Champion.PlayerSpells.E.GetDamage(t) * Champion.PlayerSpells.E.Instance.Ammo;
                 fComboDamage += comboMode == 1 ? ObjectManager.Player.TotalAttackDamage : 0;
             }
 
-            if (Champion.PlayerSpells.R.LSIsReady())
+            if (Champion.PlayerSpells.R.IsReady())
             {
                 fComboDamage += Champion.PlayerSpells.R.GetDamage(t);
                 fComboDamage += comboMode == 1 ? ObjectManager.Player.TotalAttackDamage : 0;

@@ -25,7 +25,7 @@ using EloBuddy;
 
         public bool ShouldRun()
         {
-            return Variables.spells[SpellSlot.E].LSIsReady() &&
+            return Variables.spells[SpellSlot.E].IsReady() &&
                     MenuExtensions.GetItemValue<bool>("iseriesr.jinx.e.auto") && ObjectManager.Player.ManaPercent > 35;
         }
 
@@ -34,7 +34,7 @@ using EloBuddy;
             var selectedTarget = TargetSelector.GetTarget(Variables.spells[SpellSlot.E].Range * 0.75f, TargetSelector.DamageType.Physical);
             var ESpell = Variables.spells[SpellSlot.E];
 
-            if (selectedTarget.LSIsValidTarget())
+            if (selectedTarget.IsValidTarget())
             {
                 //The selected target is valid.
                 if (selectedTarget.HasBuffOfType(BuffType.Slow) && selectedTarget.Path.Count() > 1)

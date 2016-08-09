@@ -31,7 +31,7 @@ using EloBuddy; namespace Activator.Spells.Shields
                 if (Player.GetSpell(SpellSlot.W).Name.ToLower() != "blindmonkwone")
                     return;
 
-                if (hero.Player.LSDistance(Player.ServerPosition) <= Range)
+                if (hero.Player.Distance(Player.ServerPosition) <= Range)
                 {
                     if (hero.IncomeDamage / hero.Player.MaxHealth * 100 >=
                         Menu.Item("selfmuchhp" + Name + "pct").GetValue<Slider>().Value)

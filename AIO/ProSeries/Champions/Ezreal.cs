@@ -75,8 +75,8 @@ using EloBuddy;
             }
 
             var targetAsHero = (AIHeroClient) target;
-            if (ProSeries.Player.LSGetSpellDamage(targetAsHero, SpellSlot.Q)/Q.Delay >
-                ProSeries.Player.LSGetAutoAttackDamage(targetAsHero, true)*(1/ProSeries.Player.AttackDelay))
+            if (ProSeries.Player.GetSpellDamage(targetAsHero, SpellSlot.Q)/Q.Delay >
+                ProSeries.Player.GetAutoAttackDamage(targetAsHero, true)*(1/ProSeries.Player.AttackDelay))
             {
                 Q.Cast(targetAsHero);
             }
@@ -87,14 +87,14 @@ using EloBuddy;
             if (ProSeries.CanCombo())
             {
                 var qtarget = TargetSelector.GetTargetNoCollision(Q);
-                if (qtarget.LSIsValidTarget() && Q.LSIsReady())
+                if (qtarget.IsValidTarget() && Q.IsReady())
                 {
                     if (ProSeries.Config.Item("usecomboq", true).GetValue<bool>())
                         Q.Cast(qtarget);
                 }
 
                 var wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
-                if (wtarget.LSIsValidTarget() && W.LSIsReady())
+                if (wtarget.IsValidTarget() && W.IsReady())
                 {
                     if (ProSeries.Config.Item("usecombow", true).GetValue<bool>())
                         W.Cast(wtarget);
@@ -104,23 +104,23 @@ using EloBuddy;
             if (ProSeries.CanHarass())
             {
                 var qtarget = TargetSelector.GetTargetNoCollision(Q);
-                if (qtarget.LSIsValidTarget() && Q.LSIsReady() && ProSeries.IsWhiteListed(qtarget))
+                if (qtarget.IsValidTarget() && Q.IsReady() && ProSeries.IsWhiteListed(qtarget))
                 {
                     if (ProSeries.Config.Item("usecomboq", true).GetValue<bool>())
                         Q.Cast(qtarget);
                 }
 
                 var wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
-                if (wtarget.LSIsValidTarget() && W.LSIsReady() && ProSeries.IsWhiteListed(wtarget))
+                if (wtarget.IsValidTarget() && W.IsReady() && ProSeries.IsWhiteListed(wtarget))
                 {
                     if (ProSeries.Config.Item("useharassw", true).GetValue<bool>())
                         W.Cast(wtarget);
                 }
             }
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.LSIsValidTarget(Q.Range)))
+                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.IsValidTarget(Q.Range)))
                 {
                     if (ProSeries.Config.Item("useqimm", true).GetValue<bool>())
                         Q.CastIfHitchanceEquals(target, HitChance.Immobile);
@@ -138,9 +138,9 @@ using EloBuddy;
                         Q.Cast(neutral);
                 }
 
-                foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(m => m.LSIsValidTarget(Q.Range)))
+                foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(m => m.IsValidTarget(Q.Range)))
                 {
-                    if (ProSeries.Player.LSGetSpellDamage(minion, Q.Slot) >= minion.Health &&
+                    if (ProSeries.Player.GetSpellDamage(minion, Q.Slot) >= minion.Health &&
                         ProSeries.Config.Item("useclearq", true).GetValue<bool>())
                     {
                         if (!minion.Name.Contains("Ward"))
@@ -152,14 +152,14 @@ using EloBuddy;
             if (ProSeries.Config.Item("usecombor", true).GetValue<bool>())
             {
                 var maxDistance = ProSeries.Config.Item("maxrdist", true).GetValue<Slider>().Value;
-                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.LSIsValidTarget(maxDistance)))
+                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.IsValidTarget(maxDistance)))
                 {
                     var aaDamage = Orbwalking.InAutoAttackRange(target)
-                        ? ProSeries.Player.LSGetAutoAttackDamage(target, true)
+                        ? ProSeries.Player.GetAutoAttackDamage(target, true)
                         : 0;
 
                     if (!target.IsZombie &&
-                         target.Health - aaDamage <= ProSeries.Player.LSGetSpellDamage(target, SpellSlot.R))
+                         target.Health - aaDamage <= ProSeries.Player.GetSpellDamage(target, SpellSlot.R))
                     {
                         R.Cast(target);
                     }

@@ -33,12 +33,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public bool wHealing
         {
-            get { return player.LSHasBuff("AatroxWLife"); }
+            get { return player.HasBuff("AatroxWLife"); }
         }
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             if (safeGap(target))
                 Q.Cast(target);
@@ -46,7 +46,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             if (player.HealthPercent < 40 && !wHealing)
                 W.Cast();
@@ -56,7 +56,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.Cast(target);
         }
@@ -64,9 +64,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
-            if (target.LSIsValidTarget(R.Range))
+            if (target.IsValidTarget(R.Range))
             {
                 R.CastIfWillHit(target, 2);
             }

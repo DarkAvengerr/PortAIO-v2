@@ -89,19 +89,19 @@ using EloBuddy; namespace SFXUtility.Features.Others
                     return;
                 }
                 var endPos = args.StartPosition;
-                var distance = ObjectManager.Player.ServerPosition.LSDistance(endPos);
-                if (Menu.Item(Name + "WallCheck").GetValue<bool>() && endPos.LSIsWall())
+                var distance = ObjectManager.Player.ServerPosition.Distance(endPos);
+                if (Menu.Item(Name + "WallCheck").GetValue<bool>() && endPos.IsWall())
                 {
                     var wallStart = Vector3.Zero;
                     var wallEnd = Vector3.Zero;
                     for (var i = 0; 900 > i; i++)
                     {
-                        var pos = ObjectManager.Player.Position.LSExtend(endPos, i);
-                        if (wallStart.Equals(Vector3.Zero) && pos.LSIsWall())
+                        var pos = ObjectManager.Player.Position.Extend(endPos, i);
+                        if (wallStart.Equals(Vector3.Zero) && pos.IsWall())
                         {
-                            wallStart = ObjectManager.Player.Position.LSExtend(endPos, i - 1);
+                            wallStart = ObjectManager.Player.Position.Extend(endPos, i - 1);
                         }
-                        if (!wallStart.Equals(Vector3.Zero) && !pos.LSIsWall())
+                        if (!wallStart.Equals(Vector3.Zero) && !pos.IsWall())
                         {
                             wallEnd = pos;
                             break;
@@ -109,7 +109,7 @@ using EloBuddy; namespace SFXUtility.Features.Others
                     }
                     if (!wallStart.Equals(Vector3.Zero))
                     {
-                        if (wallEnd.Equals(Vector3.Zero) || wallEnd.LSDistance(endPos) > wallStart.LSDistance(endPos))
+                        if (wallEnd.Equals(Vector3.Zero) || wallEnd.Distance(endPos) > wallStart.Distance(endPos))
                         {
                             args.Process = false;
                             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, wallStart);
@@ -146,7 +146,7 @@ using EloBuddy; namespace SFXUtility.Features.Others
                     {
                         args.Process = false;
                         ObjectManager.Player.Spellbook.CastSpell(
-                            args.Slot, ObjectManager.Player.ServerPosition.LSExtend(endPos, 450f));
+                            args.Slot, ObjectManager.Player.ServerPosition.Extend(endPos, 450f));
                     }
                 }
             }

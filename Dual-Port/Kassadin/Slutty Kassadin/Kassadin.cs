@@ -99,19 +99,19 @@ using EloBuddy;
         {
             var damage = 0d;
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
                 damage += Q.GetDamage(enemy);
 
-            if (W.LSIsReady())
+            if (W.IsReady())
                 damage += W.GetDamage(enemy);
 
-            if (E.LSIsReady() && eCanCast())
+            if (E.IsReady() && eCanCast())
                 damage += W.GetDamage(enemy);
 
-            if (R.LSIsReady())
+            if (R.IsReady())
                 damage += R.GetDamage(enemy);
 
-            if (Player.LSGetSpellSlot("summonerdot").LSIsReady())
+            if (Player.GetSpellSlot("summonerdot").IsReady())
                 damage += IgniteDamage(enemy);
 
             return (float)damage;
@@ -140,10 +140,10 @@ using EloBuddy;
             if (!use) return;
 
             if (!sender.IsChampion() || !sender.IsEnemy) return;
-            if (!(sender.LSDistance(Player) < Q.Range)) return;
+            if (!(sender.Distance(Player) < Q.Range)) return;
             if (DangerLevel(args) < dangerlevel) return;
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
                 Q.Cast(sender);
         }
 
@@ -197,7 +197,7 @@ using EloBuddy;
         {
             if (!Orbwalking.IsAutoAttack(args.SData.Name)) return;
             if (!sender.IsMe) return;
-            if (!args.SData.LSIsAutoAttack()) return;
+            if (!args.SData.IsAutoAttack()) return;
             if (args.Target.Type != GameObjectType.obj_AI_Minion) return;
             var usew = GetBool("usewl", typeof (bool));
             if (!usew) return;
@@ -206,9 +206,9 @@ using EloBuddy;
                 var minions =
                     MinionManager.GetMinions(Player.Position, 300);
                 
-                if (W.LSIsReady())
+                if (W.IsReady())
                 {
-                    if(((Obj_AI_Base) args.Target).Health > Player.LSGetAutoAttackDamage((Obj_AI_Base) args.Target) + 50)                      
+                    if(((Obj_AI_Base) args.Target).Health > Player.GetAutoAttackDamage((Obj_AI_Base) args.Target) + 50)                      
                     {
                         W.Cast();
                         Orbwalking.ResetAutoAttackTimer();
@@ -217,7 +217,7 @@ using EloBuddy;
                     foreach (var min in minions.Where(
                             x => x.NetworkId != ((Obj_AI_Base)args.Target).NetworkId))
                     {
-                        if (((Obj_AI_Base) args.Target).Health > Player.LSGetAutoAttackDamage((Obj_AI_Base) args.Target))
+                        if (((Obj_AI_Base) args.Target).Health > Player.GetAutoAttackDamage((Obj_AI_Base) args.Target))
                         {
                             W.Cast();
                             Orbwalking.ResetAutoAttackTimer();
@@ -238,11 +238,11 @@ using EloBuddy;
             var usew = GetBool("usew", typeof (bool));
             if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo) return;
 
-            if (args.SData.LSIsAutoAttack())
+            if (args.SData.IsAutoAttack())
             {
                 if (target == null) return;
                 {
-                    if (W.LSIsReady() && usew)
+                    if (W.IsReady() && usew)
                     {
                         W.Cast();
                         Orbwalking.ResetAutoAttackTimer();
@@ -254,7 +254,7 @@ using EloBuddy;
 
         private static bool eCanCast()
         {
-            return Player.LSHasBuff("forcepulsecancast");
+            return Player.HasBuff("forcepulsecancast");
         }
 
 
@@ -336,7 +336,7 @@ using EloBuddy;
 
             if (useq)
             {
-                if (Player.LSDistance(minions[0]) < Orbwalking.GetRealAutoAttackRange(minions[0]) && !W.LSIsReady())
+                if (Player.Distance(minions[0]) < Orbwalking.GetRealAutoAttackRange(minions[0]) && !W.IsReady())
                 {
                     Q.Cast(minions[0]);
                 }
@@ -348,7 +348,7 @@ using EloBuddy;
 
             if (usee && eCanCast())
             {
-                if (E.LSIsReady())
+                if (E.IsReady())
                 {
                     E.Cast(minions[0]);
                 }
@@ -357,7 +357,7 @@ using EloBuddy;
             if (user)
             {
                 if (ForcePulseCount() >= rslider) return;
-                if (R.LSIsReady())
+                if (R.IsReady())
                 {
                     R.Cast(minions[0]);
                 }
@@ -379,7 +379,7 @@ using EloBuddy;
                 if (minions.FirstOrDefault() == null) return;
                 if (minions[0].Health >= Q.GetDamage(minions[0])) return;
 
-                if (Player.LSDistance(minions[0]) < Orbwalking.GetRealAutoAttackRange(minions[0]) && !W.LSIsReady())
+                if (Player.Distance(minions[0]) < Orbwalking.GetRealAutoAttackRange(minions[0]) && !W.IsReady())
                 {
                     Q.Cast(minions[0]);
                 }
@@ -403,12 +403,12 @@ using EloBuddy;
                 {
                     if (mins.Health <= Q.GetDamage(mins))
                     {
-                        if (mins.Health >= Player.LSGetAutoAttackDamage(mins) + 50 && mins.LSDistance(Player) <= Orbwalking.GetRealAutoAttackRange(mins))
+                        if (mins.Health >= Player.GetAutoAttackDamage(mins) + 50 && mins.Distance(Player) <= Orbwalking.GetRealAutoAttackRange(mins))
                         {
                             Q.Cast(mins);
                         }
 
-                        if (mins.LSDistance(Player) >= Orbwalking.GetRealAutoAttackRange(mins) + 100)
+                        if (mins.Distance(Player) >= Orbwalking.GetRealAutoAttackRange(mins) + 100)
                         {
                             Q.Cast(mins);
                         }
@@ -429,11 +429,11 @@ using EloBuddy;
 
             if (usee)
             {
-                if (E.LSIsReady() && eCanCast())
+                if (E.IsReady() && eCanCast())
                 {
-                    // if (Player.LSDistance(minions) < Orbwalking.GetRealAutoAttackRange(minions) && !W.LSIsReady())
+                    // if (Player.Distance(minions) < Orbwalking.GetRealAutoAttackRange(minions) && !W.IsReady())
                     //    E.CastIfWillHit(minions, useeslider);
-                    //else if (Player.LSDistance(minions) > Orbwalking.GetRealAutoAttackRange(minions))
+                    //else if (Player.Distance(minions) > Orbwalking.GetRealAutoAttackRange(minions))
                     //{
                     var miniosn =
                         MinionManager.GetMinions(Player.Position, 400);
@@ -454,7 +454,7 @@ using EloBuddy;
             if (user)
             {
                 if (ForcePulseCount() >= count) return;
-                if (R.LSIsReady())
+                if (R.IsReady())
                 {
 
                     var min =
@@ -484,34 +484,34 @@ using EloBuddy;
         private static void Killsteal()
         {
             var target = TargetSelector.GetTarget(Q.Range + 500, TargetSelector.DamageType.Magical);
-            if (!target.LSIsValidTarget(Q.Range + 500)) return;
-            var extendedposition = Player.Position.LSExtend(target.ServerPosition, 500);
+            if (!target.IsValidTarget(Q.Range + 500)) return;
+            var extendedposition = Player.Position.Extend(target.ServerPosition, 500);
             var ks = GetBool("ks", typeof (bool));
             if (!ks) return;
             var qks = GetBool("qks", typeof (bool));
             var rks = GetBool("rks", typeof (bool));
             var eks = GetBool("eks", typeof (bool));
             var rgks = GetBool("rgks", typeof (bool));
-            if (target.LSDistance(Player) > Q.Range - 20 && rgks)
+            if (target.Distance(Player) > Q.Range - 20 && rgks)
             {
-                if ((target.Health < Q.GetDamage(target) && Q.LSIsReady()) ||
-                    (target.Health < E.GetDamage(target) && E.LSIsReady()))
+                if ((target.Health < Q.GetDamage(target) && Q.IsReady()) ||
+                    (target.Health < E.GetDamage(target) && E.IsReady()))
                     R.Cast(extendedposition);
             }
 
-            if (target.Health < Q.GetDamage(target) && target.LSIsValidTarget(Q.Range))
+            if (target.Health < Q.GetDamage(target) && target.IsValidTarget(Q.Range))
             {
                 if (qks)
                     Q.Cast(target);
             }
 
-            if (target.Health < E.GetDamage(target) && eCanCast() && target.LSDistance(Player) < 500)
+            if (target.Health < E.GetDamage(target) && eCanCast() && target.Distance(Player) < 500)
             {
                 if (eks)
                     E.Cast(target.Position);
             }
 
-            if (target.Health < R.GetDamage(target) && R.LSIsReady() && target.LSIsValidTarget(700))
+            if (target.Health < R.GetDamage(target) && R.IsReady() && target.IsValidTarget(700))
             {
                 if (rks)
                     R.Cast(extendedposition);
@@ -522,9 +522,9 @@ using EloBuddy;
         {
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             //    var getrrcount = GetValue("fleercoutn");
-            var extendedposition = Player.Position.LSExtend(Game.CursorPos, 500);
+            var extendedposition = Player.Position.Extend(Game.CursorPos, 500);
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 R.Cast(extendedposition);
             }
@@ -542,13 +542,13 @@ using EloBuddy;
 
             if (useq)
             {
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                 {
                     Q.Cast(target);
                 }
             }
 
-            if (E.LSIsReady() && eCanCast() && target.LSDistance(Player) < 500)
+            if (E.IsReady() && eCanCast() && target.Distance(Player) < 500)
             {
                 if (usee)
                     E.Cast(target);
@@ -584,46 +584,46 @@ using EloBuddy;
             var ignite = GetBool("useignite", typeof (bool));
             if (Player.Spellbook.IsAutoAttacking) return;
 
-            SetIgniteSlot(Player.LSGetSpellSlot("summonerdot"));
+            SetIgniteSlot(Player.GetSpellSlot("summonerdot"));
 
             if (ignite)
             {
-                if (target.LSIsValidTarget(Q.Range) &&
+                if (target.IsValidTarget(Q.Range) &&
                     (target.Health < IgniteDamage(target) + Q.GetDamage(target)))
                     Player.Spellbook.CastSpell(GetIgniteSlot(), target);
             }
 
-            if (Q.LSIsReady() && useq && target.LSIsValidTarget(Q.Range))
+            if (Q.IsReady() && useq && target.IsValidTarget(Q.Range))
             {
-                if (Player.LSDistance(target) < Orbwalking.GetRealAutoAttackRange(target) && !W.LSIsReady())
+                if (Player.Distance(target) < Orbwalking.GetRealAutoAttackRange(target) && !W.IsReady())
                     Q.Cast(target);
-                else if (Player.LSDistance(target) > Orbwalking.GetRealAutoAttackRange(target))
+                else if (Player.Distance(target) > Orbwalking.GetRealAutoAttackRange(target))
                 {
                     Q.Cast(target);
                 }
             }
 
-            if (E.LSIsReady() && usee && target.LSDistance(Player) < 500 && eCanCast())
+            if (E.IsReady() && usee && target.Distance(Player) < 500 && eCanCast())
             {
-                if (Player.LSDistance(target) < Orbwalking.GetRealAutoAttackRange(target) && !W.LSIsReady())
+                if (Player.Distance(target) < Orbwalking.GetRealAutoAttackRange(target) && !W.IsReady())
                     E.Cast(target.Position);
-                else if (Player.LSDistance(target) > Orbwalking.GetRealAutoAttackRange(target))
+                else if (Player.Distance(target) > Orbwalking.GetRealAutoAttackRange(target))
                 {
                    LeagueSharp.Common.Utility.DelayAction.Add(200, () =>  E.Cast(target.Position));
                 }
             }
 
             var rCount = GetValue("rcount");
-            var extendedposition = Player.Position.LSExtend(target.Position, 500);
-            if (ForcePulseCount() < rCount && user && R.LSIsReady() && Player.LSIsFacing(target))
+            var extendedposition = Player.Position.Extend(target.Position, 500);
+            if (ForcePulseCount() < rCount && user && R.IsReady() && Player.IsFacing(target))
             {
-                if (target.LSUnderTurret(true) && userturret) return;
+                if (target.UnderTurret(true) && userturret) return;
                 if (target.HealthPercent - 15 > Player.HealthPercent) return;
-                if (Q.LSIsReady() || (E.LSIsReady() && (eCanCast() || GetPassiveBuff == 5)) || W.LSIsReady())
+                if (Q.IsReady() || (E.IsReady() && (eCanCast() || GetPassiveBuff == 5)) || W.IsReady())
                 {
                     if (Player.Mana >= Player.Spellbook.GetSpell(SpellSlot.R).SData.Mana + Q.ManaCost)
                     {
-                        if (Player.LSDistance(target) > Orbwalking.GetRealAutoAttackRange(target))
+                        if (Player.Distance(target) > Orbwalking.GetRealAutoAttackRange(target))
                             R.Cast(extendedposition);
                     }
                 }

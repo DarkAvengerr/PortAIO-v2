@@ -49,7 +49,7 @@ namespace VayneHunter_Reborn.External.Activator.Items
             if (currentValue || MenuExtensions.GetItemValue<bool>("dz191.vhr.activator.offensive.cutlass.always"))
             {
                 var target = TargetSelector.GetTarget(450f, TargetSelector.DamageType.True);
-                if (target.LSIsValidTarget())
+                if (target.IsValidTarget())
                 {
                     if (ObjectManager.Player.HealthPercent <=
                         MenuExtensions.GetItemValue<Slider>("dz191.vhr.activator.offensive.cutlass.my").Value &&

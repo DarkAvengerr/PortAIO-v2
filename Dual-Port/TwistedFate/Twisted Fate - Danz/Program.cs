@@ -91,7 +91,7 @@ namespace Twisted_Fate___Its_all_in_the_cards
         }
         public static void PickBlue()
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
             {
                 return;
             }
@@ -112,7 +112,7 @@ namespace Twisted_Fate___Its_all_in_the_cards
 
         private static void PickRed()
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
             {
                 return;
             }
@@ -132,7 +132,7 @@ namespace Twisted_Fate___Its_all_in_the_cards
         }
         private static void PickYellow()
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
             {
                 return;
             }
@@ -154,7 +154,7 @@ namespace Twisted_Fate___Its_all_in_the_cards
         {
             var target = TargetSelector.GetTarget(1300, TargetSelector.DamageType.Magical);
 
-            if (Q.LSIsReady() && (Config.Item("UseQCombo").GetValue<bool>()))
+            if (Q.IsReady() && (Config.Item("UseQCombo").GetValue<bool>()))
             {
                 var Qprediction = Q.GetPrediction(target);
 
@@ -164,19 +164,19 @@ namespace Twisted_Fate___Its_all_in_the_cards
                 }
 
             }
-            if (W.LSIsReady() && (Config.Item("UseWComboGold").GetValue<bool>()))
+            if (W.IsReady() && (Config.Item("UseWComboGold").GetValue<bool>()))
             {
                 PickYellow();
                 Orbwalker.ForceTarget(target);
                 Orbwalker.SetAttack(true);
             }
-            if (W.LSIsReady() && (Config.Item("UseWComboBlue").GetValue<bool>()))
+            if (W.IsReady() && (Config.Item("UseWComboBlue").GetValue<bool>()))
             {
                 PickBlue();
                 Orbwalker.ForceTarget(target);
                 Orbwalker.SetAttack(true);
             }
-            if (W.LSIsReady() && (Config.Item("UseWComboRed").GetValue<bool>()))
+            if (W.IsReady() && (Config.Item("UseWComboRed").GetValue<bool>()))
             {
                 PickRed();
                 Orbwalker.ForceTarget(target);
@@ -187,7 +187,7 @@ namespace Twisted_Fate___Its_all_in_the_cards
         {
             var target = TargetSelector.GetTarget(1300, TargetSelector.DamageType.Magical);
 
-            if (Q.LSIsReady() && (Config.Item("UseQHarass").GetValue<bool>()))
+            if (Q.IsReady() && (Config.Item("UseQHarass").GetValue<bool>()))
             {
                 var Qprediction = Q.GetPrediction(target);
 
@@ -195,7 +195,7 @@ namespace Twisted_Fate___Its_all_in_the_cards
                 {
                     Q.Cast(Qprediction.CastPosition);
                 }
-                if (Player.LSDistance(target.ServerPosition) < Player.AttackRange - 25)
+                if (Player.Distance(target.ServerPosition) < Player.AttackRange - 25)
                 {
                     PickBlue();
                 }
@@ -209,7 +209,7 @@ namespace Twisted_Fate___Its_all_in_the_cards
             if ((Config.Item("QLaneClear").GetValue<bool>() || jungleMobs))
             {
                 MinionManager.FarmLocation farmLocation = Q.GetLineFarmLocation(minions);
-                if (farmLocation.Position.LSIsValid())
+                if (farmLocation.Position.IsValid())
                     if (farmLocation.MinionsHit >= 2 || jungleMobs)
                         Q.Cast(farmLocation.Position);
             }
@@ -229,11 +229,11 @@ namespace Twisted_Fate___Its_all_in_the_cards
 
         private static void KS()
         {
-            foreach (AIHeroClient hero in ObjectManager.Get<AIHeroClient>().Where(unit => unit.LSIsValidTarget(Q.Range)))
+            foreach (AIHeroClient hero in ObjectManager.Get<AIHeroClient>().Where(unit => unit.IsValidTarget(Q.Range)))
             {
                 var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
                 if (target == null) return;
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                 {
 
                     if (target.Health < Q.GetDamage(target))
@@ -250,10 +250,10 @@ namespace Twisted_Fate___Its_all_in_the_cards
         }
         private static void OnStunedQ()
         {
-            var NearEnemies = Player.LSGetEnemiesInRange(Q.Range)
+            var NearEnemies = Player.GetEnemiesInRange(Q.Range)
                                .Where(x => !x.IsAlly)
                                .Where(x => !x.IsDead)
-                               .Where(x => x.LSDistance(Player.Position) <= Q.Range)
+                               .Where(x => x.Distance(Player.Position) <= Q.Range)
                                .Where(x => x.IsStunned)
                                .FirstOrDefault();
 
@@ -261,10 +261,10 @@ namespace Twisted_Fate___Its_all_in_the_cards
         }
         private static void OnStunedW()
         {
-            var NearEnemies = Player.LSGetEnemiesInRange(Q.Range)
+            var NearEnemies = Player.GetEnemiesInRange(Q.Range)
                                .Where(x => !x.IsAlly)
                                .Where(x => !x.IsDead)
-                               .Where(x => x.LSDistance(Player.Position) <= Q.Range)
+                               .Where(x => x.Distance(Player.Position) <= Q.Range)
                                .Where(x => x.IsStunned)
                                .FirstOrDefault();
 
@@ -273,7 +273,7 @@ namespace Twisted_Fate___Its_all_in_the_cards
 
         private static void OnPossibleToInterrupt(AIHeroClient target, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (Config.Item("YellowInterrupt").GetValue<bool>() && W.LSIsReady() && W.IsInRange(target))
+            if (Config.Item("YellowInterrupt").GetValue<bool>() && W.IsReady() && W.IsInRange(target))
             {
                 PickYellow();
             }
@@ -284,7 +284,7 @@ namespace Twisted_Fate___Its_all_in_the_cards
             {
                 return;
             }
-            if (Config.Item("YellowGapCloser").GetValue<bool>() && W.LSIsReady() && W.IsInRange(gapcloser.End))
+            if (Config.Item("YellowGapCloser").GetValue<bool>() && W.IsReady() && W.IsInRange(gapcloser.End))
             {
                 PickYellow();
             }

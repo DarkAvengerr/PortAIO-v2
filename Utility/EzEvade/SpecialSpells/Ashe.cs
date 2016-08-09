@@ -31,7 +31,7 @@ using EloBuddy; namespace ezEvade.SpecialSpells
             {
                 for (int i = -4; i < 5; i++)
                 {
-                    Vector3 endPos2 = MathUtils.RotateVector(args.Start.LSTo2D(), args.End.LSTo2D(), i * spellData.angle).To3D();
+                    Vector3 endPos2 = MathUtils.RotateVector(args.Start.To2D(), args.End.To2D(), i * spellData.angle).To3D();
                     if (i != 0)
                     {
                         SpellDetector.CreateSpellData(hero, args.Start, endPos2, spellData, null, 0, false);

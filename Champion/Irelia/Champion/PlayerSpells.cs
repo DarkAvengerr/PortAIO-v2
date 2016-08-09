@@ -103,7 +103,7 @@ namespace Irelia.Champion
                 if (Modes.ModeSettings.MenuSettingE.Item("Settings.E.Auto").GetValue<StringList>().SelectedIndex == 1)
                 {
                     var t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-                    if (t.LSIsValidTarget())
+                    if (t.IsValidTarget())
                     {
                         CastECombo(t);
                     }
@@ -137,7 +137,7 @@ namespace Irelia.Champion
                 return;
             }
 
-            if (Modes.ModeCombo.MenuLocal.Item("Combo.Mode").GetValue<StringList>().SelectedIndex == 1 && LastAutoAttackTick < LastSpellCastTick && t.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
+            if (Modes.ModeCombo.MenuLocal.Item("Combo.Mode").GetValue<StringList>().SelectedIndex == 1 && LastAutoAttackTick < LastSpellCastTick && t.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
             {
                 return;
             }

@@ -113,27 +113,27 @@ namespace SCommon.Prediction
                 }
                 else
                 {
-                    List<Vector2> wp = args.Path.Select(p => p.LSTo2D()).ToList();
+                    List<Vector2> wp = args.Path.Select(p => p.To2D()).ToList();
                     List<Vector2> sample1 = new List<Vector2>();
-                    wp.Insert(0, sender.ServerPosition.LSTo2D());
+                    wp.Insert(0, sender.ServerPosition.To2D());
 
                     for (int i = 0; i < wp.Count - 1; i++)
                     {
-                        Vector2 direction = (wp[i + 1] - wp[i]).LSNormalized();
+                        Vector2 direction = (wp[i + 1] - wp[i]).Normalized();
                         sample1.Add(direction);
                     }
 
                     List<Vector2> sample2 = new List<Vector2>();
                     for (int i = 0; i < enemy.LastWaypoints.Count - 1; i++)
                     {
-                        Vector2 direction = (enemy.LastWaypoints[i + 1] - enemy.LastWaypoints[i]).LSNormalized();
+                        Vector2 direction = (enemy.LastWaypoints[i + 1] - enemy.LastWaypoints[i]).Normalized();
                         sample2.Add(direction);
                     }
 
                     if (sample1.Count() > 0 && sample2.Count() > 0)
                     {
-                        float sample1_avg = sample1.Average(p => p.LSAngleBetween(Vector2.Zero));
-                        float sample2_avg = sample2.Average(p => p.LSAngleBetween(Vector2.Zero));
+                        float sample1_avg = sample1.Average(p => p.AngleBetween(Vector2.Zero));
+                        float sample2_avg = sample2.Average(p => p.AngleBetween(Vector2.Zero));
                         enemy.LastAngleDiff = Math.Abs(sample2_avg - sample1_avg);
                     }
                     if (!enemy.LastWaypoints.SequenceEqual(wp))
@@ -141,7 +141,7 @@ namespace SCommon.Prediction
                         if (!enemy.IsStopped)
                         {
                             enemy.AvgTick = (enemy.Count * enemy.AvgTick + (Environment.TickCount - enemy.LastWaypointTick)) / ++enemy.Count;
-                            enemy.AvgPathLenght = ((enemy.Count - 1) * enemy.AvgPathLenght + wp.LSPathLength()) / enemy.Count;
+                            enemy.AvgPathLenght = ((enemy.Count - 1) * enemy.AvgPathLenght + wp.PathLength()) / enemy.Count;
                         }
                         enemy.LastWaypointTick = Environment.TickCount;
                         enemy.IsStopped = false;
@@ -165,7 +165,7 @@ namespace SCommon.Prediction
         /// </summary>
         private static void AIHeroClient_OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (args.SData.LSIsAutoAttack() && sender.IsEnemy && sender.IsChampion())
+            if (args.SData.IsAutoAttack() && sender.IsEnemy && sender.IsChampion())
             {
                 EnemyData enemy = EnemyInfo[sender.NetworkId];
                 lock (enemy.m_lock)
@@ -182,7 +182,7 @@ namespace SCommon.Prediction
         /// </summary>
         private static void AIHeroClient_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (args.SData.LSIsAutoAttack() && sender.IsEnemy && sender.IsChampion())
+            if (args.SData.IsAutoAttack() && sender.IsEnemy && sender.IsChampion())
             {
                 EnemyData enemy = EnemyInfo[sender.NetworkId];
                 lock (enemy.m_lock)

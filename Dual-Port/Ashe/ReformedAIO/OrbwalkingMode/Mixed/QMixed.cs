@@ -66,7 +66,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Mixed
         private void OnUpdate(EventArgs args)
         {
             if (Variable.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed
-                || !Variable.Spells[SpellSlot.Q].LSIsReady()) return;
+                || !Variable.Spells[SpellSlot.Q].IsReady()) return;
 
             if (this.Menu.Item(this.Menu.Name + "QMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
 

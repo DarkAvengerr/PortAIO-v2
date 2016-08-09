@@ -41,7 +41,7 @@ using EloBuddy;
                     break;
                 case "Karma":
                     // ReSharper disable once ObjectCreationAsStatement
-                    new Karma();
+                    new Champions.Karma();
                     new ActivatorBase();
                     VersionCheck.UpdateCheck();
                     break;

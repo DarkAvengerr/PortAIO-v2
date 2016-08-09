@@ -48,7 +48,7 @@ using EloBuddy;
             E.SetSkillshot(0.0f, 90, 1200, false, SkillshotType.SkillshotLine);
             R.SetSkillshot(0.25f, 250, float.MaxValue, false, SkillshotType.SkillshotCircle);
 
-            Ignite = Player.LSGetSpellSlot("summonerdot");
+            Ignite = Player.GetSpellSlot("summonerdot");
 
             Config = new Menu("HikiCarry - Viktor", "HikiCarry - Viktor", true).SetFontStyle(FontStyle.Bold, SharpDX.Color.Gold);
             TargetSelector.AddToMenu(Config.SubMenu("Target Selector Settings"));
@@ -147,7 +147,7 @@ using EloBuddy;
         {
             if (Config.Item("aGapcloser").GetValue<bool>())
             {
-                if (gapcloser.Sender.LSIsValidTarget(1000))
+                if (gapcloser.Sender.IsValidTarget(1000))
                 {
                     Render.Circle.DrawCircle(gapcloser.Sender.Position, gapcloser.Sender.BoundingRadius, Color.Gold, 5);
                 }
@@ -161,7 +161,7 @@ using EloBuddy;
         {
             if (Config.Item("ainterrupt").GetValue<bool>())
             {
-                if (sender.LSIsValidTarget(1000))
+                if (sender.IsValidTarget(1000))
                 {
                     Render.Circle.DrawCircle(sender.Position, sender.BoundingRadius, Color.Gold, 5);
                 }
@@ -192,7 +192,7 @@ using EloBuddy;
             }
             if (R.Instance.Name != "ViktorChaosStorm")
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range + 500)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range + 500)))
                 {
                     R.Cast(enemy);
                 }
@@ -204,52 +204,52 @@ using EloBuddy;
         {
             byte minHit = (byte)Config.Item("minHitR").GetValue<Slider>().Value;
             HitChance HikiChance = HitchanceArray[Config.Item("hChance").GetValue<StringList>().SelectedIndex];
-            if (Q.LSIsReady() && Config.Item("qCombo").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("qCombo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(ObjectManager.Player.AttackRange)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(ObjectManager.Player.AttackRange)))
                 {
                     Q.Cast(enemy);
                 }
             }
 
-            if (W.LSIsReady() && Config.Item("wCombo").GetValue<bool>())
+            if (W.IsReady() && Config.Item("wCombo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range) && W.GetPrediction(x).Hitchance > HikiChance))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range) && W.GetPrediction(x).Hitchance > HikiChance))
                 {
                     W.Cast(enemy);
                 }
             }
 
-            if (E.LSIsReady() && Config.Item("eCombo").GetValue<bool>())
+            if (E.IsReady() && Config.Item("eCombo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range + ERange)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range + ERange)))
                 {
                     DeathRay(enemy, HikiChance);
                 }
             }
 
-            if (R.LSIsReady() && Config.Item("rCombo").GetValue<bool>())
+            if (R.IsReady() && Config.Item("rCombo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(R.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(R.Range) &&
                     R.GetPrediction(x, true).Hitchance > HikiChance))
                 {
                     if (enemy.Health < CDamage(enemy))
                     {
                         R.Cast(enemy);
                     }
-                    if (Player.LSCountEnemiesInRange(R.Range) > minHit)
+                    if (Player.CountEnemiesInRange(R.Range) > minHit)
                     {
                         R.CastIfWillHit(enemy, minHit);
                     }
                 }
             }
 
-            if (Ignite.LSIsReady() && Config.Item("useIgnite").GetValue<bool>())
+            if (Ignite.IsReady() && Config.Item("useIgnite").GetValue<bool>())
             {
                 foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsDead && !x.IsZombie
-                    && x.LSIsValidTarget(550)))
+                    && x.IsValidTarget(550)))
                 {
-                    if (Player.LSGetSpellDamage(enemy, Ignite) + CDamage(enemy) > enemy.Health)
+                    if (Player.GetSpellDamage(enemy, Ignite) + CDamage(enemy) > enemy.Health)
                     {
                         Player.Spellbook.CastSpell(Ignite, enemy);
                     }
@@ -258,16 +258,16 @@ using EloBuddy;
         }
         private static void DeathRay(Obj_AI_Base enemy, HitChance hitChance)
         {
-            if (Player.ServerPosition.LSDistance(enemy.ServerPosition) < ERange)
+            if (Player.ServerPosition.Distance(enemy.ServerPosition) < ERange)
             {
                 E.UpdateSourcePosition(enemy.ServerPosition, enemy.ServerPosition);
                 var prediction = E.GetPrediction(enemy, true);
                 if (prediction.Hitchance >= hitChance)
                     E.Cast(enemy.ServerPosition, prediction.CastPosition);
             }
-            else if (Player.ServerPosition.LSDistance(enemy.ServerPosition) < E.Range + ERange)
+            else if (Player.ServerPosition.Distance(enemy.ServerPosition) < E.Range + ERange)
             {
-                var castStartPos = Player.ServerPosition.LSExtend(enemy.ServerPosition, ERange);
+                var castStartPos = Player.ServerPosition.Extend(enemy.ServerPosition, ERange);
                 E.UpdateSourcePosition(castStartPos, castStartPos);
                 var prediction = E.GetPrediction(enemy, true);
                 if (prediction.Hitchance >= hitChance)
@@ -283,19 +283,19 @@ using EloBuddy;
             var qDAA = new Double[] { 20, 25, 30, 35, 40, 45, 50, 55, 60, 70, 80, 90, 110, 130, 150, 170, 190, 210 };
             float damage = 0;
 
-            if (Q.LSIsReady() && useQ)
+            if (Q.IsReady() && useQ)
             {
                 damage += Q.GetDamage(enemy);
             }
-            if (Q.LSIsReady() || ObjectManager.Player.LSHasBuff("viktorpowertransferreturn") && useQ)
+            if (Q.IsReady() || ObjectManager.Player.HasBuff("viktorpowertransferreturn") && useQ)
             {
                 damage += (float)Player.CalcDamage(enemy, Damage.DamageType.Magical,
                     qDAA[Player.Level >= 18 ? 18 - 1 : Player.Level - 1] +
                     (Player.TotalMagicalDamage * .5) + Player.TotalAttackDamage());
             }
-            if (E.LSIsReady() && useE)
+            if (E.IsReady() && useE)
             {
-                if (Player.LSHasBuff("viktoreaug") || Player.LSHasBuff("viktorqeaug") || Player.LSHasBuff("viktorqweaug"))
+                if (Player.HasBuff("viktoreaug") || Player.HasBuff("viktorqeaug") || Player.HasBuff("viktorqweaug"))
                 {
                     damage += E.GetDamage(enemy, 1);
                 }
@@ -304,7 +304,7 @@ using EloBuddy;
                     damage += E.GetDamage(enemy, 0);
                 }
             }
-            if (R.LSIsReady() && useR)
+            if (R.IsReady() && useR)
             {
                 damage += R.GetDamage(enemy);
                 damage += R.GetDamage(enemy, 2);
@@ -319,17 +319,17 @@ using EloBuddy;
                 return;
             }
             HitChance HikiChance = HitchanceArray[Config.Item("hChance").GetValue<StringList>().SelectedIndex];
-            if (Q.LSIsReady() && Config.Item("qHarass").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("qHarass").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(ObjectManager.Player.AttackRange)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(ObjectManager.Player.AttackRange)))
                 {
                     Q.Cast(enemy);
                 }
             }
 
-            if (E.LSIsReady() && Config.Item("eHarass").GetValue<bool>())
+            if (E.IsReady() && Config.Item("eHarass").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range + ERange)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range + ERange)))
                 {
                     DeathRay(enemy, HikiChance);
                 }
@@ -343,9 +343,9 @@ using EloBuddy;
                 return;
             }
 
-            if (E.LSIsReady() && Config.Item("eToggle").GetValue<bool>())
+            if (E.IsReady() && Config.Item("eToggle").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range + ERange)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range + ERange)))
                 {
                     DeathRay(enemy, ToggleChance);
                 }
@@ -359,15 +359,15 @@ using EloBuddy;
             {
                 return;
             }
-            if (E.LSIsReady() && Config.Item("eClear").GetValue<bool>())
+            if (E.IsReady() && Config.Item("eClear").GetValue<bool>())
             {
-                var firstMinion = ObjectManager.Get<Obj_AI_Minion>().Where(a => a.IsEnemy).Where(a => !a.IsDead).Where(a => a.LSDistance(Player) < E.Range+ERange).FirstOrDefault();
-                var lasttMinion = ObjectManager.Get<Obj_AI_Minion>().Where(a => a.IsEnemy).Where(a => !a.IsDead).Where(a => a.LSDistance(Player) < E.Range).LastOrDefault();
+                var firstMinion = ObjectManager.Get<Obj_AI_Minion>().Where(a => a.IsEnemy).Where(a => !a.IsDead).Where(a => a.Distance(Player) < E.Range+ERange).FirstOrDefault();
+                var lasttMinion = ObjectManager.Get<Obj_AI_Minion>().Where(a => a.IsEnemy).Where(a => !a.IsDead).Where(a => a.Distance(Player) < E.Range).LastOrDefault();
                 if (firstMinion == null || lasttMinion == null)
                 {
                     return;
                 }
-                if (firstMinion.LSDistance(Player) < ERange)
+                if (firstMinion.Distance(Player) < ERange)
                 {
                     E.Cast(firstMinion.Position, lasttMinion.Position);
                 } 
@@ -375,10 +375,10 @@ using EloBuddy;
         }
         private static void EKs()
         {
-            if (E.LSIsReady() && Config.Item("eKS").GetValue<bool>())
+            if (E.IsReady() && Config.Item("eKS").GetValue<bool>())
             {
                 foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsDead && !x.IsZombie
-                    && x.LSIsValidTarget(E.Range) && E.GetDamage(x) > x.Health))
+                    && x.IsValidTarget(E.Range) && E.GetDamage(x) > x.Health))
                 {
                     HitChance HikiChance = HitchanceArray[Config.Item("hChance").GetValue<StringList>().SelectedIndex];
                     DeathRay(enemy,HikiChance);
@@ -394,15 +394,15 @@ using EloBuddy;
             {
                 return;
             }
-            if (Q.LSIsReady() && Config.Item("qJungle").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("qJungle").GetValue<bool>())
             {
                 Q.Cast(mob[0]);
             }
-            if (W.LSIsReady() && Config.Item("wJungle").GetValue<bool>())
+            if (W.IsReady() && Config.Item("wJungle").GetValue<bool>())
             {
                 W.Cast(mob[0].Position);
             }
-            if (E.LSIsReady() && Config.Item("eJungle").GetValue<bool>())
+            if (E.IsReady() && Config.Item("eJungle").GetValue<bool>())
             {
                 DeathRay(mob[0], HikiChance);
             }
@@ -415,7 +415,7 @@ using EloBuddy;
             var qMinion = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Enemy);
             if (ObjectManager.Player.ManaPercent > lMana)
             {
-                if (Q.LSIsReady() && useQ)
+                if (Q.IsReady() && useQ)
                 {
                     foreach (var minyon in qMinion)
                     {
@@ -438,19 +438,19 @@ using EloBuddy;
             var menuItem4 = Config.Item("rDraw").GetValue<Circle>();
             
 
-            if (menuItem1.Active && Q.LSIsReady())
+            if (menuItem1.Active && Q.IsReady())
             {
                 Render.Circle.DrawCircle(new Vector3(Player.Position.X, Player.Position.Y, Player.Position.Z), Q.Range, menuItem1.Color, 5);
             }
-            if (menuItem2.Active && W.LSIsReady())
+            if (menuItem2.Active && W.IsReady())
             {
                 Render.Circle.DrawCircle(new Vector3(Player.Position.X, Player.Position.Y, Player.Position.Z), W.Range, menuItem2.Color, 5);
             }
-            if (menuItem3.Active && E.LSIsReady())
+            if (menuItem3.Active && E.IsReady())
             {
                 Render.Circle.DrawCircle(new Vector3(Player.Position.X, Player.Position.Y, Player.Position.Z), E.Range + ERange , menuItem3.Color, 5);
             }
-            if (menuItem4.Active && R.LSIsReady())
+            if (menuItem4.Active && R.IsReady())
             {
                 Render.Circle.DrawCircle(new Vector3(Player.Position.X, Player.Position.Y, Player.Position.Z), R.Range, menuItem4.Color, 5);
             }

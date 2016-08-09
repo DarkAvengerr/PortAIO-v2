@@ -38,7 +38,7 @@ namespace SPrediction
         /// <returns>Prediction result as <see cref="Prediction.Result"/></returns>
         public static Prediction.Result GetPrediction(Prediction.Input input)
         {
-            return GetPrediction(input.Target, input.SpellWidth, input.SpellDelay, input.SpellMissileSpeed, input.SpellRange, input.SpellCollisionable, input.Path, input.AvgReactionTime, input.LastMovChangeTime, input.AvgPathLenght, input.LastAngleDiff, input.From.LSTo2D(), input.RangeCheckFrom.LSTo2D());
+            return GetPrediction(input.Target, input.SpellWidth, input.SpellDelay, input.SpellMissileSpeed, input.SpellRange, input.SpellCollisionable, input.Path, input.AvgReactionTime, input.LastMovChangeTime, input.AvgPathLenght, input.LastAngleDiff, input.From.To2D(), input.RangeCheckFrom.To2D());
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace SPrediction
         /// <returns>Prediction result as <see cref="Prediction.Result"/></returns>
         public static Prediction.Result GetPrediction(AIHeroClient target, float width, float delay, float missileSpeed, float range, bool collisionable)
         {
-            return GetPrediction(target, width, delay, missileSpeed, range, collisionable, target.LSGetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), ObjectManager.Player.ServerPosition.LSTo2D(), ObjectManager.Player.ServerPosition.LSTo2D());
+            return GetPrediction(target, width, delay, missileSpeed, range, collisionable, target.GetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), ObjectManager.Player.ServerPosition.To2D(), ObjectManager.Player.ServerPosition.To2D());
         }
 
         /// <summary>
@@ -81,15 +81,15 @@ namespace SPrediction
 
             if (arconly)
             {
-                if (target.LSDistance(from) < width || target.LSDistance(from) > range * 0.75f)
+                if (target.Distance(from) < width || target.Distance(from) > range * 0.75f)
                     return CirclePrediction.GetPrediction(target, width, delay, missileSpeed, range, collisionable, path, avgt, movt, avgp, anglediff, from, rangeCheckFrom);
 
                 var pred = LinePrediction.GetPrediction(target, 80f, delay, missileSpeed, range, collisionable, path, avgt, movt, avgp, anglediff, from, rangeCheckFrom);
                 if (pred.HitChance >= HitChance.Low)
                 {
-                    pred.CastPosition = (from + (pred.CastPosition - from).LSNormalized() * range);
-                    float cos = (float)Math.Cos((1 - pred.UnitPosition.LSDistance(from) / 820f) * Math.PI / 2);
-                    float sin = (float)Math.Sin((1 - pred.UnitPosition.LSDistance(from) / 820f) * Math.PI / 2);
+                    pred.CastPosition = (from + (pred.CastPosition - from).Normalized() * range);
+                    float cos = (float)Math.Cos((1 - pred.UnitPosition.Distance(from) / 820f) * Math.PI / 2);
+                    float sin = (float)Math.Sin((1 - pred.UnitPosition.Distance(from) / 820f) * Math.PI / 2);
                     float x = cos * (pred.CastPosition.X - from.X) - sin * (pred.CastPosition.Y - from.Y) + from.X;
                     float y = sin * (pred.CastPosition.X - from.X) + cos * (pred.CastPosition.Y - from.Y) + from.Y;
                     pred.CastPosition = new Vector2(x, y);
@@ -104,7 +104,7 @@ namespace SPrediction
                 if (path.Count <= 1) //if target is not moving, easy to hit
                 {
                     result.HitChance = HitChance.Immobile;
-                    result.CastPosition = target.ServerPosition.LSTo2D();
+                    result.CastPosition = target.ServerPosition.To2D();
                     result.UnitPosition = result.CastPosition;
                     return result;
                 }
@@ -112,7 +112,7 @@ namespace SPrediction
                 if (target is AIHeroClient && ((AIHeroClient)target).IsChannelingImportantSpell())
                 {
                     result.HitChance = HitChance.Immobile;
-                    result.CastPosition = target.ServerPosition.LSTo2D();
+                    result.CastPosition = target.ServerPosition.To2D();
                     result.UnitPosition = result.CastPosition;
                     return result;
                 }
@@ -120,16 +120,16 @@ namespace SPrediction
                 if (Utility.IsImmobileTarget(target))
                     return Prediction.GetImmobilePrediction(target, width, delay, missileSpeed, range, collisionable, SkillshotType.SkillshotCircle, from, rangeCheckFrom);
 
-                if (target.LSIsDashing())
+                if (target.IsDashing())
                     return Prediction.GetDashingPrediction(target, width, delay, missileSpeed, range, collisionable, SkillshotType.SkillshotCircle, from, rangeCheckFrom);
 
-                float targetDistance = rangeCheckFrom.LSDistance(target.ServerPosition);
+                float targetDistance = rangeCheckFrom.Distance(target.ServerPosition);
                 float flyTime = 0f;
 
                 if (missileSpeed != 0)
                 {
-                    Vector2 Vt = (path[path.Count - 1] - path[0]).LSNormalized() * target.MoveSpeed;
-                    Vector2 Vs = (target.ServerPosition.LSTo2D() - rangeCheckFrom).LSNormalized() * missileSpeed;
+                    Vector2 Vt = (path[path.Count - 1] - path[0]).Normalized() * target.MoveSpeed;
+                    Vector2 Vs = (target.ServerPosition.To2D() - rangeCheckFrom).Normalized() * missileSpeed;
                     Vector2 Vr = Vs - Vt;
 
                     flyTime = targetDistance / Vr.Length();
@@ -150,13 +150,13 @@ namespace SPrediction
                         Vector2 senderPos = rangeCheckFrom;
                         Vector2 testPos = path[i];
 
-                        float multp = (testPos.LSDistance(senderPos) / 875.0f);
+                        float multp = (testPos.Distance(senderPos) / 875.0f);
 
                         var dianaArc = new SPrediction.Geometry.Polygon(
                                         ClipperWrapper.DefineArc(senderPos - new Vector2(875 / 2f, 20), testPos, (float)Math.PI * multp, 410, 200 * multp),
                                         ClipperWrapper.DefineArc(senderPos - new Vector2(875 / 2f, 20), testPos, (float)Math.PI * multp, 410, 320 * multp));
 
-                        if (!ClipperWrapper.IsOutside(dianaArc, target.ServerPosition.LSTo2D()))
+                        if (!ClipperWrapper.IsOutside(dianaArc, target.ServerPosition.To2D()))
                         {
                             result.HitChance = HitChance.VeryHigh;
                             result.CastPosition = testPos;
@@ -184,14 +184,14 @@ namespace SPrediction
         public static Prediction.AoeResult GetAoePrediction(float width, float delay, float missileSpeed, float range, Vector2 from, Vector2 rangeCheckFrom)
         {
             Prediction.AoeResult result = new Prediction.AoeResult();
-            var enemies = HeroManager.Enemies.Where(p => p.LSIsValidTarget() && Prediction.GetFastUnitPosition(p, delay, 0, from).LSDistance(rangeCheckFrom) < range);
+            var enemies = HeroManager.Enemies.Where(p => p.IsValidTarget() && Prediction.GetFastUnitPosition(p, delay, 0, from).Distance(rangeCheckFrom) < range);
 
             foreach (AIHeroClient enemy in enemies)
             {
-                Prediction.Result prediction = GetPrediction(enemy, width, delay, missileSpeed, range, false, enemy.LSGetWaypoints(), enemy.AvgMovChangeTime(), enemy.LastMovChangeTime(), enemy.AvgPathLenght(), enemy.LastAngleDiff(), from, rangeCheckFrom);
+                Prediction.Result prediction = GetPrediction(enemy, width, delay, missileSpeed, range, false, enemy.GetWaypoints(), enemy.AvgMovChangeTime(), enemy.LastMovChangeTime(), enemy.AvgPathLenght(), enemy.LastAngleDiff(), from, rangeCheckFrom);
                 if (prediction.HitChance > HitChance.Medium)
                 {
-                    float multp = (result.CastPosition.LSDistance(from) / 875.0f);
+                    float multp = (result.CastPosition.Distance(from) / 875.0f);
 
                     var spellHitBox = new SPrediction.Geometry.Polygon(
                                             ClipperWrapper.DefineArc(from - new Vector2(875 / 2f, 20), result.CastPosition, (float)Math.PI * multp, 410, 200 * multp),

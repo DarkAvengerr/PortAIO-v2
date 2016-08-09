@@ -48,10 +48,10 @@ namespace FioraProject.Evade
             {
                 var from = self[i];
                 var to = self[i + 1];
-                var d = (int)to.LSDistance(from);
+                var d = (int)to.Distance(from);
                 if (d > distance)
                 {
-                    return from + distance * (to - from).LSNormalized();
+                    return from + distance * (to - from).Normalized();
                 }
                 distance -= d;
             }
@@ -96,7 +96,7 @@ namespace FioraProject.Evade
                 this.Start = start;
                 this.End = end;
                 this.HitBox = hitbox;
-                this.Distance = this.Start.LSDistance(this.End);
+                this.Distance = this.Start.Distance(this.End);
             }
 
             #endregion
@@ -110,28 +110,28 @@ namespace FioraProject.Evade
                 var innerRadius = -0.1562f * this.Distance + 687.31f;
                 var outerRadius = 0.35256f * this.Distance + 133f;
                 outerRadius = outerRadius / (float)Math.Cos(2 * Math.PI / CircleLineSegmentN);
-                var innerCenters = LeagueSharp.Common.Geometry.LSCircleCircleIntersection(this.Start,this.End, innerRadius, innerRadius);
-                var outerCenters = LeagueSharp.Common.Geometry.LSCircleCircleIntersection(this.Start,this.End, outerRadius, outerRadius);
+                var innerCenters = LeagueSharp.Common.Geometry.CircleCircleIntersection(this.Start,this.End, innerRadius, innerRadius);
+                var outerCenters = LeagueSharp.Common.Geometry.CircleCircleIntersection(this.Start,this.End, outerRadius, outerRadius);
                 var innerCenter = innerCenters[0];
                 var outerCenter = outerCenters[0];
-                var direction = (this.End - outerCenter).LSNormalized();
-                var end = (this.Start - outerCenter).LSNormalized();
-                var maxAngle = (float)(direction.LSAngleBetween(end) * Math.PI / 180);
+                var direction = (this.End - outerCenter).Normalized();
+                var end = (this.Start - outerCenter).Normalized();
+                var maxAngle = (float)(direction.AngleBetween(end) * Math.PI / 180);
                 var step = -maxAngle / CircleLineSegmentN;
                 for (var i = 0; i < CircleLineSegmentN; i++)
                 {
                     var angle = step * i;
-                    var point = outerCenter + (outerRadius + 15 + offset) * direction.LSRotated(angle);
+                    var point = outerCenter + (outerRadius + 15 + offset) * direction.Rotated(angle);
                     result.Add(point);
                 }
-                direction = (this.Start - innerCenter).LSNormalized();
-                end = (this.End - innerCenter).LSNormalized();
-                maxAngle = (float)(direction.LSAngleBetween(end) * Math.PI / 180);
+                direction = (this.Start - innerCenter).Normalized();
+                end = (this.End - innerCenter).Normalized();
+                maxAngle = (float)(direction.AngleBetween(end) * Math.PI / 180);
                 step = maxAngle / CircleLineSegmentN;
                 for (var i = 0; i < CircleLineSegmentN; i++)
                 {
                     var angle = step * i;
-                    var point = innerCenter + Math.Max(0, innerRadius - offset - 100) * direction.LSRotated(angle);
+                    var point = innerCenter + Math.Max(0, innerRadius - offset - 100) * direction.Rotated(angle);
                     result.Add(point);
                 }
                 return result;
@@ -249,8 +249,8 @@ namespace FioraProject.Evade
                 this.RStart = start;
                 this.REnd = end;
                 this.Width = width;
-                this.Direction = (end - start).LSNormalized();
-                this.Perpendicular = this.Direction.LSPerpendicular();
+                this.Direction = (end - start).Normalized();
+                this.Perpendicular = this.Direction.Perpendicular();
             }
 
             #endregion
@@ -364,10 +364,10 @@ namespace FioraProject.Evade
                 var result = new Polygon();
                 var outRadius = (this.Radius + offset) / (float)Math.Cos(2 * Math.PI / CircleLineSegmentN);
                 result.Add(this.Center);
-                var side1 = this.Direction.LSRotated(-this.Angle * 0.5f);
+                var side1 = this.Direction.Rotated(-this.Angle * 0.5f);
                 for (var i = 0; i <= CircleLineSegmentN; i++)
                 {
-                    var cDirection = side1.LSRotated(i * this.Angle / CircleLineSegmentN).LSNormalized();
+                    var cDirection = side1.Rotated(i * this.Angle / CircleLineSegmentN).Normalized();
                     result.Add(
                         new Vector2(this.Center.X + outRadius * cDirection.X, this.Center.Y + outRadius * cDirection.Y));
                 }

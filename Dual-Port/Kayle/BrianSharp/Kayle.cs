@@ -122,7 +122,7 @@ namespace BrianSharp.Plugin
         private static void OnUpdate(EventArgs args)
         {
             AntiDetect();
-            if (Player.IsDead || MenuGUI.IsChatOpen || Player.LSIsRecalling())
+            if (Player.IsDead || MenuGUI.IsChatOpen || Player.IsRecalling())
             {
                 return;
             }
@@ -160,15 +160,15 @@ namespace BrianSharp.Plugin
             }
             if (GetValue<bool>("Draw", "Q") && Q.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, Q.Range, Q.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, Q.Range, Q.IsReady() ? Color.Green : Color.Red);
             }
             if (GetValue<bool>("Draw", "W") && W.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, W.Range, W.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, W.Range, W.IsReady() ? Color.Green : Color.Red);
             }
             if (GetValue<bool>("Draw", "R") && R.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, R.Range, R.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, R.Range, R.IsReady() ? Color.Green : Color.Red);
             }
         }
 
@@ -178,22 +178,22 @@ namespace BrianSharp.Plugin
             {
                 return;
             }
-            if (GetValue<bool>("Combo", "W") && GetValue<bool>("Combo", "WHeal") && W.LSIsReady())
+            if (GetValue<bool>("Combo", "W") && GetValue<bool>("Combo", "WHeal") && W.IsReady())
             {
                 var obj = ObjectManager.GetUnitByNetworkId<AIHeroClient>((uint)args.Target.NetworkId);
-                if (obj.LSIsValidTarget(W.Range, false) && obj.IsAlly && GetValue<bool>("Heal", MenuName(obj)) &&
-                    obj.HealthPercent < GetValue<Slider>("Heal", MenuName(obj) + "HpU").Value && !obj.LSInFountain() &&
+                if (obj.IsValidTarget(W.Range, false) && obj.IsAlly && GetValue<bool>("Heal", MenuName(obj)) &&
+                    obj.HealthPercent < GetValue<Slider>("Heal", MenuName(obj) + "HpU").Value && !obj.InFountain() &&
                     !obj.HasBuff("JudicatorIntervention") && !obj.HasBuff("UndyingRage") &&
                     W.CastOnUnit(obj, PacketCast))
                 {
                     return;
                 }
             }
-            if (GetValue<bool>("Combo", "R") && GetValue<bool>("Combo", "RSave") && R.LSIsReady())
+            if (GetValue<bool>("Combo", "R") && GetValue<bool>("Combo", "RSave") && R.IsReady())
             {
                 var obj = ObjectManager.GetUnitByNetworkId<AIHeroClient>((uint)args.Target.NetworkId);
-                if (obj.LSIsValidTarget(R.Range, false) && obj.IsAlly && GetValue<bool>("Save", MenuName(obj)) &&
-                    obj.HealthPercent < GetValue<Slider>("Save", MenuName(obj) + "HpU").Value && !obj.LSInFountain() &&
+                if (obj.IsValidTarget(R.Range, false) && obj.IsAlly && GetValue<bool>("Save", MenuName(obj)) &&
+                    obj.HealthPercent < GetValue<Slider>("Save", MenuName(obj) + "HpU").Value && !obj.InFountain() &&
                     !obj.HasBuff("UndyingRage"))
                 {
                     R.CastOnUnit(obj, PacketCast);
@@ -207,7 +207,7 @@ namespace BrianSharp.Plugin
             {
                 var target =
                     HeroManager.Enemies.Where(i => Orbwalk.InAutoAttackRange(i))
-                        .MaxOrDefault(i => i.LSCountEnemiesInRange(150));
+                        .MaxOrDefault(i => i.CountEnemiesInRange(150));
                 if (target != null)
                 {
                     Orbwalk.ForcedTarget = target;
@@ -221,14 +221,14 @@ namespace BrianSharp.Plugin
             {
                 var target = Q.GetTarget();
                 if (target != null &&
-                    ((Player.LSDistance(target) > Q.Range - 100 && !target.LSIsFacing(Player) && Player.LSIsFacing(target)) ||
-                     target.HealthPercent > 60 || Player.LSCountEnemiesInRange(Q.Range) == 1) &&
+                    ((Player.Distance(target) > Q.Range - 100 && !target.IsFacing(Player) && Player.IsFacing(target)) ||
+                     target.HealthPercent > 60 || Player.CountEnemiesInRange(Q.Range) == 1) &&
                     Q.CastOnUnit(target, PacketCast))
                 {
                     return;
                 }
             }
-            if (GetValue<bool>(mode, "E") && E.LSIsReady() && E.GetTarget() != null && E.Cast(PacketCast))
+            if (GetValue<bool>(mode, "E") && E.IsReady() && E.GetTarget() != null && E.Cast(PacketCast))
             {
                 return;
             }
@@ -236,21 +236,21 @@ namespace BrianSharp.Plugin
             {
                 return;
             }
-            if (GetValue<bool>(mode, "W") && GetValue<bool>(mode, "WSpeed") && W.LSIsReady())
+            if (GetValue<bool>(mode, "W") && GetValue<bool>(mode, "WSpeed") && W.IsReady())
             {
                 var target = Q.GetTarget(200);
-                if (target != null && !target.LSIsFacing(Player) && (!HaveE || !Orbwalk.InAutoAttackRange(target)) &&
-                    (!GetValue<bool>(mode, "Q") || (Q.LSIsReady() && !Q.IsInRange(target))) && W.Cast(PacketCast))
+                if (target != null && !target.IsFacing(Player) && (!HaveE || !Orbwalk.InAutoAttackRange(target)) &&
+                    (!GetValue<bool>(mode, "Q") || (Q.IsReady() && !Q.IsInRange(target))) && W.Cast(PacketCast))
                 {
                     return;
                 }
             }
-            if (GetValue<bool>(mode, "R") && GetValue<StringList>(mode, "RAnti").SelectedIndex > 0 && R.LSIsReady())
+            if (GetValue<bool>(mode, "R") && GetValue<StringList>(mode, "RAnti").SelectedIndex > 0 && R.IsReady())
             {
                 var obj =
                     HeroManager.Allies.Where(
                         i =>
-                            i.LSIsValidTarget(R.Range, false) && RAntiDetected.ContainsKey(i.NetworkId) &&
+                            i.IsValidTarget(R.Range, false) && RAntiDetected.ContainsKey(i.NetworkId) &&
                             Game.Time > RAntiDetected[i.NetworkId].StartTick && !i.HasBuff("UndyingRage"))
                         .MinOrDefault(i => i.Health);
                 if (obj != null)
@@ -268,7 +268,7 @@ namespace BrianSharp.Plugin
             {
                 return;
             }
-            if (GetValue<bool>("Clear", "Q") && Q.LSIsReady())
+            if (GetValue<bool>("Clear", "Q") && Q.IsReady())
             {
                 var obj = minionObj.FirstOrDefault(i => Q.IsKillable(i)) ??
                           minionObj.FirstOrDefault(i => i.MaxHealth >= 1200);
@@ -277,7 +277,7 @@ namespace BrianSharp.Plugin
                     return;
                 }
             }
-            if (GetValue<bool>("Clear", "E") && E.LSIsReady() &&
+            if (GetValue<bool>("Clear", "E") && E.IsReady() &&
                 (minionObj.Count > 1 || minionObj.Any(i => i.MaxHealth >= 1200)))
             {
                 E.Cast(PacketCast);
@@ -286,7 +286,7 @@ namespace BrianSharp.Plugin
 
         private static void LastHit()
         {
-            if (!GetValue<bool>("LastHit", "Q") || !Q.LSIsReady())
+            if (!GetValue<bool>("LastHit", "Q") || !Q.IsReady())
             {
                 return;
             }
@@ -302,7 +302,7 @@ namespace BrianSharp.Plugin
 
         private static void Flee()
         {
-            if (GetValue<bool>("Flee", "W") && W.LSIsReady() && W.Cast(PacketCast))
+            if (GetValue<bool>("Flee", "W") && W.IsReady() && W.Cast(PacketCast))
             {
                 return;
             }
@@ -324,7 +324,7 @@ namespace BrianSharp.Plugin
 
         private static void KillSteal()
         {
-            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.LSIsReady())
+            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.IsReady())
             {
                 var target = TargetSelector.GetTarget(600, TargetSelector.DamageType.True);
                 if (target != null && CastIgnite(target))
@@ -341,7 +341,7 @@ namespace BrianSharp.Plugin
                     return;
                 }
             }
-            if (GetValue<bool>("KillSteal", "Q") && Q.LSIsReady())
+            if (GetValue<bool>("KillSteal", "Q") && Q.IsReady())
             {
                 var target = Q.GetTarget();
                 if (target != null && Q.IsKillable(target))
@@ -383,8 +383,8 @@ namespace BrianSharp.Plugin
                     }
                     else if (buff.DisplayName == "KarthusFallenOne" && GetValue<bool>("Anti", "Karthus") &&
                              obj.Health <=
-                             ((AIHeroClient) buff.Caster).LSGetSpellDamage(obj, SpellSlot.R) + obj.Health * 0.2f &&
-                             obj.LSCountEnemiesInRange(R.Range) > 0)
+                             ((AIHeroClient) buff.Caster).GetSpellDamage(obj, SpellSlot.R) + obj.Health * 0.2f &&
+                             obj.CountEnemiesInRange(R.Range) > 0)
                     {
                         RAntiDetected.Add(obj.NetworkId, new RAntiItem(buff));
                     }

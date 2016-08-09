@@ -17,13 +17,13 @@ using EloBuddy;
             =>
                 ObjectManager.Get<Obj_AI_Turret>()
                     .Where(x => !x.IsDead && x.Team == ObjectManager.Player.Team)
-                    .Any(x => x.LSDistance(position) < 775);
+                    .Any(x => x.Distance(position) < 775);
 
         public static bool UnderEnemyTurret(this Vector3 position)
             =>
                 ObjectManager.Get<Obj_AI_Turret>()
                     .Where(x => !x.IsDead && x.Team != ObjectManager.Player.Team)
-                    .Any(x => x.LSDistance(position) < 775);
+                    .Any(x => x.Distance(position) < 775);
 
         #endregion
     }

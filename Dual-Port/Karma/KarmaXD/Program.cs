@@ -158,32 +158,32 @@ using EloBuddy;
 
         private static void OnProcess(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
                 if (sender.IsAlly && sender is AIHeroClient && Config.Item("e.engage." + args.SData.Name).GetValue<bool>()
-                && Config.Item("e." + sender.CharData.BaseSkinName).GetValue<bool>() && sender.LSDistance(ObjectManager.Player.Position) <= E.Range
+                && Config.Item("e." + sender.CharData.BaseSkinName).GetValue<bool>() && sender.Distance(ObjectManager.Player.Position) <= E.Range
                     && !sender.IsDead && !sender.IsZombie && sender.IsValid)
                 {
                     E.CastOnUnit(sender);
                 }
 
                 if (sender is AIHeroClient && sender.IsEnemy && args.Target.IsAlly && args.Target.Type == GameObjectType.AIHeroClient
-                && args.SData.LSIsAutoAttack() && ObjectManager.Player.ManaPercent >= Config.Item("min.mana.for.e").GetValue<Slider>().Value
-                && Config.Item("e." + ((AIHeroClient)args.Target).ChampionName).GetValue<bool>() && ((AIHeroClient)args.Target).LSDistance(ObjectManager.Player.Position) < E.Range)
+                && args.SData.IsAutoAttack() && ObjectManager.Player.ManaPercent >= Config.Item("min.mana.for.e").GetValue<Slider>().Value
+                && Config.Item("e." + ((AIHeroClient)args.Target).ChampionName).GetValue<bool>() && ((AIHeroClient)args.Target).Distance(ObjectManager.Player.Position) < E.Range)
                 {
                     E.Cast((AIHeroClient)args.Target);
                 }
 
                 if (sender is AIHeroClient && args.Target.IsAlly && args.Target.Type == GameObjectType.AIHeroClient
-                    && !args.SData.LSIsAutoAttack() && (Config.Item("e.protect." + args.SData.Name).GetValue<bool>() || Config.Item("e.protect.targetted." + args.SData.Name).GetValue<bool>())
-                    && sender.IsEnemy && sender.LSGetSpellDamage(((AIHeroClient)args.Target), args.SData.Name) > ((AIHeroClient)args.Target).Health)
+                    && !args.SData.IsAutoAttack() && (Config.Item("e.protect." + args.SData.Name).GetValue<bool>() || Config.Item("e.protect.targetted." + args.SData.Name).GetValue<bool>())
+                    && sender.IsEnemy && sender.GetSpellDamage(((AIHeroClient)args.Target), args.SData.Name) > ((AIHeroClient)args.Target).Health)
                 {
                     E.Cast((AIHeroClient)args.Target);
                 }
 
                 if (sender is AIHeroClient && sender.IsEnemy && args.Target.IsAlly && args.Target.Type == GameObjectType.obj_AI_Turret
-                    && args.SData.LSIsAutoAttack() && ObjectManager.Player.ManaPercent >= Config.Item("min.mana.for.e").GetValue<Slider>().Value
-                    && ((AIHeroClient)args.Target).LSDistance(ObjectManager.Player.Position) < E.Range
+                    && args.SData.IsAutoAttack() && ObjectManager.Player.ManaPercent >= Config.Item("min.mana.for.e").GetValue<Slider>().Value
+                    && ((AIHeroClient)args.Target).Distance(ObjectManager.Player.Position) < E.Range
                     && ((AIHeroClient)args.Target).HealthPercent < Config.Item("turret.hp.percent").GetValue<Slider>().Value)
                 {
                     E.Cast((AIHeroClient)args.Target);
@@ -193,19 +193,19 @@ using EloBuddy;
         private static float TotalDamage(AIHeroClient hero)
         {
             var damage = 0d;
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 damage += Q.GetDamage(hero);
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 damage += W.GetDamage(hero);
             }
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
                 damage += W.GetDamage(hero);
             }
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 damage += R.GetDamage(hero);
             }
@@ -234,9 +234,9 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (Q.LSIsReady() && Config.Item("karma.q.combo").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("karma.q.combo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(Q.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(Q.Range)))
                 {
                     var hit = Q.GetPrediction(enemy);
                     if (hit.Hitchance >= HikiChance("hitchance"))
@@ -246,19 +246,19 @@ using EloBuddy;
                 }
             }
 
-            if (W.LSIsReady() && Config.Item("karma.w.combo").GetValue<bool>())
+            if (W.IsReady() && Config.Item("karma.w.combo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(W.Range - 50)))
+                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(W.Range - 50)))
                 {
                     W.CastOnUnit(enemy);
                 }
             }
 
-            if (R.LSIsReady() && Config.Item("karma.r.combo").GetValue<bool>())
+            if (R.IsReady() && Config.Item("karma.r.combo").GetValue<bool>())
             {
-                if (Q.LSIsReady() && Config.Item("karma.q.combo").GetValue<bool>())
+                if (Q.IsReady() && Config.Item("karma.q.combo").GetValue<bool>())
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range)))
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                     {
                         var hit = Q.GetPrediction(enemy);
                         if (hit.Hitchance >= HikiChance("hitchance"))
@@ -267,10 +267,10 @@ using EloBuddy;
                         }
                     }
                 }
-                if (W.LSIsReady() && Config.Item("karma.w.combo").GetValue<bool>()
+                if (W.IsReady() && Config.Item("karma.w.combo").GetValue<bool>()
                     && ObjectManager.Player.HealthPercent <= Config.Item("karma.w.hp").GetValue<Slider>().Value)
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(W.Range+10)))
+                    foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(W.Range+10)))
                     {
                         R.Cast();
                     }
@@ -285,9 +285,9 @@ using EloBuddy;
                 return;
             }
 
-            if (Q.LSIsReady() && Config.Item("karma.q.harass").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("karma.q.harass").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                 {
                     var hit = Q.GetPrediction(enemy);
                     if (hit.Hitchance >= HitChance.VeryHigh)
@@ -310,7 +310,7 @@ using EloBuddy;
                 return;
             }
 
-            if (Q.LSIsReady() && Config.Item("karma.q.clear").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("karma.q.clear").GetValue<bool>())
             {
                 var wminion = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, W.Range, MinionTypes.All, MinionTeam.NotAlly).ToList();
                 var xx = Q.GetCircularFarmLocation(wminion);

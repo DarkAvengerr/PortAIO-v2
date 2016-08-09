@@ -16,7 +16,7 @@ using EloBuddy;
     {
         public static bool IsRendKillable(this Obj_AI_Base target)
         {
-            if (target.LSHasBuff("kindredrnodeathbuff")) return false;
+            if (target.HasBuff("kindredrnodeathbuff")) return false;
             if (target.Name.Contains("Baron") || target.Name.Contains("Dragon") || target.Health > 20)
             {
                 if (target is AIHeroClient)
@@ -28,15 +28,15 @@ using EloBuddy;
                     }
                 }
                 var dmg = Program.E.GetDamage(target);
-                if (ObjectManager.Player.LSHasBuff("SummonerExhaustSlow"))
+                if (ObjectManager.Player.HasBuff("SummonerExhaustSlow"))
                 {
                     dmg *= 0.55f;
                 }
-                if (target.Name.Contains("Baron") && ObjectManager.Player.LSHasBuff("barontarget"))
+                if (target.Name.Contains("Baron") && ObjectManager.Player.HasBuff("barontarget"))
                 {
                     dmg *= 0.5f;
                 }
-                if (target.Name.Contains("Dragon") && ObjectManager.Player.LSHasBuff("s5test_dragonslayerbuff"))
+                if (target.Name.Contains("Dragon") && ObjectManager.Player.HasBuff("s5test_dragonslayerbuff"))
                 {
                     dmg *= (1f - (0.07f * ObjectManager.Player.GetBuffCount("s5test_dragonslayerbuff")));
                 }
@@ -46,7 +46,7 @@ using EloBuddy;
         }
         public static BuffInstance GetRendBuff(this Obj_AI_Base target)
         {
-            return target.Buffs.Find(b => b.Caster.IsMe && b.LSIsValidBuff() && b.DisplayName.ToLower() == "kalistaexpungemarker");
+            return target.Buffs.Find(b => b.Caster.IsMe && b.IsValidBuff() && b.DisplayName.ToLower() == "kalistaexpungemarker");
         }
     }
 }

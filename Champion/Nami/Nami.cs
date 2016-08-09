@@ -55,7 +55,7 @@
             spells[Spells.Q].SetSkillshot(1f, 150f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             spells[Spells.R].SetSkillshot(0.5f, 260f, 850f, false, SkillshotType.SkillshotLine);
 
-            ignite = Player.LSGetSpellSlot("summonerdot");
+            ignite = Player.GetSpellSlot("summonerdot");
 
             ElNamiMenu.Initialize();
             Game.OnUpdate += OnUpdate;
@@ -70,17 +70,17 @@
 
         private static void AllyHealing()
         {
-            if (Player.LSIsRecalling() || Player.LSInFountain()
+            if (Player.IsRecalling() || Player.InFountain()
                 || !ElNamiMenu.Menu.Item("ElNamiReborn.Heal.Ally.HP").GetValue<bool>())
             {
                 return;
             }
 
-            foreach (var hero in HeroManager.Allies.Where(h => !h.IsMe && (!h.LSIsRecalling() || !h.LSInFountain())))
+            foreach (var hero in HeroManager.Allies.Where(h => !h.IsMe && (!h.IsRecalling() || !h.InFountain())))
             {
                 if ((hero.Health / hero.MaxHealth) * 100
                     <= ElNamiMenu.Menu.Item("ElNamiReborn.Heal.Ally.HP.Percentage").GetValue<Slider>().Value
-                    && spells[Spells.W].LSIsReady() && hero.LSDistance(Player.ServerPosition) <= spells[Spells.W].Range
+                    && spells[Spells.W].IsReady() && hero.Distance(Player.ServerPosition) <= spells[Spells.W].Range
                     && Player.ManaPercent >= ElNamiMenu.Menu.Item("ElNamiReborn.Heal.Mana").GetValue<Slider>().Value)
                 {
                     spells[Spells.W].Cast(hero);
@@ -90,25 +90,25 @@
 
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (!gapcloser.Sender.LSIsValidTarget(spells[Spells.Q].Range))
+            if (!gapcloser.Sender.IsValidTarget(spells[Spells.Q].Range))
             {
                 return;
             }
 
-            if (gapcloser.Sender.LSDistance(Player) > spells[Spells.Q].Range)
+            if (gapcloser.Sender.Distance(Player) > spells[Spells.Q].Range)
             {
                 return;
             }
 
-            if (gapcloser.Sender.LSIsValidTarget(spells[Spells.Q].Range))
+            if (gapcloser.Sender.IsValidTarget(spells[Spells.Q].Range))
             {
-                if (ElNamiMenu.Menu.Item("ElNamiReborn.Interupt.Q").IsActive() && spells[Spells.Q].LSIsReady())
+                if (ElNamiMenu.Menu.Item("ElNamiReborn.Interupt.Q").IsActive() && spells[Spells.Q].IsReady())
                 {
                     spells[Spells.Q].Cast(gapcloser.Sender);
                 }
 
-                if (ElNamiMenu.Menu.Item("ElNamiReborn.Interupt.R").IsActive() && !spells[Spells.Q].LSIsReady()
-                    && spells[Spells.R].LSIsReady())
+                if (ElNamiMenu.Menu.Item("ElNamiReborn.Interupt.R").IsActive() && !spells[Spells.Q].IsReady()
+                    && spells[Spells.R].IsReady())
                 {
                     spells[Spells.R].Cast(gapcloser.Sender);
                 }
@@ -123,7 +123,7 @@
                 return;
             }
 
-            if (ElNamiMenu.Menu.Item("ElNamiReborn.Combo.Q").IsActive() && spells[Spells.Q].LSIsReady())
+            if (ElNamiMenu.Menu.Item("ElNamiReborn.Combo.Q").IsActive() && spells[Spells.Q].IsReady())
             {
                 var pred = spells[Spells.Q].GetPrediction(target);
                 if (pred.Hitchance >= HitChance.VeryHigh)
@@ -132,12 +132,12 @@
                 }
             }
 
-            if (ElNamiMenu.Menu.Item("ElNamiReborn.Combo.E").IsActive() && spells[Spells.E].LSIsReady())
+            if (ElNamiMenu.Menu.Item("ElNamiReborn.Combo.E").IsActive() && spells[Spells.E].IsReady())
             {
-                if (Player.LSGetEnemiesInRange(spells[Spells.E].Range).Any())
+                if (Player.GetEnemiesInRange(spells[Spells.E].Range).Any())
                 {
                     var closestEnemy =
-                        Player.LSGetEnemiesInRange(spells[Spells.E].Range)
+                        Player.GetEnemiesInRange(spells[Spells.E].Range)
                             .OrderByDescending(h => (h.PhysicalDamageDealtPlayer + h.MagicDamageDealtPlayer))
                             .FirstOrDefault();
 
@@ -154,10 +154,10 @@
                     spells[Spells.E].Cast(closestEnemy);
                 }
 
-                if (Player.LSGetAlliesInRange(spells[Spells.E].Range).Any() && Player.LSGetEnemiesInRange(800f).Count >= 1)
+                if (Player.GetAlliesInRange(spells[Spells.E].Range).Any() && Player.GetEnemiesInRange(800f).Count >= 1)
                 {
                     var closestToTarget =
-                        Player.LSGetAlliesInRange(spells[Spells.E].Range)
+                        Player.GetAlliesInRange(spells[Spells.E].Range)
                             .OrderByDescending(h => (h.PhysicalDamageDealtPlayer + h.MagicDamageDealtPlayer))
                             .FirstOrDefault();
 
@@ -165,15 +165,15 @@
                 }
             }
 
-            if (ElNamiMenu.Menu.Item("ElNamiReborn.Combo.W").IsActive() && spells[Spells.W].LSIsReady())
+            if (ElNamiMenu.Menu.Item("ElNamiReborn.Combo.W").IsActive() && spells[Spells.W].IsReady())
             {
                 spells[Spells.W].Cast(target);
             }
 
-            if (ElNamiMenu.Menu.Item("ElNamiReborn.Combo.R").IsActive() && spells[Spells.R].LSIsReady())
+            if (ElNamiMenu.Menu.Item("ElNamiReborn.Combo.R").IsActive() && spells[Spells.R].IsReady())
             {
                 foreach (var x in
-                    HeroManager.Enemies.Where((hero => !hero.IsDead && hero.LSIsValidTarget(spells[Spells.R].Range))))
+                    HeroManager.Enemies.Where((hero => !hero.IsDead && hero.IsValidTarget(spells[Spells.R].Range))))
                 {
                     var pred = spells[Spells.R].GetPrediction(x);
                     if (pred.AoeTargetsHitCount
@@ -187,7 +187,7 @@
                 }
             }
 
-            if (ElNamiMenu.Menu.Item("ElNamiReborn.Combo.Ignite").IsActive() && Player.LSDistance(target) <= 600
+            if (ElNamiMenu.Menu.Item("ElNamiReborn.Combo.Ignite").IsActive() && Player.Distance(target) <= 600
                 && IgniteDamage(target) >= target.Health)
             {
                 Player.Spellbook.CastSpell(ignite, target);
@@ -207,17 +207,17 @@
                 return;
             }
 
-            if (ElNamiMenu.Menu.Item("ElNamiReborn.Harass.Q").IsActive() && spells[Spells.Q].LSIsReady())
+            if (ElNamiMenu.Menu.Item("ElNamiReborn.Harass.Q").IsActive() && spells[Spells.Q].IsReady())
             {
                 spells[Spells.Q].CastIfHitchanceEquals(target, HitChance.VeryHigh);
             }
 
-            if (ElNamiMenu.Menu.Item("ElNamiReborn.Harass.E").IsActive() && spells[Spells.E].LSIsReady())
+            if (ElNamiMenu.Menu.Item("ElNamiReborn.Harass.E").IsActive() && spells[Spells.E].IsReady())
             {
-                if (Player.LSGetAlliesInRange(spells[Spells.E].Range).Any())
+                if (Player.GetAlliesInRange(spells[Spells.E].Range).Any())
                 {
                     var closestToTarget =
-                        Player.LSGetAlliesInRange(spells[Spells.E].Range)
+                        Player.GetAlliesInRange(spells[Spells.E].Range)
                             .OrderByDescending(h => (h.PhysicalDamageDealtPlayer + h.MagicDamageDealtPlayer))
                             .First();
 
@@ -229,7 +229,7 @@
                 }
             }
 
-            if (ElNamiMenu.Menu.Item("ElNamiReborn.Harass.W").IsActive() && spells[Spells.W].LSIsReady())
+            if (ElNamiMenu.Menu.Item("ElNamiReborn.Harass.W").IsActive() && spells[Spells.W].IsReady())
             {
                 spells[Spells.W].Cast(target);
             }
@@ -248,13 +248,13 @@
             AIHeroClient sender,
             Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (args.DangerLevel != Interrupter2.DangerLevel.High || sender.LSDistance(Player) > spells[Spells.Q].Range)
+            if (args.DangerLevel != Interrupter2.DangerLevel.High || sender.Distance(Player) > spells[Spells.Q].Range)
             {
                 return;
             }
 
-            if (sender.LSIsValidTarget(spells[Spells.Q].Range) && args.DangerLevel == Interrupter2.DangerLevel.High
-                && spells[Spells.Q].LSIsReady())
+            if (sender.IsValidTarget(spells[Spells.Q].Range) && args.DangerLevel == Interrupter2.DangerLevel.High
+                && spells[Spells.Q].IsReady())
             {
                 spells[Spells.Q].Cast(sender);
             }
@@ -284,7 +284,7 @@
 
         private static void PlayerHealing()
         {
-            if (Player.LSIsRecalling() || Player.LSInFountain()
+            if (Player.IsRecalling() || Player.InFountain()
                 || !ElNamiMenu.Menu.Item("ElNamiReborn.Heal.Activate").IsActive())
             {
                 return;
@@ -292,7 +292,7 @@
 
             if ((Player.Health / Player.MaxHealth) * 100
                 <= ElNamiMenu.Menu.Item("ElNamiReborn.Heal.Player.HP").GetValue<Slider>().Value
-                && spells[Spells.W].LSIsReady()
+                && spells[Spells.W].IsReady()
                 && ObjectManager.Player.ManaPercent
                 >= ElNamiMenu.Menu.Item("ElNamiReborn.Heal.Mana").GetValue<Slider>().Value)
             {

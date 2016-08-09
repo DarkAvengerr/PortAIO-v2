@@ -112,7 +112,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private float GetQTime(Obj_AI_Base targetB)
         {
-            return player.LSDistance(targetB) / 2800f + Q.Delay;
+            return player.Distance(targetB) / 2800f + Q.Delay;
         }
 
         private bool KillableBarrel(Obj_AI_Base targetB)
@@ -136,29 +136,29 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
-            if (!Q.LSIsReady(3500) && player.Mana > 150)
+            if (!Q.IsReady(3500) && player.Mana > 150)
                 W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.CastOnUnit(target);
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if (target == null || !R.LSIsReady())
+            if (target == null || !R.IsReady())
                 return;
             R.CastIfWillHit(target, 3);
         }
@@ -169,7 +169,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             {
 
                 Combo();
-                if (player.HealthPercent < 40 && W.LSIsReady())
+                if (player.HealthPercent < 40 && W.IsReady())
                     W.Cast();
             }
             catch (Exception ex)
@@ -192,13 +192,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void farm()
         {
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 var mini =
                     MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly)
                         .Where(m => m.Health < Q.GetDamage(m) && m.BaseSkinName != "GangplankBarrel")
                         .OrderByDescending(m => m.MaxHealth)
-                        .ThenByDescending(m => m.LSDistance(player))
+                        .ThenByDescending(m => m.Distance(player))
                         .FirstOrDefault();
 
                 if (mini != null)
@@ -215,7 +215,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public static List<Vector3> PointsAroundTheTargetOuterRing(Vector3 pos, float dist, float width = 15)
         {
-            if (!pos.LSIsValid())
+            if (!pos.IsValid())
             {
                 return new List<Vector3>();
             }
@@ -248,14 +248,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
             
             if (40 < player.HealthPercent &&
-                player.LSCountEnemiesInRange(500) > 0)
+                player.CountEnemiesInRange(500) > 0)
             {
                 W.Cast();
             }
-            if (R.LSIsReady() )
+            if (R.IsReady() )
             {
                 var Rtarget =
-                    HeroManager.Enemies.FirstOrDefault(e => e.HealthPercent < 50 && e.LSCountAlliesInRange(660) > 0);
+                    HeroManager.Enemies.FirstOrDefault(e => e.HealthPercent < 50 && e.CountAlliesInRange(660) > 0);
                 if (Rtarget != null)
                 {
                     R.CastIfWillHit(Rtarget, 2);
@@ -265,17 +265,17 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 GetBarrels()
                     .Where(
                         o =>
-                            o.IsValid && !o.IsDead && o.LSDistance(player) < 1600 && o.BaseSkinName == "GangplankBarrel" &&
+                            o.IsValid && !o.IsDead && o.Distance(player) < 1600 && o.BaseSkinName == "GangplankBarrel" &&
                             o.GetBuff("gangplankebarrellife").Caster.IsMe)
                     .ToList();
 
-            if (Q.LSIsReady()  &&
-                E.LSIsReady() )
+            if (Q.IsReady()  &&
+                E.IsReady() )
             {
-                var Qbarrels = GetBarrels().Where(o => o.LSDistance(player) < Q.Range && KillableBarrel(o));
+                var Qbarrels = GetBarrels().Where(o => o.Distance(player) < Q.Range && KillableBarrel(o));
                 foreach (var Qbarrel in Qbarrels)
                 {
-                    if (Qbarrel.LSDistance(target) < BarrelExplosionRange)
+                    if (Qbarrel.Distance(target) < BarrelExplosionRange)
                     {
                         continue;
                     }
@@ -283,10 +283,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
                         GetBarrelPoints(Qbarrel.Position)
                             .Where(
                                 p =>
-                                    p.LSIsValid() && !p.LSIsWall() && p.LSDistance(player.Position) < E.Range &&
-                                    p.LSDistance(Prediction.GetPrediction(target, GetQTime(Qbarrel)).UnitPosition) <
-                                    BarrelExplosionRange && savedBarrels.Count(b => b.barrel.Position.LSDistance(p) < BarrelExplosionRange) < 1)
-                             .OrderBy(p => p.LSDistance(target.Position))
+                                    p.IsValid() && !p.IsWall() && p.Distance(player.Position) < E.Range &&
+                                    p.Distance(Prediction.GetPrediction(target, GetQTime(Qbarrel)).UnitPosition) <
+                                    BarrelExplosionRange && savedBarrels.Count(b => b.barrel.Position.Distance(p) < BarrelExplosionRange) < 1)
+                             .OrderBy(p => p.Distance(target.Position))
                              .FirstOrDefault();
                     if (point != null && !justE)
                     {
@@ -297,8 +297,8 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 }
             }
 
-            if (E.LSIsReady() && player.LSDistance(target) < E.Range  &&
-                target.Health > Q.GetDamage(target) + player.LSGetAutoAttackDamage(target) && DeathWalker.canMove() &&
+            if (E.IsReady() && player.Distance(target) < E.Range  &&
+                target.Health > Q.GetDamage(target) + player.GetAutoAttackDamage(target) && DeathWalker.canMove() &&
                 0 < E.Instance.Ammo)
             {
                 CastE(target, barrels);
@@ -306,17 +306,17 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var meleeRangeBarrel =
                 barrels.FirstOrDefault(
                     b =>
-                        b.Health < 2 && b.LSDistance(player) < DeathWalker.getRealAutoAttackRange(player, b) &&
-                        b.LSCountEnemiesInRange(BarrelExplosionRange) > 0);
+                        b.Health < 2 && b.Distance(player) < DeathWalker.getRealAutoAttackRange(player, b) &&
+                        b.CountEnemiesInRange(BarrelExplosionRange) > 0);
             if (meleeRangeBarrel != null)
             {
                 DeathWalker.ForcedTarget = meleeRangeBarrel;
             }
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 if (barrels.Any())
                 {
-                    var detoneateTargetBarrels = barrels.Where(b => b.LSDistance(player) < Q.Range);
+                    var detoneateTargetBarrels = barrels.Where(b => b.Distance(player) < Q.Range);
                     
                         if (detoneateTargetBarrels.Any())
                         {
@@ -327,26 +327,26 @@ using EloBuddy; namespace ARAMDetFull.Champions
                                     continue;
                                 }
                                 if (
-                                    detoneateTargetBarrel.LSDistance(
+                                    detoneateTargetBarrel.Distance(
                                         Prediction.GetPrediction(target, GetQTime(detoneateTargetBarrel)).UnitPosition) <
                                     BarrelExplosionRange &&
-                                    target.LSDistance(detoneateTargetBarrel.Position) < BarrelExplosionRange)
+                                    target.Distance(detoneateTargetBarrel.Position) < BarrelExplosionRange)
                                 {
                                     Q.CastOnUnit(detoneateTargetBarrel);
                                     return;
                                 }
                                 var detoneateTargetBarrelSeconds =
-                                    barrels.Where(b => b.LSDistance(detoneateTargetBarrel) < BarrelConnectionRange);
+                                    barrels.Where(b => b.Distance(detoneateTargetBarrel) < BarrelConnectionRange);
                                 if (detoneateTargetBarrelSeconds.Any())
                                 {
                                     foreach (var detoneateTargetBarrelSecond in detoneateTargetBarrelSeconds)
                                     {
                                         if (
-                                            detoneateTargetBarrelSecond.LSDistance(
+                                            detoneateTargetBarrelSecond.Distance(
                                                 Prediction.GetPrediction(
                                                     target, GetQTime(detoneateTargetBarrel) + 0.15f).UnitPosition) <
                                             BarrelExplosionRange &&
-                                            target.LSDistance(detoneateTargetBarrelSecond.Position) < BarrelExplosionRange)
+                                            target.Distance(detoneateTargetBarrelSecond.Position) < BarrelExplosionRange)
                                         {
                                             Q.CastOnUnit(detoneateTargetBarrel);
                                             return;
@@ -359,10 +359,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
                         if (2 > 1)
                         {
                             var enemies =
-                                HeroManager.Enemies.Where(e => e.LSIsValidTarget() && e.LSDistance(player) < 600)
+                                HeroManager.Enemies.Where(e => e.IsValidTarget() && e.Distance(player) < 600)
                                     .Select(e => Prediction.GetPrediction(e, 0.25f));
                             var enemies2 =
-                                HeroManager.Enemies.Where(e => e.LSIsValidTarget() && e.LSDistance(player) < 600)
+                                HeroManager.Enemies.Where(e => e.IsValidTarget() && e.Distance(player) < 600)
                                     .Select(e => Prediction.GetPrediction(e, 0.35f));
                             if (detoneateTargetBarrels.Any())
                             {
@@ -375,17 +375,17 @@ using EloBuddy; namespace ARAMDetFull.Champions
                                     var enemyCount =
                                         enemies.Count(
                                             e =>
-                                                e.UnitPosition.LSDistance(detoneateTargetBarrel.Position) <
+                                                e.UnitPosition.Distance(detoneateTargetBarrel.Position) <
                                                 BarrelExplosionRange);
                                     if (enemyCount >= 1 &&
-                                        detoneateTargetBarrel.LSCountEnemiesInRange(BarrelExplosionRange) >=
+                                        detoneateTargetBarrel.CountEnemiesInRange(BarrelExplosionRange) >=
                                         1)
                                     {
                                         Q.CastOnUnit(detoneateTargetBarrel);
                                         return;
                                     }
                                     var detoneateTargetBarrelSeconds =
-                                        barrels.Where(b => b.LSDistance(detoneateTargetBarrel) < BarrelConnectionRange);
+                                        barrels.Where(b => b.Distance(detoneateTargetBarrel) < BarrelConnectionRange);
                                     if (detoneateTargetBarrelSeconds.Any())
                                     {
                                         foreach (var detoneateTargetBarrelSecond in detoneateTargetBarrelSeconds)
@@ -393,10 +393,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
                                             if (enemyCount +
                                                 enemies2.Count(
                                                     e =>
-                                                        e.UnitPosition.LSDistance(detoneateTargetBarrelSecond.Position) <
+                                                        e.UnitPosition.Distance(detoneateTargetBarrelSecond.Position) <
                                                         BarrelExplosionRange) >=
                                                 1 &&
-                                                detoneateTargetBarrelSecond.LSCountEnemiesInRange(BarrelExplosionRange) >=
+                                                detoneateTargetBarrelSecond.CountEnemiesInRange(BarrelExplosionRange) >=
                                                 1)
                                             {
                                                 Q.CastOnUnit(
@@ -422,7 +422,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 barrels.FirstOrDefault(
                     b =>
                         b.Health == 2 &&
-                        Prediction.GetPrediction(target, GetQTime(b)).UnitPosition.LSDistance(b.Position) <
+                        Prediction.GetPrediction(target, GetQTime(b)).UnitPosition.Distance(b.Position) <
                         BarrelExplosionRange) != null && target.Health > Q.GetDamage(target))
             {
                 return;
@@ -438,27 +438,27 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 return;
             }
             var enemies =
-                HeroManager.Enemies.Where(e => e.LSIsValidTarget() && e.LSDistance(player) < E.Range)
+                HeroManager.Enemies.Where(e => e.IsValidTarget() && e.Distance(player) < E.Range)
                     .Select(e => Prediction.GetPrediction(e, 0.35f));
             List<Vector3> points = new List<Vector3>();
             foreach (var barrel in
-                barrels.Where(b => b.LSDistance(player) < Q.Range && KillableBarrel(b)))
+                barrels.Where(b => b.Distance(player) < Q.Range && KillableBarrel(b)))
             {
                 if (barrel != null)
                 {
-                    var newP = GetBarrelPoints(barrel.Position).Where(p => !p.LSIsWall());
+                    var newP = GetBarrelPoints(barrel.Position).Where(p => !p.IsWall());
                     if (newP.Any())
                     {
-                        points.AddRange(newP.Where(p => p.LSDistance(player.Position) < E.Range));
+                        points.AddRange(newP.Where(p => p.Distance(player.Position) < E.Range));
                     }
                 }
             }
             var bestPoint =
-                points.Where(b => enemies.Count(e => e.UnitPosition.LSDistance(b) < BarrelExplosionRange) > 0)
-                    .OrderByDescending(b => enemies.Count(e => e.UnitPosition.LSDistance(b) < BarrelExplosionRange))
+                points.Where(b => enemies.Count(e => e.UnitPosition.Distance(b) < BarrelExplosionRange) > 0)
+                    .OrderByDescending(b => enemies.Count(e => e.UnitPosition.Distance(b) < BarrelExplosionRange))
                     .FirstOrDefault();
-            if (bestPoint.LSIsValid() &&
-                !savedBarrels.Any(b => b.barrel.Position.LSDistance(bestPoint) < BarrelConnectionRange) && !justE)
+            if (bestPoint.IsValid() &&
+                !savedBarrels.Any(b => b.barrel.Position.Distance(bestPoint) < BarrelConnectionRange) && !justE)
             {
                 E.Cast(bestPoint);
             }
@@ -478,10 +478,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
         private void CastEtarget(AIHeroClient target)
         {
             var ePred = Prediction.GetPrediction(target, 1);
-            if (ePred.CastPosition.LSDistance(ePos) > 400 && !justE)
+            if (ePred.CastPosition.Distance(ePos) > 400 && !justE)
             {
                 E.Cast(
-                    target.Position.LSExtend(ePred.CastPosition, BarrelExplosionRange));
+                    target.Position.Extend(ePred.CastPosition, BarrelExplosionRange));
             }
         }
     }

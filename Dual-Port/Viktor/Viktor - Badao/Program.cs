@@ -74,10 +74,10 @@ using EloBuddy;
 
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (_menu.Item("Use W GapCloser").GetValue<bool>() && _w.LSIsReady() && gapcloser.Sender.LSIsValidTarget(_w.Range))
+            if (_menu.Item("Use W GapCloser").GetValue<bool>() && _w.IsReady() && gapcloser.Sender.IsValidTarget(_w.Range))
             {
                 var pos = gapcloser.End;
-                if (Player.LSDistance(pos) <= _w.Range)
+                if (Player.Distance(pos) <= _w.Range)
                     _w.Cast(pos);
             }
         }
@@ -99,10 +99,10 @@ using EloBuddy;
         {
             if (Player.IsDead)
                 return;
-            //Chat.Print(Player.Position.LSDistance(Game.CursorPos).ToString());
+            //Chat.Print(Player.Position.Distance(Game.CursorPos).ToString());
             if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && Selected()))
             {
-                if (_q.LSIsReady())
+                if (_q.IsReady())
                 {
                     _orbwalker.SetAttack(false);
                 }
@@ -147,10 +147,10 @@ using EloBuddy;
         private static void UseW()
         {
             var target = TargetSelector.GetTarget(_w.Range, TargetSelector.DamageType.Magical);
-            if ( target.LSIsValidTarget() && !target.IsZombie && _w.LSIsReady())
+            if ( target.IsValidTarget() && !target.IsZombie && _w.IsReady())
             {
                 var pos = Prediction.GetPrediction(target, 0.25f).UnitPosition;
-                if (Player.LSDistance(pos) <= _w.Range)
+                if (Player.Distance(pos) <= _w.Range)
                 {
                     _w.Cast(pos);
                 }
@@ -158,10 +158,10 @@ using EloBuddy;
         }
         private static void ViktorRMove()
         {
-            if (_menu.Item("Use R Follow").GetValue<bool>() && ViktorR != null && _r.LSIsReady())
+            if (_menu.Item("Use R Follow").GetValue<bool>() && ViktorR != null && _r.IsReady())
             {
-                var target = ViktorR.Position.LSGetEnemiesInRange(2000).Where(t => t.LSIsValidTarget() && !t.IsZombie).OrderByDescending(t => 1 - t.LSDistance(ViktorR.Position)).FirstOrDefault();
-                if (target.LSDistance(ViktorR.Position) >= 50)
+                var target = ViktorR.Position.GetEnemiesInRange(2000).Where(t => t.IsValidTarget() && !t.IsZombie).OrderByDescending(t => 1 - t.Distance(ViktorR.Position)).FirstOrDefault();
+                if (target.Distance(ViktorR.Position) >= 50)
                 {
                     Vector3 x = Prediction.GetPrediction(target,0.5f).UnitPosition;
                     _r.Cast(x);
@@ -182,7 +182,7 @@ using EloBuddy;
                 {
                     return false;
                 }
-                return !(Player.LSDistance(target.Position) > a);
+                return !(Player.Distance(target.Position) > a);
             }
         }
 
@@ -193,36 +193,36 @@ using EloBuddy;
 
         private static void UseQ()
         {
-            if (!_q.LSIsReady())
+            if (!_q.IsReady())
                 return;
             var target = Gettarget(650);
-            if (target != null && target.LSIsValidTarget(650) && !target.IsZombie && _q.LSIsReady())
+            if (target != null && target.IsValidTarget(650) && !target.IsZombie && _q.IsReady())
                 _q.Cast(target);
         }
 
         private static void UseR()
         {
-            if (!_r.LSIsReady())
+            if (!_r.IsReady())
                 return;
-            if (_r.LSIsReady() && _r.Instance.Name == "ViktorChaosStorm")
+            if (_r.IsReady() && _r.Instance.Name == "ViktorChaosStorm")
             {
                 {
                     var target = TargetSelector.GetSelectedTarget();
-                    if (target != null && Player.LSDistance(target.Position) <= 1000 && target.LSIsValidTarget() && !target.IsZombie && _r.LSIsReady() && _r.Instance.Name == "ViktorChaosStorm")
+                    if (target != null && Player.Distance(target.Position) <= 1000 && target.IsValidTarget() && !target.IsZombie && _r.IsReady() && _r.Instance.Name == "ViktorChaosStorm")
                     {
                         CastR(target);
                     }
                 }
                 {
                     var target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Magical);
-                    if (target != null && target.LSIsValidTarget() && !target.IsZombie && _r.LSIsReady() && _r.Instance.Name == "ViktorChaosStorm" )
+                    if (target != null && target.IsValidTarget() && !target.IsZombie && _r.IsReady() && _r.Instance.Name == "ViktorChaosStorm" )
                     {
                         if (target.Health <= _r.GetDamage(target)*1.7)
                         {
                             CastR(target);
                         }
                     }
-                    foreach(var hero in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(1000) && !x.IsZombie))
+                    foreach(var hero in HeroManager.Enemies.Where(x=> x.IsValidTarget(1000) && !x.IsZombie))
                     {
 
                     }
@@ -232,13 +232,13 @@ using EloBuddy;
 
         private static void CastR(Obj_AI_Base target)
         {
-            if (!target.LSIsValidTarget() || target.IsZombie)
+            if (!target.IsValidTarget() || target.IsZombie)
                 return;
-            var predpos = Prediction.GetPrediction(target, 0.25f).UnitPosition.LSTo2D();
-            if (predpos.LSDistance(Player.Position.LSTo2D()) <= 1000 )
+            var predpos = Prediction.GetPrediction(target, 0.25f).UnitPosition.To2D();
+            if (predpos.Distance(Player.Position.To2D()) <= 1000 )
             {
-                var castpos = predpos.LSDistance(Player.Position.LSTo2D()) > 700 ?
-                    Player.Position.LSTo2D().LSExtend(predpos, 700) :
+                var castpos = predpos.Distance(Player.Position.To2D()) > 700 ?
+                    Player.Position.To2D().Extend(predpos, 700) :
                     predpos;
                 _r.Cast(predpos);
             }
@@ -246,21 +246,21 @@ using EloBuddy;
 
         private static void UseE(Obj_AI_Base  ForceTarget = null)
         {
-            if (!_e.LSIsReady())
+            if (!_e.IsReady())
                 return;
             var target = Gettarget(525 + 700);
             if (ForceTarget != null)
                 target = ForceTarget;
-            if (target != null && target.LSIsValidTarget(1025) && !target.IsZombie && _e.LSIsReady())
+            if (target != null && target.IsValidTarget(1025) && !target.IsZombie && _e.IsReady())
             {
-                AIHeroClient startHeroPos = HeroManager.Enemies.Where(x => x.LSIsValidTarget(525) && x.NetworkId != target.NetworkId && x.LSDistance(target) <= 700).MinOrDefault(x => x.Health);
-                AIHeroClient startHeroExtend = HeroManager.Enemies.Where(x => x.LSIsValidTarget() && x.NetworkId != target.NetworkId && x.LSDistance (target) <= 700
-                    && target.Position.LSTo2D().LSExtend(x.Position.LSTo2D(), 700).LSDistance(Player.Position) <= 525).MinOrDefault(x => x.Health);
-                AIHeroClient endHeroPos = HeroManager.Enemies.Where(x => x.LSIsValidTarget(525 + 700) && x.NetworkId != target.NetworkId && target.LSIsValidTarget(525)
-                    && x.LSDistance(target) <= 700).MinOrDefault(x => x.Health);
-                AIHeroClient endHeroExtend = HeroManager.Enemies.Where(x => x.LSIsValidTarget(1025) && x.NetworkId != target.NetworkId
-                    && x.LSDistance(target) <= 700 && x.Position.LSTo2D().LSExtend(target.Position.LSTo2D(),700).LSDistance(Player.Position) <= 525).MinOrDefault(x => x.Health);
-                Vector3 DefaultPos = Player.LSDistance(target.Position) >= 525 ? Player.Position.LSTo2D().LSExtend(target.Position.LSTo2D(), 525).To3D() : target.Position;
+                AIHeroClient startHeroPos = HeroManager.Enemies.Where(x => x.IsValidTarget(525) && x.NetworkId != target.NetworkId && x.Distance(target) <= 700).MinOrDefault(x => x.Health);
+                AIHeroClient startHeroExtend = HeroManager.Enemies.Where(x => x.IsValidTarget() && x.NetworkId != target.NetworkId && x.Distance (target) <= 700
+                    && target.Position.To2D().Extend(x.Position.To2D(), 700).Distance(Player.Position) <= 525).MinOrDefault(x => x.Health);
+                AIHeroClient endHeroPos = HeroManager.Enemies.Where(x => x.IsValidTarget(525 + 700) && x.NetworkId != target.NetworkId && target.IsValidTarget(525)
+                    && x.Distance(target) <= 700).MinOrDefault(x => x.Health);
+                AIHeroClient endHeroExtend = HeroManager.Enemies.Where(x => x.IsValidTarget(1025) && x.NetworkId != target.NetworkId
+                    && x.Distance(target) <= 700 && x.Position.To2D().Extend(target.Position.To2D(),700).Distance(Player.Position) <= 525).MinOrDefault(x => x.Health);
+                Vector3 DefaultPos = Player.Distance(target.Position) >= 525 ? Player.Position.To2D().Extend(target.Position.To2D(), 525).To3D() : target.Position;
                 if (startHeroPos != null)
                 {
                     _e.SetSkillshot(0.25f, 80, 1050, false, SkillshotType.SkillshotLine, startHeroPos.Position, startHeroPos.Position);
@@ -269,12 +269,12 @@ using EloBuddy;
                 else if (startHeroExtend != null)
                 {
                     //float r = 525;
-                    //float d = target.LSDistance(Player);
-                    //float h = Geometry.LSDistance(Player.Position.LSTo2D(), target.Position.LSTo2D(), startHeroExtend.Position.LSTo2D());
+                    //float d = target.Distance(Player);
+                    //float h = Geometry.Distance(Player.Position.To2D(), target.Position.To2D(), startHeroExtend.Position.To2D());
                     //float a = (float)Math.Sqrt(d * d - h * h);
                     //float b = (float)Math.Sqrt(r * r - h * h);
                     //float c = a - b;
-                    _e.SetSkillshot(0.25f, 80, 1050, false, SkillshotType.SkillshotLine, target.Position.LSTo2D().LSExtend(startHeroExtend.Position.LSTo2D(), 700).To3D(), target.Position.LSTo2D().LSExtend(startHeroExtend.Position.LSTo2D(), 700).To3D());
+                    _e.SetSkillshot(0.25f, 80, 1050, false, SkillshotType.SkillshotLine, target.Position.To2D().Extend(startHeroExtend.Position.To2D(), 700).To3D(), target.Position.To2D().Extend(startHeroExtend.Position.To2D(), 700).To3D());
                     CastE(target);
                 }
                 else if (endHeroPos != null)
@@ -285,12 +285,12 @@ using EloBuddy;
                 else if(endHeroExtend != null)
                 {
                     //float r = 525;
-                    //float d = endHeroExtend.LSDistance(Player);
-                    //float h = Geometry.LSDistance(Player.Position.LSTo2D(), target.Position.LSTo2D(), endHeroExtend.Position.LSTo2D());
+                    //float d = endHeroExtend.Distance(Player);
+                    //float h = Geometry.Distance(Player.Position.To2D(), target.Position.To2D(), endHeroExtend.Position.To2D());
                     //float a = (float)Math.Sqrt(d * d - h * h);
                     //float b = (float)Math.Sqrt(r * r - h * h);
                     //float c = a - b;
-                    _e.SetSkillshot(0.25f, 80, 1050, false, SkillshotType.SkillshotLine, endHeroExtend.Position.LSTo2D().LSExtend(target.Position.LSTo2D(), 700).To3D(), endHeroExtend.Position.LSTo2D().LSExtend(target.Position.LSTo2D(), 700).To3D());
+                    _e.SetSkillshot(0.25f, 80, 1050, false, SkillshotType.SkillshotLine, endHeroExtend.Position.To2D().Extend(target.Position.To2D(), 700).To3D(), endHeroExtend.Position.To2D().Extend(target.Position.To2D(), 700).To3D());
                     CastE(endHeroExtend);
                 }
                 else
@@ -312,43 +312,43 @@ using EloBuddy;
         }
         public static void killsteal()
         {
-            if (_q.LSIsReady() && _menu.Item("Use Q KillSteal").GetValue<bool>() && !Player.Spellbook.IsAutoAttacking)
+            if (_q.IsReady() && _menu.Item("Use Q KillSteal").GetValue<bool>() && !Player.Spellbook.IsAutoAttacking)
             {
-                foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsEnemy && hero.LSIsValidTarget(650)))
+                foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsEnemy && hero.IsValidTarget(650)))
                 {
                     var dmg = Dame(hero, SpellSlot.Q);
-                    if (hero != null && hero.LSIsValidTarget() && !hero.IsZombie && dmg > hero.Health) { _q.Cast(hero); }
+                    if (hero != null && hero.IsValidTarget() && !hero.IsZombie && dmg > hero.Health) { _q.Cast(hero); }
                 }
             }
-            if (_e.LSIsReady() && _menu.Item("Use E KillSteal").GetValue<bool>() && !Player.Spellbook.IsAutoAttacking)
+            if (_e.IsReady() && _menu.Item("Use E KillSteal").GetValue<bool>() && !Player.Spellbook.IsAutoAttacking)
             {
-                foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsEnemy && hero.LSIsValidTarget(1025)))
+                foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsEnemy && hero.IsValidTarget(1025)))
                 {
                     var dmg = Dame(hero, SpellSlot.E);
-                    if (hero != null && hero.LSIsValidTarget() && !hero.IsZombie && dmg > hero.Health)
+                    if (hero != null && hero.IsValidTarget() && !hero.IsZombie && dmg > hero.Health)
                     {
                         UseE(hero);
                     }
                 }
             }
 
-            if (_r.LSIsReady() && _menu.Item("Use R KillSteal").GetValue<bool>() && !Player.Spellbook.IsAutoAttacking)
+            if (_r.IsReady() && _menu.Item("Use R KillSteal").GetValue<bool>() && !Player.Spellbook.IsAutoAttacking)
             {
-                foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsEnemy && hero.LSIsValidTarget(860)))
+                foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsEnemy && hero.IsValidTarget(860)))
                 {
                     var dmgR = Dame(hero, SpellSlot.R);
                     var dmgE = Dame(hero, SpellSlot.E);
                     var dmgQ = Dame(hero, SpellSlot.Q);
-                    if (hero != null && hero.LSIsValidTarget() && !hero.IsZombie)
+                    if (hero != null && hero.IsValidTarget() && !hero.IsZombie)
                     {
                         if (dmgE > hero.Health && dmgR > hero.Health)
                         {
-                            if (!_e.LSIsReady())
+                            if (!_e.IsReady())
                                 CastR(hero);
                         }
-                        else if (dmgQ > hero.Health && dmgR > hero.Health && Player.LSDistance(hero.Position) <= 600)
+                        else if (dmgQ > hero.Health && dmgR > hero.Health && Player.Distance(hero.Position) <= 600)
                         {
-                            if (!_q.LSIsReady() && !_e.LSIsReady())
+                            if (!_q.IsReady() && !_e.IsReady())
                                 CastR(hero);
                         }
                         else if (dmgR > hero.Health) { _r.Cast(hero); }
@@ -359,7 +359,7 @@ using EloBuddy;
         }
         public static double Dame(Obj_AI_Base target, SpellSlot x)
         {
-            if (target != null) { return Player.LSGetSpellDamage(target, x); } else return 0;
+            if (target != null) { return Player.GetSpellDamage(target, x); } else return 0;
         }
 
     }

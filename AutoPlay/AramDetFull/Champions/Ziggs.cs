@@ -39,20 +39,20 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q1.LSIsReady() || target == null)
+            if (!Q1.IsReady() || target == null)
                 return;
             CastQ(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             PredictionOutput po = E.GetPrediction(target);
-            var dist = po.UnitPosition.LSDistance(player.Position);
+            var dist = po.UnitPosition.Distance(player.Position);
             if (dist < 900)
             {
-                var pos = player.Position.LSExtend(po.UnitPosition, dist + 90);
+                var pos = player.Position.Extend(po.UnitPosition, dist + 90);
                 W.Cast(pos);
             }
 
@@ -60,10 +60,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
 
-            //var distToTar = target.LSDistance(player);
+            //var distToTar = target.Distance(player);
 
             E.Cast(target, false, true);
         }
@@ -71,15 +71,15 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
-            if ((ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.Q) +
-                         ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.W) +
-                         ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.E) +
-                         ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.R) > target.Health) &&
-                        ObjectManager.Player.LSDistance(target) <= Q2.Range)
+            if ((ObjectManager.Player.GetSpellDamage(target, SpellSlot.Q) +
+                         ObjectManager.Player.GetSpellDamage(target, SpellSlot.W) +
+                         ObjectManager.Player.GetSpellDamage(target, SpellSlot.E) +
+                         ObjectManager.Player.GetSpellDamage(target, SpellSlot.R) > target.Health) &&
+                        ObjectManager.Player.Distance(target) <= Q2.Range)
             {
-                R.Delay = 2000 + 1500 * target.LSDistance(ObjectManager.Player) / 5300;
+                R.Delay = 2000 + 1500 * target.Distance(ObjectManager.Player) / 5300;
                 R.Cast(target, true, true);
             }
         }
@@ -104,14 +104,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
 
             //R aoe in teamfights
-            if ( R.LSIsReady())
+            if ( R.IsReady())
             {
                 var alliesarround = 0;
                 var n = 0;
                 foreach (var ally in ObjectManager.Get<AIHeroClient>())
                 {
-                    if (ally.IsAlly && !ally.IsMe && ally.LSIsValidTarget(float.MaxValue, false) &&
-                        ally.LSDistance(target) < 700)
+                    if (ally.IsAlly && !ally.IsMe && ally.IsValidTarget(float.MaxValue, false) &&
+                        ally.Distance(target) < 700)
                     {
                         alliesarround++;
                         if (Utils.TickCount - ally.LastCastedSpellT() < 1500)
@@ -142,14 +142,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             foreach (var pos in from enemy in ObjectManager.Get<AIHeroClient>()
                                 where
-                                    enemy.LSIsValidTarget() &&
-                                    enemy.LSDistance(ObjectManager.Player) <=
+                                    enemy.IsValidTarget() &&
+                                    enemy.Distance(ObjectManager.Player) <=
                                     enemy.BoundingRadius + enemy.AttackRange + ObjectManager.Player.BoundingRadius &&
                                     enemy.IsMelee()
                                 let direction =
-                                    (enemy.ServerPosition.LSTo2D() - ObjectManager.Player.ServerPosition.LSTo2D()).LSNormalized()
-                                let pos = ObjectManager.Player.ServerPosition.LSTo2D()
-                                select pos + Math.Min(200, Math.Max(50, enemy.LSDistance(ObjectManager.Player) / 2)) * direction)
+                                    (enemy.ServerPosition.To2D() - ObjectManager.Player.ServerPosition.To2D()).Normalized()
+                                let pos = ObjectManager.Player.ServerPosition.To2D()
+                                select pos + Math.Min(200, Math.Max(50, enemy.Distance(ObjectManager.Player) / 2)) * direction)
             {
                 W.Cast(pos.To3D(), true);
                 UseSecondWT = Utils.TickCount;
@@ -181,21 +181,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             PredictionOutput prediction;
 
-            if (ObjectManager.Player.LSDistance(target) < Q1.Range)
+            if (ObjectManager.Player.Distance(target) < Q1.Range)
             {
                 var oldrange = Q1.Range;
                 Q1.Range = Q2.Range;
                 prediction = Q1.GetPrediction(target, true);
                 Q1.Range = oldrange;
             }
-            else if (ObjectManager.Player.LSDistance(target) < Q2.Range)
+            else if (ObjectManager.Player.Distance(target) < Q2.Range)
             {
                 var oldrange = Q2.Range;
                 Q2.Range = Q3.Range;
                 prediction = Q2.GetPrediction(target, true);
                 Q2.Range = oldrange;
             }
-            else if (ObjectManager.Player.LSDistance(target) < Q3.Range)
+            else if (ObjectManager.Player.Distance(target) < Q3.Range)
             {
                 prediction = Q3.GetPrediction(target, true);
             }
@@ -206,14 +206,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             if (prediction.Hitchance >= HitChance.High)
             {
-                if (ObjectManager.Player.ServerPosition.LSDistance(prediction.CastPosition) <= Q1.Range + Q1.Width)
+                if (ObjectManager.Player.ServerPosition.Distance(prediction.CastPosition) <= Q1.Range + Q1.Width)
                 {
                     Vector3 p;
-                    if (ObjectManager.Player.ServerPosition.LSDistance(prediction.CastPosition) > 300)
+                    if (ObjectManager.Player.ServerPosition.Distance(prediction.CastPosition) > 300)
                     {
                         p = prediction.CastPosition -
                             100 *
-                            (prediction.CastPosition.LSTo2D() - ObjectManager.Player.ServerPosition.LSTo2D()).LSNormalized()
+                            (prediction.CastPosition.To2D() - ObjectManager.Player.ServerPosition.To2D()).Normalized()
                                 .To3D();
                     }
                     else
@@ -223,11 +223,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
                     Q1.Cast(p);
                 }
-                else if (ObjectManager.Player.ServerPosition.LSDistance(prediction.CastPosition) <=
+                else if (ObjectManager.Player.ServerPosition.Distance(prediction.CastPosition) <=
                          ((Q1.Range + Q2.Range) / 2))
                 {
-                    var p = ObjectManager.Player.ServerPosition.LSTo2D()
-                        .LSExtend(prediction.CastPosition.LSTo2D(), Q1.Range - 100);
+                    var p = ObjectManager.Player.ServerPosition.To2D()
+                        .Extend(prediction.CastPosition.To2D(), Q1.Range - 100);
 
                     if (!CheckQCollision(target, prediction.UnitPosition, p.To3D()))
                     {
@@ -236,9 +236,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 }
                 else
                 {
-                    var p = ObjectManager.Player.ServerPosition.LSTo2D() +
+                    var p = ObjectManager.Player.ServerPosition.To2D() +
                             Q1.Range *
-                            (prediction.CastPosition.LSTo2D() - ObjectManager.Player.ServerPosition.LSTo2D()).LSNormalized
+                            (prediction.CastPosition.To2D() - ObjectManager.Player.ServerPosition.To2D()).Normalized
                                 ();
 
                     if (!CheckQCollision(target, prediction.UnitPosition, p.To3D()))
@@ -270,7 +270,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             if (laneClear)
             {
-                if (Q1.LSIsReady() && useQ)
+                if (Q1.IsReady() && useQ)
                 {
                     var rangedLocation = Q2.GetCircularFarmLocation(rangedMinions);
                     var location = Q2.GetCircularFarmLocation(allMinions);
@@ -283,20 +283,20 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     }
                 }
 
-                if (W.LSIsReady() && useW)
+                if (W.IsReady() && useW)
                 {
                     var dmgpct = new[] { 25, 27.5, 30, 32.5, 35 }[W.Level - 1];
 
                     var killableTurret =
                         ObjectManager.Get<Obj_AI_Turret>()
-                            .Find(x => x.IsEnemy && ObjectManager.Player.LSDistance(x.Position) <= W.Range && x.HealthPercent < dmgpct);
+                            .Find(x => x.IsEnemy && ObjectManager.Player.Distance(x.Position) <= W.Range && x.HealthPercent < dmgpct);
                     if (killableTurret != null)
                     {
                         W.Cast(killableTurret.Position);
                     }
                 }
 
-                if (E.LSIsReady() && useE)
+                if (E.IsReady() && useE)
                 {
                     var rangedLocation = E.GetCircularFarmLocation(rangedMinions, E.Width * 2);
                     var location = E.GetCircularFarmLocation(allMinions, E.Width * 2);
@@ -311,13 +311,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
             else
             {
-                if (useQ && Q1.LSIsReady())
+                if (useQ && Q1.IsReady())
                 {
                     foreach (var minion in allMinions)
                     {
                         if (!Orbwalking.InAutoAttackRange(minion))
                         {
-                            var Qdamage = ObjectManager.Player.LSGetSpellDamage(minion, SpellSlot.Q) * 0.75;
+                            var Qdamage = ObjectManager.Player.GetSpellDamage(minion, SpellSlot.Q) * 0.75;
 
                             if (Qdamage > Q1.GetHealthPrediction(minion))
                             {
@@ -327,7 +327,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     }
                 }
 
-                if (E.LSIsReady() && useE)
+                if (E.IsReady() && useE)
                 {
                     var rangedLocation = E.GetCircularFarmLocation(rangedMinions, E.Width * 2);
                     var location = E.GetCircularFarmLocation(allMinions, E.Width * 2);
@@ -344,25 +344,25 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private bool CheckQCollision(Obj_AI_Base target, Vector3 targetPosition, Vector3 castPosition)
         {
-            var direction = (castPosition.LSTo2D() - ObjectManager.Player.ServerPosition.LSTo2D()).LSNormalized();
-            var firstBouncePosition = castPosition.LSTo2D();
+            var direction = (castPosition.To2D() - ObjectManager.Player.ServerPosition.To2D()).Normalized();
+            var firstBouncePosition = castPosition.To2D();
             var secondBouncePosition = firstBouncePosition +
                                        direction * 0.4f *
-                                       ObjectManager.Player.ServerPosition.LSTo2D().LSDistance(firstBouncePosition);
+                                       ObjectManager.Player.ServerPosition.To2D().Distance(firstBouncePosition);
             var thirdBouncePosition = secondBouncePosition +
-                                      direction * 0.6f * firstBouncePosition.LSDistance(secondBouncePosition);
+                                      direction * 0.6f * firstBouncePosition.Distance(secondBouncePosition);
 
             //TODO: Check for wall collision.
 
-            if (thirdBouncePosition.LSDistance(targetPosition.LSTo2D()) < Q1.Width + target.BoundingRadius)
+            if (thirdBouncePosition.Distance(targetPosition.To2D()) < Q1.Width + target.BoundingRadius)
             {
                 //Check the second one.
                 foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
                 {
-                    if (minion.LSIsValidTarget(3000))
+                    if (minion.IsValidTarget(3000))
                     {
                         var predictedPos = Q2.GetPrediction(minion);
-                        if (predictedPos.UnitPosition.LSTo2D().LSDistance(secondBouncePosition) <
+                        if (predictedPos.UnitPosition.To2D().Distance(secondBouncePosition) <
                             Q2.Width + minion.BoundingRadius)
                         {
                             return true;
@@ -371,16 +371,16 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 }
             }
 
-            if (secondBouncePosition.LSDistance(targetPosition.LSTo2D()) < Q1.Width + target.BoundingRadius ||
-                thirdBouncePosition.LSDistance(targetPosition.LSTo2D()) < Q1.Width + target.BoundingRadius)
+            if (secondBouncePosition.Distance(targetPosition.To2D()) < Q1.Width + target.BoundingRadius ||
+                thirdBouncePosition.Distance(targetPosition.To2D()) < Q1.Width + target.BoundingRadius)
             {
                 //Check the first one
                 foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
                 {
-                    if (minion.LSIsValidTarget(3000))
+                    if (minion.IsValidTarget(3000))
                     {
                         var predictedPos = Q1.GetPrediction(minion);
-                        if (predictedPos.UnitPosition.LSTo2D().LSDistance(firstBouncePosition) <
+                        if (predictedPos.UnitPosition.To2D().Distance(firstBouncePosition) <
                             Q1.Width + minion.BoundingRadius)
                         {
                             return true;

@@ -38,9 +38,9 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.Menus.Draw
         public void OnEndScene(EventArgs args)
         {
             foreach (
-                var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget(1200) && !ene.IsZombie))
+                var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1200) && !ene.IsZombie))
             {
-                var easyKill = Variables.Spells[SpellSlot.R].LSIsReady()
+                var easyKill = Variables.Spells[SpellSlot.R].IsReady()
                                    ? new ColorBGRA(0, 255, 0, 120)
                                    : new ColorBGRA(255, 255, 0, 120);
 

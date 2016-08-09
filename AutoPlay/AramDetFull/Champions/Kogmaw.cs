@@ -33,21 +33,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             W.Cast(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
             E.Cast(target);
 
@@ -55,7 +55,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
             if (GetUltimateBuffStacks() < 3 || R.GetDamage(target) > target.Health)
                 R.Cast(target);
@@ -87,7 +87,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public static bool EnemyInRange(int numOfEnemy, float range)
         {
-            return LeagueSharp.Common.Utility.LSCountEnemysInRange(ObjectManager.Player, (int)range) >= numOfEnemy;
+            return LeagueSharp.Common.Utility.CountEnemysInRange(ObjectManager.Player, (int)range) >= numOfEnemy;
         }
 
         private static int GetUltimateBuffStacks()

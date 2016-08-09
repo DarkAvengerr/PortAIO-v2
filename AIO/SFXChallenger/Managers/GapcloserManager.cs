@@ -212,7 +212,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                     }
                     if (gSpell.IsUnitDash)
                     {
-                        endPosition = startPosition.LSExtend(endPosition, gSpell.DashDistance);
+                        endPosition = startPosition.Extend(endPosition, gSpell.DashDistance);
                     }
                     if (gSpell.Collision)
                     {
@@ -220,8 +220,8 @@ using EloBuddy; namespace SFXChallenger.Managers
                         {
                             var colObjects =
                                 GameObjects.AllyHeroes.Select(a => a as Obj_AI_Base)
-                                    .Concat(GameObjects.AllyMinions.Where(m => m.LSDistance(enemy) <= 2000))
-                                    .OrderBy(c => c.LSDistance(enemy))
+                                    .Concat(GameObjects.AllyMinions.Where(m => m.Distance(enemy) <= 2000))
+                                    .OrderBy(c => c.Distance(enemy))
                                     .ToList();
                             var rect = new Geometry.Polygon.Rectangle(
                                 startPosition, endPosition, cSpell.SData.LineWidth + enemy.BoundingRadius);
@@ -232,10 +232,10 @@ using EloBuddy; namespace SFXChallenger.Managers
                                             p => rect.IsInside(p)));
                             if (collision != null)
                             {
-                                endPosition = collision.ServerPosition.LSExtend(
+                                endPosition = collision.ServerPosition.Extend(
                                     startPosition, collision.BoundingRadius + enemy.BoundingRadius);
-                                if (collision is Obj_AI_Minion && endPosition.LSDistance(startPosition) <= 100 &&
-                                    !GameObjects.AllyHeroes.Any(a => a.LSDistance(endPosition) <= 150))
+                                if (collision is Obj_AI_Minion && endPosition.Distance(startPosition) <= 100 &&
+                                    !GameObjects.AllyHeroes.Any(a => a.Distance(endPosition) <= 150))
                                 {
                                     return;
                                 }
@@ -245,7 +245,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                     var endTime = Game.Time;
                     if (cSpell != null)
                     {
-                        var time = startPosition.LSDistance(endPosition) /
+                        var time = startPosition.Distance(endPosition) /
                                    Math.Max(cSpell.SData.MissileSpeed, enemy.MoveSpeed * 1.25f);
                         if (time <= 3)
                         {
@@ -300,7 +300,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                 {
                     return;
                 }
-                if (endPosition.LSDistance(ObjectManager.Player.ServerPosition) >= 2000)
+                if (endPosition.Distance(ObjectManager.Player.ServerPosition) >= 2000)
                 {
                     return;
                 }
@@ -313,7 +313,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                     {
                         var distance = menu.Item(menu.Name + ".gap-" + uniqueId + ".distance").GetValue<Slider>().Value;
                         var dangerous = menu.Item(menu.Name + ".gap-" + uniqueId + ".dangerous").GetValue<bool>();
-                        if (startPosition.LSDistance(ObjectManager.Player.Position) >= distance &&
+                        if (startPosition.Distance(ObjectManager.Player.Position) >= distance &&
                             (!dangerous || IsDangerous(sender, startPosition, endPosition, targeted)))
                         {
                             var delay = menu.Item(menu.Name + ".gap-" + uniqueId + ".delay").GetValue<Slider>().Value;
@@ -358,8 +358,8 @@ using EloBuddy; namespace SFXChallenger.Managers
         {
             try
             {
-                var endDistance = endPosition.LSDistance(ObjectManager.Player.Position);
-                var startDistance = startPosition.LSDistance(ObjectManager.Player.Position);
+                var endDistance = endPosition.Distance(ObjectManager.Player.Position);
+                var startDistance = startPosition.Distance(ObjectManager.Player.Position);
                 if (targeted)
                 {
                     return true;
@@ -373,7 +373,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                     var spell = sender.GetSpell(SpellSlot.R);
                     if (spell != null && endDistance <= 600)
                     {
-                        return spell.Cooldown >= 20 && spell.LSIsReady(2500);
+                        return spell.Cooldown >= 20 && spell.IsReady(2500);
                     }
                     if (endDistance <= 500 && ObjectManager.Player.HealthPercent < 50)
                     {

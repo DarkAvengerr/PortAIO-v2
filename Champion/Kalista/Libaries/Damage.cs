@@ -17,7 +17,7 @@ namespace S_Plus_Class_Kalista.Libaries
 
             public static bool CheckNoDamageBuffs(AIHeroClient target)// From Asuna
             {
-                foreach (var b in target.Buffs.Where(b => b.LSIsValidBuff()))
+                foreach (var b in target.Buffs.Where(b => b.IsValidBuff()))
                 {
                     switch (b.DisplayName)
                     {
@@ -47,7 +47,7 @@ namespace S_Plus_Class_Kalista.Libaries
                         return !o.IsMe
                                && o.Buffs.Any(
                                    b =>
-                                       b.Caster.NetworkId == target.NetworkId && b.LSIsValidBuff()
+                                       b.Caster.NetworkId == target.NetworkId && b.IsValidBuff()
                                        && b.DisplayName == "PoppyDITarget");
                     }))
                 {
@@ -95,7 +95,7 @@ namespace S_Plus_Class_Kalista.Libaries
                 //damage = (RendBase[eLevel] + RendBaseAdRate * baseAd) + ((GetRendCount(target) - 1) * (RendStackBase[eLevel] + RendStackAdRate[eLevel] * baseAd));
                 //return (float)Player.CalcDamage(target, LeagueSharp.Common.Damage.DamageType.Physical, damage - (target.FlatHPRegenMod / 2));
 
-                if (!Champion.E.LSIsReady()) return 0f;
+                if (!Champion.E.IsReady()) return 0f;
 
                 return (float)Player.CalcDamage(target, LeagueSharp.Common.Damage.DamageType.Physical, Champion.E.GetDamage(target) - (target.FlatHPRegenMod / 2 + 15) );
             }

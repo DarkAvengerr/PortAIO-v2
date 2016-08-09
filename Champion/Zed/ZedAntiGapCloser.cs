@@ -51,17 +51,17 @@ using EloBuddy; namespace KoreanZed
 
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (ObjectManager.Player.LSDistance(gapcloser.Sender.Position) > e.Range)
+            if (ObjectManager.Player.Distance(gapcloser.Sender.Position) > e.Range)
             {
                 return;
             }
 
-            if (zedMenu.GetParamBool("koreanzed.miscmenu.useeantigc") && e.LSIsReady())
+            if (zedMenu.GetParamBool("koreanzed.miscmenu.useeantigc") && e.IsReady())
             {
                 e.Cast();
             }
 
-            if (zedMenu.GetParamBool("koreanzed.miscmenu.usewantigc") && w.LSIsReady() && antiGapCloserList.Count == 0)
+            if (zedMenu.GetParamBool("koreanzed.miscmenu.usewantigc") && w.IsReady() && antiGapCloserList.Count == 0)
             {
                 if (shadows.CanCast)
                 {
@@ -74,14 +74,14 @@ using EloBuddy; namespace KoreanZed
                         antiGapCloserList,
                         () => w.Instance.ToggleState != 0,
                         () => shadows.Switch(),
-                        () => !w.LSIsReady());
+                        () => !w.IsReady());
                     Game.OnUpdate += Game_OnUpdate;
                     return;
                 }
                 else if (!shadows.CanCast && shadows.CanSwitch)
                 {
                     int champCount =
-                        HeroManager.Enemies.Count(enemy => enemy.LSDistance(shadows.Instance.Position) < 1500F);
+                        HeroManager.Enemies.Count(enemy => enemy.Distance(shadows.Instance.Position) < 1500F);
 
                     if ((player.HealthPercent > 80 && champCount <= 3)
                         || (player.HealthPercent > 40 && champCount <= 2)

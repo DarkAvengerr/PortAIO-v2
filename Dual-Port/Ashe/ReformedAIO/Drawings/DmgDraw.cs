@@ -43,7 +43,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.Drawings
         {
             if (Variable.Player.IsDead) return;
 
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget(1500)))
+            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1500)))
             {
                 
                 this.drawDamage.Unit = enemy;

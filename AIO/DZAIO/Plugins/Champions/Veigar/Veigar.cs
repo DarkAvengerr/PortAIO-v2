@@ -72,9 +72,9 @@ using EloBuddy;
         {
             if (Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.veigar.extra.antigapcloser")
                 && ObjectManager.Player.ManaPercent > 20
-                && gapcloser.End.LSDistance(ObjectManager.Player.ServerPosition) < 400
-                && gapcloser.Sender.LSIsValidTarget(Variables.Spells[SpellSlot.E].Range)
-                && Variables.Spells[SpellSlot.E].LSIsReady())
+                && gapcloser.End.Distance(ObjectManager.Player.ServerPosition) < 400
+                && gapcloser.Sender.IsValidTarget(Variables.Spells[SpellSlot.E].Range)
+                && Variables.Spells[SpellSlot.E].IsReady())
             {
                 Variables.Spells[SpellSlot.E].SPredictionCastRing(gapcloser.Sender, 80f, HitChance.High);
             }
@@ -85,8 +85,8 @@ using EloBuddy;
             if (Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.veigar.extra.interrupter")
                 && ObjectManager.Player.ManaPercent > 20
                 && args.DangerLevel > DZInterrupter.DangerLevel.Medium
-                && sender.LSIsValidTarget(Variables.Spells[SpellSlot.E].Range)
-                && Variables.Spells[SpellSlot.E].LSIsReady())
+                && sender.IsValidTarget(Variables.Spells[SpellSlot.E].Range)
+                && Variables.Spells[SpellSlot.E].IsReady())
             {
                 Variables.Spells[SpellSlot.E].SPredictionCastRing(sender, 80f, HitChance.Medium);
             }
@@ -122,7 +122,7 @@ using EloBuddy;
             if (Variables.Spells[SpellSlot.E].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo))
             {
                 var target = Variables.Spells[SpellSlot.E].GetTarget(250f);
-                if (target.LSIsValidTarget())
+                if (target.IsValidTarget())
                 {
                     Variables.Spells[SpellSlot.E].SPredictionCastRing(target, 80f, HitChance.High);
                 }
@@ -132,7 +132,7 @@ using EloBuddy;
             {
                 var target = EntityHelper.GetStunnedTarget(Variables.Spells[SpellSlot.W].Range) ??
                              TargetSelector.GetTarget(Variables.Spells[SpellSlot.W].Range, TargetSelector.DamageType.Magical);
-                if (target.LSIsValidTarget())
+                if (target.IsValidTarget())
                 {
                     var targetIsStunned = target.HasBuffOfType(BuffType.Stun);
                     if (targetIsStunned)
@@ -158,7 +158,7 @@ using EloBuddy;
             {
                 var target = TargetSelector.GetTarget(Variables.Spells[SpellSlot.Q].Range,
                     TargetSelector.DamageType.Magical);
-                if (target.LSIsValidTarget())
+                if (target.IsValidTarget())
                 {
                     Variables.Spells[SpellSlot.Q].CastIfHitchanceEquals(target, HitChance.High);
                 }
@@ -168,7 +168,7 @@ using EloBuddy;
             {
                 var target = TargetSelector.GetTarget(Variables.Spells[SpellSlot.Q].Range,
                     TargetSelector.DamageType.Magical);
-                if (target.LSIsValidTarget() 
+                if (target.IsValidTarget() 
                     && Variables.Spells[SpellSlot.R].IsKillable(target))
                 {
                     //TODO Check Zhonya and stuff like that if it is an enemy mage.
@@ -188,7 +188,7 @@ using EloBuddy;
             if (Variables.Spells[SpellSlot.E].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass))
             {
                 var target = Variables.Spells[SpellSlot.E].GetTarget(250f);
-                if (target.LSIsValidTarget())
+                if (target.IsValidTarget())
                 {
                     Variables.Spells[SpellSlot.E].SPredictionCastRing(target, 80f, HitChance.VeryHigh);
                 }
@@ -198,7 +198,7 @@ using EloBuddy;
             {
                 var target = EntityHelper.GetStunnedTarget(Variables.Spells[SpellSlot.W].Range) ??
                              TargetSelector.GetTarget(Variables.Spells[SpellSlot.W].Range, TargetSelector.DamageType.Magical);
-                if (target.LSIsValidTarget())
+                if (target.IsValidTarget())
                 {
                     var targetIsStunned = target.HasBuffOfType(BuffType.Stun);
                     if (targetIsStunned)
@@ -224,7 +224,7 @@ using EloBuddy;
             {
                 var target = TargetSelector.GetTarget(Variables.Spells[SpellSlot.Q].Range,
                     TargetSelector.DamageType.Magical);
-                if (target.LSIsValidTarget())
+                if (target.IsValidTarget())
                 {
                     Variables.Spells[SpellSlot.Q].CastIfHitchanceEquals(target, HitChance.High);
                 }
@@ -248,7 +248,7 @@ using EloBuddy;
                     MinionTypes.All, MinionTeam.NotAlly,
                     MinionOrderTypes.MaxHealth)
                     .Where(m => Variables.Spells[SpellSlot.Q].GetDamage(m) >= m.Health + 5)
-                    .Select(m => m.ServerPosition.LSTo2D()).ToList();
+                    .Select(m => m.ServerPosition.To2D()).ToList();
 
                 var lineFarmLocation = Variables.Spells[SpellSlot.Q].GetLineFarmLocation(positions);
 
@@ -266,14 +266,14 @@ using EloBuddy;
                     MinionTypes.All, MinionTeam.NotAlly,
                     MinionOrderTypes.MaxHealth)
                     .Where(m => Variables.Spells[SpellSlot.W].GetDamage(m) >= m.Health + 5)
-                    .Select(m => m.ServerPosition.LSTo2D()).ToList()
+                    .Select(m => m.ServerPosition.To2D()).ToList()
 
                     :
 
                      MinionManager.GetMinions(Variables.Spells[SpellSlot.W].Range,
                     MinionTypes.All, MinionTeam.NotAlly,
                     MinionOrderTypes.MaxHealth)
-                    .Select(m => m.ServerPosition.LSTo2D()).ToList()
+                    .Select(m => m.ServerPosition.To2D()).ToList()
                     ;
 
                 var circularFarmLocation = Variables.Spells[SpellSlot.W].GetCircularFarmLocation(positions);

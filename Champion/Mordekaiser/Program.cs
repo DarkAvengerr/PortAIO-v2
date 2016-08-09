@@ -27,7 +27,7 @@ namespace Mordekaiser
         public static JungleClear JungleClear;
         public static DamageCalc DamageCalc;
         
-        public static SpellSlot IgniteSlot = Player.LSGetSpellSlot("SummonerDot");
+        public static SpellSlot IgniteSlot = Player.GetSpellSlot("SummonerDot");
 
         public static void Game_OnGameLoad()
         {

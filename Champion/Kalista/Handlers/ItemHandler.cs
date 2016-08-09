@@ -92,7 +92,7 @@ namespace S_Plus_Class_Kalista.Handlers
                 if (Structures.Items.Offensive.Botrk.IsReady())
                 {
                     if (
-                        target.LSIsValidTarget(Player.AttackRange + Player.BoundingRadius) || Player.HealthPercent < SMenu.Item(_MenuOffensiveItemBase + "Slider.Bork.MinHp.Player").GetValue<Slider>().Value)
+                        target.IsValidTarget(Player.AttackRange + Player.BoundingRadius) || Player.HealthPercent < SMenu.Item(_MenuOffensiveItemBase + "Slider.Bork.MinHp.Player").GetValue<Slider>().Value)
                     {
                         // In auto Range or about to die
                         if (SMenu.Item(_MenuOffensiveItemBase + "Boolean.ComboOnly").GetValue<bool>() && inCombo &&
@@ -121,7 +121,7 @@ namespace S_Plus_Class_Kalista.Handlers
                 if (Structures.Items.Offensive.Cutless.IsReady())
                 {
                     if (
-                        target.LSIsValidTarget(Player.AttackRange +
+                        target.IsValidTarget(Player.AttackRange +
                                            Player.BoundingRadius) ||
                         Player.HealthPercent <
                        SMenu.Item(_MenuOffensiveItemBase + "Slider.Bork.MinHp.Player").GetValue<Slider>().Value)
@@ -152,7 +152,7 @@ namespace S_Plus_Class_Kalista.Handlers
             // If enabled and has item
             {
                 if (Structures.Items.Offensive.GhostBlade.IsReady() &&
-                    target.LSIsValidTarget(Player.AttackRange + Player.BoundingRadius))
+                    target.IsValidTarget(Player.AttackRange + Player.BoundingRadius))
                 // Is ready and target is in auto range 
                 {
                     if (inCombo)

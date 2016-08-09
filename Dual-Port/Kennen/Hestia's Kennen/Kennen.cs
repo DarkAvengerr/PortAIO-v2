@@ -72,21 +72,21 @@ using EloBuddy;
             if (target == null || !target.IsValid)
                 return;
 
-            var castQ = ConfigMenu.config.Item("useQ").GetValue<bool>() && q.LSIsReady();
-            var castW = ConfigMenu.config.Item("useW").GetValue<bool>() && w.LSIsReady();
+            var castQ = ConfigMenu.config.Item("useQ").GetValue<bool>() && q.IsReady();
+            var castW = ConfigMenu.config.Item("useW").GetValue<bool>() && w.IsReady();
             var modeW = ConfigMenu.config.Item("useWmodeCombo").GetValue<StringList>();
-            var castR = ConfigMenu.config.Item("useR").GetValue<bool>() && r.LSIsReady();
+            var castR = ConfigMenu.config.Item("useR").GetValue<bool>() && r.IsReady();
 
             var useZhonya = ConfigMenu.config.Item("useZhonya").GetValue<bool>() && CommonUtilities.CheckZhonya();
             var zhonyaHp = ConfigMenu.config.Item("useZhonyaHp").GetValue<Slider>().Value;
 
 
-            if (castQ && target.LSIsValidTarget(q.Range))
+            if (castQ && target.IsValidTarget(q.Range))
             {
                 q.CastIfHitchanceEquals(target, CommonUtilities.GetHitChance("hitchanceQ"));
             }
 
-            if (castW && target.LSIsValidTarget(w.Range))
+            if (castW && target.IsValidTarget(w.Range))
             {
                 switch (modeW.SelectedIndex)
                 {
@@ -106,14 +106,14 @@ using EloBuddy;
                 }
             }
 
-            if (castR && target.LSIsValidTarget(r.Range - 50))
+            if (castR && target.IsValidTarget(r.Range - 50))
             {
                 if (target.Health > CommonUtilities.GetComboDamage(target))
                 {
                     r.Cast();
 
                     if (HasR() && useZhonya && ObjectManager.Player.HealthPercent < zhonyaHp &&
-                        ObjectManager.Player.LSCountEnemiesInRange(r.Range) > 0)
+                        ObjectManager.Player.CountEnemiesInRange(r.Range) > 0)
                     {
                         CommonUtilities.UseZhonya();
                     }
@@ -128,17 +128,17 @@ using EloBuddy;
             if (target == null || !target.IsValid)
                 return;
 
-            var castQ = ConfigMenu.config.Item("useQHarass").GetValue<bool>() && q.LSIsReady();
-            var castW = ConfigMenu.config.Item("useWHarass").GetValue<bool>() && w.LSIsReady();
+            var castQ = ConfigMenu.config.Item("useQHarass").GetValue<bool>() && q.IsReady();
+            var castW = ConfigMenu.config.Item("useWHarass").GetValue<bool>() && w.IsReady();
             var modeW = ConfigMenu.config.Item("useWmodeHarass").GetValue<StringList>();
 
 
-            if (castQ && target.LSIsValidTarget(q.Range) && ObjectManager.Player.ManaPercent >= ConfigMenu.config.Item("useQHarassMana").GetValue<Slider>().Value)
+            if (castQ && target.IsValidTarget(q.Range) && ObjectManager.Player.ManaPercent >= ConfigMenu.config.Item("useQHarassMana").GetValue<Slider>().Value)
             {
                 q.CastIfHitchanceEquals(target, CommonUtilities.GetHitChance("hitchanceQ"));
             }
 
-            if (castW && target.LSIsValidTarget(w.Range) && ObjectManager.Player.ManaPercent >= ConfigMenu.config.Item("useWHarassMana").GetValue<Slider>().Value)
+            if (castW && target.IsValidTarget(w.Range) && ObjectManager.Player.ManaPercent >= ConfigMenu.config.Item("useWHarassMana").GetValue<Slider>().Value)
             {
                 switch (modeW.SelectedIndex)
                 {
@@ -161,7 +161,7 @@ using EloBuddy;
 
         private static void LastHit()
         {
-            var castQ = ConfigMenu.config.Item("useQlh").GetValue<bool>() && q.LSIsReady();
+            var castQ = ConfigMenu.config.Item("useQlh").GetValue<bool>() && q.IsReady();
 
             if (!Orbwalking.CanMove(40))
                 return;
@@ -174,14 +174,14 @@ using EloBuddy;
                 {
                     if (ConfigMenu.config.Item("qRange").GetValue<bool>())
                     {
-                        if (HealthPrediction.GetHealthPrediction(minion, (int)(q.Delay + (minion.LSDistance(ObjectManager.Player.Position) / q.Speed))) < ObjectManager.Player.LSGetSpellDamage(minion, SpellSlot.Q) && ObjectManager.Player.LSDistance(minion) > ObjectManager.Player.AttackRange)
+                        if (HealthPrediction.GetHealthPrediction(minion, (int)(q.Delay + (minion.Distance(ObjectManager.Player.Position) / q.Speed))) < ObjectManager.Player.GetSpellDamage(minion, SpellSlot.Q) && ObjectManager.Player.Distance(minion) > ObjectManager.Player.AttackRange)
                         {
                             q.Cast(minion);
                         }
                     }
                     else
                     {
-                        if (HealthPrediction.GetHealthPrediction(minion, (int)(q.Delay + (minion.LSDistance(ObjectManager.Player.Position) / q.Speed))) < ObjectManager.Player.LSGetSpellDamage(minion, SpellSlot.Q))
+                        if (HealthPrediction.GetHealthPrediction(minion, (int)(q.Delay + (minion.Distance(ObjectManager.Player.Position) / q.Speed))) < ObjectManager.Player.GetSpellDamage(minion, SpellSlot.Q))
                         {
                             q.Cast(minion);
                         }
@@ -192,7 +192,7 @@ using EloBuddy;
 
         private static void LaneClear()
         {
-            var castQ = ConfigMenu.config.Item("useQlc").GetValue<bool>() && q.LSIsReady();
+            var castQ = ConfigMenu.config.Item("useQlc").GetValue<bool>() && q.IsReady();
 
             if (!Orbwalking.CanMove(40))
                 return;
@@ -203,7 +203,7 @@ using EloBuddy;
             {
                 foreach (var minion in minions)
                 {
-                    if (HealthPrediction.GetHealthPrediction(minion, (int)(q.Delay + (minion.LSDistance(ObjectManager.Player.Position) / q.Speed))) < ObjectManager.Player.LSGetSpellDamage(minion, SpellSlot.Q))
+                    if (HealthPrediction.GetHealthPrediction(minion, (int)(q.Delay + (minion.Distance(ObjectManager.Player.Position) / q.Speed))) < ObjectManager.Player.GetSpellDamage(minion, SpellSlot.Q))
                     {
                         q.Cast(minion);
                     }
@@ -213,8 +213,8 @@ using EloBuddy;
 
         private static void JungleClear()
         {
-            var castQ = ConfigMenu.config.Item("useQj").GetValue<bool>() && q.LSIsReady();
-            var castW = ConfigMenu.config.Item("useWj").GetValue<bool>() && w.LSIsReady();
+            var castQ = ConfigMenu.config.Item("useQj").GetValue<bool>() && q.IsReady();
+            var castW = ConfigMenu.config.Item("useWj").GetValue<bool>() && w.IsReady();
 
             if (!Orbwalking.CanMove(40))
                 return;
@@ -247,17 +247,17 @@ using EloBuddy;
             if (!ConfigMenu.config.Item("killsteal").GetValue<bool>())
                 return;
 
-            if (ConfigMenu.config.Item("useQks").GetValue<bool>() && q.LSIsReady())
+            if (ConfigMenu.config.Item("useQks").GetValue<bool>() && q.IsReady())
             {
-                foreach (var target in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(q.Range) && !enemy.HasBuffOfType(BuffType.Invulnerability)).Where(target => target.Health < ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.Q)))
+                foreach (var target in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(q.Range) && !enemy.HasBuffOfType(BuffType.Invulnerability)).Where(target => target.Health < ObjectManager.Player.GetSpellDamage(target, SpellSlot.Q)))
                 {
                     q.CastIfHitchanceEquals(target, CommonUtilities.GetHitChance("hitchanceQ"));
                 }
             }
 
-            if (ConfigMenu.config.Item("useWks").GetValue<bool>() && q.LSIsReady())
+            if (ConfigMenu.config.Item("useWks").GetValue<bool>() && q.IsReady())
             {
-                foreach (var target in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(w.Range) && !enemy.HasBuffOfType(BuffType.Invulnerability)).Where(target => target.Health < ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.W)))
+                foreach (var target in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(w.Range) && !enemy.HasBuffOfType(BuffType.Invulnerability)).Where(target => target.Health < ObjectManager.Player.GetSpellDamage(target, SpellSlot.W)))
                 {
                     if (HasMark(target))
                     {
@@ -266,9 +266,9 @@ using EloBuddy;
                 }
             }
 
-            if (ConfigMenu.config.Item("useIks").GetValue<bool>() && ignite.Slot.LSIsReady() && ignite != null && ignite.Slot != SpellSlot.Unknown)
+            if (ConfigMenu.config.Item("useIks").GetValue<bool>() && ignite.Slot.IsReady() && ignite != null && ignite.Slot != SpellSlot.Unknown)
             {
-                foreach (var target in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(ignite.SData.CastRange) && !enemy.HasBuffOfType(BuffType.Invulnerability)).Where(target => target.Health < ObjectManager.Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite)))
+                foreach (var target in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(ignite.SData.CastRange) && !enemy.HasBuffOfType(BuffType.Invulnerability)).Where(target => target.Health < ObjectManager.Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite)))
                 {
                     ObjectManager.Player.Spellbook.CastSpell(ignite.Slot, target);
                 }
@@ -277,11 +277,11 @@ using EloBuddy;
 
         private static void AutoQ()
         {
-            var autoQ = ConfigMenu.config.Item("autoQ").GetValue<KeyBind>().Active && q.LSIsReady();
+            var autoQ = ConfigMenu.config.Item("autoQ").GetValue<KeyBind>().Active && q.IsReady();
 
             var target = TargetSelector.GetTarget(q.Range, TargetSelector.DamageType.Magical);
 
-            if (autoQ && target.LSIsValidTarget(q.Range))
+            if (autoQ && target.IsValidTarget(q.Range))
             {
                 q.CastIfHitchanceEquals(target, CommonUtilities.GetHitChance("hitchanceQ"));
             }
@@ -289,9 +289,9 @@ using EloBuddy;
 
         private static void CastRmulti()
         {
-            var castR = ConfigMenu.config.Item("useRmul").GetValue<bool>() && r.LSIsReady();
+            var castR = ConfigMenu.config.Item("useRmul").GetValue<bool>() && r.IsReady();
             var minR = ConfigMenu.config.Item("useRmulti").GetValue<Slider>().Value;
-            var enemiesCount = ObjectManager.Player.LSCountEnemiesInRange(r.Range - 50);
+            var enemiesCount = ObjectManager.Player.CountEnemiesInRange(r.Range - 50);
 
             if (castR && enemiesCount >= minR)
             {
@@ -303,10 +303,10 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(q.Range, TargetSelector.DamageType.Magical);
 
-            var useQ = ConfigMenu.config.Item("qFlee").GetValue<bool>() && q.LSIsReady();
-            var useE = ConfigMenu.config.Item("eFlee").GetValue<bool>() && e.LSIsReady();
+            var useQ = ConfigMenu.config.Item("qFlee").GetValue<bool>() && q.IsReady();
+            var useE = ConfigMenu.config.Item("eFlee").GetValue<bool>() && e.IsReady();
 
-            if (useQ && target.LSIsValidTarget(q.Range))
+            if (useQ && target.IsValidTarget(q.Range))
             {
                 q.Cast(target);
             }
@@ -319,12 +319,12 @@ using EloBuddy;
 
         private static bool HasMark(Obj_AI_Base target)
         {
-            return target.LSHasBuff("KennenMarkOfStorm");
+            return target.HasBuff("KennenMarkOfStorm");
         }
 
         private static bool HasR()
         {
-            return ObjectManager.Player.LSHasBuff("KennenShurikenStorm");
+            return ObjectManager.Player.HasBuff("KennenShurikenStorm");
         }
 
         private static bool CanStun(Obj_AI_Base target)

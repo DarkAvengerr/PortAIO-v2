@@ -50,7 +50,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         /// <returns></returns>
         public void CreateMenu(Menu rootMenu)
         {
-            if (this.Player.LSGetSpellSlot("summonerheal") == SpellSlot.Unknown)
+            if (this.Player.GetSpellSlot("summonerheal") == SpellSlot.Unknown)
             {
                 return;
             }
@@ -84,7 +84,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         {
             try
             {
-                var healSlot = this.Player.LSGetSpellSlot("summonerheal");
+                var healSlot = this.Player.GetSpellSlot("summonerheal");
 
                 if (healSlot == SpellSlot.Unknown)
                 {
@@ -110,19 +110,19 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         {
             try
             {
-                if (this.Player.IsDead || !this.HealSpell.LSIsReady() || this.Player.LSInFountain() || this.Player.LSIsRecalling() || !this.Menu.Item("Heal.Activated").IsActive() || this.Menu.Item("PauseHealHotkey").GetValue<KeyBind>().Active)
+                if (this.Player.IsDead || !this.HealSpell.IsReady() || this.Player.InFountain() || this.Player.IsRecalling() || !this.Menu.Item("Heal.Activated").IsActive() || this.Menu.Item("PauseHealHotkey").GetValue<KeyBind>().Active)
                 {
                     return;
                 }
 
                 foreach (var ally in HeroManager.Allies)
                 {
-                    if (!this.Menu.Item($"healon{ally.ChampionName}").IsActive() || ally.LSIsRecalling() || ally.IsInvulnerable || ally.LSHasBuff("ChronoShift"))
+                    if (!this.Menu.Item($"healon{ally.ChampionName}").IsActive() || ally.IsRecalling() || ally.IsInvulnerable || ally.HasBuff("ChronoShift"))
                     {
                         return;
                     }
 
-                    var enemies = ally.LSCountEnemiesInRange(750f);
+                    var enemies = ally.CountEnemiesInRange(750f);
                     var totalDamage = IncomingDamageManager.GetDamage(ally) * 1.1f;
 
                     if (ally.HealthPercent <= this.Menu.Item("min-health").GetValue<Slider>().Value && 

@@ -32,33 +32,33 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
-            if (target.LSIsValidTarget(300))
+            if (target.IsValidTarget(300))
                 Q.Cast();
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
-            if (target.LSIsValidTarget(400))
+            if (target.IsValidTarget(400))
                 W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
-            if (target.LSIsValidTarget(300))
+            if (target.IsValidTarget(300))
                 E.Cast();
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
-            if (target.LSIsValidTarget(300))
+            if (target.IsValidTarget(300))
                 R.Cast();
         }
 

@@ -24,19 +24,19 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Misc
             if (MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.general.reveal"))
             {
                 if (obj.IsStealthed
-                    && obj.Sender.LSIsValidTarget(600f))
+                    && obj.Sender.IsValidTarget(600f))
                 {
                     var objectPosition = obj.Sender.ServerPosition;
                     if (Trinket.IsOwned() && Trinket.IsReady())
                     {
-                        var extend = ObjectManager.Player.ServerPosition.LSExtend(objectPosition, 400f);
+                        var extend = ObjectManager.Player.ServerPosition.Extend(objectPosition, 400f);
                         Trinket.Cast(extend);
                         return;
                     }
 
                     if (Ward.IsOwned() && Ward.IsReady())
                     {
-                        var extend = ObjectManager.Player.ServerPosition.LSExtend(objectPosition, 400f);
+                        var extend = ObjectManager.Player.ServerPosition.Extend(objectPosition, 400f);
                         Ward.Cast(extend);
                     }
                 }

@@ -53,13 +53,13 @@ using EloBuddy;
                     Variables.Spells[SpellSlot.W].Cast();
                     break;
                 case Commands.E:
-                    if (command.Unit.LSIsValidTarget(float.MaxValue, false))
+                    if (command.Unit.IsValidTarget(float.MaxValue, false))
                     {
                         Variables.Spells[SpellSlot.E].Cast(command.Unit);
                     }
                     break;
                 case Commands.R:
-                    if (BallPosition.LSCountEnemiesInRange(300f) > 0)
+                    if (BallPosition.CountEnemiesInRange(300f) > 0)
                     {
                         Variables.Spells[SpellSlot.R].Cast();
                     }
@@ -76,7 +76,7 @@ using EloBuddy;
 
             LastTick = Environment.TickCount;
 
-            if (ObjectManager.Player.LSHasBuff(BallStrings.OriannaSelfShield))
+            if (ObjectManager.Player.HasBuff(BallStrings.OriannaSelfShield))
             {
                 BallPosition = ObjectManager.Player.ServerPosition;
                 return;
@@ -84,7 +84,7 @@ using EloBuddy;
 
             foreach (var ally in HeroManager.Allies)
             {
-                if (ally.LSHasBuff(BallStrings.OriannaShieldAlly))
+                if (ally.HasBuff(BallStrings.OriannaShieldAlly))
                 {
                     BallPosition = ally.ServerPosition;
                     return;
@@ -99,7 +99,7 @@ using EloBuddy;
                 switch (args.SData.Name)
                 {
                     case BallStrings.IzunaCommand:
-                        LeagueSharp.Common.Utility.DelayAction.Add((int)(BallPosition.LSDistance(args.End) / 1.25f - 60 - Game.Ping), () => BallPosition = args.End);
+                        LeagueSharp.Common.Utility.DelayAction.Add((int)(BallPosition.Distance(args.End) / 1.25f - 60 - Game.Ping), () => BallPosition = args.End);
                         BallPosition = Vector3.Zero;
                         break;
                     case BallStrings.RedactCommand:

@@ -72,7 +72,7 @@ using EloBuddy;
                     AIHeroClient target = null;
 
                     if (TargetSelector.SelectedTarget != null
-                        && TargetSelector.SelectedTarget.LSDistance(champion.Player.Position) < R.Range + 400F)
+                        && TargetSelector.SelectedTarget.Distance(champion.Player.Position) < R.Range + 400F)
                     {
                         target = TargetSelector.SelectedTarget;
                     }
@@ -155,7 +155,7 @@ using EloBuddy;
             {
                 AIHeroClient target;
 
-                if (Q.UseOnHaras && Q.LSIsReady() && Q.CanCast() && HaveManaToHaras())
+                if (Q.UseOnHaras && Q.IsReady() && Q.CanCast() && HaveManaToHaras())
                 {
                     if (!KoreanUtils.GetParamKeyBind(champion.MainMenu, "toggleextendedq"))
                     {
@@ -184,7 +184,7 @@ using EloBuddy;
                     }
                 }
 
-                if (W.UseOnHaras && !CheckPassive() && HaveManaToHaras() && W.LSIsReady() && W.CanCast())
+                if (W.UseOnHaras && !CheckPassive() && HaveManaToHaras() && W.IsReady() && W.CanCast())
                 {
                     target = TargetSelector.GetTarget(champion.Player, W.Range, TargetSelector.DamageType.Physical);
 
@@ -194,7 +194,7 @@ using EloBuddy;
                     }
 
                     if (target != null
-                        && target.LSDistance(champion.Player) <= Orbwalking.GetRealAutoAttackRange(champion.Player))
+                        && target.Distance(champion.Player) <= Orbwalking.GetRealAutoAttackRange(champion.Player))
                     {
                         if (W.Cast(target.Position))
                         {
@@ -216,7 +216,7 @@ using EloBuddy;
                     }
                 }
 
-                if (E.UseOnHaras && lucian.semiAutomaticE.Holding && E.LSIsReady() && E.CanCast() && !CheckPassive()
+                if (E.UseOnHaras && lucian.semiAutomaticE.Holding && E.IsReady() && E.CanCast() && !CheckPassive()
                     && ((E.Instance.SData.Mana > 0 && HaveManaToHaras()) || E.Instance.SData.Mana.Equals(0f)))
                 {
                     target = TargetSelector.GetTarget(
@@ -246,13 +246,13 @@ using EloBuddy;
 
             lock (lockObject)
             {
-                if (Q.UseOnLaneClear && Q.LSIsReady() && Q.CanCast() && !CheckPassive() && HaveManaToLaneclear()
+                if (Q.UseOnLaneClear && Q.IsReady() && Q.CanCast() && !CheckPassive() && HaveManaToLaneclear()
                     && champion.CastExtendedQToLaneClear())
                 {
                     ProcessSpell();
                 }
 
-                if (W.UseOnLaneClear && W.LSIsReady() && W.CanCast() && !CheckPassive() && HaveManaToHaras())
+                if (W.UseOnLaneClear && W.IsReady() && W.CanCast() && !CheckPassive() && HaveManaToHaras())
                 {
                     List<Obj_AI_Base> minions = MinionManager.GetMinions(W.Range).ToList();
                     MinionManager.FarmLocation farmLocation = W.GetCircularFarmLocation(minions);
@@ -268,15 +268,15 @@ using EloBuddy;
                     }
                 }
 
-                if (E.UseOnLaneClear && lucian.semiAutomaticE.Holding && E.LSIsReady() && E.CanCast() && !CheckPassive()
+                if (E.UseOnLaneClear && lucian.semiAutomaticE.Holding && E.IsReady() && E.CanCast() && !CheckPassive()
                     && (E.Instance.SData.Mana.Equals(0) || (E.Instance.SData.Mana > 0 && HaveManaToHaras())))
                 {
                     Obj_AI_Base target =
                         MinionManager.GetMinions(E.Range + Orbwalking.GetRealAutoAttackRange(champion.Player))
                             .FirstOrDefault(
                                 minion =>
-                                champion.Player.LSDistance(minion) > Orbwalking.GetRealAutoAttackRange(champion.Player)
-                                && Game.CursorPos.LSDistance(minion.Position) < champion.Player.LSDistance(minion));
+                                champion.Player.Distance(minion) > Orbwalking.GetRealAutoAttackRange(champion.Player)
+                                && Game.CursorPos.Distance(minion.Position) < champion.Player.Distance(minion));
 
                     if (target != null && lucian.semiAutomaticE.Cast(target))
                     {
@@ -303,7 +303,7 @@ using EloBuddy;
 
             AIHeroClient target;
 
-            if (W.UseOnCombo && !CheckPassive() && W.LSIsReady() && W.CanCast())
+            if (W.UseOnCombo && !CheckPassive() && W.IsReady() && W.CanCast())
             {
                 target = TargetSelector.GetTarget(champion.Player, W.Range, TargetSelector.DamageType.Physical);
 
@@ -318,7 +318,7 @@ using EloBuddy;
                     }
                 }
                 else if (target != null
-                         && target.LSDistance(champion.Player) <= Orbwalking.GetRealAutoAttackRange(champion.Player))
+                         && target.Distance(champion.Player) <= Orbwalking.GetRealAutoAttackRange(champion.Player))
                 {
                     if (W.Cast(target.ServerPosition))
                     {
@@ -327,7 +327,7 @@ using EloBuddy;
                 }
             }
 
-            if (Q.UseOnCombo && Q.LSIsReady() && Q.CanCast())
+            if (Q.UseOnCombo && Q.IsReady() && Q.CanCast())
             {
                 if (!CheckPassive())
                 {
@@ -348,7 +348,7 @@ using EloBuddy;
                 }
             }
 
-            if (E.UseOnCombo && !CheckPassive() && E.LSIsReady() && E.CanCast()
+            if (E.UseOnCombo && !CheckPassive() && E.IsReady() && E.CanCast()
                 && (!KoreanUtils.GetParamBool(champion.MainMenu, "dashmode")
                     || (KoreanUtils.GetParamBool(champion.MainMenu, "dashmode") && lucian.semiAutomaticE.Holding)))
             {

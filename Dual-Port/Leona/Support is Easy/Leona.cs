@@ -49,7 +49,7 @@ using EloBuddy; namespace Support.Plugins
                 return;
             }
 
-            if (!this.Q.LSIsReady())
+            if (!this.Q.IsReady())
             {
                 return;
             }
@@ -117,7 +117,7 @@ using EloBuddy; namespace Support.Plugins
                     this.W.Cast();
                 }
 
-                if (this.E.CastCheck(this.Target, "ComboQWE") && this.Q.LSIsReady())
+                if (this.E.CastCheck(this.Target, "ComboQWE") && this.Q.IsReady())
                 {
                     // Max Range with VeryHigh Hitchance / Immobile
                     if (this.E.GetPrediction(this.Target).Hitchance >= HitChance.VeryHigh)

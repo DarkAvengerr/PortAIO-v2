@@ -42,7 +42,7 @@ namespace Irelia.Common
 
         public static bool CanStun(this Obj_AI_Base t)
         {
-            float targetHealth = Champion.PlayerSpells.Q.LSIsReady() && !t.LSIsValidTarget(Champion.PlayerSpells.E.Range)
+            float targetHealth = Champion.PlayerSpells.Q.IsReady() && !t.IsValidTarget(Champion.PlayerSpells.E.Range)
                 ? t.Health + Champion.PlayerSpells.Q.GetDamage(t)
                 : t.Health;
             return targetHealth / t.MaxHealth * 100 > ObjectManager.Player.Health / ObjectManager.Player.MaxHealth * 100;

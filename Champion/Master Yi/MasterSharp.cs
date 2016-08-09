@@ -134,7 +134,7 @@ namespace MasterSharp
             {
                 if (args.Source.NetworkId == MasterYi.player.NetworkId)
                 Console.WriteLine("type: " + args.Type + " : "+ args.HitType);
-                if (args.Source.NetworkId != MasterYi.player.NetworkId || !MasterYi.W.LSIsReady() || DeathWalker.canAttack() || !isYiAA(args.Type))
+                if (args.Source.NetworkId != MasterYi.player.NetworkId || !MasterYi.W.IsReady() || DeathWalker.canAttack() || !isYiAA(args.Type))
                     return;
 
 
@@ -163,7 +163,7 @@ namespace MasterSharp
 
         private static void afterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (MasterYi.W.LSIsReady() && Config.Item("comboWreset").GetValue<bool>() && Config.Item("useWatHP").GetValue<Slider>().Value>=MasterYi.player.HealthPercent && target is AIHeroClient && DeathWalker.CurrentMode == DeathWalker.Mode.Combo)
+            if (MasterYi.W.IsReady() && Config.Item("comboWreset").GetValue<bool>() && Config.Item("useWatHP").GetValue<Slider>().Value>=MasterYi.player.HealthPercent && target is AIHeroClient && DeathWalker.CurrentMode == DeathWalker.Mode.Combo)
             {
                 MasterYi.W.Cast();
                 LeagueSharp.Common.Utility.DelayAction.Add(100, delegate { DeathWalker.resetAutoAttackTimer(); });
@@ -174,8 +174,8 @@ namespace MasterSharp
         private static void onDash(Obj_AI_Base sender, Dash.DashItem args)
         {
             if (MasterYi.selectedTarget != null && sender.NetworkId == MasterYi.selectedTarget.NetworkId &&
-                MasterYi.Q.LSIsReady() && DeathWalker.CurrentMode == DeathWalker.Mode.Combo
-                && sender.LSDistance(MasterYi.player)<=600)
+                MasterYi.Q.IsReady() && DeathWalker.CurrentMode == DeathWalker.Mode.Combo
+                && sender.Distance(MasterYi.player)<=600)
                 MasterYi.Q.Cast(sender);
         }
 
@@ -183,7 +183,7 @@ namespace MasterSharp
         {
             return;
 
-            if (Config.Item("comboWreset").GetValue<bool>() && args.PacketData[0] == 0x65 && MasterYi.W.LSIsReady() && DeathWalker.CurrentMode == DeathWalker.Mode.Combo)
+            if (Config.Item("comboWreset").GetValue<bool>() && args.PacketData[0] == 0x65 && MasterYi.W.IsReady() && DeathWalker.CurrentMode == DeathWalker.Mode.Combo)
             {
 
                 // LogPacket(args);
@@ -199,7 +199,7 @@ namespace MasterSharp
                 int SourceNetworkId = gp.ReadInteger();
                 float dmga =
                     (float)
-                        MasterYi.player.LSGetAutoAttackDamage(
+                        MasterYi.player.GetAutoAttackDamage(
                             ObjectManager.GetUnitByNetworkId<Obj_AI_Base>((uint)targetID));
                 if (dmga - 10 > DamageAmount || dmga + 10 < DamageAmount)
                     return;
@@ -208,7 +208,7 @@ namespace MasterSharp
                 Obj_AI_Base targ = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>((uint)dmg.TargetNetworkId);
                 if ((int) dmg.Type == 12 || (int) dmg.Type == 4 || (int) dmg.Type == 3 )
                 {
-                    if (MasterYi.W.LSIsReady() && DeathWalker.inAutoAttackRange(targ))
+                    if (MasterYi.W.IsReady() && DeathWalker.inAutoAttackRange(targ))
                     {
                         MasterYi.W.Cast(targ.Position);
                        // DeathWalker.ResetAutoAttackTimer();
@@ -379,7 +379,7 @@ namespace MasterSharp
                 {
 
                     var hero = (AIHeroClient) obj;
-                    var spellSlot = (hero.LSGetSpellSlot(arg.SData.Name));
+                    var spellSlot = (hero.GetSpellSlot(arg.SData.Name));
                     TargetedSkills.TargSkill skill = TargetedSkills.targetedSkillsAll.FirstOrDefault(ob => ob.sName == arg.SData.Name);
                     if (skill != null)
                     {
@@ -397,14 +397,14 @@ namespace MasterSharp
             if (skillshot.SpellData.SpellName == "VelkozQ")
             {
                 var spellData = SpellDatabase.GetByName("VelkozQSplit");
-                var direction = skillshot.Direction.LSPerpendicular();
+                var direction = skillshot.Direction.Perpendicular();
                 if (DetectedSkillshots.Count(s => s.SpellData.SpellName == "VelkozQSplit") == 0)
                 {
                     for (var i = -1; i <= 1; i = i + 2)
                     {
                         var skillshotToAdd = new Skillshot(
-                            DetectionType.ProcessSpell, spellData, Environment.TickCount, missile.Position.LSTo2D(),
-                            missile.Position.LSTo2D() + i * direction * spellData.Range, skillshot.Unit);
+                            DetectionType.ProcessSpell, spellData, Environment.TickCount, missile.Position.To2D(),
+                            missile.Position.To2D() + i * direction * spellData.Range, skillshot.Unit);
                         DetectedSkillshots.Add(skillshotToAdd);
                     }
                 }
@@ -419,8 +419,8 @@ namespace MasterSharp
             {
                 if (item.SpellData.SpellName == skillshot.SpellData.SpellName &&
                     (item.Unit.NetworkId == skillshot.Unit.NetworkId &&
-                     (skillshot.Direction).LSAngleBetween(item.Direction) < 5 &&
-                     (skillshot.Start.LSDistance(item.Start) < 100 || skillshot.SpellData.FromObjects.Length == 0)))
+                     (skillshot.Direction).AngleBetween(item.Direction) < 5 &&
+                     (skillshot.Start.Distance(item.Start) < 100 || skillshot.SpellData.FromObjects.Length == 0)))
                 {
                     alreadyAdded = true;
                 }
@@ -433,7 +433,7 @@ namespace MasterSharp
             }
 
             //Check if the skillshot is too far away.
-            if (skillshot.Start.LSDistance(ObjectManager.Player.ServerPosition.LSTo2D()) >
+            if (skillshot.Start.Distance(ObjectManager.Player.ServerPosition.To2D()) >
                 (skillshot.SpellData.Range + skillshot.SpellData.Radius + 1000) * 1.5)
             {
                 return;
@@ -455,7 +455,7 @@ namespace MasterSharp
                         {
                             var end = skillshot.Start +
                                       skillshot.SpellData.Range *
-                                      originalDirection.LSRotated(skillshot.SpellData.MultipleAngle * i);
+                                      originalDirection.Rotated(skillshot.SpellData.MultipleAngle * i);
                             var skillshotToAdd = new Skillshot(
                                 skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, skillshot.Start, end,
                                 skillshot.Unit);
@@ -472,8 +472,8 @@ namespace MasterSharp
 
                     if (skillshot.SpellData.Invert)
                     {
-                        var newDirection = -(skillshot.End - skillshot.Start).LSNormalized();
-                        var end = skillshot.Start + newDirection * skillshot.Start.LSDistance(skillshot.End);
+                        var newDirection = -(skillshot.End - skillshot.Start).Normalized();
+                        var end = skillshot.Start + newDirection * skillshot.Start.Distance(skillshot.End);
                         var skillshotToAdd = new Skillshot(
                             skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, skillshot.Start, end,
                             skillshot.Unit);
@@ -496,22 +496,22 @@ namespace MasterSharp
                     {
                         var angle = 60;
                         var edge1 =
-                            (skillshot.End - skillshot.Unit.ServerPosition.LSTo2D()).LSRotated(
+                            (skillshot.End - skillshot.Unit.ServerPosition.To2D()).Rotated(
                                 -angle / 2 * (float)Math.PI / 180);
-                        var edge2 = edge1.LSRotated(angle * (float)Math.PI / 180);
+                        var edge2 = edge1.Rotated(angle * (float)Math.PI / 180);
 
                         foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
                         {
-                            var v = minion.ServerPosition.LSTo2D() - skillshot.Unit.ServerPosition.LSTo2D();
-                            if (minion.Name == "Seed" && edge1.LSCrossProduct(v) > 0 && v.LSCrossProduct(edge2) > 0 &&
-                                minion.LSDistance(skillshot.Unit) < 800 &&
+                            var v = minion.ServerPosition.To2D() - skillshot.Unit.ServerPosition.To2D();
+                            if (minion.Name == "Seed" && edge1.CrossProduct(v) > 0 && v.CrossProduct(edge2) > 0 &&
+                                minion.Distance(skillshot.Unit) < 800 &&
                                 (minion.Team != ObjectManager.Player.Team))
                             {
-                                var start = minion.ServerPosition.LSTo2D();
-                                var end = skillshot.Unit.ServerPosition.LSTo2D()
-                                    .LSExtend(
-                                        minion.ServerPosition.LSTo2D(),
-                                        skillshot.Unit.LSDistance(minion) > 200 ? 1300 : 1000);
+                                var start = minion.ServerPosition.To2D();
+                                var end = skillshot.Unit.ServerPosition.To2D()
+                                    .Extend(
+                                        minion.ServerPosition.To2D(),
+                                        skillshot.Unit.Distance(minion) > 200 ? 1300 : 1000);
 
                                 var skillshotToAdd = new Skillshot(
                                     skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, start, end,
@@ -524,8 +524,8 @@ namespace MasterSharp
 
                     if (skillshot.SpellData.SpellName == "AlZaharCalloftheVoid")
                     {
-                        var start = skillshot.End - skillshot.Direction.LSPerpendicular() * 400;
-                        var end = skillshot.End + skillshot.Direction.LSPerpendicular() * 400;
+                        var start = skillshot.End - skillshot.Direction.Perpendicular() * 400;
+                        var end = skillshot.End + skillshot.Direction.Perpendicular() * 400;
                         var skillshotToAdd = new Skillshot(
                             skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, start, end,
                             skillshot.Unit);
@@ -535,7 +535,7 @@ namespace MasterSharp
 
                     if (skillshot.SpellData.SpellName == "ZiggsQ")
                     {
-                        var d1 = skillshot.Start.LSDistance(skillshot.End);
+                        var d1 = skillshot.Start.Distance(skillshot.End);
                         var d2 = d1 * 0.4f;
                         var d3 = d2 * 0.69f;
 
@@ -565,7 +565,7 @@ namespace MasterSharp
                     if (skillshot.SpellData.SpellName == "ZiggsR")
                     {
                         skillshot.SpellData.Delay =
-                            (int)(1500 + 1500 * skillshot.End.LSDistance(skillshot.Start) / skillshot.SpellData.Range);
+                            (int)(1500 + 1500 * skillshot.End.Distance(skillshot.Start) / skillshot.SpellData.Range);
                     }
 
                     if (skillshot.SpellData.SpellName == "JarvanIVDragonStrike")
@@ -583,19 +583,19 @@ namespace MasterSharp
                         foreach (var m in ObjectManager.Get<Obj_AI_Minion>())
                         {
                             if (m.BaseSkinName == "jarvanivstandard" && m.Team == skillshot.Unit.Team &&
-                                skillshot.IsDanger(m.Position.LSTo2D()))
+                                skillshot.IsDanger(m.Position.To2D()))
                             {
-                                endPos = m.Position.LSTo2D();
+                                endPos = m.Position.To2D();
                             }
                         }
 
-                        if (!endPos.LSIsValid())
+                        if (!endPos.IsValid())
                         {
                             return;
                         }
 
-                        skillshot.End = endPos + 200 * (endPos - skillshot.Start).LSNormalized();
-                        skillshot.Direction = (skillshot.End - skillshot.Start).LSNormalized();
+                        skillshot.End = endPos + 200 * (endPos - skillshot.Start).Normalized();
+                        skillshot.Direction = (skillshot.End - skillshot.Start).Normalized();
                     }
                 }
 

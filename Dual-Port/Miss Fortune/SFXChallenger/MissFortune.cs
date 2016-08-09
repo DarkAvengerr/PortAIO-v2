@@ -118,10 +118,10 @@ using EloBuddy; namespace SFXChallenger.Champions
                 foreach (var minion in minions)
                 {
                     var coneBuff = new Geometry.Polygon.Sector(
-                        minion.Position, Player.Position.LSExtend(minion.Position, Player.LSDistance(minion) + Q.Range / 2f),
+                        minion.Position, Player.Position.Extend(minion.Position, Player.Distance(minion) + Q.Range / 2f),
                         (float) (40 * Math.PI / 180), Q1.Range - Q.Range);
                     var coneNormal = new Geometry.Polygon.Sector(
-                        minion.Position, Player.Position.LSExtend(minion.Position, Player.LSDistance(minion) + Q.Range / 2f),
+                        minion.Position, Player.Position.Extend(minion.Position, Player.Distance(minion) + Q.Range / 2f),
                         (float) (60 * Math.PI / 180), Q1.Range - Q.Range);
                     for (var i = 0; i < coneBuff.Points.Count - 1; i++)
                     {
@@ -235,7 +235,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             IndicatorManager.AddToMenu(DrawingManager.Menu, true);
             IndicatorManager.Add(Q);
             IndicatorManager.Add(E);
-            IndicatorManager.Add("R", hero => R.LSIsReady() ? R.GetDamage(hero) * 5 : 0);
+            IndicatorManager.Add("R", hero => R.IsReady() ? R.GetDamage(hero) * 5 : 0);
             IndicatorManager.Finale();
         }
 
@@ -305,7 +305,7 @@ using EloBuddy; namespace SFXChallenger.Champions
         {
             if (Game.Time - _lastRCast < 5 && !_lastRPosition.Equals(Vector3.Zero))
             {
-                var hits = GameObjects.EnemyHeroes.Count(e => e.LSIsValidTarget(R.Width * 2.5f, true, _lastRPosition));
+                var hits = GameObjects.EnemyHeroes.Count(e => e.IsValidTarget(R.Width * 2.5f, true, _lastRPosition));
                 if (hits <= 0)
                 {
                     BlockOrdersManager.Automatic = false;
@@ -318,7 +318,7 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void OnPostUpdate()
         {
-            if (Ultimate.IsActive(UltimateModeType.Assisted) && R.LSIsReady())
+            if (Ultimate.IsActive(UltimateModeType.Assisted) && R.IsReady())
             {
                 if (Ultimate.ShouldMove(UltimateModeType.Assisted))
                 {
@@ -331,7 +331,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 }
             }
 
-            if (Ultimate.IsActive(UltimateModeType.Auto) && R.LSIsReady())
+            if (Ultimate.IsActive(UltimateModeType.Auto) && R.IsReady())
             {
                 if (!RLogic(UltimateModeType.Auto, R.GetHitChance("combo"), TargetSelector.GetTarget(R)))
                 {
@@ -344,10 +344,10 @@ using EloBuddy; namespace SFXChallenger.Champions
         {
             try
             {
-                if (args.UniqueId.Equals("e-gapcloser") && E.LSIsReady() &&
+                if (args.UniqueId.Equals("e-gapcloser") && E.IsReady() &&
                     BestTargetOnlyManager.Check("e-gapcloser", E, args.Hero))
                 {
-                    if (args.End.LSDistance(Player.Position) <= E.Range)
+                    if (args.End.Distance(Player.Position) <= E.Range)
                     {
                         E.Cast(args.End);
                     }
@@ -365,11 +365,11 @@ using EloBuddy; namespace SFXChallenger.Champions
             var e = Menu.Item(Menu.Name + ".combo.e").GetValue<bool>();
             var r = Ultimate.IsActive(UltimateModeType.Combo);
 
-            if (q && Q.LSIsReady())
+            if (q && Q.IsReady())
             {
                 QLogic();
             }
-            if (e && E.LSIsReady())
+            if (e && E.IsReady())
             {
                 var target = TargetSelector.GetTarget(E);
                 if (target != null)
@@ -377,7 +377,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     ELogic(target, E.GetHitChance("combo"));
                 }
             }
-            if (r && R.LSIsReady())
+            if (r && R.IsReady())
             {
                 var target = TargetSelector.GetTarget(R);
                 if (target != null)
@@ -399,11 +399,11 @@ using EloBuddy; namespace SFXChallenger.Champions
             var q = Menu.Item(Menu.Name + ".harass.q").GetValue<bool>();
             var e = Menu.Item(Menu.Name + ".harass.e").GetValue<bool>();
 
-            if (q && Q.LSIsReady())
+            if (q && Q.IsReady())
             {
                 QLogic();
             }
-            if (e && E.LSIsReady())
+            if (e && E.IsReady())
             {
                 var target = TargetSelector.GetTarget(E);
                 if (target != null)
@@ -428,10 +428,10 @@ using EloBuddy; namespace SFXChallenger.Champions
                     if (target != null)
                     {
                         var heroPositions = (from t in GameObjects.EnemyHeroes
-                            where t.LSIsValidTarget(Q1.Range)
+                            where t.IsValidTarget(Q1.Range)
                             let prediction = Q.GetPrediction(t)
                             select new CPrediction.Position(t, prediction.UnitPosition)).Where(
-                                t => t.UnitPosition.LSDistance(Player.Position) < Q1.Range).ToList();
+                                t => t.UnitPosition.Distance(Player.Position) < Q1.Range).ToList();
                         if (heroPositions.Any())
                         {
                             var minions = MinionManager.GetMinions(
@@ -442,22 +442,22 @@ using EloBuddy; namespace SFXChallenger.Champions
                                 return;
                             }
 
-                            var outerMinions = minions.Where(m => m.LSDistance(Player) > Q.Range).ToList();
-                            var innerPositions = minions.Where(m => m.LSDistance(Player) < Q.Range).ToList();
+                            var outerMinions = minions.Where(m => m.Distance(Player) > Q.Range).ToList();
+                            var innerPositions = minions.Where(m => m.Distance(Player) < Q.Range).ToList();
                             foreach (var minion in innerPositions)
                             {
                                 var lMinion = minion;
                                 var coneBuff = new Geometry.Polygon.Sector(
                                     minion.Position,
-                                    Player.Position.LSExtend(minion.Position, Player.LSDistance(minion) + Q.Range * 0.5f),
+                                    Player.Position.Extend(minion.Position, Player.Distance(minion) + Q.Range * 0.5f),
                                     (float) (40 * Math.PI / 180), Q1.Range - Q.Range);
                                 var coneNormal = new Geometry.Polygon.Sector(
                                     minion.Position,
-                                    Player.Position.LSExtend(minion.Position, Player.LSDistance(minion) + Q.Range * 0.5f),
+                                    Player.Position.Extend(minion.Position, Player.Distance(minion) + Q.Range * 0.5f),
                                     (float) (60 * Math.PI / 180), Q1.Range - Q.Range);
                                 foreach (var enemy in
                                     heroPositions.Where(
-                                        m => m.UnitPosition.LSDistance(lMinion.Position) < Q1.Range - Q.Range))
+                                        m => m.UnitPosition.Distance(lMinion.Position) < Q1.Range - Q.Range))
                                 {
                                     if (coneBuff.IsInside(enemy.Hero) && HasPassiveDebuff(enemy.Hero))
                                     {
@@ -469,9 +469,9 @@ using EloBuddy; namespace SFXChallenger.Champions
                                         var insideCone =
                                             outerMinions.Where(m => coneNormal.IsInside(m.Position)).ToList();
                                         if (!insideCone.Any() ||
-                                            enemy.UnitPosition.LSDistance(minion.Position) <
+                                            enemy.UnitPosition.Distance(minion.Position) <
                                             insideCone.Select(
-                                                m => m.Position.LSDistance(minion.Position) - m.BoundingRadius)
+                                                m => m.Position.Distance(minion.Position) - m.BoundingRadius)
                                                 .DefaultIfEmpty(float.MaxValue)
                                                 .Min())
                                         {
@@ -493,7 +493,7 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         private bool HasPassiveDebuff(AIHeroClient target)
         {
-            return target.LSHasBuff("missfortunepassive");
+            return target.HasBuff("missfortunepassive");
         }
 
         private void ELogic(AIHeroClient target, HitChance hitChance)
@@ -579,13 +579,13 @@ using EloBuddy; namespace SFXChallenger.Champions
                 }
 
                 float damage = 0;
-                if (R.LSIsReady() && (!rangeCheck || R.IsInRange(target)))
+                if (R.IsReady() && (!rangeCheck || R.IsInRange(target)))
                 {
                     var rMana = R.ManaCost * resMulti;
                     if (rMana <= Player.Mana)
                     {
                         var waves = 10 + R.Level * 2 - 2;
-                        if (target.LSDistance(Player) < 250)
+                        if (target.Distance(Player) < 250)
                         {
                             waves -= 4;
                         }
@@ -600,7 +600,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                         waves = Math.Max(3, waves);
                         if (Player.Position.IsUnderTurret(false))
                         {
-                            waves = target.LSDistance(Player) > Orbwalking.GetAttackRange(target) * 1.2f ? 1 : 0;
+                            waves = target.Distance(Player) > Orbwalking.GetAttackRange(target) * 1.2f ? 1 : 0;
                         }
                         damage += R.GetDamage(target) * waves;
                     }
@@ -620,8 +620,8 @@ using EloBuddy; namespace SFXChallenger.Champions
             {
                 return;
             }
-            var useQ = Menu.Item(Menu.Name + ".lane-clear.q").GetValue<bool>() && Q.LSIsReady();
-            var useE = Menu.Item(Menu.Name + ".lane-clear.e").GetValue<bool>() && E.LSIsReady();
+            var useQ = Menu.Item(Menu.Name + ".lane-clear.q").GetValue<bool>() && Q.IsReady();
+            var useE = Menu.Item(Menu.Name + ".lane-clear.e").GetValue<bool>() && E.IsReady();
             var minE = Menu.Item(Menu.Name + ".lane-clear.e-min").GetValue<Slider>().Value;
 
             if (useQ)
@@ -647,8 +647,8 @@ using EloBuddy; namespace SFXChallenger.Champions
             {
                 return;
             }
-            var useQ = Menu.Item(Menu.Name + ".jungle-clear.q").GetValue<bool>() && Q.LSIsReady();
-            var useE = Menu.Item(Menu.Name + ".jungle-clear.e").GetValue<bool>() && E.LSIsReady();
+            var useQ = Menu.Item(Menu.Name + ".jungle-clear.q").GetValue<bool>() && Q.IsReady();
+            var useE = Menu.Item(Menu.Name + ".jungle-clear.e").GetValue<bool>() && E.IsReady();
 
             if (useQ)
             {
@@ -673,26 +673,26 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void Flee()
         {
-            if (Menu.Item(Menu.Name + ".flee.w").GetValue<bool>() && W.LSIsReady())
+            if (Menu.Item(Menu.Name + ".flee.w").GetValue<bool>() && W.IsReady())
             {
                 W.Cast();
             }
-            if (Menu.Item(Menu.Name + ".flee.e").GetValue<bool>() && E.LSIsReady())
+            if (Menu.Item(Menu.Name + ".flee.e").GetValue<bool>() && E.IsReady())
             {
                 ELogic(
-                    GameObjects.EnemyHeroes.Where(e => e.LSIsValidTarget(E.Range))
-                        .OrderBy(e => e.Position.LSDistance(Player.Position))
+                    GameObjects.EnemyHeroes.Where(e => e.IsValidTarget(E.Range))
+                        .OrderBy(e => e.Position.Distance(Player.Position))
                         .FirstOrDefault(), HitChance.High);
             }
         }
 
         protected override void Killsteal()
         {
-            if (Menu.Item(Menu.Name + ".killsteal.q").GetValue<bool>() && Q.LSIsReady())
+            if (Menu.Item(Menu.Name + ".killsteal.q").GetValue<bool>() && Q.IsReady())
             {
                 var killable =
                     GameObjects.EnemyHeroes.FirstOrDefault(
-                        e => e.LSIsValidTarget(Q.Range) && Q.GetDamage(e) * 0.95f > e.Health);
+                        e => e.IsValidTarget(Q.Range) && Q.GetDamage(e) * 0.95f > e.Health);
                 if (killable != null)
                 {
                     Q.CastOnUnit(killable);

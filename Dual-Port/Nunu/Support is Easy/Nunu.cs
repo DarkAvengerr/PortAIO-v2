@@ -59,7 +59,7 @@ using EloBuddy; namespace Support.Plugins
             {
                 this.E.CastOnUnit(gapcloser.Sender);
 
-                if (this.W.LSIsReady())
+                if (this.W.IsReady())
                 {
                     this.W.CastOnUnit(this.Player);
                 }
@@ -70,28 +70,28 @@ using EloBuddy; namespace Support.Plugins
         {
             if (this.ComboMode)
             {
-                if (this.Q.LSIsReady() && this.ConfigValue<bool>("Combo.Q")
+                if (this.Q.IsReady() && this.ConfigValue<bool>("Combo.Q")
                     && this.Player.HealthPercent < this.ConfigValue<Slider>("Combo.Q.Health").Value)
                 {
                     var minion = MinionManager.GetMinions(this.Player.Position, this.Q.Range).FirstOrDefault();
-                    if (minion.LSIsValidTarget(this.Q.Range))
+                    if (minion.IsValidTarget(this.Q.Range))
                     {
                         this.Q.CastOnUnit(minion);
                     }
                 }
 
                 var allys = Helpers.AllyInRange(this.W.Range).OrderByDescending(h => h.FlatPhysicalDamageMod).ToList();
-                if (this.W.LSIsReady() && allys.Count > 0 && this.ConfigValue<bool>("Combo.W"))
+                if (this.W.IsReady() && allys.Count > 0 && this.ConfigValue<bool>("Combo.W"))
                 {
                     this.W.CastOnUnit(allys.FirstOrDefault());
                 }
 
-                if (this.W.LSIsReady() && this.Target.LSIsValidTarget(this.AttackRange) && this.ConfigValue<bool>("Combo.W"))
+                if (this.W.IsReady() && this.Target.IsValidTarget(this.AttackRange) && this.ConfigValue<bool>("Combo.W"))
                 {
                     this.W.CastOnUnit(this.Player);
                 }
 
-                if (this.E.LSIsReady() && this.Target.LSIsValidTarget(this.E.Range) && this.ConfigValue<bool>("Combo.E"))
+                if (this.E.IsReady() && this.Target.IsValidTarget(this.E.Range) && this.ConfigValue<bool>("Combo.E"))
                 {
                     this.E.CastOnUnit(this.Target);
                 }
@@ -99,36 +99,36 @@ using EloBuddy; namespace Support.Plugins
 
             if (this.HarassMode)
             {
-                if (this.Q.LSIsReady() && this.ConfigValue<bool>("Harass.Q")
+                if (this.Q.IsReady() && this.ConfigValue<bool>("Harass.Q")
                     && this.Player.HealthPercent < this.ConfigValue<Slider>("Harass.Q.Health").Value)
                 {
                     var minion = MinionManager.GetMinions(this.Player.Position, this.Q.Range).FirstOrDefault();
-                    if (minion.LSIsValidTarget(this.Q.Range))
+                    if (minion.IsValidTarget(this.Q.Range))
                     {
                         this.Q.CastOnUnit(minion);
                     }
                 }
 
                 var allys = Helpers.AllyInRange(this.W.Range).OrderByDescending(h => h.FlatPhysicalDamageMod).ToList();
-                if (this.W.LSIsReady() && allys.Count > 0 && this.ConfigValue<bool>("Harass.W"))
+                if (this.W.IsReady() && allys.Count > 0 && this.ConfigValue<bool>("Harass.W"))
                 {
                     this.W.CastOnUnit(allys.FirstOrDefault());
                 }
 
-                if (this.W.LSIsReady() && this.Target.LSIsValidTarget(this.AttackRange)
+                if (this.W.IsReady() && this.Target.IsValidTarget(this.AttackRange)
                     && this.ConfigValue<bool>("Harass.W"))
                 {
                     this.W.CastOnUnit(this.Player);
                 }
 
-                if (this.E.LSIsReady() && this.Target.LSIsValidTarget(this.E.Range) && this.ConfigValue<bool>("Harass.E"))
+                if (this.E.IsReady() && this.Target.IsValidTarget(this.E.Range) && this.ConfigValue<bool>("Harass.E"))
                 {
                     this.E.CastOnUnit(this.Target);
                 }
             }
 
             if (this.ConfigValue<StringList>("Misc.Laugh").SelectedValue == "ON"
-                && this.Player.LSCountEnemiesInRange(2000) > 0 && this.last + 4200 < Environment.TickCount)
+                && this.Player.CountEnemiesInRange(2000) > 0 && this.last + 4200 < Environment.TickCount)
             {
                 EloBuddy.Player.DoEmote(Emote.Laugh);
                 this.last = Environment.TickCount;

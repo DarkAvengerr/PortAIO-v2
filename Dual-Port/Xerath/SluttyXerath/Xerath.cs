@@ -63,14 +63,14 @@ using EloBuddy;
 
         private static void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
-            if (Player.LSHasBuff("xerathascended2onhit"))
+            if (Player.HasBuff("xerathascended2onhit"))
                 return;
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 if (GlobalManager.RCasted()
                     || Q.IsCharging
-                    || (Q.LSIsReady() || W.LSIsReady() || E.LSIsReady()))
+                    || (Q.IsReady() || W.IsReady() || E.IsReady()))
                 {
                     args.Process = false;
                 }
@@ -84,7 +84,7 @@ using EloBuddy;
                 return;
             if (sender.IsAlly || sender.IsMe)
                 return;
-            if (Player.LSDistance(sender) <= E.Range)
+            if (Player.Distance(sender) <= E.Range)
             {
                 E.Cast(sender);
             }
@@ -99,7 +99,7 @@ using EloBuddy;
             if (gapcloser.Sender.IsAlly || gapcloser.Sender.IsMe)
                 return;
 
-            if (Player.LSDistance(gapcloser.Sender) <= E.Range)
+            if (Player.Distance(gapcloser.Sender) <= E.Range)
             {
                 E.Cast(gapcloser.Sender);
             }
@@ -184,7 +184,7 @@ using EloBuddy;
 
             if (!(Items.HasItem(ItemId.Farsight_Alteration.ToString()) ||
                   Items.HasItem(ItemId.Farsight_Alteration.ToString()))
-                && Player.LSInShop() && Player.Level >= level)
+                && Player.InShop() && Player.Level >= level)
             {
                 Shop.BuyItem(ItemId.Farsight_Alteration);
                    hasbought = true;
@@ -204,17 +204,17 @@ using EloBuddy;
                 return;
 
 
-            if (drawq && Q.Level >= 1 && Q.LSIsReady())
+            if (drawq && Q.Level >= 1 && Q.IsReady())
             {
                 Drawing.DrawCircle(Player.Position, Q.Range, Color.GreenYellow);
             }
 
-            if (draww && W.Level >= 1 && W.LSIsReady())
+            if (draww && W.Level >= 1 && W.IsReady())
             {
                 Drawing.DrawCircle(Player.Position, W.Range, Color.Aqua);
             }
 
-            if (drawe && E.Level >= 1 && E.LSIsReady())
+            if (drawe && E.Level >= 1 && E.IsReady())
             {
                 Drawing.DrawCircle(Player.Position, E.Range, Color.Brown);
             }
@@ -289,14 +289,14 @@ using EloBuddy;
 
             if (qtarget == null)
                 return;
-            if (usee && qtarget.LSIsValidTarget(E.Range) && E.LSIsReady() && !Q.IsCharging)
+            if (usee && qtarget.IsValidTarget(E.Range) && E.IsReady() && !Q.IsCharging)
             {
                 E.Cast(qtarget);
             }
 
             if (useq)
             {
-                if (Q.LSIsReady() && !Q.IsCharging)
+                if (Q.IsReady() && !Q.IsCharging)
                 {
                     Q.StartCharging();
                 }
@@ -307,7 +307,7 @@ using EloBuddy;
                 }
             }
 
-            if (usew && !Q.IsCharging && qtarget.LSIsValidTarget(Q.ChargedMaxRange))
+            if (usew && !Q.IsCharging && qtarget.IsValidTarget(Q.ChargedMaxRange))
             {
                 W.Cast(qtarget);
             }
@@ -329,7 +329,7 @@ using EloBuddy;
                 return;
 
 
-            if (usew && jungle[0].LSIsValidTarget())
+            if (usew && jungle[0].IsValidTarget())
             {
                 if (!Q.IsCharging)
                 {
@@ -338,7 +338,7 @@ using EloBuddy;
             }
 
 
-            if (useq && jungle[0].LSIsValidTarget())
+            if (useq && jungle[0].IsValidTarget())
             {
                 if (!Q.IsCharging)
                     Q.Cast(jungle[0].Position);
@@ -393,7 +393,7 @@ using EloBuddy;
                     }
                 }
 
-                if (usew && !Q.IsCharging && W.LSIsReady())
+                if (usew && !Q.IsCharging && W.IsReady())
                 {
                     if (wfarm.MinionsHit >= usewhit)
                     {
@@ -411,7 +411,7 @@ using EloBuddy;
             var target = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
             if (target == null)
                 return;
-            if (Player.LSDistance(R.GetPrediction(target).CastPosition) > Player.AttackRange)
+            if (Player.Distance(R.GetPrediction(target).CastPosition) > Player.AttackRange)
             {
                 if (Items.HasItem(3342))
                 {
@@ -441,7 +441,7 @@ using EloBuddy;
             if (Q.IsCharging)
                 return;
 
-            if (Player.LSHasBuff("xerathascended2onhit") && Player.ManaPercent < 80)
+            if (Player.HasBuff("xerathascended2onhit") && Player.ManaPercent < 80)
             {
                 havebuff = true;
             }
@@ -466,19 +466,19 @@ using EloBuddy;
 
 
 
-            if (Ignite.LSIsReady() && qtarget.Health <= (Q.GetDamage(qtarget) + Player.LSGetAutoAttackDamage(qtarget)))
+            if (Ignite.IsReady() && qtarget.Health <= (Q.GetDamage(qtarget) + Player.GetAutoAttackDamage(qtarget)))
             {
                 Player.Spellbook.CastSpell(Ignite, qtarget);
             }
 
-            if (usee && qtarget.LSIsValidTarget(E.Range) && E.LSIsReady() && !Q.IsCharging)
+            if (usee && qtarget.IsValidTarget(E.Range) && E.IsReady() && !Q.IsCharging)
             {
                 E.Cast(qtarget);
             }
 
             if (useq)
             {
-                if (Q.LSIsReady() && !Q.IsCharging)
+                if (Q.IsReady() && !Q.IsCharging)
                 {
                     Q.StartCharging();
                 }
@@ -489,7 +489,7 @@ using EloBuddy;
                 }
             }
 
-            if (usew && !Q.IsCharging && qtarget.LSIsValidTarget(Q.ChargedMaxRange))
+            if (usew && !Q.IsCharging && qtarget.IsValidTarget(Q.ChargedMaxRange))
             {
                 W.Cast(qtarget);
             }
@@ -501,7 +501,7 @@ using EloBuddy;
             if (target == null)
                 return;
             
-            if (Config.Item("comboMenu.usertarget").GetValue<bool>() && TargetSelector.SelectedTarget.LSIsValidTarget())
+            if (Config.Item("comboMenu.usertarget").GetValue<bool>() && TargetSelector.SelectedTarget.IsValidTarget())
             {
                 target = TargetSelector.GetSelectedTarget();
             }
@@ -515,7 +515,7 @@ using EloBuddy;
             {
                 case 1:
                 {
-                    if (R.LSIsReady() && target.LSIsValidTarget(R.Range) && userrtap)
+                    if (R.IsReady() && target.IsValidTarget(R.Range) && userrtap)
                     {
                         if (rpred.Hitchance >= HitChance.High)
                         {
@@ -529,7 +529,7 @@ using EloBuddy;
 
                 case 0:
                 {
-                    if (R.LSIsReady() && target.LSIsValidTarget(R.Range) && userrtap &&
+                    if (R.IsReady() && target.IsValidTarget(R.Range) && userrtap &&
                         Environment.TickCount - lastrr > userdelay)
                     {
                         if (rpred.Hitchance >= HitChance.High)

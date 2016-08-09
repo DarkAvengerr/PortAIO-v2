@@ -22,7 +22,7 @@ using EloBuddy;
         public static Spell E { get { return _E; } }
         public static Spell E2 { get { return _E2; } }
         public static Spell R { get { return _R; } }
-        public static SpellSlot IgniteSlot = Player.LSGetSpellSlot("SummonerDot");
+        public static SpellSlot IgniteSlot = Player.GetSpellSlot("SummonerDot");
 
         public static float UltCastedTime;
 
@@ -50,12 +50,12 @@ using EloBuddy;
 
         public static bool HasQBuff
         {
-            get { return Player.LSHasBuff("viktorpowertransferreturn"); }
+            get { return Player.HasBuff("viktorpowertransferreturn"); }
         }
 
         public static void CastSpell(Spell spell, Obj_AI_Base target, HitChance hitChance)
         {
-            if (target.LSIsValidTarget(spell.Range) && spell.GetPrediction(target).Hitchance >= hitChance)
+            if (target.IsValidTarget(spell.Range) && spell.GetPrediction(target).Hitchance >= hitChance)
                 spell.Cast(target);
         }
 

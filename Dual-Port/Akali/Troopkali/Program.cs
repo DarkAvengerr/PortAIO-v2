@@ -132,7 +132,7 @@ using EloBuddy;
         public static void Drawing_OnEndScene(EventArgs args)
         {
             if (Player.IsDead) return;
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
             {
                 if (Menu.Item("ComboDMG").GetValue<bool>()) ;
                 {
@@ -146,24 +146,24 @@ using EloBuddy;
         {
             var damage = 0d;
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                damage += Player.LSGetSpellDamage(target, SpellSlot.Q);
+                damage += Player.GetSpellDamage(target, SpellSlot.Q);
             }
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                damage += Player.LSGetSpellDamage(target, SpellSlot.W);
+                damage += Player.GetSpellDamage(target, SpellSlot.W);
             }
 
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                damage += Player.LSGetSpellDamage(target, SpellSlot.E);
+                damage += Player.GetSpellDamage(target, SpellSlot.E);
             }
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
-                damage += Player.LSGetSpellDamage(target, SpellSlot.R);
+                damage += Player.GetSpellDamage(target, SpellSlot.R);
             }
 
             return (float)damage;
@@ -171,7 +171,7 @@ using EloBuddy;
 
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (R.LSIsReady() && gapcloser.Sender.LSIsValidTarget(R.Range) && Menu.Item("RGap").GetValue<bool>())
+            if (R.IsReady() && gapcloser.Sender.IsValidTarget(R.Range) && Menu.Item("RGap").GetValue<bool>())
                 R.CastOnUnit(gapcloser.Sender);
         }
 
@@ -218,7 +218,7 @@ using EloBuddy;
         private static void Flee()
         {
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-            if (Menu.Item("WFlee").GetValue<bool>() && W.LSIsReady())
+            if (Menu.Item("WFlee").GetValue<bool>() && W.IsReady())
             {
                 W.Cast();
             }
@@ -245,15 +245,15 @@ using EloBuddy;
 
 
             //Itemusage
-            if (x != null && Player.LSDistance(x) <= botrk.Range)
+            if (x != null && Player.Distance(x) <= botrk.Range)
             {
                 botrk.Cast(x);
             }
-            if (x != null && Player.LSDistance(x) <= cutlass.Range)
+            if (x != null && Player.Distance(x) <= cutlass.Range)
             {
                 cutlass.Cast(x);
             }
-            if (x != null && Player.LSDistance(x) <= hextech.Range)
+            if (x != null && Player.Distance(x) <= hextech.Range)
             {
                 hextech.Cast(x);
             }
@@ -261,11 +261,11 @@ using EloBuddy;
             //combo
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if (Menu.Item("useQ").GetValue<bool>() && Q.LSIsReady()) ;
+                if (Menu.Item("useQ").GetValue<bool>() && Q.IsReady()) ;
                 {
                     Q.CastOnBestTarget();
                 }
-                if (useR && R.LSIsReady())
+                if (useR && R.IsReady())
                 {
                     R.CastOnBestTarget();
                 }
@@ -278,7 +278,7 @@ using EloBuddy;
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                 if (Menu.Item("hQ").GetValue<bool>())
                 {
-                    if (Player.LSDistance(target.Position) > 400 && (Q.LSIsReady()))
+                    if (Player.Distance(target.Position) > 400 && (Q.IsReady()))
                     {
                         Q.CastOnBestTarget();
                     }
@@ -291,7 +291,7 @@ using EloBuddy;
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 AIHeroClient target = TargetSelector.GetTarget(300, TargetSelector.DamageType.Magical);
-                if (Menu.Item("useE").GetValue<bool>() && E.LSIsReady()) ;
+                if (Menu.Item("useE").GetValue<bool>() && E.IsReady()) ;
                 E.Cast();
             }
         }
@@ -304,14 +304,14 @@ using EloBuddy;
             var minions = MinionManager.GetMinions(Player.ServerPosition, E.Range);
             if (minions.Count <= 1) return;
             {
-                if (E.LSIsReady() && E.LSIsReady())
+                if (E.IsReady() && E.IsReady())
                 {
                     if (
                         allMinions.Any(
                             minion =>
-                            minion.LSIsValidTarget(E.Range)
-                            && minion.Health < 0.90 * Player.LSGetSpellDamage(minion, SpellSlot.E)
-                            && minion.LSIsValidTarget(E.Range)))
+                            minion.IsValidTarget(E.Range)
+                            && minion.Health < 0.90 * Player.GetSpellDamage(minion, SpellSlot.E)
+                            && minion.IsValidTarget(E.Range)))
                     {
                         E.Cast();
                     }
@@ -328,11 +328,11 @@ using EloBuddy;
                 MinionTypes.All,
                 MinionTeam.Neutral,
                 MinionOrderTypes.MaxHealth);
-            if (Menu.Item("jungleclearE").GetValue<bool>() && E.LSIsReady())
+            if (Menu.Item("jungleclearE").GetValue<bool>() && E.IsReady())
             {
                 foreach (var minion in allMinions)
                 {
-                    if (minion.LSIsValidTarget())
+                    if (minion.IsValidTarget())
                     {
                         E.Cast();
                     }

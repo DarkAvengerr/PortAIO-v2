@@ -19,8 +19,8 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
         public bool ShouldGetExecuted()
         {
             return false && MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.condemn.repelkindred") &&
-                   Variables.spells[SpellSlot.E].LSIsReady() && ObjectManager.Player.LSCountEnemiesInRange(1500f) == 1 
-                   && ObjectManager.Player.LSGetAlliesInRange(1500f).Count(m => !m.IsMe) == 0;
+                   Variables.spells[SpellSlot.E].IsReady() && ObjectManager.Player.CountEnemiesInRange(1500f) == 1 
+                   && ObjectManager.Player.GetAlliesInRange(1500f).Count(m => !m.IsMe) == 0;
         }
 
         public ModuleType GetModuleType()
@@ -31,9 +31,9 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
         public void OnExecute()
         {
             var CondemnTarget =
-                HeroManager.Enemies.FirstOrDefault(h => h.LSIsValidTarget(Variables.spells[SpellSlot.E].Range) && h.HasBuff("KindredRNoDeathBuff") &&
+                HeroManager.Enemies.FirstOrDefault(h => h.IsValidTarget(Variables.spells[SpellSlot.E].Range) && h.HasBuff("KindredRNoDeathBuff") &&
                         h.HealthPercent <= 10);
-            if (CondemnTarget.LSIsValidTarget())
+            if (CondemnTarget.IsValidTarget())
             {
                 Variables.spells[SpellSlot.E].CastOnUnit(CondemnTarget);
             }

@@ -139,7 +139,7 @@ namespace SharpShooter.Plugins
                                     {
                                         if (!(MenuProvider.Champion.Combo.UseE && _e.IsReadyPerfectly()))
                                         {
-                                            if (ObjectManager.Player.LSCountEnemiesInRange(1000) >= 1)
+                                            if (ObjectManager.Player.CountEnemiesInRange(1000) >= 1)
                                             {
                                                 _r.Cast();
                                             }
@@ -194,7 +194,7 @@ namespace SharpShooter.Plugins
                                                 MinionManager.GetMinions(_q.Range)
                                                     .FirstOrDefault(
                                                         x =>
-                                                            x.LSIsValidTarget(_q.Range) &&
+                                                            x.IsValidTarget(_q.Range) &&
                                                             _q.GetPrediction(x).Hitchance >= _q.MinHitChance);
 
                                             if (target != null)
@@ -226,7 +226,7 @@ namespace SharpShooter.Plugins
                                         {
                                             var target =
                                                 MinionManager.GetMinions(_w.Range)
-                                                    .FirstOrDefault(x => x.LSIsValidTarget(_w.Range));
+                                                    .FirstOrDefault(x => x.IsValidTarget(_w.Range));
 
                                             if (target != null)
                                                 _w.CastOnUnit(target);
@@ -256,7 +256,7 @@ namespace SharpShooter.Plugins
                                         {
                                             var target =
                                                 MinionManager.GetMinions(_e.Range)
-                                                    .FirstOrDefault(x => x.LSIsValidTarget(_e.Range));
+                                                    .FirstOrDefault(x => x.IsValidTarget(_e.Range));
 
                                             if (target != null)
                                                 _e.CastOnUnit(target);
@@ -285,7 +285,7 @@ namespace SharpShooter.Plugins
                                                 MinionOrderTypes.MaxHealth)
                                                 .FirstOrDefault(
                                                     x =>
-                                                        x.LSIsValidTarget(600) &&
+                                                        x.IsValidTarget(600) &&
                                                         _q.GetPrediction(x).Hitchance >= _q.MinHitChance);
 
                                         if (target != null)
@@ -298,7 +298,7 @@ namespace SharpShooter.Plugins
                                     {
                                         var target =
                                             MinionManager.GetMinions(600, MinionTypes.All, MinionTeam.Neutral,
-                                                MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.LSIsValidTarget(600));
+                                                MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.IsValidTarget(600));
 
                                         if (target != null)
                                             _w.CastOnUnit(target);
@@ -310,7 +310,7 @@ namespace SharpShooter.Plugins
                                     {
                                         var target =
                                             MinionManager.GetMinions(600, MinionTypes.All, MinionTeam.Neutral,
-                                                MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.LSIsValidTarget(600));
+                                                MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.IsValidTarget(600));
 
                                         if (target != null)
                                             _e.CastOnUnit(target);
@@ -357,7 +357,7 @@ namespace SharpShooter.Plugins
                     if (
                         ObjectManager.Player.IsManaPercentOkay(
                             MenuProvider.Champion.Misc.GetSliderValue("^ Min Mana").Value))
-                        if (!ObjectManager.Player.LSIsRecalling())
+                        if (!ObjectManager.Player.IsRecalling())
                             if (_q.Level > 0)
                                 if (_w.Level > 0)
                                     if (_e.Level > 0)
@@ -379,7 +379,7 @@ namespace SharpShooter.Plugins
                                                                     MinionManager.GetMinions(_q.Range)
                                                                         .FirstOrDefault(
                                                                             x =>
-                                                                                x.LSIsValidTarget(_q.Range) &&
+                                                                                x.IsValidTarget(_q.Range) &&
                                                                                 _q.GetPrediction(x).Hitchance >=
                                                                                 _q.MinHitChance);
 
@@ -403,7 +403,7 @@ namespace SharpShooter.Plugins
                                                                 MinionManager.GetMinions(_q.Range)
                                                                     .FirstOrDefault(
                                                                         x =>
-                                                                            x.LSIsValidTarget(_q.Range) &&
+                                                                            x.IsValidTarget(_q.Range) &&
                                                                             _q.GetPrediction(x).Hitchance >=
                                                                             _q.MinHitChance);
 
@@ -443,7 +443,7 @@ namespace SharpShooter.Plugins
         {
             if (MenuProvider.Champion.Misc.UseAntiGapcloser)
                 if (_w.IsReadyPerfectly())
-                    if (gapcloser.Sender.LSIsValidTarget(_w.Range))
+                    if (gapcloser.Sender.IsValidTarget(_w.Range))
                         _w.CastOnUnit(gapcloser.Sender);
         }
 
@@ -452,7 +452,7 @@ namespace SharpShooter.Plugins
         {
             if (MenuProvider.Champion.Misc.UseInterrupter)
                 if (_w.IsReadyPerfectly())
-                    if (sender.LSIsValidTarget(_w.Range))
+                    if (sender.IsValidTarget(_w.Range))
                         _w.CastOnUnit(sender);
         }
 
@@ -503,7 +503,7 @@ namespace SharpShooter.Plugins
             float damage = 0;
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
-                damage += (float) ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float) ObjectManager.Player.GetAutoAttackDamage(enemy, true);
 
             if (_q.IsReadyPerfectly())
                 damage += _q.GetDamage(enemy);

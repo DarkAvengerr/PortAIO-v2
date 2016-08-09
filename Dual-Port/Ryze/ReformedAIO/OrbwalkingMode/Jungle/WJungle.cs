@@ -40,7 +40,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Jungle
         private void OnUpdate(EventArgs args)
         {
             if (Variable.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
-                || !Variable.Spells[SpellSlot.W].LSIsReady()) return;
+                || !Variable.Spells[SpellSlot.W].IsReady()) return;
 
             if (this.Menu.Item(this.Menu.Name + "WMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
 

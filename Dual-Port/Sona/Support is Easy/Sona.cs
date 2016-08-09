@@ -83,8 +83,8 @@ using EloBuddy; namespace Support.Plugins
                         this.Q.Cast();
                     }
 
-                    //if (Target.LSIsValidTarget(AttackRange) &&
-                    //    (Player.LSHasBuff("sonaqprocattacker") || Player.LSHasBuff("sonaqprocattacker")))
+                    //if (Target.IsValidTarget(AttackRange) &&
+                    //    (Player.HasBuff("sonaqprocattacker") || Player.HasBuff("sonaqprocattacker")))
                     //{
                     //    EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                     //}
@@ -95,7 +95,7 @@ using EloBuddy; namespace Support.Plugins
                         this.W.Cast();
                     }
 
-                    if (this.E.LSIsReady() && Helpers.AllyInRange(this.E.Range).Count > 0
+                    if (this.E.IsReady() && Helpers.AllyInRange(this.E.Range).Count > 0
                         && this.ConfigValue<bool>("ComboE"))
                     {
                         this.E.Cast();
@@ -120,7 +120,7 @@ using EloBuddy; namespace Support.Plugins
                         this.W.Cast();
                     }
 
-                    if (this.E.LSIsReady() && Helpers.AllyInRange(this.E.Range).Count > 0
+                    if (this.E.IsReady() && Helpers.AllyInRange(this.E.Range).Count > 0
                         && this.ConfigValue<bool>("HarassE"))
                     {
                         this.E.Cast();

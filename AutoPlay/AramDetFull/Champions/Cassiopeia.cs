@@ -33,23 +33,23 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
-            if (target.LSIsValidTarget(Q.Range+100))
+            if (target.IsValidTarget(Q.Range+100))
                 Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
-            if (target.LSIsValidTarget(W.Range + 100))
+            if (target.IsValidTarget(W.Range + 100))
                 W.Cast(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             if ((target.HasBuffOfType(BuffType.Poison)))
             {
@@ -61,7 +61,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             if (target == null)
                 return;
-            if (target.LSIsValidTarget(R.Range) && R.LSIsReady())
+            if (target.IsValidTarget(R.Range) && R.IsReady())
             {
                 R.Cast(target);
             }

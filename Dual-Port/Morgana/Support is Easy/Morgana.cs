@@ -83,14 +83,14 @@ using EloBuddy; namespace Support.Plugins
                     {
                         if (
                             HeroManager.Enemies.Where(
-                                hero => (hero.LSIsValidTarget(this.W.Range) && hero.IsMovementImpaired()))
+                                hero => (hero.IsValidTarget(this.W.Range) && hero.IsMovementImpaired()))
                                        .Any(enemy => this.W.Cast(enemy.Position)))
                         {
                             return;
                         }
 
                         if (
-                            HeroManager.Enemies.Where(hero => hero.LSIsValidTarget(this.W.Range))
+                            HeroManager.Enemies.Where(hero => hero.IsValidTarget(this.W.Range))
                                        .Any(enemy => this.W.CastIfWillHit(enemy, 1)))
                         {
                             return;
@@ -116,14 +116,14 @@ using EloBuddy; namespace Support.Plugins
                     {
                         if (
                             HeroManager.Enemies.Where(
-                                hero => (hero.LSIsValidTarget(this.W.Range) && hero.IsMovementImpaired()))
+                                hero => (hero.IsValidTarget(this.W.Range) && hero.IsMovementImpaired()))
                                        .Any(enemy => this.W.Cast(enemy.Position)))
                         {
                             return;
                         }
 
                         if (
-                            HeroManager.Enemies.Where(hero => hero.LSIsValidTarget(this.W.Range))
+                            HeroManager.Enemies.Where(hero => hero.IsValidTarget(this.W.Range))
                                        .Any(enemy => this.W.CastIfWillHit(enemy, 1)))
                         {
                         }

@@ -89,7 +89,7 @@ using EloBuddy;
                 Lane();
                 Jungle();
             }
-            var ksW = HeroManager.Enemies.FindAll(champ => champ.LSIsValidTarget() && (champ.Health <= ObjectManager.Player.LSGetSpellDamage(champ, SpellSlot.W)));
+            var ksW = HeroManager.Enemies.FindAll(champ => champ.IsValidTarget() && (champ.Health <= ObjectManager.Player.GetSpellDamage(champ, SpellSlot.W)));
             if (ksW.Any())
             {
                 W.CastOnUnit(ksW.FirstOrDefault());
@@ -97,7 +97,7 @@ using EloBuddy;
         }
         private static void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
-            if (menu.Item("useR").GetValue<bool>() && R.LSIsReady() && args.Target.IsEnemy && args.Target.IsValid<AIHeroClient>())
+            if (menu.Item("useR").GetValue<bool>() && R.IsReady() && args.Target.IsEnemy && args.Target.IsValid<AIHeroClient>())
             {
                 R.Cast();
             }
@@ -108,27 +108,27 @@ using EloBuddy;
             {
                 return;
             }
-            if (Player.LSDistance(target) <= Q.Range && Q.LSIsReady() && (menu.Item("useQ").GetValue<bool>()))
+            if (Player.Distance(target) <= Q.Range && Q.IsReady() && (menu.Item("useQ").GetValue<bool>()))
             {
                 Q.Cast();
             }
-            if (Player.LSDistance(target) <= E.Range && E.LSIsReady() && (menu.Item("useE").GetValue<bool>()))
+            if (Player.Distance(target) <= E.Range && E.IsReady() && (menu.Item("useE").GetValue<bool>()))
             {
                 E.Cast();
             }          
-                if (Player.LSDistance(target) <= hydra.Range)
+                if (Player.Distance(target) <= hydra.Range)
                 {
                     hydra.Cast(target);
                 }
-                if (Player.LSDistance(target) <= tiamat.Range)
+                if (Player.Distance(target) <= tiamat.Range)
                 {
                     tiamat.Cast(target);
                 }
-                if (Player.LSDistance(target) <= botrk.Range)
+                if (Player.Distance(target) <= botrk.Range)
                 {
                     botrk.Cast(target);
                 }
-                if (Player.LSDistance(target) <= cutlass.Range)
+                if (Player.Distance(target) <= cutlass.Range)
                 {
                     cutlass.Cast(target);
                 }
@@ -136,22 +136,22 @@ using EloBuddy;
         private static void Lane()
         {
             var allMinions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q.Range);
-                if (menu.Item("laneclearW").GetValue<bool>() && W.LSIsReady())
+                if (menu.Item("laneclearW").GetValue<bool>() && W.IsReady())
                 {
                     foreach (var minion in allMinions)
                     {
-                        if (minion.LSIsValidTarget())
+                        if (minion.IsValidTarget())
                         {
                             W.CastOnUnit(minion);
                         }
                     }
                 }
 
-                if (menu.Item("laneclearE").GetValue<bool>() && E.LSIsReady())
+                if (menu.Item("laneclearE").GetValue<bool>() && E.IsReady())
                 {
                     foreach (var minion in allMinions)
                     {
-                        if (minion.LSIsValidTarget())
+                        if (minion.IsValidTarget())
                         {
                             E.Cast();
                         }
@@ -162,32 +162,32 @@ using EloBuddy;
         {
             var allMinions = MinionManager.GetMinions(
                 ObjectManager.Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-                if (menu.Item("jungleclearQ").GetValue<bool>() && Q.LSIsReady())
+                if (menu.Item("jungleclearQ").GetValue<bool>() && Q.IsReady())
                 {
                     foreach (var minion in allMinions)
                     {
-                        if (minion.LSIsValidTarget())
+                        if (minion.IsValidTarget())
                         {
                             Q.Cast();
                         }
                     }
                 }
 
-                if (menu.Item("jungleclearW").GetValue<bool>() && W.LSIsReady())
+                if (menu.Item("jungleclearW").GetValue<bool>() && W.IsReady())
                 {
                     foreach (var minion in allMinions)
                     {
-                        if (minion.LSIsValidTarget())
+                        if (minion.IsValidTarget())
                         {
                             W.CastOnUnit(minion);
                         }
                     }
                 }
-                if (menu.Item("jungleclearE").GetValue<bool>() && E.LSIsReady())
+                if (menu.Item("jungleclearE").GetValue<bool>() && E.IsReady())
                 {
                     foreach (var minion in allMinions)
                     {
-                        if (minion.LSIsValidTarget())
+                        if (minion.IsValidTarget())
                         {
                             E.Cast();
                         }

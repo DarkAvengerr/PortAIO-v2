@@ -35,11 +35,11 @@ namespace Gnar
 
         public static bool UseHydra(Obj_AI_Base target)
         {
-            if (Config.BoolLinks["itemsHydra"].Value && HYDRA.IsReady() && target.LSIsValidTarget(HYDRA.Range))
+            if (Config.BoolLinks["itemsHydra"].Value && HYDRA.IsReady() && target.IsValidTarget(HYDRA.Range))
             {
                 return HYDRA.Cast();
             }
-            else if (Config.BoolLinks["itemsTiamat"].Value && TIAMAT.IsReady() && target.LSIsValidTarget(TIAMAT.Range))
+            else if (Config.BoolLinks["itemsTiamat"].Value && TIAMAT.IsReady() && target.IsValidTarget(TIAMAT.Range))
             {
                 return TIAMAT.Cast();
             }
@@ -48,12 +48,12 @@ namespace Gnar
 
         public static bool UseBotrk(AIHeroClient target)
         {
-            if (Config.BoolLinks["itemsBotrk"].Value && BOTRK.IsReady() && target.LSIsValidTarget(BOTRK.Range) &&
+            if (Config.BoolLinks["itemsBotrk"].Value && BOTRK.IsReady() && target.IsValidTarget(BOTRK.Range) &&
                 player.Health + player.GetItemDamage(target, Damage.DamageItems.Botrk) < player.MaxHealth)
             {
                 return BOTRK.Cast(target);
             }
-            else if (Config.BoolLinks["itemsCutlass"].Value && CUTLASS.IsReady() && target.LSIsValidTarget(CUTLASS.Range))
+            else if (Config.BoolLinks["itemsCutlass"].Value && CUTLASS.IsReady() && target.IsValidTarget(CUTLASS.Range))
             {
                 return CUTLASS.Cast(target);
             }
@@ -62,7 +62,7 @@ namespace Gnar
 
         public static bool UseYoumuu(Obj_AI_Base target)
         {
-            if (Config.BoolLinks["itemsYoumuu"].Value && YOUMUU.IsReady() && target.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(player) + 50))
+            if (Config.BoolLinks["itemsYoumuu"].Value && YOUMUU.IsReady() && target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(player) + 50))
             {
                 return YOUMUU.Cast();
             }
@@ -71,7 +71,7 @@ namespace Gnar
 
         public static bool UseRanduin(AIHeroClient target)
         {
-            if (Config.BoolLinks["itemsRanduin"].Value && RANDUIN.IsReady() && target.LSIsValidTarget(RANDUIN.Range))
+            if (Config.BoolLinks["itemsRanduin"].Value && RANDUIN.IsReady() && target.IsValidTarget(RANDUIN.Range))
             {
                 return RANDUIN.Cast();
             }

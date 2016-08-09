@@ -22,7 +22,7 @@ using EloBuddy; namespace Activator.Items.Offensives
             if (!Menu.Item("use" + Name).GetValue<bool>() || !IsReady())
                 return;
 
-            if (Player.LSCountEnemiesInRange(Range) > Menu.Item("selfcount" + Name).GetValue<Slider>().Value)
+            if (Player.CountEnemiesInRange(Range) > Menu.Item("selfcount" + Name).GetValue<Slider>().Value)
             {
                 UseItem();
             }

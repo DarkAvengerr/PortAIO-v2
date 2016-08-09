@@ -21,12 +21,12 @@ using EloBuddy; namespace Activator.Summoners
                 if (!Parent.Item(Parent.Name + "useon" + hero.Player.NetworkId).GetValue<bool>())
                     continue;
 
-                if (hero.Player.MaxMana <= 200 || hero.Player.LSDistance(Player.ServerPosition) > Range)
+                if (hero.Player.MaxMana <= 200 || hero.Player.Distance(Player.ServerPosition) > Range)
                     continue;
 
                 if (hero.Player.Mana/hero.Player.MaxMana*100 <= Menu.Item("selflowmp" + Name + "pct").GetValue<Slider>().Value)
                 {
-                    if (!hero.Player.LSIsRecalling() && !hero.Player.LSInFountain())
+                    if (!hero.Player.IsRecalling() && !hero.Player.InFountain())
                         UseSpell();
                 }
             }

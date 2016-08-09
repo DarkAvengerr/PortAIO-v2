@@ -406,7 +406,7 @@ using EloBuddy; namespace Support
                 Render.Circle.DrawCircle(
                     this.Player.Position,
                     spell.Range,
-                    spell.LSIsReady() ? menu.Color : Color.FromArgb(150, Color.Red));
+                    spell.IsReady() ? menu.Color : Color.FromArgb(150, Color.Red));
             }
         }
 

@@ -40,7 +40,7 @@ using EloBuddy; namespace KappaSeries
             SpellList.Add(_e);
             SpellList.Add(_r);
 
-            IgniteSlot = _player.LSGetSpellSlot("SummonerDot");
+            IgniteSlot = _player.GetSpellSlot("SummonerDot");
 
             _cfg = new Menu("Akali", "Ahri", true);
 
@@ -240,11 +240,11 @@ using EloBuddy; namespace KappaSeries
             var edmg = _e.GetDamage(minion[0]);
             if (minion[0] == null) return;
 
-            if (_cfg.Item("UseQFarm").IsActive() && minion[0].LSDistance(_player) <= _q.Range && minion[0].Health <= qdmg && _q.LSIsReady())
+            if (_cfg.Item("UseQFarm").IsActive() && minion[0].Distance(_player) <= _q.Range && minion[0].Health <= qdmg && _q.IsReady())
             {
                 _q.Cast(minion[0]);
             }
-            if (_cfg.Item("UseEFarm").IsActive() && minion[0].LSDistance(_player) <= _e.Range && minion[0].Health <= edmg && _e.LSIsReady())
+            if (_cfg.Item("UseEFarm").IsActive() && minion[0].Distance(_player) <= _e.Range && minion[0].Health <= edmg && _e.IsReady())
             {
                 _e.Cast();
             }
@@ -258,12 +258,12 @@ using EloBuddy; namespace KappaSeries
             if (minion.Count < 2)
                 return;
 
-            if (_cfg.Item("UseQLane").IsActive() && _q.LSIsReady() && _player.LSDistance(minion[0]) <= _q.Range)
+            if (_cfg.Item("UseQLane").IsActive() && _q.IsReady() && _player.Distance(minion[0]) <= _q.Range)
             {
                 _q.CastOnUnit(minion[0]);
             }
 
-            if (_cfg.Item("UseELane").IsActive() && _e.LSIsReady() && _player.LSDistance(minion[0]) <= _e.Range)
+            if (_cfg.Item("UseELane").IsActive() && _e.IsReady() && _player.Distance(minion[0]) <= _e.Range)
             {
                 _e.Cast();
             }
@@ -274,11 +274,11 @@ using EloBuddy; namespace KappaSeries
             var junglemonster = MinionManager.GetMinions(_player.ServerPosition, _q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
             if (junglemonster.Count == 0 || junglemonster[0] == null) return;
 
-            if (_cfg.Item("UseQJungle").IsActive() && _q.LSIsReady() && _player.LSDistance(junglemonster[0]) <= _q.Range)
+            if (_cfg.Item("UseQJungle").IsActive() && _q.IsReady() && _player.Distance(junglemonster[0]) <= _q.Range)
             {
                 _q.CastOnUnit(junglemonster[0]);
             }
-            if (_cfg.Item("UseEJungle").IsActive() && _e.LSIsReady() && _player.LSDistance(junglemonster[0]) <= _e.Range)
+            if (_cfg.Item("UseEJungle").IsActive() && _e.IsReady() && _player.Distance(junglemonster[0]) <= _e.Range)
             {
                 _e.Cast();
             }
@@ -288,12 +288,12 @@ using EloBuddy; namespace KappaSeries
         private static void Harass()
         {
             var t = TargetSelector.GetTarget(_q.Range, TargetSelector.DamageType.Magical);
-            if (!t.LSIsValidTarget() || t == null || t.IsDead) return;
-            if (_q.LSIsReady() && _player.LSDistance(t) <= _q.Range && _cfg.Item("HarQ").IsActive())
+            if (!t.IsValidTarget() || t == null || t.IsDead) return;
+            if (_q.IsReady() && _player.Distance(t) <= _q.Range && _cfg.Item("HarQ").IsActive())
             {
                 _q.CastOnUnit(t);
             }
-            if (_e.LSIsReady() && _player.LSDistance(t) <= _e.Range && _cfg.Item("HarE").IsActive())
+            if (_e.IsReady() && _player.Distance(t) <= _e.Range && _cfg.Item("HarE").IsActive())
             {
                 _e.Cast();
             }
@@ -302,7 +302,7 @@ using EloBuddy; namespace KappaSeries
         private static void Combo()
         {
             var t = TargetSelector.GetTarget(_r.Range, TargetSelector.DamageType.Magical);
-            if (!t.LSIsValidTarget() || t == null) return;
+            if (!t.IsValidTarget() || t == null) return;
             #region items
 
             if (_cfg.Item("UseItems").IsActive())
@@ -315,7 +315,7 @@ using EloBuddy; namespace KappaSeries
             if (_cfg.Item("ComboMode").GetValue<StringList>().SelectedValue == "QRWE")
             {
                 UseQ(t);
-               if (_cfg.Item("Qaa").IsActive() && _player.AttackRange <= t.LSDistance(_player) && t.LSHasBuff("AkaliMota"))
+               if (_cfg.Item("Qaa").IsActive() && _player.AttackRange <= t.Distance(_player) && t.HasBuff("AkaliMota"))
                 {
                     return;
                 }
@@ -328,7 +328,7 @@ using EloBuddy; namespace KappaSeries
                 UseRChase(t);
                 UseR(t);
                 UseQ(t);
-                if (_cfg.Item("Qaa").IsActive() && _player.AttackRange <= t.LSDistance(_player) && t.LSHasBuff("AkaliMota"))
+                if (_cfg.Item("Qaa").IsActive() && _player.AttackRange <= t.Distance(_player) && t.HasBuff("AkaliMota"))
                 {
                     return;
                 }
@@ -339,10 +339,10 @@ using EloBuddy; namespace KappaSeries
 
         private static void UseR(AIHeroClient t)
         {
-            if (_cfg.Item("UseR").IsActive() && _r.LSIsReady() && t.LSDistance(_player) <= _r.Range)
+            if (_cfg.Item("UseR").IsActive() && _r.IsReady() && t.Distance(_player) <= _r.Range)
             {
                 Console.WriteLine("Casting R");
-                if (_cfg.Item("UseW").IsActive() && _w.LSIsReady())
+                if (_cfg.Item("UseW").IsActive() && _w.IsReady())
                 {
                     _r.Cast(t);
                     LeagueSharp.Common.Utility.DelayAction.Add(500, () => _w.Cast());
@@ -356,10 +356,10 @@ using EloBuddy; namespace KappaSeries
 
         private static void UseRChase(AIHeroClient t)
         {
-            if (_cfg.Item("UseR").IsActive() && _r.LSIsReady() && _cfg.Item("RChase").IsActive())
+            if (_cfg.Item("UseR").IsActive() && _r.IsReady() && _cfg.Item("RChase").IsActive())
             {
                 Console.WriteLine("RChase");
-                if (_cfg.Item("UseW").IsActive() && _w.LSIsReady())
+                if (_cfg.Item("UseW").IsActive() && _w.IsReady())
                 {
                     ChaseR(t);
                     LeagueSharp.Common.Utility.DelayAction.Add(500, () => _w.Cast());
@@ -375,7 +375,7 @@ using EloBuddy; namespace KappaSeries
         private static void UseE(AIHeroClient tar)
         {
             var t = TargetSelector.GetTarget(_r.Range, TargetSelector.DamageType.Magical);
-            if (_cfg.Item("UseE").IsActive() && !_q.LSIsReady() && _player.LSDistance(t) <= _e.Range)
+            if (_cfg.Item("UseE").IsActive() && !_q.IsReady() && _player.Distance(t) <= _e.Range)
             {
                 Console.WriteLine("Casting E");
                 _e.Cast();
@@ -384,11 +384,11 @@ using EloBuddy; namespace KappaSeries
 
         private static void UseQ(AIHeroClient t)
         {
-            if (_cfg.Item("UseQ").IsActive() && _q.LSIsReady() && (_player.LSDistance(t) <= _q.Range))
+            if (_cfg.Item("UseQ").IsActive() && _q.IsReady() && (_player.Distance(t) <= _q.Range))
             {
                 Console.WriteLine("Casting Q");
                 _q.Cast(t);
-                if (t.LSDistance(_player) <= _player.AttackRange && t.LSHasBuff("AkaliMota"))
+                if (t.Distance(_player) <= _player.AttackRange && t.HasBuff("AkaliMota"))
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, (t));
                 }
@@ -398,8 +398,8 @@ using EloBuddy; namespace KappaSeries
 
         private static void ChaseR(AIHeroClient target)
         {
-            if (target != null && _player.LSDistance(target) >= _cfg.Item("RChaseRange").GetValue<Slider>().Value &&
-                _r.LSIsReady())
+            if (target != null && _player.Distance(target) >= _cfg.Item("RChaseRange").GetValue<Slider>().Value &&
+                _r.IsReady())
             {
                 _r.Cast(target);
             }
@@ -410,14 +410,14 @@ using EloBuddy; namespace KappaSeries
             var hextech = LeagueSharp.Common.Data.ItemData.Hextech_Gunblade;
             var bilge = LeagueSharp.Common.Data.ItemData.Bilgewater_Cutlass;
             
-            if (target != null && !target.IsDead && target.LSIsValidTarget())
+            if (target != null && !target.IsDead && target.IsValidTarget())
             {
-                if (Items.HasItem(hextech.Id) && Items.CanUseItem(hextech.Id) && _player.LSDistance(target) <= hextech.Range)
+                if (Items.HasItem(hextech.Id) && Items.CanUseItem(hextech.Id) && _player.Distance(target) <= hextech.Range)
                 {
                     Items.UseItem(hextech.Id,target);
                 }
                 
-                if (Items.HasItem(bilge.Id) && Items.CanUseItem(bilge.Id) && _player.LSDistance(target) <= bilge.Range)
+                if (Items.HasItem(bilge.Id) && Items.CanUseItem(bilge.Id) && _player.Distance(target) <= bilge.Range)
                 {
                     Items.UseItem(bilge.Id, target);
                 }
@@ -428,7 +428,7 @@ using EloBuddy; namespace KappaSeries
 
         private static void AutoLaneE()
         {
-            foreach(var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.LSIsValidTarget(_e.Range) && _e.LSIsReady() && _e.GetDamage(minion) >= minion.Health))
+            foreach(var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(_e.Range) && _e.IsReady() && _e.GetDamage(minion) >= minion.Health))
             {
                 _e.Cast();
             }
@@ -436,7 +436,7 @@ using EloBuddy; namespace KappaSeries
 
         private static void AutoLaneQ()
         {
-            foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.LSIsValidTarget(_q.Range) && _q.LSIsReady() && _q.GetDamage(minion) >= minion.Health))
+            foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(_q.Range) && _q.IsReady() && _q.GetDamage(minion) >= minion.Health))
             {
                 _q.CastOnUnit(minion);
             }
@@ -444,7 +444,7 @@ using EloBuddy; namespace KappaSeries
 
         private static void AutoHarassE()
         {
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(t => t.IsEnemy).Where(t => t.LSIsValidTarget(_e.Range)).Where(enemy => enemy.LSIsValidTarget(_e.Range)).Where(enemy => _player.LSDistance(enemy) <= _e.Range && _e.LSIsReady()))
+            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(t => t.IsEnemy).Where(t => t.IsValidTarget(_e.Range)).Where(enemy => enemy.IsValidTarget(_e.Range)).Where(enemy => _player.Distance(enemy) <= _e.Range && _e.IsReady()))
             {
                 _e.Cast();
             }
@@ -452,7 +452,7 @@ using EloBuddy; namespace KappaSeries
 
         private static void AutoHarassQ()
         {
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(t => t.IsEnemy).Where(t => t.LSIsValidTarget(_q.Range)).Where(enemy => enemy.LSIsValidTarget(_q.Range)).Where(enemy => _player.LSDistance(enemy) <= _q.Range && _q.LSIsReady()))
+            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(t => t.IsEnemy).Where(t => t.IsValidTarget(_q.Range)).Where(enemy => enemy.IsValidTarget(_q.Range)).Where(enemy => _player.Distance(enemy) <= _q.Range && _q.IsReady()))
             {
                 _q.CastOnUnit(enemy);
             }
@@ -466,7 +466,7 @@ using EloBuddy; namespace KappaSeries
             var myHP = _player.Health;
             var myMaxHP = _player.MaxHealth;
 
-            if (_player.LSCountEnemiesInRange(wRange.Value) >= wEnemy.Value)
+            if (_player.CountEnemiesInRange(wRange.Value) >= wEnemy.Value)
             {
                 _w.Cast(_player.ServerPosition);
             }
@@ -479,37 +479,37 @@ using EloBuddy; namespace KappaSeries
         private static void Smartks()
         {
             foreach (
-                var enemy in ObjectManager.Get<AIHeroClient>().Where(t => t.IsEnemy).Where(t => t.LSIsValidTarget(_r.Range)))
+                var enemy in ObjectManager.Get<AIHeroClient>().Where(t => t.IsEnemy).Where(t => t.IsValidTarget(_r.Range)))
             {
                 var idmg = _player.GetSummonerSpellDamage(enemy, Damage.SummonerSpell.Ignite);
                 var qdmg = _q.GetDamage(enemy);
                 var edmg = _e.GetDamage(enemy);
                 var rdmg = _r.GetDamage(enemy);
 
-                if (enemy.LSIsValidTarget(_r.Range) && !enemy.IsDead)
+                if (enemy.IsValidTarget(_r.Range) && !enemy.IsDead)
                 {
                     #region Q
-                    if (enemy.Health <= qdmg && enemy.LSIsValidTarget(_q.Range) && _q.LSIsReady())
+                    if (enemy.Health <= qdmg && enemy.IsValidTarget(_q.Range) && _q.IsReady())
                     {
                         _q.CastOnUnit(enemy);
                     }
                     #endregion Q
                     #region QE
-                    else if (enemy.Health <= qdmg + edmg && enemy.LSIsValidTarget(_e.Range) && _q.LSIsReady() && _e.LSIsReady())
+                    else if (enemy.Health <= qdmg + edmg && enemy.IsValidTarget(_e.Range) && _q.IsReady() && _e.IsReady())
                     {
                         _q.CastOnUnit(enemy);
                         _e.Cast();
                     }
                     #endregion
                     #region RQ
-                    else if (enemy.Health <= (qdmg + rdmg) && enemy.LSIsValidTarget(_r.Range) && _q.LSIsReady() && _r.LSIsReady() && _cfg.Item("RKS").IsActive())
+                    else if (enemy.Health <= (qdmg + rdmg) && enemy.IsValidTarget(_r.Range) && _q.IsReady() && _r.IsReady() && _cfg.Item("RKS").IsActive())
                     {
                         _r.CastOnUnit(enemy);
                         _q.CastOnUnit(enemy);
                     }
                     #endregion
                     #region RQE
-                    else if (enemy.Health <= (qdmg + rdmg + edmg) && enemy.LSIsValidTarget(_r.Range) && _q.LSIsReady() && _e.LSIsReady() && _r.LSIsReady() &&_cfg.Item("RKS").IsActive())
+                    else if (enemy.Health <= (qdmg + rdmg + edmg) && enemy.IsValidTarget(_r.Range) && _q.IsReady() && _e.IsReady() && _r.IsReady() &&_cfg.Item("RKS").IsActive())
                     {
                         _r.CastOnUnit(enemy);
                         _q.CastOnUnit(enemy);
@@ -518,8 +518,8 @@ using EloBuddy; namespace KappaSeries
                     #endregion
                     #region QRMIN 
                     
-                    else if (enemy.Health <= (qdmg + rdmg) && enemy.LSIsValidTarget(_q.Range + _r.Range) &&
-                             enemy.LSDistance(_player) > _r.Range && _q.LSIsReady() && _r.LSIsReady() &&
+                    else if (enemy.Health <= (qdmg + rdmg) && enemy.IsValidTarget(_q.Range + _r.Range) &&
+                             enemy.Distance(_player) > _r.Range && _q.IsReady() && _r.IsReady() &&
                              _cfg.Item("RKSMin").IsActive() && _cfg.Item("RKS").IsActive())
                     {
                         KillStealR(enemy);
@@ -531,7 +531,7 @@ using EloBuddy; namespace KappaSeries
                     #endregion
                     #region ERMIN
                     
-                    else if (enemy.Health <= (edmg + rdmg) && enemy.LSIsValidTarget(_r.Range + _e.Range) && enemy.LSDistance(_player) > _r.Range && _e.LSIsReady() && _r.LSIsReady() &&
+                    else if (enemy.Health <= (edmg + rdmg) && enemy.IsValidTarget(_r.Range + _e.Range) && enemy.Distance(_player) > _r.Range && _e.IsReady() && _r.IsReady() &&
                              _cfg.Item("RKSMin").IsActive() && _cfg.Item("RKS").IsActive())
                     {
                         KillStealR(enemy);
@@ -543,7 +543,7 @@ using EloBuddy; namespace KappaSeries
                     
                     #region IginteRMIN
                    
-                   else if (enemy.Health <= (idmg + rdmg) && enemy.LSIsValidTarget(_r.Range + 600f) && enemy.LSDistance(_player) > _r.Range && IgniteSlot.LSIsReady() && _r.LSIsReady() &&
+                   else if (enemy.Health <= (idmg + rdmg) && enemy.IsValidTarget(_r.Range + 600f) && enemy.Distance(_player) > _r.Range && IgniteSlot.IsReady() && _r.IsReady() &&
                              _cfg.Item("RKSMin").IsActive() && _cfg.Item("RKS").IsActive())
                    {
                        KillStealR(enemy);
@@ -556,47 +556,47 @@ using EloBuddy; namespace KappaSeries
                 
                     #region QIgnite
 
-                   else if (enemy.Health <= (qdmg + idmg) && enemy.LSIsValidTarget(_q.Range) && _q.LSIsReady() && IgniteSlot.LSIsReady())
+                   else if (enemy.Health <= (qdmg + idmg) && enemy.IsValidTarget(_q.Range) && _q.IsReady() && IgniteSlot.IsReady())
                    {
                        _q.CastOnUnit(enemy);
                        _player.Spellbook.CastSpell(IgniteSlot, enemy);
                    }
                     #endregion
                     #region E
-                    else if (enemy.Health <= edmg && enemy.LSIsValidTarget(_e.Range) && _e.LSIsReady())
+                    else if (enemy.Health <= edmg && enemy.IsValidTarget(_e.Range) && _e.IsReady())
                     {
                         _e.Cast();
                     }
                     #endregion
                     #region RE
-                    else if (enemy.Health <= (edmg + rdmg) && enemy.LSIsValidTarget(_r.Range) && _r.LSIsReady() && _e.LSIsReady() && _cfg.Item("RKS").IsActive())
+                    else if (enemy.Health <= (edmg + rdmg) && enemy.IsValidTarget(_r.Range) && _r.IsReady() && _e.IsReady() && _cfg.Item("RKS").IsActive())
                     {
                         _r.CastOnUnit(enemy);
                         _e.Cast(enemy);
                     }
                     #endregion
                     #region EIgnite
-                    else if (enemy.Health <= (edmg + idmg) && enemy.LSIsValidTarget(_e.Range) && _e.LSIsReady() && IgniteSlot.LSIsReady())
+                    else if (enemy.Health <= (edmg + idmg) && enemy.IsValidTarget(_e.Range) && _e.IsReady() && IgniteSlot.IsReady())
                     {
                         _e.Cast();
                         _player.Spellbook.CastSpell(IgniteSlot, enemy);
                     }
                     #endregion
                     #region R
-                    else if (enemy.Health <= rdmg && enemy.LSIsValidTarget(_r.Range) && _r.LSIsReady() && _cfg.Item("RKS").IsActive())
+                    else if (enemy.Health <= rdmg && enemy.IsValidTarget(_r.Range) && _r.IsReady() && _cfg.Item("RKS").IsActive())
                     {
                         _r.CastOnUnit(enemy);
                     }
                     #endregion
                     #region R Ignite
-                    else if (enemy.Health <= (rdmg + idmg) && enemy.LSIsValidTarget(_r.Range) && _r.LSIsReady() && IgniteSlot.LSIsReady() && _cfg.Item("RKS").IsActive())
+                    else if (enemy.Health <= (rdmg + idmg) && enemy.IsValidTarget(_r.Range) && _r.IsReady() && IgniteSlot.IsReady() && _cfg.Item("RKS").IsActive())
                     {
                         _r.CastOnUnit(enemy);
                         _player.Spellbook.CastSpell(IgniteSlot, enemy);
                     }
                     #endregion
                     #region QERIgnite
-                    else if (enemy.Health <= (qdmg + edmg +rdmg + idmg) && enemy.LSIsValidTarget(_r.Range) && _q.LSIsReady() && _e.LSIsReady() && _r.LSIsReady() && _cfg.Item("RKS").IsActive())
+                    else if (enemy.Health <= (qdmg + edmg +rdmg + idmg) && enemy.IsValidTarget(_r.Range) && _q.IsReady() && _e.IsReady() && _r.IsReady() && _cfg.Item("RKS").IsActive())
                     {
                         _r.CastOnUnit(enemy);
                         _q.CastOnUnit(enemy);
@@ -606,7 +606,7 @@ using EloBuddy; namespace KappaSeries
                     #endregion
                     #region REQ
 
-                    else if(enemy.Health <= (qdmg + edmg + rdmg) && enemy.LSIsValidTarget(_r.Range) && _q.LSIsReady() && _e.LSIsReady() && _r.LSIsReady() && _cfg.Item("RKS").IsActive())
+                    else if(enemy.Health <= (qdmg + edmg + rdmg) && enemy.IsValidTarget(_r.Range) && _q.IsReady() && _e.IsReady() && _r.IsReady() && _cfg.Item("RKS").IsActive())
                     {
                         _r.CastOnUnit(enemy);
                         _e.Cast(enemy);
@@ -632,7 +632,7 @@ using EloBuddy; namespace KappaSeries
             {
                 if (QRKill)
                 {
-                    if (minion[0].LSDistance(enemy) <= _q.Range && minion[0].LSDistance(_player) <= _r.Range)
+                    if (minion[0].Distance(enemy) <= _q.Range && minion[0].Distance(_player) <= _r.Range)
                     {
                         _r.CastOnUnit(minion[0]);
                         LeagueSharp.Common.Utility.DelayAction.Add(500,() => _q.Cast(enemy));
@@ -640,7 +640,7 @@ using EloBuddy; namespace KappaSeries
                 }
                 if (ERKill)
                 {
-                    if (minion[0].LSDistance(enemy) <= _e.Range && minion[0].LSDistance(_player) <= _r.Range)
+                    if (minion[0].Distance(enemy) <= _e.Range && minion[0].Distance(_player) <= _r.Range)
                     {
                         _r.CastOnUnit(minion[0]);
                         LeagueSharp.Common.Utility.DelayAction.Add(500, () => _e.Cast(enemy));
@@ -648,7 +648,7 @@ using EloBuddy; namespace KappaSeries
                 }
                 if (IRKill)
                 {
-                    if (minion[0].LSDistance(enemy) <= 600f && minion[0].LSDistance(_player) <= _r.Range)
+                    if (minion[0].Distance(enemy) <= 600f && minion[0].Distance(_player) <= _r.Range)
                     {
                         _r.CastOnUnit(minion[0]);
                         LeagueSharp.Common.Utility.DelayAction.Add(500, () => _player.Spellbook.CastSpell(IgniteSlot, enemy));
@@ -659,7 +659,7 @@ using EloBuddy; namespace KappaSeries
 
         private static void AutoIgnite(AIHeroClient enemy)
         {
-            if (enemy.LSIsValidTarget(600f) && enemy.Health <= 50 + (20*_player.Level) && IgniteSlot.LSIsReady())
+            if (enemy.IsValidTarget(600f) && enemy.Health <= 50 + (20*_player.Level) && IgniteSlot.IsReady())
             {
                 _player.Spellbook.CastSpell(IgniteSlot, enemy);
             }

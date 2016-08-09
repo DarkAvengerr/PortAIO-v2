@@ -176,23 +176,23 @@ namespace SephKayle
         private static void KillSteal()
         {
             var target = ObjectManager.Get<AIHeroClient>()
-                .Where(x => x.IsInvulnerable && !x.IsDead && x.IsEnemy && !x.IsZombie && x.LSIsValidTarget() && x.LSDistance(Player.Position) <= 800)
+                .Where(x => x.IsInvulnerable && !x.IsDead && x.IsEnemy && !x.IsZombie && x.IsValidTarget() && x.Distance(Player.Position) <= 800)
                 .OrderBy(x => x.Health).FirstOrDefault();
             if (target != null)
             {
                 double igniteDmg = Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
-                double QDmg = Player.LSGetSpellDamage(target, SpellSlot.Q);
+                double QDmg = Player.GetSpellDamage(target, SpellSlot.Q);
                 var totalksdmg = igniteDmg + QDmg;
 
-                if (target.Health <= QDmg && Player.LSDistance(target) <= Q.Range)
+                if (target.Health <= QDmg && Player.Distance(target) <= Q.Range)
                 {
                     Q.CastOnUnit(target);
                 }
-                if (target.Health <= igniteDmg && Player.LSDistance(target) <= Ignite.Range)
+                if (target.Health <= igniteDmg && Player.Distance(target) <= Ignite.Range)
                 {
                     Player.Spellbook.CastSpell(Ignite.Slot, target);
                 }
-                if (target.Health <= totalksdmg && Player.LSDistance(target) <= Q.Range)
+                if (target.Health <= totalksdmg && Player.Distance(target) <= Q.Range)
                 {
                     Q.CastOnUnit(target);
                     Player.Spellbook.CastSpell(Ignite.Slot, target);
@@ -230,11 +230,11 @@ namespace SephKayle
             var qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
             var etarget = TargetSelector.GetTarget(incrange, TargetSelector.DamageType.Magical);
 
-            if (GetBool("UseQ") && qtarget != null && Q.LSIsReady())
+            if (GetBool("UseQ") && qtarget != null && Q.IsReady())
             {
                 Q.Cast(qtarget);
             }
-            if (GetBool("UseE") && etarget != null && E.LSIsReady() && !Eon)
+            if (GetBool("UseE") && etarget != null && E.IsReady() && !Eon)
             {
                 E.CastOnUnit(Player);
             }
@@ -248,22 +248,22 @@ namespace SephKayle
                 return;
             }
 
-            var minions = ObjectManager.Get<Obj_AI_Minion>().Where(m => m.IsEnemy && Player.LSDistance(m) <= incrange);
-            if (minions.Any() && Config.Item("UseEwc").GetValue<bool>() && E.LSIsReady() && !Eon)
+            var minions = ObjectManager.Get<Obj_AI_Minion>().Where(m => m.IsEnemy && Player.Distance(m) <= incrange);
+            if (minions.Any() && Config.Item("UseEwc").GetValue<bool>() && E.IsReady() && !Eon)
             {
                 E.CastOnUnit(Player);
             }
 
-            if (Config.Item("UseQwc").GetValue<bool>() && Q.LSIsReady())
+            if (Config.Item("UseQwc").GetValue<bool>() && Q.IsReady())
             {
 
                 List<Obj_AI_Base> allMinions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q.Range);
                 var vminions = allMinions.Where(
                    minion =>
-                       minion.LSIsValidTarget() && Player.LSDistance(minion) >
-                            Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) && Player.LSDistance(minion) <= Q.Range &&
-                       HealthPrediction.GetHealthPrediction(minion, (int)((Player.LSDistance(minion) * 1000) / 1500) + 300 + Game.Ping / 2) <
-                       0.75 * Player.LSGetSpellDamage(minion, SpellSlot.Q));
+                       minion.IsValidTarget() && Player.Distance(minion) >
+                            Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) && Player.Distance(minion) <= Q.Range &&
+                       HealthPrediction.GetHealthPrediction(minion, (int)((Player.Distance(minion) * 1000) / 1500) + 300 + Game.Ping / 2) <
+                       0.75 * Player.GetSpellDamage(minion, SpellSlot.Q));
                 var bestminion = vminions.MaxOrDefault(x => x.MaxHealth);
                 if (bestminion != null)
                 {
@@ -277,7 +277,7 @@ namespace SephKayle
 
         static void HealUltTrigger(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (GetBool("Recallcheck") && Player.LSIsRecalling())
+            if (GetBool("Recallcheck") && Player.IsRecalling())
             {
                 return;
             }
@@ -295,12 +295,12 @@ namespace SephKayle
 
             bool triggered = false;
 
-            if (W.LSIsReady() && GetBool("heal" + target.ChampionName) && (target.HealthPercent <= setvaluehealth))
+            if (W.IsReady() && GetBool("heal" + target.ChampionName) && (target.HealthPercent <= setvaluehealth))
             {
                 HealUltManager(true, false, target);
                 triggered = true;
             }
-            if (R.LSIsReady() && GetBool("ult" + target.ChampionName) && (target.HealthPercent <= setvalueult) && target.LSDistance(Player) <= R.Range)
+            if (R.IsReady() && GetBool("ult" + target.ChampionName) && (target.HealthPercent <= setvalueult) && target.Distance(Player) <= R.Range)
             {
                 if (args.SData.Name.ToLower().Contains("minion") && target.HealthPercent > 5)
                 {
@@ -319,17 +319,17 @@ namespace SephKayle
                 return;
             }
 
-                var damage = sender.LSGetSpellDamage(target, args.SData.Name);
+                var damage = sender.GetSpellDamage(target, args.SData.Name);
                 var afterdmg = ((target.Health - damage) / (target.MaxHealth)) * 100f;
 
-                if (W.LSIsReady() && Player.LSDistance(target) <= W.Range && GetBool("heal" + target.ChampionName) && (target.HealthPercent <= setvaluehealth || (GetBool("hcheckdmgafter") && afterdmg <= setvaluehealth)))
+                if (W.IsReady() && Player.Distance(target) <= W.Range && GetBool("heal" + target.ChampionName) && (target.HealthPercent <= setvaluehealth || (GetBool("hcheckdmgafter") && afterdmg <= setvaluehealth)))
             {
                 if (GetBool("hdamagedetection")) {
                     HealUltManager(true, false, target);
                 }
             }
 
-            if (R.LSIsReady() && Player.LSDistance(target) <= R.Range && GetBool("ult" + target.ChampionName) && (target.HealthPercent <= setvalueult || (GetBool("ucheckdmgafter") && afterdmg <= setvalueult)) && (senderhero != null || senderturret != null || target.HealthPercent < 5f))
+            if (R.IsReady() && Player.Distance(target) <= R.Range && GetBool("ult" + target.ChampionName) && (target.HealthPercent <= setvalueult || (GetBool("ucheckdmgafter") && afterdmg <= setvalueult)) && (senderhero != null || senderturret != null || target.HealthPercent < 5f))
             {
                 if (GetBool("udamagedetection"))
                 {
@@ -357,12 +357,12 @@ namespace SephKayle
 
         static void HealUltManager(bool forceheal = false, bool forceult = false, AIHeroClient target = null)
         {
-            if (forceheal && target != null && W.LSIsReady() && Player.LSDistance(target) <= W.Range)
+            if (forceheal && target != null && W.IsReady() && Player.Distance(target) <= W.Range)
             {
                 W.CastOnUnit(target);
                 return;
             }
-            if (forceult && target != null && R.LSIsReady() && Player.LSDistance(target) <= R.Range)
+            if (forceult && target != null && R.IsReady() && Player.Distance(target) <= R.Range)
             {
                 if (debug())
                 {
@@ -378,13 +378,13 @@ namespace SephKayle
                     .Where(
                         h =>
                             (h.IsAlly || h.IsMe) && !h.IsZombie && !h.IsDead && GetBool("heal" + h.ChampionName) &&
-                            h.HealthPercent <= Getslider("hpct" + h.ChampionName) && Player.LSDistance(h) <= R.Range)
+                            h.HealthPercent <= Getslider("hpct" + h.ChampionName) && Player.Distance(h) <= R.Range)
                     .OrderByDescending(i => i.IsMe)
                     .ThenBy(i => i.HealthPercent);
                 
-                if (W.LSIsReady())
+                if (W.IsReady())
                 {
-                    if (herolistheal.Contains(Player) && !Player.LSIsRecalling() && !Player.LSInFountain())
+                    if (herolistheal.Contains(Player) && !Player.IsRecalling() && !Player.InFountain())
                     {
                         W.CastOnUnit(Player);
                         return;
@@ -393,7 +393,7 @@ namespace SephKayle
                     {
                         var hero = herolistheal.FirstOrDefault();
 
-                        if (Player.LSDistance(hero) <= R.Range && !Player.LSIsRecalling() && !hero.LSIsRecalling() && !hero.LSInFountain())
+                        if (Player.Distance(hero) <= R.Range && !Player.IsRecalling() && !hero.IsRecalling() && !hero.InFountain())
                         {
                             W.CastOnUnit(hero);
                             return;
@@ -411,9 +411,9 @@ namespace SephKayle
                                 (h.IsAlly || h.IsMe) && !h.IsZombie && !h.IsDead &&
                                  GetBool("ult" + h.ChampionName) &&
                                 h.HealthPercent <= Getslider("upct" + h.ChampionName) &&
-                                Player.LSDistance(h) <= R.Range && Player.LSCountEnemiesInRange(500) > 0).OrderByDescending(i => i.IsMe).ThenBy(i => i.HealthPercent);
+                                Player.Distance(h) <= R.Range && Player.CountEnemiesInRange(500) > 0).OrderByDescending(i => i.IsMe).ThenBy(i => i.HealthPercent);
 
-                    if (R.LSIsReady())
+                    if (R.IsReady())
                     {
                         if (herolist.Contains(Player))
                         {
@@ -429,7 +429,7 @@ namespace SephKayle
                         {
                             var hero = herolist.FirstOrDefault();
 
-                            if (Player.LSDistance(hero) <= R.Range)
+                            if (Player.Distance(hero) <= R.Range)
                             {
                             if (debug())
                             {
@@ -445,7 +445,7 @@ namespace SephKayle
 
         static void GameTick(EventArgs args)
         {
-            if (Player.IsDead || GetBool("Recallcheck") && Player.LSIsRecalling())
+            if (Player.IsDead || GetBool("Recallcheck") && Player.IsRecalling())
             {
                 return;
             }
@@ -490,12 +490,12 @@ namespace SephKayle
             List<Obj_AI_Base> allMinions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q.Range);
             var vminions = allMinions.Where(
                minion =>
-                   minion.LSIsValidTarget() && Player.LSDistance(minion) >
-                        Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) && Player.LSDistance(minion) <= Q.Range &&
-                   HealthPrediction.GetHealthPrediction(minion, (int)((Player.LSDistance(minion) * 1000) / 1500) + 300 + Game.Ping / 2) <
-                   0.75 * Player.LSGetSpellDamage(minion, SpellSlot.Q));
+                   minion.IsValidTarget() && Player.Distance(minion) >
+                        Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) && Player.Distance(minion) <= Q.Range &&
+                   HealthPrediction.GetHealthPrediction(minion, (int)((Player.Distance(minion) * 1000) / 1500) + 300 + Game.Ping / 2) <
+                   0.75 * Player.GetSpellDamage(minion, SpellSlot.Q));
 
-            if (Config.Item("UseQfarm").GetValue<bool>() && Q.LSIsReady())
+            if (Config.Item("UseQfarm").GetValue<bool>() && Q.IsReady())
             {
                 var bestminion = vminions.MaxOrDefault(x => x.MaxHealth);
                 if (bestminion != null)
@@ -507,10 +507,10 @@ namespace SephKayle
             }
 
 
-            if (Config.Item("UseEfarm").GetValue<bool>() && E.LSIsReady() && !Eon)
+            if (Config.Item("UseEfarm").GetValue<bool>() && E.IsReady() && !Eon)
             {
-                var minions = ObjectManager.Get<Obj_AI_Base>().Where(m => m.LSIsValidTarget() && m.Team != Player.Team && Player.LSDistance(m) <= incrange && HealthPrediction.GetHealthPrediction(m, (int)((Player.LSDistance(m) * 1000) / 1500) + 300 + Game.Ping / 2) <
-                   0.75 * Player.LSGetAutoAttackDamage(m));
+                var minions = ObjectManager.Get<Obj_AI_Base>().Where(m => m.IsValidTarget() && m.Team != Player.Team && Player.Distance(m) <= incrange && HealthPrediction.GetHealthPrediction(m, (int)((Player.Distance(m) * 1000) / 1500) + 300 + Game.Ping / 2) <
+                   0.75 * Player.GetAutoAttackDamage(m));
                 if (minions.Any())
                 {
                     E.CastOnUnit(Player);
@@ -527,24 +527,24 @@ namespace SephKayle
                 Harass();
             }
 
-            if (Config.Item("UseEfarm").GetValue<bool>() && E.LSIsReady())
+            if (Config.Item("UseEfarm").GetValue<bool>() && E.IsReady())
             {
-                var minions = ObjectManager.Get<Obj_AI_Base>().Where(m => m.Team != Player.Team && Player.LSDistance(m) <= incrange);
+                var minions = ObjectManager.Get<Obj_AI_Base>().Where(m => m.Team != Player.Team && Player.Distance(m) <= incrange);
                 if (minions.Any() && Config.Item("UseEfarm").GetValue<bool>() && !Eon)
                 {
                     E.CastOnUnit(Player);
                 }
             }
 
-            if (Config.Item("UseQfarm").GetValue<bool>() && Q.LSIsReady())
+            if (Config.Item("UseQfarm").GetValue<bool>() && Q.IsReady())
             {
                 List<Obj_AI_Base> allMinions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q.Range);
                 var vminions = allMinions.Where(
                    minion =>
-                       minion.LSIsValidTarget() && Player.LSDistance(minion) >
-                            Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) && Player.LSDistance(minion) <= Q.Range &&
-                       HealthPrediction.GetHealthPrediction(minion, (int)((Player.LSDistance(minion) * 1000) / 1500) + 300 + Game.Ping / 2) <
-                       0.75 * Player.LSGetSpellDamage(minion, SpellSlot.Q));
+                       minion.IsValidTarget() && Player.Distance(minion) >
+                            Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) && Player.Distance(minion) <= Q.Range &&
+                       HealthPrediction.GetHealthPrediction(minion, (int)((Player.Distance(minion) * 1000) / 1500) + 300 + Game.Ping / 2) <
+                       0.75 * Player.GetSpellDamage(minion, SpellSlot.Q));
 
                 var bestminion = vminions.MaxOrDefault(x => x.MaxHealth);
                 if (bestminion != null)
@@ -568,7 +568,7 @@ namespace SephKayle
             if (GetBool("Harass.Q"))
             {
                 var Targ = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-                if (Targ != null && Q.LSIsReady() && Player.LSDistance(Targ) <= Q.Range)
+                if (Targ != null && Q.IsReady() && Player.Distance(Targ) <= Q.Range)
                 {
                     Q.Cast(Targ);
                 }
@@ -582,7 +582,7 @@ namespace SephKayle
            W = new Spell(SpellSlot.W, 900);
            E = new Spell(SpellSlot.E, 0);
            R = new Spell(SpellSlot.R, 900);
-           SpellDataInst ignite = ObjectManager.Player.Spellbook.GetSpell(ObjectManager.Player.LSGetSpellSlot("summonerdot"));
+           SpellDataInst ignite = ObjectManager.Player.Spellbook.GetSpell(ObjectManager.Player.GetSpellSlot("summonerdot"));
            if (ignite.Slot != SpellSlot.Unknown)
            {
                Ignite = new Spell(ignite.Slot, 600);

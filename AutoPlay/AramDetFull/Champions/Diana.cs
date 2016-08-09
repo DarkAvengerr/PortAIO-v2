@@ -33,7 +33,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Console.WriteLine("Cast QQ");
             Q.Cast(target);
@@ -41,14 +41,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.Cast();
         }
@@ -56,9 +56,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
-            if ((target.LSHasBuff("dianamoonlight") && safeGap(target))|| target.HealthPercent<28)
+            if ((target.HasBuff("dianamoonlight") && safeGap(target))|| target.HealthPercent<28)
                 R.Cast(target);
         }
 
@@ -93,7 +93,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             foreach (var minion in MinionManager.GetMinions(Q.Range))
             {
-                if (minion.Health > ObjectManager.Player.LSGetAutoAttackDamage(minion) && minion.Health < Q.GetDamage(minion))
+                if (minion.Health > ObjectManager.Player.GetAutoAttackDamage(minion) && minion.Health < Q.GetDamage(minion))
                 {
                     Q.Cast(minion);
                     return;

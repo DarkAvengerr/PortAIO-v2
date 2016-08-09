@@ -35,14 +35,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             if (safeGap(target))
                 W.CastOnUnit(target);
@@ -50,22 +50,22 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() )
+            if (!E.IsReady() )
                 return;
             E.Cast(target);
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
-            if ((CanKill(target, R, GetRDmg(target)) || player.Position.LSCountEnemysInRange((int)R.Range-100)>2))
+            if ((CanKill(target, R, GetRDmg(target)) || player.Position.CountEnemysInRange((int)R.Range-100)>2))
                 R.Cast();
             if (player.ManaPercentage() >= 30)
             {
-                if (!player.LSHasBuff("MaokaiDrain")) R.Cast();
+                if (!player.HasBuff("MaokaiDrain")) R.Cast();
             }
-            else if (player.LSHasBuff("MaokaiDrain")) R.Cast();
+            else if (player.HasBuff("MaokaiDrain")) R.Cast();
 
 
         }
@@ -106,7 +106,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
-            if ( player.IsDead || !Q.LSIsReady()) return;
+            if ( player.IsDead || !Q.IsReady()) return;
             if (player.Distance3D(unit) > 100 && W.CanCast(unit) && player.Mana >= Q.Instance.SData.Mana + W.Instance.SData.Mana)
             {
                 W.CastOnUnit(unit);

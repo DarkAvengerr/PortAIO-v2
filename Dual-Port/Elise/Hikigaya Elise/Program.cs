@@ -154,7 +154,7 @@ using EloBuddy;
             {
                 if (Config.Item("ainterrupt").GetValue<bool>())
                 {
-                    if (sender.LSIsValidTarget(1000))
+                    if (sender.IsValidTarget(1000))
                     {
                         Render.Circle.DrawCircle(sender.Position, sender.BoundingRadius, Color.Gold, 5);
                         var targetpos = Drawing.WorldToScreen(sender.Position);
@@ -170,7 +170,7 @@ using EloBuddy;
             {
                 if (Config.Item("ainterrupt2").GetValue<bool>())
                 {
-                    if (sender.LSIsValidTarget(1000))
+                    if (sender.IsValidTarget(1000))
                     {
                         Render.Circle.DrawCircle(sender.Position, sender.BoundingRadius, Color.Gold, 5);
                         var targetpos = Drawing.WorldToScreen(sender.Position);
@@ -189,7 +189,7 @@ using EloBuddy;
             {
                 if (Config.Item("agapcloser").GetValue<bool>())
                 {
-                    if (gapcloser.Sender.LSIsValidTarget(1000))
+                    if (gapcloser.Sender.IsValidTarget(1000))
                     {
                         Render.Circle.DrawCircle(gapcloser.Sender.Position, gapcloser.Sender.BoundingRadius, Color.Gold, 5);
                         var targetpos = Drawing.WorldToScreen(gapcloser.Sender.Position);
@@ -205,7 +205,7 @@ using EloBuddy;
             {
                 if (Config.Item("agapcloser2").GetValue<bool>())
                 {
-                    if (gapcloser.Sender.LSIsValidTarget(1000))
+                    if (gapcloser.Sender.IsValidTarget(1000))
                     {
                         Render.Circle.DrawCircle(gapcloser.Sender.Position, gapcloser.Sender.BoundingRadius, Color.Gold, 5);
                         var targetpos = Drawing.WorldToScreen(gapcloser.Sender.Position);
@@ -246,18 +246,18 @@ using EloBuddy;
             {
                 if (spidergirl)
                 {
-                    if (SpiderQ.LSIsReady() && spiderQKS && SpiderQ.CanCast(target) && SpiderQ.IsKillable(target))
+                    if (SpiderQ.IsReady() && spiderQKS && SpiderQ.CanCast(target) && SpiderQ.IsKillable(target))
                     {
                         SpiderQ.Cast(target);
                     }   
                 }
                 if (humansexygirl)
                 {
-                    if (Q.LSIsReady() && humanQKS && Q.CanCast(target) && Q.IsKillable(target))
+                    if (Q.IsReady() && humanQKS && Q.CanCast(target) && Q.IsKillable(target))
                     {
                         Q.Cast(target);
                     }
-                    if (W.LSIsReady() && humanWKS && Q.CanCast(target) && W.IsKillable(target))
+                    if (W.IsReady() && humanWKS && Q.CanCast(target) && W.IsKillable(target))
                     {
                         W.Cast(target);
                     }
@@ -268,7 +268,7 @@ using EloBuddy;
         {
             if (Config.Item("useRanduin").GetValue<bool>())
             {
-                if (Player.LSCountEnemiesInRange(400) >= Config.Item("randuinCount").GetValue<Slider>().Value)
+                if (Player.CountEnemiesInRange(400) >= Config.Item("randuinCount").GetValue<Slider>().Value)
                 {
                     Randuin.Cast();
                 }
@@ -284,7 +284,7 @@ using EloBuddy;
             {
                 foreach (var ally in HeroManager.Allies)
                 {
-                    if (!ally.IsMe && !ally.LSIsRecalling() && ally.HealthPercent <= Config.Item("ironsolariAllyHp").GetValue<Slider>().Value)
+                    if (!ally.IsMe && !ally.IsRecalling() && ally.HealthPercent <= Config.Item("ironsolariAllyHp").GetValue<Slider>().Value)
                     {
                         IronSolari.Cast();
                     }
@@ -300,30 +300,30 @@ using EloBuddy;
             }
             if (humansexygirl)
             {
-                    if (Q.LSIsReady() && Config.Item("qjClear").GetValue<bool>())
+                    if (Q.IsReady() && Config.Item("qjClear").GetValue<bool>())
                     {
                         Q.Cast(mobs[0]);
                     }
-                    if (W.LSIsReady() && Config.Item("wjClear").GetValue<bool>())
+                    if (W.IsReady() && Config.Item("wjClear").GetValue<bool>())
                     {
                         W.Cast(mobs[0]);
                     }
-                    if (!Q.LSIsReady() && !W.LSIsReady() && Config.Item("autoswitch").GetValue<bool>())
+                    if (!Q.IsReady() && !W.IsReady() && Config.Item("autoswitch").GetValue<bool>())
                     {
                         R.Cast();
                     }
             }
             if (spidergirl)
             {
-                     if (W.LSIsReady() && Config.Item("wjClear.Spider").GetValue<bool>())
+                     if (W.IsReady() && Config.Item("wjClear.Spider").GetValue<bool>())
                      {
                          W.Cast();
                      }
-                     if (Q.LSIsReady() && Config.Item("qjClear.Spider").GetValue<bool>())
+                     if (Q.IsReady() && Config.Item("qjClear.Spider").GetValue<bool>())
                      {
                          Q.Cast(mobs[0]);
                      }
-                     if (!SpiderQ.LSIsReady() && !SpiderW.LSIsReady() && Config.Item("autoswitch").GetValue<bool>())
+                     if (!SpiderQ.IsReady() && !SpiderW.IsReady() && Config.Item("autoswitch").GetValue<bool>())
                      {
                          R.Cast();
                      }
@@ -337,14 +337,14 @@ using EloBuddy;
                     {
                         if (spidergirl)
                         {
-                            if (Q.LSIsReady() && Q.IsKillable(minyon))
+                            if (Q.IsReady() && Q.IsKillable(minyon))
                             {
                                 SpiderQ.Cast(minyon);
                             }
                         }
                         if (humansexygirl)
                         {
-                            if (Q.LSIsReady() && Q.IsKillable(minyon))
+                            if (Q.IsReady() && Q.IsKillable(minyon))
                             {
                                 Q.Cast(minyon);
                             }
@@ -355,14 +355,14 @@ using EloBuddy;
                     {
                         if (spidergirl)
                         {
-                            if (Q.LSIsReady() && Q.IsKillable(minyon))
+                            if (Q.IsReady() && Q.IsKillable(minyon))
                             {
                                 SpiderQ.Cast(minyon);
                             }
                         }
                         if (humansexygirl)
                         {
-                            if (Q.LSIsReady() && Q.IsKillable(minyon))
+                            if (Q.IsReady() && Q.IsKillable(minyon))
                             {
                                 Q.Cast(minyon);
                             }
@@ -372,14 +372,14 @@ using EloBuddy;
                     {
                         if (spidergirl)
                         {
-                            if (Q.LSIsReady() && Q.IsKillable(minyon))
+                            if (Q.IsReady() && Q.IsKillable(minyon))
                             {
                                 SpiderQ.Cast(minyon);
                             }
                         }
                         if (humansexygirl)
                         {
-                            if (Q.LSIsReady() && Q.IsKillable(minyon))
+                            if (Q.IsReady() && Q.IsKillable(minyon))
                             {
                                 Q.Cast(minyon);
                             }
@@ -389,14 +389,14 @@ using EloBuddy;
                     {
                         if (spidergirl)
                         {
-                            if (Q.LSIsReady() && Q.IsKillable(minyon))
+                            if (Q.IsReady() && Q.IsKillable(minyon))
                             {
                                 SpiderQ.Cast(minyon);
                             }
                         }
                         if (humansexygirl)
                         {
-                            if (Q.LSIsReady() && Q.IsKillable(minyon))
+                            if (Q.IsReady() && Q.IsKillable(minyon))
                             {
                                 Q.Cast(minyon);
                             }
@@ -409,19 +409,19 @@ using EloBuddy;
         {
             if (humansexygirl)
             {
-                if (E.LSIsReady() && Config.Item("eCombo").GetValue<bool>())
+                if (E.IsReady() && Config.Item("eCombo").GetValue<bool>())
                 {
-                    foreach (var en in HeroManager.Enemies.Where(hero => hero.LSIsValidTarget(E.Range)))
+                    foreach (var en in HeroManager.Enemies.Where(hero => hero.IsValidTarget(E.Range)))
                     {
-                        if (E.CanCast(en) && E.GetPrediction(en).Hitchance >= HitChance.Medium && !Player.Spellbook.IsAutoAttacking && !Player.LSIsDashing())
+                        if (E.CanCast(en) && E.GetPrediction(en).Hitchance >= HitChance.Medium && !Player.Spellbook.IsAutoAttacking && !Player.IsDashing())
                         {
                             E.Cast(en);
                         }
                     }
                 }
-                if (Q.LSIsReady() && Config.Item("qCombo").GetValue<bool>())
+                if (Q.IsReady() && Config.Item("qCombo").GetValue<bool>())
                 {
-                    foreach (var en in HeroManager.Enemies.Where(hero => hero.LSIsValidTarget(Q.Range)))
+                    foreach (var en in HeroManager.Enemies.Where(hero => hero.IsValidTarget(Q.Range)))
                     {
                         if (Q.CanCast(en))
                         {
@@ -429,9 +429,9 @@ using EloBuddy;
                         }
                     }
                 }
-                if (W.LSIsReady() && Config.Item("wCombo").GetValue<bool>())
+                if (W.IsReady() && Config.Item("wCombo").GetValue<bool>())
                 {
-                    foreach (var en in HeroManager.Enemies.Where(hero => hero.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(Player))))
+                    foreach (var en in HeroManager.Enemies.Where(hero => hero.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player))))
                     {
                         if (W.CanCast(en))
                         {
@@ -439,7 +439,7 @@ using EloBuddy;
                         }
                     }
                 }
-                if (!Q.LSIsReady() && !W.LSIsReady() && !E.LSIsReady() && R.LSIsReady() &&
+                if (!Q.IsReady() && !W.IsReady() && !E.IsReady() && R.IsReady() &&
                     Config.Item("rCombo").GetValue<bool>())
                 {
                     R.Cast();
@@ -447,37 +447,37 @@ using EloBuddy;
             }
             if (spidergirl)
             {
-                if (SpiderW.LSIsReady() && Config.Item("wCombo.Spider").GetValue<bool>())
+                if (SpiderW.IsReady() && Config.Item("wCombo.Spider").GetValue<bool>())
                 {
-                    foreach (var en in HeroManager.Enemies.Where(hero => hero.LSIsValidTarget(Q.Range)))
+                    foreach (var en in HeroManager.Enemies.Where(hero => hero.IsValidTarget(Q.Range)))
                     {
                         W.Cast();
                     }
                 }
-                if (SpiderQ.LSIsReady() && Config.Item("qCombo.Spider").GetValue<bool>())
+                if (SpiderQ.IsReady() && Config.Item("qCombo.Spider").GetValue<bool>())
                 {
-                    foreach (var en in HeroManager.Enemies.Where(hero => hero.LSIsValidTarget(Q.Range)))
+                    foreach (var en in HeroManager.Enemies.Where(hero => hero.IsValidTarget(Q.Range)))
                     {
                         Q.Cast(en);
                     }
                 }
-                if (SpiderE.LSIsReady() && Config.Item("qCombo.Spider").GetValue<bool>())
+                if (SpiderE.IsReady() && Config.Item("qCombo.Spider").GetValue<bool>())
                 {
-                    foreach (var en in HeroManager.Enemies.Where(hero => hero.LSIsValidTarget(E.Range)))
+                    foreach (var en in HeroManager.Enemies.Where(hero => hero.IsValidTarget(E.Range)))
 	                {
-                        if (Player.LSDistance(en, true) <= SpiderE.Range && Player.LSDistance(en, true) > SpiderQ.Range &&
-                        Config.Item("eCombo.Spider").GetValue<bool>() && SpiderE.LSIsReady())
+                        if (Player.Distance(en, true) <= SpiderE.Range && Player.Distance(en, true) > SpiderQ.Range &&
+                        Config.Item("eCombo.Spider").GetValue<bool>() && SpiderE.IsReady())
                         {
                             E.Cast(en);
                         }
-                        if (Player.LSDistance(en, true) <= SpiderE.Range && Player.LSDistance(en, true) > SpiderQ.Range &&
-                        Config.Item("eCombo.Spider").GetValue<bool>() && SpiderE.LSIsReady() && Player.LSCountAlliesInRange(E.Range) == 1 && en.HealthPercent < 5)
+                        if (Player.Distance(en, true) <= SpiderE.Range && Player.Distance(en, true) > SpiderQ.Range &&
+                        Config.Item("eCombo.Spider").GetValue<bool>() && SpiderE.IsReady() && Player.CountAlliesInRange(E.Range) == 1 && en.HealthPercent < 5)
                         {
                             E.Cast(en);
                         }
 	                }
                 }
-                if (!SpiderQ.LSIsReady() && !SpiderW.LSIsReady() && R.LSIsReady() &&
+                if (!SpiderQ.IsReady() && !SpiderW.IsReady() && R.IsReady() &&
                     Config.Item("rCombo").GetValue<bool>())
                 {
                     R.Cast();
@@ -491,18 +491,18 @@ using EloBuddy;
             {
                 if (ObjectManager.Player.ManaPercent > Config.Item("manaHarass").GetValue<Slider>().Value)
                 {
-                    if (Q.LSIsReady() && Config.Item("qHarass").GetValue<bool>())
+                    if (Q.IsReady() && Config.Item("qHarass").GetValue<bool>())
                     {
-                        foreach (AIHeroClient qTarget in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range)))
+                        foreach (AIHeroClient qTarget in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                         {
                             Q.Cast(qTarget);
                         }
                     }
-                    if (W.LSIsReady() && Config.Item("wHarass").GetValue<bool>())
+                    if (W.IsReady() && Config.Item("wHarass").GetValue<bool>())
 	                {
-                        foreach (AIHeroClient wTarget in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range)))
+                        foreach (AIHeroClient wTarget in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)))
 	                    {
-                            if (W.CanCast(wTarget) && W.GetPrediction(wTarget).Hitchance >= HitChance.High && !Player.Spellbook.IsAutoAttacking && !Player.LSIsDashing())
+                            if (W.CanCast(wTarget) && W.GetPrediction(wTarget).Hitchance >= HitChance.High && !Player.Spellbook.IsAutoAttacking && !Player.IsDashing())
                             {
                                 W.Cast(wTarget);
                             }
@@ -541,15 +541,15 @@ using EloBuddy;
             var menuItem2 = Config.Item("wDraw").GetValue<Circle>();
             var menuItem3 = Config.Item("eDraw").GetValue<Circle>();
 
-            if (menuItem1.Active && Q.LSIsReady())
+            if (menuItem1.Active && Q.IsReady())
             {
                 Render.Circle.DrawCircle(Player.Position, rangeQ, Color.SpringGreen);
             }
-            if (menuItem2.Active && W.LSIsReady())
+            if (menuItem2.Active && W.IsReady())
             {
                 Render.Circle.DrawCircle(Player.Position, rangeW , Color.White);
             }
-            if (menuItem3.Active && E.LSIsReady())
+            if (menuItem3.Active && E.IsReady())
             {
                 Render.Circle.DrawCircle(Player.Position, rangeW, Color.White);
             }

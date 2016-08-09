@@ -34,24 +34,24 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || MapControl.fightIsOn() == null)
+            if (!Q.IsReady() || MapControl.fightIsOn() == null)
                 return;
             Q.Cast();
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             W.Cast(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
             var eTarget = ARAMTargetSelector.getBestTarget(E.Range);
-            if (eTarget.LSIsValidTarget(E.Range))
+            if (eTarget.IsValidTarget(E.Range))
             {
                 if (eTarget.Buffs.Where(buff => buff.DisplayName.ToLower() == "twitchdeadlyvenom").Any(buff => buff.Count > 4))
                 {
@@ -65,8 +65,8 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     ObjectManager.Get<AIHeroClient>()
                         .Where(
                             hero =>
-                                hero.LSIsValidTarget(E.Range) &&
-                                (player.LSGetSpellDamage(hero, SpellSlot.E) - 10 > hero.Health)))
+                                hero.IsValidTarget(E.Range) &&
+                                (player.GetSpellDamage(hero, SpellSlot.E) - 10 > hero.Health)))
             {
                 E.Cast();
             }
@@ -75,9 +75,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
-            if (player.LSCountEnemysInRange(700)>1)
+            if (player.CountEnemysInRange(700)>1)
                 if(R.Cast())
                     Aggresivity.addAgresiveMove(new AgresiveMove(35, 5000, true));
         }

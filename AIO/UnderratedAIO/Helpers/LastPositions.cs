@@ -99,7 +99,7 @@ namespace UnderratedAIO.Helpers
                     dist = 50;
                 }
                 var line = getpos(enemy, dist);
-                dist = enemy.Player.LSDistance(line);
+                dist = enemy.Player.Distance(line);
                 Vector3 pos = line;
                 if (enemy.Player.IsVisible)
                 {
@@ -111,10 +111,10 @@ namespace UnderratedAIO.Helpers
                         CombatHelper.PointsAroundTheTarget(enemy.Player.Position, trueDist)
                             .Where(
                                 p =>
-                                    !p.LSIsWall() && line.LSDistance(p) < dist &&
+                                    !p.IsWall() && line.Distance(p) < dist &&
                                     Environment.Map.GetPath(enemy.Player, p) < trueDist)
                             .OrderByDescending(p => NavMesh.IsWallOfGrass(p, 10))
-                            .ThenBy(p => line.LSDistance(p))
+                            .ThenBy(p => line.Distance(p))
                             .FirstOrDefault();
                 }
                 if (pos != null)
@@ -127,8 +127,8 @@ namespace UnderratedAIO.Helpers
 
         private Vector3 getpos(Positions enemy, float dist)
         {
-            var line = enemy.Player.Position.LSExtend(enemy.predictedpos, dist);
-            if (enemy.Player.Position.LSDistance(enemy.predictedpos) < dist &&
+            var line = enemy.Player.Position.Extend(enemy.predictedpos, dist);
+            if (enemy.Player.Position.Distance(enemy.predictedpos) < dist &&
                 ((enemy.LastSeen - enemy.RecallData.RecallStartTime) / 1000) < 1)
             {
                 line = enemy.predictedpos;
@@ -149,7 +149,7 @@ namespace UnderratedAIO.Helpers
                     enemyInfo.predictedpos = prediction.UnitPosition;
                 }
             }
-            if (!configMenu.Item("UseR").GetValue<bool>() || !R.LSIsReady() || !enabled)
+            if (!configMenu.Item("UseR").GetValue<bool>() || !R.IsReady() || !enabled)
             {
                 return;
             }
@@ -187,10 +187,10 @@ namespace UnderratedAIO.Helpers
                         CombatHelper.PointsAroundTheTarget(enemy.Player.Position, trueDist)
                             .Where(
                                 p =>
-                                    !p.LSIsWall() && line.LSDistance(p) < dist &&
+                                    !p.IsWall() && line.Distance(p) < dist &&
                                     Environment.Map.GetPath(enemy.Player, p) < trueDist)
                             .OrderByDescending(p => NavMesh.IsWallOfGrass(p, 10))
-                            .ThenBy(p => line.LSDistance(p))
+                            .ThenBy(p => line.Distance(p))
                             .FirstOrDefault();
                 }
                 if (pos != null)
@@ -204,12 +204,12 @@ namespace UnderratedAIO.Helpers
         {
             return
                 ObjectManager.Get<Obj_AI_Turret>()
-                    .Any(t => t.LSDistance(pos) < 1100f && t.HasBuff("SRTurretSecondaryShielder"));
+                    .Any(t => t.Distance(pos) < 1100f && t.HasBuff("SRTurretSecondaryShielder"));
         }
 
         private void kill(Positions positions, Vector3 pos)
         {
-            if (R.LSIsReady() && pos.LSDistance(positions.Player.Position) < 1200 && pos.LSCountAlliesInRange(1800) < 1)
+            if (R.IsReady() && pos.Distance(positions.Player.Position) < 1200 && pos.CountAlliesInRange(1800) < 1)
             {
                 if (checkdmg(positions.Player) && UltTime(pos) < positions.RecallData.GetRecallTime() &&
                     !isColliding(pos) && !CheckShieldTower(pos))
@@ -243,7 +243,7 @@ namespace UnderratedAIO.Helpers
 
         private float UltTime(Vector3 pos)
         {
-            var dist = player.ServerPosition.LSDistance(pos);
+            var dist = player.ServerPosition.Distance(pos);
             if (player.ChampionName == "Ezreal")
             {
                 return (dist / 2000) * 1000 + 1000;

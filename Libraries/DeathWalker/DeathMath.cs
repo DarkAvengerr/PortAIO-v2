@@ -15,9 +15,9 @@ namespace DetuksSharp
         public static Polygon getPolygonOn(Obj_AI_Base source, Obj_AI_Base target, float W,  float L)
         {
 
-            Vector2 rTpos = LeagueSharp.Common.Prediction.GetPrediction(target, 0.10f).UnitPosition.LSTo2D();
+            Vector2 rTpos = LeagueSharp.Common.Prediction.GetPrediction(target, 0.10f).UnitPosition.To2D();
 
-            return getPolygonOn(source.ServerPosition.LSTo2D(), rTpos, W, L);
+            return getPolygonOn(source.ServerPosition.To2D(), rTpos, W, L);
         }
 
         public static Polygon getPolygonOn(Vector2 source, Vector2 target, float W, float L)
@@ -26,10 +26,10 @@ namespace DetuksSharp
 
             Vector2 rTpos = target;
             Vector2 startP = source;
-            Vector2 endP = startP.LSExtend(rTpos, L);
+            Vector2 endP = startP.Extend(rTpos, L);
 
             Vector2 p = (rTpos - startP);
-            var per = p.LSPerpendicular().LSNormalized() * (W / 2);
+            var per = p.Perpendicular().Normalized() * (W / 2);
             points.Add(startP + per);
             points.Add(startP - per);
             points.Add(endP - per);
@@ -85,7 +85,7 @@ namespace DetuksSharp
             {
                 for (var i = 0; i <= Points.Count - 1; i++)
                 {
-                    if (Points[i].LSDistance(ObjectManager.Player.Position) < 1500)
+                    if (Points[i].Distance(ObjectManager.Player.Position) < 1500)
                     {
                         var nextIndex = (Points.Count - 1 == i) ? 0 : (i + 1);
                         var from = Drawing.WorldToScreen(Points[i].To3D());

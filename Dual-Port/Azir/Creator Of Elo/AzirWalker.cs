@@ -22,7 +22,7 @@ using EloBuddy;
 
         private  float GetDamageValue(Obj_AI_Base target, bool soldierAttack)
         {
-            var d = soldierAttack ?    _azir.Hero.LSGetSpellDamage(target, SpellSlot.W) :_azir.Hero.LSGetAutoAttackDamage(target);
+            var d = soldierAttack ?    _azir.Hero.GetSpellDamage(target, SpellSlot.W) :_azir.Hero.GetAutoAttackDamage(target);
             return target.Health / (float)d;
         }
 
@@ -38,7 +38,7 @@ using EloBuddy;
                 return 1;
             }
 
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return 0;
             }
@@ -51,7 +51,7 @@ using EloBuddy;
             soldierAArange *= soldierAArange;
             foreach (var soldier in _azir.SoldierManager.ActiveSoldiers)
             {
-                if (soldier.LSDistance(target, true) <= soldierAArange)
+                if (soldier.Distance(target, true) <= soldierAArange)
                 {
                     return 2;
                 }
@@ -70,7 +70,7 @@ using EloBuddy;
                     ObjectManager.Get<Obj_AI_Minion>()
                         .Where(
                             minion =>
-                                minion.LSIsValidTarget() &&
+                                minion.IsValidTarget() &&
                                 minion.Health <
                                 3 *
                                 (ObjectManager.Player.BaseAttackDamage + ObjectManager.Player.FlatPhysicalDamageMod))
@@ -82,7 +82,7 @@ using EloBuddy;
                         var t = (int)(_azir.Hero.AttackCastDelay * 1000) - 100 + Game.Ping / 2;
                         var predHealth = HealthPrediction.GetHealthPrediction(minion, t, 0);
 
-                        var damage = (r == 1) ? _azir.Hero.LSGetAutoAttackDamage(minion, true) :_azir.Hero.LSGetSpellDamage(minion, SpellSlot.W);
+                        var damage = (r == 1) ? _azir.Hero.GetAutoAttackDamage(minion, true) :_azir.Hero.GetSpellDamage(minion, SpellSlot.W);
                         if (minion.Team != GameObjectTeam.Neutral && MinionManager.IsMinion(minion, true))
                         {
                             if (predHealth > 0 && predHealth <= damage)
@@ -98,7 +98,7 @@ using EloBuddy;
             {
                 var posibleTargets = new Dictionary<Obj_AI_Base, float>();
                 var autoAttackTarget = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                if (autoAttackTarget.LSIsValidTarget())
+                if (autoAttackTarget.IsValidTarget())
                 {
                     posibleTargets.Add(autoAttackTarget, GetDamageValue(autoAttackTarget, false));
                 }
@@ -106,7 +106,7 @@ using EloBuddy;
                 foreach (var soldier in _azir.SoldierManager.ActiveSoldiers)
                 {
                     var soldierTarget = TargetSelector.GetTarget(SoldierAaRange + 65 + 65, TargetSelector.DamageType.Magical, true, null, soldier.ServerPosition);
-                    if (soldierTarget.LSIsValidTarget())
+                    if (soldierTarget.IsValidTarget())
                     {
                         if (posibleTargets.ContainsKey(soldierTarget))
                         {
@@ -127,7 +127,7 @@ using EloBuddy;
                 if (soldiers.Count > 0)
                 {
                     var minions = MinionManager.GetMinions(1100, MinionTypes.All, MinionTeam.NotAlly);
-                    var validEnemiesPosition = HeroManager.Enemies.Where(e => e.LSIsValidTarget(1100)).Select(e => e.ServerPosition.LSTo2D()).ToList();
+                    var validEnemiesPosition = HeroManager.Enemies.Where(e => e.IsValidTarget(1100)).Select(e => e.ServerPosition.To2D()).ToList();
                     const int AAWidthSqr = 100 * 100;
                     //Try to harass using minions
                     foreach (var soldier in soldiers)
@@ -136,13 +136,13 @@ using EloBuddy;
                         {
                             var soldierAArange = SoldierAaRange + 65 + minion.BoundingRadius;
                             soldierAArange *= soldierAArange;
-                            if (soldier.LSDistance(minion, true) < soldierAArange)
+                            if (soldier.Distance(minion, true) < soldierAArange)
                             {
-                                var p1 = minion.Position.LSTo2D();
-                                var p2 = soldier.Position.LSTo2D().LSExtend(minion.Position.LSTo2D(), 375);
+                                var p1 = minion.Position.To2D();
+                                var p2 = soldier.Position.To2D().Extend(minion.Position.To2D(), 375);
                                 foreach (var enemyPosition in validEnemiesPosition)
                                 {
-                                    if (enemyPosition.LSDistance(p1, p2, true, true) < AAWidthSqr)
+                                    if (enemyPosition.Distance(p1, p2, true, true) < AAWidthSqr)
                                     {
                                         return minion;
                                     }
@@ -158,21 +158,21 @@ using EloBuddy;
             {
                 /* turrets */
                 foreach (var turret in
-                    ObjectManager.Get<Obj_AI_Turret>().Where(t => t.LSIsValidTarget() && Orbwalking.InAutoAttackRange(t)))
+                    ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && Orbwalking.InAutoAttackRange(t)))
                 {
                     return turret;
                 }
 
                 /* inhibitor */
                 foreach (var turret in
-                    ObjectManager.Get<Obj_BarracksDampener>().Where(t => t.LSIsValidTarget() && Orbwalking.InAutoAttackRange(t)))
+                    ObjectManager.Get<Obj_BarracksDampener>().Where(t => t.IsValidTarget() && Orbwalking.InAutoAttackRange(t)))
                 {
                     return turret;
                 }
 
                 /* nexus */
                 foreach (var nexus in
-                    ObjectManager.Get<Obj_HQ>().Where(t => t.LSIsValidTarget() && Orbwalking.InAutoAttackRange(t)))
+                    ObjectManager.Get<Obj_HQ>().Where(t => t.IsValidTarget() && Orbwalking.InAutoAttackRange(t)))
                 {
                     return nexus;
                 }
@@ -185,7 +185,7 @@ using EloBuddy;
                     ObjectManager.Get<Obj_AI_Minion>()
                         .Where(
                             mob =>
-                                mob.LSIsValidTarget() && Orbwalking.InAutoAttackRange(mob) && mob.Team == GameObjectTeam.Neutral)
+                                mob.IsValidTarget() && Orbwalking.InAutoAttackRange(mob) && mob.Team == GameObjectTeam.Neutral)
                         .MaxOrDefault(mob => mob.MaxHealth);
                 if (result != null)
                 {
@@ -195,7 +195,7 @@ using EloBuddy;
 
             if (ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-                return (ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.LSIsValidTarget() && InAutoAttackRange(minion))).MaxOrDefault(m => CustomInAutoattackRange(m) * m.Health);
+                return (ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))).MaxOrDefault(m => CustomInAutoattackRange(m) * m.Health);
             }
 
             return null;

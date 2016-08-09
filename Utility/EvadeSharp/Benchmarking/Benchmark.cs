@@ -43,12 +43,12 @@ using EloBuddy; namespace Evade.Benchmarking
         {
             if (args.Msg == (uint)WindowsMessages.WM_LBUTTONDOWN)
             {
-                startPoint = Game.CursorPos.LSTo2D();
+                startPoint = Game.CursorPos.To2D();
             }
 
             if (args.Msg == (uint)WindowsMessages.WM_LBUTTONUP)
             {
-                endPoint = Game.CursorPos.LSTo2D();
+                endPoint = Game.CursorPos.To2D();
             }
 
             if (args.Msg == (uint)WindowsMessages.WM_KEYUP && args.WParam == 'L') //line missile skillshot

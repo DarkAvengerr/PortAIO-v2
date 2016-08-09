@@ -34,7 +34,7 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Tumble
             Vector2 drakeWallQPos = new Vector2(11514, 4462);
             Vector2 midWallQPos = new Vector2(6667, 8794);
 
-            if (Player.LSDistance(midWallQPos) >= Player.LSDistance(drakeWallQPos))
+            if (Player.Distance(midWallQPos) >= Player.Distance(drakeWallQPos))
             {
 
                 if (Player.Position.X < 12000 || Player.Position.X > 12070 || Player.Position.Y < 4800 ||

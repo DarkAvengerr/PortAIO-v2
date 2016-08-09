@@ -57,17 +57,17 @@
 
             foreach (var target in ObjectManager.Get<AIHeroClient>().Where(target => !target.IsMe && !target.IsDead && target.Team != ObjectManager.Player.Team && !target.IsZombie && (SkyLv_Taric.Ignite.Slot != SpellSlot.Unknown || !target.HasBuff("summonerdot"))))
             {
-                if (UseAAKS && Orbwalking.CanAttack() && Player.LSGetAutoAttackDamage(target) > target.Health && target.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
+                if (UseAAKS && Orbwalking.CanAttack() && Player.GetAutoAttackDamage(target) > target.Health && target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, target);
                 }
 
-                if (UseEKS && E.GetDamage(target) > target.Health && Player.LSDistance(target) <= E.Range && Player.Mana >= E.ManaCost)
+                if (UseEKS && E.GetDamage(target) > target.Health && Player.Distance(target) <= E.Range && Player.Mana >= E.ManaCost)
                 {
                     E.CastIfHitchanceEquals(target, HitChance.VeryHigh, PacketCast);
                 }
 
-                if (UseIgniteKS && SkyLv_Taric.Ignite.Slot != SpellSlot.Unknown && target.Health < Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.LSDistance(target) <= SkyLv_Taric.Ignite.Range)
+                if (UseIgniteKS && SkyLv_Taric.Ignite.Slot != SpellSlot.Unknown && target.Health < Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.Distance(target) <= SkyLv_Taric.Ignite.Range)
                 {
                     SkyLv_Taric.Ignite.Cast(target, PacketCast);
                 }

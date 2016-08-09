@@ -36,23 +36,23 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
-            if (target.LSIsValidTarget(Q.Range + 100))
+            if (target.IsValidTarget(Q.Range + 100))
                 Q.CastOnUnit(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
-            if (target.LSIsValidTarget(W.Range + 100))
+            if (target.IsValidTarget(W.Range + 100))
                 W.Cast(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
                 E.Cast(target);
         }
@@ -61,7 +61,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             if (target == null)
                 return;
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 if (getEnemiesInRange(player.Position, 500f) >= 3 && getAlliesInRange(player.Position, 410f) < 3)
                 {
@@ -71,7 +71,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
 
                 if (getEnemiesInRange(target.Position, 500f) >= 3 && getAlliesInRange(target.Position, 410f) < 3) return;
-                if (!Sector.inTowerRange(target.Position.LSTo2D()) && GetComboDamage(target) > target.Health)
+                if (!Sector.inTowerRange(target.Position.To2D()) && GetComboDamage(target) > target.Health)
                     R.Cast(target);
             }
         }
@@ -80,14 +80,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             return
                 ObjectManager.Get<AIHeroClient>()
-                    .Where(h => h.IsEnemy && !h.IsDead && h.IsValid && h.LSDistance(point) <= range).ToList().Count;
+                    .Where(h => h.IsEnemy && !h.IsDead && h.IsValid && h.Distance(point) <= range).ToList().Count;
         }
 
         int getAlliesInRange(Vector3 point, float range)
         {
             return
                 ObjectManager.Get<AIHeroClient>()
-                    .Where(h => h.IsAlly && !h.IsDead && h.IsValid && h.LSDistance(point) <= range).ToList().Count;
+                    .Where(h => h.IsAlly && !h.IsDead && h.IsValid && h.Distance(point) <= range).ToList().Count;
         }
 
         public override void useSpells()
@@ -121,20 +121,20 @@ using EloBuddy; namespace ARAMDetFull.Champions
         private float GetComboDamage(Obj_AI_Base enemy)
         {
             var damage = 0d;
-            if (R.LSIsReady())
-                damage += player.LSGetSpellDamage(enemy, SpellSlot.R);
+            if (R.IsReady())
+                damage += player.GetSpellDamage(enemy, SpellSlot.R);
 
             if (DFG.IsReady())
                 damage += player.GetItemDamage(enemy, Damage.DamageItems.Dfg) / 1.2;
 
-            if (W.LSIsReady())
-                damage += player.LSGetSpellDamage(enemy, SpellSlot.W);
+            if (W.IsReady())
+                damage += player.GetSpellDamage(enemy, SpellSlot.W);
 
-            if (Q.LSIsReady())
-                damage += player.LSGetSpellDamage(enemy, SpellSlot.Q);
+            if (Q.IsReady())
+                damage += player.GetSpellDamage(enemy, SpellSlot.Q);
 
-            if (E.LSIsReady())
-                damage += player.LSGetSpellDamage(enemy, SpellSlot.E);
+            if (E.IsReady())
+                damage += player.GetSpellDamage(enemy, SpellSlot.E);
 
 
             return (float)damage * (DFG.IsReady() ? 1.2f : 1);

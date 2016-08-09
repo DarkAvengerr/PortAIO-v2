@@ -25,7 +25,7 @@ namespace Leblanc.Modes
         {
             return;
             var t = TargetSelector.GetTarget(5000, TargetSelector.DamageType.Magical);
-            if (t.LSIsValidTarget())
+            if (t.IsValidTarget())
             {
                 var y =
                     Common.AutoBushHelper.EnemyInfo.Find(x => x.Player.ChampionName == "Leona").LastSeenForE;
@@ -36,7 +36,7 @@ namespace Leblanc.Modes
             //    if (Modes.ModeSettings.MenuSettingE.Item("Settings.E.Auto").GetValue<StringList>().SelectedIndex == 1)
             //    {
             //        var t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-            //        if (t.LSIsValidTarget() && t.CanStun())
+            //        if (t.IsValidTarget() && t.CanStun())
             //        {
             //            //Champion.PlayerSpells.CastECombo(t);
             //        }

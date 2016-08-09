@@ -23,7 +23,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.Logic
 
         //public float misayaDelay(AIHeroClient target)
         //{
-        //    var dist = Variables.Player.ServerPosition.LSDistance(target.ServerPosition);
+        //    var dist = Variables.Player.ServerPosition.Distance(target.ServerPosition);
         //    var delay = Variables.Spells[SpellSlot.Q].Delay;
         //    var speed = Variables.Spells[SpellSlot.Q].Speed;
         //    var movespeed = Variables.Player.MoveSpeed;
@@ -48,16 +48,16 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.Logic
 
             var dmg = 0f;
 
-            if (Variables.Player.LSHasBuff("SummonerExhaust")) dmg = dmg * 0.6f;
+            if (Variables.Player.HasBuff("SummonerExhaust")) dmg = dmg * 0.6f;
 
-            if (Variables.Spells[SpellSlot.Q].LSIsReady()) dmg = dmg + Variables.Spells[SpellSlot.Q].GetDamage(x);
+            if (Variables.Spells[SpellSlot.Q].IsReady()) dmg = dmg + Variables.Spells[SpellSlot.Q].GetDamage(x);
 
             return dmg;
         }
 
         public float QDelay(AIHeroClient target)
         {
-            var time = target.LSDistance(Variables.Player) / Variables.Spells[SpellSlot.Q].Speed;
+            var time = target.Distance(Variables.Player) / Variables.Spells[SpellSlot.Q].Speed;
 
             return time + Variables.Spells[SpellSlot.Q].Delay;
         }

@@ -37,7 +37,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void beforeAttack(DeathWalker.BeforeAttackEventArgs args)
         {
-            if (args.Unit.IsMe && args.Target is AIHeroClient && E.LSIsReady())
+            if (args.Unit.IsMe && args.Target is AIHeroClient && E.IsReady())
             {
                 E.Cast();
                 Aggresivity.addAgresiveMove(new AgresiveMove(105, 3500, true));
@@ -46,21 +46,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null || target.HealthPercent > 65)
+            if (!W.IsReady() || target == null || target.HealthPercent > 65)
                 return;
             W.CastOnUnit(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.Cast();
             Aggresivity.addAgresiveMove(new AgresiveMove(105, 5000, true));
@@ -68,7 +68,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (target == null || !R.LSIsReady())
+            if (target == null || !R.IsReady())
                 return;
             if (player.HealthPercent < 60)
             {
@@ -79,18 +79,18 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public bool isBurning()
         {
-            return ObjectManager.Player.LSHasBuff("BurningAgony");
+            return ObjectManager.Player.HasBuff("BurningAgony");
         }
 
         public override void useSpells()
         {
             if (player.IsChannelingImportantSpell())
                 return;
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                if (isBurning() && player.LSCountEnemiesInRange(450) == 0)
+                if (isBurning() && player.CountEnemiesInRange(450) == 0)
                     W.Cast();
-                if (!isBurning() && player.LSCountEnemiesInRange(450) > 0)
+                if (!isBurning() && player.CountEnemiesInRange(450) > 0)
                     W.Cast();
             }
 

@@ -25,7 +25,7 @@ using EloBuddy;
                 EntryPoint.Menu.Item("l33t.stds.combo.useR").GetValue<bool>(),
                 EntryPoint.Menu.Item("l33t.stds.combo.useQE").GetValue<bool>(),
                 (EntryPoint.Menu.Item("l33t.stds.mode").GetValue<StringList>().SelectedIndex == 0 &&
-                 target.LSIsValidTarget())
+                 target.IsValidTarget())
                     ? target
                     : null);
         }
@@ -39,17 +39,17 @@ using EloBuddy;
         {
             var targets = GetTargets(target);
 
-            if (useR && Spells[SpellSlot.R].IsReady() && targets[SpellSlot.R].LSIsValidTarget(Spells[SpellSlot.R].Range))
+            if (useR && Spells[SpellSlot.R].IsReady() && targets[SpellSlot.R].IsValidTarget(Spells[SpellSlot.R].Range))
             {
                 ProcessUltimate(targets[SpellSlot.R]);
             }
 
-            if (IgniteSpell.LSIsReady())
+            if (IgniteSpell.IsReady())
             {
                 ProcessIgnite(targets[SpellSlot.Ignite]);
             }
 
-            if (useSphereE && targets[SpellSlot.SphereE].LSIsValidTarget() &&
+            if (useSphereE && targets[SpellSlot.SphereE].IsValidTarget() &&
                 !Collision.DetectCollision(targets[SpellSlot.SphereE]) && Spells[SpellSlot.Q].IsReady() &&
                 (Spells[SpellSlot.E].IsReady() ||
                  (Spells[SpellSlot.E].Instance.Instance.CooldownExpires - Game.Time < 1 && Spells[SpellSlot.E].Level > 0)) &&
@@ -59,7 +59,7 @@ using EloBuddy;
                 ProcessSphereE(targets[SpellSlot.SphereE]);
             }
 
-            if (useQ && targets[SpellSlot.SphereE].LSIsValidTarget() && Spells[SpellSlot.Q].IsReady())
+            if (useQ && targets[SpellSlot.SphereE].IsValidTarget() && Spells[SpellSlot.Q].IsReady())
             {
                 ProcessQ(targets[SpellSlot.SphereE]);
             }
@@ -68,22 +68,22 @@ using EloBuddy;
                 (int) (Game.Time * 0x3E8) - Spells[SpellSlot.W].LastCastAttemptTick > Game.Ping + 150 &&
                 (int) (Game.Time * 0x3E8) - Spells[SpellSlot.Q].LastCastAttemptTick > Game.Ping)
             {
-                foreach (var enemy in ObjectCache.GetHeroes().Where(e => e.LSIsValidTarget(Spells[SpellSlot.E].Range)))
+                foreach (var enemy in ObjectCache.GetHeroes().Where(e => e.IsValidTarget(Spells[SpellSlot.E].Range)))
                 {
                     if (enemy.GetComboDamage(useQ, useW, true, useR) > enemy.Health &&
-                        EntryPoint.Player.LSDistance(enemy, true) <= Math.Pow(Spells[SpellSlot.E].Range, 2))
+                        EntryPoint.Player.Distance(enemy, true) <= Math.Pow(Spells[SpellSlot.E].Range, 2))
                     {
                         Spells[SpellSlot.E].Instance.Cast(enemy);
                         Spells[SpellSlot.E].LastCastAttemptTick = (int) (Game.Time * 0x3E8);
                     }
-                    else if (EntryPoint.Player.LSDistance(enemy, true) <= Math.Pow(Spells[SpellSlot.SphereE].Range, 2))
+                    else if (EntryPoint.Player.Distance(enemy, true) <= Math.Pow(Spells[SpellSlot.SphereE].Range, 2))
                     {
                         ProcessE(enemy);
                     }
                 }
             }
 
-            if (useW && targets[SpellSlot.W].LSIsValidTarget() && Spells[SpellSlot.W].IsReady())
+            if (useW && targets[SpellSlot.W].IsValidTarget() && Spells[SpellSlot.W].IsReady())
             {
                 ProcessW(targets[SpellSlot.SphereE], targets[SpellSlot.W]);
             }
@@ -108,8 +108,8 @@ using EloBuddy;
 
         private static void ProcessIgnite(AIHeroClient target)
         {
-            if (IgniteSpell.Slot != EloBuddy.SpellSlot.Unknown && target.LSIsValidTarget() &&
-                EntryPoint.Player.LSDistance(target) <= 360000 && target.GetIgniteDamage() > target.Health)
+            if (IgniteSpell.Slot != EloBuddy.SpellSlot.Unknown && target.IsValidTarget() &&
+                EntryPoint.Player.Distance(target) <= 360000 && target.GetIgniteDamage() > target.Health)
             {
                 if (EntryPoint.Menu.Item("l33t.stds.misc.ignitecd").GetValue<bool>())
                 {
@@ -133,7 +133,7 @@ using EloBuddy;
 
         private static IDictionary<SpellSlot, AIHeroClient> GetTargets(AIHeroClient target)
         {
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 return new Dictionary<SpellSlot, AIHeroClient>
                 {
@@ -149,7 +149,7 @@ using EloBuddy;
             var wTarget = TargetSelector.GetTarget(
                 Spells[SpellSlot.W].Range + Spells[SpellSlot.W].Instance.Width, TargetSelector.DamageType.Magical);
             var rTarget = TargetSelector.GetTarget(Spells[SpellSlot.R].Range, TargetSelector.DamageType.Magical);
-            if (rTarget.LSIsValidTarget() &&
+            if (rTarget.IsValidTarget() &&
                 !EntryPoint.Menu.Item("l33t.stds.ups.ignore." + rTarget.ChampionName).GetValue<bool>())
             {
                 rTarget =
@@ -172,16 +172,16 @@ using EloBuddy;
 
         public static void ProcessSphereE(Obj_AI_Base target)
         {
-            if (Spells[SpellSlot.Q].IsReady() && Spells[SpellSlot.E].IsReady() && target.LSIsValidTarget())
+            if (Spells[SpellSlot.Q].IsReady() && Spells[SpellSlot.E].IsReady() && target.IsValidTarget())
             {
                 var targetPosition =
                     Prediction.GetPrediction(target, Spells[SpellSlot.Q].Delay + Spells[SpellSlot.E].Delay).UnitPosition;
-                if (EntryPoint.Player.LSDistance(target, true) > Math.Pow(Spells[SpellSlot.E].Range, 2))
+                if (EntryPoint.Player.Distance(target, true) > Math.Pow(Spells[SpellSlot.E].Range, 2))
                 {
                     var sphere = EntryPoint.Player.Position +
-                                 (targetPosition - EntryPoint.Player.Position).LSNormalized() * Spells[SpellSlot.E].Range;
+                                 (targetPosition - EntryPoint.Player.Position).Normalized() * Spells[SpellSlot.E].Range;
                     Spells[SpellSlot.SphereE].Instance.Delay = Spells[SpellSlot.Q].Delay + Spells[SpellSlot.E].Delay +
-                                                               EntryPoint.Player.LSDistance(sphere) /
+                                                               EntryPoint.Player.Distance(sphere) /
                                                                Spells[SpellSlot.E].Instance.Speed;
                     var prediction = Spells[SpellSlot.SphereE].Instance.GetPrediction(target);
                     if (prediction.Hitchance >= HitChance.Medium)
@@ -205,26 +205,26 @@ using EloBuddy;
 
         private static void CastSphereE(Obj_AI_Base target, Vector3 sphere)
         {
-            if (target.LSIsValidTarget() &&
-                EntryPoint.Player.LSDistance(sphere, true) <= Math.Pow(Spells[SpellSlot.E].Range, 2))
+            if (target.IsValidTarget() &&
+                EntryPoint.Player.Distance(sphere, true) <= Math.Pow(Spells[SpellSlot.E].Range, 2))
             {
-                var sp = sphere + (EntryPoint.Player.ServerPosition - sphere).LSNormalized() * 100f;
-                var esp = sphere + (sphere - EntryPoint.Player.ServerPosition).LSNormalized() * 592f;
+                var sp = sphere + (EntryPoint.Player.ServerPosition - sphere).Normalized() * 100f;
+                var esp = sphere + (sphere - EntryPoint.Player.ServerPosition).Normalized() * 592f;
 
                 Spells[SpellSlot.SphereE].Instance.Delay = Spells[SpellSlot.Q].Delay + Spells[SpellSlot.E].Delay +
-                                                           EntryPoint.Player.LSDistance(sphere) /
+                                                           EntryPoint.Player.Distance(sphere) /
                                                            Spells[SpellSlot.E].MissileSpeed;
                 Spells[SpellSlot.SphereE].Instance.UpdateSourcePosition(sphere);
 
                 var segment =
                     Spells[SpellSlot.SphereE].Instance.GetPrediction(target)
-                        .UnitPosition.LSTo2D()
-                        .LSProjectOn(sp.LSTo2D(), esp.LSTo2D());
+                        .UnitPosition.To2D()
+                        .ProjectOn(sp.To2D(), esp.To2D());
                 if (segment.IsOnSegment ||
-                    (segment.SegmentPoint.LSDistance(target, true) <=
+                    (segment.SegmentPoint.Distance(target, true) <=
                      Math.Pow(Spells[SpellSlot.SphereE].Instance.Width + target.BoundingRadius, 2)))
                 {
-                    var delay = 280 - (int) (EntryPoint.Player.LSDistance(sphere) / 2.5f) +
+                    var delay = 280 - (int) (EntryPoint.Player.Distance(sphere) / 2.5f) +
                                 EntryPoint.Menu.Item("l33t.stds.qesettings.qedelay").GetValue<Slider>().Value;
                     LeagueSharp.Common.Utility.DelayAction.Add(
                         Math.Max(0, delay), () =>
@@ -252,27 +252,27 @@ using EloBuddy;
 
         private static void ProcessE(Obj_AI_Base target)
         {
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 foreach (var sphere in
                     SphereManager.GetSpheres(true)
                         .Where(
                             o =>
-                                o.LSTo2D().LSIsValid() &&
-                                EntryPoint.Player.LSDistance(o, true) < Math.Pow(Spells[SpellSlot.E].Range, 2)))
+                                o.To2D().IsValid() &&
+                                EntryPoint.Player.Distance(o, true) < Math.Pow(Spells[SpellSlot.E].Range, 2)))
                 {
-                    var sp = sphere.LSTo2D() +
-                             (EntryPoint.Player.ServerPosition.LSTo2D() - sphere.LSTo2D()).LSNormalized() * 100f;
-                    var esp = sphere.LSTo2D() +
-                              (sphere.LSTo2D() - EntryPoint.Player.ServerPosition.LSTo2D()).LSNormalized() * 592f;
+                    var sp = sphere.To2D() +
+                             (EntryPoint.Player.ServerPosition.To2D() - sphere.To2D()).Normalized() * 100f;
+                    var esp = sphere.To2D() +
+                              (sphere.To2D() - EntryPoint.Player.ServerPosition.To2D()).Normalized() * 592f;
 
                     Spells[SpellSlot.SphereE].Instance.Delay = Spells[SpellSlot.Q].Delay + Spells[SpellSlot.E].Delay +
-                                                               EntryPoint.Player.LSDistance(sphere) /
+                                                               EntryPoint.Player.Distance(sphere) /
                                                                Spells[SpellSlot.E].MissileSpeed;
                     Spells[SpellSlot.SphereE].Instance.UpdateSourcePosition(sphere);
 
-                    var prediction = Spells[SpellSlot.SphereE].Instance.GetPrediction(target).UnitPosition.LSTo2D();
-                    if (prediction.LSDistance(sp, esp, true, true) <=
+                    var prediction = Spells[SpellSlot.SphereE].Instance.GetPrediction(target).UnitPosition.To2D();
+                    if (prediction.Distance(sp, esp, true, true) <=
                         Math.Pow(Spells[SpellSlot.SphereE].Instance.Width + target.BoundingRadius, 2))
                     {
                         Spells[SpellSlot.E].Instance.Cast(sphere);
@@ -290,7 +290,7 @@ using EloBuddy;
             var attackDamage = 0d;
             if (EntryPoint.Menu.Item("l33t.stds.ups.disable.AA").GetValue<bool>())
             {
-                attackDamage = EntryPoint.Player.LSGetAutoAttackDamage(target);
+                attackDamage = EntryPoint.Player.GetAutoAttackDamage(target);
             }
 
             var includeQ = EntryPoint.Menu.Item("l33t.stds.ups.disable.Q").GetValue<bool>();
@@ -316,11 +316,11 @@ using EloBuddy;
 
         private static void ProcessW(Obj_AI_Base target, Obj_AI_Base officialTarget)
         {
-            if (target.LSIsValidTarget() && Spells[SpellSlot.W].IsReady() &&
+            if (target.IsValidTarget() && Spells[SpellSlot.W].IsReady() &&
                 Spells[SpellSlot.W].Instance.Instance.ToggleState == 1)
             {
                 var gameObjectPos = GetGrabbableObjectPos(false);
-                if (gameObjectPos.LSTo2D().LSIsValid() &&
+                if (gameObjectPos.To2D().IsValid() &&
                     (int) (Game.Time * 0x3E8) - Spells[SpellSlot.Q].LastCastAttemptTick > Game.Ping + 150 &&
                     (int) (Game.Time * 0x3E8) - Spells[SpellSlot.W].LastCastAttemptTick > Game.Ping + 750 &&
                     (int) (Game.Time * 0x3E8) - Spells[SpellSlot.E].LastCastAttemptTick > Game.Ping + 750)
@@ -341,7 +341,7 @@ using EloBuddy;
                     }
                 }
             }
-            else if (officialTarget.LSIsValidTarget() && Spells[SpellSlot.W].IsReady() &&
+            else if (officialTarget.IsValidTarget() && Spells[SpellSlot.W].IsReady() &&
                      Spells[SpellSlot.W].Instance.Instance.ToggleState == 2)
             {
                 var prediction = Spells[SpellSlot.W].Instance.GetPrediction(officialTarget, true);
@@ -360,7 +360,7 @@ using EloBuddy;
                 return SphereManager.GetGrabbableSpheres((int) Spells[SpellSlot.W].Range);
             }
             foreach (var minion in
-                ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.LSIsValidTarget(Spells[SpellSlot.W].Range)))
+                ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(Spells[SpellSlot.W].Range)))
             {
                 return minion.ServerPosition;
             }
@@ -439,7 +439,7 @@ using EloBuddy;
                 if (Spells[SpellSlot.W].Instance.Instance.ToggleState == 1)
                 {
                     var gObjectPos = GetGrabbableObjectPos(false);
-                    if (gObjectPos.LSTo2D().LSIsValid() &&
+                    if (gObjectPos.To2D().IsValid() &&
                         Environment.TickCount - Spells[SpellSlot.W].LastCastAttemptTick > Game.Ping + 150)
                     {
                         Spells[SpellSlot.W].Instance.Cast(gObjectPos);
@@ -559,7 +559,7 @@ using EloBuddy;
 
             if (EntryPoint.Menu.Item("l33t.stds.harass.useQAA").GetValue<bool>() &&
                 sender.Type == EntryPoint.Player.Type && sender.IsEnemy && args.SData.Name.ToLower().Contains("attack") &&
-                EntryPoint.Player.LSDistance(sender, true) <= Math.Pow(Spells[SpellSlot.Q].Range, 2) &&
+                EntryPoint.Player.Distance(sender, true) <= Math.Pow(Spells[SpellSlot.Q].Range, 2) &&
                 EntryPoint.Player.ManaPercent > EntryPoint.Menu.Item("l33t.stds.harass.mana").GetValue<Slider>().Value)
             {
                 ProcessQ(sender);
@@ -569,7 +569,7 @@ using EloBuddy;
         public static void ProcessHarass(AIHeroClient target)
         {
             if (EntryPoint.Menu.Item("l33t.stds.harass.turret").GetValue<bool>() &&
-                EntryPoint.Player.Position.LSUnderTurret(true) ||
+                EntryPoint.Player.Position.UnderTurret(true) ||
                 EntryPoint.Player.ManaPercent < EntryPoint.Menu.Item("l33t.stds.harass.mana").GetValue<Slider>().Value)
             {
                 return;
@@ -581,7 +581,7 @@ using EloBuddy;
                 EntryPoint.Menu.Item("l33t.stds.harass.useE").GetValue<bool>(), false,
                 EntryPoint.Menu.Item("l33t.stds.harass.useQE").GetValue<bool>(),
                 (EntryPoint.Menu.Item("l33t.stds.mode").GetValue<StringList>().SelectedIndex == 0 &&
-                 target.LSIsValidTarget())
+                 target.IsValidTarget())
                     ? target
                     : null);
         }
@@ -592,14 +592,14 @@ using EloBuddy;
                 ObjectCache.GetHeroes()
                     .Where(
                         e =>
-                            !e.LSHasBuff("UndyingRage") && !e.LSHasBuff("JudicatorIntervention") &&
-                            e.LSIsValidTarget(Spells[SpellSlot.SphereE].Range) &&
+                            !e.HasBuff("UndyingRage") && !e.HasBuff("JudicatorIntervention") &&
+                            e.IsValidTarget(Spells[SpellSlot.SphereE].Range) &&
                             (int) (Game.Time * 0x3E8) - _flashCastTick > 650 + Game.Ping))
             {
                 if (
                     enemy.GetComboDamage(
                         false, false, EntryPoint.Menu.Item("l33t.stds.ks.useQE").GetValue<bool>(), false) > enemy.Health &&
-                    EntryPoint.Player.LSDistance(enemy, true) <= Math.Pow(Spells[SpellSlot.SphereE].Range, 2))
+                    EntryPoint.Player.Distance(enemy, true) <= Math.Pow(Spells[SpellSlot.SphereE].Range, 2))
                 {
                     ProcessSpells(
                         false, false, false, false, EntryPoint.Menu.Item("l33t.stds.ks.useQE").GetValue<bool>());
@@ -609,7 +609,7 @@ using EloBuddy;
                     enemy.GetComboDamage(
                         false, EntryPoint.Menu.Item("l33t.stds.ks.useW").GetValue<bool>(), false, false) >
                     enemy.Health &&
-                    EntryPoint.Player.LSDistance(enemy, true) <= Math.Pow(Spells[SpellSlot.W].Range, 2))
+                    EntryPoint.Player.Distance(enemy, true) <= Math.Pow(Spells[SpellSlot.W].Range, 2))
                 {
                     ProcessSpells(
                         false, EntryPoint.Menu.Item("l33t.stds.ks.useW").GetValue<bool>(), false, false, false);
@@ -619,7 +619,7 @@ using EloBuddy;
                     enemy.GetComboDamage(
                         EntryPoint.Menu.Item("l33t.stds.ks.useQ").GetValue<bool>(), false,
                         EntryPoint.Menu.Item("l33t.stds.ks.useE").GetValue<bool>(), false) > enemy.Health &&
-                    EntryPoint.Player.LSDistance(enemy, true) <= Math.Pow(Spells[SpellSlot.Q].Range + 25f, 2))
+                    EntryPoint.Player.Distance(enemy, true) <= Math.Pow(Spells[SpellSlot.Q].Range + 25f, 2))
                 {
                     ProcessSpells(
                         EntryPoint.Menu.Item("l33t.stds.ks.useQ").GetValue<bool>(), false,
@@ -630,7 +630,7 @@ using EloBuddy;
                     enemy.GetComboDamage(
                         EntryPoint.Menu.Item("l33t.stds.ks.useQ").GetValue<bool>(), false, false, false) >
                     enemy.Health &&
-                    EntryPoint.Player.LSDistance(enemy, true) <= Math.Pow(Spells[SpellSlot.Q].Range + 25f, 2))
+                    EntryPoint.Player.Distance(enemy, true) <= Math.Pow(Spells[SpellSlot.Q].Range + 25f, 2))
                 {
                     ProcessSpells(
                         EntryPoint.Menu.Item("l33t.stds.ks.useQ").GetValue<bool>(), false, false, false,
@@ -641,7 +641,7 @@ using EloBuddy;
                     enemy.GetComboDamage(
                         false, false, false, EntryPoint.Menu.Item("l33t.stds.ks.useR").GetValue<bool>()) >
                     enemy.Health &&
-                    EntryPoint.Player.LSDistance(enemy, true) <= Math.Pow(Spells[SpellSlot.R].Range, 2))
+                    EntryPoint.Player.Distance(enemy, true) <= Math.Pow(Spells[SpellSlot.R].Range, 2))
                 {
                     ProcessSpells(
                         false, false, false, false,
@@ -654,7 +654,7 @@ using EloBuddy;
                         EntryPoint.Menu.Item("l33t.stds.ks.useW").GetValue<bool>(),
                         EntryPoint.Menu.Item("l33t.stds.ks.useE").GetValue<bool>(),
                         EntryPoint.Menu.Item("l33t.stds.ks.useR").GetValue<bool>()) > enemy.Health &&
-                    EntryPoint.Player.LSDistance(enemy, true) <= Math.Pow(1337f, 2))
+                    EntryPoint.Player.Distance(enemy, true) <= Math.Pow(1337f, 2))
                 {
                     ProcessSpells(
                         EntryPoint.Menu.Item("l33t.stds.ks.useQ").GetValue<bool>(),
@@ -680,10 +680,10 @@ using EloBuddy;
                     EntryPoint.Menu.Item("l33t.stds.ks.useQ").GetValue<bool>(), false,
                     EntryPoint.Menu.Item("l33t.stds.ks.useE").GetValue<bool>(), false) < enemy.Health;
             var ePos = Spells[SpellSlot.R].Instance.GetPrediction(enemy);
-            if ((FlashSpell.Slot == EloBuddy.SpellSlot.Unknown && FlashSpell.LSIsReady()) || !useFlash ||
-                !(EntryPoint.Player.LSDistance(ePos.UnitPosition, true) <=
+            if ((FlashSpell.Slot == EloBuddy.SpellSlot.Unknown && FlashSpell.IsReady()) || !useFlash ||
+                !(EntryPoint.Player.Distance(ePos.UnitPosition, true) <=
                   Math.Pow(Spells[SpellSlot.Q].Range + 25f + 395, 2)) ||
-                !(EntryPoint.Player.LSDistance(ePos.UnitPosition, true) >
+                !(EntryPoint.Player.Distance(ePos.UnitPosition, true) >
                   Math.Pow(Spells[SpellSlot.Q].Range + 25f + 200, 2)))
             {
                 return;
@@ -695,10 +695,10 @@ using EloBuddy;
                  !EntryPoint.Menu.Item("l33t.stds.ks.usefqe").GetValue<bool>()) &&
                 (!(enemy.GetComboDamage(false, false, false, EntryPoint.Menu.Item("l33t.stds.ks.useR").GetValue<bool>()) >
                    enemy.Health) || !EntryPoint.Menu.Item("l33t.stds.ks.usefr").GetValue<bool>() ||
-                 !(EntryPoint.Player.LSDistance(ePos.UnitPosition, true) <= Math.Pow(Spells[SpellSlot.R].Range + 390, 2)) ||
+                 !(EntryPoint.Player.Distance(ePos.UnitPosition, true) <= Math.Pow(Spells[SpellSlot.R].Range + 390, 2)) ||
                  (int) (Game.Time * 0x3E8) - Spells[SpellSlot.R].LastCastAttemptTick <= Game.Ping + 750 ||
                  (int) (Game.Time * 0x3E8) - Spells[SpellSlot.SphereE].LastCastAttemptTick <= Game.Ping + 750 ||
-                 !(EntryPoint.Player.LSDistance(ePos.UnitPosition, true) > Math.Pow(Spells[SpellSlot.R].Range + 200, 2))))
+                 !(EntryPoint.Player.Distance(ePos.UnitPosition, true) > Math.Pow(Spells[SpellSlot.R].Range + 200, 2))))
             {
                 return;
             }
@@ -713,14 +713,14 @@ using EloBuddy;
             {
                 return;
             }
-            var nearbyE = ePos.UnitPosition.LSCountEnemiesInRange(1000);
+            var nearbyE = ePos.UnitPosition.CountEnemiesInRange(1000);
             if (nearbyE > EntryPoint.Menu.Item("l33t.stds.ks.maxenemy").GetValue<Slider>().Value)
             {
                 return;
             }
             var flashPos = EntryPoint.Player.ServerPosition -
                            Vector3.Normalize(EntryPoint.Player.ServerPosition - ePos.UnitPosition) * 400;
-            if (flashPos.LSIsWall())
+            if (flashPos.IsWall())
             {
                 return;
             }
@@ -749,8 +749,8 @@ using EloBuddy;
             }
 
             if (!Spells[SpellSlot.E].IsReady() ||
-                !(EntryPoint.Player.LSDistance(gapcloser.Sender, true) <= Math.Pow(Spells[SpellSlot.SphereE].Range, 2)) ||
-                !gapcloser.Sender.LSIsValidTarget(Spells[SpellSlot.SphereE].Range))
+                !(EntryPoint.Player.Distance(gapcloser.Sender, true) <= Math.Pow(Spells[SpellSlot.SphereE].Range, 2)) ||
+                !gapcloser.Sender.IsValidTarget(Spells[SpellSlot.SphereE].Range))
             {
                 return;
             }
@@ -760,7 +760,7 @@ using EloBuddy;
             {
                 ProcessSphereE(gapcloser.Sender);
             }
-            else if (EntryPoint.Player.LSDistance(gapcloser.Sender, true) <= Math.Pow(Spells[SpellSlot.E].Range, 2))
+            else if (EntryPoint.Player.Distance(gapcloser.Sender, true) <= Math.Pow(Spells[SpellSlot.E].Range, 2))
             {
                 Spells[SpellSlot.E].Instance.Cast(gapcloser.End);
             }
@@ -774,8 +774,8 @@ using EloBuddy;
             }
 
             if (Spells[SpellSlot.E].IsReady() &&
-                EntryPoint.Player.LSDistance(sender, true) <= Math.Pow(Spells[SpellSlot.E].Range, 2) &&
-                sender.LSIsValidTarget(Spells[SpellSlot.E].Range))
+                EntryPoint.Player.Distance(sender, true) <= Math.Pow(Spells[SpellSlot.E].Range, 2) &&
+                sender.IsValidTarget(Spells[SpellSlot.E].Range))
             {
                 if (Spells[SpellSlot.Q].IsReady())
                 {
@@ -787,7 +787,7 @@ using EloBuddy;
                 }
             }
             else if (Spells[SpellSlot.Q].IsReady() && Spells[SpellSlot.E].IsReady() &&
-                     EntryPoint.Player.LSDistance(sender, true) <= Math.Pow(Spells[SpellSlot.SphereE].Range, 2))
+                     EntryPoint.Player.Distance(sender, true) <= Math.Pow(Spells[SpellSlot.SphereE].Range, 2))
             {
                 ProcessSphereE(sender);
             }

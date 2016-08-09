@@ -128,14 +128,14 @@ using EloBuddy;
                 {
                     float damage = 0;
 
-                    if (_Q.LSIsReady())
+                    if (_Q.IsReady())
                         damage += _Q.GetDamage(enemy);
-                    if (_E.LSIsReady())
+                    if (_E.IsReady())
                         damage += _E.GetDamage(enemy);
-                    if (_R.LSIsReady())
+                    if (_R.IsReady())
                         damage += _R.GetDamage(enemy);
                     if (!Player.Spellbook.IsAutoAttacking)
-                        damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                        damage += (float)Player.GetAutoAttackDamage(enemy, true);
                     return damage;
                 }
                 return 0;
@@ -155,7 +155,7 @@ using EloBuddy;
             try
             {
                 if (Player.IsDead) return;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
                 {
                     if (_MainMenu.Item("Thresh_Indicator").GetValue<bool>())
                     {
@@ -197,15 +197,15 @@ using EloBuddy;
                 if (Player.IsDead) return;
                 // Set Target
                 var QTarget = TargetSelector.GetTarget(_Q.Range, TargetSelector.DamageType.Magical);
-                var WTarget = ObjectManager.Get<AIHeroClient>().OrderByDescending(x => x.Health).FirstOrDefault(x => x.IsAlly && !x.IsDead && !x.IsMe && x.HealthPercent < _MainMenu.Item("Thresh_LenternHP").GetValue<Slider>().Value && x.LSDistance(Player) < 1600);
+                var WTarget = ObjectManager.Get<AIHeroClient>().OrderByDescending(x => x.Health).FirstOrDefault(x => x.IsAlly && !x.IsDead && !x.IsMe && x.HealthPercent < _MainMenu.Item("Thresh_LenternHP").GetValue<Slider>().Value && x.Distance(Player) < 1600);
                 var ETarget = TargetSelector.GetTarget(_E.Range, TargetSelector.DamageType.Magical);
                 var RTarget = TargetSelector.GetTarget(_R.Range, TargetSelector.DamageType.Magical);
 
-                if (WTarget != null && _MainMenu.Item("Thresh_LenternEnable").GetValue<bool>() && _W.LSIsReady())
+                if (WTarget != null && _MainMenu.Item("Thresh_LenternEnable").GetValue<bool>() && _W.IsReady())
                 {
-                    if (WTarget.LSDistance(Player) > 950)
+                    if (WTarget.Distance(Player) > 950)
                     {
-                        _W.Cast(Player.ServerPosition.LSExtend(WTarget.ServerPosition, 950), true);
+                        _W.Cast(Player.ServerPosition.Extend(WTarget.ServerPosition, 950), true);
                     }
                     else
                     {
@@ -219,15 +219,15 @@ using EloBuddy;
                     foreach (var enemy in ObjectManager.Get<AIHeroClient>())
                     {
                         if (enemy.Team != Player.Team && QTarget != null
-                            && _MainMenu.Item("Thresh_GrabSelect" + enemy.ChampionName).GetValue<StringList>().SelectedIndex == 2 && _Q.LSIsReady()
+                            && _MainMenu.Item("Thresh_GrabSelect" + enemy.ChampionName).GetValue<StringList>().SelectedIndex == 2 && _Q.IsReady()
                             && QTarget.ChampionName == enemy.ChampionName && Player.Spellbook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
                         {
-                            if ((HasBuff(QTarget) || QTarget.HasBuffOfType(BuffType.Slow)) && QTarget.Position.LSDistance(Player.Position) <= _Q.Range * 0.9)
+                            if ((HasBuff(QTarget) || QTarget.HasBuffOfType(BuffType.Slow)) && QTarget.Position.Distance(Player.Position) <= _Q.Range * 0.9)
                             {
                                 _Q.CastIfHitchanceEquals(QTarget, Hitchance("Thresh_CUseQ_Hit"), true);
                                 return;
                             }
-                            if (QTarget.Position.LSDistance(Player.Position) <= _Q.Range * 0.8)
+                            if (QTarget.Position.Distance(Player.Position) <= _Q.Range * 0.8)
                             {
                                 _Q.CastIfHitchanceEquals(QTarget, Hitchance("Thresh_CUseQ_Hit"), true);
                                 return;
@@ -238,17 +238,17 @@ using EloBuddy;
 
                 if (_MainMenu.Item("CKey").GetValue<KeyBind>().Active) // Combo
                 {
-                    if (_MainMenu.Item("Thresh_CUse_E").GetValue<bool>() && ETarget != null && _E.LSIsReady())
+                    if (_MainMenu.Item("Thresh_CUse_E").GetValue<bool>() && ETarget != null && _E.IsReady())
                     {
-                        var EPosition = ETarget.ServerPosition.LSExtend(Player.ServerPosition, 600);
+                        var EPosition = ETarget.ServerPosition.Extend(Player.ServerPosition, 600);
                         _E.Cast(EPosition, true);
                     }
-                    if (_MainMenu.Item("Thresh_CUse_Q").GetValue<bool>() && QTarget != null && _Q.LSIsReady() && _MainMenu.Item("Thresh_GrabSelect" + QTarget.ChampionName).GetValue<StringList>().SelectedIndex != 1
+                    if (_MainMenu.Item("Thresh_CUse_Q").GetValue<bool>() && QTarget != null && _Q.IsReady() && _MainMenu.Item("Thresh_GrabSelect" + QTarget.ChampionName).GetValue<StringList>().SelectedIndex != 1
                         && Player.Spellbook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
                     {
                         _Q.CastIfHitchanceEquals(QTarget, Hitchance("Thresh_CUseQ_Hit"), true);
                     }
-                    if (_MainMenu.Item("Thresh_CUse_R").GetValue<bool>() && RTarget != null && _R.LSIsReady())
+                    if (_MainMenu.Item("Thresh_CUse_R").GetValue<bool>() && RTarget != null && _R.IsReady())
                     {
                         _R.Cast(true);
                     }
@@ -267,16 +267,16 @@ using EloBuddy;
         {
             try
             {
-                if (_MainMenu.Item("Thresh_GapE").GetValue<bool>() && _E.LSIsReady())
+                if (_MainMenu.Item("Thresh_GapE").GetValue<bool>() && _E.IsReady())
                 {
-                    if (gapcloser.Sender.IsEnemy && gapcloser.Sender.LSDistance(Player) < 480)
+                    if (gapcloser.Sender.IsEnemy && gapcloser.Sender.Distance(Player) < 480)
                     {
                         _E.Cast(gapcloser.Sender.ServerPosition, true);
                     }
                 }
-                if (_MainMenu.Item("Thresh_GapQ").GetValue<bool>() && _Q.LSIsReady())
+                if (_MainMenu.Item("Thresh_GapQ").GetValue<bool>() && _Q.IsReady())
                 {
-                    if (gapcloser.Sender.IsEnemy && gapcloser.Sender.LSDistance(Player) < 1100 && Player.Spellbook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
+                    if (gapcloser.Sender.IsEnemy && gapcloser.Sender.Distance(Player) < 1100 && Player.Spellbook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
                     {
                         _Q.CastIfHitchanceEquals(gapcloser.Sender, Hitchance("Thresh_CUseQ_Hit"), true);
                     }
@@ -313,16 +313,16 @@ using EloBuddy;
             {
                 if (!sender.IsEnemy || !sender.IsValid<AIHeroClient>())
                     return;
-                if (_MainMenu.Item("Thresh_InterE").GetValue<bool>() && _E.LSIsReady())
+                if (_MainMenu.Item("Thresh_InterE").GetValue<bool>() && _E.IsReady())
                 {
-                    if (sender.IsEnemy && sender.LSDistance(Player) < 480)
+                    if (sender.IsEnemy && sender.Distance(Player) < 480)
                     {
                         _E.Cast(sender.ServerPosition, true);
                     }
                 }
-                if (_MainMenu.Item("Thresh_InterQ").GetValue<bool>() && _Q.LSIsReady())
+                if (_MainMenu.Item("Thresh_InterQ").GetValue<bool>() && _Q.IsReady())
                 {
-                    if (sender.IsEnemy && sender.LSDistance(Player) < 1100 && Player.Spellbook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
+                    if (sender.IsEnemy && sender.Distance(Player) < 1100 && Player.Spellbook.GetSpell(SpellSlot.Q).Name == "ThreshQ")
                     {
                         _Q.CastIfHitchanceEquals(sender, Hitchance("Thresh_CUseQ_Hit"), true);
                     }

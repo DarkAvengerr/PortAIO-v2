@@ -78,15 +78,15 @@ using EloBuddy;
                 return;
             }
 
-            if (!gapcloser.Sender.LSIsValidTarget() ||
-                !(gapcloser.End.LSDistance(ObjectManager.Player.ServerPosition) <= 350f) || !(ObjectManager.Player.HealthPercent > 25))
+            if (!gapcloser.Sender.IsValidTarget() ||
+                !(gapcloser.End.Distance(ObjectManager.Player.ServerPosition) <= 350f) || !(ObjectManager.Player.HealthPercent > 25))
             {
                 return;
             }
             LeagueSharp.Common.Utility.DelayAction.Add(Variables.AssemblyMenu.GetItemValue<Slider>("dzaio.champion.vladimir.extra.w.antigpdelay").Value,
                 () =>
                 {
-                    var extendedPosition = ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, Variables.Spells[SpellSlot.E].Range);
+                    var extendedPosition = ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, Variables.Spells[SpellSlot.E].Range);
                     Variables.Spells[SpellSlot.W].Cast(extendedPosition);
                 });
         }
@@ -124,7 +124,7 @@ using EloBuddy;
             if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo))
             {
                 var qTarget = Variables.Spells[SpellSlot.Q].GetTarget();
-                if (qTarget.LSIsValidTarget())
+                if (qTarget.IsValidTarget())
                 {
                         Variables.Spells[SpellSlot.Q].CastOnUnit(qTarget);
                 }
@@ -133,7 +133,7 @@ using EloBuddy;
             if (Variables.Spells[SpellSlot.E].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo))
             {
                 var eTarget = Variables.Spells[SpellSlot.E].GetTarget();
-                if (eTarget.LSIsValidTarget() && ObjectManager.Player.LSDistance(eTarget) >= Variables.Spells[SpellSlot.E].Range / 2f)
+                if (eTarget.IsValidTarget() && ObjectManager.Player.Distance(eTarget) >= Variables.Spells[SpellSlot.E].Range / 2f)
                 {
                     Variables.Spells[SpellSlot.E].CastOnUnit(eTarget);
                 }
@@ -143,14 +143,14 @@ using EloBuddy;
             {
                 var qTarget = Variables.Spells[SpellSlot.Q].GetTarget();
 
-                if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo) && qTarget.LSIsValidTarget()
+                if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo) && qTarget.IsValidTarget()
                        && Variables.Spells[SpellSlot.Q].IsKillable(qTarget))
                 {
                     Variables.Spells[SpellSlot.Q].CastOnUnit(qTarget);
                     return;
                 }
 
-                if (Variables.Spells[SpellSlot.R].GetDamage(qTarget) >= qTarget.Health && qTarget.LSIsValidTarget(Variables.Spells[SpellSlot.R].Range))
+                if (Variables.Spells[SpellSlot.R].GetDamage(qTarget) >= qTarget.Health && qTarget.IsValidTarget(Variables.Spells[SpellSlot.R].Range))
                 {
                     var prediction = Variables.Spells[SpellSlot.R].GetPrediction(qTarget);
                     if (prediction.Hitchance >= HitChance.VeryHigh)
@@ -172,7 +172,7 @@ using EloBuddy;
             if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass))
             {
                 var qTarget = Variables.Spells[SpellSlot.Q].GetTarget();
-                if (qTarget.LSIsValidTarget())
+                if (qTarget.IsValidTarget())
                 {
                     Variables.Spells[SpellSlot.Q].CastOnUnit(qTarget);
                 }
@@ -181,7 +181,7 @@ using EloBuddy;
             if (Variables.Spells[SpellSlot.E].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass))
             {
                 var eTarget = Variables.Spells[SpellSlot.E].GetTarget();
-                if (eTarget.LSIsValidTarget() && ObjectManager.Player.LSDistance(eTarget) >= Variables.Spells[SpellSlot.E].Range / 2f)
+                if (eTarget.IsValidTarget() && ObjectManager.Player.Distance(eTarget) >= Variables.Spells[SpellSlot.E].Range / 2f)
                 {
                     Variables.Spells[SpellSlot.E].CastOnUnit(eTarget);
                 }
@@ -202,7 +202,7 @@ using EloBuddy;
             var minionTarget =
                 MinionManager
                     .GetMinions(Variables.Spells[SpellSlot.Q].Range, MinionTypes.All).FirstOrDefault(m => Variables.Spells[SpellSlot.Q].IsKillable(m));
-            if (minionTarget.LSIsValidTarget(Variables.Spells[SpellSlot.Q].Range))
+            if (minionTarget.IsValidTarget(Variables.Spells[SpellSlot.Q].Range))
             {
                 Variables.Spells[SpellSlot.Q].Cast(minionTarget);
             }

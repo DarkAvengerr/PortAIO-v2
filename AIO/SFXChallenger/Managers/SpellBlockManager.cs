@@ -134,16 +134,16 @@ using EloBuddy; namespace SFXChallenger.Managers
         public static bool Contains(AIHeroClient unit, GameObjectProcessSpellCastEventArgs args)
         {
             var name = unit.ChampionName;
-            var slot = unit.LSGetSpellSlot(args.SData.Name);
+            var slot = unit.GetSpellSlot(args.SData.Name);
 
             foreach (var spell in
                 BlockedSpells.Where(o => o.Name.Equals(name))
                     .Where(spell => !spell.HasModelCondition || unit.CharData.BaseSkinName.Equals(spell.ModelName))
-                    .Where(spell => !spell.HasBuffCondition || unit.LSHasBuff(spell.AutoAttackBuff)))
+                    .Where(spell => !spell.HasBuffCondition || unit.HasBuff(spell.AutoAttackBuff)))
             {
                 if (spell.IsAutoAttack)
                 {
-                    if (!args.SData.LSIsAutoAttack())
+                    if (!args.SData.IsAutoAttack())
                     {
                         continue;
                     }

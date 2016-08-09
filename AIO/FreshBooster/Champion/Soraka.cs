@@ -120,7 +120,7 @@ using EloBuddy;
                 if (_MainMenu.Item("Soraka_WAlly").GetValue<bool>())
                     foreach (var item in HeroManager.Allies.OrderBy(f => f.Health))
                     {
-                        if (item.LSDistance(Player.Position) <= 2500 && !item.IsDead)
+                        if (item.Distance(Player.Position) <= 2500 && !item.IsDead)
                             if (item.HealthPercent <= _MainMenu.Item("Soraka_WMin").GetValue<Slider>().Value)
                                 Drawing.DrawLine(ToScreen(Player.Position), ToScreen(item.Position), 1, LineColor(item));
                     }
@@ -143,12 +143,12 @@ using EloBuddy;
                 {
                     float damage = 0;
 
-                    if (_Q.LSIsReady())
+                    if (_Q.IsReady())
                         damage += _Q.GetDamage(enemy);
-                    if (_E.LSIsReady())
+                    if (_E.IsReady())
                         damage += _E.GetDamage(enemy);
                     if (!Player.Spellbook.IsAutoAttacking)
-                        damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                        damage += (float)Player.GetAutoAttackDamage(enemy, true);
                     return damage;
                 }
                 return 0;
@@ -168,7 +168,7 @@ using EloBuddy;
             try
             {
                 if (Player.IsDead) return;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
                 {
                     if (_MainMenu.Item("Soraka_Indicator").GetValue<bool>())
                     {
@@ -213,11 +213,11 @@ using EloBuddy;
                 var QTarget = TargetSelector.GetTarget(_Q.Range, TargetSelector.DamageType.Magical);
                 var ETarget = TargetSelector.GetTarget(_E.Range, TargetSelector.DamageType.Magical);
                 var WTarget = HeroManager.Allies.OrderBy(f => f.Health)
-                    .FirstOrDefault(f => f.Position.LSDistance(Player.Position) <= _W.Range && f.HealthPercent <= _MainMenu.Item("Soraka_WMin").GetValue<Slider>().Value
-                    && !f.LSInFountain(LeagueSharp.Common.Utility.FountainType.OwnFountain) && !f.IsDead && !f.IsZombie);
+                    .FirstOrDefault(f => f.Position.Distance(Player.Position) <= _W.Range && f.HealthPercent <= _MainMenu.Item("Soraka_WMin").GetValue<Slider>().Value
+                    && !f.InFountain(LeagueSharp.Common.Utility.FountainType.OwnFountain) && !f.IsDead && !f.IsZombie);
                 var RTarget = HeroManager.Allies.OrderBy(f => f.Health)
                     .FirstOrDefault(f => f.HealthPercent <= _MainMenu.Item("Soraka_RMin").GetValue<Slider>().Value
-                    && !f.LSInFountain(LeagueSharp.Common.Utility.FountainType.OwnFountain) && !f.IsDead && !f.IsZombie);
+                    && !f.InFountain(LeagueSharp.Common.Utility.FountainType.OwnFountain) && !f.IsDead && !f.IsZombie);
 
                 //Kill
                 if (_MainMenu.Item("Soraka_KUse_E").GetValue<bool>() && ETarget != null && _E.GetDamage(ETarget) > ETarget.Health)
@@ -227,21 +227,21 @@ using EloBuddy;
                 }
                 if (_MainMenu.Item("Soraka_KUse_Q").GetValue<bool>() && QTarget != null && _Q.GetDamage(QTarget) > QTarget.Health)
                 {
-                    _Q.SetSkillshot(0.5f, 210, QTarget.LSDistance(Player.Position) / 2f, false, SkillshotType.SkillshotCircle);
+                    _Q.SetSkillshot(0.5f, 210, QTarget.Distance(Player.Position) / 2f, false, SkillshotType.SkillshotCircle);
                     if (_Q.GetPrediction(QTarget).Hitchance >= HitChance.Medium)
                         _Q.CastIfHitchanceEquals(QTarget, _Q.GetPrediction(QTarget).Hitchance, true);
                 }
 
                 //Auto W, R
                 if (_MainMenu.Item("Soraka_WMinEnable").GetValue<bool>())
-                    if (_W.LSIsReady())
+                    if (_W.IsReady())
                         if (WTarget != null)
                             _W.CastOnUnit(WTarget, true);
                 if (_MainMenu.Item("Soraka_RMinEnable").GetValue<bool>())
-                    if (_R.LSIsReady())
+                    if (_R.IsReady())
                         if (RTarget != null)
                         {
-                            var enemy = HeroManager.Enemies.FirstOrDefault(f => RTarget.LSDistance(f.Position) < 1000);
+                            var enemy = HeroManager.Enemies.FirstOrDefault(f => RTarget.Distance(f.Position) < 1000);
                             if (enemy != null)
                                 _R.Cast(true);
                         }
@@ -250,13 +250,13 @@ using EloBuddy;
                 if (_MainMenu.Item("CKey").GetValue<KeyBind>().Active)
                 {
                     if (_MainMenu.Item("Soraka_CUse_E").GetValue<bool>() && ETarget != null)
-                        if (_E.LSIsReady())
+                        if (_E.IsReady())
                             if (_E.GetPrediction(ETarget).Hitchance >= HitChance.Medium)
                                 _E.CastIfHitchanceEquals(ETarget, _E.GetPrediction(ETarget).Hitchance, true);
                     if (_MainMenu.Item("Soraka_CUse_Q").GetValue<bool>() && QTarget != null)
-                        if (_Q.LSIsReady())
+                        if (_Q.IsReady())
                         {
-                            _Q.SetSkillshot(0.5f, 210, QTarget.LSDistance(Player.Position) / 2f, false, SkillshotType.SkillshotCircle);
+                            _Q.SetSkillshot(0.5f, 210, QTarget.Distance(Player.Position) / 2f, false, SkillshotType.SkillshotCircle);
                             if (_Q.GetPrediction(QTarget).Hitchance >= HitChance.Medium)
                                 _Q.CastIfHitchanceEquals(QTarget, _Q.GetPrediction(QTarget).Hitchance, true);
                         }
@@ -267,13 +267,13 @@ using EloBuddy;
                     && _MainMenu.Item("Soraka_HMana").GetValue<Slider>().Value < Player.ManaPercent)
                 {
                     if (_MainMenu.Item("Soraka_HUse_E").GetValue<bool>() && ETarget != null)
-                        if (_E.LSIsReady())
+                        if (_E.IsReady())
                             if (_E.GetPrediction(ETarget).Hitchance >= HitChance.Medium)
                                 _E.CastIfHitchanceEquals(ETarget, _E.GetPrediction(ETarget).Hitchance, true);
                     if (_MainMenu.Item("Soraka_HUse_Q").GetValue<bool>() && QTarget != null)
-                        if (_Q.LSIsReady())
+                        if (_Q.IsReady())
                         {
-                            _Q.SetSkillshot(0.5f, 210, QTarget.LSDistance(Player.Position) / 1.8f, false, SkillshotType.SkillshotCircle);
+                            _Q.SetSkillshot(0.5f, 210, QTarget.Distance(Player.Position) / 1.8f, false, SkillshotType.SkillshotCircle);
                             if (_Q.GetPrediction(QTarget).Hitchance >= HitChance.Medium)
                                 _Q.CastIfHitchanceEquals(QTarget, _Q.GetPrediction(QTarget).Hitchance, true);
                         }
@@ -294,9 +294,9 @@ using EloBuddy;
             try
             {
                 if (_MainMenu.Item("Soraka_AntiE").GetValue<bool>())
-                    if (_E.LSIsReady())
+                    if (_E.IsReady())
                         if (gapcloser.Sender.IsEnemy)
-                            if (gapcloser.Sender.LSDistance(Player.Position) <= _E.Range)
+                            if (gapcloser.Sender.Distance(Player.Position) <= _E.Range)
                                 _E.CastIfHitchanceEquals(gapcloser.Sender, HitChance.Low, true);
             }
             catch (Exception)
@@ -329,9 +329,9 @@ using EloBuddy;
             try
             {
                 if (_MainMenu.Item("Soraka_InterE").GetValue<bool>())
-                    if (_E.LSIsReady())
+                    if (_E.IsReady())
                         if (sender.IsEnemy)
-                            if (sender.LSDistance(Player.Position) <= _E.Range)
+                            if (sender.Distance(Player.Position) <= _E.Range)
                                 _E.CastIfHitchanceEquals(sender, HitChance.Low, true);
             }
             catch (Exception)

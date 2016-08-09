@@ -79,8 +79,8 @@
         {
             this.Distance = distance;
             this.ComingFrom = comingFrom;
-            this.Valid = point.LSIsValid();
-            this.Point = point + Configs.GridSize * (this.ComingFrom - point).LSNormalized();
+            this.Valid = point.IsValid();
+            this.Point = point + Configs.GridSize * (this.ComingFrom - point).Normalized();
             this.Time = time;
         }
 
@@ -144,7 +144,7 @@
             this.StartTick = startT;
             this.Start = start;
             this.End = end;
-            this.Direction = (end - start).LSNormalized();
+            this.Direction = (end - start).Normalized();
             this.Unit = unit;
             switch (spellData.Type)
             {
@@ -207,7 +207,7 @@
                            ? Utils.GameTimeTickCount <= this.StartTick + 5000
                            : Utils.GameTimeTickCount
                              <= this.StartTick + this.SpellData.Delay + this.SpellData.ExtraDuration
-                             + 1000 * (this.Start.LSDistance(this.End) / this.SpellData.MissileSpeed);
+                             + 1000 * (this.Start.Distance(this.End) / this.SpellData.MissileSpeed);
             }
         }
 
@@ -215,7 +215,7 @@
         {
             get
             {
-                return this.Direction.LSPerpendicular();
+                return this.Direction.Perpendicular();
             }
         }
 
@@ -229,7 +229,7 @@
         {
             get
             {
-                return this.collisionEnd.LSIsValid()
+                return this.collisionEnd.IsValid()
                            ? this.collisionEnd
                            : (this.SpellData.RawRange == 20000
                                   ? this.GetGlobalMissilePosition(0)
@@ -269,21 +269,21 @@
                                   ? this.SpellData.MissileMaxSpeed
                                   : this.SpellData.MissileMinSpeed));
             }
-            return this.Start + this.Direction * (int)Math.Max(0, Math.Min(this.CollisionEnd.LSDistance(this.Start), x));
+            return this.Start + this.Direction * (int)Math.Max(0, Math.Min(this.CollisionEnd.Distance(this.Start), x));
         }
 
         public bool IsAboutToHit(int time, Obj_AI_Base unit)
         {
             if (this.SpellData.Type != SkillShotType.SkillshotMissileLine)
             {
-                return !this.IsSafePoint(unit.ServerPosition.LSTo2D())
+                return !this.IsSafePoint(unit.ServerPosition.To2D())
                        && this.SpellData.ExtraDuration + this.SpellData.Delay
-                       + (int)(1000 * this.Start.LSDistance(this.End) / this.SpellData.MissileSpeed)
+                       + (int)(1000 * this.Start.Distance(this.End) / this.SpellData.MissileSpeed)
                        - (Utils.GameTimeTickCount - this.StartTick) <= time;
             }
-            var project = unit.ServerPosition.LSTo2D()
-                .LSProjectOn(this.GetMissilePosition(0), this.GetMissilePosition(time));
-            return project.IsOnSegment && unit.LSDistance(project.SegmentPoint) < this.SpellData.Radius;
+            var project = unit.ServerPosition.To2D()
+                .ProjectOn(this.GetMissilePosition(0), this.GetMissilePosition(time));
+            return project.IsOnSegment && unit.Distance(project.SegmentPoint) < this.SpellData.Radius;
         }
 
         public SafePathResult IsSafePath(List<Vector2> path, int timeOffset, int speed = -1, int delay = 0)
@@ -301,25 +301,25 @@
                 {
                     var sideStart = this.Polygon.Points[j];
                     var sideEnd = this.Polygon.Points[j == (this.Polygon.Points.Count - 1) ? 0 : j + 1];
-                    var intersection = from.LSIntersection(to, sideStart, sideEnd);
+                    var intersection = from.Intersection(to, sideStart, sideEnd);
                     if (intersection.Intersects)
                     {
                         segmentIntersections.Add(
                             new FoundIntersection(
-                                distance + intersection.Point.LSDistance(from),
-                                (int)((distance + intersection.Point.LSDistance(from)) * 1000 / speed),
+                                distance + intersection.Point.Distance(from),
+                                (int)((distance + intersection.Point.Distance(from)) * 1000 / speed),
                                 intersection.Point,
                                 from));
                     }
                 }
                 allIntersections.AddRange(segmentIntersections.OrderBy(o => o.Distance));
-                distance += from.LSDistance(to);
+                distance += from.Distance(to);
             }
             if (this.SpellData.Type == SkillShotType.SkillshotMissileLine
                 || this.SpellData.Type == SkillShotType.SkillshotMissileCone
                 || this.SpellData.Type == SkillShotType.SkillshotArc)
             {
-                if (this.IsSafePoint(ObjectManager.Player.ServerPosition.LSTo2D()))
+                if (this.IsSafePoint(ObjectManager.Player.ServerPosition.To2D()))
                 {
                     if (allIntersections.Count == 0)
                     {
@@ -333,23 +333,23 @@
                     {
                         var enterIntersection = allIntersections[i];
                         var enterIntersectionProjection =
-                            enterIntersection.Point.LSProjectOn(this.Start, this.End).SegmentPoint;
+                            enterIntersection.Point.ProjectOn(this.Start, this.End).SegmentPoint;
                         if (i == allIntersections.Count - 1)
                         {
                             return
                                 new SafePathResult(
-                                    (this.End.LSDistance(this.GetMissilePosition(enterIntersection.Time - timeOffset))
-                                     + 50 <= this.End.LSDistance(enterIntersectionProjection))
+                                    (this.End.Distance(this.GetMissilePosition(enterIntersection.Time - timeOffset))
+                                     + 50 <= this.End.Distance(enterIntersectionProjection))
                                     && ObjectManager.Player.MoveSpeed < this.SpellData.MissileSpeed,
                                     allIntersections[0]);
                         }
                         var exitIntersection = allIntersections[i + 1];
                         var exitIntersectionProjection =
-                            exitIntersection.Point.LSProjectOn(this.Start, this.End).SegmentPoint;
-                        if (this.GetMissilePosition(enterIntersection.Time - timeOffset).LSDistance(this.End) + 50
-                            > enterIntersectionProjection.LSDistance(this.End)
-                            && this.GetMissilePosition(exitIntersection.Time + timeOffset).LSDistance(this.End)
-                            <= exitIntersectionProjection.LSDistance(this.End))
+                            exitIntersection.Point.ProjectOn(this.Start, this.End).SegmentPoint;
+                        if (this.GetMissilePosition(enterIntersection.Time - timeOffset).Distance(this.End) + 50
+                            > enterIntersectionProjection.Distance(this.End)
+                            && this.GetMissilePosition(exitIntersection.Time + timeOffset).Distance(this.End)
+                            <= exitIntersectionProjection.Distance(this.End))
                         {
                             return new SafePathResult(false, allIntersections[0]);
                         }
@@ -363,9 +363,9 @@
                 if (allIntersections.Count > 0)
                 {
                     var exitIntersection = allIntersections[0];
-                    var exitIntersectionProjection = exitIntersection.Point.LSProjectOn(this.Start, this.End).SegmentPoint;
-                    if (this.GetMissilePosition(exitIntersection.Time + timeOffset).LSDistance(this.End)
-                        <= exitIntersectionProjection.LSDistance(this.End))
+                    var exitIntersectionProjection = exitIntersection.Point.ProjectOn(this.Start, this.End).SegmentPoint;
+                    if (this.GetMissilePosition(exitIntersection.Time + timeOffset).Distance(this.End)
+                        <= exitIntersectionProjection.Distance(this.End))
                     {
                         return new SafePathResult(false, allIntersections[0]);
                     }
@@ -375,13 +375,13 @@
             {
                 return new SafePathResult(false, new FoundIntersection());
             }
-            if (this.IsSafePoint(ObjectManager.Player.ServerPosition.LSTo2D()) && this.SpellData.DontCross)
+            if (this.IsSafePoint(ObjectManager.Player.ServerPosition.To2D()) && this.SpellData.DontCross)
             {
                 return new SafePathResult(false, allIntersections[0]);
             }
             var timeToExplode = (this.SpellData.DontAddExtraDuration ? 0 : this.SpellData.ExtraDuration)
                                 + this.SpellData.Delay
-                                + (int)(1000 * this.Start.LSDistance(this.End) / this.SpellData.MissileSpeed)
+                                + (int)(1000 * this.Start.Distance(this.End) / this.SpellData.MissileSpeed)
                                 - (Utils.GameTimeTickCount - this.StartTick);
             return !this.IsSafePoint(path.PositionAfter(timeToExplode, speed, delay))
                        ? new SafePathResult(false, allIntersections[0])
@@ -413,8 +413,8 @@
             }
             if (this.SpellData.MissileFollowsUnit && this.Unit.IsVisible)
             {
-                this.End = this.Unit.ServerPosition.LSTo2D();
-                this.Direction = (this.End - this.Start).LSNormalized();
+                this.End = this.Unit.ServerPosition.To2D();
+                this.Direction = (this.End - this.Start).Normalized();
                 this.UpdatePolygon();
             }
             if (this.SpellData.SpellName == "SionR")
@@ -424,7 +424,7 @@
                     this.helperTick = this.StartTick;
                 }
                 this.SpellData.MissileSpeed = (int)this.Unit.MoveSpeed;
-                if (this.Unit.LSIsValidTarget(float.MaxValue, false))
+                if (this.Unit.IsValidTarget(float.MaxValue, false))
                 {
                     if (!this.Unit.HasBuff("SionR") && Utils.GameTimeTickCount - this.helperTick > 600)
                     {
@@ -433,9 +433,9 @@
                     else
                     {
                         this.StartTick = Utils.GameTimeTickCount - this.SpellData.Delay;
-                        this.Start = this.Unit.ServerPosition.LSTo2D();
-                        this.End = this.Unit.ServerPosition.LSTo2D() + 1000 * this.Unit.Direction.LSTo2D().LSPerpendicular();
-                        this.Direction = (this.End - this.Start).LSNormalized();
+                        this.Start = this.Unit.ServerPosition.To2D();
+                        this.End = this.Unit.ServerPosition.To2D() + 1000 * this.Unit.Direction.To2D().Perpendicular();
+                        this.Direction = (this.End - this.Start).Normalized();
                         this.UpdatePolygon();
                     }
                 }
@@ -446,7 +446,7 @@
             }
             if (this.SpellData.FollowCaster)
             {
-                this.Circle.Center = this.Unit.ServerPosition.LSTo2D();
+                this.Circle.Center = this.Unit.ServerPosition.To2D();
                 this.UpdatePolygon();
             }
         }
@@ -463,7 +463,7 @@
                      Math.Max(
                          0,
                          Math.Min(
-                             this.End.LSDistance(this.Start),
+                             this.End.Distance(this.Start),
                              (float)Math.Max(0, Utils.GameTimeTickCount + time - this.StartTick - this.SpellData.Delay)
                              * this.SpellData.MissileSpeed / 1000));
         }

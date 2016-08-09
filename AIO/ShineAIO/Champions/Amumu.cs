@@ -85,38 +85,38 @@ using EloBuddy;
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                 return;
 
-            if (!Spells[W].IsActive() || !Spells[W].LSIsReady())
+            if (!Spells[W].IsActive() || !Spells[W].IsReady())
                 return;
 
-            if (HeroManager.Enemies.Count(p => p.LSDistance(ObjectManager.Player.ServerPosition) <= Spells[W].Range + 50) == 0 && MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Spells[W].Range + 50, MinionTypes.All, MinionTeam.NotAlly).Count == 0)
+            if (HeroManager.Enemies.Count(p => p.Distance(ObjectManager.Player.ServerPosition) <= Spells[W].Range + 50) == 0 && MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Spells[W].Range + 50, MinionTypes.All, MinionTeam.NotAlly).Count == 0)
                 Spells[W].Cast();
             
         }
 
         public void Combo()
         {
-            if (Spells[Q].LSIsReady() && Config.Item("CUSEQ").GetValue<bool>())
+            if (Spells[Q].IsReady() && Config.Item("CUSEQ").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, TargetSelector.DamageType.Magical);
                 if (t != null)
                     CastSkillshot(t, Spells[Q], ShineCommon.Utility.HitchanceArray[combo.Item("CQHITCHANCE").GetValue<StringList>().SelectedIndex]);
             }
             
-            if (Spells[W].LSIsReady() && !Spells[W].IsActive() && combo.Item("CUSEW").GetValue<bool>())
+            if (Spells[W].IsReady() && !Spells[W].IsActive() && combo.Item("CUSEW").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(Spells[W].Range, TargetSelector.DamageType.Magical);
                 if (t != null)
                     Spells[W].Cast();
             }
 
-            if (Spells[E].LSIsReady() && combo.Item("CUSEE").GetValue<bool>())
+            if (Spells[E].IsReady() && combo.Item("CUSEE").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(Spells[E].Range, TargetSelector.DamageType.Magical);
                 if (t != null)
                     Spells[E].Cast();
             }
 
-            if (Spells[R].LSIsReady() && ult.Item("CUSER").GetValue<bool>())
+            if (Spells[R].IsReady() && ult.Item("CUSER").GetValue<bool>())
             {
                 //new string[] { "Only If Will Hit >= X Method", "If Will Hit Toggle Selected", "Shine# Smart R" }
 
@@ -124,14 +124,14 @@ using EloBuddy;
                 {
                     case 0:
                     {
-                        if (ObjectManager.Player.LSCountEnemiesInRange(Spells[R].Range) >= ult.Item("CUSERHIT").GetValue<Slider>().Value)
+                        if (ObjectManager.Player.CountEnemiesInRange(Spells[R].Range) >= ult.Item("CUSERHIT").GetValue<Slider>().Value)
                             Spells[R].Cast();
                     }
                     break;
 
                     case 1:
                     {
-                        if (TargetSelector.SelectedTarget != null && TargetSelector.SelectedTarget.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition) <= Spells[R].Range)
+                        if (TargetSelector.SelectedTarget != null && TargetSelector.SelectedTarget.ServerPosition.Distance(ObjectManager.Player.ServerPosition) <= Spells[R].Range)
                             Spells[R].Cast();
                     }
                     break;
@@ -140,7 +140,7 @@ using EloBuddy;
                     {
                         //high = 3, medium = 2, low = 1
                         int prio_sum = 0;
-                        var enemies = HeroManager.Enemies.Where(p => p.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition) <= Spells[R].Range);
+                        var enemies = HeroManager.Enemies.Where(p => p.ServerPosition.Distance(ObjectManager.Player.ServerPosition) <= Spells[R].Range);
                         foreach (var enemy in enemies)
                             prio_sum += ShineCommon.Utility.GetPriority(enemy.ChampionName);
 
@@ -157,21 +157,21 @@ using EloBuddy;
             if (ObjectManager.Player.ManaPercent < Config.Item("HMANA").GetValue<Slider>().Value)
                 return;
 
-            if (Spells[Q].LSIsReady() && Config.Item("HUSEQ").GetValue<bool>())
+            if (Spells[Q].IsReady() && Config.Item("HUSEQ").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, TargetSelector.DamageType.Magical);
                 if (t != null)
                     CastSkillshot(t, Spells[Q], ShineCommon.Utility.HitchanceArray[Config.Item("HQHITCHANCE").GetValue<StringList>().SelectedIndex]);
             }
 
-            if (Spells[W].LSIsReady() && !Spells[W].IsActive() && Config.Item("HUSEW").GetValue<bool>())
+            if (Spells[W].IsReady() && !Spells[W].IsActive() && Config.Item("HUSEW").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(Spells[W].Range, TargetSelector.DamageType.Magical);
                 if (t != null)
                     Spells[W].Cast();
             }
 
-            if (Spells[E].LSIsReady() && Config.Item("HUSEE").GetValue<bool>())
+            if (Spells[E].IsReady() && Config.Item("HUSEE").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(Spells[E].Range, TargetSelector.DamageType.Magical);
                 if (t != null)
@@ -184,7 +184,7 @@ using EloBuddy;
             if (ObjectManager.Player.ManaPercent < Config.Item("LMANA").GetValue<Slider>().Value)
                 return;
 
-            if (Spells[W].LSIsReady() && !Spells[W].IsActive() && laneclear.Item("LUSEW").GetValue<bool>())
+            if (Spells[W].IsReady() && !Spells[W].IsActive() && laneclear.Item("LUSEW").GetValue<bool>())
             {
                 if (MinionManager.GetMinions(Spells[W].Range + 50, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.None).Count >= laneclear.Item("LMINW").GetValue<Slider>().Value)
                     Spells[W].Cast();
@@ -192,7 +192,7 @@ using EloBuddy;
                     Spells[W].Cast();
             }
 
-            if (Spells[E].LSIsReady() && laneclear.Item("LUSEE").GetValue<bool>())
+            if (Spells[E].IsReady() && laneclear.Item("LUSEE").GetValue<bool>())
                 if (MinionManager.GetMinions(Spells[E].Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.None).Count > 0)
                     Spells[E].Cast();
             
@@ -210,14 +210,14 @@ using EloBuddy;
 
         public override void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (Spells[R].LSIsReady() && gapcloser.End.LSDistance(ObjectManager.Player.ServerPosition) <= 300 && misc.Item("MANTIGAPR").GetValue<bool>())
+            if (Spells[R].IsReady() && gapcloser.End.Distance(ObjectManager.Player.ServerPosition) <= 300 && misc.Item("MANTIGAPR").GetValue<bool>())
                 Spells[R].Cast();
         }
 
         public override void Obj_AI_Base_OnBuffAdd(Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs args)
         {
             if (sender.IsEnemy && sender.IsChampion() && ShineCommon.Utility.IsImmobileTarget(sender as AIHeroClient) && Spells[Q].IsInRange(sender) && misc.Item("MAUTOQIMMO").GetValue<bool>())
-                if (Spells[Q].LSIsReady())
+                if (Spells[Q].IsReady())
                     Spells[Q].Cast(sender.ServerPosition);
         }
     }

@@ -28,9 +28,9 @@ using EloBuddy; namespace Activator.Items.Offensives
                     .OrderByDescending(x => x.Player.FlatPhysicalDamageMod + x.Player.BaseAttackDamage)
                     .FirstOrDefault();
 
-            if (!highadhero.Player.IsMe && highadhero.Player.LSDistance(Player.ServerPosition) <= Range)
+            if (!highadhero.Player.IsMe && highadhero.Player.Distance(Player.ServerPosition) <= Range)
             {
-                if (!highadhero.Player.LSHasBuff("rallyingbanneraurafriend"))
+                if (!highadhero.Player.HasBuff("rallyingbanneraurafriend"))
                 {
                     UseItem(highadhero.Player, Menu.Item("mode" + Name).GetValue<StringList>().SelectedIndex == 1);
                 }

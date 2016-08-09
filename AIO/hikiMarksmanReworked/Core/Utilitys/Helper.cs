@@ -84,13 +84,13 @@ using EloBuddy;
 
         public static void GravesAntiGapcloser(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs spell)
         {
-            if (sender.IsEnemy && spell.End.LSDistance(ObjectManager.Player.Position) < GravesSpells.E.Range && !spell.SData.LSIsAutoAttack() && spell.Target.IsMe)
+            if (sender.IsEnemy && spell.End.Distance(ObjectManager.Player.Position) < GravesSpells.E.Range && !spell.SData.IsAutoAttack() && spell.Target.IsMe)
             {
                 foreach (var gapclose in AntiGapcloseSpell.GapcloseableSpells.Where(x => spell.SData.Name == ((AIHeroClient)sender).GetSpell(x.Slot).Name).OrderByDescending(c => Slider("gapclose.slider." + sender.CharData.BaseSkinName)))
                 {
                     if (Enabled("gapclose." + ((AIHeroClient)sender).ChampionName))
                     {
-                        GravesSpells.E.Cast(ObjectManager.Player.Position.LSExtend(spell.End, -GravesSpells.E.Range));
+                        GravesSpells.E.Cast(ObjectManager.Player.Position.Extend(spell.End, -GravesSpells.E.Range));
                     }
                 }
             }
@@ -98,13 +98,13 @@ using EloBuddy;
 
         public static void EzrealAntiGapcloser(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs spell)
         {
-            if (sender.IsEnemy && spell.End.LSDistance(ObjectManager.Player.Position) < EzrealSpells.E.Range && !spell.SData.LSIsAutoAttack() && spell.Target.IsMe)
+            if (sender.IsEnemy && spell.End.Distance(ObjectManager.Player.Position) < EzrealSpells.E.Range && !spell.SData.IsAutoAttack() && spell.Target.IsMe)
             {
                 foreach (var gapclose in AntiGapcloseSpell.GapcloseableSpells.Where(x => spell.SData.Name == ((AIHeroClient)sender).GetSpell(x.Slot).Name).OrderByDescending(c => Slider("gapclose.slider."+sender.CharData.BaseSkinName)))
                 {
                     if (Enabled("gapclose." + ((AIHeroClient)sender).ChampionName))
                     {
-                        EzrealSpells.E.Cast(ObjectManager.Player.Position.LSExtend(spell.End, -EzrealSpells.E.Range));
+                        EzrealSpells.E.Cast(ObjectManager.Player.Position.Extend(spell.End, -EzrealSpells.E.Range));
                     }
                 }
             }
@@ -112,13 +112,13 @@ using EloBuddy;
 
         public static void CorkiAntiGapcloser(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs spell)
         {
-            if (sender.IsEnemy && spell.End.LSDistance(ObjectManager.Player.Position) < CorkiSpells.E.Range && !spell.SData.LSIsAutoAttack() && spell.Target.IsMe)
+            if (sender.IsEnemy && spell.End.Distance(ObjectManager.Player.Position) < CorkiSpells.E.Range && !spell.SData.IsAutoAttack() && spell.Target.IsMe)
             {
                 foreach (var gapclose in AntiGapcloseSpell.GapcloseableSpells.Where(x => spell.SData.Name == ((AIHeroClient)sender).GetSpell(x.Slot).Name).OrderByDescending(c => Slider("gapclose.slider." + sender.CharData.BaseSkinName)))
                 {
                     if (Enabled("gapclose." + ((AIHeroClient)sender).ChampionName))
                     {
-                        CorkiSpells.W.Cast(ObjectManager.Player.Position.LSExtend(spell.End, -CorkiSpells.W.Range));
+                        CorkiSpells.W.Cast(ObjectManager.Player.Position.Extend(spell.End, -CorkiSpells.W.Range));
                     }
                 }
             }
@@ -126,13 +126,13 @@ using EloBuddy;
 
         public static void LucianAntiGapcloser(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs spell)
         {
-            if (sender.IsEnemy && spell.End.LSDistance(ObjectManager.Player.Position) < LucianSpells.E.Range && !spell.SData.LSIsAutoAttack() && spell.Target.IsMe)
+            if (sender.IsEnemy && spell.End.Distance(ObjectManager.Player.Position) < LucianSpells.E.Range && !spell.SData.IsAutoAttack() && spell.Target.IsMe)
             {
                 foreach (var gapclose in AntiGapcloseSpell.GapcloseableSpells.Where(x => spell.SData.Name == ((AIHeroClient)sender).GetSpell(x.Slot).Name).OrderByDescending(c => Slider("gapclose.slider." + sender.CharData.BaseSkinName)))
                 {
                     if (Enabled("gapclose." + ((AIHeroClient)sender).ChampionName))
                     {
-                        CorkiSpells.W.Cast(ObjectManager.Player.Position.LSExtend(spell.End, -LucianSpells.W.Range));
+                        CorkiSpells.W.Cast(ObjectManager.Player.Position.Extend(spell.End, -LucianSpells.W.Range));
                     }
                 }
             }
@@ -140,7 +140,7 @@ using EloBuddy;
 
         public static void VayneAntiGapcloser(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs spell)
         {
-            if (sender.IsEnemy && spell.End.LSDistance(ObjectManager.Player.Position) < VayneSpells.E.Range && !spell.SData.LSIsAutoAttack() && spell.Target.IsMe)
+            if (sender.IsEnemy && spell.End.Distance(ObjectManager.Player.Position) < VayneSpells.E.Range && !spell.SData.IsAutoAttack() && spell.Target.IsMe)
             {
                 foreach (var gapclose in AntiGapcloseSpell.GapcloseableSpells.Where(x => spell.SData.Name == ((AIHeroClient)sender).GetSpell(x.Slot).Name).OrderByDescending(c => Slider("gapclose.slider." + sender.CharData.BaseSkinName)))
                 {
@@ -154,26 +154,26 @@ using EloBuddy;
 
         public static void SivirSpellBlockInit(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs spell)
         {
-            if (sender.IsEnemy && !spell.SData.LSIsAutoAttack() && spell.Target.IsMe)
+            if (sender.IsEnemy && !spell.SData.IsAutoAttack() && spell.Target.IsMe)
             {
                 foreach (var gapclose in EvadeDb.SpellData.SpellDatabase.Spells.Where(x => x.spellName == spell.SData.Name))
                 {
                     switch (gapclose.spellType)
                     {
                         case EvadeDb.SpellType.Cone:
-                            if (ObjectManager.Player.LSDistance(spell.End) <= 250 && SivirSpells.E.LSIsReady())
+                            if (ObjectManager.Player.Distance(spell.End) <= 250 && SivirSpells.E.IsReady())
                             {
                                 SivirSpells.E.Cast();
                             }
                             break;
                         case EvadeDb.SpellType.Line:
-                            if (ObjectManager.Player.LSDistance(spell.End) <= 100 && SivirSpells.E.LSIsReady())
+                            if (ObjectManager.Player.Distance(spell.End) <= 100 && SivirSpells.E.IsReady())
                             {
                                 SivirSpells.E.Cast();
                             }
                             break;
                         case EvadeDb.SpellType.Circular:
-                            if (ObjectManager.Player.LSDistance(spell.End) <= 250 && SivirSpells.E.LSIsReady())
+                            if (ObjectManager.Player.Distance(spell.End) <= 250 && SivirSpells.E.IsReady())
                             {
                                 SivirSpells.E.Cast();
                             }

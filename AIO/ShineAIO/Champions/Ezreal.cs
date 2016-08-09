@@ -91,10 +91,10 @@ using EloBuddy;
         public override double CalculateDamageR(AIHeroClient target)
         {
             double dmg = 0.0;
-            if (Config.Item("CUSER").GetValue<bool>() && Spells[R].LSIsReady())
+            if (Config.Item("CUSER").GetValue<bool>() && Spells[R].IsReady())
             {
-                dmg = ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.R);
-                int collCount = Spells[R].GetCollision(ObjectManager.Player.ServerPosition.LSTo2D(), new List<Vector2>() { target.ServerPosition.LSTo2D() }).Count();
+                dmg = ObjectManager.Player.GetSpellDamage(target, SpellSlot.R);
+                int collCount = Spells[R].GetCollision(ObjectManager.Player.ServerPosition.To2D(), new List<Vector2>() { target.ServerPosition.To2D() }).Count();
                 int percent = 10 - collCount > 7 ? 7 : collCount;
                 dmg = dmg / 10 * percent;
             }
@@ -103,13 +103,13 @@ using EloBuddy;
 
         private void OnEnemyCustomGapcloser(CActiveCGapcloser cGapcloser)
         {
-            if (cGapcloser.Sender.IsEnemy && cGapcloser.End.LSDistance(ObjectManager.Player.ServerPosition) < 300 && !cGapcloser.Sender.IsDead && Spells[E].LSIsReady() && Config.Item("CUSTOMANTIGAPE").GetValue<bool>())
+            if (cGapcloser.Sender.IsEnemy && cGapcloser.End.Distance(ObjectManager.Player.ServerPosition) < 300 && !cGapcloser.Sender.IsDead && Spells[E].IsReady() && Config.Item("CUSTOMANTIGAPE").GetValue<bool>())
             {
                 int idx = Config.Item("CUSTOMANTIGAPEMETHOD").GetValue<StringList>().SelectedIndex;
                 if (idx == 0)
-                    Spells[E].Cast(ObjectManager.Player.ServerPosition.LSTo2D() + (cGapcloser.End - cGapcloser.Start).LSTo2D().LSNormalized().LSPerpendicular() * Spells[E].Range);
+                    Spells[E].Cast(ObjectManager.Player.ServerPosition.To2D() + (cGapcloser.End - cGapcloser.Start).To2D().Normalized().Perpendicular() * Spells[E].Range);
                 else
-                    Spells[E].Cast(ObjectManager.Player.ServerPosition.LSTo2D() + (cGapcloser.End - cGapcloser.Start).LSTo2D().LSNormalized() * Spells[E].Range);
+                    Spells[E].Cast(ObjectManager.Player.ServerPosition.To2D() + (cGapcloser.End - cGapcloser.Start).To2D().Normalized() * Spells[E].Range);
             }
         }
 
@@ -117,18 +117,18 @@ using EloBuddy;
         public void BeforeOrbwalk()
         {
             #region Auto Harass
-            if (Spells[Q].LSIsReady() && Config.Item("MAUTOQ").GetValue<bool>() && !ObjectManager.Player.LSUnderTurret() && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
+            if (Spells[Q].IsReady() && Config.Item("MAUTOQ").GetValue<bool>() && !ObjectManager.Player.UnderTurret() && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
             {
-                var t = (from enemy in HeroManager.Enemies where enemy.LSIsValidTarget(Spells[Q].Range) orderby TargetSelector.GetPriority(enemy) descending select enemy).FirstOrDefault();
+                var t = (from enemy in HeroManager.Enemies where enemy.IsValidTarget(Spells[Q].Range) orderby TargetSelector.GetPriority(enemy) descending select enemy).FirstOrDefault();
                 if (t != null)
                     CastSkillshot(t, Spells[Q]);
             }
             #endregion
 
             #region Auto Ult
-            if (Config.Item("MUSER").GetValue<bool>() && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && ObjectManager.Player.LSCountEnemiesInRange(600) == 0)
+            if (Config.Item("MUSER").GetValue<bool>() && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && ObjectManager.Player.CountEnemiesInRange(600) == 0)
             {
-                var t = (from enemy in HeroManager.Enemies where enemy.LSIsValidTarget(2500f) && CalculateDamageR(enemy) > enemy.Health orderby enemy.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition) descending select enemy).FirstOrDefault();
+                var t = (from enemy in HeroManager.Enemies where enemy.IsValidTarget(2500f) && CalculateDamageR(enemy) > enemy.Health orderby enemy.ServerPosition.Distance(ObjectManager.Player.ServerPosition) descending select enemy).FirstOrDefault();
                 if (t != null)
                     CastSkillshot(t, Spells[R], HitChance.High);
             }
@@ -137,23 +137,23 @@ using EloBuddy;
         
         public void Combo()
         {
-            if (Spells[Q].LSIsReady() && Config.Item("CUSEQ").GetValue<bool>())
+            if (Spells[Q].IsReady() && Config.Item("CUSEQ").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, TargetSelector.DamageType.Physical);
                 if (t != null)
                     CastSkillshot(t, Spells[Q]);
             }
 
-            if (Spells[W].LSIsReady() && Config.Item("CUSEW").GetValue<bool>())
+            if (Spells[W].IsReady() && Config.Item("CUSEW").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(Spells[W].Range, TargetSelector.DamageType.Magical);
                 if (t != null)
                     CastSkillshot(t, Spells[W]);
             }
 
-            if (Spells[R].LSIsReady() && ult.Item("CUSER").GetValue<bool>() && ObjectManager.Player.LSCountEnemiesInRange(ult.Item("CUSERRANGE").GetValue<Slider>().Value) < 2)
+            if (Spells[R].IsReady() && ult.Item("CUSER").GetValue<bool>() && ObjectManager.Player.CountEnemiesInRange(ult.Item("CUSERRANGE").GetValue<Slider>().Value) < 2)
             {
-                var t = HeroManager.Enemies.Where(p => p.LSIsValidTarget(2500f)).OrderBy(q => q.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition)).FirstOrDefault();
+                var t = HeroManager.Enemies.Where(p => p.IsValidTarget(2500f)).OrderBy(q => q.ServerPosition.Distance(ObjectManager.Player.ServerPosition)).FirstOrDefault();
                 if (t != null)
                 {
                     HitChance ulthc = ShineCommon.Utility.HitchanceArray[Config.Item("CRHITCHANCE").GetValue<StringList>().SelectedIndex];
@@ -177,14 +177,14 @@ using EloBuddy;
             if (ObjectManager.Player.ManaPercent < Config.Item("HMANA").GetValue<Slider>().Value)
                 return;
 
-            if (Spells[Q].LSIsReady() && Config.Item("HUSEQ").GetValue<bool>())
+            if (Spells[Q].IsReady() && Config.Item("HUSEQ").GetValue<bool>())
             {
                 var target = TargetSelector.GetTarget(Spells[Q].Range, TargetSelector.DamageType.Physical);
                 if (target != null)
                     CastSkillshot(target, Spells[Q]);
             }
 
-            if (Spells[W].LSIsReady() && Config.Item("HUSEW").GetValue<bool>())
+            if (Spells[W].IsReady() && Config.Item("HUSEW").GetValue<bool>())
             {
                 var target = TargetSelector.GetTarget(Spells[W].Range, TargetSelector.DamageType.Magical);
                 if (target != null)
@@ -195,19 +195,19 @@ using EloBuddy;
 
         public void LaneClear()
         {
-            if (!Spells[Q].LSIsReady() || ObjectManager.Player.ManaPercent < Config.Item("LMANA").GetValue<Slider>().Value || !Config.Item("LUSEQ").GetValue<bool>())
+            if (!Spells[Q].IsReady() || ObjectManager.Player.ManaPercent < Config.Item("LMANA").GetValue<Slider>().Value || !Config.Item("LUSEQ").GetValue<bool>())
                 return;
 
-            var t = (from minion in MinionManager.GetMinions(Spells[Q].Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth) where minion.LSIsValidTarget(Spells[Q].Range) && Spells[Q].GetDamage(minion) >= minion.Health orderby minion.LSDistance(ObjectManager.Player.Position) descending select minion).FirstOrDefault();
+            var t = (from minion in MinionManager.GetMinions(Spells[Q].Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth) where minion.IsValidTarget(Spells[Q].Range) && Spells[Q].GetDamage(minion) >= minion.Health orderby minion.Distance(ObjectManager.Player.Position) descending select minion).FirstOrDefault();
             if (t != null)
                 Spells[Q].CastIfHitchanceEquals(t, HitChance.High);
         }
 
         public void LastHit()
         {
-            if (Spells[Q].LSIsReady() && Config.Item("MLASTQ").GetValue<bool>())
+            if (Spells[Q].IsReady() && Config.Item("MLASTQ").GetValue<bool>())
             {
-                var t = (from minion in MinionManager.GetMinions(Spells[Q].Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth) where minion.LSIsValidTarget(Spells[Q].Range) && Spells[Q].GetDamage(minion) >= minion.Health && (!minion.LSUnderTurret() && minion.LSDistance(ObjectManager.Player.Position) > ObjectManager.Player.AttackRange) orderby minion.Health ascending select minion).FirstOrDefault();
+                var t = (from minion in MinionManager.GetMinions(Spells[Q].Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth) where minion.IsValidTarget(Spells[Q].Range) && Spells[Q].GetDamage(minion) >= minion.Health && (!minion.UnderTurret() && minion.Distance(ObjectManager.Player.Position) > ObjectManager.Player.AttackRange) orderby minion.Health ascending select minion).FirstOrDefault();
                 if (t != null)
                     Spells[Q].CastIfHitchanceEquals(t, HitChance.High);
             }

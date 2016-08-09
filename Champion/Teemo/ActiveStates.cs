@@ -57,16 +57,16 @@ namespace PandaTeemo
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             }
 
-            if (!Essentials.R.LSIsReady() || ObjectManager.Player.LSIsRecalling() || autoRPanic)
+            if (!Essentials.R.IsReady() || ObjectManager.Player.IsRecalling() || autoRPanic)
             {
                 return;
             }
 
-            var target = HeroManager.Enemies.FirstOrDefault(t => Essentials.R.IsInRange(t) && t.LSIsValidTarget());
+            var target = HeroManager.Enemies.FirstOrDefault(t => Essentials.R.IsInRange(t) && t.IsValidTarget());
 
             if (target != null)
             {
-                if (target.HasBuff("zhonyasringshield") && Essentials.R.LSIsReady() && Essentials.R.IsInRange(target))
+                if (target.HasBuff("zhonyasringshield") && Essentials.R.IsReady() && Essentials.R.IsInRange(target))
                 {
                     Essentials.R.Cast(target.Position);
                 }
@@ -85,7 +85,7 @@ namespace PandaTeemo
                                 var place in
                                     Essentials.ShroomPositions.SummonersRift.Where(
                                         pos =>
-                                            pos.LSDistance(ObjectManager.Player.Position) <= Essentials.R.Range &&
+                                            pos.Distance(ObjectManager.Player.Position) <= Essentials.R.Range &&
                                             !Essentials.IsShroomed(pos))
                                         .Where(
                                             place =>
@@ -102,7 +102,7 @@ namespace PandaTeemo
                                 var place in
                                     Essentials.ShroomPositions.HowlingAbyss.Where(
                                         pos =>
-                                            pos.LSDistance(ObjectManager.Player.Position) <= Essentials.R.Range &&
+                                            pos.Distance(ObjectManager.Player.Position) <= Essentials.R.Range &&
                                             !Essentials.IsShroomed(pos))
                                         .Where(
                                             place =>
@@ -119,7 +119,7 @@ namespace PandaTeemo
                                 var place in
                                     Essentials.ShroomPositions.CrystalScar.Where(
                                         pos =>
-                                            pos.LSDistance(ObjectManager.Player.Position) <= Essentials.R.Range &&
+                                            pos.Distance(ObjectManager.Player.Position) <= Essentials.R.Range &&
                                             !Essentials.IsShroomed(pos))
                                         .Where(
                                             place =>
@@ -136,7 +136,7 @@ namespace PandaTeemo
                                 var place in
                                     Essentials.ShroomPositions.TwistedTreeline.Where(
                                         pos =>
-                                            pos.LSDistance(ObjectManager.Player.Position) <= Essentials.R.Range &&
+                                            pos.Distance(ObjectManager.Player.Position) <= Essentials.R.Range &&
                                             !Essentials.IsShroomed(pos))
                                         .Where(
                                             place =>
@@ -155,7 +155,7 @@ namespace PandaTeemo
                                     var place in
                                         Essentials.ShroomPositions.ButcherBridge.Where(
                                             pos =>
-                                                pos.LSDistance(ObjectManager.Player.Position) <= Essentials.R.Range &&
+                                                pos.Distance(ObjectManager.Player.Position) <= Essentials.R.Range &&
                                                 !Essentials.IsShroomed(pos))
                                             .Where(
                                                 place =>
@@ -179,7 +179,7 @@ namespace PandaTeemo
             var target = TargetSelector.GetTarget(Essentials.Q.Range, TargetSelector.DamageType.Magical);
             var allMinionsQ = MinionManager.GetMinions(ObjectManager.Player.Position, Essentials.Q.Range);
 
-            if (Essentials.Q.LSIsReady() && 1 <= allMinionsQ.Count)
+            if (Essentials.Q.IsReady() && 1 <= allMinionsQ.Count)
             {
                 foreach (
                     var minion in
@@ -192,7 +192,7 @@ namespace PandaTeemo
 
             if (target != null)
             {
-                if (Essentials.Q.LSIsReady() && Essentials.Q.IsInRange(target) && target.LSIsValidTarget() &&
+                if (Essentials.Q.IsReady() && Essentials.Q.IsInRange(target) && target.IsValidTarget() &&
                     ObjectManager.Player.ManaPercent >= 25)
                 {
                     Essentials.Q.Cast(target);
@@ -205,7 +205,7 @@ namespace PandaTeemo
         /// </summary>
         public static void AutoW()
         {
-            if (Essentials.W.LSIsReady())
+            if (Essentials.W.IsReady())
             {
                 Essentials.W.Cast(ObjectManager.Player);
             }
@@ -219,12 +219,12 @@ namespace PandaTeemo
             var target = TargetSelector.GetTarget(Essentials.Q.Range, TargetSelector.DamageType.Magical);
             var allMinionsQ = MinionManager.GetMinions(ObjectManager.Player.Position, Essentials.Q.Range);
 
-            if (Essentials.W.LSIsReady())
+            if (Essentials.W.IsReady())
             {
                 Essentials.W.Cast();
             }
 
-            if (Essentials.Q.LSIsReady() && 1 <= allMinionsQ.Count)
+            if (Essentials.Q.IsReady() && 1 <= allMinionsQ.Count)
             {
                 foreach (
                     var minion in
@@ -237,7 +237,7 @@ namespace PandaTeemo
 
             if (target != null)
             {
-                if (Essentials.Q.LSIsReady() && Essentials.Q.IsInRange(target) && target.LSIsValidTarget() &&
+                if (Essentials.Q.IsReady() && Essentials.Q.IsInRange(target) && target.IsValidTarget() &&
                     ObjectManager.Player.ManaPercent >= 25)
                 {
                     Essentials.Q.Cast(target);

@@ -45,7 +45,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var predE = E.GetPrediction(sender, true);
             if (predE.Hitchance >= E.MinHitChance)
             {
-                E.Cast(predE.CastPosition.LSExtend(player.ServerPosition, -100));
+                E.Cast(predE.CastPosition.Extend(player.ServerPosition, -100));
             }
         }
 
@@ -58,28 +58,28 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var predE = E.GetPrediction(gapcloser.Sender, true);
             if (predE.Hitchance >= E.MinHitChance)
             {
-                E.Cast(predE.CastPosition.LSExtend(player.ServerPosition, -100));
+                E.Cast(predE.CastPosition.Extend(player.ServerPosition, -100));
             }
         }
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
-            //if (!Q.LSIsReady(4500) && player.Mana > 200)
+            //if (!Q.IsReady(4500) && player.Mana > 200)
             W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null || !safeGap(target))
+            if (!E.IsReady() || target == null || !safeGap(target))
                 return;
             E.Cast(target);
         }
@@ -100,14 +100,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (tar != null) useW(tar);
             tar = ARAMTargetSelector.getBestTarget(E.Range);
             if (tar != null) useE(tar);
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 var obj =
                     HeroManager.Allies.Where(
                         i =>
-                            !i.IsMe && i.LSIsValidTarget(R.Range, false) &&
+                            !i.IsMe && i.IsValidTarget(R.Range, false) &&
                             i.HealthPercent < 35 &&
-                            i.LSCountEnemiesInRange(E.Range) > 0).MinOrDefault(i => i.Health);
+                            i.CountEnemiesInRange(E.Range) > 0).MinOrDefault(i => i.Health);
                 if (obj != null)
                 {
                     R.CastOnUnit(obj);
@@ -136,7 +136,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var AllMinions = MinionManager.GetMinions(player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
             foreach (var minion in AllMinions)
             {
-                if (Q.LSIsReady() && Q.GetDamage(minion) > minion.Health)
+                if (Q.IsReady() && Q.GetDamage(minion) > minion.Health)
                 {
                     Q.Cast(minion);
                 }

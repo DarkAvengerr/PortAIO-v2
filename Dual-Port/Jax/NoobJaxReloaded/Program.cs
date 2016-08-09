@@ -24,9 +24,9 @@ using EloBuddy;
         private static Spell Q, W, E, R;
 
         private static Items.Item tiamat, hydra, cutlass, botrk, hextech;
-        private static bool IsEUsed => Player.LSHasBuff("JaxCounterStrike");
+        private static bool IsEUsed => Player.HasBuff("JaxCounterStrike");
 
-        private static bool IsWUsed => Player.LSHasBuff("JaxEmpowerTwo");
+        private static bool IsWUsed => Player.HasBuff("JaxEmpowerTwo");
 
         private static Menu _menu;
 
@@ -120,7 +120,7 @@ using EloBuddy;
 
         private static void OnUpdate(EventArgs args)
         {
-            if (Player.IsDead || Player.LSIsRecalling())
+            if (Player.IsDead || Player.IsRecalling())
             {
                 return;
             }
@@ -142,15 +142,15 @@ using EloBuddy;
             AIHeroClient target = TargetSelector.GetTarget(700, TargetSelector.DamageType.Magical);
 
             // IITEMS
-            if (target != null && Player.LSDistance(target) <= botrk.Range)
+            if (target != null && Player.Distance(target) <= botrk.Range)
             {
                 botrk.Cast(target);
             }
-            if (target != null && Player.LSDistance(target) <= cutlass.Range)
+            if (target != null && Player.Distance(target) <= cutlass.Range)
             {
                 cutlass.Cast(target);
             }
-            if (target != null && Player.LSDistance(target) <= hextech.Range)
+            if (target != null && Player.Distance(target) <= hextech.Range)
             {
                 hextech.Cast(target);
             }
@@ -159,26 +159,26 @@ using EloBuddy;
             // ACTUAL COMBO
             if (target != null && !target.IsZombie)
             {
-                if (Q.LSIsReady() && _menu.Item("useQ").GetValue<bool>())
+                if (Q.IsReady() && _menu.Item("useQ").GetValue<bool>())
                 {
-                    if ((Player.LSDistance(target.Position) > Orbwalking.GetRealAutoAttackRange(Player)) || _menu.Item("useQ2").GetValue<bool>())
+                    if ((Player.Distance(target.Position) > Orbwalking.GetRealAutoAttackRange(Player)) || _menu.Item("useQ2").GetValue<bool>())
                     {
                         Q.CastOnUnit(target);
                     }
                 }
-                if (E.LSIsReady() && (_menu.Item("useE").GetValue<bool>()))
+                if (E.IsReady() && (_menu.Item("useE").GetValue<bool>()))
                 {
-                    if ((!IsEUsed && Q.LSIsReady() && target.LSIsValidTarget(Q.Range)) || (!IsEUsed && Player.LSDistance(target.Position) < 250))
+                    if ((!IsEUsed && Q.IsReady() && target.IsValidTarget(Q.Range)) || (!IsEUsed && Player.Distance(target.Position) < 250))
                     {
                         E.Cast();
                     }
-                    if (_menu.Item("useE2").GetValue<bool>() && IsEUsed && (Player.LSDistance(target.Position) < 180))
+                    if (_menu.Item("useE2").GetValue<bool>() && IsEUsed && (Player.Distance(target.Position) < 180))
                     {
                         E.Cast();
                     }
                     /*if (anyTarget)
                     {
-                        List<AIHeroClient> enemies = Player.Position.LSGetEnemiesInRange(180);
+                        List<AIHeroClient> enemies = Player.Position.GetEnemiesInRange(180);
                         if (enemies.Count >= 3)
                         {
                             E.Cast();
@@ -192,9 +192,9 @@ using EloBuddy;
                 }
                 if (target.HealthPercent > 20)
                 {
-                    if ((_menu.Item("useR").GetValue<bool>() && Q.LSIsReady() && R.LSIsReady()) ||
-                        (_menu.Item("useR").GetValue<bool>() && R.LSIsReady() && !Q.LSIsReady() &&
-                         Player.LSDistance(target.Position) < 300)) R.Cast();
+                    if ((_menu.Item("useR").GetValue<bool>() && Q.IsReady() && R.IsReady()) ||
+                        (_menu.Item("useR").GetValue<bool>() && R.IsReady() && !Q.IsReady() &&
+                         Player.Distance(target.Position) < 300)) R.Cast();
                 }
             }
         }
@@ -204,11 +204,11 @@ using EloBuddy;
             Obj_AI_Base.OnSpellCast += (sender, args) =>
             {
                 //if (!sender.IsMe || !Orbwalking.IsAutoAttack((args.SData.Name))) return;
-                if (sender.IsMe && args.SData.LSIsAutoAttack())
+                if (sender.IsMe && args.SData.IsAutoAttack())
                 {
                     if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                     {
-                        if (_menu.Item("useW").GetValue<bool>() && W.LSIsReady()) W.Cast();
+                        if (_menu.Item("useW").GetValue<bool>() && W.IsReady()) W.Cast();
                     }
 
                     // Jungleclear 
@@ -220,21 +220,21 @@ using EloBuddy;
                         MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
                             if (allJungleMinions.Count != 0)
                             {                                
-                                if (_menu.Item("jungleclearQ").GetValue<bool>() && Q.LSIsReady())
+                                if (_menu.Item("jungleclearQ").GetValue<bool>() && Q.IsReady())
                                 {
                                     foreach (var minion in allJungleMinions)
                                     {
-                                        if (minion.LSIsValidTarget())
+                                        if (minion.IsValidTarget())
                                         {
                                             Q.CastOnUnit(minion);
                                         }
                                     }
                                 }
-                                if (_menu.Item("jungleclearW").GetValue<bool>() && W.LSIsReady())
+                                if (_menu.Item("jungleclearW").GetValue<bool>() && W.IsReady())
                                 {
                                     foreach (var minion in allJungleMinions)
                                     {
-                                        if (minion.LSIsValidTarget())
+                                        if (minion.IsValidTarget())
                                         {
                                             W.Cast(minion);
                                         }
@@ -251,11 +251,11 @@ using EloBuddy;
                         {
                             var allLaneMinions = MinionManager.GetMinions(Q.Range);
                             //Lane
-                            if (_menu.Item("laneclearW").GetValue<bool>() && W.LSIsReady())
+                            if (_menu.Item("laneclearW").GetValue<bool>() && W.IsReady())
                             {
                                 foreach (var minion in allLaneMinions)
                                 {
-                                    if (minion.LSIsValidTarget())
+                                    if (minion.IsValidTarget())
                                     {
                                         W.Cast(minion);
                                     }
@@ -269,7 +269,7 @@ using EloBuddy;
 
         private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (args.Target != null && args.Target.IsMe && args.SData.LSIsAutoAttack() && _menu.Item("jungleclearE").GetValue<bool>() && E.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && sender.Team == GameObjectTeam.Neutral)
+            if (args.Target != null && args.Target.IsMe && args.SData.IsAutoAttack() && _menu.Item("jungleclearE").GetValue<bool>() && E.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && sender.Team == GameObjectTeam.Neutral)
             {
                 E.Cast();
              }
@@ -295,7 +295,7 @@ using EloBuddy;
                 if (enemy == null || enemy.HasBuffOfType(BuffType.Invulnerability))
                     return;
                 double damage = 0d;
-                damage = ObjectManager.Player.LSGetSpellDamage(enemy, SpellSlot.Q);
+                damage = ObjectManager.Player.GetSpellDamage(enemy, SpellSlot.Q);
 
                 if (damage > enemy.Health)
                 {
@@ -308,19 +308,19 @@ using EloBuddy;
             AIHeroClient y = TargetSelector.GetTarget(185, TargetSelector.DamageType.Physical);
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {               
-                    if (hydra.IsOwned() && Player.LSDistance(y) < hydra.Range && hydra.IsReady() && !W.LSIsReady()
+                    if (hydra.IsOwned() && Player.Distance(y) < hydra.Range && hydra.IsReady() && !W.IsReady()
                         && !IsWUsed)
                         hydra.Cast();
-                    if (tiamat.IsOwned() && Player.LSDistance(y) < tiamat.Range && tiamat.IsReady() && !W.LSIsReady()
+                    if (tiamat.IsOwned() && Player.Distance(y) < tiamat.Range && tiamat.IsReady() && !W.IsReady()
                         && !IsWUsed)
                         tiamat.Cast();                
             }
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                if (hydra.IsOwned() && Player.LSDistance(y) < hydra.Range && hydra.IsReady() && !W.LSIsReady()
+                if (hydra.IsOwned() && Player.Distance(y) < hydra.Range && hydra.IsReady() && !W.IsReady()
                         && !IsWUsed)
                     hydra.Cast();
-                if (tiamat.IsOwned() && Player.LSDistance(y) < tiamat.Range && tiamat.IsReady() && !W.LSIsReady()
+                if (tiamat.IsOwned() && Player.Distance(y) < tiamat.Range && tiamat.IsReady() && !W.IsReady()
                         && !IsWUsed)
                     tiamat.Cast();
             }
@@ -329,17 +329,17 @@ using EloBuddy;
         public static void WardJump()
         {
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
             {
                 return;
             }
-            Vector3 wardJumpPosition = (Player.Position.LSDistance(Game.CursorPos) < 600) ? Game.CursorPos : Player.Position.LSExtend(Game.CursorPos, 600);
+            Vector3 wardJumpPosition = (Player.Position.Distance(Game.CursorPos) < 600) ? Game.CursorPos : Player.Position.Extend(Game.CursorPos, 600);
             var lstGameObjects = ObjectManager.Get<Obj_AI_Base>().ToArray();
             Obj_AI_Base entityToWardJump = lstGameObjects.FirstOrDefault(obj =>
-                obj.Position.LSDistance(wardJumpPosition) < 150
+                obj.Position.Distance(wardJumpPosition) < 150
                 && (obj is Obj_AI_Minion || obj is AIHeroClient)
                 && !obj.IsMe && !obj.IsDead
-                && obj.Position.LSDistance(Player.Position) < Q.Range);
+                && obj.Position.Distance(Player.Position) < Q.Range);
 
             if (entityToWardJump != null)
             {
@@ -350,14 +350,14 @@ using EloBuddy;
                 int wardId = GetWardItem();
 
 
-                if (wardId != -1 && !wardJumpPosition.LSIsWall())
+                if (wardId != -1 && !wardJumpPosition.IsWall())
                 {
-                    PutWard(wardJumpPosition.LSTo2D(), (ItemId)wardId);
+                    PutWard(wardJumpPosition.To2D(), (ItemId)wardId);
                     lstGameObjects = ObjectManager.Get<Obj_AI_Base>().ToArray();
                     Q.Cast(
                         lstGameObjects.FirstOrDefault(obj =>
-                        obj.Position.LSDistance(wardJumpPosition) < 150 &&
-                        obj is Obj_AI_Minion && obj.Position.LSDistance(Player.Position) < Q.Range));
+                        obj.Position.Distance(wardJumpPosition) < 150 &&
+                        obj is Obj_AI_Minion && obj.Position.Distance(Player.Position) < Q.Range));
                 }
             }
         }

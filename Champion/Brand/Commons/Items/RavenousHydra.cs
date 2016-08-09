@@ -24,7 +24,7 @@ namespace TheBrand.Commons.Items
 
         public void Update(AIHeroClient target)
         {
-            if ((!_afterAttack || _justAttacked) && ObjectManager.Player.LSCountEnemiesInRange(400) > 0 || ObjectManager.Player.ChampionName == "Garen" && ObjectManager.Player.HasBuff("GarenE"))
+            if ((!_afterAttack || _justAttacked) && ObjectManager.Player.CountEnemiesInRange(400) > 0 || ObjectManager.Player.ChampionName == "Garen" && ObjectManager.Player.HasBuff("GarenE"))
             {
                 if (ObjectManager.Player.ChampionName == "Garen")
                 {

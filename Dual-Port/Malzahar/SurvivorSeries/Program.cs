@@ -33,7 +33,7 @@ using EloBuddy; namespace SurvivorMalzahar
         {
             if (Player.ChampionName != "Malzahar") return;
 
-            igniteSlot = Player.LSGetSpellSlot("summonerdot");
+            igniteSlot = Player.GetSpellSlot("summonerdot");
             Q = new Spell(SpellSlot.Q, 900f);
             W = new Spell(SpellSlot.W, 760f);
             E = new Spell(SpellSlot.E, 650f);
@@ -149,12 +149,12 @@ using EloBuddy; namespace SurvivorMalzahar
         }
         private static void OnUpdate(EventArgs args)
         {
-            if (Player.IsDead || Player.LSIsRecalling())
+            if (Player.IsDead || Player.IsRecalling())
             {
                 return;
             }
 
-            if (Player.IsChannelingImportantSpell() || Game.Time - Rtime < 2.5 || Player.LSHasBuff("malzaharrsound"))
+            if (Player.IsChannelingImportantSpell() || Game.Time - Rtime < 2.5 || Player.HasBuff("malzaharrsound"))
             {
                 Orbwalker.SetAttack(false);
                 Orbwalker.SetMovement(false);
@@ -165,16 +165,16 @@ using EloBuddy; namespace SurvivorMalzahar
                 Orbwalker.SetAttack(true);
                 Orbwalker.SetMovement(true);
             }
-            if (E.LSIsReady() && Menu.Item("ksE").GetValue<bool>())
+            if (E.IsReady() && Menu.Item("ksE").GetValue<bool>())
             {
-                foreach (var h in HeroManager.Enemies.Where(h => h.LSIsValidTarget(E.Range) && h.Health < SebbyLib.OktwCommon.GetKsDamage(h, E) + SebbyLib.OktwCommon.GetEchoLudenDamage(h)))
+                foreach (var h in HeroManager.Enemies.Where(h => h.IsValidTarget(E.Range) && h.Health < SebbyLib.OktwCommon.GetKsDamage(h, E) + SebbyLib.OktwCommon.GetEchoLudenDamage(h)))
                 {
                     E.Cast(h);
                 }
             }
-            if (Q.LSIsReady() && Menu.Item("ksQ").GetValue<bool>())
+            if (Q.IsReady() && Menu.Item("ksQ").GetValue<bool>())
             {
-                foreach (var h in HeroManager.Enemies.Where(h => h.LSIsValidTarget(Q.Range) && h.Health < SebbyLib.OktwCommon.GetKsDamage(h, Q) + SebbyLib.OktwCommon.GetEchoLudenDamage(h)))
+                foreach (var h in HeroManager.Enemies.Where(h => h.IsValidTarget(Q.Range) && h.Health < SebbyLib.OktwCommon.GetKsDamage(h, Q) + SebbyLib.OktwCommon.GetEchoLudenDamage(h)))
                 {
                     #region SebbyPrediction
                     //SebbyPrediction
@@ -231,7 +231,7 @@ using EloBuddy; namespace SurvivorMalzahar
         }
         private static void Interrupter2_OnInterruptableTarget(AIHeroClient t, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (Player.IsChannelingImportantSpell() || Game.Time - Rtime < 2.5 || Player.LSHasBuff("malzaharrsound"))
+            if (Player.IsChannelingImportantSpell() || Game.Time - Rtime < 2.5 || Player.HasBuff("malzaharrsound"))
             {
                 Orbwalker.SetAttack(false);
                 Orbwalker.SetMovement(false);
@@ -242,10 +242,10 @@ using EloBuddy; namespace SurvivorMalzahar
                 Orbwalker.SetAttack(true);
                 Orbwalker.SetMovement(true);
             }
-            if (!Menu.Item("interruptQ", true).GetValue<bool>() || !Q.LSIsReady())
+            if (!Menu.Item("interruptQ", true).GetValue<bool>() || !Q.IsReady())
                 return;
 
-            if (t.LSIsValidTarget(Q.Range))
+            if (t.IsValidTarget(Q.Range))
             {
                 Q.Cast(t);
             }
@@ -254,7 +254,7 @@ using EloBuddy; namespace SurvivorMalzahar
         #region Q Range/Placement Calculations (BETA)
         /*private void CastQ(Obj_AI_Base target, int minManaPercent = 0)
         {
-            if (!Q.LSIsReady() || !(GetManaPercent() >= minManaPercent))
+            if (!Q.IsReady() || !(GetManaPercent() >= minManaPercent))
                 return;
             if (target == null)
                 return;
@@ -267,13 +267,13 @@ using EloBuddy; namespace SurvivorMalzahar
         }
         private static float GetDynamicQWidth(Obj_AI_Base target)
         {
-            return Math.Max(70, (1f - (ObjectManager.Player.LSDistance(target) / Q.Range)) * SpellQWidth);
+            return Math.Max(70, (1f - (ObjectManager.Player.Distance(target) / Q.Range)) * SpellQWidth);
         }*/
         #endregion
 
         private static void AntiGapcloserOnOnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (Player.IsChannelingImportantSpell() || Game.Time - Rtime < 2.5 || Player.LSHasBuff("malzaharrsound"))
+            if (Player.IsChannelingImportantSpell() || Game.Time - Rtime < 2.5 || Player.HasBuff("malzaharrsound"))
             {
                 Orbwalker.SetAttack(false);
                 Orbwalker.SetMovement(false);
@@ -286,16 +286,16 @@ using EloBuddy; namespace SurvivorMalzahar
             }
             // Improved AntiGap Closer
             var sender = gapcloser.Sender;
-            if (!gapcloser.Sender.LSIsValidTarget())
+            if (!gapcloser.Sender.IsValidTarget())
             {
                 return;
             }
 
-            if (Menu.Item("useQAntiGapCloser").GetValue<bool>() && sender.LSIsValidTarget(Q.Range))
+            if (Menu.Item("useQAntiGapCloser").GetValue<bool>() && sender.IsValidTarget(Q.Range))
             {
                 Q.Cast(gapcloser.End);
             }
-            if (R.LSIsReady() && Menu.Item("gapcloserR" + gapcloser.Sender.ChampionName).GetValue<bool>() && sender.LSIsValidTarget(R.Range) && gapcloser.End == Player.ServerPosition)
+            if (R.IsReady() && Menu.Item("gapcloserR" + gapcloser.Sender.ChampionName).GetValue<bool>() && sender.IsValidTarget(R.Range) && gapcloser.End == Player.ServerPosition)
             {
                 R.CastOnUnit(sender);
             }
@@ -312,24 +312,24 @@ using EloBuddy; namespace SurvivorMalzahar
             }
             double ultdamage = 0;
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 damage += Q.GetDamage(enemy);
             }
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 damage += W.GetDamage(enemy);
             }
 
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
                 damage += E.GetDamage(enemy);
             }
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
-                ultdamage += Player.LSGetSpellDamage(enemy, SpellSlot.R);
+                ultdamage += Player.GetSpellDamage(enemy, SpellSlot.R);
             }
             return damage + ((float)ultdamage * 2);
         }
@@ -338,7 +338,7 @@ using EloBuddy; namespace SurvivorMalzahar
             if (Player.ManaPercentage() < Menu.Item("autoharassminimumMana").GetValue<Slider>().Value)
                 return;
             var m = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-            if (m == null || !m.LSIsValidTarget())
+            if (m == null || !m.IsValidTarget())
                 return;
             #region SebbyPrediction
             //SebbyPrediction
@@ -371,7 +371,7 @@ using EloBuddy; namespace SurvivorMalzahar
         }
         private static bool HasRBuff()
         {
-            return (Player.IsChannelingImportantSpell() || Player.LSHasBuff("AiZaharNetherGrasp") || Player.LSHasBuff("MalzaharR") || Player.LSHasBuff("MalzaharRSound") || R.IsChanneling);
+            return (Player.IsChannelingImportantSpell() || Player.HasBuff("AiZaharNetherGrasp") || Player.HasBuff("MalzaharR") || Player.HasBuff("MalzaharRSound") || R.IsChanneling);
         }
         //Combo
         private static void Combo()
@@ -381,7 +381,7 @@ using EloBuddy; namespace SurvivorMalzahar
             var useE = (Menu.Item("useE").GetValue<bool>());
             var useR = (Menu.Item("useR").GetValue<bool>());
             var m = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-            if (m == null || !m.LSIsValidTarget())
+            if (m == null || !m.IsValidTarget())
                 return;
             #region SebbyPrediction
             //SebbyPrediction
@@ -406,7 +406,7 @@ using EloBuddy; namespace SurvivorMalzahar
             var predpos = SebbyLib.Prediction.Prediction.GetPrediction(predictioninput);
             if (Player.Mana > E.ManaCost + W.ManaCost + R.ManaCost)
             {
-                if (useQ && Q.LSIsReady() && Player.Mana > Q.ManaCost && Q.IsInRange(m))
+                if (useQ && Q.IsReady() && Player.Mana > Q.ManaCost && Q.IsInRange(m))
                 {
                     if (m.CanMove && predpos.Hitchance >= SebbyLib.Prediction.HitChance.High)
                     {
@@ -417,14 +417,14 @@ using EloBuddy; namespace SurvivorMalzahar
                         Q.Cast(m.Position);
                     }
                 }
-                if (useW && W.LSIsReady()) W.Cast(m);
-                if (useE && E.LSIsReady() && E.IsInRange(m)) E.CastOnUnit(m);
-                if (useR && R.LSIsReady() && !W.LSIsReady() && !E.LSIsReady() && m != null && E.IsInRange(m)) R.CastOnUnit(m);
+                if (useW && W.IsReady()) W.Cast(m);
+                if (useE && E.IsReady() && E.IsInRange(m)) E.CastOnUnit(m);
+                if (useR && R.IsReady() && !W.IsReady() && !E.IsReady() && m != null && E.IsInRange(m)) R.CastOnUnit(m);
             }
             else
             {
-                if (useE && E.LSIsReady() && E.IsInRange(m)) E.CastOnUnit(m);
-                if (useQ && Q.LSIsReady() && Player.Mana > Q.ManaCost && Q.IsInRange(m))
+                if (useE && E.IsReady() && E.IsInRange(m)) E.CastOnUnit(m);
+                if (useQ && Q.IsReady() && Player.Mana > Q.ManaCost && Q.IsInRange(m))
                 {
                     if (m.CanMove && predpos.Hitchance >= SebbyLib.Prediction.HitChance.High)
                     {
@@ -435,7 +435,7 @@ using EloBuddy; namespace SurvivorMalzahar
                         Q.Cast(m.Position);
                     }
                 }
-                if (useW && W.LSIsReady() && Player.Mana > W.ManaCost && W.IsInRange(m)) W.Cast(m);
+                if (useW && W.IsReady() && Player.Mana > W.ManaCost && W.IsInRange(m)) W.Cast(m);
             }
             if (Menu.Item("useIgniteInCombo").GetValue<bool>())
             {
@@ -453,7 +453,7 @@ using EloBuddy; namespace SurvivorMalzahar
                 return;
 
 
-            if (Player.IsChannelingImportantSpell() || Game.Time - Rtime < 2.5 || Player.LSHasBuff("malzaharrsound"))
+            if (Player.IsChannelingImportantSpell() || Game.Time - Rtime < 2.5 || Player.HasBuff("malzaharrsound"))
             {
                 Orbwalker.SetAttack(false);
                 Orbwalker.SetMovement(false);
@@ -467,7 +467,7 @@ using EloBuddy; namespace SurvivorMalzahar
 
             SebbyLib.Orbwalking.MoveTo(Game.CursorPos);
             var m = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-            if (!m.LSIsValidTarget())
+            if (!m.IsValidTarget())
             {
                 return;
             }
@@ -493,7 +493,7 @@ using EloBuddy; namespace SurvivorMalzahar
             // Input = 'var predictioninput'
             var predpos = SebbyLib.Prediction.Prediction.GetPrediction(predictioninput);
             // var pred = Q.GetSPrediction(m);
-                if (Q.LSIsReady() && Q.IsInRange(m))
+                if (Q.IsReady() && Q.IsInRange(m))
                 {
                     if (m.CanMove && predpos.Hitchance >= SebbyLib.Prediction.HitChance.High)
                     {
@@ -504,10 +504,10 @@ using EloBuddy; namespace SurvivorMalzahar
                         Q.Cast(m.Position);
                     }
                 }
-                if (E.LSIsReady() && E.IsInRange(m)) E.CastOnUnit(m);
-                if (W.LSIsReady()) W.Cast(m);
+                if (E.IsReady() && E.IsInRange(m)) E.CastOnUnit(m);
+                if (W.IsReady()) W.Cast(m);
                 Player.Spellbook.CastSpell(igniteSlot, m);
-                if (R.LSIsReady() && !E.LSIsReady() && !W.LSIsReady() && R.IsInRange(m)) R.CastOnUnit(m);
+                if (R.IsReady() && !E.IsReady() && !W.IsReady() && R.IsInRange(m)) R.CastOnUnit(m);
         }
         //Lane
         private static void Lane()
@@ -515,7 +515,7 @@ using EloBuddy; namespace SurvivorMalzahar
             if (Player.ManaPercentage() < Menu.Item("laneclearEMinimumMana").GetValue<Slider>().Value || Player.ManaPercentage() < Menu.Item("laneclearQMinimumMana").GetValue<Slider>().Value || Player.ManaPercentage() < Menu.Item("laneclearWMinimumMana").GetValue<Slider>().Value)
                 return;
 
-            var infectedminion = MinionManager.GetMinions(Player.Position, E.Range).Find(x => x.HasBuff("malzahare") && x.LSIsValidTarget(E.Range));
+            var infectedminion = MinionManager.GetMinions(Player.Position, E.Range).Find(x => x.HasBuff("malzahare") && x.IsValidTarget(E.Range));
             //var allMinions = Cache.GetMinions(ObjectManager.Player.ServerPosition, E.Range, MinionTeam.Enemy);
             //var allMinionsW = Cache.GetMinions(ObjectManager.Player.ServerPosition, 450f, MinionTeam.Enemy);
             var allMinions = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Enemy);
@@ -533,28 +533,28 @@ using EloBuddy; namespace SurvivorMalzahar
             }
             if (allMinions.Count > Menu.Item("LaneClearEMinMinions").GetValue<Slider>().Value)
             {
-                if (Menu.Item("laneclearE").GetValue<bool>() && E.LSIsReady())
+                if (Menu.Item("laneclearE").GetValue<bool>() && E.IsReady())
                 {
                     foreach (var minion in allMinions)
                     {
-                        if (minion.LSIsValidTarget() && !minion.LSHasBuff("malzahare") && minion.Health < E.GetDamage(minion))
+                        if (minion.IsValidTarget() && !minion.HasBuff("malzahare") && minion.Health < E.GetDamage(minion))
                         {
                             E.CastOnUnit(minion);
                         }
                     }
                 }
             }
-            if (Menu.Item("laneclearW").GetValue<bool>() && W.LSIsReady())
+            if (Menu.Item("laneclearW").GetValue<bool>() && W.IsReady())
             {
                 foreach (var minion in allMinionsW)
                 {
-                    if (minion.LSIsValidTarget())
+                    if (minion.IsValidTarget())
                     {
                         W.Cast(minion);
                     }
                 }
             }
-            if (Menu.Item("laneclearQ").GetValue<bool>() && Q.LSIsReady())
+            if (Menu.Item("laneclearQ").GetValue<bool>() && Q.IsReady())
             {
                 var allMinionsQ = MinionManager.GetMinions(Player.ServerPosition, Q.Range);
                 var farmPos = Q.GetCircularFarmLocation(allMinionsQ, 150);

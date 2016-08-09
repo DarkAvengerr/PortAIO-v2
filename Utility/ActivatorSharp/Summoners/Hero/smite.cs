@@ -24,9 +24,9 @@ using EloBuddy; namespace Activator.Summoners
         {
             foreach (var hero in Smitedata.SpellList.Where(x => x.Name == Activator.Player.ChampionName))
             {
-                if (Activator.Player.LSGetSpellDamage(unit, hero.Slot, hero.Stage) + smitedmg >= unit.Health)
+                if (Activator.Player.GetSpellDamage(unit, hero.Slot, hero.Stage) + smitedmg >= unit.Health)
                 {
-                    if (unit.LSDistance(Activator.Player.ServerPosition) <= hero.CastRange + 
+                    if (unit.Distance(Activator.Player.ServerPosition) <= hero.CastRange + 
                         unit.BoundingRadius + Activator.Player.BoundingRadius)
                     {
                         if (hero.HeroReqs(unit))
@@ -72,7 +72,7 @@ using EloBuddy; namespace Activator.Summoners
                     ? (float) Player.GetSummonerSpellDamage(minion, Damage.SummonerSpell.Smite)
                     : 0;
 
-                if (minion.LSDistance(Player.ServerPosition) <= 500 + minion.BoundingRadius + Player.BoundingRadius)
+                if (minion.Distance(Player.ServerPosition) <= 500 + minion.BoundingRadius + Player.BoundingRadius)
                 {
                     if (Helpers.IsLargeMinion(minion) && Menu.Item("smitelarge").GetValue<bool>())
                     {
@@ -124,7 +124,7 @@ using EloBuddy; namespace Activator.Summoners
                             var hero in
                                 Activator.Heroes.Where(
                                     h =>
-                                        h.Player.LSIsValidTarget(500) && !h.Player.IsZombie &&
+                                        h.Player.IsValidTarget(500) && !h.Player.IsZombie &&
                                         h.Player.Health <= 20 + 8 * Player.Level))
                         {
                             Player.Spellbook.CastSpell(Activator.Smite, hero.Player);
@@ -139,7 +139,7 @@ using EloBuddy; namespace Activator.Summoners
                         if (Activator.Origin.Item("usecombo").GetValue<KeyBind>().Active)
                         {
                             var t = TargetSelector.GetTarget(700f, TargetSelector.DamageType.True);
-                            if (t.LSIsValidTarget(500))
+                            if (t.IsValidTarget(500))
                             {
                                 Player.Spellbook.CastSpell(Activator.Smite, t);                            
                             }

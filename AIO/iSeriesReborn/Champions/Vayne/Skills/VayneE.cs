@@ -19,15 +19,15 @@ using EloBuddy;
             if (Variables.spells[SpellSlot.E].IsEnabledAndReady())
             {
                 if (MenuExtensions.GetItemValue<bool>("iseriesr.vayne.misc.qe") 
-                    && Variables.spells[SpellSlot.E].LSIsReady() 
-                    && Variables.spells[SpellSlot.Q].LSIsReady())
+                    && Variables.spells[SpellSlot.E].IsReady() 
+                    && Variables.spells[SpellSlot.Q].IsReady())
                 {
                     const int currentStep = 30;
-                    var direction = ObjectManager.Player.Direction.LSTo2D().LSPerpendicular();
+                    var direction = ObjectManager.Player.Direction.To2D().Perpendicular();
                     for (var i = 0f; i < 360f; i += currentStep)
                     {
                         var angleRad = Geometry.DegreeToRadian(i);
-                        var rotatedPosition = ObjectManager.Player.Position.LSTo2D() + (300f * direction.LSRotated(angleRad));
+                        var rotatedPosition = ObjectManager.Player.Position.To2D() + (300f * direction.Rotated(angleRad));
                         ECheck(rotatedPosition.To3D(), true);
                     }
                 }
@@ -40,7 +40,7 @@ using EloBuddy;
 
         public static void ECheck(Vector3 from, bool castQFirst = false)
         {
-            if (!Variables.spells[SpellSlot.E].LSIsReady())
+            if (!Variables.spells[SpellSlot.E].IsReady())
             {
                 return;
             }
@@ -54,16 +54,16 @@ using EloBuddy;
                 pushDistance -= (10 + (PushEx - 410) / 2);
             }
             
-            foreach (var target in GameObjects.EnemyHeroes.Where(h => !h.IsInvulnerable && !TargetSelector.IsInvulnerable(h, TargetSelector.DamageType.Physical, false) && h.LSIsValidTarget()))
+            foreach (var target in GameObjects.EnemyHeroes.Where(h => !h.IsInvulnerable && !TargetSelector.IsInvulnerable(h, TargetSelector.DamageType.Physical, false) && h.IsValidTarget()))
             {
                 
                 var targetPosition = Variables.spells[SpellSlot.E].GetPrediction(target).UnitPosition;
 
-                var finalPosition = targetPosition.LSExtend(from, -pushDistance);
-                var finalPosition_ex = target.ServerPosition.LSExtend(from, -pushDistance);
+                var finalPosition = targetPosition.Extend(from, -pushDistance);
+                var finalPosition_ex = target.ServerPosition.Extend(from, -pushDistance);
 
-                var condemnRectangle = new iSRPolygon(iSRPolygon.Rectangle(targetPosition.LSTo2D(), finalPosition.LSTo2D(), target.BoundingRadius));
-                var condemnRectangle_ex = new iSRPolygon(iSRPolygon.Rectangle(target.ServerPosition.LSTo2D(), finalPosition_ex.LSTo2D(), target.BoundingRadius));
+                var condemnRectangle = new iSRPolygon(iSRPolygon.Rectangle(targetPosition.To2D(), finalPosition.To2D(), target.BoundingRadius));
+                var condemnRectangle_ex = new iSRPolygon(iSRPolygon.Rectangle(target.ServerPosition.To2D(), finalPosition_ex.To2D(), target.BoundingRadius));
 
                 if (IsBothNearWall(target))
                 {
@@ -78,13 +78,13 @@ using EloBuddy;
                         Variables.spells[SpellSlot.Q].Cast(from);
                         LeagueSharp.Common.Utility.DelayAction.Add((int)(250 + Game.Ping / 2f + 125), () =>
                         {
-                            WardBush(from, targetPosition.LSExtend(from, -pushDistance));
+                            WardBush(from, targetPosition.Extend(from, -pushDistance));
                             Variables.spells[SpellSlot.E].Cast(target);
                         });
                         return;
                     }
 
-                    WardBush(from, targetPosition.LSExtend(from, -pushDistance));
+                    WardBush(from, targetPosition.Extend(from, -pushDistance));
                     Variables.spells[SpellSlot.E].Cast(target);
                     return;
                 }
@@ -101,7 +101,7 @@ using EloBuddy;
             var wardSlot = Items.GetWardSlot();
             if (wardSlot != null)
             {
-                var wardPos = from.LSExtend(endPosition, from.LSDistance(endPosition) - 65f);
+                var wardPos = from.Extend(endPosition, from.Distance(endPosition) - 65f);
                 if (NavMesh.IsWallOfGrass(wardPos, 65))
                 {
                     if (Items.CanUseItem(wardSlot.Slot))
@@ -115,11 +115,11 @@ using EloBuddy;
         private static bool IsBothNearWall(Obj_AI_Base target)
         {
             var positions =
-                GetWallQPositions(target, 110).ToList().OrderBy(pos => pos.LSDistance(target.ServerPosition, true));
+                GetWallQPositions(target, 110).ToList().OrderBy(pos => pos.Distance(target.ServerPosition, true));
             var positions_ex =
-            GetWallQPositions(ObjectManager.Player, 70).ToList().OrderBy(pos => pos.LSDistance(ObjectManager.Player.ServerPosition, true));
+            GetWallQPositions(ObjectManager.Player, 70).ToList().OrderBy(pos => pos.Distance(ObjectManager.Player.ServerPosition, true));
 
-            if (positions.Any(p => p.LSIsWall()))
+            if (positions.Any(p => p.IsWall()))
             {
                 return true;
             }
@@ -130,8 +130,8 @@ using EloBuddy;
         {
             Vector3[] vList =
             {
-                (player.ServerPosition.LSTo2D() + Range * player.Direction.LSTo2D()).To3D(),
-                (player.ServerPosition.LSTo2D() - Range * player.Direction.LSTo2D()).To3D()
+                (player.ServerPosition.To2D() + Range * player.Direction.To2D()).To3D(),
+                (player.ServerPosition.To2D() - Range * player.Direction.To2D()).To3D()
 
             };
 

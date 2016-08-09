@@ -13,7 +13,7 @@ namespace VayneHunter_Reborn.Utility.Helpers
         public static float GetRealAutoAttackRange(AIHeroClient attacker, AttackableUnit target)
         {
             var result = attacker.AttackRange + attacker.BoundingRadius;
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 return result + target.BoundingRadius;
             }
@@ -42,7 +42,7 @@ namespace VayneHunter_Reborn.Utility.Helpers
 
         public static Vector3 GetAfterTumblePosition(Vector3 endPosition)
         {
-            return ObjectManager.Player.ServerPosition.LSExtend(endPosition, 300f);
+            return ObjectManager.Player.ServerPosition.Extend(endPosition, 300f);
         }
     }
 }

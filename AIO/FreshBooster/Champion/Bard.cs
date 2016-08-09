@@ -149,12 +149,12 @@ using EloBuddy;
                 if (enemy != null)
                 {
                     float damage = 0;
-                    if (_Q.LSIsReady())
+                    if (_Q.IsReady())
                         damage += _Q.GetDamage(enemy);
-                    if (_R.LSIsReady())
+                    if (_R.IsReady())
                         damage += _R.GetDamage(enemy);
                     if (!Player.Spellbook.IsAutoAttacking)
-                        damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                        damage += (float)Player.GetAutoAttackDamage(enemy, true);
                     return damage;
                 }
                 return 0;
@@ -174,7 +174,7 @@ using EloBuddy;
             try
             {
                 if (Player.IsDead) return;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
                 {
                     if (_MainMenu.Item("Bard_Indicator").GetValue<bool>())
                     {
@@ -224,23 +224,23 @@ using EloBuddy;
                 //Kill
                 if (_MainMenu.Item("Bard_KUse_Q").GetValue<bool>())
                     if (QTarget != null)
-                        if (_Q.LSIsReady())
+                        if (_Q.IsReady())
                             if (QTarget.Health < _Q.GetDamage(QTarget))
                                 _Q.CastIfHitchanceEquals(QTarget, HitChance.High, true);
 
                 // W
-                if (_MainMenu.Item("Bard_HealWMinEnable").GetValue<bool>() && !Player.LSIsRecalling())
+                if (_MainMenu.Item("Bard_HealWMinEnable").GetValue<bool>() && !Player.IsRecalling())
                 {
-                    var ally = HeroManager.Allies.OrderBy(f => f.Health).FirstOrDefault(f => f.LSDistance(Player.Position) < _W.Range && !f.IsDead && !f.IsZombie && f.HealthPercent < _MainMenu.Item("Bard_HealWMin").GetValue<Slider>().Value);
-                    if (ally != null && _W.LSIsReady() && !ally.LSInFountain(LeagueSharp.Common.Utility.FountainType.OwnFountain))
+                    var ally = HeroManager.Allies.OrderBy(f => f.Health).FirstOrDefault(f => f.Distance(Player.Position) < _W.Range && !f.IsDead && !f.IsZombie && f.HealthPercent < _MainMenu.Item("Bard_HealWMin").GetValue<Slider>().Value);
+                    if (ally != null && _W.IsReady() && !ally.InFountain(LeagueSharp.Common.Utility.FountainType.OwnFountain))
                         _W.CastOnUnit(ally, true);
                 }
 
                 //R
-                if (_MainMenu.Item("BardRKey").GetValue<KeyBind>().Active && _R.LSIsReady())
+                if (_MainMenu.Item("BardRKey").GetValue<KeyBind>().Active && _R.IsReady())
                 {
                     RCnt = 0;
-                    var range = HeroManager.AllHeroes.OrderBy(f => Game.CursorPos.LSDistance(f.Position) < 340f);
+                    var range = HeroManager.AllHeroes.OrderBy(f => Game.CursorPos.Distance(f.Position) < 340f);
                     if (range == null)
                         return;
                     foreach (var item in range)
@@ -249,8 +249,8 @@ using EloBuddy;
                     }
                     if (RCnt == 0)
                         return;
-                    var target = range.FirstOrDefault(f => f.LSDistance(Game.CursorPos) < 340f);
-                    _R.SetSkillshot(Player.LSDistance(target.Position) * 3400 / 1.4f, 340f, 1400f, false, SkillshotType.SkillshotCircle);
+                    var target = range.FirstOrDefault(f => f.Distance(Game.CursorPos) < 340f);
+                    _R.SetSkillshot(Player.Distance(target.Position) * 3400 / 1.4f, 340f, 1400f, false, SkillshotType.SkillshotCircle);
                     if (target != null)
                         _R.CastIfHitchanceEquals(target, HitChance.Medium, true);
                 }
@@ -258,7 +258,7 @@ using EloBuddy;
                 // Combo
                 if (_MainMenu.Item("CKey").GetValue<KeyBind>().Active)
                 {
-                    if (_MainMenu.Item("Bard_CUse_Q").GetValue<bool>() && _Q.LSIsReady() && QTarget != null)
+                    if (_MainMenu.Item("Bard_CUse_Q").GetValue<bool>() && _Q.IsReady() && QTarget != null)
                     {
                         BardQ(QTarget, true);
                         if (_MainMenu.Item("Bard_CUse_OnlyQ").GetValue<bool>())
@@ -266,7 +266,7 @@ using EloBuddy;
                             if (cnt == 2)
                                 if (BardQTarget1 is AIHeroClient || BardQTarget2 is AIHeroClient)
                                     _Q.CastIfHitchanceEquals(BardQTarget1, Hitchance("Bard_CUse_Q_Hit"), true);
-                            if (cnt == 1 && BardQTarget1 is AIHeroClient && BardQTarget1.Position.LSExtend(Player.Position, -450).LSIsWall())
+                            if (cnt == 1 && BardQTarget1 is AIHeroClient && BardQTarget1.Position.Extend(Player.Position, -450).IsWall())
                                 _Q.CastIfHitchanceEquals(BardQTarget1, Hitchance("Bard_CUse_Q_Hit"), true);
                         }
                         else
@@ -281,7 +281,7 @@ using EloBuddy;
                 // Harass
                 if (_MainMenu.Item("HKey").GetValue<KeyBind>().Active || _MainMenu.Item("Bard_Auto_HEnable").GetValue<bool>())
                 {
-                    if (_MainMenu.Item("Bard_HUse_Q").GetValue<bool>() && _Q.LSIsReady() && QTarget != null && _MainMenu.Item("Bard_AManarate").GetValue<Slider>().Value < Player.ManaPercent)
+                    if (_MainMenu.Item("Bard_HUse_Q").GetValue<bool>() && _Q.IsReady() && QTarget != null && _MainMenu.Item("Bard_AManarate").GetValue<Slider>().Value < Player.ManaPercent)
                     {
                         BardQ(QTarget, true);
                         // Sturn
@@ -294,7 +294,7 @@ using EloBuddy;
                                     Console.WriteLine("1");
                                 }
 
-                            if (cnt == 1 && BardQTarget1 is AIHeroClient && BardQTarget1.Position.LSExtend(Player.Position, -400).LSIsWall())
+                            if (cnt == 1 && BardQTarget1 is AIHeroClient && BardQTarget1.Position.Extend(Player.Position, -400).IsWall())
                             {
                                 _Q.CastIfHitchanceEquals(BardQTarget1, Hitchance("Bard_CUse_Q_Hit"), true);
                                 Console.WriteLine("2");
@@ -325,7 +325,7 @@ using EloBuddy;
         {
             try
             {
-                if (_MainMenu.Item("Bard_Anti").GetValue<bool>() && _Q.LSIsReady() && gapcloser.Sender.LSDistance(Player.Position) < _Q.Range)
+                if (_MainMenu.Item("Bard_Anti").GetValue<bool>() && _Q.IsReady() && gapcloser.Sender.Distance(Player.Position) < _Q.Range)
                     _Q.CastIfHitchanceEquals(gapcloser.Sender, HitChance.Medium, true);
             }
             catch (Exception)
@@ -361,9 +361,9 @@ using EloBuddy;
         {
             try
             {
-                if (_MainMenu.Item("Bard_Inter").GetValue<bool>() && _R.LSIsReady() && sender.LSDistance(Player.Position) < _R.Range)
+                if (_MainMenu.Item("Bard_Inter").GetValue<bool>() && _R.IsReady() && sender.Distance(Player.Position) < _R.Range)
                 {
-                    _R.SetSkillshot(Player.LSDistance(sender.Position) * 3400 / 1.5f, 340f, 1400f, false, SkillshotType.SkillshotCircle);
+                    _R.SetSkillshot(Player.Distance(sender.Position) * 3400 / 1.5f, 340f, 1400f, false, SkillshotType.SkillshotCircle);
                     _R.CastIfHitchanceEquals(sender, HitChance.Medium, true);
                 }
             }
@@ -442,16 +442,16 @@ using EloBuddy;
             /* return
             target1, target2, type
             */            
-            Range1 = new Geometry.Polygon.Rectangle(Player.Position, Player.Position.LSExtend(Target.Position, _Q.Range), _Q.Width);
+            Range1 = new Geometry.Polygon.Rectangle(Player.Position, Player.Position.Extend(Target.Position, _Q.Range), _Q.Width);
             Range2 = null;
             if (Draw)
                 Range1.Draw(Color.Red);
             cnt = 0;
             BardQTarget1 = Player;
             BardQTarget2 = Player;
-            foreach (var item in ObjectManager.Get<Obj_AI_Base>().OrderBy(f => f.LSDistance(f.Position)))
+            foreach (var item in ObjectManager.Get<Obj_AI_Base>().OrderBy(f => f.Distance(f.Position)))
             {
-                if (item.LSDistance(Player.Position) < _Q.Range)
+                if (item.Distance(Player.Position) < _Q.Range)
                     if (item is AIHeroClient || item is Obj_AI_Minion)
                         if (item.IsEnemy && !item.IsDead)
                         {
@@ -460,8 +460,8 @@ using EloBuddy;
                             if (cnt == 0 && Range1.IsInside(item.Position))
                             {
                                 BardQTarget1 = item;
-                                Range2 = new Geometry.Polygon.Rectangle(Player.Position.LSExtend(BardQTarget1.Position, Player.LSDistance(BardQTarget1.Position)),
-                                    Player.Position.LSExtend(BardQTarget1.Position, Player.LSDistance(BardQTarget1.Position) + 450), _Q.Width);
+                                Range2 = new Geometry.Polygon.Rectangle(Player.Position.Extend(BardQTarget1.Position, Player.Distance(BardQTarget1.Position)),
+                                    Player.Position.Extend(BardQTarget1.Position, Player.Distance(BardQTarget1.Position) + 450), _Q.Width);
                                 if (Draw)
                                     Range2.Draw(Color.Yellow);
                                 cnt++;

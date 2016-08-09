@@ -90,7 +90,7 @@ using EloBuddy; namespace Activator.Base
                     unit.HitTypes.Clear();
                 }
 
-                if (unit.Player.IsZombie || unit.Immunity || !unit.Player.LSIsValidTarget(float.MaxValue, false))
+                if (unit.Player.IsZombie || unit.Immunity || !unit.Player.IsValidTarget(float.MaxValue, false))
                 {
                     unit.Attacker = null;
                     unit.IncomeDamage = 0;
@@ -315,7 +315,7 @@ using EloBuddy; namespace Activator.Base
                         hero.MikaelsHighestBuffTime = 0;
                 }
 
-                foreach (var aura in Auradata.BuffList.Where(au => hero.Player.LSHasBuff(au.Name)))
+                foreach (var aura in Auradata.BuffList.Where(au => hero.Player.HasBuff(au.Name)))
                 {
                     if (aura.DoT && hero.Player.Health / hero.Player.MaxHealth * 100 <=
                         Activator.Origin.Item("useMikaelsdot").GetValue<Slider>().Value)

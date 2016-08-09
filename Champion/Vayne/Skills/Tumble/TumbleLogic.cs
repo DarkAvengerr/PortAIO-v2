@@ -78,7 +78,7 @@ namespace VayneHunter_Reborn.Skills.Tumble
                 {
                     var tg = target as AIHeroClient;
                     if (Variables.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && tg.GetWBuff() != null
-                        && tg.GetWBuff().Count == 1 && tg.LSIsValidTarget(Variables.spells[SpellSlot.E].Range))
+                        && tg.GetWBuff().Count == 1 && tg.IsValidTarget(Variables.spells[SpellSlot.E].Range))
                     {
                         Variables.spells[SpellSlot.E].CastOnUnit(tg);
                     }

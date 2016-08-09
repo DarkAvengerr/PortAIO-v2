@@ -248,7 +248,7 @@ namespace JaxQx
         {
             if (args.Target is AIHeroClient)
             {
-                if (W.LSIsReady() && Config.Item("Misc.AutoW").GetValue<bool>() && !shenBuffActive)
+                if (W.IsReady() && Config.Item("Misc.AutoW").GetValue<bool>() && !shenBuffActive)
                 {
                     W.Cast();
                 }
@@ -291,19 +291,19 @@ namespace JaxQx
         {
             var fComboDamage = 0d;
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                fComboDamage += ObjectManager.Player.LSGetSpellDamage(t, SpellSlot.Q);
+                fComboDamage += ObjectManager.Player.GetSpellDamage(t, SpellSlot.Q);
             }
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                fComboDamage += ObjectManager.Player.LSGetSpellDamage(t, SpellSlot.W);
+                fComboDamage += ObjectManager.Player.GetSpellDamage(t, SpellSlot.W);
             }
 
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                fComboDamage += ObjectManager.Player.LSGetSpellDamage(t, SpellSlot.E);
+                fComboDamage += ObjectManager.Player.GetSpellDamage(t, SpellSlot.E);
             }
 
             if (PlayerSpells.IgniteSlot != SpellSlot.Unknown
@@ -327,7 +327,7 @@ namespace JaxQx
                 return;
             }
 
-            if (arg.Slot == SpellSlot.Q && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && E.LSIsReady())
+            if (arg.Slot == SpellSlot.Q && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && E.IsReady())
             {
 
                 if (Config.Item("Combo.CastE").GetValue<StringList>().SelectedIndex == 0)
@@ -339,11 +339,11 @@ namespace JaxQx
 
             if (Wards.ToList().Contains(arg.SData.Name))
             {
-                Jumper.testSpellCast = arg.End.LSTo2D();
+                Jumper.testSpellCast = arg.End.To2D();
                 Polygon pol;
-                if ((pol = map.getInWhichPolygon(arg.End.LSTo2D())) != null)
+                if ((pol = map.getInWhichPolygon(arg.End.To2D())) != null)
                 {
-                    Jumper.testSpellProj = pol.getProjOnPolygon(arg.End.LSTo2D());
+                    Jumper.testSpellProj = pol.getProjOnPolygon(arg.End.To2D());
                 }
             }
         }
@@ -358,7 +358,7 @@ namespace JaxQx
             if (Config.Item("Ward").GetValue<KeyBind>().Active)
             {
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-                Jumper.wardJump(Game.CursorPos.LSTo2D());
+                Jumper.wardJump(Game.CursorPos.To2D());
             }
 
             if (Config.Item("ComboActive").GetValue<KeyBind>().Active)
@@ -402,62 +402,62 @@ namespace JaxQx
                 return;
             }
 
-            if (t.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 95) && shenBuffActive)
+            if (t.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 95) && shenBuffActive)
             {
                 return;
             }
 
             var minQRange = Config.Item("ComboUseQMinRange").GetValue<Slider>().Value;
 
-            if (Q.LSIsReady() && Q.GetDamage(t) > t.Health)
+            if (Q.IsReady() && Q.GetDamage(t) > t.Health)
             {
                 Q.Cast(t);
             }
 
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
                 switch (Config.Item("Combo.CastE").GetValue<StringList>().SelectedIndex)
                 {
                     case 0:
-                        if (E.LSIsReady() && Q.LSIsReady() && t.LSIsValidTarget(Q.Range))
+                        if (E.IsReady() && Q.IsReady() && t.IsValidTarget(Q.Range))
                         {
-                            if (Player.LSDistance(t) >= minQRange && t.LSIsValidTarget(Q.Range)) Q.CastOnUnit(t);
+                            if (Player.Distance(t) >= minQRange && t.IsValidTarget(Q.Range)) Q.CastOnUnit(t);
                             E.Cast();
                         }
                         break;
                     case 1:
-                        if (E.LSIsReady() && t.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 95))
+                        if (E.IsReady() && t.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 95))
                         {
                             E.Cast();
                         }
                         break;
                 }
 
-                if (eCounterStrike && t.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
+                if (eCounterStrike && t.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
                 {
                     E.Cast();
                 }
 
             }
 
-            if (Q.LSIsReady() && Player.LSDistance(t) >= minQRange && t.LSIsValidTarget(Q.Range))
+            if (Q.IsReady() && Player.Distance(t) >= minQRange && t.IsValidTarget(Q.Range))
             {
                 Q.Cast(t);
             }
 
 
-            if (ObjectManager.Player.LSDistance(t) <= E.Range)
+            if (ObjectManager.Player.Distance(t) <= E.Range)
             {
                 CastItems();
                 //UseItems(t);
             }
 
-            if (W.LSIsReady() && ObjectManager.Player.LSCountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(t)) > 0)
+            if (W.IsReady() && ObjectManager.Player.CountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(t)) > 0)
             {
                 W.Cast();
             }
 
-            if (E.LSIsReady() && ObjectManager.Player.LSCountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(t)) > 0)
+            if (E.IsReady() && ObjectManager.Player.CountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(t)) > 0)
             {
                 E.Cast();
             }
@@ -466,18 +466,18 @@ namespace JaxQx
                 && Player.Spellbook.CanUseSpell(PlayerSpells.IgniteSlot) == SpellState.Ready)
             {
                 if (Player.GetSummonerSpellDamage(t, Damage.SummonerSpell.Ignite) > t.Health
-                    && ObjectManager.Player.LSDistance(t) <= 500)
+                    && ObjectManager.Player.Distance(t) <= 500)
                 {
                     Player.Spellbook.CastSpell(PlayerSpells.IgniteSlot, t);
                 }
             }
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
-                if (Player.LSDistance(t) < Player.AttackRange)
+                if (Player.Distance(t) < Player.AttackRange)
                 {
                     if (
-                        ObjectManager.Player.LSCountEnemiesInRange(
+                        ObjectManager.Player.CountEnemiesInRange(
                             (int)Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)) >= 2
                         || t.Health > Player.Health)
                     {
@@ -503,11 +503,11 @@ namespace JaxQx
             {
                 case 0:
                     {
-                        if (Q.LSIsReady() && W.LSIsReady() && t != null && useQ && useW)
+                        if (Q.IsReady() && W.IsReady() && t != null && useQ && useW)
                         {
                             if (useQDontUnderTurret)
                             {
-                                if (!t.LSUnderTurret())
+                                if (!t.UnderTurret())
                                 {
                                     Q.Cast(t);
                                     W.Cast();
@@ -523,11 +523,11 @@ namespace JaxQx
                     }
                 case 1:
                     {
-                        if (Q.LSIsReady() && E.LSIsReady() && t != null && useQ && useE)
+                        if (Q.IsReady() && E.IsReady() && t != null && useQ && useE)
                         {
                             if (useQDontUnderTurret)
                             {
-                                if (!t.LSUnderTurret())
+                                if (!t.UnderTurret())
                                 {
                                     Q.Cast(t);
                                     E.Cast();
@@ -543,22 +543,22 @@ namespace JaxQx
                     }
                 case 2:
                     {
-                        if (Q.LSIsReady() && useQ && t != null && useQ)
+                        if (Q.IsReady() && useQ && t != null && useQ)
                         {
                             if (useQDontUnderTurret)
                             {
-                                if (!t.LSUnderTurret()) Q.Cast(t);
+                                if (!t.UnderTurret()) Q.Cast(t);
                             }
                             else Q.Cast(t);
                             UseItems(t);
                         }
 
-                        if (W.LSIsReady() && useW && t != null && t.LSIsValidTarget(E.Range))
+                        if (W.IsReady() && useW && t != null && t.IsValidTarget(E.Range))
                         {
                             W.Cast();
                         }
 
-                        if (E.LSIsReady() && useE && t != null && t.LSIsValidTarget(E.Range))
+                        if (E.IsReady() && useE && t != null && t.IsValidTarget(E.Range))
                         {
                             E.CastOnUnit(Player);
                         }
@@ -577,18 +577,18 @@ namespace JaxQx
             var vMinions = MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.NotAlly);
             foreach (var vMinion in vMinions)
             {
-                if (useQ && Q.LSIsReady() && Player.LSDistance(vMinion) > Orbwalking.GetRealAutoAttackRange(Player))
+                if (useQ && Q.IsReady() && Player.Distance(vMinion) > Orbwalking.GetRealAutoAttackRange(Player))
                 {
                     if (useQDontUnderTurret)
                     {
-                        if (!vMinion.LSUnderTurret()) Q.Cast(vMinion);
+                        if (!vMinion.UnderTurret()) Q.Cast(vMinion);
                     }
                     else Q.Cast(vMinion);
                 }
 
-                if (useW && W.LSIsReady()) W.Cast();
+                if (useW && W.IsReady()) W.Cast();
 
-                if (useE && E.LSIsReady()) E.CastOnUnit(Player);
+                if (useE && E.IsReady()) E.CastOnUnit(Player);
             }
         }
 
@@ -607,11 +607,11 @@ namespace JaxQx
 
             if (mobs.Count <= 0) return;
 
-            if (Q.LSIsReady() && useQ && Player.LSDistance(mobs[0]) > Player.AttackRange) Q.Cast(mobs[0]);
+            if (Q.IsReady() && useQ && Player.Distance(mobs[0]) > Player.AttackRange) Q.Cast(mobs[0]);
 
-            if (W.LSIsReady() && useW) W.Cast();
+            if (W.IsReady() && useW) W.Cast();
 
-            if (E.LSIsReady() && useE) E.CastOnUnit(Player);
+            if (E.IsReady() && useE) E.CastOnUnit(Player);
         }
 
         private static void Interrupter2_OnInterruptableTarget(
@@ -619,9 +619,9 @@ namespace JaxQx
             Interrupter2.InterruptableTargetEventArgs args)
         {
             var interruptSpells = Config.Item("InterruptSpells").GetValue<KeyBind>().Active;
-            if (!interruptSpells || !E.LSIsReady()) return;
+            if (!interruptSpells || !E.IsReady()) return;
 
-            if (Player.LSDistance(unit) <= E.Range)
+            if (Player.Distance(unit) <= E.Range)
             {
                 E.Cast();
             }
@@ -643,7 +643,7 @@ namespace JaxQx
                 targeted.Where(
                     itemId =>
                     LeagueSharp.Common.Items.HasItem(itemId) && LeagueSharp.Common.Items.CanUseItem(itemId)
-                    && GetInventorySlot(itemId) != null && t.LSIsValidTarget(450)))
+                    && GetInventorySlot(itemId) != null && t.IsValidTarget(450)))
             {
                 LeagueSharp.Common.Items.UseItem(itemId, t);
             }
@@ -653,7 +653,7 @@ namespace JaxQx
                 nonTarget.Where(
                     itemId =>
                     LeagueSharp.Common.Items.HasItem(itemId) && LeagueSharp.Common.Items.CanUseItem(itemId)
-                    && GetInventorySlot(itemId) != null && t.LSIsValidTarget(450)))
+                    && GetInventorySlot(itemId) != null && t.IsValidTarget(450)))
             {
                 LeagueSharp.Common.Items.UseItem(itemId);
             }
@@ -662,14 +662,14 @@ namespace JaxQx
         private static void CastItems()
         {
             var t = AssassinManager.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
-            if (!t.LSIsValidTarget()) return;
+            if (!t.IsValidTarget()) return;
 
             foreach (var item in
                 Items.ItemDb.Where(
                     item =>
                     item.Value.ItemType == Items.EnumItemType.AoE
                     && item.Value.TargetingType == Items.EnumItemTargettingType.EnemyObjects)
-                    .Where(item => t.LSIsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady()))
+                    .Where(item => t.IsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady()))
             {
                 item.Value.Item.Cast();
             }
@@ -679,7 +679,7 @@ namespace JaxQx
                     item =>
                     item.Value.ItemType == Items.EnumItemType.Targeted
                     && item.Value.TargetingType == Items.EnumItemTargettingType.EnemyHero)
-                    .Where(item => t.LSIsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady()))
+                    .Where(item => t.IsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady()))
             {
                 item.Value.Item.Cast(t);
             }

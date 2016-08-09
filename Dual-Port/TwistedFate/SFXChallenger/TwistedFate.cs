@@ -233,7 +233,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             IndicatorManager.Add(
                 "W",
                 hero =>
-                    (W.LSIsReady() || Cards.Status == SelectStatus.Selecting || Cards.Status == SelectStatus.Ready) &&
+                    (W.IsReady() || Cards.Status == SelectStatus.Selecting || Cards.Status == SelectStatus.Ready) &&
                     Cards.Status != SelectStatus.Selected
                         ? W.GetDamage(hero)
                         : (Cards.Status == SelectStatus.Selected
@@ -331,7 +331,7 @@ using EloBuddy; namespace SFXChallenger.Champions
         {
             try
             {
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                 {
                     if (args.UniqueId.Equals("q-immobile") && BestTargetOnlyManager.Check("q-immobile", Q, args.Hero) &&
                         Q.IsInRange(args.Hero))
@@ -363,8 +363,8 @@ using EloBuddy; namespace SFXChallenger.Champions
                     var range = Player.AttackRange + Player.BoundingRadius * 1.5f;
                     var minions = MinionManager.GetMinions(range, MinionTypes.All, MinionTeam.NotAlly);
                     var pred = MinionManager.GetBestCircularFarmLocation(
-                        minions.Select(m => m.Position.LSTo2D()).ToList(), 500, range);
-                    var target = minions.OrderBy(m => m.LSDistance(pred.Position)).FirstOrDefault();
+                        minions.Select(m => m.Position.To2D()).ToList(), 500, range);
+                    var target = minions.OrderBy(m => m.Distance(pred.Position)).FirstOrDefault();
                     if (target != null)
                     {
                         Orbwalker.ForceTarget(target);
@@ -399,7 +399,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     .Where(Orbwalking.InAutoAttackRange)
                     .ToList();
             var possibilities =
-                ListExtensions.ProduceEnumeration(minions.Select(p => p.ServerPosition.LSTo2D()).ToList())
+                ListExtensions.ProduceEnumeration(minions.Select(p => p.ServerPosition.To2D()).ToList())
                     .Where(p => p.Count > 0 && p.Count < 8)
                     .ToList();
             var hits = 0;
@@ -425,7 +425,7 @@ using EloBuddy; namespace SFXChallenger.Champions
 
             if (hits > 0 && !center.Equals(Vector2.Zero))
             {
-                return minions.OrderBy(m => m.Position.LSDistance(center.To3D())).FirstOrDefault();
+                return minions.OrderBy(m => m.Position.Distance(center.To3D())).FirstOrDefault();
             }
 
             return null;
@@ -437,7 +437,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             var totalHits = 0;
             try
             {
-                var enemies = targets.Where(e => e.LSIsValidTarget(Q.Range * 1.5f)).ToList();
+                var enemies = targets.Where(e => e.IsValidTarget(Q.Range * 1.5f)).ToList();
                 var enemyPositions = new List<Tuple<Obj_AI_Base, Vector3>>();
                 var circle = new Geometry.Polygon.Circle(Player.Position, Player.BoundingRadius, 30).Points;
 
@@ -446,7 +446,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     var ePred = Q.GetPrediction(h);
                     if (ePred.Hitchance >= hitChance)
                     {
-                        circle.Add(Player.Position.LSExtend(ePred.UnitPosition, Player.BoundingRadius).LSTo2D());
+                        circle.Add(Player.Position.Extend(ePred.UnitPosition, Player.BoundingRadius).To2D());
                         enemyPositions.Add(new Tuple<Obj_AI_Base, Vector3>(h, ePred.UnitPosition));
                     }
                 }
@@ -458,7 +458,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     var count = 0;
                     foreach (var possibility in possibilities)
                     {
-                        var mec = MEC.GetMec(possibility.Select(p => p.Item2.LSTo2D()).ToList());
+                        var mec = MEC.GetMec(possibility.Select(p => p.Item2.To2D()).ToList());
                         if (mec.Radius < Q.Width && possibility.Count > count)
                         {
                             count = possibility.Count;
@@ -470,7 +470,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 {
                     return new Tuple<int, Vector3>(totalHits, castPos);
                 }
-                circle = circle.OrderBy(c => c.LSDistance(targetPos)).ToList();
+                circle = circle.OrderBy(c => c.Distance(targetPos)).ToList();
                 if (!enemyPositions.Any())
                 {
                     return new Tuple<int, Vector3>(totalHits, castPos);
@@ -480,15 +480,15 @@ using EloBuddy; namespace SFXChallenger.Champions
                 {
                     var hits = 0;
                     var containsTarget = false;
-                    var direction = Q.Range * (point.To3D() - Player.Position).LSNormalized().LSTo2D();
+                    var direction = Q.Range * (point.To3D() - Player.Position).Normalized().To2D();
                     var rect1 = new Geometry.Polygon.Rectangle(
-                        Player.Position, Player.Position.LSExtend(Player.Position + direction.To3D(), Q.Range), Q.Width);
+                        Player.Position, Player.Position.Extend(Player.Position + direction.To3D(), Q.Range), Q.Width);
                     var rect2 = new Geometry.Polygon.Rectangle(
                         Player.Position,
-                        Player.Position.LSExtend(Player.Position + direction.LSRotated(QAngle).To3D(), Q.Range), Q.Width);
+                        Player.Position.Extend(Player.Position + direction.Rotated(QAngle).To3D(), Q.Range), Q.Width);
                     var rect3 = new Geometry.Polygon.Rectangle(
                         Player.Position,
-                        Player.Position.LSExtend(Player.Position + direction.LSRotated(-QAngle).To3D(), Q.Range), Q.Width);
+                        Player.Position.Extend(Player.Position + direction.Rotated(-QAngle).To3D(), Q.Range), Q.Width);
                     foreach (var enemy in enemyPositions)
                     {
                         var bounding = new Geometry.Polygon.Circle(enemy.Item2, enemy.Item1.BoundingRadius * 0.85f);
@@ -504,7 +504,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     if ((containsTarget || target == null) && hits > totalHits)
                     {
                         totalHits = hits;
-                        castPos = Player.Position.LSExtend(point.To3D(), Q.Range);
+                        castPos = Player.Position.Extend(point.To3D(), Q.Range);
                         if (totalHits >= enemies.Count)
                         {
                             break;
@@ -525,7 +525,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             {
                 if (targets != null && color == CardColor.Red)
                 {
-                    targets = targets.Where(t => t.LSIsValidTarget((W.Range + W.Width) * 1.5f)).ToList();
+                    targets = targets.Where(t => t.IsValidTarget((W.Range + W.Width) * 1.5f)).ToList();
                     var pred = W.GetPrediction(target);
                     if (pred.Hitchance >= HitChance.Medium)
                     {
@@ -557,7 +557,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 {
                     return;
                 }
-                if (args.SData.Name.Equals("gate", StringComparison.OrdinalIgnoreCase) && W.LSIsReady())
+                if (args.SData.Name.Equals("gate", StringComparison.OrdinalIgnoreCase) && W.IsReady())
                 {
                     if (Cards.Status != SelectStatus.Selected)
                     {
@@ -596,7 +596,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             var q = Menu.Item(Menu.Name + ".combo.q").GetValue<bool>();
             var w = Menu.Item(Menu.Name + ".combo.w").GetValue<bool>();
 
-            if (w && W.LSIsReady())
+            if (w && W.IsReady())
             {
                 var target = TargetSelector.GetTarget(W, false);
                 if (target != null)
@@ -608,27 +608,27 @@ using EloBuddy; namespace SFXChallenger.Champions
                     }
                 }
             }
-            if (q && Q.LSIsReady())
+            if (q && Q.IsReady())
             {
                 var target = TargetSelector.GetTarget(Q);
-                var goldCardTarget = _wTarget != null && _wTarget.LSIsValidTarget(Q.Range) && _wTargetEndTime > Game.Time;
+                var goldCardTarget = _wTarget != null && _wTarget.IsValidTarget(Q.Range) && _wTargetEndTime > Game.Time;
                 if (goldCardTarget)
                 {
                     target = _wTarget;
                 }
-                if (target == null || target.LSDistance(Player) < Player.BoundingRadius && !Utils.IsImmobile(target))
+                if (target == null || target.Distance(Player) < Player.BoundingRadius && !Utils.IsImmobile(target))
                 {
                     return;
                 }
                 if (!goldCardTarget && (Cards.Has() || HasEBuff()) &&
-                    GameObjects.EnemyHeroes.Any(e => Orbwalking.InAutoAttackRange(e) && e.LSIsValidTarget()) ||
+                    GameObjects.EnemyHeroes.Any(e => Orbwalking.InAutoAttackRange(e) && e.IsValidTarget()) ||
                     Cards.Has(CardColor.Gold))
                 {
                     return;
                 }
                 if (goldCardTarget)
                 {
-                    if (target.LSDistance(Player) > 250 && !Utils.IsImmobile(target))
+                    if (target.Distance(Player) > 250 && !Utils.IsImmobile(target))
                     {
                         return;
                     }
@@ -660,7 +660,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             var q = Menu.Item(Menu.Name + ".harass.q").GetValue<bool>();
             var w = Menu.Item(Menu.Name + ".harass.w").GetValue<bool>();
 
-            if (w && W.LSIsReady())
+            if (w && W.IsReady())
             {
                 var target = TargetSelector.GetTarget(W, false);
                 if (target != null)
@@ -672,7 +672,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     }
                 }
             }
-            if (ResourceManager.Check("harass") && q && Q.LSIsReady())
+            if (ResourceManager.Check("harass") && q && Q.IsReady())
             {
                 var target = TargetSelector.GetTarget(Q, false);
                 if (target != null)
@@ -692,15 +692,15 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void LaneClear()
         {
-            var q = Menu.Item(Menu.Name + ".lane-clear.q").GetValue<bool>() && Q.LSIsReady() &&
+            var q = Menu.Item(Menu.Name + ".lane-clear.q").GetValue<bool>() && Q.IsReady() &&
                     ResourceManager.Check("lane-clear");
             var qMin = Menu.Item(Menu.Name + ".lane-clear.q-min").GetValue<Slider>().Value;
-            var w = Menu.Item(Menu.Name + ".lane-clear.w").GetValue<bool>() && W.LSIsReady();
+            var w = Menu.Item(Menu.Name + ".lane-clear.w").GetValue<bool>() && W.IsReady();
 
             if (q)
             {
                 var minions = MinionManager.GetMinions(Q.Range * 1.2f);
-                var m = minions.OrderBy(x => x.LSDistance(Player)).FirstOrDefault();
+                var m = minions.OrderBy(x => x.Distance(Player)).FirstOrDefault();
                 if (m == null)
                 {
                     return;
@@ -720,7 +720,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 }
                 else if (
                     GameObjects.EnemyTurrets.Any(
-                        t => t.IsValid && !t.IsDead && t.Health > 1 && t.LSDistance(Player) < W.Range))
+                        t => t.IsValid && !t.IsDead && t.Health > 1 && t.Distance(Player) < W.Range))
                 {
                     Cards.Select(CardColor.Blue);
                 }
@@ -729,15 +729,15 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void JungleClear()
         {
-            var q = Menu.Item(Menu.Name + ".jungle-clear.q").GetValue<bool>() && Q.LSIsReady() &&
+            var q = Menu.Item(Menu.Name + ".jungle-clear.q").GetValue<bool>() && Q.IsReady() &&
                     ResourceManager.Check("jungle-clear");
-            var w = Menu.Item(Menu.Name + ".jungle-clear.w").GetValue<bool>() && W.LSIsReady();
+            var w = Menu.Item(Menu.Name + ".jungle-clear.w").GetValue<bool>() && W.IsReady();
 
             if (q)
             {
                 var minions = MinionManager.GetMinions(
                     Q.Range * 1.2f, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-                var m = minions.OrderBy(x => x.LSDistance(Player)).FirstOrDefault();
+                var m = minions.OrderBy(x => x.Distance(Player)).FirstOrDefault();
                 if (m == null)
                 {
                     return;
@@ -761,7 +761,7 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         private bool HasEBuff()
         {
-            return Player.LSHasBuff("cardmasterstackparticle");
+            return Player.HasBuff("cardmasterstackparticle");
         }
 
         private int GetEStacks()
@@ -773,7 +773,7 @@ using EloBuddy; namespace SFXChallenger.Champions
         {
             if (Menu.Item(Menu.Name + ".flee.w").GetValue<bool>())
             {
-                if (W.LSIsReady() || Cards.Status == SelectStatus.Ready)
+                if (W.IsReady() || Cards.Status == SelectStatus.Ready)
                 {
                     var target = TargetSelector.GetTarget(W, false);
                     if (target != null)
@@ -789,8 +789,8 @@ using EloBuddy; namespace SFXChallenger.Champions
                 if (Player.CanAttack && (Cards.Has(CardColor.Red) || Cards.Has(CardColor.Gold)))
                 {
                     var target =
-                        GameObjects.EnemyHeroes.Where(e => Orbwalking.InAutoAttackRange(e) && e.LSIsValidTarget())
-                            .OrderBy(e => e.LSDistance(Player))
+                        GameObjects.EnemyHeroes.Where(e => Orbwalking.InAutoAttackRange(e) && e.IsValidTarget())
+                            .OrderBy(e => e.Distance(Player))
                             .FirstOrDefault();
                     if (target != null)
                     {
@@ -911,7 +911,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                         return new List<CardColor> { CardColor.Blue };
                     }
                     gold++;
-                    if (target.LSDistance(Player) > W.Range * 0.8f)
+                    if (target.Distance(Player) > W.Range * 0.8f)
                     {
                         gold++;
                     }
@@ -966,13 +966,13 @@ using EloBuddy; namespace SFXChallenger.Champions
                     {
                         return new List<CardColor> { CardColor.Blue };
                     }
-                    var distance = target.LSDistance(Player);
+                    var distance = target.Distance(Player);
                     var damage = ItemManager.CalculateComboDamage(target) - target.HPRegenRate * 2f - 10;
                     if (HasEBuff())
                     {
                         damage += E.GetDamage(target);
                     }
-                    if (Q.LSIsReady() && (Utils.GetImmobileTime(target) > 0.5f || distance < Q.Range / 4f))
+                    if (Q.IsReady() && (Utils.GetImmobileTime(target) > 0.5f || distance < Q.Range / 4f))
                     {
                         damage += Q.GetDamage(target);
                     }
@@ -1022,7 +1022,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 {
                     if (selectedCard == CardColor.None && burst)
                     {
-                        cards.Add(target.LSDistance(Player) > W.Range * 0.8f ? CardColor.Gold : CardColor.Blue);
+                        cards.Add(target.Distance(Player) > W.Range * 0.8f ? CardColor.Gold : CardColor.Blue);
                     }
                     else
                     {
@@ -1105,9 +1105,9 @@ using EloBuddy; namespace SFXChallenger.Champions
 
             public static bool Has(CardColor color)
             {
-                return color == CardColor.Gold && ObjectManager.Player.LSHasBuff("goldcardpreattack") ||
-                       color == CardColor.Red && ObjectManager.Player.LSHasBuff("redcardpreattack") ||
-                       color == CardColor.Blue && ObjectManager.Player.LSHasBuff("bluecardpreattack");
+                return color == CardColor.Gold && ObjectManager.Player.HasBuff("goldcardpreattack") ||
+                       color == CardColor.Red && ObjectManager.Player.HasBuff("redcardpreattack") ||
+                       color == CardColor.Blue && ObjectManager.Player.HasBuff("bluecardpreattack");
             }
 
             public static bool Has()

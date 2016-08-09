@@ -10,7 +10,7 @@ using EloBuddy;
     {
         public static float GetAARange()
         {
-            if (ObjectManager.Player.LSHasBuff("kogmawbioarcanebarrage"))
+            if (ObjectManager.Player.HasBuff("kogmawbioarcanebarrage"))
             {
                 return GetWRange();
             }

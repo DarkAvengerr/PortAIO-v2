@@ -305,7 +305,7 @@ namespace Orianna
             if (RIsReady)
             {
                 Q.Cast(sender, true);
-                if (BallManager.BallPosition.LSDistance(sender.ServerPosition, true) < R.Range * R.Range)
+                if (BallManager.BallPosition.Distance(sender.ServerPosition, true) < R.Range * R.Range)
                 {
                     R.Cast(Player.ServerPosition, true);
                 }
@@ -341,7 +341,7 @@ namespace Orianna
                 return;
             }
 
-            if (sender.IsAlly && Player.LSDistance(sender, true) < E.Range * E.Range)
+            if (sender.IsAlly && Player.Distance(sender, true) < E.Range * E.Range)
             {
                 E.CastOnUnit(sender);
             }
@@ -398,7 +398,7 @@ namespace Orianna
                 {
                     foreach (var minion in allMinions.FindAll(m => !Orbwalking.InAutoAttackRange(m)))
                     {
-                        if (HealthPrediction.GetHealthPrediction(minion, Math.Max((int)(minion.ServerPosition.LSDistance(BallManager.BallPosition) / Q.Speed * 1000) - 100, 0)) < 50)
+                        if (HealthPrediction.GetHealthPrediction(minion, Math.Max((int)(minion.ServerPosition.Distance(BallManager.BallPosition) / Q.Speed * 1000) - 100, 0)) < 50)
                         {
                             Q.Cast(minion.ServerPosition, true);
                             return;
@@ -413,7 +413,7 @@ namespace Orianna
                 var d = 0;
                 foreach (var m in allMinions)
                 {
-                    if (m.LSDistance(BallManager.BallPosition) <= W.Range)
+                    if (m.Distance(BallManager.BallPosition) <= W.Range)
                     {
                         n++;
                         if (W.GetDamage(m) > m.Health)
@@ -462,8 +462,8 @@ namespace Orianna
                 else if (useE && EIsReady && (!WIsReady || !useW))
                 {
                     var closestAlly = HeroManager.Allies
-                        .Where(h =>  h.LSIsValidTarget(E.Range, false))
-                        .MinOrDefault(h => h.LSDistance(mob));
+                        .Where(h =>  h.IsValidTarget(E.Range, false))
+                        .MinOrDefault(h => h.Distance(mob));
                     if (closestAlly != null)
                     {
                         E.CastOnUnit(closestAlly, true);
@@ -480,14 +480,14 @@ namespace Orianna
             {
                 return new Tuple<int, Vector3>(1, Vector3.Zero);
             }
-            points.Add(qPrediction.UnitPosition.LSTo2D());
+            points.Add(qPrediction.UnitPosition.To2D());
 
-            foreach (var enemy in HeroManager.Enemies.Where(h => h.LSIsValidTarget(Q.Range + R.Range)))
+            foreach (var enemy in HeroManager.Enemies.Where(h => h.IsValidTarget(Q.Range + R.Range)))
             {
                 var prediction = Q.GetPrediction(enemy);
                 if (prediction.Hitchance >= HitChance.High)
                 {
-                   points.Add(prediction.UnitPosition.LSTo2D()); 
+                   points.Add(prediction.UnitPosition.To2D()); 
                 }
             }
 
@@ -553,7 +553,7 @@ namespace Orianna
                 CastW(1);
             }
 
-            if (LeagueSharp.Common.Utility.LSCountEnemiesInRange((int)(Q.Range + R.Width)) <= 1)
+            if (LeagueSharp.Common.Utility.CountEnemiesInRange((int)(Q.Range + R.Width)) <= 1)
             {
                 if(useR && GetComboDamage(target) > target.Health && RIsReady)
                 {
@@ -567,9 +567,9 @@ namespace Orianna
 
                 if(useE && EIsReady)
                 {
-                    foreach (var ally in HeroManager.Allies.Where(h => h.LSIsValidTarget(E.Range, false)))
+                    foreach (var ally in HeroManager.Allies.Where(h => h.IsValidTarget(E.Range, false)))
                     {
-                        if (ally.Position.LSCountEnemiesInRange(300) >= 1)
+                        if (ally.Position.CountEnemiesInRange(300) >= 1)
                         {
                             E.CastOnUnit(ally, true);
                         }
@@ -582,7 +582,7 @@ namespace Orianna
             {
                 if (useR && RIsReady)
                 {
-                    if (BallManager.BallPosition.LSCountEnemiesInRange(800) > 1)
+                    if (BallManager.BallPosition.CountEnemiesInRange(800) > 1)
                     {
                         var rCheck = GetHits(R);
                         var pk = 0;
@@ -603,7 +603,7 @@ namespace Orianna
                                 }
                             }
 
-                            if (rCheck.Item1 >= BallManager.BallPosition.LSCountEnemiesInRange(800) || pk >= 2 ||
+                            if (rCheck.Item1 >= BallManager.BallPosition.CountEnemiesInRange(800) || pk >= 2 ||
                                 k >= 1)
                             {
                                 if (rCheck.Item1 >= minRTargets)
@@ -635,7 +635,7 @@ namespace Orianna
 
                 if(useE && EIsReady)
                 {
-                    if (BallManager.BallPosition.LSCountEnemiesInRange(800) <= 2)
+                    if (BallManager.BallPosition.CountEnemiesInRange(800) <= 2)
                     {
                         CastE(Player, 1);
                     }
@@ -644,9 +644,9 @@ namespace Orianna
                         CastE(Player, 2);
                     }
 
-                    foreach (var ally in HeroManager.Allies.Where(h => h.LSIsValidTarget(E.Range, false)))
+                    foreach (var ally in HeroManager.Allies.Where(h => h.IsValidTarget(E.Range, false)))
                     {
-                        if (ally.Position.LSCountEnemiesInRange(300) >= 2)
+                        if (ally.Position.CountEnemiesInRange(300) >= 2)
                         {
                             E.CastOnUnit(ally, true);
                         }
@@ -757,7 +757,7 @@ namespace Orianna
                 result += R.GetDamage(target);
             }
 
-            result += 2 * (float) Player.LSGetAutoAttackDamage(target);
+            result += 2 * (float) Player.GetAutoAttackDamage(target);
 
             return result;
         }
@@ -766,9 +766,9 @@ namespace Orianna
         {
             var hits = new List<AIHeroClient>();
             var range = spell.Range * spell.Range;
-            foreach (var enemy in HeroManager.Enemies.Where(h => h.LSIsValidTarget() && BallManager.BallPosition.LSDistance(h.ServerPosition, true) < range))
+            foreach (var enemy in HeroManager.Enemies.Where(h => h.IsValidTarget() && BallManager.BallPosition.Distance(h.ServerPosition, true) < range))
 	        {
-                if (spell.WillHit(enemy, BallManager.BallPosition) && BallManager.BallPosition.LSDistance(enemy.ServerPosition, true) < spell.Width * spell.Width)
+                if (spell.WillHit(enemy, BallManager.BallPosition) && BallManager.BallPosition.Distance(enemy.ServerPosition, true) < spell.Width * spell.Width)
                 {
                     hits.Add(enemy);
                 }
@@ -781,7 +781,7 @@ namespace Orianna
             var hits = new List<AIHeroClient>();
             var oldERange = E.Range;
             E.Range = 10000; //avoid the range check
-            foreach (var enemy in HeroManager.Enemies.Where(h => h.LSIsValidTarget(2000)))
+            foreach (var enemy in HeroManager.Enemies.Where(h => h.IsValidTarget(2000)))
             {
                 if (E.WillHit(enemy, to))
                 {
@@ -803,14 +803,14 @@ namespace Orianna
 
             if(EIsReady)
             {
-                var directTravelTime = BallManager.BallPosition.LSDistance(qPrediction.CastPosition) / Q.Speed;
+                var directTravelTime = BallManager.BallPosition.Distance(qPrediction.CastPosition) / Q.Speed;
                 var bestEQTravelTime = float.MaxValue;
 
                 AIHeroClient eqTarget = null;
 
-                foreach (var ally in HeroManager.Allies.Where(h => h.LSIsValidTarget(E.Range, false)))
+                foreach (var ally in HeroManager.Allies.Where(h => h.IsValidTarget(E.Range, false)))
                 {
-                    var t = BallManager.BallPosition.LSDistance(ally.ServerPosition) / E.Speed + ally.LSDistance(qPrediction.CastPosition) / Q.Speed;
+                    var t = BallManager.BallPosition.Distance(ally.ServerPosition) / E.Speed + ally.Distance(qPrediction.CastPosition) / Q.Speed;
                     if(t < bestEQTravelTime)
                     {
                         eqTarget = ally;
@@ -818,14 +818,14 @@ namespace Orianna
                     }
                 }
 
-                if (eqTarget != null && bestEQTravelTime < directTravelTime * 1.3f && (BallManager.BallPosition.LSDistance(eqTarget.ServerPosition, true) > 10000))
+                if (eqTarget != null && bestEQTravelTime < directTravelTime * 1.3f && (BallManager.BallPosition.Distance(eqTarget.ServerPosition, true) > 10000))
                 {
                     E.CastOnUnit(eqTarget, true);
                     return true;
                 }
             }
             
-            if (!target.LSIsFacing(Player) && target.Path.Count() >= 1) // target is running
+            if (!target.IsFacing(Player) && target.Path.Count() >= 1) // target is running
             {
                 var targetBehind = Q.GetPrediction(target).CastPosition +
                                    Vector3.Normalize(target.ServerPosition - BallManager.BallPosition) * target.MoveSpeed / 2;

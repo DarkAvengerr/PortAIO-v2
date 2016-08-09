@@ -40,7 +40,7 @@ using EloBuddy;
 
             if (Player.IsMegaGnar())
             {
-                if (GnarSpells.WMega.LSIsReady()
+                if (GnarSpells.WMega.IsReady()
                     && GnarSpells.WMega.IsInRange(sender)
                     && Config.Item("qwi").GetValue<bool>())
                     GnarSpells.WMega.Cast(sender.ServerPosition);
@@ -112,9 +112,9 @@ using EloBuddy;
                 return;
 
             var targets = TargetSelector.GetTarget(GnarSpells.QMini.Range, TargetSelector.DamageType.Physical);
-            if (Player.LSDistance(target) <= 450)
+            if (Player.Distance(target) <= 450)
             {
-                if (GnarSpells.QnMini.LSIsReady())
+                if (GnarSpells.QnMini.IsReady())
                     GnarSpells.QnMini.Cast(targets);
             }
 
@@ -138,8 +138,8 @@ using EloBuddy;
                 && Player.IsMiniGnar())
             {
                 if (useQ
-                    && GnarSpells.QMini.LSIsReady()
-                    && args.EndPos.LSDistance(Player) <= GnarSpells.QMini.Range)
+                    && GnarSpells.QMini.IsReady()
+                    && args.EndPos.Distance(Player) <= GnarSpells.QMini.Range)
                 {
                     var delay = (int) (args.EndTick - Game.Time - GnarSpells.QMini.Delay - 0.1f);
                     if (delay > 0)
@@ -155,8 +155,8 @@ using EloBuddy;
                     && Player.IsMegaGnar())
                 {
                     if (useQm
-                        && GnarSpells.QMini.LSIsReady()
-                        && args.EndPos.LSDistance(Player) <= GnarSpells.QMega.Range)
+                        && GnarSpells.QMini.IsReady()
+                        && args.EndPos.Distance(Player) <= GnarSpells.QMega.Range)
                     {
                         var delay = (int) (args.EndTick - Game.Time - GnarSpells.QMega.Delay - 0.1f);
                         if (delay > 0)
@@ -203,7 +203,7 @@ using EloBuddy;
             #region force target
 
             var qSpell = Config.Item("focust").GetValue<bool>();
-            var target = HeroManager.Enemies.Find(en => en.LSIsValidTarget(ObjectManager.Player.AttackRange)
+            var target = HeroManager.Enemies.Find(en => en.IsValidTarget(ObjectManager.Player.AttackRange)
                                                         &&
                                                         en.Buffs.Any(buff => buff.Name == "gnarwproc" && buff.Count == 2));
             if (qSpell && target != null)
@@ -240,21 +240,21 @@ using EloBuddy;
                     var minionPrediction = GnarSpells.EMini.GetPrediction(minion);
                    
                     var k =
-                        ObjectManager.Get<Obj_AI_Minion>().Where(x => Player.LSIsFacing(x)
+                        ObjectManager.Get<Obj_AI_Minion>().Where(x => Player.IsFacing(x)
                                                                       && x.IsMinion
-                                                                      && x.LSDistance(Player) <= GnarSpells.EMini.Range)
-                            .OrderByDescending(x => x.LSDistance(Player))
+                                                                      && x.Distance(Player) <= GnarSpells.EMini.Range)
+                            .OrderByDescending(x => x.Distance(Player))
                             .First();
 
                     if (k == null)
                         return;
-                    var edm = Player.ServerPosition.LSExtend(minionPrediction.CastPosition,
-                        Player.ServerPosition.LSDistance(minionPrediction.CastPosition) + GnarSpells.EMini.Range);
+                    var edm = Player.ServerPosition.Extend(minionPrediction.CastPosition,
+                        Player.ServerPosition.Distance(minionPrediction.CastPosition) + GnarSpells.EMini.Range);
                     if (!ObjectManager.Get<Obj_AI_Turret>().Any(type => type.IsMinion
                                                                         && !type.IsDead
-                                                                        && type.LSDistance(edm, true) < 775*775))
+                                                                        && type.Distance(edm, true) < 775*775))
                     {
-                        GnarSpells.EMini.Cast(edm.LSExtend(Game.CursorPos, Player.ServerPosition.LSDistance(minionPrediction.CastPosition) + GnarSpells.EMini.Range));
+                        GnarSpells.EMini.Cast(edm.Extend(Game.CursorPos, Player.ServerPosition.Distance(minionPrediction.CastPosition) + GnarSpells.EMini.Range));
                     }
                 }
                 /*
@@ -262,12 +262,12 @@ using EloBuddy;
                 if (target == null)
                     return;
                 var prediction = GnarSpells.EMini.GetPrediction(target);
-                var ed = Player.ServerPosition.LSExtend(prediction.CastPosition,
-                    Player.ServerPosition.LSDistance(prediction.CastPosition) + GnarSpells.EMini.Range);
+                var ed = Player.ServerPosition.Extend(prediction.CastPosition,
+                    Player.ServerPosition.Distance(prediction.CastPosition) + GnarSpells.EMini.Range);
 
                 if (!ObjectManager.Get<Obj_AI_Turret>().Any(type => type.Team != Player.Team
                                                                     && !type.IsDead
-                                                                    && type.LSDistance(ed, true) < 775 * 775))
+                                                                    && type.Distance(ed, true) < 775 * 775))
                 {
                     GnarSpells.EMini.Cast(prediction.CastPosition);
                 }
@@ -295,15 +295,15 @@ using EloBuddy;
             {
                 if (Player.IsMiniGnar())
                 {
-                    if (GnarSpells.QMini.LSIsReady()
-                        && target.LSIsValidTarget(GnarSpells.QMini.Range - 30)
+                    if (GnarSpells.QMini.IsReady()
+                        && target.IsValidTarget(GnarSpells.QMini.Range - 30)
                         && target.Health <= GnarSpells.QMini.GetDamage(target))
                         GnarSpells.QMini.Cast(target);
                 }
                 if (Player.IsMegaGnar())
                 {
-                    if (GnarSpells.QMega.LSIsReady()
-                        && target.LSIsValidTarget(GnarSpells.QMega.Range - 30)
+                    if (GnarSpells.QMega.IsReady()
+                        && target.IsValidTarget(GnarSpells.QMega.Range - 30)
                         && target.Health <= GnarSpells.QMega.GetDamage(target))
                         GnarSpells.QMega.Cast(target);
                 }
@@ -312,22 +312,22 @@ using EloBuddy;
             if (rSpell)
             {
                 if (Player.IsMegaGnar()
-                    && GnarSpells.RMega.LSIsReady()
+                    && GnarSpells.RMega.IsReady()
                     && target.Health <= GnarSpells.RMega.GetDamage(target))
                     GnarSpells.RMega.Cast(target);
             }
 
             if (eqSpell
                 && Player.IsMiniGnar()
-                && Player.LSDistance(target) > 1400)
+                && Player.Distance(target) > 1400)
             {
                 var prediction = GnarSpells.EMini.GetPrediction(target);
-                var ed = Player.ServerPosition.LSExtend(prediction.CastPosition,
-                    Player.ServerPosition.LSDistance(prediction.CastPosition) + GnarSpells.EMini.Range);
+                var ed = Player.ServerPosition.Extend(prediction.CastPosition,
+                    Player.ServerPosition.Distance(prediction.CastPosition) + GnarSpells.EMini.Range);
 
                 if (!ObjectManager.Get<Obj_AI_Turret>().Any(type => type.Team != Player.Team
                                                                     && !type.IsDead
-                                                                    && type.LSDistance(ed, true) < 775*775))
+                                                                    && type.Distance(ed, true) < 775*775))
                 {
                     GnarSpells.EMini.Cast(prediction.CastPosition);
                     lastq = Environment.TickCount;
@@ -339,24 +339,24 @@ using EloBuddy;
                 {
                     var minionPrediction = GnarSpells.EMini.GetPrediction(minion);
                     var k =
-                        ObjectManager.Get<Obj_AI_Minion>().Where(x => Player.LSIsFacing(x)
+                        ObjectManager.Get<Obj_AI_Minion>().Where(x => Player.IsFacing(x)
                                                                       && x.IsMinion
-                                                                      && x.LSDistance(Player) <= GnarSpells.EMini.Range)
-                            .OrderByDescending(x => x.LSDistance(Player))
+                                                                      && x.Distance(Player) <= GnarSpells.EMini.Range)
+                            .OrderByDescending(x => x.Distance(Player))
                             .First();
 
-                    var edm = Player.ServerPosition.LSExtend(minionPrediction.CastPosition,
-                        Player.ServerPosition.LSDistance(minionPrediction.CastPosition) + GnarSpells.EMini.Range);
+                    var edm = Player.ServerPosition.Extend(minionPrediction.CastPosition,
+                        Player.ServerPosition.Distance(minionPrediction.CastPosition) + GnarSpells.EMini.Range);
                     if (!ObjectManager.Get<Obj_AI_Turret>().Any(type => type.IsMinion != Player.IsMinion
                                                                         && !type.IsDead
-                                                                        && type.LSDistance(edm, true) < 775*775
+                                                                        && type.Distance(edm, true) < 775*775
                                                                         && k.IsValid))
                     {
                         GnarSpells.EMini.Cast(k);
                         lastq = Environment.TickCount;
                     }
                 }
-                if (GnarSpells.QMini.LSIsReady()
+                if (GnarSpells.QMini.IsReady()
                     && Environment.TickCount - lastq > 500)
                 {
                     GnarSpells.QMini.Cast(target);
@@ -378,17 +378,17 @@ using EloBuddy;
 
             foreach (var jungleminion in jungle)
             {
-                if (!jungleminion.LSIsValidTarget())
+                if (!jungleminion.IsValidTarget())
                     return;
 
                 if (Player.IsMiniGnar())
                 {
-                    if (qSpell && GnarSpells.QMini.LSIsReady())
+                    if (qSpell && GnarSpells.QMini.IsReady())
                         GnarSpells.QMini.Cast(jungleminion);
                 }
                 if (Player.IsMegaGnar())
                 {
-                    if (wSpell && GnarSpells.WMega.LSIsReady())
+                    if (wSpell && GnarSpells.WMega.IsReady())
                         GnarSpells.WMega.Cast(jungleminion);
                 }
             }
@@ -426,14 +426,14 @@ using EloBuddy;
 
             if (Player.IsMiniGnar())
             {
-                if (qSpell && GnarSpells.QMini.LSIsReady() && QFarmLocation.MinionsHit > qlSpell)
+                if (qSpell && GnarSpells.QMini.IsReady() && QFarmLocation.MinionsHit > qlSpell)
                     GnarSpells.QMini.Cast(QFarmLocation.Position);
             }
             if (Player.IsMegaGnar())
             {
-                if (wSpell && GnarSpells.WMega.LSIsReady() && WFarmLocation.MinionsHit > wlSpell)
+                if (wSpell && GnarSpells.WMega.IsReady() && WFarmLocation.MinionsHit > wlSpell)
                     GnarSpells.WMega.Cast(WFarmLocation.Position);
-                if (qSpell && GnarSpells.QMega.LSIsReady())
+                if (qSpell && GnarSpells.QMega.IsReady())
                     GnarSpells.QMega.Cast(minions[0]);
             }
 
@@ -454,8 +454,8 @@ using EloBuddy;
 
             if (Player.IsMiniGnar())
             {
-                if (qSpell && target.LSIsValidTarget(GnarSpells.QMini.Range)
-                    && Player.LSDistance(target) > 450)
+                if (qSpell && target.IsValidTarget(GnarSpells.QMini.Range)
+                    && Player.Distance(target) > 450)
                 {
                     if (!qsSpell)
                         GnarSpells.QMini.Cast(target);
@@ -470,7 +470,7 @@ using EloBuddy;
                 if (wSpell && Environment.TickCount - rcast >= 600)
                     GnarSpells.WMega.Cast(target);
 
-                if (GnarSpells.QMega.LSIsReady() && qSpell)
+                if (GnarSpells.QMega.IsReady() && qSpell)
                     GnarSpells.QMega.Cast(target);
             }
         }
@@ -495,23 +495,23 @@ using EloBuddy;
                 if (target == null)
                     return;
                 var qpred = GnarSpells.QMini.GetPrediction(target);
-                var collision = GnarSpells.QMini.GetCollision(Player.Position.LSTo2D(),
-                    new List<Vector2> {qpred.CastPosition.LSTo2D()});
+                var collision = GnarSpells.QMini.GetCollision(Player.Position.To2D(),
+                    new List<Vector2> {qpred.CastPosition.To2D()});
                 var mincol =
                     collision.Where(
-                        obj => obj != null && obj.LSIsValidTarget() && !obj.IsDead && obj.IsMinion);
+                        obj => obj != null && obj.IsValidTarget() && !obj.IsDead && obj.IsMinion);
 
                 var aiBases = mincol as Obj_AI_Base[] ?? mincol.ToArray();
                 var objAiBases = mincol as IList<Obj_AI_Base> ?? aiBases.ToList();
                 var count = objAiBases.Count();
 
-                var firstcol = objAiBases.OrderBy(m => m.LSDistance(Player.ServerPosition, true)).FirstOrDefault();
+                var firstcol = objAiBases.OrderBy(m => m.Distance(Player.ServerPosition, true)).FirstOrDefault();
 
 
-              //  var firstcolcalc = (int) (GnarSpells.QMini.Range - firstcol.LSDistance(Player))/(count +0.5);
+              //  var firstcolcalc = (int) (GnarSpells.QMini.Range - firstcol.Distance(Player))/(count +0.5);
 
-                if (qSpell && target.LSIsValidTarget(GnarSpells.QMini.Range)
-                    && Player.LSDistance(target) > 450)
+                if (qSpell && target.IsValidTarget(GnarSpells.QMini.Range)
+                    && Player.Distance(target) > 450)
                 {
                     if (!aiBases.Any())
                     {
@@ -523,7 +523,7 @@ using EloBuddy;
                     }
                     else
                     {
-                        if (objAiBases.Any(minc => count >= 1 && firstcol.LSDistance(target) <= 350))
+                        if (objAiBases.Any(minc => count >= 1 && firstcol.Distance(target) <= 350))
                         {
                             if (!qsSpell)
                             {
@@ -539,8 +539,8 @@ using EloBuddy;
                 }
 
                 /*
-                if (qSpell && target.LSIsValidTarget(GnarSpells.QMini.Range)
-                    && Player.LSDistance(target) > 450)
+                if (qSpell && target.IsValidTarget(GnarSpells.QMini.Range)
+                    && Player.Distance(target) > 450)
                 {
                     {
                         if (!qsSpell)
@@ -555,7 +555,7 @@ using EloBuddy;
 
 
                 if (eSpell
-                    && Player.LSDistance(target) > 500
+                    && Player.Distance(target) > 500
                     && target.Health <= GnarSpells.QMini.GetDamage(target))
                 {
                     var minionCount = MinionManager.GetMinions(Player.Position, GnarSpells.QMini.Range, MinionTypes.All,
@@ -564,21 +564,21 @@ using EloBuddy;
                     {
                         var minionPrediction = GnarSpells.EMini.GetPrediction(minion);
                         var k =
-                            ObjectManager.Get<Obj_AI_Minion>().Where(x => Player.LSIsFacing(x)
+                            ObjectManager.Get<Obj_AI_Minion>().Where(x => Player.IsFacing(x)
                                                                           && x.IsMinion
                                                                           &&
-                                                                          x.LSDistance(Player) <= GnarSpells.EMini.Range)
-                                .OrderBy(x => x.LSDistance(target))
+                                                                          x.Distance(Player) <= GnarSpells.EMini.Range)
+                                .OrderBy(x => x.Distance(target))
                                 .FirstOrDefault();
 
-                        var edm = Player.ServerPosition.LSExtend(minionPrediction.CastPosition,
-                            Player.ServerPosition.LSDistance(minionPrediction.CastPosition) + GnarSpells.EMini.Range);
+                        var edm = Player.ServerPosition.Extend(minionPrediction.CastPosition,
+                            Player.ServerPosition.Distance(minionPrediction.CastPosition) + GnarSpells.EMini.Range);
 
                         if (!ObjectManager.Get<Obj_AI_Turret>().Any(type => type.IsMinion != Player.IsMinion
                                                                             && !type.IsDead
-                                                                            && type.LSDistance(edm, true) < 775*775
+                                                                            && type.Distance(edm, true) < 775*775
                                                                             && k.IsValid)
-                            && Player.LSDistance(target) > 300)
+                            && Player.Distance(target) > 300)
                         {
                             GnarSpells.EMini.Cast(k);
                         }
@@ -599,15 +599,15 @@ using EloBuddy;
                 var wSpell = Config.Item("UseWMega").GetValue<bool>();
                 if (target == null)
                     return;
-                if (GnarSpells.RMega.LSIsReady()
+                if (GnarSpells.RMega.IsReady()
                     && Config.Item("UseRMega").GetValue<bool>())
                 {
-                    if (Player.LSCountEnemiesInRange(420) >= rSlider)
+                    if (Player.CountEnemiesInRange(420) >= rSlider)
                     {
                         var prediction = Prediction.GetPrediction(target, GnarSpells.RMega.Delay);
                         if (GnarSpells.RMega.IsInRange(prediction.UnitPosition))
                         {
-                            var direction = (Player.ServerPosition - prediction.UnitPosition).LSNormalized();
+                            var direction = (Player.ServerPosition - prediction.UnitPosition).Normalized();
                             var maxAngle = 180f;
                             var step = maxAngle/6f;
                             var currentAngle = 0f;
@@ -638,10 +638,10 @@ using EloBuddy;
                                     && !target.IsStunned
                                     &&
                                     target.Health >=
-                                    (GnarSpells.QMega.GetDamage(target) + Player.LSGetAutoAttackDamage(target)))
+                                    (GnarSpells.QMega.GetDamage(target) + Player.GetAutoAttackDamage(target)))
                                 {
                                     GnarSpells.RMega.Cast(Player.Position +
-                                                          500*(checkPoint - prediction.UnitPosition).LSNormalized());
+                                                          500*(checkPoint - prediction.UnitPosition).Normalized());
                                     rcast = Environment.TickCount;
                                     break;
                                 }
@@ -650,8 +650,8 @@ using EloBuddy;
                     }
                 }
 
-                if (GnarSpells.EMega.LSIsReady()
-                    && target.LSDistance(Player) > 500
+                if (GnarSpells.EMega.IsReady()
+                    && target.Distance(Player) > 500
                     && emSpell
                     && target.HealthPercent <= Player.HealthPercent)
                     GnarSpells.EMega.Cast(target);
@@ -662,12 +662,12 @@ using EloBuddy;
                 if (qmSpell
                     && Environment.TickCount - rcast >= 700)
                 {
-                    if (target.LSDistance(Player) <= 130)
+                    if (target.Distance(Player) <= 130)
                     {
-                        if (GnarSpells.QnMega.LSIsReady())
+                        if (GnarSpells.QnMega.IsReady())
                             GnarSpells.QnMega.Cast(target);
                     }
-                    else if (GnarSpells.QMega.LSIsReady())
+                    else if (GnarSpells.QMega.IsReady())
                         GnarSpells.QMega.Cast(target);
                 }
             }

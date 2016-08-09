@@ -77,7 +77,7 @@
             spells[Spells.Q].SetSkillshot(0, 70, 1600, true, SkillshotType.SkillshotLine);
             spells[Spells.R].SetSkillshot(250, 110, 1600, false, SkillshotType.SkillshotLine);
 
-            _ignite = Player.LSGetSpellSlot("summonerdot");
+            _ignite = Player.GetSpellSlot("summonerdot");
 
             ElSejuaniMenu.Initialize();
             Game.OnUpdate += OnUpdate;
@@ -93,12 +93,12 @@
 
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (!gapcloser.Sender.LSIsValidTarget(spells[Spells.Q].Range))
+            if (!gapcloser.Sender.IsValidTarget(spells[Spells.Q].Range))
             {
                 return;
             }
 
-            if (gapcloser.Sender.LSDistance(Player) > spells[Spells.Q].Range)
+            if (gapcloser.Sender.Distance(Player) > spells[Spells.Q].Range)
             {
                 return;
             }
@@ -106,14 +106,14 @@
             var useQ = ElSejuaniMenu.Menu.Item("ElSejuani.Interupt.Q").IsActive();
             var useR = ElSejuaniMenu.Menu.Item("ElSejuani.Interupt.R").IsActive();
 
-            if (gapcloser.Sender.LSIsValidTarget(spells[Spells.Q].Range))
+            if (gapcloser.Sender.IsValidTarget(spells[Spells.Q].Range))
             {
-                if (useQ && spells[Spells.Q].LSIsReady())
+                if (useQ && spells[Spells.Q].IsReady())
                 {
                     spells[Spells.Q].Cast(gapcloser.Sender);
                 }
 
-                if (useR && !spells[Spells.Q].LSIsReady() && spells[Spells.R].LSIsReady())
+                if (useR && !spells[Spells.Q].IsReady() && spells[Spells.R].IsReady())
                 {
                     spells[Spells.R].Cast(gapcloser.Sender);
                 }
@@ -135,17 +135,17 @@
             var countEnemyR = ElSejuaniMenu.Menu.Item("ElSejuani.Combo.R.Count").GetValue<Slider>().Value;
             var countEnemyE = ElSejuaniMenu.Menu.Item("ElSejuani.Combo.E.Count").GetValue<Slider>().Value;
 
-            if (comboQ && spells[Spells.Q].LSIsReady() && target.LSIsValidTarget(spells[Spells.Q].Range))
+            if (comboQ && spells[Spells.Q].IsReady() && target.IsValidTarget(spells[Spells.Q].Range))
             {
                 spells[Spells.Q].Cast(target);
             }
 
-            if (comboW && spells[Spells.W].LSIsReady() && target.LSIsValidTarget(spells[Spells.W].Range))
+            if (comboW && spells[Spells.W].IsReady() && target.IsValidTarget(spells[Spells.W].Range))
             {
                 spells[Spells.W].Cast();
             }
 
-            if (comboE && spells[Spells.E].LSIsReady() && IsFrozen(target) && target.LSIsValidTarget(spells[Spells.E].Range))
+            if (comboE && spells[Spells.E].IsReady() && IsFrozen(target) && target.IsValidTarget(spells[Spells.E].Range))
             {
                 if (IsFrozen(target))
                 {
@@ -153,17 +153,17 @@
                 }
 
                 if (IsFrozen(target)
-                    && target.ServerPosition.LSDistance(Player.ServerPosition, true) <= spells[Spells.E].Range)
+                    && target.ServerPosition.Distance(Player.ServerPosition, true) <= spells[Spells.E].Range)
                 {
                     spells[Spells.E].Cast();
                 }
             }
 
-            if (comboR && spells[Spells.R].LSIsReady())
+            if (comboR && spells[Spells.R].IsReady())
             {
                 foreach (
                     var x in
-                        HeroManager.Enemies.Where((hero => !hero.IsDead && hero.LSIsValidTarget(spells[Spells.R].Range))))
+                        HeroManager.Enemies.Where((hero => !hero.IsDead && hero.IsValidTarget(spells[Spells.R].Range))))
                 {
                     var pred = spells[Spells.R].GetPrediction(x);
                     if (pred.AoeTargetsHitCount >= countEnemyR)
@@ -209,17 +209,17 @@
                 return;
             }
 
-            if (harassQ && spells[Spells.Q].LSIsReady() && target.LSIsValidTarget(spells[Spells.Q].Range))
+            if (harassQ && spells[Spells.Q].IsReady() && target.IsValidTarget(spells[Spells.Q].Range))
             {
                 spells[Spells.Q].Cast(target);
             }
 
-            if (harassW && spells[Spells.W].LSIsReady() && target.LSIsValidTarget(spells[Spells.W].Range))
+            if (harassW && spells[Spells.W].IsReady() && target.IsValidTarget(spells[Spells.W].Range))
             {
                 spells[Spells.W].Cast();
             }
 
-            if (harassE && spells[Spells.E].LSIsReady() && target.LSIsValidTarget(spells[Spells.E].Range))
+            if (harassE && spells[Spells.E].IsReady() && target.IsValidTarget(spells[Spells.E].Range))
             {
                 if (IsFrozen(target) && spells[Spells.E].GetDamage(target) > target.Health)
                 {
@@ -227,7 +227,7 @@
                 }
 
                 if (IsFrozen(target)
-                    && target.ServerPosition.LSDistance(Player.ServerPosition, true)
+                    && target.ServerPosition.Distance(Player.ServerPosition, true)
                     < Math.Pow(spells[Spells.E].Range * 0.8, 2))
                 {
                     spells[Spells.E].Cast();
@@ -239,13 +239,13 @@
             AIHeroClient sender,
             Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (args.DangerLevel != Interrupter2.DangerLevel.High || sender.LSDistance(Player) > spells[Spells.Q].Range)
+            if (args.DangerLevel != Interrupter2.DangerLevel.High || sender.Distance(Player) > spells[Spells.Q].Range)
             {
                 return;
             }
 
-            if (sender.LSIsValidTarget(spells[Spells.Q].Range) && args.DangerLevel == Interrupter2.DangerLevel.High
-                && spells[Spells.Q].LSIsReady())
+            if (sender.IsValidTarget(spells[Spells.Q].Range) && args.DangerLevel == Interrupter2.DangerLevel.High
+                && spells[Spells.Q].IsReady())
             {
                 spells[Spells.Q].Cast(sender);
             }
@@ -283,7 +283,7 @@
 
             foreach (var minion in minions)
             {
-                if (spells[Spells.Q].LSIsReady() && clearQ)
+                if (spells[Spells.Q].IsReady() && clearQ)
                 {
                     if (spells[Spells.Q].GetLineFarmLocation(minions).MinionsHit >= minQ)
                     {
@@ -291,13 +291,13 @@
                     }
                 }
 
-                if (spells[Spells.W].LSIsReady() && clearW
-                    && minion.ServerPosition.LSDistance(Player.ServerPosition, true) <= spells[Spells.W].Range)
+                if (spells[Spells.W].IsReady() && clearW
+                    && minion.ServerPosition.Distance(Player.ServerPosition, true) <= spells[Spells.W].Range)
                 {
                     spells[Spells.W].Cast();
                 }
 
-                if (spells[Spells.E].LSIsReady() && clearE
+                if (spells[Spells.E].IsReady() && clearE
                     && minions[0].Health + (minions[0].HPRegenRate / 2) <= spells[Spells.E].GetDamage(minion)
                     && minion.HasBuff("sejuanifrost"))
                 {
@@ -327,7 +327,7 @@
 
             foreach (var minion in minions)
             {
-                if (spells[Spells.Q].LSIsReady() && clearQ)
+                if (spells[Spells.Q].IsReady() && clearQ)
                 {
                     if (spells[Spells.Q].GetLineFarmLocation(minions).MinionsHit >= minQ)
                     {
@@ -335,13 +335,13 @@
                     }
                 }
 
-                if (spells[Spells.W].LSIsReady() && clearW
-                    && minion.ServerPosition.LSDistance(Player.ServerPosition, true) >= spells[Spells.W].Range)
+                if (spells[Spells.W].IsReady() && clearW
+                    && minion.ServerPosition.Distance(Player.ServerPosition, true) >= spells[Spells.W].Range)
                 {
                     spells[Spells.W].Cast();
                 }
 
-                if (spells[Spells.E].LSIsReady() && clearE
+                if (spells[Spells.E].IsReady() && clearE
                     && minions[0].Health + (minions[0].HPRegenRate / 2) <= spells[Spells.E].GetDamage(minion)
                     && minion.HasBuff("sejuanifrost"))
                 {
@@ -386,7 +386,7 @@
                 return;
             }
 
-            if (!spells[Spells.R].LSIsReady() || !target.LSIsValidTarget(spells[Spells.R].Range))
+            if (!spells[Spells.R].IsReady() || !target.IsValidTarget(spells[Spells.R].Range))
             {
                 return;
             }

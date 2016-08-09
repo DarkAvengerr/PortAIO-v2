@@ -37,7 +37,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void OnProcessSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!W.LSIsReady() || sender == null || args.Target == null || sender.IsAlly || !(sender is AIHeroClient) || !args.Target.IsMe)
+            if (!W.IsReady() || sender == null || args.Target == null || sender.IsAlly || !(sender is AIHeroClient) || !args.Target.IsMe)
                 return;
             W.Cast();
 
@@ -51,29 +51,29 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
-            //if (!Q.LSIsReady(4500) && player.Mana > 200)
+            //if (!Q.IsReady(4500) && player.Mana > 200)
             //      W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.CastOnUnit(target);
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if (target == null || !R.LSIsReady() || !safeGap(target))
+            if (target == null || !R.IsReady() || !safeGap(target))
                 return;
             R.Cast();
             R.CastOnUnit(target);
@@ -112,7 +112,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var AllMinions = MinionManager.GetMinions(player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
             foreach (var minion in AllMinions)
             {
-                if (Q.LSIsReady() && Q.GetDamage(minion) > minion.Health)
+                if (Q.IsReady() && Q.GetDamage(minion) > minion.Health)
                 {
                     Q.Cast(minion);
                     return;

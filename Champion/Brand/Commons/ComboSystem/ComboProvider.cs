@@ -79,12 +79,12 @@ namespace TheBrand.Commons.ComboSystem
 
                 if (!_drawingsEnabled) return;
 
-                if (_targetDrawing.Active && Target.LSIsValidTarget())
+                if (_targetDrawing.Active && Target.IsValidTarget())
                     Render.Circle.DrawCircle(Target.Position, 100, _targetDrawing.Color);
 
                 if (_deadDrawing.Active)
                     foreach (var enemy in HeroManager.Enemies)
-                        if (enemy.LSIsValidTarget(TargetRange) && ShouldBeDead(enemy))
+                        if (enemy.IsValidTarget(TargetRange) && ShouldBeDead(enemy))
                             Render.Circle.DrawCircle(enemy.Position, 200, _deadDrawing.Color);
 
             };

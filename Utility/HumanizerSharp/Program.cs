@@ -117,7 +117,7 @@ using EloBuddy; namespace HumanizerSharp
             {
                 return;
             }
-            if (LastMovementPosition != Vector3.Zero && args.TargetPosition.LSDistance(LastMovementPosition) < 300)
+            if (LastMovementPosition != Vector3.Zero && args.TargetPosition.Distance(LastMovementPosition) < 300)
             {
                 if (NextMovementDelay == 0)
                 {
@@ -136,8 +136,8 @@ using EloBuddy; namespace HumanizerSharp
 
                 if (Menu.Item("MovementHumanizeDistance").IsActive())
                 {
-                    var wp = ObjectManager.Player.LSGetWaypoints();
-                   /* if (wp.Count > 1 && wp.Last().LSDistance(args.TargetPosition) < 20)
+                    var wp = ObjectManager.Player.GetWaypoints();
+                   /* if (wp.Count > 1 && wp.Last().Distance(args.TargetPosition) < 20)
                     {
                         //Console.WriteLine("HUMANIZE WAYPOINTS");
                         BlockedMoveCount++;
@@ -145,7 +145,7 @@ using EloBuddy; namespace HumanizerSharp
                         return;
                     }
 
-                    if (args.TargetPosition.LSDistance(LastMovementPosition) < 20)
+                    if (args.TargetPosition.Distance(LastMovementPosition) < 20)
                     {
                         //Console.WriteLine("HUMANIZE LAST POSITION");
                         BlockedMoveCount++;
@@ -153,7 +153,7 @@ using EloBuddy; namespace HumanizerSharp
                         return;
                     }
                     */
-                    if (args.TargetPosition.LSDistance(Player.ServerPosition) < 50)
+                    if (args.TargetPosition.Distance(Player.ServerPosition) < 50)
                     {
                         // Console.WriteLine("HUMANIZE CURRENT POSITION");
                         BlockedMoveCount++;

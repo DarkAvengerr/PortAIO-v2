@@ -301,7 +301,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
                         _sprite.End();
                     }
                     if (!enemy.Unit.IsDead && !enemy.LastPosition.Equals(Vector3.Zero) &&
-                        enemy.LastPosition.LSDistance(enemy.Unit.Position) > 500)
+                        enemy.LastPosition.Distance(enemy.Unit.Position) > 500)
                     {
                         enemy.LastVisible = Game.Time;
                     }

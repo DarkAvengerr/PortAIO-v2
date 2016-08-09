@@ -183,9 +183,9 @@ namespace Irelia.Modes
             }
 
 
-            if (W.LSIsReady() && MenuLocal.Item("Jungle.Simple.W").GetValue<StringList>().SelectedIndex != 0 && mob.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
+            if (W.IsReady() && MenuLocal.Item("Jungle.Simple.W").GetValue<StringList>().SelectedIndex != 0 && mob.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
             {
-                var totalAa = ObjectManager.Get<Obj_AI_Minion>().Where(m => m.Team == GameObjectTeam.Neutral && m.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65)).Sum(m => (int)m.Health);
+                var totalAa = ObjectManager.Get<Obj_AI_Minion>().Where(m => m.Team == GameObjectTeam.Neutral && m.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65)).Sum(m => (int)m.Health);
 
                 totalAa = (int)(totalAa / ObjectManager.Player.TotalAttackDamage);
                 if (totalAa >= MenuLocal.Item("Jungle.Simple.W").GetValue<StringList>().SelectedIndex + 2 || CommonManaManager.GetMobType(mobs[0], CommonManaManager.FromMobClass.ByType) == CommonManaManager.MobTypes.Big)

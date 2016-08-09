@@ -125,7 +125,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                     : 0;
 
                 foreach (var enemy in
-                    GameObjects.EnemyHeroes.Where(e => HeroListManager.Check(uniqueId, e) && e.LSIsValidTarget(2000)))
+                    GameObjects.EnemyHeroes.Where(e => HeroListManager.Check(uniqueId, e) && e.IsValidTarget(2000)))
                 {
                     var buff =
                         enemy.Buffs.OrderBy(b => b.EndTime)

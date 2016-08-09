@@ -141,7 +141,7 @@ namespace SCommon.Damage
                 {
                     ChampionName = "Aatrox",
                     IsActive = (source, target) => (source.HasBuff("AatroxWPower") && source.HasBuff("AatroxWONHPowerBuff")),
-                    GetDamage = (source, target) => ((float)source.LSGetSpellDamage(target, SpellSlot.W)),
+                    GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
                 });
 
             //caitlyn passive
@@ -221,7 +221,7 @@ namespace SCommon.Damage
                 {
                     ChampionName = "Gnar",
                     IsActive = (source, target) => (target.GetBuffCount("gnarwproc") == 2),
-                    GetDamage = (source, target) => ((float)source.LSGetSpellDamage(target, SpellSlot.W)),
+                    GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
                 });
 
             //jinx q
@@ -264,7 +264,7 @@ namespace SCommon.Damage
                 {
                     ChampionName = "Katarina",
                     IsActive = (source, target) => (target.HasBuff("katarinaqmark")),
-                    GetDamage = (source, target) => ((float)source.LSGetSpellDamage(target, SpellSlot.Q, 1)),
+                    GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.Q, 1)),
                 });
 
             //kowmaw w
@@ -274,7 +274,7 @@ namespace SCommon.Damage
                 {
                     ChampionName = "KogMaw",
                     IsActive = (source, target) => (source.HasBuff("KogMawBioArcaneBarrage")),
-                    GetDamage = (source, target) => ((float)source.LSGetSpellDamage(target, SpellSlot.W)),
+                    GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
                 });
 
             //miss fortune passive
@@ -301,7 +301,7 @@ namespace SCommon.Damage
                 {
                     ChampionName = "Nasus",
                     IsActive = (source, target) => (source.HasBuff("NasusQ")),
-                    GetDamage = (source, target) => ((float)source.LSGetSpellDamage(target, SpellSlot.Q)),
+                    GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.Q)),
 
                 });
 
@@ -401,7 +401,7 @@ namespace SCommon.Damage
                 {
                     ChampionName = "Varus",
                     IsActive = (source, target) => (source.HasBuff("VarusW")),
-                    GetDamage = (source, target) => ((float)source.LSGetSpellDamage(target, SpellSlot.W))
+                    GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W))
                 });
 
             //vayne q
@@ -411,7 +411,7 @@ namespace SCommon.Damage
                 {
                     ChampionName = "Vayne",
                     IsActive = (source, target) => (source.HasBuff("vaynetumblebonus")),
-                    GetDamage = (source, target) => ((float)source.LSGetSpellDamage(target, SpellSlot.Q)),
+                    GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.Q)),
                 });
 
             //vayne w
@@ -497,7 +497,7 @@ namespace SCommon.Damage
                     HeroManager.AllHeroes.Any(
                         h =>
                         h.NetworkId != hero.NetworkId && h.Team == hero.Team
-                        && h.LSDistance(minionTarget.Position) < 1100))
+                        && h.Distance(minionTarget.Position) < 1100))
                 {
                     var value = 0;
 
@@ -540,7 +540,7 @@ namespace SCommon.Damage
                 dmg = (float)ObjectManager.Player.CalcDamage(target, LeagueSharp.Common.Damage.DamageType.Physical, k + (passiveCheck ? PassiveFlatMod(ObjectManager.Player, target) : 0));
             if (hero.ChampionName == "Azir")
             {
-                int cnt = ObjectManager.Get<GameObject>().Count(p => p.IsAlly && p.Name == "AzirSoldier" && p.Position.LSDistance(target.Position) < 315);
+                int cnt = ObjectManager.Get<GameObject>().Count(p => p.IsAlly && p.Name == "AzirSoldier" && p.Position.Distance(target.Position) < 315);
                 if (cnt > 0)
                 {
                     dmg = (float)hero.CalcDamage(target, LeagueSharp.Common.Damage.DamageType.Magical, new[] { 50, 55, 60, 65, 70, 75, 80, 85, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180 }[ObjectManager.Player.Level - 1] + 0.6f * hero.TotalMagicalDamage);

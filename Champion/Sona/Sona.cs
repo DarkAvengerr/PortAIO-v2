@@ -145,7 +145,7 @@
         public void Load()
         {
             Console.WriteLine("Loaded Sona");
-            Ignite = this.Player.LSGetSpellSlot("summonerdot");
+            Ignite = this.Player.GetSpellSlot("summonerdot");
 
             spells[Spells.R].SetSkillshot(0.5f, 125, 3000f, false, SkillshotType.SkillshotLine);
 
@@ -161,8 +161,8 @@
 
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (this.Menu.Item("ElEasy.Sona.GapCloser.Activated").IsActive() && spells[Spells.R].LSIsReady()
-                && gapcloser.Sender.LSIsValidTarget(spells[Spells.R].Range))
+            if (this.Menu.Item("ElEasy.Sona.GapCloser.Activated").IsActive() && spells[Spells.R].IsReady()
+                && gapcloser.Sender.IsValidTarget(spells[Spells.R].Range))
             {
                 spells[Spells.R].Cast(gapcloser.Sender);
             }
@@ -171,13 +171,13 @@
         private void AutoHarass()
         {
             var target = TargetSelector.GetTarget(spells[Spells.Q].Range, TargetSelector.DamageType.Magical);
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
             {
                 return;
             }
 
             if (this.Menu.Item("ElEasy.Sona.Autoharass.Activated").GetValue<KeyBind>().Active
-                && spells[Spells.Q].LSIsReady() && target.LSIsValidTarget(spells[Spells.Q].Range))
+                && spells[Spells.Q].IsReady() && target.IsValidTarget(spells[Spells.Q].Range))
             {
                 spells[Spells.Q].Cast(target);
             }
@@ -190,8 +190,8 @@
             var playerHp = this.Menu.Item("ElEasy.Sona.Heal.Player.HP").GetValue<Slider>().Value;
             var allyHp = this.Menu.Item("ElEasy.Sona.Heal.Ally.HP").GetValue<Slider>().Value;
 
-            if (this.Player.LSIsRecalling() || this.Player.LSInFountain() || !useHeal
-                || this.Player.ManaPercent < playerMana || !spells[Spells.W].LSIsReady())
+            if (this.Player.IsRecalling() || this.Player.InFountain() || !useHeal
+                || this.Player.ManaPercent < playerMana || !spells[Spells.W].IsReady())
             {
                 return;
             }
@@ -224,13 +224,13 @@
             Interrupter2.InterruptableTargetEventArgs args)
         {
             if (args.DangerLevel != Interrupter2.DangerLevel.High
-                || sender.LSDistance(this.Player) > spells[Spells.R].Range)
+                || sender.Distance(this.Player) > spells[Spells.R].Range)
             {
                 return;
             }
 
-            if (sender.LSIsValidTarget(spells[Spells.R].Range) && args.DangerLevel == Interrupter2.DangerLevel.High
-                && spells[Spells.R].LSIsReady())
+            if (sender.IsValidTarget(spells[Spells.R].Range) && args.DangerLevel == Interrupter2.DangerLevel.High
+                && spells[Spells.R].IsReady())
             {
                 spells[Spells.R].Cast(sender.Position);
             }
@@ -241,7 +241,7 @@
             var target = TargetSelector.GetTarget(spells[Spells.Q].Range, TargetSelector.DamageType.Magical);
             var rTarget = TargetSelector.GetTarget(spells[Spells.R].Range, TargetSelector.DamageType.Magical);
 
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
             {
                 return;
             }
@@ -253,27 +253,27 @@
             var useI = this.Menu.Item("ElEasy.Sona.Combo.Ignite").IsActive();
             var hitByR = this.Menu.Item("ElEasy.Sona.Combo.Count.R").GetValue<Slider>().Value;
 
-            if (useQ && spells[Spells.Q].LSIsReady() && target.LSIsValidTarget(spells[Spells.Q].Range))
+            if (useQ && spells[Spells.Q].IsReady() && target.IsValidTarget(spells[Spells.Q].Range))
             {
                 spells[Spells.Q].Cast(target);
             }
 
-            if (useE && spells[Spells.E].LSIsReady() && target.LSIsValidTarget(spells[Spells.E].Range))
+            if (useE && spells[Spells.E].IsReady() && target.IsValidTarget(spells[Spells.E].Range))
             {
                 spells[Spells.E].Cast();
             }
 
-            if (useW && spells[Spells.W].LSIsReady() && target.LSIsValidTarget(spells[Spells.W].Range))
+            if (useW && spells[Spells.W].IsReady() && target.IsValidTarget(spells[Spells.W].Range))
             {
                 spells[Spells.W].Cast();
             }
 
-            if (useR && spells[Spells.R].LSIsReady() && rTarget.LSIsValidTarget(spells[Spells.R].Range))
+            if (useR && spells[Spells.R].IsReady() && rTarget.IsValidTarget(spells[Spells.R].Range))
             {
                 var pred = spells[Spells.R].GetPrediction(target);
                 if (pred.Hitchance >= HitChance.High)
                 {
-                    var hits = HeroManager.Enemies.Where(x => x.LSDistance(target) <= spells[Spells.R].Width).ToList();
+                    var hits = HeroManager.Enemies.Where(x => x.Distance(target) <= spells[Spells.R].Width).ToList();
                     Console.WriteLine(hits.Count);
                     if (hits.Any(hit => hits.Count >= hitByR))
                     {
@@ -282,7 +282,7 @@
                 }
             }
 
-            if (this.Player.LSDistance(target) <= 600 && this.IgniteDamage(target) >= target.Health && useI)
+            if (this.Player.Distance(target) <= 600 && this.IgniteDamage(target) >= target.Health && useI)
             {
                 this.Player.Spellbook.CastSpell(Ignite, target);
             }
@@ -347,8 +347,8 @@
                 return;
             }
 
-            if (this.Menu.Item("ElEasy.Sona.Harass.Q").IsActive() && spells[Spells.Q].LSIsReady()
-                && target.LSIsValidTarget(spells[Spells.Q].Range))
+            if (this.Menu.Item("ElEasy.Sona.Harass.Q").IsActive() && spells[Spells.Q].IsReady()
+                && target.IsValidTarget(spells[Spells.Q].Range))
             {
                 spells[Spells.Q].Cast(target);
             }

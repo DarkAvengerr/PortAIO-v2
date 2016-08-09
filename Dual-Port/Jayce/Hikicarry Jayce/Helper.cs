@@ -70,8 +70,8 @@ using EloBuddy;
         {
             foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy))
             {
-                var pos2 = Program.Jayce.Position.LSExtend(new Vector3(hero.Position.X, hero.Position.Y, Program.Jayce.Position.Z), Program.CannonE.Range);
-                if (pos2.LSDistance(hero.Position) < Program.CannonQ.Range && Program.Jayce.LSDistance(hero.Position) > Program.CannonE.Range)
+                var pos2 = Program.Jayce.Position.Extend(new Vector3(hero.Position.X, hero.Position.Y, Program.Jayce.Position.Z), Program.CannonE.Range);
+                if (pos2.Distance(hero.Position) < Program.CannonQ.Range && Program.Jayce.Distance(hero.Position) > Program.CannonE.Range)
                 {
                     if (Program.CannonQExt.GetPrediction(hero).CollisionObjects.Count == 0)
                     {
@@ -82,9 +82,9 @@ using EloBuddy;
                         Program.CannonQExt.Cast(pos2);
                     }
                 }
-                if (pos2.LSDistance(hero.Position) < Program.CannonQ.Range && Program.Jayce.LSDistance(hero.Position) < Program.CannonE.Range)
+                if (pos2.Distance(hero.Position) < Program.CannonQ.Range && Program.Jayce.Distance(hero.Position) < Program.CannonE.Range)
                 {
-                    var YUZ = Program.Jayce.Position.LSExtend(new Vector3(hero.Position.X, hero.Position.Y + 200, Program.Jayce.Position.Z), 200);
+                    var YUZ = Program.Jayce.Position.Extend(new Vector3(hero.Position.X, hero.Position.Y + 200, Program.Jayce.Position.Z), 200);
                     if (Program.CannonQExt.GetPrediction(hero).CollisionObjects.Count == 0)
                     {
                         Program.CannonE.Cast(YUZ);
@@ -99,8 +99,8 @@ using EloBuddy;
         public static void JungleExt()
         {
             var mob = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 100, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-            var pos2 = Program.Jayce.Position.LSExtend(new Vector3(mob[0].Position.X, mob[0].Position.Y, Program.Jayce.Position.Z), Program.CannonE.Range);
-            if (pos2.LSDistance(mob[0].Position) < Program.CannonQ.Range && Program.Jayce.LSDistance(mob[0].Position) > Program.CannonE.Range)
+            var pos2 = Program.Jayce.Position.Extend(new Vector3(mob[0].Position.X, mob[0].Position.Y, Program.Jayce.Position.Z), Program.CannonE.Range);
+            if (pos2.Distance(mob[0].Position) < Program.CannonQ.Range && Program.Jayce.Distance(mob[0].Position) > Program.CannonE.Range)
             {
                 Program.CannonE.Cast(pos2);
 
@@ -109,9 +109,9 @@ using EloBuddy;
                     Program.CannonQExt.Cast(pos2);
                 }
             }
-            if (pos2.LSDistance(mob[0].Position) < Program.CannonQ.Range && Program.Jayce.LSDistance(mob[0].Position) < Program.CannonE.Range)
+            if (pos2.Distance(mob[0].Position) < Program.CannonQ.Range && Program.Jayce.Distance(mob[0].Position) < Program.CannonE.Range)
             {
-                var YUZ = Program.Jayce.Position.LSExtend(new Vector3(mob[0].Position.X, mob[0].Position.Y + 200, Program.Jayce.Position.Z), 200);
+                var YUZ = Program.Jayce.Position.Extend(new Vector3(mob[0].Position.X, mob[0].Position.Y + 200, Program.Jayce.Position.Z), 200);
                 Program.CannonE.Cast(YUZ);
                 if (Program.CannonQExt.GetPrediction(mob[0]).Hitchance >= HitChance.VeryHigh)
                 {
@@ -128,34 +128,34 @@ using EloBuddy;
                 return;
             }
 
-            if (burstTarget.LSDistance(Program.Jayce.Position) < Program.HammerQ.Range && !Program.Jayce.IsMelee)
+            if (burstTarget.Distance(Program.Jayce.Position) < Program.HammerQ.Range && !Program.Jayce.IsMelee)
             {
-                if (Program.CannonQ.LSIsReady() && Program.CannonE.LSIsReady())
+                if (Program.CannonQ.IsReady() && Program.CannonE.IsReady())
                 {
                     Ext();
                     Program.Stage = 1;
                 }
-                if (Program.Stage == 1 && Program.CannonW.LSIsReady() && burstTarget.LSDistance(Program.Jayce.Position) < 600)
+                if (Program.Stage == 1 && Program.CannonW.IsReady() && burstTarget.Distance(Program.Jayce.Position) < 600)
                 {
                     Program.CannonW.Cast();
                     Program.Stage = 2;
                 }
-                if (Program.Stage == 2 && !Program.CannonQ.LSIsReady() && !Program.CannonW.LSIsReady() && !Program.CannonE.LSIsReady() && Program.R.LSIsReady())
+                if (Program.Stage == 2 && !Program.CannonQ.IsReady() && !Program.CannonW.IsReady() && !Program.CannonE.IsReady() && Program.R.IsReady())
                 {
                     Program.R.Cast();
                     Program.Stage = 3;
                 }
-                if (Program.Stage == 3 && Program.HammerQ.LSIsReady() && Program.HammerQ.CanCast(burstTarget))
+                if (Program.Stage == 3 && Program.HammerQ.IsReady() && Program.HammerQ.CanCast(burstTarget))
                 {
                     Program.HammerQ.Cast(burstTarget);
                     Program.Stage = 4;
                 }
-                if (Program.Stage == 4 && Program.HammerW.LSIsReady() && burstTarget.LSDistance(Program.Jayce.Position) < 600)
+                if (Program.Stage == 4 && Program.HammerW.IsReady() && burstTarget.Distance(Program.Jayce.Position) < 600)
                 {
                     Program.HammerW.Cast();
                     Program.Stage = 5;
                 }
-                if (Program.Stage == 5 && Program.HammerE.LSIsReady() && Program.HammerE.CanCast(burstTarget))
+                if (Program.Stage == 5 && Program.HammerE.IsReady() && Program.HammerE.CanCast(burstTarget))
                 {
                     Program.HammerE.Cast(burstTarget);
                     Program.Stage = 0;
@@ -209,7 +209,7 @@ using EloBuddy;
                 {
                     Program.HammerQ.CastOnUnit(mob[0]);
                 }
-                if (Program.Jayce.LSDistance(mob[0].Position) < 600)
+                if (Program.Jayce.Distance(mob[0].Position) < 600)
                 {
                     Program.HammerW.Cast();
                 }
@@ -228,15 +228,15 @@ using EloBuddy;
                 {
                     return;
                 }
-                if (Program.CannonQ.LSIsReady() && Program.CannonE.LSIsReady())
+                if (Program.CannonQ.IsReady() && Program.CannonE.IsReady())
                 {
                    JungleExt();
                 }
-                if (Program.CannonQ.LSIsReady() && !Program.CannonE.LSIsReady() && Program.CannonQ.CanCast(mob[0]))
+                if (Program.CannonQ.IsReady() && !Program.CannonE.IsReady() && Program.CannonQ.CanCast(mob[0]))
                 {
                     Program.CannonQ.CastOnUnit(mob[0]);
                 }
-                if (Program.Jayce.LSDistance(mob[0].Position) < 600)
+                if (Program.Jayce.Distance(mob[0].Position) < 600)
                 {
                     Program.CannonW.Cast();
                 }
@@ -251,7 +251,7 @@ using EloBuddy;
             var damage = 0f;
             if (Program.Cannon)
             {
-                if (Program.CannonQ.LSIsReady())
+                if (Program.CannonQ.IsReady())
                 {
                     var cannonQ = CannonQDamage[Program.CannonQ.Level - 1] + 1.2 * Program.Jayce.FlatPhysicalDamageMod;
                     damage += (float)ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical, cannonQ);
@@ -260,18 +260,18 @@ using EloBuddy;
             }
             if (Program.Hammer)
             {
-                if (Program.HammerQ.LSIsReady())
+                if (Program.HammerQ.IsReady())
                 {
                     var hammerQ = HammerQDamage[Program.HammerQ.Level - 1] + 1 * Program.Jayce.FlatPhysicalDamageMod;
                     damage += (float)ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical, hammerQ);
 
                 }
-                if (Program.HammerW.LSIsReady())
+                if (Program.HammerW.IsReady())
                 {
                     var hammerW = HammerWDamage[Program.HammerW.Level - 1] + 0.25*Program.Jayce.AbilityPower();
                     damage += (float) ObjectManager.Player.CalcDamage(target, Damage.DamageType.Magical, hammerW);
                 }
-                if (Program.HammerE.LSIsReady())
+                if (Program.HammerE.IsReady())
                 {
                     var hammerE = HammerEDamage[Program.HammerE.Level - 1]/100*target.MaxHealth +
                                   1*Program.Jayce.FlatPhysicalDamageMod;

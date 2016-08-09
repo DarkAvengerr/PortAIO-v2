@@ -73,7 +73,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Combo
 
             if (target == null) return;
 
-            if (Variable.Spells[SpellSlot.Q].LSIsReady())
+            if (Variable.Spells[SpellSlot.Q].IsReady())
             {
                 if (target.IsValid
                     && this.Menu.Item(this.Menu.Name + "QMana").GetValue<Slider>().Value < Variable.Player.ManaPercent)
@@ -86,18 +86,18 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Combo
                 }
             }
 
-            if (Variable.Spells[SpellSlot.E].LSIsReady() && !Variable.Spells[SpellSlot.Q].LSIsReady())
+            if (Variable.Spells[SpellSlot.E].IsReady() && !Variable.Spells[SpellSlot.Q].IsReady())
             {
-                if (target.LSIsValidTarget(Variable.Spells[SpellSlot.E].Range)
+                if (target.IsValidTarget(Variable.Spells[SpellSlot.E].Range)
                     && this.Menu.Item(this.Menu.Name + "EMana").GetValue<Slider>().Value < Variable.Player.ManaPercent)
                 {
                     Variable.Spells[SpellSlot.E].Cast(target);
                 }
             }
 
-            if (!Variable.Spells[SpellSlot.W].LSIsReady() || this.eLogic.RyzeE(target)) return;
+            if (!Variable.Spells[SpellSlot.W].IsReady() || this.eLogic.RyzeE(target)) return;
 
-            if (!target.LSIsValidTarget(Variable.Spells[SpellSlot.W].Range)
+            if (!target.IsValidTarget(Variable.Spells[SpellSlot.W].Range)
                 || !(this.Menu.Item(this.Menu.Name + "WMana").GetValue<Slider>().Value < Variable.Player.ManaPercent)) return;
 
             Variable.Spells[SpellSlot.W].Cast(target);
@@ -140,18 +140,18 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Combo
 
             if (target == null) return;
 
-            if (Variable.Spells[SpellSlot.E].LSIsReady())
+            if (Variable.Spells[SpellSlot.E].IsReady())
             {
                 Variable.Spells[SpellSlot.E].Cast(target);
             }
 
-            if (this.eLogic.RyzeE(target) && Variable.Spells[SpellSlot.W].LSIsReady()
-                && target.LSIsValidTarget(Variable.Spells[SpellSlot.W].Range))
+            if (this.eLogic.RyzeE(target) && Variable.Spells[SpellSlot.W].IsReady()
+                && target.IsValidTarget(Variable.Spells[SpellSlot.W].Range))
             {
                 Variable.Spells[SpellSlot.W].Cast(target);
             }
 
-            if (Variable.Spells[SpellSlot.Q].LSIsReady() && !this.eLogic.RyzeE(target))
+            if (Variable.Spells[SpellSlot.Q].IsReady() && !this.eLogic.RyzeE(target))
             {
                 Variable.Spells[SpellSlot.Q].CastIfHitchanceEquals(target, HitChance.High);
             }

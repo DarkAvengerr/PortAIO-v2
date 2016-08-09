@@ -199,7 +199,7 @@ using EloBuddy;
                 return;
             }
 
-            var allies = ObjectManager.Player.LSGetAlliesInRange(600f);
+            var allies = ObjectManager.Player.GetAlliesInRange(600f);
             var highestAlly = ObjectManager.Player;
             var highestCount = 0;
             foreach (var ally in allies)
@@ -233,7 +233,7 @@ using EloBuddy;
             }
 
             if (Variables.Menu.IsEnabled("ilucian.cleanser.items.michael") && Items.HasItem(3222)
-                && Items.CanUseItem(3222) && target.LSIsValidTarget(600f))
+                && Items.CanUseItem(3222) && target.IsValidTarget(600f))
             {
                 Items.UseItem(3222, target);
                 return;
@@ -286,20 +286,20 @@ using EloBuddy;
                 if (
                     QssSpells.Where(
                         spell =>
-                        ObjectManager.Player.LSHasBuff(spell.SpellBuff) && SpellEnabledOnKill(spell.SpellBuff)
-                        && GetChampByName(spell.ChampName).LSGetSpellDamage(ObjectManager.Player, spell.Slot)
+                        ObjectManager.Player.HasBuff(spell.SpellBuff) && SpellEnabledOnKill(spell.SpellBuff)
+                        && GetChampByName(spell.ChampName).GetSpellDamage(ObjectManager.Player, spell.Slot)
                         > ObjectManager.Player.Health + HealthBuffer)
                         .OrderBy(
-                            spell => GetChampByName(spell.ChampName).LSGetSpellDamage(ObjectManager.Player, spell.Slot))
+                            spell => GetChampByName(spell.ChampName).GetSpellDamage(ObjectManager.Player, spell.Slot))
                         .Any())
                 {
                     mySpell =
                         QssSpells.Where(
                             spell =>
-                            ObjectManager.Player.LSHasBuff(spell.SpellBuff) && SpellEnabledOnKill(spell.SpellBuff))
+                            ObjectManager.Player.HasBuff(spell.SpellBuff) && SpellEnabledOnKill(spell.SpellBuff))
                             .OrderBy(
                                 spell =>
-                                GetChampByName(spell.ChampName).LSGetSpellDamage(ObjectManager.Player, spell.Slot))
+                                GetChampByName(spell.ChampName).GetSpellDamage(ObjectManager.Player, spell.Slot))
                             .First();
                 }
 
@@ -315,7 +315,7 @@ using EloBuddy;
             }
 
             // Ally Cleansing
-            var allies = ObjectManager.Player.LSGetAlliesInRange(600f);
+            var allies = ObjectManager.Player.GetAlliesInRange(600f);
             var highestAlly = ObjectManager.Player;
             var highestDamage = 0f;
             CleanseSpell highestSpell = null;
@@ -325,20 +325,20 @@ using EloBuddy;
                 if (
                     QssSpells.Where(
                         spell =>
-                        ally.LSHasBuff(spell.SpellBuff) && SpellEnabledOnKill(spell.SpellBuff)
-                        && GetChampByName(spell.ChampName).LSGetSpellDamage(ally, spell.Slot) > ally.Health + HealthBuffer)
-                        .OrderBy(spell => GetChampByName(spell.ChampName).LSGetSpellDamage(ally, spell.Slot))
+                        ally.HasBuff(spell.SpellBuff) && SpellEnabledOnKill(spell.SpellBuff)
+                        && GetChampByName(spell.ChampName).GetSpellDamage(ally, spell.Slot) > ally.Health + HealthBuffer)
+                        .OrderBy(spell => GetChampByName(spell.ChampName).GetSpellDamage(ally, spell.Slot))
                         .Any())
                 {
                     theSpell =
-                        QssSpells.Where(spell => ally.LSHasBuff(spell.SpellBuff) && SpellEnabledOnKill(spell.SpellBuff))
-                            .OrderBy(spell => GetChampByName(spell.ChampName).LSGetSpellDamage(ally, spell.Slot))
+                        QssSpells.Where(spell => ally.HasBuff(spell.SpellBuff) && SpellEnabledOnKill(spell.SpellBuff))
+                            .OrderBy(spell => GetChampByName(spell.ChampName).GetSpellDamage(ally, spell.Slot))
                             .First();
                 }
 
                 if (theSpell != null)
                 {
-                    var damageDone = GetChampByName(theSpell.ChampName).LSGetSpellDamage(ally, theSpell.Slot);
+                    var damageDone = GetChampByName(theSpell.ChampName).GetSpellDamage(ally, theSpell.Slot);
                     if (damageDone >= highestDamage
                         && Variables.Menu.IsEnabled("ilucian.cleanser.allies.useon." + ally.ChampionName))
                     {
@@ -381,18 +381,18 @@ using EloBuddy;
                 CleanseSpell mySpell = null;
                 if (
                     QssSpells.Where(
-                        spell => ObjectManager.Player.LSHasBuff(spell.SpellBuff) && SpellEnabledAlways(spell.SpellBuff))
+                        spell => ObjectManager.Player.HasBuff(spell.SpellBuff) && SpellEnabledAlways(spell.SpellBuff))
                         .OrderBy(
-                            spell => GetChampByName(spell.ChampName).LSGetSpellDamage(ObjectManager.Player, spell.Slot))
+                            spell => GetChampByName(spell.ChampName).GetSpellDamage(ObjectManager.Player, spell.Slot))
                         .Any())
                 {
                     mySpell =
                         QssSpells.Where(
                             spell =>
-                            ObjectManager.Player.LSHasBuff(spell.SpellBuff) && SpellEnabledAlways(spell.SpellBuff))
+                            ObjectManager.Player.HasBuff(spell.SpellBuff) && SpellEnabledAlways(spell.SpellBuff))
                             .OrderBy(
                                 spell =>
-                                GetChampByName(spell.ChampName).LSGetSpellDamage(ObjectManager.Player, spell.Slot))
+                                GetChampByName(spell.ChampName).GetSpellDamage(ObjectManager.Player, spell.Slot))
                             .First();
                 }
 
@@ -408,7 +408,7 @@ using EloBuddy;
             }
 
             // Ally Cleansing
-            var allies = ObjectManager.Player.LSGetAlliesInRange(600f);
+            var allies = ObjectManager.Player.GetAlliesInRange(600f);
             var highestAlly = ObjectManager.Player;
             var highestDamage = 0f;
             CleanseSpell highestSpell = null;
@@ -416,19 +416,19 @@ using EloBuddy;
             {
                 CleanseSpell theSpell = null;
                 if (
-                    QssSpells.Where(spell => ally.LSHasBuff(spell.SpellBuff) && SpellEnabledAlways(spell.SpellBuff))
-                        .OrderBy(spell => GetChampByName(spell.ChampName).LSGetSpellDamage(ally, spell.Slot))
+                    QssSpells.Where(spell => ally.HasBuff(spell.SpellBuff) && SpellEnabledAlways(spell.SpellBuff))
+                        .OrderBy(spell => GetChampByName(spell.ChampName).GetSpellDamage(ally, spell.Slot))
                         .Any())
                 {
                     theSpell =
-                        QssSpells.Where(spell => ally.LSHasBuff(spell.SpellBuff) && SpellEnabledAlways(spell.SpellBuff))
-                            .OrderBy(spell => GetChampByName(spell.ChampName).LSGetSpellDamage(ally, spell.Slot))
+                        QssSpells.Where(spell => ally.HasBuff(spell.SpellBuff) && SpellEnabledAlways(spell.SpellBuff))
+                            .OrderBy(spell => GetChampByName(spell.ChampName).GetSpellDamage(ally, spell.Slot))
                             .First();
                 }
 
                 if (theSpell != null)
                 {
-                    var damageDone = GetChampByName(theSpell.ChampName).LSGetSpellDamage(ally, theSpell.Slot);
+                    var damageDone = GetChampByName(theSpell.ChampName).GetSpellDamage(ally, theSpell.Slot);
                     if (damageDone >= highestDamage
                         && Variables.Menu.IsEnabled("ilucian.cleanser.allies.useon." + ally.ChampionName))
                     {

@@ -84,24 +84,24 @@ using EloBuddy;
                 var useW = SkyLv_AurelionSol.Menu.Item("AurelionSol.UseWHarass").GetValue<bool>();
                 var MiniManaW = SkyLv_AurelionSol.Menu.Item("AurelionSol.WMiniManaHarass").GetValue<Slider>().Value;
 
-                if (useQ && Q.LSIsReady() && Player.Mana >= Q.ManaCost && Player.ManaPercent > MiniManaQ)
+                if (useQ && Q.IsReady() && Player.Mana >= Q.ManaCost && Player.ManaPercent > MiniManaQ)
                 {
                     Q.CastIfHitchanceEquals(target, HitChance.VeryHigh, PacketCast);
                 }
 
-                if (useW && W1.LSIsReady() && Player.ManaPercent > MiniManaW)
+                if (useW && W1.IsReady() && Player.ManaPercent > MiniManaW)
                 {
                     if (Player.ManaPercent <= MiniManaW && CustomLib.isWInLongRangeMode())
                     {
                         W2.Cast(PacketCast);
                     }
 
-                    if (Player.LSDistance(target) > W1.Range - 20 && Player.LSDistance(target) < W1.Range + 20 && CustomLib.isWInLongRangeMode())
+                    if (Player.Distance(target) > W1.Range - 20 && Player.Distance(target) < W1.Range + 20 && CustomLib.isWInLongRangeMode())
                     {
                         W2.Cast(PacketCast);
                     }
 
-                    if (Player.LSDistance(target) > W2.Range - 20 && Player.LSDistance(target) < W2.Range + 20 && !CustomLib.isWInLongRangeMode() && Player.ManaPercent > MiniManaW)
+                    if (Player.Distance(target) > W2.Range - 20 && Player.Distance(target) < W2.Range + 20 && !CustomLib.isWInLongRangeMode() && Player.ManaPercent > MiniManaW)
                     {
                         W1.Cast(PacketCast);
                     }

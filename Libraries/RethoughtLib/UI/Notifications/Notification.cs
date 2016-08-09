@@ -76,7 +76,7 @@ using EloBuddy; namespace RethoughtLib.UI.Notifications
         {
             if (this.Moving)
             {
-                this.Design.Transition.Start(this.Position, this.Position.LSExtend(this.StartPosition, this.Design.Width));
+                this.Design.Transition.Start(this.Position, this.Position.Extend(this.StartPosition, this.Design.Width));
             }
 
             this.Position = this.Design.Transition.GetPosition();

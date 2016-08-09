@@ -19,7 +19,7 @@ using EloBuddy;
     {
         public static void UpdateKs()
         {
-            foreach (var hero in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) && !x.IsZombie))
+            foreach (var hero in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsZombie))
             {
                 if (EKs && E.GetDamage(hero) >= hero.Health)
                 {
@@ -28,7 +28,7 @@ using EloBuddy;
                 if (RKs && R.GetDamage(hero) >= hero.Health)
                 {
                     var pred = R.GetPrediction(hero);
-                    if (!pred.CastPosition.LSIsWall() && pred.Hitchance >= HitChance.Medium)
+                    if (!pred.CastPosition.IsWall() && pred.Hitchance >= HitChance.Medium)
                     {
                         R.Cast(pred.CastPosition);
                     }
@@ -54,7 +54,7 @@ using EloBuddy;
                     if ((ItemData.Tiamat_Melee_Only.GetItem().IsInRange(pred)
                         || ItemData.Ravenous_Hydra_Melee_Only.GetItem().IsInRange(pred))
                         && Player.CalcDamage(hero, Damage.DamageType.Physical,
-                        Player.TotalAttackDamage * (1-(Player.Position.LSTo2D().LSDistance(pred.LSTo2D()) - hero.BoundingRadius)/1000))
+                        Player.TotalAttackDamage * (1-(Player.Position.To2D().Distance(pred.To2D()) - hero.BoundingRadius)/1000))
                         >= hero.Health)
                     {
                         if (ItemData.Tiamat_Melee_Only.GetItem().IsReady())
@@ -67,8 +67,8 @@ using EloBuddy;
                         }
                     }
                 }
-                if (KsSmite && Smite.LSIsReady() && GetSmiteDamage(hero) >= hero.Health
-                    && Player.Position.LSTo2D().LSDistance(hero.Position.LSTo2D()) <= 500 + Player.BoundingRadius + hero.BoundingRadius)
+                if (KsSmite && Smite.IsReady() && GetSmiteDamage(hero) >= hero.Health
+                    && Player.Position.To2D().Distance(hero.Position.To2D()) <= 500 + Player.BoundingRadius + hero.BoundingRadius)
                 {
                     Player.Spellbook.CastSpell(Smite, hero);
                 }

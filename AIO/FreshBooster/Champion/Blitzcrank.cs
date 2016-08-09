@@ -136,14 +136,14 @@ using EloBuddy;
                 {
                     float damage = 0;
 
-                    if (_Q.LSIsReady())
+                    if (_Q.IsReady())
                         damage += _Q.GetDamage(enemy);
-                    if (_E.LSIsReady())
+                    if (_E.IsReady())
                         damage += _E.GetDamage(enemy);
-                    if (_R.LSIsReady())
+                    if (_R.IsReady())
                         damage += _R.GetDamage(enemy);
                     if (!Player.Spellbook.IsAutoAttacking)
-                        damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                        damage += (float)Player.GetAutoAttackDamage(enemy, true);
                     return damage;
                 }
                 return 0;
@@ -163,7 +163,7 @@ using EloBuddy;
             try
             {
                 if (Player.IsDead) return;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
                 {
                     if (_MainMenu.Item("Blitzcrank_Indicator").GetValue<bool>())
                     {
@@ -207,17 +207,17 @@ using EloBuddy;
                 var WTarget = TargetSelector.GetTarget(1500, TargetSelector.DamageType.Physical);
                 var RTarget = TargetSelector.GetTarget(_R.Range, TargetSelector.DamageType.Magical);
 
-                if (_MainMenu.Item("Blitzcrank_GrabDash").GetValue<bool>() && _Q.LSIsReady())
+                if (_MainMenu.Item("Blitzcrank_GrabDash").GetValue<bool>() && _Q.IsReady())
                     if (QTarget != null && _Q.GetPrediction(QTarget, false).Hitchance == HitChance.Dashing)
                         _Q.CastIfHitchanceEquals(QTarget, HitChance.Dashing, true);
 
                 //killsteal
-                if (_MainMenu.Item("Blitzcran_KUse_Q").GetValue<bool>() && QTarget != null && QTarget.Health < _Q.GetDamage(QTarget) && _Q.LSIsReady())
+                if (_MainMenu.Item("Blitzcran_KUse_Q").GetValue<bool>() && QTarget != null && QTarget.Health < _Q.GetDamage(QTarget) && _Q.IsReady())
                 {
                     _Q.CastIfHitchanceEquals(QTarget, HitChance.VeryHigh, true);
                     return;
                 }
-                if (_MainMenu.Item("Blitzcran_KUse_R").GetValue<bool>() && RTarget != null && RTarget.Health < _E.GetDamage(RTarget) && _R.LSIsReady())
+                if (_MainMenu.Item("Blitzcran_KUse_R").GetValue<bool>() && RTarget != null && RTarget.Health < _E.GetDamage(RTarget) && _R.IsReady())
                 {
                     _R.Cast(true);
                     return;
@@ -227,10 +227,10 @@ using EloBuddy;
                 foreach (var enemy in ObjectManager.Get<AIHeroClient>())
                 {
                     if (enemy.Team != Player.Team && QTarget != null
-                        && _MainMenu.Item("Blitzcrank_GrabSelect" + enemy.ChampionName).GetValue<StringList>().SelectedIndex == 2 && _Q.LSIsReady()
+                        && _MainMenu.Item("Blitzcrank_GrabSelect" + enemy.ChampionName).GetValue<StringList>().SelectedIndex == 2 && _Q.IsReady()
                         && QTarget.ChampionName == enemy.ChampionName)
                     {
-                        if (QTarget.CanMove && QTarget.LSDistance(Player.Position) < _Q.Range * 0.9)
+                        if (QTarget.CanMove && QTarget.Distance(Player.Position) < _Q.Range * 0.9)
                             _Q.CastIfHitchanceEquals(QTarget, Hitchance("Blitzcrank_CUseQ_Hit"), true);
                         if (!QTarget.CanMove)
                             _Q.CastIfHitchanceEquals(QTarget, Hitchance("Blitzcrank_CUseQ_Hit"), true);
@@ -240,30 +240,30 @@ using EloBuddy;
                 // Combo
                 if (_MainMenu.Item("CKey").GetValue<KeyBind>().Active)
                 {
-                    if (_MainMenu.Item("Blitzcrank_CUse_Q").GetValue<bool>() && _Q.LSIsReady() && QTarget != null
+                    if (_MainMenu.Item("Blitzcrank_CUse_Q").GetValue<bool>() && _Q.IsReady() && QTarget != null
                         && _MainMenu.Item("Blitzcrank_GrabSelect" + QTarget.ChampionName).GetValue<StringList>().SelectedIndex != 1)
                     {
                         _Q.CastIfHitchanceEquals(QTarget, Hitchance("Blitzcrank_CUseQ_Hit"), true);
                     }
-                    if (_MainMenu.Item("Blitzcrank_CUse_W").GetValue<bool>() && _W.LSIsReady() && WTarget != null)
+                    if (_MainMenu.Item("Blitzcrank_CUse_W").GetValue<bool>() && _W.IsReady() && WTarget != null)
                         _W.Cast(Player, true);
-                    if (_MainMenu.Item("Blitzcrank_CUse_E").GetValue<bool>() && _E.LSIsReady() && QTarget.LSDistance(Player.ServerPosition) < 230)
+                    if (_MainMenu.Item("Blitzcrank_CUse_E").GetValue<bool>() && _E.IsReady() && QTarget.Distance(Player.ServerPosition) < 230)
                         _E.Cast(Player);
-                    if (_MainMenu.Item("Blitzcrank_CUse_R").GetValue<bool>() && _R.LSIsReady() && RTarget != null)
+                    if (_MainMenu.Item("Blitzcrank_CUse_R").GetValue<bool>() && _R.IsReady() && RTarget != null)
                         _R.Cast();
                 }
 
                 // Harass
                 if (_MainMenu.Item("HKey").GetValue<KeyBind>().Active && _MainMenu.Item("Blitzcrank_AManarate").GetValue<Slider>().Value < Player.ManaPercent)
                 {
-                    if (_MainMenu.Item("Blitzcrank_HUse_Q").GetValue<bool>() && _Q.LSIsReady() && QTarget != null
+                    if (_MainMenu.Item("Blitzcrank_HUse_Q").GetValue<bool>() && _Q.IsReady() && QTarget != null
                         && _MainMenu.Item("Blitzcrank_GrabSelect" + QTarget.ChampionName).GetValue<StringList>().SelectedIndex != 1)
                     {
                         _Q.CastIfHitchanceEquals(QTarget, Hitchance("Blitzcrank_CUseQ_Hit"), true);
                     }
-                    if (_MainMenu.Item("Blitzcrank_HUse_W").GetValue<bool>() && _W.LSIsReady() && WTarget != null)
+                    if (_MainMenu.Item("Blitzcrank_HUse_W").GetValue<bool>() && _W.IsReady() && WTarget != null)
                         _W.Cast(Player, true);
-                    if (_MainMenu.Item("Blitzcrank_HUse_E").GetValue<bool>() && _E.LSIsReady() && QTarget.LSDistance(Player.ServerPosition) < 230)
+                    if (_MainMenu.Item("Blitzcrank_HUse_E").GetValue<bool>() && _E.IsReady() && QTarget.Distance(Player.ServerPosition) < 230)
                         _E.Cast(Player);
                 }
             }
@@ -316,19 +316,19 @@ using EloBuddy;
                 if (!sender.IsEnemy || !sender.IsValid<AIHeroClient>())
                     return;
 
-                if (_MainMenu.Item("Blitzcrank_InterQ").GetValue<bool>() && _Q.LSIsReady())
+                if (_MainMenu.Item("Blitzcrank_InterQ").GetValue<bool>() && _Q.IsReady())
                 {
-                    if (sender.LSDistance(Player.ServerPosition, true) <= _Q.RangeSqr)
+                    if (sender.Distance(Player.ServerPosition, true) <= _Q.RangeSqr)
                         _Q.Cast(sender);
                 }
-                if (_MainMenu.Item("Blitzcrank_InterR").GetValue<bool>() && _R.LSIsReady())
+                if (_MainMenu.Item("Blitzcrank_InterR").GetValue<bool>() && _R.IsReady())
                 {
-                    if (sender.LSDistance(Player.ServerPosition, true) <= _R.RangeSqr)
+                    if (sender.Distance(Player.ServerPosition, true) <= _R.RangeSqr)
                         _R.Cast();
                 }
-                if (_MainMenu.Item("Blitzcrank_InterR").GetValue<bool>() && _E.LSIsReady())
+                if (_MainMenu.Item("Blitzcrank_InterR").GetValue<bool>() && _E.IsReady())
                 {
-                    if (sender.LSDistance(Player.ServerPosition, true) <= _E.RangeSqr)
+                    if (sender.Distance(Player.ServerPosition, true) <= _E.RangeSqr)
                         _E.CastOnUnit(Player);
                 }
             }

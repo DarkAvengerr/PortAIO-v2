@@ -75,7 +75,7 @@ namespace SPrediction
             {
                 foreach (AIHeroClient enemy in HeroManager.Enemies)
                 {
-                    var waypoints = enemy.LSGetWaypoints();
+                    var waypoints = enemy.GetWaypoints();
                     if (waypoints != null && waypoints.Count > 1)
                     {
                         for (int i = 0; i < waypoints.Count - 1; i++)
@@ -86,7 +86,7 @@ namespace SPrediction
                         }
 
                         Vector2 pos = Drawing.WorldToScreen(waypoints[waypoints.Count - 1].To3D());
-                        Drawing.DrawText(pos.X, pos.Y, System.Drawing.Color.Black, (waypoints.LSPathLength() / enemy.MoveSpeed).ToString("0.00")); //arrival time
+                        Drawing.DrawText(pos.X, pos.Y, System.Drawing.Color.Black, (waypoints.PathLength() / enemy.MoveSpeed).ToString("0.00")); //arrival time
                     }
                 }
 
@@ -131,7 +131,7 @@ namespace SPrediction
         private static void AIHeroClient_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             LastSpells.RemoveAll(p => Environment.TickCount - p.Item2 > 2000);
-            if (sender.IsMe && !args.SData.LSIsAutoAttack() && ConfigMenu.CountHitChance)
+            if (sender.IsMe && !args.SData.IsAutoAttack() && ConfigMenu.CountHitChance)
             {
                 if (args.Slot == SpellSlot.Q && !LastSpells.Exists(p => p.Item1 == args.SData.Name))
                 {

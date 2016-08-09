@@ -66,22 +66,22 @@ using EloBuddy; namespace ARAMDetFull.Helpers
             }
             if (LeagueSharp.Common.Items.HasItem(locket.Id) && LeagueSharp.Common.Items.CanUseItem(locket.Id))
             {
-                if (player.HealthPercent < 80 && player.LSCountEnemiesInRange(550)>0)
+                if (player.HealthPercent < 80 && player.CountEnemiesInRange(550)>0)
                 {
                     LeagueSharp.Common.Items.UseItem(locket.Id);
                 }
             }
             if (LeagueSharp.Common.Items.HasItem(randuins.Id) && LeagueSharp.Common.Items.CanUseItem(randuins.Id))
             {
-                if (player.LSDistance(target) < randuins.Range && player.LSDistance(target) > player.AttackRange + 100)
+                if (player.Distance(target) < randuins.Range && player.Distance(target) > player.AttackRange + 100)
                 {
                     LeagueSharp.Common.Items.UseItem(randuins.Id);
                 }
             }
             if (LeagueSharp.Common.Items.HasItem(odins.Id) && LeagueSharp.Common.Items.CanUseItem(odins.Id))
             {
-                if (player.LSDistance(target) < odins.Range &&
-                    (player.LSCountEnemiesInRange(odins.Range) > 1 ||
+                if (player.Distance(target) < odins.Range &&
+                    (player.CountEnemiesInRange(odins.Range) > 1 ||
                      target.Health < Damage.GetItemDamage(player, target, Damage.DamageItems.OdingVeils)))
                 {
                     LeagueSharp.Common.Items.UseItem(odins.Id);
@@ -107,7 +107,7 @@ using EloBuddy; namespace ARAMDetFull.Helpers
             {
                 Bft.Cast(target);
             }
-            if (LeagueSharp.Common.Items.HasItem(youmuu.Id) && LeagueSharp.Common.Items.CanUseItem(youmuu.Id) && player.LSDistance(target) < player.AttackRange + 50)
+            if (LeagueSharp.Common.Items.HasItem(youmuu.Id) && LeagueSharp.Common.Items.CanUseItem(youmuu.Id) && player.Distance(target) < player.AttackRange + 50)
             {
                 youmuu.Cast();
             }
@@ -115,7 +115,7 @@ using EloBuddy; namespace ARAMDetFull.Helpers
 
         public static void castHydra(AIHeroClient target)
         {
-            if (player.LSDistance(target) < hydra.Range && !LeagueSharp.Common.Orbwalking.CanAttack())
+            if (player.Distance(target) < hydra.Range && !LeagueSharp.Common.Orbwalking.CanAttack())
             {
                 if (LeagueSharp.Common.Items.HasItem(tiamat.Id) && LeagueSharp.Common.Items.CanUseItem(tiamat.Id))
                 {
@@ -169,7 +169,7 @@ using EloBuddy; namespace ARAMDetFull.Helpers
             {
                 damage += Damage.GetItemDamage(player, target, Damage.DamageItems.Botrk);
             }
-            if (LeagueSharp.Common.Items.HasItem(sheen.Id) && (LeagueSharp.Common.Items.CanUseItem(sheen.Id) || player.LSHasBuff("sheen", true)))
+            if (LeagueSharp.Common.Items.HasItem(sheen.Id) && (LeagueSharp.Common.Items.CanUseItem(sheen.Id) || player.HasBuff("sheen", true)))
             {
                 damage += player.CalcDamage(target, Damage.DamageType.Physical, player.BaseAttackDamage);
             }

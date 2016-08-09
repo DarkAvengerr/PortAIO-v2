@@ -151,13 +151,13 @@ using EloBuddy; namespace Activator
 
                 // init valid auto spells
                 foreach (CoreSpell autospell in Lists.Spells)
-                    if (Player.LSGetSpellSlot(autospell.Name) != SpellSlot.Unknown)
+                    if (Player.GetSpellSlot(autospell.Name) != SpellSlot.Unknown)
                         Game.OnUpdate += autospell.OnTick;
 
                 // init valid summoners
                 foreach (CoreSum summoner in Lists.Summoners)
                     if (summoner.Slot != SpellSlot.Unknown ||
-                        summoner.ExtraNames.Any(x => Player.LSGetSpellSlot(x) != SpellSlot.Unknown))
+                        summoner.ExtraNames.Any(x => Player.GetSpellSlot(x) != SpellSlot.Unknown))
                         Game.OnUpdate += summoner.OnTick;
 
                 // find items (if F5)
@@ -268,7 +268,7 @@ using EloBuddy; namespace Activator
         {
             try
             {
-                if (Player.LSGetSpellSlot(spell.Name) != SpellSlot.Unknown)
+                if (Player.GetSpellSlot(spell.Name) != SpellSlot.Unknown)
                     Lists.Spells.Add(spell.CreateMenu(parent));
             }
 
@@ -286,7 +286,7 @@ using EloBuddy; namespace Activator
                 if (summoner.Name.Contains("smite") && SmiteInGame)
                     Lists.Summoners.Add(summoner.CreateMenu(parent));
 
-                if (!summoner.Name.Contains("smite") && Player.LSGetSpellSlot(summoner.Name) != SpellSlot.Unknown)
+                if (!summoner.Name.Contains("smite") && Player.GetSpellSlot(summoner.Name) != SpellSlot.Unknown)
                     Lists.Summoners.Add(summoner.CreateMenu(parent));
             }
 

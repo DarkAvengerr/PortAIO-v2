@@ -146,12 +146,12 @@ using EloBuddy; namespace XinZhao
                 item.Value.Item.Cast();
             }
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 Q.Cast();
             }
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 W.Cast();
             }
@@ -159,7 +159,7 @@ using EloBuddy; namespace XinZhao
 
         private static int GetHitsR
         {
-            get { { return Player.LSCountEnemiesInRange(R.Range); } }
+            get { { return Player.CountEnemiesInRange(R.Range); } }
         }
 
         private static void Spellbook_OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
@@ -183,8 +183,8 @@ using EloBuddy; namespace XinZhao
                 return;
             }
 
-            if (unit.LSIsValidTarget(R.Range) && args.DangerLevel >= Interrupter2.DangerLevel.Medium &&
-                !unit.LSHasBuff("xenzhaointimidate"))
+            if (unit.IsValidTarget(R.Range) && args.DangerLevel >= Interrupter2.DangerLevel.Medium &&
+                !unit.HasBuff("xenzhaointimidate"))
             {
                 R.Cast();
             }
@@ -244,7 +244,7 @@ using EloBuddy; namespace XinZhao
                             ObjectManager.Get<AIHeroClient>()
                             .Where(
                                 enemy =>
-                                !enemy.IsDead && enemy.IsEnemy && Player.LSDistance(enemy) < R.Range && R.LSIsReady())
+                                !enemy.IsDead && enemy.IsEnemy && Player.Distance(enemy) < R.Range && R.IsReady())
                         from buff in enemy.Buffs.Where(buff => !buff.Name.Contains("xenzhaointimidate"))
                         select enemy)
                 {
@@ -257,15 +257,15 @@ using EloBuddy; namespace XinZhao
         {
             var t = AssassinManager.GetTarget(E.Range, TargetSelector.DamageType.Magical);
 
-            if (!t.LSIsValidTarget())
+            if (!t.IsValidTarget())
             {
                 return;
             }
 
-            if (t.LSIsValidTarget(E.Range) && E.LSIsReady())
+            if (t.IsValidTarget(E.Range) && E.IsReady())
             {
                 var eMinRange = Config.Item("EMinRange").GetValue<Slider>().Value;
-                if (ObjectManager.Player.LSDistance(t) >= eMinRange)
+                if (ObjectManager.Player.Distance(t) >= eMinRange)
                 {
                     E.CastOnUnit(t);
                 }
@@ -285,7 +285,7 @@ using EloBuddy; namespace XinZhao
                 }
             }
 
-            if (R.LSIsReady() &&
+            if (R.IsReady() &&
                 Config.Item("ComboUseR").GetValue<bool>() &&
                 GetHitsR >= Config.Item("ComboUseRS").GetValue<Slider>().Value)
             {
@@ -298,7 +298,7 @@ using EloBuddy; namespace XinZhao
         private static void CastItems()
         {
             var t = AssassinManager.GetTarget(750, TargetSelector.DamageType.Physical);
-            if (!t.LSIsValidTarget())
+            if (!t.IsValidTarget())
                 return;
 
             foreach (var item in Items.ItemDb)
@@ -306,7 +306,7 @@ using EloBuddy; namespace XinZhao
                 if (item.Value.ItemType == Items.EnumItemType.AoE &&
                     item.Value.TargetingType == Items.EnumItemTargettingType.EnemyObjects)
                 {
-                    if (t.LSIsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
+                    if (t.IsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
                     {
                         item.Value.Item.Cast(Player);
                     }
@@ -315,7 +315,7 @@ using EloBuddy; namespace XinZhao
                 if (item.Value.ItemType == Items.EnumItemType.Targeted &&
                     item.Value.TargetingType == Items.EnumItemTargettingType.EnemyHero)
                 {
-                    if (t.LSIsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
+                    if (t.IsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
                     {
                         item.Value.Item.Cast(t);
                     }
@@ -344,8 +344,8 @@ using EloBuddy; namespace XinZhao
                 foreach (var vMinion in
                     from vMinion in minionsQ where vMinion.IsEnemy select vMinion)
                 {
-                    if (useQ && Q.LSIsReady()) Q.Cast();
-                    if (useW && W.LSIsReady()) W.Cast();
+                    if (useQ && Q.IsReady()) Q.Cast();
+                    if (useW && W.IsReady()) W.Cast();
                 }
             }
 
@@ -359,17 +359,17 @@ using EloBuddy; namespace XinZhao
                                          item.Value.Item.Range)
                                  where
                                      iMinions.Count >= 2 && item.Value.Item.IsReady()
-                                     && iMinions[0].LSDistance(Player.Position) < item.Value.Item.Range
+                                     && iMinions[0].Distance(Player.Position) < item.Value.Item.Range
                                  select item)
             {
                 item.Value.Item.Cast();
             }
 
-            if (useE && E.LSIsReady())
+            if (useE && E.IsReady())
             {
                 var locE = E.GetCircularFarmLocation(allMinions);
-                if (allMinions.Count == allMinions.Count(m => Player.LSDistance(m) < E.Range) && locE.MinionsHit >= 2
-                    && locE.Position.LSIsValid()) E.Cast(locE.Position);
+                if (allMinions.Count == allMinions.Count(m => Player.Distance(m) < E.Range) && locE.MinionsHit >= 2
+                    && locE.Position.IsValid()) E.Cast(locE.Position);
             }
         }
 
@@ -387,13 +387,13 @@ using EloBuddy; namespace XinZhao
                 return;
 
             var mob = mobs[0];
-            if (useQ && Q.LSIsReady() && mobs.Count >= 1)
+            if (useQ && Q.IsReady() && mobs.Count >= 1)
                 Q.Cast();
 
-            if (useW && W.LSIsReady() && mobs.Count >= 1)
+            if (useW && W.IsReady() && mobs.Count >= 1)
                 W.Cast();
 
-            if (useE && E.LSIsReady() && mobs.Count >= 1)
+            if (useE && E.IsReady() && mobs.Count >= 1)
                 E.CastOnUnit(mob);
 
             if (mobs.Count >= 2)
@@ -410,7 +410,7 @@ using EloBuddy; namespace XinZhao
                                              MinionTeam.Neutral)
                                      where
                                          item.Value.Item.IsReady()
-                                         && iMinions[0].LSDistance(Player.Position) < item.Value.Item.Range
+                                         && iMinions[0].Distance(Player.Position) < item.Value.Item.Range
                                      select item)
                 {
                     item.Value.Item.Cast();

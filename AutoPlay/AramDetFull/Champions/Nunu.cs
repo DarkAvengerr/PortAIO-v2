@@ -37,21 +37,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
             W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.CastOnUnit(target);
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if (target == null || !R.LSIsReady())
+            if (target == null || !R.IsReady())
                 return;
             if (player.Position.GetAliveEnemiesInRange(500)>1)
             {
@@ -69,11 +69,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useSpells()
         {
-            if (Q.LSIsReady()  &&
+            if (Q.IsReady()  &&
                     player.HealthPercent < 80)
             {
                 var minion = MinionManager.GetMinions(player.Position, Q.Range).FirstOrDefault();
-                if (minion.LSIsValidTarget(Q.Range))
+                if (minion.IsValidTarget(Q.Range))
                 {
                     Q.CastOnUnit(minion);
                 }

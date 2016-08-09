@@ -302,7 +302,7 @@ namespace S_Plus_Class_Kalista.Libaries
     //    /// <param name="target">The target.</param>
     //    private static void FireAfterAttack(AttackableUnit unit, AttackableUnit target)
     //    {
-    //        if (AfterAttack != null && target.LSIsValidTarget())
+    //        if (AfterAttack != null && target.IsValidTarget())
     //        {
     //            AfterAttack(unit, target);
     //        }
@@ -314,7 +314,7 @@ namespace S_Plus_Class_Kalista.Libaries
     //    /// <param name="newTarget">The new target.</param>
     //    private static void FireOnTargetSwitch(AttackableUnit newTarget)
     //    {
-    //        if (OnTargetChange != null && (!_lastTarget.LSIsValidTarget() || _lastTarget != newTarget))
+    //        if (OnTargetChange != null && (!_lastTarget.IsValidTarget() || _lastTarget != newTarget))
     //        {
     //            OnTargetChange(_lastTarget, newTarget);
     //        }
@@ -371,7 +371,7 @@ namespace S_Plus_Class_Kalista.Libaries
     //    public static float GetRealAutoAttackRange(AttackableUnit target)
     //    {
     //        var result = Player.AttackRange + Player.BoundingRadius;
-    //        if (target.LSIsValidTarget())
+    //        if (target.IsValidTarget())
     //        {
     //            return result + target.BoundingRadius;
     //        }
@@ -396,7 +396,7 @@ namespace S_Plus_Class_Kalista.Libaries
     //    /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
     //    public static bool InAutoAttackRange(AttackableUnit target)
     //    {
-    //        if (!target.LSIsValidTarget())
+    //        if (!target.IsValidTarget())
     //        {
     //            return false;
     //        }
@@ -582,7 +582,7 @@ namespace S_Plus_Class_Kalista.Libaries
     //    {
     //        try
     //        {
-    //            if (target.LSIsValidTarget() && CanAttack())
+    //            if (target.IsValidTarget() && CanAttack())
     //            {
     //                DisableNextAttack = false;
     //                FireBeforeAttack(target);
@@ -1012,7 +1012,7 @@ namespace S_Plus_Class_Kalista.Libaries
     //                ObjectManager.Get<Obj_AI_Minion>()
     //                    .Any(
     //                        minion =>
-    //                            minion.LSIsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
+    //                            minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
     //                            InAutoAttackRange(minion) && MinionManager.IsMinion(minion, false) &&
     //                            HealthPrediction.LaneClearHealthPrediction(
     //                                minion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay) <=
@@ -1041,14 +1041,14 @@ namespace S_Plus_Class_Kalista.Libaries
     //            if ((_config.Item($"{_orbwalkerName}.MinionComboOrbwalk").GetValue<bool>() && ActiveMode == OrbwalkingMode.Combo))
     //            {
     //                var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-    //                if (target.LSIsValidTarget() && InAutoAttackRange(target))
+    //                if (target.IsValidTarget() && InAutoAttackRange(target))
     //                {
     //                    return target;
     //                }
     //            }
 
     //            //Forced target
-    //            if (_forcedTarget.LSIsValidTarget() && InAutoAttackRange(_forcedTarget))
+    //            if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget))
     //            {
     //                return _forcedTarget;
     //            }
@@ -1061,7 +1061,7 @@ namespace S_Plus_Class_Kalista.Libaries
     //                    ObjectManager.Get<Obj_AI_Minion>()
     //                        .Where(
     //                            minion =>
-    //                                minion.LSIsValidTarget() && InAutoAttackRange(minion))
+    //                                minion.IsValidTarget() && InAutoAttackRange(minion))
     //                                .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
     //                                .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
     //                                .ThenBy(minion => minion.Health)
@@ -1094,21 +1094,21 @@ namespace S_Plus_Class_Kalista.Libaries
     //            {
     //                /* turrets */
     //                foreach (var turret in
-    //                    ObjectManager.Get<Obj_AI_Turret>().Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+    //                    ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
     //                {
     //                    return turret;
     //                }
 
     //                /* inhibitor */
     //                foreach (var turret in
-    //                    ObjectManager.Get<Obj_BarracksDampener>().Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+    //                    ObjectManager.Get<Obj_BarracksDampener>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
     //                {
     //                    return turret;
     //                }
 
     //                /* nexus */
     //                foreach (var nexus in
-    //                    ObjectManager.Get<Obj_HQ>().Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+    //                    ObjectManager.Get<Obj_HQ>().Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
     //                {
     //                    return nexus;
     //                }
@@ -1118,7 +1118,7 @@ namespace S_Plus_Class_Kalista.Libaries
     //            if (ActiveMode != OrbwalkingMode.LastHit)
     //            {
     //                var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-    //                if (target.LSIsValidTarget() && InAutoAttackRange(target))
+    //                if (target.IsValidTarget() && InAutoAttackRange(target))
     //                {
     //                    return target;
     //                }
@@ -1131,7 +1131,7 @@ namespace S_Plus_Class_Kalista.Libaries
     //                    ObjectManager.Get<Obj_AI_Minion>()
     //                        .Where(
     //                            mob =>
-    //                            mob.LSIsValidTarget() && mob.Team == GameObjectTeam.Neutral && this.InAutoAttackRange(mob)
+    //                            mob.IsValidTarget() && mob.Team == GameObjectTeam.Neutral && this.InAutoAttackRange(mob)
     //                            && mob.CharData.BaseSkinName != "gangplankbarrel");
 
     //                result = _config.Item($"{_orbwalkerName}.Smallminionsprio").GetValue<bool>()
@@ -1149,7 +1149,7 @@ namespace S_Plus_Class_Kalista.Libaries
     //            {
     //                if (!ShouldWait())
     //                {
-    //                    if (_prevMinion.LSIsValidTarget() && InAutoAttackRange(_prevMinion))
+    //                    if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion))
     //                    {
     //                        var predHealth = HealthPrediction.LaneClearHealthPrediction(
     //                            _prevMinion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
@@ -1162,7 +1162,7 @@ namespace S_Plus_Class_Kalista.Libaries
 
     //                    result = (from minion in
     //                                  ObjectManager.Get<Obj_AI_Minion>()
-    //                                      .Where(minion => minion.LSIsValidTarget() && InAutoAttackRange(minion) &&
+    //                                      .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) &&
     //                                      (_config.Item($"{_orbwalkerName}.AttackWards").GetValue<bool>() || !MinionManager.IsWard(minion.CharData.BaseSkinName.ToLower())) &&
     //                                      (_config.Item($"{_orbwalkerName}.AttackPetsnTraps").GetValue<bool>() && minion.CharData.BaseSkinName != "jarvanivstandard" || MinionManager.IsMinion(minion, _config.Item($"{_orbwalkerName}.AttackWards").GetValue<bool>())) &&
     //                                      minion.CharData.BaseSkinName != "gangplankbarrel")
@@ -1233,7 +1233,7 @@ namespace S_Plus_Class_Kalista.Libaries
     //            if (_config.Item($"{_orbwalkerName}.EnemyAACircle").GetValue<Circle>().Active)
     //            {
     //                foreach (var target in
-    //                    HeroManager.Enemies.FindAll(target => target.LSIsValidTarget(1175)))
+    //                    HeroManager.Enemies.FindAll(target => target.IsValidTarget(1175)))
     //                {
     //                    Render.Circle.DrawCircle(
     //                        target.Position, GetAttackRange(target),

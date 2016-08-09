@@ -38,7 +38,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void OnProcessSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!W.LSIsReady() || sender == null || args.Target == null || sender.IsAlly || !(sender is AIHeroClient) || !(args.Target is AIHeroClient) || !args.Target.IsAlly || safeGap((AIHeroClient)args.Target))
+            if (!W.IsReady() || sender == null || args.Target == null || sender.IsAlly || !(sender is AIHeroClient) || !(args.Target is AIHeroClient) || !args.Target.IsAlly || safeGap((AIHeroClient)args.Target))
                 return;
             if (W.IsInRange(args.Target))
                 W.CastOnUnit((AIHeroClient)args.Target);
@@ -51,27 +51,27 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private AIHeroClient buffQhero()
         {
-            return HeroManager.Enemies.FirstOrDefault(ene => ene.IsDead && ene.LSHasBuff("BlindMonkQOne"));
+            return HeroManager.Enemies.FirstOrDefault(ene => ene.IsDead && ene.HasBuff("BlindMonkQOne"));
         }
 
         private bool passive
         {
-            get {return player.LSHasBuff("blindmonkpassive_cosmetic");}
+            get {return player.HasBuff("blindmonkpassive_cosmetic");}
         }
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             if(Q.Instance.Name == "BlindMonkQOne")
                 Q.Cast(target);
-            else if (safeGap(target) || target.LSDistance(player,true)<300*300)
+            else if (safeGap(target) || target.Distance(player,true)<300*300)
                 Q.Cast();
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
             if (W.Instance.Name == "blindmonkwtwo")
             {
@@ -82,7 +82,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             if (E.Instance.Name == "BlindMonkEOne")
                 E.Cast();
@@ -92,7 +92,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             if (R.IsKillable(target) || player.HealthPercent<25)
                 R.Cast(target);
@@ -104,7 +104,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void castRMultiple(int min)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
 
             foreach (var enemy in from enemy in HeroManager.Enemies
@@ -120,10 +120,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
                                       From = player.ServerPosition,
                                   }
                                   let output = Prediction.GetPrediction(input)
-                                  where output.Hitchance >= HitChance.Medium && player.LSDistance(output.CastPosition) < R.Range
-                                  let endPos = (player.ServerPosition + output.CastPosition - player.ServerPosition).LSNormalized() * 1000
+                                  where output.Hitchance >= HitChance.Medium && player.Distance(output.CastPosition) < R.Range
+                                  let endPos = (player.ServerPosition + output.CastPosition - player.ServerPosition).Normalized() * 1000
                                   let colObjs = output.CollisionObjects
-                                  where player.LSDistance(endPos) < 1200 && colObjs.Any()
+                                  where player.Distance(endPos) < 1200 && colObjs.Any()
                                   where colObjs.Count >= min
                                   select enemy)
             {
@@ -163,12 +163,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var AllMinions = MinionManager.GetMinions(player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
             foreach (var minion in AllMinions)
             {
-                if (Q.LSIsReady() && Q.GetDamage(minion) > minion.Health)
+                if (Q.IsReady() && Q.GetDamage(minion) > minion.Health)
                 {
                     Q.Cast(minion);
                     return;
                 }
-                if (E.LSIsReady() && E.GetDamage(minion) > minion.Health)
+                if (E.IsReady() && E.GetDamage(minion) > minion.Health)
                 {
                     E.Cast(minion);
                 }

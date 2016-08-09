@@ -67,9 +67,9 @@ using EloBuddy;
 
         private static void OnDraw(EventArgs args)
         {
-            if(DR)Render.Circle.DrawCircle(Player.Position, E.Range + W.Range, E.LSIsReady() && W.LSIsReady() ? Color.LimeGreen : Color.IndianRed);
-            if(DW)Render.Circle.DrawCircle(Player.Position, W.Range, W.LSIsReady() ? Color.LimeGreen : Color.IndianRed);
-            if(DE)Render.Circle.DrawCircle(Player.Position, E.Range, E.LSIsReady() ? Color.LimeGreen : Color.IndianRed);
+            if(DR)Render.Circle.DrawCircle(Player.Position, E.Range + W.Range, E.IsReady() && W.IsReady() ? Color.LimeGreen : Color.IndianRed);
+            if(DW)Render.Circle.DrawCircle(Player.Position, W.Range, W.IsReady() ? Color.LimeGreen : Color.IndianRed);
+            if(DE)Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.LimeGreen : Color.IndianRed);
         }
 
         private static void OnCast(Spellbook sender, SpellbookCastSpellEventArgs args)
@@ -92,9 +92,9 @@ using EloBuddy;
                     var target = (AIHeroClient) args.Target;
                     if (!target.IsDead)
                     {
-                        if (Q.LSIsReady() && CQ) Q.Cast();
+                        if (Q.IsReady() && CQ) Q.Cast();
                         UseCastItem(300);
-                        if ((!Q.LSIsReady() || (Q.LSIsReady() && !CQ)) && CW) W.Cast(target.ServerPosition);
+                        if ((!Q.IsReady() || (Q.IsReady() && !CQ)) && CW) W.Cast(target.ServerPosition);
                     }
                 }
             }
@@ -105,9 +105,9 @@ using EloBuddy;
                     var target = (AIHeroClient)args.Target;
                     if (!target.IsDead)
                     {
-                        if (Q.LSIsReady() && CQ) Q.Cast();
+                        if (Q.IsReady() && CQ) Q.Cast();
                         UseCastItem(300);
-                        if ((!Q.LSIsReady() || (Q.LSIsReady() && !CQ)) && CW) W.Cast(target.ServerPosition);
+                        if ((!Q.IsReady() || (Q.IsReady() && !CQ)) && CW) W.Cast(target.ServerPosition);
                     }
                 }
             }
@@ -118,9 +118,9 @@ using EloBuddy;
                     var target = (AIHeroClient)args.Target;
                     if (!target.IsDead)
                     {
-                        if (Q.LSIsReady() && HQ) Q.Cast();
+                        if (Q.IsReady() && HQ) Q.Cast();
                         UseCastItem(300);
-                        if ((!Q.LSIsReady() || (Q.LSIsReady() && !HQ)) && HW) W.Cast(target.ServerPosition);
+                        if ((!Q.IsReady() || (Q.IsReady() && !HQ)) && HW) W.Cast(target.ServerPosition);
                     }
                 }
             }
@@ -131,7 +131,7 @@ using EloBuddy;
                     var target = (Obj_AI_Minion)args.Target;
                     if (!target.IsDead)
                     {
-                        if (Q.LSIsReady() && LQ) Q.Cast();
+                        if (Q.IsReady() && LQ) Q.Cast();
                         UseCastItem(300);
                     }
                 }
@@ -149,26 +149,26 @@ using EloBuddy;
 
         private static void Killsteal()
         {
-            var targets = HeroManager.Enemies.Where(x => x.LSIsValidTarget() && Player.LSDistance(x.ServerPosition) <= E.Range + W.Range && !x.IsZombie && !x.IsDead);
-            if (W.LSIsReady() && KSW)
+            var targets = HeroManager.Enemies.Where(x => x.IsValidTarget() && Player.Distance(x.ServerPosition) <= E.Range + W.Range && !x.IsZombie && !x.IsDead);
+            if (W.IsReady() && KSW)
             {
                 foreach (var target in targets)
                 {
                     if (target.Health <= W.GetDamage2(target) * 2)
                     {
-                        if (Player.LSDistance(target.ServerPosition) < W.Range && Player.Mana >= W.ManaCost)
+                        if (Player.Distance(target.ServerPosition) < W.Range && Player.Mana >= W.ManaCost)
                         {
                             W.Cast(target.ServerPosition);
                         }
-                        else if (E.LSIsReady() && Player.LSDistance(target.ServerPosition) > W.Range && Player.Mana >= E.ManaCost + W.ManaCost && KSEW)
+                        else if (E.IsReady() && Player.Distance(target.ServerPosition) > W.Range && Player.Mana >= E.ManaCost + W.ManaCost && KSEW)
                         {
                             var minions = MinionManager.GetMinions(E.Range);
                             if (minions.Count != 0)
                             {
                                 foreach (var minion in minions)
                                 {
-                                    if (minion.LSIsValidTarget(E.Range) &&
-                                        minion.LSDistance(target.ServerPosition) <= W.Range)
+                                    if (minion.IsValidTarget(E.Range) &&
+                                        minion.Distance(target.ServerPosition) <= W.Range)
                                     {
                                         TacticalMap.ShowPing(PingCategory.Normal, minion.Position);
                                         E.Cast(minion);
@@ -184,8 +184,8 @@ using EloBuddy;
                                 {
                                     foreach (var hero in heros)
                                     {
-                                        if (hero.LSIsValidTarget(E.Range) &&
-                                            hero.LSDistance(target.ServerPosition) <= W.Range)
+                                        if (hero.IsValidTarget(E.Range) &&
+                                            hero.Distance(target.ServerPosition) <= W.Range)
                                         {
                                             TacticalMap.ShowPing(PingCategory.Normal, hero.Position);
                                             E.Cast(hero);
@@ -203,13 +203,13 @@ using EloBuddy;
         private static void Combo()
         {
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-            if (CR && CRS == 0 && R.LSIsReady() && Player.LSDistance(target.ServerPosition) <= R.Range &&
-                (E.LSIsReady() || (!E.LSIsReady() && !CE)) && R.Instance.Name == IsFirstR) R.Cast();
-            if (!Orbwalker.InAutoAttackRange(target) && E.LSIsReady() && CE && ((CR && CRS == 0 && R.LSIsReady() && R.Instance.Name == IsSecondR) || (CR && CRS == 1 && R.LSIsReady() && R.Instance.Name == IsFirstR) || !R.LSIsReady() || (R.LSIsReady() && !CR))) E.Cast(target);
-            if ((!E.LSIsReady() || (E.LSIsReady() && !CE)) && CW && !Orbwalker.InAutoAttackRange(target) && Player.LSDistance(target) <= W.Range) W.Cast(target.ServerPosition);
-            if (target.Health < R.GetDamage2(target) && Player.LSDistance(target.Position) <= R.Range - 50 && KSR) R.Cast();
-            if (R.LSIsReady() && CR && CRS == 1 && Player.LSDistance(target.ServerPosition) <= R.Range &&
-                (!E.LSIsReady() || (E.LSIsReady() && !CE)) && (!W.LSIsReady() || (W.LSIsReady() && !CW)))
+            if (CR && CRS == 0 && R.IsReady() && Player.Distance(target.ServerPosition) <= R.Range &&
+                (E.IsReady() || (!E.IsReady() && !CE)) && R.Instance.Name == IsFirstR) R.Cast();
+            if (!Orbwalker.InAutoAttackRange(target) && E.IsReady() && CE && ((CR && CRS == 0 && R.IsReady() && R.Instance.Name == IsSecondR) || (CR && CRS == 1 && R.IsReady() && R.Instance.Name == IsFirstR) || !R.IsReady() || (R.IsReady() && !CR))) E.Cast(target);
+            if ((!E.IsReady() || (E.IsReady() && !CE)) && CW && !Orbwalker.InAutoAttackRange(target) && Player.Distance(target) <= W.Range) W.Cast(target.ServerPosition);
+            if (target.Health < R.GetDamage2(target) && Player.Distance(target.Position) <= R.Range - 50 && KSR) R.Cast();
+            if (R.IsReady() && CR && CRS == 1 && Player.Distance(target.ServerPosition) <= R.Range &&
+                (!E.IsReady() || (E.IsReady() && !CE)) && (!W.IsReady() || (W.IsReady() && !CW)))
             {
                 R.Cast();
                 R.Cast();
@@ -219,8 +219,8 @@ using EloBuddy;
         private static void Harass()
         {
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-            if (!Orbwalker.InAutoAttackRange(target) && E.LSIsReady() && HE) E.Cast(target);
-            if ((!E.LSIsReady() || (E.LSIsReady() && !HE)) && HW && !Orbwalker.InAutoAttackRange(target) && Player.LSDistance(target) <= W.Range) W.Cast(target.ServerPosition);
+            if (!Orbwalker.InAutoAttackRange(target) && E.IsReady() && HE) E.Cast(target);
+            if ((!E.IsReady() || (E.IsReady() && !HE)) && HW && !Orbwalker.InAutoAttackRange(target) && Player.Distance(target) <= W.Range) W.Cast(target.ServerPosition);
         }
 
         private static void JungleClear()
@@ -230,13 +230,13 @@ using EloBuddy;
             if (Mobs.Count <= 0)
                 return;
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
 
                 List<Vector2> minionVec2List = new List<Vector2>();
 
                 foreach (var Mob in Mobs)
-                    minionVec2List.Add(Mob.ServerPosition.LSTo2D());
+                    minionVec2List.Add(Mob.ServerPosition.To2D());
 
                 var MaxHit = MinionManager.GetBestCircularFarmLocation(minionVec2List, 200f, W.Range);
 
@@ -252,18 +252,18 @@ using EloBuddy;
             if (Minions.Count <= 0)
                 return;
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
 
                 List<Vector2> minionVec2List = new List<Vector2>();
 
                 foreach (var Minion in Minions)
-                    minionVec2List.Add(Minion.ServerPosition.LSTo2D());
+                    minionVec2List.Add(Minion.ServerPosition.To2D());
 
                 var MaxHit = MinionManager.GetBestCircularFarmLocation(minionVec2List, 200f, W.Range);
                 for (int i = 20;i > 0;i--)
                     if (MaxHit.MinionsHit >= minhit)
-                    if (MaxHit.MinionsHit >= i && W.LSIsReady() && LW) W.Cast(MaxHit.Position);
+                    if (MaxHit.MinionsHit >= i && W.IsReady() && LW) W.Cast(MaxHit.Position);
             }
         }
 
@@ -353,9 +353,9 @@ using EloBuddy;
             if (enemy != null)
             {
                 float damage = 0;
-                if (Q.LSIsReady()) damage += Q.GetDamage2(enemy) + (float)Player.GetAutoAttackDamage2(enemy);
-                if (W.LSIsReady()) damage += W.GetDamage2(enemy) * 2;
-                if (R.LSIsReady()) damage += R.GetDamage2(enemy) * 2;
+                if (Q.IsReady()) damage += Q.GetDamage2(enemy) + (float)Player.GetAutoAttackDamage2(enemy);
+                if (W.IsReady()) damage += W.GetDamage2(enemy) * 2;
+                if (R.IsReady()) damage += R.GetDamage2(enemy) * 2;
                 if (HasItem()) damage += (float)Player.GetAutoAttackDamage2(enemy) * 0.7f;
 
                 return damage;
@@ -367,7 +367,7 @@ using EloBuddy;
             foreach (
                 var enemy in
                     ObjectManager.Get<AIHeroClient>()
-                        .Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                        .Where(ene => ene.IsValidTarget() && !ene.IsZombie))
             {
                 if (Dind)
                 {

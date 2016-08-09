@@ -36,7 +36,7 @@ using EloBuddy;
             get
             {
                 return KillableEnemy != null && KillableEnemy.Position.IsOnScreen() &&
-                       SupportedHeros[ProSeries.Player.ChampionName].LSIsReady() &&
+                       SupportedHeros[ProSeries.Player.ChampionName].IsReady() &&
                        ProSeries.Config.SubMenu("Drawings").Item("Crosshair", true).GetValue<bool>();
             }
         }
@@ -50,9 +50,9 @@ using EloBuddy;
                         .OrderBy(hero => hero.Health)
                         .FirstOrDefault(
                             hero =>
-                                hero.LSIsValidTarget(3000f) &&
+                                hero.IsValidTarget(3000f) &&
                                 hero.Health <=
-                                ProSeries.Player.LSGetSpellDamage(hero, SupportedHeros[ProSeries.Player.ChampionName]));
+                                ProSeries.Player.GetSpellDamage(hero, SupportedHeros[ProSeries.Player.ChampionName]));
             }
         }
 

@@ -32,7 +32,7 @@ using EloBuddy;
                 var selectedTarget = TargetSelector.GetTarget(maxAaRange, TargetSelector.DamageType.Physical);
                 var jinxBaseRange = JinxUtility.GetMinigunRange(selectedTarget);
 
-                if (selectedTarget.LSIsValidTarget())
+                if (selectedTarget.IsValidTarget())
                 {
                     var manaItem = Variables.Menu.Item($"iseriesr.{ObjectManager.Player.ChampionName.ToLower()}.{Variables.Orbwalker.ActiveMode.ToString().ToLower()}.mm.{SpellSlot.Q.ToString().ToLower()}");
                     var manaCondition = (manaItem != null && ObjectManager.Player.ManaPercent >= manaItem.GetValue<Slider>().Value);
@@ -42,10 +42,10 @@ using EloBuddy;
                          //If we can kill the target within 3 AAs then don't switch.
                          //Jinx Q uses 20 mana for each AA. So check if we can do the 3 AAs.
                          //And also check if the target is not about to escape our AA range.
-                            if (selectedTarget.Health + 5 <= ObjectManager.Player.LSGetAutoAttackDamage(selectedTarget) * 3 
+                            if (selectedTarget.Health + 5 <= ObjectManager.Player.GetAutoAttackDamage(selectedTarget) * 3 
                                 && (ObjectManager.Player.Mana - 20 * 3 > 0)
-                                && !(selectedTarget.LSDistance(ObjectManager.Player) > JinxUtility.GetFishboneRange() * 0.9f 
-                                && (ObjectManager.Player.ServerPosition.LSDistance((selectedTarget.ServerPosition.LSTo2D() + selectedTarget.Direction.LSTo2D().LSPerpendicular() * (300 + 65f)).To3D()) > ObjectManager.Player.LSDistance(selectedTarget.ServerPosition))
+                                && !(selectedTarget.Distance(ObjectManager.Player) > JinxUtility.GetFishboneRange() * 0.9f 
+                                && (ObjectManager.Player.ServerPosition.Distance((selectedTarget.ServerPosition.To2D() + selectedTarget.Direction.To2D().Perpendicular() * (300 + 65f)).To3D()) > ObjectManager.Player.Distance(selectedTarget.ServerPosition))
                                 ))
                             {
                                 return;
@@ -61,7 +61,7 @@ using EloBuddy;
 
                         //If the distance from the selected target is less than the minigun base range. And it has no enemies in 150 (AOE) range within it.
                         //Swap to minigun.
-                        if (ObjectManager.Player.LSDistance(selectedTarget) < jinxBaseRange && !(selectedTarget.ServerPosition.LSCountEnemiesInRange(150) >= 2))
+                        if (ObjectManager.Player.Distance(selectedTarget) < jinxBaseRange && !(selectedTarget.ServerPosition.CountEnemiesInRange(150) >= 2))
                         {
                             Variables.spells[SpellSlot.Q].Cast();
                         }
@@ -70,7 +70,7 @@ using EloBuddy;
                     {
                         //If the distance is greater than our current AA range or the selected target has enemies in AOE range.
                         //Swap to fishbone
-                        if (ObjectManager.Player.LSDistance(selectedTarget) > jinxBaseRange || (selectedTarget.ServerPosition.LSCountEnemiesInRange(150) >= 2))
+                        if (ObjectManager.Player.Distance(selectedTarget) > jinxBaseRange || (selectedTarget.ServerPosition.CountEnemiesInRange(150) >= 2))
                         {
                             Variables.spells[SpellSlot.Q].Cast();
                         }
@@ -84,7 +84,7 @@ using EloBuddy;
             if (Variables.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
                 && JinxUtility.IsFishBone()
                 && MenuExtensions.GetItemValue<bool>("iseriesr.jinx.q.switch.noenemies")
-                && ObjectManager.Player.LSCountEnemiesInRange(1500) < 1)
+                && ObjectManager.Player.CountEnemiesInRange(1500) < 1)
             {
                 Variables.spells[SpellSlot.Q].Cast();
             }
@@ -143,8 +143,8 @@ using EloBuddy;
                             //If our target is a minion.
                             var tgMinion = target as Obj_AI_Minion;
                             //If there are minions near the one we are AAing and they are at least 3 killable minions.
-                            if (GameObjects.EnemyMinions.Count(minion => minion.LSDistance(tgMinion) < 150 
-                                && minion.Health <= (ObjectManager.Player.LSGetAutoAttackDamage(minion) * 1.1f) * 3) >= 3)
+                            if (GameObjects.EnemyMinions.Count(minion => minion.Distance(tgMinion) < 150 
+                                && minion.Health <= (ObjectManager.Player.GetAutoAttackDamage(minion) * 1.1f) * 3) >= 3)
                             {
                                 if (!JinxUtility.IsFishBone())
                                 {

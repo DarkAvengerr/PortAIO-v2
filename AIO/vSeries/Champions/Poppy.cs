@@ -73,13 +73,13 @@ using EloBuddy;
 
         private static void PoppyInterrupter(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (sender.IsEnemy && MenuCheck("poppy.interrupter", Config) && sender.LSIsValidTarget(E.Range) &&
+            if (sender.IsEnemy && MenuCheck("poppy.interrupter", Config) && sender.IsValidTarget(E.Range) &&
                 args.DangerLevel >= Interrupter2.DangerLevel.High)
             {
                 E.Cast(sender);
             }
-            else if (sender.IsEnemy && MenuCheck("poppy.interrupter", Config) && sender.LSIsValidTarget(125) &&
-                args.DangerLevel >= Interrupter2.DangerLevel.High && !E.LSIsReady())
+            else if (sender.IsEnemy && MenuCheck("poppy.interrupter", Config) && sender.IsValidTarget(125) &&
+                args.DangerLevel >= Interrupter2.DangerLevel.High && !E.IsReady())
             {
                 R.Cast(sender.Position);
             }
@@ -87,7 +87,7 @@ using EloBuddy;
 
         private static void PoppyOnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (W.LSIsReady() && MenuCheck("poppy.gapcloser", Config) && gapcloser.Sender.LSIsValidTarget(W.Range))
+            if (W.IsReady() && MenuCheck("poppy.gapcloser", Config) && gapcloser.Sender.IsValidTarget(W.Range))
             {
                 W.Cast();
             }
@@ -108,10 +108,10 @@ using EloBuddy;
 
         public static bool CheckWalls(Obj_AI_Base p, Obj_AI_Base e)
         {
-            var d = ObjectManager.Player.Position.LSDistance(e.Position);
+            var d = ObjectManager.Player.Position.Distance(e.Position);
             for (int i = 1; i < 6; i++)
             {
-                if (ObjectManager.Player.Position.LSExtend(e.Position, d + 300 * i).LSIsWall())
+                if (ObjectManager.Player.Position.Extend(e.Position, d + 300 * i).IsWall())
                 {
                     return true;
                 }
@@ -121,12 +121,12 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (E.LSIsReady() && MenuCheck("poppy.e.combo", Config))
+            if (E.IsReady() && MenuCheck("poppy.e.combo", Config))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range)))
                 {
                     var targetPosition = E.GetPrediction(enemy).UnitPosition;
-                    var pushDirection = (targetPosition - ObjectManager.Player.ServerPosition).LSNormalized();
+                    var pushDirection = (targetPosition - ObjectManager.Player.ServerPosition).Normalized();
                     float checkDistance = 300 / 6;
                     
                     for (int i = 1; i < 6; i++)
@@ -143,9 +143,9 @@ using EloBuddy;
                 }
             }
 
-            if (Q.LSIsReady() && MenuCheck("poppy.q.combo", Config))
+            if (Q.IsReady() && MenuCheck("poppy.q.combo", Config))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                 {
                     Q.Cast(enemy);
                 }
@@ -159,20 +159,20 @@ using EloBuddy;
                 return;
             }
 
-            if (Q.LSIsReady() && MenuCheck("poppy.q.harass", Config))
+            if (Q.IsReady() && MenuCheck("poppy.q.harass", Config))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                 {
                     Q.Cast(enemy);
                 }
             }
 
-            if (E.LSIsReady() && MenuCheck("poppy.e.harass", Config))
+            if (E.IsReady() && MenuCheck("poppy.e.harass", Config))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range)))
                 {
                     var targetPosition = E.GetPrediction(enemy).UnitPosition;
-                    var pushDirection = (targetPosition - ObjectManager.Player.ServerPosition).LSNormalized();
+                    var pushDirection = (targetPosition - ObjectManager.Player.ServerPosition).Normalized();
                     float checkDistance = 300 / 6;
                     
                     for (int i = 1; i < 6; i++)
@@ -191,22 +191,22 @@ using EloBuddy;
         }
         private static void PoppyOnDraw(EventArgs args)
         {
-            if (Q.LSIsReady() && ActiveCheck("poppy.q.draw", Config))
+            if (Q.IsReady() && ActiveCheck("poppy.q.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, GetColor("poppy.q.draw", Config));
             }
 
-            if (W.LSIsReady() && ActiveCheck("poppy.w.draw", Config))
+            if (W.IsReady() && ActiveCheck("poppy.w.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, GetColor("poppy.w.draw", Config));
             }
 
-            if (E.LSIsReady() && ActiveCheck("poppy.e.draw", Config))
+            if (E.IsReady() && ActiveCheck("poppy.e.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, GetColor("poppy.e.draw", Config));
             }
 
-            if (R.LSIsReady() && ActiveCheck("poppy.r.draw", Config))
+            if (R.IsReady() && ActiveCheck("poppy.r.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, GetColor("poppy.r.draw", Config));
             }

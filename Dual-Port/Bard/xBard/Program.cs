@@ -136,7 +136,7 @@ using EloBuddy;
         {
             if (sender.IsValid && sender.Name.ToLower() == "bardchimeminion")
             {
-                Cords.Add(sender.Position.LSTo2D().To3D());
+                Cords.Add(sender.Position.To2D().To3D());
             }
         }
 
@@ -168,7 +168,7 @@ using EloBuddy;
 
             if (Menu.Item("DrawRPred").GetValue<bool>())
             {
-                if (R.LSIsReady())
+                if (R.IsReady())
                 {
                     var target2 = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
                     if (target2 == null)
@@ -192,7 +192,7 @@ using EloBuddy;
                 if (Cords.Count != 0)
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Cords.FirstOrDefault());
-                    if (Cords.FirstOrDefault().LSTo2D() == Player.Position.LSTo2D())
+                    if (Cords.FirstOrDefault().To2D() == Player.Position.To2D())
                     {
                         Cords.RemoveAt(0);
                     }
@@ -238,9 +238,9 @@ using EloBuddy;
 
         private static void UseRcomboTower()
         {
-            if (Player.LSUnderTurret(true))
+            if (Player.UnderTurret(true))
             {
-                var enemyturret = ObjectManager.Get<Obj_AI_Turret>().Where(turret => turret.IsEnemy && !turret.IsDead).OrderBy(turret => Player.LSDistance(turret.ServerPosition)).FirstOrDefault();
+                var enemyturret = ObjectManager.Get<Obj_AI_Turret>().Where(turret => turret.IsEnemy && !turret.IsDead).OrderBy(turret => Player.Distance(turret.ServerPosition)).FirstOrDefault();
                 if (enemyturret.IsAttackingPlayer)
                 {
                     if (Player.HealthPercent <= Menu.Item("UseRcomboTowerHP").GetValue<Slider>().Value)
@@ -258,7 +258,7 @@ using EloBuddy;
 
             if (prediction2.Hitchance >= HitChance.High)
             {
-                var hits = HeroManager.Enemies.Where(x => x.LSDistance(target2) <= 350f).ToList();
+                var hits = HeroManager.Enemies.Where(x => x.Distance(target2) <= 350f).ToList();
                 if (hits.Any(hit => hits.Count >= Menu.Item("UseRcomboCountAuto").GetValue<Slider>().Value))
                 {
                     R.Cast(prediction2.CastPosition);
@@ -268,8 +268,8 @@ using EloBuddy;
 
         private static void HealAlly() 
         {
-            var target = HeroManager.Allies.OrderBy(x => x.Health).FirstOrDefault(f => f.LSDistance(Player.Position) < W.Range);
-            if (Player.LSIsRecalling())
+            var target = HeroManager.Allies.OrderBy(x => x.Health).FirstOrDefault(f => f.Distance(Player.Position) < W.Range);
+            if (Player.IsRecalling())
             {
                 return;
             }
@@ -284,7 +284,7 @@ using EloBuddy;
 
         private static void SaveAlly()
         {
-            var target = HeroManager.Allies.OrderBy(x => x.Health).FirstOrDefault(f => f.LSDistance(Player.Position) < W.Range);
+            var target = HeroManager.Allies.OrderBy(x => x.Health).FirstOrDefault(f => f.Distance(Player.Position) < W.Range);
             if (target == null)
             {
                 return;
@@ -293,7 +293,7 @@ using EloBuddy;
             {
                 if (target.HealthPercent <= Menu.Item("RSettingsHealthPercent." + target.ChampionName.ToLower()).GetValue<Slider>().Value)
                 {
-                    if (target.LSCountAlliesInRange(600) >= 1 || target.LSCountEnemiesInRange(600) >= 1)
+                    if (target.CountAlliesInRange(600) >= 1 || target.CountEnemiesInRange(600) >= 1)
                     {
                         R.CastIfHitchanceEquals(target, HitChance.Medium);
                     }                
@@ -354,7 +354,7 @@ using EloBuddy;
             for (var i = 15; i < 450; i += 75)
             {
                 if (i > 450) return false;
-                var posCF = NavMesh.GetCollisionFlags(prediction.UnitPosition.LSTo2D().LSExtend(ObjectManager.Player.ServerPosition.LSTo2D(), -i).To3D());
+                var posCF = NavMesh.GetCollisionFlags(prediction.UnitPosition.To2D().Extend(ObjectManager.Player.ServerPosition.To2D(), -i).To3D());
                 if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
                 {
                     return true;
@@ -368,7 +368,7 @@ using EloBuddy;
         {
             if (Menu.Item("UseQGapCloser").GetValue<bool>())
             {
-                if (gapcloser.Sender.LSIsValidTarget(Q.Range))
+                if (gapcloser.Sender.IsValidTarget(Q.Range))
                 {
                     Render.Circle.DrawCircle(gapcloser.Sender.Position, gapcloser.Sender.BoundingRadius, Color.Gold, 5);
                     var targetpos = Drawing.WorldToScreen(gapcloser.Sender.Position);
@@ -380,8 +380,8 @@ using EloBuddy;
 
         private static void AutoWNearTower()
         {
-            var myturret = ObjectManager.Get<Obj_AI_Turret>().Where(turret => turret.IsAlly && !turret.IsDead).OrderBy(turret => Player.LSDistance(turret.ServerPosition)).FirstOrDefault();
-            if (Player.LSUnderAllyTurret())
+            var myturret = ObjectManager.Get<Obj_AI_Turret>().Where(turret => turret.IsAlly && !turret.IsDead).OrderBy(turret => Player.Distance(turret.ServerPosition)).FirstOrDefault();
+            if (Player.UnderAllyTurret())
             {
                 if (Player.ManaPercent >= Menu.Item("AutoWNearTowerMana").GetValue<Slider>().Value)
                 {
@@ -479,8 +479,8 @@ using EloBuddy;
 
             if (Menu.Item("UseEcombo").GetValue<bool>())
             {
-                var pred = ObjectManager.Player.ServerPosition.LSTo2D() + ObjectManager.Player.Direction.LSTo2D().LSPerpendicular() * (ObjectManager.Player.BoundingRadius * 2.5f);
-                if (LeagueSharp.Common.Utility.LSIsWall(pred))
+                var pred = ObjectManager.Player.ServerPosition.To2D() + ObjectManager.Player.Direction.To2D().Perpendicular() * (ObjectManager.Player.BoundingRadius * 2.5f);
+                if (LeagueSharp.Common.Utility.IsWall(pred))
                 {
                     var targetpos = Drawing.WorldToScreen(Player.ServerPosition);
                     Drawing.DrawText(targetpos[0] - 40, targetpos[1] + 20, Color.Gold, "wall");
@@ -495,7 +495,7 @@ using EloBuddy;
 
                 if (prediction2.Hitchance >= HitChance.High)
                 {
-                    var hits = HeroManager.Enemies.Where(x => x.LSDistance(target2) <= 350f).ToList();
+                    var hits = HeroManager.Enemies.Where(x => x.Distance(target2) <= 350f).ToList();
                     if (hits.Any(hit => hits.Count >= Menu.Item("UseRcomboCount").GetValue<Slider>().Value))
                     {
                         R.Cast(prediction2.CastPosition);

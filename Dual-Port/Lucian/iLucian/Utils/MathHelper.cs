@@ -34,8 +34,8 @@ using EloBuddy;
                     return new Vector2(0, 0);
                 if (One)
                     return Inter1;
-                var dist1 = target.LSDistance(Inter1, true);
-                var dist2 = target.LSDistance(Inter2, true);
+                var dist1 = target.Distance(Inter1, true);
+                var dist2 = target.Distance(Inter2, true);
 
                 return dist1 > dist2 ? Inter2 : Inter1;
             }

@@ -56,7 +56,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.Logic.Killsteal
             var target =
                 HeroManager.Enemies.FirstOrDefault(
                     x =>
-                    !x.IsDead && x.LSIsValidTarget(this.Menu.Item(this.Menu.Name + "RRange").GetValue<Slider>().Value));
+                    !x.IsDead && x.IsValidTarget(this.Menu.Item(this.Menu.Name + "RRange").GetValue<Slider>().Value));
 
             if (target == null || target.Health > this.rLogic.GetDmg(target)) return;
 

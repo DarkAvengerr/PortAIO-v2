@@ -89,7 +89,7 @@ namespace SebbyLib
         /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs"/> instance containing the event data.</param>
         private static void ObjAiBaseOnOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if ( sender.Team != ObjectManager.Player.Team || !sender.LSIsValidTarget(3000, false) || !Orbwalking.IsAutoAttack(args.SData.Name) || !(args.Target is Obj_AI_Base))
+            if ( sender.Team != ObjectManager.Player.Team || !sender.IsValidTarget(3000, false) || !Orbwalking.IsAutoAttack(args.SData.Name) || !(args.Target is Obj_AI_Base))
             {
                 return;
             }
@@ -105,7 +105,7 @@ namespace SebbyLib
                 sender.AttackCastDelay * 1000,
                 sender.AttackDelay * 1000 - (sender is Obj_AI_Turret ? 70 : 0),
                 sender.IsMelee ? int.MaxValue : (int)args.SData.MissileSpeed,
-                (float)sender.LSGetAutoAttackDamage(target, true));
+                (float)sender.GetAutoAttackDamage(target, true));
             ActiveAttacks.Add(sender.NetworkId, attackData);
         }
 
@@ -117,10 +117,10 @@ namespace SebbyLib
             {
                 var attackDamage = 0f;
                 if (!attack.Processed &&
-                    attack.Target.LSIsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
+                    attack.Target.IsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
                 {
 
-                    float bonding = Math.Max(attack.Target.BoundingRadius, unit.LSDistance(attack.StartPos) - attack.Source.BoundingRadius);
+                    float bonding = Math.Max(attack.Target.BoundingRadius, unit.Distance(attack.StartPos) - attack.Source.BoundingRadius);
                     if(attack.Source.IsMelee )
                     {
                         bonding = 0;
@@ -148,8 +148,8 @@ namespace SebbyLib
             {
                 var n = 0;
                 if (Utils.GameTimeTickCount - 100 <= attack.StartTick + attack.AnimationTime &&
-                    attack.Target.LSIsValidTarget(float.MaxValue, false) &&
-                    attack.Source.LSIsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
+                    attack.Target.IsValidTarget(float.MaxValue, false) &&
+                    attack.Source.IsValidTarget(float.MaxValue, false) && attack.Target.NetworkId == unit.NetworkId)
                 {
                     var fromT = attack.StartTick;
                     var toT = Utils.GameTimeTickCount + time;
@@ -157,7 +157,7 @@ namespace SebbyLib
                     while (fromT < toT)
                     {
                         if (fromT >= Utils.GameTimeTickCount &&
-                            (fromT + attack.Delay + Math.Max(0, unit.LSDistance(attack.Source) - attack.Source.BoundingRadius / 2) / attack.ProjectileSpeed < toT))
+                            (fromT + attack.Delay + Math.Max(0, unit.Distance(attack.Source) - attack.Source.BoundingRadius / 2) / attack.ProjectileSpeed < toT))
                         {
                             n++;
                         }

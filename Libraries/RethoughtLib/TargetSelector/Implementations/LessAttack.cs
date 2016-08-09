@@ -25,10 +25,10 @@ using EloBuddy; namespace RethoughtLib.TargetSelector.Implementations
 
                 while (targetHealth > 0)
                 {
-                    targetHealth -= (float) requester.LSGetAutoAttackDamage(target);
+                    targetHealth -= (float) requester.GetAutoAttackDamage(target);
                 }
             }
-            return targets.MinOrDefault(x => x.Health / requester.LSGetAutoAttackDamage(x, true));
+            return targets.MinOrDefault(x => x.Health / requester.GetAutoAttackDamage(x, true));
         }
     }
 }

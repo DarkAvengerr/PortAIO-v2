@@ -39,12 +39,12 @@ using EloBuddy;
                 return;
             }
 
-            if (Spells.Q.LSIsReady() && Menus.Config.Item("q.clear").GetValue<bool>()) // done working
+            if (Spells.Q.IsReady() && Menus.Config.Item("q.clear").GetValue<bool>()) // done working
             {
                 ExecuteQ();
             }
 
-            if (Spells.W.LSIsReady() && Menus.Config.Item("w.clear").GetValue<bool>()) // done working
+            if (Spells.W.IsReady() && Menus.Config.Item("w.clear").GetValue<bool>()) // done working
             {
                 ExecuteW();
             }

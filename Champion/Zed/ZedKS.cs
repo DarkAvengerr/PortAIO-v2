@@ -39,14 +39,14 @@ using EloBuddy; namespace KoreanZed
 
         private void Game_OnUpdate(EventArgs args)
         {
-            if (q.LSIsReady() && player.Mana > q.ManaCost)
+            if (q.IsReady() && player.Mana > q.ManaCost)
             {
-                foreach (AIHeroClient objAiHero in player.LSGetEnemiesInRange(q.Range).Where(hero => !hero.IsDead && !hero.IsZombie && q.IsKillable(hero)))
+                foreach (AIHeroClient objAiHero in player.GetEnemiesInRange(q.Range).Where(hero => !hero.IsDead && !hero.IsZombie && q.IsKillable(hero)))
                 {
                     PredictionOutput predictionOutput = q.GetPrediction(objAiHero);
 
                     if ((predictionOutput.Hitchance >= HitChance.High) &&
-                        ((!q.GetCollision(player.Position.LSTo2D(), new List<Vector2> { predictionOutput.CastPosition.LSTo2D() }).Any())
+                        ((!q.GetCollision(player.Position.To2D(), new List<Vector2> { predictionOutput.CastPosition.To2D() }).Any())
                         || q.GetDamage(objAiHero) / 2 > objAiHero.Health))
                     {
                         q.Cast(predictionOutput.CastPosition);
@@ -54,9 +54,9 @@ using EloBuddy; namespace KoreanZed
                 }
             }
 
-            if (e.LSIsReady() && player.Mana > e.ManaCost)
+            if (e.IsReady() && player.Mana > e.ManaCost)
             {
-                if (player.LSGetEnemiesInRange(e.Range).Any(hero => !hero.IsDead && !hero.IsZombie && e.IsKillable(hero)))
+                if (player.GetEnemiesInRange(e.Range).Any(hero => !hero.IsDead && !hero.IsZombie && e.IsKillable(hero)))
                 {
                     e.Cast();
                 }
@@ -67,14 +67,14 @@ using EloBuddy; namespace KoreanZed
                 return;
             }
 
-            List<AIHeroClient> heroList = ObjectManager.Player.LSGetEnemiesInRange(2000F);
+            List<AIHeroClient> heroList = ObjectManager.Player.GetEnemiesInRange(2000F);
             if (heroList.Count() == 1)
             {
                 AIHeroClient target = heroList.FirstOrDefault();
 
-                if (target != null && zedShadows.CanCast && player.LSDistance(target) > Orbwalking.GetRealAutoAttackRange(target) 
-                    && player.LSDistance(target) < w.Range + Orbwalking.GetRealAutoAttackRange(target)
-                    && player.LSGetAutoAttackDamage(target) > target.Health && player.Mana > w.ManaCost)
+                if (target != null && zedShadows.CanCast && player.Distance(target) > Orbwalking.GetRealAutoAttackRange(target) 
+                    && player.Distance(target) < w.Range + Orbwalking.GetRealAutoAttackRange(target)
+                    && player.GetAutoAttackDamage(target) > target.Health && player.Mana > w.ManaCost)
                 {
                     zedShadows.Cast(target.Position);
                     zedShadows.Switch();

@@ -111,15 +111,15 @@ using EloBuddy; namespace xSaliceResurrected.ADC
         {
             double comboDamage = 0;
 
-            if (Q.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.Q);
+            if (Q.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.Q);
 
-            if (W.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.W);
+            if (W.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.W);
 
             comboDamage = ItemManager.CalcDamage(target, comboDamage);
 
-            return (float)(comboDamage + Player.LSGetAutoAttackDamage(target) * 2);
+            return (float)(comboDamage + Player.GetAutoAttackDamage(target) * 2);
         }
 
         private void Combo()
@@ -158,15 +158,15 @@ using EloBuddy; namespace xSaliceResurrected.ADC
             if ((target != null && source == "Combo") && menu.Item("Always_Use", true).GetValue<bool>())
                 return;
 
-            if (useW && W.LSIsReady())
+            if (useW && W.IsReady())
                 W.CastIfHitchanceEquals(target, HitChance.High);
         }
 
         protected override void AfterAttack(AttackableUnit unit, AttackableUnit mytarget)
         {
-            if (menu.Item("UseQCombo", true).GetValue<bool>() && Q.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            if (menu.Item("UseQCombo", true).GetValue<bool>() && Q.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if (ObjectManager.Player.LSCountEnemiesInRange(450) == 0 && ObjectManager.Player.AttackRange < 600)
+                if (ObjectManager.Player.CountEnemiesInRange(450) == 0 && ObjectManager.Player.AttackRange < 600)
                 {
                     return;
                 }

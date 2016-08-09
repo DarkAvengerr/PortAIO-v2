@@ -12,7 +12,7 @@ namespace SharpShooter
             Console.WriteLine("SharpShooter: HelloWorld!");
 
             var now = DateTime.Now;
-            if (now.Month == 4 && now.Day == 1 && ObjectManager.Player.LSInFountain())
+            if (now.Month == 4 && now.Day == 1 && ObjectManager.Player.InFountain())
             {
                 Chat.Print("Your license to use SharpShooter has expired. you can buy a license to use SharpShooter for 1 month for $200, 6 months for only $1000. if you want to renew your license, contact xcsoft");
                 LeagueSharp.Common.Utility.DelayAction.Add(10000, Load);

@@ -142,11 +142,11 @@ using EloBuddy; namespace Support.Plugins
 
         private void CastPassive()
         {
-            if (!this.Passive.LSIsReady())
+            if (!this.Passive.IsReady())
             {
                 return;
             }
-            if (!this.Target.LSIsValidTarget(this.E.Range))
+            if (!this.Target.IsValidTarget(this.E.Range))
             {
                 return;
             }
@@ -155,7 +155,7 @@ using EloBuddy; namespace Support.Plugins
 
         private void CastW(Vector3 v)
         {
-            if (!this.W.LSIsReady())
+            if (!this.W.IsReady())
             {
                 return;
             }

@@ -22,7 +22,7 @@ namespace Mundo
 
                 q.SetSkillshot(0.275f, 60, 2000, true, SkillshotType.SkillshotLine);
 
-                ignite = ObjectManager.Player.Spellbook.GetSpell(ObjectManager.Player.LSGetSpellSlot("summonerdot"));
+                ignite = ObjectManager.Player.Spellbook.GetSpell(ObjectManager.Player.GetSpellSlot("summonerdot"));
             }
             catch (Exception exception)
             {

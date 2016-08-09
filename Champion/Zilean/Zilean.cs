@@ -169,7 +169,7 @@ using EloBuddy; namespace ElZilean
                     return;
                 }
 
-                var igniteSlot = Player.LSGetSpellSlot("summonerdot");
+                var igniteSlot = Player.GetSpellSlot("summonerdot");
                 if (igniteSlot != SpellSlot.Unknown)
                 {
                     IgniteSpell = new Spell(igniteSlot, 600f);
@@ -343,7 +343,7 @@ using EloBuddy; namespace ElZilean
             {
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                 {
-                    if (Q.LSIsReady())
+                    if (Q.IsReady())
                     {
                         args.Process = false;
                     }
@@ -356,7 +356,7 @@ using EloBuddy; namespace ElZilean
         /// </summary>
         private static void HandleIgnite()
         {
-            if (Player.LSGetSpellSlot("summonerdot") == SpellSlot.Unknown)
+            if (Player.GetSpellSlot("summonerdot") == SpellSlot.Unknown)
             {
                 return;
             }
@@ -364,7 +364,7 @@ using EloBuddy; namespace ElZilean
             var kSableEnemy =
                 HeroManager.Enemies.FirstOrDefault(
                     hero =>
-                    hero.LSIsValidTarget(550f) && !hero.LSHasBuff("summonerdot") && !hero.IsZombie
+                    hero.IsValidTarget(550f) && !hero.HasBuff("summonerdot") && !hero.IsZombie
                     && Player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite) >= hero.Health);
 
             if (kSableEnemy != null)
@@ -386,7 +386,7 @@ using EloBuddy; namespace ElZilean
 
         private static void MouseCombo()
         {
-            if (IsActive("ElZilean.Combo.Q") && Q.LSIsReady())
+            if (IsActive("ElZilean.Combo.Q") && Q.IsReady())
             {
                 Q.Cast(Game.CursorPos);
                 LeagueSharp.Common.Utility.DelayAction.Add(100, () => W.Cast());
@@ -404,7 +404,7 @@ using EloBuddy; namespace ElZilean
                 return;
             }
 
-            if (IsActive("ElZilean.Combo.Q") && Q.LSIsReady() && target.LSIsValidTarget(Q.Range))
+            if (IsActive("ElZilean.Combo.Q") && Q.IsReady() && target.IsValidTarget(Q.Range))
             {
                 var pred = Q.GetPrediction(target);
                 if (pred.Hitchance >= HitChance.VeryHigh)
@@ -414,13 +414,13 @@ using EloBuddy; namespace ElZilean
             }
 
             // Check if target has a bomb
-            var isBombed = HeroManager.Enemies.Find(x => x.LSHasBuff("ZileanQEnemyBomb") && x.LSIsValidTarget(Q.Range));
-            if (!isBombed.LSIsValidTarget())
+            var isBombed = HeroManager.Enemies.Find(x => x.HasBuff("ZileanQEnemyBomb") && x.IsValidTarget(Q.Range));
+            if (!isBombed.IsValidTarget())
             {
                 return;
             }
 
-            if (isBombed != null && isBombed.LSIsValidTarget(Q.Range))
+            if (isBombed != null && isBombed.IsValidTarget(Q.Range))
             {
                 if (Q.Instance.CooldownExpires - Game.Time < 3)
                 {
@@ -433,9 +433,9 @@ using EloBuddy; namespace ElZilean
                 }
             }
 
-            if (IsActive("ElZilean.Combo.W") && IsActive("ElZilean.Combo.W2") && W.LSIsReady() && !Q.LSIsReady())
+            if (IsActive("ElZilean.Combo.W") && IsActive("ElZilean.Combo.W2") && W.IsReady() && !Q.IsReady())
             {
-                if (HeroManager.Enemies.Any(x => x.Health > Q.GetDamage(x) && x.LSIsValidTarget(Q.Range)))
+                if (HeroManager.Enemies.Any(x => x.Health > Q.GetDamage(x) && x.IsValidTarget(Q.Range)))
                 {
                     return;
                 }
@@ -443,12 +443,12 @@ using EloBuddy; namespace ElZilean
                 W.Cast();
             }
 
-            if (IsActive("ElZilean.Combo.E") && E.LSIsReady())
+            if (IsActive("ElZilean.Combo.E") && E.IsReady())
             {
-                if (Player.LSGetEnemiesInRange(E.Range).Any())
+                if (Player.GetEnemiesInRange(E.Range).Any())
                 {
                     var closestEnemy =
-                        Player.LSGetEnemiesInRange(E.Range)
+                        Player.GetEnemiesInRange(E.Range)
                             .OrderByDescending(h => (h.PhysicalDamageDealtPlayer + h.MagicDamageDealtPlayer))
                             .FirstOrDefault();
 
@@ -463,14 +463,14 @@ using EloBuddy; namespace ElZilean
 
             if (IsActive("ElZilean.Ignite") && isBombed != null)
             {
-                if (Player.LSGetSpellSlot("summonerdot") == SpellSlot.Unknown)
+                if (Player.GetSpellSlot("summonerdot") == SpellSlot.Unknown)
                 {
                     return;
                 }
 
                 if (Q.GetDamage(isBombed) + IgniteSpell.GetDamage(isBombed) > isBombed.Health)
                 {
-                    if (isBombed.LSIsValidTarget(Q.Range))
+                    if (isBombed.IsValidTarget(Q.Range))
                     {
                         Player.Spellbook.CastSpell(IgniteSpell.Slot, isBombed);
                     }
@@ -505,12 +505,12 @@ using EloBuddy; namespace ElZilean
         {
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
-            if (E.LSIsReady() && Player.Mana > Menu.Item("ElZilean.Flee.Mana").GetValue<Slider>().Value)
+            if (E.IsReady() && Player.Mana > Menu.Item("ElZilean.Flee.Mana").GetValue<Slider>().Value)
             {
                 E.Cast();
             }
 
-            if (!E.LSIsReady() && W.LSIsReady())
+            if (!E.IsReady() && W.IsReady())
             {
                 if (HasSpeedBuff)
                 {
@@ -532,7 +532,7 @@ using EloBuddy; namespace ElZilean
                 return;
             }
 
-            if (IsActive("ElZilean.Harass.Q") && Q.LSIsReady() && target.LSIsValidTarget(Q.Range))
+            if (IsActive("ElZilean.Harass.Q") && Q.IsReady() && target.IsValidTarget(Q.Range))
             {
                 var pred = Q.GetPrediction(target);
                 if (pred.Hitchance >= HitChance.VeryHigh)
@@ -541,15 +541,15 @@ using EloBuddy; namespace ElZilean
                 }
             }
 
-            if (IsActive("ElZilean.Harass.W") && W.LSIsReady() && !Q.LSIsReady())
+            if (IsActive("ElZilean.Harass.W") && W.IsReady() && !Q.IsReady())
             {
                 W.Cast();
             }
 
             // Check if target has a bomb
             var isBombed =
-                HeroManager.Enemies.FirstOrDefault(x => x.LSHasBuff("ZileanQEnemyBomb") && x.LSIsValidTarget(Q.Range));
-            if (!isBombed.LSIsValidTarget())
+                HeroManager.Enemies.FirstOrDefault(x => x.HasBuff("ZileanQEnemyBomb") && x.IsValidTarget(Q.Range));
+            if (!isBombed.IsValidTarget())
             {
                 return;
             }
@@ -562,14 +562,14 @@ using EloBuddy; namespace ElZilean
 
         private static void OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (sender == null || !sender.LSIsValidTarget(Q.Range) || !sender.IsEnemy)
+            if (sender == null || !sender.IsValidTarget(Q.Range) || !sender.IsEnemy)
             {
                 return;
             }
 
             if (sender.IsValid && args.DangerLevel == Interrupter2.DangerLevel.High && IsActive("ElZilean.Q.Interrupt"))
             {
-                if (Q.LSIsReady() && sender.LSIsValidTarget(Q.Range))
+                if (Q.IsReady() && sender.IsValidTarget(Q.Range))
                 {
                     var prediction = Q.GetPrediction(sender);
                     if (prediction.Hitchance >= HitChance.VeryHigh)
@@ -599,7 +599,7 @@ using EloBuddy; namespace ElZilean
 
             var farmLocation =
                 MinionManager.GetBestCircularFarmLocation(
-                    MinionManager.GetMinions(Q.Range).Select(x => x.ServerPosition.LSTo2D()).ToList(),
+                    MinionManager.GetMinions(Q.Range).Select(x => x.ServerPosition.To2D()).ToList(),
                     Q.Width,
                     Q.Range);
 
@@ -608,18 +608,18 @@ using EloBuddy; namespace ElZilean
                 return;
             }
 
-            if (IsActive("ElZilean.laneclear.Q") && IsActive("ElZilean.laneclear.QMouse") && Q.LSIsReady())
+            if (IsActive("ElZilean.laneclear.Q") && IsActive("ElZilean.laneclear.QMouse") && Q.IsReady())
             {
                 Q.Cast(Game.CursorPos);
             }
 
-            if (IsActive("ElZilean.laneclear.Q") && Q.LSIsReady() && !IsActive("ElZilean.laneclear.QMouse")
+            if (IsActive("ElZilean.laneclear.Q") && Q.IsReady() && !IsActive("ElZilean.laneclear.QMouse")
                 && farmLocation.MinionsHit >= 3)
             {
                 Q.Cast(farmLocation.Position.To3D());
             }
 
-            if (IsActive("ElZilean.laneclear.W") && W.LSIsReady())
+            if (IsActive("ElZilean.laneclear.W") && W.IsReady())
             {
                 W.Cast();
             }
@@ -648,13 +648,13 @@ using EloBuddy; namespace ElZilean
 
             if (initiatorChampionSpell != null)
             {
-                if (args.Start.LSDistance(Player.Position) <= E.Range && args.End.LSDistance(Player.Position) <= E.Range
+                if (args.Start.Distance(Player.Position) <= E.Range && args.End.Distance(Player.Position) <= E.Range
                     && HeroManager.Enemies.Any(
                         e =>
-                        e.LSIsValidTarget(E.Range, false) && !e.IsDead
-                        && (e.Position.LSDistance(args.End) < 600f || e.Position.LSDistance(args.Start) < 800f)))
+                        e.IsValidTarget(E.Range, false) && !e.IsDead
+                        && (e.Position.Distance(args.End) < 600f || e.Position.Distance(args.Start) < 800f)))
                 {
-                    if (E.LSIsReady() && E.IsInRange(hero))
+                    if (E.IsReady() && E.IsInRange(hero))
                     {
                         E.CastOnUnit(hero);
                     }
@@ -677,7 +677,7 @@ using EloBuddy; namespace ElZilean
 
                 if (IsActive("ElZilean.Combo.Focus.Bomb"))
                 {
-                    var passiveTarget = HeroManager.Enemies.FirstOrDefault(x => x.LSIsValidTarget() && x.LSHasBuff("ZileanQEnemyBomb") && x.LSIsValidTarget(Q.Range + 100));
+                    var passiveTarget = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget() && x.HasBuff("ZileanQEnemyBomb") && x.IsValidTarget(Q.Range + 100));
 
                     if (passiveTarget != null)
                     {
@@ -717,10 +717,10 @@ using EloBuddy; namespace ElZilean
                 if (IsActive("ElZilean.E.Slow"))
                 {
                     foreach (var slowedAlly in
-                        HeroManager.Allies.Where(x => x.HasBuffOfType(BuffType.Slow) && x.LSIsValidTarget(Q.Range, false))
+                        HeroManager.Allies.Where(x => x.HasBuffOfType(BuffType.Slow) && x.IsValidTarget(Q.Range, false))
                         )
                     {
-                        if (E.LSIsReady() && E.IsInRange(slowedAlly))
+                        if (E.IsReady() && E.IsInRange(slowedAlly))
                         {
                             E.CastOnUnit(slowedAlly);
                         }
@@ -732,13 +732,13 @@ using EloBuddy; namespace ElZilean
                     var target =
                         HeroManager.Enemies.FirstOrDefault(
                             h =>
-                            h.LSIsValidTarget(Q.Range) && h.HasBuffOfType(BuffType.Slow)
+                            h.IsValidTarget(Q.Range) && h.HasBuffOfType(BuffType.Slow)
                             || h.HasBuffOfType(BuffType.Knockup) || h.HasBuffOfType(BuffType.Charm)
                             || h.HasBuffOfType(BuffType.Stun));
 
                     if (target != null)
                     {
-                        if (Q.LSIsReady() && target.LSIsValidTarget(Q.Range))
+                        if (Q.IsReady() && target.IsValidTarget(Q.Range))
                         {
                             var prediction = Q.GetPrediction(target);
                             if (prediction.Hitchance >= HitChance.VeryHigh)
@@ -750,18 +750,18 @@ using EloBuddy; namespace ElZilean
                     }
                 }
 
-                foreach (var ally in HeroManager.Allies.Where(a => a.LSIsValidTarget(R.Range, false)))
+                foreach (var ally in HeroManager.Allies.Where(a => a.IsValidTarget(R.Range, false)))
                 {
-                    if (!Menu.Item($"R{ally.ChampionName}").IsActive() || ally.LSIsRecalling() || ally.IsInvulnerable
-                        || !ally.LSIsValidTarget(R.Range, false))
+                    if (!Menu.Item($"R{ally.ChampionName}").IsActive() || ally.IsRecalling() || ally.IsInvulnerable
+                        || !ally.IsValidTarget(R.Range, false))
                     {
                         return;
                     }
 
-                    var enemies = ally.LSCountEnemiesInRange(750f);
+                    var enemies = ally.CountEnemiesInRange(750f);
                     var totalDamage = IncomingDamageManager.GetDamage(ally) * 1.1f;
                     if (ally.HealthPercent <= Menu.Item("min-health").GetValue<Slider>().Value && !ally.IsDead
-                        && enemies >= 1 && ally.LSIsValidTarget(R.Range, false))
+                        && enemies >= 1 && ally.IsValidTarget(R.Range, false))
                     {
                         if ((int)(totalDamage / ally.Health) > Menu.Item("min-damage").GetValue<Slider>().Value
                             || ally.HealthPercent < Menu.Item("min-health").GetValue<Slider>().Value)

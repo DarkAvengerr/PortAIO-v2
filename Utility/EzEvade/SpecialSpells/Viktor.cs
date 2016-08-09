@@ -39,7 +39,7 @@ using EloBuddy; namespace ezEvade.SpecialSpells
                 && SpellDetector.onMissileSpells.TryGetValue("ViktorDeathRay3", out spellData)
                 && missile.StartPosition != null && missile.EndPosition != null)
             {
-                var missileDist = missile.EndPosition.LSTo2D().LSDistance(missile.StartPosition.LSTo2D());
+                var missileDist = missile.EndPosition.To2D().Distance(missile.StartPosition.To2D());
                 var delay = missileDist / 1.5f + 1000;
 
                 spellData.spellDelay = delay;

@@ -48,13 +48,13 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Lane
 
             if (this.Menu.Item(this.Menu.Name + "LaneWEnemy").GetValue<bool>())
             {
-                if (minions.Any(m => m.LSCountEnemiesInRange(1500) > 0))
+                if (minions.Any(m => m.CountEnemiesInRange(1500) > 0))
                 {
                     return;
                 }
             }
 
-            foreach (var m in minions.Where(m => m.LSDistance(Variable.Player) <= 250))
+            foreach (var m in minions.Where(m => m.Distance(Variable.Player) <= 250))
             {
                 Variable.Spells[SpellSlot.W].Cast();
             }
@@ -63,7 +63,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Lane
         private void OnUpdate(EventArgs args)
         {
             if (Variable.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
-                || !Variable.Spells[SpellSlot.W].LSIsReady()) return;
+                || !Variable.Spells[SpellSlot.W].IsReady()) return;
 
             if (this.Menu.Item(this.Menu.Name + "LaneWMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
 

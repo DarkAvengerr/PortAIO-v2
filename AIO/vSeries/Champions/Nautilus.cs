@@ -93,13 +93,13 @@ using EloBuddy;
 
         private static void NautilusInterrupter(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (sender.IsEnemy && MenuCheck("nautilus.interrupter",Config) && sender.LSIsValidTarget(R.Range) && 
+            if (sender.IsEnemy && MenuCheck("nautilus.interrupter",Config) && sender.IsValidTarget(R.Range) && 
                 args.DangerLevel >= Interrupter2.DangerLevel.High)
             {
                 R.Cast(sender);
             }
 
-            if (sender.IsEnemy && MenuCheck("nautilus.interrupter", Config) && sender.LSIsValidTarget(Q.Range) &&
+            if (sender.IsEnemy && MenuCheck("nautilus.interrupter", Config) && sender.IsValidTarget(Q.Range) &&
                 args.DangerLevel >= Interrupter2.DangerLevel.High)
             {
                 Q.Cast(sender.Position);
@@ -122,35 +122,35 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (MenuCheck("nautilus.q.combo", Config) && Q.LSIsReady())
+            if (MenuCheck("nautilus.q.combo", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && 
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && 
                     MenuCheck("nautilus.q." + x.ChampionName, Config)))
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "nautilus.q.hitchance"));
                 }
             }
 
-            if (MenuCheck("nautilus.w.combo", Config) && W.LSIsReady())
+            if (MenuCheck("nautilus.w.combo", Config) && W.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)))
                 {
                     W.Cast();
                 }
             }
 
-            if (MenuCheck("nautilus.e.combo", Config) && E.LSIsReady())
+            if (MenuCheck("nautilus.e.combo", Config) && E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(ObjectManager.Player.AttackRange)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(ObjectManager.Player.AttackRange)))
                 {
                     E.Cast();
                 }
             }
-            if (MenuCheck("nautilus.r.combo", Config) && R.LSIsReady())
+            if (MenuCheck("nautilus.r.combo", Config) && R.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range)))
                 {
-                    if (ObjectManager.Player.LSCountEnemiesInRange(R.Range) >= SliderCheck("nautilus.r.count", Config))
+                    if (ObjectManager.Player.CountEnemiesInRange(R.Range) >= SliderCheck("nautilus.r.count", Config))
                     {
                         R.Cast(enemy);
                     }
@@ -161,17 +161,17 @@ using EloBuddy;
 
         private static void Harass()
         {
-            if (MenuCheck("nautilus.q.harass", Config) && Q.LSIsReady())
+            if (MenuCheck("nautilus.q.harass", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && MenuCheck("nautilus.q." + x.ChampionName, Config)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && MenuCheck("nautilus.q." + x.ChampionName, Config)))
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "nautilus.q.hitchance"));
                 }
             }
 
-            if (MenuCheck("nautilus.e.harass", Config) && E.LSIsReady())
+            if (MenuCheck("nautilus.e.harass", Config) && E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range)))
                 {
                     E.Cast(enemy);
                 }
@@ -180,17 +180,17 @@ using EloBuddy;
 
         private static void NautilusOnDraw(EventArgs args)
         {
-            if (Q.LSIsReady() && ActiveCheck("nautilus.q.draw",Config))
+            if (Q.IsReady() && ActiveCheck("nautilus.q.draw",Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range ,GetColor("nautilus.q.draw",Config));
             }
 
-            if (E.LSIsReady() && ActiveCheck("nautilus.e.draw", Config))
+            if (E.IsReady() && ActiveCheck("nautilus.e.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, GetColor("nautilus.e.draw", Config));
             }
 
-            if (R.LSIsReady() && ActiveCheck("nautilus.r.draw", Config))
+            if (R.IsReady() && ActiveCheck("nautilus.r.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, GetColor("nautilus.r.draw", Config));
             }

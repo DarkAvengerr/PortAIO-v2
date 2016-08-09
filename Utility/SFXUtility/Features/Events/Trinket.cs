@@ -119,7 +119,7 @@ using EloBuddy; namespace SFXUtility.Features.Events
 
                 _lastCheck = Environment.TickCount;
 
-                if (ObjectManager.Player.IsDead || ObjectManager.Player.LSInShop())
+                if (ObjectManager.Player.IsDead || ObjectManager.Player.InShop())
                 {
                     if (ItemData.Farsight_Alteration.GetItem().IsOwned() ||
                         ItemData.Oracle_Alteration.GetItem().IsOwned())

@@ -205,17 +205,17 @@ using EloBuddy; namespace xSaliceResurrected.Mid
         {
             double damage = 0d;
 
-            //if (Q.LSIsReady())
-            damage += Player.LSGetSpellDamage(enemy, SpellSlot.Q) * 1.5;
+            //if (Q.IsReady())
+            damage += Player.GetSpellDamage(enemy, SpellSlot.Q) * 1.5;
 
-            if (W.LSIsReady())
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.W);
+            if (W.IsReady())
+                damage += Player.GetSpellDamage(enemy, SpellSlot.W);
 
-            if (E.LSIsReady())
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.E);
+            if (E.IsReady())
+                damage += Player.GetSpellDamage(enemy, SpellSlot.E);
 
-            if (R.LSIsReady())
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.R) - 25;
+            if (R.IsReady())
+                damage += Player.GetSpellDamage(enemy, SpellSlot.R) - 25;
 
             damage = ItemManager.CalcDamage(enemy, damage);
 
@@ -224,7 +224,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
         private void Combo()
         {
-            //Orbwalker.SetAttacks(!(Q.LSIsReady()));
+            //Orbwalker.SetAttacks(!(Q.IsReady()));
             UseSpells(menu.Item("UseQCombo", true).GetValue<bool>(), menu.Item("UseWCombo", true).GetValue<bool>(),
                 menu.Item("UseECombo", true).GetValue<bool>(), menu.Item("UseRCombo", true).GetValue<bool>(), "Combo");
         }
@@ -239,10 +239,10 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             if (source == "Harass" && !ManaManager.HasMana("Harass"))
                 return;
 
-            var range = E.LSIsReady() ? E.Range : Q.Range;
+            var range = E.IsReady() ? E.Range : Q.Range;
             AIHeroClient target = TargetSelector.GetTarget(range, TargetSelector.DamageType.Magical);
 
-            if (useQ && Q.LSIsReady())
+            if (useQ && Q.IsReady())
             {
                 CastQ(target, source);
             }
@@ -250,7 +250,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             if (_isBallMoving)
                 return;
 
-            if (useW && target != null && W.LSIsReady())
+            if (useW && target != null && W.IsReady())
             {
                 CastW(target);
             }
@@ -272,19 +272,19 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 }
             }
 
-            if (useE && target != null && E.LSIsReady())
+            if (useE && target != null && E.IsReady())
             {
                 CastE(target);
             }
 
-            if (useR && target != null && R.LSIsReady())
+            if (useR && target != null && R.IsReady())
             {
                 if (menu.Item("intR" + target.CharData.BaseSkinName, true) != null)
                 {
                     foreach (
                         AIHeroClient enemy in
                             ObjectManager.Get<AIHeroClient>()
-                                .Where(x => Player.LSDistance(x.Position) < 1500 && x.LSIsValidTarget() && x.IsEnemy && !x.IsDead))
+                                .Where(x => Player.Distance(x.Position) < 1500 && x.IsValidTarget() && x.IsEnemy && !x.IsDead))
                     {
                         if (!enemy.IsDead && menu.Item("intR" + enemy.CharData.BaseSkinName, true).GetValue<bool>())
                         {
@@ -297,7 +297,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 if (!(menu.Item("killR", true).GetValue<KeyBind>().Active)) //check if multi
                 {
                     if (menu.Item("overK", true).GetValue<bool>() &&
-                        (Player.LSGetSpellDamage(target, SpellSlot.Q) + Player.LSGetSpellDamage(target, SpellSlot.W)) >= target.Health)
+                        (Player.GetSpellDamage(target, SpellSlot.Q) + Player.GetSpellDamage(target, SpellSlot.W)) >= target.Health)
                     {
                         return;
                     }
@@ -313,7 +313,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
             PredictionOutput prediction = Util.GetPCircle(_currentBallPosition, W, target, true);
 
-            if (W.LSIsReady() && prediction.UnitPosition.LSDistance(_currentBallPosition) < W.Width)
+            if (W.IsReady() && prediction.UnitPosition.Distance(_currentBallPosition) < W.Width)
             {
                 W.Cast();
             }
@@ -326,7 +326,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
             PredictionOutput prediction = Util.GetPCircle(_currentBallPosition, R, target, true);
 
-            if (R.LSIsReady() && prediction.UnitPosition.LSDistance(_currentBallPosition) <= R.Width)
+            if (R.IsReady() && prediction.UnitPosition.Distance(_currentBallPosition) <= R.Width)
             {
                 if (checkAdditional)
                 {
@@ -356,25 +356,25 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 case 0:
                     if (target != null)
                     {
-                        float travelTime = target.LSDistance(Player.ServerPosition) / Q.Speed;
+                        float travelTime = target.Distance(Player.ServerPosition) / Q.Speed;
                         float minTravelTime = 10000f;
 
                         foreach (
                             AIHeroClient ally in
                                 ObjectManager.Get<AIHeroClient>()
-                                    .Where(x => x.IsAlly && Player.LSDistance(x.ServerPosition) <= E.Range && !x.IsMe))
+                                    .Where(x => x.IsAlly && Player.Distance(x.ServerPosition) <= E.Range && !x.IsMe))
                         { 
                             //dmg enemy with E
                             if (menu.Item("UseEDmg", true).GetValue<bool>())
                             {
                                 PredictionOutput prediction3 = Util.GetP(Player.ServerPosition, E, target, true);
-                                Object[] obj = Util.VectorPointProjectionOnLineSegment(Player.ServerPosition.LSTo2D(),
-                                    ally.ServerPosition.LSTo2D(), prediction3.UnitPosition.LSTo2D());
+                                Object[] obj = Util.VectorPointProjectionOnLineSegment(Player.ServerPosition.To2D(),
+                                    ally.ServerPosition.To2D(), prediction3.UnitPosition.To2D());
                                 var isOnseg = (bool)obj[2];
                                 var pointLine = (Vector2)obj[1];
 
-                                if (E.LSIsReady() && isOnseg &&
-                                    prediction3.UnitPosition.LSDistance(pointLine.To3D()) < E.Width)
+                                if (E.IsReady() && isOnseg &&
+                                    prediction3.UnitPosition.Distance(pointLine.To3D()) < E.Width)
                                 {
                                     //Console.WriteLine("Dmg 1");
                                     E.CastOnUnit(ally);
@@ -382,8 +382,8 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                                 }
                             }
 
-                            float allyRange = target.LSDistance(ally.ServerPosition) / Q.Speed +
-                                                ally.LSDistance(Player.ServerPosition) / E.Speed;
+                            float allyRange = target.Distance(ally.ServerPosition) / Q.Speed +
+                                                ally.Distance(Player.ServerPosition) / E.Speed;
                             if (allyRange < minTravelTime)
                             {
                                 etarget = ally;
@@ -391,8 +391,8 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                             }
                         }
 
-                        if (minTravelTime < travelTime && Player.LSDistance(etarget.ServerPosition) <= E.Range &&
-                            E.LSIsReady())
+                        if (minTravelTime < travelTime && Player.Distance(etarget.ServerPosition) <= E.Range &&
+                            E.IsReady())
                         {
                             E.CastOnUnit(etarget);
                         }
@@ -403,12 +403,12 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                     if (menu.Item("UseEDmg", true).GetValue<bool>())
                     {
                         PredictionOutput prediction = Util.GetP(_currentBallPosition, E, target, true);
-                        Object[] obj = Util.VectorPointProjectionOnLineSegment(_currentBallPosition.LSTo2D(),
-                            Player.ServerPosition.LSTo2D(), prediction.UnitPosition.LSTo2D());
+                        Object[] obj = Util.VectorPointProjectionOnLineSegment(_currentBallPosition.To2D(),
+                            Player.ServerPosition.To2D(), prediction.UnitPosition.To2D());
                         var isOnseg = (bool)obj[2];
                         var pointLine = (Vector2)obj[1];
 
-                        if (E.LSIsReady() && isOnseg && prediction.UnitPosition.LSDistance(pointLine.To3D()) < E.Width)
+                        if (E.IsReady() && isOnseg && prediction.UnitPosition.Distance(pointLine.To3D()) < E.Width)
                         {
                             //Console.WriteLine("Dmg 2");
                             E.CastOnUnit(Player);
@@ -416,37 +416,37 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                         }
                     }
 
-                    float travelTime2 = target.LSDistance(_currentBallPosition) / Q.Speed;
-                    float minTravelTime2 = target.LSDistance(Player.ServerPosition) / Q.Speed +
-                                            Player.LSDistance(_currentBallPosition) / E.Speed;
+                    float travelTime2 = target.Distance(_currentBallPosition) / Q.Speed;
+                    float minTravelTime2 = target.Distance(Player.ServerPosition) / Q.Speed +
+                                            Player.Distance(_currentBallPosition) / E.Speed;
 
-                    if (minTravelTime2 < travelTime2 && target.LSDistance(Player.ServerPosition) <= Q.Range + Q.Width &&
-                        E.LSIsReady())
+                    if (minTravelTime2 < travelTime2 && target.Distance(Player.ServerPosition) <= Q.Range + Q.Width &&
+                        E.IsReady())
                     {
                         E.CastOnUnit(Player);
                     }
 
                     break;
                 case 2:
-                    float travelTime3 = target.LSDistance(_currentBallPosition) / Q.Speed;
+                    float travelTime3 = target.Distance(_currentBallPosition) / Q.Speed;
                     float minTravelTime3 = 10000f;
 
                     foreach (
                         AIHeroClient ally in
                             ObjectManager.Get<AIHeroClient>()
-                                .Where(x => x.IsAlly && Player.LSDistance(x.ServerPosition) <= E.Range && !x.IsMe))
+                                .Where(x => x.IsAlly && Player.Distance(x.ServerPosition) <= E.Range && !x.IsMe))
                     {
                         //dmg enemy with E
                         if (menu.Item("UseEDmg", true).GetValue<bool>())
                         {
                             PredictionOutput prediction2 = Util.GetP(_currentBallPosition, E, target, true);
-                            Object[] obj = Util.VectorPointProjectionOnLineSegment(_currentBallPosition.LSTo2D(),
-                                ally.ServerPosition.LSTo2D(), prediction2.UnitPosition.LSTo2D());
+                            Object[] obj = Util.VectorPointProjectionOnLineSegment(_currentBallPosition.To2D(),
+                                ally.ServerPosition.To2D(), prediction2.UnitPosition.To2D());
                             var isOnseg = (bool)obj[2];
                             var pointLine = (Vector2)obj[1];
 
-                            if (E.LSIsReady() && isOnseg &&
-                                prediction2.UnitPosition.LSDistance(pointLine.To3D()) < E.Width)
+                            if (E.IsReady() && isOnseg &&
+                                prediction2.UnitPosition.Distance(pointLine.To3D()) < E.Width)
                             {
                                 Console.WriteLine("Dmg 3");
                                 E.CastOnUnit(ally);
@@ -454,8 +454,8 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                             }
                         }
 
-                        float allyRange2 = target.LSDistance(ally.ServerPosition) / Q.Speed +
-                                            ally.LSDistance(_currentBallPosition) / E.Speed;
+                        float allyRange2 = target.Distance(ally.ServerPosition) / Q.Speed +
+                                            ally.Distance(_currentBallPosition) / E.Speed;
 
                         if (allyRange2 < minTravelTime3)
                         {
@@ -464,8 +464,8 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                         }
                     }
 
-                    if (minTravelTime3 < travelTime3 && Player.LSDistance(etarget.ServerPosition) <= E.Range &&
-                        E.LSIsReady())
+                    if (minTravelTime3 < travelTime3 && Player.Distance(etarget.ServerPosition) <= E.Range &&
+                        E.IsReady())
                     {
                         E.CastOnUnit(etarget);
                     }
@@ -476,11 +476,11 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
         private void CastQ(Obj_AI_Base target, String source)
         {
-            if (_isBallMoving || !target.LSIsValidTarget(Q.Range)) return;
+            if (_isBallMoving || !target.IsValidTarget(Q.Range)) return;
 
             PredictionOutput prediction = Util.GetP(_currentBallPosition, Q, target,  true);
 
-            if (Q.LSIsReady() && prediction.Hitchance >= HitChanceManager.GetQHitChance(source) && Player.LSDistance(target.Position) <= Q.Range)
+            if (Q.IsReady() && prediction.Hitchance >= HitChanceManager.GetQHitChance(source) && Player.Distance(target.Position) <= Q.Range)
             {
                 Q.Cast(prediction.CastPosition);
             }
@@ -488,54 +488,54 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
         private void CheckWMec()
         {
-            if (!W.LSIsReady() || _isBallMoving)
+            if (!W.IsReady() || _isBallMoving)
                 return;
 
             int minHit = menu.Item("autoW", true).GetValue<Slider>().Value;
 
-            int hit = (from x in ObjectManager.Get<AIHeroClient>().Where(champ => champ.LSIsValidTarget(1500) && champ.IsVisible && !champ.IsZombie)
-                       select Util.GetPCircle(_currentBallPosition, W, x, true)).Count(prediction => W.LSIsReady() && prediction.UnitPosition.LSDistance(_currentBallPosition) < W.Width);
+            int hit = (from x in ObjectManager.Get<AIHeroClient>().Where(champ => champ.IsValidTarget(1500) && champ.IsVisible && !champ.IsZombie)
+                       select Util.GetPCircle(_currentBallPosition, W, x, true)).Count(prediction => W.IsReady() && prediction.UnitPosition.Distance(_currentBallPosition) < W.Width);
 
-            if (hit >= minHit && W.LSIsReady())
+            if (hit >= minHit && W.IsReady())
                 W.Cast();
         }
 
         private void CheckRMec()
         {
-            if (!R.LSIsReady() || _isBallMoving)
+            if (!R.IsReady() || _isBallMoving)
                 return;
 
             int minHit = menu.Item("autoRCombo", true).GetValue<Slider>().Value;
 
-            int hit = (from x in ObjectManager.Get<AIHeroClient>().Where(champ => champ.LSIsValidTarget(1500) && champ.IsVisible && !champ.IsZombie)
-                       select Util.GetPCircle(_currentBallPosition, R, x, true)).Count(prediction => R.LSIsReady() && prediction.UnitPosition.LSDistance(_currentBallPosition) < R.Width);
+            int hit = (from x in ObjectManager.Get<AIHeroClient>().Where(champ => champ.IsValidTarget(1500) && champ.IsVisible && !champ.IsZombie)
+                       select Util.GetPCircle(_currentBallPosition, R, x, true)).Count(prediction => R.IsReady() && prediction.UnitPosition.Distance(_currentBallPosition) < R.Width);
 
-            if (hit >= minHit && R.LSIsReady())
+            if (hit >= minHit && R.IsReady())
                 R.Cast();
         }
 
         private void CheckRMecGlobal()
         {
-            if (!R.LSIsReady() || _isBallMoving)
+            if (!R.IsReady() || _isBallMoving)
                 return;
 
             int minHit = menu.Item("autoR", true).GetValue<Slider>().Value;
 
-            int hit = (from x in ObjectManager.Get<AIHeroClient>().Where(champ => champ.LSIsValidTarget(1500) && champ.IsVisible && !champ.IsZombie)
-                       select Util.GetPCircle(_currentBallPosition, R, x, true)).Count(prediction => R.LSIsReady() && prediction.UnitPosition.LSDistance(_currentBallPosition) < R.Width);
+            int hit = (from x in ObjectManager.Get<AIHeroClient>().Where(champ => champ.IsValidTarget(1500) && champ.IsVisible && !champ.IsZombie)
+                       select Util.GetPCircle(_currentBallPosition, R, x, true)).Count(prediction => R.IsReady() && prediction.UnitPosition.Distance(_currentBallPosition) < R.Width);
 
 
-            if (hit >= minHit && R.LSIsReady())
+            if (hit >= minHit && R.IsReady())
                 R.Cast();
         }
 
         private int CountR()
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return 0;
 
-            return (from enemy in ObjectManager.Get<AIHeroClient>().Where(champ => champ.LSIsValidTarget(1500) && champ.IsVisible && !champ.IsZombie)
-                    select Util.GetPCircle(_currentBallPosition, R, enemy, true)).Count(prediction => R.LSIsReady() && prediction.UnitPosition.LSDistance(_currentBallPosition) <= R.Width);
+            return (from enemy in ObjectManager.Get<AIHeroClient>().Where(champ => champ.IsValidTarget(1500) && champ.IsVisible && !champ.IsZombie)
+                    select Util.GetPCircle(_currentBallPosition, R, enemy, true)).Count(prediction => R.IsReady() && prediction.UnitPosition.Distance(_currentBallPosition) <= R.Width);
         }
 
         private void LastHit()
@@ -544,17 +544,17 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
             List<Obj_AI_Base> allMinions = MinionManager.GetMinions(Player.ServerPosition, Q.Range);
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 foreach (Obj_AI_Base minion in allMinions)
                 {
-                    if (minion.LSIsValidTarget() &&
-                        HealthPrediction.GetHealthPrediction(minion, (int)(Player.LSDistance(minion.Position) * 1000 / 1400)) <
-                        Player.LSGetSpellDamage(minion, SpellSlot.Q) - 10)
+                    if (minion.IsValidTarget() &&
+                        HealthPrediction.GetHealthPrediction(minion, (int)(Player.Distance(minion.Position) * 1000 / 1400)) <
+                        Player.GetSpellDamage(minion, SpellSlot.Q) - 10)
                     {
                         PredictionOutput prediction = Util.GetP(_currentBallPosition, Q, minion, true);
 
-                        if (prediction.Hitchance >= HitChance.High && Q.LSIsReady())
+                        if (prediction.Hitchance >= HitChance.High && Q.IsReady())
                             Q.Cast(prediction.CastPosition);
                     }
                 }
@@ -577,7 +577,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             var useW = menu.Item("UseWFarm", true).GetValue<bool>();
             int min = menu.Item("qFarm", true).GetValue<Slider>().Value;
 
-            if (useQ && Q.LSIsReady())
+            if (useQ && Q.IsReady())
             {
                 Q.From = _currentBallPosition;
 
@@ -588,11 +588,11 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             }
 
             int hit = 0;
-            if (useW && W.LSIsReady())
+            if (useW && W.IsReady())
             {
-                hit += allMinionsW.Count(enemy => enemy.LSDistance(_currentBallPosition) < W.Width);
+                hit += allMinionsW.Count(enemy => enemy.Distance(_currentBallPosition) < W.Width);
 
-                if (hit >= min && W.LSIsReady())
+                if (hit >= min && W.IsReady())
                     W.Cast();
             }
         }
@@ -601,9 +601,9 @@ using EloBuddy; namespace xSaliceResurrected.Mid
         {
             OrbwalkManager.Orbwalk(null, Game.CursorPos);
 
-            if (_ballStatus == 0 && W.LSIsReady())
+            if (_ballStatus == 0 && W.IsReady())
                 W.Cast();
-            else if (E.LSIsReady() && _ballStatus != 0)
+            else if (E.IsReady() && _ballStatus != 0)
                 E.CastOnUnit(Player);
         }
 
@@ -647,7 +647,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
         private void OnGainBuff()
         {
-            if (Player.LSHasBuff("OrianaGhostSelf"))
+            if (Player.HasBuff("OrianaGhostSelf"))
             {
                 _ballStatus = 0;
                 _currentBallPosition = Player.ServerPosition;
@@ -657,7 +657,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
             foreach (AIHeroClient ally in
                 ObjectManager.Get<AIHeroClient>()
-                    .Where(ally => ally.IsAlly && !ally.IsDead && ally.LSHasBuff("orianaghost", true)))
+                    .Where(ally => ally.IsAlly && !ally.IsDead && ally.HasBuff("orianaghost", true)))
             {
                 _ballStatus = 2;
                 _currentBallPosition = ally.ServerPosition;
@@ -677,14 +677,14 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 if ((spell.Slot == SpellSlot.R && menuItem.Active) || (spell.Slot == SpellSlot.W && menuItem.Active))
                 {
                     if (_ballStatus == 0)
-                        Render.Circle.DrawCircle(Player.Position, spell.Width, spell.LSIsReady() ? Color.Aqua : Color.Red);
+                        Render.Circle.DrawCircle(Player.Position, spell.Width, spell.IsReady() ? Color.Aqua : Color.Red);
                     else if (_ballStatus == 2)
-                        Render.Circle.DrawCircle(_allyDraw, spell.Width, spell.LSIsReady() ? Color.Aqua : Color.Red);
+                        Render.Circle.DrawCircle(_allyDraw, spell.Width, spell.IsReady() ? Color.Aqua : Color.Red);
                     else
-                        Render.Circle.DrawCircle(_currentBallPosition, spell.Width, spell.LSIsReady() ? Color.Aqua : Color.Red);
+                        Render.Circle.DrawCircle(_currentBallPosition, spell.Width, spell.IsReady() ? Color.Aqua : Color.Red);
                 }
                 else if (menuItem.Active)
-                    Render.Circle.DrawCircle(Player.Position, spell.Range, spell.LSIsReady() ? Color.Aqua : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, spell.Range, spell.IsReady() ? Color.Aqua : Color.Red);
             }
         }
 
@@ -693,15 +693,15 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             //Shield Ally
             if (!menu.Item("saveEMana", true).GetValue<bool>() || Player.Mana - ESpell.SData.Mana >= QSpell.SData.Mana + WSpell.SData.Mana)
             {
-                if (unit.IsEnemy && unit.Type == GameObjectType.AIHeroClient && E.LSIsReady())
+                if (unit.IsEnemy && unit.Type == GameObjectType.AIHeroClient && E.IsReady())
                 {
                     foreach (
                         AIHeroClient ally in
                             ObjectManager.Get<AIHeroClient>()
                                 .Where(
                                     x =>
-                                        Player.LSDistance(x.Position) < E.Range && Player.LSDistance(unit.Position) < 1500 &&
-                                        x.IsAlly && !x.IsDead).OrderBy(x => x.LSDistance(args.End)))
+                                        Player.Distance(x.Position) < E.Range && Player.Distance(unit.Position) < 1500 &&
+                                        x.IsAlly && !x.IsDead).OrderBy(x => x.Distance(args.End)))
                     {
                         if (menu.Item("shield" + ally.CharData.BaseSkinName, true) != null)
                         {
@@ -709,7 +709,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                             {
                                 int hp = menu.Item("eAllyIfHP", true).GetValue<Slider>().Value;
 
-                                if (ally.LSDistance(args.End) < 500 && ally.HealthPercent <= hp)
+                                if (ally.Distance(args.End) < 500 && ally.HealthPercent <= hp)
                                 {
                                     //Chat.Print("shielding");
                                     E.CastOnUnit(ally);
@@ -725,7 +725,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             //intiator
             if (unit.IsAlly)
             {
-                if (Initiator.InitatorList.Where(spell => args.SData.Name == spell.SDataName).Where(spell => menu.Item(spell.SpellName, true).GetValue<bool>()).Any(spell => E.LSIsReady() && Player.LSDistance(unit.Position) < E.Range))
+                if (Initiator.InitatorList.Where(spell => args.SData.Name == spell.SDataName).Where(spell => menu.Item(spell.SpellName, true).GetValue<bool>()).Any(spell => E.IsReady() && Player.Distance(unit.Position) < E.Range))
                 {
                     E.CastOnUnit(unit);
                     _isBallMoving = true;
@@ -735,13 +735,13 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
             if (!unit.IsMe) return;
 
-            SpellSlot castedSlot = ObjectManager.Player.LSGetSpellSlot(args.SData.Name);
+            SpellSlot castedSlot = ObjectManager.Player.GetSpellSlot(args.SData.Name);
 
             if (castedSlot == SpellSlot.Q)
             {
                 _isBallMoving = true;
                 LeagueSharp.Common.Utility.DelayAction.Add(
-                    (int)Math.Max(1, 1000 * (args.End.LSDistance(_currentBallPosition) - Game.Ping - 0.1) / Q.Speed), () =>
+                    (int)Math.Max(1, 1000 * (args.End.Distance(_currentBallPosition) - Game.Ping - 0.1) / Q.Speed), () =>
                     {
                         _currentBallPosition = args.End;
                         _ballStatus = 1;
@@ -755,7 +755,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
         {
             if (!menu.Item("UseInt", true).GetValue<bool>() || _isBallMoving) return;
 
-            if (Player.LSDistance(unit.Position) < R.Width)
+            if (Player.Distance(unit.Position) < R.Width)
             {
                 CastR(unit);
             }

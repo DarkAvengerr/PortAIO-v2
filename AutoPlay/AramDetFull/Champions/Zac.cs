@@ -48,26 +48,26 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             W.Cast();
         }
 
         public double GetAngle(Obj_AI_Base source, Vector3 target)
         {
-            if (source == null || !target.LSIsValid())
+            if (source == null || !target.IsValid())
             {
                 return 0;
             }
-            return Geometry.LSAngleBetween(
-                Geometry.LSPerpendicular(Geometry.LSTo2D(source.Direction)), Geometry.LSTo2D(target - source.Position));
+            return Geometry.AngleBetween(
+                Geometry.Perpendicular(Geometry.To2D(source.Direction)), Geometry.To2D(target - source.Position));
             ;
         }
 
@@ -75,39 +75,39 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public float[] eChannelTimes = new float[] { 0.9f, 1.05f, 1.2f, 1.35f, 1.5f };
         public override void useE(Obj_AI_Base target)
         {
-            if (target.LSDistance(player) > eRanges[E.Level - 1] || LeagueSharp.SDK.Extensions.IsUnderEnemyTurret(target))
+            if (target.Distance(player) > eRanges[E.Level - 1] || LeagueSharp.SDK.Extensions.IsUnderEnemyTurret(target))
             {
                 return;
             }
             var eFlyPred = E.GetPrediction(target);
             var enemyPred = Prediction.GetPrediction(
-                target, eChannelTimes[E.Level - 1] + target.LSDistance(player) / E.Speed / 1000);
+                target, eChannelTimes[E.Level - 1] + target.Distance(player) / E.Speed / 1000);
             if (E.IsCharging)
             {
                 Console.WriteLine("Jump!!!");
-                if (eFlyPred.CastPosition.LSDistance(player.Position) < E.Range)
+                if (eFlyPred.CastPosition.Distance(player.Position) < E.Range)
                 {
                     E.CastIfHitchanceEquals(target, HitChance.High);
                 }
-                else if (eFlyPred.UnitPosition.LSDistance(player.Position) < E.Range && target.LSDistance(player) < 500f)
+                else if (eFlyPred.UnitPosition.Distance(player.Position) < E.Range && target.Distance(player) < 500f)
                 {
                     E.CastIfHitchanceEquals(target, HitChance.Medium);
                 }
-                else if ((eFlyPred.CastPosition.LSDistance(player.Position) < E.Range &&
-                          eRanges[E.Level - 1] - eFlyPred.CastPosition.LSDistance(player.Position) < 200) ||
+                else if ((eFlyPred.CastPosition.Distance(player.Position) < E.Range &&
+                          eRanges[E.Level - 1] - eFlyPred.CastPosition.Distance(player.Position) < 200) ||
                          (GetAngle(player, eFlyPred.CastPosition) > 35))
                     
                 {
                     E.CastIfHitchanceEquals(target, HitChance.Medium);
                 }
-                else if (eFlyPred.CastPosition.LSDistance(player.Position) < E.Range && zacETime != 0 &&
+                else if (eFlyPred.CastPosition.Distance(player.Position) < E.Range && zacETime != 0 &&
                          System.Environment.TickCount - zacETime > 2500)
                 {
                     E.CastIfHitchanceEquals(target, HitChance.Medium);
                 }
             }
-            else if (enemyPred.UnitPosition.LSDistance(player.Position) < eRanges[E.Level - 1] &&
-                     300 < target.LSDistance(player.Position))
+            else if (enemyPred.UnitPosition.Distance(player.Position) < eRanges[E.Level - 1] &&
+                     300 < target.Distance(player.Position))
             {
                 E.SetCharged("ZacE", "ZacE", 300, eRanges[E.Level - 1], eChannelTimes[E.Level - 1]);
                 E.StartCharging(eFlyPred.UnitPosition);
@@ -181,20 +181,20 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             var comboR = 2;
 
-            if (comboR > 0 && R.LSIsReady())
+            if (comboR > 0 && R.IsReady())
             {
                 int enemiesHit = 0;
                 int killableHits = 0;
 
-                foreach (AIHeroClient enemy in ObjectManager.Get<AIHeroClient>().Where(he => he.IsEnemy && he.LSIsValidTarget(R.Range)))
+                foreach (AIHeroClient enemy in ObjectManager.Get<AIHeroClient>().Where(he => he.IsEnemy && he.IsValidTarget(R.Range)))
                 {
                     var prediction = Prediction.GetPrediction(enemy, R.Delay);
 
-                    if (prediction != null && prediction.UnitPosition.LSDistance(ObjectManager.Player.ServerPosition) <= R.Range)
+                    if (prediction != null && prediction.UnitPosition.Distance(ObjectManager.Player.ServerPosition) <= R.Range)
                     {
                         enemiesHit++;
 
-                        if (ObjectManager.Player.LSGetSpellDamage(enemy, SpellSlot.W) >= enemy.Health)
+                        if (ObjectManager.Player.GetSpellDamage(enemy, SpellSlot.W) >= enemy.Health)
                             killableHits++;
                     }
                 }
@@ -210,7 +210,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         
         void CastR()
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
             R.Cast();
         }

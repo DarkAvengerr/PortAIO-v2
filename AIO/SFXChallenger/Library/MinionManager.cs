@@ -68,7 +68,7 @@ using EloBuddy; namespace SFXChallenger.Library
             MinionOrderTypes order = MinionOrderTypes.Health)
         {
             var result = (from minion in GameObjects.Minions.Concat(GameObjects.Jungle)
-                where minion.LSIsValidTarget(range, false, @from)
+                where minion.IsValidTarget(range, false, @from)
                 let minionTeam = minion.Team
                 where
                     team == MinionTeam.Neutral && minionTeam == GameObjectTeam.Neutral ||
@@ -131,7 +131,7 @@ using EloBuddy; namespace SFXChallenger.Library
         {
             var result = new Vector2();
             var minionCount = 0;
-            var startPos = ObjectManager.Player.ServerPosition.LSTo2D();
+            var startPos = ObjectManager.Player.ServerPosition.To2D();
 
             range = range * range;
 
@@ -150,7 +150,7 @@ using EloBuddy; namespace SFXChallenger.Library
                     {
                         var circle = MEC.GetMec(subGroup);
 
-                        if (circle.Radius <= width && circle.Center.LSDistance(startPos, true) <= range)
+                        if (circle.Radius <= width && circle.Center.Distance(startPos, true) <= range)
                         {
                             minionCount = subGroup.Count;
                             return new FarmLocation(circle.Center, minionCount);
@@ -162,9 +162,9 @@ using EloBuddy; namespace SFXChallenger.Library
             {
                 foreach (var pos in minionPositions)
                 {
-                    if (pos.LSDistance(startPos, true) <= range)
+                    if (pos.Distance(startPos, true) <= range)
                     {
-                        var count = minionPositions.Count(pos2 => pos.LSDistance(pos2, true) <= width * width);
+                        var count = minionPositions.Count(pos2 => pos.Distance(pos2, true) <= width * width);
 
                         if (count >= minionCount)
                         {
@@ -185,7 +185,7 @@ using EloBuddy; namespace SFXChallenger.Library
         {
             var result = new Vector2();
             var minionCount = 0;
-            var startPos = ObjectManager.Player.ServerPosition.LSTo2D();
+            var startPos = ObjectManager.Player.ServerPosition.To2D();
 
             var posiblePositions = new List<Vector2>();
             posiblePositions.AddRange(minionPositions);
@@ -204,12 +204,12 @@ using EloBuddy; namespace SFXChallenger.Library
 
             foreach (var pos in posiblePositions)
             {
-                if (pos.LSDistance(startPos, true) <= range * range)
+                if (pos.Distance(startPos, true) <= range * range)
                 {
-                    var endPos = startPos + range * (pos - startPos).LSNormalized();
+                    var endPos = startPos + range * (pos - startPos).Normalized();
 
                     var count =
-                        minionPositions.Count(pos2 => pos2.LSDistance(startPos, endPos, true, true) <= width * width);
+                        minionPositions.Count(pos2 => pos2.Distance(startPos, endPos, true, true) <= width * width);
 
                     if (count >= minionCount)
                     {
@@ -232,7 +232,7 @@ using EloBuddy; namespace SFXChallenger.Library
             SkillshotType stype,
             Vector3 rangeCheckFrom = new Vector3())
         {
-            from = from.LSTo2D().LSIsValid() ? from : ObjectManager.Player.ServerPosition;
+            from = from.To2D().IsValid() ? from : ObjectManager.Player.ServerPosition;
 
             return (from minion in minions
                 select
@@ -251,7 +251,7 @@ using EloBuddy; namespace SFXChallenger.Library
                         })
                 into pos
                 where pos.Hitchance >= HitChance.High
-                select pos.UnitPosition.LSTo2D()).ToList();
+                select pos.UnitPosition.To2D()).ToList();
         }
 
         /// <summary>

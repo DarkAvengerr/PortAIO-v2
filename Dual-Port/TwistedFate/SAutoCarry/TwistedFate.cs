@@ -76,13 +76,13 @@ namespace SAutoCarry.Champions
             var t = TargetSelector.GetTarget(Spells[Q].Range * 2f, LeagueSharp.Common.TargetSelector.DamageType.Magical);
             if(t != null)
             {
-                if(Spells[Q].LSIsReady() && (ComboUseQDashing || ComboUseQImmobile))
+                if(Spells[Q].IsReady() && (ComboUseQDashing || ComboUseQImmobile))
                 {
-                    if ((t.IsImmobilized() && ComboUseQImmobile) || (t.LSIsDashing() && ComboUseQDashing))
-                        CastQ(t, t.ServerPosition.LSTo2D());
+                    if ((t.IsImmobilized() && ComboUseQImmobile) || (t.IsDashing() && ComboUseQDashing))
+                        CastQ(t, t.ServerPosition.To2D());
                 }
 
-                if(Spells[W].LSIsReady() && ComboUseW)
+                if(Spells[W].IsReady() && ComboUseW)
                 {
                     Helpers.CardMgr.Select(FindCardToSelect(t));
                 }
@@ -94,10 +94,10 @@ namespace SAutoCarry.Champions
             var t = TargetSelector.GetTarget(ObjectManager.Player.AttackRange + 250, LeagueSharp.Common.TargetSelector.DamageType.Magical);
             if (t != null)
             {
-                if (Spells[W].LSIsReady() && HarassUseW)
+                if (Spells[W].IsReady() && HarassUseW)
                     Helpers.CardMgr.Select(Helpers.CardMgr.Card.Blue);
 
-                if (Spells[Q].LSIsReady() && HarassUseQ)
+                if (Spells[Q].IsReady() && HarassUseQ)
                     Spells[Q].Cast(t);
             }
         }
@@ -106,12 +106,12 @@ namespace SAutoCarry.Champions
         {
             var blueDamage = Spells[W].GetDamage(t);
             var redDamage = Spells[W].GetDamage(t, 1);
-            var goldDamage = Spells[W].GetDamage(t, 2) + (Spells[Q].LSIsReady() && ObjectManager.Player.Mana - Spells[W].ManaCost - Spells[Q].ManaCost >= 0 ? Spells[Q].GetDamage(t) : 0);
+            var goldDamage = Spells[W].GetDamage(t, 2) + (Spells[Q].IsReady() && ObjectManager.Player.Mana - Spells[W].ManaCost - Spells[Q].ManaCost >= 0 ? Spells[Q].GetDamage(t) : 0);
 
-            if (ObjectManager.Player.Mana - Spells[W].ManaCost < Spells[Q].ManaCost - 5 && ObjectManager.Player.LSCountAlliesInRange(1000) == 0 && Spells[Q].LSIsReady(1000))
+            if (ObjectManager.Player.Mana - Spells[W].ManaCost < Spells[Q].ManaCost - 5 && ObjectManager.Player.CountAlliesInRange(1000) == 0 && Spells[Q].IsReady(1000))
                 return Helpers.CardMgr.Card.Blue;
 
-            if (t.HealthPercent - goldDamage > 0 && ObjectManager.Player.Mana - Spells[W].ManaCost - Spells[Q].ManaCost <= 0 && ObjectManager.Player.LSCountAlliesInRange(1000) == 0)
+            if (t.HealthPercent - goldDamage > 0 && ObjectManager.Player.Mana - Spells[W].ManaCost - Spells[Q].ManaCost <= 0 && ObjectManager.Player.CountAlliesInRange(1000) == 0)
                 return Helpers.CardMgr.Card.Blue;
 
             if (t.Health - blueDamage + 50 < 0)
@@ -130,17 +130,17 @@ namespace SAutoCarry.Champions
             var points = new List<Vector2>();
             var hitBoxes = new List<int>();
 
-            var startPoint = ObjectManager.Player.ServerPosition.LSTo2D();
-            var originalDirection = Spells[Q].Range * (unitPosition - startPoint).LSNormalized();
+            var startPoint = ObjectManager.Player.ServerPosition.To2D();
+            var originalDirection = Spells[Q].Range * (unitPosition - startPoint).Normalized();
 
             foreach (var enemy in ObjectManager.Get<AIHeroClient>())
             {
-                if (enemy.LSIsValidTarget() && enemy.NetworkId != unit.NetworkId)
+                if (enemy.IsValidTarget() && enemy.NetworkId != unit.NetworkId)
                 {
                     var pos = Spells[Q].GetPrediction(enemy);
                     if (pos.Hitchance >= HitChance.Medium)
                     {
-                        points.Add(pos.UnitPosition.LSTo2D());
+                        points.Add(pos.UnitPosition.To2D());
                         hitBoxes.Add((int)enemy.BoundingRadius);
                     }
                 }
@@ -150,18 +150,18 @@ namespace SAutoCarry.Champions
 
             for (var i = 0; i < 3; i++)
             {
-                if (i == 0) posiblePositions.Add(unitPosition + originalDirection.LSRotated(0));
-                if (i == 1) posiblePositions.Add(startPoint + originalDirection.LSRotated(Qangle));
-                if (i == 2) posiblePositions.Add(startPoint + originalDirection.LSRotated(-Qangle));
+                if (i == 0) posiblePositions.Add(unitPosition + originalDirection.Rotated(0));
+                if (i == 1) posiblePositions.Add(startPoint + originalDirection.Rotated(Qangle));
+                if (i == 2) posiblePositions.Add(startPoint + originalDirection.Rotated(-Qangle));
             }
 
 
-            if (startPoint.LSDistance(unitPosition) < 900)
+            if (startPoint.Distance(unitPosition) < 900)
             {
                 for (var i = 0; i < 3; i++)
                 {
                     var pos = posiblePositions[i];
-                    var direction = (pos - startPoint).LSNormalized().LSPerpendicular();
+                    var direction = (pos - startPoint).Normalized().Perpendicular();
                     var k = (2 / 3 * (unit.BoundingRadius + Spells[Q].Width));
                     posiblePositions.Add(startPoint - k * direction);
                     posiblePositions.Add(startPoint + k * direction);
@@ -191,8 +191,8 @@ namespace SAutoCarry.Champions
         {
             var result = 0;
 
-            var startPoint = ObjectManager.Player.ServerPosition.LSTo2D();
-            var originalDirection = Spells[Q].Range * (position - startPoint).LSNormalized();
+            var startPoint = ObjectManager.Player.ServerPosition.To2D();
+            var originalDirection = Spells[Q].Range * (position - startPoint).Normalized();
             var originalEndPoint = startPoint + originalDirection;
 
             for (var i = 0; i < points.Count; i++)
@@ -203,10 +203,10 @@ namespace SAutoCarry.Champions
                 {
                     var endPoint = new Vector2();
                     if (k == 0) endPoint = originalEndPoint;
-                    if (k == 1) endPoint = startPoint + originalDirection.LSRotated(Qangle);
-                    if (k == 2) endPoint = startPoint + originalDirection.LSRotated(-Qangle);
+                    if (k == 1) endPoint = startPoint + originalDirection.Rotated(Qangle);
+                    if (k == 2) endPoint = startPoint + originalDirection.Rotated(-Qangle);
 
-                    if (point.LSDistance(startPoint, endPoint, true, true) <
+                    if (point.Distance(startPoint, endPoint, true, true) <
                         (Spells[Q].Width + hitBoxes[i]) * (Spells[Q].Width + hitBoxes[i]))
                     {
                         result++;
@@ -256,7 +256,7 @@ namespace SAutoCarry.Champions
 
         protected override void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if ((Helpers.CardMgr.CurrentCard == Helpers.CardMgr.Card.Gold || Helpers.CardMgr.CurrentCard == Helpers.CardMgr.Card.Red) && gapcloser.End.LSDistance(ObjectManager.Player.ServerPosition) < ObjectManager.Player.AttackRange && AntiGapCloser)
+            if ((Helpers.CardMgr.CurrentCard == Helpers.CardMgr.Card.Gold || Helpers.CardMgr.CurrentCard == Helpers.CardMgr.Card.Red) && gapcloser.End.Distance(ObjectManager.Player.ServerPosition) < ObjectManager.Player.AttackRange && AntiGapCloser)
             {
                 Orbwalker.ForcedTarget = gapcloser.Sender;
                 EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, gapcloser.Sender);
@@ -265,7 +265,7 @@ namespace SAutoCarry.Champions
 
         protected override void Interrupter_OnPossibleToInterrupt(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (Helpers.CardMgr.CurrentCard == Helpers.CardMgr.Card.Gold && sender.LSDistance(ObjectManager.Player.ServerPosition) < ObjectManager.Player.AttackRange && Interrupter)
+            if (Helpers.CardMgr.CurrentCard == Helpers.CardMgr.Card.Gold && sender.Distance(ObjectManager.Player.ServerPosition) < ObjectManager.Player.AttackRange && Interrupter)
             {
                 Orbwalker.ForcedTarget = sender;
                 EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, sender);

@@ -378,7 +378,7 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
                     var duration = packet.Duration;
                     if (packet.Type == Packet.S2C.Teleport.Type.Recall)
                     {
-                        duration = teleport.Hero.LSHasBuff("exaltedwithbaronnashor") ? 4000 : 8000;
+                        duration = teleport.Hero.HasBuff("exaltedwithbaronnashor") ? 4000 : 8000;
                         if (LeagueSharp.Common.Utility.Map.GetMap().Type == LeagueSharp.Common.Utility.Map.MapType.CrystalScar)
                         {
                             duration = 4500;

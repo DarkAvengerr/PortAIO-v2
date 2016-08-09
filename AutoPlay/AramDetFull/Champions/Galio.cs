@@ -38,7 +38,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void OnProcessSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!W.LSIsReady() || sender.IsAlly || !(sender is AIHeroClient) || !(args.Target is AIHeroClient) || args.Target.IsEnemy)
+            if (!W.IsReady() || sender.IsAlly || !(sender is AIHeroClient) || !(args.Target is AIHeroClient) || args.Target.IsEnemy)
                 return;
             if (W.IsInRange(args.Target))
                 W.CastOnUnit((AIHeroClient)args.Target);
@@ -53,33 +53,33 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
-            //if (!Q.LSIsReady(4500) && player.Mana > 200)
+            //if (!Q.IsReady(4500) && player.Mana > 200)
           //      W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.Cast(target);
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if (target == null || !R.LSIsReady())
+            if (target == null || !R.IsReady())
                 return;
-            if (player.LSCountEnemiesInRange(450) > 1)
+            if (player.CountEnemiesInRange(450) > 1)
             {
-                if (W.LSIsReady())
+                if (W.IsReady())
                     W.Cast();
                 R.Cast();
             }
@@ -122,12 +122,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var AllMinions = MinionManager.GetMinions(player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
             foreach (var minion in AllMinions)
             {
-                if (Q.LSIsReady() && Q.GetDamage(minion)>minion.Health)
+                if (Q.IsReady() && Q.GetDamage(minion)>minion.Health)
                 {
                     Q.Cast(minion);
                     return;
                 }
-                if (E.LSIsReady() && E.GetDamage(minion) > minion.Health)
+                if (E.IsReady() && E.GetDamage(minion) > minion.Health)
                 {
                     E.Cast(minion);
                 }

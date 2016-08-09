@@ -25,7 +25,7 @@ using EloBuddy;
         public bool ShouldGetExecuted()
         {
             return Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.kalista.kalista.autoEKS") &&
-                   Variables.Spells[SpellSlot.E].LSIsReady();
+                   Variables.Spells[SpellSlot.E].IsReady();
 
         }
 
@@ -36,7 +36,7 @@ using EloBuddy;
 
         public void OnExecute()
         {
-            var target = HeroManager.Enemies.FirstOrDefault(enemy => enemy.CanBeRendKilled() && enemy.LSIsValidTarget(Variables.Spells[SpellSlot.E].Range));
+            var target = HeroManager.Enemies.FirstOrDefault(enemy => enemy.CanBeRendKilled() && enemy.IsValidTarget(Variables.Spells[SpellSlot.E].Range));
 
             if (target != null 
                 && (Environment.TickCount - LastECastTime >= 250f)

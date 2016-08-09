@@ -26,7 +26,7 @@ using EloBuddy;
         public bool ShouldGetExecuted()
         {
             return Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.kalista.kalista.autoESlow") &&
-                   Variables.Spells[SpellSlot.E].LSIsReady();
+                   Variables.Spells[SpellSlot.E].IsReady();
 
         }
 
@@ -40,11 +40,11 @@ using EloBuddy;
             var killableMinions =
                 LeagueSharp.SDK.GameObjects.EnemyMinions.Where(
                     m =>
-                        m.LSIsValidTarget(Variables.Spells[SpellSlot.E].Range)
+                        m.IsValidTarget(Variables.Spells[SpellSlot.E].Range)
                         && m.HasRend()
                         && m.CanBeRendKilled());
 
-            var rendHero = HeroManager.Enemies.Where(h => h.LSIsValidTarget(Variables.Spells[SpellSlot.E].Range) 
+            var rendHero = HeroManager.Enemies.Where(h => h.IsValidTarget(Variables.Spells[SpellSlot.E].Range) 
                 && h.HasRend()
                 && h.GetRendBuff().Count >= Variables.AssemblyMenu.GetItemValue<Slider>("dzaio.champion.kalista.combo.e.stacks").Value)
                 .OrderBy(KalistaHelper.GetRendDamage)
@@ -54,7 +54,7 @@ using EloBuddy;
                 && rendHero != null
                 && killableMinions.Any()
                 && rendHero.HealthPercent >= 35
-                && ObjectManager.Player.LSDistance(rendHero) <= Orbwalking.GetRealAutoAttackRange(rendHero) * 1.1f)
+                && ObjectManager.Player.Distance(rendHero) <= Orbwalking.GetRealAutoAttackRange(rendHero) * 1.1f)
             {
                 Variables.Spells[SpellSlot.E].Cast();
                 LastECastTime = Environment.TickCount;

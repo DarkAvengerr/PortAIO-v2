@@ -73,7 +73,7 @@ using EloBuddy;
 
         private static void DrawingOnOnDraw(EventArgs args)
         {
-            if (_selectedTargetObjAiHero.LSIsValidTarget() && _configMenu != null &&
+            if (_selectedTargetObjAiHero.IsValidTarget() && _configMenu != null &&
                 _configMenu.Item("FocusSelected").GetValue<bool>() &&
                 _configMenu.Item("SelTColor").GetValue<Circle>().Active)
             {
@@ -91,8 +91,8 @@ using EloBuddy;
             }
             _selectedTargetObjAiHero =
                 HeroManager.Enemies
-                    .FindAll(hero => hero.LSIsValidTarget() && hero.LSDistance(Game.CursorPos, true) < 40000) // 200 * 200
-                    .OrderBy(h => h.LSDistance(Game.CursorPos, true)).FirstOrDefault();
+                    .FindAll(hero => hero.IsValidTarget() && hero.Distance(Game.CursorPos, true) < 40000) // 200 * 200
+                    .OrderBy(h => h.Distance(Game.CursorPos, true)).FirstOrDefault();
         }
 
         #endregion
@@ -246,13 +246,13 @@ using EloBuddy;
         public static bool IsInvulnerable(Obj_AI_Base target)
         {
             // Tryndamere's Undying Rage (R)
-            if (target.LSHasBuff("Undying Rage") && target.Health <= 2f)
+            if (target.HasBuff("Undying Rage") && target.Health <= 2f)
             {
                 return true;
             }
 
             // Kayle's Intervention (R)
-            if (target.LSHasBuff("JudicatorIntervention"))
+            if (target.HasBuff("JudicatorIntervention"))
             {
                 return true;
             }
@@ -262,7 +262,7 @@ using EloBuddy;
 
         public static void SetTarget(AIHeroClient hero)
         {
-            if (hero.LSIsValidTarget())
+            if (hero.IsValidTarget())
             {
                 _selectedTargetObjAiHero = hero;
             }
@@ -284,8 +284,8 @@ using EloBuddy;
             float range,
             Vector3? rangeCheckFrom = null)
         {
-            return target.LSIsValidTarget() &&
-                   target.LSDistance(rangeCheckFrom ?? ObjectManager.Player.ServerPosition, true) <
+            return target.IsValidTarget() &&
+                   target.Distance(rangeCheckFrom ?? ObjectManager.Player.ServerPosition, true) <
                    Math.Pow(range <= 0 ? Orbwalking.GetRealAutoAttackRange(target) : range, 2) &&
                    !IsInvulnerable(target);
         }
@@ -331,7 +331,7 @@ using EloBuddy;
                         return
                             targets.MinOrDefault(
                                 hero =>
-                                    (rangeCheckFrom.HasValue ? rangeCheckFrom.Value : champion.ServerPosition).LSDistance(
+                                    (rangeCheckFrom.HasValue ? rangeCheckFrom.Value : champion.ServerPosition).Distance(
                                         hero.ServerPosition, true));
                     case TargetingMode.AutoPriority:
                         return

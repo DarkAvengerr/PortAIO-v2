@@ -53,7 +53,7 @@ using EloBuddy; namespace ADCPackage.Plugins
         private static void Interrupter2_OnInterruptableTarget(AIHeroClient sender,
             Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 foreach (var champ in from interrupter in HeroManager.Enemies.SelectMany(
                     enemy => Interrupter.Spells.Where(g => g.ChampionName == enemy.ChampionName))
@@ -67,7 +67,7 @@ using EloBuddy; namespace ADCPackage.Plugins
 
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (Menu.Config.Item(gapcloser.Sender.ChampionName).IsActive() && R.LSIsReady())
+            if (Menu.Config.Item(gapcloser.Sender.ChampionName).IsActive() && R.IsReady())
             {
                 R.CastOnUnit(gapcloser.Sender);
             }
@@ -78,8 +78,8 @@ using EloBuddy; namespace ADCPackage.Plugins
             if (Menu.Config.Item("draw.explosion").IsActive())
             {
                 var eturret =
-                    ObjectManager.Get<Obj_AI_Turret>().FirstOrDefault(t => !t.IsDead && t.LSHasBuff("tristanaecharge"));
-                var etarget = HeroManager.Enemies.FirstOrDefault(e => !e.IsDead && e.LSHasBuff("tristanaecharge"));
+                    ObjectManager.Get<Obj_AI_Turret>().FirstOrDefault(t => !t.IsDead && t.HasBuff("tristanaecharge"));
+                var etarget = HeroManager.Enemies.FirstOrDefault(e => !e.IsDead && e.HasBuff("tristanaecharge"));
 
                 if (etarget != null)
                 {
@@ -114,7 +114,7 @@ using EloBuddy; namespace ADCPackage.Plugins
         private static void PermaActive(EventArgs args)
         {
             // also need a check to jump with W if target is killable by E already and its on them, and or if R is ready ---- everything works when all in seperate foreach's..
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 if (Player.ManaPercent < Menu.Config.Item("killsteal.r.mana").GetValue<Slider>().Value) return;
 
@@ -145,33 +145,33 @@ using EloBuddy; namespace ADCPackage.Plugins
                 }
             }
 
-            if (W.LSIsReady() && Menu.Config.Item("ks.w").IsActive())
+            if (W.IsReady() && Menu.Config.Item("ks.w").IsActive())
             {
                 if (Player.ManaPercent < Menu.Config.Item("killsteal.w.mana").GetValue<Slider>().Value) return;
                 if (Menu.Config.Item("ks.w.setting1").GetValue<bool>() && Player.Mana < W.ManaCost*2) return;
                 if (Menu.Config.Item("ks.w.setting2").GetValue<bool>() &&
-                    Player.LSCountAlliesInRange(1000) < Player.LSCountEnemiesInRange(1500) - 1) return;
+                    Player.CountAlliesInRange(1000) < Player.CountEnemiesInRange(1500) - 1) return;
                 if (Menu.Config.Item("ks.w.setting3").GetValue<Slider>().Value > Player.HealthPercent) return;
-                if (Menu.Config.Item("ks.w.setting5").GetValue<bool>() && Menu.Config.Item("ks.r").GetValue<bool>() && R.LSIsReady() && Utils.GameTimeTickCount -R.LastCastAttemptT > 1000) return;
+                if (Menu.Config.Item("ks.w.setting5").GetValue<bool>() && Menu.Config.Item("ks.r").GetValue<bool>() && R.IsReady() && Utils.GameTimeTickCount -R.LastCastAttemptT > 1000) return;
 
                 /* solo W damage with E buff amp*/
                 foreach (var enemy in from enemy in HeroManager.Enemies.Where(e => W.CanCast(e))
-                                      where enemy.LSHasBuff("tristanaecharge")
+                                      where enemy.HasBuff("tristanaecharge")
                                       let etargetbuff = enemy.Buffs.Find(buff => buff.Name == "tristanaecharge")
                                       where (W.GetDamage(enemy) + ((etargetbuff.Count * 0.25) * W.GetDamage(enemy)) >=
                                              enemy.Health)
                                       select enemy)
                 {
 
-                    if (Menu.Config.Item("ks.w.setting0").GetValue<bool>() && enemy.LSUnderTurret(true)) return;
+                    if (Menu.Config.Item("ks.w.setting0").GetValue<bool>() && enemy.UnderTurret(true)) return;
 
                     var etargetstacks = enemy.Buffs.Find(buff => buff.Name == "tristanaecharge");
                     if (Menu.Config.Item("ks.w.setting4").GetValue<bool>() && E.GetDamage(enemy) + etargetstacks?.Count*0.30*E.GetDamage(enemy) > enemy.Health) return;
 
-                    delay = ((1000 * Player.ServerPosition.LSDistance(enemy.ServerPosition)) / 1500) + 500 +
+                    delay = ((1000 * Player.ServerPosition.Distance(enemy.ServerPosition)) / 1500) + 500 +
                             Game.Ping;
 
-                    if (W.Cast(enemy).LSIsCasted())
+                    if (W.Cast(enemy).IsCasted())
                     {
                         switch (Menu.Config.Item("ks.w.jumpmouse").GetValue<StringList>().SelectedIndex)
                         {
@@ -187,7 +187,7 @@ using EloBuddy; namespace ADCPackage.Plugins
 
                 /* W dmg + E dmg*/
                 foreach (var enemy in from enemy in HeroManager.Enemies.Where(e => W.CanCast(e))
-                                      where enemy.LSHasBuff("tristanaecharge")
+                                      where enemy.HasBuff("tristanaecharge")
                                       let etargetbuff = enemy.Buffs.Find(buff => buff.Name == "tristanaecharge")
                                       let timedbuff = enemy.Buffs.Find(buff => buff.Name == "tristanaechargesound")
                                       where (Math.Abs(timedbuff.EndTime - Game.Time) * 1000 <= delay ||
@@ -197,14 +197,14 @@ using EloBuddy; namespace ADCPackage.Plugins
                                 >= enemy.Health)
                                       select enemy)
                 {
-                    if (Menu.Config.Item("ks.w.setting0").GetValue<bool>() && enemy.LSUnderTurret(true)) return;
+                    if (Menu.Config.Item("ks.w.setting0").GetValue<bool>() && enemy.UnderTurret(true)) return;
 
                     var etargetstacks = enemy.Buffs.Find(buff => buff.Name == "tristanaecharge");
                     if (Menu.Config.Item("ks.w.setting4").GetValue<bool>() && E.GetDamage(enemy) + etargetstacks?.Count * 0.30 * E.GetDamage(enemy) > enemy.Health) return;
 
-                    delay = ((1000 * Player.ServerPosition.LSDistance(enemy.ServerPosition)) / 1500) + 500 + Game.Ping;
+                    delay = ((1000 * Player.ServerPosition.Distance(enemy.ServerPosition)) / 1500) + 500 + Game.Ping;
 
-                    if (W.Cast(enemy).LSIsCasted())
+                    if (W.Cast(enemy).IsCasted())
                     {
                         switch (Menu.Config.Item("ks.w.jumpmouse").GetValue<StringList>().SelectedIndex)
                         {
@@ -222,14 +222,14 @@ using EloBuddy; namespace ADCPackage.Plugins
                 /* solo W damage no E */
                 foreach (var enemy in HeroManager.Enemies.Where(e => W.CanCast(e)).Where(enemy => enemy.Health < W.GetDamage(enemy)))
                 {
-                    if (Menu.Config.Item("ks.w.setting0").GetValue<bool>() && enemy.LSUnderTurret(true)) return;
+                    if (Menu.Config.Item("ks.w.setting0").GetValue<bool>() && enemy.UnderTurret(true)) return;
 
                     var etargetstacks = enemy.Buffs.Find(buff => buff.Name == "tristanaecharge");
                     if (Menu.Config.Item("ks.w.setting4").GetValue<bool>() && E.GetDamage(enemy) + etargetstacks?.Count * 0.30 * E.GetDamage(enemy) > enemy.Health) return;
 
-                    delay = ((1000 * Player.ServerPosition.LSDistance(enemy.ServerPosition)) / 1500) + 500 + Game.Ping;
+                    delay = ((1000 * Player.ServerPosition.Distance(enemy.ServerPosition)) / 1500) + 500 + Game.Ping;
 
-                    if (W.Cast(enemy).LSIsCasted())
+                    if (W.Cast(enemy).IsCasted())
                     {
                         switch (Menu.Config.Item("ks.w.jumpmouse").GetValue<StringList>().SelectedIndex)
                         {
@@ -246,9 +246,9 @@ using EloBuddy; namespace ADCPackage.Plugins
 
             }
 
-            //foreach (var enemy in HeroManager.Enemies.Where(e => e.LSDistance(Player) <= W.Range && e != null && e.LSIsValidTarget()))
+            //foreach (var enemy in HeroManager.Enemies.Where(e => e.Distance(Player) <= W.Range && e != null && e.IsValidTarget()))
             //{
-            //    if (R.LSIsReady())
+            //    if (R.IsReady())
             //    {
             //        if (Menu.Config.Item("ks.er").GetValue<bool>())
             //        {
@@ -274,14 +274,14 @@ using EloBuddy; namespace ADCPackage.Plugins
             //        }
             //    }
 
-            //    if (W.LSIsReady())
+            //    if (W.IsReady())
             //    {
             //        if (Menu.Config.Item("ks.w").IsActive())
             //        {
             //            if (Menu.Config.Item("ks.w.setting1").IsActive() && Player.Mana < W.ManaCost*2) continue;
             //            if (Player.HealthPercent < Menu.Config.Item("ks.w.setting3").GetValue<Slider>().Value) continue;
 
-            //            if (enemy.LSHasBuff("tristanaecharge"))
+            //            if (enemy.HasBuff("tristanaecharge"))
             //            {
             //                var etarget = enemy;
 
@@ -291,15 +291,15 @@ using EloBuddy; namespace ADCPackage.Plugins
             //                if (etarget != null)
             //                {
             //                    if (Menu.Config.Item("ks.w.setting2").IsActive() &&
-            //                        Player.LSCountAlliesInRange(1000) < etarget.LSCountEnemiesInRange(1000))
+            //                        Player.CountAlliesInRange(1000) < etarget.CountEnemiesInRange(1000))
             //                        break;
 
             //                    if ((W.GetDamage(etarget) + ((etargetbuff.Count * 0.25) * W.GetDamage(etarget)) >=
             //                         etarget.Health))
             //                    {
-            //                        delay = ((1000 * Player.ServerPosition.LSDistance(etarget.ServerPosition)) / 1500) + 500 +
+            //                        delay = ((1000 * Player.ServerPosition.Distance(etarget.ServerPosition)) / 1500) + 500 +
             //                                Game.Ping;
-            //                        if (W.Cast(etarget).LSIsCasted())
+            //                        if (W.Cast(etarget).IsCasted())
             //                        {
             //                            switch (Menu.Config.Item("ks.w.jumpmouse").GetValue<StringList>().SelectedIndex)
             //                            {
@@ -317,12 +317,12 @@ using EloBuddy; namespace ADCPackage.Plugins
             //                        + (E.GetDamage(etarget) + ((etargetbuff.Count * 0.30) * E.GetDamage(etarget)))
             //                        >= etarget.Health)
             //                    {
-            //                        delay = ((1000 * Player.ServerPosition.LSDistance(etarget.ServerPosition)) / 1500) + 500 +
+            //                        delay = ((1000 * Player.ServerPosition.Distance(etarget.ServerPosition)) / 1500) + 500 +
             //                                Game.Ping;
             //                        if (System.Math.Abs(timedbuff.EndTime - Game.Time) * 1000 <= delay ||
             //                            etargetbuff.Count == 4)
             //                        {
-            //                            if (W.Cast(etarget).LSIsCasted())
+            //                            if (W.Cast(etarget).IsCasted())
             //                            {
             //                                switch (Menu.Config.Item("ks.w.jumpmouse").GetValue<StringList>().SelectedIndex)
             //                                {
@@ -343,14 +343,14 @@ using EloBuddy; namespace ADCPackage.Plugins
             //            if (enemy != null)
             //            {
             //                if (Menu.Config.Item("ks.w.setting2").IsActive() &&
-            //                    Player.LSCountAlliesInRange(1000) < enemy.LSCountEnemiesInRange(1000))
+            //                    Player.CountAlliesInRange(1000) < enemy.CountEnemiesInRange(1000))
             //                    return;
 
             //                if ((W.GetDamage(enemy) >= enemy.Health))
             //                {
-            //                    if (W.Cast(enemy).LSIsCasted())
+            //                    if (W.Cast(enemy).IsCasted())
             //                    {
-            //                        delay = ((1000*Player.ServerPosition.LSDistance(enemy.ServerPosition))/1500) + 500 +
+            //                        delay = ((1000*Player.ServerPosition.Distance(enemy.ServerPosition))/1500) + 500 +
             //                                Game.Ping;
             //                        switch (Menu.Config.Item("ks.w.jumpmouse").GetValue<StringList>().SelectedIndex)
             //                        {
@@ -377,16 +377,16 @@ using EloBuddy; namespace ADCPackage.Plugins
 
             if (Menu.Orbwalker.ActiveMode == CustomOrbwalker.OrbwalkingMode.Combo)
             {
-                if (_target != null && E.LSIsReady() && Menu.Config.Item(_target.ChampionName + "e").GetValue<bool>() &&
-                    _target.LSDistance(Player) >= Player.AttackRange)
+                if (_target != null && E.IsReady() && Menu.Config.Item(_target.ChampionName + "e").GetValue<bool>() &&
+                    _target.Distance(Player) >= Player.AttackRange)
                 {
                     args.Process = false;
                 }
 
 
-                if (_target != null && Q.LSIsReady() && Menu.Config.Item(_target.ChampionName + "q").GetValue<bool>())
+                if (_target != null && Q.IsReady() && Menu.Config.Item(_target.ChampionName + "q").GetValue<bool>())
                 {
-                    if (Menu.Config.Item("q.onlye").GetValue<bool>() && !_target.LSHasBuff("tristanaechargesound"))
+                    if (Menu.Config.Item("q.onlye").GetValue<bool>() && !_target.HasBuff("tristanaechargesound"))
                     {
                         return;
                     }
@@ -396,16 +396,16 @@ using EloBuddy; namespace ADCPackage.Plugins
             }
             else if (Menu.Orbwalker.ActiveMode == CustomOrbwalker.OrbwalkingMode.Mixed)
             {
-                if (_target != null && E.LSIsReady() && Menu.Config.Item(_target.ChampionName + "e.harass").GetValue<bool>() &&
-                    _target.LSDistance(Player) >= Player.AttackRange)
+                if (_target != null && E.IsReady() && Menu.Config.Item(_target.ChampionName + "e.harass").GetValue<bool>() &&
+                    _target.Distance(Player) >= Player.AttackRange)
                 {
                     args.Process = false;
                 }
 
 
-                if (_target != null && Q.LSIsReady() && Menu.Config.Item(_target.ChampionName + "q.harass").GetValue<bool>())
+                if (_target != null && Q.IsReady() && Menu.Config.Item(_target.ChampionName + "q.harass").GetValue<bool>())
                 {
-                    if (Menu.Config.Item("q.onlye").GetValue<bool>() && !_target.LSHasBuff("tristanaechargesound"))
+                    if (Menu.Config.Item("q.onlye").GetValue<bool>() && !_target.HasBuff("tristanaechargesound"))
                     {
                         return;
                     }
@@ -419,7 +419,7 @@ using EloBuddy; namespace ADCPackage.Plugins
                 Menu.Config.Item("e.force.target.harass").GetValue<bool>() &&
                 Menu.Orbwalker.ActiveMode == CustomOrbwalker.OrbwalkingMode.Mixed)
             {
-                foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.LSHasBuff("tristanaechargesound")))
+                foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.HasBuff("tristanaechargesound")))
                 {
                     TargetSelector.SetTarget(enemy);
                     return;
@@ -435,7 +435,7 @@ using EloBuddy; namespace ADCPackage.Plugins
                 var eminion =
                     MinionManager
                         .GetMinions(Orbwalking.GetRealAutoAttackRange(Player))
-                        .FirstOrDefault(m => m.LSHasBuff("tristanaecharge") || m.LSHasBuff("tristanaechargesound"));
+                        .FirstOrDefault(m => m.HasBuff("tristanaecharge") || m.HasBuff("tristanaechargesound"));
 
                 if (eminion == null) return;
                 Menu.Orbwalker.ForceTarget(eminion);
@@ -464,16 +464,16 @@ using EloBuddy; namespace ADCPackage.Plugins
         public static void Combo()
         {
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-            if (target == null || !target.LSIsValidTarget()) return;
+            if (target == null || !target.IsValidTarget()) return;
 
-            if (E.LSIsReady() && E.IsInRange(target) && Menu.Config.Item(target.ChampionName + "e").GetValue<bool>())
+            if (E.IsReady() && E.IsInRange(target) && Menu.Config.Item(target.ChampionName + "e").GetValue<bool>())
             {
                 if (Player.ManaPercent < Menu.Config.Item("combo.e.mana").GetValue<Slider>().Value) return;
 
                 E.CastOnUnit(target);
             }
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 if (Menu.Config.Item("r.selfpeel").GetValue<Slider>().Value != 0 &&
                     Player.HealthPercent <= Menu.Config.Item("r.selfpeel").GetValue<Slider>().Value)
@@ -482,7 +482,7 @@ using EloBuddy; namespace ADCPackage.Plugins
 
                     var peel =
                         HeroManager.Enemies.Where(e => R.CanCast(e))
-                            .OrderBy(enemy => enemy.LSDistance(Player))
+                            .OrderBy(enemy => enemy.Distance(Player))
                             .FirstOrDefault();
                     if (peel != null)
                     {
@@ -496,7 +496,7 @@ using EloBuddy; namespace ADCPackage.Plugins
         {
             return
                 MinionManager.GetMinions(E.Range)
-                    .FindAll(x => point.LSDistance(x.ServerPosition, true) <= range * range);
+                    .FindAll(x => point.Distance(x.ServerPosition, true) <= range * range);
         }
 
         public static void LaneClear()
@@ -512,7 +512,7 @@ using EloBuddy; namespace ADCPackage.Plugins
                 }
             }
 
-            if (E.LSIsReady() && Menu.Config.Item("e.laneclear").GetValue<bool>())
+            if (E.IsReady() && Menu.Config.Item("e.laneclear").GetValue<bool>())
             {
                 var minion = MinionManager.GetMinions(E.Range).Where(m => GetMinionsInRange(m.ServerPosition, 150 + m.BoundingRadius).Count >= 2).OrderByDescending(m => m.MaxHealth).FirstOrDefault();
                 if (minion != null)
@@ -530,8 +530,8 @@ using EloBuddy; namespace ADCPackage.Plugins
                         MinionManager.GetMinions(E.Range)
                             .Where(
                                 m =>
-                                    E.CanCast(m) && m.Health < Player.LSGetAutoAttackDamage(m) &&
-                                    m.LSCountEnemiesInRange(m.BoundingRadius + 150) >= 1))
+                                    E.CanCast(m) && m.Health < Player.GetAutoAttackDamage(m) &&
+                                    m.CountEnemiesInRange(m.BoundingRadius + 150) >= 1))
                 {
                     var etarget = E.GetTarget();
                     if (etarget != null) return;
@@ -542,9 +542,9 @@ using EloBuddy; namespace ADCPackage.Plugins
             }
 
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-            if (target == null || !target.LSIsValidTarget()) return;
+            if (target == null || !target.IsValidTarget()) return;
 
-            if (E.LSIsReady() && E.IsInRange(target) && Menu.Config.Item(target.ChampionName + "e.harass").GetValue<bool>())
+            if (E.IsReady() && E.IsInRange(target) && Menu.Config.Item(target.ChampionName + "e.harass").GetValue<bool>())
             {
                 E.CastOnUnit(target);
             }

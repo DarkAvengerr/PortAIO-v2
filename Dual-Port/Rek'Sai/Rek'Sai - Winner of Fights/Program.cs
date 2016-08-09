@@ -190,9 +190,9 @@ using EloBuddy;
             var useE2 = Config.Item("e.combo.burrowed").GetValue<bool>();
             if (burrowed)
             {
-                if (Q2.LSIsReady() && useQ2)
+                if (Q2.IsReady() && useQ2)
                 {
-                    foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsZombie && x.LSIsValidTarget(Q2.Range)))
+                    foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsZombie && x.IsValidTarget(Q2.Range)))
                     {
                         if (Q2.GetPrediction(enemy).Hitchance >= HitChance.High)
                         {
@@ -200,38 +200,38 @@ using EloBuddy;
                         }
                     }
                 }
-                if (E2.LSIsReady() && useE2)
+                if (E2.IsReady() && useE2)
                 {
-                    foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsZombie && x.LSIsValidTarget(E2.Range)))
+                    foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsZombie && x.IsValidTarget(E2.Range)))
                     {
                         E.Cast(enemy.Position - 50);
                     }
                 }
-                if (W.LSIsReady() && !Q2.LSIsReady() && !E2.LSIsReady() && autoSwitch) // Auto Switch
+                if (W.IsReady() && !Q2.IsReady() && !E2.IsReady() && autoSwitch) // Auto Switch
                 {
                     W.Cast();
                 }
             }
             if (unburrowed)
             {
-                if (Q.LSIsReady() && useQ)
+                if (Q.IsReady() && useQ)
                 {
                     foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsZombie))
                     {
-                        if (Player.LSDistance(enemy.Position) < E.Range)
+                        if (Player.Distance(enemy.Position) < E.Range)
                         {
                             Q.Cast();
                         }
                     }
                 }
-                if (E.LSIsReady() && useE)
+                if (E.IsReady() && useE)
                 {
-                    foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsZombie && x.LSIsValidTarget(E.Range)))
+                    foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsZombie && x.IsValidTarget(E.Range)))
                     {
                         E.Cast(enemy);
                     }
                 }
-                if (W.LSIsReady() && !Q.LSIsReady() && !E.LSIsReady() && autoSwitch) // Auto Switch
+                if (W.IsReady() && !Q.IsReady() && !E.IsReady() && autoSwitch) // Auto Switch
                 {
                     W.Cast();
                 }
@@ -244,9 +244,9 @@ using EloBuddy;
 
             if (burrowed)
             {
-                if (Q2.LSIsReady() && useQ)
+                if (Q2.IsReady() && useQ)
                 {
-                    foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsZombie && x.LSIsValidTarget(Q2.Range)))
+                    foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsZombie && x.IsValidTarget(Q2.Range)))
                     {
                         if (Q2.GetPrediction(enemy).Hitchance >= HitChance.High)
                         {
@@ -257,9 +257,9 @@ using EloBuddy;
             }
             if (unburrowed)
             {
-                if (E.LSIsReady() && useE)
+                if (E.IsReady() && useE)
                 {
-                    foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsZombie && x.LSIsValidTarget(E.Range)))
+                    foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && !x.IsZombie && x.IsValidTarget(E.Range)))
                     {
                         E.Cast(enemy);
                     }
@@ -276,7 +276,7 @@ using EloBuddy;
             
             if (unburrowed && protectReksai) //
             {
-                if (W.LSIsReady() && ObjectManager.Player.HealthPercent < hpPercent &&
+                if (W.IsReady() && ObjectManager.Player.HealthPercent < hpPercent &&
                     ObjectManager.Player.ManaPercent > furyPercent)
                 {
                     W.Cast(); 
@@ -299,26 +299,26 @@ using EloBuddy;
 
             if (burrowed)
             {
-                if (Q2.LSIsReady() && useQ2)
+                if (Q2.IsReady() && useQ2)
                 {
                     Q2.Cast(mob[0].Position);
                 }
-                if (!Q2.LSIsReady() && W.LSIsReady() && autoSwitch)
+                if (!Q2.IsReady() && W.IsReady() && autoSwitch)
                 {
                     W.Cast();
                 }
             }
             if (unburrowed)
             {
-                if (Q.LSIsReady() && useQ && ObjectManager.Player.LSDistance(mob[0].Position) < E.Range)
+                if (Q.IsReady() && useQ && ObjectManager.Player.Distance(mob[0].Position) < E.Range)
                 {
                     Q.Cast();
                 }
-                if (E.LSIsReady() && useE)
+                if (E.IsReady() && useE)
                 {
                     E.Cast(mob[0]);
                 }
-                if (!Q.LSIsReady() && !E.LSIsReady() && W.LSIsReady() && autoSwitch)
+                if (!Q.IsReady() && !E.IsReady() && W.IsReady() && autoSwitch)
                 {
                     W.Cast();
                 }
@@ -331,19 +331,19 @@ using EloBuddy;
             var menuItem3 = Config.Item("eDraw").GetValue<Circle>();
             var menuItem4 = Config.Item("rDraw").GetValue<Circle>();
 
-            if (menuItem1.Active && Q.LSIsReady())
+            if (menuItem1.Active && Q.IsReady())
             {
                 Render.Circle.DrawCircle(new Vector3(Player.Position.X, Player.Position.Y, Player.Position.Z), rangeQ, menuItem1.Color, 5);
             }
-            if (menuItem2.Active && W.LSIsReady())
+            if (menuItem2.Active && W.IsReady())
             {
                 Render.Circle.DrawCircle(new Vector3(Player.Position.X, Player.Position.Y, Player.Position.Z), rangeW, menuItem2.Color, 5);
             }
-            if (menuItem3.Active && E.LSIsReady())
+            if (menuItem3.Active && E.IsReady())
             {
                 Render.Circle.DrawCircle(new Vector3(Player.Position.X, Player.Position.Y, Player.Position.Z), rangeE, menuItem3.Color, 5);
             }
-            if (menuItem4.Active && R.LSIsReady())
+            if (menuItem4.Active && R.IsReady())
             {
                 Render.Circle.DrawCircle(new Vector3(Player.Position.X, Player.Position.Y, Player.Position.Z), R.Range, menuItem4.Color, 5);
             }

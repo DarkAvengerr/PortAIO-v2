@@ -41,21 +41,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (target == null || !Q.LSIsReady())
+            if (target == null || !Q.IsReady())
                 return;
             Q.CastOnUnit(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null || Q.LSIsReady() || E.LSIsReady())
+            if (!W.IsReady() || target == null || Q.IsReady() || E.IsReady())
                 return;
             W.CastOnUnit(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
             {
                 return;
             }
@@ -66,22 +66,22 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
-            if (!Sector.inTowerRange(target.Position.LSTo2D()) &&  (MapControl.fightIsOn() != null ) && player.HealthPercent>45)
+            if (!Sector.inTowerRange(target.Position.To2D()) &&  (MapControl.fightIsOn() != null ) && player.HealthPercent>45)
                 R.Cast(target.Position);
         }
 
         public override void useSpells()
         {
-            if (player.LSHasBuff("Drain") || justUsedDrain)
+            if (player.HasBuff("Drain") || justUsedDrain)
             {
                 DeathWalker.setMovement(false);
                 DeathWalker.setAttack(false);
             }
             if (justUsedDrain)
                 return;
-            if (!player.LSHasBuff("Drain"))
+            if (!player.HasBuff("Drain"))
             {
                 DeathWalker.setMovement(true);
                 DeathWalker.setAttack(true);

@@ -49,7 +49,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
             bool boundingRadius = true,
             bool maxRange = true)
         {
-            if (!spell.LSIsReady() || target == null)
+            if (!spell.IsReady() || target == null)
             {
                 return;
             }
@@ -87,7 +87,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
 
         public static void TargetSkill(Obj_AI_Base target, Spell spell)
         {
-            if (!spell.LSIsReady() || target == null)
+            if (!spell.IsReady() || target == null)
             {
                 return;
             }
@@ -97,7 +97,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
 
         public static void FarmSelfAoe(Spell spell, List<Obj_AI_Base> minions, int minHit = 3, float overrideWidth = -1f)
         {
-            if (!spell.LSIsReady() || minions.Count == 0)
+            if (!spell.IsReady() || minions.Count == 0)
             {
                 return;
             }
@@ -113,7 +113,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
             float overrideWidth = -1f,
             bool chargeMax = true)
         {
-            if (!spell.LSIsReady() || minions.Count == 0)
+            if (!spell.IsReady() || minions.Count == 0)
             {
                 return;
             }
@@ -153,7 +153,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
 
         private static void ConeFarm(Spell spell, List<Obj_AI_Base> minions, int min, float overrideWidth = -1f)
         {
-            if (!spell.LSIsReady() || minions.Count == 0)
+            if (!spell.IsReady() || minions.Count == 0)
             {
                 return;
             }
@@ -167,7 +167,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
 
         private static void CircleFarm(Spell spell, List<Obj_AI_Base> minions, int min, float overrideWidth = -1f)
         {
-            if (!spell.LSIsReady() || minions.Count == 0)
+            if (!spell.IsReady() || minions.Count == 0)
             {
                 return;
             }
@@ -176,7 +176,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
                 select spell.GetPrediction(minion)
                 into pred
                 where pred.Hitchance >= HitChance.Medium
-                select pred.UnitPosition.LSTo2D()).ToList();
+                select pred.UnitPosition.To2D()).ToList();
             if (points.Any())
             {
                 var possibilities = ListExtensions.ProduceEnumeration(points).Where(p => p.Count >= min).ToList();
@@ -208,7 +208,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
 
         private static void LineFarm(Spell spell, List<Obj_AI_Base> minions, int min, float overrideWidth = -1f)
         {
-            if (!spell.LSIsReady() || minions.Count == 0)
+            if (!spell.IsReady() || minions.Count == 0)
             {
                 return;
             }
@@ -226,7 +226,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
                 foreach (var position in positions)
                 {
                     var rect = new Geometry.Polygon.Rectangle(
-                        ObjectManager.Player.Position, ObjectManager.Player.Position.LSExtend(position.Item2, spell.Range),
+                        ObjectManager.Player.Position, ObjectManager.Player.Position.Extend(position.Item2, spell.Range),
                         spellWidth);
                     var count =
                         positions.Select(

@@ -135,7 +135,7 @@ using EloBuddy;
 
         private static void SolInterrupter(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (Q.LSIsReady() && sender.LSIsValidTarget(Q.Range) && MenuCheck("inter.q", Config))
+            if (Q.IsReady() && sender.IsValidTarget(Q.Range) && MenuCheck("inter.q", Config))
             {
                 Q.SPredictionCast(sender, SpellHitChance(Config, "sol.hitchance"));
             }
@@ -143,11 +143,11 @@ using EloBuddy;
 
         private static void SolGapcloser(ActiveGapcloser gapcloser)
         {
-            if (Q.LSIsReady() && gapcloser.Sender.LSIsValidTarget(Q.Range) && MenuCheck("gap.q", Config))
+            if (Q.IsReady() && gapcloser.Sender.IsValidTarget(Q.Range) && MenuCheck("gap.q", Config))
             {
                 Q.SPredictionCast(gapcloser.Sender, SpellHitChance(Config, "sol.hitchance"));
             }
-            else if (!Q.LSIsReady() && R.LSIsReady() && gapcloser.Sender.LSIsValidTarget(R.Range) && MenuCheck("gap.r", Config))
+            else if (!Q.IsReady() && R.IsReady() && gapcloser.Sender.IsValidTarget(R.Range) && MenuCheck("gap.r", Config))
             {
                 R.SPredictionCast(gapcloser.Sender, SpellHitChance(Config, "sol.hitchance"));
             }
@@ -189,36 +189,36 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (MenuCheck("combo.q", Config) && Q.LSIsReady())
+            if (MenuCheck("combo.q", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                 {
                     Q.Cast(enemy);
                 }
             }
 
-            if (MenuCheck("combo.w", Config) && W.LSIsReady())
+            if (MenuCheck("combo.w", Config) && W.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(1000)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(1000)))
                 {
-                    if (enemy.LSDistance(Player.Position) > 320 && !Player.LSHasBuff("aurelionsolwactive"))
+                    if (enemy.Distance(Player.Position) > 320 && !Player.HasBuff("aurelionsolwactive"))
                     {
                         W.Cast();
                     }
-                    else if (enemy.LSDistance(Player.Position) > 900 && Player.LSHasBuff("aurelionsolwactive"))
+                    else if (enemy.Distance(Player.Position) > 900 && Player.HasBuff("aurelionsolwactive"))
                     {
                         W.Cast();
                     }
-                    else if (enemy.LSDistance(Player.Position) < 400 && Player.LSHasBuff("aurelionsolwactive"))
+                    else if (enemy.Distance(Player.Position) < 400 && Player.HasBuff("aurelionsolwactive"))
                     {
                         W.Cast();
                     }
                 }
             }
 
-            if (MenuCheck("combo.r", Config) && R.LSIsReady())
+            if (MenuCheck("combo.r", Config) && R.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) &&
                                     !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
                 {
                     R.Cast(enemy);
@@ -236,7 +236,7 @@ using EloBuddy;
                 return;
             }
             
-            if (MenuCheck("lane.q", Config) && Q.LSIsReady())
+            if (MenuCheck("lane.q", Config) && Q.IsReady())
             {
                 if (qPos.MinionsHit >= 2)
                 {
@@ -255,7 +255,7 @@ using EloBuddy;
                 return;
             }
 
-            if (MenuCheck("jungle.q", Config) && Q.LSIsReady())
+            if (MenuCheck("jungle.q", Config) && Q.IsReady())
             {
                 if (pred.MinionsHit >= 1)
                 {
@@ -273,27 +273,27 @@ using EloBuddy;
 
         private static void Harass()
         {
-            if (MenuCheck("harass.q", Config) && Q.LSIsReady())
+            if (MenuCheck("harass.q", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                 {
                     Q.Cast(enemy);
                 }
             }
 
-            if (MenuCheck("harass.w", Config) && W.LSIsReady() && !MenuCheck("auto.w", Config))
+            if (MenuCheck("harass.w", Config) && W.IsReady() && !MenuCheck("auto.w", Config))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(1000)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(1000)))
                 {
-                    if (enemy.LSDistance(Player.Position) > 400 && !Player.LSHasBuff("aurelionsolwactive"))
+                    if (enemy.Distance(Player.Position) > 400 && !Player.HasBuff("aurelionsolwactive"))
                     {
                         W.Cast();
                     }
-                    else if (enemy.LSDistance(Player.Position) > 900 && Player.LSHasBuff("aurelionsolwactive"))
+                    else if (enemy.Distance(Player.Position) > 900 && Player.HasBuff("aurelionsolwactive"))
                     {
                         W.Cast();
                     }
-                    else if (enemy.LSDistance(Player.Position) < 400 && Player.LSHasBuff("aurelionsolwactive"))
+                    else if (enemy.Distance(Player.Position) < 400 && Player.HasBuff("aurelionsolwactive"))
                     {
                         W.Cast();
                     }
@@ -303,15 +303,15 @@ using EloBuddy;
 
         private static void Killsteal()
         {
-            foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) &&
+            foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) &&
                     !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
             {
-                if (MenuCheck("ks.q", Config) && Q.LSIsReady() && enemy.Health < Q.GetDamage(enemy) && enemy.LSIsValidTarget(Q.Range))
+                if (MenuCheck("ks.q", Config) && Q.IsReady() && enemy.Health < Q.GetDamage(enemy) && enemy.IsValidTarget(Q.Range))
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "sol.hitchance"));
                 }
 
-                if (MenuCheck("ks.r", Config) && R.LSIsReady() && enemy.Health < R.GetDamage(enemy) && enemy.LSIsValidTarget(R.Range))
+                if (MenuCheck("ks.r", Config) && R.IsReady() && enemy.Health < R.GetDamage(enemy) && enemy.IsValidTarget(R.Range))
                 {
                     R.Cast(enemy);
                 }
@@ -320,22 +320,22 @@ using EloBuddy;
 
         private static void SolDraw(EventArgs args)
         {
-            if (Q.LSIsReady() && ActiveCheck("draw.q", Config))
+            if (Q.IsReady() && ActiveCheck("draw.q", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, GetColor("draw.q", Config));
             }
 
-            if (W.LSIsReady() && MenuCheck("draw.w", Config))
+            if (W.IsReady() && MenuCheck("draw.w", Config))
             {
                 Render.Circle.DrawCircle(Player.Position, W.Range, GetColor("draw.w", Config));
             }
 
-            if (E.LSIsReady() && MenuCheck("draw.e", Config))
+            if (E.IsReady() && MenuCheck("draw.e", Config))
             {
                 Render.Circle.DrawCircle(Player.Position, E.Range, GetColor("draw.e", Config));
             }
 
-            if (R.LSIsReady() && MenuCheck("draw.r", Config))
+            if (R.IsReady() && MenuCheck("draw.r", Config))
             {
                 Render.Circle.DrawCircle(Player.Position, R.Range, GetColor("draw.r", Config));
             }

@@ -101,13 +101,13 @@ using EloBuddy;
             if (!Config.SubMenu("Misc").Item("gapcloser").GetValue<bool>())
                 return;
 
-            if (gapcloser.Sender.LSHasBuff("brandablaze") && _Q.LSIsReady())
+            if (gapcloser.Sender.HasBuff("brandablaze") && _Q.IsReady())
             {
                 _Q.Cast(gapcloser.Sender);
             }
             else
             {
-                if (_E.LSIsReady() && _Q.LSIsReady())
+                if (_E.IsReady() && _Q.IsReady())
                 {
                     _E.CastOnUnit(gapcloser.Sender);
                 }
@@ -119,13 +119,13 @@ using EloBuddy;
             if (!Config.SubMenu("Misc").Item("interrupt").GetValue<bool>())
                 return;
 
-            if (sender.LSHasBuff("brandablaze") && _Q.LSIsReady())
+            if (sender.HasBuff("brandablaze") && _Q.IsReady())
             {
                 _Q.Cast(sender);
             }
             else
             {
-                if (_E.LSIsReady() && _Q.LSIsReady())
+                if (_E.IsReady() && _Q.IsReady())
                 {
                     _E.CastOnUnit(sender);
                 }
@@ -159,7 +159,7 @@ using EloBuddy;
             if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 comboTarget = TargetSelector.GetTarget(_Q.Range, TargetSelector.DamageType.Magical);
-                if (comboTarget.IsValid && comboTarget.LSIsValidTarget())
+                if (comboTarget.IsValid && comboTarget.IsValidTarget())
                 {
                     Combo(comboTarget);
                 }
@@ -178,7 +178,7 @@ using EloBuddy;
             else if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
                 comboTarget = TargetSelector.GetTarget(_Q.Range, TargetSelector.DamageType.Magical);
-                if (comboTarget.IsValid && comboTarget.LSIsValidTarget())
+                if (comboTarget.IsValid && comboTarget.IsValidTarget())
                 {
                     Harass(comboTarget);
                 }
@@ -217,23 +217,23 @@ using EloBuddy;
         {
             foreach (var enemy in HeroManager.Enemies)
             {
-                if (_Ignite.Slot != SpellSlot.Unknown && Config.SubMenu("Misc").Item("ignite").GetValue<bool>() && Player.GetSummonerSpellDamage(enemy, Damage.SummonerSpell.Ignite) > enemy.Health && enemy.LSIsValidTarget(_Ignite.Range))
+                if (_Ignite.Slot != SpellSlot.Unknown && Config.SubMenu("Misc").Item("ignite").GetValue<bool>() && Player.GetSummonerSpellDamage(enemy, Damage.SummonerSpell.Ignite) > enemy.Health && enemy.IsValidTarget(_Ignite.Range))
                 {
                     _Ignite.CastOnUnit(enemy);
                 }
-                else if (Config.SubMenu("KS").Item("ksQ").GetValue<bool>() && Player.LSGetSpellDamage(enemy, SpellSlot.Q) > enemy.Health && _Q.LSIsReady() && enemy.LSIsValidTarget(_Q.Range))
+                else if (Config.SubMenu("KS").Item("ksQ").GetValue<bool>() && Player.GetSpellDamage(enemy, SpellSlot.Q) > enemy.Health && _Q.IsReady() && enemy.IsValidTarget(_Q.Range))
                 {
                     _Q.Cast(enemy);
                 }
-                else if (Config.SubMenu("KS").Item("ksW").GetValue<bool>() && Player.LSGetSpellDamage(enemy, SpellSlot.W) > enemy.Health && _W.LSIsReady() && enemy.LSIsValidTarget(_W.Range))
+                else if (Config.SubMenu("KS").Item("ksW").GetValue<bool>() && Player.GetSpellDamage(enemy, SpellSlot.W) > enemy.Health && _W.IsReady() && enemy.IsValidTarget(_W.Range))
                 {
                     _W.Cast(enemy);
                 }
-                else if (Config.SubMenu("KS").Item("ksE").GetValue<bool>() && Player.LSGetSpellDamage(enemy, SpellSlot.E) > enemy.Health && _E.LSIsReady() && enemy.LSIsValidTarget(_E.Range))
+                else if (Config.SubMenu("KS").Item("ksE").GetValue<bool>() && Player.GetSpellDamage(enemy, SpellSlot.E) > enemy.Health && _E.IsReady() && enemy.IsValidTarget(_E.Range))
                 {
                     _E.Cast(enemy);
                 }
-                else if (Config.SubMenu("KS").Item("ksR").GetValue<bool>() && Player.LSGetSpellDamage(enemy, SpellSlot.R) > enemy.Health && _R.LSIsReady() && enemy.LSIsValidTarget(_R.Range))
+                else if (Config.SubMenu("KS").Item("ksR").GetValue<bool>() && Player.GetSpellDamage(enemy, SpellSlot.R) > enemy.Health && _R.IsReady() && enemy.IsValidTarget(_R.Range))
                 {
                     _R.Cast(enemy);
                 }
@@ -242,16 +242,16 @@ using EloBuddy;
 
         private static void CastQ(Obj_AI_Base target)
         {
-            if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && target.LSHasBuff("brandablaze") && Config.SubMenu("Combo").Item("blaze").GetValue<bool>())
+            if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && target.HasBuff("brandablaze") && Config.SubMenu("Combo").Item("blaze").GetValue<bool>())
             {
-                if (_Q.LSIsReady() && target.LSIsValidTarget(_Q.Range))
+                if (_Q.IsReady() && target.IsValidTarget(_Q.Range))
                 {
                     _Q.Cast(target);
                 }
             }
             else
             {
-                if (_Q.LSIsReady() && target.LSIsValidTarget(_Q.Range))
+                if (_Q.IsReady() && target.IsValidTarget(_Q.Range))
                 {
                     _Q.Cast(target);
                 }
@@ -260,7 +260,7 @@ using EloBuddy;
 
         private static void CastW(Obj_AI_Base target)
         {
-            if (_W.LSIsReady() && target.LSIsValidTarget(_W.Range))
+            if (_W.IsReady() && target.IsValidTarget(_W.Range))
             {
                 _W.Cast(target, aoe: true);
             }
@@ -268,7 +268,7 @@ using EloBuddy;
 
         private static void CastE(Obj_AI_Base target)
         {
-            if (_E.LSIsReady() && target.LSIsValidTarget(_E.Range))
+            if (_E.IsReady() && target.IsValidTarget(_E.Range))
             {
                 _E.CastOnUnit(target);
             }
@@ -276,7 +276,7 @@ using EloBuddy;
 
         private static void CastR(Obj_AI_Base target)
         {
-            if (_R.LSIsReady() && target.LSIsValidTarget(_R.Range))
+            if (_R.IsReady() && target.IsValidTarget(_R.Range))
             {
                 _R.CastOnUnit(target);
             }
@@ -284,14 +284,14 @@ using EloBuddy;
 
         private static void CastWFarm()
         {
-            if (!_W.LSIsReady())
+            if (!_W.IsReady())
                 return;
 
             var minions = MinionManager.GetMinions(_W.Range);
             var positions = new List<Vector2>();
             foreach(var minion in minions)
             {
-                positions.Add(minion.ServerPosition.LSTo2D());
+                positions.Add(minion.ServerPosition.To2D());
             }
 
             var location = MinionManager.GetBestCircularFarmLocation(positions, 240, _W.Range);
@@ -303,13 +303,13 @@ using EloBuddy;
 
         private static void CastQFarm()
         {
-            if (!_Q.LSIsReady())
+            if (!_Q.IsReady())
                 return;
 
             var minions = MinionManager.GetMinions(_Q.Range);
             foreach (var minion in minions)
             {
-                if (Player.LSGetSpellDamage(minion, SpellSlot.Q) > minion.Health)
+                if (Player.GetSpellDamage(minion, SpellSlot.Q) > minion.Health)
                 {
                     _Q.Cast(minion);
                 }
@@ -318,13 +318,13 @@ using EloBuddy;
 
         private static void CastEFarm()
         {
-            if (!_E.LSIsReady())
+            if (!_E.IsReady())
                 return;
 
             var minions = MinionManager.GetMinions(_E.Range);
             foreach (var minion in minions)
             {
-                if (Player.LSGetSpellDamage(minion, SpellSlot.E) > minion.Health)
+                if (Player.GetSpellDamage(minion, SpellSlot.E) > minion.Health)
                 {
                     _E.CastOnUnit(minion);
                 }
@@ -334,10 +334,10 @@ using EloBuddy;
         private static double GetDamage(AIHeroClient target)
         {
             var pDamage = Damage.CalcDamage(Player, target, Damage.DamageType.Magical, (.08) * target.MaxHealth);
-            var qDamage = Damage.LSGetSpellDamage(Player, target, SpellSlot.Q);
-            var wDamage = Damage.LSGetSpellDamage(Player, target, SpellSlot.W);
-            var eDamage = Damage.LSGetSpellDamage(Player, target, SpellSlot.E);
-            var rDamage = Damage.LSGetSpellDamage(Player, target, SpellSlot.R);
+            var qDamage = Damage.GetSpellDamage(Player, target, SpellSlot.Q);
+            var wDamage = Damage.GetSpellDamage(Player, target, SpellSlot.W);
+            var eDamage = Damage.GetSpellDamage(Player, target, SpellSlot.E);
+            var rDamage = Damage.GetSpellDamage(Player, target, SpellSlot.R);
             var iDamage = Damage.GetSummonerSpellDamage(Player, target, Damage.SummonerSpell.Ignite);
             var totalDamage = 0.0;
 
@@ -348,13 +348,13 @@ using EloBuddy;
             var rMana = _R.Instance.SData.Mana;
             var totalMana = 0.0;
 
-            if (!_Q.LSIsReady())
+            if (!_Q.IsReady())
                 qDamage = 0.0;
-            if (!_W.LSIsReady())
+            if (!_W.IsReady())
                 wDamage = 0.0;
-            if (!_E.LSIsReady())
+            if (!_E.IsReady())
                 eDamage = 0.0;
-            if (!_R.LSIsReady())
+            if (!_R.IsReady())
                 rDamage = 0.0;
             if (_Ignite.Slot == SpellSlot.Unknown)
                 iDamage = 0.0;

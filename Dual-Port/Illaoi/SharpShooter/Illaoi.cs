@@ -88,7 +88,7 @@ namespace SharpShooter.Plugins
                                     if (target != null)
                                         if (
                                             !HeroManager.Enemies.Any(
-                                                x => x.LSIsValidTarget() && Orbwalking.InAutoAttackRange(x)))
+                                                x => x.IsValidTarget() && Orbwalking.InAutoAttackRange(x)))
                                         {
                                             _w.Cast();
                                         }
@@ -110,8 +110,8 @@ namespace SharpShooter.Plugins
                                 if (
                                     HeroManager.Enemies.Count(
                                         x =>
-                                            x.LSIsValidTarget(_r.Range) &&
-                                            ObjectManager.Player.ServerPosition.LSDistance(
+                                            x.IsValidTarget(_r.Range) &&
+                                            ObjectManager.Player.ServerPosition.Distance(
                                                 Prediction.GetPrediction(x, 0.5f).UnitPosition) < _r.Range) >=
                                     MenuProvider.Champion.Combo.GetSliderValue("Use R if Will Hit >=").Value)
                                 {
@@ -143,7 +143,7 @@ namespace SharpShooter.Plugins
                                         if (target != null)
                                             if (
                                                 !HeroManager.Enemies.Any(
-                                                    x => x.LSIsValidTarget() && Orbwalking.InAutoAttackRange(x)))
+                                                    x => x.IsValidTarget() && Orbwalking.InAutoAttackRange(x)))
                                             {
                                                 _w.Cast();
                                             }
@@ -212,7 +212,7 @@ namespace SharpShooter.Plugins
                             if (MenuProvider.Champion.Combo.UseW)
                                 if (_w.IsReadyPerfectly())
                                 {
-                                    if (target.LSIsValidTarget(_w.Range))
+                                    if (target.IsValidTarget(_w.Range))
                                     {
                                         _w.Cast();
                                     }
@@ -227,7 +227,7 @@ namespace SharpShooter.Plugins
                             if (MenuProvider.Champion.Harass.UseW)
                                 if (_w.IsReadyPerfectly())
                                 {
-                                    if (target.LSIsValidTarget(_w.Range))
+                                    if (target.IsValidTarget(_w.Range))
                                     {
                                         _w.Cast();
                                     }
@@ -242,7 +242,7 @@ namespace SharpShooter.Plugins
                             if (MenuProvider.Champion.Laneclear.UseW)
                                 if (_w.IsReadyPerfectly())
                                 {
-                                    if (target.LSIsValidTarget(_w.Range))
+                                    if (target.IsValidTarget(_w.Range))
                                     {
                                         _w.Cast();
                                     }
@@ -256,7 +256,7 @@ namespace SharpShooter.Plugins
                             if (MenuProvider.Champion.Jungleclear.UseW)
                                 if (_w.IsReadyPerfectly())
                                 {
-                                    if (target.LSIsValidTarget(_w.Range))
+                                    if (target.IsValidTarget(_w.Range))
                                     {
                                         _w.Cast();
                                     }
@@ -318,7 +318,7 @@ namespace SharpShooter.Plugins
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float) ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float) ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
             if (_q.IsReadyPerfectly())

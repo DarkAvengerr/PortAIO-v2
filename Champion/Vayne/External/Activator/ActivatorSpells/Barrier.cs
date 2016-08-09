@@ -11,7 +11,7 @@ namespace VayneHunter_Reborn.External.Activator.ActivatorSpells
     {
         private SpellSlot barrierSlot
         {
-            get { return ObjectManager.Player.LSGetSpellSlot("summonerbarrier"); }
+            get { return ObjectManager.Player.GetSpellSlot("summonerbarrier"); }
         }
 
         public void OnLoad()
@@ -51,7 +51,7 @@ namespace VayneHunter_Reborn.External.Activator.ActivatorSpells
                     if (
                         rSkills.Any(
                             skillshot =>
-                                skillshot.Caster.LSGetSpellDamage(ObjectManager.Player, skillshot.SpellData.SpellName) >=
+                                skillshot.Caster.GetSpellDamage(ObjectManager.Player, skillshot.SpellData.SpellName) >=
                                 ObjectManager.Player.Health + 15))
                     {
                         CastSpell();

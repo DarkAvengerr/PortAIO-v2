@@ -50,7 +50,7 @@ using EloBuddy;
                 Bushwack.SetSkillshot(0.25f, 100f, float.MaxValue, false, SkillshotType.SkillshotCircle);
                 Javelin.SetSkillshot(0.25f, 40f, 1500f, true, SkillshotType.SkillshotLine);
 
-                Ignite = Player.LSGetSpellSlot("SummonerDot");
+                Ignite = Player.GetSpellSlot("SummonerDot");
             }
         }
     }

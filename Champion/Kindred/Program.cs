@@ -86,15 +86,15 @@ namespace Kindred___YinYang
                     Jungle();
                     break;
             }
-            if (Config.Item("use.r").GetValue<bool>() && R.LSIsReady())
+            if (Config.Item("use.r").GetValue<bool>() && R.IsReady())
             {
                 Helper.ClassicUltimate();
             }
-            if (Config.Item("q.ks").GetValue<bool>() && Q.LSIsReady())
+            if (Config.Item("q.ks").GetValue<bool>() && Q.IsReady())
             {
                 KillSteal(Config.Item("q.ks.count").GetValue<Slider>().Value);
             }
-            if (Config.Item("spell.broker").GetValue<bool>() && R.LSIsReady())
+            if (Config.Item("spell.broker").GetValue<bool>() && R.IsReady())
             {
                 Helper.SpellBreaker();
             }
@@ -105,23 +105,23 @@ namespace Kindred___YinYang
             var useW = Config.Item("w.combo").GetValue<bool>();
             var useE = Config.Item("e.combo").GetValue<bool>();
 
-            if (useQ && Q.LSIsReady())
+            if (useQ && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(ObjectManager.Player.AttackRange)))
+                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(ObjectManager.Player.AttackRange)))
                 {
                     Helper.AdvancedQ(Q, enemy, 3);
                 }
             }
-            if (useW && W.LSIsReady())
+            if (useW && W.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(W.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(W.Range) && !o.IsDead && !o.IsZombie))
                 {
                     W.Cast();
                 } 
             }
-            if (useE && E.LSIsReady())
+            if (useE && E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(E.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(E.Range) && !o.IsDead && !o.IsZombie))
                 {
                     if (Config.Item("enemy." + enemy.CharData.BaseSkinName).GetValue<bool>())
                     {
@@ -139,23 +139,23 @@ namespace Kindred___YinYang
 
             if (Kindred.ManaPercent > harassMana)
             {
-                if (useQ && Q.LSIsReady())
+                if (useQ && Q.IsReady())
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(ObjectManager.Player.AttackRange) && !o.IsDead && !o.IsZombie))
+                    foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(ObjectManager.Player.AttackRange) && !o.IsDead && !o.IsZombie))
                     {
                         Q.Cast(Game.CursorPos);
                     }
                 }
-                if (useW && W.LSIsReady())
+                if (useW && W.IsReady())
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(W.Range) && !o.IsDead && !o.IsZombie))
+                    foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(W.Range) && !o.IsDead && !o.IsZombie))
                     {
                         W.Cast();
                     }
                 }
-                if (useE && E.LSIsReady())
+                if (useE && E.IsReady())
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(E.Range) && !o.IsDead && !o.IsZombie))
+                    foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(E.Range) && !o.IsDead && !o.IsZombie))
                     {
                         if (Config.Item("enemy." + enemy.CharData.BaseSkinName).GetValue<bool>())
                         {
@@ -173,7 +173,7 @@ namespace Kindred___YinYang
             var minCount = Config.Item("q.minion.count").GetValue<Slider>().Value;
             if (Kindred.ManaPercent >= manaClear)
             {
-                if (useQ && Q.LSIsReady() && xMinion.Count >= minCount)
+                if (useQ && Q.IsReady() && xMinion.Count >= minCount)
                 {
                     Q.Cast(Game.CursorPos);
                 }
@@ -181,7 +181,7 @@ namespace Kindred___YinYang
         }
         private static void KillSteal(int aacount)
         {
-            foreach (var enemy in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(Q.Range)))
+            foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(Q.Range)))
             {
                 if (enemy.Health < ObjectManager.Player.CalcDamage(enemy, Damage.DamageType.Physical, Kindred.TotalAttackDamage()) * aacount)
                 {
@@ -204,15 +204,15 @@ namespace Kindred___YinYang
 
             if (Kindred.ManaPercent > manaSlider)
             {
-                if (Q.LSIsReady() && useQ)
+                if (Q.IsReady() && useQ)
                 {
                     Q.Cast(Game.CursorPos);
                 }
-                if (W.LSIsReady() && useW)
+                if (W.IsReady() && useW)
                 {
                     W.Cast();
                 }
-                if (E.LSIsReady() && useE)
+                if (E.IsReady() && useE)
                 {
                     E.Cast(mob[0]);
                 }
@@ -226,25 +226,25 @@ namespace Kindred___YinYang
             var menuItem4 = Config.Item("r.draw").GetValue<Circle>();
             var menuItem5 = Config.Item("aa.indicator").GetValue<Circle>();
 
-            if (menuItem1.Active && Q.LSIsReady())
+            if (menuItem1.Active && Q.IsReady())
             {
                 Render.Circle.DrawCircle(new Vector3(Kindred.Position.X, Kindred.Position.Y, Kindred.Position.Z), Q.Range, menuItem1.Color, 5);
             }
-            if (menuItem2.Active && W.LSIsReady())
+            if (menuItem2.Active && W.IsReady())
             {
                 Render.Circle.DrawCircle(new Vector3(Kindred.Position.X, Kindred.Position.Y, Kindred.Position.Z), W.Range, menuItem2.Color, 5);
             }
-            if (menuItem3.Active && E.LSIsReady())
+            if (menuItem3.Active && E.IsReady())
             {
                 Render.Circle.DrawCircle(new Vector3(Kindred.Position.X, Kindred.Position.Y, Kindred.Position.Z), E.Range, menuItem3.Color, 5);
             }
-            if (menuItem4.Active && R.LSIsReady())
+            if (menuItem4.Active && R.IsReady())
             {
                 Render.Circle.DrawCircle(new Vector3(Kindred.Position.X, Kindred.Position.Y, Kindred.Position.Z), R.Range, menuItem4.Color, 5);
             }
             if (menuItem4.Active)
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(1500)  && x.IsValid && x.IsVisible && !x.IsDead && !x.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(1500)  && x.IsValid && x.IsVisible && !x.IsDead && !x.IsZombie))
                 {
                     Drawing.DrawText(enemy.HPBarPosition.X, enemy.HPBarPosition.Y, menuItem5.Color,
                                         string.Format("{0} Basic Attack = Kill", Helper.AaIndicator(enemy)));

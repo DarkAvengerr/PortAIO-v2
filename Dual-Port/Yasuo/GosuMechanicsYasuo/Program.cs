@@ -84,13 +84,13 @@ using EloBuddy;
             Q.SetSkillshot(0.25f, 50f, float.MaxValue, false, SkillshotType.SkillshotLine);
             Q3.SetSkillshot(0.5f, 90f, 1200f, false, SkillshotType.SkillshotLine);
 
-            var slot = ObjectManager.Player.LSGetSpellSlot("summonerdot");
+            var slot = ObjectManager.Player.GetSpellSlot("summonerdot");
             if (slot != SpellSlot.Unknown)
             {
                 Ignite = new Spell(slot, 600, TargetSelector.DamageType.True);
             }
 
-            var Fslot = ObjectManager.Player.LSGetSpellSlot("SummonerFlash");
+            var Fslot = ObjectManager.Player.GetSpellSlot("SummonerFlash");
             if (Fslot != SpellSlot.Unknown)
             {
                 Flash = new Spell(slot, 425);
@@ -253,12 +253,12 @@ using EloBuddy;
         {
             var target = gapcloser.Sender;
 
-            if (!target.LSIsValidTarget(Q3.Range))
+            if (!target.IsValidTarget(Q3.Range))
             {
                 return;
             }
 
-            if (Q3.LSIsReady() && Q3READY() && Config.Item("IntAnt").GetValue<bool>())
+            if (Q3.IsReady() && Q3READY() && Config.Item("IntAnt").GetValue<bool>())
             {
                 Q3.Cast(target);
             }
@@ -266,7 +266,7 @@ using EloBuddy;
 
         private static void Interrupter2_OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (sender != null && Q3.LSIsReady() && Q3READY() && sender.LSIsValidTarget(Q3.Range) && Config.Item("IntAnt").GetValue<bool>())
+            if (sender != null && Q3.IsReady() && Q3READY() && sender.IsValidTarget(Q3.Range) && Config.Item("IntAnt").GetValue<bool>())
             {
                 Q3.Cast(sender);
             }
@@ -279,13 +279,13 @@ using EloBuddy;
                 return;
             }
             isDashing = true;
-            LeagueSharp.Common.Utility.DelayAction.Add(300, () => { if (myHero.LSIsDashing()) { isDashing = false; } });
+            LeagueSharp.Common.Utility.DelayAction.Add(300, () => { if (myHero.IsDashing()) { isDashing = false; } });
 
             LeagueSharp.Common.Utility.DelayAction.Add(450, () => isDashing = false);
         }
         private static void Game_OnUpdate(EventArgs args)
         {
-            if (myHero.IsDead || myHero.LSIsRecalling())
+            if (myHero.IsDead || myHero.IsRecalling())
             {
                 return;
             }
@@ -297,7 +297,7 @@ using EloBuddy;
                 if (Config.Item("smartW").GetValue<bool>())
                     useWSmart(mis);
 
-                if (Config.Item("smartEDogue").GetValue<bool>() && !W.LSIsReady() && !isSafePoint(ObjectManager.Player.Position.LSTo2D(), true).IsSafe)
+                if (Config.Item("smartEDogue").GetValue<bool>() && !W.IsReady() && !isSafePoint(ObjectManager.Player.Position.To2D(), true).IsSafe)
                     useEtoSafe(mis);
             }
             if (Config.Item("flee").GetValue<KeyBind>().Active)
@@ -340,11 +340,11 @@ using EloBuddy;
             {
                 var TsTarget = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
 
-                if (TsTarget != null && TsTarget.CharData.BaseSkinName != "gangplankbarrel" && Config.Item("HarassTower").GetValue<bool>() && Q3.LSIsReady() && Config.Item("HarassQ3").GetValue<bool>() && !IsDashing && Q3READY() && Q3.IsInRange(TsTarget))
+                if (TsTarget != null && TsTarget.CharData.BaseSkinName != "gangplankbarrel" && Config.Item("HarassTower").GetValue<bool>() && Q3.IsReady() && Config.Item("HarassQ3").GetValue<bool>() && !IsDashing && Q3READY() && Q3.IsInRange(TsTarget))
                 {
                     CastQ3(TsTarget);
                 }
-                else if (TsTarget != null && !Config.Item("HarassTower").GetValue<bool>() && TsTarget.CharData.BaseSkinName != "gangplankbarrel" && !UnderTower(myHero.ServerPosition.LSTo2D()) && Q3.LSIsReady() && Config.Item("HarassQ3").GetValue<bool>() && !IsDashing && Q3READY() && Q3.IsInRange(TsTarget))
+                else if (TsTarget != null && !Config.Item("HarassTower").GetValue<bool>() && TsTarget.CharData.BaseSkinName != "gangplankbarrel" && !UnderTower(myHero.ServerPosition.To2D()) && Q3.IsReady() && Config.Item("HarassQ3").GetValue<bool>() && !IsDashing && Q3READY() && Q3.IsInRange(TsTarget))
                 {
                     CastQ3(TsTarget);
                 }
@@ -354,11 +354,11 @@ using EloBuddy;
             {
                 var TsTarget = TargetSelector.GetTarget(475, TargetSelector.DamageType.Physical);
 
-                if (TsTarget != null && TsTarget.CharData.BaseSkinName != "gangplankbarrel" && Config.Item("HarassTower").GetValue<bool>() && !Q3READY() && Q.LSIsReady() && Config.Item("HarassQ").GetValue<bool>() && !IsDashing && Q.IsInRange(TsTarget))
+                if (TsTarget != null && TsTarget.CharData.BaseSkinName != "gangplankbarrel" && Config.Item("HarassTower").GetValue<bool>() && !Q3READY() && Q.IsReady() && Config.Item("HarassQ").GetValue<bool>() && !IsDashing && Q.IsInRange(TsTarget))
                 {
                     CastQ12(TsTarget);
                 }
-                else if (TsTarget != null && TsTarget.CharData.BaseSkinName != "gangplankbarrel" && !Config.Item("HarassTower").GetValue<bool>() && !Q3READY() && Q.LSIsReady() && Config.Item("HarassQ").GetValue<bool>() && !IsDashing && !UnderTower(myHero.ServerPosition.LSTo2D()) && Q.IsInRange(TsTarget))
+                else if (TsTarget != null && TsTarget.CharData.BaseSkinName != "gangplankbarrel" && !Config.Item("HarassTower").GetValue<bool>() && !Q3READY() && Q.IsReady() && Config.Item("HarassQ").GetValue<bool>() && !IsDashing && !UnderTower(myHero.ServerPosition.To2D()) && Q.IsInRange(TsTarget))
                 {
                     CastQ12(TsTarget);
                 }
@@ -373,9 +373,9 @@ using EloBuddy;
                     return;
                 }
 
-                if (!minion.IsDead && minion != null && Config.Item("LastHitQ1").GetValue<bool>() && Q.LSIsReady() && minion.LSIsValidTarget(500) && !Q3READY() && Q.IsInRange(minion))
+                if (!minion.IsDead && minion != null && Config.Item("LastHitQ1").GetValue<bool>() && Q.IsReady() && minion.IsValidTarget(500) && !Q3READY() && Q.IsInRange(minion))
                 {
-                    var predHealth = HealthPrediction.GetHealthPrediction(minion, (int)(Program.myHero.LSDistance(minion.Position) * 1000 / 2000));
+                    var predHealth = HealthPrediction.GetHealthPrediction(minion, (int)(Program.myHero.Distance(minion.Position) * 1000 / 2000));
                     if (predHealth <= GetQDmg(minion))
                     {
                         CastQ12(minion);
@@ -394,22 +394,22 @@ using EloBuddy;
             if (TsTarget != null && Config.Item("HarassTower").GetValue<bool>())
             {
 
-                if (Q3.LSIsReady() && Config.Item("HarassQ3").GetValue<bool>() && !IsDashing && Q3READY() && Q3.IsInRange(TsTarget))
+                if (Q3.IsReady() && Config.Item("HarassQ3").GetValue<bool>() && !IsDashing && Q3READY() && Q3.IsInRange(TsTarget))
                 {
                     CastQ3(TsTarget);
                 }
-                else if (!Q3READY() && Q.LSIsReady() && Config.Item("HarassQ").GetValue<bool>() && !IsDashing && Q.IsInRange(TsTarget))
+                else if (!Q3READY() && Q.IsReady() && Config.Item("HarassQ").GetValue<bool>() && !IsDashing && Q.IsInRange(TsTarget))
                 {
                     CastQ12(TsTarget);
                 }
             }
             else if (TsTarget != null && !Config.Item("HarassTower").GetValue<bool>())
             {
-                if (!UnderTower(myHero.ServerPosition.LSTo2D()) && Q3.LSIsReady() && Config.Item("HarassQ3").GetValue<bool>() && !IsDashing && Q3READY() && Q3.IsInRange(TsTarget))
+                if (!UnderTower(myHero.ServerPosition.To2D()) && Q3.IsReady() && Config.Item("HarassQ3").GetValue<bool>() && !IsDashing && Q3READY() && Q3.IsInRange(TsTarget))
                 {
                     CastQ3(TsTarget);
                 }
-                if (!Q3READY() && Q.LSIsReady() && Config.Item("HarassQ").GetValue<bool>() && !IsDashing && !UnderTower(myHero.ServerPosition.LSTo2D()) && Q.IsInRange(TsTarget))
+                if (!Q3READY() && Q.IsReady() && Config.Item("HarassQ").GetValue<bool>() && !IsDashing && !UnderTower(myHero.ServerPosition.To2D()) && Q.IsInRange(TsTarget))
                 {
                     CastQ12(TsTarget);
                 }
@@ -418,16 +418,16 @@ using EloBuddy;
         public static void Flee()
         {
             var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, E.Range);
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
                 var bestMinion =
                    ObjectManager.Get<Obj_AI_Base>()
-                       .Where(x => x.LSIsValidTarget(E.Range))
-                       .Where(x => x.LSDistance(Game.CursorPos) < ObjectManager.Player.LSDistance(Game.CursorPos))
-                       .OrderByDescending(x => x.LSDistance(ObjectManager.Player))
+                       .Where(x => x.IsValidTarget(E.Range))
+                       .Where(x => x.Distance(Game.CursorPos) < ObjectManager.Player.Distance(Game.CursorPos))
+                       .OrderByDescending(x => x.Distance(ObjectManager.Player))
                        .FirstOrDefault();
 
-                if (bestMinion != null && ObjectManager.Player.LSIsFacing(bestMinion) && CanCastE(bestMinion) && E.LSIsReady())
+                if (bestMinion != null && ObjectManager.Player.IsFacing(bestMinion) && CanCastE(bestMinion) && E.IsReady())
                 {
                     E.CastOnUnit(bestMinion, true);
                 }
@@ -436,13 +436,13 @@ using EloBuddy;
         public static void AutoQFlee()
         {
             List<Obj_AI_Base> Qminion = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, 1000, MinionTypes.All, MinionTeam.NotAlly);
-            foreach (var minion in Qminion.Where(minion => minion.LSIsValidTarget(Q.Range) && !minion.IsDead))
+            foreach (var minion in Qminion.Where(minion => minion.IsValidTarget(Q.Range) && !minion.IsDead))
             {
                 if (minion == null)
                 {
                     return;
                 }
-                if (!Q3READY() && Config.Item("AutoQ1").GetValue<bool>() && minion.LSIsValidTarget(Q.Range) && IsDashing)
+                if (!Q3READY() && Config.Item("AutoQ1").GetValue<bool>() && minion.IsValidTarget(Q.Range) && IsDashing)
                 {
                     CastQ12(minion);
                 }
@@ -451,13 +451,13 @@ using EloBuddy;
         public static void AutoQ()
         {
             List<Obj_AI_Base> Qminion = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, 1000, MinionTypes.All, MinionTeam.NotAlly);
-            foreach (var minion in Qminion.Where(minion => minion.LSIsValidTarget(Q.Range) && !minion.IsDead))
+            foreach (var minion in Qminion.Where(minion => minion.IsValidTarget(Q.Range) && !minion.IsDead))
             {
                 if (minion == null && minion.CharData.BaseSkinName == "gangplankbarrel")
                 {
                     return;
                 }
-                if (!Q3READY() && Config.Item("AutoQ1").GetValue<bool>() && minion.LSIsValidTarget(Q.Range) && !IsDashing)
+                if (!Q3READY() && Config.Item("AutoQ1").GetValue<bool>() && minion.IsValidTarget(Q.Range) && !IsDashing)
                 {
                     CastQ12(minion);
                 }
@@ -472,27 +472,27 @@ using EloBuddy;
                     return;
                 }
 
-                if (!minion.IsDead && minion != null && Config.Item("LastHitQ1").GetValue<bool>() && Q.LSIsReady() && minion.LSIsValidTarget(500) && !Q3READY() && Q.IsInRange(minion) && !IsDashing)
+                if (!minion.IsDead && minion != null && Config.Item("LastHitQ1").GetValue<bool>() && Q.IsReady() && minion.IsValidTarget(500) && !Q3READY() && Q.IsInRange(minion) && !IsDashing)
                 {
-                    var predHealth = HealthPrediction.GetHealthPrediction(minion, (int)(Program.myHero.LSDistance(minion.Position) * 1000 / 2000));
+                    var predHealth = HealthPrediction.GetHealthPrediction(minion, (int)(Program.myHero.Distance(minion.Position) * 1000 / 2000));
                     if (predHealth <= GetQDmg(minion))
                     {
                         CastQ12(minion);
                     }
                 }
-                if (!minion.IsDead && minion != null && Config.Item("LastHitQ3").GetValue<bool>() && Q.LSIsReady() && minion.LSIsValidTarget(1100) && Q3READY() && Q3.IsInRange(minion) && !IsDashing)
+                if (!minion.IsDead && minion != null && Config.Item("LastHitQ3").GetValue<bool>() && Q.IsReady() && minion.IsValidTarget(1100) && Q3READY() && Q3.IsInRange(minion) && !IsDashing)
                 {
-                    var predHealth = HealthPrediction.GetHealthPrediction(minion, (int)(Program.myHero.LSDistance(minion.Position) * 1000 / 2000));
+                    var predHealth = HealthPrediction.GetHealthPrediction(minion, (int)(Program.myHero.Distance(minion.Position) * 1000 / 2000));
                     if (predHealth <= GetQDmg(minion))
                     {
                         CastQ3(minion);
                     }
                 }
-                if (Config.Item("LastHitE").GetValue<bool>() && E.LSIsReady() && minion.LSIsValidTarget(475))
+                if (Config.Item("LastHitE").GetValue<bool>() && E.IsReady() && minion.IsValidTarget(475))
                 {
                     if (!UnderTower(PosAfterE(minion)) && CanCastE(minion))
                     {
-                        var predHealth = HealthPrediction.GetHealthPrediction(minion, (int)(Program.myHero.LSDistance(minion.Position) * 1000 / 2000));
+                        var predHealth = HealthPrediction.GetHealthPrediction(minion, (int)(Program.myHero.Distance(minion.Position) * 1000 / 2000));
                         if (predHealth <= GetEDmg(minion) && !isDangerous(minion, 600))
                         {
                             E.CastOnUnit(minion, true);
@@ -504,15 +504,15 @@ using EloBuddy;
         public static void LaneClear()
         {
             List<Obj_AI_Base> Qminion = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, 1000, MinionTypes.All, MinionTeam.Enemy);
-            foreach (var minion in Qminion.Where(minion => minion.LSIsValidTarget(Q3.Range)))
+            foreach (var minion in Qminion.Where(minion => minion.IsValidTarget(Q3.Range)))
             {
                 if (minion == null)
                 {
                     return;
                 }
-                if (minion != null && Config.Item("LaneClearQ1").GetValue<bool>() && Q.LSIsReady() && minion.LSIsValidTarget(500) && !Q3READY() && Q.IsInRange(minion))
+                if (minion != null && Config.Item("LaneClearQ1").GetValue<bool>() && Q.IsReady() && minion.IsValidTarget(500) && !Q3READY() && Q.IsInRange(minion))
                 {
-                    var predHealth = HealthPrediction.LaneClearHealthPrediction(minion, (int)(Program.myHero.LSDistance(minion.Position) * 1000 / 2000));
+                    var predHealth = HealthPrediction.LaneClearHealthPrediction(minion, (int)(Program.myHero.Distance(minion.Position) * 1000 / 2000));
                     if (predHealth <= GetQDmg(minion) && !IsDashing)
                     {
                         CastQ12(minion);
@@ -525,7 +525,7 @@ using EloBuddy;
                         {
                             CastQ12(minion);
                         }
-                        else if (Q.LSIsReady() && IsDashing && Q.IsInRange(minion))
+                        else if (Q.IsReady() && IsDashing && Q.IsInRange(minion))
                         {
                             if (farm.MinionsHit >= 2)
                             {
@@ -534,9 +534,9 @@ using EloBuddy;
                         }
                     }
                 }
-                if (!minion.IsDead && minion != null && Config.Item("LaneClearQ3").GetValue<bool>() && Q3.LSIsReady() && minion.LSIsValidTarget(1100) && Q3READY() && Q3.IsInRange(minion))
+                if (!minion.IsDead && minion != null && Config.Item("LaneClearQ3").GetValue<bool>() && Q3.IsReady() && minion.IsValidTarget(1100) && Q3READY() && Q3.IsInRange(minion))
                 {
-                    var predHealth = HealthPrediction.LaneClearHealthPrediction(minion, (int)(Program.myHero.LSDistance(minion.Position) * 1000 / 2000));
+                    var predHealth = HealthPrediction.LaneClearHealthPrediction(minion, (int)(Program.myHero.Distance(minion.Position) * 1000 / 2000));
                     if (predHealth <= GetQDmg(minion) && !IsDashing)
                     {
                         CastQ3(minion);
@@ -549,7 +549,7 @@ using EloBuddy;
                         {
                             CastQ3(minion);
                         }
-                        else if (Q3.LSIsReady() && IsDashing && Q.IsInRange(minion) && Q3READY())
+                        else if (Q3.IsReady() && IsDashing && Q.IsInRange(minion) && Q3READY())
                         {
                             if (farm.MinionsHit >= 2)
                             {
@@ -560,19 +560,19 @@ using EloBuddy;
                 }
             }
             var allMinionsE = MinionManager.GetMinions(myHero.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Enemy);
-            foreach (var minion in allMinionsE.Where(x => x.LSIsValidTarget(E.Range) && CanCastE(x)))
+            foreach (var minion in allMinionsE.Where(x => x.IsValidTarget(E.Range) && CanCastE(x)))
             {
                 if (minion == null)
                 {
                     return;
                 }
 
-                if (Config.Item("LaneClearE").GetValue<bool>() && E.LSIsReady() && minion.LSIsValidTarget(E.Range) && CanCastE(minion))
+                if (Config.Item("LaneClearE").GetValue<bool>() && E.IsReady() && minion.IsValidTarget(E.Range) && CanCastE(minion))
                 {
                     if (!UnderTower(PosAfterE(minion)))
                     {
 
-                        var predHealth = HealthPrediction.LaneClearHealthPrediction(minion, (int)(Program.myHero.LSDistance(minion.Position) * 1000 / 2000));
+                        var predHealth = HealthPrediction.LaneClearHealthPrediction(minion, (int)(Program.myHero.Distance(minion.Position) * 1000 / 2000));
                         if (predHealth <= GetEDmg(minion) && !isDangerous(minion, 600))
                         {
                             E.CastOnUnit(minion, true);
@@ -585,21 +585,21 @@ using EloBuddy;
                 }
             }
             var jminions = MinionManager.GetMinions(myHero.ServerPosition, 1000, MinionTypes.All, MinionTeam.Neutral);
-            foreach (var jungleMobs in jminions.Where(x => x.LSIsValidTarget(Q3.Range)))
+            foreach (var jungleMobs in jminions.Where(x => x.IsValidTarget(Q3.Range)))
             {
                 if (jungleMobs == null)
                 {
                     return;
                 }
-                if (Config.Item("JungleClearE").GetValue<bool>() && E.LSIsReady() && jungleMobs != null && jungleMobs.LSIsValidTarget(E.Range) && CanCastE(jungleMobs))
+                if (Config.Item("JungleClearE").GetValue<bool>() && E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(E.Range) && CanCastE(jungleMobs))
                 {
                     E.CastOnUnit(jungleMobs);
                 }
-                if (jungleMobs != null && Config.Item("JungleClearQ3").GetValue<bool>() && Q3.LSIsReady() && jungleMobs.LSIsValidTarget(1000) && Q3READY() && Q3.IsInRange(jungleMobs))
+                if (jungleMobs != null && Config.Item("JungleClearQ3").GetValue<bool>() && Q3.IsReady() && jungleMobs.IsValidTarget(1000) && Q3READY() && Q3.IsInRange(jungleMobs))
                 {
                     CastQ3(jungleMobs);
                 }
-                if (jungleMobs != null && Config.Item("JungleClearQ12").GetValue<bool>() && Q.LSIsReady() && jungleMobs.LSIsValidTarget(500) && !Q3READY() && Q.IsInRange(jungleMobs))
+                if (jungleMobs != null && Config.Item("JungleClearQ12").GetValue<bool>() && Q.IsReady() && jungleMobs.IsValidTarget(500) && !Q3READY() && Q.IsInRange(jungleMobs))
                 {
                     CastQ12(jungleMobs);
                 }
@@ -613,34 +613,34 @@ using EloBuddy;
                 Items.UseItem((int)ItemId.Blade_of_the_Ruined_King, unit);
             }
             if (Items.HasItem((int)ItemId.Bilgewater_Cutlass, myHero) && Items.CanUseItem((int)ItemId.Bilgewater_Cutlass)
-               && unit.LSIsValidTarget(Q.Range))
+               && unit.IsValidTarget(Q.Range))
             {
                 Items.UseItem((int)ItemId.Bilgewater_Cutlass, unit);
             }
             if (Items.HasItem((int)ItemId.Youmuus_Ghostblade, myHero) && Items.CanUseItem((int)ItemId.Youmuus_Ghostblade)
-               && myHero.LSDistance(unit.Position) <= Q.Range)
+               && myHero.Distance(unit.Position) <= Q.Range)
             {
                 Items.UseItem((int)ItemId.Youmuus_Ghostblade);
             }
             if (Items.HasItem((int)ItemId.Ravenous_Hydra_Melee_Only, myHero) && Items.CanUseItem((int)ItemId.Ravenous_Hydra_Melee_Only)
-               && myHero.LSDistance(unit.Position) <= 400)
+               && myHero.Distance(unit.Position) <= 400)
             {
                 Items.UseItem((int)ItemId.Ravenous_Hydra_Melee_Only);
             }
             if (Items.HasItem((int)ItemId.Tiamat_Melee_Only, myHero) && Items.CanUseItem((int)ItemId.Tiamat_Melee_Only)
-               && myHero.LSDistance(unit.Position) <= 400)
+               && myHero.Distance(unit.Position) <= 400)
             {
                 Items.UseItem((int)ItemId.Tiamat_Melee_Only);
             }
             if (Items.HasItem((int)ItemId.Randuins_Omen, myHero) && Items.CanUseItem((int)ItemId.Randuins_Omen)
-               && myHero.LSDistance(unit.Position) <= 400)
+               && myHero.Distance(unit.Position) <= 400)
             {
                 Items.UseItem((int)ItemId.Randuins_Omen);
             }
         }
         public static void AutoR()
         {
-            if (!Program.R.LSIsReady())
+            if (!Program.R.IsReady())
             {
                 return;
             }
@@ -658,12 +658,12 @@ using EloBuddy;
 
             var enemiesKnockedUp =
                 ObjectManager.Get<AIHeroClient>()
-                    .Where(x => x.LSIsValidTarget(Program.R.Range))
+                    .Where(x => x.IsValidTarget(Program.R.Range))
                     .Where(x => x.HasBuffOfType(BuffType.Knockup) || x.HasBuffOfType(BuffType.Knockback) && x.IsEnemy);
 
             var enemies = enemiesKnockedUp as IList<AIHeroClient> ?? enemiesKnockedUp.ToList();
 
-            if (enemies.Count() >= autoREnemies && Program.myHero.Health >= MyHP && myHero.LSCountEnemiesInRange(1500) <= enemyInRange)
+            if (enemies.Count() >= autoREnemies && Program.myHero.Health >= MyHP && myHero.CountEnemiesInRange(1500) <= enemyInRange)
             {
                 Program.R.Cast();
             }
@@ -679,7 +679,7 @@ using EloBuddy;
             }
             if (TsTarget != null && Config.Item("QC").GetValue<bool>())
             {
-                if (Q3READY() && Q3.LSIsReady() && TsTarget.LSIsValidTarget(Q3.Range) && !IsDashing)
+                if (Q3READY() && Q3.IsReady() && TsTarget.IsValidTarget(Q3.Range) && !IsDashing)
                 {
                     PredictionOutput Q3Pred = Q3.GetPrediction(TsTarget);
                     if (Q3.IsInRange(TsTarget) && Q3Pred.Hitchance >= HitChance.Medium) 
@@ -687,7 +687,7 @@ using EloBuddy;
                         Q3.Cast(Q3Pred.CastPosition, true);
                     }
                 }
-                if (!Q3READY() && Q.LSIsReady() && TsTarget.LSIsValidTarget(Q.Range))
+                if (!Q3READY() && Q.IsReady() && TsTarget.IsValidTarget(Q.Range))
                 {
                     PredictionOutput QPred = Q.GetPrediction(TsTarget);
                     if (Q.IsInRange(TsTarget) && QPred.Hitchance >= HitChance.Medium)
@@ -700,81 +700,81 @@ using EloBuddy;
             {
                 putWallBehind(TsTarget);
             }
-            if (Config.Item("smartW").GetValue<bool>() && wallCasted && myHero.LSDistance(TsTarget.Position) < 300)
+            if (Config.Item("smartW").GetValue<bool>() && wallCasted && myHero.Distance(TsTarget.Position) < 300)
             {
                 eBehindWall(TsTarget);
             }
             if (Config.Item("EC").GetValue<bool>() && TsTarget != null)
             {
-                var dmg = ((float)myHero.LSGetSpellDamage(TsTarget, SpellSlot.Q) + (float)myHero.LSGetSpellDamage(TsTarget, SpellSlot.E) + (float)myHero.LSGetSpellDamage(TsTarget, SpellSlot.R));
-                if (E.LSIsReady() && TsTarget.LSDistance(myHero) >= (Config.Item("E1").GetValue<Slider>().Value) && dmg >= TsTarget.Health && UnderTower(PosAfterE(TsTarget)) && CanCastE(TsTarget) && myHero.LSIsFacing(TsTarget))
+                var dmg = ((float)myHero.GetSpellDamage(TsTarget, SpellSlot.Q) + (float)myHero.GetSpellDamage(TsTarget, SpellSlot.E) + (float)myHero.GetSpellDamage(TsTarget, SpellSlot.R));
+                if (E.IsReady() && TsTarget.Distance(myHero) >= (Config.Item("E1").GetValue<Slider>().Value) && dmg >= TsTarget.Health && UnderTower(PosAfterE(TsTarget)) && CanCastE(TsTarget) && myHero.IsFacing(TsTarget))
                 {
                     E.CastOnUnit(TsTarget);
                 }
-                else if(TsTarget.LSDistance(myHero) >= (Config.Item("E1").GetValue<Slider>().Value) && dmg <= TsTarget.Health && CanCastE(TsTarget) && myHero.LSIsFacing(TsTarget))
+                else if(TsTarget.Distance(myHero) >= (Config.Item("E1").GetValue<Slider>().Value) && dmg <= TsTarget.Health && CanCastE(TsTarget) && myHero.IsFacing(TsTarget))
                 {
                     useENormal(TsTarget);
                 }
-                else if (Q.LSIsReady() && IsDashing && myHero.LSDistance(TsTarget) <= 275 * 275)
+                else if (Q.IsReady() && IsDashing && myHero.Distance(TsTarget) <= 275 * 275)
                 {
                     LeagueSharp.Common.Utility.DelayAction.Add(200, () => { CastQ12(TsTarget); } );
                 }
-                else if (Q3.LSIsReady() && myHero.LSDistance(TsTarget) <= E.Range && Q3READY() && TsTarget != null && E.LSIsReady() && CanCastE(TsTarget))
+                else if (Q3.IsReady() && myHero.Distance(TsTarget) <= E.Range && Q3READY() && TsTarget != null && E.IsReady() && CanCastE(TsTarget))
                 {
                     E.CastOnUnit(TsTarget, true);
                 }
-                else if (Q3.LSIsReady() && IsDashing && myHero.LSDistance(TsTarget) <= 275 * 275 && Q3READY())
+                else if (Q3.IsReady() && IsDashing && myHero.Distance(TsTarget) <= 275 * 275 && Q3READY())
                 {
                     LeagueSharp.Common.Utility.DelayAction.Add(200, () => { CastQ3(TsTarget); });
                 }           
 
-                if (Config.Item("E3").GetValue<bool>() && E.LSIsReady())
+                if (Config.Item("E3").GetValue<bool>() && E.IsReady())
                 {
                     var bestMinion =
                     ObjectManager.Get<Obj_AI_Base>()
-                    .Where(x => x.LSIsValidTarget(E.Range))
-                    .Where(x => x.LSDistance(TsTarget) < myHero.LSDistance(TsTarget))
-                    .OrderByDescending(x => x.LSDistance(myHero))
+                    .Where(x => x.IsValidTarget(E.Range))
+                    .Where(x => x.Distance(TsTarget) < myHero.Distance(TsTarget))
+                    .OrderByDescending(x => x.Distance(myHero))
                     .FirstOrDefault();
-                    var dmg2 = ((float)myHero.LSGetSpellDamage(TsTarget, SpellSlot.Q) + (float)myHero.LSGetSpellDamage(TsTarget, SpellSlot.E) + (float)myHero.LSGetSpellDamage(TsTarget, SpellSlot.R));
-                    if (bestMinion != null && TsTarget != null && dmg2 >= TsTarget.Health && UnderTower(PosAfterE(bestMinion)) && myHero.LSIsFacing(bestMinion) && TsTarget.LSDistance(myHero) >= (Config.Item("E2").GetValue<Slider>().Value) && CanCastE(bestMinion) && myHero.LSIsFacing(bestMinion))
+                    var dmg2 = ((float)myHero.GetSpellDamage(TsTarget, SpellSlot.Q) + (float)myHero.GetSpellDamage(TsTarget, SpellSlot.E) + (float)myHero.GetSpellDamage(TsTarget, SpellSlot.R));
+                    if (bestMinion != null && TsTarget != null && dmg2 >= TsTarget.Health && UnderTower(PosAfterE(bestMinion)) && myHero.IsFacing(bestMinion) && TsTarget.Distance(myHero) >= (Config.Item("E2").GetValue<Slider>().Value) && CanCastE(bestMinion) && myHero.IsFacing(bestMinion))
                     {
                         E.CastOnUnit(bestMinion, true);
                     }
-                    else if (bestMinion != null && TsTarget != null && dmg2 <= TsTarget.Health && myHero.LSIsFacing(bestMinion) && TsTarget.LSDistance(myHero) >= (Config.Item("E2").GetValue<Slider>().Value) && CanCastE(bestMinion) && myHero.LSIsFacing(bestMinion))
+                    else if (bestMinion != null && TsTarget != null && dmg2 <= TsTarget.Health && myHero.IsFacing(bestMinion) && TsTarget.Distance(myHero) >= (Config.Item("E2").GetValue<Slider>().Value) && CanCastE(bestMinion) && myHero.IsFacing(bestMinion))
                     {
                         useENormal(bestMinion);
                     }
                 }
-                if (!Config.Item("E3").GetValue<bool>() && E.LSIsReady())
+                if (!Config.Item("E3").GetValue<bool>() && E.IsReady())
                 {
                        var bestMinion =
                        ObjectManager.Get<Obj_AI_Base>()
-                      .Where(x => x.LSIsValidTarget(E.Range))
-                      .Where(x => x.LSDistance(Game.CursorPos) < ObjectManager.Player.LSDistance(Game.CursorPos))
-                      .OrderByDescending(x => x.LSDistance(myHero))
+                      .Where(x => x.IsValidTarget(E.Range))
+                      .Where(x => x.Distance(Game.CursorPos) < ObjectManager.Player.Distance(Game.CursorPos))
+                      .OrderByDescending(x => x.Distance(myHero))
                       .FirstOrDefault();
 
-                    var dmg3 = ((float)myHero.LSGetSpellDamage(TsTarget, SpellSlot.Q) + (float)myHero.LSGetSpellDamage(TsTarget, SpellSlot.E) + (float)myHero.LSGetSpellDamage(TsTarget, SpellSlot.R));
-                    if (bestMinion != null && TsTarget != null && dmg3 >= TsTarget.Health && UnderTower(PosAfterE(bestMinion)) && myHero.LSIsFacing(bestMinion) && TsTarget.LSDistance(myHero) >= (Config.Item("E2").GetValue<Slider>().Value) && CanCastE(bestMinion) && myHero.LSIsFacing(bestMinion))
+                    var dmg3 = ((float)myHero.GetSpellDamage(TsTarget, SpellSlot.Q) + (float)myHero.GetSpellDamage(TsTarget, SpellSlot.E) + (float)myHero.GetSpellDamage(TsTarget, SpellSlot.R));
+                    if (bestMinion != null && TsTarget != null && dmg3 >= TsTarget.Health && UnderTower(PosAfterE(bestMinion)) && myHero.IsFacing(bestMinion) && TsTarget.Distance(myHero) >= (Config.Item("E2").GetValue<Slider>().Value) && CanCastE(bestMinion) && myHero.IsFacing(bestMinion))
                     {
                         E.CastOnUnit(bestMinion, true);
                     }
-                    else if (bestMinion != null && TsTarget != null && dmg3 <= TsTarget.Health && myHero.LSIsFacing(bestMinion) && TsTarget.LSDistance(myHero) >= (Config.Item("E2").GetValue<Slider>().Value) && CanCastE(bestMinion) && myHero.LSIsFacing(bestMinion))
+                    else if (bestMinion != null && TsTarget != null && dmg3 <= TsTarget.Health && myHero.IsFacing(bestMinion) && TsTarget.Distance(myHero) >= (Config.Item("E2").GetValue<Slider>().Value) && CanCastE(bestMinion) && myHero.IsFacing(bestMinion))
                     {
                         useENormal(bestMinion);
                     }
                 }
             }
-            /*if (Config.Item("flash").GetValue<bool>() && E.LSIsReady() && R.LSIsReady() && Flash.LSIsReady())
+            /*if (Config.Item("flash").GetValue<bool>() && E.IsReady() && R.IsReady() && Flash.IsReady())
             {
                 if (TsTarget == null)
                 {
                     return;
                 }
                 var flashQ3range = ((Flash.Range + E.Range) - 25);
-                if (Flash != null && TsTarget != null && myHero.LSDistance(TsTarget) <= flashQ3range && TsTarget.LSCountEnemiesInRange(400) >= Config.Item("flash2").GetValue<Slider>().Value 
-                    && myHero.LSCountAlliesInRange(1000) >= Config.Item("flash3").GetValue<Slider>().Value)
+                if (Flash != null && TsTarget != null && myHero.Distance(TsTarget) <= flashQ3range && TsTarget.CountEnemiesInRange(400) >= Config.Item("flash2").GetValue<Slider>().Value 
+                    && myHero.CountAlliesInRange(1000) >= Config.Item("flash3").GetValue<Slider>().Value)
                 {
                     myHero.Spellbook.CastSpell(Flash.Slot, TsTarget.ServerPosition);
                     LeagueSharp.Common.Utility.DelayAction.Add(10, () => { E.CastOnUnit(TsTarget, true); });
@@ -782,25 +782,25 @@ using EloBuddy;
                 }
             }*/
 
-            if (Program.R.LSIsReady() && Program.Config.Item("R").GetValue<bool>())
+            if (Program.R.IsReady() && Program.Config.Item("R").GetValue<bool>())
             {
                 List<AIHeroClient> enemies = HeroManager.Enemies;
                 foreach (AIHeroClient enemy in enemies)
                 {
-                    if (ObjectManager.Player.LSDistance(enemy) <= 1200)
+                    if (ObjectManager.Player.Distance(enemy) <= 1200)
                     {
                         var enemiesKnockedUp =
                             ObjectManager.Get<AIHeroClient>()
-                            .Where(x => x.LSIsValidTarget(Program.R.Range))
+                            .Where(x => x.IsValidTarget(Program.R.Range))
                             .Where(x => x.HasBuffOfType(BuffType.Knockup));
 
                         var enemiesKnocked = enemiesKnockedUp as IList<AIHeroClient> ?? enemiesKnockedUp.ToList();
-                        if (enemy.LSIsValidTarget(Program.R.Range) && Program.CanCastDelayR(enemy) && enemiesKnocked.Count() >= (Program.Config.Item("R2").GetValue<Slider>().Value))
+                        if (enemy.IsValidTarget(Program.R.Range) && Program.CanCastDelayR(enemy) && enemiesKnocked.Count() >= (Program.Config.Item("R2").GetValue<Slider>().Value))
                         {
                             Program.R.Cast();
                         }
                     }
-                    if (enemy.LSIsValidTarget(Program.R.Range))
+                    if (enemy.IsValidTarget(Program.R.Range))
                     {
                         
                         if (Program.IsKnockedUp(enemy) && Program.CanCastDelayR(enemy) && enemy.Health <= ((Program.Config.Item("R1").GetValue<Slider>().Value / 100 * enemy.MaxHealth) * 1.5f) && Config.Item(enemy.ChampionName).GetValue<bool>())
@@ -821,7 +821,7 @@ using EloBuddy;
                     Ignite.Cast(TsTarget);
                 }
                 
-                if (Program.Config.Item("comboItems").GetValue<bool>() && TsTarget != null && TsTarget.LSIsValidTarget())
+                if (Program.Config.Item("comboItems").GetValue<bool>() && TsTarget != null && TsTarget.IsValidTarget())
                 {
                     UseItems(TsTarget);
                 }
@@ -831,9 +831,9 @@ using EloBuddy;
         {
             foreach (AIHeroClient enemy in HeroManager.Enemies)
             {
-                if (enemy.LSIsValidTarget(Q.Range) && Config.Item("KS").GetValue<bool>())
+                if (enemy.IsValidTarget(Q.Range) && Config.Item("KS").GetValue<bool>())
                 {
-                    if (Q.LSIsReady() && !Q3READY())
+                    if (Q.IsReady() && !Q3READY())
                     {
                         
                         if (enemy.Health <= GetQDmg(enemy))
@@ -841,7 +841,7 @@ using EloBuddy;
                             CastQ12(enemy);
                         }
                     }
-                    if (Q3.LSIsReady() && Q3READY())
+                    if (Q3.IsReady() && Q3READY())
                     {
 
                         if (enemy.Health <= GetQDmg(enemy))
@@ -849,7 +849,7 @@ using EloBuddy;
                             CastQ3(enemy);
                         }
                     }
-                    if (!Q.LSIsReady() && E.LSIsReady() && CanCastE(enemy))
+                    if (!Q.IsReady() && E.IsReady() && CanCastE(enemy))
                     {
                         
                         if (enemy.Health <= GetEDmg(enemy))
@@ -857,7 +857,7 @@ using EloBuddy;
                             E.CastOnUnit(enemy, true);
                         }
                     }
-                    if (Ignite != null && Ignite.LSIsReady())
+                    if (Ignite != null && Ignite.IsReady())
                     {
                         
                         if (enemy.Health <= Program.myHero.GetSummonerSpellDamage(enemy, Damage.SummonerSpell.Ignite))
@@ -894,7 +894,7 @@ using EloBuddy;
         }
         public static void CastQ3AoE()
         {
-            foreach (AIHeroClient target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(1100)))
+            foreach (AIHeroClient target in HeroManager.Enemies.Where(x => x.IsValidTarget(1100)))
             {
                 PredictionOutput Q3Pred = Q3.GetPrediction(target, true);
                 if (Q3Pred.Hitchance >= HitChance.Medium && Q3.IsInRange(target) && Q3Pred.AoeTargetsHitCount >= 2)
@@ -910,11 +910,11 @@ using EloBuddy;
 
         public static bool AlliesNearTarget(Obj_AI_Base target, float range)
         {
-            return HeroManager.Allies.Where(tar => tar.LSDistance(target) < range).Any(tar => tar != null);
+            return HeroManager.Allies.Where(tar => tar.Distance(target) < range).Any(tar => tar != null);
         }
         public static bool isDangerous(Obj_AI_Base target, float range)
         {
-            return HeroManager.Enemies.Where(tar => tar.LSDistance(PosAfterE(target)) < range).Any(tar => tar != null);
+            return HeroManager.Enemies.Where(tar => tar.Distance(PosAfterE(target)) < range).Any(tar => tar != null);
         }
 
         //copy pasta from valvesharp
@@ -925,27 +925,27 @@ using EloBuddy;
         }
         public static Vector2 PosAfterE(Obj_AI_Base target)
         {
-            return myHero.ServerPosition.LSExtend(target.ServerPosition, myHero.LSDistance(target) < 410 ? E.Range : myHero.LSDistance(target) + 65).LSTo2D();
+            return myHero.ServerPosition.Extend(target.ServerPosition, myHero.Distance(target) < 410 ? E.Range : myHero.Distance(target) + 65).To2D();
         }
         public static bool UnderTower(Vector2 pos)
         {
-            return ObjectManager.Get<Obj_AI_Turret>().Any(i => i.Health > 0 && i.LSDistance(pos) <= 950 && i.IsEnemy);
+            return ObjectManager.Get<Obj_AI_Turret>().Any(i => i.Health > 0 && i.Distance(pos) <= 950 && i.IsEnemy);
         }
         public static bool IsDashing
         {
             get
             {
-                return isDashing || myHero.LSIsDashing();
+                return isDashing || myHero.IsDashing();
             }
         }
         public static bool Q3READY()
         {
-            return ObjectManager.Player.LSHasBuff("YasuoQ3W");
+            return ObjectManager.Player.HasBuff("YasuoQ3W");
         }
 
         public static bool CanCastE(Obj_AI_Base target)
         {
-            return !target.LSHasBuff("YasuoDashWrapper");
+            return !target.HasBuff("YasuoDashWrapper");
         }
         public static double GetEDmg(Obj_AI_Base target)
         {
@@ -956,11 +956,11 @@ using EloBuddy;
         }
         public static Vector2 getNextPos(AIHeroClient target)
         {
-            Vector2 dashPos = target.Position.LSTo2D();
+            Vector2 dashPos = target.Position.To2D();
             if (target.IsMoving && target.Path.Count() != 0)
             {
-                Vector2 tpos = target.Position.LSTo2D();
-                Vector2 path = target.Path[0].LSTo2D() - tpos;
+                Vector2 tpos = target.Position.To2D();
+                Vector2 path = target.Path[0].To2D() - tpos;
                 path.Normalize();
                 dashPos = tpos + (path * 100);
             }
@@ -968,14 +968,14 @@ using EloBuddy;
         }
         public static void putWallBehind(AIHeroClient target)
         {
-            if (!W.LSIsReady() || !E.LSIsReady() || target.IsMelee())
+            if (!W.IsReady() || !E.IsReady() || target.IsMelee())
                 return;
             Vector2 dashPos = getNextPos(target);
             PredictionOutput po = Prediction.GetPrediction(target, 0.5f);
 
-            float dist = myHero.LSDistance(po.UnitPosition);
-            if (!target.IsMoving || myHero.LSDistance(dashPos) <= dist + 40)
-                if (dist < 330 && dist > 100 && W.LSIsReady() && Config.Item(target.ChampionName).GetValue<bool>())
+            float dist = myHero.Distance(po.UnitPosition);
+            if (!target.IsMoving || myHero.Distance(dashPos) <= dist + 40)
+                if (dist < 330 && dist > 100 && W.IsReady() && Config.Item(target.ChampionName).GetValue<bool>())
                 {
                     W.Cast(po.UnitPosition, true);
                 }
@@ -983,18 +983,18 @@ using EloBuddy;
 
         public static void eBehindWall(AIHeroClient target)
         {
-            if (!E.LSIsReady() || !enemyIsJumpable(target) || target.IsMelee())
+            if (!E.IsReady() || !enemyIsJumpable(target) || target.IsMelee())
                 return;
-            float dist = myHero.LSDistance(target);
-            var pPos = myHero.Position.LSTo2D();
-            Vector2 dashPos = target.Position.LSTo2D();
-            if (!target.IsMoving || myHero.LSDistance(dashPos) <= dist)
+            float dist = myHero.Distance(target);
+            var pPos = myHero.Position.To2D();
+            Vector2 dashPos = target.Position.To2D();
+            if (!target.IsMoving || myHero.Distance(dashPos) <= dist)
             {
                 foreach (Obj_AI_Base enemy in ObjectManager.Get<Obj_AI_Base>().Where(enemy => enemyIsJumpable(enemy)))
                 {
-                    Vector2 posAfterE = pPos + (Vector2.Normalize(enemy.Position.LSTo2D() - pPos) * E.Range);
-                    if ((target.LSDistance(posAfterE) < dist
-                        || target.LSDistance(posAfterE) < Orbwalking.GetRealAutoAttackRange(target) + 100)
+                    Vector2 posAfterE = pPos + (Vector2.Normalize(enemy.Position.To2D() - pPos) * E.Range);
+                    if ((target.Distance(posAfterE) < dist
+                        || target.Distance(posAfterE) < Orbwalking.GetRealAutoAttackRange(target) + 100)
                         && goesThroughWall(target.Position, posAfterE.To3D()))
                     {
                         if (useENormal(target))
@@ -1013,7 +1013,7 @@ using EloBuddy;
 
 
             bool safe = Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo ||
-                        point.To3D().LSGetEnemiesInRange(500).Count > myHero.HealthPercent % 65;
+                        point.To3D().GetEnemiesInRange(500).Count > myHero.HealthPercent % 65;
             if (!safe)
             {
                 result.IsSafe = false;
@@ -1040,14 +1040,14 @@ using EloBuddy;
             double closest = 10000000000000;
             foreach (Obj_AI_Minion minion in minions)
             {
-                if (Vector2.Distance(player.Position.LSTo2D(), minion.Position.LSTo2D()) < 475 && minion.IsEnemy && enemyIsJumpable(minion) && closest > Vector3.DistanceSquared(Game.CursorPos, minion.Position))
+                if (Vector2.Distance(player.Position.To2D(), minion.Position.To2D()) < 475 && minion.IsEnemy && enemyIsJumpable(minion) && closest > Vector3.DistanceSquared(Game.CursorPos, minion.Position))
                 {
                     foreach (Skillshot skillshot in skillshots)
                     {
                         //Get intersection point
-                        //  Vector2 intersectionPoint = LineIntersectionPoint(startPos, player.Position.LSTo2D(), endPos, V2E(player.Position, minion.Position, 475));
+                        //  Vector2 intersectionPoint = LineIntersectionPoint(startPos, player.Position.To2D(), endPos, V2E(player.Position, minion.Position, 475));
                         //Time when yasuo will be in intersection point
-                        //  float arrivingTime = Vector2.Distance(player.Position.LSTo2D(), intersectionPoint) / currentDashSpeed;
+                        //  float arrivingTime = Vector2.Distance(player.Position.To2D(), intersectionPoint) / currentDashSpeed;
                         //Estimated skillshot position
                         //  Vector2 skillshotPosition = V2E(startPos.To3D(), intersectionPoint.To3D(), speed * arrivingTime);
                         if (skillshot.IsDanger(V2E(player.Position, minion.Position, 475)))
@@ -1063,7 +1063,7 @@ using EloBuddy;
 
         private static Vector2 V2E(Vector3 from, Vector3 direction, float distance)
         {
-            return (from + distance * Vector3.Normalize(direction - from)).LSTo2D();
+            return (from + distance * Vector3.Normalize(direction - from)).To2D();
         }
         public static Vector2 LineIntersectionPoint(Vector2 ps1, Vector2 pe1, Vector2 ps2,
                 Vector2 pe2)
@@ -1091,13 +1091,13 @@ using EloBuddy;
         }
         public static bool willColide(Skillshot ss, Vector2 from, float speed, Vector2 direction, float radius)
         {
-            Vector2 ssVel = ss.Direction.LSNormalized() * ss.SpellData.MissileSpeed;
+            Vector2 ssVel = ss.Direction.Normalized() * ss.SpellData.MissileSpeed;
             Vector2 dashVel = direction * speed;
             Vector2 a = ssVel - dashVel;//true direction + speed
-            Vector2 realFrom = from.LSExtend(direction, ss.SpellData.Delay + speed);
+            Vector2 realFrom = from.Extend(direction, ss.SpellData.Delay + speed);
             if (!ss.IsAboutToHit((int)((dashVel.Length() / 475) * 1000) + Game.Ping + 100, ObjectManager.Player))
                 return false;
-            if (ss.IsAboutToHit(1000, ObjectManager.Player) && interCir(ss.MissilePosition, ss.MissilePosition.LSExtend(ss.MissilePosition + a, ss.SpellData.Range + 50), from,
+            if (ss.IsAboutToHit(1000, ObjectManager.Player) && interCir(ss.MissilePosition, ss.MissilePosition.Extend(ss.MissilePosition + a, ss.SpellData.Range + 50), from,
                 radius))
                 return true;
             return false;
@@ -1163,33 +1163,33 @@ using EloBuddy;
         {
             float currentDashSpeed = 700 + myHero.MoveSpeed;//At least has to be like this
             //Get intersection point
-            Vector2 intersectionPoint = LineIntersectionPoint(myHero.Position.LSTo2D(), V2E(myHero.Position, jumpOn.Position, 475), ss.Start, ss.End);
+            Vector2 intersectionPoint = LineIntersectionPoint(myHero.Position.To2D(), V2E(myHero.Position, jumpOn.Position, 475), ss.Start, ss.End);
             //Time when yasuo will be in intersection point
-            float arrivingTime = Vector2.Distance(myHero.Position.LSTo2D(), intersectionPoint) / currentDashSpeed;
+            float arrivingTime = Vector2.Distance(myHero.Position.To2D(), intersectionPoint) / currentDashSpeed;
             //Estimated skillshot position
             Vector2 skillshotPosition = ss.GetMissilePosition((int)(arrivingTime * 1000));
             if (Vector2.DistanceSquared(skillshotPosition, intersectionPoint) <
-                (ss.SpellData.Radius + myHero.BoundingRadius) && !willColide(skillShot, myHero.Position.LSTo2D(), 700f + myHero.MoveSpeed, dashDir, myHero.BoundingRadius + skillShot.SpellData.Radius))
+                (ss.SpellData.Radius + myHero.BoundingRadius) && !willColide(skillShot, myHero.Position.To2D(), 700f + myHero.MoveSpeed, dashDir, myHero.BoundingRadius + skillShot.SpellData.Radius))
                 return false;
             return true;
         }
 
         public static void useEtoSafe(Skillshot skillShot)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
             float closest = float.MaxValue;
             Obj_AI_Base closestTarg = null;
             float currentDashSpeed = 700 + myHero.MoveSpeed;
-            foreach (Obj_AI_Base enemy in ObjectManager.Get<Obj_AI_Base>().Where(ob => ob.NetworkId != skillShot.Unit.NetworkId && enemyIsJumpable(ob) && ob.LSDistance(myHero) < E.Range).OrderBy(ene => ene.LSDistance(Game.CursorPos, true)))
+            foreach (Obj_AI_Base enemy in ObjectManager.Get<Obj_AI_Base>().Where(ob => ob.NetworkId != skillShot.Unit.NetworkId && enemyIsJumpable(ob) && ob.Distance(myHero) < E.Range).OrderBy(ene => ene.Distance(Game.CursorPos, true)))
             {
-                var pPos = myHero.Position.LSTo2D();
+                var pPos = myHero.Position.To2D();
                 Vector2 posAfterE = V2E(myHero.Position, enemy.Position, 475);
-                Vector2 dashDir = (posAfterE - myHero.Position.LSTo2D()).LSNormalized();
+                Vector2 dashDir = (posAfterE - myHero.Position.To2D()).Normalized();
 
                 if (isSafePoint(posAfterE).IsSafe && wontHitOnDash(skillShot, enemy, skillShot, dashDir) /*&& skillShot.IsSafePath(new List<Vector2>() { posAfterE }, 0, (int)currentDashSpeed, 0).IsSafe*/)
                 {
-                    float curDist = Vector2.DistanceSquared(Game.CursorPos.LSTo2D(), posAfterE);
+                    float curDist = Vector2.DistanceSquared(Game.CursorPos.To2D(), posAfterE);
                     if (curDist < closest)
                     {
                         closestTarg = enemy;
@@ -1197,7 +1197,7 @@ using EloBuddy;
                     }
                 }
             }
-            if (closestTarg != null && closestTarg.LSCountEnemiesInRange(600) <= 2 && skillShotMenu.Item("DangerLevel" + skillShot.SpellData.MenuItemName) != null && skillShotMenu.Item("DangerLevel" + skillShot.SpellData.MenuItemName).GetValue<Slider>().Value >= Config.Item("smartEDogueDanger").GetValue<Slider>().Value)
+            if (closestTarg != null && closestTarg.CountEnemiesInRange(600) <= 2 && skillShotMenu.Item("DangerLevel" + skillShot.SpellData.MenuItemName) != null && skillShotMenu.Item("DangerLevel" + skillShot.SpellData.MenuItemName).GetValue<Slider>().Value >= Config.Item("smartEDogueDanger").GetValue<Slider>().Value)
                 useENormal(closestTarg);
         }
 
@@ -1206,7 +1206,7 @@ using EloBuddy;
             //try douge with E if cant windWall
             var WDelay = Config.Item("smartWDelay").GetValue<Slider>().Value;
 
-            if (!W.LSIsReady() || skillShot.SpellData.Type == SkillShotType.SkillshotCircle || skillShot.SpellData.Type == SkillShotType.SkillshotRing)
+            if (!W.IsReady() || skillShot.SpellData.Type == SkillShotType.SkillshotCircle || skillShot.SpellData.Type == SkillShotType.SkillshotRing)
                 return;
             if (skillShot.IsAboutToHit(WDelay, myHero))
             {
@@ -1258,7 +1258,7 @@ using EloBuddy;
 
         public static bool useENormal(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target.LSDistance(myHero) > 470)
+            if (!E.IsReady() || target.Distance(myHero) > 470)
                 return false;
             Vector2 posAfter = V2E(myHero.Position, target.Position, 475);
             if (!Config.Item("ETower").GetValue<bool>())
@@ -1271,9 +1271,9 @@ using EloBuddy;
             }
             else
             {
-                Vector2 pPos = myHero.ServerPosition.LSTo2D();
-                Vector2 posAfterE = pPos + (Vector2.Normalize(target.Position.LSTo2D() - pPos) * E.Range);
-                if (!(posAfterE.To3D().LSUnderTurret(true)))
+                Vector2 pPos = myHero.ServerPosition.To2D();
+                Vector2 posAfterE = pPos + (Vector2.Normalize(target.Position.To2D() - pPos) * E.Range);
+                if (!(posAfterE.To3D().UnderTurret(true)))
                 {
                     Console.WriteLine("use gap?");
                     if (isSafePoint(posAfter, true).IsSafe)
@@ -1290,13 +1290,13 @@ using EloBuddy;
         {
             if (wall.endtime < Game.Time || wall.pointL == null || wall.pointL == null)
                 return false;
-            Vector2 inter = LineIntersectionPoint(vec1.LSTo2D(), vec2.LSTo2D(), wall.pointL.Position.LSTo2D(), wall.pointR.Position.LSTo2D());
+            Vector2 inter = LineIntersectionPoint(vec1.To2D(), vec2.To2D(), wall.pointL.Position.To2D(), wall.pointR.Position.To2D());
             float wallW = (300 + 50 * W.Level);
-            if (wall.pointL.Position.LSTo2D().LSDistance(inter) > wallW ||
-                wall.pointR.Position.LSTo2D().LSDistance(inter) > wallW)
+            if (wall.pointL.Position.To2D().Distance(inter) > wallW ||
+                wall.pointR.Position.To2D().Distance(inter) > wallW)
                 return false;
-            var dist = vec1.LSDistance(vec2);
-            if (vec1.LSTo2D().LSDistance(inter) + vec2.LSTo2D().LSDistance(inter) - 30 > dist)
+            var dist = vec1.Distance(vec2);
+            if (vec1.To2D().Distance(inter) + vec2.To2D().Distance(inter) - 30 > dist)
                 return false;
 
             return true;
@@ -1365,14 +1365,14 @@ using EloBuddy;
             if (skillshot.SpellData.SpellName == "VelkozQ")
             {
                 var spellData = SpellDatabase.GetByName("VelkozQSplit");
-                var direction = skillshot.Direction.LSPerpendicular();
+                var direction = skillshot.Direction.Perpendicular();
                 if (EvadeDetectedSkillshots.Count(s => s.SpellData.SpellName == "VelkozQSplit") == 0)
                 {
                     for (var i = -1; i <= 1; i = i + 2)
                     {
                         var skillshotToAdd = new Skillshot(
-                            DetectionType.ProcessSpell, spellData, Environment.TickCount, missile.Position.LSTo2D(),
-                            missile.Position.LSTo2D() + i * direction * spellData.Range, skillshot.Unit);
+                            DetectionType.ProcessSpell, spellData, Environment.TickCount, missile.Position.To2D(),
+                            missile.Position.To2D() + i * direction * spellData.Range, skillshot.Unit);
                         EvadeDetectedSkillshots.Add(skillshotToAdd);
                     }
                 }
@@ -1381,11 +1381,11 @@ using EloBuddy;
         private static double GetQDmg(Obj_AI_Base target)
         {
             var dmgItem = 0d;
-            if (Items.HasItem(3057) && (Items.CanUseItem(3057) || myHero.LSHasBuff("Sheen")))
+            if (Items.HasItem(3057) && (Items.CanUseItem(3057) || myHero.HasBuff("Sheen")))
             {
                 dmgItem = myHero.BaseAttackDamage;
             }
-            if (Items.HasItem(3078) && (Items.CanUseItem(3078) || myHero.LSHasBuff("Sheen")))
+            if (Items.HasItem(3078) && (Items.CanUseItem(3078) || myHero.HasBuff("Sheen")))
             {
                 dmgItem = myHero.BaseAttackDamage * 2;
             }
@@ -1444,7 +1444,7 @@ using EloBuddy;
             Vector3 rangeCheckFrom = new Vector3())
         {
             var result = new List<Vector2>();
-            from = from.LSTo2D().LSIsValid() ? from : ObjectManager.Player.ServerPosition;
+            from = from.To2D().IsValid() ? from : ObjectManager.Player.ServerPosition;
             foreach (var minion in minions)
             {
                 var pos = Prediction.GetPrediction(new PredictionInput
@@ -1462,7 +1462,7 @@ using EloBuddy;
 
                 if (pos.Hitchance >= HitChance.High)
                 {
-                    result.Add(pos.CastPosition.LSTo2D());
+                    result.Add(pos.CastPosition.To2D());
                 }
             }
 
@@ -1476,8 +1476,8 @@ using EloBuddy;
             {
                 if (item.SpellData.SpellName == skillshot.SpellData.SpellName &&
                     (item.Unit.NetworkId == skillshot.Unit.NetworkId &&
-                     (skillshot.Direction).LSAngleBetween(item.Direction) < 5 &&
-                     (skillshot.Start.LSDistance(item.Start) < 100 || skillshot.SpellData.FromObjects.Length == 0)))
+                     (skillshot.Direction).AngleBetween(item.Direction) < 5 &&
+                     (skillshot.Start.Distance(item.Start) < 100 || skillshot.SpellData.FromObjects.Length == 0)))
                 {
                     alreadyAdded = true;
                 }
@@ -1490,7 +1490,7 @@ using EloBuddy;
             }
 
             //Check if the skillshot is too far away.
-            if (skillshot.Start.LSDistance(ObjectManager.Player.ServerPosition.LSTo2D()) >
+            if (skillshot.Start.Distance(ObjectManager.Player.ServerPosition.To2D()) >
                 (skillshot.SpellData.Range + skillshot.SpellData.Radius + 1000) * 1.5)
             {
                 return;
@@ -1512,7 +1512,7 @@ using EloBuddy;
                         {
                             var end = skillshot.Start +
                                       skillshot.SpellData.Range *
-                                      originalDirection.LSRotated(skillshot.SpellData.MultipleAngle * i);
+                                      originalDirection.Rotated(skillshot.SpellData.MultipleAngle * i);
                             var skillshotToAdd = new Skillshot(
                                 skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, skillshot.Start, end,
                                 skillshot.Unit);
@@ -1529,8 +1529,8 @@ using EloBuddy;
 
                     if (skillshot.SpellData.Invert)
                     {
-                        var newDirection = -(skillshot.End - skillshot.Start).LSNormalized();
-                        var end = skillshot.Start + newDirection * skillshot.Start.LSDistance(skillshot.End);
+                        var newDirection = -(skillshot.End - skillshot.Start).Normalized();
+                        var end = skillshot.Start + newDirection * skillshot.Start.Distance(skillshot.End);
                         var skillshotToAdd = new Skillshot(
                             skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, skillshot.Start, end,
                             skillshot.Unit);
@@ -1553,22 +1553,22 @@ using EloBuddy;
                     {
                         var angle = 60;
                         var edge1 =
-                            (skillshot.End - skillshot.Unit.ServerPosition.LSTo2D()).LSRotated(
+                            (skillshot.End - skillshot.Unit.ServerPosition.To2D()).Rotated(
                                 -angle / 2 * (float)Math.PI / 180);
-                        var edge2 = edge1.LSRotated(angle * (float)Math.PI / 180);
+                        var edge2 = edge1.Rotated(angle * (float)Math.PI / 180);
 
                         foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
                         {
-                            var v = minion.ServerPosition.LSTo2D() - skillshot.Unit.ServerPosition.LSTo2D();
-                            if (minion.Name == "Seed" && edge1.LSCrossProduct(v) > 0 && v.LSCrossProduct(edge2) > 0 &&
-                                minion.LSDistance(skillshot.Unit) < 800 &&
+                            var v = minion.ServerPosition.To2D() - skillshot.Unit.ServerPosition.To2D();
+                            if (minion.Name == "Seed" && edge1.CrossProduct(v) > 0 && v.CrossProduct(edge2) > 0 &&
+                                minion.Distance(skillshot.Unit) < 800 &&
                                 (minion.Team != ObjectManager.Player.Team))
                             {
-                                var start = minion.ServerPosition.LSTo2D();
-                                var end = skillshot.Unit.ServerPosition.LSTo2D()
-                                    .LSExtend(
-                                        minion.ServerPosition.LSTo2D(),
-                                        skillshot.Unit.LSDistance(minion) > 200 ? 1300 : 1000);
+                                var start = minion.ServerPosition.To2D();
+                                var end = skillshot.Unit.ServerPosition.To2D()
+                                    .Extend(
+                                        minion.ServerPosition.To2D(),
+                                        skillshot.Unit.Distance(minion) > 200 ? 1300 : 1000);
 
                                 var skillshotToAdd = new Skillshot(
                                     skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, start, end,
@@ -1581,8 +1581,8 @@ using EloBuddy;
 
                     if (skillshot.SpellData.SpellName == "AlZaharCalloftheVoid")
                     {
-                        var start = skillshot.End - skillshot.Direction.LSPerpendicular() * 400;
-                        var end = skillshot.End + skillshot.Direction.LSPerpendicular() * 400;
+                        var start = skillshot.End - skillshot.Direction.Perpendicular() * 400;
+                        var end = skillshot.End + skillshot.Direction.Perpendicular() * 400;
                         var skillshotToAdd = new Skillshot(
                             skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, start, end,
                             skillshot.Unit);
@@ -1592,7 +1592,7 @@ using EloBuddy;
 
                     if (skillshot.SpellData.SpellName == "ZiggsQ")
                     {
-                        var d1 = skillshot.Start.LSDistance(skillshot.End);
+                        var d1 = skillshot.Start.Distance(skillshot.End);
                         var d2 = d1 * 0.4f;
                         var d3 = d2 * 0.69f;
 
@@ -1622,7 +1622,7 @@ using EloBuddy;
                     if (skillshot.SpellData.SpellName == "ZiggsR")
                     {
                         skillshot.SpellData.Delay =
-                            (int)(1500 + 1500 * skillshot.End.LSDistance(skillshot.Start) / skillshot.SpellData.Range);
+                            (int)(1500 + 1500 * skillshot.End.Distance(skillshot.Start) / skillshot.SpellData.Range);
                     }
 
                     if (skillshot.SpellData.SpellName == "JarvanIVDragonStrike")
@@ -1640,19 +1640,19 @@ using EloBuddy;
                         foreach (var m in ObjectManager.Get<Obj_AI_Minion>())
                         {
                             if (m.CharData.BaseSkinName == "jarvanivstandard" && m.Team == skillshot.Unit.Team &&
-                                skillshot.IsDanger(m.Position.LSTo2D()))
+                                skillshot.IsDanger(m.Position.To2D()))
                             {
-                                endPos = m.Position.LSTo2D();
+                                endPos = m.Position.To2D();
                             }
                         }
 
-                        if (!endPos.LSIsValid())
+                        if (!endPos.IsValid())
                         {
                             return;
                         }
 
-                        skillshot.End = endPos + 200 * (endPos - skillshot.Start).LSNormalized();
-                        skillshot.Direction = (skillshot.End - skillshot.Start).LSNormalized();
+                        skillshot.End = endPos + 200 * (endPos - skillshot.Start).Normalized();
+                        skillshot.Direction = (skillshot.End - skillshot.Start).Normalized();
                     }
                 }
 
@@ -1686,23 +1686,23 @@ using EloBuddy;
             {
                 return;
             }
-            if (Config.Item("DrawQ").GetValue<bool>() && Q.LSIsReady())
+            if (Config.Item("DrawQ").GetValue<bool>() && Q.IsReady())
             {
                 Render.Circle.DrawCircle(myHero.Position, Q.Range, Color.LightGreen);
             }
-            if (Config.Item("DrawQ3").GetValue<bool>() && Q3.LSIsReady())
+            if (Config.Item("DrawQ3").GetValue<bool>() && Q3.IsReady())
             {
                 Render.Circle.DrawCircle(myHero.Position, Q3.Range, Color.LightGreen);
             }
-            if (Config.Item("DrawW").GetValue<bool>() && W.LSIsReady())
+            if (Config.Item("DrawW").GetValue<bool>() && W.IsReady())
             {
                 Render.Circle.DrawCircle(myHero.Position, W.Range, Color.LightGreen);
             }
-            if (Config.Item("DrawE").GetValue<bool>() && E.LSIsReady())
+            if (Config.Item("DrawE").GetValue<bool>() && E.IsReady())
             {
                 Render.Circle.DrawCircle(myHero.Position, E.Range, Color.LightGreen);
             }
-            if (Config.Item("DrawR").GetValue<bool>() && R.LSIsReady())
+            if (Config.Item("DrawR").GetValue<bool>() && R.IsReady())
             {
                 Render.Circle.DrawCircle(myHero.Position, R.Range, Color.LightGreen);
             }

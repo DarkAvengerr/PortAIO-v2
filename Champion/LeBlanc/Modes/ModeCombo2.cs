@@ -58,8 +58,8 @@
 //        public static SpellSlot IgniteSlot = ObjectManager.Player.GetSpellSlot("SummonerDot");
 
 //        //public static AIHeroClient Target => GetTarget ?? TargetSelector.GetTarget(Q.Range * 2, TargetSelector.DamageType.Magical);
-//        //public static AIHeroClient Target => HeroManager.Enemies.Where(e => !e.IsDead && e.IsVisible && e.LSIsValidTarget(E.Range) && !e.HasImmortalBuff()).OrderBy(e => e.Health - GetComboDamage(e)).FirstOrDefault();
-//        public static AIHeroClient Target => HeroManager.Enemies.Where(e => !e.IsDead && e.IsVisible && e.LSIsValidTarget(E.Range)).OrderBy(e => e.Health - GetComboDamage(e)).FirstOrDefault();
+//        //public static AIHeroClient Target => HeroManager.Enemies.Where(e => !e.IsDead && e.IsVisible && e.IsValidTarget(E.Range) && !e.HasImmortalBuff()).OrderBy(e => e.Health - GetComboDamage(e)).FirstOrDefault();
+//        public static AIHeroClient Target => HeroManager.Enemies.Where(e => !e.IsDead && e.IsVisible && e.IsValidTarget(E.Range)).OrderBy(e => e.Health - GetComboDamage(e)).FirstOrDefault();
 
 
 //        //public static AIHeroClient Target => TargetSelector.GetTarget(Q.Range * 2, TargetSelector.DamageType.Magical);
@@ -168,7 +168,7 @@
 //                var enemy =
 //                    HeroManager.Enemies.FirstOrDefault(
 //                        e =>
-//                            !e.IsDead && e.IsVisible && e.LSIsValidTarget(W.Range*2 + Q.Range) &&
+//                            !e.IsDead && e.IsVisible && e.IsValidTarget(W.Range*2 + Q.Range) &&
 //                            MenuHunt.Item("Hunt." + e.ChampionName).GetValue<bool>());
 
 //                if (enemy != null)
@@ -179,7 +179,7 @@
 //                var killableEnemy =
 //                    HeroManager.Enemies.FirstOrDefault(
 //                        e =>
-//                            !e.IsDead && e.IsVisible && e.LSIsValidTarget(W.Range) &&
+//                            !e.IsDead && e.IsVisible && e.IsValidTarget(W.Range) &&
 //                            e.Health < GetComboDamage(e));
 
 //                if (killableEnemy != null)
@@ -202,14 +202,14 @@
 
 //                //var x= HeroManager.Enemies.Where(
 //                //    e =>
-//                //        !e.IsDead && e.IsVisible && e.LSIsValidTarget(W.Range * 2 + Q.Range) &&
+//                //        !e.IsDead && e.IsVisible && e.IsValidTarget(W.Range * 2 + Q.Range) &&
 //                //        MenuHunt.Item("Hunt." + e.ChampionName).GetValue<bool>()).OrderByDescending(e => e.Health).FirstOrDefault();
 //                //return x;
 //                var enemy =
 //                    HeroManager.Enemies.Where(
 //                        e =>
 //                            !e.IsDead && e.IsVisible &&
-//                            e.LSIsValidTarget(ActiveComboMode == ActiveComboMode.Mode2xQ
+//                            e.IsValidTarget(ActiveComboMode == ActiveComboMode.Mode2xQ
 //                                ? Q.Range
 //                                : (ActiveComboMode == ActiveComboMode.Mode2xW ? W.Range : E.Range)) &&
 //                            MenuHunt.Item("Hunt." + e.ChampionName).GetValue<bool>())
@@ -221,7 +221,7 @@
 //                //var killableEnemy =
 //                //    HeroManager.Enemies.FirstOrDefault(
 //                //        e =>
-//                //            !e.IsDead && e.IsVisible && e.LSIsValidTarget(W.Range) &&
+//                //            !e.IsDead && e.IsVisible && e.IsValidTarget(W.Range) &&
 //                //            e.Health < GetComboDamage(e));
 
 //                //if (killableEnemy != null)
@@ -243,7 +243,7 @@
 //                if (MenuHunt.Item("Hunt." + e.ChampionName).GetValue<bool>())
 //                {
 //                    Common.CommonGeometry.DrawBox(new Vector2(e.HPBarPosition.X + 140, e.HPBarPosition.Y + 4), 65, 18, System.Drawing.Color.FromArgb(100, 255, 0, 0), 1, System.Drawing.Color.Black);
-//                    Common.CommonGeometry.DrawText(CommonGeometry.Text, "Hunt: On!", e.HPBarPosition.X + 145, e.HPBarPosition.Y + 6, SharpDX.Color.Wheat);if (e.LSIsValidTarget(W.Range*2 + Q.Range))
+//                    Common.CommonGeometry.DrawText(CommonGeometry.Text, "Hunt: On!", e.HPBarPosition.X + 145, e.HPBarPosition.Y + 6, SharpDX.Color.Wheat);if (e.IsValidTarget(W.Range*2 + Q.Range))
 //                    {
 //                        var pol = new LeagueSharp.Common.Geometry.Polygon.Line(ObjectManager.Player.Position, e.Position,
 //                            ObjectManager.Player.Distance(e.Position));
@@ -348,7 +348,7 @@
 //            }
 
 //            var nTarget = CommonTargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-//            if (nTarget.LSIsValidTarget() && nTarget.Health < ComboDamage2xW(nTarget))
+//            if (nTarget.IsValidTarget() && nTarget.Health < ComboDamage2xW(nTarget))
 //            {
 
 //                Render.Circle.DrawCircle(nTarget.Position, 105f, System.Drawing.Color.AliceBlue);
@@ -418,12 +418,12 @@
 
 //            return;
 //            var t = CommonTargetSelector.GetTarget(W.Range + Q.Range - 20, TargetSelector.DamageType.Magical);
-//            if (!t.LSIsValidTarget(W.Range + Q.Range - 20))
+//            if (!t.IsValidTarget(W.Range + Q.Range - 20))
 //            {
 //                return;
 //            }
 
-//            if (t.LSIsValidTarget(W.Range))
+//            if (t.IsValidTarget(W.Range))
 //            {
 //                return;
 //            }
@@ -583,7 +583,7 @@
 
 //        private static void ExecuteMode2xQ()
 //        {
-//            if (!Target.LSIsValidTarget(Q.Range))
+//            if (!Target.IsValidTarget(Q.Range))
 //            {
 //                return;
 //            }
@@ -599,7 +599,7 @@
 
 //        private static void ExecuteMode2xW()
 //        {
-//            if (!Target.LSIsValidTarget(W.Range))
+//            if (!Target.IsValidTarget(W.Range))
 //            {
 //                return;
 //            }
@@ -699,18 +699,18 @@
 //        {
 //            return;
 //            var nTarget = CommonTargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-//            if (nTarget.LSIsValidTarget() && nTarget.Health < ComboDamage2xW(nTarget))
+//            if (nTarget.IsValidTarget() && nTarget.Health < ComboDamage2xW(nTarget))
 //            {
                 
 
 
 //            }
 
-//            IEnumerable<Vector2> rangedMinionsW = HeroManager.Enemies.Where(e => e.LSIsValidTarget(W.Range + W.Width + 30)).Select(a => a.Position.To2D());
+//            IEnumerable<Vector2> rangedMinionsW = HeroManager.Enemies.Where(e => e.IsValidTarget(W.Range + W.Width + 30)).Select(a => a.Position.To2D());
 
-//            //rangedMinionsW.AddRange(HeroManager.Enemies.Where(e => e.LSIsValidTarget(W.Range + W.Width + 30)).Select(x => x.Position.To2D()));
+//            //rangedMinionsW.AddRange(HeroManager.Enemies.Where(e => e.IsValidTarget(W.Range + W.Width + 30)).Select(x => x.Position.To2D()));
 //            //var rangedMinionsW =
-//            //    HeroManager.Enemies.Where(e => e.LSIsValidTarget(W.Range + W.Width + 30)).Select(x => x.Position.To2D());
+//            //    HeroManager.Enemies.Where(e => e.IsValidTarget(W.Range + W.Width + 30)).Select(x => x.Position.To2D());
 
 //            var locationW = W.GetCircularFarmLocation((List<Vector2>) rangedMinionsW, W.Width*0.75f);
 
@@ -719,7 +719,7 @@
 //                ExecuteMode2xW();
 //            }
 
-//            if (Target.LSIsValidTarget(Q.Range))
+//            if (Target.IsValidTarget(Q.Range))
 //            {
 //                if (HeroManager.Enemies.Find(e => e.Distance(Target) < W.Range && e.NetworkId != Target.NetworkId) ==
 //                    null)
@@ -727,7 +727,7 @@
 //                    ExecuteMode2xQ();
 //                }
 //            }
-//            else if (Target.LSIsValidTarget(Q.Range) && MenuHunt.Item("Hunt." + Target.ChampionName).GetValue<bool>())
+//            else if (Target.IsValidTarget(Q.Range) && MenuHunt.Item("Hunt." + Target.ChampionName).GetValue<bool>())
 //            {
 //                ExecuteMode2xQ();
 //            }
@@ -747,14 +747,14 @@
 //                if (item.Value.ItemType == Common.CommonItems.EnumItemType.AoE
 //                    && item.Value.TargetingType == Common.CommonItems.EnumItemTargettingType.EnemyHero)
 //                {
-//                    if (t is AIHeroClient && t.LSIsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
+//                    if (t is AIHeroClient && t.IsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
 //                        item.Value.Item.Cast();
 //                }
 
 //                if (item.Value.ItemType == Common.CommonItems.EnumItemType.Targeted
 //                    && item.Value.TargetingType == Common.CommonItems.EnumItemTargettingType.EnemyHero)
 //                {
-//                    if (t.LSIsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
+//                    if (t.IsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
 //                        item.Value.Item.Cast((AIHeroClient) t);
 //                }
 //            }

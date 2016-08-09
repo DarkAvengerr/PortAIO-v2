@@ -70,7 +70,7 @@ using EloBuddy;
             //theR.SetSkillshot(spellInfo["rDelay"], spellInfo["rRange"], float.PositiveInfinity, false, SkillshotType.SkillshotCircle);
 
             //Do we have ignite? I mean, you, not "we" ayy lmao
-            ignite = ObjectManager.Player.LSGetSpellSlot("summonerdot");
+            ignite = ObjectManager.Player.GetSpellSlot("summonerdot");
 
             //Items
             tiamat_item = new Items.Item(3077, 400f);
@@ -186,7 +186,7 @@ using EloBuddy;
 
             //animationTime = ObjectManager.Player.AttackCastDelay;
 
-            hasPassive = ObjectManager.Player.LSHasBuff(buffName);
+            hasPassive = ObjectManager.Player.HasBuff(buffName);
 
             HealingManager();
 
@@ -246,7 +246,7 @@ using EloBuddy;
                 return;
             }
 
-            if (theQ.LSIsReady())
+            if (theQ.IsReady())
             {
                 switch (TaricMenu.Item("useQ").GetValue<StringList>().SelectedIndex)
                 {
@@ -273,11 +273,11 @@ using EloBuddy;
                 }
             }
 
-            if (theW.LSIsReady())
+            if (theW.IsReady())
             {
                 if (TaricMenu.Item("useW").GetValue<bool>())
                 {
-                    if (ObjectManager.Player.LSCountEnemiesInRange(spellInfo["wRange"]) >= TaricMenu.Item("useWenemies")//fag
+                    if (ObjectManager.Player.CountEnemiesInRange(spellInfo["wRange"]) >= TaricMenu.Item("useWenemies")//fag
                         .GetValue<Slider>().Value)
                     {
                         theW.Cast();
@@ -285,11 +285,11 @@ using EloBuddy;
                 }
             }
 
-            if (theE.LSIsReady())
+            if (theE.IsReady())
             {
                 if (TaricMenu.Item("useE").GetValue<bool>())
                 {
-                    if (ObjectManager.Player.ServerPosition.LSDistance(target.ServerPosition) <= TaricMenu.Item("useErange")//fag
+                    if (ObjectManager.Player.ServerPosition.Distance(target.ServerPosition) <= TaricMenu.Item("useErange")//fag
                         .GetValue<Slider>().Value)
                     {
                         theE.CastOnUnit(target);
@@ -297,11 +297,11 @@ using EloBuddy;
                 }
             }
 
-            if (theR.LSIsReady())
+            if (theR.IsReady())
             {
                 if (TaricMenu.Item("useR").GetValue<bool>())
                 {
-                    if (ObjectManager.Player.LSCountEnemiesInRange(spellInfo["rRange"]) >= TaricMenu.Item("useRenemies")//fag
+                    if (ObjectManager.Player.CountEnemiesInRange(spellInfo["rRange"]) >= TaricMenu.Item("useRenemies")//fag
                         .GetValue<Slider>().Value)
                     {
                         theR.Cast();
@@ -317,7 +317,7 @@ using EloBuddy;
                 return;
             }
 
-            if (theQ.LSIsReady())
+            if (theQ.IsReady())
             {
                 if (TaricMenu.Item("useQharass").GetValue<bool>())
                 {
@@ -328,11 +328,11 @@ using EloBuddy;
                 }
             }
 
-            if (theE.LSIsReady())
+            if (theE.IsReady())
             {
                 if (TaricMenu.Item("useEharass").GetValue<bool>())
                 {
-                    if (ObjectManager.Player.ServerPosition.LSDistance(target.ServerPosition) <= spellInfo["eRange"])
+                    if (ObjectManager.Player.ServerPosition.Distance(target.ServerPosition) <= spellInfo["eRange"])
                     {
                         theE.CastOnUnit(target);
                     }
@@ -351,7 +351,7 @@ using EloBuddy;
 
             List<AIHeroClient> AllyList = ObjectManager.Get<AIHeroClient>().ToList().FindAll(ally => ally.IsAlly);
 
-            if (!theQ.LSIsReady() || (!HealSelf && !HealOther))
+            if (!theQ.IsReady() || (!HealSelf && !HealOther))
             {
                 return;
             }
@@ -368,7 +368,7 @@ using EloBuddy;
             {
                 foreach (AIHeroClient ally in AllyList)
                 {
-                    if (ObjectManager.Player.ServerPosition.LSDistance(ally.ServerPosition) <= spellInfo["qRange"])
+                    if (ObjectManager.Player.ServerPosition.Distance(ally.ServerPosition) <= spellInfo["qRange"])
                     {
                         if (ally.HealthPercent <= HealOtherSlider)
                         {
@@ -383,23 +383,23 @@ using EloBuddy;
         {
             if (SWcombo && penisOrb.ActiveMode == Orbwalking.OrbwalkingMode.Combo && target != null)
             {
-                if (theE.LSIsReady()
-                && target.LSIsValidTarget(spellInfo["eRange"]) && !GetPassiveState())
+                if (theE.IsReady()
+                && target.IsValidTarget(spellInfo["eRange"]) && !GetPassiveState())
                 {
                     theE.CastOnUnit(target);
                 }
-                else if (theR.LSIsReady() && !theE.LSIsReady()
-                && target.LSIsValidTarget(spellInfo["rRange"]) && !GetPassiveState())
+                else if (theR.IsReady() && !theE.IsReady()
+                && target.IsValidTarget(spellInfo["rRange"]) && !GetPassiveState())
                 {
                     theR.Cast();
                 }
-                else if (theW.LSIsReady() && !theR.LSIsReady() && !theE.LSIsReady()
-                && target.LSIsValidTarget(spellInfo["wRange"]) && !GetPassiveState())
+                else if (theW.IsReady() && !theR.IsReady() && !theE.IsReady()
+                && target.IsValidTarget(spellInfo["wRange"]) && !GetPassiveState())
                 {
                     theW.Cast();
                 }
-                else if (theQ.LSIsReady() && !theW.LSIsReady() && !theR.LSIsReady() && !theE.LSIsReady()
-                && target.LSIsValidTarget(spellInfo["qRange"]) && !GetPassiveState())
+                else if (theQ.IsReady() && !theW.IsReady() && !theR.IsReady() && !theE.IsReady()
+                && target.IsValidTarget(spellInfo["qRange"]) && !GetPassiveState())
                 {
                     theQ.CastOnUnit(ObjectManager.Player);
                 }
@@ -418,7 +418,7 @@ using EloBuddy;
 
             if (TaricMenu.Item("qRangeDraw").GetValue<Circle>().Active)
             {
-                if (!(!theQ.LSIsReady() && HideNotReady))
+                if (!(!theQ.IsReady() && HideNotReady))
                 {
                     Render.Circle.DrawCircle(ObjectManager.Player.Position, spellInfo["qRange"],
                         TaricMenu.Item("qRangeDraw").GetValue<Circle>().Color);
@@ -427,7 +427,7 @@ using EloBuddy;
 
             if (TaricMenu.Item("wRangeDraw").GetValue<Circle>().Active)
             {
-                if (!(!theW.LSIsReady() && HideNotReady))
+                if (!(!theW.IsReady() && HideNotReady))
                 {
                     Render.Circle.DrawCircle(ObjectManager.Player.Position, spellInfo["wRange"],
                         TaricMenu.Item("wRangeDraw").GetValue<Circle>().Color);
@@ -442,7 +442,7 @@ using EloBuddy;
 
             if (TaricMenu.Item("eRangeDraw").GetValue<Circle>().Active)
             {
-                if (!(!theE.LSIsReady() && HideNotReady))
+                if (!(!theE.IsReady() && HideNotReady))
                 {
                     Render.Circle.DrawCircle(ObjectManager.Player.Position,
                         TaricMenu.Item("useErange").GetValue<Slider>().Value,
@@ -452,7 +452,7 @@ using EloBuddy;
 
             if (TaricMenu.Item("rRangeDraw").GetValue<Circle>().Active)
             {
-                if (!(!theR.LSIsReady() && HideNotReady))
+                if (!(!theR.IsReady() && HideNotReady))
                 {
                     Render.Circle.DrawCircle(ObjectManager.Player.Position, spellInfo["rRange"],
                         TaricMenu.Item("rRangeDraw").GetValue<Circle>().Color);
@@ -516,31 +516,31 @@ using EloBuddy;
 
             double spellDamage = 0d;
 
-            var basic = Taric.LSGetAutoAttackDamage(faggot);
+            var basic = Taric.GetAutoAttackDamage(faggot);
             var passive = Taric.CalcDamage(faggot, Damage.DamageType.Magical, 0.2f * Taric.Armor);
             var totalBasic = basic + passive;
 
-            if (theQ.LSIsReady())
+            if (theQ.IsReady())
             {
                 activeSpells += 1;
             }
 
-            if (theW.LSIsReady())
+            if (theW.IsReady())
             {
                 activeSpells += 1;
-                spellDamage += Taric.LSGetSpellDamage(faggot, SpellSlot.W);
+                spellDamage += Taric.GetSpellDamage(faggot, SpellSlot.W);
             }
 
-            if (theE.LSIsReady())
+            if (theE.IsReady())
             {
                 activeSpells += 1;
-                spellDamage += Taric.LSGetSpellDamage(faggot, SpellSlot.E); //Needs precise tweaking
+                spellDamage += Taric.GetSpellDamage(faggot, SpellSlot.E); //Needs precise tweaking
             }
 
-            if (theR.LSIsReady())
+            if (theR.IsReady())
             {
                 activeSpells += 1;
-                spellDamage += Taric.LSGetSpellDamage(faggot, SpellSlot.R);
+                spellDamage += Taric.GetSpellDamage(faggot, SpellSlot.R);
             }
 
 

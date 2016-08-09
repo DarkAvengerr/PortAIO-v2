@@ -54,7 +54,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
         private void OnUpdate(EventArgs args)
         {
             if (Variable.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
-                || !Variable.Spells[SpellSlot.W].LSIsReady() || Variable.Player.Spellbook.IsAutoAttacking) return;
+                || !Variable.Spells[SpellSlot.W].IsReady() || Variable.Player.Spellbook.IsAutoAttacking) return;
 
             this.Volley();
         }

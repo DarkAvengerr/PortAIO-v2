@@ -42,7 +42,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 if (Q.IsCharging)
                 {
@@ -63,14 +63,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-          //  if (!W.LSIsReady())
+          //  if (!W.IsReady())
           //      return;
           //  W.Cast(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || Q.IsCharging)
+            if (!E.IsReady() || Q.IsCharging)
                 return;
             E.Cast(target, true);
 
@@ -78,7 +78,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || Q.IsCharging)
+            if (!R.IsReady() || Q.IsCharging)
                 return;
             R.Cast(target);
         }

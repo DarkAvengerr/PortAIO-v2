@@ -92,7 +92,7 @@ namespace Leblanc.Common
         {
             get
             {
-                if (!Champion.PlayerSpells.R.LSIsReady())
+                if (!Champion.PlayerSpells.R.IsReady())
                 {
                     return SpellRName.None;
                 }
@@ -145,7 +145,7 @@ namespace Leblanc.Common
 
         public static bool ShouldCastSpell(Obj_AI_Base t)
         {
-            return !t.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(t) + 65) || !ObjectManager.Player.HasSheenBuff();
+            return !t.IsValidTarget(Orbwalking.GetRealAutoAttackRange(t) + 65) || !ObjectManager.Player.HasSheenBuff();
         }
     }
 
@@ -196,8 +196,8 @@ namespace Leblanc.Common
             if (checkCoolDown)
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, spell.Range,
-                    spell.LSIsReady() ? color : System.Drawing.Color.Gray,
-                    spell.LSIsReady() ? 5 : 1);
+                    spell.IsReady() ? color : System.Drawing.Color.Gray,
+                    spell.IsReady() ? 5 : 1);
             }
             else
             {

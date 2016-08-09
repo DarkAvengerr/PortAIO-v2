@@ -87,7 +87,7 @@ using EloBuddy;
             var MinimumEnemyHitAutoR = SkyLv_AurelionSol.Menu.Item("AurelionSol.MinimumEnemyHitAutoR").GetValue<Slider>().Value;
             var PacketCast = SkyLv_AurelionSol.Menu.Item("AurelionSol.UsePacketCastCombo").GetValue<bool>();
 
-            if (R.LSIsReady() && Player.Mana >= R.ManaCost)
+            if (R.IsReady() && Player.Mana >= R.ManaCost)
             {
                 R.CastIfWillHit(target, MinimumEnemyHitAutoR, PacketCast);
             }

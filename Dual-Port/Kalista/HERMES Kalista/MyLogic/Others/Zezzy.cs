@@ -26,23 +26,23 @@ using EloBuddy;
         {
             if (sender.IsEnemy)
             {
-                if (Program.E.LSIsReady())
+                if (Program.E.IsReady())
                 {
-                    if ((!(sender is AIHeroClient) || args.SData.LSIsAutoAttack()) && args.Target != null &&
+                    if ((!(sender is AIHeroClient) || args.SData.IsAutoAttack()) && args.Target != null &&
                         args.Target.NetworkId == ObjectManager.Player.NetworkId)
                     {
                         _incomingDamage.Add(
-                            ObjectManager.Player.ServerPosition.LSDistance(sender.ServerPosition)/args.SData.MissileSpeed +
-                            Game.Time, (float) sender.LSGetAutoAttackDamage(ObjectManager.Player));
+                            ObjectManager.Player.ServerPosition.Distance(sender.ServerPosition)/args.SData.MissileSpeed +
+                            Game.Time, (float) sender.GetAutoAttackDamage(ObjectManager.Player));
                     }
                     else if (sender is AIHeroClient)
                     {
                         var attacker = (AIHeroClient) sender;
-                        var slot = attacker.LSGetSpellSlot(args.SData.Name);
+                        var slot = attacker.GetSpellSlot(args.SData.Name);
 
                         if (slot != SpellSlot.Unknown)
                         {
-                            if (slot == attacker.LSGetSpellSlot("SummonerDot") && args.Target != null &&
+                            if (slot == attacker.GetSpellSlot("SummonerDot") && args.Target != null &&
                                 args.Target.NetworkId == ObjectManager.Player.NetworkId)
                             {
                                 _instantDamage.Add(Game.Time + 2,
@@ -52,11 +52,11 @@ using EloBuddy;
                             }
                             else if (slot.HasFlag(SpellSlot.Q | SpellSlot.W | SpellSlot.E | SpellSlot.R) &&
                                      ((args.Target != null && args.Target.NetworkId == ObjectManager.Player.NetworkId) ||
-                                      args.End.LSDistance(ObjectManager.Player.ServerPosition) <
+                                      args.End.Distance(ObjectManager.Player.ServerPosition) <
                                       Math.Pow(args.SData.LineWidth, 2)))
                             {
                                 _instantDamage.Add(Game.Time + 2,
-                                    (float) attacker.LSGetSpellDamage(ObjectManager.Player, slot));
+                                    (float) attacker.GetSpellDamage(ObjectManager.Player, slot));
                             }
                         }
                     }
@@ -74,10 +74,10 @@ using EloBuddy;
 
         public static void OnUpdate(EventArgs args)
         {
-            if (ObjectManager.Player.LSIsRecalling() || ObjectManager.Player.LSInFountain() || !Program.E.LSIsReady())
+            if (ObjectManager.Player.IsRecalling() || ObjectManager.Player.InFountain() || !Program.E.IsReady())
                 return;
 
-            if ((ObjectManager.Player.HealthPercent < 10 || IncomingDamage >= ObjectManager.Player.Health) && ObjectManager.Player.LSCountEnemiesInRange(Program.E.Range) > 0)
+            if ((ObjectManager.Player.HealthPercent < 10 || IncomingDamage >= ObjectManager.Player.Health) && ObjectManager.Player.CountEnemiesInRange(Program.E.Range) > 0)
             {
                 Program.E.Cast();
             }

@@ -40,7 +40,7 @@ namespace TheBrand
         public override void Update(Orbwalking.OrbwalkingMode mode, ComboProvider combo, AIHeroClient target)
         {
             if (Killsteal && (mode == Orbwalking.OrbwalkingMode.Combo || !KillstealCombo))
-                foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(650)))
+                foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(650)))
                 {
                     if (!IsKillable(enemy)) continue;
                     Cast(enemy);
@@ -50,10 +50,10 @@ namespace TheBrand
 
         public override void Execute(AIHeroClient target)
         {
-            var distance = target.LSDistance(ObjectManager.Player); //Todo: make him use fireminions even in range, just for showoff and potential AOE. Check if hes on fire too though
+            var distance = target.Distance(ObjectManager.Player); //Todo: make him use fireminions even in range, just for showoff and potential AOE. Check if hes on fire too though
             if (distance < 950 && distance > 650 && UseMinions)
             {
-                var fireMinion = MinionManager.GetMinions(650, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.None).Where(minion => minion.HasBuff("brandablaze") && minion.LSDistance(target) < 300).MinOrDefault(minion => minion.LSDistance(target));
+                var fireMinion = MinionManager.GetMinions(650, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.None).Where(minion => minion.HasBuff("brandablaze") && minion.Distance(target) < 300).MinOrDefault(minion => minion.Distance(target));
                 if (fireMinion != null)
                 {
                     if (Cast(fireMinion) == CastStates.SuccessfullyCasted && !target.HasSpellShield())
@@ -78,7 +78,7 @@ namespace TheBrand
             var neighbours = -1;
             foreach (var minion in minions)
             {
-                var currentNeighbours = minions.Count(neighbour => neighbour.LSDistance(minion) < 300);
+                var currentNeighbours = minions.Count(neighbour => neighbour.Distance(minion) < 300);
                 if (currentNeighbours <= neighbours) continue;
                 bestMinion = minion;
                 neighbours = currentNeighbours;
@@ -89,7 +89,7 @@ namespace TheBrand
         private void OnMinionUnkillable(AttackableUnit minion)
         {
             if (!FarmAssist) return;
-            if (Provider.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && minion.Position.LSDistance(ObjectManager.Player.Position) < 650 && ManaManager.CanUseMana(Orbwalking.OrbwalkingMode.LastHit) && (_recentFarmTarget == null || minion.NetworkId != _recentFarmTarget.NetworkId))
+            if (Provider.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && minion.Position.Distance(ObjectManager.Player.Position) < 650 && ManaManager.CanUseMana(Orbwalking.OrbwalkingMode.LastHit) && (_recentFarmTarget == null || minion.NetworkId != _recentFarmTarget.NetworkId))
             {
                 Cast(minion as Obj_AI_Base);
             }
@@ -97,14 +97,14 @@ namespace TheBrand
 
         public override void Gapcloser(ComboProvider combo, ActiveGapcloser gapcloser)
         {
-            if (!gapcloser.Sender.LSIsValidTarget()) return;
+            if (!gapcloser.Sender.IsValidTarget()) return;
             if (_brandQ.CanBeCast() && CanBeCast() && !gapcloser.Sender.HasBuff("brandablaze"))
                 Execute(gapcloser.Sender);
         }
 
         public override void Interruptable(ComboProvider combo, AIHeroClient sender, ComboProvider.InterruptableSpell interruptableSpell, float endTime)
         {
-            if (InterruptE && _brandQ.CouldHit(sender) && sender.LSDistance(ObjectManager.Player) < 650)
+            if (InterruptE && _brandQ.CouldHit(sender) && sender.Distance(ObjectManager.Player) < 650)
                 Execute(sender);
         }
 

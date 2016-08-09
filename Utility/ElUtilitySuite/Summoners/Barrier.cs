@@ -51,7 +51,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         /// <returns></returns>
         public void CreateMenu(Menu rootMenu)
         {
-            if (this.Player.LSGetSpellSlot("summonerbarrier") == SpellSlot.Unknown)
+            if (this.Player.GetSpellSlot("summonerbarrier") == SpellSlot.Unknown)
             {
                 return;
             }
@@ -76,7 +76,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         /// </summary>
         public void Load()
         {
-            var barrierSlot = this.Player.LSGetSpellSlot("summonerbarrier");
+            var barrierSlot = this.Player.GetSpellSlot("summonerbarrier");
 
             if (barrierSlot == SpellSlot.Unknown)
             {
@@ -100,12 +100,12 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         {
             try
             {
-                if (this.Player.IsDead || this.Player.LSHasBuff("ChronoShift") ||  !this.BarrierSpell.LSIsReady() || this.Player.LSInFountain() || this.Player.LSIsRecalling() || !this.Menu.Item("Barrier.Activated").IsActive())
+                if (this.Player.IsDead || this.Player.HasBuff("ChronoShift") ||  !this.BarrierSpell.IsReady() || this.Player.InFountain() || this.Player.IsRecalling() || !this.Menu.Item("Barrier.Activated").IsActive())
                 {
                     return;
                 }
 
-                var enemies = this.Player.LSCountEnemiesInRange(750f);
+                var enemies = this.Player.CountEnemiesInRange(750f);
                 var totalDamage = IncomingDamageManager.GetDamage(this.Player) * 1.1f; 
 
                 if (this.Player.HealthPercent <= this.Menu.Item("barrier.min-health").GetValue<Slider>().Value &&

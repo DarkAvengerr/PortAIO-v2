@@ -27,29 +27,29 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
             #region The Required Variables
             var positions = DashHelper.GetRotatedQPositions();
             var enemyPositions = DashHelper.GetEnemyPoints();
-            var safePositions = positions.Where(pos => !enemyPositions.Contains(pos.LSTo2D())).ToList();
-            var BestPosition = ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, 300f);
+            var safePositions = positions.Where(pos => !enemyPositions.Contains(pos.To2D())).ToList();
+            var BestPosition = ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f);
             var AverageDistanceWeight = .60f;
             var ClosestDistanceWeight = .40f;
 
             var bestWeightedAvg = 0f;
 
             var highHealthEnemiesNear =
-                    HeroManager.Enemies.Where(m => !m.IsMelee && m.LSIsValidTarget(1300f) && m.HealthPercent > 7).ToList();
+                    HeroManager.Enemies.Where(m => !m.IsMelee && m.IsValidTarget(1300f) && m.HealthPercent > 7).ToList();
 
-            var alliesNear = HeroManager.Allies.Count(ally => !ally.IsMe && ally.LSIsValidTarget(1500f, false));
+            var alliesNear = HeroManager.Allies.Count(ally => !ally.IsMe && ally.IsValidTarget(1500f, false));
 
             var enemiesNear =
-                HeroManager.Enemies.Where(m => m.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(m) + 300f + 65f)).ToList();
+                HeroManager.Enemies.Where(m => m.IsValidTarget(Orbwalking.GetRealAutoAttackRange(m) + 300f + 65f)).ToList();
             #endregion
 
             #region 1 Enemy around only
-            if (ObjectManager.Player.LSCountEnemiesInRange(1500f) <= 1)
+            if (ObjectManager.Player.CountEnemiesInRange(1500f) <= 1)
             {
                 //Logic for 1 enemy near
-                var backwardsPosition = (ObjectManager.Player.ServerPosition.LSTo2D() + 300f * ObjectManager.Player.Direction.LSTo2D()).To3D();
+                var backwardsPosition = (ObjectManager.Player.ServerPosition.To2D() + 300f * ObjectManager.Player.Direction.To2D()).To3D();
 
-                if (!backwardsPosition.LSUnderTurret(true))
+                if (!backwardsPosition.UnderTurret(true))
                 {
                     return backwardsPosition;
                 }
@@ -61,14 +61,14 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
                     enemiesNear.Any(
                         t =>
                             t.Health + 15 <
-                            ObjectManager.Player.LSGetAutoAttackDamage(t) * 2 + Variables.spells[SpellSlot.Q].GetDamage(t)
-                            && t.LSDistance(ObjectManager.Player) < Orbwalking.GetRealAutoAttackRange(t) + 80f))
+                            ObjectManager.Player.GetAutoAttackDamage(t) * 2 + Variables.spells[SpellSlot.Q].GetDamage(t)
+                            && t.Distance(ObjectManager.Player) < Orbwalking.GetRealAutoAttackRange(t) + 80f))
             {
                 var QPosition =
-                    ObjectManager.Player.ServerPosition.LSExtend(
+                    ObjectManager.Player.ServerPosition.Extend(
                         enemiesNear.OrderBy(t => t.Health).First().ServerPosition, 300f);
 
-                if (!QPosition.LSUnderTurret(true))
+                if (!QPosition.UnderTurret(true))
                 {
                     return QPosition;
                 }
@@ -81,14 +81,14 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
                     enemiesNear.Any(
                         t =>
                             t.Health + 15 <
-                            ObjectManager.Player.LSGetAutoAttackDamage(t) + Variables.spells[SpellSlot.Q].GetDamage(t)
-                            && t.LSDistance(ObjectManager.Player) < Orbwalking.GetRealAutoAttackRange(t) + 80f))
+                            ObjectManager.Player.GetAutoAttackDamage(t) + Variables.spells[SpellSlot.Q].GetDamage(t)
+                            && t.Distance(ObjectManager.Player) < Orbwalking.GetRealAutoAttackRange(t) + 80f))
                 {
                     var QPosition =
-                        ObjectManager.Player.ServerPosition.LSExtend(
+                        ObjectManager.Player.ServerPosition.Extend(
                             highHealthEnemiesNear.OrderBy(t => t.Health).First().ServerPosition, 300f);
 
-                    if (!QPosition.LSUnderTurret(true))
+                    if (!QPosition.UnderTurret(true))
                     {
                         return QPosition;
                     }
@@ -102,9 +102,9 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
                 //Logic for 2 enemies Near and alone
 
                 //If there is a killable enemy among those. 
-                var backwardsPosition = (ObjectManager.Player.ServerPosition.LSTo2D() + 300f * ObjectManager.Player.Direction.LSTo2D()).To3D();
+                var backwardsPosition = (ObjectManager.Player.ServerPosition.To2D() + 300f * ObjectManager.Player.Direction.To2D()).To3D();
 
-                if (!backwardsPosition.LSUnderTurret(true))
+                if (!backwardsPosition.UnderTurret(true))
                 {
                 //    return backwardsPosition;
                 }
@@ -112,14 +112,14 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
             #endregion
 
             #region Already in an enemy's attack range.
-            var closeNonMeleeEnemy = DashHelper.GetClosestEnemy(ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, 300f));
+            var closeNonMeleeEnemy = DashHelper.GetClosestEnemy(ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f));
 
             if (closeNonMeleeEnemy != null
-                && ObjectManager.Player.LSDistance(closeNonMeleeEnemy) <= closeNonMeleeEnemy.AttackRange - 85
+                && ObjectManager.Player.Distance(closeNonMeleeEnemy) <= closeNonMeleeEnemy.AttackRange - 85
                 && !closeNonMeleeEnemy.IsMelee)
             {
-                return ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, 300f).IsSafeEx()
-                    ? ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, 300f)
+                return ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f).IsSafeEx()
+                    ? ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f)
                     : Vector3.Zero;
             }
             #endregion
@@ -128,7 +128,7 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
             foreach (var position in safePositions)
             {
                 var enemy = DashHelper.GetClosestEnemy(position);
-                if (!enemy.LSIsValidTarget())
+                if (!enemy.IsValidTarget())
                 {
                     continue;
                 }
@@ -137,7 +137,7 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
 
                 if (avgDist > -1)
                 {
-                    var closestDist = ObjectManager.Player.ServerPosition.LSDistance(enemy.ServerPosition);
+                    var closestDist = ObjectManager.Player.ServerPosition.Distance(enemy.ServerPosition);
                     var weightedAvg = closestDist * ClosestDistanceWeight + avgDist * AverageDistanceWeight;
                     if (weightedAvg > bestWeightedAvg && position.IsSafeEx())
                     {
@@ -155,17 +155,17 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
             {
                 //Try to find another suitable position. This usually means we are already near too much enemies turrets so just gtfo and tumble
                 //to the closest ally ordered by most health.
-                var alliesClose = HeroManager.Allies.Where(ally => !ally.IsMe && ally.LSIsValidTarget(1500f, false)).ToList();
+                var alliesClose = HeroManager.Allies.Where(ally => !ally.IsMe && ally.IsValidTarget(1500f, false)).ToList();
                 if (alliesClose.Any() && enemiesNear.Any())
                 {
                     var closestMostHealth =
-                    alliesClose.OrderBy(m => m.LSDistance(ObjectManager.Player)).ThenByDescending(m => m.Health).FirstOrDefault();
+                    alliesClose.OrderBy(m => m.Distance(ObjectManager.Player)).ThenByDescending(m => m.Health).FirstOrDefault();
 
                     if (closestMostHealth != null
-                        && closestMostHealth.LSDistance(enemiesNear.OrderBy(m => m.LSDistance(ObjectManager.Player)).FirstOrDefault())
-                        > ObjectManager.Player.LSDistance(enemiesNear.OrderBy(m => m.LSDistance(ObjectManager.Player)).FirstOrDefault()))
+                        && closestMostHealth.Distance(enemiesNear.OrderBy(m => m.Distance(ObjectManager.Player)).FirstOrDefault())
+                        > ObjectManager.Player.Distance(enemiesNear.OrderBy(m => m.Distance(ObjectManager.Player)).FirstOrDefault()))
                     {
-                        var tempPosition = ObjectManager.Player.ServerPosition.LSExtend(closestMostHealth.ServerPosition,
+                        var tempPosition = ObjectManager.Player.ServerPosition.Extend(closestMostHealth.ServerPosition,
                             300f);
                         if (tempPosition.IsSafeEx())
                         {
@@ -181,7 +181,7 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
             #region Couldn't even tumble to ally, just go to mouse
             if (endPosition == Vector3.Zero)
             {
-                var mousePosition = ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, 300f);
+                var mousePosition = ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f);
                 if (mousePosition.IsSafe())
                 {
                     endPosition = mousePosition;
@@ -203,13 +203,13 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
         {
             const int currentStep = 30;
             // var direction = ObjectManager.Player.Direction.To2D().Perpendicular();
-            var direction = (Game.CursorPos - ObjectManager.Player.ServerPosition).LSNormalized().LSTo2D();
+            var direction = (Game.CursorPos - ObjectManager.Player.ServerPosition).Normalized().To2D();
 
             var list = new List<Vector3>();
             for (var i = -70; i <= 70; i += currentStep)
             {
                 var angleRad = Geometry.DegreeToRadian(i);
-                var rotatedPosition = ObjectManager.Player.Position.LSTo2D() + (300f * direction.LSRotated(angleRad));
+                var rotatedPosition = ObjectManager.Player.Position.To2D() + (300f * direction.Rotated(angleRad));
                 list.Add(rotatedPosition.To3D());
             }
             return list;
@@ -225,7 +225,7 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
             if (Variables.Orbwalker.GetTarget() is AIHeroClient)
             {
                 var owAI = Variables.Orbwalker.GetTarget() as AIHeroClient;
-                if (owAI.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 120f, true, from))
+                if (owAI.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 120f, true, from))
                 {
                     return owAI;
                 }
@@ -242,12 +242,12 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
         public static bool IsSafeEx(Vector3 position)
         {
             var closeEnemies =
-                    HeroManager.Enemies.FindAll(en => en.LSIsValidTarget(1500f) && !(en.LSDistance(ObjectManager.Player.ServerPosition) < en.AttackRange + 65f))
-                    .OrderBy(en => en.LSDistance(position));
+                    HeroManager.Enemies.FindAll(en => en.IsValidTarget(1500f) && !(en.Distance(ObjectManager.Player.ServerPosition) < en.AttackRange + 65f))
+                    .OrderBy(en => en.Distance(position));
 
             return closeEnemies.All(
                                 enemy =>
-                                    position.LSCountEnemiesInRange(enemy.AttackRange) <= 1);
+                                    position.CountEnemiesInRange(enemy.AttackRange) <= 1);
         }
 
         /// <summary>
@@ -257,21 +257,21 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
         /// <returns></returns>
         public static float GetAvgDistance(Vector3 from)
         {
-            var numberOfEnemies = from.LSCountEnemiesInRange(1200f);
+            var numberOfEnemies = from.CountEnemiesInRange(1200f);
             if (numberOfEnemies != 0)
             {
-                var enemies = HeroManager.Enemies.Where(en => en.LSIsValidTarget(1200f, true, from)
+                var enemies = HeroManager.Enemies.Where(en => en.IsValidTarget(1200f, true, from)
                                                     &&
                                                     en.Health >
-                                                    ObjectManager.Player.LSGetAutoAttackDamage(en) * 3 +
+                                                    ObjectManager.Player.GetAutoAttackDamage(en) * 3 +
                                                     Variables.spells[SpellSlot.W].GetDamage(en) +
                                                     Variables.spells[SpellSlot.Q].GetDamage(en)).ToList();
-                var enemiesEx = HeroManager.Enemies.Where(en => en.LSIsValidTarget(1200f, true, from)).ToList();
+                var enemiesEx = HeroManager.Enemies.Where(en => en.IsValidTarget(1200f, true, from)).ToList();
                 var LHEnemies = enemiesEx.Count() - enemies.Count();
 
                 var totalDistance = (LHEnemies > 1 && enemiesEx.Count() > 2) ?
-                    enemiesEx.Sum(en => en.LSDistance(ObjectManager.Player.ServerPosition)) :
-                    enemies.Sum(en => en.LSDistance(ObjectManager.Player.ServerPosition));
+                    enemiesEx.Sum(en => en.Distance(ObjectManager.Player.ServerPosition)) :
+                    enemies.Sum(en => en.Distance(ObjectManager.Player.ServerPosition));
 
                 return totalDistance / numberOfEnemies;
             }
@@ -286,9 +286,9 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
         public static List<Vector2> GetEnemyPoints(bool dynamic = true)
         {
             var staticRange = 360f;
-            var polygonsList = DashVariables.EnemiesClose.Select(enemy => new SOLOGeometry.Circle(enemy.ServerPosition.LSTo2D(), (dynamic ? (enemy.IsMelee ? enemy.AttackRange * 1.5f : enemy.AttackRange) : staticRange) + enemy.BoundingRadius + 20).ToPolygon()).ToList();
+            var polygonsList = DashVariables.EnemiesClose.Select(enemy => new SOLOGeometry.Circle(enemy.ServerPosition.To2D(), (dynamic ? (enemy.IsMelee ? enemy.AttackRange * 1.5f : enemy.AttackRange) : staticRange) + enemy.BoundingRadius + 20).ToPolygon()).ToList();
             var pathList = SOLOGeometry.ClipPolygons(polygonsList);
-            var pointList = pathList.SelectMany(path => path, (path, point) => new Vector2(point.X, point.Y)).Where(currentPoint => !currentPoint.LSIsWall()).ToList();
+            var pointList = pathList.SelectMany(path => path, (path, point) => new Vector2(point.X, point.Y)).Where(currentPoint => !currentPoint.IsWall()).ToList();
             return pointList;
         }
     }
@@ -307,8 +307,8 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
                 return
                     HeroManager.Enemies.Where(
                         m =>
-                            m.LSDistance(ObjectManager.Player, true) <= Math.Pow(1000, 2) && m.LSIsValidTarget(1500, false) &&
-                            m.LSCountEnemiesInRange(m.IsMelee() ? m.AttackRange * 1.5f : m.AttackRange + 20 * 1.5f) > 0);
+                            m.Distance(ObjectManager.Player, true) <= Math.Pow(1000, 2) && m.IsValidTarget(1500, false) &&
+                            m.CountEnemiesInRange(m.IsMelee() ? m.AttackRange * 1.5f : m.AttackRange + 20 * 1.5f) > 0);
             }
         }
     }
@@ -324,8 +324,8 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
         {
             return position.IsSafeEx()
                 && position.IsNotIntoEnemies()
-                && HeroManager.Enemies.All(m => m.LSDistance(position) > 350f)
-                && (!position.LSUnderTurret(true) || (ObjectManager.Player.LSUnderTurret(true) && position.LSUnderTurret(true) && ObjectManager.Player.HealthPercent > 10));
+                && HeroManager.Enemies.All(m => m.Distance(position) > 350f)
+                && (!position.UnderTurret(true) || (ObjectManager.Player.UnderTurret(true) && position.UnderTurret(true) && ObjectManager.Player.HealthPercent > 10));
             //Either it is not under turret or both the player and the position are under turret already and the health percent is greater than 10.
         }
 
@@ -336,22 +336,22 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
         /// <returns></returns>
         public static bool IsSafeEx(this Vector3 Position)
         {
-            if (Position.LSUnderTurret(true) && !ObjectManager.Player.LSUnderTurret())
+            if (Position.UnderTurret(true) && !ObjectManager.Player.UnderTurret())
             {
                 return false;
             }
             var range = 1000f;
             var lowHealthAllies =
-                HeroManager.Allies.Where(a => a.LSIsValidTarget(range, false) && a.HealthPercent < 10 && !a.IsMe);
+                HeroManager.Allies.Where(a => a.IsValidTarget(range, false) && a.HealthPercent < 10 && !a.IsMe);
             var lowHealthEnemies =
-                HeroManager.Allies.Where(a => a.LSIsValidTarget(range) && a.HealthPercent < 10);
-            var enemies = ObjectManager.Player.LSCountEnemiesInRange(range);
-            var allies = ObjectManager.Player.LSCountAlliesInRange(range);
-            var enemyTurrets = GameObjects.EnemyTurrets.Where(m => m.LSIsValidTarget(975f));
-            var allyTurrets = GameObjects.AllyTurrets.Where(m => m.LSIsValidTarget(975f, false));
+                HeroManager.Allies.Where(a => a.IsValidTarget(range) && a.HealthPercent < 10);
+            var enemies = ObjectManager.Player.CountEnemiesInRange(range);
+            var allies = ObjectManager.Player.CountAlliesInRange(range);
+            var enemyTurrets = GameObjects.EnemyTurrets.Where(m => m.IsValidTarget(975f));
+            var allyTurrets = GameObjects.AllyTurrets.Where(m => m.IsValidTarget(975f, false));
 
             return (allies - lowHealthAllies.Count() + allyTurrets.Count() * 2 + 1 >=
-                enemies - lowHealthEnemies.Count() + (!ObjectManager.Player.LSUnderTurret(true) ? enemyTurrets.Count() * 2 : 0));
+                enemies - lowHealthEnemies.Count() + (!ObjectManager.Player.UnderTurret(true) ? enemyTurrets.Count() * 2 : 0));
         }
 
         /// <summary>
@@ -363,7 +363,7 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
         {
 
             var enemyPoints = DashHelper.GetEnemyPoints();
-            if (enemyPoints.ToList().Contains(position.LSTo2D()) && !enemyPoints.Contains(ObjectManager.Player.ServerPosition.LSTo2D()))
+            if (enemyPoints.ToList().Contains(position.To2D()) && !enemyPoints.Contains(ObjectManager.Player.ServerPosition.To2D()))
             {
                 return false;
             }
@@ -371,9 +371,9 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
             var closeEnemies =
                 HeroManager.Enemies.FindAll(
                     en =>
-                        en.LSIsValidTarget(1500f) &&
-                        !(en.LSDistance(ObjectManager.Player.ServerPosition) < en.AttackRange + 65f));
-            if (!closeEnemies.All(enemy => position.LSCountEnemiesInRange(enemy.AttackRange) <= 1))
+                        en.IsValidTarget(1500f) &&
+                        !(en.Distance(ObjectManager.Player.ServerPosition) < en.AttackRange + 65f));
+            if (!closeEnemies.All(enemy => position.CountEnemiesInRange(enemy.AttackRange) <= 1))
             {
                 return false;
             }
@@ -1224,8 +1224,8 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
             double distance = Vector3.Distance(start, end);
             for (uint i = 0; i < distance; i += 10)
             {
-                var tempPosition = start.LSExtend(end, i).LSTo2D();
-                if (tempPosition.LSIsWall())
+                var tempPosition = start.Extend(end, i).To2D();
+                if (tempPosition.IsWall())
                 {
                     return true;
                 }
@@ -1256,10 +1256,10 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
             {
                 var from = self[i];
                 var to = self[i + 1];
-                var d = (int)to.LSDistance(from);
+                var d = (int)to.Distance(from);
                 if (d > distance)
                 {
-                    return from + distance * (to - from).LSNormalized();
+                    return from + distance * (to - from).Normalized();
                 }
                 distance -= d;
             }
@@ -1384,8 +1384,8 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
                 RStart = start;
                 REnd = end;
                 Width = width;
-                Direction = (end - start).LSNormalized();
-                Perpendicular = Direction.LSPerpendicular();
+                Direction = (end - start).Normalized();
+                Perpendicular = Direction.Perpendicular();
             }
 
             public Polygon ToPolygon(int offset = 0, float overrideWidth = -1)
@@ -1469,11 +1469,11 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
                 var outRadius = (Radius + offset) / (float)Math.Cos(2 * Math.PI / CircleLineSegmentN);
 
                 result.Add(Center);
-                var Side1 = Direction.LSRotated(-Angle * 0.5f);
+                var Side1 = Direction.Rotated(-Angle * 0.5f);
 
                 for (var i = 0; i <= CircleLineSegmentN; i++)
                 {
-                    var cDirection = Side1.LSRotated(i * Angle / CircleLineSegmentN).LSNormalized();
+                    var cDirection = Side1.Rotated(i * Angle / CircleLineSegmentN).Normalized();
                     result.Add(new Vector2(Center.X + outRadius * cDirection.X, Center.Y + outRadius * cDirection.Y));
                 }
 

@@ -25,7 +25,7 @@ using EloBuddy; namespace Activator.Items.Consumables
 
             foreach (var hero in Activator.Allies())
             {
-                if (hero.Player.LSDistance(Player.ServerPosition) > Range)
+                if (hero.Player.Distance(Player.ServerPosition) > Range)
                     continue;
 
                 if (hero.HitTypes.Contains(HitType.Stealth))

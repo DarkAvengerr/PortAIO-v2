@@ -16,9 +16,9 @@ using EloBuddy;
     {
         public static void HandleQLogic(Obj_AI_Base target)
         {
-            if (Variables.spells[SpellSlot.Q].IsEnabledAndReady() && target.LSIsValidTarget())
+            if (Variables.spells[SpellSlot.Q].IsEnabledAndReady() && target.IsValidTarget())
             {
-                var qEndPosition = ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, 325f);
+                var qEndPosition = ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 325f);
 
                 if (!IsSafe(qEndPosition))
                 {
@@ -53,11 +53,11 @@ using EloBuddy;
         private static Vector3? GetQBurstModePosition()
         {
             var positions =
-                GetWallQPositions(70).ToList().OrderBy(pos => pos.LSDistance(ObjectManager.Player.ServerPosition, true));
+                GetWallQPositions(70).ToList().OrderBy(pos => pos.Distance(ObjectManager.Player.ServerPosition, true));
 
             foreach (var position in positions)
             {
-                if (position.LSIsWall() && IsSafe(position))
+                if (position.IsWall() && IsSafe(position))
                 {
                     return position;
                 }
@@ -70,8 +70,8 @@ using EloBuddy;
         {
             Vector3[] vList =
             {
-                (ObjectManager.Player.ServerPosition.LSTo2D() + Range * ObjectManager.Player.Direction.LSTo2D()).To3D(),
-                (ObjectManager.Player.ServerPosition.LSTo2D() - Range * ObjectManager.Player.Direction.LSTo2D()).To3D()
+                (ObjectManager.Player.ServerPosition.To2D() + Range * ObjectManager.Player.Direction.To2D()).To3D(),
+                (ObjectManager.Player.ServerPosition.To2D() - Range * ObjectManager.Player.Direction.To2D()).To3D()
 
             };
             
@@ -80,7 +80,7 @@ using EloBuddy;
 
         public static bool IsSafe(Vector3 Position)
         {
-            if((Position.LSUnderTurret(true) && !ObjectManager.Player.LSUnderTurret(true)) || (PositioningVariables.EnemiesClose.Count() > 1 && iSRGeometry.GetEnemyPoints().Contains(Position.LSTo2D())))
+            if((Position.UnderTurret(true) && !ObjectManager.Player.UnderTurret(true)) || (PositioningVariables.EnemiesClose.Count() > 1 && iSRGeometry.GetEnemyPoints().Contains(Position.To2D())))
             {
                 return false;
             }

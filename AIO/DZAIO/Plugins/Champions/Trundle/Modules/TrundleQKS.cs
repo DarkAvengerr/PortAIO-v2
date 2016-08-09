@@ -19,7 +19,7 @@ using EloBuddy;
         public bool ShouldGetExecuted()
         {
             return Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.trundle.extra.qks") &&
-                   Variables.Spells[SpellSlot.Q].LSIsReady();
+                   Variables.Spells[SpellSlot.Q].IsReady();
 
         }
 
@@ -31,7 +31,7 @@ using EloBuddy;
         public void OnExecute()
         {
             var ksAbleEnemy =
-                HeroManager.Enemies.FirstOrDefault(m => m.LSIsValidTarget(Variables.Spells[SpellSlot.Q].Range) &&
+                HeroManager.Enemies.FirstOrDefault(m => m.IsValidTarget(Variables.Spells[SpellSlot.Q].Range) &&
                         Variables.Spells[SpellSlot.Q].IsKillable(m));
 
             if (ksAbleEnemy != null)

@@ -170,25 +170,25 @@ using EloBuddy;
 
             if (minions.Count > 0)
             {
-                if (useQ && Q.LSIsReady() && minions[0].LSIsValidTarget() && Player.LSDistance(minions[0]) <= Q.Range)
+                if (useQ && Q.IsReady() && minions[0].IsValidTarget() && Player.Distance(minions[0]) <= Q.Range)
                 {
                     Q.Cast(minions[0].Position);
                 }
 
-                if (useW && W.LSIsReady() && minions[0].LSIsValidTarget())
+                if (useW && W.IsReady() && minions[0].IsValidTarget())
                 {
-                    if (Player.LSDistance(minions[0]) <= W.Range && (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1))
+                    if (Player.Distance(minions[0]) <= W.Range && (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1))
                     {
                         W.Cast();
                     }
-                    else if (Player.LSDistance(minions[0]) > W.Range && (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 2))
+                    else if (Player.Distance(minions[0]) > W.Range && (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 2))
                     {
                         W.Cast();
                     }
 
                 }
 
-                if (useE && E.LSIsReady() && minions[0].LSIsValidTarget() && Player.LSDistance(minions[0]) <= E.Range)
+                if (useE && E.IsReady() && minions[0].IsValidTarget() && Player.Distance(minions[0]) <= E.Range)
                 {
                     E.Cast();
                 }
@@ -205,25 +205,25 @@ using EloBuddy;
 
             if (allminions.Count > 0)
             {
-                if (useQ && Q.LSIsReady() && allminions[0].LSIsValidTarget() && Player.LSDistance(allminions[0]) <= Q.Range)
+                if (useQ && Q.IsReady() && allminions[0].IsValidTarget() && Player.Distance(allminions[0]) <= Q.Range)
                 {
                     Q.Cast(allminions[0].Position);
                 }
 
-                if (useW && W.LSIsReady() && allminions[0].LSIsValidTarget())
+                if (useW && W.IsReady() && allminions[0].IsValidTarget())
                 {
-                    if (Player.LSDistance(allminions[0]) <= W.Range && (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1))
+                    if (Player.Distance(allminions[0]) <= W.Range && (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1))
                     {
                         W.Cast();
                     }
-                    else if (Player.LSDistance(allminions[0]) > W.Range && (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 2))
+                    else if (Player.Distance(allminions[0]) > W.Range && (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 2))
                     {
                         W.Cast();
                     }
 
                 }
 
-                if (useE && E.LSIsReady() && allminions[0].LSIsValidTarget() && Player.LSDistance(allminions[0]) <= E.Range)
+                if (useE && E.IsReady() && allminions[0].IsValidTarget() && Player.Distance(allminions[0]) <= E.Range)
                 {
                     E.Cast();
                 }
@@ -238,28 +238,28 @@ using EloBuddy;
             if (target == null) return;
 
             //Combo
-            if (Player.LSDistance(target) <= Q.Range && Q.LSIsReady() && (Config.Item("UseQCombo").GetValue<bool>()))
+            if (Player.Distance(target) <= Q.Range && Q.IsReady() && (Config.Item("UseQCombo").GetValue<bool>()))
             {
 
                 Q.Cast(target);
 
             }
-            if (W.LSIsReady() && (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1) && (Config.Item("UseWCombo").GetValue<bool>()))
-                if (Player.ServerPosition.LSDistance(target.Position) < W.Range)
+            if (W.IsReady() && (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1) && (Config.Item("UseWCombo").GetValue<bool>()))
+                if (Player.ServerPosition.Distance(target.Position) < W.Range)
                 {
 
                     W.Cast();
 
                 }
-            if (W.LSIsReady() && (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 2) && (Config.Item("UseWCombo").GetValue<bool>()))
-                if (Player.ServerPosition.LSDistance(target.Position) > W.Range)
+            if (W.IsReady() && (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 2) && (Config.Item("UseWCombo").GetValue<bool>()))
+                if (Player.ServerPosition.Distance(target.Position) > W.Range)
                 {
 
 
                     W.Cast();
 
                 }
-            if (Player.LSDistance(target) <= E.Range && E.LSIsReady() && (Config.Item("UseECombo").GetValue<bool>()))
+            if (Player.Distance(target) <= E.Range && E.IsReady() && (Config.Item("UseECombo").GetValue<bool>()))
             {
 
                 E.Cast();
@@ -267,31 +267,31 @@ using EloBuddy;
             }
             if (Config.Item("UseItems").GetValue<bool>())
             {
-                if (Player.LSDistance(target) <= RDO.Range)
+                if (Player.Distance(target) <= RDO.Range)
                 {
                     RDO.Cast(target);
                 }
-                if (Player.LSDistance(target) <= HYD.Range)
+                if (Player.Distance(target) <= HYD.Range)
                 {
                     HYD.Cast(target);
                 }
-                if (Player.LSDistance(target) <= DFG.Range)
+                if (Player.Distance(target) <= DFG.Range)
                 {
                     DFG.Cast(target);
                 }
-                if (Player.LSDistance(target) <= BOTK.Range)
+                if (Player.Distance(target) <= BOTK.Range)
                 {
                     BOTK.Cast(target);
                 }
-                if (Player.LSDistance(target) <= CUT.Range)
+                if (Player.Distance(target) <= CUT.Range)
                 {
                     CUT.Cast(target);
                 }
-                if (Player.LSDistance(target) <= 125f)
+                if (Player.Distance(target) <= 125f)
                 {
                     YOY.Cast();
                 }
-                if (Player.LSDistance(target) <= TYM.Range)
+                if (Player.Distance(target) <= TYM.Range)
                 {
                     TYM.Cast(target);
                 }

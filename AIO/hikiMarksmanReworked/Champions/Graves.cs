@@ -58,8 +58,8 @@ using EloBuddy;
 
         private static void AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (GravesMenu.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Helper.Enabled("graves.e.combo") && GravesSpells.E.LSIsReady()
-                && target.LSIsValidTarget(GravesSpells.Q.Range))
+            if (GravesMenu.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Helper.Enabled("graves.e.combo") && GravesSpells.E.IsReady()
+                && target.IsValidTarget(GravesSpells.Q.Range))
             {
                 GravesSpells.E.Cast(Game.CursorPos);
             }
@@ -87,9 +87,9 @@ using EloBuddy;
                     Jungle();
                     break;
             }
-            if (Helper.Enabled("graves.q.harass") && GravesSpells.Q.LSIsReady() && ObjectManager.Player.ManaPercent > Helper.Slider("graves.harass.mana"))
+            if (Helper.Enabled("graves.q.harass") && GravesSpells.Q.IsReady() && ObjectManager.Player.ManaPercent > Helper.Slider("graves.harass.mana"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(GravesSpells.Q.Range) && Helper.Enabled("graves.q.toggle."+x.ChampionName) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(GravesSpells.Q.Range) && Helper.Enabled("graves.q.toggle."+x.ChampionName) &&
                     GravesSpells.Q.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     GravesSpells.Q.Cast(enemy);
@@ -99,25 +99,25 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (GravesSpells.Q.LSIsReady() && Helper.Enabled("graves.q.combo"))
+            if (GravesSpells.Q.IsReady() && Helper.Enabled("graves.q.combo"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(GravesSpells.Q.Range) && 
+                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(GravesSpells.Q.Range) && 
                     GravesSpells.Q.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     GravesSpells.Q.Cast(enemy);
                 }
             }
-            if (GravesSpells.W.LSIsReady() && Helper.Enabled("graves.w.combo"))
+            if (GravesSpells.W.IsReady() && Helper.Enabled("graves.w.combo"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(GravesSpells.W.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(GravesSpells.W.Range) &&
                     GravesSpells.W.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     GravesSpells.W.Cast(enemy);
                 }
             }
-            if (GravesSpells.R.LSIsReady() && Helper.Enabled("graves.r.combo"))
+            if (GravesSpells.R.IsReady() && Helper.Enabled("graves.r.combo"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(GravesSpells.R.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(GravesSpells.R.Range) &&
                     GravesSpells.R.GetPrediction(x).Hitchance >= HitChance.High && GravesSpells.R.GetDamage(x) > x.Health))
                 {
                     GravesSpells.R.Cast(enemy);
@@ -131,17 +131,17 @@ using EloBuddy;
             {
                 return;
             }
-            if (GravesSpells.Q.LSIsReady() && Helper.Enabled("graves.q.harass"))
+            if (GravesSpells.Q.IsReady() && Helper.Enabled("graves.q.harass"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(GravesSpells.Q.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(GravesSpells.Q.Range) &&
                     GravesSpells.Q.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     GravesSpells.Q.Cast(enemy);
                 }
             }
-            if (GravesSpells.W.LSIsReady() && Helper.Enabled("graves.w.harass"))
+            if (GravesSpells.W.IsReady() && Helper.Enabled("graves.w.harass"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(GravesSpells.W.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(GravesSpells.W.Range) &&
                     GravesSpells.W.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     GravesSpells.W.Cast(enemy);
@@ -156,7 +156,7 @@ using EloBuddy;
                 return;
             }
 
-            if (GravesSpells.Q.LSIsReady() && Helper.Enabled("graves.q.clear") && MinionManager.GetMinions(ObjectManager.Player.Position, GravesSpells.Q.Range, MinionTypes.All, MinionTeam.NotAlly).Count >= Helper.Slider("graves.q.minion.hit.count")
+            if (GravesSpells.Q.IsReady() && Helper.Enabled("graves.q.clear") && MinionManager.GetMinions(ObjectManager.Player.Position, GravesSpells.Q.Range, MinionTypes.All, MinionTeam.NotAlly).Count >= Helper.Slider("graves.q.minion.hit.count")
                 && GravesSpells.Q.GetLineFarmLocation(MinionManager.GetMinions(ObjectManager.Player.Position, GravesSpells.Q.Range, MinionTypes.All, MinionTeam.NotAlly)).MinionsHit >= Helper.Slider("graves.q.minion.hit.count"))
             {
                 GravesSpells.Q.Cast(GravesSpells.Q.GetLineFarmLocation(MinionManager.GetMinions(ObjectManager.Player.Position, GravesSpells.Q.Range, MinionTypes.All, MinionTeam.NotAlly)).Position);
@@ -171,14 +171,14 @@ using EloBuddy;
             {
                 return;
             }
-            if (GravesSpells.Q.LSIsReady() && Helper.Enabled("graves.q.jungle"))
+            if (GravesSpells.Q.IsReady() && Helper.Enabled("graves.q.jungle"))
             {
                 GravesSpells.Q.Cast(
                     MinionManager.GetMinions(ObjectManager.Player.ServerPosition,
                         Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 100, MinionTypes.All,
                         MinionTeam.Neutral, MinionOrderTypes.MaxHealth)[0]);
             }
-            if (GravesSpells.W.LSIsReady() && Helper.Enabled("graves.w.jungle"))
+            if (GravesSpells.W.IsReady() && Helper.Enabled("graves.w.jungle"))
             {
                 GravesSpells.W.Cast(
                     MinionManager.GetMinions(ObjectManager.Player.ServerPosition,

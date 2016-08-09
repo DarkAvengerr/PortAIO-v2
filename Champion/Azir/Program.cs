@@ -114,9 +114,9 @@ namespace HeavenStrikeAzir
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             var target = gapcloser.Sender;
-            if (target.IsEnemy && _r.LSIsReady() && target.LSIsValidTarget() && !target.IsZombie && RGAP)
+            if (target.IsEnemy && _r.IsReady() && target.IsValidTarget() && !target.IsZombie && RGAP)
             {
-                if (target.LSIsValidTarget(250)) _r.Cast(target.Position);
+                if (target.IsValidTarget(250)) _r.Cast(target.Position);
             }
         }
         public static int EQdelay { get{ return _menu.Item("EQdelay").GetValue<Slider>().Value; } }
@@ -172,7 +172,7 @@ namespace HeavenStrikeAzir
             if (_menu.Item(drawSoldierAA).GetValue<bool>())
             {
                 Render.Circle.DrawCircle(Player.Position, 925, Color.Red);
-                foreach (var sold in Soldiers.soldier.Where(x => x.Position.LSDistance(Player.Position) <= 925))
+                foreach (var sold in Soldiers.soldier.Where(x => x.Position.Distance(Player.Position) <= 925))
                 {
                     Render.Circle.DrawCircle(sold.Position, 300, Color.Red);
                 }
@@ -189,9 +189,9 @@ namespace HeavenStrikeAzir
         {
             if (RKS)
             {
-                if (_r.LSIsReady())
+                if (_r.IsReady())
                 {
-                    foreach (var hero in HeroManager.Enemies.Where(x => x.LSIsValidTarget(250) && !x.IsZombie && x.Health < _r.GetDamage(x)))
+                    foreach (var hero in HeroManager.Enemies.Where(x => x.IsValidTarget(250) && !x.IsZombie && x.Health < _r.GetDamage(x)))
                     {
                         _r.Cast(hero.Position);
                     }
@@ -199,14 +199,14 @@ namespace HeavenStrikeAzir
             }
             if(RTOWER)
             {
-                if (_r.LSIsReady())
+                if (_r.IsReady())
                 {
-                    var turret = ObjectManager.Get<Obj_AI_Turret>().Where(x => x.IsAlly && !x.IsDead).OrderByDescending(x => x.LSDistance(Player.Position)).LastOrDefault();
-                    foreach (var hero in HeroManager.Enemies.Where(x => x.LSIsValidTarget(250) && !x.IsZombie))
+                    var turret = ObjectManager.Get<Obj_AI_Turret>().Where(x => x.IsAlly && !x.IsDead).OrderByDescending(x => x.Distance(Player.Position)).LastOrDefault();
+                    foreach (var hero in HeroManager.Enemies.Where(x => x.IsValidTarget(250) && !x.IsZombie))
                     {
-                        if (Player.ServerPosition.LSDistance(turret.Position)+100 >= hero.LSDistance(turret.Position) && hero.LSDistance(turret.Position) <= 775 + 250)
+                        if (Player.ServerPosition.Distance(turret.Position)+100 >= hero.Distance(turret.Position) && hero.Distance(turret.Position) <= 775 + 250)
                         {
-                            var pos = Player.Position.LSExtend(turret.Position, 250);
+                            var pos = Player.Position.Extend(turret.Position, 250);
                             _r.Cast(pos);
                         }
                     }

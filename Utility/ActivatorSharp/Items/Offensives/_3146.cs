@@ -61,7 +61,7 @@ using EloBuddy; namespace Activator.Items.Offensives
 
                 if (hero.HitTypes.Contains(HitType.Ultimate) || hero.HitTypes.Contains(HitType.Danger))
                 {
-                    if (attacker.LSDistance(hero.Player) <= Range / 2f)
+                    if (attacker.Distance(hero.Player) <= Range / 2f)
                     {
                         UseItem(Tar.Player, true);
                     }
@@ -69,7 +69,7 @@ using EloBuddy; namespace Activator.Items.Offensives
 
                 if (!Menu.Item("enemygapdanger" + Name).GetValue<bool>())
                 {
-                    if (attacker.LSDistance(hero.Player) <= Range / 2f)
+                    if (attacker.Distance(hero.Player) <= Range / 2f)
                     {
                         UseItem(Tar.Player, true);
                     }

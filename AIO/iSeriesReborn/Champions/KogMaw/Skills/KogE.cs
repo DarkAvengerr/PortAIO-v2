@@ -17,12 +17,12 @@ using EloBuddy;
             {
                 var firstTarget = TargetSelector.GetTarget(Variables.spells[SpellSlot.E].Range * 0.70f, TargetSelector.DamageType.Magical);
 
-                if (firstTarget.LSIsValidTarget())
+                if (firstTarget.IsValidTarget())
                 {
                     var polygon = new iSRPolygon(iSRPolygon.Rectangle(
-                        ObjectManager.Player.ServerPosition.LSTo2D(), firstTarget.ServerPosition.LSTo2D(), 100f));
+                        ObjectManager.Player.ServerPosition.To2D(), firstTarget.ServerPosition.To2D(), 100f));
 
-                    if (HeroManager.Enemies.Count(m => polygon.Contains(m.ServerPosition.LSTo2D())) >= 2)
+                    if (HeroManager.Enemies.Count(m => polygon.Contains(m.ServerPosition.To2D())) >= 2)
                     {
                         Variables.spells[SpellSlot.E].Cast(firstTarget.ServerPosition);
                     }

@@ -114,7 +114,7 @@ using EloBuddy;
 
         private static void TaricOnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (E.LSIsReady() && sender.LSIsValidTarget(625) && MenuCheck("taric.inter", Config))
+            if (E.IsReady() && sender.IsValidTarget(625) && MenuCheck("taric.inter", Config))
             {
                 E.Cast(sender);
             }
@@ -122,7 +122,7 @@ using EloBuddy;
 
         private static void TaricOnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (E.LSIsReady() && MenuCheck("taric.anti", Config) && gapcloser.Sender.LSIsValidTarget(625))
+            if (E.IsReady() && MenuCheck("taric.anti", Config) && gapcloser.Sender.IsValidTarget(625))
             {
                 E.Cast(gapcloser.Sender);
             }
@@ -130,7 +130,7 @@ using EloBuddy;
 
         private static void TaricOnUpdate(EventArgs args)
         {
-            hasPassive = Player.LSHasBuff(buffName);
+            hasPassive = Player.HasBuff(buffName);
 
             switch (Orbwalker.ActiveMode)
             {
@@ -142,7 +142,7 @@ using EloBuddy;
                     break;
             }
 
-            if (!MenuCheck("taric.heal.disable", Config) && Q.LSIsReady())
+            if (!MenuCheck("taric.heal.disable", Config) && Q.IsReady())
             {
                 QManager();
             }
@@ -172,25 +172,25 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (MenuCheck("taric.w.combo", Config) && W.LSIsReady())
+            if (MenuCheck("taric.w.combo", Config) && W.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)))
                 {
                     W.Cast();
                 }
             }
 
-            if (MenuCheck("taric.e.combo", Config) && E.LSIsReady())
+            if (MenuCheck("taric.e.combo", Config) && E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range) && !x.IsDead && !x.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && !x.IsDead && !x.IsZombie))
                 {
                     E.Cast(enemy);
                 }
             }
 
-            if (MenuCheck("taric.r.combo", Config) && R.LSIsReady() && Player.LSCountEnemiesInRange(R.Range) >= SliderCheck("taric.r.count", Config))
+            if (MenuCheck("taric.r.combo", Config) && R.IsReady() && Player.CountEnemiesInRange(R.Range) >= SliderCheck("taric.r.count", Config))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) && !x.IsDead && !x.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsDead && !x.IsZombie))
                 {
                     R.Cast();
                 }
@@ -204,9 +204,9 @@ using EloBuddy;
                 return;
             }
 
-            if (MenuCheck("taric.e.harass", Config) && E.LSIsReady())
+            if (MenuCheck("taric.e.harass", Config) && E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && !x.IsDead && !x.IsZombie && !x.HasBuffOfType(BuffType.SpellShield) && !x.HasBuffOfType(BuffType.SpellImmunity)))
                 {
                     E.Cast(enemy);
                 }
@@ -219,19 +219,19 @@ using EloBuddy;
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && t != null)
             {
-                if (E.LSIsReady() && !GetPassive())
+                if (E.IsReady() && !GetPassive())
                 {
                     E.Cast(t);
                 }
-                else if (R.LSIsReady() && t.LSIsValidTarget(R.Range) && !E.LSIsReady() && !GetPassive())
+                else if (R.IsReady() && t.IsValidTarget(R.Range) && !E.IsReady() && !GetPassive())
                 {
                     R.Cast();
                 }
-                else if (W.LSIsReady() && t.LSIsValidTarget(W.Range) && !R.LSIsReady() && E.LSIsReady() && !GetPassive())
+                else if (W.IsReady() && t.IsValidTarget(W.Range) && !R.IsReady() && E.IsReady() && !GetPassive())
                 {
                     W.Cast();
                 }
-                else if (Q.LSIsReady() && t.LSIsValidTarget(Q.Range) && !W.LSIsReady() && !R.LSIsReady() && !E.LSIsReady() && !GetPassive())
+                else if (Q.IsReady() && t.IsValidTarget(Q.Range) && !W.IsReady() && !R.IsReady() && !E.IsReady() && !GetPassive())
                 {
                     Q.CastOnUnit(Player);
                 }
@@ -240,22 +240,22 @@ using EloBuddy;
 
         private static void TaricOnDraw(EventArgs args)
         {
-            if (Q.LSIsReady() && ActiveCheck("taric.q.draw", Config))
+            if (Q.IsReady() && ActiveCheck("taric.q.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, GetColor("taric.q.draw", Config));
             }
 
-            if (W.LSIsReady() && ActiveCheck("taric.w.draw", Config))
+            if (W.IsReady() && ActiveCheck("taric.w.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, GetColor("taric.w.draw", Config));
             }
 
-            if (E.LSIsReady() && ActiveCheck("taric.e.draw", Config))
+            if (E.IsReady() && ActiveCheck("taric.e.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, GetColor("taric.e.draw", Config));
             }
 
-            if (R.LSIsReady() && ActiveCheck("taric.r.draw", Config))
+            if (R.IsReady() && ActiveCheck("taric.r.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, GetColor("taric.r.draw", Config));
             }

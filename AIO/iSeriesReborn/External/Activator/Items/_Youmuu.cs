@@ -71,7 +71,7 @@ using EloBuddy;
 
                 if (currentValue || MenuExtensions.GetItemValue<bool>("iseriesr.activator.offensive.youmuu.always"))
                 {
-                    if (TargetHero.LSIsValidTarget(ObjectManager.Player.AttackRange + 65f + 65f + 150f))
+                    if (TargetHero.IsValidTarget(ObjectManager.Player.AttackRange + 65f + 65f + 150f))
                     {
                         LeagueSharp.Common.Items.UseItem(3142);
                     }

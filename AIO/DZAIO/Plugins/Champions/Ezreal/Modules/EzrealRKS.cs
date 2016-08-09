@@ -21,7 +21,7 @@ using EloBuddy;
         public bool ShouldGetExecuted()
         {
             return Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.ezreal.extra.autoRKS") &&
-                   ObjectManager.Player.ManaPercent >= 15 && Variables.Spells[SpellSlot.R].LSIsReady();
+                   ObjectManager.Player.ManaPercent >= 15 && Variables.Spells[SpellSlot.R].IsReady();
 
         }
 
@@ -33,7 +33,7 @@ using EloBuddy;
         public void OnExecute()
         {
             var target = HeroManager.Enemies.FirstOrDefault(enemy => CanExecuteTarget(enemy)
-                && enemy.LSIsValidTarget(Variables.Spells[SpellSlot.Q].Range));
+                && enemy.IsValidTarget(Variables.Spells[SpellSlot.Q].Range));
 
             if (target != null
                 && (target.NetworkId != Variables.Orbwalker.GetTarget().NetworkId))
@@ -49,7 +49,7 @@ using EloBuddy;
             var prediction = Variables.Spells[SpellSlot.R].GetPrediction(target);
             var count = prediction.CollisionObjects.Count;
 
-            damage += ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.R);
+            damage += ObjectManager.Player.GetSpellDamage(target, SpellSlot.R);
 
             if (count >= 7)
             {

@@ -41,7 +41,7 @@ namespace Olaf.Champion
             if (hero != null)
             {
                 var t = hero;
-                if (!t.LSIsValidTarget(E.Range))
+                if (!t.IsValidTarget(E.Range))
                 {
                     return;
                 }
@@ -55,18 +55,18 @@ namespace Olaf.Champion
 
         public static void CastQ(Obj_AI_Base t, float range = 980)
         {
-            if (!Q.LSIsReady() || !t.LSIsValidTarget(range))
+            if (!Q.IsReady() || !t.IsValidTarget(range))
             {
                 return;
             }
 
-            if (t.HaveOlafSlowBuff() && t.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
+            if (t.HaveOlafSlowBuff() && t.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
             {
                 return;
             }
 
             
-            var nDistance = ObjectManager.Player.LSDistance(t);
+            var nDistance = ObjectManager.Player.Distance(t);
             var nExtend = 0;
 
             if (nDistance < 300)
@@ -87,17 +87,17 @@ namespace Olaf.Champion
             }
 
             PredictionOutput qPredictionOutput = Q.GetPrediction(t);
-            Vector3 castPosition = qPredictionOutput.CastPosition.LSExtend(ObjectManager.Player.Position, -nExtend);
+            Vector3 castPosition = qPredictionOutput.CastPosition.Extend(ObjectManager.Player.Position, -nExtend);
             HitChance[] hitChances = new[]
             {
                 HitChance.VeryHigh, HitChance.High, HitChance.Medium, HitChance.Low
             };
 
             if (qPredictionOutput.Hitchance >=
-                (ObjectManager.Player.LSDistance(t.ServerPosition) >= 350
+                (ObjectManager.Player.Distance(t.ServerPosition) >= 350
                     ? HitChance.VeryHigh
                     : hitChances[Modes.ModeSettings.QHitchance]) &&
-                ObjectManager.Player.LSDistance(castPosition) < range)
+                ObjectManager.Player.Distance(castPosition) < range)
             {
                 Q.Cast(castPosition);
             }

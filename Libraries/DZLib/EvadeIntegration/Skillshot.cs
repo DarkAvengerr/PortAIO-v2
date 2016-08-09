@@ -65,8 +65,8 @@ namespace DZLib.EvadeIntegration
         {
             Distance = distance;
             ComingFromVector2 = comingFromVector2;
-            IsValid = pointVector2.LSIsValid();
-            PointVector2 = pointVector2 + GridSize * (ComingFromVector2 - pointVector2).LSNormalized();
+            IsValid = pointVector2.IsValid();
+            PointVector2 = pointVector2 + GridSize * (ComingFromVector2 - pointVector2).Normalized();
             Time = time;
         }
     }
@@ -104,7 +104,7 @@ namespace DZLib.EvadeIntegration
             Start = start;
             End = end;
             MissilePosition = start;
-            Direction = (end - start).LSNormalized();
+            Direction = (end - start).Normalized();
 
             Caster = caster;
 
@@ -134,14 +134,14 @@ namespace DZLib.EvadeIntegration
 
         public Vector2 Perpendicular
         {
-            get { return Direction.LSPerpendicular(); }
+            get { return Direction.Perpendicular(); }
         }
 
         public Vector2 CollisionEnd
         {
             get
             {
-                if (_collisionEnd.LSIsValid())
+                if (_collisionEnd.IsValid())
                 {
                     return _collisionEnd;
                 }
@@ -177,7 +177,7 @@ namespace DZLib.EvadeIntegration
 
             return Environment.TickCount <=
                    StartTick + SpellData.Delay + SpellData.ExtraDuration +
-                   1000 * (Start.LSDistance(End) / SpellData.MissileSpeed);
+                   1000 * (Start.Distance(End) / SpellData.MissileSpeed);
         }
 
         public void Game_OnGameUpdate()
@@ -202,8 +202,8 @@ namespace DZLib.EvadeIntegration
             {
                 if (Caster.IsVisible)
                 {
-                    End = Caster.ServerPosition.LSTo2D();
-                    Direction = (End - Start).LSNormalized();
+                    End = Caster.ServerPosition.To2D();
+                    Direction = (End - Start).Normalized();
                     UpdatePolygon();
                 }
             }
@@ -260,7 +260,7 @@ namespace DZLib.EvadeIntegration
         {
             var t = Math.Max(0, Environment.TickCount + time - StartTick - SpellData.Delay);
             var fraction = t * SpellData.MissileSpeed / 0x3e8; // 0x3e8 = 1000
-            t = (int) Math.Max(0, Math.Min(End.LSDistance(Start), fraction));
+            t = (int) Math.Max(0, Math.Min(End.Distance(Start), fraction));
             return Start + Direction * t;
         }
 
@@ -301,7 +301,7 @@ namespace DZLib.EvadeIntegration
                 }
             }
 
-            t = (int) Math.Max(0, Math.Min(CollisionEnd.LSDistance(Start), x));
+            t = (int) Math.Max(0, Math.Min(CollisionEnd.Distance(Start), x));
             return Start + Direction * t;
         }
 
@@ -312,7 +312,7 @@ namespace DZLib.EvadeIntegration
         {
             timeOffset /= 2;
 
-            if (IsSafe(ObjectManager.Player.ServerPosition.LSTo2D()))
+            if (IsSafe(ObjectManager.Player.ServerPosition.To2D()))
             {
                 return true;
             }
@@ -321,9 +321,9 @@ namespace DZLib.EvadeIntegration
             if (SpellData.Type == SkillShotType.SkillshotMissileLine)
             {
                 var missilePositionAfterBlink = GetMissilePosition(delay + timeOffset);
-                var myPositionProjection = ObjectManager.Player.ServerPosition.LSTo2D().LSProjectOn(Start, End);
+                var myPositionProjection = ObjectManager.Player.ServerPosition.To2D().ProjectOn(Start, End);
 
-                if (missilePositionAfterBlink.LSDistance(End) < myPositionProjection.SegmentPoint.LSDistance(End))
+                if (missilePositionAfterBlink.Distance(End) < myPositionProjection.SegmentPoint.Distance(End))
                 {
                     return false;
                 }
@@ -333,7 +333,7 @@ namespace DZLib.EvadeIntegration
 
             //skillshots without missile
             var timeToExplode = SpellData.ExtraDuration + SpellData.Delay +
-                                (int) (1000 * Start.LSDistance(End) / SpellData.MissileSpeed) -
+                                (int) (1000 * Start.Distance(End) / SpellData.MissileSpeed) -
                                 (Environment.TickCount - StartTick);
 
             return timeToExplode > timeOffset + delay;
@@ -361,14 +361,14 @@ namespace DZLib.EvadeIntegration
                     var sideStart = Polygon.Points[j];
                     var sideEnd = Polygon.Points[j == (Polygon.Points.Count - 1) ? 0 : j + 1];
 
-                    var intersection = from.LSIntersection(to, sideStart, sideEnd);
+                    var intersection = from.Intersection(to, sideStart, sideEnd);
 
                     if (intersection.Intersects)
                     {
                         segmentIntersections.Add(
                             new FoundIntersection(
-                                distance + intersection.Point.LSDistance(from),
-                                (int) ((distance + intersection.Point.LSDistance(from)) * 1000 / speed),
+                                distance + intersection.Point.Distance(from),
+                                (int) ((distance + intersection.Point.Distance(from)) * 1000 / speed),
                                 intersection.Point, from));
                     }
                 }
@@ -376,7 +376,7 @@ namespace DZLib.EvadeIntegration
                 var sortedList = segmentIntersections.OrderBy(o => o.Distance).ToList();
                 allIntersections.AddRange(sortedList);
 
-                distance += from.LSDistance(to);
+                distance += from.Distance(to);
             }
 
             //Skillshot with missile.
@@ -384,7 +384,7 @@ namespace DZLib.EvadeIntegration
                 SpellData.Type == SkillShotType.SkillshotMissileCone)
             {
                 //Outside the skillshot
-                if (IsSafe(ObjectManager.Player.ServerPosition.LSTo2D()))
+                if (IsSafe(ObjectManager.Player.ServerPosition.To2D()))
                 {
                     //No intersections -> Safe
                     if (allIntersections.Count == 0)
@@ -396,7 +396,7 @@ namespace DZLib.EvadeIntegration
                     {
                         var enterIntersection = allIntersections[i];
                         var enterIntersectionProjection =
-                            enterIntersection.PointVector2.LSProjectOn(Start, End).SegmentPoint;
+                            enterIntersection.PointVector2.ProjectOn(Start, End).SegmentPoint;
 
                         //Intersection with no exit point.
                         if (i == allIntersections.Count - 1)
@@ -404,23 +404,23 @@ namespace DZLib.EvadeIntegration
                             var missilePositionOnIntersection = GetMissilePosition(enterIntersection.Time - timeOffset);
                             return
                                 new SafePathResult(
-                                    (End.LSDistance(missilePositionOnIntersection) + 50 <=
-                                     End.LSDistance(enterIntersectionProjection)) &&
+                                    (End.Distance(missilePositionOnIntersection) + 50 <=
+                                     End.Distance(enterIntersectionProjection)) &&
                                     ObjectManager.Player.MoveSpeed < SpellData.MissileSpeed, allIntersections[0]);
                         }
 
 
                         var exitIntersection = allIntersections[i + 1];
                         var exitIntersectionProjection =
-                            exitIntersection.PointVector2.LSProjectOn(Start, End).SegmentPoint;
+                            exitIntersection.PointVector2.ProjectOn(Start, End).SegmentPoint;
 
                         var missilePosOnEnter = GetMissilePosition(enterIntersection.Time - timeOffset);
                         var missilePosOnExit = GetMissilePosition(exitIntersection.Time + timeOffset);
 
                         //Missile didnt pass.
-                        if (missilePosOnEnter.LSDistance(End) + 50 > enterIntersectionProjection.LSDistance(End))
+                        if (missilePosOnEnter.Distance(End) + 50 > enterIntersectionProjection.Distance(End))
                         {
-                            if (missilePosOnExit.LSDistance(End) <= exitIntersectionProjection.LSDistance(End))
+                            if (missilePosOnExit.Distance(End) <= exitIntersectionProjection.Distance(End))
                             {
                                 return new SafePathResult(false, allIntersections[0]);
                             }
@@ -439,10 +439,10 @@ namespace DZLib.EvadeIntegration
                 {
                     //Check only for the exit point
                     FoundIntersection exitIntersection = allIntersections[0];
-                    Vector2 exitIntersectionProjection = exitIntersection.PointVector2.LSProjectOn(Start, End).SegmentPoint;
+                    Vector2 exitIntersectionProjection = exitIntersection.PointVector2.ProjectOn(Start, End).SegmentPoint;
 
                     Vector2 missilePosOnExit = GetMissilePosition(exitIntersection.Time + timeOffset);
-                    if (missilePosOnExit.LSDistance(End) <= exitIntersectionProjection.LSDistance(End))
+                    if (missilePosOnExit.Distance(End) <= exitIntersectionProjection.Distance(End))
                     {
                         return new SafePathResult(false, allIntersections[0]);
                     }
@@ -450,7 +450,7 @@ namespace DZLib.EvadeIntegration
             }
 
 
-            if (IsSafe(ObjectManager.Player.ServerPosition.LSTo2D()))
+            if (IsSafe(ObjectManager.Player.ServerPosition.To2D()))
             {
                 if (allIntersections.Count == 0)
                 {
@@ -471,7 +471,7 @@ namespace DZLib.EvadeIntegration
             }
 
             var timeToExplode = (SpellData.DontAddExtraDuration ? 0 : SpellData.ExtraDuration) + SpellData.Delay +
-                                (int) (1000 * Start.LSDistance(End) / SpellData.MissileSpeed) -
+                                (int) (1000 * Start.Distance(End) / SpellData.MissileSpeed) -
                                 (Environment.TickCount - StartTick);
 
 
@@ -504,19 +504,19 @@ namespace DZLib.EvadeIntegration
             {
                 Vector2 missilePos = GetMissilePosition(0);
                 Vector2 missilePosAfterT = GetMissilePosition(time);
-                LeagueSharp.Common.Geometry.ProjectionInfo projection = unit.ServerPosition.LSTo2D().LSProjectOn(missilePos, missilePosAfterT);
+                LeagueSharp.Common.Geometry.ProjectionInfo projection = unit.ServerPosition.To2D().ProjectOn(missilePos, missilePosAfterT);
 
                 return projection.IsOnSegment &&
-                       projection.SegmentPoint.LSDistance(unit.ServerPosition) < SpellData.Radius;
+                       projection.SegmentPoint.Distance(unit.ServerPosition) < SpellData.Radius;
             }
 
-            if (IsSafe(unit.ServerPosition.LSTo2D()))
+            if (IsSafe(unit.ServerPosition.To2D()))
             {
                 return false;
             }
 
             var timeToExplode = SpellData.ExtraDuration + SpellData.Delay +
-                                (int) ((1000 * Start.LSDistance(End)) / SpellData.MissileSpeed) -
+                                (int) ((1000 * Start.Distance(End)) / SpellData.MissileSpeed) -
                                 (Environment.TickCount - StartTick);
             return timeToExplode <= time;
         }
@@ -527,19 +527,19 @@ namespace DZLib.EvadeIntegration
             {
                 Vector2 missilePos = GetMissilePosition(0);
                 Vector2 missilePosAfterT = GetMissilePosition(time);
-                LeagueSharp.Common.Geometry.ProjectionInfo projection = position.LSTo2D().LSProjectOn(missilePos, missilePosAfterT);
+                LeagueSharp.Common.Geometry.ProjectionInfo projection = position.To2D().ProjectOn(missilePos, missilePosAfterT);
 
                 return projection.IsOnSegment &&
-                       projection.SegmentPoint.LSDistance(position) < SpellData.Radius;
+                       projection.SegmentPoint.Distance(position) < SpellData.Radius;
             }
 
-            if (IsSafe(position.LSTo2D()))
+            if (IsSafe(position.To2D()))
             {
                 return false;
             }
 
             var timeToExplode = SpellData.ExtraDuration + SpellData.Delay +
-                                (int)((1000 * Start.LSDistance(End)) / SpellData.MissileSpeed) -
+                                (int)((1000 * Start.Distance(End)) / SpellData.MissileSpeed) -
                                 (Environment.TickCount - StartTick);
             return timeToExplode <= time;
         }

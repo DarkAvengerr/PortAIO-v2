@@ -43,12 +43,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
         void Interrupter2_OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
 
-            if (player.LSDistance(sender) < E.Range && E.LSIsReady())
+            if (player.Distance(sender) < E.Range && E.IsReady())
             {
                 Q.Cast(sender.ServerPosition);
                 E.Cast(sender.ServerPosition);
             }
-            else if (player.LSDistance(sender) < EQ.Range && E.LSIsReady() && Q.LSIsReady())
+            else if (player.Distance(sender) < EQ.Range && E.IsReady() && Q.IsReady())
             {
                 UseQE(sender);
             }
@@ -56,14 +56,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.Cast();
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             if (player.HealthPercent < 30)
                 W.Cast();
@@ -71,7 +71,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             if (safeGap(target))
                 E.CastOnUnit(target);
@@ -80,9 +80,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
-            if (player.LSCountEnemiesInRange(250) > 1)
+            if (player.CountEnemiesInRange(250) > 1)
             {
                 R.Cast();
             }
@@ -121,16 +121,16 @@ using EloBuddy; namespace ARAMDetFull.Champions
         private void UseE(Obj_AI_Base enemy)
         {
             foreach (var orb in OrbManager.GetOrbs(true))
-                if (player.LSDistance(orb) < E.Range + 100)
+                if (player.Distance(orb) < E.Range + 100)
                 {
-                    var startPoint = orb.LSTo2D().LSExtend(player.ServerPosition.LSTo2D(), 100);
-                    var endPoint = player.ServerPosition.LSTo2D()
-                        .LSExtend(orb.LSTo2D(), player.LSDistance(orb) > 200 ? 1300 : 1000);
-                    EQ.Delay = E.Delay + player.LSDistance(orb) / E.Speed;
+                    var startPoint = orb.To2D().Extend(player.ServerPosition.To2D(), 100);
+                    var endPoint = player.ServerPosition.To2D()
+                        .Extend(orb.To2D(), player.Distance(orb) > 200 ? 1300 : 1000);
+                    EQ.Delay = E.Delay + player.Distance(orb) / E.Speed;
                     EQ.From = orb;
                     var enemyPred = EQ.GetPrediction(enemy);
                     if (enemyPred.Hitchance >= HitChance.High &&
-                        enemyPred.UnitPosition.LSTo2D().LSDistance(startPoint, endPoint, false) <
+                        enemyPred.UnitPosition.To2D().Distance(startPoint, endPoint, false) <
                         EQ.Width + enemy.BoundingRadius)
                     {
                         E.Cast(orb, true);
@@ -143,12 +143,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
         private void UseQE(Obj_AI_Base enemy)
         {
             EQ.Delay = E.Delay + Q.Range / E.Speed;
-            EQ.From = player.ServerPosition.LSTo2D().LSExtend(enemy.ServerPosition.LSTo2D(), Q.Range).To3D();
+            EQ.From = player.ServerPosition.To2D().Extend(enemy.ServerPosition.To2D(), Q.Range).To3D();
 
             var prediction = EQ.GetPrediction(enemy);
             if (prediction.Hitchance >= HitChance.High)
             {
-                Q.Cast(player.ServerPosition.LSTo2D().LSExtend(prediction.CastPosition.LSTo2D(), Q.Range - 100));
+                Q.Cast(player.ServerPosition.To2D().Extend(prediction.CastPosition.To2D(), Q.Range - 100));
                 QEComboT = DeathWalker.now;
                 W.LastCastAttemptT = DeathWalker.now;
             }
@@ -157,7 +157,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         private Vector3 GetGrabableObjectPos(bool onlyOrbs)
         {
             if (!onlyOrbs)
-                foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.LSIsValidTarget(W.Range))
+                foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(W.Range))
                     )
                     return minion.ServerPosition;
 
@@ -168,18 +168,18 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             var damage = 0d;
 
-            if (Q.LSIsReady(420))
-                damage += player.LSGetSpellDamage(enemy, SpellSlot.Q);
+            if (Q.IsReady(420))
+                damage += player.GetSpellDamage(enemy, SpellSlot.Q);
 
-            if (W.LSIsReady())
-                damage += player.LSGetSpellDamage(enemy, SpellSlot.W);
+            if (W.IsReady())
+                damage += player.GetSpellDamage(enemy, SpellSlot.W);
 
-            if (E.LSIsReady())
-                damage += player.LSGetSpellDamage(enemy, SpellSlot.E);
+            if (E.IsReady())
+                damage += player.GetSpellDamage(enemy, SpellSlot.E);
 
 
-            if (R.LSIsReady())
-                damage += Math.Min(7, player.Spellbook.GetSpell(SpellSlot.R).Ammo) * player.LSGetSpellDamage(enemy, SpellSlot.R, 1);
+            if (R.IsReady())
+                damage += Math.Min(7, player.Spellbook.GetSpell(SpellSlot.R).Ammo) * player.GetSpellDamage(enemy, SpellSlot.R, 1);
 
             return (float)damage;
         }
@@ -197,28 +197,28 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 Q.Cast(qTarget, false, true);
 
             //E
-            if (DeathWalker.now - W.LastCastAttemptT > Game.Ping + 150 && E.LSIsReady() && useE)
+            if (DeathWalker.now - W.LastCastAttemptT > Game.Ping + 150 && E.IsReady() && useE)
                 foreach (var enemy in ObjectManager.Get<AIHeroClient>())
                 {
-                    if (enemy.LSIsValidTarget(EQ.Range))
+                    if (enemy.IsValidTarget(EQ.Range))
                         UseE(enemy);
                 }
 
             //W
             if (useW)
             {
-                if (player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1 && W.LSIsReady() && qeTarget != null)
+                if (player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1 && W.IsReady() && qeTarget != null)
                 {
                     var gObjectPos = GetGrabableObjectPos(wTarget == null);
 
-                    if (gObjectPos.LSTo2D().LSIsValid() && Utils.TickCount - W.LastCastAttemptT > Game.Ping + 300
+                    if (gObjectPos.To2D().IsValid() && Utils.TickCount - W.LastCastAttemptT > Game.Ping + 300
                         && Utils.TickCount - E.LastCastAttemptT > Game.Ping + 600)
                     {
                         W.Cast(gObjectPos);
                         W.LastCastAttemptT = Utils.TickCount;
                     }
                 }
-                else if (wTarget != null && player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && W.LSIsReady()
+                else if (wTarget != null && player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && W.IsReady()
                          && Utils.TickCount - W.LastCastAttemptT > Game.Ping + 100)
                 {
                     if (OrbManager.WObject(false) != null)
@@ -234,14 +234,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             if (rTarget != null && useR && comboDamage > rTarget.Health)
             {
-                if (R.LSIsReady())
+                if (R.IsReady())
                 {
                     R.Cast(rTarget);
                 }
             }
 
             //R
-            if (rTarget != null && useR && R.LSIsReady() && !Q.LSIsReady())
+            if (rTarget != null && useR && R.IsReady() && !Q.IsReady())
             {
                 if (comboDamage > rTarget.Health)
                 {
@@ -251,18 +251,18 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
 
             //QE
-            if ( qeTarget != null && Q.LSIsReady() && E.LSIsReady() && useQE && player.Mana>150)
+            if ( qeTarget != null && Q.IsReady() && E.IsReady() && useQE && player.Mana>150)
                 UseQE(qeTarget);
 
             //WE
-            if (qeTarget != null && E.LSIsReady() && useE && OrbManager.WObject(true) != null)
+            if (qeTarget != null && E.IsReady() && useE && OrbManager.WObject(true) != null)
             {
                 EQ.Delay = E.Delay + Q.Range / W.Speed;
-                EQ.From = player.ServerPosition.LSTo2D().LSExtend(qeTarget.ServerPosition.LSTo2D(), Q.Range).To3D();
+                EQ.From = player.ServerPosition.To2D().Extend(qeTarget.ServerPosition.To2D(), Q.Range).To3D();
                 var prediction = EQ.GetPrediction(qeTarget);
                 if (prediction.Hitchance >= HitChance.High)
                 {
-                    W.Cast(player.ServerPosition.LSTo2D().LSExtend(prediction.CastPosition.LSTo2D(), Q.Range - 100));
+                    W.Cast(player.ServerPosition.To2D().Extend(prediction.CastPosition.To2D(), Q.Range - 100));
                     WEComboT = DeathWalker.now;
                 }
             }
@@ -299,7 +299,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 MinionTypes.All);
 
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
                 if (laneClear)
                 {
                     var fl1 = Q.GetCircularFarmLocation(rangedMinionsQ, Q.Width);
@@ -318,10 +318,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 else
                     foreach (var minion in allMinionsQ)
                         if (!Orbwalking.InAutoAttackRange(minion) &&
-                            minion.Health < 0.75 * player.LSGetSpellDamage(minion, SpellSlot.Q))
+                            minion.Health < 0.75 * player.GetSpellDamage(minion, SpellSlot.Q))
                             Q.Cast(minion);
 
-            if (W.LSIsReady() && allMinionsW.Count > 3)
+            if (W.IsReady() && allMinionsW.Count > 3)
             {
                 if (laneClear)
                 {
@@ -330,7 +330,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                         //WObject
                         var gObjectPos = GetGrabableObjectPos(false);
 
-                        if (gObjectPos.LSTo2D().LSIsValid() && DeathWalker.now - W.LastCastAttemptT > Game.Ping + 150)
+                        if (gObjectPos.To2D().IsValid() && DeathWalker.now - W.LastCastAttemptT > Game.Ping + 150)
                         {
                             W.Cast(gObjectPos);
                         }
@@ -433,7 +433,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                             .Any(
                                 b =>
                                     b.IsValid && b.Name.Contains("_Q_") && b.Name.Contains("Syndra_") &&
-                                    b.Name.Contains("idle") && obj.Position.LSDistance(b.Position) < 50))
+                                    b.Name.Contains("idle") && obj.Position.Distance(b.Position) < 50))
                         valid = true;
 
                 if (valid && (!toGrab || !obj.IsMoving))
@@ -455,7 +455,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public static Vector3 GetOrbToGrab(int range)
         {
-            var list = GetOrbs(true).Where(orb => ObjectManager.Player.LSDistance(orb) < range).ToList();
+            var list = GetOrbs(true).Where(orb => ObjectManager.Player.Distance(orb) < range).ToList();
             return list.Count > 0 ? list[0] : new Vector3();
         }
     }

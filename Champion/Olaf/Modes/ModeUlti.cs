@@ -97,7 +97,7 @@ namespace Olaf.Modes
                 return;
             }
 
-            if (!R.LSIsReady())
+            if (!R.IsReady())
             {
                 return;
             }
@@ -119,12 +119,12 @@ namespace Olaf.Modes
 
         private static void ObjAiHeroOnOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!R.LSIsReady() || !MenuLocal.Item("MenuR.R.Enabled").GetValue<KeyBind>().Active)
+            if (!R.IsReady() || !MenuLocal.Item("MenuR.R.Enabled").GetValue<KeyBind>().Active)
             {
                 return;
             }
 
-            if (!(sender is AIHeroClient) || !sender.LSIsValidTarget(1500) || sender.IsMe || sender.IsAlly)
+            if (!(sender is AIHeroClient) || !sender.IsValidTarget(1500) || sender.IsMe || sender.IsAlly)
             {
                 return;
             }
@@ -135,7 +135,7 @@ namespace Olaf.Modes
                 return;
             }
 
-            if (!sender.LSIsValidTarget(Champion.PlayerSpells.Q.Range))
+            if (!sender.IsValidTarget(Champion.PlayerSpells.Q.Range))
             {
                 return;
             }

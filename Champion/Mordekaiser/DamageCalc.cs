@@ -46,24 +46,24 @@ namespace Mordekaiser
         {
             var fComboDamage = 0f;
 
-            if (Spells.Q.LSIsReady() && Menu.MenuDrawings.Item("Draw.Calc.Q").GetValue<bool>())
+            if (Spells.Q.IsReady() && Menu.MenuDrawings.Item("Draw.Calc.Q").GetValue<bool>())
             {
                 fComboDamage += QDamage * (100 / (100 + t.Armor));
             }
 
-            if (Spells.W.LSIsReady() && Menu.MenuDrawings.Item("Draw.Calc.W").GetValue<bool>())
+            if (Spells.W.IsReady() && Menu.MenuDrawings.Item("Draw.Calc.W").GetValue<bool>())
             {
                 fComboDamage += WDamage * (100 / (100 + t.SpellBlock));
             }
 
-            if (Spells.E.LSIsReady() && Menu.MenuDrawings.Item("Draw.Calc.E").GetValue<bool>())
+            if (Spells.E.IsReady() && Menu.MenuDrawings.Item("Draw.Calc.E").GetValue<bool>())
             {
                 fComboDamage += WDamage * (100 / (100 + t.Armor));
             }
 
-            if (Spells.R.LSIsReady() && Menu.MenuDrawings.Item("Draw.Calc.R").GetValue<bool>())
+            if (Spells.R.IsReady() && Menu.MenuDrawings.Item("Draw.Calc.R").GetValue<bool>())
             {
-                fComboDamage += (float)ObjectManager.Player.LSGetSpellDamage(t, SpellSlot.R)* (100 / (100 + t.SpellBlock));
+                fComboDamage += (float)ObjectManager.Player.GetSpellDamage(t, SpellSlot.R)* (100 / (100 + t.SpellBlock));
             }
 
             if (PlayerSpells.IgniteSlot != SpellSlot.Unknown && Menu.MenuDrawings.Item("Draw.Calc.I").GetValue<bool>()

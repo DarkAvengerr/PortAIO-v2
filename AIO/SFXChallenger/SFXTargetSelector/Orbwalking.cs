@@ -317,7 +317,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
         /// <param name="target">The target.</param>
         private static void FireAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (AfterAttack != null && target.LSIsValidTarget())
+            if (AfterAttack != null && target.IsValidTarget())
             {
                 AfterAttack(unit, target);
             }
@@ -329,7 +329,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
         /// <param name="newTarget">The new target.</param>
         private static void FireOnTargetSwitch(AttackableUnit newTarget)
         {
-            if (OnTargetChange != null && (!_lastTarget.LSIsValidTarget() || _lastTarget != newTarget))
+            if (OnTargetChange != null && (!_lastTarget.IsValidTarget() || _lastTarget != newTarget))
             {
                 OnTargetChange(_lastTarget, newTarget);
             }
@@ -386,12 +386,12 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
         public static float GetRealAutoAttackRange(AttackableUnit target)
         {
             var result = Player.AttackRange + Player.BoundingRadius;
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 var aiBase = target as Obj_AI_Base;
                 if (aiBase != null && Player.ChampionName == "Caitlyn")
                 {
-                    if (aiBase.LSHasBuff("caitlynyordletrapinternal"))
+                    if (aiBase.HasBuff("caitlynyordletrapinternal"))
                     {
                         result += 650;
                     }
@@ -419,15 +419,15 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         public static bool InAutoAttackRange(AttackableUnit target)
         {
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return false;
             }
             var myRange = GetRealAutoAttackRange(target);
             return
                 Vector2.DistanceSquared(
-                    target is Obj_AI_Base ? ((Obj_AI_Base) target).ServerPosition.LSTo2D() : target.Position.LSTo2D(),
-                    Player.ServerPosition.LSTo2D()) <= myRange * myRange;
+                    target is Obj_AI_Base ? ((Obj_AI_Base) target).ServerPosition.To2D() : target.Position.To2D(),
+                    Player.ServerPosition.To2D()) <= myRange * myRange;
         }
 
         /// <summary>
@@ -437,7 +437,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
         public static float GetMyProjectileSpeed()
         {
             return IsMelee(Player) || ChampionName == "Azir" || ChampionName == "Velkoz" ||
-                   ChampionName == "Viktor" && Player.LSHasBuff("ViktorPowerTransferReturn")
+                   ChampionName == "Viktor" && Player.HasBuff("ViktorPowerTransferReturn")
                 ? float.MaxValue
                 : Player.BasicAttack.MissileSpeed;
         }
@@ -453,7 +453,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
             {
                 var attackDelay = 1.0740296828d * 1000 * Player.AttackDelay - 716.2381256175d;
                 if (LeagueSharp.Common.Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAaTick + attackDelay &&
-                    Player.LSHasBuff("GravesBasicAttackAmmo1"))
+                    Player.HasBuff("GravesBasicAttackAmmo1"))
                 {
                     return true;
                 }
@@ -482,7 +482,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
             }
 
             var localExtraWindup = 0;
-            if (ChampionName == "Rengar" && (Player.LSHasBuff("rengarqbase") || Player.LSHasBuff("rengarqemp")))
+            if (ChampionName == "Rengar" && (Player.HasBuff("rengarqbase") || Player.HasBuff("rengarqemp")))
             {
                 localExtraWindup = 200;
             }
@@ -627,7 +627,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
         {
             var playerPosition = Player.ServerPosition;
 
-            if (playerPosition.LSDistance(position, true) < holdAreaRadius * holdAreaRadius)
+            if (playerPosition.Distance(position, true) < holdAreaRadius * holdAreaRadius)
             {
                 if (Player.Path.Length > 0)
                 {
@@ -640,14 +640,14 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
 
             var point = position;
 
-            if (Player.LSDistance(point, true) < 150 * 150)
+            if (Player.Distance(point, true) < 150 * 150)
             {
-                point = playerPosition.LSExtend(
+                point = playerPosition.Extend(
                     position, randomizeMinDistance ? (Random.NextFloat(0.6f, 1) + 0.2f) * _minDistance : _minDistance);
             }
             var angle = 0f;
-            var currentPath = Player.LSGetWaypoints();
-            if (currentPath.Count > 1 && currentPath.LSPathLength() > 100)
+            var currentPath = Player.GetWaypoints();
+            if (currentPath.Count > 1 && currentPath.PathLength() > 100)
             {
                 var movePath = Player.GetPath(point);
 
@@ -655,8 +655,8 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                 {
                     var v1 = currentPath[1] - currentPath[0];
                     var v2 = movePath[1] - movePath[0];
-                    angle = v1.LSAngleBetween(v2.LSTo2D());
-                    var distance = movePath.Last().LSTo2D().LSDistance(currentPath.Last(), true);
+                    angle = v1.AngleBetween(v2.To2D());
+                    var distance = movePath.Last().To2D().Distance(currentPath.Last(), true);
 
                     if ((angle < 10 && distance < 500 * 500) || distance < 50 * 50)
                     {
@@ -713,7 +713,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
             try
             {
                 var randomize = Randomizes[OrbwalkingRandomize.Attack];
-                if (target.LSIsValidTarget() && CanAttack(randomize.Current))
+                if (target.IsValidTarget() && CanAttack(randomize.Current))
                 {
                     SetRandomizeCurrent(randomize);
                     DisableNextAttack = false;
@@ -1324,7 +1324,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                                 InAutoAttackRange(minion) &&
                                 HealthPrediction.LaneClearHealthPrediction(
                                     minion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay) <=
-                                Player.LSGetAutoAttackDamage(minion));
+                                Player.GetAutoAttackDamage(minion));
             }
 
             /// <summary>
@@ -1356,7 +1356,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                     ActiveMode == OrbwalkingMode.LastHit)
                 {
                     var minionList =
-                        minions.Where(minion => minion.LSIsValidTarget() && InAutoAttackRange(minion))
+                        minions.Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
                             .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                             .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                             .ThenBy(minion => minion.Health)
@@ -1365,7 +1365,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                     foreach (var minion in minionList)
                     {
                         var t = (int) (_player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
-                                1000 * (int) Math.Max(0, _player.LSDistance(minion) - _player.BoundingRadius) /
+                                1000 * (int) Math.Max(0, _player.Distance(minion) - _player.BoundingRadius) /
                                 (int) GetMyProjectileSpeed();
                         if (minion.MaxHealth <= 10)
                         {
@@ -1382,7 +1382,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                                 FireOnNonKillableMinion(minion);
                             }
 
-                            if (predHealth > 0 && predHealth <= Player.LSGetAutoAttackDamage(minion, true))
+                            if (predHealth > 0 && predHealth <= Player.GetAutoAttackDamage(minion, true))
                             {
                                 return minion;
                             }
@@ -1391,7 +1391,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                 }
 
                 //Forced target
-                if (_forcedTarget.LSIsValidTarget() && InAutoAttackRange(_forcedTarget))
+                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget))
                 {
                     return _forcedTarget;
                 }
@@ -1402,20 +1402,20 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                 {
                     /* turrets */
                     foreach (var turret in
-                        GameObjects.EnemyTurrets.Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+                        GameObjects.EnemyTurrets.Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                     {
                         return turret;
                     }
 
                     /* inhibitor */
                     foreach (var inhib in
-                        GameObjects.EnemyInhibitors.Where(i => i.LSIsValidTarget() && InAutoAttackRange(i)))
+                        GameObjects.EnemyInhibitors.Where(i => i.IsValidTarget() && InAutoAttackRange(i)))
                     {
                         return inhib;
                     }
 
                     /* nexus */
-                    if (GameObjects.EnemyNexus != null && GameObjects.EnemyNexus.LSIsValidTarget() &&
+                    if (GameObjects.EnemyNexus != null && GameObjects.EnemyNexus.IsValidTarget() &&
                         InAutoAttackRange(GameObjects.EnemyNexus))
                     {
                         return GameObjects.EnemyNexus;
@@ -1426,7 +1426,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                 if (ActiveMode != OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, DamageType.Physical);
-                    if (target.LSIsValidTarget() && InAutoAttackRange(target))
+                    if (target.IsValidTarget() && InAutoAttackRange(target))
                     {
                         return target;
                     }
@@ -1450,7 +1450,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                 {
                     if (!ShouldWait())
                     {
-                        if (_prevMinion.LSIsValidTarget() && InAutoAttackRange(_prevMinion))
+                        if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion))
                         {
                             if (_prevMinion.MaxHealth <= 10)
                             {
@@ -1458,7 +1458,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                             }
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 _prevMinion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay);
-                            if (predHealth >= 2 * _player.LSGetAutoAttackDamage(_prevMinion) ||
+                            if (predHealth >= 2 * _player.GetAutoAttackDamage(_prevMinion) ||
                                 Math.Abs(predHealth - _prevMinion.Health) < float.Epsilon)
                             {
                                 return _prevMinion;
@@ -1474,7 +1474,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                             {
                                 var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                     minion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay);
-                                if (predHealth >= 2 * Player.LSGetAutoAttackDamage(minion) ||
+                                if (predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
                                     Math.Abs(predHealth - minion.Health) < float.Epsilon)
                                 {
                                     if (result == null || minion.Health > result.Health && result.MaxHealth > 10)
@@ -1497,7 +1497,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                         !GameObjects.EnemyHeroes.Any(
                             e =>
                                 e.IsValid && !e.IsDead && e.IsVisible &&
-                                e.LSDistance(Player) <= GetRealAutoAttackRange(e) * 2f))
+                                e.Distance(Player) <= GetRealAutoAttackRange(e) * 2f))
                     {
                         return minions.FirstOrDefault();
                     }
@@ -1515,7 +1515,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                 var units = IsAttackableObject("ward")
                     ? GameObjects.EnemyMinions.Concat(GameObjects.EnemyWards)
                     : GameObjects.EnemyMinions;
-                foreach (var unit in units.Where(u => u.LSIsValidTarget() && InAutoAttackRange(u)))
+                foreach (var unit in units.Where(u => u.IsValidTarget() && InAutoAttackRange(u)))
                 {
                     var baseName = unit.CharData.BaseSkinName.ToLower();
                     if (minion) //minions
@@ -1628,7 +1628,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                 {
                     finalTargets =
                         finalTargets.Concat(minions)
-                            .Concat(GameObjects.Jungle.Where(u => u.LSIsValidTarget() && InAutoAttackRange(u)))
+                            .Concat(GameObjects.Jungle.Where(u => u.IsValidTarget() && InAutoAttackRange(u)))
                             .ToList();
                 }
                 return finalTargets.Concat(clones).ToList();
@@ -1655,7 +1655,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
 
                     var target = GetTarget();
                     Orbwalk(
-                        target, _orbwalkingPoint.LSTo2D().LSIsValid() ? _orbwalkingPoint : Game.CursorPos,
+                        target, _orbwalkingPoint.To2D().IsValid() ? _orbwalkingPoint : Game.CursorPos,
                         _config.Item("ExtraWindup").GetValue<Slider>().Value,
                         Math.Max(_config.Item("HoldPosRadius").GetValue<Slider>().Value, 30));
                 }
@@ -1682,7 +1682,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                 if (_config.Item("AACircle2").GetValue<Circle>().Active)
                 {
                     foreach (var target in
-                        HeroManager.Enemies.FindAll(target => target.LSIsValidTarget(1175)))
+                        HeroManager.Enemies.FindAll(target => target.IsValidTarget(1175)))
                     {
                         Render.Circle.DrawCircle(
                             target.Position, GetAttackRange(target), _config.Item("AACircle2").GetValue<Circle>().Color,

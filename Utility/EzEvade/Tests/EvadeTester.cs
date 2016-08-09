@@ -137,10 +137,10 @@ using EloBuddy; namespace ezEvade
 
         private void Game_onRecvPacket(GamePacketEventArgs args)
         {
-            if (args.LSGetPacketId() == 178)
+            if (args.GetPacketId() == 178)
             {
                 /*
-                //ConsolePrinter.Print(args.LSGetPacketId());
+                //ConsolePrinter.Print(args.GetPacketId());
 
                 foreach (var data in args.PacketData)
                 {
@@ -154,7 +154,7 @@ using EloBuddy; namespace ezEvade
 
         private void Game_onSendPacket(GamePacketEventArgs args)
         {
-            if (args.LSGetPacketId() == 160)
+            if (args.GetPacketId() == 160)
             {
                 if (testMenu.Item("EvadeTesterPing").GetValue<bool>())
                 {
@@ -192,7 +192,7 @@ using EloBuddy; namespace ezEvade
 
                 if (args.IsDash && testMenu.Item("ShowDashInfo").GetValue<bool>())
                 {
-                    var dist = args.Path.First().LSDistance(args.Path.Last());
+                    var dist = args.Path.First().Distance(args.Path.Last());
                     ConsolePrinter.Print("Dash Speed: " + args.Speed + " Dash dist: " + dist);
                 }
 
@@ -204,8 +204,8 @@ using EloBuddy; namespace ezEvade
 
                 if (unit.IsMe)
                 {
-                    //Draw.RenderObjects.Add(new Draw.RenderCircle(args.Path.Last().LSTo2D(), 500));
-                    //Draw.RenderObjects.Add(new Draw.RenderCircle(args.Path.First().LSTo2D(), 500));
+                    //Draw.RenderObjects.Add(new Draw.RenderCircle(args.Path.Last().To2D(), 500));
+                    //Draw.RenderObjects.Add(new Draw.RenderCircle(args.Path.First().To2D(), 500));
                 }
 
             }
@@ -218,7 +218,7 @@ using EloBuddy; namespace ezEvade
 
             if (testMenu.Item("TestPath").GetValue<bool>())
             {
-                Draw.RenderObjects.Add(new Draw.RenderCircle(args.EndPosition.LSTo2D(), 500));
+                Draw.RenderObjects.Add(new Draw.RenderCircle(args.EndPosition.To2D(), 500));
             }
 
             lastSpellCastTimeEx = EvadeUtils.TickCount;
@@ -241,7 +241,7 @@ using EloBuddy; namespace ezEvade
             {
                 if (testMissile != null && testMissile.NetworkId == sender.NetworkId)
                 {
-                    var range = sender.Position.LSTo2D().LSDistance(testMissile.StartPosition.LSTo2D());
+                    var range = sender.Position.To2D().Distance(testMissile.StartPosition.To2D());
                     ConsolePrinter.Print("Est.Missile range: " + range);
 
                     ConsolePrinter.Print("Est.Missile speed: " + range / (EvadeUtils.TickCount - testMissileStartTime));
@@ -310,14 +310,14 @@ using EloBuddy; namespace ezEvade
 
 
             var testMissileSpeedStartTime = EvadeUtils.TickCount;
-            var testMissileSpeedStartPos = missile.Position.LSTo2D();
+            var testMissileSpeedStartPos = missile.Position.To2D();
 
             DelayAction.Add(250, () =>
             {
                 if (missile != null && missile.IsValid && !missile.IsDead)
                 {
                     testMissileSpeedStartTime = EvadeUtils.TickCount;
-                    testMissileSpeedStartPos = missile.Position.LSTo2D();
+                    testMissileSpeedStartPos = missile.Position.To2D();
                 }
             });
 
@@ -334,20 +334,20 @@ using EloBuddy; namespace ezEvade
             /*ConsolePrinter.Print("Offset: " + missile.SData.ParticleStartOffset);
             ConsolePrinter.Print("Missile Speed " + missile.SData.MissileSpeed);
             ConsolePrinter.Print("LineWidth " + missile.SData.LineWidth);
-            circleRenderPos = missile.SData.ParticleStartOffset.LSTo2D();*/
+            circleRenderPos = missile.SData.ParticleStartOffset.To2D();*/
 
             //ConsolePrinter.Print("Acquired: " + (EvadeUtils.TickCount - lastSpellCastTime));
 
             Draw.RenderObjects.Add(
-                new Draw.RenderCircle(missile.StartPosition.LSTo2D(), 500));
+                new Draw.RenderCircle(missile.StartPosition.To2D(), 500));
             Draw.RenderObjects.Add(
-                new Draw.RenderCircle(missile.EndPosition.LSTo2D(), 500));
+                new Draw.RenderCircle(missile.EndPosition.To2D(), 500));
 
             DelayAction.Add(750, () =>
             {
                 if (missile != null && missile.IsValid && !missile.IsDead)
                 {
-                    var dist = missile.Position.LSTo2D().LSDistance(testMissileSpeedStartPos);
+                    var dist = missile.Position.To2D().Distance(testMissileSpeedStartPos);
                     ConsolePrinter.Print("Est.Missile speed: " + dist / (EvadeUtils.TickCount - testMissileSpeedStartTime));
                 }
             });
@@ -359,7 +359,7 @@ using EloBuddy; namespace ezEvade
                 && missile.StartPosition != null && missile.EndPosition != null)
             {
 
-                if (missile.StartPosition.LSDistance(myHero.Position) < spellData.range + 1000)
+                if (missile.StartPosition.Distance(myHero.Position) < spellData.range + 1000)
                 {
                     var hero = missile.SpellCaster;
 
@@ -408,18 +408,18 @@ using EloBuddy; namespace ezEvade
             {
 
                 Draw.RenderObjects.Add(
-                    new Draw.RenderCircle(args.Start.LSTo2D(), 500));
+                    new Draw.RenderCircle(args.Start.To2D(), 500));
                 Draw.RenderObjects.Add(
-                    new Draw.RenderCircle(args.End.LSTo2D(), 500));
+                    new Draw.RenderCircle(args.End.To2D(), 500));
             }
 
             //ConsolePrinter.Print(EvadeUtils.TickCount - lastProcessPacketTime);
-            //circleRenderPos = args.SData.ParticleStartOffset.LSTo2D();
+            //circleRenderPos = args.SData.ParticleStartOffset.To2D();
 
             /*Draw.RenderObjects.Add(
-                new Draw.RenderPosition(args.Start.LSTo2D(), Evade.GetTickCount + 500));
+                new Draw.RenderPosition(args.Start.To2D(), Evade.GetTickCount + 500));
             Draw.RenderObjects.Add(
-                new Draw.RenderPosition(args.End.LSTo2D(), Evade.GetTickCount + 500));*/
+                new Draw.RenderPosition(args.End.To2D(), Evade.GetTickCount + 500));*/
 
             /*float testTime;
             
@@ -468,7 +468,7 @@ using EloBuddy; namespace ezEvade
             var pos2 = spell.currentSpellPosition;
             if (spell.spellObject != null)
             {
-                ConsolePrinter.Print("Compare: " + (pos2.LSDistance(pos)) / (EvadeUtils.TickCount - time));
+                ConsolePrinter.Print("Compare: " + (pos2.Distance(pos)) / (EvadeUtils.TickCount - time));
             }
 
         }
@@ -480,7 +480,7 @@ using EloBuddy; namespace ezEvade
 
             if (spell.spellObject != null)
             {
-                ConsolePrinter.Print("start distance: " + (spell.startPos.LSDistance(pos1)));
+                ConsolePrinter.Print("start distance: " + (spell.startPos.Distance(pos1)));
             }
 
             DelayAction.Add(250, () => CompareSpellLocation(spell, pos1, timeNow));
@@ -492,7 +492,7 @@ using EloBuddy; namespace ezEvade
             {
                 if (EvadeUtils.TickCount - startWalkTime > 500 && myHero.IsMoving == false)
                 {
-                    //ConsolePrinter.Print("walkspeed: " + startWalkPos.LSDistance(ObjectCache.myHeroCache.serverPos2D) / (Evade.GetTickCount - startWalkTime));
+                    //ConsolePrinter.Print("walkspeed: " + startWalkPos.Distance(ObjectCache.myHeroCache.serverPos2D) / (Evade.GetTickCount - startWalkTime));
                     startWalkTime = 0;
                 }
             }
@@ -512,10 +512,10 @@ using EloBuddy; namespace ezEvade
 
             if (testMenu.Item("ShowDashInfo").GetValue<bool>())
             {
-                if (myHero.LSIsDashing())
+                if (myHero.IsDashing())
                 {
                     var dashInfo = myHero.GetDashInfo();
-                    ConsolePrinter.Print("Dash Speed: " + dashInfo.Speed + " Dash dist: " + dashInfo.EndPos.LSDistance(dashInfo.StartPos));
+                    ConsolePrinter.Print("Dash Speed: " + dashInfo.Speed + " Dash dist: " + dashInfo.EndPos.Distance(dashInfo.StartPos));
                 }
             }
 
@@ -543,7 +543,7 @@ using EloBuddy; namespace ezEvade
 
             if (obj.Name == "RobotBuddy")
             {
-                //Draw.RenderObjects.Add(new Draw.RenderPosition(obj.Position.LSTo2D(), EvadeUtils.TickCount + 10));
+                //Draw.RenderObjects.Add(new Draw.RenderPosition(obj.Position.To2D(), EvadeUtils.TickCount + 10));
             }
 
             //ConsolePrinter.Print(obj.Name);
@@ -606,8 +606,8 @@ using EloBuddy; namespace ezEvade
 
                 if (path.Length > 0)
                 {
-                    var movePos = path[path.Length - 1].LSTo2D();
-                    var walkDir = (movePos - heroPoint).LSNormalized();
+                    var movePos = path[path.Length - 1].To2D();
+                    var walkDir = (movePos - heroPoint).Normalized();
 
                     //circleRenderPos = EvadeHelper.GetRealHeroPos();
                     //heroPoint;// +walkDir * ObjectCache.myHeroCache.moveSpeed * (((float)ObjectCache.gamePing) / 1000);
@@ -621,7 +621,7 @@ using EloBuddy; namespace ezEvade
 
                 foreach (Vector3 point in tPath)
                 {
-                    var point2D = point.LSTo2D();
+                    var point2D = point.To2D();
                     Draw.RenderObjects.Add(new Draw.RenderCircle(point2D, 500));
                     //Render.Circle.DrawCircle(new Vector3(point.X, point.Y, point.Z), ObjectCache.myHeroCache.boundingRadius, Color.Violet, 3);
                 }
@@ -632,7 +632,7 @@ using EloBuddy; namespace ezEvade
             {         
                 if (testingCollision)
                 {
-                    if (args.TargetPosition.LSTo2D().LSDistance(testCollisionPos) < 3)
+                    if (args.TargetPosition.To2D().Distance(testCollisionPos) < 3)
                     {
                         //var path = myHero.GetPath();
                         //circleRenderPos
@@ -650,7 +650,7 @@ using EloBuddy; namespace ezEvade
                 }
 
                 Vector2 heroPos = ObjectCache.myHeroCache.serverPos2D;
-                Vector2 pos = args.TargetPosition.LSTo2D();
+                Vector2 pos = args.TargetPosition.To2D();
                 float speed = ObjectCache.myHeroCache.moveSpeed;
 
                 startWalkPos = heroPos;
@@ -660,7 +660,7 @@ using EloBuddy; namespace ezEvade
                 {
                     Spell spell = entry.Value;
                     var spellPos = spell.currentSpellPosition;
-                    var walkDir = (pos - heroPos).LSNormalized();
+                    var walkDir = (pos - heroPos).Normalized();
 
 
                     float spellTime = (EvadeUtils.TickCount - spell.startTime) - spell.info.spellDelay;
@@ -672,8 +672,8 @@ using EloBuddy; namespace ezEvade
                     float movingCollisionTime = MathUtils.GetCollisionTime(heroPos, spellPos, walkDir * (speed - 25), spell.direction * (spell.info.projectileSpeed - 200), ObjectCache.myHeroCache.boundingRadius, spell.radius, out isCollision);
                     if (isCollision)
                     {
-                        //ConsolePrinter.Print("aaaa" + spellPos.LSDistance(spell.endPos) / spell.info.projectileSpeed);
-                        if (true)//spellPos.LSDistance(spell.endPos) / spell.info.projectileSpeed > movingCollisionTime)
+                        //ConsolePrinter.Print("aaaa" + spellPos.Distance(spell.endPos) / spell.info.projectileSpeed);
+                        if (true)//spellPos.Distance(spell.endPos) / spell.info.projectileSpeed > movingCollisionTime)
                         {
                             ConsolePrinter.Print("movingCollisionTime: " + movingCollisionTime);
                             //circleRenderPos = heroPos + walkDir * speed * movingCollisionTime;
@@ -719,7 +719,7 @@ using EloBuddy; namespace ezEvade
 
         private void TestUnderTurret()
         {
-            if (Game.CursorPos.LSTo2D().IsUnderTurret())
+            if (Game.CursorPos.To2D().IsUnderTurret())
             {
                 Render.Circle.DrawCircle(Game.CursorPos, 50, Color.Red, 3);
             }
@@ -733,12 +733,12 @@ using EloBuddy; namespace ezEvade
         {
             //PrintTimers();
 
-            //EvadeHelper.CheckMovePath(Game.CursorPos.LSTo2D());            
+            //EvadeHelper.CheckMovePath(Game.CursorPos.To2D());            
 
             //TestUnderTurret();
 
 
-            /*if (EvadeHelper.CheckPathCollision(myHero, Game.CursorPos.LSTo2D()))
+            /*if (EvadeHelper.CheckPathCollision(myHero, Game.CursorPos.To2D()))
             {                
                 var paths = myHero.GetPath(ObjectCache.myHeroCache.serverPos2DExtra.To3D(), Game.CursorPos);
                 foreach (var path in paths)
@@ -773,7 +773,7 @@ using EloBuddy; namespace ezEvade
                 var path = myHero.Path;
                 if (path.Length > 0)
                 {
-                    var heroPos2 = EvadeHelper.GetRealHeroPos(ObjectCache.gamePing + 50);// path[path.Length - 1].LSTo2D();
+                    var heroPos2 = EvadeHelper.GetRealHeroPos(ObjectCache.gamePing + 50);// path[path.Length - 1].To2D();
                     var heroPos1 = ObjectCache.myHeroCache.serverPos2D;
 
                     Render.Circle.DrawCircle(new Vector3(heroPos2.X, heroPos2.Y, myHero.ServerPosition.Z), ObjectCache.myHeroCache.boundingRadius, Color.Red, 3);
@@ -781,7 +781,7 @@ using EloBuddy; namespace ezEvade
 
                     var heroPos = Drawing.WorldToScreen(ObjectManager.Player.Position);
                     var dimension = Drawing.GetTextEntent(("Evade: ON"), 15);
-                    Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Red, "" + (int)(heroPos2.LSDistance(heroPos1)));
+                    Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Red, "" + (int)(heroPos2.Distance(heroPos1)));
 
                     Render.Circle.DrawCircle(new Vector3(circleRenderPos.X, circleRenderPos.Y, myHero.ServerPosition.Z), 10, Color.Red, 3);
                 }
@@ -802,13 +802,13 @@ using EloBuddy; namespace ezEvade
 
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
-                var dir = (Game.CursorPos - myHero.Position).LSNormalized();
-                //var pos2 = myHero.Position - dir * Game.CursorPos.LSDistance(myHero.Position);
+                var dir = (Game.CursorPos - myHero.Position).Normalized();
+                //var pos2 = myHero.Position - dir * Game.CursorPos.Distance(myHero.Position);
 
-                //var pos2 = myHero.Position.LSTo2D() - dir.LSTo2D() * 75;
-                var pos2 = Game.CursorPos.LSTo2D() - dir.LSTo2D() * 75;
+                //var pos2 = myHero.Position.To2D() - dir.To2D() * 75;
+                var pos2 = Game.CursorPos.To2D() - dir.To2D() * 75;
 
-                //Console.WriteLine(myHero.BBox.Maximum.LSDistance(myHero.Position));
+                //Console.WriteLine(myHero.BBox.Maximum.Distance(myHero.Position));
 
                 DelayAction.Add(20, () => EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, pos2.To3D(), false));
                 //EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, pos2, false);
@@ -821,7 +821,7 @@ using EloBuddy; namespace ezEvade
 
                 foreach (Vector3 point in tPath)
                 {
-                    var point2D = point.LSTo2D();
+                    var point2D = point.To2D();
                     Render.Circle.DrawCircle(new Vector3(point.X, point.Y, point.Z), ObjectCache.myHeroCache.boundingRadius, Color.Violet, 3);
 
                     lastPoint = point2D;
@@ -835,7 +835,7 @@ using EloBuddy; namespace ezEvade
 
                 foreach (Vector3 point in tPath)
                 {
-                    var point2D = point.LSTo2D();
+                    var point2D = point.To2D();
                     //Render.Circle.DrawCircle(new Vector3(point.X, point.Y, point.Z), ObjectCache.myHeroCache.boundingRadius, Color.Violet, 3);
 
                     lastPoint = point2D;
@@ -845,12 +845,12 @@ using EloBuddy; namespace ezEvade
                 {
                     Spell spell = entry.Value;
 
-                    Vector2 to = Game.CursorPos.LSTo2D();
-                    var dir = (to - myHero.Position.LSTo2D()).LSNormalized();
+                    Vector2 to = Game.CursorPos.To2D();
+                    var dir = (to - myHero.Position.To2D()).Normalized();
                     Vector2 cPos1, cPos2;
 
-                    var cpa = MathUtilsCPA.CPAPointsEx(myHero.Position.LSTo2D(), dir * ObjectCache.myHeroCache.moveSpeed, spell.endPos, spell.direction * spell.info.projectileSpeed, to, spell.endPos);
-                    var cpaTime = MathUtilsCPA.CPATime(myHero.Position.LSTo2D(), dir * ObjectCache.myHeroCache.moveSpeed, spell.endPos, spell.direction * spell.info.projectileSpeed);
+                    var cpa = MathUtilsCPA.CPAPointsEx(myHero.Position.To2D(), dir * ObjectCache.myHeroCache.moveSpeed, spell.endPos, spell.direction * spell.info.projectileSpeed, to, spell.endPos);
+                    var cpaTime = MathUtilsCPA.CPATime(myHero.Position.To2D(), dir * ObjectCache.myHeroCache.moveSpeed, spell.endPos, spell.direction * spell.info.projectileSpeed);
 
                     //ConsolePrinter.Print("" + cpaTime);
                     //Render.Circle.DrawCircle(cPos1.To3D(), ObjectCache.myHeroCache.boundingRadius, Color.Red, 3);
@@ -885,7 +885,7 @@ using EloBuddy; namespace ezEvade
 
                 foreach (var buff in buffs)
                 {
-                    if (buff.LSIsValidBuff())
+                    if (buff.IsValidBuff())
                     {
                         Drawing.DrawText(10, height, Color.White, buff.Name);
                         height += 20;

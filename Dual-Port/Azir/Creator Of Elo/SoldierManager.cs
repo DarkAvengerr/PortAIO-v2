@@ -50,7 +50,7 @@ using EloBuddy;
                 foreach (var min in minions)
                 {
                     if(!min.IsDead)
-                    if (min.ServerPosition.LSDistance(sol.ServerPosition)<= attackRange) //estos estan atacando
+                    if (min.ServerPosition.Distance(sol.ServerPosition)<= attackRange) //estos estan atacando
                     {
                         x++;
                         break;
@@ -66,7 +66,7 @@ using EloBuddy;
         {
           foreach(Obj_AI_Minion sol in ActiveSoldiers)
             {
-                if(sol.LSDistance(HeroManager.Player.ServerPosition)<=range)
+                if(sol.Distance(HeroManager.Player.ServerPosition)<=range)
                     {
                     return sol;
                 }
@@ -76,7 +76,7 @@ using EloBuddy;
         }
         public bool ChecksToCastQHarrash(AzirMain azir, AIHeroClient target)
         {
-            if (!azir.Spells.Q.LSIsReady()) return false;
+            if (!azir.Spells.Q.IsReady()) return false;
             int x = 0; // soldados no atacando
             var nSoldiersToQ =azir.Menu.GetMenu.Item("SoldiersToQ").GetValue<Slider>().Value;
             switch (azir._menu.Orb.ActiveMode)
@@ -94,7 +94,7 @@ using EloBuddy;
                     if (!me.IsDead)
                     {
 
-                        if (me.LSDistance(target) > 315)
+                        if (me.Distance(target) > 315)
                         {
                             x++;
 
@@ -111,7 +111,7 @@ using EloBuddy;
         }
         public bool ChecksToCastQ(AzirMain azir, AIHeroClient target)
         {
-            if (!azir.Spells.Q.LSIsReady()) return false;
+            if (!azir.Spells.Q.IsReady()) return false;
             int x = 0; // soldados no atacando
            
             var nSoldiersToQ = azir.Menu.GetMenu.Item("SoldiersToQ").GetValue<Slider>().Value;
@@ -121,7 +121,7 @@ using EloBuddy;
                 if (!me.IsDead)
                 {
                    
-                        if (me.LSDistance(target) > 315)
+                        if (me.Distance(target) > 315)
                         {
                             x++;
                           
@@ -164,7 +164,7 @@ using EloBuddy;
         }
         public  Obj_AI_Minion getClosestSolider(Vector3 pos)
         {
-            return Soldiers.Where(sol => !sol.IsDead).OrderBy(sol => sol.LSDistance(pos, true) - ((sol.IsMoving) ? 500 : 0)).FirstOrDefault();
+            return Soldiers.Where(sol => !sol.IsDead).OrderBy(sol => sol.Distance(pos, true) - ((sol.IsMoving) ? 500 : 0)).FirstOrDefault();
         }
         private  void Drawing_OnDraw(EventArgs args)
         {
@@ -179,7 +179,7 @@ using EloBuddy;
                
                 foreach (AIHeroClient h in HeroManager.Enemies)
                 {
-                    if (m.LSDistance(h) < 315)
+                    if (m.Distance(h) < 315)
                     {
           
                         return true;

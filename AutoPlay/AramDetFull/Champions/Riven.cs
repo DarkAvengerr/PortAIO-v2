@@ -53,7 +53,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 var targ = (Obj_AI_Base)DeathWalker.getBestTarget();
                 if (targ != null && targ is Obj_AI_Base)
                 {
-                    if (args.Animation == "Spell3" && R.LSIsReady())
+                    if (args.Animation == "Spell3" && R.IsReady())
                     {
                         useRSmart(targ, true);
                         //LeagueSharp.Common.Utility.DelayAction.Add(10,
@@ -61,7 +61,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     }
 
                     if (sender.IsMe && args.Animation == "Spell3" &&
-                        Q.LSIsReady())
+                        Q.IsReady())
                     {
                         Console.WriteLine("force W");
                         LeagueSharp.Common.Utility.DelayAction.Add(30, delegate { useWSmart(targ, false, true); });
@@ -71,7 +71,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     }
 
                     if (sender.IsMe && args.Animation == "Spell2" &&
-                        Q.LSIsReady())
+                        Q.IsReady())
                     {
                         LeagueSharp.Common.Utility.DelayAction.Add(30, delegate { Q.Cast(targ.Position); });
                         Aggresivity.addAgresiveMove(new AgresiveMove(30, 3000));
@@ -112,7 +112,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos); 
             if (DeathWalker.getBestTarget() != null)
             {
-                if (W.LSIsReady())
+                if (W.IsReady())
                     useWSmart((Obj_AI_Base)DeathWalker.getBestTarget());
 
             }
@@ -176,7 +176,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public float getRivenReach()
         {
             int Qtimes = getQJumpCount();
-            return player.AttackRange + Qtimes*200 + (E.LSIsReady() ? 390 : 0);
+            return player.AttackRange + Qtimes*200 + (E.IsReady() ? 390 : 0);
         }
 
         public  void doCombo(Obj_AI_Base target)
@@ -186,47 +186,47 @@ using EloBuddy; namespace ARAMDetFull.Champions
             
             rushDownQ =  rushDmgBasedOnDist(target) * 0.7f > target.Health;
             rushDown = rushDmgBasedOnDist(target) * 1.1f > target.Health;
-            if (rushDown || player.LSCountEnemiesInRange(600)>2)
+            if (rushDown || player.CountEnemiesInRange(600)>2)
                 useRSmart(target);
             if(rushDown || safeGap(target))
                 useESmart(target);
             useWSmart(target);
-            if (DeathWalker.canMove() && (target.LSDistance(player)<700 || rushDown))
+            if (DeathWalker.canMove() && (target.Distance(player)<700 || rushDown))
                 gapWithQ(target);
         }
 
         public void gapWithQ(Obj_AI_Base target)
         {
-            if ((E.LSIsReady() || !Q.LSIsReady()) && !rushDownQ || player.LSIsDashing())
+            if ((E.IsReady() || !Q.IsReady()) && !rushDownQ || player.IsDashing())
                 return;
             reachWithQ(target);
         }
 
         public void reachWithQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || player.LSIsDashing())
+            if (!Q.IsReady() || player.IsDashing())
                 return;
 
             float trueAARange = player.AttackRange + target.BoundingRadius + 20;
             float trueQRange = target.BoundingRadius + Q.Range + 30;
 
-            float dist = player.LSDistance(target);
+            float dist = player.Distance(target);
             Vector2 walkPos = new Vector2();
             if (target.IsMoving && target.Path.Count() != 0)
             {
-                Vector2 tpos = target.Position.LSTo2D();
-                Vector2 path = target.Path[0].LSTo2D() - tpos;
+                Vector2 tpos = target.Position.To2D();
+                Vector2 path = target.Path[0].To2D() - tpos;
                 path.Normalize();
                 walkPos = tpos + (path * 100);
             }
-            float targ_ms = (target.IsMoving && player.LSDistance(walkPos) > dist) ? target.MoveSpeed : 0;
+            float targ_ms = (target.IsMoving && player.Distance(walkPos) > dist) ? target.MoveSpeed : 0;
             float msDif = (player.MoveSpeed - targ_ms) == 0 ? 0.0001f : (player.MoveSpeed - targ_ms);
             float timeToReach = (dist - trueAARange) / msDif;
             if ((dist > trueAARange && dist < trueQRange) || rushDown)
             {
                 if (timeToReach > 2.5 || timeToReach < 0.0f || rushDown)
                 {
-                    Vector2 to = player.Position.LSTo2D().LSExtend(target.Position.LSTo2D(), 50);
+                    Vector2 to = player.Position.To2D().Extend(target.Position.To2D(), 50);
                     // EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo,to.To3D());
                     Q.Cast(target.ServerPosition);
                     Aggresivity.addAgresiveMove(new AgresiveMove(30, 3000));
@@ -236,14 +236,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public void useWSmart(Obj_AI_Base target, bool aaRange = false, bool rrAa = false)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             float range = 0;
             if (aaRange)
                 range = player.AttackRange + target.BoundingRadius;
             else
                 range = W.Range + target.BoundingRadius - 40;
-            if (W.LSIsReady() && target.LSDistance(player.ServerPosition) < range)
+            if (W.IsReady() && target.Distance(player.ServerPosition) < range)
             {
                 W.Cast();
                 //LeagueSharp.Common.Utility.DelayAction.Add(50, delegate { DeathWalker.resetAutoAttackTimer(true); });
@@ -252,7 +252,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public void useESmart(Obj_AI_Base target)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
 
 
@@ -262,7 +262,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
 
 
-            float dist = player.LSDistance(target);
+            float dist = player.Distance(target);
 
             var path = player.GetPath(target.Position);
             if (!target.IsMoving && dist < trueERange)
@@ -279,9 +279,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public void useRSmart(Obj_AI_Base target, bool rrAA = false)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
-            if (!ultIsOn() && !E.LSIsReady() && target.LSDistance(player.ServerPosition) < (Q.Range + target.BoundingRadius))
+            if (!ultIsOn() && !E.IsReady() && target.Distance(player.ServerPosition) < (Q.Range + target.BoundingRadius))
             {
                 R.Cast();
                 Aggresivity.addAgresiveMove(new AgresiveMove(150,8000));
@@ -291,15 +291,15 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     //LeagueSharp.Common.Utility.DelayAction.Add(50, delegate { DeathWalker.resetAutoAttackTimer(true); } );
                 }
             }
-            else if (canUseWindSlash() && target is AIHeroClient && (!(E.LSIsReady() && player.LSIsDashing()) || player.LSDistance(target) > 150))
+            else if (canUseWindSlash() && target is AIHeroClient && (!(E.IsReady() && player.IsDashing()) || player.Distance(target) > 150))
             {
                 var targ = target as AIHeroClient;
                 PredictionOutput po = R.GetPrediction(targ, true);
                 if (getTrueRDmgOn(targ) > ((targ.Health)) || rushDown)
                 {
-                    if (po.Hitchance > HitChance.Medium && player.LSDistance(po.UnitPosition) > 30)
+                    if (po.Hitchance > HitChance.Medium && player.Distance(po.UnitPosition) > 30)
                     {
-                        R.Cast(player.LSDistance(po.UnitPosition) < 150 ? target.Position : po.UnitPosition);
+                        R.Cast(player.Distance(po.UnitPosition) < 150 ? target.Position : po.UnitPosition);
 
                     }
                 }
@@ -317,20 +317,20 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public float rushDmgBasedOnDist(Obj_AI_Base target)
         {
             float multi = 1.0f;
-            if (!ultIsOn() && R.LSIsReady())
+            if (!ultIsOn() && R.IsReady())
                 multi = 1.2f;
             float Qdmg = getTrueQDmOn(target);
-            float Wdmg = (E.LSIsReady()) ? (float)player.LSGetSpellDamage(target, SpellSlot.W) : 0;
-            float ADdmg = (float)player.LSGetAutoAttackDamage(target);
-            float Rdmg = (R.LSIsReady() && (canUseWindSlash() || !ultIsOn())) ? getTrueRDmgOn(target) : 0;
+            float Wdmg = (E.IsReady()) ? (float)player.GetSpellDamage(target, SpellSlot.W) : 0;
+            float ADdmg = (float)player.GetAutoAttackDamage(target);
+            float Rdmg = (R.IsReady() && (canUseWindSlash() || !ultIsOn())) ? getTrueRDmgOn(target) : 0;
 
             float trueAARange = player.AttackRange + target.BoundingRadius - 15;
-            float dist = player.LSDistance(target.ServerPosition);
-            float Ecan = (E.LSIsReady()) ? E.Range : 0;
+            float dist = player.Distance(target.ServerPosition);
+            float Ecan = (E.IsReady()) ? E.Range : 0;
             int Qtimes = getQJumpCount();
             int ADtimes = 0;
 
-            if (E.LSIsReady())
+            if (E.IsReady())
                 ADtimes++;
 
 
@@ -391,7 +391,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
             catch (Exception ex)
             {
-                if (!Q.LSIsReady())
+                if (!Q.IsReady())
                     return 0;
                 return 3;
             }

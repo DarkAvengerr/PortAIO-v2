@@ -38,7 +38,7 @@ namespace Mordekaiser.Events
                 return;
             }
 
-            if (!Spells.Q.LSIsReady())
+            if (!Spells.Q.IsReady())
             {
                 return;
             }
@@ -95,7 +95,7 @@ namespace Mordekaiser.Events
                 return;
             }
 
-            if (!Spells.E.LSIsReady() || !Menu.MenuE.Item("UseE.Jungle").GetValue<bool>())
+            if (!Spells.E.IsReady() || !Menu.MenuE.Item("UseE.Jungle").GetValue<bool>())
             {
                 return;
             }
@@ -114,7 +114,7 @@ namespace Mordekaiser.Events
 
             if (minionOutOfAutoAttackRange != null)
             {
-                if (Utils.Player.Self.LSDistance(minionOutOfAutoAttackRange) > Utils.Player.AutoAttackRange)
+                if (Utils.Player.Self.Distance(minionOutOfAutoAttackRange) > Utils.Player.AutoAttackRange)
                 {
                     Spells.E.Cast(minionOutOfAutoAttackRange);
                     return;
@@ -143,7 +143,7 @@ namespace Mordekaiser.Events
                         MinionTeam.Neutral)
                 where
                     item.Value.Item.IsReady() &&
-                    iMinions[0].LSDistance(Utils.Player.Self.Position) < item.Value.Item.Range
+                    iMinions[0].Distance(Utils.Player.Self.Position) < item.Value.Item.Range
                 select item)
             {
                 item.Value.Item.Cast();
@@ -152,7 +152,7 @@ namespace Mordekaiser.Events
 
         public static void CastQ(Obj_AI_Base t)
         {
-            if (!t.LSIsValidTarget(Utils.Player.AutoAttackRange))
+            if (!t.IsValidTarget(Utils.Player.AutoAttackRange))
             {
                 return;
             }

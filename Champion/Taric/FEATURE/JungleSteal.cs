@@ -68,16 +68,16 @@
                 var UseEJungleKS = SkyLv_Taric.Menu.Item("Taric.UseEJungleKS").GetValue<bool>();
                 var PacketCast = SkyLv_Taric.Menu.Item("Taric.UsePacketCast").GetValue<bool>();
 
-                if (Player.LSIsRecalling()) return;
+                if (Player.IsRecalling()) return;
 
                 foreach (var target in ObjectManager.Get<Obj_AI_Base>().Where(target => SkyLv_Taric.Monsters.Contains(target.BaseSkinName) && !target.IsDead))
                 {
-                    if (UseAAJungleKS && Orbwalking.CanAttack() && Player.LSGetAutoAttackDamage(target) > target.Health && target.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
+                    if (UseAAJungleKS && Orbwalking.CanAttack() && Player.GetAutoAttackDamage(target) > target.Health && target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
                     {
                         EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, target);
                     }
 
-                    if (UseEJungleKS && E.GetDamage(target) > target.Health && Player.LSDistance(target) <= E.Range && Player.Mana >= E.ManaCost)
+                    if (UseEJungleKS && E.GetDamage(target) > target.Health && Player.Distance(target) <= E.Range && Player.Mana >= E.ManaCost)
                     {
                         E.CastIfHitchanceEquals(target, HitChance.VeryHigh, PacketCast);
                     }

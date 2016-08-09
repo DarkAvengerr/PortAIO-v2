@@ -34,7 +34,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             if (Q.Cast(target) == Spell.CastStates.SuccessfullyCasted)
             {
@@ -49,7 +49,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             if (E.Cast(target) == Spell.CastStates.SuccessfullyCasted)
             {
@@ -61,7 +61,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             if (target == null)
                 return;
-            if (target.LSIsValidTarget(R.Range) && R.LSIsReady())
+            if (target.IsValidTarget(R.Range) && R.IsReady())
             {
                 R.CastIfWillHit(target, 2);
             }
@@ -109,11 +109,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void CastPassive(Obj_AI_Base target)
         {
-            if (!Passive.LSIsReady())
+            if (!Passive.IsReady())
             {
                 return;
             }
-            if (!target.LSIsValidTarget(E.Range))
+            if (!target.IsValidTarget(E.Range))
             {
                 return;
             }
@@ -130,7 +130,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void CastW(Vector3 v)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
             {
                 return;
             }

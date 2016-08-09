@@ -100,18 +100,18 @@ namespace UnderratedAIO.Champions
             bool smiteReady = Helpers.Jungle.SmiteReady(config.Item("useSmite").GetValue<KeyBind>().Active);
             if (target != null)
             {
-                if (target.LSCountEnemiesInRange(760f) > 0)
+                if (target.CountEnemiesInRange(760f) > 0)
                 {
-                    bool hasFlash = player.Spellbook.CanUseSpell(player.LSGetSpellSlot("SummonerFlash")) ==
+                    bool hasFlash = player.Spellbook.CanUseSpell(player.GetSpellSlot("SummonerFlash")) ==
                                     SpellState.Ready;
                     if (config.Item("useRJ", true).GetValue<bool>() && config.Item("useFlashJ", true).GetValue<bool>() &&
-                        R.LSIsReady() && hasFlash && 1000 + player.FlatMagicDamageMod * 0.7f >= target.Health &&
-                        player.GetSpell(SpellSlot.R).SData.Mana <= player.Mana && player.LSDistance(target.Position) > 400 &&
-                        player.LSDistance(target.Position) <= RFlash.Range &&
-                        !player.Position.LSExtend(target.Position, 400).LSIsWall())
+                        R.IsReady() && hasFlash && 1000 + player.FlatMagicDamageMod * 0.7f >= target.Health &&
+                        player.GetSpell(SpellSlot.R).SData.Mana <= player.Mana && player.Distance(target.Position) > 400 &&
+                        player.Distance(target.Position) <= RFlash.Range &&
+                        !player.Position.Extend(target.Position, 400).IsWall())
                     {
                         player.Spellbook.CastSpell(
-                            player.LSGetSpellSlot("SummonerFlash"), player.Position.LSExtend(target.Position, 400));
+                            player.GetSpellSlot("SummonerFlash"), player.Position.Extend(target.Position, 400));
                         //Utility.DelayAction.Add(50, () => R.Cast(target));
                     }
                 }
@@ -127,7 +127,7 @@ namespace UnderratedAIO.Champions
                     return;
                 }
                 if (R.CanCast(target) && config.Item("useSmite").GetValue<KeyBind>().Active &&
-                    target.LSCountEnemiesInRange(750f) > 0 && config.Item("useRSJ", true).GetValue<bool>() && smiteReady &&
+                    target.CountEnemiesInRange(750f) > 0 && config.Item("useRSJ", true).GetValue<bool>() && smiteReady &&
                     1000f + player.FlatMagicDamageMod * 0.7f + Helpers.Jungle.smiteDamage(target) >= target.Health)
                 {
                     R.Cast(target);
@@ -137,7 +137,7 @@ namespace UnderratedAIO.Champions
 
         private static void Clear()
         {
-            var minions = ObjectManager.Get<Obj_AI_Minion>().Where(m => m.LSIsValidTarget(400)).ToList();
+            var minions = ObjectManager.Get<Obj_AI_Minion>().Where(m => m.IsValidTarget(400)).ToList();
             if (minions.Count() > 2)
             {
                 if (Items.HasItem(3077) && Items.CanUseItem(3077))
@@ -155,13 +155,13 @@ namespace UnderratedAIO.Champions
             {
                 return;
             }
-            if (config.Item("usewLC", true).GetValue<bool>() && W.LSIsReady() &&
+            if (config.Item("usewLC", true).GetValue<bool>() && W.IsReady() &&
                 player.Spellbook.GetSpell(SpellSlot.W).SData.Mana <= player.Mana)
             {
                 var minionsForW = MinionManager.GetMinions(
                     ObjectManager.Player.ServerPosition, W.Range, MinionTypes.All, MinionTeam.NotAlly);
                 MinionManager.FarmLocation bestPositionW = W.GetLineFarmLocation(minionsForW);
-                if (bestPositionW.Position.LSIsValid())
+                if (bestPositionW.Position.IsValid())
                 {
                     if (bestPositionW.MinionsHit >= config.Item("whitLC", true).GetValue<Slider>().Value)
                     {
@@ -170,13 +170,13 @@ namespace UnderratedAIO.Champions
                 }
             }
 
-            if (config.Item("useqLC", true).GetValue<bool>() && Q.LSIsReady() &&
+            if (config.Item("useqLC", true).GetValue<bool>() && Q.IsReady() &&
                 player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana <= player.Mana)
             {
                 var minionsForQ = MinionManager.GetMinions(
                     ObjectManager.Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.NotAlly);
                 MinionManager.FarmLocation bestPositionQ = Q.GetCircularFarmLocation(minionsForQ);
-                if (Q.LSIsReady() && bestPositionQ.MinionsHit > config.Item("qhitLC", true).GetValue<Slider>().Value)
+                if (Q.IsReady() && bestPositionQ.MinionsHit > config.Item("qhitLC", true).GetValue<Slider>().Value)
                 {
                     Q.Cast(bestPositionQ.Position);
                 }
@@ -188,14 +188,14 @@ namespace UnderratedAIO.Champions
             AIHeroClient target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
             if (config.Item("useqH", true).GetValue<bool>())
             {
-                if (target.LSIsValidTarget(Q.Range) && Q.LSIsReady())
+                if (target.IsValidTarget(Q.Range) && Q.IsReady())
                 {
                     Q.Cast(target);
                 }
             }
             if (config.Item("useeH", true).GetValue<bool>())
             {
-                if (target.LSIsValidTarget(W.Range) && W.LSIsReady())
+                if (target.IsValidTarget(W.Range) && W.IsReady())
                 {
                     W.Cast(target);
                 }
@@ -227,17 +227,17 @@ namespace UnderratedAIO.Champions
             {
                 ItemHandler.UseItems(target, config, combodmg);
             }
-            bool hasFlash = player.Spellbook.CanUseSpell(player.LSGetSpellSlot("SummonerFlash")) == SpellState.Ready;
-            bool hasIgnite = player.Spellbook.CanUseSpell(player.LSGetSpellSlot("SummonerDot")) == SpellState.Ready;
+            bool hasFlash = player.Spellbook.CanUseSpell(player.GetSpellSlot("SummonerFlash")) == SpellState.Ready;
+            bool hasIgnite = player.Spellbook.CanUseSpell(player.GetSpellSlot("SummonerDot")) == SpellState.Ready;
             var ignitedmg = (float) player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
             if (hasIgnite && ignitedmg > target.Health && !R.CanCast(target) && !W.CanCast(target) && !Q.CanCast(target))
             {
-                player.Spellbook.CastSpell(player.LSGetSpellSlot("SummonerDot"), target);
+                player.Spellbook.CastSpell(player.GetSpellSlot("SummonerDot"), target);
             }
             if (hasIgnite && combodmg > target.Health && R.CanCast(target) &&
-                (float) Damage.LSGetSpellDamage(player, target, SpellSlot.R) < target.Health)
+                (float) Damage.GetSpellDamage(player, target, SpellSlot.R) < target.Health)
             {
-                player.Spellbook.CastSpell(player.LSGetSpellSlot("SummonerDot"), target);
+                player.Spellbook.CastSpell(player.GetSpellSlot("SummonerDot"), target);
             }
             if (hasIgnite)
             {
@@ -247,7 +247,7 @@ namespace UnderratedAIO.Champions
             {
                 flashRblock = false;
             }
-            if (config.Item("useq", true).GetValue<bool>() && Q.LSIsReady())
+            if (config.Item("useq", true).GetValue<bool>() && Q.IsReady())
             {
                 int qHit = config.Item("qHit", true).GetValue<Slider>().Value;
                 var hitC = HitChance.VeryHigh;
@@ -277,9 +277,9 @@ namespace UnderratedAIO.Champions
                     {
                         if (target.IsMoving)
                         {
-                            if (pred.CastPosition.LSDistance(target.ServerPosition) > 250f)
+                            if (pred.CastPosition.Distance(target.ServerPosition) > 250f)
                             {
-                                Q.Cast(target.Position.LSExtend(pred.CastPosition, 250f));
+                                Q.Cast(target.Position.Extend(pred.CastPosition, 250f));
                             }
                             else
                             {
@@ -304,22 +304,22 @@ namespace UnderratedAIO.Champions
                     W.Cast(target);
                 }
             }
-            if (config.Item("UseFlashC", true).GetValue<bool>() && !flashRblock && R.LSIsReady() && hasFlash &&
+            if (config.Item("UseFlashC", true).GetValue<bool>() && !flashRblock && R.IsReady() && hasFlash &&
                 !CombatHelper.CheckCriticalBuffs(target) && player.GetSpell(SpellSlot.R).SData.Mana <= player.Mana &&
-                player.LSDistance(target.Position) >= 400 && player.LSGetSpellDamage(target, SpellSlot.R) > target.Health &&
-                !Q.LSIsReady() && !W.LSIsReady() && player.LSDistance(target.Position) <= RFlash.Range &&
-                !player.Position.LSExtend(target.Position, 400).LSIsWall())
+                player.Distance(target.Position) >= 400 && player.GetSpellDamage(target, SpellSlot.R) > target.Health &&
+                !Q.IsReady() && !W.IsReady() && player.Distance(target.Position) <= RFlash.Range &&
+                !player.Position.Extend(target.Position, 400).IsWall())
             {
                 player.Spellbook.CastSpell(
-                    player.LSGetSpellSlot("SummonerFlash"), player.Position.LSExtend(target.Position, 400));
+                    player.GetSpellSlot("SummonerFlash"), player.Position.Extend(target.Position, 400));
                 LeagueSharp.Common.Utility.DelayAction.Add(50, () => R.Cast(target));
             }
             var rtarget =
-                HeroManager.Enemies.Where(e => e.LSIsValidTarget() && R.CanCast(e))
+                HeroManager.Enemies.Where(e => e.IsValidTarget() && R.CanCast(e))
                     .OrderByDescending(e => TargetSelector.GetPriority(e))
                     .FirstOrDefault();
             if (config.Item("user", true).GetValue<bool>() && rtarget != null &&
-                player.LSGetSpellDamage(target, SpellSlot.R) > rtarget.Health)
+                player.GetSpellDamage(target, SpellSlot.R) > rtarget.Health)
             {
                 R.Cast(rtarget);
             }
@@ -329,14 +329,14 @@ namespace UnderratedAIO.Champions
         {
             if (config.Item("useQgc", true).GetValue<bool>())
             {
-                if (gapcloser.Sender.LSIsValidTarget(Q.Range) && Q.LSIsReady())
+                if (gapcloser.Sender.IsValidTarget(Q.Range) && Q.IsReady())
                 {
                     Q.Cast(gapcloser.End);
                 }
             }
             if (config.Item("useWgc", true).GetValue<bool>())
             {
-                if (gapcloser.Sender.LSIsValidTarget(W.Range) && W.LSIsReady())
+                if (gapcloser.Sender.IsValidTarget(W.Range) && W.IsReady())
                 {
                     W.Cast(gapcloser.End);
                 }
@@ -356,26 +356,26 @@ namespace UnderratedAIO.Champions
         public static float ComboDamage(AIHeroClient hero)
         {
             double damage = 0;
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.Q);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.Q);
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.W);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.W);
             }
             if ((Items.HasItem(ItemHandler.Bft.Id) && Items.CanUseItem(ItemHandler.Bft.Id)) ||
                 (Items.HasItem(ItemHandler.Dfg.Id) && Items.CanUseItem(ItemHandler.Dfg.Id)))
             {
                 damage = (float) (damage * 1.2);
             }
-            if (player.Spellbook.CanUseSpell(player.LSGetSpellSlot("summonerdot")) == SpellState.Ready)
+            if (player.Spellbook.CanUseSpell(player.GetSpellSlot("summonerdot")) == SpellState.Ready)
             {
                 damage += player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
             }
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.R);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.R);
             }
             damage += ItemHandler.GetItemsDamage(hero);
             return (float) damage;

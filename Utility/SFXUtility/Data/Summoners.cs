@@ -43,7 +43,7 @@ using EloBuddy; namespace SFXUtility.Data
 
         public SpellSlot Slot
         {
-            get { return (SpellSlot) (_slot ?? (_slot = ObjectManager.Player.LSGetSpellSlot(Name))); }
+            get { return (SpellSlot) (_slot ?? (_slot = ObjectManager.Player.GetSpellSlot(Name))); }
         }
     }
 
@@ -76,7 +76,7 @@ using EloBuddy; namespace SFXUtility.Data
 
         public static bool IsReady(this SummonerSpell spell)
         {
-            return spell.Slot != SpellSlot.Unknown && spell.Slot.LSIsReady();
+            return spell.Slot != SpellSlot.Unknown && spell.Slot.IsReady();
         }
 
         public static List<SummonerSpell> AvailableSummoners()
@@ -120,19 +120,19 @@ using EloBuddy; namespace SFXUtility.Data
             {
                 var damage = 0f;
                 if (ignite && Ignite.Exists() && Ignite.IsReady() &&
-                    target.Position.LSDistance(ObjectManager.Player.Position) <= Ignite.Range)
+                    target.Position.Distance(ObjectManager.Player.Position) <= Ignite.Range)
                 {
                     damage += (float) ObjectManager.Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
                 }
                 if (smite)
                 {
                     if (BlueSmite.Exists() && BlueSmite.IsReady() &&
-                        target.Position.LSDistance(ObjectManager.Player.Position) <= BlueSmite.Range)
+                        target.Position.Distance(ObjectManager.Player.Position) <= BlueSmite.Range)
                     {
                         damage += CalculateBlueSmiteDamage();
                     }
                     else if (RedSmite.Exists() && RedSmite.IsReady() &&
-                             target.Position.LSDistance(ObjectManager.Player.Position) <= RedSmite.Range)
+                             target.Position.Distance(ObjectManager.Player.Position) <= RedSmite.Range)
                     {
                         damage += CalculateRedSmiteDamage();
                     }
@@ -151,19 +151,19 @@ using EloBuddy; namespace SFXUtility.Data
             try
             {
                 if (ignite && Ignite.Exists() && Ignite.IsReady() &&
-                    target.Position.LSDistance(ObjectManager.Player.Position) <= Ignite.Range)
+                    target.Position.Distance(ObjectManager.Player.Position) <= Ignite.Range)
                 {
                     Ignite.Cast(target);
                 }
                 if (smite)
                 {
                     if (BlueSmite.Exists() && BlueSmite.IsReady() &&
-                        target.Position.LSDistance(ObjectManager.Player.Position) <= BlueSmite.Range)
+                        target.Position.Distance(ObjectManager.Player.Position) <= BlueSmite.Range)
                     {
                         BlueSmite.Cast(target);
                     }
                     else if (RedSmite.Exists() && RedSmite.IsReady() &&
-                             target.Position.LSDistance(ObjectManager.Player.Position) <= RedSmite.Range)
+                             target.Position.Distance(ObjectManager.Player.Position) <= RedSmite.Range)
                     {
                         RedSmite.Cast(target);
                     }

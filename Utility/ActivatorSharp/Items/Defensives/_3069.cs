@@ -27,7 +27,7 @@ using EloBuddy; namespace Activator.Items.Defensives
                 if (!Parent.Item(Parent.Name + "useon" + hero.Player.NetworkId).GetValue<bool>())
                     continue;
 
-                if (hero.Player.LSDistance(Player.ServerPosition) <= Range)
+                if (hero.Player.Distance(Player.ServerPosition) <= Range)
                 {
                     if (Menu.Item("use" + Name + "norm").GetValue<bool>())
                         if (hero.IncomeDamage > 0 && hero.HitTypes.Contains(HitType.Danger))
@@ -41,7 +41,7 @@ using EloBuddy; namespace Activator.Items.Defensives
                         Menu.Item("selflowhp" + Name + "pct").GetValue<Slider>().Value)
                     {
                         if (hero.IncomeDamage > 0 && hero.Attacker != null &&
-                            hero.Attacker.LSDistance(hero.Player.ServerPosition) <= 600)
+                            hero.Attacker.Distance(hero.Player.ServerPosition) <= 600)
                             UseItem();    
                     }
                 }

@@ -16,15 +16,15 @@ using EloBuddy;
     {
         public static float LucianTotalDamage(AIHeroClient enemy)
         {
-            if (LucianSpells.Q.LSIsReady() && Helper.LEnabled("lucian.q.combo"))
+            if (LucianSpells.Q.IsReady() && Helper.LEnabled("lucian.q.combo"))
             {
                 return LucianSpells.Q.GetDamage(enemy);
             }
-            if (LucianSpells.W.LSIsReady() && Helper.LEnabled("lucian.w.combo"))
+            if (LucianSpells.W.IsReady() && Helper.LEnabled("lucian.w.combo"))
             {
                 return LucianSpells.W.GetDamage(enemy);
             }
-            if (LucianSpells.R.LSIsReady() && Helper.LEnabled("lucian.r.combo"))
+            if (LucianSpells.R.IsReady() && Helper.LEnabled("lucian.r.combo"))
             {
                 return LucianSpells.R.GetDamage(enemy);
             }

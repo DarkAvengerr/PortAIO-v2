@@ -65,7 +65,7 @@ using EloBuddy;
                             .Any(
                                 b =>
                                     b.IsValid && b.Name.Contains("_Q_") && b.Name.Contains("Syndra_") &&
-                                    b.Name.Contains("idle") && obj.Position.LSDistance(b.Position) < 50))
+                                    b.Name.Contains("idle") && obj.Position.Distance(b.Position) < 50))
                         valid = true;
 
                 if (valid && (!toGrab || !obj.IsMoving))
@@ -76,7 +76,7 @@ using EloBuddy;
 
         public static Vector3 GetOrbToGrab(int range)
         {
-            var list = GetOrbs(true).Where(orb => ObjectManager.Player.LSDistance(orb) < range).ToList();
+            var list = GetOrbs(true).Where(orb => ObjectManager.Player.Distance(orb) < range).ToList();
             return list.Count > 0 ? list[0] : new Vector3();
         }
     }

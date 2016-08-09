@@ -16,7 +16,7 @@ using EloBuddy;
         public static bool IsRunningOfYou(this AIHeroClient target)
         {
             var pos = Prediction.GetPrediction(target, 0.5f).UnitPosition;
-            return Vector2.Distance(HeroManager.Player.ServerPosition.LSTo2D(), pos.LSTo2D()) > Vector2.Distance(HeroManager.Player.ServerPosition.LSTo2D(), target.ServerPosition.LSTo2D());
+            return Vector2.Distance(HeroManager.Player.ServerPosition.To2D(), pos.To2D()) > Vector2.Distance(HeroManager.Player.ServerPosition.To2D(), target.ServerPosition.To2D());
         }
     }
 }

@@ -12,7 +12,7 @@ namespace VayneHunter_Reborn.Utility.Helpers
     {
         public static List<AIHeroClient> GetLhEnemiesNear(this Vector3 position, float range, float healthpercent)
         {
-            return HeroManager.Enemies.Where(hero => hero.LSIsValidTarget(range, true, position) && hero.HealthPercent <= healthpercent).ToList();
+            return HeroManager.Enemies.Where(hero => hero.IsValidTarget(range, true, position) && hero.HealthPercent <= healthpercent).ToList();
         }
 
         public static bool UnderAllyTurret_Ex(this Vector3 position)
@@ -23,7 +23,7 @@ namespace VayneHunter_Reborn.Utility.Helpers
         public static bool IsJ4Flag(this Vector3 endPosition, Obj_AI_Base target)
         {
             return MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.condemn.condemnflag")
-                && ObjectManager.Get<Obj_AI_Base>().Any(m => m.LSDistance(endPosition) <= target.BoundingRadius && m.Name == "Beacon");
+                && ObjectManager.Get<Obj_AI_Base>().Any(m => m.Distance(endPosition) <= target.BoundingRadius && m.Name == "Beacon");
         }
 
         public static bool Has2WStacks(this AIHeroClient target)

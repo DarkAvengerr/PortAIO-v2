@@ -91,9 +91,9 @@ using EloBuddy;
 
         private static void Bloodlust()
         {
-            if (Q.LSIsReady() && (Player.Health / Player.MaxHealth) * 100 < Menu.Item("qBelow").GetValue<Slider>().Value && !Player.LSHasBuff("UndyingRage",true))
+            if (Q.IsReady() && (Player.Health / Player.MaxHealth) * 100 < Menu.Item("qBelow").GetValue<Slider>().Value && !Player.HasBuff("UndyingRage",true))
             {
-                if (ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && x.LSDistance(Player.Position) <= 1200).Count() > 0)
+                if (ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && x.Distance(Player.Position) <= 1200).Count() > 0)
                 {
                     Q.Cast();
                 }
@@ -102,7 +102,7 @@ using EloBuddy;
 
         private static void MockingShout()
         {
-            if (W.LSIsReady() && !target.LSIsFacing(Player))
+            if (W.IsReady() && !target.IsFacing(Player))
             {
                 W.Cast();
             }
@@ -110,9 +110,9 @@ using EloBuddy;
 
         private static void SpinningSlash()
         {
-            if (E.LSIsReady() && Player.LSDistance(target) <= E.Range - 125)
+            if (E.IsReady() && Player.Distance(target) <= E.Range - 125)
             {      
-                //var extendPos = target.ServerPosition.LSTo2D().LSExtend(target.ServerPosition.LSTo2D(), 200).To3D();       
+                //var extendPos = target.ServerPosition.To2D().Extend(target.ServerPosition.To2D(), 200).To3D();       
 
                 E.Cast(target);
             }
@@ -120,7 +120,7 @@ using EloBuddy;
 
         private static void UndyingRage()
         {
-            if (R.LSIsReady() && ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && x.LSDistance(Player.Position) <= 1200).Count() > 0 && (Player.Health / Player.MaxHealth) * 100 < Menu.Item("rBelow").GetValue<Slider>().Value)
+            if (R.IsReady() && ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && x.Distance(Player.Position) <= 1200).Count() > 0 && (Player.Health / Player.MaxHealth) * 100 < Menu.Item("rBelow").GetValue<Slider>().Value)
             {
                 R.Cast();
             }

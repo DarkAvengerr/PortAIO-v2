@@ -40,12 +40,12 @@ using EloBuddy;
                 MoveToLimited(Game.CursorPos);
             }
 
-            var directionExtension = ObjectManager.Player.ServerPosition.LSTo2D() + ObjectManager.Player.Direction.LSTo2D().LSPerpendicular() * (ObjectManager.Player.BoundingRadius * 1.10f);
-            var oppositeDirectionExtension = ObjectManager.Player.ServerPosition.LSTo2D() + ObjectManager.Player.Direction.LSTo2D().LSPerpendicular() * -(ObjectManager.Player.BoundingRadius * 2f);
-            var ExtendedPosition = ObjectManager.Player.ServerPosition.LSTo2D() + ObjectManager.Player.Direction.LSTo2D().LSPerpendicular() * (300 + 65f);
+            var directionExtension = ObjectManager.Player.ServerPosition.To2D() + ObjectManager.Player.Direction.To2D().Perpendicular() * (ObjectManager.Player.BoundingRadius * 1.10f);
+            var oppositeDirectionExtension = ObjectManager.Player.ServerPosition.To2D() + ObjectManager.Player.Direction.To2D().Perpendicular() * -(ObjectManager.Player.BoundingRadius * 2f);
+            var ExtendedPosition = ObjectManager.Player.ServerPosition.To2D() + ObjectManager.Player.Direction.To2D().Perpendicular() * (300 + 65f);
 
-            if (directionExtension.LSIsWall() && PositioningHelper.DoPositionsCrossWall(ObjectManager.Player.ServerPosition, ExtendedPosition.To3D())
-                    && Variables.Spells[SpellSlot.Q].LSIsReady()
+            if (directionExtension.IsWall() && PositioningHelper.DoPositionsCrossWall(ObjectManager.Player.ServerPosition, ExtendedPosition.To3D())
+                    && Variables.Spells[SpellSlot.Q].IsReady()
                     && PositioningHelper.DoPositionsCrossWall(ObjectManager.Player.ServerPosition, Game.CursorPos)
                     && PositioningHelper.GetWallLength(ObjectManager.Player.ServerPosition, ExtendedPosition.To3D()) <= (280f - 65f / 2f))
             {

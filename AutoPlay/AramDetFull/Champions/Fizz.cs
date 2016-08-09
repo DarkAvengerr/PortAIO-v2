@@ -32,21 +32,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
         }
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null || !safeGap(player.Position.LSExtend(target.Position,475).LSTo2D()))
+            if (!Q.IsReady() || target == null || !safeGap(player.Position.Extend(target.Position,475).To2D()))
                 return;
             Q.CastOnUnit(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null || !safeGap(target))
+            if (!E.IsReady() || target == null || !safeGap(target))
                 return;
             if (player.Spellbook.GetSpell(SpellSlot.E).Name == "fizzjumptwo" && Environment.TickCount - E.LastCastAttemptT > 150)
                 E.Cast(target.Position);
@@ -58,7 +58,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             if (!safeGap(target) || target.HealthPercent < 28)
             {
@@ -93,12 +93,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void farm()
         {
-           // if (player.ManaPercent < 55 || !E.LSIsReady())
+           // if (player.ManaPercent < 55 || !E.IsReady())
                 return;
 
             foreach (var minion in MinionManager.GetMinions(E.Range-300))
             {
-                if (minion.Health > ObjectManager.Player.LSGetAutoAttackDamage(minion) && minion.Health < E.GetDamage(minion) && safeGap(minion))
+                if (minion.Health > ObjectManager.Player.GetAutoAttackDamage(minion) && minion.Health < E.GetDamage(minion) && safeGap(minion))
                 {
                     E.Cast(minion);
                     return;

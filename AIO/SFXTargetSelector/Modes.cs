@@ -79,12 +79,12 @@ namespace SFXTargetSelector
                                 Mode = Mode.MostAttackDamage
                             },
                             new Item(
-                                "closest", "Closest", list => list.OrderBy(x => x.Hero.LSDistance(ObjectManager.Player)))
+                                "closest", "Closest", list => list.OrderBy(x => x.Hero.Distance(ObjectManager.Player)))
                             {
                                 Mode = Mode.Closest
                             },
                             new Item(
-                                "near-mouse", "Near Mouse", list => list.OrderBy(x => x.Hero.LSDistance(Game.CursorPos)))
+                                "near-mouse", "Near Mouse", list => list.OrderBy(x => x.Hero.Distance(Game.CursorPos)))
                             {
                                 Mode = Mode.NearMouse
                             },

@@ -622,9 +622,9 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                                 {
                                     Slot =
                                         () =>
-                                        Player.LSGetSpellSlot("summonerboost") == SpellSlot.Unknown
+                                        Player.GetSpellSlot("summonerboost") == SpellSlot.Unknown
                                             ? SpellSlot.Unknown
-                                            : Player.LSGetSpellSlot("summonerboost"),
+                                            : Player.GetSpellSlot("summonerboost"),
                                     WorksOn =
                                         new[]
                                             {
@@ -858,7 +858,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                     continue;
                 }
 
-                if (!item.Spell.LSIsReady() || !item.Spell.IsInRange(ally) || item.Spell.Slot == SpellSlot.Unknown)
+                if (!item.Spell.IsReady() || !item.Spell.IsInRange(ally) || item.Spell.Slot == SpellSlot.Unknown)
                 {
                     continue;
                 }
@@ -885,9 +885,9 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                 return;
             }
 
-            foreach (var ally in HeroManager.Allies.Where(x => x.LSIsValidTarget(800f, false)))
+            foreach (var ally in HeroManager.Allies.Where(x => x.IsValidTarget(800f, false)))
             {
-                foreach (var spell in Spells.Where(x => ally.LSHasBuff(x.Name) || ally.HasBuffOfType(x.BuffType)))
+                foreach (var spell in Spells.Where(x => ally.HasBuff(x.Name) || ally.HasBuffOfType(x.BuffType)))
                 {
                     if (
                         !this.Menu.Item(spell.MenuName?.Replace(" ", string.Empty) ?? spell.Name)

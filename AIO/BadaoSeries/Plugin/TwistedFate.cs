@@ -21,25 +21,25 @@ using EloBuddy;
         private static int cardtick, yellowtick;
         public static bool helpergold, helperblue, helperred;
         private static bool isobvious { get { return Utils.GameTimeTickCount - cardtick <= 500; } }
-        private static bool IsPickingCard { get { return Player.LSHasBuff("pickacard_tracker"); } }
-        private static bool CanUseR2 { get { return R.LSIsReady() && Player.LSHasBuff("destiny_marker"); } }
-        private static bool CanUseR1 { get { return R.LSIsReady() && !Player.LSHasBuff("destiny_marker"); } }
+        private static bool IsPickingCard { get { return Player.HasBuff("pickacard_tracker"); } }
+        private static bool CanUseR2 { get { return R.IsReady() && Player.HasBuff("destiny_marker"); } }
+        private static bool CanUseR1 { get { return R.IsReady() && !Player.HasBuff("destiny_marker"); } }
         private static bool PickACard { get { return W.Instance.Name == "PickACard"; } }
         private static bool GoldCard { get { return W.Instance.Name == "goldcardlock"; } }
         private static bool BlueCard { get { return W.Instance.Name == "bluecardlock"; } }
         private static bool RedCard { get { return W.Instance.Name == "redcardlock"; } }
-        private static bool HasBlue { get { return Player.LSHasBuff("bluecardpreattack"); } }
-        private static bool HasRed { get { return Player.LSHasBuff("redcardpreattack"); } }
-        private static bool HasGold { get { return Player.LSHasBuff("goldcardpreattack"); } }
+        private static bool HasBlue { get { return Player.HasBuff("bluecardpreattack"); } }
+        private static bool HasRed { get { return Player.HasBuff("redcardpreattack"); } }
+        private static bool HasGold { get { return Player.HasBuff("goldcardpreattack"); } }
         private static string HasACard
         {
             get
             {
-                if (Player.LSHasBuff("bluecardpreattack"))
+                if (Player.HasBuff("bluecardpreattack"))
                     return "blue";
-                if (Player.LSHasBuff("goldcardpreattack"))
+                if (Player.HasBuff("goldcardpreattack"))
                     return "gold";
-                if (Player.LSHasBuff("redcardpreattack"))
+                if (Player.HasBuff("redcardpreattack"))
                     return "red";
                 return "none";
             }
@@ -225,9 +225,9 @@ using EloBuddy;
         private static bool drawhp { get { return  MainMenu.Item("Hpd").GetValue<bool>(); } }
         private static void AutoHelper()
         {
-            if (autokillsteal && Q.LSIsReady())
+            if (autokillsteal && Q.IsReady())
             {
-                foreach (var x in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && Player.LSGetSpellDamage(x, SpellSlot.Q) > x.Health))
+                foreach (var x in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && Player.GetSpellDamage(x, SpellSlot.Q) > x.Health))
                 {
                     Q.Cast(x);
                 }
@@ -253,7 +253,7 @@ using EloBuddy;
                 if (HasRed)
                     helperpickred = false;
             }
-            if (combow && Player.LSHasBuff("destiny_marker") && combopickgold && W.LSIsReady())
+            if (combow && Player.HasBuff("destiny_marker") && combopickgold && W.IsReady())
             {
                 if (!IsPickingCard && PickACard && Utils.GameTimeTickCount - cardtick >= 500)
                 {
@@ -294,7 +294,7 @@ using EloBuddy;
             {
                 args.Process = false;
                 var target = TargetSelector.GetTarget(Orbwalking.GetRealAutoAttackRange(Player), TargetSelector.DamageType.Magical);
-                if (target.LSIsValidTarget() && !target.IsZombie)
+                if (target.IsValidTarget() && !target.IsZombie)
                     EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, target);
             }
             else if (HasACard != "none" && HasRed && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
@@ -303,11 +303,11 @@ using EloBuddy;
                 IDictionary<Obj_AI_Minion, int> creeps = new Dictionary<Obj_AI_Minion, int>();
                 foreach (var x in ObjectManager.Get<Obj_AI_Minion>().Where(x => x.Team != Player.Team && x.Team != GameObjectTeam.Neutral  && Orbwalking.InAutoAttackRange(x)))
                 {
-                    creeps.Add(x, ObjectManager.Get<Obj_AI_Minion>().Count(y => y.Team != Player.Team && y.Team != GameObjectTeam.Neutral && y.LSIsValidTarget() && y.LSDistance(x.Position) <= 300));
+                    creeps.Add(x, ObjectManager.Get<Obj_AI_Minion>().Count(y => y.Team != Player.Team && y.Team != GameObjectTeam.Neutral && y.IsValidTarget() && y.Distance(x.Position) <= 300));
                 }
                 foreach (var x in ObjectManager.Get<Obj_AI_Minion>().Where(x => x.Team == GameObjectTeam.Neutral && Orbwalking.InAutoAttackRange(x)))
                 {
-                    creeps.Add(x, ObjectManager.Get<Obj_AI_Minion>().Count(y => y.Team == GameObjectTeam.Neutral && y.LSIsValidTarget() && y.LSDistance(x.Position) <= 300));
+                    creeps.Add(x, ObjectManager.Get<Obj_AI_Minion>().Count(y => y.Team == GameObjectTeam.Neutral && y.IsValidTarget() && y.Distance(x.Position) <= 300));
                 }
                 var minion = creeps.OrderByDescending(x => x.Value).FirstOrDefault();
                 EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, minion.Key);
@@ -317,25 +317,25 @@ using EloBuddy;
         {
             if (!Enable)
                 return;
-            if (target.LSIsValidTarget() && (target as AIHeroClient) != null && (target as AIHeroClient).IsValid)
+            if (target.IsValidTarget() && (target as AIHeroClient) != null && (target as AIHeroClient).IsValid)
             {
                 if (Utils.GameTimeTickCount - yellowtick <= 1500)
                     return;
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && comboqafterattack)
                 {
-                    if (target.LSIsValidTarget() && !target.IsZombie)
+                    if (target.IsValidTarget() && !target.IsZombie)
                     {
                         var Target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-                        if (Target.LSIsValidTarget() && !Target.IsZombie)
+                        if (Target.IsValidTarget() && !Target.IsZombie)
                             Q.Cast(Q.GetPrediction(Target).CastPosition);
                     }
                 }
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && harassqafterattack && Player.ManaPercent >= harassmana)
                 {
-                    if (target.LSIsValidTarget() && !target.IsZombie)
+                    if (target.IsValidTarget() && !target.IsZombie)
                     {
                         var Target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-                        if (Target.LSIsValidTarget() && !Target.IsZombie)
+                        if (Target.IsValidTarget() && !Target.IsZombie)
                             Q.Cast(Q.GetPrediction(Target).CastPosition);
                     }
                 }
@@ -367,23 +367,23 @@ using EloBuddy;
         }
         private static void Combo()
         {
-            if (Q.LSIsReady() && comboq)
+            if (Q.IsReady() && comboq)
             {
                 if (comboqimmobile)
                 {
-                    foreach (var x in HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie))
+                    foreach (var x in HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie))
                         Q.CastIfHitchanceEquals(x, HitChance.Immobile);
                 }
                 {
                     var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-                    if (target.LSIsValidTarget() && !target.IsZombie)
+                    if (target.IsValidTarget() && !target.IsZombie)
                         Q.CastIfWillHit(target, comboqhit);
                 }
             }
-            if (combow && W.LSIsReady())
+            if (combow && W.IsReady())
             {
                 var target = TargetSelector.GetTarget(900, TargetSelector.DamageType.Magical);
-                if (target.LSIsValidTarget() && !target.IsZombie)
+                if (target.IsValidTarget() && !target.IsZombie)
                 {
                     if (!IsPickingCard && PickACard && Utils.GameTimeTickCount - cardtick >= 500)
                     {
@@ -397,7 +397,7 @@ using EloBuddy;
                             if (GoldCard && !(dontbeobvious && isobvious))
                                 W.Cast();
                         }
-                        else if (HeroManager.Allies.Any(x => x.LSIsValidTarget(800, false)))
+                        else if (HeroManager.Allies.Any(x => x.IsValidTarget(800, false)))
                         {
                             if (GoldCard && !(dontbeobvious && isobvious))
                                 W.Cast();
@@ -412,11 +412,11 @@ using EloBuddy;
         }
         private static void Harass()
         {
-            if (Q.LSIsReady() && harassq && Player.ManaPercent >= clearmana)
+            if (Q.IsReady() && harassq && Player.ManaPercent >= clearmana)
             {
                 if (harassqimmobile)
                 {
-                    foreach (var x in HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie))
+                    foreach (var x in HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie))
                         Q.CastIfHitchanceEquals(x, HitChance.Immobile);
                 }
                 {
@@ -424,10 +424,10 @@ using EloBuddy;
                     Q.CastIfWillHit(target, harassqhit);
                 }
             }
-            if (harassw && W.LSIsReady())
+            if (harassw && W.IsReady())
             {
                 var target = TargetSelector.GetTarget(900, TargetSelector.DamageType.Magical);
-                if (target.LSIsValidTarget() && !target.IsZombie)
+                if (target.IsValidTarget() && !target.IsZombie)
                 {
                     if (!IsPickingCard && PickACard && Utils.GameTimeTickCount - cardtick >= 500 && Player.ManaPercent >= clearmana)
                     {
@@ -457,15 +457,15 @@ using EloBuddy;
         }
         private static void Clear()
         {
-            if (Q.LSIsReady() && clearq && Player.ManaPercent >= clearmana)
+            if (Q.IsReady() && clearq && Player.ManaPercent >= clearmana)
             {
                 var farm = Q.GetLineFarmLocation(MinionManager.GetMinions(Q.Range, MinionTypes.All));
                 if (farm.MinionsHit >= clearqhit)
                     Q.Cast(farm.Position);
             }
-            if (W.LSIsReady() && clearw)
+            if (W.IsReady() && clearw)
             {
-                var target = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.Team != Player.Team && x.LSIsValidTarget() && Orbwalking.InAutoAttackRange(x));
+                var target = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.Team != Player.Team && x.IsValidTarget() && Orbwalking.InAutoAttackRange(x));
                 if (target.Any())
                 {
                     if (!IsPickingCard && PickACard && Utils.GameTimeTickCount - cardtick >= 500 && Player.ManaPercent >= clearmana)
@@ -500,10 +500,10 @@ using EloBuddy;
         }
         private static float TwistedFateDamage(AIHeroClient target)
         {
-            var Qdamage = (float)Player.LSGetSpellDamage(target, Q.Slot);
-            var Wdamage = (float)Player.LSGetSpellDamage(target, W.Slot);
+            var Qdamage = (float)Player.GetSpellDamage(target, Q.Slot);
+            var Wdamage = (float)Player.GetSpellDamage(target, W.Slot);
             float x = 0;
-            if ((W.LSIsReady() || HasACard != "none") && Q.LSIsReady())
+            if ((W.IsReady() || HasACard != "none") && Q.IsReady())
             {
                 if ((Player.Mana >= Q.Instance.SData.Mana + W.Instance.SData.Mana) || (Player.Mana >= Q.Instance.SData.Mana && HasACard != "none"))
                 {
@@ -518,11 +518,11 @@ using EloBuddy;
                     x = x + Wdamage;
                 }
             }
-            else if (Q.LSIsReady())
+            else if (Q.IsReady())
             {
                 x = x + Qdamage;
             }
-            else if (W.LSIsReady() || HasACard != "none")
+            else if (W.IsReady() || HasACard != "none")
             {
                 x = x + Wdamage;
             }
@@ -546,7 +546,7 @@ using EloBuddy;
             {
                 x = x + (float)Player.CalcDamage(target, Damage.DamageType.Magical, 100 + 0.1 * Player.FlatMagicDamageMod);
             }
-            x = x + (float)Player.LSGetAutoAttackDamage(target, true);
+            x = x + (float)Player.GetAutoAttackDamage(target, true);
             return x;
         }
         private static void checkbuff()

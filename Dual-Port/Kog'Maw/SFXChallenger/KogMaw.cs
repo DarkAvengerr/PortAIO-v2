@@ -226,7 +226,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             {
                 if (ShouldUseSpells())
                 {
-                    if (R.LSIsReady())
+                    if (R.IsReady())
                     {
                         if (args.UniqueId.Equals("r-immobile") &&
                             BestTargetOnlyManager.Check("r-immobile", R, args.Hero) && R.IsInRange(args.Position))
@@ -266,19 +266,19 @@ using EloBuddy; namespace SFXChallenger.Champions
             {
                 if (ShouldUseSpells())
                 {
-                    if (args.UniqueId.Equals("e-gapcloser") && E.LSIsReady() &&
+                    if (args.UniqueId.Equals("e-gapcloser") && E.IsReady() &&
                         BestTargetOnlyManager.Check("e-gapcloser", E, args.Hero))
                     {
-                        if (args.End.LSDistance(Player.Position) <= E.Range)
+                        if (args.End.Distance(Player.Position) <= E.Range)
                         {
                             E.Cast(args.End);
                         }
                     }
-                    if (args.UniqueId.Equals("r-gapcloser") && R.LSIsReady() &&
+                    if (args.UniqueId.Equals("r-gapcloser") && R.IsReady() &&
                         BestTargetOnlyManager.Check("r-gapcloser", R, args.Hero) &&
                         Menu.Item(Menu.Name + ".miscellaneous.r-max").GetValue<Slider>().Value > GetRBuffCount())
                     {
-                        if (args.End.LSDistance(Player.Position) <= R.Range)
+                        if (args.End.Distance(Player.Position) <= R.Range)
                         {
                             R.Cast(args.End);
                         }
@@ -319,10 +319,10 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void Combo()
         {
-            var useQ = Menu.Item(Menu.Name + ".combo.q").GetValue<bool>() && Q.LSIsReady();
-            var useW = Menu.Item(Menu.Name + ".combo.w").GetValue<bool>() && W.LSIsReady();
-            var useE = Menu.Item(Menu.Name + ".combo.e").GetValue<bool>() && E.LSIsReady();
-            var useR = Menu.Item(Menu.Name + ".combo.r").GetValue<bool>() && R.LSIsReady();
+            var useQ = Menu.Item(Menu.Name + ".combo.q").GetValue<bool>() && Q.IsReady();
+            var useW = Menu.Item(Menu.Name + ".combo.w").GetValue<bool>() && W.IsReady();
+            var useE = Menu.Item(Menu.Name + ".combo.e").GetValue<bool>() && E.IsReady();
+            var useR = Menu.Item(Menu.Name + ".combo.r").GetValue<bool>() && R.IsReady();
 
             if (useW)
             {
@@ -357,7 +357,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             try
             {
                 var wRange = Player.AttackRange + Player.BoundingRadius + 60 + 25 * W.Level;
-                if (GameObjects.EnemyHeroes.Any(e => e.LSDistance(Player) < wRange + e.BoundingRadius))
+                if (GameObjects.EnemyHeroes.Any(e => e.Distance(Player) < wRange + e.BoundingRadius))
                 {
                     W.Cast();
                 }
@@ -372,8 +372,8 @@ using EloBuddy; namespace SFXChallenger.Champions
         {
             if (ResourceManager.Check("harass"))
             {
-                var useQ = Menu.Item(Menu.Name + ".harass.q").GetValue<bool>() && Q.LSIsReady();
-                var useW = Menu.Item(Menu.Name + ".harass.w").GetValue<bool>() && W.LSIsReady();
+                var useQ = Menu.Item(Menu.Name + ".harass.q").GetValue<bool>() && Q.IsReady();
+                var useW = Menu.Item(Menu.Name + ".harass.w").GetValue<bool>() && W.IsReady();
                 if (useQ && ShouldUseSpells())
                 {
                     Casting.SkillShot(Q, Q.GetHitChance("harass"));
@@ -385,7 +385,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             }
             if (ResourceManager.Check("harass-r") && ShouldUseSpells())
             {
-                var useR = Menu.Item(Menu.Name + ".harass.r").GetValue<bool>() && R.LSIsReady();
+                var useR = Menu.Item(Menu.Name + ".harass.r").GetValue<bool>() && R.IsReady();
                 if (useR && Menu.Item(Menu.Name + ".miscellaneous.r-max").GetValue<Slider>().Value > GetRBuffCount())
                 {
                     var target = TargetSelector.GetTarget(R);
@@ -404,9 +404,9 @@ using EloBuddy; namespace SFXChallenger.Champions
                 return;
             }
 
-            var useW = Menu.Item(Menu.Name + ".lane-clear.w").GetValue<bool>() && W.LSIsReady();
-            var useE = Menu.Item(Menu.Name + ".lane-clear.e").GetValue<bool>() && E.LSIsReady();
-            var useR = Menu.Item(Menu.Name + ".lane-clear.r").GetValue<bool>() && R.LSIsReady() &&
+            var useW = Menu.Item(Menu.Name + ".lane-clear.w").GetValue<bool>() && W.IsReady();
+            var useE = Menu.Item(Menu.Name + ".lane-clear.e").GetValue<bool>() && E.IsReady();
+            var useR = Menu.Item(Menu.Name + ".lane-clear.r").GetValue<bool>() && R.IsReady() &&
                        Menu.Item(Menu.Name + ".miscellaneous.r-max").GetValue<Slider>().Value > GetRBuffCount();
 
             if (useW)
@@ -439,9 +439,9 @@ using EloBuddy; namespace SFXChallenger.Champions
                 return;
             }
 
-            var useW = Menu.Item(Menu.Name + ".jungle-clear.w").GetValue<bool>() && W.LSIsReady();
-            var useE = Menu.Item(Menu.Name + ".jungle-clear.e").GetValue<bool>() && E.LSIsReady();
-            var useR = Menu.Item(Menu.Name + ".jungle-clear.r").GetValue<bool>() && R.LSIsReady() &&
+            var useW = Menu.Item(Menu.Name + ".jungle-clear.w").GetValue<bool>() && W.IsReady();
+            var useE = Menu.Item(Menu.Name + ".jungle-clear.e").GetValue<bool>() && E.IsReady();
+            var useR = Menu.Item(Menu.Name + ".jungle-clear.r").GetValue<bool>() && R.IsReady() &&
                        Menu.Item(Menu.Name + ".miscellaneous.r-max").GetValue<Slider>().Value > GetRBuffCount();
 
             if (useW)
@@ -472,11 +472,11 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void Flee()
         {
-            if (Menu.Item(Menu.Name + ".flee.e").GetValue<bool>() && E.LSIsReady())
+            if (Menu.Item(Menu.Name + ".flee.e").GetValue<bool>() && E.IsReady())
             {
                 var enemy =
-                    GameObjects.EnemyHeroes.Where(e => e.LSIsValidTarget() && !Utils.IsSlowed(e) && !Utils.IsImmobile(e))
-                        .OrderBy(e => e.LSDistance(Player))
+                    GameObjects.EnemyHeroes.Where(e => e.IsValidTarget() && !Utils.IsSlowed(e) && !Utils.IsImmobile(e))
+                        .OrderBy(e => e.Distance(Player))
                         .FirstOrDefault();
                 if (enemy != null)
                 {
@@ -487,11 +487,11 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void Killsteal()
         {
-            if (Menu.Item(Menu.Name + ".killsteal.r").GetValue<bool>() && R.LSIsReady())
+            if (Menu.Item(Menu.Name + ".killsteal.r").GetValue<bool>() && R.IsReady())
             {
                 var fPredEnemy =
                     GameObjects.EnemyHeroes.Where(
-                        e => e.LSIsValidTarget(R.Range) && !Orbwalking.InAutoAttackRange(e) && R.IsKillable(e))
+                        e => e.IsValidTarget(R.Range) && !Orbwalking.InAutoAttackRange(e) && R.IsKillable(e))
                         .Select(enemy => R.GetPrediction(enemy, true))
                         .FirstOrDefault(pred => pred.Hitchance >= HitChance.High);
                 if (fPredEnemy != null)

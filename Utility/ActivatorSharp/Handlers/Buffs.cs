@@ -32,7 +32,7 @@ using EloBuddy; namespace Activator.Handlers
 
             foreach (var ally in Activator.Allies())
             {
-                if (sender.LSIsValidTarget(1000) && !sender.IsZombie && sender.NetworkId == ally.Player.NetworkId)
+                if (sender.IsValidTarget(1000) && !sender.IsZombie && sender.NetworkId == ally.Player.NetworkId)
                 {
                     if (args.Buff.Name == "rengarralertsound")
                     {
@@ -49,7 +49,7 @@ using EloBuddy; namespace Activator.Handlers
        {
             foreach (var hero in Activator.Allies())
             {
-                var aura = Auradata.CachedAuras.Find(au => hero.Player.LSHasBuff(au.Name));
+                var aura = Auradata.CachedAuras.Find(au => hero.Player.HasBuff(au.Name));
                 if (aura == null)
                 {
                     if (hero.DotTicks > 0)
@@ -70,7 +70,7 @@ using EloBuddy; namespace Activator.Handlers
                         () =>
                         {
                             // double check after delay incase we no longer have the buff
-                            if (hero.Player.LSHasBuff(aura.Name) && hero.Player.LSIsValidTarget(float.MaxValue, false))
+                            if (hero.Player.HasBuff(aura.Name) && hero.Player.IsValidTarget(float.MaxValue, false))
                             {
                                 hero.ForceQSS = true;
                                 LeagueSharp.Common.Utility.DelayAction.Add(100, () => hero.ForceQSS = false);
@@ -84,7 +84,7 @@ using EloBuddy; namespace Activator.Handlers
                         () =>
                         {                           
                             // double check after delay incase we no longer have the buff
-                            if (hero.Player.LSHasBuff(aura.Name) && hero.Player.LSIsValidTarget(float.MaxValue, false))
+                            if (hero.Player.HasBuff(aura.Name) && hero.Player.IsValidTarget(float.MaxValue, false))
                             {
                                 if (!hero.Player.IsZombie && !hero.Immunity)
                                 {
@@ -109,7 +109,7 @@ using EloBuddy; namespace Activator.Handlers
                 {
                     if (Utils.GameTimeTickCount - aura.TickLimiter >= aura.Interval * 1000)
                     {
-                        if (hero.Player.LSIsValidTarget(float.MaxValue, false))
+                        if (hero.Player.IsValidTarget(float.MaxValue, false))
                         {
                             if (!hero.Player.IsZombie && !hero.Immunity)
                             {

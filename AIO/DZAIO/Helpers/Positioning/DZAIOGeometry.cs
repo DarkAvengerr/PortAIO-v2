@@ -37,8 +37,8 @@ using EloBuddy;
             double distance = Vector3.Distance(start, end);
             for (uint i = 0; i < distance; i += 10)
             {
-                var tempPosition = start.LSExtend(end, i).LSTo2D();
-                if (tempPosition.LSIsWall())
+                var tempPosition = start.Extend(end, i).To2D();
+                if (tempPosition.IsWall())
                 {
                     return true;
                 }
@@ -52,10 +52,10 @@ using EloBuddy;
             double distance = Vector3.Distance(start, end);
             for (uint i = 0; i < distance; i += 10)
             {
-                var tempPosition = start.LSExtend(end, i);
-                if (tempPosition.LSIsWall())
+                var tempPosition = start.Extend(end, i);
+                if (tempPosition.IsWall())
                 {
-                    return tempPosition.LSExtend(start, -35);
+                    return tempPosition.Extend(start, -35);
                 }
             }
 
@@ -70,13 +70,13 @@ using EloBuddy;
                 PositioningVariables.EnemiesClose.Select(
                     enemy =>
                         new DZAIOGeometry.Circle(
-                            enemy.ServerPosition.LSTo2D(),
+                            enemy.ServerPosition.To2D(),
                             (dynamic ? (enemy.IsMelee ? enemy.AttackRange * 1.5f : enemy.AttackRange) : staticRange) +
                             enemy.BoundingRadius + 20).ToPolygon()).ToList();
             var pathList = DZAIOGeometry.ClipPolygons(polygonsList);
             var pointList =
                 pathList.SelectMany(path => path, (path, point) => new Vector2(point.X, point.Y))
-                    .Where(currentPoint => !currentPoint.LSIsWall())
+                    .Where(currentPoint => !currentPoint.IsWall())
                     .ToList();
             return pointList;
         }
@@ -89,13 +89,13 @@ using EloBuddy;
 
             for (uint i = 0; i < distance; i += 10)
             {
-                var tempPosition = start.LSExtend(end, i);
-                if (tempPosition.LSIsWall() && firstPosition == Vector3.Zero)
+                var tempPosition = start.Extend(end, i);
+                if (tempPosition.IsWall() && firstPosition == Vector3.Zero)
                 {
                     firstPosition = tempPosition;
                 }
                 lastPosition = tempPosition;
-                if (!lastPosition.LSIsWall() && firstPosition != Vector3.Zero)
+                if (!lastPosition.IsWall() && firstPosition != Vector3.Zero)
                 {
                     break;
                 }
@@ -127,10 +127,10 @@ using EloBuddy;
             {
                 var from = self[i];
                 var to = self[i + 1];
-                var d = (int) to.LSDistance(from);
+                var d = (int) to.Distance(from);
                 if (d > distance)
                 {
-                    return from + distance * (to - from).LSNormalized();
+                    return from + distance * (to - from).Normalized();
                 }
                 distance -= d;
             }
@@ -256,8 +256,8 @@ using EloBuddy;
                 RStart = start;
                 REnd = end;
                 Width = width;
-                Direction = (end - start).LSNormalized();
-                Perpendicular = Direction.LSPerpendicular();
+                Direction = (end - start).Normalized();
+                Perpendicular = Direction.Perpendicular();
             }
 
             public Polygon ToPolygon(int offset = 0, float overrideWidth = -1)
@@ -341,11 +341,11 @@ using EloBuddy;
                 var outRadius = (Radius + offset) / (float) Math.Cos(2 * Math.PI / CircleLineSegmentN);
 
                 result.Add(Center);
-                var Side1 = Direction.LSRotated(-Angle * 0.5f);
+                var Side1 = Direction.Rotated(-Angle * 0.5f);
 
                 for (var i = 0; i <= CircleLineSegmentN; i++)
                 {
-                    var cDirection = Side1.LSRotated(i * Angle / CircleLineSegmentN).LSNormalized();
+                    var cDirection = Side1.Rotated(i * Angle / CircleLineSegmentN).Normalized();
                     result.Add(new Vector2(Center.X + outRadius * cDirection.X, Center.Y + outRadius * cDirection.Y));
                 }
 

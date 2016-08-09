@@ -39,7 +39,7 @@ using EloBuddy;
         {
             try
             {
-                if (Variables.spells[SpellSlot.E].LSIsReady() &&
+                if (Variables.spells[SpellSlot.E].IsReady() &&
                     MenuExtensions.GetItemValue<bool>("iseriesr.kalista.misc.lhassit"))
                 {
                     if (Variables.spells[SpellSlot.E].CanCast((Obj_AI_Base)minion)

@@ -161,12 +161,12 @@ using EloBuddy; namespace xSaliceResurrected.ADC
         {
             double comboDamage = 0;
 
-            if (Q.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.Q);
+            if (Q.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.Q);
 
             comboDamage = ItemManager.CalcDamage(target, comboDamage);
 
-            return (float)(comboDamage + W.GetDamage(target) + Player.LSGetAutoAttackDamage(target) * 3);
+            return (float)(comboDamage + W.GetDamage(target) + Player.GetAutoAttackDamage(target) * 3);
         }
         private void JungleClear()
         {
@@ -174,11 +174,11 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                 ObjectManager.Get<Obj_AI_Minion>()
                     .FirstOrDefault(
                         m =>
-                            m.Team == GameObjectTeam.Neutral && m.LSDistance(ObjectManager.Player) < 550 &&
+                            m.Team == GameObjectTeam.Neutral && m.Distance(ObjectManager.Player) < 550 &&
                             m.Name.Contains("SRU_") && !m.Name.Contains("Mini") && !m.Name.Contains("Dragon") && !m.Name.Contains("Baron"));
             if (mob != null)
             {
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                 {
                     Q.Cast(GetJungleSafeTumblePos(mob));
                 }
@@ -191,44 +191,44 @@ using EloBuddy; namespace xSaliceResurrected.ADC
             var cursorPos = Game.CursorPos;
             if (IsSafeTumblePos(cursorPos)) return cursorPos;
 
-            if (!target.LSIsValidTarget()) return Vector3.Zero;
+            if (!target.IsValidTarget()) return Vector3.Zero;
 
             var targetPosition = target.ServerPosition;
 
             var myTumbleRangeCircle =
-                new Geometry.Circle(ObjectManager.Player.ServerPosition.LSTo2D(), 300).ToPolygon().ToClipperPath();
+                new Geometry.Circle(ObjectManager.Player.ServerPosition.To2D(), 300).ToPolygon().ToClipperPath();
 
             var goodCandidates = from p in myTumbleRangeCircle
                                  select new Vector2(p.X, p.Y).To3D() into v3
-                                 let dist = v3.LSDistance(targetPosition)
+                                 let dist = v3.Distance(targetPosition)
                                  where dist > menu.Item("QMinDist", true).GetValue<Slider>().Value && dist < 500
                                  select v3;
 
-            return goodCandidates.OrderByDescending(candidate => candidate.LSDistance(cursorPos)).FirstOrDefault();
+            return goodCandidates.OrderByDescending(candidate => candidate.Distance(cursorPos)).FirstOrDefault();
         }
 
         private Vector3 GetSafeTumblePos(AIHeroClient target)
         {
-            if (!target.LSIsValidTarget()) return Vector3.Zero;
+            if (!target.IsValidTarget()) return Vector3.Zero;
 
             var targetPosition = target.ServerPosition;
 
             var myTumbleRangeCircle =
-                new Geometry.Circle(ObjectManager.Player.ServerPosition.LSTo2D(), 300).ToPolygon().ToClipperPath();
+                new Geometry.Circle(ObjectManager.Player.ServerPosition.To2D(), 300).ToPolygon().ToClipperPath();
 
             var goodCandidates = from p in myTumbleRangeCircle
                 select new Vector2(p.X, p.Y).To3D() into v3
-                let dist = v3.LSDistance(targetPosition)
+                let dist = v3.Distance(targetPosition)
                 where dist > menu.Item("QMinDist", true).GetValue<Slider>().Value && dist < 500
                 select v3;
 
-            return goodCandidates.OrderBy(candidate => candidate.LSDistance(Game.CursorPos)).FirstOrDefault();
+            return goodCandidates.OrderBy(candidate => candidate.Distance(Game.CursorPos)).FirstOrDefault();
         }
 
         private void AttemptSimpleCondemn(Obj_AI_Base target)
         {
-            if (E.LSIsReady() && target.LSIsValidTarget(550) && target.ServerPosition.LSExtend(ObjectManager.Player.ServerPosition, -420).LSIsWall() ||
-                target.ServerPosition.LSExtend(ObjectManager.Player.ServerPosition, -210).LSIsWall())
+            if (E.IsReady() && target.IsValidTarget(550) && target.ServerPosition.Extend(ObjectManager.Player.ServerPosition, -420).IsWall() ||
+                target.ServerPosition.Extend(ObjectManager.Player.ServerPosition, -210).IsWall())
             {
                 E.Cast(target);
             }
@@ -238,7 +238,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
         {
             return
                 !ObjectManager.Get<AIHeroClient>()
-                    .Any(e => e.IsEnemy && e.LSDistance(position) < menu.Item("QMinDist", true).GetValue<Slider>().Value);
+                    .Any(e => e.IsEnemy && e.Distance(position) < menu.Item("QMinDist", true).GetValue<Slider>().Value);
         }
         private AIHeroClient GetEnemyWith2W()
         {
@@ -269,8 +269,8 @@ using EloBuddy; namespace xSaliceResurrected.ADC
         private bool IsCondemnable(AIHeroClient hero)
         {
 
-            if (!hero.LSIsValidTarget(550f) || hero.HasBuffOfType(BuffType.SpellShield) ||
-                hero.HasBuffOfType(BuffType.SpellImmunity) || hero.LSIsDashing()) return false;
+            if (!hero.IsValidTarget(550f) || hero.HasBuffOfType(BuffType.SpellShield) ||
+                hero.HasBuffOfType(BuffType.SpellImmunity) || hero.IsDashing()) return false;
 
             //values for pred calc pP = player position; p = enemy position; pD = push distance
             var pP = ObjectManager.Player.ServerPosition;
@@ -279,23 +279,23 @@ using EloBuddy; namespace xSaliceResurrected.ADC
             var mode = menu.Item("EMode", true).GetValue<StringList>().SelectedValue;
 
 
-            if (mode == "PRADASMART" && (IsCollisionable(p.LSExtend(pP, -pD)) || IsCollisionable(p.LSExtend(pP, -pD / 2f)) ||
-                 IsCollisionable(p.LSExtend(pP, -pD / 3f))))
+            if (mode == "PRADASMART" && (IsCollisionable(p.Extend(pP, -pD)) || IsCollisionable(p.Extend(pP, -pD / 2f)) ||
+                 IsCollisionable(p.Extend(pP, -pD / 3f))))
             {
                 if (!hero.CanMove ||
                     (hero.Spellbook.IsAutoAttacking))
                     return true;
 
-                var enemiesCount = ObjectManager.Player.LSCountEnemiesInRange(1200);
+                var enemiesCount = ObjectManager.Player.CountEnemiesInRange(1200);
                 if (enemiesCount > 1 && enemiesCount <= 3)
                 {
                     var prediction = E.GetPrediction(hero);
                     for (var i = 15; i < pD; i += 75)
                     {
                         var posFlags = NavMesh.GetCollisionFlags(
-                            prediction.UnitPosition.LSTo2D()
-                                .LSExtend(
-                                    pP.LSTo2D(),
+                            prediction.UnitPosition.To2D()
+                                .Extend(
+                                    pP.To2D(),
                                     -i)
                                 .To3D());
                         if (posFlags.HasFlag(CollisionFlags.Wall) || posFlags.HasFlag(CollisionFlags.Building))
@@ -317,17 +317,17 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
                     for (var i = 15; i < pD; i += 100)
                     {
-                        if (IsCollisionable(pP.LSTo2D().LSExtend(alpha,
+                        if (IsCollisionable(pP.To2D().Extend(alpha,
                                 i)
-                            .To3D()) && IsCollisionable(pP.LSTo2D().LSExtend(beta, i).To3D())) return true;
+                            .To3D()) && IsCollisionable(pP.To2D().Extend(beta, i).To3D())) return true;
                     }
                     return false;
                 }
             }
 
             if (mode == "PRADAPERFECT" &&
-                (IsCollisionable(p.LSExtend(pP, -pD)) || IsCollisionable(p.LSExtend(pP, -pD / 2f)) ||
-                 IsCollisionable(p.LSExtend(pP, -pD / 3f))))
+                (IsCollisionable(p.Extend(pP, -pD)) || IsCollisionable(p.Extend(pP, -pD / 2f)) ||
+                 IsCollisionable(p.Extend(pP, -pD / 3f))))
             {
                 if (!hero.CanMove ||
                     (hero.Spellbook.IsAutoAttacking))
@@ -343,9 +343,9 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
                 for (var i = 15; i < pD; i += 100)
                 {
-                    if (IsCollisionable(pP.LSTo2D().LSExtend(alpha,
+                    if (IsCollisionable(pP.To2D().Extend(alpha,
                             i)
-                        .To3D()) && IsCollisionable(pP.LSTo2D().LSExtend(beta, i).To3D())) return true;
+                        .To3D()) && IsCollisionable(pP.To2D().Extend(beta, i).To3D())) return true;
                 }
                 return false;
             }
@@ -366,9 +366,9 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
                 for (var i = 15; i < pD; i += 100)
                 {
-                    if (IsCollisionable(pP.LSTo2D().LSExtend(alpha,
+                    if (IsCollisionable(pP.To2D().Extend(alpha,
                             i)
-                        .To3D()) || IsCollisionable(pP.LSTo2D().LSExtend(beta, i).To3D())) return true;
+                        .To3D()) || IsCollisionable(pP.To2D().Extend(beta, i).To3D())) return true;
                 }
                 return false;
             }
@@ -377,15 +377,15 @@ using EloBuddy; namespace xSaliceResurrected.ADC
             {
                 var prediction = E.GetPrediction(hero);
                 return NavMesh.GetCollisionFlags(
-                    prediction.UnitPosition.LSTo2D()
-                        .LSExtend(
-                            pP.LSTo2D(),
+                    prediction.UnitPosition.To2D()
+                        .Extend(
+                            pP.To2D(),
                             -pD)
                         .To3D()).HasFlag(CollisionFlags.Wall) ||
                        NavMesh.GetCollisionFlags(
-                           prediction.UnitPosition.LSTo2D()
-                               .LSExtend(
-                                   pP.LSTo2D(),
+                           prediction.UnitPosition.To2D()
+                               .Extend(
+                                   pP.To2D(),
                                    -pD / 2f)
                                .To3D()).HasFlag(CollisionFlags.Wall);
             }
@@ -396,9 +396,9 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                 for (var i = 15; i < pD; i += 100)
                 {
                     var posCF = NavMesh.GetCollisionFlags(
-                        prediction.UnitPosition.LSTo2D()
-                            .LSExtend(
-                                pP.LSTo2D(),
+                        prediction.UnitPosition.To2D()
+                            .Extend(
+                                pP.To2D(),
                                 -i)
                             .To3D());
                     if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
@@ -415,9 +415,9 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                 for (var i = 15; i < pD; i += 75)
                 {
                     var posCF = NavMesh.GetCollisionFlags(
-                        prediction.UnitPosition.LSTo2D()
-                            .LSExtend(
-                                pP.LSTo2D(),
+                        prediction.UnitPosition.To2D()
+                            .Extend(
+                                pP.To2D(),
                                 -i)
                             .To3D());
                     if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
@@ -434,9 +434,9 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                 for (var i = 15; i < pD; i += (int)hero.BoundingRadius) //:frosty:
                 {
                     var posCF = NavMesh.GetCollisionFlags(
-                        prediction.UnitPosition.LSTo2D()
-                            .LSExtend(
-                                pP.LSTo2D(),
+                        prediction.UnitPosition.To2D()
+                            .Extend(
+                                pP.To2D(),
                                 -i)
                             .To3D());
                     if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
@@ -453,9 +453,9 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                 for (var i = 15; i < pD; i += 75)
                 {
                     var posCF = NavMesh.GetCollisionFlags(
-                        prediction.UnitPosition.LSTo2D()
-                            .LSExtend(
-                                pP.LSTo2D(),
+                        prediction.UnitPosition.To2D()
+                            .Extend(
+                                pP.To2D(),
                                 -i)
                             .To3D());
                     if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
@@ -466,8 +466,8 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                 return false;
             }
 
-            if (mode == "FASTEST" && IsCollisionable(p.LSExtend(pP, -pD)) || IsCollisionable(p.LSExtend(pP, -pD / 2f)) ||
-                                     IsCollisionable(p.LSExtend(pP, -pD / 3f)))
+            if (mode == "FASTEST" && IsCollisionable(p.Extend(pP, -pD)) || IsCollisionable(p.Extend(pP, -pD / 2f)) ||
+                                     IsCollisionable(p.Extend(pP, -pD / 3f)))
             {
                 return true;
             }
@@ -485,7 +485,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
             if (target is AIHeroClient && (menu.Item("UseQCombo", true).GetValue<bool>() &&
                  menu.Item("ComboActive", true).GetValue<KeyBind>().Active))
             {
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                 {
                     Q.Cast(GetSafeTumblePos((AIHeroClient) target));
                 }
@@ -493,13 +493,13 @@ using EloBuddy; namespace xSaliceResurrected.ADC
             if ((menu.Item("HarassActive", true).GetValue<KeyBind>().Active && menu.Item("UseQHarass", true).GetValue<bool>()))
             {
                 var tg = target as AIHeroClient;
-                if (Q.LSIsReady() && target is AIHeroClient)
+                if (Q.IsReady() && target is AIHeroClient)
                 {
                     var qMin = menu.Item("Q_Min_Stack", true).GetValue<Slider>().Value;
-                    if (qMin <= GetWBuffCount(tg) && IsSafeTumblePos(ObjectManager.Player.Position.LSExtend(tg.ServerPosition, 300)))
+                    if (qMin <= GetWBuffCount(tg) && IsSafeTumblePos(ObjectManager.Player.Position.Extend(tg.ServerPosition, 300)))
                         Q.Cast(tg.ServerPosition);
                 }
-                if (E.LSIsReady() && menu.Item("UseEHarass", true).GetValue<bool>() && target is AIHeroClient && GetWBuffCount(tg) == 2)
+                if (E.IsReady() && menu.Item("UseEHarass", true).GetValue<bool>() && target is AIHeroClient && GetWBuffCount(tg) == 2)
                 {
                     E.Cast(tg);
                 }
@@ -508,7 +508,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
         protected override void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
-            if (ObjectManager.Player.Buffs.Any(b=>b.Name.ToLower().Contains("tumblefade")) && ObjectManager.Get<AIHeroClient>().Any(h => h.IsEnemy && h.LSIsValidTarget() && h.IsMelee && h.LSDistance(ObjectManager.Player) < 325))
+            if (ObjectManager.Player.Buffs.Any(b=>b.Name.ToLower().Contains("tumblefade")) && ObjectManager.Get<AIHeroClient>().Any(h => h.IsEnemy && h.IsValidTarget() && h.IsMelee && h.Distance(ObjectManager.Player) < 325))
             {
                 args.Process = false;
             }
@@ -522,7 +522,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
             var useQ = menu.Item("UseQFarm", true).GetValue<bool>();
             var cursorPos = Game.CursorPos;
 
-            if (useQ && IsSafeTumblePos(cursorPos) && MinionManager.GetMinions(580, MinionTypes.All, MinionTeam.Enemy).Any(m => m.Health < ObjectManager.Player.LSGetAutoAttackDamage(m) && m.Health > 13))
+            if (useQ && IsSafeTumblePos(cursorPos) && MinionManager.GetMinions(580, MinionTypes.All, MinionTeam.Enemy).Any(m => m.Health < ObjectManager.Player.GetAutoAttackDamage(m) && m.Health > 13))
             {
                 Q.Cast(cursorPos);
             }
@@ -537,9 +537,9 @@ using EloBuddy; namespace xSaliceResurrected.ADC
             if (menu.Item("JungleClearActiveT", true).GetValue<KeyBind>().Active &&
                 Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
                 JungleClear();
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                foreach (var en in ObjectManager.Get<AIHeroClient>().Where(h => h.IsEnemy && h.LSIsValidTarget(550f)))
+                foreach (var en in ObjectManager.Get<AIHeroClient>().Where(h => h.IsEnemy && h.IsValidTarget(550f)))
                 {
                     AttemptSimpleCondemn(en);
                 }
@@ -550,9 +550,9 @@ using EloBuddy; namespace xSaliceResurrected.ADC
         {
             if (!menu.Item("UseInt", true).GetValue<bool>()) return;
 
-            if (Player.LSDistance(unit.Position) < E.Range && spell.DangerLevel >= Interrupter2.DangerLevel.High)
+            if (Player.Distance(unit.Position) < E.Range && spell.DangerLevel >= Interrupter2.DangerLevel.High)
             {
-                if (E.LSIsReady())
+                if (E.IsReady())
                     E.Cast(unit);
             }
         }
@@ -562,7 +562,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
             if (menu.Item("antigc" + gapcloser.Sender.ChampionName, true)
                 .GetValue<bool>())
             {
-                if (ObjectManager.Player.LSDistance(gapcloser.End) < 425)
+                if (ObjectManager.Player.Distance(gapcloser.End) < 425)
                 {
                     E.Cast(gapcloser.Sender);
                 }

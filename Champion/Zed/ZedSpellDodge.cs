@@ -25,8 +25,8 @@ using EloBuddy; namespace KoreanZed
 
         private void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender == null || args == null || !r.LSIsReady() || r.Instance.ToggleState != 0
-                || !player.LSGetEnemiesInRange(r.Range).Any() || args.Slot != SpellSlot.R || !sender.IsChampion()
+            if (sender == null || args == null || !r.IsReady() || r.Instance.ToggleState != 0
+                || !player.GetEnemiesInRange(r.Range).Any() || args.Slot != SpellSlot.R || !sender.IsChampion()
                 || !sender.IsEnemy || !zedMenu.GetParamBool("koreanzed.miscmenu.rdodge.user")
                 || !zedMenu.CheckMenuItem("koreanzed.miscmenu.rdodge." + args.SData.Name.ToLowerInvariant()))
             {
@@ -34,10 +34,10 @@ using EloBuddy; namespace KoreanZed
             }
 
             if (((args.Target != null && args.Target.IsMe)
-                    || player.LSDistance(args.End) < Math.Max(args.SData.BounceRadius, args.SData.LineWidth))
+                    || player.Distance(args.End) < Math.Max(args.SData.BounceRadius, args.SData.LineWidth))
                 && zedMenu.GetParamBool("koreanzed.miscmenu.rdodge." + args.SData.Name.ToLowerInvariant()))
             {
-                int delay = (int) Math.Truncate((double)(player.LSDistance(sender) / args.SData.MissileSpeed)) - 1;
+                int delay = (int) Math.Truncate((double)(player.Distance(sender) / args.SData.MissileSpeed)) - 1;
                 LeagueSharp.Common.Utility.DelayAction.Add(delay, () => { r.Cast(TargetSelector.GetTarget(r.Range, r.DamageType)); });
             }
         }

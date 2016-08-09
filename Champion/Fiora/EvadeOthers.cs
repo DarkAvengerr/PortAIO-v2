@@ -98,14 +98,14 @@ namespace FioraProject
                 return;
             if (missile.SData.Name == "FizzMarinerDoomMissile")
             {
-                FizzFishEndPos = missile.Position.LSTo2D();
+                FizzFishEndPos = missile.Position.To2D();
             }
         }
 
         private static void GameObject_OnCreate(GameObject sender, EventArgs args)
         {
-            if (sender.Name == "Fizz_UltimateMissile_Orbit.troy" && FizzFishEndPos.LSIsValid()
-                && sender.Position.LSTo2D().LSDistance(FizzFishEndPos) <= 300)
+            if (sender.Name == "Fizz_UltimateMissile_Orbit.troy" && FizzFishEndPos.IsValid()
+                && sender.Position.To2D().Distance(FizzFishEndPos) <= 300)
             {
                 FizzFishChum = sender;
                 if (Utils.GameTimeTickCount >= FizzFishChumStartTick + 5000)
@@ -166,7 +166,7 @@ namespace FioraProject
                 if (!Player.HasBuff("reksaiknockupimmune") && spellData.ChampionName == "Reksai"
                     && spellData.Slot == SpellSlot.W && args.Animation == "Spell2_knockup")// chua test
                 {
-                    if (Player.Position.LSTo2D().LSDistance(caster.Position.LSTo2D())
+                    if (Player.Position.To2D().Distance(caster.Position.To2D())
                         <= Player.BoundingRadius + caster.BoundingRadius + caster.AttackRange)
                         SolveInstantBlock();
                     return;
@@ -194,7 +194,7 @@ namespace FioraProject
             foreach (var spellData in spellDatas)
             {
                 // auto attack
-                if (args.SData.LSIsAutoAttack() && args.Target != null && args.Target.IsMe)
+                if (args.SData.IsAutoAttack() && args.Target != null && args.Target.IsMe)
                 {
                     if (spellData.ChampionName == "Jax" && spellData.Slot == SpellSlot.W && caster.HasBuff("JaxEmpowerTwo"))
                     {
@@ -234,28 +234,28 @@ namespace FioraProject
                 // aoe
                 if (spellData.ChampionName == "Riven" && spellData.Slot == SpellSlot.W && args.Slot == SpellSlot.W)// chua test
                 {
-                    if (Player.Position.LSTo2D().LSDistance(caster.Position.LSTo2D())
+                    if (Player.Position.To2D().Distance(caster.Position.To2D())
                         <= Player.BoundingRadius + caster.BoundingRadius + caster.AttackRange)
                         SolveInstantBlock();
                     return;
                 }
                 if (spellData.ChampionName == "Diana" && spellData.Slot == SpellSlot.E && args.Slot == SpellSlot.E)// chua test
                 {
-                    if (Player.Position.LSTo2D().LSDistance(caster.Position.LSTo2D())
+                    if (Player.Position.To2D().Distance(caster.Position.To2D())
                         <= Player.BoundingRadius + 450)
                         SolveInstantBlock();
                     return;
                 }
                 if (spellData.ChampionName == "Maokai" && spellData.Slot == SpellSlot.R && args.SData.Name == "maokaidrain3toggle")
                 {
-                    if (Player.Position.LSTo2D().LSDistance(caster.Position.LSTo2D())
+                    if (Player.Position.To2D().Distance(caster.Position.To2D())
                         <= Player.BoundingRadius + 575)
                         SolveInstantBlock();
                     return;
                 }
                 if (spellData.ChampionName == "Kalista" && spellData.Slot == SpellSlot.E && args.Slot == SpellSlot.E)
                 {
-                    if (Player.Position.LSTo2D().LSDistance(caster.Position.LSTo2D())
+                    if (Player.Position.To2D().Distance(caster.Position.To2D())
                         <= 950
                         && Player.HasBuff("kalistaexpungemarker"))
                         SolveInstantBlock();
@@ -263,7 +263,7 @@ namespace FioraProject
                 }
                 if (spellData.ChampionName == "Kennen" && spellData.Slot == SpellSlot.W && args.Slot == SpellSlot.W)// chua test
                 {
-                    if (Player.Position.LSTo2D().LSDistance(caster.Position.LSTo2D())
+                    if (Player.Position.To2D().Distance(caster.Position.To2D())
                         <= 800
                         && Player.HasBuff("kennenmarkofstorm") && Player.GetBuffCount("kennenmarkofstorm") == 2)
                         SolveInstantBlock();
@@ -271,8 +271,8 @@ namespace FioraProject
                 }
                 if (spellData.ChampionName == "Azir" && spellData.Slot == SpellSlot.R && args.Slot == SpellSlot.R)// chua test
                 {
-                    Vector2 start = caster.Position.LSTo2D().LSExtend(args.End.LSTo2D(), -300);
-                    Vector2 end = start.LSExtend(caster.Position.LSTo2D(), 750);
+                    Vector2 start = caster.Position.To2D().Extend(args.End.To2D(), -300);
+                    Vector2 end = start.Extend(caster.Position.To2D(), 750);
                     Render.Circle.DrawCircle(start.To3D(), 50, Color.Red);
                     Render.Circle.DrawCircle(end.To3D(), 50, Color.Red);
                     float width = caster.Level >= 16 ? 125 * 6 / 2 :
@@ -280,7 +280,7 @@ namespace FioraProject
                                 125 * 4 / 2;
                     FioraProject.Evade.Geometry.Rectangle Rect = new FioraProject.Evade.Geometry.Rectangle(start, end, width);
                     var Poly = Rect.ToPolygon();
-                    if (!Poly.IsOutside(Player.Position.LSTo2D()))
+                    if (!Poly.IsOutside(Player.Position.To2D()))
                     {
                         SolveInstantBlock();
                     }
@@ -381,7 +381,7 @@ namespace FioraProject
             }
 
             // jax E
-            var jax = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Jax" && x.LSIsValidTarget());
+            var jax = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Jax" && x.IsValidTarget());
 
             if (jax != null && jax.HasBuff("JaxCounterStrike")
                 && Menu.SubMenu("EvadeOthers").SubMenu(("Jax").ToLowerInvariant())
@@ -390,7 +390,7 @@ namespace FioraProject
                 var buff = jax.GetBuff("JaxCounterStrike");
                 if (buff != null)
                 {
-                    if ((buff.EndTime - Game.Time) * 1000 <= 650 + Game.Ping && Player.Position.LSTo2D().LSDistance(jax.Position.LSTo2D())
+                    if ((buff.EndTime - Game.Time) * 1000 <= 650 + Game.Ping && Player.Position.To2D().Distance(jax.Position.To2D())
                         <= Player.BoundingRadius + jax.BoundingRadius + jax.AttackRange + 100)
                     {
                         SolveInstantBlock();
@@ -400,7 +400,7 @@ namespace FioraProject
             }
 
             //maokai R
-            var maokai = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Maokai" && x.LSIsValidTarget());
+            var maokai = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Maokai" && x.IsValidTarget());
             if (maokai != null && maokai.HasBuff("MaokaiDrain3")
                 && Menu.SubMenu("EvadeOthers").SubMenu(("Maokai").ToLowerInvariant())
                 .Item("Maokai" + SpellSlot.R).GetValue<bool>())
@@ -408,7 +408,7 @@ namespace FioraProject
                 var buff = maokai.GetBuff("MaokaiDrain3");
                 if (buff != null)
                 {
-                    if (Player.Position.LSTo2D().LSDistance(maokai.Position.LSTo2D())
+                    if (Player.Position.To2D().Distance(maokai.Position.To2D())
                         <= Player.BoundingRadius + 475)
                         SolveBuffBlock(buff);
                 }
@@ -425,7 +425,7 @@ namespace FioraProject
                 var obj = ObjectManager.Get<GameObject>().Where(x => x.Name == "GrandLineSeeker").FirstOrDefault();
                 if (obj == null)
                     return;
-                if (obj.Position.LSTo2D().LSDistance(Player.Position.LSTo2D()) <= 300 + 700 * Game.Ping / 1000)
+                if (obj.Position.To2D().Distance(Player.Position.To2D()) <= 300 + 700 * Game.Ping / 1000)
                 {
                     SolveInstantBlock();
                     return;
@@ -433,7 +433,7 @@ namespace FioraProject
             }
 
             //rammus Q
-            var ramus = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Rammus" && x.LSIsValidTarget());
+            var ramus = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Rammus" && x.IsValidTarget());
             if (ramus != null
                 && Menu.SubMenu("EvadeOthers").SubMenu(("Rammus").ToLowerInvariant())
                 .Item("Rammus" + SpellSlot.Q).GetValue<bool>())
@@ -441,10 +441,10 @@ namespace FioraProject
                 var buff = ramus.GetBuff("PowerBall");
                 if (buff != null)
                 {
-                    var waypoints = ramus.LSGetWaypoints();
+                    var waypoints = ramus.GetWaypoints();
                     if (waypoints.Count == 1)
                     {
-                        if (Player.Position.LSTo2D().LSDistance(ramus.Position.LSTo2D())
+                        if (Player.Position.To2D().Distance(ramus.Position.To2D())
                             <= Player.BoundingRadius + ramus.AttackRange + ramus.BoundingRadius)
                         {
                             SolveInstantBlock();
@@ -453,11 +453,11 @@ namespace FioraProject
                     }
                     else
                     {
-                        if (Player.Position.LSTo2D().LSDistance(ramus.Position.LSTo2D())
+                        if (Player.Position.To2D().Distance(ramus.Position.To2D())
                             <= Player.BoundingRadius + ramus.AttackRange + ramus.BoundingRadius
                             + ramus.MoveSpeed * (0.5f + Game.Ping / 1000))
                         {
-                            if (waypoints.Any(x => x.LSDistance(Player.Position.LSTo2D())
+                            if (waypoints.Any(x => x.Distance(Player.Position.To2D())
                                 <= Player.BoundingRadius + ramus.AttackRange + ramus.BoundingRadius + 70))
                             {
                                 SolveInstantBlock();
@@ -465,7 +465,7 @@ namespace FioraProject
                             }
                             for (int i = 0; i < waypoints.Count() - 2; i++)
                             {
-                                if (Player.Position.LSTo2D().LSDistance(waypoints[i], waypoints[i + 1], true)
+                                if (Player.Position.To2D().Distance(waypoints[i], waypoints[i + 1], true)
                                     <= Player.BoundingRadius + ramus.BoundingRadius + ramus.AttackRange + 70)
                                 {
                                     SolveInstantBlock();
@@ -484,7 +484,7 @@ namespace FioraProject
             {
                 if (FizzFishChum != null && FizzFishChum.IsValid
                     && Utils.GameTimeTickCount - FizzFishChumStartTick >= 1500 - 250 - Game.Ping
-                    && Player.Position.LSTo2D().LSDistance(FizzFishChum.Position.LSTo2D()) <= 250 + Player.BoundingRadius)
+                    && Player.Position.To2D().Distance(FizzFishChum.Position.To2D()) <= 250 + Player.BoundingRadius)
                 {
                     SolveInstantBlock();
                     return;
@@ -492,13 +492,13 @@ namespace FioraProject
             }
 
             //nocturne R
-            var nocturne = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Nocturne" && x.LSIsValidTarget());
+            var nocturne = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Nocturne" && x.IsValidTarget());
             if (nocturne != null
                 && Menu.SubMenu("EvadeOthers").SubMenu(("Nocturne").ToLowerInvariant())
                 .Item("Nocturne" + SpellSlot.R).GetValue<bool>())
             {
                 var buff = Player.GetBuff("nocturneparanoiadash");
-                if (buff != null && Player.Position.LSTo2D().LSDistance(nocturne.Position.LSTo2D()) <= 300 + 1200 * Game.Ping / 1000)
+                if (buff != null && Player.Position.To2D().Distance(nocturne.Position.To2D()) <= 300 + 1200 * Game.Ping / 1000)
                 {
                     SolveInstantBlock();
                     return;
@@ -507,12 +507,12 @@ namespace FioraProject
 
 
             // rivenQ3
-            var riven = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Riven" && x.LSIsValidTarget());
+            var riven = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Riven" && x.IsValidTarget());
             if (riven != null && Menu.SubMenu("EvadeOthers").SubMenu(("Riven").ToLowerInvariant())
-                .Item("Riven" + SpellSlot.Q).GetValue<bool>() && RivenDashEnd.LSIsValid())
+                .Item("Riven" + SpellSlot.Q).GetValue<bool>() && RivenDashEnd.IsValid())
             {
                 if (Utils.GameTimeTickCount - RivenDashTick <= 100 && Utils.GameTimeTickCount - RivenQ3Tick <= 100
-                    && Math.Abs(RivenDashTick - RivenQ3Tick) <= 100 && Player.Position.LSTo2D().LSDistance(RivenDashEnd) <= RivenQ3Rad)
+                    && Math.Abs(RivenDashTick - RivenQ3Tick) <= 100 && Player.Position.To2D().Distance(RivenDashEnd) <= RivenQ3Rad)
                 {
                     SolveInstantBlock();
                     return;
@@ -523,40 +523,40 @@ namespace FioraProject
         private static void SolveBuffBlock(BuffInstance buff)
         {
             if (Player.IsDead || Player.HasBuffOfType(BuffType.SpellShield) || Player.HasBuffOfType(BuffType.SpellImmunity)
-                || !Menu.SubMenu("EvadeOthers").Item("W").GetValue<bool>() || !W.LSIsReady())
+                || !Menu.SubMenu("EvadeOthers").Item("W").GetValue<bool>() || !W.IsReady())
                 return;
             if (buff == null)
                 return;
             if ((buff.EndTime - Game.Time) * 1000 <= 250 + Game.Ping)
             {
                 var tar = GetTarget(W.Range);
-                if (tar.LSIsValidTarget(W.Range))
+                if (tar.IsValidTarget(W.Range))
                     Player.Spellbook.CastSpell(SpellSlot.W, tar.Position);
                 else
                 {
-                    var hero = HeroManager.Enemies.FirstOrDefault(x => x.LSIsValidTarget(W.Range));
+                    var hero = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(W.Range));
                     if (hero != null)
                         Player.Spellbook.CastSpell(SpellSlot.W, hero.Position);
                     else
-                        Player.Spellbook.CastSpell(SpellSlot.W, Player.ServerPosition.LSExtend(Game.CursorPos, 100));
+                        Player.Spellbook.CastSpell(SpellSlot.W, Player.ServerPosition.Extend(Game.CursorPos, 100));
                 }
             }
         }
         private static void SolveInstantBlock()
         {
             if (Player.IsDead || Player.HasBuffOfType(BuffType.SpellShield) || Player.HasBuffOfType(BuffType.SpellImmunity)
-                || !Menu.SubMenu("EvadeOthers").Item("W").GetValue<bool>() || !W.LSIsReady())
+                || !Menu.SubMenu("EvadeOthers").Item("W").GetValue<bool>() || !W.IsReady())
                 return;
             var tar = GetTarget(W.Range);
-            if (tar.LSIsValidTarget(W.Range))
+            if (tar.IsValidTarget(W.Range))
                 Player.Spellbook.CastSpell(SpellSlot.W, tar.Position);
             else
             {
-                var hero = HeroManager.Enemies.FirstOrDefault(x => x.LSIsValidTarget(W.Range));
+                var hero = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(W.Range));
                 if (hero != null)
                     Player.Spellbook.CastSpell(SpellSlot.W, hero.Position);
                 else
-                    Player.Spellbook.CastSpell(SpellSlot.W, Player.ServerPosition.LSExtend(Game.CursorPos, 100));
+                    Player.Spellbook.CastSpell(SpellSlot.W, Player.ServerPosition.Extend(Game.CursorPos, 100));
             }
         }
         private static void LoadSpellData()

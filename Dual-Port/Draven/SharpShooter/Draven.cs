@@ -97,12 +97,12 @@ namespace SharpShooter.Plugins
                             .OrderBy(x => x.ExpireTime)
                             .FirstOrDefault(
                                 x =>
-                                    Game.CursorPos.LSDistance(x.Object.Position) <=
+                                    Game.CursorPos.Distance(x.Object.Position) <=
                                     MenuProvider.Champion.Misc.GetSliderValue("Axe Catch Range").Value);
                     if (bestObject != null)
                     {
                         _bestDropObject = bestObject.Object;
-                        if (ObjectManager.Player.GetPath(bestObject.Object.Position).ToList().LSTo2D().LSPathLength() /
+                        if (ObjectManager.Player.GetPath(bestObject.Object.Position).ToList().To2D().PathLength() /
                             ObjectManager.Player.MoveSpeed + Environment.TickCount >= bestObject.ExpireTime)
                         {
                             switch (MenuProvider.Orbwalker.ActiveMode)
@@ -119,7 +119,7 @@ namespace SharpShooter.Plugins
                             }
                         }
 
-                        if (bestObject.Object.Position.LSDistance(ObjectManager.Player.Position) < 120)
+                        if (bestObject.Object.Position.Distance(ObjectManager.Player.Position) < 120)
                         {
                             if (MenuProvider.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
                             {
@@ -218,7 +218,7 @@ namespace SharpShooter.Plugins
                                             var target =
                                                 MinionManager.GetMinions(_e.Range, MinionTypes.All, MinionTeam.Neutral,
                                                     MinionOrderTypes.MaxHealth)
-                                                    .FirstOrDefault(x => x.LSIsValidTarget(_e.Range));
+                                                    .FirstOrDefault(x => x.IsValidTarget(_e.Range));
                                             if (target != null)
                                                 _e.Cast(target);
                                         }
@@ -236,14 +236,14 @@ namespace SharpShooter.Plugins
                     if (args.Order == GameObjectOrder.MoveTo)
                         if (_bestDropObject != null)
                             if (_bestDropObject.IsValid)
-                                if (_bestDropObject.Position.LSDistance(ObjectManager.Player.Position) < 120)
-                                    if (_bestDropObject.Position.LSDistance(args.TargetPosition) >= 120)
-                                        for (var i = _bestDropObject.Position.LSDistance(args.TargetPosition);
+                                if (_bestDropObject.Position.Distance(ObjectManager.Player.Position) < 120)
+                                    if (_bestDropObject.Position.Distance(args.TargetPosition) >= 120)
+                                        for (var i = _bestDropObject.Position.Distance(args.TargetPosition);
                                             i > 0;
                                             i = i - 1)
                                         {
-                                            var position = ObjectManager.Player.Position.LSExtend(args.TargetPosition, i);
-                                            if (_bestDropObject.Position.LSDistance(position) < 120)
+                                            var position = ObjectManager.Player.Position.Extend(args.TargetPosition, i);
+                                            if (_bestDropObject.Position.Distance(position) < 120)
                                             {
                                                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, position);
                                                 args.Process = false;
@@ -306,7 +306,7 @@ namespace SharpShooter.Plugins
         {
             if (MenuProvider.Champion.Misc.UseAntiGapcloser)
                 if (_e.IsReadyPerfectly())
-                    if (gapcloser.Sender.LSIsValidTarget(_e.Range))
+                    if (gapcloser.Sender.IsValidTarget(_e.Range))
                         _e.Cast(gapcloser.Sender);
         }
 
@@ -315,7 +315,7 @@ namespace SharpShooter.Plugins
         {
             if (MenuProvider.Champion.Misc.UseInterrupter)
                 if (_e.IsReadyPerfectly())
-                    if (sender.LSIsValidTarget(_e.Range))
+                    if (sender.IsValidTarget(_e.Range))
                         _e.Cast(sender);
         }
 
@@ -377,7 +377,7 @@ namespace SharpShooter.Plugins
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float)ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float)ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
             if (AxeCount > 0)

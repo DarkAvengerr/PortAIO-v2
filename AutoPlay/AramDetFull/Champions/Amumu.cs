@@ -42,7 +42,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
         }
 
@@ -89,20 +89,20 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             var comboR = 2;
 
-            if (comboR > 0 && R.LSIsReady())
+            if (comboR > 0 && R.IsReady())
             {
                 int enemiesHit = 0;
                 int killableHits = 0;
 
-                foreach (AIHeroClient enemy in ObjectManager.Get<AIHeroClient>().Where(he => he.IsEnemy && he.LSIsValidTarget(R.Range)))
+                foreach (AIHeroClient enemy in ObjectManager.Get<AIHeroClient>().Where(he => he.IsEnemy && he.IsValidTarget(R.Range)))
                 {
                     var prediction = Prediction.GetPrediction(enemy, R.Delay);
 
-                    if (prediction != null && prediction.UnitPosition.LSDistance(ObjectManager.Player.ServerPosition) <= R.Range)
+                    if (prediction != null && prediction.UnitPosition.Distance(ObjectManager.Player.ServerPosition) <= R.Range)
                     {
                         enemiesHit++;
 
-                        if (ObjectManager.Player.LSGetSpellDamage(enemy, SpellSlot.W) >= enemy.Health)
+                        if (ObjectManager.Player.GetSpellDamage(enemy, SpellSlot.W) >= enemy.Health)
                             killableHits++;
                     }
                 }
@@ -114,19 +114,19 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         void CastE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null || !target.LSIsValidTarget())
+            if (!E.IsReady() || target == null || !target.IsValidTarget())
                 return;
 
-            if (E.GetPrediction(target).UnitPosition.LSDistance(ObjectManager.Player.ServerPosition) <= E.Range)
+            if (E.GetPrediction(target).UnitPosition.Distance(ObjectManager.Player.ServerPosition) <= E.Range)
                 E.CastOnUnit(ObjectManager.Player);
         }
 
 
         void CastQ(Obj_AI_Base target, HitChance hitChance = HitChance.High)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
                 return;
 
             Q.CastIfHitchanceEquals(target, hitChance);
@@ -134,7 +134,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         void CastR()
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
             R.Cast();
         }

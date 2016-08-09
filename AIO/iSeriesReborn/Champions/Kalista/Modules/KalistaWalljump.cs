@@ -40,11 +40,11 @@ using EloBuddy;
                 MoveToLimited(Game.CursorPos);
             }
 
-            var dir = ObjectManager.Player.ServerPosition.LSTo2D() + ObjectManager.Player.Direction.LSTo2D().LSPerpendicular() * (ObjectManager.Player.BoundingRadius * 1.10f);
-            var oppositeDir = ObjectManager.Player.ServerPosition.LSTo2D() + ObjectManager.Player.Direction.LSTo2D().LSPerpendicular() * -(ObjectManager.Player.BoundingRadius * 2f);
-            var Extended = ObjectManager.Player.ServerPosition.LSTo2D() + ObjectManager.Player.Direction.LSTo2D().LSPerpendicular() * (300 + 65f);
-            if (dir.LSIsWall() && iSRGeometry.IsOverWall(ObjectManager.Player.ServerPosition, Extended.To3D())
-                    && Variables.spells[SpellSlot.Q].LSIsReady()
+            var dir = ObjectManager.Player.ServerPosition.To2D() + ObjectManager.Player.Direction.To2D().Perpendicular() * (ObjectManager.Player.BoundingRadius * 1.10f);
+            var oppositeDir = ObjectManager.Player.ServerPosition.To2D() + ObjectManager.Player.Direction.To2D().Perpendicular() * -(ObjectManager.Player.BoundingRadius * 2f);
+            var Extended = ObjectManager.Player.ServerPosition.To2D() + ObjectManager.Player.Direction.To2D().Perpendicular() * (300 + 65f);
+            if (dir.IsWall() && iSRGeometry.IsOverWall(ObjectManager.Player.ServerPosition, Extended.To3D())
+                    && Variables.spells[SpellSlot.Q].IsReady()
                     && iSRGeometry.IsOverWall(ObjectManager.Player.ServerPosition, Game.CursorPos)
                     && iSRGeometry.GetWallLength(ObjectManager.Player.ServerPosition, Extended.To3D()) <= (280f - 65f / 2f))
             {

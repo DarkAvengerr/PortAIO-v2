@@ -40,7 +40,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
             var pred = Q.GetPrediction(target);
             if(pred.Hitchance>HitChance.High || pred.AoeTargetsHit.Count>1)
@@ -49,7 +49,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             var pred = W.GetPrediction(target);
             if (pred.Hitchance >= HitChance.High)
@@ -58,17 +58,17 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
 
-            if (W.LSIsReady() && W.IsInRange(target))
+            if (W.IsReady() && W.IsInRange(target))
             {
                 var pred = W.GetPrediction(target);
                 if (pred.Hitchance >= HitChance.High)
                 {
                     lastE = ObjectManager.Player.ServerPosition;
                     E.Cast(ObjectManager.Player.ServerPosition +
-                           (pred.CastPosition - ObjectManager.Player.ServerPosition).LSNormalized()*(E.Range - 200));
+                           (pred.CastPosition - ObjectManager.Player.ServerPosition).Normalized()*(E.Range - 200));
                     LeagueSharp.Common.Utility.DelayAction.Add(250, () =>
                     {
                         W.Cast(pred.UnitPosition);
@@ -86,15 +86,15 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
-           // if (player.LSCountEnemiesInRange(450) > 1 || player.HealthPercent < 25)
+           // if (player.CountEnemiesInRange(450) > 1 || player.HealthPercent < 25)
            //     R.Cast();
         }
 
         public override void killSteal()
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             var killable = HeroManager.Enemies.Where(h => h.Health < W.GetDamage(h) && W.IsInRange(h)).ToList();
             if (killable != null && killable.Any())
@@ -142,13 +142,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void OnInterruptableSpell(AIHeroClient unit, InterruptableSpell spell)
         {
-            if (W.LSIsReady() && unit.LSIsValidTarget(W.Range))
+            if (W.IsReady() && unit.IsValidTarget(W.Range))
                 W.Cast(unit.ServerPosition);
         }
 
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (E.LSIsReady() && gapcloser.Sender.LSIsValidTarget(W.Range))
+            if (E.IsReady() && gapcloser.Sender.IsValidTarget(W.Range))
                 W.Cast(gapcloser.Sender.ServerPosition);
         }
         

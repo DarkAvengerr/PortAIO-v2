@@ -23,7 +23,7 @@ using EloBuddy;
 
                 q.SetSkillshot(0.125f, 50, 1700, true, SkillshotType.SkillshotLine);
 
-                ignite = ObjectManager.Player.Spellbook.GetSpell(ObjectManager.Player.LSGetSpellSlot("summonerdot"));
+                ignite = ObjectManager.Player.Spellbook.GetSpell(ObjectManager.Player.GetSpellSlot("summonerdot"));
             }
             catch (Exception exception)
             {

@@ -45,23 +45,23 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void OnInterruptableSpell(AIHeroClient unit, InterruptableSpell spell)
         {
-            if (W.LSIsReady() && unit.LSIsValidTarget(W.Range))
+            if (W.IsReady() && unit.IsValidTarget(W.Range))
                 W.Cast(unit);
         }
 
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             var Target = (AIHeroClient)gapcloser.Sender;
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                if (Target.LSIsValidTarget(Q.Range))
+                if (Target.IsValidTarget(Q.Range))
                 {
                     Q.Cast(Target);
                 }
             }
-            else if (W.LSIsReady())
+            else if (W.IsReady())
             {
-                if (Target.LSIsValidTarget(W.Range))
+                if (Target.IsValidTarget(W.Range))
                 {
                     W.Cast(Target);
                 }
@@ -114,7 +114,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             if (target.HealthPercent < 35)
                 R.CastOnUnit(target);
@@ -124,15 +124,15 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             if (Combo)
             {
-                DeathWalker.setAttack(!E.LSIsReady());
+                DeathWalker.setAttack(!E.IsReady());
             }
             else
                 DeathWalker.setAttack(true);
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 var t = TargetSelector.GetTarget(R.Range + 400, TargetSelector.DamageType.Physical);
-                if (RMissile == null && t.LSIsValidTarget())
+                if (RMissile == null && t.IsValidTarget())
                 {
                     
                         R.Cast(t, true, true);
@@ -152,34 +152,34 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 {
                     R.Cast();
                 }
-                else if (RMissile != null && Farm && (Rfarm.MinionsHit < 3 || Rfarm.Position.LSDistance(RMissile.Position) > 400))
+                else if (RMissile != null && Farm && (Rfarm.MinionsHit < 3 || Rfarm.Position.Distance(RMissile.Position) > 400))
                 {
                     R.Cast();
                 }
                 if (!Combo && !Farm && RMissile != null)
                     R.Cast();
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 var ta = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
-                if (Combo && ta.LSIsValidTarget(W.Range) && ta.Path.Count() == 1 && W.GetPrediction(ta).CastPosition.LSDistance(ta.Position) > 150)
+                if (Combo && ta.IsValidTarget(W.Range) && ta.Path.Count() == 1 && W.GetPrediction(ta).CastPosition.Distance(ta.Position) > 150)
                 {
-                    if (player.Position.LSDistance(ta.ServerPosition) > player.Position.LSDistance(ta.Position))
+                    if (player.Position.Distance(ta.ServerPosition) > player.Position.Distance(ta.Position))
                     {
-                        if (ta.Position.LSDistance(player.ServerPosition) < ta.Position.LSDistance(player.Position) && ta.LSIsValidTarget(W.Range - 200))
+                        if (ta.Position.Distance(player.ServerPosition) < ta.Position.Distance(player.Position) && ta.IsValidTarget(W.Range - 200))
                             CastSpell(W, ta, 3);
                     }
                     else
                     {
-                        if (ta.Position.LSDistance(player.ServerPosition) > ta.Position.LSDistance(player.Position) && ta.LSIsValidTarget(E.Range) && ta.HasBuffOfType(BuffType.Slow))
+                        if (ta.Position.Distance(player.ServerPosition) > ta.Position.Distance(player.Position) && ta.IsValidTarget(E.Range) && ta.HasBuffOfType(BuffType.Slow))
                             CastSpell(W, ta, 3);
                     }
                 }
             }
-            if (Q.LSIsReady() && QMissile == null)
+            if (Q.IsReady() && QMissile == null)
             {
                 var t = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
-                if (t.LSIsValidTarget())
+                if (t.IsValidTarget())
                 {
                     var qDmg = Q.GetDamage(t);
 
@@ -187,9 +187,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
                         Q.Cast(t, true);
                     else if (Combo)
                         CastSpell(Q, t, 3);
-                    else if (Farm && !player.LSUnderTurret(true))
+                    else if (Farm && !player.UnderTurret(true))
                     {
-                        foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.LSIsValidTarget(Q.Range)))
+                        foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.IsValidTarget(Q.Range)))
                         {
                             CastSpell(Q, enemy, 3);
                         }
@@ -197,11 +197,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
                     else
                     {
-                        foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.LSIsValidTarget(Q.Range)))
+                        foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.IsValidTarget(Q.Range)))
                         {
                             if (enemy.HasBuffOfType(BuffType.Stun) || enemy.HasBuffOfType(BuffType.Snare) ||
                              enemy.HasBuffOfType(BuffType.Charm) || enemy.HasBuffOfType(BuffType.Fear) ||
-                             enemy.HasBuffOfType(BuffType.Taunt) || enemy.HasBuffOfType(BuffType.Slow) || enemy.LSHasBuff("Recall"))
+                             enemy.HasBuffOfType(BuffType.Taunt) || enemy.HasBuffOfType(BuffType.Slow) || enemy.HasBuff("Recall"))
                             {
                                 Q.Cast(enemy, true);
                             }
@@ -210,10 +210,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 }
             }
 
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
                 var t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-                if (t.LSIsValidTarget())
+                if (t.IsValidTarget())
                 {
 
                     var qCd = Q.Instance.CooldownExpires - Game.Time;
@@ -222,32 +222,32 @@ using EloBuddy; namespace ARAMDetFull.Champions
                         rCd = 10;
                     //debug("Q " + qCd + "R " + rCd + "E now " + E.Instance.Cooldown);
                     var eDmg = E.GetDamage(t);
-                    if (t.LSHasBuff("chilled"))
+                    if (t.HasBuff("chilled"))
                     {
                         eDmg = 2 * eDmg;
                     }
                     if (eDmg > t.Health)
                         E.Cast(t, true);
-                    else if ((t.LSHasBuff("chilled")) && Combo && QMissile == null)
+                    else if ((t.HasBuff("chilled")) && Combo && QMissile == null)
                     {
-                        if (RMissile == null && R.LSIsReady())
+                        if (RMissile == null && R.IsReady())
                             R.Cast(t, true, true);
                         E.Cast(t, true);
                     }
-                    else if (t.LSHasBuff("chilled") && Farm && !player.LSUnderTurret(true) && QMissile == null)
+                    else if (t.HasBuff("chilled") && Farm && !player.UnderTurret(true) && QMissile == null)
                     {
-                        if (RMissile == null && R.LSIsReady())
+                        if (RMissile == null && R.IsReady())
                             R.Cast(t, true, true);
                         E.Cast(t, true);
                     }
-                    else if (t.LSHasBuff("chilled") && Combo)
+                    else if (t.HasBuff("chilled") && Combo)
                     {
                         E.Cast(t, true);
                     }
                 }
                 farmE();
             }
-            if (Q.LSIsReady() && QMissile != null)
+            if (Q.IsReady() && QMissile != null)
             {
                 if (QMissile.Position.GetAliveEnemiesInRange(220) > 0)
                     Q.Cast();
@@ -268,10 +268,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 }
 
                 var minions = MinionManager.GetMinions(player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
-                foreach (var minion in minions.Where(minion => minion.Health > player.LSGetAutoAttackDamage(minion) && FarmId != minion.NetworkId))
+                foreach (var minion in minions.Where(minion => minion.Health > player.GetAutoAttackDamage(minion) && FarmId != minion.NetworkId))
                 {
                     var eDmg = E.GetDamage(minion);
-                    if (minion.LSHasBuff("chilled"))
+                    if (minion.HasBuff("chilled"))
                         eDmg = 2 * eDmg;
 
                     if (minion.Health < eDmg * 0.9)
@@ -289,7 +289,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (target.IsDead || col > 0 || target.Path.Count() > 1)
                 return;
 
-            if ((target.Path.Count() == 0 && target.Position == target.ServerPosition) || target.LSHasBuff("Recall"))
+            if ((target.Path.Count() == 0 && target.Position == target.ServerPosition) || target.HasBuff("Recall"))
             {
                 QWER.Cast(poutput.CastPosition);
                 return;
@@ -304,12 +304,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
             else if (HitChanceNum == 2)
             {
-                List<Vector2> waypoints = target.LSGetWaypoints();
-                if (waypoints.Last<Vector2>().To3D().LSDistance(poutput.CastPosition) > QWER.Width && (int)poutput.Hitchance == 5)
+                List<Vector2> waypoints = target.GetWaypoints();
+                if (waypoints.Last<Vector2>().To3D().Distance(poutput.CastPosition) > QWER.Width && (int)poutput.Hitchance == 5)
                 {
-                    if (waypoints.Last<Vector2>().To3D().LSDistance(player.Position) <= target.LSDistance(player.Position) || (target.Path.Count() == 0 && target.Position == target.ServerPosition))
+                    if (waypoints.Last<Vector2>().To3D().Distance(player.Position) <= target.Distance(player.Position) || (target.Path.Count() == 0 && target.Position == target.ServerPosition))
                     {
-                        if (player.LSDistance(target.ServerPosition) < QWER.Range - (poutput.CastPosition.LSDistance(target.ServerPosition) + target.BoundingRadius))
+                        if (player.Distance(target.ServerPosition) < QWER.Range - (poutput.CastPosition.Distance(target.ServerPosition) + target.BoundingRadius))
                         {
                             QWER.Cast(poutput.CastPosition);
                         }
@@ -322,17 +322,17 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
             else if (HitChanceNum == 3)
             {
-                List<Vector2> waypoints = target.LSGetWaypoints();
-                float SiteToSite = ((target.MoveSpeed * QWER.Delay) + (player.LSDistance(target.ServerPosition) / QWER.Speed) - QWER.Width) * 6;
-                float BackToFront = ((target.MoveSpeed * QWER.Delay) + (player.LSDistance(target.ServerPosition) / QWER.Speed));
-                if (player.LSDistance(waypoints.Last<Vector2>().To3D()) < SiteToSite || player.LSDistance(target.Position) < SiteToSite)
+                List<Vector2> waypoints = target.GetWaypoints();
+                float SiteToSite = ((target.MoveSpeed * QWER.Delay) + (player.Distance(target.ServerPosition) / QWER.Speed) - QWER.Width) * 6;
+                float BackToFront = ((target.MoveSpeed * QWER.Delay) + (player.Distance(target.ServerPosition) / QWER.Speed));
+                if (player.Distance(waypoints.Last<Vector2>().To3D()) < SiteToSite || player.Distance(target.Position) < SiteToSite)
                     QWER.CastIfHitchanceEquals(target, HitChance.High, true);
-                else if ((target.ServerPosition.LSDistance(waypoints.Last<Vector2>().To3D()) > SiteToSite
-                    || Math.Abs(player.LSDistance(waypoints.Last<Vector2>().To3D()) - player.LSDistance(target.Position)) > BackToFront))
+                else if ((target.ServerPosition.Distance(waypoints.Last<Vector2>().To3D()) > SiteToSite
+                    || Math.Abs(player.Distance(waypoints.Last<Vector2>().To3D()) - player.Distance(target.Position)) > BackToFront))
                 {
-                    if (waypoints.Last<Vector2>().To3D().LSDistance(player.Position) <= target.LSDistance(player.Position))
+                    if (waypoints.Last<Vector2>().To3D().Distance(player.Position) <= target.Distance(player.Position))
                     {
-                        if (player.LSDistance(target.ServerPosition) < QWER.Range - (poutput.CastPosition.LSDistance(target.ServerPosition)))
+                        if (player.Distance(target.ServerPosition) < QWER.Range - (poutput.CastPosition.Distance(target.ServerPosition)))
                         {
                             QWER.Cast(poutput.CastPosition);
                         }
@@ -345,18 +345,18 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
             else if (HitChanceNum == 4 && (int)poutput.Hitchance > 4)
             {
-                List<Vector2> waypoints = target.LSGetWaypoints();
-                float SiteToSite = ((target.MoveSpeed * QWER.Delay) + (player.LSDistance(target.ServerPosition) / QWER.Speed) - QWER.Width) * 6;
-                float BackToFront = ((target.MoveSpeed * QWER.Delay) + (player.LSDistance(target.ServerPosition) / QWER.Speed));
+                List<Vector2> waypoints = target.GetWaypoints();
+                float SiteToSite = ((target.MoveSpeed * QWER.Delay) + (player.Distance(target.ServerPosition) / QWER.Speed) - QWER.Width) * 6;
+                float BackToFront = ((target.MoveSpeed * QWER.Delay) + (player.Distance(target.ServerPosition) / QWER.Speed));
 
-                if (player.LSDistance(waypoints.Last<Vector2>().To3D()) < SiteToSite || player.LSDistance(target.Position) < SiteToSite)
+                if (player.Distance(waypoints.Last<Vector2>().To3D()) < SiteToSite || player.Distance(target.Position) < SiteToSite)
                     QWER.CastIfHitchanceEquals(target, HitChance.High, true);
-                else if ((target.ServerPosition.LSDistance(waypoints.Last<Vector2>().To3D()) > SiteToSite
-                    || Math.Abs(player.LSDistance(waypoints.Last<Vector2>().To3D()) - player.LSDistance(target.Position)) > BackToFront))
+                else if ((target.ServerPosition.Distance(waypoints.Last<Vector2>().To3D()) > SiteToSite
+                    || Math.Abs(player.Distance(waypoints.Last<Vector2>().To3D()) - player.Distance(target.Position)) > BackToFront))
                 {
-                    if (waypoints.Last<Vector2>().To3D().LSDistance(player.Position) <= target.LSDistance(player.Position))
+                    if (waypoints.Last<Vector2>().To3D().Distance(player.Position) <= target.Distance(player.Position))
                     {
-                        if (player.LSDistance(target.ServerPosition) < QWER.Range - (poutput.CastPosition.LSDistance(target.ServerPosition)))
+                        if (player.Distance(target.ServerPosition) < QWER.Range - (poutput.CastPosition.Distance(target.ServerPosition)))
                         {
                             QWER.Cast(poutput.CastPosition);
                         }

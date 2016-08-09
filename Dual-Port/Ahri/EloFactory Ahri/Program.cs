@@ -207,22 +207,22 @@ using EloBuddy;
         public static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs args)
         {
             double ShouldUseOn = ShouldUse(args.SData.Name);
-            if (unit.Team != ObjectManager.Player.Team && ShouldUseOn >= 0f && unit.LSIsValidTarget(Q.Range))
+            if (unit.Team != ObjectManager.Player.Team && ShouldUseOn >= 0f && unit.IsValidTarget(Q.Range))
             {
 
-                if (Config.Item("Ahri.EInterrupt").GetValue<bool>() && E.LSIsReady() && Player.Mana >= EMANA && Player.LSDistance(unit) < E.Range - 25)
+                if (Config.Item("Ahri.EInterrupt").GetValue<bool>() && E.IsReady() && Player.Mana >= EMANA && Player.Distance(unit) < E.Range - 25)
                 {
                     E.CastIfHitchanceEquals(unit, HitChance.VeryHigh, true);
                 }
 
             }
 
-            if (Config.Item("Ahri.AutoEWhenEnemyCast").GetValue<bool>() && (unit.IsValid<AIHeroClient>() && !unit.IsValid<Obj_AI_Turret>()) && unit.IsEnemy && args.Target.IsMe && E.LSIsReady() && Player.LSDistance(unit) < E.Range - 25)
+            if (Config.Item("Ahri.AutoEWhenEnemyCast").GetValue<bool>() && (unit.IsValid<AIHeroClient>() && !unit.IsValid<Obj_AI_Turret>()) && unit.IsEnemy && args.Target.IsMe && E.IsReady() && Player.Distance(unit) < E.Range - 25)
             {
                 E.CastIfHitchanceEquals(unit, HitChance.VeryHigh, true);
             }
 
-            if (((Config.Item("Ahri.AutoQWhenEnemyCast").GetValue<bool>() && (unit.IsValid<AIHeroClient>() && !unit.IsValid<Obj_AI_Turret>()) && unit.IsEnemy && args.Target.IsMe) || (Config.Item("Ahri.AutoQWhenE").GetValue<bool>() && unit.LSHasBuff("AhriSeduce"))) && Q.LSIsReady() && Player.LSDistance(unit) < Q.Range - 25)
+            if (((Config.Item("Ahri.AutoQWhenEnemyCast").GetValue<bool>() && (unit.IsValid<AIHeroClient>() && !unit.IsValid<Obj_AI_Turret>()) && unit.IsEnemy && args.Target.IsMe) || (Config.Item("Ahri.AutoQWhenE").GetValue<bool>() && unit.HasBuff("AhriSeduce"))) && Q.IsReady() && Player.Distance(unit) < Q.Range - 25)
             {
                 Q.CastIfHitchanceEquals(unit, HitChance.VeryHigh, true);
             }
@@ -233,12 +233,12 @@ using EloBuddy;
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
 
-            if (Config.Item("Ahri.AutoEEGC").GetValue<bool>() && E.LSIsReady() && (Player.Mana >= EMANA + RMANA || Player.Mana < RMANA * 0.8) && Player.LSDistance(gapcloser.Sender) < E.Range - 20)
+            if (Config.Item("Ahri.AutoEEGC").GetValue<bool>() && E.IsReady() && (Player.Mana >= EMANA + RMANA || Player.Mana < RMANA * 0.8) && Player.Distance(gapcloser.Sender) < E.Range - 20)
             {
                 E.CastIfHitchanceEquals(gapcloser.Sender, HitChance.VeryHigh, true);
             }
 
-            if (Config.Item("Ahri.AutoWEGC").GetValue<bool>() && W.LSIsReady() && (Player.Mana >= WMANA + RMANA || Player.Mana < RMANA * 0.8) && Player.LSDistance(gapcloser.Sender) < W.Range - 20)
+            if (Config.Item("Ahri.AutoWEGC").GetValue<bool>() && W.IsReady() && (Player.Mana >= WMANA + RMANA || Player.Mana < RMANA * 0.8) && Player.Distance(gapcloser.Sender) < W.Range - 20)
             {
                 W.Cast();
             }
@@ -258,7 +258,7 @@ using EloBuddy;
             if (sender.NetworkId == target.NetworkId)
             {
 
-                if (useE && E.LSIsReady() && Player.Mana >= EMANA && args.EndPos.LSDistance(Player) < E.Range)
+                if (useE && E.IsReady() && Player.Mana >= EMANA && args.EndPos.Distance(Player) < E.Range)
                 {
                     var delay = (int)(args.EndTick - Game.Time - E.Delay - 0.1f);
                     if (delay > 0)
@@ -271,7 +271,7 @@ using EloBuddy;
                     }
                 }
 
-                if (useQ && Q.LSIsReady() && Player.Mana >= QMANA && args.EndPos.LSDistance(Player) < Q.Range)
+                if (useQ && Q.IsReady() && Player.Mana >= QMANA && args.EndPos.Distance(Player) < Q.Range)
                 {
 
                     var delay = (int)(args.EndTick - Game.Time - Q.Delay - 0.1f);
@@ -299,19 +299,19 @@ using EloBuddy;
 
             var targetR = TargetSelector.GetTarget(Q.Range + R.Range, TargetSelector.DamageType.Magical);
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 #region Sort E combo mode
-                if (useE && E.LSIsReady() && Player.Mana >= EMANA && Player.LSDistance(target) < E.Range)
+                if (useE && E.IsReady() && Player.Mana >= EMANA && Player.Distance(target) < E.Range)
                 {
                     E.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                 }
                 #endregion
 
                 #region Sort R combo mode
-                if (useR && R.LSIsReady() && E.LSIsReady() && Player.Mana > RMANA + QMANA + WMANA + EMANA && Player.HealthPercent >= targetR.HealthPercent)
+                if (useR && R.IsReady() && E.IsReady() && Player.Mana > RMANA + QMANA + WMANA + EMANA && Player.HealthPercent >= targetR.HealthPercent)
                 {
-                    if (Player.LSDistance(targetR) < R.Range + E.Range - 75 && Player.LSDistance(targetR) > E.Range - 50 && getComboDamage(targetR) > targetR.Health)
+                    if (Player.Distance(targetR) < R.Range + E.Range - 75 && Player.Distance(targetR) > E.Range - 50 && getComboDamage(targetR) > targetR.Health)
                     {
                         R.Cast(targetR.ServerPosition, true);
                     }
@@ -319,14 +319,14 @@ using EloBuddy;
                 #endregion
 
                 #region Sort W combo mode
-                if (useW && W.LSIsReady() && Player.Mana >= WMANA && Player.LSDistance(target) < W.Range)
+                if (useW && W.IsReady() && Player.Mana >= WMANA && Player.Distance(target) < W.Range)
                 {
                     W.Cast();
                 }
                 #endregion
 
                 #region Sort Q combo mode
-                if (useQ && Q.LSIsReady() && Player.Mana >= QMANA && Player.LSDistance(target) < Q.Range)
+                if (useQ && Q.IsReady() && Player.Mana >= QMANA && Player.Distance(target) < Q.Range)
                 {
                     QLogic();
                 }
@@ -351,17 +351,17 @@ using EloBuddy;
             var EMinMana = Config.Item("Ahri.EMiniManaHarass").GetValue<Slider>().Value;
 
 
-            if (useE && E.LSIsReady() && Player.LSDistance(targetH) < E.Range && Player.ManaPercent >= EMinMana)
+            if (useE && E.IsReady() && Player.Distance(targetH) < E.Range && Player.ManaPercent >= EMinMana)
             {
                 E.CastIfHitchanceEquals(targetH, HitChance.VeryHigh, true);
             }
 
-            if (useQ && (!useE || !Config.Item("Ahri.UseQOnlyEHarass").GetValue<bool>() || (Config.Item("Ahri.UseQOnlyEHarass").GetValue<bool>() && (targetH.HasBuffOfType(BuffType.Stun) || targetH.HasBuffOfType(BuffType.Snare) || targetH.HasBuffOfType(BuffType.Charm) || targetH.HasBuffOfType(BuffType.Fear) || targetH.HasBuffOfType(BuffType.Taunt)))) && Q.LSIsReady() && Player.LSDistance(targetH) < Q.Range && Player.ManaPercent >= QMinMana)
+            if (useQ && (!useE || !Config.Item("Ahri.UseQOnlyEHarass").GetValue<bool>() || (Config.Item("Ahri.UseQOnlyEHarass").GetValue<bool>() && (targetH.HasBuffOfType(BuffType.Stun) || targetH.HasBuffOfType(BuffType.Snare) || targetH.HasBuffOfType(BuffType.Charm) || targetH.HasBuffOfType(BuffType.Fear) || targetH.HasBuffOfType(BuffType.Taunt)))) && Q.IsReady() && Player.Distance(targetH) < Q.Range && Player.ManaPercent >= QMinMana)
             {
                 Q.CastIfHitchanceEquals(targetH, HitChance.VeryHigh, true);
             }
 
-            if (useW && (!useE || !Config.Item("Ahri.UseWOnlyEHarass").GetValue<bool>() || (Config.Item("Ahri.UseWOnlyEHarass").GetValue<bool>() && (targetH.HasBuffOfType(BuffType.Stun) || targetH.HasBuffOfType(BuffType.Snare) || targetH.HasBuffOfType(BuffType.Charm) || targetH.HasBuffOfType(BuffType.Fear) || targetH.HasBuffOfType(BuffType.Taunt)))) && W.LSIsReady() && Player.LSDistance(targetH) < W.Range && Player.ManaPercent >= WMinMana)
+            if (useW && (!useE || !Config.Item("Ahri.UseWOnlyEHarass").GetValue<bool>() || (Config.Item("Ahri.UseWOnlyEHarass").GetValue<bool>() && (targetH.HasBuffOfType(BuffType.Stun) || targetH.HasBuffOfType(BuffType.Snare) || targetH.HasBuffOfType(BuffType.Charm) || targetH.HasBuffOfType(BuffType.Fear) || targetH.HasBuffOfType(BuffType.Taunt)))) && W.IsReady() && Player.Distance(targetH) < W.Range && Player.ManaPercent >= WMinMana)
             {
                 W.Cast();
             }
@@ -382,7 +382,7 @@ using EloBuddy;
 
             foreach (var minion in allMinionsQ)
             {
-                if (useQ && Q.LSIsReady() && minion.Health > Player.LSGetAutoAttackDamage(minion) && minion.Health < Q.GetDamage(minion) * 0.9)
+                if (useQ && Q.IsReady() && minion.Health > Player.GetAutoAttackDamage(minion) && minion.Health < Q.GetDamage(minion) * 0.9)
                 {
                     Q.CastIfHitchanceEquals(minion, HitChance.High, true);
                 }
@@ -403,7 +403,7 @@ using EloBuddy;
 
             var allMinionsQ = MinionManager.GetMinions(Q.Range, MinionTypes.All);
 
-            if (useQ && Q.LSIsReady() && Player.Mana >= QMANA && Player.ManaPercent >= QMinMana)
+            if (useQ && Q.IsReady() && Player.Mana >= QMANA && Player.ManaPercent >= QMinMana)
             {
 
                 var Qfarm = Q.GetLineFarmLocation(allMinionsQ, Q.Width);
@@ -411,9 +411,9 @@ using EloBuddy;
                     Q.Cast(Qfarm.Position);
             }
 
-            if (useW && W.LSIsReady() && Player.Mana >= WMANA + QMANA && Player.ManaPercent >= WMinMana)
+            if (useW && W.IsReady() && Player.Mana >= WMANA + QMANA && Player.ManaPercent >= WMinMana)
             {
-                if (allMinionsQ.Count(x => x.LSIsValidTarget(W.Range)) >= Config.Item("Ahri.WLaneClearCount").GetValue<Slider>().Value)
+                if (allMinionsQ.Count(x => x.IsValidTarget(W.Range)) >= Config.Item("Ahri.WLaneClearCount").GetValue<Slider>().Value)
                 {
                     W.Cast();
                 }
@@ -437,25 +437,25 @@ using EloBuddy;
             var allMinionsQ = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral);
             var MinionN = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
 
-            if (!MinionN.LSIsValidTarget() || MinionN == null)
+            if (!MinionN.IsValidTarget() || MinionN == null)
             {
                 LaneClear();
                 return;
             }
 
-            if (Config.Item("Ahri.SafeJungleClear").GetValue<bool>() && Player.LSCountEnemiesInRange(1500) > 0) return;
+            if (Config.Item("Ahri.SafeJungleClear").GetValue<bool>() && Player.CountEnemiesInRange(1500) > 0) return;
 
-            if (useE && E.LSIsReady() && Player.LSDistance(MinionN) < E.Range && Player.Mana >= EMANA + QMANA && Player.ManaPercent >= EMinMana)
+            if (useE && E.IsReady() && Player.Distance(MinionN) < E.Range && Player.Mana >= EMANA + QMANA && Player.ManaPercent >= EMinMana)
             {
                 E.CastIfHitchanceEquals(MinionN, HitChance.VeryHigh, true);
             }
 
-            if (useW && W.LSIsReady() && Player.LSDistance(MinionN) < Player.AttackRange && Player.Mana >= WMANA + QMANA && Player.ManaPercent >= WMinMana)
+            if (useW && W.IsReady() && Player.Distance(MinionN) < Player.AttackRange && Player.Mana >= WMANA + QMANA && Player.ManaPercent >= WMinMana)
             {
                 W.Cast();
             }
 
-            if (useQ && Q.LSIsReady() && Player.Mana >= QMANA && Player.ManaPercent >= QMinMana)
+            if (useQ && Q.IsReady() && Player.Mana >= QMANA && Player.ManaPercent >= QMinMana)
             {
 
                 var Qfarm = Q.GetLineFarmLocation(allMinionsQ, Q.Width);
@@ -481,60 +481,60 @@ using EloBuddy;
             foreach (var target in ObjectManager.Get<AIHeroClient>().Where(target => !target.IsMe && target.Team != ObjectManager.Player.Team))
             {
 
-                if (useWKS && W.LSIsReady() && Player.Mana >= WMANA && target.Health < W.GetDamage(target) && Player.LSDistance(target) < W.Range - 50 && Player.LSCountEnemiesInRange(W.Range) == 1 && !target.IsDead && target.LSIsValidTarget())
+                if (useWKS && W.IsReady() && Player.Mana >= WMANA && target.Health < W.GetDamage(target) && Player.Distance(target) < W.Range - 50 && Player.CountEnemiesInRange(W.Range) == 1 && !target.IsDead && target.IsValidTarget())
                 {
                     W.Cast();
                     return;
                 }
 
-                if (useQKS && Q.LSIsReady() && Player.Mana >= QMANA && target.Health < Q.GetDamage(target) && Player.LSDistance(target) < Q.Range - 50 && !target.IsDead && target.LSIsValidTarget())
+                if (useQKS && Q.IsReady() && Player.Mana >= QMANA && target.Health < Q.GetDamage(target) && Player.Distance(target) < Q.Range - 50 && !target.IsDead && target.IsValidTarget())
                 {
                     Q.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                     return;
                 }
 
-                if (useEKS && E.LSIsReady() && Player.Mana >= EMANA && target.Health < E.GetDamage(target) && Player.LSDistance(target) < E.Range - 50 && !target.IsDead && target.LSIsValidTarget())
+                if (useEKS && E.IsReady() && Player.Mana >= EMANA && target.Health < E.GetDamage(target) && Player.Distance(target) < E.Range - 50 && !target.IsDead && target.IsValidTarget())
                 {
                     E.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                     return;
                 }
 
-                if (useIgniteKS && Ignite.Slot != SpellSlot.Unknown && Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) > target.Health && target.LSIsValidTarget(Ignite.Range))
+                if (useIgniteKS && Ignite.Slot != SpellSlot.Unknown && Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) > target.Health && target.IsValidTarget(Ignite.Range))
                 {
                     Ignite.Cast(target, true);
                 }
 
-                if (useWKS && useQKS && W.LSIsReady() && Q.LSIsReady() && Player.Mana >= WMANA + QMANA && target.Health < W.GetDamage(target) + Q.GetDamage(target) && Player.LSDistance(target) < W.Range - 50 && Player.LSCountEnemiesInRange(W.Range) == 1 && !target.IsDead && target.LSIsValidTarget())
+                if (useWKS && useQKS && W.IsReady() && Q.IsReady() && Player.Mana >= WMANA + QMANA && target.Health < W.GetDamage(target) + Q.GetDamage(target) && Player.Distance(target) < W.Range - 50 && Player.CountEnemiesInRange(W.Range) == 1 && !target.IsDead && target.IsValidTarget())
                 {
                     W.Cast();
                     return;
                 }
 
-                if (useWKS && useEKS && W.LSIsReady() && E.LSIsReady() && Player.Mana >= WMANA + EMANA && target.Health < W.GetDamage(target) + E.GetDamage(target) && Player.LSDistance(target) < E.Range - 50 && Player.LSCountEnemiesInRange(W.Range) == 1 && !target.IsDead && target.LSIsValidTarget())
+                if (useWKS && useEKS && W.IsReady() && E.IsReady() && Player.Mana >= WMANA + EMANA && target.Health < W.GetDamage(target) + E.GetDamage(target) && Player.Distance(target) < E.Range - 50 && Player.CountEnemiesInRange(W.Range) == 1 && !target.IsDead && target.IsValidTarget())
                 {
                     E.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                     return;
                 }
 
-                if (useQKS && useEKS && Q.LSIsReady() && E.LSIsReady() && Player.Mana >= QMANA + EMANA && target.Health < E.GetDamage(target) + Q.GetDamage(target) && Player.LSDistance(target) < E.Range - 50 && !target.IsDead && target.LSIsValidTarget())
+                if (useQKS && useEKS && Q.IsReady() && E.IsReady() && Player.Mana >= QMANA + EMANA && target.Health < E.GetDamage(target) + Q.GetDamage(target) && Player.Distance(target) < E.Range - 50 && !target.IsDead && target.IsValidTarget())
                 {
                     E.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                     return;
                 }
 
-                if (useIgniteKS && useWKS && Ignite.Slot != SpellSlot.Unknown && W.LSIsReady() && Player.Mana >= WMANA && target.Health < W.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.LSDistance(target) < W.Range - 50 && Player.LSCountEnemiesInRange(W.Range) == 1 && !target.IsDead && target.LSIsValidTarget())
+                if (useIgniteKS && useWKS && Ignite.Slot != SpellSlot.Unknown && W.IsReady() && Player.Mana >= WMANA && target.Health < W.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.Distance(target) < W.Range - 50 && Player.CountEnemiesInRange(W.Range) == 1 && !target.IsDead && target.IsValidTarget())
                 {
                     W.Cast();
                     return;
                 }
 
-                if (useIgniteKS && useQKS && Ignite.Slot != SpellSlot.Unknown && Q.LSIsReady() && Player.Mana >= QMANA && target.Health < Q.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.LSDistance(target) < 600 && !target.IsDead && target.LSIsValidTarget())
+                if (useIgniteKS && useQKS && Ignite.Slot != SpellSlot.Unknown && Q.IsReady() && Player.Mana >= QMANA && target.Health < Q.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.Distance(target) < 600 && !target.IsDead && target.IsValidTarget())
                 {
                     Q.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                     return;
                 }
 
-                if (useIgniteKS && useEKS && Ignite.Slot != SpellSlot.Unknown && E.LSIsReady() && Player.Mana >= EMANA && target.Health < E.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.LSDistance(target) < E.Range - 50 && !target.IsDead && target.LSIsValidTarget())
+                if (useIgniteKS && useEKS && Ignite.Slot != SpellSlot.Unknown && E.IsReady() && Player.Mana >= EMANA && target.Health < E.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.Distance(target) < E.Range - 50 && !target.IsDead && target.IsValidTarget())
                 {
                     E.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                     return;
@@ -548,19 +548,19 @@ using EloBuddy;
         public static float getComboDamage(AIHeroClient hero)
         {
             double damage = 0;
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(Player, hero, SpellSlot.E);
+                damage += Damage.GetSpellDamage(Player, hero, SpellSlot.E);
             }
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(Player, hero, SpellSlot.Q);
+                damage += Damage.GetSpellDamage(Player, hero, SpellSlot.Q);
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                damage += (float)Damage.LSGetSpellDamage(Player, hero, SpellSlot.W);
+                damage += (float)Damage.GetSpellDamage(Player, hero, SpellSlot.W);
             }
-            if (Player.Spellbook.CanUseSpell(Player.LSGetSpellSlot("summonerdot")) == SpellState.Ready)
+            if (Player.Spellbook.CanUseSpell(Player.GetSpellSlot("summonerdot")) == SpellState.Ready)
             {
                 damage += (float)Player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
             }
@@ -661,22 +661,22 @@ using EloBuddy;
         #region PotionManager
         public static void PotionManager()
         {
-            if (Player.Level == 1 && Player.LSCountEnemiesInRange(1000) == 1 && Player.Health >= Player.MaxHealth * 0.35) return;
-            if (Player.Level == 1 && Player.LSCountEnemiesInRange(1000) == 2 && Player.Health >= Player.MaxHealth * 0.50) return;
+            if (Player.Level == 1 && Player.CountEnemiesInRange(1000) == 1 && Player.Health >= Player.MaxHealth * 0.35) return;
+            if (Player.Level == 1 && Player.CountEnemiesInRange(1000) == 2 && Player.Health >= Player.MaxHealth * 0.50) return;
 
-            if (Config.Item("Ahri.AutoPotion").GetValue<bool>() && !Player.LSInFountain() && !Player.LSIsRecalling() && !Player.IsDead)
+            if (Config.Item("Ahri.AutoPotion").GetValue<bool>() && !Player.InFountain() && !Player.IsRecalling() && !Player.IsDead)
             {
                 #region BiscuitofRejuvenation
-                if (BiscuitofRejuvenation.IsReady() && !Player.LSHasBuff("ItemMiniRegenPotion") && !Player.LSHasBuff("ItemCrystalFlask"))
+                if (BiscuitofRejuvenation.IsReady() && !Player.HasBuff("ItemMiniRegenPotion") && !Player.HasBuff("ItemCrystalFlask"))
                 {
 
-                    if (Player.MaxHealth > Player.Health + 170 && Player.MaxMana > Player.Mana + 10 && Player.LSCountEnemiesInRange(1000) > 0 &&
+                    if (Player.MaxHealth > Player.Health + 170 && Player.MaxMana > Player.Mana + 10 && Player.CountEnemiesInRange(1000) > 0 &&
                         Player.Health < Player.MaxHealth * 0.75)
                     {
                         BiscuitofRejuvenation.Cast();
                     }
 
-                    else if (Player.MaxHealth > Player.Health + 170 && Player.MaxMana > Player.Mana + 10 && Player.LSCountEnemiesInRange(1000) == 0 &&
+                    else if (Player.MaxHealth > Player.Health + 170 && Player.MaxMana > Player.Mana + 10 && Player.CountEnemiesInRange(1000) == 0 &&
                         Player.Health < Player.MaxHealth * 0.6)
                     {
                         BiscuitofRejuvenation.Cast();
@@ -686,16 +686,16 @@ using EloBuddy;
                 #endregion
 
                 #region HealthPotion
-                else if (HealthPotion.IsReady() && !Player.LSHasBuff("RegenerationPotion") && !Player.LSHasBuff("ItemCrystalFlask"))
+                else if (HealthPotion.IsReady() && !Player.HasBuff("RegenerationPotion") && !Player.HasBuff("ItemCrystalFlask"))
                 {
 
-                    if (Player.MaxHealth > Player.Health + 150 && Player.LSCountEnemiesInRange(1000) > 0 &&
+                    if (Player.MaxHealth > Player.Health + 150 && Player.CountEnemiesInRange(1000) > 0 &&
                         Player.Health < Player.MaxHealth * 0.75)
                     {
                         HealthPotion.Cast();
                     }
 
-                    else if (Player.MaxHealth > Player.Health + 150 && Player.LSCountEnemiesInRange(1000) == 0 &&
+                    else if (Player.MaxHealth > Player.Health + 150 && Player.CountEnemiesInRange(1000) == 0 &&
                         Player.Health < Player.MaxHealth * 0.6)
                     {
                         HealthPotion.Cast();
@@ -705,16 +705,16 @@ using EloBuddy;
                 #endregion
 
                 #region CrystallineFlask
-                else if (CrystallineFlask.IsReady() && !Player.LSHasBuff("ItemCrystalFlask") && !Player.LSHasBuff("RegenerationPotion") && !Player.LSHasBuff("FlaskOfCrystalWater") && !Player.LSHasBuff("ItemMiniRegenPotion"))
+                else if (CrystallineFlask.IsReady() && !Player.HasBuff("ItemCrystalFlask") && !Player.HasBuff("RegenerationPotion") && !Player.HasBuff("FlaskOfCrystalWater") && !Player.HasBuff("ItemMiniRegenPotion"))
                 {
 
-                    if (Player.MaxHealth > Player.Health + 120 && Player.MaxMana > Player.Mana + 60 && Player.LSCountEnemiesInRange(1000) > 0 &&
+                    if (Player.MaxHealth > Player.Health + 120 && Player.MaxMana > Player.Mana + 60 && Player.CountEnemiesInRange(1000) > 0 &&
                         (Player.Health < Player.MaxHealth * 0.85 || Player.Mana < Player.MaxMana * 0.65))
                     {
                         CrystallineFlask.Cast();
                     }
 
-                    else if (Player.MaxHealth > Player.Health + 120 && Player.MaxMana > Player.Mana + 60 && Player.LSCountEnemiesInRange(1000) == 0 &&
+                    else if (Player.MaxHealth > Player.Health + 120 && Player.MaxMana > Player.Mana + 60 && Player.CountEnemiesInRange(1000) == 0 &&
                         (Player.Health < Player.MaxHealth * 0.7 || Player.Mana < Player.MaxMana * 0.5))
                     {
                         CrystallineFlask.Cast();
@@ -724,16 +724,16 @@ using EloBuddy;
                 #endregion
 
                 #region ManaPotion
-                else if (ManaPotion.IsReady() && !Player.LSHasBuff("FlaskOfCrystalWater") && !Player.LSHasBuff("ItemCrystalFlask"))
+                else if (ManaPotion.IsReady() && !Player.HasBuff("FlaskOfCrystalWater") && !Player.HasBuff("ItemCrystalFlask"))
                 {
 
-                    if (Player.MaxMana > Player.Mana + 100 && Player.LSCountEnemiesInRange(1000) > 0 &&
+                    if (Player.MaxMana > Player.Mana + 100 && Player.CountEnemiesInRange(1000) > 0 &&
                         Player.Mana < Player.MaxMana * 0.7)
                     {
                         ManaPotion.Cast();
                     }
 
-                    else if (Player.MaxMana > Player.Mana + 100 && Player.LSCountEnemiesInRange(1000) == 0 &&
+                    else if (Player.MaxMana > Player.Mana + 100 && Player.CountEnemiesInRange(1000) == 0 &&
                         Player.Mana < Player.MaxMana * 0.4)
                     {
                         ManaPotion.Cast();
@@ -759,7 +759,7 @@ using EloBuddy;
             if (Config.Item("DrawOrbwalkTarget").GetValue<bool>())
             {
                 var orbT = Orbwalker.GetTarget();
-                if (orbT.LSIsValidTarget())
+                if (orbT.IsValidTarget())
                     Render.Circle.DrawCircle(orbT.Position, 100, System.Drawing.Color.Pink);
             }
 
@@ -794,14 +794,14 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
 
-            if (Player.LSCountEnemiesInRange(1300) > 1)
+            if (Player.CountEnemiesInRange(1300) > 1)
             {
-                if (target.LSCountAlliesInRange(Q.Width) >= 1)
+                if (target.CountAlliesInRange(Q.Width) >= 1)
                 {
                     Q.Cast(target, true, true);
                     return;
                 }
-                if (target.LSCountAlliesInRange(Q.Width) == 0)
+                if (target.CountAlliesInRange(Q.Width) == 0)
                 {
                     Q.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                     return;
@@ -809,7 +809,7 @@ using EloBuddy;
                 return;
             }
 
-            if (Player.LSCountEnemiesInRange(1300) == 1)//1
+            if (Player.CountEnemiesInRange(1300) == 1)//1
             {
                 Q.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                 return;

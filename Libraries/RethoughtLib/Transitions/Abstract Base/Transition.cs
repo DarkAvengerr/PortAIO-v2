@@ -121,13 +121,13 @@ using EloBuddy; namespace RethoughtLib.Transitions.Abstract_Base
                 return this.endPosition;
             }
 
-            return this.startPosition.LSExtend(
+            return this.startPosition.Extend(
                 this.endPosition,
                 (float)
                 this.Equation(
                     Time - this.StartTime,
                     0,
-                    this.endPosition.LSDistance(this.startPosition),
+                    this.endPosition.Distance(this.startPosition),
                     this.Duration * 1000));
         }
 
@@ -146,7 +146,7 @@ using EloBuddy; namespace RethoughtLib.Transitions.Abstract_Base
                     this.Equation(
                         Time - this.StartTime,
                         0,
-                        this.endPosition.LSDistance(this.startPosition),
+                        this.endPosition.Distance(this.startPosition),
                         this.Duration);
                 return this.lastValue;
             }

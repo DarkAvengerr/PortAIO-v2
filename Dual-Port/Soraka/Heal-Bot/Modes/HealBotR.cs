@@ -17,7 +17,7 @@ using EloBuddy;
 
         internal static void Execute()
         {
-            if (!Config.IsChecked("cancelBase") && ObjectManager.Player.LSHasBuff("Recall"))
+            if (!Config.IsChecked("cancelBase") && ObjectManager.Player.HasBuff("Recall"))
             {
                 return;
             }
@@ -25,12 +25,12 @@ using EloBuddy;
             var alliesToCheck =
                 HeroManager.Allies.Where(
                     ally =>
-                    !ally.IsMe && !ally.IsDead && !ally.IsZombie && !ally.LSInShop() && !ally.LSHasBuff("Recall")
+                    !ally.IsMe && !ally.IsDead && !ally.IsZombie && !ally.InShop() && !ally.HasBuff("Recall")
                     && Config.IsChecked("autoR_" + ally.ChampionName)
                     && ally.HealthPercent <= Config.GetSliderValue("autoRHP"));
             foreach (var ally in alliesToCheck)
             {
-                if (ally.LSCountEnemiesInRange(950) < 1)
+                if (ally.CountEnemiesInRange(950) < 1)
                 {
                     continue;
                 }
@@ -41,7 +41,7 @@ using EloBuddy;
                     continue;
                 }
 
-                if (!Spells.R.LSIsReady())
+                if (!Spells.R.IsReady())
                 {
                     return;
                 }

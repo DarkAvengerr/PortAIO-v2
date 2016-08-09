@@ -108,7 +108,7 @@ using EloBuddy; namespace ARAMDetFull
             private int lastCast = 0;
             public override void useSpell()
             {
-                if (!spell.LSIsReady() || lastCast + 700 > DeathWalker.now)
+                if (!spell.IsReady() || lastCast + 700 > DeathWalker.now)
                     return;
                 lastCast = DeathWalker.now;
 
@@ -151,11 +151,11 @@ using EloBuddy; namespace ARAMDetFull
         {
             public override void useSpell()
             {
-                if (!spell.LSIsReady())
+                if (!spell.IsReady())
                     return;
-                if (player.LSCountEnemysInRange(600) > 1 && player.HealthPercent < 40)
+                if (player.CountEnemysInRange(600) > 1 && player.HealthPercent < 40)
                 {
-                        spell.Cast(player.Position.LSExtend(ARAMSimulator.fromNex.Position, 450));
+                        spell.Cast(player.Position.Extend(ARAMSimulator.fromNex.Position, 450));
                 }
             }
 
@@ -169,7 +169,7 @@ using EloBuddy; namespace ARAMDetFull
         {
             public override void useSpell()
             {
-                if (!spell.LSIsReady())
+                if (!spell.IsReady())
                     return;
                 var tar = ARAMTargetSelector.getBestTarget(450);
                 if(tar != null)
@@ -190,9 +190,9 @@ using EloBuddy; namespace ARAMDetFull
         {
             public override void useSpell()
             {
-                if (!spell.LSIsReady())
+                if (!spell.IsReady())
                     return;
-                if (player.LSCountEnemiesInRange(600) > 0 && player.HealthPercent < 30)
+                if (player.CountEnemiesInRange(600) > 0 && player.HealthPercent < 30)
                 {
                     spell.Cast(player);
                 }
@@ -209,9 +209,9 @@ using EloBuddy; namespace ARAMDetFull
         {
             public override void useSpell()
             {
-                if (!spell.LSIsReady())
+                if (!spell.IsReady())
                     return;
-                if (player.LSInShop())
+                if (player.InShop())
                 {
                     spell.Cast();
                 }
@@ -228,7 +228,7 @@ using EloBuddy; namespace ARAMDetFull
         {
             public override void useSpell()
             {
-                if (!spell.LSIsReady())
+                if (!spell.IsReady())
                     return;
                 var tar = ARAMTargetSelector.getBestTarget(300);
                 if (tar != null)
@@ -249,9 +249,9 @@ using EloBuddy; namespace ARAMDetFull
         {
             public override void useSpell()
             {
-                if (!spell.LSIsReady())
+                if (!spell.IsReady())
                     return;
-                if (player.LSCountEnemysInRange(600) > 0 && player.HealthPercent < 20)
+                if (player.CountEnemysInRange(600) > 0 && player.HealthPercent < 20)
                 {
                     spell.Cast();
                 }
@@ -268,7 +268,7 @@ using EloBuddy; namespace ARAMDetFull
         {
             public override void useSpell()
             {
-                if (!spell.LSIsReady())
+                if (!spell.IsReady())
                     return;
                 if (player.ManaPercent < 25)
                 {

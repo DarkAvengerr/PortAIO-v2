@@ -43,7 +43,7 @@ using EloBuddy; namespace D_Zyra
             _r.SetSkillshot(0.5f, 500f, 20f, false, SkillshotType.SkillshotCircle);
             _passive.SetSkillshot(0.5f, 70f, 1400f, false, SkillshotType.SkillshotLine);
 
-            _igniteSlot = _player.LSGetSpellSlot("SummonerDot");
+            _igniteSlot = _player.GetSpellSlot("SummonerDot");
 
             _dfg = LeagueSharp.Common.Utility.Map.GetMap().Type == LeagueSharp.Common.Utility.Map.MapType.TwistedTreeline
                    || LeagueSharp.Common.Utility.Map.GetMap().Type == LeagueSharp.Common.Utility.Map.MapType.CrystalScar
@@ -379,10 +379,10 @@ using EloBuddy; namespace D_Zyra
                 CastPassive();
                 return;
             }
-            if (_config.Item("useRaim").GetValue<KeyBind>().Active && _r.LSIsReady())
+            if (_config.Item("useRaim").GetValue<KeyBind>().Active && _r.IsReady())
             {
                 var t = TargetSelector.GetTarget(_r.Range, TargetSelector.DamageType.Magical);
-                if (t.LSIsValidTarget(_r.Range)) _r.Cast(t.Position);
+                if (t.IsValidTarget(_r.Range)) _r.Cast(t.Position);
             }
             if (_config.Item("ActiveCombo").GetValue<KeyBind>().Active)
             {
@@ -440,7 +440,7 @@ using EloBuddy; namespace D_Zyra
         private static int Getallies(float range)
         {
             int allies = 0;
-            foreach (AIHeroClient hero in ObjectManager.Get<AIHeroClient>()) if (hero.IsAlly && !hero.IsMe && _player.LSDistance(hero) <= range) allies++;
+            foreach (AIHeroClient hero in ObjectManager.Get<AIHeroClient>()) if (hero.IsAlly && !hero.IsMe && _player.Distance(hero) <= range) allies++;
             return allies;
         }
 
@@ -454,38 +454,38 @@ using EloBuddy; namespace D_Zyra
         {
             var dmg = 0d;
 
-            if (_q.LSIsReady())
+            if (_q.IsReady())
             {
-                if (_w.LSIsReady())
+                if (_w.IsReady())
                 {
-                    dmg += _player.LSGetSpellDamage(hero, SpellSlot.Q) + (23 + 6.5 * ObjectManager.Player.Level)
+                    dmg += _player.GetSpellDamage(hero, SpellSlot.Q) + (23 + 6.5 * ObjectManager.Player.Level)
                            + (1.2 * _player.FlatMagicDamageMod);
                 }
-                else dmg += _player.LSGetSpellDamage(hero, SpellSlot.Q);
+                else dmg += _player.GetSpellDamage(hero, SpellSlot.Q);
             }
 
-            if (_e.LSIsReady())
+            if (_e.IsReady())
             {
-                if (_w.LSIsReady())
+                if (_w.IsReady())
                 {
-                    dmg += _player.LSGetSpellDamage(hero, SpellSlot.E) + (23 + 6.5 * ObjectManager.Player.Level)
+                    dmg += _player.GetSpellDamage(hero, SpellSlot.E) + (23 + 6.5 * ObjectManager.Player.Level)
                            + (1.2 * _player.FlatMagicDamageMod);
                 }
-                else dmg += _player.LSGetSpellDamage(hero, SpellSlot.E);
+                else dmg += _player.GetSpellDamage(hero, SpellSlot.E);
             }
-            if (_r.LSIsReady()) dmg += _player.LSGetSpellDamage(hero, SpellSlot.R);
+            if (_r.IsReady()) dmg += _player.GetSpellDamage(hero, SpellSlot.R);
             if (Items.HasItem(3153) && Items.CanUseItem(3153)) dmg += _player.GetItemDamage(hero, Damage.DamageItems.Botrk);
             if (Items.HasItem(3146) && Items.CanUseItem(3146)) dmg += _player.GetItemDamage(hero, Damage.DamageItems.Hexgun);
 
-            if (ObjectManager.Player.LSHasBuff("LichBane"))
+            if (ObjectManager.Player.HasBuff("LichBane"))
             {
                 dmg += _player.BaseAttackDamage * 0.75 + _player.FlatMagicDamageMod * 0.5;
             }
-            if (ObjectManager.Player.LSGetSpellSlot("SummonerIgnite") != SpellSlot.Unknown)
+            if (ObjectManager.Player.GetSpellSlot("SummonerIgnite") != SpellSlot.Unknown)
             {
                 dmg += _player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
             }
-            dmg += _player.LSGetAutoAttackDamage(hero, true);
+            dmg += _player.GetAutoAttackDamage(hero, true);
             return (float)dmg;
         }
 
@@ -494,19 +494,19 @@ using EloBuddy; namespace D_Zyra
             var pos = _e.GetPrediction(gapcloser.Sender).CastPosition;
             if (_config.Item("Gap_E").GetValue<bool>())
             {
-                if (_e.LSIsReady() && gapcloser.Sender.LSIsValidTarget(_e.Range) && _w.LSIsReady())
+                if (_e.IsReady() && gapcloser.Sender.IsValidTarget(_e.Range) && _w.IsReady())
                 {
                     _e.CastIfHitchanceEquals(gapcloser.Sender, Echange());
                     LeagueSharp.Common.Utility.DelayAction.Add(50, () => _w.Cast(new Vector3(pos.X - 2, pos.Y - 2, pos.Z)));
                     LeagueSharp.Common.Utility.DelayAction.Add(150, () => _w.Cast(new Vector3(pos.X + 2, pos.Y + 2, pos.Z)));
                 }
-                else if (_e.LSIsReady() && gapcloser.Sender.LSIsValidTarget(_e.Range))
+                else if (_e.IsReady() && gapcloser.Sender.IsValidTarget(_e.Range))
                 {
                     _e.CastIfHitchanceEquals(gapcloser.Sender, HitChance.High);
                 }
             }
             if (Items.HasItem(3092) && Items.CanUseItem(3092) && _config.Item("usefrostq").GetValue<bool>()
-                && gapcloser.Sender.LSIsValidTarget(800))
+                && gapcloser.Sender.IsValidTarget(800))
             {
                 _frostqueen.Cast(gapcloser.Sender);
             }
@@ -518,13 +518,13 @@ using EloBuddy; namespace D_Zyra
         {
             var pos = _e.GetPrediction(unit).CastPosition;
             if (!_config.Item("Inter_E").GetValue<bool>()) return;
-            if (_e.LSIsReady() && unit.LSIsValidTarget(_e.Range) && _w.LSIsReady())
+            if (_e.IsReady() && unit.IsValidTarget(_e.Range) && _w.IsReady())
             {
                 _e.CastIfHitchanceEquals(unit, Echange());
                 LeagueSharp.Common.Utility.DelayAction.Add(50, () => _w.Cast(new Vector3(pos.X - 2, pos.Y - 2, pos.Z)));
                 LeagueSharp.Common.Utility.DelayAction.Add(150, () => _w.Cast(new Vector3(pos.X + 2, pos.Y + 2, pos.Z)));
             }
-            else if (_e.LSIsReady() && unit.LSIsValidTarget(_e.Range))
+            else if (_e.IsReady() && unit.IsValidTarget(_e.Range))
             {
                 _e.CastIfHitchanceEquals(unit, HitChance.High);
             }
@@ -533,7 +533,7 @@ using EloBuddy; namespace D_Zyra
         private static void Smiteontarget()
         {
             if (_smite == null) return;
-            var hero = HeroManager.Enemies.FirstOrDefault(x => x.LSIsValidTarget(570));
+            var hero = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(570));
             var smiteDmg = _player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Smite);
             var usesmite = _config.Item("smitecombo").GetValue<bool>();
             if (_player.GetSpell(_smiteSlot).Name.ToLower() == "s5_summonersmiteplayerganker" && usesmite
@@ -549,7 +549,7 @@ using EloBuddy; namespace D_Zyra
                 }
             }
             if (_player.GetSpell(_smiteSlot).Name.ToLower() == "s5_summonersmiteduel" && usesmite
-                && ObjectManager.Player.Spellbook.CanUseSpell(_smiteSlot) == SpellState.Ready && hero.LSIsValidTarget(570))
+                && ObjectManager.Player.Spellbook.CanUseSpell(_smiteSlot) == SpellState.Ready && hero.IsValidTarget(570))
             {
                 ObjectManager.Player.Spellbook.CastSpell(_smiteSlot, hero);
             }
@@ -563,7 +563,7 @@ using EloBuddy; namespace D_Zyra
             UseItemes();
             Smiteontarget();
 
-            if (useignite && _igniteSlot != SpellSlot.Unknown && target.LSIsValidTarget(600)
+            if (useignite && _igniteSlot != SpellSlot.Unknown && target.IsValidTarget(600)
                 && _player.Spellbook.CanUseSpell(_igniteSlot) == SpellState.Ready)
             {
                 if (target.Health <= 1.2 * ComboDamage(target))
@@ -608,7 +608,7 @@ using EloBuddy; namespace D_Zyra
 
         private static void CastEjungleMinion()
         {
-            if (!_e.LSIsReady()) return;
+            if (!_e.IsReady()) return;
             var minions = MinionManager.GetMinions(
                 _player.ServerPosition,
                 _e.Range,
@@ -618,11 +618,11 @@ using EloBuddy; namespace D_Zyra
             if (minions.Count == 0) return;
             var castPostion =
                 MinionManager.GetBestLineFarmLocation(
-                    minions.Select(minion => minion.ServerPosition.LSTo2D()).ToList(),
+                    minions.Select(minion => minion.ServerPosition.To2D()).ToList(),
                     _e.Width,
                     _e.Range);
             _e.Cast(castPostion.Position);
-            if (_config.Item("useWE_Passivej").GetValue<bool>() && _w.LSIsReady())
+            if (_config.Item("useWE_Passivej").GetValue<bool>() && _w.IsReady())
             {
                 var pos = _e.GetCircularFarmLocation(minions);
                 LeagueSharp.Common.Utility.DelayAction.Add(50, () => _w.Cast(pos.Position.To3D()));
@@ -632,16 +632,16 @@ using EloBuddy; namespace D_Zyra
 
         private static void CastEMinion()
         {
-            if (!_e.LSIsReady()) return;
+            if (!_e.IsReady()) return;
             var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, _e.Range, MinionTypes.All);
             if (minions.Count == 0) return;
             var castPostion =
                 MinionManager.GetBestLineFarmLocation(
-                    minions.Select(minion => minion.ServerPosition.LSTo2D()).ToList(),
+                    minions.Select(minion => minion.ServerPosition.To2D()).ToList(),
                     _e.Width,
                     _e.Range);
             _e.Cast(castPostion.Position);
-            if (_config.Item("useWE_Passivel").GetValue<bool>() && _w.LSIsReady())
+            if (_config.Item("useWE_Passivel").GetValue<bool>() && _w.IsReady())
             {
                 var pos = _e.GetCircularFarmLocation(minions);
                 LeagueSharp.Common.Utility.DelayAction.Add(50, () => _w.Cast(pos.Position.To3D()));
@@ -652,7 +652,7 @@ using EloBuddy; namespace D_Zyra
 
         private static void CastQjungleMinion()
         {
-            if (!_q.LSIsReady()) return;
+            if (!_q.IsReady()) return;
             var minions = MinionManager.GetMinions(
                 _player.ServerPosition,
                 _q.Range,
@@ -662,11 +662,11 @@ using EloBuddy; namespace D_Zyra
             if (minions.Count == 0) return;
             var castPostion =
                 MinionManager.GetBestCircularFarmLocation(
-                    minions.Select(minion => minion.ServerPosition.LSTo2D()).ToList(),
+                    minions.Select(minion => minion.ServerPosition.To2D()).ToList(),
                     _q.Width,
                     _q.Range);
             _q.Cast(castPostion.Position);
-            if (_config.Item("useW_Passivej").GetValue<bool>() && _w.LSIsReady())
+            if (_config.Item("useW_Passivej").GetValue<bool>() && _w.IsReady())
             {
                 var pos = castPostion.Position.To3D();
                 LeagueSharp.Common.Utility.DelayAction.Add(50, () => _w.Cast(new Vector3(pos.X - 5, pos.Y - 5, pos.Z)));
@@ -676,7 +676,7 @@ using EloBuddy; namespace D_Zyra
 
         private static void CastQMinion()
         {
-            if (!_q.LSIsReady()) return;
+            if (!_q.IsReady()) return;
             var minions = MinionManager.GetMinions(
                 ObjectManager.Player.Position,
                 _q.Range + (_q.Width / 2),
@@ -684,11 +684,11 @@ using EloBuddy; namespace D_Zyra
             if (minions.Count == 0) return;
             var castPostion =
                 MinionManager.GetBestCircularFarmLocation(
-                    minions.Select(minion => minion.ServerPosition.LSTo2D()).ToList(),
+                    minions.Select(minion => minion.ServerPosition.To2D()).ToList(),
                     _q.Width,
                     _q.Range);
             _q.Cast(castPostion.Position);
-            if (_config.Item("useW_Passivel").GetValue<bool>() && _w.LSIsReady())
+            if (_config.Item("useW_Passivel").GetValue<bool>() && _w.IsReady())
             {
                 var pos = castPostion.Position.To3D();
                 LeagueSharp.Common.Utility.DelayAction.Add(50, () => _w.Cast(new Vector3(pos.X - 5, pos.Y - 5, pos.Z)));
@@ -700,14 +700,14 @@ using EloBuddy; namespace D_Zyra
         {
             var target = TargetSelector.GetTarget(_r.Range, TargetSelector.DamageType.Magical);
             var rpred = _r.GetPrediction(target, true);
-            if (!target.LSIsValidTarget(_r.Range) || !_r.LSIsReady()) return;
+            if (!target.IsValidTarget(_r.Range) || !_r.IsReady()) return;
 
             if (ComboDamage(target) * 1.3 > target.Health && _config.Item("use_ulti").GetValue<bool>()
                 && _r.GetPrediction(target).Hitchance >= HitChance.High)
             {
                 _r.Cast(rpred.CastPosition);
             }
-            if (ObjectManager.Get<AIHeroClient>().Count(hero => hero.LSIsValidTarget(_r.Range))
+            if (ObjectManager.Get<AIHeroClient>().Count(hero => hero.IsValidTarget(_r.Range))
                 >= _config.Item("MinTargets").GetValue<Slider>().Value
                 && _r.GetPrediction(target).Hitchance >= HitChance.High)
             {
@@ -722,11 +722,11 @@ using EloBuddy; namespace D_Zyra
 
         private static void CastQEnemy()
         {
-            if (!_q.LSIsReady()) return;
+            if (!_q.IsReady()) return;
             var target = TargetSelector.GetTarget(_q.Range + (_q.Width / 2), TargetSelector.DamageType.Magical);
-            if (!target.LSIsValidTarget(_q.Range)) return;
+            if (!target.IsValidTarget(_q.Range)) return;
             _q.CastIfHitchanceEquals(target, HitChance.High);
-            if (_w.LSIsReady() && _config.Item("useW_Passive").GetValue<bool>())
+            if (_w.IsReady() && _config.Item("useW_Passive").GetValue<bool>())
             {
                 var pos = _q.GetPrediction(target).CastPosition;
                 LeagueSharp.Common.Utility.DelayAction.Add(50, () => _w.Cast(new Vector3(pos.X - 2, pos.Y - 2, pos.Z)));
@@ -736,11 +736,11 @@ using EloBuddy; namespace D_Zyra
 
         private static void CastQEnemyharass()
         {
-            if (!_q.LSIsReady()) return;
+            if (!_q.IsReady()) return;
             var target = TargetSelector.GetTarget(_q.Range + (_q.Width / 2), TargetSelector.DamageType.Magical);
-            if (!target.LSIsValidTarget(_q.Range)) return;
+            if (!target.IsValidTarget(_q.Range)) return;
             _q.CastIfHitchanceEquals(target, HitChance.High);
-            if (_w.LSIsReady() && _config.Item("useW_Passiveh").GetValue<bool>())
+            if (_w.IsReady() && _config.Item("useW_Passiveh").GetValue<bool>())
             {
                 var pos = _q.GetPrediction(target).CastPosition;
                 LeagueSharp.Common.Utility.DelayAction.Add(50, () => _w.Cast(new Vector3(pos.X - 2, pos.Y - 2, pos.Z)));
@@ -750,11 +750,11 @@ using EloBuddy; namespace D_Zyra
 
         private static void CastEEnemy()
         {
-            if (!_e.LSIsReady()) return;
+            if (!_e.IsReady()) return;
             var target = TargetSelector.GetTarget(_e.Range, TargetSelector.DamageType.Magical);
-            if (!target.LSIsValidTarget(_e.Range)) return;
+            if (!target.IsValidTarget(_e.Range)) return;
             _e.CastIfHitchanceEquals(target, Echange());
-            if (_w.LSIsReady() && _config.Item("useWE_Passive").GetValue<bool>())
+            if (_w.IsReady() && _config.Item("useWE_Passive").GetValue<bool>())
             {
                 var pos = _e.GetPrediction(target).CastPosition;
                 LeagueSharp.Common.Utility.DelayAction.Add(50, () => _w.Cast(new Vector3(pos.X - 5, pos.Y - 5, pos.Z)));
@@ -764,11 +764,11 @@ using EloBuddy; namespace D_Zyra
 
         private static void CastEEnemyharass()
         {
-            if (!_e.LSIsReady()) return;
+            if (!_e.IsReady()) return;
             var target = TargetSelector.GetTarget(_e.Range, TargetSelector.DamageType.Magical);
-            if (!target.LSIsValidTarget(_e.Range)) return;
+            if (!target.IsValidTarget(_e.Range)) return;
             _e.CastIfHitchanceEquals(target, Echange());
-            if (_w.LSIsReady() && _config.Item("useWE_Passiveh").GetValue<bool>())
+            if (_w.IsReady() && _config.Item("useWE_Passiveh").GetValue<bool>())
             {
                 var pos = _e.GetPrediction(target).CastPosition;
                 LeagueSharp.Common.Utility.DelayAction.Add(50, () => _w.Cast(new Vector3(pos.X - 5, pos.Y - 5, pos.Z)));
@@ -778,9 +778,9 @@ using EloBuddy; namespace D_Zyra
 
         private static void CastPassive()
         {
-            if (!_passive.LSIsReady()) return;
+            if (!_passive.IsReady()) return;
             var target = TargetSelector.GetTarget(_passive.Range, TargetSelector.DamageType.Magical);
-            if (!target.LSIsValidTarget(_e.Range)) return;
+            if (!target.IsValidTarget(_e.Range)) return;
             _passive.CastIfHitchanceEquals(target, HitChance.High);
         }
 
@@ -790,19 +790,19 @@ using EloBuddy; namespace D_Zyra
             {
                 var useq = _config.Item("useQkill").GetValue<bool>();
                 var usee = _config.Item("useEkill").GetValue<bool>();
-                var whDmg = _player.LSGetSpellDamage(hero, SpellSlot.W);
-                var qhDmg = _player.LSGetSpellDamage(hero, SpellSlot.Q);
-                var ehDmg = _player.LSGetSpellDamage(hero, SpellSlot.E);
+                var whDmg = _player.GetSpellDamage(hero, SpellSlot.W);
+                var qhDmg = _player.GetSpellDamage(hero, SpellSlot.Q);
+                var ehDmg = _player.GetSpellDamage(hero, SpellSlot.E);
                 var emana = _player.Spellbook.GetSpell(SpellSlot.E).SData.Mana;
                 var qmana = _player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana;
-                if (useq && hero.LSIsValidTarget(_q.Range) && _q.LSIsReady())
+                if (useq && hero.IsValidTarget(_q.Range) && _q.IsReady())
                 {
                     if (qhDmg >= hero.Health && qmana < _player.Mana)
                     {
                         _q.CastIfHitchanceEquals(hero, HitChance.High);
 
                     }
-                    else if (qhDmg + whDmg > hero.Health && _player.Mana >= qmana && _w.LSIsReady())
+                    else if (qhDmg + whDmg > hero.Health && _player.Mana >= qmana && _w.IsReady())
                     {
                         _q.CastIfHitchanceEquals(hero, HitChance.High);
                         var pos = _e.GetPrediction(hero).CastPosition;
@@ -810,14 +810,14 @@ using EloBuddy; namespace D_Zyra
                         LeagueSharp.Common.Utility.DelayAction.Add(150, () => _w.Cast(new Vector3(pos.X + 5, pos.Y + 5, pos.Z)));
                     }
                 }
-                if (usee && hero.LSIsValidTarget(_e.Range) && _e.LSIsReady())
+                if (usee && hero.IsValidTarget(_e.Range) && _e.IsReady())
                 {
                     if (ehDmg >= hero.Health && emana < _player.Mana)
                     {
                         _e.CastIfHitchanceEquals(hero, HitChance.High);
 
                     }
-                    else if (ehDmg + whDmg > hero.Health && _player.Mana >= emana && _w.LSIsReady())
+                    else if (ehDmg + whDmg > hero.Health && _player.Mana >= emana && _w.IsReady())
                     {
                         _e.CastIfHitchanceEquals(hero, HitChance.High);
                         var pos = _e.GetPrediction(hero).CastPosition;
@@ -850,33 +850,33 @@ using EloBuddy; namespace D_Zyra
                 var iHextechmyhp = _player.Health
                                    <= (_player.MaxHealth * (_config.Item("Hextechmyhp").GetValue<Slider>().Value) / 100);
                 var iOmen = _config.Item("Omen").GetValue<bool>();
-                var iOmenenemys = hero.LSCountEnemiesInRange(450) >= _config.Item("Omenenemys").GetValue<Slider>().Value;
+                var iOmenenemys = hero.CountEnemiesInRange(450) >= _config.Item("Omenenemys").GetValue<Slider>().Value;
                 var ifrost = _config.Item("frostQ").GetValue<bool>();
 
-                if (hero.LSIsValidTarget(450) && iBilge && (iBilgeEnemyhp || iBilgemyhp) && _bilge.IsReady())
+                if (hero.IsValidTarget(450) && iBilge && (iBilgeEnemyhp || iBilgemyhp) && _bilge.IsReady())
                 {
                     _bilge.Cast(hero);
 
                 }
-                if (hero.LSIsValidTarget(450) && iBlade && (iBladeEnemyhp || iBlademyhp) && _blade.IsReady())
+                if (hero.IsValidTarget(450) && iBlade && (iBladeEnemyhp || iBlademyhp) && _blade.IsReady())
                 {
                     _blade.Cast(hero);
 
                 }
-                if (hero.LSIsValidTarget(450) && iYoumuu && _youmuu.IsReady())
+                if (hero.IsValidTarget(450) && iYoumuu && _youmuu.IsReady())
                 {
                     _youmuu.Cast();
                 }
-                if (hero.LSIsValidTarget(700) && iHextech && (iHextechEnemyhp || iHextechmyhp) && _hextech.IsReady())
+                if (hero.IsValidTarget(700) && iHextech && (iHextechEnemyhp || iHextechmyhp) && _hextech.IsReady())
                 {
                     _hextech.Cast(hero);
                 }
-                if (iOmenenemys && iOmen && _rand.IsReady() && hero.LSIsValidTarget(450))
+                if (iOmenenemys && iOmen && _rand.IsReady() && hero.IsValidTarget(450))
                 {
                     LeagueSharp.Common.Utility.DelayAction.Add(100, () => _rand.Cast());
                 }
 
-                if (ifrost && _frostqueen.IsReady() && hero.LSIsValidTarget(_frostqueen.Range))
+                if (ifrost && _frostqueen.IsReady() && hero.IsValidTarget(_frostqueen.Range))
                 {
                     _frostqueen.Cast(hero);
 
@@ -888,7 +888,7 @@ using EloBuddy; namespace D_Zyra
                 foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsAlly || hero.IsMe))
                 {
                     if (hero.Health <= (hero.MaxHealth * (_config.Item("lotisminhp").GetValue<Slider>().Value) / 100)
-                        && hero.LSDistance(_player.ServerPosition) <= _lotis.Range && _lotis.IsReady()) _lotis.Cast();
+                        && hero.Distance(_player.ServerPosition) <= _lotis.Range && _lotis.IsReady()) _lotis.Cast();
                 }
             }
 
@@ -908,17 +908,17 @@ using EloBuddy; namespace D_Zyra
             var iusemppotion = _config.Item("usemppotions").GetValue<bool>();
             var iusepotionmp = _player.Mana
                                <= (_player.MaxMana * (_config.Item("usepotionmp").GetValue<Slider>().Value) / 100);
-            if (_player.LSInFountain() || ObjectManager.Player.LSHasBuff("Recall")) return;
+            if (_player.InFountain() || ObjectManager.Player.HasBuff("Recall")) return;
 
-            if (LeagueSharp.Common.Utility.LSCountEnemiesInRange(800) > 0
+            if (LeagueSharp.Common.Utility.CountEnemiesInRange(800) > 0
                 || (mobs.Count > 0 && _config.Item("ActiveJungle").GetValue<KeyBind>().Active && _smite != null))
             {
                 if (iusepotionhp && iusehppotion
-                    && !(ObjectManager.Player.LSHasBuff("RegenerationPotion")
-                         || ObjectManager.Player.LSHasBuff("ItemMiniRegenPotion")
-                         || ObjectManager.Player.LSHasBuff("ItemCrystalFlask")
-                         || ObjectManager.Player.LSHasBuff("ItemCrystalFlaskJungle")
-                         || ObjectManager.Player.LSHasBuff("ItemDarkCrystalFlask")))
+                    && !(ObjectManager.Player.HasBuff("RegenerationPotion")
+                         || ObjectManager.Player.HasBuff("ItemMiniRegenPotion")
+                         || ObjectManager.Player.HasBuff("ItemCrystalFlask")
+                         || ObjectManager.Player.HasBuff("ItemCrystalFlaskJungle")
+                         || ObjectManager.Player.HasBuff("ItemDarkCrystalFlask")))
                 {
 
                     if (Items.HasItem(2010) && Items.CanUseItem(2010))
@@ -943,10 +943,10 @@ using EloBuddy; namespace D_Zyra
                     }
                 }
                 if (iusepotionmp && iusemppotion
-                    && !(ObjectManager.Player.LSHasBuff("ItemDarkCrystalFlask")
-                         || ObjectManager.Player.LSHasBuff("ItemMiniRegenPotion")
-                         || ObjectManager.Player.LSHasBuff("ItemCrystalFlaskJungle")
-                         || ObjectManager.Player.LSHasBuff("ItemCrystalFlask")))
+                    && !(ObjectManager.Player.HasBuff("ItemDarkCrystalFlask")
+                         || ObjectManager.Player.HasBuff("ItemMiniRegenPotion")
+                         || ObjectManager.Player.HasBuff("ItemCrystalFlaskJungle")
+                         || ObjectManager.Player.HasBuff("ItemCrystalFlask")))
                 {
                     if (Items.HasItem(2041) && Items.CanUseItem(2041))
                     {
@@ -1046,7 +1046,7 @@ using EloBuddy; namespace D_Zyra
                     && !_config.Item("ActiveCombo").GetValue<KeyBind>().Active)) return;
             if (Cleanse(_player) && _config.Item("useqss").GetValue<bool>())
             {
-                if (_player.LSHasBuff("zedulttargetmark"))
+                if (_player.HasBuff("zedulttargetmark"))
                 {
                     if (Items.HasItem(3140) && Items.CanUseItem(3140)) LeagueSharp.Common.Utility.DelayAction.Add(1000, () => Items.UseItem(3140));
                     else if (Items.HasItem(3139) && Items.CanUseItem(3139)) LeagueSharp.Common.Utility.DelayAction.Add(1000, () => Items.UseItem(3139));
@@ -1067,9 +1067,9 @@ using EloBuddy; namespace D_Zyra
                 if (((Cleanse(hero) && usemikael) || mikaeluse) && _config.Item("mikaeluse" + hero.ChampionName) != null
                     && _config.Item("mikaeluse" + hero.ChampionName).GetValue<bool>() == true)
                 {
-                    if (_mikael.IsReady() && hero.LSDistance(_player.ServerPosition) <= _mikael.Range)
+                    if (_mikael.IsReady() && hero.Distance(_player.ServerPosition) <= _mikael.Range)
                     {
-                        if (_player.LSHasBuff("zedulttargetmark")) LeagueSharp.Common.Utility.DelayAction.Add(500, () => _mikael.Cast(hero));
+                        if (_player.HasBuff("zedulttargetmark")) LeagueSharp.Common.Utility.DelayAction.Add(500, () => _mikael.Cast(hero));
                         else _mikael.Cast(hero);
                     }
                 }
@@ -1151,7 +1151,7 @@ using EloBuddy; namespace D_Zyra
             }
             if (_config.Item("zedultexecute").GetValue<bool>())
             {
-                if (_player.LSHasBuff("zedulttargetmark"))
+                if (_player.HasBuff("zedulttargetmark"))
                 {
                     cc = true;
                 }
@@ -1218,7 +1218,7 @@ using EloBuddy; namespace D_Zyra
             if (_config.Item("damagetest").GetValue<bool>())
             {
                 foreach (var enemyVisible in
-                    ObjectManager.Get<AIHeroClient>().Where(enemyVisible => enemyVisible.LSIsValidTarget()))
+                    ObjectManager.Get<AIHeroClient>().Where(enemyVisible => enemyVisible.IsValidTarget()))
                 {
                     if (ComboDamage(enemyVisible) > enemyVisible.Health)
                     {
@@ -1228,7 +1228,7 @@ using EloBuddy; namespace D_Zyra
                             Color.Red,
                             "Combo=Rekt");
                     }
-                    else if (ComboDamage(enemyVisible) + _player.LSGetAutoAttackDamage(enemyVisible, true) * 2 > enemyVisible.Health)
+                    else if (ComboDamage(enemyVisible) + _player.GetAutoAttackDamage(enemyVisible, true) * 2 > enemyVisible.Health)
                     {
                         Drawing.DrawText(
                             Drawing.WorldToScreen(enemyVisible.Position)[0] + 50,

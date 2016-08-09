@@ -21,19 +21,19 @@ namespace Olaf.Common
                 fComboDamage += ObjectManager.Player.TotalAttackDamage * 1.2;
             }
 
-            if (Champion.PlayerSpells.Q.LSIsReady())
+            if (Champion.PlayerSpells.Q.IsReady())
             {
-                fComboDamage += ObjectManager.Player.LSGetSpellDamage(t, SpellSlot.Q);
+                fComboDamage += ObjectManager.Player.GetSpellDamage(t, SpellSlot.Q);
             }
 
-            if (Champion.PlayerSpells.E.LSIsReady())
+            if (Champion.PlayerSpells.E.IsReady())
             {
-                fComboDamage += ObjectManager.Player.LSGetSpellDamage(t, SpellSlot.E);
+                fComboDamage += ObjectManager.Player.GetSpellDamage(t, SpellSlot.E);
             }
 
-            if (Champion.PlayerSpells.R.LSIsReady())
+            if (Champion.PlayerSpells.R.IsReady())
             {
-                fComboDamage += ObjectManager.Player.LSGetSpellDamage(t, SpellSlot.R);
+                fComboDamage += ObjectManager.Player.GetSpellDamage(t, SpellSlot.R);
                 fComboDamage += ObjectManager.Player.TotalAttackDamage * 3;
             }
 

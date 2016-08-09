@@ -158,14 +158,14 @@ using EloBuddy;
                 if (enemy != null)
                 {
                     float damage = 0;
-                    if (_Q.LSIsReady())
+                    if (_Q.IsReady())
                         damage += _Q.GetDamage(enemy);
-                    if (_W.LSIsReady())
+                    if (_W.IsReady())
                         damage += _W.GetDamage(enemy);
-                    if (_R.LSIsReady())
+                    if (_R.IsReady())
                         damage += _R.GetDamage(enemy);
                     if (!Player.Spellbook.IsAutoAttacking)
-                        damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                        damage += (float)Player.GetAutoAttackDamage(enemy, true);
                     return damage;
                 }
                 return 0;
@@ -185,7 +185,7 @@ using EloBuddy;
             try
             {
                 if (Player.IsDead) return;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
                 {
                     if (_MainMenu.Item("Veigar_Indicator").GetValue<bool>())
                     {
@@ -230,22 +230,22 @@ using EloBuddy;
                 var ETarget = TargetSelector.GetTarget(_E.Range, TargetSelector.DamageType.Magical);
                 var RTarget = TargetSelector.GetTarget(_E.Range, TargetSelector.DamageType.Magical);
 
-                var KTarget = ObjectManager.Get<AIHeroClient>().OrderBy(x => x.Health).FirstOrDefault(x => x.IsEnemy && Player.LSDistance(x) < 900);
+                var KTarget = ObjectManager.Get<AIHeroClient>().OrderBy(x => x.Health).FirstOrDefault(x => x.IsEnemy && Player.Distance(x) < 900);
                 //KillSteal
                 if (KTarget != null && !KTarget.IsDead && KTarget.IsEnemy && KTarget.Health > 0)
                 {
-                    if (_MainMenu.Item("Veigar_KseQ").GetValue<bool>() && _Q.LSIsReady() && KTarget.Health < _Q.GetDamage(KTarget) && KTarget.LSDistance(Player) <= _Q.Range)
+                    if (_MainMenu.Item("Veigar_KseQ").GetValue<bool>() && _Q.IsReady() && KTarget.Health < _Q.GetDamage(KTarget) && KTarget.Distance(Player) <= _Q.Range)
                     {
                         _Q.CastIfHitchanceEquals(KTarget, Hitchance("Veigar_CUseQ_Hit"), true);
                         return;
                     }
-                    if (_MainMenu.Item("Veigar_KseR").GetValue<bool>() && _R.LSIsReady() && KTarget.Health < _R.GetDamage(KTarget) && KTarget.LSDistance(Player) <= _R.Range)
+                    if (_MainMenu.Item("Veigar_KseR").GetValue<bool>() && _R.IsReady() && KTarget.Health < _R.GetDamage(KTarget) && KTarget.Distance(Player) <= _R.Range)
                     {
                         _R.Cast(KTarget, true);
                         return;
                     }
 
-                    if (_MainMenu.Item("Veigar_KseW").GetValue<bool>() && _W.LSIsReady() && !KTarget.CanMove && KTarget.Health < _W.GetDamage(KTarget) && KTarget.LSDistance(Player) <= _W.Range)
+                    if (_MainMenu.Item("Veigar_KseW").GetValue<bool>() && _W.IsReady() && !KTarget.CanMove && KTarget.Health < _W.GetDamage(KTarget) && KTarget.Distance(Player) <= _W.Range)
                     {
                         _W.CastIfHitchanceEquals(KTarget, HitChance.VeryHigh, true);
                         return;
@@ -255,21 +255,21 @@ using EloBuddy;
                 //Combo
                 if (_MainMenu.Item("CKey").GetValue<KeyBind>().Active)
                 {
-                    if (_MainMenu.Item("Veigar_CUseE").GetValue<bool>() && ETarget != null && _E.LSIsReady())
+                    if (_MainMenu.Item("Veigar_CUseE").GetValue<bool>() && ETarget != null && _E.IsReady())
                     {
                         SpellUseE(ETarget);
                     }
-                    if (_MainMenu.Item("Veigar_CUseW").GetValue<bool>() && WTarget != null && _W.LSIsReady())
+                    if (_MainMenu.Item("Veigar_CUseW").GetValue<bool>() && WTarget != null && _W.IsReady())
                     {
                         _W.CastIfHitchanceEquals(WTarget, HitChance.VeryHigh, true);
                         return;
                     }
-                    if (_MainMenu.Item("Veigar_CUseQ").GetValue<bool>() && QTarget != null && _Q.LSIsReady())
+                    if (_MainMenu.Item("Veigar_CUseQ").GetValue<bool>() && QTarget != null && _Q.IsReady())
                     {
                         _Q.CastIfHitchanceEquals(QTarget, Hitchance("Veigar_CUseQ_Hit"), true);
                         return;
                     }
-                    if (_MainMenu.Item("Veigar_CUseR").GetValue<bool>() && RTarget != null && _R.LSIsReady() && !_MainMenu.Item("Veigar_CUseR_Select").GetValue<bool>())
+                    if (_MainMenu.Item("Veigar_CUseR").GetValue<bool>() && RTarget != null && _R.IsReady() && !_MainMenu.Item("Veigar_CUseR_Select").GetValue<bool>())
                     {
                         _R.Cast(RTarget, true);
                         return;
@@ -280,21 +280,21 @@ using EloBuddy;
                 if ((_MainMenu.Item("HKey").GetValue<KeyBind>().Active || _MainMenu.Item("Veigar_AutoHUseQ").GetValue<KeyBind>().Active)
                     && _MainMenu.Item("Veigar_HManarate").GetValue<Slider>().Value < Player.ManaPercent)
                 {
-                    if (_MainMenu.Item("Veigar_HUseE").GetValue<bool>() && ETarget != null && _E.LSIsReady() && !ETarget.CanMove)
+                    if (_MainMenu.Item("Veigar_HUseE").GetValue<bool>() && ETarget != null && _E.IsReady() && !ETarget.CanMove)
                     {
                         SpellUseE(ETarget);
                     }
-                    if (_MainMenu.Item("Veigar_HUseW").GetValue<bool>() && WTarget != null && _W.LSIsReady() && !WTarget.CanMove)
+                    if (_MainMenu.Item("Veigar_HUseW").GetValue<bool>() && WTarget != null && _W.IsReady() && !WTarget.CanMove)
                     {
                         _W.CastIfHitchanceEquals(WTarget, HitChance.VeryHigh, true);
                         return;
                     }
-                    if (_MainMenu.Item("Veigar_HUseQ").GetValue<bool>() && QTarget != null && _Q.LSIsReady())
+                    if (_MainMenu.Item("Veigar_HUseQ").GetValue<bool>() && QTarget != null && _Q.IsReady())
                     {
                         _Q.CastIfHitchanceEquals(QTarget, Hitchance("Veigar_CUseQ_Hit"), true);
                         return;
                     }
-                    if (_MainMenu.Item("Veigar_HUseR").GetValue<bool>() && RTarget != null && _R.LSIsReady())
+                    if (_MainMenu.Item("Veigar_HUseR").GetValue<bool>() && RTarget != null && _R.IsReady())
                     {
                         _R.Cast(RTarget, true);
                         return;
@@ -358,13 +358,13 @@ using EloBuddy;
         {
             if (!target.CanMove && !target.IsMoving)
             {
-                var EPosition = target.ServerPosition.LSExtend(Player.Position, 400);
+                var EPosition = target.ServerPosition.Extend(Player.Position, 400);
                 _E.Cast(EPosition, true);
                 return;
             }
-            if (target.LSDistance(Player) > 750)
+            if (target.Distance(Player) > 750)
             {
-                var EPosition = target.ServerPosition.LSExtend(Player.Position, 200);
+                var EPosition = target.ServerPosition.Extend(Player.Position, 200);
                 _E.Cast(EPosition, true);
                 return;
             }
@@ -379,9 +379,9 @@ using EloBuddy;
         {
             try
             {
-                if (_MainMenu.Item("Veigar_Anti-GapCloser").GetValue<bool>() && _E.LSIsReady())
+                if (_MainMenu.Item("Veigar_Anti-GapCloser").GetValue<bool>() && _E.IsReady())
                 {
-                    var EPosition = gapcloser.End.LSExtend(Player.ServerPosition, 400);
+                    var EPosition = gapcloser.End.Extend(Player.ServerPosition, 400);
                     _E.Cast(EPosition, true);
                     return;
                 }
@@ -415,9 +415,9 @@ using EloBuddy;
         {
             try
             {
-                if (_MainMenu.Item("Veigar_Interrupt").GetValue<bool>() && sender.IsEnemy && _E.LSIsReady() && sender.LSDistance(Player) < 1150)
+                if (_MainMenu.Item("Veigar_Interrupt").GetValue<bool>() && sender.IsEnemy && _E.IsReady() && sender.Distance(Player) < 1150)
                 {
-                    var EPosition = sender.ServerPosition.LSExtend(Player.Position, 400);
+                    var EPosition = sender.ServerPosition.Extend(Player.Position, 400);
                     _E.Cast(EPosition, true);
                     return;
                 }

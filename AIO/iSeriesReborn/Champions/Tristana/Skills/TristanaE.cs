@@ -18,7 +18,7 @@ using EloBuddy;
             if (Variables.spells[SpellSlot.E].IsEnabledAndReady())
             {
                 var eTarget = TargetSelector.GetTarget(TristanaUtility.GetERRange(), TargetSelector.DamageType.Physical);
-                if ((eTarget.LSIsValidTarget() && MenuExtensions.GetItemValue<bool>($"iseriesr.tristana.combo.eon.{eTarget.ChampionName.ToLower()}")) 
+                if ((eTarget.IsValidTarget() && MenuExtensions.GetItemValue<bool>($"iseriesr.tristana.combo.eon.{eTarget.ChampionName.ToLower()}")) 
                     || PositioningVariables.EnemiesClose.Count() == 1)
                 {
                     Variables.spells[SpellSlot.E].Cast(eTarget);
@@ -33,8 +33,8 @@ using EloBuddy;
                 var minionsInRange =
                     GameObjects.EnemyMinions.Where(
                         m =>
-                            m.LSIsValidTarget(Variables.spells[SpellSlot.E].Range) &&
-                            GameObjects.EnemyMinions.Count(m_ex => m_ex.LSDistance(m) < 150f) > 1)
+                            m.IsValidTarget(Variables.spells[SpellSlot.E].Range) &&
+                            GameObjects.EnemyMinions.Count(m_ex => m_ex.Distance(m) < 150f) > 1)
                 .OrderBy(m => m.Health);
 
                 if (minionsInRange.Any())

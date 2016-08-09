@@ -17,7 +17,7 @@ namespace VayneHunter_Reborn.Skills.Condemn.Methods
         {
             var HeroList = HeroManager.Enemies.Where(
                                     h =>
-                                        h.LSIsValidTarget(Variables.spells[SpellSlot.E].Range) &&
+                                        h.IsValidTarget(Variables.spells[SpellSlot.E].Range) &&
                                         !h.HasBuffOfType(BuffType.SpellShield) &&
                                         !h.HasBuffOfType(BuffType.SpellImmunity));
                     //dz191.vhr.misc.condemn.rev.accuracy
@@ -31,7 +31,7 @@ namespace VayneHunter_Reborn.Skills.Condemn.Methods
                 PushDistance -= (10 + (PushEx - 410)/2);
             }
 
-            if (ObjectManager.Player.ServerPosition.LSUnderTurret(true))
+            if (ObjectManager.Player.ServerPosition.UnderTurret(true))
             {
                     return null;
             }
@@ -45,7 +45,7 @@ namespace VayneHunter_Reborn.Skills.Condemn.Methods
                 }
 
                 if (Hero.Health + 10 <=
-                    ObjectManager.Player.LSGetAutoAttackDamage(Hero)*
+                    ObjectManager.Player.GetAutoAttackDamage(Hero)*
                     MenuExtensions.GetItemValue<Slider>("dz191.vhr.misc.condemn.noeaa").Value)
                 {
                     continue;
@@ -65,11 +65,11 @@ namespace VayneHunter_Reborn.Skills.Condemn.Methods
                     return null;
                 }
 
-                var finalPosition = targetPosition.LSExtend(ObjectManager.Player.ServerPosition, -PushDistance);
-                var finalPosition_ex = Hero.ServerPosition.LSExtend(ObjectManager.Player.ServerPosition, -PushDistance);
+                var finalPosition = targetPosition.Extend(ObjectManager.Player.ServerPosition, -PushDistance);
+                var finalPosition_ex = Hero.ServerPosition.Extend(ObjectManager.Player.ServerPosition, -PushDistance);
 
-                var condemnRectangle = new VHRPolygon(VHRPolygon.Rectangle(targetPosition.LSTo2D(), finalPosition.LSTo2D(), Hero.BoundingRadius));
-                var condemnRectangle_ex = new VHRPolygon(VHRPolygon.Rectangle(Hero.ServerPosition.LSTo2D(), finalPosition_ex.LSTo2D(), Hero.BoundingRadius));
+                var condemnRectangle = new VHRPolygon(VHRPolygon.Rectangle(targetPosition.To2D(), finalPosition.To2D(), Hero.BoundingRadius));
+                var condemnRectangle_ex = new VHRPolygon(VHRPolygon.Rectangle(Hero.ServerPosition.To2D(), finalPosition_ex.To2D(), Hero.BoundingRadius));
 
                 if (IsBothNearWall(Hero))
                 {
@@ -88,11 +88,11 @@ namespace VayneHunter_Reborn.Skills.Condemn.Methods
         private static bool IsBothNearWall(Obj_AI_Base target)
         {
             var positions =
-                GetWallQPositions(target, 110).ToList().OrderBy(pos => pos.LSDistance(target.ServerPosition, true));
+                GetWallQPositions(target, 110).ToList().OrderBy(pos => pos.Distance(target.ServerPosition, true));
             var positions_ex =
-            GetWallQPositions(ObjectManager.Player, 110).ToList().OrderBy(pos => pos.LSDistance(ObjectManager.Player.ServerPosition, true));
+            GetWallQPositions(ObjectManager.Player, 110).ToList().OrderBy(pos => pos.Distance(ObjectManager.Player.ServerPosition, true));
 
-            if (positions.Any(p => p.LSIsWall()) && positions_ex.Any(p => p.LSIsWall()))
+            if (positions.Any(p => p.IsWall()) && positions_ex.Any(p => p.IsWall()))
             {
                 return true;
             }
@@ -103,8 +103,8 @@ namespace VayneHunter_Reborn.Skills.Condemn.Methods
         {
             Vector3[] vList =
             {
-                (player.ServerPosition.LSTo2D() + Range * player.Direction.LSTo2D()).To3D(),
-                (player.ServerPosition.LSTo2D() - Range * player.Direction.LSTo2D()).To3D()
+                (player.ServerPosition.To2D() + Range * player.Direction.To2D()).To3D(),
+                (player.ServerPosition.To2D() - Range * player.Direction.To2D()).To3D()
 
             };
 

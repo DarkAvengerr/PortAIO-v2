@@ -66,7 +66,7 @@ using EloBuddy;
                 return;
             }
 
-            ignite = Player.LSGetSpellSlot("summonerdot");
+            ignite = Player.GetSpellSlot("summonerdot");
 
             spells[Spells.W].SetSkillshot(0.5f, 350, 700, false, SkillshotType.SkillshotCircle);
 
@@ -107,36 +107,36 @@ using EloBuddy;
 
             var qTarget =
                 HeroManager.Enemies.FirstOrDefault(
-                    enemy => enemy.LSIsValidTarget() && enemy.LSDistance(Player) < 200 && Player.IsMoving && enemy.IsMoving);
+                    enemy => enemy.IsValidTarget() && enemy.Distance(Player) < 200 && Player.IsMoving && enemy.IsMoving);
 
-            if (MenuReady("ElSinged.Combo.Q") && spells[Spells.Q].LSIsReady()
-                && (qTarget != null || target.LSHasBuff("poisontrailtarget") || Player.LSDistance(target) <= 500))
+            if (MenuReady("ElSinged.Combo.Q") && spells[Spells.Q].IsReady()
+                && (qTarget != null || target.HasBuff("poisontrailtarget") || Player.Distance(target) <= 500))
             {
                 CastQ();
             }
 
-            if (MenuReady("ElSinged.Combo.W") && target.LSIsValidTarget(spells[Spells.W].Range)
-                && spells[Spells.W].LSIsReady())
+            if (MenuReady("ElSinged.Combo.W") && target.IsValidTarget(spells[Spells.W].Range)
+                && spells[Spells.W].IsReady())
             {
                 var pred = spells[Spells.W].GetPrediction(target);
-                if (spells[Spells.W].Range - 80 > pred.CastPosition.LSDistance(Player.Position)
+                if (spells[Spells.W].Range - 80 > pred.CastPosition.Distance(Player.Position)
                     && pred.Hitchance >= HitChance.High)
                 {
                     spells[Spells.W].Cast(pred.CastPosition);
                 }
             }
 
-            if (MenuReady("ElSinged.Combo.E") && spells[Spells.E].LSIsReady())
+            if (MenuReady("ElSinged.Combo.E") && spells[Spells.E].IsReady())
             {
                 spells[Spells.E].CastOnUnit(target);
             }
 
-            if (MenuReady("ElSinged.Combo.R") && Player.LSCountEnemiesInRange(spells[Spells.W].Range) >= comboCount)
+            if (MenuReady("ElSinged.Combo.R") && Player.CountEnemiesInRange(spells[Spells.W].Range) >= comboCount)
             {
                 spells[Spells.R].Cast();
             }
 
-            if (MenuReady("ElSinged.Combo.Ignite") && Player.LSDistance(target) <= 600
+            if (MenuReady("ElSinged.Combo.Ignite") && Player.Distance(target) <= 600
                 && IgniteDamage(target) >= target.Health)
             {
                 Player.Spellbook.CastSpell(ignite, target);
@@ -153,27 +153,27 @@ using EloBuddy;
 
             var qTarget =
                 HeroManager.Enemies.FirstOrDefault(
-                    enemy => enemy.LSIsValidTarget() && enemy.LSDistance(Player) < 200 && Player.IsMoving && enemy.IsMoving);
+                    enemy => enemy.IsValidTarget() && enemy.Distance(Player) < 200 && Player.IsMoving && enemy.IsMoving);
 
-            if (MenuReady("ElSinged.Harass.Q") && spells[Spells.Q].LSIsReady()
-                && (qTarget != null || target.LSHasBuff("poisontrailtarget") || Player.LSDistance(target) <= 500))
+            if (MenuReady("ElSinged.Harass.Q") && spells[Spells.Q].IsReady()
+                && (qTarget != null || target.HasBuff("poisontrailtarget") || Player.Distance(target) <= 500))
             {
                 CastQ();
             }
 
       
-                if (MenuReady("ElSinged.Harass.W") && target.LSIsValidTarget(spells[Spells.W].Range)
-                    && spells[Spells.W].LSIsReady())
+                if (MenuReady("ElSinged.Harass.W") && target.IsValidTarget(spells[Spells.W].Range)
+                    && spells[Spells.W].IsReady())
                 {
                     var pred = spells[Spells.W].GetPrediction(target);
-                    if (spells[Spells.W].Range - 80 > pred.CastPosition.LSDistance(Player.Position)
+                    if (spells[Spells.W].Range - 80 > pred.CastPosition.Distance(Player.Position)
                         && pred.Hitchance >= HitChance.High)
                     {
                         spells[Spells.W].Cast(pred.CastPosition);
                     }
                 }
 
-                if (MenuReady("ElSinged.Harass.E") && spells[Spells.E].LSIsReady())
+                if (MenuReady("ElSinged.Harass.E") && spells[Spells.E].IsReady())
                 {
                     spells[Spells.E].CastOnUnit(target);
                 }
@@ -181,7 +181,7 @@ using EloBuddy;
                 if (MenuReady("ElSinged.Harass.W"))
                 {
                     var pred = spells[Spells.W].GetPrediction(target);
-                    if (spells[Spells.W].Range - 80 > pred.CastPosition.LSDistance(Player.Position)
+                    if (spells[Spells.W].Range - 80 > pred.CastPosition.Distance(Player.Position)
                         && pred.Hitchance >= HitChance.High)
                     {
                         spells[Spells.W].Cast(pred.CastPosition);
@@ -208,12 +208,12 @@ using EloBuddy;
                 return;
             }
 
-            if (MenuReady("ElSinged.Laneclear.E") && spells[Spells.E].GetDamage(minion) > minion.Health && minion.LSIsValidTarget(spells[Spells.E].Range))
+            if (MenuReady("ElSinged.Laneclear.E") && spells[Spells.E].GetDamage(minion) > minion.Health && minion.IsValidTarget(spells[Spells.E].Range))
             {
                 spells[Spells.E].CastOnUnit(minion);
             }
 
-            if (MenuReady("ElSinged.Laneclear.Q") && spells[Spells.Q].LSIsReady())
+            if (MenuReady("ElSinged.Laneclear.Q") && spells[Spells.Q].IsReady())
             {
                 spells[Spells.Q].Cast();
             }
@@ -251,7 +251,7 @@ using EloBuddy;
         {
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if (spells[Spells.E].LSIsReady() && args.Target.LSIsValidTarget(spells[Spells.E].Range))
+                if (spells[Spells.E].IsReady() && args.Target.IsValidTarget(spells[Spells.E].Range))
                 {
                     args.Process = false;
                     spells[Spells.E].Cast();

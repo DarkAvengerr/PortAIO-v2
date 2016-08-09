@@ -20,39 +20,39 @@ using EloBuddy;
 
         public static bool IsCharmed(this AIHeroClient target)
         {
-            return target.LSHasBuff("AhriSeduce",true);
+            return target.HasBuff("AhriSeduce",true);
         }
 
         public static bool IsSafe(this Vector3 myVector)
         {
-            var killableEnemy = myVector.LSGetEnemiesInRange(600f).Find(h => GetComboDamage(h) >= h.Health);
+            var killableEnemy = myVector.GetEnemiesInRange(600f).Find(h => GetComboDamage(h) >= h.Health);
             var killableEnemyNumber = killableEnemy != null ? 1 : 0;
-            var killableEnemyPlayer = ObjectManager.Player.LSGetEnemiesInRange(600f).Find(h => GetComboDamage(h) >= h.Health);
+            var killableEnemyPlayer = ObjectManager.Player.GetEnemiesInRange(600f).Find(h => GetComboDamage(h) >= h.Health);
             var killableEnemyPlayerNumber = killableEnemyPlayer != null ? 1 : 0;
 
-            if ((ObjectManager.Player.LSUnderTurret(true) && killableEnemyPlayerNumber == 0) || (myVector.LSUnderTurret(true) && killableEnemyNumber == 0))
+            if ((ObjectManager.Player.UnderTurret(true) && killableEnemyPlayerNumber == 0) || (myVector.UnderTurret(true) && killableEnemyNumber == 0))
             {
                 return false;
             }
-            if (myVector.LSCountEnemiesInRange(600f) == 1 || ObjectManager.Player.LSCountEnemiesInRange(600f) >= 1)
+            if (myVector.CountEnemiesInRange(600f) == 1 || ObjectManager.Player.CountEnemiesInRange(600f) >= 1)
             {
                 return true;
             }
-            return myVector.LSCountEnemiesInRange(600f) - killableEnemyNumber - myVector.LSCountAlliesInRange(600f) + 1 >= 0;
+            return myVector.CountEnemiesInRange(600f) - killableEnemyNumber - myVector.CountAlliesInRange(600f) + 1 >= 0;
         }
 
         public static float GetComboDamage(AIHeroClient enemy)
         {
             float totalDamage = 0;
-            totalDamage += DZAhri._spells[SpellSlot.Q].LSIsReady() ? DZAhri._spells[SpellSlot.Q].GetDamage(enemy) : 0;
-            totalDamage += DZAhri._spells[SpellSlot.W].LSIsReady() ? DZAhri._spells[SpellSlot.W].GetDamage(enemy) : 0;
-            totalDamage += DZAhri._spells[SpellSlot.E].LSIsReady() ? DZAhri._spells[SpellSlot.E].GetDamage(enemy) : 0;
-            totalDamage += (DZAhri._spells[SpellSlot.R].LSIsReady() || (RStacks() != 0)) ? DZAhri._spells[SpellSlot.R].GetDamage(enemy) : 0;
+            totalDamage += DZAhri._spells[SpellSlot.Q].IsReady() ? DZAhri._spells[SpellSlot.Q].GetDamage(enemy) : 0;
+            totalDamage += DZAhri._spells[SpellSlot.W].IsReady() ? DZAhri._spells[SpellSlot.W].GetDamage(enemy) : 0;
+            totalDamage += DZAhri._spells[SpellSlot.E].IsReady() ? DZAhri._spells[SpellSlot.E].GetDamage(enemy) : 0;
+            totalDamage += (DZAhri._spells[SpellSlot.R].IsReady() || (RStacks() != 0)) ? DZAhri._spells[SpellSlot.R].GetDamage(enemy) : 0;
             return totalDamage;
         }
         public static bool IsRCasted()
         {
-            return ObjectManager.Player.LSHasBuff("AhriTumble", true);
+            return ObjectManager.Player.HasBuff("AhriTumble", true);
         }
         public static int RStacks()
         {

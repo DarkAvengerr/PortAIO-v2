@@ -120,7 +120,7 @@ using EloBuddy;
 
         private static void ThreshInterrupter(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (sender.IsEnemy && MenuCheck("thresh.interrupter", Config) && sender.LSIsValidTarget(Q.Range) &&
+            if (sender.IsEnemy && MenuCheck("thresh.interrupter", Config) && sender.IsValidTarget(Q.Range) &&
                 args.DangerLevel >= Interrupter2.DangerLevel.High)
             {
                 Q.Cast(sender.Position);
@@ -147,32 +147,32 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (MenuCheck("thresh.q.combo",Config) && Q.LSIsReady())
+            if (MenuCheck("thresh.q.combo",Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && MenuCheck("thresh.q."+x.ChampionName,Config)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && MenuCheck("thresh.q."+x.ChampionName,Config)))
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "thresh.q.hitchance"));
                 }
             }
 
-            if (MenuCheck("thresh.w.combo", Config) && W.LSIsReady())
+            if (MenuCheck("thresh.w.combo", Config) && W.IsReady())
             {
-                foreach (var ally in HeroManager.Allies.Where(x => x.LSIsValidTarget(W.Range) && HighChamps.Contains(x.ChampionName)))
+                foreach (var ally in HeroManager.Allies.Where(x => x.IsValidTarget(W.Range) && HighChamps.Contains(x.ChampionName)))
                 {
                     W.Cast(ally);
                 }
             }
 
-            if (MenuCheck("thresh.e.combo", Config) && E.LSIsReady())
+            if (MenuCheck("thresh.e.combo", Config) && E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(E.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(E.Range)))
                 {
                     E.Cast(enemy);
                 }
             }
 
-            if (MenuCheck("thresh.r.combo", Config) && R.LSIsReady() && 
-                ObjectManager.Player.LSCountEnemiesInRange(R.Range) >= SliderCheck("thresh.r.count",Config))
+            if (MenuCheck("thresh.r.combo", Config) && R.IsReady() && 
+                ObjectManager.Player.CountEnemiesInRange(R.Range) >= SliderCheck("thresh.r.count",Config))
             {
                 R.Cast();
             }
@@ -180,17 +180,17 @@ using EloBuddy;
 
         private static void Harass()
         {
-            if (MenuCheck("thresh.q.harass", Config) && Q.LSIsReady())
+            if (MenuCheck("thresh.q.harass", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && MenuCheck("thresh.q." + x.ChampionName, Config)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && MenuCheck("thresh.q." + x.ChampionName, Config)))
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "thresh.q.hitchance"));
                 }
             }
 
-            if (MenuCheck("thresh.e.harass", Config) && E.LSIsReady())
+            if (MenuCheck("thresh.e.harass", Config) && E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range)))
                 {
                     E.Cast(enemy);
                 }
@@ -216,19 +216,19 @@ using EloBuddy;
 
         private static void ThreshOnDraw(EventArgs args)
         {
-            if (Q.LSIsReady() && ActiveCheck("thresh.q.draw",Config))
+            if (Q.IsReady() && ActiveCheck("thresh.q.draw",Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range ,GetColor("thresh.q.draw",Config));
             }
-            if (W.LSIsReady() && ActiveCheck("thresh.w.draw", Config))
+            if (W.IsReady() && ActiveCheck("thresh.w.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, GetColor("thresh.w.draw", Config));
             }
-            if (E.LSIsReady() && ActiveCheck("thresh.e.draw", Config))
+            if (E.IsReady() && ActiveCheck("thresh.e.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, GetColor("thresh.e.draw", Config));
             }
-            if (R.LSIsReady() && ActiveCheck("thresh.r.draw", Config))
+            if (R.IsReady() && ActiveCheck("thresh.r.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, GetColor("thresh.r.draw", Config));
             }

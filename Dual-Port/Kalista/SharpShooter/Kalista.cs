@@ -97,13 +97,13 @@ namespace SharpShooter.Plugins
                                 if (MenuProvider.Orbwalker.GetTarget() == null)
                                     if (
                                         !HeroManager.Enemies.Any(
-                                            x => x.LSIsValidTarget() && Orbwalking.InAutoAttackRange(x)))
+                                            x => x.IsValidTarget() && Orbwalking.InAutoAttackRange(x)))
                                     {
                                         var minion =
                                             MinionManager.GetMinions(Orbwalking.GetRealAutoAttackRange(null) + 65,
                                                 MinionTypes.All, MinionTeam.NotAlly)
-                                                .Where(x=>x.LSIsValidTarget())
-                                                .OrderBy(x => x.LSDistance(ObjectManager.Player))
+                                                .Where(x=>x.IsValidTarget())
+                                                .OrderBy(x => x.Distance(ObjectManager.Player))
                                                 .FirstOrDefault();
                                         if (minion != null)
                                             Orbwalking.Orbwalk(minion, Game.CursorPos, 0f);
@@ -111,7 +111,7 @@ namespace SharpShooter.Plugins
 
                             if (MenuProvider.Champion.Combo.UseQ)
                                 if (_q.IsReadyPerfectly())
-                                    if (!ObjectManager.Player.LSIsDashing())
+                                    if (!ObjectManager.Player.IsDashing())
                                         if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
                                         {
                                             var target = TargetSelector.GetTargetNoCollision(_q);
@@ -148,7 +148,7 @@ namespace SharpShooter.Plugins
                         {
                             if (MenuProvider.Champion.Harass.UseQ)
                                 if (ObjectManager.Player.IsManaPercentOkay(MenuProvider.Champion.Harass.IfMana))
-                                    if (!ObjectManager.Player.LSIsDashing())
+                                    if (!ObjectManager.Player.IsDashing())
                                         if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
                                             if (_q.IsReadyPerfectly())
                                             {
@@ -164,7 +164,7 @@ namespace SharpShooter.Plugins
                             //Lane
                             if (MenuProvider.Champion.Laneclear.UseQ)
                                 if (_q.IsReadyPerfectly())
-                                    if (!ObjectManager.Player.LSIsDashing())
+                                    if (!ObjectManager.Player.IsDashing())
                                         if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
                                             if (
                                                 ObjectManager.Player.IsManaPercentOkay(
@@ -185,7 +185,7 @@ namespace SharpShooter.Plugins
                                                         Collision.GetCollision(
                                                             new List<Vector3>
                                                             {
-                                                                ObjectManager.Player.ServerPosition.LSExtend(
+                                                                ObjectManager.Player.ServerPosition.Extend(
                                                                     killableMinion.ServerPosition, _q.Range)
                                                             },
                                                             new PredictionInput
@@ -198,13 +198,13 @@ namespace SharpShooter.Plugins
                                                                 CollisionObjects = new[] {CollisionableObjects.Minions},
                                                                 UseBoundingRadius = false
                                                             }
-                                                            ).OrderBy(x => x.LSDistance(ObjectManager.Player));
+                                                            ).OrderBy(x => x.Distance(ObjectManager.Player));
 
                                                     foreach (Obj_AI_Minion collisionMinion in collisionMinions)
                                                     {
                                                         if (
                                                             collisionMinion.IsKillableAndValidTarget(
-                                                                ObjectManager.Player.LSGetSpellDamage(collisionMinion,
+                                                                ObjectManager.Player.GetSpellDamage(collisionMinion,
                                                                     SpellSlot.Q), TargetSelector.DamageType.Physical,
                                                                 _q.Range))
                                                             killableNumber++;
@@ -249,7 +249,7 @@ namespace SharpShooter.Plugins
                                                 MinionOrderTypes.MaxHealth)
                                                 .FirstOrDefault(
                                                     x =>
-                                                        x.LSIsValidTarget(_q.Range) &&
+                                                        x.IsValidTarget(_q.Range) &&
                                                         _q.GetPrediction(x).Hitchance >= HitChance.High);
 
                                         if (qTarget != null)
@@ -322,7 +322,7 @@ namespace SharpShooter.Plugins
                             var grabTarget =
                                 HeroManager.Enemies.FirstOrDefault(x => !x.IsDead && x.HasBuff("rocketgrab2"));
                             if (grabTarget != null)
-                                if (ObjectManager.Player.LSDistance(grabTarget) > myBlitzcrank.LSDistance(grabTarget))
+                                if (ObjectManager.Player.Distance(grabTarget) > myBlitzcrank.Distance(grabTarget))
                                     _r.Cast();
                         }
                     }
@@ -333,7 +333,7 @@ namespace SharpShooter.Plugins
                             !(MenuProvider.Champion.Misc.GetBoolValue("^ Don't do this in ComboMode") &&
                               MenuProvider.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo))
                             if (ObjectManager.Player.Mana - _e.ManaCost >= _e.ManaCost)
-                                if (HeroManager.Enemies.Any(x => x.LSIsValidTarget(_e.Range) && _e.GetDamage(x) > 10))
+                                if (HeroManager.Enemies.Any(x => x.IsValidTarget(_e.Range) && _e.GetDamage(x) > 10))
                                     if (
                                         MinionManager.GetMinions(_e.Range, MinionTypes.All, MinionTeam.NotAlly)
                                             .Any(
@@ -345,27 +345,27 @@ namespace SharpShooter.Plugins
 
                 if (MenuProvider.Champion.Misc.GetBoolValue("Auto W on Dragon or Baron (With W)"))
                     if (ObjectManager.Player.IsManaPercentOkay(50))
-                        if (!ObjectManager.Player.LSIsRecalling())
-                            if (ObjectManager.Player.Position.LSCountEnemiesInRange(1500f) <= 0)
+                        if (!ObjectManager.Player.IsRecalling())
+                            if (ObjectManager.Player.Position.CountEnemiesInRange(1500f) <= 0)
                                 if (MenuProvider.Orbwalker.GetTarget() == null)
                                 {
                                     if (_w.IsReadyPerfectly())
-                                        if (ObjectManager.Player.LSDistance(_baronLocation) <= _w.Range)
+                                        if (ObjectManager.Player.Distance(_baronLocation) <= _w.Range)
                                             _w.Cast(_baronLocation);
 
                                     if (_w.IsReadyPerfectly())
-                                        if (ObjectManager.Player.LSDistance(_dragonLocation) <= _w.Range)
+                                        if (ObjectManager.Player.Distance(_dragonLocation) <= _w.Range)
                                             _w.Cast(_dragonLocation);
                                 }
 
                 if (MenuProvider.Champion.Misc.GetKeyBindValue("Cast W on Dragon").Active)
                     if (_w.IsReadyPerfectly())
-                        if (ObjectManager.Player.LSDistance(_dragonLocation) <= _w.Range)
+                        if (ObjectManager.Player.Distance(_dragonLocation) <= _w.Range)
                             _w.Cast(_dragonLocation);
 
                 if (MenuProvider.Champion.Misc.GetKeyBindValue("Cast W on Baron").Active)
                     if (_w.IsReadyPerfectly())
-                        if (ObjectManager.Player.LSDistance(_baronLocation) <= _w.Range)
+                        if (ObjectManager.Player.Distance(_baronLocation) <= _w.Range)
                             _w.Cast(_baronLocation);
             }
         }
@@ -409,7 +409,7 @@ namespace SharpShooter.Plugins
                                         x => !x.IsDead && x.HasBuff("kalistacoopstrikeally"));
                                 if (soulbound != null)
                                     if (args.Target.NetworkId == soulbound.NetworkId ||
-                                        args.End.LSDistance(soulbound.Position) <= 200)
+                                        args.End.Distance(soulbound.Position) <= 200)
                                         if (soulbound.HealthPercent < 20)
                                             _r.Cast();
                             }
@@ -420,7 +420,7 @@ namespace SharpShooter.Plugins
                                     if (_e.IsReadyPerfectly())
                                         if (
                                             HeroManager.Enemies.Any(
-                                                x => x.LSIsValidTarget(_e.Range) && _e.GetDamage(x) > 0))
+                                                x => x.IsValidTarget(_e.Range) && _e.GetDamage(x) > 0))
                                             _e.Cast();
                     }
         }

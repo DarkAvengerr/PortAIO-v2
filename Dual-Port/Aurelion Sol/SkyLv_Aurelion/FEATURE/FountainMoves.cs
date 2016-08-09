@@ -56,7 +56,7 @@ using EloBuddy;
 
         public static void FountainAutoMoves()
         {
-            if (ObjectManager.Player.LSInFountain() && Utils.GameTimeTickCount - FountainMove >= 20000)
+            if (ObjectManager.Player.InFountain() && Utils.GameTimeTickCount - FountainMove >= 20000)
             {
                 #region SummonersRift
 

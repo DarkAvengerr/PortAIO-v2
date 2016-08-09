@@ -18,16 +18,16 @@ using EloBuddy; namespace xSaliceResurrected.Managers
         public static double GetAzirAaSandwarriorDamage(AttackableUnit target)
         {
             var unit = (Obj_AI_Base)target;
-            var dmg = MyHero.LSGetSpellDamage(unit, SpellSlot.W);
+            var dmg = MyHero.GetSpellDamage(unit, SpellSlot.W);
 
-            var count = Soldiers.Count(obj => obj.Position.LSDistance(unit.Position) < 350);
+            var count = Soldiers.Count(obj => obj.Position.Distance(unit.Position) < 350);
 
             return dmg * count;
         }
 
         public static bool InSoldierAttackRange(AttackableUnit target)
         {
-            return Soldiers.Count(obj => obj.Position.LSDistance(target.Position) < 350 && MyHero.LSDistance(target) < 1000 && !obj.IsMoving) > 0;
+            return Soldiers.Count(obj => obj.Position.Distance(target.Position) < 350 && MyHero.Distance(target) < 1000 && !obj.IsMoving) > 0;
         }
 
         private static float GetAutoAttackRange(Obj_AI_Base source = null, AttackableUnit target = null)
@@ -42,7 +42,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
 
         public override bool InAutoAttackRange(AttackableUnit target)
         {
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
                 return false;
             if (Orbwalking.InAutoAttackRange(target))
                 return true;
@@ -69,11 +69,11 @@ using EloBuddy; namespace xSaliceResurrected.Managers
             //last hit
             if (ActiveMode == Orbwalking.OrbwalkingMode.Mixed || ActiveMode == Orbwalking.OrbwalkingMode.LastHit || ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-                foreach (var minion in from minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.LSIsValidTarget() && minion.Name != "Beacon" && InAutoAttackRange(minion)
+                foreach (var minion in from minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget() && minion.Name != "Beacon" && InAutoAttackRange(minion)
                 && minion.Health < 3 * (MyHero.BaseAttackDamage + MyHero.FlatPhysicalDamageMod))
                                        let t = (int)(MyHero.AttackCastDelay * 1000) - 100 + Game.Ping / 2
                                        let predHealth = HealthPrediction.GetHealthPrediction(minion, t, 0)
-                                       where minion.Team != GameObjectTeam.Neutral && predHealth > 0 && predHealth <= (InSoldierAttackRange(minion) ? GetAzirAaSandwarriorDamage(minion) - 30 : MyHero.LSGetAutoAttackDamage(minion, true))
+                                       where minion.Team != GameObjectTeam.Neutral && predHealth > 0 && predHealth <= (InSoldierAttackRange(minion) ? GetAzirAaSandwarriorDamage(minion) - 30 : MyHero.GetAutoAttackDamage(minion, true))
                                        select minion)
                     return minion;
             }
@@ -84,7 +84,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
 
                 foreach (
                     var turret in
-                        ObjectManager.Get<Obj_AI_Turret>().Where(turret => turret.LSIsValidTarget(GetAutoAttackRange(MyHero, turret))))
+                        ObjectManager.Get<Obj_AI_Turret>().Where(turret => turret.IsValidTarget(GetAutoAttackRange(MyHero, turret))))
                     return turret;
             }
 
@@ -100,7 +100,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
                     foreach (
                         var minion in
                             minions
-                                .Where(minion => InSoldierAttackRange(minion) && minion.Name != "Beacon" && minion.LSIsValidTarget())
+                                .Where(minion => InSoldierAttackRange(minion) && minion.Name != "Beacon" && minion.IsValidTarget())
                                 .Where(minion => minion.MaxHealth >= maxhealth1[0] || Math.Abs(maxhealth1[0] - float.MaxValue) < float.Epsilon))
                     {
                         tempTarget = minion;
@@ -112,7 +112,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
 
                 maxhealth = new float[] { 0 };
                 var maxhealth2 = maxhealth;
-                foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.LSIsValidTarget(GetAutoAttackRange(MyHero, minion)) && minion.Name != "Beacon" && minion.Team == GameObjectTeam.Neutral).Where(minion => minion.MaxHealth >= maxhealth2[0] || Math.Abs(maxhealth2[0] - float.MaxValue) < float.Epsilon))
+                foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(GetAutoAttackRange(MyHero, minion)) && minion.Name != "Beacon" && minion.Team == GameObjectTeam.Neutral).Where(minion => minion.MaxHealth >= maxhealth2[0] || Math.Abs(maxhealth2[0] - float.MaxValue) < float.Epsilon))
                 {
                     tempTarget = minion;
                     maxhealth[0] = minion.MaxHealth;
@@ -127,7 +127,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
             //lane clear
             if (ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-                return (ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.LSIsValidTarget() && InAutoAttackRange(minion))).MaxOrDefault(x => x.Health);
+                return (ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))).MaxOrDefault(x => x.Health);
             }
 
             return null;
@@ -138,10 +138,10 @@ using EloBuddy; namespace xSaliceResurrected.Managers
             return ObjectManager.Get<Obj_AI_Minion>()
             .Any(
             minion =>
-            minion.LSIsValidTarget(850) && minion.Team != GameObjectTeam.Neutral &&
+            minion.IsValidTarget(850) && minion.Team != GameObjectTeam.Neutral &&
             InAutoAttackRange(minion) &&
             HealthPrediction.LaneClearHealthPrediction(minion, (int)((MyHero.AttackDelay * 1000) * 2f), 0) <=
-            (InSoldierAttackRange(minion) ? GetAzirAaSandwarriorDamage(minion) - 30 : MyHero.LSGetAutoAttackDamage(minion, true)));
+            (InSoldierAttackRange(minion) ? GetAzirAaSandwarriorDamage(minion) - 30 : MyHero.GetAutoAttackDamage(minion, true)));
         }
 
         private AIHeroClient GetBestHeroTarget()

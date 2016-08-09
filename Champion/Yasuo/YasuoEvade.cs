@@ -19,7 +19,7 @@ using EloBuddy; namespace YasuoPro
                 return;
             }
 
-            if (!Helper.Spells[Helper.W].LSIsReady() && !Helper.Spells[Helper.E].LSIsReady())
+            if (!Helper.Spells[Helper.W].IsReady() && !Helper.Spells[Helper.E].IsReady())
             {
                 return;
             }
@@ -34,7 +34,7 @@ using EloBuddy; namespace YasuoPro
                 }
 
                 //Avoid trying to evade while dashing
-                if (Helper.Yasuo.LSIsDashing())
+                if (Helper.Yasuo.IsDashing())
                 {
                     return;
                 }
@@ -47,15 +47,15 @@ using EloBuddy; namespace YasuoPro
 
                 var randDist = Helper.Yasuo.BoundingRadius + rand.Next(0, 20);
                 //Avoid dodging the skillshot if there is no room/time to safely block it
-                if (skillshot.Start.LSDistance(Helper.Yasuo.ServerPosition) < randDist)
+                if (skillshot.Start.Distance(Helper.Yasuo.ServerPosition) < randDist)
                 {
                     continue;
                 }
 
 
                 if (((Program.NoSolutionFound ||
-                      !Program.IsSafePath(Helper.Yasuo.LSGetWaypoints(), 1000).IsSafe &&
-                      !Program.IsSafe(Helper.Yasuo.ServerPosition.LSTo2D()).IsSafe)))
+                      !Program.IsSafePath(Helper.Yasuo.GetWaypoints(), 1000).IsSafe &&
+                      !Program.IsSafe(Helper.Yasuo.ServerPosition.To2D()).IsSafe)))
                 {
                     Helper.DontDash = true;
                     bool windWallable = true;
@@ -74,7 +74,7 @@ using EloBuddy; namespace YasuoPro
                             if (skillshot.Evade(SpellSlot.W)
                                 && skillshot.SpellData.DangerValue >= Helper.GetSliderInt("Evade.MinDangerLevelWW"))
                             {
-                                var castpos = Helper.Yasuo.ServerPosition.LSExtend(skillshot.MissilePosition.To3D(), randDist);
+                                var castpos = Helper.Yasuo.ServerPosition.Extend(skillshot.MissilePosition.To3D(), randDist);
                                 var delay = Helper.GetSliderInt("Evade.Delay");
                                 if (Helper.TickCount - skillshot.StartTick >=
                                     skillshot.SpellData.setdelay +
@@ -105,9 +105,9 @@ using EloBuddy; namespace YasuoPro
                                         .Where(
                                             x =>
                                                 x.IsDashable() && !Helper.GetDashPos(x).PointUnderEnemyTurret() &&
-                                                Program.IsSafe(x.ServerPosition.LSTo2D()).IsSafe &&
+                                                Program.IsSafe(x.ServerPosition.To2D()).IsSafe &&
                                                 Program.IsSafePath(x.GeneratePathTo(), 0, 1200, 250).IsSafe)
-                                        .MinOrDefault(x => x.LSDistance(Helper.shop));
+                                        .MinOrDefault(x => x.Distance(Helper.shop));
 
                                 if (evadetarget != null)
                                 {
@@ -133,7 +133,7 @@ using EloBuddy; namespace YasuoPro
         static List<Vector2> GeneratePathTo(this Obj_AI_Base unit)
         {
             List<Vector2> path = new List<Vector2>();
-            path.Add(Helper.Yasuo.ServerPosition.LSTo2D());
+            path.Add(Helper.Yasuo.ServerPosition.To2D());
             path.Add(Helper.GetDashPos(unit));
             return path;
         }

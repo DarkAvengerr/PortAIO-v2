@@ -72,7 +72,7 @@ using EloBuddy; namespace KoreanZed.Common
             if (zedMenu.GetParamBool("koreanzed.miscmenu.forceultimate")
                 && zedOrbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                b = r.LSIsReady() && r.Instance.ToggleState == 0 && ObjectManager.Player.Mana > r.ManaCost;
+                b = r.IsReady() && r.Instance.ToggleState == 0 && ObjectManager.Player.Mana > r.ManaCost;
             }
             else
             {

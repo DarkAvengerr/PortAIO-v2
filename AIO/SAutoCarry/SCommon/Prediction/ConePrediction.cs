@@ -39,7 +39,7 @@ namespace SCommon.Prediction
         /// <returns>Prediction result as <see cref="Prediction.Result"/></returns>
         public static Prediction.Result GetPrediction(Prediction.Input input)
         {
-            return GetPrediction(input.Target, input.SpellWidth, input.SpellDelay, input.SpellMissileSpeed, input.SpellRange, input.SpellCollisionable, input.Path, input.AvgReactionTime, input.LastMovChangeTime, input.AvgPathLenght, input.LastAngleDiff, input.From.LSTo2D(), input.RangeCheckFrom.LSTo2D());
+            return GetPrediction(input.Target, input.SpellWidth, input.SpellDelay, input.SpellMissileSpeed, input.SpellRange, input.SpellCollisionable, input.Path, input.AvgReactionTime, input.LastMovChangeTime, input.AvgPathLenght, input.LastAngleDiff, input.From.To2D(), input.RangeCheckFrom.To2D());
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace SCommon.Prediction
         /// <returns>Prediction result as <see cref="Prediction.Result"/></returns>
         public static Prediction.Result GetPrediction(AIHeroClient target, float width, float delay, float missileSpeed, float range, bool collisionable)
         {
-            return GetPrediction(target, width, delay, missileSpeed, range, collisionable, target.LSGetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), ObjectManager.Player.ServerPosition.LSTo2D(), ObjectManager.Player.ServerPosition.LSTo2D());
+            return GetPrediction(target, width, delay, missileSpeed, range, collisionable, target.GetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), ObjectManager.Player.ServerPosition.To2D(), ObjectManager.Player.ServerPosition.To2D());
         }
 
         /// <summary>
@@ -95,14 +95,14 @@ namespace SCommon.Prediction
         {
             Prediction.AoeResult result = new Prediction.AoeResult();
             result.HitCount = 0;
-            var enemies = HeroManager.Enemies.Where(p => p.LSIsValidTarget() && Prediction.GetFastUnitPosition(p, delay, 0, from).LSDistance(rangeCheckFrom) < range);
+            var enemies = HeroManager.Enemies.Where(p => p.IsValidTarget() && Prediction.GetFastUnitPosition(p, delay, 0, from).Distance(rangeCheckFrom) < range);
 
             foreach (AIHeroClient enemy in enemies)
             {
-                Prediction.Result prediction = GetPrediction(enemy, width, delay, missileSpeed, range, false, enemy.LSGetWaypoints(), enemy.AvgMovChangeTime(), enemy.LastMovChangeTime(), enemy.AvgPathLenght(), enemy.LastAngleDiff(), from, rangeCheckFrom);
+                Prediction.Result prediction = GetPrediction(enemy, width, delay, missileSpeed, range, false, enemy.GetWaypoints(), enemy.AvgMovChangeTime(), enemy.LastMovChangeTime(), enemy.AvgPathLenght(), enemy.LastAngleDiff(), from, rangeCheckFrom);
                 if (prediction.HitChance > HitChance.Medium)
                 {
-                    Vector2 to = from + (prediction.CastPosition - from).LSNormalized() * range;
+                    Vector2 to = from + (prediction.CastPosition - from).Normalized() * range;
                     var spellHitBox = ClipperWrapper.DefineSector(from, to, width, range);
                     var collidedEnemies = HeroManager.Enemies.AsParallel().Where(p => !ClipperWrapper.IsOutside(spellHitBox, Prediction.GetFastUnitPosition(p, delay, missileSpeed, from)));
                     int collisionCount = collidedEnemies.Count();

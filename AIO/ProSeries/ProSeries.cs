@@ -110,7 +110,7 @@ using EloBuddy;
             };
 
             var minions = from minion in ObjectManager.Get<Obj_AI_Minion>()
-                where minion.LSIsValidTarget(range) && !minion.Name.Contains("Mini")
+                where minion.IsValidTarget(range) && !minion.Name.Contains("Mini")
                 where names.Any(name => minion.Name.StartsWith(name))
                 select minion;
 
@@ -122,16 +122,16 @@ using EloBuddy;
             Vector3 startpos,  Vector3 endpos, 
             float width, float range, out List<Obj_AI_Base> units,  bool minion = false)
         {
-            var end = endpos.LSTo2D();
-            var start = startpos.LSTo2D();
-            var direction = (end - start).LSNormalized();
-            var endposition = start + direction * start.LSDistance(endpos);
+            var end = endpos.To2D();
+            var start = startpos.To2D();
+            var direction = (end - start).Normalized();
+            var endposition = start + direction * start.Distance(endpos);
 
             var objinpath = from unit in ObjectManager.Get<Obj_AI_Base>().Where(b => b.Team != Player.Team)
-                    where Player.ServerPosition.LSDistance(unit.ServerPosition) <= range
+                    where Player.ServerPosition.Distance(unit.ServerPosition) <= range
                     where unit is AIHeroClient || unit is Obj_AI_Minion && minion
-                    let proj = unit.ServerPosition.LSTo2D().LSProjectOn(start, endposition)
-                    let projdist = unit.LSDistance(proj.SegmentPoint)
+                    let proj = unit.ServerPosition.To2D().ProjectOn(start, endposition)
+                    let projdist = unit.Distance(proj.SegmentPoint)
                     where unit.BoundingRadius + width > projdist
                     select unit;
 

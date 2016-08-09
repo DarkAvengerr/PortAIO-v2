@@ -19,7 +19,7 @@ using EloBuddy;
         public bool ShouldGetExecuted()
         {
             return Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.veigar.extra.autoRKS") &&
-                   Variables.Spells[SpellSlot.R].LSIsReady();
+                   Variables.Spells[SpellSlot.R].IsReady();
 
         }
 
@@ -32,7 +32,7 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(Variables.Spells[SpellSlot.R].Range, TargetSelector.DamageType.Magical);
 
-            if (target.LSIsValidTarget() 
+            if (target.IsValidTarget() 
                 && TargetSelector.GetPriority(target) > 1 )
             {
                 if (target.Health + 5 < Variables.Spells[SpellSlot.R].GetDamage(target))
@@ -43,8 +43,8 @@ using EloBuddy;
                 {
                     var nearlyKillableTarget = DZTargetHelper.GetNearlyKillableTarget(Variables.Spells[SpellSlot.R],
                         new[] { SpellSlot.Q }, TargetSelector.DamageType.Magical);
-                    if (nearlyKillableTarget.LSIsValidTarget(Variables.Spells[SpellSlot.Q].Range)
-                        && nearlyKillableTarget.LSIsValidTarget(Variables.Spells[SpellSlot.R].Range)
+                    if (nearlyKillableTarget.IsValidTarget(Variables.Spells[SpellSlot.Q].Range)
+                        && nearlyKillableTarget.IsValidTarget(Variables.Spells[SpellSlot.R].Range)
                         && TargetSelector.GetPriority(target) > 1)
                     {
                         var QPrediction = Variables.Spells[SpellSlot.Q].GetPrediction(nearlyKillableTarget);

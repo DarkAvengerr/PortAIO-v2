@@ -37,7 +37,7 @@ namespace UnderratedAIO.Champions
 
         private void AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (unit.IsMe && orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && W.LSIsReady() &&
+            if (unit.IsMe && orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && W.IsReady() &&
                 config.Item("usew", true).GetValue<bool>())
             {
                 W.Cast();
@@ -49,14 +49,14 @@ namespace UnderratedAIO.Champions
         {
             if (config.Item("useqint", true).GetValue<bool>())
             {
-                if (unit.LSIsValidTarget(Q.Range) && Q.LSIsReady() && me.LSDistance(unit) < Q.Range)
+                if (unit.IsValidTarget(Q.Range) && Q.IsReady() && me.Distance(unit) < Q.Range)
                 {
                     Q.Cast(unit.Position);
                 }
             }
             if (config.Item("userint", true).GetValue<bool>())
             {
-                if (unit.LSIsValidTarget(R.Range) && R.LSIsReady() && me.LSDistance(unit) < R.Range)
+                if (unit.IsValidTarget(R.Range) && R.IsReady() && me.Distance(unit) < R.Range)
                 {
                     R.Cast(unit.Position);
                 }
@@ -96,7 +96,7 @@ namespace UnderratedAIO.Champions
                     break;
             }
 
-            if (config.Item("manualR", true).GetValue<KeyBind>().Active && R.LSIsReady())
+            if (config.Item("manualR", true).GetValue<KeyBind>().Active && R.IsReady())
             {
                 CastR();
             }
@@ -106,8 +106,8 @@ namespace UnderratedAIO.Champions
         {
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             foreach (var enemy in
-                HeroManager.Enemies.Where(i => !i.IsDead && me.LSDistance(i) < R.Range)
-                    .OrderByDescending(l => l.LSCountEnemiesInRange(350f)))
+                HeroManager.Enemies.Where(i => !i.IsDead && me.Distance(i) < R.Range)
+                    .OrderByDescending(l => l.CountEnemiesInRange(350f)))
             {
                 R.CastIfHitchanceEquals(enemy, HitChance.High);
                 break;
@@ -118,14 +118,14 @@ namespace UnderratedAIO.Champions
         {
             if (config.Item("useqgc", true).GetValue<bool>())
             {
-                if (gapcloser.Sender.LSIsValidTarget(Q.Range) && Q.LSIsReady() && me.LSDistance(gapcloser.End) < Q.Range)
+                if (gapcloser.Sender.IsValidTarget(Q.Range) && Q.IsReady() && me.Distance(gapcloser.End) < Q.Range)
                 {
                     Q.Cast(gapcloser.End);
                 }
             }
             if (config.Item("usergc", true).GetValue<bool>())
             {
-                if (gapcloser.Sender.LSIsValidTarget(R.Range) && R.LSIsReady() && me.LSDistance(gapcloser.End) < R.Range)
+                if (gapcloser.Sender.IsValidTarget(R.Range) && R.IsReady() && me.Distance(gapcloser.End) < R.Range)
                 {
                     R.Cast(gapcloser.End);
                 }
@@ -136,7 +136,7 @@ namespace UnderratedAIO.Champions
         {
             var minions =
                 MinionManager.GetMinions(400, MinionTypes.All, MinionTeam.NotAlly)
-                    .Where(m => m.LSIsValidTarget(400))
+                    .Where(m => m.IsValidTarget(400))
                     .ToList();
             if (minions.Count() > 2)
             {
@@ -159,26 +159,26 @@ namespace UnderratedAIO.Champions
                 Q.Instance.SData.SpellCastTime, Q.Instance.SData.LineWidth, Q.Instance.SData.MissileSpeed, false,
                 SkillshotType.SkillshotLine);
             var minionsSpells = MinionManager.GetMinions(W.Range, MinionTypes.All, MinionTeam.NotAlly);
-            if (W.LSIsReady() && minionsSpells.Count() > 1 && config.Item("usewC", true).GetValue<bool>() &&
+            if (W.IsReady() && minionsSpells.Count() > 1 && config.Item("usewC", true).GetValue<bool>() &&
                 me.Spellbook.GetSpell(SpellSlot.W).SData.Mana <= me.Mana)
             {
                 W.Cast();
             }
             var minHit = config.Item("useeCmin", true).GetValue<Slider>().Value;
-            if (E.LSIsReady() && me.Spellbook.GetSpell(SpellSlot.Q).SData.Mana <= me.Mana &&
+            if (E.IsReady() && me.Spellbook.GetSpell(SpellSlot.Q).SData.Mana <= me.Mana &&
                 CombatHelper.SejuaniCountFrostMinion(E.Range) >= minHit &&
-                (!(!Q.LSIsReady() && me.Mana - me.Spellbook.GetSpell(SpellSlot.Q).SData.Mana < me.MaxMana * perc) ||
-                 !(!W.LSIsReady() && me.Mana - me.Spellbook.GetSpell(SpellSlot.W).SData.Mana < me.MaxMana * perc)))
+                (!(!Q.IsReady() && me.Mana - me.Spellbook.GetSpell(SpellSlot.Q).SData.Mana < me.MaxMana * perc) ||
+                 !(!W.IsReady() && me.Mana - me.Spellbook.GetSpell(SpellSlot.W).SData.Mana < me.MaxMana * perc)))
             {
                 E.Cast();
             }
-            if (config.Item("useqC", true).GetValue<bool>() && Q.LSIsReady() &&
+            if (config.Item("useqC", true).GetValue<bool>() && Q.IsReady() &&
                 me.Spellbook.GetSpell(SpellSlot.Q).SData.Mana <= me.Mana)
             {
                 var minionsForQ = MinionManager.GetMinions(
                     ObjectManager.Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.NotAlly);
                 MinionManager.FarmLocation bestPosition = Q.GetLineFarmLocation(minionsForQ);
-                if (bestPosition.Position.LSIsValid())
+                if (bestPosition.Position.IsValid())
                 {
                     if (bestPosition.MinionsHit >= 2)
                     {
@@ -194,7 +194,7 @@ namespace UnderratedAIO.Champions
 
         private static void Ulti()
         {
-            if (!R.LSIsReady() || config.Item("useRmin", true).GetValue<Slider>().Value == 0)
+            if (!R.IsReady() || config.Item("useRmin", true).GetValue<Slider>().Value == 0)
             {
                 return;
             }
@@ -211,12 +211,12 @@ namespace UnderratedAIO.Champions
                 foreach (var enemy in
                     HeroManager.Enemies.Where(
                         i =>
-                            i.LSIsValidTarget() && me.LSDistance(i) < R.Range &&
-                            me.LSDistance(i) >= config.Item("useRminr", true).GetValue<Slider>().Value &&
+                            i.IsValidTarget() && me.Distance(i) < R.Range &&
+                            me.Distance(i) >= config.Item("useRminr", true).GetValue<Slider>().Value &&
                             !config.Item("ult" + i.BaseSkinName, true).GetValue<bool>() &&
-                            i.Position.LSCountEnemiesInRange(350f) >=
-                            config.Item("useRmin", true).GetValue<Slider>().Value && target.LSDistance(i.Position) < 350f)
-                        .OrderByDescending(l => l.Position.LSCountEnemiesInRange(350f)))
+                            i.Position.CountEnemiesInRange(350f) >=
+                            config.Item("useRmin", true).GetValue<Slider>().Value && target.Distance(i.Position) < 350f)
+                        .OrderByDescending(l => l.Position.CountEnemiesInRange(350f)))
                 {
                     R.Cast(enemy);
                     return;
@@ -240,22 +240,22 @@ namespace UnderratedAIO.Champions
             }
 
             var buffs = CombatHelper.SejuaniCountFrostHero(E.Range);
-            if (E.LSIsReady() && me.LSDistance(target.Position) < E.Range && buffs > 0 &&
-                ((buffs > minHit) || (Damage.LSGetSpellDamage(me, target, SpellSlot.E) >= target.Health) ||
-                 (me.LSDistance(target) > config.Item("useEminr", true).GetValue<Slider>().Value &&
-                  me.LSDistance(target) < E.Range && buffs == 1)))
+            if (E.IsReady() && me.Distance(target.Position) < E.Range && buffs > 0 &&
+                ((buffs > minHit) || (Damage.GetSpellDamage(me, target, SpellSlot.E) >= target.Health) ||
+                 (me.Distance(target) > config.Item("useEminr", true).GetValue<Slider>().Value &&
+                  me.Distance(target) < E.Range && buffs == 1)))
             {
-                if (!(Q.LSIsReady() && me.Mana - me.Spellbook.GetSpell(SpellSlot.Q).SData.Mana < me.MaxMana * perc) ||
-                    !(W.LSIsReady() && me.Mana - me.Spellbook.GetSpell(SpellSlot.W).SData.Mana < me.MaxMana * perc))
+                if (!(Q.IsReady() && me.Mana - me.Spellbook.GetSpell(SpellSlot.Q).SData.Mana < me.MaxMana * perc) ||
+                    !(W.IsReady() && me.Mana - me.Spellbook.GetSpell(SpellSlot.W).SData.Mana < me.MaxMana * perc))
                 {
                     E.Cast();
                 }
             }
-            if (Q.LSIsReady() && config.Item("useq", true).GetValue<bool>() &&
-                me.LSDistance(target.Position) > config.Item("useQminr", true).GetValue<Slider>().Value)
+            if (Q.IsReady() && config.Item("useq", true).GetValue<bool>() &&
+                me.Distance(target.Position) > config.Item("useQminr", true).GetValue<Slider>().Value)
             {
                 var hits = Q.GetHitCount(HitChance.High);
-                if (target.LSCountEnemiesInRange(Q.Width) >= hits)
+                if (target.CountEnemiesInRange(Q.Width) >= hits)
                 {
                     if (Program.IsSPrediction)
                     {
@@ -267,26 +267,26 @@ namespace UnderratedAIO.Champions
                     }
                 }
             }
-            bool hasIgnite = me.Spellbook.CanUseSpell(me.LSGetSpellSlot("SummonerDot")) == SpellState.Ready;
+            bool hasIgnite = me.Spellbook.CanUseSpell(me.GetSpellSlot("SummonerDot")) == SpellState.Ready;
             var ignitedmg = (float)me.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
             if (ignitedmg > target.Health && hasIgnite && !E.CanCast(target) && !W.CanCast(target) && !Q.CanCast(target))
             {
-                me.Spellbook.CastSpell(me.LSGetSpellSlot("SummonerDot"), target);
+                me.Spellbook.CastSpell(me.GetSpellSlot("SummonerDot"), target);
             }
         }
 
         private static float ComboDamage(AIHeroClient hero)
         {
             float damage = 0;
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                damage += (float)Damage.LSGetSpellDamage(me, hero, SpellSlot.Q);
+                damage += (float)Damage.GetSpellDamage(me, hero, SpellSlot.Q);
             }
-            if (E.LSIsReady() || E.Instance.State == SpellState.Surpressed)
+            if (E.IsReady() || E.Instance.State == SpellState.Surpressed)
             {
-                damage += (float)Damage.LSGetSpellDamage(me, hero, SpellSlot.E);
+                damage += (float)Damage.GetSpellDamage(me, hero, SpellSlot.E);
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 double watk = (new double[] { 4, 4.5, 5, 5.5, 6 }[W.Level - 1] + hero.FlatMagicDamageMod * 0.03) / 100 *
                               hero.Health;
@@ -295,9 +295,9 @@ namespace UnderratedAIO.Champions
                 damage += (float)me.CalcDamage(hero, Damage.DamageType.Magical, wdot);
                 damage += (float)me.CalcDamage(hero, Damage.DamageType.Magical, watk);
             }
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
-                damage += (float)Damage.LSGetSpellDamage(me, hero, SpellSlot.R);
+                damage += (float)Damage.GetSpellDamage(me, hero, SpellSlot.R);
             }
 
             if ((Items.HasItem(ItemHandler.Bft.Id) && Items.CanUseItem(ItemHandler.Bft.Id)) ||
@@ -305,7 +305,7 @@ namespace UnderratedAIO.Champions
             {
                 damage = (float)(damage * 1.2);
             }
-            if (me.Spellbook.CanUseSpell(me.LSGetSpellSlot("summonerdot")) == SpellState.Ready &&
+            if (me.Spellbook.CanUseSpell(me.GetSpellSlot("summonerdot")) == SpellState.Ready &&
                 hero.Health < damage + me.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite))
             {
                 damage += (float)me.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);

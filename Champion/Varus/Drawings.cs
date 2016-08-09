@@ -31,7 +31,7 @@ namespace Elvarus
                     Render.Circle.DrawCircle(
                         ObjectManager.Player.Position,
                         Varus.spells[Spells.Q].Range,
-                        Varus.spells[Spells.Q].LSIsReady() ? Color.Green : Color.Red);
+                        Varus.spells[Spells.Q].IsReady() ? Color.Green : Color.Red);
                 }
             }
 
@@ -42,7 +42,7 @@ namespace Elvarus
                     Render.Circle.DrawCircle(
                         ObjectManager.Player.Position,
                         Varus.spells[Spells.W].Range,
-                        Varus.spells[Spells.W].LSIsReady() ? Color.Green : Color.Red);
+                        Varus.spells[Spells.W].IsReady() ? Color.Green : Color.Red);
                 }
             }
 
@@ -53,7 +53,7 @@ namespace Elvarus
                     Render.Circle.DrawCircle(
                         ObjectManager.Player.Position,
                         Varus.spells[Spells.E].Range,
-                        Varus.spells[Spells.E].LSIsReady() ? Color.Green : Color.Red);
+                        Varus.spells[Spells.E].IsReady() ? Color.Green : Color.Red);
                 }
             }
 
@@ -64,7 +64,7 @@ namespace Elvarus
                     Render.Circle.DrawCircle(
                         ObjectManager.Player.Position,
                         Varus.spells[Spells.R].Range,
-                        Varus.spells[Spells.R].LSIsReady() ? Color.Green : Color.Red);
+                        Varus.spells[Spells.R].IsReady() ? Color.Green : Color.Red);
                 }
             }
         }

@@ -145,27 +145,27 @@ using EloBuddy;
             if (rengar != null)
 
                 if (sender.Name == ("Rengar_LeapSound.troy") && Config.Item("AntiRengar").GetValue<bool>() &&
-                    sender.Position.LSDistance(player.Position) < R.Range)
+                    sender.Position.Distance(player.Position) < R.Range)
                     R.Cast(rengar);
 
             var khazix = HeroManager.Enemies.Find(h => h.ChampionName.Equals("Khazix"));
             if (khazix != null)
 
                 if (sender.Name == ("Khazix_Base_E_Tar.troy") && Config.Item("AntiKhazix").GetValue<bool>() &&
-                   sender.Position.LSDistance(player.Position) <= 300)
+                   sender.Position.Distance(player.Position) <= 300)
                     R.Cast(khazix);
 
         }
         private static void Interrupter2_OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
 
-            if (R.LSIsReady() && sender.LSIsValidTarget(E.Range) && Config.Item("interrupt").GetValue<bool>())
+            if (R.IsReady() && sender.IsValidTarget(E.Range) && Config.Item("interrupt").GetValue<bool>())
                 R.CastOnUnit(sender);
         }
 
         private static void AntiGapCloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (R.LSIsReady() && gapcloser.Sender.LSIsValidTarget(E.Range) && Config.Item("antigap").GetValue<bool>())
+            if (R.IsReady() && gapcloser.Sender.IsValidTarget(E.Range) && Config.Item("antigap").GetValue<bool>())
                 R.CastOnUnit(gapcloser.Sender);
         }
 
@@ -199,10 +199,10 @@ using EloBuddy;
         private static void combo()
         {
             var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
                 return;
 
-            if (R.LSIsReady() && target.LSIsValidTarget(R.Range)) rlogic(target);
+            if (R.IsReady() && target.IsValidTarget(R.Range)) rlogic(target);
 
             var botrk = LeagueSharp.Common.Data.ItemData.Blade_of_the_Ruined_King.GetItem();
             var Ghost = LeagueSharp.Common.Data.ItemData.Youmuus_Ghostblade.GetItem();
@@ -211,26 +211,26 @@ using EloBuddy;
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 if (botrk.IsReady() && botrk.IsInRange(target) || 
-                    Ghost.IsReady() && target.LSIsValidTarget(Q.Range) || 
+                    Ghost.IsReady() && target.IsValidTarget(Q.Range) || 
                     cutlass.IsReady() && cutlass.IsInRange(target)) items();
             }
 
-            if (!Q.LSIsReady() && !E.LSIsReady())
+            if (!Q.IsReady() && !E.IsReady())
                 return;
 
-            if (Q.LSIsReady() && target.LSIsValidTarget(Q.Range))
+            if (Q.IsReady() && target.IsValidTarget(Q.Range))
                 qlogic(target);
 
-            if (E.LSIsReady() && Config.Item("UseE").GetValue<bool>()) E.Cast(target);
+            if (E.IsReady() && Config.Item("UseE").GetValue<bool>()) E.Cast(target);
 
         }
         public static float CalcDamage(Obj_AI_Base target)
         {
                 //Calculate Combo Damage
-                float damage = (float)player.LSGetAutoAttackDamage(target, true) * (1 + player.Crit);
-                Ignite = player.LSGetSpellSlot("summonerdot");
+                float damage = (float)player.GetAutoAttackDamage(target, true) * (1 + player.Crit);
+                Ignite = player.GetSpellSlot("summonerdot");
 
-                if (Ignite.LSIsReady())
+                if (Ignite.IsReady())
                     damage += (float)player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
 
                 if (Items.HasItem(3153) && Items.CanUseItem(3153))
@@ -239,14 +239,14 @@ using EloBuddy;
                 if (Items.HasItem(3144) && Items.CanUseItem(3144))
                     damage += (float)player.GetItemDamage(target, Damage.DamageItems.Bilgewater);
 
-            if (E.LSIsReady())
+            if (E.IsReady())
                 damage += E.GetDamage(target);
 
-            if (target.LSHasBuff("tristanaecharge"))
+            if (target.HasBuff("tristanaecharge"))
                 damage += E.GetDamage(target) * (float)(0.30 * target.Buffs.Find(buff => buff.Name == "tristanaecharge").Count) +1;
 
 
-            if (R.LSIsReady()) // rdamage
+            if (R.IsReady()) // rdamage
                     damage += R.GetDamage(target);
 
                 return damage;
@@ -258,10 +258,10 @@ using EloBuddy;
         {
             if (target == null || !target.IsValid) return;
 
-            if (Config.Item("QonE").GetValue<bool>() && !target.LSHasBuff("tristanaecharge"))
+            if (Config.Item("QonE").GetValue<bool>() && !target.HasBuff("tristanaecharge"))
                 return;
 
-            if (Q.LSIsReady() && Config.Item("UseQ").GetValue<bool>() && target.LSIsValidTarget(Q.Range))
+            if (Q.IsReady() && Config.Item("UseQ").GetValue<bool>() && target.IsValidTarget(Q.Range))
                 Q.Cast(player);
         }
 
@@ -273,19 +273,19 @@ using EloBuddy;
             if (target == null)
                 return;
 
-            if (Config.Item("UseR").GetValue<bool>() && R.LSIsReady() &&
+            if (Config.Item("UseR").GetValue<bool>() && R.IsReady() &&
             R.GetDamage(target) > target.Health)
             {
                 R.Cast(target);
             }
 
-            if (Config.Item("manualr").GetValue<KeyBind>().Active && R.LSIsReady())
+            if (Config.Item("manualr").GetValue<KeyBind>().Active && R.IsReady())
                 R.Cast(target);
 
             if (Config.Item("UseRE").GetValue<bool>()
-                && R.LSIsReady()
+                && R.IsReady()
                 && Config.Item("UseR").GetValue<bool>()
-                && target.LSHasBuff("tristanaecharge") 
+                && target.HasBuff("tristanaecharge") 
                 && (E.GetDamage(target) * 
                 ((0.30 * target.Buffs.Find(buff => buff.Name == "tristanaecharge").Count) + 1) + R.GetDamage(target)) - 2 * target.Level > target.Health)
             {
@@ -303,9 +303,9 @@ using EloBuddy;
 
         private static void items()
         {
-            Ignite = player.LSGetSpellSlot("summonerdot");
+            Ignite = player.GetSpellSlot("summonerdot");
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
                 return;
 
             var botrk = LeagueSharp.Common.Data.ItemData.Blade_of_the_Ruined_King.GetItem();
@@ -330,12 +330,12 @@ using EloBuddy;
 
                 cutlass.Cast(target);
 
-            if (Ghost.IsReady() && Ghost.IsOwned(player) && target.LSIsValidTarget(E.Range)
+            if (Ghost.IsReady() && Ghost.IsOwned(player) && target.IsValidTarget(E.Range)
                 && Config.Item("useGhostblade").GetValue<bool>())
 
                 Ghost.Cast();
 
-            if (player.LSDistance(target) <= 600 && IgniteDamage(target) > target.Health &&
+            if (player.Distance(target) <= 600 && IgniteDamage(target) > target.Health &&
                 Config.Item("UseIgnite").GetValue<bool>())
                 player.Spellbook.CastSpell(Ignite, target);
         }
@@ -370,16 +370,16 @@ using EloBuddy;
                 return;
 
 
-            if (E.LSIsReady()
+            if (E.IsReady()
                 && Config.Item("harassE").GetValue<bool>()
-                && target.LSIsValidTarget(E.Range)
+                && target.IsValidTarget(E.Range)
                 && player.ManaPercent >= harassmana)
 
                 E.CastOnUnit(target);
 
-            if (Q.LSIsReady()
+            if (Q.IsReady()
                 && Config.Item("harassQ").GetValue<bool>()
-                && target.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(player))
+                && target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(player))
                 && player.ManaPercent >= harassmana)
 
                 Q.Cast(player);
@@ -394,7 +394,7 @@ using EloBuddy;
             var Efarmpos = W.GetCircularFarmLocation(allMinionsE, 200);
 
             foreach (var turret in
-                ObjectManager.Get<Obj_AI_Turret>().Where(t => t.LSIsValidTarget() && player.LSDistance(t.Position) < Orbwalking.GetRealAutoAttackRange(player) && t != null))
+                ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && player.Distance(t.Position) < Orbwalking.GetRealAutoAttackRange(player) && t != null))
             {
                 if (Config.Item("eturret").GetValue<bool>())
                 {
@@ -418,7 +418,7 @@ using EloBuddy;
                 if (minion == null) return;
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear
-                    && minion.LSIsValidTarget(E.Range) && Efarmpos.MinionsHit > 2
+                    && minion.IsValidTarget(E.Range) && Efarmpos.MinionsHit > 2
                     && allMinionsE.Count >= 2 && Config.Item("laneE").GetValue<bool>()
                     && player.ManaPercent >= lanemana)
 
@@ -444,7 +444,7 @@ using EloBuddy;
                 Q.Cast(player);
 
             foreach (var minion in MinionsE)
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && minion.LSIsValidTarget(E.Range)
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && minion.IsValidTarget(E.Range)
                     && Efarmpos.MinionsHit >= 1
                     && MinionsE.Count >= 1
                     && Config.Item("jungleE").GetValue<bool>()
@@ -473,28 +473,28 @@ using EloBuddy;
 
            // if (Config.Item("Qdraw").GetValue<Circle>().Active)
               //  if (Q.Level > 0)
-                //    Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, Q.LSIsReady() ? Config.Item("Qdraw").GetValue<Circle>().Color : Color.Red,
+                //    Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, Q.IsReady() ? Config.Item("Qdraw").GetValue<Circle>().Color : Color.Red,
                       //                                  Config.Item("CircleThickness").GetValue<Slider>().Value);
             if (Config.Item("Qdraw").GetValue<Circle>().Active)
                 if (Q.Level > 0)
-                    Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, Q.LSIsReady() ? Config.Item("Qdraw").GetValue<Circle>().Color : Color.Red,
+                    Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, Q.IsReady() ? Config.Item("Qdraw").GetValue<Circle>().Color : Color.Red,
                                                         Config.Item("CircleThickness").GetValue<Slider>().Value);
 
             if (Config.Item("Wdraw").GetValue<Circle>().Active)
                 if (W.Level > 0)
-                    Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, W.LSIsReady() ? Config.Item("Wdraw").GetValue<Circle>().Color : Color.Red,
+                    Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, W.IsReady() ? Config.Item("Wdraw").GetValue<Circle>().Color : Color.Red,
                                                         Config.Item("CircleThickness").GetValue<Slider>().Value);
 
             if (Config.Item("Edraw").GetValue<Circle>().Active)
                 if (E.Level > 0)
                     Render.Circle.DrawCircle(ObjectManager.Player.Position, 550 + 7 * player.Level,
-                        E.LSIsReady() ? Config.Item("Edraw").GetValue<Circle>().Color : Color.Red,
+                        E.IsReady() ? Config.Item("Edraw").GetValue<Circle>().Color : Color.Red,
                                                         Config.Item("CircleThickness").GetValue<Slider>().Value);
 
             if (Config.Item("Rdraw").GetValue<Circle>().Active)
                 if (R.Level > 0)
                     Render.Circle.DrawCircle(ObjectManager.Player.Position, 550 + 7 * player.Level,
-                        R.LSIsReady() ? Config.Item("Rdraw").GetValue<Circle>().Color : Color.Red,
+                        R.IsReady() ? Config.Item("Rdraw").GetValue<Circle>().Color : Color.Red,
                                                         Config.Item("CircleThickness").GetValue<Slider>().Value);
 
             var orbtarget = Orbwalker.GetTarget();

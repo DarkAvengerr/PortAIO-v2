@@ -49,7 +49,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
             
 
-            if (!W.LSIsReady() || sender == null || args.Target == null || sender.IsAlly || !(sender is AIHeroClient) || !(args.Target.IsMe))
+            if (!W.IsReady() || sender == null || args.Target == null || sender.IsAlly || !(sender is AIHeroClient) || !(args.Target.IsMe))
                 return;
                 W.Cast();
 
@@ -63,30 +63,30 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.Cast(target);
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if (R.LSIsReady() && _rCasted && ARAMSimulator.balance < 100)
+            if (R.IsReady() && _rCasted && ARAMSimulator.balance < 100)
                 R.Cast();
 
-            if (target == null || !R.LSIsReady() || !safeGap(target) || _rCasted)
+            if (target == null || !R.IsReady() || !safeGap(target) || _rCasted)
                 return;
             R.CastOnUnit(target);
 
@@ -98,7 +98,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (player.IsChannelingImportantSpell())
                 return;
             var tar = ARAMTargetSelector.getBestTarget(E.Range);
-            if (tar != null && E.LSIsReady() && safeGap(tar))
+            if (tar != null && E.IsReady() && safeGap(tar))
                 if (tar != null) useE(tar);
 
             tar = ARAMTargetSelector.getBestTarget(Q.Range);
@@ -132,12 +132,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var AllMinions = MinionManager.GetMinions(player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
             foreach (var minion in AllMinions)
             {
-                if (Q.LSIsReady() && Q.GetDamage(minion) > minion.Health)
+                if (Q.IsReady() && Q.GetDamage(minion) > minion.Health)
                 {
                     Q.Cast(minion);
                     return;
                 }
-                if (E.LSIsReady() && E.GetDamage(minion) > minion.Health)
+                if (E.IsReady() && E.GetDamage(minion) > minion.Health)
                 {
                     E.Cast(minion);
                 }

@@ -81,26 +81,26 @@ using EloBuddy;
             {
                 var target = TargetSelector.GetTarget(W2.Range + 50, TargetSelector.DamageType.Magical);
 
-                if (target.LSIsValidTarget())
+                if (target.IsValidTarget())
                 {
-                    if (useR && R.LSIsReady() && Player.Mana >= R.ManaCost)
+                    if (useR && R.IsReady() && Player.Mana >= R.ManaCost)
                     {
                         R.CastIfWillHit(target, MinimumEnemyHitComboR, PacketCast);
                     }
 
-                    if (useQ && Q.LSIsReady() && Player.Mana >= Q.ManaCost)
+                    if (useQ && Q.IsReady() && Player.Mana >= Q.ManaCost)
                     {
                         Q.CastIfHitchanceEquals(target, HitChance.VeryHigh, PacketCast);
                     }
 
                     if (useW)
                     {
-                        if (target.LSDistance(Player) <= W1.Range + 50 && CustomLib.isWInLongRangeMode())
+                        if (target.Distance(Player) <= W1.Range + 50 && CustomLib.isWInLongRangeMode())
                         {
                             W2.Cast(PacketCast);
                         }
 
-                        if (target.LSDistance(Player) > W1.Range + 50 && target.LSDistance(Player) < W2.Range + 50 && !CustomLib.isWInLongRangeMode())
+                        if (target.Distance(Player) > W1.Range + 50 && target.Distance(Player) < W2.Range + 50 && !CustomLib.isWInLongRangeMode())
                         {
                             W1.Cast(PacketCast);
                         }

@@ -78,7 +78,7 @@ using EloBuddy;
 
         public bool IsReady()
         {
-            return Instance.LSIsReady();
+            return Instance.IsReady();
         }
     }
 }

@@ -116,7 +116,7 @@
                 var hitsToKill = double.MaxValue;
                 foreach (var obj in HeroManager.Enemies.Where(i => InAutoAttackRange(i) && i.IsVisible && i.IsHPBarRendered && !i.IsDead && i.IsTargetable))
                 {
-                    var killHits = obj.Health / Player.LSGetAutoAttackDamage(obj, true);
+                    var killHits = obj.Health / Player.GetAutoAttackDamage(obj, true);
                     if (killableObj != null && (killHits >= hitsToKill || obj.HasBuffOfType(BuffType.Invulnerability)))
                     {
                         continue;
@@ -136,7 +136,7 @@
                     && (CurrentMode == Mode.Harass || CurrentMode == Mode.Clear))
                 {
                     var hero = GetBestHeroTarget;
-                    if (hero.LSIsValidTarget())
+                    if (hero.IsValidTarget())
                     {
                         return hero;
                     }
@@ -156,13 +156,13 @@
                             .ThenByDescending(i => i.MaxHealth))
                     {
                         var time = (int)(Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2
-                                   + (int)(Player.LSDistance(obj) / Orbwalking.GetMyProjectileSpeed() * 1000);
+                                   + (int)(Player.Distance(obj) / Orbwalking.GetMyProjectileSpeed() * 1000);
                         var hpPred = HealthPrediction.GetHealthPrediction(obj, time, 0);
                         if (hpPred < 1)
                         {
                             FireOnNonKillableMinion(obj);
                         }
-                        if (hpPred > 0 && hpPred <= Player.LSGetAutoAttackDamage(obj, true))
+                        if (hpPred > 0 && hpPred <= Player.GetAutoAttackDamage(obj, true))
                         {
                             return obj;
                         }
@@ -190,7 +190,7 @@
                 if (CurrentMode != Mode.LastHit)
                 {
                     var hero = GetBestHeroTarget;
-                    if (hero.LSIsValidTarget())
+                    if (hero.IsValidTarget())
                     {
                         return hero;
                     }
@@ -219,7 +219,7 @@
                         prevMinion,
                         (int)(Player.AttackDelay * 1000 * 2),
                         0);
-                    if (hpPred >= 2 * Player.LSGetAutoAttackDamage(prevMinion, true)
+                    if (hpPred >= 2 * Player.GetAutoAttackDamage(prevMinion, true)
                         || Math.Abs(hpPred - prevMinion.Health) < float.Epsilon)
                     {
                         return prevMinion;
@@ -231,7 +231,7 @@
                               let hpPred =
                                   HealthPrediction.GetHealthPrediction(obj, (int)(Player.AttackDelay * 1000 * 2), 0)
                               where
-                                  hpPred >= 2 * Player.LSGetAutoAttackDamage(obj, true)
+                                  hpPred >= 2 * Player.GetAutoAttackDamage(obj, true)
                                   || Math.Abs(hpPred - obj.Health) < float.Epsilon
                               select obj).MaxOrDefault(i => i.Health);
                 if (minion != null)
@@ -318,7 +318,7 @@
                             i =>
                             InAutoAttackRange(i) && i.Team != GameObjectTeam.Neutral
                             && HealthPrediction.GetHealthPrediction(i, (int)(Player.AttackDelay * 1000 * 2), 0)
-                            <= Player.LSGetAutoAttackDamage(i, true));
+                            <= Player.GetAutoAttackDamage(i, true));
             }
         }
 
@@ -333,7 +333,7 @@
 
         public static bool InAutoAttackRange(AttackableUnit target, float extraRange = 0, Vector3 from = new Vector3())
         {
-            return target.LSIsValidTarget(GetAutoAttackRange(target) + extraRange, true, from);
+            return target.IsValidTarget(GetAutoAttackRange(target) + extraRange, true, from);
         }
 
         public static void Init(Menu mainMenu)
@@ -441,19 +441,19 @@
                 return;
             }
             lastMove = Utils.GameTimeTickCount;
-            if (Player.LSDistance(pos, true)
+            if (Player.Distance(pos, true)
                 < Math.Pow(Player.BoundingRadius + config.Item("OW_Misc_HoldZone").GetValue<Slider>().Value, 2))
             {
                 return;
             }
             EloBuddy.Player.IssueOrder(
                 GameObjectOrder.MoveTo,
-                Player.ServerPosition.LSExtend(pos, (Random.NextFloat(0.6f, 1) + 0.2f) * 400));
+                Player.ServerPosition.Extend(pos, (Random.NextFloat(0.6f, 1) + 0.2f) * 400));
         }
 
         public static void Orbwalk(AttackableUnit target)
         {
-            if (target.LSIsValidTarget() && EloBuddy.SDK.Orbwalker.CanAutoAttack && IsAllowedToAttack)
+            if (target.IsValidTarget() && EloBuddy.SDK.Orbwalker.CanAutoAttack && IsAllowedToAttack)
             {
                 disableNextAttack = false;
                 FireBeforeAttack(target);
@@ -463,7 +463,7 @@
                 {
                     lastAttack = Utils.GameTimeTickCount + Game.Ping + 100 - (int)(Player.AttackCastDelay * 1000);
                     missileLaunched = false;
-                    if (Player.LSDistance(target, true) > Math.Pow(GetAutoAttackRange(target) - 65, 2) && !Player.IsMelee)
+                    if (Player.Distance(target, true) > Math.Pow(GetAutoAttackRange(target) - 65, 2) && !Player.IsMelee)
                     {
                         lastAttack = Utils.GameTimeTickCount + Game.Ping + 400 - (int)(Player.AttackCastDelay * 1000);
                     }
@@ -481,7 +481,7 @@
             }
             if (config.Item("OW_Combo_MeleeMagnet").IsActive() && CurrentMode == Mode.Combo && Player.IsMelee
                 && Player.AttackRange < 200 && InAutoAttackRange(target) && target.IsValid<AIHeroClient>()
-                && ((AIHeroClient)target).LSDistance(Game.CursorPos) < 300)
+                && ((AIHeroClient)target).Distance(Game.CursorPos) < 300)
             {
                 MovePrediction.Delay = Player.BasicAttack.SpellCastTime;
                 MovePrediction.Speed = Player.BasicAttack.MissileSpeed;
@@ -499,7 +499,7 @@
 
         private static void FireAfterAttack(AttackableUnit target)
         {
-            if (AfterAttack != null && target.LSIsValidTarget())
+            if (AfterAttack != null && target.IsValidTarget())
             {
                 AfterAttack(target);
             }
@@ -509,7 +509,7 @@
         {
             if (BeforeAttack != null)
             {
-                if (target.LSIsValidTarget())
+                if (target.IsValidTarget())
                 {
                     BeforeAttack(new BeforeAttackEventArgs { Target = target });
                 }
@@ -522,7 +522,7 @@
 
         private static void FireOnAttack(AttackableUnit target)
         {
-            if (OnAttack != null && target.LSIsValidTarget())
+            if (OnAttack != null && target.IsValidTarget())
             {
                 OnAttack(target);
             }
@@ -530,7 +530,7 @@
 
         private static void FireOnNonKillableMinion(AttackableUnit minion)
         {
-            if (OnNonKillableMinion != null && minion.LSIsValidTarget())
+            if (OnNonKillableMinion != null && minion.IsValidTarget())
             {
                 OnNonKillableMinion(minion);
             }
@@ -546,7 +546,7 @@
 
         private static float GetAutoAttackRange(Obj_AI_Base source, AttackableUnit target)
         {
-            return source.AttackRange + source.BoundingRadius + (target.LSIsValidTarget() ? target.BoundingRadius : 0);
+            return source.AttackRange + source.BoundingRadius + (target.IsValidTarget() ? target.BoundingRadius : 0);
         }
 
         private static void OnCreateMissileClient(GameObject sender, EventArgs args)
@@ -556,7 +556,7 @@
                 return;
             }
             var missile = (MissileClient)sender;
-            if (!missile.SpellCaster.IsMe || !missile.SpellCaster.IsRanged || !missile.SData.LSIsAutoAttack())
+            if (!missile.SpellCaster.IsMe || !missile.SpellCaster.IsRanged || !missile.SData.IsAutoAttack())
             {
                 return;
             }
@@ -579,7 +579,7 @@
             }
             if (config.Item("OW_Draw_AARangeEnemy").IsActive())
             {
-                foreach (var obj in HeroManager.Enemies.Where(i => i.LSIsValidTarget(1000)))
+                foreach (var obj in HeroManager.Enemies.Where(i => i.IsValidTarget(1000)))
                 {
                     Render.Circle.DrawCircle(
                         obj.Position,
@@ -602,12 +602,12 @@
             {
                 return;
             }
-            if (args.Target.IsValid<AttackableUnit>() && args.SData.LSIsAutoAttack())
+            if (args.Target.IsValid<AttackableUnit>() && args.SData.IsAutoAttack())
             {
                 lastAttack = Utils.GameTimeTickCount - Game.Ping / 2;
                 missileLaunched = false;
                 var target = (AttackableUnit)args.Target;
-                if (!lastTarget.LSIsValidTarget() || target.NetworkId != lastTarget.NetworkId)
+                if (!lastTarget.IsValidTarget() || target.NetworkId != lastTarget.NetworkId)
                 {
                     FireOnTargetSwitch(target);
                     lastTarget = target;
@@ -635,7 +635,7 @@
 
         private static void OnUpdate(EventArgs args)
         {
-            if (Player.IsDead || CurrentMode == Mode.None || MenuGUI.IsChatOpen || Player.LSIsRecalling()
+            if (Player.IsDead || CurrentMode == Mode.None || MenuGUI.IsChatOpen || Player.IsRecalling()
                 || Player.IsCastingInterruptableSpell(true))
             {
                 return;

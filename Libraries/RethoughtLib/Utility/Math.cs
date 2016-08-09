@@ -49,7 +49,7 @@ using EloBuddy; namespace RethoughtLib.Utility
         /// <returns></returns>
         public static float GetMeanDistance(List<Vector3> vectors, Vector3 vector)
         {
-            var result = vectors.Sum(v => v.LSDistance(vector));
+            var result = vectors.Sum(v => v.Distance(vector));
 
             return result / vectors.Count;
         }
@@ -159,7 +159,7 @@ using EloBuddy; namespace RethoughtLib.Utility
             {
                 if (i + 1 != path.Count())
                 {
-                    result += path[i].LSDistance(path[i + 1]);
+                    result += path[i].Distance(path[i + 1]);
                 }
             }
             return result;
@@ -167,7 +167,7 @@ using EloBuddy; namespace RethoughtLib.Utility
 
         public static IEnumerable<Vector2> MoveTo(this IEnumerable<Vector2> vectors, Vector2 direction)
         {
-            return vectors.Select(vec => vec.LSExtend(direction, direction.Length()));
+            return vectors.Select(vec => vec.Extend(direction, direction.Length()));
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ using EloBuddy; namespace RethoughtLib.Utility
         /// <returns></returns>
         public static IEnumerable<Vector2> To2D(this IEnumerable<Vector3> vectorList)
         {
-            return vectorList.Select(vector => vector.LSTo2D());
+            return vectorList.Select(vector => vector.To2D());
         }
 
         /// <summary>

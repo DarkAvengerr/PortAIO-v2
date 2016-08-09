@@ -37,7 +37,7 @@ using EloBuddy;
             var result = new List<Vector2>();
             foreach (var point in v)
             {
-                result.Add(point.LSTo2D());
+                result.Add(point.To2D());
             }
             return result;
         }
@@ -50,7 +50,7 @@ using EloBuddy;
 
             foreach (var target in targetList)
             {
-                var distance = Vector2.DistanceSquared(from, target.ServerPosition.LSTo2D());
+                var distance = Vector2.DistanceSquared(from, target.ServerPosition.To2D());
                 if (distance < dist)
                 {
                     dist = distance;

@@ -84,10 +84,10 @@ using EloBuddy;
             var targetAsHero = target as AIHeroClient;
 
             // was using W too close, will work with rockets after attack though
-            if (targetAsHero.LSDistance(ProSeries.Player.ServerPosition) > 525)
+            if (targetAsHero.Distance(ProSeries.Player.ServerPosition) > 525)
             {
-                if (ProSeries.Player.LSGetSpellDamage(targetAsHero, SpellSlot.W) / W.Delay >
-                    ProSeries.Player.LSGetAutoAttackDamage(targetAsHero, true) * (1 / ProSeries.Player.AttackDelay))
+                if (ProSeries.Player.GetSpellDamage(targetAsHero, SpellSlot.W) / W.Delay >
+                    ProSeries.Player.GetAutoAttackDamage(targetAsHero, true) * (1 / ProSeries.Player.AttackDelay))
                 {
                     W.Cast(targetAsHero);
                 }
@@ -98,11 +98,11 @@ using EloBuddy;
         {
             var minions = MinionManager.GetMinions(525 + RocketRange);
             var centerlocation =
-                MinionManager.GetBestCircularFarmLocation(minions.Select(x => x.Position.LSTo2D()).ToList(), 250,
+                MinionManager.GetBestCircularFarmLocation(minions.Select(x => x.Position.To2D()).ToList(), 250,
                     525 + RocketRange);
 ;
             return centerlocation.MinionsHit >= ProSeries.Config.Item("clearqmin", true).GetValue<Slider>().Value
-                ? MinionManager.GetMinions(1000).OrderBy(x => x.LSDistance(centerlocation.Position)).FirstOrDefault()
+                ? MinionManager.GetMinions(1000).OrderBy(x => x.Distance(centerlocation.Position)).FirstOrDefault()
                 : null;
         }
 
@@ -114,21 +114,21 @@ using EloBuddy;
             }
 
             var units = new List<Obj_AI_Base>();
-            var maxdist = ProSeries.Player.LSDistance(target.ServerPosition) > 750;
+            var maxdist = ProSeries.Player.Distance(target.ServerPosition) > 750;
             var maxrdist = ProSeries.Config.Item("maxrdist", true).GetValue<Slider>().Value;
 
             // impact physical damage
-            var idmg = R.LSIsReady() &&
+            var idmg = R.IsReady() &&
                        ProSeries.CountInPath(ProSeries.Player.ServerPosition, target.ServerPosition, R.Width + 50,
                            (maxrdist * 2), out units) <= 1
                 ? (maxdist ? R.GetDamage(target, 1) : R.GetDamage(target, 0))
                 : 0;
 
             // explosion damage
-            var edmg = R.LSIsReady() &&
+            var edmg = R.IsReady() &&
                        ProSeries.CountInPath(ProSeries.Player.ServerPosition, target.ServerPosition, R.Width + 50,
                            (maxrdist * 2), out units) > 1 &&
-                            target.LSDistance(units.OrderBy(x => x.LSDistance(ProSeries.Player.ServerPosition))
+                            target.Distance(units.OrderBy(x => x.Distance(ProSeries.Player.ServerPosition))
                                 .First(t => t.NetworkId != target.NetworkId).ServerPosition) <= R.Width + 100 // explosion radius? :^)
                 ? (maxdist
                     ? (float) // maximum explosion dmage
@@ -157,47 +157,47 @@ using EloBuddy;
                 {
                     if (ProSeries.Player.ManaPercent < 35 &&
                         HeroManager.Enemies.Any(
-                            i => i.LSIsValidTarget(590 + RocketRange + 10) &&
-                                 ProSeries.Player.LSGetAutoAttackDamage(i, true) * 3 < i.Health))
+                            i => i.IsValidTarget(590 + RocketRange + 10) &&
+                                 ProSeries.Player.GetAutoAttackDamage(i, true) * 3 < i.Health))
                     {
                         Q.Cast();
                     }
                 }
 
                 var qtarget = TargetSelector.GetTarget(525 + RocketRange + 250, TargetSelector.DamageType.Physical);          
-                if (qtarget.LSIsValidTarget() && Q.LSIsReady())
+                if (qtarget.IsValidTarget() && Q.IsReady())
                 {
                     if (ProSeries.Config.Item("usecomboq", true).GetValue<bool>())
                     {
                         if (minigunOut && (ProSeries.Player.ManaPercent > 35 ||
-                            ProSeries.Player.LSGetAutoAttackDamage(qtarget, true) * 3 > qtarget.Health) &&
-                            qtarget.LSDistance(ProSeries.Player.ServerPosition) > 590)
+                            ProSeries.Player.GetAutoAttackDamage(qtarget, true) * 3 > qtarget.Health) &&
+                            qtarget.Distance(ProSeries.Player.ServerPosition) > 590)
                             Q.Cast();
 
                         if (!minigunOut && ProSeries.Player.ManaPercent < 35)
                             Q.Cast();
 
-                        if (!minigunOut && qtarget.LSDistance(ProSeries.Player.ServerPosition) <= 590)
+                        if (!minigunOut && qtarget.Distance(ProSeries.Player.ServerPosition) <= 590)
                             Q.Cast();      
                     }
                 }
 
                 var wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
-                if (wtarget.LSIsValidTarget() && W.LSIsReady())
+                if (wtarget.IsValidTarget() && W.IsReady())
                 {
                     if (ProSeries.Config.Item("usecombow", true).GetValue<bool>())
                     {
-                        if (wtarget.LSDistance(ProSeries.Player.ServerPosition) > 525)
+                        if (wtarget.Distance(ProSeries.Player.ServerPosition) > 525)
                         {
-                            if (ProSeries.Player.LSGetAutoAttackDamage(wtarget, true) * 2 < wtarget.Health)
+                            if (ProSeries.Player.GetAutoAttackDamage(wtarget, true) * 2 < wtarget.Health)
                                 W.CastIfHitchanceEquals(wtarget, HitChance.High);
                         }
                     }
                 }
 
-                if (ProSeries.Config.Item("usecomboe", true).GetValue<bool>() && E.LSIsReady())
+                if (ProSeries.Config.Item("usecomboe", true).GetValue<bool>() && E.IsReady())
                 {
-                    foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.LSIsValidTarget(400) && h.IsMelee()))
+                    foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.IsValidTarget(400) && h.IsMelee()))
                     {
                         E.CastIfHitchanceEquals(target, HitChance.VeryHigh);
                     }
@@ -207,13 +207,13 @@ using EloBuddy;
             if (ProSeries.CanHarass())
             {
                 var qtarget = TargetSelector.GetTarget(525 + RocketRange + 250, TargetSelector.DamageType.Physical);
-                if (!qtarget.LSIsValidTarget() && !minigunOut)
+                if (!qtarget.IsValidTarget() && !minigunOut)
                 {
                     if (ProSeries.Config.Item("useharassq", true).GetValue<bool>())
                         Q.Cast();
                 }
 
-                if (qtarget.LSIsValidTarget() && Q.LSIsReady() && ProSeries.IsWhiteListed(qtarget))
+                if (qtarget.IsValidTarget() && Q.IsReady() && ProSeries.IsWhiteListed(qtarget))
                 {
                     if (ProSeries.Config.Item("useharassq", true).GetValue<bool>())
                     {
@@ -221,27 +221,27 @@ using EloBuddy;
                             Q.Cast();   
 
                         if (minigunOut && ProSeries.Player.ManaPercent > 20)
-                            if (qtarget.LSDistance(ProSeries.Player.ServerPosition) > 590)
+                            if (qtarget.Distance(ProSeries.Player.ServerPosition) > 590)
                                 Q.Cast();
 
-                        if (!minigunOut && qtarget.LSDistance(ProSeries.Player.ServerPosition) <= 590) 
+                        if (!minigunOut && qtarget.Distance(ProSeries.Player.ServerPosition) <= 590) 
                             Q.Cast();
                     }
                 }
 
                 var wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
-                if (wtarget.LSIsValidTarget() && W.LSIsReady() && ProSeries.IsWhiteListed(wtarget))
+                if (wtarget.IsValidTarget() && W.IsReady() && ProSeries.IsWhiteListed(wtarget))
                 {
                     if (ProSeries.Config.Item("useharassw", true).GetValue<bool>())
                         W.CastIfHitchanceEquals(wtarget, HitChance.High);
                 }
             }
 
-            if (ProSeries.CanClear() && Q.LSIsReady())
+            if (ProSeries.CanClear() && Q.IsReady())
             {
                 if (ProSeries.Config.Item("useclearq", true).GetValue<bool>())
                 {
-                    if (GetCenterMinion().LSIsValidTarget())
+                    if (GetCenterMinion().IsValidTarget())
                     {
                         if (minigunOut)
                             Q.Cast();
@@ -258,7 +258,7 @@ using EloBuddy;
                 }
             }
 
-            if (ProSeries.Player.GetSpell(SpellSlot.Q).ToggleState == 2 && Q.LSIsReady())
+            if (ProSeries.Player.GetSpell(SpellSlot.Q).ToggleState == 2 && Q.IsReady())
             {
                 if (ProSeries.Config.Item("useclearq", true).GetValue<bool>())
                 {
@@ -273,9 +273,9 @@ using EloBuddy;
                 }
             }
 
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.LSIsValidTarget(E.Range)))
+                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.IsValidTarget(E.Range)))
                 {
                     if (ProSeries.Config.Item("useeimm", true).GetValue<bool>())
                         E.CastIfHitchanceEquals(target, HitChance.Immobile);
@@ -289,12 +289,12 @@ using EloBuddy;
             {
                 var maxDistance = ProSeries.Config.Item("maxrdist", true).GetValue<Slider>().Value;
 
-                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.LSIsValidTarget(maxDistance)))
+                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.IsValidTarget(maxDistance)))
                 {
                     var canr = !TargetSelector.IsInvulnerable(target, TargetSelector.DamageType.Physical);
 
                     var aaDamage = Orbwalking.InAutoAttackRange(target)
-                        ? ProSeries.Player.LSGetAutoAttackDamage(target, true)
+                        ? ProSeries.Player.GetAutoAttackDamage(target, true)
                         : 0;
 
                     if (target.Health - aaDamage <= GetRDamage(target) && canr)

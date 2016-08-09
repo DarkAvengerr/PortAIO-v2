@@ -19,24 +19,24 @@ using EloBuddy;
                 {
                     var targetHero = target as AIHeroClient;
 
-                    if (targetHero.LSIsValidTarget())
+                    if (targetHero.IsValidTarget())
                     {
                         //Determine whether we should use Q or not.
                         var enemiesInRange =
-                            ObjectManager.Player.LSGetEnemiesInRange(Orbwalking.GetRealAutoAttackRange(null));
+                            ObjectManager.Player.GetEnemiesInRange(Orbwalking.GetRealAutoAttackRange(null));
                         if (enemiesInRange.Any())
                         {
                             var maxPriorityHero =
                                 enemiesInRange.OrderByDescending(TargetSelector.GetPriority).FirstOrDefault();
                             if (maxPriorityHero != null 
-                                && maxPriorityHero.LSIsValidTarget() 
+                                && maxPriorityHero.IsValidTarget() 
                                 && target.NetworkId == maxPriorityHero.NetworkId)
                             {
                                 Variables.spells[SpellSlot.Q].Cast();
                                 return;
                             }
 
-                            if (targetHero.Health + 5 < ObjectManager.Player.LSGetAutoAttackDamage(targetHero, true) * 4)
+                            if (targetHero.Health + 5 < ObjectManager.Player.GetAutoAttackDamage(targetHero, true) * 4)
                             {
                                 Variables.spells[SpellSlot.Q].Cast();
                             }

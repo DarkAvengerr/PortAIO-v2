@@ -47,9 +47,9 @@ namespace Gnar
             // Face of the Mountain Kappa
             if (Config.BoolLinks["itemsFace"].Value && ItemManager.FACE_MOUNTAIN.IsReady())
             {
-                foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(h => h.Team == player.Team && h.LSIsValidTarget(700, false)))
+                foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(h => h.Team == player.Team && h.IsValidTarget(700, false)))
                 {
-                    if (ally.HealthPercent < 15 && ally.LSCountEnemiesInRange(700) > 0)
+                    if (ally.HealthPercent < 15 && ally.CountEnemiesInRange(700) > 0)
                     {
                         ItemManager.FACE_MOUNTAIN.Cast(ally);
                         break;
@@ -81,7 +81,7 @@ namespace Gnar
                 var target = TargetSelector.GetTarget(600, TargetSelector.DamageType.True);
                 if (target != null && player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) > target.Health)
                 {
-                    player.Spellbook.CastSpell(player.LSGetSpellSlot("SummonerDot"), target);
+                    player.Spellbook.CastSpell(player.GetSpellSlot("SummonerDot"), target);
                 }
             }
 
@@ -109,11 +109,11 @@ namespace Gnar
                             case HitChance.Collision:
 
                                 // Special case for colliding enemies
-                                var colliding = prediction.CollisionObjects.OrderBy(o => o.LSDistance(player, true)).ToList();
+                                var colliding = prediction.CollisionObjects.OrderBy(o => o.Distance(player, true)).ToList();
                                 if (colliding.Count > 0)
                                 {
                                     // First colliding target is < 100 units away from our main target
-                                    if (colliding[0].LSDistance(target, true) < 10000)
+                                    if (colliding[0].Distance(target, true) < 10000)
                                         Q.Cast(prediction.CastPosition);
                                 }
                                 break;
@@ -132,10 +132,10 @@ namespace Gnar
                         if (prediction.Hitchance >= HitChance.High)
                         {
                             // Get the landing point of our E
-                            var arrivalPoint = player.ServerPosition.LSExtend(prediction.CastPosition, player.ServerPosition.LSDistance(prediction.CastPosition) + E.Range);
+                            var arrivalPoint = player.ServerPosition.Extend(prediction.CastPosition, player.ServerPosition.Distance(prediction.CastPosition) + E.Range);
 
                             // If we will land in the tower attack range of 775, don't continue
-                            if (!ObjectManager.Get<Obj_AI_Turret>().Any(t => t.Team != player.Team && !t.IsDead && t.LSDistance(arrivalPoint, true) < 775 * 775))
+                            if (!ObjectManager.Get<Obj_AI_Turret>().Any(t => t.Team != player.Team && !t.IsDead && t.Distance(arrivalPoint, true) < 775 * 775))
                             {
                                 // Arrival point won't be in the turret range, cast it
                                 E.Cast(prediction.CastPosition);
@@ -163,7 +163,7 @@ namespace Gnar
                         if (prediction.Hitchance >= HitChance.High && R.IsInRange(prediction.UnitPosition))
                         {
                             // 12 angle checks for casting, prefer to player direction
-                            var direction = (player.ServerPosition - prediction.UnitPosition).LSNormalized();
+                            var direction = (player.ServerPosition - prediction.UnitPosition).Normalized();
                             var maxAngle = 180f;
                             var step = maxAngle / 6f;
                             var currentAngle = 0f;
@@ -199,7 +199,7 @@ namespace Gnar
                                 if (prediction.UnitPosition.GetFirstWallPoint(checkPoint).HasValue)
                                 {
                                     // Cast ult into the direction where the wall is located
-                                    R.Cast(player.Position + 500 * (checkPoint - prediction.UnitPosition).LSNormalized());
+                                    R.Cast(player.Position + 500 * (checkPoint - prediction.UnitPosition).Normalized());
                                     break;
                                 }
                             }
@@ -267,11 +267,11 @@ namespace Gnar
                         case HitChance.Collision:
 
                             // Special case for colliding enemies
-                            var colliding = prediction.CollisionObjects.OrderBy(o => o.LSDistance(player, true)).ToList();
+                            var colliding = prediction.CollisionObjects.OrderBy(o => o.Distance(player, true)).ToList();
                             if (colliding.Count > 0)
                             {
                                 // First colliding target is < 100 units away from our main target
-                                if (colliding[0].LSDistance(target, true) < 10000)
+                                if (colliding[0].Distance(target, true) < 10000)
                                     Q.Cast(prediction.CastPosition);
                             }
                             break;
@@ -301,7 +301,7 @@ namespace Gnar
                 {
                     // Get minions in Q range which could die with Q but not with AA
                     var minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).Where(m =>
-                        m.Health > player.LSGetAutoAttackDamage(m) / 2 && m.Health < Q.GetRealDamage(m));
+                        m.Health > player.GetAutoAttackDamage(m) / 2 && m.Health < Q.GetRealDamage(m));
                     // Get farm location
                     var position = Q.GetFarmLocation(MinionTeam.Enemy, minions.ToList());
                     if (position.HasValue)
@@ -320,7 +320,7 @@ namespace Gnar
                 {
                     // Get minions in Q range which could die with Q but not with AA
                     var minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).Where(m =>
-                        m.Health > player.LSGetAutoAttackDamage(m) / 2 && m.Health < Q.GetRealDamage(m));
+                        m.Health > player.GetAutoAttackDamage(m) / 2 && m.Health < Q.GetRealDamage(m));
                     // Get farm location
                     var position = Q.GetFarmLocation(MinionTeam.Enemy, minions.ToList());
                     if (position.HasValue)

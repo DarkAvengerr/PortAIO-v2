@@ -45,7 +45,7 @@ namespace SCommon.Evade
                     if (spell != null)
                     {
                         if ((spell.IsTargeted && args.Target != null && args.Target.IsMe) ||
-                            (!spell.IsTargeted && sender.LSDistance(ObjectManager.Player.ServerPosition) <= spell.Radius))
+                            (!spell.IsTargeted && sender.Distance(ObjectManager.Player.ServerPosition) <= spell.Radius))
                             OnDetected(new DetectedTargetedSpellArgs { Caster = sender, SpellData = spell, SpellCastArgs = args });
                     }
                 }

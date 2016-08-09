@@ -40,7 +40,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         /// <returns></returns>
         public void CreateMenu(Menu rootMenu)
         {
-            if (this.Player.LSGetSpellSlot("summonerdot") == SpellSlot.Unknown)
+            if (this.Player.GetSpellSlot("summonerdot") == SpellSlot.Unknown)
             {
                 return;
             }
@@ -74,7 +74,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         {
             try
             {
-                var igniteSlot = this.Player.LSGetSpellSlot("summonerdot");
+                var igniteSlot = this.Player.GetSpellSlot("summonerdot");
 
                 if (igniteSlot == SpellSlot.Unknown)
                 {
@@ -127,7 +127,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                 var kSableEnemy =
                     HeroManager.Enemies.FirstOrDefault(
                         hero =>
-                        hero.LSIsValidTarget(600) && !hero.IsZombie
+                        hero.IsValidTarget(600) && !hero.IsZombie
                         && this.Player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite) > hero.Health);
 
                 if (kSableEnemy != null)

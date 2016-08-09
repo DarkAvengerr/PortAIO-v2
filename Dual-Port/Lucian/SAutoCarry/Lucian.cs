@@ -73,7 +73,7 @@ namespace SAutoCarry.Champions
             {
                 foreach (var enemy in HeroManager.Enemies)
                 {
-                    if (enemy.LSIsValidTarget(1200))
+                    if (enemy.IsValidTarget(1200))
                     {
                         float autoAttackDamage = SCommon.Damage.AutoAttack.GetDamage(enemy) * 1.5f;
                         int aaCount = (int)Math.Ceiling(Math.Max(1, enemy.Health - CalculateComboDamage(enemy, 0)) / autoAttackDamage);
@@ -100,10 +100,10 @@ namespace SAutoCarry.Champions
             var t = TargetSelector.GetTarget(Spells[Q].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
             if (t != null)
             {
-                if (Spells[Q].LSIsReady() && ComboUseQ)
+                if (Spells[Q].IsReady() && ComboUseQ)
                     Spells[Q].CastOnUnit(t);
 
-                if (!CheckPassive && Spells[W].LSIsReady())
+                if (!CheckPassive && Spells[W].IsReady())
                     Spells[W].SPredictionCast(t, HitChance.High);
             }
             else
@@ -138,7 +138,7 @@ namespace SAutoCarry.Champions
                 var minions = MinionManager.GetMinions(Spells[Q].Range, MinionTypes.All, MinionTeam.NotAlly);
                 foreach (var minion in minions)
                 {
-                    var spellHitBox = ClipperWrapper.DefineRectangle(ObjectManager.Player.ServerPosition.LSTo2D(), ObjectManager.Player.ServerPosition.LSTo2D() + (minion.ServerPosition.LSTo2D() - ObjectManager.Player.ServerPosition.LSTo2D()).LSNormalized() * 1200f, 60f);
+                    var spellHitBox = ClipperWrapper.DefineRectangle(ObjectManager.Player.ServerPosition.To2D(), ObjectManager.Player.ServerPosition.To2D() + (minion.ServerPosition.To2D() - ObjectManager.Player.ServerPosition.To2D()).Normalized() * 1200f, 60f);
                     if (ClipperWrapper.IsIntersects(ClipperWrapper.MakePaths(enemyHitBox), ClipperWrapper.MakePaths(spellHitBox)))
                     {
                         Spells[Q].CastOnUnit(minion);
@@ -156,10 +156,10 @@ namespace SAutoCarry.Champions
 
                 if (target.Path.Length > 0)
                 {
-                    if (ObjectManager.Player.LSDistance(vec) < ObjectManager.Player.LSDistance(target.Path.Last()))
+                    if (ObjectManager.Player.Distance(vec) < ObjectManager.Player.Distance(target.Path.Last()))
                         return IsSafe(target, Game.CursorPos);
                     else
-                        return IsSafe(target, Game.CursorPos.LSTo2D().LSRotated(LeagueSharp.Common.Geometry.DegreeToRadian((vec - ObjectManager.Player.ServerPosition).LSTo2D().LSAngleBetween((Game.CursorPos - ObjectManager.Player.ServerPosition).LSTo2D()) % 90)).To3D());
+                        return IsSafe(target, Game.CursorPos.To2D().Rotated(LeagueSharp.Common.Geometry.DegreeToRadian((vec - ObjectManager.Player.ServerPosition).To2D().AngleBetween((Game.CursorPos - ObjectManager.Player.ServerPosition).To2D()) % 90)).To3D());
                 }
                 else
                 {
@@ -167,11 +167,11 @@ namespace SAutoCarry.Champions
                         return IsSafe(target, Game.CursorPos);
                 }
 
-                return IsSafe(target, ObjectManager.Player.ServerPosition + (target.ServerPosition - ObjectManager.Player.ServerPosition).LSNormalized().LSTo2D().LSRotated(LeagueSharp.Common.Geometry.DegreeToRadian(90 - (vec - ObjectManager.Player.ServerPosition).LSTo2D().LSAngleBetween((Game.CursorPos - ObjectManager.Player.ServerPosition).LSTo2D()))).To3D() * 300f);
+                return IsSafe(target, ObjectManager.Player.ServerPosition + (target.ServerPosition - ObjectManager.Player.ServerPosition).Normalized().To2D().Rotated(LeagueSharp.Common.Geometry.DegreeToRadian(90 - (vec - ObjectManager.Player.ServerPosition).To2D().AngleBetween((Game.CursorPos - ObjectManager.Player.ServerPosition).To2D()))).To3D() * 300f);
             }
             else if(ComboEMode == 1) //side e idea, credits hoola
             {
-                return SCommon.Maths.Geometry.Deviation(ObjectManager.Player.ServerPosition.LSTo2D(), target.ServerPosition.LSTo2D(), 65).To3D();
+                return SCommon.Maths.Geometry.Deviation(ObjectManager.Player.ServerPosition.To2D(), target.ServerPosition.To2D(), 65).To3D();
             }
             else if (ComboEMode == 2)
             {
@@ -183,10 +183,10 @@ namespace SAutoCarry.Champions
 
         public static Vector3 IsSafe(AIHeroClient target, Vector3 vec)
         {
-            if (target.ServerPosition.LSTo2D().LSDistance(vec) <= target.AttackRange && vec.LSCountEnemiesInRange(1000) > 1)
+            if (target.ServerPosition.To2D().Distance(vec) <= target.AttackRange && vec.CountEnemiesInRange(1000) > 1)
                 return Vector3.Zero;
 
-            if (HeroManager.Enemies.Any(p => p.NetworkId != target.NetworkId && p.ServerPosition.LSTo2D().LSDistance(vec) <= p.AttackRange) || vec.LSUnderTurret(true))
+            if (HeroManager.Enemies.Any(p => p.NetworkId != target.NetworkId && p.ServerPosition.To2D().Distance(vec) <= p.AttackRange) || vec.UnderTurret(true))
                 return Vector3.Zero;
 
             return vec;
@@ -205,7 +205,7 @@ namespace SAutoCarry.Champions
         {
             if (!HasPassive && args.Target != null && args.Target is AIHeroClient && Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo)
             {
-                if (Spells[Q].LSIsReady() && ComboUseQ)
+                if (Spells[Q].IsReady() && ComboUseQ)
                 {
                     Spells[Q].CastOnUnit(args.Target as Obj_AI_Base);
                     args.Process = false;
@@ -219,17 +219,17 @@ namespace SAutoCarry.Champions
             if (args.Target != null && args.Target is AIHeroClient && Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo)
             {
                 var t = args.Target as AIHeroClient;
-                if (Spells[E].LSIsReady() && ComboUseE)
+                if (Spells[E].IsReady() && ComboUseE)
                 {
                     var pos = FindDashPosition(t);
-                    if (pos.LSIsValid())
+                    if (pos.IsValid())
                     {
                         Spells[E].Cast(pos);
                         return;
                     }
                 }
 
-                if (Spells[W].LSIsReady() && ComboUseW)
+                if (Spells[W].IsReady() && ComboUseW)
                     Spells[W].SPredictionCast(t, HitChance.Low);
             }
             else if (args.Target != null && args.Target is Obj_AI_Base && Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.LaneClear)
@@ -237,13 +237,13 @@ namespace SAutoCarry.Champions
                 var jungleMob = MinionManager.GetMinions(Spells[Q].Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
                 if (jungleMob != null)
                 {   
-                    if (Spells[E].LSIsReady())
+                    if (Spells[E].IsReady())
                     {
                         Spells[E].Cast(Game.CursorPos);
                         return;
                     }
 
-                    if (Spells[W].LSIsReady())
+                    if (Spells[W].IsReady())
                         Spells[W].Cast(jungleMob.ServerPosition);
                 }
             }

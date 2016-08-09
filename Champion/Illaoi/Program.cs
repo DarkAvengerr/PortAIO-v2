@@ -126,25 +126,25 @@ namespace Illaoi___Tentacle_Kitty
             var menuItem4 = Config.Item("r.draw").GetValue<Circle>();
             var menuItem5 = Config.Item("aa.indicator").GetValue<Circle>();
             var menuItem6 = Config.Item("passive.draw").GetValue<Circle>();
-            if (menuItem1.Active && Q.LSIsReady())
+            if (menuItem1.Active && Q.IsReady())
             {
                 Render.Circle.DrawCircle(new Vector3(Illaoi.Position.X, Illaoi.Position.Y, Illaoi.Position.Z), Q.Range, menuItem1.Color, 5);
             }
-            if (menuItem2.Active && W.LSIsReady())
+            if (menuItem2.Active && W.IsReady())
             {
                 Render.Circle.DrawCircle(new Vector3(Illaoi.Position.X, Illaoi.Position.Y, Illaoi.Position.Z), W.Range, menuItem2.Color, 5);
             }
-            if (menuItem3.Active && E.LSIsReady())
+            if (menuItem3.Active && E.IsReady())
             {
                 Render.Circle.DrawCircle(new Vector3(Illaoi.Position.X, Illaoi.Position.Y, Illaoi.Position.Z), E.Range, menuItem3.Color, 5);
             }
-            if (menuItem4.Active && R.LSIsReady())
+            if (menuItem4.Active && R.IsReady())
             {
                 Render.Circle.DrawCircle(new Vector3(Illaoi.Position.X, Illaoi.Position.Y, Illaoi.Position.Z), R.Range, menuItem4.Color, 5);
             }
             if (menuItem4.Active)
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(1500) && x.IsValid && x.IsVisible && !x.IsDead && !x.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(1500) && x.IsValid && x.IsVisible && !x.IsDead && !x.IsZombie))
                 {
                     Drawing.DrawText(enemy.HPBarPosition.X, enemy.HPBarPosition.Y, menuItem5.Color,
                                         string.Format("{0} Basic Attack = Kill", AaIndicator(enemy)));
@@ -152,13 +152,13 @@ namespace Illaoi___Tentacle_Kitty
             }
             if (menuItem5.Active)
             {
-                var enemy = HeroManager.Enemies.FirstOrDefault(x => x.LSIsValidTarget(2000));
+                var enemy = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(2000));
                 foreach (var passive in ObjectManager.Get<Obj_AI_Minion>().Where(x=> x.Name == "God"))
                 {
                     Render.Circle.DrawCircle(new Vector3(passive.Position.X, passive.Position.Y, passive.Position.Z), 850, menuItem5.Color, 2);
                     if (enemy != null)
                     {
-                        var xx = Drawing.WorldToScreen(passive.Position.LSExtend(enemy.Position, 850));
+                        var xx = Drawing.WorldToScreen(passive.Position.Extend(enemy.Position, 850));
                         var xy = Drawing.WorldToScreen(passive.Position);
                         Drawing.DrawLine(xy.X, xy.Y, xx.X, xx.Y, 5, Color.Gold);
                     }
@@ -192,9 +192,9 @@ namespace Illaoi___Tentacle_Kitty
         }
         private static void Combo()
         {
-            if (Q.LSIsReady() && Config.Item("q.combo").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("q.combo").GetValue<bool>())
             {
-                var enemy = HeroManager.Enemies.FirstOrDefault(x => x.LSIsValidTarget(Q.Range));
+                var enemy = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(Q.Range));
                 var enemyGhost = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(x=> x.Name == enemy.Name);
                 if (enemy != null && enemyGhost == null )
                 {
@@ -215,21 +215,21 @@ namespace Illaoi___Tentacle_Kitty
                    
                 
             }
-            if (W.LSIsReady() && Config.Item("w.combo").GetValue<bool>())
+            if (W.IsReady() && Config.Item("w.combo").GetValue<bool>())
             {
                 var tentacle = ObjectManager.Get<Obj_AI_Minion>().First(x=> x.Name == "God");
                 if (tentacle != null)
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(850)))
+                    foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(850)))
                     {
                         W.Cast();
                     }
                 }
 
             }
-            if (E.LSIsReady() && Config.Item("e.combo").GetValue<bool>())
+            if (E.IsReady() && Config.Item("e.combo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(E.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(E.Range) && !o.IsDead && !o.IsZombie))
                 {
                     if (Config.Item("enemy." + enemy.CharData.BaseSkinName).GetValue<bool>() && E.GetPrediction(enemy).Hitchance >= HitChance.High
                         && E.GetPrediction(enemy).CollisionObjects.Count == 0)
@@ -238,11 +238,11 @@ namespace Illaoi___Tentacle_Kitty
                     }
                 } 
             }
-            if (R.LSIsReady() && Config.Item("r.combo").GetValue<bool>())
+            if (R.IsReady() && Config.Item("r.combo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(R.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(R.Range) && !o.IsDead && !o.IsZombie))
                 {
-                    if (Illaoi.LSCountEnemiesInRange(R.Range) >= Config.Item("r.min.hit").GetValue<Slider>().Value)
+                    if (Illaoi.CountEnemiesInRange(R.Range) >= Config.Item("r.min.hit").GetValue<Slider>().Value)
                     {
                         R.Cast();
                     }
@@ -255,9 +255,9 @@ namespace Illaoi___Tentacle_Kitty
             {
                 return;
             }
-            if (Q.LSIsReady() && Config.Item("q.harass").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("q.harass").GetValue<bool>())
             {
-                var enemy = HeroManager.Enemies.FirstOrDefault(x => x.LSIsValidTarget(Q.Range));
+                var enemy = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(Q.Range));
                 var enemyGhost = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(x => x.Name == enemy.Name);
                 if (enemy != null && enemyGhost == null)
                 {
@@ -276,21 +276,21 @@ namespace Illaoi___Tentacle_Kitty
                     }
                 }
             }
-            if (W.LSIsReady() && Config.Item("w.harass").GetValue<bool>())
+            if (W.IsReady() && Config.Item("w.harass").GetValue<bool>())
             {
                 var tentacle = ObjectManager.Get<Obj_AI_Minion>().First(x => x.Name == "God");
                 if (tentacle != null)
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(850)))
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(850)))
                     {
                         W.Cast();
                     }
                 }
 
             }
-            if (E.LSIsReady() && Config.Item("e.harass").GetValue<bool>())
+            if (E.IsReady() && Config.Item("e.harass").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(E.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(E.Range) && !o.IsDead && !o.IsZombie))
                 {
                     if (Config.Item("enemy." + enemy.CharData.BaseSkinName).GetValue<bool>() && E.GetPrediction(enemy).Hitchance >= HitChance.High
                         && E.GetPrediction(enemy).CollisionObjects.Count == 0)
@@ -308,7 +308,7 @@ namespace Illaoi___Tentacle_Kitty
             }
 
             var minionCount = MinionManager.GetMinions(Illaoi.Position, Q.Range, MinionTypes.All, MinionTeam.NotAlly);
-            if (Q.LSIsReady() && Config.Item("q.clear").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("q.clear").GetValue<bool>())
             {
                 var mfarm = Q.GetLineFarmLocation(minionCount);
                 if (minionCount.Count >= Config.Item("q.minion.hit").GetValue<Slider>().Value)

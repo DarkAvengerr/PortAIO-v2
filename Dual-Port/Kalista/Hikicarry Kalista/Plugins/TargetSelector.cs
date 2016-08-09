@@ -92,7 +92,7 @@ using EloBuddy;
 
         private static void DrawingOnOnDraw(EventArgs args)
         {
-            if (_selectedTargetObjAiHero.LSIsValidTarget() && _configMenu != null &&
+            if (_selectedTargetObjAiHero.IsValidTarget() && _configMenu != null &&
                 _configMenu.Item("FocusSelected").GetValue<bool>() &&
                 _configMenu.Item("SelTColor").GetValue<Circle>().Active)
             {
@@ -110,8 +110,8 @@ using EloBuddy;
             }
             _selectedTargetObjAiHero =
                 HeroManager.Enemies
-                    .FindAll(hero => hero.LSIsValidTarget() && hero.LSDistance(Game.CursorPos, true) < 40000) // 200 * 200
-                    .OrderBy(h => h.LSDistance(Game.CursorPos, true)).FirstOrDefault();
+                    .FindAll(hero => hero.IsValidTarget() && hero.Distance(Game.CursorPos, true) < 40000) // 200 * 200
+                    .OrderBy(h => h.Distance(Game.CursorPos, true)).FirstOrDefault();
         }
 
         #endregion
@@ -270,19 +270,19 @@ using EloBuddy;
         public static bool IsInvulnerable(Obj_AI_Base target, DamageType damageType, bool ignoreShields = true)
         {
             // Tryndamere's Undying Rage (R)
-            if (target.LSHasBuff("Undying Rage") && target.Health <= target.MaxHealth * 0.10f)
+            if (target.HasBuff("Undying Rage") && target.Health <= target.MaxHealth * 0.10f)
             {
                 return true;
             }
 
             // Kayle's Intervention (R)
-            if (target.LSHasBuff("JudicatorIntervention"))
+            if (target.HasBuff("JudicatorIntervention"))
             {
                 return true;
             }
 
             // Poppy's Diplomatic Immunity (R)
-            if (target.LSHasBuff("DiplomaticImmunity") && !ObjectManager.Player.LSHasBuff("poppyulttargetmark"))
+            if (target.HasBuff("DiplomaticImmunity") && !ObjectManager.Player.HasBuff("poppyulttargetmark"))
             {
                 //TODO: Get the actual target mark buff name
                 return true;
@@ -294,27 +294,27 @@ using EloBuddy;
             }
 
             // Morgana's Black Shield (E)
-            if (damageType.Equals(DamageType.Magical) && target.LSHasBuff("BlackShield"))
+            if (damageType.Equals(DamageType.Magical) && target.HasBuff("BlackShield"))
             {
                 return true;
             }
 
             // Banshee's Veil (PASSIVE)
-            if (damageType.Equals(DamageType.Magical) && target.LSHasBuff("BansheesVeil"))
+            if (damageType.Equals(DamageType.Magical) && target.HasBuff("BansheesVeil"))
             {
                 // TODO: Get exact Banshee's Veil buff name.
                 return true;
             }
 
             // Sivir's Spell Shield (E)
-            if (damageType.Equals(DamageType.Magical) && target.LSHasBuff("SivirShield"))
+            if (damageType.Equals(DamageType.Magical) && target.HasBuff("SivirShield"))
             {
                 // TODO: Get exact Sivir's Spell Shield buff name
                 return true;
             }
 
             // Nocturne's Shroud of Darkness (W)
-            if (damageType.Equals(DamageType.Magical) && target.LSHasBuff("ShroudofDarkness"))
+            if (damageType.Equals(DamageType.Magical) && target.HasBuff("ShroudofDarkness"))
             {
                 // TODO: Get exact Nocturne's Shourd of Darkness buff name
                 return true;
@@ -326,7 +326,7 @@ using EloBuddy;
 
         public static void SetTarget(AIHeroClient hero)
         {
-            if (hero.LSIsValidTarget())
+            if (hero.IsValidTarget())
             {
                 _selectedTargetObjAiHero = hero;
             }
@@ -368,8 +368,8 @@ using EloBuddy;
             bool ignoreShieldSpells = true,
             Vector3? rangeCheckFrom = null)
         {
-            return target.LSIsValidTarget() &&
-                   target.LSDistance(rangeCheckFrom ?? ObjectManager.Player.ServerPosition, true) <
+            return target.IsValidTarget() &&
+                   target.Distance(rangeCheckFrom ?? ObjectManager.Player.ServerPosition, true) <
                    Math.Pow(range <= 0 ? Orbwalking.GetRealAutoAttackRange(target) : range, 2) &&
                    !IsInvulnerable(target, damageType, ignoreShieldSpells);
         }
@@ -428,11 +428,11 @@ using EloBuddy;
                         return
                             targets.MinOrDefault(
                                 hero =>
-                                    (rangeCheckFrom.HasValue ? rangeCheckFrom.Value : champion.ServerPosition).LSDistance(
+                                    (rangeCheckFrom.HasValue ? rangeCheckFrom.Value : champion.ServerPosition).Distance(
                                         hero.ServerPosition, true));
 
                     case TargetingMode.NearMouse:
-                        return targets.Find(hero => hero.LSDistance(Game.CursorPos, true) < 22500); // 150 * 150
+                        return targets.Find(hero => hero.Distance(Game.CursorPos, true) < 22500); // 150 * 150
 
                     case TargetingMode.AutoPriority:
                         return
@@ -483,7 +483,7 @@ using EloBuddy;
             IEnumerable<AIHeroClient> ignoredChamps = null,
             Vector3? rangeCheckFrom = null)
         {
-            if (_lastTarget == null || !_lastTarget.LSIsValidTarget() || _lastDamageType != damageType)
+            if (_lastTarget == null || !_lastTarget.IsValidTarget() || _lastDamageType != damageType)
             {
                 var newTarget = TargetSelector.GetTarget(range, damageType, ignoreShield, ignoredChamps, rangeCheckFrom);
 
@@ -493,7 +493,7 @@ using EloBuddy;
                 return newTarget;
             }
 
-            if (_lastTarget.LSIsValidTarget(range) && damageType == _lastDamageType)
+            if (_lastTarget.IsValidTarget(range) && damageType == _lastDamageType)
             {
                 return _lastTarget;
             }

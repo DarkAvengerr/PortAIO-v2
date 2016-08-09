@@ -51,7 +51,7 @@ namespace FioraProject
         {
             if (e.GetNewValue<KeyBind>().Active)
             {
-                LastClickPoint = Game.CursorPos.LSTo2D();
+                LastClickPoint = Game.CursorPos.To2D();
             }
         }
         private static void Game_OnUpdate(EventArgs args)
@@ -62,7 +62,7 @@ namespace FioraProject
             var target = GetTarget();
             Orbwalking.Orbwalk(
                         Orbwalking.InAutoAttackRange(target) ? target : null,
-                        LastClickPoint.LSIsValid() ? LastClickPoint.To3D() : Game.CursorPos,
+                        LastClickPoint.IsValid() ? LastClickPoint.To3D() : Game.CursorPos,
                         80,
                         50, false, false, false);
         }
@@ -71,7 +71,7 @@ namespace FioraProject
         {
             if (args.Msg == (uint)WindowsMessages.WM_RBUTTONDOWN)
             {
-                LastClickPoint = Game.CursorPos.LSTo2D();
+                LastClickPoint = Game.CursorPos.To2D();
             }
         }
     }

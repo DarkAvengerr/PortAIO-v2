@@ -39,8 +39,8 @@ namespace UnderratedAIO.Champions
 
         private void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (config.Item("useegc", true).GetValue<bool>() && Q.LSIsReady() &&
-                gapcloser.End.LSDistance(player.Position) < 200 && !gapcloser.Sender.ChampionName.ToLower().Contains("yi"))
+            if (config.Item("useegc", true).GetValue<bool>() && Q.IsReady() &&
+                gapcloser.End.Distance(player.Position) < 200 && !gapcloser.Sender.ChampionName.ToLower().Contains("yi"))
             {
                 E.Cast(gapcloser.End);
             }
@@ -82,7 +82,7 @@ namespace UnderratedAIO.Champions
         private void Harass()
         {
             AIHeroClient target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical, true);
-            if (config.Item("useeH", true).GetValue<bool>() && E.CanCast(target) && E.LSIsReady() && !player.Spellbook.IsAutoAttacking &&
+            if (config.Item("useeH", true).GetValue<bool>() && E.CanCast(target) && E.IsReady() && !player.Spellbook.IsAutoAttacking &&
                 Orbwalking.CanMove(100))
             {
                 CastEtarget(target);
@@ -92,8 +92,8 @@ namespace UnderratedAIO.Champions
         private void CastEtarget(AIHeroClient target)
         {
             var pred = E.GetPrediction(target);
-            var pos = target.Position.LSExtend(pred.CastPosition, Orbwalking.GetRealAutoAttackRange(target));
-            var poly = CombatHelper.GetPoly(pred.CastPosition, player.LSDistance(pos), E.Width);
+            var pos = target.Position.Extend(pred.CastPosition, Orbwalking.GetRealAutoAttackRange(target));
+            var poly = CombatHelper.GetPoly(pred.CastPosition, player.Distance(pos), E.Width);
             if (pred.Hitchance >= HitChance.High && poly.IsInside(pred.UnitPosition) &&
                 poly.IsInside(target.ServerPosition))
             {
@@ -107,7 +107,7 @@ namespace UnderratedAIO.Champions
                 E.GetLineFarmLocation(
                     MinionManager.GetMinions(
                         ObjectManager.Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.NotAlly));
-            if (E.LSIsReady() && config.Item("useeLC", true).GetValue<bool>() &&
+            if (E.IsReady() && config.Item("useeLC", true).GetValue<bool>() &&
                 bestPosition.MinionsHit >= config.Item("eMinHit", true).GetValue<Slider>().Value)
             {
                 E.Cast(bestPosition.Position);
@@ -127,38 +127,38 @@ namespace UnderratedAIO.Champions
             }
             var data = Program.IncDamages.GetAllyData(player.NetworkId);
             var ignitedmg = (float) player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
-            bool hasIgnite = player.Spellbook.CanUseSpell(player.LSGetSpellSlot("SummonerDot")) == SpellState.Ready;
+            bool hasIgnite = player.Spellbook.CanUseSpell(player.GetSpellSlot("SummonerDot")) == SpellState.Ready;
             if (config.Item("useIgnite", true).GetValue<bool>() &&
                 ignitedmg > HealthPrediction.GetHealthPrediction(target, 700) && hasIgnite &&
                 !CombatHelper.CheckCriticalBuffs(target) &&
-                (target.LSDistance(player) > Orbwalking.GetRealAutoAttackRange(target) + 25 || player.HealthPercent < 30) &&
+                (target.Distance(player) > Orbwalking.GetRealAutoAttackRange(target) + 25 || player.HealthPercent < 30) &&
                 !justE)
             {
-                player.Spellbook.CastSpell(player.LSGetSpellSlot("SummonerDot"), target);
+                player.Spellbook.CastSpell(player.GetSpellSlot("SummonerDot"), target);
             }
             if (Q.CanCast(target) && config.Item("useq", true).GetValue<bool>() &&
-                (data.IsAboutToDie || player.HealthPercent < 20 && data.AnyCC) && !R.LSIsReady() &&
+                (data.IsAboutToDie || player.HealthPercent < 20 && data.AnyCC) && !R.IsReady() &&
                 (!player.HasBuff("UndyingRage") || CombatHelper.GetBuffTime(player.GetBuff("UndyingRage")) < 0.4f) &&
                 !justR)
             {
                 Q.Cast();
             }
 
-            if (E.LSIsReady() && config.Item("usee", true).GetValue<bool>() && !player.Spellbook.IsAutoAttacking &&
+            if (E.IsReady() && config.Item("usee", true).GetValue<bool>() && !player.Spellbook.IsAutoAttacking &&
                 Orbwalking.CanMove(100))
             {
                 if (!config.Item("useeLimited", true).GetValue<bool>() ||
-                    Orbwalking.GetRealAutoAttackRange(target) + 25 < player.LSDistance(target))
+                    Orbwalking.GetRealAutoAttackRange(target) + 25 < player.Distance(target))
                 {
                     CastEtarget(target);
                 }
             }
-            if (config.Item("usew", true).GetValue<bool>() && W.LSIsReady() && !Orbwalking.CanAttack() &&
+            if (config.Item("usew", true).GetValue<bool>() && W.IsReady() && !Orbwalking.CanAttack() &&
                 Orbwalking.CanMove(100))
             {
                 W.Cast();
             }
-            if (config.Item("user", true).GetValue<bool>() && R.LSIsReady() && data.IsAboutToDie)
+            if (config.Item("user", true).GetValue<bool>() && R.IsReady() && data.IsAboutToDie)
             {
                 R.Cast();
             }
@@ -173,14 +173,14 @@ namespace UnderratedAIO.Champions
         private static float ComboDamage(AIHeroClient hero)
         {
             double damage = 0;
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.E);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.E);
             }
             damage = Environment.Hero.GetAdOverTime(player, hero, 3);
             //damage += ItemHandler.GetItemsDamage(target);
             var ignitedmg = player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
-            if (player.Spellbook.CanUseSpell(player.LSGetSpellSlot("summonerdot")) == SpellState.Ready &&
+            if (player.Spellbook.CanUseSpell(player.GetSpellSlot("summonerdot")) == SpellState.Ready &&
                 hero.Health < damage + ignitedmg)
             {
                 damage += ignitedmg;

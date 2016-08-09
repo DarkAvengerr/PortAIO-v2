@@ -151,30 +151,30 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
             var damage = 0d;
             try
             {
-                foreach (var spell in _spells.Where(spell => spell.LSIsReady()))
+                foreach (var spell in _spells.Where(spell => spell.IsReady()))
                 {
                     switch (spell.DamageType)
                     {
                         case TargetSelector.DamageType.Physical:
                             damage += ObjectManager.Player.CalcDamage(
                                 enemy, Damage.DamageType.Physical,
-                                ObjectManager.Player.LSGetSpellDamage(enemy, spell.Slot) *
+                                ObjectManager.Player.GetSpellDamage(enemy, spell.Slot) *
                                 ObjectManager.Player.PercentArmorPenetrationMod);
                             break;
                         case TargetSelector.DamageType.Magical:
                             damage += ObjectManager.Player.CalcDamage(
                                 enemy, Damage.DamageType.Magical,
-                                ObjectManager.Player.LSGetSpellDamage(enemy, spell.Slot) *
+                                ObjectManager.Player.GetSpellDamage(enemy, spell.Slot) *
                                 ObjectManager.Player.PercentMagicPenetrationMod);
                             break;
                         case TargetSelector.DamageType.True:
                             damage += ObjectManager.Player.CalcDamage(
-                                enemy, Damage.DamageType.True, ObjectManager.Player.LSGetSpellDamage(enemy, spell.Slot));
+                                enemy, Damage.DamageType.True, ObjectManager.Player.GetSpellDamage(enemy, spell.Slot));
                             break;
                     }
                 }
 
-                damage += ObjectManager.Player.LSGetAutoAttackDamage(enemy) *
+                damage += ObjectManager.Player.GetAutoAttackDamage(enemy) *
                           Menu.Item(Name + "AutoAttacks").GetValue<Slider>().Value;
             }
             catch (Exception ex)

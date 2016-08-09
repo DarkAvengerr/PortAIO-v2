@@ -97,7 +97,7 @@ namespace SharpShooter.Plugins
                                     {
                                         var target =
                                             HeroManager.Enemies.Where(
-                                                x => x.LSIsValidTarget(_w.Range) && !Orbwalking.InAutoAttackRange(x))
+                                                x => x.IsValidTarget(_w.Range) && !Orbwalking.InAutoAttackRange(x))
                                                 .OrderByDescending(x => TargetSelector.GetPriority(x))
                                                 .FirstOrDefault();
                                         if (target != null)
@@ -162,7 +162,7 @@ namespace SharpShooter.Plugins
                                         var qTarget =
                                             MinionManager.GetMinions(_q.Range, MinionTypes.All, MinionTeam.Neutral,
                                                 MinionOrderTypes.MaxHealth)
-                                                .FirstOrDefault(x => x.LSIsValidTarget(_q.Range));
+                                                .FirstOrDefault(x => x.IsValidTarget(_q.Range));
 
                                         if (qTarget != null)
                                             _q.Cast(qTarget);
@@ -214,12 +214,12 @@ namespace SharpShooter.Plugins
                                     : true)
                                     if (_e.IsReadyPerfectly())
                                         if (
-                                            ObjectManager.Player.Position.LSExtend(Game.CursorPos, 700)
-                                                .LSCountEnemiesInRange(700) <= 1)
+                                            ObjectManager.Player.Position.Extend(Game.CursorPos, 700)
+                                                .CountEnemiesInRange(700) <= 1)
                                             if (!_q.IsReadyPerfectly())
-                                                _e.Cast(ObjectManager.Player.Position.LSExtend(Game.CursorPos, 450));
+                                                _e.Cast(ObjectManager.Player.Position.Extend(Game.CursorPos, 450));
                                             else if (ObjectManager.Player.Mana - _e.ManaCost >= _q.ManaCost)
-                                                _e.Cast(ObjectManager.Player.Position.LSExtend(Game.CursorPos, 450));
+                                                _e.Cast(ObjectManager.Player.Position.Extend(Game.CursorPos, 450));
                         }
                         break;
                     }
@@ -229,11 +229,11 @@ namespace SharpShooter.Plugins
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (MenuProvider.Champion.Misc.UseAntiGapcloser)
-                if (gapcloser.End.LSDistance(ObjectManager.Player.Position) <= 200)
-                    if (gapcloser.Sender.LSIsValidTarget())
+                if (gapcloser.End.Distance(ObjectManager.Player.Position) <= 200)
+                    if (gapcloser.Sender.IsValidTarget())
                         if (gapcloser.Sender.ChampionName.ToLowerInvariant() != "masteryi")
                             if (_e.IsReadyPerfectly())
-                                _e.Cast(ObjectManager.Player.Position.LSExtend(gapcloser.Sender.Position, -_e.Range));
+                                _e.Cast(ObjectManager.Player.Position.Extend(gapcloser.Sender.Position, -_e.Range));
         }
 
         private void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -244,10 +244,10 @@ namespace SharpShooter.Plugins
                         if (sender.Type == GameObjectType.AIHeroClient)
                             if (sender.IsEnemy)
                                 if (sender.IsMelee)
-                                    if (args.SData.LSIsAutoAttack())
+                                    if (args.SData.IsAutoAttack())
                                         if (MenuProvider.Champion.Misc.GetBoolValue("Use Anti-Melee (E)"))
                                             if (_e.IsReadyPerfectly())
-                                                _e.Cast(ObjectManager.Player.Position.LSExtend(sender.Position, -_e.Range));
+                                                _e.Cast(ObjectManager.Player.Position.Extend(sender.Position, -_e.Range));
         }
 
         private void Drawing_OnDraw(EventArgs args)
@@ -290,7 +290,7 @@ namespace SharpShooter.Plugins
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float) ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float) ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
             if (_q.IsReadyPerfectly())

@@ -167,9 +167,9 @@ using EloBuddy; namespace ezEvade
 
                     if (path.Length > 0)
                     {
-                        var movePos = path[path.Length - 1].LSTo2D();
+                        var movePos = path[path.Length - 1].To2D();
 
-                        if (movePos.LSDistance(lastTestMoveToCommand.targetPosition) < 10)
+                        if (movePos.Distance(lastTestMoveToCommand.targetPosition) < 10)
                         {
                             float moveTime = EvadeUtils.TickCount - lastTestMoveToCommand.timestamp - ObjectCache.gamePing;
                             Console.WriteLine("Extra Delay: " + moveTime);

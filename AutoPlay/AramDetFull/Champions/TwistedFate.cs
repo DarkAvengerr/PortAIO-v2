@@ -34,14 +34,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void DeathWalkerOnBeforeAttack(DeathWalker.BeforeAttackEventArgs args)
         {
-            if (!W.LSIsReady() || !(args.Target is AIHeroClient))
+            if (!W.IsReady() || !(args.Target is AIHeroClient))
                 return;
             W.Cast();
         }
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null )
+            if (!Q.IsReady() || target == null )
                 return;
             Q.Cast(target);
         }
@@ -52,7 +52,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null || !safeGap(target))
+            if (!E.IsReady() || target == null || !safeGap(target))
                 return;
            // E.Cast(target.Position);
           //  LeagueSharp.Common.Utility.DelayAction.Add(250, () => E.Cast(target.Position));
@@ -61,9 +61,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null || target.LSDistance(player)<1600)
+            if (!R.IsReady() || target == null || target.Distance(player)<1600)
                 return;
-            if (target.LSHasBuff("dianamoonlight"))
+            if (target.HasBuff("dianamoonlight"))
                 R.Cast(target.Position);
             else if (safeGap(target))
                R.Cast();
@@ -91,12 +91,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void farm()
         {
-            if (player.ManaPercent < 55 || !Q.LSIsReady())
+            if (player.ManaPercent < 55 || !Q.IsReady())
                 return;
 
             foreach (var minion in MinionManager.GetMinions(Q.Range-100))
             {
-                if (minion.Health > ObjectManager.Player.LSGetAutoAttackDamage(minion) && minion.Health < Q.GetDamage(minion))
+                if (minion.Health > ObjectManager.Player.GetAutoAttackDamage(minion) && minion.Health < Q.GetDamage(minion))
                 {
                     Q.Cast(minion);
                     return;

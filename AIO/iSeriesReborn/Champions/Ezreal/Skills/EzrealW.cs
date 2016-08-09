@@ -15,7 +15,7 @@ using EloBuddy;
             {
                 var target = TargetSelector.GetTarget(Variables.spells[SpellSlot.W].Range * 0.75f, TargetSelector.DamageType.Physical);
 
-                if (target.LSIsValidTarget(Variables.spells[SpellSlot.W].Range))
+                if (target.IsValidTarget(Variables.spells[SpellSlot.W].Range))
                 {
                     Variables.spells[SpellSlot.W].CastIfHitchanceEquals(
                       target, target.IsMoving ? HitChance.VeryHigh : HitChance.High);

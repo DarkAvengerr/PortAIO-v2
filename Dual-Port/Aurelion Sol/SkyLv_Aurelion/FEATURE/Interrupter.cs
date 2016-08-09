@@ -37,7 +37,7 @@ using EloBuddy;
 
         private static void Interrupter2_OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (SkyLv_AurelionSol.Menu.Item("AurelionSol.AutoIQ").GetValue<bool>() && Q.LSIsReady() && sender.LSIsValidTarget(Q.Range))
+            if (SkyLv_AurelionSol.Menu.Item("AurelionSol.AutoIQ").GetValue<bool>() && Q.IsReady() && sender.IsValidTarget(Q.Range))
                 Q.Cast(sender);
         }
     }

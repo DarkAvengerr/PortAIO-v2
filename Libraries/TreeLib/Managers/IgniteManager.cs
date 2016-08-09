@@ -21,7 +21,7 @@ namespace TreeLib.Managers
 
         private static void Game_OnUpdate(EventArgs args)
         {
-            if (!Menu.Item("IgniteEnabled").IsActive() || SpellManager.Ignite == null || !SpellManager.Ignite.LSIsReady() ||
+            if (!Menu.Item("IgniteEnabled").IsActive() || SpellManager.Ignite == null || !SpellManager.Ignite.IsReady() ||
                 ObjectManager.Player.IsDead)
             {
                 return;
@@ -30,7 +30,7 @@ namespace TreeLib.Managers
             var target =
                 HeroManager.Enemies.FirstOrDefault(
                     h =>
-                        h.LSIsValidTarget(SpellManager.Ignite.Range) &&
+                        h.IsValidTarget(SpellManager.Ignite.Range) &&
                         h.Health < ObjectManager.Player.GetSummonerSpellDamage(h, Damage.SummonerSpell.Ignite));
             if (target != null)
             {

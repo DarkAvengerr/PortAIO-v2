@@ -134,11 +134,11 @@ using EloBuddy;
 
         private static void KarmaOnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (Q.LSIsReady() && MenuCheck("karma.anti.q", Config) && gapcloser.Sender.LSIsValidTarget(Q.Range))
+            if (Q.IsReady() && MenuCheck("karma.anti.q", Config) && gapcloser.Sender.IsValidTarget(Q.Range))
             {
                 Q.Cast(gapcloser.Sender);
             }
-            else if (E.LSIsReady() && MenuCheck("karma.anti.e", Config) && gapcloser.Sender.LSIsValidTarget(E.Range))
+            else if (E.IsReady() && MenuCheck("karma.anti.e", Config) && gapcloser.Sender.IsValidTarget(E.Range))
             {
                 E.Cast(gapcloser.Sender);
             }
@@ -167,7 +167,7 @@ using EloBuddy;
             }
 
             foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(x => x.IsAlly && !x.IsMe && !x.IsDead
-                && x.LSDistance(ObjectManager.Player.Position) < E.Range))
+                && x.Distance(ObjectManager.Player.Position) < E.Range))
             {
                 if (MenuCheck("karma.shield" + ally.ChampionName, Config) && ally.HealthPercent < SliderCheck("karma.ally.percent" + ally.ChampionName, Config)
                     && ObjectManager.Player.HealthPercent > SliderCheck("karma.ally.limit", Config))
@@ -179,11 +179,11 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (MenuCheck("karma.w.combo", Config) && W.LSIsReady())
+            if (MenuCheck("karma.w.combo", Config) && W.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)))
                 {
-                    if (MenuCheck("combo.r.w", Config) && R.LSIsReady())
+                    if (MenuCheck("combo.r.w", Config) && R.IsReady())
                     {
                         if (ObjectManager.Player.HealthPercent <= SliderCheck("combo.r.w.health", Config))
                         {
@@ -192,24 +192,24 @@ using EloBuddy;
                         }
                     }
 
-                    if (!MenuCheck("combo.r.w", Config) || !R.LSIsReady())
+                    if (!MenuCheck("combo.r.w", Config) || !R.IsReady())
                     {
                         W.Cast(enemy);
                     }
                 }
             }
 
-            if (MenuCheck("karma.q.combo", Config) && Q.LSIsReady())
+            if (MenuCheck("karma.q.combo", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                 {
-                    if (MenuCheck("combo.r.q", Config) && R.LSIsReady())
+                    if (MenuCheck("combo.r.q", Config) && R.IsReady())
                     {
                         R.Cast();
                         Q.SPredictionCast(enemy, SpellHitChance(Config, "karma.q.hitchance"));
                     }
 
-                    if (!MenuCheck("combo.r.q", Config) || !R.LSIsReady())
+                    if (!MenuCheck("combo.r.q", Config) || !R.IsReady())
                     {
                         Q.SPredictionCast(enemy, SpellHitChance(Config, "karma.q.hitchance"));
                     }
@@ -219,9 +219,9 @@ using EloBuddy;
 
         private static void Harass()
         {
-            foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range)))
+            foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)))
             {
-                if (MenuCheck("karma.rw.harass", Config) && W.LSIsReady() && R.LSIsReady())
+                if (MenuCheck("karma.rw.harass", Config) && W.IsReady() && R.IsReady())
                 {
                     if (ObjectManager.Player.HealthPercent <= SliderCheck("harass.rw.health", Config))
                     {
@@ -230,21 +230,21 @@ using EloBuddy;
                     }
                 }
 
-                if (!MenuCheck("karma.rw.harass", Config) || !R.LSIsReady())
+                if (!MenuCheck("karma.rw.harass", Config) || !R.IsReady())
                 {
                     W.Cast(enemy);
                 }
             }
 
-            foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range)))
+            foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
             {
-                if (MenuCheck("karma.rq.harass", Config) && Q.LSIsReady() && R.LSIsReady())
+                if (MenuCheck("karma.rq.harass", Config) && Q.IsReady() && R.IsReady())
                 {
                     R.Cast();
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "karma.q.hitchance"));
                 }
 
-                if (MenuCheck("karma.q.harass", Config) && Q.LSIsReady())
+                if (MenuCheck("karma.q.harass", Config) && Q.IsReady())
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "karma.q.hitchance"));
                 }
@@ -254,17 +254,17 @@ using EloBuddy;
 
         private static void KarmaOnDraw(EventArgs args)
         {
-            if (Q.LSIsReady() && ActiveCheck("karma.q.draw", Config))
+            if (Q.IsReady() && ActiveCheck("karma.q.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, GetColor("karma.q.draw", Config));
             }
 
-            if (W.LSIsReady() && ActiveCheck("karma.w.draw", Config))
+            if (W.IsReady() && ActiveCheck("karma.w.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, GetColor("karma.w.draw", Config));
             }
 
-            if (E.LSIsReady() && ActiveCheck("karma.e.draw", Config))
+            if (E.IsReady() && ActiveCheck("karma.e.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, GetColor("karma.e.draw", Config));
             }

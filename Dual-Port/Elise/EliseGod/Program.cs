@@ -60,7 +60,7 @@ using EloBuddy;
             {
                 if (Config.Item("interrupt").GetValue<bool>())
                 {
-                    if (E.LSIsReady() && sender.LSIsValidTarget(E.Range))
+                    if (E.IsReady() && sender.IsValidTarget(E.Range))
                     {
                         E.Cast(sender);
                     }
@@ -70,7 +70,7 @@ using EloBuddy;
             {
                 if (Config.Item("switchInterrupt").GetValue<bool>())
                 {
-                    if (realcdE == 0 && sender.LSIsValidTarget(E.Range) && R.LSIsReady())
+                    if (realcdE == 0 && sender.IsValidTarget(E.Range) && R.IsReady())
                     {
                         R.Cast();
                         E.Cast(sender);
@@ -106,7 +106,7 @@ using EloBuddy;
         //        {
         //            if (!Human() && !Player.Spellbook.IsAutoAttacking)
         //            {
-        //                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Player.Position.LSExtend(sender.Position, -40));
+        //                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Player.Position.Extend(sender.Position, -40));
         //            }
         //            // idk find out when spider is aggrod and run back in range of sender
         //        }
@@ -144,15 +144,15 @@ using EloBuddy;
             foreach (
                 var enemy in
                     HeroManager.Enemies.Where(
-                        enemy => enemy.NetworkId == args.NetworkId && enemy.LSDistance(Player.Position) <= E.Range))
+                        enemy => enemy.NetworkId == args.NetworkId && enemy.Distance(Player.Position) <= E.Range))
             {
             stunbitches:
-                if (Human() && E.LSIsReady())
+                if (Human() && E.IsReady())
                     E.Cast(enemy);
 
                 else if (!Human())
                 {
-                    if (R.LSIsReady())
+                    if (R.IsReady())
                         R.Cast();
 
                     goto stunbitches;
@@ -169,10 +169,10 @@ using EloBuddy;
             {
                 if (Human())
                 {
-                    if (Q.LSIsReady())
+                    if (Q.IsReady())
                         Q.CastOnUnit(minion);
 
-                    if (W.LSIsReady())
+                    if (W.IsReady())
                     {
                         if (W.GetPrediction(minion).CollisionObjects.Count >= 1)
                             W.Cast(minion);
@@ -181,17 +181,17 @@ using EloBuddy;
                             W.Cast(minion);
                     }
 
-                    if (!Q.LSIsReady() && !W.LSIsReady() && R.LSIsReady())
+                    if (!Q.IsReady() && !W.IsReady() && R.IsReady())
                     {
                         R.Cast();
                     }
                 }
                 else
                 {
-                    if (Q1.LSIsReady())
+                    if (Q1.IsReady())
                         Q1.CastOnUnit(minion);
 
-                    if (realcdSQ > 1 && realcdSW > 1 && !Player.LSHasBuff("EliseSpiderW") && R.LSIsReady())
+                    if (realcdSQ > 1 && realcdSW > 1 && !Player.HasBuff("EliseSpiderW") && R.IsReady())
                         if (realcdQ < 1 || realcdW < 1)
                             R.Cast();
                 }
@@ -207,15 +207,15 @@ using EloBuddy;
 
             if (Human())
             {
-                if (Q.LSIsReady() && Config.Item("laneclear.q").GetValue<bool>() && minions.LSDistance(Player.Position) <= Q.Range)
+                if (Q.IsReady() && Config.Item("laneclear.q").GetValue<bool>() && minions.Distance(Player.Position) <= Q.Range)
                     Q.CastOnUnit(minions);
 
-                if (W.LSIsReady() && Config.Item("laneclear.w").GetValue<bool>())
+                if (W.IsReady() && Config.Item("laneclear.w").GetValue<bool>())
                     W.Cast(minions);
             }
             else
             {
-                if (Q.LSIsReady() && Config.Item("laneclear.q.spider").GetValue<bool>() && minions.LSDistance(Player.Position) <= Q1.Range)
+                if (Q.IsReady() && Config.Item("laneclear.q.spider").GetValue<bool>() && minions.Distance(Player.Position) <= Q1.Range)
                     Q1.CastOnUnit(minions);
             }
         }
@@ -224,12 +224,12 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
             if (target == null) return;
-            if (!target.LSIsValidTarget()) return;
+            if (!target.IsValidTarget()) return;
 
             if (Human())
             {
-                if (W.LSIsReady() && Config.Item("wComboH").GetValue<bool>() &&
-                    target.LSDistance(Player.Position) <= W.Range)
+                if (W.IsReady() && Config.Item("wComboH").GetValue<bool>() &&
+                    target.Distance(Player.Position) <= W.Range)
                 {
                     var wprediction = W.GetPrediction(target);
 
@@ -245,20 +245,20 @@ using EloBuddy;
 
                         case HitChance.Collision:
 
-                            var colliding = wprediction.CollisionObjects.OrderBy(o => o.LSDistance(Player, true)).ToList();
+                            var colliding = wprediction.CollisionObjects.OrderBy(o => o.Distance(Player, true)).ToList();
                             if (colliding.Count > 0)
                             {
-                                if (colliding[0].LSDistance(target, true) <= 25000 ||
+                                if (colliding[0].Distance(target, true) <= 25000 ||
                                     colliding[0].Type == GameObjectType.AIHeroClient)
                                 {
                                     W.Cast(wprediction.CastPosition);
                                 }
                                 else if (colliding[0].Type != GameObjectType.AIHeroClient &&
-                                         colliding[0].LSDistance(target, true) > 25000 && R.LSIsReady() && realcdSQ <= 1 &&
-                                         target.LSDistance(Player.Position) <= Q1.Range + 200)
+                                         colliding[0].Distance(target, true) > 25000 && R.IsReady() && realcdSQ <= 1 &&
+                                         target.Distance(Player.Position) <= Q1.Range + 200)
                                 {
-                                    var playerPosition = ObjectManager.Player.Position.LSTo2D();
-                                    var direction = ObjectManager.Player.Direction.LSTo2D().LSPerpendicular();
+                                    var playerPosition = ObjectManager.Player.Position.To2D();
+                                    var direction = ObjectManager.Player.Direction.To2D().Perpendicular();
                                     const int distance = 600;
                                     const int stepSize = 40;
 
@@ -266,7 +266,7 @@ using EloBuddy;
                                     {
                                         var currentAngel = step * (float)Math.PI / 180;
                                         var currentCheckPoint = playerPosition +
-                                                                distance * direction.LSRotated(currentAngel);
+                                                                distance * direction.Rotated(currentAngel);
 
                                         var collision =
                                             Collision.GetCollision(new List<Vector3> { currentCheckPoint.To3D() },
@@ -277,8 +277,8 @@ using EloBuddy;
                                             Q.CastOnUnit(target);
                                             W.Cast(currentCheckPoint);
                                             R.Cast();
-                                            //if (Q.LSIsReady() && Config.Item("qComboH").GetValue<bool>() &&
-                                            //    target.LSDistance(Player.Position) <= Q.Range)
+                                            //if (Q.IsReady() && Config.Item("qComboH").GetValue<bool>() &&
+                                            //    target.Distance(Player.Position) <= Q.Range)
                                             //{
                                             //    
                                             //}
@@ -291,8 +291,8 @@ using EloBuddy;
                 }
 
 
-                if (E.LSIsReady() && Config.Item("eComboH").GetValue<bool>() &&
-                    target.LSDistance(Player.Position) <= E.Range)
+                if (E.IsReady() && Config.Item("eComboH").GetValue<bool>() &&
+                    target.Distance(Player.Position) <= E.Range)
                 {
                     var eprediction = E.GetPrediction(target);
                     switch (eprediction.Hitchance)
@@ -305,37 +305,37 @@ using EloBuddy;
                             break;
 
                         case HitChance.Collision:
-                            var colliding = eprediction.CollisionObjects.OrderBy(o => o.LSDistance(Player, true)).ToList();
+                            var colliding = eprediction.CollisionObjects.OrderBy(o => o.Distance(Player, true)).ToList();
                             if (colliding.Count >= 1 && colliding[0].Type == GameObjectType.AIHeroClient)
                                 E.Cast(eprediction.CastPosition);
                             break;
                     }
                 }
 
-                if (Q.LSIsReady() && Config.Item("qComboH").GetValue<bool>() &&
-                    target.LSDistance(Player.Position) <= Q.Range)
+                if (Q.IsReady() && Config.Item("qComboH").GetValue<bool>() &&
+                    target.Distance(Player.Position) <= Q.Range)
                     Q.CastOnUnit(target);
 
-                if (Config.Item("rCombo").GetValue<bool>() && !Q.LSIsReady() && !W.LSIsReady() && !E.LSIsReady() &&
-                    R.LSIsReady() && target.LSDistance(Player.Position) <= Q1.Range)
+                if (Config.Item("rCombo").GetValue<bool>() && !Q.IsReady() && !W.IsReady() && !E.IsReady() &&
+                    R.IsReady() && target.Distance(Player.Position) <= Q1.Range)
                     if (realcdSQ == 0 || realcdSW == 0 || realcdSE == 0)
                         R.Cast();
             }
             else
             {
-                if (Q1.LSIsReady() && Config.Item("qCombo").GetValue<bool>() &&
-                    target.LSDistance(Player.Position) <= Q1.Range)
+                if (Q1.IsReady() && Config.Item("qCombo").GetValue<bool>() &&
+                    target.Distance(Player.Position) <= Q1.Range)
                 {
                     Q1.CastOnUnit(target);
                 }
 
-                if (E1.LSIsReady() && Config.Item("eCombo").GetValue<bool>() &&
-                    target.LSDistance(Player.Position) <= E1.Range &&
-                    target.LSDistance(Player.Position) >= Config.Item("eMin").GetValue<Slider>().Value)
+                if (E1.IsReady() && Config.Item("eCombo").GetValue<bool>() &&
+                    target.Distance(Player.Position) <= E1.Range &&
+                    target.Distance(Player.Position) >= Config.Item("eMin").GetValue<Slider>().Value)
                     E1.CastOnUnit(target);
 
-                if (Config.Item("rCombo").GetValue<bool>() && !Q.LSIsReady() && !W.LSIsReady() && !E.LSIsReady() && R.LSIsReady())
-                    if (!Player.LSHasBuff("EliseSpiderW") || target.LSDistance(Player.Position) >= Orbwalking.GetRealAutoAttackRange(target) + 100)
+                if (Config.Item("rCombo").GetValue<bool>() && !Q.IsReady() && !W.IsReady() && !E.IsReady() && R.IsReady())
+                    if (!Player.HasBuff("EliseSpiderW") || target.Distance(Player.Position) >= Orbwalking.GetRealAutoAttackRange(target) + 100)
                         if (realcdQ <= 1 || realcdW <= 1 || realcdE <= 1)
                             R.Cast();
             }
@@ -346,12 +346,12 @@ using EloBuddy;
             if (Human() && Player.ManaPercent <= Config.Item("harassMana").GetValue<Slider>().Value) return;
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
             if (target == null) return;
-            if (!target.LSIsValidTarget()) return;
+            if (!target.IsValidTarget()) return;
 
             if (Human())
             {
-                if (W.LSIsReady() && Config.Item("wHarassH").GetValue<bool>() &&
-                    target.LSDistance(Player.Position) <= W.Range)
+                if (W.IsReady() && Config.Item("wHarassH").GetValue<bool>() &&
+                    target.Distance(Player.Position) <= W.Range)
                 {
                     var wprediction = W.GetPrediction(target);
 
@@ -367,20 +367,20 @@ using EloBuddy;
 
                         case HitChance.Collision:
 
-                            var colliding = wprediction.CollisionObjects.OrderBy(o => o.LSDistance(Player, true)).ToList();
+                            var colliding = wprediction.CollisionObjects.OrderBy(o => o.Distance(Player, true)).ToList();
                             if (colliding.Count > 0)
                             {
-                                if (colliding[0].LSDistance(target, true) <= 25000 ||
+                                if (colliding[0].Distance(target, true) <= 25000 ||
                                     colliding[0].Type == GameObjectType.AIHeroClient)
                                 {
                                     W.Cast(wprediction.CastPosition);
                                 }
                                 else if (colliding[0].Type != GameObjectType.AIHeroClient &&
-                                         colliding[0].LSDistance(target, true) > 25000 && R.LSIsReady() && realcdSQ <= 1 &&
-                                         target.LSDistance(Player.Position) <= Q1.Range + 200 && Config.Item("rCombo").GetValue<bool>())
+                                         colliding[0].Distance(target, true) > 25000 && R.IsReady() && realcdSQ <= 1 &&
+                                         target.Distance(Player.Position) <= Q1.Range + 200 && Config.Item("rCombo").GetValue<bool>())
                                 {
-                                    var playerPosition = ObjectManager.Player.Position.LSTo2D();
-                                    var direction = ObjectManager.Player.Direction.LSTo2D().LSPerpendicular();
+                                    var playerPosition = ObjectManager.Player.Position.To2D();
+                                    var direction = ObjectManager.Player.Direction.To2D().Perpendicular();
                                     const int distance = 600;
                                     const int stepSize = 40;
 
@@ -388,7 +388,7 @@ using EloBuddy;
                                     {
                                         var currentAngel = step * (float)Math.PI / 180;
                                         var currentCheckPoint = playerPosition +
-                                                                distance * direction.LSRotated(currentAngel);
+                                                                distance * direction.Rotated(currentAngel);
 
                                         var collision =
                                             Collision.GetCollision(new List<Vector3> { currentCheckPoint.To3D() },
@@ -399,8 +399,8 @@ using EloBuddy;
                                             Q.CastOnUnit(target);
                                             W.Cast(currentCheckPoint);
                                             R.Cast();
-                                            //if (Q.LSIsReady() && Config.Item("qHarassH").GetValue<bool>() &&
-                                            //    target.LSDistance(Player.Position) <= Q.Range)
+                                            //if (Q.IsReady() && Config.Item("qHarassH").GetValue<bool>() &&
+                                            //    target.Distance(Player.Position) <= Q.Range)
                                             //{
                                             //    
                                             //}
@@ -413,8 +413,8 @@ using EloBuddy;
                 }
 
 
-                if (E.LSIsReady() && Config.Item("eHarassH").GetValue<bool>() &&
-                    target.LSDistance(Player.Position) <= E.Range)
+                if (E.IsReady() && Config.Item("eHarassH").GetValue<bool>() &&
+                    target.Distance(Player.Position) <= E.Range)
                 {
                     var eprediction = E.GetPrediction(target);
                     switch (eprediction.Hitchance)
@@ -427,37 +427,37 @@ using EloBuddy;
                             break;
 
                         case HitChance.Collision:
-                            var colliding = eprediction.CollisionObjects.OrderBy(o => o.LSDistance(Player, true)).ToList();
+                            var colliding = eprediction.CollisionObjects.OrderBy(o => o.Distance(Player, true)).ToList();
                             if (colliding.Count >= 1 && colliding[0].Type == GameObjectType.AIHeroClient)
                                 E.Cast(eprediction.CastPosition);
                             break;
                     }
                 }
 
-                if (Q.LSIsReady() && Config.Item("qHarassH").GetValue<bool>() &&
-                    target.LSDistance(Player.Position) <= Q.Range)
+                if (Q.IsReady() && Config.Item("qHarassH").GetValue<bool>() &&
+                    target.Distance(Player.Position) <= Q.Range)
                     Q.CastOnUnit(target);
 
-                if (Config.Item("rHarass").GetValue<bool>() && !Q.LSIsReady() && !W.LSIsReady() && !E.LSIsReady() &&
-                    R.LSIsReady() && target.LSDistance(Player.Position) <= Q1.Range)
+                if (Config.Item("rHarass").GetValue<bool>() && !Q.IsReady() && !W.IsReady() && !E.IsReady() &&
+                    R.IsReady() && target.Distance(Player.Position) <= Q1.Range)
                     if (realcdSQ == 0 || realcdSW == 0 || realcdSE == 0)
                         R.Cast();
             }
             else
             {
-                if (Q1.LSIsReady() && Config.Item("qHarass").GetValue<bool>() &&
-                    target.LSDistance(Player.Position) <= Q1.Range)
+                if (Q1.IsReady() && Config.Item("qHarass").GetValue<bool>() &&
+                    target.Distance(Player.Position) <= Q1.Range)
                 {
                     Q1.CastOnUnit(target);
                 }
 
-                if (E1.LSIsReady() && Config.Item("eHarass").GetValue<bool>() &&
-                    target.LSDistance(Player.Position) <= E1.Range &&
-                    target.LSDistance(Player.Position) >= Config.Item("eMinHarass").GetValue<Slider>().Value)
+                if (E1.IsReady() && Config.Item("eHarass").GetValue<bool>() &&
+                    target.Distance(Player.Position) <= E1.Range &&
+                    target.Distance(Player.Position) >= Config.Item("eMinHarass").GetValue<Slider>().Value)
                     E1.CastOnUnit(target);
 
-                if (Config.Item("rHarass").GetValue<bool>() && !Q.LSIsReady() && !W.LSIsReady() && !E.LSIsReady() && R.LSIsReady())
-                    if (!Player.LSHasBuff("EliseSpiderW") || target.LSDistance(Player.Position) >= Player.AttackRange + 100)
+                if (Config.Item("rHarass").GetValue<bool>() && !Q.IsReady() && !W.IsReady() && !E.IsReady() && R.IsReady())
+                    if (!Player.HasBuff("EliseSpiderW") || target.Distance(Player.Position) >= Player.AttackRange + 100)
                         if (realcdQ == 0 || realcdW == 0 || realcdE == 0)
                             R.Cast();
             }
@@ -466,15 +466,15 @@ using EloBuddy;
         private static void Killsteal()
         {
             foreach (
-                var enemy in HeroManager.Enemies.Where(e => e.LSIsValidTarget() && e.LSDistance(Player.Position) <= E.Range)
+                var enemy in HeroManager.Enemies.Where(e => e.IsValidTarget() && e.Distance(Player.Position) <= E.Range)
                 )
             {
                 if (Human())
                 {
-                    if (Config.Item("qKSH").GetValue<bool>() && Config.Item("wKSH").GetValue<bool>() && Q.LSIsReady()
-                        && W.LSIsReady())
+                    if (Config.Item("qKSH").GetValue<bool>() && Config.Item("wKSH").GetValue<bool>() && Q.IsReady()
+                        && W.IsReady())
                     {
-                        if (enemy.LSDistance(Player.Position) <= Q.Range
+                        if (enemy.Distance(Player.Position) <= Q.Range
                             && enemy.Health <= Q.GetDamage(enemy) + W.GetDamage(enemy))
                         {
                             W.Cast(enemy);
@@ -485,7 +485,7 @@ using EloBuddy;
 
                     if (Config.Item("qKSH").GetValue<bool>())
                     {
-                        if (Q.LSIsReady() && enemy.LSDistance(Player.Position) <= Q.Range &&
+                        if (Q.IsReady() && enemy.Distance(Player.Position) <= Q.Range &&
                             enemy.Health <= Q.GetDamage(enemy))
                         {
                             Q.CastOnUnit(enemy);
@@ -495,10 +495,10 @@ using EloBuddy;
 
                     if (Config.Item("qKS").GetValue<bool>() && Config.Item("switchKS").GetValue<bool>())
                     {
-                        if (realcdSQ == 0 && enemy.LSDistance(Player.Position) <= Q1.Range &&
+                        if (realcdSQ == 0 && enemy.Distance(Player.Position) <= Q1.Range &&
                             enemy.Health <= Q1.GetDamage(enemy, 1))
                         {
-                            if (R.LSIsReady())
+                            if (R.IsReady())
                             {
                                 R.Cast();
                                 Q1.CastOnUnit(enemy);
@@ -509,7 +509,7 @@ using EloBuddy;
 
                     if (Config.Item("wKSH").GetValue<bool>())
                     {
-                        if (W.LSIsReady() && enemy.LSDistance(Player.Position) <= W.Range &&
+                        if (W.IsReady() && enemy.Distance(Player.Position) <= W.Range &&
                             enemy.Health <= W.GetDamage(enemy))
                         {
                             W.Cast(enemy);
@@ -523,7 +523,7 @@ using EloBuddy;
                     if (Config.Item("qKSH").GetValue<bool>() && Config.Item("wKSH").GetValue<bool>() && realcdW == 0
                         && realcdQ == 0)
                     {
-                        if (enemy.LSDistance(Player.Position) <= Q.Range
+                        if (enemy.Distance(Player.Position) <= Q.Range
                             && enemy.Health <= Q.GetDamage(enemy) + W.GetDamage(enemy))
                         {
                             R.Cast();
@@ -535,7 +535,7 @@ using EloBuddy;
 
                     if (Config.Item("qKS").GetValue<bool>())
                     {
-                        if (Q1.LSIsReady() && enemy.LSDistance(Player.Position) <= Q1.Range &&
+                        if (Q1.IsReady() && enemy.Distance(Player.Position) <= Q1.Range &&
                             enemy.Health <= Q1.GetDamage(enemy, 1))
                         {
                             Q1.CastOnUnit(enemy);
@@ -545,10 +545,10 @@ using EloBuddy;
 
                     if (Config.Item("qKSH").GetValue<bool>() && Config.Item("switchKS").GetValue<bool>())
                     {
-                        if (realcdQ == 0 && enemy.LSDistance(Player.Position) <= Q.Range &&
+                        if (realcdQ == 0 && enemy.Distance(Player.Position) <= Q.Range &&
                             enemy.Health <= Q.GetDamage(enemy))
                         {
-                            if (R.LSIsReady())
+                            if (R.IsReady())
                             {
                                 R.Cast();
                                 Q.CastOnUnit(enemy);
@@ -559,10 +559,10 @@ using EloBuddy;
 
                     if (Config.Item("wKSH").GetValue<bool>() && Config.Item("switchKS").GetValue<bool>())
                     {
-                        if (realcdW == 0 && enemy.LSDistance(Player.Position) <= W.Range &&
+                        if (realcdW == 0 && enemy.Distance(Player.Position) <= W.Range &&
                             enemy.Health <= W.GetDamage(enemy))
                         {
-                            if (R.LSIsReady())
+                            if (R.IsReady())
                             {
                                 R.Cast();
                                 W.Cast(enemy);
@@ -588,8 +588,8 @@ using EloBuddy;
 
         private static void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
-            if (Config.Item("bAuto").GetValue<bool>() && Human() && Q.LSIsReady() &&
-                Player.LSDistance(args.Target.Position) >= Player.AttackRange)
+            if (Config.Item("bAuto").GetValue<bool>() && Human() && Q.IsReady() &&
+                Player.Distance(args.Target.Position) >= Player.AttackRange)
             {
                 args.Process = false;
             }
@@ -597,16 +597,16 @@ using EloBuddy;
 
         private static void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (E.LSIsReady() && Human() && gapcloser.Sender.LSIsValidTarget(E.Range) && Config.Item("hGC").GetValue<bool>())
+            if (E.IsReady() && Human() && gapcloser.Sender.IsValidTarget(E.Range) && Config.Item("hGC").GetValue<bool>())
             {
                 E.Cast(gapcloser.Sender);
                 return;
             }
 
-            if (realcdSE == 0 && gapcloser.Sender.LSIsValidTarget(E1.Range) && Config.Item("fGC").GetValue<bool>() &&
-                gapcloser.End.LSDistance(Player.Position) >= Config.Item("eMin").GetValue<Slider>().Value)
+            if (realcdSE == 0 && gapcloser.Sender.IsValidTarget(E1.Range) && Config.Item("fGC").GetValue<bool>() &&
+                gapcloser.End.Distance(Player.Position) >= Config.Item("eMin").GetValue<Slider>().Value)
             {
-                if (Human() && R.LSIsReady())
+                if (Human() && R.IsReady())
                 {
                     R.Cast();
                     E1.Cast(gapcloser.Sender);
@@ -657,7 +657,7 @@ using EloBuddy;
         {
             if (Config.Item("rappel").GetValue<KeyBind>().Active)
             {
-                if (Human() && R.LSIsReady() && realcdSE == 0)
+                if (Human() && R.IsReady() && realcdSE == 0)
                 {
                     R.Cast();
                     E1.Cast();

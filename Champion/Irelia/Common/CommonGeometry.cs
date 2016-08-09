@@ -88,10 +88,10 @@ namespace Irelia.Common
             {
                 var from = self[i];
                 var to = self[i + 1];
-                var d = (int) to.LSDistance(from);
+                var d = (int) to.Distance(from);
                 if (d > distance)
                 {
-                    return from + distance*(to - from).LSNormalized();
+                    return from + distance*(to - from).Normalized();
                 }
                 distance -= d;
             }
@@ -267,7 +267,7 @@ namespace Irelia.Common
             /// <returns></returns>
             public bool IsInside(Vector3 point)
             {
-                return !IsOutside(point.LSTo2D());
+                return !IsOutside(point.To2D());
             }
 
             /// <summary>
@@ -277,7 +277,7 @@ namespace Irelia.Common
             /// <returns></returns>
             public bool IsInside(GameObject point)
             {
-                return !IsOutside(point.Position.LSTo2D());
+                return !IsOutside(point.Position.To2D());
             }
 
             public bool IsOutside(Vector2 point)
@@ -345,7 +345,7 @@ namespace Irelia.Common
             /// <returns></returns>
             public bool IsInside(Vector3 point)
             {
-                return !IsOutside(point.LSTo2D());
+                return !IsOutside(point.To2D());
             }
 
             /// <summary>
@@ -355,7 +355,7 @@ namespace Irelia.Common
             /// <returns></returns>
             public bool IsInside(GameObject point)
             {
-                return !IsOutside(point.Position.LSTo2D());
+                return !IsOutside(point.Position.To2D());
             }
 
             public bool IsOutside(Vector2 point)
@@ -399,8 +399,8 @@ namespace Irelia.Common
                 this.RStart = start;
                 this.REnd = end;
                 this.Width = width;
-                this.Direction = (end - start).LSNormalized();
-                this.Perpendicular = this.Direction.LSPerpendicular();
+                this.Direction = (end - start).Normalized();
+                this.Perpendicular = this.Direction.Perpendicular();
             }
 
             #endregion
@@ -521,11 +521,11 @@ namespace Irelia.Common
                 var outRadius = (this.Radius + offset)/(float) Math.Cos(2*Math.PI/CircleLineSegmentN);
 
                 result.Add(this.Center);
-                var Side1 = this.Direction.LSRotated(-this.Angle*0.5f);
+                var Side1 = this.Direction.Rotated(-this.Angle*0.5f);
 
                 for (var i = 0; i <= CircleLineSegmentN; i++)
                 {
-                    var cDirection = Side1.LSRotated(i*this.Angle/CircleLineSegmentN).LSNormalized();
+                    var cDirection = Side1.Rotated(i*this.Angle/CircleLineSegmentN).Normalized();
                     result.Add(
                         new Vector2(this.Center.X + outRadius*cDirection.X, this.Center.Y + outRadius*cDirection.Y));
                 }

@@ -42,10 +42,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 return;
             }
 
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
                 Q.Cast(sender, true);
-                if (BallManager.BallPosition.LSDistance(sender.ServerPosition, true) < R.Range * R.Range)
+                if (BallManager.BallPosition.Distance(sender.ServerPosition, true) < R.Range * R.Range)
                 {
                     R.Cast(player.ServerPosition, true);
                 }
@@ -107,7 +107,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             if (safeGap(target))
                 Q.Cast(target);
@@ -115,13 +115,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.Cast(target);
         }
@@ -129,9 +129,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
-            if (target.LSIsValidTarget(R.Range))
+            if (target.IsValidTarget(R.Range))
             {
                 R.CastIfWillHit(target, 2);
             }
@@ -179,12 +179,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
 
 
-            if (!E.LSIsReady())
+            if (!E.IsReady())
             {
                 return;
             }
 
-            if (sender.IsAlly && player.LSDistance(sender, true) < E.Range * E.Range)
+            if (sender.IsAlly && player.Distance(sender, true) < E.Range * E.Range)
             {
                 E.CastOnUnit(sender);
             }
@@ -215,7 +215,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var useW = (laneClear && (useWi == 1 || useWi == 2)) || (!laneClear && (useWi == 0 || useWi == 2));
             var useE = (laneClear && (useEi == 1 || useEi == 2)) || (!laneClear && (useEi == 0 || useEi == 2));
 
-            if (useQ && Q.LSIsReady())
+            if (useQ && Q.IsReady())
             {
                 if (useW)
                 {
@@ -233,7 +233,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 {
                     foreach (var minion in allMinions.Where(m => !Orbwalking.InAutoAttackRange(m)))
                     {
-                        if (HealthPrediction.GetHealthPrediction(minion, Math.Max((int)(minion.ServerPosition.LSDistance(BallManager.BallPosition) / Q.Speed * 1000) - 100, 0)) < 50)
+                        if (HealthPrediction.GetHealthPrediction(minion, Math.Max((int)(minion.ServerPosition.Distance(BallManager.BallPosition) / Q.Speed * 1000) - 100, 0)) < 50)
                         {
                             Q.Cast(minion.ServerPosition, true);
                             return;
@@ -242,13 +242,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 }
             }
 
-            if (useW && W.LSIsReady())
+            if (useW && W.IsReady())
             {
                 var n = 0;
                 var d = 0;
                 foreach (var m in allMinions)
                 {
-                    if (m.LSDistance(BallManager.BallPosition) <= W.Range)
+                    if (m.Distance(BallManager.BallPosition) <= W.Range)
                     {
                         n++;
                         if (W.GetDamage(m) > m.Health)
@@ -264,7 +264,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 }
             }
 
-            if (useE && E.LSIsReady())
+            if (useE && E.IsReady())
             {
                 if (W.CountHits(allMinions, player.ServerPosition) >= 3)
                 {
@@ -282,23 +282,23 @@ using EloBuddy; namespace ARAMDetFull.Champions
             {
                 return new Tuple<int, Vector3>(1, Vector3.Zero);
             }
-            points.Add(qPrediction.UnitPosition.LSTo2D());
+            points.Add(qPrediction.UnitPosition.To2D());
 
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(h => h.LSIsValidTarget(Q.Range + R.Range)))
+            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(h => h.IsValidTarget(Q.Range + R.Range)))
             {
-                points.Add(Q.GetPrediction(enemy).UnitPosition.LSTo2D());
+                points.Add(Q.GetPrediction(enemy).UnitPosition.To2D());
             }
 
             for (int j = 0; j < 5; j++)
             {
                 var mecResult = MEC.GetMec(points);
 
-                if (mecResult.Radius < R.Range && points.Count >= 3 && R.LSIsReady())
+                if (mecResult.Radius < R.Range && points.Count >= 3 && R.IsReady())
                 {
                     return new Tuple<int, Vector3>(3, mecResult.Center.To3D());
                 }
 
-                if (mecResult.Radius < W.Range && points.Count >= 2 && W.LSIsReady())
+                if (mecResult.Radius < W.Range && points.Count >= 2 && W.IsReady())
                 {
                     return new Tuple<int, Vector3>(2, mecResult.Center.To3D());
                 }
@@ -341,28 +341,28 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             var minRTargets = 2 + 1;
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 CastW(1);
             }
 
-            if (LeagueSharp.Common.Utility.LSCountEnemiesInRange((int)(Q.Range + R.Width)) <= 1)
+            if (LeagueSharp.Common.Utility.CountEnemiesInRange((int)(Q.Range + R.Width)) <= 1)
             {
-                if (GetComboDamage(target) > target.Health && R.LSIsReady())
+                if (GetComboDamage(target) > target.Health && R.IsReady())
                 {
                     CastR(minRTargets);
                 }
 
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                 {
                     CastQ(target);
                 }
 
                 if (true)
                 {
-                    foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(h => h.LSIsValidTarget(E.Range, false) && h.IsAlly && !h.IsMe))
+                    foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(h => h.IsValidTarget(E.Range, false) && h.IsAlly && !h.IsMe))
                     {
-                        if (ally.Position.LSCountEnemiesInRange(300) >= 1)
+                        if (ally.Position.CountEnemiesInRange(300) >= 1)
                         {
                             E.CastOnUnit(ally, true);
                         }
@@ -375,9 +375,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
             else
             {
-                if (R.LSIsReady())
+                if (R.IsReady())
                 {
-                    if (BallManager.BallPosition.LSCountEnemiesInRange(800) > 1)
+                    if (BallManager.BallPosition.CountEnemiesInRange(800) > 1)
                     {
                         var rCheck = GetHits(R);
                         var pk = 0;
@@ -397,7 +397,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                                 }
                             }
 
-                            if (rCheck.Item1 >= BallManager.BallPosition.LSCountEnemiesInRange(800) || pk >= 2 ||
+                            if (rCheck.Item1 >= BallManager.BallPosition.CountEnemiesInRange(800) || pk >= 2 ||
                                 k >= 1)
                             {
                                 if (rCheck.Item1 >= minRTargets)
@@ -413,7 +413,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     }
                 }
 
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                 {
                     var qLoc = GetBestQLocation(target);
                     if (qLoc.Item1 > 1)
@@ -426,9 +426,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     }
                 }
 
-                if (E.LSIsReady())
+                if (E.IsReady())
                 {
-                    if (BallManager.BallPosition.LSCountEnemiesInRange(800) <= 2)
+                    if (BallManager.BallPosition.CountEnemiesInRange(800) <= 2)
                     {
                         CastE(player, 1);
                     }
@@ -437,9 +437,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
                         CastE(player, 2);
                     }
 
-                    foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(h => h.LSIsValidTarget(E.Range, false) && h.IsAlly))
+                    foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(h => h.IsValidTarget(E.Range, false) && h.IsAlly))
                     {
-                        if (ally.Position.LSCountEnemiesInRange(300) >= 2)
+                        if (ally.Position.CountEnemiesInRange(300) >= 2)
                         {
                             E.CastOnUnit(ally, true);
                         }
@@ -457,16 +457,16 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 return false;
             }
 
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                var directTravelTime = BallManager.BallPosition.LSDistance(qPrediction.CastPosition) / Q.Speed;
+                var directTravelTime = BallManager.BallPosition.Distance(qPrediction.CastPosition) / Q.Speed;
                 var bestEQTravelTime = float.MaxValue;
 
                 AIHeroClient eqTarget = null;
 
-                foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(h => h.Team == player.Team && h.LSIsValidTarget(E.Range, false)))
+                foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(h => h.Team == player.Team && h.IsValidTarget(E.Range, false)))
                 {
-                    var t = BallManager.BallPosition.LSDistance(ally.ServerPosition) / E.Speed + ally.LSDistance(qPrediction.CastPosition) / Q.Speed;
+                    var t = BallManager.BallPosition.Distance(ally.ServerPosition) / E.Speed + ally.Distance(qPrediction.CastPosition) / Q.Speed;
                     if (t < bestEQTravelTime)
                     {
                         eqTarget = ally;
@@ -474,7 +474,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     }
                 }
 
-                if (eqTarget != null && bestEQTravelTime < directTravelTime * 1.3f && (BallManager.BallPosition.LSDistance(eqTarget.ServerPosition, true) > 10000))
+                if (eqTarget != null && bestEQTravelTime < directTravelTime * 1.3f && (BallManager.BallPosition.Distance(eqTarget.ServerPosition, true) > 10000))
                 {
                     E.CastOnUnit(eqTarget, true);
                     return true;
@@ -520,7 +520,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var hits = new List<AIHeroClient>();
             var oldERange = E.Range;
             E.Range = 10000; //avoid the range check
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(h => h.LSIsValidTarget(2000)))
+            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(h => h.IsValidTarget(2000)))
             {
                 if (E.WillHit(enemy, to))
                 {
@@ -540,22 +540,22 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public float GetComboDamage(AIHeroClient target)
         {
             var result = 0f;
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 result += 2 * Q.GetDamage(target);
             }
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 result += W.GetDamage(target);
             }
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 result += R.GetDamage(target);
             }
 
-            result += 2 * (float)player.LSGetAutoAttackDamage(target);
+            result += 2 * (float)player.GetAutoAttackDamage(target);
 
             return result;
         }
@@ -564,9 +564,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             var hits = new List<AIHeroClient>();
             var range = spell.Range * spell.Range;
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(h => h.LSIsValidTarget() && BallManager.BallPosition.LSDistance(h.ServerPosition, true) < range))
+            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(h => h.IsValidTarget() && BallManager.BallPosition.Distance(h.ServerPosition, true) < range))
             {
-                if (spell.WillHit(enemy, BallManager.BallPosition) && BallManager.BallPosition.LSDistance(enemy.ServerPosition, true) < spell.Width * spell.Width)
+                if (spell.WillHit(enemy, BallManager.BallPosition) && BallManager.BallPosition.Distance(enemy.ServerPosition, true) < spell.Width * spell.Width)
                 {
                     hits.Add(enemy);
                 }
@@ -595,7 +595,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 switch (args.SData.Name)
                 {
                     case "OrianaIzunaCommand":
-                        LeagueSharp.Common.Utility.DelayAction.Add((int)(BallPosition.LSDistance(args.End) / 1.2 - 70 - Game.Ping), () => BallPosition = args.End);
+                        LeagueSharp.Common.Utility.DelayAction.Add((int)(BallPosition.Distance(args.End) / 1.2 - 70 - Game.Ping), () => BallPosition = args.End);
                         BallPosition = Vector3.Zero;
                         _sTick = Environment.TickCount;
                         break;
@@ -610,14 +610,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         static void Game_OnGameUpdate(EventArgs args)
         {
-            if (Environment.TickCount - _sTick > 300 && ObjectManager.Player.LSHasBuff("OrianaGhostSelf"))
+            if (Environment.TickCount - _sTick > 300 && ObjectManager.Player.HasBuff("OrianaGhostSelf"))
             {
                 BallPosition = ObjectManager.Player.Position;
             }
 
             foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(h => h.IsAlly && !h.IsMe))
             {
-                if (ally.LSHasBuff("OrianaGhost"))
+                if (ally.HasBuff("OrianaGhost"))
                 {
                     BallPosition = ally.Position;
                 }

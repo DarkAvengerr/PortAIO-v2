@@ -72,15 +72,15 @@ namespace Nautilus_AnchorTheChallenger
         {
             var ComboDamage = 0d;
 
-            if (Q.LSIsReady())
-                ComboDamage += Player.LSGetSpellDamage(Target, SpellSlot.Q);
+            if (Q.IsReady())
+                ComboDamage += Player.GetSpellDamage(Target, SpellSlot.Q);
 
 
-            if (E.LSIsReady())
-                ComboDamage += Player.LSGetSpellDamage(Target, SpellSlot.E);
+            if (E.IsReady())
+                ComboDamage += Player.GetSpellDamage(Target, SpellSlot.E);
 
-            if (R.LSIsReady())
-                ComboDamage += Player.LSGetSpellDamage(Target, SpellSlot.R);
+            if (R.IsReady())
+                ComboDamage += Player.GetSpellDamage(Target, SpellSlot.R);
 
 
             return (float)ComboDamage;
@@ -93,7 +93,7 @@ namespace Nautilus_AnchorTheChallenger
             if (ObjectManager.Player.BaseSkinName != Champion) return;
 
 
-            FlashSlot = Player.LSGetSpellSlot("SummonerFlash");
+            FlashSlot = Player.GetSpellSlot("SummonerFlash");
             Q = new Spell(SpellSlot.Q, 1100);
             W = new Spell(SpellSlot.W);
             E = new Spell(SpellSlot.E, 300);
@@ -185,7 +185,7 @@ namespace Nautilus_AnchorTheChallenger
             {
                 if (FlashSlot != SpellSlot.Unknown && Player.Spellbook.CanUseSpell(FlashSlot) == SpellState.Ready)
                 {
-                    if (Q.LSIsReady())
+                    if (Q.IsReady())
                     {
                         Player.Spellbook.CastSpell(FlashSlot, target.ServerPosition);
                         Q.Cast(target.ServerPosition);
@@ -206,12 +206,12 @@ namespace Nautilus_AnchorTheChallenger
             {
                 var mob = mobs[0];
 
-                if (W.LSIsReady() && Config.Item("WJGClear").GetValue<bool>())
+                if (W.IsReady() && Config.Item("WJGClear").GetValue<bool>())
                 {
                     W.Cast();
                 }
 
-                if (E.LSIsReady() && Config.Item("EJGClear").GetValue<bool>())
+                if (E.IsReady() && Config.Item("EJGClear").GetValue<bool>())
                 {
                     E.Cast();
                 }
@@ -228,7 +228,7 @@ namespace Nautilus_AnchorTheChallenger
         {
             if (Config.Item("InterruptSpells").GetValue<bool>())
             {
-                if (Q.IsInRange(unit) && Q.LSIsReady() && unit.IsEnemy)
+                if (Q.IsInRange(unit) && Q.IsReady() && unit.IsEnemy)
                 {
                     Q.CastOnUnit(unit);
                 }
@@ -311,7 +311,7 @@ namespace Nautilus_AnchorTheChallenger
 
         private static void OnGameUpdate(EventArgs args)
         {
-            smiteSlot = Player.LSGetSpellSlot(smitetype());
+            smiteSlot = Player.GetSpellSlot(smitetype());
 
             switch (Orbwalker.ActiveMode)
             {
@@ -352,7 +352,7 @@ namespace Nautilus_AnchorTheChallenger
             if (target == null) return;
 
             //Combo
-            if (Q.LSIsReady() && (Config.Item("UseQCombo").GetValue<bool>()))
+            if (Q.IsReady() && (Config.Item("UseQCombo").GetValue<bool>()))
             {
                 var Qprediction = Q.GetPrediction(target);
 
@@ -368,12 +368,12 @@ namespace Nautilus_AnchorTheChallenger
                 }
             }
 
-            if (target.LSIsValidTarget(E.Range) && E.LSIsReady() && (Config.Item("UseECombo").GetValue<bool>()))
+            if (target.IsValidTarget(E.Range) && E.IsReady() && (Config.Item("UseECombo").GetValue<bool>()))
             {
                 E.Cast(target, true, true);
             }
 
-            if (target.LSIsValidTarget(R.Range) && R.LSIsReady() && (Config.Item("UseRCombo").GetValue<bool>()))
+            if (target.IsValidTarget(R.Range) && R.IsReady() && (Config.Item("UseRCombo").GetValue<bool>()))
             {
                 R.Cast(target, true, true);
             }
@@ -399,14 +399,14 @@ namespace Nautilus_AnchorTheChallenger
 
         private static void KSQ()
         {
-            foreach (AIHeroClient hero in ObjectManager.Get<AIHeroClient>().Where(unit => unit.LSIsValidTarget(Q.Range)))
+            foreach (AIHeroClient hero in ObjectManager.Get<AIHeroClient>().Where(unit => unit.IsValidTarget(Q.Range)))
             {
                 var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
                 if (target == null) return;
 
                 var prediction = Q.GetPrediction(target);
 
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                 {
 
                     if (target.Health < GetQDamage(target))
@@ -426,7 +426,7 @@ namespace Nautilus_AnchorTheChallenger
         {
             double damage = 0d;
 
-            if (Q.LSIsReady()) damage += Player.LSGetSpellDamage(enemy, SpellSlot.W);
+            if (Q.IsReady()) damage += Player.GetSpellDamage(enemy, SpellSlot.W);
 
             return (float)damage * 2; //return damage of W back to the function of KS W
         }

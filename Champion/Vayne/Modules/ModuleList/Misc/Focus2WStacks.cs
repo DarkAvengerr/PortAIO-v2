@@ -31,7 +31,7 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Misc
             if (Game.Time < 25 * 60 * 1000)
             {
                 var ADC =
-                    HeroManager.Enemies.Where(m => TargetSelector.GetPriority(m) > 4 && m.LSIsValidTarget() || (m.Has2WStacks() && TargetSelector.GetPriority(m) > 1))
+                    HeroManager.Enemies.Where(m => TargetSelector.GetPriority(m) > 4 && m.IsValidTarget() || (m.Has2WStacks() && TargetSelector.GetPriority(m) > 1))
                         .OrderBy(m => m.TotalAttackDamage)
                         .FirstOrDefault();
 
@@ -51,7 +51,7 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Misc
             }
             else
             {
-                var target = HeroManager.Enemies.Find(en => en.LSIsValidTarget(ObjectManager.Player.AttackRange + 65f + 65f) && en.Has2WStacks());
+                var target = HeroManager.Enemies.Find(en => en.IsValidTarget(ObjectManager.Player.AttackRange + 65f + 65f) && en.Has2WStacks());
 
                 if (target != null)
                 {

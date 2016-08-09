@@ -29,9 +29,9 @@ namespace SCommon.Damage
         /// <returns>true if last hitable</returns>
         public static bool IsLastHitable(Obj_AI_Base unit, float extraWindup = 0)
         {
-            //float health = unit.Health - GetPrediction(unit, (Math.Max(0, unit.ServerPosition.LSTo2D().LSDistance(ObjectManager.Player.ServerPosition.LSTo2D()) - ObjectManager.Player.BoundingRadius) / Orbwalking.Utility.GetProjectileSpeed() + ObjectManager.Player.AttackCastDelay) * 1000f);
+            //float health = unit.Health - GetPrediction(unit, (Math.Max(0, unit.ServerPosition.To2D().Distance(ObjectManager.Player.ServerPosition.To2D()) - ObjectManager.Player.BoundingRadius) / Orbwalking.Utility.GetProjectileSpeed() + ObjectManager.Player.AttackCastDelay) * 1000f);
             var t = (int)(ObjectManager.Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
-                               1000 * (int)Math.Max(0, ObjectManager.Player.LSDistance(unit.ServerPosition) - ObjectManager.Player.BoundingRadius) / (int)Orbwalking.Utility.GetProjectileSpeed();
+                               1000 * (int)Math.Max(0, ObjectManager.Player.Distance(unit.ServerPosition) - ObjectManager.Player.BoundingRadius) / (int)Orbwalking.Utility.GetProjectileSpeed();
 
             float health = HealthPrediction.GetHealthPrediction(unit, t, 30);
             //float health = unit.Health - dmg;
@@ -52,11 +52,11 @@ namespace SCommon.Damage
             float dmg = 0.0f;
             foreach (var attack in ActiveAttacks.Values)
             {
-                if (attack.Source.LSIsValidTarget(float.MaxValue, false) && attack.Target.LSIsValidTarget(float.MaxValue, false))
+                if (attack.Source.IsValidTarget(float.MaxValue, false) && attack.Target.IsValidTarget(float.MaxValue, false))
                 {
                     if (attack.Target.NetworkId == unit.NetworkId)
                     {
-                        float d = attack.Target.LSDistance(attack.Source.ServerPosition) - attack.Source.BoundingRadius;
+                        float d = attack.Target.Distance(attack.Source.ServerPosition) - attack.Source.BoundingRadius;
                         float maxTravelTime = (Math.Max(0, d) / attack.ProjectileSpeed) * 1000f;
                         if (!attack.Damaged)
                         {
@@ -132,11 +132,11 @@ namespace SCommon.Damage
             float dmg = 0.0f;
             foreach (var attack in ActiveAttacks.Values)
             {
-                if (attack.Source.LSIsValidTarget(float.MaxValue, false) && attack.Target.LSIsValidTarget(float.MaxValue, false))
+                if (attack.Source.IsValidTarget(float.MaxValue, false) && attack.Target.IsValidTarget(float.MaxValue, false))
                 {
                     if (attack.Target.NetworkId == unit.NetworkId && !attack.Damaged)
                     {
-                        float arrivalT = (attack.StartTick + attack.Delay + Math.Max(0, attack.Target.ServerPosition.LSTo2D().LSDistance(attack.Source.ServerPosition.LSTo2D()) - attack.Source.BoundingRadius) / attack.ProjectileSpeed * 1000f) - Utils.TickCount;
+                        float arrivalT = (attack.StartTick + attack.Delay + Math.Max(0, attack.Target.ServerPosition.To2D().Distance(attack.Source.ServerPosition.To2D()) - attack.Source.BoundingRadius) / attack.ProjectileSpeed * 1000f) - Utils.TickCount;
 
                         if (arrivalT < t && arrivalT > 0)
                             dmg += attack.Damage;
@@ -158,7 +158,7 @@ namespace SCommon.Damage
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.LSIsValidTarget(3000, false) || sender.Team != ObjectManager.Player.Team || sender is AIHeroClient || !Orbwalking.Utility.IsAutoAttack(args.SData.Name) || !(args.Target is Obj_AI_Base) || sender.Type == GameObjectType.obj_AI_Turret)
+            if (!sender.IsValidTarget(3000, false) || sender.Team != ObjectManager.Player.Team || sender is AIHeroClient || !Orbwalking.Utility.IsAutoAttack(args.SData.Name) || !(args.Target is Obj_AI_Base) || sender.Type == GameObjectType.obj_AI_Turret)
                 return;
 
             var target = (Obj_AI_Base)args.Target;
@@ -172,7 +172,7 @@ namespace SCommon.Damage
                 sender.AttackCastDelay * 1000f,
                 sender.AttackDelay * 1000f,
                 sender.IsMelee() ? float.MaxValue : args.SData.MissileSpeed,
-                (float)sender.LSGetAutoAttackDamage(target) - 1);
+                (float)sender.GetAutoAttackDamage(target) - 1);
             ActiveAttacks.Add(sender.NetworkId, attackData);
         }
 

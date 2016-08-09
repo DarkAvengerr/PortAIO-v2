@@ -172,16 +172,16 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
             double damage = 0d;
 
-            if (Q.LSIsReady())
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.Q);
+            if (Q.IsReady())
+                damage += Player.GetSpellDamage(enemy, SpellSlot.Q);
 
-            if (E.LSIsReady() & (Q.LSIsReady() || R.LSIsReady()))
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.E) * 2;
-            else if (E.LSIsReady())
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.E);
+            if (E.IsReady() & (Q.IsReady() || R.IsReady()))
+                damage += Player.GetSpellDamage(enemy, SpellSlot.E) * 2;
+            else if (E.IsReady())
+                damage += Player.GetSpellDamage(enemy, SpellSlot.E);
 
-            if (R.LSIsReady())
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.R) * 3;
+            if (R.IsReady())
+                damage += Player.GetSpellDamage(enemy, SpellSlot.R) * 3;
 
             damage = ItemManager.CalcDamage(enemy, damage);
 
@@ -202,11 +202,11 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
         private void UseSpells(bool useQ, bool useW, bool useE, bool useR, string source)
         {
-            var range = Q.LSIsReady() ? Q.Range : W.Range;
+            var range = Q.IsReady() ? Q.Range : W.Range;
             var focusSelected = menu.Item("selected", true).GetValue<bool>();
             AIHeroClient target = TargetSelector.GetTarget(range, TargetSelector.DamageType.Magical);
             if (TargetSelector.GetSelectedTarget() != null)
-                if (focusSelected && TargetSelector.GetSelectedTarget().LSDistance(Player.ServerPosition) < range)
+                if (focusSelected && TargetSelector.GetSelectedTarget().Distance(Player.ServerPosition) < range)
                     target = TargetSelector.GetSelectedTarget();
 
             if (target == null)
@@ -214,13 +214,13 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
             float dmg = GetComboDamage(target);
 
-            if (useE && E.LSIsReady() && Player.LSDistance(target.Position) < E.Range && ShouldE(target))
+            if (useE && E.IsReady() && Player.Distance(target.Position) < E.Range && ShouldE(target))
             {
                 E.CastOnUnit(target);
             }
 
             //Q
-            if (useQ && Q.LSIsReady() && Player.LSDistance(Q.GetPrediction(target).CastPosition) <= Q.Range &&
+            if (useQ && Q.IsReady() && Player.Distance(Q.GetPrediction(target).CastPosition) <= Q.Range &&
                 Q.GetPrediction(target).Hitchance >= HitChanceManager.GetQHitChance(source) && ShouldQ())
             {
                 Q.Cast(Q.GetPrediction(target).CastPosition);
@@ -242,12 +242,12 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 }
             }
 
-            if (useW && W.LSIsReady() && Player.LSDistance(target.Position) <= W.Range && ShouldUseW(target))
+            if (useW && W.IsReady() && Player.Distance(target.Position) <= W.Range && ShouldUseW(target))
             {
                 CastW(target);
             }
 
-            if (useR && R.LSIsReady() && Player.LSDistance(target.Position) < R.Range &&
+            if (useR && R.IsReady() && Player.Distance(target.Position) < R.Range &&
                 R.GetPrediction(target).Hitchance >= HitChance.High)
             {
                 if (ShouldR(source))
@@ -260,14 +260,14 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             if (!menu.Item("smartKS", true).GetValue<bool>())
                 return;
 
-            foreach (AIHeroClient target in ObjectManager.Get<AIHeroClient>().Where(x => x.LSIsValidTarget(1300)))
+            foreach (AIHeroClient target in ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(1300)))
             {
                 //ER
-                if (Player.LSDistance(target.ServerPosition) <= R.Range && !_rFirstCreated &&
-                    (Player.LSGetSpellDamage(target, SpellSlot.R) + Player.LSGetSpellDamage(target, SpellSlot.E) * 2) >
+                if (Player.Distance(target.ServerPosition) <= R.Range && !_rFirstCreated &&
+                    (Player.GetSpellDamage(target, SpellSlot.R) + Player.GetSpellDamage(target, SpellSlot.E) * 2) >
                     target.Health + 50)
                 {
-                    if (R.LSIsReady() && E.LSIsReady())
+                    if (R.IsReady() && E.IsReady())
                     {
                         E.CastOnUnit(target);
                         R.CastOnUnit(target);
@@ -276,11 +276,11 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 }
 
                 //QR
-                if (Player.LSDistance(target.ServerPosition) <= R.Range && ShouldQ() &&
-                    (Player.LSGetSpellDamage(target, SpellSlot.Q) + Player.LSGetSpellDamage(target, SpellSlot.R)) >
+                if (Player.Distance(target.ServerPosition) <= R.Range && ShouldQ() &&
+                    (Player.GetSpellDamage(target, SpellSlot.Q) + Player.GetSpellDamage(target, SpellSlot.R)) >
                     target.Health + 30)
                 {
-                    if (W.LSIsReady() && R.LSIsReady())
+                    if (W.IsReady() && R.IsReady())
                     {
                         W.Cast(target);
                         return;
@@ -288,10 +288,10 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 }
 
                 //Q
-                if (Player.LSDistance(target.ServerPosition) <= Q.Range && ShouldQ() &&
-                    (Player.LSGetSpellDamage(target, SpellSlot.Q)) > target.Health + 30)
+                if (Player.Distance(target.ServerPosition) <= Q.Range && ShouldQ() &&
+                    (Player.GetSpellDamage(target, SpellSlot.Q)) > target.Health + 30)
                 {
-                    if (Q.LSIsReady())
+                    if (Q.IsReady())
                     {
                         Q.Cast(target);
                         return;
@@ -299,10 +299,10 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 }
 
                 //E
-                if (Player.LSDistance(target.ServerPosition) <= E.Range &&
-                    (Player.LSGetSpellDamage(target, SpellSlot.E)) > target.Health + 30)
+                if (Player.Distance(target.ServerPosition) <= E.Range &&
+                    (Player.GetSpellDamage(target, SpellSlot.E)) > target.Health + 30)
                 {
-                    if (E.LSIsReady())
+                    if (E.IsReady())
                     {
                         E.CastOnUnit(target);
                         return;
@@ -346,10 +346,10 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             if (checkChilled(target))
                 return true;
 
-            if (Player.LSGetSpellDamage(target, SpellSlot.E) > target.Health)
+            if (Player.GetSpellDamage(target, SpellSlot.E) > target.Health)
                 return true;
 
-            if (R.LSIsReady() && Player.LSDistance(target.Position) <= R.Range - 25 && Player.LSDistance(target.ServerPosition) > 250)
+            if (R.IsReady() && Player.Distance(target.Position) <= R.Range - 25 && Player.Distance(target.ServerPosition) > 250)
                 return true;
 
             return false;
@@ -362,7 +362,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
             if (_rFirstCreated && _rObj != null)
             {
-                if (_rObj.Position.LSDistance(target.ServerPosition) > 300)
+                if (_rObj.Position.Distance(target.ServerPosition) > 300)
                 {
                     return true;
                 }
@@ -378,14 +378,14 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 pred.CastPosition.Z - Player.ServerPosition.Z);
             Vector3 castBehind = pred.CastPosition + Vector3.Normalize(vec) * 125;
 
-            if (W.LSIsReady())
+            if (W.IsReady())
                 W.Cast(castBehind);
         }
 
         /*private void castWBetween()
         {
-            var enemy = (from champ in ObjectManager.Get<AIHeroClient>() where Player.LSDistance(champ.ServerPosition) < W.Range && champ.IsEnemy && champ.IsValid select champ).ToList();
-            enemy.OrderBy(x => rObj.Position.LSDistance(x.ServerPosition));
+            var enemy = (from champ in ObjectManager.Get<AIHeroClient>() where Player.Distance(champ.ServerPosition) < W.Range && champ.IsEnemy && champ.IsValid select champ).ToList();
+            enemy.OrderBy(x => rObj.Position.Distance(x.ServerPosition));
 
             castW(enemy.FirstOrDefault());
         }*/
@@ -397,21 +397,21 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 pred.CastPosition.Z - Player.ServerPosition.Z);
             Vector3 castBehind = pred.CastPosition - Vector3.Normalize(vec) * 125;
 
-            if (W.LSIsReady())
+            if (W.IsReady())
                 W.Cast(castBehind);
         }
 
         private bool checkChilled(AIHeroClient target)
         {
-            return target.LSHasBuff("Chilled");
+            return target.HasBuff("Chilled");
         }
 
         private void DetonateQ()
         {
-            if (_qMissle == null || !Q.LSIsReady())
+            if (_qMissle == null || !Q.IsReady())
                 return;
 
-            foreach (AIHeroClient enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.LSIsValidTarget(1200) && x.LSDistance(_qMissle.Position) < 200).OrderByDescending(GetComboDamage))
+            foreach (AIHeroClient enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(1200) && x.Distance(_qMissle.Position) < 200).OrderByDescending(GetComboDamage))
             {
                 if (ShouldDetonate(enemy) && Environment.TickCount - Q.LastCastAttemptT > Game.Ping)
                 {
@@ -424,11 +424,11 @@ using EloBuddy; namespace xSaliceResurrected.Mid
         {
             if (menu.Item("detonateQ2", true).GetValue<bool>())
             {
-                if (target.LSDistance(_qMissle.Position) < Q.Width + target.BoundingRadius && checkChilled(target))
+                if (target.Distance(_qMissle.Position) < Q.Width + target.BoundingRadius && checkChilled(target))
                     return true;
             }
 
-            if (target.LSDistance(_qMissle.Position) < Q.Width + target.BoundingRadius)
+            if (target.Distance(_qMissle.Position) < Q.Width + target.BoundingRadius)
                 return true;
 
             return false;
@@ -442,7 +442,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             AIHeroClient qTarget = TargetSelector.GetTarget(range, TargetSelector.DamageType.Magical);
 
             if (TargetSelector.GetSelectedTarget() != null)
-                if (focusSelected && TargetSelector.GetSelectedTarget().LSDistance(Player.ServerPosition) < range)
+                if (focusSelected && TargetSelector.GetSelectedTarget().Distance(Player.ServerPosition) < range)
                     qTarget = TargetSelector.GetSelectedTarget();
 
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
@@ -450,10 +450,10 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             if (qTarget == null)
                 return;
 
-            if (W.LSIsReady() && Q.LSIsReady() && Player.LSDistance(qTarget.ServerPosition) < W.Range)
+            if (W.IsReady() && Q.IsReady() && Player.Distance(qTarget.ServerPosition) < W.Range)
                 CastW(qTarget);
 
-            if (!W.LSIsReady() && Q.LSIsReady() && Player.LSDistance(qTarget.ServerPosition) < Q.Range &&
+            if (!W.IsReady() && Q.IsReady() && Player.Distance(qTarget.ServerPosition) < Q.Range &&
                 Q.GetPrediction(qTarget).Hitchance >= HitChance.High && ShouldQ())
             {
                 Q.Cast(Q.GetPrediction(qTarget).CastPosition);
@@ -465,9 +465,9 @@ using EloBuddy; namespace xSaliceResurrected.Mid
             if (_rObj == null)
                 return;
 
-            int hit = ObjectManager.Get<AIHeroClient>().Count(x => _rObj.Position.LSDistance(x.ServerPosition) < 475 && x.LSIsValidTarget(R.Range + 500));
+            int hit = ObjectManager.Get<AIHeroClient>().Count(x => _rObj.Position.Distance(x.ServerPosition) < 475 && x.IsValidTarget(R.Range + 500));
 
-            if (hit < 1 && R.LSIsReady() && _rFirstCreated && R.LSIsReady())
+            if (hit < 1 && R.IsReady() && _rFirstCreated && R.IsReady())
             {
                 R.Cast();
             }
@@ -477,15 +477,15 @@ using EloBuddy; namespace xSaliceResurrected.Mid
         {
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
-            List<AIHeroClient> enemy = (from champ in ObjectManager.Get<AIHeroClient>() where champ.LSIsValidTarget(1500) select champ).ToList();
+            List<AIHeroClient> enemy = (from champ in ObjectManager.Get<AIHeroClient>() where champ.IsValidTarget(1500) select champ).ToList();
 
-            if (Q.LSIsReady() && Player.LSDistance(enemy.FirstOrDefault().Position) <= Q.Range &&
+            if (Q.IsReady() && Player.Distance(enemy.FirstOrDefault().Position) <= Q.Range &&
                 Q.GetPrediction(enemy.FirstOrDefault()).Hitchance >= HitChance.High && ShouldQ())
             {
                 Q.Cast(enemy.FirstOrDefault());
             }
 
-            if (W.LSIsReady() && Player.LSDistance(enemy.FirstOrDefault().Position) <= W.Range)
+            if (W.IsReady() && Player.Distance(enemy.FirstOrDefault().Position) <= W.Range)
             {
                 CastWEscape(enemy.FirstOrDefault());
             }
@@ -508,7 +508,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
             int hit = 0;
 
-            if (useQ && Q.LSIsReady() && ShouldQ())
+            if (useQ && Q.IsReady() && ShouldQ())
             {
                 MinionManager.FarmLocation qPos = Q.GetLineFarmLocation(allMinionsQ);
                 if (qPos.MinionsHit >= 3)
@@ -517,33 +517,33 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 }
             }
 
-            if (useR & R.LSIsReady() && !_rFirstCreated)
+            if (useR & R.IsReady() && !_rFirstCreated)
             {
                 MinionManager.FarmLocation rPos = R.GetCircularFarmLocation(allMinionsR);
-                if (Player.LSDistance(rPos.Position) < R.Range)
+                if (Player.Distance(rPos.Position) < R.Range)
                     R.Cast(rPos.Position);
             }
 
             if (!ShouldQ() && _qMissle != null)
             {
-                if (useQ && Q.LSIsReady())
+                if (useQ && Q.IsReady())
                 {
-                    hit += allMinionsQ.Count(enemy => enemy.LSDistance(_qMissle.Position) < 110);
+                    hit += allMinionsQ.Count(enemy => enemy.Distance(_qMissle.Position) < 110);
                 }
 
-                if (hit >= 2 && Q.LSIsReady())
+                if (hit >= 2 && Q.IsReady())
                     Q.Cast();
             }
 
             if (_rFirstCreated)
             {
-                hit += allMinionsR.Count(enemy => enemy.LSDistance(_rObj.Position) < 400);
+                hit += allMinionsR.Count(enemy => enemy.Distance(_rObj.Position) < 400);
 
-                if (hit < 2 && R.LSIsReady())
+                if (hit < 2 && R.IsReady())
                     R.Cast();
             }
 
-            if (useE && allMinionsE.Count > 0 && E.LSIsReady())
+            if (useE && allMinionsE.Count > 0 && E.IsReady())
                 E.Cast(allMinionsE[0]);
         }
 
@@ -605,7 +605,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
         {
             if (!unit.IsMe) return;
 
-            SpellSlot castedSlot = Player.LSGetSpellSlot(attack.SData.Name);
+            SpellSlot castedSlot = Player.GetSpellSlot(attack.SData.Name);
 
             if (castedSlot == SpellSlot.E)
             {
@@ -623,7 +623,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
         {
             if (!menu.Item("UseGap", true).GetValue<bool>()) return;
 
-            if (W.LSIsReady() && gapcloser.Sender.LSIsValidTarget(W.Range))
+            if (W.IsReady() && gapcloser.Sender.IsValidTarget(W.Range))
             {
                 Vector3 vec = Player.ServerPosition -
                               Vector3.Normalize(Player.ServerPosition - gapcloser.Sender.ServerPosition) * 1;
@@ -635,12 +635,12 @@ using EloBuddy; namespace xSaliceResurrected.Mid
         {
             if (!menu.Item("UseInt", true).GetValue<bool>()) return;
 
-            if (unit.LSIsValidTarget(Q.Range) && Q.LSIsReady())
+            if (unit.IsValidTarget(Q.Range) && Q.IsReady())
             {
                 Q.Cast(unit);
             }
 
-            if (unit.LSIsValidTarget(W.Range) && W.LSIsReady())
+            if (unit.IsValidTarget(W.Range) && W.IsReady())
             {
                 W.Cast(unit);
             }
@@ -648,10 +648,10 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
         protected override void GameObject_OnCreate(GameObject obj, EventArgs args)
         {
-            //if(Player.LSDistance(obj.Position) < 300)
+            //if(Player.Distance(obj.Position) < 300)
             //Chat.Print("OBJ: " + obj.Name);
 
-            if (obj.Type != GameObjectType.obj_GeneralParticleEmitter || Player.LSDistance(obj.Position) > 1500)
+            if (obj.Type != GameObjectType.obj_GeneralParticleEmitter || Player.Distance(obj.Position) > 1500)
                 return;
 
             //Q
@@ -673,11 +673,11 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
         protected override void GameObject_OnDelete(GameObject obj, EventArgs args)
         {
-            if (obj.Type != GameObjectType.obj_GeneralParticleEmitter || Player.LSDistance(obj.Position) > 1500)
+            if (obj.Type != GameObjectType.obj_GeneralParticleEmitter || Player.Distance(obj.Position) > 1500)
                 return;
 
             //Q
-            if (Player.LSDistance(obj.Position) < 1500)
+            if (Player.Distance(obj.Position) < 1500)
             {
                 if (obj.IsValid && obj.Name == "cryo_FlashFrost_Player_mis.troy")
                 {

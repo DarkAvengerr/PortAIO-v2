@@ -19,7 +19,7 @@ namespace UnderratedAIO.Helpers
             {
                 return
                     MinionManager.GetMinions(l, p, MinionTypes.All, MinionTeam.NotAlly)
-                        .Count(i => !i.IsDead && i.IsEnemy && i.LSDistance(l) < p);
+                        .Count(i => !i.IsDead && i.IsEnemy && i.Distance(l) < p);
             }
 
             public static Vector3 bestVectorToAoeFarm(Vector3 center, float spellrange, float spellWidth, int hit = 0)
@@ -37,8 +37,8 @@ namespace UnderratedAIO.Helpers
                     Vector3 newPos = new Vector3(minion.Position.X + 80, minion.Position.Y + 80, minion.Position.Z);
                     for (int i = 1; i < 4; i++)
                     {
-                        var rotated = newPos.LSTo2D().LSRotateAroundPoint(newPos.LSTo2D(), 90 * i).To3D();
-                        if (countMinionsInrange(rotated, spellWidth) > hits && player.LSDistance(rotated) <= spellrange)
+                        var rotated = newPos.To2D().RotateAroundPoint(newPos.To2D(), 90 * i).To3D();
+                        if (countMinionsInrange(rotated, spellWidth) > hits && player.Distance(rotated) <= spellrange)
                         {
                             bestPos = newPos;
                             hits = countMinionsInrange(rotated, spellWidth);
@@ -57,7 +57,7 @@ namespace UnderratedAIO.Helpers
                         .Any(
                             minion =>
                                 HealthPrediction.GetHealthPrediction(minion, 3000) <=
-                                Damage.LSGetAutoAttackDamage(player, minion, false));
+                                Damage.GetAutoAttackDamage(player, minion, false));
             }
         }
 
@@ -70,9 +70,9 @@ namespace UnderratedAIO.Helpers
             {
                 return
                     HeroManager.Allies.Where(
-                        i => !i.IsDead && i.LSCountEnemiesInRange(spellWidth) >= min && i.LSDistance(player) < spellRange)
+                        i => !i.IsDead && i.CountEnemiesInRange(spellWidth) >= min && i.Distance(player) < spellRange)
                         .OrderBy(i => i.IsMe)
-                        .ThenByDescending(i => i.LSCountEnemiesInRange(spellWidth))
+                        .ThenByDescending(i => i.CountEnemiesInRange(spellWidth))
                         .FirstOrDefault();
             }
 
@@ -84,19 +84,19 @@ namespace UnderratedAIO.Helpers
                 int hits = 0;
                 foreach (var hero in heroes)
                 {
-                    if (hero.Position.LSCountEnemiesInRange(spellwidth) > hits)
+                    if (hero.Position.CountEnemiesInRange(spellwidth) > hits)
                     {
                         bestPos = hero.Position;
-                        hits = hero.Position.LSCountEnemiesInRange(spellwidth);
+                        hits = hero.Position.CountEnemiesInRange(spellwidth);
                     }
                     Vector3 newPos = new Vector3(hero.Position.X + 80, hero.Position.Y + 80, hero.Position.Z);
                     for (int i = 1; i < 4; i++)
                     {
-                        var rotated = newPos.LSTo2D().LSRotateAroundPoint(newPos.LSTo2D(), 90 * i).To3D();
-                        if (rotated.LSCountEnemiesInRange(spellwidth) > hits && player.LSDistance(rotated) <= spellrange)
+                        var rotated = newPos.To2D().RotateAroundPoint(newPos.To2D(), 90 * i).To3D();
+                        if (rotated.CountEnemiesInRange(spellwidth) > hits && player.Distance(rotated) <= spellrange)
                         {
                             bestPos = newPos;
-                            hits = rotated.LSCountEnemiesInRange(spellwidth);
+                            hits = rotated.CountEnemiesInRange(spellwidth);
                         }
                     }
                 }
@@ -112,12 +112,12 @@ namespace UnderratedAIO.Helpers
                 {
                     if (source.Crit > 0)
                     {
-                        basicDmg += source.LSGetAutoAttackDamage(target, true) - source.LSGetAutoAttackDamage(target) +
-                                    source.LSGetAutoAttackDamage(target) * (1 + source.Crit / attacks);
+                        basicDmg += source.GetAutoAttackDamage(target, true) - source.GetAutoAttackDamage(target) +
+                                    source.GetAutoAttackDamage(target) * (1 + source.Crit / attacks);
                     }
                     else
                     {
-                        basicDmg += source.LSGetAutoAttackDamage(target, true);
+                        basicDmg += source.GetAutoAttackDamage(target, true);
                     }
                 }
                 return (float) basicDmg;
@@ -125,7 +125,7 @@ namespace UnderratedAIO.Helpers
 
             public static int getSpellDelay(Spell spell, Vector3 pos)
             {
-                return (int) (spell.Delay * 1000 + player.LSDistance(pos) / spell.Speed);
+                return (int) (spell.Delay * 1000 + player.Distance(pos) / spell.Speed);
             }
 
             public static int GetPriority(string championName)
@@ -182,7 +182,7 @@ namespace UnderratedAIO.Helpers
         {
             public static int countTurretsInRange(AIHeroClient l)
             {
-                return ObjectManager.Get<Obj_AI_Turret>().Count(i => !i.IsDead && i.IsEnemy && l.LSDistance(i) < 750f);
+                return ObjectManager.Get<Obj_AI_Turret>().Count(i => !i.IsDead && i.IsEnemy && l.Distance(i) < 750f);
             }
         }
 
@@ -190,10 +190,10 @@ namespace UnderratedAIO.Helpers
         {
             public static bool CheckWalls(Vector3 player, Vector3 enemy)
             {
-                var distance = player.LSDistance(enemy);
+                var distance = player.Distance(enemy);
                 for (int i = 1; i < 6; i++)
                 {
-                    if (player.LSExtend(enemy, distance + 55 * i).LSIsWall())
+                    if (player.Extend(enemy, distance + 55 * i).IsWall())
                     {
                         return true;
                     }
@@ -203,12 +203,12 @@ namespace UnderratedAIO.Helpers
 
             public static Vector3 ClosestWall(Vector3 StartPos, Vector3 EndPos)
             {
-                var distance = StartPos.LSDistance(EndPos);
+                var distance = StartPos.Distance(EndPos);
                 for (int i = 1; i < 8; i++)
                 {
-                    if (StartPos.LSExtend(EndPos, distance + 55 * i).LSIsWall())
+                    if (StartPos.Extend(EndPos, distance + 55 * i).IsWall())
                     {
-                        return StartPos.LSExtend(EndPos, distance + 55 * i);
+                        return StartPos.Extend(EndPos, distance + 55 * i);
                     }
                 }
                 return EndPos;
@@ -221,7 +221,7 @@ namespace UnderratedAIO.Helpers
                 var distance = 0f;
                 foreach (var point in path.Where(point => !point.Equals(lastPoint)))
                 {
-                    distance += lastPoint.LSDistance(point);
+                    distance += lastPoint.Distance(point);
                     lastPoint = point;
                 }
                 return distance;

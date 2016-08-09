@@ -116,10 +116,10 @@ using EloBuddy;
             {
                 //Method bugged == plz fix the Common
                 //annie.EloBuddy.Player.IssueOrder(
-                //    Tibbers.LSDistance(target.Position) > 200 ? GameObjectOrder.MovePet : GameObjectOrder.AutoAttackPet,
+                //    Tibbers.Distance(target.Position) > 200 ? GameObjectOrder.MovePet : GameObjectOrder.AutoAttackPet,
                 //    target);
 
-                if (Tibbers.LSDistance(target.Position) > 200)
+                if (Tibbers.Distance(target.Position) > 200)
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MovePet, target);
                 }
@@ -168,7 +168,7 @@ using EloBuddy;
                 return target;
             }
 
-            if ((currentTarget != null) && (currentTarget.LSIsValidTarget(annie.Player.AttackRange + 200f)))
+            if ((currentTarget != null) && (currentTarget.IsValidTarget(annie.Player.AttackRange + 200f)))
             {
                 return currentTarget;
             }
@@ -184,7 +184,7 @@ using EloBuddy;
                 return;
             }
 
-            if ((annie.Spells.R.LSIsReady()) && (FlashSpell.IsReady(annie.Player)) && (annie.CheckStun()))
+            if ((annie.Spells.R.IsReady()) && (FlashSpell.IsReady(annie.Player)) && (annie.CheckStun()))
             {
                 int minToCast = annie.GetParamSlider("minenemiestoflashr");
 
@@ -193,7 +193,7 @@ using EloBuddy;
                     foreach (
                         PredictionOutput pred in
                             ObjectManager.Get<AIHeroClient>()
-                                .Where(x => x.LSIsValidTarget(annie.Spells.RFlash.Range))
+                                .Where(x => x.IsValidTarget(annie.Spells.RFlash.Range))
                                 .Select(x => annie.Spells.RFlash.GetPrediction(x, true))
                                 .Where(pred => pred.Hitchance >= HitChance.High && pred.AoeTargetsHitCount >= minToCast)
                         )
@@ -227,7 +227,7 @@ using EloBuddy;
         {
             List<Obj_AI_Base> minion =
                 MinionManager.GetMinions(Tibbers.Position, TibbersRange)
-                    .OrderBy(x => x.LSDistance(Tibbers.Position))
+                    .OrderBy(x => x.Distance(Tibbers.Position))
                     .ToList();
 
             return (minion.Count > 0) ? minion[0] : null;

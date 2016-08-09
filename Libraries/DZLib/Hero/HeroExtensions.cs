@@ -14,7 +14,7 @@ namespace DZLib.Hero
     {
         public static List<AIHeroClient> GetLhEnemiesNear(this Vector3 position, float range, float healthpercent)
         {
-            return HeroManager.Enemies.Where(hero => hero.LSIsValidTarget(range, true, position) && hero.HealthPercent <= healthpercent).ToList();
+            return HeroManager.Enemies.Where(hero => hero.IsValidTarget(range, true, position) && hero.HealthPercent <= healthpercent).ToList();
         }
     }
 }

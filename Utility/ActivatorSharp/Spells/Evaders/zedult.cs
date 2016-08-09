@@ -30,7 +30,7 @@ using EloBuddy; namespace Activator.Spells.Evaders
                     if (hero.Attacker == null)
                         continue;
 
-                    if (hero.Attacker.LSDistance(hero.Player.ServerPosition) > Range)
+                    if (hero.Attacker.Distance(hero.Player.ServerPosition) > Range)
                         continue;
 
                     if (Menu.Item("use" + Name + "norm").GetValue<bool>())

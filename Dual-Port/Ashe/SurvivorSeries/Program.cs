@@ -199,7 +199,7 @@ using EloBuddy; namespace SurvivorAshe
                 return;
             }
 
-            if (Spell.SData.Name.ToLower() == "summonerflash" && enemy.LSDistance(Player.Position) < 2200)
+            if (Spell.SData.Name.ToLower() == "summonerflash" && enemy.Distance(Player.Position) < 2200)
             {
                 E.Cast(Spell.End);
             }
@@ -267,7 +267,7 @@ using EloBuddy; namespace SurvivorAshe
                     {
                         case SebbyLib.Orbwalking.OrbwalkingMode.LaneClear:
                             {
-                                if (Q.LSIsReady() && Menu.Item("LaneClearUseQ").GetValue<bool>())
+                                if (Q.IsReady() && Menu.Item("LaneClearUseQ").GetValue<bool>())
                                 {
                                     var Minions = MinionManager.GetMinions(SebbyLib.Orbwalking.GetRealAutoAttackRange(Player), MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
                                     {
@@ -283,7 +283,7 @@ using EloBuddy; namespace SurvivorAshe
 
         private static void Game_OnUpdate(EventArgs args)
         {
-            if (Player.IsDead || Player.LSIsRecalling())
+            if (Player.IsDead || Player.IsRecalling())
                 return;
 
             if (Menu.Item("UseSkin").GetValue<bool>())
@@ -318,7 +318,7 @@ using EloBuddy; namespace SurvivorAshe
                 InstantlyR();
             }
 
-            if (Menu.Item("BuyBlueTrinket").GetValue<bool>() && Player.Level >= 6 && Player.LSInShop() && !(Items.HasItem(3342) || Items.HasItem(3363)))
+            if (Menu.Item("BuyBlueTrinket").GetValue<bool>() && Player.Level >= 6 && Player.InShop() && !(Items.HasItem(3342) || Items.HasItem(3363)))
             {
                 Shop.BuyItem(ItemId.Farsight_Alteration);
             }
@@ -335,10 +335,10 @@ using EloBuddy; namespace SurvivorAshe
 
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 var GapCloser = gapcloser.Sender;
-                if (Menu.Item("GapCloserEnemies" + GapCloser.ChampionName).GetValue<bool>() && GapCloser.LSIsValidTarget(750))
+                if (Menu.Item("GapCloserEnemies" + GapCloser.ChampionName).GetValue<bool>() && GapCloser.IsValidTarget(750))
                 {
                     R.Cast(GapCloser.ServerPosition);
                 }
@@ -347,17 +347,17 @@ using EloBuddy; namespace SurvivorAshe
 
         private static void Interrupter2_OnInterruptableTarget(AIHeroClient t, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (Menu.Item("RToInterrupt").GetValue<bool>() && t.LSIsValidTarget(2400) && R.LSIsReady())
+            if (Menu.Item("RToInterrupt").GetValue<bool>() && t.IsValidTarget(2400) && R.IsReady())
                 R.Cast(t);
         }
 
         private static void InstantlyR()
         {
             var target = TargetSelector.GetSelectedTarget();
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
                 target = TargetSelector.GetTarget(1400, TargetSelector.DamageType.Physical);
 
-            if (target.LSIsValidTarget() && target != null && !target.LSHasBuff("rebirth"))
+            if (target.IsValidTarget() && target != null && !target.HasBuff("rebirth"))
             {
                 if (Player.Mana > R.Instance.SData.Mana)
                 {
@@ -372,19 +372,19 @@ using EloBuddy; namespace SurvivorAshe
             {
                 var target = Orbwalker.GetTarget() as AIHeroClient;
 
-                if (target.LSIsValidTarget(W.Range) && target.Health < W.GetDamage(target) + R.GetDamage(target) + OktwCommon.GetIncomingDamage(target))
+                if (target.IsValidTarget(W.Range) && target.Health < W.GetDamage(target) + R.GetDamage(target) + OktwCommon.GetIncomingDamage(target))
                 {
                     if (!OktwCommon.IsSpellHeroCollision(target, R))
                         SebbySpell(R, target);
                     if (!target.CanMove || target.IsStunned)
                         W.Cast(target.Position);
                 }
-                if (target.LSIsValidTarget(1600) && target.Health < R.GetDamage(target) + OktwCommon.GetIncomingDamage(target))
+                if (target.IsValidTarget(1600) && target.Health < R.GetDamage(target) + OktwCommon.GetIncomingDamage(target))
                 {
                     if (!OktwCommon.IsSpellHeroCollision(target, R))
                         SebbySpell(R, target);
                 }
-                if (target.LSIsValidTarget(W.Range) && target.Health < W.GetDamage(target) + OktwCommon.GetIncomingDamage(target))
+                if (target.IsValidTarget(W.Range) && target.Health < W.GetDamage(target) + OktwCommon.GetIncomingDamage(target))
                 {
                     if (target.CanMove)
                     {
@@ -406,18 +406,18 @@ using EloBuddy; namespace SurvivorAshe
             if (target == null)
                 target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
 
-            if (target != null && target.LSIsValidTarget())
+            if (target != null && target.IsValidTarget())
             {
-                if (Menu.Item("ComboUseQ").GetValue<bool>() && Q.LSIsReady() && Player.Mana > Q.Instance.SData.Mana + R.Instance.SData.Mana || target.Health < 5 * Player.LSGetAutoAttackDamage(Player))
+                if (Menu.Item("ComboUseQ").GetValue<bool>() && Q.IsReady() && Player.Mana > Q.Instance.SData.Mana + R.Instance.SData.Mana || target.Health < 5 * Player.GetAutoAttackDamage(Player))
                     Q.Cast();
-                if (Menu.Item("ComboUseW").GetValue<bool>() && W.LSIsReady() && Player.Mana > W.Instance.SData.Mana + R.Instance.SData.Mana && target.LSIsValidTarget(W.Range))
+                if (Menu.Item("ComboUseW").GetValue<bool>() && W.IsReady() && Player.Mana > W.Instance.SData.Mana + R.Instance.SData.Mana && target.IsValidTarget(W.Range))
                     SebbySpell(W, target);
-                foreach (var ulttarget in HeroManager.Enemies.Where(ulttarget => target.LSIsValidTarget(2000) && OktwCommon.ValidUlt(ulttarget)))
+                foreach (var ulttarget in HeroManager.Enemies.Where(ulttarget => target.IsValidTarget(2000) && OktwCommon.ValidUlt(ulttarget)))
                 {
-                    if (Menu.Item("ComboUseR").GetValue<bool>() && target.LSIsValidTarget(W.Range) && target.Health < W.GetDamage(target) + R.GetDamage(target) + 3 * Player.LSGetAutoAttackDamage(target) + OktwCommon.GetIncomingDamage(target) && !target.LSHasBuff("rebirth"))
+                    if (Menu.Item("ComboUseR").GetValue<bool>() && target.IsValidTarget(W.Range) && target.Health < W.GetDamage(target) + R.GetDamage(target) + 3 * Player.GetAutoAttackDamage(target) + OktwCommon.GetIncomingDamage(target) && !target.HasBuff("rebirth"))
                     {
                         SebbySpell(R, target);
-                        if (Q.LSIsReady())
+                        if (Q.IsReady())
                             Q.Cast();
                     }
                 }
@@ -432,12 +432,12 @@ using EloBuddy; namespace SurvivorAshe
             if (target == null)
                 target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
 
-            if (target != null && target.LSIsValidTarget())
+            if (target != null && target.IsValidTarget())
             {
-                if (target.LSIsValidTarget(W.Range) && SpellW)
+                if (target.IsValidTarget(W.Range) && SpellW)
                     SebbySpell(W, target);
 
-                if (Q.LSIsReady() && SpellQ)
+                if (Q.IsReady() && SpellQ)
                     Q.Cast();
             }
         }
@@ -451,11 +451,11 @@ using EloBuddy; namespace SurvivorAshe
             {
                 foreach (var minion in allMinionsW)
                 {
-                    if (!minion.LSIsValidTarget() || minion == null)
+                    if (!minion.IsValidTarget() || minion == null)
                         return;
-                    if (SpellW && W.LSIsReady())
+                    if (SpellW && W.IsReady())
                         W.Cast(minion);
-                    if (SpellQ && Q.LSIsReady())
+                    if (SpellQ && Q.IsReady())
                         Q.Cast();
                 }
             }
@@ -465,15 +465,15 @@ using EloBuddy; namespace SurvivorAshe
         {
             float damage = 0;
 
-            if (W.LSIsReady() && Player.Mana > W.Instance.SData.Mana)
+            if (W.IsReady() && Player.Mana > W.Instance.SData.Mana)
             {
                 damage += W.GetDamage(enemy);
             }
-            if (R.LSIsReady() && Player.Mana > R.Instance.SData.Mana)
+            if (R.IsReady() && Player.Mana > R.Instance.SData.Mana)
             {
                 damage += R.GetDamage(enemy);
             }
-            damage += (float)Player.LSGetAutoAttackDamage(enemy);
+            damage += (float)Player.GetAutoAttackDamage(enemy);
 
             return damage;
         }

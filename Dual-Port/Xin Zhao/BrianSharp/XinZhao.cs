@@ -94,14 +94,14 @@ namespace BrianSharp.Plugin
                 return
                     HeroManager.Enemies.Where(
                         i =>
-                            i.LSIsValidTarget() &&
-                            Player.LSDistance(Prediction.GetPrediction(i, 0.25f).UnitPosition) < R.Range).ToList();
+                            i.IsValidTarget() &&
+                            Player.Distance(Prediction.GetPrediction(i, 0.25f).UnitPosition) < R.Range).ToList();
             }
         }
 
         private static void OnUpdate(EventArgs args)
         {
-            if (Player.IsDead || MenuGUI.IsChatOpen || Player.LSIsRecalling())
+            if (Player.IsDead || MenuGUI.IsChatOpen || Player.IsRecalling())
             {
                 return;
             }
@@ -132,18 +132,18 @@ namespace BrianSharp.Plugin
             }
             if (GetValue<bool>("Draw", "E") && E.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, E.Range, E.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.Green : Color.Red);
             }
             if (GetValue<bool>("Draw", "R") && R.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, R.Range, R.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, R.Range, R.IsReady() ? Color.Green : Color.Red);
             }
         }
 
         private static void OnPossibleToInterrupt(AIHeroClient unit, InterruptableSpell spell)
         {
             if (Player.IsDead || !GetValue<bool>("Interrupt", "R") ||
-                !GetValue<bool>("Interrupt", unit.ChampionName + "_" + spell.Slot) || !R.LSIsReady() ||
+                !GetValue<bool>("Interrupt", unit.ChampionName + "_" + spell.Slot) || !R.IsReady() ||
                 unit.HasBuff("xenzhaointimidate"))
             {
                 return;
@@ -153,16 +153,16 @@ namespace BrianSharp.Plugin
             {
                 return;
             }
-            if (!R.IsInRange(pos) && E.LSIsReady() && Player.Mana >= E.Instance.SData.Mana + R.Instance.SData.Mana)
+            if (!R.IsInRange(pos) && E.IsReady() && Player.Mana >= E.Instance.SData.Mana + R.Instance.SData.Mana)
             {
                 var obj =
                     (Obj_AI_Base)
                         HeroManager.Enemies.Where(
-                            i => i.LSIsValidTarget(E.Range) && i.LSDistance(pos) <= R.Range && i.NetworkId != unit.NetworkId)
-                            .MinOrDefault(i => i.LSDistance(unit)) ??
+                            i => i.IsValidTarget(E.Range) && i.Distance(pos) <= R.Range && i.NetworkId != unit.NetworkId)
+                            .MinOrDefault(i => i.Distance(unit)) ??
                     GetMinions(E.Range, MinionTypes.All, MinionTeam.NotAlly)
-                        .Where(i => i.LSDistance(pos) <= R.Range)
-                        .MinOrDefault(i => i.LSDistance(unit));
+                        .Where(i => i.Distance(pos) <= R.Range)
+                        .MinOrDefault(i => i.Distance(unit));
                 if (obj != null)
                 {
                     E.CastOnUnit(obj, PacketCast);
@@ -172,7 +172,7 @@ namespace BrianSharp.Plugin
 
         private static void OnAttack(AttackableUnit target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
             {
                 return;
             }
@@ -186,7 +186,7 @@ namespace BrianSharp.Plugin
 
         private static void AfterAttack(AttackableUnit target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
             {
                 return;
             }
@@ -200,7 +200,7 @@ namespace BrianSharp.Plugin
 
         private static void Fight(string mode)
         {
-            if (mode == "Combo" && GetValue<bool>(mode, "R") && R.LSIsReady() && !Player.LSIsDashing())
+            if (mode == "Combo" && GetValue<bool>(mode, "R") && R.IsReady() && !Player.IsDashing())
             {
                 var obj = GetRTarget;
                 if ((obj.Count > 1 && obj.Any(i => R.IsKillable(i))) ||
@@ -209,11 +209,11 @@ namespace BrianSharp.Plugin
                 {
                     R.Cast(PacketCast);
                 }
-                if (GetValue<bool>(mode, "E") && E.LSIsReady() && Player.Mana >= E.Instance.SData.Mana + R.Instance.SData.Mana)
+                if (GetValue<bool>(mode, "E") && E.IsReady() && Player.Mana >= E.Instance.SData.Mana + R.Instance.SData.Mana)
                 {
                     var target =
                         obj.Where(
-                            i => CanKill(i, R.GetDamage(i) + E.GetDamage(i) + Player.LSGetAutoAttackDamage(i, true)))
+                            i => CanKill(i, R.GetDamage(i) + E.GetDamage(i) + Player.GetAutoAttackDamage(i, true)))
                             .MinOrDefault(i => i.Health);
                     if (target != null && R.Cast(PacketCast) && E.CastOnUnit(target, PacketCast))
                     {
@@ -221,7 +221,7 @@ namespace BrianSharp.Plugin
                     }
                 }
             }
-            if (GetValue<bool>(mode, "E") && E.LSIsReady())
+            if (GetValue<bool>(mode, "E") && E.IsReady())
             {
                 var target = E.GetTarget();
                 if (target != null)
@@ -249,7 +249,7 @@ namespace BrianSharp.Plugin
             {
                 return;
             }
-            if (GetValue<bool>("Clear", "E") && E.LSIsReady())
+            if (GetValue<bool>("Clear", "E") && E.IsReady())
             {
                 var obj = minionObj.FirstOrDefault(i => E.IsKillable(i));
                 if (obj == null && !minionObj.Any(i => Orbwalk.InAutoAttackRange(i, 30)))
@@ -266,7 +266,7 @@ namespace BrianSharp.Plugin
                 var item = Hydra.IsReady() ? Hydra : Tiamat;
                 if (item.IsReady() &&
                     (minionObj.Count(i => item.IsInRange(i)) > 2 ||
-                     minionObj.Any(i => i.MaxHealth >= 1200 && i.LSDistance(Player) < item.Range - 80)))
+                     minionObj.Any(i => i.MaxHealth >= 1200 && i.Distance(Player) < item.Range - 80)))
                 {
                     item.Cast();
                 }
@@ -275,7 +275,7 @@ namespace BrianSharp.Plugin
 
         private static void KillSteal()
         {
-            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.LSIsReady())
+            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.IsReady())
             {
                 var target = TargetSelector.GetTarget(600, TargetSelector.DamageType.True);
                 if (target != null && CastIgnite(target))
@@ -292,7 +292,7 @@ namespace BrianSharp.Plugin
                     return;
                 }
             }
-            if (GetValue<bool>("KillSteal", "E") && E.LSIsReady())
+            if (GetValue<bool>("KillSteal", "E") && E.IsReady())
             {
                 var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
                 if (target != null && E.IsKillable(target) && E.CastOnUnit(target, PacketCast))
@@ -300,7 +300,7 @@ namespace BrianSharp.Plugin
                     return;
                 }
             }
-            if (GetValue<bool>("KillSteal", "R") && R.LSIsReady())
+            if (GetValue<bool>("KillSteal", "R") && R.IsReady())
             {
                 var target = GetRTarget.FirstOrDefault(i => R.IsKillable(i));
                 if (target != null)

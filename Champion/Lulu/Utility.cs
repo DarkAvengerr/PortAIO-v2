@@ -14,7 +14,7 @@ namespace LuluLicious
         public static AIHeroClient GetBestWETarget()
         {
             var ally =
-                HeroManager.Allies.Where(h => !h.IsMe && h.LSIsValidTarget(SpellManager.W.Range, false))
+                HeroManager.Allies.Where(h => !h.IsMe && h.IsValidTarget(SpellManager.W.Range, false))
                     .OrderByDescending(h => TreeLib.Objects.Champion.Menu.Item(h.ChampionName + "WEPriority").GetValue<Slider>().Value)
                     .FirstOrDefault();
 
@@ -26,7 +26,7 @@ namespace LuluLicious
         public static AIHeroClient GetBestWTarget()
         {
             var enemy =
-                HeroManager.Enemies.Where(h => h.LSIsValidTarget(SpellManager.W.Range))
+                HeroManager.Enemies.Where(h => h.IsValidTarget(SpellManager.W.Range))
                     .MaxOrDefault(o => TreeLib.Objects.Champion.Menu.Item(o.ChampionName + "WPriority").GetValue<Slider>().Value);
             return enemy == null || TreeLib.Objects.Champion.Menu.Item(enemy.ChampionName + "WPriority").GetValue<Slider>().Value == 0
                 ? null
@@ -40,7 +40,7 @@ namespace LuluLicious
             {
                 try
                 {
-                    dmg += skillshot.Unit.LSGetDamageSpell(hero, skillshot.SpellData.SpellName).CalculatedDamage;
+                    dmg += skillshot.Unit.GetDamageSpell(hero, skillshot.SpellData.SpellName).CalculatedDamage;
                 }
                 catch {}
             }
@@ -52,17 +52,17 @@ namespace LuluLicious
         {
             var d = 0d;
 
-            if (SpellManager.Q.LSIsReady())
+            if (SpellManager.Q.IsReady())
             {
                 d += SpellManager.Q.GetDamage(unit);
             }
 
-            if (SpellManager.E.LSIsReady())
+            if (SpellManager.E.IsReady())
             {
                 d += SpellManager.Q.GetDamage(unit);
             }
 
-            d += (float) ObjectManager.Player.LSGetAutoAttackDamage(unit, true);
+            d += (float) ObjectManager.Player.GetAutoAttackDamage(unit, true);
 
             var dl = ObjectManager.Player.GetMastery(MasteryData.Ferocity.DoubleEdgedSword);
             if (dl != null && dl.IsActive())
@@ -71,13 +71,13 @@ namespace LuluLicious
             }
 
             var assassin = ObjectManager.Player.GetMastery((MasteryData.Cunning) 83);
-            if (assassin != null && assassin.IsActive() && ObjectManager.Player.LSCountAlliesInRange(800) == 0)
+            if (assassin != null && assassin.IsActive() && ObjectManager.Player.CountAlliesInRange(800) == 0)
             {
                 d *= 1.02f;
             }
 
             var ignite = TreeLib.Managers.SpellManager.Ignite;
-            if (ignite != null && ignite.LSIsReady())
+            if (ignite != null && ignite.IsReady())
             {
                 d += (float) ObjectManager.Player.GetSummonerSpellDamage(unit, Damage.SummonerSpell.Ignite);
             }

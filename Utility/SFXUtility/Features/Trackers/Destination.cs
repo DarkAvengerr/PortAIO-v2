@@ -355,18 +355,18 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
         {
             try
             {
-                var dist = start.LSDistance(end);
+                var dist = start.Distance(end);
                 var endPos = end;
                 if (dist > maxRange)
                 {
-                    endPos = start.LSExtend(end, maxRange);
+                    endPos = start.Extend(end, maxRange);
                 }
-                if (endPos.LSIsWall())
+                if (endPos.IsWall())
                 {
                     for (var i = 0; i < 200; i = i + 10)
                     {
-                        var pos = start.LSExtend(endPos, dist + i);
-                        if (!pos.LSIsWall())
+                        var pos = start.Extend(endPos, dist + i);
+                        if (!pos.IsWall())
                         {
                             return pos;
                         }

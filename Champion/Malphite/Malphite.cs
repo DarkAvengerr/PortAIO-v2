@@ -177,7 +177,7 @@
         public void Load()
         {
             Console.WriteLine("Loaded Malphite");
-            Ignite = this.Player.LSGetSpellSlot("summonerdot");
+            Ignite = this.Player.GetSpellSlot("summonerdot");
             spells[Spells.R].SetSkillshot(0.00f, 270, 700, false, SkillshotType.SkillshotCircle);
 
             Game.OnUpdate += this.OnUpdate;
@@ -208,13 +208,13 @@
             }
 
             if (args.DangerLevel != Interrupter2.DangerLevel.High
-                || sender.LSDistance(this.Player) > spells[Spells.R].Range)
+                || sender.Distance(this.Player) > spells[Spells.R].Range)
             {
                 return;
             }
 
-            if (sender.LSIsValidTarget(spells[Spells.R].Range) && args.DangerLevel == Interrupter2.DangerLevel.High
-                && spells[Spells.R].LSIsReady())
+            if (sender.IsValidTarget(spells[Spells.R].Range) && args.DangerLevel == Interrupter2.DangerLevel.High
+                && spells[Spells.R].IsReady())
             {
                 spells[Spells.R].Cast(sender);
             }
@@ -239,12 +239,12 @@
                 return;
             }
 
-            if (useQ && spells[Spells.Q].LSIsReady() && qTarget.LSIsValidTarget(spells[Spells.Q].Range))
+            if (useQ && spells[Spells.Q].IsReady() && qTarget.IsValidTarget(spells[Spells.Q].Range))
             {
                 spells[Spells.Q].Cast(qTarget);
             }
 
-            if (useE && spells[Spells.E].LSIsReady() && eTarget.LSIsValidTarget(spells[Spells.E].Range))
+            if (useE && spells[Spells.E].IsReady() && eTarget.IsValidTarget(spells[Spells.E].Range))
             {
                 spells[Spells.E].Cast();
             }
@@ -253,7 +253,7 @@
         private void OnCombo()
         {
             var target = TargetSelector.GetTarget(spells[Spells.Q].Range, TargetSelector.DamageType.Magical);
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
             {
                 return;
             }
@@ -267,17 +267,17 @@
 
             var countEnemies = this.Menu.Item("ElEasy.Malphite.Combo.Count.R").GetValue<Slider>().Value;
 
-            if (useQ && spells[Spells.Q].LSIsReady() && target.LSIsValidTarget(spells[Spells.Q].Range))
+            if (useQ && spells[Spells.Q].IsReady() && target.IsValidTarget(spells[Spells.Q].Range))
             {
                 spells[Spells.Q].Cast(target);
             }
 
-            if (useW && spells[Spells.W].LSIsReady() && target.LSIsValidTarget(spells[Spells.W].Range))
+            if (useW && spells[Spells.W].IsReady() && target.IsValidTarget(spells[Spells.W].Range))
             {
                 spells[Spells.W].Cast();
             }
 
-            if (useE && spells[Spells.E].LSIsReady() && target.LSIsValidTarget(spells[Spells.E].Range))
+            if (useE && spells[Spells.E].IsReady() && target.IsValidTarget(spells[Spells.E].Range))
             {
                 spells[Spells.E].Cast();
             }
@@ -285,7 +285,7 @@
             switch (ultType)
             {
                 case 0:
-                    if (useR && spells[Spells.R].LSIsReady() && target.LSIsValidTarget(spells[Spells.R].Range))
+                    if (useR && spells[Spells.R].IsReady() && target.IsValidTarget(spells[Spells.R].Range))
                     {
                         if (spells[Spells.R].GetDamage(target) > target.Health)
                         {
@@ -299,13 +299,13 @@
                     break;
 
                 case 1:
-                    if (useR && spells[Spells.R].LSIsReady() && target.LSIsValidTarget(spells[Spells.R].Range))
+                    if (useR && spells[Spells.R].IsReady() && target.IsValidTarget(spells[Spells.R].Range))
                     {
                         var pred = spells[Spells.R].GetPrediction(target);
                         if (pred.Hitchance >= HitChance.High)
                         {
                       
-                            var hits = HeroManager.Enemies.Where(x => x.LSDistance(target) <= 300f).ToList();
+                            var hits = HeroManager.Enemies.Where(x => x.Distance(target) <= 300f).ToList();
                             if (hits.Any(hit => hits.Count >= countEnemies))
                             {
                                 spells[Spells.R].Cast(pred.CastPosition);
@@ -320,8 +320,8 @@
                 var getthabitch =
                     HeroManager.Enemies.FirstOrDefault(
                         x =>
-                        x.LSDistance(target) <= 300f && spells[Spells.R].GetDamage(x) > x.Health
-                        && this.Player.LSCountEnemiesInRange(1000) == 1);
+                        x.Distance(target) <= 300f && spells[Spells.R].GetDamage(x) > x.Health
+                        && this.Player.CountEnemiesInRange(1000) == 1);
 
                 var pred = spells[Spells.R].GetPrediction(getthabitch);
                 if (pred.Hitchance >= HitChance.High)
@@ -331,7 +331,7 @@
             }
 
 
-            if (target.LSIsValidTarget(600) && this.IgniteDamage(target) >= target.Health && useI)
+            if (target.IsValidTarget(600) && this.IgniteDamage(target) >= target.Health && useI)
             {
                 this.Player.Spellbook.CastSpell(Ignite, target);
             }
@@ -354,7 +354,7 @@
                 var target = TargetSelector.GetTarget(spells[Spells.R].Range, TargetSelector.DamageType.Magical);
                 if (target == null) return;
 
-                var hits = HeroManager.Enemies.Where(x => x.LSDistance(target) <= 300f).ToList();
+                var hits = HeroManager.Enemies.Where(x => x.Distance(target) <= 300f).ToList();
                 if (hits.Any(hit => hits.Count >= this.Menu.Item("ElEasy.Malphite.Combo.Count.R").GetValue<Slider>().Value))
             {
                     var pred = spells[Spells.R].GetPrediction(target);
@@ -408,12 +408,12 @@
                 return;
             }
 
-            if (useQ && spells[Spells.Q].LSIsReady() && spells[Spells.Q].IsInRange(target))
+            if (useQ && spells[Spells.Q].IsReady() && spells[Spells.Q].IsInRange(target))
             {
                 spells[Spells.Q].Cast(target);
             }
 
-            if (useE && spells[Spells.E].LSIsReady() && spells[Spells.E].IsInRange(target) && eTarget != null)
+            if (useE && spells[Spells.E].IsReady() && spells[Spells.E].IsInRange(target) && eTarget != null)
             {
                 spells[Spells.E].Cast(eTarget);
             }
@@ -444,17 +444,17 @@
                 return;
             }
 
-            if (spells[Spells.Q].LSIsReady() && useQ)
+            if (spells[Spells.Q].IsReady() && useQ)
             {
                 spells[Spells.Q].CastOnUnit(minions);
             }
 
-            if (useW && spells[Spells.W].LSIsReady())
+            if (useW && spells[Spells.W].IsReady())
             {
                 spells[Spells.W].Cast(this.Player);
             }
 
-            if (useE && spells[Spells.E].LSIsReady() && minions.LSIsValidTarget(spells[Spells.E].Range))
+            if (useE && spells[Spells.E].IsReady() && minions.IsValidTarget(spells[Spells.E].Range))
             {
                 spells[Spells.E].Cast();
             }
@@ -478,14 +478,14 @@
                 return;
             }
 
-            if (spells[Spells.Q].LSIsReady() && useQ)
+            if (spells[Spells.Q].IsReady() && useQ)
             {
                 var allMinions = MinionManager.GetMinions(this.Player.ServerPosition, spells[Spells.E].Range);
                 {
                     foreach (var minion in
-                        allMinions.Where(minion => minion.Health <= this.Player.LSGetSpellDamage(minion, SpellSlot.Q)))
+                        allMinions.Where(minion => minion.Health <= this.Player.GetSpellDamage(minion, SpellSlot.Q)))
                     {
-                        if (minion.LSIsValidTarget())
+                        if (minion.IsValidTarget())
                         {
                             spells[Spells.Q].CastOnUnit(minion);
                             return;
@@ -494,12 +494,12 @@
                 }
             }
 
-            if (useW && spells[Spells.W].LSIsReady())
+            if (useW && spells[Spells.W].IsReady())
             {
                 spells[Spells.W].Cast(this.Player);
             }
 
-            if (useE && spells[Spells.E].LSIsReady() && minions.LSIsValidTarget(spells[Spells.E].Range))
+            if (useE && spells[Spells.E].IsReady() && minions.IsValidTarget(spells[Spells.E].Range))
             {
                 spells[Spells.E].Cast();
             }
@@ -524,7 +524,7 @@
 
             foreach (var minion in minions)
             {
-                if (spells[Spells.Q].GetDamage(minion) > minion.Health && spells[Spells.Q].LSIsReady())
+                if (spells[Spells.Q].GetDamage(minion) > minion.Health && spells[Spells.Q].IsReady())
                 {
                     spells[Spells.Q].CastOnUnit(minion);
                 }

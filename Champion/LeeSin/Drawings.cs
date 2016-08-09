@@ -37,7 +37,7 @@
 
             if (Program.ParamBool("Draw.Insec.Lines")) //&& Program.spells[Program.Spells.R].IsReady()
             {
-                if (newTarget != null && newTarget.IsVisible && newTarget.LSIsValidTarget() && !newTarget.IsDead && Program.Player.Distance(newTarget) < 3000)
+                if (newTarget != null && newTarget.IsVisible && newTarget.IsValidTarget() && !newTarget.IsDead && Program.Player.Distance(newTarget) < 3000)
                 {
                     Vector2 targetPos = Drawing.WorldToScreen(newTarget.Position);
                     Drawing.DrawLine(
@@ -83,28 +83,28 @@
                 Render.Circle.DrawCircle(
                     Program.Player.Position,
                     Program.spells[Program.Spells.Q].Range - 80,
-                    Program.spells[Program.Spells.Q].LSIsReady() ? Color.LightSkyBlue : Color.Tomato);
+                    Program.spells[Program.Spells.Q].IsReady() ? Color.LightSkyBlue : Color.Tomato);
             }
             if (Program.ParamBool("ElLeeSin.Draw.W"))
             {
                 Render.Circle.DrawCircle(
                     Program.Player.Position,
                     Program.spells[Program.Spells.W].Range - 80,
-                    Program.spells[Program.Spells.W].LSIsReady() ? Color.LightSkyBlue : Color.Tomato);
+                    Program.spells[Program.Spells.W].IsReady() ? Color.LightSkyBlue : Color.Tomato);
             }
             if (Program.ParamBool("ElLeeSin.Draw.E"))
             {
                 Render.Circle.DrawCircle(
                     Program.Player.Position,
                     Program.spells[Program.Spells.E].Range - 80,
-                    Program.spells[Program.Spells.E].LSIsReady() ? Color.LightSkyBlue : Color.Tomato);
+                    Program.spells[Program.Spells.E].IsReady() ? Color.LightSkyBlue : Color.Tomato);
             }
             if (Program.ParamBool("ElLeeSin.Draw.R"))
             {
                 Render.Circle.DrawCircle(
                     Program.Player.Position,
                     Program.spells[Program.Spells.R].Range - 80,
-                    Program.spells[Program.Spells.R].LSIsReady() ? Color.LightSkyBlue : Color.Tomato);
+                    Program.spells[Program.Spells.R].IsReady() ? Color.LightSkyBlue : Color.Tomato);
             }
         }
 

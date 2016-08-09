@@ -29,7 +29,7 @@ using EloBuddy;
         
         public static IEnumerable<Vector3> PointsAroundTheTarget(Vector3 pos, float dist, float prec = 15, float prec2 = 5)
         {
-            if (!pos.LSIsValid())
+            if (!pos.IsValid())
             {
                 return new List<Vector3>();
             }
@@ -67,10 +67,10 @@ using EloBuddy;
             foreach (var m in azir.SoldierManager.Soldiers)
             {
                 if (m.IsDead) continue;
-                var spaceToDoQ = m.ServerPosition.LSDistance(point);
+                var spaceToDoQ = m.ServerPosition.Distance(point);
                 var timeToDoIt = (spaceToDoQ/azir.Spells.Q.Speed);
                 var posFinalTarget = Prediction.GetPrediction(target, timeToDoIt);
-                var space = azirSoldierRange - posFinalTarget.UnitPosition.LSDistance(point);
+                var space = azirSoldierRange - posFinalTarget.UnitPosition.Distance(point);
 
                 var time = space/target.MoveSpeed;
                 attacksS +=  (time/azir.Hero.AttackDelay);

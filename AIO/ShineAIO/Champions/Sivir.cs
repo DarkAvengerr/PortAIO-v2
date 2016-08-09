@@ -71,7 +71,7 @@ using EloBuddy;
 
         public void Combo()
         {
-            if (Spells[Q].LSIsReady() && Config.Item("CUSEQ").GetValue<bool>())
+            if (Spells[Q].IsReady() && Config.Item("CUSEQ").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, TargetSelector.DamageType.Physical);
                 if (t != null)
@@ -84,7 +84,7 @@ using EloBuddy;
             if (ObjectManager.Player.ManaPercent < Config.Item("HMANA").GetValue<Slider>().Value)
                 return;
 
-            if (Spells[Q].LSIsReady() && Config.Item("HUSEQ").GetValue<bool>())
+            if (Spells[Q].IsReady() && Config.Item("HUSEQ").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, TargetSelector.DamageType.Physical);
                 if (t != null)
@@ -94,7 +94,7 @@ using EloBuddy;
 
         public void LaneClear()
         {
-            if (!Spells[W].LSIsReady() || ObjectManager.Player.ManaPercent < Config.Item("LMANA").GetValue<Slider>().Value || !Config.Item("LUSEW").GetValue<bool>())
+            if (!Spells[W].IsReady() || ObjectManager.Player.ManaPercent < Config.Item("LMANA").GetValue<Slider>().Value || !Config.Item("LUSEW").GetValue<bool>())
                 return;
 
             if (MinionManager.GetMinions(Spells[W].Range * 1.5f, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.None).Count() >= Config.Item("LMINW").GetValue<Slider>().Value)
@@ -104,26 +104,26 @@ using EloBuddy;
         public override void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             if (Config.Item("HUSEW").GetValue<bool>() || Config.Item("CUSEW").GetValue<bool>())
-                if (Spells[W].LSIsReady() && (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && Config.Item("HMANA").GetValue<Slider>().Value >= (ObjectManager.Player.Mana / ObjectManager.Player.MaxMana * 100))))
+                if (Spells[W].IsReady() && (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && Config.Item("HMANA").GetValue<Slider>().Value >= (ObjectManager.Player.Mana / ObjectManager.Player.MaxMana * 100))))
                     Spells[W].Cast();
         }
 
         public override void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (Spells[R].LSIsReady() && gapcloser.End.LSDistance(ObjectManager.Player.ServerPosition) <= 300 && Config.Item("MANTIGAPR").GetValue<bool>())
+            if (Spells[R].IsReady() && gapcloser.End.Distance(ObjectManager.Player.ServerPosition) <= 300 && Config.Item("MANTIGAPR").GetValue<bool>())
                 Spells[R].Cast();
         }
 
         public override void Obj_AI_Base_OnBuffAdd(Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs args)
         {
             if (sender.IsEnemy && sender.IsChampion() && ShineCommon.Utility.IsImmobileTarget(sender as AIHeroClient) && Spells[Q].IsInRange(sender) && Config.Item("MAUTOQIMMO").GetValue<bool>())
-                if (Spells[Q].LSIsReady())
+                if (Spells[Q].IsReady())
                     Spells[Q].Cast(sender.ServerPosition);
         }
 
         private void TargetedSpell_Evade(DetectedTargetedSpellArgs data)
         {
-            if (Spells[E].LSIsReady())
+            if (Spells[E].IsReady())
             {
                 if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo || !m_targetedEvader.DisableInComboMode)
                 {

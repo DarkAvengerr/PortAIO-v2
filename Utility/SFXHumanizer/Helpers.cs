@@ -46,7 +46,7 @@ using EloBuddy;
 
         public static Vector3 Randomize(this CryptoRandom rnd, Vector3 position, int amount)
         {
-            if (position.LSIsValid())
+            if (position.IsValid())
             {
                 if (amount > 0)
                 {
@@ -65,16 +65,16 @@ using EloBuddy;
 
         public static bool IsSharpTurn(Vector3 position, int minAngle)
         {
-            if (position.LSIsValid())
+            if (position.IsValid())
             {
-                var currentPath = ObjectManager.Player.LSGetWaypoints();
-                if (currentPath.Count > 1 && currentPath.LSPathLength() > 100)
+                var currentPath = ObjectManager.Player.GetWaypoints();
+                if (currentPath.Count > 1 && currentPath.PathLength() > 100)
                 {
                     var movePath = ObjectManager.Player.GetPath(position);
                     if (movePath.Length > 1)
                     {
-                        var angle = (currentPath[1] - currentPath[0]).LSAngleBetween((movePath[1] - movePath[0]).LSTo2D());
-                        var distance = movePath.Last().LSTo2D().LSDistance(currentPath.Last(), true);
+                        var angle = (currentPath[1] - currentPath[0]).AngleBetween((movePath[1] - movePath[0]).To2D());
+                        var distance = movePath.Last().To2D().Distance(currentPath.Last(), true);
                         return !(angle < 10 && distance < 500 * 500 || distance < 50 * 50) && angle > minAngle;
                     }
                 }
@@ -84,11 +84,11 @@ using EloBuddy;
 
         public static float AngleBetween(Vector3 oldPosition, Vector3 newPosition)
         {
-            if (oldPosition.LSIsValid() && newPosition.LSIsValid())
+            if (oldPosition.IsValid() && newPosition.IsValid())
             {
                 return
-                    (oldPosition - ObjectManager.Player.Position).LSTo2D()
-                        .LSAngleBetween((newPosition - ObjectManager.Player.Position).LSTo2D());
+                    (oldPosition - ObjectManager.Player.Position).To2D()
+                        .AngleBetween((newPosition - ObjectManager.Player.Position).To2D());
             }
             return 0f;
         }

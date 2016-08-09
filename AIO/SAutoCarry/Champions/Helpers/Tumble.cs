@@ -57,10 +57,10 @@ namespace SAutoCarry.Champions.Helpers
 
                 if (target.Path.Length > 0)
                 {
-                    if (ObjectManager.Player.LSDistance(vec) < ObjectManager.Player.LSDistance(target.Path.Last()))
+                    if (ObjectManager.Player.Distance(vec) < ObjectManager.Player.Distance(target.Path.Last()))
                         return IsSafe(target, Game.CursorPos);
                     else
-                        return IsSafe(target, Game.CursorPos.LSTo2D().LSRotated(Geometry.DegreeToRadian((vec - ObjectManager.Player.ServerPosition).LSTo2D().LSAngleBetween((Game.CursorPos - ObjectManager.Player.ServerPosition).LSTo2D()) % 90)).To3D());
+                        return IsSafe(target, Game.CursorPos.To2D().Rotated(Geometry.DegreeToRadian((vec - ObjectManager.Player.ServerPosition).To2D().AngleBetween((Game.CursorPos - ObjectManager.Player.ServerPosition).To2D()) % 90)).To3D());
                 }
                 else
                 {
@@ -68,7 +68,7 @@ namespace SAutoCarry.Champions.Helpers
                         return IsSafe(target, Game.CursorPos);
                 }
 
-                return IsSafe(target, ObjectManager.Player.ServerPosition + (target.ServerPosition - ObjectManager.Player.ServerPosition).LSNormalized().LSTo2D().LSRotated(Geometry.DegreeToRadian(90 - (vec - ObjectManager.Player.ServerPosition).LSTo2D().LSAngleBetween((Game.CursorPos - ObjectManager.Player.ServerPosition).LSTo2D()))).To3D() * 300f);
+                return IsSafe(target, ObjectManager.Player.ServerPosition + (target.ServerPosition - ObjectManager.Player.ServerPosition).Normalized().To2D().Rotated(Geometry.DegreeToRadian(90 - (vec - ObjectManager.Player.ServerPosition).To2D().AngleBetween((Game.CursorPos - ObjectManager.Player.ServerPosition).To2D()))).To3D() * 300f);
             }
             else if(Mode == 1)
             {
@@ -85,18 +85,18 @@ namespace SAutoCarry.Champions.Helpers
 
             if (checkTarget)
             {
-                if (target.ServerPosition.LSTo2D().LSDistance(vec) <= target.AttackRange)
+                if (target.ServerPosition.To2D().Distance(vec) <= target.AttackRange)
                 {
-                    if (vec.LSCountEnemiesInRange(1000) > 1)
+                    if (vec.CountEnemiesInRange(1000) > 1)
                         return Vector3.Zero;
-                    else if (target.ServerPosition.LSTo2D().LSDistance(vec) <= target.AttackRange / 2f)
-                        return SCommon.Maths.Geometry.Deviation(ObjectManager.Player.ServerPosition.LSTo2D(), target.ServerPosition.LSTo2D(), 60).To3D();
+                    else if (target.ServerPosition.To2D().Distance(vec) <= target.AttackRange / 2f)
+                        return SCommon.Maths.Geometry.Deviation(ObjectManager.Player.ServerPosition.To2D(), target.ServerPosition.To2D(), 60).To3D();
                 }
 
-                if (((DontQIntoEnemies || target.IsMelee) && HeroManager.Enemies.Any(p => p.ServerPosition.LSTo2D().LSDistance(vec) <= p.AttackRange + ObjectManager.Player.BoundingRadius + (p.IsMelee ? 100 : 0))) || vec.LSUnderTurret(true))
+                if (((DontQIntoEnemies || target.IsMelee) && HeroManager.Enemies.Any(p => p.ServerPosition.To2D().Distance(vec) <= p.AttackRange + ObjectManager.Player.BoundingRadius + (p.IsMelee ? 100 : 0))) || vec.UnderTurret(true))
                     return Vector3.Zero;
             }
-            if (HeroManager.Enemies.Any(p => p.NetworkId != target.NetworkId && p.ServerPosition.LSTo2D().LSDistance(vec) <= p.AttackRange + (p.IsMelee ? 50 : 0)) || vec.LSUnderTurret(true))
+            if (HeroManager.Enemies.Any(p => p.NetworkId != target.NetworkId && p.ServerPosition.To2D().Distance(vec) <= p.AttackRange + (p.IsMelee ? 50 : 0)) || vec.UnderTurret(true))
                 return Vector3.Zero;
 
             return vec;
@@ -117,7 +117,7 @@ namespace SAutoCarry.Champions.Helpers
                     Vector2 midWallQPos = new Vector2(6667, 8794);
                     Vector2 midWallMovePos = new Vector2(6962, 8952);
 
-                    if (ObjectManager.Player.LSDistance(midWallQPos) >= ObjectManager.Player.LSDistance(drakeWallQPos))
+                    if (ObjectManager.Player.Distance(midWallQPos) >= ObjectManager.Player.Distance(drakeWallQPos))
                         MoveAndWallTumble(drakeWallMovePos, drakeWallQPos);
                     else
                         MoveAndWallTumble(midWallMovePos, midWallQPos);
@@ -130,11 +130,11 @@ namespace SAutoCarry.Champions.Helpers
             if (Utils.TickCount - s_LastWallTumbleTick < 50)
                 return;
             s_LastWallTumbleTick = Utils.TickCount;
-            if (ObjectManager.Player.ServerPosition.LSTo2D().LSDistance(pos) > 1500 || !s_Champion.Spells[SCommon.PluginBase.Champion.Q].LSIsReady())
+            if (ObjectManager.Player.ServerPosition.To2D().Distance(pos) > 1500 || !s_Champion.Spells[SCommon.PluginBase.Champion.Q].IsReady())
                 return;
 
             //if near at tumble pos
-            if(ObjectManager.Player.ServerPosition.LSTo2D().LSDistance(pos) <= 10f)
+            if(ObjectManager.Player.ServerPosition.To2D().Distance(pos) <= 10f)
             {
                 if (s_NextWallTumbleWalkPos != pos)
                 {
@@ -150,18 +150,18 @@ namespace SAutoCarry.Champions.Helpers
             }
             if(!ObjectManager.Player.IsMoving)
             {
-                s_NextWallTumbleWalkPos = ObjectManager.Player.ServerPosition.LSTo2D() + (pos - ObjectManager.Player.ServerPosition.LSTo2D()).LSNormalized() * 200;
+                s_NextWallTumbleWalkPos = ObjectManager.Player.ServerPosition.To2D() + (pos - ObjectManager.Player.ServerPosition.To2D()).Normalized() * 200;
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, s_NextWallTumbleWalkPos.To3D());
             }
             else
             {
-                if(ObjectManager.Player.ServerPosition.LSTo2D().LSDistance(s_NextWallTumbleWalkPos) <= 50)
+                if(ObjectManager.Player.ServerPosition.To2D().Distance(s_NextWallTumbleWalkPos) <= 50)
                 {
-                    s_NextWallTumbleWalkPos = ObjectManager.Player.ServerPosition.LSTo2D() + (pos - ObjectManager.Player.ServerPosition.LSTo2D()).LSNormalized() * 200;
-                    Vector2 a = ObjectManager.Player.ServerPosition.LSTo2D();
+                    s_NextWallTumbleWalkPos = ObjectManager.Player.ServerPosition.To2D() + (pos - ObjectManager.Player.ServerPosition.To2D()).Normalized() * 200;
+                    Vector2 a = ObjectManager.Player.ServerPosition.To2D();
                     Vector2 b = s_NextWallTumbleWalkPos;
                     Vector2 c = pos;
-                    float d = a.LSDistance(c) + c.LSDistance(b) - a.LSDistance(b);
+                    float d = a.Distance(c) + c.Distance(b) - a.Distance(b);
                     if (-float.Epsilon < d && float.Epsilon > d)
                         s_NextWallTumbleWalkPos = pos;
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, s_NextWallTumbleWalkPos.To3D());

@@ -19,7 +19,7 @@ namespace SharpShooter
         internal static bool IsKillableAndValidTarget(this AIHeroClient target, double calculatedDamage,
             TargetSelector.DamageType damageType, float distance = float.MaxValue)
         {
-            if (target == null || !target.LSIsValidTarget(distance) || target.CharData.BaseSkinName == "gangplankbarrel")
+            if (target == null || !target.IsValidTarget(distance) || target.CharData.BaseSkinName == "gangplankbarrel")
                 return false;
 
             if (target.HasBuff("kindredrnodeathbuff"))
@@ -92,7 +92,7 @@ namespace SharpShooter
         internal static bool IsKillableAndValidTarget(this Obj_AI_Minion target, double calculatedDamage,
             TargetSelector.DamageType damageType, float distance = float.MaxValue)
         {
-            if (target == null || !target.LSIsValidTarget(distance) || target.Health <= 0 ||
+            if (target == null || !target.IsValidTarget(distance) || target.Health <= 0 ||
                 target.HasBuffOfType(BuffType.SpellImmunity) || target.HasBuffOfType(BuffType.SpellShield) ||
                 target.CharData.BaseSkinName == "gangplankbarrel")
                 return false;
@@ -122,7 +122,7 @@ namespace SharpShooter
         internal static bool IsKillableAndValidTarget(this Obj_AI_Base target, double calculatedDamage,
             TargetSelector.DamageType damageType, float distance = float.MaxValue)
         {
-            if (target == null || !target.LSIsValidTarget(distance) || target.CharData.BaseSkinName == "gangplankbarrel")
+            if (target == null || !target.IsValidTarget(distance) || target.CharData.BaseSkinName == "gangplankbarrel")
                 return false;
 
             if (target.HasBuff("kindredrnodeathbuff"))
@@ -232,9 +232,9 @@ namespace SharpShooter
                     if (
                         target.IsKillableAndValidTarget(
                             (float)
-                                (ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.E) *
+                                (ObjectManager.Player.GetSpellDamage(target, SpellSlot.E) *
                                  (target.GetBuffCount("tristanaecharge") * 0.30) +
-                                 ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.E)),
+                                 ObjectManager.Player.GetSpellDamage(target, SpellSlot.E)),
                             TargetSelector.DamageType.Physical))
                         return true;
             return false;
@@ -247,7 +247,7 @@ namespace SharpShooter
                 var teleport = MinionManager.GetMinions(spell.Range).FirstOrDefault(x => x.HasBuff("teleport_target"));
                 var zhonya =
                     HeroManager.Enemies.FirstOrDefault(
-                        x => ObjectManager.Player.LSDistance(x) <= spell.Range && x.HasBuff("zhonyasringshield"));
+                        x => ObjectManager.Player.Distance(x) <= spell.Range && x.HasBuff("zhonyasringshield"));
 
                 if (teleport != null)
                     return spell.Cast(teleport);
@@ -262,7 +262,7 @@ namespace SharpShooter
             int autoAttackRange)
         {
             var result = autoAttackRange + unit.BoundingRadius;
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
                 return result + target.BoundingRadius;
             return result;
         }

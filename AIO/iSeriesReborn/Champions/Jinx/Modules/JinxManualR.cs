@@ -26,7 +26,7 @@ using EloBuddy;
 
         public bool ShouldRun()
         {
-            return Variables.spells[SpellSlot.R].LSIsReady() &&
+            return Variables.spells[SpellSlot.R].IsReady() &&
                     MenuExtensions.GetItemValue<KeyBind>("iseriesr.jinx.r.manual").Active;
         }
 
@@ -34,10 +34,10 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(
                 Variables.spells[SpellSlot.R].Range * 0.75f, TargetSelector.DamageType.Magical);
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
-                var enemiesAround = target.LSGetEnemiesInRange(450f);
-                if (ObjectManager.Player.LSDistance(target) > JinxUtility.GetFishboneRange()
+                var enemiesAround = target.GetEnemiesInRange(450f);
+                if (ObjectManager.Player.Distance(target) > JinxUtility.GetFishboneRange()
                     && HealthPrediction.GetHealthPrediction(target, 375) > 0 &&
                     HealthPrediction.GetHealthPrediction(target, 375) + 5 <
                     Variables.spells[SpellSlot.R].GetDamage(target))
@@ -57,7 +57,7 @@ using EloBuddy;
                     Variables.spells[SpellSlot.R].CastIfHitchanceEquals(target, HitChance.VeryHigh);
 
                 }
-                else if (ObjectManager.Player.LSDistance(target) < JinxUtility.GetFishboneRange() &&
+                else if (ObjectManager.Player.Distance(target) < JinxUtility.GetFishboneRange() &&
                          HealthPrediction.GetHealthPrediction(target, 375) > 0 &&
                          HealthPrediction.GetHealthPrediction(target, 375) + 5 <
                          Variables.spells[SpellSlot.R].GetDamage(target))
@@ -71,7 +71,7 @@ using EloBuddy;
                     }
 
                     //We can kill the target with W (If we can hit it, using prediction) and 2 AA then return.
-                    if (ObjectManager.Player.LSGetAutoAttackDamage(target)*2 +
+                    if (ObjectManager.Player.GetAutoAttackDamage(target)*2 +
                         (Variables.spells[SpellSlot.W].IsEnabledAndReady() &&
                          Variables.spells[SpellSlot.W].GetPrediction(target).Hitchance >= HitChance.VeryHigh
                             ? Variables.spells[SpellSlot.W].GetDamage(target)

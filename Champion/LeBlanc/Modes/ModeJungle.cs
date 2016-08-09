@@ -201,16 +201,16 @@ namespace Leblanc.Modes
             }
 
 
-            if (W.LSIsReady() && W.StillJumped()
+            if (W.IsReady() && W.StillJumped()
                 && MenuLocal.Item("Jungle.Simple.W").GetValue<StringList>().SelectedIndex != 0
-                && mob.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
+                && mob.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
             {
                 var totalAa =
                     ObjectManager.Get<Obj_AI_Minion>()
                         .Where(
                             m =>
                                 m.Team == GameObjectTeam.Neutral &&
-                                m.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
+                                m.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
                         .Sum(m => (int) m.Health);
 
                 totalAa = (int) (totalAa/ObjectManager.Player.TotalAttackDamage);

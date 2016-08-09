@@ -260,11 +260,11 @@ using EloBuddy;
                 if (Environment.TickCount - RCardTickCount < 250) return;
 
                 RCardTickCount = Environment.TickCount;
-                if ((Player.LSHasBuff("Destiny Marker") || Player.LSHasBuff("Gate")) && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "PickACard")
+                if ((Player.HasBuff("Destiny Marker") || Player.HasBuff("Gate")) && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "PickACard")
                 {
                     W.Cast();
                 }
-                else if ((Player.LSHasBuff("Destiny Marker") || Player.LSHasBuff("Gate")) && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "goldcardlock")
+                else if ((Player.HasBuff("Destiny Marker") || Player.HasBuff("Gate")) && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "goldcardlock")
                 {
                     W.Cast();
                 }
@@ -273,7 +273,7 @@ using EloBuddy;
             if (Config.Item("TwistedFate.AutoQOnStunTarget").GetValue<bool>())
             {
                 var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-                if (target.LSIsValidTarget() && (target.HasBuffOfType(BuffType.Stun) || target.HasBuffOfType(BuffType.Snare)) && Player.LSDistance(target) < Q.Range)
+                if (target.IsValidTarget() && (target.HasBuffOfType(BuffType.Stun) || target.HasBuffOfType(BuffType.Snare)) && Player.Distance(target) < Q.Range)
                 {
                     Q.CastIfHitchanceEquals(target, HitChance.High, true);
                 }
@@ -315,25 +315,25 @@ using EloBuddy;
 
             if ((unit.IsValid<AIHeroClient>() || unit.IsValid<Obj_AI_Turret>()) && unit.IsEnemy && args.Target.IsMe && Config.Item("TwistedFate.useZhonyasHourglass").GetValue<bool>() && ZhonyasHourglass.IsReady() && Player.HealthPercent <= Config.Item("TwistedFate.MinimumHPtoZhonyasHourglass").GetValue<Slider>().Value)
             {
-                if (Player.LSCountEnemiesInRange(1300) > 1)
+                if (Player.CountEnemiesInRange(1300) > 1)
                 {
-                    if (Player.LSCountAlliesInRange(1300) >= 1 + 1)
+                    if (Player.CountAlliesInRange(1300) >= 1 + 1)
                     {
                         ZhonyasHourglass.Cast();
                         return;
                     }
-                    if (Player.LSCountAlliesInRange(1300) == 0 + 1)
+                    if (Player.CountAlliesInRange(1300) == 0 + 1)
                     {
-                        if (unit.LSGetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.LSGetAutoAttackDamage(Player) >= Player.Health && args.SData.LSIsAutoAttack()))
+                        if (unit.GetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.GetAutoAttackDamage(Player) >= Player.Health && args.SData.IsAutoAttack()))
                         {
                             ZhonyasHourglass.Cast();
                             return;
                         }
                     }
                 }
-                if (Player.LSCountEnemiesInRange(1300) == 1)
+                if (Player.CountEnemiesInRange(1300) == 1)
                 {
-                    if (unit.LSGetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.LSGetAutoAttackDamage(Player) >= Player.Health && args.SData.LSIsAutoAttack()))
+                    if (unit.GetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.GetAutoAttackDamage(Player) >= Player.Health && args.SData.IsAutoAttack()))
                     {
                         ZhonyasHourglass.Cast();
                         return;
@@ -344,25 +344,25 @@ using EloBuddy;
 
             if ((unit.IsValid<AIHeroClient>() || unit.IsValid<Obj_AI_Turret>()) && unit.IsEnemy && args.Target.IsMe && Config.Item("TwistedFate.useWoogletsWitchcap").GetValue<bool>() && WoogletsWitchcap.IsReady() && Player.HealthPercent <= Config.Item("TwistedFate.MinimumHPtoWoogletsWitchcap").GetValue<Slider>().Value)
             {
-                if (Player.LSCountEnemiesInRange(1300) > 1)
+                if (Player.CountEnemiesInRange(1300) > 1)
                 {
-                    if (Player.LSCountAlliesInRange(1300) >= 1 + 1)
+                    if (Player.CountAlliesInRange(1300) >= 1 + 1)
                     {
                         WoogletsWitchcap.Cast();
                         return;
                     }
-                    if (Player.LSCountAlliesInRange(1300) == 0 + 1)
+                    if (Player.CountAlliesInRange(1300) == 0 + 1)
                     {
-                        if (unit.LSGetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.LSGetAutoAttackDamage(Player) >= Player.Health && args.SData.LSIsAutoAttack()))
+                        if (unit.GetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.GetAutoAttackDamage(Player) >= Player.Health && args.SData.IsAutoAttack()))
                         {
                             WoogletsWitchcap.Cast();
                             return;
                         }
                     }
                 }
-                if (Player.LSCountEnemiesInRange(1300) == 1)
+                if (Player.CountEnemiesInRange(1300) == 1)
                 {
-                    if (unit.LSGetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.LSGetAutoAttackDamage(Player) >= Player.Health && args.SData.LSIsAutoAttack()))
+                    if (unit.GetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.GetAutoAttackDamage(Player) >= Player.Health && args.SData.IsAutoAttack()))
                     {
                         WoogletsWitchcap.Cast();
                         return;
@@ -372,10 +372,10 @@ using EloBuddy;
             }
 
             double ShouldUseOn = ShouldUse(args.SData.Name);
-            if (unit.Team != ObjectManager.Player.Team && ShouldUseOn >= 0f && unit.LSIsValidTarget(Q.Range))
+            if (unit.Team != ObjectManager.Player.Team && ShouldUseOn >= 0f && unit.IsValidTarget(Q.Range))
             {
 
-                if (Config.Item("TwistedFate.WInterrupt").GetValue<bool>() && W.LSIsReady() && Player.Mana >= WMANA && Player.LSDistance(unit) <= W.Range)
+                if (Config.Item("TwistedFate.WInterrupt").GetValue<bool>() && W.IsReady() && Player.Mana >= WMANA && Player.Distance(unit) <= W.Range)
                 {
                     W.CastIfHitchanceEquals(unit, HitChance.High, true);
                 }
@@ -384,7 +384,7 @@ using EloBuddy;
 
             if (Config.Item("TwistedFate.HarassActive").GetValue<KeyBind>().Active || Config.Item("TwistedFate.HarassActiveT").GetValue<KeyBind>().Active)
             {
-                if (Config.Item("TwistedFate.QWhenEnemyCastHarass").GetValue<bool>() && (unit.IsValid<AIHeroClient>() && !unit.IsValid<Obj_AI_Turret>()) && unit.IsEnemy && args.Target.IsMe && Q.LSIsReady() && Player.LSDistance(unit) <= Q.Range)
+                if (Config.Item("TwistedFate.QWhenEnemyCastHarass").GetValue<bool>() && (unit.IsValid<AIHeroClient>() && !unit.IsValid<Obj_AI_Turret>()) && unit.IsEnemy && args.Target.IsMe && Q.IsReady() && Player.Distance(unit) <= Q.Range)
                 {
                     Q.CastIfHitchanceEquals(unit, HitChance.High, true);
                 }
@@ -399,12 +399,12 @@ using EloBuddy;
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
 
-            if (Config.Item("TwistedFate.AutoQEGC").GetValue<bool>() && Q.LSIsReady() && (Player.Mana >= QMANA + WMANA) && Player.LSDistance(gapcloser.Sender) < Q.Range)
+            if (Config.Item("TwistedFate.AutoQEGC").GetValue<bool>() && Q.IsReady() && (Player.Mana >= QMANA + WMANA) && Player.Distance(gapcloser.Sender) < Q.Range)
             {
                 Q.CastIfHitchanceEquals(gapcloser.Sender, HitChance.High, true);
             }
 
-            if (Config.Item("TwistedFate.AutoWEGC").GetValue<bool>() && W.LSIsReady() && (Player.Mana >= WMANA) && Player.LSDistance(gapcloser.Sender) < 660)
+            if (Config.Item("TwistedFate.AutoWEGC").GetValue<bool>() && W.IsReady() && (Player.Mana >= WMANA) && Player.Distance(gapcloser.Sender) < 660)
             {
                 if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "PickACard")
                 {
@@ -416,7 +416,7 @@ using EloBuddy;
                         {
                             if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "redcardlock")
                             {
-                                if (gapcloser.Sender.LSCountAlliesInRange(200) >= 1)
+                                if (gapcloser.Sender.CountAlliesInRange(200) >= 1)
                                 {
                                     W.Cast();
                                 }
@@ -429,7 +429,7 @@ using EloBuddy;
                                 {
                                     W.Cast();
                                 }
-                                else if (gapcloser.Sender.LSCountAlliesInRange(200) == 0)
+                                else if (gapcloser.Sender.CountAlliesInRange(200) == 0)
                                     W.Cast();
 
                             }
@@ -471,7 +471,7 @@ using EloBuddy;
             if (sender.NetworkId == target.NetworkId)
             {
 
-                if (useQ && Q.LSIsReady() && Player.Mana >= QMANA && args.EndPos.LSDistance(Player) < Q.Range)
+                if (useQ && Q.IsReady() && Player.Mana >= QMANA && args.EndPos.Distance(Player) < Q.Range)
                 {
 
                     var delay = (int)(args.EndTick - Game.Time - Q.Delay - 0.1f);
@@ -495,23 +495,23 @@ using EloBuddy;
             var useQ = Config.Item("TwistedFate.UseQCombo").GetValue<bool>();
             var useW = Config.Item("TwistedFate.UseWCombo").GetValue<bool>();
 
-            if (Player.LSHasBuff("Pick A Card")) Orbwalking.Attack = false;
+            if (Player.HasBuff("Pick A Card")) Orbwalking.Attack = false;
             else Orbwalking.Attack = true;
 
 
             var target = TargetSelector.GetTarget(800, TargetSelector.DamageType.Magical);
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
 
                 #region Sort Q combo mode
-                if (useQ && Q.LSIsReady() && Player.Mana >= QMANA && ((!W.LSIsReady() && !Player.LSHasBuff("Pick A Card") && !Player.LSHasBuff("Pick A Card Red") && !Player.LSHasBuff("Pick A Card Gold") && !Player.LSHasBuff("Pick A Card Blue")) || target.HasBuffOfType(BuffType.Stun) || target.HasBuffOfType(BuffType.Snare) || target.HasBuffOfType(BuffType.Knockup)))
+                if (useQ && Q.IsReady() && Player.Mana >= QMANA && ((!W.IsReady() && !Player.HasBuff("Pick A Card") && !Player.HasBuff("Pick A Card Red") && !Player.HasBuff("Pick A Card Gold") && !Player.HasBuff("Pick A Card Blue")) || target.HasBuffOfType(BuffType.Stun) || target.HasBuffOfType(BuffType.Snare) || target.HasBuffOfType(BuffType.Knockup)))
                 {
                     Q.CastIfHitchanceEquals(target, HitChance.High, true);
                 }
                 #endregion
 
                 #region Sort W combo mode
-                if (W.LSIsReady() && Player.Mana >= WMANA && ((Player.LSDistance(target) < 660 && target.IsMoving) || (Player.LSDistance(target) < 800) && !target.IsMoving && Player.MoveSpeed > target.MoveSpeed) || (Player.LSDistance(target) < 800 && target.LSIsFacing(Player)))
+                if (W.IsReady() && Player.Mana >= WMANA && ((Player.Distance(target) < 660 && target.IsMoving) || (Player.Distance(target) < 800) && !target.IsMoving && Player.MoveSpeed > target.MoveSpeed) || (Player.Distance(target) < 800 && target.IsFacing(Player)))
                 {
 
                     if (!useW) return;
@@ -539,7 +539,7 @@ using EloBuddy;
 
                                     if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "redcardlock")
                                     {
-                                        if (Player.LSCountEnemiesInRange(1200) >= 2 && target.LSCountAlliesInRange(200) >= 1)
+                                        if (Player.CountEnemiesInRange(1200) >= 2 && target.CountAlliesInRange(200) >= 1)
                                         {
                                             W.Cast();
                                         }
@@ -601,16 +601,16 @@ using EloBuddy;
             var QMinMana = Config.Item("TwistedFate.QMiniManaHarass").GetValue<Slider>().Value;
             var WMinMana = Config.Item("TwistedFate.WMiniManaHarass").GetValue<Slider>().Value;
 
-            if (Player.LSHasBuff("Pick A Card")) Orbwalking.Attack = false;
+            if (Player.HasBuff("Pick A Card")) Orbwalking.Attack = false;
             else Orbwalking.Attack = true;
 
-            if (useQ && Q.LSIsReady() && Player.LSDistance(targetH) < Q.Range && Player.ManaPercent >= QMinMana)
+            if (useQ && Q.IsReady() && Player.Distance(targetH) < Q.Range && Player.ManaPercent >= QMinMana)
             {
                 Q.CastIfHitchanceEquals(targetH, HitChance.High, true);
             }
 
 
-            if (useW && W.LSIsReady() && Player.ManaPercent > WMinMana && Player.Mana >= WMANA && ((Player.LSDistance(targetH) < 660 && targetH.IsMoving) || (Player.LSDistance(targetH) < 800) && !targetH.IsMoving && Player.MoveSpeed > targetH.MoveSpeed) || (Player.LSDistance(targetH) < 800 && targetH.LSIsFacing(Player)))
+            if (useW && W.IsReady() && Player.ManaPercent > WMinMana && Player.Mana >= WMANA && ((Player.Distance(targetH) < 660 && targetH.IsMoving) || (Player.Distance(targetH) < 800) && !targetH.IsMoving && Player.MoveSpeed > targetH.MoveSpeed) || (Player.Distance(targetH) < 800 && targetH.IsFacing(Player)))
             {
                 if (Environment.TickCount - CardTickCount < 250) return;
 
@@ -636,7 +636,7 @@ using EloBuddy;
 
                                 if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "redcardlock")
                                 {
-                                    if (Player.LSCountEnemiesInRange(1200) >= 2 && targetH.LSCountAlliesInRange(200) >= 1)
+                                    if (Player.CountEnemiesInRange(1200) >= 2 && targetH.CountAlliesInRange(200) >= 1)
                                     {
                                         W.Cast();
                                     }
@@ -691,11 +691,11 @@ using EloBuddy;
 
             var useW = Config.Item("TwistedFate.UseWLastHitBlueCard").GetValue<bool>();
 
-            if (useW && W.LSIsReady() && Player.Mana >= WMANA)
+            if (useW && W.IsReady() && Player.Mana >= WMANA)
             {
                 var AllMinions = MinionManager.GetMinions(Player.Position, 800, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
 
-                if (AllMinions.Any() && ((!Config.Item("TwistedFate.OptionW").GetValue<bool>()) || (Player.LSCountEnemiesInRange(1400) == 0 && Config.Item("TwistedFate.OptionW2").GetValue<bool>())))
+                if (AllMinions.Any() && ((!Config.Item("TwistedFate.OptionW").GetValue<bool>()) || (Player.CountEnemiesInRange(1400) == 0 && Config.Item("TwistedFate.OptionW2").GetValue<bool>())))
                 {
 
                     if (Environment.TickCount - CardTickCount < 250) return;
@@ -713,7 +713,7 @@ using EloBuddy;
 
                 }
 
-                else if (AllMinions.Any() && Config.Item("TwistedFate.OptionW").GetValue<bool>() && (Player.LSCountEnemiesInRange(1400) != 0 || !Config.Item("TwistedFate.OptionW2").GetValue<bool>()))
+                else if (AllMinions.Any() && Config.Item("TwistedFate.OptionW").GetValue<bool>() && (Player.CountEnemiesInRange(1400) != 0 || !Config.Item("TwistedFate.OptionW2").GetValue<bool>()))
                 {
                     if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "bluecardlock")
                     {
@@ -738,7 +738,7 @@ using EloBuddy;
 
 
 
-            if (useQ && Q.LSIsReady() && Player.Mana >= QMANA && Player.ManaPercent >= QMinMana)
+            if (useQ && Q.IsReady() && Player.Mana >= QMANA && Player.ManaPercent >= QMinMana)
             {
                 var allMinionsQ = MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Enemy);
 
@@ -752,7 +752,7 @@ using EloBuddy;
                 }
             }
 
-            if (useW && W.LSIsReady() && Player.Mana >= WMANA)
+            if (useW && W.IsReady() && Player.Mana >= WMANA)
             {
                 var AllMinions = MinionManager.GetMinions(Player.Position, 800, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
 
@@ -789,7 +789,7 @@ using EloBuddy;
                                         var minions = MinionManager.GetMinions(Player.Position, 800, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
                                         foreach (var minion in minions)
                                         {
-                                            var count = minions.Count(m => m.NetworkId != minion.NetworkId && m.LSDistance(minion) < 200);
+                                            var count = minions.Count(m => m.NetworkId != minion.NetworkId && m.Distance(minion) < 200);
                                             if (count > hits)
                                             {
                                                 hits = count;
@@ -810,7 +810,7 @@ using EloBuddy;
                                         var minions = MinionManager.GetMinions(Player.Position, 800, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
                                         foreach (var minion in minions)
                                         {
-                                            var count = minions.Count(m => m.NetworkId != minion.NetworkId && m.LSDistance(minion) < 200);
+                                            var count = minions.Count(m => m.NetworkId != minion.NetworkId && m.Distance(minion) < 200);
                                             if (count > hits)
                                             {
                                                 hits = count;
@@ -855,15 +855,15 @@ using EloBuddy;
 
             var MinionN = MinionManager.GetMinions(800, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
 
-            if (!MinionN.LSIsValidTarget() || MinionN == null)
+            if (!MinionN.IsValidTarget() || MinionN == null)
             {
                 LaneClear();
                 return;
             }
 
-            if (Config.Item("TwistedFate.SafeJungleClear").GetValue<bool>() && Player.LSCountEnemiesInRange(1500) > 0) return;
+            if (Config.Item("TwistedFate.SafeJungleClear").GetValue<bool>() && Player.CountEnemiesInRange(1500) > 0) return;
 
-            if (useQ && Q.LSIsReady() && Player.Mana >= QMANA && Player.ManaPercent >= QMinMana)
+            if (useQ && Q.IsReady() && Player.Mana >= QMANA && Player.ManaPercent >= QMinMana)
             {
                 var allMonsterQ = MinionManager.GetMinions(Player.Position, 660, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
@@ -874,7 +874,7 @@ using EloBuddy;
                 }
             }
 
-            if (useW && W.LSIsReady() && Player.Mana >= WMANA)
+            if (useW && W.IsReady() && Player.Mana >= WMANA)
             {
                 var AllMinions = MinionManager.GetMinions(Player.Position, 660, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
@@ -911,7 +911,7 @@ using EloBuddy;
                                         var minions = MinionManager.GetMinions(Player.Position, 800, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.Health);
                                         foreach (var minion in minions)
                                         {
-                                            var count = minions.Count(m => m.NetworkId != minion.NetworkId && m.LSDistance(minion) < 200);
+                                            var count = minions.Count(m => m.NetworkId != minion.NetworkId && m.Distance(minion) < 200);
                                             if (count > hits)
                                             {
                                                 hits = count;
@@ -932,7 +932,7 @@ using EloBuddy;
                                         var minions = MinionManager.GetMinions(Player.Position, 800, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
                                         foreach (var minion in minions)
                                         {
-                                            var count = minions.Count(m => m.NetworkId != minion.NetworkId && m.LSDistance(minion) < 200);
+                                            var count = minions.Count(m => m.NetworkId != minion.NetworkId && m.Distance(minion) < 200);
                                             if (count > hits)
                                             {
                                                 hits = count;
@@ -995,42 +995,42 @@ using EloBuddy;
             foreach (var target in ObjectManager.Get<AIHeroClient>().Where(target => !target.IsMe && target.Team != ObjectManager.Player.Team))
             {
 
-                if (useQKS && Q.LSIsReady() && Player.Mana >= QMANA && target.Health < Q.GetDamage(target) && Player.LSDistance(target) < Q.Range && !target.IsDead && target.LSIsValidTarget())
+                if (useQKS && Q.IsReady() && Player.Mana >= QMANA && target.Health < Q.GetDamage(target) && Player.Distance(target) < Q.Range && !target.IsDead && target.IsValidTarget())
                 {
                     Q.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                     return;
                 }
 
-                if (useWKS && (W.LSIsReady() || Player.LSHasBuff("Pick A Card")) && Player.Mana >= WMANA && target.Health < W.GetDamage(target) && Player.LSDistance(target) < 660 && !target.IsDead && target.LSIsValidTarget())
+                if (useWKS && (W.IsReady() || Player.HasBuff("Pick A Card")) && Player.Mana >= WMANA && target.Health < W.GetDamage(target) && Player.Distance(target) < 660 && !target.IsDead && target.IsValidTarget())
                 {
                     W.Cast();
                     return;
                 }
 
-                if (useIgniteKS && Ignite.Slot != SpellSlot.Unknown && Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) > target.Health && target.LSIsValidTarget(Ignite.Range))
+                if (useIgniteKS && Ignite.Slot != SpellSlot.Unknown && Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) > target.Health && target.IsValidTarget(Ignite.Range))
                 {
                     Ignite.Cast(target, true);
                 }
 
-                if (useQKS && useWKS && Q.LSIsReady() && (W.LSIsReady() || Player.LSHasBuff("Pick A Card")) && Player.Mana >= QMANA + WMANA && target.Health < W.GetDamage(target) + Q.GetDamage(target) && Player.LSDistance(target) < 660 && !target.IsDead && target.LSIsValidTarget())
+                if (useQKS && useWKS && Q.IsReady() && (W.IsReady() || Player.HasBuff("Pick A Card")) && Player.Mana >= QMANA + WMANA && target.Health < W.GetDamage(target) + Q.GetDamage(target) && Player.Distance(target) < 660 && !target.IsDead && target.IsValidTarget())
                 {
                     Q.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                     return;
                 }
 
-                if (useQKS && useIgniteKS && Ignite.Slot != SpellSlot.Unknown && Q.LSIsReady() && Player.Mana >= QMANA && target.Health < Q.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.LSDistance(target) < 600 && !target.IsDead && target.LSIsValidTarget())
+                if (useQKS && useIgniteKS && Ignite.Slot != SpellSlot.Unknown && Q.IsReady() && Player.Mana >= QMANA && target.Health < Q.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.Distance(target) < 600 && !target.IsDead && target.IsValidTarget())
                 {
                     Q.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                     return;
                 }
 
-                if (useWKS && useIgniteKS && Ignite.Slot != SpellSlot.Unknown && (W.LSIsReady() || Player.LSHasBuff("Pick A Card")) && Player.Mana >= WMANA && target.Health < W.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.LSDistance(target) < 600 && !target.IsDead && target.LSIsValidTarget())
+                if (useWKS && useIgniteKS && Ignite.Slot != SpellSlot.Unknown && (W.IsReady() || Player.HasBuff("Pick A Card")) && Player.Mana >= WMANA && target.Health < W.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.Distance(target) < 600 && !target.IsDead && target.IsValidTarget())
                 {
                     W.Cast();
                     return;
                 }
 
-                if (useQKS && useWKS && useIgniteKS && Ignite.Slot != SpellSlot.Unknown && Q.LSIsReady() && (W.LSIsReady() || Player.LSHasBuff("Pick A Card")) && Player.Mana >= QMANA + WMANA && target.Health < Q.GetDamage(target) + W.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.LSDistance(target) < 600 && !target.IsDead && target.LSIsValidTarget())
+                if (useQKS && useWKS && useIgniteKS && Ignite.Slot != SpellSlot.Unknown && Q.IsReady() && (W.IsReady() || Player.HasBuff("Pick A Card")) && Player.Mana >= QMANA + WMANA && target.Health < Q.GetDamage(target) + W.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.Distance(target) < 600 && !target.IsDead && target.IsValidTarget())
                 {
                     Q.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                     return;
@@ -1160,22 +1160,22 @@ using EloBuddy;
         #region PotionManager
         public static void PotionManager()
         {
-            if (Player.Level == 1 && Player.LSCountEnemiesInRange(1000) == 1 && Player.Health >= Player.MaxHealth * 0.35) return;
-            if (Player.Level == 1 && Player.LSCountEnemiesInRange(1000) == 2 && Player.Health >= Player.MaxHealth * 0.50) return;
+            if (Player.Level == 1 && Player.CountEnemiesInRange(1000) == 1 && Player.Health >= Player.MaxHealth * 0.35) return;
+            if (Player.Level == 1 && Player.CountEnemiesInRange(1000) == 2 && Player.Health >= Player.MaxHealth * 0.50) return;
 
-            if (Config.Item("TwistedFate.AutoPotion").GetValue<bool>() && !Player.LSInFountain() && !Player.LSIsRecalling() && !Player.IsDead)
+            if (Config.Item("TwistedFate.AutoPotion").GetValue<bool>() && !Player.InFountain() && !Player.IsRecalling() && !Player.IsDead)
             {
                 #region BiscuitofRejuvenation
-                if (BiscuitofRejuvenation.IsReady() && !Player.LSHasBuff("ItemMiniRegenPotion") && !Player.LSHasBuff("ItemCrystalFlask"))
+                if (BiscuitofRejuvenation.IsReady() && !Player.HasBuff("ItemMiniRegenPotion") && !Player.HasBuff("ItemCrystalFlask"))
                 {
 
-                    if (Player.MaxHealth > Player.Health + 170 && Player.MaxMana > Player.Mana + 10 && Player.LSCountEnemiesInRange(1000) > 0 &&
+                    if (Player.MaxHealth > Player.Health + 170 && Player.MaxMana > Player.Mana + 10 && Player.CountEnemiesInRange(1000) > 0 &&
                         Player.Health < Player.MaxHealth * 0.75)
                     {
                         BiscuitofRejuvenation.Cast();
                     }
 
-                    else if (Player.MaxHealth > Player.Health + 170 && Player.MaxMana > Player.Mana + 10 && Player.LSCountEnemiesInRange(1000) == 0 &&
+                    else if (Player.MaxHealth > Player.Health + 170 && Player.MaxMana > Player.Mana + 10 && Player.CountEnemiesInRange(1000) == 0 &&
                         Player.Health < Player.MaxHealth * 0.6)
                     {
                         BiscuitofRejuvenation.Cast();
@@ -1185,16 +1185,16 @@ using EloBuddy;
                 #endregion
 
                 #region HealthPotion
-                else if (HealthPotion.IsReady() && !Player.LSHasBuff("RegenerationPotion") && !Player.LSHasBuff("ItemCrystalFlask"))
+                else if (HealthPotion.IsReady() && !Player.HasBuff("RegenerationPotion") && !Player.HasBuff("ItemCrystalFlask"))
                 {
 
-                    if (Player.MaxHealth > Player.Health + 150 && Player.LSCountEnemiesInRange(1000) > 0 &&
+                    if (Player.MaxHealth > Player.Health + 150 && Player.CountEnemiesInRange(1000) > 0 &&
                         Player.Health < Player.MaxHealth * 0.75)
                     {
                         HealthPotion.Cast();
                     }
 
-                    else if (Player.MaxHealth > Player.Health + 150 && Player.LSCountEnemiesInRange(1000) == 0 &&
+                    else if (Player.MaxHealth > Player.Health + 150 && Player.CountEnemiesInRange(1000) == 0 &&
                         Player.Health < Player.MaxHealth * 0.6)
                     {
                         HealthPotion.Cast();
@@ -1204,16 +1204,16 @@ using EloBuddy;
                 #endregion
 
                 #region CrystallineFlask
-                else if (CrystallineFlask.IsReady() && !Player.LSHasBuff("ItemCrystalFlask") && !Player.LSHasBuff("RegenerationPotion") && !Player.LSHasBuff("FlaskOfCrystalWater") && !Player.LSHasBuff("ItemMiniRegenPotion"))
+                else if (CrystallineFlask.IsReady() && !Player.HasBuff("ItemCrystalFlask") && !Player.HasBuff("RegenerationPotion") && !Player.HasBuff("FlaskOfCrystalWater") && !Player.HasBuff("ItemMiniRegenPotion"))
                 {
 
-                    if (Player.MaxHealth > Player.Health + 120 && Player.MaxMana > Player.Mana + 60 && Player.LSCountEnemiesInRange(1000) > 0 &&
+                    if (Player.MaxHealth > Player.Health + 120 && Player.MaxMana > Player.Mana + 60 && Player.CountEnemiesInRange(1000) > 0 &&
                         (Player.Health < Player.MaxHealth * 0.85 || Player.Mana < Player.MaxMana * 0.65))
                     {
                         CrystallineFlask.Cast();
                     }
 
-                    else if (Player.MaxHealth > Player.Health + 120 && Player.MaxMana > Player.Mana + 60 && Player.LSCountEnemiesInRange(1000) == 0 &&
+                    else if (Player.MaxHealth > Player.Health + 120 && Player.MaxMana > Player.Mana + 60 && Player.CountEnemiesInRange(1000) == 0 &&
                         (Player.Health < Player.MaxHealth * 0.7 || Player.Mana < Player.MaxMana * 0.5))
                     {
                         CrystallineFlask.Cast();
@@ -1223,16 +1223,16 @@ using EloBuddy;
                 #endregion
 
                 #region ManaPotion
-                else if (ManaPotion.IsReady() && !Player.LSHasBuff("FlaskOfCrystalWater") && !Player.LSHasBuff("ItemCrystalFlask"))
+                else if (ManaPotion.IsReady() && !Player.HasBuff("FlaskOfCrystalWater") && !Player.HasBuff("ItemCrystalFlask"))
                 {
 
-                    if (Player.MaxMana > Player.Mana + 100 && Player.LSCountEnemiesInRange(1000) > 0 &&
+                    if (Player.MaxMana > Player.Mana + 100 && Player.CountEnemiesInRange(1000) > 0 &&
                         Player.Mana < Player.MaxMana * 0.7)
                     {
                         ManaPotion.Cast();
                     }
 
-                    else if (Player.MaxMana > Player.Mana + 100 && Player.LSCountEnemiesInRange(1000) == 0 &&
+                    else if (Player.MaxMana > Player.Mana + 100 && Player.CountEnemiesInRange(1000) == 0 &&
                         Player.Mana < Player.MaxMana * 0.4)
                     {
                         ManaPotion.Cast();
@@ -1258,7 +1258,7 @@ using EloBuddy;
             if (Config.Item("DrawOrbwalkTarget").GetValue<bool>())
             {
                 var orbT = Orbwalker.GetTarget();
-                if (orbT.LSIsValidTarget())
+                if (orbT.IsValidTarget())
                     Render.Circle.DrawCircle(orbT.Position, 100, System.Drawing.Color.Pink);
             }
 

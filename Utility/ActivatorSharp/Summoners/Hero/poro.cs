@@ -15,19 +15,19 @@ using EloBuddy; namespace Activator.Summoners
 
         public poro()
         {
-            mark = new Spell(Player.LSGetSpellSlot(Name), Range);
+            mark = new Spell(Player.GetSpellSlot(Name), Range);
             mark.SetSkillshot(0f, 60f, 1500f, true, SkillshotType.SkillshotLine);
         }
 
         public override void OnTick(EventArgs args)
         {
-            if (!Menu.Item("use" + Name).GetValue<bool>() || !mark.LSIsReady())
+            if (!Menu.Item("use" + Name).GetValue<bool>() || !mark.IsReady())
                 return;
 
             if (Player.GetSpell(mark.Slot).Name.ToLower() != Name)
                 return;
 
-            foreach (var tar in Activator.Heroes.Where(hero => hero.Player.LSIsValidTarget(Range)))
+            foreach (var tar in Activator.Heroes.Where(hero => hero.Player.IsValidTarget(Range)))
             {
                 if (Parent.Item(Parent.Name + "useon" + tar.Player.NetworkId).GetValue<bool>())
                     mark.CastIfHitchanceEquals(tar.Player, HitChance.Medium);

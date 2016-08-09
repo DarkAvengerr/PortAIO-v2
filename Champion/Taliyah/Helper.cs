@@ -93,8 +93,8 @@ namespace TophSharp
         public static void PotionCast(int id, string buff)
         {
             if (ItemReady(id) && !PlayerBuff(buff)
-                && !Player.LSIsRecalling() && !Player.LSInFountain()
-                && Player.LSCountEnemiesInRange(700) >= 1)
+                && !Player.IsRecalling() && !Player.InFountain()
+                && Player.CountEnemiesInRange(700) >= 1)
             {
                 SelfCast(id);
             }

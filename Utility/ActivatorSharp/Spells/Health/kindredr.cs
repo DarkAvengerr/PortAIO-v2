@@ -23,7 +23,7 @@ using EloBuddy; namespace Activator.Spells.Health
             {
                 if (Parent.Item(Parent.Name + "useon" + hero.Player.NetworkId).GetValue<bool>())
                 {
-                    if (hero.Player.LSDistance(Player.ServerPosition) <= 500)
+                    if (hero.Player.Distance(Player.ServerPosition) <= 500)
                     {
                         if (!hero.Player.HasBuffOfType(BuffType.Invulnerability))
                         {

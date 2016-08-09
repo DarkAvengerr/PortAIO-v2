@@ -85,7 +85,7 @@ using EloBuddy; namespace Activator.Handlers
 
             if (Shop.IsOpen)
             {
-                if (Player.LSInShop() || Player.IsDead)
+                if (Player.InShop() || Player.IsDead)
                 {
                     if (TrinketId == 3340 && !LeagueSharp.Common.Items.HasItem(3363))
                     {

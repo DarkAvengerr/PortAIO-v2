@@ -79,7 +79,7 @@ namespace TreeLib.Objects
                 return;
             }
 
-            if (Player.LSIsDashing() || Player.IsChannelingImportantSpell()) /*|| Player.Spellbook.IsCastingSpell || 
+            if (Player.IsDashing() || Player.IsChannelingImportantSpell()) /*|| Player.Spellbook.IsCastingSpell || 
                 Player.Spellbook.IsAutoAttacking|| Player.Spellbook.IsAutoAttacking)*/
             {
                 return;

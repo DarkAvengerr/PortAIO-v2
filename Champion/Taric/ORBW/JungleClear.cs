@@ -80,49 +80,49 @@
 
             var MinionN = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
 
-            if (MinionN.LSIsValidTarget() && SkyLv_Taric.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            if (MinionN.IsValidTarget() && SkyLv_Taric.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
-                if (SkyLv_Taric.Menu.Item("Taric.SafeJungleClear").GetValue<bool>() && Player.LSCountEnemiesInRange(1500) > 0) return;
+                if (SkyLv_Taric.Menu.Item("Taric.SafeJungleClear").GetValue<bool>() && Player.CountEnemiesInRange(1500) > 0) return;
 
-                if (useE && E.LSIsReady() && Player.ManaPercent > MiniManaE)
+                if (useE && E.IsReady() && Player.ManaPercent > MiniManaE)
                 {
                     if (SkyLv_Taric.Menu.Item("Taric.SpellOnlyBigMonster").GetValue<bool>())
                     {
                         foreach (var target in ObjectManager.Get<Obj_AI_Base>().Where(target => SkyLv_Taric.Monsters.Contains(target.BaseSkinName) && !target.IsDead))
                         {
-                            if (target.LSIsValidTarget() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveJungleClear").GetValue<bool>()))
+                            if (target.IsValidTarget() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveJungleClear").GetValue<bool>()))
                                 E.CastIfHitchanceEquals(target, HitChance.VeryHigh, PacketCast);
                         }
                     }
-                    else if(!SkyLv_Taric.Menu.Item("Taric.SpellOnlyBigMonster").GetValue<bool>() && MinionN.LSIsValidTarget() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveJungleClear").GetValue<bool>()))
+                    else if(!SkyLv_Taric.Menu.Item("Taric.SpellOnlyBigMonster").GetValue<bool>() && MinionN.IsValidTarget() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveJungleClear").GetValue<bool>()))
                         E.CastIfHitchanceEquals(MinionN, HitChance.VeryHigh, PacketCast);
                 }
 
-                if (useW && W.LSIsReady() && Player.ManaPercent > MiniManaW && (!E.LSIsReady() || !useE))
+                if (useW && W.IsReady() && Player.ManaPercent > MiniManaW && (!E.IsReady() || !useE))
                 {
                     if (SkyLv_Taric.Menu.Item("Taric.SpellOnlyBigMonster").GetValue<bool>())
                     {
                         foreach (var target in ObjectManager.Get<Obj_AI_Base>().Where(target => SkyLv_Taric.Monsters.Contains(target.BaseSkinName) && !target.IsDead))
                         {
-                            if (target.LSIsValidTarget() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveJungleClear").GetValue<bool>()))
+                            if (target.IsValidTarget() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveJungleClear").GetValue<bool>()))
                                 W.Cast(Player, PacketCast);
                         }
                     }
-                    else if (!SkyLv_Taric.Menu.Item("Taric.SpellOnlyBigMonster").GetValue<bool>() && MinionN.LSIsValidTarget() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveJungleClear").GetValue<bool>()))
+                    else if (!SkyLv_Taric.Menu.Item("Taric.SpellOnlyBigMonster").GetValue<bool>() && MinionN.IsValidTarget() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveJungleClear").GetValue<bool>()))
                         W.Cast(Player, PacketCast);
                 }
 
-                if (useQ && Q.LSIsReady() && Player.ManaPercent > MiniManaQ && (!E.LSIsReady() || !useE) && (!W.LSIsReady() || !useW))
+                if (useQ && Q.IsReady() && Player.ManaPercent > MiniManaQ && (!E.IsReady() || !useE) && (!W.IsReady() || !useW))
                 {
                     if (SkyLv_Taric.Menu.Item("Taric.SpellOnlyBigMonster").GetValue<bool>())
                     {
                         foreach (var target in ObjectManager.Get<Obj_AI_Base>().Where(target => SkyLv_Taric.Monsters.Contains(target.BaseSkinName) && !target.IsDead))
                         {
-                            if (target.LSIsValidTarget() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveJungleClear").GetValue<bool>()))
+                            if (target.IsValidTarget() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveJungleClear").GetValue<bool>()))
                                 Q.Cast(Player, PacketCast);
                         }
                     }
-                    else if (!SkyLv_Taric.Menu.Item("Taric.SpellOnlyBigMonster").GetValue<bool>() && MinionN.LSIsValidTarget() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveJungleClear").GetValue<bool>()))
+                    else if (!SkyLv_Taric.Menu.Item("Taric.SpellOnlyBigMonster").GetValue<bool>() && MinionN.IsValidTarget() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveJungleClear").GetValue<bool>()))
                         Q.Cast(Player, PacketCast);
                 }
             }

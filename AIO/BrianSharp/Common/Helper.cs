@@ -35,19 +35,19 @@
         {
             get
             {
-                if (Player.LSGetSpellSlot("s5_summonersmitequick").LSIsReady())
+                if (Player.GetSpellSlot("s5_summonersmitequick").IsReady())
                 {
                     return SmiteType.Grey;
                 }
-                if (Player.LSGetSpellSlot("itemsmiteaoe").LSIsReady())
+                if (Player.GetSpellSlot("itemsmiteaoe").IsReady())
                 {
                     return SmiteType.Purple;
                 }
-                if (Player.LSGetSpellSlot("s5_summonersmiteduel").LSIsReady())
+                if (Player.GetSpellSlot("s5_summonersmiteduel").IsReady())
                 {
                     return SmiteType.Red;
                 }
-                return Player.LSGetSpellSlot("s5_summonersmiteplayerganker").LSIsReady() ? SmiteType.Blue : SmiteType.None;
+                return Player.GetSpellSlot("s5_summonersmiteplayerganker").IsReady() ? SmiteType.Blue : SmiteType.None;
             }
         }
 
@@ -158,19 +158,19 @@
 
         public static bool CastFlash(Vector3 pos)
         {
-            return Flash.LSIsReady() && pos.LSIsValid() && Player.Spellbook.CastSpell(Flash, pos);
+            return Flash.IsReady() && pos.IsValid() && Player.Spellbook.CastSpell(Flash, pos);
         }
 
         public static bool CastIgnite(AIHeroClient target)
         {
-            return Ignite.LSIsReady() && target.LSIsValidTarget(600)
+            return Ignite.IsReady() && target.IsValidTarget(600)
                    && target.Health + 5 < Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite)
                    && Player.Spellbook.CastSpell(Ignite, target);
         }
 
         public static bool CastSmite(Obj_AI_Base target, bool killable = true)
         {
-            return Smite.LSIsReady() && target.LSIsValidTarget(760)
+            return Smite.IsReady() && target.IsValidTarget(760)
                    && (!killable || target.Health < Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Smite))
                    && Player.Spellbook.CastSpell(Smite, target);
         }
@@ -193,7 +193,7 @@
             MinionOrderTypes order = MinionOrderTypes.Health)
         {
             var result = from minion in ObjectManager.Get<Obj_AI_Minion>()
-                         where minion.LSIsValidTarget(range, false, @from)
+                         where minion.IsValidTarget(range, false, @from)
                          let minionTeam = minion.Team
                          where
                              (team == MinionTeam.Neutral && minionTeam == GameObjectTeam.Neutral)
@@ -262,7 +262,7 @@
 
         public static void SmiteMob()
         {
-            if (!GetValue<bool>("SmiteMob", "Smite") || !Smite.LSIsReady())
+            if (!GetValue<bool>("SmiteMob", "Smite") || !Smite.IsReady())
             {
                 return;
             }

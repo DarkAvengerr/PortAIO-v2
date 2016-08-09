@@ -144,19 +144,19 @@ using EloBuddy;
 
         private static void MorganaOnDraw(EventArgs args)
         {
-            if (Q.LSIsReady() && ActiveCheck("morgana.q.draw", Config))
+            if (Q.IsReady() && ActiveCheck("morgana.q.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, GetColor("morgana.q.draw", Config));
             }
-            if (W.LSIsReady() && ActiveCheck("morgana.w.draw", Config))
+            if (W.IsReady() && ActiveCheck("morgana.w.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, GetColor("morgana.w.draw", Config));
             }
-            if (E.LSIsReady() && ActiveCheck("morgana.e.draw", Config))
+            if (E.IsReady() && ActiveCheck("morgana.e.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, E.Range, GetColor("morgana.e.draw", Config));
             }
-            if (R.LSIsReady() && ActiveCheck("morgana.r.draw", Config))
+            if (R.IsReady() && ActiveCheck("morgana.r.draw", Config))
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, GetColor("morgana.r.draw", Config));
             }
@@ -164,25 +164,25 @@ using EloBuddy;
 
         private static void MorganaOnProcess(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
                 if (sender.IsAlly && sender is AIHeroClient && Config.Item("e.engage." + args.SData.Name).GetValue<bool>()
-                && Config.Item("e." + sender.CharData.BaseSkinName).GetValue<bool>() && sender.LSDistance(ObjectManager.Player.Position) <= E.Range
+                && Config.Item("e." + sender.CharData.BaseSkinName).GetValue<bool>() && sender.Distance(ObjectManager.Player.Position) <= E.Range
                     && !sender.IsDead && !sender.IsZombie && sender.IsValid)
                 {
                     E.CastOnUnit(sender);
                 }
 
                 if (sender is AIHeroClient && sender.IsEnemy && args.Target.IsAlly && args.Target.Type == GameObjectType.AIHeroClient
-                && args.SData.LSIsAutoAttack() && ObjectManager.Player.ManaPercent >= Config.Item("min.mana.for.e").GetValue<Slider>().Value
-                && Config.Item("e." + ((AIHeroClient)args.Target).ChampionName).GetValue<bool>() && ((AIHeroClient)args.Target).LSDistance(ObjectManager.Player.Position) < E.Range)
+                && args.SData.IsAutoAttack() && ObjectManager.Player.ManaPercent >= Config.Item("min.mana.for.e").GetValue<Slider>().Value
+                && Config.Item("e." + ((AIHeroClient)args.Target).ChampionName).GetValue<bool>() && ((AIHeroClient)args.Target).Distance(ObjectManager.Player.Position) < E.Range)
                 {
                     E.Cast((AIHeroClient)args.Target);
                 }
 
                 if (sender is AIHeroClient && args.Target.IsAlly && args.Target.Type == GameObjectType.AIHeroClient
-                    && !args.SData.LSIsAutoAttack() && (Config.Item("e.protect." + args.SData.Name).GetValue<bool>() || Config.Item("e.protect.targetted." + args.SData.Name).GetValue<bool>())
-                    && sender.IsEnemy && sender.LSGetSpellDamage(((AIHeroClient)args.Target), args.SData.Name) > ((AIHeroClient)args.Target).Health)
+                    && !args.SData.IsAutoAttack() && (Config.Item("e.protect." + args.SData.Name).GetValue<bool>() || Config.Item("e.protect.targetted." + args.SData.Name).GetValue<bool>())
+                    && sender.IsEnemy && sender.GetSpellDamage(((AIHeroClient)args.Target), args.SData.Name) > ((AIHeroClient)args.Target).Health)
                 {
                     E.Cast((AIHeroClient)args.Target);
                 }
@@ -191,8 +191,8 @@ using EloBuddy;
 
         private static void MorganaOnGapcloser(ActiveGapcloser gapcloser)
         {
-            if (gapcloser.Sender.IsEnemy && gapcloser.End.LSDistance(ObjectManager.Player.Position) < 200 &&
-               gapcloser.Sender.LSIsValidTarget(Q.Range) && Config.Item("q.antigapcloser").GetValue<bool>())
+            if (gapcloser.Sender.IsEnemy && gapcloser.End.Distance(ObjectManager.Player.Position) < 200 &&
+               gapcloser.Sender.IsValidTarget(Q.Range) && Config.Item("q.antigapcloser").GetValue<bool>())
             {
                 Q.Cast(gapcloser.Sender);
             }
@@ -210,26 +210,26 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (MenuCheck("q.combo", Config) && Q.LSIsReady())
+            if (MenuCheck("q.combo", Config) && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) &&
                     MenuCheck("nautilus.q." + x.ChampionName, Config)))
                 {
                     Q.SPredictionCast(enemy, SpellHitChance(Config, "morgana.q.hitchance"));
                 }
             }
 
-            if (Config.Item("w.combo").GetValue<bool>() && Q.LSIsReady())
+            if (Config.Item("w.combo").GetValue<bool>() && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(W.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)))
                 {
                     W.CastOnUnit(enemy);
                 }
             }
 
-            if (Config.Item("r.combo").GetValue<bool>() && R.LSIsReady())
+            if (Config.Item("r.combo").GetValue<bool>() && R.IsReady())
             {
-                if (MenuCheck("combo.r", Config) && R.LSIsReady() && ObjectManager.Player.LSCountEnemiesInRange(600f) >= SliderCheck("min.enemies.r", Config))
+                if (MenuCheck("combo.r", Config) && R.IsReady() && ObjectManager.Player.CountEnemiesInRange(600f) >= SliderCheck("min.enemies.r", Config))
                 {
                     R.Cast();
                 }

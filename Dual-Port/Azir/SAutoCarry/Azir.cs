@@ -117,17 +117,17 @@ namespace SAutoCarry.Champions
 
             if (t != null)
             {
-                if (ComboUseR && Spells[R].LSIsReady() && t.LSIsValidTarget(Spells[R].Range) && ShouldCast(SpellSlot.R, t))
+                if (ComboUseR && Spells[R].IsReady() && t.IsValidTarget(Spells[R].Range) && ShouldCast(SpellSlot.R, t))
                     Spells[R].SPredictionCast(t, HitChance.High);
 
-                if (ComboUseW && Spells[W].LSIsReady() && ShouldCast(SpellSlot.W, t))
-                    Spells[W].Cast(ObjectManager.Player.Position.LSTo2D().LSExtend(t.Position.LSTo2D(), 450));
+                if (ComboUseW && Spells[W].IsReady() && ShouldCast(SpellSlot.W, t))
+                    Spells[W].Cast(ObjectManager.Player.Position.To2D().Extend(t.Position.To2D(), 450));
 
-                if (ComboUseQ && Spells[Q].LSIsReady() && ShouldCast(SpellSlot.Q, t))
+                if (ComboUseQ && Spells[Q].IsReady() && ShouldCast(SpellSlot.Q, t))
                 {
                     foreach (var soldier in Helpers.SoldierMgr.ActiveSoldiers)
                     {
-                        if (ObjectManager.Player.ServerPosition.LSDistance(t.ServerPosition) < Spells[Q].Range)
+                        if (ObjectManager.Player.ServerPosition.Distance(t.ServerPosition) < Spells[Q].Range)
                         {
                             Spells[Q].UpdateSourcePosition(soldier.Position, ObjectManager.Player.ServerPosition);
                             var predRes = Spells[Q].GetSPrediction(t);
@@ -135,7 +135,7 @@ namespace SAutoCarry.Champions
                             {
                                 var pos = predRes.CastPosition;
                                 if (ComboUseQAlwaysMaxRange)
-                                    pos = ObjectManager.Player.ServerPosition.LSTo2D().LSExtend(pos, Spells[Q].Range);
+                                    pos = ObjectManager.Player.ServerPosition.To2D().Extend(pos, Spells[Q].Range);
                                 Spells[Q].Cast(pos);
                                 return;
                             }
@@ -146,7 +146,7 @@ namespace SAutoCarry.Champions
 
             if (extendedTarget != null)
             {
-                if (ComboUseE && Spells[E].LSIsReady() && ShouldCast(SpellSlot.E, extendedTarget))
+                if (ComboUseE && Spells[E].IsReady() && ShouldCast(SpellSlot.E, extendedTarget))
                 {
                     foreach (var soldier in Helpers.SoldierMgr.ActiveSoldiers)
                     {
@@ -169,14 +169,14 @@ namespace SAutoCarry.Champions
             if (t == null)
                 return;
 
-            if (HarassUseW && Spells[W].LSIsReady() && ShouldCast(SpellSlot.W, t))
-                Spells[W].Cast(ObjectManager.Player.Position.LSTo2D().LSExtend(t.Position.LSTo2D(), 450));
+            if (HarassUseW && Spells[W].IsReady() && ShouldCast(SpellSlot.W, t))
+                Spells[W].Cast(ObjectManager.Player.Position.To2D().Extend(t.Position.To2D(), 450));
 
-            if (HarassUseQ && Spells[Q].LSIsReady() && ShouldCast(SpellSlot.Q, t))
+            if (HarassUseQ && Spells[Q].IsReady() && ShouldCast(SpellSlot.Q, t))
             {
                 foreach (var soldier in Helpers.SoldierMgr.ActiveSoldiers)
                 {
-                    if (ObjectManager.Player.ServerPosition.LSDistance(t.ServerPosition) < Spells[Q].Range)
+                    if (ObjectManager.Player.ServerPosition.Distance(t.ServerPosition) < Spells[Q].Range)
                     {
                         Spells[Q].UpdateSourcePosition(soldier.Position, ObjectManager.Player.ServerPosition);
                         if (Spells[Q].SPredictionCast(t, HitChance.High))
@@ -191,20 +191,20 @@ namespace SAutoCarry.Champions
             if (ObjectManager.Player.ManaPercent < LaneClearMinMana || !LaneClearToggle)
                 return;
 
-            if (LaneClearUseW && Spells[W].LSIsReady() && Spells[W].Instance.Ammo != 0)
+            if (LaneClearUseW && Spells[W].IsReady() && Spells[W].Instance.Ammo != 0)
             {
                 var minions = MinionManager.GetMinions(Spells[W].Range + Helpers.SoldierMgr.SoldierAttackRange / 2f);
                 if (minions.Count > 1)
                 {
-                    var loc = MinionManager.GetBestCircularFarmLocation(minions.Select(p => p.ServerPosition.LSTo2D()).ToList(), Helpers.SoldierMgr.SoldierAttackRange, Spells[W].Range);
+                    var loc = MinionManager.GetBestCircularFarmLocation(minions.Select(p => p.ServerPosition.To2D()).ToList(), Helpers.SoldierMgr.SoldierAttackRange, Spells[W].Range);
                     if (loc.MinionsHit > 2)
                         Spells[W].Cast(loc.Position);
                 }
             }
 
-            if (LaneClearUseQ && Spells[Q].LSIsReady())
+            if (LaneClearUseQ && Spells[Q].IsReady())
             {
-                MinionManager.FarmLocation bestfarm = MinionManager.GetBestCircularFarmLocation(MinionManager.GetMinions(Spells[Q].Range + 100).Select(p => p.ServerPosition.LSTo2D()).ToList(), Helpers.SoldierMgr.SoldierAttackRange, Spells[Q].Range + 100);
+                MinionManager.FarmLocation bestfarm = MinionManager.GetBestCircularFarmLocation(MinionManager.GetMinions(Spells[Q].Range + 100).Select(p => p.ServerPosition.To2D()).ToList(), Helpers.SoldierMgr.SoldierAttackRange, Spells[Q].Range + 100);
                 if (bestfarm.MinionsHit >= LaneClearQMinMinion)
                     Spells[Q].Cast(bestfarm.Position);
             }
@@ -212,7 +212,7 @@ namespace SAutoCarry.Champions
 
         public void BeforeOrbwalk()
         {
-            if (Spells[R].LSIsReady())
+            if (Spells[R].IsReady())
                 Spells[R].Width = 133 * (3 + Spells[R].Level);
 
             if (JumpActive)
@@ -233,21 +233,21 @@ namespace SAutoCarry.Champions
 
         public void BeforeDraw()
         {
-            if (InsecTo.LSIsValid())
+            if (InsecTo.IsValid())
                 Render.Circle.DrawCircle(InsecTo.To3D2(), 200, System.Drawing.Color.DarkBlue);
         }
 
         public void KillSteal()
         {
-            if (!Spells[Q].LSIsReady() || (Helpers.SoldierMgr.ActiveSoldiers.Count == 0 && !Spells[W].LSIsReady()))
+            if (!Spells[Q].IsReady() || (Helpers.SoldierMgr.ActiveSoldiers.Count == 0 && !Spells[W].IsReady()))
                 return;
 
-            foreach (AIHeroClient target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Spells[Q].Range + 100) && !x.HasBuffOfType(BuffType.Invulnerability)))
+            foreach (AIHeroClient target in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells[Q].Range + 100) && !x.HasBuffOfType(BuffType.Invulnerability)))
             {
-                if ((ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.Q)) > target.Health + 20)
+                if ((ObjectManager.Player.GetSpellDamage(target, SpellSlot.Q)) > target.Health + 20)
                 {
                     if (Helpers.SoldierMgr.ActiveSoldiers.Count == 0)
-                        Spells[W].Cast(ObjectManager.Player.Position.LSTo2D().LSExtend(target.Position.LSTo2D(), 450));
+                        Spells[W].Cast(ObjectManager.Player.Position.To2D().Extend(target.Position.To2D(), 450));
                     else
                         Spells[Q].SPredictionCast(target, HitChance.High);
                 }
@@ -259,11 +259,11 @@ namespace SAutoCarry.Champions
             Orbwalker.Orbwalk(null, pos);
             if (Math.Abs(Spells[E].Cooldown) < 0.00001)
             {
-                var extended = ObjectManager.Player.ServerPosition.LSTo2D().LSExtend(pos.LSTo2D(), 800f);
-                if (!JumpTo.LSIsValid())
-                    JumpTo = pos.LSTo2D();
+                var extended = ObjectManager.Player.ServerPosition.To2D().Extend(pos.To2D(), 800f);
+                if (!JumpTo.IsValid())
+                    JumpTo = pos.To2D();
 
-                if (Spells[W].LSIsReady() && Helpers.SoldierMgr.ActiveSoldiers.Count == 0)
+                if (Spells[W].IsReady() && Helpers.SoldierMgr.ActiveSoldiers.Count == 0)
                 {
                     if (juke)
                     {
@@ -274,9 +274,9 @@ namespace SAutoCarry.Champions
                             var angle = i * 2 * Math.PI / 12;
                             float x = ObjectManager.Player.Position.X + outRadius * (float)Math.Cos(angle);
                             float y = ObjectManager.Player.Position.Y + outRadius * (float)Math.Sin(angle);
-                            if (NavMesh.GetCollisionFlags(x, y).HasFlag(CollisionFlags.Wall) && !ObjectManager.Player.ServerPosition.LSTo2D().LSExtend(new Vector2(x, y), 500f).LSIsWall())
+                            if (NavMesh.GetCollisionFlags(x, y).HasFlag(CollisionFlags.Wall) && !ObjectManager.Player.ServerPosition.To2D().Extend(new Vector2(x, y), 500f).IsWall())
                             {
-                                Spells[W].Cast(ObjectManager.Player.ServerPosition.LSTo2D().LSExtend(new Vector2(x, y), 800f));
+                                Spells[W].Cast(ObjectManager.Player.ServerPosition.To2D().Extend(new Vector2(x, y), 800f));
                                 return;
                             }
                         }
@@ -284,13 +284,13 @@ namespace SAutoCarry.Champions
                     Spells[W].Cast(extended);
                 }
 
-                if (Helpers.SoldierMgr.ActiveSoldiers.Count > 0 && Spells[Q].LSIsReady())
+                if (Helpers.SoldierMgr.ActiveSoldiers.Count > 0 && Spells[Q].IsReady())
                 {
-                    var closestSoldier = Helpers.SoldierMgr.ActiveSoldiers.MinOrDefault(s => s.Position.LSTo2D().LSDistance(extended, true));
-                    CastELocation = closestSoldier.Position.LSTo2D();
-                    CastQLocation = closestSoldier.Position.LSTo2D().LSExtend(JumpTo, 800f);
+                    var closestSoldier = Helpers.SoldierMgr.ActiveSoldiers.MinOrDefault(s => s.Position.To2D().Distance(extended, true));
+                    CastELocation = closestSoldier.Position.To2D();
+                    CastQLocation = closestSoldier.Position.To2D().Extend(JumpTo, 800f);
 
-                    if (CastELocation.LSDistance(JumpTo) > ObjectManager.Player.ServerPosition.LSTo2D().LSDistance(JumpTo) && !juke && castq)
+                    if (CastELocation.Distance(JumpTo) > ObjectManager.Player.ServerPosition.To2D().Distance(JumpTo) && !juke && castq)
                     {
                         CastQLocation = extended;
                         CastET = Utils.TickCount + 250;
@@ -299,14 +299,14 @@ namespace SAutoCarry.Champions
                     else
                     {
                         Spells[E].Cast(CastELocation, true);
-                        if (ObjectManager.Player.ServerPosition.LSTo2D().LSDistance(CastELocation) < 700 && castq)
+                        if (ObjectManager.Player.ServerPosition.To2D().Distance(CastELocation) < 700 && castq)
                             LeagueSharp.Common.Utility.DelayAction.Add(250, () => Spells[Q].Cast(CastQLocation, true));
                     }
                 }
             }
             else
             {
-                if (Spells[Q].LSIsReady() && CastELocation.LSDistance(ObjectManager.Player.ServerPosition) <= 200 && castq)
+                if (Spells[Q].IsReady() && CastELocation.Distance(ObjectManager.Player.ServerPosition) <= 200 && castq)
                     Spells[Q].Cast(CastQLocation, true);
 
                 JumpTo = Vector2.Zero;
@@ -317,26 +317,26 @@ namespace SAutoCarry.Champions
         {
             if (TargetSelector.SelectedTarget != null)
             {
-                if (TargetSelector.SelectedTarget.LSIsValidTarget(900))
+                if (TargetSelector.SelectedTarget.IsValidTarget(900))
                 {
-                    if (Spells[Q].LSIsReady())
+                    if (Spells[Q].IsReady())
                     {
-                        if (Spells[R].LSIsReady())
+                        if (Spells[R].IsReady())
                         {
-                            var direction = (TargetSelector.SelectedTarget.ServerPosition - ObjectManager.Player.ServerPosition).LSTo2D().LSNormalized();
-                            var insecPos = TargetSelector.SelectedTarget.ServerPosition.LSTo2D() + (direction * 200f);
-                            if (!InsecLocation.LSIsValid())
-                                InsecLocation = ObjectManager.Player.ServerPosition.LSTo2D();
+                            var direction = (TargetSelector.SelectedTarget.ServerPosition - ObjectManager.Player.ServerPosition).To2D().Normalized();
+                            var insecPos = TargetSelector.SelectedTarget.ServerPosition.To2D() + (direction * 200f);
+                            if (!InsecLocation.IsValid())
+                                InsecLocation = ObjectManager.Player.ServerPosition.To2D();
                             Jump(insecPos.To3D());
                         }
                     }
-                    else if (ObjectManager.Player.ServerPosition.LSDistance(TargetSelector.SelectedTarget.ServerPosition) < 400 && InsecLocation.LSIsValid())
+                    else if (ObjectManager.Player.ServerPosition.Distance(TargetSelector.SelectedTarget.ServerPosition) < 400 && InsecLocation.IsValid())
                     {
-                        if (InsecTo.LSIsValid() && InsecTo.LSDistance(ObjectManager.Player.ServerPosition.LSTo2D()) < 1500)
+                        if (InsecTo.IsValid() && InsecTo.Distance(ObjectManager.Player.ServerPosition.To2D()) < 1500)
                             Spells[R].Cast(InsecTo);
                         else
                             Spells[R].Cast(InsecLocation);
-                        if (!Spells[R].LSIsReady())
+                        if (!Spells[R].IsReady())
                             InsecLocation = Vector2.Zero;
                     }
                 }
@@ -383,7 +383,7 @@ namespace SAutoCarry.Champions
 
                 case SpellSlot.E:
                     {
-                        if (CalculateDamageE(target) + SCommon.Damage.AutoAttack.GetDamage(target) >= target.Health && HeroManager.Enemies.Count(p => p.LSIsValidTarget() && p.LSDistance(target.ServerPosition) < 600) < 2)
+                        if (CalculateDamageE(target) + SCommon.Damage.AutoAttack.GetDamage(target) >= target.Health && HeroManager.Enemies.Count(p => p.IsValidTarget() && p.Distance(target.ServerPosition) < 600) < 2)
                             return true;
 
                         return false;
@@ -397,7 +397,7 @@ namespace SAutoCarry.Champions
                         if (ObjectManager.Player.HealthPercent < ComboRMinHP)
                             return true;
 
-                        if (IsWallStunable(target.ServerPosition.LSTo2D(), ObjectManager.Player.ServerPosition.LSTo2D().LSExtend(Spells[R].GetSPrediction(target).UnitPosition, 200 - target.BoundingRadius)) && CalculateDamageR(target) >= target.Health / 2f)
+                        if (IsWallStunable(target.ServerPosition.To2D(), ObjectManager.Player.ServerPosition.To2D().Extend(Spells[R].GetSPrediction(target).UnitPosition, 200 - target.BoundingRadius)) && CalculateDamageR(target) >= target.Health / 2f)
                             return true;
 
                         if (ComboRMinHit > 1 && Spells[R].GetAoeSPrediction().HitCount > ComboRMinHit)
@@ -412,10 +412,10 @@ namespace SAutoCarry.Champions
 
         private bool IsWallStunable(Vector2 from, Vector2 to)
         {
-            float count = from.LSDistance(to);
+            float count = from.Distance(to);
             for (uint i = 0; i <= count; i += 25)
             {
-                Vector2 pos = from.LSExtend(ObjectManager.Player.ServerPosition.LSTo2D(), -i);
+                Vector2 pos = from.Extend(ObjectManager.Player.ServerPosition.To2D(), -i);
                 var colFlags = NavMesh.GetCollisionFlags(pos.X, pos.Y);
                 if (colFlags.HasFlag(CollisionFlags.Wall) || colFlags.HasFlag(CollisionFlags.Building))
                     return true;
@@ -429,7 +429,7 @@ namespace SAutoCarry.Champions
                 ObjectManager.Get<Obj_AI_Minion>()
                     .Any(
                         minion =>
-                            (minion.LSIsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
+                            (minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                             (Helpers.SoldierMgr.InAARange(minion) || SCommon.Orbwalking.Utility.InAARange(minion)) && MinionManager.IsMinion(minion, false) &&
                             HealthPrediction.LaneClearHealthPrediction(
                                     minion, (int)(ObjectManager.Player.AttackDelay * 1000f * 2f + ObjectManager.Player.AttackCastDelay * 1000f), 30) <=
@@ -445,21 +445,21 @@ namespace SAutoCarry.Champions
 
         private bool CanOrbwalkTarget(AttackableUnit target)
         {
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 float scalingRange = 0f;
                 if (target.Type == GameObjectType.AIHeroClient)
                     scalingRange = (target as AIHeroClient).GetScalingRange();
-                if (Helpers.SoldierMgr.ActiveSoldiers.Any(p => p.Position.LSDistance(ObjectManager.Player.ServerPosition) - ObjectManager.Player.BoundingRadius < 900 && p.Position.LSDistance(target.Position) - target.BoundingRadius - scalingRange + 10 < Helpers.SoldierMgr.SoldierAttackRange + p.BoundingRadius))
+                if (Helpers.SoldierMgr.ActiveSoldiers.Any(p => p.Position.Distance(ObjectManager.Player.ServerPosition) - ObjectManager.Player.BoundingRadius < 900 && p.Position.Distance(target.Position) - target.BoundingRadius - scalingRange + 10 < Helpers.SoldierMgr.SoldierAttackRange + p.BoundingRadius))
                     return true;
 
                 if (target.Type == GameObjectType.AIHeroClient)
                 {
                     AIHeroClient hero = target as AIHeroClient;
-                    return ObjectManager.Player.LSDistance(hero.ServerPosition) - hero.BoundingRadius - hero.GetScalingRange() + 10 < ObjectManager.Player.AttackRange + ObjectManager.Player.BoundingRadius;
+                    return ObjectManager.Player.Distance(hero.ServerPosition) - hero.BoundingRadius - hero.GetScalingRange() + 10 < ObjectManager.Player.AttackRange + ObjectManager.Player.BoundingRadius;
                 }
                 else
-                    return ObjectManager.Player.LSDistance(target.Position) - target.BoundingRadius + 10 < ObjectManager.Player.AttackRange + ObjectManager.Player.BoundingRadius;
+                    return ObjectManager.Player.Distance(target.Position) - target.BoundingRadius + 10 < ObjectManager.Player.AttackRange + ObjectManager.Player.BoundingRadius;
             }
             return false;
         }
@@ -494,8 +494,8 @@ namespace SAutoCarry.Champions
             {
                 if (ConfigMenu.Item("SAutoCarry.Azir.Misc.AntiGapCloser." + gapcloser.Sender.Spellbook.GetSpell(gapcloser.Slot).Name).GetValue<bool>())
                 {
-                    if (gapcloser.End.LSDistance(ObjectManager.Player.ServerPosition) < 200)
-                        Spells[R].Cast(gapcloser.End.LSExtend(gapcloser.Start, 100));
+                    if (gapcloser.End.Distance(ObjectManager.Player.ServerPosition) < 200)
+                        Spells[R].Cast(gapcloser.End.Extend(gapcloser.Start, 100));
                 }
             }
 
@@ -511,11 +511,11 @@ namespace SAutoCarry.Champions
         {
             if (args.Msg == (uint)WindowsMessages.WM_LBUTTONDOWN)
             {
-                var clickedObject = ObjectManager.Get<Obj_AI_Base>().Where(p => p.Position.LSDistance(Game.CursorPos, true) < 40000 && p.IsAlly).OrderBy(q => q.Position.LSDistance(Game.CursorPos, true)).FirstOrDefault();
+                var clickedObject = ObjectManager.Get<Obj_AI_Base>().Where(p => p.Position.Distance(Game.CursorPos, true) < 40000 && p.IsAlly).OrderBy(q => q.Position.Distance(Game.CursorPos, true)).FirstOrDefault();
 
                 if (clickedObject != null)
                 {
-                    InsecTo = clickedObject.Position.LSTo2D();
+                    InsecTo = clickedObject.Position.To2D();
                     if (clickedObject.IsMe)
                         InsecTo = Vector2.Zero;
                 }
@@ -530,7 +530,7 @@ namespace SAutoCarry.Champions
                 args.Process = false;
                 foreach (var enemy in HeroManager.Enemies)
                 {
-                    if (enemy.LSIsValidTarget(Spells[R].Range + 200))
+                    if (enemy.IsValidTarget(Spells[R].Range + 200))
                     {
                         var pred = Spells[R].GetPrediction(enemy);
                         args.Process |= pred.Hitchance > HitChance.Low;

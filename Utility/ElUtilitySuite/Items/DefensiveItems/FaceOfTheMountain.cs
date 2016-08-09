@@ -87,14 +87,14 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
                     return;
                 }
 
-                foreach (var ally in HeroManager.Allies.Where(a => a.LSIsValidTarget(850f, false) && !a.LSIsRecalling()))
+                foreach (var ally in HeroManager.Allies.Where(a => a.IsValidTarget(850f, false) && !a.IsRecalling()))
                 {
                     if (!this.Menu.Item(string.Format("Faceon{0}", ally.ChampionName)).IsActive())
                     {
                         return;
                     }
 
-                    var enemies = ally.LSCountEnemiesInRange(800);
+                    var enemies = ally.CountEnemiesInRange(800);
                     var totalDamage = IncomingDamageManager.GetDamage(ally) * 1.1f;
 
                     if (ally.HealthPercent <= this.Menu.Item("face-min-health").GetValue<Slider>().Value && enemies >= 1)

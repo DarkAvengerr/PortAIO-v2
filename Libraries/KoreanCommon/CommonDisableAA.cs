@@ -52,7 +52,7 @@ namespace KoreanCommon
             if (KoreanUtils.GetParam(champion.MainMenu, "supportmode") != null)
             {
                 if (KoreanUtils.GetParamBool(champion.MainMenu, "supportmode")
-                    && champion.Player.LSCountAlliesInRange(1500f) > 0)
+                    && champion.Player.CountAlliesInRange(1500f) > 0)
                 {
                     canHit = false;
                 }

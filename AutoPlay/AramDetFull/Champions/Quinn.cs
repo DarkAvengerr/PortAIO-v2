@@ -14,9 +14,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
-            if (IsValorMode() && player.LSDistance(target,true) <= 375*375)
+            if (IsValorMode() && player.Distance(target,true) <= 375*375)
             {
                 Q.Cast();
             }
@@ -45,16 +45,16 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            //if (MapControl.balanceAroundPoint(target.Position.LSTo2D(), 400) <= 1)
+            //if (MapControl.balanceAroundPoint(target.Position.To2D(), 400) <= 1)
              //   W.CastOnUnit(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
-            if (!Sector.inTowerRange(target.Position.LSTo2D()) &&
-                (MapControl.balanceAroundPoint(target.Position.LSTo2D(), 700) >= -1 ||
+            if (!Sector.inTowerRange(target.Position.To2D()) &&
+                (MapControl.balanceAroundPoint(target.Position.To2D(), 700) >= -1 ||
                  (MapControl.fightIsOn() != null && MapControl.fightIsOn().NetworkId == target.NetworkId)))
             {
 
@@ -63,7 +63,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
                 if (IsValorMode())
                 {
-                    if (R.LSIsReady() && target.LSDistance(player) < R.Range)
+                    if (R.IsReady() && target.Distance(player) < R.Range)
                     {
                         var ultdamage = player.CalcDamage(target, Damage.DamageType.Physical,
                             (75 + (R.Level*55) + (player.FlatPhysicalDamageMod*0.5))*
@@ -84,7 +84,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 }
                 else // human form
                 {
-                    if (MapControl.balanceAroundPoint(target.Position.LSTo2D(), 600) >= -1)
+                    if (MapControl.balanceAroundPoint(target.Position.To2D(), 600) >= -1)
                     {
                         E.CastOnUnit(target, true);
                         EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, target);
@@ -96,9 +96,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public override void useR(Obj_AI_Base target)
         {
             return;
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
-            if (player.Path.Length > 0 && player.Path[player.Path.Length - 1].LSDistance(player.Position) > 2500)
+            if (player.Path.Length > 0 && player.Path[player.Path.Length - 1].Distance(player.Position) > 2500)
             {
                 R.Cast(player.Path[player.Path.Length - 1]);
             }

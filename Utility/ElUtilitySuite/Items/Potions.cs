@@ -124,7 +124,7 @@ using EloBuddy; namespace ElUtilitySuite.Items
         {
             try
             {
-                if (!this.Menu.Item("Potions.Activated").IsActive() || this.Player.IsDead || this.Player.LSInFountain() || this.Player.Buffs.Any(
+                if (!this.Menu.Item("Potions.Activated").IsActive() || this.Player.IsDead || this.Player.InFountain() || this.Player.Buffs.Any(
                         b => b.Name.ToLower().Contains("Recall") || b.Name.ToLower().Contains("Teleport")))
                 {
                     return;

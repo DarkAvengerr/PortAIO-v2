@@ -29,7 +29,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.Menus.Draw
             Render.Circle.DrawCircle(
                 Variable.Player.Position,
                 Variable.Spells[SpellSlot.R].Range,
-                Variable.Spells[SpellSlot.Q].LSIsReady() ? Color.FromArgb(120, 0, 170, 255) : Color.IndianRed);
+                Variable.Spells[SpellSlot.Q].IsReady() ? Color.FromArgb(120, 0, 170, 255) : Color.IndianRed);
         }
 
         #endregion

@@ -45,11 +45,11 @@ namespace SFXTargetSelector.Others
                 new Item(
                     "Alistar", "FerociousHowl", null, false, -1,
                     (target, type) =>
-                        ObjectManager.Player.LSCountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(target)) > 1),
+                        ObjectManager.Player.CountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(target)) > 1),
                 new Item(
                     "MasterYi", "Meditate", null, false, -1,
                     (target, type) =>
-                        ObjectManager.Player.LSCountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(target)) > 1),
+                        ObjectManager.Player.CountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(target)) > 1),
                 new Item("Tryndamere", "UndyingRage", null, false, 1, (target, type) => target.HealthPercent <= 5),
                 new Item("Kayle", "JudicatorIntervention", null, false),
                 new Item("Fizz", "fizztrickslamsounddummy", null, false),

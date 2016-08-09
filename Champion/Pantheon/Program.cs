@@ -338,7 +338,7 @@ namespace Pantheon
 
         private static void Game_OnUpdate(EventArgs args)
         {
-            shennBuffActive = Player.LSHasBuff("Sheen", true);
+            shennBuffActive = Player.HasBuff("Sheen", true);
 
             if (Config.Item("PingLH").GetValue<bool>())
                 foreach (
@@ -346,9 +346,9 @@ namespace Pantheon
                         HeroManager.Enemies.Where(
                             t =>
                                 ObjectManager.Player.Spellbook.CanUseSpell(SpellSlot.R) == SpellState.Ready &&
-                                t.LSIsValidTarget() && ComboDamage(t) > t.Health))
+                                t.IsValidTarget() && ComboDamage(t) > t.Health))
                 {
-                    Ping(enemy.Position.LSTo2D());
+                    Ping(enemy.Position.To2D());
                 }
 
             if (!Orbwalking.CanMove(100))
@@ -383,14 +383,14 @@ namespace Pantheon
         {
             var fComboDamage = 0d;
 
-            if (Q.LSIsReady())
-                fComboDamage += Player.LSGetSpellDamage(t, SpellSlot.Q);
+            if (Q.IsReady())
+                fComboDamage += Player.GetSpellDamage(t, SpellSlot.Q);
 
-            if (W.LSIsReady())
-                fComboDamage += Player.LSGetSpellDamage(t, SpellSlot.W);
+            if (W.IsReady())
+                fComboDamage += Player.GetSpellDamage(t, SpellSlot.W);
 
-            if (E.LSIsReady())
-                fComboDamage += Player.LSGetSpellDamage(t, SpellSlot.E);
+            if (E.IsReady())
+                fComboDamage += Player.GetSpellDamage(t, SpellSlot.E);
 
             if (PlayerSpells.IgniteSlot != SpellSlot.Unknown &&
                 Player.Spellbook.CanUseSpell(PlayerSpells.IgniteSlot) == SpellState.Ready)
@@ -403,23 +403,23 @@ namespace Pantheon
         {
             AIHeroClient t;
             t = AssassinManager.GetTarget(W.Range, TargetSelector.DamageType.Physical);
-            if (!t.LSIsValidTarget())
+            if (!t.IsValidTarget())
                 return;
 
-            //if (t.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65) && (shennBuffActive || usedSpell))
-            if (t.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65) && (shennBuffActive))
+            //if (t.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65) && (shennBuffActive || usedSpell))
+            if (t.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65) && (shennBuffActive))
                 return;
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 W.CastOnUnit(t);
             }
-            else if (Q.LSIsReady())
+            else if (Q.IsReady())
             {
                 Q.CastOnUnit(t);
             }
-            else if (E.LSIsReady() && !Player.LSHasBuff("sound", true) && !Q.LSIsReady() && !W.LSIsReady() &&
-                     t.LSIsValidTarget(E.Range))
+            else if (E.IsReady() && !Player.HasBuff("sound", true) && !Q.IsReady() && !W.IsReady() &&
+                     t.IsValidTarget(E.Range))
             {
                 E.Cast(t.Position);
             }
@@ -435,22 +435,22 @@ namespace Pantheon
 
         private static void Harass()
         {
-            var useQ = Config.Item("UseQHarass").GetValue<bool>() && Q.LSIsReady();
-            var useE = Config.Item("UseEHarass").GetValue<bool>() && E.LSIsReady();
+            var useQ = Config.Item("UseQHarass").GetValue<bool>() && Q.IsReady();
+            var useE = Config.Item("UseEHarass").GetValue<bool>() && E.IsReady();
 
             AIHeroClient t;
 
             if (useQ)
             {
                 t = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
-                if (t.LSIsValidTarget())
+                if (t.IsValidTarget())
                     Q.CastOnUnit(t);
             }
 
-            if (useE && !Player.LSHasBuff("sound", true) && !Q.LSIsReady() && !W.LSIsReady())
+            if (useE && !Player.HasBuff("sound", true) && !Q.IsReady() && !W.IsReady())
             {
                 t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-                if (t.LSIsValidTarget())
+                if (t.IsValidTarget())
                 {
                     E.Cast(t.Position);
                 }
@@ -561,7 +561,7 @@ namespace Pantheon
             }
 
             var eMob = Config.Item("Jungle.UseE").GetValue<StringList>().SelectedIndex;
-            if (E.LSIsReady() && eMob != 0)
+            if (E.IsReady() && eMob != 0)
             {
                 if (mobs.Count >= eMob)
                 {
@@ -583,7 +583,7 @@ namespace Pantheon
                             MinionTeam.Neutral)
                     where
                         item.Value.Item.IsReady()
-                        && iMinions[0].LSDistance(Player.Position) < item.Value.Item.Range
+                        && iMinions[0].Distance(Player.Position) < item.Value.Item.Range
                     select item)
                 {
                     item.Value.Item.Cast();
@@ -602,7 +602,7 @@ namespace Pantheon
             }
 
             var useQ = Config.Item("Lane.UseQ").GetValue<StringList>().SelectedIndex;
-            var useE = Config.Item("Lane.UseE").GetValue<bool>() && E.LSIsReady();
+            var useE = Config.Item("Lane.UseE").GetValue<bool>() && E.IsReady();
 
             var vMinions = MinionManager.GetMinions(ObjectManager.Player.Position, Q.Range);
             foreach (var minions in
@@ -615,7 +615,7 @@ namespace Pantheon
                 }
                 else if (useQ == 2)
                 {
-                    if (minions.LSDistance(Player.Position) > Orbwalking.GetRealAutoAttackRange(null) + 65)
+                    if (minions.Distance(Player.Position) > Orbwalking.GetRealAutoAttackRange(null) + 65)
                         Q.Cast(minions);
                 }
             }
@@ -642,7 +642,7 @@ namespace Pantheon
                         item.Value.Item.Range)
                 where
                     iMinions.Count >= 2 && item.Value.Item.IsReady()
-                    && iMinions[0].LSDistance(Player.Position) < item.Value.Item.Range
+                    && iMinions[0].Distance(Player.Position) < item.Value.Item.Range
                 select item)
             {
                 item.Value.Item.Cast();
@@ -655,7 +655,7 @@ namespace Pantheon
             if (!Config.Item("InterruptSpells").GetValue<bool>())
                 return;
 
-            if (unit.LSIsValidTarget(W.Range) && W.LSIsReady())
+            if (unit.IsValidTarget(W.Range) && W.IsReady())
             {
                 W.CastOnUnit(unit);
             }
@@ -664,7 +664,7 @@ namespace Pantheon
         private static void CastItems()
         {
             var t = AssassinManager.GetTarget(750, TargetSelector.DamageType.Physical);
-            if (!t.LSIsValidTarget())
+            if (!t.IsValidTarget())
                 return;
 
             foreach (var item in Items.ItemDb)
@@ -672,7 +672,7 @@ namespace Pantheon
                 if (item.Value.ItemType == Items.EnumItemType.AoE &&
                     item.Value.TargetingType == Items.EnumItemTargettingType.EnemyObjects)
                 {
-                    if (t.LSIsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
+                    if (t.IsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
                     {
                         item.Value.Item.Cast(Player);
                     }
@@ -681,7 +681,7 @@ namespace Pantheon
                 if (item.Value.ItemType == Items.EnumItemType.Targeted &&
                     item.Value.TargetingType == Items.EnumItemTargettingType.EnemyHero)
                 {
-                    if (t.LSIsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
+                    if (t.IsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
                     {
                         item.Value.Item.Cast(t);
                     }

@@ -16,11 +16,11 @@ using EloBuddy;
             {
                 var wTarget = TargetSelector.GetTarget(
                     Variables.spells[SpellSlot.W].Range * 0.75f, TargetSelector.DamageType.Physical);
-                if (wTarget.LSIsValidTarget())
+                if (wTarget.IsValidTarget())
                 {
                     var prediction = Variables.spells[SpellSlot.W].GetPrediction(wTarget);
                     if (prediction.Hitchance >= HitChance.VeryHigh &&
-                        (prediction.AoeTargetsHit.Count() >= 2 || ObjectManager.Player.LSCountEnemiesInRange(1500f) == 1))
+                        (prediction.AoeTargetsHit.Count() >= 2 || ObjectManager.Player.CountEnemiesInRange(1500f) == 1))
                     {
                         Variables.spells[SpellSlot.W].Cast(prediction.CastPosition);
                     }

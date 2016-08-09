@@ -73,7 +73,7 @@ using EloBuddy;
         /// </returns>
         private static bool IsSpellActive(SpellSlot spellSlot, Orbwalking.OrbwalkingMode orbwalkingMode)
         {
-            if (Program.Orbwalker.ActiveMode != orbwalkingMode || !spellSlot.LSIsReady())
+            if (Program.Orbwalker.ActiveMode != orbwalkingMode || !spellSlot.IsReady())
             {
                 return false;
             }

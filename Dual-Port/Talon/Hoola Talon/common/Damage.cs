@@ -48,7 +48,7 @@ using EloBuddy;
     {
         public static float GetDamage2(this Spell spell, Obj_AI_Base target, int stage = 0)
         {
-            return (float)ObjectManager.Player.LSGetSpellDamage(target, spell.Slot, stage);
+            return (float)ObjectManager.Player.GetSpellDamage(target, spell.Slot, stage);
         }
         public enum DamageItems
         {
@@ -270,7 +270,7 @@ using EloBuddy;
             {
                 ChampionName = "Aatrox",
                 IsActive = (source, target) => (source.HasBuff2("AatroxWPower") && source.HasBuff2("AatroxWONHPowerBuff")),
-                GetDamage = (source, target) => ((float)source.LSGetSpellDamage(target, SpellSlot.W)),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
             };
             AttackPassives.Add(p);
 
@@ -349,7 +349,7 @@ using EloBuddy;
                     (source, target) =>
                         (from buff in target.Buffs where buff.DisplayName == "GnarWProc" select buff.Count)
                             .FirstOrDefault() == 2,
-                GetDamage = (source, target) => ((float)source.LSGetSpellDamage(target, SpellSlot.W)),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
             };
             AttackPassives.Add(p);
 
@@ -395,7 +395,7 @@ using EloBuddy;
             {
                 ChampionName = "Katarina",
                 IsActive = (source, target) => (target.HasBuff2("KataQMark1")),
-                GetDamage = (source, target) => ((float)source.LSGetSpellDamage(target, SpellSlot.Q, 1)),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.Q, 1)),
             };
             AttackPassives.Add(p);
 
@@ -407,7 +407,7 @@ using EloBuddy;
             {
                 ChampionName = "KogMaw",
                 IsActive = (source, target) => (source.HasBuff2("KogMawBioArcaneBarrage")),
-                GetDamage = (source, target) => ((float)source.LSGetSpellDamage(target, SpellSlot.W)),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
             };
             AttackPassives.Add(p);
 
@@ -436,7 +436,7 @@ using EloBuddy;
             {
                 ChampionName = "Nasus",
                 IsActive = (source, target) => (source.HasBuff2("NasusQ")),
-                GetDamage = (source, target) => ((float)source.LSGetSpellDamage(target, SpellSlot.Q)),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.Q)),
             };
             AttackPassives.Add(p);
 
@@ -486,7 +486,7 @@ using EloBuddy;
                 IsActive = (source, target) => (source.HasBuff2("bluecardpreattack")),
                 GetDamage =
                     (source, target) =>
-                        (float)source.LSGetSpellDamage(target, SpellSlot.W) -
+                        (float)source.GetSpellDamage(target, SpellSlot.W) -
                         (float)
                             source.CalcDamage(
                                 target, DamageType.Physical, (source.BaseAttackDamage + source.FlatPhysicalDamageMod)),
@@ -497,7 +497,7 @@ using EloBuddy;
             {
                 ChampionName = "TwistedFate",
                 IsActive = (source, target) => (source.HasBuff2("cardmasterstackparticle")),
-                GetDamage = (source, target) => (float)source.LSGetSpellDamage(target, SpellSlot.E),
+                GetDamage = (source, target) => (float)source.GetSpellDamage(target, SpellSlot.E),
             };
             AttackPassives.Add(p);
 
@@ -509,7 +509,7 @@ using EloBuddy;
             {
                 ChampionName = "Varus",
                 IsActive = (source, target) => (source.HasBuff2("VarusW")),
-                GetDamage = (source, target) => ((float)source.LSGetSpellDamage(target, SpellSlot.W)),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
             };
             AttackPassives.Add(p);
 
@@ -521,7 +521,7 @@ using EloBuddy;
             {
                 ChampionName = "Vayne",
                 IsActive = (source, target) => (source.HasBuff2("vaynetumblebonus")),
-                GetDamage = (source, target) => ((float)source.LSGetSpellDamage(target, SpellSlot.Q)),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.Q)),
             };
             AttackPassives.Add(p);
 
@@ -532,7 +532,7 @@ using EloBuddy;
                     (source, target) =>
                         (from buff in target.Buffs where buff.Name == "vaynesilvereddebuff" select buff.Count)
                             .FirstOrDefault() == 2,
-                GetDamage = (source, target) => ((float)source.LSGetSpellDamage(target, SpellSlot.W)),
+                GetDamage = (source, target) => ((float)source.GetSpellDamage(target, SpellSlot.W)),
             };
             AttackPassives.Add(p);
 
@@ -2276,7 +2276,7 @@ using EloBuddy;
                             (source, target, level) =>
                                 (new double[] { 25, 30, 35 }[level] / 100 * (target.MaxHealth - target.Health) + //잃은 체력
                                 ((new double[] { 25, 35, 45 }[level] + 0.1 * source.FlatPhysicalDamageMod) // 깡뎀+계수
-                                * Math.Min((1 + source.LSDistance(target.ServerPosition)/ 15 * 0.09d),10))), //깡뎀+계수 거리비례 뎀증
+                                * Math.Min((1 + source.Distance(target.ServerPosition)/ 15 * 0.09d),10))), //깡뎀+계수 거리비례 뎀증
                     },
                 });
 
@@ -5715,7 +5715,7 @@ using EloBuddy;
             Obj_AI_Base target,
             IEnumerable<Tuple<SpellSlot, int>> spellCombo)
         {
-            return spellCombo.Sum(spell => source.LSGetSpellDamage(target, spell.Item1, spell.Item2));
+            return spellCombo.Sum(spell => source.GetSpellDamage(target, spell.Item1, spell.Item2));
         }
 
         /// <summary>

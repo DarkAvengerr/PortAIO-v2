@@ -17,7 +17,7 @@ using EloBuddy;
 
         public static SpellSlot Slot(AIHeroClient player)
         {
-            return player.LSGetSpellSlot("SummonerFlash");
+            return player.GetSpellSlot("SummonerFlash");
         }
 
         #endregion

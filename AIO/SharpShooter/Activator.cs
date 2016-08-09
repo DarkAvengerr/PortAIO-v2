@@ -79,8 +79,8 @@ namespace SharpShooter
 
         internal static void Load()
         {
-            _cleanseSlot = ObjectManager.Player.LSGetSpellSlot("summonerboost");
-            _healSlot = ObjectManager.Player.LSGetSpellSlot("summonerheal");
+            _cleanseSlot = ObjectManager.Player.GetSpellSlot("summonerboost");
+            _healSlot = ObjectManager.Player.GetSpellSlot("summonerheal");
 
             Menu.AddSubMenu(new Menu("Auto Potion", "AutoPotion"));
             Menu.AddSubMenu(new Menu("Cleanser", "Cleanser"));
@@ -364,7 +364,7 @@ namespace SharpShooter
         {
             if (!ObjectManager.Player.IsDead)
             {
-                if (!ObjectManager.Player.LSIsRecalling() && !ObjectManager.Player.LSInFountain())
+                if (!ObjectManager.Player.IsRecalling() && !ObjectManager.Player.InFountain())
                 {
                     if (Menu.Item("AutoPotion.Use Health Potion").GetValue<bool>())
                         if (ObjectManager.Player.HealthPercent <=
@@ -406,7 +406,7 @@ namespace SharpShooter
                 }
 
                 foreach (
-                    var target in HeroManager.Allies.Where(x => x.LSIsValidTarget() && x.LSCountEnemiesInRange(500f) >= 2))
+                    var target in HeroManager.Allies.Where(x => x.IsValidTarget() && x.CountEnemiesInRange(500f) >= 2))
                 {
                     if (Menu.Item("SummonerSpell.Heal.UseHeal").GetValue<bool>())
                     {
@@ -415,22 +415,22 @@ namespace SharpShooter
                             if (Menu.Item("SummonerSpell.Heal.UseForMe").GetValue<bool>())
                                 if (ObjectManager.Player.HealthPercent <=
                                     Menu.Item("SummonerSpell.Heal.ifHealthPercent").GetValue<Slider>().Value)
-                                    if (_healSlot != SpellSlot.Unknown && _healSlot.LSIsReady())
+                                    if (_healSlot != SpellSlot.Unknown && _healSlot.IsReady())
                                         ObjectManager.Player.Spellbook.CastSpell(_healSlot);
                         }
                         else if (target.IsAlly)
                         {
-                            if (target.LSIsValidTarget(840f, false, ObjectManager.Player.ServerPosition))
+                            if (target.IsValidTarget(840f, false, ObjectManager.Player.ServerPosition))
                                 if (Menu.Item("SummonerSpell.Heal.UseForAlly").GetValue<bool>())
                                     if (target.HealthPercent <=
                                         Menu.Item("SummonerSpell.Heal.ifHealthPercent").GetValue<Slider>().Value)
-                                        if (_healSlot != SpellSlot.Unknown && _healSlot.LSIsReady())
+                                        if (_healSlot != SpellSlot.Unknown && _healSlot.IsReady())
                                             ObjectManager.Player.Spellbook.CastSpell(_healSlot);
                         }
                     }
                 }
 
-                foreach (var target in HeroManager.Enemies.Where(x => x.LSIsValidTarget()))
+                foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget()))
                 {
                     var item =
                         _activeItemList.FirstOrDefault(
@@ -458,7 +458,7 @@ namespace SharpShooter
                                 x =>
                                     Menu.Item("Offensive.Use" + x.Id).GetValue<bool>() &&
                                     x.When.Contains(When.BeforeAttack) && Items.CanUseItem((int) x.Id) &&
-                                    args.Target.LSIsValidTarget(x.Range) && ObjectManager.Player.ManaPercent <= x.MinMyHp &&
+                                    args.Target.IsValidTarget(x.Range) && ObjectManager.Player.ManaPercent <= x.MinMyHp &&
                                     args.Target.ManaPercent <= x.MinTargetHp);
                         if (item != null)
                             Items.UseItem((int) item.Id, item.IsTargeted ? args.Target as Obj_AI_Base : null);
@@ -479,7 +479,7 @@ namespace SharpShooter
                                 x =>
                                     Menu.Item("Offensive.Use" + x.Id).GetValue<bool>() &&
                                     x.When.Contains(When.AfterAttack) && Items.CanUseItem((int) x.Id) &&
-                                    target.LSIsValidTarget(x.Range) && ObjectManager.Player.ManaPercent <= x.MinMyHp &&
+                                    target.IsValidTarget(x.Range) && ObjectManager.Player.ManaPercent <= x.MinMyHp &&
                                     target.ManaPercent <= x.MinTargetHp);
                         if (item != null)
                             Items.UseItem((int) item.Id, item.IsTargeted ? target as Obj_AI_Base : null);
@@ -491,14 +491,14 @@ namespace SharpShooter
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (!ObjectManager.Player.IsDead)
-                if (ObjectManager.Player.Position.LSDistance(gapcloser.End) <= 200)
+                if (ObjectManager.Player.Position.Distance(gapcloser.End) <= 200)
                 {
                     var item =
                         _activeItemList.FirstOrDefault(
                             x =>
                                 Menu.Item("Offensive.Use" + x.Id).GetValue<bool>() &&
                                 x.When.Contains(When.AntiGapcloser) && Items.CanUseItem((int) x.Id) &&
-                                gapcloser.Sender.LSIsValidTarget(x.Range));
+                                gapcloser.Sender.IsValidTarget(x.Range));
                     if (item != null)
                         Items.UseItem((int) item.Id, item.IsTargeted ? gapcloser.Sender : null);
                 }
@@ -559,7 +559,7 @@ namespace SharpShooter
                                         else
                                         {
                                             if (Menu.Item("Cleanser.UseCleanse").GetValue<bool>())
-                                                if (_cleanseSlot != SpellSlot.Unknown && _cleanseSlot.LSIsReady())
+                                                if (_cleanseSlot != SpellSlot.Unknown && _cleanseSlot.IsReady())
                                                     ObjectManager.Player.Spellbook.CastSpell(_cleanseSlot);
                                         }
                                     }
@@ -570,7 +570,7 @@ namespace SharpShooter
                                                 x =>
                                                     x.CleanserTargets.Contains(CleanserTarget.Ally) &&
                                                     Menu.Item("Cleanser.Use" + x.Id).GetValue<bool>() &&
-                                                    Items.CanUseItem((int) x.Id) && sender.LSIsValidTarget(x.Range, false))
+                                                    Items.CanUseItem((int) x.Id) && sender.IsValidTarget(x.Range, false))
                                                 .OrderBy(x => x.Priority)
                                                 .FirstOrDefault();
                                         if (item != null)
@@ -609,19 +609,19 @@ namespace SharpShooter
                                         if (Menu.Item("SummonerSpell.Heal.UseForMe").GetValue<bool>())
                                             if (ObjectManager.Player.HealthPercent <=
                                                 Menu.Item("SummonerSpell.Heal.ifHealthPercent").GetValue<Slider>().Value)
-                                                if (_healSlot != SpellSlot.Unknown && _healSlot.LSIsReady())
+                                                if (_healSlot != SpellSlot.Unknown && _healSlot.IsReady())
                                                     ObjectManager.Player.Spellbook.CastSpell(_healSlot);
                                     }
                                     else if (args.Target.IsAlly)
                                     {
                                         var target = args.Target as AIHeroClient;
-                                        if (target.LSIsValidTarget(850f, false))
+                                        if (target.IsValidTarget(850f, false))
                                             if (Menu.Item("SummonerSpell.Heal.UseForAlly").GetValue<bool>())
                                                 if (target.HealthPercent <=
                                                     Menu.Item("SummonerSpell.Heal.ifHealthPercent")
                                                         .GetValue<Slider>()
                                                         .Value)
-                                                    if (_healSlot != SpellSlot.Unknown && _healSlot.LSIsReady())
+                                                    if (_healSlot != SpellSlot.Unknown && _healSlot.IsReady())
                                                         ObjectManager.Player.Spellbook.CastSpell(_healSlot);
                                     }
                                 }

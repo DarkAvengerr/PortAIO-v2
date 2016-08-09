@@ -36,7 +36,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.Drawings
 
         public void OnEndScene(EventArgs args)
         {
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget(1200)))
+            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1200)))
             {
              
                 drawDamage.Unit = enemy;

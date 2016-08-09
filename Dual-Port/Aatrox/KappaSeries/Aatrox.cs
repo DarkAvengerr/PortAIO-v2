@@ -44,8 +44,8 @@ using EloBuddy; namespace KappaSeries
             SpellList.Add(_e);
             SpellList.Add(_r);
 
-            IgniteSlot = _player.LSGetSpellSlot("SummonerDot");
-            SmiteSlot = _player.LSGetSpellSlot("summonersmite");
+            IgniteSlot = _player.GetSpellSlot("SummonerDot");
+            SmiteSlot = _player.GetSpellSlot("summonersmite");
 
             _cfg = new Menu("Aatrox","Aatrox",true);
 
@@ -153,7 +153,7 @@ using EloBuddy; namespace KappaSeries
 
         private static void OnPossibleToInterrupt(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (!_cfg.Item("IntQ").IsActive() || !_q.LSIsReady() || !sender.LSIsValidTarget(_q.Range))
+            if (!_cfg.Item("IntQ").IsActive() || !_q.IsReady() || !sender.IsValidTarget(_q.Range))
             {
                 return;
             }
@@ -233,12 +233,12 @@ using EloBuddy; namespace KappaSeries
         
         private static void Towerq()
         {
-            var allyturret = ObjectManager.Get<Obj_AI_Turret>().First(obj => obj.IsAlly && obj.LSDistance(_player) <= 775f);
+            var allyturret = ObjectManager.Get<Obj_AI_Turret>().First(obj => obj.IsAlly && obj.Distance(_player) <= 775f);
             var minUnderTur = MinionManager.GetMinions(allyturret.ServerPosition, 775, MinionTypes.All, MinionTeam.Enemy);
 
-            foreach (var target in ObjectManager.Get<AIHeroClient>().Where(target => target.LSIsValidTarget(_e.Range)))
+            foreach (var target in ObjectManager.Get<AIHeroClient>().Where(target => target.IsValidTarget(_e.Range)))
             {
-                if (allyturret != null && minUnderTur == null && target.LSIsValidTarget())
+                if (allyturret != null && minUnderTur == null && target.IsValidTarget())
                 {
                     _q.Cast(target);
                 }
@@ -248,12 +248,12 @@ using EloBuddy; namespace KappaSeries
         private static void Flee()
         {
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-           if (_q.LSIsReady())
+           if (_q.IsReady())
             {
                 _q.Cast(Game.CursorPos);
             }
            var t = TargetSelector.GetTarget(_q.Range, TargetSelector.DamageType.Physical);
-           if (_e.LSIsReady() && t.LSIsValidTarget(_e.Range))
+           if (_e.IsReady() && t.IsValidTarget(_e.Range))
            {
                 _e.Cast(t);
            }
@@ -261,22 +261,22 @@ using EloBuddy; namespace KappaSeries
 
         private static void Smartks()
         {
-            foreach (var t in ObjectManager.Get<AIHeroClient>().Where(t => t.IsEnemy).Where(t => t.LSIsValidTarget(_q.Range))) {
+            foreach (var t in ObjectManager.Get<AIHeroClient>().Where(t => t.IsEnemy).Where(t => t.IsValidTarget(_q.Range))) {
                 #region e
-                if (t.Health < _e.GetDamage(t) && _e.LSIsReady())
+                if (t.Health < _e.GetDamage(t) && _e.IsReady())
                 {
                     _e.Cast(t);
                 }
                     #endregion
                     #region q
-                else if (t.Health < _q.GetDamage(t) && _q.LSIsReady())
+                else if (t.Health < _q.GetDamage(t) && _q.IsReady())
                 {
                     _q.Cast(t.ServerPosition);
 
                 }
                     #endregion
                     #region eq
-                else if (t.Health < (_q.GetDamage(t) + _e.GetDamage(t)) && _e.LSIsReady() && _q.LSIsReady())
+                else if (t.Health < (_q.GetDamage(t) + _e.GetDamage(t)) && _e.IsReady() && _q.IsReady())
                 {
                     if(_e.Cast(t)== Spell.CastStates.SuccessfullyCasted)
                     {
@@ -285,7 +285,7 @@ using EloBuddy; namespace KappaSeries
                 }
                     #endregion
                     #region eq ignite
-                else  if (t.Health < (_q.GetDamage(t) + _e.GetDamage(t) + _player.GetSummonerSpellDamage(t, Damage.SummonerSpell.Ignite)) && _e.LSIsReady() && _q.LSIsReady() && IgniteSlot.LSIsReady() && IgniteSlot != SpellSlot.Unknown) 
+                else  if (t.Health < (_q.GetDamage(t) + _e.GetDamage(t) + _player.GetSummonerSpellDamage(t, Damage.SummonerSpell.Ignite)) && _e.IsReady() && _q.IsReady() && IgniteSlot.IsReady() && IgniteSlot != SpellSlot.Unknown) 
                 {
                     _e.Cast(t);
                     if (!_e.IsCharging)
@@ -296,7 +296,7 @@ using EloBuddy; namespace KappaSeries
                 }
                     #endregion
                     #region eq smite
-                else if (t.Health < (_q.GetDamage(t) + _e.GetDamage(t) + Smitedamage()) && _e.LSIsReady() && _q.LSIsReady() && SmiteSlot.LSIsReady() && SmiteSlot != SpellSlot.Unknown)
+                else if (t.Health < (_q.GetDamage(t) + _e.GetDamage(t) + Smitedamage()) && _e.IsReady() && _q.IsReady() && SmiteSlot.IsReady() && SmiteSlot != SpellSlot.Unknown)
                 {
                     _e.Cast(t);
                     if (!_e.IsCharging)
@@ -307,38 +307,38 @@ using EloBuddy; namespace KappaSeries
                 }
                     #endregion
                     #region eq smite R
-                else if (_cfg.Item("RKS").IsActive() && t.Health < (_q.GetDamage(t) + _e.GetDamage(t) + Smitedamage() + _r.GetDamage(t)) && _e.LSIsReady() && _q.LSIsReady() && SmiteSlot.LSIsReady() && _r.LSIsReady() && SmiteSlot != SpellSlot.Unknown)
+                else if (_cfg.Item("RKS").IsActive() && t.Health < (_q.GetDamage(t) + _e.GetDamage(t) + Smitedamage() + _r.GetDamage(t)) && _e.IsReady() && _q.IsReady() && SmiteSlot.IsReady() && _r.IsReady() && SmiteSlot != SpellSlot.Unknown)
                 {
                     _e.Cast(t);
                     if (!_e.IsCharging)
                     {
                         _q.Cast(t, false, true);
                     }
-                    if (_player.LSDistance(t) < 500)
+                    if (_player.Distance(t) < 500)
                     {
                         _player.Spellbook.CastSpell(SmiteSlot, t);
                     }
 
-                    if (_player.LSDistance(t) < _r.Range && !_e.IsCharging && !_q.IsCharging)
+                    if (_player.Distance(t) < _r.Range && !_e.IsCharging && !_q.IsCharging)
                     {
                         _r.Cast();
                     }
                 }
                     #endregion
                     #region eq ignite R
-                else if (_cfg.Item("RKS").IsActive() && t.Health < (_q.GetDamage(t) + _e.GetDamage(t) + _player.GetSummonerSpellDamage(t, Damage.SummonerSpell.Ignite) + _r.GetDamage(t)) && _e.LSIsReady() && _q.LSIsReady() && IgniteSlot.LSIsReady() && _r.LSIsReady() && IgniteSlot != SpellSlot.Unknown)
+                else if (_cfg.Item("RKS").IsActive() && t.Health < (_q.GetDamage(t) + _e.GetDamage(t) + _player.GetSummonerSpellDamage(t, Damage.SummonerSpell.Ignite) + _r.GetDamage(t)) && _e.IsReady() && _q.IsReady() && IgniteSlot.IsReady() && _r.IsReady() && IgniteSlot != SpellSlot.Unknown)
                 {
                     _e.Cast(t);
                     if (!_e.IsCharging)
                     {
                         _q.Cast(t, false, true);
                     }
-                    if (_player.LSDistance(t) < 600)
+                    if (_player.Distance(t) < 600)
                     {
                         _player.Spellbook.CastSpell(IgniteSlot, t);
                     }
 
-                    if (_player.LSDistance(t) < _r.Range && !_e.IsCharging && !_q.IsCharging)
+                    if (_player.Distance(t) < _r.Range && !_e.IsCharging && !_q.IsCharging)
                     {
                         _r.Cast();
                     }
@@ -356,15 +356,15 @@ using EloBuddy; namespace KappaSeries
             if (minion.Count < 3)
                 return;
 
-            if (_cfg.Item("UseQLane").IsActive() && _q.LSIsReady())
+            if (_cfg.Item("UseQLane").IsActive() && _q.IsReady())
             {
                 _q.Cast(minion[0].ServerPosition);
             }
-            if (_cfg.Item("UseWLane").IsActive() && _w.LSIsReady() && _player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 2)
+            if (_cfg.Item("UseWLane").IsActive() && _w.IsReady() && _player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 2)
             {
                 _w.Cast();
             }
-            if (_cfg.Item("UseELane").IsActive() && _e.LSIsReady())
+            if (_cfg.Item("UseELane").IsActive() && _e.IsReady())
             {
                 _e.Cast(minion[0].ServerPosition);
             }
@@ -375,15 +375,15 @@ using EloBuddy; namespace KappaSeries
             var junglemonster = MinionManager.GetMinions(_player.ServerPosition, _q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
             if (junglemonster.Count == 0) return;
 
-            if (_cfg.Item("UseEJungle").IsActive() && _e.LSIsReady())
+            if (_cfg.Item("UseEJungle").IsActive() && _e.IsReady())
             {
                 _e.Cast(junglemonster[0].ServerPosition);
             }
-            if (_cfg.Item("UseQJungle").IsActive() && _q.LSIsReady())
+            if (_cfg.Item("UseQJungle").IsActive() && _q.IsReady())
             {
                 _q.Cast(junglemonster[0].ServerPosition);
             }
-            if (_cfg.Item("UseWJungle").IsActive() && _player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 2 && _w.LSIsReady())
+            if (_cfg.Item("UseWJungle").IsActive() && _player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 2 && _w.IsReady())
             {
                 _w.Cast();
             }
@@ -395,11 +395,11 @@ using EloBuddy; namespace KappaSeries
             var t = TargetSelector.GetTarget(_q.Range, TargetSelector.DamageType.Physical);
             if (t == null) return;
 
-            if (t.LSIsValidTarget() && _e.LSIsReady() && _cfg.Item("HarE").IsActive())
+            if (t.IsValidTarget() && _e.IsReady() && _cfg.Item("HarE").IsActive())
             {
                 _e.Cast(t);
             }
-            if (t.LSIsValidTarget() && _e.LSIsReady() && _cfg.Item("HarQ").IsActive() && !t.LSUnderTurret())
+            if (t.IsValidTarget() && _e.IsReady() && _cfg.Item("HarQ").IsActive() && !t.UnderTurret())
             {
                 _q.Cast(t);
             }
@@ -432,21 +432,21 @@ using EloBuddy; namespace KappaSeries
             {
                 if (Items.HasItem(youm.Id))
                 {
-                    if (Items.CanUseItem(youm.Id) && _player.LSDistance(t) <= 200f)
+                    if (Items.CanUseItem(youm.Id) && _player.Distance(t) <= 200f)
                     {
                         Items.UseItem(youm.Id);
                     }
                 }
                 if (Items.HasItem(bil.Id))
                 {
-                    if (Items.CanUseItem(bil.Id) && _player.LSDistance(t) <= bil.Range)
+                    if (Items.CanUseItem(bil.Id) && _player.Distance(t) <= bil.Range)
                     {
                         Items.UseItem(bil.Id, t);
                     }
                 }
                 if (Items.HasItem(botrk.Id))
                 {
-                    if (Items.CanUseItem(botrk.Id) && _player.LSDistance(t) <= botrk.Range)
+                    if (Items.CanUseItem(botrk.Id) && _player.Distance(t) <= botrk.Range)
                     {
                         Items.UseItem(botrk.Id, t);
                     }
@@ -457,16 +457,16 @@ using EloBuddy; namespace KappaSeries
             if (t == null) return;
             
             #region E
-            if (_e.LSIsReady() && _cfg.Item("UseECombo").IsActive() && _player.LSDistance(t) <= _e.Range)
+            if (_e.IsReady() && _cfg.Item("UseECombo").IsActive() && _player.Distance(t) <= _e.Range)
             {
                 _e.Cast(t);
             }
             #endregion
             #region Q
 
-            if (_q.LSIsReady() && _cfg.Item("UseQCombo").IsActive() && _player.LSDistance(t) <= _q.Range)
+            if (_q.IsReady() && _cfg.Item("UseQCombo").IsActive() && _player.Distance(t) <= _q.Range)
             {
-                if (_cfg.Item("DontQ").IsActive() && t.LSUnderTurret())
+                if (_cfg.Item("DontQ").IsActive() && t.UnderTurret())
                 {
                     if (_cfg.Item("Dive").IsActive())
                     {
@@ -491,7 +491,7 @@ using EloBuddy; namespace KappaSeries
 
             #endregion
             #region W
-            if (_w.LSIsReady() && _cfg.Item("UseWCombo").IsActive())
+            if (_w.IsReady() && _cfg.Item("UseWCombo").IsActive())
             {
                 #region Smart W
                 if (_cfg.Item("SmartW").IsActive())
@@ -512,14 +512,14 @@ using EloBuddy; namespace KappaSeries
                 #region not smart W
                 else if (!_cfg.Item("SmartW").IsActive())
                 {
-                    if (_w.LSIsReady() && GetHealthPercent(_player) < (_cfg.Item("minW").GetValue<Slider>().Value))
+                    if (_w.IsReady() && GetHealthPercent(_player) < (_cfg.Item("minW").GetValue<Slider>().Value))
                     {
                         if (_player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 2)
                         {
                             _w.Cast();
                         }
                     }
-                    if (_w.LSIsReady() && GetHealthPercent(_player) > (_cfg.Item("maxW").GetValue<Slider>().Value))
+                    if (_w.IsReady() && GetHealthPercent(_player) > (_cfg.Item("maxW").GetValue<Slider>().Value))
                     {
                         if (_player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1)
                         {
@@ -532,7 +532,7 @@ using EloBuddy; namespace KappaSeries
             #endregion
             #endregion
             #region R
-            if (_r.LSIsReady() && _cfg.Item("UseRCombo").IsActive() && _player.LSCountEnemiesInRange(_r.Range) >= _cfg.Item("minR").GetValue<Slider>().Value && _player.LSDistance(t) <= _r.Range)
+            if (_r.IsReady() && _cfg.Item("UseRCombo").IsActive() && _player.CountEnemiesInRange(_r.Range) >= _cfg.Item("minR").GetValue<Slider>().Value && _player.Distance(t) <= _r.Range)
             {
                 _r.Cast();
             }

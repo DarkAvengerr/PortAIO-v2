@@ -16,15 +16,15 @@ using EloBuddy;
     {
         public static float GravesTotalDamage(AIHeroClient enemy)
         {
-            if (GravesSpells.Q.LSIsReady() && Helper.Enabled("graves.q.combo"))
+            if (GravesSpells.Q.IsReady() && Helper.Enabled("graves.q.combo"))
             {
                 return GravesSpells.Q.GetDamage(enemy);
             }
-            if (GravesSpells.W.LSIsReady() && Helper.Enabled("graves.w.combo"))
+            if (GravesSpells.W.IsReady() && Helper.Enabled("graves.w.combo"))
             {
                 return GravesSpells.W.GetDamage(enemy);
             }
-            if (GravesSpells.R.LSIsReady() && Helper.Enabled("graves.r.combo"))
+            if (GravesSpells.R.IsReady() && Helper.Enabled("graves.r.combo"))
             {
                 return GravesSpells.R.GetDamage(enemy);
             }

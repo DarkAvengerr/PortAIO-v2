@@ -21,7 +21,7 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Tumble
         {
             if (sender.IsMe && args.Slot == SpellSlot.R && ShouldGetExecuted())
             {
-                var qCastPosition = ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, 300f);
+                var qCastPosition = ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 300f);
                 if (qCastPosition.IsSafe() && qCastPosition.IsSafeEx())
                 {
                     LeagueSharp.Common.Utility.DelayAction.Add(250, () =>
@@ -33,7 +33,7 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Tumble
         public bool ShouldGetExecuted()
         {
             return Variables.Menu.Item("dz191.vhr.misc.tumble.autoQR") != null
-                && Variables.Menu.Item("dz191.vhr.misc.tumble.autoQR").GetValue<bool>() && Variables.spells[SpellSlot.Q].LSIsReady();
+                && Variables.Menu.Item("dz191.vhr.misc.tumble.autoQR").GetValue<bool>() && Variables.spells[SpellSlot.Q].IsReady();
         }
 
         public ModuleType GetModuleType()

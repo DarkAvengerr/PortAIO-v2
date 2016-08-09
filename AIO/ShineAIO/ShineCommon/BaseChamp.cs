@@ -72,7 +72,7 @@ using EloBuddy;
 
         public virtual void Game_OnUpdate(EventArgs args)
         {
-            if (ObjectManager.Player.IsDead || ObjectManager.Player.LSIsRecalling() || args == null)
+            if (ObjectManager.Player.IsDead || ObjectManager.Player.IsRecalling() || args == null)
                 return;
 
             if (BeforeOrbWalking != null) BeforeOrbWalking();
@@ -132,7 +132,7 @@ using EloBuddy;
 
         public bool ComboReady()
         {
-            return Spells[Q].LSIsReady() && Spells[W].LSIsReady() && Spells[E].LSIsReady() && Spells[R].LSIsReady();
+            return Spells[Q].IsReady() && Spells[W].IsReady() && Spells[E].IsReady() && Spells[R].IsReady();
         }
 
         #region Damage Calculation Funcitons
@@ -145,8 +145,8 @@ using EloBuddy;
         public virtual double CalculateDamageQ(AIHeroClient target)
         {
             var item = Config.Item("CUSEQ");
-            if (item != null && item.GetValue<bool>() && Spells[Q].LSIsReady())
-                return ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.Q);
+            if (item != null && item.GetValue<bool>() && Spells[Q].IsReady())
+                return ObjectManager.Player.GetSpellDamage(target, SpellSlot.Q);
 
             return 0.0;
         }
@@ -155,8 +155,8 @@ using EloBuddy;
         public virtual double CalculateDamageW(AIHeroClient target)
         {
             var item = Config.Item("CUSEW");
-            if (item != null && item.GetValue<bool>() && Spells[W].LSIsReady())
-                return ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.W);
+            if (item != null && item.GetValue<bool>() && Spells[W].IsReady())
+                return ObjectManager.Player.GetSpellDamage(target, SpellSlot.W);
 
             return 0.0;
         }
@@ -165,8 +165,8 @@ using EloBuddy;
         public virtual double CalculateDamageE(AIHeroClient target)
         {
             var item = Config.Item("CUSEE");
-            if (item != null && item.GetValue<bool>() && Spells[E].LSIsReady())
-                return ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.E);
+            if (item != null && item.GetValue<bool>() && Spells[E].IsReady())
+                return ObjectManager.Player.GetSpellDamage(target, SpellSlot.E);
 
             return 0.0;
         }
@@ -175,8 +175,8 @@ using EloBuddy;
         public virtual double CalculateDamageR(AIHeroClient target)
         {
             var item = Config.Item("CUSER");
-            if (item != null && item.GetValue<bool>() && Spells[R].LSIsReady())
-                return ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.R);
+            if (item != null && item.GetValue<bool>() && Spells[R].IsReady())
+                return ObjectManager.Player.GetSpellDamage(target, SpellSlot.R);
 
             return 0.0;
         }
@@ -190,8 +190,8 @@ using EloBuddy;
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private double CalculateSummonersDamage(AIHeroClient target)
         {
-            var ignite = ObjectManager.Player.LSGetSpellSlot("summonerdot");
-            if (ignite != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(ignite) == SpellState.Ready && ObjectManager.Player.LSDistance(target, false) < 550)
+            var ignite = ObjectManager.Player.GetSpellSlot("summonerdot");
+            if (ignite != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(ignite) == SpellState.Ready && ObjectManager.Player.Distance(target, false) < 550)
                 return ObjectManager.Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite); //ignite
 
             return 0.0;
@@ -202,10 +202,10 @@ using EloBuddy;
         {
             double dmg = 0.0;
 
-            if (Items.CanUseItem(3144) && ObjectManager.Player.LSDistance(target, false) < 550)
+            if (Items.CanUseItem(3144) && ObjectManager.Player.Distance(target, false) < 550)
                 dmg += ObjectManager.Player.GetItemDamage(target, Damage.DamageItems.Bilgewater); //bilgewater cutlass
 
-            if (Items.CanUseItem(3153) && ObjectManager.Player.LSDistance(target, false) < 550)
+            if (Items.CanUseItem(3153) && ObjectManager.Player.Distance(target, false) < 550)
                 dmg += ObjectManager.Player.GetItemDamage(target, Damage.DamageItems.Botrk); //botrk
 
             if(Items.HasItem(3057))
@@ -224,7 +224,7 @@ using EloBuddy;
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual double CalculateAADamage(AIHeroClient target, int aacount = 2)
         {
-            double dmg = ObjectManager.Player.LSGetAutoAttackDamage(target) * aacount;
+            double dmg = ObjectManager.Player.GetAutoAttackDamage(target) * aacount;
 
             if (Items.HasItem(3115))
                 dmg += ObjectManager.Player.CalcDamage(target, Damage.DamageType.Magical, 15 + (0.15 * ObjectManager.Player.FlatMagicDamageMod)); //nashor

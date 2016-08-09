@@ -54,19 +54,19 @@ namespace TreeLib.Managers
 
         private static void Game_OnUpdate(EventArgs args)
         {
-            if (Minion != null && !Minion.LSIsValidTarget(float.MaxValue, false))
+            if (Minion != null && !Minion.IsValidTarget(float.MaxValue, false))
             {
                 Minion = null;
             }
 
-            if (!Menu.Item("Enabled").IsActive() || Player.IsDead || !Smite.LSIsReady())
+            if (!Menu.Item("Enabled").IsActive() || Player.IsDead || !Smite.IsReady())
             {
                 return;
             }
 
             var minion =
                 NearbyMinions.FirstOrDefault(
-                    buff => buff.LSIsValidTarget() && SmiteableMinions.Contains(buff.CharData.BaseSkinName));
+                    buff => buff.IsValidTarget() && SmiteableMinions.Contains(buff.CharData.BaseSkinName));
 
             if (minion == null || !minion.IsValid)
             {
@@ -90,7 +90,7 @@ namespace TreeLib.Managers
 
             if (Menu.Item("DrawSmite").IsActive())
             {
-                if (!Smite.LSIsReady())
+                if (!Smite.IsReady())
                 {
                     Render.Circle.DrawCircle(ObjectManager.Player.Position, 500, Color.Red);
 

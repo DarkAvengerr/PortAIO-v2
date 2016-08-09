@@ -53,7 +53,7 @@ namespace VayneHunter_Reborn.Utility.MenuUtility
             
             if(Variables.Menu.Item(name) != null && Variables.Menu.Item(mana) != null)
             {
-                return spell.LSIsReady()
+                return spell.IsReady()
                     && GetItemValue<bool>(name)
                     && (!checkMana || (ObjectManager.Player.Mana >= GetItemValue<Slider>(mana).Value));
             }

@@ -81,7 +81,7 @@ namespace SFXTargetSelector
             private static void OnDrawingDraw(EventArgs args)
             {
                 if (Selected.Enabled && TargetSelector.Selected.Target != null &&
-                    TargetSelector.Selected.Target.LSIsValidTarget() &&
+                    TargetSelector.Selected.Target.IsValidTarget() &&
                     TargetSelector.Selected.Target.Position.IsOnScreen() && TargetSelector.Selected.Focus.Enabled)
                 {
                     if (Selected.Enabled)
@@ -204,7 +204,7 @@ namespace SFXTargetSelector
                     if (Modes.Current.Mode == Mode.Weights && (BestTarget.Enabled || Simple))
                     {
                         var enemies =
-                            Targets.Items.Where(h => h.Hero.LSIsValidTarget(TargetSelector.Weights.Range)).ToList();
+                            Targets.Items.Where(h => h.Hero.IsValidTarget(TargetSelector.Weights.Range)).ToList();
                         foreach (var weight in TargetSelector.Weights.Items.Where(w => w.Weight > 0))
                         {
                             TargetSelector.Weights.UpdateMaxMinValue(weight, enemies, true);

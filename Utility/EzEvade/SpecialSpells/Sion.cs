@@ -39,17 +39,17 @@ using EloBuddy; namespace ezEvade.SpecialSpells
                     }
                 }
 
-                objList.OrderBy(o => o.LSDistance(hero.ServerPosition));
+                objList.OrderBy(o => o.Distance(hero.ServerPosition));
 
-                var spellStart = args.Start.LSTo2D();
-                var dir = (args.End.LSTo2D() - spellStart).LSNormalized();
+                var spellStart = args.Start.To2D();
+                var dir = (args.End.To2D() - spellStart).Normalized();
                 var spellEnd = spellStart + dir * spellData.range;
 
                 foreach (var obj in objList)
                 {
-                    var objProjection = obj.ServerPosition.LSTo2D().LSProjectOn(spellStart, spellEnd);
+                    var objProjection = obj.ServerPosition.To2D().ProjectOn(spellStart, spellEnd);
 
-                    if (objProjection.IsOnSegment && objProjection.SegmentPoint.LSDistance(obj.ServerPosition.LSTo2D()) < obj.BoundingRadius + spellData.radius)
+                    if (objProjection.IsOnSegment && objProjection.SegmentPoint.Distance(obj.ServerPosition.To2D()) < obj.BoundingRadius + spellData.radius)
                     {
                         //sth happens
                     }

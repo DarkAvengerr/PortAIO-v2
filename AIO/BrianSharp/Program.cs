@@ -90,7 +90,7 @@ namespace BrianSharp
             Sheen = ItemData.Sheen.GetItem();
             Iceborn = ItemData.Iceborn_Gauntlet.GetItem();
             Trinity = ItemData.Trinity_Force.GetItem();
-            Flash = Player.LSGetSpellSlot("summonerflash");
+            Flash = Player.GetSpellSlot("summonerflash");
             foreach (var spell in
                 Player.Spellbook.Spells.Where(
                     i =>
@@ -99,7 +99,7 @@ namespace BrianSharp
             {
                 Smite = spell.Slot;
             }
-            Ignite = Player.LSGetSpellSlot("summonerdot");
+            Ignite = Player.GetSpellSlot("summonerdot");
             MainMenu.AddToMainMenu();
             Helper.AddNotif(string.Format("[Brian Sharp] - {0}: Loaded !", Player.ChampionName), 3000);
         }

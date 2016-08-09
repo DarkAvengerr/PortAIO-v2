@@ -72,7 +72,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
         private void Game_OnUpdate(EventArgs args)
         {
-            if (!Program.LagFree(0) || Player.LSIsRecalling() || Player.IsDead)
+            if (!Program.LagFree(0) || Player.IsRecalling() || Player.IsDead)
                 return;
 
             foreach (var obj in HiddenObjList)
@@ -84,13 +84,13 @@ namespace OneKeyToWin_AIO_Sebby.Core
                 }
             }
 
-            if (Config.Item("autoBuy").GetValue<bool>() && Player.LSInFountain() && !ScryingOrb.IsOwned() && Player.Level >= 9 && Shop.IsOpen)
+            if (Config.Item("autoBuy").GetValue<bool>() && Player.InFountain() && !ScryingOrb.IsOwned() && Player.Level >= 9 && Shop.IsOpen)
                 Shop.BuyItem(ItemId.Farsight_Alteration);
 
             if(rengar && Player.HasBuff("rengarralertsound"))
                 CastVisionWards(Player.ServerPosition);
             
-            if (Vayne != null && Vayne.LSIsValidTarget(1000) && Vayne.HasBuff("vaynetumblefade"))
+            if (Vayne != null && Vayne.IsValidTarget(1000) && Vayne.HasBuff("vaynetumblefade"))
                 CastVisionWards(Vayne.ServerPosition);
 
             AutoWardLogic();
@@ -105,7 +105,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
                 if (need == null || need.PredictedPos == null)
                     continue;
 
-                var PPDistance = need.PredictedPos.LSDistance(Player.Position);
+                var PPDistance = need.PredictedPos.Distance(Player.Position);
 
                 if(PPDistance > 1400)
                     continue;
@@ -114,31 +114,31 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
                 if (timer > 1 && timer < 3)
                 {
-                    if (Program.Combo && PPDistance < 1500 && Player.ChampionName == "Quinn" && W.LSIsReady() && Config.Item("autoW", true).GetValue<bool>())
+                    if (Program.Combo && PPDistance < 1500 && Player.ChampionName == "Quinn" && W.IsReady() && Config.Item("autoW", true).GetValue<bool>())
                     {
                         W.Cast();
                     }
 
-                    if (Program.Combo && PPDistance < 900 && Player.ChampionName == "Karhus" && Q.LSIsReady() && Player.LSCountEnemiesInRange(900) == 0)
+                    if (Program.Combo && PPDistance < 900 && Player.ChampionName == "Karhus" && Q.IsReady() && Player.CountEnemiesInRange(900) == 0)
                     {
                         Q.Cast(need.PredictedPos);
                     }
 
-                    if (Program.Combo && PPDistance < 1400 && Player.ChampionName == "Ashe" && E.LSIsReady() && Player.LSCountEnemiesInRange(800) == 0 && Config.Item("autoE", true).GetValue<bool>())
+                    if (Program.Combo && PPDistance < 1400 && Player.ChampionName == "Ashe" && E.IsReady() && Player.CountEnemiesInRange(800) == 0 && Config.Item("autoE", true).GetValue<bool>())
                     {
-                        E.Cast(Player.Position.LSExtend(need.PredictedPos, 5000));
+                        E.Cast(Player.Position.Extend(need.PredictedPos, 5000));
                     }
 
-                    if (PPDistance < 800 && Player.ChampionName == "MissFortune" && E.LSIsReady() && Program.Combo && Player.Mana > 200)
+                    if (PPDistance < 800 && Player.ChampionName == "MissFortune" && E.IsReady() && Program.Combo && Player.Mana > 200)
                     {
-                        E.Cast(Player.Position.LSExtend(need.PredictedPos, 800));
+                        E.Cast(Player.Position.Extend(need.PredictedPos, 800));
                     }
 
-                    if (!Player.Spellbook.IsAutoAttacking && PPDistance < 800 && Player.ChampionName == "Caitlyn" && W.LSIsReady() && Player.Mana > 200f && Config.Item("bushW", true).GetValue<bool>() && Utils.TickCount - W.LastCastAttemptT > 2000)
+                    if (!Player.Spellbook.IsAutoAttacking && PPDistance < 800 && Player.ChampionName == "Caitlyn" && W.IsReady() && Player.Mana > 200f && Config.Item("bushW", true).GetValue<bool>() && Utils.TickCount - W.LastCastAttemptT > 2000)
                     {
                         W.Cast(need.PredictedPos);
                     }
-                    if (!Player.Spellbook.IsAutoAttacking && PPDistance < 760 && Player.ChampionName == "Jhin" && E.LSIsReady() && Player.Mana > 200f && Config.Item("bushE", true).GetValue<bool>() && Utils.TickCount - E.LastCastAttemptT > 2000)
+                    if (!Player.Spellbook.IsAutoAttacking && PPDistance < 760 && Player.ChampionName == "Jhin" && E.IsReady() && Player.Mana > 200f && Config.Item("bushE", true).GetValue<bool>() && Utils.TickCount - E.LastCastAttemptT > 2000)
                     {
                         E.Cast(need.PredictedPos);
                     }
@@ -221,11 +221,11 @@ namespace OneKeyToWin_AIO_Sebby.Core
             var minion = sender as Obj_AI_Minion;
             if (minion != null)
             {
-                if ((sender.Name.ToLower() == "visionward" || sender.Name.ToLower() == "sightward") && !HiddenObjList.Exists(x => x.pos.LSDistance(sender.Position) < 100))
+                if ((sender.Name.ToLower() == "visionward" || sender.Name.ToLower() == "sightward") && !HiddenObjList.Exists(x => x.pos.Distance(sender.Position) < 100))
                 {
                     foreach (var obj in HiddenObjList)
                     {
-                        if (obj.pos.LSDistance(sender.Position) < 400)
+                        if (obj.pos.Distance(sender.Position) < 400)
                         {
                             if (obj.type == 0)
                             {
@@ -242,7 +242,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
                         HiddenObjList.Add(new HiddenObj() { type = 1, pos = sender.Position, endTime = Game.Time + dupa.Mana });
                 }
             }
-            else if (rengar && sender.Position.LSDistance(Player.Position) < 800)
+            else if (rengar && sender.Position.Distance(Player.Position) < 800)
             {
                 switch (sender.Name)
                 {
@@ -269,12 +269,12 @@ namespace OneKeyToWin_AIO_Sebby.Core
                         HiddenObjList.Remove(obj);
                         return;
                     }
-                    else if (obj.type == 3 && obj.pos.LSDistance(sender.Position) < 100)
+                    else if (obj.type == 3 && obj.pos.Distance(sender.Position) < 100)
                     {
                         HiddenObjList.Remove(obj);
                         return;
                     }
-                    else if (obj.pos.LSDistance(sender.Position) < 400)
+                    else if (obj.pos.Distance(sender.Position) < 400)
                     {
                         if (obj.type == 2 && sender.Name.ToLower() == "visionward")
                         {
@@ -298,7 +298,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
                 if(args.Target == null)
                     AddWard(args.SData.Name.ToLower(), args.End);
 
-                if ((OracleLens.IsReady() || VisionWard.IsReady()) && sender.LSDistance(Player.Position) < 1200)
+                if ((OracleLens.IsReady() || VisionWard.IsReady()) && sender.Distance(Player.Position) < 1200)
                 {
                     switch (args.SData.Name.ToLower())
                     {
@@ -386,9 +386,9 @@ namespace OneKeyToWin_AIO_Sebby.Core
             if (Config.Item("AutoWardPink").GetValue<bool>())
             {
                 if (OracleLens.IsReady())
-                    OracleLens.Cast(Player.Position.LSExtend(position, OracleLens.Range));
+                    OracleLens.Cast(Player.Position.Extend(position, OracleLens.Range));
                 else if (VisionWard.IsReady())
-                    VisionWard.Cast(Player.Position.LSExtend(position, VisionWard.Range));
+                    VisionWard.Cast(Player.Position.Extend(position, VisionWard.Range));
             }
         }
     }

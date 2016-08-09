@@ -30,7 +30,7 @@ namespace S_Plus_Class_Kalista.Libaries
 
         private static void OnUpdate(EventArgs args)
         {       
-            if (!Champion.R.LSIsReady()) return;
+            if (!Champion.R.IsReady()) return;
 
             if (SoulBoundHero == null)
                   SoulBoundHero = HeroManager.Allies.Find(ally =>ally.Buffs.Any(user => user.Caster.IsMe && user.Name.Contains("kalistacoopstrikeally")));
@@ -53,26 +53,26 @@ namespace S_Plus_Class_Kalista.Libaries
             if (!sender.IsEnemy) return;
             if (SoulBoundHero == null) return;
             // Calculate Damage
-            if ((!(sender is AIHeroClient) || args.SData.LSIsAutoAttack()) && args.Target != null && args.Target.NetworkId == SoulBoundHero.NetworkId)
+            if ((!(sender is AIHeroClient) || args.SData.IsAutoAttack()) && args.Target != null && args.Target.NetworkId == SoulBoundHero.NetworkId)
             {
                 // Calculate arrival time and damage
-                _incomingDamage.Add(SoulBoundHero.ServerPosition.LSDistance(sender.ServerPosition) / args.SData.MissileSpeed + Game.Time, (float)sender.LSGetAutoAttackDamage(SoulBoundHero));
+                _incomingDamage.Add(SoulBoundHero.ServerPosition.Distance(sender.ServerPosition) / args.SData.MissileSpeed + Game.Time, (float)sender.GetAutoAttackDamage(SoulBoundHero));
             }
             // Sender is a hero
             else if (sender is AIHeroClient)
             {
                 var attacker = (AIHeroClient)sender;
-                var slot = attacker.LSGetSpellSlot(args.SData.Name);
+                var slot = attacker.GetSpellSlot(args.SData.Name);
 
                 if (slot == SpellSlot.Unknown) return;
 
-                if (slot == attacker.LSGetSpellSlot("SummonerDot") && args.Target != null && args.Target.NetworkId == SoulBoundHero.NetworkId)
+                if (slot == attacker.GetSpellSlot("SummonerDot") && args.Target != null && args.Target.NetworkId == SoulBoundHero.NetworkId)
                     _instantDamage.Add(Game.Time + 2, (float)attacker.GetSummonerSpellDamage(SoulBoundHero, LeagueSharp.Common.Damage.SummonerSpell.Ignite));
                     
                 else if (slot.HasFlag(SpellSlot.Q | SpellSlot.W | SpellSlot.E | SpellSlot.R) &&
                          ((args.Target != null && args.Target.NetworkId == SoulBoundHero.NetworkId) ||
-                          args.End.LSDistance(SoulBoundHero.ServerPosition) < Math.Pow(args.SData.LineWidth, 2)))
-                    _instantDamage.Add(Game.Time + 2, (float)attacker.LSGetSpellDamage(SoulBoundHero, slot));
+                          args.End.Distance(SoulBoundHero.ServerPosition) < Math.Pow(args.SData.LineWidth, 2)))
+                    _instantDamage.Add(Game.Time + 2, (float)attacker.GetSpellDamage(SoulBoundHero, slot));
             }
         }
 

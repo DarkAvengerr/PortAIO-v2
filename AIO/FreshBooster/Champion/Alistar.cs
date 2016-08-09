@@ -139,12 +139,12 @@ using EloBuddy;
                 {
                     float damage = 0;
 
-                    if (_Q.LSIsReady())
+                    if (_Q.IsReady())
                         damage += _Q.GetDamage(enemy);
-                    if (_W.LSIsReady())
+                    if (_W.IsReady())
                         damage += _W.GetDamage(enemy);
                     if (!Player.Spellbook.IsAutoAttacking)
-                        damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                        damage += (float)Player.GetAutoAttackDamage(enemy, true);
                     return damage;
                 }
                 return 0;
@@ -164,7 +164,7 @@ using EloBuddy;
             try
             {
                 if (Player.IsDead) return;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
                 {
                     if (_MainMenu.Item("Alistar_Indicator").GetValue<bool>())
                     {
@@ -215,9 +215,9 @@ using EloBuddy;
                 // E
                 if (_MainMenu.Item("Alistar_EMinEnable").GetValue<bool>())
                 {
-                    var EAlly = HeroManager.Allies.FirstOrDefault(f => f.LSDistance(Player.Position) < _E.Range && !f.LSIsRecalling() && !f.LSInFountain(LeagueSharp.Common.Utility.FountainType.OwnFountain)
+                    var EAlly = HeroManager.Allies.FirstOrDefault(f => f.Distance(Player.Position) < _E.Range && !f.IsRecalling() && !f.InFountain(LeagueSharp.Common.Utility.FountainType.OwnFountain)
                         && _MainMenu.Item("Alistar_EMMin").GetValue<Slider>().Value > f.HealthPercent);
-                    if (EAlly.LSIsRecalling() || Player.LSIsRecalling())
+                    if (EAlly.IsRecalling() || Player.IsRecalling())
                         return;
                     if (EAlly != null)
                         _E.Cast(true);
@@ -227,16 +227,16 @@ using EloBuddy;
                 if (_MainMenu.Item("CKey").GetValue<KeyBind>().Active)
                 {
                     if (_MainMenu.Item("Alistar_CUse_R").GetValue<bool>())
-                        if (_R.LSIsReady())
+                        if (_R.IsReady())
                         {
-                            var Enemy = HeroManager.Enemies.FirstOrDefault(f => f.LSDistance(Player.Position) < _Q.Range);
+                            var Enemy = HeroManager.Enemies.FirstOrDefault(f => f.Distance(Player.Position) < _Q.Range);
                             if (Enemy != null && HasBuff(Player))
                                 _R.Cast(true);
                         }
-                    if (QTarget != null && _Q.LSIsReady())
+                    if (QTarget != null && _Q.IsReady())
                         if (_MainMenu.Item("Alistar_CUse_Q").GetValue<bool>())
                             _Q.Cast(true);
-                    if (WTarget != null && _W.LSIsReady())
+                    if (WTarget != null && _W.IsReady())
                         if (_MainMenu.Item("Alistar_CUse_W").GetValue<bool>())
                             _W.Cast(WTarget, true);
                 }
@@ -246,9 +246,9 @@ using EloBuddy;
                     MovingPlayer(Game.CursorPos);
                     if (GetTarget == null)
                         return;
-                    if (GetTarget.Position.LSDistance(Player.Position) < _W.Range)
+                    if (GetTarget.Position.Distance(Player.Position) < _W.Range)
                     {
-                        if (_W.LSIsReady() && _Q.LSIsReady())
+                        if (_W.IsReady() && _Q.IsReady())
                         {
                             _W.Cast(GetTarget, true);
                         }
@@ -260,9 +260,9 @@ using EloBuddy;
                     MovingPlayer(Game.CursorPos);
                     if (GetTarget == null)
                         return;
-                    QFPos = Player.Position.LSExtend(GetTarget.Position, 425);
-                    if (GetTarget.Position.LSDistance(Player.Position) < 425 + _Q.Range)
-                        if (_Q.LSIsReady() && Player.LSGetSpellSlot("SummonerFlash").LSIsReady())
+                    QFPos = Player.Position.Extend(GetTarget.Position, 425);
+                    if (GetTarget.Position.Distance(Player.Position) < 425 + _Q.Range)
+                        if (_Q.IsReady() && Player.GetSpellSlot("SummonerFlash").IsReady())
                         {
                             _Q.Cast(true);
                             return;
@@ -284,12 +284,12 @@ using EloBuddy;
             {
                 if (_MainMenu.Item("Alistar_Anti-Order").GetValue<StringList>().SelectedIndex == 0)
                 {
-                    if (_Q.LSIsReady() && gapcloser.Sender.Position.LSDistance(Player.Position) < _Q.Range && AntiTime < Environment.TickCount && _MainMenu.Item("Alistar_Anti-Q").GetValue<bool>())
+                    if (_Q.IsReady() && gapcloser.Sender.Position.Distance(Player.Position) < _Q.Range && AntiTime < Environment.TickCount && _MainMenu.Item("Alistar_Anti-Q").GetValue<bool>())
                     {
                         _Q.Cast(true);
                         AntiTime = TickCount(1000);
                     }
-                    if (_W.LSIsReady() && gapcloser.Sender.Position.LSDistance(Player.Position) < _W.Range && AntiTime < Environment.TickCount && _MainMenu.Item("Alistar_Anti-W").GetValue<bool>())
+                    if (_W.IsReady() && gapcloser.Sender.Position.Distance(Player.Position) < _W.Range && AntiTime < Environment.TickCount && _MainMenu.Item("Alistar_Anti-W").GetValue<bool>())
                     {
                         _W.Cast(gapcloser.Sender, true);
                         AntiTime = TickCount(1000);
@@ -297,12 +297,12 @@ using EloBuddy;
                 }
                 if (_MainMenu.Item("Alistar_Anti-Order").GetValue<StringList>().SelectedIndex == 1)
                 {
-                    if (_W.LSIsReady() && gapcloser.Sender.Position.LSDistance(Player.Position) < _W.Range && AntiTime < Environment.TickCount && _MainMenu.Item("Alistar_Anti-W").GetValue<bool>())
+                    if (_W.IsReady() && gapcloser.Sender.Position.Distance(Player.Position) < _W.Range && AntiTime < Environment.TickCount && _MainMenu.Item("Alistar_Anti-W").GetValue<bool>())
                     {
                         _W.Cast(gapcloser.Sender, true);
                         AntiTime = TickCount(1000);
                     }
-                    if (_Q.LSIsReady() && gapcloser.Sender.Position.LSDistance(Player.Position) < _Q.Range && AntiTime < Environment.TickCount && _MainMenu.Item("Alistar_Anti-Q").GetValue<bool>())
+                    if (_Q.IsReady() && gapcloser.Sender.Position.Distance(Player.Position) < _Q.Range && AntiTime < Environment.TickCount && _MainMenu.Item("Alistar_Anti-Q").GetValue<bool>())
                     {
                         _Q.Cast(true);
                         AntiTime = TickCount(1000);
@@ -323,16 +323,16 @@ using EloBuddy;
             try
             {
                 if (_MainMenu.Item("Alistar_FQKey").GetValue<KeyBind>().Active)
-                    if (sender.IsMe && TargetSelector.GetSelectedTarget().Position.LSDistance(Player.Position) > _Q.Range)
+                    if (sender.IsMe && TargetSelector.GetSelectedTarget().Position.Distance(Player.Position) > _Q.Range)
                         if (args.SData.Name == "Pulverize")
                         {
-                            var Flash = Player.LSGetSpellSlot("SummonerFlash");
+                            var Flash = Player.GetSpellSlot("SummonerFlash");
                             Player.Spellbook.CastSpell(Flash, QFPos, true);
                         }
                 if (_MainMenu.Item("Alistar_CUse_WQ").GetValue<KeyBind>().Active)
                 {
                     if (sender.IsMe && args.SData.Name == "Headbutt")
-                        if (_Q.LSIsReady())
+                        if (_Q.IsReady())
                             _Q.Cast(true);
                 }
             }
@@ -354,12 +354,12 @@ using EloBuddy;
             {
                 if (sender.IsAlly)
                     return;
-                if (_MainMenu.Item("Alistar_Inter-Q").GetValue<bool>() && _Q.LSIsReady() && sender.Position.LSDistance(Player.Position) < _Q.Range && InterTime < Environment.TickCount)
+                if (_MainMenu.Item("Alistar_Inter-Q").GetValue<bool>() && _Q.IsReady() && sender.Position.Distance(Player.Position) < _Q.Range && InterTime < Environment.TickCount)
                 {
                     _Q.Cast(true);
                     InterTime = TickCount(1000);
                 }
-                if (_MainMenu.Item("Alistar_Inter-W").GetValue<bool>() && _W.LSIsReady() && sender.Position.LSDistance(Player.Position) < _W.Range && InterTime < Environment.TickCount)
+                if (_MainMenu.Item("Alistar_Inter-W").GetValue<bool>() && _W.IsReady() && sender.Position.Distance(Player.Position) < _W.Range && InterTime < Environment.TickCount)
                 {
                     _W.Cast(true);
                     InterTime = TickCount(1000);

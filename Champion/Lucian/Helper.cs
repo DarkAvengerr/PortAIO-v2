@@ -20,13 +20,13 @@ namespace LCS_Lucian
 
         public static void LucianAntiGapcloser(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs spell)
         {
-            if (sender.IsEnemy && spell.End.LSDistance(ObjectManager.Player.Position) < LucianSpells.E.Range && !spell.SData.LSIsAutoAttack() && spell.Target.IsMe)
+            if (sender.IsEnemy && spell.End.Distance(ObjectManager.Player.Position) < LucianSpells.E.Range && !spell.SData.IsAutoAttack() && spell.Target.IsMe)
             {
                 foreach (var gapclose in AntiGapcloseSpell.GapcloseableSpells.Where(x => spell.SData.Name == ((AIHeroClient)sender).GetSpell(x.Slot).Name).OrderByDescending(c => LSlider("gapclose.slider." + spell.SData.Name)))
                 {
                     if (LEnabled("gapclose." + ((AIHeroClient)sender).ChampionName))
                     {
-                        LucianSpells.E.Cast(ObjectManager.Player.Position.LSExtend(spell.End, -LucianSpells.W.Range));
+                        LucianSpells.E.Cast(ObjectManager.Player.Position.Extend(spell.End, -LucianSpells.W.Range));
                     }
                 }
             }

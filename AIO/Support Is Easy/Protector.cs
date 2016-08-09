@@ -177,13 +177,13 @@ using EloBuddy; namespace Support
                 foreach (var hero in
                     HeroManager.Allies.Where(h => !h.IsDead)
                                .OrderByDescending(h => h.FlatPhysicalDamageMod)
-                               .Where(h => ObjectManager.Player.LSDistance(h) < mikael.Item.Range))
+                               .Where(h => ObjectManager.Player.Distance(h) < mikael.Item.Range))
                 {
                     foreach (var buff in CcTypes)
                     {
                         if (hero.HasBuffOfType(buff) && Menu.SubMenu("CC").Item(buff.ToString()).GetValue<bool>())
                         {
-                            if (mikael.IsActive(hero) && hero.LSCountEnemiesInRange(800) > 0)
+                            if (mikael.IsActive(hero) && hero.CountEnemiesInRange(800) > 0)
                             {
                                 mikael.Item.Cast(hero);
                                 Console.WriteLine(
@@ -464,8 +464,8 @@ using EloBuddy; namespace Support
                 {
                     if (item.SpellData.SpellName == skillshot.SpellData.SpellName
                         && (item.Unit.NetworkId == skillshot.Unit.NetworkId
-                            && (skillshot.Direction).LSAngleBetween(item.Direction) < 5
-                            && (skillshot.Start.LSDistance(item.Start) < 100
+                            && (skillshot.Direction).AngleBetween(item.Direction) < 5
+                            && (skillshot.Start.Distance(item.Start) < 100
                                 || skillshot.SpellData.FromObjects.Length == 0)))
                     {
                         alreadyAdded = true;
@@ -479,7 +479,7 @@ using EloBuddy; namespace Support
                 }
 
                 //Check if the skillshot is too far away.
-                if (skillshot.Start.LSDistance(ObjectManager.Player.ServerPosition.LSTo2D())
+                if (skillshot.Start.Distance(ObjectManager.Player.ServerPosition.To2D())
                     > (skillshot.SpellData.Range + skillshot.SpellData.Radius + 1000) * 1.5)
                 {
                     return;
@@ -501,7 +501,7 @@ using EloBuddy; namespace Support
                             {
                                 var end = skillshot.Start
                                           + skillshot.SpellData.Range
-                                          * originalDirection.LSRotated(skillshot.SpellData.MultipleAngle * i);
+                                          * originalDirection.Rotated(skillshot.SpellData.MultipleAngle * i);
                                 var skillshotToAdd = new Skillshot(
                                     skillshot.DetectionType,
                                     skillshot.SpellData,
@@ -522,8 +522,8 @@ using EloBuddy; namespace Support
 
                         if (skillshot.SpellData.Invert)
                         {
-                            var newDirection = -(skillshot.End - skillshot.Start).LSNormalized();
-                            var end = skillshot.Start + newDirection * skillshot.Start.LSDistance(skillshot.End);
+                            var newDirection = -(skillshot.End - skillshot.Start).Normalized();
+                            var end = skillshot.Start + newDirection * skillshot.Start.Distance(skillshot.End);
                             var skillshotToAdd = new Skillshot(
                                 skillshot.DetectionType,
                                 skillshot.SpellData,
@@ -554,22 +554,22 @@ using EloBuddy; namespace Support
                         {
                             var angle = 60;
                             var edge1 =
-                                (skillshot.End - skillshot.Unit.ServerPosition.LSTo2D()).LSRotated(
+                                (skillshot.End - skillshot.Unit.ServerPosition.To2D()).Rotated(
                                     -angle / 2 * (float)Math.PI / 180);
-                            var edge2 = edge1.LSRotated(angle * (float)Math.PI / 180);
+                            var edge2 = edge1.Rotated(angle * (float)Math.PI / 180);
 
                             foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
                             {
-                                var v = minion.ServerPosition.LSTo2D() - skillshot.Unit.ServerPosition.LSTo2D();
-                                if (minion.Name == "Seed" && edge1.LSCrossProduct(v) > 0 && v.LSCrossProduct(edge2) > 0
-                                    && minion.LSDistance(skillshot.Unit) < 800
+                                var v = minion.ServerPosition.To2D() - skillshot.Unit.ServerPosition.To2D();
+                                if (minion.Name == "Seed" && edge1.CrossProduct(v) > 0 && v.CrossProduct(edge2) > 0
+                                    && minion.Distance(skillshot.Unit) < 800
                                     && (minion.Team != ObjectManager.Player.Team))
                                 {
-                                    var start = minion.ServerPosition.LSTo2D();
-                                    var end = skillshot.Unit.ServerPosition.LSTo2D()
-                                                       .LSExtend(
-                                                           minion.ServerPosition.LSTo2D(),
-                                                           skillshot.Unit.LSDistance(minion) > 200 ? 1300 : 1000);
+                                    var start = minion.ServerPosition.To2D();
+                                    var end = skillshot.Unit.ServerPosition.To2D()
+                                                       .Extend(
+                                                           minion.ServerPosition.To2D(),
+                                                           skillshot.Unit.Distance(minion) > 200 ? 1300 : 1000);
 
                                     var skillshotToAdd = new Skillshot(
                                         skillshot.DetectionType,
@@ -586,8 +586,8 @@ using EloBuddy; namespace Support
 
                         if (skillshot.SpellData.SpellName == "AlZaharCalloftheVoid")
                         {
-                            var start = skillshot.End - skillshot.Direction.LSPerpendicular() * 400;
-                            var end = skillshot.End + skillshot.Direction.LSPerpendicular() * 400;
+                            var start = skillshot.End - skillshot.Direction.Perpendicular() * 400;
+                            var end = skillshot.End + skillshot.Direction.Perpendicular() * 400;
                             var skillshotToAdd = new Skillshot(
                                 skillshot.DetectionType,
                                 skillshot.SpellData,
@@ -601,7 +601,7 @@ using EloBuddy; namespace Support
 
                         if (skillshot.SpellData.SpellName == "ZiggsQ")
                         {
-                            var d1 = skillshot.Start.LSDistance(skillshot.End);
+                            var d1 = skillshot.Start.Distance(skillshot.End);
                             var d2 = d1 * 0.4f;
                             var d3 = d2 * 0.69f;
 
@@ -638,7 +638,7 @@ using EloBuddy; namespace Support
                         if (skillshot.SpellData.SpellName == "ZiggsR")
                         {
                             skillshot.SpellData.Delay =
-                                (int)(1500 + 1500 * skillshot.End.LSDistance(skillshot.Start) / skillshot.SpellData.Range);
+                                (int)(1500 + 1500 * skillshot.End.Distance(skillshot.Start) / skillshot.SpellData.Range);
                         }
 
                         if (skillshot.SpellData.SpellName == "JarvanIVDragonStrike")
@@ -656,19 +656,19 @@ using EloBuddy; namespace Support
                             foreach (var m in ObjectManager.Get<Obj_AI_Minion>())
                             {
                                 if (m.CharData.BaseSkinName == "jarvanivstandard" && m.Team == skillshot.Unit.Team
-                                    && skillshot.IsDanger(m.Position.LSTo2D()))
+                                    && skillshot.IsDanger(m.Position.To2D()))
                                 {
-                                    endPos = m.Position.LSTo2D();
+                                    endPos = m.Position.To2D();
                                 }
                             }
 
-                            if (!endPos.LSIsValid())
+                            if (!endPos.IsValid())
                             {
                                 return;
                             }
 
-                            skillshot.End = endPos + 200 * (endPos - skillshot.Start).LSNormalized();
-                            skillshot.Direction = (skillshot.End - skillshot.Start).LSNormalized();
+                            skillshot.End = endPos + 200 * (endPos - skillshot.Start).Normalized();
+                            skillshot.Direction = (skillshot.End - skillshot.Start).Normalized();
                         }
                     }
 
@@ -722,10 +722,10 @@ using EloBuddy; namespace Support
 
                 // Protect
                 foreach (var ally in
-                    HeroManager.Allies.Where(h => h.LSIsValidTarget(2000, false))
+                    HeroManager.Allies.Where(h => h.IsValidTarget(2000, false))
                                .OrderByDescending(h => h.FlatPhysicalDamageMod))
                 {
-                    var allySafeResult = IsSafe(ally.ServerPosition.LSTo2D());
+                    var allySafeResult = IsSafe(ally.ServerPosition.To2D());
 
                     if (!allySafeResult.IsSafe && IsAboutToHit(ally, IsAboutToHitTime))
                     {
@@ -761,7 +761,7 @@ using EloBuddy; namespace Support
                 foreach (var ps in
                     ProtectorSpells.Where(
                         s =>
-                        s.ChampionName == ObjectManager.Player.ChampionName && s.Spell.LSIsReady()
+                        s.ChampionName == ObjectManager.Player.ChampionName && s.Spell.IsReady()
                         && s.Spell.IsInRange(target) && s.IsActive(target)))
                 {
                     if (ps.Harass || caster.WillKill(target, spell, ps.HpBuffer))
@@ -814,7 +814,7 @@ using EloBuddy; namespace Support
                         skillshot.Unit.CharData.BaseSkinName,
                         target.CharData.BaseSkinName,
                         skillshot.SpellData.SpellName,
-                        Math.Round(skillshot.Unit.LSGetSpellDamage(target, skillshot.SpellData.SpellName)));
+                        Math.Round(skillshot.Unit.GetSpellDamage(target, skillshot.SpellData.SpellName)));
 
                     Console.WriteLine(text);
                 }
@@ -834,7 +834,7 @@ using EloBuddy; namespace Support
                     caster.CharData.BaseSkinName,
                     target.CharData.BaseSkinName,
                     spell.Name,
-                    Math.Round(caster.LSGetSpellDamage(target, spell.Name)));
+                    Math.Round(caster.GetSpellDamage(target, spell.Name)));
 
                 Console.WriteLine(text);
             }

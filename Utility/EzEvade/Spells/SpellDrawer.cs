@@ -70,8 +70,8 @@ using EloBuddy; namespace ezEvade
 
         private void DrawLineRectangle(Vector2 start, Vector2 end, int radius, int width, Color color)
         {
-            var dir = (end - start).LSNormalized();
-            var pDir = dir.LSPerpendicular();
+            var dir = (end - start).Normalized();
+            var pDir = dir.Perpendicular();
 
             var rightStartPos = start + pDir * radius;
             var leftStartPos = start - pDir * radius;
@@ -195,7 +195,7 @@ using EloBuddy; namespace ezEvade
                             }*/
 
                             /*if (spell.spellObject != null && spell.spellObject.IsValid && spell.spellObject.IsVisible &&
-                                  spell.spellObject.Position.LSTo2D().LSDistance(ObjectCache.myHeroCache.serverPos2D) < spell.info.range + 1000)*/
+                                  spell.spellObject.Position.To2D().Distance(ObjectCache.myHeroCache.serverPos2D) < spell.info.range + 1000)*/
 
                             Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, myHero.Position.Z), (int)spell.radius, spellDrawingConfig.Color, spellDrawingWidth);
                         }
@@ -212,7 +212,7 @@ using EloBuddy; namespace ezEvade
                     }
                     else if (spell.spellType == SpellType.Arc)
                     {                      
-                        /*var spellRange = spell.startPos.LSDistance(spell.endPos);
+                        /*var spellRange = spell.startPos.Distance(spell.endPos);
                         var midPoint = spell.startPos + spell.direction * (spellRange / 2);
 
                         Render.Circle.DrawCircle(new Vector3(midPoint.X, midPoint.Y, myHero.Position.Z), (int)spell.radius, spellDrawingConfig.Color, spellDrawingWidth);

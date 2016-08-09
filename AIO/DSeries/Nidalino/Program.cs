@@ -93,7 +93,7 @@ using EloBuddy;
             _zhonya = new Items.Item(3157, 10);
 
 
-            IgniteSlot = Player.LSGetSpellSlot("SummonerDot");
+            IgniteSlot = Player.GetSpellSlot("SummonerDot");
 
             //D Nidalee
             Config = new Menu("D-Nidalee", "D-Nidalee", true);
@@ -335,16 +335,16 @@ using EloBuddy;
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             if (IsHuman)
             {
-                if (R.LSIsReady())
+                if (R.IsReady())
                 {
                     R.Cast();
                 }
-                if (WC.LSIsReady())
+                if (WC.IsReady())
                 {
                     WC.Cast(Game.CursorPos);
                 }
             }
-            else if (IsCougar && WC.LSIsReady())
+            else if (IsCougar && WC.IsReady())
             {
                 WC.Cast(Game.CursorPos);
             }
@@ -431,7 +431,7 @@ using EloBuddy;
         private static void Combo()
         {
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-            Orbwalker.SetAttack((!Q.LSIsReady() || W.LSIsReady()));
+            Orbwalker.SetAttack((!Q.IsReady() || W.IsReady()));
             var itemsIgnite = Config.Item("UseItemsignite").GetValue<bool>();
             if (target != null)
             {
@@ -443,7 +443,7 @@ using EloBuddy;
                         Player.Spellbook.CastSpell(IgniteSlot, target);
                     }
                 }
-                if (Q.LSIsReady() && IsHuman && Player.LSDistance(target) <= Q.Range &&
+                if (Q.IsReady() && IsHuman && Player.Distance(target) <= Q.Range &&
                     Config.Item("UseQCombo").GetValue<bool>())
                 {
                     var prediction = Q.GetPrediction(target);
@@ -451,14 +451,14 @@ using EloBuddy;
                         Q.Cast(prediction.CastPosition);
 
                 }
-                if (W.LSIsReady() && IsHuman && Player.LSDistance(target) <= W.Range &&
+                if (W.IsReady() && IsHuman && Player.Distance(target) <= W.Range &&
                     Config.Item("UseWCombo").GetValue<bool>())
                 {
                     W.Cast(target);
                 }
 
-                if (R.LSIsReady() && IsHuman && Config.Item("UseRCombo").GetValue<bool>() &&
-                    Player.LSDistance(target) <= 625)
+                if (R.IsReady() && IsHuman && Config.Item("UseRCombo").GetValue<bool>() &&
+                    Player.Distance(target) <= 625)
                 {
                     if (IsHuman)
                     {
@@ -467,18 +467,18 @@ using EloBuddy;
 
                     if (IsCougar)
                     {
-                        if (WC.LSIsReady() && Config.Item("UseWComboCougar").GetValue<bool>() &&
-                            Player.LSDistance(target) <= WC.Range)
+                        if (WC.IsReady() && Config.Item("UseWComboCougar").GetValue<bool>() &&
+                            Player.Distance(target) <= WC.Range)
                         {
                             WC.Cast(target);
                         }
-                        if (EC.LSIsReady() && Config.Item("UseEComboCougar").GetValue<bool>() &&
-                            Player.LSDistance(target) <= EC.Range)
+                        if (EC.IsReady() && Config.Item("UseEComboCougar").GetValue<bool>() &&
+                            Player.Distance(target) <= EC.Range)
                         {
                             EC.Cast(target);
                         }
-                        if (QC.LSIsReady() && Config.Item("UseQComboCougar").GetValue<bool>() &&
-                            Player.LSDistance(target) <= QC.Range)
+                        if (QC.IsReady() && Config.Item("UseQComboCougar").GetValue<bool>() &&
+                            Player.Distance(target) <= QC.Range)
                         {
                             Orbwalker.SetAttack(true);
                             QC.Cast();
@@ -488,27 +488,27 @@ using EloBuddy;
 
                 }
 
-                if (IsCougar && Player.LSDistance(target) < 625)
+                if (IsCougar && Player.Distance(target) < 625)
                 {
-                    if (IsHuman && R.LSIsReady())
+                    if (IsHuman && R.IsReady())
                     {
                         R.Cast();
                     }
 
                     if (IsCougar)
                     {
-                        if (WC.LSIsReady() && Config.Item("UseWComboCougar").GetValue<bool>() &&
-                            Player.LSDistance(target) <= WC.Range)
+                        if (WC.IsReady() && Config.Item("UseWComboCougar").GetValue<bool>() &&
+                            Player.Distance(target) <= WC.Range)
                         {
                             WC.Cast(target);
                         }
-                        if (EC.LSIsReady() && Config.Item("UseEComboCougar").GetValue<bool>() &&
-                            Player.LSDistance(target) <= EC.Range)
+                        if (EC.IsReady() && Config.Item("UseEComboCougar").GetValue<bool>() &&
+                            Player.Distance(target) <= EC.Range)
                         {
                             EC.Cast(target);
                         }
-                        if (QC.LSIsReady() && Config.Item("UseQComboCougar").GetValue<bool>() &&
-                            Player.LSDistance(target) <= QC.Range)
+                        if (QC.IsReady() && Config.Item("UseQComboCougar").GetValue<bool>() &&
+                            Player.Distance(target) <= QC.Range)
                         {
                             Orbwalker.SetAttack(true);
                             QC.Cast();
@@ -517,12 +517,12 @@ using EloBuddy;
                     }
                 }
 
-                if (R.LSIsReady() && IsCougar && Config.Item("UseRCombo").GetValue<bool>() &&
-                    Player.LSDistance(target) > WC.Range)
+                if (R.IsReady() && IsCougar && Config.Item("UseRCombo").GetValue<bool>() &&
+                    Player.Distance(target) > WC.Range)
                 {
                     R.Cast();
                 }
-                if (R.LSIsReady() && IsCougar && Player.LSDistance(target) > EC.Range &&
+                if (R.IsReady() && IsCougar && Player.Distance(target) > EC.Range &&
                     Config.Item("UseRCombo").GetValue<bool>())
                 {
                     R.Cast();
@@ -535,7 +535,7 @@ using EloBuddy;
         private static float ComboDamage(Obj_AI_Base hero)
         {
             var dmg = 0d;
-            if (ObjectManager.Player.LSGetSpellSlot("SummonerIgnite") != SpellSlot.Unknown)
+            if (ObjectManager.Player.GetSpellSlot("SummonerIgnite") != SpellSlot.Unknown)
             {
                 dmg += Player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
             }
@@ -543,14 +543,14 @@ using EloBuddy;
                 dmg += Player.GetItemDamage(hero, Damage.DamageItems.Botrk);
             if (Items.HasItem(3144) && Items.CanUseItem(3144))
                 dmg += Player.GetItemDamage(hero, Damage.DamageItems.Bilgewater);
-            if (QC.LSIsReady())
-                dmg += Player.LSGetSpellDamage(hero, SpellSlot.Q);
-            if (EC.LSIsReady())
-                dmg += Player.LSGetSpellDamage(hero, SpellSlot.E);
-            if (WC.LSIsReady())
-                dmg += Player.LSGetSpellDamage(hero, SpellSlot.W);
-            if (Q.LSIsReady() && !IsCougar)
-                dmg += Player.LSGetSpellDamage(hero, SpellSlot.Q);
+            if (QC.IsReady())
+                dmg += Player.GetSpellDamage(hero, SpellSlot.Q);
+            if (EC.IsReady())
+                dmg += Player.GetSpellDamage(hero, SpellSlot.E);
+            if (WC.IsReady())
+                dmg += Player.GetSpellDamage(hero, SpellSlot.W);
+            if (Q.IsReady() && !IsCougar)
+                dmg += Player.GetSpellDamage(hero, SpellSlot.Q);
             return (float) dmg;
         }
 
@@ -567,7 +567,7 @@ using EloBuddy;
             var iBlademyhp = Player.Health <=
                              (Player.MaxHealth*(Config.Item("Blademyhp").GetValue<Slider>().Value)/100);
             var iOmen = Config.Item("Omen").GetValue<bool>();
-            var iOmenenemys = ObjectManager.Get<AIHeroClient>().Count(hero => hero.LSIsValidTarget(450)) >=
+            var iOmenenemys = ObjectManager.Get<AIHeroClient>().Count(hero => hero.IsValidTarget(450)) >=
                               Config.Item("Omenenemys").GetValue<Slider>().Value;
             var iTiamat = Config.Item("Tiamat").GetValue<bool>();
             var iHydra = Config.Item("Hydra").GetValue<bool>();
@@ -576,22 +576,22 @@ using EloBuddy;
             var iZhonyashp = Player.Health <=
                              (Player.MaxHealth*(Config.Item("Zhonyashp").GetValue<Slider>().Value)/100);
            
-            if (Player.LSDistance(target) <= 450 && iBilge && (iBilgeEnemyhp || iBilgemyhp) && _bilge.IsReady())
+            if (Player.Distance(target) <= 450 && iBilge && (iBilgeEnemyhp || iBilgemyhp) && _bilge.IsReady())
             {
                 _bilge.Cast(target);
 
             }
-            if (Player.LSDistance(target) <= 450 && iBlade && (iBladeEnemyhp || iBlademyhp) && _blade.IsReady())
+            if (Player.Distance(target) <= 450 && iBlade && (iBladeEnemyhp || iBlademyhp) && _blade.IsReady())
             {
                 _blade.Cast(target);
 
             }
-            if (iTiamat && _tiamat.IsReady() && target.LSIsValidTarget(_tiamat.Range))
+            if (iTiamat && _tiamat.IsReady() && target.IsValidTarget(_tiamat.Range))
             {
                 _tiamat.Cast();
 
             }
-            if (iHydra && _hydra.IsReady() && target.LSIsValidTarget(_hydra.Range))
+            if (iHydra && _hydra.IsReady() && target.IsValidTarget(_hydra.Range))
             {
                 _hydra.Cast();
 
@@ -606,11 +606,11 @@ using EloBuddy;
                 foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsAlly || hero.IsMe))
                 {
                     if (hero.Health <= (hero.MaxHealth*(Config.Item("lotisminhp").GetValue<Slider>().Value)/100) &&
-                        hero.LSDistance(Player.ServerPosition) <= _lotis.Range && _lotis.IsReady())
+                        hero.Distance(Player.ServerPosition) <= _lotis.Range && _lotis.IsReady())
                         _lotis.Cast();
                 }
             }
-            if (iZhonyas && iZhonyashp && ObjectManager.Player.LSCountEnemiesInRange(1000) >= 1)
+            if (iZhonyas && iZhonyashp && ObjectManager.Player.CountEnemiesInRange(1000) >= 1)
             {
                 _zhonya.Cast(Player);
 
@@ -627,18 +627,18 @@ using EloBuddy;
             var iusemppotion = Config.Item("usemppotions").GetValue<bool>();
             var iusepotionmp = Player.Mana <=
                                (Player.MaxMana * (Config.Item("usepotionmp").GetValue<Slider>().Value) / 100);
-            if (ObjectManager.Player.LSInFountain() || ObjectManager.Player.LSHasBuff("Recall")) return;
+            if (ObjectManager.Player.InFountain() || ObjectManager.Player.HasBuff("Recall")) return;
 
-            if (ObjectManager.Player.LSCountEnemiesInRange(800) > 0 ||
+            if (ObjectManager.Player.CountEnemiesInRange(800) > 0 ||
                 (mobs.Count > 0 && Config.Item("LaneClear").GetValue<KeyBind>().Active && (Items.HasItem(1039) ||
                  SmiteBlue.Any(i => Items.HasItem(i)) || SmiteRed.Any(i => Items.HasItem(i)) || SmitePurple.Any(i => Items.HasItem(i)) ||
                   SmiteBlue.Any(i => Items.HasItem(i)) || SmiteGrey.Any(i => Items.HasItem(i))
                      )))
             {
                 if (iusepotionhp && iusehppotion &&
-                     !(ObjectManager.Player.LSHasBuff("RegenerationPotion", true) ||
-                       ObjectManager.Player.LSHasBuff("ItemCrystalFlask", true) ||
-                       ObjectManager.Player.LSHasBuff("ItemMiniRegenPotion", true)))
+                     !(ObjectManager.Player.HasBuff("RegenerationPotion", true) ||
+                       ObjectManager.Player.HasBuff("ItemCrystalFlask", true) ||
+                       ObjectManager.Player.HasBuff("ItemMiniRegenPotion", true)))
                 {
                     if (Items.HasItem(2041) && Items.CanUseItem(2041))
                     {
@@ -656,9 +656,9 @@ using EloBuddy;
 
 
                 if (iusepotionmp && iusemppotion &&
-                    !(ObjectManager.Player.LSHasBuff("FlaskOfCrystalWater", true) ||
-                      ObjectManager.Player.LSHasBuff("ItemCrystalFlask", true) ||
-                      ObjectManager.Player.LSHasBuff("ItemMiniRegenPotion", true)))
+                    !(ObjectManager.Player.HasBuff("FlaskOfCrystalWater", true) ||
+                      ObjectManager.Player.HasBuff("ItemCrystalFlask", true) ||
+                      ObjectManager.Player.HasBuff("ItemMiniRegenPotion", true)))
                 {
                     if (Items.HasItem(2041) && Items.CanUseItem(2041))
                     {
@@ -680,7 +680,7 @@ using EloBuddy;
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
             if (target != null)
             {
-                if (Q.LSIsReady() && IsHuman && Player.LSDistance(target) <= Q.Range &&
+                if (Q.IsReady() && IsHuman && Player.Distance(target) <= Q.Range &&
                     Config.Item("UseQHarass").GetValue<bool>())
                 {
                     var prediction = Q.GetPrediction(target);
@@ -689,7 +689,7 @@ using EloBuddy;
 
                 }
 
-                if (W.LSIsReady() && IsHuman && Player.LSDistance(target) <= W.Range &&
+                if (W.IsReady() && IsHuman && Player.Distance(target) <= W.Range &&
                     Config.Item("UseWHarass").GetValue<bool>())
                 {
                     W.Cast(target);
@@ -706,23 +706,23 @@ using EloBuddy;
                         .Where(
                             minion =>
                                 minion.Team != Player.Team && !minion.IsDead &&
-                                Vector2.Distance(minion.ServerPosition.LSTo2D(), Player.ServerPosition.LSTo2D()) < 600f)
-                        .OrderBy(minion => Vector2.Distance(minion.Position.LSTo2D(), Player.Position.LSTo2D())))
+                                Vector2.Distance(minion.ServerPosition.To2D(), Player.ServerPosition.To2D()) < 600f)
+                        .OrderBy(minion => Vector2.Distance(minion.Position.To2D(), Player.Position.To2D())))
             {
                 if (IsCougar)
                 {
-                    if (QC.LSIsReady() && Config.Item("UseQLane").GetValue<bool>() && Player.LSDistance(Minion) < QC.Range)
+                    if (QC.IsReady() && Config.Item("UseQLane").GetValue<bool>() && Player.Distance(Minion) < QC.Range)
                         QC.Cast();
-                    else if (WC.LSIsReady() && Config.Item("UseWLane").GetValue<bool>() && Player.LSDistance(Minion) > 200f)
+                    else if (WC.IsReady() && Config.Item("UseWLane").GetValue<bool>() && Player.Distance(Minion) > 200f)
                         WC.Cast(Minion);
-                    else if (EC.LSIsReady() && Config.Item("UseELane").GetValue<bool>() &&
-                             Player.LSDistance(Minion) < EC.Range)
+                    else if (EC.IsReady() && Config.Item("UseELane").GetValue<bool>() &&
+                             Player.Distance(Minion) < EC.Range)
                         EC.Cast(Minion);
                 }
 
-                else if (R.LSIsReady() && Config.Item("farm_R").GetValue<KeyBind>().Active)
+                else if (R.IsReady() && Config.Item("farm_R").GetValue<KeyBind>().Active)
                     R.Cast();
-                else if (E.LSIsReady() && !Config.Item("farm_R").GetValue<KeyBind>().Active &&
+                else if (E.IsReady() && !Config.Item("farm_R").GetValue<KeyBind>().Active &&
                          Config.Item("farm_E1").GetValue<bool>() &&
                          (100*(Player.Mana/Player.MaxMana)) > Config.Item("Lane").GetValue<Slider>().Value)
                     E.CastOnUnit(Player);
@@ -735,9 +735,9 @@ using EloBuddy;
             if (Player.Spellbook.CanUseSpell(SpellSlot.E) == SpellState.Ready && Player.IsMe)
             {
 
-                if (Player.LSHasBuff("Recall") || ObjectManager.Player.LSInFountain()) return;
+                if (Player.HasBuff("Recall") || ObjectManager.Player.InFountain()) return;
 
-                if (E.LSIsReady() &&
+                if (E.IsReady() &&
                     Player.Health <= (Player.MaxHealth*(Config.Item("HPercent").GetValue<Slider>().Value)/100))
                 {
                     Player.Spellbook.CastSpell(SpellSlot.E, Player);
@@ -754,8 +754,8 @@ using EloBuddy;
             var useQ = Config.Item("UseQLH").GetValue<bool>();
             foreach (var minion in allMinions)
             {
-                if (Q.LSIsReady() && IsHuman && useQ && Player.LSDistance(minion) < Q.Range &&
-                    minion.Health <= 0.95*Player.LSGetSpellDamage(minion, SpellSlot.Q))
+                if (Q.IsReady() && IsHuman && useQ && Player.Distance(minion) < Q.Range &&
+                    minion.Health <= 0.95*Player.GetSpellDamage(minion, SpellSlot.Q))
                 {
                     Q.Cast(minion);
                 }
@@ -766,11 +766,11 @@ using EloBuddy;
         {
             foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsAlly && !hero.IsMe))
             {
-                if (Player.LSHasBuff("Recall") || hero.LSHasBuff("Recall") || ObjectManager.Player.LSInFountain()) return;
-                if (E.LSIsReady() && Config.Item("AllyUseAutoE").GetValue<bool>() &&
+                if (Player.HasBuff("Recall") || hero.HasBuff("Recall") || ObjectManager.Player.InFountain()) return;
+                if (E.IsReady() && Config.Item("AllyUseAutoE").GetValue<bool>() &&
                     (hero.Health/hero.MaxHealth)*100 <= Config.Item("AllyHPercent").GetValue<Slider>().Value &&
-                    ObjectManager.Player.LSCountEnemiesInRange(1200) > 0 &&
-                    hero.LSDistance(Player.ServerPosition) <= E.Range)
+                    ObjectManager.Player.CountEnemiesInRange(1200) > 0 &&
+                    hero.Distance(Player.ServerPosition) <= E.Range)
                 {
                     E.Cast(hero);
                 }
@@ -781,7 +781,7 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
             var igniteDmg = Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
-            var QHDmg = Player.LSGetSpellDamage(target, SpellSlot.Q);
+            var QHDmg = Player.GetSpellDamage(target, SpellSlot.Q);
 
             if (target != null && Config.Item("UseIgnite").GetValue<bool>() && IgniteSlot != SpellSlot.Unknown &&
                 Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready)
@@ -792,7 +792,7 @@ using EloBuddy;
                 }
             }
 
-            if (Q.LSIsReady() && Player.LSDistance(target) <= Q.Range && target != null &&
+            if (Q.IsReady() && Player.Distance(target) <= Q.Range && target != null &&
                 Config.Item("UseQKs").GetValue<bool>())
             {
                 if (target.Health <= QHDmg)

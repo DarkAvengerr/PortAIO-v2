@@ -34,7 +34,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
             var ally =
                 ObjectManager.Get<AIHeroClient>().FirstOrDefault(h => h.IsValid && Q.IsInRange(h) && !h.IsDead && h.HealthPercent < 65 && (!h.IsMe || h.HealthPercent<50));
@@ -44,21 +44,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || W.LSIsReady())
+            if (!E.IsReady() || W.IsReady())
                 return;
                 E.Cast(target);
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
             R.Cast();
 

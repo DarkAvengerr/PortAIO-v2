@@ -88,7 +88,7 @@ namespace imAsharpHumanPro
                         return;
                     }
                     if (issueOrderEventArgs.Order == GameObjectOrder.MoveTo &&
-                        issueOrderEventArgs.TargetPosition.LSIsValid() && !_thisMovementCommandHasBeenTamperedWith)
+                        issueOrderEventArgs.TargetPosition.IsValid() && !_thisMovementCommandHasBeenTamperedWith)
                     {
                         _thisMovementCommandHasBeenTamperedWith = true;
                         issueOrderEventArgs.Process = false;
@@ -106,9 +106,9 @@ namespace imAsharpHumanPro
 
 
                 if (sender.Owner.IsMe && eventArgs.Slot != SpellSlot.Q && eventArgs.Slot != SpellSlot.W && eventArgs.Slot != SpellSlot.E && eventArgs.Slot != SpellSlot.R &&
-                    eventArgs.StartPosition.LSDistance(ObjectManager.Player.ServerPosition, true) > 50 * 50 &&
-                    eventArgs.StartPosition.LSDistance(ObjectManager.Player.Position, true) > 50 * 50 &&
-                    eventArgs.Target == null && !eventArgs.StartPosition.LSIsWall())
+                    eventArgs.StartPosition.Distance(ObjectManager.Player.ServerPosition, true) > 50 * 50 &&
+                    eventArgs.StartPosition.Distance(ObjectManager.Player.Position, true) > 50 * 50 &&
+                    eventArgs.Target == null && !eventArgs.StartPosition.IsWall())
                 {
                     if (_lastCommandT.FirstOrDefault(e => e.Key == "spellcast" + eventArgs.Slot).Value == 0)
                     {

@@ -51,7 +51,7 @@ using EloBuddy; namespace Support.Evade
             this.Distance = distance;
             this.ComingFrom = comingFrom;
             this.Valid = (point.X != 0) && (point.Y != 0);
-            this.Point = point + Config.GridSize * (this.ComingFrom - point).LSNormalized();
+            this.Point = point + Config.GridSize * (this.ComingFrom - point).Normalized();
             this.Time = time;
         }
 
@@ -82,7 +82,7 @@ using EloBuddy; namespace Support.Evade
             this.Start = start;
             this.End = end;
             this.MissilePosition = start;
-            this.Direction = (end - start).LSNormalized();
+            this.Direction = (end - start).Normalized();
 
             this.Unit = unit;
 
@@ -149,7 +149,7 @@ using EloBuddy; namespace Support.Evade
         {
             get
             {
-                if (this._collisionEnd.LSIsValid())
+                if (this._collisionEnd.IsValid())
                 {
                     return this._collisionEnd;
                 }
@@ -179,7 +179,7 @@ using EloBuddy; namespace Support.Evade
         {
             get
             {
-                return this.Direction.LSPerpendicular();
+                return this.Direction.Perpendicular();
             }
         }
 
@@ -234,8 +234,8 @@ using EloBuddy; namespace Support.Evade
             {
                 if (this.Unit.IsVisible)
                 {
-                    this.End = this.Unit.ServerPosition.LSTo2D();
-                    this.Direction = (this.End - this.Start).LSNormalized();
+                    this.End = this.Unit.ServerPosition.To2D();
+                    this.Direction = (this.End - this.Start).Normalized();
                     this.UpdatePolygon();
                 }
             }
@@ -284,7 +284,7 @@ using EloBuddy; namespace Support.Evade
                 }
             }
 
-            t = (int)Math.Max(0, Math.Min(this.CollisionEnd.LSDistance(this.Start), x));
+            t = (int)Math.Max(0, Math.Min(this.CollisionEnd.Distance(this.Start), x));
             return this.Start + this.Direction * t;
         }
 
@@ -294,7 +294,7 @@ using EloBuddy; namespace Support.Evade
         public Vector2 GlobalGetMissilePosition(int time)
         {
             var t = Math.Max(0, Environment.TickCount + time - this.StartTick - this.SpellData.Delay);
-            t = (int)Math.Max(0, Math.Min(this.End.LSDistance(this.Start), t * this.SpellData.MissileSpeed / 1000));
+            t = (int)Math.Max(0, Math.Min(this.End.Distance(this.Start), t * this.SpellData.MissileSpeed / 1000));
             return this.Start + this.Direction * t;
         }
 
@@ -307,10 +307,10 @@ using EloBuddy; namespace Support.Evade
                 var missilePosAfterT = this.GetMissilePosition(time);
 
                 //TODO: Check for minion collision etc.. in the future.
-                var projection = unit.ServerPosition.LSTo2D().LSProjectOn(missilePos, missilePosAfterT);
+                var projection = unit.ServerPosition.To2D().ProjectOn(missilePos, missilePosAfterT);
 
                 if (projection.IsOnSegment
-                    && projection.SegmentPoint.LSDistance(unit.ServerPosition) < this.SpellData.Radius)
+                    && projection.SegmentPoint.Distance(unit.ServerPosition) < this.SpellData.Radius)
                 {
                     return true;
                 }
@@ -318,10 +318,10 @@ using EloBuddy; namespace Support.Evade
                 return false;
             }
 
-            if (!this.IsSafe(unit.ServerPosition.LSTo2D()))
+            if (!this.IsSafe(unit.ServerPosition.To2D()))
             {
                 var timeToExplode = this.SpellData.ExtraDuration + this.SpellData.Delay
-                                    + (int)((1000 * this.Start.LSDistance(this.End)) / this.SpellData.MissileSpeed)
+                                    + (int)((1000 * this.Start.Distance(this.End)) / this.SpellData.MissileSpeed)
                                     - (Environment.TickCount - this.StartTick);
                 if (timeToExplode <= time)
                 {
@@ -351,7 +351,7 @@ using EloBuddy; namespace Support.Evade
 
             return Environment.TickCount
                    <= this.StartTick + this.SpellData.Delay + this.SpellData.ExtraDuration
-                   + 1000 * (this.Start.LSDistance(this.End) / this.SpellData.MissileSpeed);
+                   + 1000 * (this.Start.Distance(this.End) / this.SpellData.MissileSpeed);
         }
 
         public bool IsDanger(Vector2 point)
@@ -396,14 +396,14 @@ using EloBuddy; namespace Support.Evade
                     var sideStart = this.Polygon.Points[j];
                     var sideEnd = this.Polygon.Points[j == (this.Polygon.Points.Count - 1) ? 0 : j + 1];
 
-                    var intersection = from.LSIntersection(to, sideStart, sideEnd);
+                    var intersection = from.Intersection(to, sideStart, sideEnd);
 
                     if (intersection.Intersects)
                     {
                         segmentIntersections.Add(
                             new FoundIntersection(
-                                Distance + intersection.Point.LSDistance(from),
-                                (int)((Distance + intersection.Point.LSDistance(from)) * 1000 / speed),
+                                Distance + intersection.Point.Distance(from),
+                                (int)((Distance + intersection.Point.Distance(from)) * 1000 / speed),
                                 intersection.Point,
                                 from));
                     }
@@ -412,7 +412,7 @@ using EloBuddy; namespace Support.Evade
                 var sortedList = segmentIntersections.OrderBy(o => o.Distance).ToList();
                 allIntersections.AddRange(sortedList);
 
-                Distance += from.LSDistance(to);
+                Distance += from.Distance(to);
             }
 
             //Skillshot with missile.
@@ -420,7 +420,7 @@ using EloBuddy; namespace Support.Evade
                 || this.SpellData.Type == SkillShotType.SkillshotMissileCone)
             {
                 //Outside the skillshot
-                if (this.IsSafe(ObjectManager.Player.ServerPosition.LSTo2D()))
+                if (this.IsSafe(ObjectManager.Player.ServerPosition.To2D()))
                 {
                     //No intersections -> Safe
                     if (allIntersections.Count == 0)
@@ -432,7 +432,7 @@ using EloBuddy; namespace Support.Evade
                     {
                         var enterIntersection = allIntersections[i];
                         var enterIntersectionProjection =
-                            enterIntersection.Point.LSProjectOn(this.Start, this.End).SegmentPoint;
+                            enterIntersection.Point.ProjectOn(this.Start, this.End).SegmentPoint;
 
                         //Intersection with no exit point.
                         if (i == allIntersections.Count - 1)
@@ -441,23 +441,23 @@ using EloBuddy; namespace Support.Evade
                                 this.GetMissilePosition(enterIntersection.Time - timeOffset);
                             return
                                 new SafePathResult(
-                                    (this.End.LSDistance(missilePositionOnIntersection) + 50
-                                     <= this.End.LSDistance(enterIntersectionProjection))
+                                    (this.End.Distance(missilePositionOnIntersection) + 50
+                                     <= this.End.Distance(enterIntersectionProjection))
                                     && ObjectManager.Player.MoveSpeed < this.SpellData.MissileSpeed,
                                     allIntersections[0]);
                         }
 
                         var exitIntersection = allIntersections[i + 1];
                         var exitIntersectionProjection =
-                            exitIntersection.Point.LSProjectOn(this.Start, this.End).SegmentPoint;
+                            exitIntersection.Point.ProjectOn(this.Start, this.End).SegmentPoint;
 
                         var missilePosOnEnter = this.GetMissilePosition(enterIntersection.Time - timeOffset);
                         var missilePosOnExit = this.GetMissilePosition(exitIntersection.Time + timeOffset);
 
                         //Missile didnt pass.
-                        if (missilePosOnEnter.LSDistance(this.End) + 50 > enterIntersectionProjection.LSDistance(this.End))
+                        if (missilePosOnEnter.Distance(this.End) + 50 > enterIntersectionProjection.Distance(this.End))
                         {
-                            if (missilePosOnExit.LSDistance(this.End) <= exitIntersectionProjection.LSDistance(this.End))
+                            if (missilePosOnExit.Distance(this.End) <= exitIntersectionProjection.Distance(this.End))
                             {
                                 return new SafePathResult(false, allIntersections[0]);
                             }
@@ -476,17 +476,17 @@ using EloBuddy; namespace Support.Evade
                 {
                     //Check only for the exit point
                     var exitIntersection = allIntersections[0];
-                    var exitIntersectionProjection = exitIntersection.Point.LSProjectOn(this.Start, this.End).SegmentPoint;
+                    var exitIntersectionProjection = exitIntersection.Point.ProjectOn(this.Start, this.End).SegmentPoint;
 
                     var missilePosOnExit = this.GetMissilePosition(exitIntersection.Time + timeOffset);
-                    if (missilePosOnExit.LSDistance(this.End) <= exitIntersectionProjection.LSDistance(this.End))
+                    if (missilePosOnExit.Distance(this.End) <= exitIntersectionProjection.Distance(this.End))
                     {
                         return new SafePathResult(false, allIntersections[0]);
                     }
                 }
             }
 
-            if (this.IsSafe(ObjectManager.Player.ServerPosition.LSTo2D()))
+            if (this.IsSafe(ObjectManager.Player.ServerPosition.To2D()))
             {
                 if (allIntersections.Count == 0)
                 {
@@ -508,7 +508,7 @@ using EloBuddy; namespace Support.Evade
 
             var timeToExplode = (this.SpellData.DontAddExtraDuration ? 0 : this.SpellData.ExtraDuration)
                                 + this.SpellData.Delay
-                                + (int)(1000 * this.Start.LSDistance(this.End) / this.SpellData.MissileSpeed)
+                                + (int)(1000 * this.Start.Distance(this.End) / this.SpellData.MissileSpeed)
                                 - (Environment.TickCount - this.StartTick);
 
             var myPositionWhenExplodes = path.PositionAfter(timeToExplode, speed, delay);
@@ -530,7 +530,7 @@ using EloBuddy; namespace Support.Evade
         {
             timeOffset /= 2;
 
-            if (this.IsSafe(ObjectManager.Player.ServerPosition.LSTo2D()))
+            if (this.IsSafe(ObjectManager.Player.ServerPosition.To2D()))
             {
                 return true;
             }
@@ -539,9 +539,9 @@ using EloBuddy; namespace Support.Evade
             if (this.SpellData.Type == SkillShotType.SkillshotMissileLine)
             {
                 var missilePositionAfterBlink = this.GetMissilePosition(delay + timeOffset);
-                var myPositionProjection = ObjectManager.Player.ServerPosition.LSTo2D().LSProjectOn(this.Start, this.End);
+                var myPositionProjection = ObjectManager.Player.ServerPosition.To2D().ProjectOn(this.Start, this.End);
 
-                if (missilePositionAfterBlink.LSDistance(this.End) < myPositionProjection.SegmentPoint.LSDistance(this.End))
+                if (missilePositionAfterBlink.Distance(this.End) < myPositionProjection.SegmentPoint.Distance(this.End))
                 {
                     return false;
                 }
@@ -551,7 +551,7 @@ using EloBuddy; namespace Support.Evade
 
             //skillshots without missile
             var timeToExplode = this.SpellData.ExtraDuration + this.SpellData.Delay
-                                + (int)(1000 * this.Start.LSDistance(this.End) / this.SpellData.MissileSpeed)
+                                + (int)(1000 * this.Start.Distance(this.End) / this.SpellData.MissileSpeed)
                                 - (Environment.TickCount - this.StartTick);
 
             return timeToExplode > timeOffset + delay;

@@ -76,7 +76,7 @@ namespace SharpShooter.Plugins
                                 if (_q.IsReadyPerfectly())
                                 {
                                     var target = TargetSelector.GetTarget(_q.Range, _q.DamageType);
-                                    if (target.LSIsValidTarget(_q.Range))
+                                    if (target.IsValidTarget(_q.Range))
                                         _q.SPredictionCast(target, _q.MinHitChance);
                                 }
 
@@ -95,7 +95,7 @@ namespace SharpShooter.Plugins
 
                             if (MenuProvider.Champion.Combo.UseR)
                                 if (_r.IsReadyPerfectly())
-                                    if (ObjectManager.Player.LSCountEnemiesInRange(700) == 0)
+                                    if (ObjectManager.Player.CountEnemiesInRange(700) == 0)
                                     {
                                         var killableTarget =
                                             HeroManager.Enemies.FirstOrDefault(
@@ -117,7 +117,7 @@ namespace SharpShooter.Plugins
                                     if (_q.IsReadyPerfectly())
                                     {
                                         var target = TargetSelector.GetTarget(_q.Range, _q.DamageType);
-                                        if (target.LSIsValidTarget(_q.Range))
+                                        if (target.IsValidTarget(_q.Range))
                                             _q.SPredictionCast(target, _q.MinHitChance);
                                     }
 
@@ -160,7 +160,7 @@ namespace SharpShooter.Plugins
                                                 MinionOrderTypes.MaxHealth)
                                                 .FirstOrDefault(
                                                     x =>
-                                                        x.LSIsValidTarget(600) &&
+                                                        x.IsValidTarget(600) &&
                                                         _q.GetPrediction(x).Hitchance >= _q.MinHitChance);
                                         if (target != null)
                                             _q.Cast(target);
@@ -171,7 +171,7 @@ namespace SharpShooter.Plugins
 
                     if (MenuProvider.Champion.Harass.AutoHarass)
                         if (MenuProvider.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
-                            if (!ObjectManager.Player.LSIsRecalling())
+                            if (!ObjectManager.Player.IsRecalling())
                             {
                                 if (_q.IsReadyPerfectly())
                                     if (MenuProvider.Champion.Harass.UseQ)
@@ -179,8 +179,8 @@ namespace SharpShooter.Plugins
                                         {
                                             var target = TargetSelector.GetTarget(_q.Range, _q.DamageType);
                                             if (target != null)
-                                                if (ObjectManager.Player.LSUnderTurret(true)
-                                                    ? !target.LSUnderTurret(true)
+                                                if (ObjectManager.Player.UnderTurret(true)
+                                                    ? !target.UnderTurret(true)
                                                     : true)
                                                     _q.Cast(target);
                                         }
@@ -191,8 +191,8 @@ namespace SharpShooter.Plugins
                                         {
                                             var target = TargetSelector.GetTarget(_w.Range, _w.DamageType);
                                             if (target != null)
-                                                if (ObjectManager.Player.LSUnderTurret(true)
-                                                    ? !target.LSUnderTurret(true)
+                                                if (ObjectManager.Player.UnderTurret(true)
+                                                    ? !target.UnderTurret(true)
                                                     : true)
                                                     _w.Cast(target);
                                         }
@@ -209,10 +209,10 @@ namespace SharpShooter.Plugins
                         if (sender.Type == GameObjectType.AIHeroClient)
                             if (sender.IsEnemy)
                                 if (sender.IsMelee)
-                                    if (args.SData.LSIsAutoAttack())
+                                    if (args.SData.IsAutoAttack())
                                         if (MenuProvider.Champion.Misc.GetBoolValue("Use Anti-Melee (E)"))
                                             if (_e.IsReadyPerfectly())
-                                                _e.Cast(ObjectManager.Player.Position.LSExtend(sender.Position, -_e.Range));
+                                                _e.Cast(ObjectManager.Player.Position.Extend(sender.Position, -_e.Range));
         }
 
         private void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
@@ -225,24 +225,24 @@ namespace SharpShooter.Plugins
                             if (_q.IsReadyPerfectly())
                             {
                                 if (MenuProvider.Champion.Combo.UseQ)
-                                    if (target.LSIsValidTarget(_q.Range))
+                                    if (target.IsValidTarget(_q.Range))
                                         _q.Cast(target as Obj_AI_Base);
                             }
                             else if (_w.IsReadyPerfectly())
                                 if (MenuProvider.Champion.Combo.UseW)
-                                    if (target.LSIsValidTarget(_w.Range))
+                                    if (target.IsValidTarget(_w.Range))
                                         _w.Cast(target as Obj_AI_Base);
                             break;
                         case Orbwalking.OrbwalkingMode.Mixed:
                             if (_q.IsReadyPerfectly())
                             {
                                 if (MenuProvider.Champion.Harass.UseQ)
-                                    if (target.LSIsValidTarget(_q.Range))
+                                    if (target.IsValidTarget(_q.Range))
                                         _q.Cast(target as Obj_AI_Base);
                             }
                             else if (_w.IsReadyPerfectly())
                                 if (MenuProvider.Champion.Harass.UseW)
-                                    if (target.LSIsValidTarget(_w.Range))
+                                    if (target.IsValidTarget(_w.Range))
                                         _w.Cast(target as Obj_AI_Base);
                             break;
                     }
@@ -251,10 +251,10 @@ namespace SharpShooter.Plugins
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (MenuProvider.Champion.Misc.UseAntiGapcloser)
-                if (gapcloser.End.LSDistance(ObjectManager.Player.Position) <= 200)
+                if (gapcloser.End.Distance(ObjectManager.Player.Position) <= 200)
                     if (gapcloser.Sender.ChampionName.ToLowerInvariant() != "masteryi")
                         if (_e.IsReadyPerfectly())
-                            _e.Cast(ObjectManager.Player.Position.LSExtend(gapcloser.Sender.Position, -_e.Range));
+                            _e.Cast(ObjectManager.Player.Position.Extend(gapcloser.Sender.Position, -_e.Range));
         }
 
         private void Drawing_OnDraw(EventArgs args)
@@ -285,7 +285,7 @@ namespace SharpShooter.Plugins
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float) ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float) ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
             if (_q.IsReadyPerfectly())

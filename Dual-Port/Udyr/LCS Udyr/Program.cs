@@ -78,7 +78,7 @@ using EloBuddy;
         private static void Interrupter2OnOnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
             if (sender.IsEnemy && (sender.IsCastingInterruptableSpell() || sender.IsChannelingImportantSpell())
-                && sender.LSIsValidTarget(E.Range) && Config.Item("e.interrupter").GetValue<bool>())
+                && sender.IsValidTarget(E.Range) && Config.Item("e.interrupter").GetValue<bool>())
             {
                 E.Cast();
             }
@@ -86,7 +86,7 @@ using EloBuddy;
 
         private static void OnEnemyCustomGapcloser(CActiveCGapcloser cGapcloser)
         {
-            if (cGapcloser.Sender.IsEnemy && cGapcloser.End.LSDistance(Udyr.Position) < 100 && !cGapcloser.Sender.IsDead && E.LSIsReady()
+            if (cGapcloser.Sender.IsEnemy && cGapcloser.End.Distance(Udyr.Position) < 100 && !cGapcloser.Sender.IsDead && E.IsReady()
                 && Config.Item("e.antigapcloser").GetValue<bool>())
             {
                 E.Cast();
@@ -102,27 +102,27 @@ using EloBuddy;
                 {
                     case 0:
                         
-                        if (Q.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
-                            && ((AIHeroClient)args.Target).LSIsValidTarget(Udyr.AttackRange) && !Udyr.IsTiger()
-                            && Config.Item("q.combo").GetValue<bool>() && !R.LSIsReady())
+                        if (Q.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
+                            && ((AIHeroClient)args.Target).IsValidTarget(Udyr.AttackRange) && !Udyr.IsTiger()
+                            && Config.Item("q.combo").GetValue<bool>() && !R.IsReady())
                         {
                             Q.Cast();
                         }
-                        if (W.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
-                            && ((AIHeroClient)args.Target).LSIsValidTarget(Udyr.AttackRange) && !Udyr.IsTurtle()
-                            && Config.Item("w.combo").GetValue<bool>() && !R.LSIsReady())
+                        if (W.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
+                            && ((AIHeroClient)args.Target).IsValidTarget(Udyr.AttackRange) && !Udyr.IsTurtle()
+                            && Config.Item("w.combo").GetValue<bool>() && !R.IsReady())
                         {
                             W.Cast();
                         }
-                        if (E.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
-                            && ((AIHeroClient)args.Target).LSIsValidTarget(Udyr.AttackRange) && !Udyr.IsBear()
+                        if (E.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
+                            && ((AIHeroClient)args.Target).IsValidTarget(Udyr.AttackRange) && !Udyr.IsBear()
                             && Config.Item("e.combo").GetValue<bool>() && !Config.Item("e.stun").GetValue<bool>()
-                            && !R.LSIsReady())
+                            && !R.IsReady())
                         {
                             E.Cast();
                         }
-                        if (R.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
-                            && ((AIHeroClient)args.Target).LSIsValidTarget(Udyr.AttackRange) && !Udyr.IsPhoenix()
+                        if (R.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
+                            && ((AIHeroClient)args.Target).IsValidTarget(Udyr.AttackRange) && !Udyr.IsPhoenix()
                             && Config.Item("r.combo").GetValue<bool>())
                         {
                             R.Cast();
@@ -130,27 +130,27 @@ using EloBuddy;
 
                         break;
                     case 1:
-                         if (Q.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
-                            && ((AIHeroClient)args.Target).LSIsValidTarget(Udyr.AttackRange) && !Udyr.IsTiger()
-                            && Config.Item("q.combo").GetValue<bool>() && !E.LSIsReady())
+                         if (Q.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
+                            && ((AIHeroClient)args.Target).IsValidTarget(Udyr.AttackRange) && !Udyr.IsTiger()
+                            && Config.Item("q.combo").GetValue<bool>() && !E.IsReady())
                         {
                             Q.Cast();
                         }
-                        if (W.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
-                            && ((AIHeroClient)args.Target).LSIsValidTarget(Udyr.AttackRange) && !Udyr.IsTurtle()
-                            && Config.Item("w.combo").GetValue<bool>() && !E.LSIsReady())
+                        if (W.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
+                            && ((AIHeroClient)args.Target).IsValidTarget(Udyr.AttackRange) && !Udyr.IsTurtle()
+                            && Config.Item("w.combo").GetValue<bool>() && !E.IsReady())
                         {
                             W.Cast();
                         }
-                        if (E.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
-                            && ((AIHeroClient)args.Target).LSIsValidTarget(Udyr.AttackRange) && !Udyr.IsBear()
+                        if (E.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
+                            && ((AIHeroClient)args.Target).IsValidTarget(Udyr.AttackRange) && !Udyr.IsBear()
                             && Config.Item("e.combo").GetValue<bool>() && !Config.Item("e.stun").GetValue<bool>())
                         {
                             E.Cast();
                         }
-                        if (R.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
-                            && ((AIHeroClient)args.Target).LSIsValidTarget(Udyr.AttackRange) && !Udyr.IsPhoenix()
-                            && Config.Item("r.combo").GetValue<bool>() && !E.LSIsReady())
+                        if (R.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
+                            && ((AIHeroClient)args.Target).IsValidTarget(Udyr.AttackRange) && !Udyr.IsPhoenix()
+                            && Config.Item("r.combo").GetValue<bool>() && !E.IsReady())
                         {
                             R.Cast();
                         }  
@@ -162,26 +162,26 @@ using EloBuddy;
                 args.Target.IsValid && ((Obj_AI_Minion)args.Target).Team == GameObjectTeam.Neutral &&
                 Udyr.ManaPercent >= Config.Item("jungle.mana").GetValue<Slider>().Value)
             {
-                if (Q.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear 
-                    && ((Obj_AI_Minion)args.Target).LSIsValidTarget(Udyr.AttackRange) && !Udyr.IsTiger()
+                if (Q.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear 
+                    && ((Obj_AI_Minion)args.Target).IsValidTarget(Udyr.AttackRange) && !Udyr.IsTiger()
                     && Config.Item("q.jungle").GetValue<bool>())
                 {
                     Q.Cast();
                 }
-                if (W.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear 
-                    && ((Obj_AI_Minion)args.Target).LSIsValidTarget(Udyr.AttackRange) && !Udyr.IsTurtle()
+                if (W.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear 
+                    && ((Obj_AI_Minion)args.Target).IsValidTarget(Udyr.AttackRange) && !Udyr.IsTurtle()
                     && Config.Item("w.jungle").GetValue<bool>() && ObjectManager.Player.Buffs.Any(buff => buff.Name != "UdyrPhoenixStance"))
                 {
                     W.Cast();
                 }
-                if (E.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear 
-                    && ((Obj_AI_Minion)args.Target).LSIsValidTarget(Udyr.AttackRange) && !Udyr.IsBear()
+                if (E.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear 
+                    && ((Obj_AI_Minion)args.Target).IsValidTarget(Udyr.AttackRange) && !Udyr.IsBear()
                     && Config.Item("e.jungle").GetValue<bool>())
                 {
                     E.Cast();
                 }
-                if (R.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear
-                    && ((Obj_AI_Minion)args.Target).LSIsValidTarget(Udyr.AttackRange) &&
+                if (R.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear
+                    && ((Obj_AI_Minion)args.Target).IsValidTarget(Udyr.AttackRange) &&
                     ObjectManager.Player.Buffs.Any(buff => buff.Name != "UdyrPhoenixStance") && !Udyr.IsPhoenix()
                     && Config.Item("r.jungle").GetValue<bool>())
                 {
@@ -192,26 +192,26 @@ using EloBuddy;
             if (sender.IsMe && Orbwalking.IsAutoAttack(args.SData.Name) && args.Target is Obj_AI_Minion &&
                 args.Target.IsValid && ((Obj_AI_Minion)args.Target).IsEnemy && Udyr.ManaPercent >= Config.Item("clear.mana").GetValue<Slider>().Value)
             {
-                if (Q.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear
-                    && ((Obj_AI_Minion)args.Target).LSIsValidTarget(Udyr.AttackRange) && !Udyr.IsTiger()
+                if (Q.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear
+                    && ((Obj_AI_Minion)args.Target).IsValidTarget(Udyr.AttackRange) && !Udyr.IsTiger()
                     && Config.Item("q.clear").GetValue<bool>())
                 {
                     Q.Cast();
                 }
-                if (W.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear
-                    && ((Obj_AI_Minion)args.Target).LSIsValidTarget(Udyr.AttackRange) && !Udyr.IsTurtle()
+                if (W.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear
+                    && ((Obj_AI_Minion)args.Target).IsValidTarget(Udyr.AttackRange) && !Udyr.IsTurtle()
                     && Config.Item("w.clear").GetValue<bool>() && ObjectManager.Player.Buffs.Any(buff => buff.Name != "UdyrPhoenixStance"))
                 {
                     W.Cast();
                 }
-                if (E.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear
-                    && ((Obj_AI_Minion)args.Target).LSIsValidTarget(Udyr.AttackRange) && !Udyr.IsBear()
+                if (E.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear
+                    && ((Obj_AI_Minion)args.Target).IsValidTarget(Udyr.AttackRange) && !Udyr.IsBear()
                     && Config.Item("e.clear").GetValue<bool>())
                 {
                     E.Cast();
                 }
-                if (R.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear
-                    && ((Obj_AI_Minion)args.Target).LSIsValidTarget(Udyr.AttackRange) &&
+                if (R.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear
+                    && ((Obj_AI_Minion)args.Target).IsValidTarget(Udyr.AttackRange) &&
                     ObjectManager.Player.Buffs.Any(buff => buff.Name != "UdyrPhoenixStance") && !Udyr.IsPhoenix()
                     && Config.Item("r.clear").GetValue<bool>())
                 {
@@ -233,9 +233,9 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (E.LSIsReady() && Config.Item("e.stun").GetValue<bool>() && Config.Item("e.combo").GetValue<bool>())
+            if (E.IsReady() && Config.Item("e.stun").GetValue<bool>() && Config.Item("e.combo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(E.Range * 2) && !Udyr.IsBear()
+                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(E.Range * 2) && !Udyr.IsBear()
                     && !x.HasBearPassive()))
                 {
                     E.Cast();

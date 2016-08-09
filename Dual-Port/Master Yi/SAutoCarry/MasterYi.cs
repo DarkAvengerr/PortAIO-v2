@@ -61,7 +61,7 @@ namespace SAutoCarry.Champions
 
         public void Combo()
         {
-            if(Spells[Q].LSIsReady() && ComboUseQ)
+            if(Spells[Q].IsReady() && ComboUseQ)
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
                 if (t != null)
@@ -74,30 +74,30 @@ namespace SAutoCarry.Champions
             var mob = MinionManager.GetMinions(500, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
             if(mob != null)
             {
-                if (Spells[Q].LSIsReady() && JungleClearUseQ)
+                if (Spells[Q].IsReady() && JungleClearUseQ)
                     Spells[Q].CastOnUnit(mob);
 
-                if (Spells[E].LSIsReady() && JungleClearUseE)
+                if (Spells[E].IsReady() && JungleClearUseE)
                     Spells[E].Cast();
             }
         }
 
         private void TargetedSpell_Evade(DetectedTargetedSpellArgs args)
         {
-            if (Spells[Q].LSIsReady())
+            if (Spells[Q].IsReady())
             {
                 if (Orbwalker.ActiveMode != SCommon.Orbwalking.Orbwalker.Mode.Combo || !m_targetedEvader.DisableInComboMode)
                 {
-                    if (args.Caster.LSIsValidTarget(Spells[Q].Range))
+                    if (args.Caster.IsValidTarget(Spells[Q].Range))
                         Spells[Q].CastOnUnit(args.Caster);
                     else
                     {
-                        var hero = HeroManager.Enemies.Where(p => p.LSIsValidTarget(Spells[Q].Range)).OrderBy(q => ObjectManager.Player.LSDistance(q.ServerPosition)).FirstOrDefault();
+                        var hero = HeroManager.Enemies.Where(p => p.IsValidTarget(Spells[Q].Range)).OrderBy(q => ObjectManager.Player.Distance(q.ServerPosition)).FirstOrDefault();
                         if (hero != null)
                             Spells[Q].CastOnUnit(hero);
                         else
                         {
-                            var minion = MinionManager.GetMinions(Spells[Q].Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.None).OrderBy(p => ObjectManager.Player.ServerPosition.LSDistance(p.ServerPosition)).FirstOrDefault();
+                            var minion = MinionManager.GetMinions(Spells[Q].Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.None).OrderBy(p => ObjectManager.Player.ServerPosition.Distance(p.ServerPosition)).FirstOrDefault();
                             if (minion != null)
                                 Spells[Q].CastOnUnit(minion);
                         }
@@ -108,14 +108,14 @@ namespace SAutoCarry.Champions
 
         public override double CalculateAADamage(AIHeroClient target, int aacount = 2)
         {
-            return base.CalculateAADamage(target, aacount) + (Spells[E].LSIsReady() ? Spells[E].GetDamage(target) * aacount : 0);
+            return base.CalculateAADamage(target, aacount) + (Spells[E].IsReady() ? Spells[E].GetDamage(target) * aacount : 0);
         }
 
         protected override void OrbwalkingEvents_BeforeAttack(BeforeAttackArgs args)
         {
             if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.Combo && args.Target.Type == GameObjectType.AIHeroClient)
             {
-                if  (Spells[E].LSIsReady() && ComboUseE)
+                if  (Spells[E].IsReady() && ComboUseE)
                     Spells[E].Cast();
             }
         }
@@ -149,7 +149,7 @@ namespace SAutoCarry.Champions
                     }
                 }
 
-                if(ComboUseW && Spells[W].LSIsReady())
+                if(ComboUseW && Spells[W].IsReady())
                 {
                     Spells[W].Cast();
                     args.ResetAATimer = true;

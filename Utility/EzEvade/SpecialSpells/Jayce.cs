@@ -58,9 +58,9 @@ using EloBuddy; namespace ezEvade.SpecialSpells
             {
                 //var particle = obj as Obj_GeneralParticleEmitter;                
 
-                /*var dir = obj.Orientation.LSTo2D();
-                var pos1 = obj.Position.LSTo2D() - dir * 470;
-                var pos2 = obj.Position.LSTo2D() + dir * 470;
+                /*var dir = obj.Orientation.To2D();
+                var pos1 = obj.Position.To2D() - dir * 470;
+                var pos2 = obj.Position.To2D() + dir * 470;
 
                 //Draw.RenderObjects.Add(new Draw.RenderLine(pos1, pos2, 3500));
                 Draw.RenderObjects.Add(new Draw.RenderCircle(pos1, 3500));*/
@@ -80,12 +80,12 @@ using EloBuddy; namespace ezEvade.SpecialSpells
 
                         Vector2 int1, int2;
                         var intersection =
-                            MathUtils.FindLineCircleIntersections(obj.Position.LSTo2D(), 470, spell.startPos, spell.endPos,
+                            MathUtils.FindLineCircleIntersections(obj.Position.To2D(), 470, spell.startPos, spell.endPos,
                             out int1, out int2);
-                        var projection = obj.Position.LSTo2D().LSProjectOn(spell.startPos, spell.endPos);
+                        var projection = obj.Position.To2D().ProjectOn(spell.startPos, spell.endPos);
 
-                        //var intersection = spell.startPos.LSIntersection(spell.endPos, pos1, pos2);
-                        //var projection = intersection.Point.LSProjectOn(spell.startPos, spell.endPos);
+                        //var intersection = spell.startPos.Intersection(spell.endPos, pos1, pos2);
+                        //var projection = intersection.Point.ProjectOn(spell.startPos, spell.endPos);
 
                         //if (intersection.Intersects && projection.IsOnSegment)
                         if (intersection > 0 && projection.IsOnSegment)
@@ -134,18 +134,18 @@ using EloBuddy; namespace ezEvade.SpecialSpells
                             }
                             else
                             {
-                                var startPos = args.Start.LSTo2D();
-                                var endPos = args.End.LSTo2D();
-                                var dir = (endPos - startPos).LSNormalized();
+                                var startPos = args.Start.To2D();
+                                var endPos = args.End.To2D();
+                                var dir = (endPos - startPos).Normalized();
                                 endPos = startPos + dir * spellDataOld.range;
 
                                 var obj = gateObj.obj;
 
                                 Vector2 int1, int2;
                                 var intersection =
-                                    MathUtils.FindLineCircleIntersections(obj.Position.LSTo2D(), 470, startPos, endPos,
+                                    MathUtils.FindLineCircleIntersections(obj.Position.To2D(), 470, startPos, endPos,
                                     out int1, out int2);
-                                var projection = obj.Position.LSTo2D().LSProjectOn(startPos, endPos);
+                                var projection = obj.Position.To2D().ProjectOn(startPos, endPos);
 
                                 if (intersection > 0 && projection.IsOnSegment)
                                 {

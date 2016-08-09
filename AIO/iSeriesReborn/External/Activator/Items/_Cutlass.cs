@@ -50,7 +50,7 @@ using EloBuddy;
             if (currentValue || MenuExtensions.GetItemValue<bool>("iseriesr.activator.offensive.cutlass.always"))
             {
                 var target = TargetSelector.GetTarget(450f, TargetSelector.DamageType.True);
-                if (target.LSIsValidTarget())
+                if (target.IsValidTarget())
                 {
                     if (ObjectManager.Player.HealthPercent <=
                         MenuExtensions.GetItemValue<Slider>("iseriesr.activator.offensive.cutlass.my").Value &&

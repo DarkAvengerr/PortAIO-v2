@@ -51,14 +51,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             CastQ(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
             CastW(ARAMTargetSelector.getBestTarget(W.Range),35);
 
@@ -66,7 +66,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
 
             if (target != null)
@@ -75,7 +75,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
                 if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).ToggleState == 1)
                 {
-                    if (ObjectManager.Player.LSDistance(target.ServerPosition) <= E.Range && enoughMana)
+                    if (ObjectManager.Player.Distance(target.ServerPosition) <= E.Range && enoughMana)
                     {
                         _comboE = true;
                         E.Cast();
@@ -92,7 +92,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             if (target == null)
                 return;
-            if (IsInPassiveForm() && R.LSIsReady())
+            if (IsInPassiveForm() && R.IsReady())
             {
                 R.Cast(target);
             }
@@ -125,7 +125,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         void CastQ(Obj_AI_Base target, int minManaPercent = 0)
         {
-            if (!Q.LSIsReady() )
+            if (!Q.IsReady() )
                 return;
             if (target == null)
                 return;
@@ -135,14 +135,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         void CastQ(Vector2 pos, int minManaPercent = 0)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
              Q.Cast(pos);
         }
 
         void CastW(Obj_AI_Base target, int minManaPercent = 0)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             if (target == null)
                 return;
@@ -162,7 +162,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         void RegulateEState(bool ignoreTargetChecks = false)
         {
-            if (!E.LSIsReady() || IsInPassiveForm() ||
+            if (!E.IsReady() || IsInPassiveForm() ||
                 ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).ToggleState != 2)
                 return;
             var target = ARAMTargetSelector.getBestTarget(E.Range);
@@ -176,12 +176,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         float GetDynamicWWidth(Obj_AI_Base target)
         {
-            return Math.Max(70, (1f - (ObjectManager.Player.LSDistance(target) / W.Range)) * SpellWWidth);
+            return Math.Max(70, (1f - (ObjectManager.Player.Distance(target) / W.Range)) * SpellWWidth);
         }
 
         float GetDynamicQWidth(Obj_AI_Base target)
         {
-            return Math.Max(30, (1f - (ObjectManager.Player.LSDistance(target) / Q.Range)) * SpellQWidth);
+            return Math.Max(30, (1f - (ObjectManager.Player.Distance(target) / Q.Range)) * SpellQWidth);
         }
 
         static bool IsInPassiveForm()

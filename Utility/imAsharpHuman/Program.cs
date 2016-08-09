@@ -62,14 +62,14 @@ namespace imAsharpHuman
                     var order = _lastCommandT.FirstOrDefault(e => e.Key == orderName);
                     if (Utils.GameTimeTickCount - order.Value <
                         _random.Next(1000 / _menu.Item("MaxClicks").GetValue<Slider>().Value,
-                            1000 / _menu.Item("MinClicks").GetValue<Slider>().Value) + _random.Next(-10, 10) && !issueOrderEventArgs.TargetPosition.LSIsWall())
+                            1000 / _menu.Item("MinClicks").GetValue<Slider>().Value) + _random.Next(-10, 10) && !issueOrderEventArgs.TargetPosition.IsWall())
                     {
                         _blockedCount += 1;
                         issueOrderEventArgs.Process = false;
                         return;
                     }
                     if (issueOrderEventArgs.Order == GameObjectOrder.MoveTo &&
-                        issueOrderEventArgs.TargetPosition.LSIsValid() && !_thisMovementCommandHasBeenTamperedWith)
+                        issueOrderEventArgs.TargetPosition.IsValid() && !_thisMovementCommandHasBeenTamperedWith)
                     {
                         _thisMovementCommandHasBeenTamperedWith = true;
                         issueOrderEventArgs.Process = false;
@@ -88,8 +88,8 @@ namespace imAsharpHuman
 
                 var cN = ObjectManager.Player.ChampionName;
                 if (sender.Owner.IsMe && cN != "Viktor" && cN != "Rumble" &&
-                    eventArgs.StartPosition.LSDistance(ObjectManager.Player.ServerPosition, true) > 50 * 50 &&
-                    eventArgs.StartPosition.LSDistance(ObjectManager.Player.Position, true) > 50 * 50 &&
+                    eventArgs.StartPosition.Distance(ObjectManager.Player.ServerPosition, true) > 50 * 50 &&
+                    eventArgs.StartPosition.Distance(ObjectManager.Player.Position, true) > 50 * 50 &&
                     eventArgs.Target == null)
                 {
                     if (_lastCommandT.FirstOrDefault(e => e.Key == "spellcast" + eventArgs.Slot).Value == 0)

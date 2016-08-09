@@ -64,7 +64,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                     {
                         new Item(
                             "killable", "AA Killable", 20, false,
-                            t => t.Health < ObjectManager.Player.LSGetAutoAttackDamage(t, true) ? 1 : 0,
+                            t => t.Health < ObjectManager.Player.GetAutoAttackDamage(t, true) ? 1 : 0,
                             "Checks if target is killable with one auto attack."),
                         new Item(
                             "attack-damage", "Attack Damage", 15, false, delegate(AIHeroClient t)
@@ -106,9 +106,9 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                         new Item("low-health", "Health", 20, true, t => t.Health, "Low Health = Higher Weight"),
                         new Item(
                             "short-distance-player", "Distance to Player", 5, true,
-                            t => t.LSDistance(ObjectManager.Player), "Close to Player = Higher Weight"),
+                            t => t.Distance(ObjectManager.Player), "Close to Player = Higher Weight"),
                         new Item(
-                            "short-distance-cursor", "Distance to Cursor", 0, true, t => t.LSDistance(Game.CursorPos),
+                            "short-distance-cursor", "Distance to Cursor", 0, true, t => t.Distance(Game.CursorPos),
                             "Close to Cursor = Higher Weight"),
                         new Item(
                             "crowd-control", "Crowd Control", 0, false, delegate(AIHeroClient t)

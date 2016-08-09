@@ -33,7 +33,7 @@ using EloBuddy; namespace RethoughtLib.Extensions
         /// <returns></returns>
         public static bool InAutoAttackRange(this Obj_AI_Base unit)
         {
-            return unit.LSDistance(ObjectManager.Player) <= ObjectManager.Player.AttackRange;
+            return unit.Distance(ObjectManager.Player) <= ObjectManager.Player.AttackRange;
         }
 
         /// <summary>

@@ -38,7 +38,7 @@ using EloBuddy;
 
         private static void OnUpdate(EventArgs args)
         {
-            if (Program.E.LSIsReady())
+            if (Program.E.IsReady())
             {
                 //KS
                 if (
@@ -52,7 +52,7 @@ using EloBuddy;
                     ObjectManager.Get<Obj_AI_Minion>()
                         .Any(
                             m =>
-                                m.LSDistance(ObjectManager.Player) < 1000 && m.IsRendKillable() &&
+                                m.Distance(ObjectManager.Player) < 1000 && m.IsRendKillable() &&
                                 (m.Name == "SRU_Dragon6.1.1" || m.Name == "SRU_Baron12.1.1" || m.Name == "SRU_Red10.1.1" ||
                                  m.Name == "SRU_Red10.1.1" || m.Name == "SRU_Red4.1.1")))
                 {
@@ -64,7 +64,7 @@ using EloBuddy;
             {
                 case MyOrbwalker.OrbwalkingMode.Combo:
                 {
-                    if (Program.E.LSIsReady())
+                    if (Program.E.IsReady())
                     {
                         //Minion Resets
                         if (Program.ComboMenu.Item("EComboMinionReset").GetValue<bool>() &&
@@ -84,10 +84,10 @@ using EloBuddy;
                             }
                         }
                     }
-                    if (Program.ComboMenu.Item("QCombo").GetValue<bool>() && ObjectManager.Player.ManaPercent > Program.ComboMenu.Item("QMinMana").GetValue<Slider>().Value && Program.Q.LSIsReady())
+                    if (Program.ComboMenu.Item("QCombo").GetValue<bool>() && ObjectManager.Player.ManaPercent > Program.ComboMenu.Item("QMinMana").GetValue<Slider>().Value && Program.Q.IsReady())
                     {
                         var target = TargetSelector.GetTarget(Program.Q.Range, TargetSelector.DamageType.Physical);
-                        if (target.LSIsValidTarget())
+                        if (target.IsValidTarget())
                         {
                             Program.Q.Cast(target);
                             return;
@@ -110,9 +110,9 @@ using EloBuddy;
                     //E poke, slow
                     if ((from enemy in HeroManager.Enemies.Where(e => Program.E.IsInRange(e))
                         let buff = enemy.GetRendBuff()
-                        where Program.E.LSIsReady() && buff != null && Program.E.IsInRange(enemy)
+                        where Program.E.IsReady() && buff != null && Program.E.IsInRange(enemy)
                         where buff.Count >= Program.ComboMenu.Item("EComboMinStacks").GetValue<Slider>().Value
-                        where (enemy.LSDistance(ObjectManager.Player, true) > Math.Pow(Program.E.Range*0.80, 2) ||
+                        where (enemy.Distance(ObjectManager.Player, true) > Math.Pow(Program.E.Range*0.80, 2) ||
                                buff.EndTime - Game.Time < 0.3)
                         select enemy).Any())
                     {
@@ -124,9 +124,9 @@ using EloBuddy;
                     //E poke, slow
                     if ((from enemy in HeroManager.Enemies.Where(e => Program.E.IsInRange(e))
                         let buff = enemy.GetRendBuff()
-                        where Program.E.LSIsReady() && buff != null && Program.E.IsInRange(enemy)
+                        where Program.E.IsReady() && buff != null && Program.E.IsInRange(enemy)
                         where buff.Count >= Program.ComboMenu.Item("EComboMinStacks").GetValue<Slider>().Value
-                        where (enemy.LSDistance(ObjectManager.Player, true) > Math.Pow(Program.E.Range*0.80, 2) ||
+                        where (enemy.Distance(ObjectManager.Player, true) > Math.Pow(Program.E.Range*0.80, 2) ||
                                buff.EndTime - Game.Time < 0.3)
                         select enemy).Any())
                     {

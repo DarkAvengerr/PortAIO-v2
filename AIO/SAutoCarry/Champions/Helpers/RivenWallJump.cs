@@ -715,10 +715,10 @@ namespace SAutoCarry.Champions.Helpers
 
         public static PositionStruct GetNearest(Vector3 pos)
         {
-            foreach (var spot in Spots.Where(p => (pos - ObjectManager.Player.ServerPosition).LSTo2D().LSNormalized().LSAngleBetween((p.Start - ObjectManager.Player.ServerPosition).LSTo2D()) < 90).OrderBy(q => q.Start.LSDistance(pos)))
+            foreach (var spot in Spots.Where(p => (pos - ObjectManager.Player.ServerPosition).To2D().Normalized().AngleBetween((p.Start - ObjectManager.Player.ServerPosition).To2D()) < 90).OrderBy(q => q.Start.Distance(pos)))
             {
-                int steps = (int)(spot.Start.LSDistance(ObjectManager.Player.ServerPosition) / 10);
-                Vector3 direction = (spot.Start - ObjectManager.Player.ServerPosition).LSNormalized();
+                int steps = (int)(spot.Start.Distance(ObjectManager.Player.ServerPosition) / 10);
+                Vector3 direction = (spot.Start - ObjectManager.Player.ServerPosition).Normalized();
                 bool found = true;
                 for (int i = 0; i < steps - 1; i++)
                 {
@@ -737,7 +737,7 @@ namespace SAutoCarry.Champions.Helpers
 
         public static PositionStruct GetSpot(Vector3 pos)
         {
-            var s = Spots.Where(p => p.Start.LSDistance(pos) <= 10).OrderBy(q => q.Start.LSDistance(pos));
+            var s = Spots.Where(p => p.Start.Distance(pos) <= 10).OrderBy(q => q.Start.Distance(pos));
             if (s.Count() > 0)
                 return s.FirstOrDefault();
             else

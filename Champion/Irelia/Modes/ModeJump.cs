@@ -125,17 +125,17 @@ namespace Irelia.Modes
                 return;
             }
 
-            if (!JumpTarget.LSIsValidTarget())
+            if (!JumpTarget.IsValidTarget())
             {
                 return;
             }
             
-            if (!JumpObject.LSIsValidTarget(Q.Range))
+            if (!JumpObject.IsValidTarget(Q.Range))
             {
                 return;
             }
 
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
             {
                 return;
             }
@@ -183,7 +183,7 @@ namespace Irelia.Modes
 
             }
             
-            //if (!JumpTarget.LSIsValidTarget(Q.Range) && !JumpTarget.LSIsValidTarget(Q.Range + Orbwalking.GetRealAutoAttackRange(null) + 65))
+            //if (!JumpTarget.IsValidTarget(Q.Range) && !JumpTarget.IsValidTarget(Q.Range + Orbwalking.GetRealAutoAttackRange(null) + 65))
             //{
             //    ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, JumpTarget);
             //}
@@ -191,13 +191,13 @@ namespace Irelia.Modes
 
             return;
 
-            if (JumpTarget.LSUnderTurret(true) && MenuLocal.Item("Jump.TurretControl").GetValue<StringList>().SelectedIndex == 0)
+            if (JumpTarget.UnderTurret(true) && MenuLocal.Item("Jump.TurretControl").GetValue<StringList>().SelectedIndex == 0)
             {
                 return;
             }
 
 
-            if (JumpTarget.LSUnderTurret(true) 
+            if (JumpTarget.UnderTurret(true) 
                 && MenuLocal.Item("Jump.TurretControl").GetValue<StringList>().SelectedIndex == 1 
                 && JumpTarget.Health < Common.CommonMath.GetComboDamage(JumpTarget))
             {
@@ -260,35 +260,35 @@ namespace Irelia.Modes
             {
                 return;
             }
-            if (JumpTarget.LSIsValidTarget(Q.Range))
+            if (JumpTarget.IsValidTarget(Q.Range))
             {
                 return;
             }
 
-            if (JumpTarget.LSIsValidTarget() && ObjectManager.Player.LSDistance(JumpTarget) > Q.Range)
+            if (JumpTarget.IsValidTarget() && ObjectManager.Player.Distance(JumpTarget) > Q.Range)
             {
                 
-                var toPolygon = new Common.CommonGeometry.Rectangle(ObjectManager.Player.Position.LSTo2D(), ObjectManager.Player.Position.LSTo2D().LSExtend(JumpTarget.Position.LSTo2D(), Q.Range * 3), 250).ToPolygon();
+                var toPolygon = new Common.CommonGeometry.Rectangle(ObjectManager.Player.Position.To2D(), ObjectManager.Player.Position.To2D().Extend(JumpTarget.Position.To2D(), Q.Range * 3), 250).ToPolygon();
                 toPolygon.Draw(System.Drawing.Color.Red, 1);
                 var otherEnemyObjects =
                     ObjectManager.Get<Obj_AI_Base>()
-                        .Where(m => m.IsEnemy && !m.IsDead && !m.IsZombie && m.LSIsValidTarget(Q.Range) && m.NetworkId != JumpTarget.NetworkId)
+                        .Where(m => m.IsEnemy && !m.IsDead && !m.IsZombie && m.IsValidTarget(Q.Range) && m.NetworkId != JumpTarget.NetworkId)
                         .Where(m => toPolygon.IsInside(m))
-                        .Where(m => ObjectManager.Player.LSDistance(JumpTarget) > ObjectManager.Player.LSDistance(m))
+                        .Where(m => ObjectManager.Player.Distance(JumpTarget) > ObjectManager.Player.Distance(m))
                         .Where(m => m.Health < Q.GetDamage(m))
-                        .Where(m => !m.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 165))
-                        .OrderBy(m => m.LSDistance(JumpTarget.Position));
+                        .Where(m => !m.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 165))
+                        .OrderBy(m => m.Distance(JumpTarget.Position));
 
-                JumpObject = otherEnemyObjects.FirstOrDefault(m => m.LSDistance(JumpTarget.Position) <= Q.Range * 2 && m.LSDistance(JumpTarget.Position) > Orbwalking.GetRealAutoAttackRange(null));
+                JumpObject = otherEnemyObjects.FirstOrDefault(m => m.Distance(JumpTarget.Position) <= Q.Range * 2 && m.Distance(JumpTarget.Position) > Orbwalking.GetRealAutoAttackRange(null));
 
                 if (JumpObject != null)
                 {
-                    if (JumpObject.LSIsValidTarget(Q.Range))// && JumpTarget.Health <= ComboDamage(t, R.Instance.Ammo - 1 < 0 ? 0: R.Instance.Ammo - 1) && Utils.UltiChargeCount >= 2)
+                    if (JumpObject.IsValidTarget(Q.Range))// && JumpTarget.Health <= ComboDamage(t, R.Instance.Ammo - 1 < 0 ? 0: R.Instance.Ammo - 1) && Utils.UltiChargeCount >= 2)
                     {
                         var startpos = ObjectManager.Player.Position;
                         var endpos = JumpObject.Position;
-                        var endpos1 = JumpObject.Position + (startpos - endpos).LSTo2D().LSNormalized().LSRotated(30 * (float)Math.PI / 180).To3D() * ObjectManager.Player.BoundingRadius * 2;
-                        var endpos2 = JumpObject.Position + (startpos - endpos).LSTo2D().LSNormalized().LSRotated(-30 * (float)Math.PI / 180).To3D() * ObjectManager.Player.BoundingRadius * 2;
+                        var endpos1 = JumpObject.Position + (startpos - endpos).To2D().Normalized().Rotated(30 * (float)Math.PI / 180).To3D() * ObjectManager.Player.BoundingRadius * 2;
+                        var endpos2 = JumpObject.Position + (startpos - endpos).To2D().Normalized().Rotated(-30 * (float)Math.PI / 180).To3D() * ObjectManager.Player.BoundingRadius * 2;
 
                         var width = 1;
 
@@ -303,8 +303,8 @@ namespace Irelia.Modes
                         /*---------------------------------------------------------------------------------------------------------*/
                         var xStartPos = JumpObject.Position;
                         var xEndPos = JumpTarget.Position;
-                        var xEndPos1 = JumpTarget.Position + (xStartPos - xEndPos).LSTo2D().LSNormalized().LSRotated(30 * (float)Math.PI / 180).To3D() * JumpObject.BoundingRadius * 2;
-                        var xEndPost2 = JumpTarget.Position + (xStartPos - xEndPos).LSTo2D().LSNormalized().LSRotated(-30 * (float)Math.PI / 180).To3D() * JumpObject.BoundingRadius * 2;
+                        var xEndPos1 = JumpTarget.Position + (xStartPos - xEndPos).To2D().Normalized().Rotated(30 * (float)Math.PI / 180).To3D() * JumpObject.BoundingRadius * 2;
+                        var xEndPost2 = JumpTarget.Position + (xStartPos - xEndPos).To2D().Normalized().Rotated(-30 * (float)Math.PI / 180).To3D() * JumpObject.BoundingRadius * 2;
 
                         var xWidth = 1;
 

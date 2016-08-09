@@ -163,15 +163,15 @@ using EloBuddy; namespace xSaliceResurrected.ADC
         {
             double comboDamage = 0;
 
-            if (Q.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.Q) * 2;
+            if (Q.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.Q) * 2;
 
-            if (E.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.E);
+            if (E.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.E);
 
             comboDamage = ItemManager.CalcDamage(target, comboDamage);
 
-            return (float)(comboDamage + Player.LSGetAutoAttackDamage(target) * 3);
+            return (float)(comboDamage + Player.GetAutoAttackDamage(target) * 3);
         }
 
         private void Combo()
@@ -192,7 +192,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                 return;
 
             var target = TargetSelector.GetTarget(Q2.Range, TargetSelector.DamageType.Physical);
-            if (!target.LSIsValidTarget(Q2.Range))
+            if (!target.IsValidTarget(Q2.Range))
                 return;
 
             //items
@@ -208,15 +208,15 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                 ItemManager.UseTargetted = true;
             }
 
-            if (useR && R.LSIsReady())
+            if (useR && R.IsReady())
                 Cast_R();
-            if (useW && W.LSIsReady())
+            if (useW && W.IsReady())
                 Cast_W(target);
-            if (useE && E.LSIsReady())
+            if (useE && E.IsReady())
                 SpellCastManager.CastBasicSkillShot(E, E.Range, TargetSelector.DamageType.Physical, HitChanceManager.GetEHitChance(source));
-            if (useQ && Q.LSIsReady())
+            if (useQ && Q.IsReady())
             {
-                if (Player.ServerPosition.LSDistance(target.ServerPosition) > E.Range || !E.LSIsReady() || !menu.Item("ForceE", true).GetValue<bool>())
+                if (Player.ServerPosition.Distance(target.ServerPosition) > E.Range || !E.IsReady() || !menu.Item("ForceE", true).GetValue<bool>())
                     Cast_Q(target, source);
             }
         }
@@ -255,9 +255,9 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
             if (menu.Item("UseWCombo", true).GetValue<bool>())
                 W.Cast();
-            if (menu.Item("UseECombo", true).GetValue<bool>() && E.LSIsReady())
+            if (menu.Item("UseECombo", true).GetValue<bool>() && E.IsReady())
                 E.Cast(target);
-            if (menu.Item("UseQCombo", true).GetValue<bool>() && Q.LSIsReady())
+            if (menu.Item("UseQCombo", true).GetValue<bool>() && Q.IsReady())
                     Q.Cast(target);
         }
 
@@ -293,18 +293,18 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
             var safeNet = menu.Item("R_Safe_Net", true).GetValue<Slider>().Value;
 
-            foreach (var target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range)).OrderByDescending(GetComboDamage))
+            foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range)).OrderByDescending(GetComboDamage))
             {
                 if (menu.Item("Dont_R" + target.CharData.BaseSkinName, true) != null)
                 {
                     if (!menu.Item("Dont_R" + target.CharData.BaseSkinName, true).GetValue<bool>())
                     {
-                        if (!(target.LSCountEnemiesInRange(1000) >= safeNet))
+                        if (!(target.CountEnemiesInRange(1000) >= safeNet))
                         {
                             //if killable
                             if (menu.Item("R_On_Killable", true).GetValue<bool>())
                             {
-                                if (GetComboDamage(target) > target.Health && Player.LSDistance(target.Position) < R.Range)
+                                if (GetComboDamage(target) > target.Health && Player.Distance(target.Position) < R.Range)
                                 {
                                     R.Cast(target);
                                     return;
@@ -314,7 +314,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                             //if player is under turret
                             if (menu.Item("R_If_UnderTurret", true).GetValue<bool>())
                             {
-                                if (Util.UnderAllyTurret() && Player.ServerPosition.LSDistance(target.ServerPosition) > 300f)
+                                if (Util.UnderAllyTurret() && Player.ServerPosition.Distance(target.ServerPosition) > 300f)
                                 {
                                     R.Cast(target);
                                     return;
@@ -328,10 +328,10 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
         private void Cast_W(AIHeroClient target)
         {
-            if (menu.Item("W_Always", true).GetValue<bool>() && Player.ServerPosition.LSDistance(target.ServerPosition) < Q.Range)
+            if (menu.Item("W_Always", true).GetValue<bool>() && Player.ServerPosition.Distance(target.ServerPosition) < Q.Range)
                 W.Cast();
 
-            if (target.LSHasBuff("urgotcorrosivedebuff", true))
+            if (target.HasBuff("urgotcorrosivedebuff", true))
                 W.Cast();
 
             var hp = menu.Item("W_If_HP", true).GetValue<Slider>().Value;
@@ -342,7 +342,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
         private void Cast_Q(AIHeroClient target, string source)
         {
-            if (target.LSHasBuff("urgotcorrosivedebuff", true))
+            if (target.HasBuff("urgotcorrosivedebuff", true))
                 Q2.Cast(target);
             else 
                 SpellCastManager.CastBasicSkillShot(Q, Q.Range, TargetSelector.DamageType.Physical, HitChanceManager.GetQHitChance(source));
@@ -350,17 +350,17 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
         private void CheckKs()
         {
-            foreach (AIHeroClient target in ObjectManager.Get<AIHeroClient>().Where(x => x.LSIsValidTarget(Q2.Range)).OrderByDescending(GetComboDamage))
+            foreach (AIHeroClient target in ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(Q2.Range)).OrderByDescending(GetComboDamage))
             {
                 //Q
-                if (Player.ServerPosition.LSDistance(target.ServerPosition) <= Q.Range && Player.LSGetSpellDamage(target, SpellSlot.Q) > target.Health && Q.LSIsReady())
+                if (Player.ServerPosition.Distance(target.ServerPosition) <= Q.Range && Player.GetSpellDamage(target, SpellSlot.Q) > target.Health && Q.IsReady())
                 {
                     Q.Cast(target);
                     return;
                 }
 
                 //R
-                if (Player.ServerPosition.LSDistance(target.ServerPosition) <= E.Range && Player.LSGetSpellDamage(target, SpellSlot.E) > target.Health && E.LSIsReady())
+                if (Player.ServerPosition.Distance(target.ServerPosition) <= E.Range && Player.GetSpellDamage(target, SpellSlot.E) > target.Health && E.IsReady())
                 {
                     E.Cast(target);
                     return;
@@ -381,7 +381,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
             {
                 var target = _poisonTargets.OrderByDescending(GetComboDamage).FirstOrDefault();
 
-                if (target.LSIsValidTarget(Q2.Range))
+                if (target.IsValidTarget(Q2.Range))
                     Q2.Cast(target);
             }
 
@@ -412,19 +412,19 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
             if (menu.Item("Draw_Q", true).GetValue<bool>())
                 if (Q.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, Q.Range, Q.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, Q.Range, Q.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_W", true).GetValue<bool>())
                 if (W.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, W.Range, W.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, W.Range, W.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_E", true).GetValue<bool>())
                 if (E.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, E.Range, E.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_R", true).GetValue<bool>())
                 if (R.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position,R.Range, R.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position,R.Range, R.IsReady() ? Color.Green : Color.Red);
         }
     }
 }

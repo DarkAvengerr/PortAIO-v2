@@ -235,7 +235,7 @@ namespace VayneHunter_Reborn.External.Cleanser
                          MenuExtensions.GetItemValue<bool>("dz191.vhr.cleanser.spells." + spell.SpellBuff + ".A")) &&
                         (HeroManager.Enemies.FirstOrDefault(m => m.ChampionName == spell.ChampName) != null
                             ? HeroManager.Enemies.FirstOrDefault(m => m.ChampionName == spell.ChampName)
-                                .LSGetSpellDamage(ObjectManager.Player, spell.Slot) >= ObjectManager.Player.Health + 15
+                                .GetSpellDamage(ObjectManager.Player, spell.Slot) >= ObjectManager.Player.Health + 15
                             : false));
 
             if (spellsOnMe.Any())

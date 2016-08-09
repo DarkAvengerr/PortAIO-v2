@@ -40,7 +40,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void onAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (unit.IsMe && ARAMSimulator.awayTo.LSIsValid())
+            if (unit.IsMe && ARAMSimulator.awayTo.IsValid())
             {
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, ARAMSimulator.awayTo.To3D());
             }
@@ -49,31 +49,31 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
-            if (!Sector.inTowerRange(target.Position.LSTo2D()) &&
-                (MapControl.balanceAroundPoint(target.Position.LSTo2D(), 700) >= -1 ||
+            if (!Sector.inTowerRange(target.Position.To2D()) &&
+                (MapControl.balanceAroundPoint(target.Position.To2D(), 700) >= -1 ||
                  (MapControl.fightIsOn() != null && MapControl.fightIsOn().NetworkId == target.NetworkId)))
                 Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || W.LSIsReady())
+            if (!E.IsReady() || W.IsReady())
                 return;
             E.Cast();
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
             R.Cast(target);
         }
@@ -98,7 +98,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 {
                     var targ = ObjectManager.Get<AIHeroClient>()
                         .Where(h => h.IsAlly && h.IsValid)
-                        .OrderBy(h => player.LSDistance(h, true))
+                        .OrderBy(h => player.Distance(h, true))
                         .FirstOrDefault();
                     if (targ != null)
                         LeagueSharp.Common.Items.UseItem(3599, targ);
@@ -107,7 +107,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 foreach (
                     var ally in
                         from ally in ObjectManager.Get<AIHeroClient>().Where(tx => tx.IsAlly && !tx.IsDead && !tx.IsMe)
-                        where ObjectManager.Player.LSDistance(ally) <= CoopStrikeAllyRange
+                        where ObjectManager.Player.Distance(ally) <= CoopStrikeAllyRange
                         from buff in ally.Buffs
                         where buff.Name.Contains("kalistacoopstrikeally")
                         select ally)
@@ -118,31 +118,31 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             AIHeroClient t;
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 t = ARAMTargetSelector.getBestTarget(Q.Range);
                 if (t != null)
                     Q.Cast(t);
             }
 
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                foreach (var targ in HeroManager.Enemies.Where(o => o.LSIsValidTarget(E.Range) && !o.IsDead))
+                foreach (var targ in HeroManager.Enemies.Where(o => o.IsValidTarget(E.Range) && !o.IsDead))
                 {
-                    if (targ.Health < player.LSGetSpellDamage(targ, SpellSlot.E))
+                    if (targ.Health < player.GetSpellDamage(targ, SpellSlot.E))
                     {
                         E.Cast();
                     }
                 }
                 var deadMins =
                     MinionManager.GetMinions(E.Range)
-                        .Count(o => o.LSIsValidTarget(E.Range) && !o.IsDead && E.GetDamage(o) > o.Health);
+                        .Count(o => o.IsValidTarget(E.Range) && !o.IsDead && E.GetDamage(o) > o.Health);
 
                 if (deadMins > 1)
                     E.Cast();
             }
 
-            if (!R.LSIsReady()) return;
+            if (!R.IsReady()) return;
             t = ARAMTargetSelector.getBestTarget(R.Range);
             if (t != null)
                 R.Cast(t);
@@ -157,7 +157,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 var xbuffCount = 0;
                 foreach (
                     var buff in from enemy in ObjectManager.Get<AIHeroClient>().Where(tx => tx.IsEnemy && !tx.IsDead)
-                                where ObjectManager.Player.LSDistance(enemy) < E.Range
+                                where ObjectManager.Player.Distance(enemy) < E.Range
                                 from buff in enemy.Buffs
                                 where buff.Name.Contains("kalistaexpungemarker")
                                 select buff)
@@ -170,9 +170,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private float GetEDamage(Obj_AI_Base t)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return 0f;
-            return (float)ObjectManager.Player.LSGetSpellDamage(t, SpellSlot.E);
+            return (float)ObjectManager.Player.GetSpellDamage(t, SpellSlot.E);
 
             /* I think this calculation working good but i cant check now. after I'll do */
             var buff = t.Buffs.FirstOrDefault(xBuff => xBuff.DisplayName.ToLower() == "kalistaexpungemarker");

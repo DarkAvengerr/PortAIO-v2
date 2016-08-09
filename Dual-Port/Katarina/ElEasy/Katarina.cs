@@ -259,7 +259,7 @@ namespace ElEasy.Plugins
             try
             {
                 Console.WriteLine("Loaded Katarina");
-                Ignite = this.Player.LSGetSpellSlot("summonerdot");
+                Ignite = this.Player.GetSpellSlot("summonerdot");
                 spells[Spells.R].SetCharged("KatarinaR", "KatarinaR", 550, 550, 1.0f);
 
                 Game.OnUpdate += this.OnUpdate;
@@ -334,7 +334,7 @@ namespace ElEasy.Plugins
 
         private void GameObject_OnCreate(GameObject sender, EventArgs args)
         {
-            if (!spells[Spells.E].LSIsReady() || !(sender is Obj_AI_Minion) || Environment.TickCount >= lastPlaced + 300)
+            if (!spells[Spells.E].IsReady() || !(sender is Obj_AI_Minion) || Environment.TickCount >= lastPlaced + 300)
             {
                 return;
             }
@@ -345,7 +345,7 @@ namespace ElEasy.Plugins
             }
             var ward = (Obj_AI_Minion)sender;
 
-            if (ward.Name.ToLower().Contains("ward") && ward.LSDistance(lastWardPos) < 500)
+            if (ward.Name.ToLower().Contains("ward") && ward.Distance(lastWardPos) < 500)
             {
                 spells[Spells.E].Cast(ward);
             }
@@ -353,33 +353,33 @@ namespace ElEasy.Plugins
 
         private double QMarkDamage(Obj_AI_Base target)
         {
-            return target.HasBuff("katarinaqmark") ? this.Player.LSGetSpellDamage(target, SpellSlot.Q, 1) : 0;
+            return target.HasBuff("katarinaqmark") ? this.Player.GetSpellDamage(target, SpellSlot.Q, 1) : 0;
         }
 
         private float GetComboDamage(Obj_AI_Base enemy)
         {
             var damage = 0d;
 
-            if (spells[Spells.Q].LSIsReady())
+            if (spells[Spells.Q].IsReady())
             {
-                damage += this.Player.LSGetSpellDamage(enemy, SpellSlot.Q);
+                damage += this.Player.GetSpellDamage(enemy, SpellSlot.Q);
             }
 
             damage += this.QMarkDamage(enemy);
 
-            if (spells[Spells.W].LSIsReady())
+            if (spells[Spells.W].IsReady())
             {
-                damage += this.Player.LSGetSpellDamage(enemy, SpellSlot.W);
+                damage += this.Player.GetSpellDamage(enemy, SpellSlot.W);
             }
 
-            if (spells[Spells.E].LSIsReady())
+            if (spells[Spells.E].IsReady())
             {
-                damage += this.Player.LSGetSpellDamage(enemy, SpellSlot.E);
+                damage += this.Player.GetSpellDamage(enemy, SpellSlot.E);
             }
 
-            if (spells[Spells.R].LSIsReady())
+            if (spells[Spells.R].IsReady())
             {
-                damage += this.Player.LSGetSpellDamage(enemy, SpellSlot.R) * 8;
+                damage += this.Player.GetSpellDamage(enemy, SpellSlot.R) * 8;
             }
 
             return (float)damage;
@@ -410,7 +410,7 @@ namespace ElEasy.Plugins
             foreach (
                 var hero in
                     HeroManager.Enemies
-                        .Where(hero => hero.LSIsValidTarget(spells[Spells.E].Range) && !hero.IsInvulnerable))
+                        .Where(hero => hero.IsValidTarget(spells[Spells.E].Range) && !hero.IsInvulnerable))
             {
                 var qdmg = spells[Spells.Q].GetDamage(hero);
                 var wdmg = spells[Spells.W].GetDamage(hero);
@@ -430,29 +430,29 @@ namespace ElEasy.Plugins
                     ignitedmg = 0f;
                 }
 
-                if (hero.HasBuff("katarinaqmark") && hero.Health - wdmg - markDmg < 0 && spells[Spells.W].LSIsReady()
-                    && hero.LSIsValidTarget(spells[Spells.W].Range))
+                if (hero.HasBuff("katarinaqmark") && hero.Health - wdmg - markDmg < 0 && spells[Spells.W].IsReady()
+                    && hero.IsValidTarget(spells[Spells.W].Range))
                 {
                     spells[Spells.W].Cast();
                 }
 
-                if (hero.Health - ignitedmg < 0 && Ignite.LSIsReady() && hero.LSIsValidTarget(600))
+                if (hero.Health - ignitedmg < 0 && Ignite.IsReady() && hero.IsValidTarget(600))
                 {
                     this.Player.Spellbook.CastSpell(Ignite, hero);
                 }
 
-                if (hero.Health - edmg < 0 && spells[Spells.E].LSIsReady() && hero.LSIsValidTarget(spells[Spells.E].Range))
+                if (hero.Health - edmg < 0 && spells[Spells.E].IsReady() && hero.IsValidTarget(spells[Spells.E].Range))
                 {
                     spells[Spells.E].Cast(hero);
                 }
 
-                if (hero.Health - qdmg < 0 && spells[Spells.Q].LSIsReady() && spells[Spells.Q].IsInRange(hero))
+                if (hero.Health - qdmg < 0 && spells[Spells.Q].IsReady() && spells[Spells.Q].IsInRange(hero))
                 {
                     spells[Spells.Q].Cast(hero);
                 }
 
-                if (hero.Health - edmg - wdmg < 0 && spells[Spells.E].LSIsReady() && spells[Spells.W].LSIsReady()
-                    && hero.LSIsValidTarget(spells[Spells.E].Range))
+                if (hero.Health - edmg - wdmg < 0 && spells[Spells.E].IsReady() && spells[Spells.W].IsReady()
+                    && hero.IsValidTarget(spells[Spells.E].Range))
                 {
                     this.CastE(hero);
                     if (spells[Spells.W].IsInRange(hero))
@@ -461,43 +461,43 @@ namespace ElEasy.Plugins
                     }
                 }
 
-                if (hero.Health - edmg - qdmg < 0 && spells[Spells.E].LSIsReady() && spells[Spells.Q].LSIsReady()
-                    && hero.LSIsValidTarget(spells[Spells.E].Range))
+                if (hero.Health - edmg - qdmg < 0 && spells[Spells.E].IsReady() && spells[Spells.Q].IsReady()
+                    && hero.IsValidTarget(spells[Spells.E].Range))
                 {
                     this.CastE(hero);
                     spells[Spells.Q].Cast(hero);
                 }
 
-                if (hero.Health - edmg - wdmg - qdmg < 0 && spells[Spells.E].LSIsReady() && spells[Spells.Q].LSIsReady()
-                    && spells[Spells.W].LSIsReady() && hero.LSIsValidTarget(spells[Spells.E].Range))
+                if (hero.Health - edmg - wdmg - qdmg < 0 && spells[Spells.E].IsReady() && spells[Spells.Q].IsReady()
+                    && spells[Spells.W].IsReady() && hero.IsValidTarget(spells[Spells.E].Range))
                 {
                     this.CastE(hero);
                     spells[Spells.Q].Cast(hero);
-                    if (hero.LSIsValidTarget(spells[Spells.W].Range))
+                    if (hero.IsValidTarget(spells[Spells.W].Range))
                     {
                         spells[Spells.W].Cast();
                     }
                 }
 
-                if (hero.Health - edmg - wdmg - qdmg - markDmg < 0 && spells[Spells.E].LSIsReady()
-                    && spells[Spells.Q].LSIsReady() && spells[Spells.W].LSIsReady()
-                    && hero.LSIsValidTarget(spells[Spells.E].Range))
+                if (hero.Health - edmg - wdmg - qdmg - markDmg < 0 && spells[Spells.E].IsReady()
+                    && spells[Spells.Q].IsReady() && spells[Spells.W].IsReady()
+                    && hero.IsValidTarget(spells[Spells.E].Range))
                 {
                     this.CastE(hero);
                     spells[Spells.Q].Cast(hero);
-                    if (hero.LSIsValidTarget(spells[Spells.W].Range))
+                    if (hero.IsValidTarget(spells[Spells.W].Range))
                     {
                         spells[Spells.W].Cast();
                     }
                 }
 
-                if (hero.Health - edmg - wdmg - qdmg - ignitedmg < 0 && spells[Spells.E].LSIsReady()
-                    && spells[Spells.Q].LSIsReady() && spells[Spells.W].LSIsReady() && Ignite.LSIsReady()
-                    && hero.LSIsValidTarget(spells[Spells.E].Range))
+                if (hero.Health - edmg - wdmg - qdmg - ignitedmg < 0 && spells[Spells.E].IsReady()
+                    && spells[Spells.Q].IsReady() && spells[Spells.W].IsReady() && Ignite.IsReady()
+                    && hero.IsValidTarget(spells[Spells.E].Range))
                 {
                     this.CastE(hero);
                     spells[Spells.Q].Cast(hero);
-                    if (hero.LSIsValidTarget(spells[Spells.W].Range))
+                    if (hero.IsValidTarget(spells[Spells.W].Range))
                     {
                         spells[Spells.W].Cast();
                         this.Player.Spellbook.CastSpell(Ignite, hero);
@@ -538,7 +538,7 @@ namespace ElEasy.Plugins
         private void OnAutoHarass()
         {
             var target = TargetSelector.GetTarget(spells[Spells.Q].Range, TargetSelector.DamageType.Magical);
-            if (target == null || !target.LSIsValidTarget() || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            if (target == null || !target.IsValidTarget() || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 return;
             }
@@ -546,12 +546,12 @@ namespace ElEasy.Plugins
             var useQ = this.Menu.Item("ElEasy.Katarina.AutoHarass.Q").IsActive();
             var useW = this.Menu.Item("ElEasy.Katarina.AutoHarass.W").IsActive();
 
-            if (useQ && spells[Spells.Q].LSIsReady() && target.LSIsValidTarget())
+            if (useQ && spells[Spells.Q].IsReady() && target.IsValidTarget())
             {
                 spells[Spells.Q].Cast(target);
             }
 
-            if (useW && spells[Spells.W].LSIsReady() && target.LSIsValidTarget(spells[Spells.W].Range))
+            if (useW && spells[Spells.W].IsReady() && target.IsValidTarget(spells[Spells.W].Range))
             {
                 spells[Spells.W].Cast();
             }
@@ -560,7 +560,7 @@ namespace ElEasy.Plugins
         private void OnCombo()
         {
             var target = TargetSelector.GetTarget(spells[Spells.Q].Range, TargetSelector.DamageType.Magical);
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
             {
                 return;
             }
@@ -576,26 +576,26 @@ namespace ElEasy.Plugins
             var forceR = this.Menu.Item("ElEasy.Katarina.Combo.R.Force").IsActive();
             var forceRCount = this.Menu.Item("ElEasy.Katarina.Combo.R.Force.Count").GetValue<Slider>().Value;
 
-            if (useQ && spells[Spells.Q].LSIsReady() && target.LSIsValidTarget(spells[Spells.Q].Range))
+            if (useQ && spells[Spells.Q].IsReady() && target.IsValidTarget(spells[Spells.Q].Range))
             {
                 spells[Spells.Q].Cast(target);
             }
 
-            if (useE && spells[Spells.E].LSIsReady() && target.LSIsValidTarget(spells[Spells.E].Range))
+            if (useE && spells[Spells.E].IsReady() && target.IsValidTarget(spells[Spells.E].Range))
             {
                 this.CastE(target);
             }
 
-            if (useW && spells[Spells.W].LSIsReady() && target.LSIsValidTarget(spells[Spells.W].Range))
+            if (useW && spells[Spells.W].IsReady() && target.IsValidTarget(spells[Spells.W].Range))
             {
                 spells[Spells.W].Cast();
             }
-            if (useR && spells[Spells.R].LSIsReady())
+            if (useR && spells[Spells.R].IsReady())
             {
                 switch (rSort.SelectedIndex)
                 {
                     case 0:
-                        if (this.Player.LSCountEnemiesInRange(spells[Spells.R].Range) > 0 && spells[Spells.R].LSIsReady())
+                        if (this.Player.CountEnemiesInRange(spells[Spells.R].Range) > 0 && spells[Spells.R].IsReady())
                         {
                             spells[Spells.R].Cast();
                             Orbwalker.SetMovement(false);
@@ -605,8 +605,8 @@ namespace ElEasy.Plugins
                         break;
 
                     case 1:
-                        if (!spells[Spells.E].LSIsReady()
-                            || forceR && this.Player.LSCountEnemiesInRange(spells[Spells.R].Range) <= forceRCount)
+                        if (!spells[Spells.E].IsReady()
+                            || forceR && this.Player.CountEnemiesInRange(spells[Spells.R].Range) <= forceRCount)
                         {
                             spells[Spells.R].Cast();
                             Orbwalker.SetMovement(false);
@@ -617,7 +617,7 @@ namespace ElEasy.Plugins
                 }
             }
 
-            if (target.LSIsValidTarget(600) && this.IgniteDamage(target) >= target.Health && useI)
+            if (target.IsValidTarget(600) && this.IgniteDamage(target) >= target.Health && useI)
             {
                 this.Player.Spellbook.CastSpell(Ignite, target);
             }
@@ -672,7 +672,7 @@ namespace ElEasy.Plugins
         private void OnHarass()
         {
             var target = TargetSelector.GetTarget(spells[Spells.Q].Range, TargetSelector.DamageType.Magical);
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
             {
                 return;
             }
@@ -685,7 +685,7 @@ namespace ElEasy.Plugins
             switch (hMode)
             {
                 case 0:
-                    if (useQ && spells[Spells.Q].LSIsReady())
+                    if (useQ && spells[Spells.Q].IsReady())
                     {
                         spells[Spells.Q].CastOnUnit(target);
                     }
@@ -694,12 +694,12 @@ namespace ElEasy.Plugins
                 case 1:
                     if (useQ && useW)
                     {
-                        if (spells[Spells.Q].LSIsReady() && target.LSIsValidTarget(spells[Spells.Q].Range))
+                        if (spells[Spells.Q].IsReady() && target.IsValidTarget(spells[Spells.Q].Range))
                         {
                             spells[Spells.Q].Cast(target);
                         }
 
-                        if (target.LSIsValidTarget(spells[Spells.W].Range) && spells[Spells.W].LSIsReady())
+                        if (target.IsValidTarget(spells[Spells.W].Range) && spells[Spells.W].IsReady())
                         {
                             spells[Spells.W].Cast();
                         }
@@ -709,17 +709,17 @@ namespace ElEasy.Plugins
                 case 2:
                     if (useQ && useW && useE)
                     {
-                        if (spells[Spells.Q].LSIsReady() && target.LSIsValidTarget(spells[Spells.Q].Range))
+                        if (spells[Spells.Q].IsReady() && target.IsValidTarget(spells[Spells.Q].Range))
                         {
                             spells[Spells.Q].Cast(target);
                         }
 
-                        if (spells[Spells.E].LSIsReady() && target.LSIsValidTarget(spells[Spells.E].Range))
+                        if (spells[Spells.E].IsReady() && target.IsValidTarget(spells[Spells.E].Range))
                         {
                             this.CastE(target);
                         }
 
-                        if (spells[Spells.W].LSIsReady() && target.LSIsValidTarget(spells[Spells.W].Range))
+                        if (spells[Spells.W].IsReady() && target.IsValidTarget(spells[Spells.W].Range))
                         {
                             spells[Spells.W].Cast();
                         }
@@ -747,17 +747,17 @@ namespace ElEasy.Plugins
                 return;
             }
 
-            if (useQ && spells[Spells.Q].LSIsReady())
+            if (useQ && spells[Spells.Q].IsReady())
             {
                 spells[Spells.Q].Cast(minions);
             }
 
-            if (useW && spells[Spells.W].LSIsReady() && spells[Spells.W].IsInRange(minions))
+            if (useW && spells[Spells.W].IsReady() && spells[Spells.W].IsInRange(minions))
             {
                 spells[Spells.W].Cast();
             }
 
-            if (useE && spells[Spells.E].LSIsReady())
+            if (useE && spells[Spells.E].IsReady())
             {
                 this.CastE(minions);
             }
@@ -777,7 +777,7 @@ namespace ElEasy.Plugins
                 return;
             }
 
-            if (spells[Spells.W].LSIsReady() && useW)
+            if (spells[Spells.W].IsReady() && useW)
             {
                 if (minions.Health < spells[Spells.W].GetDamage(minions))
                 {
@@ -785,7 +785,7 @@ namespace ElEasy.Plugins
                 }
             }
 
-            if (spells[Spells.Q].LSIsReady() && useQ)
+            if (spells[Spells.Q].IsReady() && useQ)
             {
                 if (minions.Health < spells[Spells.Q].GetDamage(minions))
                 {
@@ -793,7 +793,7 @@ namespace ElEasy.Plugins
                 }
             }
 
-            if (spells[Spells.E].LSIsReady() && useE)
+            if (spells[Spells.E].IsReady() && useE)
             {
                 if (minions.Health < spells[Spells.E].GetDamage(minions))
                 {
@@ -816,7 +816,7 @@ namespace ElEasy.Plugins
                 return;
             }
 
-            if (spells[Spells.W].LSIsReady() && useW)
+            if (spells[Spells.W].IsReady() && useW)
             {
                 if (minions.Health < spells[Spells.W].GetDamage(minions))
                 {
@@ -824,7 +824,7 @@ namespace ElEasy.Plugins
                 }
             }
 
-            if (spells[Spells.Q].LSIsReady() && useQ)
+            if (spells[Spells.Q].IsReady() && useQ)
             {
                 if (minions.Health < spells[Spells.Q].GetDamage(minions))
                 {
@@ -832,7 +832,7 @@ namespace ElEasy.Plugins
                 }
             }
 
-            if (spells[Spells.E].LSIsReady() && useE)
+            if (spells[Spells.E].IsReady() && useE)
             {
                 if (minions.Health < spells[Spells.E].GetDamage(minions))
                 {
@@ -933,27 +933,27 @@ namespace ElEasy.Plugins
             bool minions = true,
             bool champions = true)
         {
-            if (!spells[Spells.E].LSIsReady())
+            if (!spells[Spells.E].IsReady())
             {
                 return;
             }
 
-            var basePos = this.Player.Position.LSTo2D();
-            var newPos = (pos.LSTo2D() - this.Player.Position.LSTo2D());
+            var basePos = this.Player.Position.To2D();
+            var newPos = (pos.To2D() - this.Player.Position.To2D());
 
             if (JumpPos == new Vector2())
             {
                 if (reqinMaxRange)
                 {
-                    JumpPos = pos.LSTo2D();
+                    JumpPos = pos.To2D();
                 }
-                else if (maxRange || this.Player.LSDistance(pos) > 590)
+                else if (maxRange || this.Player.Distance(pos) > 590)
                 {
-                    JumpPos = basePos + (newPos.LSNormalized() * (590));
+                    JumpPos = basePos + (newPos.Normalized() * (590));
                 }
                 else
                 {
-                    JumpPos = basePos + (newPos.LSNormalized() * (this.Player.LSDistance(pos)));
+                    JumpPos = basePos + (newPos.Normalized() * (this.Player.Distance(pos)));
                 }
             }
             if (JumpPos != new Vector2() && reCheckWard)
@@ -974,7 +974,7 @@ namespace ElEasy.Plugins
             {
                 this.Orbwalk(pos);
             }
-            if (!spells[Spells.E].LSIsReady() || reqinMaxRange && this.Player.LSDistance(pos) > spells[Spells.E].Range)
+            if (!spells[Spells.E].IsReady() || reqinMaxRange && this.Player.Distance(pos) > spells[Spells.E].Range)
             {
                 return;
             }
@@ -985,12 +985,12 @@ namespace ElEasy.Plugins
                 {
                     var champs = (from champ in ObjectManager.Get<AIHeroClient>()
                                   where
-                                      champ.IsAlly && champ.LSDistance(this.Player) < spells[Spells.E].Range
-                                      && champ.LSDistance(pos) < 200 && !champ.IsMe
+                                      champ.IsAlly && champ.Distance(this.Player) < spells[Spells.E].Range
+                                      && champ.Distance(pos) < 200 && !champ.IsMe
                                   select champ).ToList();
-                    if (champs.Count > 0 && spells[Spells.E].LSIsReady())
+                    if (champs.Count > 0 && spells[Spells.E].IsReady())
                     {
-                        if (500 >= Environment.TickCount - wcasttime || !spells[Spells.E].LSIsReady())
+                        if (500 >= Environment.TickCount - wcasttime || !spells[Spells.E].IsReady())
                         {
                             return;
                         }
@@ -1003,12 +1003,12 @@ namespace ElEasy.Plugins
                 {
                     var minion2 = (from minion in ObjectManager.Get<Obj_AI_Minion>()
                                    where
-                                       minion.IsAlly && minion.LSDistance(this.Player) < spells[Spells.E].Range
-                                       && minion.LSDistance(pos) < 200 && !minion.Name.ToLower().Contains("ward")
+                                       minion.IsAlly && minion.Distance(this.Player) < spells[Spells.E].Range
+                                       && minion.Distance(pos) < 200 && !minion.Name.ToLower().Contains("ward")
                                    select minion).ToList();
                     if (minion2.Count > 0)
                     {
-                        if (500 >= Environment.TickCount - wcasttime || !spells[Spells.E].LSIsReady())
+                        if (500 >= Environment.TickCount - wcasttime || !spells[Spells.E].IsReady())
                         {
                             return;
                         }
@@ -1022,10 +1022,10 @@ namespace ElEasy.Plugins
             var isWard = false;
             foreach (var ward in ObjectManager.Get<Obj_AI_Base>())
             {
-                if (ward.IsAlly && ward.Name.ToLower().Contains("ward") && ward.LSDistance(JumpPos) < 200)
+                if (ward.IsAlly && ward.Name.ToLower().Contains("ward") && ward.Distance(JumpPos) < 200)
                 {
                     isWard = true;
-                    if (500 >= Environment.TickCount - wcasttime || !spells[Spells.E].LSIsReady())
+                    if (500 >= Environment.TickCount - wcasttime || !spells[Spells.E].IsReady())
                     {
                         return;
                     }
@@ -1038,7 +1038,7 @@ namespace ElEasy.Plugins
             if (!isWard && castWardAgain)
             {
                 var ward = this.FindBestWardItem();
-                if (ward == null || !spells[Spells.E].LSIsReady())
+                if (ward == null || !spells[Spells.E].IsReady())
                 {
                     return;
                 }

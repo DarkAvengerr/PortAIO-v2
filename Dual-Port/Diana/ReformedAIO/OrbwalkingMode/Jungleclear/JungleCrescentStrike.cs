@@ -62,7 +62,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Jungleclear
         private void OnUpdate(EventArgs args)
         {
             if (Variables.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
-                || !Variables.Spells[SpellSlot.Q].LSIsReady()) return;
+                || !Variables.Spells[SpellSlot.Q].IsReady()) return;
 
             if (this.Menu.Item(this.Menu.Name + "JungleQMana").GetValue<Slider>().Value > Variables.Player.ManaPercent) return;
 

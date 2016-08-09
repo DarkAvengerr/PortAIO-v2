@@ -52,7 +52,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base t)
         {
-            if (!Q.LSIsReady() || t == null)
+            if (!Q.IsReady() || t == null)
                 return;
             var qDmg = GetQdmg(t);
             if (qDmg > t.Health)
@@ -61,80 +61,80 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 Q.Cast(t);
             if (player.Mana > RMANA + QMANA + WMANA)
             {
-                foreach (var enemy in DeathWalker.AllEnemys.Where(enemy => enemy.LSIsValidTarget(Q.Range)))
+                foreach (var enemy in DeathWalker.AllEnemys.Where(enemy => enemy.IsValidTarget(Q.Range)))
                     Q.Cast(enemy, true);
             }
         }
 
         public override void useW(Obj_AI_Base t)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             var qDmg = GetQdmg(t);
-            if (t.HasBuffOfType(BuffType.Slow) || t.LSCountEnemiesInRange(250) > 1)
+            if (t.HasBuffOfType(BuffType.Slow) || t.CountEnemiesInRange(250) > 1)
             {
                 W.Cast(t);
 
             }
             if (ObjectManager.Player.Mana > RMANA + WMANA + EMANA + QMANA)
                 W.Cast(t);
-            else if (!ObjectManager.Player.LSUnderTurret(true) && ObjectManager.Player.Mana > ObjectManager.Player.MaxMana * 0.8 && ObjectManager.Player.Mana > RMANA + WMANA + EMANA + QMANA + WMANA)
+            else if (!ObjectManager.Player.UnderTurret(true) && ObjectManager.Player.Mana > ObjectManager.Player.MaxMana * 0.8 && ObjectManager.Player.Mana > RMANA + WMANA + EMANA + QMANA + WMANA)
                 W.Cast(t);
             else if (ObjectManager.Player.Mana > RMANA + WMANA + EMANA)
             {
-                foreach (var enemy in DeathWalker.AllEnemys.Where(enemy => enemy.LSIsValidTarget(W.Range)))
+                foreach (var enemy in DeathWalker.AllEnemys.Where(enemy => enemy.IsValidTarget(W.Range)))
                     W.Cast(enemy, true);
             }
         }
 
         public override void useE(Obj_AI_Base t)
         {
-            if (!E.LSIsReady() || t == null)
+            if (!E.IsReady() || t == null)
                 return;
             if (WMissile != null && WMissile.IsValid)
             {
-                if (WMissile.Position.LSCountEnemiesInRange(200) > 0 && WMissile.Position.LSDistance(player.ServerPosition) < 100)
+                if (WMissile.Position.CountEnemiesInRange(200) > 0 && WMissile.Position.Distance(player.ServerPosition) < 100)
                 {
-                    E.Cast(player.Position.LSExtend(WMissile.Position, E.Range), true);
+                    E.Cast(player.Position.Extend(WMissile.Position, E.Range), true);
                 }
             }
 
 
-            if (E.LSIsReady() && ObjectManager.Player.Mana > RMANA + EMANA
-                 && ObjectManager.Player.LSCountEnemiesInRange(260) > 0
-                 && ObjectManager.Player.Position.LSExtend(Game.CursorPos, E.Range).LSCountEnemiesInRange(500) < 3
-                 && t.Position.LSDistance(Game.CursorPos) > t.Position.LSDistance(ObjectManager.Player.Position))
+            if (E.IsReady() && ObjectManager.Player.Mana > RMANA + EMANA
+                 && ObjectManager.Player.CountEnemiesInRange(260) > 0
+                 && ObjectManager.Player.Position.Extend(Game.CursorPos, E.Range).CountEnemiesInRange(500) < 3
+                 && t.Position.Distance(Game.CursorPos) > t.Position.Distance(ObjectManager.Player.Position))
             {
-                E.Cast(ObjectManager.Player.Position.LSExtend(Game.CursorPos, E.Range), true);
+                E.Cast(ObjectManager.Player.Position.Extend(Game.CursorPos, E.Range), true);
             }
             else if (ObjectManager.Player.Health > ObjectManager.Player.MaxHealth * 0.4
                 && ObjectManager.Player.Mana > RMANA + EMANA
-                && !ObjectManager.Player.LSUnderTurret(true)
-                && ObjectManager.Player.Position.LSExtend(Game.CursorPos, E.Range).LSCountEnemiesInRange(700) < 3)
+                && !ObjectManager.Player.UnderTurret(true)
+                && ObjectManager.Player.Position.Extend(Game.CursorPos, E.Range).CountEnemiesInRange(700) < 3)
             {
-                if (t.LSIsValidTarget() && player.Mana > QMANA + EMANA + WMANA && t.Position.LSDistance(Game.CursorPos) + 300 < t.Position.LSDistance(player.Position))
+                if (t.IsValidTarget() && player.Mana > QMANA + EMANA + WMANA && t.Position.Distance(Game.CursorPos) + 300 < t.Position.Distance(player.Position))
                 {
-                    E.Cast(player.Position.LSExtend(Game.CursorPos, E.Range), true);
+                    E.Cast(player.Position.Extend(Game.CursorPos, E.Range), true);
                 }
             }
-            else if (t.LSIsValidTarget() && GetEdmg(t) + GetWdmg(t) > t.Health)
+            else if (t.IsValidTarget() && GetEdmg(t) + GetWdmg(t) > t.Health)
             {
-                E.Cast(player.Position.LSExtend(t.Position, E.Range), true);
+                E.Cast(player.Position.Extend(t.Position, E.Range), true);
             }
         }
 
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
-            foreach (var t in DeathWalker.AllEnemys.Where(t => RMissile != null && RMissile.IsValid && t.LSIsValidTarget() && RMissile.Position.LSDistance(Prediction.GetPrediction(t, R.Delay).CastPosition) < 350 && RMissile.Position.LSDistance(t.ServerPosition) < 350))
+            foreach (var t in DeathWalker.AllEnemys.Where(t => RMissile != null && RMissile.IsValid && t.IsValidTarget() && RMissile.Position.Distance(Prediction.GetPrediction(t, R.Delay).CastPosition) < 350 && RMissile.Position.Distance(t.ServerPosition) < 350))
             {
 
                 var comboDmg = GetRdmg(t) + GetWdmg(t);
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                     comboDmg += GetQdmg(t);
-                if (E.LSIsReady())
+                if (E.IsReady())
                     comboDmg += GetEdmg(t);
                 if (t.Health < comboDmg)
                     R.Cast();
@@ -143,7 +143,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             }
 
-            if (player.Health < player.LSCountEnemiesInRange(600) * player.Level * 15)
+            if (player.Health < player.CountEnemiesInRange(600) * player.Level * 15)
             {
                 R.Cast();
             }
@@ -155,7 +155,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             WMANA = W.Instance.SData.Mana;
             EMANA = E.Instance.SData.Mana;
 
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 RMANA = QMANA - ObjectManager.Player.Level * 2;
             else
                 RMANA = R.Instance.SData.Mana; ;
@@ -230,11 +230,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void farm()
         {
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 var allMinionsQ = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q1.Range, MinionTypes.All);
                 var Qfarm = Q.GetLineFarmLocation(allMinionsQ, 100);
-                if (Qfarm.MinionsHit > 5 && Q1.LSIsReady())
+                if (Qfarm.MinionsHit > 5 && Q1.IsReady())
                     Q.Cast(Qfarm.Position);
             }
         }

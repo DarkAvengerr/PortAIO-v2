@@ -113,7 +113,7 @@ using EloBuddy; namespace SFXUtility.Data
                         CustomItems.Where(
                             i =>
                                 i.Item.IsOwned() && i.Item.IsReady() &&
-                                target.LSDistance(ObjectManager.Player.Position) <= i.Range)
+                                target.Distance(ObjectManager.Player.Position) <= i.Range)
                             .Sum(item => ObjectManager.Player.GetItemDamage(target, item.Damage));
             }
             catch (Exception ex)
@@ -131,7 +131,7 @@ using EloBuddy; namespace SFXUtility.Data
                     CustomItems.Where(
                         i =>
                             i.Item.IsOwned() && i.Item.IsReady() &&
-                            target.LSDistance(ObjectManager.Player.Position) <= i.Range))
+                            target.Distance(ObjectManager.Player.Position) <= i.Range))
                 {
                     if (item.Target)
                     {

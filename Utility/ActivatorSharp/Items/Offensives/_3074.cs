@@ -32,7 +32,7 @@ using EloBuddy; namespace Activator.Items.Offensives
                 return;
 
             var hero = target as AIHeroClient;
-            if (hero.LSIsValidTarget(Range))
+            if (hero.IsValidTarget(Range))
             {
                 if (!Parent.Item(Parent.Name + "useon" + hero.NetworkId).GetValue<bool>())
                     return;

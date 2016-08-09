@@ -34,14 +34,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void SmartQ()
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
             {
                 return;
             }
 
             foreach (var obj in
                 ObjectManager.Get<AIHeroClient>()
-                    .Where(obj => obj.LSIsValidTarget(Q2.Range) && obj.LSHasBuff("urgotcorrosivedebuff", true)))
+                    .Where(obj => obj.IsValidTarget(Q2.Range) && obj.HasBuff("urgotcorrosivedebuff", true)))
             {
                 W.Cast();
                 Q2.Cast(obj.ServerPosition);
@@ -52,8 +52,8 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             if(target == null)
                 return;
-            if (Q.LSIsReady()  &&
-                target.LSIsValidTarget(target.LSHasBuff("urgotcorrosivedebuff", true) ? Q2.Range : Q.Range))
+            if (Q.IsReady()  &&
+                target.IsValidTarget(target.HasBuff("urgotcorrosivedebuff", true) ? Q2.Range : Q.Range))
             {
                 Q.Cast(target.ServerPosition);
             }
@@ -61,22 +61,22 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
-            if (target.LSIsValidTarget(300))
+            if (target.IsValidTarget(300))
                 W.Cast(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
             {
                 return;
             }
 
             var hitchance = (HitChance.Medium);
 
-            if (target.LSIsValidTarget(E.Range))
+            if (target.IsValidTarget(E.Range))
             {
                 E.CastIfHitchanceEquals(target, hitchance);
             }
@@ -90,7 +90,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             if (safeGap(target))
                 R.CastOnUnit(target);

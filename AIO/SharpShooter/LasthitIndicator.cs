@@ -35,11 +35,11 @@ namespace SharpShooter
                     foreach (var xMinion in xMinions)
                     {
                         if (drawMinionLastHit.Active &&
-                            ObjectManager.Player.LSGetAutoAttackDamage(xMinion, true) >= xMinion.Health)
+                            ObjectManager.Player.GetAutoAttackDamage(xMinion, true) >= xMinion.Health)
                             Render.Circle.DrawCircle(xMinion.Position, xMinion.BoundingRadius - 20,
                                 drawMinionLastHit.Color, 3);
                         else if (drawMinionNearKill.Active &&
-                                 ObjectManager.Player.LSGetAutoAttackDamage(xMinion, true)*2 >= xMinion.Health)
+                                 ObjectManager.Player.GetAutoAttackDamage(xMinion, true)*2 >= xMinion.Health)
                             Render.Circle.DrawCircle(xMinion.Position, xMinion.BoundingRadius - 20,
                                 drawMinionNearKill.Color, 3);
                     }

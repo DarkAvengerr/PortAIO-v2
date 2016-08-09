@@ -79,7 +79,7 @@ namespace AmumuSharp
             AutoUlt();
 
             if (_menu.Item("aimQ" + Player.ChampionName).GetValue<KeyBind>().Active)
-                CastQ(Program.Helper.EnemyTeam.Where(x => x.LSIsValidTarget(_spellQ.Range) && x.LSDistance(Game.CursorPos) < 400).OrderBy(x => x.LSDistance(Game.CursorPos)).FirstOrDefault());
+                CastQ(Program.Helper.EnemyTeam.Where(x => x.IsValidTarget(_spellQ.Range) && x.Distance(Game.CursorPos) < 400).OrderBy(x => x.Distance(Game.CursorPos)).FirstOrDefault());
 
             switch (_orbwalker.ActiveMode)
             {
@@ -99,20 +99,20 @@ namespace AmumuSharp
         {
             var comboR = _menu.Item("comboR" + Player.ChampionName).GetValue<Slider>().Value;
 
-            if (comboR > 0 && _spellR.LSIsReady())
+            if (comboR > 0 && _spellR.IsReady())
             {
                 int enemiesHit = 0;
                 int killableHits = 0;
 
-                foreach (AIHeroClient enemy in Program.Helper.EnemyTeam.Where(x => x.LSIsValidTarget(_spellR.Range)))
+                foreach (AIHeroClient enemy in Program.Helper.EnemyTeam.Where(x => x.IsValidTarget(_spellR.Range)))
                 {
                     var prediction = Prediction.GetPrediction(enemy, _spellR.Delay);
 
-                    if (prediction != null && prediction.UnitPosition.LSDistance(Player.ServerPosition) <= _spellR.Range)
+                    if (prediction != null && prediction.UnitPosition.Distance(Player.ServerPosition) <= _spellR.Range)
                     {
                         enemiesHit++;
 
-                        if (Player.LSGetSpellDamage(enemy, SpellSlot.W) >= enemy.Health)
+                        if (Player.GetSpellDamage(enemy, SpellSlot.W) >= enemy.Health)
                             killableHits++;
                     }
                 }
@@ -124,10 +124,10 @@ namespace AmumuSharp
 
         void CastE(Obj_AI_Base target)
         {
-            if (!_spellE.LSIsReady() || target == null || !target.LSIsValidTarget())
+            if (!_spellE.IsReady() || target == null || !target.IsValidTarget())
                 return;
 
-            if (_spellE.GetPrediction(target).UnitPosition.LSDistance(Player.ServerPosition) <= _spellE.Range)
+            if (_spellE.GetPrediction(target).UnitPosition.Distance(Player.ServerPosition) <= _spellE.Range)
                 _spellE.CastOnUnit(Player);
         }
 
@@ -148,16 +148,16 @@ namespace AmumuSharp
             var comboE = _menu.Item("comboE" + Player.ChampionName).GetValue<bool>();
             var comboR = _menu.Item("comboR" + Player.ChampionName).GetValue<Slider>().Value;
 
-            if (comboQ > 0 && _spellQ.LSIsReady())
+            if (comboQ > 0 && _spellQ.IsReady())
             {
-                if (_spellR.LSIsReady() && comboR > 0) //search unit that provides most targets hit by ult. prioritize hero target unit
+                if (_spellR.IsReady() && comboR > 0) //search unit that provides most targets hit by ult. prioritize hero target unit
                 {
                     int maxTargetsHit = 0;
                     Obj_AI_Base unitMostTargetsHit = null;
 
-                    foreach (Obj_AI_Base unit in ObjectManager.Get<Obj_AI_Base>().Where(x => x.LSIsValidTarget(_spellQ.Range) && _spellQ.GetPrediction(x).Hitchance >= HitChance.High)) //causes troubles?
+                    foreach (Obj_AI_Base unit in ObjectManager.Get<Obj_AI_Base>().Where(x => x.IsValidTarget(_spellQ.Range) && _spellQ.GetPrediction(x).Hitchance >= HitChance.High)) //causes troubles?
                     {
-                        int targetsHit = unit.LSCountEnemiesInRange((int)_spellR.Range); //unitposition might not reflect where you land with Q
+                        int targetsHit = unit.CountEnemiesInRange((int)_spellR.Range); //unitposition might not reflect where you land with Q
 
                         if (targetsHit > maxTargetsHit || (unitMostTargetsHit != null && targetsHit >= maxTargetsHit && unit.Type == GameObjectType.AIHeroClient))
                         {
@@ -177,7 +177,7 @@ namespace AmumuSharp
                         CastQ(target);
             }
 
-            if (comboW && _spellW.LSIsReady())
+            if (comboW && _spellW.IsReady())
             {
                 var target = TargetSelector.GetTarget(_spellW.Range, TargetSelector.DamageType.Magical);
 
@@ -187,7 +187,7 @@ namespace AmumuSharp
 
                     if (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1)
                     {
-                        if (Player.LSDistance(target.ServerPosition) <= _spellW.Range && enoughMana)
+                        if (Player.Distance(target.ServerPosition) <= _spellW.Range && enoughMana)
                         {
                             _comboW = true;
                             _spellW.Cast();
@@ -200,8 +200,8 @@ namespace AmumuSharp
                     RegulateWState();
             }
 
-            if (comboE && _spellE.LSIsReady())
-                CastE(Program.Helper.EnemyTeam.OrderBy(x => x.LSDistance(Player)).FirstOrDefault());
+            if (comboE && _spellE.IsReady())
+                CastE(Program.Helper.EnemyTeam.OrderBy(x => x.Distance(Player)).FirstOrDefault());
         }
 
         void LaneClear()
@@ -212,7 +212,7 @@ namespace AmumuSharp
 
             List<Obj_AI_Base> minions;
 
-            if (farmQ > 0 && _spellQ.LSIsReady())
+            if (farmQ > 0 && _spellQ.IsReady())
             {
                 Obj_AI_Base minion = MinionManager.GetMinions(Player.ServerPosition, _spellQ.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).FirstOrDefault(x => _spellQ.GetPrediction(x).Hitchance >= HitChance.Medium);
 
@@ -221,13 +221,13 @@ namespace AmumuSharp
                         CastQ(minion, HitChance.Medium);
             }
 
-            if (farmE && _spellE.LSIsReady())
+            if (farmE && _spellE.IsReady())
             {
                 minions = MinionManager.GetMinions(Player.ServerPosition, _spellE.Range, MinionTypes.All, MinionTeam.NotAlly);
-                CastE(minions.OrderBy(x => x.LSDistance(Player)).FirstOrDefault());
+                CastE(minions.OrderBy(x => x.Distance(Player)).FirstOrDefault());
             }
 
-            if (!farmW || !_spellW.LSIsReady())
+            if (!farmW || !_spellW.IsReady())
                 return;
             _comboW = false;
 
@@ -245,7 +245,7 @@ namespace AmumuSharp
 
         void RegulateWState(bool ignoreTargetChecks = false)
         {
-            if (!_spellW.LSIsReady() || Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 2)
+            if (!_spellW.IsReady() || Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 2)
                 return;
 
             var target = TargetSelector.GetTarget(_spellW.Range, TargetSelector.DamageType.Magical);
@@ -260,9 +260,9 @@ namespace AmumuSharp
 
         void CastQ(Obj_AI_Base target, HitChance hitChance = HitChance.High)
         {
-            if (!_spellQ.LSIsReady())
+            if (!_spellQ.IsReady())
                 return;
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
                 return;
 
             _spellQ.CastIfHitchanceEquals(target, hitChance);
@@ -270,7 +270,7 @@ namespace AmumuSharp
 
         void CastR()
         {
-            if (!_spellR.LSIsReady())
+            if (!_spellR.IsReady())
                 return;
             _spellR.Cast();
         }

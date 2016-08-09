@@ -57,7 +57,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             // use W against gap closer
             var target = gapcloser.Sender;
-            if (W.LSIsReady() && target.LSIsValidTarget(W.Range))
+            if (W.IsReady() && target.IsValidTarget(W.Range))
             {
                 W.Cast(target);
             }
@@ -66,15 +66,15 @@ using EloBuddy; namespace ARAMDetFull.Champions
         private void Interrupter2_OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
             // interrupt with W
-            if (W.LSIsReady() && sender.LSIsValidTarget(W.Range) && !sender.IsZombie)
+            if (W.IsReady() && sender.IsValidTarget(W.Range) && !sender.IsZombie)
             {
                 W.Cast(sender);
             }
             // interrupt with R
-            else if (R.LSIsReady() && sender.LSIsValidTarget() && !sender.IsZombie)
+            else if (R.IsReady() && sender.IsValidTarget() && !sender.IsZombie)
             {
-                var target = HeroManager.Allies.Where(x => x.LSIsValidTarget(R.Range, false)).OrderByDescending(x => 1 - x.LSDistance(sender.Position))
-                    .Find(x => x.LSDistance(sender.Position) <= 350);
+                var target = HeroManager.Allies.Where(x => x.IsValidTarget(R.Range, false)).OrderByDescending(x => 1 - x.Distance(sender.Position))
+                    .Find(x => x.Distance(sender.Position) <= 350);
                 if (target != null)
                     R.Cast(target);
             }
@@ -82,31 +82,31 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (Q.LSIsReady() && target.IsValid)
+            if (Q.IsReady() && target.IsValid)
                 Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             W.CastOnUnit(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
             E.Cast(target);
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if(!R.LSIsReady())
+            if(!R.IsReady())
                 return;
-            foreach (var hero in HeroManager.Allies.Where(x => x.LSIsValidTarget(R.Range, false)))
+            foreach (var hero in HeroManager.Allies.Where(x => x.IsValidTarget(R.Range, false)))
             {
-                if (hero.LSCountEnemiesInRange(350) >= 1)
+                if (hero.CountEnemiesInRange(350) >= 1)
                     R.Cast(hero);
             }
         }
@@ -137,10 +137,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             base.killSteal();
             // case KS with Q
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                foreach (var hero in HeroManager.Enemies.Where(x => x.LSIsValidTarget() && Q.GetDamage(x) >= x.Health
-                    && (x.LSDistance(player.Position) > x.LSDistance(pix.Position) ? 925 >= x.LSDistance(pix.Position) : 925 >= x.LSDistance(player.Position))
+                foreach (var hero in HeroManager.Enemies.Where(x => x.IsValidTarget() && Q.GetDamage(x) >= x.Health
+                    && (x.Distance(player.Position) > x.Distance(pix.Position) ? 925 >= x.Distance(pix.Position) : 925 >= x.Distance(player.Position))
                     ))
                 {
                     Q.Cast(hero);
@@ -149,9 +149,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 }
             }
             // case KS with E
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                foreach (var hero in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range) && E.GetDamage(x) >= x.Health))
+                foreach (var hero in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && E.GetDamage(x) >= x.Health))
                 {
                     E.Cast(hero);
                 }
@@ -159,28 +159,28 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             
             // case KS with EQ
-            if (Q.LSIsReady() && E.LSIsReady() && player.Mana >= Q.Instance.SData.Mana + E.Instance.SData.Mana)
+            if (Q.IsReady() && E.IsReady() && player.Mana >= Q.Instance.SData.Mana + E.Instance.SData.Mana)
             {
                 // EQ on same target
-                foreach (var hero in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range) && E.GetDamage(x) + Q.GetDamage(x) >= x.Health
+                foreach (var hero in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && E.GetDamage(x) + Q.GetDamage(x) >= x.Health
                     && Q.GetDamage(x) < x.Health))
                 {
                     E.Cast(hero);
                 }
                 // EQ on different target
-                foreach (var hero in HeroManager.Enemies.Where(x => x.LSIsValidTarget(E.Range + Q.Range) && !x.LSIsValidTarget(Q.Range)
+                foreach (var hero in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range + Q.Range) && !x.IsValidTarget(Q.Range)
                     && Q.GetDamage(x) >= x.Health))
                 {
                     // E target is hero
-                    foreach (var target in HeroManager.AllHeroes.Where(x => x.LSIsValidTarget(E.Range, false) && x.LSDistance(hero.Position) <= Q.Range)
-                        .OrderByDescending(y => 1 - y.LSDistance(hero.Position)))
+                    foreach (var target in HeroManager.AllHeroes.Where(x => x.IsValidTarget(E.Range, false) && x.Distance(hero.Position) <= Q.Range)
+                        .OrderByDescending(y => 1 - y.Distance(hero.Position)))
                     {
                         E.Cast(target);
                     }
                     // E target is minion
-                    foreach (var target in MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.All).Where(x => x.LSIsValidTarget(E.Range, false)
-                        && !x.Name.ToLower().Contains("ward") && x.LSDistance(hero.Position) <= Q.Range)
-                            .OrderByDescending(y => 1 - y.LSDistance(hero.Position)))
+                    foreach (var target in MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.All).Where(x => x.IsValidTarget(E.Range, false)
+                        && !x.Name.ToLower().Contains("ward") && x.Distance(hero.Position) <= Q.Range)
+                            .OrderByDescending(y => 1 - y.Distance(hero.Position)))
                     {
                         // target die with E ?
                         if (!target.IsAlly && target.Health > E.GetDamage(target) || target.IsAlly)
@@ -189,22 +189,22 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 }
             }
             //auto shield
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                foreach (var hero in HeroManager.Allies.Where(x => x.LSIsValidTarget(E.Range, false)))
+                foreach (var hero in HeroManager.Allies.Where(x => x.IsValidTarget(E.Range, false)))
                 {
                     if (hero.Health * 100 / hero.MaxHealth <= 36
-                        && hero.LSCountEnemiesInRange(900) >= 1)
+                        && hero.CountEnemiesInRange(900) >= 1)
                         E.Cast(hero);
                 }
             }
             //auto R save
-            if (R.LSIsReady() )
+            if (R.IsReady() )
             {
-                foreach (var hero in HeroManager.Allies.Where(x => x.LSIsValidTarget(R.Range, false)))
+                foreach (var hero in HeroManager.Allies.Where(x => x.IsValidTarget(R.Range, false)))
                 {
                     if (hero.Health * 100 / hero.MaxHealth <= 20
-                        && hero.LSCountEnemiesInRange(500) >= 1)
+                        && hero.CountEnemiesInRange(500) >= 1)
                         R.Cast(hero);
                 }
             }

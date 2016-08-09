@@ -43,7 +43,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
             if (!LissEMissile.IsValid)
                 LissEMissile = null;
-            MissilePosition = LissEMissile.Position.LSTo2D();
+            MissilePosition = LissEMissile.Position.To2D();
 
         }
 
@@ -110,31 +110,31 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 ObjectManager.Get<Obj_AI_Minion>()
                     .Where(
                         m =>
-                            m.LSIsValidTarget() &&
+                            m.IsValidTarget() &&
                             (Vector3.Distance(m.ServerPosition, player.ServerPosition) <= Q.Range ||
                              Vector3.Distance(m.ServerPosition, player.ServerPosition) <= W.Range ||
                              Vector3.Distance(m.ServerPosition, player.ServerPosition) <= E.Range));
 
-            if (Q.LSIsReady() )
+            if (Q.IsReady() )
             {
-                var KillableMinionsQ = Minions.Where(m => m.Health < player.LSGetSpellDamage(m, SpellSlot.Q) && Vector3.Distance(m.ServerPosition, player.ServerPosition) > player.AttackRange);
+                var KillableMinionsQ = Minions.Where(m => m.Health < player.GetSpellDamage(m, SpellSlot.Q) && Vector3.Distance(m.ServerPosition, player.ServerPosition) > player.AttackRange);
                 if (KillableMinionsQ.Any())
                 {
                     Q.Cast(KillableMinionsQ.FirstOrDefault().ServerPosition);
                 }
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                var KillableMinionsW = Minions.Where(m => m.Health < player.LSGetSpellDamage(m, SpellSlot.W) && Vector3.Distance(player.ServerPosition, m.ServerPosition) < W.Range);
+                var KillableMinionsW = Minions.Where(m => m.Health < player.GetSpellDamage(m, SpellSlot.W) && Vector3.Distance(player.ServerPosition, m.ServerPosition) < W.Range);
                 if (KillableMinionsW.Any())
                 {
                     W.CastOnUnit(player);
                 }
             }
 
-            if (E.LSIsReady() && LissEMissile == null && !LissUtils.CanSecondE() && LissEMissile == null)
+            if (E.IsReady() && LissEMissile == null && !LissUtils.CanSecondE() && LissEMissile == null)
             {
-                var KillableMinionsE = Minions.Where(m => m.Health < player.LSGetSpellDamage(m, SpellSlot.E) && Vector3.Distance(m.ServerPosition, player.ServerPosition) > player.AttackRange);
+                var KillableMinionsE = Minions.Where(m => m.Health < player.GetSpellDamage(m, SpellSlot.E) && Vector3.Distance(m.ServerPosition, player.ServerPosition) > player.AttackRange);
                 if (KillableMinionsE.Any())
                 {
                     E.Cast(KillableMinionsE.FirstOrDefault().ServerPosition);
@@ -162,22 +162,22 @@ using EloBuddy; namespace ARAMDetFull.Champions
             
             if (Target != null && !Target.IsInvulnerable)
             {
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                 {
                     if (CastQ(Target))
                         return;
                 }
-                if (E.LSIsReady())
+                if (E.IsReady())
                 {
                     if (CastE(Target))
                         return;
                 }
-                if (W.LSIsReady())
+                if (W.IsReady())
                 {
                     if (CastW(Target))
                         return;
                 }
-                if (R.LSIsReady() && !Target.IsZombie)
+                if (R.IsReady() && !Target.IsZombie)
                 {
                     if (CastR(Target))
                         return;
@@ -187,7 +187,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private bool CastQ(AIHeroClient target)
         {
-            Dictionary<SharpDX.Vector3, int> maxhit = (from hero in HeroManager.Enemies.Where(h => h.LSIsValidTarget() && 
+            Dictionary<SharpDX.Vector3, int> maxhit = (from hero in HeroManager.Enemies.Where(h => h.IsValidTarget() && 
                                                        !h.IsInvulnerable && Vector3.Distance(h.ServerPosition, player.ServerPosition) < Q.Range)
                                                        select Q.GetPrediction(hero) into prediction where prediction.CollisionObjects.Count > 0
                                                                                     && prediction.Hitchance >= HitChance.High let enemieshit = prediction.CollisionObjects.Where(x => x is AIHeroClient) select prediction).ToDictionary(prediction => prediction.CastPosition, prediction => prediction.CollisionObjects.Count);
@@ -232,7 +232,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private bool CastW(AIHeroClient target)
         {
-            if (player.LSCountEnemiesInRange(W.Range)>0)
+            if (player.CountEnemiesInRange(W.Range)>0)
             {
                 W.Cast();
                 return true;
@@ -257,33 +257,33 @@ using EloBuddy; namespace ARAMDetFull.Champions
         //return asap to check the most amount of times 
         bool SecondEChecker(AIHeroClient target)
         {
-            if (LissUtils.isHealthy() && LissEMissile != null && E.LSIsReady())
+            if (LissUtils.isHealthy() && LissEMissile != null && E.IsReady())
             {
-                if (Vector2.Distance(MissilePosition, target.ServerPosition.LSTo2D()) < Vector3.Distance(player.ServerPosition, target.ServerPosition)
+                if (Vector2.Distance(MissilePosition, target.ServerPosition.To2D()) < Vector3.Distance(player.ServerPosition, target.ServerPosition)
                     && !LissUtils.PointUnderEnemyTurret(MissilePosition)
                     && Vector3.Distance(target.ServerPosition, LissEMissile.EndPosition) > Vector3.Distance(player.ServerPosition, target.ServerPosition))
                 {
-                    if (safeGap(LissEMissile.Position.LSTo2D()))
+                    if (safeGap(LissEMissile.Position.To2D()))
                     {
                         E.Cast();
                         return true;
                     }
                 }
-                var Enemiesatpoint = LissEMissile.Position.LSGetEnemiesInRange(R.Range);
+                var Enemiesatpoint = LissEMissile.Position.GetEnemiesInRange(R.Range);
                 var enemiesatpointR = Enemiesatpoint.Count;
 
-                if ((enemiesatpointR >= 2 && SpellSlot.R.LSIsReady()) || (Enemiesatpoint.Any(e => IsKillableFromPoint(e,LissEMissile.Position) && Vector3.Distance(LissEMissile.Position, e.ServerPosition) < Vector3.Distance(player.ServerPosition, e.ServerPosition))))
+                if ((enemiesatpointR >= 2 && SpellSlot.R.IsReady()) || (Enemiesatpoint.Any(e => IsKillableFromPoint(e,LissEMissile.Position) && Vector3.Distance(LissEMissile.Position, e.ServerPosition) < Vector3.Distance(player.ServerPosition, e.ServerPosition))))
                 {
-                    if (safeGap(LissEMissile.Position.LSTo2D()))
+                    if (safeGap(LissEMissile.Position.To2D()))
                     {
                         E.Cast();
                         return true;
                     }
                 }
-                var enemiesatpointW = LissEMissile.Position.LSCountEnemiesInRange(W.Range);
-                if (enemiesatpointW >= 2 && SpellSlot.W.LSIsReady())
+                var enemiesatpointW = LissEMissile.Position.CountEnemiesInRange(W.Range);
+                if (enemiesatpointW >= 2 && SpellSlot.W.IsReady())
                 {
-                    if (safeGap(LissEMissile.Position.LSTo2D()))
+                    if (safeGap(LissEMissile.Position.To2D()))
                     {
                         E.Cast();
                         return true;
@@ -296,21 +296,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public bool IsKillableFromPoint(AIHeroClient target, Vector3 Point, bool ExcludeE = false)
         {
             double totaldmgavailable = 0;
-            if (SpellSlot.Q.LSIsReady() && Vector3.Distance(Point, target.ServerPosition) < Q.Range + 35)
+            if (SpellSlot.Q.IsReady() && Vector3.Distance(Point, target.ServerPosition) < Q.Range + 35)
             {
-                totaldmgavailable += player.LSGetSpellDamage(target, SpellSlot.Q);
+                totaldmgavailable += player.GetSpellDamage(target, SpellSlot.Q);
             }
-            if (SpellSlot.W.LSIsReady() && Vector3.Distance(Point, target.ServerPosition) < W.Range + 35)
+            if (SpellSlot.W.IsReady() && Vector3.Distance(Point, target.ServerPosition) < W.Range + 35)
             {
-                totaldmgavailable += player.LSGetSpellDamage(target, SpellSlot.W);
+                totaldmgavailable += player.GetSpellDamage(target, SpellSlot.W);
             }
-            if (SpellSlot.E.LSIsReady() && Vector3.Distance(Point, target.ServerPosition) < E.Range + 35 && !LissUtils.CanSecondE() && LissEMissile == null && !ExcludeE)
+            if (SpellSlot.E.IsReady() && Vector3.Distance(Point, target.ServerPosition) < E.Range + 35 && !LissUtils.CanSecondE() && LissEMissile == null && !ExcludeE)
             {
-                totaldmgavailable += player.LSGetSpellDamage(target, SpellSlot.E);
+                totaldmgavailable += player.GetSpellDamage(target, SpellSlot.E);
             }
-            if (SpellSlot.R.LSIsReady() && Vector3.Distance(Point, target.ServerPosition) < Q.Range + 35)
+            if (SpellSlot.R.IsReady() && Vector3.Distance(Point, target.ServerPosition) < Q.Range + 35)
             {
-                totaldmgavailable += player.LSGetSpellDamage(target, SpellSlot.R);
+                totaldmgavailable += player.GetSpellDamage(target, SpellSlot.R);
             }
             
             return totaldmgavailable > target.Health;
@@ -319,7 +319,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         float GetAvailableDamage(AIHeroClient target)
         {
-            if (player.LSDistance(target) > 3000) // save some fps
+            if (player.Distance(target) > 3000) // save some fps
             {
                 return 0;
             }
@@ -327,19 +327,19 @@ using EloBuddy; namespace ARAMDetFull.Champions
             bool ExcludeE = false;
             double totaldmgavailable = 0;
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 totaldmgavailable += Q.GetDamage(target);
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 totaldmgavailable += W.GetDamage(target);
             }
-            if (E.LSIsReady() && !LissUtils.CanSecondE() && LissEMissile == null)
+            if (E.IsReady() && !LissUtils.CanSecondE() && LissEMissile == null)
             {
                 totaldmgavailable += E.GetDamage(target);
             }
-            if (R.LSIsReady() )
+            if (R.IsReady() )
             {
                 totaldmgavailable += R.GetDamage(target);
             }
@@ -354,9 +354,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var Check =
                 HeroManager.Enemies
                     .Where(
-                        h => h.LSIsValidTarget(R.Range) && h.LSCountEnemiesInRange(R.Range) >=2 && h.HealthPercent >22).ToList();
+                        h => h.IsValidTarget(R.Range) && h.CountEnemiesInRange(R.Range) >=2 && h.HealthPercent >22).ToList();
 
-            if (player.LSCountEnemiesInRange(R.Range) >= 2)
+            if (player.CountEnemiesInRange(R.Range) >= 2)
             {
                 Check.Add(player);
             }
@@ -376,7 +376,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 }
             }
             
-            if (IsKillableFromPoint(currenttarget, player.ServerPosition) && player.LSDistance(currenttarget) < R.Range)
+            if (IsKillableFromPoint(currenttarget, player.ServerPosition) && player.Distance(currenttarget) < R.Range)
             {
                 R.Cast(currenttarget);
                 return true;
@@ -389,7 +389,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 return true;
             }
 
-            var dmgto = player.LSGetSpellDamage(currenttarget, SpellSlot.R);
+            var dmgto = player.GetSpellDamage(currenttarget, SpellSlot.R);
             if (dmgto > currenttarget.Health && currenttarget.Health >= 0.40 * dmgto)
             {
                 R.Cast(currenttarget);
@@ -397,15 +397,15 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
 
             var enemycount = 2;
-            if (!LissUtils.isHealthy() && player.LSCountEnemiesInRange(R.Range - 100) >= enemycount)
+            if (!LissUtils.isHealthy() && player.CountEnemiesInRange(R.Range - 100) >= enemycount)
             {
                 R.CastOnUnit(player);
                 return true;
             }
 
-            var possibilities = HeroManager.Enemies.Where(h => (h.LSIsValidTarget() && Vector3.Distance(h.ServerPosition, player.ServerPosition) <= R.Range || (IsKillableFromPoint(h, player.ServerPosition) && h.LSIsValidTarget() && !h.IsInvulnerable))).ToList();
+            var possibilities = HeroManager.Enemies.Where(h => (h.IsValidTarget() && Vector3.Distance(h.ServerPosition, player.ServerPosition) <= R.Range || (IsKillableFromPoint(h, player.ServerPosition) && h.IsValidTarget() && !h.IsInvulnerable))).ToList();
 
-            var arranged = possibilities.OrderByDescending(h => h.LSCountEnemiesInRange(R.Range));
+            var arranged = possibilities.OrderByDescending(h => h.CountEnemiesInRange(R.Range));
             
 
             var UltTarget = arranged.FirstOrDefault();
@@ -413,8 +413,8 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (UltTarget != null)
             {
                 if (!LissUtils.isHealthy() &&
-                    player.LSCountEnemiesInRange(R.Range) >
-                    UltTarget.LSCountEnemiesInRange(R.Range) + 1)
+                    player.CountEnemiesInRange(R.Range) >
+                    UltTarget.CountEnemiesInRange(R.Range) + 1)
                 {
                     R.CastOnUnit(player);
                     return true;
@@ -440,7 +440,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public static bool PointUnderEnemyTurret(Vector2 Point)
         {
             var EnemyTurrets =
-                ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsEnemy && Vector2.Distance(t.Position.LSTo2D(), Point) < 900f);
+                ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsEnemy && Vector2.Distance(t.Position.To2D(), Point) < 900f);
             return EnemyTurrets.Any();
         }
 
@@ -453,7 +453,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public static bool CanSecondE()
         {
-            return player.LSHasBuff("LissandraE");
+            return player.HasBuff("LissandraE");
         }
 
         public static bool AutoSecondE()

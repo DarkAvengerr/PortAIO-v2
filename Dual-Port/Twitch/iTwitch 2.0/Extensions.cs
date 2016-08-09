@@ -58,8 +58,8 @@ using EloBuddy;
 
         public static float GetPoisonDamage(this Obj_AI_Base target)
         {
-            if (target == null || !target.LSHasBuff("twitchdeadlyvenom") || target.IsInvulnerable
-                || target.HasUndyingBuff() || target.LSHasBuff("KindredRNoDeathBuff")
+            if (target == null || !target.HasBuff("twitchdeadlyvenom") || target.IsInvulnerable
+                || target.HasUndyingBuff() || target.HasBuff("KindredRNoDeathBuff")
                 || target.HasBuffOfType(BuffType.SpellShield))
             {
                 return 0;
@@ -68,13 +68,13 @@ using EloBuddy;
             double baseDamage = Twitch.Spells[SpellSlot.E].GetDamage(target);
 
             // Exhaust
-            if (ObjectManager.Player.LSHasBuff("SummonerExhaust"))
+            if (ObjectManager.Player.HasBuff("SummonerExhaust"))
             {
                 baseDamage *= 0.6;
             }
 
             // Urgot P
-            if (ObjectManager.Player.LSHasBuff("urgotentropypassive"))
+            if (ObjectManager.Player.HasBuff("urgotentropypassive"))
             {
                 baseDamage *= 0.85;
             }
@@ -95,45 +95,45 @@ using EloBuddy;
 
             /*
             // Bond Of Stone
-            if (targetHero.GetResolve(Resolve.BondofStone).LSIsValid())
+            if (targetHero.GetResolve(Resolve.BondofStone).IsValid())
             {
                 baseDamage *= 0.96;
             }
             */
 
             // Alistar R
-            if (target.LSHasBuff("FerociousHowl"))
+            if (target.HasBuff("FerociousHowl"))
             {
                 baseDamage *= 0.6 - new[] { 0.1, 0.2, 0.3 }[target.Spellbook.GetSpell(SpellSlot.R).Level - 1];
             }
 
             // Amumu E
-            if (target.LSHasBuff("Tantrum"))
+            if (target.HasBuff("Tantrum"))
             {
                 baseDamage -= new[] { 2, 4, 6, 8, 10 }[target.Spellbook.GetSpell(SpellSlot.E).Level - 1];
             }
 
             // Braum E
-            if (target.LSHasBuff("BraumShieldRaise"))
+            if (target.HasBuff("BraumShieldRaise"))
             {
                 baseDamage *= 1
                               - new[] { 0.3, 0.325, 0.35, 0.375, 0.4 }[target.Spellbook.GetSpell(SpellSlot.E).Level - 1];
             }
 
             // Galio R
-            if (target.LSHasBuff("GalioIdolOfDurand"))
+            if (target.HasBuff("GalioIdolOfDurand"))
             {
                 baseDamage *= 0.5;
             }
 
             // Garen W
-            if (target.LSHasBuff("GarenW"))
+            if (target.HasBuff("GarenW"))
             {
                 baseDamage *= 0.7;
             }
 
             // Gragas W
-            if (target.LSHasBuff("GragasWSelf"))
+            if (target.HasBuff("GragasWSelf"))
             {
                 baseDamage *= 1
                               - new[] { 0.1, 0.12, 0.14, 0.16, 0.18 }[target.Spellbook.GetSpell(SpellSlot.W).Level - 1];
@@ -141,38 +141,38 @@ using EloBuddy;
 
             /*
             // Kassadin P
-            if (target.LSHasBuff("VoidStone") && damageType == DamageType.Magical)
+            if (target.HasBuff("VoidStone") && damageType == DamageType.Magical)
             {
                 baseDamage *= 0.85;
             }
             */
 
             // Katarina E
-            if (target.LSHasBuff("KatarinaEReduction"))
+            if (target.HasBuff("KatarinaEReduction"))
             {
                 baseDamage *= 0.85;
             }
 
             // Maokai R
-            if (target.LSHasBuff("MaokaiDrainDefense"))
+            if (target.HasBuff("MaokaiDrainDefense"))
             {
                 baseDamage *= 0.8;
             }
 
             // MasterYi W
-            if (target.LSHasBuff("Meditate"))
+            if (target.HasBuff("Meditate"))
             {
                 baseDamage *= 1 - new[] { 0.5, 0.55, 0.6, 0.65, 0.7 }[target.Spellbook.GetSpell(SpellSlot.W).Level - 1];
             }
 
             // Urgot R
-            if (target.LSHasBuff("urgotswapdef"))
+            if (target.HasBuff("urgotswapdef"))
             {
                 baseDamage *= 1 - new[] { 0.3, 0.4, 0.5 }[target.Spellbook.GetSpell(SpellSlot.R).Level - 1];
             }
 
             // Yorick P
-            if (target.LSHasBuff("YorickUnholySymbiosis"))
+            if (target.HasBuff("YorickUnholySymbiosis"))
             {
                 baseDamage *= 1
                               - (ObjectManager.Get<Obj_AI_Minion>()
@@ -180,7 +180,7 @@ using EloBuddy;
                                          g =>
                                          g.Team == target.Team
                                          && (g.Name.Equals("Clyde") || g.Name.Equals("Inky") || g.Name.Equals("Blinky")
-                                             || (g.LSHasBuff("yorickunholysymbiosis")
+                                             || (g.HasBuff("yorickunholysymbiosis")
                                                  && g.GetBuff("yorickunholysymbiosis").Caster == target))) * 0.05);
             }
 

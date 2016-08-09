@@ -54,7 +54,7 @@ namespace TheBrand.Commons
                 foreach (var enemy in HeroManager.Enemies)
                     UpdateOnHero(enemy, otherDamage, otherDamageTime, _igniteKillsteal.GetValue<bool>());
             }
-            else if (combo.Target.LSIsValidTarget(600))
+            else if (combo.Target.IsValidTarget(600))
                 UpdateOnHero(combo.Target, otherDamage, otherDamageTime, _igniteKillsteal.GetValue<bool>());
 
         }
@@ -74,7 +74,7 @@ namespace TheBrand.Commons
 
             var fixedDamage = otherDamage + (target.Health - HealthPrediction.GetHealthPrediction(target, (int) otherDamageTime));
             if (Orbwalking.InAutoAttackRange(target))
-                fixedDamage += (float)(_igniteMaxAutoattacks.GetValue<Slider>().Value * ObjectManager.Player.LSGetAutoAttackDamage(target));
+                fixedDamage += (float)(_igniteMaxAutoattacks.GetValue<Slider>().Value * ObjectManager.Player.GetAutoAttackDamage(target));
 
             enemyHealth -= fixedDamage;
 
@@ -119,7 +119,7 @@ namespace TheBrand.Commons
             if (target.Spellbook.Spells.Any(spell => spell.Name == "summonerflash" && spell.State == SpellState.Ready))
                 return false;
 
-            var distance = target.LSDistance(ObjectManager.Player);
+            var distance = target.Distance(ObjectManager.Player);
 
             return !(distance >= fleeRange);
         }

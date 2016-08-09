@@ -16,7 +16,7 @@ using EloBuddy;
             {
                 var target = TargetSelector.GetTarget(Variables.spells[SpellSlot.Q].Range * 0.75f, TargetSelector.DamageType.Physical);
 
-                if (target.LSIsValidTarget(Variables.spells[SpellSlot.Q].Range))
+                if (target.IsValidTarget(Variables.spells[SpellSlot.Q].Range))
                 {
                     Variables.spells[SpellSlot.Q].CastIfHitchanceEquals(
                       target, target.IsMoving ? HitChance.VeryHigh : HitChance.High);
@@ -29,7 +29,7 @@ using EloBuddy;
             if (Variables.spells[SpellSlot.Q].IsEnabledAndReady())
             {
                 var minion = MinionManager.GetMinions(Variables.spells[SpellSlot.Q].Range).Where(m => 
-                    HealthPrediction.GetHealthPrediction(m, (int)(m.LSDistance(ObjectManager.Player) / Variables.spells[SpellSlot.Q].Speed * 1000f)) > Variables.spells[SpellSlot.Q].GetDamage(m) - 5);
+                    HealthPrediction.GetHealthPrediction(m, (int)(m.Distance(ObjectManager.Player) / Variables.spells[SpellSlot.Q].Speed * 1000f)) > Variables.spells[SpellSlot.Q].GetDamage(m) - 5);
                 var qFarmLocation = Variables.spells[SpellSlot.Q].GetLineFarmLocation(minion.ToList());
 
                 if (qFarmLocation.MinionsHit >= 1)

@@ -586,7 +586,7 @@ using EloBuddy; namespace ARAMDetFull
                     champ = new WarwickA();
                     break;
                 case "Karma":
-                    champ = new Karma();
+                    champ = new KarmaA();
                     break;
                 case "Soraka":
                     champ = new Soraka();
@@ -771,13 +771,13 @@ using EloBuddy; namespace ARAMDetFull
 
             if (fromNex == null)
                 return;
-            float sep = fromNex.Position.LSDistance(toNex.Position)/40;
+            float sep = fromNex.Position.Distance(toNex.Position)/40;
 
-            Vector2 lastPos = fromNex.Position.LSTo2D();
+            Vector2 lastPos = fromNex.Position.To2D();
             //Setup sectors
             for (int i = 0; i < 40; i++)
             {
-                Vector2 end = lastPos.LSExtend(toNex.Position.LSTo2D(), sep);
+                Vector2 end = lastPos.Extend(toNex.Position.To2D(), sep);
                 sectors.Add(new Sector(lastPos,end,750));
                 lastPos = end;
             }
@@ -820,7 +820,7 @@ using EloBuddy; namespace ARAMDetFull
                         towerAttackedMe = true;
                         towerAttackedAlly = false;
                     }
-                    else if (((AIHeroClient) missile.Target).LSDistance(turret) < 700)
+                    else if (((AIHeroClient) missile.Target).Distance(turret) < 700)
                     {
                         towerAttackedAlly = true;
                         towerAttackedMe = false;
@@ -882,7 +882,7 @@ using EloBuddy; namespace ARAMDetFull
             {
                 Console.WriteLine(ex);
             }
-            if ((player.LSInShop() || player.IsDead)/* && nextItem != null && nextItem.goldReach <= player.Gold*/)
+            if ((player.InShop() || player.IsDead)/* && nextItem != null && nextItem.goldReach <= player.Gold*/)
             {
                 buyItems();
             }
@@ -897,7 +897,7 @@ using EloBuddy; namespace ARAMDetFull
             var fightLevel = MapControl.fightLevel();
             MapControl.updateReaches();
 
-            var closestEnemy = HeroManager.Enemies.Where(ene => !ene.IsDead && ene.IsTargetable && !ARAMTargetSelector.IsInvulnerable(ene)).OrderBy(ene =>  player.Position.LSDistance(ene.Position, true)).FirstOrDefault();
+            var closestEnemy = HeroManager.Enemies.Where(ene => !ene.IsDead && ene.IsTargetable && !ARAMTargetSelector.IsInvulnerable(ene)).OrderBy(ene =>  player.Position.Distance(ene.Position, true)).FirstOrDefault();
             if (closestEnemy != null && ramboMode)
             {
                 DeathWalker.deathWalk(closestEnemy.Position,true);
@@ -911,21 +911,21 @@ using EloBuddy; namespace ARAMDetFull
 
             agrobalance = Aggresivity.getAgroBalance();
 
-            balance = (ARAMTargetSelector.IsInvulnerable(player) || player.IsZombie) ? 250 : MapControl.balanceAroundPointAdvanced(player.Position.LSTo2D(), 250 - agrobalance * 5) + agrobalance;
+            balance = (ARAMTargetSelector.IsInvulnerable(player) || player.IsZombie) ? 250 : MapControl.balanceAroundPointAdvanced(player.Position.To2D(), 250 - agrobalance * 5) + agrobalance;
             inDanger = balance < 0;
 
             if (Game.MapId == GameMapId.SummonersRift)
             {
-                if (player.LSIsRecalling())
+                if (player.IsRecalling())
                     return;
-                if (player.LSInFountain() && player.HealthPercent < 90)
+                if (player.InFountain() && player.HealthPercent < 90)
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.Stop, player);
                     return;
                 }
                 if(player.HealthPercent>85 && (player.MaxMana < 450 || player.ManaPercent > 85))
                     needRecall = false;
-                if ((( (player.HealthPercent < 32 || (player.MaxMana > 450 && player.ManaPercent < 5)) && player.LSCountEnemiesInRange(1000)==0) || needRecall) && balance > 5 )
+                if ((( (player.HealthPercent < 32 || (player.MaxMana > 450 && player.ManaPercent < 5)) && player.CountEnemiesInRange(1000)==0) || needRecall) && balance > 5 )
                 {
                     if (lastRecall + 9000 < DeathWalker.now)
                     {
@@ -947,7 +947,7 @@ using EloBuddy; namespace ARAMDetFull
             {
                 try
                 {
-                    if (player.LSGetEnemiesInRange(ARAMSimulator.farmRange).Count(ene => !ene.IsDead && !ene.IsZombie) != 0)
+                    if (player.GetEnemiesInRange(ARAMSimulator.farmRange).Count(ene => !ene.IsDead && !ene.IsZombie) != 0)
                         champ.killSteal();
                     else
                         champ.farm();
@@ -959,7 +959,7 @@ using EloBuddy; namespace ARAMDetFull
                 }
             }
             
-            if (!Sector.inTowerRange(player.Position.LSTo2D()) || towerAttackedAlly || player.HealthPercent < 25)
+            if (!Sector.inTowerRange(player.Position.To2D()) || towerAttackedAlly || player.HealthPercent < 25)
             {
                 try
                 {
@@ -982,29 +982,29 @@ using EloBuddy; namespace ARAMDetFull
                 }
             }
 
-            deepestAlly = HeroManager.Allies.OrderBy(al => toNex.Position.LSDistance(al.Position, true)).FirstOrDefault();
+            deepestAlly = HeroManager.Allies.OrderBy(al => toNex.Position.Distance(al.Position, true)).FirstOrDefault();
             var lookRange = player.AttackRange + ((player.IsMelee) ? 260 : 155);
             var easyKill =
-               HeroManager.Enemies.FirstOrDefault(ene => ene!= null && !ene.IsZombie && !ene.IsDead && ene.LSDistance(player, true) < lookRange * lookRange &&
-                                                         !ARAMTargetSelector.IsInvulnerable(ene) && ene.Health / 1.5 < player.LSGetAutoAttackDamage(ene));
+               HeroManager.Enemies.FirstOrDefault(ene => ene!= null && !ene.IsZombie && !ene.IsDead && ene.Distance(player, true) < lookRange * lookRange &&
+                                                         !ARAMTargetSelector.IsInvulnerable(ene) && ene.Health / 1.5 < player.GetAutoAttackDamage(ene));
 
             if (easyKill != null)
             {
                 Aggresivity.addAgresiveMove(new AgresiveMove(45,1500,true));
                 //Console.WriteLine("go get easy");
-                DeathWalker.deathWalk(easyKill.Position.LSTo2D().LSExtend(player.Position.LSTo2D(), player.AttackRange*0.7f).To3D(),true);
+                DeathWalker.deathWalk(easyKill.Position.To2D().Extend(player.Position.To2D(), player.AttackRange*0.7f).To3D(),true);
             }
 
 
             if (balance < 0)
-                DeathWalker.deathWalk(player.Position.LSTo2D().LSExtend(fromNex.Position.LSTo2D(), 600).To3D(),true);
+                DeathWalker.deathWalk(player.Position.To2D().Extend(fromNex.Position.To2D(), 600).To3D(),true);
 
             if ((!player.IsMelee || fightLevel<2) && HeroManager.Enemies.Any(h => !h.IsDead) && moveToRelicIfForHeal())
             {
                 return;
             }
 
-            if (!player.LSUnderTurret(true))
+            if (!player.UnderTurret(true))
             {
                 towerAttackedMe = false;
                 towerAttackedAlly = false;
@@ -1014,12 +1014,12 @@ using EloBuddy; namespace ARAMDetFull
             {
                 DeathWalker.CustomOrbwalkMode = false;
                // Chat.Print("ouch tower!");
-                DeathWalker.deathWalk(player.Position.LSTo2D().LSExtend(fromNex.Position.LSTo2D(), 600).To3D(), true);
+                DeathWalker.deathWalk(player.Position.To2D().Extend(fromNex.Position.To2D(), 600).To3D(), true);
                 return;
             }
             
             awayTo = eAwayFromTo();
-            if (awayTo.LSIsValid() && awayTo.X != 0 )
+            if (awayTo.IsValid() && awayTo.X != 0 )
             {
 
                 DeathWalker.CustomOrbwalkMode = false;
@@ -1034,12 +1034,12 @@ using EloBuddy; namespace ARAMDetFull
 
                 var closestObj =
                     DeathWalker.EnemyObjectives.Where(
-                        obj => obj.LSIsValidTarget(700) && !obj.IsDead && !obj.IsInvulnerable)
-                        .OrderBy(obj => obj.Position.LSDistance(player.Position, true)).FirstOrDefault();
+                        obj => obj.IsValidTarget(700) && !obj.IsDead && !obj.IsInvulnerable)
+                        .OrderBy(obj => obj.Position.Distance(player.Position, true)).FirstOrDefault();
                 if (closestObj != null && (!(closestObj is Obj_AI_Turret) ||  Sector.towerContainsAlly((Obj_AI_Turret)closestObj)))
                 {
                     DeathWalker.deathWalk(
-                        closestObj.Position.LSExtend(player.Position, player.AttackRange * 0.6f), true);
+                        closestObj.Position.Extend(player.Position, player.AttackRange * 0.6f), true);
                     return;
                 }
 
@@ -1049,16 +1049,16 @@ using EloBuddy; namespace ARAMDetFull
                     if (safeMeleeEnem != null)
                     {
                         DeathWalker.deathWalk(
-                            safeMeleeEnem.Position.LSExtend(safeMeleeEnem.Direction, player.AttackRange*0.3f), true);
+                            safeMeleeEnem.Position.Extend(safeMeleeEnem.Direction, player.AttackRange*0.3f), true);
                         return;
                     }
 
                 }
                 var fightOn = MapControl.fightIsOn();
-                if (fightOn != null && MapControl.balanceAroundPointAdvanced(fightOn.Position.LSTo2D(),280,450) > (-130) && fightOn.LSDistance(player, true) < 2500 * 2500 && (!player.IsMelee() || !Sector.inTowerRange(fightOn.Position.LSTo2D())))
+                if (fightOn != null && MapControl.balanceAroundPointAdvanced(fightOn.Position.To2D(),280,450) > (-130) && fightOn.Distance(player, true) < 2500 * 2500 && (!player.IsMelee() || !Sector.inTowerRange(fightOn.Position.To2D())))
                 {
                     Aggresivity.addAgresiveMove(new AgresiveMove(40* MapControl.fightLevel(), 2000,true,true));
-                    DeathWalker.deathWalk(fightOn.Position.LSExtend(player.Position, player.AttackRange * 0.8f), true);
+                    DeathWalker.deathWalk(fightOn.Position.Extend(player.Position, player.AttackRange * 0.8f), true);
                 }
                 else
                 {/*
@@ -1076,7 +1076,7 @@ using EloBuddy; namespace ARAMDetFull
                         {
                             sector.update();
                             int sectorCheck = 1150 - MapControl.fearDistance;
-                            if (sector.containsEnemyChamp && sector.enemyChampIn.LSDistance(player,true) < sectorCheck * sectorCheck)
+                            if (sector.containsEnemyChamp && sector.enemyChampIn.Distance(player,true) < sectorCheck * sectorCheck)
                             {
                                 orbSector = sector;
                                 break;
@@ -1104,7 +1104,7 @@ using EloBuddy; namespace ARAMDetFull
                     }
                     else
                     {
-                        DeathWalker.deathWalk(player.Position.LSTo2D().LSExtend(fromNex.Position.LSTo2D(),600).To3D(),false);
+                        DeathWalker.deathWalk(player.Position.To2D().Extend(fromNex.Position.To2D(),600).To3D(),false);
                     }
                 }
             }
@@ -1114,7 +1114,7 @@ using EloBuddy; namespace ARAMDetFull
 
             /*foreach (var ally in MapControl.ally_champions)
             {
-                if (ally.hero.LSDistance(player) < 800 && MapControl.myControler != null)
+                if (ally.hero.Distance(player) < 800 && MapControl.myControler != null)
                     MapControl.myControler.useNonSkillshots(ally.hero);
             }*/
         }
@@ -1124,7 +1124,7 @@ using EloBuddy; namespace ARAMDetFull
             var relicHeal = MapControl.ClosestRelic();
             if (relicHeal != null)
             {
-                var dist = relicHeal.LSDistance(player);
+                var dist = relicHeal.Distance(player);
                 var bonus = ((50 - dist/20) > 0) ? (50 - dist/20) : 0;
                 bool needHeal = player.HealthPercent + (float)agrobalance / 5 - (tankBal / 2.5) < 39 + bonus;
                 if (dist < 100 && !relicHeal.IsMoving)
@@ -1142,19 +1142,19 @@ using EloBuddy; namespace ARAMDetFull
 
         public static bool enemIsOnMe(Obj_AI_Base target)
         {
-            if (target.IsAlly || target.IsDead || !target.LSIsValidTarget())
+            if (target.IsAlly || target.IsDead || !target.IsValidTarget())
                 return false;
 
-            float distTo = target.LSDistance(player, true);
+            float distTo = target.Distance(player, true);
             bool dangerousAround = (balance < -player.HealthPercent);
             float targetReack = (!dangerousAround)?player.AttackRange + 150:MapControl.getByObj(target).getReach();
             if (distTo > targetReack * targetReack)
                return false;
 
-            var per = target.Direction.LSTo2D().LSPerpendicular();
+            var per = target.Direction.To2D().Perpendicular();
             var dir = new Vector3(per, 0);
             var enemDir = target.Position + dir * 40;
-            if (target.LSDistance(fromNex.Position, true) < enemDir.LSDistance(fromNex.Position, true))
+            if (target.Distance(fromNex.Position, true) < enemDir.Distance(fromNex.Position, true))
                 return false;
 
             return true;
@@ -1165,20 +1165,20 @@ using EloBuddy; namespace ARAMDetFull
             if(player.IsMelee())
                 return new Vector2(0, 0);
 
-            Vector2 backTo = player.Position.LSTo2D();
+            Vector2 backTo = player.Position.To2D();
             int count = 0;
 
-            backTo -= (toNex.Position - player.Position).LSTo2D();
+            backTo -= (toNex.Position - player.Position).To2D();
             foreach (var enem in ObjectManager.Get<AIHeroClient>().Where(enemIsOnMe))
             {
                 count++;
-                backTo -= (enem.Position - player.Position).LSTo2D();
+                backTo -= (enem.Position - player.Position).To2D();
             }
 
 
             if (count > 0)
             {
-                var awayTo = player.Position.LSTo2D().LSExtend(backTo, player.AttackRange*0.8f);
+                var awayTo = player.Position.To2D().Extend(backTo, player.AttackRange*0.8f);
                 if (!Sector.inTowerRange(awayTo))
                     return backTo;
             }

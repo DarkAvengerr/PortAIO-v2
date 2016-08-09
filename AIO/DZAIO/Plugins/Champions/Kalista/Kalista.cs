@@ -79,7 +79,7 @@ using EloBuddy;
         private void OnGapcloser(DZLib.Core.ActiveGapcloser gapcloser)
         {
             if (Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.kalista.extra.antigapcloser") 
-                && Variables.Spells[SpellSlot.Q].LSIsReady())
+                && Variables.Spells[SpellSlot.Q].IsReady())
             {
                 Variables.Spells[SpellSlot.Q].Cast(gapcloser.End);
                 LeagueSharp.Common.Utility.DelayAction.Add((int)(250f + Game.Ping / 2f + 30), () =>
@@ -138,7 +138,7 @@ using EloBuddy;
                 var target = TargetSelector.GetTarget(
                     Variables.Spells[SpellSlot.Q].Range * qRangeReduction, TargetSelector.DamageType.Physical);
 
-                if (target.LSIsValidTarget(Variables.Spells[SpellSlot.Q].Range * qRangeReduction))
+                if (target.IsValidTarget(Variables.Spells[SpellSlot.Q].Range * qRangeReduction))
                 {
                     //Calculate the dash End Position and update the prediction accordingly
                     var dashEndPos = ObjectManager.Player.GetDashInfo().EndPos;
@@ -159,8 +159,8 @@ using EloBuddy;
                             LastQCastTick = Environment.TickCount;
                         }
                     }
-                    else if (target.CanBeRendKilled() && !target.LSIsValidTarget(Variables.Spells[SpellSlot.E].Range)
-                      && target.LSIsValidTarget(Variables.Spells[SpellSlot.E].Range + qJumpRange))
+                    else if (target.CanBeRendKilled() && !target.IsValidTarget(Variables.Spells[SpellSlot.E].Range)
+                      && target.IsValidTarget(Variables.Spells[SpellSlot.E].Range + qJumpRange))
                     {
                         if (IsPlayerNotBusy() && (Environment.TickCount - LastQCastTick >= qTickInterval))
                         {
@@ -177,7 +177,7 @@ using EloBuddy;
                 foreach (
                 var hero in
                     HeroManager.Enemies.Where(
-                        h =>  h.HasRend() && h.LSIsValidTarget(Variables.Spells[SpellSlot.E].Range)))
+                        h =>  h.HasRend() && h.IsValidTarget(Variables.Spells[SpellSlot.E].Range)))
                 {
                     if (hero.CanBeRendKilled() 
                         || hero.GetRendBuff().Count >= Variables.AssemblyMenu.GetItemValue<Slider>("dzaio.champion.kalista.combo.e.stacks").Value)
@@ -190,7 +190,7 @@ using EloBuddy;
 
         public bool IsPlayerNotBusy()
         {
-            return !ObjectManager.Player.LSIsDashing() &&
+            return !ObjectManager.Player.IsDashing() &&
                    (!ObjectManager.Player.Spellbook.IsAutoAttacking || ObjectManager.Player.Spellbook.IsAutoAttacking);
         }
 

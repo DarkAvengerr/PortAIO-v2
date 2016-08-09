@@ -350,7 +350,7 @@ using EloBuddy; namespace AutoJungle.Data
                 Items.UseItem((int) ItemId.Ravenous_Hydra_Melee_Only);
             }
             var muramana = LeagueSharp.Common.Data.ItemData.Muramana.GetItem().Id;
-            if (Items.HasItem(muramana) && Items.CanUseItem(muramana) && Program.player.LSHasBuff("Muramana"))
+            if (Items.HasItem(muramana) && Items.CanUseItem(muramana) && Program.player.HasBuff("Muramana"))
             {
                 Items.UseItem(muramana);
             }
@@ -359,12 +359,12 @@ using EloBuddy; namespace AutoJungle.Data
         public static void UseItemsCombo(Obj_AI_Base target, bool use)
         {
             if (Items.HasItem((int) ItemId.Tiamat_Melee_Only) && Items.CanUseItem((int) ItemId.Tiamat_Melee_Only) &&
-                target.LSDistance(Program.player) < 400)
+                target.Distance(Program.player) < 400)
             {
                 Items.UseItem((int) ItemId.Tiamat_Melee_Only);
             }
             if (Items.HasItem((int) ItemId.Ravenous_Hydra_Melee_Only) &&
-                Items.CanUseItem((int) ItemId.Ravenous_Hydra_Melee_Only) && target.LSDistance(Program.player) < 400)
+                Items.CanUseItem((int) ItemId.Ravenous_Hydra_Melee_Only) && target.Distance(Program.player) < 400)
             {
                 Items.UseItem((int) ItemId.Ravenous_Hydra_Melee_Only);
             }
@@ -373,14 +373,14 @@ using EloBuddy; namespace AutoJungle.Data
                 return;
             }
             if (Items.HasItem((int) ItemId.Bilgewater_Cutlass) && Items.CanUseItem((int) ItemId.Bilgewater_Cutlass) &&
-                (target.LSDistance(Program.player) > Orbwalking.GetRealAutoAttackRange(target) ||
+                (target.Distance(Program.player) > Orbwalking.GetRealAutoAttackRange(target) ||
                  (target.HealthPercent < 35 && Program.player.HealthPercent < 35)))
             {
                 Items.UseItem((int) ItemId.Bilgewater_Cutlass, target);
             }
             if (Items.HasItem((int) ItemId.Blade_of_the_Ruined_King) &&
                 Items.CanUseItem((int) ItemId.Blade_of_the_Ruined_King) &&
-                (target.LSDistance(Program.player) > Orbwalking.GetRealAutoAttackRange(target) ||
+                (target.Distance(Program.player) > Orbwalking.GetRealAutoAttackRange(target) ||
                  (target.HealthPercent < 35 && Program.player.HealthPercent < 35)))
             {
                 Items.UseItem((int) ItemId.Blade_of_the_Ruined_King, target);
@@ -388,11 +388,11 @@ using EloBuddy; namespace AutoJungle.Data
             var muramana = LeagueSharp.Common.Data.ItemData.Muramana.GetItem().Id;
             if (Items.HasItem(muramana) && Items.CanUseItem(muramana))
             {
-                if (!Program.player.LSHasBuff("Muramana") && Program.player.Mana > 250)
+                if (!Program.player.HasBuff("Muramana") && Program.player.Mana > 250)
                 {
                     Items.UseItem(muramana);
                 }
-                else if (Program.player.LSHasBuff("Muramana") && Program.player.Mana < 260)
+                else if (Program.player.HasBuff("Muramana") && Program.player.Mana < 260)
                 {
                     Items.UseItem(muramana);
                 }

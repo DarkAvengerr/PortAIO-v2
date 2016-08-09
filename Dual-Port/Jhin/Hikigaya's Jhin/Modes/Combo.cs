@@ -26,7 +26,7 @@ using EloBuddy;
         /// <param name="spell">Spell</param>
         public static void Execute(this Spell spell)
         {
-            foreach (var enemy in HeroManager.Enemies.Where(o=> o.LSIsValidTarget(spell.Range)))
+            foreach (var enemy in HeroManager.Enemies.Where(o=> o.IsValidTarget(spell.Range)))
             {
                 spell.Cast(enemy);
             }
@@ -37,7 +37,7 @@ using EloBuddy;
         /// </summary>
         public static void ExecuteQ()
         {
-            foreach (var enemy in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(Spells.Q.Range) && !x.IsReloading()))
+            foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(Spells.Q.Range) && !x.IsReloading()))
             {
                 Spells.Q.CastOnUnit(enemy);
             }
@@ -50,7 +50,7 @@ using EloBuddy;
         {
             if (Menus.Config.Item("w.passive.combo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.LSIsValidTarget(Spells.W.Range) && 
+                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(Spells.W.Range) && 
                     (x.IsStunnable() || x.IsEnemyImmobile())))
                 {
                     Spells.W.Cast(enemy);
@@ -58,8 +58,8 @@ using EloBuddy;
             }
             else
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValid && x.LSDistance(ObjectManager.Player) < MaxRange
-                    && x.LSDistance(ObjectManager.Player) > MinRange && 
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValid && x.Distance(ObjectManager.Player) < MaxRange
+                    && x.Distance(ObjectManager.Player) > MinRange && 
                     Spells.W.GetPrediction(x).Hitchance >= Menus.Config.HikiChance("w.hit.chance")
                     && !x.IsDead && !x.IsZombie))
                 {
@@ -73,7 +73,7 @@ using EloBuddy;
         /// </summary>
         public static void ExecuteE()
         {
-            foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Spells.E.Range) && x.IsEnemyImmobile()))
+            foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.E.Range) && x.IsEnemyImmobile()))
             { 
                 var pred = Spells.E.GetPrediction(enemy);
                 if (pred.Hitchance >= Menus.Config.HikiChance("e.hit.chance"))
@@ -88,15 +88,15 @@ using EloBuddy;
         /// </summary>
         public static void ExecuteCombo()
         {
-            if (Spells.Q.LSIsReady() && Menus.Config.Item("q.combo").GetValue<bool>())
+            if (Spells.Q.IsReady() && Menus.Config.Item("q.combo").GetValue<bool>())
             {
                 ExecuteQ();
             }
-            if (Spells.W.LSIsReady() && Menus.Config.Item("w.combo").GetValue<bool>())
+            if (Spells.W.IsReady() && Menus.Config.Item("w.combo").GetValue<bool>())
             {
                 ExecuteW();
             }
-            if (Spells.E.LSIsReady() && Menus.Config.Item("e.combo").GetValue<bool>())
+            if (Spells.E.IsReady() && Menus.Config.Item("e.combo").GetValue<bool>())
             {
                 ExecuteE();
             }

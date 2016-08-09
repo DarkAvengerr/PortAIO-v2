@@ -16,17 +16,17 @@ using EloBuddy;
     {
         public static Vector3 WayPointEnemy(AIHeroClient enemy)
         {
-            return enemy.LSGetWaypoints()[enemy.LSGetWaypoints().Count - 1].To3D();
+            return enemy.GetWaypoints()[enemy.GetWaypoints().Count - 1].To3D();
         }
         public static float Calculate(AIHeroClient enemy)
         {
-            var x1 = ObjectManager.Player.LSDistance(WayPointEnemy(enemy));
+            var x1 = ObjectManager.Player.Distance(WayPointEnemy(enemy));
             var x2 = x1 / ObjectManager.Player.MoveSpeed;
             return x2;
         }
         public static float GapcloseCalculte(AIHeroClient enemy, Spell spell)
         {
-            var x1 = ObjectManager.Player.LSDistance(WayPointEnemy(enemy)) - spell.Range;
+            var x1 = ObjectManager.Player.Distance(WayPointEnemy(enemy)) - spell.Range;
             var x2 = x1 / ObjectManager.Player.MoveSpeed;
             return x2;
         }

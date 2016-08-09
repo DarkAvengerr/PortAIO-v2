@@ -74,7 +74,7 @@ using EloBuddy; namespace SFXChallenger.Managers
 
                 foreach (var enemy in
                     GameObjects.EnemyHeroes.Where(
-                        e => e.LSDistance(ObjectManager.Player) <= MaxRange && !Invulnerable.Check(e)))
+                        e => e.Distance(ObjectManager.Player) <= MaxRange && !Invulnerable.Check(e)))
                 {
                     var itemDamage = items ? ItemManager.CalculateComboDamage(enemy) - 20 : 0;
                     var summonerDamage = summoners ? SummonerManager.CalculateComboDamage(enemy) - 10 : 0;

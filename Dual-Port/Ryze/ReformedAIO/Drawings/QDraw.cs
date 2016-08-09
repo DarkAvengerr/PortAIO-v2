@@ -31,7 +31,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.Drawings
             Render.Circle.DrawCircle(
                 Variables.Player.Position,
                 Variables.Spells[SpellSlot.Q].Range,
-                Variables.Spells[SpellSlot.Q].LSIsReady()
+                Variables.Spells[SpellSlot.Q].IsReady()
                 ? Color.LightGray 
                 : Color.DarkSlateGray);
         }

@@ -48,17 +48,17 @@ using EloBuddy;
             var wdraw = GetBool("draww", typeof(bool));
             var edraw = GetBool("drawe", typeof(bool));
 
-            if (qdraw && Q.LSIsReady() && Q.Level >= 1)
+            if (qdraw && Q.IsReady() && Q.Level >= 1)
             {
                 Render.Circle.DrawCircle(Player.Position, Q.Range, Color.DarkBlue, 3);
             }
 
-            if (wdraw && W.LSIsReady() && W.Level >= 1)
+            if (wdraw && W.IsReady() && W.Level >= 1)
             {
                 Render.Circle.DrawCircle(Player.Position, W.Range, Color.DarkRed, 3);
             }
 
-            if (edraw && E.LSIsReady() && E.Level >= 1)
+            if (edraw && E.IsReady() && E.Level >= 1)
             {
                 Render.Circle.DrawCircle(Player.Position, E.Range, Color.LimeGreen, 3);
             }
@@ -122,7 +122,7 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
 
-            if (!target.LSIsValidTarget()) return;
+            if (!target.IsValidTarget()) return;
 
             var useq = GetBool("useq", typeof(bool));
             var usew = GetBool("usew", typeof(bool));
@@ -131,15 +131,15 @@ using EloBuddy;
             var uservalue = GetValue("minmanarc");
 
 
-            if (Player.Level >= 6 && R.LSIsReady() && user)
+            if (Player.Level >= 6 && R.IsReady() && user)
             {
-                foreach (var heros in HeroManager.Enemies.Where(x => x.LSIsValidTarget(900)))
+                foreach (var heros in HeroManager.Enemies.Where(x => x.IsValidTarget(900)))
                 {
-                    if (RavenForm == false && Player.ManaPercent > uservalue && heros.LSIsValidTarget(R.Range))
+                    if (RavenForm == false && Player.ManaPercent > uservalue && heros.IsValidTarget(R.Range))
                     {
                         R.Cast();
                     }
-                    if (RavenForm == true && (Player.ManaPercent <= uservalue || !heros.LSIsValidTarget(R.Range)))
+                    if (RavenForm == true && (Player.ManaPercent <= uservalue || !heros.IsValidTarget(R.Range)))
                     {
                         R.Cast();
                     }
@@ -148,19 +148,19 @@ using EloBuddy;
 
             if (RavenForm)
             {
-                foreach (var heros in HeroManager.Enemies.Where(x => x.LSIsValidTarget(900)))
+                foreach (var heros in HeroManager.Enemies.Where(x => x.IsValidTarget(900)))
                 {
-                    if (W.LSIsReady() && heros.LSIsValidTarget(W.Range) && usew)
+                    if (W.IsReady() && heros.IsValidTarget(W.Range) && usew)
                     {
                         W.Cast(heros);
                     }
 
-                    if (E.LSIsReady() && target.LSIsValidTarget(E.Range) && usee)
+                    if (E.IsReady() && target.IsValidTarget(E.Range) && usee)
                     {
                         E.Cast(target);
                     }
 
-                    if (Q.LSIsReady() && target.LSIsValidTarget(Q.Range) && useq)
+                    if (Q.IsReady() && target.IsValidTarget(Q.Range) && useq)
                     {
                         Q.Cast(target);
                     }
@@ -183,7 +183,7 @@ using EloBuddy;
             var userrminminions = GetValue("minminionsrl");
             var userrminmana = GetValue("minmanarl");
 
-            if (R.LSIsReady() && minion.Count >= userrminminions && Player.ManaPercent >= userrminmana && user)
+            if (R.IsReady() && minion.Count >= userrminminions && Player.ManaPercent >= userrminmana && user)
             {
                 if (RavenForm == true)
                 {
@@ -191,7 +191,7 @@ using EloBuddy;
                 }
             }
 
-            if (R.LSIsReady() && (minion.Count < userrminminions || Player.ManaPercent < userrminmana) && user)
+            if (R.IsReady() && (minion.Count < userrminminions || Player.ManaPercent < userrminmana) && user)
             {
                 if (RavenForm == false)
                 {
@@ -206,12 +206,12 @@ using EloBuddy;
 
             if (min == null) return;
 
-            if (Q.LSIsReady() && useq)
+            if (Q.IsReady() && useq)
             {
                 Q.Cast(min);
             }
 
-            if (E.LSIsReady() && usee)
+            if (E.IsReady() && usee)
             {
                 E.Cast(min);
             }
@@ -226,17 +226,17 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
 
-            if (!target.LSIsValidTarget()) return;
+            if (!target.IsValidTarget()) return;
 
             var useq = GetBool("useqm", typeof (bool));
             var usee = GetBool("useem", typeof(bool));
 
-            if (Q.LSIsReady() && useq)
+            if (Q.IsReady() && useq)
             {
                 Q.Cast(target);
             }
 
-            if (E.LSIsReady() && usee)
+            if (E.IsReady() && usee)
             {
                 E.Cast(target);
             }
@@ -249,7 +249,7 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
 
-            if (!target.LSIsValidTarget()) return;
+            if (!target.IsValidTarget()) return;
 
             var useq = GetBool("useq", typeof(bool));
             var usew = GetBool("usew", typeof(bool));
@@ -261,12 +261,12 @@ using EloBuddy;
 
             if (RavenForm == false)
             {
-                if (Q.LSIsReady() && target.LSIsValidTarget(Q.Range) && useq)
+                if (Q.IsReady() && target.IsValidTarget(Q.Range) && useq)
                 {
                     Q.Cast(target);
                 }
 
-                if (W.LSIsReady() && usew)
+                if (W.IsReady() && usew)
                 {
                     var wpred = W.GetPrediction(target);
                     if (wpred.Hitchance == HitChance.Immobile || wpred.Hitchance >= HitChance.High)
@@ -275,7 +275,7 @@ using EloBuddy;
                     }
                 }
 
-                if (E.LSIsReady() && target.LSIsValidTarget(E.Range) && usee)
+                if (E.IsReady() && target.IsValidTarget(E.Range) && usee)
                 {
                     E.Cast(target);
                 }

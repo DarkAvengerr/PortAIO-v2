@@ -1106,22 +1106,22 @@ using EloBuddy;
 
         public int EndTick
         {
-            get { return (int)(StartTick + Spell.Delay + 1000 * (StartPosition.LSDistance(EndPosition) / Spell.Speed)); }
+            get { return (int)(StartTick + Spell.Delay + 1000 * (StartPosition.Distance(EndPosition) / Spell.Speed)); }
         }
 
         public Vector2 EndPosition
         {
-            get { return Target.ServerPosition.LSTo2D(); }
+            get { return Target.ServerPosition.To2D(); }
         }
 
         public Vector2 Direction
         {
-            get { return (EndPosition - StartPosition).LSNormalized(); }
+            get { return (EndPosition - StartPosition).Normalized(); }
         }
 
         public double Damage
         {
-            get { return Caster.LSGetSpellDamage(Target, Spell.Name); }
+            get { return Caster.GetSpellDamage(Target, Spell.Name); }
         }
 
         public bool IsKillable

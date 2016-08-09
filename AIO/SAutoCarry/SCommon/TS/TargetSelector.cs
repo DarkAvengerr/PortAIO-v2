@@ -60,7 +60,7 @@ namespace SCommon.TS
         public static AIHeroClient GetTarget(float range, LeagueSharp.Common.TargetSelector.DamageType dmgType = LeagueSharp.Common.TargetSelector.DamageType.Physical, Vector3? _from = null)
         {
             Vector3 from = _from.HasValue ? _from.Value : ObjectManager.Player.ServerPosition;
-            //if (s_LastTarget == null || !s_LastTarget.LSIsValidTarget(range) || Utils.TickCount - s_LastTargetSent > 250)
+            //if (s_LastTarget == null || !s_LastTarget.IsValidTarget(range) || Utils.TickCount - s_LastTargetSent > 250)
             //{
             //    var t = GetNewTarget(range, dmgType, from);
             //    s_LastTarget = t;
@@ -88,9 +88,9 @@ namespace SCommon.TS
             {
                 if (s_SelectedTarget != null)
                 {
-                    if (s_SelectedTarget.LSIsValidTarget(range))
+                    if (s_SelectedTarget.IsValidTarget(range))
                         return s_SelectedTarget;
-                    else if (s_SelectedTarget.LSIsValidTarget())  
+                    else if (s_SelectedTarget.IsValidTarget())  
                         return null;
                 }
             }
@@ -99,15 +99,15 @@ namespace SCommon.TS
             {
                 if(s_SelectedTarget != null)
                 {
-                    if (s_SelectedTarget.LSIsValidTarget(range))
+                    if (s_SelectedTarget.IsValidTarget(range))
                         return s_SelectedTarget;
-                    else if (ConfigMenu.FocusExtraRange > 0 && s_SelectedTarget.LSIsValidTarget(range + ConfigMenu.FocusExtraRange))
+                    else if (ConfigMenu.FocusExtraRange > 0 && s_SelectedTarget.IsValidTarget(range + ConfigMenu.FocusExtraRange))
                         return null;
                 }
             }
             Vector3 from = _from.HasValue ? _from.Value : ObjectManager.Player.ServerPosition;
 
-            var enemies = HeroManager.Enemies.Where(p => p.LSIsValidTarget(range + p.BoundingRadius, true, from) && !LeagueSharp.Common.TargetSelector.IsInvulnerable(p, dmgType));
+            var enemies = HeroManager.Enemies.Where(p => p.IsValidTarget(range + p.BoundingRadius, true, from) && !LeagueSharp.Common.TargetSelector.IsInvulnerable(p, dmgType));
             if (enemies.Count() == 0)
                 return null;
 
@@ -126,11 +126,11 @@ namespace SCommon.TS
                     return
                         enemies.MinOrDefault(
                             hero =>
-                                (_from.HasValue ? _from.Value : ObjectManager.Player.ServerPosition).LSDistance(
+                                (_from.HasValue ? _from.Value : ObjectManager.Player.ServerPosition).Distance(
                                     hero.ServerPosition, true));
 
                 case Mode.NearMouse:
-                    return enemies.Find(hero => hero.LSDistance(Game.CursorPos, true) < 22500); // 150 * 150
+                    return enemies.Find(hero => hero.Distance(Game.CursorPos, true) < 22500); // 150 * 150
 
                 case Mode.LessAttack:
                     return
@@ -161,7 +161,7 @@ namespace SCommon.TS
                         if (killableTarget != null)
                             return killableTarget;
                 
-                        var targets = possibleTargets.OrderBy(p => ObjectManager.Player.LSDistance(p.ServerPosition));
+                        var targets = possibleTargets.OrderBy(p => ObjectManager.Player.Distance(p.ServerPosition));
                         AIHeroClient mostImportant = null;
                         double mostImportantsDamage = 0;
                         foreach (var target in targets)
@@ -243,7 +243,7 @@ namespace SCommon.TS
 
         private static float GetHealthMultipler(AIHeroClient target)
         {
-            if (target.Health <= ObjectManager.Player.LSGetAutoAttackDamage(target) * 2f)
+            if (target.Health <= ObjectManager.Player.GetAutoAttackDamage(target) * 2f)
                 return 20;
 
             if (target.HealthPercent <= 50 && target.GetRole() != ChampionRole.Tank)
@@ -260,8 +260,8 @@ namespace SCommon.TS
             }
             s_SelectedTarget =
                 HeroManager.Enemies
-                    .FindAll(hero => hero.LSIsValidTarget() && hero.LSDistance(Game.CursorPos, true) < 40000) // 200 * 200
-                    .OrderBy(h => h.LSDistance(Game.CursorPos, true)).FirstOrDefault();
+                    .FindAll(hero => hero.IsValidTarget() && hero.Distance(Game.CursorPos, true) < 40000) // 200 * 200
+                    .OrderBy(h => h.Distance(Game.CursorPos, true)).FirstOrDefault();
 
         }
 
@@ -269,7 +269,7 @@ namespace SCommon.TS
         {
             if (ConfigMenu.FocusSelected && ConfigMenu.SelectedTargetColor.Active)
             {
-                if (s_SelectedTarget != null && s_SelectedTarget.LSIsValidTarget())
+                if (s_SelectedTarget != null && s_SelectedTarget.IsValidTarget())
                     Render.Circle.DrawCircle(s_SelectedTarget.Position, 150, ConfigMenu.SelectedTargetColor.Color, 7, true);
             }
         }

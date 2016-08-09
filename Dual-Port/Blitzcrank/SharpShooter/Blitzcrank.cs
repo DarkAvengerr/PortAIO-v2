@@ -82,7 +82,7 @@ namespace SharpShooter.Plugins
                                     var target =
                                         HeroManager.Enemies.Where(
                                             x =>
-                                                x.LSIsValidTarget(_q.Range) &&
+                                                x.IsValidTarget(_q.Range) &&
                                                 _q.GetPrediction(x).Hitchance >= _q.MinHitChance &&
                                                 MenuProvider.MenuInstance.Item("Combo.Q Targets." + x.ChampionName, true)
                                                     .GetValue<bool>())
@@ -99,7 +99,7 @@ namespace SharpShooter.Plugins
                             if (MenuProvider.Champion.Combo.UseR)
                                 if (_r.IsReadyPerfectly())
                                 {
-                                    foreach (var target in HeroManager.Enemies.Where(x => x.LSIsValidTarget(_r.Range)))
+                                    foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(_r.Range)))
                                     {
                                         //R Logics
                                         if (target.IsKillableAndValidTarget(_r.GetDamage(target),
@@ -120,7 +120,7 @@ namespace SharpShooter.Plugins
                                                 _r.Cast();
                                     }
 
-                                    if (ObjectManager.Player.LSCountEnemiesInRange(_r.Range) >= 2)
+                                    if (ObjectManager.Player.CountEnemiesInRange(_r.Range) >= 2)
                                         _r.Cast();
                                 }
                             break;
@@ -146,7 +146,7 @@ namespace SharpShooter.Plugins
         {
             if (MenuProvider.Champion.Misc.UseAntiGapcloser)
                 if (_r.IsReadyPerfectly())
-                    if (gapcloser.Sender.LSIsValidTarget(_r.Range))
+                    if (gapcloser.Sender.IsValidTarget(_r.Range))
                         _r.Cast();
         }
 
@@ -155,7 +155,7 @@ namespace SharpShooter.Plugins
         {
             if (MenuProvider.Champion.Misc.UseInterrupter)
                 if (args.DangerLevel >= Interrupter2.DangerLevel.High)
-                    if (sender.LSIsValidTarget(_r.Range))
+                    if (sender.IsValidTarget(_r.Range))
                         if (_r.IsReadyPerfectly())
                             _r.Cast();
         }
@@ -243,7 +243,7 @@ namespace SharpShooter.Plugins
                         var target =
                             HeroManager.Enemies.Where(
                                 x =>
-                                    x.LSIsValidTarget(_q.Range) && _q.GetPrediction(x).Hitchance >= _q.MinHitChance &&
+                                    x.IsValidTarget(_q.Range) && _q.GetPrediction(x).Hitchance >= _q.MinHitChance &&
                                     MenuProvider.MenuInstance.Item("Combo.Q Targets." + x.ChampionName, true)
                                         .GetValue<bool>())
                                 .OrderByDescending(x => TargetSelector.GetPriority(x))
@@ -262,7 +262,7 @@ namespace SharpShooter.Plugins
                             var target in
                                 HeroManager.Enemies.Where(
                                     x =>
-                                        x.LSIsValidTarget() &&
+                                        x.IsValidTarget() &&
                                         MenuProvider.MenuInstance.Item("Combo.Q Targets." + x.ChampionName, true)
                                             .GetValue<bool>()))
                         {
@@ -279,7 +279,7 @@ namespace SharpShooter.Plugins
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float) ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float) ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
             if (_q.IsReadyPerfectly())

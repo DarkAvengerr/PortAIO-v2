@@ -140,10 +140,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public override void useSpells()
         {
             checkForm();
-            if (isHammer && R1.LSIsReady() && (player.LSCountEnemiesInRange(700) > 0 && !Q1.LSIsReady()))
+            if (isHammer && R1.IsReady() && (player.CountEnemiesInRange(700) > 0 && !Q1.IsReady()))
                 R1.Cast();
 
-            if (!E1.LSIsReady() && !isHammer)
+            if (!E1.IsReady() && !isHammer)
                 castQon = new Vector3(0, 0, 0);
             else if (castQon.X != 0 && !isHammer)
                 shootQE(castQon, true);
@@ -156,7 +156,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (tar != null)
             {
                 var dmgOn = getJayceFullComoDmg(tar);
-                if ( (!Sector.inTowerRange(tar.Position.LSTo2D()) && (MapControl.balanceAroundPoint(tar.Position.LSTo2D(), 700) >= -1 || (MapControl.fightIsOn() != null && MapControl.fightIsOn().NetworkId == tar.NetworkId)))
+                if ( (!Sector.inTowerRange(tar.Position.To2D()) && (MapControl.balanceAroundPoint(tar.Position.To2D(), 700) >= -1 || (MapControl.fightIsOn() != null && MapControl.fightIsOn().NetworkId == tar.NetworkId)))
            )
                     doFullDmg(tar);
                 else
@@ -192,42 +192,42 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     castEonSpell(target);
 
                 //DO QE combo first
-                if (E1.LSIsReady() && Q1.LSIsReady() && gotManaFor(true, false, true))
+                if (E1.IsReady() && Q1.IsReady() && gotManaFor(true, false, true))
                 {
                     castQEPred(target);
                 }
-                else if (Q1.LSIsReady() && gotManaFor(true))
+                else if (Q1.IsReady() && gotManaFor(true))
                 {
                     castQPred(target);
                 }
-                else if (W1.LSIsReady() && gotManaFor(false, true) && targetInRange(getClosestEnem(), 650f))
+                else if (W1.IsReady() && gotManaFor(false, true) && targetInRange(getClosestEnem(), 650f))
                 {
                     W1.Cast();
                     sumItems.cast(SummonerItems.ItemIds.Ghostblade);
                 }//and wont die wih 1 AA
-                else if (!Q1.LSIsReady() && !W1.LSIsReady() && R1.LSIsReady() && hammerWillKill(target) && hamQCDRem == 0 && hamECDRem == 0)// will need to add check if other form skills ready
+                else if (!Q1.IsReady() && !W1.IsReady() && R1.IsReady() && hammerWillKill(target) && hamQCDRem == 0 && hamECDRem == 0)// will need to add check if other form skills ready
                 {
-                    if(player.LSCountEnemiesInRange(700)>0 && !Q1.LSIsReady())
+                    if(player.CountEnemiesInRange(700)>0 && !Q1.IsReady())
                         R1.Cast();
                 }
             }
             else
             {
-                if ((!Q2.LSIsReady() && R2.LSIsReady() && player.LSDistance(getClosestEnem()) > 350) || player.LSDistance(getClosestEnem()) > 700)
+                if ((!Q2.IsReady() && R2.IsReady() && player.Distance(getClosestEnem()) > 350) || player.Distance(getClosestEnem()) > 700)
                 {
                     sumItems.cast(SummonerItems.ItemIds.Ghostblade);
                     R2.Cast();
                 }
-                if (Q2.LSIsReady() && gotManaFor(true) && targetInRange(target, Q2.Range) && player.LSDistance(target) > 300)
+                if (Q2.IsReady() && gotManaFor(true) && targetInRange(target, Q2.Range) && player.Distance(target) > 300)
                 {
                     sumItems.cast(SummonerItems.ItemIds.Ghostblade);
                     Q2.Cast(target);
                 }
-                if (E2.LSIsReady() && gotManaFor(false, false, true) && targetInRange(target, E2.Range) && shouldIKnockDatMadaFaka(target))
+                if (E2.IsReady() && gotManaFor(false, false, true) && targetInRange(target, E2.Range) && shouldIKnockDatMadaFaka(target))
                 {
                     E2.Cast(target);
                 }
-                if (W2.LSIsReady() && gotManaFor(false, true) && targetInRange(target, W2.Range))
+                if (W2.IsReady() && gotManaFor(false, true) && targetInRange(target, W2.Range))
                 {
                     W2.Cast();
                 }
@@ -247,42 +247,42 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     castEonSpell(target);
                 }
                 //DO QE combo first
-                if (E1.LSIsReady() && Q1.LSIsReady() && gotManaFor(true, false, true))
+                if (E1.IsReady() && Q1.IsReady() && gotManaFor(true, false, true))
                 {
                     castQEPred(target);
                 }
-                else if (Q1.LSIsReady() && gotManaFor(true))
+                else if (Q1.IsReady() && gotManaFor(true))
                 {
                     castQPred(target);
                 }
-                else if (W1.LSIsReady() && gotManaFor(false, true) && targetInRange(getClosestEnem(), 1000f))
+                else if (W1.IsReady() && gotManaFor(false, true) && targetInRange(getClosestEnem(), 1000f))
                 {
 
                     sumItems.cast(SummonerItems.ItemIds.Ghostblade);
                     W1.Cast();
                 }
-                else if (!Q1.LSIsReady() && !W1.LSIsReady() && R1.LSIsReady() && hamQCDRem == 0 && hamECDRem == 0)// will need to add check if other form skills ready
+                else if (!Q1.IsReady() && !W1.IsReady() && R1.IsReady() && hamQCDRem == 0 && hamECDRem == 0)// will need to add check if other form skills ready
                 {
                     R1.Cast();
                 }
             }
             else
             {
-                if (!Q2.LSIsReady() && R2.LSIsReady() && player.LSDistance(getClosestEnem()) > 350)
+                if (!Q2.IsReady() && R2.IsReady() && player.Distance(getClosestEnem()) > 350)
                 {
 
                     sumItems.cast(SummonerItems.ItemIds.Ghostblade);
                     R2.Cast();
                 }
-                if (Q2.LSIsReady() && gotManaFor(true) && targetInRange(target, Q2.Range))
+                if (Q2.IsReady() && gotManaFor(true) && targetInRange(target, Q2.Range))
                 {
                     Q2.Cast(target);
                 }
-                if (E2.LSIsReady() && gotManaFor(false, false, true) && targetInRange(target, E2.Range) && (!gotSpeedBuff()) || (getJayceEHamDmg(target) > target.Health))
+                if (E2.IsReady() && gotManaFor(false, false, true) && targetInRange(target, E2.Range) && (!gotSpeedBuff()) || (getJayceEHamDmg(target) > target.Health))
                 {
                     E2.Cast(target);
                 }
-                if (W2.LSIsReady() && gotManaFor(false, true) && targetInRange(target, W2.Range))
+                if (W2.IsReady() && gotManaFor(false, true) && targetInRange(target, W2.Range))
                 {
                     W2.Cast();
                 }
@@ -296,12 +296,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
             {
                 if (rangQCDRem == 0 && rangECDRem == 0 && gotManaFor(true, false, true))
                 {
-                    List<AIHeroClient> deadEnes = ObjectManager.Get<AIHeroClient>().Where(ene => getJayceEQDmg(ene) > ene.Health && ene.IsEnemy && ene.IsValid && ene.LSDistance(player.ServerPosition) < 1800).ToList();
+                    List<AIHeroClient> deadEnes = ObjectManager.Get<AIHeroClient>().Where(ene => getJayceEQDmg(ene) > ene.Health && ene.IsEnemy && ene.IsValid && ene.Distance(player.ServerPosition) < 1800).ToList();
                     foreach (var enem in deadEnes)
                     {
-                        if (player.LSDistance(enem) < 300)
+                        if (player.Distance(enem) < 300)
                             continue;
-                        if (isHammer && R2.LSIsReady())
+                        if (isHammer && R2.IsReady())
                         {
                             R2.Cast();
                         }
@@ -310,10 +310,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 }
                 else if (rangQCDRem == 0 && gotManaFor(true))
                 {
-                    List<AIHeroClient> deadEnes = ObjectManager.Get<AIHeroClient>().Where(ene => getJayceQDmg(ene) > ene.Health && ene.IsEnemy && ene.IsValid && ene.LSDistance(player.ServerPosition) < 1200).ToList();
+                    List<AIHeroClient> deadEnes = ObjectManager.Get<AIHeroClient>().Where(ene => getJayceQDmg(ene) > ene.Health && ene.IsEnemy && ene.IsValid && ene.Distance(player.ServerPosition) < 1200).ToList();
                     foreach (var enem in deadEnes)
                     {
-                        if (isHammer && R2.LSIsReady())
+                        if (isHammer && R2.IsReady())
                         {
                             R2.Cast();
                         }
@@ -338,14 +338,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (isHammer)
                 return;
             PredictionOutput po = QEmp1.GetPrediction(target);
-            if (po.Hitchance >= HitChance.Low && player.LSDistance(po.UnitPosition) < (QEmp1.Range + target.BoundingRadius))
+            if (po.Hitchance >= HitChance.Low && player.Distance(po.UnitPosition) < (QEmp1.Range + target.BoundingRadius))
             {
                 castQon = po.CastPosition;
             }
             else if (po.Hitchance == HitChance.Collision)
             {
-                Obj_AI_Base fistCol = po.CollisionObjects.OrderBy(unit => unit.LSDistance(player.ServerPosition)).First();
-                if (fistCol.LSDistance(po.UnitPosition) < (180 - fistCol.BoundingRadius / 2) && fistCol.LSDistance(target.ServerPosition) < (180 - fistCol.BoundingRadius / 2))
+                Obj_AI_Base fistCol = po.CollisionObjects.OrderBy(unit => unit.Distance(player.ServerPosition)).First();
+                if (fistCol.Distance(po.UnitPosition) < (180 - fistCol.BoundingRadius / 2) && fistCol.Distance(target.ServerPosition) < (180 - fistCol.BoundingRadius / 2))
                 {
                     castQon = po.CastPosition;
                 }
@@ -357,14 +357,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (isHammer)
                 return;
             PredictionOutput po = Q1.GetPrediction(target);
-            if (po.Hitchance >= HitChance.High && player.LSDistance(po.UnitPosition) < (Q1.Range + target.BoundingRadius))
+            if (po.Hitchance >= HitChance.High && player.Distance(po.UnitPosition) < (Q1.Range + target.BoundingRadius))
             {
                 shootQE(po.CastPosition, true);
             }
             else if (po.Hitchance == HitChance.Collision)
             {
-                Obj_AI_Base fistCol = po.CollisionObjects.OrderBy(unit => unit.LSDistance(player.ServerPosition)).First();
-                if (fistCol.LSDistance(po.UnitPosition) < (180 - fistCol.BoundingRadius / 2) && fistCol.LSDistance(target.ServerPosition) < (100 - fistCol.BoundingRadius / 2))
+                Obj_AI_Base fistCol = po.CollisionObjects.OrderBy(unit => unit.Distance(player.ServerPosition)).First();
+                if (fistCol.Distance(po.UnitPosition) < (180 - fistCol.BoundingRadius / 2) && fistCol.Distance(target.ServerPosition) < (100 - fistCol.BoundingRadius / 2))
                 {
                     shootQE(po.CastPosition, true);
                 }
@@ -374,7 +374,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public  Vector3 getBestPosToHammer(Vector3 target)
         {
-            Obj_AI_Base tower = ObjectManager.Get<Obj_AI_Turret>().Where(tur => tur.IsAlly && tur.Health > 0).OrderBy(tur => player.LSDistance(tur)).First();
+            Obj_AI_Base tower = ObjectManager.Get<Obj_AI_Turret>().Where(tur => tur.IsAlly && tur.Health > 0).OrderBy(tur => player.Distance(tur)).First();
             return target + Vector3.Normalize(tower.ServerPosition - target) * (-120);
         }
 
@@ -385,7 +385,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public  AIHeroClient getClosestEnem()
         {
-            return ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsEnemy && ene.LSIsValidTarget()).OrderBy(ene => player.LSDistance(ene)).First();
+            return ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsEnemy && ene.IsValidTarget()).OrderBy(ene => player.Distance(ene)).First();
         }
 
         public float getBestRange()
@@ -393,11 +393,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
             float range;
             if (!isHammer)
             {
-                if (Q1.LSIsReady() && E1.LSIsReady() && gotManaFor(true, false, true))
+                if (Q1.IsReady() && E1.IsReady() && gotManaFor(true, false, true))
                 {
                     range = 1750;
                 }
-                else if (Q1.LSIsReady() && gotManaFor(true))
+                else if (Q1.IsReady() && gotManaFor(true))
                 {
                     range = 1150;
                 }
@@ -408,7 +408,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
             else
             {
-                if (Q1.LSIsReady() && gotManaFor(true))
+                if (Q1.IsReady() && gotManaFor(true))
                 {
                     range = 600;
                 }
@@ -425,11 +425,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             try
             {
-                if (isHammer && R2.LSIsReady())
+                if (isHammer && R2.IsReady())
                     R2.Cast();
-                if(E1.LSIsReady())
+                if(E1.IsReady())
                     E1.Cast(getParalelVec(pos));
-                if (!Q1.LSIsReady() || isHammer)
+                if (!Q1.IsReady() || isHammer)
                     return false;
                 
                 Vector3 bPos = player.ServerPosition - Vector3.Normalize(pos - player.ServerPosition) * 50;
@@ -447,7 +447,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public bool shouldIKnockDatMadaFaka(AIHeroClient target)
         {
-            //if (useSmartKnock(target) && R2.LSIsReady() && target.CombatType == GameObjectCombatType.Melee)
+            //if (useSmartKnock(target) && R2.IsReady() && target.CombatType == GameObjectCombatType.Melee)
             // {
             //  return true;
             // }
@@ -475,16 +475,16 @@ using EloBuddy; namespace ARAMDetFull.Champions
             float trueAARange = player.BoundingRadius + target.AttackRange;
             float trueERange = target.BoundingRadius + E2.Range;
 
-            float dist = player.LSDistance(target);
+            float dist = player.Distance(target);
             Vector2 movePos = new Vector2();
             if (target.IsMoving)
             {
-                Vector2 tpos = target.Position.LSTo2D();
-                Vector2 path = target.Path[0].LSTo2D() - tpos;
+                Vector2 tpos = target.Position.To2D();
+                Vector2 path = target.Path[0].To2D() - tpos;
                 path.Normalize();
                 movePos = tpos + (path * 100);
             }
-            float targ_ms = (target.IsMoving && player.LSDistance(movePos) < dist) ? target.MoveSpeed : 0;
+            float targ_ms = (target.IsMoving && player.Distance(movePos) < dist) ? target.MoveSpeed : 0;
             float msDif = (player.MoveSpeed * 0.7f - targ_ms) == 0 ? 0.0001f : (targ_ms - player.MoveSpeed * 0.7f);
             float timeToReach = (dist - trueAARange) / msDif;
             if (dist > trueAARange && dist < trueERange && target.IsMoving)
@@ -499,14 +499,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public bool inMyTowerRange(Vector3 pos)
         {
-            return ObjectManager.Get<Obj_AI_Turret>().Where(tur => tur.IsAlly && tur.Health > 0).Any(tur => pos.LSDistance(tur.Position) < (850 + player.BoundingRadius));
+            return ObjectManager.Get<Obj_AI_Turret>().Where(tur => tur.IsAlly && tur.Health > 0).Any(tur => pos.Distance(tur.Position) < (850 + player.BoundingRadius));
         }
 
         public void castEonSpell(AIHeroClient mis)
         {
-            if (isHammer || !E1.LSIsReady())
+            if (isHammer || !E1.IsReady())
                 return;
-            if (player.LSDistance(myCastedQ.Position) < 250)
+            if (player.Distance(myCastedQ.Position) < 250)
             {
                 E1.Cast(getParalelVec(mis.Position));
             }
@@ -516,7 +516,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public bool targetInRange(Obj_AI_Base target, float range)
         {
-            float dist2 = Vector2.DistanceSquared(target.ServerPosition.LSTo2D(), player.ServerPosition.LSTo2D());
+            float dist2 = Vector2.DistanceSquared(target.ServerPosition.To2D(), player.ServerPosition.To2D());
             float range2 = range * range + target.BoundingRadius * target.BoundingRadius;
             return dist2 < range2;
         }
@@ -543,13 +543,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 away = (neg == 1) ? away : -away;
                 var v2 = Vector3.Normalize(pos - player.ServerPosition) * away;
                 var bom = new Vector2(v2.Y, -v2.X);
-                return player.ServerPosition.LSTo2D() + bom;
+                return player.ServerPosition.To2D() + bom;
             }
             else
             {
                 var v2 = Vector3.Normalize(pos - player.ServerPosition) * 300;
                 var bom = new Vector2(v2.X, v2.Y);
-                return player.ServerPosition.LSTo2D() + bom;
+                return player.ServerPosition.To2D() + bom;
             }
         }
 
@@ -614,9 +614,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (!targetInRange(target, 270) || hamECDRem != 0 || E1.Level == 0)
                 return;
 
-            if (!isHammer && R2.LSIsReady())
+            if (!isHammer && R2.IsReady())
                 R1.Cast();
-            if (isHammer && E2.LSIsReady() && targetInRange(target, 260))
+            if (isHammer && E2.IsReady() && targetInRange(target, 260))
                 E2.Cast(target);
 
         }
@@ -625,7 +625,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             if (!safeToJumpOn(target))
                 return false;
-            float damage = (float)player.LSGetAutoAttackDamage(target) + 50;
+            float damage = (float)player.GetAutoAttackDamage(target) + 50;
             damage += getJayceEHamDmg(target);
             damage += getJayceQHamDmg(target);
 
@@ -637,7 +637,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             float dmg = 0;
             //Ranged
-            if (!isHammer || R1.LSIsReady())
+            if (!isHammer || R1.IsReady())
             {
                 if (rangECDRem == 0 && rangQCDRem == 0 && Q1.Level != 0 && E1.Level != 0)
                 {
@@ -654,7 +654,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 }
             }
             //Hamer
-            if (isHammer || R1.LSIsReady())
+            if (isHammer || R1.IsReady())
             {
                 if (hamECDRem == 0 && E2.Level != 0)
                 {
@@ -670,7 +670,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public float getJayceAADmg(Obj_AI_Base target)
         {
-            return (float)player.LSGetAutoAttackDamage(target);
+            return (float)player.GetAutoAttackDamage(target);
 
         }
 
@@ -714,7 +714,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public void castOmen(AIHeroClient target)
         {
-            if (player.LSDistance(target) < 430)
+            if (player.Distance(target) < 430)
                 sumItems.cast(SummonerItems.ItemIds.Omen);
         }
 
@@ -732,7 +732,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public bool safeToJumpOn(Obj_AI_Base target)
         {
-            return (!Sector.inTowerRange(target.Position.LSTo2D()) &&
+            return (!Sector.inTowerRange(target.Position.To2D()) &&
                     ((MapControl.fightIsOn() != null && MapControl.fightIsOn().NetworkId == target.NetworkId)));
         }
 

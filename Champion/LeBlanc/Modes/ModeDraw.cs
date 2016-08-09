@@ -314,7 +314,7 @@ namespace Leblanc.Modes
                 return;
             }
 
-            if (t.LSIsValidTarget(W.Range))
+            if (t.IsValidTarget(W.Range))
             {
                 return;
             }
@@ -322,7 +322,7 @@ namespace Leblanc.Modes
             
             List<Vector2> xList = new List<Vector2>();
 
-            var nLocation = ObjectManager.Player.Position.LSTo2D() + Vector2.Normalize(t.Position.LSTo2D() - ObjectManager.Player.Position.LSTo2D()) * W.Range;
+            var nLocation = ObjectManager.Player.Position.To2D() + Vector2.Normalize(t.Position.To2D() - ObjectManager.Player.Position.To2D()) * W.Range;
 
 
             //if (CommonGeometry.IsWallBetween(nEvadePoint.To3D(), location.To3D()))
@@ -341,23 +341,23 @@ namespace Leblanc.Modes
             //Render.Circle.DrawCircle(wCastPosition.To3D(), 105f, System.Drawing.Color.Red);
 
 
-            if (!wCastPosition.LSIsWall())
+            if (!wCastPosition.IsWall())
             {
                 xList.Add(wCastPosition);
             }
 
-            if (wCastPosition.LSIsWall())
+            if (wCastPosition.IsWall())
             {
                 for (int j = 20; j < 80; j += 20)
                 {
-                    Vector2 wcPositive = ObjectManager.Player.Position.LSTo2D() + Vector2.Normalize(t.Position.LSTo2D() - ObjectManager.Player.Position.LSTo2D()).LSRotated(j * (float)Math.PI / 180) * W.Range;
-                    if (!wcPositive.LSIsWall())
+                    Vector2 wcPositive = ObjectManager.Player.Position.To2D() + Vector2.Normalize(t.Position.To2D() - ObjectManager.Player.Position.To2D()).Rotated(j * (float)Math.PI / 180) * W.Range;
+                    if (!wcPositive.IsWall())
                     {
                         xList.Add(wcPositive);
                     }
 
-                    Vector2 wcNegative = ObjectManager.Player.Position.LSTo2D() + Vector2.Normalize(t.Position.LSTo2D() - ObjectManager.Player.Position.LSTo2D()) .LSRotated(-j*(float) Math.PI/180)*W.Range;
-                    if (!wcNegative.LSIsWall())
+                    Vector2 wcNegative = ObjectManager.Player.Position.To2D() + Vector2.Normalize(t.Position.To2D() - ObjectManager.Player.Position.To2D()) .Rotated(-j*(float) Math.PI/180)*W.Range;
+                    if (!wcNegative.IsWall())
                     {
                         xList.Add(wcNegative);
                     }
@@ -372,7 +372,7 @@ namespace Leblanc.Modes
             //{
             //    Render.Circle.DrawCircle(aa.To3D2(), 105f, System.Drawing.Color.White);
             //}
-            var nJumpPoint = xList.OrderBy(al => al.LSDistance(t.Position)).First();
+            var nJumpPoint = xList.OrderBy(al => al.Distance(t.Position)).First();
 
             var color = System.Drawing.Color.DarkRed;
             var width = 4;
@@ -380,10 +380,10 @@ namespace Leblanc.Modes
             var startpos = ObjectManager.Player.Position;
             var endpos = nJumpPoint.To3D();
 
-            if (startpos.LSDistance(endpos) > 100)
+            if (startpos.Distance(endpos) > 100)
             {
-                var endpos1 = nJumpPoint.To3D() + (startpos - endpos).LSTo2D().LSNormalized().LSRotated(25 * (float)Math.PI / 180).To3D() * 75;
-                var endpos2 = nJumpPoint.To3D() + (startpos - endpos).LSTo2D().LSNormalized().LSRotated(-25 * (float)Math.PI / 180).To3D() * 75;
+                var endpos1 = nJumpPoint.To3D() + (startpos - endpos).To2D().Normalized().Rotated(25 * (float)Math.PI / 180).To3D() * 75;
+                var endpos2 = nJumpPoint.To3D() + (startpos - endpos).To2D().Normalized().Rotated(-25 * (float)Math.PI / 180).To3D() * 75;
 
                 var x1 = new LeagueSharp.Common.Geometry.Polygon.Line(startpos, endpos);
                 x1.Draw(color, width - 2);
@@ -404,12 +404,12 @@ namespace Leblanc.Modes
                 }
             }
 
-            if (!t.LSIsValidTarget(W.Range + Q.Range - 60))
+            if (!t.IsValidTarget(W.Range + Q.Range - 60))
             {
                 return;
             }
 
-            if (t.LSIsValidTarget(W.Range))
+            if (t.IsValidTarget(W.Range))
             {
                 return;
             }
@@ -417,13 +417,13 @@ namespace Leblanc.Modes
             var canJump = false;
             if (Modes.ModeCombo.ComboMode == ComboMode.Mode2xQ)
             {
-                if ((t.Health < ModeCombo.GetComboDamage(t) - W.GetDamage(t) && Q.LSIsReady() && R.LSIsReady()) || (t.Health < Q.GetDamage(t) && Q.LSIsReady()))
+                if ((t.Health < ModeCombo.GetComboDamage(t) - W.GetDamage(t) && Q.IsReady() && R.IsReady()) || (t.Health < Q.GetDamage(t) && Q.IsReady()))
                 {
                     canJump = true;
                 }
             }
 
-            var nPoint = nJumpPoint.LSExtend(ObjectManager.Player.Position.LSTo2D(), +ObjectManager.Player.BoundingRadius * 3);
+            var nPoint = nJumpPoint.Extend(ObjectManager.Player.Position.To2D(), +ObjectManager.Player.BoundingRadius * 3);
             Render.Circle.DrawCircle(nPoint.To3D(), 50f, Color.GreenYellow);
 
             if (CommonGeometry.IsWallBetween(nPoint.To3D(), nJumpPoint.To3D()))
@@ -431,7 +431,7 @@ namespace Leblanc.Modes
                 canJump = false;
             }
 
-            if (canJump && W.LSIsReady() && !W.StillJumped())
+            if (canJump && W.IsReady() && !W.StillJumped())
             {
                 if (Modes.ModeConfig.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                 {
@@ -462,7 +462,7 @@ namespace Leblanc.Modes
                         circle1.Draw(Color.Black, 3);
 
                         var circle =
-                            new CommonGeometry.Circle2(hero.Position.LSTo2D(), 140 + (buffName.b1.Number * 20),
+                            new CommonGeometry.Circle2(hero.Position.To2D(), 140 + (buffName.b1.Number * 20),
                                 Game.Time - buffName.b.StartTime, buffName.b.EndTime - buffName.b.StartTime).ToPolygon();
                         circle.Draw(buffName.b1.Color, 3);
                     }
@@ -497,25 +497,25 @@ namespace Leblanc.Modes
             var drawQ = MenuLocal.Item(GetPcModeStringValue + "Draw.Q").GetValue<Circle>();
             if (drawQ.Active && Q.Level > 0)
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, Q.LSIsReady() ? drawQ.Color: Color.LightGray, Q.LSIsReady() ? 5 : 1);
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, Q.IsReady() ? drawQ.Color: Color.LightGray, Q.IsReady() ? 5 : 1);
             }
 
             var drawW = MenuLocal.Item(GetPcModeStringValue + "Draw.W").GetValue<Circle>();
             if (drawW.Active && W.Level > 0)
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, W.LSIsReady() ? drawW.Color : Color.LightGray, W.LSIsReady() ? 5 : 1);
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, W.Range, W.IsReady() ? drawW.Color : Color.LightGray, W.IsReady() ? 5 : 1);
             }
 
             var drawE = MenuLocal.Item(GetPcModeStringValue + "Draw.E").GetValue<Circle>();
             if (drawE.Active && E.Level > 0)
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, Modes.ModeSettings.MaxERange, E.LSIsReady() ? drawE.Color: Color.LightGray, E.LSIsReady() ? 5 : 1);
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, Modes.ModeSettings.MaxERange, E.IsReady() ? drawE.Color: Color.LightGray, E.IsReady() ? 5 : 1);
             }
 
             var drawR = MenuLocal.Item(GetPcModeStringValue + "Draw.R").GetValue<Circle>();
             if (drawR.Active && R.Level > 0)
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, E.LSIsReady() ? drawR.Color : Color.LightGray, E.LSIsReady() ? 5 : 1);
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, E.IsReady() ? drawR.Color : Color.LightGray, E.IsReady() ? 5 : 1);
             }
         }
 
@@ -536,7 +536,7 @@ namespace Leblanc.Modes
             if (MenuLocal.Item(GetPcModeStringValue + "DrawKillableEnemy").GetValue<bool>())
             {
                 var t = KillableEnemyAa;
-                if (t.Item1 != null && t.Item1.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 800) && t.Item2 > 0)
+                if (t.Item1 != null && t.Item1.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 800) && t.Item2 > 0)
                 {
                     CommonHelper.DrawText(CommonHelper.Text, $"{t.Item1.ChampionName}: {t.Item2} Combo = Kill", (int)t.Item1.HPBarPosition.X + 85, (int)t.Item1.HPBarPosition.Y + 5, SharpDX.Color.GreenYellow);
                     //CommonHelper.DrawText(CommonHelper.Text, $"{t.Item1.ChampionName}: {t.Item2} Combo = Kill", (int)t.Item1.HPBarPosition.X + 7, (int)t.Item1.HPBarPosition.Y + 36, SharpDX.Color.GreenYellow);
@@ -583,7 +583,7 @@ namespace Leblanc.Modes
                 var x = 0;
                 var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
                 {
-                    if (t.LSIsValidTarget())
+                    if (t.IsValidTarget())
                     {
                             if (t.Health <= Common.CommonMath.GetComboDamage(t))
                             {

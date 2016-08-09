@@ -145,12 +145,12 @@ using EloBuddy;
                 {
                     float damage = 0;
 
-                    if (_Q.LSIsReady())
+                    if (_Q.IsReady())
                         damage += _Q.GetDamage(enemy);
-                    if (_W.LSIsReady())
+                    if (_W.IsReady())
                         damage += _W.GetDamage(enemy);
                     if (!Player.Spellbook.IsAutoAttacking)
-                        damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                        damage += (float)Player.GetAutoAttackDamage(enemy, true);
                     return damage;
                 }
                 return 0;
@@ -170,7 +170,7 @@ using EloBuddy;
             try
             {
                 if (Player.IsDead) return;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
                 {
                     if (_MainMenu.Item("TahmKench_Indicator").GetValue<bool>())
                     {
@@ -217,30 +217,30 @@ using EloBuddy;
                 var WTarget = TargetSelector.GetTarget(_W.Range, TargetSelector.DamageType.Magical);
                 var WTarget2 = TargetSelector.GetTarget(_W2.Range, TargetSelector.DamageType.Magical);
 
-                if (_MainMenu.Item("TahmKench_MyTeamCC").GetValue<bool>() && _W.LSIsReady() && Player.Spellbook.GetSpell(SpellSlot.W).Name != "tahmkenchwspitready")
+                if (_MainMenu.Item("TahmKench_MyTeamCC").GetValue<bool>() && _W.IsReady() && Player.Spellbook.GetSpell(SpellSlot.W).Name != "tahmkenchwspitready")
                 {
-                    var Ally = ObjectManager.Get<AIHeroClient>().FirstOrDefault(x => x.IsAlly && !x.IsMe && !x.IsDead && !x.IsZombie && x.ServerPosition.LSDistance(Player.ServerPosition) < _W.Range);
+                    var Ally = ObjectManager.Get<AIHeroClient>().FirstOrDefault(x => x.IsAlly && !x.IsMe && !x.IsDead && !x.IsZombie && x.ServerPosition.Distance(Player.ServerPosition) < _W.Range);
                     if (Ally != null && HasBuff(Ally))
                         _W.CastOnUnit(Ally, true);
                 }
 
                 if (_MainMenu.Item("CKey").GetValue<KeyBind>().Active) // Combo
                 {
-                    if (WTarget2 != null && _W.LSIsReady() && Player.Spellbook.GetSpell(SpellSlot.W).Name == "tahmkenchwspitready")
+                    if (WTarget2 != null && _W.IsReady() && Player.Spellbook.GetSpell(SpellSlot.W).Name == "tahmkenchwspitready")
                     {
                         _W2.CastIfHitchanceEquals(WTarget2, HitChance.Low, true);
                     }
-                    if (WTarget2 != null && _E.LSIsReady() && Player.HealthPercent <= 7 && _MainMenu.Item("TahmKench_CUse_E").GetValue<bool>())
+                    if (WTarget2 != null && _E.IsReady() && Player.HealthPercent <= 7 && _MainMenu.Item("TahmKench_CUse_E").GetValue<bool>())
                         _E.Cast(true);
-                    if (QTarget != null && _Q.LSIsReady() && _MainMenu.Item("TahmKench_CUse_Q").GetValue<bool>())
+                    if (QTarget != null && _Q.IsReady() && _MainMenu.Item("TahmKench_CUse_Q").GetValue<bool>())
                         _Q.CastIfHitchanceEquals(QTarget, HitChance.Low, true);
-                    if (WTarget != null && _W.LSIsReady() && WTarget.Buffs.Find(x => x.Name == "tahmkenchpdebuffcounter" && x.LSIsValidBuff()).Count == 3 && _MainMenu.Item("TahmKench_CUse_W1").GetValue<bool>())
+                    if (WTarget != null && _W.IsReady() && WTarget.Buffs.Find(x => x.Name == "tahmkenchpdebuffcounter" && x.IsValidBuff()).Count == 3 && _MainMenu.Item("TahmKench_CUse_W1").GetValue<bool>())
                         _W.CastOnUnit(WTarget, true);
-                    if (WTarget2 != null && _W.LSIsReady() && _MainMenu.Item("TahmKench_CUse_W2").GetValue<bool>())
+                    if (WTarget2 != null && _W.IsReady() && _MainMenu.Item("TahmKench_CUse_W2").GetValue<bool>())
                     {
                         if (Player.Spellbook.GetSpell(SpellSlot.W).Name == "tahmkenchw")
                         {
-                            var getminion = MinionManager.GetMinions(_W.Range, MinionTypes.All, MinionTeam.NotAlly).OrderBy(x => x.LSDistance(Player.ServerPosition)).FirstOrDefault();
+                            var getminion = MinionManager.GetMinions(_W.Range, MinionTypes.All, MinionTeam.NotAlly).OrderBy(x => x.Distance(Player.ServerPosition)).FirstOrDefault();
                             if (getminion != null)
                                 _W.CastOnUnit(getminion, true);
                         }
@@ -250,9 +250,9 @@ using EloBuddy;
                 if ((_MainMenu.Item("HKey").GetValue<KeyBind>().Active || _MainMenu.Item("TahmKench_HToggle").GetValue<bool>())
                     && _MainMenu.Item("TahmKench_HManarate").GetValue<Slider>().Value < Player.ManaPercent) // Harass
                 {
-                    if (QTarget != null && _Q.LSIsReady() && _MainMenu.Item("TahmKench_HUse_Q").GetValue<bool>())
+                    if (QTarget != null && _Q.IsReady() && _MainMenu.Item("TahmKench_HUse_Q").GetValue<bool>())
                         _Q.CastIfHitchanceEquals(QTarget, HitChance.Low, true);
-                    if (WTarget2 != null && _W.LSIsReady() && _MainMenu.Item("TahmKench_HUse_W2").GetValue<bool>())
+                    if (WTarget2 != null && _W.IsReady() && _MainMenu.Item("TahmKench_HUse_W2").GetValue<bool>())
                     {
                         if (Player.Spellbook.GetSpell(SpellSlot.W).Name == "tahmkenchwspitready")
                         {
@@ -292,10 +292,10 @@ using EloBuddy;
 
                 if (!sender.IsMe && sender.IsEnemy)
                 {
-                    if (_MainMenu.Item("TahmKench_MyTeamMinEnable").GetValue<bool>() && sender.IsEnemy && _W.LSIsReady())
+                    if (_MainMenu.Item("TahmKench_MyTeamMinEnable").GetValue<bool>() && sender.IsEnemy && _W.IsReady())
                     {
                         var SkillRange = new Geometry.Polygon.Rectangle(args.Start, args.End, sender.BoundingRadius + 30);
-                        var Target = HeroManager.Allies.FirstOrDefault(f => f.LSDistance(Player.Position) <= _W.Range
+                        var Target = HeroManager.Allies.FirstOrDefault(f => f.Distance(Player.Position) <= _W.Range
                         && !f.IsZombie && !f.IsDead && SkillRange.IsInside(f.Position)
                         && _MainMenu.Item("TahmKench_MyTeamMin").GetValue<Slider>().Value >= f.HealthPercent);
                         if (Target != null)
@@ -305,7 +305,7 @@ using EloBuddy;
                         }
                         if (args.Target != null)
                         {
-                            var target = HeroManager.Allies.FirstOrDefault(f => f.Position.LSDistance(Player.Position) <= _W.Range
+                            var target = HeroManager.Allies.FirstOrDefault(f => f.Position.Distance(Player.Position) <= _W.Range
                             && !f.IsZombie && !f.IsDead && f.HealthPercent <= _MainMenu.Item("TahmKench_MyTeamMin").GetValue<Slider>().Value);
                             if (target != null)
                             {
@@ -314,7 +314,7 @@ using EloBuddy;
                             }
                         }
                     }
-                    if (_MainMenu.Item("TahmKench_AutoEUse").GetValue<bool>() && sender.IsEnemy && _E.LSIsReady() && Player.HealthPercent <= _MainMenu.Item("TahmKench_MinE").GetValue<Slider>().Value)
+                    if (_MainMenu.Item("TahmKench_AutoEUse").GetValue<bool>() && sender.IsEnemy && _E.IsReady() && Player.HealthPercent <= _MainMenu.Item("TahmKench_MinE").GetValue<Slider>().Value)
                     {
                         var target = new Geometry.Polygon.Rectangle(args.Start, args.End, sender.BoundingRadius + 30);
                         if (target != null)
@@ -324,7 +324,7 @@ using EloBuddy;
                         }
                         if (args.Target != null)
                         {
-                            var TargetMe = HeroManager.Allies.FirstOrDefault(f => f.Position.LSDistance(Player.Position) <= 10);
+                            var TargetMe = HeroManager.Allies.FirstOrDefault(f => f.Position.Distance(Player.Position) <= 10);
                             if (TargetMe == Player)
                             {
                                 _E.Cast(true);

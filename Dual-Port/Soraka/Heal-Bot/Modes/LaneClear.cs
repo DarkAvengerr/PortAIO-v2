@@ -15,7 +15,7 @@ using EloBuddy;
 
         internal static void Execute()
         {
-            if (!Spells.Q.LSIsReady() || !Config.IsChecked("useQInLC")
+            if (!Spells.Q.IsReady() || !Config.IsChecked("useQInLC")
                 || ObjectManager.Player.ManaPercent < Config.GetSliderValue("manaLaneClear"))
             {
                 return;
@@ -28,7 +28,7 @@ using EloBuddy;
             }
 
             var farmLoc = MinionManager.GetBestCircularFarmLocation(
-                minions.Select(x => x.Position.LSTo2D()).ToList(), 
+                minions.Select(x => x.Position.To2D()).ToList(), 
                 Spells.Q.Width, 
                 Spells.Q.Range);
             if (farmLoc.MinionsHit >= Config.GetSliderValue("qTargets"))

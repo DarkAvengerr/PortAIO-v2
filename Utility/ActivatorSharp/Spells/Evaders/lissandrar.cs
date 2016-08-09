@@ -25,7 +25,7 @@ using EloBuddy; namespace Activator.Spells.Evaders
                     if (!Parent.Item(Parent.Name + "useon" + hero.Player.NetworkId).GetValue<bool>())
                         continue;
 
-                    if (hero.Player.LSCountEnemiesInRange(425) >= 1)
+                    if (hero.Player.CountEnemiesInRange(425) >= 1)
                     {
                         if (Menu.Item("use" + Name + "norm").GetValue<bool>())
                             if (hero.IncomeDamage > 0 && hero.HitTypes.Contains(HitType.Danger))

@@ -47,7 +47,7 @@ namespace FioraProject
         {
             if (Enabled)
             {
-                foreach (var unit in HeroManager.Enemies.Where(u => u.LSIsValidTarget() && u.IsHPBarRendered))
+                foreach (var unit in HeroManager.Enemies.Where(u => u.IsValidTarget() && u.IsHPBarRendered))
                 {
                     // Get damage to unit
                     var damage = damageToUnit(unit);

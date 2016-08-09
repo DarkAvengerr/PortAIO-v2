@@ -48,7 +48,7 @@ using EloBuddy;
 
         public static double GetIgniteDamage(this AIHeroClient target)
         {
-            return Mechanics.IgniteSpell.Slot != EloBuddy.SpellSlot.Unknown && Mechanics.IgniteSpell.LSIsReady()
+            return Mechanics.IgniteSpell.Slot != EloBuddy.SpellSlot.Unknown && Mechanics.IgniteSpell.IsReady()
                 ? EntryPoint.Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite)
                 : 0d;
         }

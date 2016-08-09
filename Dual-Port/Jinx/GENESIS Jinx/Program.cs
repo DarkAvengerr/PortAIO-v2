@@ -155,10 +155,10 @@ using EloBuddy;
             if (Player.ManaPercent < Config.Item("EmanaCombo").GetValue<Slider>().Value)
                 return;
 
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
                 var t = gapcloser.Sender;
-                if (t.LSIsValidTarget(E.Range) && Config.Item("EGCchampion" + t.ChampionName).GetValue<bool>())
+                if (t.IsValidTarget(E.Range) && Config.Item("EGCchampion" + t.ChampionName).GetValue<bool>())
                 {
                     if(Config.Item("EmodeGC").GetValue<StringList>().SelectedIndex == 0)
                         E.Cast(gapcloser.End);
@@ -173,10 +173,10 @@ using EloBuddy;
             if (!FishBoneActive)
                 return;
 
-            if (Q.LSIsReady() && args.Target is AIHeroClient && Config.Item("Qchange").GetValue<StringList>().SelectedIndex == 1)
+            if (Q.IsReady() && args.Target is AIHeroClient && Config.Item("Qchange").GetValue<StringList>().SelectedIndex == 1)
             {
                 var t = (AIHeroClient)args.Target;
-                if ( t.LSIsValidTarget())
+                if ( t.IsValidTarget())
                 {
                     FishBoneToMiniGun(t);
                 }
@@ -192,7 +192,7 @@ using EloBuddy;
                 else if (GetRealDistance(t) < GetRealPowPowRange(t))
                 {
                     args.Process = false;
-                    if (Q.LSIsReady())
+                    if (Q.IsReady())
                         Q.Cast();
                 }
             }
@@ -210,7 +210,7 @@ using EloBuddy;
                     WCastTime = Game.Time;
             }
 
-            if (!E.LSIsReady() || !sender.IsEnemy || !Config.Item("Espell").GetValue<bool>() || Player.ManaPercent < Config.Item("EmanaCombo").GetValue<Slider>().Value || !sender.IsValid<AIHeroClient>() || !sender.LSIsValidTarget(E.Range) )
+            if (!E.IsReady() || !sender.IsEnemy || !Config.Item("Espell").GetValue<bool>() || Player.ManaPercent < Config.Item("EmanaCombo").GetValue<Slider>().Value || !sender.IsValid<AIHeroClient>() || !sender.IsValidTarget(E.Range) )
                 return;
 
             var foundSpell = Spells.Find(x => args.SData.Name.ToLower() == x);
@@ -224,13 +224,13 @@ using EloBuddy;
         {
             SetValues();
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
                 Qlogic();
-            if (W.LSIsReady())
+            if (W.IsReady())
                 Wlogic();
-            if (E.LSIsReady())
+            if (E.IsReady())
                 Elogic();
-            if (R.LSIsReady())
+            if (R.IsReady())
                 Rlogic();
         }
 
@@ -241,7 +241,7 @@ using EloBuddy;
             if (Config.Item("useR").GetValue<KeyBind>().Active)
             {
                 var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
-                if (t.LSIsValidTarget())
+                if (t.IsValidTarget())
                 {
                     if(Config.Item("semiMode").GetValue<StringList>().SelectedIndex == 0)
                     {
@@ -263,16 +263,16 @@ using EloBuddy;
                 if (Config.Item("RoverAA").GetValue<bool>() && (!SebbyLib.Orbwalking.CanAttack() || Player.Spellbook.IsAutoAttacking))
                     return;
 
-                foreach (var target in Enemies.Where(target => target.LSIsValidTarget(R.Range) && OktwCommon.ValidUlt(target) ))
+                foreach (var target in Enemies.Where(target => target.IsValidTarget(R.Range) && OktwCommon.ValidUlt(target) ))
                 {
                     
                     float predictedHealth = target.Health + target.HPRegenRate * 2;
 
                     var Rdmg = R.GetDamage(target, 1);
-                    if(Player.LSDistance(target.Position) < 1500)
+                    if(Player.Distance(target.Position) < 1500)
                     {
 
-                        Rdmg = Rdmg * (Player.LSDistance(target.Position) / 1500);
+                        Rdmg = Rdmg * (Player.Distance(target.Position) / 1500);
                        
                     }
 
@@ -280,10 +280,10 @@ using EloBuddy;
                     {
                         cast = true;
                         PredictionOutput output = R.GetPrediction(target);
-                        Vector2 direction = output.CastPosition.LSTo2D() - Player.Position.LSTo2D();
+                        Vector2 direction = output.CastPosition.To2D() - Player.Position.To2D();
                         direction.Normalize();
 
-                        foreach (var enemy in Enemies.Where(enemy => enemy.LSIsValidTarget()))
+                        foreach (var enemy in Enemies.Where(enemy => enemy.IsValidTarget()))
                         {
                             if (enemy.NetworkId == target.NetworkId || !cast)
                                 continue;
@@ -296,19 +296,19 @@ using EloBuddy;
                             double b = c1 / c2;
                             Vector3 pb = Player.ServerPosition + ((float)b * v);
                             float length = Vector3.Distance(predictedPosition, pb);
-                            if (length < (R.Width + 150 + enemy.BoundingRadius / 2) && Player.LSDistance(predictedPosition) < Player.LSDistance(target.ServerPosition))
+                            if (length < (R.Width + 150 + enemy.BoundingRadius / 2) && Player.Distance(predictedPosition) < Player.Distance(target.ServerPosition))
                                 cast = false;
                         }
 
                         if (cast)
                         {
-                            if (Config.Item("RoverW").GetValue<bool>() && target.LSIsValidTarget(W.Range) && W.GetDamage(target) > target.Health && W.Instance.Cooldown - (W.Instance.CooldownExpires - Game.Time) < 1.1)
+                            if (Config.Item("RoverW").GetValue<bool>() && target.IsValidTarget(W.Range) && W.GetDamage(target) > target.Health && W.Instance.Cooldown - (W.Instance.CooldownExpires - Game.Time) < 1.1)
                                 return;
 
-                            if (target.LSCountEnemiesInRange(400) > Config.Item("Raoe").GetValue<Slider>().Value)
+                            if (target.CountEnemiesInRange(400) > Config.Item("Raoe").GetValue<Slider>().Value)
                                 CastSpell(R, target);
 
-                            if (RValidRange(target) && target.LSCountAlliesInRange(Config.Item("Rover").GetValue<Slider>().Value) == 0)
+                            if (RValidRange(target) && target.CountAlliesInRange(Config.Item("Rover").GetValue<Slider>().Value) == 0)
                                 CastSpell(R, target);
                         }
                     }
@@ -351,16 +351,16 @@ using EloBuddy;
             if (Player.ManaPercent < Config.Item("EmanaCombo").GetValue<Slider>().Value)
                 return;
 
-            if (blitz != null && blitz.LSDistance(Player.Position) < E.Range)
+            if (blitz != null && blitz.Distance(Player.Position) < E.Range)
             {
-                foreach (var enemy in Enemies.Where(enemy => enemy.LSIsValidTarget(2000) && enemy.LSHasBuff("RocketGrab")))
+                foreach (var enemy in Enemies.Where(enemy => enemy.IsValidTarget(2000) && enemy.HasBuff("RocketGrab")))
                 {
-                    E.Cast(blitz.Position.LSExtend(enemy.Position, 30));
+                    E.Cast(blitz.Position.Extend(enemy.Position, 30));
                     return;
                 }
             }
 
-            foreach (var enemy in Enemies.Where(enemy => enemy.LSIsValidTarget(E.Range) ))
+            foreach (var enemy in Enemies.Where(enemy => enemy.IsValidTarget(E.Range) ))
             {
 
                 E.CastIfWillHit(enemy, Config.Item("Eaoe").GetValue<Slider>().Value);
@@ -381,7 +381,7 @@ using EloBuddy;
 
             if (Config.Item("Etel").GetValue<bool>())
             {
-                foreach (var Object in ObjectManager.Get<Obj_AI_Base>().Where(Obj => Obj.IsEnemy && Obj.LSDistance(Player.ServerPosition) < E.Range && (Obj.LSHasBuff("teleport_target", true) || Obj.LSHasBuff("Pantheon_GrandSkyfall_Jump", true))))
+                foreach (var Object in ObjectManager.Get<Obj_AI_Base>().Where(Obj => Obj.IsEnemy && Obj.Distance(Player.ServerPosition) < E.Range && (Obj.HasBuff("teleport_target", true) || Obj.HasBuff("Pantheon_GrandSkyfall_Jump", true))))
                 {
                     E.Cast(Object.Position);
                 }
@@ -390,16 +390,16 @@ using EloBuddy;
             if (Combo && Player.IsMoving && Config.Item("Ecombo").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-                if (t.LSIsValidTarget(E.Range) && E.GetPrediction(t).CastPosition.LSDistance(t.Position) > 200)
+                if (t.IsValidTarget(E.Range) && E.GetPrediction(t).CastPosition.Distance(t.Position) > 200)
                 {
-                    if (Player.Position.LSDistance(t.ServerPosition) > Player.Position.LSDistance(t.Position))
+                    if (Player.Position.Distance(t.ServerPosition) > Player.Position.Distance(t.Position))
                     {
-                        if (t.Position.LSDistance(Player.ServerPosition) < t.Position.LSDistance(Player.Position))
+                        if (t.Position.Distance(Player.ServerPosition) < t.Position.Distance(Player.Position))
                             CastSpell(E, t);
                     }
                     else
                     {
-                        if (t.Position.LSDistance(Player.ServerPosition) > t.Position.LSDistance(Player.Position))
+                        if (t.Position.Distance(Player.ServerPosition) > t.Position.Distance(Player.Position))
                             CastSpell(E, t);
                     }
                 }
@@ -412,7 +412,7 @@ using EloBuddy;
 
             if (Config.Item("Wmode").GetValue<StringList>().SelectedIndex == 0)
             {
-                if (range > GetRealPowPowRange(t) && Player.LSCountEnemiesInRange(GetRealPowPowRange(t)) == 0)
+                if (range > GetRealPowPowRange(t) && Player.CountEnemiesInRange(GetRealPowPowRange(t)) == 0)
                     return true;
                 else
                     return false;
@@ -420,14 +420,14 @@ using EloBuddy;
             }
             else if (Config.Item("Wmode").GetValue<StringList>().SelectedIndex == 1)
             {
-                if (range > Q.Range + 50 && Player.LSCountEnemiesInRange(Q.Range + 50) == 0)
+                if (range > Q.Range + 50 && Player.CountEnemiesInRange(Q.Range + 50) == 0)
                     return true;
                 else
                     return false;
             }
             else if (Config.Item("Wmode").GetValue<StringList>().SelectedIndex == 2)
             {
-                if(range > Config.Item("Wcustome").GetValue<Slider>().Value && Player.LSCountEnemiesInRange(Config.Item("Wcustome").GetValue<Slider>().Value) == 0)
+                if(range > Config.Item("Wcustome").GetValue<Slider>().Value && Player.CountEnemiesInRange(Config.Item("Wcustome").GetValue<Slider>().Value) == 0)
                     return true;
                 else
                     return false;
@@ -439,7 +439,7 @@ using EloBuddy;
         private static void Wlogic()
         {
             var t = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
-            if (t.LSIsValidTarget() && WValidRange(t))
+            if (t.IsValidTarget() && WValidRange(t))
             {
                 if (Config.Item("Wks").GetValue<bool>() && GetKsDamage(t, W) > t.Health && OktwCommon.ValidUlt(t))
                 {
@@ -459,7 +459,7 @@ using EloBuddy;
                     }
                     else
                     {
-                        foreach (var enemy in Enemies.Where(enemy => enemy.LSIsValidTarget(W.Range) && WValidRange(t) && Config.Item("haras" + enemy.ChampionName).GetValue<bool>()))
+                        foreach (var enemy in Enemies.Where(enemy => enemy.IsValidTarget(W.Range) && WValidRange(t) && Config.Item("haras" + enemy.ChampionName).GetValue<bool>()))
                             CastSpell(W, enemy);
                     }
                 }
@@ -490,15 +490,15 @@ using EloBuddy;
             else
             {
                 var t = TargetSelector.GetTarget(Q.Range + 40, TargetSelector.DamageType.Physical);
-                if (t.LSIsValidTarget())
+                if (t.IsValidTarget())
                 {
-                    if ((!SebbyLib.Orbwalking.InAutoAttackRange(t) || t.LSCountEnemiesInRange(250) >= Config.Item("Qaoe").GetValue<Slider>().Value))
+                    if ((!SebbyLib.Orbwalking.InAutoAttackRange(t) || t.CountEnemiesInRange(250) >= Config.Item("Qaoe").GetValue<Slider>().Value))
                     {
-                        if (Combo && Config.Item("Qcombo").GetValue<bool>() && (Player.ManaPercent > Config.Item("QmanaCombo").GetValue<Slider>().Value || Player.LSGetAutoAttackDamage(t) * Config.Item("QmanaIgnore").GetValue<Slider>().Value > t.Health))
+                        if (Combo && Config.Item("Qcombo").GetValue<bool>() && (Player.ManaPercent > Config.Item("QmanaCombo").GetValue<Slider>().Value || Player.GetAutoAttackDamage(t) * Config.Item("QmanaIgnore").GetValue<Slider>().Value > t.Health))
                         {
                             Q.Cast();
                         }
-                        if (Farm && SebbyLib.Orbwalking.CanAttack() && !Player.Spellbook.IsAutoAttacking && Config.Item("harasQ" + t.ChampionName).GetValue<bool>() && Config.Item("Qharass").GetValue<bool>() && (Player.ManaPercent > Config.Item("QmanaHarass").GetValue<Slider>().Value || Player.LSGetAutoAttackDamage(t) * Config.Item("QmanaIgnore").GetValue<Slider>().Value > t.Health))
+                        if (Farm && SebbyLib.Orbwalking.CanAttack() && !Player.Spellbook.IsAutoAttacking && Config.Item("harasQ" + t.ChampionName).GetValue<bool>() && Config.Item("Qharass").GetValue<bool>() && (Player.ManaPercent > Config.Item("QmanaHarass").GetValue<Slider>().Value || Player.GetAutoAttackDamage(t) * Config.Item("QmanaIgnore").GetValue<Slider>().Value > t.Health))
                         {
                             Q.Cast();
                         }
@@ -513,7 +513,7 @@ using EloBuddy;
                     else if (Farm && !Player.Spellbook.IsAutoAttacking && Config.Item("farmQout").GetValue<bool>() && SebbyLib.Orbwalking.CanAttack())
                     {
                         foreach (var minion in MinionManager.GetMinions(Q.Range + 30).Where(
-                        minion => !SebbyLib.Orbwalking.InAutoAttackRange(minion) && minion.Health < Player.LSGetAutoAttackDamage(minion) * 1.2 && GetRealPowPowRange(minion) < GetRealDistance(minion) && Q.Range < GetRealDistance(minion)))
+                        minion => !SebbyLib.Orbwalking.InAutoAttackRange(minion) && minion.Health < Player.GetAutoAttackDamage(minion) * 1.2 && GetRealPowPowRange(minion) < GetRealDistance(minion) && Q.Range < GetRealDistance(minion)))
                         {
                             Orbwalker.ForceTarget(minion);
                             Q.Cast();
@@ -547,16 +547,16 @@ using EloBuddy;
         {
             var totalDmg = QWER.GetDamage(t);
 
-            if (Player.LSHasBuff("summonerexhaust"))
+            if (Player.HasBuff("summonerexhaust"))
                 totalDmg = totalDmg * 0.6f;
 
-            if (t.LSHasBuff("ferocioushowl"))
+            if (t.HasBuff("ferocioushowl"))
                 totalDmg = totalDmg * 0.7f;
 
             if (t is AIHeroClient)
             {
                 var champion = (AIHeroClient)t;
-                if (champion.ChampionName == "Blitzcrank" && !champion.LSHasBuff("BlitzcrankManaBarrierCD") && !champion.LSHasBuff("ManaBarrier"))
+                if (champion.ChampionName == "Blitzcrank" && !champion.HasBuff("BlitzcrankManaBarrierCD") && !champion.HasBuff("ManaBarrier"))
                 {
                     totalDmg -= champion.Mana / 2f;
                 }
@@ -669,15 +669,15 @@ using EloBuddy;
         {
             var realDistance = GetRealDistance(t);
 
-            if(realDistance < GetRealPowPowRange(t) && t.LSCountEnemiesInRange(250) < Config.Item("Qaoe").GetValue<Slider>().Value)
+            if(realDistance < GetRealPowPowRange(t) && t.CountEnemiesInRange(250) < Config.Item("Qaoe").GetValue<Slider>().Value)
             {
-                if (Player.ManaPercent < Config.Item("QmanaCombo").GetValue<Slider>().Value || Player.LSGetAutoAttackDamage(t) * Config.Item("QmanaIgnore").GetValue<Slider>().Value < t.Health)
+                if (Player.ManaPercent < Config.Item("QmanaCombo").GetValue<Slider>().Value || Player.GetAutoAttackDamage(t) * Config.Item("QmanaIgnore").GetValue<Slider>().Value < t.Health)
                     Q.Cast();
 
             }
         }
 
-        private static float GetRealDistance(Obj_AI_Base target) { return Player.ServerPosition.LSDistance(target.ServerPosition) + Player.BoundingRadius + target.BoundingRadius; }
+        private static float GetRealDistance(Obj_AI_Base target) { return Player.ServerPosition.Distance(target.ServerPosition) + Player.BoundingRadius + target.BoundingRadius; }
 
         private static float GetRealPowPowRange(GameObject target) { return 650f + Player.BoundingRadius + target.BoundingRadius; }
 
@@ -694,7 +694,7 @@ using EloBuddy;
                 Config.Item("Rcustome").Show(false);
 
 
-            if (Player.LSHasBuff("JinxQ"))
+            if (Player.HasBuff("JinxQ"))
                 FishBoneActive = true;
             else
                 FishBoneActive = false;
@@ -734,7 +734,7 @@ using EloBuddy;
             {
                 if (Config.Item("onlyRdy").GetValue<bool>())
                 {
-                    if (W.LSIsReady())
+                    if (W.IsReady())
                         LeagueSharp.Common.Utility.DrawCircle(Player.Position, W.Range, System.Drawing.Color.Gray, 1, 1);
                 }
                 else
@@ -744,7 +744,7 @@ using EloBuddy;
             {
                 if (Config.Item("onlyRdy").GetValue<bool>())
                 {
-                    if (E.LSIsReady())
+                    if (E.IsReady())
                         LeagueSharp.Common.Utility.DrawCircle(Player.Position, E.Range, System.Drawing.Color.Gray, 1, 1);
                 }
                 else

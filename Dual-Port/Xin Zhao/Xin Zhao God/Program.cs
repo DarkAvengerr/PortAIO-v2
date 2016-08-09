@@ -39,7 +39,7 @@ using EloBuddy;
             E = new Spell(SpellSlot.E, 600);
             R = new Spell(SpellSlot.R, 500);
 
-            ignite = Player.LSGetSpellSlot("summonerdot");
+            ignite = Player.GetSpellSlot("summonerdot");
             youmuu = new Items.Item(3142, 0f);
             cutlass = new Items.Item(3144, 450f);
             blade = new Items.Item(3153, 450f);
@@ -110,23 +110,23 @@ using EloBuddy;
         {
             var dmg = 0d;
 
-            if (Q.LSIsReady() || Player.GetSpell(SpellSlot.Q).State == SpellState.Surpressed)
+            if (Q.IsReady() || Player.GetSpell(SpellSlot.Q).State == SpellState.Surpressed)
             {
-                dmg += Player.LSGetSpellDamage(hero, SpellSlot.Q) * 3;
+                dmg += Player.GetSpellDamage(hero, SpellSlot.Q) * 3;
                 dmg += Player.BaseAttackDamage + Player.FlatPhysicalDamageMod * 3;
             }
 
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                dmg += Player.LSGetSpellDamage(hero, SpellSlot.E);
+                dmg += Player.GetSpellDamage(hero, SpellSlot.E);
             }
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
-                dmg += Player.LSGetSpellDamage(hero, SpellSlot.R);
+                dmg += Player.GetSpellDamage(hero, SpellSlot.R);
             }
 
-            if (Player.Spellbook.CanUseSpell(Player.LSGetSpellSlot("summonerdot")) == SpellState.Ready)
+            if (Player.Spellbook.CanUseSpell(Player.GetSpellSlot("summonerdot")) == SpellState.Ready)
             {
                 dmg += Player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
             }
@@ -159,7 +159,7 @@ using EloBuddy;
             if (minions == null)
                 return;
 
-            if (Config.Item("UseELaneclear").GetValue<bool>() && E.LSIsReady())
+            if (Config.Item("UseELaneclear").GetValue<bool>() && E.IsReady())
                 E.CastOnUnit(minions);
         }
 
@@ -177,31 +177,31 @@ using EloBuddy;
             if (target == null)
                 return;
 
-            if (E.LSIsReady() && Player.LSDistance(target.ServerPosition) >= dist && eCombo && target.LSIsValidTarget(E.Range))
+            if (E.IsReady() && Player.Distance(target.ServerPosition) >= dist && eCombo && target.IsValidTarget(E.Range))
             {
                 E.Cast(target);
             }
 
-            if (R.LSIsReady() && rCombo && target.LSIsValidTarget(R.Range))
+            if (R.IsReady() && rCombo && target.IsValidTarget(R.Range))
             {
-                if (target.LSHasBuff("xenzhaointimidate"))
+                if (target.HasBuff("xenzhaointimidate"))
                 {
                     R.Cast();
                 }
             }
 
-            if (ComboDamage(target) > target.Health && R.LSIsReady() && rComboKillable && target.LSIsValidTarget(R.Range))
+            if (ComboDamage(target) > target.Health && R.IsReady() && rComboKillable && target.IsValidTarget(R.Range))
             {
-                if (target.LSHasBuff("xenzhaointimidate"))
+                if (target.HasBuff("xenzhaointimidate"))
                 {
                     R.Cast();
                 }
             }
 
-            if (R.LSIsReady() && rComboAoE)
+            if (R.IsReady() && rComboAoE)
             {
                 // xsalice :v)
-                foreach (var target1 in HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range)))
+                foreach (var target1 in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range)))
                 {
                     var poly = new Geometry.Polygon.Circle(Player.Position, R.Range);
                     var nearByEnemies = 1;
@@ -215,22 +215,22 @@ using EloBuddy;
                 }
             }
 
-            if (Player.LSDistance(target.ServerPosition) <= 600 && ComboDamage(target) >= target.Health && useIgnite)
+            if (Player.Distance(target.ServerPosition) <= 600 && ComboDamage(target) >= target.Health && useIgnite)
             {
                 Player.Spellbook.CastSpell(ignite, target);
             }
 
-            if (useItems && youmuu.IsReady() && target.LSIsValidTarget(E.Range)) 
+            if (useItems && youmuu.IsReady() && target.IsValidTarget(E.Range)) 
             {
                 youmuu.Cast();
             }
 
-            if (useItems && Player.LSDistance(target.ServerPosition) <= 450 && cutlass.IsReady())
+            if (useItems && Player.Distance(target.ServerPosition) <= 450 && cutlass.IsReady())
             {
                 cutlass.Cast(target);
             }
 
-            if (useItems && Player.LSDistance(target.ServerPosition) <= 450 && blade.IsReady())
+            if (useItems && Player.Distance(target.ServerPosition) <= 450 && blade.IsReady())
             {
                 blade.Cast(target);
             }
@@ -238,13 +238,13 @@ using EloBuddy;
 
 
 
-           //if (E.LSIsReady() && Player.LSDistance(target2.ServerPosition) > E.Range)
+           //if (E.IsReady() && Player.Distance(target2.ServerPosition) > E.Range)
             //{
                 // minion shit  
                // not sure if actually works, fuck it
                 //foreach (var minion in MinionManager.GetMinions(ObjectManager.Player.Position, E.Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.Health))
                 //{
-                    //if (target.LSDistance(minion.ServerPosition) <= 100)
+                    //if (target.Distance(minion.ServerPosition) <= 100)
                     //{
                      //   E.Cast(minion);
                     //}
@@ -262,7 +262,7 @@ using EloBuddy;
             if (target == null)
                 return;
 
-            if (E.LSIsReady() && Player.LSDistance(target.ServerPosition) >= dist && eHarass)
+            if (E.IsReady() && Player.Distance(target.ServerPosition) >= dist && eHarass)
             {
                 E.Cast(target);
             }
@@ -277,12 +277,12 @@ using EloBuddy;
             if (target == null)
                 return;
 
-            if (E.LSIsReady() && E.GetDamage(target) >= target.Health && eKS)
+            if (E.IsReady() && E.GetDamage(target) >= target.Health && eKS)
             {
                 E.Cast(target);
             }
 
-            if (R.LSIsReady() && R.GetDamage(target) >= target.Health && rKS)
+            if (R.IsReady() && R.GetDamage(target) >= target.Health && rKS)
             {
                 R.Cast(target);
             }
@@ -290,7 +290,7 @@ using EloBuddy;
 
         private static void OrbwalkingOnBeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
-            if (!W.LSIsReady()) return;
+            if (!W.IsReady()) return;
 
             if (args.Target.Type == GameObjectType.AIHeroClient && Config.Item("UseWCombo").GetValue<bool>() || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && args.Target.Type == GameObjectType.obj_AI_Minion && Config.Item("UseWLaneclear").GetValue<bool>())
             {
@@ -315,7 +315,7 @@ using EloBuddy;
             // badao
             if (!target.Name.ToLower().Contains("minion") && !target.Name.ToLower().Contains("sru") && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if (Q.LSIsReady() && qCombo)
+                if (Q.IsReady() && qCombo)
                 {
                     // chewy
                     LeagueSharp.Common.Utility.DelayAction.Add(
@@ -323,10 +323,10 @@ using EloBuddy;
                        {
                            Q.Cast();
 
-                           if (Items.CanUseItem(3074) && useItems && Player.LSDistance(target) <= 400)
+                           if (Items.CanUseItem(3074) && useItems && Player.Distance(target) <= 400)
                                Items.UseItem(3074);
 
-                           if (Items.CanUseItem(3077) && useItems && Player.LSDistance(target) <= 400)
+                           if (Items.CanUseItem(3077) && useItems && Player.Distance(target) <= 400)
                                Items.UseItem(3077);
                        });
 
@@ -337,7 +337,7 @@ using EloBuddy;
             // badao
             if (!target.Name.ToLower().Contains("minion") && !target.Name.ToLower().Contains("sru") && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                if (Q.LSIsReady() && qHarass)
+                if (Q.IsReady() && qHarass)
                 {
                     // chewy
                     LeagueSharp.Common.Utility.DelayAction.Add(
@@ -348,7 +348,7 @@ using EloBuddy;
                 }
             }
 
-            if (Config.Item("UseQLaneclear").GetValue<bool>() && target.Type == GameObjectType.obj_AI_Minion && Q.LSIsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            if (Config.Item("UseQLaneclear").GetValue<bool>() && target.Type == GameObjectType.obj_AI_Minion && Q.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
                 LeagueSharp.Common.Utility.DelayAction.Add((int)(aaDelay), () => Q.Cast());
         }
                
@@ -390,7 +390,7 @@ using EloBuddy;
             if (target == null)
                 return;
 
-            if (target.LSHasBuff("xenzhaointimidate"))
+            if (target.HasBuff("xenzhaointimidate"))
             {
                 Render.Circle.DrawCircle(target.Position, 100, challenged.Color);
             }

@@ -24,7 +24,7 @@ using EloBuddy; namespace ezEvade
 
         public static Vector3 spellStartPosition = myHero.ServerPosition;
         public static Vector3 spellEndPostion = myHero.ServerPosition
-                              + (myHero.Direction.LSTo2D().LSPerpendicular() * 500).To3D();
+                              + (myHero.Direction.To2D().Perpendicular() * 500).To3D();
 
         public static float lastSpellFireTime = 0;
 
@@ -68,9 +68,9 @@ using EloBuddy; namespace ezEvade
                 {
                     if (spell.spellType == SpellType.Line)
                     {
-                        if (spellPos.LSDistance(myHero) <= myHero.BoundingRadius + spell.radius
+                        if (spellPos.Distance(myHero) <= myHero.BoundingRadius + spell.radius
                             && EvadeUtils.TickCount - spell.startTime > spell.info.spellDelay
-                            && spell.startPos.LSDistance(myHero) < spell.info.range)
+                            && spell.startPos.Distance(myHero) < spell.info.range)
                         {
                             Draw.RenderObjects.Add(new Draw.RenderCircle(spellPos, 1000, Color.Red,
                                 (int)spell.radius, 10));
@@ -83,7 +83,7 @@ using EloBuddy; namespace ezEvade
                     }
                     else if (spell.spellType == SpellType.Circular)
                     {
-                        if (myHero.ServerPosition.LSTo2D().InSkillShot(spell, myHero.BoundingRadius))
+                        if (myHero.ServerPosition.To2D().InSkillShot(spell, myHero.BoundingRadius))
                         {
 
                         }
@@ -120,7 +120,7 @@ using EloBuddy; namespace ezEvade
             e.Process = false;
 
             spellEndPostion = myHero.ServerPosition;
-            Draw.RenderObjects.Add(new Draw.RenderCircle(spellEndPostion.LSTo2D(), 1000, Color.Red, 100, 20));
+            Draw.RenderObjects.Add(new Draw.RenderCircle(spellEndPostion.To2D(), 1000, Color.Red, 100, 20));
         }
 
         private void OnSpellStartChange(object sender, OnValueChangeEventArgs e)
@@ -128,7 +128,7 @@ using EloBuddy; namespace ezEvade
             e.Process = false;
 
             spellStartPosition = myHero.ServerPosition;
-            Draw.RenderObjects.Add(new Draw.RenderCircle(spellStartPosition.LSTo2D(), 1000, Color.Red, 100, 20));
+            Draw.RenderObjects.Add(new Draw.RenderCircle(spellStartPosition.To2D(), 1000, Color.Red, 100, 20));
         }
 
         private void LoadSpellDictionary()

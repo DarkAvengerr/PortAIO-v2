@@ -55,14 +55,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.CastIfHitchanceEquals(target,HitChance.VeryHigh);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             W.Cast();
             Aggresivity.addAgresiveMove(new AgresiveMove(55, 6000));
@@ -70,7 +70,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.CastOnUnit(target);
         }
@@ -78,7 +78,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             if (player.HealthPercent < 65)
             {
@@ -106,7 +106,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             DeathWalker.CustomOrbwalkMode = false;
             if (olafAxe == null)
                 return;
-            if (!safeGap(olafAxe.Position.LSTo2D()))
+            if (!safeGap(olafAxe.Position.To2D()))
                 return;
             DeathWalker.CustomOrbwalkMode = true;
             DeathWalker.deathWalkTarget(olafAxe.Position,DeathWalker.getBestTarget());

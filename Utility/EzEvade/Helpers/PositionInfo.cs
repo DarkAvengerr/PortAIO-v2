@@ -66,7 +66,7 @@ using EloBuddy; namespace ezEvade
 
         public static PositionInfo SetAllDodgeable()
         {
-            return SetAllDodgeable(myHero.Position.LSTo2D());
+            return SetAllDodgeable(myHero.Position.To2D());
         }
 
         public static PositionInfo SetAllDodgeable(Vector2 position)
@@ -110,7 +110,7 @@ using EloBuddy; namespace ezEvade
             }
 
             return new PositionInfo(
-                myHero.Position.LSTo2D(),
+                myHero.Position.To2D(),
                 posDangerLevel,
                 posDangerCount,
                 true,
@@ -155,7 +155,7 @@ using EloBuddy; namespace ezEvade
             var path = myHero.Path;
             if (path.Length > 0)
             {
-                var movePos = path[path.Length - 1].LSTo2D();
+                var movePos = path[path.Length - 1].To2D();
                 posInfo = EvadeHelper.CanHeroWalkToPos(movePos, ObjectCache.myHeroCache.moveSpeed, 0, 0, false);
             }
             else
@@ -177,7 +177,7 @@ using EloBuddy; namespace ezEvade
             var path = myHero.Path;
             if (path.Length > 0)
             {
-                var movePos = path[path.Length - 1].LSTo2D();
+                var movePos = path[path.Length - 1].To2D();
                 posInfo = EvadeHelper.CanHeroWalkToPos(movePos, ObjectCache.myHeroCache.moveSpeed, 0, 0, false);
             }
             else

@@ -68,7 +68,7 @@ using EloBuddy;
             get
             {
                 var firstOrDefault = SyndraOrb
-                    .FirstOrDefault(x => x.Value.Position.LSTo2D().LSDistance(Player.Position.LSTo2D()) <= 950);
+                    .FirstOrDefault(x => x.Value.Position.To2D().Distance(Player.Position.To2D()) <= 950);
                 return firstOrDefault !=
                        null ? firstOrDefault.Value : null;
             }
@@ -79,7 +79,7 @@ using EloBuddy;
             {
                 var firstOrDefault =  ObjectManager.Get<Obj_AI_Minion>()
                         .FirstOrDefault(
-                            x => x.IsEnemy && x.IsValid && x.Position.LSTo2D().LSDistance(Player.Position.LSTo2D()) <= 950);
+                            x => x.IsEnemy && x.IsValid && x.Position.To2D().Distance(Player.Position.To2D()) <= 950);
                 return firstOrDefault;
             }
         }
@@ -90,23 +90,23 @@ using EloBuddy;
                 if (Wobject() == null)
                 {
                     return
-                        SyndraOrb.Where(x => x.Value.Position.LSTo2D().LSDistance(Player.Position.LSTo2D()) <= 700)
+                        SyndraOrb.Where(x => x.Value.Position.To2D().Distance(Player.Position.To2D()) <= 700)
                             .Select(
                                 x =>
                                     new LineEQs(x.Value,
-                                        Player.Position.LSTo2D().LSExtend(x.Value.Position.LSTo2D(), 1100)))
+                                        Player.Position.To2D().Extend(x.Value.Position.To2D(), 1100)))
                             .ToList();
                 }
                 {
                     return
                         SyndraOrb.Where(
                             x =>
-                                x.Value.Position.LSTo2D().LSDistance(Wobject().Position.LSTo2D()) >= 20 &&
-                                x.Value.Position.LSTo2D().LSDistance(Player.Position.LSTo2D()) <= 700)
+                                x.Value.Position.To2D().Distance(Wobject().Position.To2D()) >= 20 &&
+                                x.Value.Position.To2D().Distance(Player.Position.To2D()) <= 700)
                             .Select(
                                 x =>
                                     new LineEQs(x.Value,
-                                        Player.Position.LSTo2D().LSExtend(x.Value.Position.LSTo2D(), 1100)))
+                                        Player.Position.To2D().Extend(x.Value.Position.To2D(), 1100)))
                             .ToList();
                 }
             }
@@ -117,11 +117,11 @@ using EloBuddy;
             get
             {
                 return (from orb in LineEQ
-                        from target in HeroManager.Enemies.Where(a => a.LSIsValidTarget())
+                        from target in HeroManager.Enemies.Where(a => a.IsValidTarget())
                         where
-                            Prediction.GetPrediction(target, Player.LSDistance(target) / 1600)
-                                .UnitPosition.LSTo2D()
-                                .LSDistance(orb.Key.Position.LSTo2D().LSExtend(orb.Value, -200), orb.Value, true) <=
+                            Prediction.GetPrediction(target, Player.Distance(target) / 1600)
+                                .UnitPosition.To2D()
+                                .Distance(orb.Key.Position.To2D().Extend(orb.Value, -200), orb.Value, true) <=
                             target.BoundingRadius + 70
                         select new StunableOrbs(target, orb.Key)).ToList();
             }
@@ -131,7 +131,7 @@ using EloBuddy;
         {
             var pred = E.GetPrediction(target);
             if (pred.Hitchance < HitChance.OutOfRange) return false;
-            return Player.Position.LSTo2D().LSDistance(pred.CastPosition) <= 1200;
+            return Player.Position.To2D().Distance(pred.CastPosition) <= 1200;
         }
 
         private static Vector2 PositionEQtarget(AIHeroClient target)
@@ -139,10 +139,10 @@ using EloBuddy;
             var pred1 = E.GetPrediction(target);
             var pred2 = Q.GetPrediction(target);
             if (pred2.Hitchance >= HitChance.Medium &&
-                pred2.UnitPosition.LSTo2D().LSDistance(Player.Position.LSTo2D()) <= E.Range)
-                return pred2.UnitPosition.LSTo2D();
+                pred2.UnitPosition.To2D().Distance(Player.Position.To2D()) <= E.Range)
+                return pred2.UnitPosition.To2D();
             return pred1.Hitchance >= HitChance.OutOfRange
-                ? Player.Position.LSTo2D().LSExtend(pred1.UnitPosition.LSTo2D(), E.Range)
+                ? Player.Position.To2D().Extend(pred1.UnitPosition.To2D(), E.Range)
                 : new Vector2();
         }
 
@@ -177,14 +177,14 @@ using EloBuddy;
             float x = 0;
             if (Player.Mana > Q.Instance.SData.Mana)
             {
-                if (Q.LSIsReady()) x += Qdamage(target);
+                if (Q.IsReady()) x += Qdamage(target);
                 if (Player.Mana > Q.Instance.SData.Mana)
                 {
                     if (Player.Mana > Q.Instance.SData.Mana + E.Instance.SData.Mana)
                     {
-                        if (E.LSIsReady()) x += Edamage(target);
+                        if (E.IsReady()) x += Edamage(target);
                         if (Player.Mana > Q.Instance.SData.Mana + E.Instance.SData.Mana + W.Instance.SData.Mana)
-                            if (W.LSIsReady()) x += Wdamage(target);
+                            if (W.IsReady()) x += Wdamage(target);
                     }
                 }
 
@@ -200,15 +200,15 @@ using EloBuddy;
             float x = 0;
             if (Player.Mana > Q.Instance.SData.Mana)
             {
-                if (Q.LSIsReady()) x += Qdamage(target);
+                if (Q.IsReady()) x += Qdamage(target);
                 if (Player.Mana > Q.Instance.SData.Mana + R.Instance.SData.Mana)
                 {
-                    if (R.LSIsReady()) x += Rdamage(target) * (SyndraOrb.Count + 1);
+                    if (R.IsReady()) x += Rdamage(target) * (SyndraOrb.Count + 1);
                     if (Player.Mana > Q.Instance.SData.Mana + R.Instance.SData.Mana + E.Instance.SData.Mana)
                     {
-                        if (E.LSIsReady()) x += Edamage(target);
+                        if (E.IsReady()) x += Edamage(target);
                         if (Player.Mana > Q.Instance.SData.Mana + R.Instance.SData.Mana + E.Instance.SData.Mana + W.Instance.SData.Mana)
-                            if (W.LSIsReady()) x += Wdamage(target);
+                            if (W.IsReady()) x += Wdamage(target);
                     }
                 }
 
@@ -217,7 +217,7 @@ using EloBuddy;
             {
                 x = x + (float)Player.CalcDamage(target, Damage.DamageType.Magical, 100 + 0.1 * Player.FlatMagicDamageMod);
             }
-            x = x + (float)Player.LSGetAutoAttackDamage(target, true);
+            x = x + (float)Player.GetAutoAttackDamage(target, true);
             return x;
         }
         public Syndra()
@@ -347,11 +347,11 @@ using EloBuddy;
             }
             if (!(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed || autoq)) return;
             if (sender is AIHeroClient && sender.IsEnemy &&
-                (args.SData.LSIsAutoAttack() || !args.SData.CanMoveWhileChanneling) &&
-                sender.LSIsValidTarget(Q.Range))
+                (args.SData.IsAutoAttack() || !args.SData.CanMoveWhileChanneling) &&
+                sender.IsValidTarget(Q.Range))
             {
-                if (Q.LSIsReady())
-                    Q.Cast(Q.GetPrediction(sender).UnitPosition.LSTo2D());
+                if (Q.IsReady())
+                    Q.Cast(Q.GetPrediction(sender).UnitPosition.To2D());
             }
         }
 
@@ -374,9 +374,9 @@ using EloBuddy;
         {
             if (!helperenable) return;
             if (!helperqe) return;
-            if (Player.Mana <= Q.Instance.SData.Mana + E.Instance.SData.Mana || !(Q.LSIsReady() && E.LSIsReady())) return;
-            Q.Cast(Player.Position.LSExtend(Game.CursorPos, E.Range - 200));
-            LeagueSharp.Common.Utility.DelayAction.Add(250, () => E.Cast(Player.Position.LSExtend(Game.CursorPos, E.Range - 200)));
+            if (Player.Mana <= Q.Instance.SData.Mana + E.Instance.SData.Mana || !(Q.IsReady() && E.IsReady())) return;
+            Q.Cast(Player.Position.Extend(Game.CursorPos, E.Range - 200));
+            LeagueSharp.Common.Utility.DelayAction.Add(250, () => E.Cast(Player.Position.Extend(Game.CursorPos, E.Range - 200)));
         }
         private void Obj_AI_Base_OnLevelUp(Obj_AI_Base sender, EventArgs args)
         {
@@ -397,24 +397,24 @@ using EloBuddy;
             }
             if (!(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed || autoq)) return;
             if (sender is AIHeroClient && sender.IsEnemy &&
-                (args.SData.LSIsAutoAttack() || !args.SData.CanMoveWhileChanneling) &&
-                sender.LSIsValidTarget(Q.Range))
+                (args.SData.IsAutoAttack() || !args.SData.CanMoveWhileChanneling) &&
+                sender.IsValidTarget(Q.Range))
             {
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                     Q.Cast(sender);
             }
         }
         private void InterruptableSpell_OnInterruptableTarget(Obj_AI_Base Sender, Interrupter2.InterruptableTargetEventArgs args)
         {
             if (!Enable) return;
-            if (Sender.IsEnemy && E.LSIsReady() && autogapinter)
+            if (Sender.IsEnemy && E.IsReady() && autogapinter)
             {
-                if (Sender.LSIsValidTarget(E.Range)) E.Cast(Sender.Position);
+                if (Sender.IsValidTarget(E.Range)) E.Cast(Sender.Position);
                 if (StunAbleOrb.Any())
                 {
                     var i = StunAbleOrb.First(x => x.Key.NetworkId == Sender.NetworkId);
                     if (i.Value != null)
-                        E.Cast(i.Value.Position.LSTo2D());
+                        E.Cast(i.Value.Position.To2D());
                 }
             }
         }
@@ -422,46 +422,46 @@ using EloBuddy;
         private void Gapcloser_OnGapCloser(ActiveGapcloser gapcloser)
         {
             if (!Enable) return;
-            if (gapcloser.Sender.IsEnemy && E.LSIsReady() && autogapinter)
+            if (gapcloser.Sender.IsEnemy && E.IsReady() && autogapinter)
             {
-                if (gapcloser.Sender.LSIsValidTarget(E.Range)) E.Cast(gapcloser.Sender.Position);
+                if (gapcloser.Sender.IsValidTarget(E.Range)) E.Cast(gapcloser.Sender.Position);
                 if (StunAbleOrb.Any())
                 {
                     var i = StunAbleOrb.First(x => x.Key.NetworkId == gapcloser.Sender.NetworkId);
                     if (i.Value != null)
-                        E.Cast(i.Value.Position.LSTo2D());
+                        E.Cast(i.Value.Position.To2D());
                 }
             }
         }
         private static void killsteal()
         {
             // killstealQ
-            if (Q.LSIsReady() && Utils.GameTimeTickCount >= spellcount + 1000)
+            if (Q.IsReady() && Utils.GameTimeTickCount >= spellcount + 1000)
             {
                 foreach (
                     var target in
                         HeroManager.Enemies.Where(
-                            x => x.LSIsValidTarget(Q.Range) && !x.IsZombie && Qdamage(x) > x.Health))
+                            x => x.IsValidTarget(Q.Range) && !x.IsZombie && Qdamage(x) > x.Health))
                 {
                     if (Q.Cast(target) == Spell.CastStates.SuccessfullyCasted)
                         spellcount = Utils.GameTimeTickCount;
                 }
             }
             // killstealW
-            if (W.LSIsReady() && Utils.GameTimeTickCount >= spellcount + 1000)
+            if (W.IsReady() && Utils.GameTimeTickCount >= spellcount + 1000)
             {
                 foreach (
                     var target in
                         HeroManager.Enemies.Where(
-                            x => x.LSIsValidTarget(W.Range) && !x.IsZombie && Wdamage(x) > x.Health))
+                            x => x.IsValidTarget(W.Range) && !x.IsZombie && Wdamage(x) > x.Health))
                 {
                     if (W.Instance.Name == "SyndraW")
                     {
                         if (PickableOrb != null || PickableMinion != null)
                         {
                             W.Cast(PickableOrb != null
-                                ? PickableOrb.Position.LSTo2D()
-                                : PickableMinion.Position.LSTo2D());
+                                ? PickableOrb.Position.To2D()
+                                : PickableMinion.Position.To2D());
                         }
                         LeagueSharp.Common.Utility.DelayAction.Add(500, () =>
                         {
@@ -482,24 +482,24 @@ using EloBuddy;
                 }
             }
             //killstealE
-            if (E.LSIsReady() && Utils.GameTimeTickCount >= spellcount + 1000)
+            if (E.IsReady() && Utils.GameTimeTickCount >= spellcount + 1000)
             {
                 foreach (
                     var target in
                         HeroManager.Enemies.Where(
-                            x => x.LSIsValidTarget(E.Range) && !x.IsZombie && Edamage(x) > x.Health))
+                            x => x.IsValidTarget(E.Range) && !x.IsZombie && Edamage(x) > x.Health))
                 {
                     E.Cast(target.Position);
                     spellcount = Utils.GameTimeTickCount;
                 }
             }
             //killstealQW
-            if (Q.LSIsReady() && W.LSIsReady() && Utils.GameTimeTickCount >= spellcount + 1000)
+            if (Q.IsReady() && W.IsReady() && Utils.GameTimeTickCount >= spellcount + 1000)
             {
                 foreach (
                     var target in
                         HeroManager.Enemies.Where(
-                            x => x.LSIsValidTarget(Q.Range) && !x.IsZombie && Qdamage(x) + Wdamage(x) > x.Health))
+                            x => x.IsValidTarget(Q.Range) && !x.IsZombie && Qdamage(x) + Wdamage(x) > x.Health))
                 {
                     if (Q.Cast(target) == Spell.CastStates.SuccessfullyCasted)
                     {
@@ -508,8 +508,8 @@ using EloBuddy;
                             if (PickableOrb != null || PickableMinion != null)
                             {
                                 LeagueSharp.Common.Utility.DelayAction.Add(250, () => W.Cast(PickableOrb != null
-                                    ? PickableOrb.Position.LSTo2D()
-                                    : PickableMinion.Position.LSTo2D()));
+                                    ? PickableOrb.Position.To2D()
+                                    : PickableMinion.Position.To2D()));
                             }
                             LeagueSharp.Common.Utility.DelayAction.Add(750, () =>
                             {
@@ -531,12 +531,12 @@ using EloBuddy;
                 }
             }
             //killstealR
-            if (R.LSIsReady() && Utils.GameTimeTickCount >= spellcount + 1000)
+            if (R.IsReady() && Utils.GameTimeTickCount >= spellcount + 1000)
             {
                 foreach (
                     var target in
                         HeroManager.Enemies.Where(
-                            x => castRtarget(x) && x.LSIsValidTarget(W.Range) && !x.IsZombie && Rdamage(x) * SyndraOrb.Count > x.Health))
+                            x => castRtarget(x) && x.IsValidTarget(W.Range) && !x.IsZombie && Rdamage(x) * SyndraOrb.Count > x.Health))
                 {
                     if (R.Cast(target) == Spell.CastStates.SuccessfullyCasted)
                         spellcount = Utils.GameTimeTickCount;
@@ -549,16 +549,16 @@ using EloBuddy;
             if (Utils.GameTimeTickCount > ecount)
             {
 
-                if (Q.LSIsReady() && harassq)
+                if (Q.IsReady() && harassq)
                 {
                     var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-                    if (target.LSIsValidTarget() && !target.IsZombie)
+                    if (target.IsValidTarget() && !target.IsZombie)
                     {
                         if (Q.Cast(target) == Spell.CastStates.SuccessfullyCasted)
                             ecount = Utils.GameTimeTickCount + 100;
                     }
                 }
-                if (E.LSIsReady() && StunAbleOrb.Any() && Utils.GameTimeTickCount >= wcount + 500 && harassE)
+                if (E.IsReady() && StunAbleOrb.Any() && Utils.GameTimeTickCount >= wcount + 500 && harassE)
                 {
                     var targetE = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
                     var Orb = StunAbleOrb.Any(x => x.Key == targetE)
@@ -566,14 +566,14 @@ using EloBuddy;
                         : StunAbleOrb.First().Value;
                     if (Orb != null)
                     {
-                        if (E.Cast(Orb.Position.LSTo2D()))
+                        if (E.Cast(Orb.Position.To2D()))
                             ecount = Utils.GameTimeTickCount + 100;
                     }
                 }
                 if (W.Instance.Name != "SyndraW" && harassw)
                 {
                     var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-                    if (target.LSIsValidTarget() && !target.IsZombie)
+                    if (target.IsValidTarget() && !target.IsZombie)
                     {
                         if (Wobject() != null && Utils.GameTimeTickCount >= w1cast + 250)
                         {
@@ -582,10 +582,10 @@ using EloBuddy;
                         }
                     }
                 }
-                if (W.LSIsReady() && Utils.GameTimeTickCount >= ecount + 500 && harassw)
+                if (W.IsReady() && Utils.GameTimeTickCount >= ecount + 500 && harassw)
                 {
                     var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-                    if (target.LSIsValidTarget() && !target.IsZombie)
+                    if (target.IsValidTarget() && !target.IsZombie)
                     {
                         if (W.Instance.Name != "SyndraW")
                         {
@@ -601,8 +601,8 @@ using EloBuddy;
                             if (PickableOrb != null || PickableMinion != null)
                             {
                                 if (W.Cast(PickableOrb != null
-                                    ? PickableOrb.Position.LSTo2D()
-                                    : PickableMinion.Position.LSTo2D()))
+                                    ? PickableOrb.Position.To2D()
+                                    : PickableMinion.Position.To2D()))
                                 {
                                     wcount = Utils.GameTimeTickCount + 100;
                                     ecount = Utils.GameTimeTickCount + 100;
@@ -617,13 +617,13 @@ using EloBuddy;
         private static void Combo()
         {
             // Use R
-            if (R.LSIsReady() && combor)
+            if (R.IsReady() && combor)
             {
                 foreach (
                     var target in
                         HeroManager.Enemies.Where(
                             x =>
-                                castRtarget(x) && x.LSIsValidTarget(W.Range) && !x.IsZombie && SyndraHalfDamage(x) < x.Health &&
+                                castRtarget(x) && x.IsValidTarget(W.Range) && !x.IsZombie && SyndraHalfDamage(x) < x.Health &&
                                 SyndraDamage(x) > x.Health))
                 {
                     R.Cast(target);
@@ -636,15 +636,15 @@ using EloBuddy;
             if (Utils.GameTimeTickCount > ecount)
             {
                 {
-                    if (R.LSIsReady() && E.LSIsReady() && combor && comboe)
+                    if (R.IsReady() && E.IsReady() && combor && comboe)
                     {
                         var target =
-                            HeroManager.Enemies.Where(x => castRtarget(x) && x.LSIsValidTarget() && !x.IsZombie)
-                                .OrderByDescending(x => x.LSDistance(Player.Position))
+                            HeroManager.Enemies.Where(x => castRtarget(x) && x.IsValidTarget() && !x.IsZombie)
+                                .OrderByDescending(x => x.Distance(Player.Position))
                                 .LastOrDefault();
-                        if (target.LSIsValidTarget(R.Range) && !target.IsZombie)
+                        if (target.IsValidTarget(R.Range) && !target.IsZombie)
                         {
-                            var count = target.LSCountEnemiesInRange(400);
+                            var count = target.CountEnemiesInRange(400);
                             if (count >= 3)
                             {
                                 R.Cast(target);
@@ -657,21 +657,21 @@ using EloBuddy;
                     }
                 }
                 {
-                    if (Q.LSIsReady() && comboq)
+                    if (Q.IsReady() && comboq)
                     {
                         var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-                        if (target.LSIsValidTarget() && !target.IsZombie)
+                        if (target.IsValidTarget() && !target.IsZombie)
                         {
                             var x = Q.GetPrediction(target).CastPosition;
-                            if (Q.Cast(target) == Spell.CastStates.SuccessfullyCasted && E.LSIsReady()
-                                && x.LSDistance(Player.Position) <= E.Range - 100 && comboe)
+                            if (Q.Cast(target) == Spell.CastStates.SuccessfullyCasted && E.IsReady()
+                                && x.Distance(Player.Position) <= E.Range - 100 && comboe)
                             {
                                 LeagueSharp.Common.Utility.DelayAction.Add(250, () => E.Cast(x));
                                 ecount = Utils.GameTimeTickCount + 350;
                             }
                         }
                     }
-                    if (E.LSIsReady() && StunAbleOrb.Any() && Utils.GameTimeTickCount >= wcount + 500 && comboe)
+                    if (E.IsReady() && StunAbleOrb.Any() && Utils.GameTimeTickCount >= wcount + 500 && comboe)
                     {
                         var targetE = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
                         var Orb = StunAbleOrb.Any(x => x.Key == targetE)
@@ -679,14 +679,14 @@ using EloBuddy;
                             : StunAbleOrb.First().Value;
                         if (Orb != null)
                         {
-                            if(E.Cast(Orb.Position.LSTo2D()))
+                            if(E.Cast(Orb.Position.To2D()))
                                 ecount = Utils.GameTimeTickCount + 100;
                         }
                     }
                     if (W.Instance.Name != "SyndraW" && combow)
                     {
                         var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-                        if (target.LSIsValidTarget() && !target.IsZombie)
+                        if (target.IsValidTarget() && !target.IsZombie)
                         {
                             if (Wobject() != null && Utils.GameTimeTickCount >= w1cast + 250)
                             {
@@ -695,10 +695,10 @@ using EloBuddy;
                             }
                         }
                     }
-                    if (W.LSIsReady() && Utils.GameTimeTickCount >= ecount + 500 && combow)
+                    if (W.IsReady() && Utils.GameTimeTickCount >= ecount + 500 && combow)
                     {
                         var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-                        if (target.LSIsValidTarget() && !target.IsZombie)
+                        if (target.IsValidTarget() && !target.IsZombie)
                         {
                             if (W.Instance.Name != "SyndraW")
                             {
@@ -714,8 +714,8 @@ using EloBuddy;
                                 if (PickableOrb != null || PickableMinion != null)
                                 {
                                     W.Cast(PickableOrb != null
-                                        ? PickableOrb.Position.LSTo2D()
-                                        : PickableMinion.Position.LSTo2D());
+                                        ? PickableOrb.Position.To2D()
+                                        : PickableMinion.Position.To2D());
                                     wcount = Utils.GameTimeTickCount + 100;
                                     ecount = Utils.GameTimeTickCount + 100;
                                 }
@@ -723,21 +723,21 @@ using EloBuddy;
                         }
                     }
 
-                    if (Utils.GameTimeTickCount > ecount && E.LSIsReady() && Q.LSIsReady() &&
+                    if (Utils.GameTimeTickCount > ecount && E.IsReady() && Q.IsReady() &&
                         Utils.GameTimeTickCount >= wcount + 500 && comboqe &&
                         Player.Mana >= E.Instance.SData.Mana + Q.Instance.SData.Mana)
                     {
                         var target =
                             HeroManager.Enemies.FirstOrDefault(
-                                x => x.LSIsValidTarget() && !x.IsZombie && CanEQtarget(x));
-                        if (target.LSIsValidTarget() && !target.IsZombie)
+                                x => x.IsValidTarget() && !x.IsZombie && CanEQtarget(x));
+                        if (target.IsValidTarget() && !target.IsZombie)
                         {
                             var pos = PositionEQtarget(target);
-                            if (pos.LSIsValid())
+                            if (pos.IsValid())
                             {
                                 if (Q.Cast(pos))
                                 {
-                                    if (pos.LSDistance(Player.Position.LSTo2D()) < E.Range - 200)
+                                    if (pos.Distance(Player.Position.To2D()) < E.Range - 200)
                                     {
                                         LeagueSharp.Common.Utility.DelayAction.Add(250, () => E.Cast(pos));
                                         ecount = Utils.GameTimeTickCount + 350;
@@ -761,7 +761,7 @@ using EloBuddy;
             //Chat.Print(sender.Name + " " + sender.Type);
             if (sender.Name.Contains("Syndra_Base_Q_idle.troy") || sender.Name.Contains("Syndra_Base_Q_Lv5_idle.troy"))
             {
-                if (seed.Any(x => x.Position.LSTo2D().LSDistance(sender.Position.LSTo2D()) <= 20))
+                if (seed.Any(x => x.Position.To2D().Distance(sender.Position.To2D()) <= 20))
                 {
                     //foreach (var x in SyndraOrb.Where(x => x.Key == sender.NetworkId))
                     //{
@@ -778,7 +778,7 @@ using EloBuddy;
             //Chat.Print(sender.Name + " " + sender.Type);
             if (sender.Name.Contains("Syndra_Base_Q_idle.troy") || sender.Name.Contains("Syndra_Base_Q_Lv5_idle.troy"))
             {
-                if (seed.Any(x => x.Position.LSTo2D().LSDistance(sender.Position.LSTo2D()) <= 20))
+                if (seed.Any(x => x.Position.To2D().Distance(sender.Position.To2D()) <= 20))
                 {
                     SyndraOrb.Add(new SyndraOrbs(sender.NetworkId, sender));
                 }

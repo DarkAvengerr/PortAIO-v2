@@ -18,7 +18,7 @@ using EloBuddy;
         {
             if (ObjectManager.Player.ManaPercent < Config.GetSliderValue("manaToW")
                 || ObjectManager.Player.HealthPercent < Config.GetSliderValue("playerHpToW")
-                || ObjectManager.Player.LSIsRecalling())
+                || ObjectManager.Player.IsRecalling())
             {
                 return;
             }
@@ -26,8 +26,8 @@ using EloBuddy;
             var validAlliesInRange =
                 HeroManager.Allies.Where(
                     ally =>
-                    !ally.IsMe && !ally.IsDead && !ally.IsZombie && ally.IsHPBarRendered && !ally.LSInShop()
-                    && ally.LSDistance(ObjectManager.Player) <= Spells.W.Range && !ally.LSIsRecalling()
+                    !ally.IsMe && !ally.IsDead && !ally.IsZombie && ally.IsHPBarRendered && !ally.InShop()
+                    && ally.Distance(ObjectManager.Player) <= Spells.W.Range && !ally.IsRecalling()
                     && Config.IsChecked("autoW_" + ally.ChampionName)).ToList();
             if (!validAlliesInRange.Any())
             {
@@ -35,7 +35,7 @@ using EloBuddy;
             }
 
             IEnumerable<AIHeroClient> alliesToConsider;
-            if (ObjectManager.Player.LSHasBuff("SorakaQRegen"))
+            if (ObjectManager.Player.HasBuff("SorakaQRegen"))
             {
                 alliesToConsider =
                     validAlliesInRange.Where(
@@ -76,7 +76,7 @@ using EloBuddy;
                     break;
                 case 4:
                     allyToHeal =
-                        alliesToConsider.OrderBy(x => x.LSDistance(ObjectManager.Player)).ThenBy(x => x.Health).First();
+                        alliesToConsider.OrderBy(x => x.Distance(ObjectManager.Player)).ThenBy(x => x.Health).First();
                     break;
                 case 5:
                     allyToHeal =

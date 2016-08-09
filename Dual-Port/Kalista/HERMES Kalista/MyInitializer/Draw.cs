@@ -34,7 +34,7 @@ using EloBuddy;
                 CustomDamageIndicator.DrawingColor = Color.LightGreen;
 
                     foreach (var source in
-                        HeroManager.Enemies.Where(x => ObjectManager.Player.LSDistance(x) <= 2000f && !x.IsDead))
+                        HeroManager.Enemies.Where(x => ObjectManager.Player.Distance(x) <= 2000f && !x.IsDead))
                     {
                         var currentPercentage = GetRealDamage(source) * 100 / source.Health;
 
@@ -51,7 +51,7 @@ using EloBuddy;
 
         public static float GetRealDamage(AIHeroClient target)
         {
-            if (target.LSHasBuff("ferocioushowl"))
+            if (target.HasBuff("ferocioushowl"))
             {
                 return Program.E.GetDamage(target) * 0.7f;
             }

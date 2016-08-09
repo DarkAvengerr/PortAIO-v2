@@ -91,10 +91,10 @@ namespace SAutoCarry.Champions
 
             foreach (var enemy in HeroManager.Enemies)
             {
-                if (enemy.LSIsValidTarget(Spells[W].Range - 150) && enemy.IsImmobilized() && autoW)
+                if (enemy.IsValidTarget(Spells[W].Range - 150) && enemy.IsImmobilized() && autoW)
                     Spells[W].Cast(enemy.ServerPosition);
 
-                if (enemy.LSIsValidTarget(Spells[R].Range) && autoR && !ConfigMenu.Item("SAutoCarry.Veigar.AutoR.DontUlt" + enemy.ChampionName).GetValue<bool>())
+                if (enemy.IsValidTarget(Spells[R].Range) && autoR && !ConfigMenu.Item("SAutoCarry.Veigar.AutoR.DontUlt" + enemy.ChampionName).GetValue<bool>())
                 {
                     if (CalculateDamageR(enemy) >= enemy.Health)
                         Spells[R].CastOnUnit(enemy);
@@ -108,7 +108,7 @@ namespace SAutoCarry.Champions
         public void Combo()
         {
             bool waitforE = false;
-            if (Spells[E].LSIsReady() && ConfigMenu.Item("SAutoCarry.Veigar.Combo.UseE").GetValue<bool>())
+            if (Spells[E].IsReady() && ConfigMenu.Item("SAutoCarry.Veigar.Combo.UseE").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(1000, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
@@ -118,21 +118,21 @@ namespace SAutoCarry.Champions
                 }
             }
 
-            if (Spells[W].LSIsReady() && ConfigMenu.Item("SAutoCarry.Veigar.Combo.UseW").GetValue<bool>() && !waitforE)
+            if (Spells[W].IsReady() && ConfigMenu.Item("SAutoCarry.Veigar.Combo.UseW").GetValue<bool>() && !waitforE)
             {
                 var t = TargetSelector.GetTarget(Spells[W].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
                     Spells[W].SPredictionCast(t, HitChance.High);
             }
 
-            if (Spells[R].LSIsReady() && ConfigMenu.Item("SAutoCarry.Veigar.Combo.UseR").GetValue<bool>())
+            if (Spells[R].IsReady() && ConfigMenu.Item("SAutoCarry.Veigar.Combo.UseR").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(Spells[R].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null && CalculateComboDamage(t, 4) >= t.Health)
                     Spells[R].CastOnUnit(t);
             }
 
-            if (Spells[Q].LSIsReady() && ConfigMenu.Item("SAutoCarry.Veigar.Combo.UseQ").GetValue<bool>())
+            if (Spells[Q].IsReady() && ConfigMenu.Item("SAutoCarry.Veigar.Combo.UseQ").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
@@ -147,7 +147,7 @@ namespace SAutoCarry.Champions
 
             bool waitforE = false;
 
-            if (Spells[E].LSIsReady() && ConfigMenu.Item("SAutoCarry.Veigar.Harass.UseE").GetValue<bool>())
+            if (Spells[E].IsReady() && ConfigMenu.Item("SAutoCarry.Veigar.Harass.UseE").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(1000, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
@@ -157,14 +157,14 @@ namespace SAutoCarry.Champions
                 }
             }
 
-            if (Spells[W].LSIsReady() && ConfigMenu.Item("SAutoCarry.Veigar.Harass.UseW").GetValue<bool>() && !waitforE)
+            if (Spells[W].IsReady() && ConfigMenu.Item("SAutoCarry.Veigar.Harass.UseW").GetValue<bool>() && !waitforE)
             {
                 var t = TargetSelector.GetTarget(Spells[W].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
                     Spells[W].SPredictionCast(t, HitChance.High);
             }
 
-            if (Spells[Q].LSIsReady() && ConfigMenu.Item("SAutoCarry.Veigar.Harass.UseQ").GetValue<bool>())
+            if (Spells[Q].IsReady() && ConfigMenu.Item("SAutoCarry.Veigar.Harass.UseQ").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
@@ -182,7 +182,7 @@ namespace SAutoCarry.Champions
 
             if (ConfigMenu.Item("SAutoCarry.Veigar.LaneClear.UseW").GetValue<bool>())
             {
-                var farmLocation = MinionManager.GetBestCircularFarmLocation(MinionManager.GetMinions(Spells[W].Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).Select(q => q.ServerPosition.LSTo2D()).ToList(), Spells[W].Width, Spells[W].Range);
+                var farmLocation = MinionManager.GetBestCircularFarmLocation(MinionManager.GetMinions(Spells[W].Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).Select(q => q.ServerPosition.To2D()).ToList(), Spells[W].Width, Spells[W].Range);
                 if (farmLocation.MinionsHit >= ConfigMenu.Item("SAutoCarry.Veigar.LaneClear.MinW").GetValue<Slider>().Value)
                     Spells[W].Cast(farmLocation.Position);
             }
@@ -190,9 +190,9 @@ namespace SAutoCarry.Champions
 
         private void StackQ()
         {
-            if (Spells[Q].LSIsReady())
+            if (Spells[Q].IsReady())
             {
-                var farmLocation = MinionManager.GetBestLineFarmLocation(MinionManager.GetMinions(Spells[Q].Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).Where(p => ObjectManager.Player.LSGetSpellDamage(p, SpellSlot.Q) >= p.Health).Select(q => q.ServerPosition.LSTo2D()).ToList(), Spells[Q].Width, Spells[Q].Range);
+                var farmLocation = MinionManager.GetBestLineFarmLocation(MinionManager.GetMinions(Spells[Q].Range, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.MaxHealth).Where(p => ObjectManager.Player.GetSpellDamage(p, SpellSlot.Q) >= p.Health).Select(q => q.ServerPosition.To2D()).ToList(), Spells[Q].Width, Spells[Q].Range);
                 if (farmLocation.MinionsHit > 0)
                     Spells[Q].Cast(farmLocation.Position);
             }
@@ -202,14 +202,14 @@ namespace SAutoCarry.Champions
         {
             if (ConfigMenu.Item("SAutoCarry.Veigar.Misc.AntiGapcloseE").GetValue<bool>())
             {
-                if (gapcloser.End.LSDistance(ObjectManager.Player.ServerPosition) < 350)
+                if (gapcloser.End.Distance(ObjectManager.Player.ServerPosition) < 350)
                     Spells[E].Cast(ObjectManager.Player.ServerPosition);
             }
         }
 
         public override double CalculateDamageR(AIHeroClient target)
         {
-            if (!Spells[R].LSIsReady())
+            if (!Spells[R].IsReady())
                 return 0;
 
             return ObjectManager.Player.CalcDamage(target, Damage.DamageType.Magical, new int[] { 250, 375, 500 }[Spells[R].Level - 1] + ObjectManager.Player.FlatMagicDamageMod + target.FlatMagicDamageMod * 0.8);

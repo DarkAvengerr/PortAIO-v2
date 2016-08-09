@@ -82,7 +82,7 @@ namespace PainInMyKass
 
         static void Interrupter2_OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (sender.IsEnemy && sender.LSDistance(Player) < Q.Range)
+            if (sender.IsEnemy && sender.Distance(Player) < Q.Range)
             {
                 Q.CastOnUnit(sender); 
             }
@@ -109,7 +109,7 @@ namespace PainInMyKass
 
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 R.Cast(Game.CursorPos);
             }
@@ -148,7 +148,7 @@ namespace PainInMyKass
             if (Player.IsDead)
                 return;
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 LeagueSharp.Common.Utility.DrawCircle(Player.Position, 650f, Color.Green);
             }
@@ -156,7 +156,7 @@ namespace PainInMyKass
             {
                 LeagueSharp.Common.Utility.DrawCircle(Player.Position, 650f, Color.Crimson);
             }
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 LeagueSharp.Common.Utility.DrawCircle(Player.Position, R.Range, Color.Green);
             }
@@ -171,11 +171,11 @@ namespace PainInMyKass
             if (!Menu.Item("useQ").GetValue<bool>())
                 return;         
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 AIHeroClient target = TargetSelector.GetTarget(650f, TargetSelector.DamageType.Magical);
 
-                if (target.LSIsValidTarget(Q.Range))
+                if (target.IsValidTarget(Q.Range))
                 {
                     Q.CastOnUnit(target);
                 }
@@ -188,9 +188,9 @@ namespace PainInMyKass
             if (!Menu.Item("useW").GetValue<bool>())
                 return;
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                int enemies = ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && x.LSDistance(Player, false) < 300).Count();
+                int enemies = ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && x.Distance(Player, false) < 300).Count();
 
                 if (enemies > 0)
                 {
@@ -205,11 +205,11 @@ namespace PainInMyKass
             if (!Menu.Item("useE").GetValue<bool>())
                 return;   
 
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
                 AIHeroClient target = TargetSelector.GetTarget(400f, TargetSelector.DamageType.Magical);
 
-                if (target.LSIsValidTarget(E.Range))
+                if (target.IsValidTarget(E.Range))
                 {
                     E.Cast(target.Position);
                 }
@@ -221,13 +221,13 @@ namespace PainInMyKass
             if (!Menu.Item("useR").GetValue<bool>())
                 return;
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 AIHeroClient target = TargetSelector.GetTarget(500f, TargetSelector.DamageType.Magical);
 
                 var extraEnemies =
-                    ObjectManager.Get<AIHeroClient>().Where(x => x != target && x.IsEnemy && x.LSDistance(target) < 800).Count();
-                if (target.LSIsValidTarget(R.Range) && extraEnemies < Menu.Item("dontR").GetValue<Slider>().Value)
+                    ObjectManager.Get<AIHeroClient>().Where(x => x != target && x.IsEnemy && x.Distance(target) < 800).Count();
+                if (target.IsValidTarget(R.Range) && extraEnemies < Menu.Item("dontR").GetValue<Slider>().Value)
                 {
                     R.Cast(target.Position);
                 }

@@ -34,7 +34,7 @@ using EloBuddy;
             }
             else
             {
-                if (Spells.R.LSIsReady() && Menus.Config.Item("semi.manual.ult").GetValue<KeyBind>().Active)
+                if (Spells.R.IsReady() && Menus.Config.Item("semi.manual.ult").GetValue<KeyBind>().Active)
                 {
                     var blocked = HeroManager.Enemies.Where(x => !Menus.Config.Item("r.combo." + x.ChampionName).GetValue<bool>());
                     var tstarget = TargetSelector.GetTarget(Spells.R.Range, TargetSelector.DamageType.Physical, false, blocked);

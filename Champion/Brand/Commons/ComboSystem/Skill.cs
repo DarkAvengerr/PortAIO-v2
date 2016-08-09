@@ -47,7 +47,7 @@ namespace TheBrand.Commons.ComboSystem
                 mode = Orbwalking.OrbwalkingMode.Mixed;
             if (UseManaManager && !ManaManager.CanUseMana(mode)) return;
 
-            if (OnlyUpdateIfTargetValid && (mode == Orbwalking.OrbwalkingMode.Combo || mode == Orbwalking.OrbwalkingMode.Mixed) && !target.LSIsValidTarget()) return;
+            if (OnlyUpdateIfTargetValid && (mode == Orbwalking.OrbwalkingMode.Combo || mode == Orbwalking.OrbwalkingMode.Mixed) && !target.IsValidTarget()) return;
             if (OnlyUpdateIfCastable && !CanBeCast()) return; //Todo: check if nessecary with new comboSystem
 
             MinHitChance = mode == Orbwalking.OrbwalkingMode.Combo ? MinComboHitchance : MinHarassHitchance;
@@ -240,7 +240,7 @@ namespace TheBrand.Commons.ComboSystem
 
         public virtual float GetDamage(AIHeroClient enemy)
         {
-            return Instance.GetState() == SpellState.Ready ? (float)ObjectManager.Player.LSGetSpellDamage(enemy, Slot) : 0f;
+            return Instance.GetState() == SpellState.Ready ? (float)ObjectManager.Player.GetSpellDamage(enemy, Slot) : 0f;
         }
 
         /// <summary>
@@ -285,7 +285,7 @@ namespace TheBrand.Commons.ComboSystem
         public bool CouldHit(Obj_AI_Base unit, HitChance minHitChance = HitChance.Low, bool aoe = false)
         {
 
-            return GetPrediction(unit, aoe).Hitchance >= minHitChance && CanBeCast() && unit.LSIsValidTarget();
+            return GetPrediction(unit, aoe).Hitchance >= minHitChance && CanBeCast() && unit.IsValidTarget();
         }
         #endregion
 

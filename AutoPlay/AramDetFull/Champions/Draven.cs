@@ -44,17 +44,17 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             //Chat.Print("Registered");
             if (!(target is AIHeroClient)) return;
-            if (unit.IsMe && target.LSIsValidTarget())
+            if (unit.IsMe && target.IsValidTarget())
             {
                 bool useW;
                 var axe = getClosestAxe(out useW);
 
                 if(axe!=null)
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, axe.Position);
-                else if (safeGap(target.Position.LSTo2D()))
+                else if (safeGap(target.Position.To2D()))
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, target.Position);
                 else
-                    EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo,player.Position.LSExtend(ARAMSimulator.fromNex.Position,450));
+                    EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo,player.Position.Extend(ARAMSimulator.fromNex.Position,450));
                 
                 CastW(target);
                 //castItems((AIHeroClient)target);
@@ -63,30 +63,30 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             W.Cast(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
             if (EnemyInRange(1, 300))
-                E.Cast(player.Position.LSTo2D().LSExtend(ARAMSimulator.fromNex.Position.LSTo2D(), 400));
+                E.Cast(player.Position.To2D().Extend(ARAMSimulator.fromNex.Position.To2D(), 400));
 
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
             R.CastIfWillHit(target,2);
         }
@@ -116,23 +116,23 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var RTarget = ARAMTargetSelector.getBestTarget(2000f);
             CatchAxes();
 
-            if (target.LSIsValidTarget()) CastQ();
-            if (Etarget.LSIsValidTarget()) CastE(Etarget);
-            if (RTarget.LSIsValidTarget()) CastRExecute(RTarget);
-            if (RTarget.LSIsValidTarget()) { RExecute(RTarget); }
-            if (RTarget.LSIsValidTarget()) { RMostDamange(RTarget); }
+            if (target.IsValidTarget()) CastQ();
+            if (Etarget.IsValidTarget()) CastE(Etarget);
+            if (RTarget.IsValidTarget()) CastRExecute(RTarget);
+            if (RTarget.IsValidTarget()) { RExecute(RTarget); }
+            if (RTarget.IsValidTarget()) { RMostDamange(RTarget); }
             
         }
 
         public bool EnemyInRange(int numOfEnemy, float range)
         {
-            return LeagueSharp.Common.Utility.LSCountEnemysInRange(player, (int)range) >= numOfEnemy;
+            return LeagueSharp.Common.Utility.CountEnemysInRange(player, (int)range) >= numOfEnemy;
         }
 
         void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             var GPSender = (AIHeroClient)gapcloser.Sender;
-            if (!E.LSIsReady() || !GPSender.LSIsValidTarget()) return;
+            if (!E.IsReady() || !GPSender.IsValidTarget()) return;
             CastEHitchance(GPSender);
 
         }
@@ -140,7 +140,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         void Interrupter_OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
             var Sender = (AIHeroClient)unit;
-            if ( !E.LSIsReady() || !Sender.LSIsValidTarget()) return;
+            if ( !E.IsReady() || !Sender.IsValidTarget()) return;
             CastEHitchance(Sender);
         }
 
@@ -178,7 +178,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             var Axe = Axes.Where(
                     axe =>
-                        axe.AxeGameObject.IsValid && axe.Position.LSDistance(player.Position) <= CatchRange).OrderBy(axe => axe.Distance())
+                        axe.AxeGameObject.IsValid && axe.Position.Distance(player.Position) <= CatchRange).OrderBy(axe => axe.Distance())
                         .FirstOrDefault();
             if (Axe == null)
             {
@@ -227,9 +227,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
         }
         public void Catch(bool shouldUseWForIt, PossibleReticle Axe)
         {
-            if (shouldUseWForIt && W.LSIsReady() && !Axe.isCatchingNow()) W.Cast();
+            if (shouldUseWForIt && W.IsReady() && !Axe.isCatchingNow()) W.Cast();
             DeathWalker.CustomOrbwalkMode = true;
-            DeathWalker.deathWalkTarget(Axe.Position.LSExtend(player.Position,player.BoundingRadius-100), DeathWalker.getBestTarget());
+            DeathWalker.deathWalkTarget(Axe.Position.Extend(player.Position,player.BoundingRadius-100), DeathWalker.getBestTarget());
         }
         public void CastQ()
         {
@@ -240,7 +240,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         }
         private void CastW(AttackableUnit target)
         {
-            if (hasWBuff() || !W.LSIsReady()) return;
+            if (hasWBuff() || !W.IsReady()) return;
 
             var MWC = 0;
             if (getPerValue(true) >= MWC)
@@ -253,16 +253,16 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void CastE(AIHeroClient target)
         {
-            if (!E.LSIsReady() || !target.LSIsValidTarget()) return;
+            if (!E.IsReady() || !target.IsValidTarget()) return;
                     CastEHitchance(target);
         }
 
         private void CastRExecute(AIHeroClient RTarget)
         {
             var Pred = R.GetPrediction(RTarget);
-            if (!RTarget.LSIsValidTarget() || Pred.Hitchance < HitChance.Medium || !R.LSIsReady()) return;
+            if (!RTarget.IsValidTarget() || Pred.Hitchance < HitChance.Medium || !R.IsReady()) return;
             var ManaR = 0;
-            if (getUnitsInPath(player, RTarget, R) && getPerValue(true) >= ManaR && !player.LSHasBuff("dravenrdoublecast", true))
+            if (getUnitsInPath(player, RTarget, R) && getPerValue(true) >= ManaR && !player.HasBuff("dravenrdoublecast", true))
             {
                 R.Cast(RTarget);
             }
@@ -272,8 +272,8 @@ using EloBuddy; namespace ARAMDetFull.Champions
         private void RExecute(AIHeroClient RTarget)
         {
             var Pred = R.GetPrediction(RTarget);
-            if (!RTarget.LSIsValidTarget() || Pred.Hitchance < HitChance.Medium || !R.LSIsReady()) return;
-            if (getUnitsInPath(player, RTarget, R) && !player.LSHasBuff("dravenrdoublecast", true))
+            if (!RTarget.IsValidTarget() || Pred.Hitchance < HitChance.Medium || !R.IsReady()) return;
+            if (getUnitsInPath(player, RTarget, R) && !player.HasBuff("dravenrdoublecast", true))
             {
                 R.Cast(RTarget);
             }
@@ -282,9 +282,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
         private void RMostDamange(AIHeroClient RTarget)
         {
             var Pred = R.GetPrediction(RTarget);
-            if (!RTarget.LSIsValidTarget() || Pred.Hitchance < HitChance.Medium || !R.LSIsReady()) return;
+            if (!RTarget.IsValidTarget() || Pred.Hitchance < HitChance.Medium || !R.IsReady()) return;
 
-            if (!player.LSHasBuff("dravenrdoublecast", true))
+            if (!player.HasBuff("dravenrdoublecast", true))
             {
                 R.CastIfWillHit(RTarget,3);
             }
@@ -305,14 +305,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             //dravenfurybuff
             //DravenFury
-            return player.LSHasBuff("DravenFury", true) || player.LSHasBuff("dravenfurybuff", true);
+            return player.HasBuff("DravenFury", true) || player.HasBuff("dravenfurybuff", true);
         }
         public bool minionThere()
         {
             var List = MinionManager.GetMinions(player.Position, DeathWalker.getTargetSearchDist())
                 .Where(m => HealthPrediction.GetHealthPrediction(m,
-                    (int)(player.LSDistance(m) / Orbwalking.GetMyProjectileSpeed()) * 1000) <=
-                            Q.GetDamage(m) + player.LSGetAutoAttackDamage(m)
+                    (int)(player.Distance(m) / Orbwalking.GetMyProjectileSpeed()) * 1000) <=
+                            Q.GetDamage(m) + player.GetAutoAttackDamage(m)
                         ).ToList();
             // Chat.Print("QDmg "+Q.GetDamage(List.FirstOrDefault()));
             return List.Count > 0;
@@ -349,13 +349,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             foreach (var tur in ObjectManager.Get<Obj_AI_Turret>().Where(turr => turr.IsEnemy && (turr.Health != 0)))
             {
-                if (tur.LSDistance(Position) <= 975f) return true;
+                if (tur.Distance(Position) <= 975f) return true;
             }
             return false;
         }
         private  bool getUnitsInPath(AIHeroClient player, AIHeroClient target, Spell spell)
         {
-            float distance = player.LSDistance(target);
+            float distance = player.Distance(target);
             List<Obj_AI_Base> minionList = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, spell.Range,
                 MinionTypes.All, MinionTeam.NotAlly);
             int numberOfMinions = (from Obj_AI_Minion minion in minionList
@@ -364,7 +364,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                                            V2E(player.Position, target.Position,
                                                Vector3.Distance(player.Position, target.Position) - spell.Width + 1).To3D(),
                                            Vector3.Distance(player.Position, minion.Position))
-                                   where skillshotPosition.LSDistance(minion) < spell.Width
+                                   where skillshotPosition.Distance(minion) < spell.Width
                                    select minion).Count();
             int numberOfChamps = (from minion in ObjectManager.Get<AIHeroClient>()
                                   let skillshotPosition =
@@ -372,7 +372,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                                           V2E(player.Position, target.Position,
                                               Vector3.Distance(player.Position, target.Position) - spell.Width + 1).To3D(),
                                           Vector3.Distance(player.Position, minion.Position))
-                                  where skillshotPosition.LSDistance(minion) < spell.Width && minion.IsEnemy
+                                  where skillshotPosition.Distance(minion) < spell.Width && minion.IsEnemy
                                   select minion).Count();
             int totalUnits = numberOfChamps + numberOfMinions - 1;
             // total number of champions and minions the projectile will pass through.
@@ -385,7 +385,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         }
         private Vector2 V2E(Vector3 from, Vector3 direction, float distance)
         {
-            return from.LSTo2D() + distance * Vector3.Normalize(direction - from).LSTo2D();
+            return from.To2D() + distance * Vector3.Normalize(direction - from).To2D();
         }
 
         internal class PossibleReticle
@@ -409,14 +409,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
             {
                 var EnemyHeroesCount =
                     ObjectManager.Get<AIHeroClient>()
-                        .Where(h => h.IsEnemy && h.LSIsValidTarget() && h.LSDistance(Position) <= 350).ToList();
+                        .Where(h => h.IsEnemy && h.IsValidTarget() && h.Distance(Position) <= 350).ToList();
                 if ((isUnderEnTurret(Position) && !isUnderEnTurret(player.Position)) || EnemyHeroesCount.Count > 1)
                 {
                     ShouldUseW = false;
                     return false;
                 }
                 Spell W = new Spell(SpellSlot.W);
-                var distance = player.GetPath(Position).ToList().LSTo2D().LSPathLength()-50;
+                var distance = player.GetPath(Position).ToList().To2D().PathLength()-50;
                 var catchNormal = (distance * 1000) / player.MoveSpeed + DeathWalker.now < EndTime; // Not buffed with W, Normal
                 var AdditionalSpeed = (5*W.Level + 35)*0.01*player.MoveSpeed;
                 var catchBuff = distance / (player.MoveSpeed + AdditionalSpeed) + DeathWalker.now < EndTime; //Buffed with W

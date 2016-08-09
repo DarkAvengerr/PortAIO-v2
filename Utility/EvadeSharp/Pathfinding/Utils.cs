@@ -35,13 +35,13 @@ using EloBuddy; namespace Evade.Pathfinding
             if (checkWalls)
             {
                 var nPoints = 2;
-                var step = start.LSDistance(end) / nPoints;
+                var step = start.Distance(end) / nPoints;
 
-                var direction = (end - start).LSNormalized();
+                var direction = (end - start).Normalized();
                 for (int i = 0; i <= nPoints; i++)
                 {
                     var p = start + i * step * direction;
-                    if (p.LSIsWall())
+                    if (p.IsWall())
                     {
                         return false;
                     }

@@ -214,7 +214,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     if (minion != null)
                     {
                         _lastAaMinion = minion;
-                        _lastAaMinionEndTime = Game.Time + minion.LSDistance(Player) / Orbwalking.GetMyProjectileSpeed() +
+                        _lastAaMinionEndTime = Game.Time + minion.Distance(Player) / Orbwalking.GetMyProjectileSpeed() +
                                                0.25f;
                     }
                 }
@@ -233,7 +233,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
                 {
                     if (!Player.Spellbook.IsAutoAttacking && Menu.Item(Menu.Name + ".lasthit.q-unkillable").GetValue<bool>() &&
-                        Q.LSIsReady() && Q.IsInRange(unit))
+                        Q.IsReady() && Q.IsInRange(unit))
                     {
                         var target = unit as Obj_AI_Base;
                         if (target != null &&
@@ -256,10 +256,10 @@ using EloBuddy; namespace SFXChallenger.Champions
         {
             try
             {
-                if (args.UniqueId.Equals("w-gapcloser") && W.LSIsReady() &&
+                if (args.UniqueId.Equals("w-gapcloser") && W.IsReady() &&
                     BestTargetOnlyManager.Check("w-gapcloser", W, args.Hero))
                 {
-                    if (args.End.LSDistance(Player.Position) <= W.Range * 0.9f)
+                    if (args.End.Distance(Player.Position) <= W.Range * 0.9f)
                     {
                         W.Cast(args.End);
                     }
@@ -276,7 +276,7 @@ using EloBuddy; namespace SFXChallenger.Champions
         protected override void OnPostUpdate()
         {
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit && !Player.Spellbook.IsAutoAttacking &&
-                Menu.Item(Menu.Name + ".lasthit.q").GetValue<bool>() && Q.LSIsReady())
+                Menu.Item(Menu.Name + ".lasthit.q").GetValue<bool>() && Q.IsReady())
             {
                 var m =
                     MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.NotAlly)
@@ -292,7 +292,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 }
             }
 
-            if (Ultimate.IsActive(UltimateModeType.Assisted) && R.LSIsReady())
+            if (Ultimate.IsActive(UltimateModeType.Assisted) && R.IsReady())
             {
                 if (Ultimate.ShouldMove(UltimateModeType.Assisted))
                 {
@@ -305,7 +305,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 }
             }
 
-            if (Ultimate.IsActive(UltimateModeType.Auto) && R.LSIsReady())
+            if (Ultimate.IsActive(UltimateModeType.Auto) && R.IsReady())
             {
                 var target = TargetSelector.GetTarget(R);
                 if (target != null && !RLogic(UltimateModeType.Auto, target))
@@ -314,8 +314,8 @@ using EloBuddy; namespace SFXChallenger.Champions
                 }
             }
 
-            if (Menu.Item(Menu.Name + ".miscellaneous.e-auto").GetValue<bool>() && E.LSIsReady() &&
-                ResourceManager.Check("auto-e") && !Player.LSIsRecalling() && !Player.LSInFountain())
+            if (Menu.Item(Menu.Name + ".miscellaneous.e-auto").GetValue<bool>() && E.IsReady() &&
+                ResourceManager.Check("auto-e") && !Player.IsRecalling() && !Player.InFountain())
             {
                 var buff = GetEBuff();
                 if (buff == null || buff.EndTime - Game.Time <= Game.Ping / 2000f + 0.5f)
@@ -347,8 +347,8 @@ using EloBuddy; namespace SFXChallenger.Champions
                 var hits =
                     GameObjects.EnemyHeroes.Where(
                         e =>
-                            e.LSIsValidTarget() && e.LSDistance(Player) < E.Width * 0.8f ||
-                            e.LSDistance(Player) < E.Width && e.LSIsFacing(Player)).ToList();
+                            e.IsValidTarget() && e.Distance(Player) < E.Width * 0.8f ||
+                            e.Distance(Player) < E.Width && e.IsFacing(Player)).ToList();
                 return new Tuple<int, List<AIHeroClient>>(hits.Count, hits);
             }
             catch (Exception ex)
@@ -361,10 +361,10 @@ using EloBuddy; namespace SFXChallenger.Champions
         protected override void Combo()
         {
             var single = false;
-            var q = Menu.Item(Menu.Name + ".combo.q").GetValue<bool>() && Q.LSIsReady();
-            var e = Menu.Item(Menu.Name + ".combo.e").GetValue<bool>() && E.LSIsReady() &&
+            var q = Menu.Item(Menu.Name + ".combo.q").GetValue<bool>() && Q.IsReady();
+            var e = Menu.Item(Menu.Name + ".combo.e").GetValue<bool>() && E.IsReady() &&
                     ResourceManager.Check("combo-e");
-            var r = Ultimate.IsActive(UltimateModeType.Combo) && R.LSIsReady();
+            var r = Ultimate.IsActive(UltimateModeType.Combo) && R.IsReady();
 
             var rTarget = TargetSelector.GetTarget(R);
             if (r)
@@ -392,8 +392,8 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void Harass()
         {
-            var q = Menu.Item(Menu.Name + ".harass.q").GetValue<bool>() && Q.LSIsReady();
-            var e = Menu.Item(Menu.Name + ".harass.e").GetValue<bool>() && E.LSIsReady() &&
+            var q = Menu.Item(Menu.Name + ".harass.q").GetValue<bool>() && Q.IsReady();
+            var e = Menu.Item(Menu.Name + ".harass.e").GetValue<bool>() && E.IsReady() &&
                     ResourceManager.Check("harass-e");
 
             if (q)
@@ -437,7 +437,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 {
                     damage += E.GetDamage(target) * 2;
                 }
-                if (r && R.LSIsReady() && (!rangeCheck || R.IsInRange(target, R.Range + R.Width)))
+                if (r && R.IsReady() && (!rangeCheck || R.IsInRange(target, R.Range + R.Width)))
                 {
                     damage *= 1.2f;
                     damage += R.GetDamage(target);
@@ -500,8 +500,8 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void LaneClear()
         {
-            var q = Menu.Item(Menu.Name + ".lane-clear.q").GetValue<bool>() && Q.LSIsReady();
-            var e = Menu.Item(Menu.Name + ".lane-clear.e").GetValue<bool>() && E.LSIsReady() &&
+            var q = Menu.Item(Menu.Name + ".lane-clear.q").GetValue<bool>() && Q.IsReady();
+            var e = Menu.Item(Menu.Name + ".lane-clear.e").GetValue<bool>() && E.IsReady() &&
                     ResourceManager.Check("lane-clear-e");
 
             if (q)
@@ -518,8 +518,8 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void JungleClear()
         {
-            var q = Menu.Item(Menu.Name + ".jungle-clear.q").GetValue<bool>() && Q.LSIsReady();
-            var e = Menu.Item(Menu.Name + ".jungle-clear.e").GetValue<bool>() && E.LSIsReady() &&
+            var q = Menu.Item(Menu.Name + ".jungle-clear.q").GetValue<bool>() && Q.IsReady();
+            var e = Menu.Item(Menu.Name + ".jungle-clear.e").GetValue<bool>() && E.IsReady() &&
                     ResourceManager.Check("jungle-clear-e");
 
             if (q)
@@ -540,12 +540,12 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void Flee()
         {
-            if (Menu.Item(Menu.Name + ".flee.q").GetValue<bool>() && Q.LSIsReady())
+            if (Menu.Item(Menu.Name + ".flee.q").GetValue<bool>() && Q.IsReady())
             {
                 var target =
                     GameObjects.EnemyHeroes.Select(e => e as Obj_AI_Base)
                         .Concat(GameObjects.EnemyMinions)
-                        .Where(e => e.LSIsValidTarget(Q.Range))
+                        .Where(e => e.IsValidTarget(Q.Range))
                         .OrderBy(e => e is AIHeroClient)
                         .FirstOrDefault();
                 if (target != null)
@@ -557,9 +557,9 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void Killsteal()
         {
-            if (Menu.Item(Menu.Name + ".killsteal.q").GetValue<bool>() && Q.LSIsReady())
+            if (Menu.Item(Menu.Name + ".killsteal.q").GetValue<bool>() && Q.IsReady())
             {
-                var target = GameObjects.EnemyHeroes.FirstOrDefault(e => e.LSIsValidTarget(Q.Range) && Q.IsKillable(e));
+                var target = GameObjects.EnemyHeroes.FirstOrDefault(e => e.IsValidTarget(Q.Range) && Q.IsKillable(e));
                 if (target != null)
                 {
                     Casting.TargetSkill(target, Q);

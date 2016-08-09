@@ -351,7 +351,7 @@ using EloBuddy; namespace Warwick
                 E.Range = 700 + 800*E.Level;
 
             if (Config.Item("Auto.E.Use").GetValue<bool>() && Player.Spellbook.GetSpell(SpellSlot.E).ToggleState == 1 &&
-                E.LSIsReady())
+                E.IsReady())
                 E.Cast();
 
             if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
@@ -359,7 +359,7 @@ using EloBuddy; namespace Warwick
                 if (Config.Item("Auto.Q.UseQHp").GetValue<bool>() &&
                     Config.Item("Auto.Q.UseQHpMinHp").GetValue<Slider>().Value > Player.HealthPercent)
                 {
-                    if (Player.LSHasBuff("Recall", true))
+                    if (Player.HasBuff("Recall", true))
                         return;
 
                     List<Obj_AI_Base> enemyObjects =
@@ -369,7 +369,7 @@ using EloBuddy; namespace Warwick
                             select obj)
                             .Union
                             (from obj in HeroManager.Enemies
-                                where obj.LSIsValidTarget(Q.Range) && !obj.IsDead && obj.IsZombie
+                                where obj.IsValidTarget(Q.Range) && !obj.IsDead && obj.IsZombie
                                 select obj)
                             .Union
                             (from obj in
@@ -377,10 +377,10 @@ using EloBuddy; namespace Warwick
                                     MinionTeam.Neutral, MinionOrderTypes.MaxHealth)
                                 select obj))
                             .ToList();
-                    if (Q.LSIsReady() && enemyObjects[0] != null)
+                    if (Q.IsReady() && enemyObjects[0] != null)
                     {
                         if (enemyObjects[0] is AIHeroClient && Config.Item("Auto.Q.UseQHpEnemyUn").GetValue<bool>() &&
-                            (enemyObjects[0] as AIHeroClient).LSUnderTurret())
+                            (enemyObjects[0] as AIHeroClient).UnderTurret())
                             return;
                         Q.CastOnUnit(enemyObjects[0]);
                     }
@@ -411,7 +411,7 @@ using EloBuddy; namespace Warwick
             if (!Config.Item("Interrupt.R").GetValue<bool>())
                 return;
 
-            if (R.LSIsReady() && unit.LSIsValidTarget(R.Range) && !unit.LSHasBuff("bansheeveil"))
+            if (R.IsReady() && unit.IsValidTarget(R.Range) && !unit.HasBuff("bansheeveil"))
                 R.Cast(unit);
         }
 
@@ -420,7 +420,7 @@ using EloBuddy; namespace Warwick
             get
             {
                 var t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-                return t.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65);
+                return t.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65);
             }
         }
 
@@ -431,10 +431,10 @@ using EloBuddy; namespace Warwick
                 return
                     (from ally in
                         HeroManager.Allies.Where(
-                            a => a.LSDistance(Player.Position) < W.Range && GetPriorityAllies(a.ChampionName))
+                            a => a.Distance(Player.Position) < W.Range && GetPriorityAllies(a.ChampionName))
                         from enemies in
                             HeroManager.Enemies.Where(
-                                e => e.LSDistance(ally) < ally.AttackRange + ally.BoundingRadius && !e.IsDead)
+                                e => e.Distance(ally) < ally.AttackRange + ally.BoundingRadius && !e.IsDead)
                         select ally).FirstOrDefault();
             }
         }
@@ -443,7 +443,7 @@ using EloBuddy; namespace Warwick
         {
             get
             {
-                if (!W.LSIsReady())
+                if (!W.IsReady())
                     return 0;
 
                 var baseAttackSpeed = 0.679348;
@@ -474,14 +474,14 @@ using EloBuddy; namespace Warwick
         {
             var fComboDamage = 0d;
 
-            if (Q.LSIsReady())
-                fComboDamage += Player.LSGetSpellDamage(t, SpellSlot.Q);
+            if (Q.IsReady())
+                fComboDamage += Player.GetSpellDamage(t, SpellSlot.Q);
 
-            if (W.LSIsReady())
+            if (W.IsReady())
                 fComboDamage += GetWTotalDamage;
 
-            if (R.LSIsReady())
-                fComboDamage += Player.LSGetSpellDamage(t, SpellSlot.R) + Player.TotalAttackDamage;
+            if (R.IsReady())
+                fComboDamage += Player.GetSpellDamage(t, SpellSlot.R) + Player.TotalAttackDamage;
 
             if (PlayerSpells.IgniteSlot != SpellSlot.Unknown &&
                 Player.Spellbook.CanUseSpell(PlayerSpells.IgniteSlot) == SpellState.Ready)
@@ -492,18 +492,18 @@ using EloBuddy; namespace Warwick
 
         public static int GetClosesAlliesToEnemy(AIHeroClient t)
         {
-            if (!t.LSIsValidTarget(R.Range))
+            if (!t.IsValidTarget(R.Range))
                 return 0;
 
             return (from ally in
                 HeroManager.Allies.Where(
                     a =>
-                        !a.IsMe && !a.IsDead && !a.IsZombie && a.LSDistance(t) < 1200 && a.Health > t.Health/2 &&
+                        !a.IsMe && !a.IsDead && !a.IsZombie && a.Distance(t) < 1200 && a.Health > t.Health/2 &&
                         a.Health > a.Level*40)
                 let aMov = ally.MoveSpeed
                 let aPos = ally.Position
                 let tPos = t.Position
-                where aPos.LSDistance(tPos) < aMov*1.8
+                where aPos.Distance(tPos) < aMov*1.8
                 select aMov).Any()
                 ? 1
                 : 0;
@@ -512,16 +512,16 @@ using EloBuddy; namespace Warwick
         private static void Combo()
         {
             var t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-            if (!t.LSIsValidTarget())
+            if (!t.IsValidTarget())
                 return;
 
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 var tR = SpellR.GetTarget(R.Range, TargetSelector.DamageType.Physical);
-                if (Q.LSIsReady() && tR.Health < Player.LSGetSpellDamage(t, SpellSlot.Q))
+                if (Q.IsReady() && tR.Health < Player.GetSpellDamage(t, SpellSlot.Q))
                     return;
 
-                if (tR.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65) &&
+                if (tR.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65) &&
                     tR.Health < Player.TotalAttackDamage)
                     return;
 
@@ -530,7 +530,7 @@ using EloBuddy; namespace Warwick
                     tR.Health < Player.GetSummonerSpellDamage(tR, Damage.SummonerSpell.Ignite))
                     return;
 
-                if (tR.LSHasBuff("bansheeveil")) // don't use R if enemy's banshee is active!
+                if (tR.HasBuff("bansheeveil")) // don't use R if enemy's banshee is active!
                     return;
 
                 var useR = Config.Item("R.Use").GetValue<StringList>().SelectedIndex;
@@ -538,7 +538,7 @@ using EloBuddy; namespace Warwick
                 {
                     case 1:
                     {
-                        if (tR.LSIsValidTarget(R.Range))
+                        if (tR.IsValidTarget(R.Range))
                         {
                             R.Cast(tR);
                         }
@@ -546,27 +546,27 @@ using EloBuddy; namespace Warwick
                     }
                     case 2:
                     {
-                        if (tR.LSIsValidTarget(R.Range) &&
+                        if (tR.IsValidTarget(R.Range) &&
                             tR.Health <
                             GetComboDamage(tR) + Player.TotalAttackDamage +
-                            (Q.LSIsReady() ||
+                            (Q.IsReady() ||
                              Player.Spellbook.GetSpell(SpellSlot.Q).CooldownExpires < 1.8 &&
                              Player.Mana > Player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana + Player.Spellbook.GetSpell(SpellSlot.R).SData.Mana
-                                ? Player.LSGetSpellDamage(t, SpellSlot.Q)
+                                ? Player.GetSpellDamage(t, SpellSlot.Q)
                                 : 0))
                             R.Cast(tR);
                         break;
                     }
                     case 3:
                     {
-                        if (tR.LSIsValidTarget(R.Range) &&
+                        if (tR.IsValidTarget(R.Range) &&
                             ((tR.Health <
                               GetComboDamage(tR) + Player.TotalAttackDamage +
-                              (Q.LSIsReady() ||
+                              (Q.IsReady() ||
                                Player.Spellbook.GetSpell(SpellSlot.Q).CooldownExpires < 1.8 &&
                                Player.Mana > Player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana + Player.Spellbook.GetSpell(SpellSlot.R).SData.Mana
-                                  ? Player.LSGetSpellDamage(t, SpellSlot.Q)
-                                  : 0)) || tR.LSCountAlliesInRange(800) >= 2 ||
+                                  ? Player.GetSpellDamage(t, SpellSlot.Q)
+                                  : 0)) || tR.CountAlliesInRange(800) >= 2 ||
                              GetClosesAlliesToEnemy(tR) > 0))
                             R.Cast(tR);
                         break;
@@ -574,14 +574,14 @@ using EloBuddy; namespace Warwick
                 }
             }
 
-            if (Q.LSIsReady() && t.LSIsValidTarget(Q.Range))
+            if (Q.IsReady() && t.IsValidTarget(Q.Range))
             {
                 Q.CastOnUnit(t);
             }
 
             var useW = Config.Item("Combo.W.Use").GetValue<StringList>().SelectedIndex;
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 switch (useW)
                 {
@@ -612,16 +612,16 @@ using EloBuddy; namespace Warwick
         private static void Harass()
         {
             var t = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-            if (!t.LSIsValidTarget())
+            if (!t.IsValidTarget())
                 return;
 
-            if (Config.Item("Harass.Q.UseTEnemyUn").GetValue<bool>() && t.LSUnderTurret())
+            if (Config.Item("Harass.Q.UseTEnemyUn").GetValue<bool>() && t.UnderTurret())
                 return;
 
             if (Player.ManaPercent < Config.Item("Harass.Q.MinMana").GetValue<Slider>().Value)
                 return;
 
-            if (Q.LSIsReady() && Config.Item("Harass.Q.Use").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("Harass.Q.Use").GetValue<bool>())
             {
                 Q.CastOnUnit(t);
             }
@@ -629,8 +629,8 @@ using EloBuddy; namespace Warwick
 
         private static void Laneclear()
         {
-            var useQ = Q.LSIsReady() && Player.ManaPercent > Config.Item("Lane.Q.MinMana").GetValue<Slider>().Value;
-            var useW = W.LSIsReady() && Player.ManaPercent > Config.Item("Lane.W.MinMana").GetValue<Slider>().Value &&
+            var useQ = Q.IsReady() && Player.ManaPercent > Config.Item("Lane.Q.MinMana").GetValue<Slider>().Value;
+            var useW = W.IsReady() && Player.ManaPercent > Config.Item("Lane.W.MinMana").GetValue<Slider>().Value &&
                        Config.Item("Lane.W.Use").GetValue<bool>();
 
             var qSelectedIndex = Config.Item("Lane.Q.Use").GetValue<StringList>().SelectedIndex;
@@ -653,7 +653,7 @@ using EloBuddy; namespace Warwick
                     case 2:
                     {
                         if (Q.GetDamage(qMinions[0]) > qMinions[0].Health &&
-                            Player.LSDistance(qMinions[0]) > Orbwalking.GetRealAutoAttackRange(null) + 65)
+                            Player.Distance(qMinions[0]) > Orbwalking.GetRealAutoAttackRange(null) + 65)
                             Q.CastOnUnit(qMinions[0]);
                         break;
                     }
@@ -694,10 +694,10 @@ using EloBuddy; namespace Warwick
 
         private static void JungleClear()
         {
-            var useQ = Q.LSIsReady() && Player.ManaPercent > Config.Item("Jungle.Q.MinMana").GetValue<Slider>().Value &&
+            var useQ = Q.IsReady() && Player.ManaPercent > Config.Item("Jungle.Q.MinMana").GetValue<Slider>().Value &&
                        Config.Item("Jungle.Q.Use").GetValue<bool>();
 
-            var useW = W.LSIsReady() && Player.ManaPercent > Config.Item("Jungle.W.MinMana").GetValue<Slider>().Value &&
+            var useW = W.IsReady() && Player.ManaPercent > Config.Item("Jungle.W.MinMana").GetValue<Slider>().Value &&
                        Config.Item("Jungle.W.Use").GetValue<bool>();
 
             var qMobs = MinionManager.GetMinions(Player.ServerPosition, Q.Range + 300, MinionTypes.All,
@@ -721,7 +721,7 @@ using EloBuddy; namespace Warwick
 
                 if (xMobs != null)
                 {
-                    if (qMobs[0].LSIsValidTarget(Q.Range))
+                    if (qMobs[0].IsValidTarget(Q.Range))
                     {
                         Q.CastOnUnit(qMobs[0]);
                     }
@@ -732,7 +732,7 @@ using EloBuddy; namespace Warwick
                 }
             }
 
-            if (useW && qMobs[0].LSIsValidTarget(Q.Range))
+            if (useW && qMobs[0].IsValidTarget(Q.Range))
             {
                 W.Cast();
             }
@@ -760,13 +760,13 @@ using EloBuddy; namespace Warwick
                 if (item.Value.ItemType == EnumItemType.AoE &&
                     item.Value.TargetingType == EnumItemTargettingType.EnemyHero)
                 {
-                    if (t.LSIsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
+                    if (t.IsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
                         item.Value.Item.Cast();
                 }
                 if (item.Value.ItemType == EnumItemType.Targeted &&
                     item.Value.TargetingType == EnumItemTargettingType.EnemyHero)
                 {
-                    if (t.LSIsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
+                    if (t.IsValidTarget(item.Value.Item.Range) && item.Value.Item.IsReady())
                         item.Value.Item.Cast(t);
                 }
             }
@@ -780,14 +780,14 @@ using EloBuddy; namespace Warwick
             if (Config.Item("Draw.Disable").GetValue<bool>())
                 return;
 
-            if (Config.Item("Draw.E.Show").GetValue<bool>() && E.LSIsReady())
+            if (Config.Item("Draw.E.Show").GetValue<bool>() && E.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(e => e.LSIsValidTarget(E.Range) && !e.IsDead))
+                foreach (var enemy in HeroManager.Enemies.Where(e => e.IsValidTarget(E.Range) && !e.IsDead))
                 {
                     foreach (var d in from buff in enemy.Buffs
                         where buff.Name == "bloodscent_target"
                         select
-                            new Geometry.Polygon.Line(Player.Position, enemy.Position, Player.LSDistance(enemy.Position)))
+                            new Geometry.Polygon.Line(Player.Position, enemy.Position, Player.Distance(enemy.Position)))
                     {
                         d.Draw(Color.Red, 2);
 

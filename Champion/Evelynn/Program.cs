@@ -142,8 +142,8 @@ namespace Evelynn
                 if (ObjectManager.Get<AIHeroClient>()
                 .Count(
                     hero =>
-                        hero.LSIsValidTarget() &&
-                        hero.LSDistance(args.StartPosition.LSTo2D()) <= R.Range) == 0)
+                        hero.IsValidTarget() &&
+                        hero.Distance(args.StartPosition.To2D()) <= R.Range) == 0)
                     args.Process = false;
             }
         }
@@ -157,14 +157,14 @@ namespace Evelynn
                 if (Config.Item("UseQCombo").GetValue<bool>())
                     Q.Cast();
 
-                if (Config.Item("UseWCombo").GetValue<bool>() && W.LSIsReady() &&
+                if (Config.Item("UseWCombo").GetValue<bool>() && W.IsReady() &&
                     ObjectManager.Player.HasBuffOfType(BuffType.Slow))
                     W.Cast();
 
-                if (Config.Item("UseECombo").GetValue<bool>() && E.LSIsReady())
+                if (Config.Item("UseECombo").GetValue<bool>() && E.IsReady())
                     E.CastOnUnit(target);
 
-                if (Config.Item("UseRCombo").GetValue<bool>() && R.LSIsReady() && GetComboDamage(target) > target.Health)
+                if (Config.Item("UseRCombo").GetValue<bool>() && R.IsReady() && GetComboDamage(target) > target.Health)
                     R.Cast(target, false, true);
             }
         }
@@ -177,10 +177,10 @@ namespace Evelynn
 
             if (mobs.Count > 0)
             {
-                if (Config.Item("UseQJFarm").GetValue<bool>() && Q.LSIsReady())
+                if (Config.Item("UseQJFarm").GetValue<bool>() && Q.IsReady())
                     Q.Cast();
 
-                if (Config.Item("UseEJFarm").GetValue<bool>() && E.LSIsReady())
+                if (Config.Item("UseEJFarm").GetValue<bool>() && E.IsReady())
                     E.CastOnUnit(mobs[0]);
             }
         }
@@ -189,12 +189,12 @@ namespace Evelynn
         {
             var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q.Range);
 
-            foreach (var minion in minions.FindAll(minion => minion.LSIsValidTarget(Q.Range)))
+            foreach (var minion in minions.FindAll(minion => minion.IsValidTarget(Q.Range)))
             {
-                if (Config.Item("UseQLaneClear").GetValue<bool>() && Q.LSIsReady())
+                if (Config.Item("UseQLaneClear").GetValue<bool>() && Q.IsReady())
                     Q.Cast();
 
-                if (Config.Item("UseELaneClear").GetValue<bool>() && E.LSIsReady())
+                if (Config.Item("UseELaneClear").GetValue<bool>() && E.IsReady())
                     E.CastOnUnit(minion);
             }
         }
@@ -205,9 +205,9 @@ namespace Evelynn
 
             if ((ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level) > 0)
                 comboDamage += Q.GetDamage(target) * 3;
-            if (E.LSIsReady())
+            if (E.IsReady())
                 comboDamage += E.GetDamage(target);
-            if (R.LSIsReady())
+            if (R.IsReady())
                 comboDamage += R.GetDamage(target);
 
             return comboDamage;

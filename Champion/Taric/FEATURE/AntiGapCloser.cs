@@ -37,9 +37,9 @@
             var UseAutoEGapCloser = SkyLv_Taric.Menu.Item("Taric.UseAutoEGapCloser").GetValue<bool>();
             var PacketCast = SkyLv_Taric.Menu.Item("Taric.UsePacketCast").GetValue<bool>();
 
-            if (Player.LSIsRecalling()) return;
+            if (Player.IsRecalling()) return;
 
-            if (UseAutoEGapCloser && gapcloser.End.LSDistance(Player.ServerPosition) < E.Range && Player.HealthPercent <= MinimumHpEGapCloser && CustomLib.enemyChampionInPlayerRange(800) >= MinimumEnemyEGapCloser)
+            if (UseAutoEGapCloser && gapcloser.End.Distance(Player.ServerPosition) < E.Range && Player.HealthPercent <= MinimumHpEGapCloser && CustomLib.enemyChampionInPlayerRange(800) >= MinimumEnemyEGapCloser)
             {
                 E.Cast(gapcloser.End, PacketCast);
             }

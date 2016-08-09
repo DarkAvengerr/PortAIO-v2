@@ -45,19 +45,19 @@ namespace Feedlesticks
             {
                 return;
             }
-            if (Spells.Q.LSIsReady() && Helper.Active("q.draw"))
+            if (Spells.Q.IsReady() && Helper.Active("q.draw"))
             {
                 Helper.Circle("q.draw",Spells.Q.Range);
             }
-            if (Spells.W.LSIsReady() && Helper.Active("w.draw"))
+            if (Spells.W.IsReady() && Helper.Active("w.draw"))
             {
                 Helper.Circle("w.draw", Spells.W.Range);
             }
-            if (Spells.E.LSIsReady() && Helper.Active("e.draw"))
+            if (Spells.E.IsReady() && Helper.Active("e.draw"))
             {
                 Helper.Circle("e.draw", Spells.E.Range);
             }
-            if (Spells.R.LSIsReady() && Helper.Active("r.draw"))
+            if (Spells.R.IsReady() && Helper.Active("r.draw"))
             {
                 Helper.Circle("r.draw", Spells.R.Range);
             }
@@ -108,28 +108,28 @@ namespace Feedlesticks
             }
             if (Helper.Enabled("auto.q.immobile"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Spells.Q.Range) && Helper.Enabled("q.enemy." + x.ChampionName) && Helper.IsEnemyImmobile(x)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.Q.Range) && Helper.Enabled("q.enemy." + x.ChampionName) && Helper.IsEnemyImmobile(x)))
                 {
                     Spells.Q.Cast(enemy);
                 }
             }
             if (Helper.Enabled("auto.q.channeling"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Spells.Q.Range) && Helper.Enabled("q.enemy." + x.ChampionName) && x.IsChannelingImportantSpell()))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.Q.Range) && Helper.Enabled("q.enemy." + x.ChampionName) && x.IsChannelingImportantSpell()))
                 {
                     Spells.Q.Cast(enemy);
                 }
             }
             if (Helper.Enabled("auto.e.immobile"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Spells.E.Range) && Helper.Enabled("e.enemy." + x.ChampionName) && Helper.IsEnemyImmobile(x)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.E.Range) && Helper.Enabled("e.enemy." + x.ChampionName) && Helper.IsEnemyImmobile(x)))
                 {
                     Spells.E.Cast(enemy);
                 }
             }
             if (Helper.Enabled("auto.e.channeling"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Spells.E.Range) && Helper.Enabled("e.enemy." + x.ChampionName) && x.IsChannelingImportantSpell()))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.E.Range) && Helper.Enabled("e.enemy." + x.ChampionName) && x.IsChannelingImportantSpell()))
                 {
                     Spells.E.Cast(enemy);
                 }
@@ -143,9 +143,9 @@ namespace Feedlesticks
                 return;
             }
 
-            if (Spells.Q.LSIsReady() && Helper.Enabled("q.harass"))
+            if (Spells.Q.IsReady() && Helper.Enabled("q.harass"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(Spells.Q.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(Spells.Q.Range) && !o.IsDead && !o.IsZombie))
                 {
                     if (Helper.Enabled("q.enemy." + enemy.ChampionName))
                     {
@@ -153,9 +153,9 @@ namespace Feedlesticks
                     }
                 }
             }
-            if (Spells.E.LSIsReady() && Helper.Enabled("e.harass"))
+            if (Spells.E.IsReady() && Helper.Enabled("e.harass"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(Spells.E.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(Spells.E.Range) && !o.IsDead && !o.IsZombie))
                 {
                     if (Helper.Enabled("e.enemy." + enemy.ChampionName))
                     {
@@ -175,15 +175,15 @@ namespace Feedlesticks
             var mob = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Spells.Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
             if (mob.Count > 0)
             {
-                if (Spells.Q.LSIsReady() && Helper.Enabled("q.jungle"))
+                if (Spells.Q.IsReady() && Helper.Enabled("q.jungle"))
                 {
                     Spells.Q.CastOnUnit(mob[0]);
                 }
-                if (Spells.W.LSIsReady() && Helper.Enabled("w.jungle"))
+                if (Spells.W.IsReady() && Helper.Enabled("w.jungle"))
                 {
                     Spells.W.CastOnUnit(mob[0]);
                 }
-                if (Spells.E.LSIsReady() && Helper.Enabled("e.jungle"))
+                if (Spells.E.IsReady() && Helper.Enabled("e.jungle"))
                 {
                     Spells.E.CastOnUnit(mob[0]);
                 }
@@ -195,9 +195,9 @@ namespace Feedlesticks
         /// </summary>
         private static void Combo()
         {
-            if (Spells.Q.LSIsReady() && Helper.Enabled("q.combo"))
+            if (Spells.Q.IsReady() && Helper.Enabled("q.combo"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o=> o.LSIsValidTarget(Spells.Q.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o=> o.IsValidTarget(Spells.Q.Range) && !o.IsDead && !o.IsZombie))
                 {
                     if (Helper.Enabled("q.enemy."+enemy.ChampionName))
                     {
@@ -205,9 +205,9 @@ namespace Feedlesticks
                     }
                 }
             }
-            if (Spells.W.LSIsReady() && Helper.Enabled("w.combo"))
+            if (Spells.W.IsReady() && Helper.Enabled("w.combo"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o=> o.LSIsValidTarget(Spells.W.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o=> o.IsValidTarget(Spells.W.Range) && !o.IsDead && !o.IsZombie))
                 {
                     if (Helper.Enabled("w.enemy."+enemy.ChampionName))
                     {
@@ -215,11 +215,11 @@ namespace Feedlesticks
                     }
                 }
             }
-            if (Spells.E.LSIsReady() && Helper.Enabled("e.combo"))
+            if (Spells.E.IsReady() && Helper.Enabled("e.combo"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o=> o.LSIsValidTarget(Spells.E.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o=> o.IsValidTarget(Spells.E.Range) && !o.IsDead && !o.IsZombie))
                 {
-                    if (Helper.Enabled("e.enemy." + enemy.ChampionName) && enemy.LSCountEnemiesInRange(Spells.E.Range) >= Helper.Slider("e.enemy.count"))
+                    if (Helper.Enabled("e.enemy." + enemy.ChampionName) && enemy.CountEnemiesInRange(Spells.E.Range) >= Helper.Slider("e.enemy.count"))
                     {
                         Spells.E.CastOnUnit(enemy);
                     }
@@ -237,14 +237,14 @@ namespace Feedlesticks
             }
 
             var min = MinionManager.GetMinions(ObjectManager.Player.Position, Spells.Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
-            if (Spells.E.LSIsReady() && Helper.Enabled("e.clear"))
+            if (Spells.E.IsReady() && Helper.Enabled("e.clear"))
             {
                 if (min.Count > Helper.Slider("e.minion.hit.count"))
                 {
                     Spells.E.CastOnUnit(min[0]);
                 }
             }
-            if (Spells.W.LSIsReady() && Helper.Enabled("w.clear"))
+            if (Spells.W.IsReady() && Helper.Enabled("w.clear"))
             {
                 Spells.W.CastOnUnit(min[0]);
             }

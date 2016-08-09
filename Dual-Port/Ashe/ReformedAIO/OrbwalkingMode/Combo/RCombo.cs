@@ -88,7 +88,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
                 TargetSelector.DamageType.Physical,
                 false);
 
-            if (target == null || !target.IsValid || target.IsInvulnerable || target.LSIsDashing()) return;
+            if (target == null || !target.IsValid || target.IsInvulnerable || target.IsDashing()) return;
 
             if (this.Menu.Item(this.Menu.Name + "RSafety").GetValue<bool>() && !this.rLogic.SafeR(target)) return;
 
@@ -105,23 +105,23 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
 
             if (target == null) return;
 
-            if (!target.IsEnemy || !Variable.Spells[SpellSlot.R].LSIsReady() || !target.LSIsValidTarget() || target.IsZombie) return;
+            if (!target.IsEnemy || !Variable.Spells[SpellSlot.R].IsReady() || !target.IsValidTarget() || target.IsZombie) return;
 
-            if (target.LSIsValidTarget(800)) Variable.Spells[SpellSlot.R].CastIfHitchanceEquals(target, HitChance.VeryHigh);
+            if (target.IsValidTarget(800)) Variable.Spells[SpellSlot.R].CastIfHitchanceEquals(target, HitChance.VeryHigh);
         }
 
         private void Interrupt(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
             if (!this.Menu.Item(this.Menu.Name + "Interrupt").GetValue<bool>()) return;
 
-            if (!sender.IsEnemy || !Variable.Spells[SpellSlot.R].LSIsReady() || sender.IsZombie) return;
+            if (!sender.IsEnemy || !Variable.Spells[SpellSlot.R].IsReady() || sender.IsZombie) return;
 
-            if (sender.LSIsValidTarget(1200)) Variable.Spells[SpellSlot.R].CastIfHitchanceEquals(sender, HitChance.VeryHigh);
+            if (sender.IsValidTarget(1200)) Variable.Spells[SpellSlot.R].CastIfHitchanceEquals(sender, HitChance.VeryHigh);
         }
 
         private void OnUpdate(EventArgs args)
         {
-            if (!Variable.Spells[SpellSlot.R].LSIsReady()) return;
+            if (!Variable.Spells[SpellSlot.R].IsReady()) return;
 
             this.SemiR();
 
@@ -136,7 +136,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
         {
             if (!this.Menu.Item(this.Menu.Name + "SemiR").GetValue<KeyBind>().Active) return;
 
-            if (Variable.Player.LSCountEnemiesInRange(1500) == 0) return;
+            if (Variable.Player.CountEnemiesInRange(1500) == 0) return;
 
             var target = TargetSelector.GetSelectedTarget();
             if (target == null) return;

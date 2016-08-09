@@ -20,9 +20,9 @@ using EloBuddy;
     {
         internal static void OnGapCloser(LeagueSharp.Common.ActiveGapcloser gapcloser)
         {
-            if (gapcloser.Sender.LSIsValidTarget() &&
+            if (gapcloser.Sender.IsValidTarget() &&
                 MenuExtensions.GetItemValue<bool>("iseriesr.vayne.misc.general.antigp") &&
-                Variables.spells[SpellSlot.E].LSIsReady())
+                Variables.spells[SpellSlot.E].IsReady())
             {
                 Variables.spells[SpellSlot.E].Cast(gapcloser.Sender);
             }
@@ -32,8 +32,8 @@ using EloBuddy;
         {
             if (args.DangerLevel >= Interrupter2.DangerLevel.Medium 
                 && MenuExtensions.GetItemValue<bool>("iseriesr.vayne.misc.general.antigp") 
-                && Variables.spells[SpellSlot.E].LSIsReady() 
-                && sender.LSIsValidTarget(Variables.spells[SpellSlot.E].Range))
+                && Variables.spells[SpellSlot.E].IsReady() 
+                && sender.IsValidTarget(Variables.spells[SpellSlot.E].Range))
             {
                 Variables.spells[SpellSlot.E].Cast(sender);
             }
@@ -47,7 +47,7 @@ using EloBuddy;
                 if (owTarget is AIHeroClient)
                 {
                     var owHero = owTarget as AIHeroClient;
-                    if (owHero.Health < ObjectManager.Player.LSGetAutoAttackDamage(owHero) * 2)
+                    if (owHero.Health < ObjectManager.Player.GetAutoAttackDamage(owHero) * 2)
                     {
                         return;
                     }
@@ -69,9 +69,9 @@ using EloBuddy;
                 var mBase = minion as Obj_AI_Base;
                 if (HealthPrediction.GetHealthPrediction(mBase, 250 + (int)ObjectManager.Player.AttackCastDelay + (int)(Game.Ping / 2f)) > 0
                     && HealthPrediction.GetHealthPrediction(mBase, 250 + (int)ObjectManager.Player.AttackCastDelay + 75 + (int)(Game.Ping / 2f)) + 5 <
-                    Variables.spells[SpellSlot.Q].GetDamage(mBase) + ObjectManager.Player.LSGetAutoAttackDamage(mBase))
+                    Variables.spells[SpellSlot.Q].GetDamage(mBase) + ObjectManager.Player.GetAutoAttackDamage(mBase))
                 {
-                    var qEndPosition = ObjectManager.Player.ServerPosition.LSExtend(Game.CursorPos, 325f);
+                    var qEndPosition = ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, 325f);
 
                     if (!VayneQ.IsSafe(qEndPosition))
                     {

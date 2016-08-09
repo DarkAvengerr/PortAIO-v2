@@ -67,7 +67,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Lane
 
             if (this.Menu.Item(this.Menu.Name + "LaneQEnemy").GetValue<bool>())
             {
-                if (minions.Any(m => m.LSCountEnemiesInRange(1500) > 0))
+                if (minions.Any(m => m.CountEnemiesInRange(1500) > 0))
                 {
                     return;
                 }
@@ -96,7 +96,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Lane
         private void OnUpdate(EventArgs args)
         {
             if (Variable.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
-                || !Variable.Spells[SpellSlot.Q].LSIsReady()) return;
+                || !Variable.Spells[SpellSlot.Q].IsReady()) return;
 
             if (this.Menu.Item(this.Menu.Name + "LaneQMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
 

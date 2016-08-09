@@ -75,7 +75,7 @@ using EloBuddy;
             {
                 if (ModeConfig.MenuFarm.Item("Farm.MinMana.Enable").GetValue<KeyBind>().Active)
                 {
-                    return HeroManager.Enemies.Find(e => e.LSIsValidTarget(2000) && !e.IsZombie) == null
+                    return HeroManager.Enemies.Find(e => e.IsValidTarget(2000) && !e.IsZombie) == null
                         ? MenuLocal.Item("Lane.MinMana.Alone").GetValue<Slider>().Value
                         : MenuLocal.Item("Lane.MinMana.Enemy").GetValue<Slider>().Value;
                 }
@@ -103,9 +103,9 @@ using EloBuddy;
                 return;
             }
 
-            if (Q.LSIsReady() && MenuLocal.Item("Lane.UseQ").GetValue<StringList>().SelectedIndex != 0)
+            if (Q.IsReady() && MenuLocal.Item("Lane.UseQ").GetValue<StringList>().SelectedIndex != 0)
             {
-                var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q.Range).Where(m => !m.LSUnderTurret(true));
+                var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q.Range).Where(m => !m.UnderTurret(true));
 
                 if (ModeConfig.MenuConfig.Item("Lane.LaneQuick").GetValue<KeyBind>().Active)
                 {
@@ -132,7 +132,7 @@ using EloBuddy;
                 }
             }
 
-            if ((MenuLocal.Item("Lane.UseQ").GetValue<StringList>().SelectedIndex == 0 || !Q.LSIsReady()) && E.LSIsReady() &&
+            if ((MenuLocal.Item("Lane.UseQ").GetValue<StringList>().SelectedIndex == 0 || !Q.IsReady()) && E.IsReady() &&
                 MenuLocal.Item("Lane.UseE").GetValue<StringList>().SelectedIndex != 0)
             {
                 var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, E.Range);
@@ -159,7 +159,7 @@ using EloBuddy;
                 return;
             }
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Q.Range);
 
@@ -172,7 +172,7 @@ using EloBuddy;
                 }
             }
 
-            if (!Q.LSIsReady() && E.LSIsReady())
+            if (!Q.IsReady() && E.IsReady())
             {
                 var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, E.Range);
 

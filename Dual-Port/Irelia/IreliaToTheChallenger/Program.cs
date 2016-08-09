@@ -42,9 +42,9 @@ using EloBuddy;
         }
         public static void DrawR(EventArgs args)
         {
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsEnemy && hero.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition) < 1000 && hero.Health > 1))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsEnemy && hero.ServerPosition.Distance(ObjectManager.Player.ServerPosition) < 1000 && hero.Health > 1))
                 {
                     var enemyPositionToScreen = Drawing.WorldToScreen(enemy.Position);
                     var dmg = R.GetDamage(enemy);
@@ -65,20 +65,20 @@ using EloBuddy;
             var target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical);
             if (target != null)
             {
-                if (ObjectManager.Player.LSHasBuff("ireliatranscendentbladesspell"))
+                if (ObjectManager.Player.HasBuff("ireliatranscendentbladesspell"))
                 {
                     R.Cast(R.GetPrediction(target).UnitPosition);
                 }
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                 {
-                    if (Q.LSIsReady())
+                    if (Q.IsReady())
                     {
-                        var killableEnemy = ObjectManager.Get<AIHeroClient>().FirstOrDefault(hero => hero.IsEnemy && !hero.IsDead && hero.Health < Q.GetDamage(hero) && hero.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition) < 650);
-                        if (killableEnemy != null && killableEnemy.LSIsValidTarget())
+                        var killableEnemy = ObjectManager.Get<AIHeroClient>().FirstOrDefault(hero => hero.IsEnemy && !hero.IsDead && hero.Health < Q.GetDamage(hero) && hero.ServerPosition.Distance(ObjectManager.Player.ServerPosition) < 650);
+                        if (killableEnemy != null && killableEnemy.IsValidTarget())
                         {
                             Q.Cast(killableEnemy);
                         }
-                        var distBetweenMeAndTarget = ObjectManager.Player.ServerPosition.LSDistance(target.ServerPosition);
+                        var distBetweenMeAndTarget = ObjectManager.Player.ServerPosition.Distance(target.ServerPosition);
                         if (distBetweenMeAndTarget > MainMenu.Item("ittc.mindistanceforqgapclose").GetValue<Slider>().Value)
                         {
                             if (distBetweenMeAndTarget < 650)
@@ -90,8 +90,8 @@ using EloBuddy;
                                 var minionGapclosingMode = MainMenu.Item("ittc.qminiongapclose").GetValue<StringList>().SelectedValue;
                                 if (minionGapclosingMode == "ONLY-CLOSEST-TO-TARGET")
                                 {
-                                    var gapclosingMinion = ObjectManager.Get<Obj_AI_Minion>().Where(m => m.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition) < 650 &&
-                                        m.IsEnemy && m.ServerPosition.LSDistance(target.ServerPosition) < distBetweenMeAndTarget && m.Health > 1 && m.Health < Q.GetDamage(m)).OrderBy(m => m.Position.LSDistance(target.ServerPosition)).FirstOrDefault();
+                                    var gapclosingMinion = ObjectManager.Get<Obj_AI_Minion>().Where(m => m.ServerPosition.Distance(ObjectManager.Player.ServerPosition) < 650 &&
+                                        m.IsEnemy && m.ServerPosition.Distance(target.ServerPosition) < distBetweenMeAndTarget && m.Health > 1 && m.Health < Q.GetDamage(m)).OrderBy(m => m.Position.Distance(target.ServerPosition)).FirstOrDefault();
                                     if (gapclosingMinion != null)
                                     {
                                         Q.Cast(gapclosingMinion);
@@ -99,8 +99,8 @@ using EloBuddy;
                                 }
                                 else
                                 {
-                                    var firstGapclosingMinion = ObjectManager.Get<Obj_AI_Minion>().Where(m => m.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition) < 650 &&
-                                    m.Health > 1 && m.Health < Q.GetDamage(m)).OrderByDescending(m => m.Position.LSDistance(target.ServerPosition)).FirstOrDefault();
+                                    var firstGapclosingMinion = ObjectManager.Get<Obj_AI_Minion>().Where(m => m.ServerPosition.Distance(ObjectManager.Player.ServerPosition) < 650 &&
+                                    m.Health > 1 && m.Health < Q.GetDamage(m)).OrderByDescending(m => m.Position.Distance(target.ServerPosition)).FirstOrDefault();
                                     if (firstGapclosingMinion != null)
                                     {
                                         Q.Cast(firstGapclosingMinion);
@@ -109,13 +109,13 @@ using EloBuddy;
                             }
                         }
                     }
-                    if (E.LSIsReady())
+                    if (E.IsReady())
                     {
                         if (ObjectManager.Player.HealthPercent <= target.HealthPercent)
                         {
                             E.Cast(target);
                         }
-                        if (target.HealthPercent < ObjectManager.Player.HealthPercent && target.MoveSpeed > ObjectManager.Player.MoveSpeed && ObjectManager.Player.ServerPosition.LSDistance(target.ServerPosition) > 300)
+                        if (target.HealthPercent < ObjectManager.Player.HealthPercent && target.MoveSpeed > ObjectManager.Player.MoveSpeed && ObjectManager.Player.ServerPosition.Distance(target.ServerPosition) > 300)
                         {
                             E.Cast(target);
                         }
@@ -129,7 +129,7 @@ using EloBuddy;
                 {
                     case "ONLY-UNKILLABLE":
                         {
-                            var unkillableMinion = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(m => m.IsEnemy && m.Position.LSDistance(ObjectManager.Player.ServerPosition) < 650 && !Orbwalking.InAutoAttackRange(m) && m.Health > 1 && m.Health < Q.GetDamage(m));
+                            var unkillableMinion = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(m => m.IsEnemy && m.Position.Distance(ObjectManager.Player.ServerPosition) < 650 && !Orbwalking.InAutoAttackRange(m) && m.Health > 1 && m.Health < Q.GetDamage(m));
                             if (unkillableMinion != null)
                             {
                                 Q.Cast(unkillableMinion);
@@ -138,7 +138,7 @@ using EloBuddy;
                         }
                     case "ALWAYS":
                         {
-                            var killableMinion = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(m => m.IsEnemy && m.Position.LSDistance(ObjectManager.Player.ServerPosition) < 650 && m.Health > 1 && m.Health < Q.GetDamage(m));
+                            var killableMinion = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(m => m.IsEnemy && m.Position.Distance(ObjectManager.Player.ServerPosition) < 650 && m.Health > 1 && m.Health < Q.GetDamage(m));
                             if (killableMinion != null)
                             {
                                 Q.Cast(killableMinion);

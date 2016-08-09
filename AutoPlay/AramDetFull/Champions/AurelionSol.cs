@@ -36,34 +36,34 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             if (!HasPassive())
             {
-                if (target.LSIsValidTarget(350))
+                if (target.IsValidTarget(350))
                 {
                     return;
                 }
 
-                if (player.LSDistance(target) > 350 && player.LSDistance(target) < W.Range)
+                if (player.Distance(target) > 350 && player.Distance(target) < W.Range)
                 {
                     W.Cast();
                 }
             }
             else if (HasPassive())
             {
-                if (player.LSDistance(target) > 350 && player.LSDistance(target) < W.Range + 100)
+                if (player.Distance(target) > 350 && player.Distance(target) < W.Range + 100)
                 {
                     return;
                 }
 
-                if (player.LSDistance(target) > 350 + 150)
+                if (player.Distance(target) > 350 + 150)
                 {
                     W.Cast();
                 }
@@ -76,7 +76,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
                 R.CastIfWillHit(target, 2);
             }
@@ -110,7 +110,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private bool HasPassive()
         {
-            return player.LSHasBuff("AurelionSolWActive");
+            return player.HasBuff("AurelionSolWActive");
         }
     }
 }

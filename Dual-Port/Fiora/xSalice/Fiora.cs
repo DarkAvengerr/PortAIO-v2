@@ -181,18 +181,18 @@ using EloBuddy; namespace xSaliceResurrected.Top
         {
             double comboDamage = 0;
 
-            if (Q.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.Q) * 2;
+            if (Q.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.Q) * 2;
 
-            if (W.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.W);
+            if (W.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.W);
 
-            if (R.LSIsReady())
-                comboDamage += Player.LSGetSpellDamage(target, SpellSlot.R) / target.LSCountEnemiesInRange(R.Range);
+            if (R.IsReady())
+                comboDamage += Player.GetSpellDamage(target, SpellSlot.R) / target.CountEnemiesInRange(R.Range);
 
             comboDamage = ItemManager.CalcDamage(target, comboDamage);
 
-            return (float)(comboDamage + Player.LSGetAutoAttackDamage(target) * 3);
+            return (float)(comboDamage + Player.GetAutoAttackDamage(target) * 3);
         }
 
         private void Combo()
@@ -260,7 +260,7 @@ using EloBuddy; namespace xSaliceResurrected.Top
             if (useQ)
                 Cast_Q_Last_Hit();
 
-            if (useE && allMinionsE.Count > 0 && E.LSIsReady())
+            if (useE && allMinionsE.Count > 0 && E.IsReady())
                 E.Cast();
 
         }
@@ -269,16 +269,16 @@ using EloBuddy; namespace xSaliceResurrected.Top
         {
             if (!menu.Item("smartKS", true).GetValue<bool>())
                 return;
-            foreach (AIHeroClient target in ObjectManager.Get<AIHeroClient>().Where(x => x.LSIsValidTarget(Q.Range) && !x.IsDead && !x.HasBuffOfType(BuffType.Invulnerability)))
+            foreach (AIHeroClient target in ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(Q.Range) && !x.IsDead && !x.HasBuffOfType(BuffType.Invulnerability)))
             {
                 //Q *2
-                if (Player.LSGetSpellDamage(target, SpellSlot.Q) * 2 > target.Health && Player.LSDistance(target.Position) < Q.Range && Q.LSIsReady())
+                if (Player.GetSpellDamage(target, SpellSlot.Q) * 2 > target.Health && Player.Distance(target.Position) < Q.Range && Q.IsReady())
                 {
                     Q.Cast(target);
                     return;
                 }
                 //Q
-                if (Player.LSGetSpellDamage(target, SpellSlot.Q) > target.Health && Player.LSDistance(target.Position) < Q.Range && Q.LSIsReady())
+                if (Player.GetSpellDamage(target, SpellSlot.Q) > target.Health && Player.Distance(target.Position) < Q.Range && Q.IsReady())
                 {
                     Q.Cast(target);
                     return;
@@ -293,12 +293,12 @@ using EloBuddy; namespace xSaliceResurrected.Top
             int mode = menu.Item("Combo_mode", true).GetValue<StringList>().SelectedIndex;
             if (mode == 0)
             {
-                if (Q.LSIsReady() && target != null)
+                if (Q.IsReady() && target != null)
                 {
                     if (Q.IsKillable(target))
                         Q.Cast(target);
 
-                    if (Player.LSGetSpellDamage(target, SpellSlot.Q) * 2 > target.Health)
+                    if (Player.GetSpellDamage(target, SpellSlot.Q) * 2 > target.Health)
                         Q.Cast(target);
 
                     if (Utils.TickCount - Q.LastCastAttemptT > 3800 && Utils.TickCount - Q.LastCastAttemptT < 4000)
@@ -306,7 +306,7 @@ using EloBuddy; namespace xSaliceResurrected.Top
 
                     var minDistance = menu.Item("Q_Min_Distance", true).GetValue<Slider>().Value;
 
-                    if (Player.LSDistance(target.Position, true) > Q.RangeSqr && menu.Item("Q_Gap_Close", true).GetValue<bool>())
+                    if (Player.Distance(target.Position, true) > Q.RangeSqr && menu.Item("Q_Gap_Close", true).GetValue<bool>())
                     {
                         var allMinionQ = MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.NotAlly);
 
@@ -317,16 +317,16 @@ using EloBuddy; namespace xSaliceResurrected.Top
 
                         foreach (var minion in allMinionQ)
                         {
-                            if (target.LSDistance(minion.Position, true) < Q.RangeSqr && Player.LSDistance(minion.Position, true) < Q.RangeSqr &&
-                                target.LSDistance(minion.Position, true) < target.LSDistance(Player.Position, true))
-                                if (target.LSDistance(minion.Position, true) < target.LSDistance(bestMinion.Position, true))
+                            if (target.Distance(minion.Position, true) < Q.RangeSqr && Player.Distance(minion.Position, true) < Q.RangeSqr &&
+                                target.Distance(minion.Position, true) < target.Distance(Player.Position, true))
+                                if (target.Distance(minion.Position, true) < target.Distance(bestMinion.Position, true))
                                     bestMinion = minion;
                         }
 
                         //check if can Q without activating
                         if (bestMinion != null && Utils.TickCount - Q.LastCastAttemptT > 4000)
                         {
-                            if (target.LSDistance(bestMinion.Position, true) < Q.RangeSqr && Player.LSDistance(bestMinion.Position, true) < Q.RangeSqr)
+                            if (target.Distance(bestMinion.Position, true) < Q.RangeSqr && Player.Distance(bestMinion.Position, true) < Q.RangeSqr)
                             {
                                 Q.Cast(bestMinion);
                                 return;
@@ -334,8 +334,8 @@ using EloBuddy; namespace xSaliceResurrected.Top
                         }
                     }
 
-                    if (Player.LSDistance(target.Position) > minDistance &&
-                        Player.LSDistance(target.Position, true) < Q.RangeSqr)
+                    if (Player.Distance(target.Position) > minDistance &&
+                        Player.Distance(target.Position, true) < Q.RangeSqr)
                     {
                         Q.Cast(target);
                     }
@@ -346,7 +346,7 @@ using EloBuddy; namespace xSaliceResurrected.Top
                 if (target == null)
                     return;
 
-                if (Q.LSIsReady() && Utils.TickCount - Q.LastCastAttemptT > 4000 && Player.LSDistance(target.Position) < Q.Range && Player.LSDistance(target.Position) > Player.AttackRange)
+                if (Q.IsReady() && Utils.TickCount - Q.LastCastAttemptT > 4000 && Player.Distance(target.Position) < Q.Range && Player.Distance(target.Position) > Player.AttackRange)
                     Q.Cast(target);
             }
         }
@@ -355,18 +355,18 @@ using EloBuddy; namespace xSaliceResurrected.Top
         {
             var allMinionQ = MinionManager.GetMinions(Player.ServerPosition, Q.Range + Player.BoundingRadius, MinionTypes.All, MinionTeam.NotAlly);
 
-            if (allMinionQ.Count > 0 && Q.LSIsReady())
+            if (allMinionQ.Count > 0 && Q.IsReady())
             {
 
                 foreach (var minion in allMinionQ)
                 {
-                    double dmg = Player.LSGetSpellDamage(minion, SpellSlot.Q);
+                    double dmg = Player.GetSpellDamage(minion, SpellSlot.Q);
 
                     if (dmg > minion.Health + 35)
                     {
                         if (menu.Item("UseQFarm_Tower", true).GetValue<bool>())
                         {
-                            if (!minion.LSUnderTurret(true))
+                            if (!minion.UnderTurret(true))
                             {
                                 Q.Cast(minion);
                                 return;
@@ -383,11 +383,11 @@ using EloBuddy; namespace xSaliceResurrected.Top
         {
             var target = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
 
-            if (target != null && R.LSIsReady())
+            if (target != null && R.IsReady())
             {
-                if (Player.LSGetSpellDamage(target, SpellSlot.R) /
-                    target.LSCountEnemiesInRange(R.Range) >
-                    target.Health - Player.LSGetAutoAttackDamage(target) * 2)
+                if (Player.GetSpellDamage(target, SpellSlot.R) /
+                    target.CountEnemiesInRange(R.Range) >
+                    target.Health - Player.GetAutoAttackDamage(target) * 2)
                     R.Cast(target);
 
                 var rHpValue = menu.Item("R_If_HP", true).GetValue<Slider>().Value;
@@ -457,7 +457,7 @@ using EloBuddy; namespace xSaliceResurrected.Top
                 if ((menu.Item("ComboActive", true).GetValue<KeyBind>().Active || menu.Item("HarassActive", true).GetValue<KeyBind>().Active)
                     && (target is AIHeroClient))
                 {
-                    if (menu.Item("E_Reset", true).GetValue<bool>() && E.LSIsReady())
+                    if (menu.Item("E_Reset", true).GetValue<bool>() && E.IsReady())
                     {
                         E.Cast();
                         LeagueSharp.Common.Utility.DelayAction.Add(250, OrbwalkManager.ResetAutoAttackTimer);
@@ -467,7 +467,7 @@ using EloBuddy; namespace xSaliceResurrected.Top
                     {
                         Q.Cast(target);
 
-                        if (QSpell.State == SpellState.Cooldown && R.LSIsReady())
+                        if (QSpell.State == SpellState.Cooldown && R.IsReady())
                             R.Cast(target);
                     }
                 }
@@ -478,7 +478,7 @@ using EloBuddy; namespace xSaliceResurrected.Top
         {
             if (unit.IsMe)
             {
-                SpellSlot castedSlot = Player.LSGetSpellSlot(args.SData.Name);
+                SpellSlot castedSlot = Player.GetSpellSlot(args.SData.Name);
 
                 if (castedSlot == SpellSlot.Q)
                 {
@@ -489,16 +489,16 @@ using EloBuddy; namespace xSaliceResurrected.Top
             if (unit.IsMe)
                 return;
 
-            if (OrbwalkManager.IsAutoAttack(args.SData.Name) && args.Target.IsMe && Player.LSDistance(args.End) < 450)
+            if (OrbwalkManager.IsAutoAttack(args.SData.Name) && args.Target.IsMe && Player.Distance(args.End) < 450)
             {
                 if (menu.Item("W_Incoming", true).GetValue<bool>() ||
-                    (menu.Item("ComboActive", true).GetValue<KeyBind>().Active && E.LSIsReady() && menu.Item("UseWCombo", true).GetValue<bool>()) ||
+                    (menu.Item("ComboActive", true).GetValue<KeyBind>().Active && E.IsReady() && menu.Item("UseWCombo", true).GetValue<bool>()) ||
                     (menu.Item("HarassActive", true).GetValue<KeyBind>().Active && menu.Item("UseWHarass", true).GetValue<bool>()))
                 {
                     if (!menu.Item("W_minion", true).GetValue<bool>() && !(unit is AIHeroClient))
                         return;
 
-                    if (menu.Item("W_Tower", true).GetValue<bool>() && Player.LSUnderTurret(true))
+                    if (menu.Item("W_Tower", true).GetValue<bool>() && Player.UnderTurret(true))
                         return;
 
                     W.Cast();
@@ -507,7 +507,7 @@ using EloBuddy; namespace xSaliceResurrected.Top
 
             if (unit.IsEnemy && (unit is AIHeroClient) && menu.Item(args.SData.Name + "R_Dodge", true) != null)
             {
-                if (Player.LSDistance(args.End) > R.Range || !R.LSIsReady())
+                if (Player.Distance(args.End) > R.Range || !R.IsReady())
                     return;
 
                 if (menu.Item(args.SData.Name + "R_Dodge", true).GetValue<bool>() && args.SData.Name == "SyndraR")
@@ -533,22 +533,22 @@ using EloBuddy; namespace xSaliceResurrected.Top
 
             if (menu.Item("Draw_Q", true).GetValue<bool>())
                 if (Q.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, Q.Range, Q.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, Q.Range, Q.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_E", true).GetValue<bool>())
                 if (E.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, E.Range, E.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.Green : Color.Red);
 
             if (menu.Item("Draw_R", true).GetValue<bool>())
                 if (R.Level > 0)
-                    Render.Circle.DrawCircle(Player.Position, R.Range, R.LSIsReady() ? Color.Green : Color.Red);
+                    Render.Circle.DrawCircle(Player.Position, R.Range, R.IsReady() ? Color.Green : Color.Red);
 
-            if (menu.Item("Draw_R_Killable", true).GetValue<bool>() && R.LSIsReady())
+            if (menu.Item("Draw_R_Killable", true).GetValue<bool>() && R.IsReady())
             {
-                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(x => x.LSIsValidTarget(5000) && !x.IsDead && x.IsEnemy).OrderBy(x => x.Health))
+                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(5000) && !x.IsDead && x.IsEnemy).OrderBy(x => x.Health))
                 {
                     Vector2 wts = Drawing.WorldToScreen(target.Position);
-                    if (Player.LSGetSpellDamage(target, SpellSlot.R) / target.LSCountEnemiesInRange(R.Range) > target.Health)
+                    if (Player.GetSpellDamage(target, SpellSlot.R) / target.CountEnemiesInRange(R.Range) > target.Health)
                     {
                         Drawing.DrawText(wts[0] - 20, wts[1], Color.White, "KILL!!!");
 

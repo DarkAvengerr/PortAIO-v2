@@ -26,10 +26,10 @@ using EloBuddy; namespace Activator.Items.Consumables
             {
                 if (hero.Player.NetworkId == Player.NetworkId)
                 {
-                    if (hero.Player.LSHasBuff("ElixirOfRuin"))
+                    if (hero.Player.HasBuff("ElixirOfRuin"))
                         return;
 
-                    if (hero.Player.LSIsRecalling() || hero.Player.LSInFountain())
+                    if (hero.Player.IsRecalling() || hero.Player.InFountain())
                         return;
 
                     if (hero.Player.Health/hero.Player.MaxHealth*100 <=

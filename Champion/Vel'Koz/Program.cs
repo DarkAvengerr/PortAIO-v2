@@ -73,7 +73,7 @@ namespace Velkoz
             E = new Spell(SpellSlot.E, 800);
             R = new Spell(SpellSlot.R, 1550);
 
-            IgniteSlot = Player.LSGetSpellSlot("SummonerDot");
+            IgniteSlot = Player.GetSpellSlot("SummonerDot");
 
 
             Q.SetSkillshot(0.25f, 50f, 1300f, true, SkillshotType.SkillshotLine);
@@ -210,7 +210,7 @@ namespace Velkoz
 
         private static void Combo()
         {
-            Orbwalker.SetAttack(!(Q.LSIsReady() || W.LSIsReady() || E.LSIsReady()));
+            Orbwalker.SetAttack(!(Q.IsReady() || W.IsReady() || E.IsReady()));
             UseSpells(Config.Item("UseQCombo").GetValue<bool>(), Config.Item("UseWCombo").GetValue<bool>(),
                 Config.Item("UseECombo").GetValue<bool>(), Config.Item("UseRCombo").GetValue<bool>(),
                 Config.Item("UseIgniteCombo").GetValue<bool>());
@@ -226,21 +226,21 @@ namespace Velkoz
         {
             var damage = 0d;
 
-            if (Q.LSIsReady() && Q.GetCollision(ObjectManager.Player.ServerPosition.LSTo2D(), new List<Vector2> { enemy.ServerPosition.LSTo2D() }).Count == 0)
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.Q);
+            if (Q.IsReady() && Q.GetCollision(ObjectManager.Player.ServerPosition.To2D(), new List<Vector2> { enemy.ServerPosition.To2D() }).Count == 0)
+                damage += Player.GetSpellDamage(enemy, SpellSlot.Q);
 
-            if (W.LSIsReady())
+            if (W.IsReady())
                 damage += W.Instance.Ammo *
-                          Player.LSGetSpellDamage(enemy, SpellSlot.W);
+                          Player.GetSpellDamage(enemy, SpellSlot.W);
 
-            if (E.LSIsReady())
-                damage += Player.LSGetSpellDamage(enemy, SpellSlot.E);
+            if (E.IsReady())
+                damage += Player.GetSpellDamage(enemy, SpellSlot.E);
 
             if (IgniteSlot != SpellSlot.Unknown && Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready)
                 damage += Player.GetSummonerSpellDamage(enemy, Damage.SummonerSpell.Ignite);
 
-            if (R.LSIsReady())
-                damage += 7 * Player.LSGetSpellDamage(enemy, SpellSlot.R) / 10;
+            if (R.IsReady())
+                damage += 7 * Player.GetSpellDamage(enemy, SpellSlot.R) / 10;
 
             return (float)damage;
         }
@@ -254,25 +254,25 @@ namespace Velkoz
             var rTarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
 
 
-            if (useW && wTarget != null && W.LSIsReady())
+            if (useW && wTarget != null && W.IsReady())
             {
                 W.Cast(wTarget);
                 return;
             }
 
-            if (useE && eTarget != null && E.LSIsReady())
+            if (useE && eTarget != null && E.IsReady())
             {
                 E.Cast(eTarget);
                 return;
             }
 
-            if (useQ && qTarget != null && Q.LSIsReady() && IsQOne)
+            if (useQ && qTarget != null && Q.IsReady() && IsQOne)
             {
                 if (Q.Cast(qTarget) == Spell.CastStates.SuccessfullyCasted)
                     return;
             }
 
-            if (qDummyTarget != null && useQ && Q.LSIsReady() && IsQOne)
+            if (qDummyTarget != null && useQ && Q.IsReady() && IsQOne)
             {
                 if (qTarget != null) qDummyTarget = qTarget;
                 QDummy.Delay = Q.Delay + Q.Range / Q.Speed * 1000 + QSplit.Range / QSplit.Speed * 1000;
@@ -283,13 +283,13 @@ namespace Velkoz
                     for (var i = -1; i < 1; i = i + 2)
                     {
                         var alpha = 28 * (float)Math.PI / 180;
-                        var cp = ObjectManager.Player.ServerPosition.LSTo2D() +
-                                 (predictedPos.CastPosition.LSTo2D() - ObjectManager.Player.ServerPosition.LSTo2D()).LSRotated
+                        var cp = ObjectManager.Player.ServerPosition.To2D() +
+                                 (predictedPos.CastPosition.To2D() - ObjectManager.Player.ServerPosition.To2D()).Rotated
                                      (i * alpha);
                         if (
-                            Q.GetCollision(ObjectManager.Player.ServerPosition.LSTo2D(), new List<Vector2> { cp }).Count ==
+                            Q.GetCollision(ObjectManager.Player.ServerPosition.To2D(), new List<Vector2> { cp }).Count ==
                             0 &&
-                            QSplit.GetCollision(cp, new List<Vector2> { predictedPos.CastPosition.LSTo2D() }).Count == 0)
+                            QSplit.GetCollision(cp, new List<Vector2> { predictedPos.CastPosition.To2D() }).Count == 0)
                         {
                             Q.Cast(cp);
                             return;
@@ -301,14 +301,14 @@ namespace Velkoz
             if (qTarget != null && useIgnite && IgniteSlot != SpellSlot.Unknown &&
                 Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready)
             {
-                if (Player.LSDistance(qTarget) < 650 && GetComboDamage(qTarget) > qTarget.Health)
+                if (Player.Distance(qTarget) < 650 && GetComboDamage(qTarget) > qTarget.Health)
                 {
                     Player.Spellbook.CastSpell(IgniteSlot, qTarget);
                 }
             }
 
-            if (useR && rTarget != null && R.LSIsReady() &&
-                Player.LSGetSpellDamage(rTarget, SpellSlot.R) / 10 * (Player.LSDistance(rTarget) < (R.Range - 500) ? 10 : 6) > rTarget.Health &&
+            if (useR && rTarget != null && R.IsReady() &&
+                Player.GetSpellDamage(rTarget, SpellSlot.R) / 10 * (Player.Distance(rTarget) < (R.Range - 500) ? 10 : 6) > rTarget.Health &&
                 (LastCastedSpell.LastCastPacketSent.Slot != SpellSlot.R ||
                  Utils.TickCount - LastCastedSpell.LastCastPacketSent.Tick > 350))
             {
@@ -329,19 +329,19 @@ namespace Velkoz
             var useE = Config.Item("UseEFarm").GetValue<bool>();
 
 
-            if (useQ && allMinionsW.Count > 0 && IsQOne && Q.LSIsReady())
+            if (useQ && allMinionsW.Count > 0 && IsQOne && Q.IsReady())
             {
                 Q.Cast(allMinionsW[0]);
             }
 
-            if (useW && W.LSIsReady())
+            if (useW && W.IsReady())
             {
                 var wPos = W.GetLineFarmLocation(allMinionsW);
                 if (wPos.MinionsHit >= 3)
                     W.Cast(wPos.Position);
             }
 
-            if (useE && E.LSIsReady())
+            if (useE && E.IsReady())
             {
                 var ePos = E.GetCircularFarmLocation(rangedMinionsE);
                 if (ePos.MinionsHit >= 3)
@@ -361,13 +361,13 @@ namespace Velkoz
             if (mobs.Count > 0)
             {
                 var mob = mobs[0];
-                if (useQ && IsQOne && Q.LSIsReady())
+                if (useQ && IsQOne && Q.IsReady())
                     Q.Cast(mob);
 
-                if (useW && W.LSIsReady())
+                if (useW && W.IsReady())
                     W.Cast(mob);
 
-                if (useE && E.LSIsReady())
+                if (useE && E.IsReady())
                     E.Cast(mob);
             }
         }
@@ -392,19 +392,19 @@ namespace Velkoz
                     if (obj != null && obj.IsValid && obj.Name.Contains("Velkoz_") &&
                         obj.Name.Contains("_R_Beam_End"))
                     {
-                        endPoint = Player.ServerPosition.LSTo2D() +
-                                   R.Range * (obj.Position - Player.ServerPosition).LSTo2D().LSNormalized();
+                        endPoint = Player.ServerPosition.To2D() +
+                                   R.Range * (obj.Position - Player.ServerPosition).To2D().Normalized();
                         break;
                     }
                 }
 
-                if (endPoint.LSIsValid())
+                if (endPoint.IsValid())
                 {
                     var targets = new List<Obj_AI_Base>();
 
-                    foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(h => h.LSIsValidTarget(R.Range)))
+                    foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(h => h.IsValidTarget(R.Range)))
                     {
-                        if (enemy.ServerPosition.LSTo2D().LSDistance(Player.ServerPosition.LSTo2D(), endPoint, true) < 400)
+                        if (enemy.ServerPosition.To2D().Distance(Player.ServerPosition.To2D(), endPoint, true) < 400)
                             targets.Add(enemy);
                     }
                     if (targets.Count > 0)
@@ -425,8 +425,8 @@ namespace Velkoz
             if (QMissile != null && QMissile.IsValid && Q.Instance.ToggleState == 2 &&
                 Utils.TickCount - Q.LastCastAttemptT < 2000)
             {
-                var qMissilePosition = QMissile.Position.LSTo2D();
-                var perpendicular = (QMissile.EndPosition - QMissile.StartPosition).LSTo2D().LSNormalized().LSPerpendicular();
+                var qMissilePosition = QMissile.Position.To2D();
+                var perpendicular = (QMissile.EndPosition - QMissile.StartPosition).To2D().Normalized().Perpendicular();
 
                 var lineSegment1End = qMissilePosition + perpendicular * QSplit.Range;
                 var lineSegment2End = qMissilePosition - perpendicular * QSplit.Range;
@@ -437,9 +437,9 @@ namespace Velkoz
                         ObjectManager.Get<AIHeroClient>()
                             .Where(
                                 h =>
-                                    h.LSIsValidTarget() &&
-                                    h.ServerPosition.LSTo2D()
-                                        .LSDistance(qMissilePosition, QMissile.EndPosition.LSTo2D(), true) < 700))
+                                    h.IsValidTarget() &&
+                                    h.ServerPosition.To2D()
+                                        .Distance(qMissilePosition, QMissile.EndPosition.To2D(), true) < 700))
                 {
                     potentialTargets.Add(enemy);
                 }
@@ -451,14 +451,14 @@ namespace Velkoz
                         ObjectManager.Get<AIHeroClient>()
                             .Where(
                                 h =>
-                                    h.LSIsValidTarget() &&
+                                    h.IsValidTarget() &&
                                     (potentialTargets.Count == 0 ||
                                      h.NetworkId == potentialTargets.OrderBy(t => t.Health / Q.GetDamage(t)).ToList()[0].NetworkId) &&
-                                    (h.ServerPosition.LSTo2D().LSDistance(qMissilePosition, QMissile.EndPosition.LSTo2D(), true) > Q.Width + h.BoundingRadius)))
+                                    (h.ServerPosition.To2D().Distance(qMissilePosition, QMissile.EndPosition.To2D(), true) > Q.Width + h.BoundingRadius)))
                 {
                     var prediction = QSplit.GetPrediction(enemy);
-                    var d1 = prediction.UnitPosition.LSTo2D().LSDistance(qMissilePosition, lineSegment1End, true);
-                    var d2 = prediction.UnitPosition.LSTo2D().LSDistance(qMissilePosition, lineSegment2End, true);
+                    var d1 = prediction.UnitPosition.To2D().Distance(qMissilePosition, lineSegment1End, true);
+                    var d2 = prediction.UnitPosition.To2D().Distance(qMissilePosition, lineSegment2End, true);
                     if (prediction.Hitchance >= HitChance.High &&
                         (d1 < QSplit.Width + enemy.BoundingRadius || d2 < QSplit.Width + enemy.BoundingRadius))
                     {

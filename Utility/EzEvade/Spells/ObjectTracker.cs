@@ -99,7 +99,7 @@ using EloBuddy; namespace ezEvade
                 var pos1 = sortedObjList.First().obj.Position;
                 var pos2 = sortedObjList.ElementAt(1).obj.Position;
 
-                return (pos2.LSTo2D() - pos1.LSTo2D()).LSNormalized();
+                return (pos2.To2D() - pos1.To2D()).Normalized();
             }
 
             return Vector2.Zero;

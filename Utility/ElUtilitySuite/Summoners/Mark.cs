@@ -63,7 +63,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         /// <returns></returns>
         public void CreateMenu(Menu rootMenu)
         {
-            if (this.Player.LSGetSpellSlot("summonersnowball") == SpellSlot.Unknown)
+            if (this.Player.GetSpellSlot("summonersnowball") == SpellSlot.Unknown)
             {
                 return;
             }
@@ -97,7 +97,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                 return;
             }
 
-            var markSlot = this.Player.LSGetSpellSlot("summonersnowball");
+            var markSlot = this.Player.GetSpellSlot("summonersnowball");
             if (markSlot == SpellSlot.Unknown)
             {
                 return;
@@ -124,7 +124,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                 return;
             }
 
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && x.LSIsValidTarget(1500f)))
+            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && x.IsValidTarget(1500f)))
             {
                 if (this.Menu.Item($"snowballon{enemy.ChampionName}").IsActive())
                 {

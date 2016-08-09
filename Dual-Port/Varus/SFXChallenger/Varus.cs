@@ -262,7 +262,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     "w-stacks", "W Stacks", 5, false, t => GetWStacks(t), "High amount of W Stacks = Higher Weight"));
 
             IndicatorManager.AddToMenu(DrawingManager.Menu, true);
-            IndicatorManager.Add("Q", hero => Q.LSIsReady() ? Q.GetDamage(hero, 1) : 0);
+            IndicatorManager.Add("Q", hero => Q.IsReady() ? Q.GetDamage(hero, 1) : 0);
             IndicatorManager.Add(E);
             IndicatorManager.Add(R);
             IndicatorManager.Finale();
@@ -275,7 +275,7 @@ using EloBuddy; namespace SFXChallenger.Champions
         protected override void OnPostUpdate()
         {
             Orbwalker.SetAttack(!Q.IsCharging);
-            if (Ultimate.IsActive(UltimateModeType.Assisted) && R.LSIsReady())
+            if (Ultimate.IsActive(UltimateModeType.Assisted) && R.IsReady())
             {
                 if (Ultimate.ShouldMove(UltimateModeType.Assisted))
                 {
@@ -288,7 +288,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 }
             }
 
-            if (Ultimate.IsActive(UltimateModeType.Auto) && R.LSIsReady())
+            if (Ultimate.IsActive(UltimateModeType.Auto) && R.IsReady())
             {
                 if (!RLogic(UltimateModeType.Auto, R.GetHitChance("combo"), TargetSelector.GetTarget(R)))
                 {
@@ -301,10 +301,10 @@ using EloBuddy; namespace SFXChallenger.Champions
         {
             try
             {
-                if (args.UniqueId.Equals("e-gapcloser") && E.LSIsReady() &&
+                if (args.UniqueId.Equals("e-gapcloser") && E.IsReady() &&
                     BestTargetOnlyManager.Check("e-gapcloser", E, args.Hero))
                 {
-                    if (args.End.LSDistance(Player.Position) <= E.Range)
+                    if (args.End.Distance(Player.Position) <= E.Range)
                     {
                         E.Cast(args.End);
                     }
@@ -330,7 +330,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             var e = Menu.Item(Menu.Name + ".combo.e").GetValue<bool>();
             var r = Ultimate.IsActive(UltimateModeType.Combo);
 
-            if (e && !Q.IsCharging && E.LSIsReady())
+            if (e && !Q.IsCharging && E.IsReady())
             {
                 var target = TargetSelector.GetTarget(E);
                 if (target != null)
@@ -347,7 +347,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     }
                 }
             }
-            if (q && Q.LSIsReady())
+            if (q && Q.IsReady())
             {
                 var target = TargetSelector.GetTarget((Q.ChargedMaxRange + Q.Width) * 1.1f, Q.DamageType);
                 if (target != null)
@@ -355,7 +355,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     var stacks = W.Level == 0 &&
                                  Menu.Item(Menu.Name + ".combo.q-settings.stacks").GetValue<Slider>().Value > 0;
                     if (Q.IsCharging || Menu.Item(Menu.Name + ".combo.q-settings.always").GetValue<bool>() ||
-                        target.LSDistance(Player) > Orbwalking.GetRealAutoAttackRange(target) * 1.2f || stacks ||
+                        target.Distance(Player) > Orbwalking.GetRealAutoAttackRange(target) * 1.2f || stacks ||
                         GetWStacks(target) >= Menu.Item(Menu.Name + ".combo.q-settings.stacks").GetValue<Slider>().Value ||
                         CPrediction.Line(Q, target, Q.GetHitChance("combo")).TotalHits >=
                         Menu.Item(Menu.Name + ".combo.q-settings.min").GetValue<Slider>().Value || Q.IsKillable(target))
@@ -366,7 +366,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     }
                 }
             }
-            if (r && R.LSIsReady())
+            if (r && R.IsReady())
             {
                 var target = TargetSelector.GetTarget(R);
                 if (target != null)
@@ -385,7 +385,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             {
                 return;
             }
-            if (Menu.Item(Menu.Name + ".harass.e").GetValue<bool>() && !Q.IsCharging && E.LSIsReady())
+            if (Menu.Item(Menu.Name + ".harass.e").GetValue<bool>() && !Q.IsCharging && E.IsReady())
             {
                 var target = TargetSelector.GetTarget(E);
                 if (target != null)
@@ -403,7 +403,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     }
                 }
             }
-            if (Menu.Item(Menu.Name + ".harass.q").GetValue<bool>() && Q.LSIsReady())
+            if (Menu.Item(Menu.Name + ".harass.q").GetValue<bool>() && Q.IsReady())
             {
                 var target = TargetSelector.GetTarget((Q.ChargedMaxRange + Q.Width) * 1.1f, Q.DamageType);
                 if (target != null)
@@ -411,7 +411,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     var stacks = W.Level == 0 &&
                                  Menu.Item(Menu.Name + ".harass.q-settings.stacks").GetValue<Slider>().Value > 0;
                     if (Q.IsCharging || Menu.Item(Menu.Name + ".harass.q-settings.always").GetValue<bool>() ||
-                        target.LSDistance(Player) > Orbwalking.GetRealAutoAttackRange(target) * 1.2f || stacks ||
+                        target.Distance(Player) > Orbwalking.GetRealAutoAttackRange(target) * 1.2f || stacks ||
                         GetWStacks(target) >=
                         Menu.Item(Menu.Name + ".harass.q-settings.stacks").GetValue<Slider>().Value ||
                         Q.IsKillable(target) ||
@@ -433,8 +433,8 @@ using EloBuddy; namespace SFXChallenger.Champions
             return
                 Utils.PositionAfter(
                     target,
-                    delay + (Player.LSDistance(target) - Q.Width - target.BoundingRadius * 0.75f) / Q.Speed +
-                    Game.Ping / 2000f, target.MoveSpeed).LSDistance(Player) < Q.ChargedMaxRange;
+                    delay + (Player.Distance(target) - Q.Width - target.BoundingRadius * 0.75f) / Q.Speed +
+                    Game.Ping / 2000f, target.MoveSpeed).Distance(Player) < Q.ChargedMaxRange;
         }
 
         private bool QIsKillable(AIHeroClient target, int collisions)
@@ -487,7 +487,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 };
                 return
                     Collision.GetCollision(
-                        new List<Vector3> { Player.Position.LSExtend(castPos, Q.Range + Q.Width) }, input).Count;
+                        new List<Vector3> { Player.Position.Extend(castPos, Q.Range + Q.Width) }, input).Count;
             }
             catch (Exception ex)
             {
@@ -567,7 +567,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 var pred = R.GetPrediction(target);
                 if (pred.Hitchance >= hitChance)
                 {
-                    var hits = GameObjects.EnemyHeroes.Where(x => x.LSDistance(target) <= _rSpreadRadius).ToList();
+                    var hits = GameObjects.EnemyHeroes.Where(x => x.Distance(target) <= _rSpreadRadius).ToList();
                     if (Ultimate.Check(mode, hits))
                     {
                         R.Cast(pred.CastPosition);
@@ -618,7 +618,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 float damage = 0;
                 var totalMana = 0f;
 
-                if (r && R.LSIsReady() && (!rangeCheck || R.IsInRange(target)))
+                if (r && R.IsReady() && (!rangeCheck || R.IsInRange(target)))
                 {
                     var rMana = R.ManaCost * resMulti;
                     if (totalMana + rMana <= Player.Mana)
@@ -627,7 +627,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                         damage += R.GetDamage(target);
                     }
                 }
-                if (q && Q.LSIsReady() && (!rangeCheck || Q.IsInRange(target, Q.ChargedMaxRange)))
+                if (q && Q.IsReady() && (!rangeCheck || Q.IsInRange(target, Q.ChargedMaxRange)))
                 {
                     var qMana = Q.ManaCost * resMulti;
                     if (totalMana + qMana <= Player.Mana)
@@ -636,7 +636,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                         damage += GetQDamage(target, 1);
                     }
                 }
-                if (e && E.LSIsReady() && (!rangeCheck || E.IsInRange(target, E.Range + E.Width)))
+                if (e && E.IsReady() && (!rangeCheck || E.IsInRange(target, E.Range + E.Width)))
                 {
                     var eMana = E.ManaCost * resMulti;
                     if (totalMana + eMana <= Player.Mana)
@@ -646,7 +646,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 }
                 if (!rangeCheck || Orbwalking.InAutoAttackRange(target))
                 {
-                    damage += 5f * (float) Player.LSGetAutoAttackDamage(target);
+                    damage += 5f * (float) Player.GetAutoAttackDamage(target);
                 }
                 damage += ItemManager.CalculateComboDamage(target, rangeCheck);
                 damage += SummonerManager.CalculateComboDamage(target, rangeCheck);
@@ -662,9 +662,9 @@ using EloBuddy; namespace SFXChallenger.Champions
         protected override void LaneClear()
         {
             var min = Menu.Item(Menu.Name + ".lane-clear.min").GetValue<Slider>().Value;
-            var useQ = Menu.Item(Menu.Name + ".lane-clear.q").GetValue<bool>() && Q.LSIsReady() &&
+            var useQ = Menu.Item(Menu.Name + ".lane-clear.q").GetValue<bool>() && Q.IsReady() &&
                        (ResourceManager.Check("lane-clear-q") || Q.IsCharging);
-            var useE = Menu.Item(Menu.Name + ".lane-clear.e").GetValue<bool>() && E.LSIsReady() &&
+            var useE = Menu.Item(Menu.Name + ".lane-clear.e").GetValue<bool>() && E.IsReady() &&
                        ResourceManager.Check("lane-clear-e");
             if (useQ)
             {
@@ -693,9 +693,9 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void JungleClear()
         {
-            var useQ = Menu.Item(Menu.Name + ".jungle-clear.q").GetValue<bool>() && Q.LSIsReady() &&
+            var useQ = Menu.Item(Menu.Name + ".jungle-clear.q").GetValue<bool>() && Q.IsReady() &&
                        (ResourceManager.Check("jungle-clear-q") || Q.IsCharging);
-            var useE = Menu.Item(Menu.Name + ".jungle-clear.e").GetValue<bool>() && E.LSIsReady() &&
+            var useE = Menu.Item(Menu.Name + ".jungle-clear.e").GetValue<bool>() && E.IsReady() &&
                        ResourceManager.Check("jungle-clear-e");
             if (useQ)
             {
@@ -726,23 +726,23 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void Flee()
         {
-            if (Menu.Item(Menu.Name + ".flee.e").GetValue<bool>() && !Q.IsCharging && E.LSIsReady())
+            if (Menu.Item(Menu.Name + ".flee.e").GetValue<bool>() && !Q.IsCharging && E.IsReady())
             {
                 ELogic(
-                    GameObjects.EnemyHeroes.Where(e => e.LSIsValidTarget(E.Range))
-                        .OrderBy(e => e.Position.LSDistance(Player.Position))
+                    GameObjects.EnemyHeroes.Where(e => e.IsValidTarget(E.Range))
+                        .OrderBy(e => e.Position.Distance(Player.Position))
                         .FirstOrDefault(), HitChance.High);
             }
         }
 
         protected override void Killsteal()
         {
-            if (Menu.Item(Menu.Name + ".killsteal.q").GetValue<bool>() && Q.LSIsReady())
+            if (Menu.Item(Menu.Name + ".killsteal.q").GetValue<bool>() && Q.IsReady())
             {
                 var killable =
                     GameObjects.EnemyHeroes.FirstOrDefault(
                         e =>
-                            e.LSIsValidTarget(Q.Range) && !Orbwalking.InAutoAttackRange(e) &&
+                            e.IsValidTarget(Q.Range) && !Orbwalking.InAutoAttackRange(e) &&
                             (QIsKillable(e, 1) || QMaxRangeHit(e) && QIsKillable(e, 2)));
                 if (killable != null)
                 {
@@ -768,7 +768,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 {
                     foreach (var enemy in
                         GameObjects.EnemyHeroes.Where(
-                            e => e.IsHPBarRendered && e.Position.IsOnScreen() && e.LSIsValidTarget()))
+                            e => e.IsHPBarRendered && e.Position.IsOnScreen() && e.IsValidTarget()))
                     {
                         var stacks = GetWStacks(enemy) - 1;
                         if (stacks > -1)

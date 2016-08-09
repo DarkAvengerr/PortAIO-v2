@@ -28,11 +28,11 @@ namespace VayneHunter_Reborn.Utility
             var midWallQPos = new Vector2(6962, 8952);
             if (MenuExtensions.GetItemValue<bool>("dz191.vhr.draw.spots"))
             {
-                if (ObjectManager.Player.LSDistance(drakeWallQPos) <= 1500f && PlayerHelper.IsSummonersRift())
+                if (ObjectManager.Player.Distance(drakeWallQPos) <= 1500f && PlayerHelper.IsSummonersRift())
                 {
                 //    Render.Circle.DrawCircle(new Vector2(12050, 4827).To3D(), 65f, Color.AliceBlue);
                 }
-                if (ObjectManager.Player.LSDistance(midWallQPos) <= 1500f && PlayerHelper.IsSummonersRift())
+                if (ObjectManager.Player.Distance(midWallQPos) <= 1500f && PlayerHelper.IsSummonersRift())
                 {
                 //    Render.Circle.DrawCircle(new Vector2(6962, 8952).To3D(), 65f, Color.AliceBlue);
                 }
@@ -54,14 +54,14 @@ namespace VayneHunter_Reborn.Utility
 
         private static void DrawCondemnRectangles()
         {
-            if (!MenuExtensions.GetItemValue<bool>("dz191.vhr.draw.condemn") || !Variables.spells[SpellSlot.E].LSIsReady())
+            if (!MenuExtensions.GetItemValue<bool>("dz191.vhr.draw.condemn") || !Variables.spells[SpellSlot.E].IsReady())
             {
                 return;
             }
 
             var HeroList = HeroManager.Enemies.Where(
                                      h =>
-                                         h.LSIsValidTarget(Variables.spells[SpellSlot.E].Range + 130f) &&
+                                         h.IsValidTarget(Variables.spells[SpellSlot.E].Range + 130f) &&
                                          !h.HasBuffOfType(BuffType.SpellShield) &&
                                          !h.HasBuffOfType(BuffType.SpellImmunity));
             //dz191.vhr.misc.condemn.rev.accuracy
@@ -78,7 +78,7 @@ namespace VayneHunter_Reborn.Utility
                 }
 
                 if (Hero.Health + 10 <=
-                    ObjectManager.Player.LSGetAutoAttackDamage(Hero) *
+                    ObjectManager.Player.GetAutoAttackDamage(Hero) *
                     MenuExtensions.GetItemValue<Slider>("dz191.vhr.misc.condemn.noeaa").Value)
                 {
                     continue;
@@ -86,11 +86,11 @@ namespace VayneHunter_Reborn.Utility
 
 
                 var targetPosition = Hero.Position;
-                var finalPosition = targetPosition.LSExtend(ObjectManager.Player.ServerPosition, -PushDistance);
-                var finalPosition_ex = Hero.ServerPosition.LSExtend(ObjectManager.Player.ServerPosition, -PushDistance);
+                var finalPosition = targetPosition.Extend(ObjectManager.Player.ServerPosition, -PushDistance);
+                var finalPosition_ex = Hero.ServerPosition.Extend(ObjectManager.Player.ServerPosition, -PushDistance);
 
-                var condemnRectangle = new VHRPolygon(VHRPolygon.Rectangle(targetPosition.LSTo2D(), finalPosition.LSTo2D(), Hero.BoundingRadius));
-                var condemnRectangle_ex = new VHRPolygon(VHRPolygon.Rectangle(Hero.ServerPosition.LSTo2D(), finalPosition_ex.LSTo2D(), Hero.BoundingRadius));
+                var condemnRectangle = new VHRPolygon(VHRPolygon.Rectangle(targetPosition.To2D(), finalPosition.To2D(), Hero.BoundingRadius));
+                var condemnRectangle_ex = new VHRPolygon(VHRPolygon.Rectangle(Hero.ServerPosition.To2D(), finalPosition_ex.To2D(), Hero.BoundingRadius));
 
                 var points = condemnRectangle.Points.Select(v2 => new IntPoint(v2.X, v2.Y)).ToList();
                 var poly_ex = Helpers.Geometry.ToPolygon(points);

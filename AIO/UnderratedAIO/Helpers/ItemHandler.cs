@@ -72,8 +72,8 @@ namespace UnderratedAIO.Helpers
             }
             if (config.Item("ran").GetValue<bool>() && Items.HasItem(randuins.Id) && Items.CanUseItem(randuins.Id))
             {
-                if (target != null && player.LSDistance(target) < randuins.Range &&
-                    player.LSCountEnemiesInRange(randuins.Range) >= config.Item("ranmin").GetValue<Slider>().Value)
+                if (target != null && player.Distance(target) < randuins.Range &&
+                    player.CountEnemiesInRange(randuins.Range) >= config.Item("ranmin").GetValue<Slider>().Value)
                 {
                     Items.UseItem(randuins.Id);
                 }
@@ -89,9 +89,9 @@ namespace UnderratedAIO.Helpers
                         odins.Cast(target);
                     }
                 }
-                else if (player.LSCountEnemiesInRange(odins.Range) >= config.Item("odinmin").GetValue<Slider>().Value ||
+                else if (player.CountEnemiesInRange(odins.Range) >= config.Item("odinmin").GetValue<Slider>().Value ||
                          (Math.Max(comboDmg, odinDmg) > target.Health && player.HealthPercent < 30 &&
-                          player.LSDistance(target) < odins.Range && !CombatHelper.CheckCriticalBuffs(target)))
+                          player.Distance(target) < odins.Range && !CombatHelper.CheckCriticalBuffs(target)))
                 {
                     odins.Cast();
                 }
@@ -107,9 +107,9 @@ namespace UnderratedAIO.Helpers
                         bilgewater.Cast(target);
                     }
                 }
-                else if ((player.LSDistance(target) > config.Item("bilminr").GetValue<Slider>().Value &&
+                else if ((player.Distance(target) > config.Item("bilminr").GetValue<Slider>().Value &&
                           IsHeRunAway(target) && (target.Health / target.MaxHealth * 100f) < 40 &&
-                          target.LSDistance(player) > player.AttackRange) ||
+                          target.Distance(player) > player.AttackRange) ||
                          (Math.Max(comboDmg, bilDmg) > target.Health && (player.Health / player.MaxHealth * 100f) < 50) ||
                          IsURF)
                 {
@@ -127,13 +127,13 @@ namespace UnderratedAIO.Helpers
                         botrk.Cast(target);
                     }
                 }
-                else if ((player.LSDistance(target) > config.Item("botrminr").GetValue<Slider>().Value &&
+                else if ((player.Distance(target) > config.Item("botrminr").GetValue<Slider>().Value &&
                           (player.Health / player.MaxHealth * 100f) <
                           config.Item("botrmyhealth").GetValue<Slider>().Value &&
                           (target.Health / target.MaxHealth * 100f) <
                           config.Item("botrenemyhealth").GetValue<Slider>().Value) ||
                          (IsHeRunAway(target) && (target.Health / target.MaxHealth * 100f) < 40 &&
-                          target.LSDistance(player) > player.AttackRange) ||
+                          target.Distance(player) > player.AttackRange) ||
                          (Math.Max(comboDmg, botrDmg) > target.Health && (player.Health / player.MaxHealth * 100f) < 50) ||
                          IsURF)
                 {
@@ -151,9 +151,9 @@ namespace UnderratedAIO.Helpers
                         hexgun.Cast(target);
                     }
                 }
-                else if ((player.LSDistance(target) > config.Item("hexminr").GetValue<Slider>().Value &&
+                else if ((player.Distance(target) > config.Item("hexminr").GetValue<Slider>().Value &&
                           IsHeRunAway(target) && (target.Health / target.MaxHealth * 100f) < 40 &&
-                          target.LSDistance(player) > player.AttackRange) ||
+                          target.Distance(player) > player.AttackRange) ||
                          (Math.Max(comboDmg, hexDmg) > target.Health && (player.Health / player.MaxHealth * 100f) < 50) ||
                          IsURF)
                 {
@@ -177,7 +177,7 @@ namespace UnderratedAIO.Helpers
             MuramanaTime = System.Environment.TickCount;
              */
             if (config.Item("you").GetValue<bool>() && Items.HasItem(youmuu.Id) && Items.CanUseItem(youmuu.Id) &&
-                target != null && player.LSDistance(target) < player.AttackRange + 50 && target.HealthPercent < 65)
+                target != null && player.Distance(target) < player.AttackRange + 50 && target.HealthPercent < 65)
             {
                 youmuu.Cast();
             }
@@ -185,7 +185,7 @@ namespace UnderratedAIO.Helpers
             if (Items.HasItem(frost.Id) && Items.CanUseItem(frost.Id) && target != null &&
                 config.Item("frost").GetValue<bool>())
             {
-                if ((config.Item("frostmin").GetValue<Slider>().Value <= player.LSCountEnemiesInRange(2000) ||
+                if ((config.Item("frostmin").GetValue<Slider>().Value <= player.CountEnemiesInRange(2000) ||
                      target.HealthPercent < 40) &&
                     (target.HealthPercent < 40 && config.Item("frostlow").GetValue<bool>() ||
                      !config.Item("frostlow").GetValue<bool>()))
@@ -199,7 +199,7 @@ namespace UnderratedAIO.Helpers
                 if (((config.Item("Zhonyadmg").GetValue<Slider>().Value / 100f * player.Health <=
                       Program.IncDamages.GetAllyData(player.NetworkId).DamageTaken ||
                       Program.IncDamages.GetAllyData(player.NetworkId).DamageTaken > player.Health) ||
-                     (Danger() && player.HealthPercent < 30)) && player.LSIsValidTarget(10, false))
+                     (Danger() && player.HealthPercent < 30)) && player.IsValidTarget(10, false))
                 {
                     if (Items.HasItem(Zhonya.Id) && Items.CanUseItem(Zhonya.Id))
                     {
@@ -234,8 +234,8 @@ namespace UnderratedAIO.Helpers
             }
             if (Items.HasItem(solari.Id) && Items.CanUseItem(solari.Id) && config.Item("solari").GetValue<bool>())
             {
-                if ((config.Item("solariminally").GetValue<Slider>().Value <= player.LSCountAlliesInRange(solari.Range) &&
-                     config.Item("solariminenemy").GetValue<Slider>().Value <= player.LSCountEnemiesInRange(solari.Range)) ||
+                if ((config.Item("solariminally").GetValue<Slider>().Value <= player.CountAlliesInRange(solari.Range) &&
+                     config.Item("solariminenemy").GetValue<Slider>().Value <= player.CountEnemiesInRange(solari.Range)) ||
                     ObjectManager.Get<AIHeroClient>()
                         .FirstOrDefault(
                             h => h.IsAlly && !h.IsDead && solari.IsInRange(h) && CombatHelper.CheckCriticalBuffs(h)) !=
@@ -251,7 +251,7 @@ namespace UnderratedAIO.Helpers
                 if (config.Item("castonme").GetValue<bool>() &&
                     ((player.Health / player.MaxHealth * 100f) < config.Item("mountainmin").GetValue<Slider>().Value ||
                      Program.IncDamages.GetAllyData(player.NetworkId).DamageTaken > player.Health) &&
-                    (player.LSCountEnemiesInRange(700f) > 0 || CombatHelper.CheckCriticalBuffs(player)))
+                    (player.CountEnemiesInRange(700f) > 0 || CombatHelper.CheckCriticalBuffs(player)))
                 {
                     mountain.Cast(player);
                     return;
@@ -260,7 +260,7 @@ namespace UnderratedAIO.Helpers
                     ObjectManager.Get<AIHeroClient>()
                         .Where(
                             h =>
-                                h.IsAlly && !h.IsMe && !h.IsDead && player.LSDistance(h) < mountain.Range &&
+                                h.IsAlly && !h.IsMe && !h.IsDead && player.Distance(h) < mountain.Range &&
                                 config.Item("mountainpriority" + h.ChampionName).GetValue<Slider>().Value > 0 &&
                                 ((h.Health / h.MaxHealth * 100f) < config.Item("mountainmin").GetValue<Slider>().Value ||
                                  Program.IncDamages.GetAllyData(h.NetworkId).DamageTaken > h.Health));
@@ -272,18 +272,18 @@ namespace UnderratedAIO.Helpers
                             .ThenBy(t => t.Health)
                             .FirstOrDefault();
                     if (finaltarg != null &&
-                        (finaltarg.LSCountEnemiesInRange(700f) > 0 || finaltarg.LSUnderTurret(true) ||
+                        (finaltarg.CountEnemiesInRange(700f) > 0 || finaltarg.UnderTurret(true) ||
                          CombatHelper.CheckCriticalBuffs(finaltarg)))
                     {
                         mountain.Cast(finaltarg);
                     }
                 }
             }
-            if (config.Item("protoBelt").GetValue<bool>() && target != null && player.LSDistance(target) < 750)
+            if (config.Item("protoBelt").GetValue<bool>() && target != null && player.Distance(target) < 750)
             {
                 if (config.Item("protoBeltEHealth").GetValue<Slider>().Value > target.HealthPercent &&
-                    (player.LSDistance(target) > 150 ||
-                     player.LSDistance(target) > Orbwalking.GetRealAutoAttackRange(target)))
+                    (player.Distance(target) > 150 ||
+                     player.Distance(target) > Orbwalking.GetRealAutoAttackRange(target)))
                 {
                     if (Items.HasItem(ProtoBelt.Id) && Items.CanUseItem(ProtoBelt.Id))
                     {
@@ -301,7 +301,7 @@ namespace UnderratedAIO.Helpers
                     }
                 }
             }
-            if (config.Item("glp").GetValue<bool>() && target != null && player.LSDistance(target) < 650)
+            if (config.Item("glp").GetValue<bool>() && target != null && player.Distance(target) < 650)
             {
                 if (config.Item("glpEHealth").GetValue<Slider>().Value > target.HealthPercent)
                 {
@@ -333,14 +333,14 @@ namespace UnderratedAIO.Helpers
 
         public static bool IsHeRunAway(AIHeroClient target)
         {
-            return (!target.LSIsFacing(player) &&
-                    Prediction.GetPrediction(target, 600, 100f).CastPosition.LSDistance(player.Position) >
-                    target.Position.LSDistance(player.Position));
+            return (!target.IsFacing(player) &&
+                    Prediction.GetPrediction(target, 600, 100f).CastPosition.Distance(player.Position) >
+                    target.Position.Distance(player.Position));
         }
 
         public static void castHydra(AIHeroClient target)
         {
-            if (target != null && player.LSDistance(target) < hydra.Range)
+            if (target != null && player.Distance(target) < hydra.Range)
             {
                 if (Items.HasItem(tiamat.Id) && Items.CanUseItem(tiamat.Id) && !Orbwalking.CanAttack())
                 {
@@ -575,7 +575,7 @@ namespace UnderratedAIO.Helpers
             {
                 return;
             }
-            if (player.ChampionName == "Gangplank" && W.LSIsReady() && cleanseSpell)
+            if (player.ChampionName == "Gangplank" && W.IsReady() && cleanseSpell)
             {
                 Cleanse(null, config, cleanseSpell);
             }
@@ -675,7 +675,7 @@ namespace UnderratedAIO.Helpers
         private static void CastQSS(int delay, Items.Item item)
         {
             QssUsed = true;
-            if (player.ChampionName == "Gangplank" && W.LSIsReady())
+            if (player.ChampionName == "Gangplank" && W.IsReady())
             {
                 LeagueSharp.Common.Utility.DelayAction.Add(
                     delay, () =>

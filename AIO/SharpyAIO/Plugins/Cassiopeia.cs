@@ -18,7 +18,7 @@ using EloBuddy;
         private Menu Menu;
         private Orbwalking.Orbwalker Orbwalker;
         private AIHeroClient Player = ObjectManager.Player;
-        private SpellSlot Flash = ObjectManager.Player.LSGetSpellSlot("summonerFlash");
+        private SpellSlot Flash = ObjectManager.Player.GetSpellSlot("summonerFlash");
         private Spell Q, W, E, R;
 
         private bool IsPoisoned(Obj_AI_Base unit)
@@ -200,7 +200,7 @@ using EloBuddy;
                 var drawF = Menu.Item("DF").GetValue<Circle>();
                 if (drawF.Active)
                 {
-                    if (R.IsReadyPerfectly() && Flash.LSIsReady())
+                    if (R.IsReadyPerfectly() && Flash.IsReady())
                     {
                         Render.Circle.DrawCircle(Player.Position, R.Range + 425f, drawF.Color, 3);
                     }
@@ -214,9 +214,9 @@ using EloBuddy;
             {
                 if (R.IsReadyPerfectly())
                 {
-                    if (sender.LSIsValidTarget(R.Range))
+                    if (sender.IsValidTarget(R.Range))
                     {
-                        if (sender.LSIsFacing(Player))
+                        if (sender.IsFacing(Player))
                         {
                             R.Cast(sender);
                         }
@@ -231,9 +231,9 @@ using EloBuddy;
             {
                 if (R.IsReadyPerfectly())
                 {
-                    if (gapcloser.Sender.LSIsValidTarget(R.Range))
+                    if (gapcloser.Sender.IsValidTarget(R.Range))
                     {
-                        if (gapcloser.Sender.LSIsFacing(Player))
+                        if (gapcloser.Sender.IsFacing(Player))
                         {
                             R.Cast(gapcloser.Sender);
                         }
@@ -276,7 +276,7 @@ using EloBuddy;
                     var starget = TargetSelector.GetSelectedTarget();
                     if (R.IsReadyPerfectly())
                     {
-                        if (starget != null && starget.Position.LSDistance(Player.Position) <= R.Range)
+                        if (starget != null && starget.Position.Distance(Player.Position) <= R.Range)
                         {
                             if (!starget.IsZombie)
                             {
@@ -407,7 +407,7 @@ using EloBuddy;
                                         }
                                         else
                                         {
-                                            var otarget = MinionManager.GetMinions(E.Range).FirstOrDefault(x => x.LSIsValidTarget(E.Range) && IsPoisoned(x));
+                                            var otarget = MinionManager.GetMinions(E.Range).FirstOrDefault(x => x.IsValidTarget(E.Range) && IsPoisoned(x));
                                             if (otarget != null)
                                             {
                                                 E.CastOnUnit(otarget);
@@ -424,7 +424,7 @@ using EloBuddy;
                                     if (Q.IsReadyPerfectly())
                                     {
                                         var target = MinionManager.GetMinions(700, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth)
-                                            .FirstOrDefault(x => x.LSIsValidTarget(700) && Q.GetPrediction(x).Hitchance >= Q.MinHitChance);
+                                            .FirstOrDefault(x => x.IsValidTarget(700) && Q.GetPrediction(x).Hitchance >= Q.MinHitChance);
                                         if (target != null)
                                         {
                                             Q.Cast(target);
@@ -437,7 +437,7 @@ using EloBuddy;
                                     if (W.IsReadyPerfectly())
                                     {
                                         var target = MinionManager.GetMinions(700, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth)
-                                            .FirstOrDefault(x => x.LSIsValidTarget(700) && W.GetPrediction(x).Hitchance >= W.MinHitChance);
+                                            .FirstOrDefault(x => x.IsValidTarget(700) && W.GetPrediction(x).Hitchance >= W.MinHitChance);
                                         if (target != null)
                                         {
                                             W.Cast(target);
@@ -450,7 +450,7 @@ using EloBuddy;
                                     if (E.IsReadyPerfectly())
                                     {
                                         var target = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth)
-                                            .FirstOrDefault(x => x.LSIsValidTarget(E.Range) && IsPoisoned(x));
+                                            .FirstOrDefault(x => x.IsValidTarget(E.Range) && IsPoisoned(x));
                                         if (target != null)
                                         {
                                             E.CastOnUnit(target);
@@ -469,8 +469,8 @@ using EloBuddy;
                                     var target = TargetSelector.GetTarget(R.Range, R.DamageType);
                                     if (target != null)
                                     {
-                                        var ctarget = HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range)).ToList();
-                                        var ftarget = ctarget.Where(x => x.LSIsFacing(Player)).ToList();
+                                        var ctarget = HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range)).ToList();
+                                        var ftarget = ctarget.Where(x => x.IsFacing(Player)).ToList();
 
                                         if (ctarget.Count >= Menu.Item("CC").GetValue<Slider>().Value || ftarget.Count >= Menu.Item("CF").GetValue<Slider>().Value)
                                         {
@@ -526,13 +526,13 @@ using EloBuddy;
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
                     var target = TargetSelector.GetSelectedTarget();
-                    if (target != null && Player.Position.LSDistance(target.Position) < R.Range + 425f)
+                    if (target != null && Player.Position.Distance(target.Position) < R.Range + 425f)
                     {
                         if (!target.IsZombie)
                         {
                             if (Flash != SpellSlot.Unknown)
                             {
-                                if (R.IsReadyPerfectly() && Flash.LSIsReady())
+                                if (R.IsReadyPerfectly() && Flash.IsReady())
                                 {
                                     R.Cast();
                                     LeagueSharp.Common.Utility.DelayAction.Add(5, () => Player.Spellbook.CastSpell(Flash, target.Position));
@@ -572,7 +572,7 @@ using EloBuddy;
                     if (!Menu.Item("MN").GetValue<bool>())
                     {
                         var target = ObjectManager.Get<AIHeroClient>().FirstOrDefault(x => x.IsKillableAndValidTarget(E.GetDamage(x), E.DamageType, E.Range) && IsPoisoned(x));
-                        if (target.LSIsValidTarget(E.Range))
+                        if (target.IsValidTarget(E.Range))
                         {
                             E.CastOnUnit(target);
                         }
@@ -580,7 +580,7 @@ using EloBuddy;
                     else
                     {
                         var target = ObjectManager.Get<AIHeroClient>().FirstOrDefault(x => x.IsKillableAndValidTarget(E.GetDamage(x), E.DamageType, E.Range));
-                        if (target.LSIsValidTarget(E.Range))
+                        if (target.IsValidTarget(E.Range))
                         {
                             E.CastOnUnit(target);
                         }
@@ -593,7 +593,7 @@ using EloBuddy;
                 if (R.IsReadyPerfectly())
                 {
                     var target = ObjectManager.Get<AIHeroClient>().FirstOrDefault(x => x.IsKillableAndValidTarget(R.GetDamage(x), R.DamageType, R.Range));
-                    if (target.LSIsValidTarget(R.Range))
+                    if (target.IsValidTarget(R.Range))
                     {
                         R.Cast(target);
                     }
@@ -605,7 +605,7 @@ using EloBuddy;
                 if (Q.IsReadyPerfectly())
                 {
                     var target = ObjectManager.Get<AIHeroClient>().FirstOrDefault(x => x.IsKillableAndValidTarget(Q.GetDamage(x), Q.DamageType, Q.Range));
-                    if (target.LSIsValidTarget(Q.Range))
+                    if (target.IsValidTarget(Q.Range))
                     {
                         Q.Cast(target);
                     }

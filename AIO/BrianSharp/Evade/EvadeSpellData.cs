@@ -104,7 +104,7 @@
             {
                 return (this.CheckSpellName == ""
                         || ObjectManager.Player.Spellbook.GetSpell(this.Slot).Name == this.CheckSpellName)
-                       && this.Slot.LSIsReady();
+                       && this.Slot.IsReady();
             }
         }
 

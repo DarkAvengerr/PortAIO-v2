@@ -36,7 +36,7 @@ using EloBuddy;
 
             if (DravenMenu.Config.Item("DAR").GetValue<Circle>().Active)
             {
-                foreach (var axe in DravenAxeHelper.AxeSpots.Where(x => x.AxeObj.IsVisible && x.AxeObj.Position.LSDistance(ObjectManager.Player.Position) < 1000))
+                foreach (var axe in DravenAxeHelper.AxeSpots.Where(x => x.AxeObj.IsVisible && x.AxeObj.Position.Distance(ObjectManager.Player.Position) < 1000))
                 {
                     Drawing.DrawText(Drawing.WorldToScreen(axe.AxeObj.Position).X - 40, Drawing.WorldToScreen(axe.AxeObj.Position).Y, Color.Gold, (((float)(axe.EndTick - Environment.TickCount))) + " ms");
                     Render.Circle.DrawCircle(axe.AxeObj.Position, 120, DravenAxeHelper.InCatchRadius(axe) ? DravenMenu.Config.Item("DAR").GetValue<Circle>().Color : Color.Gold);

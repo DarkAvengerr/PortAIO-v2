@@ -45,7 +45,7 @@ using EloBuddy;
         {
             var useRanduin = Program.Config.Item("use.randuin").GetValue<bool>();
             var randuinCount = Program.Config.Item("randuin.count").GetValue<Slider>().Value;
-            if (useRanduin && Items.HasItem(3143) && Items.CanUseItem(3143) && ObjectManager.Player.LSCountEnemiesInRange(490f) >= randuinCount)
+            if (useRanduin && Items.HasItem(3143) && Items.CanUseItem(3143) && ObjectManager.Player.CountEnemiesInRange(490f) >= randuinCount)
             {
                 Items.UseItem(3143);
             }

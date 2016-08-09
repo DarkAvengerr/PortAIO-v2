@@ -39,7 +39,7 @@ using EloBuddy;
         internal static bool IsFishBone()
         {
             //return ObjectManager.Player.AttackRange > 565f;
-            return ObjectManager.Player.LSHasBuff("JinxQ"); // Jinx's AA Range is 525.
+            return ObjectManager.Player.HasBuff("JinxQ"); // Jinx's AA Range is 525.
         }
 
         /// <summary>

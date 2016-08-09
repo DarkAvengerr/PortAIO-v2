@@ -14,7 +14,7 @@ using EloBuddy;
         public static float GetRealAutoAttackRange(AIHeroClient attacker, AttackableUnit target)
         {
             var result = attacker.AttackRange + attacker.BoundingRadius;
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
                 return result + target.BoundingRadius;
             }
@@ -43,13 +43,13 @@ using EloBuddy;
 
         public static Vector3 GetPositionInFront(this AIHeroClient target, float distance, bool addHitBox = true)
         {
-            return (target.ServerPosition.LSTo2D() + target.Direction.LSTo2D().LSPerpendicular() * (distance + (addHitBox ? 0 : 65f))).To3D();
+            return (target.ServerPosition.To2D() + target.Direction.To2D().Perpendicular() * (distance + (addHitBox ? 0 : 65f))).To3D();
         }
 
         public static bool IsRunningAway(this AIHeroClient target)
         {
-            return ObjectManager.Player.LSDistance(target.GetPositionInFront(300)) >
-                   ObjectManager.Player.LSDistance(target.ServerPosition) && !target.LSIsFacing(ObjectManager.Player);
+            return ObjectManager.Player.Distance(target.GetPositionInFront(300)) >
+                   ObjectManager.Player.Distance(target.ServerPosition) && !target.IsFacing(ObjectManager.Player);
         }
     }
 }

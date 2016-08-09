@@ -77,21 +77,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.CastOnUnit(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             W.Cast(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null || haveStun)
+            if (!E.IsReady() || target == null || haveStun)
                 return;
             E.Cast();
         }
@@ -99,7 +99,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady() || target == null)
+            if (!R.IsReady() || target == null)
                 return;
             if ((R.CastIfWillHit(target, 2) && haveStun) || (R.CastIfWillHit(target, 3)) || R.IsKillable(target) || player.HealthPercent<20)
                 R.Cast(target);
@@ -118,7 +118,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (Tibbers != null && tar != null)
             {
                 tar = ARAMTargetSelector.getBestTarget(1500);
-                if (Tibbers.LSDistance(tar.Position) > 200)
+                if (Tibbers.Distance(tar.Position) > 200)
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MovePet, tar);
                 }
@@ -146,12 +146,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void farm()
         {
-            if(player.ManaPercent < 55 || !Q.LSIsReady())
+            if(player.ManaPercent < 55 || !Q.IsReady())
                 return;
             
             foreach (var minion in MinionManager.GetMinions(Q.Range))
             {
-                if (minion.Health > ObjectManager.Player.LSGetAutoAttackDamage(minion) && minion.Health < Q.GetDamage(minion))
+                if (minion.Health > ObjectManager.Player.GetAutoAttackDamage(minion) && minion.Health < Q.GetDamage(minion))
                 {
                     Q.Cast(minion);
                     return;

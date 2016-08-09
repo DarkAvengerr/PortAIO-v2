@@ -185,12 +185,12 @@ using EloBuddy;
 
         static void killsteal()
         {
-            if (KillstealQ && Q.LSIsReady())
+            if (KillstealQ && Q.IsReady())
             {
-                var targets = HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsZombie);
+                var targets = HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsZombie);
                 foreach (var target in targets)
                 {
-                    if (target.Health < Q.GetDamage(target) && (!target.LSHasBuff("kindrednodeathbuff") && !target.LSHasBuff("Undying Rage") && !target.LSHasBuff("JudicatorIntervention")))
+                    if (target.Health < Q.GetDamage(target) && (!target.HasBuff("kindrednodeathbuff") && !target.HasBuff("Undying Rage") && !target.HasBuff("JudicatorIntervention")))
                         Q.Cast(target);
                 }
             }
@@ -207,22 +207,22 @@ using EloBuddy;
                     {
                         if (!LT) return;
 
-                        if (E.LSIsReady() && !AAPassive && LE) E.Cast(Player.Position.LSExtend(Game.CursorPos, 70));
-                        if (Q.LSIsReady() && (!E.LSIsReady() || (E.LSIsReady() && !LE)) && LQ != 0 && !AAPassive)
+                        if (E.IsReady() && !AAPassive && LE) E.Cast(Player.Position.Extend(Game.CursorPos, 70));
+                        if (Q.IsReady() && (!E.IsReady() || (E.IsReady() && !LE)) && LQ != 0 && !AAPassive)
                         {
                             var QMinions = MinionManager.GetMinions(Q.Range);
                             var exminions = MinionManager.GetMinions(Q1.Range);
                             foreach (var Minion in QMinions)
                             {
-                                var QHit = new Geometry.Polygon.Rectangle(Player.Position,Player.Position.LSExtend(Minion.Position, Q1.Range),Q1.Width);
-                                if (exminions.Count(x => !QHit.IsOutside(x.Position.LSTo2D())) >= LQ)
+                                var QHit = new Geometry.Polygon.Rectangle(Player.Position,Player.Position.Extend(Minion.Position, Q1.Range),Q1.Width);
+                                if (exminions.Count(x => !QHit.IsOutside(x.Position.To2D())) >= LQ)
                                 {
                                     Q.Cast(Minion);
                                     break;
                                 }
                             }
                         }
-                        if ((!E.LSIsReady() || (E.LSIsReady() && !LE)) && (!Q.LSIsReady() || (Q.LSIsReady() && LQ == 0)) && LW && W.LSIsReady() && !AAPassive) W.Cast(Minions[0].Position);
+                        if ((!E.IsReady() || (E.IsReady() && !LE)) && (!Q.IsReady() || (Q.IsReady() && LQ == 0)) && LW && W.IsReady() && !AAPassive) W.Cast(Minions[0].Position);
                     }
                 }
             }
@@ -246,21 +246,21 @@ using EloBuddy;
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && target.IsValid)
                 {
                     if (ItemData.Youmuus_Ghostblade.GetItem().IsReady()) ItemData.Youmuus_Ghostblade.GetItem().Cast();
-                    if (E.LSIsReady() && !AAPassive && CE == 0) E.Cast((Deviation(Player.Position.LSTo2D(), target.Position.LSTo2D(), 65).To3D()));
-                    if (E.LSIsReady() && !AAPassive && CE == 1) E.Cast(Game.CursorPos);
-                    if (E.LSIsReady() && !AAPassive && CE == 2) E.Cast(Player.Position.LSExtend(target.Position, 50));
-                    if (Q.LSIsReady() && (!E.LSIsReady() || (E.LSIsReady() && CE == 3)) && CQ && !AAPassive) Q.Cast(target);
-                    if ((!E.LSIsReady() || (E.LSIsReady() && CE == 3)) && (!Q.LSIsReady() || (Q.LSIsReady() && !CQ)) && CW && W.LSIsReady() && !AAPassive) W.Cast(target.Position);
+                    if (E.IsReady() && !AAPassive && CE == 0) E.Cast((Deviation(Player.Position.To2D(), target.Position.To2D(), 65).To3D()));
+                    if (E.IsReady() && !AAPassive && CE == 1) E.Cast(Game.CursorPos);
+                    if (E.IsReady() && !AAPassive && CE == 2) E.Cast(Player.Position.Extend(target.Position, 50));
+                    if (Q.IsReady() && (!E.IsReady() || (E.IsReady() && CE == 3)) && CQ && !AAPassive) Q.Cast(target);
+                    if ((!E.IsReady() || (E.IsReady() && CE == 3)) && (!Q.IsReady() || (Q.IsReady() && !CQ)) && CW && W.IsReady() && !AAPassive) W.Cast(target.Position);
                 }
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && target.IsValid)
                 {
                     if (Player.ManaPercent < HHMinMana) return;
 
-                    if (E.LSIsReady() && !AAPassive && HE == 0) E.Cast((Deviation(Player.Position.LSTo2D(), target.Position.LSTo2D(),65).To3D()));
-                    if (E.LSIsReady() && !AAPassive && HE == 1) E.Cast(Player.Position.LSExtend(Game.CursorPos, 50));
-                    if (E.LSIsReady() && !AAPassive && HE == 2) E.Cast(Player.Position.LSExtend(target.Position, 50));
-                    if (Q.LSIsReady() && (!E.LSIsReady() || (E.LSIsReady() && HE == 3)) && HQ && !AAPassive) Q.Cast(target);
-                    if ((!E.LSIsReady() || (E.LSIsReady() && HE == 3)) && (!Q.LSIsReady() || (Q.LSIsReady() && !HQ)) && HW && W.LSIsReady() && !AAPassive) W.Cast(target.Position);
+                    if (E.IsReady() && !AAPassive && HE == 0) E.Cast((Deviation(Player.Position.To2D(), target.Position.To2D(),65).To3D()));
+                    if (E.IsReady() && !AAPassive && HE == 1) E.Cast(Player.Position.Extend(Game.CursorPos, 50));
+                    if (E.IsReady() && !AAPassive && HE == 2) E.Cast(Player.Position.Extend(target.Position, 50));
+                    if (Q.IsReady() && (!E.IsReady() || (E.IsReady() && HE == 3)) && HQ && !AAPassive) Q.Cast(target);
+                    if ((!E.IsReady() || (E.IsReady() && HE == 3)) && (!Q.IsReady() || (Q.IsReady() && !HQ)) && HW && W.IsReady() && !AAPassive) W.Cast(target.Position);
                 }
             }
             if (args.Target is Obj_AI_Minion && args.Target.IsValid)
@@ -270,9 +270,9 @@ using EloBuddy;
                     var Mobs = MinionManager.GetMinions(Orbwalking.GetRealAutoAttackRange(Player), MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
                     if (Mobs[0].IsValid && Mobs.Count != 0)
                     {
-                        if (E.LSIsReady() && !AAPassive && JE) E.Cast(Player.Position.LSExtend(Game.CursorPos, 70));
-                        if (Q.LSIsReady() && (!E.LSIsReady() || (E.LSIsReady() && !JE)) && JQ && !AAPassive) Q.Cast(Mobs[0]);
-                        if ((!E.LSIsReady() || (E.LSIsReady() && !JE)) && (!Q.LSIsReady() || (Q.LSIsReady() && !JQ)) && JW && W.LSIsReady() && !AAPassive) W.Cast(Mobs[0].Position);
+                        if (E.IsReady() && !AAPassive && JE) E.Cast(Player.Position.Extend(Game.CursorPos, 70));
+                        if (Q.IsReady() && (!E.IsReady() || (E.IsReady() && !JE)) && JQ && !AAPassive) Q.Cast(Mobs[0]);
+                        if ((!E.IsReady() || (E.IsReady() && !JE)) && (!Q.IsReady() || (Q.IsReady() && !JQ)) && JW && W.IsReady() && !AAPassive) W.Cast(Mobs[0].Position);
                     }
                 }
             }
@@ -282,15 +282,15 @@ using EloBuddy;
         {
             if (Player.ManaPercent < HMinMana) return;
 
-            if (Q.LSIsReady() && HEXQ)
+            if (Q.IsReady() && HEXQ)
             {
                 var target = TargetSelector.GetTarget(Q1.Range, TargetSelector.DamageType.Physical);
                 var Minions = MinionManager.GetMinions(Q.Range);
                 foreach (var Minion in Minions)
                 {
-                    var QHit = new Geometry.Polygon.Rectangle(Player.Position, Player.Position.LSExtend(Minion.Position, Q1.Range),Q1.Width);
+                    var QHit = new Geometry.Polygon.Rectangle(Player.Position, Player.Position.Extend(Minion.Position, Q1.Range),Q1.Width);
                     var QPred = Q1.GetPrediction(target);
-                    if (!QHit.IsOutside(QPred.UnitPosition.LSTo2D()) && QPred.Hitchance == HitChance.High)
+                    if (!QHit.IsOutside(QPred.UnitPosition.To2D()) && QPred.Hitchance == HitChance.High)
                     {
                         Q.Cast(Minion);
                         break;
@@ -302,15 +302,15 @@ using EloBuddy;
         {
             if (Player.ManaPercent < LMinMana) return;
 
-            if (Q.LSIsReady() && LHQ)
+            if (Q.IsReady() && LHQ)
             {
                 var extarget = TargetSelector.GetTarget(Q1.Range, TargetSelector.DamageType.Physical);
                 var Minions = MinionManager.GetMinions(Q.Range);
                 foreach (var Minion in Minions)
                 {
-                    var QHit = new Geometry.Polygon.Rectangle(Player.Position, Player.Position.LSExtend(Minion.Position, Q1.Range), Q1.Width);
+                    var QHit = new Geometry.Polygon.Rectangle(Player.Position, Player.Position.Extend(Minion.Position, Q1.Range), Q1.Width);
                     var QPred = Q1.GetPrediction(extarget);
-                    if (!QHit.IsOutside(QPred.UnitPosition.LSTo2D()) && QPred.Hitchance == HitChance.High)
+                    if (!QHit.IsOutside(QPred.UnitPosition.To2D()) && QPred.Hitchance == HitChance.High)
                     {
                         Q.Cast(Minion);
                         break;
@@ -320,15 +320,15 @@ using EloBuddy;
         }
         static void AutoUseQ()
         {
-            if (Q.LSIsReady() && AutoQ && Player.ManaPercent > MinMana)
+            if (Q.IsReady() && AutoQ && Player.ManaPercent > MinMana)
             {
                 var extarget = TargetSelector.GetTarget(Q1.Range, TargetSelector.DamageType.Physical);
                 var Minions = MinionManager.GetMinions(Q.Range);
                 foreach (var Minion in Minions)
                 {
-                    var QHit = new Geometry.Polygon.Rectangle(Player.Position, Player.Position.LSExtend(Minion.Position, Q1.Range), Q1.Width);
+                    var QHit = new Geometry.Polygon.Rectangle(Player.Position, Player.Position.Extend(Minion.Position, Q1.Range), Q1.Width);
                     var QPred = Q1.GetPrediction(extarget);
-                    if (!QHit.IsOutside(QPred.UnitPosition.LSTo2D()) && QPred.Hitchance == HitChance.High)
+                    if (!QHit.IsOutside(QPred.UnitPosition.To2D()) && QPred.Hitchance == HitChance.High)
                     {
                         Q.Cast(Minion);
                         break;
@@ -340,7 +340,7 @@ using EloBuddy;
         static void UseRTarget()
         {
             var target = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
-            if (ForceR && R.LSIsReady() && target.IsValid && target is AIHeroClient && !Player.LSHasBuff("LucianR")) R.Cast(target.Position);
+            if (ForceR && R.IsReady() && target.IsValid && target is AIHeroClient && !Player.HasBuff("LucianR")) R.Cast(target.Position);
         }
         static void Game_OnUpdate(EventArgs args)
         {
@@ -364,13 +364,13 @@ using EloBuddy;
             if (enemy != null)
             {
                 float damage = 0;
-                if (E.LSIsReady()) damage = damage + (float)Player.LSGetAutoAttackDamage(enemy) * 2;
-                if (W.LSIsReady()) damage = damage + W.GetDamage(enemy) + (float)Player.LSGetAutoAttackDamage(enemy);
-                if (Q.LSIsReady())
+                if (E.IsReady()) damage = damage + (float)Player.GetAutoAttackDamage(enemy) * 2;
+                if (W.IsReady()) damage = damage + W.GetDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy);
+                if (Q.IsReady())
                 {
-                    damage = damage + Q.GetDamage(enemy) + (float)Player.LSGetAutoAttackDamage(enemy);
+                    damage = damage + Q.GetDamage(enemy) + (float)Player.GetAutoAttackDamage(enemy);
                 }
-                damage = damage + (float)Player.LSGetAutoAttackDamage(enemy);
+                damage = damage + (float)Player.GetAutoAttackDamage(enemy);
 
                 return damage;
             }
@@ -379,10 +379,10 @@ using EloBuddy;
 
         static void OnDraw(EventArgs args)
         {
-            if (DEQ) Render.Circle.DrawCircle(Player.Position, Q1.Range, Q.LSIsReady() ? Color.LimeGreen : Color.IndianRed);
-            if (DQ) Render.Circle.DrawCircle(Player.Position, Q.Range, Q.LSIsReady() ? Color.LimeGreen : Color.IndianRed);
-            if (DW) Render.Circle.DrawCircle(Player.Position, W.Range, W.LSIsReady() ? Color.LimeGreen : Color.IndianRed);
-            if (DE) Render.Circle.DrawCircle(Player.Position, E.Range, E.LSIsReady() ? Color.LimeGreen : Color.IndianRed);
+            if (DEQ) Render.Circle.DrawCircle(Player.Position, Q1.Range, Q.IsReady() ? Color.LimeGreen : Color.IndianRed);
+            if (DQ) Render.Circle.DrawCircle(Player.Position, Q.Range, Q.IsReady() ? Color.LimeGreen : Color.IndianRed);
+            if (DW) Render.Circle.DrawCircle(Player.Position, W.Range, W.IsReady() ? Color.LimeGreen : Color.IndianRed);
+            if (DE) Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.LimeGreen : Color.IndianRed);
         }
         static void Drawing_OnEndScene(EventArgs args)
         {
@@ -391,7 +391,7 @@ using EloBuddy;
                 foreach (
                     var enemy in
                         ObjectManager.Get<AIHeroClient>()
-                            .Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                            .Where(ene => ene.IsValidTarget() && !ene.IsZombie))
                 {
                     Indicator.unit = enemy;
                     Indicator.drawDmg(getComboDamage(enemy), new ColorBGRA(255, 204, 0, 160));

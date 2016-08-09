@@ -72,14 +72,14 @@ using EloBuddy; namespace EvadeYas
                     var sideStart = poly.Points[i];
                     var sideEnd = poly.Points[(i == poly.Points.Count - 1) ? 0 : i + 1];
 
-                    var originalCandidate = myPosition.LSProjectOn(sideStart, sideEnd).SegmentPoint;
+                    var originalCandidate = myPosition.ProjectOn(sideStart, sideEnd).SegmentPoint;
                     var distanceToEvadePoint = Vector2.DistanceSquared(originalCandidate, myPosition);
 
 
                     if (distanceToEvadePoint < 600 * 600)
                     {
                         var sideDistance = Vector2.DistanceSquared(sideEnd, sideStart);
-                        var direction = (sideEnd - sideStart).LSNormalized();
+                        var direction = (sideEnd - sideStart).Normalized();
 
                         var s = (distanceToEvadePoint < 200 * 200 && sideDistance > 90 * 90)
                             ? Config.DiagonalEvadePointsCount
@@ -128,7 +128,7 @@ using EloBuddy; namespace EvadeYas
                 {
                     goodCandidates = new List<Vector2>
                     {
-                        goodCandidates.MinOrDefault(vector2 => ObjectManager.Player.LSDistance(vector2, true))
+                        goodCandidates.MinOrDefault(vector2 => ObjectManager.Player.Distance(vector2, true))
                     };
                 }
 
@@ -136,7 +136,7 @@ using EloBuddy; namespace EvadeYas
                 {
                     badCandidates = new List<Vector2>
                     {
-                        badCandidates.MinOrDefault(vector2 => ObjectManager.Player.LSDistance(vector2, true))
+                        badCandidates.MinOrDefault(vector2 => ObjectManager.Player.Distance(vector2, true))
                     };
                 }
             }
@@ -155,10 +155,10 @@ using EloBuddy; namespace EvadeYas
                     var sideStart = poly.Points[i];
                     var sideEnd = poly.Points[(i == poly.Points.Count - 1) ? 0 : i + 1];
 
-                    result.Add(from.LSProjectOn(sideStart, sideEnd).SegmentPoint);
+                    result.Add(from.ProjectOn(sideStart, sideEnd).SegmentPoint);
                 }
             }
-            return result.MinOrDefault(vector2 => vector2.LSDistance(from));
+            return result.MinOrDefault(vector2 => vector2.Distance(from));
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ using EloBuddy; namespace EvadeYas
 
                         foreach (var ally in ObjectManager.Get<AIHeroClient>())
                         {
-                            if (ally.LSIsValidTarget(range, false) && !ally.IsMe && ally.IsAlly)
+                            if (ally.IsValidTarget(range, false) && !ally.IsMe && ally.IsAlly)
                             {
                                 allTargets.Add(ally);
                             }
@@ -201,7 +201,7 @@ using EloBuddy; namespace EvadeYas
 
                         foreach (var gameObject in ObjectManager.Get<Obj_AI_Minion>())
                         {
-                            if (gameObject.Name.ToLower().Contains("ward") && gameObject.LSIsValidTarget(range, false) &&
+                            if (gameObject.Name.ToLower().Contains("ward") && gameObject.IsValidTarget(range, false) &&
                                 gameObject.Team == ObjectManager.Player.Team)
                             {
                                 allTargets.Add(gameObject);
@@ -212,7 +212,7 @@ using EloBuddy; namespace EvadeYas
                     case SpellValidTargets.EnemyChampions:
                         foreach (var enemy in ObjectManager.Get<AIHeroClient>())
                         {
-                            if (enemy.LSIsValidTarget(range))
+                            if (enemy.IsValidTarget(range))
                             {
                                 allTargets.Add(enemy);
                             }
@@ -230,7 +230,7 @@ using EloBuddy; namespace EvadeYas
 
                         foreach (var gameObject in ObjectManager.Get<Obj_AI_Minion>())
                         {
-                            if (gameObject.Name.ToLower().Contains("ward") && gameObject.LSIsValidTarget(range))
+                            if (gameObject.Name.ToLower().Contains("ward") && gameObject.IsValidTarget(range))
                             {
                                 allTargets.Add(gameObject);
                             }
@@ -241,18 +241,18 @@ using EloBuddy; namespace EvadeYas
 
             foreach (var target in allTargets)
             {
-                if (DontCheckForSafety || Program.IsSafe(target.ServerPosition.LSTo2D()).IsSafe)
+                if (DontCheckForSafety || Program.IsSafe(target.ServerPosition.To2D()).IsSafe)
                 {
                     if (isBlink)
                     {
                         if (Utils.TickCount - Program.LastWardJumpAttempt < 250 ||
-                            Program.IsSafeToBlink(target.ServerPosition.LSTo2D(), Config.EvadingFirstTimeOffset, delay))
+                            Program.IsSafeToBlink(target.ServerPosition.To2D(), Config.EvadingFirstTimeOffset, delay))
                         {
                             goodTargets.Add(target);
                         }
 
                         if (Utils.TickCount - Program.LastWardJumpAttempt < 250 ||
-                            Program.IsSafeToBlink(target.ServerPosition.LSTo2D(), Config.EvadingSecondTimeOffset, delay))
+                            Program.IsSafeToBlink(target.ServerPosition.To2D(), Config.EvadingSecondTimeOffset, delay))
                         {
                             badTargets.Add(target);
                         }
@@ -261,7 +261,7 @@ using EloBuddy; namespace EvadeYas
                     {
                         var pathToTarget = new List<Vector2>();
                         pathToTarget.Add(Program.PlayerPosition);
-                        pathToTarget.Add(target.ServerPosition.LSTo2D());
+                        pathToTarget.Add(target.ServerPosition.To2D());
 
                         if (Utils.TickCount - Program.LastWardJumpAttempt < 250 ||
                             Program.IsSafePath(pathToTarget, Config.EvadingFirstTimeOffset, speed, delay).IsSafe)

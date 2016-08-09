@@ -64,8 +64,8 @@ namespace HeavenStrikeAzir
         private static void Game_OnUpdate(EventArgs args)
         {
             var soldierandtargetminion = new List<SoldierAndTargetMinion>();
-            var minions = GameObjects.EnemyMinions.Where(x => x.LSIsValidTarget()).ToList();
-            minions.AddRange(GameObjects.Jungle.Where(x=> x.LSIsValidTarget()));
+            var minions = GameObjects.EnemyMinions.Where(x => x.IsValidTarget()).ToList();
+            minions.AddRange(GameObjects.Jungle.Where(x=> x.IsValidTarget()));
             var minionspredictedposition = new List<MinionPredictedPosition>();
             foreach (var x in minions)
             {
@@ -74,23 +74,23 @@ namespace HeavenStrikeAzir
                         (x, Prediction.GetPrediction(x, Player.AttackCastDelay + Game.Ping / 1000).UnitPosition));
             }
             var championpredictedposition = new List<ChampionPredictedPosition>();
-            foreach (var x in HeroManager.Enemies.Where(x => x.LSIsValidTarget()))
+            foreach (var x in HeroManager.Enemies.Where(x => x.IsValidTarget()))
             {
                 championpredictedposition
                     .Add(new ChampionPredictedPosition
                         (x, Prediction.GetPrediction(x, Player.AttackCastDelay + Game.Ping / 1000).UnitPosition));
             }
             enemies = new List<AIHeroClient>();
-            foreach (var hero in HeroManager.Enemies.Where(x => x.LSIsValidTarget() && !x.IsZombie))
+            foreach (var hero in HeroManager.Enemies.Where(x => x.IsValidTarget() && !x.IsZombie))
             {
-                if (soldier.Any(x => x.Position.LSDistance(hero.Position) <= 300 + hero.BoundingRadius && Player.LSDistance(x.Position) <= 925))
+                if (soldier.Any(x => x.Position.Distance(hero.Position) <= 300 + hero.BoundingRadius && Player.Distance(x.Position) <= 925))
                     enemies.Add(hero);
             }
             soldierattackminions = new List<Obj_AI_Minion>();
             foreach (var minion in minions)
             {
                 var Soldiers = soldier.Where
-                    (x => x.Position.LSDistance(minion.Position) <= 300 + minion.BoundingRadius && Player.LSDistance(x.Position) <= 925)
+                    (x => x.Position.Distance(minion.Position) <= 300 + minion.BoundingRadius && Player.Distance(x.Position) <= 925)
                     .ToList();
                 if (Soldiers.Any())
                 {
@@ -99,7 +99,7 @@ namespace HeavenStrikeAzir
                 }
             }
             autoattackminions = new List<Obj_AI_Minion>();
-            foreach (var minion in minions.Where(x => x.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(x))))
+            foreach (var minion in minions.Where(x => x.IsValidTarget(Orbwalking.GetRealAutoAttackRange(x))))
             {
                 if (!soldierattackminions.Any(x => x.NetworkId == minion.NetworkId))
                     autoattackminions.Add(minion);
@@ -113,8 +113,8 @@ namespace HeavenStrikeAzir
                 foreach (var hero in championpredictedposition)
                 {
                     foreach (var mainminionsoldier in mainminion.Soldier)
-                        if (Geometry.LSDistance(hero.Position.LSTo2D(), mainminionsoldier.Position.LSTo2D(),
-                            mainminionsoldier.Position.LSTo2D().LSExtend(mainminionpredictedposition.LSTo2D(), 450), false)
+                        if (Geometry.Distance(hero.Position.To2D(), mainminionsoldier.Position.To2D(),
+                            mainminionsoldier.Position.To2D().Extend(mainminionpredictedposition.To2D(), 450), false)
                             <= hero.Hero.BoundingRadius + 50)
                         {
                             splashchampions.Add(hero.Hero);
@@ -132,8 +132,8 @@ namespace HeavenStrikeAzir
                 foreach (var minion in minionspredictedposition)
                 {
                     foreach (var mainminionsoldier in mainminion.Soldier)
-                        if (Geometry.LSDistance(minion.Position.LSTo2D(), mainminionsoldier.Position.LSTo2D(),
-                            mainminionsoldier.Position.LSTo2D().LSExtend(mainminionpredictedposition.LSTo2D(), 450), false)
+                        if (Geometry.Distance(minion.Position.To2D(), mainminionsoldier.Position.To2D(),
+                            mainminionsoldier.Position.To2D().Extend(mainminionpredictedposition.To2D(), 450), false)
                             <= minion.Minion.BoundingRadius + 50)
                         {
                             splashminions.Add(minion.Minion);

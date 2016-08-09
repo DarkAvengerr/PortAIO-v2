@@ -14,23 +14,23 @@ using EloBuddy;
     {
         public static bool IsTiger(this AIHeroClient unit)
         {
-            return unit.LSHasBuff("udyrtigerpunch");
+            return unit.HasBuff("udyrtigerpunch");
         }
         public static bool IsTurtle(this AIHeroClient unit)
         {
-            return unit.LSHasBuff("udyrturtleactivation");
+            return unit.HasBuff("udyrturtleactivation");
         }
         public static bool IsBear(this AIHeroClient unit)
         {
-            return unit.LSHasBuff("udyrbearactivation");
+            return unit.HasBuff("udyrbearactivation");
         }
         public static bool IsPhoenix(this AIHeroClient unit)
         {
-            return unit.LSHasBuff("udyrphoenixactivation"); // udyrbearstuncheck
+            return unit.HasBuff("udyrphoenixactivation"); // udyrbearstuncheck
         }
         public static bool HasBearPassive(this AIHeroClient unit)
         {
-            return unit.LSHasBuff("udyrbearstuncheck"); // 
+            return unit.HasBuff("udyrbearstuncheck"); // 
         }
     }
 }

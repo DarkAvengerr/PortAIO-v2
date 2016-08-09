@@ -112,7 +112,7 @@ using EloBuddy; namespace ARAMDetFull
                     //
                 }
                 var spell = MyHero.Spellbook.GetSpell(args.Slot);
-                if (spell.LSIsAutoAttack() || args.SData.LSIsAutoAttack())
+                if (spell.IsAutoAttack() || args.SData.IsAutoAttack())
                 {
                     /*if(player.IsMelee)
                         LeagueSharp.Common.Utility.DelayAction.Add((int)(player.AttackDelay * 1000), delegate { afterAttack(sender, (AttackableUnit)args.Target); });
@@ -157,7 +157,7 @@ using EloBuddy; namespace ARAMDetFull
         {
             try
             {
-                    if (target != null && target.LSIsValidTarget() && CanAttack() && IsAllowedToAttack())
+                    if (target != null && target.IsValidTarget() && CanAttack() && IsAllowedToAttack())
                     {
                         if (EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, target))
                             _lastAATick = DeathWalker.now + Game.Ping/2;
@@ -165,8 +165,8 @@ using EloBuddy; namespace ARAMDetFull
                     if (!CanMove() || !IsAllowedToMove())
                         return;
                     /*if ( MyHero.IsMelee() && target != null &&
-                        target.Position.LSDistance(MyHero.Position) < GetAutoAttackRange(MyHero, target)
-                        && target is AIHeroClient && MyHero.LSDistance(target.Position) < 300)
+                        target.Position.Distance(MyHero.Position) < GetAutoAttackRange(MyHero, target)
+                        && target is AIHeroClient && MyHero.Distance(target.Position) < 300)
                     {
                         _movementPrediction.Delay = MyHero.BasicAttack.SpellCastTime;
                         _movementPrediction.Speed = MyHero.BasicAttack.MissileSpeed;
@@ -193,18 +193,18 @@ using EloBuddy; namespace ARAMDetFull
                 return;
             if (holdAreaRadius < 0)
                 holdAreaRadius = 160;
-            if (MyHero.ServerPosition.LSDistance(position) < holdAreaRadius)
+            if (MyHero.ServerPosition.Distance(position) < holdAreaRadius)
             {
                 if (MyHero.Path.Count() > 1)
                     EloBuddy.Player.IssueOrder(GameObjectOrder.HoldPosition, MyHero.ServerPosition);
                 return;
             }
-            if (position.LSDistance(MyHero.Position) > 200)
+            if (position.Distance(MyHero.Position) > 200)
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, position);
             else
             {
                 var point = MyHero.ServerPosition +
-                200 * (position.LSTo2D() - MyHero.ServerPosition.LSTo2D()).LSNormalized().To3D();
+                200 * (position.To2D() - MyHero.ServerPosition.To2D()).Normalized().To3D();
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, point);
             }
 
@@ -271,7 +271,7 @@ using EloBuddy; namespace ARAMDetFull
             if (CurrentMode == Mode.LaneClear || CurrentMode == Mode.Lasthit || true)
             {
                 foreach (var turret in
-                   EnemyTowers.Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+                   EnemyTowers.Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                 {
                     return turret;
                 }
@@ -283,7 +283,7 @@ using EloBuddy; namespace ARAMDetFull
             {
                 foreach (var turret in
                     EnemyBarracs
-                        .Where(t => t.LSIsValidTarget() && !t.IsInvulnerable && InAutoAttackRange(t)))
+                        .Where(t => t.IsValidTarget() && !t.IsInvulnerable && InAutoAttackRange(t)))
                 {
                     return turret;
                 }
@@ -294,7 +294,7 @@ using EloBuddy; namespace ARAMDetFull
             {
                 foreach (var nexus in
                     EnemyHQ
-                        .Where(t => t.LSIsValidTarget() && InAutoAttackRange(t)))
+                        .Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
                 {
                     return nexus;
                 }
@@ -312,25 +312,25 @@ using EloBuddy; namespace ARAMDetFull
             /* dont aa if enemy close */
             var closestenemy =
                 HeroManager.Enemies.Where(ene => !ene.IsDead)
-                    .OrderBy(ene => ene.LSDistance(MyHero, true))
+                    .OrderBy(ene => ene.Distance(MyHero, true))
                     .FirstOrDefault();
             var aaRangeext = GetAutoAttackRange(MyHero, closestenemy)+120;
-            if (closestenemy != null && closestenemy.LSDistance(MyHero, true) < aaRangeext*aaRangeext)
+            if (closestenemy != null && closestenemy.Distance(MyHero, true) < aaRangeext*aaRangeext)
                 return null;
             enemiesMinionsAround = ObjectManager.Get<Obj_AI_Base>()
-                   .Where(targ => targ.LSIsValidTarget(farmRange) && !targ.IsDead && targ.IsTargetable && targ.IsEnemy).ToList();
+                   .Where(targ => targ.IsValidTarget(farmRange) && !targ.IsDead && targ.IsTargetable && targ.IsEnemy).ToList();
 
             if (CurrentMode == Mode.Harass || CurrentMode == Mode.Lasthit || CurrentMode == Mode.LaneClear || CurrentMode == Mode.LaneFreeze)
             {
                 foreach (
                     var minion in
                         from minion in
-                            enemiesMinionsAround.Where(minion => minion != null && minion.LSIsValidTarget() && InAutoAttackRange(minion))
+                            enemiesMinionsAround.Where(minion => minion != null && minion.IsValidTarget() && InAutoAttackRange(minion))
                         let t = (int)(MyHero.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
-                                1000 * (int)MyHero.LSDistance(minion) / (int)MyProjectileSpeed()
+                                1000 * (int)MyHero.Distance(minion) / (int)MyProjectileSpeed()
                         let predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay())
                         where minion != null && minion.Team != GameObjectTeam.Neutral && predHealth > 0 && minion.BaseSkinName != "GangplankBarrel" && 
-                              predHealth <= MyHero.LSGetAutoAttackDamage(minion, true)
+                              predHealth <= MyHero.GetAutoAttackDamage(minion, true)
                         select minion)
                     return minion;
             }
@@ -339,7 +339,7 @@ using EloBuddy; namespace ARAMDetFull
             {
                 foreach (
                     var turret in
-                        EnemyTowers.Where(turret => turret.LSIsValidTarget(GetAutoAttackRange(MyHero, turret))))
+                        EnemyTowers.Where(turret => turret.IsValidTarget(GetAutoAttackRange(MyHero, turret))))
                     return turret;
             }
 
@@ -355,7 +355,7 @@ using EloBuddy; namespace ARAMDetFull
             {
                 maxhealth = new float[] { 0 };
                 var maxhealth1 = maxhealth;
-                foreach (var minion in enemiesMinionsAround.Where(minion => minion.LSIsValidTarget(GetAutoAttackRange(MyHero, minion)) && minion.BaseSkinName != "GangplankBarrel" && minion.Team == GameObjectTeam.Neutral).Where(minion => minion.MaxHealth >= maxhealth1[0] || Math.Abs(maxhealth1[0] - float.MaxValue) < float.Epsilon))
+                foreach (var minion in enemiesMinionsAround.Where(minion => minion.IsValidTarget(GetAutoAttackRange(MyHero, minion)) && minion.BaseSkinName != "GangplankBarrel" && minion.Team == GameObjectTeam.Neutral).Where(minion => minion.MaxHealth >= maxhealth1[0] || Math.Abs(maxhealth1[0] - float.MaxValue) < float.Epsilon))
                 {
                     tempTarget = minion;
                     maxhealth[0] = minion.MaxHealth;
@@ -368,10 +368,10 @@ using EloBuddy; namespace ARAMDetFull
                 return null;
             maxhealth = new float[] { 0 };
             foreach (var minion in from minion in enemiesMinionsAround
-                .Where(minion => minion!= null && minion.LSIsValidTarget(GetAutoAttackRange(MyHero, minion)) && minion.BaseSkinName != "GangplankBarrel")
+                .Where(minion => minion!= null && minion.IsValidTarget(GetAutoAttackRange(MyHero, minion)) && minion.BaseSkinName != "GangplankBarrel")
                                    let predHealth = HealthPrediction.LaneClearHealthPrediction(minion, (int)((MyHero.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay())
                                    where predHealth >=
-                                         2 * MyHero.LSGetAutoAttackDamage(minion, true) ||
+                                         2 * MyHero.GetAutoAttackDamage(minion, true) ||
                                          Math.Abs(predHealth - minion.Health) < float.Epsilon
                                    where minion.Health >= maxhealth[0] || Math.Abs(maxhealth[0] - float.MaxValue) < float.Epsilon
                                    select minion)
@@ -388,10 +388,10 @@ using EloBuddy; namespace ARAMDetFull
             enemiesMinionsAround
             .Any(
             minion =>
-            minion.LSIsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
+            minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
             InAutoAttackRange(minion) &&
             HealthPrediction.LaneClearHealthPrediction(
-            minion, (int)((MyHero.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay()) <= MyHero.LSGetAutoAttackDamage(minion));
+            minion, (int)((MyHero.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay()) <= MyHero.GetAutoAttackDamage(minion));
         }
 
         public static bool IsAutoAttack(string name)
@@ -445,7 +445,7 @@ using EloBuddy; namespace ARAMDetFull
         {
             AIHeroClient killableEnemy = null;
             var hitsToKill = double.MaxValue;
-            foreach (var enemy in AllEnemys.Where(hero => !hero.IsDead && !hero.IsInvulnerable && hero.LSIsValidTarget() && !hero.IsZombie && InAutoAttackRange(hero)))
+            foreach (var enemy in AllEnemys.Where(hero => !hero.IsDead && !hero.IsInvulnerable && hero.IsValidTarget() && !hero.IsZombie && InAutoAttackRange(hero)))
             {
                 var killHits = CountKillhits(enemy);
                 if (killableEnemy != null && !(killHits < hitsToKill))
@@ -458,7 +458,7 @@ using EloBuddy; namespace ARAMDetFull
 
         private static double CountKillhits(AIHeroClient enemy)
         {
-            return enemy.Health / MyHero.LSGetAutoAttackDamage(enemy);
+            return enemy.Health / MyHero.GetAutoAttackDamage(enemy);
         }
 
 
@@ -505,7 +505,7 @@ using EloBuddy; namespace ARAMDetFull
             if (target == null)
                 return false;
             var myRange = GetAutoAttackRange(MyHero, target);
-            return Vector2.DistanceSquared(target.Position.LSTo2D(), MyHero.ServerPosition.LSTo2D()) <= myRange * myRange;
+            return Vector2.DistanceSquared(target.Position.To2D(), MyHero.ServerPosition.To2D()) <= myRange * myRange;
         }
 
         public static Mode CurrentMode = Mode.LaneClear;

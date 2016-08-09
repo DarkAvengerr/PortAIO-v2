@@ -49,11 +49,11 @@ using EloBuddy;
                 if (target != null)
                 {
 
-                    if (azir.Hero.LSDistance(target) < 220)
+                    if (azir.Hero.Distance(target) < 220)
                     {
 
                         var tower =
-                            ObjectManager.Get<Obj_AI_Turret>().FirstOrDefault(it => it.IsAlly && it.LSIsValidTarget(1000));
+                            ObjectManager.Get<Obj_AI_Turret>().FirstOrDefault(it => it.IsAlly && it.IsValidTarget(1000));
                         if (tower != null)
                         {
                             azir.Spells.R.Cast(tower.Position);
@@ -78,7 +78,7 @@ using EloBuddy;
             var target = TargetSelector.GetTarget(900, TargetSelector.DamageType.Magical);
             if (target != null)
             {
-                if (target.LSDistance(azir.Hero.ServerPosition) < 450)
+                if (target.Distance(azir.Hero.ServerPosition) < 450)
                 {
                     var pred = azir.Spells.W.GetPrediction(target);
                     if (pred.Hitchance >= HitChance.Medium)
@@ -90,7 +90,7 @@ using EloBuddy;
                         else
                         {
                             if (useW)
-                                if (azir.Spells.W.LSIsReady())
+                                if (azir.Spells.W.IsReady())
                                     azir.Spells.W.Cast(pred.CastPosition);
                         }
                     }
@@ -100,7 +100,7 @@ using EloBuddy;
                     if (!savew || (wCount != 1))
                     {
                         if (useW)
-                            azir.Spells.W.Cast(azir.Hero.Position.LSExtend(target.ServerPosition, 450));
+                            azir.Spells.W.Cast(azir.Hero.Position.Extend(target.ServerPosition, 450));
                     }
 
                 }
@@ -137,7 +137,7 @@ using EloBuddy;
                     {
                         azir.Spells.W.Cast(wFarmLocation.Position);
                     }
-                    else if (wFarmLocation.Position.LSDistance(closestSoldier) >= 300)
+                    else if (wFarmLocation.Position.Distance(closestSoldier) >= 300)
                     {
                         azir.Spells.W.Cast(wFarmLocation.Position);
                     }
@@ -160,7 +160,7 @@ MinionManager.GetMinions(
                     var minion = (Obj_AI_Minion) objAiBase;
                     var closestSoldier = azir.SoldierManager.getClosestSolider(minion.ServerPosition);
                     if(closestSoldier!=null)
-                        if (minion.LSDistance(closestSoldier) > 315)
+                        if (minion.Distance(closestSoldier) > 315)
                         {
                             azir.Spells.Q.Cast(minion.Position);
                             break;
@@ -206,7 +206,7 @@ MinionManager.GetMinions(
                     var minion = (Obj_AI_Minion) objAiBase;
                     var closestSoldier = azir.SoldierManager.getClosestSolider(minion.ServerPosition);
                     if (closestSoldier == null) continue;
-                    if (!(minion.LSDistance(closestSoldier) > 315)) continue;
+                    if (!(minion.Distance(closestSoldier) > 315)) continue;
                     azir.Spells.Q.Cast(minion.Position);
                     break;
                 }
@@ -223,7 +223,7 @@ MinionManager.GetMinions(
             var target = TargetSelector.GetTarget(900, TargetSelector.DamageType.Magical);
             if (target == null) return;
 
-            if (target.LSDistance(azir.Hero.ServerPosition) < 450)
+            if (target.Distance(azir.Hero.ServerPosition) < 450)
             {
                 if (target.IsRunningOfYou())
                 {
@@ -242,10 +242,10 @@ MinionManager.GetMinions(
             }
             else
             {
-                if (azir.Spells.Q.Level > 0 && azir.Spells.Q.LSIsReady())
+                if (azir.Spells.Q.Level > 0 && azir.Spells.Q.IsReady())
                     if (useW)
-                        if (target.LSDistance(HeroManager.Player) <= 750)
-                            azir.Spells.W.Cast(azir.Hero.Position.LSExtend(target.ServerPosition, 450));
+                        if (target.Distance(HeroManager.Player) <= 750)
+                            azir.Spells.W.Cast(azir.Hero.Position.Extend(target.ServerPosition, 450));
             }
             //Qc casting
             var checksQ = azir.SoldierManager.ChecksToCastQ(azir, target);

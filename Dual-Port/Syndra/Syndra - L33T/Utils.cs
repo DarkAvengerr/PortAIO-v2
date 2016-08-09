@@ -9,7 +9,7 @@ using EloBuddy;
     {
         public static double GetComboDamage(this AIHeroClient target, bool useQ, bool useW, bool useE, bool useR)
         {
-            if (!target.LSIsValidTarget())
+            if (!target.IsValidTarget())
             {
                 return 0d;
             }
@@ -61,21 +61,21 @@ using EloBuddy;
 
         public static bool BuffCheck(this Obj_AI_Base enemy)
         {
-            return enemy.LSHasBuff("UndyingRage") &&
+            return enemy.HasBuff("UndyingRage") &&
                    EntryPoint.Menu.Item("l33t.stds.ups.disablebuff.undying").GetValue<bool>() ||
-                   enemy.LSHasBuff("JudicatorIntervention") &&
+                   enemy.HasBuff("JudicatorIntervention") &&
                    EntryPoint.Menu.Item("l33t.stds.ups.disablebuff.judicator").GetValue<bool>() ||
-                   enemy.LSHasBuff("Ferocious Howl") &&
+                   enemy.HasBuff("Ferocious Howl") &&
                    EntryPoint.Menu.Item("l33t.stds.ups.disablebuff.alistar").GetValue<bool>() ||
-                   enemy.LSHasBuff("Chrono Shift") &&
+                   enemy.HasBuff("Chrono Shift") &&
                    EntryPoint.Menu.Item("l33t.stds.ups.disablebuff.zilean").GetValue<bool>() ||
-                   enemy.LSHasBuff("ZacRebirthReady") &&
+                   enemy.HasBuff("ZacRebirthReady") &&
                    EntryPoint.Menu.Item("l33t.stds.ups.disablebuff.zac").GetValue<bool>() ||
-                   enemy.LSHasBuff("AttroxPassiveReady") &&
+                   enemy.HasBuff("AttroxPassiveReady") &&
                    EntryPoint.Menu.Item("l33t.stds.ups.disablebuff.aatrox").GetValue<bool>() ||
-                   enemy.LSHasBuff("Spell Shield") &&
+                   enemy.HasBuff("Spell Shield") &&
                    EntryPoint.Menu.Item("l33t.stds.ups.disablebuff.sivir").GetValue<bool>() ||
-                   enemy.LSHasBuff("Black Shield") &&
+                   enemy.HasBuff("Black Shield") &&
                    EntryPoint.Menu.Item("l33t.stds.ups.disablebuff.morgana").GetValue<bool>();
         }
     }

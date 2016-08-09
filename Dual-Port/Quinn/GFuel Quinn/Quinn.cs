@@ -142,9 +142,9 @@ using EloBuddy;
         {
             try
             {
-                if (IsActive("GFUELQuinn.Misc.Antigapcloser") && E.LSIsReady())
+                if (IsActive("GFUELQuinn.Misc.Antigapcloser") && E.IsReady())
                 {
-                    if (gapcloser.Sender.LSIsValidTarget(E.Range))
+                    if (gapcloser.Sender.IsValidTarget(E.Range))
                     {
                         E.CastOnUnit(gapcloser.Sender);
                     }
@@ -169,7 +169,7 @@ using EloBuddy;
                     return;
                 }
 
-                var passiveTarget = HeroManager.Enemies.Find(x => x.HasBuff("quinnw") && x.LSIsValidTarget(Q.Range));
+                var passiveTarget = HeroManager.Enemies.Find(x => x.HasBuff("quinnw") && x.IsValidTarget(Q.Range));
                 if (passiveTarget != null)
                 {
                     Orbwalker.ForceTarget(passiveTarget);
@@ -183,18 +183,18 @@ using EloBuddy;
                 {
                     var ghostBlade = ItemData.Youmuus_Ghostblade.GetItem();
                     if (ghostBlade.IsReady() && ghostBlade.IsOwned(Player)
-                        && target.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(Player) + 100))
+                        && target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player) + 100))
                     {
                         ghostBlade.Cast();
                     }
                 }
 
-                if (IsActive("GFUELQuinn.Combo.E") && target.LSDistance(Player.Position) < E.Range && E.LSIsReady())
+                if (IsActive("GFUELQuinn.Combo.E") && target.Distance(Player.Position) < E.Range && E.IsReady())
                 {
                     E.CastOnUnit(target);
                 }
 
-                if (IsActive("GFUELQuinn.Combo.Q") && target.LSDistance(Player.Position) < Q.Range && Q.LSIsReady())
+                if (IsActive("GFUELQuinn.Combo.Q") && target.Distance(Player.Position) < Q.Range && Q.IsReady())
                 {
                     var prediction = Q.GetPrediction(target);
                     if (prediction.Hitchance >= HitChance.High)
@@ -222,7 +222,7 @@ using EloBuddy;
                     return;
                 }
 
-                var passiveTarget = HeroManager.Enemies.Find(x => x.HasBuff("quinnw") && x.LSIsValidTarget(Q.Range));
+                var passiveTarget = HeroManager.Enemies.Find(x => x.HasBuff("quinnw") && x.IsValidTarget(Q.Range));
                 if (passiveTarget != null)
                 {
                     Orbwalker.ForceTarget(passiveTarget);
@@ -232,7 +232,7 @@ using EloBuddy;
                     Orbwalker.ForceTarget(null);
                 }
 
-                if (IsActive("GFUELQuinn.Harass.Q") && target.LSDistance(Player.Position) < Q.Range && Q.LSIsReady())
+                if (IsActive("GFUELQuinn.Harass.Q") && target.Distance(Player.Position) < Q.Range && Q.IsReady())
                 {
                     var prediction = Q.GetPrediction(target);
                     if (prediction.Hitchance >= HitChance.High)
@@ -271,7 +271,7 @@ using EloBuddy;
 
                 var passiveTarget =
                     MinionManager.GetMinions(Player.Position, Q.Range + Q.Width)
-                        .Find(x => x.HasBuff("quinnw") && x.LSIsValidTarget(Q.Range));
+                        .Find(x => x.HasBuff("quinnw") && x.IsValidTarget(Q.Range));
                 if (passiveTarget != null)
                 {
                     Orbwalker.ForceTarget(passiveTarget);
@@ -314,7 +314,7 @@ using EloBuddy;
 
                 var passiveTarget =
                     MinionManager.GetMinions(Player.Position, Q.Range + Q.Width)
-                        .Find(x => x.HasBuff("quinnw") && x.LSIsValidTarget(Q.Range));
+                        .Find(x => x.HasBuff("quinnw") && x.IsValidTarget(Q.Range));
                 if (passiveTarget != null)
                 {
                     Orbwalker.ForceTarget(passiveTarget);
@@ -326,7 +326,7 @@ using EloBuddy;
 
                 if (IsActive("GFUELQuinn.laneclear.Q"))
                 {
-                    if (GetCenterMinion().LSIsValidTarget())
+                    if (GetCenterMinion().IsValidTarget())
                     {
                         Q.Cast(GetCenterMinion());
                     }
@@ -470,13 +470,13 @@ using EloBuddy;
             var minions = MinionManager.GetMinions(Q.Range + 500);
             var centerlocation =
                 MinionManager.GetBestCircularFarmLocation(
-                    minions.Select(x => x.Position.LSTo2D()).ToList(),
+                    minions.Select(x => x.Position.To2D()).ToList(),
                     500,
                     Q.Range);
 
             return centerlocation.MinionsHit >= Menu.Item("GFUELQuinn.laneclear.count").GetValue<Slider>().Value
                        ? MinionManager.GetMinions(1000)
-                             .OrderBy(x => x.LSDistance(centerlocation.Position))
+                             .OrderBy(x => x.Distance(centerlocation.Position))
                              .FirstOrDefault()
                        : null;
         }
@@ -489,15 +489,15 @@ using EloBuddy;
 
                 if (!Player.Spellbook.IsAutoAttacking)
                 {
-                    damage += (float)ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                    damage += (float)ObjectManager.Player.GetAutoAttackDamage(enemy, true);
                 }
 
-                if (Q.LSIsReady())
+                if (Q.IsReady())
                 {
                     damage += Q.GetDamage(enemy);
                 }
 
-                if (E.LSIsReady())
+                if (E.IsReady())
                 {
                     damage += E.GetDamage(enemy);
                 }
@@ -518,9 +518,9 @@ using EloBuddy;
         {
             try
             {
-                if (IsActive("GFUELQuinn.Misc.Interrupter") && E.LSIsReady())
+                if (IsActive("GFUELQuinn.Misc.Interrupter") && E.IsReady())
                 {
-                    if (sender.LSIsValidTarget(E.Range))
+                    if (sender.IsValidTarget(E.Range))
                     {
                         E.CastOnUnit(sender);
                     }
@@ -586,9 +586,9 @@ using EloBuddy;
             try
             {
                 foreach (
-                    var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie))
+                    var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsDead && !x.IsZombie))
                 {
-                    if (enemy.LSIsValidTarget(Q.Range) && enemy.Health < Q.GetDamage(enemy))
+                    if (enemy.IsValidTarget(Q.Range) && enemy.Health < Q.GetDamage(enemy))
                     {
                         var prediction = Q.GetPrediction(enemy);
                         if (prediction.Hitchance >= HitChance.High)
@@ -662,7 +662,7 @@ using EloBuddy;
                         return;
                     }
 
-                    var target = HeroManager.Enemies.Find(x => x.HasBuff("quinnw") && x.LSIsValidTarget(Q.Range));
+                    var target = HeroManager.Enemies.Find(x => x.HasBuff("quinnw") && x.IsValidTarget(Q.Range));
                     if (target == null)
                     {
                         return;
@@ -677,7 +677,7 @@ using EloBuddy;
                     || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
                 {
                     var minion = args.Target as Obj_AI_Minion;
-                    if (minion != null && minion.LSHasBuff("quinnw"))
+                    if (minion != null && minion.HasBuff("quinnw"))
                     {
                         Orbwalker.ForceTarget(minion);
                     }

@@ -69,7 +69,7 @@ using EloBuddy;
         public void BeforeOrbwalk()
         {
             #region Auto Harass
-            if (Spells[Q].LSIsReady() && Config.Item("MAUTOQ").GetValue<bool>() && !ObjectManager.Player.LSUnderTurret())
+            if (Spells[Q].IsReady() && Config.Item("MAUTOQ").GetValue<bool>() && !ObjectManager.Player.UnderTurret())
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, TargetSelector.DamageType.Magical);
                 if (t != null)
@@ -80,23 +80,23 @@ using EloBuddy;
 
         public void Combo()
         {
-            if (Spells[Q].LSIsReady() && Config.Item("CUSEQ").GetValue<bool>())
+            if (Spells[Q].IsReady() && Config.Item("CUSEQ").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range, TargetSelector.DamageType.Magical);
                 if (t != null)
                     CastSkillshot(t, Spells[Q]);
             }
 
-            if (Spells[W].LSIsReady() && Config.Item("CUSEW").GetValue<bool>())
+            if (Spells[W].IsReady() && Config.Item("CUSEW").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(Spells[W].Range, TargetSelector.DamageType.Magical);
                 if (t != null)
                     CastSkillshot(t, Spells[W]);
             }
 
-            if (Spells[R].LSIsReady())
+            if (Spells[R].IsReady())
             {
-                if (ObjectManager.Player.LSCountEnemiesInRange(Spells[R].Range - 40) >= combo.Item("CUSERHIT").GetValue<Slider>().Value)
+                if (ObjectManager.Player.CountEnemiesInRange(Spells[R].Range - 40) >= combo.Item("CUSERHIT").GetValue<Slider>().Value)
                     Spells[R].Cast();
             }
         }
@@ -106,14 +106,14 @@ using EloBuddy;
             if (ObjectManager.Player.ManaPercent < Config.Item("HMANA").GetValue<Slider>().Value)
                 return;
 
-            if (Spells[Q].LSIsReady() && Config.Item("HUSEQ").GetValue<bool>())
+            if (Spells[Q].IsReady() && Config.Item("HUSEQ").GetValue<bool>())
             {
                 var target = TargetSelector.GetTarget(Spells[Q].Range, TargetSelector.DamageType.Physical);
                 if (target != null)
                     CastSkillshot(target, Spells[Q]);
             }
 
-            if (Spells[W].LSIsReady() && Config.Item("HUSEW").GetValue<bool>())
+            if (Spells[W].IsReady() && Config.Item("HUSEW").GetValue<bool>())
             {
                 var target = TargetSelector.GetTarget(Spells[W].Range, TargetSelector.DamageType.Magical);
                 if (target != null)
@@ -126,10 +126,10 @@ using EloBuddy;
         {
             if (sender.IsEnemy && sender.IsChampion() && ShineCommon.Utility.IsImmobileTarget(sender as AIHeroClient))
             {
-                if (Spells[Q].LSIsReady() && sender.LSIsValidTarget(Spells[Q].Range) && Config.Item("MAUTOQIMMO").GetValue<bool>())
+                if (Spells[Q].IsReady() && sender.IsValidTarget(Spells[Q].Range) && Config.Item("MAUTOQIMMO").GetValue<bool>())
                     Spells[Q].Cast(sender.ServerPosition);
 
-                if (Spells[W].LSIsReady() && sender.LSIsValidTarget(Spells[W].Range) && Config.Item("MAUTOWIMMO").GetValue<bool>())
+                if (Spells[W].IsReady() && sender.IsValidTarget(Spells[W].Range) && Config.Item("MAUTOWIMMO").GetValue<bool>())
                     Spells[W].Cast(sender.ServerPosition);
             }
         }

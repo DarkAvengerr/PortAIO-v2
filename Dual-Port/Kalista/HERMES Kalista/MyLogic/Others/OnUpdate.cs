@@ -17,7 +17,7 @@ using EloBuddy;
         public static void OnUpdate(EventArgs args)
         {
             if (LeagueSharp.Common.Utility.Map.GetMap().Type != LeagueSharp.Common.Utility.Map.MapType.SummonersRift) return;
-            if (Heroes.Player.LSHasBuff("rengarralertsound"))
+            if (Heroes.Player.HasBuff("rengarralertsound"))
             {
                 if (Items.HasItem(ItemData.Oracle_Alteration.Id, Heroes.Player) && Items.CanUseItem(ItemData.Oracle_Alteration.Id))
                 {
@@ -30,7 +30,7 @@ using EloBuddy;
             }
 
             var enemyVayne = Heroes.EnemyHeroes.FirstOrDefault(e => e.CharData.BaseSkinName == "Vayne");
-            if (enemyVayne != null && enemyVayne.LSDistance(Heroes.Player) < 700 && enemyVayne.LSHasBuff("VayneInquisition"))
+            if (enemyVayne != null && enemyVayne.Distance(Heroes.Player) < 700 && enemyVayne.HasBuff("VayneInquisition"))
             {
                 if (Items.HasItem(ItemData.Oracle_Alteration.Id, Heroes.Player) && Items.CanUseItem(ItemData.Oracle_Alteration.Id))
                 {
@@ -42,7 +42,7 @@ using EloBuddy;
                 }
             }
 
-            if (Heroes.Player.LSInFountain() && Shop.IsOpen)
+            if (Heroes.Player.InFountain() && Shop.IsOpen)
             {
                 if (Program.ComboMenu.Item("AutoBuy").GetValue<bool>() &&
                     !Items.HasItem(ItemData.Oracle_Alteration.Id, Heroes.Player) && Heroes.Player.Level >= 9 &&

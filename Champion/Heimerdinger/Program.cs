@@ -175,21 +175,21 @@ namespace Two_Girls_One_Donger
 
             PredictionOutput prediction;
 
-            if (ObjectManager.Player.LSDistance(target) < E1.Range)
+            if (ObjectManager.Player.Distance(target) < E1.Range)
             {
                 var oldrange = E1.Range;
                 E1.Range = E2.Range;
                 prediction = E1.GetPrediction(target, true);
                 E1.Range = oldrange;
             }
-            else if (ObjectManager.Player.LSDistance(target) < E2.Range)
+            else if (ObjectManager.Player.Distance(target) < E2.Range)
             {
                 var oldrange = E2.Range;
                 E2.Range = E3.Range;
                 prediction = E2.GetPrediction(target, true);
                 E2.Range = oldrange;
             }
-            else if (ObjectManager.Player.LSDistance(target) < E3.Range)
+            else if (ObjectManager.Player.Distance(target) < E3.Range)
             {
                 prediction = E3.GetPrediction(target, true);
             }
@@ -200,14 +200,14 @@ namespace Two_Girls_One_Donger
 
             if (prediction.Hitchance >= HitChance.High)
             {
-                if (ObjectManager.Player.ServerPosition.LSDistance(prediction.CastPosition) <= E1.Range + E1.Width)
+                if (ObjectManager.Player.ServerPosition.Distance(prediction.CastPosition) <= E1.Range + E1.Width)
                 {
                     Vector3 p;
-                    if (ObjectManager.Player.ServerPosition.LSDistance(prediction.CastPosition) > 300)
+                    if (ObjectManager.Player.ServerPosition.Distance(prediction.CastPosition) > 300)
                     {
                         p = prediction.CastPosition -
                             100 *
-                            (prediction.CastPosition.LSTo2D() - ObjectManager.Player.ServerPosition.LSTo2D()).LSNormalized()
+                            (prediction.CastPosition.To2D() - ObjectManager.Player.ServerPosition.To2D()).Normalized()
                                 .To3D();
                     }
                     else
@@ -217,11 +217,11 @@ namespace Two_Girls_One_Donger
                     R.Cast();
                     E1.Cast(p);
                 }
-                else if (ObjectManager.Player.ServerPosition.LSDistance(prediction.CastPosition) <=
+                else if (ObjectManager.Player.ServerPosition.Distance(prediction.CastPosition) <=
                          ((E1.Range + E1.Range) / 2))
                 {
-                    var p = ObjectManager.Player.ServerPosition.LSTo2D()
-                        .LSExtend(prediction.CastPosition.LSTo2D(), E1.Range - 100);
+                    var p = ObjectManager.Player.ServerPosition.To2D()
+                        .Extend(prediction.CastPosition.To2D(), E1.Range - 100);
                     {
                         R.Cast();
                         E1.Cast(p.To3D());
@@ -229,9 +229,9 @@ namespace Two_Girls_One_Donger
                 }
                 else
                 {
-                    var p = ObjectManager.Player.ServerPosition.LSTo2D() +
+                    var p = ObjectManager.Player.ServerPosition.To2D() +
                             E1.Range *
-                            (prediction.CastPosition.LSTo2D() - ObjectManager.Player.ServerPosition.LSTo2D()).LSNormalized
+                            (prediction.CastPosition.To2D() - ObjectManager.Player.ServerPosition.To2D()).Normalized
                                 ();
 
                     {
@@ -271,38 +271,38 @@ namespace Two_Girls_One_Donger
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                if (Q.LSIsReady() && R.LSIsReady() && Config.Item("UseQRCombo").GetValue<bool>() &&
-                    Config.Item("UseQCombo").GetValue<bool>() && qtarget.LSIsValidTarget(650) &&
-                    Player.Position.LSCountEnemiesInRange(650) >=
+                if (Q.IsReady() && R.IsReady() && Config.Item("UseQRCombo").GetValue<bool>() &&
+                    Config.Item("UseQCombo").GetValue<bool>() && qtarget.IsValidTarget(650) &&
+                    Player.Position.CountEnemiesInRange(650) >=
                     Config.Item("QRcount").GetValue<Slider>().Value)
                 {
                     R.Cast();
-                    Q.Cast(Player.Position.LSExtend(target.Position, +300));
+                    Q.Cast(Player.Position.Extend(target.Position, +300));
                 }
                 else
                 {
-                    if (Q.LSIsReady() && Config.Item("UseQCombo").GetValue<bool>() && qtarget.LSIsValidTarget(650) &&
+                    if (Q.IsReady() && Config.Item("UseQCombo").GetValue<bool>() && qtarget.IsValidTarget(650) &&
 
-                        Player.Position.LSCountEnemiesInRange(650) >= 1)
+                        Player.Position.CountEnemiesInRange(650) >= 1)
                     {
-                        Q.Cast(Player.Position.LSExtend(target.Position, +300));
+                        Q.Cast(Player.Position.Extend(target.Position, +300));
                     }
                 }
-                if (E3.LSIsReady() && R.LSIsReady() && Config.Item("UseERCombo").GetValue<bool>() &&
+                if (E3.IsReady() && R.IsReady() && Config.Item("UseERCombo").GetValue<bool>() &&
                     Config.Item("UseRCombo").GetValue<bool>() &&
-                    target.Position.LSCountEnemiesInRange(450 - 250) >=
+                    target.Position.CountEnemiesInRange(450 - 250) >=
                     Config.Item("ERcount").GetValue<Slider>().Value)
                 {
                     CastER(target);
                 }
                 else
                 {
-                    if (E.LSIsReady() && Config.Item("UseECombo").GetValue<bool>() && target.LSIsValidTarget(E.Range))
+                    if (E.IsReady() && Config.Item("UseECombo").GetValue<bool>() && target.IsValidTarget(E.Range))
                     {
                         E.CastIfHitchanceEquals(target, HitChance.High, true);
                     }
-                    if (W.LSIsReady() && Config.Item("UseWRCombo").GetValue<bool>() && Config.Item("UseRCombo").GetValue<bool>() &&
-                        R.LSIsReady() && target.LSIsValidTarget(W.Range) &&
+                    if (W.IsReady() && Config.Item("UseWRCombo").GetValue<bool>() && Config.Item("UseRCombo").GetValue<bool>() &&
+                        R.IsReady() && target.IsValidTarget(W.Range) &&
                         wpred.Hitchance >= HitChance.High && CalcDamage(target) >= target.Health)
                     {
                         R.Cast();
@@ -312,7 +312,7 @@ namespace Two_Girls_One_Donger
                     }
                     else
                     {
-                        if (W.LSIsReady() && Config.Item("UseWCombo").GetValue<bool>() && target.LSIsValidTarget(W.Range))
+                        if (W.IsReady() && Config.Item("UseWCombo").GetValue<bool>() && target.IsValidTarget(W.Range))
                         {
                             W.CastIfHitchanceEquals(target, HitChance.High, true);
                         }
@@ -331,7 +331,7 @@ namespace Two_Girls_One_Donger
               return;
           var harassmana = Config.Item("ManaW").GetValue<Slider>().Value;
           var useW = Config.Item("AutoHarras").GetValue<KeyBind>().Active;
-          if (W.LSIsReady() && target.LSIsValidTarget() && useW && (Player.Mana / Player.MaxMana) * 100 > harassmana)
+          if (W.IsReady() && target.IsValidTarget() && useW && (Player.Mana / Player.MaxMana) * 100 > harassmana)
             {
               W.CastIfHitchanceEquals(target,HitChance.High,true);
             }
@@ -344,7 +344,7 @@ namespace Two_Girls_One_Donger
 
             //Calculate Combo Damage
 
-            var aa = Player.LSGetAutoAttackDamage(target, true);
+            var aa = Player.GetAutoAttackDamage(target, true);
             var damage = aa;
 
             if (Ignite != SpellSlot.Unknown &&
@@ -354,25 +354,25 @@ namespace Two_Girls_One_Donger
 
             if (Config.Item("UseE").GetValue<bool>()) // edamage
             {
-                if (E.LSIsReady())
+                if (E.IsReady())
                 {
                     damage += E.GetDamage(target);
                 }
             }
 
-            if (E.LSIsReady() && Config.Item("UseE").GetValue<bool>()) // rdamage
+            if (E.IsReady() && Config.Item("UseE").GetValue<bool>()) // rdamage
             {
 
                 damage += E.GetDamage(target);
             }
 
-            if (W.LSIsReady() && Config.Item("UseW").GetValue<bool>())
+            if (W.IsReady() && Config.Item("UseW").GetValue<bool>())
             {
                 damage += W.GetDamage(target);
             }
-            if (W.LSIsReady() && Config.Item("UseW").GetValue<bool>())
+            if (W.IsReady() && Config.Item("UseW").GetValue<bool>())
             {
-                if (R.LSIsReady() && Config.Item("UseW").GetValue<bool>() && Config.Item("UseR").GetValue<bool>())
+                if (R.IsReady() && Config.Item("UseW").GetValue<bool>() && Config.Item("UseR").GetValue<bool>())
                     damage += W.GetDamage(target) * 2.2;
             }
             return (int)damage;
@@ -406,7 +406,7 @@ namespace Two_Girls_One_Donger
 
             target = TargetSelector.GetTarget(W.Range + 200, TargetSelector.DamageType.Magical);
             if (target == null) return;
-            if (target.Health < GetW1Damage(target) && R.LSIsReady())
+            if (target.Health < GetW1Damage(target) && R.IsReady())
             {
                 var prediction = W.GetPrediction(target);
                 if (prediction.Hitchance >= HitChance.High && prediction.CollisionObjects.Count(h => h.IsEnemy && !h.IsDead && h is Obj_AI_Minion) < 2)
@@ -426,8 +426,8 @@ namespace Two_Girls_One_Donger
             if (target == null) return (float)0;
             double damage = 0d;
 
-            if (W.LSIsReady())
-                damage += Player.LSGetSpellDamage(target, SpellSlot.W);
+            if (W.IsReady())
+                damage += Player.GetSpellDamage(target, SpellSlot.W);
 
             return (float)damage * 2;
         }
@@ -438,8 +438,8 @@ namespace Two_Girls_One_Donger
             if (target == null) return (float)0;
             double damage = 0d;
 
-            if (W1.LSIsReady() && R.LSIsReady())
-                damage += Player.LSGetSpellDamage(target, SpellSlot.W, 1);
+            if (W1.IsReady() && R.IsReady())
+                damage += Player.GetSpellDamage(target, SpellSlot.W, 1);
 
             return (float)damage * 2;
         }
@@ -450,8 +450,8 @@ namespace Two_Girls_One_Donger
             if (target == null) return (float)0;
             double damage = 0d;
 
-            if (E.LSIsReady())
-                damage += Player.LSGetSpellDamage(target, SpellSlot.E);
+            if (E.IsReady())
+                damage += Player.GetSpellDamage(target, SpellSlot.E);
 
             return (float)damage * 2;
         }
@@ -460,14 +460,14 @@ namespace Two_Girls_One_Donger
             #region Misc
         private static void AntiGapCloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (E.LSIsReady() && gapcloser.Sender.LSIsValidTarget(E.Range) && Config.Item("AntiGap").GetValue<bool>())
+            if (E.IsReady() && gapcloser.Sender.IsValidTarget(E.Range) && Config.Item("AntiGap").GetValue<bool>())
                 E.Cast(gapcloser.End);
         }
 
 
         private static void Interrupter2_OnInterruptableTarget(Obj_AI_Base sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (E.LSIsReady() && sender.LSIsValidTarget(E.Range) && Config.Item("Interrupt").GetValue<bool>())
+            if (E.IsReady() && sender.IsValidTarget(E.Range) && Config.Item("Interrupt").GetValue<bool>())
                 E.Cast(sender.Position);
         }
         #endregion

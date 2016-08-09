@@ -68,7 +68,7 @@ using EloBuddy; namespace ezEvade
 
         public static bool UseEkkoE2(EvadeSpellData evadeSpell, bool process = true)
         {
-            if (myHero.LSHasBuff("ekkoeattackbuff"))
+            if (myHero.HasBuff("ekkoeattackbuff"))
             {
                 var posInfo = EvadeHelper.GetBestPositionTargetedDash(evadeSpell);
                 if (posInfo != null && posInfo.target != null)
@@ -88,7 +88,7 @@ using EloBuddy; namespace ezEvade
             {
                 if (obj != null && obj.IsValid && !obj.IsDead && obj.Name == "Ekko" && obj.IsAlly)
                 {
-                    Vector2 blinkPos = obj.ServerPosition.LSTo2D();
+                    Vector2 blinkPos = obj.ServerPosition.To2D();
                     if (!blinkPos.CheckDangerousPos(10))
                     {
                         EvadeSpell.CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell), process);

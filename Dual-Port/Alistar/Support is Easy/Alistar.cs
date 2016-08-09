@@ -84,10 +84,10 @@ using EloBuddy; namespace Support.Plugins
                     this.Q.Cast();
                 }
 
-                if (this.Q.LSIsReady() && this.W.CastCheck(this.Target, "Combo.W"))
+                if (this.Q.IsReady() && this.W.CastCheck(this.Target, "Combo.W"))
                 {
                     this.W.CastOnUnit(this.Target);
-                    var jumpTime = Math.Max(0, this.Player.LSDistance(this.Target) - 500) * 10 / 25 + 25;
+                    var jumpTime = Math.Max(0, this.Player.Distance(this.Target) - 500) * 10 / 25 + 25;
                     LeagueSharp.Common.Utility.DelayAction.Add((int)jumpTime, () => this.Q.Cast());
                 }
 

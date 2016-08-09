@@ -141,7 +141,7 @@ using EloBuddy;
             var target = TargetSelector.GetTarget(1100, TargetSelector.DamageType.Physical);
             if (target == null) return;
 
-            if (Config.Item("HarassE").GetValue<bool>() && Player.LSDistance(target) <= E.Range && E.LSIsReady())
+            if (Config.Item("HarassE").GetValue<bool>() && Player.Distance(target) <= E.Range && E.IsReady())
             {
                 E.Cast();
             }
@@ -153,11 +153,11 @@ using EloBuddy;
             if (target == null) return;
 
             //Combo
-            if (Player.LSDistance(target) <= Q.Range && Q.LSIsReady() && (Config.Item("UseQCombo").GetValue<bool>()))
+            if (Player.Distance(target) <= Q.Range && Q.IsReady() && (Config.Item("UseQCombo").GetValue<bool>()))
             {
                 Q.Cast();
             }
-            if  (Player.LSDistance(target) <= E.Range && E.LSIsReady() && (Config.Item("UseECombo").GetValue<bool>()))
+            if  (Player.Distance(target) <= E.Range && E.IsReady() && (Config.Item("UseECombo").GetValue<bool>()))
             {
                 E.Cast();
             }
@@ -167,38 +167,38 @@ using EloBuddy;
            float wcount = Config.Item("CountW").GetValue<Slider>().Value;
             if (health < ((maxhealth * wcount)/100))
             {
-                if (Config.Item("UseWCombo").GetValue<bool>() && W.LSIsReady())
+                if (Config.Item("UseWCombo").GetValue<bool>() && W.IsReady())
                 {
                     W.Cast(target);
                 }
             }
-            if (Config.Item("AutoR").GetValue<bool>() && R.LSIsReady() && (GetNumberHitByR(target) >= Config.Item("CountR").GetValue<Slider>().Value))
+            if (Config.Item("AutoR").GetValue<bool>() && R.IsReady() && (GetNumberHitByR(target) >= Config.Item("CountR").GetValue<Slider>().Value))
             {
                 R.Cast();
             }
             if (Config.Item("UseItems").GetValue<bool>())
             {
-                if (Player.LSDistance(target) <= RDO.Range)
+                if (Player.Distance(target) <= RDO.Range)
                 {
                     RDO.Cast(target);
                 }
-                if (Player.LSDistance(target) <= HYD.Range)
+                if (Player.Distance(target) <= HYD.Range)
                 {
                     HYD.Cast(target);
                 }
-                if (Player.LSDistance(target) <= DFG.Range)
+                if (Player.Distance(target) <= DFG.Range)
                 {
                     DFG.Cast(target);
                 }
-                if (Player.LSDistance(target) <= BOTK.Range)
+                if (Player.Distance(target) <= BOTK.Range)
                 {
                     BOTK.Cast(target);
                 }
-                if (Player.LSDistance(target) <= CUT.Range)
+                if (Player.Distance(target) <= CUT.Range)
                 {
                     CUT.Cast(target);
                 }
-                if (Player.LSDistance(target) <= 125f)
+                if (Player.Distance(target) <= 125f)
                 {
                     YOY.Cast();
                 }

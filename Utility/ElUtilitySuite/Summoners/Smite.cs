@@ -453,9 +453,9 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                         x =>
                         x.ChampionName.Equals(this.Player.ChampionName, StringComparison.InvariantCultureIgnoreCase)))
                 {
-                    if (this.Player.LSGetSpellDamage(mob, spell.Slot, spell.Stage) + damage >= mob.Health && this.Player.Spellbook.GetSpell(spell.Slot).State == SpellState.Ready)
+                    if (this.Player.GetSpellDamage(mob, spell.Slot, spell.Stage) + damage >= mob.Health && this.Player.Spellbook.GetSpell(spell.Slot).State == SpellState.Ready)
                     {
-                        if (mob.LSIsValidTarget(this.SmiteSpell.Range))
+                        if (mob.IsValidTarget(this.SmiteSpell.Range))
                         {
                             if (spell.TargetType == SpellDataTargetType.Unit)
                             {
@@ -516,7 +516,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                             ObjectManager.Get<Obj_AI_Minion>()
                                 .Where(
                                     m =>
-                                    m.Team == GameObjectTeam.Neutral && m.LSIsValidTarget()   );
+                                    m.Team == GameObjectTeam.Neutral && m.IsValidTarget()   );
 
                         foreach (var minion in minions.Where(m => m.IsHPBarRendered))
                         {
@@ -723,7 +723,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                 foreach (var mob in MinionManager.GetMinions(950f, MinionTypes.All, MinionTeam.Neutral)
                     .Where(m => !m.Name.Contains("Mini") && !m.Name.Contains("Respawn")))
                 {
-                    if (mob.LSDistance(this.Player, false) - (this.Player.BoundingRadius)
+                    if (mob.Distance(this.Player, false) - (this.Player.BoundingRadius)
                         > 500)
                     {
                         continue;
@@ -752,7 +752,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                         && this.Player.GetSpell(this.SmiteSpell.Slot)
                                .Name.Equals("s5_summonersmiteduel", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        var kSableEnemy = HeroManager.Enemies.FirstOrDefault(hero => hero.LSIsValidTarget(SmiteRange) && this.SmiteSpell.GetDamage(hero) >= hero.Health);
+                        var kSableEnemy = HeroManager.Enemies.FirstOrDefault(hero => hero.IsValidTarget(SmiteRange) && this.SmiteSpell.GetDamage(hero) >= hero.Health);
 
                         if (kSableEnemy != null)
                         {
@@ -765,7 +765,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                     {
                         if (this.ComboModeActive)
                         {
-                            var smiteComboEnemy = HeroManager.Enemies.FirstOrDefault(hero => hero.LSIsValidTarget(SmiteRange));
+                            var smiteComboEnemy = HeroManager.Enemies.FirstOrDefault(hero => hero.IsValidTarget(SmiteRange));
                             if (smiteComboEnemy != null)
                             {
                                 this.Player.Spellbook.CastSpell(this.SmiteSpell.Slot, smiteComboEnemy);

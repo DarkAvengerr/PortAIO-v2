@@ -52,11 +52,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 return;
             var t = target as AIHeroClient;
 
-            if (Q.LSIsReady() && t.LSIsValidTarget(Q.Range))
+            if (Q.IsReady() && t.IsValidTarget(Q.Range))
             {
                 Q.Cast(t);
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 W.Cast();
             }
@@ -64,22 +64,22 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
-            if (!Q.LSIsReady(4500) && player.Mana > 200)
+            if (!Q.IsReady(4500) && player.Mana > 200)
                 W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.Cast(target);
         }
@@ -124,13 +124,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             var t = ARAMTargetSelector.getBestTarget(R.Range);
 
-            if (t.LSIsValidTarget(R.Range))
+            if (t.IsValidTarget(R.Range))
             {
                 var rDmg = R.GetDamage(t) + (W.GetDamage(t) * 10);
 
-                if (player.LSCountEnemiesInRange(700) == 0 && t.LSCountAlliesInRange(400) == 0)
+                if (player.CountEnemiesInRange(700) == 0 && t.CountAlliesInRange(400) == 0)
                 {
-                    var tDis = player.LSDistance(t.ServerPosition);
+                    var tDis = player.Distance(t.ServerPosition);
                     if (rDmg * 7 > t.Health && tDis < 800)
                     {
                         R.Cast(t, true, true);
@@ -163,13 +163,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     }
                     return;
                 }
-                else if (rDmg * 8 > t.Health && t.LSCountEnemiesInRange(300) > 2 && player.LSCountEnemiesInRange(700) == 0)
+                else if (rDmg * 8 > t.Health && t.CountEnemiesInRange(300) > 2 && player.CountEnemiesInRange(700) == 0)
                 {
                     R.Cast(t, true, true);
                     RCastTime = Game.Time;
                     return;
                 }
-                else if (rDmg * 8 > t.Health  && player.LSCountEnemiesInRange(600) == 0)
+                else if (rDmg * 8 > t.Health  && player.CountEnemiesInRange(600) == 0)
                 {
                     R.Cast(t, true, true);
                     RCastTime = Game.Time;

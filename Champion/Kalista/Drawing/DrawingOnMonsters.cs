@@ -62,7 +62,7 @@ namespace S_Plus_Class_Kalista.Drawing
             foreach (var monster in ObjectManager.Get<Obj_AI_Minion>())
             {
 
-                if (monster.Team != GameObjectTeam.Neutral || !monster.LSIsValidTarget(Champion.E.Range) ||
+                if (monster.Team != GameObjectTeam.Neutral || !monster.IsValidTarget(Champion.E.Range) ||
                     !monster.IsHPBarRendered)
                     continue;
 

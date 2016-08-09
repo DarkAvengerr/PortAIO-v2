@@ -49,7 +49,7 @@ using EloBuddy;
             E = new Spell(SpellSlot.E, 800);
             R = new Spell(SpellSlot.R, 650);
 
-            IgniteSlot = Player.LSGetSpellSlot("SummonerDot");
+            IgniteSlot = Player.GetSpellSlot("SummonerDot");
 
             Q.SetSkillshot(0.25f, 70f, 1450f, false, SkillshotType.SkillshotLine);
             E.SetSkillshot(0.5f, 175f, int.MaxValue, false, SkillshotType.SkillshotCircle);
@@ -130,7 +130,7 @@ using EloBuddy;
                 Combo();
             }
             
-            if (Player.LSDistance(target) <= 600 && IgniteDamage(target) >= target.Health && Config.Item("Ignite").GetValue<bool>())
+            if (Player.Distance(target) <= 600 && IgniteDamage(target) >= target.Health && Config.Item("Ignite").GetValue<bool>())
             {
                 Player.Spellbook.CastSpell(IgniteSlot, target);
             }
@@ -139,7 +139,7 @@ using EloBuddy;
 
         private static void EQMouse()
         {
-            if (E.LSIsReady() && Q.LSIsReady())
+            if (E.IsReady() && Q.IsReady())
             {
                 E.Cast(Game.CursorPos);
                 Q.Cast(Game.CursorPos);
@@ -151,27 +151,27 @@ using EloBuddy;
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
             if (target == null) return;
 
-            if (E.LSIsReady() && Q.LSIsReady())
+            if (E.IsReady() && Q.IsReady())
             {
-                if (Player.LSDistance(target) <= E.Range && (Config.Item("UseEQCombo").GetValue<bool>()))
+                if (Player.Distance(target) <= E.Range && (Config.Item("UseEQCombo").GetValue<bool>()))
                 {
                     E.Cast(target);
                     Q.Cast(target);
                 }
             }
-            else if (Player.LSDistance(target) <= E.Range && E.LSIsReady() && (Config.Item("UseECombo").GetValue<bool>()))
+            else if (Player.Distance(target) <= E.Range && E.IsReady() && (Config.Item("UseECombo").GetValue<bool>()))
             {
                 E.Cast(target);
             }
-            else if (Player.LSDistance(target) <= Q.Range && Q.LSIsReady() && (Config.Item("UseQCombo").GetValue<bool>()))
+            else if (Player.Distance(target) <= Q.Range && Q.IsReady() && (Config.Item("UseQCombo").GetValue<bool>()))
             {
                 Q.Cast(target);
             }
-            if (Player.LSDistance(target) <= R.Range && (Config.Item("UseRCombo").GetValue<bool>()))
+            if (Player.Distance(target) <= R.Range && (Config.Item("UseRCombo").GetValue<bool>()))
             {
                 R.Cast(target);
             }
-            if (Player.LSDistance(target) <= W.Range && (Config.Item("UseWCombo").GetValue<bool>()))
+            if (Player.Distance(target) <= W.Range && (Config.Item("UseWCombo").GetValue<bool>()))
             {
                 W.Cast();
             }

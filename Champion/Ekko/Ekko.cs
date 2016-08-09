@@ -70,13 +70,13 @@ namespace OneKeyToWin_AIO_Sebby
                 Jungle();
             }
 
-            if (Program.LagFree(1) && Q.LSIsReady() )
+            if (Program.LagFree(1) && Q.IsReady() )
                 LogicQ();
-            if (Program.LagFree(2) && W.LSIsReady() && Config.Item("autoW", true).GetValue<bool>() && Player.Mana > RMANA + WMANA + EMANA + QMANA)
+            if (Program.LagFree(2) && W.IsReady() && Config.Item("autoW", true).GetValue<bool>() && Player.Mana > RMANA + WMANA + EMANA + QMANA)
                 LogicW();
-            if (Program.LagFree(3) && E.LSIsReady() )
+            if (Program.LagFree(3) && E.IsReady() )
                 LogicE();
-            if ( R.LSIsReady() )
+            if ( R.IsReady() )
                 LogicR();
         }
 
@@ -86,20 +86,20 @@ namespace OneKeyToWin_AIO_Sebby
             {
                 if (Program.LagFree(4) && Program.Combo && RMissile != null && RMissile.IsValid)
                 {
-                    if (RMissile.Position.LSCountEnemiesInRange(R.Range) >= Config.Item("rCount", true).GetValue<Slider>().Value && Config.Item("rCount", true).GetValue<Slider>().Value > 0)
+                    if (RMissile.Position.CountEnemiesInRange(R.Range) >= Config.Item("rCount", true).GetValue<Slider>().Value && Config.Item("rCount", true).GetValue<Slider>().Value > 0)
                         R.Cast();
 
-                    foreach (var t in HeroManager.Enemies.Where(t => t.LSIsValidTarget() && RMissile.Position.LSDistance(Prediction.GetPrediction(t, R.Delay).CastPosition) < R.Range && RMissile.Position.LSDistance(t.ServerPosition) < R.Range))
+                    foreach (var t in HeroManager.Enemies.Where(t => t.IsValidTarget() && RMissile.Position.Distance(Prediction.GetPrediction(t, R.Delay).CastPosition) < R.Range && RMissile.Position.Distance(t.ServerPosition) < R.Range))
                     {
                         var comboDMG = OktwCommon.GetKsDamage(t, R);
 
-                        if (Q.LSIsReady())
+                        if (Q.IsReady())
                             comboDMG += Q.GetDamage(t);
 
-                        if (E.LSIsReady())
+                        if (E.IsReady())
                             comboDMG += E.GetDamage(t);
 
-                        if (W.LSIsReady())
+                        if (W.IsReady())
                             comboDMG += W.GetDamage(t);
 
                         if (t.Health < comboDMG && OktwCommon.ValidUlt(t))
@@ -111,7 +111,7 @@ namespace OneKeyToWin_AIO_Sebby
                 }
 
                 double dmg = OktwCommon.GetIncomingDamage(Player, 1);
-                var enemys = Player.LSCountEnemiesInRange(800);
+                var enemys = Player.CountEnemiesInRange(800);
 
                 if (dmg > 0 || enemys > 0)
                 {
@@ -136,34 +136,34 @@ namespace OneKeyToWin_AIO_Sebby
         {
             if (Program.Combo && WMissile != null && WMissile.IsValid)
             {
-                if (WMissile.Position.LSCountEnemiesInRange(200) > 0 && WMissile.Position.LSDistance(Player.ServerPosition) < 100)
+                if (WMissile.Position.CountEnemiesInRange(200) > 0 && WMissile.Position.Distance(Player.ServerPosition) < 100)
                 {
-                    E.Cast(Player.Position.LSExtend(WMissile.Position, E.Range), true);
+                    E.Cast(Player.Position.Extend(WMissile.Position, E.Range), true);
                 }
             }
 
             var t = TargetSelector.GetTarget(800, TargetSelector.DamageType.Magical);
 
-            if (E.LSIsReady() && Player.Mana > RMANA + EMANA
-                 && Player.LSCountEnemiesInRange(260) > 0
-                 && Player.Position.LSExtend(Game.CursorPos, E.Range).LSCountEnemiesInRange(500) < 3
-                 && t.Position.LSDistance(Game.CursorPos) > t.Position.LSDistance(Player.Position))
+            if (E.IsReady() && Player.Mana > RMANA + EMANA
+                 && Player.CountEnemiesInRange(260) > 0
+                 && Player.Position.Extend(Game.CursorPos, E.Range).CountEnemiesInRange(500) < 3
+                 && t.Position.Distance(Game.CursorPos) > t.Position.Distance(Player.Position))
             {
-                E.Cast(Player.Position.LSExtend(Game.CursorPos, E.Range), true);
+                E.Cast(Player.Position.Extend(Game.CursorPos, E.Range), true);
             }
             else if (Program.Combo && Player.Health > Player.MaxHealth * 0.4
                 && Player.Mana > RMANA + EMANA
-                && !Player.LSUnderTurret(true)
-                && Player.Position.LSExtend(Game.CursorPos, E.Range).LSCountEnemiesInRange(700) < 3)
+                && !Player.UnderTurret(true)
+                && Player.Position.Extend(Game.CursorPos, E.Range).CountEnemiesInRange(700) < 3)
             {
-                if (t.LSIsValidTarget() && Player.Mana > QMANA + EMANA + WMANA && t.Position.LSDistance(Game.CursorPos) + 300 < t.Position.LSDistance(Player.Position))
+                if (t.IsValidTarget() && Player.Mana > QMANA + EMANA + WMANA && t.Position.Distance(Game.CursorPos) + 300 < t.Position.Distance(Player.Position))
                 {
-                    E.Cast(Player.Position.LSExtend(Game.CursorPos, E.Range), true);
+                    E.Cast(Player.Position.Extend(Game.CursorPos, E.Range), true);
                 }
             }
-            else if (t.LSIsValidTarget() && Program.Combo  && E.GetDamage(t) + W.GetDamage(t) > t.Health)
+            else if (t.IsValidTarget() && Program.Combo  && E.GetDamage(t) + W.GetDamage(t) > t.Health)
             {
-                E.Cast(Player.Position.LSExtend(t.Position, E.Range), true);
+                E.Cast(Player.Position.Extend(t.Position, E.Range), true);
             }
         }
 
@@ -175,12 +175,12 @@ namespace OneKeyToWin_AIO_Sebby
                 if (mobs.Count > 0)
                 {
                     var mob = mobs[0];
-                    if (W.LSIsReady() && Config.Item("jungleW", true).GetValue<bool>())
+                    if (W.IsReady() && Config.Item("jungleW", true).GetValue<bool>())
                     {
                         W.Cast(mob.Position);
                         return;
                     }
-                    if (Q.LSIsReady() && Config.Item("jungleQ", true).GetValue<bool>())
+                    if (Q.IsReady() && Config.Item("jungleQ", true).GetValue<bool>())
                     {
                         Q.Cast(mob.Position);
                         return;
@@ -211,7 +211,7 @@ namespace OneKeyToWin_AIO_Sebby
         {
             var t = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
             var t1 = TargetSelector.GetTarget(Q1.Range, TargetSelector.DamageType.Magical);
-            if (t.LSIsValidTarget())
+            if (t.IsValidTarget())
             {
                 missileManager.Target = t;
                 if (Program.Combo && Player.Mana > RMANA + QMANA)
@@ -222,12 +222,12 @@ namespace OneKeyToWin_AIO_Sebby
                     Program.CastSpell(Q, t);
                 if (Player.Mana > RMANA + QMANA + WMANA )
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(Q.Range) && !OktwCommon.CanMove(enemy)))
+                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(Q.Range) && !OktwCommon.CanMove(enemy)))
                         Q.Cast(enemy,true,true);
                 }
 
             }
-            else if (t1.LSIsValidTarget())
+            else if (t1.IsValidTarget())
             {
                 missileManager.Target = t1;
                 if (Program.Combo && Player.Mana > RMANA + QMANA)
@@ -238,7 +238,7 @@ namespace OneKeyToWin_AIO_Sebby
                     Program.CastSpell(Q1, t1);
                 if (Player.Mana > RMANA + QMANA + WMANA)
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(Q1.Range) && !OktwCommon.CanMove(enemy)))
+                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(Q1.Range) && !OktwCommon.CanMove(enemy)))
                         Q1.Cast(enemy, true, true);
                 }
             }
@@ -255,24 +255,24 @@ namespace OneKeyToWin_AIO_Sebby
         private void LogicW()
         {
             var t = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
-            if (t.LSIsValidTarget() )
+            if (t.IsValidTarget() )
             {
                 
                 if (Config.Item("Waoe", true).GetValue<bool>())
                 {
                     W.CastIfWillHit(t, 2, true);
-                    if (t.LSCountEnemiesInRange(250) > 1)
+                    if (t.CountEnemiesInRange(250) > 1)
                     {
                         Program.CastSpell(W, t);
                     }
                 }
                     
-                if (Program.Combo  && W.GetPrediction(t).CastPosition.LSDistance(t.Position) > 200)
+                if (Program.Combo  && W.GetPrediction(t).CastPosition.Distance(t.Position) > 200)
                     Program.CastSpell(W, t);
             }
             if (!Program.None)
             {
-                foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.LSIsValidTarget(W.Range) && !OktwCommon.CanMove(enemy)))
+                foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(W.Range) && !OktwCommon.CanMove(enemy)))
                     W.Cast(enemy, true, true);
             }
         }
@@ -291,7 +291,7 @@ namespace OneKeyToWin_AIO_Sebby
             WMANA = W.Instance.SData.Mana;
             EMANA = E.Instance.SData.Mana;
 
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 RMANA = QMANA - Player.PARRegenRate * Q.Instance.Cooldown;
             else
                 RMANA = R.Instance.SData.Mana;
@@ -333,7 +333,7 @@ namespace OneKeyToWin_AIO_Sebby
             {
                 if (Config.Item("onlyRdy", true).GetValue<bool>())
                 {
-                    if (Q.LSIsReady())
+                    if (Q.IsReady())
                         LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, Q.Range, System.Drawing.Color.Cyan, 1, 1);
                 }
                 else
@@ -343,7 +343,7 @@ namespace OneKeyToWin_AIO_Sebby
             {
                 if (Config.Item("onlyRdy", true).GetValue<bool>())
                 {
-                    if (W.LSIsReady())
+                    if (W.IsReady())
                         LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, W.Range, System.Drawing.Color.Orange, 1, 1);
                 }
                 else
@@ -354,7 +354,7 @@ namespace OneKeyToWin_AIO_Sebby
             {
                 if (Config.Item("onlyRdy", true).GetValue<bool>())
                 {
-                    if (E.LSIsReady())
+                    if (E.IsReady())
                         LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, 800, System.Drawing.Color.Yellow, 1, 1);
                 }
                 else
@@ -368,7 +368,7 @@ namespace OneKeyToWin_AIO_Sebby
                     {
                         if (Config.Item("onlyRdy", true).GetValue<bool>())
                         {
-                            if (R.LSIsReady())
+                            if (R.IsReady())
                                 LeagueSharp.Common.Utility.DrawCircle(RMissile.Position, R.Width, System.Drawing.Color.YellowGreen, 1, 1);
                         }
                         else

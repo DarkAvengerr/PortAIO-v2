@@ -128,14 +128,14 @@ namespace BrianSharp.Plugin
                 return
                     HeroManager.Enemies.Where(
                         i =>
-                            i.LSIsValidTarget() &&
-                            Player.LSDistance(Prediction.GetPrediction(i, 0.25f).UnitPosition) < R.Range).ToList();
+                            i.IsValidTarget() &&
+                            Player.Distance(Prediction.GetPrediction(i, 0.25f).UnitPosition) < R.Range).ToList();
             }
         }
 
         private static void OnUpdate(EventArgs args)
         {
-            if (Player.IsDead || MenuGUI.IsChatOpen || Player.LSIsRecalling())
+            if (Player.IsDead || MenuGUI.IsChatOpen || Player.IsRecalling())
             {
                 return;
             }
@@ -170,22 +170,22 @@ namespace BrianSharp.Plugin
             }
             if (GetValue<bool>("Draw", "Q") && Q.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, Q.Range, Q.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, Q.Range, Q.IsReady() ? Color.Green : Color.Red);
             }
             if (GetValue<bool>("Draw", "E") && E.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, E.Range, E.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.Green : Color.Red);
             }
             if (GetValue<bool>("Draw", "R") && R.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, R.Range, R.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, R.Range, R.IsReady() ? Color.Green : Color.Red);
             }
         }
 
         private static void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (Player.IsDead || !GetValue<bool>("AntiGap", "Q") ||
-                !GetValue<bool>("AntiGap", gapcloser.Sender.ChampionName + "_" + gapcloser.Slot) || !Q.LSIsReady())
+                !GetValue<bool>("AntiGap", gapcloser.Sender.ChampionName + "_" + gapcloser.Slot) || !Q.IsReady())
             {
                 return;
             }
@@ -195,7 +195,7 @@ namespace BrianSharp.Plugin
         private static void OnPossibleToInterrupt(AIHeroClient unit, InterruptableSpell spell)
         {
             if (Player.IsDead || !GetValue<bool>("Interrupt", "Q") ||
-                !GetValue<bool>("Interrupt", unit.ChampionName + "_" + spell.Slot) || !Q.LSIsReady())
+                !GetValue<bool>("Interrupt", unit.ChampionName + "_" + spell.Slot) || !Q.IsReady())
             {
                 return;
             }
@@ -206,11 +206,11 @@ namespace BrianSharp.Plugin
         {
             if (GetValue<bool>(mode, "Q") &&
                 (mode == "Combo" || Player.HealthPercent >= GetValue<Slider>(mode, "QHpA").Value) &&
-                Q2.CastOnBestTarget(Q2.Width / 2, PacketCast, true).LSIsCasted())
+                Q2.CastOnBestTarget(Q2.Width / 2, PacketCast, true).IsCasted())
             {
                 return;
             }
-            if (GetValue<bool>(mode, "E") && E.CastOnBestTarget(0, PacketCast, true).LSIsCasted())
+            if (GetValue<bool>(mode, "E") && E.CastOnBestTarget(0, PacketCast, true).IsCasted())
             {
                 return;
             }
@@ -218,7 +218,7 @@ namespace BrianSharp.Plugin
             {
                 return;
             }
-            if (GetValue<bool>(mode, "W") && W.LSIsReady())
+            if (GetValue<bool>(mode, "W") && W.IsReady())
             {
                 if (Player.HealthPercent >= GetValue<Slider>(mode, "WHpU").Value)
                 {
@@ -232,7 +232,7 @@ namespace BrianSharp.Plugin
                     return;
                 }
             }
-            if (GetValue<bool>(mode, "R") && R.LSIsReady() && !Player.LSIsDashing())
+            if (GetValue<bool>(mode, "R") && R.IsReady() && !Player.IsDashing())
             {
                 var obj = GetRTarget;
                 if ((obj.Count > 1 && obj.Any(i => R.IsKillable(i))) ||
@@ -255,7 +255,7 @@ namespace BrianSharp.Plugin
             {
                 return;
             }
-            if (GetValue<bool>("Clear", "Q") && Q.LSIsReady())
+            if (GetValue<bool>("Clear", "Q") && Q.IsReady())
             {
                 var pos = Q.GetCircularFarmLocation(
                     minionObj.Where(i => Q.IsInRange(i, Q.Range + Q.Width / 2)).ToList());
@@ -269,13 +269,13 @@ namespace BrianSharp.Plugin
                 else
                 {
                     var obj = minionObj.FirstOrDefault(i => i.MaxHealth >= 1200);
-                    if (obj != null && Q.IsInRange(obj, Q.Range + Q2.Width / 2) && Q.Cast(obj, PacketCast).LSIsCasted())
+                    if (obj != null && Q.IsInRange(obj, Q.Range + Q2.Width / 2) && Q.Cast(obj, PacketCast).IsCasted())
                     {
                         return;
                     }
                 }
             }
-            if (GetValue<bool>("Clear", "E") && E.LSIsReady())
+            if (GetValue<bool>("Clear", "E") && E.IsReady())
             {
                 var pos = E.GetLineFarmLocation(minionObj);
                 if (pos.MinionsHit > 0 && E.Cast(pos.Position, PacketCast))
@@ -283,7 +283,7 @@ namespace BrianSharp.Plugin
                     return;
                 }
             }
-            if (GetValue<bool>("Clear", "W") && W.LSIsReady())
+            if (GetValue<bool>("Clear", "W") && W.IsReady())
             {
                 if (Player.HealthPercent >=
                     (GetValue<bool>("Clear", "WPriority") ? 85 : GetValue<Slider>("Clear", "WHpU").Value))
@@ -303,7 +303,7 @@ namespace BrianSharp.Plugin
                 var item = Hydra.IsReady() ? Hydra : Tiamat;
                 if (item.IsReady() &&
                     (minionObj.Count(i => item.IsInRange(i)) > 2 ||
-                     minionObj.Any(i => i.MaxHealth >= 1200 && i.LSDistance(Player) < item.Range - 80)))
+                     minionObj.Any(i => i.MaxHealth >= 1200 && i.Distance(Player) < item.Range - 80)))
                 {
                     item.Cast();
                 }
@@ -312,7 +312,7 @@ namespace BrianSharp.Plugin
 
         private static void Flee()
         {
-            if (GetValue<bool>("Flee", "Q") && Q.LSIsReady() && Q.Cast(Game.CursorPos, PacketCast))
+            if (GetValue<bool>("Flee", "Q") && Q.IsReady() && Q.Cast(Game.CursorPos, PacketCast))
             {
                 return;
             }
@@ -334,7 +334,7 @@ namespace BrianSharp.Plugin
 
         private static void KillSteal()
         {
-            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.LSIsReady())
+            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.IsReady())
             {
                 var target = TargetSelector.GetTarget(600, TargetSelector.DamageType.True);
                 if (target != null && CastIgnite(target))
@@ -351,23 +351,23 @@ namespace BrianSharp.Plugin
                     return;
                 }
             }
-            if (GetValue<bool>("KillSteal", "Q") && Q.LSIsReady())
+            if (GetValue<bool>("KillSteal", "Q") && Q.IsReady())
             {
                 var target = Q.GetTarget(Q.Width / 2);
-                if (target != null && Q.IsKillable(target) && Q2.Cast(target, PacketCast).LSIsCasted())
+                if (target != null && Q.IsKillable(target) && Q2.Cast(target, PacketCast).IsCasted())
                 {
                     return;
                 }
             }
-            if (GetValue<bool>("KillSteal", "E") && E.LSIsReady())
+            if (GetValue<bool>("KillSteal", "E") && E.IsReady())
             {
                 var target = E.GetTarget();
-                if (target != null && E.IsKillable(target) && E.Cast(target, PacketCast).LSIsCasted())
+                if (target != null && E.IsKillable(target) && E.Cast(target, PacketCast).IsCasted())
                 {
                     return;
                 }
             }
-            if (GetValue<bool>("KillSteal", "R") && R.LSIsReady())
+            if (GetValue<bool>("KillSteal", "R") && R.IsReady())
             {
                 var target = GetRTarget.FirstOrDefault(i => R.IsKillable(i));
                 if (target != null)

@@ -68,7 +68,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public override void kiteBack(Vector2 pos)
         {
             base.kiteBack(pos);
-            if (Q.LSIsReady() && player.LSGetEnemiesInRange(380).Count(ene => !ene.IsDead) != 0)
+            if (Q.IsReady() && player.GetEnemiesInRange(380).Count(ene => !ene.IsDead) != 0)
                 Q.Cast(pos);
         }
 
@@ -90,19 +90,19 @@ using EloBuddy; namespace ARAMDetFull.Champions
         }
         void NoAAStealth()
         {
-            var mb = (!player.LSHasBuff("vaynetumblefade", true));
+            var mb = (!player.HasBuff("vaynetumblefade", true));
             DeathWalker.setAttack(mb);
         }
 
         public static bool EnemyInRange(int numOfEnemy, float range)
         {
-            return LeagueSharp.Common.Utility.LSCountEnemysInRange(ObjectManager.Player, (int)range) >= numOfEnemy;
+            return LeagueSharp.Common.Utility.CountEnemysInRange(ObjectManager.Player, (int)range) >= numOfEnemy;
         }
 
         void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             var GPSender = (AIHeroClient)gapcloser.Sender;
-            if (!E.LSIsReady() || !GPSender.LSIsValidTarget()) return;
+            if (!E.IsReady() || !GPSender.IsValidTarget()) return;
             CastE(GPSender, true);
 
         }
@@ -110,28 +110,28 @@ using EloBuddy; namespace ARAMDetFull.Champions
         void Interrupter_OnPossibleToInterrupt(AttackableUnit unit, InterruptableSpell spell)
         {
             var Sender = (AIHeroClient)unit;
-            if ( !E.LSIsReady() || !Sender.LSIsValidTarget()) return;
+            if ( !E.IsReady() || !Sender.IsValidTarget()) return;
             CastE(Sender, true);
         }
 
         bool CondemnCheck(Vector3 Position, out AIHeroClient target)
         {
-            if (Sector.inTowerRange(player.Position.LSTo2D()))
+            if (Sector.inTowerRange(player.Position.To2D()))
             {
                 target = null;
                 return false;
             }
-            foreach (var En in DeathWalker.AllEnemys.Where(hero => hero.IsEnemy && hero.LSIsValidTarget() && hero.LSDistance(player.Position) <= E.Range))
+            foreach (var En in DeathWalker.AllEnemys.Where(hero => hero.IsEnemy && hero.IsValidTarget() && hero.Distance(player.Position) <= E.Range))
             {
                 var EPred = E.GetPrediction(En);
                 int pushDist = 300;
-                var FinalPosition = EPred.UnitPosition.LSTo2D().LSExtend(Position.LSTo2D(), -pushDist).To3D();
+                var FinalPosition = EPred.UnitPosition.To2D().Extend(Position.To2D(), -pushDist).To3D();
                 for (int i = 1; i < pushDist; i += (int)En.BoundingRadius)
                 {
-                    Vector3 loc3 = EPred.UnitPosition.LSTo2D().LSExtend(Position.LSTo2D(), -i).To3D();
-                    var OrTurret = Sector.inTowerRange(FinalPosition.LSTo2D());
+                    Vector3 loc3 = EPred.UnitPosition.To2D().Extend(Position.To2D(), -i).To3D();
+                    var OrTurret = Sector.inTowerRange(FinalPosition.To2D());
                     AfterCond = loc3;
-                    if (loc3.LSIsWall() || OrTurret)
+                    if (loc3.IsWall() || OrTurret)
                     {
                         target = En;
                         return true;
@@ -147,7 +147,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void ENextAuto(AIHeroClient tar)
         {
-            if (!E.LSIsReady() || !tar.IsValid) return;
+            if (!E.IsReady() || !tar.IsValid) return;
             CastE(tar, true);
         }
 
@@ -156,7 +156,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             foreach (
                 var hero in
                     DeathWalker.AllEnemys
-                        .Where(hero => hero.LSIsValidTarget(DeathWalker.getRealAutoAttackRange(player,hero))))
+                        .Where(hero => hero.IsValidTarget(DeathWalker.getRealAutoAttackRange(player,hero))))
             {
                 foreach (var b in hero.Buffs)
                 {
@@ -172,10 +172,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         void SmartQCheck(AIHeroClient target)
         {
-            if (!Q.LSIsReady() || !target.LSIsValidTarget()) return;
-            var goodPos = player.Position.LSTo2D().LSExtend((player.Position - target.Position).LSTo2D().LSPerpendicular(), 300);
+            if (!Q.IsReady() || !target.IsValidTarget()) return;
+            var goodPos = player.Position.To2D().Extend((player.Position - target.Position).To2D().Perpendicular(), 300);
 
-            if ( !E.LSIsReady())
+            if ( !E.IsReady())
             {
                 CastQ(goodPos.To3D(), target);
             }
@@ -184,7 +184,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 for (int I = 0; I <= 360; I += 65)
                 {
                     var F1 = new Vector2(player.Position.X + (float)(300 * Math.Cos(I * (Math.PI / 180))), player.Position.Y + (float)(300 * Math.Sin(I * (Math.PI / 180)))).To3D();
-                   // var FinalPos = player.Position.LSTo2D().LSExtend(F1, 300).To3D();
+                   // var FinalPos = player.Position.To2D().Extend(F1, 300).To3D();
                     AIHeroClient targ;
                     if (CondemnCheck(F1, out targ))
                     {
@@ -199,14 +199,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         void CastQ(Vector3 Pos,Obj_AI_Base target,bool customPos=false)
         {
-           if (!Q.LSIsReady() || !target.LSIsValidTarget()) return;
+           if (!Q.IsReady() || !target.IsValidTarget()) return;
            
             var ManaC = 0;
             var EnMin = 1;
             var EnemiesList =
                 ObjectManager.Get<AIHeroClient>()
-                    .Where(h => h.IsValid && !h.IsDead && h.LSDistance(player.Position) <= 900 && h.IsEnemy).ToList();
-            if (R.LSIsReady() && EnemiesList.Count >= EnMin)
+                    .Where(h => h.IsValid && !h.IsDead && h.Distance(player.Position) <= 900 && h.IsEnemy).ToList();
+            if (R.IsReady() && EnemiesList.Count >= EnMin)
             {
                 Aggresivity.addAgresiveMove(new AgresiveMove(160,10000,true));
                 R.Cast();
@@ -217,17 +217,17 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         void CastTumble(Obj_AI_Base target)
         {
-            var goodPos = player.Position.LSTo2D().LSExtend((player.Position - target.Position).LSTo2D().LSPerpendicular(), 300);
+            var goodPos = player.Position.To2D().Extend((player.Position - target.Position).To2D().Perpendicular(), 300);
 
             var posAfterTumble =
-                ObjectManager.Player.ServerPosition.LSTo2D().LSExtend(goodPos, 300).To3D();
+                ObjectManager.Player.ServerPosition.To2D().Extend(goodPos, 300).To3D();
             var distanceAfterTumble = Vector3.DistanceSquared(posAfterTumble, target.ServerPosition);
             Q.Cast(goodPos);
         }
         void CastTumble(Vector3 Pos,Obj_AI_Base target)
         {
             var posAfterTumble =
-                ObjectManager.Player.ServerPosition.LSTo2D().LSExtend(Pos.LSTo2D(), 300).To3D();
+                ObjectManager.Player.ServerPosition.To2D().Extend(Pos.To2D(), 300).To3D();
             var distanceAfterTumble = Vector3.DistanceSquared(posAfterTumble, target.ServerPosition);
             if (distanceAfterTumble < 550*550 && distanceAfterTumble > 100*100)
                 Q.Cast(Pos);
@@ -236,7 +236,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         #region E Region
         void CastE(AIHeroClient target, bool isForGapcloser = false)
         {
-            if (!E.LSIsReady() || !target.LSIsValidTarget()) return;
+            if (!E.IsReady() || !target.IsValidTarget()) return;
             if (isForGapcloser)
             {
                 E.Cast(target);
@@ -268,13 +268,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             return
                 ObjectManager.Get<AIHeroClient>()
-                    .Where(h => h.IsEnemy && !h.IsDead && h.IsValid && h.LSDistance(point) <= range).ToList().Count;
+                    .Where(h => h.IsEnemy && !h.IsDead && h.IsValid && h.Distance(point) <= range).ToList().Count;
         }
         int getAlliesInRange(Vector3 point, float range)
         {
             return
                 ObjectManager.Get<AIHeroClient>()
-                    .Where(h => h.IsAlly && !h.IsDead && h.IsValid && h.LSDistance(point) <= range).ToList().Count;
+                    .Where(h => h.IsAlly && !h.IsDead && h.IsValid && h.Distance(point) <= range).ToList().Count;
         }
 
         private static SpellDataInst GetItemSpell(InventorySlot invSlot)
@@ -298,7 +298,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             foreach (var tur in ObjectManager.Get<Obj_AI_Turret>().Where(turr => turr.IsAlly && (turr.Health != 0)))
             {
-                if (tur.LSDistance(Position) <= 975f) return true;
+                if (tur.Distance(Position) <= 975f) return true;
             }
             return false;
         }
@@ -306,7 +306,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             foreach (var tur in ObjectManager.Get<Obj_AI_Turret>().Where(turr => turr.IsEnemy && (turr.Health != 0)))
             {
-                if (tur.LSDistance(Position) <= 975f) return true;
+                if (tur.Distance(Position) <= 975f) return true;
             }
             return false;
         }
@@ -330,7 +330,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         bool isJ4FlagThere(Vector3 Position,AIHeroClient target)
         {
             foreach (
-                var obj in ObjectManager.Get<Obj_AI_Base>().Where(m => m.LSDistance(Position) <= target.BoundingRadius))
+                var obj in ObjectManager.Get<Obj_AI_Base>().Where(m => m.Distance(Position) <= target.BoundingRadius))
             {
                 if (obj.Name == "Beacon")
                 {

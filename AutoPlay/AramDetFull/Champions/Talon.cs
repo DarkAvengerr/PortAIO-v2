@@ -37,7 +37,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
 
             Q.Cast();
@@ -45,26 +45,26 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             W.Cast(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
-            if (!Sector.inTowerRange(target.Position.LSTo2D()) &&
-                (MapControl.balanceAroundPoint(target.Position.LSTo2D(), 700) >= -1 ||
+            if (!Sector.inTowerRange(target.Position.To2D()) &&
+                (MapControl.balanceAroundPoint(target.Position.To2D(), 700) >= -1 ||
                  (MapControl.fightIsOn() != null && MapControl.fightIsOn().NetworkId == target.NetworkId)))
                 E.Cast(target);
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
-            if (player.LSCountEnemiesInRange(400) > 1)
+            if (player.CountEnemiesInRange(400) > 1)
                 R.Cast();
         }
 

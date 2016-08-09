@@ -36,7 +36,7 @@ namespace D_Jarvan
             {
                 var t = Program.GetTarget(Program.E.Range);
 
-                if (t.LSIsValidTarget())
+                if (t.IsValidTarget())
                     return t;
 
                 return null;

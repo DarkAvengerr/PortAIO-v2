@@ -26,7 +26,7 @@ using EloBuddy; namespace Support.Plugins
         {
             get
             {
-                if (!this.Q.LSIsReady())
+                if (!this.Q.IsReady())
                 {
                     return true;
                 }
@@ -36,24 +36,24 @@ using EloBuddy; namespace Support.Plugins
                     return false;
                 }
 
-                if (!this.Target.LSIsValidTarget())
+                if (!this.Target.IsValidTarget())
                 {
                     return true;
                 }
 
-                if (this.Target.LSHasBuff("BlackShield"))
+                if (this.Target.HasBuff("BlackShield"))
                 {
                     return true;
                 }
 
                 if (
                     Helpers.AllyInRange(1200)
-                           .Any(ally => ally.LSDistance(this.Target) < ally.AttackRange + ally.BoundingRadius))
+                           .Any(ally => ally.Distance(this.Target) < ally.AttackRange + ally.BoundingRadius))
                 {
                     return true;
                 }
 
-                return this.Player.LSDistance(this.Target) < this.ConfigValue<Slider>("Misc.Q.Block.Distance").Value;
+                return this.Player.Distance(this.Target) < this.ConfigValue<Slider>("Misc.Q.Block.Distance").Value;
             }
         }
 
@@ -97,7 +97,7 @@ using EloBuddy; namespace Support.Plugins
                 return;
             }
 
-            if (!this.E.LSIsReady())
+            if (!this.E.IsReady())
             {
                 return;
             }
@@ -178,7 +178,7 @@ using EloBuddy; namespace Support.Plugins
                         }
                     }
 
-                    if (this.E.LSIsReady() && this.Target.LSIsValidTarget() && this.Target.LSHasBuff("RocketGrab"))
+                    if (this.E.IsReady() && this.Target.IsValidTarget() && this.Target.HasBuff("RocketGrab"))
                     {
                         if (this.E.Cast())
                         {
@@ -187,8 +187,8 @@ using EloBuddy; namespace Support.Plugins
                         }
                     }
 
-                    if (this.W.LSIsReady() && this.ConfigValue<bool>("ComboW")
-                        && this.Player.LSCountEnemiesInRange(1500) > 0)
+                    if (this.W.IsReady() && this.ConfigValue<bool>("ComboW")
+                        && this.Player.CountEnemiesInRange(1500) > 0)
                     {
                         this.W.Cast();
                     }
@@ -218,7 +218,7 @@ using EloBuddy; namespace Support.Plugins
                         }
                     }
 
-                    if (this.E.LSIsReady() && this.Target.LSIsValidTarget() && this.Target.LSHasBuff("RocketGrab"))
+                    if (this.E.IsReady() && this.Target.IsValidTarget() && this.Target.HasBuff("RocketGrab"))
                     {
                         if (this.E.Cast())
                         {

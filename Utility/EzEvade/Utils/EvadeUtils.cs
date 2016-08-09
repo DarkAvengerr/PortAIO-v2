@@ -30,12 +30,12 @@ using EloBuddy; namespace ezEvade
 
         public static List<Vector2> PathToVector2(this Vector3[] path)
         {
-            return path.Select(p => p.LSTo2D()).ToList();
+            return path.Select(p => p.To2D()).ToList();
         }
 
         public static List<Vector2> PathToVector2(this List<Vector3> path)
         {
-            return path.Select(p => p.LSTo2D()).ToList();
+            return path.Select(p => p.To2D()).ToList();
         }
 
         public static Vector2 GetGamePosition(AIHeroClient hero, float delay = 0)
@@ -45,15 +45,15 @@ using EloBuddy; namespace ezEvade
                 if (hero.IsMoving)
                 {
                     var path = new List<Vector2>();
-                    path.Add(hero.ServerPosition.LSTo2D());
-                    path.AddRange(hero.Path.Select(point => point.LSTo2D()));
+                    path.Add(hero.ServerPosition.To2D());
+                    path.AddRange(hero.Path.Select(point => point.To2D()));
 
                     var finalPath = EvadeUtils.CutPath(path, hero, delay);
 
                     return finalPath.Last();
                 }
 
-                return hero.ServerPosition.LSTo2D();
+                return hero.ServerPosition.To2D();
             }
 
             return Vector2.Zero;
@@ -88,10 +88,10 @@ using EloBuddy; namespace ezEvade
             
             for (var i = 0; i < path.Count - 1; i++)
             {
-                var dist = path[i].LSDistance(path[i + 1]);
+                var dist = path[i].Distance(path[i + 1]);
                 if (dist > Distance)
                 {
-                    result.Add(path[i] + Distance * (path[i + 1] - path[i]).LSNormalized());
+                    result.Add(path[i] + Distance * (path[i + 1] - path[i]).Normalized());
                     break;
                 }
                 else
@@ -110,10 +110,10 @@ using EloBuddy; namespace ezEvade
 
             for (var i = 0; i < path.Count - 1; i++)
             {
-                var dist = path[i].LSDistance(path[i + 1]);
+                var dist = path[i].Distance(path[i + 1]);
                 if (dist > Distance)
                 {
-                    result.Add(path[i] + Distance * (path[i + 1] - path[i]).LSNormalized());
+                    result.Add(path[i] + Distance * (path[i + 1] - path[i]).Normalized());
 
                     for (var j = i + 1; j < path.Count; j++)
                     {

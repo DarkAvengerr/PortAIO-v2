@@ -130,7 +130,7 @@ using EloBuddy;
                 return;
             }
 
-            if (target.Position.LSDistance(player.Position) >= 5f)
+            if (target.Position.Distance(player.Position) >= 5f)
             {
                 ShowClick(args.Target.Position, ClickType.Attack);
             }
@@ -149,7 +149,7 @@ using EloBuddy;
         private static void DrawFake(Obj_AI_Base sender, GameObjectNewPathEventArgs args)
         {
             if (sender.IsMe && lastTime + deltaT < Game.Time && args.Path.LastOrDefault() != lastEndpoint &&
-                args.Path.LastOrDefault().LSDistance(player.ServerPosition) >= 5f &&
+                args.Path.LastOrDefault().Distance(player.ServerPosition) >= 5f &&
                 root.Item("Enable").IsActive() &&
                 root.Item("Click Mode").GetValue<StringList>().SelectedIndex == 1)
             {

@@ -136,12 +136,12 @@ using EloBuddy;
         {
             if (Root.Item("drawq").GetValue<bool>())
             {
-                Render.Circle.DrawCircle(Player.Position, Q.Range, Q.LSIsReady() ? Color.LawnGreen : Color.Red, 2);
+                Render.Circle.DrawCircle(Player.Position, Q.Range, Q.IsReady() ? Color.LawnGreen : Color.Red, 2);
             }
 
             if (Root.Item("drawr").GetValue<bool>())
             {
-                Render.Circle.DrawCircle(Player.Position, R.Range, R.LSIsReady() ? Color.LawnGreen : Color.Red, 2);
+                Render.Circle.DrawCircle(Player.Position, R.Range, R.IsReady() ? Color.LawnGreen : Color.Red, 2);
             }
         }
 
@@ -153,11 +153,11 @@ using EloBuddy;
                     Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
                 {
                     var minion = args.Target as Obj_AI_Base;
-                    if (minion != null && minion.IsMinion && minion.LSIsValidTarget())
+                    if (minion != null && minion.IsMinion && minion.IsValidTarget())
                     {
-                        if (HeroManager.Allies.Any(x => x.LSIsValidTarget(1000, false) && !x.IsMe))
+                        if (HeroManager.Allies.Any(x => x.IsValidTarget(1000, false) && !x.IsMe))
                         {
-                            if (Player.LSHasBuff("talentreaperdisplay"))
+                            if (Player.HasBuff("talentreaperdisplay"))
                             {
                                 var b = Player.GetBuff("talentreaperdisplay");
                                 if (b.Count > 0)
@@ -176,9 +176,9 @@ using EloBuddy;
 
         private static void Interrupter2_OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (sender.IsEnemy && sender.LSIsValidTarget() && Root.Item("int").GetValue<bool>())
+            if (sender.IsEnemy && sender.IsValidTarget() && Root.Item("int").GetValue<bool>())
             {
-                if (R.LSIsReady() && Player.LSDistance(sender.ServerPosition) <= R.Range)
+                if (R.IsReady() && Player.Distance(sender.ServerPosition) <= R.Range)
                 {
                     if (args.DangerLevel >= Interrupter2.DangerLevel.High)
                     {
@@ -186,7 +186,7 @@ using EloBuddy;
                     }
                 }
 
-                if (Q.LSIsReady() && Player.LSDistance(sender.ServerPosition) <= Root.Item("maxq").GetValue<Slider>().Value)
+                if (Q.IsReady() && Player.Distance(sender.ServerPosition) <= Root.Item("maxq").GetValue<Slider>().Value)
                 {
                     if (Player.HealthPercent < Root.Item("grabhp").GetValue<Slider>().Value)
                     {
@@ -194,7 +194,7 @@ using EloBuddy;
                     }
 
                     if (!Root.Item("blq" + sender.ChampionName).GetValue<bool>() &&
-                        Player.LSDistance(sender.ServerPosition) > Root.Item("minq").GetValue<Slider>().Value)
+                        Player.Distance(sender.ServerPosition) > Root.Item("minq").GetValue<Slider>().Value)
                     {
                         Q.Cast(sender);
                     }
@@ -210,19 +210,19 @@ using EloBuddy;
             }
 
             var hero = sender as AIHeroClient;
-            if (hero != null && hero.IsEnemy && Q.LSIsReady() && Root.Item("useqcombo").GetValue<bool>())
+            if (hero != null && hero.IsEnemy && Q.IsReady() && Root.Item("useqcombo").GetValue<bool>())
             {
                 if (Player.HealthPercent < Root.Item("grabhp").GetValue<Slider>().Value)
                 {
                     return;
                 }
 
-                if (hero.LSIsValidTarget(Root.Item("maxq").GetValue<Slider>().Value) && hero.Health > Q.GetDamage(hero))
+                if (hero.IsValidTarget(Root.Item("maxq").GetValue<Slider>().Value) && hero.Health > Q.GetDamage(hero))
                 {
                     if (!Root.Item("blq" + hero.ChampionName).GetValue<bool>() &&
                          Root.Item("auq" + hero.ChampionName).GetValue<bool>())
                     {
-                        if (hero.LSDistance(Player.ServerPosition) > Root.Item("minq").GetValue<Slider>().Value)
+                        if (hero.Distance(Player.ServerPosition) > Root.Item("minq").GetValue<Slider>().Value)
                         {
                             Q.CastIfHitchanceEquals(hero, HitChance.VeryHigh);
                         }
@@ -251,7 +251,7 @@ using EloBuddy;
                 Player.SetSkin(Player.CharData.BaseSkinName, Root.Item("skinid").GetValue<Slider>().Value);
             }
 
-            foreach (var ene in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Root.Item("maxq").GetValue<Slider>().Value)))
+            foreach (var ene in HeroManager.Enemies.Where(x => x.IsValidTarget(Root.Item("maxq").GetValue<Slider>().Value)))
             {
                 if (Player.HealthPercent < Root.Item("grabhp").GetValue<Slider>().Value)
                 {
@@ -261,7 +261,7 @@ using EloBuddy;
                 if (!Root.Item("blq" + ene.ChampionName).GetValue<bool>() && 
                      Root.Item("auq" + ene.ChampionName).GetValue<bool>())
                 {
-                    if (ene.LSDistance(Player.ServerPosition) > Root.Item("minq").GetValue<Slider>().Value && Q.LSIsReady())
+                    if (ene.Distance(Player.ServerPosition) > Root.Item("minq").GetValue<Slider>().Value && Q.IsReady())
                     {
                         Q.CastIfHitchanceEquals(ene, HitChance.Dashing, true);
                         Q.CastIfHitchanceEquals(ene, HitChance.Immobile, true);
@@ -277,18 +277,18 @@ using EloBuddy;
                 return;
             }
 
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
                 W.Cast();
             }
 
-            var ene = HeroManager.Enemies.FirstOrDefault(x => x.LSDistance(Player.ServerPosition) <= E.Range + 200);
-            if (E.LSIsReady() && ene.LSIsValidTarget())
+            var ene = HeroManager.Enemies.FirstOrDefault(x => x.Distance(Player.ServerPosition) <= E.Range + 200);
+            if (E.IsReady() && ene.IsValidTarget())
             {
                 E.Cast();
             }
 
-            if (Player.LSHasBuff("powerfist") && Orbwalking.InAutoAttackRange(ene))
+            if (Player.HasBuff("powerfist") && Orbwalking.InAutoAttackRange(ene))
             {
                 if (Utils.GameTimeTickCount - Limiter >= 150 + Game.Ping)
                 {
@@ -309,7 +309,7 @@ using EloBuddy;
                 return;
             }
 
-            if (useq && Q.LSIsReady())
+            if (useq && Q.IsReady())
             {
                 var QT = TargetSelector.GetTarget(Root.Item("maxq").GetValue<Slider>().Value, TargetSelector.DamageType.Magical);
                 if (QT != null && Root.Item("blq" + QT.ChampionName).GetValue<bool>())
@@ -319,7 +319,7 @@ using EloBuddy;
 
                 if (!(Player.HealthPercent < Root.Item("grabhp").GetValue<Slider>().Value))
                 {
-                    if (QT.LSIsValidTarget() && QT.LSDistance(Player.ServerPosition) > Root.Item("minq").GetValue<Slider>().Value)
+                    if (QT.IsValidTarget() && QT.Distance(Player.ServerPosition) > Root.Item("minq").GetValue<Slider>().Value)
                     {
                         if (!QT.IsZombie && !TargetSelector.IsInvulnerable(QT, TargetSelector.DamageType.Magical))
                         {
@@ -341,11 +341,11 @@ using EloBuddy;
                 }
             }
 
-            if (usee && E.LSIsReady())
+            if (usee && E.IsReady())
             {
                 var ET =
                     HeroManager.Enemies.FirstOrDefault(
-                        x => x.HasBuff("rocketgrab2") || x.LSDistance(Player.ServerPosition) <= E.Range + 200);
+                        x => x.HasBuff("rocketgrab2") || x.Distance(Player.ServerPosition) <= E.Range + 200);
 
                 if (ET != null)
                 {
@@ -356,14 +356,14 @@ using EloBuddy;
                 }
             }
 
-            if (user && R.LSIsReady())
+            if (user && R.IsReady())
             {
                 var RT = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-                if (RT.LSIsValidTarget() && !RT.IsZombie)
+                if (RT.IsValidTarget() && !RT.IsZombie)
                 {
                     if (!TargetSelector.IsInvulnerable(RT, TargetSelector.DamageType.Magical))
                     {
-                        if (RT.Health > R.GetDamage(RT) && !E.LSIsReady() && RT.HasBuffOfType(BuffType.Knockup))
+                        if (RT.Health > R.GetDamage(RT) && !E.IsReady() && RT.HasBuffOfType(BuffType.Knockup))
                         {
                             R.Cast();
                         }
@@ -374,7 +374,7 @@ using EloBuddy;
 
         private static void Grab(bool enable)
         {
-            if (Q.LSIsReady() && enable)
+            if (Q.IsReady() && enable)
             {
                 var QT = TargetSelector.GetTarget(Root.Item("maxq").GetValue<Slider>().Value, TargetSelector.DamageType.Magical);
                 if (QT != null && Root.Item("blq" + QT.ChampionName).GetValue<bool>())
@@ -384,7 +384,7 @@ using EloBuddy;
 
                 if (!(Player.HealthPercent < Root.Item("grabhp").GetValue<Slider>().Value))
                 {
-                    if (QT.LSIsValidTarget() && QT.LSDistance(Player.ServerPosition) > Root.Item("minq").GetValue<Slider>().Value)
+                    if (QT.IsValidTarget() && QT.Distance(Player.ServerPosition) > Root.Item("minq").GetValue<Slider>().Value)
                     {
                         if (!QT.IsZombie && !TargetSelector.IsInvulnerable(QT, TargetSelector.DamageType.Magical))
                         {
@@ -409,10 +409,10 @@ using EloBuddy;
 
         private static void Secure(bool useq, bool user)
         {
-            if (useq && Q.LSIsReady())
+            if (useq && Q.IsReady())
             {
                 var QT = HeroManager.Enemies.FirstOrDefault(x => Q.GetDamage(x) > x.Health);
-                if (QT.LSIsValidTarget(Root.Item("maxq").GetValue<Slider>().Value))
+                if (QT.IsValidTarget(Root.Item("maxq").GetValue<Slider>().Value))
                 {
                     var poutput = Q.GetPrediction(QT); // prediction output
                     if (poutput.Hitchance >= (HitChance) Root.Item("pred").GetValue<Slider>().Value + 2)
@@ -425,10 +425,10 @@ using EloBuddy;
                 }
             }
 
-            if (user && R.LSIsReady())
+            if (user && R.IsReady())
             {
                 var RT = HeroManager.Enemies.FirstOrDefault(x => R.GetDamage(x) > x.Health);
-                if (RT.LSIsValidTarget(R.Range) && !RT.IsZombie)
+                if (RT.IsValidTarget(R.Range) && !RT.IsZombie)
                 {
                     if (!TargetSelector.IsInvulnerable(RT, TargetSelector.DamageType.Magical))
                     {

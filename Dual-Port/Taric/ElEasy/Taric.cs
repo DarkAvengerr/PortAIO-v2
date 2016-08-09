@@ -143,7 +143,7 @@
         public void Load()
         {
             Console.WriteLine("Loaded Taric");
-            Ignite = this.Player.LSGetSpellSlot("summonerdot");
+            Ignite = this.Player.GetSpellSlot("summonerdot");
 
             Game.OnUpdate += this.OnUpdate;
             Drawing.OnDraw += this.OnDraw;
@@ -157,8 +157,8 @@
 
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (this.Menu.Item("ElEasy.Taric.GapCloser.Activated").IsActive() && spells[Spells.E].LSIsReady()
-                && gapcloser.Sender.LSDistance(this.Player) < spells[Spells.E].Range)
+            if (this.Menu.Item("ElEasy.Taric.GapCloser.Activated").IsActive() && spells[Spells.E].IsReady()
+                && gapcloser.Sender.Distance(this.Player) < spells[Spells.E].Range)
             {
                 spells[Spells.E].Cast(gapcloser.Sender);
             }
@@ -166,10 +166,10 @@
 
         private void HealManager()
         {
-            if (this.Player.LSIsRecalling() || this.Player.LSInFountain()
+            if (this.Player.IsRecalling() || this.Player.InFountain()
                 || !this.Menu.Item("ElEasy.Taric.Heal.Activated").IsActive()
                 || this.Player.ManaPercent < this.Menu.Item("ElEasy.Taric.Heal.Player.Mana").GetValue<Slider>().Value
-                || !spells[Spells.Q].LSIsReady())
+                || !spells[Spells.Q].IsReady())
             {
                 return;
             }
@@ -205,13 +205,13 @@
             Interrupter2.InterruptableTargetEventArgs args)
         {
             if (args.DangerLevel != Interrupter2.DangerLevel.High
-                || sender.LSDistance(this.Player) > spells[Spells.E].Range)
+                || sender.Distance(this.Player) > spells[Spells.E].Range)
             {
                 return;
             }
 
-            if (sender.LSIsValidTarget(spells[Spells.E].Range) && args.DangerLevel == Interrupter2.DangerLevel.High
-                && spells[Spells.E].LSIsReady())
+            if (sender.IsValidTarget(spells[Spells.E].Range) && args.DangerLevel == Interrupter2.DangerLevel.High
+                && spells[Spells.E].IsReady())
             {
                 spells[Spells.E].Cast(sender);
             }
@@ -220,32 +220,32 @@
         private void OnCombo()
         {
             var target = TargetSelector.GetTarget(spells[Spells.E].Range, TargetSelector.DamageType.Magical);
-            if (target == null || !target.LSIsValidTarget())
+            if (target == null || !target.IsValidTarget())
             {
                 return;
             }
 
-            if (this.Menu.Item("ElEasy.Taric.Combo.E").IsActive() && spells[Spells.E].LSIsReady()
-                && target.LSIsValidTarget(spells[Spells.E].Range))
+            if (this.Menu.Item("ElEasy.Taric.Combo.E").IsActive() && spells[Spells.E].IsReady()
+                && target.IsValidTarget(spells[Spells.E].Range))
             {
                 spells[Spells.E].Cast(target);
             }
 
-            if (this.Menu.Item("ElEasy.Taric.Combo.W").IsActive() && spells[Spells.W].LSIsReady()
-                && target.LSIsValidTarget(spells[Spells.W].Range))
+            if (this.Menu.Item("ElEasy.Taric.Combo.W").IsActive() && spells[Spells.W].IsReady()
+                && target.IsValidTarget(spells[Spells.W].Range))
             {
                 spells[Spells.W].CastOnUnit(this.Player);
             }
 
-            if (this.Menu.Item("ElEasy.Taric.Combo.R").IsActive() && spells[Spells.R].LSIsReady()
-                && target.LSIsValidTarget(spells[Spells.R].Range)
-                && this.Player.LSCountEnemiesInRange(spells[Spells.R].Range)
+            if (this.Menu.Item("ElEasy.Taric.Combo.R").IsActive() && spells[Spells.R].IsReady()
+                && target.IsValidTarget(spells[Spells.R].Range)
+                && this.Player.CountEnemiesInRange(spells[Spells.R].Range)
                 >= this.Menu.Item("ElEasy.Taric.Combo.Count.Enemies").GetValue<Slider>().Value)
             {
                 spells[Spells.R].CastOnUnit(this.Player);
             }
 
-            if (this.Menu.Item("ElEasy.Taric.Combo.Ignite").IsActive() && target.LSIsValidTarget(600)
+            if (this.Menu.Item("ElEasy.Taric.Combo.Ignite").IsActive() && target.IsValidTarget(600)
                 && this.IgniteDamage(target) >= target.Health)
             {
                 this.Player.Spellbook.CastSpell(Ignite, target);
@@ -315,12 +315,12 @@
                 return;
             }
 
-            if (useE && spells[Spells.E].LSIsReady() && target.LSIsValidTarget(spells[Spells.E].Range))
+            if (useE && spells[Spells.E].IsReady() && target.IsValidTarget(spells[Spells.E].Range))
             {
                 spells[Spells.E].Cast(target);
             }
 
-            if (useW && spells[Spells.W].LSIsReady() && target.LSIsValidTarget(spells[Spells.W].Range))
+            if (useW && spells[Spells.W].IsReady() && target.IsValidTarget(spells[Spells.W].Range))
             {
                 spells[Spells.W].CastOnUnit(this.Player);
             }

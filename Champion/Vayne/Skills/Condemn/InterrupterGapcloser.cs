@@ -23,24 +23,24 @@ namespace VayneHunter_Reborn.Skills.Condemn
 
         private static void OnEnemyGapcloser(ActiveGapcloser gapcloser, SpellSlot slot)
         {
-            if (MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.general.antigp") && Variables.spells[slot].LSIsReady())
+            if (MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.general.antigp") && Variables.spells[slot].IsReady())
             {
                 LeagueSharp.Common.Utility.DelayAction.Add(MenuExtensions.GetItemValue<Slider>("dz191.vhr.misc.general.antigpdelay").Value,
                     () =>
                     {
-                        if (gapcloser.Sender.LSIsValidTarget(Variables.spells[SpellSlot.E].Range) && 
+                        if (gapcloser.Sender.IsValidTarget(Variables.spells[SpellSlot.E].Range) && 
                             MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.general.antigp") 
-                            && (Variables.spells[slot].LSIsReady()))
+                            && (Variables.spells[slot].IsReady()))
                         {
                             switch (slot)
                             {
                                 case SpellSlot.Q:
                                     var senderPos = gapcloser.End;
-                                    var backOut = ObjectManager.Player.ServerPosition.LSExtend(senderPos, 300f);
+                                    var backOut = ObjectManager.Player.ServerPosition.Extend(senderPos, 300f);
                                     if (backOut.IsSafe())
                                     {
-                                        if (gapcloser.Start.LSDistance(ObjectManager.Player.ServerPosition) >
-                                            gapcloser.End.LSDistance(ObjectManager.Player.ServerPosition))
+                                        if (gapcloser.Start.Distance(ObjectManager.Player.ServerPosition) >
+                                            gapcloser.End.Distance(ObjectManager.Player.ServerPosition))
                                         {
                                             Variables.spells[SpellSlot.Q].Cast(backOut);
                                         }
@@ -49,8 +49,8 @@ namespace VayneHunter_Reborn.Skills.Condemn
                                     break;
 
                                 case SpellSlot.E:
-                                    if (gapcloser.Start.LSDistance(ObjectManager.Player.ServerPosition) >
-                                        gapcloser.End.LSDistance(ObjectManager.Player.ServerPosition))
+                                    if (gapcloser.Start.Distance(ObjectManager.Player.ServerPosition) >
+                                        gapcloser.End.Distance(ObjectManager.Player.ServerPosition))
                                     {
                                         Variables.spells[SpellSlot.E].CastOnUnit(gapcloser.Sender);
                                     }
@@ -65,7 +65,7 @@ namespace VayneHunter_Reborn.Skills.Condemn
         {
             if (MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.general.interrupt"))
             {
-                if (args.DangerLevel == Interrupter2.DangerLevel.High && sender.LSIsValidTarget(Variables.spells[SpellSlot.E].Range))
+                if (args.DangerLevel == Interrupter2.DangerLevel.High && sender.IsValidTarget(Variables.spells[SpellSlot.E].Range))
                 {
                     Variables.spells[SpellSlot.E].CastOnUnit(sender);
                 }
@@ -78,11 +78,11 @@ namespace VayneHunter_Reborn.Skills.Condemn
             if (sender is AIHeroClient)
             {
                 var s2 = (AIHeroClient)sender;
-                if (s2.LSIsValidTarget() && s2.ChampionName == "Pantheon" && s2.LSGetSpellSlot(args.SData.Name) == SpellSlot.W)
+                if (s2.IsValidTarget() && s2.ChampionName == "Pantheon" && s2.GetSpellSlot(args.SData.Name) == SpellSlot.W)
                 {
-                    if (MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.general.antigp") && args.Target.IsMe && Variables.spells[SpellSlot.E].LSIsReady())
+                    if (MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.general.antigp") && args.Target.IsMe && Variables.spells[SpellSlot.E].IsReady())
                     {
-                        if (s2.LSIsValidTarget(Variables.spells[SpellSlot.E].Range))
+                        if (s2.IsValidTarget(Variables.spells[SpellSlot.E].Range))
                         {
                             Variables.spells[SpellSlot.E].CastOnUnit(s2);
                         }
@@ -94,11 +94,11 @@ namespace VayneHunter_Reborn.Skills.Condemn
 
         private static void GameObject_OnCreate(GameObject sender, EventArgs args)
         {
-            if (MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.general.antigp") && Variables.spells[SpellSlot.E].LSIsReady())
+            if (MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.general.antigp") && Variables.spells[SpellSlot.E].IsReady())
             {
                 if (sender.IsEnemy && sender.Name == "Rengar_LeapSound.troy")
                 {
-                    var rengarEntity = HeroManager.Enemies.Find(h => h.ChampionName.Equals("Rengar") && h.LSIsValidTarget(Variables.spells[SpellSlot.E].Range));
+                    var rengarEntity = HeroManager.Enemies.Find(h => h.ChampionName.Equals("Rengar") && h.IsValidTarget(Variables.spells[SpellSlot.E].Range));
                     if (rengarEntity != null)
                     {
                         Variables.spells[SpellSlot.E].CastOnUnit(rengarEntity);

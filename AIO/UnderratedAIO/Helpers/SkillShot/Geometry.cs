@@ -28,10 +28,10 @@ namespace UnderratedAIO.Helpers.SkillShot
             {
                 var from = self[i];
                 var to = self[i + 1];
-                var d = (int) to.LSDistance(from);
+                var d = (int) to.Distance(from);
                 if (d > distance)
                 {
-                    return from + distance * (to - from).LSNormalized();
+                    return from + distance * (to - from).Normalized();
                 }
                 distance -= d;
             }
@@ -105,8 +105,8 @@ namespace UnderratedAIO.Helpers.SkillShot
                 RStart = start;
                 REnd = end;
                 Width = width;
-                Direction = (end - start).LSNormalized();
-                Perpendicular = Direction.LSPerpendicular();
+                Direction = (end - start).Normalized();
+                Perpendicular = Direction.Perpendicular();
             }
 
             public Polygon ToPolygon(int offset = 0, float overrideWidth = -1)
@@ -190,11 +190,11 @@ namespace UnderratedAIO.Helpers.SkillShot
                 var outRadius = (Radius + offset) / (float) Math.Cos(2 * Math.PI / CircleLineSegmentN);
 
                 result.Add(Center);
-                var side1 = Direction.LSRotated(-Angle * 0.5f);
+                var side1 = Direction.Rotated(-Angle * 0.5f);
 
                 for (var i = 0; i <= CircleLineSegmentN; i++)
                 {
-                    var cDirection = side1.LSRotated(i * Angle / CircleLineSegmentN).LSNormalized();
+                    var cDirection = side1.Rotated(i * Angle / CircleLineSegmentN).Normalized();
                     result.Add(new Vector2(Center.X + outRadius * cDirection.X, Center.Y + outRadius * cDirection.Y));
                 }
 

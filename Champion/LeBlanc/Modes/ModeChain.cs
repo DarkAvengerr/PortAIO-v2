@@ -44,7 +44,7 @@ namespace Leblanc.Modes
                         .Where(
                             e =>
                                 e.IsEnemy && !e.IsDead && e.IsVisible &&
-                                ObjectManager.Player.LSDistance(e) < Modes.ModeSettings.MaxERange && !e.HasSoulShackle()))
+                                ObjectManager.Player.Distance(e) < Modes.ModeSettings.MaxERange && !e.HasSoulShackle()))
                 {
                     PlayerSpells.CastE(e);
                     PlayerSpells.CastE2(e);

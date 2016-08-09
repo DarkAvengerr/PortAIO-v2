@@ -84,24 +84,24 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             double damage = 0d;
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                damage += player.LSGetSpellDamage(enemy, SpellSlot.Q);
-                damage += player.LSGetSpellDamage(enemy, SpellSlot.Q, 1);
+                damage += player.GetSpellDamage(enemy, SpellSlot.Q);
+                damage += player.GetSpellDamage(enemy, SpellSlot.Q, 1);
             }
 
 
-            if (W.LSIsReady())
-                damage += player.LSGetSpellDamage(enemy, SpellSlot.W);
+            if (W.IsReady())
+                damage += player.GetSpellDamage(enemy, SpellSlot.W);
 
             if (_rOn)
-                damage += player.LSGetSpellDamage(enemy, SpellSlot.R) * RCount();
-            else if (R.LSIsReady())
-                damage += player.LSGetSpellDamage(enemy, SpellSlot.R) * 3;
+                damage += player.GetSpellDamage(enemy, SpellSlot.R) * RCount();
+            else if (R.IsReady())
+                damage += player.GetSpellDamage(enemy, SpellSlot.R) * 3;
 
 
-            if (E.LSIsReady())
-                damage += player.LSGetSpellDamage(enemy, SpellSlot.E);
+            if (E.IsReady())
+                damage += player.GetSpellDamage(enemy, SpellSlot.E);
 
             return (float)damage;
         }
@@ -133,10 +133,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
             //end items-------
 
             //E
-            if (useE && E.LSIsReady() && player.LSDistance(eTarget) < E.Range)
+            if (useE && E.IsReady() && player.Distance(eTarget) < E.Range)
             {
                     E.Cast(eTarget);
-                    if (Q.LSIsReady())
+                    if (Q.IsReady())
                     {
                         Q.Cast(eTarget);
                     }
@@ -144,7 +144,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
 
             //W
-            if (useW && W.LSIsReady() && player.LSDistance(eTarget) <= W.Range - 100 &&
+            if (useW && W.IsReady() && player.Distance(eTarget) <= W.Range - 100 &&
                 ShouldW(eTarget, source))
             {
                 W.Cast();
@@ -152,14 +152,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             if (source == "Harass")
             {
-                if (useQ && Q.LSIsReady() && player.LSDistance(eTarget) <= Q.Range &&
-                    ShouldQ(eTarget, source) && player.LSDistance(eTarget) > 600)
+                if (useQ && Q.IsReady() && player.Distance(eTarget) <= Q.Range &&
+                    ShouldQ(eTarget, source) && player.Distance(eTarget) > 600)
                 {
                     Q.Cast(eTarget, true);
                     return;
                 }
             }
-            else if (useQ && Q.LSIsReady() && player.LSDistance(eTarget) <= Q.Range &&
+            else if (useQ && Q.IsReady() && player.Distance(eTarget) <= Q.Range &&
                      ShouldQ(eTarget, source))
             {
                     Q.Cast(eTarget, true);
@@ -167,21 +167,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
 
             //R
-            if (useR && R.LSIsReady() && player.LSDistance(eTarget) < R.Range)
+            if (useR && R.IsReady() && player.Distance(eTarget) < R.Range)
             {
-                if (E.LSIsReady())
+                if (E.IsReady())
                 {
                     if (CheckReq(rETarget))
                         E.Cast(rETarget);
                 }
-                if (ShouldR(eTarget) && R.LSIsReady())
+                if (ShouldR(eTarget) && R.IsReady())
                 {
-                    R.Cast(player.Position.LSExtend(ARAMSimulator.fromNex.Position, 250));
+                    R.Cast(player.Position.Extend(ARAMSimulator.fromNex.Position, 250));
                     _rTimer = DeathWalker.now - 250;
                 }
-                if (_rTimeLeft > 9500 && _rOn && R.LSIsReady())
+                if (_rTimeLeft > 9500 && _rOn && R.IsReady())
                 {
-                    R.Cast(player.Position.LSExtend(ARAMSimulator.fromNex.Position,250));
+                    R.Cast(player.Position.Extend(ARAMSimulator.fromNex.Position,250));
                     _rTimer = DeathWalker.now - 250;
                 }
             }
@@ -189,35 +189,35 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void CheckKs()
         {
-            foreach (AIHeroClient target in ObjectManager.Get<AIHeroClient>().Where(x => x.LSIsValidTarget(1300) && x.IsEnemy && !x.IsDead).OrderByDescending(GetComboDamage))
+            foreach (AIHeroClient target in ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(1300) && x.IsEnemy && !x.IsDead).OrderByDescending(GetComboDamage))
             {
                 if (target != null)
                 {
-                    if (player.LSDistance(target.ServerPosition) <= W.Range &&
-                        (player.LSGetSpellDamage(target, SpellSlot.Q) + player.LSGetSpellDamage(target, SpellSlot.Q, 1) +
-                         player.LSGetSpellDamage(target, SpellSlot.W)) > target.Health && Q.LSIsReady() && Q.LSIsReady())
+                    if (player.Distance(target.ServerPosition) <= W.Range &&
+                        (player.GetSpellDamage(target, SpellSlot.Q) + player.GetSpellDamage(target, SpellSlot.Q, 1) +
+                         player.GetSpellDamage(target, SpellSlot.W)) > target.Health && Q.IsReady() && Q.IsReady())
                     {
                         Q.Cast(target);
                         return;
                     }
 
-                    if (player.LSDistance(target.ServerPosition) <= Q.Range &&
-                        (player.LSGetSpellDamage(target, SpellSlot.Q) + player.LSGetSpellDamage(target, SpellSlot.Q, 1)) >
-                        target.Health && Q.LSIsReady())
+                    if (player.Distance(target.ServerPosition) <= Q.Range &&
+                        (player.GetSpellDamage(target, SpellSlot.Q) + player.GetSpellDamage(target, SpellSlot.Q, 1)) >
+                        target.Health && Q.IsReady())
                     {
                         Q.Cast(target);
                         return;
                     }
 
-                    if (player.LSDistance(target.ServerPosition) <= E.Range &&
-                        (player.LSGetSpellDamage(target, SpellSlot.E)) > target.Health & E.LSIsReady())
+                    if (player.Distance(target.ServerPosition) <= E.Range &&
+                        (player.GetSpellDamage(target, SpellSlot.E)) > target.Health & E.IsReady())
                     {
                         E.Cast(target);
                         return;
                     }
 
-                    if (player.LSDistance(target.ServerPosition) <= W.Range &&
-                        (player.LSGetSpellDamage(target, SpellSlot.W)) > target.Health && W.LSIsReady())
+                    if (player.Distance(target.ServerPosition) <= W.Range &&
+                        (player.GetSpellDamage(target, SpellSlot.W)) > target.Health && W.IsReady())
                     {
                         W.Cast();
                         return;
@@ -225,9 +225,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
                     Vector3 dashVector = player.Position +
                                          Vector3.Normalize(target.ServerPosition - player.Position) * 425;
-                    if (player.LSDistance(target.ServerPosition) <= R.Range &&
-                        (player.LSGetSpellDamage(target, SpellSlot.R)) > target.Health && R.LSIsReady() && _rOn &&
-                        target.LSDistance(dashVector) < 425 && R.LSIsReady())
+                    if (player.Distance(target.ServerPosition) <= R.Range &&
+                        (player.GetSpellDamage(target, SpellSlot.R)) > target.Health && R.IsReady() && _rOn &&
+                        target.Distance(dashVector) < 425 && R.IsReady())
                     {
                         R.Cast(dashVector);
                     }
@@ -239,7 +239,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             if (source == "Combo")
             {
-                if ((player.LSGetSpellDamage(target, SpellSlot.Q) + player.LSGetSpellDamage(target, SpellSlot.Q, 1)) >
+                if ((player.GetSpellDamage(target, SpellSlot.Q) + player.GetSpellDamage(target, SpellSlot.Q, 1)) >
                     target.Health)
                     return true;
 
@@ -253,7 +253,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
             if (source == "Harass")
             {
-                if ((player.LSGetSpellDamage(target, SpellSlot.Q) + player.LSGetSpellDamage(target, SpellSlot.Q, 1)) >
+                if ((player.GetSpellDamage(target, SpellSlot.Q) + player.GetSpellDamage(target, SpellSlot.Q, 1)) >
                     target.Health)
                     return true;
 
@@ -272,7 +272,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             if (source == "Combo")
             {
-                if (player.LSGetSpellDamage(target, SpellSlot.W) > target.Health)
+                if (player.GetSpellDamage(target, SpellSlot.W) > target.Health)
                     return true;
 
                 if (_rOn)
@@ -284,7 +284,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
             if (source == "Harass")
             {
-                if (player.LSGetSpellDamage(target, SpellSlot.W) > target.Health)
+                if (player.GetSpellDamage(target, SpellSlot.W) > target.Health)
                     return true;
 
                 if (_rOn)
@@ -312,7 +312,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 return true;
 
 
-            if (player.LSGetSpellDamage(target, SpellSlot.R) * 2 > target.Health)
+            if (player.GetSpellDamage(target, SpellSlot.R) * 2 > target.Health)
                 return true;
 
             if (_rOn && _rTimeLeft > 9500)
@@ -324,9 +324,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
         private bool CheckReq(AIHeroClient target)
         {
 
-            if (GetComboDamage(target) > target.Health && !_rOn && target.LSCountEnemiesInRange(500)<3)
+            if (GetComboDamage(target) > target.Health && !_rOn && target.CountEnemiesInRange(500)<3)
             {
-                if (E.LSIsReady())
+                if (E.IsReady())
                 {
                     //Chat.Print("added delay: " + addedDelay);
 
@@ -339,7 +339,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private bool IsRActive()
         {
-            return player.LSHasBuff("AhriTumble", true);
+            return player.HasBuff("AhriTumble", true);
         }
 
         private int RCount()
@@ -360,7 +360,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 MinionTypes.All, MinionTeam.NotAlly);
 
 
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
                 MinionManager.FarmLocation qPos = Q.GetLineFarmLocation(allMinionsQ);
                 if (qPos.MinionsHit >= 3)
@@ -369,7 +369,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 }
             }
 
-            if (allMinionsW.Count > 0 && W.LSIsReady())
+            if (allMinionsW.Count > 0 && W.IsReady())
                 W.Cast();
         }
     }

@@ -125,7 +125,7 @@ using EloBuddy; namespace Activator.Handlers
                         var barPos = minion.HPBarPosition;
 
                         var sdamage = smitespell != null && Activator.Player.GetSpell(smitespell.Slot).State == SpellState.Ready
-                            ? Activator.Player.LSGetSpellDamage(minion, smitespell.Slot, smitespell.Stage)
+                            ? Activator.Player.GetSpellDamage(minion, smitespell.Slot, smitespell.Stage)
                             : 0;
 
                         var smite = Activator.Player.GetSpell(Activator.Smite).State == SpellState.Ready

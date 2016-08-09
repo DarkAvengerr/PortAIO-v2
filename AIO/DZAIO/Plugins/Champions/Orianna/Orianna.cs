@@ -73,8 +73,8 @@ using EloBuddy;
 
         private void OnInterrupter(AIHeroClient sender, DZInterrupter.InterruptableTargetEventArgs args)
         {
-            if (Variables.Spells[SpellSlot.R].LSIsReady() 
-                && sender.LSIsValidTarget(Variables.Spells[SpellSlot.Q].Range) 
+            if (Variables.Spells[SpellSlot.R].IsReady() 
+                && sender.IsValidTarget(Variables.Spells[SpellSlot.Q].Range) 
                 && args.DangerLevel >= DZInterrupter.DangerLevel.High
                 && Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.orianna.extra.interrupter"))
             {
@@ -91,7 +91,7 @@ using EloBuddy;
 
                         var actionDelay =
                             (int)
-                                (BallManager.BallPosition.LSDistance(sender.ServerPosition) /
+                                (BallManager.BallPosition.Distance(sender.ServerPosition) /
                                  Variables.Spells[SpellSlot.Q].Speed * 1000f +
                                  Variables.Spells[SpellSlot.Q].Delay * 1000f + Game.Ping / 2f + 100f);
 
@@ -99,7 +99,7 @@ using EloBuddy;
                             actionDelay, () =>
                             {
                                 var enemiesInRange =
-                                    BallManager.BallPosition.LSGetEnemiesInRange(Variables.Spells[SpellSlot.R].Range);
+                                    BallManager.BallPosition.GetEnemiesInRange(Variables.Spells[SpellSlot.R].Range);
 
                                 if (enemiesInRange.Count >= 1 &&
                                     enemiesInRange.Any(n => n.NetworkId == sender.NetworkId))
@@ -111,10 +111,10 @@ using EloBuddy;
                     break;
                     case 1:
                         var ballPosition = BallManager.BallPosition;
-                        if (sender.LSIsValidTarget(Variables.Spells[SpellSlot.R].Range / 2f, true, ballPosition))
+                        if (sender.IsValidTarget(Variables.Spells[SpellSlot.R].Range / 2f, true, ballPosition))
                         {
                             var enemiesInRange =
-                                    BallManager.BallPosition.LSGetEnemiesInRange(Variables.Spells[SpellSlot.R].Range);
+                                    BallManager.BallPosition.GetEnemiesInRange(Variables.Spells[SpellSlot.R].Range);
 
                             if (enemiesInRange.Count >= 1 &&
                                 enemiesInRange.Any(n => n.NetworkId == sender.NetworkId))
@@ -157,13 +157,13 @@ using EloBuddy;
         {
             var qTarget = TargetSelector.GetTarget(Variables.Spells[SpellSlot.Q].Range / 1.5f, TargetSelector.DamageType.Magical);
 
-            if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo) && qTarget.LSIsValidTarget())
+            if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo) && qTarget.IsValidTarget())
             {
                 var targetPrediction = LeagueSharp.Common.Prediction.GetPrediction(qTarget, 0.75f);
 
                 if (ObjectManager.Player.HealthPercent >= 35)
                 {
-                    var enemyHeroesPositions = HeroManager.Enemies.Select(hero => hero.Position.LSTo2D()).ToList();
+                    var enemyHeroesPositions = HeroManager.Enemies.Select(hero => hero.Position.To2D()).ToList();
 
                     var Groups = PositioningHelper.GetCombinations(enemyHeroesPositions);
 
@@ -173,8 +173,8 @@ using EloBuddy;
                         {
                             var Circle = MEC.GetMec(group);
 
-                            if (Circle.Center.To3D().LSCountEnemiesInRange(Variables.Spells[SpellSlot.Q].Range) >= 2 &&
-                                Circle.Center.LSDistance(ObjectManager.Player) <= Variables.Spells[SpellSlot.Q].Range &&
+                            if (Circle.Center.To3D().CountEnemiesInRange(Variables.Spells[SpellSlot.Q].Range) >= 2 &&
+                                Circle.Center.Distance(ObjectManager.Player) <= Variables.Spells[SpellSlot.Q].Range &&
                                 Circle.Radius <= Variables.Spells[SpellSlot.Q].Width)
                             {
                                 this.BallManager.ProcessCommand(new Command()
@@ -199,21 +199,21 @@ using EloBuddy;
             }
 
             if (Variables.Spells[SpellSlot.W].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo) &&
-                qTarget.LSIsValidTarget(Variables.Spells[SpellSlot.W].Range))
+                qTarget.IsValidTarget(Variables.Spells[SpellSlot.W].Range))
             {
                 var ballLocation = this.BallManager.BallPosition;
                 var minWEnemies = 2;
 
-                if (ObjectManager.Player.LSCountEnemiesInRange(Variables.Spells[SpellSlot.Q].Range + 245f) >= 2)
+                if (ObjectManager.Player.CountEnemiesInRange(Variables.Spells[SpellSlot.Q].Range + 245f) >= 2)
                 {
-                    if (ballLocation.LSCountEnemiesInRange(Variables.Spells[SpellSlot.W].Range) >= minWEnemies)
+                    if (ballLocation.CountEnemiesInRange(Variables.Spells[SpellSlot.W].Range) >= minWEnemies)
                     {
                         this.BallManager.ProcessCommand(new Command() { SpellCommand = Commands.W, });
                     }
                 }
                 else
                 {
-                    if (ballLocation.LSCountEnemiesInRange(Variables.Spells[SpellSlot.W].Range) >= 1)
+                    if (ballLocation.CountEnemiesInRange(Variables.Spells[SpellSlot.W].Range) >= 1)
                     {
                         this.BallManager.ProcessCommand(new Command() { SpellCommand = Commands.W, });
                     }
@@ -223,9 +223,9 @@ using EloBuddy;
 
             if (Variables.Spells[SpellSlot.R].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo))
             {
-                if (ObjectManager.Player.LSCountEnemiesInRange(Variables.Spells[SpellSlot.Q].Range + 250f) > 1)
+                if (ObjectManager.Player.CountEnemiesInRange(Variables.Spells[SpellSlot.Q].Range + 250f) > 1)
                 {
-                    var EnemyPositions = HeroManager.Enemies.Select(hero => hero.Position.LSTo2D()).ToList();
+                    var EnemyPositions = HeroManager.Enemies.Select(hero => hero.Position.To2D()).ToList();
 
                     var Combinations = PositioningHelper.GetCombinations(EnemyPositions);
 
@@ -235,16 +235,16 @@ using EloBuddy;
                         if (group.Count >= 2)
                         {
                             var Circle = MEC.GetMec(group);
-                            if (Variables.Spells[SpellSlot.Q].LSIsReady() &&
-                                Circle.Center.LSDistance(ObjectManager.Player) <= Variables.Spells[SpellSlot.Q].Range &&
+                            if (Variables.Spells[SpellSlot.Q].IsReady() &&
+                                Circle.Center.Distance(ObjectManager.Player) <= Variables.Spells[SpellSlot.Q].Range &&
                                 Circle.Radius <= Variables.Spells[SpellSlot.R].Range &&
-                                Circle.Center.To3D().LSCountEnemiesInRange(Variables.Spells[SpellSlot.R].Range) >= 2)
+                                Circle.Center.To3D().CountEnemiesInRange(Variables.Spells[SpellSlot.R].Range) >= 2)
                             {
                                 Variables.Spells[SpellSlot.Q].Cast(Circle.Center.To3D());
 
                                 var arrivalDelay =
                                     (int)
-                                        (BallManager.BallPosition.LSDistance(Circle.Center.To3D()) /
+                                        (BallManager.BallPosition.Distance(Circle.Center.To3D()) /
                                          Variables.Spells[SpellSlot.Q].Speed * 1000f +
                                          Variables.Spells[SpellSlot.Q].Delay * 1000f + Game.Ping / 2f + 100f);
 
@@ -253,7 +253,7 @@ using EloBuddy;
                                     {
                                         //Extra check just for safety
                                         if (
-                                            BallManager.BallPosition.LSCountEnemiesInRange(
+                                            BallManager.BallPosition.CountEnemiesInRange(
                                                 Variables.Spells[SpellSlot.R].Range) >= 2)
                                         {
                                             Variables.Spells[SpellSlot.R].Cast();
@@ -269,7 +269,7 @@ using EloBuddy;
                     var targetForQR = TargetSelector.GetTarget(
                         Variables.Spells[SpellSlot.Q].Range / 1.2f, TargetSelector.DamageType.Magical);
 
-                    if (targetForQR.LSIsValidTarget())
+                    if (targetForQR.IsValidTarget())
                     {
                         var QWDamage = ObjectManager.Player.GetComboDamage(
                             targetForQR, new[] { SpellSlot.Q, SpellSlot.W });
@@ -283,25 +283,25 @@ using EloBuddy;
                             return;
                         }
 
-                        var rPosition = targetForQR.ServerPosition.LSExtend(
+                        var rPosition = targetForQR.ServerPosition.Extend(
                             ObjectManager.Player.ServerPosition, Variables.Spells[SpellSlot.R].Range / 2f);
 
                         if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Combo) &&
-                            rPosition.LSDistance(ObjectManager.Player.ServerPosition) <=
+                            rPosition.Distance(ObjectManager.Player.ServerPosition) <=
                             Variables.Spells[SpellSlot.Q].Range)
                         {
                             Variables.Spells[SpellSlot.Q].Cast(rPosition);
 
                             var actionDelay =
                                 (int)
-                                    (BallManager.BallPosition.LSDistance(rPosition) / Variables.Spells[SpellSlot.Q].Speed *
+                                    (BallManager.BallPosition.Distance(rPosition) / Variables.Spells[SpellSlot.Q].Speed *
                                      1000f + Variables.Spells[SpellSlot.Q].Delay * 1000f + Game.Ping / 2f + 100f);
 
                             LeagueSharp.Common.Utility.DelayAction.Add(
                                 actionDelay, () =>
                                 {
                                     if (
-                                        BallManager.BallPosition.LSCountEnemiesInRange(
+                                        BallManager.BallPosition.CountEnemiesInRange(
                                             Variables.Spells[SpellSlot.R].Range) >= 1)
                                     {
                                         Variables.Spells[SpellSlot.R].Cast();
@@ -325,13 +325,13 @@ using EloBuddy;
 
             var qTarget = TargetSelector.GetTarget(Variables.Spells[SpellSlot.Q].Range / 1.5f, TargetSelector.DamageType.Magical);
 
-            if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass) && qTarget.LSIsValidTarget())
+            if (Variables.Spells[SpellSlot.Q].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass) && qTarget.IsValidTarget())
             {
                 var targetPrediction = LeagueSharp.Common.Prediction.GetPrediction(qTarget, 0.75f);
 
                 if (ObjectManager.Player.HealthPercent >= 35)
                 {
-                    var enemyHeroesPositions = HeroManager.Enemies.Select(hero => hero.Position.LSTo2D()).ToList();
+                    var enemyHeroesPositions = HeroManager.Enemies.Select(hero => hero.Position.To2D()).ToList();
 
                     var Groups = PositioningHelper.GetCombinations(enemyHeroesPositions);
 
@@ -341,8 +341,8 @@ using EloBuddy;
                         {
                             var Circle = MEC.GetMec(group);
 
-                            if (Circle.Center.To3D().LSCountEnemiesInRange(Variables.Spells[SpellSlot.Q].Range) >= 2 &&
-                                Circle.Center.LSDistance(ObjectManager.Player) <= Variables.Spells[SpellSlot.Q].Range &&
+                            if (Circle.Center.To3D().CountEnemiesInRange(Variables.Spells[SpellSlot.Q].Range) >= 2 &&
+                                Circle.Center.Distance(ObjectManager.Player) <= Variables.Spells[SpellSlot.Q].Range &&
                                 Circle.Radius <= Variables.Spells[SpellSlot.Q].Width)
                             {
                                 this.BallManager.ProcessCommand(new Command()
@@ -367,21 +367,21 @@ using EloBuddy;
             }
 
             if (Variables.Spells[SpellSlot.W].IsEnabledAndReady(ModesMenuExtensions.Mode.Harrass) &&
-                qTarget.LSIsValidTarget(Variables.Spells[SpellSlot.W].Range))
+                qTarget.IsValidTarget(Variables.Spells[SpellSlot.W].Range))
             {
                 var ballLocation = this.BallManager.BallPosition;
                 var minWEnemies = 2;
 
-                if (ObjectManager.Player.LSCountEnemiesInRange(Variables.Spells[SpellSlot.Q].Range + 245f) >= 2)
+                if (ObjectManager.Player.CountEnemiesInRange(Variables.Spells[SpellSlot.Q].Range + 245f) >= 2)
                 {
-                    if (ballLocation.LSCountEnemiesInRange(Variables.Spells[SpellSlot.W].Range) >= minWEnemies)
+                    if (ballLocation.CountEnemiesInRange(Variables.Spells[SpellSlot.W].Range) >= minWEnemies)
                     {
                         this.BallManager.ProcessCommand(new Command() { SpellCommand = Commands.W, });
                     }
                 }
                 else
                 {
-                    if (ballLocation.LSCountEnemiesInRange(Variables.Spells[SpellSlot.W].Range) >= 1)
+                    if (ballLocation.CountEnemiesInRange(Variables.Spells[SpellSlot.W].Range) >= 1)
                     {
                         this.BallManager.ProcessCommand(new Command() { SpellCommand = Commands.W, });
                     }
@@ -430,7 +430,7 @@ using EloBuddy;
         public static List<AIHeroClient> getEHits(Vector3 endPosition)
         {
             return HeroManager.Enemies
-                .Where(enemy => enemy.LSIsValidTarget(Variables.Spells[SpellSlot.E].Range * 1.45f) && Variables.Spells[SpellSlot.E].WillHit(enemy, endPosition))
+                .Where(enemy => enemy.IsValidTarget(Variables.Spells[SpellSlot.E].Range * 1.45f) && Variables.Spells[SpellSlot.E].WillHit(enemy, endPosition))
                 .ToList();
         }
     }

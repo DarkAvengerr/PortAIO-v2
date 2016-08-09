@@ -82,7 +82,7 @@ namespace Gnar
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsMe && !args.SData.LSIsAutoAttack())
+            if (sender.IsMe && !args.SData.IsAutoAttack())
             {
                 // Reset timer
                 IsBusy = false;

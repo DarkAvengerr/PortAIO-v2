@@ -75,7 +75,7 @@ namespace BrianSharp.Plugin
 
         private static void OnUpdate(EventArgs args)
         {
-            if (Player.IsDead || MenuGUI.IsChatOpen || Player.LSIsRecalling())
+            if (Player.IsDead || MenuGUI.IsChatOpen || Player.IsRecalling())
             {
                 return;
             }
@@ -91,7 +91,7 @@ namespace BrianSharp.Plugin
                     Clear();
                     break;
                 case Orbwalker.Mode.Flee:
-                    if (GetValue<bool>("Flee", "E") && E.LSIsReady() && E.Cast(Game.CursorPos, PacketCast))
+                    if (GetValue<bool>("Flee", "E") && E.IsReady() && E.Cast(Game.CursorPos, PacketCast))
                     {
                         return;
                     }
@@ -112,11 +112,11 @@ namespace BrianSharp.Plugin
             }
             if (GetValue<bool>("Draw", "W") && W.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, W.Range, W.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, W.Range, W.IsReady() ? Color.Green : Color.Red);
             }
             if (GetValue<bool>("Draw", "E") && E.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, E.Range, E.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.Green : Color.Red);
             }
         }
 
@@ -126,11 +126,11 @@ namespace BrianSharp.Plugin
             {
                 return;
             }
-            if (GetValue<bool>("Combo", "R") && R.LSIsReady() && Player.HealthPercent < 10 && R.Cast(PacketCast))
+            if (GetValue<bool>("Combo", "R") && R.IsReady() && Player.HealthPercent < 10 && R.Cast(PacketCast))
             {
                 return;
             }
-            if (GetValue<bool>("Combo", "Q") && Q.LSIsReady() && !Player.HasBuff("UndyingRage") &&
+            if (GetValue<bool>("Combo", "Q") && Q.IsReady() && !Player.HasBuff("UndyingRage") &&
                 Player.HealthPercent < GetValue<Slider>("Survive", "QHpU").Value)
             {
                 Q.Cast(PacketCast);
@@ -139,25 +139,25 @@ namespace BrianSharp.Plugin
 
         private static void Fight(string mode)
         {
-            if (mode == "Combo" && GetValue<bool>(mode, "W") && W.LSIsReady() && !Player.LSIsDashing())
+            if (mode == "Combo" && GetValue<bool>(mode, "W") && W.IsReady() && !Player.IsDashing())
             {
                 var target = W.GetTarget();
                 if (target != null)
                 {
-                    if (GetValue<bool>(mode, "WSolo") && LeagueSharp.Common.Utility.LSIsBothFacing(Player, target) &&
+                    if (GetValue<bool>(mode, "WSolo") && LeagueSharp.Common.Utility.IsBothFacing(Player, target) &&
                         Orbwalk.InAutoAttackRange(target) &&
-                        Player.LSGetAutoAttackDamage(target, true) < target.LSGetAutoAttackDamage(Player, true))
+                        Player.GetAutoAttackDamage(target, true) < target.GetAutoAttackDamage(Player, true))
                     {
                         return;
                     }
-                    if (Player.LSIsFacing(target) && !target.LSIsFacing(Player) && !Orbwalk.InAutoAttackRange(target, 30) &&
+                    if (Player.IsFacing(target) && !target.IsFacing(Player) && !Orbwalk.InAutoAttackRange(target, 30) &&
                         W.Cast(PacketCast))
                     {
                         return;
                     }
                 }
             }
-            if (GetValue<bool>(mode, "E") && E.LSIsReady() &&
+            if (GetValue<bool>(mode, "E") && E.IsReady() &&
                 (mode == "Combo" || Player.HealthPercent >= GetValue<Slider>(mode, "EHpA").Value))
             {
                 var target = E.GetTarget(E.Width);
@@ -168,16 +168,16 @@ namespace BrianSharp.Plugin
                         ((mode == "Combo" && !Orbwalk.InAutoAttackRange(target, 20)) ||
                          (mode == "Harass" && Orbwalk.InAutoAttackRange(target, 50))))
                     {
-                        E.Cast(predE.CastPosition.LSExtend(Player.ServerPosition, -100), PacketCast);
+                        E.Cast(predE.CastPosition.Extend(Player.ServerPosition, -100), PacketCast);
                     }
                 }
                 else
                 {
                     var sub = E.GetTarget(Orbwalk.GetAutoAttackRange());
                     if (sub != null &&
-                        Orbwalk.InAutoAttackRange(sub, 20, Player.ServerPosition.LSExtend(sub.ServerPosition, E.Range)))
+                        Orbwalk.InAutoAttackRange(sub, 20, Player.ServerPosition.Extend(sub.ServerPosition, E.Range)))
                     {
-                        E.Cast(Player.ServerPosition.LSExtend(sub.ServerPosition, E.Range), PacketCast);
+                        E.Cast(Player.ServerPosition.Extend(sub.ServerPosition, E.Range), PacketCast);
                     }
                 }
             }
@@ -191,10 +191,10 @@ namespace BrianSharp.Plugin
             {
                 return;
             }
-            if (GetValue<bool>("Clear", "E") && E.LSIsReady())
+            if (GetValue<bool>("Clear", "E") && E.IsReady())
             {
                 var pos = E.GetLineFarmLocation(minionObj.Cast<Obj_AI_Base>().ToList(), 200);
-                if (pos.MinionsHit > 0 && E.Cast(pos.Position.LSExtend(Player.ServerPosition.LSTo2D(), -100), PacketCast))
+                if (pos.MinionsHit > 0 && E.Cast(pos.Position.Extend(Player.ServerPosition.To2D(), -100), PacketCast))
                 {
                     return;
                 }
@@ -204,7 +204,7 @@ namespace BrianSharp.Plugin
                 var item = Hydra.IsReady() ? Hydra : Tiamat;
                 if (item.IsReady() &&
                     (minionObj.Count(i => item.IsInRange(i)) > 2 ||
-                     minionObj.Any(i => i.MaxHealth >= 1200 && i.LSDistance(Player) < item.Range - 80)))
+                     minionObj.Any(i => i.MaxHealth >= 1200 && i.Distance(Player) < item.Range - 80)))
                 {
                     item.Cast();
                 }
@@ -213,7 +213,7 @@ namespace BrianSharp.Plugin
 
         private static void KillSteal()
         {
-            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.LSIsReady())
+            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.IsReady())
             {
                 var target = TargetSelector.GetTarget(600, TargetSelector.DamageType.True);
                 if (target != null && CastIgnite(target))
@@ -230,7 +230,7 @@ namespace BrianSharp.Plugin
                     return;
                 }
             }
-            if (GetValue<bool>("KillSteal", "E") && E.LSIsReady())
+            if (GetValue<bool>("KillSteal", "E") && E.IsReady())
             {
                 var target = E.GetTarget(E.Width);
                 if (target != null && E.IsKillable(target))
@@ -238,7 +238,7 @@ namespace BrianSharp.Plugin
                     var predE = E.GetPrediction(target, true);
                     if (predE.Hitchance >= E.MinHitChance)
                     {
-                        E.Cast(predE.CastPosition.LSExtend(Player.ServerPosition, -100), PacketCast);
+                        E.Cast(predE.CastPosition.Extend(Player.ServerPosition, -100), PacketCast);
                     }
                 }
             }

@@ -105,7 +105,7 @@ namespace SharpShooter.Plugins
                             {
                                 var target =
                                     MinionManager.GetMinions(600, MinionTypes.All, MinionTeam.Neutral,
-                                        MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.LSIsValidTarget(600));
+                                        MinionOrderTypes.MaxHealth).FirstOrDefault(x => x.IsValidTarget(600));
                                 if (target != null)
                                     _q.Cast(target);
                             }
@@ -118,7 +118,7 @@ namespace SharpShooter.Plugins
                 {
                     var target =
                         HeroManager.Enemies.FirstOrDefault(
-                            x => x.LSIsValidTarget(_q.Range) && _q.GetPrediction(x).Hitchance >= HitChance.Immobile);
+                            x => x.IsValidTarget(_q.Range) && _q.GetPrediction(x).Hitchance >= HitChance.Immobile);
                     if (target != null)
                         _q.Cast(target);
                 }
@@ -133,7 +133,7 @@ namespace SharpShooter.Plugins
                             if (sender.IsEnemy)
                                 if (MenuProvider.Champion.Misc.GetBoolValue("Auto E against targeted spells"))
                                     if (_e.IsReadyPerfectly())
-                                        if (!args.SData.LSIsAutoAttack())
+                                        if (!args.SData.IsAutoAttack())
                                         {
                                             if (!args.SData.Name.Contains("summoner"))
                                                 if (!args.SData.Name.Contains("TormentedSoil"))
@@ -211,7 +211,7 @@ namespace SharpShooter.Plugins
 
             if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                damage += (float) ObjectManager.Player.LSGetAutoAttackDamage(enemy, true);
+                damage += (float) ObjectManager.Player.GetAutoAttackDamage(enemy, true);
             }
 
             if (_q.IsReadyPerfectly())
@@ -221,7 +221,7 @@ namespace SharpShooter.Plugins
 
             if (_w.IsReadyPerfectly())
             {
-                damage += (float) ObjectManager.Player.LSGetAutoAttackDamage(enemy);
+                damage += (float) ObjectManager.Player.GetAutoAttackDamage(enemy);
             }
 
             return damage;

@@ -15,7 +15,7 @@ using EloBuddy; namespace RethoughtLib.TargetValidator.Implementations
 
         public bool Check(Obj_AI_Base target)
         {
-            return target.LSIsValidTarget();
+            return target.IsValidTarget();
         }
 
         #endregion

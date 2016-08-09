@@ -86,7 +86,7 @@
                 return;
             }
 
-            if (active && Program.spells[Program.Spells.Q].LSIsReady() && InitMenu.Menu.Item("ElLeeSin.Draw.Q.Width").GetValue<bool>())
+            if (active && Program.spells[Program.Spells.Q].IsReady() && InitMenu.Menu.Item("ElLeeSin.Draw.Q.Width").GetValue<bool>())
             {
                 rect.Draw(Color.White);
             }
@@ -117,7 +117,7 @@
 
             Program.Orbwalk(Game.CursorPos);
 
-            if (BuffedEnemy.LSIsValidTarget() && BuffedEnemy.IsValid<AIHeroClient>())
+            if (BuffedEnemy.IsValidTarget() && BuffedEnemy.IsValid<AIHeroClient>())
             {
                 InitQ = false;
                 return;
@@ -138,7 +138,7 @@
                 Player.Position.To2D().Extend(Game.CursorPos.To2D(), 1050),
                 100);
 
-            if (Program.QState && Program.spells[Program.Spells.Q].LSIsReady())
+            if (Program.QState && Program.spells[Program.Spells.Q].IsReady())
             {
                 foreach (var pos in JunglePos)
                 {
@@ -151,7 +151,7 @@
                     return;
                 }
             }
-            else if (Program.spells[Program.Spells.Q].LSIsReady() && !Program.QState)
+            else if (Program.spells[Program.Spells.Q].IsReady() && !Program.QState)
             {
                 Program.spells[Program.Spells.Q].Cast();
                 InitQ = true;

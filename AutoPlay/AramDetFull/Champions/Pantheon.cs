@@ -34,22 +34,22 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
             Q.CastOnUnit(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
-            if(!Sector.inTowerRange(target.Position.LSTo2D()) && (MapControl.balanceAroundPoint(target.Position.LSTo2D(),700)>=-1 || (MapControl.fightIsOn() != null && MapControl.fightIsOn().NetworkId == target.NetworkId))  )
+            if(!Sector.inTowerRange(target.Position.To2D()) && (MapControl.balanceAroundPoint(target.Position.To2D(),700)>=-1 || (MapControl.fightIsOn() != null && MapControl.fightIsOn().NetworkId == target.NetworkId))  )
                 W.CastOnUnit(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || W.LSIsReady())
+            if (!E.IsReady() || W.IsReady())
                 return;
             E.Cast(target);
         }
@@ -57,9 +57,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public override void useR(Obj_AI_Base target)
         {
             return;
-            if(!R.LSIsReady())
+            if(!R.IsReady())
                 return;
-            if (player.Path.Length > 0 && player.Path[player.Path.Length-1].LSDistance(player.Position)>2500)
+            if (player.Path.Length > 0 && player.Path[player.Path.Length-1].Distance(player.Position)>2500)
             {
                 R.Cast(player.Path[player.Path.Length - 1]);
             }

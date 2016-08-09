@@ -79,20 +79,20 @@ using EloBuddy;
         {
             if (ProSeries.Config.Item("useegap", true).GetValue<bool>())
             {
-                if (gapcloser.Sender.LSIsValidTarget(E.Range))
+                if (gapcloser.Sender.IsValidTarget(E.Range))
                     E.Cast(gapcloser.Sender);
             }
         }
 
         private void Game_OnUpdate(EventArgs args)
         {
-            WRange = ProSeries.Player.LSHasBuff("KogMawBioArcaneBarrage", true)
+            WRange = ProSeries.Player.HasBuff("KogMawBioArcaneBarrage", true)
                 ? 500 + new[] {130, 150, 170, 190, 210}[W.Level - 1]
                 : 500;
 
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.LSIsValidTarget(E.Range)))
+                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(h => h.IsValidTarget(E.Range)))
                 {
                     if (ProSeries.Config.Item("useeimm", true).GetValue<bool>())
                         E.CastIfHitchanceEquals(target, HitChance.Immobile);
@@ -102,21 +102,21 @@ using EloBuddy;
             if (ProSeries.CanCombo())
             {
                 var qtarget = TargetSelector.GetTargetNoCollision(Q);
-                if (qtarget.LSIsValidTarget() && Q.LSIsReady())
+                if (qtarget.IsValidTarget() && Q.IsReady())
                 {
                     if (ProSeries.Config.Item("usecomboq", true).GetValue<bool>())
                         Q.Cast(qtarget);
                 }
 
                 var wtarget = TargetSelector.GetTarget(W.Range + new[] { 130, 150, 170, 190, 210 }[W.Level - 1], TargetSelector.DamageType.Physical);
-                if (wtarget.LSIsValidTarget() && W.LSIsReady())
+                if (wtarget.IsValidTarget() && W.IsReady())
                 {
                     if (ProSeries.Config.Item("usecombow", true).GetValue<bool>())
                         W.Cast();
                 }
 
                 var rtarget = TargetSelector.GetTarget(new[] { 1200f, 1500f, 1800f }[R.Level - 1], TargetSelector.DamageType.Physical);
-                if (rtarget.LSIsValidTarget() && R.LSIsReady())
+                if (rtarget.IsValidTarget() && R.IsReady())
                 {
                     if (ProSeries.Player.Buffs.Count(b => b.Name == "kogmawlivingartillery") < 6)
                     {
@@ -135,21 +135,21 @@ using EloBuddy;
             if (ProSeries.CanHarass())
             {
                 var qtarget = TargetSelector.GetTargetNoCollision(Q);
-                if (qtarget.LSIsValidTarget() && Q.LSIsReady() && ProSeries.IsWhiteListed(qtarget))
+                if (qtarget.IsValidTarget() && Q.IsReady() && ProSeries.IsWhiteListed(qtarget))
                 {
                     if (ProSeries.Config.Item("useharassq", true).GetValue<bool>())
                         Q.Cast(qtarget);
                 }
 
                 var wtarget = TargetSelector.GetTarget(W.Range + new[] {130,150,170,190,210}[W.Level-1], TargetSelector.DamageType.Physical);
-                if (wtarget.LSIsValidTarget() && W.LSIsReady() && ProSeries.IsWhiteListed(wtarget))
+                if (wtarget.IsValidTarget() && W.IsReady() && ProSeries.IsWhiteListed(wtarget))
                 {
                     if (ProSeries.Config.Item("useharassw", true).GetValue<bool>())
                         W.Cast();
                 }
 
                 var rtarget = TargetSelector.GetTarget(new[] {1200f, 1500f, 1800f}[R.Level - 1], TargetSelector.DamageType.Physical);
-                if (rtarget.LSIsValidTarget() && R.LSIsReady() && ProSeries.IsWhiteListed(rtarget))
+                if (rtarget.IsValidTarget() && R.IsReady() && ProSeries.IsWhiteListed(rtarget))
                 {
                     if (ProSeries.Player.Buffs.Count(b => b.Name == "kogmawlivingartillery") < 3)
                     {

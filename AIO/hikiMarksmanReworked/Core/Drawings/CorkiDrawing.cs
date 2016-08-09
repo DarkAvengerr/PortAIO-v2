@@ -22,19 +22,19 @@ using EloBuddy;
             {
                 return;
             }
-            if (CorkiMenu.Config.Item("corki.q.draw").GetValue<Circle>().Active && CorkiSpells.Q.LSIsReady())
+            if (CorkiMenu.Config.Item("corki.q.draw").GetValue<Circle>().Active && CorkiSpells.Q.IsReady())
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, CorkiSpells.Q.Range, CorkiMenu.Config.Item("corki.q.draw").GetValue<Circle>().Color);
             }
-            if (CorkiMenu.Config.Item("corki.w.draw").GetValue<Circle>().Active && CorkiSpells.W.LSIsReady())
+            if (CorkiMenu.Config.Item("corki.w.draw").GetValue<Circle>().Active && CorkiSpells.W.IsReady())
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, CorkiSpells.W.Range, CorkiMenu.Config.Item("corki.w.draw").GetValue<Circle>().Color);
             }
-            if (CorkiMenu.Config.Item("corki.e.draw").GetValue<Circle>().Active && CorkiSpells.E.LSIsReady())
+            if (CorkiMenu.Config.Item("corki.e.draw").GetValue<Circle>().Active && CorkiSpells.E.IsReady())
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, CorkiSpells.E.Range, CorkiMenu.Config.Item("corki.e.draw").GetValue<Circle>().Color);
             }
-            if (CorkiMenu.Config.Item("corki.r.draw").GetValue<Circle>().Active && CorkiSpells.R.LSIsReady())
+            if (CorkiMenu.Config.Item("corki.r.draw").GetValue<Circle>().Active && CorkiSpells.R.IsReady())
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, CorkiSpells.R.Range, CorkiMenu.Config.Item("corki.r.draw").GetValue<Circle>().Color);
             }

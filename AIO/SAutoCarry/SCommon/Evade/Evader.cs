@@ -104,7 +104,7 @@ namespace SCommon.Evade
             {
                 if (sender.IsEnemy)
                 {
-                    Vector2 sender_pos = sender.ServerPosition.LSTo2D();
+                    Vector2 sender_pos = sender.ServerPosition.To2D();
                     var item = evade.Items.FirstOrDefault(q => q.Name == String.Format("SCommon.Evade.Spell.{0}", args.SData.Name));
                     if (item != null && item.GetValue<bool>())
                     {
@@ -114,16 +114,16 @@ namespace SCommon.Evade
                             if (spell.IsSkillshot)
                             {
                                 DetectedSpellData dcspell = m_spell_pool.GetObject();
-                                dcspell.Set(spell, sender_pos, args.End.LSTo2D(), sender, args);
+                                dcspell.Set(spell, sender_pos, args.End.To2D(), sender, args);
                                 m_spell_queue.Enqueue(dcspell);
                             }
                         }
                     }
 
                     //to do: ally check
-                    if (item == null && args.Target != null && args.Target.IsMe && args != null && args.SData != null && !args.SData.LSIsAutoAttack() && sender.IsChampion())
+                    if (item == null && args.Target != null && args.Target.IsMe && args != null && args.SData != null && !args.SData.IsAutoAttack() && sender.IsChampion())
                     {
-                        if (sender.LSGetSpellDamage(ObjectManager.Player, args.SData.Name) * 2 >= ObjectManager.Player.Health)
+                        if (sender.GetSpellDamage(ObjectManager.Player, args.SData.Name) * 2 >= ObjectManager.Player.Health)
                             OnSpellHitDetected(sender_pos, ObjectManager.Player);
                     }
                 }
@@ -143,7 +143,7 @@ namespace SCommon.Evade
             if (m_evade_queue.TryDequeue(out edata))
             {
                 Console.WriteLine("try evade with data Targetted: {0}, SelfCast: {1}, TargetName: {2}", edata.IsTargetted, edata.IsSelfCast, edata.Target.Name);
-                if (EvadeSpell.LSIsReady())
+                if (EvadeSpell.IsReady())
                 {
                     if ((ObjectManager.Player.CharData.BaseSkinName == "Zed" && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "ZedShadowDash") || ObjectManager.Player.CharData.BaseSkinName != "Zed")
                     {
@@ -167,8 +167,8 @@ namespace SCommon.Evade
         {
             EvadeData edata;
 
-            Vector2 evade_direction = direction.LSPerpendicular();
-            Vector2 evade_pos = ObjectManager.Player.ServerPosition.LSTo2D() + evade_direction * EvadeSpell.Range;
+            Vector2 evade_direction = direction.Perpendicular();
+            Vector2 evade_pos = ObjectManager.Player.ServerPosition.To2D() + evade_direction * EvadeSpell.Range;
 
             bool position_needed = SpecialMethod.HasFlag(EvadeMethods.Dash) || SpecialMethod.HasFlag(EvadeMethods.Blink);
 
@@ -213,11 +213,11 @@ namespace SCommon.Evade
                 {
                     if (m_spell_queue.TryDequeue(out dcspell))
                     {
-                        Vector2 my_pos = ObjectManager.Player.ServerPosition.LSTo2D();
+                        Vector2 my_pos = ObjectManager.Player.ServerPosition.To2D();
                         Vector2 sender_pos = dcspell.StartPosition;
                         Vector2 end_pos = dcspell.EndPosition;
-                        Vector2 direction = (end_pos - sender_pos).LSNormalized();
-                        if (sender_pos.LSDistance(end_pos) > dcspell.Spell.Range)
+                        Vector2 direction = (end_pos - sender_pos).Normalized();
+                        if (sender_pos.Distance(end_pos) > dcspell.Spell.Range)
                             end_pos = sender_pos + direction * dcspell.Spell.Range;
 
                         Geometry.Polygon my_hitbox = ClipperWrapper.DefineRectangle(my_pos - 60, my_pos + 60, 60);
@@ -236,7 +236,7 @@ namespace SCommon.Evade
                         //spells with arc
                         if (dcspell.Spell.IsArc)
                         {
-                            float mul = (end_pos.LSDistance(sender_pos) / (dcspell.Spell.Range - 20.0f));
+                            float mul = (end_pos.Distance(sender_pos) / (dcspell.Spell.Range - 20.0f));
                             
                             spell_hitbox = new Geometry.Polygon(
                                 ClipperWrapper.DefineArc(sender_pos - dcspell.Spell.ArcData.Pos, end_pos, dcspell.Spell.ArcData.Angle * mul, dcspell.Spell.ArcData.Width, dcspell.Spell.ArcData.Height * mul),
@@ -252,13 +252,13 @@ namespace SCommon.Evade
                             {
                                 if (ObjectManager.Player.CharData.BaseSkinName == "Morgana" && shieldAlly != null && shieldAlly.Item("SHIELDENABLED").GetValue<bool>())
                                 {
-                                    var allies = ObjectManager.Player.LSGetAlliesInRange(EvadeSpell.Range).Where(p => !p.IsMe && shieldAlly.Item("shield" + p.ChampionName).GetValue<bool>());
+                                    var allies = ObjectManager.Player.GetAlliesInRange(EvadeSpell.Range).Where(p => !p.IsMe && shieldAlly.Item("shield" + p.ChampionName).GetValue<bool>());
 
                                     if (allies != null)
                                     {
                                         foreach (Obj_AI_Base ally in allies)
                                         {
-                                            Vector2 ally_pos = ally.ServerPosition.LSTo2D();
+                                            Vector2 ally_pos = ally.ServerPosition.To2D();
                                             Geometry.Polygon ally_hitbox = ClipperWrapper.DefineRectangle(ally_pos, ally_pos + 60, 60);
                                             if (ClipperWrapper.IsIntersects(ClipperWrapper.MakePaths(ally_hitbox), ClipperWrapper.MakePaths(spell_hitbox)))
                                             {
@@ -289,12 +289,12 @@ namespace SCommon.Evade
         /// <returns></returns>
         private bool CorrectNearTurret(ref Vector2 evade_pos, Vector2 direction)
         {
-            var turret = ObjectManager.Get<Obj_AI_Turret>().Where(p => p.IsAlly).MinOrDefault(q => q.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition));
+            var turret = ObjectManager.Get<Obj_AI_Turret>().Where(p => p.IsAlly).MinOrDefault(q => q.ServerPosition.Distance(ObjectManager.Player.ServerPosition));
             if (turret != null)
             {
-                if (turret.ServerPosition.LSTo2D().LSDistance(evade_pos) > turret.ServerPosition.LSTo2D().LSDistance(ObjectManager.Player.ServerPosition.LSTo2D() - direction * EvadeSpell.Range))
+                if (turret.ServerPosition.To2D().Distance(evade_pos) > turret.ServerPosition.To2D().Distance(ObjectManager.Player.ServerPosition.To2D() - direction * EvadeSpell.Range))
                 {
-                    evade_pos = ObjectManager.Player.Position.LSTo2D() - direction * EvadeSpell.Range;
+                    evade_pos = ObjectManager.Player.Position.To2D() - direction * EvadeSpell.Range;
                     return true;
                 }
             }
@@ -310,9 +310,9 @@ namespace SCommon.Evade
         /// <returns></returns>
         private bool CorrectLessEnemies(ref Vector2 evade_pos, Vector2 direction)
         {
-            if (HeroManager.Enemies.Count(p => p.ServerPosition.LSTo2D().LSDistance(ObjectManager.Player.ServerPosition.LSTo2D() + direction * EvadeSpell.Range) <= ObjectManager.Player.BasicAttack.CastRange) > HeroManager.Enemies.Count(p => p.ServerPosition.LSTo2D().LSDistance(ObjectManager.Player.ServerPosition.LSTo2D() - direction * EvadeSpell.Range) <= ObjectManager.Player.BasicAttack.CastRange))
+            if (HeroManager.Enemies.Count(p => p.ServerPosition.To2D().Distance(ObjectManager.Player.ServerPosition.To2D() + direction * EvadeSpell.Range) <= ObjectManager.Player.BasicAttack.CastRange) > HeroManager.Enemies.Count(p => p.ServerPosition.To2D().Distance(ObjectManager.Player.ServerPosition.To2D() - direction * EvadeSpell.Range) <= ObjectManager.Player.BasicAttack.CastRange))
             {
-                    evade_pos = ObjectManager.Player.Position.LSTo2D() - direction * EvadeSpell.Range;
+                    evade_pos = ObjectManager.Player.Position.To2D() - direction * EvadeSpell.Range;
                     return true;
             }
 

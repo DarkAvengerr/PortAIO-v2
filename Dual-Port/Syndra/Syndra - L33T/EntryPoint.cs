@@ -83,10 +83,10 @@ using EloBuddy;
                     ObjectCache.GetHeroes()
                         .Where(
                             e =>
-                                e.LSIsValidTarget() &&
-                                Player.LSDistance(e.Position, true) <=
+                                e.IsValidTarget() &&
+                                Player.Distance(e.Position, true) <=
                                 Math.Pow(Mechanics.Spells[SpellSlot.SphereE].Range, 2) &&
-                                e.LSDistance(Game.CursorPos, true) <= 22500))
+                                e.Distance(Game.CursorPos, true) <= 22500))
                 {
                     Mechanics.ProcessSphereE(enemy);
                 }
@@ -329,8 +329,8 @@ using EloBuddy;
                         9000, () => Menu.Item("l33t.stds.qesettings.qerange").GetValue<Slider>().Value * .01f * 1292f)
                 }
             };
-            Mechanics.IgniteSpell = new Spell(Player.LSGetSpellSlot("SummonerDot"), 600f);
-            Mechanics.FlashSpell = new Spell(Player.LSGetSpellSlot("summonerflash"), 400f);
+            Mechanics.IgniteSpell = new Spell(Player.GetSpellSlot("SummonerDot"), 600f);
+            Mechanics.FlashSpell = new Spell(Player.GetSpellSlot("summonerflash"), 400f);
         }
     }
 }

@@ -47,7 +47,7 @@ namespace UnderratedAIO.Champions
             switch (orbwalker.ActiveMode)
             {
                 case Orbwalking.OrbwalkingMode.Combo:
-                    if (config.Item("useq", true).GetValue<bool>() && Q.LSIsReady() && target is AIHeroClient)
+                    if (config.Item("useq", true).GetValue<bool>() && Q.IsReady() && target is AIHeroClient)
                     {
                         Q.Cast();
                         Orbwalking.ResetAutoAttackTimer();
@@ -55,7 +55,7 @@ namespace UnderratedAIO.Champions
                     }
                     break;
                 case Orbwalking.OrbwalkingMode.Mixed:
-                    if (config.Item("useqH", true).GetValue<bool>() && Q.LSIsReady() && target is AIHeroClient &&
+                    if (config.Item("useqH", true).GetValue<bool>() && Q.IsReady() && target is AIHeroClient &&
                         config.Item("minmanaH", true).GetValue<Slider>().Value < player.ManaPercent)
                     {
                         Q.Cast();
@@ -64,11 +64,11 @@ namespace UnderratedAIO.Champions
                     }
                     break;
                 case Orbwalking.OrbwalkingMode.LaneClear:
-                    if (config.Item("useqLC", true).GetValue<bool>() && Q.LSIsReady() &&
+                    if (config.Item("useqLC", true).GetValue<bool>() && Q.IsReady() &&
                         config.Item("minmana", true).GetValue<Slider>().Value < player.ManaPercent &&
                         (target.Health <
-                         player.LSGetAutoAttackDamage((Obj_AI_Base) target) + Q.GetDamage((Obj_AI_Base) target) ||
-                         target.Health > player.LSGetAutoAttackDamage((Obj_AI_Base) target, true) * 4))
+                         player.GetAutoAttackDamage((Obj_AI_Base) target) + Q.GetDamage((Obj_AI_Base) target) ||
+                         target.Health > player.GetAutoAttackDamage((Obj_AI_Base) target, true) * 4))
                     {
                         Q.Cast();
                         Orbwalking.ResetAutoAttackTimer();
@@ -84,7 +84,7 @@ namespace UnderratedAIO.Champions
         private void Interrupter2_OnInterruptableTarget(AIHeroClient sender,
             Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (R.LSIsReady() && config.Item("Interrupt", true).GetValue<bool>() && sender.LSDistance(player) < R.Range)
+            if (R.IsReady() && config.Item("Interrupt", true).GetValue<bool>() && sender.Distance(player) < R.Range)
             {
                 R.Cast(player);
             }
@@ -101,7 +101,7 @@ namespace UnderratedAIO.Champions
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if ((wActive && (!Q.LSIsReady() || justW)) || rActive)
+            if ((wActive && (!Q.IsReady() || justW)) || rActive)
             {
                 orbwalker.SetAttack(false);
             }
@@ -134,35 +134,35 @@ namespace UnderratedAIO.Champions
 
         private void Rmovement()
         {
-            if (rActive && Game.CursorPos.LSCountEnemiesInRange(300) > 1)
+            if (rActive && Game.CursorPos.CountEnemiesInRange(300) > 1)
             {
                 AIHeroClient target = TargetSelector.GetTarget(
                     E.Range, TargetSelector.DamageType.Physical, true, HeroManager.Enemies.Where(h => h.IsInvulnerable));
-                if (target != null && target.LSCountEnemiesInRange(R.Range) > 1)
+                if (target != null && target.CountEnemiesInRange(R.Range) > 1)
                 {
                     if (System.Environment.TickCount - UltiCheck > 250 || UltiCheck == 0f)
                     {
                         var enemies =
-                            HeroManager.Enemies.Where(e => e.LSIsValidTarget() && e.LSDistance(player) < 600)
+                            HeroManager.Enemies.Where(e => e.IsValidTarget() && e.Distance(player) < 600)
                                 .Select(e => Prediction.GetPrediction(e, 0.35f));
                         switch (config.Item("rType", true).GetValue<StringList>().SelectedIndex)
                         {
                             case 0:
                                 point =
                                     CombatHelper.PointsAroundTheTarget(player.Position, R.Range)
-                                        .Where(p => p.LSCountEnemiesInRange(R.Range + 100) > 0)
+                                        .Where(p => p.CountEnemiesInRange(R.Range + 100) > 0)
                                         .OrderByDescending(
-                                            p => enemies.Count(e => e.UnitPosition.LSDistance(p) <= R.Range))
-                                        .ThenBy(p => p.LSDistance(Game.CursorPos))
+                                            p => enemies.Count(e => e.UnitPosition.Distance(p) <= R.Range))
+                                        .ThenBy(p => p.Distance(Game.CursorPos))
                                         .FirstOrDefault();
                                 break;
                             case 1:
                                 point =
                                     CombatHelper.PointsAroundTheTarget(target.Position, R.Range)
-                                        .Where(p => p.LSCountEnemiesInRange(R.Range + 100) > 0)
+                                        .Where(p => p.CountEnemiesInRange(R.Range + 100) > 0)
                                         .OrderByDescending(
-                                            p => enemies.Count(e => e.UnitPosition.LSDistance(p) <= R.Range))
-                                        .ThenBy(p => p.LSDistance(Game.CursorPos))
+                                            p => enemies.Count(e => e.UnitPosition.Distance(p) <= R.Range))
+                                        .ThenBy(p => p.Distance(Game.CursorPos))
                                         .FirstOrDefault();
                                 break;
                             case 2:
@@ -171,8 +171,8 @@ namespace UnderratedAIO.Champions
                         }
                     }
 
-                    if (point.LSIsValid() && player.LSDistance(point) > 10 &&
-                        point.LSCountEnemiesInRange(R.Range) > player.LSCountEnemiesInRange(R.Range))
+                    if (point.IsValid() && player.Distance(point) > 10 &&
+                        point.CountEnemiesInRange(R.Range) > player.CountEnemiesInRange(R.Range))
                     {
                         orbwalker.SetMovement(false);
                         EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, point);
@@ -207,7 +207,7 @@ namespace UnderratedAIO.Champions
             {
                 return;
             }
-            if (config.Item("useeLC", true).GetValue<bool>() && E.LSIsReady())
+            if (config.Item("useeLC", true).GetValue<bool>() && E.IsReady())
             {
                 var bestPos =
                     MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.NotAlly)
@@ -232,14 +232,14 @@ namespace UnderratedAIO.Champions
                 return;
             }
             bool canKill = ComboDamage(target) + ItemHandler.GetItemsDamage(target) +
-                           player.LSGetAutoAttackDamage(target) * 2 > target.Health;
+                           player.GetAutoAttackDamage(target) * 2 > target.Health;
             var ignitedmg = (float) player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
-            bool hasIgnite = player.Spellbook.CanUseSpell(player.LSGetSpellSlot("SummonerDot")) == SpellState.Ready;
+            bool hasIgnite = player.Spellbook.CanUseSpell(player.GetSpellSlot("SummonerDot")) == SpellState.Ready;
             if (config.Item("useIgnite", true).GetValue<bool>() && ignitedmg > target.Health && hasIgnite &&
                 !CombatHelper.CheckCriticalBuffs(target) && !E.CanCast(target) && !justQ && !justE &&
-                (target.LSDistance(player) > 500 || player.HealthPercent < 25))
+                (target.Distance(player) > 500 || player.HealthPercent < 25))
             {
-                player.Spellbook.CastSpell(player.LSGetSpellSlot("SummonerDot"), target);
+                player.Spellbook.CastSpell(player.GetSpellSlot("SummonerDot"), target);
             }
             if (rActive)
             {
@@ -250,28 +250,28 @@ namespace UnderratedAIO.Champions
                 orbwalker.SetAttack(true);
             }
             if (config.Item("useq", true).GetValue<bool>() && Q.CanCast(target) &&
-                target.Health < player.LSGetAutoAttackDamage(target) + Q.GetDamage(target))
+                target.Health < player.GetAutoAttackDamage(target) + Q.GetDamage(target))
             {
                 Q.Cast();
                 EloBuddy.Player.IssueOrder(GameObjectOrder.AutoAttack, target);
             }
-            if (config.Item("usew", true).GetValue<bool>() && !Q.LSIsReady() && !qActive && !player.LSUnderTurret(true) &&
-                W.LSIsReady() && !canKill &&
-                ((!Q.LSIsReady() && !E.LSIsReady() && !justE && target.HealthPercent > 20 &&
+            if (config.Item("usew", true).GetValue<bool>() && !Q.IsReady() && !qActive && !player.UnderTurret(true) &&
+                W.IsReady() && !canKill &&
+                ((!Q.IsReady() && !E.IsReady() && !justE && target.HealthPercent > 20 &&
                   config.Item("wHealth", true).GetValue<Slider>().Value > player.HealthPercent &&
-                  Orbwalking.GetRealAutoAttackRange(target) > player.LSDistance(target) &&
+                  Orbwalking.GetRealAutoAttackRange(target) > player.Distance(target) &&
                   CombatHelper.IsFacing(target, player.Position, 45)) ||
                  (config.Item("wOnFocus", true).GetValue<bool>() &&
                   Program.IncDamages.GetAllyData(player.NetworkId).DamageCount >= 3)))
             {
                 W.Cast();
             }
-            if (R.LSIsReady() && config.Item("userone", true).GetValue<bool>() && canKill && !eActive && !Q.LSIsReady() &&
-                player.LSDistance(target) < R.Range && player.HealthPercent < 55 && player.HealthPercent > 10)
+            if (R.IsReady() && config.Item("userone", true).GetValue<bool>() && canKill && !eActive && !Q.IsReady() &&
+                player.Distance(target) < R.Range && player.HealthPercent < 55 && player.HealthPercent > 10)
             {
                 R.Cast();
             }
-            if (R.LSIsReady() && config.Item("Rmin", true).GetValue<Slider>().Value <= player.LSCountEnemiesInRange(R.Range))
+            if (R.IsReady() && config.Item("Rmin", true).GetValue<Slider>().Value <= player.CountEnemiesInRange(R.Range))
             {
                 R.Cast();
             }
@@ -280,8 +280,8 @@ namespace UnderratedAIO.Champions
                 ItemHandler.UseItems(target, config);
             }
             if (config.Item("usee", true).GetValue<bool>() && E.CanCast(target) && Orbwalking.CanMove(100) &&
-                (config.Item("eMinRange", true).GetValue<Slider>().Value < player.LSDistance(target) ||
-                 player.HealthPercent < 20 || (player.LSCountEnemiesInRange(800) == 1 && target.HealthPercent < 20)))
+                (config.Item("eMinRange", true).GetValue<Slider>().Value < player.Distance(target) ||
+                 player.HealthPercent < 20 || (player.CountEnemiesInRange(800) == 1 && target.HealthPercent < 20)))
             {
                 E.CastOnUnit(target);
             }
@@ -317,22 +317,22 @@ namespace UnderratedAIO.Champions
         private static float ComboDamage(AIHeroClient hero)
         {
             double damage = 0;
-            if (Q.LSIsReady())
+            if (Q.IsReady())
             {
-                damage += player.LSGetAutoAttackDamage(hero) + Q.GetDamage(hero) +
-                          Damage.LSGetSpellDamage(player, hero, SpellSlot.Q);
+                damage += player.GetAutoAttackDamage(hero) + Q.GetDamage(hero) +
+                          Damage.GetSpellDamage(player, hero, SpellSlot.Q);
             }
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.E);
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.E);
             }
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(player, hero, SpellSlot.R) * 4;
+                damage += Damage.GetSpellDamage(player, hero, SpellSlot.R) * 4;
             }
             //damage += ItemHandler.GetItemsDamage(hero);
             var ignitedmg = player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
-            if (player.Spellbook.CanUseSpell(player.LSGetSpellSlot("summonerdot")) == SpellState.Ready &&
+            if (player.Spellbook.CanUseSpell(player.GetSpellSlot("summonerdot")) == SpellState.Ready &&
                 hero.Health < damage + ignitedmg)
             {
                 damage += ignitedmg;

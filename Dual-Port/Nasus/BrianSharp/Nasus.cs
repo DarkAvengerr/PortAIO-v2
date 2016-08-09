@@ -97,7 +97,7 @@ namespace BrianSharp.Plugin
 
         private static void OnUpdate(EventArgs args)
         {
-            if (Player.IsDead || MenuGUI.IsChatOpen || Player.LSIsRecalling())
+            if (Player.IsDead || MenuGUI.IsChatOpen || Player.IsRecalling())
             {
                 return;
             }
@@ -139,11 +139,11 @@ namespace BrianSharp.Plugin
             }
             if (GetValue<bool>("Draw", "W") && W.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, W.Range, W.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, W.Range, W.IsReady() ? Color.Green : Color.Red);
             }
             if (GetValue<bool>("Draw", "E") && E.Level > 0)
             {
-                Render.Circle.DrawCircle(Player.Position, E.Range, E.LSIsReady() ? Color.Green : Color.Red);
+                Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.Green : Color.Red);
             }
         }
 
@@ -160,7 +160,7 @@ namespace BrianSharp.Plugin
 
         private static void AfterAttack(AttackableUnit target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
             {
                 return;
             }
@@ -175,14 +175,14 @@ namespace BrianSharp.Plugin
         {
             if (mode == "Combo")
             {
-                if (GetValue<bool>(mode, "R") && R.LSIsReady() && !Player.LSInFountain() &&
+                if (GetValue<bool>(mode, "R") && R.IsReady() && !Player.InFountain() &&
                     (Player.HealthPercent < GetValue<Slider>(mode, "RHpU").Value ||
-                     Player.LSCountEnemiesInRange(E.Range) >= GetValue<Slider>(mode, "RCountA").Value) &&
+                     Player.CountEnemiesInRange(E.Range) >= GetValue<Slider>(mode, "RCountA").Value) &&
                     R.Cast(PacketCast))
                 {
                     return;
                 }
-                if (GetValue<bool>(mode, "Q") && (Q.LSIsReady() || HaveQ))
+                if (GetValue<bool>(mode, "Q") && (Q.IsReady() || HaveQ))
                 {
                     var target = Orbwalk.GetBestHeroTarget;
                     if (target != null)
@@ -199,16 +199,16 @@ namespace BrianSharp.Plugin
                     }
                 }
             }
-            if (GetValue<bool>(mode, "E") && E.LSIsReady())
+            if (GetValue<bool>(mode, "E") && E.IsReady())
             {
                 var target = E.GetTarget(E.Width / 2);
                 if (target != null && (mode == "Combo" || Orbwalk.InAutoAttackRange(target, 50)) &&
-                    E.Cast(target, PacketCast).LSIsCasted())
+                    E.Cast(target, PacketCast).IsCasted())
                 {
                     return;
                 }
             }
-            if (GetValue<bool>(mode, "W") && W.LSIsReady())
+            if (GetValue<bool>(mode, "W") && W.IsReady())
             {
                 var target = W.GetTarget();
                 if (target != null &&
@@ -229,7 +229,7 @@ namespace BrianSharp.Plugin
             {
                 return;
             }
-            if (GetValue<bool>("Clear", "Q") && (Q.LSIsReady() || HaveQ))
+            if (GetValue<bool>("Clear", "Q") && (Q.IsReady() || HaveQ))
             {
                 var obj =
                     (Obj_AI_Base)
@@ -242,7 +242,7 @@ namespace BrianSharp.Plugin
                                 !CanKill(
                                     i,
                                     GetBonusDmg(i) +
-                                    Player.LSGetAutoAttackDamage(i, true) *
+                                    Player.GetAutoAttackDamage(i, true) *
                                     Math.Floor(Q.Instance.Cooldown / 1 / Player.AttackDelay)));
                 if (obj != null)
                 {
@@ -257,7 +257,7 @@ namespace BrianSharp.Plugin
                     Orbwalk.Attack = true;
                 }
             }
-            if (GetValue<bool>("Clear", "E") && E.LSIsReady())
+            if (GetValue<bool>("Clear", "E") && E.IsReady())
             {
                 var pos = E.GetCircularFarmLocation(minionObj.Cast<Obj_AI_Base>().ToList());
                 if (pos.MinionsHit > 1)
@@ -277,7 +277,7 @@ namespace BrianSharp.Plugin
 
         private static void LastHit()
         {
-            if (!GetValue<bool>("LastHit", "Q") || (!Q.LSIsReady() && !HaveQ))
+            if (!GetValue<bool>("LastHit", "Q") || (!Q.IsReady() && !HaveQ))
             {
                 return;
             }
@@ -302,7 +302,7 @@ namespace BrianSharp.Plugin
 
         private static void KillSteal()
         {
-            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.LSIsReady())
+            if (GetValue<bool>("KillSteal", "Ignite") && Ignite.IsReady())
             {
                 var target = TargetSelector.GetTarget(600, TargetSelector.DamageType.True);
                 if (target != null && CastIgnite(target))
@@ -319,7 +319,7 @@ namespace BrianSharp.Plugin
                     return;
                 }
             }
-            if (GetValue<bool>("KillSteal", "Q") && (Q.LSIsReady() || HaveQ))
+            if (GetValue<bool>("KillSteal", "Q") && (Q.IsReady() || HaveQ))
             {
                 var target = Orbwalk.GetBestHeroTarget;
                 if (target != null && CanKill(target, GetBonusDmg(target)))
@@ -335,7 +335,7 @@ namespace BrianSharp.Plugin
                     Orbwalk.Attack = true;
                 }
             }
-            if (GetValue<bool>("KillSteal", "E") && E.LSIsReady())
+            if (GetValue<bool>("KillSteal", "E") && E.IsReady())
             {
                 var target = E.GetTarget(E.Width);
                 if (target != null && E.IsKillable(target))
@@ -360,7 +360,7 @@ namespace BrianSharp.Plugin
             {
                 dmgItem = Player.BaseAttackDamage * 2;
             }
-            return (Q.LSIsReady() ? Q.GetDamage(target) : 0) + Player.LSGetAutoAttackDamage(target, true) +
+            return (Q.IsReady() ? Q.GetDamage(target) : 0) + Player.GetAutoAttackDamage(target, true) +
                    (dmgItem > 0 ? Player.CalcDamage(target, Damage.DamageType.Physical, dmgItem) : 0);
         }
     }

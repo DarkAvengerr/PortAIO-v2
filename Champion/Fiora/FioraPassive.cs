@@ -22,7 +22,7 @@ namespace FioraProject
             List<Vector2> RadiusPoints = new List<Vector2>();
             for (int i = 50; i <= 300; i = i + 25)
             {
-                var x = targetpredictedpos.LSExtend(passivepredictedposition, i);
+                var x = targetpredictedpos.Extend(passivepredictedposition, i);
                 for (int j = -45; j <= 45; j = j + 5)
                 {
                     RadiusPoints.Add(x.RotateAround(targetpredictedpos, j * (float)(Math.PI / 180)));
@@ -34,8 +34,8 @@ namespace FioraProject
         {
             var allobjects = GetPassiveObjects()
                 .Where(x => x.Object != null && x.Object.IsValid
-                           && x.Object.Position.LSTo2D().LSDistance(target.Position.LSTo2D()) <= 50);
-            var targetpredictedpos = Prediction.GetPrediction(target, delay).UnitPosition.LSTo2D();
+                           && x.Object.Position.To2D().Distance(target.Position.To2D()) <= 50);
+            var targetpredictedpos = Prediction.GetPrediction(target, delay).UnitPosition.To2D();
             if (!allobjects.Any())
             {
                 return new PassiveStatus(false, PassiveType.None, new Vector2(), new List<PassiveDirection>(), new List<Vector2>());

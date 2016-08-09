@@ -60,12 +60,12 @@ using EloBuddy;
             switch (mode)
             {
                 case 1:
-                    var b = new Geometry.Polygon.Sector(Draven.Position.LSTo2D(), Game.CursorPos.LSTo2D() - Draven.Position.LSTo2D(), DravenMenu.Config.Item("sectorAngle").GetValue<Slider>().Value
-                        * (float)Math.PI / 180, DravenMenu.Config.Item("catchRadius").GetValue<Slider>().Value).IsOutside(a.AxeObj.Position.LSExtend(Game.CursorPos, 30).LSTo2D());
+                    var b = new Geometry.Polygon.Sector(Draven.Position.To2D(), Game.CursorPos.To2D() - Draven.Position.To2D(), DravenMenu.Config.Item("sectorAngle").GetValue<Slider>().Value
+                        * (float)Math.PI / 180, DravenMenu.Config.Item("catchRadius").GetValue<Slider>().Value).IsOutside(a.AxeObj.Position.Extend(Game.CursorPos, 30).To2D());
 
                     return !b;
                 default:
-                    return a.AxeObj.Position.LSDistance(Game.CursorPos) <
+                    return a.AxeObj.Position.Distance(Game.CursorPos) <
                            DravenMenu.Config.Item("catchRadius").GetValue<Slider>().Value;
             }
         }
@@ -73,7 +73,7 @@ using EloBuddy;
         public static void AIHeroClient_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!sender.IsMe) return;
-            if (args.SData.LSIsAutoAttack())
+            if (args.SData.IsAutoAttack())
             {
                 LastAa = Environment.TickCount;
             }
@@ -86,13 +86,13 @@ using EloBuddy;
         public static void OnCreate(GameObject sender, EventArgs args)
         {
             var name = sender.Name;
-            if ((AxesList.Contains(name)) && sender.Position.LSDistance(ObjectManager.Player.Position) / ObjectManager.Player.MoveSpeed <= 2)
+            if ((AxesList.Contains(name)) && sender.Position.Distance(ObjectManager.Player.Position) / ObjectManager.Player.MoveSpeed <= 2)
             {
                 AxeSpots.Add(new Axe(sender));
             }
 
             if ((QBuffList.Contains(name)) &&
-                sender.Position.LSDistance(ObjectManager.Player.Position) < 100)
+                sender.Position.Distance(ObjectManager.Player.Position) < 100)
             {
                 CurrentAxes += 1;
             }
@@ -109,7 +109,7 @@ using EloBuddy;
                 }
             }
 
-            if ((QBuffList.Contains(sender.Name)) && sender.Position.LSDistance(ObjectManager.Player.Position) < 300)
+            if ((QBuffList.Contains(sender.Name)) && sender.Position.Distance(ObjectManager.Player.Position) < 300)
             {
                 if (CurrentAxes == 0)
                 {

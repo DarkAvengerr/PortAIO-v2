@@ -184,16 +184,16 @@ using EloBuddy; namespace EloFactory_Ekko
 
             #region Sort R Auto
 
-            if (Config.Item("Ekko.RAuto").GetValue<bool>() && R.LSIsReady())
+            if (Config.Item("Ekko.RAuto").GetValue<bool>() && R.IsReady())
             {
                 if (Config.Item("Ekko.UseBurstRComboAuto").GetValue<bool>() && Player.HealthPercent >= Config.Item("Ekko.MinimumHPBurstRAuto").GetValue<Slider>().Value)
                 {
-                    var EnemiesCNoDash = HeroManager.Enemies.Count(x => x.IsValid<AIHeroClient>() && x.LSIsValidTarget() && !x.IsDead && x.LSDistance(EkkoUlt.Position) < 400 && getComboDamageUlt(x) > x.Health);
-                    var CountEnemiesIn800 = HeroManager.Enemies.Count(x => x.IsValid<AIHeroClient>() && x.LSIsValidTarget() && !x.IsDead && x.LSDistance(EkkoUlt.Position) < 800);
-                    var CountAlliesIn1000 = HeroManager.Allies.Count(x => x.IsValid<AIHeroClient>() && x.LSIsValidTarget() && !x.IsDead && x.LSDistance(EkkoUlt.Position) < 1000);
+                    var EnemiesCNoDash = HeroManager.Enemies.Count(x => x.IsValid<AIHeroClient>() && x.IsValidTarget() && !x.IsDead && x.Distance(EkkoUlt.Position) < 400 && getComboDamageUlt(x) > x.Health);
+                    var CountEnemiesIn800 = HeroManager.Enemies.Count(x => x.IsValid<AIHeroClient>() && x.IsValidTarget() && !x.IsDead && x.Distance(EkkoUlt.Position) < 800);
+                    var CountAlliesIn1000 = HeroManager.Allies.Count(x => x.IsValid<AIHeroClient>() && x.IsValidTarget() && !x.IsDead && x.Distance(EkkoUlt.Position) < 1000);
 
                     var target = TargetSelector.GetTarget(850, TargetSelector.DamageType.Magical);
-                    if (Player.LSCountEnemiesInRange(850) == 0 || getComboDamageNoUlt(target) < target.Health)
+                    if (Player.CountEnemiesInRange(850) == 0 || getComboDamageNoUlt(target) < target.Health)
                     {
                         if (EnemiesCNoDash >= Config.Item("Ekko.MinimumEnemiesBurstRAuto").GetValue<Slider>().Value && CountEnemiesIn800 <= Config.Item("Ekko.MinimumEnemiesDrangeRAuto").GetValue<Slider>().Value)
                         {
@@ -208,7 +208,7 @@ using EloBuddy; namespace EloFactory_Ekko
             if (Config.Item("Ekko.AutoWOnStunTarget").GetValue<bool>())
             {
                 var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-                if (target.LSIsValidTarget() && target.HasBuffOfType(BuffType.Stun) && Player.LSDistance(target) < W.Range)
+                if (target.IsValidTarget() && target.HasBuffOfType(BuffType.Stun) && Player.Distance(target) < W.Range)
                 {
                     W.CastIfHitchanceEquals(target, HitChance.High, true);
                 }
@@ -238,39 +238,39 @@ using EloBuddy; namespace EloFactory_Ekko
         {
 
             double ShouldUseOn = ShouldUse(args.SData.Name);
-            if (unit.Team != ObjectManager.Player.Team && ShouldUseOn >= 0f && unit.LSIsValidTarget(Q.Range))
+            if (unit.Team != ObjectManager.Player.Team && ShouldUseOn >= 0f && unit.IsValidTarget(Q.Range))
             {
 
-                if (Config.Item("Ekko.WInterrupt").GetValue<bool>() && W.LSIsReady() && Player.Mana >= WMANA && Player.LSDistance(unit) <= W.Range)
+                if (Config.Item("Ekko.WInterrupt").GetValue<bool>() && W.IsReady() && Player.Mana >= WMANA && Player.Distance(unit) <= W.Range)
                 {
                     W.CastIfHitchanceEquals(unit, HitChance.High, true);
                 }
 
             }
 
-            if (Config.Item("Ekko.RAuto").GetValue<bool>() && R.LSIsReady())
+            if (Config.Item("Ekko.RAuto").GetValue<bool>() && R.IsReady())
             {
                 if (Config.Item("Ekko.UseSafeRComboAuto").GetValue<bool>() && Player.HealthPercent <= Config.Item("Ekko.MinimumHPSafeRAuto").GetValue<Slider>().Value)
                 {
                     if ((unit.IsValid<AIHeroClient>() || unit.IsValid<Obj_AI_Turret>()) && unit.IsEnemy && args.Target.IsMe)
                     {
-                        if (Player.LSCountEnemiesInRange(1300) > 1)
+                        if (Player.CountEnemiesInRange(1300) > 1)
                         {
-                            if (Player.LSCountAlliesInRange(1300) >= 1 + 1)
+                            if (Player.CountAlliesInRange(1300) >= 1 + 1)
                             {
                                 R.Cast();
                                 return;
                             }
-                            if (Player.LSCountAlliesInRange(1300) == 0 + 1)
+                            if (Player.CountAlliesInRange(1300) == 0 + 1)
                             {
-                                if (unit.LSGetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.LSGetAutoAttackDamage(Player) >= Player.Health && args.SData.LSIsAutoAttack()))
+                                if (unit.GetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.GetAutoAttackDamage(Player) >= Player.Health && args.SData.IsAutoAttack()))
                                 {
                                     R.Cast();
                                     return;
                                 }
                             }
                         }
-                        else if (unit.LSGetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.LSGetAutoAttackDamage(Player) >= Player.Health && args.SData.LSIsAutoAttack()))
+                        else if (unit.GetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.GetAutoAttackDamage(Player) >= Player.Health && args.SData.IsAutoAttack()))
                         {
                             R.Cast();
                             return;
@@ -282,25 +282,25 @@ using EloBuddy; namespace EloFactory_Ekko
 
             if ((unit.IsValid<AIHeroClient>() || unit.IsValid<Obj_AI_Turret>()) && unit.IsEnemy && args.Target.IsMe && Config.Item("Ekko.useZhonyasHourglass").GetValue<bool>() && ZhonyasHourglass.IsReady() && Player.HealthPercent <= Config.Item("Ekko.MinimumHPtoZhonyasHourglass").GetValue<Slider>().Value)
             {
-                if (Player.LSCountEnemiesInRange(1300) > 1)
+                if (Player.CountEnemiesInRange(1300) > 1)
                 {
-                    if (Player.LSCountAlliesInRange(1300) >= 1 + 1)
+                    if (Player.CountAlliesInRange(1300) >= 1 + 1)
                     {
                         ZhonyasHourglass.Cast();
                         return;
                     }
-                    if (Player.LSCountAlliesInRange(1300) == 0 + 1)
+                    if (Player.CountAlliesInRange(1300) == 0 + 1)
                     {
-                        if (unit.LSGetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.LSGetAutoAttackDamage(Player) >= Player.Health && args.SData.LSIsAutoAttack()))
+                        if (unit.GetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.GetAutoAttackDamage(Player) >= Player.Health && args.SData.IsAutoAttack()))
                         {
                             ZhonyasHourglass.Cast();
                             return;
                         }
                     }
                 }
-                if (Player.LSCountEnemiesInRange(1300) == 1)
+                if (Player.CountEnemiesInRange(1300) == 1)
                 {
-                    if (unit.LSGetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.LSGetAutoAttackDamage(Player) >= Player.Health && args.SData.LSIsAutoAttack()))
+                    if (unit.GetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.GetAutoAttackDamage(Player) >= Player.Health && args.SData.IsAutoAttack()))
                     {
                         ZhonyasHourglass.Cast();
                         return;
@@ -311,25 +311,25 @@ using EloBuddy; namespace EloFactory_Ekko
 
             if ((unit.IsValid<AIHeroClient>() || unit.IsValid<Obj_AI_Turret>()) && unit.IsEnemy && args.Target.IsMe && Config.Item("Ekko.useWoogletsWitchcap").GetValue<bool>() && WoogletsWitchcap.IsReady() && Player.HealthPercent <= Config.Item("Ekko.MinimumHPtoWoogletsWitchcap").GetValue<Slider>().Value)
             {
-                if (Player.LSCountEnemiesInRange(1300) > 1)
+                if (Player.CountEnemiesInRange(1300) > 1)
                 {
-                    if (Player.LSCountAlliesInRange(1300) >= 1 + 1)
+                    if (Player.CountAlliesInRange(1300) >= 1 + 1)
                     {
                         WoogletsWitchcap.Cast();
                         return;
                     }
-                    if (Player.LSCountAlliesInRange(1300) == 0 + 1)
+                    if (Player.CountAlliesInRange(1300) == 0 + 1)
                     {
-                        if (unit.LSGetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.LSGetAutoAttackDamage(Player) >= Player.Health && args.SData.LSIsAutoAttack()))
+                        if (unit.GetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.GetAutoAttackDamage(Player) >= Player.Health && args.SData.IsAutoAttack()))
                         {
                             WoogletsWitchcap.Cast();
                             return;
                         }
                     }
                 }
-                if (Player.LSCountEnemiesInRange(1300) == 1)
+                if (Player.CountEnemiesInRange(1300) == 1)
                 {
-                    if (unit.LSGetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.LSGetAutoAttackDamage(Player) >= Player.Health && args.SData.LSIsAutoAttack()))
+                    if (unit.GetSpellDamage(Player, args.SData.Name) >= Player.Health || (unit.GetAutoAttackDamage(Player) >= Player.Health && args.SData.IsAutoAttack()))
                     {
                         WoogletsWitchcap.Cast();
                         return;
@@ -341,7 +341,7 @@ using EloBuddy; namespace EloFactory_Ekko
 
             if (Config.Item("Ekko.HarassActive").GetValue<KeyBind>().Active || Config.Item("Ekko.HarassActiveT").GetValue<KeyBind>().Active)
             {
-                if (Config.Item("Ekko.QWhenEnemyCastHarass").GetValue<bool>() && (unit.IsValid<AIHeroClient>() && !unit.IsValid<Obj_AI_Turret>()) && unit.IsEnemy && args.Target.IsMe && Q.LSIsReady() && Player.LSDistance(unit) <= Q.Range)
+                if (Config.Item("Ekko.QWhenEnemyCastHarass").GetValue<bool>() && (unit.IsValid<AIHeroClient>() && !unit.IsValid<Obj_AI_Turret>()) && unit.IsEnemy && args.Target.IsMe && Q.IsReady() && Player.Distance(unit) <= Q.Range)
                 {
                     Q.CastIfHitchanceEquals(unit, HitChance.High, true);
                 }
@@ -357,12 +357,12 @@ using EloBuddy; namespace EloFactory_Ekko
         static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
 
-            if (Config.Item("Ekko.AutoQEGC").GetValue<bool>() && Q.LSIsReady() && (Player.Mana >= EMANA + QMANA) && Player.LSDistance(gapcloser.Sender) < Q.Range)
+            if (Config.Item("Ekko.AutoQEGC").GetValue<bool>() && Q.IsReady() && (Player.Mana >= EMANA + QMANA) && Player.Distance(gapcloser.Sender) < Q.Range)
             {
                 Q.CastIfHitchanceEquals(gapcloser.Sender, HitChance.High, true);
             }
 
-            if (Config.Item("Ekko.AutoWEGC").GetValue<bool>() && W.LSIsReady() && (Player.Mana >= EMANA + WMANA) && Player.LSDistance(gapcloser.Sender) < Q.Range)
+            if (Config.Item("Ekko.AutoWEGC").GetValue<bool>() && W.IsReady() && (Player.Mana >= EMANA + WMANA) && Player.Distance(gapcloser.Sender) < Q.Range)
             {
                 W.Cast(Player.ServerPosition, true);
             }
@@ -381,7 +381,7 @@ using EloBuddy; namespace EloFactory_Ekko
             if (sender.NetworkId == target.NetworkId)
             {
 
-                if (useQ && Q.LSIsReady() && Player.Mana >= QMANA && args.EndPos.LSDistance(Player) <= Q.Range)
+                if (useQ && Q.IsReady() && Player.Mana >= QMANA && args.EndPos.Distance(Player) <= Q.Range)
                 {
 
                     var delay = (int)(args.EndTick - Game.Time - Q.Delay - 0.1f);
@@ -437,32 +437,32 @@ using EloBuddy; namespace EloFactory_Ekko
             var useR = Config.Item("Ekko.UseRCombo").GetValue<bool>();
 
             #region Sort R combo mode
-            if (useR && R.LSIsReady())
+            if (useR && R.IsReady())
             {
                 RLogic();
             }
             #endregion
 
             var target = TargetSelector.GetTarget(Q.Range + R.Range, TargetSelector.DamageType.Magical);
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
 
                 #region Sort W combo mode
-                if (useW && W.LSIsReady() && Player.Mana >= WMANA)
+                if (useW && W.IsReady() && Player.Mana >= WMANA)
                 {
                     WLogic();
                 }
                 #endregion
 
                 #region Sort E combo mode
-                if (useE && E.LSIsReady() && Player.Mana >= EMANA)
+                if (useE && E.IsReady() && Player.Mana >= EMANA)
                 {
                     ELogic();
                 }
                 #endregion
 
                 #region Sort Q combo mode
-                if (useQ && Q.LSIsReady() && Player.Mana >= QMANA)
+                if (useQ && Q.IsReady() && Player.Mana >= QMANA)
                 {
                     QLogic();
                 }
@@ -484,12 +484,12 @@ using EloBuddy; namespace EloFactory_Ekko
             var QMinMana = Config.Item("Ekko.QMiniManaHarass").GetValue<Slider>().Value;
             var EMinMana = Config.Item("Ekko.EMiniManaHarass").GetValue<Slider>().Value;
 
-            if (useQ && Q.LSIsReady() && Player.LSDistance(targetH) <= Q.Range && Player.ManaPercent >= QMinMana)
+            if (useQ && Q.IsReady() && Player.Distance(targetH) <= Q.Range && Player.ManaPercent >= QMinMana)
             {
                 Q.CastIfHitchanceEquals(targetH, HitChance.High, true);
             }
 
-            if (useE && E.LSIsReady() && targetH.GetBuffCount("EkkoStacks") == 2 && Player.LSDistance(targetH) <= E.Range + 450 && Player.ManaPercent >= EMinMana)
+            if (useE && E.IsReady() && targetH.GetBuffCount("EkkoStacks") == 2 && Player.Distance(targetH) <= E.Range + 450 && Player.ManaPercent >= EMinMana)
             {
                 E.Cast(targetH.ServerPosition, true);
             }
@@ -507,7 +507,7 @@ using EloBuddy; namespace EloFactory_Ekko
             var QMinMana = Config.Item("Ekko.QMiniManaLaneClear").GetValue<Slider>().Value;
             var WMinMana = Config.Item("Ekko.WMiniManaLaneClear").GetValue<Slider>().Value;
 
-            if (useQ && Q.LSIsReady() && Player.Mana >= QMANA)
+            if (useQ && Q.IsReady() && Player.Mana >= QMANA)
             {
                 var allMinionsQ = MinionManager.GetMinions(Player.Position, 1000, MinionTypes.All, MinionTeam.Enemy);
 
@@ -521,7 +521,7 @@ using EloBuddy; namespace EloFactory_Ekko
                 }
             }
 
-            if (useW && W.LSIsReady() && Player.Mana >= WMANA && Player.ManaPercent >= WMinMana)
+            if (useW && W.IsReady() && Player.Mana >= WMANA && Player.ManaPercent >= WMinMana)
             {
                 var allMinionsW = MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Enemy);
 
@@ -552,15 +552,15 @@ using EloBuddy; namespace EloFactory_Ekko
 
             var MinionN = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
 
-            if (!MinionN.LSIsValidTarget() || MinionN == null)
+            if (!MinionN.IsValidTarget() || MinionN == null)
             {
                 LaneClear();
                 return;
             }
 
-            if (Config.Item("Ekko.SafeJungleClear").GetValue<bool>() && Player.LSCountEnemiesInRange(1500) > 0) return;
+            if (Config.Item("Ekko.SafeJungleClear").GetValue<bool>() && Player.CountEnemiesInRange(1500) > 0) return;
 
-            if (useQ && Q.LSIsReady() && Player.Mana >= QMANA && Player.ManaPercent >= QMinMana)
+            if (useQ && Q.IsReady() && Player.Mana >= QMANA && Player.ManaPercent >= QMinMana)
             {
                 var allMonsterQ = MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
@@ -571,7 +571,7 @@ using EloBuddy; namespace EloFactory_Ekko
                 }
             }
 
-            if (useW && W.LSIsReady() && Player.Mana >= WMANA && Player.ManaPercent >= WMinMana)
+            if (useW && W.IsReady() && Player.Mana >= WMANA && Player.ManaPercent >= WMinMana)
             {
                 var allMonsterW = MinionManager.GetMinions(Player.Position, Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
@@ -583,7 +583,7 @@ using EloBuddy; namespace EloFactory_Ekko
             }
 
 
-            if (useE && E.LSIsReady() && Player.Mana >= EMANA && Player.ManaPercent >= EMinMana)
+            if (useE && E.IsReady() && Player.Mana >= EMANA && Player.ManaPercent >= EMinMana)
             {
                 var MinionE = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
 
@@ -603,45 +603,45 @@ using EloBuddy; namespace EloFactory_Ekko
             foreach (var target in ObjectManager.Get<AIHeroClient>().Where(target => !target.IsMe && target.Team != ObjectManager.Player.Team))
             {
 
-                if (useQKS && Q.LSIsReady() && Player.Mana >= QMANA && target.Health < Q.GetDamage(target) && Player.LSDistance(target) <= Q.Range && !target.IsDead && target.LSIsValidTarget())
+                if (useQKS && Q.IsReady() && Player.Mana >= QMANA && target.Health < Q.GetDamage(target) && Player.Distance(target) <= Q.Range && !target.IsDead && target.IsValidTarget())
                 {
                     Q.CastIfHitchanceEquals(target, HitChance.High, true);
                     return;
                 }
 
-                if (useEKS && E.LSIsReady() && Player.Mana >= EMANA && target.Health < E.GetDamage(target) && Player.LSDistance(target) <= E.Range + 450 && !target.IsDead && target.LSIsValidTarget())
+                if (useEKS && E.IsReady() && Player.Mana >= EMANA && target.Health < E.GetDamage(target) && Player.Distance(target) <= E.Range + 450 && !target.IsDead && target.IsValidTarget())
                 {
                     E.Cast(target.ServerPosition, true);
                     EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, target);
                     return;
                 }
 
-                if (useIgniteKS && Ignite.Slot != SpellSlot.Unknown && Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) > target.Health && target.LSIsValidTarget(Ignite.Range))
+                if (useIgniteKS && Ignite.Slot != SpellSlot.Unknown && Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) > target.Health && target.IsValidTarget(Ignite.Range))
                 {
                     Ignite.Cast(target, true);
                 }
 
-                if (useQKS && useEKS && Q.LSIsReady() && E.LSIsReady() && Player.Mana >= QMANA + EMANA && target.Health < E.GetDamage(target) + Q.GetDamage(target) && Player.LSDistance(target) <= E.Range + 450 && !target.IsDead && target.LSIsValidTarget())
+                if (useQKS && useEKS && Q.IsReady() && E.IsReady() && Player.Mana >= QMANA + EMANA && target.Health < E.GetDamage(target) + Q.GetDamage(target) && Player.Distance(target) <= E.Range + 450 && !target.IsDead && target.IsValidTarget())
                 {
                     E.Cast(target.ServerPosition, true);
                     EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, target);
                     return;
                 }
 
-                if (useQKS && useIgniteKS && Ignite.Slot != SpellSlot.Unknown && Q.LSIsReady() && Player.Mana >= QMANA && target.Health < Q.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.LSDistance(target) < 600 && !target.IsDead && target.LSIsValidTarget())
+                if (useQKS && useIgniteKS && Ignite.Slot != SpellSlot.Unknown && Q.IsReady() && Player.Mana >= QMANA && target.Health < Q.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.Distance(target) < 600 && !target.IsDead && target.IsValidTarget())
                 {
                     Q.CastIfHitchanceEquals(target, HitChance.High, true);
                     return;
                 }
 
-                if (useEKS && useIgniteKS && Ignite.Slot != SpellSlot.Unknown && E.LSIsReady() && Player.Mana >= EMANA && target.Health < E.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.LSDistance(target) <= E.Range + 450 && !target.IsDead && target.LSIsValidTarget())
+                if (useEKS && useIgniteKS && Ignite.Slot != SpellSlot.Unknown && E.IsReady() && Player.Mana >= EMANA && target.Health < E.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.Distance(target) <= E.Range + 450 && !target.IsDead && target.IsValidTarget())
                 {
                     E.Cast(target.ServerPosition, true);
                     EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, target);
                     return;
                 }
 
-                if (useQKS && useEKS && useIgniteKS && Ignite.Slot != SpellSlot.Unknown && Q.LSIsReady() && E.LSIsReady() && Player.Mana >= QMANA + EMANA && target.Health < Q.GetDamage(target) + E.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.LSDistance(target) <= E.Range + 450 && !target.IsDead && target.LSIsValidTarget())
+                if (useQKS && useEKS && useIgniteKS && Ignite.Slot != SpellSlot.Unknown && Q.IsReady() && E.IsReady() && Player.Mana >= QMANA + EMANA && target.Health < Q.GetDamage(target) + E.GetDamage(target) + Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite) && Player.Distance(target) <= E.Range + 450 && !target.IsDead && target.IsValidTarget())
                 {
                     E.Cast(target.ServerPosition, true);
                     EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, target);
@@ -745,22 +745,22 @@ using EloBuddy; namespace EloFactory_Ekko
         #region PotionManager
         public static void PotionManager()
         {
-            if (Player.Level == 1 && Player.LSCountEnemiesInRange(1000) == 1 && Player.Health >= Player.MaxHealth * 0.35) return;
-            if (Player.Level == 1 && Player.LSCountEnemiesInRange(1000) == 2 && Player.Health >= Player.MaxHealth * 0.50) return;
+            if (Player.Level == 1 && Player.CountEnemiesInRange(1000) == 1 && Player.Health >= Player.MaxHealth * 0.35) return;
+            if (Player.Level == 1 && Player.CountEnemiesInRange(1000) == 2 && Player.Health >= Player.MaxHealth * 0.50) return;
 
-            if (Config.Item("Ekko.AutoPotion").GetValue<bool>() && !Player.LSInFountain() && !Player.LSIsRecalling() && !Player.IsDead)
+            if (Config.Item("Ekko.AutoPotion").GetValue<bool>() && !Player.InFountain() && !Player.IsRecalling() && !Player.IsDead)
             {
                 #region BiscuitofRejuvenation
-                if (BiscuitofRejuvenation.IsReady() && !Player.LSHasBuff("ItemMiniRegenPotion") && !Player.LSHasBuff("ItemCrystalFlask"))
+                if (BiscuitofRejuvenation.IsReady() && !Player.HasBuff("ItemMiniRegenPotion") && !Player.HasBuff("ItemCrystalFlask"))
                 {
 
-                    if (Player.MaxHealth > Player.Health + 170 && Player.MaxMana > Player.Mana + 10 && Player.LSCountEnemiesInRange(1000) > 0 &&
+                    if (Player.MaxHealth > Player.Health + 170 && Player.MaxMana > Player.Mana + 10 && Player.CountEnemiesInRange(1000) > 0 &&
                         Player.Health < Player.MaxHealth * 0.75)
                     {
                         BiscuitofRejuvenation.Cast();
                     }
 
-                    else if (Player.MaxHealth > Player.Health + 170 && Player.MaxMana > Player.Mana + 10 && Player.LSCountEnemiesInRange(1000) == 0 &&
+                    else if (Player.MaxHealth > Player.Health + 170 && Player.MaxMana > Player.Mana + 10 && Player.CountEnemiesInRange(1000) == 0 &&
                         Player.Health < Player.MaxHealth * 0.6)
                     {
                         BiscuitofRejuvenation.Cast();
@@ -770,16 +770,16 @@ using EloBuddy; namespace EloFactory_Ekko
                 #endregion
 
                 #region HealthPotion
-                else if (HealthPotion.IsReady() && !Player.LSHasBuff("RegenerationPotion") && !Player.LSHasBuff("ItemCrystalFlask"))
+                else if (HealthPotion.IsReady() && !Player.HasBuff("RegenerationPotion") && !Player.HasBuff("ItemCrystalFlask"))
                 {
 
-                    if (Player.MaxHealth > Player.Health + 150 && Player.LSCountEnemiesInRange(1000) > 0 &&
+                    if (Player.MaxHealth > Player.Health + 150 && Player.CountEnemiesInRange(1000) > 0 &&
                         Player.Health < Player.MaxHealth * 0.75)
                     {
                         HealthPotion.Cast();
                     }
 
-                    else if (Player.MaxHealth > Player.Health + 150 && Player.LSCountEnemiesInRange(1000) == 0 &&
+                    else if (Player.MaxHealth > Player.Health + 150 && Player.CountEnemiesInRange(1000) == 0 &&
                         Player.Health < Player.MaxHealth * 0.6)
                     {
                         HealthPotion.Cast();
@@ -789,16 +789,16 @@ using EloBuddy; namespace EloFactory_Ekko
                 #endregion
 
                 #region CrystallineFlask
-                else if (CrystallineFlask.IsReady() && !Player.LSHasBuff("ItemCrystalFlask") && !Player.LSHasBuff("RegenerationPotion") && !Player.LSHasBuff("FlaskOfCrystalWater") && !Player.LSHasBuff("ItemMiniRegenPotion"))
+                else if (CrystallineFlask.IsReady() && !Player.HasBuff("ItemCrystalFlask") && !Player.HasBuff("RegenerationPotion") && !Player.HasBuff("FlaskOfCrystalWater") && !Player.HasBuff("ItemMiniRegenPotion"))
                 {
 
-                    if (Player.MaxHealth > Player.Health + 120 && Player.MaxMana > Player.Mana + 60 && Player.LSCountEnemiesInRange(1000) > 0 &&
+                    if (Player.MaxHealth > Player.Health + 120 && Player.MaxMana > Player.Mana + 60 && Player.CountEnemiesInRange(1000) > 0 &&
                         (Player.Health < Player.MaxHealth * 0.85 || Player.Mana < Player.MaxMana * 0.65))
                     {
                         CrystallineFlask.Cast();
                     }
 
-                    else if (Player.MaxHealth > Player.Health + 120 && Player.MaxMana > Player.Mana + 60 && Player.LSCountEnemiesInRange(1000) == 0 &&
+                    else if (Player.MaxHealth > Player.Health + 120 && Player.MaxMana > Player.Mana + 60 && Player.CountEnemiesInRange(1000) == 0 &&
                         (Player.Health < Player.MaxHealth * 0.7 || Player.Mana < Player.MaxMana * 0.5))
                     {
                         CrystallineFlask.Cast();
@@ -808,16 +808,16 @@ using EloBuddy; namespace EloFactory_Ekko
                 #endregion
 
                 #region ManaPotion
-                else if (ManaPotion.IsReady() && !Player.LSHasBuff("FlaskOfCrystalWater") && !Player.LSHasBuff("ItemCrystalFlask"))
+                else if (ManaPotion.IsReady() && !Player.HasBuff("FlaskOfCrystalWater") && !Player.HasBuff("ItemCrystalFlask"))
                 {
 
-                    if (Player.MaxMana > Player.Mana + 100 && Player.LSCountEnemiesInRange(1000) > 0 &&
+                    if (Player.MaxMana > Player.Mana + 100 && Player.CountEnemiesInRange(1000) > 0 &&
                         Player.Mana < Player.MaxMana * 0.7)
                     {
                         ManaPotion.Cast();
                     }
 
-                    else if (Player.MaxMana > Player.Mana + 100 && Player.LSCountEnemiesInRange(1000) == 0 &&
+                    else if (Player.MaxMana > Player.Mana + 100 && Player.CountEnemiesInRange(1000) == 0 &&
                         Player.Mana < Player.MaxMana * 0.4)
                     {
                         ManaPotion.Cast();
@@ -851,7 +851,7 @@ using EloBuddy; namespace EloFactory_Ekko
             if (Config.Item("DrawOrbwalkTarget").GetValue<bool>())
             {
                 var orbT = Orbwalker.GetTarget();
-                if (orbT.LSIsValidTarget())
+                if (orbT.IsValidTarget())
                     Render.Circle.DrawCircle(orbT.Position, 100, System.Drawing.Color.Pink);
             }
 
@@ -886,11 +886,11 @@ using EloBuddy; namespace EloFactory_Ekko
         {
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
 
-            if (Player.LSCountEnemiesInRange(1300) > 1)
+            if (Player.CountEnemiesInRange(1300) > 1)
             {
-                if (Player.LSCountAlliesInRange(1300) >= 1 + 1)
+                if (Player.CountAlliesInRange(1300) >= 1 + 1)
                 {
-                    if (target.LSCountAlliesInRange(Q.Width) >= 1)
+                    if (target.CountAlliesInRange(Q.Width) >= 1)
                     {
                         if (target.GetBuffCount("EkkoStacks") == 2)
                         {
@@ -904,21 +904,21 @@ using EloBuddy; namespace EloFactory_Ekko
                         }
                         return;
                     }
-                    if (target.LSCountAlliesInRange(Q.Width) == 0)
+                    if (target.CountAlliesInRange(Q.Width) == 0)
                     {
                         Q.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                         return;
                     }
                     return;
                 }
-                if (Player.LSCountAlliesInRange(1300) == 0 + 1)
+                if (Player.CountAlliesInRange(1300) == 0 + 1)
                 {
-                    if (target.LSCountAlliesInRange(Q.Width) >= 1)
+                    if (target.CountAlliesInRange(Q.Width) >= 1)
                     {
                         Q.Cast(target, true, true);
                         return;
                     }
-                    if (target.LSCountAlliesInRange(Q.Width) == 0)
+                    if (target.CountAlliesInRange(Q.Width) == 0)
                     {
                         Q.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                         return;
@@ -928,7 +928,7 @@ using EloBuddy; namespace EloFactory_Ekko
                 return;
             }
 
-            if (Player.LSCountEnemiesInRange(1300) == 1)
+            if (Player.CountEnemiesInRange(1300) == 1)
             {
                 Q.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                 return;
@@ -942,27 +942,27 @@ using EloBuddy; namespace EloFactory_Ekko
         {
             var target = TargetSelector.GetTarget(E.Range + 450 + 200, TargetSelector.DamageType.Magical);
 
-            if (Player.LSCountEnemiesInRange(1300) > 1)
+            if (Player.CountEnemiesInRange(1300) > 1)
             {
-                if (target.LSCountAlliesInRange(W.Width) >= 1)
+                if (target.CountAlliesInRange(W.Width) >= 1)
                 {
                     if (Player.HealthPercent <= target.HealthPercent)
                     {
-                        if (Player.LSCountEnemiesInRange(360) >= 1)
+                        if (Player.CountEnemiesInRange(360) >= 1)
                         {
-                            if (target.LSDistance(Player) <= 360)
+                            if (target.Distance(Player) <= 360)
                             {
                                 W.Cast(Player.ServerPosition, true);
                                 return;
                             }
-                            if (target.LSDistance(Player) > 360)
+                            if (target.Distance(Player) > 360)
                             {
                                 W.Cast(target, true, true);
                                 return;
                             }
                             return;
                         }
-                        if (Player.LSCountEnemiesInRange(360) == 0)
+                        if (Player.CountEnemiesInRange(360) == 0)
                         {
                             W.Cast(target, true, true);
                             return;
@@ -988,21 +988,21 @@ using EloBuddy; namespace EloFactory_Ekko
                         }
                         if (Player.HealthPercent < 50)
                         {
-                            if (Player.LSCountEnemiesInRange(360) >= 1)
+                            if (Player.CountEnemiesInRange(360) >= 1)
                             {
-                                if (target.LSDistance(Player) <= 360)
+                                if (target.Distance(Player) <= 360)
                                 {
                                     W.Cast(Player.ServerPosition, true);
                                     return;
                                 }
-                                if (target.LSDistance(Player) > 360)
+                                if (target.Distance(Player) > 360)
                                 {
                                     W.Cast(target, true, true);
                                     return;
                                 }
                                 return;
                             }
-                            if (Player.LSCountEnemiesInRange(360) == 0)
+                            if (Player.CountEnemiesInRange(360) == 0)
                             {
                                 W.Cast(target, true, true);
                                 return;
@@ -1014,23 +1014,23 @@ using EloBuddy; namespace EloFactory_Ekko
                     return;
                 }
 
-                if (target.LSCountAlliesInRange(W.Width) == 0)
+                if (target.CountAlliesInRange(W.Width) == 0)
                 {
-                    if (Player.LSCountEnemiesInRange(360) >= 1)
+                    if (Player.CountEnemiesInRange(360) >= 1)
                     {
-                        if (target.LSDistance(Player) <= 360)
+                        if (target.Distance(Player) <= 360)
                         {
                             W.Cast(Player.ServerPosition, true);
                             return;
                         }
-                        if (target.LSDistance(Player) > 360)
+                        if (target.Distance(Player) > 360)
                         {
                             W.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                             return;
                         }
                         return;
                     }
-                    if (Player.LSCountEnemiesInRange(360) == 0)
+                    if (Player.CountEnemiesInRange(360) == 0)
                     {
                         W.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                         return;
@@ -1040,7 +1040,7 @@ using EloBuddy; namespace EloFactory_Ekko
                 return;
             }
 
-            if (Player.LSCountEnemiesInRange(1300) == 1)
+            if (Player.CountEnemiesInRange(1300) == 1)
             {
                 W.CastIfHitchanceEquals(target, HitChance.VeryHigh, true);
                 return;
@@ -1054,9 +1054,9 @@ using EloBuddy; namespace EloFactory_Ekko
         {
             var target = TargetSelector.GetTarget(E.Range + 425, TargetSelector.DamageType.Magical);
 
-            if (Player.LSDistance(target) > 260)
+            if (Player.Distance(target) > 260)
             {
-                if (Player.HealthPercent >= 50 || R.LSIsReady())
+                if (Player.HealthPercent >= 50 || R.IsReady())
                 {
                     if (target.GetBuffCount("EkkoStacks") == 2)
                     {
@@ -1070,7 +1070,7 @@ using EloBuddy; namespace EloFactory_Ekko
                     }
                     return;
                 }
-                if (Player.HealthPercent < 50 && !R.LSIsReady())
+                if (Player.HealthPercent < 50 && !R.IsReady())
                 {
                     if (target.GetBuffCount("EkkoStacks") == 2)
                     {
@@ -1088,15 +1088,15 @@ using EloBuddy; namespace EloFactory_Ekko
         #region RLogic
         public static void RLogic()
         {
-            var EnemiesCDash = HeroManager.Enemies.Count(x => x.IsValid<AIHeroClient>() && x.LSIsValidTarget() && !x.IsDead && x.LSDistance(EkkoUlt.Position) > 385 && x.LSDistance(EkkoUlt.Position) < 800 && getComboDamageNoUlt(x) > x.Health);
-            var EnemiesCNoDash = HeroManager.Enemies.Count(x => x.IsValid<AIHeroClient>() && x.LSIsValidTarget() && !x.IsDead && x.LSDistance(EkkoUlt.Position) < 385 && getComboDamageUlt(x) > x.Health);
-            var CountEnemiesIn800 = HeroManager.Enemies.Count(x => x.IsValid<AIHeroClient>() && x.LSIsValidTarget() && !x.IsDead && x.LSDistance(EkkoUlt.Position) < 800);
-            var CountAlliesIn1000 = HeroManager.Allies.Count(x => x.IsValid<AIHeroClient>() && x.LSIsValidTarget() && !x.IsDead && x.LSDistance(EkkoUlt.Position) < 1000);
-            var CountEnemiesIn1100 = HeroManager.Enemies.Count(x => x.IsValid<AIHeroClient>() && x.LSIsValidTarget() && !x.IsDead && x.LSDistance(EkkoUlt.Position) < 1100);
-            var CountAlliesIn1300 = HeroManager.Allies.Count(x => x.IsValid<AIHeroClient>() && x.LSIsValidTarget() && !x.IsDead && x.LSDistance(EkkoUlt.Position) < 1300);
+            var EnemiesCDash = HeroManager.Enemies.Count(x => x.IsValid<AIHeroClient>() && x.IsValidTarget() && !x.IsDead && x.Distance(EkkoUlt.Position) > 385 && x.Distance(EkkoUlt.Position) < 800 && getComboDamageNoUlt(x) > x.Health);
+            var EnemiesCNoDash = HeroManager.Enemies.Count(x => x.IsValid<AIHeroClient>() && x.IsValidTarget() && !x.IsDead && x.Distance(EkkoUlt.Position) < 385 && getComboDamageUlt(x) > x.Health);
+            var CountEnemiesIn800 = HeroManager.Enemies.Count(x => x.IsValid<AIHeroClient>() && x.IsValidTarget() && !x.IsDead && x.Distance(EkkoUlt.Position) < 800);
+            var CountAlliesIn1000 = HeroManager.Allies.Count(x => x.IsValid<AIHeroClient>() && x.IsValidTarget() && !x.IsDead && x.Distance(EkkoUlt.Position) < 1000);
+            var CountEnemiesIn1100 = HeroManager.Enemies.Count(x => x.IsValid<AIHeroClient>() && x.IsValidTarget() && !x.IsDead && x.Distance(EkkoUlt.Position) < 1100);
+            var CountAlliesIn1300 = HeroManager.Allies.Count(x => x.IsValid<AIHeroClient>() && x.IsValidTarget() && !x.IsDead && x.Distance(EkkoUlt.Position) < 1300);
 
             var target = TargetSelector.GetTarget(850, TargetSelector.DamageType.Magical);
-            if (Player.LSCountEnemiesInRange(850) == 0 || getComboDamageNoUlt(target) < target.Health)
+            if (Player.CountEnemiesInRange(850) == 0 || getComboDamageNoUlt(target) < target.Health)
             {
                 if (EnemiesCNoDash >= 1 && CountEnemiesIn800 <= 2)
                 {
@@ -1107,11 +1107,11 @@ using EloBuddy; namespace EloFactory_Ekko
                     R.Cast();
                 }
 
-                if (EnemiesCDash >= 1 && CountEnemiesIn1100 <= 2 && E.LSIsReady())
+                if (EnemiesCDash >= 1 && CountEnemiesIn1100 <= 2 && E.IsReady())
                 {
                     R.Cast();
                 }
-                if (EnemiesCDash >= 1 && CountEnemiesIn1100 > 2 && CountAlliesIn1300 >= CountEnemiesIn1100 && E.LSIsReady())
+                if (EnemiesCDash >= 1 && CountEnemiesIn1100 > 2 && CountAlliesIn1300 >= CountEnemiesIn1100 && E.IsReady())
                 {
                     R.Cast();
                 }
@@ -1124,19 +1124,19 @@ using EloBuddy; namespace EloFactory_Ekko
         public static float getComboDamageNoUlt(AIHeroClient hero)
         {
             double damage = 0;
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(Player, hero, SpellSlot.E);
+                damage += Damage.GetSpellDamage(Player, hero, SpellSlot.E);
             }
             if (EMANA + QMANA >= Player.Mana)
             {
-                damage += Damage.LSGetSpellDamage(Player, hero, SpellSlot.Q) * 4;
+                damage += Damage.GetSpellDamage(Player, hero, SpellSlot.Q) * 4;
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                damage += (float)Damage.LSGetSpellDamage(Player, hero, SpellSlot.Q);
+                damage += (float)Damage.GetSpellDamage(Player, hero, SpellSlot.Q);
             }
-            if (Player.Spellbook.CanUseSpell(Player.LSGetSpellSlot("summonerdot")) == SpellState.Ready)
+            if (Player.Spellbook.CanUseSpell(Player.GetSpellSlot("summonerdot")) == SpellState.Ready)
             {
                 damage += (float)Player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
             }
@@ -1146,23 +1146,23 @@ using EloBuddy; namespace EloFactory_Ekko
         public static float getComboDamageUlt(AIHeroClient hero)
         {
             double damage = 0;
-            if (R.LSIsReady())
+            if (R.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(Player, hero, SpellSlot.R);
+                damage += Damage.GetSpellDamage(Player, hero, SpellSlot.R);
             }
-            if (E.LSIsReady())
+            if (E.IsReady())
             {
-                damage += Damage.LSGetSpellDamage(Player, hero, SpellSlot.E);
+                damage += Damage.GetSpellDamage(Player, hero, SpellSlot.E);
             }
             if (EMANA + QMANA >= Player.Mana)
             {
-                damage += Damage.LSGetSpellDamage(Player, hero, SpellSlot.Q) * 4;
+                damage += Damage.GetSpellDamage(Player, hero, SpellSlot.Q) * 4;
             }
-            if (W.LSIsReady())
+            if (W.IsReady())
             {
-                damage += (float)Damage.LSGetSpellDamage(Player, hero, SpellSlot.Q);
+                damage += (float)Damage.GetSpellDamage(Player, hero, SpellSlot.Q);
             }
-            if (Player.Spellbook.CanUseSpell(Player.LSGetSpellSlot("summonerdot")) == SpellState.Ready)
+            if (Player.Spellbook.CanUseSpell(Player.GetSpellSlot("summonerdot")) == SpellState.Ready)
             {
                 damage += (float)Player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
             }

@@ -166,9 +166,9 @@ namespace Pantheon
             {
                 foreach (var objAiHero in from hero in HeroManager.Enemies
                     where
-                        hero.LSDistance(Game.CursorPos) < 150f && hero != null && hero.IsVisible
+                        hero.Distance(Game.CursorPos) < 150f && hero != null && hero.IsVisible
                         && !hero.IsDead
-                    orderby hero.LSDistance(Game.CursorPos) descending
+                    orderby hero.Distance(Game.CursorPos) descending
                     select hero)
                 {
                     if (objAiHero != null && objAiHero.IsVisible && !objAiHero.IsDead)
@@ -209,7 +209,7 @@ namespace Pantheon
                     .Where(e => e.Team != Program.Player.Team && !e.IsDead && e.IsVisible)
                     .Where(e => this.Config.Item("enemy_" + e.ChampionName) != null)
                     .Where(e => this.Config.Item("enemy_" + e.ChampionName).GetValue<bool>())
-                    .Where(e => Program.Player.LSDistance(e) < vDefaultRange)
+                    .Where(e => Program.Player.Distance(e) < vDefaultRange)
                     .Where(jKukuri => "jQuery" != "White guy");
 
             if (this.Config.Item("Set").GetValue<StringList>().SelectedIndex == 1)
@@ -232,7 +232,7 @@ namespace Pantheon
             if (drawEnemy.Active)
             {
                 var t = this.GetTarget(Program.E.Range, TargetSelector.DamageType.Physical);
-                if (t.LSIsValidTarget())
+                if (t.IsValidTarget())
                 {
                     Render.Circle.DrawCircle(t.Position, (float) (t.BoundingRadius*1.5), drawEnemy.Color);
                 }

@@ -54,7 +54,7 @@ using EloBuddy;
 
         private static void DravenOnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (DravenSpells.E.LSIsReady() && gapcloser.Sender.LSIsValidTarget(DravenSpells.E.Range) && Helper.DEnabled("draven.e.antigapcloser"))
+            if (DravenSpells.E.IsReady() && gapcloser.Sender.IsValidTarget(DravenSpells.E.Range) && Helper.DEnabled("draven.e.antigapcloser"))
             {
                 DravenSpells.E.Cast(gapcloser.Sender);
             }
@@ -62,7 +62,7 @@ using EloBuddy;
 
         private static void DravenOnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (!DravenMenu.Config.Item("draven.e.interrupter").GetValue<bool>() || !sender.LSIsValidTarget()) return;
+            if (!DravenMenu.Config.Item("draven.e.interrupter").GetValue<bool>() || !sender.IsValidTarget()) return;
             Interrupter2.DangerLevel a;
             switch (DravenMenu.Config.Item("min.interrupter.danger.level").GetValue<StringList>().SelectedValue)
             {
@@ -82,7 +82,7 @@ using EloBuddy;
                 args.DangerLevel == Interrupter2.DangerLevel.Medium && a != Interrupter2.DangerLevel.Medium &&
                 a != Interrupter2.DangerLevel.High)
             {
-                if (DravenSpells.E.LSIsReady() && sender.LSIsValidTarget(DravenSpells.E.Range))
+                if (DravenSpells.E.IsReady() && sender.IsValidTarget(DravenSpells.E.Range))
                 {
                     DravenSpells.E.Cast(sender);
                 }
@@ -107,26 +107,26 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (DravenSpells.Q.LSIsReady() && Helper.DEnabled("draven.q.combo"))
+            if (DravenSpells.Q.IsReady() && Helper.DEnabled("draven.q.combo"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(ObjectManager.Player))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Orbwalking.GetRealAutoAttackRange(ObjectManager.Player))
                     && DravenAxeHelper.LastQ + 100 < Environment.TickCount && DravenAxeHelper.CurrentAxes < Helper.DSlider("draven.q.combo.axe.count")))
                 {
                     DravenSpells.Q.Cast();
                 }
             }
-            if (DravenSpells.E.LSIsReady() && Helper.DEnabled("draven.e.combo"))
+            if (DravenSpells.E.IsReady() && Helper.DEnabled("draven.e.combo"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.LSIsValidTarget(DravenSpells.E.Range) &&
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(DravenSpells.E.Range) &&
                     DravenSpells.E.GetPrediction(x).Hitchance >= HitChance.High))
                 {
                     DravenSpells.E.Cast(enemy);
                 }
             }
-            if (DravenSpells.R.LSIsReady() && Helper.DEnabled("draven.r.combo"))
+            if (DravenSpells.R.IsReady() && Helper.DEnabled("draven.r.combo"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o => o.LSIsValidTarget(3000) && ObjectManager.Player.LSDistance(o.Position) > Helper.DSlider("draven.min.ult.distance") &&
-                    ObjectManager.Player.LSDistance(o.Position) < Helper.DSlider("draven.max.ult.distance") && DravenSpells.R.GetPrediction(o).Hitchance >= HitChance.Medium &&
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(3000) && ObjectManager.Player.Distance(o.Position) > Helper.DSlider("draven.min.ult.distance") &&
+                    ObjectManager.Player.Distance(o.Position) < Helper.DSlider("draven.max.ult.distance") && DravenSpells.R.GetPrediction(o).Hitchance >= HitChance.Medium &&
                     o.Health < DravenSpells.R.GetDamage(o)))
                 {
                     DravenSpells.R.Cast(enemy);
@@ -140,7 +140,7 @@ using EloBuddy;
                 return;
             }
 
-            if (DravenSpells.Q.LSIsReady() && Helper.DEnabled("draven.q.clear"))
+            if (DravenSpells.Q.IsReady() && Helper.DEnabled("draven.q.clear"))
             {
                 var minions = MinionManager.GetMinions(ObjectManager.Player.Position, EzrealSpells.Q.Range,
                     MinionTypes.All, MinionTeam.NotAlly);
@@ -158,11 +158,11 @@ using EloBuddy;
             {
                 return;
             }
-            if (DravenSpells.Q.LSIsReady() && DravenAxeHelper.CurrentAxes < Helper.DSlider("draven.q.jungle.clear.axe.count") && Helper.DEnabled("draven.q.jungle"))
+            if (DravenSpells.Q.IsReady() && DravenAxeHelper.CurrentAxes < Helper.DSlider("draven.q.jungle.clear.axe.count") && Helper.DEnabled("draven.q.jungle"))
             {
                 DravenSpells.Q.Cast();
             }
-            if (DravenSpells.E.LSIsReady() && Helper.DEnabled("draven.e.jungle"))
+            if (DravenSpells.E.IsReady() && Helper.DEnabled("draven.e.jungle"))
             {
                 DravenSpells.E.Cast(MinionManager.GetMinions(ObjectManager.Player.ServerPosition,
                         Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 100, MinionTypes.All,

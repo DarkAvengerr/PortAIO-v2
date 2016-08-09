@@ -128,7 +128,7 @@ using EloBuddy;
             if (Q.IsCharging)
             {
                 var qPrediction = Q.GetPrediction(t);
-                var hithere = qPrediction.CastPosition.LSExtend(ObjectManager.Player.Position, -90);
+                var hithere = qPrediction.CastPosition.Extend(ObjectManager.Player.Position, -90);
                 if (qPrediction.Hitchance >= HitChance.High)
                 {
                     Q.Cast(hithere);
@@ -177,14 +177,14 @@ using EloBuddy;
 
             if (Modes.ModeCombo.MenuLocal.Item("Combo.Mode").GetValue<StringList>().SelectedIndex == 1
                 && AutoAttackCount == 0
-                && t.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 120) && !Q.IsCharging)
+                && t.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 120) && !Q.IsCharging)
             {
                 return;
             }
 
             //if (Modes.ModeCombo.MenuLocal.Item("Combo.Mode").GetValue<StringList>().SelectedIndex == 1 
             //    && LastAutoAttackTick < LastSpellCastTick 
-            //    && t.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
+            //    && t.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 65))
             //{
             //    return;
             //}
@@ -192,7 +192,7 @@ using EloBuddy;
             if (Q.IsCharging)
             {
                 var qPrediction = Q.GetPrediction(t);
-                var hithere = qPrediction.CastPosition.LSExtend(ObjectManager.Player.Position, -90);
+                var hithere = qPrediction.CastPosition.Extend(ObjectManager.Player.Position, -90);
                 if (qPrediction.Hitchance >= HitChance.High)
                 {
                     Q.Cast(hithere);
@@ -206,7 +206,7 @@ using EloBuddy;
 
         public static void CastE(Obj_AI_Base t)
         {
-            if (!E.LSIsReady() || !t.LSIsValidTarget(E.Range))
+            if (!E.IsReady() || !t.IsValidTarget(E.Range))
             {
                 return;
             }
@@ -219,7 +219,7 @@ using EloBuddy;
             if (Modes.ModeCombo.MenuLocal.Item("Combo.Mode").GetValue<StringList>().SelectedIndex == 1
                 //&& LastAutoAttackTick < LastSpellCastTick
                 && AutoAttackCount == 0
-                && t.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + (t.HasViQKnockBack() ? 170 : 95)))
+                && t.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + (t.HasViQKnockBack() ? 170 : 95)))
             {
                 return;
             }
@@ -249,7 +249,7 @@ using EloBuddy;
 
             if (Modes.ModeCombo.MenuLocal.Item("Combo.Mode").GetValue<StringList>().SelectedIndex == 1
                 && AutoAttackCount == 0
-                && t.LSIsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 120))
+                && t.IsValidTarget(Orbwalking.GetRealAutoAttackRange(null) + 120))
             {
                 return;
             }

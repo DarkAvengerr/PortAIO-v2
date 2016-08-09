@@ -104,17 +104,17 @@ using EloBuddy; namespace SFXChallenger.Managers
                     var target = args.Target as AIHeroClient;
                     if (target != null)
                     {
-                        if (!(sender is AIHeroClient) || args.SData.LSIsAutoAttack())
+                        if (!(sender is AIHeroClient) || args.SData.IsAutoAttack())
                         {
                             Damages.Add(
                                 target.NetworkId,
-                                target.ServerPosition.LSDistance(sender.ServerPosition) / args.SData.MissileSpeed +
-                                Game.Time, (float) sender.LSGetAutoAttackDamage(target));
+                                target.ServerPosition.Distance(sender.ServerPosition) / args.SData.MissileSpeed +
+                                Game.Time, (float) sender.GetAutoAttackDamage(target));
                         }
                         else
                         {
-                            var slot = target.LSGetSpellSlot(args.SData.Name);
-                            if (slot != SpellSlot.Unknown && slot == target.LSGetSpellSlot("SummonerDot"))
+                            var slot = target.GetSpellSlot(args.SData.Name);
+                            if (slot != SpellSlot.Unknown && slot == target.GetSpellSlot("SummonerDot"))
                             {
                                 Damages.Add(
                                     target.NetworkId, Game.Time + 2,
@@ -126,7 +126,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                 var hero = sender as AIHeroClient;
                 if (hero != null && hero.IsAlly)
                 {
-                    var slot = hero.LSGetSpellSlot(args.SData.Name);
+                    var slot = hero.GetSpellSlot(args.SData.Name);
                     if (slot != SpellSlot.Unknown)
                     {
                         if (slot == SpellSlot.Q || slot == SpellSlot.W || slot == SpellSlot.E || slot == SpellSlot.R)
@@ -135,22 +135,22 @@ using EloBuddy; namespace SFXChallenger.Managers
                             {
                                 Damages.Add(
                                     args.Target.NetworkId, Game.Time + 1,
-                                    (float) hero.LSGetSpellDamage(args.Target as AIHeroClient, slot));
+                                    (float) hero.GetSpellDamage(args.Target as AIHeroClient, slot));
                             }
                             else if (args.Target == null)
                             {
                                 foreach (var enemy in
                                     GameObjects.EnemyHeroes.Where(
-                                        e => e.LSIsValidTarget() && e.LSDistance(args.Start) < 300))
+                                        e => e.IsValidTarget() && e.Distance(args.Start) < 300))
                                 {
-                                    var length = (int) args.Start.LSDistance(args.End);
+                                    var length = (int) args.Start.Distance(args.End);
                                     for (int i = 0, l = length > 300 ? 300 : length; i < l; i = i + 50)
                                     {
-                                        var pos = args.Start.LSExtend(args.End, i);
-                                        if (enemy.LSDistance(pos) <= 50)
+                                        var pos = args.Start.Extend(args.End, i);
+                                        if (enemy.Distance(pos) <= 50)
                                         {
                                             Damages.Add(
-                                                enemy.NetworkId, Game.Time + 1, (float) hero.LSGetSpellDamage(enemy, slot));
+                                                enemy.NetworkId, Game.Time + 1, (float) hero.GetSpellDamage(enemy, slot));
                                             break;
                                         }
                                     }

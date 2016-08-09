@@ -19,7 +19,7 @@ namespace Syndra
 
         private static bool InTeamFight(this AIHeroClient player, float range)
         {
-            var enemies = HeroManager.Enemies.Where(e => e.LSDistance(player.Position) < range);
+            var enemies = HeroManager.Enemies.Where(e => e.Distance(player.Position) < range);
 
             if (enemies.Any())
             {

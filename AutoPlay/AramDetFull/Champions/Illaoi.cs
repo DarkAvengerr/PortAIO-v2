@@ -34,9 +34,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
         
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady() || target == null)
+            if (!Q.IsReady() || target == null)
                 return;
-            var enemy = HeroManager.Enemies.FirstOrDefault(x => x.LSIsValidTarget(Q.Range));
+            var enemy = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(Q.Range));
             var enemyGhost = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(x => x.Name == enemy.Name);
             if (enemy != null && enemyGhost == null)
             {
@@ -58,23 +58,23 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || target == null)
+            if (!W.IsReady() || target == null)
                 return;
             W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
             E.Cast(target);
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || target == null)
+            if (!E.IsReady() || target == null)
                 return;
-            if (player.LSCountEnemiesInRange(500) >= 2)
+            if (player.CountEnemiesInRange(500) >= 2)
             {
                 R.Cast(target.Position);
                 Aggresivity.addAgresiveMove(new AgresiveMove(1200,8000));

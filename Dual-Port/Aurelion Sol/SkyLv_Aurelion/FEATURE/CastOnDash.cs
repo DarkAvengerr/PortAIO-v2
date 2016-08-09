@@ -46,7 +46,7 @@ using EloBuddy;
             if (sender.NetworkId == target.NetworkId)
             {
 
-                if (Q.LSIsReady() && Player.LSDistance(sender) < Q.Range && Player.Mana >= Q.ManaCost)
+                if (Q.IsReady() && Player.Distance(sender) < Q.Range && Player.Mana >= Q.ManaCost)
                 {
                     var delay = (int)(args.EndTick - Game.Time - Q.Delay - 0.1f);
                     if (delay > 0)

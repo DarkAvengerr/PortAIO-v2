@@ -15,7 +15,7 @@ using EloBuddy; namespace HoolaRiven
         private static readonly HpBarIndicator Indicator = new HpBarIndicator();
         private const string IsFirstR = "RivenFengShuiEngine";
         private const string IsSecondR = "RivenIzunaBlade";
-        private static readonly SpellSlot Flash = Player.LSGetSpellSlot("summonerFlash");
+        private static readonly SpellSlot Flash = Player.GetSpellSlot("summonerFlash");
         private static Spell Q, Q1, W, E, R;
         private static int QStack = 1;
         public static Render.Text Timer, Timer2;
@@ -100,7 +100,7 @@ using EloBuddy; namespace HoolaRiven
             foreach (
                 var enemy in
                     ObjectManager.Get<AIHeroClient>()
-                        .Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                        .Where(ene => ene.IsValidTarget() && !ene.IsZombie))
             {
                 if (Dind)
                 {
@@ -125,19 +125,19 @@ using EloBuddy; namespace HoolaRiven
                         CastTitan();
                         return;
                     }
-                    if (Q.LSIsReady() && LaneQ)
+                    if (Q.IsReady() && LaneQ)
                     {
                         ForceItem();
                         LeagueSharp.Common.Utility.DelayAction.Add(1, ()=>ForceCastQ(Minions[0]));
                     }
-                    if ((!Q.LSIsReady() || (Q.LSIsReady() && !LaneQ)) && W.LSIsReady() && LaneW != 0 &&
+                    if ((!Q.IsReady() || (Q.IsReady() && !LaneQ)) && W.IsReady() && LaneW != 0 &&
                         Minions.Count >= LaneW)
                     {
                         ForceItem();
                         LeagueSharp.Common.Utility.DelayAction.Add(1, ForceW);
                     }
-                    if ((!Q.LSIsReady() || (Q.LSIsReady() && !LaneQ)) && (!W.LSIsReady() || (W.LSIsReady() && LaneW == 0) || Minions.Count < LaneW) &&
-                        E.LSIsReady() && LaneE)
+                    if ((!Q.IsReady() || (Q.IsReady() && !LaneQ)) && (!W.IsReady() || (W.IsReady() && LaneW == 0) || Minions.Count < LaneW) &&
+                        E.IsReady() && LaneE)
                     {
                         E.Cast(Minions[0].Position);
                         LeagueSharp.Common.Utility.DelayAction.Add(1, ForceItem);
@@ -165,29 +165,29 @@ using EloBuddy; namespace HoolaRiven
                             CastTitan();
                             return;
                         }
-                        if (Q.LSIsReady())
+                        if (Q.IsReady())
                         {
                             ForceItem();
                             LeagueSharp.Common.Utility.DelayAction.Add(1, ()=> ForceCastQ(Mobs[0]));
                         }
-                        else if (W.LSIsReady())
+                        else if (W.IsReady())
                         {
                             ForceItem();
                             LeagueSharp.Common.Utility.DelayAction.Add(1, ForceW);
                         }
-                        else if (E.LSIsReady())
+                        else if (E.IsReady())
                         {
                             E.Cast(Mobs[0].Position);
                         }
                     }
                 }
             }
-            if (args.Target is Obj_AI_Turret || args.Target is Obj_Barracks || args.Target is Obj_BarracksDampener || args.Target is Obj_Building) if (args.Target.IsValid && args.Target != null && Q.LSIsReady() && LaneQ && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear) ForceCastQ((Obj_AI_Base)args.Target);
+            if (args.Target is Obj_AI_Turret || args.Target is Obj_Barracks || args.Target is Obj_BarracksDampener || args.Target is Obj_Building) if (args.Target.IsValid && args.Target != null && Q.IsReady() && LaneQ && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear) ForceCastQ((Obj_AI_Base)args.Target);
             if (args.Target is AIHeroClient)
             {
             var target = (AIHeroClient)args.Target;
-                if (KillstealR && R.LSIsReady() && R.Instance.Name == IsSecondR) if (target.Health < (Rdame(target, target.Health) + Player.LSGetAutoAttackDamage(target)) && target.Health > Player.LSGetAutoAttackDamage(target)) R.Cast(target.Position);
-                if (KillstealW && W.LSIsReady()) if (target.Health < (W.GetDamage(target) + Player.LSGetAutoAttackDamage(target)) && target.Health > Player.LSGetAutoAttackDamage(target)) W.Cast();
+                if (KillstealR && R.IsReady() && R.Instance.Name == IsSecondR) if (target.Health < (Rdame(target, target.Health) + Player.GetAutoAttackDamage(target)) && target.Health > Player.GetAutoAttackDamage(target)) R.Cast(target.Position);
+                if (KillstealW && W.IsReady()) if (target.Health < (W.GetDamage(target) + Player.GetAutoAttackDamage(target)) && target.Health > Player.GetAutoAttackDamage(target)) W.Cast();
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                 {
                     if (HasTitan())
@@ -195,17 +195,17 @@ using EloBuddy; namespace HoolaRiven
                         CastTitan();
                         return;
                     }
-                    if (Q.LSIsReady())
+                    if (Q.IsReady())
                     {
                         ForceItem();
                         LeagueSharp.Common.Utility.DelayAction.Add(1, ()=>ForceCastQ(target));
                     }
-                    else if (W.LSIsReady() && InWRange(target))
+                    else if (W.IsReady() && InWRange(target))
                     {
                         ForceItem();
                         LeagueSharp.Common.Utility.DelayAction.Add(1, ForceW);
                     }
-                    else if (E.LSIsReady() && !Orbwalking.InAutoAttackRange(target)) E.Cast(target.Position);
+                    else if (E.IsReady() && !Orbwalking.InAutoAttackRange(target)) E.Cast(target.Position);
                 }
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.FastHarass)
                 {
@@ -214,18 +214,18 @@ using EloBuddy; namespace HoolaRiven
                         CastTitan();
                         return;
                     }
-                    if (W.LSIsReady() && InWRange(target))
+                    if (W.IsReady() && InWRange(target))
                     {
                         ForceItem();
                         LeagueSharp.Common.Utility.DelayAction.Add(1, ForceW);
                         LeagueSharp.Common.Utility.DelayAction.Add(2, () => ForceCastQ(target));
                     }
-                    else if (Q.LSIsReady())
+                    else if (Q.IsReady())
                     {
                         ForceItem();
                         LeagueSharp.Common.Utility.DelayAction.Add(1,()=>ForceCastQ(target));
                     }
-                    else if (E.LSIsReady() && !Orbwalking.InAutoAttackRange(target) && !InWRange(target))
+                    else if (E.IsReady() && !Orbwalking.InAutoAttackRange(target) && !InWRange(target))
                     {
                         E.Cast(target.Position);
                     }
@@ -238,7 +238,7 @@ using EloBuddy; namespace HoolaRiven
                         CastTitan();
                         return;
                     }
-                    if (QStack == 2 && Q.LSIsReady())
+                    if (QStack == 2 && Q.IsReady())
                     {
                         ForceItem();
                         LeagueSharp.Common.Utility.DelayAction.Add(1, () => ForceCastQ(target));
@@ -252,12 +252,12 @@ using EloBuddy; namespace HoolaRiven
                         CastTitan();
                         return;
                     }
-                    if (R.LSIsReady() && R.Instance.Name == IsSecondR)
+                    if (R.IsReady() && R.Instance.Name == IsSecondR)
                     {
                         ForceItem();
                         LeagueSharp.Common.Utility.DelayAction.Add(1, ForceR2);
                     }
-                    else if (Q.LSIsReady())
+                    else if (Q.IsReady())
                     {
                         ForceItem();
                         LeagueSharp.Common.Utility.DelayAction.Add(1, ()=>ForceCastQ(target));
@@ -337,19 +337,19 @@ using EloBuddy; namespace HoolaRiven
 
       private static void Interrupt(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (sender.IsEnemy && W.LSIsReady() && sender.LSIsValidTarget() && !sender.IsZombie && WInterrupt)
+            if (sender.IsEnemy && W.IsReady() && sender.IsValidTarget() && !sender.IsZombie && WInterrupt)
             {
-                if (sender.LSIsValidTarget(125 + Player.BoundingRadius + sender.BoundingRadius)) W.Cast();
+                if (sender.IsValidTarget(125 + Player.BoundingRadius + sender.BoundingRadius)) W.Cast();
             }
         }
 
-        private static int GetWRange => Player.LSHasBuff("RivenFengShuiEngine") ? 330 : 265;
+        private static int GetWRange => Player.HasBuff("RivenFengShuiEngine") ? 330 : 265;
 
       private static void AutoUseW()
         {
             if (AutoW > 0)
             {
-                if (Player.LSCountEnemiesInRange(GetWRange) >= AutoW)
+                if (Player.CountEnemiesInRange(GetWRange) >= AutoW)
                 {
                     ForceW();
                 }
@@ -372,38 +372,38 @@ using EloBuddy; namespace HoolaRiven
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.FastHarass) FastHarass();
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Burst) Burst();
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Flee) Flee();
-            if (Utils.GameTimeTickCount - LastQ >= 3650 && QStack != 1 && !Player.LSIsRecalling() && KeepQ && Q.LSIsReady()) Q.Cast(Game.CursorPos);
+            if (Utils.GameTimeTickCount - LastQ >= 3650 && QStack != 1 && !Player.IsRecalling() && KeepQ && Q.IsReady()) Q.Cast(Game.CursorPos);
         }
 
       private static void Killsteal()
         {
-            if (KillstealW && W.LSIsReady())
+            if (KillstealW && W.IsReady())
             {
-                var targets = HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) && !x.IsZombie);
+                var targets = HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsZombie);
                 foreach (var target in targets)
                 {
                     if (target.Health < W.GetDamage(target) && InWRange(target))
                         W.Cast();
                 }
             }
-            if (KillstealR && R.LSIsReady() && R.Instance.Name == IsSecondR)
+            if (KillstealR && R.IsReady() && R.Instance.Name == IsSecondR)
             {
-                var targets = HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) && !x.IsZombie);
+                var targets = HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsZombie);
                 foreach (var target in targets)
                 {
-                    if (target.Health < Rdame(target, target.Health) && (!target.LSHasBuff("kindrednodeathbuff") && !target.LSHasBuff("Undying Rage") && !target.LSHasBuff("JudicatorIntervention")))
+                    if (target.Health < Rdame(target, target.Health) && (!target.HasBuff("kindrednodeathbuff") && !target.HasBuff("Undying Rage") && !target.HasBuff("JudicatorIntervention")))
                         R.Cast(target.Position);
                 }
             }
         }
       private static void UseRMaxDam()
         {
-            if (RMaxDam && R.LSIsReady() && R.Instance.Name == IsSecondR)
+            if (RMaxDam && R.IsReady() && R.Instance.Name == IsSecondR)
             {
-                var targets = HeroManager.Enemies.Where(x => x.LSIsValidTarget(R.Range) && !x.IsZombie);
+                var targets = HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !x.IsZombie);
                 foreach (var target in targets)
                 {
-                    if (target.Health / target.MaxHealth <= 0.25 && (!target.LSHasBuff("kindrednodeathbuff") || !target.LSHasBuff("Undying Rage") || !target.LSHasBuff("JudicatorIntervention")))
+                    if (target.Health / target.MaxHealth <= 0.25 && (!target.HasBuff("kindrednodeathbuff") || !target.HasBuff("Undying Rage") || !target.HasBuff("JudicatorIntervention")))
                         R.Cast(target.Position);
                 }
             }
@@ -422,16 +422,16 @@ using EloBuddy; namespace HoolaRiven
                 Timer.OnEndScene();
             }
 
-            if (Player.LSHasBuff("RivenFengShuiEngine") && DrawTimer2)
+            if (Player.HasBuff("RivenFengShuiEngine") && DrawTimer2)
             {
                 Timer2.text = ("R Expiry =>  " + (((double)LastR - Utils.GameTimeTickCount + 15000) / 1000).ToString("0.0") +"S");
                 Timer2.OnEndScene();
             }
 
-            if (DrawCB) Render.Circle.DrawCircle(Player.Position, 250 + Player.AttackRange + 70, E.LSIsReady() ? System.Drawing.Color.FromArgb(120, 0, 170, 255) : System.Drawing.Color.IndianRed);
-            if (DrawBT && Flash != SpellSlot.Unknown) Render.Circle.DrawCircle(Player.Position, 800, R.LSIsReady() && Flash.LSIsReady() ? System.Drawing.Color.FromArgb(120, 0, 170, 255) : System.Drawing.Color.IndianRed);
-            if (DrawFH) Render.Circle.DrawCircle(Player.Position, 450 + Player.AttackRange + 70, E.LSIsReady() && Q.LSIsReady() ? System.Drawing.Color.FromArgb(120, 0, 170, 255) : System.Drawing.Color.IndianRed);
-            if (DrawHS) Render.Circle.DrawCircle(Player.Position, 400, Q.LSIsReady() && W.LSIsReady() ? System.Drawing.Color.FromArgb(120, 0, 170, 255) : System.Drawing.Color.IndianRed);
+            if (DrawCB) Render.Circle.DrawCircle(Player.Position, 250 + Player.AttackRange + 70, E.IsReady() ? System.Drawing.Color.FromArgb(120, 0, 170, 255) : System.Drawing.Color.IndianRed);
+            if (DrawBT && Flash != SpellSlot.Unknown) Render.Circle.DrawCircle(Player.Position, 800, R.IsReady() && Flash.IsReady() ? System.Drawing.Color.FromArgb(120, 0, 170, 255) : System.Drawing.Color.IndianRed);
+            if (DrawFH) Render.Circle.DrawCircle(Player.Position, 450 + Player.AttackRange + 70, E.IsReady() && Q.IsReady() ? System.Drawing.Color.FromArgb(120, 0, 170, 255) : System.Drawing.Color.IndianRed);
+            if (DrawHS) Render.Circle.DrawCircle(Player.Position, 400, Q.IsReady() && W.IsReady() ? System.Drawing.Color.FromArgb(120, 0, 170, 255) : System.Drawing.Color.IndianRed);
             if (DrawAlwaysR) 
             {
                 Drawing.DrawText(heropos.X -40, heropos.Y + 20, System.Drawing.Color.DodgerBlue, "Always R  (     )");
@@ -452,7 +452,7 @@ using EloBuddy; namespace HoolaRiven
             if (Mobs.Count <= 0)
                 return;
 
-            if (W.LSIsReady() && E.LSIsReady() && !Orbwalking.InAutoAttackRange(Mobs[0]))
+            if (W.IsReady() && E.IsReady() && !Orbwalking.InAutoAttackRange(Mobs[0]))
             {
                 E.Cast(Mobs[0].Position);
                 LeagueSharp.Common.Utility.DelayAction.Add(1, ForceItem);
@@ -463,14 +463,14 @@ using EloBuddy; namespace HoolaRiven
       private static void Combo()
         {
             var targetR = TargetSelector.GetTarget(250 + Player.AttackRange + 70, TargetSelector.DamageType.Physical);
-            if (R.LSIsReady() && R.Instance.Name == IsFirstR && Orbwalker.InAutoAttackRange(targetR) && AlwaysR && targetR != null) ForceR();
-            if (R.LSIsReady() && R.Instance.Name == IsFirstR && W.LSIsReady() && InWRange(targetR) && ComboW && AlwaysR && targetR != null)
+            if (R.IsReady() && R.Instance.Name == IsFirstR && Orbwalker.InAutoAttackRange(targetR) && AlwaysR && targetR != null) ForceR();
+            if (R.IsReady() && R.Instance.Name == IsFirstR && W.IsReady() && InWRange(targetR) && ComboW && AlwaysR && targetR != null)
             {
                 ForceR();
                 LeagueSharp.Common.Utility.DelayAction.Add(1, ForceW);
             }
-            if (W.LSIsReady() && InWRange(targetR) && ComboW && targetR != null) W.Cast();
-            if (UseHoola && R.LSIsReady() && R.Instance.Name == IsFirstR && W.LSIsReady() && targetR != null && E.LSIsReady() && targetR.LSIsValidTarget() && !targetR.IsZombie && (IsKillableR(targetR) || AlwaysR))
+            if (W.IsReady() && InWRange(targetR) && ComboW && targetR != null) W.Cast();
+            if (UseHoola && R.IsReady() && R.Instance.Name == IsFirstR && W.IsReady() && targetR != null && E.IsReady() && targetR.IsValidTarget() && !targetR.IsZombie && (IsKillableR(targetR) || AlwaysR))
             {
                 if (!InWRange(targetR))
                 {
@@ -480,7 +480,7 @@ using EloBuddy; namespace HoolaRiven
                     LeagueSharp.Common.Utility.DelayAction.Add(305, () => ForceCastQ(targetR));
                 }
             }
-            else if (!UseHoola && R.LSIsReady() && R.Instance.Name == IsFirstR && W.LSIsReady() && targetR != null && E.LSIsReady() && targetR.LSIsValidTarget() && !targetR.IsZombie && (IsKillableR(targetR) || AlwaysR))
+            else if (!UseHoola && R.IsReady() && R.Instance.Name == IsFirstR && W.IsReady() && targetR != null && E.IsReady() && targetR.IsValidTarget() && !targetR.IsZombie && (IsKillableR(targetR) || AlwaysR))
             {
                 if (!InWRange(targetR))
                 {
@@ -489,9 +489,9 @@ using EloBuddy; namespace HoolaRiven
                     LeagueSharp.Common.Utility.DelayAction.Add(200, ForceW);
                 }
             }
-            else if (UseHoola && W.LSIsReady() && E.LSIsReady())
+            else if (UseHoola && W.IsReady() && E.IsReady())
             {
-                if (targetR.LSIsValidTarget() && targetR != null && !targetR.IsZombie && !InWRange(targetR))
+                if (targetR.IsValidTarget() && targetR != null && !targetR.IsZombie && !InWRange(targetR))
                 {
                     E.Cast(targetR.Position);
                     LeagueSharp.Common.Utility.DelayAction.Add(10, ForceItem);
@@ -499,18 +499,18 @@ using EloBuddy; namespace HoolaRiven
                     LeagueSharp.Common.Utility.DelayAction.Add(305, () => ForceCastQ(targetR));
                 }
             }
-            else if (!UseHoola && W.LSIsReady() && targetR != null && E.LSIsReady())
+            else if (!UseHoola && W.IsReady() && targetR != null && E.IsReady())
             {
-                if (targetR.LSIsValidTarget() && targetR != null && !targetR.IsZombie && !InWRange(targetR))
+                if (targetR.IsValidTarget() && targetR != null && !targetR.IsZombie && !InWRange(targetR))
                 {
                     E.Cast(targetR.Position);
                     LeagueSharp.Common.Utility.DelayAction.Add(10, ForceItem);
                     LeagueSharp.Common.Utility.DelayAction.Add(240, ForceW);
                 }
             }
-            else if (E.LSIsReady())
+            else if (E.IsReady())
             {
-                if (targetR.LSIsValidTarget() && !targetR.IsZombie && !InWRange(targetR))
+                if (targetR.IsValidTarget() && !targetR.IsZombie && !InWRange(targetR))
                 {
                     E.Cast(targetR.Position);
                 }
@@ -520,17 +520,17 @@ using EloBuddy; namespace HoolaRiven
       private static void Burst()
         {
             var target = TargetSelector.GetSelectedTarget();
-            if (target != null && target.LSIsValidTarget() && !target.IsZombie)
+            if (target != null && target.IsValidTarget() && !target.IsZombie)
             {
-                if (R.LSIsReady() && R.Instance.Name == IsFirstR && W.LSIsReady() && E.LSIsReady() && Player.LSDistance(target.Position) <= 250 + 70 + Player.AttackRange)
+                if (R.IsReady() && R.Instance.Name == IsFirstR && W.IsReady() && E.IsReady() && Player.Distance(target.Position) <= 250 + 70 + Player.AttackRange)
                 {
                     E.Cast(target.Position);
                     CastYoumoo();
                     ForceR();
                     LeagueSharp.Common.Utility.DelayAction.Add(100, ForceW);
                 }
-                else if (R.LSIsReady() && R.Instance.Name == IsFirstR && E.LSIsReady() && W.LSIsReady() && Q.LSIsReady() &&
-                         Player.LSDistance(target.Position) <= 400 + 70 + Player.AttackRange)
+                else if (R.IsReady() && R.Instance.Name == IsFirstR && E.IsReady() && W.IsReady() && Q.IsReady() &&
+                         Player.Distance(target.Position) <= 400 + 70 + Player.AttackRange)
                 {
                     E.Cast(target.Position);
                     CastYoumoo();
@@ -538,16 +538,16 @@ using EloBuddy; namespace HoolaRiven
                     LeagueSharp.Common.Utility.DelayAction.Add(150,()=>ForceCastQ(target));
                     LeagueSharp.Common.Utility.DelayAction.Add(160, ForceW);
                 }
-                else if (Flash.LSIsReady()
-                    && R.LSIsReady() && R.Instance.Name == IsFirstR && (Player.LSDistance(target.Position) <= 800) && (!FirstHydra || (FirstHydra && !HasItem())))
+                else if (Flash.IsReady()
+                    && R.IsReady() && R.Instance.Name == IsFirstR && (Player.Distance(target.Position) <= 800) && (!FirstHydra || (FirstHydra && !HasItem())))
                 {
                     E.Cast(target.Position);
                     CastYoumoo();
                     ForceR();
                     LeagueSharp.Common.Utility.DelayAction.Add(180, FlashW);
                 }
-                else if (Flash.LSIsReady()
-                    && R.LSIsReady() && E.LSIsReady() && W.LSIsReady() && R.Instance.Name == IsFirstR && (Player.LSDistance(target.Position) <= 800) && FirstHydra && HasItem())
+                else if (Flash.IsReady()
+                    && R.IsReady() && E.IsReady() && W.IsReady() && R.Instance.Name == IsFirstR && (Player.Distance(target.Position) <= 800) && FirstHydra && HasItem())
                 {
                     E.Cast(target.Position);
                     ForceR();
@@ -559,10 +559,10 @@ using EloBuddy; namespace HoolaRiven
 
       private static void FastHarass()
         {
-            if (Q.LSIsReady() && E.LSIsReady())
+            if (Q.IsReady() && E.IsReady())
             {
                 var target = TargetSelector.GetTarget(450 + Player.AttackRange + 70, TargetSelector.DamageType.Physical);
-                if (target.LSIsValidTarget() && !target.IsZombie)
+                if (target.IsValidTarget() && !target.IsZombie)
                 {
                     if (!Orbwalking.InAutoAttackRange(target) && !InWRange(target)) E.Cast(target.Position);
                     LeagueSharp.Common.Utility.DelayAction.Add(10, ForceItem);
@@ -574,18 +574,18 @@ using EloBuddy; namespace HoolaRiven
       private static void Harass()
         {
             var target = TargetSelector.GetTarget(400, TargetSelector.DamageType.Physical);
-            if (Q.LSIsReady() && W.LSIsReady() && E.LSIsReady() && QStack == 1)
+            if (Q.IsReady() && W.IsReady() && E.IsReady() && QStack == 1)
             {
-                if (target.LSIsValidTarget() && !target.IsZombie)
+                if (target.IsValidTarget() && !target.IsZombie)
                 {
                     ForceCastQ(target);
                     LeagueSharp.Common.Utility.DelayAction.Add(1, ForceW);
                 }
             }
-            if (Q.LSIsReady() && E.LSIsReady() && QStack == 3 && !Orbwalking.CanAttack() && Orbwalking.CanMove(5))
+            if (Q.IsReady() && E.IsReady() && QStack == 3 && !Orbwalking.CanAttack() && Orbwalking.CanMove(5))
             {
                 var epos = Player.ServerPosition +
-                          (Player.ServerPosition - target.ServerPosition).LSNormalized() * 300;
+                          (Player.ServerPosition - target.ServerPosition).Normalized() * 300;
                 E.Cast(epos);
                 LeagueSharp.Common.Utility.DelayAction.Add(190, () => Q.Cast(epos));
             }
@@ -596,13 +596,13 @@ using EloBuddy; namespace HoolaRiven
             var enemy =
                 HeroManager.Enemies.Where(
                     hero =>
-                        hero.LSIsValidTarget(Player.LSHasBuff("RivenFengShuiEngine")
+                        hero.IsValidTarget(Player.HasBuff("RivenFengShuiEngine")
                             ? 70 + 195 + Player.BoundingRadius
-                            : 70 + 120 + Player.BoundingRadius) && W.LSIsReady());
-            var x = Player.Position.LSExtend(Game.CursorPos, 300);
-            if (W.LSIsReady() && enemy.Any()) foreach (var target in enemy) if (InWRange(target)) W.Cast();
-            if (Q.LSIsReady() && !Player.LSIsDashing()) Q.Cast(Game.CursorPos);
-            if (E.LSIsReady() && !Player.LSIsDashing()) E.Cast(x);
+                            : 70 + 120 + Player.BoundingRadius) && W.IsReady());
+            var x = Player.Position.Extend(Game.CursorPos, 300);
+            if (W.IsReady() && enemy.Any()) foreach (var target in enemy) if (InWRange(target)) W.Cast();
+            if (Q.IsReady() && !Player.IsDashing()) Q.Cast(Game.CursorPos);
+            if (E.IsReady() && !Player.IsDashing()) E.Cast(x);
         }
 
       private static void OnPlay(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
@@ -640,7 +640,7 @@ using EloBuddy; namespace HoolaRiven
                     break;
                 case "Spell4b":
                     var target = TargetSelector.GetSelectedTarget();
-                    if (Q.LSIsReady() && target.LSIsValidTarget()) ForceCastQ(target);
+                    if (Q.IsReady() && target.IsValidTarget()) ForceCastQ(target);
                     break;
             }
         }
@@ -660,16 +660,16 @@ using EloBuddy; namespace HoolaRiven
         {
             Chat.Say("/d");
             Orbwalking.LastAATick = 0;
-            EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Player.Position.LSExtend(Game.CursorPos, Player.LSDistance(Game.CursorPos) + 10));
+            EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Player.Position.Extend(Game.CursorPos, Player.Distance(Game.CursorPos) + 10));
         }
 
-      private static bool InWRange(GameObject target)=> (Player.LSHasBuff("RivenFengShuiEngine") && target != null) ?
-                    330 >= Player.LSDistance(target.Position) : 265 >= Player.LSDistance(target.Position);
+      private static bool InWRange(GameObject target)=> (Player.HasBuff("RivenFengShuiEngine") && target != null) ?
+                    330 >= Player.Distance(target.Position) : 265 >= Player.Distance(target.Position);
         
 
         private static void ForceSkill()
         {
-            if (forceQ && QTarget != null && QTarget.LSIsValidTarget(E.Range + Player.BoundingRadius + 70) && Q.LSIsReady()) Q.Cast(QTarget.Position);
+            if (forceQ && QTarget != null && QTarget.IsValidTarget(E.Range + Player.BoundingRadius + 70) && Q.IsReady()) Q.Cast(QTarget.Position);
             if (forceW) W.Cast();
             if (forceR && R.Instance.Name == IsFirstR) R.Cast();
             if (forceItem && Items.CanUseItem(Item) && Items.HasItem(Item) && Item != 0) Items.UseItem(Item);
@@ -687,17 +687,17 @@ using EloBuddy; namespace HoolaRiven
         }
         private static void ForceR()
         {
-            forceR = (R.LSIsReady() && R.Instance.Name == IsFirstR);
+            forceR = (R.IsReady() && R.Instance.Name == IsFirstR);
             LeagueSharp.Common.Utility.DelayAction.Add(500, ()=> forceR = false);
         }
         private static void ForceR2()
         {
-            forceR2 = R.LSIsReady() && R.Instance.Name == IsSecondR;
+            forceR2 = R.IsReady() && R.Instance.Name == IsSecondR;
             LeagueSharp.Common.Utility.DelayAction.Add(500, () => forceR2 = false);
         }
         private static void ForceW()
         {
-            forceW = W.LSIsReady();
+            forceW = W.IsReady();
             LeagueSharp.Common.Utility.DelayAction.Add(500, () => forceW = false);
         }
 
@@ -711,7 +711,7 @@ using EloBuddy; namespace HoolaRiven
       private static void FlashW()
         {
             var target = TargetSelector.GetSelectedTarget();
-            if (target != null && target.LSIsValidTarget() && !target.IsZombie)
+            if (target != null && target.IsValidTarget() && !target.IsZombie)
             {
                 W.Cast();
                 LeagueSharp.Common.Utility.DelayAction.Add(10, () => Player.Spellbook.CastSpell(Flash, target.Position));
@@ -726,9 +726,9 @@ using EloBuddy; namespace HoolaRiven
             if (sender.IsEnemy && sender.Type == Player.Type && (AutoShield || (Shield && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)))
             {
                 var epos = Player.ServerPosition +
-                          (Player.ServerPosition - sender.ServerPosition).LSNormalized() * 300;
+                          (Player.ServerPosition - sender.ServerPosition).Normalized() * 300;
 
-                if (Player.LSDistance(sender.ServerPosition) <= args.SData.CastRange)
+                if (Player.Distance(sender.ServerPosition) <= args.SData.CastRange)
                 {
                     switch (args.SData.TargettingType)
                     {
@@ -738,7 +738,7 @@ using EloBuddy; namespace HoolaRiven
                             {
                                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit && !args.SData.Name.Contains("NasusW"))
                                 {
-                                    if (E.LSIsReady()) E.Cast(epos);
+                                    if (E.IsReady()) E.Cast(epos);
                                 }
                             }
 
@@ -747,7 +747,7 @@ using EloBuddy; namespace HoolaRiven
 
                             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
                             {
-                                if (E.LSIsReady()) E.Cast(epos);
+                                if (E.IsReady()) E.Cast(epos);
                             }
 
                             break;
@@ -756,150 +756,150 @@ using EloBuddy; namespace HoolaRiven
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (W.LSIsReady() && InWRange(sender)) W.Cast();
-                            else if (E.LSIsReady()) E.Cast(epos);
+                            if (W.IsReady() && InWRange(sender)) W.Cast();
+                            else if (E.IsReady()) E.Cast(epos);
                         }
                     }
                     if (args.SData.Name.Contains("TalonCutthroat"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (W.LSIsReady()) W.Cast();
+                            if (W.IsReady()) W.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("RenektonPreExecute"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (W.LSIsReady()) W.Cast();
+                            if (W.IsReady()) W.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("GarenRPreCast"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (E.LSIsReady()) E.Cast(epos);
+                            if (E.IsReady()) E.Cast(epos);
                         }
                     }
                     if (args.SData.Name.Contains("GarenQAttack"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (E.LSIsReady()) E.Cast();
+                            if (E.IsReady()) E.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("XenZhaoThrust3"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (W.LSIsReady()) W.Cast();
+                            if (W.IsReady()) W.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("RengarQ"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (E.LSIsReady()) E.Cast();
+                            if (E.IsReady()) E.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("RengarPassiveBuffDash"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (E.LSIsReady()) E.Cast();
+                            if (E.IsReady()) E.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("RengarPassiveBuffDashAADummy"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (E.LSIsReady()) E.Cast();
+                            if (E.IsReady()) E.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("TwitchEParticle"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (E.LSIsReady()) E.Cast();
+                            if (E.IsReady()) E.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("FizzPiercingStrike"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (E.LSIsReady()) E.Cast();
+                            if (E.IsReady()) E.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("HungeringStrike"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (E.LSIsReady()) E.Cast();
+                            if (E.IsReady()) E.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("YasuoDash"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (E.LSIsReady()) E.Cast();
+                            if (E.IsReady()) E.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("KatarinaRTrigger"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (W.LSIsReady() && InWRange(sender)) W.Cast();
-                            else if (E.LSIsReady()) E.Cast();
+                            if (W.IsReady() && InWRange(sender)) W.Cast();
+                            else if (E.IsReady()) E.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("YasuoDash"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (E.LSIsReady()) E.Cast();
+                            if (E.IsReady()) E.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("KatarinaE"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (W.LSIsReady()) W.Cast();
+                            if (W.IsReady()) W.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("MonkeyKingQAttack"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (E.LSIsReady()) E.Cast();
+                            if (E.IsReady()) E.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("MonkeyKingSpinToWin"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (E.LSIsReady()) E.Cast();
-                            else if (W.LSIsReady()) W.Cast();
+                            if (E.IsReady()) E.Cast();
+                            else if (W.IsReady()) W.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("MonkeyKingQAttack"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (E.LSIsReady()) E.Cast();
+                            if (E.IsReady()) E.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("MonkeyKingQAttack"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (E.LSIsReady()) E.Cast();
+                            if (E.IsReady()) E.Cast();
                         }
                     }
                     if (args.SData.Name.Contains("MonkeyKingQAttack"))
                     {
                         if (args.Target.NetworkId == Player.NetworkId)
                         {
-                            if (E.LSIsReady()) E.Cast();
+                            if (E.IsReady()) E.Cast();
                         }
                     }
                 }
@@ -919,14 +919,14 @@ using EloBuddy; namespace HoolaRiven
                 else if (Player.Level >= 6) { passivenhan = 0.3; }
                 else if (Player.Level >= 3) { passivenhan = 0.25; }
                 else { passivenhan = 0.2; }
-                if (HasItem()) dmg = dmg + Player.LSGetAutoAttackDamage(target) * 0.7;
-                if (W.LSIsReady()) dmg = dmg + W.GetDamage(target);
-                if (Q.LSIsReady())
+                if (HasItem()) dmg = dmg + Player.GetAutoAttackDamage(target) * 0.7;
+                if (W.IsReady()) dmg = dmg + W.GetDamage(target);
+                if (Q.IsReady())
                 {
                     var qnhan = 4 - QStack;
-                    dmg = dmg + Q.GetDamage(target) * qnhan + Player.LSGetAutoAttackDamage(target) * qnhan * (1 + passivenhan);
+                    dmg = dmg + Q.GetDamage(target) * qnhan + Player.GetAutoAttackDamage(target) * qnhan * (1 + passivenhan);
                 }
-                dmg = dmg + Player.LSGetAutoAttackDamage(target) * (1 + passivenhan);
+                dmg = dmg + Player.GetAutoAttackDamage(target) * (1 + passivenhan);
                 return dmg;
             }
             return 0;
@@ -946,15 +946,15 @@ using EloBuddy; namespace HoolaRiven
                 else if (Player.Level >= 6) { passivenhan = 0.3f; }
                 else if (Player.Level >= 3) { passivenhan = 0.25f; }
                 else { passivenhan = 0.2f; }
-                if (HasItem()) damage = damage + (float)Player.LSGetAutoAttackDamage(enemy) * 0.7f;
-                if (W.LSIsReady()) damage = damage + W.GetDamage(enemy);
-                if (Q.LSIsReady())
+                if (HasItem()) damage = damage + (float)Player.GetAutoAttackDamage(enemy) * 0.7f;
+                if (W.IsReady()) damage = damage + W.GetDamage(enemy);
+                if (Q.IsReady())
                 {
                     var qnhan = 4 - QStack;
-                    damage = damage + Q.GetDamage(enemy) * qnhan + (float)Player.LSGetAutoAttackDamage(enemy) * qnhan * (1 + passivenhan);
+                    damage = damage + Q.GetDamage(enemy) * qnhan + (float)Player.GetAutoAttackDamage(enemy) * qnhan * (1 + passivenhan);
                 }
-                damage = damage + (float)Player.LSGetAutoAttackDamage(enemy) * (1 + passivenhan);
-                if (R.LSIsReady())
+                damage = damage + (float)Player.GetAutoAttackDamage(enemy) * (1 + passivenhan);
+                if (R.IsReady())
                 {
                     return damage * 1.2f + R.GetDamage(enemy);
                 }
@@ -966,8 +966,8 @@ using EloBuddy; namespace HoolaRiven
 
         public static bool IsKillableR(AIHeroClient target)
         {
-            if (RKillable && target.LSIsValidTarget() && (totaldame(target) >= target.Health
-                 && basicdmg(target) <= target.Health) || Player.LSCountEnemiesInRange(900) >= 2 && (!target.LSHasBuff("kindrednodeathbuff") && !target.LSHasBuff("Undying Rage") && !target.LSHasBuff("JudicatorIntervention")))
+            if (RKillable && target.IsValidTarget() && (totaldame(target) >= target.Health
+                 && basicdmg(target) <= target.Health) || Player.CountEnemiesInRange(900) >= 2 && (!target.HasBuff("kindrednodeathbuff") && !target.HasBuff("Undying Rage") && !target.HasBuff("JudicatorIntervention")))
             {
                 return true;
             }
@@ -987,15 +987,15 @@ using EloBuddy; namespace HoolaRiven
                 else if (Player.Level >= 6) { passivenhan = 0.3; }
                 else if (Player.Level >= 3) { passivenhan = 0.25; }
                 else { passivenhan = 0.2; }
-                if (HasItem()) dmg = dmg + Player.LSGetAutoAttackDamage(target) * 0.7;
-                if (W.LSIsReady()) dmg = dmg + W.GetDamage(target);
-                if (Q.LSIsReady())
+                if (HasItem()) dmg = dmg + Player.GetAutoAttackDamage(target) * 0.7;
+                if (W.IsReady()) dmg = dmg + W.GetDamage(target);
+                if (Q.IsReady())
                 {
                     var qnhan = 4 - QStack;
-                    dmg = dmg + Q.GetDamage(target) * qnhan + Player.LSGetAutoAttackDamage(target) * qnhan * (1 + passivenhan);
+                    dmg = dmg + Q.GetDamage(target) * qnhan + Player.GetAutoAttackDamage(target) * qnhan * (1 + passivenhan);
                 }
-                dmg = dmg + Player.LSGetAutoAttackDamage(target) * (1 + passivenhan);
-                if (R.LSIsReady())
+                dmg = dmg + Player.GetAutoAttackDamage(target) * (1 + passivenhan);
+                if (R.IsReady())
                 {
                     var rdmg = Rdame(target, target.Health - dmg * 1.2);
                     return dmg * 1.2 + rdmg;

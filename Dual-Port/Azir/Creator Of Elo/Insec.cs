@@ -41,7 +41,7 @@ using EloBuddy;
         {
           
             var target = TargetSelector.GetSelectedTarget();
-            /*     var posWs = GeoAndExten.GetWsPosition(target.Position.LSTo2D()).Where(x => x != null);
+            /*     var posWs = GeoAndExten.GetWsPosition(target.Position.To2D()).Where(x => x != null);
                  foreach (var posW in posWs)
                  {
 
@@ -52,14 +52,14 @@ using EloBuddy;
                 {
                     if (target.IsVisible && target.IsValid)
                     {
-                 //       var pos = target.ServerPosition.LSExtend(Game.CursorPos, -300);
+                 //       var pos = target.ServerPosition.Extend(Game.CursorPos, -300);
                    //     Render.Circle.DrawCircle(pos, 100, System.Drawing.Color.GreenYellow);
                     }
                 }
             }
             else
             {
-                var pos = target.ServerPosition.LSExtend(Clickposition, -300);
+                var pos = target.ServerPosition.Extend(Clickposition, -300);
              //   Render.Circle.DrawCircle(pos, 100, System.Drawing.Color.GreenYellow,2);
                 Render.Circle.DrawCircle(Clickposition, 100, System.Drawing.Color.GreenYellow,2);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
             }
@@ -98,7 +98,7 @@ using EloBuddy;
         private void Game_OnUpdate(EventArgs args)
         {
 
-               if (!azir.Spells.R.LSIsReady()) return;
+               if (!azir.Spells.R.IsReady()) return;
             var insecPoint = new Vector3(0, 2, 3);
             if (Clickposition == new Vector3(0, 0, 0))
                 insecPoint = Game.CursorPos;
@@ -114,11 +114,11 @@ using EloBuddy;
 
             azir.Orbwalk(Game.CursorPos);
  
-            if (!insecPoint.LSIsValid())
+            if (!insecPoint.IsValid())
                 return;
             var target = TargetSelector.GetSelectedTarget();
             if (target == null) return;
-            if (!target.LSIsValidTarget() || target.IsZombie)
+            if (!target.IsValidTarget() || target.IsZombie)
             {
 
                 steps = Steps.firstCalcs;
@@ -140,14 +140,14 @@ using EloBuddy;
             {
         
                 case Steps.firstCalcs:
-                    if (target.LSDistance(HeroManager.Player) <= azir.Spells.W.Range + azir.Spells.Q.Range-100)
+                    if (target.Distance(HeroManager.Player) <= azir.Spells.W.Range + azir.Spells.Q.Range-100)
                     {
 
                         steps = Steps.jump;
                     }
                     break;
                 case Steps.jump:
-                    if (HeroManager.Player.ServerPosition.LSDistance(postoGo) <= 220)
+                    if (HeroManager.Player.ServerPosition.Distance(postoGo) <= 220)
                     {
                         steps = Steps.R;
                     }
@@ -158,9 +158,9 @@ using EloBuddy;
                     }
                     break;
                 case Steps.R:
-                    if (azir.Hero.LSDistance(target) < 220)
+                    if (azir.Hero.Distance(target) < 220)
                     {
-                        var tower  = ObjectManager.Get<Obj_AI_Turret>().FirstOrDefault(it => it.LSIsValidTarget(1000));
+                        var tower  = ObjectManager.Get<Obj_AI_Turret>().FirstOrDefault(it => it.IsValidTarget(1000));
 
                         if (tower != null)
                         {
@@ -185,8 +185,8 @@ using EloBuddy;
 
         private void castWOnAngle(Vector2 playerPos, Vector2 targetPos, float ag)
         {
-            var posW = playerPos.LSExtend(targetPos, azir.Spells.W.Range);
-            if(!RotatePoint(posW, playerPos, ag).LSIsWall())
+            var posW = playerPos.Extend(targetPos, azir.Spells.W.Range);
+            if(!RotatePoint(posW, playerPos, ag).IsWall())
             azir.Spells.W.Cast(RotatePoint(posW, playerPos, ag));
         }
         public  Vector2 RotatePoint( Vector2 pointToRotate, Vector2 centerPoint, float angleInRadians)

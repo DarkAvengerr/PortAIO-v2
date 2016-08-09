@@ -35,30 +35,30 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || player.ManaPercent < 45)
+            if (!W.IsReady() || player.ManaPercent < 45)
                 return;
             W.Cast(target);
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
             if (EnemyInRange(1, 300) || (EnemyInRange(1, 600) && player.HealthPercent<30))
-                E.Cast(player.Position.LSTo2D().LSExtend(ARAMSimulator.fromNex.Position.LSTo2D(),400));
+                E.Cast(player.Position.To2D().Extend(ARAMSimulator.fromNex.Position.To2D(),400));
 
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
             if (target.Health < R.GetDamage(target))
                 R.Cast(target);
@@ -94,17 +94,17 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public static bool EnemyInRange(int numOfEnemy, float range)
         {
-            return LeagueSharp.Common.Utility.LSCountEnemysInRange(ObjectManager.Player, (int)range) >= numOfEnemy;
+            return LeagueSharp.Common.Utility.CountEnemysInRange(ObjectManager.Player, (int)range) >= numOfEnemy;
         }
 
         public override void farm()
         {
-            if (player.ManaPercent < 55 || !Q.LSIsReady())
+            if (player.ManaPercent < 55 || !Q.IsReady())
                 return;
 
             foreach (var minion in MinionManager.GetMinions(Q.Range - 50))
             {
-                if (minion.Health > ObjectManager.Player.LSGetAutoAttackDamage(minion) && minion.Health < Q.GetDamage(minion))
+                if (minion.Health > ObjectManager.Player.GetAutoAttackDamage(minion) && minion.Health < Q.GetDamage(minion))
                 {
                     Q.Cast(minion);
                     return;

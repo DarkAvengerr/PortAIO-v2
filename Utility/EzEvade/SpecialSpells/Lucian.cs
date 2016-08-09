@@ -35,7 +35,7 @@ using EloBuddy; namespace ezEvade.SpecialSpells
                     var target = args.Target as Obj_AI_Base;
 
                     float spellDelay = ((float)(350 - ObjectCache.gamePing)) / 1000;
-                    var heroWalkDir = (target.ServerPosition - target.Position).LSNormalized();
+                    var heroWalkDir = (target.ServerPosition - target.Position).Normalized();
                     var predictedHeroPos = target.Position + heroWalkDir * target.MoveSpeed * (spellDelay);
 
 

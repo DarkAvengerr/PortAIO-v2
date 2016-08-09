@@ -83,24 +83,24 @@
 
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
 
-            if (target.LSIsValidTarget())
+            if (target.IsValidTarget())
             {
-                if (UseEHarass && Player.ManaPercent > EMiniManaHarass && E.LSIsReady() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveHarass").GetValue<bool>()))
+                if (UseEHarass && Player.ManaPercent > EMiniManaHarass && E.IsReady() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveHarass").GetValue<bool>()))
                 {
-                    if (Player.LSDistance(target) < E.Range)
+                    if (Player.Distance(target) < E.Range)
                     {
                         E.CastIfHitchanceEquals(target, HitChance.VeryHigh, PacketCast);
                         return;
                     }
                 }
 
-                if (UseWHarass && Player.ManaPercent > WMiniManaHarass && W.LSIsReady() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveHarass").GetValue<bool>()) && (!E.LSIsReady() || !UseEHarass))
+                if (UseWHarass && Player.ManaPercent > WMiniManaHarass && W.IsReady() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveHarass").GetValue<bool>()) && (!E.IsReady() || !UseEHarass))
                 {
                     W.Cast(Player, PacketCast);
                     return;
                 }
 
-                if (UseQHarass && Player.ManaPercent > QMiniManaHarass && Q.LSIsReady() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveHarass").GetValue<bool>()) && (!E.LSIsReady() || !UseEHarass) && (Player.HealthPercent < 100 || (!W.LSIsReady() || !UseWHarass)))
+                if (UseQHarass && Player.ManaPercent > QMiniManaHarass && Q.IsReady() && (!CustomLib.HavePassiveAA() || !SkyLv_Taric.Menu.Item("Taric.UseTaricAAPassiveHarass").GetValue<bool>()) && (!E.IsReady() || !UseEHarass) && (Player.HealthPercent < 100 || (!W.IsReady() || !UseWHarass)))
                 {
                     Q.Cast(Player, PacketCast);
                     return;

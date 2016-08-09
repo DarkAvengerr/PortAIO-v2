@@ -106,20 +106,20 @@ namespace SAutoCarry.Champions
             UltMethods[0] = () =>
             {
                 {
-                    if (Helpers.BallMgr.Position.LSCountEnemiesInRange(Spells[R].Range) >= ConfigMenu.Item("CUSERHIT").GetValue<Slider>().Value)
+                    if (Helpers.BallMgr.Position.CountEnemiesInRange(Spells[R].Range) >= ConfigMenu.Item("CUSERHIT").GetValue<Slider>().Value)
                     {
                         Helpers.BallMgr.Post(Helpers.BallMgr.Command.Shockwave, null);
                         return;
                     }
                 }
 
-                if (Spells[Q].LSIsReady() && Spells[R].LSIsReady())
+                if (Spells[Q].IsReady() && Spells[R].IsReady())
                 {
                     Vector3 bestQPos = Vector3.Zero;
                     int bestEnemyCount = 0;
                     foreach (var enemy in HeroManager.Enemies)
                     {
-                        var enemies = enemy.LSGetEnemiesInRange(Spells[R].Range);
+                        var enemies = enemy.GetEnemiesInRange(Spells[R].Range);
                         if (enemies.Count >= ConfigMenu.Item("CUSERHIT").GetValue<Slider>().Value)
                         {
                             if (enemies.Count > bestEnemyCount)
@@ -129,7 +129,7 @@ namespace SAutoCarry.Champions
                                 Vector3 pos = Vector3.Zero;
                                 enemies.ForEach(p => pos += p.ServerPosition);
                                 pos = pos / enemies.Count;
-                                if (pos.LSDistance(ObjectManager.Player.ServerPosition) < Spells[Q].Range / 2f && pos.LSCountEnemiesInRange(Spells[R].Range) >= bestEnemyCount)
+                                if (pos.Distance(ObjectManager.Player.ServerPosition) < Spells[Q].Range / 2f && pos.CountEnemiesInRange(Spells[R].Range) >= bestEnemyCount)
                                     bestQPos = pos;
                                 else
                                     bestQPos = enemy.ServerPosition;
@@ -137,11 +137,11 @@ namespace SAutoCarry.Champions
                         }
                     }
 
-                    if (bestQPos != Vector3.Zero && bestQPos.LSDistance(ObjectManager.Player.ServerPosition) < Spells[Q].Range / 2f)
+                    if (bestQPos != Vector3.Zero && bestQPos.Distance(ObjectManager.Player.ServerPosition) < Spells[Q].Range / 2f)
                     {
-                        if (Helpers.BallMgr.IsBallReady && Spells[Q].LSIsReady())
+                        if (Helpers.BallMgr.IsBallReady && Spells[Q].IsReady())
                         {
-                            Helpers.BallMgr.Post(Helpers.BallMgr.Command.Attack, null, bestQPos.LSTo2D());
+                            Helpers.BallMgr.Post(Helpers.BallMgr.Command.Attack, null, bestQPos.To2D());
                             Helpers.BallMgr.Post(Helpers.BallMgr.Command.Shockwave, null);
                         }
                     }
@@ -152,17 +152,17 @@ namespace SAutoCarry.Champions
             {
                 if (TargetSelector.SelectedTarget != null)
                 {
-                    if (Spells[Q].LSIsReady() && Spells[R].LSIsReady())
+                    if (Spells[Q].IsReady() && Spells[R].IsReady())
                     {
-                        if (TargetSelector.SelectedTarget.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition) < Spells[Q].Range / 2f)
+                        if (TargetSelector.SelectedTarget.ServerPosition.Distance(ObjectManager.Player.ServerPosition) < Spells[Q].Range / 2f)
                         {
                             Helpers.BallMgr.Post(Helpers.BallMgr.Command.Attack, TargetSelector.SelectedTarget);
                             Helpers.BallMgr.Post(Helpers.BallMgr.Command.Shockwave, null);
                         }
                     }
-                    else if (Spells[R].LSIsReady())
+                    else if (Spells[R].IsReady())
                     {
-                        if (TargetSelector.SelectedTarget.ServerPosition.LSDistance(Helpers.BallMgr.Position) < Spells[R].Range)
+                        if (TargetSelector.SelectedTarget.ServerPosition.Distance(Helpers.BallMgr.Position) < Spells[R].Range)
                             Helpers.BallMgr.Post(Helpers.BallMgr.Command.Shockwave, TargetSelector.SelectedTarget);
                     }
                 }
@@ -170,13 +170,13 @@ namespace SAutoCarry.Champions
 
             UltMethods[2] = () =>
             {
-                if (Spells[Q].LSIsReady() && Spells[R].LSIsReady())
+                if (Spells[Q].IsReady() && Spells[R].IsReady())
                 {
                     Vector3 bestQPos = Vector3.Zero;
                     int bestPrioSum = 0;
                     foreach (var enemy in HeroManager.Enemies)
                     {
-                        var enemies = enemy.LSGetEnemiesInRange(Spells[R].Range);
+                        var enemies = enemy.GetEnemiesInRange(Spells[R].Range);
                         int prio_sum = 0;
                         foreach (var e in enemies)
                         {
@@ -195,7 +195,7 @@ namespace SAutoCarry.Champions
                                 enemies.ForEach(p => pos += p.ServerPosition);
                                 pos = pos / enemies.Count;
 
-                                var enemies2 = pos.LSGetEnemiesInRange(Spells[R].Range);
+                                var enemies2 = pos.GetEnemiesInRange(Spells[R].Range);
                                 int prio_sum2 = 0;
                                 foreach (var e in enemies2)
                                 {
@@ -204,7 +204,7 @@ namespace SAutoCarry.Champions
                                         prio_sum2 += 1;
                                 }
 
-                                if (pos.LSDistance(ObjectManager.Player.ServerPosition) < Spells[Q].Range / 2f && prio_sum2 >= bestPrioSum)
+                                if (pos.Distance(ObjectManager.Player.ServerPosition) < Spells[Q].Range / 2f && prio_sum2 >= bestPrioSum)
                                     bestQPos = pos;
                                 else
                                     bestQPos = enemy.ServerPosition;
@@ -212,11 +212,11 @@ namespace SAutoCarry.Champions
                         }
                     }
 
-                    if (bestQPos != Vector3.Zero && bestQPos.LSDistance(ObjectManager.Player.ServerPosition) < Spells[Q].Range / 2f)
+                    if (bestQPos != Vector3.Zero && bestQPos.Distance(ObjectManager.Player.ServerPosition) < Spells[Q].Range / 2f)
                     {
-                        if (Helpers.BallMgr.IsBallReady && Spells[Q].LSIsReady())
+                        if (Helpers.BallMgr.IsBallReady && Spells[Q].IsReady())
                         {
-                            Helpers.BallMgr.Post(Helpers.BallMgr.Command.Attack, null, bestQPos.LSTo2D());
+                            Helpers.BallMgr.Post(Helpers.BallMgr.Command.Attack, null, bestQPos.To2D());
                             Helpers.BallMgr.Post(Helpers.BallMgr.Command.Shockwave, null);
                         }
                     }
@@ -224,7 +224,7 @@ namespace SAutoCarry.Champions
 
                 {
                     int prio_sum = 0;
-                    var enemies = HeroManager.Enemies.Where(p => p.ServerPosition.LSDistance(Helpers.BallMgr.Position) <= Spells[R].Range);
+                    var enemies = HeroManager.Enemies.Where(p => p.ServerPosition.Distance(Helpers.BallMgr.Position) <= Spells[R].Range);
                     foreach (var enemy in enemies)
                     {
                         prio_sum += enemy.GetPriority();
@@ -239,7 +239,7 @@ namespace SAutoCarry.Champions
                     }
 
                     var t = TargetSelector.GetTarget(Spells[R].Range, LeagueSharp.Common.TargetSelector.DamageType.Magical, true, null, Helpers.BallMgr.Position);
-                    if (t != null && ObjectManager.Player.LSCountEnemiesInRange(2000) <= 2)
+                    if (t != null && ObjectManager.Player.CountEnemiesInRange(2000) <= 2)
                     {
                         Helpers.BallMgr.Post(Helpers.BallMgr.Command.Shockwave, t);
                         return;
@@ -268,7 +268,7 @@ namespace SAutoCarry.Champions
 
         public void BeforeOrbwalk()
         {
-            if (ObjectManager.Player.HealthPercent < 25 && ObjectManager.Player.LSCountEnemiesInRange(1200) > 0)
+            if (ObjectManager.Player.HealthPercent < 25 && ObjectManager.Player.CountEnemiesInRange(1200) > 0)
                 Spells[E].CastOnUnit(ObjectManager.Player);
 
             if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.None)
@@ -280,22 +280,22 @@ namespace SAutoCarry.Champions
 
             if (Orbwalker.ActiveMode == SCommon.Orbwalking.Orbwalker.Mode.None)
             {
-                if (Spells[R].LSIsReady() && Helpers.BallMgr.IsBallReady && ConfigMenu.Item("MAUTOR").GetValue<bool>())
+                if (Spells[R].IsReady() && Helpers.BallMgr.IsBallReady && ConfigMenu.Item("MAUTOR").GetValue<bool>())
                 {
                     if (CountEnemiesInRangePredicted(Spells[R].Range, 100, 0.75f) >= ConfigMenu.Item("MAUTORHIT").GetValue<Slider>().Value)
                         Helpers.BallMgr.Post(Helpers.BallMgr.Command.Shockwave, null);
                     else
                     {
-                        if (Spells[Q].LSIsReady())
+                        if (Spells[Q].IsReady())
                         {
                             List<Vector2> poses = new List<Vector2>();
                             foreach (var enemy in HeroManager.Enemies)
                             {
-                                if (enemy.LSIsValidTarget(Spells[Q].Range))
+                                if (enemy.IsValidTarget(Spells[Q].Range))
                                 {
-                                    var pos = LeagueSharp.Common.Prediction.GetPrediction(enemy, 0.75f).UnitPosition.LSTo2D();
-                                    if (pos.LSDistance(ObjectManager.Player.ServerPosition.LSTo2D()) <= 800)
-                                        poses.Add(LeagueSharp.Common.Prediction.GetPrediction(enemy, 0.75f).UnitPosition.LSTo2D());
+                                    var pos = LeagueSharp.Common.Prediction.GetPrediction(enemy, 0.75f).UnitPosition.To2D();
+                                    if (pos.Distance(ObjectManager.Player.ServerPosition.To2D()) <= 800)
+                                        poses.Add(LeagueSharp.Common.Prediction.GetPrediction(enemy, 0.75f).UnitPosition.To2D());
                                 }
                             }
 
@@ -306,7 +306,7 @@ namespace SAutoCarry.Champions
                                     Vector2 center;
                                     float radius;
                                     MEC.FindMinimalBoundingCircle(poses, out center, out radius);
-                                    if (radius < Spells[R].Width && center.LSDistance(ObjectManager.Player.ServerPosition) < 825f)
+                                    if (radius < Spells[R].Width && center.Distance(ObjectManager.Player.ServerPosition) < 825f)
                                     {
                                         Helpers.BallMgr.Post(Helpers.BallMgr.Command.Attack, null, center);
                                         Helpers.BallMgr.Post(Helpers.BallMgr.Command.Shockwave, null);
@@ -325,20 +325,20 @@ namespace SAutoCarry.Champions
             //R
             if (ConfigMenu.Item("CUSER").GetValue<bool>())
                 UltMethods[ConfigMenu.Item("CUSERMETHOD").GetValue<StringList>().SelectedIndex]();
-            if (Spells[Q].LSIsReady() && ConfigMenu.Item("CUSEQ").GetValue<bool>())
+            if (Spells[Q].IsReady() && ConfigMenu.Item("CUSEQ").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range / 2f, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
                     Helpers.BallMgr.Post(Helpers.BallMgr.Command.Attack, t);
             }
 
-            if (Spells[W].LSIsReady() && ConfigMenu.Item("CUSEW").GetValue<bool>())
+            if (Spells[W].IsReady() && ConfigMenu.Item("CUSEW").GetValue<bool>())
             {
                 if (CountEnemiesInRangePredicted(Spells[W].Range, 50, 0.25f) > 0)
                     Helpers.BallMgr.Post(Helpers.BallMgr.Command.Dissonance, null);
             }
 
-            if (Spells[E].LSIsReady() && !Spells[W].LSIsReady() && ConfigMenu.Item("CUSEE").GetValue<bool>())
+            if (Spells[E].IsReady() && !Spells[W].IsReady() && ConfigMenu.Item("CUSEE").GetValue<bool>())
             {
                 if (Helpers.BallMgr.CheckHeroCollision(ObjectManager.Player.ServerPosition))
                     Helpers.BallMgr.Post(Helpers.BallMgr.Command.Protect, ObjectManager.Player);
@@ -350,20 +350,20 @@ namespace SAutoCarry.Champions
             if (ObjectManager.Player.ManaPercent < ConfigMenu.Item("HMANA").GetValue<Slider>().Value)
                 return;
 
-            if (Spells[Q].LSIsReady() && ConfigMenu.Item("HUSEQ").GetValue<bool>())
+            if (Spells[Q].IsReady() && ConfigMenu.Item("HUSEQ").GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(Spells[Q].Range / 2f, LeagueSharp.Common.TargetSelector.DamageType.Magical);
                 if (t != null)
                     Helpers.BallMgr.Post(Helpers.BallMgr.Command.Attack, t);
             }
 
-            if (Spells[W].LSIsReady() && ConfigMenu.Item("HUSEW").GetValue<bool>())
+            if (Spells[W].IsReady() && ConfigMenu.Item("HUSEW").GetValue<bool>())
             {
                 if (CountEnemiesInRangePredicted(Spells[W].Range, 50, 0.25f) > 0)
                     Helpers.BallMgr.Post(Helpers.BallMgr.Command.Dissonance, null);
             }
 
-            if (Spells[E].LSIsReady() && !Spells[W].LSIsReady() && ConfigMenu.Item("HUSEE").GetValue<bool>())
+            if (Spells[E].IsReady() && !Spells[W].IsReady() && ConfigMenu.Item("HUSEE").GetValue<bool>())
             {
                 if (Helpers.BallMgr.CheckHeroCollision(ObjectManager.Player.ServerPosition))
                     Helpers.BallMgr.Post(Helpers.BallMgr.Command.Protect, ObjectManager.Player);
@@ -377,20 +377,20 @@ namespace SAutoCarry.Champions
 
             m_lastLaneClearTick = Utils.TickCount;
 
-            if (Spells[Q].LSIsReady() && ConfigMenu.Item("LUSEQ").GetValue<bool>())
+            if (Spells[Q].IsReady() && ConfigMenu.Item("LUSEQ").GetValue<bool>())
             {
-                var farm = MinionManager.GetBestCircularFarmLocation(MinionManager.GetMinions(Spells[Q].Range / 2f, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.None).Select(p => p.ServerPosition.LSTo2D()).ToList(), Spells[Q].Width, Spells[Q].Range);
+                var farm = MinionManager.GetBestCircularFarmLocation(MinionManager.GetMinions(Spells[Q].Range / 2f, MinionTypes.All, MinionTeam.NotAlly, MinionOrderTypes.None).Select(p => p.ServerPosition.To2D()).ToList(), Spells[Q].Width, Spells[Q].Range);
                 if (farm.MinionsHit > 0 && Helpers.BallMgr.IsBallReady)
                     Spells[Q].Cast(farm.Position, true);
             }
 
-            if (Spells[W].LSIsReady() && ConfigMenu.Item("LUSEW").GetValue<bool>())
+            if (Spells[W].IsReady() && ConfigMenu.Item("LUSEW").GetValue<bool>())
             {
-                if (ObjectManager.Get<Obj_AI_Minion>().Count(p => (p.IsEnemy || p.IsJungleMinion()) && p.ServerPosition.LSDistance(Helpers.BallMgr.Position) <= Spells[W].Range) >= ConfigMenu.Item("LMINW").GetValue<Slider>().Value)
+                if (ObjectManager.Get<Obj_AI_Minion>().Count(p => (p.IsEnemy || p.IsJungleMinion()) && p.ServerPosition.Distance(Helpers.BallMgr.Position) <= Spells[W].Range) >= ConfigMenu.Item("LMINW").GetValue<Slider>().Value)
                     Spells[W].Cast(ObjectManager.Player.ServerPosition, true);
             }
 
-            if (Spells[E].LSIsReady() && ConfigMenu.Item("LUSEE").GetValue<bool>())
+            if (Spells[E].IsReady() && ConfigMenu.Item("LUSEE").GetValue<bool>())
             {
                 if (MinionManager.GetMinions(ObjectManager.Player.AttackRange, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).Any(p => p.GetJunglePriority() == 1))
                     Spells[E].CastOnUnit(ObjectManager.Player);
@@ -399,7 +399,7 @@ namespace SAutoCarry.Champions
 
         private void BallMgr_OnProcessCommand(Helpers.BallMgr.Command cmd, AIHeroClient target, Vector2 pos)
         {
-            if (!Spells[(int)cmd].LSIsReady() || (Orbwalker.ActiveMode != SCommon.Orbwalking.Orbwalker.Mode.Mixed && Orbwalker.ActiveMode != SCommon.Orbwalking.Orbwalker.Mode.Combo))
+            if (!Spells[(int)cmd].IsReady() || (Orbwalker.ActiveMode != SCommon.Orbwalking.Orbwalker.Mode.Mixed && Orbwalker.ActiveMode != SCommon.Orbwalking.Orbwalker.Mode.Combo))
                 return;
 
             switch (cmd)
@@ -439,10 +439,10 @@ namespace SAutoCarry.Champions
             int cnt = 0;
             foreach (var enemy in HeroManager.Enemies)
             {
-                var prediction = SCommon.Prediction.Prediction.GetPrediction(enemy, width, time, 0, range, false, SkillshotType.SkillshotCircle, enemy.LSGetWaypoints(), enemy.AvgMovChangeTime(), enemy.LastMovChangeTime(), enemy.AvgPathLenght(), 360, Helpers.BallMgr.Position.LSTo2D(), Helpers.BallMgr.Position.LSTo2D());
+                var prediction = SCommon.Prediction.Prediction.GetPrediction(enemy, width, time, 0, range, false, SkillshotType.SkillshotCircle, enemy.GetWaypoints(), enemy.AvgMovChangeTime(), enemy.LastMovChangeTime(), enemy.AvgPathLenght(), 360, Helpers.BallMgr.Position.To2D(), Helpers.BallMgr.Position.To2D());
                 if (prediction.HitChance > HitChance.Low)
                 {
-                    if (prediction.UnitPosition.LSDistance(Helpers.BallMgr.Position.LSTo2D()) < range)
+                    if (prediction.UnitPosition.Distance(Helpers.BallMgr.Position.To2D()) < range)
                         cnt++;
                 }
             }
@@ -451,7 +451,7 @@ namespace SAutoCarry.Champions
 
         protected override void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (Spells[E].LSIsReady() && gapcloser.Sender.IsEnemy)
+            if (Spells[E].IsReady() && gapcloser.Sender.IsEnemy)
             {
                 Spells[E].CastOnUnit(ObjectManager.Player);
                 Spells[W].Cast(ObjectManager.Player.ServerPosition, true);
@@ -464,9 +464,9 @@ namespace SAutoCarry.Champions
         {
             if (sender.IsChannelingImportantSpell())
             {
-                if (Spells[R].LSIsReady() && Helpers.BallMgr.Position.LSDistance(sender.ServerPosition) < Spells[R].Range)
+                if (Spells[R].IsReady() && Helpers.BallMgr.Position.Distance(sender.ServerPosition) < Spells[R].Range)
                     Spells[R].Cast(ObjectManager.Player.ServerPosition, true);
-                else if (Spells[Q].LSIsReady() && Spells[R].LSIsReady() && ObjectManager.Player.ServerPosition.LSDistance(sender.ServerPosition) < Spells[Q].Range / 2f)
+                else if (Spells[Q].IsReady() && Spells[R].IsReady() && ObjectManager.Player.ServerPosition.Distance(sender.ServerPosition) < Spells[Q].Range / 2f)
                 {
                     Spells[Q].Cast(sender, true);
                     Spells[W].Cast(ObjectManager.Player.ServerPosition, true);
@@ -478,7 +478,7 @@ namespace SAutoCarry.Champions
         {
             if (sender.IsAlly)
             {
-                if (InitiatorsList.Contains(args.SData.Name.ToLower()) && sender.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition) < Spells[E].Range && ConfigMenu.Item("MEINIT").GetValue<bool>())
+                if (InitiatorsList.Contains(args.SData.Name.ToLower()) && sender.ServerPosition.Distance(ObjectManager.Player.ServerPosition) < Spells[E].Range && ConfigMenu.Item("MEINIT").GetValue<bool>())
                     Spells[E].CastOnUnit(sender, true);
             }
         }
@@ -486,10 +486,10 @@ namespace SAutoCarry.Champions
         public override double CalculateDamageQ(AIHeroClient target)
         {
             double dmg = 0.0;
-            if (ConfigMenu.Item("CUSEQ").GetValue<bool>() && Spells[Q].LSIsReady())
+            if (ConfigMenu.Item("CUSEQ").GetValue<bool>() && Spells[Q].IsReady())
             {
-                dmg = ObjectManager.Player.LSGetSpellDamage(target, SpellSlot.Q);
-                int collCount = Spells[R].GetCollision(Helpers.BallMgr.Position.LSTo2D(), new List<Vector2>() { target.ServerPosition.LSTo2D() }).Count();
+                dmg = ObjectManager.Player.GetSpellDamage(target, SpellSlot.Q);
+                int collCount = Spells[R].GetCollision(Helpers.BallMgr.Position.To2D(), new List<Vector2>() { target.ServerPosition.To2D() }).Count();
                 int percent = 10 - (collCount > 6 ? 6 : collCount);
                 dmg = dmg * percent * 0.1;
             }
@@ -510,7 +510,7 @@ namespace SAutoCarry.Champions
 
         private void TargetedSpell_Evade(DetectedTargetedSpellArgs data)
         {
-            if (Spells[E].LSIsReady() && Helpers.BallMgr.IsBallReady)
+            if (Spells[E].IsReady() && Helpers.BallMgr.IsBallReady)
             {
                 if (Orbwalker.ActiveMode != SCommon.Orbwalking.Orbwalker.Mode.Combo || !m_targetedEvader.DisableInComboMode)
                     Spells[E].CastOnUnit(ObjectManager.Player);

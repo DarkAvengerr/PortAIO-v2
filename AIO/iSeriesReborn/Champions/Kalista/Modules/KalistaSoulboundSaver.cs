@@ -23,7 +23,7 @@ using EloBuddy;
 
         public bool ShouldRun()
         {
-            return Variables.spells[SpellSlot.E].LSIsReady() &&
+            return Variables.spells[SpellSlot.E].IsReady() &&
                    MenuExtensions.GetItemValue<bool>("iseriesr.kalista.misc.savesoulbound");
         }
 
@@ -33,7 +33,7 @@ using EloBuddy;
             var SoulBound = KalistaHooks.SoulBound;
 
             if (SoulBound?.HealthPercent < 7
-                && (SoulBound.LSCountEnemiesInRange(500) > 0))
+                && (SoulBound.CountEnemiesInRange(500) > 0))
             {
                 Variables.spells[SpellSlot.R].Cast();
             }

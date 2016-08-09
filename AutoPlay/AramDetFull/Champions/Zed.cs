@@ -17,14 +17,14 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
             Q.Cast(target);
         }
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady() || shadowW != null || lastW+1000>DeathWalker.now)
+            if (!W.IsReady() || shadowW != null || lastW+1000>DeathWalker.now)
                 return;
             lastW = DeathWalker.now;
             W.Cast(target.Position);
@@ -32,7 +32,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady() || W.LSIsReady())
+            if (!E.IsReady() || W.IsReady())
                 return;
             E.Cast();
         }
@@ -40,9 +40,9 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public override void useR(Obj_AI_Base target)
         {
             return;
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
-            if (player.Path.Length > 0 && player.Path[player.Path.Length - 1].LSDistance(player.Position) > 2500)
+            if (player.Path.Length > 0 && player.Path[player.Path.Length - 1].Distance(player.Position) > 2500)
             {
                 R.Cast(player.Path[player.Path.Length - 1]);
             }
@@ -66,7 +66,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (tar == null)
                 return;
 
-            if (!Sector.inTowerRange(tar.Position.LSTo2D()) && (getFullComboDmg(tar) > tar.Health || player.HealthPercent < 25))
+            if (!Sector.inTowerRange(tar.Position.To2D()) && (getFullComboDmg(tar) > tar.Health || player.HealthPercent < 25))
             {
                 if (tFocus == null) tFocus = tar;
                 doLineCombo(tFocus);
@@ -85,7 +85,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void farm()
         {
-            if (player.ManaPercent < 75 || !Q.LSIsReady())
+            if (player.ManaPercent < 75 || !Q.IsReady())
                 return;
 
             foreach (var minion in MinionManager.GetMinions(Q.Range - 50))
@@ -183,19 +183,19 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 return 0;
             float dmg = 0;
             PredictionOutput po = Prediction.GetPrediction(target, 0.5f);
-            float dist = player.LSDistance(po.UnitPosition);
-            float gapDist = ((W.LSIsReady()) ? W.Range : 0);
+            float dist = player.Distance(po.UnitPosition);
+            float gapDist = ((W.IsReady()) ? W.Range : 0);
             float distAfterGap = dist - gapDist;
 
             if (distAfterGap < player.AttackRange)
-                dmg += (float)player.LSGetAutoAttackDamage(target);
-            if (Q.LSIsReady() && distAfterGap < Q.Range)
+                dmg += (float)player.GetAutoAttackDamage(target);
+            if (Q.IsReady() && distAfterGap < Q.Range)
                 dmg += Q.GetDamage(target);
-            if (Q.LSIsReady() && W.LSIsReady() && distAfterGap < Q.Range && dist < Q.Range)
+            if (Q.IsReady() && W.IsReady() && distAfterGap < Q.Range && dist < Q.Range)
                 dmg += Q.GetDamage(target) / 2;
             if (distAfterGap < E.Range)
                 dmg += E.GetDamage(target);
-            if (R.LSIsReady() && distAfterGap < R.Range)
+            if (R.IsReady() && distAfterGap < R.Range)
             {
                 dmg += R.GetDamage(target);
                 dmg += (float)player.CalcDamage(target, Damage.DamageType.Physical, (dmg * (5 + 15 * R.Level) / 100));
@@ -227,8 +227,8 @@ using EloBuddy; namespace ARAMDetFull.Champions
             try
             {
                 //Tried to Add shadow Coax
-                float dist = player.LSDistance(target);
-                if (R.LSIsReady() && shadowR == null && dist < R.Range &&
+                float dist = player.Distance(target);
+                if (R.IsReady() && shadowR == null && dist < R.Range &&
                     canDoCombo(new[] { SpellSlot.Q, SpellSlot.W, SpellSlot.E, SpellSlot.R }))
                 {
                     R.Cast(target);
@@ -238,13 +238,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 // Chat.Print("W2 "+ZedSharp.W2);
                 /*foreach (
                 AIHeroClient newtarget in
-                ObjectManager.Get<AIHeroClient>().Where(hero => hero.LSIsValidTarget(Q.Range)).Where(
-                enemy => enemy.LSHasBuff("zedulttargetmark") && enemy.IsEnemy && !enemy.IsMinion)) {
+                ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsValidTarget(Q.Range)).Where(
+                enemy => enemy.HasBuff("zedulttargetmark") && enemy.IsEnemy && !enemy.IsMinion)) {
                 target = newtarget;
                 }*/
                 //PredictionOutput p1o = Prediction.GetPrediction(target, 0.350f);
                 Vector3 shadowPos = target.Position + Vector3.Normalize(target.Position - shadowR.Position) * E.Range;
-                if (W.LSIsReady() && shadowW == null &&
+                if (W.IsReady() && shadowW == null &&
                     ((!getWshad && recast < DeathWalker.now && !serverTookWCast)))
                 {
                     //V2E(shadowR.Position, po.UnitPosition, E.Range)
@@ -254,15 +254,15 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     wIsCasted = true;
                     recast = DeathWalker.now + 300;
                 }
-                if (E.LSIsReady() && shadowW != null || shadowR != null)
+                if (E.IsReady() && shadowW != null || shadowR != null)
                 {
                     E.Cast();
                 }
-                if (Q.LSIsReady() && shadowW != null && shadowR != null)
+                if (Q.IsReady() && shadowW != null && shadowR != null)
                 {
                     float midDist = dist;
-                    midDist += target.LSDistance(shadowR);
-                    midDist += target.LSDistance(shadowW);
+                    midDist += target.Distance(shadowR);
+                    midDist += target.Distance(shadowW);
                     float delay = midDist / (Q.Speed * 3);
                     PredictionOutput po = Prediction.GetPrediction(target, delay * 1.1f);
                     if (po.Hitchance > HitChance.Low)
@@ -284,17 +284,17 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         private void castItemsFull(Obj_AI_Base target)
         {
-            if (target.LSDistance(player) < 500)
+            if (target.Distance(player) < 500)
             {
                 sumItems.cast(SummonerItems.ItemIds.Ghostblade);
                 sumItems.castIgnite((AIHeroClient)target);
             }
-            if (target.LSDistance(player) < 500)
+            if (target.Distance(player) < 500)
             {
                 sumItems.cast(SummonerItems.ItemIds.BotRK, target);
                 sumItems.cast(SummonerItems.ItemIds.Cutlass, target);
             }
-            if (target.LSDistance(player.ServerPosition) < (400 + target.BoundingRadius - 20))
+            if (target.Distance(player.ServerPosition) < (400 + target.BoundingRadius - 20))
             {
                 sumItems.cast(SummonerItems.ItemIds.Tiamat);
                 sumItems.cast(SummonerItems.ItemIds.Hydra);

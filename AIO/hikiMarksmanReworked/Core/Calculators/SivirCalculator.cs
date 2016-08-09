@@ -16,11 +16,11 @@ using EloBuddy;
     {
         public static float SivirTotalDamage(AIHeroClient enemy)
         {
-            if (SivirSpells.Q.LSIsReady() && Helper.SEnabled("sivir.q.combo"))
+            if (SivirSpells.Q.IsReady() && Helper.SEnabled("sivir.q.combo"))
             {
                 return SivirSpells.Q.GetDamage(enemy);
             }
-            if (SivirSpells.W.LSIsReady() && Helper.SEnabled("sivir.w.combo"))
+            if (SivirSpells.W.IsReady() && Helper.SEnabled("sivir.w.combo"))
             {
                 return SivirSpells.W.GetDamage(enemy);
             }

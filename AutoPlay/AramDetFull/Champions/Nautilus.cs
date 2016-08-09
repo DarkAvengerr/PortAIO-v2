@@ -43,13 +43,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
 
 
-            if (Q.LSIsReady() & Q.IsInRange(unit, Q.Range))
+            if (Q.IsReady() & Q.IsInRange(unit, Q.Range))
             {
                 Q.Cast(unit);
             }
 
 
-            if (R.LSIsReady() && R.IsInRange(unit, R.Range))
+            if (R.IsReady() && R.IsInRange(unit, R.Range))
             {
                 R.Cast(unit);
             }
@@ -59,7 +59,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useQ(Obj_AI_Base target)
         {
-            if (!Q.LSIsReady())
+            if (!Q.IsReady())
                 return;
             if (safeGap(target))
             {
@@ -79,21 +79,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useW(Obj_AI_Base target)
         {
-            if (!W.LSIsReady())
+            if (!W.IsReady())
                 return;
             W.Cast();
         }
 
         public override void useE(Obj_AI_Base target)
         {
-            if (!E.LSIsReady())
+            if (!E.IsReady())
                 return;
                 E.Cast();
         }
 
         public override void useR(Obj_AI_Base target)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
                 return;
             R.Cast(target);
         }

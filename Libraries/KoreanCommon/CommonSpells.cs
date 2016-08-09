@@ -82,14 +82,14 @@
                 if (SpellList != null && SpellList.Count > 0)
                 {
                     CommonSpell ultimate = SpellList.First(x => x.Slot == SpellSlot.R);
-                    if (ultimate != null && ultimate.UseOnCombo && ultimate.LSIsReady() && ultimate.CanCast())
+                    if (ultimate != null && ultimate.UseOnCombo && ultimate.IsReady() && ultimate.CanCast())
                     {
                         range = ultimate.Range;
                     }
                     else
                     {
                         List<CommonSpell> Spells =
-                            SpellList.Where(x => x.Slot != SpellSlot.R && x.UseOnCombo && x.LSIsReady() && x.CanCast())
+                            SpellList.Where(x => x.Slot != SpellSlot.R && x.UseOnCombo && x.IsReady() && x.CanCast())
                                 .ToList();
                         if (Spells != null && Spells.Count > 0)
                         {
@@ -113,7 +113,7 @@
 
                 if (SpellList != null && SpellList.Count > 0)
                 {
-                    List<CommonSpell> Spells = SpellList.Where(x => x.UseOnHaras && x.LSIsReady() && x.CanCast()).ToList();
+                    List<CommonSpell> Spells = SpellList.Where(x => x.UseOnHaras && x.IsReady() && x.CanCast()).ToList();
                     if (Spells != null && Spells.Count > 0)
                     {
                         foreach (CommonSpell spell in Spells)
@@ -138,7 +138,7 @@
 
             if (SpellList != null && SpellList.Count > 0)
             {
-                List<CommonSpell> Spells = SpellList.Where(x => x.UseOnCombo && x.LSIsReady() && x.CanCast()).ToList();
+                List<CommonSpell> Spells = SpellList.Where(x => x.UseOnCombo && x.IsReady() && x.CanCast()).ToList();
                 if (Spells != null && Spells.Count > 0)
                 {
                     foreach (CommonSpell spell in Spells)
@@ -186,12 +186,12 @@
         {
             float totalDamage = 0f;
 
-            if (R.LSIsReady() && R.CanCast() && target.LSIsValidTarget(R.Range))
+            if (R.IsReady() && R.CanCast() && target.IsValidTarget(R.Range))
             {
                 List<CommonSpell> Spells =
                     SpellList.Where(
                         x =>
-                        x.CanCast() && x.LSIsReady() && target.LSIsValidTarget(x.Range) && x.IsKillable(target)
+                        x.CanCast() && x.IsReady() && target.IsValidTarget(x.Range) && x.IsKillable(target)
                         && x.Slot != SpellSlot.R).ToList();
 
                 if (Spells.Count > 0)
@@ -208,19 +208,19 @@
 
         public bool HarasReady()
         {
-            return SpellList.Count(x => x.UseOnHaras && x.LSIsReady() && x.CanCast())
+            return SpellList.Count(x => x.UseOnHaras && x.IsReady() && x.CanCast())
                    == SpellList.Count(x => x.UseOnHaras);
         }
 
         public bool ComboReady()
         {
-            return SpellList.Count(x => x.UseOnCombo && x.LSIsReady() && x.CanCast())
+            return SpellList.Count(x => x.UseOnCombo && x.IsReady() && x.CanCast())
                    == SpellList.Count(x => x.UseOnCombo);
         }
 
         public bool SomeSkillReady()
         {
-            return SpellList.Any(x => x.Range > 0 && x.LSIsReady() && x.CanCast());
+            return SpellList.Any(x => x.Range > 0 && x.IsReady() && x.CanCast());
         }
     }
 
@@ -237,7 +237,7 @@
         {
             FlashStruct flash = new FlashStruct();
 
-            flash.Slot = ObjectManager.Player.LSGetSpellSlot("SummonerFlash");
+            flash.Slot = ObjectManager.Player.GetSpellSlot("SummonerFlash");
             flash.IsReady = ((flash.Slot != SpellSlot.Unknown)
                              && (Player.Spellbook.CanUseSpell(flash.Slot) == SpellState.Ready));
 

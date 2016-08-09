@@ -198,8 +198,8 @@ namespace TwistedFate
         {
             var result = 0;
 
-            var startPoint = ObjectManager.Player.ServerPosition.LSTo2D();
-            var originalDirection = Q.Range*(position - startPoint).LSNormalized();
+            var startPoint = ObjectManager.Player.ServerPosition.To2D();
+            var originalDirection = Q.Range*(position - startPoint).Normalized();
             var originalEndPoint = startPoint + originalDirection;
 
             for (var i = 0; i < points.Count; i++)
@@ -210,10 +210,10 @@ namespace TwistedFate
                 {
                     var endPoint = new Vector2();
                     if (k == 0) endPoint = originalEndPoint;
-                    if (k == 1) endPoint = startPoint + originalDirection.LSRotated(Qangle);
-                    if (k == 2) endPoint = startPoint + originalDirection.LSRotated(-Qangle);
+                    if (k == 1) endPoint = startPoint + originalDirection.Rotated(Qangle);
+                    if (k == 2) endPoint = startPoint + originalDirection.Rotated(-Qangle);
 
-                    if (point.LSDistance(startPoint, endPoint, true, true) <
+                    if (point.Distance(startPoint, endPoint, true, true) <
                         (Q.Width + hitBoxes[i])*(Q.Width + hitBoxes[i]))
                     {
                         result++;
@@ -230,17 +230,17 @@ namespace TwistedFate
             var points = new List<Vector2>();
             var hitBoxes = new List<int>();
 
-            var startPoint = ObjectManager.Player.ServerPosition.LSTo2D();
-            var originalDirection = Q.Range*(unitPosition - startPoint).LSNormalized();
+            var startPoint = ObjectManager.Player.ServerPosition.To2D();
+            var originalDirection = Q.Range*(unitPosition - startPoint).Normalized();
 
             foreach (var enemy in HeroManager.Enemies)
             {
-                if (enemy.LSIsValidTarget() && enemy.NetworkId != unit.NetworkId)
+                if (enemy.IsValidTarget() && enemy.NetworkId != unit.NetworkId)
                 {
                     var pos = Q.GetPrediction(enemy);
                     if (pos.Hitchance >= HitChance.Medium)
                     {
-                        points.Add(pos.UnitPosition.LSTo2D());
+                        points.Add(pos.UnitPosition.To2D());
                         hitBoxes.Add((int) enemy.BoundingRadius);
                     }
                 }
@@ -250,18 +250,18 @@ namespace TwistedFate
 
             for (var i = 0; i < 3; i++)
             {
-                if (i == 0) posiblePositions.Add(unitPosition + originalDirection.LSRotated(0));
-                if (i == 1) posiblePositions.Add(startPoint + originalDirection.LSRotated(Qangle));
-                if (i == 2) posiblePositions.Add(startPoint + originalDirection.LSRotated(-Qangle));
+                if (i == 0) posiblePositions.Add(unitPosition + originalDirection.Rotated(0));
+                if (i == 1) posiblePositions.Add(startPoint + originalDirection.Rotated(Qangle));
+                if (i == 2) posiblePositions.Add(startPoint + originalDirection.Rotated(-Qangle));
             }
 
 
-            if (startPoint.LSDistance(unitPosition) < 900)
+            if (startPoint.Distance(unitPosition) < 900)
             {
                 for (var i = 0; i < 3; i++)
                 {
                     var pos = posiblePositions[i];
-                    var direction = (pos - startPoint).LSNormalized().LSPerpendicular();
+                    var direction = (pos - startPoint).Normalized().Perpendicular();
                     var k = (2/3*(unit.BoundingRadius + Q.Width));
                     posiblePositions.Add(startPoint - k*direction);
                     posiblePositions.Add(startPoint + k*direction);
@@ -290,11 +290,11 @@ namespace TwistedFate
         private static float ComboDamage(AIHeroClient hero)
         {
             var dmg = 0d;
-            dmg += Player.LSGetSpellDamage(hero, SpellSlot.Q)*2;
-            dmg += Player.LSGetSpellDamage(hero, SpellSlot.W);
-            dmg += Player.LSGetSpellDamage(hero, SpellSlot.Q);
+            dmg += Player.GetSpellDamage(hero, SpellSlot.Q)*2;
+            dmg += Player.GetSpellDamage(hero, SpellSlot.W);
+            dmg += Player.GetSpellDamage(hero, SpellSlot.Q);
 
-            if (ObjectManager.Player.LSGetSpellSlot("SummonerIgnite") != SpellSlot.Unknown)
+            if (ObjectManager.Player.GetSpellSlot("SummonerIgnite") != SpellSlot.Unknown)
             {
                 dmg += ObjectManager.Player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
             }
@@ -311,9 +311,9 @@ namespace TwistedFate
                             .Where(
                                 h =>
                                     ObjectManager.Player.Spellbook.CanUseSpell(SpellSlot.R) == SpellState.Ready &&
-                                    h.LSIsValidTarget() && ComboDamage(h) > h.Health))
+                                    h.IsValidTarget() && ComboDamage(h) > h.Health))
                 {
-                    Ping(enemy.Position.LSTo2D());
+                    Ping(enemy.Position.To2D());
                 }
 
             if (Config.Item("CastQ").GetValue<KeyBind>().Active)
@@ -357,13 +357,13 @@ namespace TwistedFate
             if (ObjectManager.Player.Spellbook.CanUseSpell(SpellSlot.Q) == SpellState.Ready && (autoQD || autoQI))
                 foreach (var enemy in HeroManager.Enemies)
                 {
-                    if (enemy.LSIsValidTarget(Q.Range*2))
+                    if (enemy.IsValidTarget(Q.Range*2))
                     {
                         var pred = Q.GetPrediction(enemy);
                         if ((pred.Hitchance == HitChance.Immobile && autoQI) ||
                             (pred.Hitchance == HitChance.Dashing && autoQD))
                         {
-                            CastQ(enemy, pred.UnitPosition.LSTo2D());
+                            CastQ(enemy, pred.UnitPosition.To2D());
                         }
                     }
                 }
@@ -385,7 +385,7 @@ namespace TwistedFate
             if (botrk)
             {
                 if (target != null && target.Type == ObjectManager.Player.Type &&
-                    target.ServerPosition.LSDistance(ObjectManager.Player.ServerPosition) < 450)
+                    target.ServerPosition.Distance(ObjectManager.Player.ServerPosition) < 450)
                 {
                     var hasCutGlass = Items.HasItem(3144);
                     var hasBotrk = Items.HasItem(3153);

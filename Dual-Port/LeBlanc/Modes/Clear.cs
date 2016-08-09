@@ -23,17 +23,17 @@ using EloBuddy;
                 return;
             }
 
-            if (Spells.Q.LSIsReady() && Utilities.Enabled("q.jungle") && mob[0].LSIsValidTarget(Spells.Q.Range))
+            if (Spells.Q.IsReady() && Utilities.Enabled("q.jungle") && mob[0].IsValidTarget(Spells.Q.Range))
             {
                 Spells.Q.CastOnUnit(mob[0]);
             }
 
-            if (Spells.W.LSIsReady() && Utilities.Enabled("w.jungle") && mob[0].LSIsValidTarget(Spells.W.Range))
+            if (Spells.W.IsReady() && Utilities.Enabled("w.jungle") && mob[0].IsValidTarget(Spells.W.Range))
             {
                 Spells.W.Cast(mob[0].Position);
             }
 
-            if (Spells.E.LSIsReady() && Utilities.Enabled("e.jungle") && mob[0].LSIsValidTarget(Spells.E.Range))
+            if (Spells.E.IsReady() && Utilities.Enabled("e.jungle") && mob[0].IsValidTarget(Spells.E.Range))
             {
                 Spells.E.Cast(mob[0].Position);
             }
@@ -57,16 +57,16 @@ using EloBuddy;
                 return;
             }
 
-            if (Spells.Q.LSIsReady() && Utilities.Enabled("q.lasthit"))
+            if (Spells.Q.IsReady() && Utilities.Enabled("q.lasthit"))
             {
-                foreach (var min in minion.Where(o => o.LSIsValidTarget(Spells.Q.Range) && o.CharData.BaseSkinName.EndsWith("MinionSiege") &&
+                foreach (var min in minion.Where(o => o.IsValidTarget(Spells.Q.Range) && o.CharData.BaseSkinName.EndsWith("MinionSiege") &&
                     Spells.Q.GetDamage(o) > o.Health))
                 {
                     Spells.Q.Cast(min);
                 }
             }
 
-            if (Spells.W.LSIsReady() && Utilities.Enabled("w.clear"))
+            if (Spells.W.IsReady() && Utilities.Enabled("w.clear"))
             {
                 var aeominpos = Spells.W.GetCircularFarmLocation(minion);
                 if (aeominpos.MinionsHit >= Utilities.Slider("w.hit.x.minion"))

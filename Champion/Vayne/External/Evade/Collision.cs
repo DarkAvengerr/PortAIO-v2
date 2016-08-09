@@ -66,7 +66,7 @@ namespace VayneHunter_Reborn.External.Evade
             }
 
             _wallCastTick = Environment.TickCount;
-            _yasuoWallVector2 = sender.ServerPosition.LSTo2D();
+            _yasuoWallVector2 = sender.ServerPosition.To2D();
         }
 
         public static FastPredictionResult FastPrediction(Vector2 fromVector2,
@@ -74,16 +74,16 @@ namespace VayneHunter_Reborn.External.Evade
             int delay,
             int speed)
         {
-            var tickDelay = delay / 1000f + (fromVector2.LSDistance(unitAiBase) / speed);
+            var tickDelay = delay / 1000f + (fromVector2.Distance(unitAiBase) / speed);
             var moveSpeedF = tickDelay * unitAiBase.MoveSpeed;
-            var path = unitAiBase.LSGetWaypoints();
+            var path = unitAiBase.GetWaypoints();
 
-            if (path.LSPathLength() > moveSpeedF)
+            if (path.PathLength() > moveSpeedF)
             {
                 return new FastPredictionResult
                 {
                     IsMoving = true,
-                    CurrentPosVector2 = unitAiBase.ServerPosition.LSTo2D(),
+                    CurrentPosVector2 = unitAiBase.ServerPosition.To2D(),
                     PredictedPosVector2 = path.CutPath((int) moveSpeedF)[0]
                 };
             }
@@ -93,8 +93,8 @@ namespace VayneHunter_Reborn.External.Evade
                 return new FastPredictionResult
                 {
                     IsMoving = false,
-                    CurrentPosVector2 = unitAiBase.ServerPosition.LSTo2D(),
-                    PredictedPosVector2 = unitAiBase.ServerPosition.LSTo2D()
+                    CurrentPosVector2 = unitAiBase.ServerPosition.To2D(),
+                    PredictedPosVector2 = unitAiBase.ServerPosition.To2D()
                 };
             }
 
@@ -133,17 +133,17 @@ namespace VayneHunter_Reborn.External.Evade
                             let pos = pred.PredictedPosVector2
                             let w =
                                 skillshot.SpellData.RawRadius + (!pred.IsMoving ? (minion.BoundingRadius - 15) : 0) -
-                                pos.LSDistance(@from, skillshot.End, true)
+                                pos.Distance(@from, skillshot.End, true)
                             where w > 0
                             select
                                 new DetectedCollision
                                 {
                                     PositionVector2 =
-                                        pos.LSProjectOn(skillshot.End, skillshot.Start).LinePoint +
+                                        pos.ProjectOn(skillshot.End, skillshot.Start).LinePoint +
                                         skillshot.Direction * 30,
                                     UnitAiBase = minion,
                                     Type = CollisionObjectTypes.Minion,
-                                    Distance = pos.LSDistance(@from),
+                                    Distance = pos.Distance(@from),
                                     Difference = w
                                 });
 
@@ -155,7 +155,7 @@ namespace VayneHunter_Reborn.External.Evade
                                 ObjectManager.Get<AIHeroClient>()
                                     .Where(
                                         h =>
-                                            (h.LSIsValidTarget(1200, false) && h.Team == ObjectManager.Player.Team &&
+                                            (h.IsValidTarget(1200, false) && h.Team == ObjectManager.Player.Team &&
                                              !h.IsMe || h.Team != ObjectManager.Player.Team))
                             let pred =
                                 FastPrediction(
@@ -164,17 +164,17 @@ namespace VayneHunter_Reborn.External.Evade
                                         0, skillshot.SpellData.Delay - (Environment.TickCount - skillshot.StartTick)),
                                     skillshot.SpellData.MissileSpeed)
                             let pos = pred.PredictedPosVector2
-                            let w = skillshot.SpellData.RawRadius + 30 - pos.LSDistance(@from, skillshot.End, true)
+                            let w = skillshot.SpellData.RawRadius + 30 - pos.Distance(@from, skillshot.End, true)
                             where w > 0
                             select
                                 new DetectedCollision
                                 {
                                     PositionVector2 =
-                                        pos.LSProjectOn(skillshot.End, skillshot.Start).LinePoint +
+                                        pos.ProjectOn(skillshot.End, skillshot.Start).LinePoint +
                                         skillshot.Direction * 30,
                                     UnitAiBase = hero,
                                     Type = CollisionObjectTypes.Minion,
-                                    Distance = pos.LSDistance(@from),
+                                    Distance = pos.Distance(@from),
                                     Difference = w
                                 });
                         break;
@@ -184,7 +184,7 @@ namespace VayneHunter_Reborn.External.Evade
                             !ObjectManager.Get<AIHeroClient>()
                                 .Any(
                                     hero =>
-                                        hero.LSIsValidTarget(float.MaxValue, false) &&
+                                        hero.IsValidTarget(float.MaxValue, false) &&
                                         hero.Team == ObjectManager.Player.Team && hero.ChampionName == "Yasuo"))
                         {
                             break;
@@ -209,9 +209,9 @@ namespace VayneHunter_Reborn.External.Evade
                         var wallWidth = (300 + 50 * Convert.ToInt32(level));
 
 
-                        var wallDirection = (wall.Position.LSTo2D() - _yasuoWallVector2).LSNormalized().LSPerpendicular();
+                        var wallDirection = (wall.Position.To2D() - _yasuoWallVector2).Normalized().Perpendicular();
                         var fraction = wallWidth / 0x2; // 0x2 = 2
-                        var wallStart = wall.Position.LSTo2D() + fraction * wallDirection;
+                        var wallStart = wall.Position.To2D() + fraction * wallDirection;
                         var wallEnd = wallStart - wallWidth * wallDirection;
                         var wallPolygon = new Geometry.Rectangle(wallStart, wallEnd, 75).ToPolygon();
                         var intersections = new List<Vector2>();
@@ -219,7 +219,7 @@ namespace VayneHunter_Reborn.External.Evade
                         for (var i = 0; i < wallPolygon.Points.Count; i++)
                         {
                             var inter =
-                                wallPolygon.Points[i].LSIntersection(
+                                wallPolygon.Points[i].Intersection(
                                     wallPolygon.Points[i != wallPolygon.Points.Count - 1 ? i + 1 : 0], from,
                                     skillshot.End);
                             if (inter.Intersects)
@@ -230,13 +230,13 @@ namespace VayneHunter_Reborn.External.Evade
 
                         if (intersections.Count > 0)
                         {
-                            var intersection = intersections.OrderBy(item => item.LSDistance(from)).ToList()[0];
+                            var intersection = intersections.OrderBy(item => item.Distance(from)).ToList()[0];
                             var collisionT = Environment.TickCount +
                                              Math.Max(
                                                  0,
                                                  skillshot.SpellData.Delay -
                                                  (Environment.TickCount - skillshot.StartTick)) + 100 +
-                                             (1000 * intersection.LSDistance(from)) / skillshot.SpellData.MissileSpeed;
+                                             (1000 * intersection.Distance(from)) / skillshot.SpellData.MissileSpeed;
                             if (collisionT - _wallCastTick < 4000)
                             {
                                 if (skillshot.SpellData.Type != SkillShotType.SkillshotMissileLine)

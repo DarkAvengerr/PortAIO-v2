@@ -28,7 +28,7 @@ namespace UnderratedAIO.Helpers
                 MinionManager.GetMinions(pos, range, MinionTypes.All, MinionTeam.NotAlly)
                     .FirstOrDefault(
                         minion =>
-                            minion.LSIsValidTarget() && minion.IsValid && minion.LSDistance(pos) < range &&
+                            minion.IsValidTarget() && minion.IsValid && minion.Distance(pos) < range &&
                             jungleMonsters.Any(name => minion.Name.StartsWith(name)) && !minion.Name.Contains("Mini") &&
                             !minion.Name.Contains("Spawn"));
         }
@@ -85,7 +85,7 @@ namespace UnderratedAIO.Helpers
                 bool smiteReady = ObjectManager.Player.Spellbook.CanUseSpell(smiteSlot) == SpellState.Ready;
                 if (target != null)
                 {
-                    if (smite.CanCast(target) && smiteReady && player.LSDistance(target.Position) <= smite.Range &&
+                    if (smite.CanCast(target) && smiteReady && player.Distance(target.Position) <= smite.Range &&
                         smiteDamage(target) >= target.Health)
                     {
                         smite.Cast(target);

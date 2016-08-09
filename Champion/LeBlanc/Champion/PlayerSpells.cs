@@ -50,12 +50,12 @@ namespace Leblanc.Champion
 
         public static bool IsReadyInt(this Spell spell)
         {
-            if (!R.LSIsReady())
+            if (!R.IsReady())
             {
                 return false;
             }
 
-            return spell.LSIsReady();
+            return spell.IsReady();
         }
 
         private static int LastSeen(Obj_AI_Base t)
@@ -66,7 +66,7 @@ namespace Leblanc.Champion
         static void Spellbook_OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
         {
             //        var t = hero;
-            //        if (!t.LSIsValidTarget(E.Range))
+            //        if (!t.IsValidTarget(E.Range))
             //        {
             //            return;
             //        }
@@ -84,7 +84,7 @@ namespace Leblanc.Champion
             //    if (hero != null)
             //    {
             //        var t = hero;
-            //        if (!t.LSIsValidTarget(E.Range))
+            //        if (!t.IsValidTarget(E.Range))
             //        {
             //            return;
             //        }
@@ -112,7 +112,7 @@ namespace Leblanc.Champion
         }
         public static void CastW(Vector3 t)
         {
-            if (W.LSIsReady() && !W.StillJumped())
+            if (W.IsReady() && !W.StillJumped())
             {
                 W.Cast(t, true);
             }
@@ -120,7 +120,7 @@ namespace Leblanc.Champion
 
         public static void CastW2(Vector3 t)
         {
-            if (W2.LSIsReady() && !W2.StillJumped())
+            if (W2.IsReady() && !W2.StillJumped())
             {
                 W2.Cast(t, true);
             }
@@ -136,7 +136,7 @@ namespace Leblanc.Champion
 
         public static void CastE(Obj_AI_Base t)
         {
-            if (E.LSIsReady() && t.LSIsValidTarget(Modes.ModeSettings.MaxERange))
+            if (E.IsReady() && t.IsValidTarget(Modes.ModeSettings.MaxERange))
             {
                 HitChance[] hitChances = new[] { HitChance.VeryHigh, HitChance.High, HitChance.Medium, HitChance.Low };
                 E.UpdateSourcePosition(ObjectManager.Player.ServerPosition, t.ServerPosition);
@@ -149,7 +149,7 @@ namespace Leblanc.Champion
 
         public static void CastE2(Obj_AI_Base t)
         {
-            if (CommonHelper.SpellRStatus == CommonHelper.SpellRName.R2xE && E.LSIsReady() && t.LSIsValidTarget(Modes.ModeSettings.MaxERange))
+            if (CommonHelper.SpellRStatus == CommonHelper.SpellRName.R2xE && E.IsReady() && t.IsValidTarget(Modes.ModeSettings.MaxERange))
             {
                 HitChance[] hitChances = new[] { HitChance.VeryHigh, HitChance.High, HitChance.Medium, HitChance.Low};
                 E.UpdateSourcePosition(ObjectManager.Player.ServerPosition, t.ServerPosition);

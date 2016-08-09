@@ -27,19 +27,19 @@ using EloBuddy;
                 return;
             }
 
-            if (spells.R.LSIsReady() && spells.R.CanCast())
+            if (spells.R.IsReady() && spells.R.CanCast())
             {
                 Render.Circle.DrawCircle(champion.Player.Position, spells.R.Range, Color.DarkGreen, 5);
             }
-            else if (spells.Q.LSIsReady() && spells.Q.CanCast())
+            else if (spells.Q.IsReady() && spells.Q.CanCast())
             {
                 Render.Circle.DrawCircle(champion.Player.Position, spells.Q.Range, Color.DarkGreen, 5);
             }
-            else if (spells.W.LSIsReady() && spells.W.CanCast())
+            else if (spells.W.IsReady() && spells.W.CanCast())
             {
                 Render.Circle.DrawCircle(champion.Player.Position, spells.W.Range, Color.DarkGreen, 5);
             }
-            else if (spells.E.LSIsReady() && spells.E.CanCast())
+            else if (spells.E.IsReady() && spells.E.CanCast())
             {
                 Render.Circle.DrawCircle(champion.Player.Position, spells.E.Range, Color.DarkGreen, 5);
             }

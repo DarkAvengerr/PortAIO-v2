@@ -40,7 +40,7 @@ using EloBuddy; namespace ezEvade.SpecialSpells
                     {
                         var info = entry.Value;
 
-                        if (info.Name == "Shadow" && info.usePosition && info.position.LSDistance(obj.Position) < 5)
+                        if (info.Name == "Shadow" && info.usePosition && info.position.Distance(obj.Position) < 5)
                         {
                             info.Name = "Shadow";
                             info.usePosition = false;
@@ -80,12 +80,12 @@ using EloBuddy; namespace ezEvade.SpecialSpells
                             Vector3 endPos2;
                             if (info.usePosition == false)
                             {
-                                endPos2 = info.obj.Position.LSExtend(args.End, spellData.range);
+                                endPos2 = info.obj.Position.Extend(args.End, spellData.range);
                                 SpellDetector.CreateSpellData(hero, info.obj.Position, endPos2, spellData, null, 0, false);
                             }
                             else
                             {
-                                endPos2 = info.position.LSExtend(args.End, spellData.range);
+                                endPos2 = info.position.Extend(args.End, spellData.range);
                                 SpellDetector.CreateSpellData(hero, info.position, endPos2, spellData, null, 0, false);
                             }
 

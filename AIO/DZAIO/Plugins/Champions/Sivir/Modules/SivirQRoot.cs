@@ -25,7 +25,7 @@ using EloBuddy;
         public bool ShouldGetExecuted()
         {
             return Variables.AssemblyMenu.GetItemValue<bool>("dzaio.champion.sivir.extra.autoQRoot") &&
-                   Variables.Spells[SpellSlot.Q].LSIsReady();
+                   Variables.Spells[SpellSlot.Q].IsReady();
 
         }
 
@@ -36,12 +36,12 @@ using EloBuddy;
 
         public void OnExecute()
         {
-            var qHero = HeroManager.Enemies.Where(h => h.LSIsValidTarget(Variables.Spells[SpellSlot.Q].Range) && (h.IsHeavilyImpaired() || h.IsLightlyImpaired()))
+            var qHero = HeroManager.Enemies.Where(h => h.IsValidTarget(Variables.Spells[SpellSlot.Q].Range) && (h.IsHeavilyImpaired() || h.IsLightlyImpaired()))
                 .OrderBy(h => Variables.Spells[SpellSlot.Q].GetDamage(h))
                 .LastOrDefault();
 
             if (qHero != null
-                && ObjectManager.Player.LSDistance(qHero) <= Orbwalking.GetRealAutoAttackRange(qHero) * 1.1f)
+                && ObjectManager.Player.Distance(qHero) <= Orbwalking.GetRealAutoAttackRange(qHero) * 1.1f)
             {
                 Variables.Spells[SpellSlot.Q].Cast();
             }

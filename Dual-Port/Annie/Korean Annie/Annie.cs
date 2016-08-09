@@ -103,8 +103,8 @@ using EloBuddy;
             CanFarm =
                 () =>
                 (!GetParamBool("supportmode"))
-                || ((GetParamBool("supportmode")) && (Player.LSCountAlliesInRange(1500f) == 1));
-            CheckStun = () => Player.LSHasBuff("pyromania_particle");
+                || ((GetParamBool("supportmode")) && (Player.CountAlliesInRange(1500f) == 1));
+            CheckStun = () => Player.HasBuff("pyromania_particle");
             SaveStun = () => (CheckStun() && (GetParamBool("savestunforcombo")));
         }
 
@@ -119,7 +119,7 @@ using EloBuddy;
         private void EAgainstEnemyAA(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if ((GetParamBool("useeagainstaa")) && (!sender.IsMe) && (sender.IsEnemy) && (sender is AIHeroClient)
-                && (args.Target != null) && (args.Target.IsMe) && (Player.LSDistance(args.End) < 440)
+                && (args.Target != null) && (args.Target.IsMe) && (Player.Distance(args.End) < 440)
                 && (args.SData.Name.ToLowerInvariant().Contains("attack")))
             {
                 Spells.E.Cast();
@@ -131,11 +131,11 @@ using EloBuddy;
             if ((GetParamBool("interruptspells")) && (CheckStun()) && (sender.IsEnemy)
                 && (args.DangerLevel > Interrupter2.DangerLevel.Medium))
             {
-                if ((Spells.Q.LSIsReady()) && (sender.LSIsValidTarget(Spells.Q.Range)))
+                if ((Spells.Q.IsReady()) && (sender.IsValidTarget(Spells.Q.Range)))
                 {
                     Spells.Q.Cast(sender);
                 }
-                if ((Spells.W.LSIsReady()) && (sender.LSIsValidTarget(Spells.W.Range)))
+                if ((Spells.W.IsReady()) && (sender.IsValidTarget(Spells.W.Range)))
                 {
                     Spells.W.Cast(sender);
                 }
@@ -144,8 +144,8 @@ using EloBuddy;
 
         private void StackE(EventArgs args)
         {
-            if (!Player.LSIsRecalling() && !CheckStun() && GetParamBool("useetostack")
-                && Player.ManaPercent > GetParamSlider("manalimitforstacking") && Spells.E.LSIsReady())
+            if (!Player.IsRecalling() && !CheckStun() && GetParamBool("useetostack")
+                && Player.ManaPercent > GetParamSlider("manalimitforstacking") && Spells.E.IsReady())
             {
                 LeagueSharp.Common.Utility.DelayAction.Add(100, () => Spells.E.Cast());
             }
@@ -155,11 +155,11 @@ using EloBuddy;
         {
             if (GetParamBool("antigapcloser") && (CheckStun()))
             {
-                if ((Spells.Q.LSIsReady()) && (gapcloser.Sender.LSIsValidTarget(Spells.Q.Range)))
+                if ((Spells.Q.IsReady()) && (gapcloser.Sender.IsValidTarget(Spells.Q.Range)))
                 {
                     Spells.Q.Cast(gapcloser.Sender);
                 }
-                else if ((Spells.W.LSIsReady()) && (gapcloser.Sender.LSIsValidTarget(Spells.W.Range)))
+                else if ((Spells.W.IsReady()) && (gapcloser.Sender.IsValidTarget(Spells.W.Range)))
                 {
                     Spells.W.Cast(gapcloser.Sender);
                 }

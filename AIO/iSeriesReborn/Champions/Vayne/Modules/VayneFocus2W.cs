@@ -30,7 +30,7 @@ using EloBuddy;
 
         public void Run()
         {
-            var target = HeroManager.Enemies.Find(enemy => enemy.LSIsValidTarget(ObjectManager.Player.AttackRange + 65f + 65f)
+            var target = HeroManager.Enemies.Find(enemy => enemy.IsValidTarget(ObjectManager.Player.AttackRange + 65f + 65f)
                     && VayneUtility.Has2WStacks(enemy));
             if (target != null)
             {

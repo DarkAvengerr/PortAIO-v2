@@ -140,14 +140,14 @@ using EloBuddy;
                 {
                     float damage = 0;
 
-                    if (_Q.LSIsReady())
+                    if (_Q.IsReady())
                         damage += _Q.GetDamage(enemy);
-                    if (_W.LSIsReady())
+                    if (_W.IsReady())
                         damage += _W.GetDamage(enemy);
-                    if (_R.LSIsReady())
+                    if (_R.IsReady())
                         damage += _R.GetDamage(enemy);
                     if (!Player.Spellbook.IsAutoAttacking)
-                        damage += (float)Player.LSGetAutoAttackDamage(enemy, true);
+                        damage += (float)Player.GetAutoAttackDamage(enemy, true);
                     return damage;
                 }
                 return 0;
@@ -167,7 +167,7 @@ using EloBuddy;
             try
             {
                 if (Player.IsDead) return;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.LSIsValidTarget() && !ene.IsZombie))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
                 {
                     if (_MainMenu.Item("Nami_Indicator").GetValue<bool>())
                     {
@@ -216,19 +216,19 @@ using EloBuddy;
                 if (_MainMenu.Item("Nami_Flee").GetValue<KeyBind>().Active)
                 {
                     MovingPlayer(Game.CursorPos);
-                    if (_E.LSIsReady())
+                    if (_E.IsReady())
                         _E.CastOnUnit(Player, true);
-                    if (_Q.LSIsReady() && QTarget != null && _Q.GetPrediction(QTarget).Hitchance >= HitChance.Low)
+                    if (_Q.IsReady() && QTarget != null && _Q.GetPrediction(QTarget).Hitchance >= HitChance.Low)
                         _Q.CastIfHitchanceEquals(QTarget, _Q.GetPrediction(QTarget).Hitchance, true);
                 }
 
                 // Auto W Heal
                 if (_MainMenu.Item("Nami_HealWMinEnable").GetValue<bool>())
                 {
-                    var Ally = HeroManager.Allies.FirstOrDefault(f => f.Position.LSDistance(Player.Position) <= _W.Range && !f.IsDead
+                    var Ally = HeroManager.Allies.FirstOrDefault(f => f.Position.Distance(Player.Position) <= _W.Range && !f.IsDead
                     && f.HealthPercent <= _MainMenu.Item("Nami_HealWMin").GetValue<Slider>().Value
-                    && !f.LSInFountain(LeagueSharp.Common.Utility.FountainType.OwnFountain));
-                    if (Ally != null && !Ally.LSIsRecalling())
+                    && !f.InFountain(LeagueSharp.Common.Utility.FountainType.OwnFountain));
+                    if (Ally != null && !Ally.IsRecalling())
                     {
                         _W.CastOnUnit(Ally, true);
                         //Chat.Print("local 1");
@@ -238,26 +238,26 @@ using EloBuddy;
 
                 //KillSteal
                 if (_MainMenu.Item("Nami_KUse_W").GetValue<bool>())
-                    if (_W.LSIsReady() && WTarget != null)
+                    if (_W.IsReady() && WTarget != null)
                         if (WTarget.Health < _W.GetDamage(WTarget))
                             _W.CastOnUnit(WTarget, true);
                 if (_MainMenu.Item("Nami_KUse_Q").GetValue<bool>())
-                    if (_Q.LSIsReady() && QTarget != null)
+                    if (_Q.IsReady() && QTarget != null)
                         if (QTarget.Health < _Q.GetDamage(QTarget))
                             if (_Q.GetPrediction(QTarget).Hitchance >= HitChance.Medium)
                                 _Q.CastIfHitchanceEquals(QTarget, HitChance.Medium, true);
                 //Auto R 
-                if (_MainMenu.Item("Nami_CUse_MinR1").GetValue<bool>() && _R.LSIsReady())
+                if (_MainMenu.Item("Nami_CUse_MinR1").GetValue<bool>() && _R.IsReady())
                 {
-                    var Enemy = HeroManager.Enemies.OrderBy(f => f.LSDistance(Player.Position));
+                    var Enemy = HeroManager.Enemies.OrderBy(f => f.Distance(Player.Position));
                     if (Enemy != null)
                     {
                         foreach (var item in Enemy)
                         {
-                            if (item.Position.LSDistance(Player.Position) < _R.Range && !item.IsDead)
+                            if (item.Position.Distance(Player.Position) < _R.Range && !item.IsDead)
                             {
-                                var RRange = new Geometry.Polygon.Rectangle(Player.Position, Player.Position.LSExtend(item.Position, +1200), 250);
-                                var Count = HeroManager.Enemies.Where(f => f.LSDistance(Player.Position) <= 1500).Count(f => RRange.IsInside(f.Position));
+                                var RRange = new Geometry.Polygon.Rectangle(Player.Position, Player.Position.Extend(item.Position, +1200), 250);
+                                var Count = HeroManager.Enemies.Where(f => f.Distance(Player.Position) <= 1500).Count(f => RRange.IsInside(f.Position));
                                 if (Count >= _MainMenu.Item("Nami_CUse_MinR").GetValue<Slider>().Value)
                                 {
                                     _R.Cast(item.Position, true);
@@ -273,33 +273,33 @@ using EloBuddy;
                 {
                     if (_MainMenu.Item("Nami_CUse_Q").GetValue<bool>())
                         if (QTarget != null)
-                            if (_Q.LSIsReady())
+                            if (_Q.IsReady())
                                 if (_Q.GetPrediction(QTarget).Hitchance >= HitChance.Medium)
                                 {
                                     _Q.CastIfHitchanceEquals(QTarget, _Q.GetPrediction(QTarget).Hitchance, true);
                                     return;
                                 }
-                    if (_MainMenu.Item("Nami_CUse_W").GetValue<bool>() && _W.LSIsReady())
+                    if (_MainMenu.Item("Nami_CUse_W").GetValue<bool>() && _W.IsReady())
                     {
                         // W to Ally 
                         foreach (var item in HeroManager.Allies.OrderByDescending(f => f.Health))
                         {
-                            if (item.Position.LSDistance(Player.Position) <= _W.Range)
-                                if ((HeroManager.Enemies.FirstOrDefault(f => f.Position.LSDistance(item.Position) <= _W.Range - 50 && !f.IsDead) != null))
+                            if (item.Position.Distance(Player.Position) <= _W.Range)
+                                if ((HeroManager.Enemies.FirstOrDefault(f => f.Position.Distance(item.Position) <= _W.Range - 50 && !f.IsDead) != null))
                                 {
                                     _W.CastOnUnit(item, true);
                                     //Chat.Print("local 2");
                                     return;
                                 }
                         }
-                        if (WTarget != null && WTarget.Position.LSDistance(Player.Position) <= _W.Range)
+                        if (WTarget != null && WTarget.Position.Distance(Player.Position) <= _W.Range)
                         {
                             _W.CastOnUnit(WTarget, true);
                             //Chat.Print("local 3");
                         }                            
                     }
-                    if (_MainMenu.Item("Nami_CUse_R").GetValue<bool>() && _R.LSIsReady() && RTarget != null)
-                        if (RTarget.LSDistance(Player.Position) <= 1300)
+                    if (_MainMenu.Item("Nami_CUse_R").GetValue<bool>() && _R.IsReady() && RTarget != null)
+                        if (RTarget.Distance(Player.Position) <= 1300)
                             if (_R.GetPrediction(RTarget).Hitchance >= HitChance.Medium)
                                 _R.CastIfHitchanceEquals(RTarget, _R.GetPrediction(RTarget).Hitchance);
                 }
@@ -310,26 +310,26 @@ using EloBuddy;
                 {
                     if (_MainMenu.Item("Nami_HUse_Q").GetValue<bool>())
                         if (QTarget != null)
-                            if (_Q.LSIsReady())
+                            if (_Q.IsReady())
                                 if (_Q.GetPrediction(QTarget).Hitchance >= HitChance.Medium)
                                 {
                                     _Q.CastIfHitchanceEquals(QTarget, _Q.GetPrediction(QTarget).Hitchance, true);
                                     return;
                                 }
-                    if (_MainMenu.Item("Nami_HUse_W").GetValue<bool>() && _W.LSIsReady())
+                    if (_MainMenu.Item("Nami_HUse_W").GetValue<bool>() && _W.IsReady())
                     {
                         // W to Ally 
                         foreach (var item in HeroManager.Allies.OrderByDescending(f => f.Health))
                         {
-                            if (item.Position.LSDistance(Player.Position) <= _W.Range && !item.IsDead)
-                                if ((HeroManager.Enemies.FirstOrDefault(f => f.Position.LSDistance(item.Position) <= _W.Range - 50 && !f.IsDead) != null) && !item.Name.ToLower().Contains("name"))
+                            if (item.Position.Distance(Player.Position) <= _W.Range && !item.IsDead)
+                                if ((HeroManager.Enemies.FirstOrDefault(f => f.Position.Distance(item.Position) <= _W.Range - 50 && !f.IsDead) != null) && !item.Name.ToLower().Contains("name"))
                                 {
                                     _W.CastOnUnit(item, true);
                                     //Chat.Print("local 4");
                                     return;
                                 }
                         }
-                        if (WTarget != null && WTarget.Position.LSDistance(Player.Position) <= _W.Range && WTarget.IsChampion())
+                        if (WTarget != null && WTarget.Position.Distance(Player.Position) <= _W.Range && WTarget.IsChampion())
                         {
                             _W.CastOnUnit(WTarget, true);
                             //Chat.Print("local 5");
@@ -351,10 +351,10 @@ using EloBuddy;
             try
             {
                 if (_MainMenu.Item("Nami_AntiQ").GetValue<bool>())
-                    if (_Q.LSIsReady() && gapcloser.Sender.Position.LSDistance(Player.Position) < _Q.Range)
+                    if (_Q.IsReady() && gapcloser.Sender.Position.Distance(Player.Position) < _Q.Range)
                         _Q.CastIfHitchanceEquals(gapcloser.Sender, _Q.GetPrediction(gapcloser.Sender).Hitchance, true);
                 if (_MainMenu.Item("Nami_AntiR").GetValue<bool>())
-                    if (_R.LSIsReady() && gapcloser.Sender.Position.LSDistance(Player.Position) < _R.Range)
+                    if (_R.IsReady() && gapcloser.Sender.Position.Distance(Player.Position) < _R.Range)
                         _R.CastIfHitchanceEquals(gapcloser.Sender, HitChance.Medium, true);
             }
             catch (Exception)
@@ -375,17 +375,17 @@ using EloBuddy;
                     // Combo E
                     if (_MainMenu.Item("CKey").GetValue<KeyBind>().Active)
                         if (_MainMenu.Item("Nami_CUse_E").GetValue<bool>())
-                            if (_E.LSIsReady())
+                            if (_E.IsReady())
                                 if (sender.IsAlly)
-                                    if (sender.Position.LSDistance(Player.Position) < _E.Range)
+                                    if (sender.Position.Distance(Player.Position) < _E.Range)
                                         if (args.SData.Name.ToLower().Contains("attack"))
                                             _E.CastOnUnit(sender);
                     // Harass E
                     if (_MainMenu.Item("HKey").GetValue<KeyBind>().Active || _MainMenu.Item("Nami_Auto_HEnable").GetValue<bool>())
                         if (_MainMenu.Item("Nami_HUse_E").GetValue<bool>())
-                            if (_E.LSIsReady())
+                            if (_E.IsReady())
                                 if (sender.IsAlly)
-                                    if (sender.Position.LSDistance(Player.Position) < _E.Range)
+                                    if (sender.Position.Distance(Player.Position) < _E.Range)
                                         if (args.SData.Name.ToLower().Contains("attack"))
                                             _E.CastOnUnit(sender);
                 }

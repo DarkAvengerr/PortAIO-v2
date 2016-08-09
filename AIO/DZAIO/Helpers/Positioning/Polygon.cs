@@ -52,7 +52,7 @@ using EloBuddy;
                 var points = new List<Vector2>();
 
                 var v1 = endVector2 - startVector2;
-                var to1Side = Vector2.Normalize(v1).LSPerpendicular() * radius;
+                var to1Side = Vector2.Normalize(v1).Perpendicular() * radius;
 
                 points.Add(startVector2 + to1Side);
                 points.Add(startVector2 - to1Side);

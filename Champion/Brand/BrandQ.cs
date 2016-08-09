@@ -36,7 +36,7 @@ namespace TheBrand
         {
             if (_brandQWE.Any(spell => spell.Instance.State == SpellState.Ready || spell.Instance.CooldownExpires > Game.Time && spell.Instance.CooldownExpires - Game.Time < spell.Instance.Cooldown / 2f) || _w.Instance.Cooldown - (_w.Instance.CooldownExpires - Game.Time) < 1)
             {
-                if ((!target.HasBuff("brandablaze") || target.GetBuff("brandablaze").EndTime - Game.Time < Delay) && !Provider.IsMarked(target) && !(ObjectManager.Player.LSGetSpellDamage(target, Instance.Slot) + ObjectManager.Player.LSGetAutoAttackDamage(target, true) > target.Health))
+                if ((!target.HasBuff("brandablaze") || target.GetBuff("brandablaze").EndTime - Game.Time < Delay) && !Provider.IsMarked(target) && !(ObjectManager.Player.GetSpellDamage(target, Instance.Slot) + ObjectManager.Player.GetAutoAttackDamage(target, true) > target.Health))
                     return;
             }
 

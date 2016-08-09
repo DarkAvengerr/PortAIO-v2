@@ -148,7 +148,7 @@
         public void Load()
         {
             Console.WriteLine("Loaded Leona");
-            Ignite = this.Player.LSGetSpellSlot("summonerdot");
+            Ignite = this.Player.GetSpellSlot("summonerdot");
             spells[Spells.E].SetSkillshot(0.25f, 120f, 2000f, false, SkillshotType.SkillshotLine);
             spells[Spells.R].SetSkillshot(1f, 300f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 
@@ -166,8 +166,8 @@
         {
             var gapCloserActive = this.Menu.Item("ElEasy.Leona.Interrupt.Activated").IsActive();
 
-            if (gapCloserActive && spells[Spells.Q].LSIsReady()
-                && gapcloser.Sender.LSDistance(this.Player) < spells[Spells.Q].Range)
+            if (gapCloserActive && spells[Spells.Q].IsReady()
+                && gapcloser.Sender.Distance(this.Player) < spells[Spells.Q].Range)
             {
                 spells[Spells.Q].Cast();
             }
@@ -204,13 +204,13 @@
             Interrupter2.InterruptableTargetEventArgs args)
         {
             if (args.DangerLevel != Interrupter2.DangerLevel.High
-                || sender.LSDistance(this.Player) > spells[Spells.R].Range)
+                || sender.Distance(this.Player) > spells[Spells.R].Range)
             {
                 return;
             }
 
-            if (sender.LSIsValidTarget(spells[Spells.R].Range) && args.DangerLevel == Interrupter2.DangerLevel.High
-                && spells[Spells.R].LSIsReady())
+            if (sender.IsValidTarget(spells[Spells.R].Range) && args.DangerLevel == Interrupter2.DangerLevel.High
+                && spells[Spells.R].IsReady())
             {
                 spells[Spells.R].Cast(sender);
             }
@@ -234,19 +234,19 @@
             if (useQ)
             {
                 //check aa range
-                if (spells[Spells.Q].LSIsReady() && !target.HasBuff("BlackShield") || !target.HasBuff("SivirShield")
+                if (spells[Spells.Q].IsReady() && !target.HasBuff("BlackShield") || !target.HasBuff("SivirShield")
                     || !target.HasBuff("BansheesVeil") || !target.HasBuff("ShroudofDarkness"))
                 {
                     spells[Spells.Q].Cast();
                 }
             }
 
-            if (useW && spells[Spells.W].LSIsReady() && target.LSIsValidTarget(spells[Spells.W].Range))
+            if (useW && spells[Spells.W].IsReady() && target.IsValidTarget(spells[Spells.W].Range))
             {
                 spells[Spells.W].Cast();
             }
 
-            if (useE && spells[Spells.E].LSIsReady() && target.LSIsValidTarget(spells[Spells.E].Range))
+            if (useE && spells[Spells.E].IsReady() && target.IsValidTarget(spells[Spells.E].Range))
             {
                 var pred = spells[Spells.E].GetPrediction(target).Hitchance;
                 if (pred >= HitChance.VeryHigh)
@@ -255,8 +255,8 @@
                 }
             }
 
-            if (useR && spells[Spells.R].LSIsReady() && target.LSIsValidTarget(spells[Spells.R].Range)
-                && this.Player.LSCountEnemiesInRange(spells[Spells.R].Range) >= countEnemies)
+            if (useR && spells[Spells.R].IsReady() && target.IsValidTarget(spells[Spells.R].Range)
+                && this.Player.CountEnemiesInRange(spells[Spells.R].Range) >= countEnemies)
             {
                 var pred = spells[Spells.R].GetPrediction(target);
                 if (pred.Hitchance >= HitChance.VeryHigh)
@@ -265,7 +265,7 @@
                 }
             }
 
-            if (target.LSIsValidTarget(600) && this.IgniteDamage(target) >= target.Health && useI)
+            if (target.IsValidTarget(600) && this.IgniteDamage(target) >= target.Health && useI)
             {
                 this.Player.Spellbook.CastSpell(Ignite, target);
             }
@@ -334,12 +334,12 @@
                 return;
             }
 
-            if (useQ && spells[Spells.Q].LSIsReady())
+            if (useQ && spells[Spells.Q].IsReady())
             {
                 spells[Spells.Q].Cast();
             }
 
-            if (useE && spells[Spells.E].LSIsReady() && target.LSIsValidTarget(spells[Spells.E].Range))
+            if (useE && spells[Spells.E].IsReady() && target.IsValidTarget(spells[Spells.E].Range))
             {
                 spells[Spells.E].Cast(target);
             }
