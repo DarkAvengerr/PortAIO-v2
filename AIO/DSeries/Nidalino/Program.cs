@@ -54,12 +54,7 @@ using EloBuddy;
 
         private static float _spideQcd = 0, _spideWcd = 0, _spideEcd = 0;
 
-        private static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
-        }
-
-        private static void Game_OnGameLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
             Player = ObjectManager.Player;
             if (ObjectManager.Player.BaseSkinName != ChampionName) return;

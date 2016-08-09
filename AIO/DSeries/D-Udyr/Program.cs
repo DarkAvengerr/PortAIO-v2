@@ -52,12 +52,8 @@ using EloBuddy;
         private static readonly int[] PhoenixREWQ = {4, 2, 3, 4, 4, 3, 4, 4, 3, 3, 3, 2, 2, 2, 1, 2, 1, 1};
         private static readonly int[] PhoenixRWEQ = {4, 2, 3, 4, 4, 2, 4, 4, 2, 2, 2, 3, 3, 3, 1, 3, 1, 1};
 
-        private static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
-        }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
             _player = ObjectManager.Player;
             //if (ObjectManager.Player.BaseSkinName != ChampionName) return;

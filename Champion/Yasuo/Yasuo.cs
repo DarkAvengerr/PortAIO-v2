@@ -19,10 +19,9 @@ using EloBuddy; namespace YasuoPro
 
         public Yasuo()
         {
-            CustomEvents.Game.OnGameLoad += OnLoad;
         }
 
-        void OnLoad(EventArgs args)
+        public void OnLoad()
         {
             Yasuo = ObjectManager.Player;
 

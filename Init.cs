@@ -1277,239 +1277,779 @@ namespace PortAIO
                 case Champion.Nidalee:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
-
+                        case 0: //Kurisu Nidalee
+                            KurisuNidalee.Program.Main();
+                            break;
+                        case 1: // HeavenStrikeNidalee
+                            HeavenStrikeNidalee.Program.Game_OnGameLoad();
+                            break;
+                        case 2: //Nechrito Nidalee
+                            Nechrito_Nidalee.Program.OnLoad();
+                            break;
+                        case 3: // D-Nidalee
+                            D_Nidalee.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 // Nocturne
                 case Champion.Nunu:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // Nunu by Aqlohol
+                            LSharpNunu.Nunu.Game_OnGameLoad();
+                            break;
+                        case 1: // Support is Easy
+                            Support.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Olaf:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // Olaf is Back II
+                            Olaf.Olaf.Game_OnGameLoad();
+                            break;
+                        case 1: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Orianna:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // Kortatu Orianna
+                            Orianna.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // DZAIO
+                            DZAIO_Reborn.Program.Main();
+                            break;
+                        case 2: // OKTW
+                            OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
+                            break;
+                        case 3: // SAutoCarry
+                            SAutoCarry.Program.Game_OnGameLoad();
+                            break;
+                        case 4: // SFXChallenger
+                            SFXChallenger.Program.Main();
+                            break;
+                        case 5: // xSalice
+                            xSaliceResurrected.Program.LoadReligion();
+                            break;
                     }
                     break;
                 case Champion.Pantheon:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // xQx Pantheon
+                            Pantheon.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // SAutoCarry
+                            SAutoCarry.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Poppy:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // FreshBooster
+                            FreshBooster.Program.Game_OnGameLoad();
+                            break;
+                        case 2: // vSeries
+                            vSupport_Series.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Quinn:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // OKTW
+                            OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
+                            break;
+                        case 1: // GFUEL Quinn
+                            GFUELQuinn.Quinn.OnGameLoad();
+                            break;
                     }
                     break;
                 // Rammus
                 case Champion.RekSai:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // D-Rek'Sai
+                            D_RekSai.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // HeavenStrike Rek'Sai
+                            HeavenStrikeReksaj.Program.Game_OnGameLoad();
+                            break;
+                        case 2: // Rek'Sai Winner of Fights
+                            RekSai.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Renekton:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // SharpyAIO
+                            Sharpy_AIO.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Rengar:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // ElRengar
+                            ElRengarRevamped.Rengar.OnLoad();
+                            break;
+                        case 1: // D-Rengar
+                            D_Rengar.Program.Game_OnGameLoad();
+                            break;
+                        case 2: // SAutoCarry
+                            SAutoCarry.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Riven:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // KurisuRiven
+                            KurisuRiven.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // HoolaRiven
+                            HoolaRiven.Program.OnGameLoad();
+                            break;
+                        case 2: // SAutoCarry
+                            SAutoCarry.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Rumble:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // xSalice
+                            xSaliceResurrected.Program.LoadReligion();
+                            break;
                     }
                     break;
                 case Champion.Ryze:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // Survivor Ryze
+                            SurvivorSeries.SurviorSeries.Main();
+                            break;
+                        case 1: // BrianSharp
+                            BrianSharp.Program.Main();
+                            break;
+                        case 2: // FreshBooster
+                            FreshBooster.Program.Game_OnGameLoad();
+                            break;
+                        case 3: // ReformedAIO
+                            ReformedAIO.Program.Main();
+                            break;
+                        case 4: // SharpShooter
+                            SharpShooter.Program.Game_OnGameLoad();
+                            break;
+                        case 5: // StonedSeriesAIO
+                            StonedSeriesAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Sejuani:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // ElSejuani
+                            ElSejuani.Sejuani.OnLoad();
+                            break;
+                        case 1: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
                     }
                     break;
                 // Shaco
                 case Champion.Shen:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // BrianSharp
+                            BrianSharp.Program.Main();
+                            break;
+                        case 2: // Kimbaeng Shen
+                            Kimbaeng_Shen.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Shyvana:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // D-Shyvana
+                            D_Shyvana.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // HeavenStrike Shyvana
+                            HeavenStrikeShyvana.Program.Game_OnGameLoad();
+                            break;
+                        case 2: //  JustShyvana
+                            JustShyvana.Program.OnLoad();
+                            break;
+                        case 3: // SAutoCarry
+                            SAutoCarry.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Singed:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // ElSinged
+                            ElSinged.Singed.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 // Sion
                 case Champion.Sivir:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // OKTW
+                            OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
+                            break;
+                        case 1: // DZAIO
+                            DZAIO_Reborn.Program.Main();
+                            break;
+                        case 2: // hikiMarksman
+                            hikiMarksmanRework.Program.Game_OnGameLoad();
+                            break;
+                        case 3: // Proseries
+                            ProSeries.Program.GameOnOnGameLoad();
+                            break;
+                        case 4: // SFXChallenger
+                            SFXChallenger.Program.Main();
+                            break;
+                        case 5: // SharpShooter
+                            SharpShooter.Program.Game_OnGameLoad();
+                            break;
+                        case 6: // ShineAIO
+                            ShineSharp.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 // Skarner
                 case Champion.Sona:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // ElEasy
+                            ElEasy.Entry.OnLoad();
+                            break;
+                        case 1: // Royal Song of Son
+                            RoyalSona.Program.Game_OnGameLoad();
+                            break;
+                        case 2: // Support is Easy
+                            Support.Program.Main();
+                            break;
+                        case 3: // Vodka Sona
+                            VodkaSona.Program.Game_OnLoad();
+                            break;
+                        case 4: // vSeries
+                            vSupport_Series.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Soraka:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // Seph Soraka
+                            SephSoraka.Soraka.SorakaMain();
+                            break;
+                        case 1: // FreshBooster
+                            FreshBooster.Program.Game_OnGameLoad();
+                            break;
+                        case 2: // Heal-Bot
+                            Soraka_HealBot.Program.OnGameLoad();
+                            break;
+                        case 3: // MLG Soraka
+                            MLGSORAKA.Program.OnLoad();
+                            break;
+                        case 4: // Support is Easy
+                            Support.Program.Main();
+                            break;
+                        case 5: // vSeries
+                            vSupport_Series.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Swain:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // OKTW
+                            OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
+                            break;
+                        case 1: // SluttySwain
+                            Slutty_Swain.Swain.OnLoad();
+                            break;
+                        case 2: // The Mocking Swain
+                            The_Mocking_Swain.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Syndra:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // Kortatu's Syndra
+                            Syndra.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // BadaoSeries
+                            BadaoSeries.Program.OnLoad();
+                            break;
+                        case 2: // ElEasy
+                            ElEasy.Entry.OnLoad();
+                            break;
+                        case 3: // Hikigaya Syndra
+                            Hikigaya_Syndra.Program.OnLoad();
+                            break;
+                        case 4: // OKTW
+                            OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
+                            break;
+                        case 5: // Syndra by L33T
+                            SyndraL33T.Bootstrap.Main();
+                            break;
+                        case 6: // vSeries
+                            vSupport_Series.Program.Game_OnGameLoad();
+                            break;
+                        case 7: // xSalice
+                            xSaliceResurrected.Program.LoadReligion();
+                            break;
                     }
                     break;
                 case Champion.TahmKench:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // FreshBooster
+                            FreshBooster.Program.Game_OnGameLoad();
+                            break;
+                        case 2: // STahmKench
+                            STahmKench.Program.Main();
+                            break;
+                        case 3: // vSeries
+                            vSupport_Series.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 // Taliyah
                 case Champion.Talon:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // GFUEL Talon
+                            GFUELTalon.Talon.OnGameLoad();
+                            break;
+                        case 1: // Hoola Talon
+                            HoolaTalon.Program.OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Taric:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // SkyLv_Taric
+                            SkyLv_Taric.Initialiser.Game_OnGameLoad();
+                            break;
+                        case 1: // ElEasy
+                            ElEasy.Entry.OnLoad();
+                            break;
+                        case 2: // PippyTaric
+                            PippyTaric.Program.LoadStuff();
+                            break;
+                        case 3: // Support is Easy
+                            Support.Program.Main();
+                            break;
+                        case 4: // vSeries
+                            vSupport_Series.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Teemo:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // KarmaPanda
+                            Chat.Print("Credits : KarmaPanda");
+                            PandaTeemo.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // SharpShooter
+                            SharpShooter.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Thresh:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // Chain Warden
+                            Thresh___The_Chain_Warden.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // FreshBooster
+                            FreshBooster.Program.Game_OnGameLoad();
+                            break;
+                        case 2: // OKTW
+                            OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
+                            break;
+                        case 3: // Support is Easy
+                            Support.Program.Main();
+                            break;
+                        case 4: // vSeries
+                            vSupport_Series.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Tristana:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // ElTristana
+                            ElTristana.Tristana.OnLoad();
+                            break;
+                        case 1: // ADCPackage
+                            ADCPackage.Program.Game_OnGameLoad();
+                            break;
+                        case 2: // D-Tristana
+                            D_Tristana.program.Game_OnGameLoad();
+                            break;
+                        case 3: // iSeriesReborn
+                            iSeriesReborn.Program.OnGameLoad();
+                            break;
+                        case 4: // OKTW
+                            OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
+                            break;
+                        case 5: // PewPewTristana
+                            PewPewTristana.Program.OnLoad();
+                            break;
+                        case 6: // ProSeries
+                            ProSeries.Program.GameOnOnGameLoad();
+                            break;
+                        case 7: // SharpShooter
+                            SharpShooter.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Trundle:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // ElTrundle
+                            ElTrundle.Trundle.OnLoad();
+                            break;
+                        case 1: // DZAIO
+                            DZAIO_Reborn.Program.Main();
+                            break;
+                        case 2: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 3: // vSeries
+                            vSupport_Series.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Tryndamere:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // BrianSharp
+                            BrianSharp.Program.Main();
+                            break;
+                        case 1: // The Lich King
+                            TheLichKing.Program.Game_OnGameLoad();
+                            break;
+                        case 2: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.TwistedFate:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // Kortatu Twistedfate
+                            TwistedFate.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // SharpShooter
+                            SharpShooter.Program.Game_OnGameLoad();
+                            break;
+                        case 2: // BadaoSeries
+                            BadaoSeries.Program.OnLoad();
+                            break;
+                        case 3: // EloFactor TF
+                            EloFactory_TwistedFate.Program.Game_OnGameLoad();
+                            break;
+                        case 4: // OKTW
+                            OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
+                            break;
+                        case 5: // SAutoCarry
+                            SAutoCarry.Program.Game_OnGameLoad();
+                            break;
+                        case 6: // SFXChallenger
+                            SFXChallenger.Program.Main();
+                            break;
+                        case 7: // TwistedFate-Danz
+                            Twisted_Fate___Its_all_in_the_cards.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Twitch:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // OKTW
+                            OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
+                            break;
+                        case 1: // iSeriesReborn
+                            iSeriesReborn.Program.OnGameLoad();
+                            break;
+                        case 2: // iTwitch2.0
+                            iTwitch.Program.Main();
+                            break;
+                        case 3: // SAutoCarry
+                            SAutoCarry.Program.Game_OnGameLoad();
+                            break;
+                        case 4: // SharpShooter
+                            SharpShooter.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Udyr:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // BrianSharp
+                            BrianSharp.Program.Main();
+                            break;
+                        case 1: // D-Udyr
+                            D_Udyr.Program.Game_OnGameLoad();
+                            break;
+                        case 2: // EloFactory Udyr
+                            EloFactory_Udyr.Program.Game_OnGameLoad();
+                            break;
+                        case 3: // LCS Udyr
+                            LCS_Udyr.Program.OnGameLoad();
+                            break;
+                        case 4: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Urgot:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // OKTW
+                            OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
+                            break;
+                        case 1: // xSalice
+                            xSaliceResurrected.Program.LoadReligion();
+                            break;
                     }
                     break;
                 case Champion.Varus:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // ElVarus
+                            Elvarus.Varus.Game_OnGameLoad();
+                            break;
+                        case 1: // OKTW
+                            OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
+                            break;
+                        case 2: // SFXChallenger
+                            SFXChallenger.Program.Main();
+                            break;
+                        case 3: // SharpShooter
+                            SharpShooter.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Vayne:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // VayneHunterReborn
+                            VayneHunter_Reborn.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // hikiMarksman
+                            hikiMarksmanRework.Program.Game_OnGameLoad();
+                            break;
+                        case 2: // iSeriesReborn
+                            iSeriesReborn.Program.OnGameLoad();
+                            break;
+                        case 3: // OKTW
+                            OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
+                            break;
+                        case 4: // SAutoCarry
+                            SAutoCarry.Program.Game_OnGameLoad();
+                            break;
+                        case 5: // SharpShooter
+                            SharpShooter.Program.Game_OnGameLoad();
+                            break;
+                        case 6: // xSalice
+                            xSaliceResurrected.Program.LoadReligion();
+                            break;
                     }
                     break;
                 case Champion.Veigar:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // DZAIO
+                            DZAIO_Reborn.Program.Main();
+                            break;
+                        case 2: // FreshBooster
+                            FreshBooster.Program.Game_OnGameLoad();
+                            break;
+                        case 3: // SAutoCarry
+                            SAutoCarry.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Velkoz:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // Kortatu Vel'Koz
+                            Velkoz.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // OKTW
+                            OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Vi:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // ElVi
+                            ElVi.Vi.OnLoad();
+                            break;
+                        case 1: // xQx Vi
+                            Vi.Vi.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Viktor:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // TRUSt in my Viktor
+                            Viktor.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // Hikicarry Viktor
+                            HikiCarry_Viktor.Program.Game_OnGameLoad();
+                            break;
+                        case 2: // Perplexed Viktor
+                            PerplexedViktor.Program.Game_OnGameLoad();
+                            break;
+                        case 3: // SAutoCarry
+                            SAutoCarry.Program.Game_OnGameLoad();
+                            break;
+                        case 4: // SFXChallenger
+                            SFXChallenger.Program.Main();
+                            break;
+                        case 5: // Badao's Viktor
+                            ViktorBadao.Program.Game_OnGameLoad();
+                            break;
+                        case 6: // xSalice
+                            xSaliceResurrected.Program.LoadReligion();
+                            break;
                     }
                     break;
                 case Champion.Vladimir:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // ElVladimir
+                            ElVladimirReborn.Vladimir.OnLoad();
+                            break;
+                        case 1: // DZAIO
+                            DZAIO_Reborn.Program.Main();
+                            break;
+                        case 2: // SFXChallenger
+                            SFXChallenger.Program.Main();
+                            break;
+                        case 3: // xSalice
+                            xSaliceResurrected.Program.LoadReligion();
+                            break;
                     }
                     break;
                 case Champion.Volibear:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // KappaSeries
+                            KappaSeries.Program.OnGameLoad();
+                            break;
+                        case 2: // NoobVolibear
+                            NoobVolibear.Program.Game_OnGameLoad();
+                            break;
+                        case 3: // StonedSeriesAIO
+                            StonedSeriesAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Warwick:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // The Blood Hunter
+                            Warwick.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // BrianSharp
+                            BrianSharp.Program.Main();
+                            break;
+                        case 2: // D-Warwick
+                            D_Warwick.Program.Game_OnGameLoad();
+                            break;
+                        case 3: // DZAIO
+                            DZAIO_Reborn.Program.Main();
+                            break;
                     }
                     break;
                 // Wukong
                 case Champion.Xerath:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // Kortatu's Xerath
+                            Xerath.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // OKTW
+                            OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
+                            break;
+                        case 2: // SluttyXerath
+                            The_Slutty_Xerath.Xerath.OnLoad();
+                            break;
                     }
                     break;
                 case Champion.XinZhao:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // xQx XinZhao
+                            XinZhao.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // BrianSharp
+                            BrianSharp.Program.Main();
+                            break;
+                        case 2: // XinZhao God
+                            Xin.Program.GameOnOnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Yasuo:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // YasuoPro
+                            new YasuoPro.Yasuo().OnLoad();
+                            break;
+                        case 1: // BrianSharp
+                            BrianSharp.Program.Main();
+                            break;
+                        case 2: // GosuMechanics
+                            GosuMechanicsYasuo.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 // Yorick
@@ -1517,17 +2057,38 @@ namespace PortAIO
                 case Champion.Zed:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // Korean Zed
+                            KoreanZed.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // SharpyAIO
+                            Sharpy_AIO.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 // Ziggs
                 case Champion.Zilean:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // ElZilean
+                            ElZilean.Zilean.OnGameLoad();
+                            break;
+                        case 1: // Support is Easy
+                            Support.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Zyra:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
+                        case 0: // D-Zyra
+                            D_Zyra.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // Support is Easy
+                            Support.Program.Main();
+                            break;
+                        case 2: // xSalice
+                            xSaliceResurrected.Program.LoadReligion();
+                            break;
                     }
                     break;
             }
