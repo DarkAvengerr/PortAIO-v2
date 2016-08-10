@@ -57,9 +57,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Berb.Common">
-      <HintPath>..\Git\Berb.Common\Berb.Common\bin\Debug\Berb.Common.dll</HintPath>
-    </Reference>
     <Reference Include="EloBuddy">
       <HintPath>..\Git\Berb.Common\Berb.Common\bin\Debug\EloBuddy.dll</HintPath>
     </Reference>
@@ -72,13 +69,16 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Git\Berb.Common\Berb.Common\bin\Debug\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PortAIO.Common">
+      <HintPath>..\PortAIO-Common\bin\Debug\PortAIO.Common.dll</HintPath>
+    </Reference>
     <Reference Include="SharpDX, Version=2.6.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Git\Berb.Common\Berb.Common\bin\Debug\SharpDX.dll</HintPath>
+      <HintPath>..\PortAIO-Common\bin\Debug\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9, Version=2.6.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Git\Berb.Common\Berb.Common\bin\Debug\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>..\PortAIO-Common\bin\Debug\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
