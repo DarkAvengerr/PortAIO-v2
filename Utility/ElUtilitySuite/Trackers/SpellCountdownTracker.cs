@@ -251,7 +251,7 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine($"Failed to find load image for {name}. Please notify jQuery/ChewyMoon!");
+                    //Console.WriteLine($"Failed to find load image for {name}. Please notify jQuery/ChewyMoon!");
                 }
             }
 
