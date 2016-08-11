@@ -861,7 +861,7 @@ using EloBuddy; namespace ARAMDetFull
         public static bool inDanger = false;
         public static float farmRange = 900;
 
-        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static void updateArmaPlay()
         {
 

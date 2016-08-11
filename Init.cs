@@ -14,13 +14,20 @@ namespace PortAIO
 {
     public static class Init
     {
+        public static bool loaded = false;
+
         public static void Initialize()
         {
-            //LeagueSharp.SDK.Bootstrap.Init(); - SDK is not yet added so it is not yet needed.
-            Misc.Load();
+            Common.Init.LoadCommon("7E6CBFB7497BE722B8E286ECBDE88");
 
-            LoadChampion();
-            LoadUtility();
+            if (Common.Init.isLoaded == "LOADED")
+            {
+                //LeagueSharp.SDK.Bootstrap.Init(); - SDK is not yet added so it is not yet needed.
+                Misc.Load();
+
+                LoadChampion();
+                LoadUtility();
+            }
         }
 
         public static void LoadUtility()

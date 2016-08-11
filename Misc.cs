@@ -19,6 +19,8 @@ namespace PortAIO.Dual_Port
             var dualPort = new Menu("Dual-Port", "DualPAIOPort");
             menu.AddSubMenu(dualPort);
 
+            var hasDualPort = true;
+
             string[] champ = new string[] { };
             switch(ObjectManager.Player.Hero)
             {
@@ -384,9 +386,15 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "D-Zyra", "Support is Easy", "xSalice" };
                     break;
                 default:
+                    hasDualPort = false;
                     dualPort.AddItem(new MenuItem("info1", "There are no dual-port for this champion."));
                     dualPort.AddItem(new MenuItem("info2", "Feel free to request one."));
                     break;
+            }
+
+            if (hasDualPort)
+            {
+                dualPort.AddItem(new MenuItem(ObjectManager.Player.Hero.ToString(), "Which dual-port?").SetValue(new StringList(champ)));
             }
 
             var autoPlay = new Menu("Auto Play", "PortAIOAUTOPLAY");

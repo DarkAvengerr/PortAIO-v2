@@ -61,7 +61,7 @@ using EloBuddy; namespace ARAMDetFull
         {
             curBuild = build;
         }
-        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static string Request(string url)
         {
             WebRequest request = WebRequest.Create(url);

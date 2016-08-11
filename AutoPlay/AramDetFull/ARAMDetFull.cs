@@ -45,7 +45,7 @@ using EloBuddy; namespace ARAMDetFull
         public ARAMDetFull()
         {
             Console.WriteLine("Aram det full started!");
-            CustomEvents.Game.OnGameLoad += onLoad;
+            onLoad();
         }
         
         public static int gameStart = 0;
@@ -57,8 +57,8 @@ using EloBuddy; namespace ARAMDetFull
             get { return (int)DateTime.Now.TimeOfDay.TotalMilliseconds; }
         }
 
-        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
-        private static void onLoad(object sender)
+        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        private static void onLoad()
         {
             gameStart = now;
 

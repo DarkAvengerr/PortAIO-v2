@@ -31,7 +31,7 @@ using EloBuddy; namespace ARAMDetFull
             sendData("logerror.php", postData);
         }
 
-        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         private static void sendData(string to, string postData)
         {
             if (!on)

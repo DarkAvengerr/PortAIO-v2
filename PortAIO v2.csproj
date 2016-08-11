@@ -58,16 +58,16 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EloBuddy">
-      <HintPath>..\Git\Berb.Common\Berb.Common\bin\Debug\EloBuddy.dll</HintPath>
+      <HintPath>..\PortAIO-Common\bin\Debug\EloBuddy.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.Sandbox">
-      <HintPath>..\Git\Berb.Common\Berb.Common\bin\Debug\EloBuddy.Sandbox.dll</HintPath>
+      <HintPath>..\PortAIO-Common\bin\Debug\EloBuddy.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.SDK">
-      <HintPath>..\Git\Berb.Common\Berb.Common\bin\Debug\EloBuddy.SDK.dll</HintPath>
+      <HintPath>..\PortAIO-Common\bin\Debug\EloBuddy.SDK.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Git\Berb.Common\Berb.Common\bin\Debug\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\PortAIO-Common\bin\Debug\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PortAIO.Common">
       <HintPath>..\PortAIO-Common\bin\Debug\PortAIO.Common.dll</HintPath>
