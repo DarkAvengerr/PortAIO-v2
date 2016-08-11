@@ -407,7 +407,7 @@ namespace KurisuRiven
                 if (menu.Item("combokey").GetValue<KeyBind>().Active)
                 {
                     ComboTarget(riventarget());
-                    TryIgnote(riventarget());
+                 //   TryIgnote(riventarget());
                 }
             }
 
@@ -433,7 +433,7 @@ namespace KurisuRiven
                         //}
                         
                         checkr();
-                        TryIgnote(riventarget());
+                        //TryIgnote(riventarget());
 
                         if (canq && !canhd && Utils.GameTimeTickCount - lasthd >= 300)
                         {
@@ -718,7 +718,7 @@ namespace KurisuRiven
         private static void ComboTarget(AIHeroClient target)
         {
             OrbTo(target);
-            TryIgnote(target);
+            //TryIgnote(target);
 
             var endq = player.Position.Extend(target.Position, q.Range + 35);
             var ende = player.Position.Extend(target.Position, e.Range + 35);
