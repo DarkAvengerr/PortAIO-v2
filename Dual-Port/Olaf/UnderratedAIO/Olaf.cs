@@ -35,7 +35,7 @@ namespace UnderratedAIO.Champions
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Helpers.Jungle.setSmiteSlot();
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Obj_AI_Base.OnDelete += Obj_AI_Base_OnDelete;
             Obj_AI_Base.OnCreate += Obj_AI_Base_OnCreate;
             HpBarDamageIndicator.DamageToUnit = ComboDamage;

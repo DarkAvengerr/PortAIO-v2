@@ -204,7 +204,7 @@
 
         public static void Init()
         {
-            Obj_AI_Base.OnProcessSpellCast += (sender, args) =>
+            Obj_AI_Base.OnSpellCast += (sender, args) =>
                 {
                     if (!sender.IsValid || sender.Team != ObjectManager.Player.Team
                         || args.SData.Name != "YasuoWMovingWall")

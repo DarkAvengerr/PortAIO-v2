@@ -17,7 +17,7 @@ namespace VayneHunter_Reborn.Skills.Condemn
         {
             Interrupter2.OnInterruptableTarget += OnInterruptableTarget;
             DZAntigapcloserVHR.OnEnemyGapcloser += OnEnemyGapcloser;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             GameObject.OnCreate += GameObject_OnCreate;
         }
 

@@ -73,7 +73,7 @@ namespace SharpShooter.Plugins
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
 
             Console.WriteLine("Sharpshooter: Twisted Fate Loaded.");
             Chat.Print(

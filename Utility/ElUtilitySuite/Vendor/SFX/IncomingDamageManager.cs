@@ -42,7 +42,7 @@ using EloBuddy; namespace ElUtilitySuite.Vendor.SFX
 
         static IncomingDamageManager()
         {
-            Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
         }
 
         public static bool Skillshots { get; set; }

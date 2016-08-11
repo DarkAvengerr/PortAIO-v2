@@ -599,7 +599,7 @@ using EloBuddy; namespace ElUtilitySuite.Items
 
             Game.OnUpdate += this.OnUpdate;
             GameObject.OnCreate += this.GameObjectOnCreate;
-            Obj_AI_Base.OnProcessSpellCast += this.ObjAiBaseOnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += this.ObjAiBaseOnProcessSpellCast;
         }
 
         #endregion
@@ -734,7 +734,7 @@ using EloBuddy; namespace ElUtilitySuite.Items
         {
             try
             {
-                if (Player.IsDead || Player.InFountain() || Player.IsRecalling())
+                if (Player.IsDead || Player.InFountain() || Player.IsRecalling() || !Items.HasItem((int)(ItemId.Zhonyas_Hourglass)) || !Items.CanUseItem((int)(ItemId.Zhonyas_Hourglass)))
                 {
                     return;
                 }

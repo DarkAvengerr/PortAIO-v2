@@ -33,7 +33,7 @@ namespace SAutoCarry.Champions.Helpers
 
             Obj_AI_Base.OnCreate += Obj_AI_Base_OnCreate;
             Obj_AI_Base.OnPlayAnimation += Obj_AI_Base_OnPlayAnimation;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Drawing.OnDraw += Drawing_OnDraw;
         }
 

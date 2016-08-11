@@ -41,7 +41,7 @@ namespace SyndraL33T
         {
             //Obj_AI_Base.OnPauseAnimation += Obj_AI_Base_OnPauseAnimation;
             Obj_AI_Base.OnPlayAnimation += Obj_AI_Base_OnPlayAnimation;
-            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += AIHeroClient_OnProcessSpellCast;
         }
 
         private static void Obj_AI_Base_OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)

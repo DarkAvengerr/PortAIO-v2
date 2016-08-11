@@ -63,7 +63,7 @@ using EloBuddy;
             AntiGapcloser.OnEnemyGapcloser += Champion.AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Champion.Interrupter_OnPossibleToInterrupt;
             Obj_AI_Base.OnBuffGain += Champion.Obj_AI_Base_OnBuffAdd;
-            Obj_AI_Base.OnProcessSpellCast += Champion.Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Champion.Obj_AI_Base_OnProcessSpellCast;
             #endregion
 
             SPrediction.Prediction.Initialize(Champion.Config);

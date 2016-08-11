@@ -65,7 +65,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
             }
             
             Game.OnUpdate += Game_OnUpdate;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             GameObject.OnCreate +=GameObject_OnCreate;
             GameObject.OnDelete += GameObject_OnDelete;
         }

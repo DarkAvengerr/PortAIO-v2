@@ -102,7 +102,7 @@ namespace MasterSharp
 
                 Game.OnUpdate += OnGameUpdate;
 
-                Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+                Obj_AI_Base.OnSpellCast += OnProcessSpell;
 
                 AttackableUnit.OnDamage += onDamage;
 

@@ -77,7 +77,7 @@ using EloBuddy; namespace SFXChallenger.Champions
         {
             _font = MDrawing.GetFont(23);
 
-            Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
             Spellbook.OnCastSpell += OnSpellbookCastSpell;
             Orbwalking.OnNonKillableMinion += OnOrbwalkingNonKillableMinion;
             Drawing.OnDraw += OnDrawingDraw;

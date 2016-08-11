@@ -38,7 +38,7 @@ namespace KurisuNidalee
             GameObject.OnCreate += MissileClient_OnCreate;
 
             // Cast Handler
-            Obj_AI_Base.OnProcessSpellCast += HeroOnCast;
+            Obj_AI_Base.OnSpellCast += HeroOnCast;
 
             // Anti-Gapclosing
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;

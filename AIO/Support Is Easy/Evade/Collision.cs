@@ -240,7 +240,7 @@ using EloBuddy; namespace Support.Evade
 
         public static void Init()
         {
-            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += AIHeroClient_OnProcessSpellCast;
         }
 
         private static void AIHeroClient_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

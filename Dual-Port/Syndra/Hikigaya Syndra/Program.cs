@@ -228,7 +228,7 @@ using EloBuddy;
                 Config.AddItem(new MenuItem("credits.x1", "                Developed by Hikigaya").SetFontStyle(FontStyle.Bold, SharpDX.Color.DodgerBlue));
                 Config.AddToMainMenu();
             }
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
             Game.OnUpdate += OnUpdate;
             Drawing.OnDraw += OnDraw;
         }

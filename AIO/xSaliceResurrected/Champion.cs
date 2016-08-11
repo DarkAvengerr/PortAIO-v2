@@ -19,7 +19,7 @@ using EloBuddy; namespace xSaliceResurrected
             Interrupter2.OnInterruptableTarget += Interrupter_OnPosibleToInterruptEvent;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloserEvent;
             GameObject.OnCreate += GameObject_OnCreateEvent;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCastEvent;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCastEvent;
             GameObject.OnDelete += GameObject_OnDeleteEvent;
             EloBuddy.Player.OnIssueOrder += ObjAiHeroOnOnIssueOrderEvent;
             Spellbook.OnUpdateChargeableSpell += Spellbook_OnUpdateChargeableSpellEvent;
@@ -77,7 +77,7 @@ using EloBuddy; namespace xSaliceResurrected
             new PluginLoader();
 
             //debug
-            //Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCastEvent;
+            //Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCastEvent;
             //Obj_AI_Base.OnBuffGain += ObjAiBaseOnOnBuffAdd;
             //Obj_AI_Base.OnBuffLose += ObjAiBaseOnOnBuffLose;
             //GameObject.OnCreate += GameObject_OnCreateEvent;

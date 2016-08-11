@@ -24,7 +24,7 @@ using EloBuddy; namespace ezEvade.SpecialSpells
                 var hero = HeroManager.Enemies.FirstOrDefault(h => h.ChampionName == "Yasuo");
                 if (hero != null)
                 {
-                    AIHeroClient.OnProcessSpellCast += (sender, args) => ProcessSpell_YasuoQW(sender, args, spellData);
+                    AIHeroClient.OnSpellCast += (sender, args) => ProcessSpell_YasuoQW(sender, args, spellData);
                 }
             }
         }

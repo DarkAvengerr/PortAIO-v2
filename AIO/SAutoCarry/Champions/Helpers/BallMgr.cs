@@ -54,7 +54,7 @@ namespace SAutoCarry.Champions.Helpers
             Position = ObjectManager.Player.ServerPosition;
             Game.OnUpdate += Game_OnUpdate;
             AIHeroClient.OnCreate += AIHeroClient_OnCreate;
-            AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            AIHeroClient.OnSpellCast += AIHeroClient_OnProcessSpellCast;
         }
 
         public static void Post(Command cmd, AIHeroClient t, Vector2 pos = default(Vector2))

@@ -494,7 +494,7 @@ using EloBuddy; namespace Support.Util
             #endregion
 
             Game.OnUpdate += Game_OnGameUpdate;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
         }
 
         public static List<ActiveGapcloser> ActiveGapclosers = new List<ActiveGapcloser>();

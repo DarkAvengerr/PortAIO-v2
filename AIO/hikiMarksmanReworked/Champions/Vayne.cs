@@ -42,7 +42,7 @@ using EloBuddy;
             Notifications.AddNotification("Gift From Hikigaya", 6000);
 
             Game.OnUpdate += VayneOnUpdate;
-            AIHeroClient.OnProcessSpellCast += VayneOnProcessSpellCast;
+            AIHeroClient.OnSpellCast += VayneOnProcessSpellCast;
             Obj_AI_Base.OnSpellCast += VayneOnSpellCast;
             Drawing.OnDraw += VayneOnDraw;
         }

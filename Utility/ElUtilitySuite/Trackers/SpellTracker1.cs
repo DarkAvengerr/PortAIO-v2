@@ -17,6 +17,7 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
 
     using Font = SharpDX.Direct3D9.Font;
     using Rectangle = SharpDX.Rectangle;
+    using EloBuddy.SDK.Events;
 
     internal class SpellTracker : IPlugin
     {
@@ -381,8 +382,8 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
                         this._text.OnResetDevice();
                     };
 
-                Obj_AI_Base.OnProcessSpellCast += this.OnObjAiBaseProcessSpellCast;
-                Obj_AI_Base.OnTeleport += this.OnObjAiBaseTeleport;
+                Obj_AI_Base.OnSpellCast += this.OnObjAiBaseProcessSpellCast;
+                Teleport.OnTeleport += this.OnObjAiBaseTeleport;
             }
             catch (Exception e)
             {
@@ -390,7 +391,7 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
             }
         }
 
-        private void OnObjAiBaseTeleport(Obj_AI_Base sender, GameObjectTeleportEventArgs args)
+        private void OnObjAiBaseTeleport(Obj_AI_Base sender, Teleport.TeleportEventArgs packet)
         {
             try
             {
@@ -399,18 +400,22 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
                     return;
                 }
 
-                var packet = Packet.S2C.Teleport.Decoded(sender, args);
-                if (packet.Type == Packet.S2C.Teleport.Type.Teleport
-                    && (packet.Status == Packet.S2C.Teleport.Status.Finish
-                        || packet.Status == Packet.S2C.Teleport.Status.Abort))
+                var unit = sender as AIHeroClient;
+
+                if (unit == null || !unit.IsValid || unit.IsAlly)
+                    return;
+
+                if (packet.Type == EloBuddy.SDK.Enumerations.TeleportType.Teleport
+                    && (packet.Status == EloBuddy.SDK.Enumerations.TeleportStatus.Finish
+                        || packet.Status == EloBuddy.SDK.Enumerations.TeleportStatus.Abort))
                 {
                     var time = Game.Time;
                     LeagueSharp.Common.Utility.DelayAction.Add(
                         250,
                         delegate
                             {
-                                var cd = packet.Status == Packet.S2C.Teleport.Status.Finish ? 300 : 200;
-                                _teleports[packet.UnitNetworkId] = time + cd;
+                                var cd = packet.Status == EloBuddy.SDK.Enumerations.TeleportStatus.Finish ? 300 : 200;
+                                _teleports[unit.NetworkId] = time + cd;
                             });
                 }
             }

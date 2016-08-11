@@ -129,7 +129,7 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
             }
 
             Drawing.OnEndScene += this.OnDrawingEndScene;
-            Obj_AI_Base.OnTeleport += this.OnObjAiBaseTeleport;
+            EloBuddy.SDK.Events.Teleport.OnTeleport += this.OnObjAiBaseTeleport;
 
             Drawing.OnPreReset += args =>
                 {
@@ -296,7 +296,7 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
             }
         }
 
-        private void OnObjAiBaseTeleport(Obj_AI_Base sender, GameObjectTeleportEventArgs args)
+        private void OnObjAiBaseTeleport(Obj_AI_Base sender, EloBuddy.SDK.Events.Teleport.TeleportEventArgs args)
         {
             try
             {
@@ -305,19 +305,25 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
                     return;
                 }
 
-                var packet = Packet.S2C.Teleport.Decoded(sender, args);
-                var lastPosition = this.lastPositions.FirstOrDefault(e => e.Hero.NetworkId == packet.UnitNetworkId);
+                var unit = sender as AIHeroClient;
+
+                if (unit == null || !unit.IsValid || unit.IsAlly)
+                {
+                    return;
+                }
+
+                var lastPosition = this.lastPositions.FirstOrDefault(e => e.Hero.NetworkId == unit.NetworkId);
                 if (lastPosition != null)
                 {
-                    switch (packet.Status)
+                    switch (args.Status)
                     {
-                        case Packet.S2C.Teleport.Status.Start:
+                        case EloBuddy.SDK.Enumerations.TeleportStatus.Start:
                             lastPosition.IsTeleporting = true;
                             break;
-                        case Packet.S2C.Teleport.Status.Abort:
+                        case EloBuddy.SDK.Enumerations.TeleportStatus.Abort:
                             lastPosition.IsTeleporting = false;
                             break;
-                        case Packet.S2C.Teleport.Status.Finish:
+                        case EloBuddy.SDK.Enumerations.TeleportStatus.Finish:
                             lastPosition.Teleported = true;
                             lastPosition.IsTeleporting = false;
                             lastPosition.LastSeen = Game.Time;

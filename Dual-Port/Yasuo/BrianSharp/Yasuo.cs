@@ -1352,7 +1352,7 @@
                 Game.OnUpdate += OnUpdateTarget;
                 GameObject.OnCreate += ObjSpellMissileOnCreate;
                 GameObject.OnDelete += ObjSpellMissileOnDelete;
-                Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
             }
 
             #endregion

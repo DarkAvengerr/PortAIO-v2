@@ -62,7 +62,7 @@ using EloBuddy;
             DZInterrupter.OnInterruptableTarget += OnInterrupter;
             DZAntigapcloser.OnEnemyGapcloser += OnGapcloser;
             Orbwalking.AfterAttack += AfterAttack;
-            Obj_AI_Base.OnProcessSpellCast += OnSpellCast;
+            Obj_AI_Base.OnSpellCast += OnSpellCast;
         }
 
         private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

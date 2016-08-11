@@ -31,7 +31,7 @@ namespace UnderratedAIO.Champions
             Orbwalking.AfterAttack += AfterAttack;
             Orbwalking.BeforeAttack += BeforeAttack;
             Drawing.OnDraw += Game_OnDraw;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             HpBarDamageIndicator.DamageToUnit = ComboDamage;
             Helpers.Jungle.setSmiteSlot();
         }

@@ -26,7 +26,7 @@
             GameObject.OnDelete += ObjOnDelete;
             GameObject.OnCreate += ObjMissileClientOnCreate;
             GameObject.OnDelete += ObjMissileClientOnDelete;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
         }
 
         #endregion

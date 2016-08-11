@@ -28,7 +28,7 @@ using EloBuddy; namespace ezEvade.SpecialSpells
                 }
 
                 //Obj_AI_Minion.OnCreate += (obj, args) => OnCreateObj_jayceshockblast(obj, args, hero, spellData);
-                //AIHeroClient.OnProcessSpellCast += OnProcessSpell_jayceshockblast;
+                //AIHeroClient.OnSpellCast += OnProcessSpell_jayceshockblast;
                 //SpellDetector.OnProcessSpecialSpell += ProcessSpell_jayceshockblast;
             }*/
         }

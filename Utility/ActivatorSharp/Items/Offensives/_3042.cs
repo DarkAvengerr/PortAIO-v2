@@ -20,7 +20,7 @@ using EloBuddy; namespace Activator.Items.Offensives
 
         public _3042()
         {
-            // Obj_AI_Base.OnProcessSpellCast += OnCast;
+            // Obj_AI_Base.OnSpellCast += OnCast;
         }
 
         private bool muramana;

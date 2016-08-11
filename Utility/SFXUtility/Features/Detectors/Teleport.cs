@@ -62,7 +62,7 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
         protected override void OnEnable()
         {
             Drawing.OnEndScene += OnDrawingEndScene;
-            Obj_AI_Base.OnTeleport += OnObjAiBaseTeleport;
+            EloBuddy.SDK.Events.Teleport.OnTeleport += OnObjAiBaseTeleport;
 
             base.OnEnable();
         }
@@ -70,7 +70,7 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
         protected override void OnDisable()
         {
             Drawing.OnEndScene -= OnDrawingEndScene;
-            Obj_AI_Base.OnTeleport -= OnObjAiBaseTeleport;
+            EloBuddy.SDK.Events.Teleport.OnTeleport -= OnObjAiBaseTeleport;
 
             base.OnDisable();
         }
@@ -93,7 +93,7 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
                         var count = 0;
                         foreach (var teleport in
                             _teleportObjects.Where(
-                                t => t.LastStatus != Packet.S2C.Teleport.Status.Unknown && t.Update()))
+                                t => t.LastStatus != EloBuddy.SDK.Enumerations.TeleportStatus.Unknown && t.Update()))
                         {
                             var text = teleport.ToString();
                             if (!string.IsNullOrWhiteSpace(text))
@@ -119,7 +119,7 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
                             (float) Math.Ceiling(Menu.Item(Name + "DrawingBarWidth").GetValue<Slider>().Value * dScale);
                         var teleports =
                             _teleportObjects.Where(
-                                t => t.LastStatus != Packet.S2C.Teleport.Status.Unknown && t.Update(true))
+                                t => t.LastStatus != EloBuddy.SDK.Enumerations.TeleportStatus.Unknown && t.Update(true))
                                 .OrderBy(t => t.Countdown);
                         foreach (var teleport in teleports.Where(t => t.Duration > 0 && !t.Hero.IsDead))
                         {
@@ -367,16 +367,15 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
             }
         }
 
-        private void OnObjAiBaseTeleport(GameObject sender, GameObjectTeleportEventArgs args)
+        private void OnObjAiBaseTeleport(GameObject sender, EloBuddy.SDK.Events.Teleport.TeleportEventArgs packet)
         {
             try
             {
-                var packet = Packet.S2C.Teleport.Decoded(sender, args);
-                var teleport = _teleportObjects.FirstOrDefault(r => r.Hero.NetworkId == packet.UnitNetworkId);
+                var teleport = _teleportObjects.FirstOrDefault(r => r.Hero.NetworkId == sender.NetworkId);
                 if (teleport != null)
                 {
                     var duration = packet.Duration;
-                    if (packet.Type == Packet.S2C.Teleport.Type.Recall)
+                    if (packet.Type == EloBuddy.SDK.Enumerations.TeleportType.Recall)
                     {
                         duration = teleport.Hero.HasBuff("exaltedwithbaronnashor") ? 4000 : 8000;
                         if (LeagueSharp.Common.Utility.Map.GetMap().Type == LeagueSharp.Common.Utility.Map.MapType.CrystalScar)
@@ -384,15 +383,15 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
                             duration = 4500;
                         }
                     }
-                    if (packet.Type == Packet.S2C.Teleport.Type.Shen)
+                    if (packet.Type == EloBuddy.SDK.Enumerations.TeleportType.Shen)
                     {
                         duration = 3000;
                     }
-                    if (packet.Type == Packet.S2C.Teleport.Type.TwistedFate)
+                    if (packet.Type == EloBuddy.SDK.Enumerations.TeleportType.TwistedFate)
                     {
                         duration = 1500;
                     }
-                    if (packet.Type == Packet.S2C.Teleport.Type.Teleport)
+                    if (packet.Type == EloBuddy.SDK.Enumerations.TeleportType.Teleport)
                     {
                         duration = 4000;
                     }
@@ -400,7 +399,7 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
                     teleport.LastStatus = packet.Status;
                     teleport.LastType = packet.Type;
 
-                    if (packet.Status == Packet.S2C.Teleport.Status.Finish)
+                    if (packet.Status == EloBuddy.SDK.Enumerations.TeleportStatus.Finish)
                     {
                         if (Menu.Item(Name + "NotificationFinished").GetValue<bool>())
                         {
@@ -414,7 +413,7 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
                         }
                     }
 
-                    if (packet.Status == Packet.S2C.Teleport.Status.Abort)
+                    if (packet.Status == EloBuddy.SDK.Enumerations.TeleportStatus.Abort)
                     {
                         if (Menu.Item(Name + "NotificationAborted").GetValue<bool>())
                         {
@@ -428,7 +427,7 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
                         }
                     }
 
-                    if (packet.Status == Packet.S2C.Teleport.Status.Start)
+                    if (packet.Status == EloBuddy.SDK.Enumerations.TeleportStatus.Start)
                     {
                         if (Menu.Item(Name + "NotificationStarted").GetValue<bool>())
                         {
@@ -453,13 +452,13 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
         {
             public readonly AIHeroClient Hero;
             private int _duration;
-            private Packet.S2C.Teleport.Status _lastStatus;
+            private EloBuddy.SDK.Enumerations.TeleportStatus _lastStatus;
             private float _preLastActionTime;
 
             public TeleportObject(AIHeroClient hero)
             {
                 Hero = hero;
-                LastStatus = Packet.S2C.Teleport.Status.Unknown;
+                LastStatus = EloBuddy.SDK.Enumerations.TeleportStatus.Unknown;
             }
 
             public int AdditionalTextTime { private get; set; }
@@ -471,7 +470,7 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
                 set { _duration = value / 1000; }
             }
 
-            public Packet.S2C.Teleport.Status LastStatus
+            public EloBuddy.SDK.Enumerations.TeleportStatus LastStatus
             {
                 get { return _lastStatus; }
                 set
@@ -483,22 +482,22 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
             }
 
             // ReSharper disable once MemberCanBePrivate.Local
-            public Packet.S2C.Teleport.Type LastType { get; set; }
+            public EloBuddy.SDK.Enumerations.TeleportType LastType { get; set; }
 
             public float Countdown
             {
                 get
                 {
-                    if (Hero.IsMe && LastStatus == Packet.S2C.Teleport.Status.Finish) {}
+                    if (Hero.IsMe && LastStatus == EloBuddy.SDK.Enumerations.TeleportStatus.Finish) {}
                     switch (LastStatus)
                     {
-                        case Packet.S2C.Teleport.Status.Start:
+                        case EloBuddy.SDK.Enumerations.TeleportStatus.Start:
                             return Game.Time - LastActionTime;
-                        case Packet.S2C.Teleport.Status.Finish:
+                        case EloBuddy.SDK.Enumerations.TeleportStatus.Finish:
                             return Game.Time - LastActionTime > AdditionalBarTime
                                 ? 0
                                 : LastActionTime - _preLastActionTime;
-                        case Packet.S2C.Teleport.Status.Abort:
+                        case EloBuddy.SDK.Enumerations.TeleportStatus.Abort:
                             return Game.Time - LastActionTime > AdditionalBarTime
                                 ? 0
                                 : LastActionTime - _preLastActionTime;
@@ -518,61 +517,61 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
                 }
                 switch (LastType)
                 {
-                    case Packet.S2C.Teleport.Type.Recall:
+                    case  EloBuddy.SDK.Enumerations.TeleportType.Recall:
                         switch (LastStatus)
                         {
-                            case Packet.S2C.Teleport.Status.Start:
+                            case EloBuddy.SDK.Enumerations.TeleportStatus.Start:
                                 return string.Format(
                                     "{1}({2}%) {0} ({3:0.00})", "Recalling", Hero.ChampionName, (int) Hero.HealthPercent,
                                     time);
 
-                            case Packet.S2C.Teleport.Status.Finish:
+                            case EloBuddy.SDK.Enumerations.TeleportStatus.Finish:
                                 return string.Format(
                                     "{1}({2}%) {0} ({3:0.00})", "Recalled", Hero.ChampionName, (int) Hero.HealthPercent,
                                     time);
 
-                            case Packet.S2C.Teleport.Status.Abort:
+                            case EloBuddy.SDK.Enumerations.TeleportStatus.Abort:
                                 return string.Format(
                                     "{1}({2}%) {0} ({3:0.00})", "Aborted", Hero.ChampionName, (int) Hero.HealthPercent,
                                     time);
                         }
                         break;
 
-                    case Packet.S2C.Teleport.Type.Teleport:
+                    case EloBuddy.SDK.Enumerations.TeleportType.Teleport:
                         switch (LastStatus)
                         {
-                            case Packet.S2C.Teleport.Status.Start:
+                            case EloBuddy.SDK.Enumerations.TeleportStatus.Start:
                                 return string.Format(
                                     "{1}({2}%) {0} ({3:0.00})", "Teleporting", Hero.ChampionName,
                                     (int) Hero.HealthPercent, time);
 
-                            case Packet.S2C.Teleport.Status.Finish:
+                            case EloBuddy.SDK.Enumerations.TeleportStatus.Finish:
                                 return string.Format(
                                     "{1}({2}%) {0} ({3:0.00})", "Teleported", Hero.ChampionName,
                                     (int) Hero.HealthPercent, time);
 
-                            case Packet.S2C.Teleport.Status.Abort:
+                            case EloBuddy.SDK.Enumerations.TeleportStatus.Abort:
                                 return string.Format(
                                     "{1}({2}%) {0} ({3:0.00})", "Aborted", Hero.ChampionName, (int) Hero.HealthPercent,
                                     time);
                         }
                         break;
 
-                    case Packet.S2C.Teleport.Type.Shen:
-                    case Packet.S2C.Teleport.Type.TwistedFate:
+                    case EloBuddy.SDK.Enumerations.TeleportType.Shen:
+                    case EloBuddy.SDK.Enumerations.TeleportType.TwistedFate:
                         switch (LastStatus)
                         {
-                            case Packet.S2C.Teleport.Status.Start:
+                            case EloBuddy.SDK.Enumerations.TeleportStatus.Start:
                                 return string.Format(
                                     "{1}({2}%) {0} ({3:0.00})", "Transporting", Hero.ChampionName,
                                     (int) Hero.HealthPercent, time);
 
-                            case Packet.S2C.Teleport.Status.Finish:
+                            case EloBuddy.SDK.Enumerations.TeleportStatus.Finish:
                                 return string.Format(
                                     "{1}({2}%) {0} ({3:0.00})", "Transported", Hero.ChampionName,
                                     (int) Hero.HealthPercent, time);
 
-                            case Packet.S2C.Teleport.Status.Abort:
+                            case EloBuddy.SDK.Enumerations.TeleportStatus.Abort:
                                 return string.Format(
                                     "{1}({2}%) {0} ({3:0.00})", "Aborted", Hero.ChampionName, (int) Hero.HealthPercent,
                                     time);
@@ -586,13 +585,13 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
             {
                 switch (LastStatus)
                 {
-                    case Packet.S2C.Teleport.Status.Start:
+                    case EloBuddy.SDK.Enumerations.TeleportStatus.Start:
                         return text ? Color.Beige : Color.White;
 
-                    case Packet.S2C.Teleport.Status.Finish:
+                    case EloBuddy.SDK.Enumerations.TeleportStatus.Finish:
                         return text ? Color.GreenYellow : Color.White;
 
-                    case Packet.S2C.Teleport.Status.Abort:
+                    case EloBuddy.SDK.Enumerations.TeleportStatus.Abort:
                         return text ? Color.Red : Color.Yellow;
 
                     default:
@@ -602,7 +601,7 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
 
             public bool Update(bool bar = false)
             {
-                var additional = LastStatus == Packet.S2C.Teleport.Status.Start
+                var additional = LastStatus == EloBuddy.SDK.Enumerations.TeleportStatus.Start
                     ? Duration + (bar ? AdditionalBarTime : AdditionalTextTime)
                     : (bar ? AdditionalBarTime : AdditionalTextTime);
                 if (LastActionTime + additional <= Game.Time)

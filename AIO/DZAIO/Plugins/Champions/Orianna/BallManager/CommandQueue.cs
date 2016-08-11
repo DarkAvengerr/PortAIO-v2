@@ -34,7 +34,7 @@ using EloBuddy;
 
         public static void InitEvents()
         {
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSCast;
+            Obj_AI_Base.OnSpellCast += OnProcessSCast;
             Spellbook.OnStopCast += OnStopCast;
             Spellbook.OnCastSpell += OnCast;
         }

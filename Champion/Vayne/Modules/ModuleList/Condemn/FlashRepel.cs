@@ -12,7 +12,7 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
     {
         public void OnLoad()
         {
-            Obj_AI_Base.OnProcessSpellCast += OnCast;
+            Obj_AI_Base.OnSpellCast += OnCast;
         }
 
         private void OnCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

@@ -32,7 +32,7 @@ using EloBuddy;
             spells[SpellSlot.E].SetSkillshot(1.2f, 1f, 1750f, false, SkillshotType.SkillshotCircle);
             spells[SpellSlot.R].SetSkillshot(0.6f, 140f, 1700f, false, SkillshotType.SkillshotLine);
             Orbwalking.BeforeAttack += JinxQ.BeforeAttack;
-            Obj_AI_Base.OnProcessSpellCast += JinxE.OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += JinxE.OnProcessSpellCast;
             Spellbook.OnCastSpell += JinxHumanizer.OnCastSpell;
             AntiGapcloser.OnEnemyGapcloser += JinxE.OnGapcloser;
         }

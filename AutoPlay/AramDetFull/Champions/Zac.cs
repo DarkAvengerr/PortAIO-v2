@@ -31,7 +31,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     ItemId.Giants_Belt,ItemId.Boots_of_Speed
                 }
             };
-            Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
+            Obj_AI_Base.OnSpellCast += Game_ProcessSpell;
         }
 
         private void Game_ProcessSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

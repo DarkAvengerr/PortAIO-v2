@@ -22,7 +22,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
         {
             Obj_AI_Base.OnDelete += Obj_AI_Base_OnDelete;
             Obj_AI_Base.OnCreate += Obj_AI_Base_OnCreate;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Drawing.OnDraw += Drawing_OnDraw;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
             Game.OnUpdate += Game_OnGameUpdate;

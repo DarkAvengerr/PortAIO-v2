@@ -33,7 +33,7 @@ namespace SebbyLib
                 if (hero.IsEnemy && hero.ChampionName == "Yasuo")
                     YasuoInGame = true;
             }
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             EloBuddy.Player.OnIssueOrder += Obj_AI_Base_OnIssueOrder;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
             Game.OnUpdate += OnUpdate;

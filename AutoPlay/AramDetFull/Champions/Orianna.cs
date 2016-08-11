@@ -13,7 +13,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
     {
         public OriannaA()
         {
-            AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            AIHeroClient.OnSpellCast += AIHeroClient_OnProcessSpellCast;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
             Interrupter2.OnInterruptableTarget += Interrupter_OnPossibleToInterrupt;
 
@@ -584,7 +584,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         static BallManager()
         {
             Game.OnUpdate += Game_OnGameUpdate;
-            AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            AIHeroClient.OnSpellCast += AIHeroClient_OnProcessSpellCast;
             BallPosition = ObjectManager.Player.Position;
         }
 

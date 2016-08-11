@@ -8,6 +8,7 @@ using LeagueSharp.Common;
 using SharpDX;
 using SharpDX.Direct3D9;
 using EloBuddy;
+using EloBuddy.SDK.Events;
 
 namespace OneKeyToWin_AIO_Sebby.Core
 {
@@ -51,31 +52,29 @@ namespace OneKeyToWin_AIO_Sebby.Core
             }
 
             Game.OnUpdate += OnUpdate;
-            Obj_AI_Base.OnTeleport += Obj_AI_Base_OnTeleport;
+            Teleport.OnTeleport += Obj_AI_Base_OnTeleport;
         }
 
-        private static void Obj_AI_Base_OnTeleport(GameObject sender, GameObjectTeleportEventArgs args)
+        private static void Obj_AI_Base_OnTeleport(GameObject sender, Teleport.TeleportEventArgs recall)
         {
             var unit = sender as AIHeroClient;
 
             if (unit == null || !unit.IsValid || unit.IsAlly)
                 return;
 
-            var ChampionInfoOne = ChampionInfoList.Find(x => x.NetworkId == sender.NetworkId);
+            var ChampionInfoOne = ChampionInfoList.Find(x => x.NetworkId == unit.NetworkId);
 
-            var recall = Packet.S2C.Teleport.Decoded(unit, args);
-
-            if (recall.Type == Packet.S2C.Teleport.Type.Recall)
+            if (recall.Type == EloBuddy.SDK.Enumerations.TeleportType.Recall)
             {
                 switch (recall.Status)
                 {
-                    case Packet.S2C.Teleport.Status.Start:
+                    case EloBuddy.SDK.Enumerations.TeleportStatus.Start:
                         ChampionInfoOne.StartRecallTime = Game.Time;
                         break;
-                    case Packet.S2C.Teleport.Status.Abort:
+                    case EloBuddy.SDK.Enumerations.TeleportStatus.Abort:
                         ChampionInfoOne.AbortRecallTime = Game.Time;
                         break;
-                    case Packet.S2C.Teleport.Status.Finish:
+                    case EloBuddy.SDK.Enumerations.TeleportStatus.Finish:
                         ChampionInfoOne.FinishRecallTime = Game.Time;
                         ChampionInfoOne.LastVisablePos = ObjectManager.Get<Obj_SpawnPoint>().FirstOrDefault(x => x.IsEnemy).Position;
                         break;

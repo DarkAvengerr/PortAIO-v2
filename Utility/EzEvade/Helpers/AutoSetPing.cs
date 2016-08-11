@@ -46,7 +46,7 @@ using EloBuddy; namespace ezEvade
 
             Spellbook.OnCastSpell += Game_OnCastSpell;
             MissileClient.OnCreate += Game_OnCreateObj;
-            AIHeroClient.OnProcessSpellCast += Game_ProcessSpell;
+            AIHeroClient.OnSpellCast += Game_ProcessSpell;
 
             //Game.OnUpdate += Game_OnUpdate;
 

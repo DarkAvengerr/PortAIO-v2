@@ -83,7 +83,7 @@
 
         private void Game_OnUpdate(EventArgs args)
         {
-            foreach (var item in this.offensiveItems.Where(x => x.ShouldUseItem() && Items.CanUseItem((int)x.Id)))
+            foreach (var item in this.offensiveItems.Where(x => x.ShouldUseItem() && Items.CanUseItem((int)x.Id) && Items.HasItem((int)x.Id)))
             {
                 item.UseItem();
             }

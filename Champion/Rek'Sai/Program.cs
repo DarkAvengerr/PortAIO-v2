@@ -319,7 +319,7 @@ namespace D_RekSai
 
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             Chat.Print("<font color='#881df2'>D-Reksai by Diabaths</font> Loaded.");
             Chat.Print(

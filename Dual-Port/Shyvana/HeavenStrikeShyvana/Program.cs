@@ -111,7 +111,7 @@ using EloBuddy;
             Orbwalking.AfterAttack += AfterAttack;
             Orbwalking.OnAttack += OnAttack;
             Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
 
 
             Chat.Print("Welcome to HeavenStrikeShyvana");

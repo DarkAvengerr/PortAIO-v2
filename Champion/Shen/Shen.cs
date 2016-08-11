@@ -44,7 +44,7 @@ namespace UnderratedAIO.Champions
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += OnPossibleToInterrupt;
             Obj_AI_Base.OnDamage += Obj_AI_Base_OnDamage;
-            Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
+            Obj_AI_Base.OnSpellCast += Game_ProcessSpell;
             Jungle.setSmiteSlot();
             HpBarDamageIndicator.DamageToUnit = ComboDamage;
         }

@@ -255,6 +255,7 @@ namespace SCommon.Orbwalking
         /// <returns>true if can attack</returns>
         public bool CanAttack(int t = 0)
         {
+            return EloBuddy.SDK.Orbwalker.CanAutoAttack;
             if (!m_Attack)
                 return false;
 
@@ -279,6 +280,7 @@ namespace SCommon.Orbwalking
         /// <returns>true if can move</returns>
         public bool CanMove(int t = 0)
         {
+            return EloBuddy.SDK.Orbwalker.CanMove;
             if (!m_Move)
                 return false;
 
@@ -392,7 +394,7 @@ namespace SCommon.Orbwalking
                         }
                         else
                         {
-                            if (CanMove())
+                            if (EloBuddy.SDK.Orbwalker.CanMove)
                             {
                                 if (m_Configuration.DontMoveInRange && target.Type == GameObjectType.AIHeroClient)
                                     return;
@@ -402,7 +404,7 @@ namespace SCommon.Orbwalking
                             }
                         }
                     }
-                    else if (CanMove())
+                    else if (EloBuddy.SDK.Orbwalker.CanMove)
                     {
                         if (m_Configuration.DontMoveInRange && target.Type == GameObjectType.AIHeroClient)
                             return;
@@ -440,7 +442,7 @@ namespace SCommon.Orbwalking
         /// <param name="pos"></param>
         private void Move(Vector3 pos)
         {
-            if (!m_attackInProgress && CanMove() && (!CanAttack(60) || CanAttack()))
+            if (!m_attackInProgress && EloBuddy.SDK.Orbwalker.CanMove && (!CanAttack(60) || EloBuddy.SDK.Orbwalker.CanAutoAttack))
             {
                 Vector3 playerPos = ObjectManager.Player.ServerPosition;
 
@@ -531,14 +533,9 @@ namespace SCommon.Orbwalking
             {
                 if (CanOrbwalkTarget(minion))
                 {
-                    var pred = HealthPrediction.LaneClearHealthPrediction(minion, (int)(ObjectManager.Player.AttackDelay * 1000 * 2), 30);
+                    var pred = EloBuddy.SDK.Prediction.Health.GetPrediction(minion, (int)(ObjectManager.Player.AttackDelay * 1000 * 2) + 30);
                     if (pred >= 2 * Damage.AutoAttack.GetDamage(minion, true) || Damage.Prediction.IsLastHitable(minion))
                     {
-                        /*
-                        //check if minion is about to be attacked
-                        if (Damage.Prediction.AggroCount(minion) == 0 && ObjectManager.Get<Obj_AI_Minion>().Any(p => p.IsEnemy && !p.IsMelee && MinionManager.IsMinion(p) && p.IsValidTarget(1500) && p.ServerPosition.Distance(minion.ServerPosition) - p.AttackRange < p.MoveSpeed * ObjectManager.Player.AttackDelay && p.Path.Length > 0))
-                            continue;
-                        */
                         return minion;
                     }
                 }
@@ -728,8 +725,11 @@ namespace SCommon.Orbwalking
                     if (ObjectManager.Player.CharData.BaseSkinName == "Azir")
                         range = 1000f;
                     var target = TargetSelector.GetTarget(range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
-                    if (!target.IsDead && target.IsVisible && target.IsHPBarRendered && target.IsTargetable && target.IsValidTarget() && (Utility.InAARange(target) || (ActiveMode != Mode.LaneClear && ObjectManager.Player.IsMelee && m_Configuration.MagnetMelee && target.IsValidTarget(m_Configuration.StickRange))))
-                        return target;
+                    if (target != null)
+                    {
+                        if (!target.IsDead && target.IsVisible && target.IsHPBarRendered && target.IsTargetable && target.IsValidTarget() && (Utility.InAARange(target) || (ActiveMode != Mode.LaneClear && ObjectManager.Player.IsMelee && m_Configuration.MagnetMelee && target.IsValidTarget(m_Configuration.StickRange))))
+                            return target;
+                    }
                 }
             }
 

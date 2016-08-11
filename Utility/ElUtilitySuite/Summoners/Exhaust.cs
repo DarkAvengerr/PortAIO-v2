@@ -98,7 +98,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
 
                 this.ExhaustSpell = new Spell(exhaustSlot, 550f);
 
-                Obj_AI_Base.OnProcessSpellCast += this.ObjAiBaseOnProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += this.ObjAiBaseOnProcessSpellCast;
 
                 var dangerousSpells =
                     Data.Get<SpellDatabase>()
@@ -160,7 +160,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                 return;
             }
 
-            if (this.ExhaustSpell.IsReady())
+            if (this.ExhaustSpell.IsReady() && sender.IsValidTarget())
             {
                LeagueSharp.Common.Utility.DelayAction.Add(Random.Next(50, 100), () => this.ExhaustSpell.Cast(sender));
                Console.WriteLine($"Use exhaust on: {sender.CharData.BaseSkinName} - for spell {args.SData.Name}");

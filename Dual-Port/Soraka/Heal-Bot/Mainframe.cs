@@ -23,8 +23,8 @@ using EloBuddy;
         internal static void Init()
         {
             Game.OnUpdate += OnUpdate;
-            Obj_AI_Base.OnProcessSpellCast += Events.SavingGrace;
-            Obj_AI_Base.OnProcessSpellCast += NerfEverything.Interrupts;
+            Obj_AI_Base.OnSpellCast += Events.SavingGrace;
+            Obj_AI_Base.OnSpellCast += NerfEverything.Interrupts;
             Drawing.OnDraw += OnDraw;
             Orbwalking.BeforeAttack += Events.OnBeforeAttack;
             Interrupter2.OnInterruptableTarget += OtherUtils.OnInterruptableSpell;

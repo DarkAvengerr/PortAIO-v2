@@ -154,7 +154,7 @@ using EloBuddy; namespace ElUtilitySuite.Utility
                 if (this.Menu.Item("ThreshHawkMode").IsActive() ? this.Menu.Item("ThreshLanternHotkey").GetValue<KeyBind>().Active :
                     this.Menu.Item("ThreshLanternHotkey").GetValue<KeyBind>().Active || this.Player.HealthPercent < this.ClickBelowHp)
                 {
-                    if (this.ThreshLantern.Position.Distance(this.Player.Position) <= 500)
+                    if (this.ThreshLantern.Position.Distance(this.Player.Position) <= 500 && ObjectManager.Player.Hero != Champion.Thresh)
                     {
                         this.Player.Spellbook.CastSpell((SpellSlot)62, this.ThreshLantern);
                     }

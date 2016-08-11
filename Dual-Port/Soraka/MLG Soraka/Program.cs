@@ -199,7 +199,7 @@ using EloBuddy;
             Drawing.OnDraw += OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapCloser_OnEnemyGapcloser;
             GameObject.OnCreate += AntiObject;
-            Obj_AI_Base.OnProcessSpellCast += InterrupterSc;
+            Obj_AI_Base.OnSpellCast += InterrupterSc;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
         }

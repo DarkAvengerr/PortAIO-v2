@@ -22,7 +22,7 @@ namespace HeavenStrikeAzir
         private static int lastMovecommandTick;
         public static void Initialize()
         {
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnDoCast;
             Game.OnUpdate += Game_OnUpdate;
             Program._orbwalker.SetAttack(false);

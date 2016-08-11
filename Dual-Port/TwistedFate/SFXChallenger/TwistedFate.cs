@@ -75,7 +75,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             Interrupter2.OnInterruptableTarget += OnInterruptableTarget;
             Drawing.OnDraw += OnDrawingDraw;
             Drawing.OnEndScene += OnDrawingEndScene;
-            Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
             Orbwalking.BeforeAttack += OnOrbwalkingBeforeAttack;
             BuffManager.OnBuff += OnBuffManagerBuff;
         }
@@ -1089,7 +1089,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             {
                 LastCard = CardColor.None;
                 ShouldSelect = new List<CardColor>();
-                Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
                 Game.OnUpdate += OnGameUpdate;
             }
 

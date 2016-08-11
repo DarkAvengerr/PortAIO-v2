@@ -1206,7 +1206,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 Status = BallStatus.Fixed;
                 Pos = ObjectManager.Player.Position;
                 GameObject.OnCreate += OnGameObjectCreate;
-                Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
                 Game.OnUpdate += OnGameUpdate;
 
                 foreach (var obj in GameObjects.AllGameObjects)

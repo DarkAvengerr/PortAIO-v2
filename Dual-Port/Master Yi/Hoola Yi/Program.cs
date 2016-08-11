@@ -67,9 +67,9 @@ using EloBuddy;
             Obj_AI_Base.OnPlayAnimation += OnPlay;
             Spellbook.OnCastSpell += OnCast;
             Obj_AI_Base.OnSpellCast += OnSpellCastJC;
-            Obj_AI_Base.OnProcessSpellCast += BeforeAttack;
-            Obj_AI_Base.OnProcessSpellCast += BeforeAttackJC;
-            Obj_AI_Base.OnProcessSpellCast += DetectBlink;
+            Obj_AI_Base.OnSpellCast += BeforeAttack;
+            Obj_AI_Base.OnSpellCast += BeforeAttackJC;
+            Obj_AI_Base.OnSpellCast += DetectBlink;
             Drawing.OnDraw += OnDraw;
         }
 

@@ -16,7 +16,7 @@ namespace S_Plus_Class_Kalista.Handlers
         {
             SMenu.AddSubMenu(_Menu());
 
-            Obj_AI_Base.OnProcessSpellCast += OnCast;
+            Obj_AI_Base.OnSpellCast += OnCast;
         }
 
         private static Menu _Menu()

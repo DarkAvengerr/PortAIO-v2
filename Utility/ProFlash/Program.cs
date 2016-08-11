@@ -124,7 +124,7 @@ namespace ProFlash
             Menu.AddToMainMenu();
 
             Spellbook.OnCastSpell += OnCastSpell;
-            //Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            //Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
             Drawing.OnDraw += OnDraw;
         }
 

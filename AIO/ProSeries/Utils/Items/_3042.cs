@@ -10,7 +10,7 @@ using EloBuddy;
     {
         public _3042()
         {
-            Obj_AI_Base.OnProcessSpellCast += OnSpellCast;
+            Obj_AI_Base.OnSpellCast += OnSpellCast;
         }
 
         internal override string Name

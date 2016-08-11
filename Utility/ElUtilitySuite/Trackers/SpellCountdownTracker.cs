@@ -1,4 +1,5 @@
-using EloBuddy; namespace ElUtilitySuite.Trackers
+using EloBuddy;
+namespace ElUtilitySuite.Trackers
 {
     using System;
     using System.Collections.Generic;
@@ -15,6 +16,7 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
     using SharpDX.Direct3D9;
 
     using Color = System.Drawing.Color;
+    using EloBuddy.SDK.Events;
 
     internal class SpellCountdownTracker : IPlugin
     {
@@ -204,7 +206,7 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
             Drawing.OnDraw += this.Drawing_OnDraw;
 
             JungleTracker.CampDied += this.JungleTrackerCampDied;
-            Obj_AI_Base.OnTeleport += this.OnTeleport;
+            Teleport.OnTeleport += this.OnTeleport;
             Obj_AI_Base.OnBuffLose += this.OnBuffLose;
 
             Drawing.OnPreReset += args =>
@@ -233,7 +235,7 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
                 try
                 {
                     var spellName = name.Split('.')[3];
-                    if (spellName != "Dragon" && spellName != "Baron" && spellName != "Teleport"  && spellName != "Rebirthready" && spellName != "Zacrebirthready")
+                    if (spellName != "Dragon" && spellName != "Baron" && spellName != "Teleport" && spellName != "Rebirthready" && spellName != "Zacrebirthready")
                     {
                         this.Spells.Add(Data.Get<SpellDatabase>().Spells.First(x => x.SpellName.Equals(spellName)));
 
@@ -313,28 +315,27 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void OnTeleport(Obj_AI_Base sender, GameObjectTeleportEventArgs args)
+        private void OnTeleport(Obj_AI_Base sender, Teleport.TeleportEventArgs packet)
         {
             try
             {
-               if (sender.IsAlly || !this.Menu.Item("DrawTeleport").IsActive())
+                if (sender.IsAlly || !this.Menu.Item("DrawTeleport").IsActive())
                 {
                     return;
                 }
-                
-                var hero =  sender as AIHeroClient;
+
+                var hero = sender as AIHeroClient;
                 if (hero != null)
                 {
-                    var packet = Packet.S2C.Teleport.Decoded(sender, args);
-                    if (packet.Type == Packet.S2C.Teleport.Type.Teleport && 
-                        (packet.Status == Packet.S2C.Teleport.Status.Finish || packet.Status == Packet.S2C.Teleport.Status.Abort))
+                    if (packet.Type == EloBuddy.SDK.Enumerations.TeleportType.Teleport &&
+                        (packet.Status == EloBuddy.SDK.Enumerations.TeleportStatus.Finish || packet.Status == EloBuddy.SDK.Enumerations.TeleportStatus.Abort))
                     {
                         var time = Game.Time;
                         LeagueSharp.Common.Utility.DelayAction.Add(
                             250,
                             delegate
                             {
-                                var cd = packet.Status == Packet.S2C.Teleport.Status.Finish ? 300 : 200;
+                                var cd = packet.Status == EloBuddy.SDK.Enumerations.TeleportStatus.Finish ? 300 : 200;
                                 var card = new Card
                                 {
                                     EndTime = time + cd,
@@ -426,7 +427,7 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
                     continue;
                 }
 
-                foreach (var spell in slots.Select(x => enemy.GetSpell(x)).Where(x => x.Level > 0 && x.CooldownExpires > 0 
+                foreach (var spell in slots.Select(x => enemy.GetSpell(x)).Where(x => x.Level > 0 && x.CooldownExpires > 0
                 && x.CooldownExpires - Game.Time <= Countdown))
                 {
                     if (spell.CooldownExpires - Game.Time <= -5

@@ -107,7 +107,7 @@ using EloBuddy;
         static MyOrbwalker()
         {
             Player = ObjectManager.Player;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += OnProcessSpell;
             MissileClient.OnCreate += MissileClient_OnCreate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
         }

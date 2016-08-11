@@ -115,7 +115,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                     return;
                 }
 
-                foreach (var ally in HeroManager.Allies)
+                foreach (var ally in EloBuddy.SDK.EntityManager.Heroes.AllHeroes.Where(x => !x.IsDead && x.IsHPBarRendered && x.IsVisible))
                 {
                     if (!this.Menu.Item($"healon{ally.ChampionName}").IsActive() || ally.IsRecalling() || ally.IsInvulnerable || ally.HasBuff("ChronoShift"))
                     {

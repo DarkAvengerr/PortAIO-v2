@@ -12,7 +12,7 @@ using EloBuddy;
         public void OnLoad()
         {
             Orbwalking.AfterAttack += AfterAttack;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
         }
 
         public void BuildMenu(Menu RootMenu)

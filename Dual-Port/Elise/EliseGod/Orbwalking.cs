@@ -84,7 +84,7 @@ using EloBuddy;
         static Orbwalking()
         {
             Player = ObjectManager.Player;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += OnProcessSpell;
             MissileClient.OnCreate += MissileClient_OnCreate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
         }

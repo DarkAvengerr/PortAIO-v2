@@ -52,7 +52,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
                       x =>
                       x.HealthPercent < this.Menu.Item("TalismanEnemyHp").GetValue<Slider>().Value
                       && x.Distance(this.Player) < 550)
-                      || this.Player.HealthPercent < this.Menu.Item("TalismanMyHp").GetValue<Slider>().Value);
+                      || this.Player.HealthPercent < this.Menu.Item("TalismanMyHp").GetValue<Slider>().Value) && Items.HasItem((int)ItemId.Talisman_of_Ascension);
         }
 
         /// <summary>

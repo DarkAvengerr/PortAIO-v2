@@ -209,7 +209,7 @@ namespace JaxQx
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             Orbwalking.BeforeAttack += OrbwalkingBeforeAttack;
             Obj_AI_Base.OnBuffLose += (sender, eventArgs) =>

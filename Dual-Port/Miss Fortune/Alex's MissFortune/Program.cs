@@ -102,7 +102,7 @@ using EloBuddy;
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
-            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += AIHeroClient_OnProcessSpellCast;
             EloBuddy.Player.OnIssueOrder += Obj_AI_Base_OnIssueOrder;
         }
 

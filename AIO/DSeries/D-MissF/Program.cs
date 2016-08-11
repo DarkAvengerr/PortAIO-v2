@@ -169,7 +169,7 @@ using EloBuddy;
 
             _config.AddToMainMenu();
             //Chat.Print("<font color='#881df2'>D-MissFortune by Diabaths</font> Loaded.");
-            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += AIHeroClient_OnProcessSpellCast;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             
             Game.OnUpdate += Game_OnUpdate;

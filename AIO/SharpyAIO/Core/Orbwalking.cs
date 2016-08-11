@@ -223,7 +223,7 @@ using EloBuddy;
         {
             Player = ObjectManager.Player;
             _championName = Player.ChampionName;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += OnProcessSpell;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnSpellCast;
             Spellbook.OnStopCast += SpellbookOnStopCast;
         }

@@ -282,7 +282,7 @@ using EloBuddy; namespace D_Rengar
             Chat.Print("<font color='#881df2'>D-Rengar by Diabaths</font> Loaded.");
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             Orbwalking.AfterAttack += OnAfterAttack;
             Orbwalking.BeforeAttack += OnBeforeAttack;

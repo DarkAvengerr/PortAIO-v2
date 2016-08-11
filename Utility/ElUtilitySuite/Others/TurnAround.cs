@@ -81,7 +81,7 @@ using EloBuddy; namespace ElUtilitySuite.Others
         /// </summary>
         public void Load()
         {
-            Obj_AI_Base.OnProcessSpellCast += this.OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += this.OnProcessSpellCast;
             EloBuddy.Player.OnIssueOrder += this.OnObjAiBaseIssueOrder;
         }
 

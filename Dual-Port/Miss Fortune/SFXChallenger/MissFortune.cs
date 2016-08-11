@@ -69,7 +69,7 @@ using EloBuddy; namespace SFXChallenger.Champions
         {
             GapcloserManager.OnGapcloser += OnEnemyGapcloser;
             Orbwalking.AfterAttack += OnOrbwalkingAfterAttack;
-            Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
             BlockOrdersManager.Spells = true;
             BlockOrdersManager.Orders = true;
             BlockOrdersManager.Automatic = true;

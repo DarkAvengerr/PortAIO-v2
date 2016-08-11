@@ -20,7 +20,7 @@ namespace S_Plus_Class_Kalista.Libaries
         {
             //Calculates all the damage
             Game.OnUpdate += OnUpdate;
-            Obj_AI_Base.OnProcessSpellCast += OnCast;
+            Obj_AI_Base.OnSpellCast += OnCast;
         }
 
         public static float IncomingDamage

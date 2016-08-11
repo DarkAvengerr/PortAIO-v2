@@ -33,7 +33,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             GameObject.OnCreate += GameObjectOnOnCreate;
             GameObject.OnDelete += GameObject_OnDelete;
-            AIHeroClient.OnProcessSpellCast += processSpells;
+            AIHeroClient.OnSpellCast += processSpells;
 
             ARAMSimulator.champBuild = new Build
             {

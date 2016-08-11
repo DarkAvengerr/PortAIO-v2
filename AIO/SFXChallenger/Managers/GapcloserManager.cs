@@ -145,7 +145,7 @@ using EloBuddy; namespace SFXChallenger.Managers
 
         static GapcloserManager()
         {
-            Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
             CustomEvents.Unit.OnDash += OnUnitDash;
         }
 

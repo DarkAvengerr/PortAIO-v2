@@ -48,7 +48,7 @@ using EloBuddy;
             Notifications.AddNotification("Gift From Hikigaya",6000);
 
             Game.OnUpdate += EzrealOnUpdate;
-            AIHeroClient.OnProcessSpellCast += EzrealOnProcessSpellCast;
+            AIHeroClient.OnSpellCast += EzrealOnProcessSpellCast;
             Drawing.OnDraw += EzrealOnDraw;
         }
 

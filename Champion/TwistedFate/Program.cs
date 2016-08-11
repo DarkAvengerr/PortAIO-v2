@@ -144,7 +144,7 @@ namespace TwistedFate
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Drawing.OnEndScene += DrawingOnOnEndScene;
-            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += AIHeroClient_OnProcessSpellCast;
             Orbwalking.BeforeAttack += OrbwalkingOnBeforeAttack;
         }
 

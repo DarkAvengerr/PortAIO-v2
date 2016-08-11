@@ -32,7 +32,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             };
 
             DeathWalker.AfterAttack += afterAttack;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += OnProcessSpell;
         }
 
         private void OnProcessSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

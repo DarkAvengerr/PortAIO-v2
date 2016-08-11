@@ -30,7 +30,7 @@ namespace UnderratedAIO.Champions
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Game_OnDraw;
             Orbwalking.AfterAttack += AfterAttack;
-            Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
+            Obj_AI_Base.OnSpellCast += Game_ProcessSpell;
             Jungle.setSmiteSlot();
             HpBarDamageIndicator.DamageToUnit = ComboDamage;
             GameObject.OnCreate += GameObject_OnCreate;

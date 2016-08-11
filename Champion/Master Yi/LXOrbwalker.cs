@@ -134,7 +134,7 @@ namespace MasterSharp
 
             Drawing.OnDraw += OnDraw;
             Game.OnUpdate += OnUpdate;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += OnProcessSpell;
             GameObject.OnCreate += MissileClient_OnCreate;
         }
 

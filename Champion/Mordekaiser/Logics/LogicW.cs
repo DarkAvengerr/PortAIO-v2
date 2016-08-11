@@ -11,7 +11,7 @@ namespace Mordekaiser.Logics
         public static void Initiate()
         {
             Game.OnUpdate += GameOnUpdate;
-            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += AIHeroClient_OnProcessSpellCast;
         }
 
         private static void GameOnUpdate(EventArgs args)

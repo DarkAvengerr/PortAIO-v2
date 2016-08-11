@@ -242,7 +242,7 @@ namespace KurisuNidalee
             Drawing.OnDraw += Drawing_OnDraw;
             Obj_AI_Base.OnBuffGain += Obj_AI_Base_OnBuffAdd;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnDoCast;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
         }
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

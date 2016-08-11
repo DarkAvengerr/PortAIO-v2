@@ -14,7 +14,7 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Tumble
     {
         public void OnLoad()
         {
-            Obj_AI_Base.OnProcessSpellCast += OnSpellcast;
+            Obj_AI_Base.OnSpellCast += OnSpellcast;
         }
 
         private void OnSpellcast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

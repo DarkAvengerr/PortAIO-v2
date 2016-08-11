@@ -75,7 +75,7 @@ namespace SPrediction
         /// </summary>
         public static void Initialize()
         {
-            AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            AIHeroClient.OnSpellCast += AIHeroClient_OnProcessSpellCast;
         }
 
         /// <summary>

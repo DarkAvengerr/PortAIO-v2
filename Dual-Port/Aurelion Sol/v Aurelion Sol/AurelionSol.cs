@@ -127,7 +127,7 @@ using EloBuddy;
             AntiGapcloser.OnEnemyGapcloser += SolGapcloser;
             Drawing.OnDraw += SolDraw;
 
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
 
             Chat.Print("[00:00] vAurelionSol");
             Chat.Print("[00:00] The first Aurelion Sol assembly available!");

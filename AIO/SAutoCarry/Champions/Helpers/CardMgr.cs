@@ -28,7 +28,7 @@ namespace SAutoCarry.Champions.Helpers
         {
             s_Champion = champ;
             Game.OnUpdate += Game_OnUpdate;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
         }
 
         /// <summary>

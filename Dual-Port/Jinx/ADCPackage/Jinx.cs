@@ -33,7 +33,7 @@ using EloBuddy; namespace ADCPackage.Plugins
             Chat.Print("[<font color='#F8F46D'>ADC Package</font>] by <font color='#79BAEC'>God</font> - <font color='#FFFFFF'>Jinx</font> loaded");
             CustomOrbwalker.BeforeAttack += CustomOrbwalker_BeforeAttack;
             Game.OnUpdate += PermaActive;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Drawing.OnDraw += Drawing_OnDraw;
 

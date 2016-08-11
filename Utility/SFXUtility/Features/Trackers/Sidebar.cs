@@ -45,7 +45,10 @@ using Utils = LeagueSharp.Common.Utils;
 
 #pragma warning disable 618
 
-using EloBuddy; namespace SFXUtility.Features.Trackers
+using EloBuddy;
+using EloBuddy.SDK.Events;
+
+namespace SFXUtility.Features.Trackers
 {
     internal class Sidebar : Child<Trackers>
     {
@@ -97,7 +100,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
         {
             Game.OnWndProc += OnGameWndProc;
             Drawing.OnEndScene += OnDrawingEndScene;
-            Obj_AI_Base.OnTeleport += OnObjAiBaseTeleport;
+            Teleport.OnTeleport += OnObjAiBaseTeleport;
 
             base.OnEnable();
         }
@@ -106,7 +109,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
         {
             Game.OnWndProc -= OnGameWndProc;
             Drawing.OnEndScene -= OnDrawingEndScene;
-            Obj_AI_Base.OnTeleport -= OnObjAiBaseTeleport;
+            Teleport.OnTeleport -= OnObjAiBaseTeleport;
 
             base.OnDisable();
         }
@@ -319,16 +322,16 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
                             new Color(255, 255, 255, 215));
                     }
 
-                    if (enemy.TeleportStatus == Packet.S2C.Teleport.Status.Start ||
-                        (enemy.TeleportStatus == Packet.S2C.Teleport.Status.Finish ||
-                         enemy.TeleportStatus == Packet.S2C.Teleport.Status.Abort) &&
+                    if (enemy.TeleportStatus == EloBuddy.SDK.Enumerations.TeleportStatus.Start ||
+                        (enemy.TeleportStatus == EloBuddy.SDK.Enumerations.TeleportStatus.Finish ||
+                         enemy.TeleportStatus == EloBuddy.SDK.Enumerations.TeleportStatus.Abort) &&
                         Game.Time <= enemy.LastTeleportStatusTime + 5f)
                     {
                         _sprite.Begin(SpriteFlags.AlphaBlend);
                         _sprite.DrawCentered(
-                            enemy.TeleportStatus == Packet.S2C.Teleport.Status.Start
+                            enemy.TeleportStatus == EloBuddy.SDK.Enumerations.TeleportStatus.Start
                                 ? _teleportStartTexture
-                                : (enemy.TeleportStatus == Packet.S2C.Teleport.Status.Finish
+                                : (enemy.TeleportStatus == EloBuddy.SDK.Enumerations.TeleportStatus.Finish
                                     ? _teleportFinishTexture
                                     : _teleportAbortTexture),
                             new Vector2(offsetRight + (float) Math.Ceiling(3 * _scale), offsetTop + offset));
@@ -469,24 +472,23 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
             return null;
         }
 
-        private void OnObjAiBaseTeleport(Obj_AI_Base sender, GameObjectTeleportEventArgs args)
+        private void OnObjAiBaseTeleport(Obj_AI_Base sender, Teleport.TeleportEventArgs packet)
         {
             try
             {
-                var packet = Packet.S2C.Teleport.Decoded(sender, args);
-                var enemyObject = _enemyObjects.FirstOrDefault(e => e.Unit.NetworkId == packet.UnitNetworkId);
+                var enemyObject = _enemyObjects.FirstOrDefault(e => e.Unit.NetworkId == sender.NetworkId);
                 if (enemyObject != null)
                 {
-                    if (packet.Type == Packet.S2C.Teleport.Type.Teleport &&
-                        (packet.Status == Packet.S2C.Teleport.Status.Finish ||
-                         packet.Status == Packet.S2C.Teleport.Status.Abort))
+                    if (packet.Type == EloBuddy.SDK.Enumerations.TeleportType.Teleport &&
+                        (packet.Status == EloBuddy.SDK.Enumerations.TeleportStatus.Finish ||
+                         packet.Status == EloBuddy.SDK.Enumerations.TeleportStatus.Abort))
                     {
                         var time = Game.Time;
                         LeagueSharp.Common.Utility.DelayAction.Add(
                             250, delegate
                             {
-                                var cd = packet.Status == Packet.S2C.Teleport.Status.Finish ? 300 : 200;
-                                _teleports[packet.UnitNetworkId] = time + cd;
+                                var cd = packet.Status == EloBuddy.SDK.Enumerations.TeleportStatus.Finish ? 300 : 200;
+                                _teleports[sender.NetworkId] = time + cd;
                             });
                     }
                     enemyObject.TeleportStatus = packet.Status;
@@ -584,11 +586,11 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
 
         private class EnemyObject
         {
-            private Packet.S2C.Teleport.Status _teleportStatus;
+            private EloBuddy.SDK.Enumerations.TeleportStatus _teleportStatus;
 
             public EnemyObject(AIHeroClient unit, Texture texture)
             {
-                TeleportStatus = Packet.S2C.Teleport.Status.Unknown;
+                TeleportStatus = EloBuddy.SDK.Enumerations.TeleportStatus.Unknown;
                 Unit = unit;
                 Texture = texture;
                 RSpell = unit.GetSpell(SpellSlot.R);
@@ -604,7 +606,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
             public Vector3 LastPosition { get; set; }
             public float LastTeleportStatusTime { get; private set; }
 
-            public Packet.S2C.Teleport.Status TeleportStatus
+            public EloBuddy.SDK.Enumerations.TeleportStatus TeleportStatus
             {
                 get { return _teleportStatus; }
                 set

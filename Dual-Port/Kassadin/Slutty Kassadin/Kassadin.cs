@@ -50,7 +50,7 @@ using EloBuddy;
             Obj_AI_Base.OnSpellCast += OnSpellCasts;
             Interrupter2.OnInterruptableTarget += OnInteruppt;
             Spellbook.OnCastSpell += OnCastSpell;
-            Obj_AI_Base.OnProcessSpellCast += OnProcess;
+            Obj_AI_Base.OnSpellCast += OnProcess;
             Drawing.OnDraw += OnDraw;
         }
 

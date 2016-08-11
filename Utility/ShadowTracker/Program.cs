@@ -109,7 +109,7 @@ using EloBuddy; namespace ShadowTracker
                 Game.OnUpdate += OnGameUpdate;
                 Drawing.OnDraw += OnDraw.Drawing_OnDraw;
                 AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
-                Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+                Obj_AI_Base.OnSpellCast += OnProcessSpell;
                 Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
                 GameObject.OnCreate += GameObject_OnCreate;
                 GameObject.OnDelete += GameObject_OnDelete;

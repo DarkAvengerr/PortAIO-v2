@@ -78,7 +78,7 @@ namespace SCommon.Evade
             m_evade_thread = new Thread(new ThreadStart(EvadeThread));
             m_evade_thread.Start();
             Game.OnUpdate += Game_OnUpdate;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             
             Chat.Print("<font color='#ff3232'>SCommon: </font><font color='#d4d4d4'>Evader loaded for champion {0} !</font>", ObjectManager.Player.ChampionName);
         }

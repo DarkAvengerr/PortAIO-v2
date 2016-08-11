@@ -60,14 +60,14 @@ using EloBuddy; namespace SFXUtility.Features.Others
 
         protected override void OnEnable()
         {
-            Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
             EloBuddy.Player.OnIssueOrder += OnObjAiBaseIssueOrder;
             base.OnEnable();
         }
 
         protected override void OnDisable()
         {
-            Obj_AI_Base.OnProcessSpellCast -= OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnSpellCast -= OnObjAiBaseProcessSpellCast;
             EloBuddy.Player.OnIssueOrder -= OnObjAiBaseIssueOrder;
             base.OnDisable();
         }

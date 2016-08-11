@@ -46,7 +46,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         public override bool ShouldUseItem()
         {
             return this.Menu.Item("UseBotrkCombo").IsActive() && this.ComboModeActive
-                   && (HeroManager.Enemies.Any(
+                   && (EloBuddy.SDK.EntityManager.Heroes.Enemies.Any(
                        x =>
                        x.HealthPercent < this.Menu.Item("BotrkEnemyHp").GetValue<Slider>().Value
                        && x.Distance(this.Player) < 550)
@@ -60,10 +60,10 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         {
             Items.UseItem(
                 (int)this.Id,
-                HeroManager.Enemies.FirstOrDefault(
+                EloBuddy.SDK.EntityManager.Heroes.Enemies.FirstOrDefault(
                     x =>
                     x.HealthPercent < this.Menu.Item("BotrkEnemyHp").GetValue<Slider>().Value
-                    && x.Distance(this.Player) < 550));
+                    && x.Distance(this.Player) < 550 && x.IsValidTarget() && x.IsHPBarRendered && x.IsVisible));
         }
 
         #endregion

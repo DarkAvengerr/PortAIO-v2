@@ -76,7 +76,7 @@ namespace SCommon.Prediction
         /// </summary>
         public static void Initialize()
         {
-            AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            AIHeroClient.OnSpellCast += AIHeroClient_OnProcessSpellCast;
         }
 
         /// <summary>

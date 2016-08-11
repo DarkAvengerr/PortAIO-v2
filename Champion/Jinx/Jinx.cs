@@ -36,7 +36,7 @@ namespace OneKeyToWin_AIO_Sebby
             LoadMenuOKTW();
             Game.OnUpdate += Game_OnUpdate;
             SebbyLib.Orbwalking.BeforeAttack += BeforeAttack;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Drawing.OnDraw += Drawing_OnDraw;
         }

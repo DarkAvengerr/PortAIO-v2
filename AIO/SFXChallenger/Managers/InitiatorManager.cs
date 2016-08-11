@@ -98,7 +98,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                     new SpellData("Zed", SpellSlot.R),
                     new SpellData("Flash", SpellSlot.Unknown, SummonerManager.Flash.Name, true)
                 };
-                Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
             }
             catch (Exception ex)
             {

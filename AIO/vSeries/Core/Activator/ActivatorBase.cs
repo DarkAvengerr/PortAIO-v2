@@ -146,7 +146,7 @@ using EloBuddy;
 
             Chat.Print("<font color='#ff3232'>vSupport Series: </font><font color='#d4d4d4'>Activator loaded!</font>");
             /*Game.OnUpdate += ActivatorBaseOnUpdate;
-            Obj_AI_Base.OnProcessSpellCast += ActivatorBaseOnProcessSpellCast;*/
+            Obj_AI_Base.OnSpellCast += ActivatorBaseOnProcessSpellCast;*/
         }
 
         private static void ActivatorBaseOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

@@ -402,7 +402,7 @@ using EloBuddy;
                     }
                 };
 
-            Obj_AI_Base.OnProcessSpellCast += OnSpellCast;
+            Obj_AI_Base.OnSpellCast += OnSpellCast;
             Drawing.OnDraw += args =>
                 {
                     if (Variables.Menu.IsEnabled("com.ilucian.misc.drawQ"))

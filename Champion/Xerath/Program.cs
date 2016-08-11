@@ -230,7 +230,7 @@ using EloBuddy; namespace Xerath
             Drawing.OnEndScene += Drawing_OnEndScene;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
-            AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            AIHeroClient.OnSpellCast += AIHeroClient_OnProcessSpellCast;
             Game.OnWndProc += Game_OnWndProc;
             Orbwalking.BeforeAttack += OrbwalkingOnBeforeAttack;
             EloBuddy.Player.OnIssueOrder += AIHeroClient_OnIssueOrder;

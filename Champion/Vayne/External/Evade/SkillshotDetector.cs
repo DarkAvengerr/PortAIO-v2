@@ -32,7 +32,7 @@ namespace VayneHunter_Reborn.External.Evade
         static SkillshotDetector()
         {
             //Detect when the skillshots are created.
-            Obj_AI_Base.OnProcessSpellCast += ObjAiHeroOnOnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += ObjAiHeroOnOnProcessSpellCast;
 
             //Detect when projectiles collide.
             GameObject.OnDelete += ObjSpellMissileOnOnDelete;

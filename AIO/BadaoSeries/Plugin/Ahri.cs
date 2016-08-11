@@ -152,7 +152,7 @@ using EloBuddy;
             Game.OnUpdate += Game_OnUpdate;
             Obj_AI_Base.OnNewPath += Obj_AI_Base_OnNewPath;
             Drawing.OnDraw += Drawing_OnDraw;
-            Obj_AI_Base.OnProcessSpellCast +=Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast +=Obj_AI_Base_OnProcessSpellCast;
             AntiGapcloser.OnEnemyGapcloser += Gapcloser_OnGapCloser;
             Interrupter2.OnInterruptableTarget += InterruptableSpell_OnInterruptableTarget;
             LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = AhriDamage;

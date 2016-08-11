@@ -80,7 +80,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             SebbyLib.Orbwalking.BeforeAttack +=Orbwalking_BeforeAttack;
             SebbyLib.Orbwalking.AfterAttack +=Orbwalking_AfterAttack;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             EloBuddy.Player.OnIssueOrder += Obj_AI_Base_OnIssueOrder;
         }
 

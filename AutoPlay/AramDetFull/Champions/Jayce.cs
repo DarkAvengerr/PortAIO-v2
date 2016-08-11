@@ -62,7 +62,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         
         public Jayce()
         {
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += OnProcessSpell;
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += OnPosibleToInterrupt;
 

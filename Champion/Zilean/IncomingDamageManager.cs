@@ -14,7 +14,7 @@ using EloBuddy; namespace ElZilean
 
         static IncomingDamageManager()
         {
-            Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
         }
 
         public static bool Skillshots { get; set; }

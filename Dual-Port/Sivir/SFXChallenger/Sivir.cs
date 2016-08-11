@@ -59,7 +59,7 @@ using EloBuddy; namespace SFXChallenger.Champions
 
         protected override void OnLoad()
         {
-            Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
             Orbwalking.AfterAttack += OnOrbwalkingAfterAttack;
             BuffManager.OnBuff += OnBuffManagerBuff;
         }

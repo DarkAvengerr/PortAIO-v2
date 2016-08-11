@@ -115,7 +115,7 @@ using EloBuddy;
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
 
             Chat.Print("<b>Blitzcrank#</b> - Loaded!");

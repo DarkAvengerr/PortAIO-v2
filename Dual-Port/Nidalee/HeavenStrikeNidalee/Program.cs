@@ -94,7 +94,7 @@ using EloBuddy;
             Game.OnUpdate += Game_OnGameUpdate;
             Orbwalking.AfterAttack += AfterAttack;
             //Orbwalking.OnAttack += OnAttack;
-            Obj_AI_Base.OnProcessSpellCast += oncast;
+            Obj_AI_Base.OnSpellCast += oncast;
             ////CustomEvents.Unit.OnDash += Unit_OnDash;
             //Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             EloBuddy.Drawing.OnDraw += Drawing_OnDraw;

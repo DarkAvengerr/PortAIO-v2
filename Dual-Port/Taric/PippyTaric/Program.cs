@@ -86,7 +86,7 @@ using EloBuddy;
             Game.OnUpdate += TaricUpdate;
             Drawing.OnDraw += TaricDraw;
             //AIHeroClient.OnPlayAnimation += TaricAnimation;
-            //AIHeroClient.OnProcessSpellCast += TaricProcessSpell;
+            //AIHeroClient.OnSpellCast += TaricProcessSpell;
             //Orbwalking.AfterAttack += TaricAfterAttack;
             //AIHeroClient.OnBuffGain += TaricBuffAdd;
             //Obj_AI_Base.OnBuffLose += TaricBuffRemove;

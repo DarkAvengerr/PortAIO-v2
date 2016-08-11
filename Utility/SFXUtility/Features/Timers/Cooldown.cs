@@ -44,7 +44,10 @@ using Rectangle = SharpDX.Rectangle;
 
 #pragma warning disable 618
 
-using EloBuddy; namespace SFXUtility.Features.Timers
+using EloBuddy;
+using EloBuddy.SDK.Events;
+
+namespace SFXUtility.Features.Timers
 {
     internal class Cooldown : Child<Timers>
     {
@@ -78,8 +81,8 @@ using EloBuddy; namespace SFXUtility.Features.Timers
         protected override void OnEnable()
         {
             Drawing.OnEndScene += OnDrawingEndScene;
-            Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
-            Obj_AI_Base.OnTeleport += OnObjAiBaseTeleport;
+            Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
+            Teleport.OnTeleport += OnObjAiBaseTeleport;
 
             base.OnEnable();
         }
@@ -87,8 +90,8 @@ using EloBuddy; namespace SFXUtility.Features.Timers
         protected override void OnDisable()
         {
             Drawing.OnEndScene -= OnDrawingEndScene;
-            Obj_AI_Base.OnProcessSpellCast -= OnObjAiBaseProcessSpellCast;
-            Obj_AI_Base.OnTeleport -= OnObjAiBaseTeleport;
+            Obj_AI_Base.OnSpellCast -= OnObjAiBaseProcessSpellCast;
+            Teleport.OnTeleport -= OnObjAiBaseTeleport;
 
             base.OnDisable();
         }
@@ -282,21 +285,20 @@ using EloBuddy; namespace SFXUtility.Features.Timers
             }
         }
 
-        private void OnObjAiBaseTeleport(Obj_AI_Base sender, GameObjectTeleportEventArgs args)
+        private void OnObjAiBaseTeleport(Obj_AI_Base sender, Teleport.TeleportEventArgs packet)
         {
             try
             {
-                var packet = Packet.S2C.Teleport.Decoded(sender, args);
-                if (packet.Type == Packet.S2C.Teleport.Type.Teleport &&
-                    (packet.Status == Packet.S2C.Teleport.Status.Finish ||
-                     packet.Status == Packet.S2C.Teleport.Status.Abort))
+                if (packet.Type == EloBuddy.SDK.Enumerations.TeleportType.Recall &&
+                    (packet.Status == EloBuddy.SDK.Enumerations.TeleportStatus.Finish ||
+                     packet.Status == EloBuddy.SDK.Enumerations.TeleportStatus.Abort))
                 {
                     var time = Game.Time;
                     LeagueSharp.Common.Utility.DelayAction.Add(
                         250, delegate
                         {
-                            var cd = packet.Status == Packet.S2C.Teleport.Status.Finish ? 300 : 200;
-                            _teleports[packet.UnitNetworkId] = time + cd;
+                            var cd = packet.Status == EloBuddy.SDK.Enumerations.TeleportStatus.Finish ? 300 : 200;
+                            _teleports[sender.NetworkId] = time + cd;
                         });
                 }
             }

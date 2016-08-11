@@ -41,7 +41,7 @@ using EloBuddy;
             InitializeSpells();
 
             Game.OnUpdate += OnUpdate;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
             Orbwalking.OnAttack += OnAttack;
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
             Orbwalking.BeforeAttack += BeforeAttack;

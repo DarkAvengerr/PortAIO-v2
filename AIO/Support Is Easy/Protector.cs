@@ -117,8 +117,8 @@ using EloBuddy; namespace Support
                 // Internal events
                 Game.OnUpdate += OnGameUpdate;
                 SkillshotDetector.OnDetectSkillshot += OnDetectSkillshot;
-                Obj_AI_Base.OnProcessSpellCast += HeroOnProcessSpellCast;
-                Obj_AI_Base.OnProcessSpellCast += TurretOnProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += HeroOnProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += TurretOnProcessSpellCast;
                 GameObject.OnCreate += SpellMissile_OnCreate;
 
                 // Actives

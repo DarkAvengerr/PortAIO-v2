@@ -63,7 +63,7 @@ namespace SharpShooter.Plugins
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             GameObject.OnCreate += GameObject_OnCreate;
             GameObject.OnDelete += GameObject_OnDelete;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
 
             Console.WriteLine("Sharpshooter: Caitlyn Loaded.");
             Chat.Print(

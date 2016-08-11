@@ -136,7 +136,7 @@ using EloBuddy;
             SPrediction.Prediction.Initialize(Config);
             Config.AddItem(new MenuItem("morgana.q.hitchance", "Skillshot Hit Chance").SetValue(new StringList(HitchanceNameArray, 2)));
 
-            Obj_AI_Base.OnProcessSpellCast += MorganaOnProcess;
+            Obj_AI_Base.OnSpellCast += MorganaOnProcess;
             AntiGapcloser.OnEnemyGapcloser += MorganaOnGapcloser;
             Game.OnUpdate += MorganaOnUpdate;
             Drawing.OnDraw += MorganaOnDraw;

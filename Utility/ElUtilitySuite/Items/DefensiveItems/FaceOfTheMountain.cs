@@ -76,8 +76,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
         {
             try
             {
-                if (!Items.HasItem((int)this.Id) || !Items.CanUseItem((int)this.Id)
-                    || !this.Menu.Item("UseFaceCombo").IsActive())
+                if (!Items.HasItem((int)this.Id) || !Items.CanUseItem((int)this.Id) || !this.Menu.Item("UseFaceCombo").IsActive())
                 {
                     return;
                 }
@@ -87,7 +86,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
                     return;
                 }
 
-                foreach (var ally in HeroManager.Allies.Where(a => a.IsValidTarget(850f, false) && !a.IsRecalling()))
+                foreach (var ally in EloBuddy.SDK.EntityManager.Heroes.Allies.Where(a => a.IsValidTarget(850f, false) && !a.IsDead && !a.IsRecalling()))
                 {
                     if (!this.Menu.Item(string.Format("Faceon{0}", ally.ChampionName)).IsActive())
                     {

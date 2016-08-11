@@ -36,7 +36,7 @@ namespace UnderratedAIO.Champions
             //Chat.Print("<font color='#9933FF'>Soresu </font><font color='#FFFFFF'>- Ezreal</font>");
             Drawing.OnDraw += Game_OnDraw;
             Game.OnUpdate += Game_OnGameUpdate;
-            Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
+            Obj_AI_Base.OnSpellCast += Game_ProcessSpell;
             Helpers.Jungle.setSmiteSlot();
             HpBarDamageIndicator.DamageToUnit = ComboDamage;
             Orbwalking.OnAttack += Orbwalking_OnAttack;

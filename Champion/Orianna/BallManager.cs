@@ -15,7 +15,7 @@ namespace Orianna
         static BallManager()
         {
             Game.OnUpdate += Game_OnGameUpdate;
-            AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            AIHeroClient.OnSpellCast += AIHeroClient_OnProcessSpellCast;
             BallPosition = ObjectManager.Player.Position;
         }
 

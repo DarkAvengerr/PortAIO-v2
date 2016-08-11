@@ -75,7 +75,7 @@ namespace FioraProject
             Game.OnUpdate += Game_OnUpdate;
             GameObject.OnCreate += GameObject_OnCreate;
             GameObject.OnDelete += GameObject_OnDelete;
-            AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            AIHeroClient.OnSpellCast += AIHeroClient_OnProcessSpellCast;
             AIHeroClient.OnPlayAnimation += AIHeroClient_OnPlayAnimation;
             CustomEvents.Unit.OnDash += Unit_OnDash;
         }

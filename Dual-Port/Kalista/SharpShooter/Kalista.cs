@@ -73,7 +73,7 @@ namespace SharpShooter.Plugins
             Drawing.OnDraw += Drawing_OnDraw;
             Orbwalking.OnNonKillableMinion += Orbwalking_OnNonKillableMinion;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
 
             _baronLocation = new Vector3(5064f, 10568f, -71f);
             _dragonLocation = new Vector3(9796f, 4432f, -71f);

@@ -76,7 +76,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             Drawing.OnDraw += Drawing_OnDraw;
             Game.OnUpdate += Game_OnGameUpdate;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
         }
 

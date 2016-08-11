@@ -251,7 +251,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
         {
             Player = ObjectManager.Player;
             ChampionName = Player.ChampionName;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += OnProcessSpell;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnSpellCast;
             Spellbook.OnStopCast += SpellbookOnStopCast;
         }

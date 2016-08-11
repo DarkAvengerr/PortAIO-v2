@@ -53,7 +53,7 @@
                 Drawing.OnDraw += OnDraw;
                 CustomEvents.Unit.OnDash += OnDash;
                 Drawing.OnEndScene += OnDrawEndScene;
-                Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
                 Orbwalking.AfterAttack += AfterAttack;
                 Orbwalking.BeforeAttack += BeforeAttack;
                 //Obj_AI_Base.OnPlayAnimation += OnPlayAnimation;

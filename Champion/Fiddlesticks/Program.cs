@@ -31,7 +31,7 @@ namespace Feedlesticks
             }
 
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += OnDraw;
         }

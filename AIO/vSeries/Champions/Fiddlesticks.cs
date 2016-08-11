@@ -131,7 +131,7 @@ using EloBuddy;
                 }
             }
             Config.AddToMainMenu();
-            Obj_AI_Base.OnProcessSpellCast += FiddleOnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += FiddleOnProcessSpellCast;
             Game.OnUpdate += FiddleOnUpdate;
             Drawing.OnDraw += FiddleOnDraw;
         }

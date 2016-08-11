@@ -290,7 +290,7 @@ using EloBuddy; namespace SFXChallenger.Abstracts
 
                 Orbwalking.BeforeAttack += OnOrbwalkingBeforeAttack;
                 Orbwalking.AfterAttack += OnOrbwalkingAfterAttack;
-                Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
 
                 Drawing.OnDraw += OnDrawingDraw;
             }

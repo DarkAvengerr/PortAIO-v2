@@ -34,7 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject></StartupObject>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -57,28 +58,32 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EloBuddy">
-      <HintPath>..\PortAIO-Common\bin\Debug\EloBuddy.dll</HintPath>
+    <Reference Include="EloBuddy, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7339047cb10f6e86, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.dll</HintPath>
     </Reference>
-    <Reference Include="EloBuddy.Sandbox">
-      <HintPath>..\PortAIO-Common\bin\Debug\EloBuddy.Sandbox.dll</HintPath>
+    <Reference Include="EloBuddy.Sandbox, Version=1.0.6047.40853, Culture=neutral, PublicKeyToken=d671ef5d8e7e69a5, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.Sandbox.dll</HintPath>
     </Reference>
-    <Reference Include="EloBuddy.SDK">
-      <HintPath>..\PortAIO-Common\bin\Debug\EloBuddy.SDK.dll</HintPath>
+    <Reference Include="EloBuddy.SDK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6b574a82b1ea937e, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.SDK.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\PortAIO-Common\bin\Debug\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="PortAIO.Common">
+    <Reference Include="PortAIO.Common, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\PortAIO-Common\bin\Debug\PortAIO.Common.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX, Version=2.6.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\PortAIO-Common\bin\Debug\SharpDX.dll</HintPath>
+      <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9, Version=2.6.2.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\PortAIO-Common\bin\Debug\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -436,6 +441,12 @@
     <Compile Include="AIO\vSeries\Core\Plugins\VersionChecker.cs" />
     <Compile Include="AIO\vSeries\Program.cs" />
     <Compile Include="Champion\Karma\Program.cs" />
+    <Compile Include="Champion\Kled\Champions\Kled.cs" />
+    <Compile Include="Champion\Kled\Extensions\Menus.cs" />
+    <Compile Include="Champion\Kled\Extensions\Predictions.cs" />
+    <Compile Include="Champion\Kled\Extensions\Spells.cs" />
+    <Compile Include="Champion\Kled\Extensions\Utilities.cs" />
+    <Compile Include="Champion\Kled\Program.cs" />
     <Compile Include="Dual-Port\Ahri\DZAhri\DZAhri.cs" />
     <Compile Include="Dual-Port\Ahri\DZAhri\Helpers.cs" />
     <Compile Include="Dual-Port\Ahri\DZAhri\Program.cs" />
@@ -2325,7 +2336,7 @@
     <Compile Include="Utility\ActivatorSharp\Items\Offensives\_3184.cs" />
     <Compile Include="Utility\ActivatorSharp\Items\Offensives\_3748.cs" />
     <Compile Include="Utility\ActivatorSharp\Items\Offensives\_3800.cs" />
-    <Compile Include="Utility\ActivatorSharp\ProFlash\Program.cs" />
+    <Compile Include="Utility\ProFlash\Program.cs" />
     <Compile Include="Utility\ActivatorSharp\Program.cs" />
     <Compile Include="Utility\ActivatorSharp\Spells\CoreSpell.cs" />
     <Compile Include="Utility\ActivatorSharp\Spells\Evaders\alphastrike.cs" />
@@ -3116,6 +3127,7 @@
     <None Include="Resources\Illaoi_Square_0.png" />
     <None Include="Resources\GoingSomewhereAsshole.wav" />
     <None Include="Resources\ILoveThisGame.wav" />
+    <None Include="Resources\GarenR.png" />
     <Content Include="Resources\Images\cursor_drag.png" />
     <Content Include="Resources\Images\notifications_arrow.png" />
     <Content Include="Resources\Images\notifications_check.png" />
@@ -3326,6 +3338,10 @@
     <None Include="Resources\OhDontYouDare.wav" />
     <None Include="Resources\OhIdiot.wav" />
     <None Include="Resources\logo.png" />
+    <None Include="Resources\KarthusFallenOne.png" />
+    <None Include="Resources\LuxMaliceCannon.png" />
+    <None Include="Resources\NasusR.png" />
+    <None Include="Resources\Rebirthready.png" />
     <Content Include="Resources\SPRITES\EloDisplayer\EloGui.png" />
     <None Include="Resources\Swain.png" />
     <None Include="Resources\Syndra.png" />
@@ -3434,6 +3450,9 @@
     <None Include="Resources\Welcome.wav" />
     <None Include="Resources\WhosTheBitchNow.wav" />
     <None Include="Resources\YourDeadMeatAsshole.wav" />
+    <None Include="Resources\Teleport.png" />
+    <None Include="Resources\VladimirR.png" />
+    <None Include="Resources\Zacrebirthready.png" />
     <Content Include="TO-DO.txt" />
     <None Include="Resources\ScopeSprite.png" />
   </ItemGroup>

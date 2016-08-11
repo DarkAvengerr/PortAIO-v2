@@ -39,7 +39,7 @@ namespace DetuksSharp.Prediction
 
             Obj_AI_Base.OnSpellCast += onDoCast;
 
-            Obj_AI_Base.OnProcessSpellCast += onMeleeStartAutoAttack;
+            Obj_AI_Base.OnSpellCast += onMeleeStartAutoAttack;
             Spellbook.OnStopCast += onMeleeStopAutoAttack;
         }
 

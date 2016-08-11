@@ -138,7 +138,7 @@ using EloBuddy; namespace SurvivorAshe
             Obj_AI_Base.OnLevelUp += Obj_AI_Base_OnLevelUp;
             Game.OnUpdate += Game_OnUpdate;
             //SebbyLib.Orbwalking.AfterAttack += Orbwalking_AfterAttack;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpell;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             #endregion

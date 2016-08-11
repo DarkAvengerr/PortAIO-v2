@@ -885,7 +885,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                 return;
             }
 
-            foreach (var ally in HeroManager.Allies.Where(x => x.IsValidTarget(800f, false)))
+            foreach (var ally in EloBuddy.SDK.EntityManager.Heroes.Allies.Where(x => x.IsValidTarget(800f, false)))
             {
                 foreach (var spell in Spells.Where(x => ally.HasBuff(x.Name) || ally.HasBuffOfType(x.BuffType)))
                 {
@@ -906,7 +906,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                     }
 
                     var item = GetBestCleanseItem(ally, buff);
-                    if (item == null)
+                    if (item == null || !item.IsReady())
                     {
                         continue;
                     }

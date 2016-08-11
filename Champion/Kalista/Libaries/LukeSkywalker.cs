@@ -236,7 +236,7 @@ namespace S_Plus_Class_Kalista.Libaries
     //    {
     //        Player = ObjectManager.Player;
     //        _championName = Player.ChampionName;
-    //        Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+    //        Obj_AI_Base.OnSpellCast += OnProcessSpell;
     //        Obj_AI_Base.OnDoCast += Obj_AI_Base_OnDoCast;
     //        Spellbook.OnStopCast += SpellbookOnStopCast;
     //    }

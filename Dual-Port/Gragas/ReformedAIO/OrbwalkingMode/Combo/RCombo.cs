@@ -42,14 +42,14 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             Drawing.OnDraw -= this.OnDraw;
-            //  Obj_AI_Base.OnProcessSpellCast -= OnProcessSpellCast;
+            //  Obj_AI_Base.OnSpellCast -= OnProcessSpellCast;
             Events.OnUpdate -= this.OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             Drawing.OnDraw += this.OnDraw;
-            //   Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            //   Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
             Events.OnUpdate += this.OnUpdate;
         }
 

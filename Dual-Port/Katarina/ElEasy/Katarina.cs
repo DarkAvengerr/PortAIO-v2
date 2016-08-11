@@ -266,7 +266,7 @@ namespace ElEasy.Plugins
                 Drawing.OnDraw += this.OnDraw;
                 EloBuddy.Player.OnIssueOrder += this.AIHeroClient_OnIssueOrder;
                 GameObject.OnCreate += this.GameObject_OnCreate;
-                Obj_AI_Base.OnProcessSpellCast += this.Obj_AI_Base_OnProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += this.Obj_AI_Base_OnProcessSpellCast;
                 Orbwalking.BeforeAttack += this.BeforeAttack;
             }
             catch (Exception e)

@@ -68,7 +68,7 @@ namespace OneKeyToWin_AIO_Sebby
             Config.SubMenu(Player.ChampionName).AddItem(new MenuItem("W", "Auto W SpeedUp logic", true).SetValue(false));
             Game.OnUpdate += Game_OnGameUpdate;
             GameObject.OnCreate += Obj_AI_Base_OnCreate;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget +=Interrupter2_OnInterruptableTarget;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;

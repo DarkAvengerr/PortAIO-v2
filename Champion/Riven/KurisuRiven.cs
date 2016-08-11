@@ -1378,7 +1378,7 @@ namespace KurisuRiven
         #region Riven: On Cast
         private static void OnCast()
         {
-            Obj_AI_Base.OnProcessSpellCast += (sender, args) =>
+            Obj_AI_Base.OnSpellCast += (sender, args) =>
             {
                 if (!sender.IsMe)
                 {

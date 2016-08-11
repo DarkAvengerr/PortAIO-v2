@@ -95,7 +95,7 @@ namespace FioraProject
         static Orbwalking()
         {
             Player = ObjectManager.Player;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += OnProcessSpell;
             MissileClient.OnCreate += MissileClient_OnCreate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
             Obj_AI_Base.OnSpellCast     += Obj_AI_Base_OnDoCast;
@@ -411,7 +411,7 @@ namespace FioraProject
         {
             try
             {
-                if (target.IsValidTarget() && CanAttack())
+                if (target.IsValidTarget() && EloBuddy.SDK.Orbwalker.CanAutoAttack)
                 {
                     DisableNextAttack = false;
                     FireBeforeAttack(target);
@@ -431,7 +431,7 @@ namespace FioraProject
                     }
                 }
 
-                if (useMove && CanMove(extraWindup))
+                if (useMove && EloBuddy.SDK.Orbwalker.CanMove)
                 {
                     MoveTo(position, holdAreaRadius, false, useFixedDistance, randomizeMinDistance);
                 }

@@ -139,7 +139,7 @@
             Orbwalking.AfterAttack += OrbwalkingAfterAttack;
             //Orbwalking.BeforeAttack += OrbwalkingBeforeAttack;
             Drawing.OnDraw += Drawing_OnDraw;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
 
             // GG PrintChat Bik™
             Chat.Print("<font color = '#01DF3A'>PandaTeemo v1.7.7.0 Loaded</font>");

@@ -19,22 +19,6 @@ using EloBuddy; namespace xSaliceResurrected
         {
             if (!_loaded)
             {
-                var webRequest = WebRequest.Create(@"https://raw.githubusercontent.com/myo/LSharp/master/xSaliceResurrected/version.txt");
-
-                using (var response = webRequest.GetResponse())
-                using (var content = response.GetResponseStream())
-                    if (content != null)
-                        using (var reader = new StreamReader(content))
-                        {
-                            var strContent = reader.ReadToEnd();
-
-                            Notifications.AddNotification("Latest Version: " + strContent, 10000);
-                            Notifications.AddNotification("Version Loaded: " + Assembly.GetExecutingAssembly().GetName().Version, 10000);
-                            if (strContent != Assembly.GetExecutingAssembly().GetName().Version.ToString())
-                                Notifications.AddNotification("Please Update Assembly!!!");
-
-                        }
-
                 switch (ObjectManager.Player.ChampionName.ToLower())
                 {
                     case "ahri":
@@ -78,6 +62,7 @@ using EloBuddy; namespace xSaliceResurrected
                         break;
                     case "fiora":
                         Chat.Print("xSalice Religion AIO: Lilith sux but so does this fiora so use trees");
+                        new Top.Fiora();
                         _loaded = true;
                         break;
                     case "irelia":

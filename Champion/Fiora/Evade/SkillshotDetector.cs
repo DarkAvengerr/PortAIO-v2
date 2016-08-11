@@ -16,7 +16,7 @@
 
         static SkillshotDetector()
         {
-            Obj_AI_Base.OnProcessSpellCast +=
+            Obj_AI_Base.OnSpellCast +=
                 (sender, args) => { LeagueSharp.Common.Utility.DelayAction.Add(0, () => OnOnProcessSpellCastDelayed(sender, args)); };
             GameObject.OnDelete += ObjSpellMissileOnOnDelete;
             GameObject.OnCreate +=

@@ -57,7 +57,7 @@ namespace SPrediction
             s_DrawTick = 0;
 
             Drawing.OnDraw += Drawing_OnDraw;
-            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += AIHeroClient_OnProcessSpellCast;
             AttackableUnit.OnDamage += AIHeroClient_OnDamage;
             Game.OnEnd += Game_OnGameEnd;
         }

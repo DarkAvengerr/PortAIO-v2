@@ -92,7 +92,7 @@ using EloBuddy; namespace ezEvade
                 Spellbook.OnCastSpell += Game_OnCastSpell;
                 Game.OnUpdate += Game_OnGameUpdate;
 
-                AIHeroClient.OnProcessSpellCast += Game_OnProcessSpell;
+                AIHeroClient.OnSpellCast += Game_OnProcessSpell;
 
                 Game.OnEnd += Game_OnGameEnd;
                 SpellDetector.OnProcessDetectedSpells += SpellDetector_OnProcessDetectedSpells;

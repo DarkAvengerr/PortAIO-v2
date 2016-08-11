@@ -77,7 +77,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
         protected override void OnEnable()
         {
             GameObject.OnCreate += OnGameObjectCreate;
-            Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
             Game.OnUpdate += OnGameUpdate;
 
             base.OnEnable();
@@ -86,7 +86,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
         protected override void OnDisable()
         {
             GameObject.OnCreate -= OnGameObjectCreate;
-            Obj_AI_Base.OnProcessSpellCast -= OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnSpellCast -= OnObjAiBaseProcessSpellCast;
             Game.OnUpdate -= OnGameUpdate;
 
             base.OnDisable();

@@ -32,7 +32,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                         }
             };
             DeathWalker.BeforeAttack += beforeAttack;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += OnProcessSpell;
             Console.WriteLine("Volibear in");
         }
 

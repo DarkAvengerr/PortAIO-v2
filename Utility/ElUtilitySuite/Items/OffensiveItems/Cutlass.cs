@@ -1,4 +1,5 @@
-using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
+using EloBuddy;
+namespace ElUtilitySuite.Items.OffensiveItems
 {
     using System.Linq;
 
@@ -52,8 +53,9 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         /// </summary>
         public override void UseItem()
         {
-            Items.UseItem(
-                (int)this.Id, TargetSelector.GetTarget(550, TargetSelector.DamageType.Physical));
+            var targ = TargetSelector.GetTarget(550, TargetSelector.DamageType.Physical);
+            if (targ != null && targ.IsHPBarRendered && targ.IsVisible)
+                Items.UseItem((int)this.Id, targ);
         }
 
         #endregion

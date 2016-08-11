@@ -36,7 +36,7 @@ namespace UnderratedAIO.Champions
             Game.OnUpdate += Game_OnGameUpdate;
             Helpers.Jungle.setSmiteSlot();
             HpBarDamageIndicator.DamageToUnit = ComboDamage;
-            Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
+            Obj_AI_Base.OnSpellCast += Game_ProcessSpell;
             CustomEvents.Unit.OnDash += Unit_OnDash;
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
         }

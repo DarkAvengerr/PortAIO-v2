@@ -40,7 +40,7 @@ using EloBuddy;
             DamageIndicator.Enabled = true;
 
             EloBuddy.Player.OnIssueOrder += KalistaHooks.OnIssueOrder;
-            Obj_AI_Base.OnProcessSpellCast += KalistaHooks.OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += KalistaHooks.OnProcessSpellCast;
             Orbwalking.OnNonKillableMinion += KalistaHooks.OnNonKillableMinion;
             AntiGapcloser.OnEnemyGapcloser += KalistaAGP.OnGapclose;
         }

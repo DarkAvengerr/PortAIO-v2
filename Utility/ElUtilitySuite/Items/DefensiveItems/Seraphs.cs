@@ -71,7 +71,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
         {
             try
             {
-                if (!ItemData.Seraphs_Embrace.GetItem().IsOwned() || !this.Menu.Item("UseSeraphsCombo").IsActive())
+                if (!ItemData.Seraphs_Embrace.GetItem().IsOwned() || !this.Menu.Item("UseSeraphsCombo").IsActive() || !Items.CanUseItem((int)ItemId.Seraphs_Embrace))
                 {
                     return;
                 }

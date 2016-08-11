@@ -152,7 +152,7 @@ using EloBuddy;
                 Config.AddToMainMenu();
             }
 
-            Obj_AI_Base.OnProcessSpellCast += OnProcess;
+            Obj_AI_Base.OnSpellCast += OnProcess;
             Game.OnUpdate += OnUpdate;
         }
 

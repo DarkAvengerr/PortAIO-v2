@@ -1487,7 +1487,7 @@ using EloBuddy; namespace AutoJungle
             ItemHandler = new ItemHandler(_GameInfo.Champdata.Type);
             CreateMenu();
             Game.OnUpdate += Game_OnGameUpdate;
-            Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
+            Obj_AI_Base.OnSpellCast += Game_ProcessSpell;
             Drawing.OnDraw += Drawing_OnDraw;
             Obj_AI_Base.OnNewPath += Obj_AI_Base_OnNewPath;
             Game.OnEnd += Game_OnEnd;

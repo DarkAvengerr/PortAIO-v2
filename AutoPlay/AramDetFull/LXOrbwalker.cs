@@ -80,7 +80,7 @@ using EloBuddy; namespace ARAMDetFull
         {
             _movementPrediction = new Spell(SpellSlot.Unknown, GetAutoAttackRange());
             _movementPrediction.SetTargetted(MyHero.BasicAttack.SpellCastTime, MyHero.BasicAttack.MissileSpeed);
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += OnProcessSpell;
             Obj_AI_Base.OnSpellCast += onDoCast;
             GameObject.OnCreate += MissileClient_OnCreate;
 

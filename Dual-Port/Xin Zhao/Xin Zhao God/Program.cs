@@ -102,7 +102,7 @@ using EloBuddy;
             Drawing.OnDraw += OnDraw;
             Orbwalking.OnAttack += onAttack;
             Orbwalking.BeforeAttack += OrbwalkingOnBeforeAttack;
-            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += AIHeroClient_OnProcessSpellCast;
         }
 
         // taken from honda

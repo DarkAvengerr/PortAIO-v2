@@ -97,7 +97,7 @@ using EloBuddy;
             Game.OnUpdate += TrundleOnUpdate;
             Drawing.OnDraw += TrundleOnDraw;
             Interrupter2.OnInterruptableTarget += TrundleInterrupter;
-            Obj_AI_Base.OnProcessSpellCast += TrundleOnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += TrundleOnProcessSpellCast;
         }
 
         private static void TrundleInterrupter(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)

@@ -77,11 +77,11 @@ using EloBuddy; namespace HoolaRiven
             Game.OnUpdate += OnTick;
             Drawing.OnDraw += Drawing_OnDraw;
             Drawing.OnEndScene += Drawing_OnEndScene;
-            Obj_AI_Base.OnProcessSpellCast += OnCast;
+            Obj_AI_Base.OnSpellCast += OnCast;
             Obj_AI_Base.OnSpellCast += OnSpellCast;
             Obj_AI_Base.OnSpellCast += OnSpellCastLC;
             Obj_AI_Base.OnPlayAnimation += OnPlay;
-            Obj_AI_Base.OnProcessSpellCast += OnCasting;
+            Obj_AI_Base.OnSpellCast += OnCasting;
             Interrupter2.OnInterruptableTarget += Interrupt;
         }
 

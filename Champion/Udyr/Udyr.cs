@@ -61,7 +61,7 @@ namespace BrianSharp.Plugin
                 MainMenu.AddSubMenu(champMenu);
             }
             Game.OnUpdate += OnUpdate;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
             Orbwalk.AfterAttack += AfterAttack;
         }
 

@@ -60,7 +60,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
         protected override void OnEnable()
         {
             Game.OnUpdate += OnGameUpdate;
-            Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
             Drawing.OnEndScene += OnDrawingEndScene;
             base.OnEnable();
         }
@@ -68,7 +68,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
         protected override void OnDisable()
         {
             Game.OnUpdate -= OnGameUpdate;
-            Obj_AI_Base.OnProcessSpellCast -= OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnSpellCast -= OnObjAiBaseProcessSpellCast;
             Drawing.OnEndScene -= OnDrawingEndScene;
             base.OnDisable();
         }

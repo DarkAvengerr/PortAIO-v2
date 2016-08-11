@@ -194,7 +194,7 @@ using EloBuddy; namespace ElZilean
                 Game.OnUpdate += OnUpdate;
                 Drawing.OnDraw += OnDraw;
                 Interrupter2.OnInterruptableTarget += OnInterruptableTarget;
-                Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
                 Orbwalking.BeforeAttack += BeforeAttack;
             }
             catch (Exception exception)

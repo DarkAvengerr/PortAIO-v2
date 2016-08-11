@@ -56,7 +56,7 @@ namespace SharpShooter.Plugins
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Obj_AI_Base.OnPlayAnimation += Obj_AI_Base_OnPlayAnimation;
 
             Console.WriteLine("Sharpshooter: Blitzcrank Loaded.");

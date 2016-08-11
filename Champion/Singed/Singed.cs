@@ -34,13 +34,13 @@ namespace UnderratedAIO.Champions
             //Chat.Print("<font color='#9933FF'>Soresu </font><font color='#FFFFFF'>- Singed</font>");
             Drawing.OnDraw += Game_OnDraw;
             Game.OnUpdate += Game_OnGameUpdate;
-            Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
+            Obj_AI_Base.OnSpellCast += Game_ProcessSpell;
             Helpers.Jungle.setSmiteSlot();
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             CustomEvents.Unit.OnDash += Unit_OnDash;
             HpBarDamageIndicator.DamageToUnit = ComboDamage;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
-            AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            AIHeroClient.OnSpellCast += AIHeroClient_OnProcessSpellCast;
         }
 
         private void AIHeroClient_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

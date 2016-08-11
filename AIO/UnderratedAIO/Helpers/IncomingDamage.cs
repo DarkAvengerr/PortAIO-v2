@@ -49,7 +49,7 @@ namespace UnderratedAIO.Helpers
 
         public IncomingDamage()
         {
-            Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
+            Obj_AI_Base.OnSpellCast += Game_ProcessSpell;
             Game.OnUpdate += Game_OnGameUpdate;
             // from H3h3 SpellDetector Lib
             SkillshotDetector.Init();

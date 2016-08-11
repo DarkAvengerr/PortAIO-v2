@@ -38,7 +38,7 @@ namespace UnderratedAIO.Champions
             Orbwalking.AfterAttack += AfterAttack;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             HpBarDamageIndicator.DamageToUnit = ComboDamage;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
         }
 
         private void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

@@ -141,7 +141,7 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
             this._line = MDrawing.GetLine(this.Menu.Item("wardtracker.CircleThickness").GetValue<Slider>().Value);
 
             Game.OnUpdate += this.OnGameUpdate;
-            Obj_AI_Base.OnProcessSpellCast += this.OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += this.OnObjAiBaseProcessSpellCast;
             GameObject.OnCreate += this.OnGameObjectCreate;
             GameObject.OnDelete += this.OnGameObjectDelete;
             Drawing.OnEndScene += this.OnDrawingEndScene;

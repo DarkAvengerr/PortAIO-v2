@@ -180,7 +180,7 @@ using EloBuddy; namespace ElUtilitySuite.Utility
                     e => e.ChampionName.Equals("Vayne", StringComparison.InvariantCultureIgnoreCase));
 
             GameObject.OnCreate += this.GameObject_OnCreate;
-            Obj_AI_Base.OnProcessSpellCast += this.OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += this.OnProcessSpellCast;
         }
 
         #endregion

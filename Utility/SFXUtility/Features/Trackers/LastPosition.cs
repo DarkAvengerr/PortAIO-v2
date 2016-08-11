@@ -41,7 +41,10 @@ using Color = System.Drawing.Color;
 
 #pragma warning disable 618
 
-using EloBuddy; namespace SFXUtility.Features.Trackers
+using EloBuddy;
+using EloBuddy.SDK.Events;
+
+namespace SFXUtility.Features.Trackers
 {
     internal class LastPosition : Child<Trackers>
     {
@@ -66,7 +69,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
         protected override void OnEnable()
         {
             Drawing.OnEndScene += OnDrawingEndScene;
-            Obj_AI_Base.OnTeleport += OnObjAiBaseTeleport;
+            Teleport.OnTeleport += OnObjAiBaseTeleport;
 
             base.OnEnable();
         }
@@ -74,7 +77,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
         protected override void OnDisable()
         {
             Drawing.OnEndScene -= OnDrawingEndScene;
-            Obj_AI_Base.OnTeleport -= OnObjAiBaseTeleport;
+            Teleport.OnTeleport -= OnObjAiBaseTeleport;
 
             base.OnDisable();
         }
@@ -193,7 +196,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
                 var angle = i * Math.PI * 2 / quality;
                 pointList.Add(
                     new Vector3(
-                        center.X + radius * (float) Math.Cos(angle), center.Y + radius * (float) Math.Sin(angle),
+                        center.X + radius * (float)Math.Cos(angle), center.Y + radius * (float)Math.Sin(angle),
                         center.Z));
             }
             _line.Width = thickness;
@@ -211,23 +214,22 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
             _line.End();
         }
 
-        private void OnObjAiBaseTeleport(Obj_AI_Base sender, GameObjectTeleportEventArgs args)
+        private void OnObjAiBaseTeleport(Obj_AI_Base sender, Teleport.TeleportEventArgs packet)
         {
             try
             {
-                var packet = Packet.S2C.Teleport.Decoded(sender, args);
-                var lastPosition = _lastPositions.FirstOrDefault(e => e.Hero.NetworkId == packet.UnitNetworkId);
+                var lastPosition = _lastPositions.FirstOrDefault(e => e.Hero.NetworkId == sender.NetworkId);
                 if (lastPosition != null)
                 {
                     switch (packet.Status)
                     {
-                        case Packet.S2C.Teleport.Status.Start:
+                        case EloBuddy.SDK.Enumerations.TeleportStatus.Start:
                             lastPosition.IsTeleporting = true;
                             break;
-                        case Packet.S2C.Teleport.Status.Abort:
+                        case EloBuddy.SDK.Enumerations.TeleportStatus.Abort:
                             lastPosition.IsTeleporting = false;
                             break;
-                        case Packet.S2C.Teleport.Status.Finish:
+                        case EloBuddy.SDK.Enumerations.TeleportStatus.Finish:
                             lastPosition.Teleported = true;
                             lastPosition.IsTeleporting = false;
                             lastPosition.LastSeen = Game.Time;

@@ -44,7 +44,7 @@ namespace BrianSharp
 
         public static void Main()
         {
-            Game.OnLoad += OnStart;
+            OnStart();
         }
 
         private static void NewInstance(Type type)
@@ -60,7 +60,7 @@ namespace BrianSharp
             ((Func<object>)dynamic.CreateDelegate(typeof(Func<object>)))();
         }
 
-        private static void OnStart(EventArgs args)
+        public static void OnStart()
         {
             var plugin = Type.GetType("BrianSharp.Plugin." + Player.ChampionName);
             if (plugin == null)

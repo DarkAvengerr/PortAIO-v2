@@ -36,7 +36,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         public override bool ShouldUseItem()
         {
             return this.Menu.Item("Youmuucombo").IsActive() && this.ComboModeActive
-                   && HeroManager.Enemies.Any(
+                   && EloBuddy.SDK.EntityManager.Heroes.Enemies.Any(
                        x => x.Distance(this.Player) < Orbwalking.GetRealAutoAttackRange(this.Player));
         }
 

@@ -40,7 +40,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter.OnPossibleToInterrupt += Interrupter_OnPosibleToInterrupt;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
 
             ARAMSimulator.champBuild = new Build
             {

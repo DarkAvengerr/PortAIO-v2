@@ -26,7 +26,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public Tahmkench()
         {
             Chat.Print("Tahm in ");
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += OnProcessSpell;
 
             ARAMSimulator.champBuild = new Build
             {

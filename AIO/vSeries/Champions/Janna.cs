@@ -174,7 +174,7 @@ using EloBuddy;
 
             SPrediction.Prediction.Initialize(Config);
 
-            Obj_AI_Base.OnProcessSpellCast += JannaOnProcess;
+            Obj_AI_Base.OnSpellCast += JannaOnProcess;
             AntiGapcloser.OnEnemyGapcloser += JannaOnGapcloser;
             Game.OnUpdate += JannaOnUpdate;
             Drawing.OnDraw += JannaOnDraw;

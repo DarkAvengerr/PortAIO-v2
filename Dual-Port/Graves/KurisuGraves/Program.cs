@@ -61,7 +61,7 @@ using EloBuddy;
                 Orbwalking.AfterAttack += GravesAfterAttack;
 
                 // On Spell Cast Event
-                Obj_AI_Base.OnProcessSpellCast += GravesOnCast;
+                Obj_AI_Base.OnSpellCast += GravesOnCast;
             }
 
             catch (Exception e)

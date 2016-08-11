@@ -59,7 +59,7 @@ using EloBuddy;
             // Events
             Game.OnUpdate += Game_OnGameUpdate;
             Orbwalking.AfterAttack += Orbwalking_OnAfterAttack;
-            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += AIHeroClient_OnProcessSpellCast;
         }
 
         private static void AIHeroClient_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

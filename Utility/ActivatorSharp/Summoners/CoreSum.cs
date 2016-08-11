@@ -192,6 +192,11 @@ using EloBuddy; namespace Activator.Summoners
 
         public void UseSpell(bool combo = false)
         {
+            if (Player.GetSpell(Slot).State == SpellState.Unknown || Player.GetSpell(Slot) == null || !Player.GetSpell(Slot).IsReady())
+            {
+                return;
+            }
+
             if (!combo || Activator.Origin.Item("usecombo").GetValue<KeyBind>().Active)
             {
                 if (Excluded.Any(ex => Name.Equals(ex)) || // ignore limit
@@ -209,6 +214,16 @@ using EloBuddy; namespace Activator.Summoners
 
         public void UseSpellOn(Obj_AI_Base target, bool combo = false)
         {
+            if (Player.GetSpell(Slot).State == SpellState.Unknown || Player.GetSpell(Slot) == null || !Player.GetSpell(Slot).IsReady())
+            {
+                return;
+            }
+
+            if (target.IsDead || !target.IsHPBarRendered || !target.IsVisible || !target.IsValidTarget())
+            {
+                return;
+            }
+
             if (!combo || Activator.Origin.Item("usecombo").GetValue<KeyBind>().Active)
             {
                 if (Excluded.Any(ex => Name.Equals(ex)) || // ignore limit

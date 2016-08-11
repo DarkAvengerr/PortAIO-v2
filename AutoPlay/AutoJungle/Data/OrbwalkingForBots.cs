@@ -246,7 +246,7 @@ using EloBuddy; namespace AutoJungle.Data
             _championName = Player.ChampionName;
             AutoAttack = new Spell(SpellSlot.Unknown, GetRealAutoAttackRange(null));
             AutoAttack.SetTargetted(Player.BasicAttack.SpellCastTime, Player.BasicAttack.MissileSpeed);
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += OnProcessSpell;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnSpellCast;
             Spellbook.OnStopCast += SpellbookOnStopCast;
             AIHeroClient.OnPlayAnimation += AIHeroClient_OnPlayAnimation;

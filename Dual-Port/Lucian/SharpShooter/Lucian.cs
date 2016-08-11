@@ -57,7 +57,7 @@ namespace SharpShooter.Plugins
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
             Obj_AI_Base.OnBuffLose += Obj_AI_Base_OnBuffRemove;

@@ -719,7 +719,7 @@ using EloBuddy; namespace ElKatarina
             Game.OnUpdate += OnUpdate;
             EloBuddy.Player.OnIssueOrder += AIHeroClient_OnIssueOrder;
             GameObject.OnCreate += GameObject_OnCreate;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Orbwalking.BeforeAttack += BeforeAttack;
         }
 

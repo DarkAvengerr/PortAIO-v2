@@ -46,7 +46,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         public override bool ShouldUseItem()
         {
             return this.Menu.Item("UseFrostQueenCombo").IsActive() && this.ComboModeActive
-                   && (HeroManager.Enemies.Any(
+                   && (EloBuddy.SDK.EntityManager.Heroes.Enemies.Any(
                        x =>
                        x.HealthPercent < this.Menu.Item("FrostQueenEnemyHp").GetValue<Slider>().Value
                        && x.Distance(this.Player) < 1500)

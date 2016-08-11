@@ -49,7 +49,7 @@ namespace hikiMarksmanRework.Champions
             Notifications.AddNotification("Gift From Hikigaya", 6000);
 
             Game.OnUpdate += CorkiOnUpdate;
-            AIHeroClient.OnProcessSpellCast += CorkiOnProcessSpellCast;
+            AIHeroClient.OnSpellCast += CorkiOnProcessSpellCast;
             Orbwalking.AfterAttack += CorkiAfterAttack;
             Drawing.OnDraw += CorkiOnDraw;
         }

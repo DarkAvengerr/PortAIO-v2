@@ -41,7 +41,7 @@ namespace Irelia.Champion
             SpellList.AddRange(new[] { Q, W, E, R });
 
             Game.OnUpdate += GameOnOnUpdate;
-            Obj_AI_Base.OnProcessSpellCast += Game_OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += Game_OnProcessSpell;
         }
 
         public static void Game_OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs spell)

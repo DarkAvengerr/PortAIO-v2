@@ -173,7 +173,7 @@ namespace SCommon.PluginBase
             AntiGapcloser.OnEnemyGapcloser += this.AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += this.Interrupter_OnPossibleToInterrupt;
             Obj_AI_Base.OnBuffGain += this.Obj_AI_Base_OnBuffAdd;
-            Obj_AI_Base.OnProcessSpellCast += this.Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += this.Obj_AI_Base_OnProcessSpellCast;
             CustomEvents.Unit.OnDash += this.Unit_OnDash;
             TargetedSpellDetector.OnDetected += this.TargetedSpellDetector_OnDetected;
             #endregion

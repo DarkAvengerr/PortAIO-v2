@@ -57,7 +57,7 @@ using EloBuddy; namespace Evade
 
         public static void Init()
         {
-            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += AIHeroClient_OnProcessSpellCast;
         }
 
 

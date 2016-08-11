@@ -49,7 +49,7 @@ namespace OneKeyToWin_AIO_Sebby
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             //SebbyLib.Orbwalking.BeforeAttack += BeforeAttack;
             //SebbyLib.Orbwalking.AfterAttack += afterAttack;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
 
         }

@@ -22,7 +22,7 @@ using EloBuddy; namespace Support.Plugins
             this.Q.SetSkillshot(0.25f, 120f, 900f, false, SkillshotType.SkillshotLine);
             GameObject.OnCreate += this.TowerAttackOnCreate;
             GameObject.OnCreate += this.RangeAttackOnCreate;
-            Obj_AI_Base.OnProcessSpellCast += this.OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += this.OnProcessSpellCast;
         }
 
         private bool IsUltChanneling { get; set; }

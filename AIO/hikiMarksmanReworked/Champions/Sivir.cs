@@ -46,7 +46,7 @@ using EloBuddy;
             Notifications.AddNotification(String.Format("hikiMarksman:AIO - {0} Loaded !", ObjectManager.Player.ChampionName), 4000);
 
             Game.OnUpdate += SivirOnUpdate;
-            AIHeroClient.OnProcessSpellCast += SivirOnProcessSpellCast;
+            AIHeroClient.OnSpellCast += SivirOnProcessSpellCast;
             Orbwalking.AfterAttack += AfterAttack;
             Drawing.OnDraw += SivirOnDraw;
         }

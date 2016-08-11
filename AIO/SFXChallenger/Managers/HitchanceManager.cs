@@ -65,7 +65,7 @@ using EloBuddy; namespace SFXChallenger.Managers
 
                 Menues[uniqueId] = menu;
 
-                Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
             }
             catch (Exception ex)
             {

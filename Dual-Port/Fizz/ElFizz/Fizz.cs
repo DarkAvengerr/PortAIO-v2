@@ -147,7 +147,7 @@ using EloBuddy;
 
                 Game.OnUpdate += OnUpdate;
                 Drawing.OnDraw += OnDraw;
-                Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
             }
             catch (Exception exception)
             {

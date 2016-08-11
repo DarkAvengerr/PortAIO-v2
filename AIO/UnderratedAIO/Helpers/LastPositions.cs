@@ -10,11 +10,32 @@ using SharpDX;
 using UnderratedAIO.Helpers;
 using Collision = LeagueSharp.Common.Collision;
 using EloBuddy;
+using EloBuddy.SDK.Events;
+using EloBuddy.SDK.Enumerations;
 
 // using Beaving.s.Baseult;
 
 namespace UnderratedAIO.Helpers
 {
+    public class RecallInf
+    {
+        public int NetworkID;
+        public int Start;
+        public int Duration;
+        public TeleportStatus Status;
+        public TeleportType Type;
+
+        public RecallInf(int netid, TeleportStatus stat, TeleportType tpe, int dura, int star = 0)
+        {
+            NetworkID = netid;
+            Status = stat;
+            Type = tpe;
+            Duration = dura;
+            Start = star;
+        }
+    }
+
+
     internal class LastPositions
     {
         public static List<Positions> Enemies;
@@ -55,10 +76,10 @@ namespace UnderratedAIO.Helpers
             Enemies = HeroManager.Enemies.Select(x => new Positions(x)).ToList();
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            Obj_AI_Base.OnTeleport += Obj_AI_Base_OnTeleport;
+            Teleport.OnTeleport += Obj_AI_Base_OnTeleport;
         }
 
-        private void Obj_AI_Base_OnTeleport(Obj_AI_Base sender, GameObjectTeleportEventArgs args)
+        private void Obj_AI_Base_OnTeleport(Obj_AI_Base sender, Teleport.TeleportEventArgs args)
         {
             var unit = sender as AIHeroClient;
 
@@ -67,8 +88,8 @@ namespace UnderratedAIO.Helpers
                 return;
             }
 
-            var recall = Packet.S2C.Teleport.Decoded(unit, args);
-            Enemies.Find(x => x.Player.NetworkId == recall.UnitNetworkId).RecallData.Update(recall);
+            var info = new RecallInf(unit.NetworkId, args.Status, args.Type, args.Duration, args.Start);
+            Enemies.Find(x => x.Player.NetworkId == unit.NetworkId).RecallData.Update(info);
         }
 
         private void Drawing_OnDraw(EventArgs args)
@@ -81,8 +102,8 @@ namespace UnderratedAIO.Helpers
                 Enemies.Where(
                     x =>
                         x.Player.IsValid<AIHeroClient>() && !x.Player.IsDead &&
-                        x.RecallData.Recall.Status == Packet.S2C.Teleport.Status.Start &&
-                        x.RecallData.Recall.Type == Packet.S2C.Teleport.Type.Recall)
+                        x.RecallData.Recall.Status == TeleportStatus.Start &&
+                        x.RecallData.Recall.Type == TeleportType.Recall)
                     .OrderBy(x => x.RecallData.GetRecallTime()))
             {
                 var trueDist = Math.Abs(enemy.LastSeen - enemy.RecallData.RecallStartTime) / 1000 *
@@ -158,8 +179,8 @@ namespace UnderratedAIO.Helpers
                     x =>
                         x.Player.IsValid<AIHeroClient>() && !x.Player.IsDead &&
                         !configMenu.Item(x.Player.ChampionName + "DontUltRandomUlt").GetValue<bool>() &&
-                        x.RecallData.Recall.Status == Packet.S2C.Teleport.Status.Start &&
-                        x.RecallData.Recall.Type == Packet.S2C.Teleport.Type.Recall)
+                        x.RecallData.Recall.Status == TeleportStatus.Start &&
+                        x.RecallData.Recall.Type == TeleportType.Recall)
                     .OrderBy(x => x.RecallData.GetRecallTime()))
             {
                 if (!checkdmg(enemy.Player))
@@ -319,8 +340,8 @@ namespace UnderratedAIO.Helpers
     internal class RecallData
     {
         public Positions Positions;
-        public Packet.S2C.Teleport.Struct Recall;
-        public Packet.S2C.Teleport.Struct Aborted;
+        public RecallInf Recall;
+        public RecallInf Aborted;
         public float AbortTime;
         public float RecallStartTime;
         public bool started;
@@ -329,8 +350,8 @@ namespace UnderratedAIO.Helpers
         public RecallData(Positions positions)
         {
             Positions = positions;
-            Recall = new Packet.S2C.Teleport.Struct(
-                Positions.Player.NetworkId, Packet.S2C.Teleport.Status.Unknown, Packet.S2C.Teleport.Type.Unknown, 0);
+            Recall = new RecallInf(
+                Positions.Player.NetworkId, TeleportStatus.Unknown, TeleportType.Unknown, 0);
         }
 
         public float GetRecallTime()
@@ -354,9 +375,9 @@ namespace UnderratedAIO.Helpers
             return countdown < 0 ? 0 : countdown;
         }
 
-        public Positions Update(Packet.S2C.Teleport.Struct newData)
+        public Positions Update(RecallInf newData)
         {
-            if (newData.Type == Packet.S2C.Teleport.Type.Recall && newData.Status == Packet.S2C.Teleport.Status.Abort)
+            if (newData.Type == TeleportType.Recall && newData.Status == TeleportStatus.Abort)
             {
                 Aborted = Recall;
                 AbortTime = System.Environment.TickCount;
@@ -366,11 +387,11 @@ namespace UnderratedAIO.Helpers
             {
                 AbortTime = 0;
             }
-            if (newData.Type == Packet.S2C.Teleport.Type.Recall && newData.Status == Packet.S2C.Teleport.Status.Finish)
+            if (newData.Type == TeleportType.Recall && newData.Status == TeleportStatus.Finish)
             {
                 started = false;
             }
-            if (newData.Type == Packet.S2C.Teleport.Type.Recall && newData.Status == Packet.S2C.Teleport.Status.Start)
+            if (newData.Type == TeleportType.Recall && newData.Status == TeleportStatus.Start)
             {
                 if (!started)
                 {

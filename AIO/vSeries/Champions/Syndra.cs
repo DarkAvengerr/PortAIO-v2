@@ -202,7 +202,7 @@ using EloBuddy;
                 Config.AddToMainMenu();
             }
             SPrediction.Prediction.Initialize(Config);
-            Obj_AI_Base.OnProcessSpellCast += SyndraOnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += SyndraOnProcessSpellCast;
             Game.OnUpdate += SyndraOnUpdate;
             Drawing.OnDraw += SyndraOnDraw;
         }

@@ -50,7 +50,7 @@ using EloBuddy;
 
             Game.OnUpdate += GameOnOnUpdate;
             Drawing.OnDraw += DrawingOnOnDraw;
-            Obj_AI_Base.OnProcessSpellCast += Game_OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += Game_OnProcessSpell;
         }
 
         private static void DrawingOnOnDraw(EventArgs args)

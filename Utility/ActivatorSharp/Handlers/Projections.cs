@@ -17,9 +17,9 @@ using EloBuddy; namespace Activator.Handlers
         {
             GameObject.OnCreate += MissileClient_OnSpellMissileCreate;
 
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnUnitSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnUnitSpellCast;
             Obj_AI_Base.OnPlayAnimation += AIHeroClient_OnPlayAnimation;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnStealth;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnStealth;
         }
 
         private static void MissileClient_OnSpellMissileCreate(GameObject sender, EventArgs args)

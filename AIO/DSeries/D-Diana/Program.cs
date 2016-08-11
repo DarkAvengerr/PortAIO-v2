@@ -268,7 +268,7 @@ using EloBuddy;
             Chat.Print(
                 "<font color='#FF0000'>If You like my work and want to support me,  plz donate via paypal in </font> <font color='#FF9900'>ssssssssssmith@hotmail.com</font> (10) S");
 
-            // Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            // Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
             Interrupter.OnPossibleToInterrupt += Interrupter_OnPossibleToInterrupt;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
         }

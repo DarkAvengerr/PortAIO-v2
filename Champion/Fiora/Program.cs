@@ -158,7 +158,7 @@ namespace FioraProject
             Orbwalking.AfterAttack += AfterAttack;
             Orbwalking.AfterAttackNoTarget += Orbwalking_AfterAttackNoTarget;
             Orbwalking.OnAttack += OnAttack;
-            Obj_AI_Base.OnProcessSpellCast += oncast;
+            Obj_AI_Base.OnSpellCast += oncast;
             Game.OnWndProc += Game_OnWndProc;
             //Utility.HpBarDamageIndicator.DamageToUnit = GetFastDamage;
             //Utility.HpBarDamageIndicator.Enabled = DrawHP;

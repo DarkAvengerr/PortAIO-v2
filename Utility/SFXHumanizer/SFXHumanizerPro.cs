@@ -161,7 +161,7 @@ using EloBuddy;
                 EloBuddy.Player.OnIssueOrder += OnObjAiBaseIssueOrder;
                 Spellbook.OnCastSpell += OnSpellbookCastSpell;
                 Spellbook.OnStopCast += OnSpellbookStopCast;
-                Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
                 Drawing.OnEndScene += OnDrawingEndScene;
                 Drawing.OnPreReset += OnDrawingPreReset;
                 Drawing.OnPostReset += OnDrawingPostReset;

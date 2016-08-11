@@ -47,7 +47,7 @@ using EloBuddy; namespace SFXChallenger.Managers
 
                 Enabled = menu.Item(menu.Name + ".enabled").GetValue<bool>();
 
-                Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
                 Spellbook.OnCastSpell += OnSpellbookCastSpell;
             }
             catch (Exception ex)

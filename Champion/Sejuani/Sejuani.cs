@@ -74,7 +74,7 @@
             Console.WriteLine("Injected");
             Notifications.AddNotification("ElSejuani by jQuery v1.0.0.0", 1000);
 
-            spells[Spells.Q].SetSkillshot(0, 70, 1600, true, SkillshotType.SkillshotLine);
+            spells[Spells.Q].SetSkillshot(0, 70, 1600, false, SkillshotType.SkillshotLine);
             spells[Spells.R].SetSkillshot(250, 110, 1600, false, SkillshotType.SkillshotLine);
 
             _ignite = Player.GetSpellSlot("summonerdot");
@@ -158,17 +158,31 @@
                     spells[Spells.E].Cast();
                 }
             }
-
-            if (comboR && spells[Spells.R].IsReady())
+            if (countEnemyR == 1)
             {
-                foreach (
-                    var x in
-                        HeroManager.Enemies.Where((hero => !hero.IsDead && hero.IsValidTarget(spells[Spells.R].Range))))
+                if (comboR && spells[Spells.R].IsReady())
                 {
-                    var pred = spells[Spells.R].GetPrediction(x);
-                    if (pred.AoeTargetsHitCount >= countEnemyR)
+                    var targ = TargetSelector.GetTarget(spells[Spells.R].Range, TargetSelector.DamageType.Physical);
+                    var predA = spells[Spells.R].GetPrediction(targ);
+                    if (targ != null && targ.IsValidTarget())
                     {
-                        spells[Spells.R].Cast(pred.CastPosition);
+                        spells[Spells.R].Cast(predA.CastPosition);
+                    }
+                }
+            }
+            else
+            {
+                if (comboR && spells[Spells.R].IsReady())
+                {
+                    foreach (
+                        var x in
+                            HeroManager.Enemies.Where((hero => !hero.IsDead && hero.IsValidTarget(spells[Spells.R].Range))))
+                    {
+                        var pred = spells[Spells.R].GetPrediction(x);
+                        if (pred.AoeTargetsHitCount >= countEnemyR)
+                        {
+                            spells[Spells.R].Cast(pred.CastPosition);
+                        }
                     }
                 }
             }
@@ -391,11 +405,7 @@
                 return;
             }
 
-            var prediction = spells[Spells.R].GetPrediction(target);
-            if (prediction.Hitchance >= HitChance.High)
-            {
-                spells[Spells.R].Cast(prediction.CastPosition);
-            }
+            spells[Spells.R].Cast(target);
         }
 
 

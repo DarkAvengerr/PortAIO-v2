@@ -720,7 +720,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                     return;
                 }
 
-                foreach (var mob in MinionManager.GetMinions(950f, MinionTypes.All, MinionTeam.Neutral)
+                foreach (var mob in EloBuddy.SDK.EntityManager.MinionsAndMonsters.Monsters
                     .Where(m => !m.Name.Contains("Mini") && !m.Name.Contains("Respawn")))
                 {
                     if (mob.Distance(this.Player, false) - (this.Player.BoundingRadius)
@@ -729,7 +729,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                         continue;
                     }
 
-                    if (this.Menu.Item(mob.CharData.BaseSkinName).IsActive())
+                    if (this.Menu.Item(mob.BaseSkinName).IsActive())
                     {
                         if (this.Menu.Item("Smite.Spell").IsActive())
                         {
@@ -752,7 +752,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                         && this.Player.GetSpell(this.SmiteSpell.Slot)
                                .Name.Equals("s5_summonersmiteduel", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        var kSableEnemy = HeroManager.Enemies.FirstOrDefault(hero => hero.IsValidTarget(SmiteRange) && this.SmiteSpell.GetDamage(hero) >= hero.Health);
+                        var kSableEnemy = EloBuddy.SDK.EntityManager.Heroes.Enemies.FirstOrDefault(hero => hero.IsValidTarget(SmiteRange) && SmiteDmg(hero) >= hero.Health);
 
                         if (kSableEnemy != null)
                         {
@@ -778,6 +778,11 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
             {
                 Console.WriteLine($"An error occurred: {e}");
             }
+        }
+
+        public static float SmiteDmg(AIHeroClient target)
+        {
+            return (float)ObjectManager.Player.CalcDamage(target, Damage.DamageType.True, (20 + ObjectManager.Player.Level * 8));
         }
 
         private float SmiteDamage()

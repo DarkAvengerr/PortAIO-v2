@@ -160,7 +160,7 @@ namespace SCommon.Prediction
             CustomEvents.Unit.OnDash += Unit_OnDash;
 
             Drawing.OnDraw += Drawing_OnDraw;
-            AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            AIHeroClient.OnSpellCast += AIHeroClient_OnProcessSpellCast;
             AIHeroClient.OnDamage += AIHeroClient_OnDamage;
             blInitialized = true;
         }

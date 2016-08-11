@@ -632,7 +632,7 @@ namespace VayneHunter_Reborn.External
             #endregion
 
             Game.OnUpdate += Game_OnGameUpdate;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
         }
 
         public static void BuildMenu(LeagueSharp.Common.Menu mainMenu, string displayName, string name)

@@ -59,7 +59,7 @@ using EloBuddy; namespace ezEvade
             MissileClient.OnCreate += SpellMissile_OnCreate;
             MissileClient.OnDelete += SpellMissile_OnDelete;
 
-            AIHeroClient.OnProcessSpellCast += Game_ProcessSpell;
+            AIHeroClient.OnSpellCast += Game_ProcessSpell;
 
             //AIHeroClient.OnEnterVisiblityClient += Game_OnEnterVisiblity;
 

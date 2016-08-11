@@ -68,6 +68,11 @@ using EloBuddy; namespace Activator.Items
 
         public void UseItem(bool combo = false)
         {
+            if (!LeagueSharp.Common.Items.CanUseItem(Id) || !LeagueSharp.Common.Items.HasItem(Id))
+            {
+                return;
+            }
+
             if (IsReady())
             {
                 LeagueSharp.Common.Utility.DelayAction.Add(80 - Priority * 10, () => Needed = true);
@@ -95,6 +100,16 @@ using EloBuddy; namespace Activator.Items
 
         public void UseItem(Obj_AI_Base target, bool combo = false)
         {
+            if (!LeagueSharp.Common.Items.CanUseItem(Id) || !LeagueSharp.Common.Items.HasItem(Id))
+            {
+                return;
+            }
+
+            if (target.IsDead || !target.IsHPBarRendered || !target.IsVisible || !target.IsValidTarget())
+            {
+                return;
+            }
+
             if (IsReady())
             {
                 LeagueSharp.Common.Utility.DelayAction.Add(80 - Priority * 10, () => Needed = true);
@@ -122,6 +137,11 @@ using EloBuddy; namespace Activator.Items
 
         public void UseItem(Vector3 pos, bool combo = false)
         {
+            if (!LeagueSharp.Common.Items.CanUseItem(Id) || !LeagueSharp.Common.Items.HasItem(Id))
+            {
+                return;
+            }
+
             if (IsReady())
             {
                 LeagueSharp.Common.Utility.DelayAction.Add(80 - Priority * 10, () => Needed = true);

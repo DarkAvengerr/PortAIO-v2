@@ -125,9 +125,9 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                 }
 
                 var kSableEnemy =
-                    HeroManager.Enemies.FirstOrDefault(
+                    EloBuddy.SDK.EntityManager.Heroes.Enemies.FirstOrDefault(
                         hero =>
-                        hero.IsValidTarget(600) && !hero.IsZombie
+                        hero.IsValidTarget(600) && !hero.IsZombie && hero.IsVisible && hero.IsHPBarRendered
                         && this.Player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite) > hero.Health);
 
                 if (kSableEnemy != null)

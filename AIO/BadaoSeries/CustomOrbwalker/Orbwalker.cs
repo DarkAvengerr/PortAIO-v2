@@ -93,7 +93,7 @@ using EloBuddy;
         {
             Player = ObjectManager.Player;
             FakeClicks.Initiate();
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += OnProcessSpell;
             MissileClient.OnCreate += MissileClient_OnCreate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
         }

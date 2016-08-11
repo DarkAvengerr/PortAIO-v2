@@ -23,7 +23,7 @@ using EloBuddy;
             BallPosition = ObjectManager.Player.ServerPosition;
 
             Game.OnUpdate += OnTick;
-            Obj_AI_Base.OnProcessSpellCast += OnSCast;
+            Obj_AI_Base.OnSpellCast += OnSCast;
         }
 
         public void ProcessCommandList(List<Command> commands)

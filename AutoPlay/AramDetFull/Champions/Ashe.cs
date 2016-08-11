@@ -15,7 +15,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
 
             Interrupter.OnPossibleToInterrupt += Game_OnPossibleToInterrupt;
-            Obj_AI_Base.OnProcessSpellCast += Game_OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += Game_OnProcessSpell;
 
             ARAMSimulator.champBuild = new Build
             {

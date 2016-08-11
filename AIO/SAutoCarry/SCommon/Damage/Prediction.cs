@@ -15,7 +15,7 @@ namespace SCommon.Damage
         {
             ActiveAttacks = new Dictionary<int, PredictedDamage>();
             s_Rnd = new Random();
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnDoCast;
             Obj_AI_Base.OnDamage += Obj_AI_Base_OnDamage;
             Obj_AI_Base.OnPlayAnimation += Obj_AI_Base_OnPlayAnimation;

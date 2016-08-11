@@ -26,7 +26,7 @@ namespace VayneHunter_Reborn.Skills.Condemn
             Variables.spells[SpellSlot.E].SetTargetted(0.375f, float.MaxValue);
             InterrupterGapcloser.OnLoad();
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
-            Obj_AI_Base.OnProcessSpellCast += WindWall.OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += WindWall.OnProcessSpellCast;
 
         }
 

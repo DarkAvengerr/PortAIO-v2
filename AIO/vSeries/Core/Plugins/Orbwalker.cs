@@ -219,7 +219,7 @@ using EloBuddy;
         {
             Player = ObjectManager.Player;
             _championName = Player.ChampionName;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += OnProcessSpell;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnSpellCast;
             Spellbook.OnStopCast += SpellbookOnStopCast;
         }
@@ -596,7 +596,7 @@ using EloBuddy;
 
             try
             {
-                if (target.IsValidTarget() && CanAttack() && Attack)
+                if (target.IsValidTarget() && EloBuddy.SDK.Orbwalker.CanAutoAttack && Attack)
                 {
                     DisableNextAttack = false;
                     FireBeforeAttack(target);
@@ -618,7 +618,7 @@ using EloBuddy;
                     }
                 }
 
-                if (CanMove(extraWindup) && Move)
+                if (EloBuddy.SDK.Orbwalker.CanMove && Move)
                 {
                     if (Orbwalker.LimitAttackSpeed && (Player.AttackDelay < 1 / 2.6f) && _autoattackCounter % 3 != 0 &&
                         !CanMove(500, true))

@@ -289,7 +289,7 @@ using EloBuddy;
 
             Game.OnUpdate += OnUpdate;
             Drawing.OnDraw += OnDraw;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
             GameObject.OnCreate += OnCreate;
             GameObject.OnDelete += OnDelete;
             AntiGapcloser.OnEnemyGapcloser += Gapcloser_OnGapCloser;

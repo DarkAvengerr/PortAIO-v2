@@ -36,7 +36,7 @@ namespace UnderratedAIO.Champions
             Helpers.Jungle.setSmiteSlot();
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             HpBarDamageIndicator.DamageToUnit = ComboDamage;
-            Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
+            Obj_AI_Base.OnSpellCast += Game_ProcessSpell;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
         }
 

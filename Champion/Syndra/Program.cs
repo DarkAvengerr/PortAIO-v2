@@ -220,7 +220,7 @@ namespace Syndra
             Game.OnWndProc += Game_OnWndProc;
             Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
 
-            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += AIHeroClient_OnProcessSpellCast;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
 
             Drawing.OnDraw += Drawing_OnDraw;

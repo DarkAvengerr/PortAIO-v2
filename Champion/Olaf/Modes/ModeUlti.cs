@@ -81,7 +81,7 @@ namespace Olaf.Modes
             MenuLocal.AddSubMenu(championMenu);
             ParentMenu.AddSubMenu(MenuLocal);
 
-            Obj_AI_Base.OnProcessSpellCast += ObjAiHeroOnOnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += ObjAiHeroOnOnProcessSpellCast;
             Game.OnUpdate += GameOnOnUpdate;
         }
 

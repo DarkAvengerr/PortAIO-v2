@@ -50,7 +50,7 @@ namespace Kindred___YinYang
                 Config.AddToMainMenu();
             }
             Chat.Print("<font color='#ff3232'>Kindred - Yin Yang: </font> <font color='#d4d4d4'>If you like this assembly feel free to upvote on Assembly DB</font>");
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Game.OnUpdate += Game_OnGameUpdate;
             GameObject.OnCreate += GameObject_OnCreate;

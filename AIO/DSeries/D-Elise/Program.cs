@@ -267,7 +267,7 @@ using EloBuddy;
             _config.AddToMainMenu();
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter.OnPossibleToInterrupt += Interrupter_OnPosibleToInterrupt;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             //Chat.Print("<font color='#881df2'>D-Elise by Diabaths</font> Loaded.");

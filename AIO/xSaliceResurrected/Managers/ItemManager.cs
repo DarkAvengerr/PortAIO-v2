@@ -172,7 +172,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
                 Orbwalking.AfterAttack += AfterAttack;
                 Orbwalking.OnAttack += OnAttack;
 
-            Obj_AI_Base.OnProcessSpellCast += SpellbookOnOnCastSpell;
+            Obj_AI_Base.OnSpellCast += SpellbookOnOnCastSpell;
             Game.OnUpdate += Game_OnGameUpdate;
         }
 

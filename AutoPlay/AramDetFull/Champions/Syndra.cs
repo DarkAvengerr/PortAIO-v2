@@ -19,7 +19,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public SyndraA()
         {
-            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += AIHeroClient_OnProcessSpellCast;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
 
             ARAMSimulator.champBuild = new Build
@@ -383,7 +383,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         static OrbManager()
         {
             //Obj_AI_Base.OnPauseAnimation += Obj_AI_Base_OnPauseAnimation;
-            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += AIHeroClient_OnProcessSpellCast;
         }
 
         static void Obj_AI_Base_OnPauseAnimation(Obj_AI_Base sender, EventArgs args)

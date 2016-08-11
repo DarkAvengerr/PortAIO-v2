@@ -36,7 +36,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         public override bool ShouldUseItem()
         {
             return this.Menu.Item("Tiamatcombo").IsActive() && this.ComboModeActive
-                   && HeroManager.Enemies.Any(x => x.Distance(this.Player) < 400 && !x.IsDead && !x.IsZombie);
+                   && EloBuddy.SDK.EntityManager.Heroes.Enemies.Any(x => x.Distance(this.Player) < 400 && !x.IsDead && !x.IsZombie);
         }
 
         #endregion

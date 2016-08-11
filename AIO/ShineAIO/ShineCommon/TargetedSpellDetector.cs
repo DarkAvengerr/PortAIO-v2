@@ -24,7 +24,7 @@ using EloBuddy;
         /// </summary>
         static TargetedSpellDetector()
         {
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             if(SpellDatabase.TargetedSpells == null)
                 SpellDatabase.InitalizeSpellDatabase();
         }

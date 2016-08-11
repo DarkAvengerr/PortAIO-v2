@@ -72,7 +72,7 @@ namespace FioraProject
             }
             Menu.AddSubMenu(evadeMenu);
             Game.OnUpdate += OnUpdateDashes;
-            AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            AIHeroClient.OnSpellCast += AIHeroClient_OnProcessSpellCast;
         }
 
         public static AIHeroClient Player

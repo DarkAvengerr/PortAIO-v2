@@ -238,7 +238,7 @@ using EloBuddy; namespace YasuoPro
         {
             Player = ObjectManager.Player;
             _championName = Player.ChampionName;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
+            Obj_AI_Base.OnSpellCast += OnProcessSpell;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnSpellCast;
             Spellbook.OnStopCast += SpellbookOnStopCast;
 
@@ -456,6 +456,7 @@ using EloBuddy; namespace YasuoPro
         /// <returns><c>true</c> if this instance can attack; otherwise, <c>false</c>.</returns>
         public static bool CanAttack()
         {
+            return EloBuddy.SDK.Orbwalker.CanAutoAttack;
             if (Player.ChampionName == "Graves")
             {
                 var attackDelay = 1.0740296828d * 1000 * Player.AttackDelay - 716.2381256175d;
@@ -491,6 +492,7 @@ using EloBuddy; namespace YasuoPro
         /// <returns><c>true</c> if this instance can move the specified extra windup; otherwise, <c>false</c>.</returns>
         public static bool CanMove(float extraWindup, bool disableMissileCheck = false)
         {
+            return EloBuddy.SDK.Orbwalker.CanMove;
             if (_missileLaunched && Orbwalker.MissileCheck && !disableMissileCheck)
             {
                 return true;

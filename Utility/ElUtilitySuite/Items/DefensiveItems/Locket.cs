@@ -81,7 +81,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
                     return;
                 }
 
-                foreach (var ally in HeroManager.Allies.Where(a => a.IsValidTarget(600f, false) && !a.IsRecalling()))
+                foreach (var ally in HeroManager.Allies.Where(a => a.IsValidTarget(600f, false) && !a.IsDead && !a.IsRecalling()))
                 {
                     var enemies = ally.CountEnemiesInRange(600f);
                     var totalDamage = IncomingDamageManager.GetDamage(ally) * 1.1f;

@@ -266,7 +266,7 @@ namespace Orianna
 
             Config.AddToMainMenu();
 
-            AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            AIHeroClient.OnSpellCast += AIHeroClient_OnProcessSpellCast;
             Game.OnUpdate += Game_OnGameUpdate;
             Game.OnWndProc += Game_OnWndProc;
             Drawing.OnDraw += Drawing_OnDraw;

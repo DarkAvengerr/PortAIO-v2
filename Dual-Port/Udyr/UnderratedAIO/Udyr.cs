@@ -40,7 +40,7 @@ namespace UnderratedAIO.Champions
             //Chat.Print("<font color='#9933FF'>Soresu </font><font color='#FFFFFF'>- Udyr</font>");
             Drawing.OnDraw += Game_OnDraw;
             Game.OnUpdate += Game_OnGameUpdate;
-            Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
+            Obj_AI_Base.OnSpellCast += Game_ProcessSpell;
             Helpers.Jungle.setSmiteSlot();
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;

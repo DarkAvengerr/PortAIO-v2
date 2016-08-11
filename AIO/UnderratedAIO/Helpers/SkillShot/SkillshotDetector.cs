@@ -35,7 +35,7 @@ namespace UnderratedAIO.Helpers.SkillShot
                 InitComplete = true;
                 Collision.Init();
                 //Detect when the skillshots are created.
-                Obj_AI_Base.OnProcessSpellCast += HeroOnProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += HeroOnProcessSpellCast;
                 //Game.OnProcessPacket += GameOnOnGameProcessPacket;
                 //Detect when projectiles collide.
                 OnDetectSkillshot += OnDetectSkillshotProcessing;

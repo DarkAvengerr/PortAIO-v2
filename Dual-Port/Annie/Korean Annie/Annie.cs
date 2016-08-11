@@ -65,7 +65,7 @@ using EloBuddy;
 
             Tibbers = new AnnieTibbers(this);
 
-            Obj_AI_Base.OnProcessSpellCast += EAgainstEnemyAA;
+            Obj_AI_Base.OnSpellCast += EAgainstEnemyAA;
             Interrupter2.OnInterruptableTarget += InterruptDangerousSpells;
             AntiGapcloser.OnEnemyGapcloser += StunGapCloser;
             Game.OnUpdate += StackE;

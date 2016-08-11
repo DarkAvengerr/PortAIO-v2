@@ -79,7 +79,7 @@ using EloBuddy; namespace ezEvade
 
             MissileClient.OnCreate += SpellMissile_OnCreate;
 
-            AIHeroClient.OnProcessSpellCast += Game_ProcessSpell;
+            AIHeroClient.OnSpellCast += Game_ProcessSpell;
             Spellbook.OnCastSpell += Game_OnCastSpell;
             GameObject.OnFloatPropertyChange += GameObject_OnFloatPropertyChange;
 

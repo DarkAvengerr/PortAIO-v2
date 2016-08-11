@@ -178,7 +178,7 @@ namespace OneKeyToWin_AIO_Sebby
             Game.OnUpdate += Game_OnGameUpdate;
             SebbyLib.Orbwalking.AfterAttack += Orbwalking_AfterAttack;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             //Drawing.OnDraw += Drawing_OnDraw;
         }
 

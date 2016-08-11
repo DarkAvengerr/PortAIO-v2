@@ -34,9 +34,9 @@ using EloBuddy;
 
             Game.OnProcessPacket += SphereManager.OnProcessPacket;
 
-            Obj_AI_Base.OnProcessSpellCast += SphereManager.OnProcessSpellCast;
-            Obj_AI_Base.OnProcessSpellCast += Collision.OnProcessSpellCast;
-            Obj_AI_Base.OnProcessSpellCast += Mechanics.OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += SphereManager.OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Collision.OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Mechanics.OnProcessSpellCast;
 
 
             AntiGapcloser.OnEnemyGapcloser += Mechanics.OnEnemyGapcloser;

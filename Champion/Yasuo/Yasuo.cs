@@ -46,7 +46,7 @@ using EloBuddy; namespace YasuoPro
             Drawing.OnDraw += OnDraw;
             AntiGapcloser.OnEnemyGapcloser += OnGapClose;
             Interrupter2.OnInterruptableTarget += OnInterruptable;
-            Obj_AI_Base.OnProcessSpellCast += TargettedDanger.SpellCast;
+            Obj_AI_Base.OnSpellCast += TargettedDanger.SpellCast;
             CustomEvents.Unit.OnDash += UnitOnOnDash;
         }
 

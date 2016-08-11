@@ -80,7 +80,7 @@ namespace SPrediction
 
             AIHeroClient.OnNewPath += AIHeroClient_OnNewPath;
             AIHeroClient.OnSpellCast += AIHeroClient_OnDoCast;
-            AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+            AIHeroClient.OnSpellCast += AIHeroClient_OnProcessSpellCast;
         }
 
 

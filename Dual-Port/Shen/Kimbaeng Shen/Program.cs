@@ -97,7 +97,7 @@ using EloBuddy;
             DrawMenu.AddItem(new MenuItem("drawEF", "DrawEFlash").SetValue(new Circle(true, System.Drawing.Color.Lime)));
             Game.OnUpdate += Game_onUpdate;
             Drawing.OnDraw += Drawing_Ondraw;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
 
             Chat.Print("<font color=\"#672FBB\">Kimbaeng Shen</font> Loaded ");
             Chat.Print("If You like this Assembly plz <font color=\"#41FF3A\">Upvote</font> XD ");

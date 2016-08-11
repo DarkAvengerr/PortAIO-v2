@@ -13,7 +13,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public Kayle()
         {
-            Obj_AI_Base.OnProcessSpellCast += HealUltTrigger;
+            Obj_AI_Base.OnSpellCast += HealUltTrigger;
 
             ARAMSimulator.champBuild = new Build
             {

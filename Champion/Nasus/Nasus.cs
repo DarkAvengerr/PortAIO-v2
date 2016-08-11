@@ -177,7 +177,7 @@
 
             Game.OnUpdate += this.OnUpdate;
             Drawing.OnDraw += this.OnDraw;
-            Obj_AI_Base.OnProcessSpellCast += this.Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += this.Obj_AI_Base_OnProcessSpellCast;
         }
 
         #endregion

@@ -664,7 +664,7 @@
 
                 Drawing.OnDraw += Drawings.OnDraw;
                 Game.OnUpdate += Game_OnGameUpdate;
-                Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
                 GameObject.OnCreate += OnCreate;
                 Orbwalking.AfterAttack += OrbwalkingAfterAttack;
                 GameObject.OnDelete += GameObject_OnDelete;

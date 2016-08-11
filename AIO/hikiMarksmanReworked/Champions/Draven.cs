@@ -44,7 +44,7 @@ using EloBuddy;
             Notifications.AddNotification("Gift From Hikigaya", 6000);
 
             Game.OnUpdate += DravenOnUpdate;
-            AIHeroClient.OnProcessSpellCast += DravenAxeHelper.AIHeroClient_OnProcessSpellCast;
+            AIHeroClient.OnSpellCast += DravenAxeHelper.AIHeroClient_OnProcessSpellCast;
             GameObject.OnCreate += DravenAxeHelper.OnCreate;
             GameObject.OnDelete += DravenAxeHelper.OnDelete;
             Interrupter2.OnInterruptableTarget += DravenOnInterruptableTarget;

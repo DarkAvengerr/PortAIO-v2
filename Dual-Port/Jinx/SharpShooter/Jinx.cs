@@ -70,7 +70,7 @@ namespace SharpShooter.Plugins
             Drawing.OnDraw += Drawing_OnDraw;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
 
             Console.WriteLine("Sharpshooter: Jinx Loaded.");
