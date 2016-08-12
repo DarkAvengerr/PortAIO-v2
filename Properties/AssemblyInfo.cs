@@ -2,6 +2,8 @@
 
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security;
+using System.Security.Permissions;
 
 #endregion
 
@@ -18,5 +20,7 @@ using System.Runtime.InteropServices;
 
 [assembly: Guid("fabfb012-089e-4629-9976-509afeaab307")]
 
-[assembly: AssemblyVersion("1.0.0.2")]
-[assembly: AssemblyFileVersion("1.0.0.2")]
+[assembly: AssemblyVersion("1.0.0.3")]
+[assembly: AssemblyFileVersion("1.0.0.3")]
+[assembly: SecurityRules(SecurityRuleSet.Level1, SkipVerificationInFullTrust = true)]
+[assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification = true)]
