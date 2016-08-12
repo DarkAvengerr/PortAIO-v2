@@ -48,9 +48,8 @@ using EloBuddy; namespace SFXChallenger
         static Global()
         {
             Logger = new SimpleFileLogger(LogDir) { LogLevel = LogLevel.High };
-            Console.WriteLine(BaseDir);
             /*
-
+            Console.WriteLine(BaseDir);
             try
             {
                 Directory.GetFiles(LogDir)

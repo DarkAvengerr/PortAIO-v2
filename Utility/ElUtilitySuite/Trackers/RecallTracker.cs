@@ -110,11 +110,6 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
 
             this.EnemyInfo = this.Enemies.Select(x => new EnemyInfo(x)).ToList();
 
-            foreach(var enemy in EnemyInfo)
-            {
-                Console.WriteLine(enemy.Player.ChampionName);
-            }
-
             this.Map = LeagueSharp.Common.Utility.Map.GetMap().Type;
 
             this.Text = new Font(

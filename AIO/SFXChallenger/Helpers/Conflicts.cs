@@ -65,7 +65,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
                                  SFXTargetSelector.Orbwalking.Orbwalker.Instances.Count;
                 if (orbwalkers > 1)
                 {
-                    messages.Add(string.Format("Possible Conflict: Multiple Orbwalkers ({0})", orbwalkers));
+                    //messages.Add(string.Format("Possible Conflict: Multiple Orbwalkers ({0})", orbwalkers));
                 }
 
                 var assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -81,7 +81,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
                                 .Any(t => t.FullName.Contains(championName, StringComparison.OrdinalIgnoreCase)))
                         {
                             var asm = assembly.GetName();
-                            messages.Add(string.Format("Possible Conflict: {0} v{1}", asm.Name, asm.Version));
+                            //messages.Add(string.Format("Possible Conflict: {0} v{1}", asm.Name, asm.Version));
                         }
                     }
                     catch (Exception ex)
@@ -97,10 +97,10 @@ using EloBuddy; namespace SFXChallenger.Helpers
                     var chatSplitted = message.Split(':');
                     if (chatSplitted.Length == 2)
                     {
-                        Chat.Print(
-                            string.Format(
-                                "{0} - <font color='#FF2929'>{1}</font>:<font color='#FFDF29'>{2}</font>", Global.Name,
-                                chatSplitted[0], chatSplitted[1]));
+                        //Chat.Print(
+                            //string.Format(
+                                //"{0} - <font color='#FF2929'>{1}</font>:<font color='#FFDF29'>{2}</font>", Global.Name,
+                                //chatSplitted[0], chatSplitted[1]));
                     }
                 }
                 Console.ResetColor();
