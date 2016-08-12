@@ -725,7 +725,7 @@ using EloBuddy;
         {
             if (Config.Item("qRange").GetValue<bool>())
             {
-                if (FishBoneActive)
+                if (!FishBoneActive)
                     LeagueSharp.Common.Utility.DrawCircle(Player.Position, 590f + Player.BoundingRadius, System.Drawing.Color.Gray, 1, 1);
                 else
                     LeagueSharp.Common.Utility.DrawCircle(Player.Position, Q.Range - 40, System.Drawing.Color.Gray, 1, 1);
