@@ -37,6 +37,7 @@ using EloBuddy; namespace SFXChallenger.Library.Logger
 
         public void AddItem(LogItem item)
         {
+            /*
             if (LogLevel == LogLevel.None || item == null || string.IsNullOrWhiteSpace(item.Exception.ToString()))
             {
                 return;
@@ -62,6 +63,7 @@ using EloBuddy; namespace SFXChallenger.Library.Logger
             {
                 Console.WriteLine(ex);
             }
+            */
         }
 
         public event EventHandler OnItemAdded;

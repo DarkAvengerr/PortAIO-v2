@@ -419,18 +419,7 @@ using EloBuddy;
         /// <returns><c>true</c> if this instance can attack; otherwise, <c>false</c>.</returns>
         public static bool CanAttack()
         {
-            if (Player.ChampionName == "Graves" && Attack)
-            {
-                var attackDelay = 1.0740296828d * 1000 * Player.AttackDelay - 716.2381256175d;
-                if (Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + attackDelay && Player.HasBuff("GravesBasicAttackAmmo1"))
-                {
-                    return true;
-                }
-
-                return false;
-            }
-
-            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 && Attack;
+            return EloBuddy.SDK.Orbwalker.CanAutoAttack;
         }
 
         /// <summary>
@@ -440,23 +429,7 @@ using EloBuddy;
         /// <returns><c>true</c> if this instance can move the specified extra windup; otherwise, <c>false</c>.</returns>
         public static bool CanMove(float extraWindup, bool disableMissileCheck = false)
         {
-            if (!Move)
-            {
-                return false;
-            }
-
-            if (_missileLaunched && Orbwalker.MissileCheck && !disableMissileCheck)
-            {
-                return true;
-            }
-
-            var localExtraWindup = 0;
-            if (_championName == "Rengar" && (Player.HasBuff("rengarqbase") || Player.HasBuff("rengarqemp")))
-            {
-                localExtraWindup = 200;
-            }
-
-            return NoCancelChamps.Contains(_championName) || (Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup + localExtraWindup);
+            return EloBuddy.SDK.Orbwalker.CanMove;
         }
 
         /// <summary>
@@ -1059,7 +1032,7 @@ using EloBuddy;
                     !_config.Item("PriorizeFarm").GetValue<bool>())
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target != null && InAutoAttackRange(target))
+                    if (target != null && InAutoAttackRange(target) && target.IsVisible && target.IsHPBarRendered && target.IsTargetable && !target.IsDead)
                     {
                         return target;
                     }
@@ -1073,7 +1046,7 @@ using EloBuddy;
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 minion =>
-                                    minion.IsValidTarget() && InAutoAttackRange(minion))
+                                    minion.IsValidTarget() && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead && InAutoAttackRange(minion))
                                     .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                                     .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                                     .ThenBy(minion => minion.Health)
@@ -1111,7 +1084,7 @@ using EloBuddy;
                 }
 
                 //Forced target
-                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget))
+                if (_forcedTarget.IsValidTarget() && _forcedTarget.IsVisible && _forcedTarget.IsHPBarRendered && _forcedTarget.IsTargetable && !_forcedTarget.IsDead && InAutoAttackRange(_forcedTarget))
                 {
                     return _forcedTarget;
                 }
@@ -1145,7 +1118,7 @@ using EloBuddy;
                 if (ActiveMode != OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target.IsValidTarget() && InAutoAttackRange(target))
+                    if (target.IsValidTarget() && InAutoAttackRange(target) && target.IsVisible && target.IsHPBarRendered && target.IsTargetable && !target.IsDead)
                     {
                         return target;
                     }
@@ -1176,7 +1149,7 @@ using EloBuddy;
                 {
                     if (!ShouldWait())
                     {
-                        if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion))
+                        if (_prevMinion.IsValidTarget() && _prevMinion.IsVisible && _prevMinion.IsHPBarRendered && _prevMinion.IsTargetable && !_prevMinion.IsDead && InAutoAttackRange(_prevMinion))
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 _prevMinion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
@@ -1189,7 +1162,7 @@ using EloBuddy;
 
                         result = (from minion in
                                       ObjectManager.Get<Obj_AI_Minion>()
-                                          .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) &&
+                                          .Where(minion => minion.IsValidTarget() && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead && InAutoAttackRange(minion) &&
                                           (_config.Item("AttackWards").GetValue<bool>() || !MinionManager.IsWard(minion.CharData.BaseSkinName.ToLower())) &&
                                           (_config.Item("AttackPetsnTraps").GetValue<bool>() && minion.CharData.BaseSkinName != "jarvanivstandard" || MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())) &&
                                           minion.CharData.BaseSkinName != "gangplankbarrel")

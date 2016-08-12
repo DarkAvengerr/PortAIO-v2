@@ -104,7 +104,7 @@ namespace SebbyLib
         private static bool CanReturn(Obj_AI_Base minion, Vector3 from, float range)
         {
             
-            if (minion != null && minion.IsValid && !minion.IsDead && minion.IsVisible && minion.IsTargetable)
+            if (minion != null && minion.IsValid && !minion.IsDead && minion.IsVisible && minion.IsTargetable && minion.IsHPBarRendered)
             {
                 if (range == float.MaxValue)
                     return true;

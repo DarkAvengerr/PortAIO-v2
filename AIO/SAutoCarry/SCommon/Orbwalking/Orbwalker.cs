@@ -255,7 +255,6 @@ namespace SCommon.Orbwalking
         /// <returns>true if can attack</returns>
         public bool CanAttack(int t = 0)
         {
-            return EloBuddy.SDK.Orbwalker.CanAutoAttack;
             if (!m_Attack)
                 return false;
 
@@ -265,13 +264,7 @@ namespace SCommon.Orbwalking
             if (m_fnCanAttack != null)
                 return m_fnCanAttack();
 
-            if (ObjectManager.Player.CharData.BaseSkinName == "Graves" && !ObjectManager.Player.HasBuff("GravesBasicAttackAmmo1") && !ObjectManager.Player.HasBuff("GravesBasicAttackAmmo2"))
-                return false;
-
-            if (ObjectManager.Player.CharData.BaseSkinName == "Jhin" && ObjectManager.Player.HasBuff("JhinPassiveReload"))
-                return false;
-
-            return Utils.TickCount + t + Game.Ping - m_lastAATick - m_Configuration.ExtraWindup - (m_Configuration.LegitMode && !ObjectManager.Player.IsMelee ? Math.Max(100, ObjectManager.Player.AttackDelay * 1000) : 0) * m_Configuration.LegitPercent / 100f >= 1000 / (ObjectManager.Player.GetAttackSpeed() * m_baseAttackSpeed);
+            return EloBuddy.SDK.Orbwalker.CanAutoAttack;
         }
 
         /// <summary>
@@ -280,20 +273,13 @@ namespace SCommon.Orbwalking
         /// <returns>true if can move</returns>
         public bool CanMove(int t = 0)
         {
-            return EloBuddy.SDK.Orbwalker.CanMove;
             if (!m_Move)
                 return false;
 
-            if (Utils.TickCount - m_lastWindUpEndTick < (ObjectManager.Player.AttackDelay - ObjectManager.Player.AttackCastDelay) * 1000f + (Game.Ping <= 30 ? 30 : 0))
-                return true;
-            
             if (m_fnCanMove != null)
                 return m_fnCanMove();
 
-            if (Utility.IsNonCancelChamp(ObjectManager.Player.CharData.BaseSkinName))
-                return Utils.TickCount - m_lastMoveTick >= 70 + m_rnd.Next(0, Game.Ping);
-            
-            return Utils.TickCount + t - 20 - m_lastAATick - m_Configuration.ExtraWindup - m_Configuration.MovementDelay >= 1000 / (ObjectManager.Player.GetAttackSpeed() * m_baseWindUp);
+            return EloBuddy.SDK.Orbwalker.CanMove;
         }
 
         /// <summary>

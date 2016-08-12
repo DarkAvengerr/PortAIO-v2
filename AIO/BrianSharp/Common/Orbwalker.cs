@@ -88,7 +88,7 @@
         {
             get
             {
-                return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= lastAttack + Player.AttackDelay * 1000;
+                return EloBuddy.SDK.Orbwalker.CanAutoAttack;
             }
         }
 
@@ -136,7 +136,7 @@
                     && (CurrentMode == Mode.Harass || CurrentMode == Mode.Clear))
                 {
                     var hero = GetBestHeroTarget;
-                    if (hero.IsValidTarget())
+                    if (hero.IsValidTarget() && hero.IsVisible && hero.IsHPBarRendered && hero.IsTargetable && !hero.IsDead)
                     {
                         return hero;
                     }
@@ -147,7 +147,7 @@
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 i =>
-                                InAutoAttackRange(i) && i.Team != GameObjectTeam.Neutral
+                                InAutoAttackRange(i) && i.IsVisible && i.IsHPBarRendered && i.IsTargetable && !i.IsDead && i.Team != GameObjectTeam.Neutral
                                 && (MinionManager.IsMinion(i, true) || Helper.IsPet(i))
                                 && i.Health < 2 * Player.TotalAttackDamage)
                             .OrderByDescending(i => i.CharData.BaseSkinName.Contains("Siege"))
@@ -190,7 +190,7 @@
                 if (CurrentMode != Mode.LastHit)
                 {
                     var hero = GetBestHeroTarget;
-                    if (hero.IsValidTarget())
+                    if (hero.IsValidTarget() && hero.IsVisible && hero.IsHPBarRendered && hero.IsTargetable && !hero.IsDead)
                     {
                         return hero;
                     }
@@ -201,7 +201,7 @@
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 i =>
-                                InAutoAttackRange(i) && i.Team == GameObjectTeam.Neutral
+                                InAutoAttackRange(i) && i.IsVisible && i.IsHPBarRendered && i.IsTargetable && !i.IsDead && i.Team == GameObjectTeam.Neutral
                                 && i.CharData.BaseSkinName != "gangplankbarrel")
                             .MaxOrDefault(i => i.MaxHealth);
                     if (mob != null)
@@ -227,7 +227,7 @@
                 }
                 var minion = (from obj in
                                   ObjectManager.Get<Obj_AI_Minion>()
-                                  .Where(i => InAutoAttackRange(i) && i.CharData.BaseSkinName != "gangplankbarrel")
+                                  .Where(i => InAutoAttackRange(i) && i.IsVisible && i.IsHPBarRendered && i.IsTargetable && !i.IsDead && i.CharData.BaseSkinName != "gangplankbarrel")
                               let hpPred =
                                   HealthPrediction.GetHealthPrediction(obj, (int)(Player.AttackDelay * 1000 * 2), 0)
                               where
@@ -252,9 +252,7 @@
         {
             get
             {
-                return missileLaunched
-                       || Utils.GameTimeTickCount + Game.Ping / 2
-                       >= lastAttack + Player.AttackCastDelay * 1000 + GetCurrentWindupTime;
+                return EloBuddy.SDK.Orbwalker.CanMove;
             }
         }
 

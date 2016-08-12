@@ -360,7 +360,7 @@ namespace MasterSharp
 
         public static Obj_AI_Base GetPossibleTarget()
         {
-            if (ForcedTarget != null)
+            if (ForcedTarget != null && ForcedTarget.IsVisible && ForcedTarget.IsHPBarRendered && ForcedTarget.IsTargetable && !ForcedTarget.IsDead)
             {
                 if (InAutoAttackRange(ForcedTarget))
                     return ForcedTarget;
@@ -382,7 +382,7 @@ namespace MasterSharp
                 foreach (
                     var minion in
                         from minion in
-                            ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
+                            ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead)
                         let t = (int)(MyHero.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
                                 1000 * (int)MyHero.Distance(minion) / (int)MyProjectileSpeed()
                         let predHealth = HealthPrediction.GetHealthPrediction(minion, t, FarmDelay())
@@ -412,7 +412,7 @@ namespace MasterSharp
             {
                 maxhealth = new float[] { 0 };
                 var maxhealth1 = maxhealth;
-                foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(GetAutoAttackRange(MyHero, minion)) && minion.Team == GameObjectTeam.Neutral).Where(minion => minion.MaxHealth >= maxhealth1[0] || Math.Abs(maxhealth1[0] - float.MaxValue) < float.Epsilon))
+                foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(GetAutoAttackRange(MyHero, minion)) && minion.Team == GameObjectTeam.Neutral && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead).Where(minion => minion.MaxHealth >= maxhealth1[0] || Math.Abs(maxhealth1[0] - float.MaxValue) < float.Epsilon))
                 {
                     tempTarget = minion;
                     maxhealth[0] = minion.MaxHealth;
@@ -425,7 +425,7 @@ namespace MasterSharp
                 return null;
             maxhealth = new float[] { 0 };
             foreach (var minion in from minion in ObjectManager.Get<Obj_AI_Minion>()
-                .Where(minion => minion.IsValidTarget(GetAutoAttackRange(MyHero, minion)))
+                .Where(minion => minion.IsValidTarget(GetAutoAttackRange(MyHero, minion)) && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead)
                                    let predHealth = HealthPrediction.LaneClearHealthPrediction(minion, (int)((MyHero.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay())
                                    where predHealth >=
                                          2 * MyHero.GetAutoAttackDamage(minion, true) ||
@@ -469,19 +469,12 @@ namespace MasterSharp
 
         public static bool CanAttack()
         {
-            if (_lastAATick <= Environment.TickCount  && cantMoveTill < Environment.TickCount)
-            {
-                return Environment.TickCount + Game.Ping / 2 + 25 >= _lastAATick + MyHero.AttackDelay * 1000 && _attack;
-            }
-            return false;
+            return EloBuddy.SDK.Orbwalker.CanAutoAttack;
         }
 
         public static bool CanMove()
         {
-            var extraWindup = Menu.Item("lxOrbwalker_Misc_ExtraWindUp").GetValue<Slider>().Value;
-            if (_lastAATick <= Environment.TickCount && cantMoveTill < Environment.TickCount)
-                return Environment.TickCount + Game.Ping / 2 >= _lastAATick + MyHero.AttackCastDelay * 1000 + extraWindup && _movement;
-            return false;
+            return EloBuddy.SDK.Orbwalker.CanMove;
         }
 
         private static float MyProjectileSpeed()
@@ -501,7 +494,7 @@ namespace MasterSharp
         {
             AIHeroClient killableEnemy = null;
             var hitsToKill = double.MaxValue;
-            foreach (var enemy in AllEnemys.Where(hero => hero.IsValidTarget() && InAutoAttackRange(hero)))
+            foreach (var enemy in AllEnemys.Where(hero => hero.IsValidTarget() && InAutoAttackRange(hero) && hero.IsVisible && hero.IsHPBarRendered && hero.IsTargetable && !hero.IsDead))
             {
                 var killHits = CountKillhits(enemy);
                 if (killableEnemy != null && !(killHits < hitsToKill))

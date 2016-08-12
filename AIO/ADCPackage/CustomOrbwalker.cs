@@ -242,30 +242,6 @@ using EloBuddy; namespace ADCPackage
             return !_missileLaunched;
         }
 
-        /// <summary>
-        ///     Returns true if moving won't cancel the auto-attack.
-        /// </summary>
-        public static bool CanMove(float extraWindup)
-        {
-            if (!Move)
-            {
-                return false;
-            }
-
-            if (_missileLaunched)
-            {
-                return true;
-            }
-
-            var localExtraWindup = 0;
-            if (_championName == "Rengar" && (Player.HasBuff("rengarqbase") || Player.HasBuff("rengarqemp")))
-            {
-                localExtraWindup = 200;
-            }
-
-            return NoCancelChamps.Contains(_championName) || (Utils.GameTimeTickCount + Game.Ping / 2 >= LastAATick + Player.AttackCastDelay * 1000 + extraWindup + localExtraWindup);
-        }
-
         public static void SetMovementDelay(int delay)
         {
             _delay = delay;
@@ -749,7 +725,7 @@ using EloBuddy; namespace ADCPackage
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 minion =>
-                                    minion.IsValidTarget() && InAutoAttackRange(minion))
+                                    minion.IsValidTarget() && InAutoAttackRange(minion) && !minion.IsDead && minion.IsTargetable && minion.IsHPBarRendered && minion.IsVisible)
                                     .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                                     .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                                     .ThenBy(minion => minion.Health)
@@ -777,7 +753,7 @@ using EloBuddy; namespace ADCPackage
                 }
 
                 //Forced target
-                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget))
+                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget) && _forcedTarget.IsVisible && !_forcedTarget.IsDead && _forcedTarget.IsHPBarRendered && _forcedTarget.IsTargetable)
                 {
                     return _forcedTarget;
                 }
@@ -811,7 +787,7 @@ using EloBuddy; namespace ADCPackage
                 if (ActiveMode != OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target.IsValidTarget() && InAutoAttackRange(target))
+                    if (target.IsValidTarget() && InAutoAttackRange(target) && !target.IsDead && target.IsVisible && target.IsHPBarRendered && target.IsTargetable)
                     {
                         return target;
                     }
@@ -853,7 +829,7 @@ using EloBuddy; namespace ADCPackage
 
                         result = (from minion in
                                       ObjectManager.Get<Obj_AI_Minion>()
-                                          .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) &&
+                                          .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) && minion.IsHPBarRendered && !minion.IsDead && minion.IsVisible && minion.IsTargetable &&
                                           (_config.Item("AttackWards").GetValue<bool>() || !MinionManager.IsWard(minion.CharData.BaseSkinName.ToLower())) &&
                                           (_config.Item("AttackPetsnTraps").GetValue<bool>() && minion.CharData.BaseSkinName != "jarvanivstandard" || MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())) &&
                                           minion.CharData.BaseSkinName != "gangplankbarrel")

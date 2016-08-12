@@ -39,7 +39,8 @@ using EloBuddy; namespace SFXChallenger
         public static string DefaultFont = "Calibri";
         public static IChampion Champion;
         public static ILogger Logger;
-        public static string BaseDir = AppDomain.CurrentDomain.BaseDirectory;
+        public static string AppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        public static string BaseDir = AppData + @"\EloBuddy\";
         public static string LogDir = Path.Combine(BaseDir, Name + " - Logs");
         public static string CacheDir = Path.Combine(BaseDir, Name + " - Cache");
         public static string UpdatePath = "Lizzaran/LeagueSharp-Dev/master/SFXChallenger";
@@ -47,6 +48,8 @@ using EloBuddy; namespace SFXChallenger
         static Global()
         {
             Logger = new SimpleFileLogger(LogDir) { LogLevel = LogLevel.High };
+            Console.WriteLine(BaseDir);
+            /*
 
             try
             {
@@ -60,6 +63,7 @@ using EloBuddy; namespace SFXChallenger
             {
                 Logger.AddItem(new LogItem(ex));
             }
+            */
         }
 
         public class Testing

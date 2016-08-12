@@ -412,20 +412,12 @@ using EloBuddy; namespace ARAMDetFull
 
         public static bool CanAttack()
         {
-            if (_lastAATick <= DeathWalker.now && _delayAttackTill <= DeathWalker.now)
-            {
-                float danger = (inDanger && MyHero.FlatMagicDamageMod > MyHero.FlatPhysicalDamageMod*1.4f) ? 300 : 0;
-                return DeathWalker.now + Game.Ping / 2 + 25 >= _lastAATick + MyHero.AttackDelay * 1000 + danger && _attack;
-            }
-            return false;
+            return EloBuddy.SDK.Orbwalker.CanAutoAttack;
         }
 
         public static bool CanMove()
         {
-            var extraWindup = (CustomOrbwalkMode)?100:320;
-            if (_lastAATick <= DeathWalker.now)
-                return DeathWalker.now >= _lastAATick + MyHero.AttackCastDelay * 1000 + extraWindup && _movement || MyHero.ChampionName == "Kalista";
-            return false;
+            return EloBuddy.SDK.Orbwalker.CanMove;
         }
 
         private static float MyProjectileSpeed()

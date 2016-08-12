@@ -810,7 +810,7 @@ namespace DetuksSharp
 
         public static bool canAttack()
         {
-            return canAttackAfter() == 0 && attack && cantMoveTill < now;
+            return EloBuddy.SDK.Orbwalker.CanAutoAttack;
         }
 
         public static int canAttackAfter()
@@ -821,7 +821,7 @@ namespace DetuksSharp
 
         public static bool canMove()
         {
-            return canMoveAfter() == 0 && cantMoveTill<now && move;
+            return EloBuddy.SDK.Orbwalker.CanMove;
         }
 
         public static int canMoveAfter()

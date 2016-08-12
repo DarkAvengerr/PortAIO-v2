@@ -963,7 +963,7 @@ using EloBuddy; namespace HoolaRiven
                     !_config.Item("PriorizeFarm").GetValue<bool>())
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target != null && InAutoAttackRange(target))
+                    if (target != null && target.IsVisible && target.IsHPBarRendered && target.IsTargetable && !target.IsDead && InAutoAttackRange(target))
                     {
                         return target;
                     }
@@ -977,7 +977,7 @@ using EloBuddy; namespace HoolaRiven
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 minion =>
-                                    minion.IsValidTarget() && InAutoAttackRange(minion))
+                                    minion.IsValidTarget() && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead && InAutoAttackRange(minion))
                                     .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                                     .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                                     .ThenBy(minion => minion.Health)
@@ -1015,7 +1015,7 @@ using EloBuddy; namespace HoolaRiven
                 }
 
                 //Forced target
-                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget))
+                if (_forcedTarget.IsValidTarget() && _forcedTarget.IsVisible && _forcedTarget.IsHPBarRendered && _forcedTarget.IsTargetable && !_forcedTarget.IsDead && InAutoAttackRange(_forcedTarget))
                 {
                     return _forcedTarget;
                 }
@@ -1049,7 +1049,7 @@ using EloBuddy; namespace HoolaRiven
                 if (ActiveMode != OrbwalkingMode.LastHit && ActiveMode != OrbwalkingMode.Flee)
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target.IsValidTarget() && InAutoAttackRange(target))
+                    if (target.IsValidTarget() && target.IsVisible && target.IsHPBarRendered && target.IsTargetable && !target.IsDead && InAutoAttackRange(target))
                     {
                         return target;
                     }
@@ -1080,7 +1080,7 @@ using EloBuddy; namespace HoolaRiven
                 {
                     if (!ShouldWait())
                     {
-                        if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion))
+                        if (_prevMinion.IsValidTarget() && _prevMinion.IsVisible && _prevMinion.IsHPBarRendered && _prevMinion.IsTargetable && !_prevMinion.IsDead && InAutoAttackRange(_prevMinion))
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 _prevMinion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), FarmDelay);
@@ -1093,7 +1093,7 @@ using EloBuddy; namespace HoolaRiven
 
                         result = (from minion in
                                       ObjectManager.Get<Obj_AI_Minion>()
-                                          .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) &&
+                                          .Where(minion => minion.IsValidTarget() && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead && InAutoAttackRange(minion) &&
                                           (_config.Item("AttackWards").GetValue<bool>() || !MinionManager.IsWard(minion)) &&
                                           (_config.Item("AttackPetsnTraps").GetValue<bool>() && minion.CharData.BaseSkinName != "jarvanivstandard" || MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())) &&
                                           minion.CharData.BaseSkinName != "gangplankbarrel")

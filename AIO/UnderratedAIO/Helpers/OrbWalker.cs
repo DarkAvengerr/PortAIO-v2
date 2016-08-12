@@ -464,6 +464,7 @@ namespace UnderratedAIO.Helpers
         /// <returns><c>true</c> if this instance can attack; otherwise, <c>false</c>.</returns>
         public static bool CanAttack()
         {
+            return EloBuddy.SDK.Orbwalker.CanAutoAttack;
             if (Player.ChampionName == "Graves")
             {
                 var attackDelay = 1.0740296828d * 1000 * Player.AttackDelay - 716.2381256175d;
@@ -491,6 +492,7 @@ namespace UnderratedAIO.Helpers
         /// <returns><c>true</c> if this instance can move the specified extra windup; otherwise, <c>false</c>.</returns>
         public static bool CanMove(float extraWindup, bool disableMissileCheck = false)
         {
+            return EloBuddy.SDK.Orbwalker.CanMove;
             if (_missileLaunched && Orbwalker.MissileCheck && !disableMissileCheck)
             {
                 return true;

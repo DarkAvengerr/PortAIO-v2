@@ -228,13 +228,13 @@ using EloBuddy;
         /// </summary>
         /// 
         // Fix this later - Berb
-        public static bool CanAttack => Utils.GameTimeTickCount >= LastAATick + Player.AttackDelay * 1000 && Attack;
+        public static bool CanAttack => EloBuddy.SDK.Orbwalker.CanAutoAttack;
 
         /// <summary>
         ///     Returns true if moving won't cancel the auto-attack.
         /// </summary>
         /// // Fix this later - Berb
-        public static bool CanMove(double extraWindup) => Move && (Utils.GameTimeTickCount >= LastAATick + Player.AttackCastDelay * 980 + extraWindup);
+        public static bool CanMove(double extraWindup) => Move && EloBuddy.SDK.Orbwalker.CanMove;
 
 
 
@@ -563,7 +563,7 @@ using EloBuddy;
                     !_config.Item("PriorizeFarm").GetValue<bool>())
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target != null && InAutoAttackRange(target))
+                    if (target != null && InAutoAttackRange(target) && target.IsVisible && target.IsHPBarRendered && target.IsTargetable && !target.IsDead)
                     {
                         return target;
                     }
@@ -577,7 +577,7 @@ using EloBuddy;
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 minion =>
-                                    minion.IsValidTarget() && InAutoAttackRange(minion))
+                                    minion.IsValidTarget() && InAutoAttackRange(minion) && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead)
                                     .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                                     .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                                     .ThenBy(minion => minion.Health)
@@ -605,7 +605,7 @@ using EloBuddy;
                 }
 
                 //Forced target
-                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget))
+                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget) && _forcedTarget.IsVisible && _forcedTarget.IsHPBarRendered && _forcedTarget.IsTargetable && !_forcedTarget.IsDead)
                 {
                     return _forcedTarget;
                 }
@@ -639,7 +639,7 @@ using EloBuddy;
                 if (ActiveMode != OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target.IsValidTarget() && InAutoAttackRange(target))
+                    if (target.IsValidTarget() && InAutoAttackRange(target) && target.IsVisible && target.IsHPBarRendered && target.IsTargetable && !target.IsDead)
                     {
                         return target;
                     }
@@ -668,7 +668,7 @@ using EloBuddy;
                 {
                     if (!ShouldWait())
                     {
-                        if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion))
+                        if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion) && _prevMinion.IsVisible && _prevMinion.IsHPBarRendered && _prevMinion.IsTargetable && !_prevMinion.IsDead)
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 _prevMinion, (int)((Player.AttackDelay * 1000) * LaneClearWaitTimeMod), 0);
@@ -681,7 +681,7 @@ using EloBuddy;
 
                         result = (from minion in
                                       ObjectManager.Get<Obj_AI_Minion>()
-                                          .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) &&
+                                          .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead &&
                                           (_config.Item("AttackWards").GetValue<bool>() || !MinionManager.IsWard(minion)) &&
                                           (_config.Item("AttackPetsnTraps").GetValue<bool>() && minion.CharData.BaseSkinName != "jarvanivstandard" || MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())) &&
                                           minion.CharData.BaseSkinName != "gangplankbarrel")

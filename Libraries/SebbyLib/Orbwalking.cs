@@ -282,45 +282,12 @@ namespace SebbyLib
 
         public static bool CanAttack()
         {
-            if (Player.ChampionName == "Graves")
-            {
-                var attackDelay = 1.0740296828d * 1000 * Player.AttackDelay - 716.2381256175d;
-                if (Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + attackDelay &&
-                    Player.HasBuff("GravesBasicAttackAmmo1"))
-                {
-                    return true;
-                }
-
-                return false;
-            }
-
-            if (Player.ChampionName == "Jhin")
-            {
-                if (Player.HasBuff("JhinPassiveReload"))
-                {
-                    return false;
-                }
-            }
-
-            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000;
+            return EloBuddy.SDK.Orbwalker.CanAutoAttack;
         }
 
         public static bool CanMove(float extraWindup, bool disableMissileCheck = false)
         {
-            if (_missileLaunched && Orbwalker.MissileCheck && !disableMissileCheck)
-            {
-                return true;
-            }
-
-            var localExtraWindup = 0;
-            if (_championName == "Rengar" && (Player.HasBuff("rengarqbase") || Player.HasBuff("rengarqemp")))
-            {
-                localExtraWindup = 200;
-            }
-
-            return NoCancelChamps.Contains(_championName) ||
-                   (Utils.GameTimeTickCount + Game.Ping / 2 >=
-                    LastAATick + Player.AttackCastDelay * 1000 + extraWindup + localExtraWindup);
+            return EloBuddy.SDK.Orbwalker.CanMove;
         }
 
         public static void SetMovementDelay(int delay)
@@ -926,7 +893,7 @@ namespace SebbyLib
                 if (mode != OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target.IsValidTarget() && InAutoAttackRange(target))
+                    if (target.IsValidTarget() && InAutoAttackRange(target) && !target.IsDead && target.IsHPBarRendered && target.IsVisible)
                     {
                         if(!ObjectManager.Player.UnderTurret(true) || mode == OrbwalkingMode.Combo)
                             return target;

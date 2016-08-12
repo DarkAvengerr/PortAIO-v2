@@ -457,32 +457,6 @@ using EloBuddy; namespace YasuoPro
         public static bool CanAttack()
         {
             return EloBuddy.SDK.Orbwalker.CanAutoAttack;
-            if (Player.ChampionName == "Graves")
-            {
-                var attackDelay = 1.0740296828d * 1000 * Player.AttackDelay - 716.2381256175d;
-                if (Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + attackDelay &&
-                    Player.HasBuff("GravesBasicAttackAmmo1"))
-                {
-                    return true;
-                }
-
-                return false;
-            }
-
-            if (Player.ChampionName == "Jhin")
-            {
-                if (Player.HasBuff("JhinPassiveReload"))
-                {
-                    return false;
-                }
-            }
-
-            if (Player.IsCastingInterruptableSpell())
-            {
-                return false;
-            }
-
-            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000;
         }
 
         /// <summary>
@@ -493,20 +467,6 @@ using EloBuddy; namespace YasuoPro
         public static bool CanMove(float extraWindup, bool disableMissileCheck = false)
         {
             return EloBuddy.SDK.Orbwalker.CanMove;
-            if (_missileLaunched && Orbwalker.MissileCheck && !disableMissileCheck)
-            {
-                return true;
-            }
-
-            var localExtraWindup = 0;
-            if (_championName == "Rengar" && (Player.HasBuff("rengarqbase") || Player.HasBuff("rengarqemp")))
-            {
-                localExtraWindup = 200;
-            }
-
-            return NoCancelChamps.Contains(_championName) ||
-                   (Utils.GameTimeTickCount + Game.Ping / 2 >=
-                    LastAATick + Player.AttackCastDelay * 1000 + extraWindup + localExtraWindup);
         }
 
         /// <summary>
@@ -1148,7 +1108,7 @@ using EloBuddy; namespace YasuoPro
                     !_config.Item("PriorizeFarm").GetValue<bool>())
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target != null && InAutoAttackRange(target))
+                    if (target != null && InAutoAttackRange(target) && target.IsVisible && target.IsHPBarRendered && target.IsTargetable && !target.IsDead)
                     {
                         return target;
                     }
@@ -1207,7 +1167,7 @@ using EloBuddy; namespace YasuoPro
                 {
                     var MinionList =
                         ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
+                            .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead)
                             .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                             .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                             .ThenBy(minion => minion.Health)
@@ -1255,7 +1215,7 @@ using EloBuddy; namespace YasuoPro
                 }
 
                 //Forced target
-                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget))
+                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget) && _forcedTarget.IsVisible && _forcedTarget.IsHPBarRendered && _forcedTarget.IsTargetable && !_forcedTarget.IsDead)
                 {
                     return _forcedTarget;
                 }
@@ -1294,7 +1254,7 @@ using EloBuddy; namespace YasuoPro
                     if (mode != OrbwalkingMode.LaneClear || !ShouldWait())
                     {
                         var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                        if (target.IsValidTarget() && InAutoAttackRange(target))
+                        if (target.IsValidTarget() && InAutoAttackRange(target) && target.IsVisible && target.IsHPBarRendered && target.IsTargetable && !target.IsDead)
                         {
                             return target;
                         }
@@ -1338,7 +1298,7 @@ using EloBuddy; namespace YasuoPro
                             MinionManager.GetMinions(Player.Position, Player.AttackRange + 200)
                                 .Where(
                                     minion =>
-                                        InAutoAttackRange(minion) && closestTower.Distance(minion, true) < 900 * 900)
+                                        InAutoAttackRange(minion) && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead && closestTower.Distance(minion, true) < 900 * 900)
                                 .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                                 .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                                 .ThenByDescending(minion => minion.MaxHealth)
@@ -1511,7 +1471,7 @@ using EloBuddy; namespace YasuoPro
                 {
                     if (!ShouldWait())
                     {
-                        if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion))
+                        if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion) && _prevMinion.IsVisible && _prevMinion.IsHPBarRendered && _prevMinion.IsTargetable && !_prevMinion.IsDead)
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 _prevMinion, (int)(Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay);
@@ -1526,7 +1486,7 @@ using EloBuddy; namespace YasuoPro
                             ObjectManager.Get<Obj_AI_Minion>()
                                 .Where(
                                     minion =>
-                                        minion.IsValidTarget() && InAutoAttackRange(minion) && ShouldAttackMinion(minion))
+                                        minion.IsValidTarget() && InAutoAttackRange(minion) && ShouldAttackMinion(minion) && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead)
                                   let predHealth =
                                       HealthPrediction.LaneClearHealthPrediction(
                                           minion, (int)(Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay)

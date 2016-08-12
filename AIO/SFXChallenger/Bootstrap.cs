@@ -35,7 +35,8 @@ using TargetSelector = SFXChallenger.SFXTargetSelector.TargetSelector;
 
 #endregion
 
-using EloBuddy; namespace SFXChallenger
+using EloBuddy;
+namespace SFXChallenger
 {
     public class Bootstrap
     {
@@ -45,50 +46,29 @@ using EloBuddy; namespace SFXChallenger
         {
             try
             {
-                AppDomain.CurrentDomain.UnhandledException +=
-                    delegate(object sender, UnhandledExceptionEventArgs eventArgs)
-                    {
-                        try
-                        {
-                            var ex = sender as Exception;
-                            if (ex != null)
-                            {
-                                Global.Logger.AddItem(new LogItem(ex));
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex);
-                        }
-                    };
-
                 GameObjects.Initialize();
-
-                CustomEvents.Game.OnGameLoad += delegate
+                try
                 {
-                    try
+                    _champion = LoadChampion();
+                    if (_champion != null)
                     {
-                        _champion = LoadChampion();
-                        if (_champion != null)
+                        Global.Champion = _champion;
+                        if (Global.Reset.Enabled)
                         {
-                            Global.Champion = _champion;
-                            if (Global.Reset.Enabled)
-                            {
-                                Reset.Force(
-                                    Global.Name, Global.Reset.MaxAge, TargetSelector.Weights.RestoreDefaultWeights);
-                            }
-                            LeagueSharp.Common.Utility.DelayAction.Add(1000, () => Conflicts.Check(ObjectManager.Player.ChampionName));
-                            Update.Check(
-                                Global.Name, Assembly.GetExecutingAssembly().GetName().Version, Global.UpdatePath, 10000);
-                            Core.Init(_champion, 50);
-                            Core.Boot();
+                            Reset.Force(
+                                Global.Name, Global.Reset.MaxAge, TargetSelector.Weights.RestoreDefaultWeights);
                         }
+                        LeagueSharp.Common.Utility.DelayAction.Add(1000, () => Conflicts.Check(ObjectManager.Player.ChampionName));
+                        Update.Check(
+                            Global.Name, Assembly.GetExecutingAssembly().GetName().Version, Global.UpdatePath, 10000);
+                        Core.Init(_champion, 50);
+                        Core.Boot();
                     }
-                    catch (Exception ex)
-                    {
-                        Global.Logger.AddItem(new LogItem(ex));
-                    }
-                };
+                }
+                catch (Exception ex)
+                {
+                    Global.Logger.AddItem(new LogItem(ex));
+                }
             }
             catch (Exception ex)
             {
@@ -119,7 +99,7 @@ using EloBuddy; namespace SFXChallenger
                                         string.Format("{0}Testing", ObjectManager.Player.ChampionName),
                                         StringComparison.OrdinalIgnoreCase));
                     }
-                    return type != null ? (IChampion) DynamicInitializer.NewInstance(type) : null;
+                    return type != null ? (IChampion)DynamicInitializer.NewInstance(type) : null;
                 }
             }
             catch (Exception ex)
