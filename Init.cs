@@ -55,17 +55,17 @@ namespace PortAIO
                 var match = new Regex(@"(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})").Match(DownloadServerVersion);
 
                 if (!match.Success) return;
-                Chat.Print("<b><font color=\"#FFFFFF\">[</font></b><b><font color=\"#3366CC\">PortAIO-Common</font></b><b><font color=\"#FFFFFF\">]</font></b> <font color=\"#FFFFFF\">You are up-to-date. Enjoy the game.</font></b>");
+                Chat.Print("<b><font color=\"#FFFFFF\">[</font></b><b><font color=\"#3366CC\">PortAIO-V2</font></b><b><font color=\"#FFFFFF\">]</font></b> <font color=\"#FFFFFF\">You are up-to-date. Enjoy the game.</font></b>");
 
                 var gitVersion = new System.Version($"{match.Groups[1]}.{match.Groups[2]}.{match.Groups[3]}.{match.Groups[4]}");
 
                 if (gitVersion <= System.Reflection.Assembly.GetExecutingAssembly().GetName().Version) return;
-                Chat.Print("<b><font color=\"#FFFFFF\">[</font></b><b><font color=\"#00e5e5\">PortAIO-Common</font></b><b><font color=\"#FFFFFF\">]</font></b> <font color=\"#FFFFFF\">Oudated:</font>You are using {1}, while the latest is {0}, please run the PortAIO-Updater.", gitVersion, System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
+                Chat.Print("<b><font color=\"#FFFFFF\">[</font></b><b><font color=\"#00e5e5\">PortAIO-V2</font></b><b><font color=\"#FFFFFF\">]</font></b> <font color=\"#FFFFFF\">Oudated:</font>You are using {1}, while the latest is {0}, please run the PortAIO-Updater.", gitVersion, System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                Chat.Print("<b><font color=\"#FFFFFF\">[</font></b><b><font color=\"#00e5e5\"> PortAIO-Common</font></b><b><font color=\"#FFFFFF\">]</font></b><b><font color=\"#FFFFFF\"> Unable to fetch latest version</font></b>");
+                Chat.Print("<b><font color=\"#FFFFFF\">[</font></b><b><font color=\"#00e5e5\"> PortAIO-V2</font></b><b><font color=\"#FFFFFF\">]</font></b><b><font color=\"#FFFFFF\"> Unable to fetch latest version</font></b>");
             }
         }
 
