@@ -310,7 +310,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
                 if (Config.Item("SS").GetValue<bool>())
                 {
-                    if (!enemy.IsVisible && !enemy.IsDead)
+                    if (!enemy.IsVisible && !enemy.IsDead && !enemy.IsHPBarRendered && !enemy.IsTargetable)
                     {
                         var ChampionInfoOne = OKTWtracker.ChampionInfoList.Find(x => x.NetworkId == enemy.NetworkId);
                         if (ChampionInfoOne != null && enemy != Program.jungler)
@@ -327,7 +327,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
                     }
                 }
                 
-                if (enemy.IsValidTarget() && ShowClicks)
+                if (enemy.IsValidTarget() && enemy.IsVisible && enemy.IsHPBarRendered && ShowClicks)
                 {
                     var lastWaypoint = enemy.GetWaypoints().Last().To3D();
                     if (lastWaypoint.IsValid())
@@ -395,7 +395,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
                 if (enemy.IsDead)
                     kolor = System.Drawing.Color.Gray;
-                else if (!enemy.IsVisible)
+                else if (!enemy.IsVisible && !enemy.IsHPBarRendered)
                     kolor = System.Drawing.Color.OrangeRed;
 
                 var kolorHP = System.Drawing.Color.GreenYellow;
@@ -493,8 +493,15 @@ namespace OneKeyToWin_AIO_Sebby.Core
                     //Drawing.DrawText(posX - 70, posY + positionDraw, kolor, enemy.Level + " lvl");
                 }
 
+                // something after this causes crash
+
+                if (enemy == null)
+                {
+                    continue;
+                }
+
                 var Distance = Player.Distance(enemy.Position);
-                if (GankAlert && !enemy.IsDead && Distance > 1200)
+                if (GankAlert && !enemy.IsDead && enemy.IsHPBarRendered && enemy.IsVisible && Distance > 1200)
                 {
                     var wts = Drawing.WorldToScreen(ObjectManager.Player.Position.Extend(enemy.Position, positionGang));
 
@@ -507,16 +514,14 @@ namespace OneKeyToWin_AIO_Sebby.Core
                     if ((int)enemy.HealthPercent < 100)
                         Drawing.DrawLine((wts[0] + ((int)enemy.HealthPercent) / 2), wts[1], wts[0] + 50, wts[1], 8, System.Drawing.Color.White);
 
-                    if (enemy.IsVisible)
+                    if (enemy.IsVisible && !enemy.IsDead && enemy.IsHPBarRendered)
                     {
-                        
-                        if (Program.jungler.NetworkId == enemy.NetworkId)
+                        if (Program.jungler.NetworkId == enemy.NetworkId && Program.jungler != ObjectManager.Player)
                         {
                             DrawFontTextMap(Tahoma13B, enemy.ChampionName, Player.Position.Extend(enemy.Position, positionGang), SharpDX.Color.OrangeRed);
                         }
                         else
                             DrawFontTextMap(Tahoma13, enemy.ChampionName, Player.Position.Extend(enemy.Position, positionGang), SharpDX.Color.White);
-
                     }
                     else 
                     {
@@ -537,7 +542,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
                     }
   
 
-                    if (Distance < 3500 && enemy.IsVisible && !Render.OnScreen(Drawing.WorldToScreen(enemy.Position)) && Program.jungler != null)
+                    if (Distance < 3500 && enemy.IsVisible && !enemy.IsDead && enemy.IsHPBarRendered && !Render.OnScreen(Drawing.WorldToScreen(enemy.Position)) && Program.jungler != null)
                     {
                         if (Program.jungler.NetworkId == enemy.NetworkId)
                         {

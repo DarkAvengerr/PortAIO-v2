@@ -202,7 +202,7 @@ namespace BrianSharp.Plugin
             }
         }
 
-        private static void AfterAttack(AttackableUnit target)
+        private static void AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             if (!W.IsReady())
             {

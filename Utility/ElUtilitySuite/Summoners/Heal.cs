@@ -110,12 +110,17 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         {
             try
             {
+                if (HealSpell == null || HealSpell.Slot == SpellSlot.Unknown)
+                {
+                    return;
+                }
+
                 if (this.Player.IsDead || !this.HealSpell.IsReady() || this.Player.InFountain() || this.Player.IsRecalling() || !this.Menu.Item("Heal.Activated").IsActive() || this.Menu.Item("PauseHealHotkey").GetValue<KeyBind>().Active)
                 {
                     return;
                 }
 
-                foreach (var ally in EloBuddy.SDK.EntityManager.Heroes.AllHeroes.Where(x => !x.IsDead && x.IsHPBarRendered && x.IsVisible))
+                foreach (var ally in EloBuddy.SDK.EntityManager.Heroes.Allies.Where(x => !x.IsDead && x.IsHPBarRendered && x.IsVisible))
                 {
                     if (!this.Menu.Item($"healon{ally.ChampionName}").IsActive() || ally.IsRecalling() || ally.IsInvulnerable || ally.HasBuff("ChronoShift"))
                     {

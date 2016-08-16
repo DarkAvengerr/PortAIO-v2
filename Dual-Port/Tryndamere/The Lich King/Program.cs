@@ -8,9 +8,9 @@ using LeagueSharp.Common;
 using LeagueSharp;
 using SharpDX;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace TheLichKing
+using EloBuddy;
+using LeagueSharp.Common;
+namespace TheLichKing
 {
     class Program
     {
@@ -50,14 +50,8 @@ using EloBuddy;
             fleeMenu.AddItem(new MenuItem("useEFlee", "Use E")).SetValue(new KeyBind('Z', KeyBindType.Press));
 
             Menu.AddToMainMenu();
-            Drawing.OnDraw += Drawing_OnDraw;
             Game.OnUpdate += Game_OnGameUpdate;
             Chat.Print("I'm a DK");
-        }
-
-        static void Drawing_OnDraw(EventArgs args)
-        {
-            throw new NotImplementedException();
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
@@ -65,15 +59,14 @@ using EloBuddy;
             if (Player.IsDead)
                 return;
             {
-
-
-                target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-
+                target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical) ?? null;
                 RunNigger();
-                if (target.IsValid && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                if (target != null)
                 {
-                    MockingShout();
-                    
+                    if (target.IsValidTarget() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                    {
+                        MockingShout();
+                    }
                 }
                 UndyingRage();
                 Bloodlust();
@@ -91,7 +84,7 @@ using EloBuddy;
 
         private static void Bloodlust()
         {
-            if (Q.IsReady() && (Player.Health / Player.MaxHealth) * 100 < Menu.Item("qBelow").GetValue<Slider>().Value && !Player.HasBuff("UndyingRage",true))
+            if (Q.IsReady() && (Player.Health / Player.MaxHealth) * 100 < Menu.Item("qBelow").GetValue<Slider>().Value && !Player.HasBuff("UndyingRage", true))
             {
                 if (ObjectManager.Get<AIHeroClient>().Where(x => x.IsEnemy && x.Distance(Player.Position) <= 1200).Count() > 0)
                 {
@@ -105,16 +98,6 @@ using EloBuddy;
             if (W.IsReady() && !target.IsFacing(Player))
             {
                 W.Cast();
-            }
-        }
-
-        private static void SpinningSlash()
-        {
-            if (E.IsReady() && Player.Distance(target) <= E.Range - 125)
-            {      
-                //var extendPos = target.ServerPosition.To2D().Extend(target.ServerPosition.To2D(), 200).To3D();       
-
-                E.Cast(target);
             }
         }
 

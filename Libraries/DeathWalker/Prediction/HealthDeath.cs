@@ -36,22 +36,12 @@ namespace DetuksSharp.Prediction
 
             GameObject.OnCreate += onCreate;
             GameObject.OnDelete += onDelete;
-
-            Obj_AI_Base.OnSpellCast += onDoCast;
-
-            Obj_AI_Base.OnSpellCast += onMeleeStartAutoAttack;
+            Obj_AI_Base.OnBasicAttack += onMeleeStartAutoAttack;
             Spellbook.OnStopCast += onMeleeStopAutoAttack;
-        }
-
-        private static void onDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-
         }
 
         private static void onMeleeStartAutoAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-
-
             if (sender is Obj_AI_Turret)
             {
                 activeTowerTargets.Remove(sender.NetworkId);
@@ -62,12 +52,8 @@ namespace DetuksSharp.Prediction
                     true);
 
                 activeTowerTargets.Add(sender.NetworkId, dMake);
-
-
             }
 
-            if (!args.SData.IsAutoAttack())
-                return;
             if (args.Target != null && args.Target is Obj_AI_Base && !sender.IsMe)
             {
 
@@ -86,6 +72,11 @@ namespace DetuksSharp.Prediction
             if(!sender.IsMelee())
                 return;
 
+            if (sender is AIHeroClient)
+            {
+                DeathWalker.lastDmg = now;
+            }
+
             if (args.Target is Obj_AI_Base)
             {
                 activeDamageMakers.Remove(sender.NetworkId);
@@ -97,23 +88,14 @@ namespace DetuksSharp.Prediction
 
                 activeDamageMakers.Add(sender.NetworkId, dMake);
             }
-
-            if (sender is AIHeroClient)
-            {
-                DeathWalker.lastDmg = now;
-            }
         }
 
         private static void onMeleeStopAutoAttack(Obj_AI_Base sender, SpellbookStopCastEventArgs args)
         {
-            //if (!sender.Owner.IsMelee())
-            //    return;
-
             if (activeDamageMakers.ContainsKey(sender.NetworkId))
                 activeDamageMakers.Remove(sender.NetworkId);
 
-            //Ranged aswell
-            if (args.DestroyMissile && activeDamageMakers.ContainsKey((int)args.MissileNetworkId))
+            if ((args.DestroyMissile && args.StopAnimation) && activeDamageMakers.ContainsKey((int)args.MissileNetworkId))
                 activeDamageMakers.Remove((int)args.MissileNetworkId);
             if (damagerSources.ContainsKey(sender.NetworkId))
                 damagerSources[sender.NetworkId].setTarget(null);
@@ -167,7 +149,10 @@ namespace DetuksSharp.Prediction
                         mis,
                         mis.SData);
 
-                    activeDamageMakers.Add(mis.NetworkId, dMake);
+                    if (!activeDamageMakers.ContainsKey(mis.NetworkId))
+                    {
+                        activeDamageMakers.Add(mis.NetworkId, dMake);
+                    }
                 }
             }
         }

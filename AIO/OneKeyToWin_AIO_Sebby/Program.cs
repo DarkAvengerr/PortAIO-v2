@@ -259,15 +259,8 @@ namespace OneKeyToWin_AIO_Sebby
                 new Core.OKTWdraws().LoadOKTW();
             }
 
-            new Core.OKTWtracker().LoadOKTW();
-
             Config.AddItem(new MenuItem("aiomodes", "!!! PRESS F5 TO RELOAD MODE !!!"));
-            //new Core.OKTWtargetSelector().LoadOKTW();
-            if (AIOmode != 2)
-            {
-                //new Core.OKTWfarmLogic().LoadOKTW();
-            }
-            //new AfkMode().LoadOKTW();
+
             Config.AddToMainMenu();
             Game.OnUpdate += OnUpdate;
             SebbyLib.Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
@@ -304,7 +297,7 @@ namespace OneKeyToWin_AIO_Sebby
                 return;
             }
 
-            foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsMelee && enemy.IsValidTarget(dodgeRange) && enemy.IsFacing(Player) && Config.Item("posAssistant" + enemy.ChampionName).GetValue<bool>()))
+            foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsMelee && enemy.IsValidTarget(dodgeRange) && enemy.IsVisible && enemy.IsHPBarRendered && enemy.IsFacing(Player) && Config.Item("posAssistant" + enemy.ChampionName).GetValue<bool>()))
             {
                 var points = OktwCommon.CirclePoints(20, 250, Player.Position);
 
@@ -399,7 +392,7 @@ namespace OneKeyToWin_AIO_Sebby
                 {
                     timer = (int)(enemySpawn.Position.Distance(Player.Position) / 370);
                 }
-                else if (jungler.IsVisible && jungler.IsHPBarRendered)
+                else if (jungler.IsVisible && jungler.IsHPBarRendered && !jungler.IsDead)
                 {
                     float Way = 0;
                     var JunglerPath = Player.GetPath(Player.Position, jungler.Position);
@@ -665,7 +658,7 @@ namespace OneKeyToWin_AIO_Sebby
             {
                 if (jungler == Player)
                     drawText("Jungler not detected", Player.Position, System.Drawing.Color.Yellow, 100);
-                else if (jungler.IsDead)
+                else if (jungler.IsDead && !jungler.IsVisible && !jungler.IsHPBarRendered)
                     drawText("Jungler dead " + timer, Player.Position, System.Drawing.Color.Cyan, 100);
                 else if (jungler.IsVisible && jungler.IsHPBarRendered)
                     drawText("Jungler visable " + timer, Player.Position, System.Drawing.Color.GreenYellow, 100);

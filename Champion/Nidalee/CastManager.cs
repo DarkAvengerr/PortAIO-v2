@@ -14,6 +14,10 @@ namespace KurisuNidalee
         // Human Q Logic
         internal static void CastJavelin(Obj_AI_Base target, string mode)
         {
+            if (target == null)
+            {
+                return;
+            }
             // if not harass mode ignore mana check
             if (!KL.CatForm() && KL.CanUse(KL.Spells["Javelin"], true, mode))
             {
@@ -107,7 +111,11 @@ namespace KurisuNidalee
 
         // Human W Logic
         internal static void CastBushwhack(Obj_AI_Base target, string mode)
-        {           
+        {
+            if (target == null)
+            {
+                return;
+            }
             // if not harass mode ignore mana check
             if (!KL.CatForm() && KL.CanUse(KL.Spells["Bushwhack"], true, mode))
             {
@@ -144,6 +152,10 @@ namespace KurisuNidalee
         // Cougar Q Logic
         internal static void CastTakedown(Obj_AI_Base target, string mode)
         {
+            if (target == null)
+            {
+                return;
+            }
             if (KL.CatForm() && KL.CanUse(KL.Spells["Takedown"], false, mode))
             {
                 if (target.IsValidTarget(KL.Player.AttackRange + KL.Spells["Takedown"].Range))
@@ -156,6 +168,10 @@ namespace KurisuNidalee
         // Cougar W Logic
         internal static void CastPounce(Obj_AI_Base target, string mode)
         {
+            if (target == null)
+            {
+                return;
+            }
             // check the actual spell timer and if we have it enabled in our menu
             if (!KL.CatForm() || !KL.CanUse(KL.Spells["Pounce"], false, mode)) 
                 return;
@@ -246,6 +262,10 @@ namespace KurisuNidalee
         // Cougar E Logic
         internal static void CastSwipe(Obj_AI_Base target, string mode)
         {
+            if (target == null)
+            {
+                return;
+            }
             if (KL.CatForm() && KL.CanUse(KL.Spells["Swipe"], false, mode))
             {
                 if (target.IsValidTarget(KL.Spells["Swipe"].Range))
@@ -283,6 +303,10 @@ namespace KurisuNidalee
 
         internal static void SwitchForm(Obj_AI_Base target, string mode)
         {
+            if (target == null)
+            {
+                return;
+            }
             // catform -> human
             if (KL.CatForm() && KL.CanUse(KL.Spells["Aspect"], false, mode))
             {

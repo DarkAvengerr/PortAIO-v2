@@ -247,20 +247,14 @@ namespace UnderratedAIO.Helpers
             _championName = Player.ChampionName;
             AutoAttack = new Spell(SpellSlot.Unknown, GetRealAutoAttackRange(null));
             AutoAttack.SetTargetted(Player.BasicAttack.SpellCastTime, Player.BasicAttack.MissileSpeed);
-            Obj_AI_Base.OnSpellCast += OnProcessSpell;
+
+            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnDoCast;
-            EloBuddy.Player.OnBasicAttack += Player_OnBasicAttack;
             Spellbook.OnStopCast += SpellbookOnStopCast;
             AIHeroClient.OnPlayAnimation += AIHeroClient_OnPlayAnimation;
+            Obj_AI_Base.OnBasicAttack += new Obj_AI_BaseOnBasicAttack(OnBasicAttack);
         }
 
-        private static void Player_OnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            if (sender.IsMe)
-            {
-                _missileLaunched = true;
-            }
-        }
 
         private static void AIHeroClient_OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
         {
@@ -442,7 +436,7 @@ namespace UnderratedAIO.Helpers
             var myRange = GetRealAutoAttackRange(target);
             return
                 Vector2.DistanceSquared(
-                    target is Obj_AI_Base ? ((Obj_AI_Base) target).ServerPosition.To2D() : target.Position.To2D(),
+                    target is Obj_AI_Base ? ((Obj_AI_Base)target).ServerPosition.To2D() : target.Position.To2D(),
                     Player.ServerPosition.To2D()) <= myRange * myRange;
         }
 
@@ -464,7 +458,6 @@ namespace UnderratedAIO.Helpers
         /// <returns><c>true</c> if this instance can attack; otherwise, <c>false</c>.</returns>
         public static bool CanAttack()
         {
-            return EloBuddy.SDK.Orbwalker.CanAutoAttack;
             if (Player.ChampionName == "Graves")
             {
                 var attackDelay = 1.0740296828d * 1000 * Player.AttackDelay - 716.2381256175d;
@@ -492,7 +485,6 @@ namespace UnderratedAIO.Helpers
         /// <returns><c>true</c> if this instance can move the specified extra windup; otherwise, <c>false</c>.</returns>
         public static bool CanMove(float extraWindup, bool disableMissileCheck = false)
         {
-            return EloBuddy.SDK.Orbwalker.CanMove;
             if (_missileLaunched && Orbwalker.MissileCheck && !disableMissileCheck)
             {
                 return true;
@@ -563,7 +555,7 @@ namespace UnderratedAIO.Helpers
             {
                 if (Player.Path.Length > 0)
                 {
-                    EloBuddy.Player.IssueOrder(GameObjectOrder.HoldPosition, playerPosition);
+                    EloBuddy.Player.IssueOrder(GameObjectOrder.Stop, playerPosition);
                     LastMoveCommandPosition = playerPosition;
                     LastMoveCommandT = Utils.GameTimeTickCount - 70;
                 }
@@ -639,7 +631,7 @@ namespace UnderratedAIO.Helpers
             }
             try
             {
-                if (target.IsValidTarget() && !target.IsDead && target.IsTargetable && target.IsVisible && EloBuddy.SDK.Orbwalker.CanAutoAttack && Attack)
+                if (target.IsValidTarget() && CanAttack() && Attack)
                 {
                     DisableNextAttack = false;
                     FireBeforeAttack(target);
@@ -661,7 +653,7 @@ namespace UnderratedAIO.Helpers
                     }
                 }
 
-                if (EloBuddy.SDK.Orbwalker.CanMove && Move)
+                if (CanMove(extraWindup) && Move)
                 {
                     if (Orbwalker.LimitAttackSpeed && (Player.AttackDelay < 1 / 2.6f) && _autoattackCounter % 3 != 0 &&
                         !CanMove(500, true))
@@ -672,8 +664,8 @@ namespace UnderratedAIO.Helpers
                         target.Position.Distance(Player.Position) + 25 < GetRealAutoAttackRange(target) &&
                         target is AIHeroClient && Game.CursorPos.Distance(target.Position) < 300)
                     {
-                        AIHeroClient tar = (AIHeroClient) target;
-                        var prediction = AutoAttack.GetPrediction((Obj_AI_Base) target);
+                        AIHeroClient tar = (AIHeroClient)target;
+                        var prediction = AutoAttack.GetPrediction((Obj_AI_Base)target);
                         var pos = prediction.UnitPosition;
                         if (Player.ChampionName == "Nocturne" &&
                             (tar.HasBuffOfType(BuffType.Fear) || tar.HasBuffOfType(BuffType.Flee)))
@@ -681,7 +673,7 @@ namespace UnderratedAIO.Helpers
                             pos = position;
                         }
                         if (Player.Distance(target) > target.BoundingRadius &&
-                            !CombatHelper.IsFacing((Obj_AI_Base) target, Player.Position, 120f) && tar.IsMoving)
+                            !CombatHelper.IsFacing((Obj_AI_Base)target, Player.Position, 120f) && tar.IsMoving)
                         {
                             AutoAttack.Delay = Player.BasicAttack.SpellCastTime;
                             AutoAttack.Speed = Player.BasicAttack.MissileSpeed;
@@ -713,9 +705,9 @@ namespace UnderratedAIO.Helpers
         /// </summary>
         /// <param name="spellbook">The spellbook.</param>
         /// <param name="args">The <see cref="SpellbookStopCastEventArgs" /> instance containing the event data.</param>
-        private static void SpellbookOnStopCast(Obj_AI_Base spellbook, SpellbookStopCastEventArgs args)
+        private static void SpellbookOnStopCast(Obj_AI_Base sender, SpellbookStopCastEventArgs args)
         {
-            if (spellbook.IsValid && spellbook.IsMe && args.DestroyMissile && args.StopAnimation)
+            if (sender.IsMe && EloBuddy.SDK.Orbwalker.IsRanged && (args.DestroyMissile || args.StopAnimation) && !EloBuddy.SDK.Orbwalker.CanBeAborted)
             {
                 ResetAutoAttackTimer();
             }
@@ -764,48 +756,66 @@ namespace UnderratedAIO.Helpers
         /// </summary>
         /// <param name="unit">The unit.</param>
         /// <param name="Spell">The <see cref="GameObjectProcessSpellCastEventArgs" /> instance containing the event data.</param>
-        private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
+        private static void OnProcessSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            try
+            if (sender.IsMe)
             {
-                var spellName = Spell.SData.Name;
+                if (IsAutoAttack(args.SData.Name))
+                {
+                    var target = args.Target as AttackableUnit;
 
-                if (unit.IsMe && IsAutoAttackReset(spellName) && Spell.SData.SpellCastTime == 0)
+                    if (target != null && target.IsValid)
+                    {
+                        FireOnAttack(sender, _lastTarget);
+                    }
+                }
+                if (IsAutoAttackReset(args.SData.Name) && Math.Abs(args.SData.CastTime) < 1.401298E-45f)
                 {
                     ResetAutoAttackTimer();
                 }
-
-                if (!IsAutoAttack(spellName))
-                {
-                    return;
-                }
-
-                if (unit.IsMe &&
-                    (Spell.Target is Obj_AI_Base || Spell.Target is Obj_BarracksDampener || Spell.Target is Obj_HQ))
-                {
-                    LastAATick = Utils.GameTimeTickCount - Game.Ping / 2;
-                    _missileLaunched = false;
-                    LastMoveCommandT = 0;
-                    _autoattackCounter++;
-
-                    if (Spell.Target is Obj_AI_Base)
-                    {
-                        var target = (Obj_AI_Base) Spell.Target;
-                        if (target.IsValid)
-                        {
-                            FireOnTargetSwitch(target);
-                            _lastTarget = target;
-                        }
-                    }
-                }
-
-                FireOnAttack(unit, _lastTarget);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
             }
         }
+
+        private static void OnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (sender.IsMe)
+            {
+                if (IsAutoAttack(args.SData.Name))
+                {
+                    var target = args.Target as AttackableUnit;
+
+                    if (target != null && target.IsValid)
+                    {
+                        FireOnAttack(sender, _lastTarget);
+                    }
+                }
+            }
+
+            if (sender.IsMe && (args.Target is Obj_AI_Base || args.Target is Obj_BarracksDampener || args.Target is Obj_HQ))
+            {
+                LastAATick = Utils.GameTimeTickCount - Game.Ping / 2;
+                _missileLaunched = false;
+                LastMoveCommandT = 0;
+                _autoattackCounter++;
+
+                if (args.Target is Obj_AI_Base)
+                {
+                    var target = (Obj_AI_Base)args.Target;
+                    if (target.IsValid)
+                    {
+                        FireOnTargetSwitch(target);
+                        _lastTarget = target;
+                    }
+                }
+            }
+
+            if (sender is Obj_AI_Turret && args.Target is Obj_AI_Base)
+            {
+                LastTargetTurrets[sender.NetworkId] = (Obj_AI_Base)args.Target;
+            }
+        }
+
+        internal static readonly Dictionary<int, Obj_AI_Base> LastTargetTurrets = new Dictionary<int, Obj_AI_Base>();
 
         /// <summary>
         ///     The before attack event arguments.
@@ -1139,7 +1149,7 @@ namespace UnderratedAIO.Helpers
                                 minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                                 InAutoAttackRange(minion) && MinionManager.IsMinion(minion, false) &&
                                 HealthPrediction.LaneClearHealthPrediction(
-                                    minion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay) <=
+                                    minion, (int)(Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay) <=
                                 Player.GetAutoAttackDamage(minion));
             }
 
@@ -1174,7 +1184,7 @@ namespace UnderratedAIO.Helpers
                 var mode = ActiveMode;
 
                 //Forced target
-                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget) && _forcedTarget.IsVisible && _forcedTarget.IsHPBarRendered && !_forcedTarget.IsDead && _forcedTarget.IsTargetable)
+                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget))
                 {
                     return _forcedTarget;
                 }
@@ -1183,7 +1193,7 @@ namespace UnderratedAIO.Helpers
                     !_config.Item("PriorizeFarm").GetValue<bool>())
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target != null && InAutoAttackRange(target) && target.IsHPBarRendered && target.IsVisible && !target.IsDead && target.IsTargetable)
+                    if (target != null && InAutoAttackRange(target))
                     {
                         return target;
                     }
@@ -1198,7 +1208,7 @@ namespace UnderratedAIO.Helpers
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 minion =>
-                                    minion.IsValidTarget() && InAutoAttackRange(minion) && minion.IsHPBarRendered && minion.IsVisible && !minion.IsDead && minion.IsTargetable &&
+                                    minion.IsValidTarget() && InAutoAttackRange(minion) &&
                                     NetworkIDBlackList.All(n => n.networkId != minion.NetworkId))
                             .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                             .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
@@ -1207,9 +1217,9 @@ namespace UnderratedAIO.Helpers
 
                     foreach (var minion in MinionList)
                     {
-                        var t = (int) (Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
-                                1000 * (int) Math.Max(0, Player.Distance(minion) - Player.BoundingRadius) /
-                                (int) GetMyProjectileSpeed();
+                        var t = (int)(Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2 +
+                                1000 * (int)Math.Max(0, Player.Distance(minion) - Player.BoundingRadius) /
+                                (int)GetMyProjectileSpeed();
 
                         if (mode == OrbwalkingMode.Freeze)
                         {
@@ -1292,7 +1302,7 @@ namespace UnderratedAIO.Helpers
                 if (mode != OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target.IsValidTarget() && InAutoAttackRange(target) && target.IsHPBarRendered && target.IsVisible && !target.IsDead && target.IsTargetable)
+                    if (target.IsValidTarget() && InAutoAttackRange(target))
                     {
                         return target;
                     }
@@ -1305,14 +1315,14 @@ namespace UnderratedAIO.Helpers
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 mob =>
-                                    mob.IsValidTarget() && mob.Team == GameObjectTeam.Neutral && InAutoAttackRange(mob) && mob.IsTargetable &&
+                                    mob.IsValidTarget() && mob.Team == GameObjectTeam.Neutral && InAutoAttackRange(mob) &&
                                     mob.CharData.BaseSkinName != "gangplankbarrel");
 
                     result = _config.Item("Smallminionsprio").GetValue<bool>()
                         ? jminions.MinOrDefault(mob => mob.MaxHealth)
                         : jminions.MaxOrDefault(mob => mob.MaxHealth);
 
-                    if (result != null && result.IsVisible && !result.IsDead)
+                    if (result != null)
                     {
                         return result;
                     }
@@ -1335,7 +1345,7 @@ namespace UnderratedAIO.Helpers
                             MinionManager.GetMinions(Player.Position, Player.AttackRange + 200)
                                 .Where(
                                     minion =>
-                                        InAutoAttackRange(minion) && closestTower.Distance(minion, true) < 900 * 900 && minion.IsTargetable && minion.IsVisible && minion.IsHPBarRendered && !minion.IsDead)
+                                        InAutoAttackRange(minion) && closestTower.Distance(minion, true) < 900 * 900)
                                 .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                                 .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                                 .ThenByDescending(minion => minion.MaxHealth)
@@ -1357,20 +1367,20 @@ namespace UnderratedAIO.Helpers
                                 var turretStarTick = HealthPrediction.TurretAggroStartTick(
                                     turretMinion as Obj_AI_Minion);
                                 // from healthprediction (don't blame me :S)
-                                var turretLandTick = turretStarTick + (int) (closestTower.AttackCastDelay * 1000) +
+                                var turretLandTick = turretStarTick + (int)(closestTower.AttackCastDelay * 1000) +
                                                      1000 *
                                                      Math.Max(
                                                          0,
                                                          (int)
                                                              (turretMinion.Distance(closestTower) -
                                                               closestTower.BoundingRadius)) /
-                                                     (int) (closestTower.BasicAttack.MissileSpeed + 70);
+                                                     (int)(closestTower.BasicAttack.MissileSpeed + 70);
                                 // calculate the HP before try to balance it
                                 for (float i = turretLandTick + 50;
                                     i < turretLandTick + 10 * closestTower.AttackDelay * 1000 + 50;
                                     i = i + closestTower.AttackDelay * 1000)
                                 {
-                                    var time = (int) i - Utils.GameTimeTickCount + Game.Ping / 2;
+                                    var time = (int)i - Utils.GameTimeTickCount + Game.Ping / 2;
                                     var predHP =
                                         (int)
                                             HealthPrediction.LaneClearHealthPrediction(
@@ -1388,15 +1398,15 @@ namespace UnderratedAIO.Helpers
                                 // calculate the hits is needed and possibilty to balance
                                 if (hpLeft == 0 && turretAttackCount != 0 && hpLeftBeforeDie != 0)
                                 {
-                                    var damage = (int) Player.GetAutoAttackDamage(turretMinion, true);
+                                    var damage = (int)Player.GetAutoAttackDamage(turretMinion, true);
                                     var hits = hpLeftBeforeDie / damage;
                                     var timeBeforeDie = turretLandTick +
                                                         (turretAttackCount + 1) *
-                                                        (int) (closestTower.AttackDelay * 1000) -
+                                                        (int)(closestTower.AttackDelay * 1000) -
                                                         Utils.GameTimeTickCount;
-                                    var timeUntilAttackReady = LastAATick + (int) (Player.AttackDelay * 1000) >
+                                    var timeUntilAttackReady = LastAATick + (int)(Player.AttackDelay * 1000) >
                                                                Utils.GameTimeTickCount + Game.Ping / 2 + 25
-                                        ? LastAATick + (int) (Player.AttackDelay * 1000) -
+                                        ? LastAATick + (int)(Player.AttackDelay * 1000) -
                                           (Utils.GameTimeTickCount + Game.Ping / 2 + 25)
                                         : 0;
                                     var timeToLandAttack = Player.IsMelee
@@ -1437,9 +1447,9 @@ namespace UnderratedAIO.Helpers
                                             x.NetworkId != turretMinion.NetworkId && x is Obj_AI_Minion &&
                                             !HealthPrediction.HasMinionAggro(x as Obj_AI_Minion)))
                                 {
-                                    var playerDamage = (int) Player.GetAutoAttackDamage(minion);
-                                    var turretDamage = (int) closestTower.GetAutoAttackDamage(minion, true);
-                                    var leftHP = (int) minion.Health % turretDamage;
+                                    var playerDamage = (int)Player.GetAutoAttackDamage(minion);
+                                    var turretDamage = (int)closestTower.GetAutoAttackDamage(minion, true);
+                                    var leftHP = (int)minion.Health % turretDamage;
                                     if (leftHP > playerDamage)
                                     {
                                         return minion;
@@ -1454,7 +1464,7 @@ namespace UnderratedAIO.Helpers
                                 if (lastminion != null && minions.Count() >= 2)
                                 {
                                     if (1f / Player.AttackDelay >= 1f &&
-                                        (int) (turretAttackCount * closestTower.AttackDelay / Player.AttackDelay) *
+                                        (int)(turretAttackCount * closestTower.AttackDelay / Player.AttackDelay) *
                                         Player.GetAutoAttackDamage(lastminion) > lastminion.Health)
                                     {
                                         return lastminion;
@@ -1479,9 +1489,9 @@ namespace UnderratedAIO.Helpers
                                 {
                                     if (closestTower != null)
                                     {
-                                        var playerDamage = (int) Player.GetAutoAttackDamage(minion);
-                                        var turretDamage = (int) closestTower.GetAutoAttackDamage(minion, true);
-                                        var leftHP = (int) minion.Health % turretDamage;
+                                        var playerDamage = (int)Player.GetAutoAttackDamage(minion);
+                                        var turretDamage = (int)closestTower.GetAutoAttackDamage(minion, true);
+                                        var leftHP = (int)minion.Health % turretDamage;
                                         if (leftHP > playerDamage)
                                         {
                                             return minion;
@@ -1511,10 +1521,10 @@ namespace UnderratedAIO.Helpers
                 {
                     if (!ShouldWait())
                     {
-                        if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion) && _prevMinion.IsHPBarRendered && _prevMinion.IsVisible && !_prevMinion.IsDead && _prevMinion.IsTargetable)
+                        if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion))
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
-                                _prevMinion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay);
+                                _prevMinion, (int)(Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay);
                             if (predHealth >= 2 * Player.GetAutoAttackDamage(_prevMinion) ||
                                 Math.Abs(predHealth - _prevMinion.Health) < float.Epsilon)
                             {
@@ -1527,23 +1537,23 @@ namespace UnderratedAIO.Helpers
                                 .Where(
                                     minion =>
                                         minion.IsValidTarget() && InAutoAttackRange(minion) &&
-                                        (_config.Item("AttackWards").GetValue<bool>() || !MinionManager.IsWard(minion)) && minion.IsHPBarRendered && minion.IsVisible && !minion.IsDead && minion.IsTargetable &&
+                                        (_config.Item("AttackWards").GetValue<bool>() || !MinionManager.IsWard(minion)) &&
                                         (_config.Item("AttackPetsnTraps").GetValue<bool>() &&
                                          minion.CharData.BaseSkinName != "jarvanivstandard" ||
                                          MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())) &&
                                         minion.CharData.BaseSkinName != "gangplankbarrel")
-                            let predHealth =
-                                HealthPrediction.LaneClearHealthPrediction(
-                                    minion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay)
-                            where
-                                predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
-                                Math.Abs(predHealth - minion.Health) < float.Epsilon
-                            select minion).MaxOrDefault(
+                                  let predHealth =
+                                      HealthPrediction.LaneClearHealthPrediction(
+                                          minion, (int)(Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay)
+                                  where
+                                      predHealth >= 2 * Player.GetAutoAttackDamage(minion) ||
+                                      Math.Abs(predHealth - minion.Health) < float.Epsilon
+                                  select minion).MaxOrDefault(
                                 m => !MinionManager.IsMinion(m, true) ? float.MaxValue : m.Health);
 
                         if (result != null)
                         {
-                            _prevMinion = (Obj_AI_Minion) result;
+                            _prevMinion = (Obj_AI_Minion)result;
                         }
                     }
                 }

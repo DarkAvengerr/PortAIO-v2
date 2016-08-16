@@ -6,7 +6,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using ARAMDetFull.Champions;
-using LeagueSharp;using DetuksSharp;
+using LeagueSharp;
+using DetuksSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using SharpDX.Direct3D9;
@@ -18,7 +19,8 @@ using System.Threading;
 using System.Windows.Forms;
 using DetuksSharp;
 
-using EloBuddy; namespace ARAMDetFull
+using EloBuddy;
+namespace ARAMDetFull
 {
     class ARAMSimulator
     {
@@ -84,7 +86,7 @@ using EloBuddy; namespace ARAMDetFull
 
         public static string[] ad_carries =
         {
-            "Ashe", "Caitlyn", "Corki", "Draven", "Ezreal", "Graves",  "KogMaw", "MissFortune", 
+            "Ashe", "Caitlyn", "Corki", "Draven", "Ezreal", "Graves",  "KogMaw", "MissFortune",
               "Sivir", "Jinx","Jayce", "Gangplank",
             "Talon", "Tristana", "Twitch", "Urgot", "Varus",  "Zed", "Lucian","Yasuo","MasterYi","Quinn","Kalista","Vayne","Kindred"," Jhin"
 
@@ -120,7 +122,7 @@ using EloBuddy; namespace ARAMDetFull
 
         public static string[] dpsAS =
         {
-            
+
         };
         public static AIHeroClient player = ObjectManager.Player;
 
@@ -138,13 +140,13 @@ using EloBuddy; namespace ARAMDetFull
 
         public static ItemToShop nextItem;
         public static int lastBuy = 0;
-        public static SummonerSpells sSpells ;
+        public static SummonerSpells sSpells;
         public static int tankBal = -20;
 
         public static ChampType getType()
         {
             var cName = player.ChampionName;
-            if(mages.Contains(cName))
+            if (mages.Contains(cName))
                 return ChampType.Mage;
             if (supports.Contains(cName))
                 return ChampType.Support;
@@ -201,7 +203,7 @@ using EloBuddy; namespace ARAMDetFull
                         new ConditionalItem(ItemId.Void_Staff,ItemId.Liandrys_Torment, ItemCondition.ENEMY_MR),
                         new ConditionalItem(ItemId.Rylais_Crystal_Scepter),
                     },
-                        startingItems = new List<ItemId>
+                    startingItems = new List<ItemId>
                     {
                         ItemId.Needlessly_Large_Rod
                     }
@@ -265,7 +267,7 @@ using EloBuddy; namespace ARAMDetFull
                         ItemId.Stinger,
                     }
                 };
-                
+
             }
             else if (getType() == ChampType.MageNoMana)
             {
@@ -329,7 +331,7 @@ using EloBuddy; namespace ARAMDetFull
                     }
                 };
             }
-                #endregion
+            #endregion
 
             else if (getType() == ChampType.Bruiser) //Bruiser
             {
@@ -351,7 +353,7 @@ using EloBuddy; namespace ARAMDetFull
                         ItemId.Boots_of_Speed,ItemId.Ruby_Crystal,ItemId.Long_Sword,
                     }
                 };
-                
+
             }
             else //adc
             {
@@ -374,7 +376,7 @@ using EloBuddy; namespace ARAMDetFull
                         ItemId.Boots_of_Speed,ItemId.Long_Sword,ItemId.Long_Sword,
                     }
                 };
-                
+
             }
         }
 
@@ -383,8 +385,8 @@ using EloBuddy; namespace ARAMDetFull
 
         public static void setChamp()
         {
-           // Chat.Print("Support DeTuKs on his new adventures on LeagueSmurfs.com");
-            Chat.Print("Champion hero: "+player.ChampionName);
+            // Chat.Print("Support DeTuKs on his new adventures on LeagueSmurfs.com");
+            Chat.Print("Champion hero: " + player.ChampionName);
             switch (player.ChampionName)
             {
                 case "Cassiopeia":
@@ -442,7 +444,7 @@ using EloBuddy; namespace ARAMDetFull
                     champ = new Darius();
                     break;
                 case "RekSai":
-                   champ = new RekSai2();
+                    champ = new RekSai2();
                     break;
                 case "Varus":
                     champ = new Varus();
@@ -728,75 +730,82 @@ using EloBuddy; namespace ARAMDetFull
             {
                 return false;
             }
-            
+
         }
 
         public static void buyItems()
         {
-            if (lastBuy<DeathWalker.now-2300)
+            if (lastBuy < DeathWalker.now - 2300)
             {
                 AutoShopper.buyNext();
                 lastBuy = DeathWalker.now;
             }
-               /* foreach (var item in nextItem.itemIds)
-                {
-                    if (!LeagueSharp.Common.Items.HasItem(item) && nextItem.goldReach<=player.Gold)
-                    {
-                        Console.WriteLine("Buy itemmss: "+item);
-                        Shop.BuyItem((ItemId)item);
-                        lastBuy = DeathWalker.now;
-                    }
-                }
-            checkItems();*/
+            /* foreach (var item in nextItem.itemIds)
+             {
+                 if (!LeagueSharp.Common.Items.HasItem(item) && nextItem.goldReach<=player.Gold)
+                 {
+                     Console.WriteLine("Buy itemmss: "+item);
+                     Shop.BuyItem((ItemId)item);
+                     lastBuy = DeathWalker.now;
+                 }
+             }
+         checkItems();*/
         }
 
         public static void setupARMASimulator()
         {
-            GameObject.OnCreate += TowerAttackOnCreate;
-            GameObject.OnDelete += onDelete;
-
-            foreach (var tur in ObjectManager.Get<Obj_HQ>())
+            try
             {
-                if (tur.Team == GameObjectTeam.Chaos && player.Team == GameObjectTeam.Chaos)
-                    fromNex = tur;
-                if (tur.Team == GameObjectTeam.Chaos && player.Team == GameObjectTeam.Order)
-                    toNex = tur;
+                GameObject.OnCreate += TowerAttackOnCreate;
+                GameObject.OnDelete += onDelete;
 
-                if (tur.Team == GameObjectTeam.Order && player.Team == GameObjectTeam.Order)
-                    fromNex = tur;
+                foreach (var tur in ObjectManager.Get<Obj_HQ>())
+                {
+                    if (tur.Team == GameObjectTeam.Chaos && player.Team == GameObjectTeam.Chaos)
+                        fromNex = tur;
+                    if (tur.Team == GameObjectTeam.Chaos && player.Team == GameObjectTeam.Order)
+                        toNex = tur;
 
-                if (tur.Team == GameObjectTeam.Order && player.Team == GameObjectTeam.Chaos)
-                    toNex = tur;
+                    if (tur.Team == GameObjectTeam.Order && player.Team == GameObjectTeam.Order)
+                        fromNex = tur;
+
+                    if (tur.Team == GameObjectTeam.Order && player.Team == GameObjectTeam.Chaos)
+                        toNex = tur;
+                }
+
+                if (fromNex == null)
+                    return;
+                float sep = fromNex.Position.Distance(toNex.Position) / 40;
+
+                Vector2 lastPos = fromNex.Position.To2D();
+                //Setup sectors
+                for (int i = 0; i < 40; i++)
+                {
+                    Vector2 end = lastPos.Extend(toNex.Position.To2D(), sep);
+                    sectors.Add(new Sector(lastPos, end, 750));
+                    lastPos = end;
+                }
+                MapControl.setupMapControl();
+                AutoLevelChamp.setAutoLevel();
+                AutoShopper.init();
+                setUpItems();
+                setChamp();
+                AutoShopper.setBuild(champBuild);
+                //checkItems();
+                sSpells = new SummonerSpells();
+                if (champ != null)
+                {
+                    champ.setUpSpells();
+                }
+
+                DeathWalker.CustomRunCS = (player.IsMelee) ? 250 : 150;
+                DeathWalker.CustomMoveDelay = 324;
+                DeathWalker.BottingMode = true;
             }
-
-            if (fromNex == null)
-                return;
-            float sep = fromNex.Position.Distance(toNex.Position)/40;
-
-            Vector2 lastPos = fromNex.Position.To2D();
-            //Setup sectors
-            for (int i = 0; i < 40; i++)
+            catch (Exception e)
             {
-                Vector2 end = lastPos.Extend(toNex.Position.To2D(), sep);
-                sectors.Add(new Sector(lastPos,end,750));
-                lastPos = end;
+                Console.WriteLine(e);
             }
-            MapControl.setupMapControl();
-            AutoLevelChamp.setAutoLevel();
-            AutoShopper.init();
-            setUpItems();
-            setChamp();
-            AutoShopper.setBuild(champBuild);
-            //checkItems();
-            sSpells = new SummonerSpells();
-            if (champ != null)
-            {
-                champ.setUpSpells();
-            }
-
-            DeathWalker.CustomRunCS = (player.IsMelee) ? 250 : 150;
-            DeathWalker.CustomMoveDelay =  324;
-            DeathWalker.BottingMode =  true;
         }
 
         private static void onDelete(GameObject sender, EventArgs args)
@@ -807,25 +816,32 @@ using EloBuddy; namespace ARAMDetFull
 
         private static void TowerAttackOnCreate(GameObject sender, EventArgs args)
         {
-            if (sender.IsValid<MissileClient>())
+            try
             {
-                var missile = (MissileClient)sender;
-                // Ally Turret -> Enemy Hero
-                if (missile.SpellCaster.IsValid<Obj_AI_Turret>() && missile.SpellCaster.IsEnemy &&
-                    missile.Target.IsValid<AIHeroClient>() && missile.Target.IsAlly)
+                if (sender.IsValid<MissileClient>())
                 {
-                    var turret = (Obj_AI_Turret)missile.SpellCaster;
-                    if (missile.Target.IsMe)
+                    var missile = (MissileClient)sender;
+                    // Ally Turret -> Enemy Hero
+                    if (missile.SpellCaster.IsValid<Obj_AI_Turret>() && missile.SpellCaster.IsEnemy &&
+                        missile.Target.IsValid<AIHeroClient>() && missile.Target.IsAlly)
                     {
-                        towerAttackedMe = true;
-                        towerAttackedAlly = false;
-                    }
-                    else if (((AIHeroClient) missile.Target).Distance(turret) < 700)
-                    {
-                        towerAttackedAlly = true;
-                        towerAttackedMe = false;
+                        var turret = (Obj_AI_Turret)missile.SpellCaster;
+                        if (missile.Target.IsMe)
+                        {
+                            towerAttackedMe = true;
+                            towerAttackedAlly = false;
+                        }
+                        else if (((AIHeroClient)missile.Target).Distance(turret) < 700)
+                        {
+                            towerAttackedAlly = true;
+                            towerAttackedMe = false;
+                        }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
             }
         }
 
@@ -864,305 +880,327 @@ using EloBuddy; namespace ARAMDetFull
         //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static void updateArmaPlay()
         {
-
-            if (!haveSeenMinion)
-            {
-                haveSeenMinion =
-                    ObjectManager.Get<Obj_AI_Minion>().Any(min => min.IsTargetable && min.IsAlly && min.Health > 50) ||
-                    ARAMDetFull.gameStart + 44*1000 < ARAMDetFull.now;
-            }
-            if (!haveSeenMinion)
-                return;
             try
             {
-                AutoLevelChamp.LevelUpOff();
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-            if ((player.InShop() || player.IsDead)/* && nextItem != null && nextItem.goldReach <= player.Gold*/)
-            {
-                buyItems();
-            }
-            if (champ != null)
-            {
-                champ.alwaysCheck();
-            }
-
-            setRambo();
-            if (player.IsDead || player.IsChannelingImportantSpell())
-                return;
-            var fightLevel = MapControl.fightLevel();
-            MapControl.updateReaches();
-
-            var closestEnemy = HeroManager.Enemies.Where(ene => !ene.IsDead && ene.IsTargetable && !ARAMTargetSelector.IsInvulnerable(ene)).OrderBy(ene =>  player.Position.Distance(ene.Position, true)).FirstOrDefault();
-            if (closestEnemy != null && ramboMode)
-            {
-                DeathWalker.deathWalk(closestEnemy.Position,true);
-                return;
-            }
-
-            if (fightLevel != 0)
-            {
-                Aggresivity.addAgresiveMove(new AgresiveMove(40 * fightLevel, 2000, true, true));
-            }
-
-            agrobalance = Aggresivity.getAgroBalance();
-
-            balance = (ARAMTargetSelector.IsInvulnerable(player) || player.IsZombie) ? 250 : MapControl.balanceAroundPointAdvanced(player.Position.To2D(), 250 - agrobalance * 5) + agrobalance;
-            inDanger = balance < 0;
-
-            if (Game.MapId == GameMapId.SummonersRift)
-            {
-                if (player.IsRecalling())
-                    return;
-                if (player.InFountain() && player.HealthPercent < 90)
+                if (!haveSeenMinion)
                 {
-                    EloBuddy.Player.IssueOrder(GameObjectOrder.Stop, player);
+                    haveSeenMinion =
+                        ObjectManager.Get<Obj_AI_Minion>().Any(min => min.IsTargetable && min.IsAlly && min.Health > 50) ||
+                        ARAMDetFull.gameStart + 44 * 1000 < ARAMDetFull.now;
+                }
+                if (!haveSeenMinion)
                     return;
-                }
-                if(player.HealthPercent>85 && (player.MaxMana < 450 || player.ManaPercent > 85))
-                    needRecall = false;
-                if ((( (player.HealthPercent < 32 || (player.MaxMana > 450 && player.ManaPercent < 5)) && player.CountEnemiesInRange(1000)==0) || needRecall) && balance > 5 )
-                {
-                    if (lastRecall + 9000 < DeathWalker.now)
-                    {
-                        needRecall = true;
-                        var recall = new Spell(SpellSlot.Recall);
-                        recall.Cast();
-                        lastRecall = DeathWalker.now;
-                        return;
-                    }
-                }
-                else if (needRecall)
-                {
-                    EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, fromNex.Position.Randomize(534,1005));
-                    return;
-                }
-            }
-
-            if (champ != null)
-            {
                 try
                 {
-                    if (player.GetEnemiesInRange(ARAMSimulator.farmRange).Count(ene => !ene.IsDead && !ene.IsZombie) != 0)
-                        champ.killSteal();
-                    else
-                        champ.farm();
+                    AutoLevelChamp.LevelUpOff();
 
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex);
                 }
-            }
-            
-            if (!Sector.inTowerRange(player.Position.To2D()) || towerAttackedAlly || player.HealthPercent < 25)
-            {
-                try
+                if ((player.InShop() || player.IsDead)/* && nextItem != null && nextItem.goldReach <= player.Gold*/)
                 {
-                    ItemHandler.useItems();
-                    sSpells.useSumoners();
+                    buyItems();
+                }
+                if (champ != null)
+                {
+                    champ.alwaysCheck();
+                }
+
+                setRambo();
+                if (player.IsDead || player.IsChannelingImportantSpell())
+                    return;
+                var fightLevel = MapControl.fightLevel();
+                MapControl.updateReaches();
+
+                var closestEnemy = HeroManager.Enemies.Where(ene => !ene.IsDead && ene.IsTargetable && !ARAMTargetSelector.IsInvulnerable(ene)).OrderBy(ene => player.Position.Distance(ene.Position, true)).FirstOrDefault();
+                if (closestEnemy != null && ramboMode)
+                {
+                    DeathWalker.deathWalk(closestEnemy.Position, true);
+                    return;
+                }
+
+                if (fightLevel != 0)
+                {
+                    Aggresivity.addAgresiveMove(new AgresiveMove(40 * fightLevel, 2000, true, true));
+                }
+
+                agrobalance = Aggresivity.getAgroBalance();
+
+                balance = (ARAMTargetSelector.IsInvulnerable(player) || player.IsZombie) ? 250 : MapControl.balanceAroundPointAdvanced(player.Position.To2D(), 250 - agrobalance * 5) + agrobalance;
+                inDanger = balance < 0;
+
+                if (Game.MapId == GameMapId.SummonersRift)
+                {
+                    if (player.IsRecalling())
+                        return;
+                    if (player.InFountain() && player.HealthPercent < 90)
+                    {
+                        EloBuddy.Player.IssueOrder(GameObjectOrder.Stop, player);
+                        return;
+                    }
+                    if (player.HealthPercent > 85 && (player.MaxMana < 450 || player.ManaPercent > 85))
+                        needRecall = false;
+                    if ((((player.HealthPercent < 32 || (player.MaxMana > 450 && player.ManaPercent < 5)) && player.CountEnemiesInRange(1000) == 0) || needRecall) && balance > 5)
+                    {
+                        if (lastRecall + 9000 < DeathWalker.now)
+                        {
+                            needRecall = true;
+                            var recall = new Spell(SpellSlot.Recall);
+                            recall.Cast();
+                            lastRecall = DeathWalker.now;
+                            return;
+                        }
+                    }
+                    else if (needRecall)
+                    {
+                        EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, fromNex.Position.Randomize(534, 1005));
+                        return;
+                    }
+                }
+
+                if (champ != null)
+                {
+                    try
+                    {
+                        if (player.GetEnemiesInRange(ARAMSimulator.farmRange).Count(ene => !ene.IsDead && !ene.IsZombie) != 0)
+                            champ.killSteal();
+                        else
+                            champ.farm();
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+                }
+
+                if (!Sector.inTowerRange(player.Position.To2D()) || towerAttackedAlly || player.HealthPercent < 25)
+                {
+                    try
+                    {
+                        ItemHandler.useItems();
+                        sSpells.useSumoners();
+                        if (champ != null)
+                        {
+                            champ.useSpells();
+                        }
+                        else
+                        {
+                            MapControl.myControler.useSpells();
+                            if (player.MaxMana < 350 || player.ManaPercent > 50)
+                                MapControl.myControler.useSpellsOnMinions();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex);
+                    }
+                }
+
+                deepestAlly = HeroManager.Allies.OrderBy(al => toNex.Position.Distance(al.Position, true)).FirstOrDefault();
+                var lookRange = player.AttackRange + ((player.IsMelee) ? 260 : 155);
+                var easyKill =
+                   HeroManager.Enemies.FirstOrDefault(ene => ene != null && !ene.IsZombie && !ene.IsDead && ene.Distance(player, true) < lookRange * lookRange &&
+                                                             !ARAMTargetSelector.IsInvulnerable(ene) && ene.Health / 1.5 < player.GetAutoAttackDamage(ene));
+
+                if (easyKill != null)
+                {
+                    Aggresivity.addAgresiveMove(new AgresiveMove(45, 1500, true));
+                    //Console.WriteLine("go get easy");
+                    DeathWalker.deathWalk(easyKill.Position.To2D().Extend(player.Position.To2D(), player.AttackRange * 0.7f).To3D(), true);
+                }
+
+
+                if (balance < 0)
+                    DeathWalker.deathWalk(player.Position.To2D().Extend(fromNex.Position.To2D(), 600).To3D(), true);
+
+                if ((!player.IsMelee || fightLevel < 2) && HeroManager.Enemies.Any(h => !h.IsDead) && moveToRelicIfForHeal())
+                {
+                    return;
+                }
+
+                if (!player.UnderTurret(true))
+                {
+                    towerAttackedMe = false;
+                    towerAttackedAlly = false;
+                }
+
+                if (towerAttackedMe)
+                {
+                    DeathWalker.CustomOrbwalkMode = false;
+                    // Chat.Print("ouch tower!");
+                    DeathWalker.deathWalk(player.Position.To2D().Extend(fromNex.Position.To2D(), 600).To3D(), true);
+                    return;
+                }
+
+                awayTo = eAwayFromTo();
+                if (awayTo.IsValid() && awayTo.X != 0)
+                {
+
+                    DeathWalker.CustomOrbwalkMode = false;
                     if (champ != null)
-                    {
-                        champ.useSpells();
-                    }
-                    else
-                    {
-                        MapControl.myControler.useSpells();
-                        if(player.MaxMana<350 || player.ManaPercent>50)
-                            MapControl.myControler.useSpellsOnMinions();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-            }
-
-            deepestAlly = HeroManager.Allies.OrderBy(al => toNex.Position.Distance(al.Position, true)).FirstOrDefault();
-            var lookRange = player.AttackRange + ((player.IsMelee) ? 260 : 155);
-            var easyKill =
-               HeroManager.Enemies.FirstOrDefault(ene => ene!= null && !ene.IsZombie && !ene.IsDead && ene.Distance(player, true) < lookRange * lookRange &&
-                                                         !ARAMTargetSelector.IsInvulnerable(ene) && ene.Health / 1.5 < player.GetAutoAttackDamage(ene));
-
-            if (easyKill != null)
-            {
-                Aggresivity.addAgresiveMove(new AgresiveMove(45,1500,true));
-                //Console.WriteLine("go get easy");
-                DeathWalker.deathWalk(easyKill.Position.To2D().Extend(player.Position.To2D(), player.AttackRange*0.7f).To3D(),true);
-            }
-
-
-            if (balance < 0)
-                DeathWalker.deathWalk(player.Position.To2D().Extend(fromNex.Position.To2D(), 600).To3D(),true);
-
-            if ((!player.IsMelee || fightLevel<2) && HeroManager.Enemies.Any(h => !h.IsDead) && moveToRelicIfForHeal())
-            {
-                return;
-            }
-
-            if (!player.UnderTurret(true))
-            {
-                towerAttackedMe = false;
-                towerAttackedAlly = false;
-            }
-
-            if (towerAttackedMe)
-            {
-                DeathWalker.CustomOrbwalkMode = false;
-               // Chat.Print("ouch tower!");
-                DeathWalker.deathWalk(player.Position.To2D().Extend(fromNex.Position.To2D(), 600).To3D(), true);
-                return;
-            }
-            
-            awayTo = eAwayFromTo();
-            if (awayTo.IsValid() && awayTo.X != 0 )
-            {
-
-                DeathWalker.CustomOrbwalkMode = false;
-                if(champ != null)
-                    champ.kiteBack(awayTo);
-                DeathWalker.deathWalk(awayTo.To3D(),true);
-                return;
-                
-            }
-            else
-            {
-
-                var closestObj =
-                    DeathWalker.EnemyObjectives.Where(
-                        obj => obj.IsValidTarget(700) && !obj.IsDead && !obj.IsInvulnerable)
-                        .OrderBy(obj => obj.Position.Distance(player.Position, true)).FirstOrDefault();
-                if (closestObj != null && (!(closestObj is Obj_AI_Turret) ||  Sector.towerContainsAlly((Obj_AI_Turret)closestObj)))
-                {
-                    DeathWalker.deathWalk(
-                        closestObj.Position.Extend(player.Position, player.AttackRange * 0.6f), true);
+                        champ.kiteBack(awayTo);
+                    DeathWalker.deathWalk(awayTo.To3D(), true);
                     return;
-                }
 
-                if (player.IsMelee)
-                {
-                    var safeMeleeEnem = ARAMTargetSelector.getSafeMeleeTarget();
-                    if (safeMeleeEnem != null)
-                    {
-                        DeathWalker.deathWalk(
-                            safeMeleeEnem.Position.Extend(safeMeleeEnem.Direction, player.AttackRange*0.3f), true);
-                        return;
-                    }
-
-                }
-                var fightOn = MapControl.fightIsOn();
-                if (fightOn != null && MapControl.balanceAroundPointAdvanced(fightOn.Position.To2D(),280,450) > (-130) && fightOn.Distance(player, true) < 2500 * 2500 && (!player.IsMelee() || !Sector.inTowerRange(fightOn.Position.To2D())))
-                {
-                    Aggresivity.addAgresiveMove(new AgresiveMove(40* MapControl.fightLevel(), 2000,true,true));
-                    DeathWalker.deathWalk(fightOn.Position.Extend(player.Position, player.AttackRange * 0.8f), true);
                 }
                 else
-                {/*
+                {
+
+                    var closestObj =
+                        DeathWalker.EnemyObjectives.Where(
+                            obj => obj.IsValidTarget(700) && !obj.IsDead && !obj.IsInvulnerable)
+                            .OrderBy(obj => obj.Position.Distance(player.Position, true)).FirstOrDefault();
+                    if (closestObj != null && (!(closestObj is Obj_AI_Turret) || Sector.towerContainsAlly((Obj_AI_Turret)closestObj)))
+                    {
+                        DeathWalker.deathWalk(
+                            closestObj.Position.Extend(player.Position, player.AttackRange * 0.6f), true);
+                        return;
+                    }
+
+                    if (player.IsMelee)
+                    {
+                        var safeMeleeEnem = ARAMTargetSelector.getSafeMeleeTarget();
+                        if (safeMeleeEnem != null)
+                        {
+                            DeathWalker.deathWalk(
+                                safeMeleeEnem.Position.Extend(safeMeleeEnem.Direction, player.AttackRange * 0.3f), true);
+                            return;
+                        }
+
+                    }
+                    var fightOn = MapControl.fightIsOn();
+                    if (fightOn != null && MapControl.balanceAroundPointAdvanced(fightOn.Position.To2D(), 280, 450) > (-130) && fightOn.Distance(player, true) < 2500 * 2500 && (!player.IsMelee() || !Sector.inTowerRange(fightOn.Position.To2D())))
+                    {
+                        Aggresivity.addAgresiveMove(new AgresiveMove(40 * MapControl.fightLevel(), 2000, true, true));
+                        DeathWalker.deathWalk(fightOn.Position.Extend(player.Position, player.AttackRange * 0.8f), true);
+                    }
+                    else
+                    {/*
                     if (player.HealthPercent < 69 && moveToRelicIfForHeal())
                     {
                         return;
                     }*/
 
-                    if (!inDanger)
-                    {
-
-                        Sector orbSector = null;
-                        Sector prevSector = null;
-                        foreach (var sector in sectors)
+                        if (!inDanger)
                         {
-                            sector.update();
-                            int sectorCheck = 1150 - MapControl.fearDistance;
-                            if (sector.containsEnemyChamp && sector.enemyChampIn.Distance(player,true) < sectorCheck * sectorCheck)
+
+                            Sector orbSector = null;
+                            Sector prevSector = null;
+                            foreach (var sector in sectors)
                             {
-                                orbSector = sector;
-                                break;
-                            }
-                            if (sector.dangerPolig)
-                                break;
-                          //  if (!player.IsMelee)
-                           // {
+                                sector.update();
+                                int sectorCheck = 1150 - MapControl.fearDistance;
+                                if (sector.containsEnemyChamp && sector.enemyChampIn.Distance(player, true) < sectorCheck * sectorCheck)
+                                {
+                                    orbSector = sector;
+                                    break;
+                                }
+                                if (sector.dangerPolig)
+                                    break;
+                                //  if (!player.IsMelee)
+                                // {
                                 if (sector.containsEnemy && !sector.containsAlly)
                                     break;
-                           // }
-                           // else
-                          //  {
-                           //     if (prevSector != null && sector.containsEnemy && !prevSector.containsAlly  && !sector.containsAlly)
-                           //         break;
-                          //  }
-                            orbSector = sector;
-                            if (sector.containsEnemy && sector.containsAlly)
-                                break;
-                            prevSector = sector;
+                                // }
+                                // else
+                                //  {
+                                //     if (prevSector != null && sector.containsEnemy && !prevSector.containsAlly  && !sector.containsAlly)
+                                //         break;
+                                //  }
+                                orbSector = sector;
+                                if (sector.containsEnemy && sector.containsAlly)
+                                    break;
+                                prevSector = sector;
+                            }
+                            if (orbSector == null)
+                                return;
+                            DeathWalker.deathWalk(orbSector.getRandomPointIn().To3D(), false, true);
                         }
-                        if (orbSector == null)
-                            return;
-                        DeathWalker.deathWalk(orbSector.getRandomPointIn().To3D(),false,true);
-                    }
-                    else
-                    {
-                        DeathWalker.deathWalk(player.Position.To2D().Extend(fromNex.Position.To2D(),600).To3D(),false);
+                        else
+                        {
+                            DeathWalker.deathWalk(player.Position.To2D().Extend(fromNex.Position.To2D(), 600).To3D(), false);
+                        }
                     }
                 }
+
+
+
+
+                /*foreach (var ally in MapControl.ally_champions)
+                {
+                    if (ally.hero.Distance(player) < 800 && MapControl.myControler != null)
+                        MapControl.myControler.useNonSkillshots(ally.hero);
+                }*/
             }
-
-           
-            
-
-            /*foreach (var ally in MapControl.ally_champions)
+            catch (Exception e)
             {
-                if (ally.hero.Distance(player) < 800 && MapControl.myControler != null)
-                    MapControl.myControler.useNonSkillshots(ally.hero);
-            }*/
+                Console.WriteLine(e);
+            }
         }
 
         public static bool moveToRelicIfForHeal()
         {
-            var relicHeal = MapControl.ClosestRelic();
-            if (relicHeal != null)
+            try
             {
-                var dist = relicHeal.Distance(player);
-                var bonus = ((50 - dist/20) > 0) ? (50 - dist/20) : 0;
-                bool needHeal = player.HealthPercent + (float)agrobalance / 5 - (tankBal / 2.5) < 39 + bonus;
-                if (dist < 100 && !relicHeal.IsMoving)
+                var relicHeal = MapControl.ClosestRelic();
+                if (relicHeal != null)
                 {
-                    MapControl.usedRelics.Add(relicHeal.NetworkId);
+                    var dist = relicHeal.Distance(player);
+                    var bonus = ((50 - dist / 20) > 0) ? (50 - dist / 20) : 0;
+                    bool needHeal = player.HealthPercent + (float)agrobalance / 5 - (tankBal / 2.5) < 39 + bonus;
+                    if (dist < 100 && !relicHeal.IsMoving)
+                    {
+                        MapControl.usedRelics.Add(relicHeal.NetworkId);
+                    }
+                    if ((needHeal && player.HealthPercent > 18 && MapControl.fightIsOn() == null) || (!relicHeal.Name.Contains("Health")) && dist < 2500)
+                    {
+                        DeathWalker.deathWalk(relicHeal.Position);
+                        return true;
+                    }
                 }
-                if ((needHeal && player.HealthPercent>18 && MapControl.fightIsOn() == null) || (!relicHeal.Name.Contains("Health")) && dist < 2500)
-                {
-                    DeathWalker.deathWalk(relicHeal.Position);
-                    return true;
-                }
+                return false;
             }
-            return false;
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
         }
 
         public static bool enemIsOnMe(Obj_AI_Base target)
         {
-            if (target.IsAlly || target.IsDead || !target.IsValidTarget())
-                return false;
+            try
+            {
+                if (target.IsAlly || target.IsDead || !target.IsValidTarget())
+                    return false;
 
-            float distTo = target.Distance(player, true);
-            bool dangerousAround = (balance < -player.HealthPercent);
-            float targetReack = (!dangerousAround)?player.AttackRange + 150:MapControl.getByObj(target).getReach();
-            if (distTo > targetReack * targetReack)
-               return false;
+                float distTo = target.Distance(player, true);
+                bool dangerousAround = (balance < -player.HealthPercent);
+                float targetReack = (!dangerousAround) ? player.AttackRange + 150 : MapControl.getByObj(target).getReach();
+                if (distTo > targetReack * targetReack)
+                    return false;
 
-            var per = target.Direction.To2D().Perpendicular();
-            var dir = new Vector3(per, 0);
-            var enemDir = target.Position + dir * 40;
-            if (target.Distance(fromNex.Position, true) < enemDir.Distance(fromNex.Position, true))
-                return false;
+                var per = target.Direction.To2D().Perpendicular();
+                var dir = new Vector3(per, 0);
+                var enemDir = target.Position + dir * 40;
+                if (target.Distance(fromNex.Position, true) < enemDir.Distance(fromNex.Position, true))
+                    return false;
 
-            return true;
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return true;
+            }
         }
 
         public static Vector2 eAwayFromTo()
         {
-            if(player.IsMelee())
+            if (player.IsMelee())
                 return new Vector2(0, 0);
 
             Vector2 backTo = player.Position.To2D();
@@ -1178,11 +1216,11 @@ using EloBuddy; namespace ARAMDetFull
 
             if (count > 0)
             {
-                var awayTo = player.Position.To2D().Extend(backTo, player.AttackRange*0.8f);
+                var awayTo = player.Position.To2D().Extend(backTo, player.AttackRange * 0.8f);
                 if (!Sector.inTowerRange(awayTo))
                     return backTo;
             }
-            return new Vector2(0,0);
+            return new Vector2(0, 0);
         }
 
     }

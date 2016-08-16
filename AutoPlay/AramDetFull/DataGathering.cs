@@ -34,32 +34,6 @@ using EloBuddy; namespace ARAMDetFull
         //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         private static void sendData(string to, string postData)
         {
-            if (!on)
-                return;
-            try
-            {
-                new Thread(() =>
-                {
-                    var request = (HttpWebRequest)WebRequest.Create("http://errorsharp.azurewebsites.net/" + to);
-                    request.Timeout = 2000;
-                    var data = Encoding.ASCII.GetBytes(postData);
-
-                    request.Method = "POST";
-                    request.ContentType = "application/x-www-form-urlencoded";
-                    request.ContentLength = data.Length;
-
-                    using (var stream = request.GetRequestStream())
-                    {
-                        stream.Write(data, 0, data.Length);
-                    }
-
-                    var response = (HttpWebResponse)request.GetResponse();
-                }).Start();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
         }
 
     }

@@ -28,6 +28,7 @@ using EloBuddy; namespace ARAMDetFull
                 {
                     knowsExceptions.Add(value);
                     DataGathering.sendError(value);
+                    Console.WriteLine(value);
                 }
                 if (defaultOut != null && defaultOut != this)
                     defaultOut.WriteLine(value);

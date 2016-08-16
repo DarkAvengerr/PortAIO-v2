@@ -38,6 +38,14 @@ namespace PortAIO
 
                 CheckVersion();
             }
+
+            Game.OnUpdate += Game_OnUpdate;
+        }
+
+        private static void Game_OnUpdate(EventArgs args)
+        {
+            EloBuddy.SDK.Orbwalker.DisableAttacking = true;
+            EloBuddy.SDK.Orbwalker.DisableMovement = true;
         }
 
         private static string DownloadServerVersion
@@ -77,6 +85,8 @@ namespace PortAIO
 
             //imAsharpHuman.Program.Main();
             //imAsharpHumanPro.Program.Main();
+
+            //RandomUlt.Program.Game_OnGameLoad();
 
             if (Misc.menu.Item("enableEvade").GetValue<bool>())
             {

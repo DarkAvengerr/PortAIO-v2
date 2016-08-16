@@ -68,8 +68,8 @@ using EloBuddy; namespace SFXUtility
 
                 AppDomain.CurrentDomain.DomainUnload += OnExit;
                 AppDomain.CurrentDomain.ProcessExit += OnExit;
-                CustomEvents.Game.OnGameEnd += OnGameEnd;
-                CustomEvents.Game.OnGameLoad += OnGameLoad;
+                Game.OnEnd += OnGameEnd;
+                OnGameLoad();
             }
             catch (Exception ex)
             {
@@ -114,12 +114,12 @@ using EloBuddy; namespace SFXUtility
             OnExit(null, args);
         }
 
-        private void OnGameLoad(EventArgs args)
+        private void OnGameLoad()
         {
             try
             {
                 Menu.AddToMainMenu();
-
+                /*
                 var errorText = "Exception";
                 Global.Logger.OnItemAdded += delegate
                 {
@@ -138,6 +138,7 @@ using EloBuddy; namespace SFXUtility
                         Console.WriteLine(ex);
                     }
                 };
+                */
             }
             catch (Exception ex)
             {

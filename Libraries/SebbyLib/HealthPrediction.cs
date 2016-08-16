@@ -111,7 +111,6 @@ namespace SebbyLib
 
         public static float GetHealthPrediction(Obj_AI_Base unit, int time, int delay = 70)
         {
-            return LeagueSharp.Common.HealthPrediction.GetHealthPrediction(unit, time, delay);
             var predictedDamage = 0f;
 
             foreach (var attack in ActiveAttacks.Values)

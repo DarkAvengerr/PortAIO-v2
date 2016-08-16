@@ -732,6 +732,10 @@ namespace UnderratedAIO.Helpers
 
         public static float GetBuffTime(BuffInstance buff)
         {
+            if (!buff.IsValidBuff() || buff == null)
+            {
+                return 0f;
+            }
             return (float) buff.EndTime - Game.Time;
         }
 

@@ -10,6 +10,7 @@
 
     using Color = System.Drawing.Color;
     using EloBuddy;
+    using System.Collections.Generic;
 
     internal class Orbwalker
     {
@@ -35,14 +36,37 @@
 
         #region Delegates
 
-        public delegate void AfterAttackEvenH(AttackableUnit target);
+        /// <summary>
+        ///     Delegate AfterAttackEvenH
+        /// </summary>
+        /// <param name="unit">The unit.</param>
+        /// <param name="target">The target.</param>
+        public delegate void AfterAttackEvenH(AttackableUnit unit, AttackableUnit target);
 
+        /// <summary>
+        ///     Delegate BeforeAttackEvenH
+        /// </summary>
+        /// <param name="args">The <see cref="BeforeAttackEventArgs" /> instance containing the event data.</param>
         public delegate void BeforeAttackEvenH(BeforeAttackEventArgs args);
 
-        public delegate void OnAttackEvenH(AttackableUnit target);
+        /// <summary>
+        ///     Delegate OnAttackEvenH
+        /// </summary>
+        /// <param name="unit">The unit.</param>
+        /// <param name="target">The target.</param>
+        public delegate void OnAttackEvenH(AttackableUnit unit, AttackableUnit target);
 
+        /// <summary>
+        ///     Delegate OnNonKillableMinionH
+        /// </summary>
+        /// <param name="minion">The minion.</param>
         public delegate void OnNonKillableMinionH(AttackableUnit minion);
 
+        /// <summary>
+        ///     Delegate OnTargetChangeH
+        /// </summary>
+        /// <param name="oldTarget">The old target.</param>
+        /// <param name="newTarget">The new target.</param>
         public delegate void OnTargetChangeH(AttackableUnit oldTarget, AttackableUnit newTarget);
 
         #endregion
@@ -88,7 +112,32 @@
         {
             get
             {
-                return EloBuddy.SDK.Orbwalker.CanAutoAttack;
+                if (Player.ChampionName == "Graves")
+                {
+                    var attackDelay = 1.0740296828d * 1000 * Player.AttackDelay - 716.2381256175d;
+                    if (Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= lastAttack + attackDelay
+                        && Player.HasBuff("GravesBasicAttackAmmo1"))
+                    {
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                if (Player.ChampionName == "Jhin")
+                {
+                    if (Player.HasBuff("JhinPassiveReload"))
+                    {
+                        return false;
+                    }
+                }
+
+                if (Player.IsCastingInterruptableSpell())
+                {
+                    return false;
+                }
+
+                return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= lastAttack + Player.AttackDelay * 1000;
             }
         }
 
@@ -114,7 +163,7 @@
             {
                 AIHeroClient killableObj = null;
                 var hitsToKill = double.MaxValue;
-                foreach (var obj in HeroManager.Enemies.Where(i => InAutoAttackRange(i) && i.IsVisible && i.IsHPBarRendered && !i.IsDead && i.IsTargetable))
+                foreach (var obj in HeroManager.Enemies.Where(i => InAutoAttackRange(i)))
                 {
                     var killHits = obj.Health / Player.GetAutoAttackDamage(obj, true);
                     if (killableObj != null && (killHits >= hitsToKill || obj.HasBuffOfType(BuffType.Invulnerability)))
@@ -128,6 +177,19 @@
             }
         }
 
+        public static float GetMyProjectileSpeed()
+        {
+            return IsMelee(Player) || ObjectManager.Player.ChampionName == "Azir" || ObjectManager.Player.ChampionName == "Velkoz"
+                   || ObjectManager.Player.ChampionName == "Viktor" && Player.HasBuff("ViktorPowerTransferReturn")
+                       ? float.MaxValue
+                       : Player.BasicAttack.MissileSpeed;
+        }
+
+        public static bool IsMelee(Obj_AI_Base unit)
+        {
+            return unit.CombatType == GameObjectCombatType.Melee;
+        }
+
         public static AttackableUnit GetPossibleTarget
         {
             get
@@ -136,39 +198,48 @@
                     && (CurrentMode == Mode.Harass || CurrentMode == Mode.Clear))
                 {
                     var hero = GetBestHeroTarget;
-                    if (hero.IsValidTarget() && hero.IsVisible && hero.IsHPBarRendered && hero.IsTargetable && !hero.IsDead)
+                    if (hero.IsValidTarget() && hero != null && hero.IsVisible && hero.IsHPBarRendered && hero.IsTargetable)
                     {
+                        Console.WriteLine("1");
                         return hero;
                     }
                 }
-                if (CurrentMode == Mode.Harass || CurrentMode == Mode.Clear || CurrentMode == Mode.LastHit)
+                /*Killable Minion*/
+                if (CurrentMode == Mode.Clear || CurrentMode == Mode.Harass || CurrentMode == Mode.LastHit)
                 {
-                    foreach (var obj in
+                    var MinionList =
                         ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(
-                                i =>
-                                InAutoAttackRange(i) && i.IsVisible && i.IsHPBarRendered && i.IsTargetable && !i.IsDead && i.Team != GameObjectTeam.Neutral
-                                && (MinionManager.IsMinion(i, true) || Helper.IsPet(i))
-                                && i.Health < 2 * Player.TotalAttackDamage)
-                            .OrderByDescending(i => i.CharData.BaseSkinName.Contains("Siege"))
-                            .ThenBy(i => i.CharData.BaseSkinName.Contains("Super"))
-                            .ThenBy(i => i.Health)
-                            .ThenByDescending(i => i.MaxHealth))
+                            .Where(minionA => minionA.IsValidTarget() && InAutoAttackRange(minionA))
+                            .OrderByDescending(minionA => minionA.CharData.BaseSkinName.Contains("Siege"))
+                            .ThenBy(minionA => minionA.CharData.BaseSkinName.Contains("Super"))
+                            .ThenBy(minionA => minionA.Health)
+                            .ThenByDescending(minionA => minionA.MaxHealth);
+
+                    foreach (var minionA in MinionList)
                     {
-                        var time = (int)(Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2
-                                   + (int)(Player.Distance(obj) / Orbwalking.GetMyProjectileSpeed() * 1000);
-                        var hpPred = HealthPrediction.GetHealthPrediction(obj, time, 0);
-                        if (hpPred < 1)
+                        var t = (int)(ObjectManager.Player.AttackCastDelay * 1000) - 100 + Game.Ping / 2
+                                + 1000 * (int)Math.Max(0, ObjectManager.Player.Distance(minionA) - ObjectManager.Player.BoundingRadius)
+                                / (int)GetMyProjectileSpeed();
+
+                        var predHealth = HealthPrediction.GetHealthPrediction(minionA, t, 0);
+
+                        if (minionA.Team != GameObjectTeam.Neutral && ShouldAttackMinion(minionA))
                         {
-                            FireOnNonKillableMinion(obj);
-                        }
-                        if (hpPred > 0 && hpPred <= Player.GetAutoAttackDamage(obj, true))
-                        {
-                            return obj;
+                            var damage = ObjectManager.Player.GetAutoAttackDamage(minionA, true);
+                            var killable = predHealth <= damage;
+                            if (predHealth <= 0)
+                            {
+                                FireOnNonKillableMinion(minionA);
+                            }
+
+                            if (killable)
+                            {
+                                return minionA;
+                            }
                         }
                     }
                 }
-                if (InAutoAttackRange(ForcedTarget))
+                if (InAutoAttackRange(ForcedTarget) && ForcedTarget != null && ForcedTarget.IsVisible && ForcedTarget.IsHPBarRendered)
                 {
                     return ForcedTarget;
                 }
@@ -190,7 +261,7 @@
                 if (CurrentMode != Mode.LastHit)
                 {
                     var hero = GetBestHeroTarget;
-                    if (hero.IsValidTarget() && hero.IsVisible && hero.IsHPBarRendered && hero.IsTargetable && !hero.IsDead)
+                    if (hero.IsValidTarget() && hero != null && hero.IsVisible && hero.IsHPBarRendered && hero.IsTargetable)
                     {
                         return hero;
                     }
@@ -201,7 +272,7 @@
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 i =>
-                                InAutoAttackRange(i) && i.IsVisible && i.IsHPBarRendered && i.IsTargetable && !i.IsDead && i.Team == GameObjectTeam.Neutral
+                                InAutoAttackRange(i) && i.Team == GameObjectTeam.Neutral
                                 && i.CharData.BaseSkinName != "gangplankbarrel")
                             .MaxOrDefault(i => i.MaxHealth);
                     if (mob != null)
@@ -213,27 +284,35 @@
                 {
                     return null;
                 }
-                if (InAutoAttackRange(prevMinion))
+
+                if (prevMinion.IsValidTarget() && InAutoAttackRange(prevMinion))
                 {
-                    var hpPred = HealthPrediction.LaneClearHealthPrediction(
+                    var predHealth = HealthPrediction.LaneClearHealthPrediction(
                         prevMinion,
-                        (int)(Player.AttackDelay * 1000 * 2),
+                        (int)(ObjectManager.Player.AttackDelay * 1000 * 2f),
                         0);
-                    if (hpPred >= 2 * Player.GetAutoAttackDamage(prevMinion, true)
-                        || Math.Abs(hpPred - prevMinion.Health) < float.Epsilon)
+                    if (predHealth >= 2 * ObjectManager.Player.GetAutoAttackDamage(prevMinion)
+                        || Math.Abs(predHealth - prevMinion.Health) < float.Epsilon)
                     {
                         return prevMinion;
                     }
                 }
+
                 var minion = (from obj in
-                                  ObjectManager.Get<Obj_AI_Minion>()
-                                  .Where(i => InAutoAttackRange(i) && i.IsVisible && i.IsHPBarRendered && i.IsTargetable && !i.IsDead && i.CharData.BaseSkinName != "gangplankbarrel")
-                              let hpPred =
-                                  HealthPrediction.GetHealthPrediction(obj, (int)(Player.AttackDelay * 1000 * 2), 0)
+                                      ObjectManager.Get<Obj_AI_Minion>()
+                                      .Where(
+                                          x =>
+                                          x.IsValidTarget() && InAutoAttackRange(x)
+                                          && ShouldAttackMinion(x))
+                              let predHealth =
+                                  HealthPrediction.LaneClearHealthPrediction(
+                                      obj,
+                                      (int)(ObjectManager.Player.AttackDelay * 1000 * 2f), 0)
                               where
-                                  hpPred >= 2 * Player.GetAutoAttackDamage(obj, true)
-                                  || Math.Abs(hpPred - obj.Health) < float.Epsilon
-                              select obj).MaxOrDefault(i => i.Health);
+                                  predHealth >= 2 * ObjectManager.Player.GetAutoAttackDamage(obj)
+                                  || Math.Abs(predHealth - obj.Health) < float.Epsilon
+                              select obj).MaxOrDefault(
+                                      m => !MinionManager.IsMinion(m, true) ? float.MaxValue : m.Health);
                 if (minion != null)
                 {
                     prevMinion = minion;
@@ -242,17 +321,97 @@
             }
         }
 
+        /// <summary>
+        ///     Returns the auto-attack range of local player with respect to the target.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <returns>System.Single.</returns>
+        public static float GetRealAutoAttackRange(AttackableUnit target)
+        {
+            var result = Player.AttackRange + Player.BoundingRadius;
+            if (target.IsValidTarget())
+            {
+                var aiBase = target as Obj_AI_Base;
+                if (aiBase != null && Player.ChampionName == "Caitlyn")
+                {
+                    if (aiBase.HasBuff("caitlynyordletrapinternal"))
+                    {
+                        result += 650;
+                    }
+                }
+
+                return result + target.BoundingRadius;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        ///     Returns true if the target is in auto-attack range.
+        /// </summary>
+        /// <param name="target">The target.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public static bool InAutoAttackRange(AttackableUnit target)
+        {
+            if (!target.IsValidTarget())
+            {
+                return false;
+            }
+            var myRange = GetRealAutoAttackRange(target);
+            return
+                Vector2.DistanceSquared(
+                    target is Obj_AI_Base ? ((Obj_AI_Base)target).ServerPosition.To2D() : target.Position.To2D(),
+                    Player.ServerPosition.To2D()) <= myRange * myRange;
+        }
+
+        /// <summary>
+        ///     Returns if a minion should be attacked
+        /// </summary>
+        /// <param name="minion">The <see cref="Obj_AI_Minion" /></param>
+        /// <param name="includeBarrel">Include Gangplank Barrel</param>
+        /// <returns><c>true</c> if the minion should be attacked; otherwise, <c>false</c>.</returns>
+        private static bool ShouldAttackMinion(Obj_AI_Minion minion)
+        {
+            if (minion.Name == "WardCorpse" || minion.CharData.BaseSkinName == "jarvanivstandard")
+            {
+                return false;
+            }
+
+            if (MinionManager.IsWard(minion))
+            {
+                return true;
+            }
+
+            return (true || MinionManager.IsMinion(minion))
+                   && minion.CharData.BaseSkinName != "gangplankbarrel";
+        }
+
         public static bool Move { get; set; }
 
         #endregion
 
         #region Properties
 
+        private static readonly string[] NoCancelChamps = { "Kalista" };
+
         private static bool CanMove
         {
             get
             {
-                return EloBuddy.SDK.Orbwalker.CanMove;
+                if (missileLaunched)
+                {
+                    return true;
+                }
+
+                var localExtraWindup = 0;
+                if (ObjectManager.Player.ChampionName == "Rengar" && (Player.HasBuff("rengarqbase") || Player.HasBuff("rengarqemp")))
+                {
+                    localExtraWindup = 200;
+                }
+
+                return NoCancelChamps.Contains(ObjectManager.Player.ChampionName)
+                       || (Utils.GameTimeTickCount + Game.Ping / 2
+                           >= lastAttack + Player.AttackCastDelay * 1000 + GetCurrentWindupTime + localExtraWindup);
             }
         }
 
@@ -416,21 +575,94 @@
             MovePrediction.SetTargetted(Player.BasicAttack.SpellCastTime, Player.BasicAttack.MissileSpeed);
             Attack = true;
             Move = true;
+
             Game.OnUpdate += OnUpdate;
             Drawing.OnDraw += OnDraw;
-            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
-            GameObject.OnCreate += OnCreateMissileClient;
+            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnBasicAttack += OnBasicAttack;
+            Obj_AI_Base.OnSpellCast += new Obj_AI_BaseDoCastSpell(Obj_AI_Base_OnDoCast);
+
             Spellbook.OnStopCast += OnStopCast;
-            EloBuddy.Player.OnBasicAttack += Player_OnBasicAttack;
         }
 
-        private static void Player_OnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        /// <summary>
+        ///     Fired when an auto attack is fired.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs" /> instance containing the event data.</param>
+        private static void Obj_AI_Base_OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender.IsMe)
             {
+                var ping = Game.Ping;
+                if (ping <= 30) //First world problems kappa
+                {
+                    LeagueSharp.Common.Utility.DelayAction.Add(30 - ping, () => Obj_AI_Base_OnDoCast_Delayed(sender, args));
+                    return;
+                }
+
+                Obj_AI_Base_OnDoCast_Delayed(sender, args); //InvokeActionAfterAttackDelay()
+            }
+        }
+
+        /// <summary>
+        ///     Fired 30ms after an auto attack is launched.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs" /> instance containing the event data.</param>
+        private static void Obj_AI_Base_OnDoCast_Delayed(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (IsAutoAttackReset(args.SData.Name))
+            {
+                ResetAutoAttack();
+            }
+
+            if (IsAutoAttack(args.SData.Name))
+            {
+                FireAfterAttack(sender, args.Target as AttackableUnit);
                 missileLaunched = true;
             }
         }
+
+        private static void OnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (sender.IsMe)
+            {
+                if (IsAutoAttack(args.SData.Name))
+                {
+                    var target = args.Target as AttackableUnit;
+
+                    if (target != null && target.IsValid)
+                    {
+                        FireOnAttack(sender, lastTarget);
+                    }
+                }
+            }
+
+            if (sender.IsMe && (args.Target is Obj_AI_Base || args.Target is Obj_BarracksDampener || args.Target is Obj_HQ))
+            {
+                lastAttack = Utils.GameTimeTickCount - Game.Ping / 2;
+                missileLaunched = false;
+                lastMove = 0;
+
+                if (args.Target is Obj_AI_Base)
+                {
+                    var target = (Obj_AI_Base)args.Target;
+                    if (target.IsValid)
+                    {
+                        FireOnTargetSwitch(target);
+                        lastTarget = target;
+                    }
+                }
+            }
+
+            if (sender is Obj_AI_Turret && args.Target is Obj_AI_Base)
+            {
+                LastTargetTurrets[sender.NetworkId] = (Obj_AI_Base)args.Target;
+            }
+        }
+
+        internal static readonly Dictionary<int, Obj_AI_Base> LastTargetTurrets = new Dictionary<int, Obj_AI_Base>();
 
         public static void MoveTo(Vector3 pos)
         {
@@ -451,7 +683,7 @@
 
         public static void Orbwalk(AttackableUnit target)
         {
-            if (target.IsValidTarget() && EloBuddy.SDK.Orbwalker.CanAutoAttack && IsAllowedToAttack)
+            if (target.IsValidTarget() && CanAttack && IsAllowedToAttack)
             {
                 disableNextAttack = false;
                 FireBeforeAttack(target);
@@ -473,7 +705,7 @@
                     return;
                 }
             }
-            if (!EloBuddy.SDK.Orbwalker.CanMove || !IsAllowedToMove)
+            if (!CanMove || !IsAllowedToMove)
             {
                 return;
             }
@@ -494,23 +726,28 @@
         #endregion
 
         #region Methods
-
-        private static void FireAfterAttack(AttackableUnit target)
+        /// <summary>
+        ///     Fires the after attack event.
+        /// </summary>
+        /// <param name="unit">The unit.</param>
+        /// <param name="target">The target.</param>
+        private static void FireAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             if (AfterAttack != null && target.IsValidTarget())
             {
-                AfterAttack(target);
+                AfterAttack(unit, target);
             }
         }
 
+        /// <summary>
+        ///     Fires the before attack event.
+        /// </summary>
+        /// <param name="target">The target.</param>
         private static void FireBeforeAttack(AttackableUnit target)
         {
             if (BeforeAttack != null)
             {
-                if (target.IsValidTarget())
-                {
-                    BeforeAttack(new BeforeAttackEventArgs { Target = target });
-                }
+                BeforeAttack(new BeforeAttackEventArgs { Target = target });
             }
             else
             {
@@ -518,25 +755,38 @@
             }
         }
 
-        private static void FireOnAttack(AttackableUnit target)
+        /// <summary>
+        ///     Fires the on attack event.
+        /// </summary>
+        /// <param name="unit">The unit.</param>
+        /// <param name="target">The target.</param>
+        private static void FireOnAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (OnAttack != null && target.IsValidTarget())
+            if (OnAttack != null)
             {
-                OnAttack(target);
+                OnAttack(unit, target);
             }
         }
 
+        /// <summary>
+        ///     Fires the on non killable minion event.
+        /// </summary>
+        /// <param name="minion">The minion.</param>
         private static void FireOnNonKillableMinion(AttackableUnit minion)
         {
-            if (OnNonKillableMinion != null && minion.IsValidTarget())
+            if (OnNonKillableMinion != null)
             {
                 OnNonKillableMinion(minion);
             }
         }
 
+        /// <summary>
+        ///     Fires the on target switch event.
+        /// </summary>
+        /// <param name="newTarget">The new target.</param>
         private static void FireOnTargetSwitch(AttackableUnit newTarget)
         {
-            if (OnTargetChange != null)
+            if (OnTargetChange != null && (!lastTarget.IsValidTarget() || lastTarget != newTarget))
             {
                 OnTargetChange(lastTarget, newTarget);
             }
@@ -545,21 +795,6 @@
         private static float GetAutoAttackRange(Obj_AI_Base source, AttackableUnit target)
         {
             return source.AttackRange + source.BoundingRadius + (target.IsValidTarget() ? target.BoundingRadius : 0);
-        }
-
-        private static void OnCreateMissileClient(GameObject sender, EventArgs args)
-        {
-            if (!sender.IsValid<MissileClient>())
-            {
-                return;
-            }
-            var missile = (MissileClient)sender;
-            if (!missile.SpellCaster.IsMe || !missile.SpellCaster.IsRanged || !missile.SData.IsAutoAttack())
-            {
-                return;
-            }
-            missileLaunched = true;
-            FireAfterAttack((AttackableUnit)missile.Target);
         }
 
         private static void OnDraw(EventArgs args)
@@ -594,41 +829,105 @@
             }
         }
 
+        /// <summary>
+        ///     Spells that reset the attack timer.
+        /// </summary>
+        private static readonly string[] AttackResets =
+            {
+                "dariusnoxiantacticsonh", "fiorae", "garenq", "gravesmove",
+                "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge",
+                "leonashieldofdaybreak", "luciane", "monkeykingdoubleattack",
+                "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze",
+                "netherblade", "gangplankqwrapper", "powerfist",
+                "renektonpreexecute", "rengarq", "shyvanadoubleattack",
+                "sivirw", "takedown", "talonnoxiandiplomacy",
+                "trundletrollsmash", "vaynetumble", "vie", "volibearq",
+                "xenzhaocombotarget", "yorickspectral", "reksaiq",
+                "itemtitanichydracleave", "masochism", "illaoiw",
+                "elisespiderw", "fiorae", "meditate", "sejuaninorthernwinds",
+                "asheq"
+            };
+
+        /// <summary>
+        ///     Spells that are attacks even if they dont have the "attack" word in their name.
+        /// </summary>
+        private static readonly string[] Attacks =
+            {
+                "caitlynheadshotmissile", "frostarrow", "garenslash2",
+                "kennenmegaproc", "masteryidoublestrike", "quinnwenhanced",
+                "renektonexecute", "renektonsuperexecute",
+                "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust",
+                "xenzhaothrust2", "xenzhaothrust3", "viktorqbuff",
+                "lucianpassiveshot"
+            };
+
+        /// <summary>
+        ///     Spells that are not attacks even if they have the "attack" word in their name.
+        /// </summary>
+        private static readonly string[] NoAttacks =
+            {
+                "volleyattack", "volleyattackwithsound",
+                "jarvanivcataclysmattack", "monkeykingdoubleattack",
+                "shyvanadoubleattack", "shyvanadoubleattackdragon",
+                "zyragraspingplantattack", "zyragraspingplantattack2",
+                "zyragraspingplantattackfire", "zyragraspingplantattack2fire",
+                "viktorpowertransfer", "sivirwattackbounce", "asheqattacknoonhit",
+                "elisespiderlingbasicattack", "heimertyellowbasicattack",
+                "heimertyellowbasicattack2", "heimertbluebasicattack",
+                "annietibbersbasicattack", "annietibbersbasicattack2",
+                "yorickdecayedghoulbasicattack", "yorickravenousghoulbasicattack",
+                "yorickspectralghoulbasicattack", "malzaharvoidlingbasicattack",
+                "malzaharvoidlingbasicattack2", "malzaharvoidlingbasicattack3",
+                "kindredwolfbasicattack"
+            };
+
+        /// <summary>
+        ///     Returns true if the spellname is an auto-attack.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns><c>true</c> if the name is an auto attack; otherwise, <c>false</c>.</returns>
+        public static bool IsAutoAttack(string name)
+        {
+            return (name.ToLower().Contains("attack") && !NoAttacks.Contains(name.ToLower()))
+                   || Attacks.Contains(name.ToLower());
+        }
+
+        /// <summary>
+        ///     Returns true if the spellname resets the attack timer.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns><c>true</c> if the specified name is an auto attack reset; otherwise, <c>false</c>.</returns>
+        public static bool IsAutoAttackReset(string name)
+        {
+            return AttackResets.Contains(name.ToLower());
+        }
+
         private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsMe)
+            if (sender.IsMe)
             {
-                return;
-            }
-            if (args.Target.IsValid<AttackableUnit>() && args.SData.IsAutoAttack())
-            {
-                lastAttack = Utils.GameTimeTickCount - Game.Ping / 2;
-                missileLaunched = false;
-                var target = (AttackableUnit)args.Target;
-                if (!lastTarget.IsValidTarget() || target.NetworkId != lastTarget.NetworkId)
+                if (IsAutoAttack(args.SData.Name))
                 {
-                    FireOnTargetSwitch(target);
-                    lastTarget = target;
+                    var target = args.Target as AttackableUnit;
+
+                    if (target != null && target.IsValid)
+                    {
+                        FireOnAttack(sender, lastTarget);
+                    }
                 }
-                if (sender.IsMelee)
+                if (IsAutoAttackReset(args.SData.Name) && Math.Abs(args.SData.CastTime) < 1.401298E-45f)
                 {
-                    LeagueSharp.Common.Utility.DelayAction.Add((int)(sender.AttackCastDelay * 1000 + 40), () => FireAfterAttack(target));
+                    ResetAutoAttack();
                 }
-                FireOnAttack(target);
-            }
-            if (Orbwalking.IsAutoAttackReset(args.SData.Name))
-            {
-                ResetAutoAttack();
             }
         }
 
         private static void OnStopCast(Obj_AI_Base sender, SpellbookStopCastEventArgs args)
         {
-            if (!sender.IsMe || !args.DestroyMissile || !args.StopAnimation)
+            if (sender.IsMe && EloBuddy.SDK.Orbwalker.IsRanged && (args.DestroyMissile || args.StopAnimation) && !EloBuddy.SDK.Orbwalker.CanBeAborted)
             {
-                return;
+                ResetAutoAttack();
             }
-            ResetAutoAttack();
         }
 
         private static void OnUpdate(EventArgs args)

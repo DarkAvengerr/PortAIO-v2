@@ -302,7 +302,7 @@ using EloBuddy;
                 if (Player.Path.Count() > 1)
                 {
                     EloBuddy.Player.IssueOrder((GameObjectOrder)10, Player.ServerPosition);
-                    EloBuddy.Player.IssueOrder(GameObjectOrder.HoldPosition, Player.ServerPosition);
+                    EloBuddy.Player.IssueOrder(GameObjectOrder.Stop, Player.ServerPosition);
                     LastMoveCommandPosition = Player.ServerPosition;
                 }
                 return;

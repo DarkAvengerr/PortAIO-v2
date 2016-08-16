@@ -135,7 +135,7 @@ namespace BrianSharp.Plugin
             }
         }
 
-        private static void AfterAttack(AttackableUnit target)
+        private static void AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             if ((Orbwalk.CurrentMode != Orbwalker.Mode.Combo && Orbwalk.CurrentMode != Orbwalker.Mode.Clear) ||
                 (CurStance != Stance.Tiger && CurStance != Stance.Phoenix))

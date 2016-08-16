@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DetuksSharp;
-using LeagueSharp;using DetuksSharp;
+using LeagueSharp;
+using DetuksSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace ARAMDetFull
+using EloBuddy;
+namespace ARAMDetFull
 {
     class AutoLevelChamp
     {
@@ -21,30 +23,35 @@ using EloBuddy; namespace ARAMDetFull
             LeagueSharp.Common.Utility.DelayAction.Add(
                     8436, () =>
                     {
-                       // var level = new AutoLevel(GetSequence());
-                       // AutoLevel.Enable();
+                        var level = new AutoLevel(GetSequence());
+                        AutoLevel.Enable();
                     });
-            
+
         }
 
         public static void LevelUpOff()
         {
+            Console.WriteLine("1");
             if (lastLevelup + 2000 < DeathWalker.now)
             {
+                Console.WriteLine("2");
                 lastLevelup = DeathWalker.now;
-                //return;
                 if (ObjectManager.Player.SpellTrainingPoints > 0 && ObjectManager.Player.SpellTrainingPoints <= ObjectManager.Player.Level)
-                    for (var i = ObjectManager.Player.Level - ObjectManager.Player.SpellTrainingPoints;
-                        i < ObjectManager.Player.Level;
-                        i++)
+                {
+                    Console.WriteLine("3");
+                    for (var i = ObjectManager.Player.Level - ObjectManager.Player.SpellTrainingPoints; i < ObjectManager.Player.Level; i++)
                     {
-                        var spell = (SpellSlot) (order[i] - 1);
+                        Console.WriteLine("4");
+                        var spell = (SpellSlot)(order[i] - 1);
                         if (ObjectManager.Player.Spellbook.GetSpell(spell).Level < 6)
                         {
+                            Console.WriteLine("5");
                             Console.WriteLine("Level: " + spell);
                             ObjectManager.Player.Spellbook.LevelUpSpell(spell);
+                            Player.LevelSpell(spell);
                         }
                     }
+                }
             }
         }
 
@@ -81,7 +88,7 @@ using EloBuddy; namespace ARAMDetFull
                     sequence = new[] { 2, 1, 3, 1, 1, 4, 1, 2, 1, 3, 4, 3, 3, 2, 2, 4, 2, 2 };
                     break;
                 case "Blitzcrank":
-                    sequence = new[] { 1, 3, 1 , 2 , 1,4, 1,3,1,3,4,3,3,2,2,4,2,2  };
+                    sequence = new[] { 1, 3, 1, 2, 1, 4, 1, 3, 1, 3, 4, 3, 3, 2, 2, 4, 2, 2 };
                     break;
                 case "Brand":
                     sequence = new[] { 2, 3, 2, 1, 2, 4, 2, 3, 2, 3, 4, 3, 3, 1, 1, 4, 1, 1 };

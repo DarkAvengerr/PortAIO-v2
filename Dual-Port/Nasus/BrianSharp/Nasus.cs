@@ -158,7 +158,7 @@ namespace BrianSharp.Plugin
             W.CastOnUnit(gapcloser.Sender, PacketCast);
         }
 
-        private static void AfterAttack(AttackableUnit target)
+        private static void AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             if (!Q.IsReady())
             {

@@ -16,7 +16,7 @@ namespace OneKeyToWin_AIO_Sebby
 
 
         //private int [] SmiteDamage = { 390, 410, 430, 450, 480, 510, 540, 570, 600, 640, 680, 720, 760, 800, 850, 900, 950, 1000};
-        private SpellSlot heal, barrier, ignite, exhaust, flash, smite , teleport, cleanse;
+        private SpellSlot heal, barrier, ignite, exhaust, flash, smite, teleport, cleanse;
 
         public static Items.Item
 
@@ -43,15 +43,15 @@ namespace OneKeyToWin_AIO_Sebby
             Hextech = new Items.Item(3146, 700f),
             FrostQueen = new Items.Item(3092, 850f),
             Protobelt = new Items.Item(3152, 850f),
-            GLP800= new Items.Item(3030, 800f),
+            GLP800 = new Items.Item(3030, 800f),
 
-            //def
+        //def
         FaceOfTheMountain = new Items.Item(3401, 600f),
             Zhonya = new Items.Item(3157, 0),
             Seraph = new Items.Item(3040, 0),
             Solari = new Items.Item(3190, 600f),
             Randuin = new Items.Item(3143, 400f);
-        
+
         public void LoadOKTW()
         {
 
@@ -153,13 +153,13 @@ namespace OneKeyToWin_AIO_Sebby
             foreach (var enemy in HeroManager.Enemies)
             {
                 var spell = enemy.Spellbook.Spells[3];
-                    Config.SubMenu("Activator OKTW©").SubMenu("Defensives").SubMenu("Zhonya").AddItem(new MenuItem("spellZ" + spell.SData.Name, enemy.ChampionName + ": "+spell.Name).SetValue(spell.SData.TargettingType == SpellDataTargetType.Unit));
+                Config.SubMenu("Activator OKTW©").SubMenu("Defensives").SubMenu("Zhonya").AddItem(new MenuItem("spellZ" + spell.SData.Name, enemy.ChampionName + ": " + spell.Name).SetValue(spell.SData.TargettingType == SpellDataTargetType.Unit));
             }
 
             Config.SubMenu("Activator OKTW©").SubMenu("Defensives").AddItem(new MenuItem("Seraph", "Seraph").SetValue(true));
             Config.SubMenu("Activator OKTW©").SubMenu("Defensives").AddItem(new MenuItem("Solari", "Solari").SetValue(true));
             // CLEANSERS 
-            
+
             Config.SubMenu("Activator OKTW©").SubMenu("Cleansers").AddItem(new MenuItem("Clean", "Quicksilver, Mikaels, Mercurial, Dervish").SetValue(true));
 
             foreach (var ally in HeroManager.Allies)
@@ -196,11 +196,11 @@ namespace OneKeyToWin_AIO_Sebby
             if (!sender.IsEnemy || sender.Type != GameObjectType.AIHeroClient)
                 return;
 
-            
+
             if (sender.Distance(Player.Position) > 1600)
                 return;
 
-            if (Zhonya.IsReady()  && Config.Item("Zhonya").GetValue<bool>())
+            if (Zhonya.IsReady() && Config.Item("Zhonya").GetValue<bool>())
             {
                 if (Config.Item("spellZ" + args.SData.Name) != null && Config.Item("spellZ" + args.SData.Name).GetValue<bool>())
                 {
@@ -243,13 +243,13 @@ namespace OneKeyToWin_AIO_Sebby
 
         private void ZhonyaTryCast()
         {
-            if (Player.HasBuffOfType(BuffType.PhysicalImmunity) || Player.HasBuffOfType(BuffType.SpellImmunity)  || (!Player.Spellbook.Spells[3].IsReady() && Player.ChampionName == "Kayle")
+            if (Player.HasBuffOfType(BuffType.PhysicalImmunity) || Player.HasBuffOfType(BuffType.SpellImmunity) || (!Player.Spellbook.Spells[3].IsReady() && Player.ChampionName == "Kayle")
                || Player.IsZombie || Player.IsInvulnerable || Player.HasBuffOfType(BuffType.Invulnerability) || Player.HasBuff("kindredrnodeathbuff")
                || Player.HasBuffOfType(BuffType.SpellShield) || Player.AllShield > OktwCommon.GetIncomingDamage(Player))
             {
-                
+
             }
-                else
+            else
             {
                 Zhonya.Cast();
             }
@@ -257,33 +257,33 @@ namespace OneKeyToWin_AIO_Sebby
 
         private void Survival()
         {
-            if (Player.HealthPercent < 60 && (Seraph.IsReady() || Zhonya.IsReady()  || CanUse(barrier)))
+            if (Player.HealthPercent < 60 && (Seraph.IsReady() || Zhonya.IsReady() || CanUse(barrier)))
             {
                 double dmg = OktwCommon.GetIncomingDamage(Player, 1);
                 var enemys = Player.CountEnemiesInRange(800);
-                if(dmg > 0 || enemys > 0)
-                { 
+                if (dmg > 0 || enemys > 0)
+                {
                     if (CanUse(barrier) && Config.Item("Barrier").GetValue<bool>())
-                        {
-                            var value = 95 + Player.Level * 20;
-                            if (dmg > value && Player.HealthPercent < 50)
-                                Player.Spellbook.CastSpell(barrier, Player);
-                            else if (Player.Health - dmg < enemys * Player.Level * 20)
-                                Player.Spellbook.CastSpell(barrier, Player);
-                            else if (Player.Health - dmg < Player.Level * 10)
-                                Seraph.Cast();
-                        }
+                    {
+                        var value = 95 + Player.Level * 20;
+                        if (dmg > value && Player.HealthPercent < 50)
+                            Player.Spellbook.CastSpell(barrier, Player);
+                        else if (Player.Health - dmg < enemys * Player.Level * 20)
+                            Player.Spellbook.CastSpell(barrier, Player);
+                        else if (Player.Health - dmg < Player.Level * 10)
+                            Seraph.Cast();
+                    }
 
-                        if (Seraph.IsReady() && Config.Item("Seraph").GetValue<bool>())
-                        {
-                            var value = Player.Mana * 0.2 + 150;
-                            if (dmg > value && Player.HealthPercent < 50)
-                                Seraph.Cast();
-                            else if (Player.Health - dmg < enemys * Player.Level * 20)
-                                Seraph.Cast();
-                            else if (Player.Health - dmg < Player.Level * 10)
-                                Seraph.Cast();
-                        }
+                    if (Seraph.IsReady() && Config.Item("Seraph").GetValue<bool>())
+                    {
+                        var value = Player.Mana * 0.2 + 150;
+                        if (dmg > value && Player.HealthPercent < 50)
+                            Seraph.Cast();
+                        else if (Player.Health - dmg < enemys * Player.Level * 20)
+                            Seraph.Cast();
+                        else if (Player.Health - dmg < Player.Level * 10)
+                            Seraph.Cast();
+                    }
 
                     if (Zhonya.IsReady() && Config.Item("Zhonya").GetValue<bool>())
                     {
@@ -306,7 +306,7 @@ namespace OneKeyToWin_AIO_Sebby
             }
 
 
-            if (!Solari.IsReady() && !FaceOfTheMountain.IsReady() && !CanUse(heal) )
+            if (!Solari.IsReady() && !FaceOfTheMountain.IsReady() && !CanUse(heal))
                 return;
 
             foreach (var ally in HeroManager.Allies.Where(ally => ally.IsValid && !ally.IsDead && ally.HealthPercent < 50 && Player.Distance(ally.ServerPosition) < 700))
@@ -324,7 +324,7 @@ namespace OneKeyToWin_AIO_Sebby
                     if (ally.Health - dmg < enemys * ally.Level * 15)
                         Player.Spellbook.CastSpell(heal, ally);
                     else if (ally.Health - dmg < ally.Level * 10)
-                       Player.Spellbook.CastSpell(heal, ally);
+                        Player.Spellbook.CastSpell(heal, ally);
                 }
 
                 if (Config.Item("Solari").GetValue<bool>() && Solari.IsReady() && Player.Distance(ally.ServerPosition) < Solari.Range)
@@ -360,7 +360,7 @@ namespace OneKeyToWin_AIO_Sebby
             {
                 Youmuus.Cast();
             }
-            if (args.Slot == SpellSlot.Q && (Player.ChampionName == "Ashe" ))
+            if (args.Slot == SpellSlot.Q && (Player.ChampionName == "Ashe"))
             {
                 Youmuus.Cast();
             }
@@ -382,39 +382,17 @@ namespace OneKeyToWin_AIO_Sebby
 
             if (Config.Item("pots").GetValue<bool>())
                 PotionManagement();
-            
+
             Ignite();
-            //Teleport();
             Exhaust();
             Offensive();
             Defensive();
             ZhonyaCast();
         }
 
-        private void Teleport()
-        {
-            if (CanUse(teleport) && !Player.HasBuff("teleport"))
-            {
-                foreach (var ally in HeroManager.Allies.Where(ally => ally.IsValid && !ally.IsDead  && ally.CountEnemiesInRange(1000) > 0 ))
-                {
-                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValid && !enemy.IsDead))
-                    {
-                        var distanceEA = enemy.Distance(ally);
-                        if (distanceEA < 1000)
-                        {
-                            foreach (var obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.IsAlly &&  distanceEA < obj.Position.Distance(ally.Position)))
-                            {
-                                Player.Spellbook.CastSpell(teleport, obj);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         private void Smite()
         {
-            if (CanUse(smite) )
+            if (CanUse(smite))
             {
                 var mobs = Cache.GetMinions(Player.ServerPosition, 520, MinionTeam.Neutral);
                 if (mobs.Count == 0 && (Player.GetSpellSlot("s5_summonersmiteplayerganker") != SpellSlot.Unknown || Player.GetSpellSlot("s5_summonersmiteduel") != SpellSlot.Unknown))
@@ -422,12 +400,12 @@ namespace OneKeyToWin_AIO_Sebby
                     var enemy = TargetSelector.GetTarget(500, TargetSelector.DamageType.True);
                     if (enemy.IsValidTarget())
                     {
-                        if(enemy.HealthPercent < 50 && Config.Item("SmiteEnemy").GetValue<bool>())
+                        if (enemy.HealthPercent < 50 && Config.Item("SmiteEnemy").GetValue<bool>())
                             Player.Spellbook.CastSpell(smite, enemy);
-                        
+
                         var smiteDmg = Player.GetSummonerSpellDamage(enemy, Damage.SummonerSpell.Smite);
-                        
-                        if ( Config.Item("SmiteEnemyKS").GetValue<bool>() && enemy.Health - OktwCommon.GetIncomingDamage(enemy) < smiteDmg)
+
+                        if (Config.Item("SmiteEnemyKS").GetValue<bool>() && enemy.Health - OktwCommon.GetIncomingDamage(enemy) < smiteDmg)
                             Player.Spellbook.CastSpell(smite, enemy);
                     }
                 }
@@ -443,7 +421,7 @@ namespace OneKeyToWin_AIO_Sebby
                             || (mob.BaseSkinName == "SRU_Blue" && Config.Item("Rblue", true).GetValue<bool>()))
                             && mob.Health <= Player.GetSummonerSpellDamage(mob, Damage.SummonerSpell.Smite))
                         {
-  
+
                             Player.Spellbook.CastSpell(smite, mob);
                         }
                     }
@@ -543,12 +521,12 @@ namespace OneKeyToWin_AIO_Sebby
 
             // patch 6.9
             //if (Player.HasBuff("zedrdeathmark") || Player.HasBuff("FizzMarinerDoom") || Player.HasBuff("MordekaiserChildrenOfTheGrave") || Player.HasBuff("PoppyDiplomaticImmunity") || Player.HasBuff("VladimirHemoplague"))
-                //Clean();
+            //Clean();
 
             if (Mikaels.IsReady())
             {
                 foreach (var ally in HeroManager.Allies.Where(
-                    ally => ally.IsValid && !ally.IsDead && Config.Item("MikaelsAlly" + ally.ChampionName).GetValue<bool>() && Player.Distance(ally.Position) < Mikaels.Range 
+                    ally => ally.IsValid && !ally.IsDead && Config.Item("MikaelsAlly" + ally.ChampionName).GetValue<bool>() && Player.Distance(ally.Position) < Mikaels.Range
                     && ally.HealthPercent < (float)Config.Item("cleanHP").GetValue<Slider>().Value))
                 {
                     if (ally.HasBuff("zedrdeathmark") || ally.HasBuff("FizzMarinerDoom") || ally.HasBuff("MordekaiserChildrenOfTheGrave") || ally.HasBuff("PoppyDiplomaticImmunity") || ally.HasBuff("VladimirHemoplague"))
@@ -598,7 +576,7 @@ namespace OneKeyToWin_AIO_Sebby
                 LeagueSharp.Common.Utility.DelayAction.Add(Config.Item("CSSdelay").GetValue<Slider>().Value, () => Mercurial.Cast());
             else if (Dervish.IsReady())
                 LeagueSharp.Common.Utility.DelayAction.Add(Config.Item("CSSdelay").GetValue<Slider>().Value, () => Dervish.Cast());
-            else if(cleanse != SpellSlot.Unknown && cleanse.IsReady() && Config.Item("Cleanse").GetValue<bool>())
+            else if (cleanse != SpellSlot.Unknown && cleanse.IsReady() && Config.Item("Cleanse").GetValue<bool>())
                 LeagueSharp.Common.Utility.DelayAction.Add(Config.Item("CSSdelay").GetValue<Slider>().Value, () => Player.Spellbook.CastSpell(cleanse, Player));
         }
 
@@ -607,7 +585,7 @@ namespace OneKeyToWin_AIO_Sebby
             if (Randuin.IsReady() && Config.Item("Randuin").GetValue<bool>() && Player.CountEnemiesInRange(Randuin.Range) > 0)
             {
                 Randuin.Cast();
-            } 
+            }
         }
 
         private void Offensive()
@@ -693,7 +671,7 @@ namespace OneKeyToWin_AIO_Sebby
                 {
                     if (Config.Item("YoumuusKS").GetValue<bool>() && t.Health < Player.MaxHealth)
                         Youmuus.Cast();
-                    if (Config.Item("YoumuusCombo").GetValue<bool>() )
+                    if (Config.Item("YoumuusCombo").GetValue<bool>())
                         Youmuus.Cast();
                 }
             }
@@ -712,7 +690,7 @@ namespace OneKeyToWin_AIO_Sebby
             if (Player.Health + 250 > Player.MaxHealth)
                 return;
 
-            if(Player.HealthPercent > 50 && Player.CountEnemiesInRange(700) == 0)
+            if (Player.HealthPercent > 50 && Player.CountEnemiesInRange(700) == 0)
                 return;
 
             if (Player.HasBuff("RegenerationPotion") || Player.HasBuff("ItemMiniRegenPotion") || Player.HasBuff("ItemCrystalFlaskJungle") || Player.HasBuff("ItemDarkCrystalFlask") || Player.HasBuff("ItemCrystalFlask"))

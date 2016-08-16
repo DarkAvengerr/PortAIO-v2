@@ -170,7 +170,7 @@ namespace BrianSharp.Plugin
             }
         }
 
-        private static void OnAttack(AttackableUnit target)
+        private static void OnAttack(AttackableUnit unit, AttackableUnit target)
         {
             if (!W.IsReady())
             {
@@ -184,7 +184,7 @@ namespace BrianSharp.Plugin
             }
         }
 
-        private static void AfterAttack(AttackableUnit target)
+        private static void AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             if (!Q.IsReady())
             {

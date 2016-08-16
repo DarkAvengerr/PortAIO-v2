@@ -211,7 +211,7 @@ namespace MasterSharp
             if (MyHero.ServerPosition.Distance(position) < holdAreaRadius)
             {
                 if (MyHero.Path.Count() > 1)
-                    Player.IssueOrder(GameObjectOrder.HoldPosition, MyHero.ServerPosition);
+                    Player.IssueOrder(GameObjectOrder.Stop, MyHero.ServerPosition);
                 return;
             }
             if (position.Distance(MyHero.Position) < 200)

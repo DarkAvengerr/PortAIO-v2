@@ -172,12 +172,6 @@ namespace Staberina
                 Menu.Item("ComboKillable").Permashow(true, null, ScriptColor);
             }
 
-            Menu.AddBool("Sounds", "Sounds");
-            if (Menu.Item("Sounds").IsActive())
-            {
-                new SoundObject(Resources.Load_Kat).Play();
-            }
-
             Menu.AddInfo("Info", "By Trees and Lilith", ScriptColor);
 
             SpellManager.Initialize(Menu, Orbwalker);

@@ -173,12 +173,6 @@ namespace LuluLicious
             superman.AddKeyBind("Superman", "Use Speedy Up!", 'A');
 
             misc.AddBool("Support", "Support Mode", false);
-            misc.AddBool("Sounds", "Sounds");
-
-            if (misc.Item("Sounds").IsActive())
-            {
-                new SoundObject(Resources.Load_Lulu).Play();
-            }
 
             Menu.AddInfo("Info", "By Trees and Lilith!", Color.MediumPurple);
             Menu.AddToMainMenu();

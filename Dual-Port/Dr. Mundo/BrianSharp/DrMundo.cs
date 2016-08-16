@@ -145,7 +145,7 @@ namespace BrianSharp.Plugin
             }
         }
 
-        private static void OnAttack(AttackableUnit target)
+        private static void OnAttack(AttackableUnit unit, AttackableUnit target)
         {
             if (!E.IsReady())
             {

@@ -1326,7 +1326,7 @@ using EloBuddy; namespace AutoJungle
             {
                 if (player.IsMoving)
                 {
-                    EloBuddy.Player.IssueOrder(GameObjectOrder.HoldPosition, player.Position);
+                    EloBuddy.Player.IssueOrder(GameObjectOrder.Stop, player.Position);
                 }
                 return true;
             }

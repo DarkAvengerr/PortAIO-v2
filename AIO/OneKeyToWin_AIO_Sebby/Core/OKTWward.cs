@@ -98,7 +98,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
         private void AutoWardLogic()
         {
-            foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValid && !enemy.IsVisible && !enemy.IsDead))
+            foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValid && (!enemy.IsVisible || !enemy.IsHPBarRendered) && !enemy.IsDead))
             {
                 var need = OKTWtracker.ChampionInfoList.Find(x => x.NetworkId == enemy.NetworkId);
 
