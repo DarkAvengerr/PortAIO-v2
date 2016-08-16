@@ -1135,9 +1135,7 @@ namespace KurisuRiven
 
             foreach (var unit in minions.Where(x => x.IsMinion))
             {
-                OrbTo(menubool("useaoeq") && GetCenterMinion().IsValidTarget() 
-                    ? GetCenterMinion() 
-                    : unit);
+                //OrbTo(menubool("useaoeq") && GetCenterMinion().IsValidTarget() ? GetCenterMinion() : unit);
 
                 if (q.IsReady() && unit.Distance(player.ServerPosition) <= truerange + 100)
                 {
