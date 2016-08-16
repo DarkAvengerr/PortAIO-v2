@@ -10,7 +10,7 @@ using EloBuddy; namespace HoolaRiven
     public class Program
     {
         public static Menu Menu;
-        private static Orbwalking.Orbwalker Orbwalker;
+        private static LeagueSharp.Common.Orbwalking.Orbwalker Orbwalker;
         private static readonly AIHeroClient Player = ObjectManager.Player;
         private static readonly HpBarIndicator Indicator = new HpBarIndicator();
         private const string IsFirstR = "RivenFengShuiEngine";
@@ -18,7 +18,7 @@ using EloBuddy; namespace HoolaRiven
         private static readonly SpellSlot Flash = Player.GetSpellSlot("summonerFlash");
         private static Spell Q, Q1, W, E, R;
         private static int QStack = 1;
-        public static Render.Text Timer, Timer2;
+    //    public static Render.Text Timer, Timer2;
         private static bool forceQ;
         private static bool forceW;
         private static bool forceR;
@@ -71,8 +71,8 @@ using EloBuddy; namespace HoolaRiven
             OnMenuLoad();
 
 
-            Timer = new Render.Text("Q Expiry =>  " + ((double)(LastQ - Utils.GameTimeTickCount + 3800) / 1000).ToString("0.0"), (int)Drawing.WorldToScreen(Player.Position).X - 140, (int)Drawing.WorldToScreen(Player.Position).Y + 10, 30, Color.MidnightBlue, "calibri");
-            Timer2 = new Render.Text("R Expiry =>  " + (((double)LastR - Utils.GameTimeTickCount + 15000) / 1000).ToString("0.0"), (int)Drawing.WorldToScreen(Player.Position).X - 60, (int)Drawing.WorldToScreen(Player.Position).Y + 10, 30, Color.IndianRed, "calibri");
+        //    Timer = new Render.Text("Q Expiry =>  " + ((double)(LastQ - Utils.GameTimeTickCount + 3800) / 1000).ToString("0.0"), (int)Drawing.WorldToScreen(Player.Position).X - 140, (int)Drawing.WorldToScreen(Player.Position).Y + 10, 30, Color.MidnightBlue, "calibri");
+        //    Timer2 = new Render.Text("R Expiry =>  " + (((double)LastR - Utils.GameTimeTickCount + 15000) / 1000).ToString("0.0"), (int)Drawing.WorldToScreen(Player.Position).X - 60, (int)Drawing.WorldToScreen(Player.Position).Y + 10, 30, Color.IndianRed, "calibri");
 
             Game.OnUpdate += OnTick;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -83,6 +83,15 @@ using EloBuddy; namespace HoolaRiven
             Obj_AI_Base.OnPlayAnimation += OnPlay;
             Obj_AI_Base.OnSpellCast += OnCasting;
             Interrupter2.OnInterruptableTarget += Interrupt;
+            Spellbook.OnCastSpell += new SpellbookCastSpell(Spellbook_OnCastSpell);
+        }
+        
+        private static void Spellbook_OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
+        {
+            if (args.Slot == SpellSlot.W)
+            {
+                Orbwalking.ResetAutoAttackTimer();
+            }
         }
 
         private static bool HasTitan() => (Items.HasItem(3748) && Items.CanUseItem(3748));
@@ -358,10 +367,10 @@ using EloBuddy; namespace HoolaRiven
 
       private static void OnTick(EventArgs args)
         {
-            Timer.X = (int)Drawing.WorldToScreen(Player.Position).X - 60;
-            Timer.Y = (int)Drawing.WorldToScreen(Player.Position).Y + 43;
-            Timer2.X = (int)Drawing.WorldToScreen(Player.Position).X - 60;
-            Timer2.Y = (int)Drawing.WorldToScreen(Player.Position).Y + 65;
+        //    Timer.X = (int)Drawing.WorldToScreen(Player.Position).X - 60;
+        //    Timer.Y = (int)Drawing.WorldToScreen(Player.Position).Y + 43;
+        //    Timer2.X = (int)Drawing.WorldToScreen(Player.Position).X - 60;
+        //    Timer2.Y = (int)Drawing.WorldToScreen(Player.Position).Y + 65;
             ForceSkill();
             UseRMaxDam();
             AutoUseW();
@@ -418,14 +427,16 @@ using EloBuddy; namespace HoolaRiven
 
             if (QStack != 1 && DrawTimer1)
             {
-                Timer.text = ("Q Expiry =>  " + ((double)(LastQ - Utils.GameTimeTickCount + 3800) / 1000).ToString("0.0")+"S");
-                Timer.OnEndScene();
+                //Timer.text = ("Q Expiry =>  " + ((double)(LastQ - Utils.GameTimeTickCount + 3800) / 1000).ToString("0.0")+"S");
+                //Timer.OnEndScene();
+                Drawing.DrawText((int)Drawing.WorldToScreen(Player.Position).X - 60, (int)Drawing.WorldToScreen(Player.Position).Y + 43, System.Drawing.Color.MidnightBlue, "Q Expiry =>  " + ((double)(LastQ - Utils.GameTimeTickCount + 3800) / 1000).ToString("0.0") + "S");
             }
 
             if (Player.HasBuff("RivenFengShuiEngine") && DrawTimer2)
             {
-                Timer2.text = ("R Expiry =>  " + (((double)LastR - Utils.GameTimeTickCount + 15000) / 1000).ToString("0.0") +"S");
-                Timer2.OnEndScene();
+                //Timer2.text = ("R Expiry =>  " + (((double)LastR - Utils.GameTimeTickCount + 15000) / 1000).ToString("0.0") +"S");
+                //Timer2.OnEndScene();
+                Drawing.DrawText((int)Drawing.WorldToScreen(Player.Position).X - 60, (int)Drawing.WorldToScreen(Player.Position).Y + 65, System.Drawing.Color.IndianRed, "R Expiry =>  " + (((double)LastR - Utils.GameTimeTickCount + 15000) / 1000).ToString("0.0") + "S");
             }
 
             if (DrawCB) Render.Circle.DrawCircle(Player.Position, 250 + Player.AttackRange + 70, E.IsReady() ? System.Drawing.Color.FromArgb(120, 0, 170, 255) : System.Drawing.Color.IndianRed);
