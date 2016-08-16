@@ -1275,7 +1275,6 @@
     <Compile Include="Dual-Port\Katarina\ElSmartKatarina\Program.cs" />
     <Compile Include="Dual-Port\Rengar\D_Rengar\Program.cs" />
     <Compile Include="Dual-Port\Riven\HoolaRiven\HpBarIndicator.cs" />
-    <Compile Include="Dual-Port\Riven\HoolaRiven\Orbwalking.cs" />
     <Compile Include="Dual-Port\Riven\HoolaRiven\Program.cs" />
     <Compile Include="Dual-Port\Udyr\EloFactory\Program.cs" />
     <Compile Include="Libraries\RethoughtLib\Algorithm\ShortestPathAlgorithm\ConnectionTypes\AutoVector2Connection.cs" />
