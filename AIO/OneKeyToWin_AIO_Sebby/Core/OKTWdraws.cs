@@ -205,6 +205,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
         private void Drawing_OnEndScene(EventArgs args)
         {
+            return;
             if (Config.Item("minimap").GetValue<bool>())
             {
                 foreach (var enemy in HeroManager.Enemies)
@@ -214,6 +215,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
                         var ChampionInfoOne = Core.OKTWtracker.ChampionInfoList.Find(x => x.NetworkId == enemy.NetworkId);
                         if (ChampionInfoOne != null)
                         {
+                            Console.WriteLine("WE got something.");
                             var wts = Drawing.WorldToMinimap(ChampionInfoOne.LastVisablePos);
                             DrawFontTextScreen(Tahoma13, enemy.ChampionName[0].ToString() + enemy.ChampionName[1].ToString(), wts[0], wts[1], Color.Yellow);
                         }
@@ -500,6 +502,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
                     continue;
                 }
 
+                /*
                 var Distance = Player.Distance(enemy.Position);
                 if (GankAlert && !enemy.IsDead && enemy.IsHPBarRendered && enemy.IsVisible && Distance > 1200)
                 {
@@ -567,6 +570,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
                     }
                 }
                 positionGang = positionGang + 100;
+                */
             }
 
             if (Program.AIOmode == 2)

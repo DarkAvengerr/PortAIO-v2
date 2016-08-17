@@ -28,6 +28,7 @@ namespace OneKeyToWin_AIO_Sebby
 
         public static void GameOnOnGameLoad()
         {
+
             enemySpawn = ObjectManager.Get<Obj_SpawnPoint>().FirstOrDefault(x => x.IsEnemy);
             Q = new Spell(SpellSlot.Q);
             E = new Spell(SpellSlot.E);
@@ -45,6 +46,7 @@ namespace OneKeyToWin_AIO_Sebby
             Config.SubMenu("About OKTW©").AddItem(new MenuItem("print", "OKTW NEWS in chat").SetValue(true));
             #endregion
 
+
             Config.AddItem(new MenuItem("AIOmode", "AIO mode", true).SetValue(new StringList(new[] { "Utility and champion", "Only Champion", "Only Utility" }, 0)));
 
             AIOmode = Config.Item("AIOmode", true).GetValue<StringList>().SelectedIndex;
@@ -52,6 +54,7 @@ namespace OneKeyToWin_AIO_Sebby
             //var targetSelectorMenu = new Menu("Target Selector", "Target Selector");
             //TargetSelector.AddToMenu(targetSelectorMenu);
             //Config.AddSubMenu(targetSelectorMenu);
+
 
             if (AIOmode != 2)
             {
@@ -85,7 +88,6 @@ namespace OneKeyToWin_AIO_Sebby
             }
             else
                 Config.SubMenu("Prediction MODE").AddItem(new MenuItem("322", "SPREDICTION NOT LOADED"));
-
 
 
             if (AIOmode != 2)
@@ -235,6 +237,7 @@ namespace OneKeyToWin_AIO_Sebby
                 }
             }
 
+
             #endregion
             foreach (var hero in HeroManager.Enemies)
             {
@@ -245,10 +248,10 @@ namespace OneKeyToWin_AIO_Sebby
                 }
             }
 
-            if (Config.Item("debug").GetValue<bool>())
-            {
-             //   new Core.OKTWlab().LoadOKTW();
-            }
+            //if (Config.Item("debug").GetValue<bool>())
+            //{
+                //   new Core.OKTWlab().LoadOKTW();
+            //}
 
             if (AIOmode != 1)
             {
@@ -620,14 +623,6 @@ namespace OneKeyToWin_AIO_Sebby
 
         public static void debug(string msg)
         {
-            if (Config.Item("debug").GetValue<bool>())
-            {
-                Console.WriteLine(msg);
-            }
-            if (Config.Item("debugChat").GetValue<bool>())
-            {
-                Chat.Print(msg);
-            }
         }
 
         private static void OnDraw(EventArgs args)

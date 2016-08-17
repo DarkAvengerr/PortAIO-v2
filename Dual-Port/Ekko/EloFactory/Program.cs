@@ -169,7 +169,7 @@ using EloBuddy; namespace EloFactory_Ekko
         #region ToogleOrder Game_OnUpdate
         public static void Game_OnGameUpdate(EventArgs args)
         {
-            Player.SetSkin(Player.BaseSkinName, Config.Item("Ekko.SkinChanger").GetValue<bool>() ? Config.Item("Ekko.SkinChangerName").GetValue<StringList>().SelectedIndex : Player.SkinId);
+            //Player.SetSkin(Player.BaseSkinName, Config.Item("Ekko.SkinChanger").GetValue<bool>() ? Config.Item("Ekko.SkinChangerName").GetValue<StringList>().SelectedIndex : Player.SkinId);
 
             if (Config.Item("Ekko.AutoLevelSpell").GetValue<bool>()) LevelUpSpells();
 

@@ -16,6 +16,8 @@ namespace OneKeyToWin_AIO_Sebby.Core
     {
         public int NetworkId { get; set; }
 
+        public string ChampionName { get; set; }
+
         public Vector3 LastVisablePos { get; set; }
         public float LastVisableTime { get; set; }
         public Vector3 PredictedPos { get; set; }
@@ -45,10 +47,15 @@ namespace OneKeyToWin_AIO_Sebby.Core
             {
                 if (hero.IsEnemy)
                 {
-                    ChampionInfoList.Add(new ChampionInfo() { NetworkId = hero.NetworkId, LastVisablePos = hero.Position });
+                    ChampionInfoList.Add(new ChampionInfo() { NetworkId = hero.NetworkId, LastVisablePos = hero.Position, ChampionName = hero.ChampionName });
                     if (IsJungler(hero))
                         jungler = hero;
                 }
+            }
+
+            foreach (var a in ChampionInfoList)
+            {
+                Console.WriteLine(a.ChampionName + " | " + a.NetworkId);
             }
 
             Game.OnUpdate += OnUpdate;
