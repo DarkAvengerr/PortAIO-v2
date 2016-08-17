@@ -58,10 +58,7 @@ namespace HoolaRiven
         private static bool LaneQ => Menu.Item("LaneQ").GetValue<bool>();
         private static bool Youmu => Menu.Item("youmu").GetValue<bool>();
 
-
-        private static void Main() => CustomEvents.Game.OnGameLoad += OnGameLoad;
-
-        private static void OnGameLoad(EventArgs args)
+        public static void OnGameLoad()
         {
 
             if (Player.ChampionName != "Riven") return;
@@ -583,7 +580,7 @@ namespace HoolaRiven
                     Utility.DelayAction.Add(1, ForceW);
                 }
             }
-            if (Q.IsReady() && E.IsReady() && QStack == 3 && !Orbwalking.CanAttack && Orbwalking.CanMove(40))
+            if (Q.IsReady() && E.IsReady() && QStack == 3 && !Orbwalking.CanAttack() && Orbwalking.CanMove(40))
             {
                 var epos = Player.ServerPosition +
                           (Player.ServerPosition - target.ServerPosition).Normalized() * 300;

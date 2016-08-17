@@ -251,10 +251,53 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
         {
             Player = ObjectManager.Player;
             ChampionName = Player.ChampionName;
-            Obj_AI_Base.OnSpellCast += OnProcessSpell;
+
+            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnSpellCast;
             Spellbook.OnStopCast += SpellbookOnStopCast;
+            Obj_AI_Base.OnBasicAttack += Obj_AI_Base_OnBasicAttack;
         }
+
+        private static void Obj_AI_Base_OnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (sender.IsMe)
+            {
+                if (IsAutoAttack(args.SData.Name))
+                {
+                    var target = args.Target as AttackableUnit;
+
+                    if (target != null && target.IsValid)
+                    {
+                        FireOnAttack(sender, _lastTarget);
+                    }
+                }
+            }
+
+            if (sender.IsMe && (args.Target is Obj_AI_Base || args.Target is Obj_BarracksDampener || args.Target is Obj_HQ))
+            {
+                LastAaTick = LeagueSharp.Common.Utils.GameTimeTickCount - Game.Ping / 2;
+                _missileLaunched = false;
+                LastMoveCommandT = 0;
+                _autoattackCounter++;
+
+                if (args.Target is Obj_AI_Base)
+                {
+                    var target = (Obj_AI_Base)args.Target;
+                    if (target.IsValid)
+                    {
+                        FireOnTargetSwitch(target);
+                        _lastTarget = target;
+                    }
+                }
+            }
+
+            if (sender is Obj_AI_Turret && args.Target is Obj_AI_Base)
+            {
+                LastTargetTurrets[sender.NetworkId] = (Obj_AI_Base)args.Target;
+            }
+        }
+
+        internal static readonly Dictionary<int, Obj_AI_Base> LastTargetTurrets = new Dictionary<int, Obj_AI_Base>();
 
         /// <summary>
         ///     This event is fired before the player auto attacks.
@@ -736,9 +779,9 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
         /// </summary>
         /// <param name="spellbook">The spellbook.</param>
         /// <param name="args">The <see cref="SpellbookStopCastEventArgs" /> instance containing the event data.</param>
-        private static void SpellbookOnStopCast(Obj_AI_Base spellbook, SpellbookStopCastEventArgs args)
+        private static void SpellbookOnStopCast(Obj_AI_Base sender, SpellbookStopCastEventArgs args)
         {
-            if (spellbook.IsValid && spellbook.IsMe && args.DestroyMissile && args.StopAnimation)
+            if (sender.IsMe && EloBuddy.SDK.Orbwalker.IsRanged && (args.DestroyMissile || args.StopAnimation) && !EloBuddy.SDK.Orbwalker.CanBeAborted)
             {
                 ResetAutoAttackTimer();
             }
@@ -787,43 +830,23 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
         /// </summary>
         /// <param name="unit">The unit.</param>
         /// <param name="spell">The <see cref="GameObjectProcessSpellCastEventArgs" /> instance containing the event data.</param>
-        private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs spell)
+        private static void OnProcessSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            try
+            if (sender.IsMe)
             {
-                var spellName = spell.SData.Name;
+                if (IsAutoAttack(args.SData.Name))
+                {
+                    var target = args.Target as AttackableUnit;
 
-                if (unit.IsMe && IsAutoAttackReset(spellName) && Math.Abs(spell.SData.SpellCastTime) <= 0)
+                    if (target != null && target.IsValid)
+                    {
+                        FireOnAttack(sender, _lastTarget);
+                    }
+                }
+                if (IsAutoAttackReset(args.SData.Name) && Math.Abs(args.SData.CastTime) < 1.401298E-45f)
                 {
                     ResetAutoAttackTimer();
                 }
-
-                if (!IsAutoAttack(spellName))
-                {
-                    return;
-                }
-
-                if (unit.IsMe &&
-                    (spell.Target is Obj_AI_Base || spell.Target is Obj_BarracksDampener || spell.Target is Obj_HQ))
-                {
-                    LastAaTick = LeagueSharp.Common.Utils.GameTimeTickCount - Game.Ping / 2;
-                    _missileLaunched = false;
-                    LastMoveCommandT = 0;
-                    _autoattackCounter++;
-
-                    var target = spell.Target as Obj_AI_Base;
-                    if (target != null && target.IsValid)
-                    {
-                        FireOnTargetSwitch(target);
-                        _lastTarget = target;
-                    }
-                }
-
-                FireOnAttack(unit, _lastTarget);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
             }
         }
 
