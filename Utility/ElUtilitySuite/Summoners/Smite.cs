@@ -750,7 +750,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                 {
                     if (this.Menu.Item("ElSmite.Combo.Mode").GetValue<StringList>().SelectedIndex == 0
                         && this.Player.GetSpell(this.SmiteSpell.Slot)
-                               .Name.Equals("s5_summonersmiteduel", StringComparison.InvariantCultureIgnoreCase))
+                               .Name.Equals("s5_summonersmiteplayerganker", StringComparison.InvariantCultureIgnoreCase))
                     {
                         var kSableEnemy = EloBuddy.SDK.EntityManager.Heroes.Enemies.FirstOrDefault(hero => hero.IsValidTarget(SmiteRange) && SmiteDmg(hero) >= hero.Health);
 
@@ -761,7 +761,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                     }
 
                     if (this.Menu.Item("ElSmite.Combo.Mode").GetValue<StringList>().SelectedIndex == 1
-                        && this.Player.GetSpell(this.SmiteSpell.Slot).Name.Equals("s5_summonersmiteplayerganker", StringComparison.InvariantCultureIgnoreCase) || this.Player.GetSpell(this.SmiteSpell.Slot).Name.Equals("s5_summonersmiteduel", StringComparison.InvariantCultureIgnoreCase))
+                        && this.Player.GetSpell(this.SmiteSpell.Slot).Name.Equals("s5_summonersmiteduel", StringComparison.InvariantCultureIgnoreCase) || this.Player.GetSpell(this.SmiteSpell.Slot).Name.Equals("s5_summonersmiteduel", StringComparison.InvariantCultureIgnoreCase))
                     {
                         if (this.ComboModeActive)
                         {

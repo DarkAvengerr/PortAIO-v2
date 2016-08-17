@@ -116,7 +116,7 @@ namespace Staberina
             bool calculateUltTick = false,
             bool damageIndicator = false)
         {
-            if (!unit.IsValidTarget())
+            if (!unit.IsValidTarget() || unit == null)
             {
                 return 0;
             }

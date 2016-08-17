@@ -15,10 +15,15 @@ using EloBuddy;
         {
            
             var Target = TargetSelector.GetTarget(1500, TargetSelector.DamageType.Magical);
+
+            if (Target == null)
+            {
+                return;
+            }
+
             var QPred = Champion.Javelin.GetPrediction(Target);
             var SwipePred = Champion.Swipe.GetPrediction(Target);
             var PouncePred = Champion.Pounce.GetPrediction(Target);
-            var bushW = Champion.Bushwack.GetPrediction(Target).UnitPosition;
             var Hunted = Player.HasBuff("NidaleePassiveHunted") || Player.HasBuff("exposeweaknessdebuff") || Target.HasBuff("NidaleePassiveHunted") || Target.HasBuff("exposeweaknessdebuff");
 
             // The full 1v1 rotation
@@ -68,6 +73,10 @@ using EloBuddy;
         public static void Harass()
         {
             var Target = TargetSelector.GetTarget(1500, TargetSelector.DamageType.Magical);
+            if (Target == null)
+            {
+                return;
+            }
             var QPred = Champion.Javelin.GetPrediction(Target);
             if (Target != null && Target.IsValidTarget() && !Target.IsZombie)
             {

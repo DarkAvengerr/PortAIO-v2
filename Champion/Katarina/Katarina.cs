@@ -302,7 +302,7 @@ namespace Staberina
             var forceTarget = forcedTarget.IsValidTarget();
             var target = forceTarget ? forcedTarget : TargetSelector.GetTarget(d, TargetSelector.DamageType.Magical);
 
-            if (!target.IsValidTarget())
+            if (!target.IsValidTarget() || target == null)
             {
                 return false;
             }
