@@ -223,8 +223,7 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
                 cooldownMenu.AddItem(
                     new MenuItem("cooldown-tracker-TimeFormat", "Time Format").SetValue(
                         new StringList(new[] { "mm:ss", "ss" })));
-                cooldownMenu.AddItem(
-                    new MenuItem("cooldown-tracker-FontSize", "Font Size").SetValue(new Slider(13, 3, 30)));
+                cooldownMenu.AddItem(new MenuItem("cooldown-tracker-FontSize", "Font Size").SetValue(new Slider(13, 3, 30)));
                 cooldownMenu.AddItem(new MenuItem("cooldown-tracker-Enemy", "Enemy").SetValue(true));
                 cooldownMenu.AddItem(new MenuItem("cooldown-tracker-Ally", "Ally").SetValue(true));
                 cooldownMenu.AddItem(new MenuItem("cooldown-tracker-Self", "Self").SetValue(true));
@@ -468,8 +467,8 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
                             return;
                         }
 
-                        var x = (int)hero.HPBarPosition.X - (hero.IsMe ? -10 : 8);
-                        var y = (int)hero.HPBarPosition.Y + (hero.IsEnemy ? 17 : (hero.IsMe ? 6 : 14));
+                        var x = (int)hero.HPBarPosition.X - (hero.IsMe ? -2 : 18);
+                        var y = (int)hero.HPBarPosition.Y + (hero.IsEnemy ? 2 : (hero.IsMe ? -4 : 2));
 
                         this._sprite.Begin(SpriteFlags.AlphaBlend);
                         var summonerData = this._summonerDatas[hero.NetworkId];

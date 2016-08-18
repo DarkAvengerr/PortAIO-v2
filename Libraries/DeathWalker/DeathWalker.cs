@@ -129,8 +129,6 @@ namespace DetuksSharp
         public static List<AIHeroClient> AllEnemys = new List<AIHeroClient>();
         public static List<AIHeroClient> AllAllys = new List<AIHeroClient>();
 
-        public static List<Obj_AI_Turret> EnemyTowers = new List<Obj_AI_Turret>();
-
         public static List<Obj_BarracksDampener> EnemyBarracs = new List<Obj_BarracksDampener>();
 
 
@@ -163,13 +161,10 @@ namespace DetuksSharp
             AllEnemys = ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsEnemy).ToList();
             AllAllys = ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsAlly).ToList();
 
-            EnemyTowers = ObjectManager.Get<Obj_AI_Turret>().Where(tow => tow.IsEnemy).ToList();
-
             EnemyBarracs = ObjectManager.Get<Obj_BarracksDampener>().Where(tow => tow.IsEnemy).ToList();
 
             EnemyHQ = ObjectManager.Get<Obj_HQ>().Where(tow => tow.IsEnemy).ToList();
 
-            EnemyObjectives.AddRange(EnemyTowers);
             EnemyObjectives.AddRange(EnemyBarracs);
             EnemyObjectives.AddRange(EnemyHQ);
 
@@ -205,7 +200,6 @@ namespace DetuksSharp
                         LeagueSharp.Common.Utility.DelayAction.Add((int)350, delegate { resetAutoAttackTimer(); });
                     else
                         resetAutoAttackTimer();
-                    //
                 }
                 var spell = player.Spellbook.GetSpell(args.Slot);
                 if (spell != null)
@@ -214,19 +208,18 @@ namespace DetuksSharp
                     {
                         afterAttack(sender, (AttackableUnit)args.Target);
                     }
-
                 }
             }
         }
 
         private static void onStopAutoAttack(Obj_AI_Base sender, SpellbookStopCastEventArgs args)
         {
-            if (sender.IsMe && EloBuddy.SDK.Orbwalker.IsRanged && (args.DestroyMissile && args.StopAnimation))
+            if (sender.IsValid && sender.IsMe && EloBuddy.SDK.Orbwalker.IsRanged && (args.DestroyMissile && args.StopAnimation))
             {
-                //Console.WriteLine("Cancel auto");
-                //var resetTo = (menu.Item("betaStut").GetValue<bool>()) ? previousAttack : 0;
-                //lastAutoAttack = resetTo;
-                //lastAutoAttackMove = resetTo;
+                Console.WriteLine("Cancel auto");
+                var resetTo = (menu.Item("betaStut").GetValue<bool>()) ? previousAttack : 0;
+                lastAutoAttack = resetTo;
+                lastAutoAttackMove = resetTo;
             }
         }
 
@@ -293,12 +286,12 @@ namespace DetuksSharp
 
         public static void deathWalkTarget(Vector3 goalPosition, AttackableUnit target = null, bool noMove = false, bool delayMovement = false)
         {
-            if (target != null && EloBuddy.SDK.Orbwalker.CanAutoAttack && inAutoAttackRange(target))
+            if (target != null && canAttack() && inAutoAttackRange(target))
             {
                 doAttack(target);
             }
             CustomMoveDelayTemp = delayMovement ? 400 : 0;
-            if (EloBuddy.SDK.Orbwalker.CanMove && !noMove)
+            if (canMove() && !noMove)
             {
                 if (target != null && (CurrentMode == Mode.Lasthit || CurrentMode == Mode.Harass))
                     killUnit = target;
@@ -317,7 +310,7 @@ namespace DetuksSharp
             {
                 /* turrets */
                 foreach (var turret in
-                    ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && inAutoAttackRange(t)))
+                    ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && inAutoAttackRange(t) && !t.IsDead))
                 {
                     return turret;
                 }
@@ -325,14 +318,14 @@ namespace DetuksSharp
                 /* inhibitor */
                 foreach (var turret in
                     ObjectManager.Get<Obj_BarracksDampener>()
-                        .Where(t => t.IsValidTarget() && inAutoAttackRange(t)))
+                        .Where(t => t.IsValidTarget() && inAutoAttackRange(t) && !t.IsDead))
                 {
                     return turret;
                 }
 
                 /* nexus */
                 foreach (var nexus in
-                    ObjectManager.Get<Obj_HQ>().Where(t => t.IsValidTarget() && inAutoAttackRange(t)))
+                    ObjectManager.Get<Obj_HQ>().Where(t => t.IsValidTarget() && inAutoAttackRange(t) && !t.IsDead))
                 {
                     return nexus;
                 }
@@ -688,7 +681,7 @@ namespace DetuksSharp
 
         public static bool canAttack()
         {
-            return EloBuddy.SDK.Orbwalker.CanAutoAttack;
+            return canAttackAfter() == 0 && attack && cantMoveTill < now;
         }
 
         public static int canAttackAfter()
@@ -699,12 +692,19 @@ namespace DetuksSharp
 
         public static bool canMove()
         {
-            return EloBuddy.SDK.Orbwalker.CanMove;
+            return canMoveAfter() == 0 && cantMoveTill < now && move;
         }
 
         private static bool hyperCharged()
         {
             return player.Buffs.Any(buffs => buffs.Name == "jaycehypercharge");
+        }
+
+        public static int canMoveAfter()
+        {
+            var after = lastAutoAttackMove + player.AttackCastDelay * 1000 - now + menu.Item("MovDelay").GetValue<Slider>().Value + ((hyperCharged()) ? 150 : 0);
+            var aaBefore = (isTryingToAttack) ? (lastAutoAttack + 350) - now : 0;
+            return (int)(after > 0 ? after : (aaBefore > 0) ? aaBefore : 0);
         }
 
         public static void resetAutoAttackTimer(bool safe = false)
@@ -806,7 +806,7 @@ namespace DetuksSharp
 
             Drawing.OnDraw += onDraw;
 
-            Obj_AI_Base.OnSpellCast += onStartAutoAttack;
+            Obj_AI_Base.OnBasicAttack += onStartAutoAttack;
             Spellbook.OnStopCast += onStopAutoAttack;
 
             Obj_AI_Base.OnSpellCast += onDoCast;

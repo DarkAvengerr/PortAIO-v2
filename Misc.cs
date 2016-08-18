@@ -111,9 +111,9 @@ namespace PortAIO.Dual_Port
                 case Champion.Fizz:
                     champ = new string[] { "Math Fizz", "ElFizz", "UnderratedAIO" };
                     break;
-                // Galio
-                // Gangplank
-                // Garen
+                // Galio - Underrated
+                // Gangplank - Underrated
+                // Garen - Underrated
                 case Champion.Gnar:
                     champ = new string[] { "Hellsing's Gnar", "SluttyGnar" };
                     break;
@@ -126,7 +126,7 @@ namespace PortAIO.Dual_Port
                 case Champion.Hecarim:
                     champ = new string[] { "JustHecarim", "SharpyAIO", "UnderratedAIO" };
                     break;
-                // Heimerdinger
+                // Heimerdinger - 2Girls1Donger
                 case Champion.Illaoi:
                     champ = new string[] { "Tentacle Kitty", "SharpShooter" };
                     break;
@@ -172,7 +172,7 @@ namespace PortAIO.Dual_Port
                 case Champion.Kennen:
                     champ = new string[] { "UnderratedAIO", "BrianSharp", "Hestia's Kennen" };
                     break;
-                // Kha'Zix
+                // Kha'Zix - Seph Kha'Zix
                 case Champion.Kindred:
                     champ = new string[] { "Yin & Yang", "OKTW", "SharpShooter" };
                     break;
@@ -189,7 +189,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "ElEasy", "Support is Easy", "vSeries" };
                     break;
                 case Champion.Lissandra:
-                    champ = new string[] { "SephLissandra", "xSalice" }; //woops
+                    champ = new string[] { "SephLissandra", "xSalice" };
                     break;
                 case Champion.Lucian:
                     champ = new string[] { "LCS Lucian", "BrianSharp", "hikiMarksman", "Hoola Lucian", "iLucian", "iSeriesReborn", "KoreanLucian", "OKTW", "SAutoCarry", "SharpShooter", "xSalice" };
@@ -200,7 +200,7 @@ namespace PortAIO.Dual_Port
                 case Champion.Lux:
                     champ = new string[] { "OKTW", "vSeries" };
                     break;
-                // Malphite
+                // Malphite - ElEasy
                 case Champion.Malzahar:
                     champ = new string[] { "OKTW", "SurvivorSeries" };
                     break;
@@ -231,7 +231,7 @@ namespace PortAIO.Dual_Port
                 case Champion.Nidalee:
                     champ = new string[] { "KurisuNidalee", "HeavenStrikeNidalee", "NechritoNidalee", "D-Nidalee" };
                     break;
-                // Nocturne
+                // Nocturne - Underrated
                 case Champion.Nunu:
                     champ = new string[] { "Nunu by Alqohol", "Support Is Easy" };
                     break;
@@ -250,7 +250,7 @@ namespace PortAIO.Dual_Port
                 case Champion.Quinn:
                     champ = new string[] { "OKTW", "GFUEL Quinn" };
                     break;
-                // Rammus
+                // Rammus - BrianSharp
                 case Champion.RekSai:
                     champ = new string[] { "D-Reksai", "HeavenStrike Rek'Sai", "Rek'Sai Winner of Fights" };
                     break;
@@ -272,7 +272,7 @@ namespace PortAIO.Dual_Port
                 case Champion.Sejuani:
                     champ = new string[] { "ElSejuani", "UnderratedAIO" };
                     break;
-                // Shaco
+                // Shaco - Underrated
                 case Champion.Shen:
                     champ = new string[] { "UnderratedAIO", "BrianSharp", "Kimbaeng Shen" };
                     break;
@@ -282,11 +282,11 @@ namespace PortAIO.Dual_Port
                 case Champion.Singed:
                     champ = new string[] { "UnderratedAIO", "ElSinged" };
                     break;
-                // Sion
+                // Sion - Underrated
                 case Champion.Sivir:
                     champ = new string[] { "OKTW", "DZAIO", "hikiMarksman", "ProSeries", "SFXChallenger", "SharpShooter", "ShineAIO" };
                     break;
-                // Skarner
+                // Skarner - Underrated
                 case Champion.Sona:
                     champ = new string[] { "ElEasy", "Royal Song of Sona", "Support is Easy", "Vodka Sona", "vSeries" };
                     break;
@@ -302,7 +302,7 @@ namespace PortAIO.Dual_Port
                 case Champion.TahmKench:
                     champ = new string[] { "UnderratedAIO", "FreshBooster", "STahmKench", "vSeries" };
                     break;
-                // Taliyah
+                // Taliyah - Toph#
                 case Champion.Talon:
                     champ = new string[] { "GFUEL Talon", "Hoola Talon" };
                     break;
@@ -363,7 +363,7 @@ namespace PortAIO.Dual_Port
                 case Champion.Warwick:
                     champ = new string[] { "The Blood Hunter", "BrianSharp", "D-Warwick", "DZAIO" };
                     break;
-                // Wukong
+                // Wukong - Underrated
                 case Champion.Xerath:
                     champ = new string[] { "Kortatu's Xerath", "OKTW", "SluttyXerath" };
                     break;
@@ -373,12 +373,12 @@ namespace PortAIO.Dual_Port
                 case Champion.Yasuo:
                     champ = new string[] { "YasuoPro", "BrianSharp", "GosuMechanics" };
                     break;
-                // Yorick
-                // Zac
+                // Yorick - Underrated
+                // Zac - Underrated
                 case Champion.Zed:
                     champ = new string[] { "Korean Zed", "SharpyAIO" };
                     break;
-                // Ziggs
+                // Ziggs - Kortatu
                 case Champion.Zilean:
                     champ = new string[] { "ElZilean", "Support is Easy" };
                     break;

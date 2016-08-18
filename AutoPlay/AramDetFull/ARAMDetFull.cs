@@ -174,34 +174,8 @@ using EloBuddy; namespace ARAMDetFull
                     {
                         Console.WriteLine(buf.Name);
                     }
-                    
-                    /*var player = HeroManager.Player;
-                    foreach (var spell in
-                   SpellDatabase.Spells.Where(
-                       s =>
-                           s.ChampionName.Equals(player.ChampionName)))
-                    {
-                        Console.WriteLine("-----Spell: " + spell.Slot + "---------------- ");
-                        if(spell.SpellTags != null)
-                            foreach (var tag in spell.SpellTags)
-                            {
-                                Console.WriteLine("--tag: " + tag);
-                            }
-                        if (spell.CastType != null)
-                            foreach (var ctype in spell.CastType)
-                            {
-                                Console.WriteLine("--casttype: " + ctype);
-                            }
-                    }*/
-
                 }
-                //if (lastTick + tickTimeRng > now)
-                //    return;
 
-                //if(rng == null)
-                //   rng = new Random();
-
-                //tickTimeRng = rng.Next(70, 140);
                 lastTick = now;
                 ARAMSimulator.updateArmaPlay();
             }

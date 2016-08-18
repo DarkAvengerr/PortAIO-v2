@@ -740,16 +740,6 @@ namespace ARAMDetFull
                 AutoShopper.buyNext();
                 lastBuy = DeathWalker.now;
             }
-            /* foreach (var item in nextItem.itemIds)
-             {
-                 if (!LeagueSharp.Common.Items.HasItem(item) && nextItem.goldReach<=player.Gold)
-                 {
-                     Console.WriteLine("Buy itemmss: "+item);
-                     Shop.BuyItem((ItemId)item);
-                     lastBuy = DeathWalker.now;
-                 }
-             }
-         checkItems();*/
         }
 
         public static void setupARMASimulator()
@@ -791,7 +781,6 @@ namespace ARAMDetFull
                 setUpItems();
                 setChamp();
                 AutoShopper.setBuild(champBuild);
-                //checkItems();
                 sSpells = new SummonerSpells();
                 if (champ != null)
                 {
@@ -877,7 +866,6 @@ namespace ARAMDetFull
         public static bool inDanger = false;
         public static float farmRange = 900;
 
-        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static void updateArmaPlay()
         {
             try
@@ -890,19 +878,21 @@ namespace ARAMDetFull
                 }
                 if (!haveSeenMinion)
                     return;
+
                 try
                 {
                     AutoLevelChamp.LevelUpOff();
-
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex);
                 }
+
                 if ((player.InShop() || player.IsDead)/* && nextItem != null && nextItem.goldReach <= player.Gold*/)
                 {
                     buyItems();
                 }
+
                 if (champ != null)
                 {
                     champ.alwaysCheck();

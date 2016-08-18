@@ -31,26 +31,23 @@ namespace ARAMDetFull
 
         public static void LevelUpOff()
         {
-            Console.WriteLine("1");
-            if (lastLevelup + 2000 < DeathWalker.now)
+            lastLevelup = DeathWalker.now;
+            for (int i = 0; i < ObjectManager.Player.Level; i++)
             {
-                Console.WriteLine("2");
-                lastLevelup = DeathWalker.now;
-                if (ObjectManager.Player.SpellTrainingPoints > 0 && ObjectManager.Player.SpellTrainingPoints <= ObjectManager.Player.Level)
+                var spell = (SpellSlot)(order[i] - 1);
+                if (ObjectManager.Player.Spellbook.CanSpellBeUpgraded(spell) && (ObjectManager.Player.Level == 6 || ObjectManager.Player.Level == 11 || ObjectManager.Player.Level == 16))
                 {
-                    Console.WriteLine("3");
-                    for (var i = ObjectManager.Player.Level - ObjectManager.Player.SpellTrainingPoints; i < ObjectManager.Player.Level; i++)
-                    {
-                        Console.WriteLine("4");
-                        var spell = (SpellSlot)(order[i] - 1);
-                        if (ObjectManager.Player.Spellbook.GetSpell(spell).Level < 6)
-                        {
-                            Console.WriteLine("5");
-                            Console.WriteLine("Level: " + spell);
-                            ObjectManager.Player.Spellbook.LevelUpSpell(spell);
-                            Player.LevelSpell(spell);
-                        }
-                    }
+                    ObjectManager.Player.Spellbook.LevelUpSpell(spell);
+                    continue;
+                }
+                if (!ObjectManager.Player.Spellbook.CanSpellBeUpgraded(spell))
+                {
+                    continue;
+                }
+                if (ObjectManager.Player.Spellbook.GetSpell(spell).Level < 6)
+                {
+                    ObjectManager.Player.Spellbook.LevelUpSpell(spell);
+                    //Player.LevelSpell(spell);
                 }
             }
         }
