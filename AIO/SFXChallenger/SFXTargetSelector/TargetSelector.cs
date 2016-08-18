@@ -38,7 +38,8 @@ using Version = System.Version;
  * Don't copy paste this without asking & giving credits fuckers :^) 
  */
 
-using EloBuddy; namespace SFXChallenger.SFXTargetSelector
+using EloBuddy;
+namespace SFXChallenger.SFXTargetSelector
 {
     public static partial class TargetSelector
     {
@@ -46,7 +47,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
         {
             LeagueSharp.Common.TargetSelector.CustomTS = true;
             GameObjects.Initialize();
-            CustomEvents.Game.OnGameLoad += delegate { Drawings.Initialize(); };
+            Drawings.Initialize();
         }
 
         public static Menu Menu { get; private set; }

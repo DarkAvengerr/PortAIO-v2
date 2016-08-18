@@ -27,10 +27,10 @@ using EloBuddy; namespace KappaSeries
 
         public Volibear()
         {
-            CustomEvents.Game.OnGameLoad += Load;
+            Load();
         }
 
-        private static void Load(EventArgs args)
+        private static void Load()
         {
             _player = ObjectManager.Player;
 

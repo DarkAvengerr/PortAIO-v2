@@ -21,7 +21,7 @@ namespace TheBrand
         private Orbwalking.Orbwalker _orbwalker;
         private MenuItem _drawQ, _drawW, _drawE, _drawR;
 
-        public void Load(EventArgs loadargs)
+        public void Load()
         {
             try
             {

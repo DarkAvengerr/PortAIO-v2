@@ -177,7 +177,7 @@ namespace MathFizz
             Menu.AddSubMenu(about);
             about.AddItem(new MenuItem("AboutText", "About"));
             about.AddItem(new MenuItem("Author", "Author: mathieu002").SetFontStyle(FontStyle.Italic, fontColor: SharpDX.Color.White));
-            about.AddItem(new MenuItem("Credits", "Credits: ChewyMoon,1Shinigamix3,jQuery,Kurisu,Hellsing,detuks"));
+            about.AddItem(new MenuItem("Credits", "Credits: 1Shinigamix3,jQuery,Kurisu,Hellsing,detuks"));
             about.AddItem(new MenuItem("Upvote", "Remember to upvote the assembly if you like it ! GL & HF").SetFontStyle(FontStyle.Italic, fontColor: SharpDX.Color.Goldenrod));
             hydra = new Items.Item(3074, 185);
             tiamat = new Items.Item(3077, 185);

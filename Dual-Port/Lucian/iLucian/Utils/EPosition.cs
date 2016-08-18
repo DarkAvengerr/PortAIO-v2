@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace iLucian.Utils
+using EloBuddy;
+using LeagueSharp.Common;
+namespace iLucian.Utils
 {
     using ClipperLib;
 
@@ -78,7 +78,7 @@ using EloBuddy;
                 {
                     var ePosition =
                         ObjectManager.Player.ServerPosition.Extend(
-                            highHealthEnemiesNear.OrderBy(t => t.Health).First().ServerPosition, 
+                            highHealthEnemiesNear.OrderBy(t => t.Health).First().ServerPosition,
                             450f);
 
                     if (!ePosition.UnderTurret(true))
@@ -174,7 +174,7 @@ using EloBuddy;
                             enemiesNear.OrderBy(m => m.Distance(ObjectManager.Player)).FirstOrDefault()))
                     {
                         var tempPosition = ObjectManager.Player.ServerPosition.Extend(
-                            closestMostHealth.ServerPosition, 
+                            closestMostHealth.ServerPosition,
                             450f);
                         if (tempPosition.IsSafe())
                         {
@@ -306,7 +306,7 @@ using EloBuddy;
                 DashVariables.EnemiesClose.Select(
                     enemy =>
                     new SOLOGeometry.Circle(
-                        enemy.ServerPosition.To2D(), 
+                        enemy.ServerPosition.To2D(),
                         (dynamic ? (enemy.IsMelee ? enemy.AttackRange * 1.5f : enemy.AttackRange) : staticRange)
                         + enemy.BoundingRadius + 20).ToPolygon()).ToList();
             var pathList = SOLOGeometry.ClipPolygons(polygonsList);
@@ -811,65 +811,62 @@ using EloBuddy;
 
             initialized = true;
 
-            CustomEvents.Game.OnGameLoad += (args) =>
-                {
-                    Player = ObjectManager.Player;
+            Player = ObjectManager.Player;
 
-                    HeroesList.AddRange(ObjectManager.Get<AIHeroClient>());
-                    MinionsList.AddRange(
-                        ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(
-                                o =>
-                                o.Team != GameObjectTeam.Neutral && !o.CharData.BaseSkinName.ToLower().Contains("ward")
-                                && !o.CharData.BaseSkinName.ToLower().Contains("trinket")
-                                && !o.CharData.BaseSkinName.Equals("gangplankbarrel")));
-                    TurretsList.AddRange(ObjectManager.Get<Obj_AI_Turret>());
-                    InhibitorsList.AddRange(ObjectManager.Get<Obj_BarracksDampener>());
-                    JungleList.AddRange(ObjectManager.Get<Obj_AI_Minion>().Where(o => o.Team == GameObjectTeam.Neutral));
-                    WardsList.AddRange(
-                        ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(
-                                o =>
-                                o.CharData.BaseSkinName.ToLower().Contains("ward")
-                                || o.CharData.BaseSkinName.ToLower().Contains("trinket")));
-                    ShopsList.AddRange(ObjectManager.Get<Obj_Shop>());
-                    SpawnPointsList.AddRange(ObjectManager.Get<Obj_SpawnPoint>());
-                    GameObjectsList.AddRange(ObjectManager.Get<GameObject>());
-                    NexusList.AddRange(ObjectManager.Get<Obj_HQ>());
-                    AttackableUnitsList.AddRange(ObjectManager.Get<AttackableUnit>());
+            HeroesList.AddRange(ObjectManager.Get<AIHeroClient>());
+            MinionsList.AddRange(
+                ObjectManager.Get<Obj_AI_Minion>()
+                    .Where(
+                        o =>
+                        o.Team != GameObjectTeam.Neutral && !o.CharData.BaseSkinName.ToLower().Contains("ward")
+                        && !o.CharData.BaseSkinName.ToLower().Contains("trinket")
+                        && !o.CharData.BaseSkinName.Equals("gangplankbarrel")));
+            TurretsList.AddRange(ObjectManager.Get<Obj_AI_Turret>());
+            InhibitorsList.AddRange(ObjectManager.Get<Obj_BarracksDampener>());
+            JungleList.AddRange(ObjectManager.Get<Obj_AI_Minion>().Where(o => o.Team == GameObjectTeam.Neutral));
+            WardsList.AddRange(
+                ObjectManager.Get<Obj_AI_Minion>()
+                    .Where(
+                        o =>
+                        o.CharData.BaseSkinName.ToLower().Contains("ward")
+                        || o.CharData.BaseSkinName.ToLower().Contains("trinket")));
+            ShopsList.AddRange(ObjectManager.Get<Obj_Shop>());
+            SpawnPointsList.AddRange(ObjectManager.Get<Obj_SpawnPoint>());
+            GameObjectsList.AddRange(ObjectManager.Get<GameObject>());
+            NexusList.AddRange(ObjectManager.Get<Obj_HQ>());
+            AttackableUnitsList.AddRange(ObjectManager.Get<AttackableUnit>());
 
-                    EnemyHeroesList.AddRange(HeroesList.Where(o => o.IsEnemy));
-                    EnemyMinionsList.AddRange(MinionsList.Where(o => o.IsEnemy));
-                    EnemyTurretsList.AddRange(TurretsList.Where(o => o.IsEnemy));
-                    EnemyInhibitorsList.AddRange(InhibitorsList.Where(o => o.IsEnemy));
-                    EnemyList.AddRange(
-                        EnemyHeroesList.Cast<Obj_AI_Base>().Concat(EnemyMinionsList).Concat(EnemyTurretsList));
-                    EnemyNexus = NexusList.FirstOrDefault(n => n.IsEnemy);
+            EnemyHeroesList.AddRange(HeroesList.Where(o => o.IsEnemy));
+            EnemyMinionsList.AddRange(MinionsList.Where(o => o.IsEnemy));
+            EnemyTurretsList.AddRange(TurretsList.Where(o => o.IsEnemy));
+            EnemyInhibitorsList.AddRange(InhibitorsList.Where(o => o.IsEnemy));
+            EnemyList.AddRange(
+                EnemyHeroesList.Cast<Obj_AI_Base>().Concat(EnemyMinionsList).Concat(EnemyTurretsList));
+            EnemyNexus = NexusList.FirstOrDefault(n => n.IsEnemy);
 
-                    AllyHeroesList.AddRange(HeroesList.Where(o => o.IsAlly));
-                    AllyMinionsList.AddRange(MinionsList.Where(o => o.IsAlly));
-                    AllyTurretsList.AddRange(TurretsList.Where(o => o.IsAlly));
-                    AllyInhibitorsList.AddRange(InhibitorsList.Where(o => o.IsAlly));
-                    AllyList.AddRange(
-                        AllyHeroesList.Cast<Obj_AI_Base>().Concat(AllyMinionsList).Concat(AllyTurretsList));
-                    AllyNexus = NexusList.FirstOrDefault(n => n.IsAlly);
+            AllyHeroesList.AddRange(HeroesList.Where(o => o.IsAlly));
+            AllyMinionsList.AddRange(MinionsList.Where(o => o.IsAlly));
+            AllyTurretsList.AddRange(TurretsList.Where(o => o.IsAlly));
+            AllyInhibitorsList.AddRange(InhibitorsList.Where(o => o.IsAlly));
+            AllyList.AddRange(
+                AllyHeroesList.Cast<Obj_AI_Base>().Concat(AllyMinionsList).Concat(AllyTurretsList));
+            AllyNexus = NexusList.FirstOrDefault(n => n.IsAlly);
 
-                    JungleSmallList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Small));
-                    JungleLargeList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Large));
-                    JungleLegendaryList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Legendary));
+            JungleSmallList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Small));
+            JungleLargeList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Large));
+            JungleLegendaryList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Legendary));
 
-                    AllyWardsList.AddRange(WardsList.Where(o => o.IsAlly));
-                    EnemyWardsList.AddRange(WardsList.Where(o => o.IsEnemy));
+            AllyWardsList.AddRange(WardsList.Where(o => o.IsAlly));
+            EnemyWardsList.AddRange(WardsList.Where(o => o.IsEnemy));
 
-                    AllyShopsList.AddRange(ShopsList.Where(o => o.IsAlly));
-                    EnemyShopsList.AddRange(ShopsList.Where(o => o.IsEnemy));
+            AllyShopsList.AddRange(ShopsList.Where(o => o.IsAlly));
+            EnemyShopsList.AddRange(ShopsList.Where(o => o.IsEnemy));
 
-                    AllySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsAlly));
-                    EnemySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsEnemy));
+            AllySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsAlly));
+            EnemySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsEnemy));
 
-                    GameObject.OnCreate += OnCreate;
-                    GameObject.OnDelete += OnDelete;
-                };
+            GameObject.OnCreate += OnCreate;
+            GameObject.OnDelete += OnDelete;
         }
 
         /// <summary>
@@ -1353,7 +1350,7 @@ using EloBuddy;
                 {
                     var angle = i * 2 * Math.PI / CircleLineSegmentN;
                     var point = new Vector2(
-                        Center.X + outRadius * (float)Math.Cos(angle), 
+                        Center.X + outRadius * (float)Math.Cos(angle),
                         Center.Y + outRadius * (float)Math.Sin(angle));
                     result.Add(point);
                 }
@@ -1470,7 +1467,7 @@ using EloBuddy;
                 {
                     var angle = i * 2 * Math.PI / CircleLineSegmentN;
                     var point = new Vector2(
-                        Center.X - outRadius * (float)Math.Cos(angle), 
+                        Center.X - outRadius * (float)Math.Cos(angle),
                         Center.Y - outRadius * (float)Math.Sin(angle));
                     result.Add(point);
                 }
@@ -1479,7 +1476,7 @@ using EloBuddy;
                 {
                     var angle = i * 2 * Math.PI / CircleLineSegmentN;
                     var point = new Vector2(
-                        Center.X + innerRadius * (float)Math.Cos(angle), 
+                        Center.X + innerRadius * (float)Math.Cos(angle),
                         Center.Y - innerRadius * (float)Math.Sin(angle));
                     result.Add(point);
                 }

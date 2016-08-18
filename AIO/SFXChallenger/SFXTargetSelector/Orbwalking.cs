@@ -1106,7 +1106,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                     _config.Item("AttackProbability").GetValue<Slider>().Value, OrbwalkingRandomize.Attack);
                 SetRandomizeEnabled(_config.Item("AttackEnabled").GetValue<bool>(), OrbwalkingRandomize.Attack);
 
-                CustomEvents.Game.OnGameLoad += GameOnOnGameLoad;
+                GameOnOnGameLoad();
                 Game.OnUpdate += GameOnOnGameUpdate;
                 Drawing.OnDraw += DrawingOnOnDraw;
 
@@ -1197,7 +1197,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                 set { _mode = value; }
             }
 
-            private void GameOnOnGameLoad(EventArgs args)
+            private void GameOnOnGameLoad()
             {
                 var clone = false;
                 foreach (var enemy in GameObjects.EnemyHeroes)

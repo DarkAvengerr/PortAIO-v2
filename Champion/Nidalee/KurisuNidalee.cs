@@ -22,10 +22,10 @@ namespace KurisuNidalee
 
         internal KurisuNidalee()
         {                                                             
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        internal static void Game_OnGameLoad(EventArgs args)
+        internal static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != "Nidalee")
             {

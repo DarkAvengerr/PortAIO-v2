@@ -16,10 +16,10 @@ namespace TreeLib.Managers
 
         internal static void Initialize()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        private static void Game_OnGameLoad()
         {
             Menu = new Menu("Summoners", "Summoners");
             Menu.AddBool("SmiteManagerEnabled", "Load Smite Manager");

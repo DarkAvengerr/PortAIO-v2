@@ -60,11 +60,11 @@ using EloBuddy; namespace RethoughtLib
 
             this.initialized = true;
 
-            CustomEvents.Game.OnGameLoad += this.Game_OnGameLoad;
+            this.Game_OnGameLoad();
 
         }
 
-        private void Game_OnGameLoad(System.EventArgs args)
+        private void Game_OnGameLoad()
         {
             foreach (var loadable in this.loadables)
             {

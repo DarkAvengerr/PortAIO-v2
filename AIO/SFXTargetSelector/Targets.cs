@@ -44,11 +44,9 @@ namespace SFXTargetSelector
             static Targets()
             {
                 PItems = new List<Item>();
-                CustomEvents.Game.OnGameLoad += delegate
-                {
-                    PItems.AddRange(GameObjects.EnemyHeroes.Select(e => new Item(e)));
-                    Game.OnUpdate += OnGameUpdate;
-                };
+
+                PItems.AddRange(GameObjects.EnemyHeroes.Select(e => new Item(e)));
+                Game.OnUpdate += OnGameUpdate;
             }
 
             public static ReadOnlyCollection<Item> Items

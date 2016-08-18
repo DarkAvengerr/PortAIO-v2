@@ -15,7 +15,7 @@ using EloBuddy;
     {
         public static void LoadLogic()
         {
-            CustomEvents.Game.OnGameLoad += MyLogic.Spells.OnLoad;
+            MyLogic.Spells.OnLoad();
             Game.OnUpdate += MyLogic.Others.SoulboundSaver.OnUpdate;
             Obj_AI_Base.OnSpellCast += MyLogic.Others.SoulboundSaver.OnProcessSpellCast;
 

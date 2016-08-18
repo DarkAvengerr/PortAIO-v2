@@ -582,7 +582,7 @@ namespace ARAMDetFull
                     champ = new Kayle();
                     break;
                 case "Yasuo":
-                    champ = new Yasuo();
+                    champ = new YasuoA();
                     break;
                 case "Warwick":
                     champ = new WarwickA();

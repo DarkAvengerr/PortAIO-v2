@@ -58,14 +58,6 @@ using EloBuddy; namespace SFXUtility.Library
 
                                 if (gVersion > version)
                                 {
-                                    CustomEvents.Game.OnGameLoad +=
-                                        delegate
-                                        {
-                                            Notifications.AddNotification(
-                                                string.Format(
-                                                    "[{0}] Update available: {1} => {2}!", name, version, gVersion),
-                                                displayTime);
-                                        };
                                 }
                             }
                         }

@@ -11,7 +11,7 @@ using EloBuddy; namespace KappaSeries
     {
         public Aatrox()
         {
-            CustomEvents.Game.OnGameLoad += Load;
+            Load();
         }
 
         private static Orbwalking.Orbwalker _orbwalker;
@@ -27,7 +27,7 @@ using EloBuddy; namespace KappaSeries
         private static Menu _cfg;
         private static AIHeroClient _player;
 
-        static void Load(EventArgs args)
+        static void Load()
         {
             _player = ObjectManager.Player;
 

@@ -203,10 +203,10 @@ using EloBuddy;
 
         public static void Initiate()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        private static void Game_OnGameLoad()
         {
             root.AddItem(new MenuItem("Enable", "Enable").SetValue(true));
             root.AddItem(new MenuItem("Click Mode", "Click Mode"))

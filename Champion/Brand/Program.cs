@@ -11,7 +11,7 @@ namespace TheBrand
     {
         public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += new Brand().Load;
+            new Brand().Load();
         }
     }
 }

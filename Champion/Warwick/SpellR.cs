@@ -118,13 +118,13 @@ using EloBuddy; namespace Warwick
                     new MenuItem("Draw.Status.Show", MenuTab + "Show This:").SetValue(
                         new StringList(new[] {"All", "Show Only High Priority Target Status"})));
             }
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
             Game.OnUpdate += OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Game.OnWndProc += Game_OnWndProc;
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        private static void Game_OnGameLoad()
         {
             LoadEnemyPriorityData();
         }

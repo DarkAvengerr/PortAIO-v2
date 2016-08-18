@@ -667,9 +667,6 @@ using EloBuddy;
             }
         }
 
-        /// <summary>
-        ///     Harass logic by Chewymoon (pls no kill)
-        /// </summary>
         private static void OnHarass()
         {
             try

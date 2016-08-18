@@ -15,11 +15,11 @@ using EloBuddy;
 
         public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Load;
+            Load();
             Obj_AI_Base.OnSpellCast += OnSpellCast;
         }
 
-        public static void Load(EventArgs args)
+        public static void Load()
         {
             Menu = new Menu(" :: TiltSharp :^)", "tiltsharpmenu", true).SetFontStyle(FontStyle.Regular, Color.Pink);
             Menu.AddItem(

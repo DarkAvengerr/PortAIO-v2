@@ -112,7 +112,7 @@ using EloBuddy; namespace ElUtilitySuite
                 menu.AddItem(new MenuItem("usecombo", "Combo (Active)").SetValue(new KeyBind(32, KeyBindType.Press)));
                 menu.AddItem(new MenuItem("seperator", ""));
                 menu.AddItem(new MenuItem("Versionnumber", $"Version: {ScriptVersion}"));
-                menu.AddItem(new MenuItem("by.jQuery", "jQuery / ChewyMoon"));
+                menu.AddItem(new MenuItem("by.jQuery", "jQuery"));
                 menu.AddToMainMenu();
 
                 Menu = menu;

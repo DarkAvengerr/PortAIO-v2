@@ -44,7 +44,8 @@ using SFXUtility.Features.Trackers;
 
 #endregion
 
-using EloBuddy; namespace SFXUtility
+using EloBuddy;
+namespace SFXUtility
 {
     public class Bootstrap
     {
@@ -96,11 +97,9 @@ using EloBuddy; namespace SFXUtility
 
                 #endregion Parents
 
-                CustomEvents.Game.OnGameLoad += delegate
-                {
-                    Global.Features.AddRange(
-                        new List<IChild>
-                        {
+                Global.Features.AddRange(
+                    new List<IChild>
+                    {
                             #region Features
 
                             new AntiRengar(activators),
@@ -143,29 +142,28 @@ using EloBuddy; namespace SFXUtility
                             new Sidebar(trackers),
                             new Ward(trackers)
 
-                            #endregion Features
-                        });
-                    foreach (var feature in Global.Features)
-                    {
-                        try
-                        {
-                            feature.HandleEvents();
-                        }
-                        catch (Exception ex)
-                        {
-                            Global.Logger.AddItem(new LogItem(ex));
-                        }
-                    }
+                        #endregion Features
+                    });
+                foreach (var feature in Global.Features)
+                {
                     try
                     {
-                        Update.Check(
-                            Global.Name, Assembly.GetExecutingAssembly().GetName().Version, Global.UpdatePath, 10000);
+                        feature.HandleEvents();
                     }
                     catch (Exception ex)
                     {
                         Global.Logger.AddItem(new LogItem(ex));
                     }
-                };
+                }
+                try
+                {
+                    Update.Check(
+                        Global.Name, Assembly.GetExecutingAssembly().GetName().Version, Global.UpdatePath, 10000);
+                }
+                catch (Exception ex)
+                {
+                    Global.Logger.AddItem(new LogItem(ex));
+                }
             }
             catch (Exception ex)
             {

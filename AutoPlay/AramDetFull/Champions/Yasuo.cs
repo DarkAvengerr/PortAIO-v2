@@ -9,12 +9,12 @@ using SharpDX;
 
 using EloBuddy; namespace ARAMDetFull.Champions
 {
-    class Yasuo : Champion
+    class YasuoA : Champion
     {
 
         private Spell Q2;
 
-        public Yasuo()
+        public YasuoA()
         {
             ARAMSimulator.champBuild = new Build
             {

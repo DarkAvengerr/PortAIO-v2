@@ -11,10 +11,10 @@ namespace Mundo
 
         public Mundo()
         {
-            CustomEvents.Game.OnGameLoad += OnLoad;
+            OnLoad();
         }
 
-        private void OnLoad(EventArgs args)
+        private void OnLoad()
         {
             if (ObjectManager.Player.ChampionName != "DrMundo")
                 return;

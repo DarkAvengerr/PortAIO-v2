@@ -16,7 +16,7 @@
 *   (without him there would be no sharp.)
 *
 *  h3h3, Trees, L33T, blacky, zezzy, xQx,
-*  iJava, ChewyMoon, Kurisu, Asuna, iMeh,
+*  iJava, Kurisu, Asuna, iMeh,
 *  Sebby, Beaving, xcsoft, Sida, jQuery,
 *  legacy, xQx, Kortatu, OutrageousMe
 *        and everyone using this

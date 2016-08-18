@@ -106,7 +106,7 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
 
                 if (!backwardsPosition.UnderTurret(true))
                 {
-                //    return backwardsPosition;
+                    //    return backwardsPosition;
                 }
             }
             #endregion
@@ -782,65 +782,62 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
 
             initialized = true;
 
-            CustomEvents.Game.OnGameLoad += (args) =>
-                {
-                    Player = ObjectManager.Player;
+            Player = ObjectManager.Player;
 
-                    HeroesList.AddRange(ObjectManager.Get<AIHeroClient>());
-                    MinionsList.AddRange(
-                        ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(
-                                o =>
-                                o.Team != GameObjectTeam.Neutral && !o.CharData.BaseSkinName.ToLower().Contains("ward")
-                                && !o.CharData.BaseSkinName.ToLower().Contains("trinket")
-                                && !o.CharData.BaseSkinName.Equals("gangplankbarrel")));
-                    TurretsList.AddRange(ObjectManager.Get<Obj_AI_Turret>());
-                    InhibitorsList.AddRange(ObjectManager.Get<Obj_BarracksDampener>());
-                    JungleList.AddRange(ObjectManager.Get<Obj_AI_Minion>().Where(o => o.Team == GameObjectTeam.Neutral));
-                    WardsList.AddRange(
-                        ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(
-                                o =>
-                                o.CharData.BaseSkinName.ToLower().Contains("ward")
-                                || o.CharData.BaseSkinName.ToLower().Contains("trinket")));
-                    ShopsList.AddRange(ObjectManager.Get<Obj_Shop>());
-                    SpawnPointsList.AddRange(ObjectManager.Get<Obj_SpawnPoint>());
-                    GameObjectsList.AddRange(ObjectManager.Get<GameObject>());
-                    NexusList.AddRange(ObjectManager.Get<Obj_HQ>());
-                    AttackableUnitsList.AddRange(ObjectManager.Get<AttackableUnit>());
+            HeroesList.AddRange(ObjectManager.Get<AIHeroClient>());
+            MinionsList.AddRange(
+                ObjectManager.Get<Obj_AI_Minion>()
+                    .Where(
+                        o =>
+                        o.Team != GameObjectTeam.Neutral && !o.CharData.BaseSkinName.ToLower().Contains("ward")
+                        && !o.CharData.BaseSkinName.ToLower().Contains("trinket")
+                        && !o.CharData.BaseSkinName.Equals("gangplankbarrel")));
+            TurretsList.AddRange(ObjectManager.Get<Obj_AI_Turret>());
+            InhibitorsList.AddRange(ObjectManager.Get<Obj_BarracksDampener>());
+            JungleList.AddRange(ObjectManager.Get<Obj_AI_Minion>().Where(o => o.Team == GameObjectTeam.Neutral));
+            WardsList.AddRange(
+                ObjectManager.Get<Obj_AI_Minion>()
+                    .Where(
+                        o =>
+                        o.CharData.BaseSkinName.ToLower().Contains("ward")
+                        || o.CharData.BaseSkinName.ToLower().Contains("trinket")));
+            ShopsList.AddRange(ObjectManager.Get<Obj_Shop>());
+            SpawnPointsList.AddRange(ObjectManager.Get<Obj_SpawnPoint>());
+            GameObjectsList.AddRange(ObjectManager.Get<GameObject>());
+            NexusList.AddRange(ObjectManager.Get<Obj_HQ>());
+            AttackableUnitsList.AddRange(ObjectManager.Get<AttackableUnit>());
 
-                    EnemyHeroesList.AddRange(HeroesList.Where(o => o.IsEnemy));
-                    EnemyMinionsList.AddRange(MinionsList.Where(o => o.IsEnemy));
-                    EnemyTurretsList.AddRange(TurretsList.Where(o => o.IsEnemy));
-                    EnemyInhibitorsList.AddRange(InhibitorsList.Where(o => o.IsEnemy));
-                    EnemyList.AddRange(
-                        EnemyHeroesList.Cast<Obj_AI_Base>().Concat(EnemyMinionsList).Concat(EnemyTurretsList));
-                    EnemyNexus = NexusList.FirstOrDefault(n => n.IsEnemy);
+            EnemyHeroesList.AddRange(HeroesList.Where(o => o.IsEnemy));
+            EnemyMinionsList.AddRange(MinionsList.Where(o => o.IsEnemy));
+            EnemyTurretsList.AddRange(TurretsList.Where(o => o.IsEnemy));
+            EnemyInhibitorsList.AddRange(InhibitorsList.Where(o => o.IsEnemy));
+            EnemyList.AddRange(
+                EnemyHeroesList.Cast<Obj_AI_Base>().Concat(EnemyMinionsList).Concat(EnemyTurretsList));
+            EnemyNexus = NexusList.FirstOrDefault(n => n.IsEnemy);
 
-                    AllyHeroesList.AddRange(HeroesList.Where(o => o.IsAlly));
-                    AllyMinionsList.AddRange(MinionsList.Where(o => o.IsAlly));
-                    AllyTurretsList.AddRange(TurretsList.Where(o => o.IsAlly));
-                    AllyInhibitorsList.AddRange(InhibitorsList.Where(o => o.IsAlly));
-                    AllyList.AddRange(
-                        AllyHeroesList.Cast<Obj_AI_Base>().Concat(AllyMinionsList).Concat(AllyTurretsList));
-                    AllyNexus = NexusList.FirstOrDefault(n => n.IsAlly);
+            AllyHeroesList.AddRange(HeroesList.Where(o => o.IsAlly));
+            AllyMinionsList.AddRange(MinionsList.Where(o => o.IsAlly));
+            AllyTurretsList.AddRange(TurretsList.Where(o => o.IsAlly));
+            AllyInhibitorsList.AddRange(InhibitorsList.Where(o => o.IsAlly));
+            AllyList.AddRange(
+                AllyHeroesList.Cast<Obj_AI_Base>().Concat(AllyMinionsList).Concat(AllyTurretsList));
+            AllyNexus = NexusList.FirstOrDefault(n => n.IsAlly);
 
-                    JungleSmallList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Small));
-                    JungleLargeList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Large));
-                    JungleLegendaryList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Legendary));
+            JungleSmallList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Small));
+            JungleLargeList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Large));
+            JungleLegendaryList.AddRange(JungleList.Where(o => o.GetJungleType() == JungleType.Legendary));
 
-                    AllyWardsList.AddRange(WardsList.Where(o => o.IsAlly));
-                    EnemyWardsList.AddRange(WardsList.Where(o => o.IsEnemy));
+            AllyWardsList.AddRange(WardsList.Where(o => o.IsAlly));
+            EnemyWardsList.AddRange(WardsList.Where(o => o.IsEnemy));
 
-                    AllyShopsList.AddRange(ShopsList.Where(o => o.IsAlly));
-                    EnemyShopsList.AddRange(ShopsList.Where(o => o.IsEnemy));
+            AllyShopsList.AddRange(ShopsList.Where(o => o.IsAlly));
+            EnemyShopsList.AddRange(ShopsList.Where(o => o.IsEnemy));
 
-                    AllySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsAlly));
-                    EnemySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsEnemy));
+            AllySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsAlly));
+            EnemySpawnPointsList.AddRange(SpawnPointsList.Where(o => o.IsEnemy));
 
-                    GameObject.OnCreate += OnCreate;
-                    GameObject.OnDelete += OnDelete;
-                };
+            GameObject.OnCreate += OnCreate;
+            GameObject.OnDelete += OnDelete;
         }
 
         /// <summary>

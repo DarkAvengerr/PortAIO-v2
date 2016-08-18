@@ -214,6 +214,9 @@ namespace PortAIO
                         case 6: // DZAIO
                             DZAIO_Reborn.Program.Main();
                             break;
+                        case 7: // M1D 0R F33D
+                            Mid_or_Feed.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Akali:
@@ -236,6 +239,9 @@ namespace PortAIO
                             break;
                         case 5: // StonedSeriesAIO
                             StonedSeriesAIO.Program.Main();
+                            break;
+                        case 6: // M1D 0R F33D
+                            Mid_or_Feed.Program.Main();
                             break;
                     }
                     break;
@@ -1092,6 +1098,9 @@ namespace PortAIO
                         case 2: // LCS Leblanc
                             LCS_LeBlanc.Program.OnLoad();
                             break;
+                        case 3: // M1D 0R F33D
+                            Mid_or_Feed.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.LeeSin:
@@ -1197,6 +1206,9 @@ namespace PortAIO
                         case 1: // vSeries
                             vSupport_Series.Program.Game_OnGameLoad();
                             break;
+                        case 2: // M1D 0R F33D
+                            Mid_or_Feed.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Malphite:
@@ -1210,6 +1222,9 @@ namespace PortAIO
                             break;
                         case 1: // SurvivorSeries
                             SurvivorSeries.SurviorSeries.Main();
+                            break;
+                        case 2: // M1D 0R F33D
+                            Mid_or_Feed.Program.Main();
                             break;
                     }
                     break;
@@ -2102,6 +2117,9 @@ namespace PortAIO
                         case 2: // SluttyXerath
                             The_Slutty_Xerath.Xerath.OnLoad();
                             break;
+                        case 3: // M1D 0R F33D
+                            Mid_or_Feed.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.XinZhao:
@@ -2129,6 +2147,20 @@ namespace PortAIO
                             break;
                         case 2: // GosuMechanics
                             GosuMechanicsYasuo.Program.Game_OnGameLoad();
+                            break;
+                        case 3: // YasuoSharpv2
+                            YasuoSharpV2.Program.Main();
+                            break;
+                        case 4: // MasterOfWinds
+                            MasterOfWind.Program.Main();
+                            break;
+                        case 5: // M1D 0R F33D
+                            Mid_or_Feed.Program.Main();
+                            break;
+                        case 6: //YasuoMemeBender
+                            YasuoTheLastMemebender.Program.Game_OnGameLoad();
+                            break;
+                        case 7: // Media's Yasuo
                             break;
                     }
                     break;

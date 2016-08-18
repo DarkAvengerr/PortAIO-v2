@@ -60,12 +60,12 @@ using EloBuddy;
 
             tittle = "[Azir]Azir Updated June 2016";
             version = "1.0.1.2";
-            CustomEvents.Game.OnGameLoad += OnLoad;
+            OnLoad();
         }
 
         public AIHeroClient Hero => HeroManager.Player;
 
-        private void OnLoad(EventArgs args)
+        private void OnLoad()
         {
             if (Hero.ChampionName != "Azir") return;
 

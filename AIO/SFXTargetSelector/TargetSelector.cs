@@ -47,12 +47,10 @@ namespace SFXTargetSelector
         {
             LeagueSharp.Common.TargetSelector.CustomTS = true;
             GameObjects.Initialize();
-            CustomEvents.Game.OnGameLoad += delegate
-            {
-                Drawings.Initialize();
-                Notifications.AddNotification(string.Format("{0} loaded.", Name), 7500);
-                Chat.Print(string.Format("<font color='#259FF8'>{0} v{1} loaded.</font>", Name, Version));
-            };
+
+            Drawings.Initialize();
+            Notifications.AddNotification(string.Format("{0} loaded.", Name), 7500);
+            Chat.Print(string.Format("<font color='#259FF8'>{0} v{1} loaded.</font>", Name, Version));
         }
 
         public static Menu Menu { get; private set; }

@@ -48,10 +48,10 @@ using EloBuddy;
 
         public MActivator()
         {
-            CustomEvents.Game.OnGameLoad += onLoad;
+            onLoad();
         }
 
-        private void onLoad(EventArgs args)
+        private void onLoad()
         {
             try
             {

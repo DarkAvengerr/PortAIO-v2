@@ -32,7 +32,8 @@ using SFXChallenger.Library;
 
 #endregion
 
-using EloBuddy; namespace SFXChallenger.SFXTargetSelector
+using EloBuddy;
+namespace SFXChallenger.SFXTargetSelector
 {
     public static partial class TargetSelector
     {
@@ -43,11 +44,9 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
             static Targets()
             {
                 PItems = new List<Item>();
-                CustomEvents.Game.OnGameLoad += delegate
-                {
-                    PItems.AddRange(GameObjects.EnemyHeroes.Select(e => new Item(e)));
-                    Game.OnUpdate += OnGameUpdate;
-                };
+
+                PItems.AddRange(GameObjects.EnemyHeroes.Select(e => new Item(e)));
+                Game.OnUpdate += OnGameUpdate;
             }
 
             public static ReadOnlyCollection<Item> Items

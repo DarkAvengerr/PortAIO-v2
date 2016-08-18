@@ -10,7 +10,7 @@ using EloBuddy; namespace KappaSeries
     {
         public Akali()
         {
-            CustomEvents.Game.OnGameLoad += Load;
+            Load();
         }
 
         private static Orbwalking.Orbwalker _orbwalker;
@@ -26,7 +26,7 @@ using EloBuddy; namespace KappaSeries
         private static bool ERKill = false;
         private static bool IRKill = false;
 
-        private static void Load(EventArgs args)
+        private static void Load()
         {
             _player = ObjectManager.Player;
 

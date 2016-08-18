@@ -28,10 +28,10 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "BrianSharp", "KappaSeries", "SAutoCarry" };
                     break;
                 case Champion.Ahri:
-                    champ = new string[] { "OKTW", "DZAhri", "EloFactory Ahri", "KappaSeries", "xSalice", "BadaoSeries", "DZAIO" };
+                    champ = new string[] { "OKTW", "DZAhri", "EloFactory Ahri", "KappaSeries", "xSalice", "BadaoSeries", "DZAIO", "M1D 0R F33D" };
                     break;
                 case Champion.Akali:
-                    champ = new string[] { "xQx Akali", "Kappa Series", "Korean Akali", "Trookali", "xSalice", "StonedSeriesAIO" };
+                    champ = new string[] { "xQx Akali", "Kappa Series", "Korean Akali", "Trookali", "xSalice", "StonedSeriesAIO", "M1D 0R F33D" };
                     break;
                 case Champion.Alistar:
                     champ = new string[] { "ElAlistar", "Support Is Easy", "FreshBooster", "vSeries" };
@@ -180,7 +180,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "OKTW", "D-Kog'Maw", "iSeriesReborn", "ProSeries", "SFXChallenger", "SharpShooter", "xSalice" };
                     break;
                 case Champion.Leblanc:
-                    champ = new string[] { "Leblanc II", "FreshBooster", "LCS Leblanc" };
+                    champ = new string[] { "Leblanc II", "FreshBooster", "LCS Leblanc", "M1D 0R F33D" };
                     break;
                 case Champion.LeeSin:
                     champ = new string[] { "ElLeeSin", "BrianSharp", "FreshBooster" };
@@ -198,11 +198,11 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "Lululicious", "HeavenStrikeLulu", "SharpShooter", "Support is Easy" };
                     break;
                 case Champion.Lux:
-                    champ = new string[] { "OKTW", "vSeries" };
+                    champ = new string[] { "OKTW", "vSeries", "M1D 0R F33D" };
                     break;
                 // Malphite - ElEasy
                 case Champion.Malzahar:
-                    champ = new string[] { "OKTW", "SurvivorSeries" };
+                    champ = new string[] { "OKTW", "SurvivorSeries", "M1D 0R F33D" };
                     break;
                 case Champion.Maokai:
                     champ = new string[] { "UnderratedAIO", "BrianSharp" };
@@ -365,13 +365,13 @@ namespace PortAIO.Dual_Port
                     break;
                 // Wukong - Underrated
                 case Champion.Xerath:
-                    champ = new string[] { "Kortatu's Xerath", "OKTW", "SluttyXerath" };
+                    champ = new string[] { "Kortatu's Xerath", "OKTW", "SluttyXerath", "M1D 0R F33D" };
                     break;
                 case Champion.XinZhao:
                     champ = new string[] { "xQx XinZhao", "BrianSharp", "XinZhao God" };
                     break;
                 case Champion.Yasuo:
-                    champ = new string[] { "YasuoPro", "BrianSharp", "GosuMechanics" };
+                    champ = new string[] { "YasuoPro", "BrianSharp", "GosuMechanics", "YasuoSharpv2", "[Yasuo] Master of Wind", "M1D 0R F33D", "YasuoMemeBender" };
                     break;
                 // Yorick - Underrated
                 // Zac - Underrated

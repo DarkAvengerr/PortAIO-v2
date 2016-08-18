@@ -45,10 +45,10 @@ namespace MasterSharp
         public MasterSharp()
         {
             /* CallBAcks */
-            CustomEvents.Game.OnGameLoad += onLoad;
+            onLoad();
         }
 
-        private static void onLoad(EventArgs args)
+        private static void onLoad()
         {
             if (ObjectManager.Player.ChampionName != CharName)
                 return;

@@ -11,10 +11,10 @@ using EloBuddy;
     {
         public Kennen()
         {
-            CustomEvents.Game.OnGameLoad += OnLoad;
+            OnLoad();
         }
 
-        private static void OnLoad(EventArgs args)
+        private static void OnLoad()
         {
             if (ObjectManager.Player.ChampionName != "Kennen")
                 return;

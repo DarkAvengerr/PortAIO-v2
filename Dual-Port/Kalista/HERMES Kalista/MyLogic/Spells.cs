@@ -21,7 +21,7 @@ using EloBuddy;
     public static class Spells
     {
         //c+p'd from hellsing
-        public static void OnLoad(EventArgs args)
+        public static void OnLoad()
         {
             Game.OnUpdate += OnUpdate;
             MyOrbwalker.OnNonKillableMinion += OnNonKillableMinion;

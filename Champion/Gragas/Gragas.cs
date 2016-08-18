@@ -26,10 +26,10 @@ namespace GragasTheDrunkCarry
 
         public Gragas()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
 
             Q = new Spell(SpellSlot.Q, 775);
