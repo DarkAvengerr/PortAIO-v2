@@ -33,12 +33,6 @@
 
         private static void Game_OnUpdate(EventArgs args)
         {
-            if (SkyLv_Taric.Menu.Item("Taric.SkinChanger").GetValue<bool>())
-            {
-                Player.SetSkin(Player.CharData.BaseSkinName, SkyLv_Taric.Menu.Item("Taric.SkinChangerName").GetValue<StringList>().SelectedIndex);
-            }
-            else
-                Player.SetSkin(Player.CharData.BaseSkinName, Player.SkinId);
         }
 
         

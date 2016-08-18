@@ -22,7 +22,7 @@ namespace Leblanc.Common
                     {
                         if (!args.GetNewValue<bool>())
                         {
-                            ObjectManager.Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, ObjectManager.Player.SkinId);
+                            ////ObjectManager.//Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, ObjectManager.Player.SkinId);
                         }
                     };
 
@@ -39,7 +39,7 @@ namespace Leblanc.Common
         {
             if (MenuLocal.Item("Settings.Skin").GetValue<bool>())
             {
-                ObjectManager.Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, MenuLocal.Item("Settings.SkinID").GetValue<StringList>().SelectedIndex);
+                //ObjectManager.//Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, MenuLocal.Item("Settings.SkinID").GetValue<StringList>().SelectedIndex);
             }
         }
     }

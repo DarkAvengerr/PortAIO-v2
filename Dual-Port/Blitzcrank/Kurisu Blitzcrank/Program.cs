@@ -98,7 +98,7 @@ using EloBuddy;
             {
                 if (!eventArgs.GetNewValue<bool>())
                 {
-                    ObjectManager.Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, ObjectManager.Player.SkinId);
+                    //ObjectManager.//Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, ObjectManager.Player.SkinId);
                 }
             };
 
@@ -248,7 +248,7 @@ using EloBuddy;
 
             if (Root.Item("useskin").GetValue<bool>())
             {
-                Player.SetSkin(Player.CharData.BaseSkinName, Root.Item("skinid").GetValue<Slider>().Value);
+                //Player.SetSkin(Player.CharData.BaseSkinName, Root.Item("skinid").GetValue<Slider>().Value);
             }
 
             foreach (var ene in HeroManager.Enemies.Where(x => x.IsValidTarget(Root.Item("maxq").GetValue<Slider>().Value)))

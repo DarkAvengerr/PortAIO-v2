@@ -315,25 +315,24 @@ namespace DetuksSharp
             /* turrets / inhibitors / nexus */
             if (BottingMode)
             {
-                Console.WriteLine("?");
                 /* turrets */
                 foreach (var turret in
-                   EnemyTowers.Where(t => t.IsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
+                    ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && inAutoAttackRange(t)))
                 {
-                    Console.WriteLine("Stutter");
                     return turret;
                 }
 
                 /* inhibitor */
                 foreach (var turret in
-                    EnemyBarracs.Where(t => t.IsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
+                    ObjectManager.Get<Obj_BarracksDampener>()
+                        .Where(t => t.IsValidTarget() && inAutoAttackRange(t)))
                 {
                     return turret;
                 }
 
                 /* nexus */
                 foreach (var nexus in
-                    EnemyHQ.Where(t => t.IsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
+                    ObjectManager.Get<Obj_HQ>().Where(t => t.IsValidTarget() && inAutoAttackRange(t)))
                 {
                     return nexus;
                 }
@@ -383,13 +382,8 @@ namespace DetuksSharp
                         var hpOnDmgPred = HealthDeath.getLaneClearPred(targ, towerShot.hitOn + 10 - now);
 
                         var aa = getRealAADmg(targ);
-                        // Console.WriteLine("AAdmg: " + aa + " Hp after: " + hpOnDmgPred + " hit: " + (towerShot.hitOn - now));
                         if (hpOnDmgPred > aa && hpOnDmgPred <= aa * 2f)
                         {
-                            //Console.WriteLine("Tower under shoting");
-                            //Notifications.AddNotification("Tower shoot");
-                            //2x hit tower target
-
                             return targ;
                         }
                     }
@@ -427,22 +421,22 @@ namespace DetuksSharp
             {
                 /* turrets */
                 foreach (var turret in
-                   EnemyTowers.Where(t => t.IsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
+                    ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && inAutoAttackRange(t)))
                 {
-                    Console.WriteLine("Stutter 2");
                     return turret;
                 }
 
                 /* inhibitor */
                 foreach (var turret in
-                    EnemyBarracs.Where(t => t.IsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
+                    ObjectManager.Get<Obj_BarracksDampener>()
+                        .Where(t => t.IsValidTarget() && inAutoAttackRange(t)))
                 {
                     return turret;
                 }
 
                 /* nexus */
                 foreach (var nexus in
-                    EnemyHQ.Where(t => t.IsValidTarget() && !t.IsDead && !t.IsInvulnerable && inAutoAttackRange(t)))
+                    ObjectManager.Get<Obj_HQ>().Where(t => t.IsValidTarget() && inAutoAttackRange(t)))
                 {
                     return nexus;
                 }

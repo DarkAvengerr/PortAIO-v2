@@ -33,12 +33,6 @@ using EloBuddy;
 
         private static void Game_OnUpdate(EventArgs args)
         {
-            if (SkyLv_AurelionSol.Menu.Item("AurelionSol.SkinChanger").GetValue<bool>())
-            {
-                Player.SetSkin(Player.CharData.BaseSkinName, SkyLv_AurelionSol.Menu.Item("AurelionSol.SkinChangerName").GetValue<StringList>().SelectedIndex);
-            }
-            else
-                Player.SetSkin(Player.CharData.BaseSkinName, Player.SkinId);
         }
 
         

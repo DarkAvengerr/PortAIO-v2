@@ -31,7 +31,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "OKTW", "DZAhri", "EloFactory Ahri", "KappaSeries", "xSalice", "BadaoSeries", "DZAIO" };
                     break;
                 case Champion.Akali:
-                    champ = new string[] { "xQx Akali", "Kappa Series", "Korean Akali", "Troopkali", "xSalice", "StonedSeriesAIO" };
+                    champ = new string[] { "xQx Akali", "Kappa Series", "Korean Akali", "Trookali", "xSalice", "StonedSeriesAIO" };
                     break;
                 case Champion.Alistar:
                     champ = new string[] { "ElAlistar", "Support Is Easy", "FreshBooster", "vSeries" };

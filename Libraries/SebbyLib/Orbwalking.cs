@@ -913,21 +913,22 @@ namespace SebbyLib
                 {
                     /* turrets */
                     foreach (var turret in
-                        Cache.TurretList.Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
+                        ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && this.InAutoAttackRange(t)))
                     {
                         return turret;
                     }
 
                     /* inhibitor */
                     foreach (var turret in
-                        Cache.InhiList.Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
+                        ObjectManager.Get<Obj_BarracksDampener>()
+                            .Where(t => t.IsValidTarget() && this.InAutoAttackRange(t)))
                     {
                         return turret;
                     }
 
                     /* nexus */
                     foreach (var nexus in
-                        Cache.NexusList.Where(t => t.IsValidTarget() && InAutoAttackRange(t)))
+                        ObjectManager.Get<Obj_HQ>().Where(t => t.IsValidTarget() && this.InAutoAttackRange(t)))
                     {
                         return nexus;
                     }

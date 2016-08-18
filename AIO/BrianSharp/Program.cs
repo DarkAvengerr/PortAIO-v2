@@ -47,7 +47,12 @@ namespace BrianSharp
             OnStart();
         }
 
-        private static void NewInstance(Type type)
+        public static object NewInstance(Type type)
+        {
+            return ObjectGenerator(type);
+        }
+
+        private static object ObjectGenerator(Type type)
         {
             var target = type.GetConstructor(Type.EmptyTypes);
             var dynamic = new DynamicMethod(string.Empty, type, new Type[0], target.DeclaringType);
@@ -57,7 +62,8 @@ namespace BrianSharp
             il.Emit(OpCodes.Stloc_0);
             il.Emit(OpCodes.Ldloc_0);
             il.Emit(OpCodes.Ret);
-            ((Func<object>)dynamic.CreateDelegate(typeof(Func<object>)))();
+            var method = (Func<object>)dynamic.CreateDelegate(typeof(Func<object>));
+            return method();
         }
 
         public static void OnStart()
@@ -77,7 +83,9 @@ namespace BrianSharp
             }
             TargetSelector.AddToMenu(MainMenu.AddSubMenu(new Menu("Target Selector", "TS")));
             Orbwalk.Init(MainMenu);
+
             NewInstance(plugin);
+
             Helper.AddBool(
                 MainMenu.SubMenu(Player.ChampionName + "_Plugin").SubMenu("Misc"),
                 "UsePacket",

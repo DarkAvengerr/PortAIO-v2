@@ -25,10 +25,10 @@ namespace SephLissandra
 
         public static void LissandraMain()
         {
-            CustomEvents.Game.OnGameLoad += OnLoad;
+            OnLoad();
         }
 
-        static void OnLoad(EventArgs args)
+        static void OnLoad()
         {
             Player = ObjectManager.Player;
             if (Player.CharData.BaseSkinName != "Lissandra")

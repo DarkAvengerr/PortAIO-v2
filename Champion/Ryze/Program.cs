@@ -130,7 +130,7 @@ namespace SurvivorRyze
             {
                 if (!eventArgs.GetNewValue<bool>())
                 {
-                    ObjectManager.Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, ObjectManager.Player.SkinId);
+                    //ObjectManager.//Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, ObjectManager.Player.SkinId);
                 }
             };
 
@@ -347,7 +347,7 @@ namespace SurvivorRyze
             PotionsCheck();
             if (Menu.Item("UseSkin").GetValue<bool>())
             {
-                Player.SetSkin(Player.CharData.BaseSkinName, Menu.Item("SkinID").GetValue<Slider>().Value);
+                ////Player.SetSkin(Player.CharData.BaseSkinName, Menu.Item("SkinID").GetValue<Slider>().Value);
             }
             switch (Orbwalker.ActiveMode)
             {
