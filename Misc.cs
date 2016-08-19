@@ -183,7 +183,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "Leblanc II", "FreshBooster", "LCS Leblanc", "M1D 0R F33D" };
                     break;
                 case Champion.LeeSin:
-                    champ = new string[] { "ElLeeSin", "BrianSharp", "FreshBooster" };
+                    champ = new string[] { "ElLeeSin", "BrianSharp", "FreshBooster", "Hikicarry LeeSin", "Lee is Back", "Slutty LeeSin" };
                     break;
                 case Champion.Leona:
                     champ = new string[] { "ElEasy", "Support is Easy", "vSeries" };

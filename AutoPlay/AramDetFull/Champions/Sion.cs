@@ -9,12 +9,12 @@ using SharpDX;
 
 using EloBuddy; namespace ARAMDetFull.Champions
 {
-    class Sion : Champion
+    class SionA : Champion
     {
         public Vector2 QCastPos = new Vector2();
         private Spell E1;
 
-        public Sion()
+        public SionA()
         {
             Chat.Print("Sion on");
             ARAMSimulator.champBuild = new Build

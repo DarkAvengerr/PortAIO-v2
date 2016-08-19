@@ -9,10 +9,10 @@ using SharpDX;
 
 using EloBuddy; namespace ARAMDetFull.Champions
 {
-    class Malphite : Champion
+    class MalphiteA : Champion
     {
 
-        public Malphite()
+        public MalphiteA()
         {
             ARAMSimulator.champBuild = new Build
             {

@@ -11,7 +11,7 @@ using Color = System.Drawing.Color;
 
 #endregion
 
-using EloBuddy; namespace Ziggs
+using EloBuddy; namespace ZiggsKortatu
 {
     internal class Program
     {

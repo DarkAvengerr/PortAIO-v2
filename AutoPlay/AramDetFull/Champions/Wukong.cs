@@ -8,10 +8,10 @@ using LeagueSharp.Common;
 
 using EloBuddy; namespace ARAMDetFull.Champions
 {
-    class Wukong : Champion
+    class WukongA : Champion
     {
 
-        public Wukong()
+        public WukongA()
         {
             ARAMSimulator.champBuild = new Build
             {

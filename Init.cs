@@ -1115,6 +1115,15 @@ namespace PortAIO
                         case 2: // FreshBooster
                             FreshBooster.Program.Game_OnGameLoad();
                             break;
+                        case 3: // Hikicarry Lee Sin
+                            HikiCarry_Lee_Sin.Program.Main();
+                            break;
+                        case 4: // Lee is Back
+                            LeeSin.Program.Main();
+                            break;
+                        case 5: // Slutty Lee Sin
+                            Lee_Sin.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Leona:
@@ -2182,7 +2191,7 @@ namespace PortAIO
                     }
                     break;
                 case Champion.Ziggs:
-                    Ziggs.Program.Game_OnGameLoad();
+                    ZiggsKortatu.Program.Game_OnGameLoad();
                     break;
                 case Champion.Zilean:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)

@@ -9,12 +9,12 @@ using SharpDX;
 
 using EloBuddy; namespace ARAMDetFull.Champions
 {
-    class LeeSin : Champion
+    class LeeSinA : Champion
     {
         private Spell Q2;
         private static bool _rCasted;
 
-        public LeeSin()
+        public LeeSinA()
         {
             ARAMSimulator.champBuild = new Build
             {

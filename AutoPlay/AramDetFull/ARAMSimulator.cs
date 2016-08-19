@@ -405,7 +405,7 @@ namespace ARAMDetFull
                     champ = new Nami();
                     break;
                 case "Malphite":
-                    champ = new Malphite();
+                    champ = new MalphiteA();
                     break;
                 case "Urgot":
                     champ = new Urgot();
@@ -501,7 +501,7 @@ namespace ARAMDetFull
                     champ = new Aatrox();
                     break;
                 case "Wukong":
-                    champ = new Wukong();
+                    champ = new WukongA();
                     break;
                 case "Syndra"://TODO put back
                     champ = new SyndraA();
@@ -627,7 +627,7 @@ namespace ARAMDetFull
                     champ = new Galio();
                     break;
                 case "Sion":
-                    champ = new Sion();
+                    champ = new SionA();
                     break;
                 case "Shen":
                     champ = new Shen();
@@ -648,10 +648,10 @@ namespace ARAMDetFull
                     champ = new Jarvan();
                     break;
                 case "LeeSin":
-                    champ = new LeeSin();
+                    champ = new LeeSinA();
                     break;
                 case "Nocturne":
-                    champ = new Nocturne();
+                    champ = new NocturneA();
                     break;
                 case "Vladimir":
                     champ = new Vladimir();

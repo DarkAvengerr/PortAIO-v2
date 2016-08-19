@@ -9,10 +9,10 @@ using SharpDX;
 
 using EloBuddy; namespace ARAMDetFull.Champions
 {
-    class Nocturne : Champion
+    class NocturneA : Champion
     {
 
-        public Nocturne()
+        public NocturneA()
         {
             ARAMSimulator.champBuild = new Build
             {
