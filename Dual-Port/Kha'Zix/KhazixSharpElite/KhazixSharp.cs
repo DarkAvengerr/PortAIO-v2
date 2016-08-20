@@ -40,11 +40,11 @@ using EloBuddy;
         public KhazixSharp()
         {
             /* CallBAcks */
-            CustomEvents.Game.OnGameLoad += onLoad;
+            onLoad();
 
         }
 
-        private static void onLoad(EventArgs args)
+        private static void onLoad()
         {
 
             Chat.Print("Khazix - Sharp by DeTuKs");

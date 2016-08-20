@@ -19,10 +19,10 @@ using EloBuddy;
     {
         public static void Init()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        private static void Game_OnGameLoad()
         {
             Champion.PlayerSpells.Init();
             Common.CommonItems.Init();

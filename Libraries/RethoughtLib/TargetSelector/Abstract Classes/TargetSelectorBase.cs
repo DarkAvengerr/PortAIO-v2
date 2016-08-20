@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.TargetSelector.Abstract_Classes
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.TargetSelector.Abstract_Classes
 {
     #region Using Directives
 

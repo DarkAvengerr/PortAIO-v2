@@ -1,9 +1,12 @@
-using EloBuddy; namespace RethoughtLib.Menu
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.Menu
 {
     #region Using Directives
 
     using System;
 
+    using global::RethoughtLib.Exceptions;
     using global::RethoughtLib.Menu.Interfaces;
 
     using LeagueSharp.Common;

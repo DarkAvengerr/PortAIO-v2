@@ -59,7 +59,7 @@ using EloBuddy;
 
         #endregion
 
-        private static void OnLoad(EventArgs args) {
+        private static void OnLoad() {
 
             DongerMenu.Init();
             if (ObjectManager.Player.CharData.BaseSkinName != Champion)
@@ -319,9 +319,9 @@ using EloBuddy;
         #endregion
 
         #region Main
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnLoad;
+            OnLoad();
         }
         #endregion
     }

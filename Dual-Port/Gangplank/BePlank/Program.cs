@@ -17,9 +17,9 @@ using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace AssemblySkeleton
+using EloBuddy;
+using LeagueSharp.Common;
+namespace BePlank
 {
     class Program
     {
@@ -45,12 +45,12 @@ using EloBuddy;
         static string CHAMPION_NAME = "Gangplank";
         #endregion
 
-        static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (Player.ChampionName != CHAMPION_NAME)
                 return;
             Chat.Print("BePlank by Brikovich loaded - Credits to baballev & Soresu");
-           
+
             #region Spells
             Q = new Spell(SpellSlot.Q, 610);
             Q.SetTargetted(0.25f, 2150f);
@@ -61,7 +61,7 @@ using EloBuddy;
             #endregion
 
 
-            
+
             #region Menu
             Menu = new Menu("BePlank", Player.ChampionName, true);
 
@@ -82,12 +82,12 @@ using EloBuddy;
             DrawingMenu.AddItem(new MenuItem("DrawEPrediction", "Draw E Predicted Range").SetValue(true));
             DrawingMenu.AddItem(new MenuItem("DrawR", "Draw R Radius").SetValue(false));
             DrawingMenu.AddItem(new MenuItem("OnReady", "Draw only if Ready").SetValue(true));
-            
+
 
             Menu.AddItem(new MenuItem("Corrector", "Connection correction [BETA]").SetTooltip("If E connection miss will try to cast E on the lastest succesfull position").SetValue(true));
             Menu.AddItem(new MenuItem("CastQ", "Quick Q detonate nearest (health decay support)").SetValue(new KeyBind('A', KeyBindType.Press, false)));
             Menu.AddItem(new MenuItem("CastEQ", "Quick cast EQ at mouse (first barrel manual)").SetValue(new KeyBind('T', KeyBindType.Press, false)));
-            
+
             Menu.AddItem(new MenuItem("Ping", "Ping on low hp (local)").SetValue(true));
             Menu.AddItem(new MenuItem("KS", "Q KillSecure").SetValue(true));
             Menu.AddItem(new MenuItem("Qlasthit", "Q last hit toggle").SetValue(new KeyBind('K', KeyBindType.Toggle, false)));
@@ -108,9 +108,9 @@ using EloBuddy;
             Menu.AddSubMenu(cleanserManagerMenu);
             Menu.AddToMainMenu();
             #endregion
-            
 
-            
+
+
             #region Subscriptions
             Drawing.OnDraw += Drawing_OnDraw;
             Game.OnUpdate += Game_OnUpdate;
@@ -141,11 +141,11 @@ using EloBuddy;
 
             if (Menu.Item("CastEQ").GetValue<KeyBind>().Active || Menu.Item("CastQ").GetValue<KeyBind>().Active)
             {
-                
+
                 if (Menu.Item("CastEQ").GetValue<KeyBind>().Active) isEQ = true;
                 else isEQ = false;
                 Barrel myQTarget = NearestExpBarrelToMouse();
-                
+
                 //Kreygasm
                 if (!ECasted)
                 {
@@ -159,7 +159,7 @@ using EloBuddy;
                             if (isEQ)
                             {
                                 ECasted = true;
-                                if (myQTarget.barrel.Distance(Game.CursorPos) > BarrelConnectionRange*2) E.Cast(correctThisPosition(Game.CursorPos.To2D(), myQTarget));
+                                if (myQTarget.barrel.Distance(Game.CursorPos) > BarrelConnectionRange * 2) E.Cast(correctThisPosition(Game.CursorPos.To2D(), myQTarget));
                                 else E.Cast(Game.CursorPos);
                                 Q.CastOnUnit(myQTarget.barrel);
 
@@ -173,7 +173,7 @@ using EloBuddy;
                     }
                     else if (Player.Level >= 13)
                     {
-                        
+
                         var time = 1f * 1000;
                         var kappaHD = Environment.TickCount - myQTarget.time + (Player.Distance(myQTarget.barrel) / 2800f + Q.Delay) * 1000;
 
@@ -182,7 +182,7 @@ using EloBuddy;
                             if (isEQ)
                             {
                                 ECasted = true;
-                                if (myQTarget.barrel.Distance(Game.CursorPos) > BarrelConnectionRange*2) E.Cast(correctThisPosition(Game.CursorPos.To2D(), myQTarget));
+                                if (myQTarget.barrel.Distance(Game.CursorPos) > BarrelConnectionRange * 2) E.Cast(correctThisPosition(Game.CursorPos.To2D(), myQTarget));
                                 else E.Cast(Game.CursorPos);
                                 Q.CastOnUnit(myQTarget.barrel);
 
@@ -202,7 +202,7 @@ using EloBuddy;
                             if (isEQ)
                             {
                                 ECasted = true;
-                                if (myQTarget.barrel.Distance(Game.CursorPos) > BarrelConnectionRange*2) E.Cast(correctThisPosition(Game.CursorPos.To2D(), myQTarget));
+                                if (myQTarget.barrel.Distance(Game.CursorPos) > BarrelConnectionRange * 2) E.Cast(correctThisPosition(Game.CursorPos.To2D(), myQTarget));
                                 else E.Cast(Game.CursorPos);
                                 Q.CastOnUnit(myQTarget.barrel);
 
@@ -213,14 +213,14 @@ using EloBuddy;
                         }
                     }
                 }
-                
-                
+
+
             }
             else
             {
                 ECasted = false;
                 isEQ = false;
-                
+
             }
 
             //Last hit
@@ -234,27 +234,27 @@ using EloBuddy;
                         .ThenByDescending(m => m.Distance(Player))
                         .FirstOrDefault();
 
-                    Q.CastOnUnit(mini);
+                Q.CastOnUnit(mini);
             }
 
-           //KS
-           if (Menu.Item("KS").GetValue<bool>())
+            //KS
+            if (Menu.Item("KS").GetValue<bool>())
             {
                 var kstarget = HeroManager.Enemies;
-                    if (kstarget != null)
+                if (kstarget != null)
+                {
+                    foreach (var ks in kstarget)
                     {
-                        foreach (var ks in kstarget)
+                        if (ks != null)
                         {
-                            if (ks != null)
+                            if (ks.Health <= Player.GetSpellDamage(ks, SpellSlot.Q) && ks.Health > 0 && Q.IsInRange(ks))
                             {
-                                if (ks.Health <= Player.GetSpellDamage(ks, SpellSlot.Q) && ks.Health > 0 && Q.IsInRange(ks))
-                                {
 
-                                    Q.CastOnUnit(ks);
-                                }
+                                Q.CastOnUnit(ks);
                             }
                         }
                     }
+                }
             }
 
             if (Menu.Item("Ping").GetValue<bool>())
@@ -272,7 +272,7 @@ using EloBuddy;
 
         }
 
-        
+
 
         static void Drawing_OnDraw(EventArgs args)
         {
@@ -286,7 +286,7 @@ using EloBuddy;
                 if (Menu.Item("DrawE").GetValue<bool>())
                 {
                     Render.Circle.DrawCircle(Player.Position, E.Range, Color.IndianRed);
-                    if(Menu.Item("DrawERadius").GetValue<bool>())
+                    if (Menu.Item("DrawERadius").GetValue<bool>())
                         Render.Circle.DrawCircle(Game.CursorPos, BarrelConnectionRange, Color.Gray);
                 }
 
@@ -317,10 +317,10 @@ using EloBuddy;
             mouseToClosestBarrel = NearestBarrelToMouse().barrel.Distance(Game.CursorPos);
             //In connection range
 
-            
+
             if (mouseToClosestBarrel <= BarrelConnectionRange * 2)
             {
-                
+
                 if (E.IsReady())
                 {
                     if (Menu.Item("DrawEConnection").GetValue<bool>())
@@ -357,7 +357,7 @@ using EloBuddy;
         {
             if (args.Slot == SpellSlot.E && Menu.Item("Corrector").GetValue<bool>())
             {
-                if (mouseToClosestBarrel > BarrelConnectionRange*2 && mouseToClosestBarrel < maxSearchRange && correctThisPosition(Game.CursorPos.To2D(), closestToPosition(Game.CursorPos)).Distance(Game.CursorPos) <= correctionRange  && savedBarrels.Count > 0 && !isEQ)
+                if (mouseToClosestBarrel > BarrelConnectionRange * 2 && mouseToClosestBarrel < maxSearchRange && correctThisPosition(Game.CursorPos.To2D(), closestToPosition(Game.CursorPos)).Distance(Game.CursorPos) <= correctionRange && savedBarrels.Count > 0 && !isEQ)
                 {
                     args.Process = false;
                     Spellbook.OnCastSpell -= Game_OnCastSpell;
@@ -385,7 +385,7 @@ using EloBuddy;
                 || (Player.HasBuff("summonerexhaust") && Menu.SubMenu("cleanserManager").Item("exhaust").GetValue<bool>())
                 || (Player.HasBuffOfType(BuffType.Suppression) && Menu.SubMenu("cleanserManager").Item("suppression").GetValue<bool>())
                 ))
-                
+
             {
                 W.Cast();
             }
@@ -424,14 +424,14 @@ using EloBuddy;
             savedBarrels.OrderBy(k => k.barrel.ServerPosition.Distance(pos.To3D()));
 
             return savedBarrels.OrderBy(k => k.barrel.Health).Where(k => k.barrel.Distance(Player) <= Q.Range).FirstOrDefault();
-            
+
         }
 
         #endregion BarrelSection
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
         //ping
@@ -492,7 +492,7 @@ using EloBuddy;
 
     }
 
-    
+
 
 
 }

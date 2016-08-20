@@ -24,11 +24,11 @@ using EloBuddy;
         public static Spell E;
         public static Spell R;
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
-        private static void Game_OnGameLoad(EventArgs args)
+        private static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Rammus") return;
 

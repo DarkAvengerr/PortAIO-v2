@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.CastManager
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.CastManager
 {
     #region Using Directives
 
@@ -28,7 +30,7 @@ using EloBuddy; namespace RethoughtLib.CastManager
         /// <summary>
         ///     Called when [disable].
         /// </summary>
-        protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
+        protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             Events.OnPostUpdate -= OnPostUpdate;
         }

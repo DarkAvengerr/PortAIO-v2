@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.Extensions
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.Extensions
 {
     using System;
     using System.Collections.Generic;

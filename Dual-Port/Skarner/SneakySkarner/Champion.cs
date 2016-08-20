@@ -20,7 +20,7 @@ using EloBuddy;
 
         public Champion()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
             Drawing.OnDraw += Drawing_OnDraw;
 
             GameObject.OnCreate += GameObject_OnCreate;
@@ -52,7 +52,7 @@ using EloBuddy;
             //throw new NotImplementedException();
         }
 
-        protected virtual void Game_OnGameLoad(EventArgs args)
+        protected virtual void Game_OnGameLoad()
         {
             //throw new NotImplementedException();
         }

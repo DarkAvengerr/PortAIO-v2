@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.Bootstraps.Implementations
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.Bootstraps.Implementations
 {
     #region Using Directives
 
@@ -31,7 +33,8 @@ using EloBuddy; namespace RethoughtLib.Bootstraps.Implementations
                 this.Strings = new List<string>(additionalStrings);
             }
 
-            this.AddString(ObjectManager.Player.ChampionName);
+            CustomEvents.Game.OnGameLoad +=
+                delegate(EventArgs args) { this.AddString(ObjectManager.Player.ChampionName); };
         }
 
         #endregion

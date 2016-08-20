@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.FeatureSystem.Abstract_Classes
 {
     #region Using Directives
 
@@ -26,7 +28,7 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
         /// Initializes the menu, overwrite this method to change the menu type. Do not overwrite if you only want to change
         /// the menu content.
         /// </summary>
-        protected override void SetMenu()
+        protected override void CreateMenu()
         {
             this.Menu = new Menu(this.Name, this.Name, true);
 

@@ -34,12 +34,12 @@ using EloBuddy;
         private static SpellSlot _Ignite;
 
         private static AIHeroClient _target;
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnLoad;
+            OnLoad();
         }
 
-        private static void OnLoad(EventArgs args)
+        private static void OnLoad()
         {
             if (Player.ChampionName != "Garen")
                 return;

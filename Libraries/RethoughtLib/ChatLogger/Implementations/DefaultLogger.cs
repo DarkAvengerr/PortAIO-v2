@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.ChatLogger.Implementations
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.ChatLogger.Implementations
 {
     #region Using Directives
 
@@ -41,9 +43,9 @@ using EloBuddy; namespace RethoughtLib.ChatLogger.Implementations
         /// <summary>
         ///     Logs this instance.
         /// </summary>
-        public void Log(AIHeroClient sender, ChatMessageEventArgs args)
+        public void Log(ChatMessageEventArgs args)
         {
-            var message = this.Format.Apply(sender, args);
+            var message = this.Format.Apply(args);
 
             if (!string.IsNullOrWhiteSpace(message.FormatedMessage) && !string.IsNullOrEmpty(message.Content))
             {

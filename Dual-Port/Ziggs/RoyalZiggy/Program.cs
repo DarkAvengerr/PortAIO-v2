@@ -44,15 +44,15 @@ using EloBuddy;
         //(?)List of damage sources to calc
         private static readonly List<Tuple<SpellSlot, int>> mainCombo = new List<Tuple<SpellSlot, int>>();
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;                // OnGameLoad callback
+            Game_OnGameLoad();                // OnGameLoad callback
         }
         /// <summary>
         /// OnGameLoad callback. Executes on loading game
         /// </summary>
         /// <param name="args"></param>
-        static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (player.ChampionName != "Ziggs") return;                   //Champion validation
             //Spell init

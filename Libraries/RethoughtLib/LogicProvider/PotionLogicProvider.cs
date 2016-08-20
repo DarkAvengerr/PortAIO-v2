@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.LogicProvider
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.LogicProvider
 {
     using LeagueSharp;
     using LeagueSharp.Common;

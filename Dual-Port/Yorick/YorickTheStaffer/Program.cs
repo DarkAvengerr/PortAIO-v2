@@ -56,10 +56,10 @@ using EloBuddy;
         public static List<YorickTheStaffer.Evade.Skillshot> DetectedSkillshots = new List<YorickTheStaffer.Evade.Skillshot>();
 
 
-        static void Main(string[] args)
+        public static void Main()
         {
            
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
             Orbwalking.AfterAttack += AfterAttack;
             Game.OnUpdate += Game_OnGameUpdate;
             Spellbook.OnCastSpell += OnSpell;
@@ -67,7 +67,7 @@ using EloBuddy;
 
         }
 
-        static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             Player = ObjectManager.Player;
             if (Player.ChampionName != championName)

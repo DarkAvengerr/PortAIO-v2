@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.FeatureSystem.Abstract_Classes
 {
     #region Using Directives
 
@@ -106,10 +108,10 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
 
             child.OnInitializeInvoker();
 
-            child.Switch.OnEnableEvent += this.OnChildEnabled;
-            child.Switch.OnDisableEvent += this.OnChildDisabled;
+            child.OnEnableEvent += this.OnChildEnabled;
+            child.OnDisableEvent += this.OnChildDisabled;
 
-            this.Children.Add(child, child.Switch.Enabled);
+            this.Children.Add(child, child.Enabled);
 
             if (this.Menu.SubMenu(child.Menu.Name) != null)
             {
@@ -158,7 +160,7 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
         ///     Called when [child disabled].
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="featureBaseEventArgs"></param>
+        /// <param name="featureBaseEventArgs">The <see cref="Base.FeatureBaseEventArgs" /> instance containing the event data.</param>
         protected virtual void OnChildDisabled(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             var child = featureBaseEventArgs.Sender;
@@ -168,7 +170,7 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
                 return;
             }
 
-            this.Children[child] = child.Switch.Enabled;
+            this.Children[child] = child.Enabled;
 
             // Disables the Parent if all Children are disabled
             if (this.Children.All(x => !x.Value))
@@ -181,7 +183,7 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
         ///     Called when [child enabled].
         /// </summary>
         /// <param name="o">The o.</param>
-        /// <param name="featureBaseEventArgs"></param>
+        /// <param name="featureBaseEventArgs">The <see cref="Base.FeatureBaseEventArgs" /> instance containing the event data.</param>
         protected virtual void OnChildEnabled(object o, FeatureBaseEventArgs featureBaseEventArgs)
         {
             var child = featureBaseEventArgs.Sender;
@@ -191,7 +193,7 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
                 return;
             }
 
-            this.Children[child] = child.Switch.Enabled;
+            this.Children[child] = child.Enabled;
 
             // Enables the Parent if one Children is enabled
             this.OnEnableInvoker();
@@ -227,7 +229,7 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
         {
             var menuItem = this.Menu.Item(this.Name + "Enabled");
 
-            if (menuItem.GetValue<bool>())
+            if (menuItem.GetValue<bool>() == true)
             {
                 menuItem.SetValue(false);
                 return;

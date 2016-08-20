@@ -196,8 +196,10 @@ using EloBuddy;
         {
             Player = ObjectManager.Player;
             _championName = Player.ChampionName;
+
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnSpellCast;
+            Obj_AI_Base.OnBasicAttack += OnBasicAttack;
             Spellbook.OnStopCast += SpellbookOnStopCast;
         }
 
@@ -540,6 +542,46 @@ using EloBuddy;
             }
         }
 
+        private static void OnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (sender.IsMe)
+            {
+                if (IsAutoAttack(args.SData.Name))
+                {
+                    var target = args.Target as AttackableUnit;
+
+                    if (target != null && target.IsValid)
+                    {
+                        FireOnAttack(sender, _lastTarget);
+                    }
+                }
+            }
+
+            if (sender.IsMe && (args.Target is Obj_AI_Base || args.Target is Obj_BarracksDampener || args.Target is Obj_HQ))
+            {
+                LastAATick = Utils.GameTimeTickCount - Game.Ping / 2;
+                _missileLaunched = false;
+                LastMoveCommandT = 0;
+
+                if (args.Target is Obj_AI_Base)
+                {
+                    var target = (Obj_AI_Base)args.Target;
+                    if (target.IsValid)
+                    {
+                        FireOnTargetSwitch(target);
+                        _lastTarget = target;
+                    }
+                }
+            }
+
+            if (sender is Obj_AI_Turret && args.Target is Obj_AI_Base)
+            {
+                LastTargetTurrets[sender.NetworkId] = (Obj_AI_Base)args.Target;
+            }
+        }
+
+        internal static readonly Dictionary<int, Obj_AI_Base> LastTargetTurrets = new Dictionary<int, Obj_AI_Base>();
+
         /// <summary>
         /// Resets the Auto-Attack timer.
         /// </summary>
@@ -553,9 +595,9 @@ using EloBuddy;
         /// </summary>
         /// <param name="spellbook">The spellbook.</param>
         /// <param name="args">The <see cref="SpellbookStopCastEventArgs"/> instance containing the event data.</param>
-        private static void SpellbookOnStopCast(Obj_AI_Base spellbook, SpellbookStopCastEventArgs args)
+        private static void SpellbookOnStopCast(Obj_AI_Base sender, SpellbookStopCastEventArgs args)
         {
-            if (spellbook.IsValid && spellbook.IsMe && args.DestroyMissile && args.StopAnimation)
+            if (sender.IsValid && sender.IsMe && EloBuddy.SDK.Orbwalker.IsRanged && (args.DestroyMissile && args.StopAnimation))
             {
                 ResetAutoAttackTimer();
             }
@@ -587,6 +629,11 @@ using EloBuddy;
         /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs"/> instance containing the event data.</param>
         private static void Obj_AI_Base_OnSpellCast_Delayed(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
+            if (IsAutoAttackReset(args.SData.Name))
+            {
+                ResetAutoAttackTimer();
+            }
+
             if (IsAutoAttack(args.SData.Name))
             {
                 FireAfterAttack(sender, args.Target as AttackableUnit);
@@ -595,44 +642,56 @@ using EloBuddy;
         }
 
         /// <summary>
+        ///     Returns true if the spellname resets the attack timer.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns><c>true</c> if the specified name is an auto attack reset; otherwise, <c>false</c>.</returns>
+        public static bool IsAutoAttackReset(string name)
+        {
+            return AttackResets.Contains(name.ToLower());
+        }
+
+        /// <summary>
+        ///     Spells that reset the attack timer.
+        /// </summary>
+        private static readonly string[] AttackResets =
+            {
+                "dariusnoxiantacticsonh", "fiorae", "garenq", "gravesmove",
+                "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge",
+                "leonashieldofdaybreak", "luciane", "monkeykingdoubleattack",
+                "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze",
+                "netherblade", "gangplankqwrapper", "powerfist",
+                "renektonpreexecute", "rengarq", "shyvanadoubleattack",
+                "sivirw", "takedown", "talonnoxiandiplomacy",
+                "trundletrollsmash", "vaynetumble", "vie", "volibearq",
+                "xenzhaocombotarget", "yorickspectral", "reksaiq",
+                "itemtitanichydracleave", "masochism", "illaoiw",
+                "elisespiderw", "fiorae", "meditate", "sejuaninorthernwinds",
+                "asheq"
+            };
+
+        /// <summary>
         /// Handles the <see cref="E:ProcessSpell" /> event.
         /// </summary>
         /// <param name="unit">The unit.</param>
         /// <param name="Spell">The <see cref="GameObjectProcessSpellCastEventArgs"/> instance containing the event data.</param>
-        private static void OnProcessSpell(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs Spell)
+        private static void OnProcessSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            try
+            if (sender.IsMe)
             {
-                var spellName = Spell.SData.Name;
-
-                if (!IsAutoAttack(spellName))
+                if (IsAutoAttack(args.SData.Name))
                 {
-                    return;
-                }
+                    var target = args.Target as AttackableUnit;
 
-                if (unit.IsMe &&
-                    (Spell.Target is Obj_AI_Base || Spell.Target is Obj_BarracksDampener || Spell.Target is Obj_HQ))
-                {
-                    LastAATick = Utils.GameTimeTickCount - Game.Ping / 2;
-                    _missileLaunched = false;
-                    LastMoveCommandT = 0;
-
-                    if (Spell.Target is Obj_AI_Base)
+                    if (target != null && target.IsValid)
                     {
-                        var target = (Obj_AI_Base)Spell.Target;
-                        if (target.IsValid)
-                        {
-                            FireOnTargetSwitch(target);
-                            _lastTarget = target;
-                        }
+                        FireOnAttack(sender, _lastTarget);
                     }
                 }
-
-                FireOnAttack(unit, _lastTarget);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
+                if (IsAutoAttackReset(args.SData.Name) && Math.Abs(args.SData.CastTime) < 1.401298E-45f)
+                {
+                    ResetAutoAttackTimer();
+                }
             }
         }
 

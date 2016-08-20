@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.DamageCalculator.DamageTypes.Implementations
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.DamageCalculator.DamageTypes.Implementations
 {
     #region Using Directives
 

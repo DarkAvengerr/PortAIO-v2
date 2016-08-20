@@ -42,12 +42,12 @@ using EloBuddy;
 
         private static Obj_AI_Base target;
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        private static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Garen") return;
 

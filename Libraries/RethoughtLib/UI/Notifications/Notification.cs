@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.UI.Notifications
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.UI.Notifications
 {
     #region Using Directives
 

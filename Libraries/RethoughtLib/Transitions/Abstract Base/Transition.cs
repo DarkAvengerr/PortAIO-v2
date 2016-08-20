@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.Transitions.Abstract_Base
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.Transitions.Abstract_Base
 {
     #region Using Directives
 

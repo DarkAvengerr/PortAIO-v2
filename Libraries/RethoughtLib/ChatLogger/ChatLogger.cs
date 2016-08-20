@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.ChatLogger
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.ChatLogger
 {
     #region Using Directives
 
@@ -84,7 +86,7 @@ using EloBuddy; namespace RethoughtLib.ChatLogger
         {
             foreach (var logger in this.chatLoggers)
             {
-                logger.Log(sender, args);
+                logger.Log(args);
 
                 this.UpdateLogged(logger);
             }

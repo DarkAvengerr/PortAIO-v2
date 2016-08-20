@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.DamageCalculator.DamageTypes
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.DamageCalculator.DamageTypes
 {
     public class DamageType
     {

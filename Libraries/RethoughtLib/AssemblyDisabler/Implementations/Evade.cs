@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.AssemblyDisabler.Implementations
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.AssemblyDisabler.Implementations
 {
     #region Using Directives
 

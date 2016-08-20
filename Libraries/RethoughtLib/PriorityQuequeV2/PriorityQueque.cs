@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.PriorityQuequeV2
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.PriorityQuequeV2
 {
     #region Using Directives
 

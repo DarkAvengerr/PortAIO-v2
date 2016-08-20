@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib
 {
     #region Using Directives
 
@@ -60,11 +62,11 @@ using EloBuddy; namespace RethoughtLib
 
             this.initialized = true;
 
-            this.Game_OnGameLoad();
+            CustomEvents.Game.OnGameLoad += this.Game_OnGameLoad;
 
         }
 
-        private void Game_OnGameLoad()
+        private void Game_OnGameLoad(System.EventArgs args)
         {
             foreach (var loadable in this.loadables)
             {

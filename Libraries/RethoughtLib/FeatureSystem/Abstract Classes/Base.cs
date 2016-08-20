@@ -1,11 +1,10 @@
-using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.FeatureSystem.Abstract_Classes
 {
     #region Using Directives
 
     using System;
-
-    using global::RethoughtLib.FeatureSystem.Implementations;
-    using global::RethoughtLib.FeatureSystem.Switches;
 
     using LeagueSharp.Common;
 
@@ -13,12 +12,6 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
 
     public abstract class Base
     {
-        #region Fields
-
-        public SwitchBase Switch;
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
@@ -33,6 +26,16 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
         #endregion
 
         #region Public Events
+
+        /// <summary>
+        ///     Occurs when [on disable event].
+        /// </summary>
+        public event EventHandler<FeatureBaseEventArgs> OnDisableEvent;
+
+        /// <summary>
+        ///     Occurs when [on enable event].
+        /// </summary>
+        public event EventHandler<FeatureBaseEventArgs> OnEnableEvent;
 
         /// <summary>
         ///     Occurs when [on initialize event].
@@ -62,6 +65,14 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
         #endregion
 
         #region Public Properties
+
+        /// <summary>
+        ///     Gets or sets a value indicating whether this <see cref="Base" /> is enabled.
+        /// </summary>
+        /// <value>
+        ///     <c>true</c> if enabled; otherwise, <c>false</c>.
+        /// </value>
+        public bool Enabled { get; set; } = true;
 
         /// <summary>
         ///     Gets or sets a value indicating whether this <see cref="Base" /> is initialized.
@@ -138,6 +149,8 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
             this.Loaded = true;
 
             this.OnLoadEvent?.Invoke(null, new FeatureBaseEventArgs(this));
+
+            this.OnEnableEvent?.Invoke(null, new FeatureBaseEventArgs(this));
         }
 
         /// <summary>
@@ -148,6 +161,7 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
             this.OnUnLoadInvoker();
 
             this.Menu = null;
+            this.Enabled = false;
             this.Loaded = false;
             this.Initialized = false;
         }
@@ -163,6 +177,11 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
         /// </exception>
         internal virtual void OnDisableInvoker()
         {
+            if (!this.Enabled)
+            {
+                return;
+            }
+
             if (!this.Initialized)
             {
                 throw new InvalidOperationException(
@@ -177,7 +196,9 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
 
             Console.WriteLine($"{this.Name} OnDisableEvent invoked");
 
-            this.Switch.OnOnDisableEvent();
+            this.Enabled = false;
+
+            this.OnDisableEvent?.Invoke(null, new FeatureBaseEventArgs(this));
         }
 
         /// <summary>
@@ -187,6 +208,11 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
         /// </exception>
         internal virtual void OnEnableInvoker()
         {
+            if (this.Enabled)
+            {
+                return;
+            }
+
             if (!this.Initialized)
             {
                 throw new InvalidOperationException(
@@ -200,7 +226,9 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
 
             Console.WriteLine($"{this.Name} OnEnableEvent invoked");
 
-            this.Switch.OnOnEnableEvent();
+            this.Enabled = true;
+
+            this.OnEnableEvent?.Invoke(null, new FeatureBaseEventArgs(this));
         }
 
         /// <summary>
@@ -243,9 +271,36 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
         }
 
         /// <summary>
+        ///     Initializes the menu, overwrite this method to change the menu.
+        /// </summary>
+        protected virtual void CreateMenu()
+        {
+            this.Menu = new Menu(this.Name, this.Name);
+
+            this.Menu.AddItem(new MenuItem(this.Name + "Enabled", "Enabled").SetValue(true));
+
+            this.DelegateEnabledButton();
+        }
+
+        protected virtual void DelegateEnabledButton()
+        {
+            this.Menu.Item(this.Name + "Enabled").ValueChanged += delegate (object sender, OnValueChangeEventArgs args)
+            {
+                if (args.GetNewValue<bool>())
+                {
+                    this.OnEnableInvoker();
+                }
+                else
+                {
+                    this.OnDisableInvoker();
+                }
+            };
+        }
+
+        /// <summary>
         ///     Called when [disable].
         /// </summary>
-        protected virtual void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
+        protected virtual void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             Console.WriteLine($"{this} OnDisable triggered");
         }
@@ -253,7 +308,7 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
         /// <summary>
         ///     Called when [enable]
         /// </summary>
-        protected virtual void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
+        protected virtual void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             Console.WriteLine($"{this} OnEnable triggered");
         }
@@ -295,11 +350,11 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
         }
 
         /// <summary>
-        ///     Initializes the menu, overwrite this method to change the menu.
+        ///     Sets whether enabled.
         /// </summary>
-        protected virtual void SetMenu()
+        protected virtual void SetEnabled()
         {
-            this.Menu = new Menu(this.Name, this.Name);
+            this.Enabled = this.Menu.Item(this.Name + "Enabled").GetValue<bool>();
         }
 
         /// <summary>
@@ -309,17 +364,12 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Abstract_Classes
         /// <param name="e">The <see cref="FeatureBaseEventArgs" /> instance containing the event data.</param>
         private void OnCoreInitialize(object sender, FeatureBaseEventArgs e)
         {
-            this.SetMenu();
+            this.CreateMenu();
 
-            if (this.Switch == null)
-            {
-                this.Switch = new BoolSwitch(this.Menu, "Enabled", true);
-            }
+            this.SetEnabled();
 
-            this.Switch.Setup();
-
-            this.Switch.OnDisableEvent += this.OnDisable;
-            this.Switch.OnEnableEvent += this.OnEnable;
+            this.OnDisableEvent += this.OnDisable;
+            this.OnEnableEvent += this.OnEnable;
             this.OnLoadEvent += this.OnLoad;
             this.OnUnLoadEvent += this.OnUnload;
             this.OnRefreshEvent += this.OnRefresh;

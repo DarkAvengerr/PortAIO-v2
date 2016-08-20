@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.UI.Notifications.Designs
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.UI.Notifications.Designs
 {
     using global::RethoughtLib.UI.Core.Designs;
 

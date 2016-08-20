@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.Classes.Injectables.Abstrahations
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.Classes.Injectables.Abstrahations
 {
     using System.Collections.Generic;
 

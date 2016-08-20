@@ -34,13 +34,13 @@ using EloBuddy;
         private static SpellSlot smiteSlot;
         private static readonly AIHeroClient player = ObjectManager.Player;
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnLoad;
+            OnLoad();
 
         }
 
-        private static void OnLoad(EventArgs args)
+        private static void OnLoad()
         {
             if (player.ChampionName != ChampName)
                 return;

@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.LogicProvider
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.LogicProvider
 {
     using System;
     using System.Collections.Generic;
@@ -85,7 +87,7 @@ using EloBuddy; namespace RethoughtLib.LogicProvider
                 {
                     var target = turretTarget[turret.NetworkId];
 
-                    if (LeagueSharp.Common.Utility.IsValidTarget(target, float.MaxValue, false))
+                    if (Utility.IsValidTarget(target, float.MaxValue, false))
                     {
                         // We can onehit the turret, there are not much enemies near and we won't die from the next turret shot
                         if (turret.Health + turret.AttackShield <= Variables.Player.GetAutoAttackDamage(turret)
@@ -115,21 +117,6 @@ using EloBuddy; namespace RethoughtLib.LogicProvider
             }
         }
 
-        /// <summary>
-        ///     Called when [target].
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs" /> instance containing the event data.</param>
-        private void OnTarget(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            if (!(sender is Obj_AI_Turret)) return;
-                
-            if (args.Target != null)
-            {
-                //this.turretTarget[sender.NetworkId] = args.Target;
-            }
-        }
-
         #endregion
 
         #region Methods
@@ -148,7 +135,7 @@ using EloBuddy; namespace RethoughtLib.LogicProvider
             var heroes =
                 HeroManager.Allies.Where(
                     ally =>
-                    Geometry.Distance(ally, position) <= range + ally.BoundingRadius && LeagueSharp.Common.Utility.IsValidTarget(ally)
+                    Geometry.Distance(ally, position) <= range + ally.BoundingRadius && Utility.IsValidTarget(ally)
                     && !ally.IsMe);
 
             return minions.Count() + heroes.Count();

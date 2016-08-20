@@ -11,12 +11,12 @@ using EloBuddy;
     {
         #region Methods
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnGameLoad;
+            OnGameLoad();
         }
 
-        private static void OnGameLoad(EventArgs args)
+        private static void OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName.ToLower() != "monkeyking")
             {

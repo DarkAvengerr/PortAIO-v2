@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using EloBuddy; namespace RethoughtLib.Classes.Observer
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.Classes.Observer
 {
     public abstract class Observer
     {

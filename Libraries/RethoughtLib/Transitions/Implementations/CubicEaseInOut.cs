@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.Transitions.Implementations
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.Transitions.Implementations
 {
     using global::RethoughtLib.Transitions.Abstract_Base;
 

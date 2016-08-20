@@ -52,9 +52,9 @@ using EloBuddy;
         private static bool DrawAlwaysR => Menu.Item("DrawAlwaysR").GetValue<bool>();
         private static int UseRMin => Menu.Item("UseRMin").GetValue<Slider>().Value;
         private static bool AlwaysR => Menu.Item("AlwaysR").GetValue<KeyBind>().Active;
-        private static void Main() => CustomEvents.Game.OnGameLoad += OnGameLoad;
+        public static void Main() => OnGameLoad();
 
-        private static void OnGameLoad(EventArgs args)
+        private static void OnGameLoad()
         {
 
             if (Player.ChampionName != "MonkeyKing") return;

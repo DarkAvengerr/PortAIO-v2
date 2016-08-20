@@ -54,8 +54,6 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.Menus.Draw
             Menu = new Menu(this.Name, this.Name);
 
             Menu.AddItem(new MenuItem(this.Name + "Enabled", "Enabled").SetValue(true));
-
-            
         }
 
         #endregion

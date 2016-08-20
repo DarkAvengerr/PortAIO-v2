@@ -8,7 +8,7 @@ using EloBuddy;
         ///     Creates a new instance of the BootstrapContainer Class
         /// </summary>
         /// <param name="args"></param>
-        static void Main(string[] args)
+        public static void Main()
         {
             var bootstrap = new BootstrapContainer();
 

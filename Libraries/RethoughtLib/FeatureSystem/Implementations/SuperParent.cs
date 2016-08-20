@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.FeatureSystem.Implementations
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.FeatureSystem.Implementations
 {
     #region Using Directives
 
@@ -36,7 +38,7 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem.Implementations
         /// <summary>
         ///     Raises the <see cref="E:ChildAddInvoker" /> event.
         /// </summary>
-        /// <param name="eventArgs">The <see cref="PareParentBaseentBaseEventArgs" /> instance containing the event data.</param>
+        /// <param name="eventArgs">The <see cref="ParentBase.ParentBaseEventArgs" /> instance containing the event data.</param>
         protected override void OnChildAddInvoker(ParentBaseEventArgs eventArgs)
         {
             if (eventArgs.Child is SuperParent)

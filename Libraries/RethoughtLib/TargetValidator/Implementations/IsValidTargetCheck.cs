@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.TargetValidator.Implementations
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.TargetValidator.Implementations
 {
     #region Using Directives
 

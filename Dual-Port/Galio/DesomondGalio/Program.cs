@@ -11,15 +11,15 @@ using SharpDX;
 using System.Collections.Generic;
 using Color = System.Drawing.Color;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace DesomondGalio
+using EloBuddy;
+using LeagueSharp.Common;
+namespace DesomondGalio
 {
     internal class Program
     {
         public static Menu Menu;
         private static AIHeroClient Player;
-       
+
 
         public static Orbwalking.Orbwalker Orbwalker;
 
@@ -28,22 +28,18 @@ using EloBuddy;
         public static Spell E;
         public static Spell R;
         public static SpellSlot SumIgnite = ObjectManager.Player.GetSpellSlot("SummonerDot");
-        public static void Main(string[] args)
+        public static void Main()
         {
-            Game.OnLoad += Game_Start;
-            if (Game.Mode == GameMode.Running)
-            {
-                Game_Start(new EventArgs());
-            }
+            Game_Start();
         }
-       
-        public static void Game_Start(EventArgs args)
+
+        public static void Game_Start()
         {
             Menu = new Menu("Galio", "Galio", true);
             var TargetSelectorMenu = new Menu("Target Selector", "Target Selector");
             TargetSelector.AddToMenu(TargetSelectorMenu);
             Menu.AddSubMenu(TargetSelectorMenu);
-            
+
 
             Menu.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
             Orbwalker = new Orbwalking.Orbwalker(Menu.SubMenu("Orbwalking"));
@@ -67,7 +63,7 @@ using EloBuddy;
             Menu.SubMenu("Harass").AddItem(new MenuItem("HarassE", "Use E").SetValue(false));
             Menu.SubMenu("Harass").AddItem(new MenuItem("HarassActive", "Harass!").SetValue(new KeyBind("20".ToCharArray()[0], KeyBindType.Press)));
 
-           
+
             Menu.AddSubMenu(new Menu("Clear", "Clear"));
             Menu.SubMenu("Clear").AddItem(new MenuItem("UseQFarm", "Use Q").SetValue(true));
             Menu.SubMenu("Clear").AddItem(new MenuItem("UseEFarm", "Use E").SetValue(true));
@@ -84,10 +80,10 @@ using EloBuddy;
             Menu.SubMenu("Draw").AddItem(new MenuItem("DrawE", "Draw E").SetValue(new Circle(true, Color.Green)));
             Menu.SubMenu("Draw").AddItem(new MenuItem("DrawR", "Draw R").SetValue(new Circle(true, Color.Green)));
 
- 
+
             Menu.AddToMainMenu();
 
-          
+
 
             Player = ObjectManager.Player;
 
@@ -134,7 +130,7 @@ using EloBuddy;
             List<Vector2> pos = new List<Vector2>();
             bool qFarm = Menu.Item("UseQFarm").GetValue<bool>();
             bool eFarm = Menu.Item("UseEFarm").GetValue<bool>();
-            
+
             var AllMinions = MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
             foreach (var minion in AllMinions)
             {
@@ -146,7 +142,7 @@ using EloBuddy;
                 {
                     E.Cast(minion);
                 }
-            } 
+            }
         }
 
         public static void Harass()
@@ -155,16 +151,16 @@ using EloBuddy;
             var HarassW = Menu.Item("HarassW").GetValue<bool>();
             var HarassE = Menu.Item("HarassE").GetValue<bool>();
             var t = TargetSelector.GetTarget(940, TargetSelector.DamageType.Magical);
-           
+
             if (HarassQ && Q.IsReady())
             {
-                
+
                 if (t.IsValidTarget())
                 {
                     if (HarassW && W.IsReady())
                     {
                         W.Cast(ObjectManager.Player);
-                        Q.Cast(t, true);   
+                        Q.Cast(t, true);
                     }
                     else
                     {
@@ -202,7 +198,7 @@ using EloBuddy;
             var useE = Menu.Item("UseE").GetValue<bool>();
             var numOfEnemies = Menu.Item("MinEnemys").GetValue<Slider>().Value;
             var t = TargetSelector.GetTarget(940, TargetSelector.DamageType.Magical);
-  
+
             if (!Player.HasBuff("GalioIdolOfDurand"))
             {
                 Orbwalker.SetMovement(true);
@@ -214,8 +210,8 @@ using EloBuddy;
                 {
                     if (useW && W.IsReady() && comboMana < (ObjectManager.Player.Mana / ObjectManager.Player.MaxMana))
                     {
-                            W.Cast(ObjectManager.Player, true);
-                            Q.Cast(t, true);
+                        W.Cast(ObjectManager.Player, true);
+                        Q.Cast(t, true);
                     }
                     else
                     {
@@ -243,7 +239,7 @@ using EloBuddy;
             if (R.IsReady() && useR)
             {
                 var t2 = TargetSelector.GetTarget(300, TargetSelector.DamageType.Magical);
-                if(GetEnemys(t2) >= numOfEnemies)
+                if (GetEnemys(t2) >= numOfEnemies)
                 {
                     Orbwalker.SetMovement(false);
                     R.Cast(t2, false, true);
@@ -252,7 +248,7 @@ using EloBuddy;
                         W.Cast(ObjectManager.Player, true);
                     }
                 }
-               
+
             }
 
             if (Menu.Item("UseI").GetValue<bool>() && SumIgnite != SpellSlot.Unknown && Player.Spellbook.CanUseSpell(SumIgnite) == SpellState.Ready)
@@ -265,7 +261,7 @@ using EloBuddy;
             }
 
         }
-     //-----------Stolen
+        //-----------Stolen
         private static int GetEnemys(AIHeroClient target)
         {
             int Enemys = 0;
@@ -279,7 +275,7 @@ using EloBuddy;
             }
             return Enemys;
         }
-     //-----------Stolen
+        //-----------Stolen
         private static void OnDraw(EventArgs args)
         {
 

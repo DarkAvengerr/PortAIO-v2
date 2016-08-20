@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using EloBuddy; namespace RethoughtLib.Classes.Injectables
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.Classes.Injectables
 {
     public abstract class DependencyInjectionBase<T>
     {

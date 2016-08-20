@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.CastManager
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.CastManager
 {
     #region Using Directives
 

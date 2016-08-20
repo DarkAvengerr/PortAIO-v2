@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.Utility
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.Utility
 {
     internal class Logger
     {

@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.Algorithm.ShortestPathAlgorithm.ConnectionTypes
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.Algorithm.ShortestPathAlgorithm.ConnectionTypes
 {
     public class SimpleConnection<T> : Connection<T>
     {

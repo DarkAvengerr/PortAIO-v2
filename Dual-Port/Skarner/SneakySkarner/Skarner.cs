@@ -17,7 +17,7 @@ using EloBuddy;
         private const string ChampionName = "Skarner";
         private DamageBuffer DamageBuffer { get; set; }
 
-        protected override void Game_OnGameLoad(EventArgs args)
+        protected override void Game_OnGameLoad()
         {
             Player = ObjectManager.Player;
             if (Player.CharData.BaseSkinName != ChampionName) return;

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using EloBuddy; namespace RethoughtLib.AssemblyDisabler.Interfaces
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.AssemblyDisabler.Interfaces
 {
     public interface IAssembly
     {

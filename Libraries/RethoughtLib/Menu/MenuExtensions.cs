@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.Menu
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.Menu
 {
     #region Using Directives
 

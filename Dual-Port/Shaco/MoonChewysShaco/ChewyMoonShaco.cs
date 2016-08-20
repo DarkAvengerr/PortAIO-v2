@@ -27,7 +27,7 @@ using EloBuddy;
         public static Items.Item Hydra;
         public static int cloneAct = 0;
         public static AIHeroClient player = ObjectManager.Player;
-        public static void OnGameLoad(EventArgs args)
+        public static void OnGameLoad()
         {
             if (player.BaseSkinName != "Shaco")
             {

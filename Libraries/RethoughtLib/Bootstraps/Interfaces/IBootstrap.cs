@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.Bootstraps.Interfaces
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.Bootstraps.Interfaces
 {
     public interface IBootstrap
     {

@@ -712,13 +712,52 @@ namespace PortAIO
                     }
                     break;
                 case Champion.Galio:
-                    UnderratedAIO.Program.OnGameLoad();
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // Desomond Galio
+                            DesomondGalio.Program.Main();
+                            break;
+                        case 2: // Galio#
+                            GalioSharp.Program.Main();
+                            break;
+                    }
                     break;
                 case Champion.Gangplank:
-                    UnderratedAIO.Program.OnGameLoad();
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // Badao Gangplank
+                            BadaoKingdom.Program.Main();
+                            break;
+                        case 2: // BangPlank
+                            Bangplank.Program.Main();
+                            break;
+                        case 3: // BePlank
+                            BePlank.Program.Main();
+                            break;
+                    }
                     break;
                 case Champion.Garen:
-                    UnderratedAIO.Program.OnGameLoad();
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // TheGaren
+                            TheGaren.Program.Main();
+                            break;
+                        case 2: // TroopGaren
+                            TroopGaren.Program.Main();
+                            break;
+                        case 3: // yol0 Garen
+                            yol0Garen.Program.Main();
+                            break;
+                    }
                     break;
                 case Champion.Gnar:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
@@ -783,7 +822,15 @@ namespace PortAIO
                     }
                     break;
                 case Champion.Heimerdinger:
-                    Two_Girls_One_Donger.Program.Game_OnGameLoad();
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // 2Girls1Donger
+                            Two_Girls_One_Donger.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // TheDonger
+                            The_Donger.Donger.Main();
+                            break;
+                    }
                     break;
                 case Champion.Illaoi:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
@@ -1041,7 +1088,15 @@ namespace PortAIO
                     }
                     break;
                 case Champion.Khazix:
-                    SephKhazix.Khazix.Main();
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // SephKhaZix
+                            SephKhazix.Khazix.Main();
+                            break;
+                        case 1: // KhaZix#
+                            KhazixSharp.Program.Main();
+                            break;
+                    }
                     break;
                 case Champion.Kindred:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
@@ -1221,7 +1276,18 @@ namespace PortAIO
                     }
                     break;
                 case Champion.Malphite:
-                    ElEasy.Entry.OnLoad();
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // ElEasy
+                            ElEasy.Entry.OnLoad();
+                            break;
+                        case 1: //JustMalphite
+                            JustMalphite.Program.Main();
+                            break;
+                        case 2: // SephMalphite
+                            Malphite.Program.Main();
+                            break;
+                    }
                     break;
                 case Champion.Malzahar:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
@@ -1382,7 +1448,15 @@ namespace PortAIO
                     }
                     break;
                 case Champion.Nocturne:
-                    UnderratedAIO.Program.OnGameLoad();
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // xQx Nocturne
+                            Nocturne.Nocturne.Init();
+                            break;
+                    }
                     break;
                 case Champion.Nunu:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
@@ -1466,7 +1540,15 @@ namespace PortAIO
                     }
                     break;
                 case Champion.Rammus:
-                    BrianSharp.Program.Main();
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // BrianSharp
+                            BrianSharp.Program.Main();
+                            break;
+                        case 1: // Rammus is OK
+                            Rammus.Program.Main();
+                            break;
+                    }
                     break;
                 case Champion.RekSai:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
@@ -1567,7 +1649,15 @@ namespace PortAIO
                     }
                     break;
                 case Champion.Shaco:
-                    UnderratedAIO.Program.OnGameLoad();
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // Ch3wyM00N Shaco
+                            ChewyMoonsShaco.Program.Main();
+                            break;
+                    }
                     break;
                 case Champion.Shen:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
@@ -1612,7 +1702,15 @@ namespace PortAIO
                     }
                     break;
                 case Champion.Sion:
-                    UnderratedAIO.Program.OnGameLoad();
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // SimpleSion
+                            Sion.Program.Main();
+                            break;
+                    }                    
                     break;
                 case Champion.Sivir:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
@@ -1641,7 +1739,18 @@ namespace PortAIO
                     }
                     break;
                 case Champion.Skarner:
-                    UnderratedAIO.Program.OnGameLoad();
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // kSkarner
+                            kSkarner.Program.Main();
+                            break;
+                        case 2: // SneakySkarner
+                            SneakySkarner.Program.Main();
+                            break;
+                    }
                     break;
                 case Champion.Sona:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
@@ -2112,7 +2221,27 @@ namespace PortAIO
                     }
                     break;
                 case Champion.MonkeyKing:
-                    UnderratedAIO.Program.OnGameLoad();
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // 2Girls1Monkey
+                            Two_Girls_One_Monkey.Program.Main();
+                            break;
+                        case 2: // HoolaWukong
+                            HoolaWukong.Program.Main();
+                            break;
+                        case 3: // JustWukong
+                            JustWukong.Program.Main();
+                            break;
+                        case 4: // mztikk's Wukong
+                            Wukong.Program.Main();
+                            break;
+                        case 5: // xQx Wukong
+                            WukongxQx.Program.Main();
+                            break;
+                    }
                     break;
                 case Champion.Xerath:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
@@ -2170,14 +2299,31 @@ namespace PortAIO
                             YasuoTheLastMemebender.Program.Game_OnGameLoad();
                             break;
                         case 7: // Media's Yasuo
+                            YasuoMedia.Program.Main();
                             break;
                     }
                     break;
                 case Champion.Yorick:
-                    UnderratedAIO.Program.OnGameLoad();
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // The Staffer
+                            yorick.Program.Main();
+                            break;
+                    }
                     break;
                 case Champion.Zac:
-                    UnderratedAIO.Program.OnGameLoad();
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // The Secret Flubber
+                            Zac_The_Secret_Flubber.Program.Main();
+                            break;
+                    }
                     break;
                 case Champion.Zed:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
@@ -2191,7 +2337,15 @@ namespace PortAIO
                     }
                     break;
                 case Champion.Ziggs:
-                    ZiggsKortatu.Program.Game_OnGameLoad();
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // Ziggs#
+                            ZiggsKortatu.Program.Game_OnGameLoad();
+                            break;
+                        case 1: // Royal Ziggy
+                            ZiggsRoyal.Program.Main();
+                            break;
+                    }
                     break;
                 case Champion.Zilean:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)

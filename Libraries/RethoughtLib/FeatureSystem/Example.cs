@@ -1,10 +1,11 @@
-using EloBuddy; namespace RethoughtLib.FeatureSystem
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.FeatureSystem
 {
     using System;
 
     using global::RethoughtLib.FeatureSystem.Abstract_Classes;
     using global::RethoughtLib.FeatureSystem.Implementations;
-    using global::RethoughtLib.FeatureSystem.Switches;
 
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -18,7 +19,6 @@ using EloBuddy; namespace RethoughtLib.FeatureSystem
 
             // A normal Menu
             var comboParent = new Parent("Parent");
-            comboParent.Switch = new BoolSwitch(comboParent.Menu, "Disabled", false);
 
             // 2 children containing the same logic
             var child = new ExampleChild("Child");

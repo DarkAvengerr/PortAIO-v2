@@ -109,9 +109,9 @@ using EloBuddy;
         /// <param name="args">
         /// The args.
         /// </param>
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ using EloBuddy;
         /// <param name="args">
         /// The args.
         /// </param>
-        private static void Game_OnGameLoad(EventArgs args)
+        private static void Game_OnGameLoad()
         {
             player = ObjectManager.Player;
             if (player.ChampionName != ChampionName)

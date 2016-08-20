@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.Design.Implementations
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.Design.Implementations
 {
     #region Using Directives
 

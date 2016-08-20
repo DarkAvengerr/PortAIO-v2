@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.Menu
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.Menu
 {
     #region Using Directives
 
@@ -6,6 +8,7 @@ using EloBuddy; namespace RethoughtLib.Menu
 
     using LeagueSharp.Common;
 
+    using global::RethoughtLib.Exceptions;
     using global::RethoughtLib.Menu.Interfaces;
 
     #endregion
@@ -71,10 +74,11 @@ using EloBuddy; namespace RethoughtLib.Menu
         #region Methods
 
         /// <summary>
-        ///     Searches the menu-item and translates it.
+        ///     Searches the menuitem and translates it.
         /// </summary>
         /// <param name="internalName">Name of the internal.</param>
         /// <param name="newDisplayName">New name of the display.</param>
+        /// <exception cref="TranslationException"></exception>
         private void SearchAndTranslate(string internalName, string newDisplayName)
         {
             try
@@ -88,7 +92,7 @@ using EloBuddy; namespace RethoughtLib.Menu
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException(
+                throw new TranslationException(
                     $"Failed translating > {internalName} into {newDisplayName}. Exception: {ex}");
             }
         }

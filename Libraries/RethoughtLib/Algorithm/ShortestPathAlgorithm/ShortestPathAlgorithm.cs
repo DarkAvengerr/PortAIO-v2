@@ -1,4 +1,6 @@
-using EloBuddy; namespace RethoughtLib.Algorithm.ShortestPathAlgorithm
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace RethoughtLib.Algorithm.ShortestPathAlgorithm
 {
     #region Using Directives
 
