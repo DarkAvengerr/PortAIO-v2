@@ -184,9 +184,11 @@ namespace KurisuNidalee
         /// Checks if Nidalee is in Cougar form or not.
         /// </summary>
         /// <returns></returns>
-        internal static bool CatForm()
+         internal static bool CatForm()
         {
-            return Player.CharData.BaseSkinName != "Nidalee";
+            return (Player.Spellbook.GetSpell(SpellSlot.Q).Name == "Takedown" ||
+                Player.Spellbook.GetSpell(SpellSlot.W).Name == "Pounce" ||
+                Player.Spellbook.GetSpell(SpellSlot.E).Name == "Swipe");
         }
 
         /// <summary>
