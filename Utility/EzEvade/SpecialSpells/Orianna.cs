@@ -35,7 +35,7 @@ using EloBuddy; namespace ezEvade.SpecialSpells
 
                 Obj_AI_Minion.OnCreate += (obj, args) => OnCreateObj_OrianaIzunaCommand(obj, args, hero);
                 //Obj_AI_Minion.OnDelete += (obj, args) => OnDeleteObj_OrianaIzunaCommand(obj, args, hero);
-                AIHeroClient.OnSpellCast += ProcessSpell_OrianaRedactCommand;
+                AIHeroClient.OnProcessSpellCast += ProcessSpell_OrianaRedactCommand;
                 SpellDetector.OnProcessSpecialSpell += ProcessSpell_OrianaIzunaCommand;
             }
         }
