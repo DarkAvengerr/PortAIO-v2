@@ -79,7 +79,7 @@ using EloBuddy; namespace ezEvade
                 }
                 else
                 {
-                    Game.OnLoad += Game_OnGameLoad;
+                    EloBuddy.SDK.Events.Loading.OnLoadingComplete += Game_OnGameLoad;
                 }
             });
         }
