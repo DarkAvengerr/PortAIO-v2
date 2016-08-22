@@ -27,7 +27,7 @@ using EloBuddy; namespace ezEvade.SpecialSpells
                     return;
                 }
 
-                AIHeroClient.OnSpellCast += ProcessSpell_JarvanIVDemacianStandard;
+                AIHeroClient.OnProcessSpellCast += ProcessSpell_JarvanIVDemacianStandard;
 
                 SpellDetector.OnProcessSpecialSpell += ProcessSpell_JarvanIVDragonStrike;
                 Obj_AI_Minion.OnCreate += OnCreateObj_JarvanIVDragonStrike;
