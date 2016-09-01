@@ -447,14 +447,13 @@ namespace KurisuNidalee
                             }
 
                             // switch if Q disabled in menu
-                            if (!KL.CanUse(KL.Spells["Javelin"], true, mode) ||
+                            if (!KL.CanUse(KL.Spells["Javelin"], true, mode)
 
                                 // delay the cast .5 seconds
-                                Utils.GameTimeTickCount - (int) (KL.TimeStamp["Javelin"] * 1000) +
-                                ((6 + (6 * KL.Player.PercentCooldownMod)) * 1000) >= 500 &&
+                             // || Utils.GameTimeTickCount - (int) (KL.TimeStamp["Javelin"] * 1000) + ((6 + (6 * KL.Player.PercentCooldownMod)) * 1000) >= 500
 
                                 // if Q is not ready in 2 seconds
-                                !KL.SpellTimer["Javelin"].IsReady(2))
+                              && !KL.SpellTimer["Javelin"].IsReady(2))
                             {
                                 KL.Spells["Aspect"].Cast();
                             }
