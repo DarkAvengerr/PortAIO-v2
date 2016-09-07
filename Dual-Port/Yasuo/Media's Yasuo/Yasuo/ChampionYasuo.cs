@@ -38,20 +38,30 @@ namespace YasuoMedia.Yasuo
         [SuppressMessage("ReSharper", "RedundantNameQualifier")]
         public void Load()
         {
+            Console.WriteLine("1a");
+
             #region parents
 
             // Core
             var assembly = new Assembly();
 
+            Console.WriteLine("2a");
+
             // Orbwalking Modes
             var combo = new Combo();
+            Console.WriteLine("3a");
             var laneclear = new LaneClear();
+            Console.WriteLine("4a");
             var lasthit = new LastHit();
+            Console.WriteLine("5a");
             var mixed = new Mixed();
+            Console.WriteLine("6a");
 
             // Additional Features
             var module = new Modules.Modules();
+            Console.WriteLine("7a");
             var protector = new Protector();
+            Console.WriteLine("8a");
 
             #endregion
 
@@ -60,16 +70,15 @@ namespace YasuoMedia.Yasuo
             GlobalVariables.Assembly.Features.AddRange(
                 new List<IFeatureChild>
                     {
+
                                 // Core
                                 new Version(assembly),
-                                new Debug(assembly), new CastManager(assembly), new SpellManager(assembly),
+                                //new Debug(assembly), new CastManager(assembly), new SpellManager(assembly),
 
-                                // Orbwalking Modes
+                                /*
                                 new OrbwalkingModes.Combo.SteelTempest(combo),
                                 new OrbwalkingModes.Combo.SweepingBlade(combo),
-
                                 new OrbwalkingModes.Combo.LastBreath(combo),
-                                //new Flash(combo),
                                 new OrbwalkingModes.LaneClear.SteelTempest(laneclear),
                                 new OrbwalkingModes.LaneClear.SweepingBlade(laneclear),
                                 new OrbwalkingModes.LaneClear.Eq(laneclear),
@@ -78,14 +87,12 @@ namespace YasuoMedia.Yasuo
                                 new OrbwalkingModes.LastHit.Eq(lasthit),
                                 new OrbwalkingModes.Mixed.SteelTempest(mixed),
                                 new OrbwalkingModes.Mixed.SweepingBlade(mixed),
-                                // new Potions(module),
-                                //new KillSteal(module),
-                            new Modules.WallDash.WallDash(module),
+                                new Modules.WallDash.WallDash(module),
                                 new Modules.Flee.SweepingBlade(module),
-
-                    // Extra Features - Disabled due to SDK/Core problems
-                    //new WindWallProtector(protector)
+                                */
                 });
+
+            Console.WriteLine("9a");
 
             foreach (var feature in GlobalVariables.Assembly.Features.Where(feature => !feature.Handled))
             {

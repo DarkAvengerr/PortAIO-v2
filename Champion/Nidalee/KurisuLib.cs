@@ -136,13 +136,9 @@ namespace KurisuNidalee
         /// </summary>
         /// <param name="unit"></param>
         /// <returns></returns>
-        public static bool IsHunted(this Obj_AI_Base unit)
+        internal static bool IsHunted(this Obj_AI_Base unit)
         {
-            if (unit != null)
-            {
-                return unit.HasBuff("nidaleepassivehunted");
-            }
-            else return false;
+            return unit.HasBuff("nidaleepassivehunted");
         }
 
         /// <summary>
@@ -188,11 +184,9 @@ namespace KurisuNidalee
         /// Checks if Nidalee is in Cougar form or not.
         /// </summary>
         /// <returns></returns>
-         internal static bool CatForm()
+        internal static bool CatForm()
         {
-            return (Player.Spellbook.GetSpell(SpellSlot.Q).Name == "Takedown" ||
-                Player.Spellbook.GetSpell(SpellSlot.W).Name == "Pounce" ||
-                Player.Spellbook.GetSpell(SpellSlot.E).Name == "Swipe");
+            return Player.CharData.BaseSkinName != "Nidalee";
         }
 
         /// <summary>
@@ -309,26 +303,29 @@ namespace KurisuNidalee
         /// <param name="args"></param>
         internal static void SpellsOnUpdate(EventArgs args)
         {
-            var spellQ = Player.Spellbook.GetSpell(SpellSlot.Q);
-            var cooldownQ = Math.Max(0, spellQ.CooldownExpires - Game.Time);
+            SpellTimer["Takedown"] = ((TimeStamp["Takedown"] - Game.Time) > 0) 
+                ? (TimeStamp["Takedown"] - Game.Time) 
+                : 0;
 
-            var spellW = Player.Spellbook.GetSpell(SpellSlot.W);
-            var cooldownW = Math.Max(0, spellW.CooldownExpires - Game.Time);
+            SpellTimer["Pounce"] = ((TimeStamp["Pounce"] - Game.Time) > 0) 
+                ? (TimeStamp["Pounce"] - Game.Time) 
+                : 0;
 
-            var spellE = Player.Spellbook.GetSpell(SpellSlot.E);
-            var cooldownE = Math.Max(0, spellE.CooldownExpires - Game.Time);
+            SpellTimer["Swipe"] = ((TimeStamp["Swipe"] - Game.Time) > 0) 
+                ? (TimeStamp["Swipe"] - Game.Time) 
+                : 0;
 
-            SpellTimer["Takedown"] = cooldownQ;
+            SpellTimer["Javelin"] = ((TimeStamp["Javelin"] - Game.Time) > 0) 
+                ? (TimeStamp["Javelin"] - Game.Time) 
+                : 0;
 
-            SpellTimer["Pounce"] = cooldownW;
+            SpellTimer["Bushwhack"] = ((TimeStamp["Bushwhack"] - Game.Time) > 0) 
+                ? (TimeStamp["Bushwhack"] - Game.Time) 
+                : 0;
 
-            SpellTimer["Swipe"] = cooldownE;
-
-            SpellTimer["Javelin"] = cooldownQ;
-
-            SpellTimer["Bushwhack"] = cooldownW;
-
-            SpellTimer["Primalsurge"] = cooldownE;
+            SpellTimer["Primalsurge"] = ((TimeStamp["Primalsurge"] - Game.Time) > 0) 
+                ? (TimeStamp["Primalsurge"] - Game.Time) 
+                : 0;
         }
 
         /// <summary>
@@ -347,7 +344,7 @@ namespace KurisuNidalee
                         if (args.End.IsValid() && args.End.Distance(KN.Player.ServerPosition) <= KN.Player.BoundingRadius * 2)
                         {
                             var hero = sender as AIHeroClient;
-                            if (hero == null || !hero.IsValidTargetLS(Spells["Bushwhack"].Range))
+                            if (hero == null || !hero.IsValidTarget(Spells["Bushwhack"].Range))
                             {
                                 return;
                             }
@@ -356,7 +353,7 @@ namespace KurisuNidalee
                         }
                     }
                 }
-             /*  
+
                 if (sender.IsMe && args.SData.Name.ToLower() == "pounce")
                 {
                     var unit = args.Target as Obj_AI_Base;
@@ -371,17 +368,17 @@ namespace KurisuNidalee
 
                 if (sender.IsMe && args.SData.Name.ToLower() == "primalsurge")
                     TimeStamp["Primalsurge"] = Game.Time + (12 + (12 * Player.PercentCooldownMod));
-                //*/
+
                 if (sender.IsMe && args.SData.Name.ToLower() == "bushwhack")
                 {
                     var wperlevel = new[] { 13, 12, 11, 10, 9 }[Spells["Bushwhack"].Level - 1];
-               //     TimeStamp["Bushwhack"] = Game.Time + (wperlevel + (wperlevel * Player.PercentCooldownMod));
+                    TimeStamp["Bushwhack"] = Game.Time + (wperlevel + (wperlevel * Player.PercentCooldownMod));
                 }
 
                 if (sender.IsMe && args.SData.Name.ToLower() == "javelintoss")
                 {
                     Counter = 0;
-                //    TimeStamp["Javelin"] = Game.Time + (6 + (6 * Player.PercentCooldownMod));
+                    TimeStamp["Javelin"] = Game.Time + (6 + (6 * Player.PercentCooldownMod));
                 }
 
                 if (sender.IsMe && args.SData.Name.ToLower() == "aspectofthecougar")
@@ -392,18 +389,18 @@ namespace KurisuNidalee
                 if (sender.IsMe && args.SData.Name.ToLower() == "aspectofthecougar" && CatForm())
                 {                    
                     Counter = 0;
-                    //Orbwalking.ResetAutoAttackTimer();
+                    Orbwalking.ResetAutoAttackTimer();
                 }
 
                 if (sender.IsMe && args.SData.Name.ToLower() == "aspectofthecougar" && !CatForm())
                 {
-                    //Orbwalking.ResetAutoAttackTimer();
+                    Orbwalking.ResetAutoAttackTimer();
                 }
 
-                if (sender.IsMe && args.SData.IsAutoAttack() && Player.HasBuff("Takedown"))
+                if (sender.IsMe && args.SData.IsAutoAttack() && Player.HasBuff("Takedown", true))
                 {
                     LastBite = Utils.GameTimeTickCount;
-                //    TimeStamp["Takedown"] = Game.Time + (5 + (5 * Player.PercentCooldownMod));
+                    TimeStamp["Takedown"] = Game.Time + (5 + (5 * Player.PercentCooldownMod));
                 }
             }
 

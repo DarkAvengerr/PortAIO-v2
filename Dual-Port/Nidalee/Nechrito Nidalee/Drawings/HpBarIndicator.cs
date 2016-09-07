@@ -19,12 +19,12 @@ using EloBuddy;
 
         public HpBarIndicator()
         {
-            dxLine = new Line(dxDevice) { Width = 9 };
+            //dxLine = new Line(dxDevice) { Width = 9 };
 
-            Drawing.OnPreReset += DrawingOnOnPreReset;
-            Drawing.OnPostReset += DrawingOnOnPostReset;
-            AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
-            AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnDomainUnload;
+            //Drawing.OnPreReset += DrawingOnOnPreReset;
+            //Drawing.OnPostReset += DrawingOnOnPostReset;
+            //AppDomain.CurrentDomain.DomainUnload += CurrentDomainOnDomainUnload;
+            //AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnDomainUnload;
         }
 
         public AIHeroClient unit { get; set; }

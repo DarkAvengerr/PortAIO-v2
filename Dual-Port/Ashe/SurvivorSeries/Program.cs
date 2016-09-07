@@ -98,7 +98,6 @@ using EloBuddy; namespace SurvivorAshe
             {
                 if (!eventArgs.GetNewValue<bool>())
                 {
-                    //ObjectManager.//Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, ObjectManager.Player.SkinId);
                 }
             };
 
@@ -288,7 +287,6 @@ using EloBuddy; namespace SurvivorAshe
 
             if (Menu.Item("UseSkin").GetValue<bool>())
             {
-                //Player.SetSkin(Player.CharData.BaseSkinName, Menu.Item("SkinID").GetValue<Slider>().Value);
             }
 
             switch (Orbwalker.ActiveMode)
@@ -408,7 +406,7 @@ using EloBuddy; namespace SurvivorAshe
 
             if (target != null && target.IsValidTarget())
             {
-                if (Menu.Item("ComboUseQ").GetValue<bool>() && Q.IsReady() && Player.Mana > Q.Instance.SData.Mana + R.Instance.SData.Mana || target.Health < 5 * Player.GetAutoAttackDamage(Player))
+                if (Menu.Item("ComboUseQ").GetValue<bool>() && target.IsValidTarget(SebbyLib.Orbwalking.GetRealAutoAttackRange(null)) && Q.IsReady() && Player.Mana > Q.Instance.SData.Mana + R.Instance.SData.Mana || target.Health < 5 * Player.GetAutoAttackDamage(Player))
                     Q.Cast();
                 if (Menu.Item("ComboUseW").GetValue<bool>() && W.IsReady() && Player.Mana > W.Instance.SData.Mana + R.Instance.SData.Mana && target.IsValidTarget(W.Range))
                     SebbySpell(W, target);
@@ -417,7 +415,7 @@ using EloBuddy; namespace SurvivorAshe
                     if (Menu.Item("ComboUseR").GetValue<bool>() && target.IsValidTarget(W.Range) && target.Health < W.GetDamage(target) + R.GetDamage(target) + 3 * Player.GetAutoAttackDamage(target) + OktwCommon.GetIncomingDamage(target) && !target.HasBuff("rebirth"))
                     {
                         SebbySpell(R, target);
-                        if (Q.IsReady())
+                        if (Q.IsReady() && target.IsValidTarget(SebbyLib.Orbwalking.GetRealAutoAttackRange(null)))
                             Q.Cast();
                     }
                 }

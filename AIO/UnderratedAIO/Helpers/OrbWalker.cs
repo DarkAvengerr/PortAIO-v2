@@ -116,13 +116,13 @@ namespace UnderratedAIO.Helpers
         /// </summary>
         private static readonly string[] AttackResets =
         {
-            "dariusnoxiantacticsonh", "garenq", "gravesmove",
+            "dariusnoxiantacticsonh", "fiorae", "garenq", "gravesmove",
             "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge", "leonashieldofdaybreak", "luciane",
             "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze", "netherblade",
-            "gangplankqwrapper", "poppypassiveattack", "powerfist", "renektonpreexecute", "rengarq",
-            "shyvanadoubleattack", "sivirw", "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble",
-            "vie", "volibearq", "xenzhaocombotarget", "yorickspectral", "reksaiq", "itemtitanichydracleave", "masochism",
-            "illaoiw"
+            "gangplankqwrapper", "powerfist", "renektonpreexecute", "rengarq", "shyvanadoubleattack", "sivirw",
+            "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble", "vie", "volibearq",
+            "xenzhaocombotarget", "yorickspectral", "reksaiq", "itemtitanichydracleave", "masochism", "illaoiw",
+            "elisespiderw", "fiorae", "meditate", "sejuaninorthernwinds", "asheq"
         };
 
 
@@ -236,7 +236,7 @@ namespace UnderratedAIO.Helpers
 
         private static int _autoattackCounter;
 
-        public static string animation;
+        public static bool _attacked;
 
         /// <summary>
         ///     Initializes static members of the <see cref="Orbwalking" /> class.
@@ -251,17 +251,7 @@ namespace UnderratedAIO.Helpers
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnDoCast;
             Spellbook.OnStopCast += SpellbookOnStopCast;
-            AIHeroClient.OnPlayAnimation += AIHeroClient_OnPlayAnimation;
             Obj_AI_Base.OnBasicAttack += new Obj_AI_BaseOnBasicAttack(OnBasicAttack);
-        }
-
-
-        private static void AIHeroClient_OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
-        {
-            if (sender.IsMe)
-            {
-                animation = args.Animation;
-            }
         }
 
         /// <summary>
@@ -315,6 +305,11 @@ namespace UnderratedAIO.Helpers
             if (OnAttack != null)
             {
                 OnAttack(unit, target);
+            }
+            if (!_attacked && unit != null && unit.IsMe)
+            {
+                _attacked = true;
+                LeagueSharp.Common.Utility.DelayAction.Add((int)(Player.AttackDelay * 1000), () => _attacked = false);
             }
         }
 
@@ -475,7 +470,8 @@ namespace UnderratedAIO.Helpers
                     return false;
                 }
             }
-            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000;
+            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000 &&
+             Player.CanAttack && !Player.IsCastingInterruptableSpell() && !_attacked;
         }
 
         /// <summary>

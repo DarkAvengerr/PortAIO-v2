@@ -299,7 +299,10 @@ namespace Thresh___The_Chain_Warden
         private static void Pull()
         {
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-
+            if (target == null)
+            {
+                return;
+            }
             if (E.IsReady() && Player.Distance(target.Position) < E.Range)
             {
                 E.Cast(target.Position.Extend(Player.Position, Vector3.Distance(target.Position, Player.Position) + 400));
@@ -309,6 +312,10 @@ namespace Thresh___The_Chain_Warden
         private static void Push()
         {
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
+            if (target == null)
+            {
+                return;
+            }
             if (E.IsReady() && Player.Distance(target.Position) < E.Range)
             {
                 E.Cast(target.Position);
@@ -318,7 +325,10 @@ namespace Thresh___The_Chain_Warden
         private static void Harass()
         {
             var target = TargetSelector.GetTarget(1300, TargetSelector.DamageType.Magical);
-
+            if (target == null)
+            {
+                return;
+            }
             if (Q.IsReady() && (Config.Item("UseQHarass").GetValue<bool>()))
             {
                 var Qprediction = Q.GetPrediction(target);
@@ -338,6 +348,10 @@ namespace Thresh___The_Chain_Warden
         private static void Combo()
         {
             var target = TargetSelector.GetTarget(1300, TargetSelector.DamageType.Magical);
+            if (target == null)
+            {
+                return;
+            }
             if (Q.IsReady() && (Config.Item("UseQCombo").GetValue<bool>()))
             {
                 Q.CastIfHitchanceEquals(target, HitChance.Dashing, true);
@@ -374,6 +388,11 @@ namespace Thresh___The_Chain_Warden
         {
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             var target = TargetSelector.GetTarget(Q2.Range, TargetSelector.DamageType.Magical);
+
+            if (target == null)
+            {
+                return;
+            }
 
             if (Player.Distance3D(target) > Q.Range)
             {

@@ -30,24 +30,31 @@ namespace YasuoMedia
         {
             try
             {
+                Console.WriteLine("1");
                 if (GlobalVariables.Assembly != null)
                 {
+                    Console.WriteLine("2");
                     return;
                 }
 
+                Console.WriteLine("3");
+
                 if (GlobalVariables.ChampionDependent)
                 {
-                    if (GlobalVariables.SupportedChampions.Contains(
-                            GlobalVariables.Player.ChampionName.ToLower()))
+                    Console.WriteLine("4");
+                    if (GlobalVariables.SupportedChampions.Contains(GlobalVariables.Player.ChampionName.ToLower()))
                     {
+                        Console.WriteLine("5");
                         switch (GlobalVariables.Player.ChampionName)
                         {
                             case "Yasuo":
+                                Console.WriteLine("6");
                                 GlobalVariables.Assembly = new Assembly(new ChampionYasuo());
+                                Console.WriteLine("7");
                                 break;
                         }
                     }
-
+                    Console.WriteLine("8");
                     GlobalVariables.Assembly = new Assembly(new BaseChampion());
                 }
             }

@@ -57,7 +57,7 @@ using EloBuddy;
                 if (CatForm() && Target.Distance(Player) <= 300 && Champion.Swipe.IsReady())
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Target);
-                    Champion.Swipe.Cast(SwipePred.CastPosition);
+                    Champion.Swipe.Cast(Target);
                 }
                 if (CatForm() && Champion.Pounce.IsReady() && !Target.UnderTurret() && Target.Distance(Player) <= 370 && !Hunted)
                 {

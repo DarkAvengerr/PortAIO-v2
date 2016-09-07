@@ -293,6 +293,10 @@ namespace Bangplank
         private static void Combo()
         {
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical, true, HeroManager.Enemies.Where(e => e.IsInvulnerable));
+            if (target == null)
+            {
+                return;
+            }
             var ePrediction = Prediction.GetPrediction(target, 1f).CastPosition;
             var nbar = NearestKeg(Player.ServerPosition.To2D());
 

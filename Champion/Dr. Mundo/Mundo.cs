@@ -2,8 +2,9 @@
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
 
+using EloBuddy;
+using LeagueSharp.Common;
 namespace Mundo
 {
     internal class Mundo : Spells
@@ -11,10 +12,10 @@ namespace Mundo
 
         public Mundo()
         {
-            OnLoad();
+            CustomEvents.Game.OnGameLoad += OnLoad;
         }
 
-        private void OnLoad()
+        private void OnLoad(EventArgs args)
         {
             if (ObjectManager.Player.ChampionName != "DrMundo")
                 return;
@@ -33,7 +34,7 @@ namespace Mundo
         {
             if ((ConfigMenu.orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || ConfigMenu.orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && unit.IsMe)
             {
-                if (ConfigMenu.config.Item("useE").GetValue<bool>() && e.IsReady() && target is AIHeroClient && target.IsValidTarget(e.Range))
+                if (ConfigMenu.config.Item("useE").GetValue<bool>() && e.IsReady())
                 {
                     e.Cast();
                 }
@@ -42,7 +43,7 @@ namespace Mundo
 
             if (ConfigMenu.orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && unit.IsMe)
             {
-                if (ConfigMenu.config.Item("useEj").GetValue<bool>() && e.IsReady() && target is Obj_AI_Minion && target.IsValidTarget(e.Range))
+                if (ConfigMenu.config.Item("useEj").GetValue<bool>() && e.IsReady())
                 {
                     e.Cast();
                 }
@@ -53,8 +54,7 @@ namespace Mundo
                  ConfigMenu.orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && unit.IsMe)
             {
                 if ((ConfigMenu.config.Item("titanicC").GetValue<bool>() || ConfigMenu.config.Item("ravenousC").GetValue<bool>() ||
-                     ConfigMenu.config.Item("tiamatC").GetValue<bool>()) && !e.IsReady() && target is AIHeroClient &&
-                    target.IsValidTarget(e.Range) && CommonUtilities.CheckItem())
+                     ConfigMenu.config.Item("tiamatC").GetValue<bool>()) && !e.IsReady() && CommonUtilities.CheckItem())
                 {
                     CommonUtilities.UseItem();
                 }
@@ -64,8 +64,7 @@ namespace Mundo
             if (ConfigMenu.orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && unit.IsMe)
             {
                 if ((ConfigMenu.config.Item("titanicF").GetValue<bool>() || ConfigMenu.config.Item("ravenousF").GetValue<bool>() ||
-                     ConfigMenu.config.Item("tiamatF").GetValue<bool>()) && !e.IsReady() && target is Obj_AI_Minion &&
-                    target.IsValidTarget(e.Range) && CommonUtilities.CheckItem())
+                     ConfigMenu.config.Item("tiamatF").GetValue<bool>()) && !e.IsReady() && CommonUtilities.CheckItem())
                 {
                     CommonUtilities.UseItem();
                 }
@@ -174,14 +173,14 @@ namespace Mundo
                 {
                     if (ConfigMenu.config.Item("qRange").GetValue<bool>())
                     {
-                        if (HealthPrediction.GetHealthPrediction(minion, (int) (q.Delay + (minion.Distance(ObjectManager.Player.Position)/q.Speed))) < ObjectManager.Player.GetSpellDamage(minion, SpellSlot.Q) && ObjectManager.Player.Distance(minion) > ObjectManager.Player.AttackRange*2)
+                        if (HealthPrediction.GetHealthPrediction(minion, (int)(q.Delay + (minion.Distance(ObjectManager.Player.Position) / q.Speed))) < ObjectManager.Player.GetSpellDamage(minion, SpellSlot.Q) && ObjectManager.Player.Distance(minion) > ObjectManager.Player.AttackRange * 2)
                         {
                             q.Cast(minion);
                         }
                     }
                     else
                     {
-                        if (HealthPrediction.GetHealthPrediction(minion, (int) (q.Delay + (minion.Distance(ObjectManager.Player.Position)/q.Speed))) < ObjectManager.Player.GetSpellDamage(minion, SpellSlot.Q))
+                        if (HealthPrediction.GetHealthPrediction(minion, (int)(q.Delay + (minion.Distance(ObjectManager.Player.Position) / q.Speed))) < ObjectManager.Player.GetSpellDamage(minion, SpellSlot.Q))
                         {
                             q.Cast(minion);
                         }
@@ -211,7 +210,7 @@ namespace Mundo
                 {
                     foreach (var minion in minions)
                     {
-                        if (HealthPrediction.GetHealthPrediction(minion, (int) (q.Delay + (minion.Distance(ObjectManager.Player.Position)/q.Speed))) < ObjectManager.Player.GetSpellDamage(minion, SpellSlot.Q))
+                        if (HealthPrediction.GetHealthPrediction(minion, (int)(q.Delay + (minion.Distance(ObjectManager.Player.Position) / q.Speed))) < ObjectManager.Player.GetSpellDamage(minion, SpellSlot.Q))
                         {
                             q.Cast(minion);
                         }
@@ -267,7 +266,7 @@ namespace Mundo
                     w.Cast();
                 }
             }
-            
+
         }
 
         private void KillSteal()
@@ -300,7 +299,7 @@ namespace Mundo
 
             var target = TargetSelector.GetTarget(q.Range, TargetSelector.DamageType.Magical);
 
-            if (autoQ && ObjectManager.Player.HealthPercent >= qHealth && target.IsValidTarget(q.Range))
+            if (autoQ && ObjectManager.Player.HealthPercent >= qHealth && target.IsValidTarget(q.Range) && !ObjectManager.Player.UnderTurret())
             {
                 q.CastIfHitchanceEquals(target, CommonUtilities.GetHitChance("hitchanceQ"));
             }
@@ -338,7 +337,7 @@ namespace Mundo
                 q.CastIfHitchanceEquals(target, CommonUtilities.GetHitChance("hitchanceQ"));
             }
 
-            if (useR && FoundEnemies(q.Range*2))
+            if (useR && FoundEnemies(q.Range * 2))
             {
                 r.Cast();
             }
@@ -358,7 +357,7 @@ namespace Mundo
         {
             if (!ConfigMenu.config.Item("handleW").GetValue<bool>())
                 return;
-            
+
             if (IsBurning() && w.IsReady())
             {
                 w.Cast();

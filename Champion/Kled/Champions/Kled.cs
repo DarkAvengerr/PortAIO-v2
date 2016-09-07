@@ -45,6 +45,22 @@ namespace Hiki.Kled.Champions
                     break;
             }
 
+            if (Menus.Config.Item("manual.r").GetValue<KeyBind>().Active)
+            {
+                Orbwalking.MoveTo(Game.CursorPos);
+
+                if (Spells.R.IsReady() && Utilities.Enabled("r.combo"))
+                {
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.R.Range)))
+                    {
+                        if (Utilities.Enabled("r." + enemy.ChampionName) &&
+                            ObjectManager.Player.CountEnemiesInRange(Utilities.Slider("max.r.distance")) <= Utilities.Slider("min.enemy"))
+                        {
+                            Spells.R.Cast(enemy.Position);
+                        }
+                    }
+                }
+            }
         }
 
         public static void OnCombo()

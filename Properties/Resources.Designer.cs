@@ -362,6 +362,16 @@ namespace PortAIO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap BlaueKarte_jpg {
+            get {
+                object obj = ResourceManager.GetObject("BlaueKarte_jpg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap BlindMonkRKick {
             get {
                 object obj = ResourceManager.GetObject("BlindMonkRKick", resourceCulture);
@@ -1001,6 +1011,16 @@ namespace PortAIO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Exclamation_small_r {
+            get {
+                object obj = ResourceManager.GetObject("Exclamation_small_r", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Ezreal {
             get {
                 object obj = ResourceManager.GetObject("Ezreal", resourceCulture);
@@ -1114,6 +1134,16 @@ namespace PortAIO.Properties {
         internal static System.Drawing.Bitmap FizzMarinerDoom {
             get {
                 object obj = ResourceManager.GetObject("FizzMarinerDoom", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap frame {
+            get {
+                object obj = ResourceManager.GetObject("frame", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -1244,6 +1274,16 @@ namespace PortAIO.Properties {
         internal static System.IO.UnmanagedMemoryStream GoingSomewhereAsshole {
             get {
                 return ResourceManager.GetStream("GoingSomewhereAsshole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap GoldeneKarte_jpg {
+            get {
+                object obj = ResourceManager.GetObject("GoldeneKarte_jpg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -2476,6 +2516,16 @@ namespace PortAIO.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap offKarte {
+            get {
+                object obj = ResourceManager.GetObject("offKarte", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
         internal static System.IO.UnmanagedMemoryStream OhDontYouDare {
@@ -2776,6 +2826,16 @@ namespace PortAIO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap RoteKarte_jpg {
+            get {
+                object obj = ResourceManager.GetObject("RoteKarte_jpg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Rumble {
             get {
                 object obj = ResourceManager.GetObject("Rumble", resourceCulture);
@@ -3029,6 +3089,16 @@ namespace PortAIO.Properties {
         internal static System.Drawing.Bitmap selectedchampion {
             get {
                 object obj = ResourceManager.GetObject("selectedchampion", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap selectedminion {
+            get {
+                object obj = ResourceManager.GetObject("selectedminion", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

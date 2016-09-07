@@ -314,6 +314,12 @@ namespace BePlank
             }
 
             //Draw connection line
+
+            if (NearestBarrelToMouse().barrel == null)
+            {
+                return;
+            }
+
             mouseToClosestBarrel = NearestBarrelToMouse().barrel.Distance(Game.CursorPos);
             //In connection range
 
@@ -342,8 +348,6 @@ namespace BePlank
                 if (Menu.Item("DrawEPrediction").GetValue<bool>())
                     Render.Circle.DrawCircle(NearestBarrelToMouse().barrel.Position, potentielRange, Color.BlanchedAlmond);
             }
-
-
         }
 
         static void Game_OnCreate(GameObject sender, EventArgs args)

@@ -49,33 +49,27 @@ using Utils = SFXChallenger.Helpers.Utils;
 
 #pragma warning disable 618
 
-using EloBuddy; namespace SFXChallenger.Champions
+using EloBuddy;
+using LeagueSharp.Common;
+namespace SFXChallenger.Champions
 {
-    internal class TwistedFate : Abstracts.Champion
+    internal class TwistedFate : SFXChallenger.Abstracts.Champion
     {
-        private const float QAngle = 28 * (float) Math.PI / 180;
+        private const float QAngle = 28 * (float)Math.PI / 180;
         private const float WRedRadius = 200f;
         private MenuItem _eStacks;
         private MenuItem _rMinimap;
         private AIHeroClient _wTarget;
         private float _wTargetEndTime;
-
-        protected override ItemFlags ItemFlags
-        {
-            get { return ItemFlags.Offensive | ItemFlags.Defensive | ItemFlags.Flee; }
-        }
-
-        protected override ItemUsageType ItemUsage
-        {
-            get { return ItemUsageType.Custom; }
-        }
+        protected override ItemFlags ItemFlags => ItemFlags.Offensive | ItemFlags.Defensive | ItemFlags.Flee;
+        protected override ItemUsageType ItemUsage => ItemUsageType.Custom;
 
         protected override void OnLoad()
         {
             Interrupter2.OnInterruptableTarget += OnInterruptableTarget;
             Drawing.OnDraw += OnDrawingDraw;
             Drawing.OnEndScene += OnDrawingEndScene;
-            Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
             Orbwalking.BeforeAttack += OnOrbwalkingBeforeAttack;
             BuffManager.OnBuff += OnBuffManagerBuff;
         }
@@ -96,27 +90,18 @@ using EloBuddy; namespace SFXChallenger.Champions
         protected override void AddToMenu()
         {
             var comboMenu = Menu.AddSubMenu(new Menu("Combo", Menu.Name + ".combo"));
-            HitchanceManager.AddToMenu(
-                comboMenu.AddSubMenu(new Menu("Hitchance", comboMenu.Name + ".hitchance")), "combo",
-                new Dictionary<string, HitChance> { { "Q", HitChance.High } });
-            comboMenu.AddItem(
-                new MenuItem(comboMenu.Name + ".gold-percent", "Pick Gold Health <= %").SetValue(new Slider(20, 5, 75)));
-            comboMenu.AddItem(
-                new MenuItem(comboMenu.Name + ".red-min", "Pick Red Targets >=").SetValue(new Slider(3, 1, 5)));
+            HitchanceManager.AddToMenu(comboMenu.AddSubMenu(new Menu("Hitchance", comboMenu.Name + ".hitchance")), "combo", new Dictionary<string, HitChance> { { "Q", HitChance.High } });
+            comboMenu.AddItem(new MenuItem(comboMenu.Name + ".gold-percent", "Pick Gold Health <= %").SetValue(new Slider(20, 5, 75)));
+            comboMenu.AddItem(new MenuItem(comboMenu.Name + ".red-min", "Pick Red Targets >=").SetValue(new Slider(3, 1, 5)));
             comboMenu.AddItem(new MenuItem(comboMenu.Name + ".q", "Use Q").SetValue(true));
             comboMenu.AddItem(new MenuItem(comboMenu.Name + ".w", "Use W").SetValue(true));
 
             var harassMenu = Menu.AddSubMenu(new Menu("Harass", Menu.Name + ".harass"));
-            HitchanceManager.AddToMenu(
-                harassMenu.AddSubMenu(new Menu("Hitchance", harassMenu.Name + ".hitchance")), "harass",
-                new Dictionary<string, HitChance> { { "Q", HitChance.High } });
-            ResourceManager.AddToMenu(
-                harassMenu,
-                new ResourceManagerArgs(
-                    "harass", ResourceType.Mana, ResourceValueType.Percent, ResourceCheckType.Minimum)
-                {
-                    DefaultValue = 30
-                });
+            HitchanceManager.AddToMenu(harassMenu.AddSubMenu(new Menu("Hitchance", harassMenu.Name + ".hitchance")), "harass", new Dictionary<string, HitChance> { { "Q", HitChance.High } });
+            ResourceManager.AddToMenu(harassMenu, new ResourceManagerArgs("harass", ResourceType.Mana, ResourceValueType.Percent, ResourceCheckType.Minimum)
+            {
+                DefaultValue = 30
+            });
             ResourceManager.AddToMenu(
                 harassMenu,
                 new ResourceManagerArgs(
@@ -198,19 +183,19 @@ using EloBuddy; namespace SFXChallenger.Champions
 
             miscMenu.AddItem(
                 new MenuItem(miscMenu.Name + ".q-range", "Q Range").SetValue(
-                    new Slider((int) Q.Range, 500, (int) Q.Range))).ValueChanged +=
-                delegate(object sender, OnValueChangeEventArgs args) { Q.Range = args.GetNewValue<Slider>().Value; };
+                    new Slider((int)Q.Range, 500, (int)Q.Range))).ValueChanged +=
+                delegate (object sender, OnValueChangeEventArgs args) { Q.Range = args.GetNewValue<Slider>().Value; };
             miscMenu.AddItem(
                 new MenuItem(miscMenu.Name + ".w-range", "Card Pick Distance").SetValue(
-                    new Slider((int) W.Range, 500, 800))).ValueChanged +=
-                delegate(object sender, OnValueChangeEventArgs args) { W.Range = args.GetNewValue<Slider>().Value; };
+                    new Slider((int)W.Range, 500, 800))).ValueChanged +=
+                delegate (object sender, OnValueChangeEventArgs args) { W.Range = args.GetNewValue<Slider>().Value; };
             miscMenu.AddItem(
                 new MenuItem(miscMenu.Name + ".w-delay", "Card Pick Delay").SetValue(new Slider(150, 0, 400)))
                 .ValueChanged +=
-                delegate(object sender, OnValueChangeEventArgs args) { Cards.Delay = args.GetNewValue<Slider>().Value; };
+                delegate (object sender, OnValueChangeEventArgs args) { Cards.Delay = args.GetNewValue<Slider>().Value; };
             miscMenu.AddItem(new MenuItem(miscMenu.Name + ".w-first", "Pick First Card Pick").SetValue(true))
                 .ValueChanged +=
-                delegate(object sender, OnValueChangeEventArgs args) { Cards.PickFirst = args.GetNewValue<bool>(); };
+                delegate (object sender, OnValueChangeEventArgs args) { Cards.PickFirst = args.GetNewValue<bool>(); };
             miscMenu.AddItem(
                 new MenuItem(miscMenu.Name + ".mode", "W Mode").SetValue(new StringList(new[] { "Burst", "Team" })));
             miscMenu.AddItem(new MenuItem(miscMenu.Name + ".r-card", "Pick Card on R").SetValue(true));
@@ -351,7 +336,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             }
         }
 
-        protected override void OnPreUpdate() {}
+        protected override void OnPreUpdate() { }
 
         protected override void OnPostUpdate()
         {
@@ -531,9 +516,9 @@ using EloBuddy; namespace SFXChallenger.Champions
                     {
                         var circle = new Geometry.Polygon.Circle(pred.UnitPosition, target.BoundingRadius + WRedRadius);
                         return 1 + (from t in targets.Where(x => x.NetworkId != target.NetworkId)
-                            let pred2 = W.GetPrediction(t)
-                            where pred2.Hitchance >= HitChance.Medium
-                            select new Geometry.Polygon.Circle(pred2.UnitPosition, t.BoundingRadius * 0.9f)).Count(
+                                    let pred2 = W.GetPrediction(t)
+                                    where pred2.Hitchance >= HitChance.Medium
+                                    select new Geometry.Polygon.Circle(pred2.UnitPosition, t.BoundingRadius * 0.9f)).Count(
                                 circle2 => circle2.Points.Any(p => circle.IsInside(p)));
                     }
                 }
@@ -800,7 +785,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             }
         }
 
-        protected override void Killsteal() {}
+        protected override void Killsteal() { }
 
         private void OnDrawingDraw(EventArgs args)
         {
@@ -994,8 +979,7 @@ using EloBuddy; namespace SFXChallenger.Champions
 
                     if (!cards.Any())
                     {
-                        if (ObjectManager.Player.HealthPercent <=
-                            Menu.Item(Menu.Name + ".combo.gold-percent").GetValue<Slider>().Value)
+                        if (ObjectManager.Player.HealthPercent <= Menu.Item(Menu.Name + ".combo.gold-percent").GetValue<Slider>().Value)
                         {
                             cards.Add(CardColor.Gold);
                         }
@@ -1005,8 +989,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                         }
                         else
                         {
-                            var redHits = GetWHits(
-                                target, GameObjects.EnemyHeroes.Cast<Obj_AI_Base>().ToList(), CardColor.Red);
+                            var redHits = GetWHits(target, GameObjects.EnemyHeroes.Cast<Obj_AI_Base>().ToList(), CardColor.Red);
                             if (redHits >= Menu.Item(Menu.Name + ".combo.red-min").GetValue<Slider>().Value)
                             {
                                 cards.Add(CardColor.Red);
@@ -1089,7 +1072,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             {
                 LastCard = CardColor.None;
                 ShouldSelect = new List<CardColor>();
-                Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
+                Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
                 Game.OnUpdate += OnGameUpdate;
             }
 
@@ -1105,9 +1088,9 @@ using EloBuddy; namespace SFXChallenger.Champions
 
             public static bool Has(CardColor color)
             {
-                return color == CardColor.Gold && ObjectManager.Player.HasBuff("goldcardpreattack") ||
-                       color == CardColor.Red && ObjectManager.Player.HasBuff("redcardpreattack") ||
-                       color == CardColor.Blue && ObjectManager.Player.HasBuff("bluecardpreattack");
+                return color == CardColor.Gold && ObjectManager.Player.HasBuff("GoldCardPreAttack") ||
+                       color == CardColor.Red && ObjectManager.Player.HasBuff("RedCardPreAttack") ||
+                       color == CardColor.Blue && ObjectManager.Player.HasBuff("BlueCardPreAttack");
             }
 
             public static bool Has()
@@ -1204,7 +1187,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                                 if (delay * multiplier < maxDelay)
                                 {
                                     LeagueSharp.Common.Utility.DelayAction.Add(
-                                        (int) (delay * multiplier),
+                                        (int)(delay * multiplier),
                                         delegate { ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W, false); });
                                 }
                             }

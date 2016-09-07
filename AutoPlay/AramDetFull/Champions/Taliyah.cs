@@ -9,13 +9,13 @@ using SharpDX;
 
 using EloBuddy; namespace ARAMDetFull.Champions
 {
-    class Taliyah : Champion
+    class TaliyahA : Champion
     {
         private static Vector3 lastE;
         private static int lastETick = Environment.TickCount;
         private static bool Q5x = true;
         private static bool EWCasting = false;
-        public Taliyah()
+        public TaliyahA()
         {
             Console.WriteLine("Taliah on!!!!");
             ARAMSimulator.champBuild = new Build

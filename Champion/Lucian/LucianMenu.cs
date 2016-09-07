@@ -3,6 +3,7 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using EloBuddy;
+using Font = SharpDX.Direct3D9.Font;
 
 namespace LCS_Lucian
 {
@@ -66,6 +67,15 @@ namespace LCS_Lucian
                 killStealMenu.AddItem(new MenuItem("lucian.q.ks", "Use Q").SetValue(true)).SetTooltip("Uses Q if Enemy Killable", SharpDX.Color.GreenYellow);
                 killStealMenu.AddItem(new MenuItem("lucian.w.ks", "Use W").SetValue(true)).SetTooltip("Uses W if Enemy Killable", SharpDX.Color.GreenYellow);
                 Config.AddSubMenu(killStealMenu);
+            }
+
+            var eqMenu = new Menu(":: E+Q KS Settings", ":: E+Q KS Settings").SetFontStyle(FontStyle.Bold, SharpDX.Color.Crimson);
+            {
+                eqMenu.AddItem(new MenuItem("use.eq", "Use E+Q").SetValue(true));
+                eqMenu.AddItem(new MenuItem("eq.safety.check", "Safety Check?").SetValue(true));
+                eqMenu.AddItem(new MenuItem("eq.safety.range", "Safety Range").SetValue(new Slider(1150, 1, 1150)));
+                eqMenu.AddItem(new MenuItem("eq.min.enemy.count.range", "Min Enemy Count").SetValue(new Slider(1, 1, 5)));
+                Config.AddSubMenu(eqMenu);
             }
 
             var miscMenu = new Menu(":: Miscellaneous", ":: Miscellaneous");

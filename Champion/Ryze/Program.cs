@@ -15,8 +15,9 @@ using LeagueSharp.Data;
 using SharpDX;
 using SebbyLib;
 using Color = System.Drawing.Color;
-using EloBuddy;
 
+using EloBuddy;
+using LeagueSharp.Common;
 namespace SurvivorRyze
 {
     class Program
@@ -25,24 +26,31 @@ namespace SurvivorRyze
         #region Declaration
         private static Spell Q, W, E, R;
         private static SpellSlot IgniteSlot;
-        private static Items.Item HealthPot;
-        private static Items.Item BiscuitOfRej;
         private static Items.Item TearOfGod;
-        private static Items.Item Seraph;
         private static Items.Item Manamune;
         private static Items.Item Archangel;
-        private static Items.Item Flask;
-        private static Items.Item Flask1;
-        private static Items.Item Flask2;
-        private static Items.Item HexProtobelt;
-        private static Items.Item HexGunBlade;
-        private static Items.Item HexGLP;
+        #region Items
+        public static Items.Item
+        HPPotion = new Items.Item(2003, 0),
+        Flask = new Items.Item(2041, 0),
+        Biscuit = new Items.Item(2010, 0),
+        FlaskRef = new Items.Item(2031, 0),
+        FlaskHunterJG = new Items.Item(2032, 0),
+        FlaskCorruptJG = new Items.Item(2033, 0),
+
+        Protobelt = new Items.Item(3152, 850f),
+        GLP800 = new Items.Item(3030, 800f),
+        Hextech = new Items.Item(3146, 700f),
+
+        Seraph = new Items.Item(3040, 0);
+        #endregion
         private static SebbyLib.Orbwalking.Orbwalker Orbwalker;
         private static Menu Menu;
         private static AIHeroClient Player { get { return ObjectManager.Player; } }
         private const string ChampionName = "Ryze";
         private static int lvl1, lvl2, lvl3, lvl4;
         private static float RangeR;
+        private static float QRealDamage;
         #endregion
 
         public static void Game_OnGameLoad()
@@ -61,21 +69,10 @@ namespace SurvivorRyze
             R.SetSkillshot(2.5f, 450f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             #endregion
 
-            #region Items/SummonerSpells
             IgniteSlot = Player.GetSpellSlot("summonerdot");
-            HealthPot = new Items.Item(2003, 0);
-            BiscuitOfRej = new Items.Item(2010, 0);
             TearOfGod = new Items.Item(3070, 0);
             Manamune = new Items.Item(3004, 0);
-            Seraph = new Items.Item(3040, 0);
             Archangel = new Items.Item(3003, 0);
-            Flask = new Items.Item(2031, 0);
-            Flask1 = new Items.Item(2032, 0);
-            Flask2 = new Items.Item(2033, 0);
-            HexGunBlade = new Items.Item(3146, 600f);
-            HexProtobelt = new Items.Item(3152, 300f);
-            HexGLP = new Items.Item(3030, 300f);
-            #endregion
 
             #region Menu
             Menu = new Menu("SurvivorRyze", "SurvivorRyze", true).SetFontStyle(System.Drawing.FontStyle.Bold, SharpDX.Color.AliceBlue);
@@ -87,12 +84,12 @@ namespace SurvivorRyze
             TargetSelector.AddToMenu(TargetSelectorMenu);
 
             Menu ComboMenu = Menu.AddSubMenu(new Menu("Combo", "Combo"));
-            ComboMenu.AddItem(new MenuItem("ComboMode", "Combo Mode:").SetValue(new StringList(new[] {"Burst", "Survivor Mode (Shield)"})).SetTooltip("Survivor Mode - Will try to stack Shield 99% of the time."));
+            ComboMenu.AddItem(new MenuItem("ComboMode", "Combo Mode:").SetValue(new StringList(new[] { "Burst", "Survivor Mode (Shield)" })).SetTooltip("Survivor Mode - Will try to stack Shield 99% of the time."));
             ComboMenu.AddItem(new MenuItem("CUseQ", "Cast Q").SetValue(true));
             ComboMenu.AddItem(new MenuItem("CUseW", "Cast W").SetValue(true));
             ComboMenu.AddItem(new MenuItem("CUseE", "Cast E").SetValue(true));
             ComboMenu.AddItem(new MenuItem("CBlockAA", "Block AA in Combo Mode").SetValue(true));
-            ComboMenu.AddItem(new MenuItem("Combo2TimesMana", "Champion needs to have mana for atleast 2 times (Q/W/E)?").SetValue(true).SetTooltip("If it's set to 'false' it'll need atleast mana for Q/W/E [1x] Post in thread if needs a change"));
+            ComboMenu.AddItem(new MenuItem("Combo2TimesMana", "Champion needs to have mana for atleast 2 times (Q/W/E)?").SetValue(false).SetTooltip("If it's set to 'false' it'll need atleast mana for Q/W/E [1x] Post in thread if needs a change"));
             ComboMenu.AddItem(new MenuItem("CUseR", "Ultimate (R) in Ultimate Menu"));
             ComboMenu.AddItem(new MenuItem("CUseIgnite", "Use Ignite (Smart)").SetValue(true));
 
@@ -108,34 +105,37 @@ namespace SurvivorRyze
             LaneClearMenu.AddItem(new MenuItem("LaneClearManaManager", "Mana Manager (%)").SetValue(new Slider(30, 1, 100)));
 
             Menu ItemsMenu = Menu.AddSubMenu(new Menu("Items Menu", "ItemsMenu"));
-            ItemsMenu.AddItem(new MenuItem("UseHPPotion", "Use HP Potion/Biscuit/Flask at % Health").SetValue(new Slider(15, 0, 100)));
-            ItemsMenu.AddItem(new MenuItem("UseItemFlask", "Use Flasks If You don't have Potions?").SetValue(true));
-            ItemsMenu.AddItem(new MenuItem("UsePotionOnlyIfEnemiesAreInRange", "Use Potions/Flasks only if Enemies are nearby?").SetValue(true).SetTooltip("It'll use the potions/flask if enemies are within the e.g (~R Range)"));
+            ItemsMenu.AddItem(new MenuItem("UsePotions", "Use Potions").SetValue(true));
+            ItemsMenu.AddItem(new MenuItem("UseSmartPotion", "Use Smart Potion Logic").SetValue(true).SetTooltip("If Enabled, it'll check if enemy's around so it doesn't waste potions."));
+            ItemsMenu.AddItem(new MenuItem("UsePotionsAtHPPercent", "Use Potions at HP Percent 'X'").SetValue(new Slider(30, 0, 100)));
             ItemsMenu.AddItem(new MenuItem("UseSeraph", "Use [Seraph's Embrace]?").SetValue(true));
-            ItemsMenu.AddItem(new MenuItem("UseSeraphIfEnemiesAreNearby", "Use [Seraph's Embrace] only if Enemies are nearby?").SetValue(true));
-            ItemsMenu.AddItem(new MenuItem("UseSeraphAtHP", "Activate [Seraph's Embrace] at HP %?").SetValue(new Slider(15, 0, 100)));
-            ItemsMenu.AddItem(new MenuItem("UseHexGunBlade", "Use [Hextech Gunblade]?").SetValue(true));
-            ItemsMenu.AddItem(new MenuItem("UseHexProtobelt", "Use [Hextech Protobelt-01]?").SetValue(true));
-            ItemsMenu.AddItem(new MenuItem("UseHexGLP", "Use [Hextech GLP-800]?").SetValue(true));
-            ItemsMenu.AddItem(new MenuItem("HexGunBladeAtHP", "Use [Hextech Gunblade] at HP %?").SetValue(new Slider(25, 0, 100)));
-            ItemsMenu.AddItem(new MenuItem("HexProtobeltAtHP", "Use [Hextech Protobelt-01] at HP %?").SetValue(new Slider(25, 0, 100)));
-            ItemsMenu.AddItem(new MenuItem("HexGLPAtHP", "Use [Hextech GLP-800] at HP %?").SetValue(new Slider(25, 0, 100)));
+            ItemsMenu.AddItem(new MenuItem("Hextech", "Use [Hextech Gunblade]?").SetValue(true));
+            ItemsMenu.AddItem(new MenuItem("Protobelt", "Use [Hextech Protobelt-01]?").SetValue(true));
+            ItemsMenu.AddItem(new MenuItem("GLP800", "Use [Hextech GLP-800]?").SetValue(true));
             ItemsMenu.AddItem(new MenuItem("StackTear", "Stack Tear/Manamune/Archangel in Fountain?").SetValue(true).SetTooltip("Stack it in Fountain?"));
-            ItemsMenu.AddItem(new MenuItem("StackTearNF", "Stack Tear/Manamune/Archangel if You've Blue Buff?").SetValue(true));
+            ItemsMenu.AddItem(new MenuItem("StackTearNF", "Stack Tear/Manamune/Archangel if You've Blue Buff?").SetValue(false));
+
+            Menu.Item("UseSmartPotion").ValueChanged += (sender, eventArgs) =>
+            {
+                if (!Menu.Item("UsePotions").GetValue<bool>() && eventArgs.GetNewValue<bool>())
+                {
+                    Menu.Item("UsePotions").SetValue(true);
+                }
+            };
 
             Menu SkinMenu = Menu.AddSubMenu(new Menu("Skins Menu", "SkinMenu"));
-            SkinMenu.AddItem(new MenuItem("SkinID", "Skin ID")).SetValue(new Slider(3, 0, 9));
+            SkinMenu.AddItem(new MenuItem("SkinID", "Skin ID")).SetValue(new Slider(10, 0, 10));
             var UseSkin = SkinMenu.AddItem(new MenuItem("UseSkin", "Enabled")).SetValue(true);
             UseSkin.ValueChanged += (sender, eventArgs) =>
             {
                 if (!eventArgs.GetNewValue<bool>())
                 {
-                    //ObjectManager.//Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, ObjectManager.Player.SkinId);
+
                 }
             };
 
             Menu HitChanceMenu = Menu.AddSubMenu(new Menu("HitChance Menu", "HitChance"));
-            HitChanceMenu.AddItem(new MenuItem("HitChance", "Hit Chance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 0)));
+            HitChanceMenu.AddItem(new MenuItem("HitChance", "Hit Chance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 1)));
 
             Menu UltimateMenu = Menu.AddSubMenu(new Menu("Ultimate Menu", "UltMenu"));
             //UltimateMenu.AddItem(new MenuItem("DontREnemyCount", "Don't R If Enemy In 'X' Range").SetValue(new Slider(1000, 0, 2000)));
@@ -149,7 +149,7 @@ namespace SurvivorRyze
             MiscMenu.AddItem(new MenuItem("KSW", "Use W to KS").SetValue(true));
             MiscMenu.AddItem(new MenuItem("KSE", "Use E to KS").SetValue(true));
             MiscMenu.AddItem(new MenuItem("InterruptWithW", "Use W to Interrupt Channeling Spells").SetValue(true));
-            MiscMenu.AddItem(new MenuItem("WGapCloser", "Use W on Enemy GapCloser (Irelia's Q)").SetValue(true));
+            MiscMenu.AddItem(new MenuItem("WGapCloser", "Use W on Enemy GapCloser (Ex. Irelia's Q)").SetValue(true));
             MiscMenu.AddItem(new MenuItem("ChaseWithR", "Use R to Chase (Being Added)"));
             MiscMenu.AddItem(new MenuItem("EscapeWithR", "Use R to Escape (Ultimate Menu)"));
 
@@ -181,12 +181,12 @@ namespace SurvivorRyze
             DrawDamage.Fill = drawFill.GetValue<Circle>().Active;
             DrawDamage.FillColor = drawFill.GetValue<Circle>().Color;
             dmgAfterShave.ValueChanged +=
-                delegate(object sender, OnValueChangeEventArgs eventArgs)
+                delegate (object sender, OnValueChangeEventArgs eventArgs)
                 {
                     DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
                 };
 
-            drawFill.ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
+            drawFill.ValueChanged += delegate (object sender, OnValueChangeEventArgs eventArgs)
             {
                 DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
                 DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
@@ -205,10 +205,10 @@ namespace SurvivorRyze
 
         private static void Drawing_OnDraw(EventArgs args)
         {
-            switch(R.Level)
+            switch (R.Level)
             {
                 case 1:
-                    RangeR = 1500f;
+                    RangeR = 1750f;
                     break;
                 case 2:
                     RangeR = 3000f;
@@ -267,58 +267,75 @@ namespace SurvivorRyze
 
         private static void PotionsCheck()
         {
-            if (Player.HasBuffOfType(BuffType.Heal) || Player.HasBuff("ItemMiniRegenPotion") || Player.HasBuff("ItemCrystalFlaskJungle") || Player.HasBuff("ItemCrystalFlask") || Player.HasBuff("ItemDarkCrystalFlask"))
+            if (Menu.Item("UseSmartPotion").GetValue<bool>())
+            {
+                if (Player.CountEnemiesInRange(800) == 0)
+                    return;
+            }
+
+            if (Player.HasBuff("RegenerationPotion") || Player.HasBuff("ItemMiniRegenPotion") || Player.HasBuff("ItemCrystalFlaskJungle") || Player.HasBuff("ItemDarkCrystalFlask") || Player.HasBuff("ItemCrystalFlask"))
                 return;
 
-            if (Player.CountEnemiesInRange(1250) > 0)
+            if (Player.HealthPercent <= Menu.Item("UsePotionsAtHPPercent").GetValue<Slider>().Value)
             {
-                if (!Player.InFountain() || !Player.IsRecalling())
-                {
-                    if (Player.HealthPercent < Menu.Item("UseHPPotion").GetValue<Slider>().Value && (!Player.HasBuff("HealthPotion") || !Player.HasBuff("Health Potion") || !Player.HasBuff("ItemDarkCrystalFlask") || !Player.HasBuff("ItemCrystalFlask") || !Player.HasBuff("ItemCrystalFlaskJungle") || !Player.HasBuff("ItemMiniRegenPotion")))
-                    {
-                        HealthPot.Cast();
-                    }
-                    if (Player.HealthPercent < Menu.Item("UseHPPotion").GetValue<Slider>().Value && (!Player.HasBuff("ItemCrystalFlaskJungle") || !Player.HasBuff("ItemDarkCrystalFlask") || !Player.HasBuff("ItemCrystalFlask") || !Player.HasBuff("HealthPotion") || !Player.HasBuff("Health Potion") || !Player.HasBuff("ItemMiniRegenPotion")))
-                    {
-                        BiscuitOfRej.Cast();
-                    }
-                    if (Menu.Item("UseItemFlask").GetValue<bool>() && !Player.HasBuff("ItemCrystalFlaskJungle") || !Player.HasBuff("ItemCrystalFlask") || !Player.HasBuff("ItemDarkCrystalFlask") || !Player.HasBuff("HealthPotion") || !Player.HasBuff("Health Potion") || !Player.HasBuff("ItemMiniRegenPotion"))
-                    {
-                        Flask.Cast();
-                        Flask1.Cast();
-                        Flask2.Cast();
-                    }
-                }
+                if (HPPotion.IsReady())
+                    HPPotion.Cast();
+                else if (Biscuit.IsReady())
+                    Biscuit.Cast();
+                else if (FlaskHunterJG.IsReady())
+                    FlaskHunterJG.Cast();
+                else if (FlaskCorruptJG.IsReady())
+                    FlaskCorruptJG.Cast();
+                else if (FlaskRef.IsReady())
+                    FlaskRef.Cast();
+            }
+        }
+
+        private static void SeraphUsage()
+        {
+            double incomingdmg = OktwCommon.GetIncomingDamage(Player, 1);
+            if (Seraph.IsReady() && Menu.Item("UseSeraph").GetValue<bool>())
+            {
+                var shieldint = Player.Mana * 0.2 + 150;
+                if (incomingdmg > Player.Health && incomingdmg < Player.Health + shieldint)
+                    Seraph.Cast();
             }
         }
 
         private static void ItemsChecks()
         {
-            // Check when you can use items (potions, ex) && Cast them (Probelt Usage please)
-            if (Player.HealthPercent < Menu.Item("UseSeraphAtHP").GetValue<Slider>().Value && Menu.Item("UseSeraph").GetValue<bool>() && !Player.InFountain() || !Player.IsRecalling())
+            if (GLP800.IsReady())
             {
-                if (Player.HealthPercent < Menu.Item("UseSeraphAtHP").GetValue<Slider>().Value && Menu.Item("UseSeraph").GetValue<bool>() && Player.CountEnemiesInRange(1000) > 0 && Menu.Item("UseSeraphIfEnemiesAreNearby").GetValue<bool>())
+                var t = TargetSelector.GetTarget(GLP800.Range, TargetSelector.DamageType.Magical);
+                if (t.IsValidTarget())
                 {
-                        Seraph.Cast();
+                    if (Menu.Item("GLP800").GetValue<bool>() && Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Combo)
+                    {
+                        GLP800.Cast(Prediction.GetPrediction(t, 0.5f).CastPosition);
+                    }
                 }
             }
-            var target = TargetSelector.GetTarget(600f, TargetSelector.DamageType.Magical);
 
-            // If Target's not in Q Range or there's no target or target's invulnerable don't fuck with him
-            if (target == null || !target.IsValidTarget(600f) || target.IsInvulnerable)
-                return;
+            if (Protobelt.IsReady())
+            {
+                var t = TargetSelector.GetTarget(Protobelt.Range, TargetSelector.DamageType.Magical);
+                if (t.IsValidTarget())
+                {
+                    if (Menu.Item("Protobelt").GetValue<bool>() && Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Combo)
+                    {
+                        Protobelt.Cast(Prediction.GetPrediction(t, 0.5f).CastPosition);
+                    }
+                }
+            }
 
-            if (Menu.Item("UseHexGunBlade").GetValue<bool>() && target.IsValidTarget(600) && target.HealthPercent < Menu.Item("HexGunBladeAtHP").GetValue<Slider>().Value)
+            if (Hextech.IsReady())
             {
-                Items.UseItem(3146, target);
-            }
-            if (Menu.Item("UseHexProtobelt").GetValue<bool>() && target.IsValidTarget(300) && target.HealthPercent < Menu.Item("HexProtobeltAtHP").GetValue<Slider>().Value)
-            {
-                Items.UseItem(3152, target.Position);
-            }
-            if (Menu.Item("UseHexGLP").GetValue<bool>() && target.IsValidTarget(300) && target.HealthPercent < Menu.Item("HexGLPAtHP").GetValue<Slider>().Value)
-            {
-                Items.UseItem(3030, target.Position);
+                var t = TargetSelector.GetTarget(Hextech.Range, TargetSelector.DamageType.Magical);
+                if (t.IsValidTarget())
+                {
+                    if (Menu.Item("Hextech").GetValue<bool>() && Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Combo)
+                        Hextech.Cast(t);
+                }
             }
         }
 
@@ -342,31 +359,32 @@ namespace SurvivorRyze
             {
                 StackItems();
             }
+            SeraphUsage();
             ItemsChecks();
             KSCheck();
             PotionsCheck();
             if (Menu.Item("UseSkin").GetValue<bool>())
             {
-                ////Player.SetSkin(Player.CharData.BaseSkinName, Menu.Item("SkinID").GetValue<Slider>().Value);
             }
             switch (Orbwalker.ActiveMode)
             {
                 case SebbyLib.Orbwalking.OrbwalkingMode.Combo:
-                        AABlock();
-                        Combo();
+                    AABlock();
+                    Combo();
+                    ComboPlusCheck(); // Beta - Will be improved
                     break;
                 case SebbyLib.Orbwalking.OrbwalkingMode.Mixed:
-                        Harass();
+                    Harass();
                     break;
                 case SebbyLib.Orbwalking.OrbwalkingMode.LaneClear:
-                        LaneClear();
+                    LaneClear();
                     break;
                 case SebbyLib.Orbwalking.OrbwalkingMode.LastHit:
-                        LastHit();
+                    LastHit();
                     break;
                 case SebbyLib.Orbwalking.OrbwalkingMode.None:
-                        Orbwalker.SetMovement(true);
-                        Orbwalker.SetAttack(true);
+                    Orbwalker.SetMovement(true);
+                    Orbwalker.SetAttack(true);
                     break;
             }
             if (Menu.Item("UseR").GetValue<KeyBind>().Active)
@@ -417,39 +435,10 @@ namespace SurvivorRyze
             var ksW = Menu.Item("KSW").GetValue<bool>();
             var ksE = Menu.Item("KSE").GetValue<bool>();
 
-            #region SebbyPrediction
-            //SebbyPrediction
-            SebbyLib.Prediction.SkillshotType PredSkillShotType = SebbyLib.Prediction.SkillshotType.SkillshotLine;
-            bool Aoe10 = false;
-
-            var predictioninput = new SebbyLib.Prediction.PredictionInput
-            {
-                Aoe = Aoe10,
-                Collision = Q.Collision,
-                Speed = Q.Speed,
-                Delay = Q.Delay,
-                Range = Q.Range,
-                From = Player.ServerPosition,
-                Radius = Q.Width,
-                Unit = target,
-                Type = PredSkillShotType
-            };
-            //SebbyPrediction END
-            #endregion
-            // Input = 'var predictioninput'
-            var predpos = SebbyLib.Prediction.Prediction.GetPrediction(predictioninput);
-
             // KS
             if (ksQ && SebbyLib.OktwCommon.GetKsDamage(target, Q) > target.Health && target.IsValidTarget(Q.Range))
             {
-                if (target.CanMove && predpos.Hitchance >= SebbyLib.Prediction.HitChance.High)
-                {
-                    Q.Cast(predpos.CastPosition);
-                }
-                else if (!target.CanMove)
-                {
-                    Q.Cast(target.Position);
-                }
+                SebbySpell(Q, target);
             }
             if (ksW && SebbyLib.OktwCommon.GetKsDamage(target, W) > target.Health && target.IsValidTarget(W.Range))
             {
@@ -524,7 +513,105 @@ namespace SurvivorRyze
                     QR.Cast(poutput2.CastPosition);
             }
         }
+        private static float QGetRealDamage(Obj_AI_Base target)
+        {
+            if (!target.HasBuff("RyzeE"))
+            {
+                return Q.GetDamage(target);
+            }
+            else if (((E.IsReady() && !Q.IsReady()) || (E.IsReady() && Q.IsReady()) || (!E.IsReady() && Q.IsReady())) && target.HasBuff("RyzeE"))
+            {
+                switch (E.Level)
+                {
+                    case 1:
+                        QRealDamage = (Q.GetDamage(target) / 40) * 100;
+                        break;
+                    case 2:
+                        QRealDamage = (Q.GetDamage(target) / 55) * 100;
+                        break;
+                    case 3:
+                        QRealDamage = (Q.GetDamage(target) / 70) * 100;
+                        break;
+                    case 4:
+                        QRealDamage = (Q.GetDamage(target) / 85) * 100;
+                        break;
+                    case 5:
+                        QRealDamage = (Q.GetDamage(target) / 100) * 100;
+                        break;
+                }
+                //Chat.Print("Inside V2 qRealDamage:" + QRealDamage);
+                return QRealDamage;
+            }
+            else
+            {
+                //Chat.Print("Inside else at end:" + Q.GetDamage(target));
+                return Q.GetDamage(target);
+            }
+        }
+        private static void ComboPlusCheck()
+        {
+            // Combo
+            var CUseQ = Menu.Item("CUseQ").GetValue<bool>();
+            //var CUseW = Menu.Item("CUseW").GetValue<bool>();
+            var CUseE = Menu.Item("CUseE").GetValue<bool>();
+            // Checks
+            var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
 
+            // If Target's not in Q Range or there's no target or target's invulnerable don't fuck with him
+            if (target == null || !target.IsValidTarget(Q.Range) || target.IsInvulnerable)
+                return;
+
+            var ryzeebuffed = MinionManager.GetMinions(Player.Position, Q.Range).Find(x => x.HasBuff("RyzeE") && x.IsValidTarget(Q.Range));
+            var noebuffed = MinionManager.GetMinions(Player.Position, Q.Range).Find(x => x.IsValidTarget(Q.Range) && x.Distance(target) < 200);
+
+            if (CUseQ && CUseE && target.IsValidTarget(Q.Range))
+            {
+                if (ryzeebuffed != null && ryzeebuffed.IsValidTarget(Q.Range))
+                {
+                    if (ryzeebuffed.Health < QGetRealDamage(ryzeebuffed))
+                    {
+                        Chat.Print("<font color='#9400D3'>DEBUG: Spread</font>");
+                        if (!Q.IsReady() && E.IsReady())
+                        {
+                            E.CastOnUnit(ryzeebuffed);
+                            Q.Cast(ryzeebuffed);
+                            Chat.Print("<font color='#9400D3'>DEBUG: Spreading [Reset with E]</font>");
+                        }
+                        Q.Cast(ryzeebuffed);
+                    }
+                    if (target.HasBuff("RyzeE") && target.Distance(ryzeebuffed) < 200 && ryzeebuffed.IsValidTarget(Q.Range))
+                    {
+                        Chat.Print("<font color='#9400D3'>DEBUG: Got to Part 1</font>");
+                        Q.Cast(ryzeebuffed);
+                    }
+                    else if (!target.HasBuff("RyzeE"))
+                    {
+                        E.CastOnUnit(target);
+                        if (target.Distance(ryzeebuffed) < 200)
+                        {
+                            Chat.Print("<font color='#9400D3'>DEBUG: Got to Part 2 else</font>");
+                            Q.Cast(ryzeebuffed);
+                        }
+                    }
+                }
+                else if (ryzeebuffed == null || !ryzeebuffed.IsValidTarget())
+                {
+                    if (noebuffed != null && noebuffed.IsValidTarget(E.Range) && noebuffed.Health < QGetRealDamage(noebuffed))
+                    {
+                        Chat.Print("<font color='#9400D3'>DEBUG: Not EBuffed Part 1</font>");
+                        Chat.Print("<font color='#9400D3'>DEBUG: Spread Going Deep</font>");
+                        if (E.IsReady())
+                        {
+                            E.CastOnUnit(noebuffed);
+                            if (Q.IsReady())
+                                Q.Cast(noebuffed);
+                            Chat.Print("<font color='#9400D3'>DEBUG: Spreading [Reset with E]</font>");
+                        }
+                    }
+                }
+                // END
+            }
+        }
         private static void Combo()
         {
             // Combo
@@ -547,116 +634,47 @@ namespace SurvivorRyze
                     {
                         Player.Spellbook.CastSpell(IgniteSlot, target);
                     }
-                    if (Menu.Item("Combo2TimesMana").GetValue<bool>())
+                    if (Player.Mana >= Q.Instance.SData.Mana + W.Instance.SData.Mana + E.Instance.SData.Mana)
                     {
-                        if (Player.Mana >= 2 * (Q.Instance.SData.Mana + W.Instance.SData.Mana + E.Instance.SData.Mana))
+                        if (CUseW && target.IsValidTarget(W.Range) && W.IsReady())
                         {
-                            if (CUseQ && CUseW && CUseE && target.IsValidTarget(Q.Range))
-                            {
-                                if (target.CanMove)
-                                {
-                                    SebbySpell(Q, target);
-                                }
-                                else if (!target.CanMove)
-                                {
-                                    SebbySpell(Q, target);
-                                }
-                                if (target.IsValidTarget(W.Range) && W.IsReady())
-                                {
-                                    W.CastOnUnit(target);
-                                }
-                                if (target.IsValidTarget(E.Range) && E.IsReady())
-                                {
-                                    E.CastOnUnit(target);
-                                }
-                            }
-                            if (CUseW && target.IsValidTarget(W.Range) && W.IsReady())
-                            {
-                                W.CastOnUnit(target);
-                            }
-                            if (CUseQ && target.IsValidTarget(Q.Range))
-                            {
-                                if (target.CanMove)
-                                {
-                                    SebbySpell(Q, target);
-                                }
-                                else if (!target.CanMove)
-                                {
-                                    SebbySpell(Q, target);
-                                }
-                            }
-                            if (CUseE && target.IsValidTarget(E.Range) && E.IsReady())
-                            {
-                                E.CastOnUnit(target);
-                            }
+                            W.CastOnUnit(target);
+                        }
+                        if (CUseQ && target.IsValidTarget(Q.Range))
+                        {
+                            SebbySpell(Q, target);
+                        }
+                        if (CUseE && target.IsValidTarget(E.Range) && E.IsReady())
+                        {
+                            E.CastOnUnit(target);
                         }
                     }
                     else
                     {
-                        if (Player.Mana >= Q.Instance.SData.Mana + W.Instance.SData.Mana + E.Instance.SData.Mana)
+                        if (CUseW && target.IsValidTarget(W.Range) && W.IsReady())
                         {
-                            if (CUseW && target.IsValidTarget(W.Range) && W.IsReady())
-                            {
-                                W.CastOnUnit(target);
-                            }
-                            if (CUseQ && target.IsValidTarget(Q.Range))
-                            {
-                                if (target.CanMove)
-                                {
-                                    SebbySpell(Q, target);
-                                }
-                                else if (!target.CanMove)
-                                {
-                                    SebbySpell(Q, target);
-                                }
-                            }
-                            if (CUseE && target.IsValidTarget(E.Range) && E.IsReady())
-                            {
-                                E.CastOnUnit(target);
-                            }
+                            W.CastOnUnit(target);
                         }
-                        else
+                        if (CUseQ && target.IsValidTarget(Q.Range))
                         {
-                            if (CUseW && target.IsValidTarget(W.Range) && W.IsReady())
-                            {
-                                W.CastOnUnit(target);
-                            }
-                            if (CUseQ && target.IsValidTarget(Q.Range))
-                            {
-                                if (target.CanMove)
-                                {
-                                    SebbySpell(Q, target);
-                                }
-                                else if (!target.CanMove)
-                                {
-                                    SebbySpell(Q, target);
-                                }
-                            }
-                            if (CUseE && target.IsValidTarget(E.Range) && E.IsReady())
-                            {
-                                E.CastOnUnit(target);
-                            }
+                            SebbySpell(Q, target);
+                        }
+                        if (CUseE && target.IsValidTarget(E.Range) && E.IsReady())
+                        {
+                            E.CastOnUnit(target);
                         }
                     }
                     #endregion
                     break;
-
                 case 1:
                     #region SurvivorMode
                     if (Q.Level >= 1 && W.Level >= 1 && E.Level >= 1)
                     {
                         if (!target.IsValidTarget(W.Range - 15f) && Q.IsReady())
                         {
-                            if (target.CanMove)
-                            {
-                                SebbySpell(Q, target);
-                            }
-                            else if (!target.CanMove)
-                            {
-                                SebbySpell(Q, target);
-                            }
+                            SebbySpell(Q, target);
                         }
-                        // Try having Full Charge if either W or E spells are ready... :pokemon:
+                        // Try having Full Charge if either W or E spells are ready...
                         if (RyzeCharge1() && Q.IsReady() && (W.IsReady() || E.IsReady()))
                         {
                             if (E.IsReady())
@@ -671,26 +689,12 @@ namespace SurvivorRyze
                         // Rest in Piece XDDD
                         if (RyzeCharge1() && !E.IsReady() && !W.IsReady())
                         {
-                            if (target.CanMove)
-                            {
-                                SebbySpell(Q, target);
-                            }
-                            else if (!target.CanMove)
-                            {
-                                SebbySpell(Q, target);
-                            }
+                            SebbySpell(Q, target);
                         }
 
                         if (RyzeCharge0() && !E.IsReady() && !W.IsReady())
                         {
-                            if (target.CanMove)
-                            {
-                                SebbySpell(Q, target);
-                            }
-                            else if (!target.CanMove)
-                            {
-                                SebbySpell(Q, target);
-                            }
+                            SebbySpell(Q, target);
                         }
 
                         if (!RyzeCharge2())
@@ -700,28 +704,14 @@ namespace SurvivorRyze
                         }
                         else
                         {
-                            if (target.CanMove)
-                            {
-                                SebbySpell(Q, target);
-                            }
-                            else if (!target.CanMove)
-                            {
-                                SebbySpell(Q, target);
-                            }
+                            SebbySpell(Q, target);
                         }
                     }
                     else
                     {
                         if (target.IsValidTarget(Q.Range) && Q.IsReady())
                         {
-                            if (target.CanMove)
-                            {
-                                SebbySpell(Q, target);
-                            }
-                            else if (!target.CanMove)
-                            {
-                                SebbySpell(Q, target);
-                            }
+                            SebbySpell(Q, target);
                         }
 
                         if (target.IsValidTarget(W.Range) && W.IsReady())
@@ -753,7 +743,7 @@ namespace SurvivorRyze
                 return;
 
             // Execute the Lad
-            if (Player.ManaPercentage() > Menu.Item("HarassManaManager").GetValue<Slider>().Value)
+            if (Player.ManaPercent > Menu.Item("HarassManaManager").GetValue<Slider>().Value)
             {
                 if (HarassUseW && target.IsValidTarget(W.Range))
                 {
@@ -761,14 +751,7 @@ namespace SurvivorRyze
                 }
                 if (HarassUseQ && target.IsValidTarget(Q.Range))
                 {
-                    if (target.CanMove)
-                    {
-                        SebbySpell(Q, target);
-                    }
-                    else if (!target.CanMove)
-                    {
-                        SebbySpell(Q, target);
-                    }
+                    SebbySpell(Q, target);
                 }
                 if (HarassUseE && target.IsValidTarget(W.Range))
                 {
@@ -780,7 +763,7 @@ namespace SurvivorRyze
         private static void LastHit()
         {
             // To be Done
-            if (Player.ManaPercentage() > Menu.Item("LaneClearManaManager").GetValue<Slider>().Value)
+            if (Player.ManaPercent > Menu.Item("LaneClearManaManager").GetValue<Slider>().Value)
             {
                 var allMinionsQ = Cache.GetMinions(Player.ServerPosition, Q.Range, MinionTeam.Enemy);
                 if (Q.IsReady())
@@ -791,9 +774,9 @@ namespace SurvivorRyze
                         {
                             if (!minion.IsValidTarget() || minion == null)
                                 return;
-                            if (minion.Health < Q.GetDamage(minion))
+                            if (minion.Health < QGetRealDamage(minion))
                                 Q.Cast(minion.Position);
-                            else if (minion.Health < Q.GetDamage(minion) + Player.GetAutoAttackDamage(minion) && minion.IsValidTarget(SebbyLib.Orbwalking.GetRealAutoAttackRange(minion)))
+                            else if (minion.Health < QGetRealDamage(minion) + Player.GetAutoAttackDamage(minion) && minion.IsValidTarget(SebbyLib.Orbwalking.GetRealAutoAttackRange(minion)))
                             {
                                 Q.Cast(minion.Position);
                                 Orbwalker.ForceTarget(minion);
@@ -809,7 +792,7 @@ namespace SurvivorRyze
             // LaneClear | Notes: Rework on early levels not using that much abilities since Spell Damage is lower, higher Lvl is fine
             if (Menu.Item("UseQLC").GetValue<bool>() || Menu.Item("UseELC").GetValue<bool>())
             {
-                if (Player.ManaPercentage() > Menu.Item("LaneClearManaManager").GetValue<Slider>().Value)
+                if (Player.ManaPercent > Menu.Item("LaneClearManaManager").GetValue<Slider>().Value)
                 {
                     var ryzeebuffed = MinionManager.GetMinions(Player.Position, Q.Range).Find(x => x.HasBuff("RyzeE") && x.IsValidTarget(Q.Range));
                     var ryzenotebuffed = MinionManager.GetMinions(Player.Position, Q.Range).Find(x => !x.HasBuff("RyzeE") && x.IsValidTarget(Q.Range));
@@ -823,13 +806,8 @@ namespace SurvivorRyze
                             {
                                 if (!minion.IsValidTarget() || minion == null)
                                     return;
-                                if (minion.Health < Q.GetDamage(minion))
+                                if (minion.Health < QGetRealDamage(minion))
                                     Q.Cast(minion);
-                                else if (minion.Health < Q.GetDamage(minion) + Player.GetAutoAttackDamage(minion) && minion.IsValidTarget(SebbyLib.Orbwalking.GetRealAutoAttackRange(minion)))
-                                {
-                                    Q.Cast(minion);
-                                    Orbwalker.ForceTarget(minion);
-                                }
                             }
                         }
                     }
@@ -837,7 +815,7 @@ namespace SurvivorRyze
                     {
                         if (ryzeebuffed != null)
                         {
-                            if (ryzeebuffed.Health < E.GetDamage(ryzeebuffed) + Q.GetDamage(ryzeebuffed) && ryzeebuffed.IsValidTarget(E.Range))
+                            if (ryzeebuffed.Health < E.GetDamage(ryzeebuffed) + QGetRealDamage(ryzeebuffed) + 20 && ryzeebuffed.IsValidTarget(E.Range))
                             {
                                 E.CastOnUnit(ryzeebuffed);
                                 if (Q.IsReady())
@@ -850,7 +828,7 @@ namespace SurvivorRyze
                         {
                             foreach (var minion in allMinions)
                             {
-                                if (minion.IsValidTarget(E.Range) && minion.Health < E.GetDamage(minion) + Q.GetDamage(minion))
+                                if (minion.IsValidTarget(E.Range) && minion.Health < E.GetDamage(minion) + QGetRealDamage(minion) + 20)
                                 {
                                     E.CastOnUnit(minion);
                                     if (Q.IsReady())
@@ -863,7 +841,7 @@ namespace SurvivorRyze
                     {
                         if (ryzeebuffed != null)
                         {
-                            if (ryzeebuffed.Health < Q.GetDamage(ryzeebuffed) + E.GetDamage(ryzeebuffed) + Q.GetDamage(ryzeebuffed) && ryzeebuffed.IsValidTarget(E.Range))
+                            if (ryzeebuffed.Health < Q.GetDamage(ryzeebuffed) + E.GetDamage(ryzeebuffed) + Q.GetDamage(ryzeebuffed) + 20 && ryzeebuffed.IsValidTarget(E.Range))
                             {
                                 Q.Cast(ryzeebuffed);
                                 if (ryzeebuffed.IsValidTarget(E.Range))
@@ -876,14 +854,17 @@ namespace SurvivorRyze
                         }
                         else if (ryzeebuffed == null)
                         {
-                            Q.Cast(ryzeebuffed);
-                            if (ryzenotebuffed.IsValidTarget(E.Range))
+                            if (ryzenotebuffed.Health < Q.GetDamage(ryzenotebuffed) + E.GetDamage(ryzenotebuffed) + Q.GetDamage(ryzenotebuffed) + 20 && ryzenotebuffed.IsValidTarget(E.Range))
                             {
-                                Orbwalker.ForceTarget(ryzenotebuffed);
-                                E.CastOnUnit(ryzenotebuffed);
-                            }
-                            if (!E.IsReady() && Q.IsReady())
                                 Q.Cast(ryzenotebuffed);
+                                if (ryzenotebuffed.IsValidTarget(E.Range))
+                                {
+                                    Orbwalker.ForceTarget(ryzenotebuffed);
+                                    E.CastOnUnit(ryzenotebuffed);
+                                }
+                                if (!E.IsReady() && Q.IsReady())
+                                    Q.Cast(ryzenotebuffed);
+                            }
                         }
                     }
                 }
@@ -895,7 +876,7 @@ namespace SurvivorRyze
             switch (R.Level)
             {
                 case 1:
-                    RangeR = 1500f;
+                    RangeR = 1750f;
                     break;
                 case 2:
                     RangeR = 3000f;
@@ -913,8 +894,8 @@ namespace SurvivorRyze
         private static float CalculateDamage(Obj_AI_Base enemy)
         {
             float damage = 0;
-            if (Q.IsReady() || Player.Mana <= Q.Instance.SData.Mana + Q.Instance.SData.Mana)
-                damage += Q.GetDamage(enemy) + Q.GetDamage(enemy);
+            if (Q.IsReady() || Player.Mana <= Q.Instance.SData.Mana + E.Instance.SData.Mana)
+                damage += QGetRealDamage(enemy);
             else if (Q.IsReady() || Player.Mana <= Q.Instance.SData.Mana)
                 damage += Q.GetDamage(enemy);
 

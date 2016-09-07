@@ -5,9 +5,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using Color = System.Drawing.Color;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Hikigaya_Syndra
+using EloBuddy;
+using LeagueSharp.Common;
+namespace Hikigaya_Syndra
 {
     class Program
     {
@@ -28,26 +28,26 @@ using EloBuddy;
 
         public static void OnLoad()
         {
-			
-			if(ObjectManager.Player.ChampionName != "Syndra")
-			{
-				return;
-			}
-			
-            Q = new Spell(SpellSlot.Q, 790,TargetSelector.DamageType.Magical);
+
+            if (ObjectManager.Player.ChampionName != "Syndra")
+            {
+                return;
+            }
+
+            Q = new Spell(SpellSlot.Q, 790, TargetSelector.DamageType.Magical);
             Q.SetSkillshot(0.6f, 125f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 
             W = new Spell(SpellSlot.W, 925, TargetSelector.DamageType.Magical);
             W.SetSkillshot(0.25f, 140f, 1600f, false, SkillshotType.SkillshotCircle);
 
             E = new Spell(SpellSlot.E, 700, TargetSelector.DamageType.Magical);
-            E.SetSkillshot(0.25f, 100, 2500f, false, SkillshotType.SkillshotLine);
+            E.SetSkillshot(0.25f, (float)(45 * 0.5), 2500f, false, SkillshotType.SkillshotCircle);
 
             R = new Spell(SpellSlot.R, 675, TargetSelector.DamageType.Magical);
             R.SetTargetted(0.5f, 1100f);
 
             Qe = new Spell(SpellSlot.E, 1290);
-            Qe.SetSkillshot(0.6f, 100f, 2500f, false, SkillshotType.SkillshotLine);
+            Qe.SetSkillshot(float.MaxValue, 55f, 2000f, false, SkillshotType.SkillshotCircle);
 
             IgniteSlot = Player.GetSpellSlot("SummonerDot");
 
@@ -73,7 +73,7 @@ using EloBuddy;
                     {
                         qeComboMenu.AddItem(new MenuItem("qe.combo", "Use (QE)").SetValue(true));
                         qeComboMenu.AddItem(new MenuItem("q.e.delay", "QE Delay").SetValue(new Slider(0, 0, 150)));
-                        qeComboMenu.AddItem(new MenuItem("q.e.max.range", "QE Max Range %").SetValue(new Slider(100)));
+                        qeComboMenu.AddItem(new MenuItem("q.e.max.range", "QE Max Range").SetValue(new Slider(1290, 1, 1290)));
                         qeComboMenu.AddItem(new MenuItem("qe.combo.style", "» (E) Style").SetValue(new StringList(new[] { "If Enemy Stunable" })));
                         qeComboMenu.AddItem(new MenuItem("qe.hit.chance", "(QE) Hit Chance").SetValue(new StringList(HitchanceNameArray, 3)));
                         comboMenu.AddSubMenu(qeComboMenu);
@@ -89,7 +89,7 @@ using EloBuddy;
                     var eComboMenu = new Menu(":: E", ":: E");
                     {
                         eComboMenu.AddItem(new MenuItem("e.combo", "Use (E)").SetValue(true));
-                        eComboMenu.AddItem(new MenuItem("e.combo.style", "» (E) Style").SetValue(new StringList(new[] { "If Enemy Stunable"})));
+                        eComboMenu.AddItem(new MenuItem("e.combo.style", "» (E) Style").SetValue(new StringList(new[] { "If Enemy Stunable" })));
                         eComboMenu.AddItem(new MenuItem("e.hit.chance", "(E) Hit Chance").SetValue(new StringList(HitchanceNameArray, 2)));
                         comboMenu.AddSubMenu(eComboMenu);
                     }
@@ -107,14 +107,20 @@ using EloBuddy;
 
                         var rUndyMenu = new Menu(":: R Undy Settings", ":: R Undy Settings");
                         {
-                            rUndyMenu.AddItem(new MenuItem("undy.tryn", "Trynda's Ult").SetValue(true));
-                            rUndyMenu.AddItem(new MenuItem("undy.kayle", "Kayle's Ult").SetValue(true));
-                            rUndyMenu.AddItem(new MenuItem("undy.zilean", "Zilean's Ult").SetValue(true));
-                            rUndyMenu.AddItem(new MenuItem("undy.alistar", "Alistar's Ult").SetValue(true));
-                            rUndyMenu.AddItem(new MenuItem("undy.zac", "Zac's Passive").SetValue(true));
-                            rUndyMenu.AddItem(new MenuItem("undy.aatrox", "Aatrox's Passive").SetValue(true));
-                            rUndyMenu.AddItem(new MenuItem("undy.sivir", "Sivir's Spell Shield").SetValue(true));
-                            rUndyMenu.AddItem(new MenuItem("undy.morgana", "Morgana's Black Shield").SetValue(true));
+                            rUndyMenu.AddItem(new MenuItem("kindred.r", "Kindred's Lamb's Respite(R)").SetValue(true));
+                            rUndyMenu.AddItem(new MenuItem("vlad.w", "Vladimir (W)").SetValue(true));
+                            rUndyMenu.AddItem(new MenuItem("try.r", "Tryndamere's Undying Rage (R)").SetValue(true));
+                            rUndyMenu.AddItem(new MenuItem("kayle.r", "Kayle's Intervention (R)").SetValue(true));
+                            rUndyMenu.AddItem(new MenuItem("morgana.e", "Morgana's Black Shield (E)").SetValue(true));
+                            rUndyMenu.AddItem(new MenuItem("sivir.e", "Sivir's Spell Shield (E)").SetValue(true));
+                            rUndyMenu.AddItem(new MenuItem("banshee.passive", "Banshee's Veil (PASSIVE)").SetValue(true));
+                            rUndyMenu.AddItem(new MenuItem("nocturne.w", "Nocturne's Shroud of Darkness (W)").SetValue(true));
+                            rUndyMenu.AddItem(new MenuItem("aatrox.passive", "Aatrox's (PASSIVE)").SetValue(true));
+                            rUndyMenu.AddItem(new MenuItem("zac.passive", "Zac's (PASSIVE)").SetValue(true));
+                            rUndyMenu.AddItem(new MenuItem("alistar.r", "Alistar's (R)").SetValue(true));
+                            rUndyMenu.AddItem(new MenuItem("sion.passive", "Sion's (PASSIVE)").SetValue(true));
+                            rUndyMenu.AddItem(new MenuItem("zilean.r", "Zilean's Chrono's Shift (R)").SetValue(true));
+                            rUndyMenu.AddItem(new MenuItem("yorick.zombie", "Yorick's (ZOMBIE)").SetValue(true));
                             rComboMenu.AddSubMenu(rUndyMenu);
                         }
 
@@ -126,7 +132,7 @@ using EloBuddy;
                 }
                 var harassMenu = new Menu(":: Harass Settings", ":: Harass Settings");
                 {
-                    var toggleMenu = new Menu(":: Toggle Settings", ":: Toggle Settings").SetFontStyle(FontStyle.Bold,SharpDX.Color.Gold);
+                    var toggleMenu = new Menu(":: Toggle Settings", ":: Toggle Settings").SetFontStyle(FontStyle.Bold, SharpDX.Color.Gold);
                     {
                         toggleMenu.AddItem(new MenuItem("q.toggle", "Use (Q)").SetValue(true));
                         toggleMenu.AddItem(new MenuItem("toggle.hit.chance", "(Toggle) Hit Chance").SetValue(new StringList(HitchanceNameArray, 3)));
@@ -195,7 +201,7 @@ using EloBuddy;
                 }
                 var drawMenu = new Menu(":: Drawings", ":: Drawings");
                 {
-                    drawMenu.AddItem(new MenuItem("q.draw", "(Q) Range").SetValue(new Circle(false,Color.Pink)));
+                    drawMenu.AddItem(new MenuItem("q.draw", "(Q) Range").SetValue(new Circle(false, Color.Pink)));
                     drawMenu.AddItem(new MenuItem("qe.draw", "(QE) Range").SetValue(new Circle(false, Color.CornflowerBlue)));
                     drawMenu.AddItem(new MenuItem("e.draw", "(E) Range").SetValue(new Circle(false, Color.Crimson)));
                     drawMenu.AddItem(new MenuItem("w.draw", "(W) Range").SetValue(new Circle(false, Color.Gold)));
@@ -214,13 +220,13 @@ using EloBuddy;
                 DamageIndicator.FillColor = drawFill.GetValue<Circle>().Color;
 
                 drawDamageMenu.ValueChanged +=
-                delegate(object sender, OnValueChangeEventArgs eventArgs)
+                delegate (object sender, OnValueChangeEventArgs eventArgs)
                 {
                     DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
                 };
 
                 drawFill.ValueChanged +=
-                delegate(object sender, OnValueChangeEventArgs eventArgs)
+                delegate (object sender, OnValueChangeEventArgs eventArgs)
                 {
                     DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
                     DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
@@ -248,9 +254,8 @@ using EloBuddy;
         private static void OnUpdate(EventArgs args)
         {
             R.Range = R.Level == 3 ? 750f : 675f;
-            E.Width = E.Level == 5 ? 45f : (float)(45 * 0.5);
-            var qeRnew = Config.Item("q.e.max.range").GetValue<Slider>().Value * .01 * 1292;
-            Qe.Range = (float)qeRnew;
+            E.Width = E.Level != 5 ? (float)(45 * 0.5) : 45f;
+            Qe.Range = Config.Item("q.e.max.range").GetValue<Slider>().Value;
 
             switch (Orbwalker.ActiveMode)
             {
@@ -268,7 +273,7 @@ using EloBuddy;
                     KillSteal();
                     Toggle();
                     break;
-                    
+
             }
         }
         private static void Combo()
@@ -284,7 +289,7 @@ using EloBuddy;
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range + W.Width) && W.GetPrediction(x).Hitchance >= HikiChance("w.hit.chance")))
                 {
-                    Helper.UseW(enemy,enemy);
+                    Helper.UseW(enemy, enemy);
                 }
             }
             if (Q.IsReady() && E.IsReady() && Config.Item("qe.combo").GetValue<bool>())
@@ -293,12 +298,12 @@ using EloBuddy;
                 {
                     Helper.UseQe(enemy);
                 }
-            }  
+            }
 
             if (R.IsReady() && Config.Item("r.combo").GetValue<bool>())
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && !Helper.BuffCheck(x) &&
-                    Config.Item("r.combo."+x.ChampionName).GetValue<bool>()))
+                    Config.Item("r.combo." + x.ChampionName).GetValue<bool>()))
                 {
                     if (enemy.Health < R.GetDamage(enemy))
                     {
@@ -332,7 +337,7 @@ using EloBuddy;
                 }
             }
 
-			if (Q.IsReady() && Config.Item("q.harass").GetValue<bool>())
+            if (Q.IsReady() && Config.Item("q.harass").GetValue<bool>())
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && Q.GetPrediction(x).Hitchance >= HikiChance("q.hit.chance")))
                 {
@@ -343,7 +348,7 @@ using EloBuddy;
             {
                 foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range + W.Width) && W.GetPrediction(x).Hitchance >= HikiChance("w.hit.chance")))
                 {
-                    Helper.UseW(enemy,enemy);
+                    Helper.UseW(enemy, enemy);
                 }
             }
             if (Q.IsReady() && E.IsReady() && Config.Item("qe.harass").GetValue<bool>())
@@ -352,8 +357,8 @@ using EloBuddy;
                 {
                     Helper.UseQe(enemy);
                 }
-            }  
-            
+            }
+
         }
         private static void LaneClear()
         {
@@ -375,7 +380,7 @@ using EloBuddy;
                 var rangedMinionsW = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, W.Range + W.Width + 30,
             MinionTypes.Ranged);
                 var allMinionsW = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, W.Range + W.Width + 30);
-                if (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1)
+                if (Player.Spellbook.GetSpell(SpellSlot.W).Name == "SyndraW")
                 {
                     //WObject
                     var gObjectPos = Helper.GetGrabableObjectPos(false);
@@ -384,7 +389,7 @@ using EloBuddy;
                         W.Cast(gObjectPos);
                     }
                 }
-                else if (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1)
+                else if (Player.Spellbook.GetSpell(SpellSlot.W).Name == "SyndraWCast")
                 {
                     var fl1 = Q.GetCircularFarmLocation(rangedMinionsW, W.Width);
                     var fl2 = Q.GetCircularFarmLocation(allMinionsW, W.Width);
@@ -396,7 +401,7 @@ using EloBuddy;
                     {
                         W.Cast(fl2.Position);
                     }
-                } 
+                }
             }
         }
         private static void JungleClear()
@@ -408,12 +413,12 @@ using EloBuddy;
             if (Q.IsReady() && Config.Item("q.jungle").GetValue<bool>())
             {
                 var mobs = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, W.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-                W.Cast(mobs[0]);
+                Q.Cast(mobs[0]);
             }
             if (W.IsReady() && Config.Item("w.jungle").GetValue<bool>() && Environment.TickCount - Q.LastCastAttemptT > 800)
             {
                 var mobs = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, W.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
-                W.Cast(mobs[0]);
+                Helper.UseW(mobs[0], mobs[0]);
             }
             if (E.IsReady() && Config.Item("e.jungle").GetValue<bool>())
             {
@@ -425,7 +430,7 @@ using EloBuddy;
         {
             if (Q.IsReady() && Config.Item("q.ks").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(Q.Range) && x.Health < Q.GetDamage(x)
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && x.Health < Q.GetDamage(x)
                     && Q.GetPrediction(x).Hitchance >= HikiChance("q.hit.chance")))
                 {
                     Q.Cast(enemy);

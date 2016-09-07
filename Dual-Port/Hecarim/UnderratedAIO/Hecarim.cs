@@ -129,10 +129,6 @@ namespace UnderratedAIO.Champions
 
         private void Combo()
         {
-            foreach (var b in player.Buffs)
-            {
-                Console.WriteLine(b.Name);
-            }
             AIHeroClient target = TargetSelector.GetTarget(1000, TargetSelector.DamageType.Physical, true);
             if (target == null)
             {

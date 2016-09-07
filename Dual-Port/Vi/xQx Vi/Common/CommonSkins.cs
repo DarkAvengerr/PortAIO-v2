@@ -22,7 +22,6 @@ using EloBuddy;
                     {
                         if (!args.GetNewValue<bool>())
                         {
-                            //ObjectManager.//Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, ObjectManager.Player.SkinId);
                         }
                     };
 
@@ -39,7 +38,6 @@ using EloBuddy;
         {
             if (MenuLocal.Item("Settings.Skin").GetValue<bool>())
             {
-                //ObjectManager.//Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, MenuLocal.Item("Settings.SkinID").GetValue<StringList>().SelectedIndex);
             }
         }
     }

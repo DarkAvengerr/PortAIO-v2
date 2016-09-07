@@ -4,8 +4,10 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using EloBuddy;
+using Spells = LCS_Lucian.LucianSpells;
 
+using EloBuddy;
+using LeagueSharp.Common;
 namespace LCS_Lucian
 {
     class Program
@@ -21,7 +23,7 @@ namespace LCS_Lucian
                 new Menu("LCS Series: Lucian", "LCS Series: Lucian", true).SetFontStyle(System.Drawing.FontStyle.Bold,
                     Color.Gold);
             {
-                LucianSpells.Init();
+                Spells.Init();
                 LucianMenu.OrbwalkerInit();
                 LucianMenu.MenuInit();
             }
@@ -30,7 +32,7 @@ namespace LCS_Lucian
             Chat.Print("<font color='##FFCC00'>LCS Series totally improved LCS player style.</font>");
 
             Game.OnUpdate += LucianOnUpdate;
-            Obj_AI_Base.OnSpellCast += LucianOnDoCast;
+            Obj_AI_Base.OnSpellCast += LucianOnSpellCast;
             Drawing.OnDraw += LucianOnDraw;
         }
         public static bool UltActive
@@ -69,7 +71,7 @@ namespace LCS_Lucian
                 LucianSpells.E.Cast(ObjectManager.Player.ServerPosition.Extend(enemy.ServerPosition, -LucianSpells.E.Range));
             }
         }
-        private static void LucianOnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private static void LucianOnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender.IsMe && Orbwalking.IsAutoAttack(args.SData.Name) && args.Target is AIHeroClient && args.Target.IsValid)
             {
@@ -81,7 +83,7 @@ namespace LCS_Lucian
                     {
                         LucianSpells.Q.CastOnUnit(((AIHeroClient)args.Target));
                     }
-                    
+
                     if (!LucianSpells.E.IsReady() && LucianSpells.W.IsReady() && Helper.LEnabled("lucian.w.combo") &&
                         ObjectManager.Player.Distance(args.Target.Position) < LucianSpells.W.Range &&
                         LucianMenu.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && ObjectManager.Player.Buffs.Any(buff => buff.Name != "lucianpassivebuff"))
@@ -97,7 +99,7 @@ namespace LCS_Lucian
                                 LucianSpells.W.Cast(((AIHeroClient)args.Target).Position);
                             }
                         }
-                       
+
                     }
                     if (LucianSpells.E.IsReady() && Helper.LEnabled("lucian.e.combo") &&
                         ObjectManager.Player.Distance(args.Target.Position) < LucianSpells.Q2.Range &&
@@ -112,7 +114,7 @@ namespace LCS_Lucian
                                 LucianSpells.E.Cast(Game.CursorPos);
                                 break;
                         }
-                        
+
                     }
                 }
                 else
@@ -145,7 +147,7 @@ namespace LCS_Lucian
                         }
                     }
                 }
-                
+
             }
             else if (sender.IsMe && Orbwalking.IsAutoAttack(args.SData.Name) && args.Target is Obj_AI_Minion && args.Target.IsValid && ((Obj_AI_Minion)args.Target).Team == GameObjectTeam.Neutral
                 && ObjectManager.Player.ManaPercent > Helper.LSlider("lucian.clear.mana"))
@@ -198,12 +200,48 @@ namespace LCS_Lucian
                 LucianMenu.Orbwalker.SetAttack(true);
             }
 
-            if (Helper.LEnabled("lucian.q.ks") && LucianSpells.Q.IsReady())
+            if (!UltActive && Helper.LEnabled("use.eq"))
+            {
+                if (Spells.E.IsReady() &&
+                    ObjectManager.Player.CountEnemiesInRange(Helper.LSlider("eq.safety.range")) <= Helper.LSlider("eq.min.enemy.count.range"))
+                {
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.Q.Range + Spells.E.Range - 100)))
+                    {
+                        var aadamage = ObjectManager.Player.GetAutoAttackDamage(enemy);
+                        var dmg = ObjectManager.Player.CalcDamage(enemy, Damage.DamageType.Physical,
+                            Spells.Q.GetDamage(enemy));
+                        var combodamage = aadamage + dmg;
+
+                        if (enemy.Health < combodamage)
+                        {
+                            Spells.E.Cast(ObjectManager.Player.Position.Extend(enemy.Position, Spells.E.Range));
+                        }
+                    }
+
+                    if (Spells.Q.IsReady() && ObjectManager.Player.CountEnemiesInRange(Helper.LSlider("eq.safety.range")) <= Helper.LSlider("eq.min.enemy.count.range"))
+                    {
+                        foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.Q.Range)))
+                        {
+                            var dmg = ObjectManager.Player.CalcDamage(enemy, Damage.DamageType.Physical,
+                                Spells.Q.GetDamage(enemy));
+                            var aadamage = ObjectManager.Player.GetAutoAttackDamage(enemy);
+
+                            var combodamage = aadamage + dmg;
+
+                            if (enemy.Health < combodamage)
+                            {
+                                Spells.Q.CastOnUnit(enemy);
+                            }
+                        }
+                    }
+                }
+            }
+            if (!UltActive && Helper.LEnabled("lucian.q.ks") && LucianSpells.Q.IsReady())
             {
                 ExtendedQKillSteal();
             }
 
-            if (Helper.LEnabled("lucian.w.ks") && LucianSpells.W.IsReady())
+            if (!UltActive && Helper.LEnabled("lucian.w.ks") && LucianSpells.W.IsReady())
             {
                 KillstealW();
             }
@@ -214,10 +252,11 @@ namespace LCS_Lucian
         {
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(LucianSpells.R.Range) &&
-                LucianSpells.R.GetPrediction(x).CollisionObjects.Count == 0))
+                LucianSpells.R.GetPrediction(x).CollisionObjects.Count < 2))
             {
                 LucianSpells.R.Cast(enemy);
             }
+
         }
         private static void Harass()
         {
@@ -267,14 +306,14 @@ namespace LCS_Lucian
         {
             var minions = ObjectManager.Get<Obj_AI_Minion>().Where(o => o.IsValidTarget(LucianSpells.Q.Range));
             var target = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(LucianSpells.Q2.Range));
-            
-            if (target.Distance(ObjectManager.Player.Position) > LucianSpells.Q.Range &&
-                target.Distance(ObjectManager.Player.Position) < LucianSpells.Q2.Range && 
-                target.CountEnemiesInRange(LucianSpells.Q2.Range) >= 1 && target.Health < LucianSpells.Q.GetDamage(target) && !target.IsDead)
+
+            if (target != null && (target.Distance(ObjectManager.Player.Position) > LucianSpells.Q.Range &&
+                                   target.Distance(ObjectManager.Player.Position) < LucianSpells.Q2.Range &&
+                                   target.CountEnemiesInRange(LucianSpells.Q2.Range) >= 1 && target.Health < LucianSpells.Q.GetDamage(target) && !target.IsDead))
             {
                 foreach (var minion in minions)
                 {
-                    if (LucianSpells.Q2.WillHit(target, ObjectManager.Player.ServerPosition.Extend(minion.ServerPosition, LucianSpells.Q2.Range),0,HitChance.VeryHigh))
+                    if (LucianSpells.Q2.WillHit(target, ObjectManager.Player.ServerPosition.Extend(minion.ServerPosition, LucianSpells.Q2.Range), 0, HitChance.VeryHigh))
                     {
                         LucianSpells.Q2.CastOnUnit(minion);
                     }
@@ -284,7 +323,7 @@ namespace LCS_Lucian
         private static void KillstealW()
         {
             var target = HeroManager.Enemies.Where(x => x.IsValidTarget(LucianSpells.W.Range)).
-                FirstOrDefault(x=> x.Health < LucianSpells.W.GetDamage(x));
+                FirstOrDefault(x => x.Health < LucianSpells.W.GetDamage(x));
 
             var pred = LucianSpells.W.GetPrediction(target);
 

@@ -657,7 +657,7 @@ namespace ARAMDetFull
                     champ = new Vladimir();
                     break;
                 case "Taliyah":
-                    champ = new Taliyah();
+                    champ = new TaliyahA();
                     break;
                 case "Lissandra":
                     champ = new Lissandra();

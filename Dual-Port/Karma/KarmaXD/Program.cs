@@ -160,28 +160,28 @@ using EloBuddy;
         {
             if (E.IsReady())
             {
-                if (sender.IsAlly && sender is AIHeroClient && Config.Item("e.engage." + args.SData.Name).GetValue<bool>()
+                if (sender.IsAlly && sender.IsValid<AIHeroClient>() && Config.Item("e.engage." + args.SData.Name).GetValue<bool>()
                 && Config.Item("e." + sender.CharData.BaseSkinName).GetValue<bool>() && sender.Distance(ObjectManager.Player.Position) <= E.Range
                     && !sender.IsDead && !sender.IsZombie && sender.IsValid)
                 {
                     E.CastOnUnit(sender);
                 }
 
-                if (sender is AIHeroClient && sender.IsEnemy && args.Target.IsAlly && args.Target.Type == GameObjectType.AIHeroClient
+                if (sender.IsValid<AIHeroClient>() && sender.IsEnemy && args.Target.IsAlly && args.Target.Type == GameObjectType.AIHeroClient
                 && args.SData.IsAutoAttack() && ObjectManager.Player.ManaPercent >= Config.Item("min.mana.for.e").GetValue<Slider>().Value
                 && Config.Item("e." + ((AIHeroClient)args.Target).ChampionName).GetValue<bool>() && ((AIHeroClient)args.Target).Distance(ObjectManager.Player.Position) < E.Range)
                 {
                     E.Cast((AIHeroClient)args.Target);
                 }
 
-                if (sender is AIHeroClient && args.Target.IsAlly && args.Target.Type == GameObjectType.AIHeroClient
+                if (sender.IsValid<AIHeroClient>() && args.Target.IsAlly && args.Target.Type == GameObjectType.AIHeroClient
                     && !args.SData.IsAutoAttack() && (Config.Item("e.protect." + args.SData.Name).GetValue<bool>() || Config.Item("e.protect.targetted." + args.SData.Name).GetValue<bool>())
                     && sender.IsEnemy && sender.GetSpellDamage(((AIHeroClient)args.Target), args.SData.Name) > ((AIHeroClient)args.Target).Health)
                 {
                     E.Cast((AIHeroClient)args.Target);
                 }
 
-                if (sender is AIHeroClient && sender.IsEnemy && args.Target.IsAlly && args.Target.Type == GameObjectType.obj_AI_Turret
+                if (sender.IsValid<AIHeroClient>() && sender.IsEnemy && args.Target.IsAlly && args.Target.Type == GameObjectType.obj_AI_Turret
                     && args.SData.IsAutoAttack() && ObjectManager.Player.ManaPercent >= Config.Item("min.mana.for.e").GetValue<Slider>().Value
                     && ((AIHeroClient)args.Target).Distance(ObjectManager.Player.Position) < E.Range
                     && ((AIHeroClient)args.Target).HealthPercent < Config.Item("turret.hp.percent").GetValue<Slider>().Value)

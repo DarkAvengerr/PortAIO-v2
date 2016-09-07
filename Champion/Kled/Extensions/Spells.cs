@@ -21,8 +21,8 @@ namespace Hiki.Kled.Extensions
             E = new Spell(SpellSlot.E, 550);
             R = new Spell(SpellSlot.R, 5000);
 
-            Q.SetSkillshot(0.2047f, 40, 3000, true, SkillshotType.SkillshotCone);
-            SkaarlQ.SetSkillshot(0.2804f, 45, 1600, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.2047f, 40, 3000, false, SkillshotType.SkillshotCone);
+            SkaarlQ.SetSkillshot(0.2804f, 45, 1600, false, SkillshotType.SkillshotLine);
             E.SetSkillshot(0.1000f, 10, 500, false, SkillshotType.SkillshotLine);
 
         }

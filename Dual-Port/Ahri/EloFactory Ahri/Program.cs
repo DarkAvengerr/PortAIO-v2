@@ -161,7 +161,6 @@ using EloBuddy;
         #region ToogleOrder Game_OnUpdate
         public static void Game_OnGameUpdate(EventArgs args)
         {
-            //Player.SetSkin(Player.BaseSkinName, Config.Item("Ahri.SkinChanger").GetValue<bool>() ? Config.Item("Ahri.SkinChangerName").GetValue<StringList>().SelectedIndex : Player.SkinId);
 
             if (Config.Item("Ahri.AutoLevelSpell").GetValue<bool>()) LevelUpSpells();
 

@@ -292,6 +292,9 @@ using EloBuddy;
             // use w
             if (CougarForm && wclear)
             {
+                var firsttarget = MinionManager.GetMinions(Player.Position, 700, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).Where(x => x.CharData.BaseSkinName != "gangplankbarrel").FirstOrDefault(x => x.HasBuff("nidaleepassivehunted"));
+                if (firsttarget != null)
+                    W.Cast(firsttarget.Position);
                 var target = MinionManager.GetMinions(Player.Position, 375, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).Where(x => x.CharData.BaseSkinName != "gangplankbarrel").FirstOrDefault();
                 if (target != null)
                     W.Cast(target.Position);
@@ -525,6 +528,8 @@ using EloBuddy;
         {
             get
             {
+                if (Q.Instance.Level == 0)
+                    return false;
                 return
                     Player.Mana >= new int[] { 50, 60, 70, 80, 90 }[Q.Instance.Level - 1]
                     && Utils.GameTimeTickCount - qhumancount >= 6 * (1 - Player.PercentCooldownMod);
@@ -534,6 +539,8 @@ using EloBuddy;
         {
             get
             {
+                if (E.Instance.Level == 0)
+                    return false;
                 return
                     Player.Mana >= new int[] { 60 , 75 , 90 , 105 , 120 }[E.Instance.Level - 1]
                     && Utils.GameTimeTickCount - qhumancount >= 12 * (1 - Player.PercentCooldownMod);

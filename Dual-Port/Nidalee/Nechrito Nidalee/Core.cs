@@ -19,12 +19,9 @@ using EloBuddy;
        /// </summary>
         public static AIHeroClient Player => ObjectManager.Player;
         public static Orbwalking.Orbwalker Orb { get; set; }
-       
-         internal static bool CatForm()
+        internal static bool CatForm()
         {
-            return (Player.Spellbook.GetSpell(SpellSlot.Q).Name == "Takedown" ||
-                Player.Spellbook.GetSpell(SpellSlot.W).Name == "Pounce" ||
-                Player.Spellbook.GetSpell(SpellSlot.E).Name == "Swipe");
+            return Player.CharData.BaseSkinName != "Nidalee";
         }
         public class Champion
         {

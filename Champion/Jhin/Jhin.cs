@@ -270,7 +270,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     if (Config.Item("autoWcc", true).GetValue<bool>())
                     {
                         foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(W.Range) && (!OktwCommon.CanMove(enemy) || enemy.HasBuff("jhinespotteddebuff"))))
-                            W.Cast(enemy);
+                            Program.CastSpell(W, t);
                     }
                 }
             }

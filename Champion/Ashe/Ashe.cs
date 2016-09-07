@@ -210,7 +210,7 @@ namespace OneKeyToWin_AIO_Sebby
 
             if (Player.HealthPercent < 50)
             {
-                foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(300) && enemy.IsMelee && Config.Item("GapCloser" + enemy.ChampionName).GetValue<bool>() && !OktwCommon.ValidUlt(enemy)))
+                foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(300) && enemy.IsMelee && Config.Item("GapCloser" + enemy.ChampionName).GetValue<bool>() && OktwCommon.ValidUlt(enemy)))
                 {
                     R.Cast(enemy);
                     Program.debug("R Meele");

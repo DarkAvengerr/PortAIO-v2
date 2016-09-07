@@ -160,7 +160,7 @@ namespace VayneHunter_Reborn.Skills.Condemn
                     return VHReborn.GetTarget(fromPosition);
                 case 2:
                     //Marksman / Gosu
-                    return Marksman.GetTarget(fromPosition);
+                    return VayneHunter_Reborn.Skills.Condemn.Methods.Marksman.GetTarget(fromPosition);
                 case 3:
                     //Shine#
                     return Shine.GetTarget(fromPosition);

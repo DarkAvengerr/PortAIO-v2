@@ -147,7 +147,7 @@ using EloBuddy; namespace Activator
                 Obj_AI_Base.OnLevelUp += Obj_AI_Base_OnLevelUp;
 
                 Chat.Print("<b>Activator#</b> - Loaded!");
-                //Updater.UpdateCheck();
+                Updater.UpdateCheck();
 
                 // init valid auto spells
                 foreach (CoreSpell autospell in Lists.Spells)

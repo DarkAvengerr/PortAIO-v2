@@ -24,7 +24,7 @@
                                                                                  Spells.W,
                                                                                  new Spell(
                                                                                  SpellSlot.W,
-                                                                                 500 + Player.BoundingRadius)
+                                                                                 400 + Player.BoundingRadius)
                                                                              },
                                                                              {
                                                                                  Spells.E,

@@ -11,6 +11,8 @@ namespace LCS_Lucian
 {
     class LucianCalculator
     {
+        private static readonly double[] UltimatePerDamageDouble = { 20, 35, 50 };
+
         public static float LucianTotalDamage(AIHeroClient enemy)
         {
             if (LucianSpells.Q.IsReady() && Helper.LEnabled("lucian.q.combo"))

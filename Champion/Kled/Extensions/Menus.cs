@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LeagueSharp.Common;
+using System.Drawing;
 
 namespace Hiki.Kled.Extensions
 {
@@ -47,6 +48,23 @@ namespace Hiki.Kled.Extensions
                     junglemenu.AddItem(new MenuItem("q.skaarl.jungle", "Use [Skaarl Q]").SetValue(true));
                     junglemenu.AddItem(new MenuItem("e.jungle", "Use [E]").SetValue(true));
                     Config.AddSubMenu(junglemenu);
+                }
+                var ultimenu = new Menu("Ultimate Settings", "Ultimate Settings").SetFontStyle(FontStyle.Bold, SharpDX.Color.GreenYellow);
+                {
+                    var whitelist = new Menu("Whitelist", "Whitelist").SetFontStyle(FontStyle.Bold, SharpDX.Color.Gold);
+                    {
+                        foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValid))
+                        {
+                            whitelist.AddItem(new MenuItem("r." + enemy.ChampionName, "Use [R] : " + enemy.ChampionName).SetValue(Utilities.HighChamps.Contains(enemy.ChampionName)));
+                        }
+
+                        ultimenu.AddSubMenu(whitelist);
+                    }
+                    ultimenu.AddItem(new MenuItem("r.combo", "Use [R]").SetValue(true));
+                    ultimenu.AddItem(new MenuItem("max.r.distance", "Max. (R) Distance").SetValue(new Slider(4000, 1000, 5000)));
+                    ultimenu.AddItem(new MenuItem("min.enemy", "Min. Enemies").SetValue(new Slider(2, 1, 5)));
+                    ultimenu.AddItem(new MenuItem("manual.r", "Semi Manual (R)").SetValue(new KeyBind("A".ToCharArray()[0], KeyBindType.Press)));
+                    Config.AddSubMenu(ultimenu);
                 }
                 Config.AddItem(new MenuItem("keysinfo", "                           General Settings").SetFontStyle(System.Drawing.FontStyle.Bold, SharpDX.Color.Gold));
                 Config.AddItem(new MenuItem("hitchance", "Hit Chance ?").SetValue(new StringList(Utilities.HitchanceNameArray, 2)));
