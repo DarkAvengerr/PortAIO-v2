@@ -74,7 +74,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="PortAIO.Common, Version=1.0.0.4, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="PortAIO.Common, Version=1.0.0.4, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\PortAIO-Common\bin\Debug\PortAIO.Common.dll</HintPath>
     </Reference>
@@ -229,6 +229,7 @@
     <Compile Include="AIO\M1D 0R F33D\Managers\PotionManager.cs" />
     <Compile Include="AIO\M1D 0R F33D\Plugin.cs" />
     <Compile Include="AIO\M1D 0R F33D\Program.cs" />
+    <Compile Include="AIO\OneKeyToWin_AIO_Sebby\Core\PredictionAio.cs" />
     <Compile Include="Dual-Port\Aatrox\NoobAatrox\Program.cs" />
     <Compile Include="Dual-Port\Ahri\AhriSharp\Ahri.cs" />
     <Compile Include="Dual-Port\Ahri\AhriSharp\Helper.cs" />

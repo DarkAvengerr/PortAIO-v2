@@ -98,45 +98,14 @@ namespace Valvrave_Sharp
             Titanic = new Items.Item(3748, 0);
         }
 
-        private static void InitMenu(bool isSupport)
+        private static void InitMenu(bool isSupport = true)
         {
             MainMenu = new Menu("ValvraveSharp", "Valvrave Sharp", true, Player.ChampionName).Attach();
             MainMenu.Separator("Author: Brian");
             MainMenu.Separator("Paypal: dcbrian01@gmail.com");
             if (isSupport)
             {
-                var skinMenu = MainMenu.Add(new Menu("Skin", "Skin Changer"));
-                {
-                    skinMenu.Slider("Index", "Skin", 0, 0, Plugins[Player.ChampionName].Item2).ValueChanged +=
-                        (sender, args) => { isSkinReset = true; };
-                    skinMenu.Bool("Own", "Keep Your Own Skin").ValueChanged += (sender, args) =>
-                        {
-                            var menuBool = sender as MenuBool;
-                            if (menuBool != null)
-                            {
-                                isSkinReset = false;
-                            }
-                        };
-                }
                 Plugins[Player.ChampionName].Item1.Invoke();
-
-                Game.OnUpdate += args =>
-                    {
-                        if (Player.IsDead)
-                        {
-                            if (!isSkinReset)
-                            {
-                                isSkinReset = true;
-                            }
-                        }
-                        else if (isSkinReset)
-                        {
-                            isSkinReset = false;
-                            if (Player.SkinId == 0 || !MainMenu["Skin"]["Own"])
-                            {
-                            }
-                        }
-                    };
             }
             else
             {
@@ -162,13 +131,9 @@ namespace Valvrave_Sharp
         public static void Main()
         {
             Bootstrap.Init();
-            Player = GameObjects.Player;
+            Player = ObjectManager.Player;
             var isSupport = Plugins.ContainsKey(Player.ChampionName);
             InitMenu(isSupport);
-            if (!isSupport)
-            {
-                return;
-            }
             InitItem();
             InitSummonerSpell();
         }
