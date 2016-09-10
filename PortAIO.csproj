@@ -229,7 +229,11 @@
     <Compile Include="AIO\M1D 0R F33D\Managers\PotionManager.cs" />
     <Compile Include="AIO\M1D 0R F33D\Plugin.cs" />
     <Compile Include="AIO\M1D 0R F33D\Program.cs" />
+    <Compile Include="AIO\OneKeyToWin_AIO_Sebby\Core\ChampionStuff.cs" />
     <Compile Include="AIO\OneKeyToWin_AIO_Sebby\Core\PredictionAio.cs" />
+    <Compile Include="Champion\Ahri\Ahri.cs" />
+    <Compile Include="Champion\Anivia\Anivia.cs" />
+    <Compile Include="Champion\Annie\Annie.cs" />
     <Compile Include="Dual-Port\Aatrox\NoobAatrox\Program.cs" />
     <Compile Include="Dual-Port\Ahri\AhriSharp\Ahri.cs" />
     <Compile Include="Dual-Port\Ahri\AhriSharp\Helper.cs" />
@@ -311,6 +315,7 @@
     <Compile Include="Dual-Port\Riven\NechritoRiven\Program.cs" />
     <Compile Include="Dual-Port\Sivir\Marksman\Sivir.cs" />
     <Compile Include="Dual-Port\Teemo\Marksman\Teemo.cs" />
+    <Compile Include="Dual-Port\Teemo\OKTW\Teemo.cs" />
     <Compile Include="Dual-Port\Tristana\Marksman\Tristana.cs" />
     <Compile Include="Dual-Port\Twitch\Marksman\Twitch.cs" />
     <Compile Include="Dual-Port\Urgot\Marksman\Urgot.cs" />
@@ -2579,15 +2584,12 @@
     <Compile Include="Champion\Twitch\Twitch.cs" />
     <Compile Include="Champion\Urgot\Urgot.cs" />
     <Compile Include="Champion\Aatrox\Program.cs" />
-    <Compile Include="Champion\Ahri\Program.cs" />
     <Compile Include="Champion\Akali\AssassinManager.cs" />
     <Compile Include="Champion\Akali\Program.cs" />
     <Compile Include="Champion\Alistar\Alistar.cs" />
     <Compile Include="Champion\Amumu\Amumu.cs" />
     <Compile Include="Champion\Amumu\Helper.cs" />
     <Compile Include="Champion\Amumu\Program.cs" />
-    <Compile Include="Champion\Anivia\Program.cs" />
-    <Compile Include="Champion\Annie\Program.cs" />
     <Compile Include="Champion\Ashe\Ashe.cs" />
     <Compile Include="Champion\AurelionSol\AurelionSol.cs" />
     <Compile Include="Champion\Azir\AzirCombo.cs" />

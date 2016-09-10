@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using SebbyLib;
-using EloBuddy;
 
-namespace OneKeyToWin_AIO_Sebby.Champions
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace OneKeyToWin_AIO_Sebby.Champions
 {
     class Malzahar
     {
@@ -160,7 +161,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             if (R.IsReady() && Config.Item("useR", true).GetValue<KeyBind>().Active)
             {
                 var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-                if (t.IsValidTarget(R.Range) && Config.Item("Ron" + t.ChampionName).GetValue<bool>())
+                if (t.IsValidTarget(R.Range) && Config.Item("Ron" + t.ChampionName).GetValue<bool>() && OktwCommon.ValidUlt(t))
                 {
                     R.CastOnUnit(t);
                     return;

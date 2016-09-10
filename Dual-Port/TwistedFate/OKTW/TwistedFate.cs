@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using SebbyLib;
-using EloBuddy;
 
-namespace OneKeyToWin_AIO_Sebby.Champions
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace OneKeyToWin_AIO_Sebby.Champions
 {
     class TwistedFate
     {
@@ -102,7 +103,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         {
             foreach (var buf in Player.Buffs.Where(x => x.Name != "secondsight"))
             {
-
+                
             }
             if (!Config.Item("ignoreW", true).GetValue<bool>())
                 cardok = true;
@@ -153,7 +154,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         private void LogicWmaunal()
         {
             if (!Player.HasBuff("pickacard_tracker"))
-            {
+            { 
                 if (Utils.TickCount - W.LastCastAttemptT > 150)
                 {
                     if (R.IsReady() && (Player.HasBuff("destiny_marker") || Player.HasBuff("gate")))
@@ -178,7 +179,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     }
                 }
             }
-            else
+            else 
             {
                 if (temp == null)
                     temp = wName;
@@ -217,7 +218,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             var t = TargetSelector.GetTarget(1100, TargetSelector.DamageType.Magical);
             if (!Player.HasBuff("pickacard_tracker"))
-            {
+            { 
                 if (Utils.TickCount - W.LastCastAttemptT > 150)
                 {
                     if (R.IsReady() && (Player.HasBuff("destiny_marker") || Player.HasBuff("gate")))
@@ -233,7 +234,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     }
                 }
             }
-            else
+            else 
             {
                 if (temp == null)
                     temp = wName;
@@ -243,7 +244,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (cardok)
                 {
                     AIHeroClient orbTarget = null;
-
+                    
                     var getTarget = Orbwalker.GetTarget();
                     if (getTarget != null && getTarget.Type == GameObjectType.AIHeroClient)
                     {
@@ -256,12 +257,12 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                         if (wName == "TwistedFate_Base_W_GoldCard.troy")
                             W.Cast();
                     }
-                    else if (Program.Combo && orbTarget.IsValidTarget() && W.GetDamage(orbTarget) + Player.GetAutoAttackDamage(orbTarget) > orbTarget.Health)
+                    else if (Program.Combo && orbTarget.IsValidTarget() &&  W.GetDamage(orbTarget) + Player.GetAutoAttackDamage(orbTarget) > orbTarget.Health)
                     {
                         W.Cast();
                         Program.debug("1" + wName);
                     }
-                    else if (Player.Mana < RMANA + QMANA + WMANA)
+                    else if ( Player.Mana < RMANA + QMANA + WMANA)
                     {
                         FindCard = 2;
                         if (wName == "TwistedFate_Base_W_BlueCard.troy")
@@ -285,7 +286,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                         if (wName == "TwistedFate_Base_W_BlueCard.troy")
                             W.Cast();
                     }
-                    else if (Program.Combo)
+                    else if(Program.Combo)
                     {
                         FindCard = 1;
                         if (wName == "TwistedFate_Base_W_GoldCard.troy")
@@ -345,8 +346,8 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     if (OktwCommon.GetKsDamage(t, Q)> t.Health && !SebbyLib.Orbwalking.InAutoAttackRange(t))
                         Program.CastSpell(Q, t);
 
-                if (W.Instance.CooldownExpires - Game.Time < W.Instance.Cooldown - 1.3 && !Player.HasBuff("pickacard_tracker") && (W.Instance.CooldownExpires - Game.Time > 3 || Player.CountEnemiesInRange(950) == 0))
-                {
+                    if (W.Instance.CooldownExpires - Game.Time < W.Instance.Cooldown - 1.3 && !Player.HasBuff("pickacard_tracker") && (W.Instance.CooldownExpires - Game.Time > 3 || Player.CountEnemiesInRange(950) == 0))
+                    {
                         if (Program.Combo && Player.Mana > RMANA + QMANA)
                             Program.CastSpell(Q, t);
                         if (Program.Farm && Player.Mana > RMANA + QMANA + WMANA + EMANA && Config.Item("harrasQ", true).GetValue<bool>() && OktwCommon.CanHarras())

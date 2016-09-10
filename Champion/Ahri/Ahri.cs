@@ -1,24 +1,24 @@
-﻿using System;
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using SebbyLib;
-using EloBuddy;
 
-namespace OneKeyToWin_AIO_Sebby.Champions
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace OneKeyToWin_AIO_Sebby.Champions
 {
-    class Ahri
+    class Ahri : Program
     {
-        private Menu Config = Program.Config;
-        public static SebbyLib.Orbwalking.Orbwalker Orbwalker = Program.Orbwalker;
-        private Spell Q, W, E, R;
-        private float QMANA = 0, WMANA = 0, EMANA = 0, RMANA = 0;
-        public AIHeroClient Player { get { return ObjectManager.Player; } }
         private static GameObject QMissile = null, EMissile = null;
         public AIHeroClient Qtarget = null;
         public static Core.MissileReturn missileManager;
-
+        private float QMANA = 0, WMANA = 0, EMANA = 0, RMANA = 0;
+        public AIHeroClient Player
+        {
+            get { return ObjectManager.Player; }
+        }
         public void LoadOKTW()
         {
             Q = new Spell(SpellSlot.Q, 870);
@@ -50,10 +50,10 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             Config.SubMenu(Player.ChampionName).SubMenu("E Config").AddItem(new MenuItem("harrasE", "Harras E", true).SetValue(true));
 
             foreach (var enemy in HeroManager.Enemies)
-                Config.SubMenu(Player.ChampionName).SubMenu("E Config").SubMenu("Use E on").AddItem(new MenuItem("Eon" + enemy.ChampionName, enemy.ChampionName, true).SetValue(true));
+                Config.SubMenu(Player.ChampionName).SubMenu("E Config").SubMenu("Use E on").AddItem(new MenuItem("Eon" + enemy.ChampionName, enemy.ChampionName ,true).SetValue(true));
 
             foreach (var enemy in HeroManager.Enemies)
-                Config.SubMenu(Player.ChampionName).SubMenu("E Config").SubMenu("Gapcloser").AddItem(new MenuItem("Egapcloser" + enemy.ChampionName, enemy.ChampionName, true).SetValue(true));
+                Config.SubMenu(Player.ChampionName).SubMenu("E Config").SubMenu("Gapcloser").AddItem(new MenuItem("Egapcloser" + enemy.ChampionName, enemy.ChampionName ,true).SetValue(true));
 
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("autoR", "R KS ", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("autoR2", "auto R fight logic + aim Q", true).SetValue(true));
@@ -83,9 +83,9 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             MissileClient missile = (MissileClient)sender;
 
-            if (missile.SData.Name != null)
+            if ( missile.SData.Name != null)
             {
-                if (missile.SData.Name == "AhriOrbReturn")
+                if(missile.SData.Name == "AhriOrbReturn")
                     QMissile = null;
                 if (missile.SData.Name == "AhriSeduceMissile")
                     EMissile = null;
@@ -99,7 +99,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             MissileClient missile = (MissileClient)sender;
 
-            if (missile.SData.Name != null)
+            if (missile.SData.Name != null )
             {
                 if (missile.SData.Name == "AhriOrbMissile" || missile.SData.Name == "AhriOrbReturn")
                 {
@@ -135,7 +135,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 SetMana();
                 Jungle();
             }
-
+            
             if (E.IsReady() && Config.Item("autoE", true).GetValue<bool>())
                 LogicE();
             if (Program.LagFree(2) && W.IsReady() && Config.Item("autoW", true).GetValue<bool>())
@@ -221,7 +221,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             else if (Program.LaneClear && QMissile == null && (Player.ManaPercent > Config.Item("Mana", true).GetValue<Slider>().Value && Config.Item("farmW", true).GetValue<bool>() && Player.Mana > RMANA + WMANA))
             {
                 var minionList = Cache.GetMinions(Player.ServerPosition, W.Range, MinionTeam.Enemy);
-                foreach (var minion in minionList.Where(minion => minion.Health < W.GetDamage(minion)))
+                foreach (var minion in minionList.Where(minion =>  minion.Health < W.GetDamage(minion)))
                 {
                     W.Cast();
                 }
@@ -236,10 +236,10 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 missileManager.Target = t;
                 if (EMissile == null || !EMissile.IsValid)
                 {
-
+                    
                     if (Program.Combo && Player.Mana > RMANA + QMANA)
                         Program.CastSpell(Q, t);
-                    else if (Program.Farm && Player.Mana > RMANA + WMANA + QMANA + QMANA && Config.Item("harrasQ", true).GetValue<bool>() && Config.Item("harras" + t.ChampionName).GetValue<bool>() && OktwCommon.CanHarras())
+                    else if (Program.Farm  && Player.Mana > RMANA + WMANA + QMANA + QMANA && Config.Item("harrasQ", true).GetValue<bool>() && Config.Item("harras" + t.ChampionName).GetValue<bool>() && OktwCommon.CanHarras())
                         Program.CastSpell(Q, t);
                     else if (Q.GetDamage(t) * 2 + OktwCommon.GetEchoLudenDamage(t) > t.Health - OktwCommon.GetIncomingDamage(t))
                         Q.Cast(t, true);
@@ -268,13 +268,13 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             var t = Orbwalker.GetTarget() as AIHeroClient;
             if (!t.IsValidTarget())
                 t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-            if (t.IsValidTarget())
+            if (t.IsValidTarget() )
             {
                 if (Program.Combo && Player.Mana > RMANA + EMANA && Config.Item("Eon" + t.ChampionName, true).GetValue<bool>())
                     Program.CastSpell(E, t);
                 else if (Program.Farm && Config.Item("harrasE", true).GetValue<bool>() && Config.Item("harras" + t.ChampionName).GetValue<bool>() && Player.Mana > RMANA + EMANA + WMANA + EMANA)
                     Program.CastSpell(E, t);
-                else if (OktwCommon.GetKsDamage(t, E) > t.Health)
+                else if (OktwCommon.GetKsDamage(t, E) > t.Health )
                     Program.CastSpell(E, t);
                 if (Player.Mana > RMANA + EMANA)
                 {

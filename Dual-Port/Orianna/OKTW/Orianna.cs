@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using SebbyLib;
-using EloBuddy;
 
-namespace OneKeyToWin_AIO_Sebby
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace OneKeyToWin_AIO_Sebby
 {
     class Orianna
     {
@@ -356,14 +357,13 @@ namespace OneKeyToWin_AIO_Sebby
         {
             float distance = Vector3.Distance(BallPos, target.ServerPosition);
             
-
             if (E.IsReady() && Player.Mana > RMANA + QMANA + WMANA + EMANA && distance > Player.Distance(target.ServerPosition) + 300)
             {
                 E.CastOnUnit(Player);
                 return;
             }
 
-            if (Config.Item("PredictionMODE", true).GetValue<StringList>().SelectedIndex == 1)
+            if (Config.Item("Qpred", true).GetValue<StringList>().SelectedIndex == 1)
             {
                 //var prepos5 = Core.Prediction.GetPrediction(target, delay, Q.Width);
 
@@ -381,7 +381,7 @@ namespace OneKeyToWin_AIO_Sebby
                 };
                 var prepos5 = SebbyLib.Prediction.Prediction.GetPrediction(predInput2);
 
-                if ((int)prepos5.Hitchance > 5 - Config.Item("HitChance", true).GetValue<StringList>().SelectedIndex)
+                if ((int)prepos5.Hitchance > 5 - Config.Item("QHitChance", true).GetValue<StringList>().SelectedIndex)
                 {
                     if (prepos5.CastPosition.Distance(prepos5.CastPosition) < Q.Range)
                     {
@@ -394,7 +394,7 @@ namespace OneKeyToWin_AIO_Sebby
                 float delay = (distance / Q.Speed + Q.Delay);
                 var prepos = Prediction.GetPrediction(target, delay, Q.Width);
 
-                if ((int)prepos.Hitchance > 5 - Config.Item("HitChance", true).GetValue<StringList>().SelectedIndex)
+                if ((int)prepos.Hitchance > 5 - Config.Item("QHitChance", true).GetValue<StringList>().SelectedIndex)
                 {
                     if (prepos.CastPosition.Distance(prepos.CastPosition) < Q.Range)
                     {

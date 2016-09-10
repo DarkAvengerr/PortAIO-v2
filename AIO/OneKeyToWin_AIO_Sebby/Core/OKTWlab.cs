@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using EloBuddy;
 
-namespace OneKeyToWin_AIO_Sebby.Core
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace OneKeyToWin_AIO_Sebby.Core
 {
     class OKTWlab
     {
@@ -156,7 +157,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
             if (obj != null &&  obj.IsValid)
             {
-                //Utility.DrawCircle(obj.Position, 100, System.Drawing.Color.Orange, 1, 1);
+                //LeagueSharp.Common.Utility.DrawCircle(obj.Position, 100, System.Drawing.Color.Orange, 1, 1);
             }
         }
 

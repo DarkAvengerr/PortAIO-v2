@@ -420,7 +420,7 @@ namespace SebbyLib.Prediction
             if (distanceUnitToWaypoint > 0)
             {
                 // RUN IN LANE DETECTION /////////////////////////////////////////////////////////////////////////////////// 
-                if (getAngle < 20 || getAngle > 160 || (getAngle > 130 && distanceUnitToWaypoint > 400) )
+                if (getAngle < 20 || getAngle > 160 || (getAngle > 130 && distanceUnitToWaypoint > 400) || OktwCommon.IsMovingInSameDirection(ObjectManager.Player, input.Unit))
                 {
                     OktwCommon.debug("PRED: ANGLE " + getAngle);
                     result.Hitchance = HitChance.VeryHigh;

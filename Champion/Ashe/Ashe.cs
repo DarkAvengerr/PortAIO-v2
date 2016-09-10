@@ -1,13 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using SebbyLib;
-using EloBuddy;
 
-namespace OneKeyToWin_AIO_Sebby
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace OneKeyToWin_AIO_Sebby
 {
     class Ashe
     {
@@ -72,10 +73,15 @@ namespace OneKeyToWin_AIO_Sebby
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            SebbyLib.Orbwalking.BeforeAttack += BeforeAttack;
+            SebbyLib.Orbwalking.AfterAttack += Orbwalking_AfterAttack; ;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget +=Interrupter2_OnInterruptableTarget;
             Game.OnWndProc += Game_OnWndProc;
+        }
+
+        private void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
+        {
+            LogicQ();
         }
 
         private void Game_OnWndProc(WndEventArgs args)
@@ -105,10 +111,6 @@ namespace OneKeyToWin_AIO_Sebby
             }
         }
 
-        private void BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
-        {
-            LogicQ();
-        }
 
         private void Game_OnUpdate(EventArgs args)
         {

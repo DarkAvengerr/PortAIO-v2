@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using SebbyLib;
-using EloBuddy;
 
-namespace OneKeyToWin_AIO_Sebby
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace OneKeyToWin_AIO_Sebby
 {
     class Sivir
     {
@@ -68,6 +69,7 @@ namespace OneKeyToWin_AIO_Sebby
             Config.SubMenu(Player.ChampionName).AddItem(new MenuItem("autoR", "Auto R", true).SetValue(true));
 
             Config.SubMenu(Player.ChampionName).SubMenu("E Shield Config").AddItem(new MenuItem("autoE", "Auto E", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("E Shield Config").AddItem(new MenuItem("autoEmissile", "Block unknown missile", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("E Shield Config").AddItem(new MenuItem("AGC", "AntiGapcloserE", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("E Shield Config").AddItem(new MenuItem("Edmg", "Block under % hp", true).SetValue(new Slider(90, 100, 0)));
 
@@ -76,6 +78,20 @@ namespace OneKeyToWin_AIO_Sebby
             SebbyLib.Orbwalking.AfterAttack += Orbwalker_AfterAttack;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
+            GameObject.OnCreate += GameObject_OnCreate;
+        }
+
+        private void GameObject_OnCreate(GameObject sender, EventArgs args)
+        {
+            var missile = sender as MissileClient;
+
+            if(missile != null && Config.Item("autoEmissile", true).GetValue<bool>())
+            {
+                if(!missile.SData.IsAutoAttack() && missile.Target == Player && missile.SpellCaster.IsEnemy && missile.SpellCaster.IsChampion())
+                {
+                    E.Cast();
+                }
+            }
         }
 
         public void Orbwalker_AfterAttack(AttackableUnit unit, AttackableUnit target)

@@ -240,7 +240,29 @@ namespace SebbyLib
 
             return Vector3.Zero;
         }
-        
+
+        public static bool IsMovingInSameDirection(Obj_AI_Base source, Obj_AI_Base target)
+        {
+            var sourceLW = source.GetWaypoints().Last().To3D();
+
+            if (sourceLW == source.Position || !source.IsMoving)
+                return false;
+
+            var targetLW = target.GetWaypoints().Last().To3D();
+
+            if (targetLW == target.Position || !target.IsMoving)
+                return false;
+
+            Vector2 pos1 = sourceLW.To2D() - source.Position.To2D();
+            Vector2 pos2 = targetLW.To2D() - target.Position.To2D();
+            var getAngle = pos1.AngleBetween(pos2);
+
+            if (getAngle < 25)
+                return true;
+            else
+                return false;
+        }
+
         public static bool CollisionYasuo(Vector3 from, Vector3 to)
         {
             if (!YasuoInGame)

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using EloBuddy;
 
-namespace OneKeyToWin_AIO_Sebby.Core
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace OneKeyToWin_AIO_Sebby.Core
 {
     class HiddenObj
     {
@@ -98,7 +99,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
         private void AutoWardLogic()
         {
-            foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValid && (!enemy.IsVisible || !enemy.IsHPBarRendered) && !enemy.IsDead))
+            foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValid && !enemy.IsVisible && !enemy.IsDead))
             {
                 var need = OKTWtracker.ChampionInfoList.Find(x => x.NetworkId == enemy.NetworkId);
 
@@ -137,6 +138,10 @@ namespace OneKeyToWin_AIO_Sebby.Core
                     if (!Player.Spellbook.IsAutoAttacking && PPDistance < 800 && Player.ChampionName == "Caitlyn" && W.IsReady() && Player.Mana > 200f && Config.Item("bushW", true).GetValue<bool>() && Utils.TickCount - W.LastCastAttemptT > 2000)
                     {
                         W.Cast(need.PredictedPos);
+                    }
+                    if (!Player.Spellbook.IsAutoAttacking && PPDistance < 150 + R.Level * 250 && Player.ChampionName == "Teemo" && R.IsReady() && Player.Mana > 200f && Config.Item("bushR", true).GetValue<bool>() && Utils.TickCount - W.LastCastAttemptT > 2000)
+                    {
+                        R.Cast(need.PredictedPos);
                     }
                     if (!Player.Spellbook.IsAutoAttacking && PPDistance < 760 && Player.ChampionName == "Jhin" && E.IsReady() && Player.Mana > 200f && Config.Item("bushE", true).GetValue<bool>() && Utils.TickCount - E.LastCastAttemptT > 2000)
                     {

@@ -1,13 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
 
-namespace OneKeyToWin_AIO_Sebby.Core
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace OneKeyToWin_AIO_Sebby.Core
 {
     static class PredictionAio
     {
@@ -15,7 +16,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
         static AIHeroClient Player { get { return ObjectManager.Player; } }
 
 
-        internal static void CCast(this Spell spell, Obj_AI_Base target, HitChance SelectedHitchance) //for Circular spells
+        internal static void CCast(this Spell spell, Obj_AI_Base target , HitChance SelectedHitchance) //for Circular spells
         {
             if (spell.Type == SkillshotType.SkillshotCircle || spell.Type == SkillshotType.SkillshotCone) // Cone 스킬은 임시로
             {
@@ -137,6 +138,6 @@ namespace OneKeyToWin_AIO_Sebby.Core
         }
 
 
-
+        
     }
 }

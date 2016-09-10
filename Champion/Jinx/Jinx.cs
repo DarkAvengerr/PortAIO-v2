@@ -1,13 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using SebbyLib;
-using EloBuddy;
 
-namespace OneKeyToWin_AIO_Sebby
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace OneKeyToWin_AIO_Sebby
 {
 
     class Jinx
@@ -112,12 +113,8 @@ namespace OneKeyToWin_AIO_Sebby
             {
                 var Target = gapcloser.Sender;
                 if (Target.IsValidTarget(E.Range))
-                {
                     E.Cast(gapcloser.End);
-                }
-                return;
             }
-            return;
         }
 
         private void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base unit, GameObjectProcessSpellCastEventArgs args)
@@ -265,7 +262,7 @@ namespace OneKeyToWin_AIO_Sebby
         {
             if (Player.Mana > RMANA + EMANA && Config.Item("autoE", true).GetValue<bool>() && Game.Time - grabTime > 1)
             {
-                foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(E.Range) && !OktwCommon.CanMove(enemy)))
+                foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(E.Range + 50) && !OktwCommon.CanMove(enemy)))
                 {
                     E.Cast(enemy);
                     return;
@@ -283,29 +280,15 @@ namespace OneKeyToWin_AIO_Sebby
                 if (Program.Combo && Player.IsMoving && Config.Item("comboE", true).GetValue<bool>() && Player.Mana > RMANA + EMANA + WMANA)
                 {
                     var t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-                    if (t.IsValidTarget(E.Range) && E.GetPrediction(t).CastPosition.Distance(t.Position) > 200 && (int)E.GetPrediction(t).Hitchance == 5)
+                    if (t.IsValidTarget(E.Range) && E.GetPrediction(t).CastPosition.Distance(t.Position) > 200 )
                     {
                         E.CastIfWillHit(t, 2);
                         if (t.HasBuffOfType(BuffType.Slow))
                         {
                             Program.CastSpell(E, t);
                         }
-                        else
-                        {
-                            if (E.GetPrediction(t).CastPosition.Distance(t.Position) > 200)
-                            {
-                                if (Player.Position.Distance(t.ServerPosition) > Player.Position.Distance(t.Position))
-                                {
-                                    if (t.Position.Distance(Player.ServerPosition) < t.Position.Distance(Player.Position))
-                                        Program.CastSpell(E, t);
-                                }
-                                else
-                                {
-                                    if (t.Position.Distance(Player.ServerPosition) > t.Position.Distance(Player.Position))
-                                        Program.CastSpell(E, t);
-                                }
-                            }
-                        }
+                        if (OktwCommon.IsMovingInSameDirection(Player, t))
+                            Program.CastSpell(E, t);
                     }
                 }
             }

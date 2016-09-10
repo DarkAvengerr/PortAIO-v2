@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SebbyLib;
-using EloBuddy;
 
-namespace OneKeyToWin_AIO_Sebby
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace OneKeyToWin_AIO_Sebby
 {
     class Anivia
     {
@@ -16,7 +17,7 @@ namespace OneKeyToWin_AIO_Sebby
         private float RCastTime = 0;
         private int Rwidth = 400;
         private static GameObject QMissile, RMissile;
-        private AIHeroClient Player { get { return ObjectManager.Player; } }
+        private AIHeroClient Player {get{return ObjectManager.Player;}}
 
         public void LoadOKTW()
         {
@@ -98,7 +99,7 @@ namespace OneKeyToWin_AIO_Sebby
             Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("jungleW", "Jungle clear W", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("jungleE", "Jungle clear E", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("jungleR", "Jungle clear R", true).SetValue(true));
-
+            
 
             Config.SubMenu(Player.ChampionName).AddItem(new MenuItem("AACombo", "Disable AA if can use E", true).SetValue(true));
         }
@@ -145,7 +146,7 @@ namespace OneKeyToWin_AIO_Sebby
 
             if (Q.IsReady() && QMissile != null && QMissile.Position.CountEnemiesInRange(230) > 0)
                 Q.Cast();
-
+            
 
             if (Program.LagFree(0))
             {
@@ -161,9 +162,9 @@ namespace OneKeyToWin_AIO_Sebby
             if (Program.LagFree(3) && Q.IsReady() && QMissile == null && Config.Item("autoQ", true).GetValue<bool>())
                 LogicQ();
 
-            if (Program.LagFree(4))
+            if (Program.LagFree(4) )
             {
-                if (E.IsReady() && Config.Item("autoE", true).GetValue<bool>())
+                if(E.IsReady() && Config.Item("autoE", true).GetValue<bool>())
                     LogicE();
 
                 Jungle();
@@ -183,7 +184,7 @@ namespace OneKeyToWin_AIO_Sebby
                 }
                 else
                 {
-                    var qDmg = OktwCommon.GetKsDamage(t, Q);
+                    var qDmg = OktwCommon.GetKsDamage(t,Q);
                     var eDmg = E.GetDamage(t);
                     if (qDmg > t.Health)
                         Program.CastSpell(Q, t);
@@ -218,7 +219,7 @@ namespace OneKeyToWin_AIO_Sebby
                 }
             }
         }
-
+        
         private void LogicE()
         {
             var t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
@@ -233,7 +234,7 @@ namespace OneKeyToWin_AIO_Sebby
 
                 if (eDmg > t.Health)
                     E.Cast(t, true);
-
+                
                 if (t.HasBuff("chilled") || qCd > E.Instance.Cooldown - 1 && rCd > E.Instance.Cooldown - 1)
                 {
                     if (eDmg * 3 > t.Health)
@@ -242,12 +243,12 @@ namespace OneKeyToWin_AIO_Sebby
                     {
                         E.Cast(t, true);
                     }
-                    else if (Program.Farm && Player.Mana > RMANA + EMANA + QMANA + WMANA && !Player.UnderTurret(true) && QMissile == null)
+                    else if ( Program.Farm && Player.Mana > RMANA + EMANA + QMANA + WMANA && !Player.UnderTurret(true) && QMissile == null)
                     {
                         E.Cast(t, true);
                     }
                 }
-                else if (Program.Combo && R.IsReady() && Player.Mana > RMANA + EMANA && QMissile == null)
+                else if (Program.Combo && R.IsReady() && Player.Mana > RMANA + EMANA && QMissile == null )
                 {
                     R.Cast(t, true, true);
                 }
@@ -315,7 +316,7 @@ namespace OneKeyToWin_AIO_Sebby
                         R.Cast();
 
                 }
-                else if (!Program.None && (RMissile.Position.CountEnemiesInRange(470) == 0 || Player.Mana < EMANA + QMANA))
+                else if (!Program.None &&(RMissile.Position.CountEnemiesInRange(470) == 0 || Player.Mana < EMANA + QMANA))
                 {
                     R.Cast();
                 }
@@ -341,7 +342,7 @@ namespace OneKeyToWin_AIO_Sebby
                         {
                             Q.Cast(mob.ServerPosition);
                         }
-
+                        
                         return;
                     }
                     if (R.IsReady() && Config.Item("jungleR", true).GetValue<bool>() && RMissile == null)
@@ -356,7 +357,7 @@ namespace OneKeyToWin_AIO_Sebby
                     }
                     if (W.IsReady() && Config.Item("jungleW", true).GetValue<bool>())
                     {
-                        W.Cast(mob.Position.Extend(Player.Position, 100));
+                        W.Cast(mob.Position.Extend(Player.Position , 100));
                         return;
                     }
                 }
@@ -365,7 +366,7 @@ namespace OneKeyToWin_AIO_Sebby
 
         private void SetMana()
         {
-            if ((Config.Item("manaDisable", true).GetValue<bool>() && Program.Combo) || Player.HealthPercent < 20)
+            if ((Config.Item("manaDisable", true).GetValue<bool>() && Program.Combo) || Player.HealthPercent < 20 )
             {
                 QMANA = 0;
                 WMANA = 0;

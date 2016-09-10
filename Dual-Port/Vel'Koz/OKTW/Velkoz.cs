@@ -1,13 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using SebbyLib;
-using EloBuddy;
 
-namespace OneKeyToWin_AIO_Sebby.Champions
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace OneKeyToWin_AIO_Sebby.Champions
 {
     class Velkoz
     {
@@ -357,7 +358,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (point.Distance(Player.Position.Extend(finalPos, radius)) < 430)
                 {
                     points.Add(point);
-                    //Utility.DrawCircle(point, 20, System.Drawing.Color.Aqua, 1, 1);
+                    //LeagueSharp.Common.Utility.DrawCircle(point, 20, System.Drawing.Color.Aqua, 1, 1);
                 }
             }
 
@@ -458,7 +459,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void Drawing_OnDraw(EventArgs args)
         {
-            //Utility.DrawCircle(Game.CursorPos, E.Width, System.Drawing.Color.Cyan, 1, 1);
+            //LeagueSharp.Common.Utility.DrawCircle(Game.CursorPos, E.Width, System.Drawing.Color.Cyan, 1, 1);
             if (Config.Item("qRange", true).GetValue<bool>())
             {
                 if (Config.Item("onlyRdy", true).GetValue<bool>())

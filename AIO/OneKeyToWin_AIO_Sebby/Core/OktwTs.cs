@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using EloBuddy;
 
-namespace OneKeyToWin_AIO_Sebby.Core
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace OneKeyToWin_AIO_Sebby.Core
 {
     class OktwTs
     {
@@ -124,7 +125,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
                 {
                     var aaRange = Player.AttackRange + Player.BoundingRadius + Config.Item("extraRang").GetValue<Slider>().Value;
 
-                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(aaRange) && enemy.IsVisible))
+                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(aaRange)))
                     {
                         if (enemy.Health / Player.GetAutoAttackDamage(enemy) + 1 < forceFocusEnemy.Health / Player.GetAutoAttackDamage(forceFocusEnemy))
                         {
@@ -159,7 +160,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
                 if (Config.Item("TsAa").GetValue<StringList>().SelectedIndex == 0)
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget() && enemy.IsVisible && enemy.IsTargetable && enemy.IsHPBarRendered && Orbwalker.InAutoAttackRange(enemy)))
+                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget() && Orbwalker.InAutoAttackRange(enemy)))
                     {
                         if (enemy.Health / Player.GetAutoAttackDamage(enemy) < hitToBestTarget)
                         {
@@ -169,7 +170,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
                 }
                 else
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget() && enemy.IsVisible && enemy.IsTargetable && enemy.IsHPBarRendered && Orbwalker.InAutoAttackRange(enemy)))
+                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget() && Orbwalker.InAutoAttackRange(enemy)))
                     {
 
                         if(enemy.Health / Player.GetAutoAttackDamage(enemy) < 3)

@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SebbyLib;
-using EloBuddy;
 
-namespace OneKeyToWin_AIO_Sebby
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace OneKeyToWin_AIO_Sebby
 {
     class Annie
     {
@@ -28,7 +29,7 @@ namespace OneKeyToWin_AIO_Sebby
             W = new Spell(SpellSlot.W, 550f);
             E = new Spell(SpellSlot.E);
             R = new Spell(SpellSlot.R, 625f);
-            FR = new Spell(SpellSlot.R, 1000f);
+            FR = new Spell(SpellSlot.R, 1000f );
 
             Q.SetTargetted(0.25f, 1400f);
             W.SetSkillshot(0.3f, 80f, float.MaxValue, false, SkillshotType.SkillshotLine);
@@ -51,7 +52,7 @@ namespace OneKeyToWin_AIO_Sebby
             Config.SubMenu(Player.ChampionName).SubMenu("E Config").AddItem(new MenuItem("autoE", "Auto E stack stun", true).SetValue(true));
 
             foreach (var enemy in HeroManager.Enemies)
-                Config.SubMenu(Player.ChampionName).SubMenu("R Config").SubMenu("Ultimate Manager").AddItem(new MenuItem("UM" + enemy.ChampionName, enemy.ChampionName, true).SetValue(new StringList(new[] { "Normal", "Always", "Never", "Always Stun" }, 0)));
+                Config.SubMenu(Player.ChampionName).SubMenu("R Config").SubMenu("Ultimate Manager").AddItem(new MenuItem("UM" + enemy.ChampionName, enemy.ChampionName, true).SetValue(new StringList(new[] { "Normal", "Always", "Never", "Always Stun"}, 0)));
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("autoRks", "Auto R KS", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("autoRcombo", "Auto R Combo if stun is ready", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("rCount", "Auto R x enemies", true).SetValue(new Slider(3, 2, 5)));
@@ -75,7 +76,7 @@ namespace OneKeyToWin_AIO_Sebby
         {
             if (obj.IsValid && obj.IsAlly && obj is Obj_AI_Minion && obj.Name.ToLower() == "tibbers")
             {
-                Tibbers = obj as Obj_AI_Base;
+                Tibbers = obj as Obj_AI_Base ;
             }
         }
 
@@ -131,7 +132,7 @@ namespace OneKeyToWin_AIO_Sebby
                                 R.Cast(poutput.CastPosition);
                         }
                     }
-                    else if (HaveStun && flash.IsReady())
+                    else if(HaveStun && flash.IsReady())
                     {
                         var poutputFlas = FR.GetPrediction(enemy, true);
                         var aoeCountFlash = poutputFlas.AoeTargetsHitCount;
@@ -183,7 +184,7 @@ namespace OneKeyToWin_AIO_Sebby
                     }
                 }
             }
-            else if (Q.IsReady() || W.IsReady())
+            else if(Q.IsReady() || W.IsReady())
             {
                 if (Config.Item("farmQ", true).GetValue<bool>())
                 {
@@ -214,7 +215,7 @@ namespace OneKeyToWin_AIO_Sebby
                     if (Config.Item("tibers", true).GetValue<bool>() && HaveTibers && Tibbers != null && Tibbers.IsValid)
                     {
                         var enemy = HeroManager.Enemies.Where(x => x.IsValidTarget() && Tibbers.Distance(x.Position) < 1000 && !x.UnderTurret(true)).OrderBy(x => x.Distance(Tibbers)).FirstOrDefault();
-                        if (enemy != null)
+                        if(enemy != null)
                         {
 
                             if (Tibbers.Distance(enemy.Position) > 200)
@@ -248,8 +249,8 @@ namespace OneKeyToWin_AIO_Sebby
 
         private void farm()
         {
-            if (Program.LaneClear)
-            {
+            if(Program.LaneClear)
+            { 
                 var mobs = Cache.GetMinions(Player.ServerPosition, Q.Range, MinionTeam.Neutral);
                 if (mobs.Count > 0)
                 {
@@ -297,7 +298,7 @@ namespace OneKeyToWin_AIO_Sebby
 
             if (!R.IsReady() || HaveTibers)
                 RMANA = 0;
-            else
+            else 
                 RMANA = R.Instance.SData.Mana;
         }
 

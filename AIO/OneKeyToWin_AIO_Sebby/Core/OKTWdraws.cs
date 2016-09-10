@@ -1,11 +1,13 @@
-﻿using System;
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using SharpDX.Direct3D9;
 using SebbyLib;
+
 using EloBuddy;
+using LeagueSharp.Common;
 using PortAIO.AIO.OneKeyToWin_AIO_Sebby;
 
 namespace OneKeyToWin_AIO_Sebby.Core
@@ -17,7 +19,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
         private AIHeroClient Player { get { return ObjectManager.Player; } }
         public Spell Q, W, E, R, DrawSpell;
         public static Font Tahoma13, Tahoma13B, TextBold;
-        private float spellFarmTimer = 0, IntroTimer = Game.Time;
+        private float IntroTimer = Game.Time;
         private Render.Sprite Intro;
 
         public void LoadOKTW()
@@ -49,15 +51,6 @@ namespace OneKeyToWin_AIO_Sebby.Core
             Config.SubMenu("Utility, Draws OKTW©").AddItem(new MenuItem("showWards", "Show hidden objects, wards").SetValue(true));
             Config.SubMenu("Utility, Draws OKTW©").AddItem(new MenuItem("minimap", "Mini-map hack").SetValue(true));
 
-            if (Program.AIOmode != 2)
-            {
-                Config.SubMenu(Player.ChampionName).SubMenu("Farm").SubMenu("SPELLS FARM TOGGLE").AddItem(new MenuItem("spellFarm", "OKTW spells farm").SetValue(true)).Show();
-                Config.SubMenu(Player.ChampionName).SubMenu("Farm").SubMenu("SPELLS FARM TOGGLE").AddItem(new MenuItem("spellFarmMode", "SPELLS FARM TOGGLE MODE").SetValue(new StringList(new[] { "Scroll down", "Scroll press", "Key toggle", "Disable" }, 1)));
-                Config.SubMenu(Player.ChampionName).SubMenu("Farm").SubMenu("SPELLS FARM TOGGLE").AddItem(new MenuItem("spellFarmKeyToggle", "Key toggle").SetValue(new KeyBind("N".ToCharArray()[0], KeyBindType.Toggle)));
-                Config.SubMenu(Player.ChampionName).SubMenu("Farm").SubMenu("SPELLS FARM TOGGLE").AddItem(new MenuItem("showNot", "Show notification").SetValue(true));
-                Config.Item("spellFarm").Permashow(true);
-            }
-
             Tahoma13B = new Font( Drawing.Direct3DDevice, new FontDescription
                { FaceName = "Tahoma", Height = 14, Weight = FontWeight.Bold, OutputPrecision = FontPrecision.Default, Quality = FontQuality.ClearType });
 
@@ -72,100 +65,8 @@ namespace OneKeyToWin_AIO_Sebby.Core
             W = new Spell(SpellSlot.W);
             R = new Spell(SpellSlot.R);
 
-            Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += OnDraw;
             Drawing.OnEndScene += Drawing_OnEndScene;
-            Game.OnWndProc += Game_OnWndProc;
-
-        }
-
-        private void Game_OnWndProc(WndEventArgs args)
-        {
-            if (Program.AIOmode == 2)
-                return;
-            if (Config.Item("spellFarm") == null || Config.Item("spellFarmMode").GetValue<StringList>().SelectedIndex == 3)
-            return;
-
-            if ((Config.Item("spellFarmMode").GetValue<StringList>().SelectedIndex == 0 && args.Msg == 0x20a)
-                || (Config.Item("spellFarmMode").GetValue<StringList>().SelectedIndex == 1 && args.Msg == 520)
-                )
-            {
-                if (!Config.Item("spellFarm").GetValue<bool>())
-                {
-                    Config.Item("spellFarm").SetValue<bool>(true);
-                    spellFarmTimer = Game.Time;
-
-                    if(Config.Item("farmQ", true) != null)
-                        Config.Item("farmQ", true).SetValue<bool>(true);
-
-                    if (Config.Item("farmW", true) != null)
-                        Config.Item("farmW", true).SetValue<bool>(true);
-
-                    if (Config.Item("farmE", true) != null)
-                        Config.Item("farmE", true).SetValue<bool>(true);
-
-                    if (Config.Item("farmR", true) != null)
-                        Config.Item("farmR", true).SetValue<bool>(true);
-                }
-                else
-                {
-                    Config.Item("spellFarm").SetValue<bool>(false);
-                    spellFarmTimer = Game.Time;
-
-                    if (Config.Item("farmQ", true) != null)
-                        Config.Item("farmQ", true).SetValue<bool>(false);
-
-                    if (Config.Item("farmW", true) != null)
-                        Config.Item("farmW", true).SetValue<bool>(false);
-
-                    if (Config.Item("farmE", true) != null)
-                        Config.Item("farmE", true).SetValue<bool>(false);
-
-                    if (Config.Item("farmR", true) != null)
-                        Config.Item("farmR", true).SetValue<bool>(false);
-                }
-            }
-        }
-
-        private void Game_OnUpdate(EventArgs args)
-        {
-            if (Program.LagFree(0) && Program.AIOmode != 2 && Config.Item("spellFarmMode").GetValue<StringList>().SelectedIndex != 3 && Config.Item("spellFarm") != null && Config.Item("spellFarmMode").GetValue<StringList>().SelectedIndex == 2 && Config.Item("spellFarmKeyToggle").GetValue<KeyBind>().Active != Config.Item("spellFarm").GetValue<bool>())
-            {
-                if (Config.Item("spellFarmKeyToggle").GetValue<KeyBind>().Active )
-                {
-                    Config.Item("spellFarm").SetValue<bool>(true);
-                    spellFarmTimer = Game.Time;
-
-                    if (Config.Item("farmQ", true) != null)
-                        Config.Item("farmQ", true).SetValue<bool>(true);
-
-                    if (Config.Item("farmW", true) != null)
-                        Config.Item("farmW", true).SetValue<bool>(true);
-
-                    if (Config.Item("farmE", true) != null)
-                        Config.Item("farmE", true).SetValue<bool>(true);
-
-                    if (Config.Item("farmR", true) != null)
-                        Config.Item("farmR", true).SetValue<bool>(true);
-                }
-                else
-                {
-                    Config.Item("spellFarm").SetValue<bool>(false);
-                    spellFarmTimer = Game.Time;
-
-                    if (Config.Item("farmQ", true) != null)
-                        Config.Item("farmQ", true).SetValue<bool>(false);
-
-                    if (Config.Item("farmW", true) != null)
-                        Config.Item("farmW", true).SetValue<bool>(false);
-
-                    if (Config.Item("farmE", true) != null)
-                        Config.Item("farmE", true).SetValue<bool>(false);
-
-                    if (Config.Item("farmR", true) != null)
-                        Config.Item("farmR", true).SetValue<bool>(false);
-                }
-            }
         }
 
         private static System.Drawing.Bitmap LoadImg(string imgName)
@@ -205,7 +106,6 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
         private void Drawing_OnEndScene(EventArgs args)
         {
-            return;
             if (Config.Item("minimap").GetValue<bool>())
             {
                 foreach (var enemy in HeroManager.Enemies)
@@ -215,7 +115,6 @@ namespace OneKeyToWin_AIO_Sebby.Core
                         var ChampionInfoOne = Core.OKTWtracker.ChampionInfoList.Find(x => x.NetworkId == enemy.NetworkId);
                         if (ChampionInfoOne != null)
                         {
-                            Console.WriteLine("WE got something.");
                             var wts = Drawing.WorldToMinimap(ChampionInfoOne.LastVisablePos);
                             DrawFontTextScreen(Tahoma13, enemy.ChampionName[0].ToString() + enemy.ChampionName[1].ToString(), wts[0], wts[1], Color.Yellow);
                         }
@@ -246,7 +145,6 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
         private void OnDraw(EventArgs args)
         {
-           
             if (Config.Item("disableDraws").GetValue<bool>())
                 return;
 
@@ -273,15 +171,6 @@ namespace OneKeyToWin_AIO_Sebby.Core
                     }
                 }
             }
-
-            if (Program.AIOmode != 2 && spellFarmTimer + 1 > Game.Time && Config.Item("showNot").GetValue<bool>() && Config.Item("spellFarm") != null )
-            {
-                if (Config.Item("spellFarm").GetValue<bool>())
-                    DrawFontTextScreen(TextBold, "SPELLS FARM ON", Drawing.Width * 0.5f, Drawing.Height * 0.4f, SharpDX.Color.GreenYellow);
-                else
-                    DrawFontTextScreen(TextBold, "SPELLS FARM OFF", Drawing.Width * 0.5f , Drawing.Height * 0.4f, SharpDX.Color.OrangeRed);
-            }
-            
 
             bool blink = true;
 
@@ -312,7 +201,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
                 if (Config.Item("SS").GetValue<bool>())
                 {
-                    if (!enemy.IsVisible && !enemy.IsDead && !enemy.IsHPBarRendered && !enemy.IsTargetable)
+                    if (!enemy.IsVisible && !enemy.IsDead)
                     {
                         var ChampionInfoOne = OKTWtracker.ChampionInfoList.Find(x => x.NetworkId == enemy.NetworkId);
                         if (ChampionInfoOne != null && enemy != Program.jungler)
@@ -329,7 +218,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
                     }
                 }
                 
-                if (enemy.IsValidTarget() && enemy.IsVisible && enemy.IsHPBarRendered && ShowClicks)
+                if (enemy.IsValidTarget() && ShowClicks)
                 {
                     var lastWaypoint = enemy.GetWaypoints().Last().To3D();
                     if (lastWaypoint.IsValid())
@@ -397,7 +286,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
                 if (enemy.IsDead)
                     kolor = System.Drawing.Color.Gray;
-                else if (!enemy.IsVisible && !enemy.IsHPBarRendered)
+                else if (!enemy.IsVisible)
                     kolor = System.Drawing.Color.OrangeRed;
 
                 var kolorHP = System.Drawing.Color.GreenYellow;
@@ -495,16 +384,8 @@ namespace OneKeyToWin_AIO_Sebby.Core
                     //Drawing.DrawText(posX - 70, posY + positionDraw, kolor, enemy.Level + " lvl");
                 }
 
-                // something after this causes crash
-
-                if (enemy == null)
-                {
-                    continue;
-                }
-
-                /*
                 var Distance = Player.Distance(enemy.Position);
-                if (GankAlert && !enemy.IsDead && enemy.IsHPBarRendered && enemy.IsVisible && Distance > 1200)
+                if (GankAlert && !enemy.IsDead && Distance > 1200)
                 {
                     var wts = Drawing.WorldToScreen(ObjectManager.Player.Position.Extend(enemy.Position, positionGang));
 
@@ -517,14 +398,16 @@ namespace OneKeyToWin_AIO_Sebby.Core
                     if ((int)enemy.HealthPercent < 100)
                         Drawing.DrawLine((wts[0] + ((int)enemy.HealthPercent) / 2), wts[1], wts[0] + 50, wts[1], 8, System.Drawing.Color.White);
 
-                    if (enemy.IsVisible && !enemy.IsDead && enemy.IsHPBarRendered)
+                    if (enemy.IsVisible)
                     {
-                        if (Program.jungler.NetworkId == enemy.NetworkId && Program.jungler != ObjectManager.Player)
+                        
+                        if (Program.jungler.NetworkId == enemy.NetworkId)
                         {
                             DrawFontTextMap(Tahoma13B, enemy.ChampionName, Player.Position.Extend(enemy.Position, positionGang), SharpDX.Color.OrangeRed);
                         }
                         else
                             DrawFontTextMap(Tahoma13, enemy.ChampionName, Player.Position.Extend(enemy.Position, positionGang), SharpDX.Color.White);
+
                     }
                     else 
                     {
@@ -545,7 +428,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
                     }
   
 
-                    if (Distance < 3500 && enemy.IsVisible && !enemy.IsDead && enemy.IsHPBarRendered && !Render.OnScreen(Drawing.WorldToScreen(enemy.Position)) && Program.jungler != null)
+                    if (Distance < 3500 && enemy.IsVisible && !Render.OnScreen(Drawing.WorldToScreen(enemy.Position)) && Program.jungler != null)
                     {
                         if (Program.jungler.NetworkId == enemy.NetworkId)
                         {
@@ -570,14 +453,12 @@ namespace OneKeyToWin_AIO_Sebby.Core
                     }
                 }
                 positionGang = positionGang + 100;
-                */
             }
 
             if (Program.AIOmode == 2)
             {
                 Drawing.DrawText(Drawing.Width * 0.2f, Drawing.Height * 1f, System.Drawing.Color.Cyan, "OKTW AIO only utility mode ON");
             }
-
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
@@ -6,9 +6,9 @@ using LeagueSharp.Common;
 using SharpDX;
 using SebbyLib;
 
-using EloBuddy;
-using LeagueSharp.Common;
-namespace OneKeyToWin_AIO_Sebby.Champions
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace OneKeyToWin_AIO_Sebby.Champions
 {
     class Draven
     {
@@ -122,14 +122,14 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             if (Q.IsReady())
             {
                 var buffCount = OktwCommon.GetBuffCount(Player, "dravenspinningattack");
-                if (Config.Item("autoQ", true).GetValue<bool>() && args.Target.IsValid<AIHeroClient>())
+                if (Config.Item("autoQ", true).GetValue<bool>() && args.Target.IsValid<AIHeroClient>()  )
                 {
                     if (buffCount + axeList.Count == 0)
                         Q.Cast();
                     else if (Player.Mana > RMANA + QMANA && buffCount == 0)
                         Q.Cast();
                 }
-                if (Program.Farm && Config.Item("farmQ", true).GetValue<bool>())
+                if (Program.Farm && Config.Item("farmQ", true).GetValue<bool>() )
                 {
                     if (buffCount + axeList.Count == 0 && Player.Mana > RMANA + EMANA + WMANA)
                         Q.Cast();
@@ -182,10 +182,10 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     Orbwalker.ActiveMode = SebbyLib.Orbwalking.OrbwalkingMode.None;
                 }
             }
-
+            
             //Program.debug("" + OktwCommon.GetBuffCount(Player, "dravenspinningattack"));
-
-            if (Program.LagFree(2) && E.IsReady() && Config.Item("autoE", true).GetValue<bool>())
+            
+            if (Program.LagFree(2) && E.IsReady() && Config.Item("autoE", true).GetValue<bool>() )
                 LogicE();
 
             if (Program.LagFree(3) && W.IsReady())
@@ -199,7 +199,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         {
             if (Config.Item("autoW", true).GetValue<bool>() && Program.Combo && Player.Mana > RMANA + EMANA + WMANA + QMANA && Player.CountEnemiesInRange(1000) > 0 && !Player.HasBuff("dravenfurybuff"))
                 W.Cast();
-            else if (Config.Item("slowW", true).GetValue<bool>() && Player.Mana > RMANA + EMANA + WMANA && Player.HasBuffOfType(BuffType.Slow))
+            else if (Config.Item("slowW", true).GetValue<bool>()&& Player.Mana > RMANA + EMANA + WMANA && Player.HasBuffOfType(BuffType.Slow))
                 W.Cast();
         }
 
@@ -214,7 +214,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             var t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
             if (t.IsValidTarget())
             {
-                if (Program.Combo)
+                if (Program.Combo )
                 {
                     if (Player.Mana > RMANA + EMANA)
                     {
@@ -223,8 +223,8 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                         if (Player.Health < Player.MaxHealth * 0.5)
                             Program.CastSpell(E, t);
                     }
-
-                    if (Player.Mana > RMANA + EMANA + QMANA)
+                    
+                    if(Player.Mana > RMANA + EMANA + QMANA)
                         E.CastIfWillHit(t, 2, true);
                 }
                 if (Program.Farm && Config.Item("autoE2", true).GetValue<bool>() && Player.Mana > RMANA + EMANA + WMANA + QMANA)
@@ -258,7 +258,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 foreach (var target in HeroManager.Enemies.Where(target => target.IsValidTarget(R.Range) && OktwCommon.ValidUlt(target) && target.CountAlliesInRange(500) == 0))
                 {
                     float predictedHealth = target.Health - (float)OktwCommon.GetIncomingDamage(target);
-                    double Rdmg = CalculateR(target);
+                    double Rdmg = CalculateR(target) ;
 
                     if (Rdmg * 2 > predictedHealth && Config.Item("Rdmg", true).GetValue<StringList>().SelectedIndex == 1)
                         Rdmg = Rdmg + getRdmg(target);
@@ -275,7 +275,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                         castR(target);
                         Program.debug("R normal");
                     }
-                    else if (Config.Item("Rcc", true).GetValue<bool>() && Rdmg * 2 > predictedHealth && !OktwCommon.CanMove(target) && target.IsValidTarget(E.Range))
+                    else if (Config.Item("Rcc", true).GetValue<bool>() && Rdmg * 2 > predictedHealth && !OktwCommon.CanMove(target) &&  target.IsValidTarget( E.Range))
                     {
                         R.Cast(target);
                         Program.debug("R normal");
@@ -372,7 +372,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 Orbwalker.SetOrbwalkingPoint(Game.CursorPos);
                 return;
             }
-
+            
             if (axeList.Count == 1)
             {
                 CatchAxe(axeList.First());
@@ -460,7 +460,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (Player.HasBuff("dravenspinningattack"))
                 {
                     var BuffTime = OktwCommon.GetPassiveTime(Player, "dravenspinningattack");
-                    if (BuffTime < 2)
+                    if (BuffTime < 2 )
                     {
                         if ((int)(Game.Time * 10) % 2 == 0)
                         {
@@ -491,7 +491,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             if (Config.Item("qCatchRange", true).GetValue<bool>())
                 LeagueSharp.Common.Utility.DrawCircle(Game.CursorPos, axeCatchRange, System.Drawing.Color.LightSteelBlue, 1, 1);
-
+            
             if (Config.Item("noti", true).GetValue<bool>() && RMissile != null)
                 OktwCommon.DrawLineRectangle(RMissile.Position, Player.Position, (int)R.Width, 1, System.Drawing.Color.White);
 

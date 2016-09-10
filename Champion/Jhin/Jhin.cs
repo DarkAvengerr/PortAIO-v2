@@ -1,13 +1,14 @@
-﻿
+
 using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using SebbyLib;
-using EloBuddy;
 
-namespace OneKeyToWin_AIO_Sebby.Champions
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace OneKeyToWin_AIO_Sebby.Champions
 {
     class Jhin
     {
@@ -56,9 +57,10 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("autoW", "Auto W", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("autoWcombo", "Auto W only in combo", true).SetValue(false));
             Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("harrasW", "Harass W", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("Wstun", "W stun, marked only", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("Wmark", "W marked only (main target)", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("Wmarkall", "W marked (all enemys)", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("Waoe", "W aoe (above 2 enemy)", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("autoWcc", "Auto W CC enemy or marked", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("autoWcc", "Auto W CC enemy", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("MaxRangeW", "Max W range", true).SetValue(new Slider(2500, 2500, 0)));
 
             Config.SubMenu(Player.ChampionName).SubMenu("E Config").AddItem(new MenuItem("autoE", "Auto E on hard CC", true).SetValue(true));
@@ -94,7 +96,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             Drawing.OnDraw += Drawing_OnDraw;
             Game.OnUpdate += Game_OnGameUpdate;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Drawing.OnEndScene += Drawing_OnEndScene;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
         }
@@ -178,7 +180,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             }
 
 
-            if (Program.LagFree(4) && E.IsReady())
+            if (Program.LagFree(4) && E.IsReady() && SebbyLib.Orbwalking.CanMove(50))
                 LogicE();
 
             if (Program.LagFree(2) && Q.IsReady() && Config.Item("autoQ", true).GetValue<bool>())
@@ -250,7 +252,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (Player.CountEnemiesInRange(400) > 1 || Player.CountEnemiesInRange(250) > 0)
                     return;
 
-                if (t.HasBuff("jhinespotteddebuff") || !Config.Item("Wstun", true).GetValue<bool>() )
+                if (t.HasBuff("jhinespotteddebuff") || !Config.Item("Wmark", true).GetValue<bool>() )
                 {
                     if (Player.Distance(t) < Config.Item("MaxRangeW", true).GetValue<Slider>().Value)
                     {
@@ -262,15 +264,20 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     }
                 }
 
-                
                 if (!Program.None && Player.Mana > RMANA + WMANA)
                 {
                     if(Config.Item("Waoe", true).GetValue<bool>())
                         W.CastIfWillHit(t, 2);
+
                     if (Config.Item("autoWcc", true).GetValue<bool>())
                     {
-                        foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(W.Range) && (!OktwCommon.CanMove(enemy) || enemy.HasBuff("jhinespotteddebuff"))))
-                            Program.CastSpell(W, t);
+                        foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(W.Range) && !OktwCommon.CanMove(enemy)))
+                            Program.CastSpell(W, enemy);
+                    }
+                    if (Config.Item("Wmarkall", true).GetValue<bool>())
+                    {
+                        foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(W.Range) && enemy.HasBuff("jhinespotteddebuff")))
+                            Program.CastSpell(W, enemy);
                     }
                 }
             }
