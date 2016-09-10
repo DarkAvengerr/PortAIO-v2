@@ -91,7 +91,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "OKTW", "hikiMarksman", "SharpShooter", "Marksman#", "M00N Draven", "[SDK] ExorAIO", "[SDK] Tyler1.exe" };
                     break;
                 case Champion.Ekko:
-                    champ = new string[] { "OKTW", "EloFactor Ekko", "xSalice" };
+                    champ = new string[] { "OKTW", "EloFactory Ekko", "xSalice" };
                     break;
                 case Champion.Elise:
                     champ = new string[] { "GFUEL Elise", "D-Elise", "EliseGod", "Hikigaya Elise" };
