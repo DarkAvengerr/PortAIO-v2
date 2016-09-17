@@ -14,7 +14,7 @@ using GamePath = System.Collections.Generic.List<SharpDX.Vector2>;
 
 using EloBuddy;
 using LeagueSharp.Common;
-namespace SoloVayne.Skills.Tumble
+namespace iSeriesReborn.Champions.Lucian
 {
     class EPositionProvider
     {

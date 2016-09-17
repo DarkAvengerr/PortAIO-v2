@@ -7,6 +7,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
+using BadaoGP;
 
 using EloBuddy; 
  using LeagueSharp.Common; 

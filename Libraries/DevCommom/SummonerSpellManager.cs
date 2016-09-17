@@ -1,0 +1,109 @@
+﻿using LeagueSharp;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using LeagueSharp.Common;
+using SharpDX;
+using EloBuddy;
+
+namespace DevCommom
+{
+    public class SummonerSpellManager
+    {
+        public SpellSlot IgniteSlot = SpellSlot.Unknown;
+        public SpellSlot FlashSlot = SpellSlot.Unknown;
+        public SpellSlot BarrierSlot = SpellSlot.Unknown;
+        public SpellSlot HealSlot = SpellSlot.Unknown;
+        public SpellSlot ExhaustSlot = SpellSlot.Unknown;
+
+
+        public SummonerSpellManager()
+        {
+            IgniteSlot = ObjectManager.Player.GetSpellSlot("SummonerDot");
+            FlashSlot = ObjectManager.Player.GetSpellSlot("SummonerFlash");
+            BarrierSlot = ObjectManager.Player.GetSpellSlot("SummonerBarrier");
+            HealSlot = ObjectManager.Player.GetSpellSlot("SummonerHeal");
+            ExhaustSlot = ObjectManager.Player.GetSpellSlot("SummonerExhaust");
+        }
+
+        public bool CastIgnite(AIHeroClient target)
+        {
+            if (IsReadyIgnite())
+                return ObjectManager.Player.Spellbook.CastSpell(IgniteSlot, target);
+            else
+                return false;
+        }
+
+        public bool CastFlash(Vector3 position)
+        {
+            if (IsReadyFlash())
+                return ObjectManager.Player.Spellbook.CastSpell(FlashSlot, position);
+            else
+                return false;
+        }
+
+        public bool CastBarrier()
+        {
+            if (IsReadyBarrier())
+                return ObjectManager.Player.Spellbook.CastSpell(BarrierSlot);
+            else
+                return false;
+        }
+
+        public bool CastHeal()
+        {
+            if (IsReadyHeal())
+                return ObjectManager.Player.Spellbook.CastSpell(HealSlot);
+            else
+                return false;
+        }
+
+        public bool CastExhaust(AIHeroClient target)
+        {
+            if (IsReadyExhaust())
+                return ObjectManager.Player.Spellbook.CastSpell(ExhaustSlot, target);
+            else
+                return false;
+        }
+
+        public bool IsReadyIgnite()
+        {
+            return (IgniteSlot != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready);
+        }
+
+        public bool IsReadyFlash()
+        {
+            return (FlashSlot != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(FlashSlot) == SpellState.Ready);
+        }
+
+        public bool IsReadyBarrier()
+        {
+            return (BarrierSlot != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(BarrierSlot) == SpellState.Ready);
+        }
+
+        public bool IsReadyHeal()
+        {
+            return (HealSlot != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(HealSlot) == SpellState.Ready);
+        }
+
+        public bool IsReadyExhaust()
+        {
+            return (ExhaustSlot != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(ExhaustSlot) == SpellState.Ready);
+        }
+
+        public bool CanKillIgnite(AIHeroClient target)
+        {
+            return IsReadyIgnite() && target.Health < ObjectManager.Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
+        }
+
+        public double GetIgniteDamage(AIHeroClient target)
+        {
+            if (IsReadyIgnite())
+                return ObjectManager.Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
+            else
+                return 0;
+        }
+    }
+}

@@ -7,9 +7,9 @@ using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Slutty_Gnar_Reworked
+using EloBuddy;
+using LeagueSharp.Common;
+namespace Slutty_Gnar_Reworked
 {
     internal class Gnar : MenuConfig
     {
@@ -141,10 +141,10 @@ using EloBuddy;
                     && GnarSpells.QMini.IsReady()
                     && args.EndPos.Distance(Player) <= GnarSpells.QMini.Range)
                 {
-                    var delay = (int) (args.EndTick - Game.Time - GnarSpells.QMini.Delay - 0.1f);
+                    var delay = (int)(args.EndTick - Game.Time - GnarSpells.QMini.Delay - 0.1f);
                     if (delay > 0)
                     {
-                        LeagueSharp.Common.Utility.DelayAction.Add(delay*1000, () => GnarSpells.QMini.Cast(args.EndPos));
+                        LeagueSharp.Common.Utility.DelayAction.Add(delay * 1000, () => GnarSpells.QMini.Cast(args.EndPos));
                     }
                     else
                     {
@@ -158,10 +158,10 @@ using EloBuddy;
                         && GnarSpells.QMini.IsReady()
                         && args.EndPos.Distance(Player) <= GnarSpells.QMega.Range)
                     {
-                        var delay = (int) (args.EndTick - Game.Time - GnarSpells.QMega.Delay - 0.1f);
+                        var delay = (int)(args.EndTick - Game.Time - GnarSpells.QMega.Delay - 0.1f);
                         if (delay > 0)
                         {
-                            LeagueSharp.Common.Utility.DelayAction.Add(delay*1000, () => GnarSpells.QMega.Cast(args.EndPos));
+                            LeagueSharp.Common.Utility.DelayAction.Add(delay * 1000, () => GnarSpells.QMega.Cast(args.EndPos));
                         }
                         else
                         {
@@ -209,7 +209,6 @@ using EloBuddy;
             if (qSpell && target != null)
             {
                 Orbwalker.ForceTarget(target);
-                //Hud.SelectedUnit = target;
             }
 
             #endregion
@@ -232,13 +231,13 @@ using EloBuddy;
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             if (Player.IsMiniGnar())
             {
-               
+
                 var minionCount = MinionManager.GetMinions(Player.Position, GnarSpells.QMini.Range, MinionTypes.All,
                     MinionTeam.All);
                 foreach (var minion in minionCount)
                 {
                     var minionPrediction = GnarSpells.EMini.GetPrediction(minion);
-                   
+
                     var k =
                         ObjectManager.Get<Obj_AI_Minion>().Where(x => Player.IsFacing(x)
                                                                       && x.IsMinion
@@ -252,7 +251,7 @@ using EloBuddy;
                         Player.ServerPosition.Distance(minionPrediction.CastPosition) + GnarSpells.EMini.Range);
                     if (!ObjectManager.Get<Obj_AI_Turret>().Any(type => type.IsMinion
                                                                         && !type.IsDead
-                                                                        && type.Distance(edm, true) < 775*775))
+                                                                        && type.Distance(edm, true) < 775 * 775))
                     {
                         GnarSpells.EMini.Cast(edm.Extend(Game.CursorPos, Player.ServerPosition.Distance(minionPrediction.CastPosition) + GnarSpells.EMini.Range));
                     }
@@ -272,7 +271,7 @@ using EloBuddy;
                     GnarSpells.EMini.Cast(prediction.CastPosition);
                 }
                  */
-                 
+
             }
         }
 
@@ -327,7 +326,7 @@ using EloBuddy;
 
                 if (!ObjectManager.Get<Obj_AI_Turret>().Any(type => type.Team != Player.Team
                                                                     && !type.IsDead
-                                                                    && type.Distance(ed, true) < 775*775))
+                                                                    && type.Distance(ed, true) < 775 * 775))
                 {
                     GnarSpells.EMini.Cast(prediction.CastPosition);
                     lastq = Environment.TickCount;
@@ -349,7 +348,7 @@ using EloBuddy;
                         Player.ServerPosition.Distance(minionPrediction.CastPosition) + GnarSpells.EMini.Range);
                     if (!ObjectManager.Get<Obj_AI_Turret>().Any(type => type.IsMinion != Player.IsMinion
                                                                         && !type.IsDead
-                                                                        && type.Distance(edm, true) < 775*775
+                                                                        && type.Distance(edm, true) < 775 * 775
                                                                         && k.IsValid))
                     {
                         GnarSpells.EMini.Cast(k);
@@ -482,12 +481,12 @@ using EloBuddy;
         /// </summary>
         private static void Combo()
         {
-            
+
             #region Mini Gnar
 
             if (Player.IsMiniGnar())
             {
-                
+
                 var target = TargetSelector.GetTarget(GnarSpells.QMini.Range, TargetSelector.DamageType.Physical);
                 var qSpell = Config.Item("UseQMini").GetValue<bool>();
                 var qsSpell = Config.Item("UseQs").GetValue<bool>();
@@ -496,7 +495,7 @@ using EloBuddy;
                     return;
                 var qpred = GnarSpells.QMini.GetPrediction(target);
                 var collision = GnarSpells.QMini.GetCollision(Player.Position.To2D(),
-                    new List<Vector2> {qpred.CastPosition.To2D()});
+                    new List<Vector2> { qpred.CastPosition.To2D() });
                 var mincol =
                     collision.Where(
                         obj => obj != null && obj.IsValidTarget() && !obj.IsDead && obj.IsMinion);
@@ -508,7 +507,7 @@ using EloBuddy;
                 var firstcol = objAiBases.OrderBy(m => m.Distance(Player.ServerPosition, true)).FirstOrDefault();
 
 
-              //  var firstcolcalc = (int) (GnarSpells.QMini.Range - firstcol.Distance(Player))/(count +0.5);
+                //  var firstcolcalc = (int) (GnarSpells.QMini.Range - firstcol.Distance(Player))/(count +0.5);
 
                 if (qSpell && target.IsValidTarget(GnarSpells.QMini.Range)
                     && Player.Distance(target) > 450)
@@ -576,7 +575,7 @@ using EloBuddy;
 
                         if (!ObjectManager.Get<Obj_AI_Turret>().Any(type => type.IsMinion != Player.IsMinion
                                                                             && !type.IsDead
-                                                                            && type.Distance(edm, true) < 775*775
+                                                                            && type.Distance(edm, true) < 775 * 775
                                                                             && k.IsValid)
                             && Player.Distance(target) > 300)
                         {
@@ -609,7 +608,7 @@ using EloBuddy;
                         {
                             var direction = (Player.ServerPosition - prediction.UnitPosition).Normalized();
                             var maxAngle = 180f;
-                            var step = maxAngle/6f;
+                            var step = maxAngle / 6f;
                             var currentAngle = 0f;
                             var currentStep = 0f;
                             while (true)
@@ -619,7 +618,7 @@ using EloBuddy;
 
                                 if ((currentAngle == 0 || currentAngle < 0) && currentStep != 0)
                                 {
-                                    currentAngle = (currentStep)*(float) Math.PI/180;
+                                    currentAngle = (currentStep) * (float)Math.PI / 180;
                                     currentStep += step;
                                 }
                                 else if (currentAngle > 0)
@@ -629,10 +628,10 @@ using EloBuddy;
                                 if (currentStep == 0)
                                 {
                                     currentStep = step;
-                                    checkPoint = prediction.UnitPosition + 500*direction;
+                                    checkPoint = prediction.UnitPosition + 500 * direction;
                                 }
                                 else
-                                    checkPoint = prediction.UnitPosition + 500*direction.Rotated(currentAngle);
+                                    checkPoint = prediction.UnitPosition + 500 * direction.Rotated(currentAngle);
 
                                 if (prediction.UnitPosition.GetFirstWallPoint(checkPoint).HasValue
                                     && !target.IsStunned
@@ -641,7 +640,7 @@ using EloBuddy;
                                     (GnarSpells.QMega.GetDamage(target) + Player.GetAutoAttackDamage(target)))
                                 {
                                     GnarSpells.RMega.Cast(Player.Position +
-                                                          500*(checkPoint - prediction.UnitPosition).Normalized());
+                                                          500 * (checkPoint - prediction.UnitPosition).Normalized());
                                     rcast = Environment.TickCount;
                                     break;
                                 }

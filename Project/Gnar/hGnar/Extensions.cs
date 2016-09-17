@@ -1,0 +1,58 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using LeagueSharp;
+using LeagueSharp.Common;
+
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace hGnar
+{
+    public static class Extensions
+    {
+        public static float TotalAttackDamage(this Obj_AI_Base target)
+        {
+            return target.BaseAttackDamage + target.FlatPhysicalDamageMod;
+        }
+
+        public static float TotalMagicalDamage(this Obj_AI_Base target)
+        {
+            return target.BaseAbilityDamage + target.FlatMagicDamageMod;
+        }
+
+        public static float AttackSpeed(this Obj_AI_Base target)
+        {
+            return 1 / target.AttackDelay;
+        }
+
+        public static float GetStunDuration(this Obj_AI_Base target)
+        {
+            return target.Buffs.Where(b => b.IsActive && Game.Time < b.EndTime &&
+                (b.Type == BuffType.Charm ||
+                b.Type == BuffType.Knockback ||
+                b.Type == BuffType.Stun ||
+                b.Type == BuffType.Suppression ||
+                b.Type == BuffType.Snare)).Aggregate(0f, (current, buff) => Math.Max(current, buff.EndTime)) -
+                Game.Time;
+        }
+
+        public static bool IsMiniGnar(this AIHeroClient target)
+        {
+            return target.CharData.BaseSkinName == "Gnar";
+        }
+
+        public static bool IsMegaGnar(this AIHeroClient target)
+        {
+            return target.CharData.BaseSkinName == "gnarbig";
+        }
+
+        public static bool IsAboutToTransform(this AIHeroClient target)
+        {
+            return target.IsMiniGnar() && (Math.Abs(target.Mana - target.MaxMana) < 0.00001 && (target.HasBuff("gnartransformsoon") || target.HasBuff("gnartransform"))) || // Mini to mega
+                target.IsMegaGnar() && target.ManaPercent <= 0.1; // Mega to mini
+        }
+    }
+}

@@ -11,7 +11,7 @@ using ItemData = LeagueSharp.Common.Data.ItemData;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace BadaoKingdom
+ namespace BadaoGP
 {
     public static class BadaoChecker
     {

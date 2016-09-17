@@ -11,7 +11,7 @@ using Color = System.Drawing.Color;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace BadaoKingdom
+ namespace BadaoGP
 {
     public static class BadaoMainVariables
     {

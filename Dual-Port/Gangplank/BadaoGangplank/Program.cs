@@ -10,7 +10,7 @@ using Color = System.Drawing.Color;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace BadaoKingdom
+ namespace BadaoGP
 {
     static class Program
     {
@@ -31,7 +31,7 @@ using EloBuddy;
             }
             Chat.Print("<font color=\"#24ff24\">Badao </font>" + "<font color=\"#ff8d1a\">" +
                 ObjectManager.Player.ChampionName + "</font>" + "<font color=\"#24ff24\"> loaded!</font>");
-            BadaoChampion.BadaoGangplank.BadaoGangplank.BadaoActivate();
+            BadaoKingdom.BadaoChampion.BadaoGangplank.BadaoGangplank.BadaoActivate();
         }
     }
 }

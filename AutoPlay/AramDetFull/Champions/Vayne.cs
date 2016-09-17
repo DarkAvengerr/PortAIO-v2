@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LeagueSharp;using DetuksSharp;
+using LeagueSharp;
+using DetuksSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; namespace ARAMDetFull.Champions
+using EloBuddy;
+namespace ARAMDetFull.Champions
 {
     class Vayne : Champion
     {
 
-        
+
         public static Vector3 AfterCond = Vector3.Zero;
         public Vayne()
         {
@@ -82,7 +84,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public override void useSpells()
         {
-            var tar = ARAMTargetSelector.getBestTarget(player.AttackRange+50);
+            var tar = ARAMTargetSelector.getBestTarget(player.AttackRange + 50);
             FocusTarget();
             NoAAStealth();
             AIHeroClient tar2;
@@ -110,7 +112,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         void Interrupter_OnPossibleToInterrupt(AttackableUnit unit, InterruptableSpell spell)
         {
             var Sender = (AIHeroClient)unit;
-            if ( !E.IsReady() || !Sender.IsValidTarget()) return;
+            if (!E.IsReady() || !Sender.IsValidTarget()) return;
             CastE(Sender, true);
         }
 
@@ -156,14 +158,13 @@ using EloBuddy; namespace ARAMDetFull.Champions
             foreach (
                 var hero in
                     DeathWalker.AllEnemys
-                        .Where(hero => hero.IsValidTarget(DeathWalker.getRealAutoAttackRange(player,hero))))
+                        .Where(hero => hero.IsValidTarget(DeathWalker.getRealAutoAttackRange(player, hero))))
             {
                 foreach (var b in hero.Buffs)
                 {
                     if (b.Name == "vaynesilvereddebuff" && b.Count == 2)
                     {
-                        DeathWalker.ForcedTarget=hero;
-                        //Hud.SelectedUnit = hero;
+                        DeathWalker.ForcedTarget = hero;
                         return;
                     }
                 }
@@ -175,7 +176,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             if (!Q.IsReady() || !target.IsValidTarget()) return;
             var goodPos = player.Position.To2D().Extend((player.Position - target.Position).To2D().Perpendicular(), 300);
 
-            if ( !E.IsReady())
+            if (!E.IsReady())
             {
                 CastQ(goodPos.To3D(), target);
             }
@@ -184,11 +185,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 for (int I = 0; I <= 360; I += 65)
                 {
                     var F1 = new Vector2(player.Position.X + (float)(300 * Math.Cos(I * (Math.PI / 180))), player.Position.Y + (float)(300 * Math.Sin(I * (Math.PI / 180)))).To3D();
-                   // var FinalPos = player.Position.To2D().Extend(F1, 300).To3D();
+                    // var FinalPos = player.Position.To2D().Extend(F1, 300).To3D();
                     AIHeroClient targ;
                     if (CondemnCheck(F1, out targ))
                     {
-                        CastTumble(F1,target);
+                        CastTumble(F1, target);
                         CastE(target);
                         return;
                     }
@@ -197,10 +198,10 @@ using EloBuddy; namespace ARAMDetFull.Champions
             }
         }
 
-        void CastQ(Vector3 Pos,Obj_AI_Base target,bool customPos=false)
+        void CastQ(Vector3 Pos, Obj_AI_Base target, bool customPos = false)
         {
-           if (!Q.IsReady() || !target.IsValidTarget()) return;
-           
+            if (!Q.IsReady() || !target.IsValidTarget()) return;
+
             var ManaC = 0;
             var EnMin = 1;
             var EnemiesList =
@@ -208,11 +209,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
                     .Where(h => h.IsValid && !h.IsDead && h.Distance(player.Position) <= 900 && h.IsEnemy).ToList();
             if (R.IsReady() && EnemiesList.Count >= EnMin)
             {
-                Aggresivity.addAgresiveMove(new AgresiveMove(160,10000,true));
+                Aggresivity.addAgresiveMove(new AgresiveMove(160, 10000, true));
                 R.Cast();
             }
-            if(!customPos){CastTumble(target);}else{CastTumble(Pos,target);}
-                
+            if (!customPos) { CastTumble(target); } else { CastTumble(Pos, target); }
+
         }
 
         void CastTumble(Obj_AI_Base target)
@@ -224,12 +225,12 @@ using EloBuddy; namespace ARAMDetFull.Champions
             var distanceAfterTumble = Vector3.DistanceSquared(posAfterTumble, target.ServerPosition);
             Q.Cast(goodPos);
         }
-        void CastTumble(Vector3 Pos,Obj_AI_Base target)
+        void CastTumble(Vector3 Pos, Obj_AI_Base target)
         {
             var posAfterTumble =
                 ObjectManager.Player.ServerPosition.To2D().Extend(Pos.To2D(), 300).To3D();
             var distanceAfterTumble = Vector3.DistanceSquared(posAfterTumble, target.ServerPosition);
-            if (distanceAfterTumble < 550*550 && distanceAfterTumble > 100*100)
+            if (distanceAfterTumble < 550 * 550 && distanceAfterTumble > 100 * 100)
                 Q.Cast(Pos);
         }
 
@@ -249,21 +250,21 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 E.Cast(target);
                 AfterCond = Vector3.Zero;
             }
-                   
+
         }
         #endregion
 
         void UseItems(AIHeroClient tar)
         {
-                UseItem(3153, tar);
-                UseItem(3153, tar);
-                UseItem(3142);
-                UseItem(3142);
-                UseItem(3144,tar);
-                UseItem(3144, tar);
+            UseItem(3153, tar);
+            UseItem(3153, tar);
+            UseItem(3142);
+            UseItem(3142);
+            UseItem(3144, tar);
+            UseItem(3144, tar);
         }
 
-         #region utility methods
+        #region utility methods
         int getEnemiesInRange(Vector3 point, float range)
         {
             return
@@ -323,11 +324,11 @@ using EloBuddy; namespace ARAMDetFull.Champions
         }
         bool isGrass(Vector3 Pos)
         {
-            return NavMesh.IsWallOfGrass(Pos,65);
+            return NavMesh.IsWallOfGrass(Pos, 65);
             //return false; 
         }
 
-        bool isJ4FlagThere(Vector3 Position,AIHeroClient target)
+        bool isJ4FlagThere(Vector3 Position, AIHeroClient target)
         {
             foreach (
                 var obj in ObjectManager.Get<Obj_AI_Base>().Where(m => m.Distance(Position) <= target.BoundingRadius))
@@ -341,6 +342,6 @@ using EloBuddy; namespace ARAMDetFull.Champions
         }
         #endregion
 
-       
+
     }
 }

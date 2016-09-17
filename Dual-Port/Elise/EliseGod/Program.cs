@@ -78,41 +78,6 @@ using EloBuddy;
                 }
             }
         }
-        
-
-        //private static void OnDeleteObject(GameObject sender, EventArgs args)
-        //{
-        //    if (sender.Type != GameObjectType.obj_AI_Minion) return;
-        //    if (sender.Name == ("Spiderling"))
-        //    {
-        //        spider = null;
-        //    }
-        //}
-
-        //private static void OnCreateObject(GameObject sender, EventArgs args)
-        //{
-        //    if (sender.Type != GameObjectType.obj_AI_Minion) return;
-        //    if (sender.Name == ("Spiderling"))
-        //    {
-        //        spider = (Obj_AI_Minion)sender;
-        //    }
-        //}
-
-        //private static void OnAggro(Obj_AI_Base sender, Obj_AI_Base args)
-        //{
-        //    if (sender == null || args == null) return;
-        //    {
-        //        if (args.NetworkId == ObjectManager.Player.NetworkId)
-        //        {
-        //            if (!Human() && !Player.Spellbook.IsAutoAttacking)
-        //            {
-        //                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Player.Position.Extend(sender.Position, -40));
-        //            }
-        //            // idk find out when spider is aggrod and run back in range of sender
-        //        }
-        //    }
-        //}
-
 
         private static void OnUpdate(EventArgs args)
         {
@@ -674,12 +639,12 @@ using EloBuddy;
 
         private static void Cooldowns()
         {
-            realcdQ = ((_qCd - Game.Time) > 0) ? (_qCd - Game.Time) : 0;
-            realcdW = ((_wCd - Game.Time) > 0) ? (_wCd - Game.Time) : 0;
-            realcdE = ((_eCd - Game.Time) > 0) ? (_eCd - Game.Time) : 0;
-            realcdSQ = ((_q1Cd - Game.Time) > 0) ? (_q1Cd - Game.Time) : 0;
-            realcdSW = ((_w1Cd - Game.Time) > 0) ? (_w1Cd - Game.Time) : 0;
-            realcdSE = ((_e1Cd - Game.Time) > 0) ? (_e1Cd - Game.Time) : 0;
+            realcdQ = ((_qCd - Game.Time) > 0) ? (_qCd) : 0;
+            realcdW = ((_wCd - Game.Time) > 0) ? (_wCd) : 0;
+            realcdE = ((_eCd - Game.Time) > 0) ? (_eCd ) : 0;
+            realcdSQ = ((_q1Cd - Game.Time) > 0) ? (_q1Cd) : 0;
+            realcdSW = ((_w1Cd - Game.Time) > 0) ? (_w1Cd) : 0;
+            realcdSE = ((_e1Cd - Game.Time) > 0) ? (_e1Cd) : 0;
         }
 
         private static void GetCDs(GameObjectProcessSpellCastEventArgs spell)
@@ -687,18 +652,18 @@ using EloBuddy;
             if (Human())
             {
                 if (spell.SData.Name == "EliseHumanQ")
-                    _qCd = Game.Time + CalculateCd(HumanQcd[Q.Level - 1]);
+                    _qCd = Q.Cooldown;
                 if (spell.SData.Name == "EliseHumanW")
-                    _wCd = Game.Time + CalculateCd(HumanWcd[W.Level - 1]);
+                    _wCd = W.Cooldown;
                 if (spell.SData.Name == "EliseHumanE")
-                    _eCd = Game.Time + CalculateCd(HumanEcd[E.Level - 1]);
+                    _eCd = E.Cooldown;
             }
             else
             {
                 if (spell.SData.Name == "EliseSpiderQCast")
-                    _q1Cd = Game.Time + CalculateCd(SpiderQcd[Q.Level - 1]);
+                    _q1Cd = Q.Cooldown;
                 if (spell.SData.Name == "EliseSpiderW")
-                    _w1Cd = Game.Time + CalculateCd(SpiderWcd[W.Level - 1]);
+                    _w1Cd = W.Cooldown;
             }
         }
 

@@ -79,6 +79,10 @@ namespace PortAIO
 
         public static void LoadUtility()
         {
+            Anti_Rito.Program.Main();
+            PortAIOHuman.Program.Game_OnGameLoad();
+            LittleHumanizer.Program.Main();
+
             //ProFlash.Program.Main();
             //TiltSharp.Program.Main();
             //new SFXHumanizer_Pro.SFXHumanizerPro().OnGameLoad();
@@ -858,7 +862,7 @@ namespace PortAIO
                             UnderratedAIO.Program.OnGameLoad();
                             break;
                         case 1: // Badao Gangplank
-                            BadaoKingdom.Program.Main();
+                            BadaoGP.Program.Main();
                             break;
                         case 2: // BangPlank
                             Bangplank.Program.Main();

@@ -131,7 +131,7 @@ using EloBuddy; namespace ElUtilitySuite.Trackers
 
             float i = 0;
 
-            foreach (var hero in HeroManager.Enemies.Where(x => !x.IsDead))
+            foreach (var hero in HeroManager.Enemies.Where(x => !x.IsDead && x != null))
             {
                 var champion = hero.ChampionName;
                 if (champion.Length > 12)

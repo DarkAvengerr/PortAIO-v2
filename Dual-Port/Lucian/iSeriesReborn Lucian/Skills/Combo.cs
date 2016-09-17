@@ -6,7 +6,6 @@ using iSeriesReborn.Utility.MenuUtility;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using SoloVayne.Skills.Tumble;
 
 using EloBuddy; 
  using LeagueSharp.Common; 

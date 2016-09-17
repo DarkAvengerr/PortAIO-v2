@@ -836,12 +836,12 @@ using EloBuddy;
 
         private static void Cooldowns()
         {
-            _humaQcd = ((_humQcd - Game.Time) > 0) ? (_humQcd - Game.Time) : 0;
-            _humaWcd = ((_humWcd - Game.Time) > 0) ? (_humWcd - Game.Time) : 0;
-            _humaEcd = ((_humEcd - Game.Time) > 0) ? (_humEcd - Game.Time) : 0;
-            _spideQcd = ((_spidQcd - Game.Time) > 0) ? (_spidQcd - Game.Time) : 0;
-            _spideWcd = ((_spidWcd - Game.Time) > 0) ? (_spidWcd - Game.Time) : 0;
-            _spideEcd = ((_spidEcd - Game.Time) > 0) ? (_spidEcd - Game.Time) : 0;
+            _humaQcd = ((_humQcd - Game.Time) > 0) ? (_humQcd) : 0;
+            _humaWcd = ((_humWcd - Game.Time) > 0) ? (_humWcd) : 0;
+            _humaEcd = ((_humEcd - Game.Time) > 0) ? (_humEcd) : 0;
+            _spideQcd = ((_spidQcd - Game.Time) > 0) ? (_spidQcd) : 0;
+            _spideWcd = ((_spidWcd - Game.Time) > 0) ? (_spidWcd) : 0;
+            _spideEcd = ((_spidEcd - Game.Time) > 0) ? (_spidEcd) : 0;
         }
 
         private static void GetCDs(GameObjectProcessSpellCastEventArgs spell)
@@ -849,20 +849,20 @@ using EloBuddy;
             if (_human)
             {
                 if (spell.SData.Name == "EliseHumanQ")
-                    _humQcd = Game.Time + CalculateCd(HumanQcd[_humanQ.Level]);
+                    _humQcd = _humanQ.Cooldown;
                 if (spell.SData.Name == "EliseHumanW")
-                    _humWcd = Game.Time + CalculateCd(HumanWcd[_humanW.Level]);
+                    _humWcd = _humanW.Cooldown;
                 if (spell.SData.Name == "EliseHumanE")
-                    _humEcd = Game.Time + CalculateCd(HumanEcd[_humanE.Level]);
+                    _humEcd = _humanE.Cooldown;
             }
             else
             {
                 if (spell.SData.Name == "EliseSpiderQCast")
-                    _spidQcd = Game.Time + CalculateCd(SpiderQcd[_spiderQ.Level]);
+                    _spidQcd = _spiderQ.Cooldown;
                 if (spell.SData.Name == "EliseSpiderW")
-                    _spidWcd = Game.Time + CalculateCd(SpiderWcd[_spiderW.Level]);
+                    _spidWcd = _spiderW.Cooldown;
                 if (spell.SData.Name == "EliseSpiderEInitial")
-                    _spidEcd = Game.Time + CalculateCd(SpiderEcd[_spiderE.Level]);
+                    _spidEcd = _spiderE.Cooldown;
             }
         }
 

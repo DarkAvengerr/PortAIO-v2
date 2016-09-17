@@ -277,6 +277,7 @@ using EloBuddy;
                 }
             }
 
+            /*
             if (Config.Item("debug").GetValue<bool>())
             {
                 new Core.OKTWlab().LoadOKTW();
@@ -292,6 +293,7 @@ using EloBuddy;
             }
 
             new Core.OKTWtracker().LoadOKTW();
+            */
 
             Config.AddItem(new MenuItem("aiomodes", "!!! PRESS F5 TO RELOAD MODE !!!" ));
             //new Core.OKTWtargetSelector().LoadOKTW();

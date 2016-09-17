@@ -129,6 +129,8 @@ namespace DetuksSharp
         public static List<AIHeroClient> AllEnemys = new List<AIHeroClient>();
         public static List<AIHeroClient> AllAllys = new List<AIHeroClient>();
 
+        public static List<Obj_AI_Turret> EnemyTowers = new List<Obj_AI_Turret>();
+
         public static List<Obj_BarracksDampener> EnemyBarracs = new List<Obj_BarracksDampener>();
 
 
@@ -161,10 +163,13 @@ namespace DetuksSharp
             AllEnemys = ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsEnemy).ToList();
             AllAllys = ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsAlly).ToList();
 
+            EnemyTowers = ObjectManager.Get<Obj_AI_Turret>().Where(tow => tow.IsEnemy).ToList();
+
             EnemyBarracs = ObjectManager.Get<Obj_BarracksDampener>().Where(tow => tow.IsEnemy).ToList();
 
             EnemyHQ = ObjectManager.Get<Obj_HQ>().Where(tow => tow.IsEnemy).ToList();
 
+            EnemyObjectives.AddRange(EnemyTowers);
             EnemyObjectives.AddRange(EnemyBarracs);
             EnemyObjectives.AddRange(EnemyHQ);
 

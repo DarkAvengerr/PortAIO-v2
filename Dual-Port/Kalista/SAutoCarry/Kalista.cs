@@ -13,7 +13,7 @@ using SharpDX;
 
 namespace SAutoCarry.Champions
 {
-    public class Kalista : Champion
+    public class Kalista : SCommon.PluginBase.Champion
     {
         public Kalista()
             : base ("Kalista", "SAutoCarry - Kalista")
