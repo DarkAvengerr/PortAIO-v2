@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Lane
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Lane
 {
     #region Using Directives
 
@@ -10,7 +12,6 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Lane
 
     using ReformedAIO.Champions.Ryze.Logic;
 
-    using RethoughtLib.Events;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
     #endregion
@@ -31,32 +32,42 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Lane
 
         #endregion
 
+        private readonly Orbwalking.Orbwalker orbwalker;
+
+        public QLane(Orbwalking.Orbwalker orbwalker)
+        {
+            this.orbwalker = orbwalker;
+        }
+
         #region Methods
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Events.OnUpdate -= this.OnUpdate;
+            Game.OnUpdate -= OnUpdate;
 
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Events.OnUpdate += this.OnUpdate;
+            Game.OnUpdate += OnUpdate;
             
         }
 
-        protected override void OnInitialize(object sender, FeatureBaseEventArgs featureBaseEventArgs)
-        {
-            this.eLogic = new ELogic();
-            this.qLoigc = new QLogic();
-            base.OnInitialize(sender, featureBaseEventArgs);
-        }
+        //protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        //{
+        //    eLogic = new ELogic();
+        //    qLoigc = new QLogic();
+        //    base.OnLoad(sender, featureBaseEventArgs);
+        //}
 
         protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            this.Menu.AddItem(new MenuItem(this.Name + "LaneQEnemy", "Only If No Enemies Visible").SetValue(true));
+            Menu.AddItem(new MenuItem(Name + "LaneQEnemy", "Only If No Enemies Visible").SetValue(true));
 
-            this.Menu.AddItem(new MenuItem(this.Name + "LaneQMana", "Mana %").SetValue(new Slider(65, 0, 100)));
+            Menu.AddItem(new MenuItem(Name + "LaneQMana", "Mana %").SetValue(new Slider(65, 0, 100)));
+
+            eLogic = new ELogic();
+            qLoigc = new QLogic();
         }
 
         private void GetMinions()
@@ -73,21 +84,21 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Lane
 
             foreach (var m in minions)
             {
-                if (this.eLogic.RyzeE(m))
+                if (eLogic.RyzeE(m))
                 {
-                    Variable.Spells[SpellSlot.Q].Cast(this.qLoigc.QPred(m));
+                    Variable.Spells[SpellSlot.Q].Cast(qLoigc.QPred(m));
                 }
             }
         }
 
         private void OnUpdate(EventArgs args)
         {
-            if (Variable.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
+            if (this.orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
                 || !Variable.Spells[SpellSlot.Q].IsReady()) return;
 
             if (Menu.Item(Menu.Name + "LaneQMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
 
-            this.GetMinions();
+            GetMinions();
         }
 
         #endregion

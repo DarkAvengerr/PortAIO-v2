@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Ashe.Drawings
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ashe.Drawings
 {
     #region Using Directives
 
@@ -36,7 +38,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.Drawings
 
         public DmgDraw(string name)
         {
-            this.Name = name;
+            Name = name;
         }
 
         public void OnDraw(EventArgs args)
@@ -46,8 +48,8 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.Drawings
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1500)))
             {
                 
-                this.drawDamage.Unit = enemy;
-                this.drawDamage.DrawDmg(this.logic.ComboDamage(enemy), Color.LawnGreen);
+                drawDamage.Unit = enemy;
+                drawDamage.DrawDmg(logic.ComboDamage(enemy), Color.LawnGreen);
             }
         }
 
@@ -57,25 +59,20 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.Drawings
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Drawing.OnDraw -= this.OnDraw;
+            Drawing.OnDraw -= OnDraw;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Drawing.OnDraw += this.OnDraw;
+            Drawing.OnDraw += OnDraw;
         }
 
-        protected override void OnInitialize(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            this.logic = new RLogic();
-            this.drawDamage = new HpBarIndicator();
-            base.OnInitialize(sender, featureBaseEventArgs);
+            logic = new RLogic();
+            drawDamage = new HpBarIndicator();
+            base.OnLoad(sender, featureBaseEventArgs);
         }
-
-        protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
-        {
-        }
-
         #endregion
     }
 }

@@ -117,6 +117,21 @@ using EloBuddy;
             }
         }
 
+        /// <summary>
+        ///     Called when [target].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs" /> instance containing the event data.</param>
+        private void OnTarget(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (!(sender is Obj_AI_Turret)) return;
+                
+            if (args.Target != null)
+            {
+                //this.turretTarget[sender.NetworkId] = args.Target;
+            }
+        }
+
         #endregion
 
         #region Methods

@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Diana.Logic.Killsteal
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Diana.Logic.Killsteal
 {
     #region Using Directives
 
@@ -8,7 +10,6 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.Logic.Killsteal
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using RethoughtLib.Events;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
     #endregion
@@ -31,25 +32,27 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.Logic.Killsteal
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Events.OnUpdate -= this.OnUpdate;
+            Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Events.OnUpdate += this.OnUpdate;
+            Game.OnUpdate += OnUpdate;
         }
 
-        protected override void OnInitialize(object sender, FeatureBaseEventArgs featureBaseEventArgs)
-        {
-            this.qLogic = new CrescentStrikeLogic();
-            base.OnInitialize(sender, featureBaseEventArgs);
-        }
+        //protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        //{
+        //    qLogic = new CrescentStrikeLogic();
+        //    base.OnLoad(sender, featureBaseEventArgs);
+        //}
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs) // TODO Add Dmg Multiplier(?)
         {
-            this.Menu.AddItem(new MenuItem(this.Menu.Name + "QRange", "Q Range ").SetValue(new Slider(820, 0, 825)));
+            Menu.AddItem(new MenuItem(Menu.Name + "QRange", "Q Range ").SetValue(new Slider(820, 0, 825)));
 
-            this.Menu.AddItem(new MenuItem(this.Menu.Name + "QMana", "Mana %").SetValue(new Slider(45, 0, 100)));
+            Menu.AddItem(new MenuItem(Menu.Name + "QMana", "Mana %").SetValue(new Slider(45, 0, 100)));
+
+            qLogic = new CrescentStrikeLogic();
         }
 
         private void OnUpdate(EventArgs args)
@@ -57,13 +60,13 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.Logic.Killsteal
             var target =
                 HeroManager.Enemies.FirstOrDefault(
                     x =>
-                    !x.IsDead && x.IsValidTarget(this.Menu.Item(this.Menu.Name + "QRange").GetValue<Slider>().Value));
+                    !x.IsDead && x.IsValidTarget(Menu.Item(Menu.Name + "QRange").GetValue<Slider>().Value));
 
-            if (this.Menu.Item(this.Menu.Name + "QMana").GetValue<Slider>().Value > Variables.Player.ManaPercent) return;
+            if (Menu.Item(Menu.Name + "QMana").GetValue<Slider>().Value > Variables.Player.ManaPercent) return;
 
-            if (target != null && target.Health < this.qLogic.GetDmg(target))
+            if (target != null && target.Health < qLogic.GetDmg(target))
             {
-                Variables.Spells[SpellSlot.Q].Cast(this.qLogic.QPred(target));
+                Variables.Spells[SpellSlot.Q].Cast(qLogic.QPred(target));
             }
         }
 

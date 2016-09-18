@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 {
     #region Using Directives
 
@@ -7,9 +9,8 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using Logic;
+    using ReformedAIO.Champions.Diana.Logic;
 
-    using RethoughtLib.Events;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
     using Prediction = SPrediction.Prediction;
@@ -33,6 +34,13 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 
         #endregion
 
+        private readonly Orbwalking.Orbwalker orbwalker;
+
+        public CrescentStrike(Orbwalking.Orbwalker orbwalker)
+        {
+            this.orbwalker = orbwalker;
+        }
+
         #region Public Properties
 
         /// <summary>
@@ -53,13 +61,12 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public void OnUpdate(EventArgs args)
         {
-            Console.WriteLine("?");
-            if (Variables.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
+            if (this.orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
                 || !Variables.Spells[SpellSlot.Q].IsReady()) return;
 
-            if (this.Menu.Item(this.Menu.Name + "QMana").GetValue<Slider>().Value > Variables.Player.ManaPercent) return;
+            if (Menu.Item(Menu.Name + "QMana").GetValue<Slider>().Value > Variables.Player.ManaPercent) return;
 
-            this.Crescent();
+            Crescent();
         }
 
         #endregion
@@ -73,8 +80,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
         /// <param name="featureBaseEventArgs">The <see cref="FeatureBaseEventArgs" /> instance containing the event data.</param>
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Console.WriteLine("Hit OnDisable");
-            Events.OnUpdate -= this.OnUpdate;
+            Game.OnUpdate -= OnUpdate;
         }
 
         /// <summary>
@@ -84,8 +90,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
         /// <param name="featureBaseEventArgs">The <see cref="FeatureBaseEventArgs" /> instance containing the event data.</param>
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Console.WriteLine("Hit OnUpdate");
-            Events.OnUpdate += this.OnUpdate;
+            Game.OnUpdate += OnUpdate;
         }
 
         /// <summary>
@@ -93,12 +98,12 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="featureBaseEventArgs">The <see cref="FeatureBaseEventArgs" /> instance containing the event data.</param>
-        protected override void OnInitialize(object sender, FeatureBaseEventArgs featureBaseEventArgs)
-        {
-            this.logic = new LogicAll();
-            this.qLogic = new CrescentStrikeLogic();
-            base.OnInitialize(sender, featureBaseEventArgs);
-        }
+        //protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        //{
+        //    logic = new LogicAll();
+        //    qLogic = new CrescentStrikeLogic();
+        //    base.OnLoad(sender, featureBaseEventArgs);
+        //}
 
         /// <summary>
         ///     Called when [load].
@@ -112,11 +117,13 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
                 Variables.Spells[SpellSlot.Q].SetSkillshot(0.25f, 185, 1600, false, SkillshotType.SkillshotCone);
             }
 
-            this.Menu.AddItem(new MenuItem(this.Menu.Name + "QRange", "Q Range ").SetValue(new Slider(820, 0, 825)));
+            Menu.AddItem(new MenuItem(Menu.Name + "QRange", "Q Range ").SetValue(new Slider(820, 0, 825)));
 
-            this.Menu.AddItem(new MenuItem(this.Menu.Name + "QMana", "Mana %").SetValue(new Slider(10, 0, 100)));
+            Menu.AddItem(new MenuItem(Menu.Name + "QMana", "Mana %").SetValue(new Slider(10, 0, 100)));
 
-            Prediction.Initialize(this.Menu);
+            qLogic = new CrescentStrikeLogic();
+            logic = new LogicAll();
+            Prediction.Initialize(Menu);
         }
 
         /// <summary>
@@ -125,12 +132,12 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
         private void Crescent()
         {
             var target = TargetSelector.GetTarget(
-                this.Menu.Item(this.Menu.Name + "QRange").GetValue<Slider>().Value,
+                Menu.Item(Menu.Name + "QRange").GetValue<Slider>().Value,
                 TargetSelector.DamageType.Magical);
 
             if (target == null || !target.IsValid) return;
 
-            Variables.Spells[SpellSlot.Q].Cast(this.qLogic.QPred(target));
+            Variables.Spells[SpellSlot.Q].Cast(qLogic.QPred(target));
         }
 
         #endregion

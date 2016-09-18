@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Diana.Logic
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Diana.Logic
 {
     #region Using Directives
 
@@ -66,7 +68,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.Logic
         {
             var pos = Variables.Spells[SpellSlot.Q].GetArcSPrediction(target);
 
-            return pos.CastPosition.To3D() + this.QDelay(target);
+            return pos.CastPosition.To3D() + QDelay(target);
         }
 
         #endregion

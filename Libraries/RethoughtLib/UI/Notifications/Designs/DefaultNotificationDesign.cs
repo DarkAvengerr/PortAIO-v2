@@ -208,7 +208,7 @@ using EloBuddy;
         /// <value>
         ///     The transition.
         /// </value>
-        public override Transition Transition { get; set; } = new ElasticEaseInOut(500);
+        public override TransitionBase TransitionBase { get; set; } = new ElasticEaseInOut(500);
 
         /// <summary>
         ///     Gets or sets the width.

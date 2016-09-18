@@ -38,11 +38,6 @@ using EloBuddy;
             { SpellSlot.R, new Spell(SpellSlot.R) }
         };
 
-        static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += OnLoad;
-        }
-
         private static void Game_OnDraw(EventArgs args)
         {
             if (_Menu.Item("AlistarScriptSky.DrawsManager.rangeE").GetValue<bool>())
@@ -60,7 +55,7 @@ using EloBuddy;
         }
 
 
-        private static void OnLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
             Player = ObjectManager.Player;
             if (Player.ChampionName != championName)

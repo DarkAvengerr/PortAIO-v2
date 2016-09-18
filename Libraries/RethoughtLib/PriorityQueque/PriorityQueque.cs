@@ -4,37 +4,127 @@ using EloBuddy;
 {
     #region Using Directives
 
-    
+    using System.Collections.Generic;
+    using System.Linq;
 
     #endregion
 
     /// <summary>
-    ///     Class that offers the access to a priorityqueque
+    ///     Default implementation of a PriorityQueque using a SortedList
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class PriorityQueue<T>
+    public class PriorityQueque<T> : IPriorityQueque<T>
     {
         #region Fields
 
         /// <summary>
-        ///     The queque implementation
+        ///     The capacity
         /// </summary>
-        public IPriorityQueque<T> QuequeImplementation;
+        protected int capacity = 0;
+
+        /// <summary>
+        ///     The items
+        /// </summary>
+        internal readonly SortedList<T, int> Items;
 
         #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="PriorityQueue{T}" /> class.
+        ///     Initializes a new instance of the <see cref="PriorityQueque{T}" /> class.
         /// </summary>
-        public PriorityQueue()
+        /// <param name="capacity">The capacity.</param>
+        public PriorityQueque(int capacity)
         {
-            this.QuequeImplementation = new DefaultPriorityQueque<T>(0);
+            this.Capacity = capacity;
+
+            this.Items = new SortedList<T, int>(capacity);
         }
 
         #endregion
 
+        #region Properties
 
+        /// <summary>
+        ///     Gets or sets the capacity.
+        /// </summary>
+        /// <value>
+        ///     The capacity.
+        /// </value>
+        protected int Capacity
+        {
+            get
+            {
+                return this.capacity;
+            }
+            set
+            {
+                if (value > 0)
+                {
+                    this.capacity = value;
+                }
+            }
+        }
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        /// <summary>
+        ///     Changes the priority.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <param name="priority">The priority.</param>
+        public void ChangePriority(T item, int priority)
+        {
+            this.Items.Remove(item);
+            this.Items.Add(item, priority);
+        }
+
+        /// <summary>
+        ///     Removes all T.
+        /// </summary>
+        public void Clear()
+        {
+            this.Items.Clear();
+        }
+
+        /// <summary>
+        ///     Determines whether the list contains specified item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <returns></returns>
+        public bool ContainsItem(T item) => this.Items.Any(x => x.Key.Equals(item));
+
+        /// <summary>
+        ///     Determines whether the list contains specified priority.
+        /// </summary>
+        /// <param name="priority">The priority.</param>
+        /// <returns></returns>
+        public bool ContainsPriority(int priority) => this.Items.Any(x => x.Value == priority);
+
+        /// <summary>
+        ///     Returns the next T to be dequeded/processed.
+        /// </summary>
+        /// <returns></returns>
+        public T Dequeque()
+        {
+            var keyvalue = this.Items.FirstOrDefault();
+
+            return keyvalue.Key;
+        }
+
+        /// <summary>
+        ///     Enqueques the specified item.
+        /// </summary>
+        /// <param name="item">The item.</param>
+        /// <param name="priority">The priority.</param>
+        public void Enqueque(T item, int priority)
+        {
+            this.Items.Add(item, priority);
+        }
+
+        #endregion
     }
 }

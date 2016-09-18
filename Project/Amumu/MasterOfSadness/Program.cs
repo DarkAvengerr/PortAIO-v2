@@ -146,7 +146,7 @@ using EloBuddy;
 
         }
 
-        public void load(EventArgs args)
+        public void load()
         {
                
             player = ObjectManager.Player;
@@ -176,11 +176,11 @@ using EloBuddy;
             { base.getSkills().wDeCast(); }
         }
 
-        static void Main(string[] args)
+        public static void Main()
         {
             Program p = new Program();
             p.load(p);
-            CustomEvents.Game.OnGameLoad += p.load;
+            p.load();
         }
 
 

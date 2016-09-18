@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 {
     #region Using Directives
 
@@ -9,7 +11,6 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 
     using ReformedAIO.Champions.Diana.Logic;
 
-    using RethoughtLib.Events;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
     #endregion
@@ -22,6 +23,13 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 
         #endregion
 
+        private readonly Orbwalking.Orbwalker orbwalker;
+
+        public Moonfall(Orbwalking.Orbwalker orbwalker)
+        {
+            this.orbwalker = orbwalker;
+        }
+
         #region Public Properties
 
         public override string Name { get; set; } = "[E] Moonfall";
@@ -32,48 +40,50 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Interrupter2.OnInterruptableTarget -= this.Interrupt;
+            Interrupter2.OnInterruptableTarget -= Interrupt;
 
-            AntiGapcloser.OnEnemyGapcloser -= this.Gapcloser;
+            AntiGapcloser.OnEnemyGapcloser -= Gapcloser;
 
-            Events.OnUpdate -= this.OnUpdate;
+            Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Interrupter2.OnInterruptableTarget += this.Interrupt;
+            Interrupter2.OnInterruptableTarget += Interrupt;
 
-            AntiGapcloser.OnEnemyGapcloser += this.Gapcloser;
+            AntiGapcloser.OnEnemyGapcloser += Gapcloser;
 
-            Events.OnUpdate += this.OnUpdate;
+            Game.OnUpdate += OnUpdate;
         }
 
-        protected override void OnInitialize(object sender, FeatureBaseEventArgs featureBaseEventArgs)
-        {
-            this.logic = new LogicAll();
+        //protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        //{
+        //    logic = new LogicAll();
 
-            base.OnInitialize(sender, featureBaseEventArgs);
-        }
+        //    base.OnLoad(sender, featureBaseEventArgs);
+        //}
 
         protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            this.Menu.AddItem(new MenuItem(this.Name + "EInterrupt", "Interrupt").SetValue(true));
+            Menu.AddItem(new MenuItem(Name + "EInterrupt", "Interrupt").SetValue(true));
 
-            this.Menu.AddItem(new MenuItem(this.Name + "EGapcloser", "Anti-Gapcloser").SetValue(true));
+            Menu.AddItem(new MenuItem(Name + "EGapcloser", "Anti-Gapcloser").SetValue(true));
 
-            this.Menu.AddItem(new MenuItem(this.Name + "EKillable", "Use Only If Killable By Combo").SetValue(true));
+            Menu.AddItem(new MenuItem(Name + "EKillable", "Use Only If Killable By Combo").SetValue(true));
 
-            this.Menu.AddItem(new MenuItem(this.Name + "ERange", "E Range").SetValue(new Slider(300, 350)));
+            Menu.AddItem(new MenuItem(Name + "ERange", "E Range").SetValue(new Slider(300, 350)));
 
-            this.Menu.AddItem(
-                new MenuItem(this.Name + "MinTargets", "Min Targets In Range").SetValue(new Slider(2, 0, 5)));
+            Menu.AddItem(
+                new MenuItem(Name + "MinTargets", "Min Targets In Range").SetValue(new Slider(2, 0, 5)));
 
-            this.Menu.AddItem(new MenuItem(this.Name + "EMana", "Mana %").SetValue(new Slider(45, 0, 100)));
+            Menu.AddItem(new MenuItem(Name + "EMana", "Mana %").SetValue(new Slider(45, 0, 100)));
+
+            logic = new LogicAll();
         }
 
         private void Gapcloser(ActiveGapcloser gapcloser)
         {
-            if (!this.Menu.Item(this.Menu.Name + "EGapcloser").GetValue<bool>()) return;
+            if (!Menu.Item(Menu.Name + "EGapcloser").GetValue<bool>()) return;
 
             var target = gapcloser.Sender;
 
@@ -89,7 +99,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 
         private void Interrupt(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (!this.Menu.Item(this.Menu.Name + "EInterrupt").GetValue<bool>()) return;
+            if (!Menu.Item(Menu.Name + "EInterrupt").GetValue<bool>()) return;
 
             if (!sender.IsEnemy || !Variables.Spells[SpellSlot.E].IsReady() || !sender.IsValidTarget()
                 || sender.IsZombie) return;
@@ -100,16 +110,16 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
         private void moonfall()
         {
             var target = TargetSelector.GetTarget(
-                this.Menu.Item(this.Menu.Name + "ERange").GetValue<Slider>().Value,
+                Menu.Item(Menu.Name + "ERange").GetValue<Slider>().Value,
                 TargetSelector.DamageType.Magical);
 
             if (target == null || !target.IsValid) return;
 
-            if (this.Menu.Item(this.Menu.Name + "MinTargets").GetValue<Slider>().Value
-                > target.CountEnemiesInRange(this.Menu.Item(this.Menu.Name + "ERange").GetValue<Slider>().Value)) return;
+            if (Menu.Item(Menu.Name + "MinTargets").GetValue<Slider>().Value
+                > target.CountEnemiesInRange(Menu.Item(Menu.Name + "ERange").GetValue<Slider>().Value)) return;
 
-            if (this.Menu.Item(this.Menu.Name + "EKillable").GetValue<bool>()
-                && this.logic.ComboDmg(target) * 1.2 < target.Health)
+            if (Menu.Item(Menu.Name + "EKillable").GetValue<bool>()
+                && logic.ComboDmg(target) * 1.2 < target.Health)
             {
                 return;
             }
@@ -119,12 +129,12 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 
         private void OnUpdate(EventArgs args)
         {
-            if (Variables.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
+            if (this.orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
                 || !Variables.Spells[SpellSlot.E].IsReady()) return;
 
             // if (Menu.Item(Menu.Name + "EMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
 
-            this.moonfall();
+            moonfall();
         }
 
         #endregion

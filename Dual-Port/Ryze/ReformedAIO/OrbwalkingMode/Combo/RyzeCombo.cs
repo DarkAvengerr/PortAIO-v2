@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Combo
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Combo
 {
     #region Using Directives
 
@@ -9,62 +11,51 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Combo
 
     using ReformedAIO.Champions.Ryze.Logic;
 
-    using RethoughtLib.Events;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
     #endregion
 
     internal class RyzeCombo : ChildBase
     {
-        #region Fields
-
         private ELogic eLogic;
+       
+        public override string Name { get; set; } = "Combo";
 
-        #endregion
+        private readonly Orbwalking.Orbwalker orbwalker;
 
-        #region Public Properties
-
-        public sealed override string Name { get; set; }
-
-        #endregion
+        public RyzeCombo(Orbwalking.Orbwalker orbwalker)
+        {
+            this.orbwalker = orbwalker;
+        }
 
         #region Methods
 
-        public RyzeCombo(string name)
-        {
-            this.Name = name;
-        }
-
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Game.OnUpdate -= this.OnUpdate;
+            Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Game.OnUpdate += this.OnUpdate;
+
+            Game.OnUpdate += OnUpdate;
         }
 
-        protected override void OnInitialize(object sender, FeatureBaseEventArgs featureBaseEventArgs)
-        {
-            this.eLogic = new ELogic();
-
-            base.OnInitialize(sender, featureBaseEventArgs);
-        }
-
+       
         protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            //base.OnLoad(sender, featureBaseEventArgs);
+            base.OnLoad(sender, featureBaseEventArgs);
 
-            this.Menu.AddItem(
-                new MenuItem(this.Name + "Mode", "Mode").SetValue(
+            Menu.AddItem(new MenuItem( "Mode", "Mode").SetValue(
                     new StringList(new[] { "Burst", "Safe", "Automatic" })));
 
-            this.Menu.AddItem(new MenuItem(this.Menu.Name + "QMana", "Q Mana %").SetValue(new Slider(0, 0, 50)));
+            Menu.AddItem(new MenuItem( "QMana", "Q Mana %").SetValue(new Slider(0, 0, 50)));
 
-            this.Menu.AddItem(new MenuItem(this.Menu.Name + "WMana", "W Mana %").SetValue(new Slider(0, 0, 50)));
+            Menu.AddItem(new MenuItem( "WMana", "W Mana %").SetValue(new Slider(0, 0, 50)));
 
-            this.Menu.AddItem(new MenuItem(this.Menu.Name + "EMana", "E Mana %").SetValue(new Slider(0, 0, 50)));
+            Menu.AddItem(new MenuItem( "EMana", "E Mana %").SetValue(new Slider(0, 0, 50)));
+
+            eLogic = new ELogic();
         }
 
         private void Burst()
@@ -76,7 +67,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Combo
             if (Variable.Spells[SpellSlot.Q].IsReady())
             {
                 if (target.IsValid
-                    && this.Menu.Item(this.Menu.Name + "QMana").GetValue<Slider>().Value < Variable.Player.ManaPercent)
+                    && Menu.Item( "QMana").GetValue<Slider>().Value < Variable.Player.ManaPercent)
                 {
                     var qpred = Variable.Spells[SpellSlot.Q].GetPrediction(target);
                     if (qpred.Hitchance >= HitChance.Medium)
@@ -89,34 +80,34 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Combo
             if (Variable.Spells[SpellSlot.E].IsReady() && !Variable.Spells[SpellSlot.Q].IsReady())
             {
                 if (target.IsValidTarget(Variable.Spells[SpellSlot.E].Range)
-                    && this.Menu.Item(this.Menu.Name + "EMana").GetValue<Slider>().Value < Variable.Player.ManaPercent)
+                    && Menu.Item( "EMana").GetValue<Slider>().Value < Variable.Player.ManaPercent)
                 {
                     Variable.Spells[SpellSlot.E].Cast(target);
                 }
             }
 
-            if (!Variable.Spells[SpellSlot.W].IsReady() || this.eLogic.RyzeE(target)) return;
+            if (!Variable.Spells[SpellSlot.W].IsReady() || eLogic.RyzeE(target)) return;
 
             if (!target.IsValidTarget(Variable.Spells[SpellSlot.W].Range)
-                || !(this.Menu.Item(this.Menu.Name + "WMana").GetValue<Slider>().Value < Variable.Player.ManaPercent)) return;
+                || !(Menu.Item( "WMana").GetValue<Slider>().Value < Variable.Player.ManaPercent)) return;
 
             Variable.Spells[SpellSlot.W].Cast(target);
         }
 
         private void OnUpdate(EventArgs args)
         {
-            if (Variable.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo) return;
+            if (this.orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo) return;
 
-            switch (this.Menu.Item(this.Menu.Name + "Mode").GetValue<StringList>().SelectedIndex)
+            switch (Menu.Item( "Mode").GetValue<StringList>().SelectedIndex)
             {
                 case 0:
                     {
-                        this.Burst();
+                        Burst();
                         break;
                     }
                 case 1:
                     {
-                        this.Safe();
+                        Safe();
                         break;
                     }
                 case 2:
@@ -145,13 +136,13 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Combo
                 Variable.Spells[SpellSlot.E].Cast(target);
             }
 
-            if (this.eLogic.RyzeE(target) && Variable.Spells[SpellSlot.W].IsReady()
+            if (eLogic.RyzeE(target) && Variable.Spells[SpellSlot.W].IsReady()
                 && target.IsValidTarget(Variable.Spells[SpellSlot.W].Range))
             {
                 Variable.Spells[SpellSlot.W].Cast(target);
             }
 
-            if (Variable.Spells[SpellSlot.Q].IsReady() && !this.eLogic.RyzeE(target))
+            if (Variable.Spells[SpellSlot.Q].IsReady() && !eLogic.RyzeE(target))
             {
                 Variable.Spells[SpellSlot.Q].CastIfHitchanceEquals(target, HitChance.High);
             }

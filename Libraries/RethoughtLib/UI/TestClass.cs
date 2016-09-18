@@ -30,6 +30,7 @@ using EloBuddy;
                                    };
 
             displayer.Add(notification);
+            displayer.Display();
         }
 
         #endregion

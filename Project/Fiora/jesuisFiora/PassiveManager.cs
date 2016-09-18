@@ -207,9 +207,10 @@ using EloBuddy;
         private Geometry.Polygon.Sector _simplePolygon;
         private Vector3 LastPolygonPosition;
         private Vector3 LastSimplePolygonPosition;
+
         public FioraPassive() {}
 
-        public unsafe FioraPassive(Obj_GeneralParticleEmitter emitter, AIHeroClient enemy) : base(emitter.Index, (uint) emitter.NetworkId, null)
+        public FioraPassive(Obj_GeneralParticleEmitter emitter, AIHeroClient enemy)
         {
             Target = enemy;
 

@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Ryze
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ryze
 {
     #region Using Directives
 
@@ -13,8 +15,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze
     {
         #region Static Fields
 
-        public static Dictionary<SpellSlot, Spell> Spells = new Dictionary<SpellSlot, Spell>()
-                                                                {
+        public static Dictionary<SpellSlot, Spell> Spells = new Dictionary<SpellSlot, Spell> {
                                                                     {
                                                                         SpellSlot.Q,
                                                                         new Spell(

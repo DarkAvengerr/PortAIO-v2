@@ -17,29 +17,39 @@ namespace PortAIO
     public static class Init
     {
         public static bool loaded = false;
+        public static int moduleNum = 1;
 
         public static void Initialize()
         {
             Common.Init.LoadCommon("7E6CBFB7497BE722B8E286ECBDE88");
-
+            Console.WriteLine("[PortAIO] Core loading : Module " + moduleNum + " - Common Loaded");
+            moduleNum++;
             if (Common.Init.isLoaded == "LOADED")
             {
-                //LeagueSharp.SDK.Bootstrap.Init(); - SDK is not yet added so it is not yet needed.
                 Misc.Load();
-
+                Console.WriteLine("[PortAIO] Core loading : Module " + moduleNum + " - Misc Loaded");
+                moduleNum++;
                 if (!Misc.menu.Item("UtilityOnly").GetValue<bool>())
                 {
                     LoadChampion();
+                    Console.WriteLine("[PortAIO] Core loading : Module " + moduleNum + " - Champion Script Loaded");
+                    moduleNum++;
+                    Game.OnUpdate += Game_OnUpdate;
+                    Console.WriteLine("[PortAIO] Core loading : Module " + moduleNum + " - Champion Load Detected, Disabling EB Orbwalker");
+                    moduleNum++;
                 }
                 if (!Misc.menu.Item("ChampsOnly").GetValue<bool>())
                 {
                     LoadUtility();
+                    Console.WriteLine("[PortAIO] Core loading : Module " + moduleNum + " - Utilities Loaded");
+                    moduleNum++;
                 }
 
+                Console.WriteLine("[PortAIO] Core loading : Module " + moduleNum + " - Checking Version");
+                moduleNum++;
                 CheckVersion();
+                Console.WriteLine("[PortAIO] Core loaded.");
             }
-
-            Game.OnUpdate += Game_OnUpdate;
         }
 
         private static void Game_OnUpdate(EventArgs args)
@@ -80,8 +90,11 @@ namespace PortAIO
         public static void LoadUtility()
         {
             Anti_Rito.Program.Main();
+            Console.WriteLine("[PortAIO] Core loading : Utility Load #1");
             PortAIOHuman.Program.Game_OnGameLoad();
-            LittleHumanizer.Program.Main();
+            Console.WriteLine("[PortAIO] Core loading : Utility Load #2");
+            BadaoActionsLimiter.Program.Main();
+            Console.WriteLine("[PortAIO] Core loading : Utility Load #3");
 
             //ProFlash.Program.Main();
             //TiltSharp.Program.Main();

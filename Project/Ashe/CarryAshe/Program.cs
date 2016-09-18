@@ -15,20 +15,14 @@ using EloBuddy;
         internal static Ashe Champion = new Ashe();
         internal static Menu RootMenu;
         internal static Orbwalking.Orbwalker Orbwalker;
-        static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += OnLoad;
-
-        }
-
-        static void OnLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
             RootMenu = new Menu("CarryAshe", "CarryAsheMenu", true);
             var orbwalkerMenu = new Menu("Orbwalker", "orbwalker");
             Orbwalker = new Orbwalking.Orbwalker(orbwalkerMenu);
             RootMenu.AddSubMenu(orbwalkerMenu);
             RootMenu.AddSubMenu(ItemManager.Menu);
-            Champion.OnLoad(args);
+            Champion.OnLoad(null);
         }
     }
 }

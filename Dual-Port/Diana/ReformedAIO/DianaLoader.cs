@@ -1,10 +1,12 @@
-using System.Collections.Generic;
-using RethoughtLib.Utility;
-
-using EloBuddy; namespace ReformedAIO.Champions.Diana
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Diana
 {
     #region Using Directives
 
+    using System.Collections.Generic;
+
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Diana.Logic.Killsteal;
@@ -17,7 +19,9 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana
     using ReformedAIO.Champions.Diana.OrbwalkingMode.Mixed;
 
     using RethoughtLib.Bootstraps.Abstract_Classes;
+    using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Implementations;
+    using RethoughtLib.Utility;
 
     #endregion
 
@@ -37,57 +41,80 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana
 
         public override void Load()
         {
-            var superParent = new SuperParent(this.DisplayName);
+            var superParent = new SuperParent(DisplayName);
+            superParent.Initialize();
+
+            var orbwalker = new Orbwalking.Orbwalker(superParent.Menu.SubMenu("Orbwalker"));
 
             // Parents
-            var combo = new Parent("Combo");
-            var misaya = new Parent("Misaya");
-            var mixed = new Parent("Mixed");
-            var lane = new Parent("LaneClear");
-            var jungle = new Parent("JungleClear");
-            var ks = new Parent("Killsteal");
-            var draw = new Parent("Drawings");
-            var flee = new Parent("Flee");
+            var comboParent = new OrbwalkingParent("Combo", orbwalker, Orbwalking.OrbwalkingMode.Combo);
+            var misayaParent = new Parent("Misaya");
+            var laneParent = new OrbwalkingParent("Lane", orbwalker, Orbwalking.OrbwalkingMode.LaneClear);
+            var jungleParent = new OrbwalkingParent("Jungle", orbwalker, Orbwalking.OrbwalkingMode.LaneClear);
+            var mixedParent = new OrbwalkingParent("Mixed", orbwalker, Orbwalking.OrbwalkingMode.Mixed);
+            var ksParent = new Parent("Killsteal");
+            var drawParent = new Parent("Drawings");
+            var fleeParent = new Parent("Flee");
 
-            superParent.AddChildren(new[]
+            superParent.Add(new Base[]
             {
-                combo, misaya, mixed, lane, jungle, ks, draw, flee
+                comboParent, misayaParent, mixedParent, laneParent, jungleParent, ksParent, drawParent, fleeParent
             });
 
-            combo.AddChild(new CrescentStrike());
-            combo.AddChild(new Moonfall());
-            combo.AddChild(new LunarRush());
-            combo.AddChild(new PaleCascade());
-            combo.AddChild(new MisayaCombo());
+            comboParent.Add(new ChildBase[]
+            {
+                new CrescentStrike(orbwalker), 
+                new Moonfall(orbwalker), 
+                new LunarRush(orbwalker), 
+                new PaleCascade(orbwalker), 
+                new MisayaCombo(orbwalker) 
+            });
 
-            mixed.AddChild(new MixedCrescentStrike());
+            mixedParent.Add(new ChildBase[]
+            {
+                new MixedCrescentStrike(orbwalker)
+            });
+            
+            laneParent.Add(new ChildBase[]
+            {
+                new LaneCrescentStrike(orbwalker), 
+                new LaneLunarRush(orbwalker) 
+            });
+            
+            jungleParent.Add(new ChildBase[]
+            {
+                new JungleCrescentStrike(orbwalker), 
+                new JungleLunarRush(orbwalker), 
+                new JungleMoonfall(orbwalker), 
+                new JunglePaleCascade(orbwalker) 
+            });
+         
+            ksParent.Add(new ChildBase[]
+            {
+                new KsPaleCascade(), 
+                new KsCrescentStrike() 
+            });
+            
+            drawParent.Add(new ChildBase[]
+            {
+                new DrawQ(), 
+                new DrawE(), 
+                new DrawDmg(), 
+                new DrawPred() 
+            });
+            
+            fleeParent.Add(new ChildBase[]
+            {
+                new FleeMode() 
+            });
+            
+            superParent.Load();
 
-            lane.AddChild(new LaneCrescentStrike());
-            lane.AddChild(new LaneLunarRush());
-
-            jungle.AddChild(new JungleCrescentStrike());
-            jungle.AddChild(new JungleLunarRush());
-            jungle.AddChild(new JungleMoonfall());
-            jungle.AddChild(new JunglePaleCascade());
-
-            ks.AddChild(new KsPaleCascade());
-            ks.AddChild(new KsCrescentStrike());
-
-            draw.AddChild(new DrawQ());
-            draw.AddChild(new DrawE());
-            draw.AddChild(new DrawDmg());
-            draw.AddChild(new DrawPred());
-
-            flee.AddChild(new FleeMode());
-
-            superParent.OnLoadInvoker();
-
-            var orbWalkingMenu = new Menu("Orbwalker", "Orbwalker");
-            Variables.Orbwalker = new Orbwalking.Orbwalker(orbWalkingMenu);
-
-            superParent.Menu.AddSubMenu(orbWalkingMenu);
+            if (superParent.Loaded)
+            {
+                Chat.Print("Reformed Diana - Loaded");
+            }
         }
-
         #endregion
     }
 }

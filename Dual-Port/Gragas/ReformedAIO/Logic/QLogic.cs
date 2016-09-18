@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Gragas.Logic
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Gragas.Logic
 {
     #region Using Directives
 
@@ -23,12 +25,12 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.Logic
 
         public bool CanExplodeQ(Obj_AI_Base target)
         {
-            return this.GragasQ != null && target.Distance(this.GragasQ.Position) <= 250;
+            return GragasQ != null && target.Distance(GragasQ.Position) <= 250;
         }
 
         public bool CanThrowQ()
         {
-            return this.GragasQ == null;
+            return GragasQ == null;
         }
 
         public void Load()
@@ -40,8 +42,8 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.Logic
                 Variable.Spells[SpellSlot.E].SetSkillshot(0.15f, 25f, 900f, true, SkillshotType.SkillshotLine);
             }
 
-            GameObject.OnCreate += this.OnCreateObject;
-            GameObject.OnDelete += this.GameObject_OnDelete;
+            GameObject.OnCreate += OnCreateObject;
+            GameObject.OnDelete += GameObject_OnDelete;
         }
 
         public Vector3 QPred(AIHeroClient target)
@@ -59,7 +61,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.Logic
         {
             if (sender.Name == "Gragas_Base_Q_Ally.troy")
             {
-                this.GragasQ = null;
+                GragasQ = null;
             }
         }
 
@@ -67,7 +69,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.Logic
         {
             if (sender.Name == "Gragas_Base_Q_Ally.troy")
             {
-                this.GragasQ = sender;
+                GragasQ = sender;
             }
         }
 

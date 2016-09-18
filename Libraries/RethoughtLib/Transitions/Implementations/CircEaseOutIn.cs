@@ -9,7 +9,7 @@ using EloBuddy;
     /// <summary>
     ///     The circular ease out in.
     /// </summary>
-    public class CircEaseOutIn : Transition
+    public class CircEaseOutIn : TransitionBase
     {
         #region Constructors and Destructors
 
@@ -77,7 +77,7 @@ using EloBuddy;
         /// <summary>
         ///     The equation.
         /// </summary>
-        /// <param name="t">
+        /// <param name="time">
         ///     The t.
         /// </param>
         /// <param name="b">
@@ -86,20 +86,20 @@ using EloBuddy;
         /// <param name="c">
         ///     The c.
         /// </param>
-        /// <param name="d">
+        /// <param name="startTime">
         ///     The d.
         /// </param>
         /// <returns>
         ///     The <see cref="double" />.
         /// </returns>
-        public override double Equation(double t, double b, double c, double d)
+        public override double Equation(double time, double b, double c, double startTime)
         {
-            if (t < d / 2)
+            if (time < startTime / 2)
             {
-                return CircEaseOut(t * 2, b, c / 2, d);
+                return CircEaseOut(time * 2, b, c / 2, startTime);
             }
 
-            return CircEaseIn(t * 2 - d, b + c / 2, c / 2, d);
+            return CircEaseIn(time * 2 - startTime, b + c / 2, c / 2, startTime);
         }
 
         #endregion

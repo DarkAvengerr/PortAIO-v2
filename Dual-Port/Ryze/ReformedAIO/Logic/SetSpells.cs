@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Ryze.Logic
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ryze.Logic
 {
     #region Using Directives
 

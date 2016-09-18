@@ -6,10 +6,9 @@ using EloBuddy;
 
     using System;
 
-    using global::RethoughtLib.Exceptions;
-    using global::RethoughtLib.Menu.Interfaces;
-
     using LeagueSharp.Common;
+
+    using RethoughtLib.Menu.Interfaces;
 
     #endregion
 
@@ -23,34 +22,32 @@ using EloBuddy;
     /// </summary>
     public class MenuGenerator
     {
-        #region Fields
-
-        /// <summary>
-        ///     The menu
-        /// </summary>
-        private readonly Menu menu = null;
-
-        /// <summary>
-        ///     The menu set
-        /// </summary>
-        private readonly IMenuPreset menuPreset = null;
-
-        #endregion
-
         #region Constructors and Destructors
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="MenuGenerator" /> class.
         /// </summary>
         /// <param name="menu">The menu.</param>
-        /// <param name="menuPreset">The menu preset.</param>
-        public MenuGenerator(Menu menu, IMenuPreset menuPreset)
+        /// <param name="generator">The menu preset.</param>
+        public MenuGenerator(Menu menu, IGenerator generator)
         {
-            this.menuPreset = menuPreset;
-            this.menu = menu;
-
-            menuPreset.Menu = menu;
+            this.Generator = generator;
+            this.Menu = menu;
         }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        ///     The menu set
+        /// </summary>
+        public IGenerator Generator { get; set; }
+
+        /// <summary>
+        ///     The menu
+        /// </summary>
+        public Menu Menu { get; set; }
 
         #endregion
 
@@ -59,27 +56,19 @@ using EloBuddy;
         /// <summary>
         ///     Generates the menu.
         /// </summary>
-        /// <exception cref="MenuGenerationException"></exception>
         /// <exception cref="System.NullReferenceException">
         ///     Get sure that you declared a valid menuPreset and a valid menu in the
         ///     constructor before generating.
         /// </exception>
         public void Generate()
         {
-            try
+            if (this.Generator == null || this.Menu == null)
             {
-                if (this.menuPreset == null || this.menu == null)
-                {
-                    throw new NullReferenceException(
-                        "Get sure that you declared a valid menuPreset and a valid menu in the constructor before generating.");
-                }
+                throw new NullReferenceException(
+                    "Get sure that you declared a valid menuPreset and a valid menu in the constructor before generating.");
+            }
 
-                this.menuPreset.Generate();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
+            this.Generator.Generate(this.Menu);
         }
 
         #endregion

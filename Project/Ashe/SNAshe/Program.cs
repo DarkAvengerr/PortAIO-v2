@@ -20,12 +20,7 @@ using EloBuddy;
         private static Orbwalking.Orbwalker orb;
         private static Menu menu;
 
-        static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += onGameLoad;
-        }
-
-        private static void onGameLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
             if (myPlayer.ChampionName != "Ashe")
                 return;

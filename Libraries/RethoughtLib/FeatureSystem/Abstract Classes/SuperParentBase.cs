@@ -19,45 +19,25 @@ using EloBuddy;
         /// </summary>
         protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            this.Menu.AddToMainMenu();
-
             base.OnLoad(sender, featureBaseEventArgs);
+
+            this.Menu.AddToMainMenu();
         }
 
         /// <summary>
-        /// Initializes the menu, overwrite this method to change the menu type. Do not overwrite if you only want to change
-        /// the menu content.
+        ///     Initializes the menu, overwrite this method to change the menu type. Do not overwrite if you only want to change
+        ///     the menu content.
         /// </summary>
-        protected override void CreateMenu()
+        protected override void SetMenu()
         {
-            this.Menu = new Menu(this.Name, this.Name, true);
-
-            this.Menu.AddItem(new MenuItem(this.Name + "Enabled", "Enabled").SetValue(true));
-
-            this.Menu.Item(this.Name + "Enabled").ValueChanged += delegate (object sender, OnValueChangeEventArgs args)
-            {
-                if (args.GetNewValue<bool>())
-                {
-                    this.OnEnableInvoker();
-                }
-                else
-                {
-                    this.OnDisableInvoker();
-                }
-            };
+            this.Menu = new Menu(this.Path, this.Name, true);
         }
 
-        /// <summary>
-        ///     Called when [unload].
-        /// </summary>
-        protected override void OnUnload(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        /// <summary>Returns a string that represents the current object.</summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString()
         {
-            Menu.Remove(this.Menu);
-
-            foreach (var child in this.Children)
-            {
-                child.Key.OnUnLoadInvoker();
-            }
+            return "SuperParent " + this.Name;
         }
 
         #endregion

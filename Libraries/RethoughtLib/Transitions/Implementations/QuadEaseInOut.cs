@@ -7,7 +7,7 @@ using EloBuddy;
     /// <summary>
     ///     The quad ease in out.
     /// </summary>
-    public class QuadEaseInOut : Transition
+    public class QuadEaseInOut : TransitionBase
     {
         #region Constructors and Destructors
 
@@ -29,7 +29,7 @@ using EloBuddy;
         /// <summary>
         ///     The equation.
         /// </summary>
-        /// <param name="t">
+        /// <param name="time">
         ///     The t.
         /// </param>
         /// <param name="b">
@@ -38,20 +38,20 @@ using EloBuddy;
         /// <param name="c">
         ///     The c.
         /// </param>
-        /// <param name="d">
+        /// <param name="startTime">
         ///     The d.
         /// </param>
         /// <returns>
         ///     The <see cref="double" />.
         /// </returns>
-        public override double Equation(double t, double b, double c, double d)
+        public override double Equation(double time, double b, double c, double startTime)
         {
-            if ((t /= d / 2) < 1)
+            if ((time /= startTime / 2) < 1)
             {
-                return c / 2 * t * t + b;
+                return c / 2 * time * time + b;
             }
 
-            return -c / 2 * (--t * (t - 2) - 1) + b;
+            return -c / 2 * (--time * (time - 2) - 1) + b;
         }
 
         #endregion

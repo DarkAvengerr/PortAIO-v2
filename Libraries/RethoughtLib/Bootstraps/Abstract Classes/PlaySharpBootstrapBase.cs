@@ -1,6 +1,6 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace RethoughtLib.Bootstraps.Abstract_Classes
+using EloBuddy;
+using LeagueSharp.Common;
+namespace RethoughtLib.Bootstraps.Abstract_Classes
 {
     #region Using Directives
 
@@ -21,7 +21,9 @@ using EloBuddy;
         /// <summary>
         ///     The modules
         /// </summary>
-        protected List<LoadableBase> Modules = new List<LoadableBase>();
+        public List<LoadableBase> Modules = new List<LoadableBase>();
+
+        protected List<LoadableBase> LoadedModules = new List<LoadableBase>();
 
         /// <summary>
         ///     Gets or sets the string that gets checked for check for.
@@ -29,7 +31,7 @@ using EloBuddy;
         /// <value>
         ///     The check for.
         /// </value>
-        protected List<string> Strings = new List<string>();
+        protected internal List<string> Strings = new List<string>();
 
         #endregion
 
@@ -152,60 +154,52 @@ using EloBuddy;
         /// </summary>
         public virtual void Run()
         {
-            CustomEvents.Game.OnGameLoad += delegate(EventArgs args)
+            if (!this.Modules.Any())
+            {
+                throw new InvalidOperationException("There are no modules in the Bootstrap to load.");
+            }
+
+            if (!this.Strings.Any())
+            {
+                throw new InvalidOperationException(
+                    "There are no strings in the Bootstrap to make a check with modules.");
+            }
+
+            var unknownModulesCount = 0;
+
+            foreach (var module in this.Modules)
+            {
+                if (string.IsNullOrWhiteSpace(module.DisplayName) || !module.Tags.Any())
                 {
-                    if (!this.Modules.Any())
+                    unknownModulesCount++;
+                    continue;
+                }
+
+                foreach (var @string in this.Strings)
+                {
+                    Console.WriteLine(@string);
+                    foreach (var tag in module.Tags)
                     {
-                        throw new InvalidOperationException("There are no modules in the Bootstrap to load.");
-                    }
-
-                    if (!this.Strings.Any())
-                    {
-                        throw new InvalidOperationException(
-                            "There are no strings in the Bootstrap to make a check with modules.");
-                    }
-
-                    var loadedModulesCount = 0;
-                    var unknownModulesCount = 0;
-
-                    foreach (var module in this.Modules)
-                    {
-                        var value = module.Tags.ToList();
-
-                        Console.WriteLine("Processing Module: " + module.InternalName + " Tags: " + value);
-
-                        if (string.IsNullOrWhiteSpace(module.DisplayName) || !module.Tags.Any())
+                        Console.WriteLine(tag);
+                        if (!tag.Equals(@string))
                         {
-                            unknownModulesCount++;
                             continue;
                         }
 
-                        foreach (var @string in this.Strings)
-                        {
-                            Console.WriteLine(@string);
-                            foreach (var tag in module.Tags)
-                            {
-                                Console.WriteLine(tag);
-                                if (!tag.Equals(@string))
-                                {
-                                    continue;
-                                }
-
-                                module.Load();
-                                loadedModulesCount++;
-                            }
-                        }
+                        module.Load();
+                        this.LoadedModules.Add(module);
                     }
+                }
+            }
 
-                    Console.WriteLine(
-                        $"[{this}] {unknownModulesCount} unknown Modules, {loadedModulesCount} loaded Modules");
+            Console.WriteLine(
+                $"[{this}] {unknownModulesCount} unknown Modules, {this.LoadedModules.Count} loaded Modules");
 
-                    if (unknownModulesCount > 0)
-                    {
-                        Console.WriteLine(
-                            $"[{this}] Please consider tagging and naming your unknown modules. The name must not be null or whitespace.");
-                    }
-                };
+            if (unknownModulesCount > 0)
+            {
+                Console.WriteLine(
+                    $"[{this}] Please consider tagging and naming your unknown modules. The name must not be null or whitespace.");
+            }
         }
 
         #endregion

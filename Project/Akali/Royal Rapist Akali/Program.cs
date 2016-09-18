@@ -39,12 +39,7 @@ using EloBuddy;
         static List<Spell> SpellList;
         //////////////////////////////
 
-        static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += OnGameLoad;
-        }
-
-        static void OnGameLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
             if (player.ChampionName != "Akali")
                 return;

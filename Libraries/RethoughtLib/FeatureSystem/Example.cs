@@ -6,6 +6,7 @@ using EloBuddy;
 
     using global::RethoughtLib.FeatureSystem.Abstract_Classes;
     using global::RethoughtLib.FeatureSystem.Implementations;
+    using global::RethoughtLib.FeatureSystem.Switches;
 
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -19,6 +20,7 @@ using EloBuddy;
 
             // A normal Menu
             var comboParent = new Parent("Parent");
+            comboParent.Switch = new BoolSwitch(comboParent.Menu, "Disabled", false, comboParent);
 
             // 2 children containing the same logic
             var child = new ExampleChild("Child");
@@ -30,12 +32,12 @@ using EloBuddy;
              *
             */
 
-            root.AddChild(comboParent);
+            root.Add(comboParent);
 
-            comboParent.AddChild(child);
-            comboParent.AddChild(child2);
+            comboParent.Add(child);
+            comboParent.Add(child2);
 
-            /* Output:
+            /* Example Output:
              * Root > Parent           > Child            > Enabled [On/Off]
              *        Enabled [On/Off]   Child2           > Enabled [On/Off]
              *                           Enabled [On/Off]
@@ -47,8 +49,6 @@ using EloBuddy;
             public ExampleChild(string name)
             {
                 this.Name = name;
-
-                this.OnInitializeInvoker();
             }
 
             /// <summary>

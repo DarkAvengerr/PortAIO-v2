@@ -1,22 +1,26 @@
-using ReformedAIO.Champions.Ryze.OrbwalkingMode.Combo;
-
-using EloBuddy; namespace ReformedAIO.Champions.Ryze
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ryze
 {
     #region Using Directives
 
-    using LeagueSharp.Common;
     using System.Collections.Generic;
-    using RethoughtLib.Utility;
 
-    using Drawings;
-    using Logic;
-    using OrbwalkingMode.Jungle;
-    using OrbwalkingMode.Lane;
-    using OrbwalkingMode.Mixed;
-    using OrbwalkingMode.None.Killsteal;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+
+    using ReformedAIO.Champions.Ryze.Drawings;
+    using ReformedAIO.Champions.Ryze.Logic;
+    using ReformedAIO.Champions.Ryze.OrbwalkingMode.Combo;
+    using ReformedAIO.Champions.Ryze.OrbwalkingMode.Jungle;
+    using ReformedAIO.Champions.Ryze.OrbwalkingMode.Lane;
+    using ReformedAIO.Champions.Ryze.OrbwalkingMode.Mixed;
+    using ReformedAIO.Champions.Ryze.OrbwalkingMode.None.Killsteal;
 
     using RethoughtLib.Bootstraps.Abstract_Classes;
+    using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Implementations;
+    using RethoughtLib.Utility;
 
     #endregion
 
@@ -28,7 +32,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze
 
         public override string InternalName { get; set; } = "Ryze";
 
-        public override IEnumerable<string> Tags { get; set; } = new List<string>() { "Ryze" };
+        public override IEnumerable<string> Tags { get; set; } = new List<string> { "Ryze" };
 
         #endregion
 
@@ -37,45 +41,64 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze
         public override void Load()
         { 
             var superParent = new SuperParent(DisplayName);
+            superParent.Initialize();
 
-            var setSpells = new SetSpells();
+            var orbwalker = new Orbwalking.Orbwalker(superParent.Menu.SubMenu("Orbwalker"));
+
+            var setSpells = new SetSpells(); // lazy af
             setSpells.Load();
 
-            var comboParent = new Parent("Combo");
-            var laneParent = new Parent("Lane");
-            var jungleParent = new Parent("Jungle");
-            var mixedParent = new Parent("Mixed");
+            var comboParent = new OrbwalkingParent("Combo", orbwalker, Orbwalking.OrbwalkingMode.Combo);
+            var laneParent = new OrbwalkingParent("Lane", orbwalker, Orbwalking.OrbwalkingMode.LaneClear);
+            var jungleParent = new OrbwalkingParent("Jungle", orbwalker, Orbwalking.OrbwalkingMode.LaneClear);
+            var mixedParent = new OrbwalkingParent("Mixed", orbwalker, Orbwalking.OrbwalkingMode.Mixed);
             var killstealParent = new Parent("Killsteal");
             var drawParent = new Parent("Drawings");
 
-            superParent.AddChild(new RyzeCombo("Combo"));
+            comboParent.Add(new ChildBase[]
+            {
+             new RyzeCombo(orbwalker)
+            });
 
-            superParent.AddChildren(new[] { laneParent, jungleParent, mixedParent, killstealParent, drawParent });
+            mixedParent.Add(new ChildBase[]
+            {
+                new QMixed(orbwalker),
+                new WMixed(orbwalker),
+                new EMixed(orbwalker)
+            });
 
-            mixedParent.AddChild(new QMixed());
-            mixedParent.AddChild(new WMixed());
-            mixedParent.AddChild(new EMixed());
+            laneParent.Add(new ChildBase[]
+            {
+                new QLane(orbwalker),
+                new WLane(orbwalker),
+                new ELane(orbwalker)
+            });
+          
+            jungleParent.Add(new ChildBase[]
+            {
+                new QJungle(orbwalker),
+                new WJungle(orbwalker),
+                new EJungle(orbwalker) 
+            });
+           
+            killstealParent.Add(new ChildBase[]
+            {
+                new KillstealMenu() 
+            });
+          
+            drawParent.Add(new ChildBase[]
+            {
+                new QDraw(), new EDraw(), new RDraw(), new DmgDraw() 
+            });
 
-            laneParent.AddChild(new QLane());
-            laneParent.AddChild(new WLane());
-            laneParent.AddChild(new ELane());
+            superParent.Add(new Base[] { comboParent, laneParent, jungleParent, mixedParent, killstealParent, drawParent });
 
-            jungleParent.AddChild(new QJungle());
-            jungleParent.AddChild(new WJungle());
-            jungleParent.AddChild(new EJungle());
+            superParent.Load();
 
-            killstealParent.AddChild(new KillstealMenu());
-
-            drawParent.AddChild(new QDraw());
-            drawParent.AddChild(new EDraw());
-            drawParent.AddChild(new RDraw());
-            drawParent.AddChild(new DmgDraw());
-
-            var orbWalkingMenu = new Menu("Orbwalker", "Orbwalker");
-            Variable.Orbwalker = new Orbwalking.Orbwalker(orbWalkingMenu);
-            superParent.Menu.AddSubMenu(orbWalkingMenu);
-
-            superParent.OnLoadInvoker();
+            if (superParent.Loaded)
+            {
+                Chat.Print("Reformed Ryze - Loaded");
+            }
         }
 
         #endregion

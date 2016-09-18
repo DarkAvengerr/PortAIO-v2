@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Jungleclear
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Jungleclear
 {
     #region Using Directives
 
@@ -8,41 +10,46 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Jungleclear
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using RethoughtLib.Events;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
     #endregion
 
     internal class JungleLunarRush : ChildBase
     {
-
         #region Public Properties
 
         public override string Name { get; set; } = "[W] Lunar Rush";
 
         #endregion
 
+        private readonly Orbwalking.Orbwalker orbwalker;
+
+        public JungleLunarRush(Orbwalking.Orbwalker orbwalker)
+        {
+            this.orbwalker = orbwalker;
+        }
+
         #region Methods
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Events.OnUpdate -= this.OnUpdate;
+            Game.OnUpdate -= OnUpdate;
 
         }
 
-        protected override void OnEnable(object sender, Base.FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Events.OnUpdate += this.OnUpdate;
+            Game.OnUpdate += OnUpdate;
             
         }
 
         protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Menu = new Menu(this.Name, this.Name);
+            Menu = new Menu(Name, Name);
 
-            Menu.AddItem(new MenuItem(this.Name + "JungleWMana", "Mana %").SetValue(new Slider(10, 0, 50)));
+            Menu.AddItem(new MenuItem(Name + "JungleWMana", "Mana %").SetValue(new Slider(10, 0, 50)));
 
-            Menu.AddItem(new MenuItem(this.Name + "Enabled", "Enabled").SetValue(true));
+            Menu.AddItem(new MenuItem(Name + "Enabled", "Enabled").SetValue(true));
 
             
         }
@@ -63,12 +70,12 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Jungleclear
 
         private void OnUpdate(EventArgs args)
         {
-            if (Variables.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
+            if (this.orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
                 || !Variables.Spells[SpellSlot.W].IsReady()) return;
 
             if (Menu.Item(Menu.Name + "JungleWMana").GetValue<Slider>().Value > Variables.Player.ManaPercent) return;
 
-            this.GetMob();
+            GetMob();
         }
 
         #endregion

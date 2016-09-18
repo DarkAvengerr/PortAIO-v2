@@ -58,6 +58,8 @@ using EloBuddy;
         public Collisions Collisionable;
         public bool IsTargeted;
         public bool IsAAEmpower;
+        public bool YasuoQ3Dodgeable;
+        public bool WindwallDodgeable;
     }
 
     public class MovementBuffSpellData : SpellData
@@ -1094,7 +1096,9 @@ using EloBuddy;
                     Slot = SpellSlot.R,
                     SpellName = "AlZaharNetherGrasp",
                     IsTargeted = true,
-                    IsDangerous = true
+                    IsDangerous = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1103,7 +1107,9 @@ using EloBuddy;
                     ChampionName = "Mordekaiser",
                     Slot = SpellSlot.R,
                     SpellName = "MordekaiserChildrenOfTheGrave",
-                    IsTargeted = true
+                    IsTargeted = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1113,7 +1119,9 @@ using EloBuddy;
                     Slot = SpellSlot.R,
                     SpellName = "NocturneParanoia",
                     IsTargeted = true,
-                    IsDangerous = true
+                    IsDangerous = true,
+                    YasuoQ3Dodgeable = true,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1123,7 +1131,9 @@ using EloBuddy;
                     Slot = SpellSlot.E,
                     SpellName = "PuncturingTaunt",
                     IsDangerous = true,
-                    IsTargeted = true
+                    IsTargeted = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1133,7 +1143,9 @@ using EloBuddy;
                     Slot = SpellSlot.R,
                     SpellName = "SkarnerImpale",
                     IsDangerous = true,
-                    IsTargeted = true
+                    IsTargeted = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1142,7 +1154,9 @@ using EloBuddy;
                     ChampionName = "Vladimir",
                     Slot = SpellSlot.Q,
                     SpellName = "VladimirTransfusion",
-                    IsTargeted = true
+                    IsTargeted = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = true,
                 });
 
             TargetedSpells.Add(
@@ -1151,7 +1165,8 @@ using EloBuddy;
                     ChampionName = "Vladimir",
                     Slot = SpellSlot.R,
                     SpellName = "VladimirHemoplague",
-                    IsDangerous = true
+                    IsDangerous = true,
+                    YasuoQ3Dodgeable = false
                 });
 
             TargetedSpells.Add(
@@ -1161,7 +1176,9 @@ using EloBuddy;
                     Slot = SpellSlot.R,
                     SpellName = "InfiniteDuress",
                     IsTargeted = true,
-                    IsDangerous = true
+                    IsDangerous = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1171,7 +1188,9 @@ using EloBuddy;
                     Slot = SpellSlot.R,
                     SpellName = "zedulttargetmark",
                     IsTargeted = true,
-                    IsDangerous = true
+                    IsDangerous = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1182,6 +1201,8 @@ using EloBuddy;
                     SpellName = "CurseoftheSadMummy",
                     Radius = 550,
                     IsDangerous = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1191,6 +1212,8 @@ using EloBuddy;
                     Slot = SpellSlot.Q,
                     SpellName = "Disintegrate",
                     IsTargeted = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = true,
                 });
 
             TargetedSpells.Add(
@@ -1200,7 +1223,9 @@ using EloBuddy;
                     Slot = SpellSlot.R,
                     SpellName = "DianaTeleport",
                     IsTargeted = true,
-                    IsDangerous = true
+                    IsDangerous = true,
+                    YasuoQ3Dodgeable = true,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1209,7 +1234,9 @@ using EloBuddy;
                     ChampionName = "Fizz",
                     Slot = SpellSlot.Q,
                     SpellName = "FizzPiercingStrike",
-                    IsTargeted = true
+                    IsTargeted = true,
+                    YasuoQ3Dodgeable = true,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1219,6 +1246,8 @@ using EloBuddy;
                     Slot = SpellSlot.Q,
                     SpellName = "KhazixQ",
                     IsTargeted = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1227,7 +1256,9 @@ using EloBuddy;
                    ChampionName = "KhaZix",
                    Slot = SpellSlot.Q, //evolved
                    SpellName = "khazixqlong",
-                   IsTargeted = true
+                   IsTargeted = true,
+                   YasuoQ3Dodgeable = false,
+                   WindwallDodgeable = false,
                });
 
             TargetedSpells.Add(
@@ -1237,7 +1268,9 @@ using EloBuddy;
                     Slot = SpellSlot.R,
                     SpellName = "BlindMonkRKick",
                     IsTargeted = true,
-                    IsDangerous = true
+                    IsDangerous = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1246,7 +1279,9 @@ using EloBuddy;
                     ChampionName = "Malphite",
                     Slot = SpellSlot.Q,
                     SpellName = "SismicShard",
-                    IsTargeted = true
+                    IsTargeted = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = true,
                 });
 
             TargetedSpells.Add(
@@ -1255,7 +1290,9 @@ using EloBuddy;
                     ChampionName = "Maokai",
                     Slot = SpellSlot.W,
                     SpellName = "MaokaiUnstableGrowth",
-                    IsTargeted = true
+                    IsTargeted = true,
+                    YasuoQ3Dodgeable = true,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1265,7 +1302,9 @@ using EloBuddy;
                     Slot = SpellSlot.Q,
                     SpellName = "Terrify",
                     IsTargeted = true,
-                    IsDangerous = true
+                    IsDangerous = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1274,7 +1313,9 @@ using EloBuddy;
                     ChampionName = "Renekton",
                     Slot = SpellSlot.W,
                     SpellName = "RenektonPreExecute",
-                    IsTargeted = true
+                    IsTargeted = true,
+                    YasuoQ3Dodgeable = true,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1285,6 +1326,8 @@ using EloBuddy;
                     SpellName = "RivenMartyr",
                     Radius = 270,
                     IsDangerous = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1294,7 +1337,9 @@ using EloBuddy;
                     Slot = SpellSlot.W,
                     SpellName = "RunePrison",
                     IsTargeted = true,
-                    IsDangerous = true
+                    IsDangerous = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1304,7 +1349,9 @@ using EloBuddy;
                     Slot = SpellSlot.E,
                     SpellName = "NocturneUnspeakableHorror",
                     IsTargeted = true,
-                    IsDangerous = true
+                    IsDangerous = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = true,
                 });
 
             TargetedSpells.Add(
@@ -1314,7 +1361,9 @@ using EloBuddy;
                     Slot = SpellSlot.W,
                     SpellName = "PantheonW",
                     IsTargeted = true,
-                    IsDangerous = true
+                    IsDangerous = true,
+                    YasuoQ3Dodgeable = true,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1323,7 +1372,9 @@ using EloBuddy;
                     ChampionName = "Pantheon",
                     Slot = SpellSlot.Q,
                     SpellName = "PantheonQ",
-                    IsTargeted = true
+                    IsTargeted = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = true,
                 });
 
             TargetedSpells.Add(
@@ -1333,7 +1384,9 @@ using EloBuddy;
                     Slot = SpellSlot.R,
                     SpellName = "TrundlePain",
                     IsTargeted = true,
-                    IsDangerous = true
+                    IsDangerous = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1343,17 +1396,9 @@ using EloBuddy;
                     Slot = SpellSlot.E,
                     SpellName = "YasuoDashWrapper",
                     IsTargeted = true,
-                    IsDangerous = true
-                });
-
-            TargetedSpells.Add(
-                new SpellData
-                {
-                    ChampionName = "Taric",
-                    Slot = SpellSlot.E,
-                    SpellName = "Dazzle",
-                    IsTargeted = true,
                     IsDangerous = true,
+                    YasuoQ3Dodgeable = true,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1364,6 +1409,8 @@ using EloBuddy;
                     SpellName = "GarenQAttack",
                     IsTargeted = true,
                     IsDangerous = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable= false,
                 });
 
             TargetedSpells.Add(
@@ -1373,7 +1420,9 @@ using EloBuddy;
                     Slot = SpellSlot.R,
                     SpellName = "GarenRPreCast",
                     IsTargeted = true,
-                    IsDangerous = true
+                    IsDangerous = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1382,7 +1431,9 @@ using EloBuddy;
                     ChampionName = "Ekko",
                     Slot = SpellSlot.E,
                     SpellName = "EkkoEAttack",
-                    IsTargeted = true
+                    IsTargeted = true,
+                    YasuoQ3Dodgeable = true,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1391,7 +1442,9 @@ using EloBuddy;
                     ChampionName = "Illaoi",
                     Slot = SpellSlot.W,
                     SpellName = "IllaoiWAttack",
-                    IsTargeted = true
+                    IsTargeted = true,
+                    YasuoQ3Dodgeable = true,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1401,7 +1454,8 @@ using EloBuddy;
                     Slot = SpellSlot.Q,
                     SpellName = "LeonaShieldOfDaybreakAttack",
                     IsTargeted = true,
-                    IsDangerous = true
+                    IsDangerous = true,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1411,7 +1465,9 @@ using EloBuddy;
                     Slot = SpellSlot.R,
                     SpellName = "DariusExecute",
                     IsTargeted = true,
-                    IsDangerous = true
+                    IsDangerous = true,
+                    YasuoQ3Dodgeable = true,
+                    WindwallDodgeable = false,
                 });
 
             TargetedSpells.Add(
@@ -1421,6 +1477,8 @@ using EloBuddy;
                     Slot = SpellSlot.Q,
                     SpellName = "GangplankQWrapper",
                     IsTargeted = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = true,
                 });
 
             TargetedSpells.Add(
@@ -1429,7 +1487,9 @@ using EloBuddy;
                     ChampionName = "Syndra",
                     Slot = SpellSlot.R,
                     SpellName = "SyndraR",
-                    IsTargeted = true
+                    IsTargeted = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = true,
                 });
 
             TargetedSpells.Add(
@@ -1438,7 +1498,9 @@ using EloBuddy;
                     ChampionName = "Veigar",
                     Slot = SpellSlot.R,
                     SpellName = "VeigarPrimordialBurst",
-                    IsTargeted = true
+                    IsTargeted = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = true,
                 });
 
             TargetedSpells.Add(
@@ -1448,7 +1510,9 @@ using EloBuddy;
                     Slot = SpellSlot.W,
                     SpellName = "goldcardpreattack",
                     IsTargeted = true,
-                    IsDangerous = true
+                    IsDangerous = true,
+                    YasuoQ3Dodgeable = false,
+                    WindwallDodgeable = true,
                 });
 
             TargetedSpells.Add(
@@ -1458,7 +1522,9 @@ using EloBuddy;
                     Slot = SpellSlot.Q,
                     SpellName = "XenZhaoThrust3",
                     IsTargeted = true,
-                    IsDangerous = true
+                    IsDangerous = true,
+                    YasuoQ3Dodgeable = true,
+                    WindwallDodgeable = false,
                 });
             #endregion
         }

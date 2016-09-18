@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO
 {
     #region Using Directives
 
@@ -6,13 +8,13 @@ using EloBuddy; namespace ReformedAIO
 
     using ReformedAIO.Champions;
     using ReformedAIO.Champions.Ashe;
+    using ReformedAIO.Champions.Caitlyn;
     using ReformedAIO.Champions.Diana;
+    using ReformedAIO.Champions.Gnar;
     using ReformedAIO.Champions.Gragas;
     using ReformedAIO.Champions.Ryze;
 
-    using RethoughtLib;
     using RethoughtLib.Bootstraps.Abstract_Classes;
-    using RethoughtLib.Classes.General_Intefaces;
 
     #endregion
 
@@ -22,9 +24,10 @@ using EloBuddy; namespace ReformedAIO
 
         public static void Main()
         {
-            RethoughtLib.Instance.Load();
-
-            var bootstrap = new Bootstrap(new List<LoadableBase> { new DianaLoader(), new GragasLoader(), new AsheLoader(), new RyzeLoader() });
+            var bootstrap = new Bootstrap(new List<LoadableBase>
+            {
+                new DianaLoader(), new GragasLoader(), new AsheLoader(), new RyzeLoader(), new CaitlynLoader(), new GnarLoader()
+            });
 
             bootstrap.Run();
         }

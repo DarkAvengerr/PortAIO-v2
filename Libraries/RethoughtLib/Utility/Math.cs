@@ -44,12 +44,31 @@ using EloBuddy;
         }
 
         /// <summary>
+        ///     Gets the path length.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns></returns>
+        public static float GetPathLenght(Vector3[] path)
+        {
+            var result = 0f;
+
+            for (var i = 0; i < path.Count(); i++)
+            {
+                if (i + 1 != path.Count())
+                {
+                    result += path[i].Distance(path[i + 1]);
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
         ///     Gets the mean distance.
         /// </summary>
         /// <param name="vectors">The vectors.</param>
         /// <param name="vector">The vector.</param>
         /// <returns></returns>
-        public static float GetMeanDistance(List<Vector3> vectors, Vector3 vector)
+        public static float MeanDistance(List<Vector3> vectors, Vector3 vector)
         {
             var result = vectors.Sum(v => v.Distance(vector));
 
@@ -61,7 +80,7 @@ using EloBuddy;
         /// </summary>
         /// <param name="units"></param>
         /// <returns>Vector2</returns>
-        public static Vector2 GetMeanVector2(List<Obj_AI_Base> units)
+        public static Vector2 MeanVector2(List<Obj_AI_Base> units)
         {
             if (units.Count == 0)
             {
@@ -83,7 +102,7 @@ using EloBuddy;
         /// </summary>
         /// <param name="vectors"></param>
         /// <returns>Vector2</returns>
-        public static Vector2 GetMeanVector2(List<Vector2> vectors)
+        public static Vector2 MeanVector2(List<Vector2> vectors)
         {
             if (vectors.Count == 0)
             {
@@ -106,7 +125,7 @@ using EloBuddy;
         /// </summary>
         /// <param name="units"></param>
         /// <returns>Vector3</returns>
-        public static Vector3 GetMeanVector3(List<Obj_AI_Base> units)
+        public static Vector3 MeanVector3(List<Obj_AI_Base> units)
         {
             if (units.Count == 0)
             {
@@ -129,7 +148,7 @@ using EloBuddy;
         /// </summary>
         /// <param name="vectors"></param>
         /// <returns>Vector2</returns>
-        public static Vector3 GetMeanVector3(List<Vector3> vectors)
+        public static Vector3 MeanVector3(List<Vector3> vectors)
         {
             if (vectors.Count == 0)
             {
@@ -146,25 +165,6 @@ using EloBuddy;
             }
 
             return new Vector3(x / vectors.Count, y / vectors.Count, z / vectors.Count);
-        }
-
-        /// <summary>
-        ///     Gets the path length.
-        /// </summary>
-        /// <param name="path">The path.</param>
-        /// <returns></returns>
-        public static float GetPathLenght(Vector3[] path)
-        {
-            var result = 0f;
-
-            for (var i = 0; i < path.Count(); i++)
-            {
-                if (i + 1 != path.Count())
-                {
-                    result += path[i].Distance(path[i + 1]);
-                }
-            }
-            return result;
         }
 
         public static IEnumerable<Vector2> MoveTo(this IEnumerable<Vector2> vectors, Vector2 direction)
@@ -190,6 +190,11 @@ using EloBuddy;
         public static IEnumerable<Vector3> To3D(this IEnumerable<Vector2> vectorList)
         {
             return vectorList.Select(vector => vector.To3D());
+        }
+
+        public static Vector3 VectorBetween(Vector3 vector1, Vector3 vector2)
+        {
+            return vector2 - vector1;
         }
 
         #endregion

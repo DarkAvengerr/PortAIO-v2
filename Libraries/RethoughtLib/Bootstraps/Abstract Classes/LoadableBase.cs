@@ -6,10 +6,17 @@ using EloBuddy;
 
     using System.Collections.Generic;
 
-    using global::RethoughtLib.Classes.General_Intefaces;
+    using LeagueSharp.Common;
+
+    using RethoughtLib.Classes.General_Intefaces;
 
     #endregion
 
+    /// <summary>
+    ///     Class that represents something loadable
+    /// </summary>
+    /// <seealso cref="RethoughtLib.Classes.General_Intefaces.ILoadable" />
+    /// <seealso cref="RethoughtLib.Classes.General_Intefaces.ITagable" />
     public abstract class LoadableBase : ILoadable, ITagable
     {
         #region Public Properties
@@ -18,7 +25,7 @@ using EloBuddy;
         ///     Gets or sets the name that will get displayed.
         /// </summary>
         /// <value>
-        ///     The name of the displaying.
+        ///     The name.
         /// </value>
         public abstract string DisplayName { get; set; }
 
@@ -29,6 +36,14 @@ using EloBuddy;
         ///     The name.
         /// </value>
         public abstract string InternalName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the root menu.
+        /// </summary>
+        /// <value>
+        /// The root menu.
+        /// </value>
+        public Menu RootMenu { get; set; }
 
         /// <summary>
         ///     Gets or sets the tags.

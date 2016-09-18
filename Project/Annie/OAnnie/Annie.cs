@@ -40,7 +40,7 @@ using EloBuddy;
         /// </summary>
         /// <param name="args"></param>
         #region called when loaded
-        internal static void Load(EventArgs args)
+        internal static void Load()
         {
             if (Player.ChampionName != ChampName)
                 return;

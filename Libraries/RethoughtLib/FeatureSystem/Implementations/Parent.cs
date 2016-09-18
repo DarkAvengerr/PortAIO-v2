@@ -17,8 +17,6 @@ using EloBuddy;
         public Parent(string name)
         {
             this.Name = name;
-
-            this.OnInitializeInvoker();
         }
 
         #endregion

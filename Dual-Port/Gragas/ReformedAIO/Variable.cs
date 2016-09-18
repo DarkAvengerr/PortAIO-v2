@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Gragas
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Gragas
 {
     #region Using Directives
 
@@ -13,8 +15,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas
     {
         #region Static Fields
 
-        public static Dictionary<SpellSlot, Spell> Spells = new Dictionary<SpellSlot, Spell>()
-                                                                {
+        public static Dictionary<SpellSlot, Spell> Spells = new Dictionary<SpellSlot, Spell> {
                                                                     {
                                                                         SpellSlot.Q,
                                                                         new Spell(

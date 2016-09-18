@@ -7,7 +7,7 @@ using EloBuddy;
     /// <summary>
     ///     Interface that gets used to build new menusets
     /// </summary>
-    public interface IMenuPreset
+    public interface IGenerator
     {
         /// <summary>
         /// Gets or sets the menu.
@@ -20,6 +20,6 @@ using EloBuddy;
         /// <summary>
         /// Generates this instance.
         /// </summary>
-        void Generate();
+        void Generate(Menu menu);
     }
 }

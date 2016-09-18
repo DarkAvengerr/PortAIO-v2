@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Ashe.Logic
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ashe.Logic
 {
     #region Using Directives
 
@@ -16,8 +18,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.Logic
     {
         #region Fields
 
-        public readonly Dictionary<string, Vector3> Camp = new Dictionary<string, Vector3>()
-                                                               {
+        public readonly Dictionary<string, Vector3> Camp = new Dictionary<string, Vector3> {
                                                                    {
                                                                        "mid_Dragon",
                                                                        new Vector3(
@@ -45,7 +46,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.Logic
                                                                        11772f,
                                                                        8856f,
                                                                        50.30728f)
-                                                                   },
+                                                                   }
                                                                };
 
         #endregion
@@ -55,7 +56,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.Logic
         public bool CanCastE()
         {
             var pos =
-                this.Camp.FirstOrDefault(
+                Camp.FirstOrDefault(
                     x =>
                     x.Value.Distance(Variable.Player.Position) > 1750
                     && x.Value.Distance(Variable.Player.Position) < 6000);

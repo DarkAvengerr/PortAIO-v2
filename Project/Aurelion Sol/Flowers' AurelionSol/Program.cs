@@ -20,12 +20,7 @@ using EloBuddy;
         internal static Menu Menu;
         internal static Orbwalking.Orbwalker Orbwalker;
         internal static MissileClient qqq;
-        static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += OnLoad;
-        }
-
-        private static void OnLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != "AurelionSol")
                 return;

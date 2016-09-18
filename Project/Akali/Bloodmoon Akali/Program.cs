@@ -20,13 +20,7 @@ using EloBuddy;
         public static HpBarIndicator Hpi = new HpBarIndicator();
         private static readonly AIHeroClient Player = ObjectManager.Player;
 
-        private static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += OnLoad;
-        }
-
-
-        private static void OnLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
             if (Player.ChampionName != ChampName)
                 return;

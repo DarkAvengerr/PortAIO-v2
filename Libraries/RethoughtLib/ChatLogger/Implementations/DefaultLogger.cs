@@ -15,7 +15,6 @@ using EloBuddy;
     /// <summary>
     ///     Default Loggers that implements IChatLogger and logs everything in the chat.
     /// </summary>
-    /// <seealso cref="RethoughtLib.ChatLogger.Interfaces.IChatLogger" />
     public class DefaultLogger : IChatLogger
     {
         #region Public Properties
@@ -43,9 +42,9 @@ using EloBuddy;
         /// <summary>
         ///     Logs this instance.
         /// </summary>
-        public void Log(ChatMessageEventArgs args)
+        public void Log(AIHeroClient sender, ChatMessageEventArgs args)
         {
-            var message = this.Format.Apply(args);
+            var message = this.Format.Apply(sender, args);
 
             if (!string.IsNullOrWhiteSpace(message.FormatedMessage) && !string.IsNullOrEmpty(message.Content))
             {

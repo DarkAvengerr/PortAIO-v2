@@ -21,12 +21,7 @@ using EloBuddy;
 
         public static HpBarIndicator Indicator = new HpBarIndicator();
 
-        static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
-        }
-
-        static void Game_OnGameLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
             Player = ObjectManager.Player;
             if (Player.ChampionName != championName) return;

@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Ashe.Drawings
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ashe.Drawings
 {
     #region Using Directives
 
@@ -24,14 +26,14 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.Drawings
 
         public WDraw(string name)
         {
-            this.Name = name;
+            Name = name;
         }
 
         public void OnDraw(EventArgs args)
         {
             if (Variable.Player.IsDead) return;
 
-            if (this.Menu.Item(this.Menu.Name + "WReady").GetValue<bool>() && !Variable.Spells[SpellSlot.W].IsReady()) return;
+            if (Menu.Item(Menu.Name + "WReady").GetValue<bool>() && !Variable.Spells[SpellSlot.W].IsReady()) return;
 
             Render.Circle.DrawCircle(
                 Variable.Player.Position,
@@ -47,17 +49,17 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.Drawings
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Drawing.OnDraw -= this.OnDraw;
+            Drawing.OnDraw -= OnDraw;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Drawing.OnDraw += this.OnDraw;
+            Drawing.OnDraw += OnDraw;
         }
 
-        protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            this.Menu.AddItem(new MenuItem(this.Name + "WReady", "Only If Ready").SetValue(false));
+            Menu.AddItem(new MenuItem(Name + "WReady", "Only If Ready").SetValue(false));
         }
 
         #endregion

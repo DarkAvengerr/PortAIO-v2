@@ -20,7 +20,7 @@ using EloBuddy;
         /// </summary>
         /// <param name="message">The <see cref="GameChatEventArgs" /> instance containing the event data.</param>
         /// <returns></returns>
-        Message Apply(ChatMessageEventArgs message);
+        Message Apply(AIHeroClient sender, ChatMessageEventArgs args);
 
         #endregion
     }

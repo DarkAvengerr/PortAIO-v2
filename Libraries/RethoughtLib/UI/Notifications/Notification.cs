@@ -13,6 +13,7 @@ using EloBuddy;
     using global::RethoughtLib.UI.Notifications.Designs;
 
     using SharpDX;
+    using SharpDX.Direct3D9;
 
     #endregion
 
@@ -36,7 +37,7 @@ using EloBuddy;
         /// <summary>
         ///     The transition
         /// </summary>
-        internal Transition Transition = new ExpoEaseInOut(0.5);
+        internal TransitionBase TransitionBase = new ExpoEaseInOut(0.5);
 
         /// <summary>
         ///     The design
@@ -78,10 +79,10 @@ using EloBuddy;
         {
             if (this.Moving)
             {
-                this.Design.Transition.Start(this.Position, this.Position.Extend(this.StartPosition, this.Design.Width));
+                this.Design.TransitionBase.Start(this.Position.To3D(), this.Position.Extend(this.StartPosition, this.Design.Width).To3D());
             }
 
-            this.Position = this.Design.Transition.GetPosition();
+            this.Position = this.Design.TransitionBase.GetPosition().To2D();
         }
 
         /// <summary>
@@ -89,7 +90,7 @@ using EloBuddy;
         /// </summary>
         public override void Draw()
         {
-            
+
         }
 
         #endregion

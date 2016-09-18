@@ -23,7 +23,7 @@ using EloBuddy;
         /// When loaded
         /// </summary>
         /// <param name="args"></param>
-        internal static void OnLoad(EventArgs args)
+        internal static void OnLoad()
         {
             GameObject.OnCreate += Obj_AI_Base_OnCreate;
         }

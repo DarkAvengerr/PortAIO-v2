@@ -14,7 +14,16 @@ using EloBuddy;
     {
         #region Fields
 
-        protected internal readonly Dictionary<Base, bool> Children = new Dictionary<Base, bool>();
+        public readonly Dictionary<Base, Tuple<bool, bool>> Children = new Dictionary<Base, Tuple<bool, bool>>();
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        protected ParentBase()
+        {
+            this.OnChildAddEvent += this.OnChildAdd;
+        }
 
         #endregion
 
@@ -38,7 +47,7 @@ using EloBuddy;
         ///     Adds the child.
         /// </summary>
         /// <param name="child">The child.</param>
-        public void AddChild(Base child)
+        public void Add(Base child)
         {
             this.OnChildAddInvoker(new ParentBaseEventArgs() { Child = child });
         }
@@ -47,50 +56,47 @@ using EloBuddy;
         ///     Adds the children.
         /// </summary>
         /// <param name="children">The children.</param>
-        public void AddChildren(IEnumerable<Base> children)
+        public void Add(IEnumerable<Base> children)
         {
             foreach (var child in children)
             {
-                this.OnChildAddInvoker(new ParentBaseEventArgs() { Child = child });
+                this.Add(child);
             }
         }
 
         /// <summary>
-        ///     Called when [uninitialize].
+        ///     Called when [load].
         /// </summary>
-        public override void OnTerminate(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        public override void Load()
         {
-            base.OnTerminate(sender, featureBaseEventArgs);
+            if (this.Loaded) return;
 
-            this.OnChildAddEvent -= this.OnChildAdd;
+            base.Load();
 
-            foreach (var child in this.Children.Keys.ToList())
+            foreach (var keyValuePair in this.Children.ToList())
             {
-                child.OnTerminateInvoker();
-            }
-        }
+                var child = keyValuePair.Key;
 
-        /// <summary>
-        ///     Removes the children.
-        /// </summary>
-        /// <param name="child">The child.</param>
-        public void RemoveChildren(Base child)
-        {
-            if (!this.Children.ContainsKey(child))
-            {
-                throw new InvalidOperationException(
-                    $"{this}, can't remove a child from the list children that has not been added to the list.");
-            }
+                child.Initialize();
 
-            this.Children.Remove(child);
-            child.OnUnLoadInvoker();
+                child.Path = this.Path + child.Path;
+
+                child.Switch.OnEnableEvent += this.OnChildEnabled;
+                child.Switch.OnDisableEvent += this.OnChildDisabled;
+
+                child.Load();
+
+                if (!child.Menu.Children.Any() && !child.Menu.Items.Any()) continue;
+
+                this.Menu.AddSubMenu(child.Menu);
+            }
         }
 
         /// <summary>Returns a string that represents the current object.</summary>
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return "ParentBase " + this.Name;
+            return "Parent " + this.Name;
         }
 
         #endregion
@@ -98,33 +104,7 @@ using EloBuddy;
         #region Methods
 
         /// <summary>
-        ///     Called when [child add].
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="parentBaseEventArgs">The <see cref="ParentBaseEventArgs" /> instance containing the event data.</param>
-        protected virtual void OnChildAdd(object sender, ParentBaseEventArgs parentBaseEventArgs)
-        {
-            var child = parentBaseEventArgs.Child;
-
-            child.OnInitializeInvoker();
-
-            child.OnEnableEvent += this.OnChildEnabled;
-            child.OnDisableEvent += this.OnChildDisabled;
-
-            this.Children.Add(child, child.Enabled);
-
-            if (this.Menu.SubMenu(child.Menu.Name) != null)
-            {
-                this.MergeChild(child);
-            }
-            else
-            {
-                this.Menu.AddSubMenu(child.Menu);
-            }
-        }
-
-        /// <summary>
-        /// Merges the child with another children with the same Name
+        ///     Merges the child with another children with the same Name
         /// </summary>
         /// <param name="child">The child.</param>
         protected virtual void MergeChild(Base child)
@@ -133,6 +113,7 @@ using EloBuddy;
             {
                 if (this.Menu.SubMenu(child.Menu.Name).Items.Contains(menuEntry))
                 {
+                    Console.WriteLine("Merging");
                     continue;
                 }
 
@@ -143,74 +124,70 @@ using EloBuddy;
         }
 
         /// <summary>
+        ///     Called when [child add].
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="parentBaseEventArgs">The <see cref="ParentBaseEventArgs" /> instance containing the event data.</param>
+        protected virtual void OnChildAdd(object sender, ParentBaseEventArgs parentBaseEventArgs)
+        {
+            var child = parentBaseEventArgs.Child;
+
+            this.Children.Add(child, new Tuple<bool, bool>(false, false));
+        }
+
+        /// <summary>
         ///     Raises the <see cref="E:ChildAddInvoker" /> event.
         /// </summary>
         /// <param name="eventArgs">The <see cref="ParentBaseEventArgs" /> instance containing the event data.</param>
         protected virtual void OnChildAddInvoker(ParentBaseEventArgs eventArgs)
         {
-            if (!this.Initialized)
-            {
-                this.OnInitializeInvoker();
-            }
-
             this.OnChildAddEvent?.Invoke(this, eventArgs);
         }
 
         /// <summary>
         ///     Called when [child disabled].
+        ///     Default Behavior:
+        ///     > if the sender is the parent do nothing
+        ///     > else if the sender is a child and all children are disabled then the parent will get disabled if it was enabled
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="featureBaseEventArgs">The <see cref="Base.FeatureBaseEventArgs" /> instance containing the event data.</param>
-        protected virtual void OnChildDisabled(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        /// <param name="o">The sender.</param>
+        /// <param name="featureBaseEventArgs"></param>
+        protected virtual void OnChildDisabled(object o, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            var child = featureBaseEventArgs.Sender;
+            var sender = featureBaseEventArgs.Sender;
 
-            if (child == null)
+            if (sender == null || sender == this)
             {
                 return;
             }
 
-            this.Children[child] = child.Enabled;
+            this.Children[sender] = new Tuple<bool, bool>(false, false);
 
-            // Disables the Parent if all Children are disabled
-            if (this.Children.All(x => !x.Value))
-            {
-                this.OnDisableInvoker();
-            }
+            if (this.Children.Any(x => !x.Value.Item1)) return;
+
+            this.Disable(sender);
         }
 
         /// <summary>
         ///     Called when [child enabled].
+        ///     Default Behavior:
+        ///     > if the sender is the parent do nothing
+        ///     > else if the sender is a child enable the parent if the parent was disabled
         /// </summary>
         /// <param name="o">The o.</param>
-        /// <param name="featureBaseEventArgs">The <see cref="Base.FeatureBaseEventArgs" /> instance containing the event data.</param>
+        /// <param name="featureBaseEventArgs"></param>
         protected virtual void OnChildEnabled(object o, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            var child = featureBaseEventArgs.Sender;
+            var sender = featureBaseEventArgs.Sender;
 
-            if (child == null)
+            if (sender == null || sender == this)
             {
                 return;
             }
 
-            this.Children[child] = child.Enabled;
+            this.Children[sender] = new Tuple<bool, bool>(true, false);
 
-            // Enables the Parent if one Children is enabled
-            this.OnEnableInvoker();
-        }
-
-        /// <summary>
-        ///     Called when [child remove].
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="parentBaseEventArgs">The <see cref="ParentBaseEventArgs" /> instance containing the event data.</param>
-        protected virtual void OnChildRemove(object sender, ParentBaseEventArgs parentBaseEventArgs)
-        {
-            this.Children.Remove(parentBaseEventArgs.Child);
-
-            parentBaseEventArgs.Child.OnTerminateInvoker();
-
-            this.Menu.RemoveMenu(parentBaseEventArgs.Child.Menu);
+            this.Enable(sender);
         }
 
         /// <summary>
@@ -227,24 +204,15 @@ using EloBuddy;
         /// </summary>
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            var menuItem = this.Menu.Item(this.Name + "Enabled");
+            base.OnDisable(sender, featureBaseEventArgs);
 
-            if (menuItem.GetValue<bool>() == true)
+            foreach (var keyValuePair in this.Children.ToList())
             {
-                menuItem.SetValue(false);
-                return;
-            }
+                if (!keyValuePair.Value.Item1) continue;
 
-            foreach (var child in this.Children.ToList())
-            {
-                if (!child.Value)
-                {
-                    continue;
-                }
+                keyValuePair.Key.Disable(this);
 
-                child.Key.OnDisableInvoker();
-
-                this.Children[child.Key] = true;
+                this.Children[keyValuePair.Key] = new Tuple<bool, bool>(true, true);
             }
         }
 
@@ -253,71 +221,16 @@ using EloBuddy;
         /// </summary>
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            var menuItem = this.Menu.Item(this.Name + "Enabled");
+            base.OnEnable(sender, featureBaseEventArgs);
 
-            if (menuItem.GetValue<bool>() == false)
+            foreach (var keyValuePair in this.Children.ToList())
             {
-                menuItem.SetValue(true);
-                return;
-            }
-
-            foreach (var child in this.Children.ToList())
-            {
-                if (!child.Value)
+                if (!keyValuePair.Value.Item1 || !keyValuePair.Value.Item2)
                 {
                     continue;
                 }
 
-                child.Key.OnEnableInvoker();
-            }
-        }
-
-        /// <summary>
-        ///     Called when [initialize].
-        /// </summary>
-        protected override void OnInitialize(object sender, FeatureBaseEventArgs featureBaseEventArgs)
-        {
-            base.OnInitialize(sender, featureBaseEventArgs);
-
-            this.OnChildAddEvent += this.OnChildAdd;
-        }
-
-        /// <summary>
-        ///     Called when [load].
-        /// </summary>
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
-        {
-            base.OnLoad(sender, featureBaseEventArgs);
-
-            foreach (var child in this.Children.ToList())
-            {
-                child.Key.OnLoadInvoker();
-            }
-        }
-
-        /// <summary>
-        ///     Called when [refresh].
-        /// </summary>
-        protected override void OnRefresh(object sender, FeatureBaseEventArgs featureBaseEventArgs)
-        {
-            base.OnRefresh(sender, featureBaseEventArgs);
-
-            foreach (var child in this.Children.ToList())
-            {
-                child.Key.OnRefreshInvoker();
-            }
-        }
-
-        /// <summary>
-        ///     Called when [unload].
-        /// </summary>
-        protected override void OnUnload(object sender, FeatureBaseEventArgs featureBaseEventArgs)
-        {
-            base.OnUnload(sender, featureBaseEventArgs);
-
-            foreach (var child in this.Children.ToList())
-            {
-                child.Key.OnUnLoadInvoker();
+                keyValuePair.Key.Enable(this);
             }
         }
 

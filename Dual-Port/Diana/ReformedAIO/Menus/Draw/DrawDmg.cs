@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Diana.Menus.Draw
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Diana.Menus.Draw
 {
     #region Using Directives
 
@@ -44,8 +46,8 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.Menus.Draw
                                    ? new ColorBGRA(0, 255, 0, 120)
                                    : new ColorBGRA(255, 255, 0, 120);
 
-                this.drawDamage.Unit = enemy;
-                this.drawDamage.DrawDmg(this.logic.ComboDmg(enemy), easyKill);
+                drawDamage.Unit = enemy;
+                drawDamage.DrawDmg(logic.ComboDmg(enemy), easyKill);
             }
         }
 
@@ -55,30 +57,32 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.Menus.Draw
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Drawing.OnEndScene -= this.OnEndScene;
+            Drawing.OnEndScene -= OnEndScene;
 
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Drawing.OnEndScene += this.OnEndScene;
+            Drawing.OnEndScene += OnEndScene;
             
         }
 
-        protected override void OnInitialize(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        //protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        //{
+        //    logic = new LogicAll();
+        //    drawDamage = new HpBarIndicator();
+        //    base.OnLoad(sender, featureBaseEventArgs);
+        //}
+
+        protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            this.logic = new LogicAll();
-            this.drawDamage = new HpBarIndicator();
-            base.OnInitialize(sender, featureBaseEventArgs);
-        }
+            Menu = new Menu(Name, Name);
 
-        protected sealed override void OnLoad(object sender, Base.FeatureBaseEventArgs featureBaseEventArgs)
-        {
-            Menu = new Menu(this.Name, this.Name);
+            Menu.AddItem(new MenuItem(Name + "Enabled", "Enabled").SetValue(true));
 
-            Menu.AddItem(new MenuItem(this.Name + "Enabled", "Enabled").SetValue(true));
-
-            
+            logic = new LogicAll();
+            drawDamage = new HpBarIndicator();
+            base.OnLoad(sender, featureBaseEventArgs);
         }
 
         #endregion

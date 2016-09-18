@@ -21,7 +21,7 @@ using EloBuddy;
         public readonly string Content;
 
         /// <summary>
-        ///     Wether processing or not
+        ///     Whether processing or not
         /// </summary>
         public readonly bool Process;
 
@@ -31,12 +31,12 @@ using EloBuddy;
         public readonly AIHeroClient Sender;
 
         /// <summary>
-        ///     The time the message gut send
+        ///     The time the message got send
         /// </summary>
         public readonly float Time;
 
         /// <summary>
-        ///     All fiels but formatted
+        ///     The formated message
         /// </summary>
         public string FormatedMessage;
 
@@ -48,7 +48,7 @@ using EloBuddy;
         ///     Initializes a new instance of the <see cref="Message" /> class.
         /// </summary>
         /// <param name="args">The <see cref="GameChatEventArgs" /> instance containing the event data.</param>
-        public Message(ChatMessageEventArgs args)
+        public Message(AIHeroClient sender, ChatMessageEventArgs args)
         {
             this.Content = args.Message;
             this.Sender = args.Sender;

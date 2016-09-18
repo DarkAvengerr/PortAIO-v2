@@ -17,12 +17,7 @@ using EloBuddy;
         internal static float ClickTime;
         internal static HpBarDraw DrawHpBar = new HpBarDraw();
 
-        static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += OnLoad;
-        }
-
-        private static void OnLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
             // Judge ChampionName , if not Annie return , not injected.
             if (ObjectManager.Player.ChampionName != "Annie")

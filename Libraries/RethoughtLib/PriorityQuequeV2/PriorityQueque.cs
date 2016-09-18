@@ -68,6 +68,11 @@ using EloBuddy;
 
         #region Public Methods and Operators
 
+        public void Clear()
+        {
+            this.Dictionary.Clear();
+        }
+
         /// <summary>
         ///     Dequeues the item with the highest priority.
         /// </summary>
@@ -77,6 +82,30 @@ using EloBuddy;
         {
             if (this.Dictionary.Any()) return this.DequeueFromHighPriorityQueue();
             else throw new InvalidOperationException("The queue is empty");
+        }
+
+        /// <summary>
+        ///     Dequeues the item with the highest priority.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">The queue is empty</exception>
+        public List<TItem> Dequeue(int count)
+        {
+            var result = new List<TItem>();
+
+            for (var i = 0; i < count; i++)
+            {
+                if (this.Dictionary.Any())
+                {
+                    result.Add(this.DequeueFromHighPriorityQueue());
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            return result;
         }
 
         /// <summary>

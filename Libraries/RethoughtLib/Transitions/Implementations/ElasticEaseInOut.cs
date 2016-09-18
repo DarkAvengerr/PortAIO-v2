@@ -9,7 +9,7 @@ using EloBuddy;
     /// <summary>
     ///     The elastic ease in out.
     /// </summary>
-    public class ElasticEaseInOut : Transition
+    public class ElasticEaseInOut : TransitionBase
     {
         #region Constructors and Destructors
 
@@ -31,7 +31,7 @@ using EloBuddy;
         /// <summary>
         ///     The equation.
         /// </summary>
-        /// <param name="t">
+        /// <param name="time">
         ///     The t.
         /// </param>
         /// <param name="b">
@@ -40,28 +40,28 @@ using EloBuddy;
         /// <param name="c">
         ///     The c.
         /// </param>
-        /// <param name="d">
+        /// <param name="startTime">
         ///     The d.
         /// </param>
         /// <returns>
         ///     The <see cref="double" />.
         /// </returns>
-        public override double Equation(double t, double b, double c, double d)
+        public override double Equation(double time, double b, double c, double startTime)
         {
-            if ((t /= d / 2) == 2)
+            if ((time /= startTime / 2) == 2)
             {
                 return b + c;
             }
 
-            var p = d * (.3 * 1.5);
+            var p = startTime * (.3 * 1.5);
             var s = p / 4;
 
-            if (t < 1)
+            if (time < 1)
             {
-                return -.5 * (c * Math.Pow(2, 10 * (t -= 1)) * Math.Sin((t * d - s) * (2 * Math.PI) / p)) + b;
+                return -.5 * (c * Math.Pow(2, 10 * (time -= 1)) * Math.Sin((time * startTime - s) * (2 * Math.PI) / p)) + b;
             }
 
-            return c * Math.Pow(2, -10 * (t -= 1)) * Math.Sin((t * d - s) * (2 * Math.PI) / p) * .5 + c + b;
+            return c * Math.Pow(2, -10 * (time -= 1)) * Math.Sin((time * startTime - s) * (2 * Math.PI) / p) * .5 + c + b;
         }
 
         #endregion

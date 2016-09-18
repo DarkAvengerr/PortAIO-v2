@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Diana.Menus.Draw
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Diana.Menus.Draw
 {
     #region Using Directives
 
@@ -39,7 +41,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.Menus.Draw
 
             if (target != null && target.IsVisible)
             {
-                Render.Circle.DrawCircle(this.qLogic.QPred(target), 50, Color.Aqua);
+                Render.Circle.DrawCircle(qLogic.QPred(target), 50, Color.Aqua);
             }
         }
 
@@ -49,29 +51,29 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.Menus.Draw
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Drawing.OnDraw -= this.OnDraw;
+            Drawing.OnDraw -= OnDraw;
 
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Drawing.OnDraw += this.OnDraw;
+            Drawing.OnDraw += OnDraw;
             
         }
 
-        protected override void OnInitialize(object sender, Base.FeatureBaseEventArgs featureBaseEventArgs)
-        {
-            this.qLogic = new CrescentStrikeLogic();
-            base.OnInitialize(sender, featureBaseEventArgs);
-        }
+        //protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        //{
+        //    qLogic = new CrescentStrikeLogic();
+        //    base.OnLoad(sender, featureBaseEventArgs);
+        //}
 
         protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Menu = new Menu(this.Name, this.Name);
+            Menu = new Menu(Name, Name);
 
-            Menu.AddItem(new MenuItem(this.Name + "Enabled", "Enabled").SetValue(true));
+            Menu.AddItem(new MenuItem(Name + "Enabled", "Enabled").SetValue(true));
 
-            
+            qLogic = new CrescentStrikeLogic();
         }
 
         #endregion

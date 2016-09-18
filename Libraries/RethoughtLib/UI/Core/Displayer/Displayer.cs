@@ -30,7 +30,7 @@ using EloBuddy;
         /// <summary>
         ///     The priority queque
         /// </summary>
-        protected PriorityQueque.PriorityQueue<Element> PriorityQueque = new PriorityQueque.PriorityQueue<Element>();
+        protected PriorityQueque.PriorityQueueContainer<Element> PriorityQueque = new PriorityQueque.PriorityQueueContainer<Element>();
 
         #endregion
 

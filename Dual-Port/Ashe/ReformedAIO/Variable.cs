@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Ashe
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ashe
 {
     #region Using Directives
 
@@ -13,8 +15,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe
     {
         #region Static Fields
 
-        public static Dictionary<SpellSlot, Spell> Spells = new Dictionary<SpellSlot, Spell>()
-                                                                {
+        public static Dictionary<SpellSlot, Spell> Spells = new Dictionary<SpellSlot, Spell> {
                                                                     {
                                                                         SpellSlot.Q,
                                                                         new Spell(
@@ -45,7 +46,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe
 
         #region Public Properties
 
-        public static Orbwalking.Orbwalker Orbwalker { get; internal set; }
+        //public static Orbwalking.Orbwalker Orbwalker { get; internal set; }
 
         public static AIHeroClient Player => ObjectManager.Player;
 

@@ -41,23 +41,12 @@ using EloBuddy;
         /// <param name="args">
         /// The args.
         /// </param>
-        private static void Game_OnGameLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName == "Ashe")
             {
                 new Ashe();
             }
-        }
-
-        /// <summary>
-        /// Main method.
-        /// </summary>
-        /// <param name="args">
-        /// The args.
-        /// </param>
-        private static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
         }
 
         #endregion

@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Laneclear
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Laneclear
 {
     #region Using Directives
 
@@ -8,7 +10,6 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Laneclear
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using RethoughtLib.Events;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
     #endregion
@@ -21,23 +22,30 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Laneclear
 
         #endregion
 
+        private readonly Orbwalking.Orbwalker orbwalker;
+
+        public LaneLunarRush(Orbwalking.Orbwalker orbwalker)
+        {
+            this.orbwalker = orbwalker;
+        }
+
         #region Methods
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Events.OnUpdate -= this.OnUpdate;
+            Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Events.OnUpdate += this.OnUpdate;
+            Game.OnUpdate += OnUpdate;
         }
 
         protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            this.Menu.AddItem(new MenuItem(this.Name + "LaneWEnemy", "Only If No Enemies Visible").SetValue(true));
+            Menu.AddItem(new MenuItem(Name + "LaneWEnemy", "Only If No Enemies Visible").SetValue(true));
 
-            this.Menu.AddItem(new MenuItem(this.Name + "LaneWMana", "Mana %").SetValue(new Slider(15, 0, 100)));
+            Menu.AddItem(new MenuItem(Name + "LaneWMana", "Mana %").SetValue(new Slider(15, 0, 100)));
         }
 
         private void GetMinions()
@@ -48,7 +56,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Laneclear
 
             if (minions.Count < 3) return;
 
-            if (this.Menu.Item(this.Menu.Name + "LaneWEnemy").GetValue<bool>())
+            if (Menu.Item(Menu.Name + "LaneWEnemy").GetValue<bool>())
             {
                 if (minions.Any(m => m.CountEnemiesInRange(1500) > 0))
                 {
@@ -61,12 +69,12 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Laneclear
 
         private void OnUpdate(EventArgs args)
         {
-            if (Variables.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
+            if (this.orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
                 || !Variables.Spells[SpellSlot.W].IsReady()) return;
 
-            if (this.Menu.Item(this.Menu.Name + "LaneWMana").GetValue<Slider>().Value > Variables.Player.ManaPercent) return;
+            if (Menu.Item(Menu.Name + "LaneWMana").GetValue<Slider>().Value > Variables.Player.ManaPercent) return;
 
-            this.GetMinions();
+            GetMinions();
         }
 
         #endregion

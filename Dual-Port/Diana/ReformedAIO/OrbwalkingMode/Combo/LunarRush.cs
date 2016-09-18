@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 {
     #region Using Directives
 
@@ -9,7 +11,6 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 
     using ReformedAIO.Champions.Diana.Logic;
 
-    using RethoughtLib.Events;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
     #endregion
@@ -22,6 +23,12 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 
         #endregion
 
+        private readonly Orbwalking.Orbwalker orbwalker;
+
+        public LunarRush(Orbwalking.Orbwalker orbwalker)
+        {
+            this.orbwalker = orbwalker;
+        }
 
         #region Public Properties
 
@@ -33,33 +40,33 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Events.OnUpdate -= this.OnUpdate;
+            Game.OnUpdate -= OnUpdate;
 
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Events.OnUpdate += this.OnUpdate;
+            Game.OnUpdate += OnUpdate;
             
         }
 
-        protected override void OnInitialize(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        //protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        //{
+        //    logic = new LogicAll();
+        //}
+
+        protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            this.logic = new LogicAll();
-        }
+            Menu = new Menu(Name, Name);
 
-        protected sealed override void OnLoad(object sender, Base.FeatureBaseEventArgs featureBaseEventArgs)
-        {
-            Menu = new Menu(this.Name, this.Name);
+            Menu.AddItem(new MenuItem(Name + "WKillable", "Use Only If Killable By Combo").SetValue(false));
 
-            Menu.AddItem(new MenuItem(this.Name + "WKillable", "Use Only If Killable By Combo").SetValue(false));
-
-            //   this.Menu.AddItem(new MenuItem(this.Name + "WMana", "Mana %")
+            //   Menu.AddItem(new MenuItem(Name + "WMana", "Mana %")
             //       .SetValue(new Slider(15, 100)));
 
-            Menu.AddItem(new MenuItem(this.Name + "Enabled", "Enabled").SetValue(true));
+            Menu.AddItem(new MenuItem(Name + "Enabled", "Enabled").SetValue(true));
 
-            
+            logic = new LogicAll();
         }
 
         private void Lunarrush()
@@ -70,7 +77,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 
             if (target == null || !target.IsValid) return;
 
-            if (Menu.Item(Menu.Name + "WKillable").GetValue<bool>() && this.logic.ComboDmg(target) < target.Health)
+            if (Menu.Item(Menu.Name + "WKillable").GetValue<bool>() && logic.ComboDmg(target) < target.Health)
             {
                 return;
             }
@@ -80,10 +87,10 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 
         private void OnUpdate(EventArgs args)
         {
-            if (Variables.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
+            if (this.orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
                 || !Variables.Spells[SpellSlot.W].IsReady()) return;
 
-            this.Lunarrush();
+            Lunarrush();
         }
 
         #endregion

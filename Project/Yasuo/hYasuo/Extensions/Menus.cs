@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LeagueSharp.Common;
 using Color = SharpDX.Color;
 
@@ -25,8 +21,12 @@ using EloBuddy;
                 var comboMenu = new Menu(":: Combo Settings", ":: Combo Settings");
                 {
                     comboMenu.AddItem(new MenuItem("q.combo", "Use (Q)").SetValue(true));
-                    comboMenu.AddItem(new MenuItem("q2.combo", "Use (Q2)").SetValue(true));
+                    comboMenu.AddItem(new MenuItem("q3.combo", "Use (Q3)").SetValue(true));
+                    comboMenu.AddItem(new MenuItem("min.q3.combo", "Use (Q3)").SetValue(true));
                     comboMenu.AddItem(new MenuItem("e.combo", "Use (E)").SetValue(true));
+                    comboMenu.AddItem(new MenuItem("eqq.combo", "Try (E-Q) Always").SetValue(true));
+                    //comboMenu.AddItem(new MenuItem("enemy.check.combo", "Dont Spam (E) ?").SetValue(true)).SetTooltip("If Enemy in E Range and Have Yasuo E Debuff, It not uses E for gapclose anymore");
+                    comboMenu.AddItem(new MenuItem("disable.e.safety", "Disable (E) Safety").SetValue(false)).SetTooltip("It disables e safety check. 10/10 for under turret dives");
                     comboMenu.AddItem(new MenuItem("r.combo", "Use (R)").SetValue(true));
                     comboMenu.AddItem(new MenuItem("min.r.count", "Min. (R) Count").SetValue(new Slider(3, 1, 5)));
                     Config.AddSubMenu(comboMenu);
@@ -34,9 +34,17 @@ using EloBuddy;
 
                 var harassMenu = new Menu(":: Harass Settings", ":: Harass Settings");
                 {
+
+                    var toggleMenu = new Menu(":: Toggle Settings", ":: Toggle Settings").SetFontStyle(FontStyle.Bold, Color.Gold);
+                    {
+                        toggleMenu.AddItem(new MenuItem("q.toggle", "Use (Q)").SetValue(true));
+                        toggleMenu.AddItem(new MenuItem("q3.toggle", "Use (Q3)").SetValue(true));
+                        toggleMenu.AddItem(new MenuItem("toggle.active", "Toggle !").SetValue(new KeyBind("A".ToCharArray()[0], KeyBindType.Toggle)));
+                        harassMenu.AddSubMenu(toggleMenu);
+                    }
+
                     harassMenu.AddItem(new MenuItem("q.harass", "Use (Q)").SetValue(true));
-                    harassMenu.AddItem(
-                        new MenuItem("harass.mana", "Min. Mana Percentage").SetValue(new Slider(50, 1, 99)));
+                    harassMenu.AddItem(new MenuItem("q3.harass", "Use (Q3)").SetValue(true));
                     Config.AddSubMenu(harassMenu);
                 }
 
@@ -49,8 +57,8 @@ using EloBuddy;
                         laneclearMenu.AddItem(new MenuItem("q.clear", "Use (Q)").SetValue(true));
                         laneclearMenu.AddItem(new MenuItem("q.hit.x.minion", "(Q) Min. Minion").SetValue(new Slider(2, 1, 5)));
 
-                        laneclearMenu.AddItem(new MenuItem("q2.clear", "Use (Q2)").SetValue(true));
-                        laneclearMenu.AddItem(new MenuItem("q2.hit.x.minion", "(Q2) Min. Minion").SetValue(new Slider(2, 1, 5)));
+                        laneclearMenu.AddItem(new MenuItem("q3.clear", "Use (Q2)").SetValue(true));
+                        laneclearMenu.AddItem(new MenuItem("q3.hit.x.minion", "(Q2) Min. Minion").SetValue(new Slider(2, 1, 5)));
                         laneclearMenu.AddItem(
                             new MenuItem("keysinfo2", "                  (E) Settings").SetTooltip("E Settings"));
                         laneclearMenu.AddItem(new MenuItem("e.clear", "Use (E)").SetValue(true));
@@ -62,7 +70,7 @@ using EloBuddy;
                         jungleClear.AddItem(
                             new MenuItem("keysinfo1X", "                  (Q) Settings").SetTooltip("Q Settings"));
                         jungleClear.AddItem(new MenuItem("q.jungle", "Use (Q)").SetValue(true));
-                        jungleClear.AddItem(new MenuItem("q2.jungle", "Use (Q)").SetValue(true));
+                        jungleClear.AddItem(new MenuItem("q3.jungle", "Use (Q3)").SetValue(true));
                         jungleClear.AddItem(
                             new MenuItem("keysinfo3X", "                  (E) Settings").SetTooltip("E Settings"));
                         jungleClear.AddItem(new MenuItem("e.jungle", "Use (E)").SetValue(true));
@@ -82,27 +90,51 @@ using EloBuddy;
                     Config.AddSubMenu(clearMenu);
                 }
 
-                var esettings = new Menu(":: (WINDWALL) Settings", ":: (WINDWALL) Settings").SetFontStyle(FontStyle.Bold, Color.HotPink);
+                var esettings = new Menu(":: (1337) Dodge Settings", "::  (1337) Dodge Settings").SetFontStyle(FontStyle.Bold, Color.HotPink);
                 {
                     esettings.AddItem(
-                           new MenuItem("213123123", "                  NOT INCLUDED YET").SetTooltip("NOT INCLUDED USE EZEVADE"));
-                    var evademenu = new Menu(":: Protectable Skillshots", ":: Protectable Skillshots");
+                           new MenuItem("213123123", "         DISABLE (W) USAGE IN EZEVADE OR EVADE#").SetTooltip("DISABLE (W) USAGE IN EZEVADE OR EVADE#"));
+
+                    var windwall = new Menu("(WINDWALL)","(WINDWALL)");
                     {
-                        foreach (var spell in HeroManager.Enemies.SelectMany(enemy => SpellDatabase.EvadeableSpells.Where(p => p.ChampionName == enemy.ChampionName && p.IsSkillshot)))
+                        var evademenu = new Menu(":: Protectable Skillshots", ":: Protectable Skillshots");
                         {
-                            evademenu.AddItem(new MenuItem(string.Format("w.protect.{0}", spell.SpellName), string.Format("{0} ({1})", spell.ChampionName, spell.Slot)).SetValue(true));
+                            foreach (var spell in HeroManager.Enemies.SelectMany(enemy => SpellDatabase.EvadeableSpells.Where(p => p.ChampionName == enemy.ChampionName && p.IsSkillshot)))
+                            {
+                                evademenu.AddItem(new MenuItem($"w.protect.{spell.SpellName}",
+                                    $"{spell.ChampionName} ({spell.Slot})").SetValue(true));
+                            }
+                            windwall.AddSubMenu(evademenu);
                         }
-                        esettings.AddSubMenu(evademenu);
-                    }
-                    var targettedmenu = new Menu(":: Protectable Targetted Spells", ":: Protectable Targetted Spells");
-                    {
-                        foreach (var spell in HeroManager.Enemies.SelectMany(enemy => SpellDatabase.TargetedSpells.Where(p => p.ChampionName == enemy.ChampionName && p.IsTargeted)))
+
+                        var targettedmenu = new Menu(":: Protectable Targetted Spells", ":: Protectable Targetted Spells");
                         {
-                            targettedmenu.AddItem(new MenuItem(string.Format("q2.protect.targetted.{0}", spell.SpellName), string.Format("{0} ({1})", spell.ChampionName, spell.Slot)).SetValue(true));
+                            foreach (var spell in HeroManager.Enemies.SelectMany(enemy => SpellDatabase.TargetedSpells.Where(p => p.ChampionName == enemy.ChampionName && p.WindwallDodgeable)))
+                            {
+                                targettedmenu.AddItem(new MenuItem($"windwall.targetted.{spell.SpellName}",
+                                    $"{spell.ChampionName} ({spell.Slot})").SetValue(true));
+                            }
+                            windwall.AddSubMenu(targettedmenu);
                         }
-                        esettings.AddSubMenu(targettedmenu);
+
+                        esettings.AddSubMenu(windwall);
                     }
 
+                    var q3Dodge = new Menu("(Q3 TARGETTED)", "(Q3) TARGETTED");
+                    {
+                        var targettedmenu = new Menu(":: Protectable Targetted Spells", ":: Protectable Targetted Spells");
+                        {
+                            foreach (var spell in HeroManager.Enemies.SelectMany(enemy => SpellDatabase.TargetedSpells.Where(p => p.ChampionName == enemy.ChampionName && p.YasuoQ3Dodgeable)))
+                            {
+                                targettedmenu.AddItem(new MenuItem($"q3.target.{spell.SpellName}",
+                                    $"{spell.ChampionName} ({spell.Slot})").SetValue(true));
+                            }
+                            q3Dodge.AddSubMenu(targettedmenu);
+                        }
+                        esettings.AddSubMenu(q3Dodge);
+                    }
+                    esettings.AddItem(new MenuItem("use.ww.incomingdamage", "Use (WINDWALL) for Incoming Damage ").SetValue(true))
+                        .SetTooltip("If enemy damage > yasuo health. yasuo uses w for protect himself from enemy skillshots.");
                     Config.AddSubMenu(esettings);
                 }
 
@@ -150,19 +182,27 @@ using EloBuddy;
                     miscMenu.AddItem(new MenuItem("auto.stack", "Auto Stack (Q)").SetValue(true));
                     Config.AddSubMenu(miscMenu);
                 }
+                Config.AddItem(new MenuItem("q.type", "Q Type").SetValue(new StringList(new[] { "Normal", "After Attack" }, 1))).SetTooltip("not supports empowered q");
                 Config.AddItem(new MenuItem("q.hitchance", ":: (Q) HITCHANCE").SetValue(new StringList(Utilities.HitchanceNameArray, 2))).SetFontStyle(FontStyle.Bold,Color.Crimson);
-                Config.AddItem(new MenuItem("q2.hitchance", ":: (Q2) HITCHANCE").SetValue(new StringList(Utilities.HitchanceNameArray, 2))).SetFontStyle(FontStyle.Bold, Color.Crimson);
+                Config.AddItem(new MenuItem("q3.hitchance", ":: (Q3) HITCHANCE").SetValue(new StringList(Utilities.HitchanceNameArray, 2))).SetFontStyle(FontStyle.Bold, Color.Crimson);
+                Config.AddItem(new MenuItem("flee.key", "(FLEE)").SetValue(new KeyBind('Z', KeyBindType.Press)).SetTooltip("uses game cursor pos"));
 
+                Config.AddItem(new MenuItem("prediction", ":: Choose Prediction").SetValue(new StringList(new[] { "Common", "Sebby", "sPrediction", "SDK" }, 1)))
+                    .ValueChanged += (s, ar) =>
+                    {
+                        Config.Item("pred.info").Show(ar.GetNewValue<StringList>().SelectedIndex == 2);
+                    };
+                Config.AddItem(new MenuItem("pred.info", "                 PRESS F5 FOR LOAD SPREDICTION").SetFontStyle(System.Drawing.FontStyle.Bold))
+                    .Show(Config.Item("prediction").GetValue<StringList>().SelectedIndex == 2);
+
+                if (Config.Item("prediction").GetValue<StringList>().SelectedIndex == 2)
+                {
+                    SPrediction.Prediction.Initialize(Config, ":: SPREDICTION");
+                }
 
                 Config.AddItem(
                     new MenuItem("credits.x1", "                          Developed by Hikigaya").SetFontStyle(
                         FontStyle.Bold, Color.DodgerBlue));
-
-                /*Config.AddItem(
-                new MenuItem("credits.x3", "                 " +
-                                           " \u221A \u221A \u221A \u221A \u221A #FREEKARL " +
-                                           "\u221A \u221A \u221A \u221A \u221A").SetFontStyle(
-                    FontStyle.Bold, Color.Crimson));*/
 
             }
             Config.AddToMainMenu();

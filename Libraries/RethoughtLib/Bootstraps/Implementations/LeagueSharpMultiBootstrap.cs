@@ -16,6 +16,8 @@ using EloBuddy;
 
     public class LeagueSharpMultiBootstrap : PlaySharpBootstrapBase
     {
+        public bool LiveVersionSwitching { get; set; } = false;
+
         #region Constructors and Destructors
 
         /// <summary>

@@ -21,8 +21,6 @@ using EloBuddy;
         public SuperParent(string name)
         {
             this.Name = name;
-
-            this.OnInitializeInvoker();
         }
 
         #endregion
@@ -38,7 +36,7 @@ using EloBuddy;
         /// <summary>
         ///     Raises the <see cref="E:ChildAddInvoker" /> event.
         /// </summary>
-        /// <param name="eventArgs">The <see cref="ParentBase.ParentBaseEventArgs" /> instance containing the event data.</param>
+        /// <param name="eventArgs">The <see cref="PareParentBaseentBaseEventArgs" /> instance containing the event data.</param>
         protected override void OnChildAddInvoker(ParentBaseEventArgs eventArgs)
         {
             if (eventArgs.Child is SuperParent)

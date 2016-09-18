@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Utilities
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Utilities
 {
     internal class UtilityLoader
     {

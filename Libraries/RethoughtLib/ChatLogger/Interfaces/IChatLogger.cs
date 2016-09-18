@@ -40,7 +40,7 @@ using EloBuddy;
         /// <summary>
         ///     Logs this instance.
         /// </summary>
-        void Log(ChatMessageEventArgs a);
+        void Log(AIHeroClient sender, ChatMessageEventArgs args);
 
         #endregion
     }

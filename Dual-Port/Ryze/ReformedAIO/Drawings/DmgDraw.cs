@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Ryze.Drawings
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ryze.Drawings
 {
     #region Using Directives
 
@@ -12,7 +14,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.Drawings
 
     using SharpDX;
 
-    using Damage = Logic.Damage;
+    using Damage = ReformedAIO.Champions.Ryze.Logic.Damage;
 
     #endregion
 
@@ -58,18 +60,21 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.Drawings
             Drawing.OnEndScene += OnEndScene;
         }
 
-        protected override void OnInitialize(object sender, FeatureBaseEventArgs featureBaseEventArgs)
-        {
-            dmg = new Damage();
-            drawDamage = new HpBarIndicator();
-            base.OnInitialize(sender, featureBaseEventArgs);
-        }
+        //protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        //{
+        //    dmg = new Damage();
+        //    drawDamage = new HpBarIndicator();
+        //    base.OnLoad(sender, featureBaseEventArgs);
+        //}
 
         protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             Menu = new Menu(Name, Name);
 
             Menu.AddItem(new MenuItem(Name + "Enabled", "Enabled").SetValue(true));
+
+            dmg = new Damage();
+            drawDamage = new HpBarIndicator();
         }
 
         #endregion

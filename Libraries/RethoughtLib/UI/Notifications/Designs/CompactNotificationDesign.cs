@@ -23,7 +23,7 @@ using EloBuddy;
         /// <value>
         ///     The transition.
         /// </value>
-        public override Transition Transition { get; set; }
+        public override TransitionBase TransitionBase { get; set; }
 
         /// <summary>
         ///     Gets or sets the width.

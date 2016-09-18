@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Ashe.Logic
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ashe.Logic
 {
     #region Using Directives
 
@@ -30,7 +32,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.Logic
 
         public bool Killable(AIHeroClient target)
         {
-            return this.RDmg(target) > target.Health && target.Distance(Variable.Player) < 1500;
+            return RDmg(target) > target.Health && target.Distance(Variable.Player) < 1500;
         }
 
         public float RDmg(AIHeroClient target)
@@ -39,7 +41,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.Logic
 
             if (!Variable.Spells[SpellSlot.R].IsReady()) return 0f;
 
-            if (Variable.Spells[SpellSlot.Q].IsReady() || this.QCount() >= 3)
+            if (Variable.Spells[SpellSlot.Q].IsReady() || QCount() >= 3)
                 dmg = dmg + (float)Variable.Player.GetAutoAttackDamage(target) * 5
                       + Variable.Spells[SpellSlot.Q].GetDamage(target);
 
@@ -60,7 +62,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ashe.Logic
             if (target.Distance(Variable.Player) < 1500) safe = true;
 
             if (target.CountAlliesInRange(1500) > target.CountEnemiesInRange(1500)
-                || Variable.Player.Health > target.Health || this.ComboDamage(target) > target.Health) ;
+                || Variable.Player.Health > target.Health || ComboDamage(target) > target.Health) ;
             safe = true;
             // This will count for more allies than enemies in 1500 units or if player health is more than targets health, can be improved.
 

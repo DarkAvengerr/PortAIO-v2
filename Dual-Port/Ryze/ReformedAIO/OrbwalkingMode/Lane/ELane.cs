@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Lane
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Lane
 {
     #region Using Directives
 
@@ -10,48 +12,42 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Lane
 
     using ReformedAIO.Champions.Ryze.Logic;
 
-    using RethoughtLib.Events;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
     #endregion
 
     internal class ELane : ChildBase
-    {
-        #region Fields
-
+    {       
         private ELogic eLogic;
-
-        #endregion
-
-        #region Public Properties
 
         public override string Name { get; set; } = "[E] Spell Flux";
 
-        #endregion
+        private readonly Orbwalking.Orbwalker orbwalker;
+
+        public ELane(Orbwalking.Orbwalker orbwalker)
+        {
+            this.orbwalker = orbwalker;
+        }
 
         #region Methods
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Events.OnUpdate -= this.OnUpdate;
+            Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Events.OnUpdate += this.OnUpdate;
-        }
-
-        protected override void OnInitialize(object sender, FeatureBaseEventArgs featureBaseEventArgs)
-        {
-            this.eLogic = new ELogic();
-            base.OnInitialize(sender, featureBaseEventArgs);
+            Game.OnUpdate += OnUpdate;
         }
 
         protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            this.Menu.AddItem(new MenuItem(this.Name + "LaneEEnemy", "Only If No Enemies Visible").SetValue(true));
+            Menu.AddItem(new MenuItem(Name + "LaneEEnemy", "Only If No Enemies Visible").SetValue(true));
 
-            this.Menu.AddItem(new MenuItem(this.Name + "LaneEMana", "Mana %").SetValue(new Slider(65, 0, 100)));
+            Menu.AddItem(new MenuItem(Name + "LaneEMana", "Mana %").SetValue(new Slider(65, 0, 100)));
+
+            eLogic = new ELogic();
         }
 
         private void GetMinions()
@@ -62,7 +58,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Lane
 
             if (minions == null) return;
 
-            if (this.Menu.Item(this.Menu.Name + "LaneEEnemy").GetValue<bool>()
+            if (Menu.Item(Menu.Name + "LaneEEnemy").GetValue<bool>()
                 && minions.Any(m => m.CountEnemiesInRange(1750) > 0))
             {
                 return;
@@ -70,7 +66,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Lane
 
             foreach (var m in minions)
             {
-                if (this.eLogic.RyzeE(m)
+                if (eLogic.RyzeE(m)
                     || m.Health > Variable.Player.GetAutoAttackDamage(m)
                     && m.Health > Variable.Spells[SpellSlot.E].GetDamage(m))
                 {
@@ -81,12 +77,12 @@ using EloBuddy; namespace ReformedAIO.Champions.Ryze.OrbwalkingMode.Lane
 
         private void OnUpdate(EventArgs args)
         {
-            if (Variable.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
+            if (this.orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
                 || !Variable.Spells[SpellSlot.E].IsReady()) return;
 
-            if (this.Menu.Item(this.Menu.Name + "LaneEMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
+            if (Menu.Item(Menu.Name + "LaneEMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
 
-            this.GetMinions();
+            GetMinions();
         }
 
         #endregion

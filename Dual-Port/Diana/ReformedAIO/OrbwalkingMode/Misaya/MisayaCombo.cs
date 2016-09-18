@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Misaya
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Misaya
 {
     #region Using Directives
 
@@ -9,7 +11,6 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Misaya
 
     using ReformedAIO.Champions.Diana.Logic;
 
-    using RethoughtLib.Events;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
     #endregion
@@ -19,8 +20,13 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Misaya
         #region Fields
 
         private LogicAll logic;
-
+        private Orbwalking.Orbwalker orbwalker;
         private CrescentStrikeLogic qLogic;
+
+        public MisayaCombo(Orbwalking.Orbwalker orbwalker)
+        {
+            this.orbwalker = orbwalker;
+        }
 
         #endregion
 
@@ -34,23 +40,23 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Misaya
 
         public void OnUpdate(EventArgs args)
         {
-            if (!this.Menu.Item(this.Menu.Name + "Keybind").GetValue<KeyBind>().Active) return;
+            if (!Menu.Item(Menu.Name + "Keybind").GetValue<KeyBind>().Active) return;
 
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
             if (Variables.Spells[SpellSlot.R].IsReady() || Variables.Spells[SpellSlot.Q].IsReady())
             {
-                this.PaleCascade();
+                PaleCascade();
             }
 
             if (Variables.Spells[SpellSlot.E].IsReady())
             {
-                this.MoonFall();
+                MoonFall();
             }
 
             if (Variables.Spells[SpellSlot.W].IsReady())
             {
-                this.LunarRush();
+                LunarRush();
             }
         }
 
@@ -60,35 +66,38 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Misaya
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Events.OnUpdate -= this.OnUpdate;
+            Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Events.OnUpdate += this.OnUpdate;
+            Game.OnUpdate += OnUpdate;
         }
 
-        protected override void OnInitialize(object sender, FeatureBaseEventArgs featureBaseEventArgs)
-        {
-            this.logic = new LogicAll();
-            this.qLogic = new CrescentStrikeLogic();
-            base.OnInitialize(sender, featureBaseEventArgs);
-        }
+        //protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        //{
+        //    logic = new LogicAll();
+        //    qLogic = new CrescentStrikeLogic();
+        //    base.OnLoad(sender, featureBaseEventArgs);
+        //}
 
         protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            this.Menu.AddItem(
-                new MenuItem(this.Menu.Name + "Keybind", "Keybind").SetValue(new KeyBind('Z', KeyBindType.Press)));
+            Menu.AddItem(
+                new MenuItem(Menu.Name + "Keybind", "Keybind").SetValue(new KeyBind('Z', KeyBindType.Press)));
 
-            this.Menu.AddItem(new MenuItem(this.Menu.Name + "Range", "Range ").SetValue(new Slider(825, 0, 825)));
+            Menu.AddItem(new MenuItem(Menu.Name + "Range", "Range ").SetValue(new Slider(825, 0, 825)));
 
-            this.Menu.AddItem(new MenuItem(this.Menu.Name + "UseW", "Use W").SetValue(true));
+            Menu.AddItem(new MenuItem(Menu.Name + "UseW", "Use W").SetValue(true));
 
-            this.Menu.AddItem(new MenuItem(this.Menu.Name + "UseE", "Use E").SetValue(true));
+            Menu.AddItem(new MenuItem(Menu.Name + "UseE", "Use E").SetValue(true));
 
-            this.Menu.AddItem(new MenuItem(this.Menu.Name + "ERange", "E Range").SetValue(new Slider(330, 0, 350)));
+            Menu.AddItem(new MenuItem(Menu.Name + "ERange", "E Range").SetValue(new Slider(330, 0, 350)));
 
-            this.Menu.AddItem(new MenuItem(this.Menu.Name + "EKillable", "Only E If Killable").SetValue(true));
+            Menu.AddItem(new MenuItem(Menu.Name + "EKillable", "Only E If Killable").SetValue(true));
+
+            logic = new LogicAll();
+            qLogic = new CrescentStrikeLogic();
         }
 
         private void LunarRush()
@@ -105,13 +114,13 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Misaya
         private void MoonFall()
         {
             var target = TargetSelector.GetTarget(
-                this.Menu.Item(this.Menu.Name + "ERange").GetValue<Slider>().Value,
+                Menu.Item(Menu.Name + "ERange").GetValue<Slider>().Value,
                 TargetSelector.DamageType.Magical);
 
             if (target == null || !target.IsValid) return;
 
-            if (this.Menu.Item(this.Menu.Name + "EKillable").GetValue<bool>()
-                && this.logic.ComboDmg(target) * 1.3 < target.Health) return;
+            if (Menu.Item(Menu.Name + "EKillable").GetValue<bool>()
+                && logic.ComboDmg(target) * 1.3 < target.Health) return;
 
             Variables.Spells[SpellSlot.E].Cast();
         }
@@ -119,7 +128,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Misaya
         private void PaleCascade()
         {
             var target = TargetSelector.GetTarget(
-                this.Menu.Item(this.Menu.Name + "Range").GetValue<Slider>().Value,
+                Menu.Item(Menu.Name + "Range").GetValue<Slider>().Value,
                 TargetSelector.DamageType.Magical);
 
             if (target == null || !target.IsValid) return;
@@ -130,7 +139,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Misaya
                 Variables.Spells[SpellSlot.R].Cast(target);
             }
 
-            Variables.Spells[SpellSlot.Q].Cast(this.qLogic.QPred(target));
+            Variables.Spells[SpellSlot.Q].Cast(qLogic.QPred(target));
         }
 
         #endregion

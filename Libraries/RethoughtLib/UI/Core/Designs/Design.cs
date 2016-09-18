@@ -27,7 +27,7 @@ using EloBuddy;
         /// <value>
         ///     The transition.
         /// </value>
-        public abstract Transition Transition { get; set; }
+        public abstract TransitionBase TransitionBase { get; set; }
 
         /// <summary>
         ///     Gets or sets the width.

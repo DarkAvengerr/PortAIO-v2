@@ -1,4 +1,6 @@
-using EloBuddy; namespace ReformedAIO.Champions.Gragas.Logic
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Gragas.Logic
 {
     #region Using Directives
 
@@ -21,7 +23,7 @@ using EloBuddy; namespace ReformedAIO.Champions.Gragas.Logic
                 Variable.Spells[SpellSlot.R].GetVectorSPrediction(target, 1150)
                     .CastTargetPosition.Extend(Variable.Player.Position.To2D(), 65);
 
-            return pos.To3D() + this.RDelay(target);
+            return pos.To3D() + RDelay(target);
         }
 
         #endregion
