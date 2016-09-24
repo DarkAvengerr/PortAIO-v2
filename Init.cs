@@ -89,12 +89,12 @@ namespace PortAIO
 
         public static void LoadUtility()
         {
-            Anti_Rito.Program.Main();
-            Console.WriteLine("[PortAIO] Core loading : Utility Load #1");
+            //Anti_Rito.Program.Main();
+            //Console.WriteLine("[PortAIO] Core loading : Utility Load #1");
             PortAIOHuman.Program.Game_OnGameLoad();
-            Console.WriteLine("[PortAIO] Core loading : Utility Load #2");
-            BadaoActionsLimiter.Program.Main();
-            Console.WriteLine("[PortAIO] Core loading : Utility Load #3");
+            Console.WriteLine("[PortAIO] Core loading : Utility Load #1");
+            //BadaoActionsLimiter.Program.Main();
+            //Console.WriteLine("[PortAIO] Core loading : Utility Load #3");
 
             //ProFlash.Program.Main();
             //TiltSharp.Program.Main();
@@ -558,6 +558,9 @@ namespace PortAIO
                             break;
                         case 5: // ExorAIO
                             ExorAIO.Program.Main();
+                            break;
+                        case 6: // Eat my Cass
+                            Eat_My_Cass.Program.Main();
                             break;
                     }
                     break;

@@ -113,7 +113,7 @@ using EloBuddy;
         ///     Raises the <see cref="E:Load" /> event.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
-        public void OnLoad(EventArgs args)
+        public void OnLoad()
         {
             if (this.Player.ChampionName != "Cassiopeia")
             {
