@@ -11,10 +11,10 @@ using EloBuddy;
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
             var sivir = new Sivir();
-            CustomEvents.Game.OnGameLoad += sivir.OnLoad;
+            sivir.OnLoad();
         }
     }
 }

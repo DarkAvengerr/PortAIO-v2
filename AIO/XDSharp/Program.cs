@@ -6,9 +6,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace XDSharp
+using EloBuddy;
+using LeagueSharp.Common;
+namespace XDSharp
 {
     class Program
     {
@@ -18,14 +18,13 @@ using EloBuddy;
             get { return ObjectManager.Player; }
         }
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnGameLoad;
+            Game_OnGameLoad();
         }
 
-
-#region OnGameLoad
-        private static void OnGameLoad(EventArgs args)
+        #region OnGameLoad
+        static void Game_OnGameLoad()
         {
             try
             {
@@ -54,6 +53,6 @@ using EloBuddy;
             }
 
         }
-#endregion
+        #endregion
     }
 }

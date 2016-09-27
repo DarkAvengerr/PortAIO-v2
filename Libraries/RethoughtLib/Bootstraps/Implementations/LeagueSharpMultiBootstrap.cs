@@ -35,8 +35,7 @@ using EloBuddy;
                 this.Strings = new List<string>(additionalStrings);
             }
 
-            CustomEvents.Game.OnGameLoad +=
-                delegate(EventArgs args) { this.AddString(ObjectManager.Player.ChampionName); };
+            this.AddString(ObjectManager.Player.ChampionName);
         }
 
         #endregion

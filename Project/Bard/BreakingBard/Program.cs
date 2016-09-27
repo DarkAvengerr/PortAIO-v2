@@ -36,9 +36,9 @@ namespace BreakingBard
 
         static bool draw = false;
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
             Interrupter.OnPossibleToInterrupt += Interrupter_OnPossibleToInterrupt;
         }
 
@@ -61,7 +61,7 @@ namespace BreakingBard
             }
         }
 
-        static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             var TargetSelectorMenu = new Menu("Target Selector", "Target Selector");
             TargetSelector.AddToMenu(TargetSelectorMenu);

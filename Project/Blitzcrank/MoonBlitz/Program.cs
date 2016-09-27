@@ -130,9 +130,9 @@ using EloBuddy;
         ///     Called when the program is executed.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        public static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += GameOnOnGameLoad;
+            GameOnOnGameLoad();
         }
 
         #endregion
@@ -433,7 +433,7 @@ using EloBuddy;
         ///     Called when the game loads.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
-        private static void GameOnOnGameLoad(EventArgs args)
+        private static void GameOnOnGameLoad()
         {
             if (Player.ChampionName != "Blitzcrank")
             {

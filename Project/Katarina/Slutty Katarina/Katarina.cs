@@ -21,7 +21,7 @@ using EloBuddy;
         private static GameObject _enemy;
         public static SpellSlot Ignite;
         public static Spell Q, W, E, R;
-        public static void OnGameLoad(EventArgs args)
+        public static void OnGameLoad()
         {
             if (Player.ChampionName != "Katarina") return;
             MenuConfig.OnLoad();

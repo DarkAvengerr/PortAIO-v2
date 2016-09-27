@@ -16,14 +16,14 @@ using EloBuddy;
         public static Spell Q, W, E, R;
         public static Orbwalking.Orbwalker Orbwalker;
         public static Menu Config;
-        public static List<Vector3> EQDrawList; 
+        public static List<Vector3> EQDrawList;
 
         public J4()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             EQDrawList = new List<Vector3>();
             Player = ObjectManager.Player;

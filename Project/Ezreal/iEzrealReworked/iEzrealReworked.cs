@@ -79,7 +79,7 @@ using EloBuddy;
         ///     The OnLoad function load your spells and other shit here before game starts.
         /// </summary>
         /// <param name="args">The event arguments.</param>
-        public void OnLoad(EventArgs args)
+        public void OnLoad()
         {
             //Initialize our player
             _player = ObjectManager.Player;

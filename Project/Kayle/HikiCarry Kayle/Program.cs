@@ -41,12 +41,12 @@ using EloBuddy;
             public string SpellName;
             public SpellSlot slot;
         }
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             Player = ObjectManager.Player;
             if (Player.BaseSkinName != ChampionName) return;

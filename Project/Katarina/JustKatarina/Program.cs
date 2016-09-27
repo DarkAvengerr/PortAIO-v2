@@ -31,12 +31,12 @@ using EloBuddy;
         private static int lastWardCast;
         private static readonly AIHeroClient player = ObjectManager.Player;
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnLoad;
+            Game_OnGameLoad();
         }
 
-        private static void OnLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (player.ChampionName != ChampName)
                 return;

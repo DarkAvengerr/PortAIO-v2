@@ -16,7 +16,7 @@ using EloBuddy;
     public class Lux : Extensions.Statics
     {
         public const string ChampName = "Lux";
-        public static void OnLoad(EventArgs args)
+        public static void OnLoad()
         {
             if (player.ChampionName != ChampName)
                 return;

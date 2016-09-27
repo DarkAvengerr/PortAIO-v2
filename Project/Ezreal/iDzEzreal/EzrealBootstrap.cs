@@ -15,7 +15,7 @@ using EloBuddy;
     class EzrealBootstrap
     {
 
-        internal static void OnGameLoad(EventArgs args)
+        internal static void OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != "Ezreal")
             {

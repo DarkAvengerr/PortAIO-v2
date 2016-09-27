@@ -103,16 +103,12 @@ using EloBuddy;
         /// The main entry point of the application.
         /// </summary>
         /// <param name="args">The arguments.</param>
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        /// <summary>
-        /// Raises the <see cref="E:GameLoad" /> event.
-        /// </summary>
-        /// <param name="args">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        private static void OnGameLoad(System.EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Thresh")
             {

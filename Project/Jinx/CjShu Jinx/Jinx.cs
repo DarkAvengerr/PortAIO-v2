@@ -15,10 +15,10 @@ using EloBuddy;
         public static string ChampionName => "Jinx";
         public static void Init()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.CharData.BaseSkinName != ChampionName)
             {

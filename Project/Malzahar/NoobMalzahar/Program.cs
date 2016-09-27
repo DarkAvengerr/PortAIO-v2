@@ -25,11 +25,12 @@ using EloBuddy;
         public static Spell W;
         public static Spell E;
         public static Spell R;
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
-        private static void Game_OnGameLoad(EventArgs args)
+
+        static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Malzahar") return;
 

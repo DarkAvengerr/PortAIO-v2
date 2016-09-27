@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace NoobFizz
+using EloBuddy;
+using LeagueSharp.Common;
+namespace NoobFizz
 {
     class Program
     {
@@ -33,11 +33,12 @@ using EloBuddy;
 
         private static Obj_AI_Base Target;
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
-        private static void Game_OnGameLoad(EventArgs args)
+
+        static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Fizz") return;
 
@@ -103,7 +104,7 @@ using EloBuddy;
             Chat.Print("<font color='#00B4D2'>Don't forget to upvote if you like NoobFizz! </font>");
         }
         private static void OnSpellCast()
-        {        
+        {
             Obj_AI_Base.OnSpellCast += (sender, args) =>
             {
                 if (sender.IsMe && args.SData.IsAutoAttack())
@@ -177,7 +178,7 @@ using EloBuddy;
             {
                 E.Cast(Game.CursorPos);
             }
-        }      
+        }
         //R usage
         public static void UseTr(AIHeroClient target)
         {
@@ -191,7 +192,7 @@ using EloBuddy;
         {
             if (ObjectManager.Player.ManaPercent < Menu.Item("lanemana").GetValue<Slider>().Value)
             {
-                return; 
+                return;
             }
             if (Menu.Item("laneclearQ").GetValue<bool>() && Q.IsReady())
             {
@@ -199,7 +200,7 @@ using EloBuddy;
                 foreach (var minion in MinionList)
                 {
                     Q.CastOnUnit(minion);
-                }              
+                }
             }
             if (Menu.Item("laneclearW").GetValue<bool>() && W.IsReady())
             {
@@ -253,32 +254,32 @@ using EloBuddy;
             }
             if (useW && (Player.Distance(target.Position) < Q.Range)) W.Cast();
             if (useQ && Player.Distance(target.Position) > 175) Q.CastOnUnit(target);
-                      
-        }
-       /* private static void AfterAa(AttackableUnit unit, AttackableUnit target)
-        {
-            var useE = (Menu.Item("useE").GetValue<bool>() && E.IsReady());
-            var useR = (Menu.Item("useR").GetValue<bool>() && R.IsReady());
-            var ondash = (Menu.Item("ComboMode").GetValue<StringList>().SelectedIndex == 1);
-            var afterdash = (Menu.Item("ComboMode").GetValue<StringList>().SelectedIndex == 0);
-            var m = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
 
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-            {
-                if (ondash)
-                {
-                    if (useE && !R.IsReady() && E.Instance.Name == "FizzJump" && Player.Distance(m.Position) < E.Range) E.Cast(Game.CursorPos);
-                }
-                if (afterdash)
-                {
-                    if (useR) R.CastOnUnit(m);
-                }
-            }
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-            {
-                if ((Menu.Item("useharassE").GetValue<bool>() && E.IsReady()) && !W.IsReady() && !Q.IsReady()) E.Cast(Game.CursorPos);
-            }
-        }*/
+        }
+        /* private static void AfterAa(AttackableUnit unit, AttackableUnit target)
+         {
+             var useE = (Menu.Item("useE").GetValue<bool>() && E.IsReady());
+             var useR = (Menu.Item("useR").GetValue<bool>() && R.IsReady());
+             var ondash = (Menu.Item("ComboMode").GetValue<StringList>().SelectedIndex == 1);
+             var afterdash = (Menu.Item("ComboMode").GetValue<StringList>().SelectedIndex == 0);
+             var m = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
+
+             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+             {
+                 if (ondash)
+                 {
+                     if (useE && !R.IsReady() && E.Instance.Name == "FizzJump" && Player.Distance(m.Position) < E.Range) E.Cast(Game.CursorPos);
+                 }
+                 if (afterdash)
+                 {
+                     if (useR) R.CastOnUnit(m);
+                 }
+             }
+             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+             {
+                 if ((Menu.Item("useharassE").GetValue<bool>() && E.IsReady()) && !W.IsReady() && !Q.IsReady()) E.Cast(Game.CursorPos);
+             }
+         }*/
         private static void Combo()
         {
             var useQ = (Menu.Item("useQ").GetValue<bool>() && Q.IsReady());
@@ -303,7 +304,7 @@ using EloBuddy;
                 hextech.Cast(m);
             }
             if (ondash)
-            {             
+            {
                 if (useQ && Player.Distance(m.Position) > 175) Q.CastOnUnit(m);
                 if (useW && (Player.Distance(m.Position) < 551)) W.Cast();
                 if (useR && m.HealthPercent > 30) R.CastIfWillHit(m);

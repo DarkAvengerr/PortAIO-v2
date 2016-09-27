@@ -20,7 +20,7 @@ using EloBuddy;
         private ComboProvider _comboProvider;
         private MenuItem _drawR, _drawQ, _drawQEx;
 
-        public void Load(EventArgs eArgs)
+        public void Load()
         {
             _comboProvider = new ComboProvider(new Skill[] { new EkkoQ(new Spell(SpellSlot.Q)), new EkkoW(new Spell(SpellSlot.W)), new EkkoE(new Spell(SpellSlot.E)), new EkkoR(new Spell(SpellSlot.R)) }.ToList(), 1000);
 

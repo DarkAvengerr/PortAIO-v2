@@ -21,10 +21,10 @@ using EloBuddy;
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        public  static void Main()
         {
             var ezreal = new iEzrealReworked();
-            CustomEvents.Game.OnGameLoad += ezreal.OnLoad;
+            ezreal.OnLoad();
         }
     }
 }

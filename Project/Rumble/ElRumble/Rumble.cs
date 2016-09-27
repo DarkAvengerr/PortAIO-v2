@@ -188,7 +188,7 @@ using EloBuddy;
             }
         }
 
-        public static void OnLoad(EventArgs args)
+        public static void OnLoad()
         {
             if (ObjectManager.Player.CharData.BaseSkinName != "Rumble")
             {

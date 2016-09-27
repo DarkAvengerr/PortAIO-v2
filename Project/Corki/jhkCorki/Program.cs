@@ -18,7 +18,7 @@ using EloBuddy;
         private static Menu Config;
         private static Orbwalking.Orbwalker _Ob;
 
-        private static void Game_OnGameLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
 
             if (Player.BaseSkinName != "Corki")
@@ -473,11 +473,6 @@ using EloBuddy;
                 W.Cast(Player.Position.Extend(Game.CursorPos, W.Range));
             else if (g.Sender.IsValidTarget() && !Player.Position.Extend(Game.CursorPos, W.Range).IsWall() && W.IsReady() && Player.CountEnemiesInRange(400) >= 3 && Player.Position.Extend(Game.CursorPos, W.Range).CountEnemiesInRange(500) < 2)
                 W.Cast(Player.Position.Extend(Game.CursorPos, W.Range));
-        }
-
-        static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
         }
     }
 }

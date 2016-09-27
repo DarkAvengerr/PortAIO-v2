@@ -25,12 +25,12 @@ using EloBuddy;
         public static int dashcount, dashtime;
         public static bool dashwait;
         private static int AutoHP { get { return Menu.Item("AutoHP").GetValue<Slider>().Value; } }
-        static void Main()
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        static void OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Rengar") return;
             Chat.Print("Hoola Rengar - Loaded Successfully, Good Luck! :)");

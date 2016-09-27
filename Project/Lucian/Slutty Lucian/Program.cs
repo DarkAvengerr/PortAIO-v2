@@ -11,11 +11,11 @@ using EloBuddy;
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
             try
             {
-                CustomEvents.Game.OnGameLoad += Lucian.OnLoad;
+                Lucian.OnLoad();
             }
             catch (Exception ex)
             {

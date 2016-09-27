@@ -37,13 +37,13 @@ using EloBuddy;
 
         #endregion
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            Bootstrap.Init(args);
-            Events.OnLoad += Events_OnLoad;
+            Bootstrap.Init(null);
+            Events_OnLoad();
         }
 
-        private static void Events_OnLoad(object sender, EventArgs args)
+        private static void Events_OnLoad()
         {
 
             Player = GameObjects.Player;

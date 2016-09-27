@@ -11,11 +11,11 @@ using EloBuddy;
     {
         #region Methods
 
-        private static void Main(string[] args)
+        public static void Main()
         {
             try
             {
-                CustomEvents.Game.OnGameLoad += Entry.OnLoad;
+                Entry.OnLoad();
             }
             catch (Exception e)
             {

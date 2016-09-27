@@ -17,16 +17,12 @@ namespace Slutty_ryze
 
         public static int rRange { get; private set; }
         #region onload
-        private static void Main(string[] args)
+        public static void Main()
         {
-            if (args == null) throw new ArgumentNullException(nameof(args));
-            // So you can test if it in VS wihout crahses
-#if !DEBUG
-            CustomEvents.Game.OnGameLoad += OnLoad;
-#endif
+            Game_OnGameLoad();
         }
 
-        private static void OnLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (GlobalManager.GetHero.ChampionName != Champion.ChampName)
                 return;

@@ -18,10 +18,10 @@ using EloBuddy;
     {
         public void Initialize()
         {
-            Events.OnLoad += OnLoad;
+            OnLoad();
         }
 
-        private void OnLoad(object sender, EventArgs e)
+        private void OnLoad()
         {
             DZLib.Menu.ModesMenuExtensions.SetBaseName($"dzaio.champion.{ObjectManager.Player.ChampionName.ToLowerInvariant()}");
             DZLib.Logging.LogHelper.OnLoad();

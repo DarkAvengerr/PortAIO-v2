@@ -26,12 +26,12 @@ using EloBuddy;
 
         static readonly Render.Text Text = new Render.Text(
                                                0, 0, "", 11, new ColorBGRA(255, 0, 0, 255), "monospace");
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_onGameLoad;
+            Game_OnGameLoad();
         }
 
-        static void Game_onGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != "Brand")
             {

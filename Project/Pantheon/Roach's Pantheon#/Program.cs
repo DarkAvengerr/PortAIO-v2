@@ -11,16 +11,12 @@ using EloBuddy;
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += delegate
-            {
-                var onGameLoad = new Thread(Game_OnGameLoad);
-                onGameLoad.Start();
-            };
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad()
+        static void Game_OnGameLoad()
         {
             if (Variable.Player.CharData.BaseSkinName != Variable.CharName)
             {

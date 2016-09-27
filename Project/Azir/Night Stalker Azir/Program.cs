@@ -548,7 +548,7 @@ using EloBuddy;
         ///     Called when the game loads.
         /// </summary>
         /// <param name="args">The <see cref="System.EventArgs" /> instance containing the event data.</param>
-        private static void Game_OnGameLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
             if (Player.CharData.BaseSkinName != "Azir")
             {
@@ -674,17 +674,6 @@ using EloBuddy;
                 }
             }
         }
-
-        /// <summary>
-        ///     Called when the program starts.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        // ReSharper disable once UnusedParameter.Local
-        private static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
-        }
-
         #endregion
     }
 }

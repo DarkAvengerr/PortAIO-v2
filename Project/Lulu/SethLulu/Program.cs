@@ -8,9 +8,9 @@ using LeagueSharp.Common;
 using LeagueSharp;
 using LeagueSharp.Common.Data;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace SethLulu
+using EloBuddy;
+using LeagueSharp.Common;
+namespace SethLulu
 {
     class Program
     {
@@ -23,11 +23,12 @@ using EloBuddy;
         public static List<Spell> _spells = new List<Spell>();
 
         private static SpellSlot _igniteSlot;
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
-        private static void Game_OnGameLoad(EventArgs args)
+
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.BaseSkinName != ChampionName) return;
 
@@ -112,7 +113,7 @@ using EloBuddy;
             _root.SubMenu("Misc").AddItem(new MenuItem("WEGapcloser", "W > E on GapClosers").SetValue(true));
 
             _root.AddToMainMenu();
-            
+
 
             var dmgAfterComboItem = new MenuItem("DamageAfterCombo", "Draw damage after combo").SetValue(true);
             _root.SubMenu("SharpDrawer").AddItem(dmgAfterComboItem);
@@ -254,7 +255,7 @@ using EloBuddy;
                     {
                         if (ObjectManager.Player.Distance(target) < _w.Range && _w.IsReady())
                         { _w.CastOnUnit(target); }
-                    }                                       
+                    }
                 }
             }
 
@@ -390,7 +391,7 @@ using EloBuddy;
                         if (ObjectManager.Player.Distance(minion) <= _q.Range && _q.IsReady())
                         { _q.Cast(minion); }
                     }
-                    if(_root.Item("UseEFarm").GetValue<bool>())
+                    if (_root.Item("UseEFarm").GetValue<bool>())
                     {
                         if (ObjectManager.Player.Distance(minion) <= _e.Range && _e.IsReady())
                         { _e.CastOnUnit(minion); }

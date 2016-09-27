@@ -124,12 +124,12 @@ using EloBuddy;
             get { return _menu.SubMenu("Harass").Item("useE2").GetValue<bool>(); }
         }
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             _menu = new Menu("yol0 LeeSin", "yol0LeeSin", true);
             _menu.AddSubMenu(new Menu("Target Selector", "Target Selector"));

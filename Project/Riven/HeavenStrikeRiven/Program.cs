@@ -37,23 +37,12 @@ using EloBuddy;
         public static int Qstate = 1;
         public static int Windup { get { return Orbwalking.Orbwalker._config.Item("ExtraWindup").GetValue<Slider>().Value; } }
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            //CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
-            if (args == null)
-            {
-                return;
-            }
-            if (Game.Mode == GameMode.Running)
-            {
-                OnStart(new EventArgs());
-            }
-            Game.OnLoad += OnStart;
-
-
+            Game_OnGameLoad();
         }
 
-        private static void OnStart(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Riven")
                 return;

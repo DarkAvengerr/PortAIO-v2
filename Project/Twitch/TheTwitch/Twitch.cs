@@ -19,7 +19,7 @@ using EloBuddy;
     {
         private Orbwalking.Orbwalker _orbwalker;
 
-        public void Load(EventArgs eArgs)
+        public void Load()
         {
             if (ObjectManager.Player.ChampionName != "Twitch")
                 return;

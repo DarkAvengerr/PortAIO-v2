@@ -24,12 +24,12 @@ using EloBuddy;
         public static List<Spell> _spells = new List<Spell>();
 
         public static SpellSlot _exhaustSlot;
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OutLoading;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OutLoading(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.BaseSkinName != ChampionName) return;
             Console.WriteLine("Loaded after champion check!");

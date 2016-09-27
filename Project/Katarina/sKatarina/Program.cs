@@ -24,12 +24,12 @@ using EloBuddy;
         //public static Items.Item Tiamat, Hydra;
         public static Menu menu;
         public static SpellSlot Ignite;
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Katarina_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        public static void Katarina_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if(player.ChampionName != "Katarina") return;
 

@@ -25,11 +25,10 @@ using EloBuddy;
 
         public Script()
         {
-            /* CallBacks */
-            CustomEvents.Game.OnGameLoad += onLoad;
+            Game_OnGameLoad();
         }
 
-        private void onLoad(EventArgs args)
+        void Game_OnGameLoad()
         {
             // Se for o Master Yi
             if (ObjectManager.Player.CharData.BaseSkinName == charName)

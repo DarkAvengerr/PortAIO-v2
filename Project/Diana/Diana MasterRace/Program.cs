@@ -31,7 +31,7 @@ using EloBuddy;
         public static Spell R;
         
 
-        static void Main(string[] args)
+        public static void Main()
         {
             if (Player.BaseSkinName != ChampionName) return;
 

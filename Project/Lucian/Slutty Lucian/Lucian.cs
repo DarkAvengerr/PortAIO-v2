@@ -18,7 +18,7 @@ using EloBuddy;
         private static bool casted;
         private static bool castq;
 
-        internal static void OnLoad(EventArgs args)
+        internal static void OnLoad()
         {
             if (Player.ChampionName != "Lucian") return;
             MenuConfig.OnLoad();

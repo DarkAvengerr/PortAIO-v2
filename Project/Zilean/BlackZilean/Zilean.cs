@@ -32,7 +32,7 @@ using EloBuddy;
 
         #region OnGameLoad
 
-        public static void OnLoad(EventArgs args)
+        public static void OnLoad()
         {
             try
             {

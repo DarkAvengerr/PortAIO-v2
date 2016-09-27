@@ -23,12 +23,12 @@ using EloBuddy;
         public static AIHeroClient Me;
         public static HpBarDraw HpBarDraw = new HpBarDraw();
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Load;
+            Game_OnGameLoad();
         }
 
-        private static void Load(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != "Brand")
                 return;

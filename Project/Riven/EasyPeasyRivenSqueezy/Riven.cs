@@ -68,7 +68,7 @@ using EloBuddy;
         public static Obj_AI_Base LastTarget { get; set; }
         public static bool CanQ { get; set; }
 
-        public static void OnGameLoad(EventArgs args)
+        public static void OnGameLoad()
         {
             if (Player.ChampionName != "Riven")
             {

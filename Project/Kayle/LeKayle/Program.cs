@@ -19,12 +19,12 @@ using EloBuddy;
 
         private static Menu Menu;
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Kayle")
                 return;

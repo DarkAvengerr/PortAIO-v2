@@ -32,12 +32,11 @@ namespace EasyLib2
         protected Champion(string championName)
         {
             targetChampion = championName;
-            CustomEvents.Game.OnGameLoad += OnGameLoad;
+            OnGameLoad();
         }
 
         ~Champion()
         {
-            CustomEvents.Game.OnGameLoad -= OnGameLoad;
             Game.OnUpdate -= OnUpdate;
             Drawing.OnDraw -= OnDraw;
             Drawing.OnEndScene -= OnEndScene;
@@ -45,7 +44,7 @@ namespace EasyLib2
             Interrupter.OnPossibleToInterrupt -= OnPossibleToInterrupt;
         }
 
-        private void OnGameLoad(EventArgs args)
+        private void OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName.ToLower() != targetChampion.ToLower())
                 return;

@@ -18,12 +18,12 @@ using EloBuddy;
         {
             "MissFortune","Poppy","Jhin","Shen",/*"Elise","AurelionSol",*/"Gangplank", /*"Graves" ,*/ /*"Veigar", */"Yasuo"
         };
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (!SupportedChampion.Contains(ObjectManager.Player.ChampionName))
             {

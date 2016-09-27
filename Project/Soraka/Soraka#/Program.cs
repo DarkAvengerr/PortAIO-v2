@@ -19,15 +19,13 @@ using EloBuddy;
         {
             get { return ObjectManager.Player; }
         }
-
-
-        private static void Main(string[] args)
+        
+        public static void Main()
         {
-            // Add OnGameLoad
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             // Validate Champion
             if (Player.ChampionName != ChampionName)

@@ -14,9 +14,12 @@ using EloBuddy;
         public static readonly AIHeroClient Player = ObjectManager.Player;
         private static readonly HpBarIndicator Indicator = new HpBarIndicator();
         private static Orbwalking.Orbwalker _orbwalker;
-        private static void Main() => CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+        public static void Main()
+        {
+            Game_OnGameLoad();
+        }
 
-        static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Diana") return;
 

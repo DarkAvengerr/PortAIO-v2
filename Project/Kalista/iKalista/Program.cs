@@ -16,9 +16,9 @@
 //             along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace IKalista
+using EloBuddy;
+using LeagueSharp.Common;
+namespace IKalista
 {
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -36,16 +36,13 @@ using EloBuddy;
         /// <param name="args">
         /// the given arguments 
         /// </param>
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += load =>
-                {
-                    if (ObjectManager.Player.ChampionName == "Kalista")
-                    {
-                        // ReSharper disable once ObjectCreationAsStatement
-                        new Kalista();
-                    }
-                };
+            if (ObjectManager.Player.ChampionName == "Kalista")
+            {
+                // ReSharper disable once ObjectCreationAsStatement
+                new Kalista();
+            }
         }
 
         #endregion

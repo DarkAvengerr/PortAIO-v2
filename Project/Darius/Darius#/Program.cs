@@ -13,13 +13,12 @@ using EloBuddy;
         private static AIHeroClient Player = ObjectManager.Player;
         private const string ChampionName = "Darius";
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            //Load "faked" OnGameLoad
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             //Return if Player is not playing Darius..
             if (Player.ChampionName != ChampionName)

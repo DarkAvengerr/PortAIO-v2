@@ -122,7 +122,7 @@ using EloBuddy;
 
         #endregion
 
-        internal void OnLoad(EventArgs args)
+        internal void OnLoad()
         {
             if (ObjectManager.Player.ChampionName != "Sivir") return;
 

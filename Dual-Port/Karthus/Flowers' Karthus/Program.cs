@@ -30,12 +30,12 @@ using EloBuddy;
         public static Orbwalking.Orbwalker Orbwalker;
         public static HpBarDraw HpbarDraw = new HpBarDraw();
 
-        public static void Main(string[] Args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void OnGameLoad(EventArgs Args)
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName.ToLower() != "karthus")
             {

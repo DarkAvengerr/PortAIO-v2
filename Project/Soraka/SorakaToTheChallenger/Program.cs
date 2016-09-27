@@ -47,21 +47,17 @@ using EloBuddy;
         /// The Frankfurt
         /// </summary>
         /// <param name="args">The args</param>
-        public static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Load;
+            Game_OnGameLoad();
         }
 
-        /// <summary>
-        /// The Load
-        /// </summary>
-        /// <param name="args">The args</param>
-        public static void Load(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.CharData.BaseSkinName != "Soraka") return;
 			
-            Chat.Print("Please switch to Challenger Series AIO, everything is improved there!");
-            Chat.Print("Open Loader > Install new assembly > GitHub > https://github.com/myo/LeagueSharp");
+            //Chat.Print("Please switch to Challenger Series AIO, everything is improved there!");
+            //Chat.Print("Open Loader > Install new assembly > GitHub > https://github.com/myo/LeagueSharp");
             Q = new Spell(SpellSlot.Q, 800, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 550);
             E = new Spell(SpellSlot.E, 900, TargetSelector.DamageType.Magical);

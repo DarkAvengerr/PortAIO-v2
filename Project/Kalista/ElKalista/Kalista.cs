@@ -110,7 +110,7 @@ using EloBuddy;
 
         #region Gameloaded 
 
-        public static void Game_OnGameLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != "Kalista") return;
            

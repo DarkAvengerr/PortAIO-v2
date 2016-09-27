@@ -80,7 +80,7 @@ using EloBuddy;
 
         #region Public Methods and Operators
 
-        public static void Game_OnGameLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.CharData.BaseSkinName != "Xerath")
             {

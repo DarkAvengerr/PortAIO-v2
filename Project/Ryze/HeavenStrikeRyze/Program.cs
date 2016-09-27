@@ -22,12 +22,12 @@ using EloBuddy;
         public static Spell _q, _q2, _w, _e, _r;
 
         public static Menu _menu;
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             //Verify Champion
             if (Player.ChampionName != "Ryze")

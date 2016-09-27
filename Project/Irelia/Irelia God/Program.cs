@@ -16,12 +16,12 @@ using EloBuddy;
         private static int lastsheenproc;
         private static int rcount;
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             // Only load on Irelia, silly
             if (Player.CharData.BaseSkinName != "Irelia") return;

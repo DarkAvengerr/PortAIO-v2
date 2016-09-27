@@ -2,22 +2,19 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using TreeLib.Core;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace PopBlanc
+using EloBuddy;
+using LeagueSharp.Common;
+namespace PopBlanc
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += eventArgs =>
+            if (ObjectManager.Player.ChampionName.Equals("Leblanc"))
             {
-                if (ObjectManager.Player.ChampionName.Equals("Leblanc"))
-                {
-                    Bootstrap.Initialize();
-                    var s = new LeBlanc();
-                }
-            };
+                Bootstrap.Initialize();
+                var s = new LeBlanc();
+            }
         }
     }
 }

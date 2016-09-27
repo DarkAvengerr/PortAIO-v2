@@ -19,9 +19,9 @@
 //   TODO The program.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Ekko_the_Boy_Who_Shattered_Time
+using EloBuddy;
+using LeagueSharp.Common;
+namespace Ekko_the_Boy_Who_Shattered_Time
 {
     using System.Reflection;
     using System.Runtime.CompilerServices;
@@ -55,24 +55,18 @@ using EloBuddy;
         /// <param name="args">
         ///     The data transferred to the main entry point.
         /// </param>
-        private static void Main(string[] args)
+        public static void Main()
         {
-            if (args != null)
+            Ekko.Player = ObjectManager.Player;
+            if (Ekko.Player.ChampionName.Equals(GetCurrentNamespace()))
             {
-                CustomEvents.Game.OnGameLoad += eventArgs =>
-                    {
-                        Ekko.Player = ObjectManager.Player;
-                        if (Ekko.Player.ChampionName.Equals(GetCurrentNamespace()))
-                        {
-                            Ekko.Menu = new Menu("[L33T] Ekko", "l33t.ekko", true);
-                            EntryPoint.Invoke(Ekko.Menu);
-                            Ekko.Menu.AddToMainMenu();
+                Ekko.Menu = new Menu("[L33T] Ekko", "l33t.ekko", true);
+                EntryPoint.Invoke(Ekko.Menu);
+                Ekko.Menu.AddToMainMenu();
 
-                            GameObject.OnCreate += GameObjects.OnCreate;
-                            GameObject.OnDelete += GameObjects.OnDelete;
-                            Game.OnUpdate += GameObjects.OnUpdate;
-                        }
-                    };
+                GameObject.OnCreate += GameObjects.OnCreate;
+                GameObject.OnDelete += GameObjects.OnDelete;
+                Game.OnUpdate += GameObjects.OnUpdate;
             }
         }
 

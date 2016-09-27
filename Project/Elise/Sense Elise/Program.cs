@@ -30,12 +30,12 @@ using EloBuddy;
         private static float _spideQcd = 0, _spideWcd = 0, _spideEcd = 0;
         public static HpBarIndicator Indicator = new HpBarIndicator();
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             Player = ObjectManager.Player;
             if (Player.ChampionName != championName) return;

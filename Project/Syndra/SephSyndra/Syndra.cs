@@ -9,9 +9,9 @@ using SharpDX;
 using SPrediction;
 using Color = System.Drawing.Color;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace SephSyndra
+using EloBuddy;
+using LeagueSharp.Common;
+namespace SephSyndra
 {
     class Syndra : Helper
     {
@@ -21,17 +21,17 @@ using EloBuddy;
 
         public float LastWTick;
 
-        static void Main(string[] args)
+        public static void Main()
         {
             Syndra syn = new Syndra();
         }
 
         public Syndra()
         {
-            CustomEvents.Game.OnGameLoad += Load;
+            Game_OnGameLoad();
         }
 
-        void Load(EventArgs args)
+        void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != "Syndra")
             {
@@ -103,7 +103,7 @@ using EloBuddy;
 
         void OnUpdate(EventArgs args)
         {
-            if(Syndra.IsRecalling() || Syndra.IsDead)
+            if (Syndra.IsRecalling() || Syndra.IsDead)
             {
                 return;
             }
@@ -114,7 +114,7 @@ using EloBuddy;
                 if (mode == QEMode.Normal)
                 {
                     CastQE();
-                } 
+                }
 
                 if (mode == QEMode.Fast)
                 {
@@ -136,7 +136,7 @@ using EloBuddy;
             {
                 KillSteal();
             }
-            
+
 
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
@@ -195,7 +195,8 @@ using EloBuddy;
             {
                 CastW(null);
             }
-            if (GetBool("h.e")) {
+            if (GetBool("h.e"))
+            {
                 CastE();
             }
         }
@@ -294,7 +295,7 @@ using EloBuddy;
                     return QEMode.Normal;
                 }
 
-                else 
+                else
                 {
                     return QEMode.Fast;
                 }
@@ -331,7 +332,8 @@ using EloBuddy;
                         return;
                     }
                     //Common if SPrediction cant find
-                    else {
+                    else
+                    {
                         var predc = SpellManager.W2.GetPrediction(targ);
                         if (predc.Hitchance >= HitChance.VeryHigh)
                         {
@@ -420,7 +422,7 @@ using EloBuddy;
                 SpellManager.R.Cast(candidate);
             }
         }
-    
+
         bool WGood
         {
             get
@@ -428,7 +430,7 @@ using EloBuddy;
                 return Utils.TickCount - LastWTick > 150 + Game.Ping;
             }
         }
-        
+
         void KillSteal()
         {
             var target = TargetSelector.GetTarget(1300, TargetSelector.DamageType.Magical);
@@ -455,11 +457,11 @@ using EloBuddy;
 
             if (GetBool("ks.w") && SpellManager.W.IsReady() && target.IsValidTarget(SpellManager.W.Range))
             {
-                    var wdmg = SpellManager.W.GetDamage(target);
-                    if (target.Health < wdmg)
-                    {
-                        CastW(target);
-                    }
+                var wdmg = SpellManager.W.GetDamage(target);
+                if (target.Health < wdmg)
+                {
+                    CastW(target);
+                }
             }
 
             if (GetBool("ks.e") && SpellManager.E.IsReady() && target.IsValidTarget(SpellManager.E.Range))
@@ -488,7 +490,8 @@ using EloBuddy;
                 spells.Add(SpellManager.Ignite);
             }
 
-            if (dmg > target.Health) {
+            if (dmg > target.Health)
+            {
                 foreach (var spell in spells)
                 {
                     if (spell.Slot == SpellSlot.Q)
@@ -521,7 +524,7 @@ using EloBuddy;
                      m =>
                          m.IsValidTarget() &&
                          (Vector3.Distance(m.ServerPosition, Syndra.ServerPosition) <= SpellManager.Q.Range ||
-                          Vector3.Distance(m.ServerPosition, Syndra.ServerPosition) <= SpellManager.W.Range||
+                          Vector3.Distance(m.ServerPosition, Syndra.ServerPosition) <= SpellManager.W.Range ||
                           Vector3.Distance(m.ServerPosition, Syndra.ServerPosition) <= SpellManager.E.Range));
 
 
@@ -538,14 +541,14 @@ using EloBuddy;
 
             if (SpellSlot.W.IsReady() && GetBool("lc.w"))
             {
-                    var wminions =
-                        Minions.Where(
-                            m => Vector3.Distance(m.ServerPosition, Syndra.ServerPosition) <= SpellManager.W.Range);
-                    MinionManager.FarmLocation wLocation =
-                        MinionManager.GetBestCircularFarmLocation(wminions.Select(m => m.ServerPosition.To2D()).ToList(),
-                            SpellManager.W2.Width, SpellManager.W2.Range);
-                    if (wLocation.Position != null && wLocation.MinionsHit > 0)
-                    {
+                var wminions =
+                    Minions.Where(
+                        m => Vector3.Distance(m.ServerPosition, Syndra.ServerPosition) <= SpellManager.W.Range);
+                MinionManager.FarmLocation wLocation =
+                    MinionManager.GetBestCircularFarmLocation(wminions.Select(m => m.ServerPosition.To2D()).ToList(),
+                        SpellManager.W2.Width, SpellManager.W2.Range);
+                if (wLocation.Position != null && wLocation.MinionsHit > 0)
+                {
 
                     if (!HasSecondW && WGood)
                     {
@@ -555,13 +558,14 @@ using EloBuddy;
                     {
                         SpellManager.W.Cast(wLocation.Position);
                     }
-                    }
+                }
             }
 
             if (SpellSlot.E.IsReady() && GetBool("lc.e"))
             {
                 int hitcount = 0;
-                foreach (var min in Minions.Where(x => x.IsInRange(SpellManager.E.Range))) { 
+                foreach (var min in Minions.Where(x => x.IsInRange(SpellManager.E.Range)))
+                {
                     var predictedposition = min.ServerPosition.Extend(Syndra.ServerPosition, -Math.Max((1200 - min.Distance(Syndra.ServerPosition)), 700)).To2D();
                     var rect = new PolyUtils.Rectangle(min.ServerPosition.To2D(), predictedposition, min.BoundingRadius).ToPolygon();
                     Polygons.Add(rect);
@@ -684,7 +688,7 @@ using EloBuddy;
                 }
             }
         }
-    
+
 
         private void Interrupter2_OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
@@ -692,7 +696,8 @@ using EloBuddy;
             {
                 return;
             }
-            if (GetBool("m.interrupter")) {
+            if (GetBool("m.interrupter"))
+            {
                 if (SpellSlot.Q.IsReady() && SpellSlot.E.IsReady())
                 {
                     if (sender.IsValidTarget(SpellManager.E.Range))
@@ -711,7 +716,7 @@ using EloBuddy;
                 }
             }
         }
-    
+
 
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {

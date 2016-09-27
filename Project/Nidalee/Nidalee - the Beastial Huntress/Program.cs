@@ -55,15 +55,6 @@ using EloBuddy;
 
         #endregion
 
-        #region Main
-
-        public static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
-        }
-
-        #endregion
-
         #region OnDraw
 
         private static void Drawing_OnDraw(EventArgs args)
@@ -808,7 +799,12 @@ using EloBuddy;
 
         #region OnGameLoad
 
-        private static void Game_OnGameLoad(EventArgs args)
+        public static void Main()
+        {
+            Game_OnGameLoad();
+        }
+
+        static void Game_OnGameLoad()
         {
             _player = ObjectManager.Player;
             if (_player.ChampionName != ChampionName)

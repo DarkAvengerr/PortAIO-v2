@@ -25,12 +25,12 @@ using EloBuddy;
         public static float LastFocusTime;
         public static HpBarDraw HpBarDraw = new HpBarDraw();
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             try
             {

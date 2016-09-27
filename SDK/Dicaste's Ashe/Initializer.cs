@@ -1,6 +1,6 @@
-using EloBuddy; 
- using LeagueSharp.SDK; 
- namespace DicasteAshe
+using EloBuddy;
+using LeagueSharp.SDK;
+namespace DicasteAshe
 {
     using System;
     using System.Reflection;
@@ -15,10 +15,10 @@ using EloBuddy;
 
         internal static void Init()
         {
-            Events.OnLoad += OnLoad;
+            OnLoad();
         }
 
-        private static void OnLoad(object sender, EventArgs eventArgs)
+        private static void OnLoad()
         {
             if (Player.ChampionName != AssemblyName)
             {

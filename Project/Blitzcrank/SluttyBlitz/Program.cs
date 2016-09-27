@@ -32,12 +32,12 @@ using EloBuddy;
 
 
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnLoad;
+            Game_OnGameLoad();
         }
 
-        private static void OnLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (Player.ChampionName != ChampName)
                 return;

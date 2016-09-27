@@ -23,7 +23,7 @@ using EloBuddy;
             AntiGapcloser.OnEnemyGapcloser += MyLogic.Q.Events.OnGapcloser;
             Obj_AI_Base.OnProcessSpellCast += MyLogic.Q.Events.OnProcessSpellCast;
             Game.OnUpdate += MyLogic.Q.Events.OnUpdate;
-            CustomEvents.Game.OnGameLoad += MyLogic.Q.WallTumble.OnLoad;
+            MyLogic.Q.WallTumble.OnLoad();
             #endregion
 
             #region E

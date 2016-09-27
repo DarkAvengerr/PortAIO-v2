@@ -38,12 +38,12 @@ using EloBuddy;
 
         public static bool HasIgnite { get; private set; }
 
-        public static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             // Validate champ
             if (player.ChampionName != CHAMP_NAME)

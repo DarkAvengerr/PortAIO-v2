@@ -28,13 +28,12 @@ using EloBuddy;
         public static Orbwalking.Orbwalker MainOrbwalker;
 
         public static bool SystemEvadeStat = false;
-        static void Main(string[] args)
+        public static void Main()
         {
-            //Game_OnStart();
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             MainMenu = new Menu("myWord", "myWord", true);
 

@@ -9,9 +9,9 @@ using EloBuddy;
     {
         internal static object _menu;
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Talon.Game_OnGameLoad;
+            Talon.Game_OnGameLoad();
         }
     }
 }

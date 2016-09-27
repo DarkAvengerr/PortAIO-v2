@@ -645,7 +645,12 @@ using EloBuddy;
             }
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        public static void Main()
+        {
+            Game_OnGameLoad();
+        }
+
+        static void Game_OnGameLoad()
         {
             if (!Player.IsChampion("Fiora"))
             {
@@ -1040,11 +1045,6 @@ using EloBuddy;
                     //  Console.WriteLine("{0} {1}", dT, d2);
                 }*/
             }
-        }
-
-        private static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
         }
 
         private static void AIHeroClient_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

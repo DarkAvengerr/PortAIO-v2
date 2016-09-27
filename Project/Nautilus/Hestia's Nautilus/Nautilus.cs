@@ -11,10 +11,10 @@ using EloBuddy;
     {
         public Nautilus()
         {
-            CustomEvents.Game.OnGameLoad += OnLoad;
+            Game_OnGameLoad();
         }
 
-        private void OnLoad(EventArgs args)
+        void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != "Nautilus")
                 return;

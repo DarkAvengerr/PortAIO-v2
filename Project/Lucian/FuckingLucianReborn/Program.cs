@@ -18,11 +18,12 @@ using EloBuddy;
         private static Spell _w2 = new Spell(SpellSlot.W);
         private static Spell _e = new Spell(SpellSlot.E);
         private static string[] select = {"Ashe", "Caitlyn", "Corki", "Draven", "Ezreal", "Graves", "Jinx", "Kalista", "KogMaw", "Lucian", "MissFortune","Quinn","Sivir","Teemo","Tristana","TwistedFate","Twitch","Urgot","Varus","Vayne"};
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
-        private static void Game_OnGameLoad(EventArgs args)
+
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != "Lucian")
             {

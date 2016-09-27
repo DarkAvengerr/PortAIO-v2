@@ -16,7 +16,7 @@ namespace EasyJinx
 {
     class EasyJinx : EasyLib1.Champion
     {
-        static void Main(string[] args)
+        public static void Main()
         {
             new EasyJinx();
         }

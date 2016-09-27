@@ -9,18 +9,17 @@ using EloBuddy;
 
     internal class Initialiser
     {
+        public static void Main()
+        {
+            Game_OnGameLoad();
+        }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName == "Evelynn")
             {
                 new SkyLv_Evelynn();
             }
-        }
-
-        private static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
         }
     }
 }

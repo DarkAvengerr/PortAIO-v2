@@ -91,8 +91,8 @@ namespace PortAIO
         {
             //Anti_Rito.Program.Main();
             //Console.WriteLine("[PortAIO] Core loading : Utility Load #1");
-            PortAIOHuman.Program.Game_OnGameLoad();
-            Console.WriteLine("[PortAIO] Core loading : Utility Load #1");
+            //PortAIOHuman.Program.Game_OnGameLoad();
+            //Console.WriteLine("[PortAIO] Core loading : Utility Load #1");
             //BadaoActionsLimiter.Program.Main();
             //Console.WriteLine("[PortAIO] Core loading : Utility Load #3");
 
@@ -243,6 +243,15 @@ namespace PortAIO
                         case 9: // Flowers' Series
                             Flowers_Series.Program.Main();
                             break;
+                        case 10: // Babehri
+                            Babehri.Program.Game_OnGameLoad();
+                            break;
+                        case 11: // EasyAhri
+                            EasyAhri.Program.Main();
+                            break;
+                        case 12: // SenseAhri
+                            Sense_Ahri.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Akali:
@@ -281,6 +290,15 @@ namespace PortAIO
                         case 10: // TroopAIO
                             _SDK_TroopAIO.Program.Main();
                             break;
+                        case 11: // Bloodmoon Akali
+                            BloodMoonAkali.Program.Game_OnGameLoad();
+                            break;
+                        case 12: // Royal Rapist Akali
+                            RoyalAkali.Program.Game_OnGameLoad();
+                            break;
+                        case 13: // sAIO
+                            sAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Alistar:
@@ -297,6 +315,9 @@ namespace PortAIO
                             break;
                         case 3: // vSeries
                             vSupport_Series.Program.Game_OnGameLoad();
+                            break;
+                        case 4: // SkyAlstar
+                            AlistarBySky97.Program.Game_OnGameLoad();
                             break;
                     }
                     break;
@@ -317,6 +338,12 @@ namespace PortAIO
                             break;
                         case 4: // ExorAIO
                             ExorAIO.Program.Main();
+                            break;
+                        case 5: // DJ Amumu
+                            DJAmumu.Program.Game_OnGameLoad();
+                            break;
+                        case 6: // MasterofSadness
+                            MasterOfSadness.Program.Main();
                             break;
                     }
                     break;
@@ -351,6 +378,15 @@ namespace PortAIO
                             break;
                         case 3: // Support is Easy
                             Support.Program.Main();
+                            break;
+                        case 4: // EloFactory Annie
+                            EloFactory_Annie.Program.Game_OnGameLoad();
+                            break;
+                        case 5: // Flower's Annie
+                            Flowers__Annie.Program.Game_OnGameLoad();
+                            break;
+                        case 6: // OAnnie
+                            OAnnie.Program.Main();
                             break;
                     }
                     break;
@@ -396,6 +432,15 @@ namespace PortAIO
                         case 12: // xcsoft's Ashe
                             xcAshe.Program.Main();
                             break;
+                        case 13: // Ashe#
+                            AsheSharp.Source.Program.Game_OnGameLoad();
+                            break;
+                        case 14: // CarryAshe
+                            CarryAshe.Program.Game_OnGameLoad();
+                            break;
+                        case 15: // SNAshe
+                            SNAshe.Program.Game_OnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.AurelionSol:
@@ -409,6 +454,12 @@ namespace PortAIO
                             break;
                         case 2: // vAurelionSol
                             vAurelionSol.AurelionSol.Game_OnGameLoad();
+                            break;
+                        case 3: // Aurelion Sol As The Star Forger
+                            Aurelion_Sol_As_the_Star_Forger.Program.Main();
+                            break;
+                        case 4: // Flowers' AurelionSol
+                            Flowers__AurelionSol.Program.Game_OnGameLoad();
                             break;
                     }
                     break;
@@ -426,6 +477,15 @@ namespace PortAIO
                             break;
                         case 3: // xSalice
                             xSaliceResurrected.Program.LoadReligion();
+                            break;
+                        case 4: // Azir by Kortatu
+                            AzirKortatu.Program.Main();
+                            break;
+                        case 5: // AzirSharp
+                            AzirSharp.Program.Main();
+                            break;
+                        case 6: // Night Stalker Azir
+                            Night_Stalker_Azir.Program.Game_OnGameLoad();
                             break;
                     }
                     break;
@@ -446,6 +506,12 @@ namespace PortAIO
                             break;
                         case 4: // ChallengerSeries
                             Challenger_Series.Program.Main();
+                            break;
+                        case 5: // BreakingBard
+                            BreakingBard.Program.Main();
+                            break;
+                        case 6: // DesomondBard
+                            DesomondBard.Program.Main();
                             break;
                     }
                     break;
@@ -482,6 +548,18 @@ namespace PortAIO
                         case 9: // xcsoft's Blitzcrank
                             xcBlitzcrank.Program.Main();
                             break;
+                        case 10: // JustBlitzcrank
+                            JustBlitz.Program.Main();
+                            break;
+                        case 11: // MoonBlitz
+                            MoonBlitz.Program.Main();
+                            break;
+                        case 12: // SluttyBlitz
+                            Slutty_Blitz.Program.Main();
+                            break;
+                        case 13: // sAIO
+                            sAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Brand:
@@ -501,6 +579,21 @@ namespace PortAIO
                             break;
                         case 4: // yol0 Brand
                             yol0Brand.Program.Game_OnGameLoad();
+                            break;
+                        case 5: // DevBrand
+                            DevBrand.Program.Main();
+                            break;
+                        case 6: // Flower's Brand
+                            Flowers_Brand.Program.Main();
+                            break;
+                        case 7: // Kimbaeng Brand
+                            Kimbaeng_Brand.Program.Main();
+                            break;
+                        case 8: // sBrand
+                            sBrand.Program.Main();
+                            break;
+                        case 9: // SNBrand
+                            SNBrand.Program.Main();
                             break;
                     }
                     break;
@@ -536,6 +629,9 @@ namespace PortAIO
                         case 4: // ExorAIO
                             ExorAIO.Program.Main();
                             break;
+                        case 5: // Slutty Caitlyn
+                            Slutty_Caitlyn.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Cassiopeia:
@@ -562,6 +658,15 @@ namespace PortAIO
                         case 6: // Eat my Cass
                             Eat_My_Cass.Program.Main();
                             break;
+                        case 7: // mztikks Cass
+                            mztikksCassiopeia.Program.Main();
+                            break;
+                        case 8: // RiseofThePython
+                            riseofthepython.Program.Main();
+                            break;
+                        case 9: // sAIO
+                            sAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Chogath:
@@ -575,6 +680,9 @@ namespace PortAIO
                             break;
                         case 2: // xSalice
                             xSaliceResurrected.Program.LoadReligion();
+                            break;
+                        case 3: // Troop Gath
+                            TroopChogath.Program.Main();
                             break;
                     }
                     break;
@@ -614,6 +722,15 @@ namespace PortAIO
                         case 10: // ExorAIO
                             ExorAIO.Program.Main();
                             break;
+                        case 11: // EasyCorki
+                            EasyCorki.EasyCorki.Main();
+                            break;
+                        case 12: // jhkCorki
+                            jhkCorki.Program.Game_OnGameLoad();
+                            break;
+                        case 13: // LeCorki
+                            LeCorki.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Darius:
@@ -634,6 +751,21 @@ namespace PortAIO
                         case 4: // Flowers' Series
                             Flowers_Series.Program.Main();
                             break;
+                        case 5: // Darius#
+                            DariusSharp.Program.Main();
+                            break;
+                        case 6: // KurisuDarius
+                            KurisuDarius.Program.Main();
+                            break;
+                        case 7: // ODarius
+                            ODarius.Program.Main();
+                            break;
+                        case 8: // PerfectDarius
+                            PerfectDarius.Program.Main();
+                            break;
+                        case 9: // sAIO
+                            sAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Diana:
@@ -650,6 +782,18 @@ namespace PortAIO
                             break;
                         case 3: // ExorAIO
                             ExorAIO.Program.Main();
+                            break;
+                        case 4: // Diana Masterrace
+                            Diana_Masterrace.Program.Main();
+                            break;
+                        case 5: // MoonDiana
+                            MoonDiana.Program.Main();
+                            break;
+                        case 6: // NechritoDiana
+                            Nechrito_Diana.Program.Main();
+                            break;
+                        case 7: // TC_SDKExAIO
+                            Tc_SDKexAIO.PlaySharp.Main();
                             break;
                     }
                     break;
@@ -680,6 +824,9 @@ namespace PortAIO
                         case 7: // Valvrave#
                             Valvrave_Sharp.Program.Main();
                             break;
+                        case 8: // MundoSharpy
+                            Mundo_Sharpy.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Draven:
@@ -706,6 +853,12 @@ namespace PortAIO
                         case 6: // Tyler1
                             Tyler1.Program.Main();
                             break;
+                        case 7: // BadaoDraven
+                            BadaoDraven.Program.Main();
+                            break;
+                        case 8: // myWorld AIO
+                            myWorld.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Ekko:
@@ -719,6 +872,24 @@ namespace PortAIO
                             break;
                         case 2: // xSalice
                             xSaliceResurrected.Program.LoadReligion();
+                            break;
+                        case 3: // Ekko Master of Time
+                            Ekko_master_of_time.Program.Main();
+                            break;
+                        case 4: // Ekko The Boy Who Shattered Time
+                            Ekko_the_Boy_Who_Shattered_Time.Bootstrap.Main();
+                            break;
+                        case 5: // EkkoGod
+                            EkkoGod.Program.Main();
+                            break;
+                        case 6: // ElEkko
+                            ElEkko.Program.Main();
+                            break;
+                        case 7: // Hikicarry Ekko
+                            HikiCarry_Ekko.Program.Main();
+                            break;
+                        case 8: // TheEkko
+                            TheEkko.Program.Main();
                             break;
                     }
                     break;
@@ -737,6 +908,15 @@ namespace PortAIO
                         case 3: // Hikigaya Elise
                             HikiCarry_Elise.Program.Game_OnGameLoad();
                             break;
+                        case 4: // Sense Elise
+                            Sense_Elise.Program.Main();
+                            break;
+                        case 5: // SephElise
+                            SephElise.Program.Main();
+                            break;
+                        case 6: // BadaoElise
+                            break;
+
                     }
                     break;
                 case Champion.Evelynn:
@@ -756,6 +936,12 @@ namespace PortAIO
                             break;
                         case 4: // TroopAIO
                             _SDK_TroopAIO.Program.Main();
+                            break;
+                        case 5: // JustEvelynn
+                            JustEvelynn.Program.Main();
+                            break;
+                        case 6: // SkyLv Evelynn
+                            SkyLv_Evelynn.Initialiser.Main();
                             break;
                     }
                     break;
@@ -813,6 +999,30 @@ namespace PortAIO
                         case 16: // Flowers' Series
                             Flowers_Series.Program.Main();
                             break;
+                        case 17: // EasyEzreal
+                            EasyEzreal.EazyEzreal.Main();
+                            break;
+                        case 18: // Ezreal - The Prodigal Explorer
+                            Ezreal___The_prodigal_explorer.Program.Main();
+                            break;
+                        case 19: // Ezreal - The Dream Chaser
+                            EzrealDreamCatcher.Program.Main();
+                            break;
+                        case 20: // IDzEzreal
+                            iDZEzreal.Program.Main();
+                            break;
+                        case 21: // iEzrealReworked
+                            iEzrealReworked.Program.Main();
+                            break;
+                        case 22: // Perplexed Ezreal
+                            PerplexedEzreal.Program.Main();
+                            break;
+                        case 23: // myWorldAIO
+                            myWorld.Program.Main();
+                            break;
+                        case 24: // TCSDexAIO
+                            Tc_SDKexAIO.PlaySharp.Main();
+                            break;
                     }
                     break;
                 case Champion.FiddleSticks:
@@ -841,6 +1051,9 @@ namespace PortAIO
                         case 2: // xSalice
                             xSaliceResurrected.Program.LoadReligion();
                             break;
+                        case 3: // jesuisFiora
+                            jesuisFiora.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Fizz:
@@ -854,6 +1067,15 @@ namespace PortAIO
                             break;
                         case 2: // UnderratedAIO
                             UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 3: // HeavenStrikeFizz
+                            HeavenStrikeFizz.Program.Main();
+                            break;
+                        case 4: // NoobFizz
+                            NoobFizz.Program.Main();
+                            break;
+                        case 5: // OneKeyToFish
+                            OneKeyToFish.Program.Main();
                             break;
                     }
                     break;
@@ -920,6 +1142,9 @@ namespace PortAIO
                         case 2: // Marksman#
                             Marksman.Program.Game_OnGameLoad();
                             break;
+                        case 3: // hGnar
+                            hGnar.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Gragas:
@@ -933,6 +1158,15 @@ namespace PortAIO
                             break;
                         case 2: // UnderratedAIO
                             UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 3: // LadyGragas
+                            LadyGragas.Program.Main();
+                            break;
+                        case 4: // NechritoGragas
+                            Nechrito_Gragas.Program.Main();
+                            break;
+                        case 5: // OriginalGragas
+                            Original_Gragas.Program.Main();
                             break;
                     }
                     break;
@@ -969,6 +1203,10 @@ namespace PortAIO
                         case 9: // VSTGraves
                             VST_Auto_Carry_Standalone_Graves.Program.Main();
                             break;
+                        case 10: // EasyGraves
+                            break;
+                        case 11: // BadaoGraves
+                            break;
                     }
                     break;
                 case Champion.Hecarim:
@@ -988,6 +1226,12 @@ namespace PortAIO
                             break;
                         case 4: // Flowers' Series
                             Flowers_Series.Program.Main();
+                            break;
+                        case 5: // Herrari 477 GTB
+                            Herrari_488_GTB.Program.Main();
+                            break;
+                        case 6: // Ponycopter
+                            Ponycopter.Ponycopter.Main();
                             break;
                     }
                     break;
@@ -1017,6 +1261,12 @@ namespace PortAIO
                         case 3: // Kraken Priestess
                             Flowers__Illaoi.Program.Main();
                             break;
+                        case 4: // IllaoiSOH
+                            IllaoiSOH.Program.Main();
+                            break;
+                        case 5: // TentacleBabeIllaoi
+                            TentacleBabeIllaoi.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Irelia:
@@ -1033,6 +1283,21 @@ namespace PortAIO
                             break;
                         case 3: // ChallengerSeries
                             Challenger_Series.Program.Main();
+                            break;
+                        case 4: // IreliaGod
+                            IreliaGod.Program.Main();
+                            break;
+                        case 5: // Irelia Reloaded
+                            Irelia_Reloaded.Program.Main();
+                            break;
+                        case 6: // Rethought Irelia
+                            Rethought_Irelia.Program.Main();
+                            break;
+                        case 7: // SluttyIrelia
+                            Slutty_Irelia.Program.Main();
+                            break;
+                        case 8: // SurvivorSeries Irelia
+                            SVIrelia.Program.Main();
                             break;
                     }
                     break;
@@ -1065,6 +1330,9 @@ namespace PortAIO
                         case 2: // StonedSeriesAIO
                             StonedSeriesAIO.Program.Main();
                             break;
+                        case 3: // J4Helper
+                            J4Helper.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Jax:
@@ -1088,6 +1356,9 @@ namespace PortAIO
                         case 5: // ExorAIO
                             ExorAIO.Program.Main();
                             break;
+                        case 6: // SkyLv JAx
+                            SkyLv_Jax.Initialiser.Main();
+                            break;
                     }
                     break;
                 case Champion.Jayce:
@@ -1101,6 +1372,12 @@ namespace PortAIO
                             break;
                         case 2: // xSalice
                             xSaliceResurrected.Program.LoadReligion();
+                            break;
+                        case 3: // AJayce
+                            AJayce.Program.Main();
+                            break;
+                        case 4: // JayceSharpV2
+                            JayceSharpV2.Program.Main();
                             break;
                     }
                     break;
@@ -1124,6 +1401,14 @@ namespace PortAIO
                             break;
                         case 5: // hJhin
                             hJhin.Program.Main();
+                            break;
+                        case 6: // Jhin As The Virtuoso
+                            Jhin_As_The_Virtuoso.Program.Main();
+                            break;
+                        case 7: // BadaoJhin
+                            break;
+                        case 8: // Tc_SDKexAIO
+                            Tc_SDKexAIO.PlaySharp.Main();
                             break;
                     }
                     break;
@@ -1156,6 +1441,27 @@ namespace PortAIO
                             break;
                         case 8: // ExorAIO
                             ExorAIO.Program.Main();
+                            break;
+                        case 9: // CJShu Jinx
+                            CjShuJinx.Program.Main();
+                            break;
+                        case 10: // EasyJinx
+                            EasyJinx.EasyJinx.Main();
+                            break;
+                        case 11: // EloFactory Jinx
+                            EloFactory_Jinx.Program.Main();
+                            break;
+                        case 12: // GenerationJinx
+                            GenerationJinx.Program.Main();
+                            break;
+                        case 13: // PennyJinx Reborn
+                            PennyJinxReborn.Program.Main();
+                            break;
+                        case 14: // myWorld AIO
+                            myWorld.Program.Main();
+                            break;
+                        case 15: // Tc_SDKex AIO
+                            Tc_SDKexAIO.PlaySharp.Main();
                             break;
                     }
                     break;
@@ -1201,6 +1507,26 @@ namespace PortAIO
                         case 12: // xcsoft's Kalista
                             xcKalista.Program.Main();
                             break;
+                        case 13: // DonghuKalista
+                            DonguKalista.Program.Main();
+                            break;
+                        case 14: // EasyKalista
+                            break;
+                        case 15: // ElKalista
+                            ElKalista.Program.Main();
+                            break;
+                        case 16: // iKalista
+                            IKalista.Program.Main();
+                            break;
+                        case 17: // iKalista:Reborn
+                            iKalistaReborn.Program.Main();
+                            break;
+                        case 18: // Kalima
+                            Kalima.Kalista.Main();
+                            break;
+                        case 19: // KAPPALISTAXD
+                            KAPPALISTAXD.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Karma:
@@ -1230,6 +1556,9 @@ namespace PortAIO
                         case 7: // SpiritKarma
                             Spirit_Karma.Program.Main();
                             break;
+                        case 8: // Karma - The Enlightened One
+                            Karma______the_Enlightened_One.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Karthus:
@@ -1247,6 +1576,19 @@ namespace PortAIO
                         case 3: // RAREKarthus
                             RAREKarthus.Program.Main();
                             break;
+                        case 4: // Karthus#
+                            KarthusSharp.Program.Main();
+                            break;
+                        case 5: // KimbaengKarthus
+                            Kimbaeng_KarThus.Program.Main();
+                            break;
+                        case 6: // SNKarthus
+                            SNKarthus.Program.Main();
+                            break;
+                        case 7: // XDSharpAIO
+                            XDSharp.Program.Main();
+                            break;
+
                     }
                     break;
                 case Champion.Kassadin:
@@ -1263,6 +1605,12 @@ namespace PortAIO
                             break;
                         case 3: // PreservedKassadin
                             Preserved_Kassadin.Program.Main();
+                            break;
+                        case 4: // Kassadin The Harbringer
+                            Kassadin_the_Harbinger.Program.Main();
+                            break;
+                        case 5: // KicKassadin
+                            KicKassadin.KicKassadin.Main();
                             break;
                     }
                     break;
@@ -1284,6 +1632,21 @@ namespace PortAIO
                         case 4: // e.Motion Katarina
                             e.Motion_Katarina.Program.Game_OnGameLoad();
                             break;
+                        case 5: // EasyCarry Katarina
+                            EasyCarryKatarina.Program.Main();
+                            break;
+                        case 6: // JustKatarina
+                            JustKatarina.Program.Main();
+                            break;
+                        case 7: // sKatarina
+                            sKatarina.Program.Main();
+                            break;
+                        case 8: // SluttyKatarina
+                            Slutty_Katarina.Program.Main();
+                            break;
+                        case 9: // sAIO
+                            sAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Kayle:
@@ -1304,6 +1667,15 @@ namespace PortAIO
                         case 4: // ChallengerSeries
                             Challenger_Series.Program.Main();
                             break;
+                        case 5: // Hikicarry Kayle
+                            HikiCarry_Kayle.Program.Main();
+                            break;
+                        case 6: // LeKayle
+                            LeKayle.Program.Main();
+                            break;
+                        case 7: // Roach's Kayle
+                            RoachKayle.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Kennen:
@@ -1320,6 +1692,8 @@ namespace PortAIO
                             break;
                         case 3: // Valvrave#
                             Valvrave_Sharp.Program.Main();
+                            break;
+                        case 4: // WR-GoFuckYourself Kennen
                             break;
                     }
                     break;
@@ -1348,6 +1722,12 @@ namespace PortAIO
                             break;
                         case 3: // Marksman#
                             Marksman.Program.Game_OnGameLoad();
+                            break;
+                        case 4: // KindredSpirits
+                            KindredSpirits.Program.Main();
+                            break;
+                        case 5: // Slutty Kindred
+                            Slutty_Kindred.Program.Main();
                             break;
                     }
                     break;
@@ -1387,6 +1767,9 @@ namespace PortAIO
                         case 9: // ExorAIO
                             ExorAIO.Program.Main();
                             break;
+                        case 10: // EasyKogmaw
+                            EasyKogMaw.EasyKogMaw.Main();
+                            break;
                     }
                     break;
                 case Champion.Leblanc:
@@ -1403,6 +1786,11 @@ namespace PortAIO
                             break;
                         case 3: // M1D 0R F33D
                             Mid_or_Feed.Program.Main();
+                            break;
+                        case 4: // BadaoLeblanc
+                            break;
+                        case 5: // PopBlanc
+                            PopBlanc.Program.Main();
                             break;
                     }
                     break;
@@ -1430,6 +1818,12 @@ namespace PortAIO
                         case 6: // Valvrave#
                             Valvrave_Sharp.Program.Main();
                             break;
+                        case 7: // yol0LeeSin
+                            yol0LeeSin.Program.Main();
+                            break;
+                        case 8: // TCSDKexAIO
+                            Tc_SDKexAIO.PlaySharp.Main();
+                            break;
                     }
                     break;
                 case Champion.Leona:
@@ -1444,6 +1838,15 @@ namespace PortAIO
                         case 2: // vSeries
                             vSupport_Series.Program.Game_OnGameLoad();
                             break;
+                        case 3: // SethLeona
+                            SethLeona.Program.Main();
+                            break;
+                        case 4: // Troopeona
+                            Troopeona.Program.Main();
+                            break;
+                        case 5: // sAIO
+                            sAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Lissandra:
@@ -1452,8 +1855,11 @@ namespace PortAIO
                         case 0: // SephLissandra
                             SephLissandra.Program.Main();
                             break;
-                        case 1: //
+                        case 1: // xSalice
                             xSaliceResurrected.Program.LoadReligion();
+                            break;
+                        case 2: // Lissandra The Ice Goddess
+                            Lissandra_the_Ice_Goddess.Program.Main();
                             break;
                     }
                     break;
@@ -1502,6 +1908,15 @@ namespace PortAIO
                         case 13: // ExorAIO
                             ExorAIO.Program.Main();
                             break;
+                        case 14: // D_Lucian
+                            D_Lucian.Program.Main();
+                            break;
+                        case 15: // FuckingLucianReborn
+                            FuckingLucianReborn.Program.Main();
+                            break;
+                        case 16: // Slutty Lucian
+                            Slutty_Lucian.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Lulu:
@@ -1518,6 +1933,15 @@ namespace PortAIO
                             break;
                         case 3: // Support Is Easy
                             Support.Program.Main();
+                            break;
+                        case 4: // Lulu & Pix
+                            Lulu_and_Pix.Program.Main();
+                            break;
+                        case 5: // Lulu#
+                            LuluSharp.Program.Main();
+                            break;
+                        case 6: // SethLulu
+                            SethLulu.Program.Main();
                             break;
                     }
                     break;
@@ -1538,6 +1962,18 @@ namespace PortAIO
                             break;
                         case 4: // ExorAIO
                             ExorAIO.Program.Main();
+                            break;
+                        case 5: // Cheerleader Lux
+                            CheerleaderLux.Loader.Main();
+                            break;
+                        case 6: // ElLux
+                            ElLux.Program.Main();
+                            break;
+                        case 7: // Hikigaya Lux
+                            Hikigaya_Lux.Program.Main();
+                            break;
+                        case 8: // SephLux
+                            SephLux.Program.Main();
                             break;
                     }
                     break;
@@ -1567,6 +2003,9 @@ namespace PortAIO
                         case 2: // M1D 0R F33D
                             Mid_or_Feed.Program.Main();
                             break;
+                        case 3: // NoobMalzahar
+                            NoobMalzahar.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Maokai:
@@ -1577,6 +2016,9 @@ namespace PortAIO
                             break;
                         case 1: // BrianSharp
                             BrianSharp.Program.Main();
+                            break;
+                        case 2: // JustMaokai
+                            JustMaokai.Program.Main();
                             break;
                     }
                     break;
@@ -1591,6 +2033,15 @@ namespace PortAIO
                             break;
                         case 2: // SAutoCarry
                             SAutoCarry.Program.Game_OnGameLoad();
+                            break;
+                        case 3: // MasterYi by Prunes
+                            MasterYiByPrunes.Program.Main();
+                            break;
+                        case 4: // xQx Yi
+                            MasterYiQx.Program.Main();
+                            break;
+                        case 5: // Yi by Crisdmc
+                            crisMasterYi.Program.Main();
                             break;
                     }
                     break;
@@ -1620,6 +2071,9 @@ namespace PortAIO
                             break;
                         case 7: // ExorAIO
                             ExorAIO.Program.Main();
+                            break;
+                        case 8: // BadaoMissFortune
+                            BadaoMissFortune.Program.Main();
                             break;
                     }
                     break;
@@ -1689,6 +2143,11 @@ namespace PortAIO
                         case 2: // UnderratedAIO
                             UnderratedAIO.Program.OnGameLoad();
                             break;
+                        case 3: // Nasus The Crazy Dog
+                            break;
+                        case 4: // Nasus the Lumberjack
+                            NasusTheLumberJack.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Nautilus:
@@ -1705,6 +2164,14 @@ namespace PortAIO
                             break;
                         case 3: // ExorAIO
                             ExorAIO.Program.Main();
+                            break;
+                        case 4: // Hestia's Nautilus
+                            HestiaNautilus.Program.Main();
+                            break;
+                        case 5: // JustNautilus
+                            JustNautilus.Program.Main();
+                            break;
+                        case 6: // Nautilus - The Freelo Titan
                             break;
                     }
                     break;
@@ -1725,6 +2192,9 @@ namespace PortAIO
                             break;
                         case 4: // Flowers' Nidalee
                             Flowers_Nidalee.Program.OnGameLoad();
+                            break;
+                        case 5: // Nidalee the Beastial Huntress
+                            NidaleeTheBestialHuntress.Program.Main();
                             break;
                     }
                     break;
@@ -1768,6 +2238,12 @@ namespace PortAIO
                         case 2: // ExorAIO
                             ExorAIO.Program.Main();
                             break;
+                        case 3: // JustOlaf Reborn
+                            JustOlaf___Reborn.Program.Main();
+                            break;
+                        case 4: // Korean Olaf
+                            KoreanOlaf.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Orianna:
@@ -1794,6 +2270,18 @@ namespace PortAIO
                         case 6: // ExorAIO
                             ExorAIO.Program.Main();
                             break;
+                        case 7: // Orianna - the Ruler of Ball
+                            OriannaTheruleroftheBall.Program.Main();
+                            break;
+                        case 8: // Orianna by Trelli
+                            Orianna_by_trelli.Program.Main();
+                            break;
+                        case 9: // Orianna Grande
+                            OriannaGrande.Program.Main();
+                            break;
+                        case 10: // MidLane#
+                            MidlaneSharp.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Pantheon:
@@ -1808,6 +2296,15 @@ namespace PortAIO
                         case 2: // ExorAIO
                             ExorAIO.Program.Main();
                             break;
+                        case 3: // NoobPantheon
+                            NoobPantheon.Program.Main();
+                            break;
+                        case 4: // Pantheon mztikks
+                            mztikkPantheon.Program.Main();
+                            break;
+                        case 5: // Roach's Pantheon
+                            RoachPantheon.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Poppy:
@@ -1821,6 +2318,8 @@ namespace PortAIO
                             break;
                         case 2: // vSeries
                             vSupport_Series.Program.Game_OnGameLoad();
+                            break;
+                        case 3: // BadaoPoppy
                             break;
                     }
                     break;
@@ -1838,6 +2337,9 @@ namespace PortAIO
                             break;
                         case 3: // ExorAIO
                             ExorAIO.Program.Main();
+                            break;
+                        case 4: // Tc_SDKex AIO
+                            Tc_SDKexAIO.PlaySharp.Main();
                             break;
                     }
                     break;
@@ -1878,8 +2380,15 @@ namespace PortAIO
                         case 2: // ExorAIO
                             ExorAIO.Program.Main();
                             break;
+                        case 3: // NoobRenekton
+                            NoobRenekton.Program.Main();
+                            break;
+                        case 4: // sAIO
+                            sAIO.Program.Main();
+                            break;
                     }
                     break;
+
                 case Champion.Rengar:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
@@ -1894,6 +2403,18 @@ namespace PortAIO
                             break;
                         case 3: // Pridestalker Rengar
                             PrideStalker_Rengar.Program.Main();
+                            break;
+                        case 4: // Badao Rengar
+                            BadaoRengar.Program.Main();
+                            break;
+                        case 5: // Experimental ElRengar
+                            ElRengar.Program.Main();
+                            break;
+                        case 6: // Hoola Rengar
+                            HoolaRengar.Program.Main();
+                            break;
+                        case 7: // NechritoRengar
+                            Nechrito_Rengar.MAIN.Main();
                             break;
                     }
                     break;
@@ -1918,6 +2439,24 @@ namespace PortAIO
                         case 5: // ReforgedRiven
                             Reforged_Riven.Program.Main();
                             break;
+                        case 6: // EasyPeasyRivenSqueezy
+                            EasyPeasyRivenSqueezy.Program.Main();
+                            break;
+                        case 7: // EloFactory Riven
+                            EloFactory_Riven.Program.Main();
+                            break;
+                        case 8: // Flower's Riven
+                            Flowers_Riven.Program.Main();
+                            break;
+                        case 9: // HeavenStrikeRiven
+                            HeavenStrikeRiven.Program.Main();
+                            break;
+                        case 10: // RivenSharpV2
+                            RivenSharp.Program.Main();
+                            break;
+                        case 11: // yol0Riven
+                            yol0Riven.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Rumble:
@@ -1928,6 +2467,9 @@ namespace PortAIO
                             break;
                         case 1: // xSalice
                             xSaliceResurrected.Program.LoadReligion();
+                            break;
+                        case 2: // ElRumble
+                            ElRumble.Program.Main();
                             break;
                     }
                     break;
@@ -1964,6 +2506,27 @@ namespace PortAIO
                         case 9: // Flowers' Series
                             Flowers_Series.Program.Main();
                             break;
+                        case 10: // BurstRyze
+                            RyzeAssembly.Program.Main();
+                            break;
+                        case 11: // HeavenStrikeRyze
+                            HeavenStrikeRyze.Program.Main();
+                            break;
+                        case 12: // JustRyze
+                            JustRyze.Program.Main();
+                            break;
+                        case 13: // Ryze#
+                            RyzeSharp.Program.Main();
+                            break;
+                        case 14: // SluttyRyze
+                            Slutty_ryze.Program.Main();
+                            break;
+                        case 15: // TRUSt in my Ryze
+                            TrusRyze.Program.Main();
+                            break;
+                        case 16: // sAIO
+                            sAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Sejuani:
@@ -1999,6 +2562,9 @@ namespace PortAIO
                             break;
                         case 2: // Kimbaeng Shen
                             Kimbaeng_Shen.Program.Game_OnGameLoad();
+                            break;
+                        case 3: // BadaoShen
+                            BadaoShen.Program.Main();
                             break;
                     }
                     break;
@@ -2039,7 +2605,7 @@ namespace PortAIO
                         case 1: // SimpleSion
                             Sion.Program.Main();
                             break;
-                    }                    
+                    }
                     break;
                 case Champion.Sivir:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
@@ -2076,6 +2642,18 @@ namespace PortAIO
                             break;
                         case 10: // xcsoft's Sivir
                             xcSivir.Program.Main();
+                            break;
+                        case 11: // HeavenStrikeSivir
+                            HeavenStrikeSivir.Program.Main();
+                            break;
+                        case 12: // iSivir
+                            iSivir.Program.Main();
+                            break;
+                        case 13: // JustSivir
+                            JustSivir.Program.Main();
+                            break;
+                        case 14: // KurisuSivir
+                            KurisuSivir.Program.Main();
                             break;
                     }
                     break;
@@ -2114,6 +2692,9 @@ namespace PortAIO
                         case 5: // ExorAIO
                             ExorAIO.Program.Main();
                             break;
+                        case 6: // mztikks Sona
+                            mztikkSona.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Soraka:
@@ -2140,6 +2721,15 @@ namespace PortAIO
                         case 6: // ChallengerSeries
                             Challenger_Series.Program.Main();
                             break;
+                        case 7: // Sophie's Soraka
+                            Sophies_Soraka.Program.Main();
+                            break;
+                        case 8: // Soraka#
+                            SorakaSharp.Source.Program.Main();
+                            break;
+                        case 9: // SorakaToTheChallenger
+                            SorakaToTheChallenger.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Swain:
@@ -2153,6 +2743,9 @@ namespace PortAIO
                             break;
                         case 2: // The Mocking Swain
                             The_Mocking_Swain.Program.Game_OnGameLoad();
+                            break;
+                        case 3: // xQx Swain
+                            Swain.Program.Main();
                             break;
                     }
                     break;
@@ -2183,6 +2776,12 @@ namespace PortAIO
                         case 7: // xSalice
                             xSaliceResurrected.Program.LoadReligion();
                             break;
+                        case 8: // SephSyndra
+                            SephSyndra.Syndra.Main();
+                            break;
+                        case 9: // Syndra - The Dark Sovereign
+                            Syndra______The_Dark_Sovereign.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.TahmKench:
@@ -2199,6 +2798,9 @@ namespace PortAIO
                             break;
                         case 3: // vSeries
                             vSupport_Series.Program.Game_OnGameLoad();
+                            break;
+                        case 4: // Hahaha's Tahm Kench
+                            Hahaha_s_Tahm_Kench.Program.Main();
                             break;
                     }
                     break;
@@ -2224,6 +2826,24 @@ namespace PortAIO
                             break;
                         case 1: // Hoola Talon
                             HoolaTalon.Program.OnGameLoad();
+                            break;
+                        case 2: // Badao Talon
+                            badaoTalon.Program.Main();
+                            break;
+                        case 3: // ElTalon
+                            ElTalon.Program.Main();
+                            break;
+                        case 4: // HeavenStrikeTalon
+                            HeavenStrikeTalon.Program.Main();
+                            break;
+                        case 5: // MistakenTalon
+                            MistakenTalon.Program.Main();
+                            break;
+                        case 6: // TrooplonRewritten
+                            TrooplonRewritten.Program.Main();
+                            break;
+                        case 7: // sAIO
+                            sAIO.Program.Main();
                             break;
                     }
                     break;
@@ -2266,6 +2886,15 @@ namespace PortAIO
                         case 4: // SwiftlyTeemo
                             Swiftly_Teemo.Program.Main();
                             break;
+                        case 5: // NoobTeemo
+                            NoobTeemo.Program.Main();
+                            break;
+                        case 6: // TSM_Teemo
+                            TSM_Teemo.Program.Main();
+                            break;
+                        case 7: // Tc_SDKEx AIO
+                            Tc_SDKexAIO.PlaySharp.Main();
+                            break;
                     }
                     break;
                 case Champion.Thresh:
@@ -2288,6 +2917,24 @@ namespace PortAIO
                             break;
                         case 5: // Dark Star Thresh
                             Dark_Star_Thresh.Program.OnLoad();
+                            break;
+                        case 6: // Slutty Thresh
+                            Slutty_Thresh.Program.Main();
+                            break;
+                        case 7: // Thresh as the Chain Warden
+                            Thresh___The_Chain_Warden.Program.Game_OnGameLoad();
+                            break;
+                        case 8: // Thresh - Catch Fish
+                            ThreshCatchFish.Program.Main();
+                            break;
+                        case 9: // Thresh Ruler of the Soul
+                            ThreshTherulerofthesoul.Program.Main();
+                            break;
+                        case 10: // Thresh the Flay Maker
+                            ThreshFlayMaker.Program.Main();
+                            break;
+                        case 11: // yol0 Thresh
+                            yol0Thresh.Program.Main();
                             break;
                     }
                     break;
@@ -2327,6 +2974,21 @@ namespace PortAIO
                         case 10: // Flowers' Series
                             Flowers_Series.Program.Main();
                             break;
+                        case 11: // Flower's Tristana
+                            Flowers_Tristana.Program.Main();
+                            break;
+                        case 12: // Geass Tristana
+                            Geass_Tristana.Program.Main();
+                            break;
+                        case 13: // SkyLv Tristana
+                            SkyLv_Tristana.Initialiser.Main();
+                            break;
+                        case 14: // Tristana#
+                            TristanaSharp.Program.Main();
+                            break;
+                        case 15: // TrooperTristana
+                            TrooperTristana.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Trundle:
@@ -2346,6 +3008,12 @@ namespace PortAIO
                             break;
                         case 4: // xDTrundle
                             xDTrundle.Program.Main();
+                            break;
+                        case 5: // FastTrundle
+                            FastTrundle.Program.Main();
+                            break;
+                        case 6: // JustTrundle
+                            JustTrundle.Program.Main();
                             break;
                     }
                     break;
@@ -2399,6 +3067,15 @@ namespace PortAIO
                         case 9: // RARETwistedFate
                             RARETwistedFate.Program.Main();
                             break;
+                        case 10: // Diabath's TwistedFate
+                            D_TwistedFate.Program.Main();
+                            break;
+                        case 11: // Flower's Twisted Fate
+                            FlowersTwistedFate.Program.Main();
+                            break;
+                        case 12: // mztikks Twisted Fate
+                            mztikksTwistedFate.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Twitch:
@@ -2431,6 +3108,24 @@ namespace PortAIO
                         case 8: // InfectedTwitch
                             Infected_Twitch.Program.Main();
                             break;
+                        case 9: // Flower's Twitch
+                            Flowers_Twitch.Program.Main();
+                            break;
+                        case 10: // NechritoTwitch
+                            Nechrito_Twitch.Program.Main();
+                            break;
+                        case 11: // SNTwitch
+                            SNTwitch.Program.Main();
+                            break;
+                        case 12: // theobjops's Twitch
+                            Twiitch.Twitch.Main();
+                            break;
+                        case 13: // TheTwitch
+                            TheTwitch.Program.Main();
+                            break;
+                        case 14: // Twitch#
+                            TwitchSharp.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Udyr:
@@ -2454,6 +3149,9 @@ namespace PortAIO
                         case 5: // ExorAIO
                             ExorAIO.Program.Main();
                             break;
+                        case 6: // NoodUdyr
+                            NoobUdyr.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Urgot:
@@ -2474,6 +3172,9 @@ namespace PortAIO
                         case 4: // TroopAIO
                             _SDK_TroopAIO.Program.Main();
                             break;
+                        case 5: // TUrgot
+                            TUrgot.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Varus:
@@ -2493,6 +3194,9 @@ namespace PortAIO
                             break;
                         case 4: // Marksman#
                             Marksman.Program.Game_OnGameLoad();
+                            break;
+                        case 5: // VarusGod
+                            Varus_God.Program.Main();
                             break;
                     }
                     break;
@@ -2538,6 +3242,18 @@ namespace PortAIO
                         case 12: // hVayne
                             hVayne.Program.Main();
                             break;
+                        case 13: // Hikicarry Vayne Masterrace
+                            HikiCarry_Vayne_Masterrace.Program.Main();
+                            break;
+                        case 14: // PRADA Vayne
+                            PRADA_Vayne.Program.Main();
+                            break;
+                        case 15: // SOLO Vayne
+                            SoloVayne.Program.Main();
+                            break;
+                        case 16: // VayneGodMode
+                            GodModeOn_Vayne.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Veigar:
@@ -2557,6 +3273,17 @@ namespace PortAIO
                             break;
                         case 4: // ExorAIO
                             ExorAIO.Program.Main();
+                            break;
+                        case 5: // ElVeigar
+                            ElVeigar.ElVeigar.Main();
+                            break;
+                        case 6: // Placebo Veigar
+                            PlaceboVeigar.Program.Main();
+                            break;
+                        case 7: // Slutty Veigar
+                            Slutty_Veigar.Program.Main();
+                            break;
+                        case 8: // BadaoVeigar
                             break;
                     }
                     break;
@@ -2701,6 +3428,10 @@ namespace PortAIO
                         case 5: // xQx Wukong
                             WukongxQx.Program.Main();
                             break;
+                        case 6: // NoobWukong
+                            NoobWukong.Program.Main();
+                            break;
+
                     }
                     break;
                 case Champion.Xerath:
@@ -2721,6 +3452,12 @@ namespace PortAIO
                         case 4: // ChallengerSeries
                             Challenger_Series.Program.Main();
                             break;
+                        case 5: // ElXerath
+                            ElXerath.Program.Main();
+                            break;
+                        case 6: // Xerath - Magnus Ascendant
+                            Xerath___The_Magus_Ascendant.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.XinZhao:
@@ -2734,6 +3471,12 @@ namespace PortAIO
                             break;
                         case 2: // XinZhao God
                             Xin.Program.GameOnOnGameLoad();
+                            break;
+                        case 3: // mztikks Xin Zhao
+                            mztikkXinZhao.Program.Main();
+                            break;
+                        case 4: // NoobXinZhao
+                            NoobXin_Zhao.Program.Main();
                             break;
                     }
                     break;
@@ -2766,6 +3509,12 @@ namespace PortAIO
                             break;
                         case 8: // Valvrave#
                             Valvrave_Sharp.Program.Main();
+                            break;
+                        case 9: // Badaos Yasuo
+                            BadaoYasuo.Program.Main();
+                            break;
+                        case 10: // hYasuo
+                            hYasuo.Program.Main();
                             break;
                     }
                     break;
@@ -2802,6 +3551,12 @@ namespace PortAIO
                             break;
                         case 2: // Valvrave#
                             Valvrave_Sharp.Program.Main();
+                            break;
+                        case 3: // iDZed
+                            iDZed.Program.Main();
+                            break;
+                        case 4: // Ze-D Is Back
+                            zedisback.Program.Main();
                             break;
                     }
                     break;

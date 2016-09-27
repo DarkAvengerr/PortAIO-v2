@@ -18,17 +18,18 @@ using EloBuddy;
 
         private static AIHeroClient Player { get { return ObjectManager.Player; } }
 
-        private static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
-        }
+
 
         private static float GetDamage(AIHeroClient target)
         {
             return _e.GetDamage(target);
         }
+        public static void Main()
+        {
+            Game_OnGameLoad();
+        }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             //Verify Champion
             if (Player.ChampionName != "Twitch")

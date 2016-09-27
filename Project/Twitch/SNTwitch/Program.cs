@@ -23,12 +23,12 @@ using EloBuddy;
        // private static SebbyLib.Orbwalking.Orbwalker sebbyOrb;
         private static Menu m;
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnLoad;
+            Game_OnGameLoad();
         }
 
-        public static void OnLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if(p.ChampionName != "Twitch")
                 return;

@@ -10,7 +10,7 @@ using EloBuddy;
     internal class Initialiser
     {
 
-        private static void Game_OnGameLoad(EventArgs args)
+        private static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName == "Tristana")
             {
@@ -18,9 +18,9 @@ using EloBuddy;
             }
         }
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
     }
 }

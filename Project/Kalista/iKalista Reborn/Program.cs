@@ -1,21 +1,18 @@
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace iKalistaReborn
+using EloBuddy;
+using LeagueSharp.Common;
+namespace iKalistaReborn
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += eventArgs =>
-            {
-                if (ObjectManager.Player.ChampionName != "Kalista")
-                    return;
+            if (ObjectManager.Player.ChampionName != "Kalista")
+                return;
 
-                new Kalista();
-            };
+            new Kalista();
         }
     }
 }

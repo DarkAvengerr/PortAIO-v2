@@ -28,9 +28,9 @@ using EloBuddy;
         private static SpellSlot _igniteSlot;
         public static Dictionary<SpellSlot, int> LastCast = new Dictionary<SpellSlot, int>();
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
         private static void Ping(Vector2 position)
@@ -59,7 +59,7 @@ using EloBuddy;
             TacticalMap.ShowPing(PingCategory.Fallback, PingLocation, true);
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        private static void Game_OnGameLoad()
         {
             Player = ObjectManager.Player;
             if (ObjectManager.Player.ChampionName != ChampionName) return;

@@ -130,7 +130,7 @@ using EloBuddy;
             return damage;
         }
 
-        public static void OnLoad(EventArgs args)
+        public static void OnLoad()
         {
             try
             {

@@ -3,9 +3,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using PRADA_Vayne.MyUtils;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace PRADA_Vayne
+using EloBuddy;
+using LeagueSharp.Common;
+namespace PRADA_Vayne
 {
     public class Program
     {
@@ -40,19 +40,16 @@ using EloBuddy;
 
         #endregion
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += onGameLoadArgs =>
+            if (ObjectManager.Player.CharData.BaseSkinName == "Vayne")
             {
-                if (ObjectManager.Player.CharData.BaseSkinName == "Vayne")
-                {
-                    Chat.Print("PRADA Vayne: Please switch to Challenger Series AIO, everything is improved there!");
-                    Chat.Print("PRADA Vayne: Open Loader > Install new assembly > GitHub > https://github.com/myo/LeagueSharp");
-                    Chat.Print("PRADA Vayne: Please don't use them together, new one has custom orbwalker.");
-                    EarlyEvade = new EarlyEvade();
-                    PRADAHijacker.AttemptHijack();
-                }
-            };
+                Chat.Print("PRADA Vayne: Please switch to Challenger Series AIO, everything is improved there!");
+                Chat.Print("PRADA Vayne: Open Loader > Install new assembly > GitHub > https://github.com/myo/LeagueSharp");
+                Chat.Print("PRADA Vayne: Please don't use them together, new one has custom orbwalker.");
+                EarlyEvade = new EarlyEvade();
+                PRADAHijacker.AttemptHijack();
+            }
         }
     }
 }

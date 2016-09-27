@@ -25,12 +25,12 @@ using EloBuddy;
         public static Menu Menu;
         public static Orbwalking.Orbwalker Orbwalker;
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += LoadEvents;
+            Game_OnGameLoad();
         }
 
-        private static void LoadEvents(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != "Tristana")
                 return;

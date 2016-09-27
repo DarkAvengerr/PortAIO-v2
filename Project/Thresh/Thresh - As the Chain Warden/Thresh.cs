@@ -27,7 +27,7 @@ namespace ThreshAsurvil
         public static Obj_AI_Base DrawTarget;
         public static List<AIHeroClient> Qignored = new List<AIHeroClient>();
 
-        public static void OnLoad(EventArgs args)
+        public static void OnLoad()
         {
             if (Player.ChampionName != "Thresh") return;
 

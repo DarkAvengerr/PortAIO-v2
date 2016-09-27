@@ -10,21 +10,18 @@ using LeagueSharp.Common;
 
 #endregion
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace RoachKayle
+using EloBuddy;
+using LeagueSharp.Common;
+namespace RoachKayle
 {
     internal class Program
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
             try
             {
-                CustomEvents.Game.OnGameLoad += delegate
-                {
-                    var onGameLoad = new Thread(Game_OnGameLoad);
-                    onGameLoad.Start();
-                };
+                var onGameLoad = new Thread(Game_OnGameLoad);
+                onGameLoad.Start();
             }
             catch (Exception ex)
             {
@@ -88,9 +85,9 @@ using EloBuddy;
 
             Variable.Config.AddSubMenu(new Menu("Farm", "Farm"));
             Variable.Config.SubMenu("Farm").AddItem(new MenuItem("UseQF", "Use Q").SetValue(
-                new StringList(new[] {"Freeze", "LaneClear", "Both", "No"}, 1)));
+                new StringList(new[] { "Freeze", "LaneClear", "Both", "No" }, 1)));
             Variable.Config.SubMenu("Farm").AddItem(new MenuItem("UseEF", "Use E").SetValue(
-                new StringList(new[] {"Freeze", "LaneClear", "Both", "No"}, 2)));
+                new StringList(new[] { "Freeze", "LaneClear", "Both", "No" }, 2)));
             Variable.Config.SubMenu("Farm").AddItem(new MenuItem("FreezeActive", "Freeze!").SetValue(
                 new KeyBind(Variable.Config.Item("Farm").GetValue<KeyBind>().Key, KeyBindType.Press)));
             Variable.Config.SubMenu("Farm").AddItem(new MenuItem("LaneClearActive", "Lane Clear!").SetValue(
@@ -135,7 +132,7 @@ using EloBuddy;
             LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = Internal.ComboDamage;
             LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = comboDmg.GetValue<bool>();
             comboDmg.ValueChanged +=
-                delegate(object sender, OnValueChangeEventArgs eventArgs)
+                delegate (object sender, OnValueChangeEventArgs eventArgs)
                 {
                     LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
                 };
@@ -166,7 +163,7 @@ using EloBuddy;
                 return;
             }
 
-            if ((((Obj_AI_Base) Variable.Orbwalker.GetTarget()).IsMinion))
+            if ((((Obj_AI_Base)Variable.Orbwalker.GetTarget()).IsMinion))
             {
                 Variable.Orbwalker.SetAttack(!Variable.Config.SubMenu("Misc").Item("SupportMode").GetValue<bool>());
             }
@@ -205,11 +202,11 @@ using EloBuddy;
             Internal.DrawCircles();
 
             var target = TargetSelector.GetTarget(Variable.W.Range, TargetSelector.DamageType.Magical);
-            var eDamage = 20 + ((Variable.E.Level - 1)*10) + (Variable.Player.BaseAbilityDamage*0.25);
+            var eDamage = 20 + ((Variable.E.Level - 1) * 10) + (Variable.Player.BaseAbilityDamage * 0.25);
             if (Variable.Config.SubMenu("Drawings").Item("ComboDamage").GetValue<bool>())
             {
                 Drawing.DrawText(target.Position.X, target.Position.Y, Color.White,
-                    ((target.Health - Internal.ComboDamage(target))/
+                    ((target.Health - Internal.ComboDamage(target)) /
                      (Variable.RighteousFuryActive ? (eDamage) : (Variable.Player.GetAutoAttackDamage(target))))
                         .ToString(
                             CultureInfo.InvariantCulture));

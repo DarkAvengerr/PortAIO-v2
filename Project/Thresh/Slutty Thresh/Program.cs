@@ -12,12 +12,11 @@ using EloBuddy;
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        public static void Main()
         {
-            if (args == null) return;
             try
             {
-                CustomEvents.Game.OnGameLoad += SluttyThresh.OnLoad;
+                SluttyThresh.OnLoad();
             }
             catch (Exception ex)
             {

@@ -15,15 +15,12 @@ using EloBuddy;
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
-            if (Game.Mode == GameMode.Running)
-            {
-                Game_OnGameLoad(null);
-            }
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
-        private static void Game_OnGameLoad(EventArgs args)
+
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName == "Lux")
             {

@@ -8,18 +8,18 @@ using LeagueSharp.Common;
 using PredictionInput = SebbyLib.Prediction.PredictionInput;
 using SkillshotType = SebbyLib.Prediction.SkillshotType;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace AJayce
+using EloBuddy;
+using LeagueSharp.Common;
+namespace AJayce
 {
     internal class Jayce : Helper
     {
         public static Spell Q, W, E, R, Qm, Wm, Em, Qe;
         public static PredictionInput qpred;
         public static PredictionInput qpred1;
-        public static void OnLoad(EventArgs args)
+        public static void OnLoad()
         {
-               if (Player.ChampionName != "Jayce") return;
+            if (Player.ChampionName != "Jayce") return;
             MenuConfig.OnLoad();
             //ranged
             Q = new Spell(SpellSlot.Q, 1050);
@@ -54,7 +54,7 @@ using EloBuddy;
                 Type = SkillshotType.SkillshotLine
             };
 
-            Q.SetSkillshot(0.3f, 70f, 1500, true, LeagueSharp.Common.SkillshotType.SkillshotLine);         
+            Q.SetSkillshot(0.3f, 70f, 1500, true, LeagueSharp.Common.SkillshotType.SkillshotLine);
             Qe.SetSkillshot(0.3f, 70f, 2180, true, LeagueSharp.Common.SkillshotType.SkillshotLine);
             Qm.SetTargetted(0f, float.MaxValue);
             Em.SetTargetted(0f, float.MaxValue);
@@ -66,7 +66,7 @@ using EloBuddy;
             Obj_AI_Base.OnSpellCast += OnSpellCastMelee;
             Obj_AI_Base.OnSpellCast += LaneClear;
             CustomEvents.Unit.OnDash += OnDash;
-          // Obj_AI_Base.OnProcessSpellCast += OnProcessCast;
+            // Obj_AI_Base.OnProcessSpellCast += OnProcessCast;
             AntiGapcloser.OnEnemyGapcloser += OnGapClose;
             Interrupter2.OnInterruptableTarget += OnInterrupt;
             EloBuddy.Player.OnIssueOrder += OnOrder;
@@ -77,7 +77,7 @@ using EloBuddy;
         private static void OnOrder(Obj_AI_Base sender, PlayerIssueOrderEventArgs args)
         {
             if (!sender.IsMe) return;
-            var on = GetBool("disorb", typeof (bool));
+            var on = GetBool("disorb", typeof(bool));
             if (!on) return;
             var target = TargetSelector.GetTarget(1050, TargetSelector.DamageType.Physical);
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
@@ -107,7 +107,7 @@ using EloBuddy;
                     R.Cast();
                 }
 
-                if (Ismelee())  
+                if (Ismelee())
                 {
                     Em.Cast(sender);
                 }
@@ -116,7 +116,7 @@ using EloBuddy;
 
         private static void OnGapClose(ActiveGapcloser gapcloser)
         {
-            if (!GetBool("autoegap", typeof (bool))) return;
+            if (!GetBool("autoegap", typeof(bool))) return;
             if (gapcloser.Sender.IsMe || gapcloser.Sender.IsAlly) return;
 
             if (!Ismelee() && R.IsReady())
@@ -128,11 +128,11 @@ using EloBuddy;
                 Em.Cast(gapcloser.Sender);
             }
         }
-        
+
 
         private static void OnDash(Obj_AI_Base sender, Dash.DashItem args)
         {
-            if (!GetBool("autoedash", typeof (bool))) return;
+            if (!GetBool("autoedash", typeof(bool))) return;
             if (sender.IsMe || sender.IsAlly) return;
             if (args.Unit == null) return;
 
@@ -167,7 +167,7 @@ using EloBuddy;
                     var castposition = Player.Position.Extend(target.Position, Player.BoundingRadius + 150);
                     E.Cast(castposition);
                 }
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && GetBool("useehr", typeof (bool)))
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && GetBool("useehr", typeof(bool)))
                 {
                     var target = TargetSelector.GetTarget(1470, TargetSelector.DamageType.Physical);
                     if (target == null) return;
@@ -181,16 +181,16 @@ using EloBuddy;
             if (!args.SData.IsAutoAttack()) return;
             if (args.Target.Type != GameObjectType.AIHeroClient) return;
             if (Ismelee()) return;
-            thisunit = (AIHeroClient) args.Target;
+            thisunit = (AIHeroClient)args.Target;
             if (W.IsReady())
             {
-                if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && GetBool("usewcr", typeof (bool)))
+                if ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && GetBool("usewcr", typeof(bool)))
                     || (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && GetBool("usewhr", typeof(bool))))
                 {
                     W.Cast();
-                    Orbwalker.ForceTarget((AIHeroClient) args.Target);
+                    Orbwalker.ForceTarget((AIHeroClient)args.Target);
 
-                   // Orbwalking.ResetAutoAttackTimer();
+                    // Orbwalking.ResetAutoAttackTimer();
                 }
             }
         }
@@ -203,26 +203,26 @@ using EloBuddy;
             if (!sender.IsMe) return;
             if (!args.SData.IsAutoAttack()) return;
             if (Ismelee()) return;
-            var obj = (Obj_AI_Base) args.Target;
-            if (!GetBool("usewlr", typeof (bool))) return;
+            var obj = (Obj_AI_Base)args.Target;
+            if (!GetBool("usewlr", typeof(bool))) return;
             if (GetValue("minmana") > Player.ManaPercent) return;
 
             if (W.IsReady() && obj.Health > Player.GetAutoAttackDamage(obj) + 30)
             {
                 W.Cast();
-                Orbwalker.ForceTarget((Obj_AI_Base) args.Target);
+                Orbwalker.ForceTarget((Obj_AI_Base)args.Target);
             }
             var minions =
                 MinionManager.GetMinions(Player.Position, 300);
             foreach (var min in minions.Where(
-                x => x.NetworkId != ((Obj_AI_Base) args.Target).NetworkId && x.Health < Player.GetAutoAttackDamage(x) + 15))
+                x => x.NetworkId != ((Obj_AI_Base)args.Target).NetworkId && x.Health < Player.GetAutoAttackDamage(x) + 15))
             {
                 if (obj.Health < Player.GetAutoAttackDamage(obj))
                 {
                     if (W.IsReady())
                     {
-                            W.Cast();
-                            Orbwalker.ForceTarget(min);      
+                        W.Cast();
+                        Orbwalker.ForceTarget(min);
                     }
                 }
             }
@@ -232,14 +232,14 @@ using EloBuddy;
         private static void GeneralOnUpdate(EventArgs args)
         {
 
-            if (GetBool("manualeq", typeof (KeyBind)))
+            if (GetBool("manualeq", typeof(KeyBind)))
             {
                 ManualEq();
             }
 
             if (GetBool("flee", typeof(KeyBind)))
             {
-         //      Flee();
+                //      Flee();
             }
 
             //if (GetBool("insec", typeof (KeyBind)))
@@ -261,7 +261,7 @@ using EloBuddy;
                     Harass();
                     break;
 
-                    case Orbwalking.OrbwalkingMode.LaneClear:
+                case Orbwalking.OrbwalkingMode.LaneClear:
                     Laneclearrange(); // also has Melee Q
                     Laneclearmelee();
                     break;
@@ -270,41 +270,41 @@ using EloBuddy;
 
         private static void Insec()
         {
-          
+
         }
 
         private static void Flee()
         {
-           // EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+            // EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             if (R.IsReady())
             {
                 R.Cast();
             }
-    //        if (!Ismelee())
-    //        {
-    //            R.Cast();
-    //        }
+            //        if (!Ismelee())
+            //        {
+            //            R.Cast();
+            //        }
 
-    //        if (Ismelee())
-    //        {
-    //            var min =
-    //ObjectManager.Get<Obj_AI_Minion>()
-    //    .Where(x => x.Distance(Player) < 300 && !x.IsDead && x.IsEnemy).ToList();
+            //        if (Ismelee())
+            //        {
+            //            var min =
+            //ObjectManager.Get<Obj_AI_Minion>()
+            //    .Where(x => x.Distance(Player) < 300 && !x.IsDead && x.IsEnemy).ToList();
 
-    //            foreach (var minions in min)
-    //            {
-    //                if (E.IsReady() && Q.IsReady())
-    //                {
-    //                    Em.Cast(minions);
-                       
-    //                }
-    //                if (!E.IsReady())
-    //                {
-    //                    Qm.Cast(minions);
-    //                }
+            //            foreach (var minions in min)
+            //            {
+            //                if (E.IsReady() && Q.IsReady())
+            //                {
+            //                    Em.Cast(minions);
 
-    //            }
-    //        }
+            //                }
+            //                if (!E.IsReady())
+            //                {
+            //                    Qm.Cast(minions);
+            //                }
+
+            //            }
+            //        }
 
         }
 
@@ -322,8 +322,8 @@ using EloBuddy;
                 return;
             }
 
-           
-            
+
+
             foreach (var minions in min)
             {
                 minionscirclemelee = new Geometry.Polygon.Circle(minions.Position, 300);
@@ -341,7 +341,7 @@ using EloBuddy;
             if (objAiMinions.Count() >= GetValue("minhitwq"))
             {
                 if (W.IsReady() && GetBool("usewlm", typeof(bool)))
-                W.Cast();
+                    W.Cast();
 
                 if (Q.IsReady() && GetBool("useqlm", typeof(bool)))
                     Qm.Cast(objAiMinions.FirstOrDefault());
@@ -353,7 +353,7 @@ using EloBuddy;
             if (GetValue("minmana") > Player.ManaPercent) return;
             var min =
                 ObjectManager.Get<Obj_AI_Minion>()
-                    .Where(x => x.Distance(Player) < Q.Range -200 && !x.IsDead && x.IsEnemy && x.IsTargetable);
+                    .Where(x => x.Distance(Player) < Q.Range - 200 && !x.IsDead && x.IsEnemy && x.IsTargetable);
 
 
             var objAiMinions = min as IList<Obj_AI_Minion> ?? min.ToList();
@@ -362,7 +362,7 @@ using EloBuddy;
                 minionscircle = new Geometry.Polygon.Circle(minions.Position, 250);
             }
 
-            var count =objAiMinions.Where(x => minionscircle.IsInside(x));
+            var count = objAiMinions.Where(x => minionscircle.IsInside(x));
 
             if (count.Count() < GetValue("minhitwq")) return;
             if (!Ismelee() && Q.IsReady() && GetBool("useqlr", typeof(bool)))
@@ -372,7 +372,7 @@ using EloBuddy;
 
         private static void ManualEq()
         {
-         //   EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+            //   EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             if (Ismelee())
             {
                 if (R.IsReady())
@@ -388,7 +388,7 @@ using EloBuddy;
 
         private static void FormChangeManager()
         {
-            if (!GetBool("usercf", typeof (bool))) return;
+            if (!GetBool("usercf", typeof(bool))) return;
             var target = TargetSelector.GetTarget(1470, TargetSelector.DamageType.Physical);
             if (!target.IsValidTarget()) return;
             if (!R.IsReady()) return;
@@ -400,9 +400,9 @@ using EloBuddy;
                 {
                     R.Cast();
                 }
-                    
+
                 if (target.Distance(Player) > Qm.Range + 30)
-                {   
+                {
                     R.Cast();
                 }
 
@@ -452,21 +452,21 @@ using EloBuddy;
 
         public static double QMeleeDamage()
         {
-            return new double[] {30, 70, 110, 150, 190, 230}[Q.Level - 1]
-                   + 1*Player.FlatPhysicalDamageMod;
+            return new double[] { 30, 70, 110, 150, 190, 230 }[Q.Level - 1]
+                   + 1 * Player.FlatPhysicalDamageMod;
         }
 
         public static double EMeleeDamage(Obj_AI_Base target)
         {
-           return (new[] { 8, 10.4, 12.8, 15.2, 17.6, 20 }[Q.Level - 1] / 100) *target.MaxHealth
-                + 1*Player.FlatPhysicalDamageMod;
+            return (new[] { 8, 10.4, 12.8, 15.2, 17.6, 20 }[Q.Level - 1] / 100) * target.MaxHealth
+                 + 1 * Player.FlatPhysicalDamageMod;
         }
 
 
 
         private static void Combomelee()
         {
-           // if (Player.Spellbook.IsAutoAttacking) return;
+            // if (Player.Spellbook.IsAutoAttacking) return;
             var target = TargetSelector.GetTarget(Qm.Range, TargetSelector.DamageType.Physical);
             if (target == null) return;
             var expires = (Player.Spellbook.GetSpell(SpellSlot.R).CooldownExpires);
@@ -530,7 +530,7 @@ using EloBuddy;
         }
         private static void Harass()
         {
-          
+
             var target = TargetSelector.GetTarget(Qe.Range, TargetSelector.DamageType.Physical);
             if (target == null) return;
             qpred.From = Qe.GetPrediction(target).CastPosition;
@@ -547,7 +547,7 @@ using EloBuddy;
                 if (Q.IsReady() && target.IsValidTarget(Q.Range) && (!E.IsReady() || Player.Mana <
                                     Player.Spellbook.GetSpell(SpellSlot.E).SData.Mana +
                                     Player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana)
-                    && GetBool("useqhr", typeof (bool)))
+                    && GetBool("useqhr", typeof(bool)))
                 {
                     Q.Cast(qpred1.From);
                 }
@@ -558,7 +558,7 @@ using EloBuddy;
                 {
                     Q.Cast(target);
                 }
-                if (W.IsReady() && GetBool("usewhm", typeof (bool)) && target.Distance(Player) < W.Range)
+                if (W.IsReady() && GetBool("usewhm", typeof(bool)) && target.Distance(Player) < W.Range)
                 {
                     W.Cast();
                 }
@@ -568,24 +568,24 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(Qe.Range, TargetSelector.DamageType.Physical);
             if (target == null) return;
-            var prede =  Q.GetPrediction(target);
+            var prede = Q.GetPrediction(target);
             var pred = Qe.GetPrediction(target);
             if (pred.CollisionObjects.Count >= 1) return;
 
             qpred.From = Qe.GetPrediction(target).CastPosition;
             qpred1.From = Q.GetPrediction(target).CastPosition;
 
-            if (Q.IsReady() && E.IsReady() && GetBool("useqcr", typeof (bool)) &&
+            if (Q.IsReady() && E.IsReady() && GetBool("useqcr", typeof(bool)) &&
                 Player.Mana >
-                Player.Spellbook.GetSpell(SpellSlot.E).SData.Mana + Player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana) 
-            {                         
+                Player.Spellbook.GetSpell(SpellSlot.E).SData.Mana + Player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana)
+            {
                 Qe.Cast(qpred.From);
-            }   
+            }
 
             if ((Q.IsReady() && !E.IsReady()) || (Q.IsReady() && E.IsReady() && Player.Mana <
                 Player.Spellbook.GetSpell(SpellSlot.E).SData.Mana + Player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana))
             {
-                if (Player.Distance(target) < Q.Range && GetBool("useqcr", typeof (bool)))
+                if (Player.Distance(target) < Q.Range && GetBool("useqcr", typeof(bool)))
                 {
                     Q.Cast(qpred1.From);
                 }
@@ -605,7 +605,7 @@ using EloBuddy;
                     Drawing.DrawText(x - 80, y, Color.Red,
                         "[Q] :" + ((int)SpellTimer["Q"]).ToString(CultureInfo.InvariantCulture));
                     Drawing.DrawText(x - 20, y, Color.Red,
-                        "[W] :" + ((int) SpellTimer["W"]).ToString(CultureInfo.InvariantCulture));
+                        "[W] :" + ((int)SpellTimer["W"]).ToString(CultureInfo.InvariantCulture));
                     Drawing.DrawText(x + 50, y, Color.Red,
                         "[E] :" + ((int)SpellTimer["E"]).ToString(CultureInfo.InvariantCulture));
                 }
@@ -628,7 +628,7 @@ using EloBuddy;
                     Drawing.DrawText(x - 80, y, Color.Red,
                         "[Q] :" + ((int)SpellTimer["Q"]).ToString(CultureInfo.InvariantCulture));
                     Drawing.DrawText(x - 20, y, Color.Red,
-                        "[W] :" + ((int) SpellTimer["W"]).ToString(CultureInfo.InvariantCulture));
+                        "[W] :" + ((int)SpellTimer["W"]).ToString(CultureInfo.InvariantCulture));
                     Drawing.DrawText(x + 50, y, Color.Red,
                         "[E] :" + ((int)SpellTimer["E"]).ToString(CultureInfo.InvariantCulture));
                 }
@@ -728,43 +728,43 @@ using EloBuddy;
             {
                 if (args.Slot == SpellSlot.Q)
                 {
-                    var qperlevel = new[] {8, 8, 8, 8, 8, 8}[Q.Level - 1];
-                    TimeStamp["Q"] = Game.Time + 1.5f + (qperlevel + (qperlevel*Cooldown));
+                    var qperlevel = new[] { 8, 8, 8, 8, 8, 8 }[Q.Level - 1];
+                    TimeStamp["Q"] = Game.Time + 1.5f + (qperlevel + (qperlevel * Cooldown));
                 }
 
                 if (args.Slot == SpellSlot.W)
                 {
-                    var wperlevel = new[] {13, 11.4f, 9.8f, 8.2f, 6.6f, 5}[W.Level - 1];
-                    TimeStamp["W"] = Game.Time + 2.0f + (wperlevel + (wperlevel*Cooldown));
+                    var wperlevel = new[] { 13, 11.4f, 9.8f, 8.2f, 6.6f, 5 }[W.Level - 1];
+                    TimeStamp["W"] = Game.Time + 2.0f + (wperlevel + (wperlevel * Cooldown));
                 }
 
                 if (args.Slot == SpellSlot.E)
                 {
-                    var eperlevel = new[] {16, 16, 16, 16, 16, 16}[E.Level - 1];
-                    TimeStamp["E"] = Game.Time + 1.5f + (eperlevel + (eperlevel*Cooldown));
+                    var eperlevel = new[] { 16, 16, 16, 16, 16, 16 }[E.Level - 1];
+                    TimeStamp["E"] = Game.Time + 1.5f + (eperlevel + (eperlevel * Cooldown));
                 }
             }
             else
             {
                 if (args.Slot == SpellSlot.Q)
                 {
-                    var qmperlevel = new[] {16, 14, 12, 10, 8, 6}[Qm.Level - 1];
-                    TimeStamp["Qm"] = Game.Time + 1.5f + (qmperlevel + (qmperlevel*Cooldown));
+                    var qmperlevel = new[] { 16, 14, 12, 10, 8, 6 }[Qm.Level - 1];
+                    TimeStamp["Qm"] = Game.Time + 1.5f + (qmperlevel + (qmperlevel * Cooldown));
                 }
 
                 if (args.Slot == SpellSlot.W)
                 {
-                    var wmperlevel = new[] {10, 10, 10, 10, 10, 10}[Wm.Level - 1];
-                    TimeStamp["Wm"] = Game.Time + 1.5f + (wmperlevel + (wmperlevel*Cooldown));
+                    var wmperlevel = new[] { 10, 10, 10, 10, 10, 10 }[Wm.Level - 1];
+                    TimeStamp["Wm"] = Game.Time + 1.5f + (wmperlevel + (wmperlevel * Cooldown));
                 }
 
                 if (args.Slot == SpellSlot.E)
                 {
-                    var emperlevel = new[] {15, 14, 13, 12, 11, 10}[Em.Level - 1];
-                    TimeStamp["Em"] = Game.Time + 1.5f + (emperlevel + (emperlevel*Cooldown));
+                    var emperlevel = new[] { 15, 14, 13, 12, 11, 10 }[Em.Level - 1];
+                    TimeStamp["Em"] = Game.Time + 1.5f + (emperlevel + (emperlevel * Cooldown));
                 }
             }
-        
+
         }
     }
 }

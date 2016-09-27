@@ -142,7 +142,12 @@ using EloBuddy;
         ///     Fired when the OnGameLoad event is fired.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
-        public static void GameOnOnGameLoad(EventArgs args)
+        public static void Main()
+        {
+            Game_OnGameLoad();
+        }
+
+        public static void Game_OnGameLoad()
         {
             if (Player.CharData.BaseSkinName != "Irelia")
             {
@@ -659,15 +664,6 @@ using EloBuddy;
                     }
                 }
             }
-        }
-
-        /// <summary>
-        ///     The entry point of the application.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        private static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += GameOnOnGameLoad;
         }
 
         /// <summary>

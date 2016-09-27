@@ -29,11 +29,12 @@ using EloBuddy;
         private static bool FocusWHarass = false;
         private static bool UseRHarass = false;
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
-        static void Game_OnGameLoad(EventArgs args)
+
+        static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Karma") return;
             Notifications.AddNotification("Karma - The Enlightened One by DanZ Loaded!", 1000);

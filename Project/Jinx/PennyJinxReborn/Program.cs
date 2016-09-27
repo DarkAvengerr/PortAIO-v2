@@ -15,16 +15,12 @@ using EloBuddy;
         /// The Main method.
         /// </summary>
         /// <param name="args">The method args</param>
-        internal static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += GameOnLoad;
+            Game_OnGameLoad();
         }
 
-        /// <summary>
-        /// Called on the game load.
-        /// </summary>
-        /// <param name="args">The event args.</param>
-        private static void GameOnLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             PJR.OnLoad();
         }

@@ -32,11 +32,6 @@ using EloBuddy;
 
         #region OnLoad
 
-        public static void LuxMain()
-        {
-            CustomEvents.Game.OnGameLoad += LuxMain;
-        }
-
         private static Dictionary<SpellSlot, Spell> Spells;
 
         private static void InitializeSpells()
@@ -54,7 +49,7 @@ using EloBuddy;
             Spells[SpellSlot.R].SetSkillshot(1f, 150f, float.MaxValue, false, SkillshotType.SkillshotCircle);
         }
 
-        private static void LuxMain(EventArgs args)
+        public static void LuxMain()
         {
             Player = ObjectManager.Player;
 

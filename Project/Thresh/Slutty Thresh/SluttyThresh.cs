@@ -30,7 +30,7 @@ using EloBuddy;
         private static int elastattempt;
         private static int elastattemptin;
 
-        public static void OnLoad(EventArgs args)
+        public static void OnLoad()
         {
             if (Player.ChampionName != ChampName)
                 return;

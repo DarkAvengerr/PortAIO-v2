@@ -21,11 +21,6 @@ using EloBuddy;
         private static AIHeroClient DrawTarget { get; set; }
         private static Geometry.Polygon.Rectangle RRectangle { get; set; }
 
-        private static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += GameOnOnGameLoad;
-        }
-
         #region OneKeyToFish :: Menu
 
         private static void CreateMenu()
@@ -92,7 +87,12 @@ using EloBuddy;
 
         #region GameLoad
 
-        private static void GameOnOnGameLoad(EventArgs args)
+        public static void Main()
+        {
+            Game_OnGameLoad();
+        }
+
+        static void Game_OnGameLoad()
         {
             if (Player.BaseSkinName != "Fizz")
             {

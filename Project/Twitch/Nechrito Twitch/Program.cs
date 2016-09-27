@@ -37,9 +37,12 @@ using EloBuddy;
         };
 
         // Initializes the loading process
-        private static void Main() => CustomEvents.Game.OnGameLoad += OnGameLoad;
+        public static void Main()
+        {
+            Game_OnGameLoad();
+        }
 
-        private static void OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Twitch") return; // If our champion name isn't Twitch, we will return and we will not load the script
 

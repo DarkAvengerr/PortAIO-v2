@@ -8,10 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Twiitch {
-    class Twitch {
+using EloBuddy;
+using LeagueSharp.Common;
+namespace Twiitch
+{
+    class Twitch
+    {
 
         private static string ChampionName = "Twitch";
 
@@ -36,19 +38,23 @@ using EloBuddy;
             "TTNWraith"
         };
 
-        private static void Main(string[] args) {
-            CustomEvents.Game.OnGameLoad += Game_OnLoad;
-        }
 
-        private static float GetDamage(AIHeroClient target) {
+        private static float GetDamage(AIHeroClient target)
+        {
             return _e.GetDamage(target);
         }
 
-        public static void Game_OnLoad(EventArgs args) {
+        public static void Main()
+        {
+            Game_OnGameLoad();
+        }
+
+        static void Game_OnGameLoad()
+        {
             // Verify champion
             if (Player.ChampionName != ChampionName)
                 return;
-            
+
             Notifications.AddNotification("Twitch by TheOBJop", 2);
 
             // Spells
@@ -62,7 +68,7 @@ using EloBuddy;
 
             // Menu
             TwitchMenu.Init();
-            
+
             CustomDamageIndicator.Initialize(GetDamage);
 
             // Listen to Events
@@ -73,7 +79,8 @@ using EloBuddy;
         }
 
         // Anti-Gapclose
-        private static void Unit_OnDash(Obj_AI_Base sender, Dash.DashItem args) {
+        private static void Unit_OnDash(Obj_AI_Base sender, Dash.DashItem args)
+        {
             if (!sender.IsEnemy)
                 return;
 
@@ -82,25 +89,28 @@ using EloBuddy;
         }
 
         // Auto Q after kill if Enemies
-        private static void Game_OnNotify(GameNotifyEventArgs args) {
-            switch (args.EventId) {
-            case GameEventId.OnChampionKill:
-                if (WasYourKill() && TwitchMenu.Item("QKill").GetValue<bool>() && Player.GetEnemiesInRange(_q.Range).Count >= TwitchMenu.Item("QFleeCount").GetValue<Slider>().Value && _q.IsReady())
-                    _q.Cast();
-                break;
-            case GameEventId.OnDamageTaken:
-                if (TwitchMenu.Item("EBeforeDeath").GetValue<bool>() && (Player.HealthPercent <= 15 || (lastHpPercent - Player.HealthPercent) > 25)  && _e.IsReady())
-                    _e.Cast();
-                lastHpPercent = Player.HealthPercent;
-                break;
-            case GameEventId.OnBuff:
-                if (Player.HasBuff("TwitchHideInShadows"))
-                    buffPosition = Player.Position;
-                break;
+        private static void Game_OnNotify(GameNotifyEventArgs args)
+        {
+            switch (args.EventId)
+            {
+                case GameEventId.OnChampionKill:
+                    if (WasYourKill() && TwitchMenu.Item("QKill").GetValue<bool>() && Player.GetEnemiesInRange(_q.Range).Count >= TwitchMenu.Item("QFleeCount").GetValue<Slider>().Value && _q.IsReady())
+                        _q.Cast();
+                    break;
+                case GameEventId.OnDamageTaken:
+                    if (TwitchMenu.Item("EBeforeDeath").GetValue<bool>() && (Player.HealthPercent <= 15 || (lastHpPercent - Player.HealthPercent) > 25) && _e.IsReady())
+                        _e.Cast();
+                    lastHpPercent = Player.HealthPercent;
+                    break;
+                case GameEventId.OnBuff:
+                    if (Player.HasBuff("TwitchHideInShadows"))
+                        buffPosition = Player.Position;
+                    break;
             }
         }
 
-        private static void Drawing_OnDraw(EventArgs args) {
+        private static void Drawing_OnDraw(EventArgs args)
+        {
             CustomDamageIndicator.DrawingColor = TwitchMenu.Item("EDamage").GetValue<Circle>().Color;
             CustomDamageIndicator.Enabled = TwitchMenu.Item("EDamage").GetValue<Circle>().Active;
 
@@ -108,7 +118,8 @@ using EloBuddy;
                 Drawing.DrawCircle(buffPosition, _q.Range, Color.Green);
         }
 
-        private static void Game_OnUpdate(EventArgs args) {
+        private static void Game_OnUpdate(EventArgs args)
+        {
             // Update Q range based on Movespeed and drawing position
             _q.Range = Player.MoveSpeed * (_q.Level + 3.0f);
             if (!Player.HasBuff("TwitchHideInShadows"))
@@ -122,7 +133,7 @@ using EloBuddy;
 
             // E before death
             if (TwitchMenu.Item("EBeforeDeath").GetValue<bool>() && Player.HealthPercent <= 10 && _e.IsReady())
-                    _e.Cast();
+                _e.Cast();
 
             // Always KS monsters
             KsMonsters();
@@ -131,18 +142,20 @@ using EloBuddy;
             RToKs();
 
             // Orbwalker Mode
-            switch (_orbwalker.ActiveMode) {
-            case Orbwalking.OrbwalkingMode.Combo:
-                Combo();
-                break;
-            case Orbwalking.OrbwalkingMode.LaneClear:
-                LaneClear();
-                JungleClear();
-                break;
+            switch (_orbwalker.ActiveMode)
+            {
+                case Orbwalking.OrbwalkingMode.Combo:
+                    Combo();
+                    break;
+                case Orbwalking.OrbwalkingMode.LaneClear:
+                    LaneClear();
+                    JungleClear();
+                    break;
             }
         }
 
-        private static void Combo() {
+        private static void Combo()
+        {
             var target = TargetSelector.GetTarget(_w.Range, TargetSelector.DamageType.Physical);
 
             // If target not found, don't do anything.
@@ -150,17 +163,20 @@ using EloBuddy;
                 return;
 
             // Use W
-            if (TwitchMenu.Item("UseWCombo").GetValue<bool>()) {
+            if (TwitchMenu.Item("UseWCombo").GetValue<bool>())
+            {
                 if (target.IsValidTarget(_w.Range) && _w.CanCast(target) && _w.GetPrediction(target).Hitchance >= HitChance.High)
                     _w.Cast(target);
             }
 
             // Use BoRK
-            if (target.Type == Player.Type && target.ServerPosition.Distance(Player.ServerPosition) < 450) {
+            if (target.Type == Player.Type && target.ServerPosition.Distance(Player.ServerPosition) < 450)
+            {
                 var hasCutlass = Items.HasItem(3144);
                 var hasBork = Items.HasItem(3153);
 
-                if (hasBork || hasCutlass) {
+                if (hasBork || hasCutlass)
+                {
                     var itemId = hasCutlass ? 3144 : 3153;
                     var damage = Player.GetItemDamage(target, Damage.DamageItems.Botrk);
                     if (hasCutlass || Player.Health + damage < Player.MaxHealth)
@@ -173,34 +189,40 @@ using EloBuddy;
                 Items.UseItem(3142);
         }
 
-        private static void KsMonsters() {
+        private static void KsMonsters()
+        {
             // If not KS enabled, don't KS
             if (!TwitchMenu.Item("KSMonsters").GetValue<bool>())
                 return;
 
             // Find Minions
             var minions = MinionManager.GetMinions(_e.Range, MinionTypes.All, MinionTeam.NotAlly);
-            foreach (var m in minions) {
+            foreach (var m in minions)
+            {
                 if ((m.CharData.BaseSkinName.Contains("MinionSiege") || m.CharData.BaseSkinName.Contains("Dragon") || m.CharData.BaseSkinName.Contains("Baron")) && _e.IsKillable(m))
                     _e.Cast();
             }
         }
 
-        private static void RToKs() {
+        private static void RToKs()
+        {
             AIHeroClient enemy = Player.GetEnemiesInRange(_r.Range).FirstOrDefault(nmy => nmy.HealthPercent < 10);
 
             if (enemy == null)
                 return;
 
             // Make sure to only KS the enemy (Kinda like auto-activating R to secure kill)
-            if (TwitchMenu.Item("RToKS").GetValue<bool>() && _r.IsReady() && Player.Distance(enemy) > 500) {
+            if (TwitchMenu.Item("RToKS").GetValue<bool>() && _r.IsReady() && Player.Distance(enemy) > 500)
+            {
                 _r.Cast();
                 _orbwalker.ForceTarget(enemy);
             }
         }
 
-        private static bool WasYourKill() {
-            if (Player.ChampionsKilled > lastKills) {
+        private static bool WasYourKill()
+        {
+            if (Player.ChampionsKilled > lastKills)
+            {
                 lastKills = Player.ChampionsKilled;
                 return true;
             }
@@ -208,9 +230,11 @@ using EloBuddy;
             return false;
         }
 
-        private static Obj_AI_Base GetCenterMinion(List<Obj_AI_Base> objects) {
+        private static Obj_AI_Base GetCenterMinion(List<Obj_AI_Base> objects)
+        {
             Obj_AI_Base highest = objects.FirstOrDefault();
-            for (int i = 0; i < objects.Count; i++) {
+            for (int i = 0; i < objects.Count; i++)
+            {
                 if (objects[i].GetAlliesInRange(_w.Width).Count > highest.GetAlliesInRange(_w.Width).Count)
                     highest = objects[i];
             }
@@ -218,7 +242,8 @@ using EloBuddy;
             return highest;
         }
 
-        private static void JungleClear() {
+        private static void JungleClear()
+        {
             var minions = MinionManager.GetMinions(_e.Range, MinionTypes.All, MinionTeam.Neutral);
 
             if (minions == null)
@@ -233,15 +258,16 @@ using EloBuddy;
 
             if (useW && _w.IsReady() && (minions.Count(m => Player.Distance(m, false) < _w.Range) >= minMobsForW) && Player.ManaPercent > minMana)
                 _w.Cast(centerMinion.Position);
-            
+
             if (highestHealthMinion == null)
                 return;
 
             if (useE && _e.IsReady() && _e.IsKillable(highestHealthMinion) && Player.ManaPercent > minMana)
-                    _e.Cast(highestHealthMinion);
+                _e.Cast(highestHealthMinion);
         }
 
-        private static void LaneClear() {
+        private static void LaneClear()
+        {
             var minions = MinionManager.GetMinions(_e.Range, MinionTypes.All, MinionTeam.Enemy);
 
             if (minions == null)

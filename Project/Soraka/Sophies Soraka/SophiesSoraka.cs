@@ -110,7 +110,7 @@ using EloBuddy;
         /// <param name="args">
         ///     The args.
         /// </param>
-        public static void OnGameLoad(EventArgs args)
+        public static void OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != "Soraka")
             {

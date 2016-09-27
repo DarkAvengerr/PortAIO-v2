@@ -19,13 +19,13 @@ using EloBuddy;
 		public static Spell Q, Q2, W, W2, E, E2, R;
 		public static Menu menu;
 		public static SpellSlot Ignite;
-		static void Main(string[] args)
-		{
-			CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
-		}
+        public static void Main()
+        {
+            Game_OnGameLoad();
+        }
 
-		static void Game_OnGameLoad(EventArgs args)
-		{
+        static void Game_OnGameLoad()
+        {
 			menu = new Menu("ROP - " + player.ChampionName, player.ChampionName, true);
 			Menu OrbwalkerMenu = new Menu("Orbwalker", "Orbwalker");
 			orbwalker = new Orbwalking.Orbwalker(OrbwalkerMenu);

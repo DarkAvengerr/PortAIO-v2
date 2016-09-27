@@ -54,12 +54,12 @@ using EloBuddy;
         private static Vector3 TargetPosition = Vector3.Zero;
         private static int InitTime { get; set; }
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnLoad;
+            Game_OnGameLoad();
         }
 
-        private static void OnLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != "Riven")
                 return;

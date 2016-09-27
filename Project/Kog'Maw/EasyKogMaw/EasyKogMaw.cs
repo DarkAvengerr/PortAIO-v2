@@ -15,7 +15,7 @@ namespace EasyKogMaw
 {
     class EasyKogMaw : EasyLib1.Champion
     {
-        static void Main(string[] args)
+        public static void Main()
         {
             new EasyKogMaw();
         }

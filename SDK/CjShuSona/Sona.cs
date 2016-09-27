@@ -28,7 +28,7 @@ namespace CjShuSona
              "Talon", "Tristana", "Twitch", "Urgot", "Varus", "Vayne", "Yasuo", "Zed", "Kindred", "AurelionSol"
         };
 
-        internal static void OnLoad(object sender, EventArgs e)
+        internal static void OnLoad()
         {
             if (GameObjects.Player.ChampionName.ToLower() != "sona")
                 return;

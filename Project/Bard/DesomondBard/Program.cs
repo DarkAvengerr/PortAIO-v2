@@ -28,16 +28,12 @@ using EloBuddy;
         public static Spell stunQ { get; private set; }
 
 
-        public static void Main(string[] args)
+        public static void Main()
         {
-            Game.OnLoad += Game_Start;
-            if (Game.Mode == GameMode.Running)
-            {
-                Game_Start(new EventArgs());
-            }
+            Game_OnGameLoad();
         }
 
-        public static void Game_Start(EventArgs args)
+        static void Game_OnGameLoad()
         {
             Player = ObjectManager.Player;
 

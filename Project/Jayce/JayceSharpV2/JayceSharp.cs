@@ -43,11 +43,10 @@ using EloBuddy;
 
         public JayceSharp()
         {
-            /* CallBAcks */
-            CustomEvents.Game.OnGameLoad += onLoad;
+            Game_OnGameLoad();
         }
 
-        private static void onLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != CharName)
                 return;

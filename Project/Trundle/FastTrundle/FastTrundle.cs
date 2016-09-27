@@ -48,7 +48,7 @@ using EloBuddy;
 
         #region Event handlers
 
-        public static void Game_OnGameLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Trundle") return;
 

@@ -28,11 +28,12 @@ using EloBuddy;
         public static RiuNo1 RiuNo1 = null;
 
         public static float Rcount;
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
-        private static void Game_OnGameLoad(EventArgs args)
+
+        static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Draven")
                 return;

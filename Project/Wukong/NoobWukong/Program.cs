@@ -28,12 +28,12 @@ using EloBuddy;
         private static Items.Item tiamat = new Items.Item(3077, 185);
         private static Items.Item hydra = new Items.Item(3074, 185);
         private static Obj_AI_Base target;
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "MonkeyKing") return;
 

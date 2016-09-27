@@ -39,11 +39,12 @@ using EloBuddy;
                 "MissFortuneBulletTime", "InfiniteDuress", "LucianR"
             };
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnGameLoad;
+            Game_OnGameLoad();
         }
-        private static void OnGameLoad(EventArgs args)
+
+        static void Game_OnGameLoad()
         {
             Player = ObjectManager.Player;
             if (Player.ChampionName.ToLower() != "vayne") return;

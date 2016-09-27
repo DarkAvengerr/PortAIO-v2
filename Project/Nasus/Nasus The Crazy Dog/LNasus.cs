@@ -1,6 +1,6 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nasus
+using EloBuddy;
+using LeagueSharp.Common;
+namespace Nasus
 {
     using System;
     using System.Collections.Generic;
@@ -24,7 +24,7 @@ using EloBuddy;
 
         private static IEnumerable<AIHeroClient> Enemies => HeroManager.Enemies;
 
-        public static void OnLoad(EventArgs args)
+        public static void OnLoad()
         {
             try
             {
@@ -83,9 +83,9 @@ using EloBuddy;
 
         private static void LaneClear()
         {
-            var MinionQ     = MinionManager.GetMinions(spells[Spells.Q].Range);
-            var EMinion     = MinionManager.GetMinions(spells[Spells.E].Range + spells[Spells.E].Width);
-            var ELocation   = spells[Spells.E].GetCircularFarmLocation(EMinion, spells[Spells.E].Range);
+            var MinionQ = MinionManager.GetMinions(spells[Spells.Q].Range);
+            var EMinion = MinionManager.GetMinions(spells[Spells.E].Range + spells[Spells.E].Width);
+            var ELocation = spells[Spells.E].GetCircularFarmLocation(EMinion, spells[Spells.E].Range);
 
             if (IsActive("LaneClear.Use.Q"))
             {
@@ -141,11 +141,11 @@ using EloBuddy;
                 case Orbwalking.OrbwalkingMode.LastHit:
                     var MinionQ = MinionManager.GetMinions(spells[Spells.Q].Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
 
-                    if(IsActive("Use.StackQ"))
+                    if (IsActive("Use.StackQ"))
                     {
-                        foreach(var minion in MinionQ)
+                        foreach (var minion in MinionQ)
                         {
-                            if (minion.Health <= spells[Spells.Q].GetDamage(minion) 
+                            if (minion.Health <= spells[Spells.Q].GetDamage(minion)
                                 + Player.GetAutoAttackDamage(minion) && spells[Spells.Q].IsReady())
                             {
                                 spells[Spells.Q].Cast();

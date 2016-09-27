@@ -42,10 +42,10 @@ using EloBuddy;
 
         public MActivator()
         {
-            CustomEvents.Game.OnGameLoad += onLoad;
+            Game_OnGameLoad();
         }
 
-        private void onLoad(EventArgs args)
+        void Game_OnGameLoad()
         {
             _player = ObjectManager.Player;
             checkCCTick = LeagueSharp.Common.Utils.TickCount;

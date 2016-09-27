@@ -6,9 +6,9 @@ using EloBuddy;
 
     internal class Program
     {
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += LNasus.OnLoad;
+            LNasus.OnLoad();
         }
     }
 }

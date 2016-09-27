@@ -10,9 +10,9 @@ using EloBuddy;
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += new Ekko().Load;
+            new Ekko().Load();
         }
     }
 }

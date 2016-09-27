@@ -67,18 +67,12 @@ using EloBuddy;
         /// <summary>
         /// Called when program starts
         /// </summary>
-        private static void Main()
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        /// <summary>
-        /// Called when game is loaded
-        /// </summary>
-        /// <param name="args">
-        /// The Args
-        /// </param>
-        private static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (Player.CharData.BaseSkinName != "Nasus")
             {

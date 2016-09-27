@@ -5,9 +5,9 @@ using LeagueSharp.Common;
 using SharpDX;
 using SPrediction;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nechrito_Gragas
+using EloBuddy;
+using LeagueSharp.Common;
+namespace Nechrito_Gragas
 {
     class Program
     {
@@ -23,9 +23,12 @@ using EloBuddy;
 
         private static readonly HpBarIndicator Indicator = new HpBarIndicator();
 
-        private static void Main() => CustomEvents.Game.OnGameLoad += OnGameLoad;
+        public static void Main()
+        {
+            Game_OnGameLoad();
+        }
 
-        private static void OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Gragas") return;
 
@@ -50,7 +53,7 @@ using EloBuddy;
             SmiteJungle();
             SmiteCombo();
             Killsteal();
-            
+
 
             switch (MenuConfig._orbwalker.ActiveMode)
             {
@@ -68,7 +71,7 @@ using EloBuddy;
 
         private static void OnCreateObject(GameObject sender, EventArgs args)
         {
-            
+
             if (sender.Name == "Gragas_Base_Q_Ally.troy")
             {
                 GragasQ = sender;
@@ -117,7 +120,7 @@ using EloBuddy;
                                     Spells.Q.Cast(true);
                                 }
                             }
-                            if(m.Distance(Player) <= 250f)
+                            if (m.Distance(Player) <= 250f)
                             {
                                 if (Spells.W.IsReady() && MenuConfig.LaneW)
                                 {
@@ -129,7 +132,7 @@ using EloBuddy;
                 }
             }
         }
-    
+
         public static Obj_AI_Base GetCenterMinion()
         {
             var minionposition = MinionManager.GetMinions(300 + Spells.Q.Range).Select(x => x.Position.To2D()).ToList();
@@ -157,7 +160,7 @@ using EloBuddy;
                 }
             }
 
-            if(Spells.Q.IsReady())
+            if (Spells.Q.IsReady())
             {
                 var targets = HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.Q.Range) && !x.IsZombie);
                 foreach (var target in targets)
@@ -168,7 +171,7 @@ using EloBuddy;
                         var pos = Spells.Q.GetSPrediction(target).CastPosition;
                         Spells.Q.Cast(pos, true);
                     }
-                    if(GragasQ != null && target.Distance(GragasQ.Position) <= 250)
+                    if (GragasQ != null && target.Distance(GragasQ.Position) <= 250)
                     {
                         Spells.Q.Cast();
                     }
@@ -188,14 +191,14 @@ using EloBuddy;
                 }
             }
         }
-        
+
         private static void Drawing_OnDraw(EventArgs args)
         {
             if (Player.IsDead || !MenuConfig.prediction) return;
 
             var Target = TargetSelector.GetSelectedTarget();
 
-            if(Target != null && !Target.IsDead)
+            if (Target != null && !Target.IsDead)
             {
                 Render.Circle.DrawCircle(Mode.rpred(Target), 100, System.Drawing.Color.GhostWhite);
                 Render.Circle.DrawCircle(Mode.qpred(Target), 100, System.Drawing.Color.Blue);

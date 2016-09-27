@@ -19,12 +19,12 @@ using EloBuddy;
         public static Menu menu;
         public static Menu R_Insec, R_Barrel,  Q_LANECLEAR, Q_Auto, E_Menu, barrel, Ult, W_Menu;
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnLoad;
+            Game_OnGameLoad();
         }
 
-        static void OnLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             
             menu = new Menu("Original Gragas", "menu", true);

@@ -7,9 +7,9 @@ using EloBuddy;
 {
     class Loader : Lux
     {
-        static void Main(string[] args)
+        public static void Main()
         {          
-            CustomEvents.Game.OnGameLoad += OnLoad;
+            OnLoad();
         }
     }
 }

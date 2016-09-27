@@ -3,7 +3,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using SharpDX.Direct3D9;
-using System; 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,10 +14,12 @@ using Collision = LeagueSharp.Common.Collision;
 //using Orbwalking = Kalima.refs.Orbwalking;
 #endregion
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Kalima {
-    internal class Kalista {
+using EloBuddy;
+using LeagueSharp.Common;
+namespace Kalima
+{
+    internal class Kalista
+    {
 
         #region GAME LOAD
         #region INIT STUFF
@@ -25,8 +27,10 @@ using EloBuddy;
         static readonly AIHeroClient Player = ObjectManager.Player;
         static int level { get { return Player.Level; } }
         static Vector3 MyPosition { get { return Player.Position; } }
-        static bool ERand {
-            get {
+        static bool ERand
+        {
+            get
+            {
                 if (randomizeEpop && Player.ChampionsKilled > randomizeEpopminkills) { return true; }
                 return false;
             }
@@ -34,19 +38,23 @@ using EloBuddy;
         #region SOULMATE RELATED STUFF
         //store the soulbound friend..
         static AIHeroClient soulmate { get { return HeroManager.Allies.Find(a => a.HasBuff("kalistacoopstrikeally")); } }
-        static bool ValidSoul { get { if (soulmate != null && !soulmate.IsDead) { return true; };return false; } }
+        static bool ValidSoul { get { if (soulmate != null && !soulmate.IsDead) { return true; }; return false; } }
         static float soulmateHealthPercent { get { return soulmate.HealthPercent; } }
         static Vector3 soulmateposition { get { return soulmate.Position; } }
-        static bool soulbalistador {
-            get {
+        static bool soulbalistador
+        {
+            get
+            {
                 var s = soulmate.ChampionName;
                 if (s == "Blitzcrank" || s == "Skarner" || s == "TahmKench") { return true; }
                 return false;
             }
         }
         static float soulmateRangeFromMe { get { return MyPosition.Distance(soulmate.Position); } }
-        static int soulmatesignal {
-            get {
+        static int soulmatesignal
+        {
+            get
+            {
                 if (soulmateRangeFromMe < 800) { return 2; }
                 if (soulmateRangeFromMe > 800 && soulmateRangeFromMe < R.Range) { return 1; }
                 return 0;
@@ -57,9 +65,9 @@ using EloBuddy;
         static Menu kalimenu;
         static Menu kalm { get { return Kalista.kalimenu; } }
         static float Manapercent { get { return Player.ManaPercent; } }
-        static bool spellsreadyEQ { get { if (E.IsReady() && Q.IsReady()) { return true; };return false; } }
+        static bool spellsreadyEQ { get { if (E.IsReady() && Q.IsReady()) { return true; }; return false; } }
         static bool spellsEQmana { get { if (Player.Mana > (E.ManaCost + Q.ManaCost)) { return true; } return false; } }
-        static bool playerisready { get { if (Player.IsRecalling() || Player.IsDead) { return false; };return true; } }
+        static bool playerisready { get { if (Player.IsRecalling() || Player.IsDead) { return false; }; return true; } }
         static bool canuseheal = false;
         static long? onupdatetimers20000 = DateTime.Now.Ticks;
         static bool onupdate20000 { get { if ((DateTime.Now.Ticks - onupdatetimers20000) > 200000000) { onupdatetimers20000 = DateTime.Now.Ticks; return true; }; return false; } }
@@ -101,7 +109,8 @@ using EloBuddy;
         static SpellSlot summHeal;
         #endregion //INIT STUFF
 
-        static void Game_OnGameLoad(EventArgs args) {//"1 3 1 2 1 4 1 3 1 3 4 3 3 2 2 4 2 2";
+        static void Game_OnGameLoad()
+        {//"1 3 1 2 1 4 1 3 1 3 4 3 3 2 2 4 2 2";
             if (Player.ChampionName != "Kalista") { return; }
             Q = new Spell(SpellSlot.Q, 1150f);
             Q.SetSkillshot(0.25f, 40f, 1700f, true, SkillshotType.SkillshotLine);
@@ -122,12 +131,13 @@ using EloBuddy;
             summHeal = Player.GetSpellSlot("summonerheal");
         }
 
-        static void Main(string[] args) { CustomEvents.Game.OnGameLoad += Game_OnGameLoad; }
+        public static void Main() { Game_OnGameLoad(); }
         #endregion //GAME LOAD
 
         #region MENU
 
-        static void menuload() {
+        static void menuload()
+        {
             kalimenu = new Menu("Kalimá", Player.ChampionName, true);
             Menu OrbwalkerMenu = kalimenu.AddSubMenu(new Menu("Orbwalker", "Orbwalker"));
             Orbwalker = new Orbwalking.Orbwalker(OrbwalkerMenu);
@@ -253,7 +263,8 @@ using EloBuddy;
             #endregion
             #region BALISTA SUBMENU
             var BalistaChamp = HeroManager.Allies.Find(x => x.ChampionName == "Blitzcrank" || x.ChampionName == "Skarner" || x.ChampionName == "TahmKench");
-            if (BalistaChamp != null) {
+            if (BalistaChamp != null)
+            {
                 Menu balista = kalimenu.AddSubMenu(new Menu("Balista", "Balista"));
                 Menu targetselect = balista.AddSubMenu(new Menu("Target Selector", "Target Selector"));
 
@@ -262,11 +273,13 @@ using EloBuddy;
                 champselect.AddItem(new MenuItem("balistadrawmaxrange", "Max Range", true).SetValue(false));
                 champselect.AddItem(new MenuItem("balistadrawlineformat", "Line Range", true).SetValue(true));
 
-                foreach (var enemy in HeroManager.Enemies.FindAll(x => x.IsEnemy)) {
+                foreach (var enemy in HeroManager.Enemies.FindAll(x => x.IsEnemy))
+                {
                     targetselect.AddItem(new MenuItem("balistaTarget" + enemy.ChampionName, enemy.ChampionName).SetValue(true));
                     targetselect.AddItem(new MenuItem("balistaminhealth" + enemy.ChampionName, "Min Health to Ult", true).SetValue(new Slider(200, 1, 1000)));
                 }
-                if (BalistaChamp.ChampionName == "Blitzcrank") {
+                if (BalistaChamp.ChampionName == "Blitzcrank")
+                {
                     balista.AddItem(new MenuItem("balistaMinRangeSoulFromEnemy", "Min Range enemy from Soulmate", true).SetValue(new Slider(300, 300, 925)));
                 }
                 balista.AddItem(new MenuItem("balistaMinRangeMeFromSoul", "Min Range me from Soulmate", true).SetValue(new Slider(450, 450, 1400)));
@@ -274,7 +287,7 @@ using EloBuddy;
                 balista.AddItem(new MenuItem("balistaMinRangeMeFromEnemy", "Min Range me from Enemy", true).SetValue(new Slider(1400, 500, 1400)));
                 balista.AddItem(new MenuItem("balistaMaxRangeMeFromEnemy", "Max Range me from enemy", true).SetValue(new Slider(2300, 500, 2300)));
                 balista.AddItem(new MenuItem("balistaActive", "Active", true).SetValue(true));
-            
+
             }
             #endregion
             kalimenu.AddToMainMenu();
@@ -310,12 +323,12 @@ using EloBuddy;
         #endregion
         #region LANECLEAR MENU VARS
         static bool laneclearQ { get { return kalm.Item("laneclearQ", true).GetValue<Boolean>(); } }
-        static bool laneclearQmana { get { if (laneclearmanaminQ > Manapercent) { return true; };return false; } }
+        static bool laneclearQmana { get { if (laneclearmanaminQ > Manapercent) { return true; }; return false; } }
         static float laneclearQminMinions { get { return kalm.Item("laneclearQminMinions", true).GetValue<Slider>().Value; } }
         static float laneclearmanaminQ { get { return kalm.Item("laneclearmanaminQ", true).GetValue<Slider>().Value; } }
         static bool laneclearSaveManaForE { get { return kalm.Item("laneclearSaveManaForE", true).GetValue<Boolean>(); } }
         static bool laneclearE { get { return kalm.Item("laneclearE", true).GetValue<Boolean>(); } }
-        static bool laneclearEmana { get { if (Manapercent >= laneclearmanaminE) { return true; };return false; } }
+        static bool laneclearEmana { get { if (Manapercent >= laneclearmanaminE) { return true; }; return false; } }
         static float laneclearEMinMinions { get { return kalm.Item("laneclearEMinMinions", true).GetValue<Slider>().Value; } }
         static float laneclearEMinIncrease { get { return kalm.Item("laneclearEMinIncrease", true).GetValue<Slider>().Value; } }
         static float laneclearEminhealth { get { return kalm.Item("laneclearEminhealth", true).GetValue<Slider>().Value; } }
@@ -403,57 +416,77 @@ using EloBuddy;
         #endregion
 
         #region EVENT GAME ON UPDATE
-        static void Game_OnUpdate(EventArgs args) {
+        static void Game_OnUpdate(EventArgs args)
+        {
             if (Player.IsRecalling() || Player.IsDead) { return; }
-            if (onupdate20000) {
+            if (onupdate20000)
+            {
             }
-            if (onupdate2000) {
+            if (onupdate2000)
+            {
             }
-            if (onupdate1000) {
+            if (onupdate1000)
+            {
                 if (Player.Level >= MyLevel) { Event_OnLevelUp(); }
-                if (autoW || kalm.Item("autoWKey").GetValue<KeyBind>().Active) {
+                if (autoW || kalm.Item("autoWKey").GetValue<KeyBind>().Active)
+                {
                     AutoW();
                 }
             }
-            if (onupdate500) {
+            if (onupdate500)
+            {
 
             }
-            if (onupdate200) {
-                if (fleeKey) {
+            if (onupdate200)
+            {
+                if (fleeKey)
+                {
                     ShowjumpsandFlee();
                 }
                 //buffadd just sucks and adds buffs too late..not feasible for balista or debuffs....
                 debuff();
                 var closebyenemy = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
-                if (closebyenemy != null) {
+                if (closebyenemy != null)
+                {
                     Event_OnItems(closebyenemy);
                 }
             }
-            if (onupdate100) {
-                if (killsteal) {
+            if (onupdate100)
+            {
+                if (killsteal)
+                {
                     Killsteal();
                 }
-                if (harassActive || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) {
+                if (harassActive || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                {
                     harass();
                 }
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit) {
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
+                {
                     laneclear();
                 }
             }
-            if (onupdate50) {
-                if (jungleActive) {
+            if (onupdate50)
+            {
+                if (jungleActive)
+                {
                     Jungleclear();
                 }
             }
         }
 
-        static void Event_OnLevelUp() {
-            if (kalm.Item("AutoLevel", true).GetValue<Boolean>()) {
+        static void Event_OnLevelUp()
+        {
+            if (kalm.Item("AutoLevel", true).GetValue<Boolean>())
+            {
                 DraWing.drawtext("levelupspells", 3, Drawing.Width * 0.45f, Drawing.Height * 0.90f, Color.PapayaWhip, "Levelling up Spells");
-                if (MyLevel == 0) {
+                if (MyLevel == 0)
+                {
                     Player.Spellbook.LevelUpSpell(SpellSlot.W);
                     MyLevel++;
-                } else {
+                }
+                else
+                {
                     if (MyLevel == 3) { Player.Spellbook.LevelUpSpell(SpellSlot.Q); }
                     Player.Spellbook.LevelUpSpell(SpellSlot.R);
                     Player.Spellbook.LevelUpSpell(SpellSlot.E);
@@ -467,34 +500,47 @@ using EloBuddy;
         #endregion
 
         #region EVENT DRAWING ONDRAW
-        static void Drawing_OnDraw(EventArgs args) {
+        static void Drawing_OnDraw(EventArgs args)
+        {
             if (Player.IsRecalling() || Player.IsDead) { return; }
-            if (ondraw20000) {
+            if (ondraw20000)
+            {
             }
-            if (ondraw2000) {
+            if (ondraw2000)
+            {
             }
-            if (ondraw1000) {
-                if (drawsoulmatelink && ValidSoul) {
+            if (ondraw1000)
+            {
+                if (drawsoulmatelink && ValidSoul)
+                {
                     draw_soulmate_link();
                 }
             }
-            if (ondraw500) {
-                if (drawJumpSpots.Active) {
+            if (ondraw500)
+            {
+                if (drawJumpSpots.Active)
+                {
                     draw_jump_spots();
                 }
             }
-            if (ondraw200) {
+            if (ondraw200)
+            {
             }
-            if (ondraw100) {
+            if (ondraw100)
+            {
             }
-            if (ondraw50) {
+            if (ondraw50)
+            {
             }
             //realtime
-            if (drawEdmg.Active && E.Level > 0) {
+            if (drawEdmg.Active && E.Level > 0)
+            {
                 var enemieswithspears = HeroManager.Enemies.Where(x => x.HasBuff("kalistaexpungemarker") && x.IsHPBarRendered);
-                if (enemieswithspears != null) {
+                if (enemieswithspears != null)
+                {
                     var barsize = 104f;
-                    foreach (var enemy in enemieswithspears) {
+                    foreach (var enemy in enemieswithspears)
+                    {
                         var health = enemy.Health;
                         var maxhealth = enemy.MaxHealth;
                         var pos = enemy.HPBarPosition;
@@ -508,8 +554,10 @@ using EloBuddy;
             }
         }
 
-        static void draw_soulmate_link() {
-            switch (soulmatesignal) {
+        static void draw_soulmate_link()
+        {
+            switch (soulmatesignal)
+            {
                 case 0:
                     DraWing.drawtext("drawlink", 1, Drawing.Width * 0.45f, Drawing.Height * 0.82f, Color.Red, "Connection Signal with " + soulmate.ChampionName + ": None");
                     break;
@@ -525,47 +573,58 @@ using EloBuddy;
         #endregion
 
         #region HARASS
-        static void harass() {
+        static void harass()
+        {
             if (!spellsreadyEQ) { return; }
             if (!(harassActive || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)) { return; }
 
             var dontprocessQ = true;
             if (laneclearSaveManaForE && !spellsEQmana) { dontprocessQ = false; }
 
-            if (harassQ && dontprocessQ && Manapercent > harassmanaminQ) {
+            if (harassQ && dontprocessQ && Manapercent > harassmanaminQ)
+            {
                 var enemies = HeroManager.Enemies.Where(x => DistanceFromMe(x) < Q.Range && Q.CanCast(x) &&
                     ((Q.GetPrediction(x).Hitchance >= gethitchanceQ) ||
                     (Q.GetPrediction(x).Hitchance == HitChance.Collision)));
-                if (enemies != null) { 
-                    foreach (var enemy in enemies) {
-                        switch (Q.GetPrediction(enemy).Hitchance) {
+                if (enemies != null)
+                {
+                    foreach (var enemy in enemies)
+                    {
+                        switch (Q.GetPrediction(enemy).Hitchance)
+                        {
                             case HitChance.Collision:
                                 var collide = Q.GetPrediction(enemy).CollisionObjects;
                                 var dontbother = 0;
-                                foreach (var thing in collide) {
+                                foreach (var thing in collide)
+                                {
                                     if ((thing.Health > Q.GetDamage(thing)) || thing.CharData.BaseSkinName == "gangplankbarrel") { dontbother = 1; }
                                 }
-                                if (dontbother == 0) {
+                                if (dontbother == 0)
+                                {
                                     Q.Cast(enemy);
                                 }
                                 break;
                             default:
                                 Q.Cast(enemy);
                                 break;
-                        }                    
-                    }                
+                        }
+                    }
                 }
             }
-            if (harassE && ECanCast) {
+            if (harassE && ECanCast)
+            {
                 var enemies = HeroManager.Enemies.Where(x => x.HasBuff("kalistaexpungemarker") && E.CanCast(x));
                 if (enemies == null) { return; }
                 //out of range E
-                foreach (var enemy in enemies) {
-                    if (harassEoutOfRange && enemy.GetBuffCount("kalistaexpungemarker") >= harassEoutOfRangeMinSpears && DistanceFromMe(enemy) > (E.Range-10)) { ECast(); }
-                    if (harassEThroughMinions) {
+                foreach (var enemy in enemies)
+                {
+                    if (harassEoutOfRange && enemy.GetBuffCount("kalistaexpungemarker") >= harassEoutOfRangeMinSpears && DistanceFromMe(enemy) > (E.Range - 10)) { ECast(); }
+                    if (harassEThroughMinions)
+                    {
                         var minions = MinionManager.GetMinions(Player.ServerPosition, R.Range, MinionTypes.All, MinionTeam.NotAlly).FindAll(x => E.IsKillable(x));
-                        if (minions != null && minions.Count() >= harassEThroughMinionsMinMinions) {
-                            ECast();                        
+                        if (minions != null && minions.Count() >= harassEThroughMinionsMinMinions)
+                        {
+                            ECast();
                         }
                     }
 
@@ -576,40 +635,52 @@ using EloBuddy;
 
         #region JUNGLE CLEAR
 
-        static void Jungleclear() {
+        static void Jungleclear()
+        {
             if (!playerisready || !spellsreadyEQ || !jungleActive) { return; }
             var minions = MinionManager.GetMinions(Q.Range, MinionTypes.All, MinionTeam.All, MinionOrderTypes.MaxHealth);
             var biggies = minions.Find(x => x.CharData.BaseSkinName.ToLower().Contains("dragon") || x.CharData.BaseSkinName.ToLower().Contains("baron"));
             var inside = minions.Find(x => x.Team == GameObjectTeam.Neutral && !x.CharData.BaseSkinName.ToLower().Contains("dragon") && !x.CharData.BaseSkinName.ToLower().Contains("baron"));
-            
-            if (inside != null) {
+
+            if (inside != null)
+            {
                 //Q section..
-                if (jungleclearQ && Manapercent > jungleclearQmana && DistanceFromMe(inside.Position) < jungleclearQMaxdistance && Q.CanCast(inside)) {
-                    if (jungleclearSaveManaForE) {
+                if (jungleclearQ && Manapercent > jungleclearQmana && DistanceFromMe(inside.Position) < jungleclearQMaxdistance && Q.CanCast(inside))
+                {
+                    if (jungleclearSaveManaForE)
+                    {
                         if (spellsEQmana) { Q.Cast(inside); }
-                    } else { Q.Cast(inside); }
+                    }
+                    else { Q.Cast(inside); }
                 }
                 //E section
-                if (jungleclearE && Manapercent > jungleclearEmana && E.CanCast(inside) && inside.Health < GetEDamage(inside)) {
+                if (jungleclearE && Manapercent > jungleclearEmana && E.CanCast(inside) && inside.Health < GetEDamage(inside))
+                {
                     ECast();
-                }            
+                }
             }
 
-            if (biggies != null && jungleclearPopdragbaron) {
+            if (biggies != null && jungleclearPopdragbaron)
+            {
                 var dmgE = GetEDamage(biggies);
                 if (Player.HasBuff("barontarget")) { dmgE = dmgE * 0.5f; }
                 var bighealth = (biggies.Health + (biggies.HPRegenRate / 2));
                 var dmgQ = Q.GetDamage(biggies);
-                var combo = Player.GetAutoAttackDamage(biggies)+dmgQ;
-                if (ECanCast) {                    
+                var combo = Player.GetAutoAttackDamage(biggies) + dmgQ;
+                if (ECanCast)
+                {
                     if (dmgE > bighealth) { ECast(); }
                 }
-                if (Manapercent > jungleclearQmana && jungleclearQdragBaron) {
-                    if (jungleclearSaveManaForE) {
+                if (Manapercent > jungleclearQmana && jungleclearQdragBaron)
+                {
+                    if (jungleclearSaveManaForE)
+                    {
                         if (spellsEQmana) { Q.Cast(biggies); }
-                    } else { Q.Cast(biggies); }
+                    }
+                    else { Q.Cast(biggies); }
                 }
-                if (DistanceFromMe(biggies) > jungleclearQMaxdistance) {
+                if (DistanceFromMe(biggies) > jungleclearQMaxdistance)
+                {
                     if (spellsEQmana && combo > biggies.Health && spellsreadyEQ) { Q.Cast(biggies); } else if (Q.IsReady() && dmgQ > biggies.Health) { Q.Cast(biggies); }
                 }
             }
@@ -618,29 +689,35 @@ using EloBuddy;
 
         #region LANECLEAR
 
-        static void laneclear() {
+        static void laneclear()
+        {
             if (!playerisready || !spellsreadyEQ) { return; }
 
             var dontprocessQ = true;
             if (laneclearSaveManaForE && !spellsEQmana) { dontprocessQ = false; }
 
-            if (laneclearQ && laneclearQmana && Q.IsReady() && dontprocessQ) {
+            if (laneclearQ && laneclearQmana && Q.IsReady() && dontprocessQ)
+            {
                 var MinionsQ = MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Enemy).Find(x => x.Health < Q.GetDamage(x) &&
                     Q_GetCollisionMinions(Player, Player.ServerPosition.Extend(x.ServerPosition, Q.Range)).Count >= kalm.Item("laneclearQminMinions", true).GetValue<Slider>().Value &&
                     Q_GetCollisionMinions(Player, Player.ServerPosition.Extend(x.ServerPosition, Q.Range)).All(xx => xx.Health < Q.GetDamage(xx)));
-                if (MinionsQ != null) {
+                if (MinionsQ != null)
+                {
                     Q.Cast(MinionsQ);
                 }
             }
 
-            if (laneclearE && laneclearEmana && ECanCast) {
+            if (laneclearE && laneclearEmana && ECanCast)
+            {
                 var MinionsE = MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Enemy).FindAll(x =>
                     x.HasBuff("kalistaexpungemarker") && E.IsKillable(x) && x.HealthPercent > laneclearEminhealth);
-                if (MinionsE != null && MinionsE.Count() >= laneclearEminincrminions) {
+                if (MinionsE != null && MinionsE.Count() >= laneclearEminincrminions)
+                {
                     ECast();
                 }
                 //check for big minions first
-                if (laneclearbigminionsE && Manapercent >= laneclearBigMinionsMinMana) {
+                if (laneclearbigminionsE && Manapercent >= laneclearBigMinionsMinMana)
+                {
                     var bigminions = MinionsE.Find(x => x.CharData.BaseSkinName.ToLower().Contains("siege") || x.CharData.BaseSkinName.ToLower().Contains("super"));
                     if (bigminions != null) { ECast(); }
                 }
@@ -649,38 +726,47 @@ using EloBuddy;
         #endregion
 
         #region MISC EVENTS
-        static void Event_OnNonKillableMinion(AttackableUnit minion) {
+        static void Event_OnNonKillableMinion(AttackableUnit minion)
+        {
             var minionX = (Obj_AI_Minion)minion;
             var health = minionX.Health;
-            if (laneclearEnonAAkillable && E.CanCast(minionX) && ECanCast && laneclearEmana && health > laneclearEminhealth && E.IsKillable(minionX)) {
-                ECast();            
-            }
-        }
-
-        static void Event_OnEnemyGapcloser(ActiveGapcloser target) {
-            //gapcloser
-            if (gapcloserQ) {
-                var source = target.Sender;
-                if (Player.Position.Distance(source.Position) > Q.Range) { return; }
-                if (Q.CanCast(source)) { Q.Cast(source); }
-            }
-            if (gapcloserE && ECanCast && E.CanCast(target.Sender)) {
+            if (laneclearEnonAAkillable && E.CanCast(minionX) && ECanCast && laneclearEmana && health > laneclearEminhealth && E.IsKillable(minionX))
+            {
                 ECast();
             }
         }
 
-        static void Event_OnBeforeAttack(Orbwalking.BeforeAttackEventArgs args) {
-            if (autoresetAA) {
+        static void Event_OnEnemyGapcloser(ActiveGapcloser target)
+        {
+            //gapcloser
+            if (gapcloserQ)
+            {
+                var source = target.Sender;
+                if (Player.Position.Distance(source.Position) > Q.Range) { return; }
+                if (Q.CanCast(source)) { Q.Cast(source); }
+            }
+            if (gapcloserE && ECanCast && E.CanCast(target.Sender))
+            {
+                ECast();
+            }
+        }
+
+        static void Event_OnBeforeAttack(Orbwalking.BeforeAttackEventArgs args)
+        {
+            if (autoresetAA)
+            {
                 Orbwalking.ResetAutoAttackTimer();
             }
         }
         #endregion
 
-        
+
         #region MISC FUNCTIONS
         static HitChance gethitchanceQ { get { return hitchanceQ(); } }
-        static HitChance hitchanceQ() {
-            switch (kalm.Item("harassQchance", true).GetValue<Slider>().Value) {
+        static HitChance hitchanceQ()
+        {
+            switch (kalm.Item("harassQchance", true).GetValue<Slider>().Value)
+            {
                 case 1:
                     return HitChance.Low;
                 case 2:
@@ -695,8 +781,10 @@ using EloBuddy;
         }
 
         //credits to xcsoft for this function
-        static List<Obj_AI_Base> Q_GetCollisionMinions(AIHeroClient source, Vector3 targetposition) {
-            var input = new PredictionInput {
+        static List<Obj_AI_Base> Q_GetCollisionMinions(AIHeroClient source, Vector3 targetposition)
+        {
+            var input = new PredictionInput
+            {
                 Unit = source,
                 Radius = Q.Width,
                 Delay = Q.Delay,
@@ -710,12 +798,14 @@ using EloBuddy;
 
         static long? ecastlastusedon = DateTime.Now.Ticks;
         static bool ECanCast { get { if (!E.IsReady()) { return false; }; if ((DateTime.Now.Ticks - ecastlastusedon) > 5000000) { return true; }; return false; } }
-        static void ECast() {
+        static void ECast()
+        {
             ecastlastusedon = DateTime.Now.Ticks;
             E.Cast();
         }
 
-        static bool hasundyingbuff(AIHeroClient target) {
+        static bool hasundyingbuff(AIHeroClient target)
+        {
             //checks for undying buffs and shields
             var hasbufforshield = TargetSelector.IsInvulnerable(target, TargetSelector.DamageType.Magical, false);
             if (hasbufforshield) { return true; }
@@ -727,43 +817,53 @@ using EloBuddy;
             return false;
         }
 
-        static void Killsteal() {
+        static void Killsteal()
+        {
             var enemies = HeroManager.Enemies.Where(x => !hasundyingbuff(x) && (Q.CanCast(x) && DistanceFromMe(x) < Q.Range) || E.CanCast(x));
             if (enemies == null || !ECanCast) { return; }
 
-            foreach (var enemy in enemies) {
+            foreach (var enemy in enemies)
+            {
                 var edmg = GetEDamage(enemy);
                 var enemyhealth = enemy.Health;
                 var enemyregen = enemy.HPRegenRate / 2;
                 var enemyhealthwithreg = enemyhealth + enemyregen;
                 //check against erand
-                if (ERand && enemyhealthwithreg + (Player.GetAutoAttackDamage(enemy)*2) <= edmg) {
+                if (ERand && enemyhealthwithreg + (Player.GetAutoAttackDamage(enemy) * 2) <= edmg)
+                {
                     ECast(); return;
                 }
                 //normal e pop...
                 if (enemyhealthwithreg <= edmg) { ECast(); return; }
                 if (Player.Mana < Q.ManaCost + E.ManaCost) { return; }
-                if (Q.GetPrediction(enemy).Hitchance >= HitChance.Medium && Q.CanCast(enemy)) {
+                if (Q.GetPrediction(enemy).Hitchance >= HitChance.Medium && Q.CanCast(enemy))
+                {
                     var qdamage = Q.GetDamage(enemy);
-                    if (qdamage + edmg > enemyhealthwithreg) {
+                    if (qdamage + edmg > enemyhealthwithreg)
+                    {
                         Q.Cast(enemy);
                     }
                 }
             }
         }
 
-        static float GetEDamage(Obj_AI_Base target, int spears = 0) {
+        static float GetEDamage(Obj_AI_Base target, int spears = 0)
+        {
             var stacks = target.GetBuffCount("kalistaexpungemarker");
             if (spears > 0) { stacks = spears; }
             if (stacks == 0) { return 1; }
-            if (target is AIHeroClient) {
+            if (target is AIHeroClient)
+            {
                 return E.GetDamage(target);
-            } else {
+            }
+            else
+            {
                 return E.GetDamage(target) - 10;
             }
         }
 
-        static void debuff() {
+        static void debuff()
+        {
             if (!debuffActive || !qss.IsReady() || !mercurial.IsReady() || !dervish.IsReady()) { return; }
             //credits to Mactivator for "useful" spell names instead of adding a bunch of crap or having to parse each one
             var debuff = false;
@@ -788,27 +888,35 @@ using EloBuddy;
             DraWing.drawtext("debuffing", 5, Drawing.Width * 0.45f, Drawing.Height * 0.90f, Color.Red, "Debuffing from: " + spell);
             var s = false;
             var i = "";
-            if (qss.IsReady()) {
+            if (qss.IsReady())
+            {
                 s = true; i = "qss";
                 qss.Cast();
-            } else if (mercurial.IsReady()) {
+            }
+            else if (mercurial.IsReady())
+            {
                 s = true; i = "merc";
                 mercurial.Cast();
-            } else if (dervish.IsReady()) {
+            }
+            else if (dervish.IsReady())
+            {
                 s = true; i = "derv";
                 dervish.Cast();
             }
-            if (s) {
+            if (s)
+            {
                 DraWing.drawtext("debuffing", 5, Drawing.Width * 0.45f, Drawing.Height * 0.90f, Color.Red, "Debuffing with item: " + i);
             }
         }
 
-        static void Event_OnItems(AIHeroClient target) {
+        static void Event_OnItems(AIHeroClient target)
+        {
             if (!botrk.IsOwned()) { return; }
             var targethealth = target.Health;
             var qdmg = Q.GetDamage(target);
             var edmg = GetEDamage(target);
-            if (botrkactive && botrk.IsReady() && botrk.IsInRange(target)) {
+            if (botrkactive && botrk.IsReady() && botrk.IsInRange(target))
+            {
                 //selfish self-preservation
                 if (Player.HealthPercent < kalm.Item("botrkmyheal", true).GetValue<Slider>().Value) { botrk.Cast(target); }
                 //total dmg that I can do to target
@@ -816,42 +924,51 @@ using EloBuddy;
                 //get in health how much is x% of his total health
                 var healthdmg = (kalm.Item("botrkKS", true).GetValue<Slider>().Value / 100) * target.MaxHealth;
                 //if his health is less than x%+q+e then just botrkhim
-                if (target.Health < healthdmg + totaldmg) {
+                if (target.Health < healthdmg + totaldmg)
+                {
                     botrk.Cast(target);
                     DraWing.drawtext("botrkwho", 3, Drawing.Width * 0.45f, Drawing.Height * 0.80f, Color.PapayaWhip, "Using botrk on: " + target.ChampionName);
                 }
             }
         }
 
-        static float DistanceFromMe(Obj_AI_Base args) {
+        static float DistanceFromMe(Obj_AI_Base args)
+        {
             return Player.Position.Distance(args.Position);
         }
 
-        static float DistanceFromMe(Vector3 args) {
-            return Vector3.Distance(Player.Position,args);
+        static float DistanceFromMe(Vector3 args)
+        {
+            return Vector3.Distance(Player.Position, args);
         }
 
         #endregion misc
 
         #region AUTO W (Sentinel stuff)
         static readonly List<mysentinels> _mysentinels = new List<mysentinels>();
-        internal class mysentinels {
+        internal class mysentinels
+        {
             public string Name;
             public Vector3 Position;
-            public mysentinels(string name, Vector3 position) {
+            public mysentinels(string name, Vector3 position)
+            {
                 Name = name;
                 Position = position;
             }
         }
-        static int? sentinelcloserthan(Vector3 position, float distance) {
-            foreach (var xxxXxxx in ObjectManager.Get<AttackableUnit>().Where(obj => obj.Name.Contains("RobotBuddy"))) {
+        static int? sentinelcloserthan(Vector3 position, float distance)
+        {
+            foreach (var xxxXxxx in ObjectManager.Get<AttackableUnit>().Where(obj => obj.Name.Contains("RobotBuddy")))
+            {
                 if (Vector3.Distance(position, xxxXxxx.Position) < distance) { return 1; }
             }
             return 0;
         }
-        static void fillsentinels() {
+        static void fillsentinels()
+        {
             _mysentinels.Clear();
-            foreach (var xxxXxxx in ObjectManager.Get<AttackableUnit>().Where(obj => obj.Name.Contains("RobotBuddy"))) {
+            foreach (var xxxXxxx in ObjectManager.Get<AttackableUnit>().Where(obj => obj.Name.Contains("RobotBuddy")))
+            {
                 _mysentinels.Add(new mysentinels("RobotBuddy", xxxXxxx.Position));
             }
             //add the camps where to send sentinels to...
@@ -866,19 +983,22 @@ using EloBuddy;
             //_mysentinels.Add(new mysentinels("RiverTop", (Vector3)SummonersRift.Bushes.);
         }
 
-        static void AutoW() {
+        static void AutoW()
+        {
             if (!W.IsReady()) { return; }
             var closestenemy = HeroManager.Enemies.Find(x => DistanceFromMe(x) < autowenemyisntnear);
             if (closestenemy != null) { return; }
             if (Player.IsDashing() || Player.Spellbook.IsAutoAttacking || Player.InFountain() || Player.IsRecalling()) { return; }
-            if (autoWKey || Manapercent > autoWmana) {
+            if (autoWKey || Manapercent > autoWmana)
+            {
                 fillsentinels();
                 Random rnd = new Random();
                 var destinations = _mysentinels.Where(x => !x.Name.Contains("RobotBuddy") &&
                     DistanceFromMe(x.Position) < W.Range &&
                     DistanceFromMe(x.Position) > autowSpotTooCloseToMe &&
                     sentinelcloserthan(x.Position, autowsentinelisntnear) == 0).OrderBy(s => rnd.Next()).ToList();
-                if (destinations == null) {
+                if (destinations == null)
+                {
                     var dest = destinations.First();
                     W.Cast(dest.Position);
                     Notifications.AddNotification(new Notification("sending bug to:" + dest.Name, 5000).SetTextColor(Color.FromArgb(255, 0, 0)));
@@ -890,40 +1010,52 @@ using EloBuddy;
         #endregion
 
         #region WALLJUMP
-        static void draw_jump_spots() {
+        static void draw_jump_spots()
+        {
             const float circleRange = 75f;
-            foreach (var pos in jumpPos) {
-                if (Player.Distance(pos.Key) <= 500f || Player.Distance(pos.Value) <= 500f) {
+            foreach (var pos in jumpPos)
+            {
+                if (Player.Distance(pos.Key) <= 500f || Player.Distance(pos.Value) <= 500f)
+                {
                     DraWing.drawcircle("jump" + pos, 0.5, pos.Key, circleRange, Color.Blue);
                     DraWing.drawcircle("jump" + pos, 0.5, pos.Value, circleRange, Color.Blue);
                 }
             }
         }
 
-        static void ShowjumpsandFlee() {
+        static void ShowjumpsandFlee()
+        {
             if (!Q.IsReady()) { return; }
             DraWing.drawtext("jumpactive", 0.0333, Drawing.Width * 0.45f, Drawing.Height * 0.10f, Color.GreenYellow, "Wall Jump Active");
             var XXX = (Vector3)canjump();
-            if (XXX != null) {
+            if (XXX != null)
+            {
                 DraWing.drawtext("couldjump", 0.0333, Drawing.Width * 0.45f, Drawing.Height * 0.50f, Color.GreenYellow, "could jump here");
                 Q.Cast(XXX);
                 Orbwalking.Orbwalk(null, XXX, 90f, 0f, false, false);
-            } else {
+            }
+            else
+            {
                 DraWing.drawtext("couldjump", 0.0333, Drawing.Width * 0.45f, Drawing.Height * 0.50f, Color.GreenYellow, "can't jump here");
             }
 
-            foreach (var pos in jumpPos) {
-                if (Player.Distance(pos.Key) <= 50f || Player.Distance(pos.Value) <= 50f) {
+            foreach (var pos in jumpPos)
+            {
+                if (Player.Distance(pos.Key) <= 50f || Player.Distance(pos.Value) <= 50f)
+                {
                     var x = (Vector3)canjump();
-                    if (x != null) {
+                    if (x != null)
+                    {
                         Q.Cast(x);
                         Orbwalking.Orbwalk(null, x, 90f, 0f, false, false);
                     }
-                } else { return; }
+                }
+                else { return; }
             }
         }
 
-        static Vector3? canjump() {
+        static Vector3? canjump()
+        {
             var wallCheck = VectorHelper.GetFirstWallPoint(Player.Position, Player.Position);
             //loop angles around the player to check for a point to jump to
             //credits to hellsing wherever it has his code here somewhere... xD
@@ -933,23 +1065,30 @@ using EloBuddy;
             float currentStep = 0;
             Vector3 currentPosition = Player.Position;
             Vector2 direction = ((Player.Position.To2D() + 50) - currentPosition.To2D()).Normalized();
-            while (true) {
+            while (true)
+            {
                 if (currentStep > maxAngle && currentAngle < 0) { break; }
 
-                if ((currentAngle == 0 || currentAngle < 0) && currentStep != 0) {
+                if ((currentAngle == 0 || currentAngle < 0) && currentStep != 0)
+                {
                     currentAngle = (currentStep) * (float)Math.PI / 180;
                     currentStep += step;
-                } else if (currentAngle > 0) {
+                }
+                else if (currentAngle > 0)
+                {
                     currentAngle = -currentAngle;
                 }
 
                 Vector3 checkPoint;
 
                 // One time only check for direct line of sight without rotating
-                if (currentStep == 0) {
+                if (currentStep == 0)
+                {
                     currentStep = step;
                     checkPoint = currentPosition + 300 * direction.To3D();
-                } else {
+                }
+                else
+                {
                     checkPoint = currentPosition + 300 * direction.Rotated(currentAngle).To3D();
                 }
                 if (checkPoint.IsWall()) { continue; }
@@ -959,20 +1098,23 @@ using EloBuddy;
                 //get the jump point
                 Vector3 wallPositionOpposite = (Vector3)VectorHelper.GetFirstWallPoint((Vector3)wallCheck, currentPosition, 5);
                 //check if the walking path is big enough to be worth a jump..if not then just skip to the next loop
-                if (Player.GetPath(wallPositionOpposite).ToList().To2D().PathLength() - Player.Distance(wallPositionOpposite) < 230) {
+                if (Player.GetPath(wallPositionOpposite).ToList().To2D().PathLength() - Player.Distance(wallPositionOpposite) < 230)
+                {
                     DraWing.drawtext("couldjump", 0.0333, Drawing.Width * 0.45f, Drawing.Height * 0.50f, Color.GreenYellow, "not worth a jump...");
                     continue;
                 }
 
                 //check the jump distance and if its short enough then jump...
-                if (Player.Distance(wallPositionOpposite, true) < Math.Pow(300 - Player.BoundingRadius / 2, 2)) {
+                if (Player.Distance(wallPositionOpposite, true) < Math.Pow(300 - Player.BoundingRadius / 2, 2))
+                {
                     return wallPositionOpposite;
                 }
             }
             return null;
         }
 
-        static void FillPositions() {
+        static void FillPositions()
+        {
             jumpPos = new Dictionary<Vector3, Vector3>();
             var pos1001 = new Vector3(9340f, 4474f, -71.2406f);
             var pos1002 = new Vector3(9084f, 4640f, 51.95212f);
@@ -994,34 +1136,43 @@ using EloBuddy;
     }
     #region MY DRAWING CLASS FOR TIMED CIRCLES/TEXT/LINE
     //drawing class for timed drawings (pls jodus add this feature in l# xD)
-    internal class DraWing {
+    internal class DraWing
+    {
         private static readonly AIHeroClient Player = ObjectManager.Player;
-        public static void Drawing_OnDraw(EventArgs args) {
+        public static void Drawing_OnDraw(EventArgs args)
+        {
             var timerightnow = Game.Time;
             //remove old items from lists
             drawtextlist.RemoveAll(x => timerightnow - x.Addedon > x.Timer);
             drawcirclelist.RemoveAll(x => timerightnow - x.Addedon > x.Timer);
             drawlinelist.RemoveAll(x => timerightnow - x.Addedon > x.Timer);
             //draw everything...
-            if (drawtextlist.Count > 0) {
-                foreach (var x in drawtextlist) {
+            if (drawtextlist.Count > 0)
+            {
+                foreach (var x in drawtextlist)
+                {
                     Drawing.DrawText(x.X, x.Y, x.Color, x.Format);
                 }
             }
-            if (drawcirclelist.Count > 0) {
-                foreach (var x in drawcirclelist) {
+            if (drawcirclelist.Count > 0)
+            {
+                foreach (var x in drawcirclelist)
+                {
                     Render.Circle.DrawCircle(x.Position, x.Radius, x.Color);
                 }
             }
-            if (drawlinelist.Count > 0) {
-                foreach (var x in drawlinelist) {
+            if (drawlinelist.Count > 0)
+            {
+                foreach (var x in drawlinelist)
+                {
                     Drawing.DrawLine(x.X, x.Y, x.X2, x.Y2, x.Thickness, x.Color);
                 }
             }
         }
 
         private static List<Drawline> drawlinelist = new List<Drawline>();
-        private class Drawline {
+        private class Drawline
+        {
             public string Name { get; set; }
             public double Timer { get; set; }
             public float Addedon { get; set; }
@@ -1033,14 +1184,16 @@ using EloBuddy;
             public float Thickness { get; set; }
             public Color Color { get; set; }
         }
-        public static void drawline(string name, double timer, float x, float y, float x2, float y2, float thickness, Color color) {
+        public static void drawline(string name, double timer, float x, float y, float x2, float y2, float thickness, Color color)
+        {
             drawlinelist.RemoveAll(xXx => xXx.Name == name);
             drawlinelist.Add(new Drawline() { Name = name, Timer = timer, Addedon = Game.Time, X = x, Y = y, X2 = x2, Y2 = y2, Thickness = thickness, Color = color });
             return;
         }
 
         private static List<Drawcircle> drawcirclelist = new List<Drawcircle>();
-        private class Drawcircle {
+        private class Drawcircle
+        {
             public string Name { get; set; }
             public double Timer { get; set; }
             public float Addedon { get; set; }
@@ -1048,14 +1201,16 @@ using EloBuddy;
             public float Radius { get; set; }
             public Color Color { get; set; }
         }
-        public static void drawcircle(string name, double timer, Vector3 position, float radius, Color color) {
+        public static void drawcircle(string name, double timer, Vector3 position, float radius, Color color)
+        {
             drawcirclelist.RemoveAll(x => x.Name == name);
             drawcirclelist.Add(new Drawcircle() { Name = name, Timer = timer, Addedon = Game.Time, Position = position, Radius = radius, Color = color });
             return;
         }
 
         private static List<Drawtext> drawtextlist = new List<Drawtext>();
-        private class Drawtext {
+        private class Drawtext
+        {
             public string Name { get; set; }
             public double Timer { get; set; }
             public float Addedon { get; set; }
@@ -1064,7 +1219,8 @@ using EloBuddy;
             public Color Color { get; set; }
             public string Format { get; set; }
         }
-        public static void drawtext(string name, double timer, float X, float Y, Color color, string format) {
+        public static void drawtext(string name, double timer, float X, float Y, Color color, string format)
+        {
             drawtextlist.RemoveAll(x => x.Name == name);
             drawtextlist.Add(new Drawtext() { Name = name, Timer = timer, Addedon = Game.Time, X = X, Y = Y, Color = color, Format = format });
             return;
@@ -1073,14 +1229,16 @@ using EloBuddy;
     #endregion
 
     #region VECTOR HELPER FROM STACKOVERFLOW
-    internal class VectorHelper {
+    internal class VectorHelper
+    {
         private static readonly AIHeroClient player = ObjectManager.Player;
 
         // Credits to furikuretsu from Stackoverflow (http://stackoverflow.com/a/10772759)
         // Modified for my needs
         #region ConeCalculations
 
-        public static bool IsLyingInCone(Vector2 position, Vector2 apexPoint, Vector2 circleCenter, double aperture) {
+        public static bool IsLyingInCone(Vector2 position, Vector2 apexPoint, Vector2 circleCenter, double aperture)
+        {
             // This is for our convenience
             double halfAperture = aperture / 2;
 
@@ -1096,8 +1254,8 @@ using EloBuddy;
             // We'll use dotProd() to 
             // determine angle between apexToXVect and axis.
             bool isInInfiniteCone = DotProd(apexToXVect, axisVect) / Magn(apexToXVect) / Magn(axisVect) >
-                // We can safely compare cos() of angles 
-                // between vectors instead of bare angles.
+            // We can safely compare cos() of angles 
+            // between vectors instead of bare angles.
             Math.Cos(halfAperture);
 
             if (!isInInfiniteCone)
@@ -1111,27 +1269,33 @@ using EloBuddy;
             return isUnderRoundCap;
         }
 
-        private static float DotProd(Vector2 a, Vector2 b) {
+        private static float DotProd(Vector2 a, Vector2 b)
+        {
             return a.X * b.X + a.Y * b.Y;
         }
 
-        private static float Magn(Vector2 a) {
+        private static float Magn(Vector2 a)
+        {
             return (float)(Math.Sqrt(a.X * a.X + a.Y * a.Y));
         }
 
         #endregion
 
-        public static Vector2? GetFirstWallPoint(Vector3 from, Vector3 to, float step = 25) {
+        public static Vector2? GetFirstWallPoint(Vector3 from, Vector3 to, float step = 25)
+        {
             return GetFirstWallPoint(from.To2D(), to.To2D(), step);
         }
 
-        public static Vector2? GetFirstWallPoint(Vector2 from, Vector2 to, float step = 25) {
+        public static Vector2? GetFirstWallPoint(Vector2 from, Vector2 to, float step = 25)
+        {
             var direction = (to - from).Normalized();
 
-            for (float d = 0; d < from.Distance(to); d = d + step) {
+            for (float d = 0; d < from.Distance(to); d = d + step)
+            {
                 var testPoint = from + d * direction;
                 var flags = NavMesh.GetCollisionFlags(testPoint.X, testPoint.Y);
-                if (flags.HasFlag(CollisionFlags.Wall) || flags.HasFlag(CollisionFlags.Building)) {
+                if (flags.HasFlag(CollisionFlags.Wall) || flags.HasFlag(CollisionFlags.Building))
+                {
                     return from + (d - step) * direction;
                 }
             }
@@ -1139,7 +1303,8 @@ using EloBuddy;
             return null;
         }
 
-        public static List<Obj_AI_Base> GetDashObjects(IEnumerable<Obj_AI_Base> predefinedObjectList = null) {
+        public static List<Obj_AI_Base> GetDashObjects(IEnumerable<Obj_AI_Base> predefinedObjectList = null)
+        {
             List<Obj_AI_Base> objects;
             if (predefinedObjectList != null)
                 objects = predefinedObjectList.ToList();

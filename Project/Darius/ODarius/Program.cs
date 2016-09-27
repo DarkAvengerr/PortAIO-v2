@@ -7,11 +7,11 @@ using EloBuddy;
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        public static void Main()
         {
             try
             {
-                CustomEvents.Game.OnGameLoad += Darius.Load;
+                Darius.Load();
             }
             catch (Exception ex)
             {

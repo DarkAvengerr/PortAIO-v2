@@ -9,12 +9,12 @@ using EloBuddy;
 {
     internal class Program : Core
     {
-        private static void Main()
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnLoad;
+            Game_OnGameLoad();
         }
 
-        private static void OnLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != "Tristana")
                 return;

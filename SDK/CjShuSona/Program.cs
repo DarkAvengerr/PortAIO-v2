@@ -4,10 +4,10 @@ using EloBuddy;
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
-            LeagueSharp.SDK.Bootstrap.Init(args);
-            LeagueSharp.SDK.Events.OnLoad += Sona.OnLoad;                    
+            LeagueSharp.SDK.Bootstrap.Init(null);
+            Sona.OnLoad();
         }
     }
 }

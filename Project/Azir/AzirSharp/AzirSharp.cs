@@ -50,11 +50,11 @@ using EloBuddy;
         {
             Console.WriteLine("Azir started");
             /* CallBAcks */
-            CustomEvents.Game.OnGameLoad += onLoad;
+            onLoad();
 
         }
 
-        private static void onLoad(EventArgs args)
+        private static void onLoad()
         {
 
             if (ObjectManager.Player.ChampionName != CharName)

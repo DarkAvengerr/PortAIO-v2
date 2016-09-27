@@ -18,7 +18,7 @@ using EloBuddy;
         public static SpellSlot FlashSlot;
         public static float FlashRange = 450f;
 
-        internal static void Load(EventArgs args)
+        internal static void Load()
         {
             if (Player.ChampionName != ChampName)
                 return;

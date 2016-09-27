@@ -21,7 +21,7 @@ using EloBuddy;
         private static Vector3 _midPreV3 = new Vector2(6962, 8952).To3D();
         private static Vector3 _midAftV3 = new Vector2(6667, 8794).To3D();
 
-        public static void OnLoad(EventArgs args)
+        public static void OnLoad()
         {
             _canWallTumble = false; //(LeagueSharp.Common.Utility.Map.GetMap().Type == LeagueSharp.Common.Utility.Map.MapType.SummonersRift);
             Game.OnUpdate += OnUpdate;

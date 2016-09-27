@@ -13,9 +13,9 @@ using EloBuddy;
     internal class Program
     {
         // ReSharper disable once UnusedParameter.Local
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += HsCameraOnLoad;
+            HsCameraOnLoad();
         }
 
         private static AIHeroClient Player { get { return ObjectManager.Player; } }
@@ -42,7 +42,7 @@ using EloBuddy;
         /// Amazing OnLoad :jew:
         /// </summary>
         /// <param name="args"></param>
-        private static void HsCameraOnLoad(EventArgs args)
+        private static void HsCameraOnLoad()
         {
             _config = new Menu("hsCamera [Official]", "hsCamera", true);
             {

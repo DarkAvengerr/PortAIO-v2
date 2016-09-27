@@ -40,12 +40,12 @@ using EloBuddy;
             { Spells.R, new Spell(SpellSlot.R, 550)}
         };
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (Player.CharData.BaseSkinName != "Katarina")
             {

@@ -78,7 +78,7 @@ using EloBuddy;
 
         #region OnLoad
 
-        public static void OnLoad(EventArgs args)
+        public static void OnLoad()
         {
             try
             {

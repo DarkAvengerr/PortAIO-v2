@@ -48,16 +48,12 @@ using EloBuddy;
         /// Run Irelia script on gameload
         /// </summary>
         /// <param name="args"></param>
-        public static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Irelia;
+            Game_OnGameLoad();
         }
 
-        /// <summary>
-        /// Main Module
-        /// </summary>
-        /// <param name="args"></param>
-        private static void Irelia(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != "Irelia")
                 return;

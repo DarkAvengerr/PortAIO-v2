@@ -48,12 +48,12 @@ using EloBuddy;
 
         private static bool mustDebug = false;
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            LeagueSharp.Common.CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             Player = ObjectManager.Player;
 

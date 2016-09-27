@@ -27,11 +27,6 @@ using EloBuddy;
             Program.MenuActivator.AddItem(menuItem);
 
             ChampionSpell = GetSpell();
-            CustomEvents.Game.OnGameLoad += args =>
-            {
-                Console.Clear();
-
-            };
             Drawing.OnDraw += Drawing_OnDraw;
             Obj_AI_Base.OnBuffGain += Obj_AI_Base_OnBuffAdd;
             GameObject.OnCreate += OnCreateObject;

@@ -16,7 +16,7 @@ using EloBuddy;
         public const string ChampName = "Kindred";
         public static Spell Q, W, E, R;
 
-        internal static void OnLoad(EventArgs args)
+        internal static void OnLoad()
         {
             //            if (Player.ChampionName != ChampName)
             //                return;

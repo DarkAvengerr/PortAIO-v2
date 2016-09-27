@@ -18,11 +18,12 @@ namespace DonguKalista
         static Spell Q, W, E, R;
         public static AIHeroClient SoulBound { get; private set; }
 
-        public static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
-        public static void Game_OnGameLoad(EventArgs args)
+
+        static void Game_OnGameLoad()
         {
             Player = ObjectManager.Player;
             if (Player.BaseSkinName != ChampionName) return;

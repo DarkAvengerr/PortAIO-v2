@@ -42,12 +42,12 @@ using EloBuddy;
         private static int shadowdelay = 0;
         private static int delayw = 500;
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             try
             {

@@ -27,17 +27,12 @@ using EloBuddy;
         public static int nextJungleScan = 0;
         public static string[] jungleMobNames = new[] { "sru_blue", "sru_dragon", "sru_baron" };
 
-        static void Main(string[] args)
+        public static void Main()
         {
-            if (Game.Mode == GameMode.Running)
-            {
-                GameOnOnStart(new EventArgs());
-            }
-
-            Game.OnLoad += GameOnOnStart;
+            Game_OnGameLoad();
         }
 
-        private static void GameOnOnStart(EventArgs args)
+        static void Game_OnGameLoad()
         {
             Player = ObjectManager.Player;
             if (Player.ChampionName != ChampionName)

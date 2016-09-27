@@ -31,7 +31,7 @@ using EloBuddy;
         private static readonly Color _color = Color.Red;
         private static readonly Color FillColor = Color.Blue;
 
-        internal static void OnLoad(EventArgs args)
+        internal static void OnLoad()
         {
             if (Player.ChampionName != "Veigar")
                 return;

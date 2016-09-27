@@ -29,15 +29,12 @@ using EloBuddy;
         public static Items.Item CrystallineFlask = new Items.Item(2041);
         public static Items.Item ManaPotion = new Items.Item(2004);
         public static Items.Item BiscuitofRejuvenation = new Items.Item(2010);
-
-
-
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnLoad;
+            Game_OnGameLoad();
         }
 
-        private static void OnLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (Player.ChampionName != ChampName)
                 return;

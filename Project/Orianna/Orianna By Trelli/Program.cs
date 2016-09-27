@@ -30,13 +30,13 @@ using EloBuddy;
         public static Dictionary<string, List<string>> GinterruptList = new Dictionary<string, List<string>>();
         public static Dictionary<string, string> GswitchList = new Dictionary<string, string>();
 
-        private static void Main(string[] args)
+        #region OnGameLoad
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        #region OnGameLoad
-        private static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.BaseSkinName != ChampionName) return;
             //OriannaUpdater.InitializeOrianna();

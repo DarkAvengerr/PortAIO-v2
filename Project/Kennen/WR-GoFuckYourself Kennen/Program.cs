@@ -16,13 +16,12 @@ using EloBuddy;
         public static Spell Q, W, E, R;
         public static Orbwalking.Orbwalker Orbwalker;
         // ReSharper disable once UnusedParameter.Local
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnGameLoad;
+            Game_OnGameLoad();
         }
 
-
-        private static void OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != "Kennen")
             {

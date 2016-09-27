@@ -69,7 +69,7 @@ using EloBuddy;
 
             Console.WriteLine("Test");
 
-            CustomEvents.Game.OnGameLoad += this.Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
         #endregion
@@ -88,7 +88,7 @@ using EloBuddy;
 
         #region Methods
 
-        private void Game_OnGameLoad(EventArgs args)
+        private void Game_OnGameLoad()
         {
             foreach (var loadable in this.loadables)
             {

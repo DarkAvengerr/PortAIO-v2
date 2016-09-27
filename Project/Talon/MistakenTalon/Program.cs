@@ -14,12 +14,12 @@ using EloBuddy;
         private static Items.Item[] items;
         private static Menu scriptConfig;
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != "Talon") return;
             items = new[]

@@ -20,12 +20,12 @@ using EloBuddy;
         public static Items.Item Tiamat, Hydra;
         public static Menu menu;
         public static SpellSlot Ignite;
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             //string[] supportedChampions={"Blitzcank","Cassiopeia","Darius","Katarina",""}
 

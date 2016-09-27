@@ -7,11 +7,11 @@ using EloBuddy;
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        public static void Main()
         {
             try
             {
-                CustomEvents.Game.OnGameLoad += Zilean.OnLoad;
+                Zilean.OnLoad();
             }
             catch (Exception e)
             {

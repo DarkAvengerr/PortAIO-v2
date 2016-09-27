@@ -2,18 +2,18 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using System;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Hahaha_s_Tahm_Kench
+using EloBuddy;
+using LeagueSharp.Common;
+namespace Hahaha_s_Tahm_Kench
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.CharData.BaseSkinName != "Tahm Kench")
             {

@@ -47,13 +47,12 @@ using EloBuddy;
         public static int qOff = 0, wOff = 0, eOff = 0, rOff = 0;
         private static readonly AIHeroClient player = ObjectManager.Player;
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += OnLoad;
-
+            Game_OnGameLoad();
         }
 
-        private static void OnLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             if (player.ChampionName != ChampName)
                 return;

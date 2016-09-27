@@ -5,15 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using LeagueSharp.Common;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ThreshAsurvil
+using EloBuddy;
+using LeagueSharp.Common;
+namespace ThreshAsurvil
 {
-	class Program {
-		static void Main(string[] args) {
-			CustomEvents.Game.OnGameLoad += Thresh.OnLoad;
-		}
-
-		
-	}
+    class Program
+    {
+        public static void Main()
+        {
+            Thresh.OnLoad();
+        }
+    }
 }

@@ -6,15 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace RyzeAssembly
+using EloBuddy;
+using LeagueSharp.Common;
+namespace RyzeAssembly
 {
     class RyzeMain
     {
         private RyzeAssembly.Spells _spells;
         public RyzeAssembly.Menu _menu;
-        private string tittle,version;
+        private string tittle, version;
         private RyzeAssembly.Modes _modes;
         public RyzeAssembly.Modes Modes { get { return _modes; } }
         public string getName()
@@ -56,14 +56,14 @@ using EloBuddy;
         public RyzeMain()
         {
 
-           tittle = "[Ryze]Ryze Updated June 2016";
+            tittle = "[Ryze]Ryze Updated June 2016";
             version = "1.0.0.0";
-            CustomEvents.Game.OnGameLoad += OnLoad;
+            OnLoad();
         }
 
-        private void OnLoad(EventArgs args)
+        private void OnLoad()
         {
-         
+
             if (Hero.ChampionName != "Ryze") return;
             Chat.Print(getName() + " load good luck ;) " + getVersion());
             _spells = new Spells();
@@ -77,9 +77,9 @@ using EloBuddy;
 
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if(_modes.Functions!=null)
-            if(gapcloser.Sender.IsAttackingPlayer)
-            _spells.W.Cast(gapcloser.Sender);
+            if (_modes.Functions != null)
+                if (gapcloser.Sender.IsAttackingPlayer)
+                    _spells.W.Cast(gapcloser.Sender);
         }
 
         private void OnProcessSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -132,12 +132,12 @@ using EloBuddy;
                         _modes.Qcast = true;
                     }
                 }
-        
+
             }
 
             //   }
         }
-    
+
 
         private void update(EventArgs args)
         {
@@ -148,15 +148,15 @@ using EloBuddy;
         {
             if (Hero.IsDead) return;
             if (_menu.menu.Item("Draw Q Range").GetValue<bool>())
-                if(_spells.Q.IsReady())
-                Render.Circle.DrawCircle(Hero.Position, 900f, System.Drawing.Color.Blue, 2);
+                if (_spells.Q.IsReady())
+                    Render.Circle.DrawCircle(Hero.Position, 900f, System.Drawing.Color.Blue, 2);
             if (_menu.menu.Item("Draw W Range").GetValue<bool>())
                 if (_spells.W.IsReady())
                     Render.Circle.DrawCircle(Hero.Position, 600f, System.Drawing.Color.Blue, 2);
             if (_menu.menu.Item("Draw E Range").GetValue<bool>())
                 if (_spells.E.IsReady())
                     Render.Circle.DrawCircle(Hero.Position, 600f, System.Drawing.Color.Blue, 2);
-       
+
         }
     }
 }

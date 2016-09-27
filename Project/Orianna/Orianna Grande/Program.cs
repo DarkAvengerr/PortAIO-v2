@@ -436,7 +436,12 @@ namespace OriannaGrande
         ///     Fired when the game loads.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
-        private static void Game_OnGameLoad(EventArgs args)
+        public static void Main()
+        {
+            Game_OnGameLoad();
+        }
+
+        static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Orianna")
             {
@@ -535,16 +540,6 @@ namespace OriannaGrande
                         () => W.Cast(qwTarget));
                 }
             }
-        }
-
-        /// <summary>
-        ///     The entry point for the application.
-        /// </summary>
-        /// <param name="args">The arguments.</param>
-        // ReSharper disable once UnusedParameter.Local
-        private static void Main(string[] args)
-        {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
         }
 
         /// <summary>

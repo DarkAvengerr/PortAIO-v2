@@ -46,12 +46,12 @@ using EloBuddy;
         public static int[] abilitySequence;
         public static int qOff = 0, wOff = 0, eOff = 0, rOff = 0;
 
-        private static void Main(string[] args)
+        public static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        static void Game_OnGameLoad()
         {
             Player = ObjectManager.Player;
 

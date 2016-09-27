@@ -14,7 +14,7 @@ using EloBuddy;
     {
         #region Methods
 
-        private static void Main(string[] args)
+        public static void Main()
         {
             var bootstrap = new LeagueSharpMultiBootstrap();
 

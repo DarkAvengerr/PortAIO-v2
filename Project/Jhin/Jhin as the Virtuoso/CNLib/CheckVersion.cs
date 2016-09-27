@@ -40,19 +40,6 @@ namespace CNLib {
 				Menu.AddBool("检查版本", "检查版本", true);
 				Menu.AddBool("新闻", "提示新闻", true);
 			}
-
-			CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
-		}
-
-		private static void Game_OnGameLoad(EventArgs args) {
-			if (MenuConfig.GetBool("检查版本"))
-			{
-				UpdateCheck();
-			}
-			if (MenuConfig.GetBool("新闻") && !string.IsNullOrEmpty(NewsUrl))
-			{
-				News();
-			}
 		}
 
 		private static async void News() {
