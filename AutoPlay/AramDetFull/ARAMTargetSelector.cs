@@ -17,8 +17,8 @@ namespace ARAMDetFull
         {
             try
             {
-                var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                if (target != null && target.IsValidTarget() && ObjectManager.Player.Distance(target) <= Player.Instance.AttackRange)
+                var target = TargetSelector.GetTarget(range, TargetSelector.DamageType.Physical);
+                if (target != null && target.IsValidTarget())
                 {
                     return target;
                 }
@@ -33,7 +33,7 @@ namespace ARAMDetFull
 
         public static AIHeroClient getSafeMeleeTarget(float range = 750)
         {
-            return getBestTarget(range, true, new Vector3(), HeroManager.Enemies.Where(ene => ene != null && MapControl.safeGap(ene)).ToList());
+            return getBestTarget(range, true, new Vector3(), EloBuddy.SDK.EntityManager.Heroes.Enemies.Where(ene => ene != null && MapControl.safeGap(ene)).ToList());
         }
 
         public static AIHeroClient getBestTargetAly(float range, bool calcInRadius = false, Vector3 fromPlus = new Vector3())
@@ -41,7 +41,7 @@ namespace ARAMDetFull
             try
             {
                 List<AIHeroClient> targetable_ones =
-                    HeroManager.Allies.Where(ob => ob != null && ob.HealthPercent < 80 && !IsInvulnerable(ob) && !ob.IsDead && !ob.IsZombie
+                    EloBuddy.SDK.EntityManager.Heroes.Allies.Where(ob => ob != null && ob.HealthPercent < 80 && !IsInvulnerable(ob) && !ob.IsDead && !ob.IsZombie
                         && (ob.IsValidTarget((!calcInRadius) ? range : range + 90) || ob.IsValidTarget((!calcInRadius) ? range : range + 90, true, fromPlus))).ToList();
 
                 if (targetable_ones.Count == 0)

@@ -810,7 +810,6 @@ namespace ARAMDetFull
                 if (sender.IsValid<MissileClient>())
                 {
                     var missile = (MissileClient)sender;
-                    // Ally Turret -> Enemy Hero
                     if (missile.SpellCaster.IsValid<Obj_AI_Turret>() && missile.SpellCaster.IsEnemy &&
                         missile.Target.IsValid<AIHeroClient>() && missile.Target.IsAlly)
                     {
@@ -876,6 +875,7 @@ namespace ARAMDetFull
                         ObjectManager.Get<Obj_AI_Minion>().Any(min => min.IsTargetable && min.IsHPBarRendered && min.IsAlly && min.Health > 50) ||
                         ARAMDetFull.gameStart + 44 * 1000 < ARAMDetFull.now;
                 }
+
                 if (!haveSeenMinion)
                     return;
 
@@ -888,7 +888,7 @@ namespace ARAMDetFull
                     Console.WriteLine(ex);
                 }
 
-                if ((player.InShop() || player.IsDead)/* && nextItem != null && nextItem.goldReach <= player.Gold*/)
+                if ((player.InShop() || player.IsDead))
                 {
                     buyItems();
                 }
@@ -899,12 +899,14 @@ namespace ARAMDetFull
                 }
 
                 setRambo();
+
                 if (player.IsDead || player.IsChannelingImportantSpell())
                     return;
+
                 var fightLevel = MapControl.fightLevel();
                 MapControl.updateReaches();
 
-                var closestEnemy = EloBuddy.SDK.EntityManager.Heroes.Enemies.Where(ene => !ene.IsDead && ene.IsTargetable && !ARAMTargetSelector.IsInvulnerable(ene)).OrderBy(ene => player.Position.Distance(ene.Position, true)).FirstOrDefault();
+                var closestEnemy = EloBuddy.SDK.EntityManager.Heroes.Enemies.Where(ene => !ene.IsDead && ene.IsTargetable && ene.IsHPBarRendered && !ARAMTargetSelector.IsInvulnerable(ene)).OrderBy(ene => player.Position.Distance(ene.Position, true)).FirstOrDefault();
                 if (closestEnemy != null && ramboMode)
                 {
                     DeathWalker.deathWalk(closestEnemy.Position, true);
@@ -964,7 +966,7 @@ namespace ARAMDetFull
                 var lookRange = player.AttackRange + ((player.IsMelee) ? 260 : 155);
                 var easyKill =
                    EloBuddy.SDK.EntityManager.Heroes.Enemies.FirstOrDefault(ene => ene != null && !ene.IsZombie && !ene.IsDead && ene.Distance(player, true) < lookRange * lookRange &&
-                                                             !ARAMTargetSelector.IsInvulnerable(ene) && ene.Health / 1.5 < player.GetAutoAttackDamage(ene));
+                                                             !ARAMTargetSelector.IsInvulnerable(ene) && ene.Health / 1.5 < player.GetAutoAttackDamage(ene) && ene.IsHPBarRendered);
 
                 if (easyKill != null)
                 {
@@ -1009,7 +1011,7 @@ namespace ARAMDetFull
 
                     var closestObj =
                         EloBuddy.SDK.EntityManager.Turrets.Enemies.Where(
-                            obj => obj.IsValidTarget(700) && !obj.IsDead && !obj.IsInvulnerable)
+                            obj => obj.IsValidTarget(700) && !obj.IsDead && !obj.IsInvulnerable && obj.IsTargetable)
                             .OrderBy(obj => obj.Position.Distance(player.Position, true)).FirstOrDefault();
 
                     if (closestObj != null && (!(closestObj is Obj_AI_Turret) || Sector.towerContainsAlly((Obj_AI_Turret)closestObj)))

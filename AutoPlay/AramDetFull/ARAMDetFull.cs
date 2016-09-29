@@ -42,7 +42,7 @@ namespace ARAMDetFull
          *  -Make velkoz
          */
         public static TextWriter defaultOut;
-
+        public delegate void OnGameEndHandler(bool win);
 
         public ARAMDetFull()
         {
@@ -67,7 +67,6 @@ namespace ARAMDetFull
             try
             {
                 defaultOut = System.Console.Out;
-                System.Console.SetOut(new ErrorLogger(defaultOut));
 
                 Config = new Menu("ARAM", "aramBot", true);
 
@@ -75,21 +74,34 @@ namespace ARAMDetFull
                 DeathWalker.AddToMenu(orbwalkerMenu);
                 Config.AddSubMenu(orbwalkerMenu);
 
-                //Extra
-                Config.AddSubMenu(new Menu("Extra Sharp", "extra"));
-                Config.SubMenu("extra").AddItem(new MenuItem("debugDraw", "Debug draw")).SetValue(false);
-                Config.SubMenu("extra").AddItem(new MenuItem("dataGathering", "Send errors to server")).SetValue(false);
-
-
-                //Debug
-                Config.AddSubMenu(new Menu("Debug", "debug"));
-                Config.SubMenu("debug").AddItem(new MenuItem("db_targ", "Debug Target")).SetValue(new KeyBind('T', KeyBindType.Press, false));
-
 
                 Config.AddToMainMenu();
 
                 Game.OnUpdate += OnGameUpdate;
-                Game.OnEnd += OnGameEnd;
+
+                var gameEndNotified = false;
+
+                OnGameEnd += ARAMDetFull_OnGameEnd;
+
+                Game.OnTick += delegate
+                {
+                    if (gameEndNotified)
+                    {
+                        return;
+                    }
+                    var nexus = ObjectManager.Get<Obj_HQ>();
+                    if (nexus == null)
+                    {
+                        return;
+                    }
+                    if (nexus.Any(n => n.IsDead || n.Health.Equals(0)))
+                    {
+                        var win = ObjectManager.Get<Obj_HQ>().Any(n => n.Health.Equals(0));
+                        OnGameEnd?.Invoke(win);
+                        gameEndNotified = true;
+                    }
+                };
+
                 ARAMSimulator.setupARMASimulator();
             }
             catch (Exception ex)
@@ -98,13 +110,13 @@ namespace ARAMDetFull
             }
         }
 
-
-        private static void OnGameEnd(EventArgs args)
+        private static void ARAMDetFull_OnGameEnd(bool win)
         {
-            Thread.Sleep(5000);//Stole from myo lol
-            Game.QuitGame();
+            var rnd = new Random().Next(15000, 30000) + Game.Ping;
+            EloBuddy.SDK.Core.DelayAction(() => { Game.QuitGame(); }, rnd);
         }
 
+        public static event OnGameEndHandler OnGameEnd;
         private static int lastTick = now;
 
         private static void OnGameUpdate(EventArgs args)

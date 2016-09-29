@@ -404,12 +404,12 @@ namespace ARAMDetFull
         public static int fightLevel()
         {
             int count = 0;
-            foreach (var enem in enemy_champions.Where(ene => !ene.hero.IsDead && ene.hero.IsVisible).OrderBy(ene => ene.hero.Distance(ObjectManager.Player, true)))
+            foreach (var enem in enemy_champions.Where(ene => !ene.hero.IsDead && ene.hero.IsVisible && ene.hero.IsHPBarRendered).OrderBy(ene => ene.hero.Distance(ObjectManager.Player, true)))
             {
                 if (myControler.canDoDmgTo(enem.hero) * 0.7f > enem.hero.Health)
                     count++;
 
-                if (ally_champions.Where(ene => !ene.hero.IsDead && !ene.hero.IsMe).Any(ally => enem.hero.Distance(ally.hero, true) < 600 * 600))
+                if (ally_champions.Where(ene => !ene.hero.IsDead && !ene.hero.IsMe && ene.hero.IsHPBarRendered).Any(ally => enem.hero.Distance(ally.hero, true) < 600 * 600))
                 {
                     count++;
                 }
@@ -419,12 +419,12 @@ namespace ARAMDetFull
 
         public static AIHeroClient fightIsOn()
         {
-            foreach (var enem in enemy_champions.Where(ene => !ene.hero.IsDead && ene.hero.IsVisible && !ene.hero.IsZombie).OrderBy(ene => ene.hero.Distance(ObjectManager.Player, true)))
+            foreach (var enem in enemy_champions.Where(ene => !ene.hero.IsDead && ene.hero.IsVisible && ene.hero.IsHPBarRendered && !ene.hero.IsZombie).OrderBy(ene => ene.hero.Distance(ObjectManager.Player, true)))
             {
                 if (myControler.canDoDmgTo(enem.hero) * 0.7f > enem.hero.Health)
                     return enem.hero;
 
-                if (ally_champions.Where(ene => !ene.hero.IsDead && !ene.hero.IsMe).Any(ally => enem.hero.Distance(ally.hero, true) < 600 * 600))
+                if (ally_champions.Where(ene => !ene.hero.IsDead && !ene.hero.IsMe && ene.hero.IsHPBarRendered).Any(ally => enem.hero.Distance(ally.hero, true) < 600 * 600))
                 {
                     return enem.hero;
                 }
@@ -435,10 +435,10 @@ namespace ARAMDetFull
 
         public static bool fightIsClose()
         {
-            foreach (var enem in enemy_champions.Where(ene => !ene.hero.IsDead && ene.hero.IsVisible).OrderBy(ene => ene.hero.Distance(ObjectManager.Player, true)))
+            foreach (var enem in enemy_champions.Where(ene => !ene.hero.IsDead && ene.hero.IsVisible && ene.hero.IsHPBarRendered).OrderBy(ene => ene.hero.Distance(ObjectManager.Player, true)))
             {
 
-                if (ally_champions.Where(ene => !ene.hero.IsDead && !ene.hero.IsMe).Any(ally => enem.hero.Distance(ally.hero, true) < 550 * 550))
+                if (ally_champions.Where(ene => !ene.hero.IsDead && !ene.hero.IsMe && ene.hero.IsHPBarRendered).Any(ally => enem.hero.Distance(ally.hero, true) < 550 * 550))
                 {
                     return true;
                 }
@@ -457,7 +457,7 @@ namespace ARAMDetFull
             if (myControler.canDoDmgTo(target) * 0.75 > target.Health)
                 return true;
 
-            if (ally_champions.Where(ene => !ene.hero.IsDead && !ene.hero.IsMe).Any(ally => target.Distance(ally.hero, true) < 300 * 300))
+            if (ally_champions.Where(ene => !ene.hero.IsDead && !ene.hero.IsMe && ene.hero.IsHPBarRendered).Any(ally => target.Distance(ally.hero, true) < 300 * 300))
             {
                 return true;
             }
@@ -468,9 +468,9 @@ namespace ARAMDetFull
         public static int balanceAroundPoint(Vector2 point, float range)
         {
             int balance = 0;
-            balance -= enemy_champions.Where(ene => !ene.hero.IsDead).Count(ene => ene.hero.Distance(point, true) < range * range);
+            balance -= enemy_champions.Where(ene => !ene.hero.IsDead && ene.hero.IsHPBarRendered).Count(ene => ene.hero.Distance(point, true) < range * range);
 
-            balance += ally_champions.Where(aly => !aly.hero.IsDead).Count(aly => aly.hero.Distance(point, true) < (range - 150) * (range - 150));
+            balance += ally_champions.Where(aly => !aly.hero.IsDead && aly.hero.IsHPBarRendered).Count(aly => aly.hero.Distance(point, true) < (range - 150) * (range - 150));
             return balance;
         }
 
@@ -481,7 +481,7 @@ namespace ARAMDetFull
             {
                 var eneBalance = 0;
                 var reach = ene.reach + rangePlus;
-                if (!ene.hero.IsDead && ene.hero.Distance(point, true) < reach * reach && !unitIsUseless(ene.hero) && !notVisibleAndMostLieklyNotThere(ene.hero))
+                if (!ene.hero.IsDead && ene.hero.IsHPBarRendered && ene.hero.Distance(point, true) < reach * reach && !unitIsUseless(ene.hero) && !notVisibleAndMostLieklyNotThere(ene.hero))
                 {
                     eneBalance -= (int)((ene.hero.HealthPercent + 20 - ene.hero.Deaths * 4 + ene.hero.ChampionsKilled * 4));
                     if (!ene.hero.IsFacing(ObjectManager.Player))
@@ -511,6 +511,11 @@ namespace ARAMDetFull
 
         public static double unitIsUselessFor(Obj_AI_Base unit)
         {
+            if (unit == null)
+            {
+                return 0;
+            }
+
             var result =
                 unit.Buffs.Where(
                     buff =>
