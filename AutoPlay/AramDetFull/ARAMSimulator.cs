@@ -978,7 +978,7 @@ namespace ARAMDetFull
                 if (balance < 0)
                     DeathWalker.deathWalk(player.Position.To2D().Extend(fromNex.Position.To2D(), 600).To3D(), true);
 
-                if ((!player.IsMelee || fightLevel < 2) && HeroManager.Enemies.Any(h => !h.IsDead) && moveToRelicIfForHeal())
+                if ((!player.IsMelee || fightLevel < 2) && EloBuddy.SDK.EntityManager.Heroes.Enemies.Any(h => !h.IsDead) && moveToRelicIfForHeal())
                 {
                     return;
                 }

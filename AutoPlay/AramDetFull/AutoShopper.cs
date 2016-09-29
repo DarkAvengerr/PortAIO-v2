@@ -294,7 +294,7 @@ using EloBuddy; namespace ARAMDetFull
                 selected = primary;
             if (condition == ItemCondition.ENEMY_MR)
             {
-                if(HeroManager.Enemies.Sum(ene => ene.SpellBlock) > HeroManager.Enemies.Sum(ene => ene.Armor))
+                if(EloBuddy.SDK.EntityManager.Heroes.Enemies.Sum(ene => ene.SpellBlock) > EloBuddy.SDK.EntityManager.Heroes.Enemies.Sum(ene => ene.Armor))
                     selected = primary;
                 else
                     selected = secondary;
@@ -302,7 +302,7 @@ using EloBuddy; namespace ARAMDetFull
 
             if (condition == ItemCondition.ENEMY_RANGED)
             {
-                if (HeroManager.Enemies.Count(ene => ene.IsRanged) > HeroManager.Enemies.Count(ene => ene.IsMelee))
+                if (EloBuddy.SDK.EntityManager.Heroes.Enemies.Count(ene => ene.IsRanged) > EloBuddy.SDK.EntityManager.Heroes.Enemies.Count(ene => ene.IsMelee))
                     selected = primary;
                 else
                     selected = secondary;
@@ -310,7 +310,7 @@ using EloBuddy; namespace ARAMDetFull
 
             if (condition == ItemCondition.ENEMY_AP)
             {
-                if (HeroManager.Enemies.Sum(ene => ene.FlatMagicDamageMod) > HeroManager.Enemies.Sum(ene => ene.FlatPhysicalDamageMod) * 2.0f)
+                if (EloBuddy.SDK.EntityManager.Heroes.Enemies.Sum(ene => ene.FlatMagicDamageMod) > EloBuddy.SDK.EntityManager.Heroes.Enemies.Sum(ene => ene.FlatPhysicalDamageMod) * 2.0f)
                     selected = primary;
                 else
                     selected = secondary;
