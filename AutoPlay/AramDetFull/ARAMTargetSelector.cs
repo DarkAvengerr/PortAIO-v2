@@ -17,24 +17,12 @@ namespace ARAMDetFull
         {
             try
             {
-                if (fromEnes == null)
-                    fromEnes = EloBuddy.SDK.EntityManager.Heroes.Enemies.Where(ene => ene != null && !ene.IsDead && ene.IsVisible && ene.IsHPBarRendered && (ene.MaxMana < 300 || (ene.MaxMana >= 300 && ene.ManaPercent > 15)) || ene.HealthPercent > 15 || ene.FlatPhysicalDamageMod > 40 + ene.Level * 6).ToList();
-
-                List<AIHeroClient> targetable_ones =
-                    fromEnes.Where(ob => ob != null && !IsInvulnerable(ob) && !ob.IsDead && !ob.IsZombie
-                        && (ob.IsValidTarget((!calcInRadius) ? range : range + 90) || ob.IsValidTarget((!calcInRadius) ? range : range + 90, true, fromPlus))).ToList();
-
-                if (targetable_ones.Count == 0)
-                    return null;
-                if (targetable_ones.Count == 1)
-                    return targetable_ones.FirstOrDefault();
-
-                AIHeroClient lowestHp = targetable_ones.OrderBy(tar => tar.Health / ARAMSimulator.player.GetAutoAttackDamage(tar)).FirstOrDefault();
-                if (lowestHp != null && lowestHp.MaxHealth != 0 && lowestHp.HealthPercent < 75)
-                    return lowestHp;
-                AIHeroClient bestStats = targetable_ones.OrderByDescending(tar => (tar.ChampionsKilled + tar.Assists) / ((tar.Deaths == 0) ? 0.5f : tar.Deaths)).FirstOrDefault();
-
-                return bestStats ?? null;
+                var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
+                if (target != null && target.IsValidTarget() && ObjectManager.Player.Distance(target) <= Player.Instance.AttackRange)
+                {
+                    return target;
+                }
+                return null;
             }
             catch (Exception e)
             {

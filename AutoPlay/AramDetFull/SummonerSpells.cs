@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DetuksSharp;
-using LeagueSharp;using DetuksSharp;
+using LeagueSharp;
+using DetuksSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace ARAMDetFull
+using EloBuddy;
+namespace ARAMDetFull
 {
     abstract class SumSpell
     {
@@ -21,7 +23,7 @@ using EloBuddy; namespace ARAMDetFull
         }
 
     }
-    
+
 
 
     class SummonerSpells
@@ -96,7 +98,7 @@ using EloBuddy; namespace ARAMDetFull
 
         public void useSumoners()
         {
-            if(sSpell1 != null)
+            if (sSpell1 != null)
                 sSpell1.useSpell();
             if (sSpell2 != null)
                 sSpell2.useSpell();
@@ -119,21 +121,21 @@ using EloBuddy; namespace ARAMDetFull
                         if (MapControl.safeGap(snowed))
                         {
                             spell.Cast();
-                            Aggresivity.addAgresiveMove(new AgresiveMove(100,2500,true));
+                            Aggresivity.addAgresiveMove(new AgresiveMove(100, 2500, true));
                         }
                     }
                 }
                 else
                 {
                     var tar = ARAMTargetSelector.getBestTarget(spell.Range);
-                    if (tar != null )
+                    if (tar != null)
                     {
                         spell.Cast(tar);
                         snowed = tar;
                     }
                 }
 
-                
+
             }
 
             public SnowBall(Spell spel)
@@ -155,7 +157,7 @@ using EloBuddy; namespace ARAMDetFull
                     return;
                 if (player.CountEnemysInRange(600) > 1 && player.HealthPercent < 40)
                 {
-                        spell.Cast(player.Position.Extend(ARAMSimulator.fromNex.Position, 450));
+                    spell.Cast(player.Position.Extend(ARAMSimulator.fromNex.Position, 450));
                 }
             }
 
@@ -172,7 +174,7 @@ using EloBuddy; namespace ARAMDetFull
                 if (!spell.IsReady())
                     return;
                 var tar = ARAMTargetSelector.getBestTarget(450);
-                if(tar != null)
+                if (tar != null)
                     if (tar.HealthPercent > 20 && tar.HealthPercent < 50)
                     {
                         spell.Cast(tar);

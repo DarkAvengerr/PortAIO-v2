@@ -449,6 +449,11 @@ namespace ARAMDetFull
 
         public static bool fightIsOn(Obj_AI_Base target)
         {
+            if (target == null)
+            {
+                return false;
+            }
+
             if (myControler.canDoDmgTo(target) * 0.75 > target.Health)
                 return true;
 
@@ -567,7 +572,7 @@ namespace ARAMDetFull
         public static Obj_AI_Base ClosestEnemyTobase()
         {
             return
-                HeroManager.Enemies
+                EloBuddy.SDK.EntityManager.Heroes.Enemies
                     .Where(h => h.IsValid && !h.IsDead && h.IsVisible && h.IsEnemy)
                     .OrderBy(h => h.Distance(ARAMSimulator.fromNex.Position, true))
                     .FirstOrDefault();

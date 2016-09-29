@@ -86,7 +86,7 @@ using EloBuddy; namespace ARAMDetFull
 
 
                 Config.AddToMainMenu();
-                Drawing.OnDraw += onDraw;
+                //Drawing.OnDraw += onDraw;
                 Game.OnUpdate += OnGameUpdate;
                 Game.OnEnd += OnGameEnd;
                 ARAMSimulator.setupARMASimulator();
@@ -100,7 +100,6 @@ using EloBuddy; namespace ARAMDetFull
 
         private static void OnGameEnd(EventArgs args)
         {
-            DataGathering.sendEndGame(ARAMSimulator.toNex.Health<ARAMSimulator.fromNex.Health);
             Thread.Sleep(5000);//Stole from myo lol
             Game.QuitGame();
         }

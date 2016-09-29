@@ -175,18 +175,6 @@ namespace DetuksSharp
 
         }
 
-        private static void onCreate(GameObject sender, EventArgs args)
-        {
-            if (!azir) return;
-            if (sender.Name == "AzirSoldier" && sender.IsAlly)
-            {
-                Obj_AI_Minion myMin = sender as Obj_AI_Minion;
-                if (myMin.BaseSkinName == "AzirSoldier")
-                    azirSoldiers.Add(myMin);
-            }
-
-        }
-
         private static void afterAttack(Obj_AI_Base sender, AttackableUnit target)
         {
             isTryingToAttack = false;
@@ -219,13 +207,6 @@ namespace DetuksSharp
 
         private static void onStopAutoAttack(Obj_AI_Base sender, SpellbookStopCastEventArgs args)
         {
-            if (sender.IsValid && sender.IsMe && EloBuddy.SDK.Orbwalker.IsRanged && (args.DestroyMissile && args.StopAnimation))
-            {
-                Console.WriteLine("Cancel auto");
-                var resetTo = (menu.Item("betaStut").GetValue<bool>()) ? previousAttack : 0;
-                lastAutoAttack = resetTo;
-                lastAutoAttackMove = resetTo;
-            }
         }
 
         private static void onStartAutoAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -310,8 +291,96 @@ namespace DetuksSharp
         {
             bool soliderHit = false;
 
+            if (targetOnlyChampions)
+                return GetBestHeroTarget(out soliderHit);
+
+            if (ForcedTarget != null && !onlySolider)
+            {
+                if (inAutoAttackRange(ForcedTarget) && !ForcedTarget.IsDead && ForcedTarget.IsHPBarRendered && ForcedTarget.IsVisible)
+                    return ForcedTarget;
+                ForcedTarget = null;
+            }
+
+            if (azir)
+            {
+                enemiesAround = ObjectManager.Get<Obj_AI_Base>()
+                .Where(targ => targ.IsValid && inAutoAttackRange(targ) && targ.IsEnemy && targ.IsHPBarRendered).ToList();
+            }
+            else
+            {
+                enemiesAround = ObjectManager.Get<Obj_AI_Base>()
+                    .Where(targ => targ.IsValidTarget(getTargetSearchDist()) && targ.IsEnemy && targ.IsHPBarRendered && targ.IsTargetable && !targ.IsDead).ToList();
+            }
+
+            Obj_AI_Base best = null;
+
+            //Lat hit
+            float bestPredHp = float.MaxValue;
+
+            if (azir)
+            {
+                var hero1 = GetBestHeroTarget(out soliderHit);
+
+                if (hero1 != null && (enemyInAzirRange(hero1) || hero1 is Obj_AI_Minion) && (!onlySolider || soliderHit))
+                    return hero1;
+            }
+
+            if (!onlySolider)
+            {
+                //check motherfuckers that are attacked by tower
+                if (CurrentMode == Mode.Harass || CurrentMode == Mode.Lasthit || CurrentMode == Mode.LaneClear)
+                {
+
+                    foreach (var targ in enemiesAround)
+                    {
+                        var towerShot = HealthDeath.attackedByTurret(targ);
+                        if (towerShot == null) continue;
+                        var hpOnDmgPred = HealthDeath.getLaneClearPred(targ, towerShot.hitOn + 10 - now);
+
+                        var aa = getRealAADmg(targ);
+                        if (hpOnDmgPred > aa && hpOnDmgPred <= aa * 2f)
+                        {
+                            return targ;
+                        }
+                    }
+                }
+            }
+
+            if (!onlySolider)
+            {
+                if (CurrentMode == Mode.Harass || CurrentMode == Mode.Lasthit || CurrentMode == Mode.LaneClear)
+                {
+                    //Last hit
+                    foreach (var targ in enemiesAround.OrderByDescending(min => HealthDeath.getLastHitPredPeriodic(min, timeTillDamageOn(min))))
+                    {
+                        var hpOnDmgPred = HealthDeath.getLastHitPred(targ, timeTillDamageOn(targ));
+                        if (hpOnDmgPred <= 0 && (lastAutoAttackUnit == null || lastAutoAttackUnit.NetworkId != targ.NetworkId))
+                            FireOnUnkillable(player, targ, HealthDeath.getTimeTillDeath(targ));
+                        if (hpOnDmgPred <= 0 || hpOnDmgPred > (int)getRealAADmg(targ))
+                            continue;
+                        var cannonBonus = (targ.BaseSkinName == "SRU_ChaosMinionSiege") ? 100 : 0;
+                        if (best == null || hpOnDmgPred - cannonBonus < bestPredHp)
+                        {
+                            best = targ;
+                            bestPredHp = hpOnDmgPred;
+                        }
+                    }
+                    if (best != null)
+                        return best;
+                }
+            }
+
+            var hero = GetBestHeroTarget(out soliderHit);
+
+            if (hero != null && (!onlySolider || soliderHit))
+                return hero;
+
+            if (!onlySolider)
+                if (ShouldWaitAllTogether())
+                    return null;
+
             /* turrets / inhibitors / nexus */
-            if (BottingMode)
+            if (CurrentMode == Mode.LaneClear)
             {
                 /* turrets */
                 foreach (var turret in
@@ -336,110 +405,6 @@ namespace DetuksSharp
                 }
             }
 
-            if (targetOnlyChampions)
-                return GetBestHeroTarget(out soliderHit);
-
-            if (ForcedTarget != null && !onlySolider)
-            {
-                if (inAutoAttackRange(ForcedTarget) && !ForcedTarget.IsDead && ForcedTarget.IsHPBarRendered && ForcedTarget.IsVisible)
-                    return ForcedTarget;
-                ForcedTarget = null;
-            }
-            if (azir)
-            {
-                enemiesAround = ObjectManager.Get<Obj_AI_Base>()
-                .Where(targ => targ.IsValid && inAutoAttackRange(targ) && targ.IsEnemy && targ.IsHPBarRendered).ToList();
-            }
-            else
-            {
-                enemiesAround = ObjectManager.Get<Obj_AI_Base>()
-                    .Where(targ => targ.IsValidTarget(getTargetSearchDist()) && targ.IsEnemy && targ.IsHPBarRendered && targ.IsTargetable && !targ.IsDead).ToList();
-            }
-
-            Obj_AI_Base best = null;
-
-            //Lat hit
-            float bestPredHp = float.MaxValue;
-
-            if (azir)
-            {
-                var hero1 = GetBestHeroTarget(out soliderHit);
-
-                if (hero1 != null && (enemyInAzirRange(hero1) || hero1 is Obj_AI_Minion) && (!onlySolider || soliderHit))
-                    return hero1;
-            }
-            if (!onlySolider)
-                //check motherfuckers that are attacked by tower
-                if (CurrentMode == Mode.Harass || CurrentMode == Mode.Lasthit || CurrentMode == Mode.LaneClear)
-                {
-
-                    foreach (var targ in enemiesAround)
-                    {
-                        var towerShot = HealthDeath.attackedByTurret(targ);
-                        if (towerShot == null) continue;
-                        var hpOnDmgPred = HealthDeath.getLaneClearPred(targ, towerShot.hitOn + 10 - now);
-
-                        var aa = getRealAADmg(targ);
-                        if (hpOnDmgPred > aa && hpOnDmgPred <= aa * 2f)
-                        {
-                            return targ;
-                        }
-                    }
-                }
-            if (!onlySolider)
-                if (CurrentMode == Mode.Harass || CurrentMode == Mode.Lasthit || CurrentMode == Mode.LaneClear)
-                {
-                    //Last hit
-                    foreach (var targ in enemiesAround.OrderByDescending(min => HealthDeath.getLastHitPredPeriodic(min, timeTillDamageOn(min))))
-                    {
-                        var hpOnDmgPred = HealthDeath.getLastHitPred(targ, timeTillDamageOn(targ));
-                        if (hpOnDmgPred <= 0 && (lastAutoAttackUnit == null || lastAutoAttackUnit.NetworkId != targ.NetworkId))
-                            FireOnUnkillable(player, targ, HealthDeath.getTimeTillDeath(targ));
-                        if (hpOnDmgPred <= 0 || hpOnDmgPred > (int)getRealAADmg(targ))
-                            continue;
-                        var cannonBonus = (targ.BaseSkinName == "SRU_ChaosMinionSiege") ? 100 : 0;
-                        if (best == null || hpOnDmgPred - cannonBonus < bestPredHp)
-                        {
-                            best = targ;
-                            bestPredHp = hpOnDmgPred;
-                        }
-                    }
-                    if (best != null)
-                        return best;
-                }
-            var hero = GetBestHeroTarget(out soliderHit);
-
-            if (hero != null && (!onlySolider || soliderHit))
-                return hero;
-            if (!onlySolider)
-                if (ShouldWaitAllTogether())
-                    return null;
-            /* turrets / inhibitors / nexus */
-            if (CurrentMode == Mode.LaneClear)
-            {
-                /* turrets */
-                foreach (var turret in
-                    ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && inAutoAttackRange(t)))
-                {
-                    return turret;
-                }
-
-                /* inhibitor */
-                foreach (var turret in
-                    ObjectManager.Get<Obj_BarracksDampener>()
-                        .Where(t => t.IsValidTarget() && inAutoAttackRange(t)))
-                {
-                    return turret;
-                }
-
-                /* nexus */
-                foreach (var nexus in
-                    ObjectManager.Get<Obj_HQ>().Where(t => t.IsValidTarget() && inAutoAttackRange(t)))
-                {
-                    return nexus;
-                }
-            }
-
             if (!onlySolider)
                 //Laneclear
                 if (CurrentMode == Mode.LaneClear)
@@ -454,61 +419,15 @@ namespace DetuksSharp
 
         private static Obj_AI_Base GetBestHeroTarget(out bool soliderHit)
         {
-            AIHeroClient killableEnemy = null;
-            var hitsToKill = double.MaxValue;
-
-            if (azir)
-            {
-                foreach (var ene in AllEnemys.OrderBy(enemy => enemy.Health))
-                {
-                    if (ene == null || ene.IsDead || !ene.IsTargetable || ene.IsInvulnerable || !ene.IsHPBarRendered || !ene.IsVisible)
-                        continue;
-                    foreach (var sol in getActiveSoliders())
-                    {
-                        if (sol == null || sol.IsDead)
-                            continue;
-                        var solAarange = 325;
-                        solAarange *= solAarange;
-                        if (ene.ServerPosition.Distance(sol.ServerPosition, true) < solAarange)
-                        {
-                            soliderHit = true;
-                            return ene;
-                        }
-                        foreach (var around in enemiesAround.Where(arou => arou != null && arou.IsValid && !arou.IsDead && arou.Position.Distance(sol.Position, true) <= ((azirSoliderRange) * (azirSoliderRange))))
-                        {
-                            if (around == null || around.IsDead || ene == null)
-                                continue;
-                            DeathMath.Polygon poly = DeathMath.getPolygonOn(sol, around, 50 + ene.BoundingRadius / 2, azirSoliderRange + ene.BoundingRadius / 2);
-                            var posi = LeagueSharp.Common.Prediction.GetPrediction(ene, player.AttackCastDelay);
-                            try
-                            {
-
-                                if (posi != null &&
-                                    poly.pointInside(posi.UnitPosition.To2D()))
-                                {
-                                    soliderHit = true;
-                                    return around;
-                                }
-                            }
-                            catch (Exception)
-                            {
-                            }
-                        }
-                    }
-                }
-            }
-            foreach (var enemy in AllEnemys.Where(hero => hero.IsValid && inAutoAttackRange(hero)))
-            {
-                var killHits = CountKillhits(enemy);
-                if (killableEnemy != null && !(killHits < hitsToKill))
-                    continue;
-                killableEnemy = enemy;
-                hitsToKill = killHits;
-            }
             soliderHit = false;
-            return hitsToKill < 4 ? killableEnemy : TargetSelector.GetTarget(player.AttackRange + player.BoundingRadius, TargetSelector.DamageType.Physical);
-
+            var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
+            if (target != null && target.IsValidTarget() && ObjectManager.Player.Distance(target) <= Player.Instance.AttackRange)
+            {
+                return target;
+            }
+            return null;
         }
+
 
         private static double CountKillhits(AIHeroClient enemy)
         {
@@ -519,7 +438,7 @@ namespace DetuksSharp
         {
             foreach (var minion in MinionManager.GetMinions(getTargetSearchDist(), MinionTypes.All))
             {
-                if (minion.IsValidTarget())
+                if (minion.IsValidTarget() && minion != null)
                 {
                     var dmgAt = timeTillDamageOn(minion);
                     var hp = HealthDeath.getLaneClearPred(minion, (int)((player.AttackDelay * 1000) * 1.26f));
@@ -532,6 +451,10 @@ namespace DetuksSharp
 
         private static bool ShouldWaitMinion(Obj_AI_Base minion)
         {
+            if (minion == null)
+            {
+                return false;
+            }
             var hp = HealthDeath.getLaneClearPred(minion, (int)((player.AttackDelay * 1000) * 2.26f));
             if (hp <= getRealAADmg(minion))
                 return true;
@@ -569,7 +492,7 @@ namespace DetuksSharp
 
         public static bool inAutoAttackRange(AttackableUnit unit)
         {
-            if (!unit.IsValidTarget())
+            if (!unit.IsValidTarget() || unit == null)
             {
                 return false;
             }
@@ -604,7 +527,7 @@ namespace DetuksSharp
 
         public static bool inAutoAttackRange(Obj_AI_Base source, AttackableUnit target)
         {
-            if (!target.IsValidTarget())
+            if (!target.IsValidTarget() || target == null)
             {
                 return false;
             }
@@ -629,7 +552,7 @@ namespace DetuksSharp
         public static float getRealAutoAttackRange(Obj_AI_Base source, AttackableUnit target)
         {
             var result = source.AttackRange + source.BoundingRadius;
-            if (target.IsValidTarget())
+            if (target.IsValidTarget() && target != null)
             {
                 return result + target.BoundingRadius;
             }
@@ -646,7 +569,7 @@ namespace DetuksSharp
                 {
                     if (!playerStoped)
                     {
-                        Player.IssueOrder(GameObjectOrder.Stop, player.ServerPosition);
+                        //Player.IssueOrder(GameObjectOrder.Stop, player.ServerPosition);
                         playerStoped = true;
                     }
                     return;
@@ -808,24 +731,16 @@ namespace DetuksSharp
             menu = menuIn;
 
             init();
-
-            Drawing.OnDraw += onDraw;
-
-            Obj_AI_Base.OnBasicAttack += onStartAutoAttack;
-            Spellbook.OnStopCast += onStopAutoAttack;
-
-            Obj_AI_Base.OnSpellCast += onDoCast;
-
-            GameObject.OnCreate += onCreate;
-            GameObject.OnDelete += onDelete;
-            Obj_AI_Minion.OnPlayAnimation += Obj_AI_Minion_OnPlayAnimation;
-
-            Game.OnUpdate += OnUpdate;
         }
 
 
         public static float getRealAADmg(Obj_AI_Base targ)
         {
+            if (targ == null)
+            {
+                return 0f;
+            }
+
             if (!azir)
                 return (float)player.GetAutoAttackDamage(targ, true);
             var solAround = solidersAroundEnemy(targ);
@@ -857,6 +772,11 @@ namespace DetuksSharp
 
         public static bool enemyInAzirRange(Obj_AI_Base ene)
         {
+            if (ene == null)
+            {
+                return false;
+            }
+
             var solis = getActiveSoliders();
 
             return !ene.IsDead && solis.Count != 0 && solis.Where(sol => !sol.IsMoving && !sol.IsDashing()).Any(sol => ene.Distance(sol, true) < azirSoliderRange * azirSoliderRange);
@@ -864,36 +784,13 @@ namespace DetuksSharp
 
         public static int solidersAroundEnemy(Obj_AI_Base ene)
         {
+            if (ene == null)
+            {
+                return 0;
+            }
             var solis = getActiveSoliders();
 
             return solis.Count(sol => ene.Distance(sol, true) < azirSoliderRange * azirSoliderRange);
-        }
-
-        static void Obj_AI_Minion_OnPlayAnimation(GameObject sender, GameObjectPlayAnimationEventArgs args)
-        {
-            if (sender.IsMe && player.IsMelee && args.Animation.StartsWith("Attack"))
-            {
-                isTryingToAttack = false;
-                lastAutoAttackMove = now;
-            }
-
-            if (!azir) return;
-            if (sender.Name == "AzirSoldier" && sender.IsAlly)
-            {
-                Obj_AI_Minion myMin = sender as Obj_AI_Minion;
-                if (myMin.BaseSkinName == "AzirSoldier")
-                {
-                    Animations[sender.NetworkId] = args.Animation;
-                }
-            }
-        }
-
-        private static void onDelete(GameObject sender, EventArgs args)
-        {
-            if (!azir)
-                return;
-            azirSoldiers.RemoveAll(s => s.NetworkId == sender.NetworkId);
-            Animations.Remove(sender.NetworkId);
         }
     }
 }

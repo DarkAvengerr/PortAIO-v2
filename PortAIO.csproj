@@ -989,13 +989,10 @@
     <Compile Include="AutoPlay\AramDetFull\Champions\Ziggs.cs" />
     <Compile Include="AutoPlay\AramDetFull\Champions\Zilean.cs" />
     <Compile Include="AutoPlay\AramDetFull\Champions\Zyra.cs" />
-    <Compile Include="AutoPlay\AramDetFull\DataGathering.cs" />
     <Compile Include="AutoPlay\AramDetFull\ErrorLogger.cs" />
     <Compile Include="AutoPlay\AramDetFull\FullItem.cs" />
-    <Compile Include="AutoPlay\AramDetFull\FullItemsData.cs" />
     <Compile Include="AutoPlay\AramDetFull\ItemHandler.cs" />
     <Compile Include="AutoPlay\AramDetFull\Items.cs" />
-    <Compile Include="AutoPlay\AramDetFull\LXOrbwalker.cs" />
     <Compile Include="AutoPlay\AramDetFull\MapControl.cs" />
     <Compile Include="AutoPlay\AramDetFull\Polygon.cs" />
     <Compile Include="AutoPlay\AramDetFull\Program.cs" />

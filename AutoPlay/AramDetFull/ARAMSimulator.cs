@@ -873,7 +873,7 @@ namespace ARAMDetFull
                 if (!haveSeenMinion)
                 {
                     haveSeenMinion =
-                        ObjectManager.Get<Obj_AI_Minion>().Any(min => min.IsTargetable && min.IsAlly && min.Health > 50) ||
+                        ObjectManager.Get<Obj_AI_Minion>().Any(min => min.IsTargetable && min.IsHPBarRendered && min.IsAlly && min.Health > 50) ||
                         ARAMDetFull.gameStart + 44 * 1000 < ARAMDetFull.now;
                 }
                 if (!haveSeenMinion)
@@ -904,7 +904,7 @@ namespace ARAMDetFull
                 var fightLevel = MapControl.fightLevel();
                 MapControl.updateReaches();
 
-                var closestEnemy = HeroManager.Enemies.Where(ene => !ene.IsDead && ene.IsTargetable && !ARAMTargetSelector.IsInvulnerable(ene)).OrderBy(ene => player.Position.Distance(ene.Position, true)).FirstOrDefault();
+                var closestEnemy = EloBuddy.SDK.EntityManager.Heroes.Enemies.Where(ene => !ene.IsDead && ene.IsTargetable && !ARAMTargetSelector.IsInvulnerable(ene)).OrderBy(ene => player.Position.Distance(ene.Position, true)).FirstOrDefault();
                 if (closestEnemy != null && ramboMode)
                 {
                     DeathWalker.deathWalk(closestEnemy.Position, true);
@@ -920,35 +920,6 @@ namespace ARAMDetFull
 
                 balance = (ARAMTargetSelector.IsInvulnerable(player) || player.IsZombie) ? 250 : MapControl.balanceAroundPointAdvanced(player.Position.To2D(), 250 - agrobalance * 5) + agrobalance;
                 inDanger = balance < 0;
-
-                if (Game.MapId == GameMapId.SummonersRift)
-                {
-                    if (player.IsRecalling())
-                        return;
-                    if (player.InFountain() && player.HealthPercent < 90)
-                    {
-                        EloBuddy.Player.IssueOrder(GameObjectOrder.Stop, player);
-                        return;
-                    }
-                    if (player.HealthPercent > 85 && (player.MaxMana < 450 || player.ManaPercent > 85))
-                        needRecall = false;
-                    if ((((player.HealthPercent < 32 || (player.MaxMana > 450 && player.ManaPercent < 5)) && player.CountEnemiesInRange(1000) == 0) || needRecall) && balance > 5)
-                    {
-                        if (lastRecall + 9000 < DeathWalker.now)
-                        {
-                            needRecall = true;
-                            var recall = new Spell(SpellSlot.Recall);
-                            recall.Cast();
-                            lastRecall = DeathWalker.now;
-                            return;
-                        }
-                    }
-                    else if (needRecall)
-                    {
-                        EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, fromNex.Position.Randomize(534, 1005));
-                        return;
-                    }
-                }
 
                 if (champ != null)
                 {
@@ -989,16 +960,15 @@ namespace ARAMDetFull
                     }
                 }
 
-                deepestAlly = HeroManager.Allies.OrderBy(al => toNex.Position.Distance(al.Position, true)).FirstOrDefault();
+                deepestAlly = EloBuddy.SDK.EntityManager.Heroes.Allies.OrderBy(al => toNex.Position.Distance(al.Position, true)).FirstOrDefault();
                 var lookRange = player.AttackRange + ((player.IsMelee) ? 260 : 155);
                 var easyKill =
-                   HeroManager.Enemies.FirstOrDefault(ene => ene != null && !ene.IsZombie && !ene.IsDead && ene.Distance(player, true) < lookRange * lookRange &&
+                   EloBuddy.SDK.EntityManager.Heroes.Enemies.FirstOrDefault(ene => ene != null && !ene.IsZombie && !ene.IsDead && ene.Distance(player, true) < lookRange * lookRange &&
                                                              !ARAMTargetSelector.IsInvulnerable(ene) && ene.Health / 1.5 < player.GetAutoAttackDamage(ene));
 
                 if (easyKill != null)
                 {
                     Aggresivity.addAgresiveMove(new AgresiveMove(45, 1500, true));
-                    //Console.WriteLine("go get easy");
                     DeathWalker.deathWalk(easyKill.Position.To2D().Extend(player.Position.To2D(), player.AttackRange * 0.7f).To3D(), true);
                 }
 
@@ -1020,7 +990,6 @@ namespace ARAMDetFull
                 if (towerAttackedMe)
                 {
                     DeathWalker.CustomOrbwalkMode = false;
-                    // Chat.Print("ouch tower!");
                     DeathWalker.deathWalk(player.Position.To2D().Extend(fromNex.Position.To2D(), 600).To3D(), true);
                     return;
                 }
@@ -1028,7 +997,6 @@ namespace ARAMDetFull
                 awayTo = eAwayFromTo();
                 if (awayTo.IsValid() && awayTo.X != 0)
                 {
-
                     DeathWalker.CustomOrbwalkMode = false;
                     if (champ != null)
                         champ.kiteBack(awayTo);
@@ -1040,9 +1008,10 @@ namespace ARAMDetFull
                 {
 
                     var closestObj =
-                        DeathWalker.EnemyObjectives.Where(
+                        EloBuddy.SDK.EntityManager.Turrets.Enemies.Where(
                             obj => obj.IsValidTarget(700) && !obj.IsDead && !obj.IsInvulnerable)
                             .OrderBy(obj => obj.Position.Distance(player.Position, true)).FirstOrDefault();
+
                     if (closestObj != null && (!(closestObj is Obj_AI_Turret) || Sector.towerContainsAlly((Obj_AI_Turret)closestObj)))
                     {
                         DeathWalker.deathWalk(
@@ -1055,8 +1024,7 @@ namespace ARAMDetFull
                         var safeMeleeEnem = ARAMTargetSelector.getSafeMeleeTarget();
                         if (safeMeleeEnem != null)
                         {
-                            DeathWalker.deathWalk(
-                                safeMeleeEnem.Position.Extend(safeMeleeEnem.Direction, player.AttackRange * 0.3f), true);
+                            DeathWalker.deathWalk(safeMeleeEnem.Position.Extend(safeMeleeEnem.Direction, player.AttackRange * 0.3f), true);
                             return;
                         }
 
@@ -1068,15 +1036,9 @@ namespace ARAMDetFull
                         DeathWalker.deathWalk(fightOn.Position.Extend(player.Position, player.AttackRange * 0.8f), true);
                     }
                     else
-                    {/*
-                    if (player.HealthPercent < 69 && moveToRelicIfForHeal())
                     {
-                        return;
-                    }*/
-
                         if (!inDanger)
                         {
-
                             Sector orbSector = null;
                             Sector prevSector = null;
                             foreach (var sector in sectors)
@@ -1090,16 +1052,8 @@ namespace ARAMDetFull
                                 }
                                 if (sector.dangerPolig)
                                     break;
-                                //  if (!player.IsMelee)
-                                // {
                                 if (sector.containsEnemy && !sector.containsAlly)
                                     break;
-                                // }
-                                // else
-                                //  {
-                                //     if (prevSector != null && sector.containsEnemy && !prevSector.containsAlly  && !sector.containsAlly)
-                                //         break;
-                                //  }
                                 orbSector = sector;
                                 if (sector.containsEnemy && sector.containsAlly)
                                     break;
@@ -1115,15 +1069,6 @@ namespace ARAMDetFull
                         }
                     }
                 }
-
-
-
-
-                /*foreach (var ally in MapControl.ally_champions)
-                {
-                    if (ally.hero.Distance(player) < 800 && MapControl.myControler != null)
-                        MapControl.myControler.useNonSkillshots(ally.hero);
-                }*/
             }
             catch (Exception e)
             {
@@ -1164,7 +1109,7 @@ namespace ARAMDetFull
         {
             try
             {
-                if (target.IsAlly || target.IsDead || !target.IsValidTarget())
+                if (target.IsAlly || target.IsDead || !target.IsValidTarget() || target == null)
                     return false;
 
                 float distTo = target.Distance(player, true);

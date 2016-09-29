@@ -27,7 +27,6 @@ using EloBuddy; namespace ARAMDetFull
                 if (value.Contains("xception") && !knowsExceptions.Contains(value))
                 {
                     knowsExceptions.Add(value);
-                    DataGathering.sendError(value);
                     Console.WriteLine(value);
                 }
                 if (defaultOut != null && defaultOut != this)
