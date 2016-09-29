@@ -291,6 +291,32 @@ namespace DetuksSharp
         {
             bool soliderHit = false;
 
+            /* turrets / inhibitors / nexus */
+            if (BottingMode)
+            {
+                /* turrets */
+                foreach (var turret in
+                    ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsValidTarget() && inAutoAttackRange(t) && !t.IsDead))
+                {
+                    return turret;
+                }
+
+                /* inhibitor */
+                foreach (var turret in
+                    ObjectManager.Get<Obj_BarracksDampener>()
+                        .Where(t => t.IsValidTarget() && inAutoAttackRange(t) && !t.IsDead))
+                {
+                    return turret;
+                }
+
+                /* nexus */
+                foreach (var nexus in
+                    ObjectManager.Get<Obj_HQ>().Where(t => t.IsValidTarget() && inAutoAttackRange(t) && !t.IsDead))
+                {
+                    return nexus;
+                }
+            }
+
             if (targetOnlyChampions)
                 return GetBestHeroTarget(out soliderHit);
 
