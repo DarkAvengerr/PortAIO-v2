@@ -32,7 +32,7 @@
             Menu.SubMenu("Combo").AddItem(new MenuItem("ElLeeSin.Combo.W2", "Use W").SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("ElLeeSin.Combo.E", "Use E").SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("ElLeeSin.Combo.R", "Use R").SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("ElLeeSin.Combo.StarKill", "Use starcombo to kill").SetValue(true));
+            Menu.SubMenu("Combo").AddItem(new MenuItem("ElLeeSin.Combo.StarKill1", "Use starcombo to kill").SetValue(false));
             Menu.SubMenu("Combo")
                 .AddItem(new MenuItem("ElLeeSin.Combo.PassiveStacks", "Min Stacks").SetValue(new Slider(1, 1, 2)));
 
@@ -142,6 +142,7 @@
 
             var miscMenu = Menu.AddSubMenu(new Menu("Misc", "Misc"));
             {
+                miscMenu.AddItem(new MenuItem("Combo.Use.items", "Use Items").SetValue(true));
                 miscMenu.AddItem(new MenuItem("ElLeeSin.Ignite.KS", "Use Ignite").SetValue(true));
                 miscMenu.AddItem(new MenuItem("ElLeeSin.Smite.KS", "Use Smite").SetValue(true));
                 miscMenu.AddItem(new MenuItem("ElLeeSin.Smite.Q", "Smite Q!").SetValue(false)); //qSmite

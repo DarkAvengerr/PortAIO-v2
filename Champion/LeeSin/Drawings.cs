@@ -7,9 +7,8 @@
     using LeagueSharp.Common;
 
     using SharpDX;
-
-    using Color = System.Drawing.Color;
     using EloBuddy;
+    using Color = System.Drawing.Color;
 
     public class Drawings
     {
@@ -18,10 +17,13 @@
         public static void OnDraw(EventArgs args)
         {
             var newTarget = Program.ParamBool("insecMode")
-                                ? TargetSelector.GetSelectedTarget()
-                                : TargetSelector.GetTarget(
-                                    Program.spells[Program.Spells.Q].Range + 200,
-                                    TargetSelector.DamageType.Physical);
+                                 ? (TargetSelector.GetSelectedTarget()
+                                    ?? TargetSelector.GetTarget(
+                                         Program.spells[Program.Spells.Q].Range,
+                                        TargetSelector.DamageType.Physical))
+                                 : TargetSelector.GetTarget(
+                                      Program.spells[Program.Spells.Q].Range,
+                                     TargetSelector.DamageType.Physical);
 
 
             if (Program.ClicksecEnabled && Program.ParamBool("clickInsec"))
