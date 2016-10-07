@@ -2457,6 +2457,9 @@ namespace PortAIO
                         case 11: // yol0Riven
                             yol0Riven.Program.Main();
                             break;
+                        case 12: // RivenToTheChallenger  
+                            RivenToTheChallenger.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Rumble:

@@ -19,7 +19,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             {
                 coreItems = new List<ConditionalItem>
                         {
-                            new ConditionalItem(ItemId.Will_of_the_Ancients),
+                            new ConditionalItem(ItemId.Rylais_Crystal_Scepter),
                             new ConditionalItem(ItemId.Sorcerers_Shoes),
                             new ConditionalItem(ItemId.Rabadons_Deathcap),
                             new ConditionalItem(ItemId.Lich_Bane),
@@ -28,7 +28,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                         },
                 startingItems = new List<ItemId>
                         {
-                            ItemId.Hextech_Revolver
+                            ItemId.Needlessly_Large_Rod
                         }
             };
         }

@@ -17,7 +17,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             {
                 coreItems = new List<ConditionalItem>
                         {
-                            new ConditionalItem(ItemId.Will_of_the_Ancients),
+                            new ConditionalItem(ItemId.Hextech_Protobelt_01),
                             new ConditionalItem(ItemId.Ionian_Boots_of_Lucidity),
                             new ConditionalItem(ItemId.Spirit_Visage),
                             new ConditionalItem(ItemId.Rabadons_Deathcap),

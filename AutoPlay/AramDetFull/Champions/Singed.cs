@@ -29,7 +29,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                         },
                 startingItems = new List<ItemId>
                         {
-                            ItemId.Catalyst_the_Protector
+                            ItemId.Catalyst_of_Aeons
                         }
             };
         }

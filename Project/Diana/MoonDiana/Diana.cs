@@ -83,7 +83,7 @@ namespace MoonDiana
                         {
                             if (ar.GetNewValue<bool>())
                             {
-                                Orbwalker.Disable();
+                                //Orbwalker.Disable();
                                 OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.Combo] -= Combo;
                                 OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.Mixed] -= Harass;
                                 OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.LaneClear] -= LaneClear;
@@ -103,7 +103,7 @@ namespace MoonDiana
                                 OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.Combo] += Combo;
                                 OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.Mixed] += Harass;
                                 OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.LaneClear] += LaneClear;
-                                Orbwalker.Enable();
+                                //Orbwalker.Enable();
                             }
                         };
             misc.AddItem(new MenuItem("MKILLABLEDRAW", "Disable Notifier Drawings").SetValue(false));

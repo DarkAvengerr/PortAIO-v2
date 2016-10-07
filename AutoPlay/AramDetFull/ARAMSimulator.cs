@@ -171,23 +171,6 @@ namespace ARAMDetFull
 
         public static void setUpItems()
         {
-
-            /*champBuild = new Build
-            {
-                coreItems = new List<ConditionalItem>
-                {
-                    new ConditionalItem(ItemId.Boots_of_Swiftness),
-                    new ConditionalItem(ItemId.Banshees_Veil,ItemId.Sunfire_Cape,ItemCondition.ENEMY_AP),
-                    new ConditionalItem(ItemId.Last_Whisper),
-                    new ConditionalItem(ItemId.Statikk_Shiv),
-                    new ConditionalItem(ItemId.Maw_of_Malmortius),
-                    new ConditionalItem(ItemId.Frozen_Mallet),
-                },
-                startingItems = new List<ItemId>
-                {
-                    ItemId.Boots_of_Speed,ItemId.Brawlers_Gloves
-                }
-            };*/
             if (getType() == ChampType.Support || getType() == ChampType.Mage)
             {
                 tankBal = 15;
@@ -306,7 +289,7 @@ namespace ARAMDetFull
                     },
                     startingItems = new List<ItemId>
                     {
-                        ItemId.Catalyst_the_Protector,
+                        ItemId.Catalyst_of_Aeons,
                     }
                 };
             }
@@ -385,7 +368,6 @@ namespace ARAMDetFull
 
         public static void setChamp()
         {
-            // Chat.Print("Support DeTuKs on his new adventures on LeagueSmurfs.com");
             Chat.Print("Champion hero: " + player.ChampionName);
             switch (player.ChampionName)
             {
@@ -686,51 +668,7 @@ namespace ARAMDetFull
                 case "Illaoi":
                     champ = new Illaoi();
                     break;
-                    //Illaoi
             }
-        }
-
-        public static void checkItems()
-        {
-
-            for (int i = defBuyThings.Count - 1; i >= 0; i--)
-            {
-                if (hasAllItems(defBuyThings[i]))
-                {
-                    nextItem = defBuyThings[i];
-
-                    return;
-                }
-            }
-        }
-
-        public static bool hasAllItems(ItemToShop its)
-        {
-            try
-            {
-                bool[] usedItems = new bool[15];
-                int itemsMatch = 0;
-                for (int j = 0; j < its.itemsMustHave.Count; j++)
-                {
-                    for (int i = 0; i < player.InventoryItems.Count(); i++)
-                    {
-                        if (usedItems[i])
-                            continue;
-                        if (its.itemsMustHave[j] == (int)player.InventoryItems[i].Id)
-                        {
-                            usedItems[i] = true;
-                            itemsMatch++;
-                            break;
-                        }
-                    }
-                }
-                return itemsMatch == its.itemsMustHave.Count;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
         }
 
         public static void buyItems()
@@ -765,16 +703,17 @@ namespace ARAMDetFull
 
                 if (fromNex == null)
                     return;
+
                 float sep = fromNex.Position.Distance(toNex.Position) / 40;
 
                 Vector2 lastPos = fromNex.Position.To2D();
-                //Setup sectors
                 for (int i = 0; i < 40; i++)
                 {
                     Vector2 end = lastPos.Extend(toNex.Position.To2D(), sep);
                     sectors.Add(new Sector(lastPos, end, 750));
                     lastPos = end;
                 }
+
                 MapControl.setupMapControl();
                 AutoLevelChamp.setAutoLevel();
                 AutoShopper.init();
@@ -807,7 +746,7 @@ namespace ARAMDetFull
         {
             try
             {
-                if (sender.IsValid<MissileClient>())
+                if (sender.IsValid<MissileClient>() && (MissileClient)sender != null)
                 {
                     var missile = (MissileClient)sender;
                     if (missile.SpellCaster.IsValid<Obj_AI_Turret>() && missile.SpellCaster.IsEnemy &&
@@ -963,6 +902,7 @@ namespace ARAMDetFull
                 }
 
                 deepestAlly = EloBuddy.SDK.EntityManager.Heroes.Allies.OrderBy(al => toNex.Position.Distance(al.Position, true)).FirstOrDefault();
+
                 var lookRange = player.AttackRange + ((player.IsMelee) ? 260 : 155);
                 var easyKill =
                    EloBuddy.SDK.EntityManager.Heroes.Enemies.FirstOrDefault(ene => ene != null && !ene.IsZombie && !ene.IsDead && ene.Distance(player, true) < lookRange * lookRange &&

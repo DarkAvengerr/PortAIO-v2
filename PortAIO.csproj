@@ -533,6 +533,15 @@
     <Compile Include="Dual-Port\Karthus\Flowers%27 Karthus\Prediction\SDKPrediction.cs" />
     <Compile Include="Dual-Port\Karthus\Flowers%27 Karthus\Prediction\xcsoftPrediction.cs" />
     <Compile Include="Dual-Port\Karthus\Flowers%27 Karthus\Program.cs" />
+    <Compile Include="Dual-Port\Riven\RivenToTheChallenger\Activator.cs" />
+    <Compile Include="Dual-Port\Riven\RivenToTheChallenger\Combat\Combo.cs" />
+    <Compile Include="Dual-Port\Riven\RivenToTheChallenger\Config.cs" />
+    <Compile Include="Dual-Port\Riven\RivenToTheChallenger\Program.cs" />
+    <Compile Include="Dual-Port\Riven\RivenToTheChallenger\Riven.cs" />
+    <Compile Include="Dual-Port\Riven\RivenToTheChallenger\Spells\BrokenWings.cs" />
+    <Compile Include="Dual-Port\Riven\RivenToTheChallenger\Spells\KiBurst.cs" />
+    <Compile Include="Dual-Port\Riven\RivenToTheChallenger\Spells\WindSlash.cs" />
+    <Compile Include="Dual-Port\Riven\RivenToTheChallenger\Utility.cs" />
     <Compile Include="Dual-Port\Ryze\ReformedAIO\Drawings\DmgDraw.cs" />
     <Compile Include="Dual-Port\Ryze\ReformedAIO\Drawings\EDraw.cs" />
     <Compile Include="Dual-Port\Ryze\ReformedAIO\Drawings\QDraw.cs" />

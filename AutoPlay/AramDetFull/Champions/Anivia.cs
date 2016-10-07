@@ -33,7 +33,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 },
                 startingItems = new List<ItemId>
                 {
-                    ItemId.Catalyst_the_Protector
+                    ItemId.Catalyst_of_Aeons
                 }
             };
             Obj_AI_Base.OnDelete += Obj_AI_Base_OnDelete;

@@ -26,7 +26,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
                 },
                 startingItems = new List<ItemId>
                 {
-                    ItemId.Catalyst_the_Protector,ItemId.Boots_of_Speed
+                    ItemId.Catalyst_of_Aeons,ItemId.Boots_of_Speed
                 }
             };
 

@@ -10,7 +10,7 @@ using EloBuddy; namespace ARAMDetFull
     {
         public static void Main()
         {
-            new ARAMDetFull();
+            EloBuddy.SDK.Core.DelayAction(() => { new ARAMDetFull(); }, 10000);
         }
     }
 }
