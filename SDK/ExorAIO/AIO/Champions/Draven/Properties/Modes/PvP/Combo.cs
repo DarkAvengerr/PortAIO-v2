@@ -40,8 +40,8 @@ using EloBuddy;
                 > ManaManager.GetNeededMana(Vars.W.Slot, Vars.Menu["spells"]["w"]["combo"])
                 && Vars.Menu["spells"]["w"]["combo"].GetValue<MenuSliderButton>().BValue)
             {
-                if (GameObjects.EnemyHeroes.Any(t => t.IsValidTarget(Vars.AaRange))
-                    && !GameObjects.EnemyHeroes.Any(t => t.IsValidTarget(Vars.AaRange))
+                if (GameObjects.EnemyHeroes.Any(t => t.IsValidTarget(1500f))
+                    && !GameObjects.EnemyHeroes.Any(t => t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange()))
                     && Vars.Menu["spells"]["w"]["engager"].GetValue<MenuBool>().Value)
                 {
                     Vars.W.Cast();
@@ -55,17 +55,6 @@ using EloBuddy;
                 && Vars.Menu["spells"]["e"]["combo"].GetValue<MenuBool>().Value)
             {
                 Vars.E.Cast(Vars.E.GetPrediction(Targets.Target).UnitPosition);
-            }
-
-            /// <summary>
-            ///     The R Combo Logic.
-            /// </summary>
-            if (Vars.R.IsReady() && Targets.Target.IsValidTarget(Vars.R.Range)
-                && Vars.Menu["spells"]["r"]["combo"].GetValue<MenuBool>().Value
-                && Vars.Menu["spells"]["r"]["whitelist"][Targets.Target.ChampionName.ToLower()].GetValue<MenuBool>()
-                       .Value)
-            {
-                Vars.R.Cast(Vars.R.GetPrediction(Targets.Target).UnitPosition);
             }
         }
 

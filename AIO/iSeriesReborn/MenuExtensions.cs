@@ -4,7 +4,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace DZLib.Logging
+ namespace iSeriesDZLib.Logging
 {
     static class MenuExtensions
     {

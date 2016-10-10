@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DZLib.Logging;
+using iSeriesDZLib.Logging;
 using iSeriesReborn.Utility;
 using iSeriesReborn.Utility.ModuleHelper;
 using LeagueSharp;

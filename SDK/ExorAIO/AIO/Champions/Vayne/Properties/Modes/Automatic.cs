@@ -51,13 +51,13 @@ using EloBuddy;
                 {
                     for (var i = 1; i < 10; i++)
                     {
+                        var position = target.ServerPosition;
+                        var prediction = Vars.E.GetPrediction(target).UnitPosition;
+                        var prediction2 = Vars.E2.GetPrediction(target).UnitPosition;
                         var vector = Vector3.Normalize(target.ServerPosition - GameObjects.Player.ServerPosition);
-                        if ((target.ServerPosition + vector * (float)(i * 42.5)).IsWall()
-                            && (Vars.E.GetPrediction(target).UnitPosition + vector * (float)(i * 42.5)).IsWall()
-                            && (Vars.E2.GetPrediction(target).UnitPosition + vector * (float)(i * 42.5)).IsWall()
-                            && (target.ServerPosition + vector * (float)(i * 44.5)).IsWall()
-                            && (Vars.E.GetPrediction(target).UnitPosition + vector * (float)(i * 44.5)).IsWall()
-                            && (Vars.E2.GetPrediction(target).UnitPosition + vector * (float)(i * 44.5)).IsWall())
+                        if ((position + vector * (i * 42)).IsWall() && (prediction + vector * (i * 42)).IsWall()
+                            && (prediction2 + vector * (i * 42)).IsWall() && (position + vector * (i * 45)).IsWall()
+                            && (prediction + vector * (i * 45)).IsWall() && (prediction2 + vector * (i * 45)).IsWall())
                         {
                             Vars.E.CastOnUnit(target);
                         }

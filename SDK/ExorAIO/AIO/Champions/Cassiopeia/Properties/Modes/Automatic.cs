@@ -37,7 +37,7 @@ using EloBuddy;
             /// <summary>
             ///     The Tear Stacking Logic.
             /// </summary>
-            if (Vars.Q.IsReady() && Bools.HasTear(GameObjects.Player) && !GameObjects.Player.IsRecalling()
+            if (Vars.Q.IsReady() && Bools.HasTear(GameObjects.Player)
                 && Variables.Orbwalker.ActiveMode == OrbwalkingMode.None
                 && GameObjects.Player.CountEnemyHeroesInRange(1500) == 0
                 && GameObjects.Player.ManaPercent
@@ -57,8 +57,7 @@ using EloBuddy;
                 /// <summary>
                 ///     The Automatic W Logic.
                 /// </summary>
-                if (Vars.W.IsReady() && target.IsValidTarget(Vars.W.Range)
-                    && !target.IsValidTarget(500)
+                if (Vars.W.IsReady() && target.IsValidTarget(Vars.W.Range) && !target.IsValidTarget(500f)
                     && Vars.Menu["spells"]["w"]["logical"].GetValue<MenuBool>().Value)
                 {
                     Vars.W.Cast(target.ServerPosition);
@@ -71,12 +70,14 @@ using EloBuddy;
             if (Vars.R.IsReady() && Vars.Menu["spells"]["r"]["bool"].GetValue<MenuBool>().Value
                 && Vars.Menu["spells"]["r"]["key"].GetValue<MenuKeyBind>().Active)
             {
-                var target = GameObjects.EnemyHeroes.Where(
-                    t =>
-                    t.IsValidTarget(Vars.R.Range - 100f) && t.IsFacing(GameObjects.Player)
-                    && !Invulnerable.Check(t, DamageType.Magical, false)
-                    && Vars.Menu["spells"]["r"]["whitelist"][t.ChampionName.ToLower()]
-                           .GetValue<MenuBool>().Value).OrderBy(o => o.Health).FirstOrDefault();
+                var target =
+                    GameObjects.EnemyHeroes.Where(
+                        t =>
+                        t.IsValidTarget(Vars.R.Range - 100f) && t.IsFacing(GameObjects.Player)
+                        && !Invulnerable.Check(t, DamageType.Magical, false)
+                        && Vars.Menu["spells"]["r"]["whitelist"][t.ChampionName.ToLower()].GetValue<MenuBool>().Value)
+                        .OrderBy(o => o.Health)
+                        .FirstOrDefault();
                 if (target != null)
                 {
                     Vars.R.Cast(target.ServerPosition);

@@ -75,11 +75,13 @@ using EloBuddy;
             if (Vars.R.IsReady() && Vars.Menu["spells"]["r"]["bool"].GetValue<MenuBool>().Value
                 && Vars.Menu["spells"]["r"]["key"].GetValue<MenuKeyBind>().Active)
             {
-                var target = GameObjects.EnemyHeroes.Where(
-                    t =>
-                    !Invulnerable.Check(t, DamageType.Magical, false) && t.IsValidTarget(Vars.R.Range)
-                    && Vars.Menu["spells"]["r"]["whitelist"][t.ChampionName.ToLower()]
-                           .GetValue<MenuBool>().Value).OrderBy(o => o.Health).FirstOrDefault();
+                var target =
+                    GameObjects.EnemyHeroes.Where(
+                        t =>
+                        !Invulnerable.Check(t, DamageType.Magical, false) && t.IsValidTarget(Vars.R.Range)
+                        && Vars.Menu["spells"]["r"]["whitelist"][t.ChampionName.ToLower()].GetValue<MenuBool>().Value)
+                        .OrderBy(o => o.Health)
+                        .FirstOrDefault();
                 if (target != null)
                 {
                     /// <summary>

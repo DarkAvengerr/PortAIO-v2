@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using EloBuddy; namespace ezEvade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade
 {
     interface ChampionPlugin
     {

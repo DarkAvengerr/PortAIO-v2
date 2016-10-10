@@ -44,7 +44,7 @@ using EloBuddy;
             ///     The W Combo Logic.
             /// </summary>
             if (Vars.W.IsReady() && Targets.Target.IsValidTarget(Vars.W.Range)
-                && !Targets.Target.IsValidTarget(Vars.AaRange)
+                && !Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
                 && Vars.Menu["spells"]["w"]["combo"].GetValue<MenuBool>().Value)
             {
                 Vars.W.Cast();

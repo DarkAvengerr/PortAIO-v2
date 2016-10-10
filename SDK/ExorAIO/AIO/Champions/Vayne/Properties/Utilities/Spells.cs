@@ -7,6 +7,7 @@ using EloBuddy;
     using LeagueSharp;
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     The spell class.
@@ -20,7 +21,7 @@ using EloBuddy;
         /// </summary>
         public static void Initialize()
         {
-            Vars.Q = new Spell(SpellSlot.Q, Vars.AaRange + 300f);
+            Vars.Q = new Spell(SpellSlot.Q, GameObjects.Player.GetRealAutoAttackRange() + 300f);
             Vars.W = new Spell(SpellSlot.W);
             Vars.E = new Spell(SpellSlot.E, 550f + GameObjects.Player.BoundingRadius);
             Vars.E2 = new Spell(SpellSlot.E, 550f + GameObjects.Player.BoundingRadius);

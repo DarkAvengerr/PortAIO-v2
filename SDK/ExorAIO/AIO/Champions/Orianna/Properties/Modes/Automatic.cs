@@ -36,9 +36,10 @@ using EloBuddy;
                 GameObjects.AllyHeroes.FirstOrDefault(
                     a => a.Buffs.Any(b => b.Caster.IsMe && b.Name.Equals("orianaghost")));
 
-            Orianna.BallPosition = ball?.Position ?? (GameObjects.Player.HasBuff("orianaghostself")
-                                                          ? GameObjects.Player.ServerPosition
-                                                          : ball3?.Position);
+            Orianna.BallPosition = ball?.ServerPosition
+                                   ?? (GameObjects.Player.HasBuff("orianaghostself")
+                                           ? GameObjects.Player.ServerPosition
+                                           : ball3?.ServerPosition);
 
             if (Orianna.BallPosition == null)
             {
@@ -50,9 +51,7 @@ using EloBuddy;
             /// </summary>
             if (Vars.R.IsReady()
                 && GameObjects.EnemyHeroes.Count(
-                    t =>
-                    t.IsValidTarget()
-                    && t.Distance((Vector2)Orianna.BallPosition) < Vars.R.Range - 25f)
+                    t => t.IsValidTarget() && t.Distance((Vector2)Orianna.BallPosition) < Vars.R.Range - 25f)
                 >= Vars.Menu["spells"]["r"]["aoe"].GetValue<MenuSliderButton>().SValue
                 && Vars.Menu["spells"]["r"]["aoe"].GetValue<MenuSliderButton>().BValue)
             {
@@ -64,12 +63,14 @@ using EloBuddy;
             /// </summary>
             if (Vars.E.IsReady())
             {
-                foreach (var ally in GameObjects.AllyHeroes.Where(
-                    a =>
-                    a.IsValidTarget(Vars.E.Range, false) && a.CountEnemyHeroesInRange(Vars.R.Range)
-                    >= Vars.Menu["spells"]["r"]["aoe"].GetValue<MenuSliderButton>().SValue
-                    && Vars.Menu["spells"]["e"]["logical"].GetValue<MenuBool>().Value
-                    && Vars.Menu["spells"]["r"]["aoe"].GetValue<MenuSliderButton>().BValue))
+                foreach (var ally in
+                    GameObjects.AllyHeroes.Where(
+                        a =>
+                        a.IsValidTarget(Vars.E.Range, false)
+                        && a.CountEnemyHeroesInRange(Vars.R.Range)
+                        >= Vars.Menu["spells"]["r"]["aoe"].GetValue<MenuSliderButton>().SValue
+                        && Vars.Menu["spells"]["e"]["logical"].GetValue<MenuBool>().Value
+                        && Vars.Menu["spells"]["r"]["aoe"].GetValue<MenuSliderButton>().BValue))
                 {
                     Vars.E.CastOnUnit(ally);
                 }

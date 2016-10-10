@@ -33,9 +33,9 @@ using EloBuddy;
             /// <summary>
             ///     The Soulbound declaration.
             /// </summary>
-            if (Vars.SoulBound == null)
+            if (Kalista.SoulBound == null)
             {
-                Vars.SoulBound =
+                Kalista.SoulBound =
                     GameObjects.AllyHeroes.Find(
                         a => a.Buffs.Any(b => b.Caster.IsMe && b.Name.Contains("kalistacoopstrikeally")));
             }
@@ -44,9 +44,11 @@ using EloBuddy;
                 /// <summary>
                 ///     The Automatic R Logic.
                 /// </summary>
-                if (Vars.R.IsReady() && Vars.SoulBound.HealthPercent < 10
-                    && Vars.SoulBound.CountEnemyHeroesInRange(800f) > 0
-                    && Vars.SoulBound.IsValidTarget(Vars.R.Range, false)
+                if (Vars.R.IsReady()
+                    && (Kalista.SoulBound.HealthPercent <= 10
+                        || Health.GetPrediction(Kalista.SoulBound, (int)(250 + Game.Ping / 2f))
+                        <= Kalista.SoulBound.MaxHealth / 4) && Kalista.SoulBound.CountEnemyHeroesInRange(800f) > 0
+                    && Kalista.SoulBound.IsValidTarget(Vars.R.Range, false)
                     && Vars.Menu["spells"]["r"]["lifesaver"].GetValue<MenuBool>().Value)
                 {
                     Vars.R.Cast();

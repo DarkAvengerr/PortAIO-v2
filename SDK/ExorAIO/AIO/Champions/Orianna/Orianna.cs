@@ -23,9 +23,12 @@ using EloBuddy;
     /// </summary>
     internal class Orianna
     {
-        #region Static Fields
+        #region Public Properties
 
-        public static Vector3? BallPosition = Vector3.Zero;
+        /// <summary>
+        ///     Gets or sets the position of the Ball.
+        /// </summary>
+        public static Vector3? BallPosition { get; set; } = Vector3.Zero;
 
         #endregion
 
@@ -69,18 +72,6 @@ using EloBuddy;
                 && Vars.Menu["spells"]["e"]["gapcloser"].GetValue<MenuBool>().Value)
             {
                 Vars.E.CastOnUnit(GameObjects.Player);
-            }
-
-            if (BallPosition == null)
-            {
-                return;
-            }
-
-            if (Vars.R.IsReady() && ((Vector2)BallPosition).Distance(args.End) < Vars.R.Range - 25
-                && !Invulnerable.Check(args.Sender, DamageType.Magical, false)
-                && Vars.Menu["spells"]["r"]["gapcloser"].GetValue<MenuBool>().Value)
-            {
-                Vars.R.Cast();
             }
         }
 

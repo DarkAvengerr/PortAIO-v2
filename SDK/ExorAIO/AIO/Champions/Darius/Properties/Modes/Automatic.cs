@@ -6,13 +6,11 @@ using EloBuddy;
  namespace ExorAIO.Champions.Darius
 {
     using System;
-    using System.Linq;
 
     using ExorAIO.Utilities;
 
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.UI;
-    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     The logics class.
@@ -27,24 +25,15 @@ using EloBuddy;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Automatic(EventArgs args)
         {
-            if (Bools.HasSheenBuff() || !Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target))
-            {
-                return;
-            }
-
             /// <summary>
-            ///     The Automatic Q Logic.
+            ///     The AoE Q Logic.
             /// </summary>
-            if (Vars.Q.IsReady() && Vars.Menu["spells"]["q"]["logical"].GetValue<MenuBool>().Value)
+            if (Vars.Q.IsReady()
+                && GameObjects.Player.CountEnemyHeroesInRange(Vars.Q.Range)
+                >= Vars.Menu["spells"]["q"]["aoe"].GetValue<MenuSliderButton>().SValue
+                && Vars.Menu["spells"]["q"]["aoe"].GetValue<MenuSliderButton>().BValue)
             {
-                if (GameObjects.EnemyHeroes.Any(t => t.IsValidTarget(Vars.Q.Range) && !t.IsValidTarget(Vars.AaRange)))
-                {
-                    Vars.Q.Cast();
-                }
-                else if (GameObjects.Player.CountEnemyHeroesInRange(Vars.Q.Range) >= 3)
-                {
-                    Vars.Q.Cast();
-                }
+                Vars.Q.Cast();
             }
         }
 

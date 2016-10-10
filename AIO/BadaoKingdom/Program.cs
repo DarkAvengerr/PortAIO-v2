@@ -18,6 +18,7 @@ using EloBuddy;
         {
             "MissFortune","Poppy","Jhin","Shen",/*"Elise","AurelionSol",*/"Gangplank", /*"Graves" ,*/ /*"Veigar", */"Yasuo"
         };
+
         public static void Main()
         {
             Game_OnGameLoad();

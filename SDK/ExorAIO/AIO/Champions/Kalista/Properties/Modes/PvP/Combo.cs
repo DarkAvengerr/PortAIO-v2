@@ -31,17 +31,17 @@ using EloBuddy;
             /// <summary>
             ///     Orbwalk on minions.
             /// </summary>
-            if (Targets.Minions.Any(m => m.IsValidTarget(Vars.AaRange))
-                && !GameObjects.EnemyHeroes.Any(t => t.IsValidTarget(Vars.AaRange))
+            if (Items.HasItem(3085)
+                && Targets.Minions.Any(m => m.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange()))
+                && !GameObjects.EnemyHeroes.Any(t => t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange()))
                 && Vars.Menu["miscellaneous"]["minionsorbwalk"].GetValue<MenuBool>().Value)
             {
                 EloBuddy.Player.IssueOrder(
                     GameObjectOrder.AttackUnit,
-                    Targets.Minions.FirstOrDefault(m => m.IsValidTarget(Vars.AaRange)));
+                    Targets.Minions.FirstOrDefault(m => m.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())));
             }
-            if (Bools.HasSheenBuff() && !Targets.Target.IsValidTarget(Vars.AaRange)
-                || !Targets.Target.IsValidTarget()
-                || Invulnerable.Check(Targets.Target))
+            if (Bools.HasSheenBuff() && !Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
+                || !Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target))
             {
                 return;
             }
@@ -49,14 +49,14 @@ using EloBuddy;
             /// <summary>
             ///     The Q Combo Logic.
             /// </summary>
-            if (Vars.Q.IsReady()
-                && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuBool>().Value)
+            if (Vars.Q.IsReady() && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuBool>().Value)
             {
                 if (!Vars.Q.GetPrediction(Targets.Target).CollisionObjects.Any()
-                    || Vars.Q.GetPrediction(Targets.Target).CollisionObjects.All(
-                        c =>
-                        (GameObjects.EnemyHeroes.Contains(c) || Targets.Minions.Contains(c))
-                        && c.Health < (float)GameObjects.Player.GetSpellDamage(c, SpellSlot.Q)))
+                    || Vars.Q.GetPrediction(Targets.Target)
+                           .CollisionObjects.All(
+                               c =>
+                               (GameObjects.EnemyHeroes.Contains(c) || Targets.Minions.Contains(c))
+                               && c.Health < (float)GameObjects.Player.GetSpellDamage(c, SpellSlot.Q)))
                 {
                     Vars.Q.Cast(Vars.Q.GetPrediction(Targets.Target).UnitPosition);
                 }

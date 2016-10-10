@@ -6,7 +6,9 @@ using System.Text;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; namespace ezEvade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade
 {
     class MathUtils
     {

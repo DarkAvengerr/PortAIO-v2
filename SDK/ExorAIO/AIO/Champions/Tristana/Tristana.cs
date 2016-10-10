@@ -14,6 +14,7 @@ using EloBuddy;
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.UI;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     The champion class.
@@ -39,7 +40,8 @@ using EloBuddy;
                     var hero = args.Target as AIHeroClient;
                     var bestTarget =
                         GameObjects.EnemyHeroes.FirstOrDefault(
-                            t => t.IsValidTarget(Vars.AaRange) && t.HasBuff("TristanaECharge"));
+                            t =>
+                            t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange()) && t.HasBuff("TristanaECharge"));
                     if (hero != null && bestTarget?.NetworkId != hero.NetworkId
                         && Vars.GetRealHealth(hero) > GameObjects.Player.GetAutoAttackDamage(hero) * 3)
                     {
@@ -76,11 +78,40 @@ using EloBuddy;
         /// <param name="args">The <see cref="Events.GapCloserEventArgs" /> instance containing the event data.</param>
         public static void OnGapCloser(object sender, Events.GapCloserEventArgs args)
         {
+            /// <summary>
+            ///     The Anti-Gapcloser W Logic.
+            /// </summary>
             if (Vars.W.IsReady() && args.Sender.IsMelee && args.IsDirectedToPlayer
-                && args.Sender.IsValidTarget(Vars.W.Range)
+                && GameObjects.Player.Distance(args.End) < GameObjects.Player.GetRealAutoAttackRange()
                 && Vars.Menu["spells"]["w"]["gapcloser"].GetValue<MenuBool>().Value)
             {
                 Vars.W.Cast(GameObjects.Player.ServerPosition.Extend(args.Sender.ServerPosition, -Vars.W.Range));
+            }
+
+            /// <summary>
+            ///     The Anti-Gapcloser R Logic.
+            /// </summary>
+            if (Vars.R.IsReady() && args.Sender.IsMelee && args.IsDirectedToPlayer
+                && args.Sender.IsValidTarget(Vars.R.Range)
+                && !Invulnerable.Check(args.Sender, DamageType.Magical, false)
+                && Vars.Menu["spells"]["r"]["gapcloser"].GetValue<MenuBool>().Value)
+            {
+                Vars.R.CastOnUnit(args.Sender);
+            }
+        }
+
+        /// <summary>
+        ///     Called on interruptable spell.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="Events.InterruptableTargetEventArgs" /> instance containing the event data.</param>
+        public static void OnInterruptableTarget(object sender, Events.InterruptableTargetEventArgs args)
+        {
+            if (Vars.R.IsReady() && args.Sender.IsValidTarget(Vars.R.Range)
+                && !Invulnerable.Check(args.Sender, DamageType.Magical, false)
+                && Vars.Menu["spells"]["r"]["interrupter"].GetValue<MenuBool>().Value)
+            {
+                Vars.R.CastOnUnit(args.Sender);
             }
         }
 

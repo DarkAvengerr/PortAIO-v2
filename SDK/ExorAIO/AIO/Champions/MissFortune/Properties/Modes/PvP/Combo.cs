@@ -45,9 +45,7 @@ using EloBuddy;
                                                         ? 0.35
                                                         : GameObjects.Player.Level < 11
                                                               ? 0.4
-                                                              : GameObjects.Player.Level < 13
-                                                                    ? 0.45
-                                                                    : 0.5;
+                                                              : GameObjects.Player.Level < 13 ? 0.45 : 0.5;
 
                 /// <summary>
                 ///     Through enemy minions.
@@ -75,17 +73,13 @@ using EloBuddy;
                     let target =
                         GameObjects.EnemyHeroes.FirstOrDefault(
                             t =>
-                            !Invulnerable.Check(t) && t.IsValidTarget(Vars.Q2.Range - 50f)
+                            !Invulnerable.Check(t) && t.IsValidTarget(Vars.Q2.Range)
                             && (t.NetworkId == MissFortune.PassiveTarget?.NetworkId
                                 || Targets.Minions.All(m => polygon.IsOutside((Vector2)m.ServerPosition))))
                     where target != null
                     where
                         !polygon.IsOutside((Vector2)target.ServerPosition)
-                        && !polygon.IsOutside(
-                            (Vector2)
-                            Movement.GetPrediction(
-                                target,
-                                GameObjects.Player.Distance(target) / Vars.Q.Speed + Vars.Q.Delay).UnitPosition)
+                        && !polygon.IsOutside((Vector2)Vars.Q.GetPrediction(target).UnitPosition)
                     select minion)
                 {
                     Vars.Q.CastOnUnit(minion);
@@ -102,7 +96,9 @@ using EloBuddy;
                     GameObjects.EnemyHeroes.Any(
                         t =>
                         t.IsValidTarget(
-                            Vars.Menu["spells"]["w"]["engager"].GetValue<MenuBool>().Value ? Vars.R.Range : Vars.AaRange)))
+                            Vars.Menu["spells"]["w"]["engager"].GetValue<MenuBool>().Value
+                                ? Vars.R.Range
+                                : GameObjects.Player.GetRealAutoAttackRange())))
                 {
                     Vars.W.Cast();
                 }
@@ -117,7 +113,8 @@ using EloBuddy;
             /// </summary>
             if (Vars.E.IsReady() && Targets.Target.IsValidTarget(Vars.E.Range)
                 && !Invulnerable.Check(Targets.Target, DamageType.Magical, false)
-                && Vars.Menu["spells"]["e"]["combo"].GetValue<MenuBool>().Value)
+                && Vars.Menu["spells"]["e"]["combo"].GetValue<MenuBool>().Value
+                && GameObjects.Player.Mana - Vars.E.Instance.SData.Mana > Vars.R.Instance.SData.Mana)
             {
                 Vars.E.Cast(Vars.E.GetPrediction(Targets.Target).CastPosition);
             }

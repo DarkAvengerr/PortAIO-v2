@@ -54,10 +54,9 @@ using EloBuddy;
                     /// </summary>
                     var hero = args.Target as AIHeroClient;
                     var bestTarget =
-                        GameObjects.EnemyHeroes.Where(
-                            t => t.IsValidTarget(Vars.AaRange))
-                            .OrderByDescending(
-                                o => Data.Get<ChampionPriorityData>().GetPriority(o.ChampionName)).FirstOrDefault();
+                        GameObjects.EnemyHeroes.Where(t => t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange()))
+                            .OrderByDescending(o => Data.Get<ChampionPriorityData>().GetPriority(o.ChampionName))
+                            .FirstOrDefault();
                     if (hero != null && bestTarget?.NetworkId != PassiveTarget?.NetworkId
                         && Vars.GetRealHealth(hero) > GameObjects.Player.GetAutoAttackDamage(hero) * 3
                         && hero.NetworkId == PassiveTarget?.NetworkId

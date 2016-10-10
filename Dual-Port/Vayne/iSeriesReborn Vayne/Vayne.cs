@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using DZLib.Logging;
+using iSeriesDZLib.Logging;
 using iSeriesReborn.Champions.Vayne.Modules;
 using iSeriesReborn.Champions.Vayne.Skills;
 using iSeriesReborn.Champions.Vayne.Utility;

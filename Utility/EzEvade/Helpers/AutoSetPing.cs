@@ -10,7 +10,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; namespace ezEvade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade
 {
     class AutoSetPing
     {
@@ -46,7 +48,7 @@ using EloBuddy; namespace ezEvade
 
             Spellbook.OnCastSpell += Game_OnCastSpell;
             MissileClient.OnCreate += Game_OnCreateObj;
-            AIHeroClient.OnSpellCast += Game_ProcessSpell;
+            AIHeroClient.OnProcessSpellCast += Game_ProcessSpell;
 
             //Game.OnUpdate += Game_OnUpdate;
 

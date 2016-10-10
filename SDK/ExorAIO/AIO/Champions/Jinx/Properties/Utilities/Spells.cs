@@ -7,6 +7,7 @@ using EloBuddy;
     using LeagueSharp;
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     The spells class.
@@ -22,7 +23,9 @@ using EloBuddy;
         {
             Vars.PowPow = new Spell(
                 SpellSlot.Q,
-                !GameObjects.Player.HasBuff("JinxQ") ? Vars.AaRange : 525f + GameObjects.Player.BoundingRadius);
+                !GameObjects.Player.HasBuff("JinxQ")
+                    ? GameObjects.Player.GetRealAutoAttackRange()
+                    : 525f + GameObjects.Player.BoundingRadius);
             Vars.Q = new Spell(
                 SpellSlot.Q,
                 Vars.PowPow.Range + (50f + 25f * GameObjects.Player.Spellbook.GetSpell(SpellSlot.Q).Level));

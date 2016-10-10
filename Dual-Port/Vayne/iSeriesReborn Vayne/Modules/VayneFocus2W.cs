@@ -1,4 +1,4 @@
-using DZLib.Logging;
+using iSeriesDZLib.Logging;
 using iSeriesReborn.Champions.Vayne.Utility;
 using iSeriesReborn.Utility;
 using iSeriesReborn.Utility.Geometry;

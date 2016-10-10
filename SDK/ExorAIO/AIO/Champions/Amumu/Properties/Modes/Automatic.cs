@@ -45,7 +45,7 @@ using EloBuddy;
                     switch (Variables.Orbwalker.ActiveMode)
                     {
                         /// <summary>
-                        ///     The Q Combo Enable Logic.
+                        ///     The W Combo Enable Logic.
                         /// </summary>
                         case OrbwalkingMode.Combo:
                             if (GameObjects.EnemyHeroes.Any(t => t.IsValidTarget(Vars.W.Range)))

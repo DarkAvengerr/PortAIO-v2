@@ -59,6 +59,7 @@ using EloBuddy;
                         Logics.Weaving(sender, args);
                         break;
                     case OrbwalkingMode.LaneClear:
+                        Logics.LaneClear(sender, args);
                         Logics.JungleClear(sender, args);
                         Logics.BuildingClear(sender, args);
                         break;

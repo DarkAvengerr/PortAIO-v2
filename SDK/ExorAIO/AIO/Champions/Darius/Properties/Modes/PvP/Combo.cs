@@ -6,6 +6,7 @@ using EloBuddy;
  namespace ExorAIO.Champions.Darius
 {
     using System;
+    using System.Linq;
 
     using ExorAIO.Utilities;
 
@@ -34,11 +35,24 @@ using EloBuddy;
             /// <summary>
             ///     The E Combo Logic.
             /// </summary>
-            if (Vars.E.IsReady() && Targets.Target.IsValidTarget(Vars.E.Range)
-                && !Targets.Target.IsValidTarget(Vars.AaRange)
+            if (Vars.E.IsReady() && Targets.Target.IsValidTarget(Vars.E.Range - 50f)
+                && !Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
                 && Vars.Menu["spells"]["e"]["combo"].GetValue<MenuBool>().Value)
             {
                 Vars.E.Cast(Vars.E.GetPrediction(Targets.Target).UnitPosition);
+            }
+
+            /// <summary>
+            ///     The Q Combo Logic.
+            /// </summary>
+            if (Vars.Q.IsReady() && !Vars.W.IsReady()
+                && Vars.Menu["spells"]["q"]["mode"].GetValue<MenuList>().Index != 2
+                && GameObjects.EnemyHeroes.Any(
+                    t =>
+                    t.IsValidTarget(Vars.Q.Range)
+                    && (Vars.Menu["spells"]["q"]["mode"].GetValue<MenuList>().Index == 0 || !t.IsValidTarget(205f))))
+            {
+                Vars.Q.Cast();
             }
         }
 

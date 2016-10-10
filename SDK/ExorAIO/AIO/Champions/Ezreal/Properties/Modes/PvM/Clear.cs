@@ -13,6 +13,7 @@ using EloBuddy;
     using LeagueSharp;
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.UI;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     The logics class.
@@ -63,7 +64,8 @@ using EloBuddy;
                 /// <summary>
                 ///     The JungleClear Q Logic.
                 /// </summary>
-                else if (Targets.JungleMinions.Any() && !Targets.JungleMinions.Any(m => m.IsValidTarget(Vars.AaRange)))
+                else if (Targets.JungleMinions.Any()
+                         && !Targets.JungleMinions.Any(m => m.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())))
                 {
                     Vars.Q.Cast(Targets.JungleMinions[0].ServerPosition);
                 }

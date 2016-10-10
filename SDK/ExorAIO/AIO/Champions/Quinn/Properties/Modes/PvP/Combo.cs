@@ -27,8 +27,8 @@ using EloBuddy;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Combo(EventArgs args)
         {
-            if ((Bools.HasSheenBuff() && Targets.Target.IsValidTarget(Vars.AaRange)) || !Targets.Target.IsValidTarget()
-                || Targets.Target.HasBuff("quinnw")
+            if ((Bools.HasSheenBuff() && Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange()))
+                || !Targets.Target.IsValidTarget() || Targets.Target.HasBuff("quinnw")
                 || Invulnerable.Check(Targets.Target))
             {
                 return;
@@ -48,8 +48,7 @@ using EloBuddy;
             ///     The Combo Q Logic.
             /// </summary>
             if (Vars.Q.IsReady() && (!Vars.E.IsReady() || !Vars.Menu["spells"]["e"]["combo"].GetValue<MenuBool>().Value)
-                && Targets.Target.IsValidTarget(Vars.Q.Range - 100f)
-                && !Vars.R.Instance.Name.Equals("QuinnRFinale")
+                && Targets.Target.IsValidTarget(Vars.Q.Range - 100f) && !Vars.R.Instance.Name.Equals("QuinnRFinale")
                 && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuBool>().Value)
             {
                 if (!Vars.Q.GetPrediction(Targets.Target).CollisionObjects.Any())

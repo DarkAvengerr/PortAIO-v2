@@ -37,10 +37,7 @@ using EloBuddy;
             /// <summary>
             ///     The W BuildingClear Logic.
             /// </summary>
-            if (Vars.W.IsReady()
-                && GameObjects.Player.ManaPercent
-                > ManaManager.GetNeededMana(Vars.E.Slot, Vars.Menu["spells"]["e"]["manamanager"])
-                && Vars.Menu["spells"]["w"]["buildings"].GetValue<MenuBool>().Value)
+            if (Vars.W.IsReady() && Vars.Menu["spells"]["w"]["buildings"].GetValue<MenuBool>().Value)
             {
                 Vars.W.Cast();
             }
@@ -60,19 +57,10 @@ using EloBuddy;
             /// <summary>
             ///     The Clear Q Logic.
             /// </summary>
-            if (Vars.Q.IsReady() && Vars.Menu["spells"]["q"]["clear"].GetValue<MenuBool>().Value)
+            if (Vars.Q.IsReady() && Targets.Minions.Any() && Targets.Minions.Count >= 3
+                && Vars.Menu["spells"]["q"]["laneclear"].GetValue<MenuBool>().Value)
             {
-                if (Targets.Minions.Any() && Targets.Minions.Count >= 3)
-                {
-                    Vars.Q.Cast();
-                }
-                else if (Targets.JungleMinions.Any())
-                {
-                    if (!Vars.W.IsReady() && !GameObjects.Player.HasBuff("RenektonPreExecute"))
-                    {
-                        Vars.Q.Cast();
-                    }
-                }
+                Vars.Q.Cast();
             }
         }
 
@@ -83,7 +71,8 @@ using EloBuddy;
         /// <param name="args">The args.</param>
         public static void JungleClear(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!(Variables.Orbwalker.GetTarget() is Obj_AI_Minion))
+            if (!(Variables.Orbwalker.GetTarget() is Obj_AI_Minion)
+                || !Targets.JungleMinions.Contains(Variables.Orbwalker.GetTarget() as Obj_AI_Minion))
             {
                 return;
             }
@@ -91,13 +80,17 @@ using EloBuddy;
             /// <summary>
             ///     The W JungleClear Logic.
             /// </summary>
-            if (Vars.W.IsReady()
-                && GameObjects.Player.ManaPercent
-                > ManaManager.GetNeededMana(Vars.W.Slot, Vars.Menu["spells"]["w"]["manamanager"])
-                && Vars.Menu["spells"]["w"]["jungleclear"].GetValue<MenuBool>().Value
-                && Targets.JungleMinions.Contains(Variables.Orbwalker.GetTarget() as Obj_AI_Minion))
+            if (Vars.W.IsReady() && Vars.Menu["spells"]["w"]["jungleclear"].GetValue<MenuBool>().Value)
             {
                 Vars.W.Cast();
+            }
+
+            /// <summary>
+            ///     The Q JungleClear Logic.
+            /// </summary>
+            if (Vars.Q.IsReady() && Vars.Menu["spells"]["q"]["jungleclear"].GetValue<MenuBool>().Value)
+            {
+                Vars.Q.Cast();
             }
         }
 

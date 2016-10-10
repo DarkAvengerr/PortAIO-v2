@@ -1,5 +1,5 @@
 using System;
-using DZLib.Logging;
+using iSeriesDZLib.Logging;
 using LeagueSharp;
 
 using EloBuddy; 

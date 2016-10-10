@@ -50,7 +50,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
         public static Result Circle(Spell spell,
             AIHeroClient target,
             HitChance hitChance,
-            bool boundingRadius = true,
+            bool boundingRadius = false,
             bool extended = true)
         {
             try

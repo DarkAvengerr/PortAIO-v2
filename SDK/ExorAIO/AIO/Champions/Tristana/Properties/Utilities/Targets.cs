@@ -5,8 +5,6 @@ using EloBuddy;
     using System.Collections.Generic;
     using System.Linq;
 
-    using ExorAIO.Utilities;
-
     using LeagueSharp;
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.Utils;
@@ -25,19 +23,22 @@ using EloBuddy;
             =>
                 GameObjects.Jungle.Where(
                     m =>
-                    m.IsValidTarget(Vars.AaRange)
+                    m.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
                     && (!GameObjects.JungleSmall.Contains(m) || m.CharData.BaseSkinName.Equals("Sru_Crab"))).ToList();
 
         /// <summary>
         ///     The minions target.
         /// </summary>
         public static List<Obj_AI_Minion> Minions
-            => GameObjects.EnemyMinions.Where(m => m.IsMinion() && m.IsValidTarget(Vars.AaRange)).ToList();
+            =>
+                GameObjects.EnemyMinions.Where(
+                    m => m.IsMinion() && m.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())).ToList();
 
         /// <summary>
         ///     The main hero target.
         /// </summary>
-        public static AIHeroClient Target => Variables.TargetSelector.GetTarget(Vars.AaRange, DamageType.Physical);
+        public static AIHeroClient Target
+            => Variables.TargetSelector.GetTarget(GameObjects.Player.GetRealAutoAttackRange(), DamageType.Physical);
 
         #endregion
     }

@@ -51,7 +51,8 @@ using EloBuddy;
             /// <summary>
             ///     The Automatic Q Logic.
             /// </summary>
-            if (Vars.Q.IsReady() && GameObjects.Player.CountEnemyHeroesInRange(Vars.AaRange) < 3
+            if (Vars.Q.IsReady()
+                && GameObjects.Player.CountEnemyHeroesInRange(GameObjects.Player.GetRealAutoAttackRange()) < 3
                 && Vars.Menu["spells"]["q"]["logical"].GetValue<MenuBool>().Value)
             {
                 foreach (var target in
@@ -74,8 +75,9 @@ using EloBuddy;
                     GameObjects.EnemyHeroes.Where(
                         t =>
                         t != null && !Invulnerable.Check(t) && t.IsValidTarget(Vars.R.Range)
-                        && Vars.Menu["spells"]["r"]["whitelist"][t.ChampionName.ToLower()]
-                               .GetValue<MenuBool>().Value).OrderBy(o => o.Health).First());
+                        && Vars.Menu["spells"]["r"]["whitelist"][t.ChampionName.ToLower()].GetValue<MenuBool>().Value)
+                        .OrderBy(o => o.Health)
+                        .First());
             }
         }
 

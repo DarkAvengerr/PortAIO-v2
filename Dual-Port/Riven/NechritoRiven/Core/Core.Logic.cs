@@ -1,157 +1,198 @@
-#region
-
-using System.Collections.Generic;
-using LeagueSharp;
-using LeagueSharp.Common;
-
-#endregion
-
 using EloBuddy; 
  using LeagueSharp.Common; 
  namespace NechritoRiven.Core
 {
-   internal partial class Core
+    #region
+
+    using System;
+    using System.Collections.Generic;
+
+    using LeagueSharp;
+    using LeagueSharp.Common;
+
+    #endregion
+
+    /// <summary>
+    /// The core.
+    /// </summary>
+    internal partial class Core
     {
-       public static AttackableUnit QTarget;
-       private static bool _forceQ;
-       private static bool _forceW;
-       private static bool _forceR;
-       private static bool _forceR2;
-       private static bool _forceItem;
+        #region Static Fields
+
+        private static AttackableUnit Unit { get; set; }
+
+        private static bool canQ;
+
+        private static bool canW;
+
+        private static bool canItem;
+
+        /// <summary>
+        ///     The e anti spell.
+        /// </summary>
+        public static List<string> EAntiSpell = new List<string>
+                                                    {
+                                                        "MonkeyKingSpinToWin", "KatarinaRTrigger", "HungeringStrike",
+                                                        "TwitchEParticle", "RengarPassiveBuffDashAADummy",
+                                                        "RengarPassiveBuffDash", "IreliaEquilibriumStrike",
+                                                        "BraumBasicAttackPassiveOverride", "gnarwproc",
+                                                        "hecarimrampattack", "illaoiwattack", "JaxEmpowerTwo",
+                                                        "JayceThunderingBlow", "RenektonSuperExecute",
+                                                        "vaynesilvereddebuff"
+                                                    };
+
         public static float LastQ;
-        
-        private static int Item
-            =>
-                Items.CanUseItem(3077) && Items.HasItem(3077)
-                    ? 3077
-                    : Items.CanUseItem(3074) && Items.HasItem(3074) ? 3074 : 0;
 
-        public static void ForceW()
+        /// <summary>
+        ///     The targeted anti spell.
+        /// </summary>
+        public static List<string> TargetedAntiSpell = new List<string>
+                                                           {
+                                                               "MonkeyKingQAttack", "YasuoDash", "FizzPiercingStrike",
+                                                               "RengarQ", "GarenQAttack", "GarenRPreCast",
+                                                               "PoppyPassiveAttack", "viktorqbuff", "FioraEAttack",
+                                                               "TeemoQ"
+                                                           };
+
+        /// <summary>
+        ///     The w anti spell.
+        /// </summary>
+        public static List<string> WAntiSpell = new List<string>
+                                                    {
+                                                        "RenektonPreExecute", "TalonCutthroat", "IreliaEquilibriumStrike",
+                                                        "XenZhaoThrust3", "KatarinaRTrigger", "KatarinaE",
+                                                        "MonkeyKingSpinToWin"
+                                                    };
+
+        public static List<string> NoRList = new List<string>
+                                                           {
+                                                               "FioraW", "kindrednodeathbuff", "Undying Rage", "JudicatorIntervention"
+                                                           };
+
+        #endregion
+
+        #region Public Properties
+
+        private static int Item =>
+             Items.CanUseItem(3077) && Items.HasItem(3077)
+           ? 3077
+           : Items.CanUseItem(3074) && Items.HasItem(3074)
+           ? 3074
+           : Items.CanUseItem(3748) && Items.HasItem(3748)
+           ? 3748 : 0;
+
+        public static bool R1 { get; set; }
+
+        private static bool CanQ(AttackableUnit x)
         {
-            _forceW = Spells.W.IsReady();
-            LeagueSharp.Common.Utility.DelayAction.Add(500, () => _forceW = false);
+            return canQ && InRange(x);  
         }
 
-        public static void ForceQ(AttackableUnit target)
+        private static bool CanW(AttackableUnit x)
         {
-            _forceQ = true;
-            QTarget = target;
+            return canW && InRange(x);
         }
+
+        public static bool InRange(AttackableUnit x)
+        {
+            return ObjectManager.Player.HasBuff("RivenFengShuiEngine")
+            ? Player.Distance(x) <= 295
+            : Player.Distance(x) <= 235;
+        }
+        #endregion
+
+        #region Public Methods and Operators
+
         public static void ForceSkill()
         {
-            if (_forceQ && qTarget != null && qTarget.IsValidTarget(Spells.E.Range + Player.BoundingRadius + 70) &&
-                Spells.Q.IsReady())
+            if (Unit == null)
             {
-                Spells.Q.Cast(qTarget.Position);
+                return;
             }
 
-            if (_forceW)
+            if (canQ && Spells.Q.IsReady())
             {
-                Spells.W.Cast();
+                if (canItem && Items.CanUseItem(Item) && Item != 0)
+                {
+                    Items.UseItem(Item);
+                    LeagueSharp.Common.Utility.DelayAction.Add(2, () => Spells.Q.Cast(Unit.Position));
+                }
+                else
+                {
+                    Spells.Q.Cast(Unit.Position);
+                }
             }
 
-            if (_forceR && Spells.R.Instance.Name == IsFirstR)
+            if (canW && Player.Distance(Unit) <= Spells.W.Range)
+            {
+                if (canItem && Items.CanUseItem(Item) && Item != 0)
+                {
+                    Items.UseItem(Item);
+                    LeagueSharp.Common.Utility.DelayAction.Add(3, () => Spells.W.Cast());
+                }
+                else
+                {
+                    Spells.W.Cast();
+                }
+            }
+
+            if (R1 && Spells.R.Instance.Name == IsFirstR)
             {
                 Spells.R.Cast();
             }
-
-            if (_forceItem && Items.CanUseItem(Item) && Items.HasItem(Item) && Item != 0)
-            {
-                Items.UseItem(Item);
-            }
-
-            if (!_forceR2 || Spells.R.Instance.Name != IsSecondR) return;
-
-            var target = TargetSelector.GetSelectedTarget();
-            if (target != null) Spells.R.Cast(target.Position);
-        }
-        public static void OnCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            if (!sender.IsMe) return;
-
-            if (args.SData.Name.Contains("ItemTiamatCleave")) _forceItem = false;
-            if (args.SData.Name.Contains("RivenTriCleave")) _forceQ = false;
-            if (args.SData.Name.Contains("RivenMartyr")) _forceW = false;
-            if (args.SData.Name == IsFirstR) _forceR = false;
-            if (args.SData.Name == IsSecondR) _forceR2 = false;
         }
 
-        public static int WRange => Player.HasBuff("RivenFengShuiEngine")
-          ? 330
-          : 265;
-
-        public static bool InWRange(Obj_AI_Base t) => t != null && t.IsValidTarget(WRange);
-
-        public static bool InQRange(GameObject target)
+        public static void CastQ(AttackableUnit x)
         {
-            return target != null && (Player.HasBuff("RivenFengShuiEngine")
-                ? 330 >= Player.Distance(target.Position)
-                : 265 >= Player.Distance(target.Position));
+            Unit = x;
+            canQ = true;
         }
-        public static void ForceItem()
+
+        public static void CastW(Obj_AI_Base x)
         {
-            if (Items.CanUseItem(Item) && Items.HasItem(Item) && Item != 0) _forceItem = true;
-            LeagueSharp.Common.Utility.DelayAction.Add(500, () => _forceItem = false);
+            canW = Spells.W.IsReady();
+            LeagueSharp.Common.Utility.DelayAction.Add(500, () => canW = false);
         }
 
         public static void ForceR()
         {
-            _forceR = Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR;
-            LeagueSharp.Common.Utility.DelayAction.Add(500, () => _forceR = false);
+            R1 = Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR;
+            LeagueSharp.Common.Utility.DelayAction.Add(500, () => R1 = false); 
         }
 
-        public static void ForceR2()
+        public static void OnCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            _forceR2 = Spells.R.IsReady() && Spells.R.Instance.Name == IsSecondR;
-            LeagueSharp.Common.Utility.DelayAction.Add(500, () => _forceR2 = false);
+            if (!sender.IsMe)
+            {
+                return;
+            }
+
+            var argsName = args.SData.Name;
+
+            if (argsName.Contains("RivenTriCleave"))
+            {
+                canQ = false;
+            }
+
+            if (argsName.Contains("RivenMartyr"))
+            {
+                canW = false;
+            }
+
+            if (argsName == IsFirstR)
+            {
+                R1 = false;
+            }
         }
-        public static void ForceCastQ(AttackableUnit target)
+
+        public void UseItem()
         {
-            _forceQ = true;
-            qTarget = target;
+            if (Items.CanUseItem(Item) && Item != 0)
+            {
+                canItem = true;
+            }
         }
 
-        public static void FlashW()
-        {
-            var target = TargetSelector.GetSelectedTarget();
-
-            if (target == null || !target.IsValidTarget() || target.IsZombie) return;
-
-            LeagueSharp.Common.Utility.DelayAction.Add(10, () => Player.Spellbook.CastSpell(Spells.Flash, target.Position));
-            LeagueSharp.Common.Utility.DelayAction.Add(11, ()=> Spells.W.Cast(target));
-        }
-
-        public static List<string> TargetedAntiSpell = new List<string>()
-        {
-            "MonkeyKingQAttack", "YasuoDash",
-            "FizzPiercingStrike", "RengarQ",
-            "GarenQAttack", "GarenRPreCast",
-            "PoppyPassiveAttack", "viktorqbuff" ,
-            "FioraEAttack",
-        };
-
-        public static List<string> EAntiSpell = new List<string>()
-        {
-           "MonkeyKingSpinToWin",  "KatarinaRTrigger",
-            "HungeringStrike", "TwitchEParticle",
-            "RengarPassiveBuffDashAADummy", "RengarPassiveBuffDash",
-            "IreliaEquilibriumStrike", "BraumBasicAttackPassiveOverride",
-            "gnarwproc", "hecarimrampattack",
-            "illaoiwattack", "JaxEmpowerTwo",
-            "JayceThunderingBlow", "RenektonSuperExecute",
-            "vaynesilvereddebuff",
-
-        };
-
-        public static List<string> WAntiSpell = new List<string>()
-        {
-            "RenektonPreExecute",
-            "TalonCutthroat",
-            "IreliaEquilibriumStrike",
-            "XenZhaoThrust3",
-            "KatarinaRTrigger",
-            "KatarinaE",
-            "MonkeyKingSpinToWin"
-        };
+        #endregion
     }
 }

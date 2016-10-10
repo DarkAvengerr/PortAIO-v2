@@ -18,12 +18,22 @@ using EloBuddy;
     using LeagueSharp.Data.Enumerations;
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     The champion class.
     /// </summary>
     internal class Kalista
     {
+        #region Public Properties
+
+        /// <summary>
+        ///     Gets or sets the SoulBound.
+        /// </summary>
+        public static AIHeroClient SoulBound { get; set; } = null;
+
+        #endregion
+
         #region Public Methods and Operators
 
         /// <summary>
@@ -43,9 +53,11 @@ using EloBuddy;
                     var hero = args.Target as AIHeroClient;
                     var bestTarget =
                         GameObjects.EnemyHeroes.Where(
-                            t => t.IsValidTarget(Vars.AaRange) && t.HasBuff("kalistacoopstrikemarkally"))
-                            .OrderByDescending(
-                                o => Data.Get<ChampionPriorityData>().GetPriority(o.ChampionName)).FirstOrDefault();
+                            t =>
+                            t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
+                            && t.HasBuff("kalistacoopstrikemarkally"))
+                            .OrderByDescending(o => Data.Get<ChampionPriorityData>().GetPriority(o.ChampionName))
+                            .FirstOrDefault();
                     if (hero != null && bestTarget?.NetworkId != hero.NetworkId
                         && Vars.GetRealHealth(hero) > GameObjects.Player.GetAutoAttackDamage(hero) * 3)
                     {

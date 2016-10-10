@@ -41,9 +41,7 @@ using EloBuddy;
             ///     The W Combo Logic.
             /// </summary>
             if (Vars.W.IsReady()
-                && GameObjects.EnemyHeroes.Any(
-                    t =>
-                    t.Distance((Vector2)Orianna.BallPosition) < Vars.W.Range)
+                && GameObjects.EnemyHeroes.Any(t => t.Distance((Vector2)Orianna.BallPosition) < Vars.W.Range)
                 && Vars.Menu["spells"]["w"]["combo"].GetValue<MenuBool>().Value)
             {
                 Vars.W.Cast();
@@ -58,9 +56,8 @@ using EloBuddy;
                 > Vars.Q.Instance.SData.Mana + Vars.W.Instance.SData.Mana
                 && Vars.Menu["spells"]["e"]["combo"].GetValue<MenuBool>().Value)
             {
-                foreach (
-                    var ally in
-                        GameObjects.AllyHeroes.OrderBy(o => o.Health).Where(t => t.IsValidTarget(Vars.E.Range, false)))
+                foreach (var ally in
+                    GameObjects.AllyHeroes.OrderBy(o => o.Health).Where(t => t.IsValidTarget(Vars.E.Range, false)))
                 {
                     var polygon = new Geometry.Rectangle(
                         ally.ServerPosition,
@@ -98,8 +95,8 @@ using EloBuddy;
                 Vars.R.Cast();
             }
 
-            if (Bools.HasSheenBuff() && Targets.Target.IsValidTarget(Vars.AaRange) || !Targets.Target.IsValidTarget()
-                || Invulnerable.Check(Targets.Target, DamageType.Magical))
+            if (Bools.HasSheenBuff() && Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
+                || !Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target, DamageType.Magical))
             {
                 return;
             }
@@ -110,10 +107,9 @@ using EloBuddy;
             if (Vars.Q.IsReady() && Targets.Target.IsValidTarget(Vars.Q.Range)
                 && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuBool>().Value)
             {
-                if (Vars.E.IsReady() &&
-                    Vars.Menu["spells"]["e"]["logical"].GetValue<MenuBool>().Value
+                if (Vars.E.IsReady() && Vars.Menu["spells"]["e"]["logical"].GetValue<MenuBool>().Value
                     && ((Vector2)Orianna.BallPosition).Distance((Vector2)GameObjects.Player.ServerPosition)
-                    > Vars.AaRange
+                    > GameObjects.Player.GetRealAutoAttackRange()
                     && ((Vector2)Orianna.BallPosition).Distance((Vector2)Targets.Target.ServerPosition)
                     > ((Vector2)Orianna.BallPosition).Distance((Vector2)GameObjects.Player.ServerPosition))
                 {

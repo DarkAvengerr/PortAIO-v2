@@ -15,10 +15,6 @@ using EloBuddy;
     using LeagueSharp.SDK.UI;
     using LeagueSharp.SDK.Utils;
 
-    using SharpDX;
-
-    using Geometry = ExorAIO.Utilities.Geometry;
-
     /// <summary>
     ///     The logics class.
     /// </summary>
@@ -80,46 +76,14 @@ using EloBuddy;
                 }
 
                 /// <summary>
-                ///     The LaneClear Q Logics.
+                ///     The LaneClear Q Logic.
                 /// </summary>
-                else
+                else if (!GameObjects.EnemyHeroes.Any(t => !Invulnerable.Check(t) && t.IsValidTarget(Vars.Q.Range + 100)))
                 {
-                    /// <summary>
-                    ///     The Aggressive LaneClear Q Logic.
-                    /// </summary>
-                    if (
-                        GameObjects.EnemyHeroes.Any(
-                            t => t.IsValidTarget(Vars.Q.Range) && !Invulnerable.Check(t, DamageType.Magical, false)))
+                    if (Vars.Q.GetCircularFarmLocation(Targets.Minions, Vars.Q.Width * 2 - 10f).MinionsHit >= 3)
                     {
-                        if (Vars.Q.GetLineFarmLocation(Targets.Minions, Vars.Q.Width * 2 - 10f).MinionsHit >= 3
-                            && !new Geometry.Rectangle(
-                                    GameObjects.Player.ServerPosition,
-                                    GameObjects.Player.ServerPosition.Extend(
-                                        Targets.Minions[0].ServerPosition,
-                                        Vars.Q.Range),
-                                    Vars.Q.Width * 2 - 10f).IsOutside(
-                                        (Vector2)
-                                        Vars.Q.GetPrediction(
-                                            GameObjects.EnemyHeroes.FirstOrDefault(
-                                                t => !Invulnerable.Check(t) && t.IsValidTarget(Vars.Q.Range)))
-                                            .CastPosition))
-                        {
-                            Vars.Q.Cast(Vars.Q.GetLineFarmLocation(Targets.Minions, Vars.Q.Width * 2 - 10f).Position);
-                        }
-                    }
-
-                    /// <summary>
-                    ///     The LaneClear Q Logic.
-                    /// </summary>
-                    else if (
-                        !GameObjects.EnemyHeroes.Any(
-                            t => !Invulnerable.Check(t) && t.IsValidTarget(Vars.Q.Range + 100)))
-                    {
-                        if (Vars.Q.GetCircularFarmLocation(Targets.Minions, Vars.Q.Width * 2 - 10f).MinionsHit >= 3)
-                        {
-                            Vars.Q.Cast(
-                                Vars.Q.GetCircularFarmLocation(Targets.Minions, Vars.Q.Width * 2 - 10f).Position);
-                        }
+                        Vars.Q.Cast(
+                            Vars.Q.GetCircularFarmLocation(Targets.Minions, Vars.Q.Width * 2 - 10f).Position);
                     }
                 }
             }

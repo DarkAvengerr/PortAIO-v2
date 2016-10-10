@@ -79,7 +79,7 @@ using EloBuddy;
 
                 Vars.SpellsMenu.Add(Vars.EMenu);
 
-                /// <summary> summary set W
+                /// <summary>
                 ///     Sets the menu for the R.
                 /// </summary>
                 Vars.RMenu = new Menu("r", "Use R to:");

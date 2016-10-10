@@ -27,7 +27,9 @@ using System.Text;
 using SharpDX;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace ezEvade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade
 {
 
     class MathUtilsCPA

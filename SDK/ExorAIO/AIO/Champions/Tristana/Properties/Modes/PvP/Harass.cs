@@ -32,6 +32,15 @@ using EloBuddy;
             }
 
             /// <summary>
+            ///     The Q Harass Logic.
+            /// </summary>
+            if (Vars.Q.IsReady() && GameObjects.Player.Spellbook.IsAutoAttacking
+                && Vars.Menu["spells"]["q"]["harass"].GetValue<MenuBool>().Value)
+            {
+                Vars.Q.Cast();
+            }
+
+            /// <summary>
             ///     The E Harass Logic.
             /// </summary>
             if (Vars.E.IsReady() && Targets.Target.IsValidTarget(Vars.E.Range)

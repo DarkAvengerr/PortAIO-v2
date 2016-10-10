@@ -8,7 +8,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; namespace ezEvade.SpecialSpells
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade.SpecialSpells
 {
     class Jayce : ChampionPlugin
     {
@@ -28,7 +30,7 @@ using EloBuddy; namespace ezEvade.SpecialSpells
                 }
 
                 //Obj_AI_Minion.OnCreate += (obj, args) => OnCreateObj_jayceshockblast(obj, args, hero, spellData);
-                //AIHeroClient.OnSpellCast += OnProcessSpell_jayceshockblast;
+                //AIHeroClient.OnProcessSpellCast += OnProcessSpell_jayceshockblast;
                 //SpellDetector.OnProcessSpecialSpell += ProcessSpell_jayceshockblast;
             }*/
         }

@@ -8,7 +8,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; namespace ezEvade.SpecialSpells
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade.SpecialSpells
 {
     class Lucian : ChampionPlugin
     {

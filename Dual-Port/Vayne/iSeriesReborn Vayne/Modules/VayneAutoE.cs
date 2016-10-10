@@ -1,4 +1,4 @@
-using DZLib.Logging;
+using iSeriesDZLib.Logging;
 using iSeriesReborn.Champions.Vayne.Skills;
 using iSeriesReborn.Utility.ModuleHelper;
 using LeagueSharp;

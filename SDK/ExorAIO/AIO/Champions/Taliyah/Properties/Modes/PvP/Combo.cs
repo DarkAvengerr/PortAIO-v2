@@ -27,8 +27,8 @@ using EloBuddy;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Combo(EventArgs args)
         {
-            if (Bools.HasSheenBuff() && Targets.Target.IsValidTarget(Vars.AaRange) || !Targets.Target.IsValidTarget()
-                || Invulnerable.Check(Targets.Target, DamageType.Magical, false))
+            if (Bools.HasSheenBuff() && Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
+                || !Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target, DamageType.Magical, false))
             {
                 return;
             }
@@ -92,8 +92,7 @@ using EloBuddy;
             if (Vars.Q.IsReady() && !Vars.E.IsReady() && Targets.Target.IsValidTarget(Vars.Q.Range - 50f)
                 && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuBool>().Value)
             {
-                if (Taliyah.TerrainObject != null
-                    && Vars.Menu["spells"]["q"]["combofull"].GetValue<MenuBool>().Value)
+                if (Taliyah.TerrainObject != null && Vars.Menu["spells"]["q"]["combofull"].GetValue<MenuBool>().Value)
                 {
                     return;
                 }

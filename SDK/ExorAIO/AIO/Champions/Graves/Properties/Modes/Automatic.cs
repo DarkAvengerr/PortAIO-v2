@@ -68,11 +68,12 @@ using EloBuddy;
             if (Vars.R.IsReady() && Vars.Menu["spells"]["r"]["bool"].GetValue<MenuBool>().Value
                 && Vars.Menu["spells"]["r"]["key"].GetValue<MenuKeyBind>().Active)
             {
-                var target = GameObjects.EnemyHeroes.Where(
-                    t =>
-                    !Invulnerable.Check(t) && t.IsValidTarget(Vars.R.Range)
-                    && Vars.Menu["spells"]["r"]["whitelist"][Targets.Target.ChampionName.ToLower()]
-                           .GetValue<MenuBool>().Value).OrderBy(o => o.Health).FirstOrDefault();
+                var target =
+                    GameObjects.EnemyHeroes.Where(
+                        t =>
+                        !Invulnerable.Check(t) && t.IsValidTarget(Vars.R.Range)
+                        && Vars.Menu["spells"]["r"]["whitelist"][Targets.Target.ChampionName.ToLower()]
+                               .GetValue<MenuBool>().Value).OrderBy(o => o.Health).FirstOrDefault();
                 if (target != null)
                 {
                     Vars.R.Cast(Vars.R.GetPrediction(target).UnitPosition);

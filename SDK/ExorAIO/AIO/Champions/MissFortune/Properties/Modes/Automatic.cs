@@ -36,11 +36,12 @@ using EloBuddy;
             /// </summary>
             if (Vars.R.IsReady() && Vars.Menu["spells"]["r"]["bool"].GetValue<MenuBool>().Value)
             {
-                if (Targets.Target.IsValidTarget(Vars.E.IsReady() ? Vars.E.Range : Vars.R.Range)
+                if (Targets.Target.IsValidTarget(Vars.E.IsReady() ? Vars.E.Range : Vars.R.Range - 50f)
                     && !GameObjects.Player.HasBuff("missfortunebulletsound")
                     && Vars.Menu["spells"]["r"]["key"].GetValue<MenuKeyBind>().Active)
                 {
-                    if (Vars.E.IsReady())
+                    if (Vars.E.IsReady()
+                        && GameObjects.Player.Mana - Vars.E.Instance.SData.Mana > Vars.R.Instance.SData.Mana)
                     {
                         Vars.E.Cast(Targets.Target.ServerPosition);
                     }

@@ -33,7 +33,7 @@ using EloBuddy;
 
             if (Bools.HasSheenBuff())
             {
-                if (Targets.Target.IsValidTarget(Vars.AaRange))
+                if (Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange()))
                 {
                     return;
                 }

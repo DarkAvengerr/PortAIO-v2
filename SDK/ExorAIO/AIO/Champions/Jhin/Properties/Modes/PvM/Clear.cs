@@ -67,10 +67,11 @@ using EloBuddy;
                     > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["laneclear"])
                     && Vars.Menu["spells"]["q"]["laneclear"].GetValue<MenuSliderButton>().BValue)
                 {
-                    foreach (var minion in Targets.Minions.Where(
-                        m =>
-                        m.IsValidTarget(Vars.Q.Range) && Targets.Minions.Count(m2 => m2.Distance(m) < 350f) >= 3
-                        && Vars.GetRealHealth(m) < (float)GameObjects.Player.GetSpellDamage(m, SpellSlot.Q)))
+                    foreach (var minion in
+                        Targets.Minions.Where(
+                            m =>
+                            m.IsValidTarget(Vars.Q.Range) && Targets.Minions.Count(m2 => m2.Distance(m) < 350f) >= 3
+                            && Vars.GetRealHealth(m) < (float)GameObjects.Player.GetSpellDamage(m, SpellSlot.Q)))
                     {
                         Vars.Q.CastOnUnit(minion);
                     }

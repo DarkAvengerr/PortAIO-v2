@@ -10,7 +10,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; namespace ezEvade.Draw
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade.Draw
 {
     class RenderLine : RenderObject
     {

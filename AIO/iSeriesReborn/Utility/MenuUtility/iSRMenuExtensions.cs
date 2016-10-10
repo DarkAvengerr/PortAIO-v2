@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using DZLib.Logging;
+using iSeriesDZLib.Logging;
 using iSeriesReborn.Utility.Entities;
 using LeagueSharp;
 using LeagueSharp.Common;

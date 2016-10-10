@@ -6,7 +6,7 @@ using LeagueSharp.Common;
 using Color = System.Drawing.Color;
 using UnderratedAIO.Helpers;
 using Environment = UnderratedAIO.Helpers.Environment;
-//using Orbwalking = UnderratedAIO.Helpers.Orbwalking;  // Orbwalking of UnderratedAIO will make crash game, plzz disable all UnderratedAIO.Helpers.Orbwalking
+using Orbwalking = UnderratedAIO.Helpers.Orbwalking;  // Orbwalking of UnderratedAIO will make crash game, plzz disable all UnderratedAIO.Helpers.Orbwalking
 using EloBuddy;
 
 namespace UnderratedAIO.Champions

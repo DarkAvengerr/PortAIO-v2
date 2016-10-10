@@ -30,7 +30,7 @@ using EloBuddy;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Harass(EventArgs args)
         {
-            if (Orianna.BallPosition == null || Invulnerable.Check(Targets.Target))
+            if (Orianna.BallPosition == null || !Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target))
             {
                 return;
             }
@@ -50,8 +50,8 @@ using EloBuddy;
                 Vars.W.Cast();
             }
 
-            if (Bools.HasSheenBuff() && Targets.Target.IsValidTarget(Vars.AaRange) || !Targets.Target.IsValidTarget()
-                || Invulnerable.Check(Targets.Target, DamageType.Magical))
+            if (Bools.HasSheenBuff() && Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
+                || !Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target, DamageType.Magical))
             {
                 return;
             }
@@ -64,10 +64,9 @@ using EloBuddy;
                 > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["harass"])
                 && Vars.Menu["spells"]["q"]["harass"].GetValue<MenuSliderButton>().BValue)
             {
-                if (Vars.E.IsReady() &&
-                    Vars.Menu["spells"]["e"]["logical"].GetValue<MenuBool>().Value
+                if (Vars.E.IsReady() && Vars.Menu["spells"]["e"]["logical"].GetValue<MenuBool>().Value
                     && ((Vector2)Orianna.BallPosition).Distance((Vector2)GameObjects.Player.ServerPosition)
-                    > Vars.AaRange
+                    > GameObjects.Player.GetRealAutoAttackRange()
                     && ((Vector2)Orianna.BallPosition).Distance((Vector2)Targets.Target.ServerPosition)
                     > ((Vector2)Orianna.BallPosition).Distance((Vector2)GameObjects.Player.ServerPosition))
                 {

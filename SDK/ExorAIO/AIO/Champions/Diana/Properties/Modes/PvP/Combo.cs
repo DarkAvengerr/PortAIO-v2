@@ -28,7 +28,7 @@ using EloBuddy;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Combo(EventArgs args)
         {
-            if (Bools.HasSheenBuff() && Targets.Target.IsValidTarget(Vars.AaRange))
+            if (Bools.HasSheenBuff() && Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange()))
             {
                 return;
             }
@@ -41,7 +41,8 @@ using EloBuddy;
             {
                 Vars.W.Cast();
             }
-            if (!Targets.Target.IsValidTarget() || Targets.Target.IsValidTarget(Vars.AaRange)
+            if (!Targets.Target.IsValidTarget()
+                || Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
                 || Invulnerable.Check(Targets.Target, DamageType.Magical, false))
             {
                 return;
@@ -150,7 +151,7 @@ using EloBuddy;
             /// <summary>
             ///     The Automatic E Logic.
             /// </summary>
-            if (Vars.E.IsReady() && !Targets.Target.IsValidTarget(Vars.AaRange)
+            if (Vars.E.IsReady() && !Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
                 && Targets.Target.IsValidTarget(Vars.E.Range - 25)
                 && Vars.Menu["spells"]["e"]["logical"].GetValue<MenuBool>().Value)
             {

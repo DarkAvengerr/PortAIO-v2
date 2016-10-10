@@ -19,6 +19,7 @@ using EloBuddy;
         {
             Game.OnUpdate += Tristana.OnUpdate;
             Events.OnGapCloser += Tristana.OnGapCloser;
+            Events.OnInterruptableTarget += Tristana.OnInterruptableTarget;
             Obj_AI_Base.OnBuffGain += Tristana.OnBuffAdd;
             Variables.Orbwalker.OnAction += Tristana.OnAction;
         }

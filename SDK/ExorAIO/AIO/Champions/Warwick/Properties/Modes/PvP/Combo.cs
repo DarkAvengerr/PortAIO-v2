@@ -27,7 +27,8 @@ using EloBuddy;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Combo(EventArgs args)
         {
-            if (Bools.HasSheenBuff() && Targets.Target.IsValidTarget(Vars.AaRange) || Invulnerable.Check(Targets.Target))
+            if (Bools.HasSheenBuff() && Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
+                || Invulnerable.Check(Targets.Target))
             {
                 return;
             }
@@ -38,8 +39,13 @@ using EloBuddy;
             if (Vars.W.IsReady() && GameObjects.Player.Spellbook.IsAutoAttacking
                 && Vars.Menu["spells"]["w"]["combo"].GetValue<MenuBool>().Value)
             {
-                Vars.W.Cast();
+                if (!Vars.Menu["miscellaneous"]["keeprmana"]
+                    || GameObjects.Player.Mana > Vars.W.Instance.SData.Mana + Vars.R.Instance.SData.Mana)
+                {
+                    Vars.W.Cast();
+                }
             }
+
             if (GameObjects.Player.Spellbook.IsAutoAttacking)
             {
                 return;
@@ -49,9 +55,15 @@ using EloBuddy;
             ///     The Q Combo Logic.
             /// </summary>
             if (Vars.Q.IsReady() && Targets.Target.IsValidTarget(Vars.Q.Range)
-                && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuBool>().Value)
+                && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuSliderButton>().BValue
+                && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuSliderButton>().SValue
+                > GameObjects.Player.HealthPercent)
             {
-                Vars.Q.CastOnUnit(Targets.Target);
+                if (!Vars.Menu["miscellaneous"]["keeprmana"]
+                    || GameObjects.Player.Mana > Vars.Q.Instance.SData.Mana + Vars.R.Instance.SData.Mana)
+                {
+                    Vars.Q.CastOnUnit(Targets.Target);
+                }
             }
 
             /// <summary>
@@ -62,7 +74,8 @@ using EloBuddy;
                 foreach (var target in
                     GameObjects.EnemyHeroes.Where(
                         t =>
-                        !t.IsUnderEnemyTurret() && t.IsValidTarget(Vars.R.Range) && !t.IsValidTarget(Vars.AaRange)
+                        !t.IsUnderEnemyTurret() && t.IsValidTarget(Vars.R.Range)
+                        && !t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
                         && Vars.Menu["spells"]["r"]["combo"].GetValue<MenuBool>().Value
                         && Vars.Menu["spells"]["r"]["whitelist"][t.ChampionName.ToLower()].GetValue<MenuBool>().Value))
                 {

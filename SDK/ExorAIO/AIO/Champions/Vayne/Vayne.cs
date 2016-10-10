@@ -68,7 +68,9 @@ using EloBuddy;
                     var hero = args.Target as AIHeroClient;
                     var bestTarget =
                         GameObjects.EnemyHeroes.FirstOrDefault(
-                            t => t.IsValidTarget(Vars.AaRange) && t.HasBuff("vaynesilvereddebuff"));
+                            t =>
+                            t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
+                            && t.HasBuff("vaynesilvereddebuff"));
                     if (hero != null && bestTarget?.NetworkId != hero.NetworkId
                         && Vars.GetRealHealth(hero) > GameObjects.Player.GetAutoAttackDamage(hero) * 3)
                     {
@@ -189,20 +191,6 @@ using EloBuddy;
             ///     Initializes the Killsteal events.
             /// </summary>
             Logics.Killsteal(args);
-            if (ObjectManager.Player.Spellbook.IsAutoAttacking)
-            {
-                return;
-            }
-
-            /// <summary>
-            ///     Initializes the orbwalkingmodes.
-            /// </summary>
-            switch (Variables.Orbwalker.ActiveMode)
-            {
-                case OrbwalkingMode.Hybrid:
-                    Logics.Harass(args);
-                    break;
-            }
         }
 
         /// <summary>

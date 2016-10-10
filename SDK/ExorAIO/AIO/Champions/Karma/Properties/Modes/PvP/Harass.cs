@@ -10,6 +10,7 @@ using EloBuddy;
 
     using ExorAIO.Utilities;
 
+    using LeagueSharp;
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.UI;
     using LeagueSharp.SDK.Utils;
@@ -27,7 +28,7 @@ using EloBuddy;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Harass(EventArgs args)
         {
-            if (!Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target))
+            if (!Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target, DamageType.Magical))
             {
                 return;
             }

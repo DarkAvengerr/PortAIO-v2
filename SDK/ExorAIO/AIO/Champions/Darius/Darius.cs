@@ -54,7 +54,7 @@ using EloBuddy;
         /// <param name="args">The <see cref="Events.GapCloserEventArgs" /> instance containing the event data.</param>
         public static void OnGapCloser(object sender, Events.GapCloserEventArgs args)
         {
-            if (Vars.E.IsReady() && args.IsDirectedToPlayer && args.Sender.IsValidTarget(Vars.E.Range)
+            if (Vars.E.IsReady() && args.IsDirectedToPlayer && args.Sender.IsValidTarget(Vars.E.Range - 50f)
                 && !Invulnerable.Check(args.Sender, DamageType.Physical, false)
                 && Vars.Menu["spells"]["e"]["gapcloser"].GetValue<MenuBool>().Value)
             {
@@ -69,7 +69,7 @@ using EloBuddy;
         /// <param name="args">The <see cref="Events.InterruptableTargetEventArgs" /> instance containing the event data.</param>
         public static void OnInterruptableTarget(object sender, Events.InterruptableTargetEventArgs args)
         {
-            if (Vars.E.IsReady() && args.Sender.IsValidTarget(Vars.E.Range)
+            if (Vars.E.IsReady() && args.Sender.IsValidTarget(Vars.E.Range - 50f)
                 && !Invulnerable.Check(args.Sender, DamageType.Physical, false)
                 && Vars.Menu["spells"]["e"]["interrupter"].GetValue<MenuBool>().Value)
             {

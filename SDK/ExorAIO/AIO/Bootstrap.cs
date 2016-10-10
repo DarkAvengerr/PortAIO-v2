@@ -21,6 +21,7 @@ using EloBuddy;
     using ExorAIO.Champions.Jinx;
     using ExorAIO.Champions.Kalista;
     using ExorAIO.Champions.Karma;
+    using ExorAIO.Champions.Karthus;
     using ExorAIO.Champions.KogMaw;
     using ExorAIO.Champions.Lucian;
     using ExorAIO.Champions.Lux;
@@ -118,6 +119,9 @@ using EloBuddy;
                     break;
                 case "Karma":
                     new Karma().OnLoad();
+                    break;
+                case "Karthus":
+                    new Karthus().OnLoad();
                     break;
                 case "KogMaw":
                     new KogMaw().OnLoad();

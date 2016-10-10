@@ -4,7 +4,7 @@ using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
-using DZLib.Logging;
+using iSeriesDZLib.Logging;
 using iSeriesReborn.Champions.Vayne.Skills;
 using iSeriesReborn.Utility;
 using iSeriesReborn.Utility.MenuUtility;

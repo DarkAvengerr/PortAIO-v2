@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using DZLib.Logging;
+using iSeriesDZLib.Logging;
 using iSeriesReborn.Champions.Jinx.Modules;
 using iSeriesReborn.Champions.Jinx.Skills;
 using iSeriesReborn.Utility;

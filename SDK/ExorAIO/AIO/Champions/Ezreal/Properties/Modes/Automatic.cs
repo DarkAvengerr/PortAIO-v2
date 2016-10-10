@@ -35,23 +35,6 @@ using EloBuddy;
             }
 
             /// <summary>
-            ///     The Automatic R Logic.
-            /// </summary>
-            if (Vars.R.IsReady()
-                && GameObjects.Player.CountEnemyHeroesInRange(Vars.AaRange) == 0
-                && Vars.Menu["spells"]["r"]["logical"].GetValue<MenuBool>().Value)
-            {
-                foreach (var target in
-                    GameObjects.EnemyHeroes.Where(
-                        t =>
-                        t.IsValidTarget(2000f) && Bools.IsImmobile(t) && !Invulnerable.Check(t)
-                        && Vars.Menu["spells"]["r"]["whitelist2"][t.ChampionName.ToLower()].GetValue<MenuBool>().Value))
-                {
-                    Vars.R.Cast(Vars.R.GetPrediction(target).UnitPosition);
-                }
-            }
-
-            /// <summary>
             ///     The Q LastHit Logic.
             /// </summary>
             if (Vars.Q.IsReady() && Variables.Orbwalker.ActiveMode != OrbwalkingMode.Combo
@@ -62,7 +45,7 @@ using EloBuddy;
                 foreach (var minion in
                     Targets.Minions.Where(
                         m =>
-                        !m.IsValidTarget(Vars.AaRange)
+                        !m.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
                         && Vars.GetRealHealth(m) > GameObjects.Player.GetAutoAttackDamage(m)
                         && Vars.GetRealHealth(m) < (float)GameObjects.Player.GetSpellDamage(m, SpellSlot.Q))
                         .OrderBy(o => o.MaxHealth))
@@ -86,6 +69,26 @@ using EloBuddy;
             {
                 Vars.Q.Cast(Game.CursorPos);
             }
+
+            /// <summary>
+            ///     The Semi-Automatic R Logic.
+            /// </summary>
+            if (Vars.R.IsReady() && Vars.Menu["spells"]["r"]["bool"].GetValue<MenuBool>().Value
+                && Vars.Menu["spells"]["r"]["key"].GetValue<MenuKeyBind>().Active)
+            {
+                var target =
+                    GameObjects.EnemyHeroes.Where(
+                        t =>
+                        !Invulnerable.Check(t, DamageType.Magical, false) && t.IsValidTarget(2000f)
+                        && Vars.Menu["spells"]["r"]["whitelist"][t.ChampionName.ToLower()].GetValue<MenuBool>().Value)
+                        .OrderBy(o => o.Health)
+                        .FirstOrDefault();
+                if (target != null)
+                {
+                    Vars.R.Cast(Vars.R.GetPrediction(target).UnitPosition);
+                }
+            }
+
             if (GameObjects.Player.TotalAttackDamage < GameObjects.Player.TotalMagicalDamage)
             {
                 return;
@@ -138,23 +141,6 @@ using EloBuddy;
                         t => !t.IsMe && t.Spellbook.IsAutoAttacking && t.IsValidTarget(Vars.W.Range, false)))
                 {
                     Vars.W.Cast(Vars.W.GetPrediction(target).UnitPosition);
-                }
-            }
-
-            /// <summary>
-            ///     The Semi-Automatic R Management.
-            /// </summary>
-            if (Vars.R.IsReady() && Vars.Menu["spells"]["r"]["bool"].GetValue<MenuBool>().Value
-                && Vars.Menu["spells"]["r"]["key"].GetValue<MenuKeyBind>().Active)
-            {
-                var target = GameObjects.EnemyHeroes.Where(
-                    t =>
-                    !Invulnerable.Check(t, DamageType.Magical, false) && t.IsValidTarget(2000f)
-                    && Vars.Menu["spells"]["r"]["whitelist"][t.ChampionName.ToLower()]
-                           .GetValue<MenuBool>().Value).OrderBy(o => o.Health).FirstOrDefault();
-                if (target != null)
-                {
-                    Vars.R.Cast(Vars.R.GetPrediction(target).UnitPosition);
                 }
             }
         }

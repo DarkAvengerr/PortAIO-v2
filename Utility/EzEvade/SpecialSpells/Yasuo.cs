@@ -8,7 +8,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; namespace ezEvade.SpecialSpells
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade.SpecialSpells
 {
     class Yasuo : ChampionPlugin
     {
@@ -24,7 +26,7 @@ using EloBuddy; namespace ezEvade.SpecialSpells
                 var hero = HeroManager.Enemies.FirstOrDefault(h => h.ChampionName == "Yasuo");
                 if (hero != null)
                 {
-                    AIHeroClient.OnSpellCast += (sender, args) => ProcessSpell_YasuoQW(sender, args, spellData);
+                    AIHeroClient.OnProcessSpellCast += (sender, args) => ProcessSpell_YasuoQW(sender, args, spellData);
                 }
             }
         }

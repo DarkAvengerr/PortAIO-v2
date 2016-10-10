@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using DZLib.Logging;
+using iSeriesDZLib.Logging;
 using iSeriesReborn.Champions.Lucian;
 using iSeriesReborn.Utility;
 using iSeriesReborn.Utility.MenuUtility;

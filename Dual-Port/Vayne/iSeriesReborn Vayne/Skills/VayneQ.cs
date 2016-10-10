@@ -1,5 +1,5 @@
 using System.Linq;
-using DZLib.Logging;
+using iSeriesDZLib.Logging;
 using iSeriesReborn.Utility;
 using iSeriesReborn.Utility.Geometry;
 using iSeriesReborn.Utility.MenuUtility;

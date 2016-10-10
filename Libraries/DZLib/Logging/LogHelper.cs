@@ -37,9 +37,6 @@ namespace DZLib.Logging
         /// <param name="logItem">The log item.</param>
         public static void AddToLog(LogItem logItem)
         {
-            CreateDirectory();
-            logItems.Add(logItem);
-            SaveToFile(logItem);
         }
 
         /// <summary>
@@ -64,16 +61,6 @@ namespace DZLib.Logging
         /// </summary>
         private static void CreateDirectory()
         {
-            if (!Directory.Exists(LogVariables.WorkingDir))
-            {
-                Directory.CreateDirectory(LogVariables.WorkingDir);
-            }
-
-            if (!File.Exists(LogPath))
-            {
-                //File.Create(LogPath);
-                InitLog();
-            }
         }
 
         /// <summary>
@@ -81,20 +68,6 @@ namespace DZLib.Logging
         /// </summary>
         private static void InitLog()
         {
-            var logString = string.Format("[{0} | {1} | {2} | Assembly Version. {3}] \r\n[Enemies: {4}] \r\n[Allies: {5}] \r\n \r\n", DateTime.Now.ToString("yyyy_MM_dd"),
-                    LogVariables.GameRegion,
-                    LogVariables.GameVersion,
-                    LogVariables.AssemblyVersion,
-                    LogVariables.EnemyTeam.Aggregate("", (current, en) => current + (" " + en)),
-                    LogVariables.OwnTeam.Aggregate("", (current, en) => current + (" " + en)));
-            try
-            {
-                File.AppendAllText(LogPath, logString);
-            }
-            catch
-            {
-                Console.WriteLine(@"[DZLib] >>> Exception: Cannot Write To Logs File.");
-            }
         }
 
         /// <summary>
@@ -103,14 +76,6 @@ namespace DZLib.Logging
         /// <param name="logItem">The log item.</param>
         private static void SaveToFile(LogItem logItem)
         {
-            try
-            {
-                File.AppendAllText(LogPath, logItem.GetLoggingString());
-            }
-            catch
-            {
-                Console.WriteLine(@"[DZLib] >>> Exception: Cannot Write To Logs File.");
-            }
         }
     }
 }

@@ -8,7 +8,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; namespace ezEvade.SpecialSpells
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade.SpecialSpells
 {
     class JarvanIV : ChampionPlugin
     {
@@ -27,7 +29,7 @@ using EloBuddy; namespace ezEvade.SpecialSpells
                     return;
                 }
 
-                AIHeroClient.OnSpellCast += ProcessSpell_JarvanIVDemacianStandard;
+                AIHeroClient.OnProcessSpellCast += ProcessSpell_JarvanIVDemacianStandard;
 
                 SpellDetector.OnProcessSpecialSpell += ProcessSpell_JarvanIVDragonStrike;
                 Obj_AI_Minion.OnCreate += OnCreateObj_JarvanIVDragonStrike;

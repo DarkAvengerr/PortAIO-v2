@@ -40,7 +40,7 @@ using EloBuddy;
                 > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["harass"])
                 && Vars.Menu["spells"]["q"]["harass"].GetValue<MenuSliderButton>().BValue)
             {
-                if (GameObjects.EnemyHeroes.Any(t => t.IsValidTarget(Vars.Q.Range) && !t.IsValidTarget(Vars.AaRange)))
+                if (GameObjects.EnemyHeroes.Any(t => t.IsValidTarget(Vars.Q.Range)))
                 {
                     Vars.Q.Cast();
                 }

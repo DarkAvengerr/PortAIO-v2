@@ -69,7 +69,7 @@ using EloBuddy;
                 if (
                     !GameObjects.EnemyHeroes.Any(
                         t =>
-                        t.IsValidTarget(Vars.R.Range-100f) && !Invulnerable.Check(t, DamageType.Magical, false)
+                        t.IsValidTarget(Vars.R.Range - 100f) && !Invulnerable.Check(t, DamageType.Magical, false)
                         && t.IsFacing(GameObjects.Player)))
                 {
                     args.Process = false;

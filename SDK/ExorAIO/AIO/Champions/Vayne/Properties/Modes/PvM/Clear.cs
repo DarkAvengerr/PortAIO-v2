@@ -12,6 +12,7 @@ using EloBuddy;
     using LeagueSharp;
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.UI;
+    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     The logics class.
@@ -53,26 +54,23 @@ using EloBuddy;
         public static void Clear(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             /// <summary>
-            ///     The Q Clear Logics.
+            ///     The Q FarmHelper Logic.
             /// </summary>
-            if (Vars.Q.IsReady())
+            if (Vars.Q.IsReady()
+                && GameObjects.Player.ManaPercent
+                > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["farmhelper"])
+                && Vars.Menu["spells"]["q"]["farmhelper"].GetValue<MenuSliderButton>().BValue)
             {
-                /// <summary>
-                ///     The Q FarmHelper Logic.
-                /// </summary>
-                if (Vars.Menu["spells"]["q"]["farmhelper"].GetValue<MenuSliderButton>().BValue
-                    && GameObjects.Player.ManaPercent
-                    > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["farmhelper"]))
+                if (Targets.Minions.Any()
+                    && Targets.Minions.Count(
+                        m =>
+                        Vars.GetRealHealth(m)
+                        < GameObjects.Player.GetAutoAttackDamage(m)
+                        + (float)GameObjects.Player.GetSpellDamage(m, SpellSlot.Q)
+                        && m.Distance(GameObjects.Player.ServerPosition.Extend(Game.CursorPos, 300f))
+                        < GameObjects.Player.GetRealAutoAttackRange()) > 1)
                 {
-                    if (Targets.Minions.Any()
-                        && Targets.Minions.Count(
-                            m =>
-                            Vars.GetRealHealth(m)
-                            < GameObjects.Player.GetAutoAttackDamage(m)
-                            + (float)GameObjects.Player.GetSpellDamage(m, SpellSlot.Q)) > 1)
-                    {
-                        Vars.Q.Cast(Game.CursorPos);
-                    }
+                    Vars.Q.Cast(Game.CursorPos);
                 }
             }
         }
@@ -87,6 +85,18 @@ using EloBuddy;
             if (!(Variables.Orbwalker.GetTarget() is Obj_AI_Minion)
                 || !Targets.JungleMinions.Contains(Variables.Orbwalker.GetTarget() as Obj_AI_Minion))
             {
+                return;
+            }
+
+            /// <summary>
+            ///     The E JungleClear Logic.
+            /// </summary>
+            if (Vars.E.IsReady()
+                && GameObjects.Player.ManaPercent
+                > ManaManager.GetNeededMana(Vars.E.Slot, Vars.Menu["spells"]["e"]["jungleclear"])
+                && Vars.Menu["spells"]["e"]["jungleclear"].GetValue<MenuSliderButton>().BValue)
+            {
+                Vars.E.CastOnUnit(Variables.Orbwalker.GetTarget() as Obj_AI_Minion);
                 return;
             }
 

@@ -95,7 +95,8 @@ using EloBuddy;
                             return;
                         }
 
-                        if (Targets.QMinions.Count >= 2)
+                        if (Targets.QMinions.Any(m => Targets.JungleMinions.Contains(m))
+                            || Targets.QMinions.Count(m => Targets.Minions.Contains(m)) >= 3)
                         {
                             Vars.Q.Cast();
                         }

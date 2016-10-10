@@ -34,14 +34,14 @@ using EloBuddy;
             /// </summary>
             foreach (var target in GameObjects.EnemyHeroes)
             {
+                var buff1 = target.GetBuff("jaxcounterstrike");
+                var buff2 = target.GetBuff("kogmawicathiansurprise");
                 switch (target.ChampionName)
                 {
                     case "Jax":
                         if (target.HasBuff("jaxcounterstrike")
                             && target.IsValidTarget(355 + GameObjects.Player.BoundingRadius)
-                            && target.GetBuff("jaxcounterstrike").EndTime - Game.Time
-                            > target.GetBuff("jaxcounterstrike").EndTime - target.GetBuff("jaxcounterstrike").StartTime
-                            - 1
+                            && buff1.EndTime - Game.Time > buff1.EndTime - buff1.StartTime - 1
                             && Vars.Menu["spells"]["e"]["whitelist"][$"{target.ChampionName.ToLower()}.jaxcounterstrike"
                                    ].GetValue<MenuBool>().Value)
                         {
@@ -51,9 +51,7 @@ using EloBuddy;
                     case "KogMaw":
                         if (target.HasBuff("kogmawicathiansurprise")
                             && target.IsValidTarget(355 + GameObjects.Player.BoundingRadius)
-                            && target.GetBuff("kogmawicathiansurprise").EndTime - Game.Time
-                            > target.GetBuff("kogmawicathiansurprise").EndTime
-                            - target.GetBuff("kogmawicathiansurprise").StartTime - 4
+                            && buff2.EndTime - Game.Time > buff2.EndTime - buff2.StartTime - 4
                             && Vars.Menu["spells"]["e"]["whitelist"][
                                 $"{target.ChampionName.ToLower()}.kogmawicathiansurprise"].GetValue<MenuBool>().Value)
                         {
@@ -67,17 +65,20 @@ using EloBuddy;
             ///     The Semi-Automatic R Management.
             /// </summary>
             if (Vars.R.IsReady() && Vars.Menu["spells"]["r"]["bool"].GetValue<MenuBool>().Value
-                && Vars.Menu["spells"]["r"]["key"].GetValue<MenuKeyBind>().Active
-                && Vars.Menu["spells"]["r"]["whitelist"][Targets.Target.ChampionName.ToLower()].GetValue<MenuBool>()
-                       .Value)
+                && Vars.Menu["spells"]["r"]["key"].GetValue<MenuKeyBind>().Active)
             {
-                Vars.R.Cast();
-                Vars.R.CastOnUnit(
+                var target =
                     GameObjects.EnemyHeroes.Where(
                         t =>
-                        t != null && !Invulnerable.Check(t) && t.IsValidTarget(Vars.R.Range)
-                        && Vars.Menu["spells"]["r"]["whitelist"][t.ChampionName.ToLower()]
-                               .GetValue<MenuBool>().Value).OrderBy(o => o.Health).First());
+                        !Invulnerable.Check(t) && t.IsValidTarget(Vars.R.Range)
+                        && Vars.Menu["spells"]["r"]["whitelist"][t.ChampionName.ToLower()].GetValue<MenuBool>().Value)
+                        .OrderBy(o => o.Health)
+                        .FirstOrDefault();
+                if (target != null)
+                {
+                    Vars.R.Cast();
+                    Vars.R.CastOnUnit(target);
+                }
             }
         }
 

@@ -94,9 +94,7 @@ using EloBuddy;
             {
                 if (args.Sender.ChampionName.Equals("MasterYi"))
                 {
-                    DelayAction.Add(
-                        250,
-                        () => { Vars.W.Cast(GameObjects.Player.ServerPosition, args.Start); });
+                    DelayAction.Add(250, () => { Vars.W.Cast(GameObjects.Player.ServerPosition, args.Start); });
                     return;
                 }
 
@@ -134,8 +132,7 @@ using EloBuddy;
             ///     Automatically Mount on R Logic.
             /// </summary>
             if (Vars.R.IsReady() && sender != null && sender.IsMe && args.Slot != SpellSlot.Unknown
-                && args.Slot.Equals(SpellSlot.R)
-                && Vars.Menu["miscellaneous"]["mountr"].GetValue<MenuBool>().Value)
+                && args.Slot.Equals(SpellSlot.R) && Vars.Menu["miscellaneous"]["mountr"].GetValue<MenuBool>().Value)
             {
                 Vars.R.Cast();
             }

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using DZLib.Logging;
+using iSeriesDZLib.Logging;
 using iSeriesReborn.Champions.Kalista.Modules;
 using iSeriesReborn.Champions.Kalista.Skills;
 using iSeriesReborn.Utility;

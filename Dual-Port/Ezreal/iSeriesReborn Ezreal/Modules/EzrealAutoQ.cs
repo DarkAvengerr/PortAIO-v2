@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using DZLib.Logging;
+using iSeriesDZLib.Logging;
 using iSeriesReborn.Utility;
 using iSeriesReborn.Utility.Evade;
 using iSeriesReborn.Utility.ModuleHelper;

@@ -36,7 +36,8 @@ using EloBuddy;
                 foreach (var target in
                     GameObjects.EnemyHeroes.Where(
                         t =>
-                        !Invulnerable.Check(t) && !t.IsValidTarget(Vars.AaRange) && t.IsValidTarget(Vars.Q.Range - 100f)
+                        !Invulnerable.Check(t) && !t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
+                        && t.IsValidTarget(Vars.Q.Range - 100f)
                         && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.Q)))
                 {
                     if (!Vars.Q.GetPrediction(target).CollisionObjects.Any())
@@ -54,7 +55,8 @@ using EloBuddy;
                 foreach (var target in
                     GameObjects.EnemyHeroes.Where(
                         t =>
-                        !Invulnerable.Check(t) && t.IsValidTarget(Vars.E.Range) && !t.IsValidTarget(Vars.AaRange)
+                        !Invulnerable.Check(t) && t.IsValidTarget(Vars.E.Range)
+                        && !t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
                         && Vars.GetRealHealth(t)
                         < GameObjects.Player.GetAutoAttackDamage(t) * 2
                         + (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.E)))

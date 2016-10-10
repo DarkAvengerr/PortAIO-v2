@@ -41,8 +41,8 @@ using EloBuddy;
             /// </summary>
             if (Vars.Q.IsReady())
             {
-                if (Targets.Minions.Any() &&
-                    GameObjects.Player.ManaPercent
+                if (Targets.Minions.Any()
+                    && GameObjects.Player.ManaPercent
                     > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["laneclear"])
                     && Vars.Menu["spells"]["q"]["laneclear"].GetValue<MenuSliderButton>().BValue)
                 {
@@ -85,8 +85,8 @@ using EloBuddy;
                 /// <summary>
                 ///     The JungleClear Q Logic.
                 /// </summary>
-                else if (Targets.JungleMinions.Any() &&
-                         GameObjects.Player.ManaPercent
+                else if (Targets.JungleMinions.Any()
+                         && GameObjects.Player.ManaPercent
                          > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["jungleclear"])
                          && Vars.Menu["spells"]["q"]["jungleclear"].GetValue<MenuSliderButton>().BValue)
                 {

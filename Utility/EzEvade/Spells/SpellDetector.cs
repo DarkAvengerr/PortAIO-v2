@@ -10,7 +10,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; namespace ezEvade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade
 {
     public class SpecialSpellEventArgs : EventArgs
     {
@@ -59,7 +61,7 @@ using EloBuddy; namespace ezEvade
             MissileClient.OnCreate += SpellMissile_OnCreate;
             MissileClient.OnDelete += SpellMissile_OnDelete;
 
-            AIHeroClient.OnSpellCast += Game_ProcessSpell;
+            AIHeroClient.OnProcessSpellCast += Game_ProcessSpell;
 
             //AIHeroClient.OnEnterVisiblityClient += Game_OnEnterVisiblity;
 

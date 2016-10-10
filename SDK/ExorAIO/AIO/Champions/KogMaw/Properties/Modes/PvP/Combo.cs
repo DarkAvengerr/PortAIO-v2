@@ -27,7 +27,8 @@ using EloBuddy;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Combo(EventArgs args)
         {
-            if (Bools.HasSheenBuff() && GameObjects.EnemyHeroes.Any(t => t.IsValidTarget(Vars.AaRange)))
+            if (Bools.HasSheenBuff()
+                && GameObjects.EnemyHeroes.Any(t => t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())))
             {
                 return;
             }

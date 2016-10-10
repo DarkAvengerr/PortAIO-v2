@@ -36,8 +36,7 @@ using EloBuddy;
             /// <summary>
             ///     The Q Harass Logic.
             /// </summary>
-            if (Vars.Q.IsReady()
-                && Targets.Target.IsValidTarget(Vars.Q.Range)
+            if (Vars.Q.IsReady() && Targets.Target.IsValidTarget(Vars.Q.Range)
                 && GameObjects.Player.HealthPercent
                 > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["harass"])
                 && Vars.Menu["spells"]["q"]["harass"].GetValue<MenuSliderButton>().BValue)

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Net.Configuration;
-using DZLib.Logging;
+using iSeriesDZLib.Logging;
 using iSeriesReborn.Champions.KogMaw.Modules;
 using iSeriesReborn.Champions.KogMaw.Skills;
 using iSeriesReborn.Utility;

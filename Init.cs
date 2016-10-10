@@ -441,6 +441,15 @@ namespace PortAIO
                         case 15: // SNAshe
                             SNAshe.Program.Game_OnGameLoad();
                             break;
+                        case 16: // ProjectGeass
+                            _Project_Geass.Program.Main();
+                            break;
+                        case 17: // Hikicarry ADC
+                            HikiCarry.Program.Main();
+                            break;
+                        case 18: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.AurelionSol:
@@ -460,6 +469,9 @@ namespace PortAIO
                             break;
                         case 4: // Flowers' AurelionSol
                             Flowers__AurelionSol.Program.Game_OnGameLoad();
+                            break;
+                        case 5: // Badao Aurelion
+                            BadaoKingdom.Program.Main();
                             break;
                     }
                     break;
@@ -632,6 +644,12 @@ namespace PortAIO
                         case 5: // Slutty Caitlyn
                             Slutty_Caitlyn.Program.Main();
                             break;
+                        case 6: // Hikicarry ADC
+                            HikiCarry.Program.Main();
+                            break;
+                        case 7: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Cassiopeia:
@@ -731,6 +749,12 @@ namespace PortAIO
                         case 13: // LeCorki
                             LeCorki.Program.Main();
                             break;
+                        case 14: // PewPewCorki
+                            PewPewCorki.Program.Main();
+                            break;
+                        case 15: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Darius:
@@ -794,6 +818,9 @@ namespace PortAIO
                             break;
                         case 7: // TC_SDKExAIO
                             Tc_SDKexAIO.PlaySharp.Main();
+                            break;
+                        case 8: // Flowers' Diana
+                            Flowers_Diana.Program.Main();
                             break;
                     }
                     break;
@@ -859,6 +886,9 @@ namespace PortAIO
                         case 8: // myWorld AIO
                             myWorld.Program.Main();
                             break;
+                        case 9: // Hikicarry ADC
+                            HikiCarry.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Ekko:
@@ -915,6 +945,7 @@ namespace PortAIO
                             SephElise.Program.Main();
                             break;
                         case 6: // BadaoElise
+                            BadaoKingdom.Program.Main();
                             break;
 
                     }
@@ -1022,6 +1053,15 @@ namespace PortAIO
                             break;
                         case 24: // TCSDexAIO
                             Tc_SDKexAIO.PlaySharp.Main();
+                            break;
+                        case 25: // ProjectGeass
+                            _Project_Geass.Program.Main();
+                            break;
+                        case 26: // Hikicarry ADC
+                            HikiCarry.Program.Main();
+                            break;
+                        case 27: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
                             break;
                     }
                     break;
@@ -1204,8 +1244,13 @@ namespace PortAIO
                             VST_Auto_Carry_Standalone_Graves.Program.Main();
                             break;
                         case 10: // EasyGraves
+                            EasyGraves.EasyGraves.Main();
                             break;
                         case 11: // BadaoGraves
+                            BadaoKingdom.Program.Main();
+                            break;
+                        case 12: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
                             break;
                     }
                     break;
@@ -1406,9 +1451,19 @@ namespace PortAIO
                             Jhin_As_The_Virtuoso.Program.Main();
                             break;
                         case 7: // BadaoJhin
+                            BadaoKingdom.Program.Main();
                             break;
                         case 8: // Tc_SDKexAIO
                             Tc_SDKexAIO.PlaySharp.Main();
+                            break;
+                        case 9: // Flowers' Jhin
+                            Flowers_Jhin.Program.Main();
+                            break;
+                        case 10: // Hikicarry ADC
+                            HikiCarry.Program.Main();
+                            break;
+                        case 11: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
                             break;
                     }
                     break;
@@ -1462,6 +1517,9 @@ namespace PortAIO
                             break;
                         case 15: // Tc_SDKex AIO
                             Tc_SDKexAIO.PlaySharp.Main();
+                            break;
+                        case 16: // Hikicarry ADC
+                            HikiCarry.Program.Main();
                             break;
                     }
                     break;
@@ -1527,6 +1585,12 @@ namespace PortAIO
                         case 19: // KAPPALISTAXD
                             KAPPALISTAXD.Program.Main();
                             break;
+                        case 20: // Hikicarry ADC
+                            HikiCarry.Program.Main();
+                            break;
+                        case 21: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Karma:
@@ -1587,6 +1651,9 @@ namespace PortAIO
                             break;
                         case 7: // XDSharpAIO
                             XDSharp.Program.Main();
+                            break;
+                        case 8: // ExorAIO
+                            ExorAIO.Program.Main();
                             break;
 
                     }
@@ -1770,6 +1837,9 @@ namespace PortAIO
                         case 10: // EasyKogmaw
                             EasyKogMaw.EasyKogMaw.Main();
                             break;
+                        case 18: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Leblanc:
@@ -1916,6 +1986,9 @@ namespace PortAIO
                             break;
                         case 16: // Slutty Lucian
                             Slutty_Lucian.Program.Main();
+                            break;
+                        case 17: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
                             break;
                     }
                     break;
@@ -2075,6 +2148,9 @@ namespace PortAIO
                         case 8: // BadaoMissFortune
                             BadaoMissFortune.Program.Main();
                             break;
+                        case 9: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Mordekaiser:
@@ -2172,6 +2248,7 @@ namespace PortAIO
                             JustNautilus.Program.Main();
                             break;
                         case 6: // Nautilus - The Freelo Titan
+                            Nautilus_Is_Meme.Program.Main();
                             break;
                     }
                     break;
@@ -2320,6 +2397,7 @@ namespace PortAIO
                             vSupport_Series.Program.Game_OnGameLoad();
                             break;
                         case 3: // BadaoPoppy
+                            BadaoKingdom.Program.Main();
                             break;
                     }
                     break;
@@ -2340,6 +2418,12 @@ namespace PortAIO
                             break;
                         case 4: // Tc_SDKex AIO
                             Tc_SDKexAIO.PlaySharp.Main();
+                            break;
+                        case 5: // Hikicarry ADC
+                            HikiCarry.Program.Main();
+                            break;
+                        case 6: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
                             break;
                     }
                     break;
@@ -2431,7 +2515,7 @@ namespace PortAIO
                             SAutoCarry.Program.Game_OnGameLoad();
                             break;
                         case 3: // NechritoRiven
-                            NechritoRiven.Program.OnLoad();
+                            NechritoRiven.Program.Main();
                             break;
                         case 4: // Flowers' Series
                             Flowers_Series.Program.Main();
@@ -2657,6 +2741,12 @@ namespace PortAIO
                             break;
                         case 14: // KurisuSivir
                             KurisuSivir.Program.Main();
+                            break;
+                        case 15: // Hikicarry ADC
+                            HikiCarry.Program.Main();
+                            break;
+                        case 16: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
                             break;
                     }
                     break;
@@ -2992,6 +3082,15 @@ namespace PortAIO
                         case 15: // TrooperTristana
                             TrooperTristana.Program.Main();
                             break;
+                        case 16: // ProjectGeass
+                            _Project_Geass.Program.Main();
+                            break;
+                        case 17: // Hikicarry ADC
+                            HikiCarry.Program.Main();
+                            break;
+                        case 18: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Trundle:
@@ -3129,6 +3228,9 @@ namespace PortAIO
                         case 14: // Twitch#
                             TwitchSharp.Program.Main();
                             break;
+                        case 15: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Udyr:
@@ -3178,6 +3280,9 @@ namespace PortAIO
                         case 5: // TUrgot
                             TUrgot.Program.Main();
                             break;
+                        case 6: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Varus:
@@ -3200,6 +3305,12 @@ namespace PortAIO
                             break;
                         case 5: // VarusGod
                             Varus_God.Program.Main();
+                            break;
+                        case 6: // Hikicarry ADC
+                            HikiCarry.Program.Main();
+                            break;
+                        case 7: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
                             break;
                     }
                     break;
@@ -3257,6 +3368,12 @@ namespace PortAIO
                         case 16: // VayneGodMode
                             GodModeOn_Vayne.Program.Main();
                             break;
+                        case 17: // Hikicarry ADC
+                            HikiCarry.Program.Main();
+                            break;
+                        case 18: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Veigar:
@@ -3287,6 +3404,7 @@ namespace PortAIO
                             Slutty_Veigar.Program.Main();
                             break;
                         case 8: // BadaoVeigar
+                            BadaoKingdom.Program.Main();
                             break;
                     }
                     break;

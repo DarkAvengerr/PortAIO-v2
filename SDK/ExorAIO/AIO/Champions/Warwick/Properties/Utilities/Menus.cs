@@ -32,10 +32,10 @@ using EloBuddy;
                 /// </summary>
                 Vars.QMenu = new Menu("q", "Use Q to:");
                 {
-                    Vars.QMenu.Add(new MenuBool("combo", "Combo", true));
-                    Vars.QMenu.Add(new MenuBool("logical", "Logical", true));
                     Vars.QMenu.Add(new MenuBool("killsteal", "KillSteal", true));
-                    Vars.QMenu.Add(new MenuSliderButton("clear", "Clear", 50, 0, 99, true));
+                    Vars.QMenu.Add(new MenuSliderButton("combo", "Combo / if Health <= x%", 75, 25, 100, true));
+                    Vars.QMenu.Add(new MenuSliderButton("laneclear", "LaneClear / if Mana >= x%", 50, 0, 99, true));
+                    Vars.QMenu.Add(new MenuSliderButton("jungleclear", "JungleClear / if Mana >= x%", 50, 0, 99, true));
                 }
                 Vars.SpellsMenu.Add(Vars.QMenu);
 
@@ -79,6 +79,15 @@ using EloBuddy;
             }
 
             Vars.Menu.Add(Vars.SpellsMenu);
+
+            /// <summary>
+            ///     Sets the miscellaneous menu.
+            /// </summary>
+            Vars.MiscMenu = new Menu("miscellaneous", "Miscellaneous");
+            {
+                Vars.MiscMenu.Add(new MenuBool("keeprmana", "Keep mana for R in Combo", true));
+            }
+            Vars.Menu.Add(Vars.MiscMenu);
 
             /// <summary>
             ///     Sets the drawings menu.

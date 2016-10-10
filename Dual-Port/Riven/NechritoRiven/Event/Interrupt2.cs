@@ -1,25 +1,42 @@
-using LeagueSharp;
-using LeagueSharp.Common;
-using NechritoRiven.Core;
-using NechritoRiven.Menus;
-
 using EloBuddy; 
  using LeagueSharp.Common; 
  namespace NechritoRiven.Event
 {
-    internal class Interrupt2 : Core.Core
+    #region
+
+    using Core;
+
+    using LeagueSharp;
+    using LeagueSharp.Common;
+
+    using Menus;
+
+    #endregion
+
+    internal class Interrupt2 : Core
     {
+        #region Public Methods and Operators
+
         public static void OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (!MenuConfig.InterruptMenu || sender.IsInvulnerable) return;
-
-            if (sender.IsValidTarget(Spells.W.Range))
+            if (!MenuConfig.InterruptMenu || !sender.IsEnemy || !sender.IsValidTarget(Spells.W.Range + sender.BoundingRadius))
             {
-                if (Spells.W.IsReady())
-                {
-                    Spells.W.Cast(sender);
-                }
+                return;
             }
+
+            if (Spells.W.IsReady())
+            {
+                Spells.W.Cast(sender);
+            }
+
+            if (Qstack != 3)
+            {
+                return;
+            }
+
+            Spells.Q.Cast(sender);
         }
+
+        #endregion
     }
 }

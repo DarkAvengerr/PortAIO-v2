@@ -30,33 +30,26 @@ using EloBuddy;
         {
             if (GameObjects.Player.IsRecalling())
             {
+                return;
             }
 
             /// <summary>
             ///     The Automatic Q Logic.
             /// </summary>
             if (Vars.Q.IsReady() && GameObjects.Player.ManaPercent >= 50 && !GameObjects.Player.IsUnderEnemyTurret()
+                && Variables.Orbwalker.ActiveMode != OrbwalkingMode.Combo
                 && Vars.Menu["spells"]["q"]["logical"].GetValue<MenuBool>().Value)
             {
-                if (GameObjects.Player.HasBuff("RenektonPreExecute")
-                    || Variables.Orbwalker.ActiveMode == OrbwalkingMode.Combo)
+                if (GameObjects.EnemyHeroes.Any(t => t.IsValidTarget(Vars.Q.Range)))
                 {
-                    return;
-                }
-
-                foreach (var target in GameObjects.EnemyHeroes.Where(t => t.IsValidTarget(Vars.Q.Range)))
-                {
-                    if (!Vars.W.IsReady() || !target.IsValidTarget(Vars.W.Range))
-                    {
-                        Vars.Q.Cast();
-                    }
+                    Vars.Q.Cast();
                 }
             }
 
             /// <summary>
             ///     The Automatic R Logic.
             /// </summary>
-            if (Vars.R.IsReady() && GameObjects.Player.CountEnemyHeroesInRange(700f) > 0)
+            if (Vars.R.IsReady())
             {
                 if (Health.GetPrediction(GameObjects.Player, (int)(250 + Game.Ping / 2f))
                     <= GameObjects.Player.MaxHealth / 6
@@ -64,8 +57,9 @@ using EloBuddy;
                 {
                     Vars.R.Cast();
                 }
-                else if (GameObjects.Player.CountEnemyHeroesInRange(Vars.R.Range) >= 2
-                         && Vars.Menu["spells"]["r"]["aoe"].GetValue<MenuBool>().Value)
+                else if (GameObjects.Player.CountEnemyHeroesInRange(Vars.W.Range)
+                         >= Vars.Menu["spells"]["r"]["aoe"].GetValue<MenuSliderButton>().SValue
+                         && Vars.Menu["spells"]["r"]["aoe"].GetValue<MenuSliderButton>().BValue)
                 {
                     Vars.R.Cast();
                 }

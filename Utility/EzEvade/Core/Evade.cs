@@ -8,7 +8,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; namespace ezEvade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade
 {
     internal class Evade
     {
@@ -71,20 +73,10 @@ using EloBuddy; namespace ezEvade
 
         private void LoadAssembly()
         {
-            DelayAction.Add(0, () =>
-            {
-                if (Game.Mode == GameMode.Running)
-                {
-                    Game_OnGameLoad(new EventArgs());
-                }
-                else
-                {
-                    Game.OnLoad += Game_OnGameLoad;
-                }
-            });
+            Game_OnGameLoad();
         }
 
-        private void Game_OnGameLoad(EventArgs args)
+        private void Game_OnGameLoad()
         {
             try
             {
@@ -92,20 +84,17 @@ using EloBuddy; namespace ezEvade
                 Spellbook.OnCastSpell += Game_OnCastSpell;
                 Game.OnUpdate += Game_OnGameUpdate;
 
-                AIHeroClient.OnSpellCast += Game_OnProcessSpell;
+                AIHeroClient.OnProcessSpellCast += Game_OnProcessSpell;
 
                 Game.OnEnd += Game_OnGameEnd;
                 SpellDetector.OnProcessDetectedSpells += SpellDetector_OnProcessDetectedSpells;
                 Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
 
-                /*Console.WriteLine("<font color=\"#66CCFF\" >Yomie's </font><font color=\"#CCFFFF\" >ezEvade</font> - " +
-                   "<font color=\"#FFFFFF\" >Version " + Assembly.GetExecutingAssembly().GetName().Version + "</font>");
-                */
-
                 menu = new Menu("ezEvade", "ezEvade", true);
 
                 Menu mainMenu = new Menu("Main", "Main");
                 mainMenu.AddItem(new MenuItem("DodgeSkillShots", "Dodge SkillShots").SetValue(new KeyBind('K', KeyBindType.Toggle, true)));
+                mainMenu.Item("DodgeSkillShots").Permashow();
                 mainMenu.AddItem(new MenuItem("ActivateEvadeSpells", "Use Evade Spells").SetValue(new KeyBind('K', KeyBindType.Toggle, true)));
                 mainMenu.AddItem(new MenuItem("DodgeDangerous", "Dodge Only Dangerous").SetValue(false));
                 mainMenu.AddItem(new MenuItem("DodgeFOWSpells", "Dodge FOW SkillShots").SetValue(true));

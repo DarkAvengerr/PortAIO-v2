@@ -48,9 +48,7 @@ using EloBuddy;
                                                         ? 0.35
                                                         : GameObjects.Player.Level < 11
                                                               ? 0.4
-                                                              : GameObjects.Player.Level < 13
-                                                                    ? 0.45
-                                                                    : 0.5;
+                                                              : GameObjects.Player.Level < 13 ? 0.45 : 0.5;
 
                 /// <summary>
                 ///     Through enemy minions.
@@ -78,7 +76,7 @@ using EloBuddy;
                     let target =
                         GameObjects.EnemyHeroes.FirstOrDefault(
                             t =>
-                            !Invulnerable.Check(t) && t.IsValidTarget(Vars.Q2.Range - 50f)
+                            !Invulnerable.Check(t) && t.IsValidTarget(Vars.Q2.Range)
                             && (t.NetworkId == MissFortune.PassiveTarget?.NetworkId
                                 || Targets.Minions.All(m => polygon.IsOutside((Vector2)m.ServerPosition)))
                             && Vars.Menu["spells"]["q"]["whitelist"][t.ChampionName.ToLower()].GetValue<MenuBool>()
@@ -86,11 +84,7 @@ using EloBuddy;
                     where target != null
                     where
                         !polygon.IsOutside((Vector2)target.ServerPosition)
-                        && !polygon.IsOutside(
-                            (Vector2)
-                            Movement.GetPrediction(
-                                target,
-                                GameObjects.Player.Distance(target) / Vars.Q.Speed + Vars.Q.Delay).UnitPosition)
+                        && !polygon.IsOutside((Vector2)Vars.Q.GetPrediction(target).UnitPosition)
                     select minion)
                 {
                     Vars.Q.CastOnUnit(minion);

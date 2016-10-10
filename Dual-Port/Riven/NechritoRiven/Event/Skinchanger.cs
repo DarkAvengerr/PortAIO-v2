@@ -1,18 +1,24 @@
-#region
-
-using System;
-using NechritoRiven.Menus;
-
-#endregion
-
 using EloBuddy; 
  using LeagueSharp.Common; 
  namespace NechritoRiven.Event
 {
-    internal class Skinchanger : Core.Core
+    #region
+
+    using System;
+
+    using Core;
+    using Menus;
+
+    #endregion
+
+    internal class Skinchanger : Core
     {
+        #region Public Methods and Operators
+
         public static void Update(EventArgs args)
         {
         }
+
+        #endregion
     }
 }

@@ -34,7 +34,7 @@ using EloBuddy;
 
             if (Bools.HasSheenBuff())
             {
-                if (Targets.Target.IsValidTarget(Vars.AaRange))
+                if (Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange()))
                 {
                     return;
                 }
@@ -55,7 +55,7 @@ using EloBuddy;
             if (Vars.W.IsReady() && Targets.Target.IsValidTarget(Vars.W.Range)
                 && Vars.Menu["spells"]["w"]["combo"].GetValue<MenuBool>().Value)
             {
-                if (!Targets.Target.IsValidTarget(Vars.AaRange)
+                if (!Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
                     || GameObjects.Player.GetBuffCount("pantheonpassivecounter") < 3)
                 {
                     Vars.W.CastOnUnit(Targets.Target);

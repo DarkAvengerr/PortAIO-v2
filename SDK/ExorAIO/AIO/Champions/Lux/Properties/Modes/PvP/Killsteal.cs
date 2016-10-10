@@ -75,7 +75,7 @@ using EloBuddy;
                         t.IsValidTarget(Vars.R.Range) && !Invulnerable.Check(t, DamageType.Magical)
                         && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.R)))
                 {
-                    if (Bools.IsImmobile(target) || !target.IsValidTarget(Vars.AaRange))
+                    if (Bools.IsImmobile(target) || !target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange()))
                     {
                         Vars.R.Cast(Vars.R.GetPrediction(target).UnitPosition);
                     }

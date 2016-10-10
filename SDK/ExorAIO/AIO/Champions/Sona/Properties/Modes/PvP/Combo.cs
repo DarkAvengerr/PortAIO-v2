@@ -27,8 +27,7 @@ using EloBuddy;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Combo(EventArgs args)
         {
-            if (!Targets.Target.IsValidTarget()
-                || Invulnerable.Check(Targets.Target, DamageType.Magical, false))
+            if (!Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target, DamageType.Magical, false))
             {
                 return;
             }

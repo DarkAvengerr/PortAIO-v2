@@ -1,5 +1,5 @@
 using System;
-using DZLib.Logging;
+using iSeriesDZLib.Logging;
 using iSeriesReborn.Utility;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -31,7 +31,7 @@ using EloBuddy;
             }
             catch
             {
-                LogHelper.AddToLog(new LogItem("Kalista_ProcessSpellCast", "Error: Failed to reset AA", LogSeverity.Error));
+                //LogHelper.AddToLog(new LogItem("Kalista_ProcessSpellCast", "Error: Failed to reset AA", LogSeverity.Error));
             }
         }
 
@@ -55,7 +55,7 @@ using EloBuddy;
             }
             catch(Exception e)
             {
-                LogHelper.AddToLog(new LogItem("Kalista_OnNonKillableMinion", e, LogSeverity.Error));
+                //LogHelper.AddToLog(new LogItem("Kalista_OnNonKillableMinion", e, LogSeverity.Error));
             }
         }
     }

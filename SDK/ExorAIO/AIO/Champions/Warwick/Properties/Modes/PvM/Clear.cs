@@ -47,18 +47,32 @@ using EloBuddy;
             }
 
             /// <summary>
-            ///     The Q Clear Logic.
+            ///     The Q Clear Logics.
             /// </summary>
             if (Vars.Q.IsReady()
-                && GameObjects.Player.ManaPercent
-                > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["clear"])
-                && Vars.Menu["spells"]["q"]["clear"].GetValue<MenuSliderButton>().BValue)
+                && GameObjects.Player.MaxHealth
+                > GameObjects.Player.Health
+                + (float)
+                  GameObjects.Player.GetSpellDamage(Variables.Orbwalker.GetTarget() as Obj_AI_Minion, SpellSlot.Q) * 0.8)
             {
-                if (GameObjects.Player.MaxHealth
-                    > GameObjects.Player.Health
-                    + (float)
-                      GameObjects.Player.GetSpellDamage(Variables.Orbwalker.GetTarget() as Obj_AI_Minion, SpellSlot.Q)
-                    * 0.8)
+                /// <summary>
+                ///     The LaneClear Q Logic.
+                /// </summary>
+                if (GameObjects.Player.ManaPercent
+                    > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["laneclear"])
+                    && Vars.Menu["spells"]["q"]["laneclear"].GetValue<MenuSliderButton>().BValue
+                    && Targets.Minions.Contains(Variables.Orbwalker.GetTarget() as Obj_AI_Minion))
+                {
+                    Vars.Q.CastOnUnit(Variables.Orbwalker.GetTarget() as Obj_AI_Minion);
+                }
+
+                /// <summary>
+                ///     The JungleClear Q Logic.
+                /// </summary>
+                else if (GameObjects.Player.ManaPercent
+                         > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["jungleclear"])
+                         && Vars.Menu["spells"]["q"]["jungleclear"].GetValue<MenuSliderButton>().BValue
+                         && Targets.JungleMinions.Contains(Variables.Orbwalker.GetTarget() as Obj_AI_Minion))
                 {
                     Vars.Q.CastOnUnit(Variables.Orbwalker.GetTarget() as Obj_AI_Minion);
                 }

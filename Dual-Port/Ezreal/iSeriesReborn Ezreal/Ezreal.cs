@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using DZLib.Logging;
+using iSeriesDZLib.Logging;
 using iSeriesReborn.Champions.Ezreal.Modules;
 using iSeriesReborn.Champions.Ezreal.Skills;
 using iSeriesReborn.Utility;

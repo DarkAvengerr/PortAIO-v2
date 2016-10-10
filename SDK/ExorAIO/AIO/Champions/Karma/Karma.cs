@@ -150,7 +150,7 @@ using EloBuddy;
         }
 
         /// <summary>
-        ///     Loads Lux.
+        ///     Loads Karma.
         /// </summary>
         public void OnLoad()
         {

@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using DZLib.Logging;
+using iSeriesDZLib.Logging;
 using iSeriesReborn.Utility;
 using iSeriesReborn.Utility.MenuUtility;
 using LeagueSharp;

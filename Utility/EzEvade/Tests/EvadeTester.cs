@@ -9,7 +9,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; namespace ezEvade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade
 {
     class EvadeTester
     {
@@ -79,7 +81,7 @@ using EloBuddy; namespace ezEvade
 
             MissileClient.OnCreate += SpellMissile_OnCreate;
 
-            AIHeroClient.OnSpellCast += Game_ProcessSpell;
+            AIHeroClient.OnProcessSpellCast += Game_ProcessSpell;
             Spellbook.OnCastSpell += Game_OnCastSpell;
             GameObject.OnFloatPropertyChange += GameObject_OnFloatPropertyChange;
 
@@ -598,7 +600,7 @@ using EloBuddy; namespace ezEvade
             if (!hero.IsMe)
                 return;
 
-            if (args.Order == GameObjectOrder.Stop)
+            if (args.Order == GameObjectOrder.HoldPosition)
             {
                 var path = myHero.Path;
                 var heroPoint = ObjectCache.myHeroCache.serverPos2D;

@@ -69,7 +69,7 @@ using EloBuddy;
                 /// </summary>
                 Vars.RMenu = new Menu("r", "Use R to:");
                 {
-                    Vars.RMenu.Add(new MenuBool("combo", "Combo", true));
+                    Vars.RMenu.Add(new MenuBool("killsteal", "KillSteal", true));
                     Vars.RMenu.Add(
                         new MenuSeparator(
                             "separator",

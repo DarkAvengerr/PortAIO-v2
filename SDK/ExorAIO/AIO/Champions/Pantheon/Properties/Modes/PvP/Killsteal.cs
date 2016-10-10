@@ -36,7 +36,8 @@ using EloBuddy;
                 foreach (var target in
                     GameObjects.EnemyHeroes.Where(
                         t =>
-                        !Invulnerable.Check(t) && t.IsValidTarget(Vars.W.Range) && !t.IsValidTarget(Vars.AaRange)
+                        !Invulnerable.Check(t) && t.IsValidTarget(Vars.W.Range)
+                        && !t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
                         && Vars.GetRealHealth(t)
                         < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.W)
                         + (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.Q)))
@@ -54,7 +55,8 @@ using EloBuddy;
                 foreach (var target in
                     GameObjects.EnemyHeroes.Where(
                         t =>
-                        !Invulnerable.Check(t) && t.IsValidTarget(Vars.Q.Range) && !t.IsValidTarget(Vars.AaRange)
+                        !Invulnerable.Check(t) && t.IsValidTarget(Vars.Q.Range)
+                        && !t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
                         && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.Q)))
                 {
                     Vars.Q.CastOnUnit(target);

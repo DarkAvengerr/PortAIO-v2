@@ -35,7 +35,7 @@ using EloBuddy;
             /// <summary>
             ///     The E Combo Logic.
             /// </summary>
-            if (Vars.E.IsReady() && Targets.Target.IsValidTarget(Vars.AaRange)
+            if (Vars.E.IsReady() && Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
                 && Vars.Menu["spells"]["e"]["combo"].GetValue<MenuBool>().Value)
             {
                 Vars.E.Cast();

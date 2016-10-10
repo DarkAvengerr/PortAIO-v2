@@ -12,7 +12,7 @@ using EloBuddy;
     using ReformedAIO.Champions.Diana;
     using ReformedAIO.Champions.Gnar;
     using ReformedAIO.Champions.Gragas;
-    using ReformedAIO.Champions.Ryze;
+    using ReformedAIO.Champions.Lucian;
 
     using RethoughtLib.Bootstraps.Abstract_Classes;
 
@@ -26,7 +26,12 @@ using EloBuddy;
         {
             var bootstrap = new Bootstrap(new List<LoadableBase>
             {
-                new DianaLoader(), new GragasLoader(), new AsheLoader(), new RyzeLoader(), new CaitlynLoader(), new GnarLoader()
+                new AsheLoader(),
+                new CaitlynLoader(),
+                new DianaLoader(),
+                new LucianLoader(),
+                new GragasLoader(),
+                new GnarLoader()
             });
 
             bootstrap.Run();

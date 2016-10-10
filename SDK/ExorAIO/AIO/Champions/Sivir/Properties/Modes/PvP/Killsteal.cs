@@ -38,7 +38,8 @@ using EloBuddy;
                 foreach (var target in
                     GameObjects.EnemyHeroes.Where(
                         t =>
-                        !Invulnerable.Check(t) && !t.IsValidTarget(Vars.AaRange) && t.IsValidTarget(Vars.Q.Range - 100f)
+                        !Invulnerable.Check(t) && !t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
+                        && t.IsValidTarget(Vars.Q.Range - 100f)
                         && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.Q) * 2))
                 {
                     Vars.Q.Cast(

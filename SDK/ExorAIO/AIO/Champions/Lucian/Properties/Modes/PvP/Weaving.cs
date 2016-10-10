@@ -46,7 +46,8 @@ using EloBuddy;
                             Vars.E.Cast(
                                 GameObjects.Player.ServerPosition.Extend(
                                     Game.CursorPos,
-                                    GameObjects.Player.Distance(Game.CursorPos) < Vars.AaRange
+                                    GameObjects.Player.Distance(Game.CursorPos)
+                                    < GameObjects.Player.GetRealAutoAttackRange()
                                         ? GameObjects.Player.BoundingRadius
                                         : 475f));
                             break;

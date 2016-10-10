@@ -27,21 +27,29 @@ using EloBuddy;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Combo(EventArgs args)
         {
-            if (Bools.HasSheenBuff() || !(Variables.Orbwalker.GetTarget() as AIHeroClient).IsValidTarget())
+            var target = Variables.Orbwalker.GetTarget() as AIHeroClient;
+            if (Bools.HasSheenBuff() || target == null || !target.IsValidTarget() || Invulnerable.Check(target))
             {
                 return;
             }
 
             /// <summary>
+            ///     The Q Combo Logic.
+            /// </summary>
+            if (Vars.Q.IsReady() && GameObjects.Player.Spellbook.IsAutoAttacking
+                && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuBool>().Value)
+            {
+                Vars.Q.Cast();
+            }
+
+            /// <summary>
             ///     The E Combo Logic.
             /// </summary>
-            if (Vars.E.IsReady() && !Invulnerable.Check(Variables.Orbwalker.GetTarget() as AIHeroClient)
-                && (Variables.Orbwalker.GetTarget() as AIHeroClient).IsValidTarget(Vars.E.Range)
+            if (Vars.E.IsReady() && target.IsValidTarget(Vars.E.Range)
                 && Vars.Menu["spells"]["e"]["combo"].GetValue<MenuBool>().Value
-                && Vars.Menu["spells"]["e"]["whitelist"][Targets.Target.ChampionName.ToLower()].GetValue<MenuBool>()
-                       .Value)
+                && Vars.Menu["spells"]["e"]["whitelist"][target.ChampionName.ToLower()].GetValue<MenuBool>().Value)
             {
-                Vars.E.CastOnUnit(Variables.Orbwalker.GetTarget() as AIHeroClient);
+                Vars.E.CastOnUnit(target);
             }
         }
 

@@ -1,25 +1,36 @@
-#region
-
-using System;
-using LeagueSharp;
-using LeagueSharp.Common;
-
-#endregion
-
-using EloBuddy;
-using LeagueSharp.Common;
-namespace NechritoRiven
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace NechritoRiven
 {
+    #region
+
+    using System;
+
+    using LeagueSharp;
+    using LeagueSharp.Common;
+
+    #endregion
+
     public class Program
     {
-        public static void OnLoad()
+        #region Methods
+
+        public static void Main()
+        {
+            OnLoad();
+        }
+
+        private static void OnLoad()
         {
             if (ObjectManager.Player.ChampionName != "Riven")
             {
-                Chat.Print("Could not load Riven");
                 return;
             }
-            Load.Load.LoadAssembly();
+
+            Console.WriteLine("Loading...");
+            Load.LoadAssembly();
         }
+
+        #endregion
     }
 }

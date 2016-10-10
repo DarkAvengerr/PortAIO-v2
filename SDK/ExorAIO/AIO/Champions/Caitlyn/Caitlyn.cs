@@ -172,7 +172,7 @@ using EloBuddy;
                 && GameObjects.Player.HasBuff("caitlynheadshotrangecheck")
                 && ((AIHeroClient)args.Target).HasBuff("caitlynyordletrapdebuff"))
             {
-                Variables.Orbwalker.ResetSwingTimer();
+                //Variables.Orbwalker.ResetSwingTimer();
             }
         }
 

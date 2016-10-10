@@ -34,7 +34,8 @@ using EloBuddy;
                     Vars.QMenu.Add(new MenuBool("combo", "Combo", true));
                     Vars.QMenu.Add(new MenuBool("killsteal", "KillSteal", true));
                     Vars.QMenu.Add(new MenuBool("logical", "Logical", true));
-                    Vars.QMenu.Add(new MenuBool("clear", "Clear", true));
+                    Vars.QMenu.Add(new MenuBool("laneclear", "LaneClear", true));
+                    Vars.QMenu.Add(new MenuBool("jungleclear", "JungleClear", true));
                 }
                 Vars.SpellsMenu.Add(Vars.QMenu);
 
@@ -54,8 +55,8 @@ using EloBuddy;
                 /// </summary>
                 Vars.EMenu = new Menu("e", "Use E to:");
                 {
-                    Vars.EMenu.Add(new MenuBool("combo", "Combo", true));
-                    Vars.EMenu.Add(new MenuSeparator("e", "Will only use the first E"));
+                    Vars.EMenu.Add(new MenuBool("combo", "Use Slice", true));
+                    Vars.EMenu.Add(new MenuBool("combo2", "Use Dice"));
                 }
                 Vars.SpellsMenu.Add(Vars.EMenu);
 
@@ -65,7 +66,7 @@ using EloBuddy;
                 Vars.RMenu = new Menu("r", "Use R to:");
                 {
                     Vars.RMenu.Add(new MenuBool("lifesaver", "Lifesaver", true));
-                    Vars.RMenu.Add(new MenuBool("aoe", "If 2+ Enemies in Range", true));
+                    Vars.RMenu.Add(new MenuSliderButton("aoe", "AoE / If enemies near >= x", 2, 2, 5, true));
                 }
                 Vars.SpellsMenu.Add(Vars.RMenu);
             }

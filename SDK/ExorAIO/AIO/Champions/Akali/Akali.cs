@@ -47,7 +47,7 @@ using EloBuddy;
                         {
                             case "AkaliMota":
                                 if (Vars.R.IsReady() && Targets.Target.IsValidTarget(Vars.R.Range)
-                                    && !Targets.Target.IsValidTarget(Vars.AaRange)
+                                    && !Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
                                     && Vars.Menu["spells"]["r"]["combo"].GetValue<MenuBool>().Value
                                     && Vars.Menu["spells"]["r"]["whitelist"][Targets.Target.ChampionName.ToLower()]
                                            .GetValue<MenuBool>().Value)

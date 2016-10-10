@@ -41,8 +41,7 @@ using EloBuddy;
                 > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["harass"])
                 && Vars.Menu["spells"]["q"]["harass"].GetValue<MenuSliderButton>().BValue)
             {
-                if (Taliyah.TerrainObject != null
-                    && Vars.Menu["spells"]["q"]["harassfull"].GetValue<MenuBool>().Value)
+                if (Taliyah.TerrainObject != null && Vars.Menu["spells"]["q"]["harassfull"].GetValue<MenuBool>().Value)
                 {
                     return;
                 }

@@ -52,7 +52,8 @@ using EloBuddy;
                 if (
                     GameObjects.EnemyHeroes.Any(
                         t =>
-                        t.IsValidTarget(Vars.AaRange) && !Invulnerable.Check(t, DamageType.Physical)
+                        t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
+                        && !Invulnerable.Check(t, DamageType.Physical)
                         && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.E)))
                 {
                     Vars.E.Cast();

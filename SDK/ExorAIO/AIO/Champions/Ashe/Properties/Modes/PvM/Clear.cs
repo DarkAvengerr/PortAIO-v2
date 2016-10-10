@@ -37,8 +37,7 @@ using EloBuddy;
             /// <summary>
             ///     The Q BuildingClear Logic.
             /// </summary>
-            if (Vars.Q.IsReady()
-                && GameObjects.Player.HasBuff("asheqcastready")
+            if (Vars.Q.IsReady() && GameObjects.Player.HasBuff("asheqcastready")
                 && GameObjects.Player.ManaPercent
                 > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["buildings"])
                 && Vars.Menu["spells"]["q"]["buildings"].GetValue<MenuSliderButton>().BValue)

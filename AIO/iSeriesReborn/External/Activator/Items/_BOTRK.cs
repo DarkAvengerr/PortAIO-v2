@@ -1,6 +1,6 @@
 using System;
 using System.Drawing;
-using DZLib.Logging;
+using iSeriesDZLib.Logging;
 using iSeriesReborn.Utility;
 using LeagueSharp;
 using LeagueSharp.Common;
