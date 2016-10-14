@@ -25,6 +25,8 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         /// </value>
         public override string Name => "Hextech GLP 800";
 
+        public static EloBuddy.SDK.Item Hextech_GLP_800;
+
         #endregion
 
         #region Public Methods and Operators
@@ -34,6 +36,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         /// </summary>
         public override void CreateMenu()
         {
+            Hextech_GLP_800 = new EloBuddy.SDK.Item(ItemId.Hextech_GLP_800);
             this.Menu.AddItem(new MenuItem("UseHextech800Combo", "Use on Combo").SetValue(true));
             this.Menu.AddItem(new MenuItem("Hextech800EnemyHp", "Use on Enemy Hp %").SetValue(new Slider(70)));
         }
@@ -48,7 +51,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
                    && HeroManager.Enemies.Any(
                        x =>
                        x.HealthPercent < this.Menu.Item("Hextech800EnemyHp").GetValue<Slider>().Value
-                       && x.Distance(this.Player) < 700 && !x.IsDead && !x.IsZombie && x.IsVisible && x.IsHPBarRendered && x.IsValidTarget());
+                       && x.Distance(this.Player) < 700 && !x.IsDead && !x.IsZombie && x.IsVisible && x.IsHPBarRendered && x.IsValidTarget()) && Hextech_GLP_800.IsReady() && Hextech_GLP_800.IsOwned();
         }
 
         /// <summary>
@@ -62,7 +65,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
 
             if (objAiHero != null)
             {
-                Items.UseItem((int)this.Id, objAiHero.ServerPosition);
+                Hextech_GLP_800.Cast(objAiHero.ServerPosition);
             }
         }
 

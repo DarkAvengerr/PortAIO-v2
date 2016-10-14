@@ -25,6 +25,8 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         /// </value>
         public override string Name => "Frost Queen's Claim";
 
+        public static EloBuddy.SDK.Item Frost_Queens_Claim;
+
         #endregion
 
         #region Public Methods and Operators
@@ -34,6 +36,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         /// </summary>
         public override void CreateMenu()
         {
+            Frost_Queens_Claim = new EloBuddy.SDK.Item(ItemId.Frost_Queens_Claim);
             this.Menu.AddItem(new MenuItem("UseFrostQueenCombo", "Use on Combo").SetValue(true));
             this.Menu.AddItem(new MenuItem("FrostQueenEnemyHp", "Use on Enemy Hp %").SetValue(new Slider(70)));
             this.Menu.AddItem(new MenuItem("FrostQueenMyHp", "Use on My Hp %").SetValue(new Slider(100)));
@@ -50,7 +53,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
                        x =>
                        x.HealthPercent < this.Menu.Item("FrostQueenEnemyHp").GetValue<Slider>().Value
                        && x.Distance(this.Player) < 1500)
-                       || this.Player.HealthPercent < this.Menu.Item("FrostQueenMyHp").GetValue<Slider>().Value);
+                       || this.Player.HealthPercent < this.Menu.Item("FrostQueenMyHp").GetValue<Slider>().Value) && Frost_Queens_Claim.IsReady() && Frost_Queens_Claim.IsOwned();
         }
 
         /// <summary>
@@ -58,7 +61,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         /// </summary>
         public override void UseItem()
         {
-            Items.UseItem((int)this.Id);
+            Frost_Queens_Claim.Cast();
         }
 
         #endregion

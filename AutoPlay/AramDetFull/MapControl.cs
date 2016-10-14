@@ -273,13 +273,13 @@ namespace ARAMDetFull
                             }
                             else if (spell.Key.CastType.Contains(CastType.AllyChampions) && spell.Key.SpellTags != null && spell.Key.SpellTags.Any(supportSpells.Contains))
                             {
-                                var bTarg = ARAMTargetSelector.getBestTargetAly(range, false);
-                                if (bTarg != null)
-                                {
-                                    Console.WriteLine("Cast ally: " + spell.Key.Slot);
-                                    spell.Value.CastOnUnit(bTarg);
-                                    return;
-                                }
+                                //var bTarg = ARAMTargetSelector.getBestTargetAly(range, false);
+                                //if (bTarg != null)
+                                //{
+                                //    Console.WriteLine("Cast ally: " + spell.Key.Slot);
+                                //    spell.Value.CastOnUnit(bTarg);
+                                //    return;
+                                //}
                             }
                             else if (spell.Key.CastType.Contains(CastType.EnemyChampions))
                             {

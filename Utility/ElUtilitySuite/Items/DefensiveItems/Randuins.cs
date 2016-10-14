@@ -23,6 +23,8 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
         /// </value>
         public override string Name => "Randuin's Omen";
 
+        public static EloBuddy.SDK.Item Randuins_Omen;
+
         #endregion
 
         #region Public Methods and Operators
@@ -32,6 +34,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
         /// </summary>
         public override void CreateMenu()
         {
+            Randuins_Omen = new EloBuddy.SDK.Item(ItemId.Randuins_Omen);
             this.Menu.AddItem(new MenuItem("UseRanduinsCombo", "Activate").SetValue(true));
             this.Menu.AddItem(new MenuItem("Mode-randuins", "Activation mode: ")).SetValue(new StringList(new[] { "Use always", "Use in combo" }, 1));
             this.Menu.AddItem(new MenuItem("RanduinsCount", "Use on enemies hit").SetValue(new Slider(3, 1, 5)));
@@ -43,7 +46,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
         /// <returns></returns>
         public override bool ShouldUseItem()
         {
-            return this.Menu.Item("UseRanduinsCombo").IsActive() && this.Player.CountEnemiesInRange(500f) >= this.Menu.Item("RanduinsCount").GetValue<Slider>().Value && Items.HasItem((int)ItemId.Randuins_Omen) && Items.CanUseItem((int)ItemId.Randuins_Omen);
+            return this.Menu.Item("UseRanduinsCombo").IsActive() && this.Player.CountEnemiesInRange(500f) >= this.Menu.Item("RanduinsCount").GetValue<Slider>().Value && Randuins_Omen.IsOwned() && Randuins_Omen.IsReady();
         }
 
         /// <summary>
@@ -56,7 +59,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
                 return;
             }
 
-            Items.UseItem((int)this.Id);
+            Randuins_Omen.Cast();
         }
 
         #endregion

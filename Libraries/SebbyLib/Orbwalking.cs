@@ -903,7 +903,7 @@ namespace SebbyLib
                     DelayOnFire = 0;
                 }
                 //Forced target
-                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget) && !_forcedTarget.IsDead && _forcedTarget.IsVisible && _forcedTarget.IsHPBarRendered && _forcedTarget.IsTargetable)
+                if (_forcedTarget != null && _forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget) && !_forcedTarget.IsDead && _forcedTarget.IsVisible && _forcedTarget.IsHPBarRendered && _forcedTarget.IsTargetable)
                 {
                     return _forcedTarget;
                 }
@@ -938,7 +938,7 @@ namespace SebbyLib
                 if (mode != OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target.IsValidTarget() && InAutoAttackRange(target) && !target.IsDead && target.IsHPBarRendered && target.IsVisible)
+                    if (target != null && target.IsValidTarget() && InAutoAttackRange(target) && !target.IsDead && target.IsHPBarRendered && target.IsVisible)
                     {
                         if (!ObjectManager.Player.UnderTurret(true) || mode == OrbwalkingMode.Combo)
                             return target;

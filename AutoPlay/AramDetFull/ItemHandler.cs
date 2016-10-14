@@ -1,47 +1,71 @@
 using System;
 using System.Collections.Generic;
 using ARAMDetFull;
-using LeagueSharp;using DetuksSharp;
+using LeagueSharp;
+using DetuksSharp;
 using LeagueSharp.Common;
 using ARAMDetFull = ARAMDetFull.ARAMDetFull;
 using Items = EloBuddy.SDK.Item;
 
-using EloBuddy; namespace ARAMDetFull.Helpers
+using EloBuddy;
+namespace ARAMDetFull.Helpers
 {
 
     public class ItemHandler
     {
         public static AIHeroClient player = ObjectManager.Player;
-        public static EloBuddy.SDK.Item botrk = new EloBuddy.SDK.Item(3153, 450);
-        public static EloBuddy.SDK.Item tiamat = new EloBuddy.SDK.Item(3077, 400);
-        public static EloBuddy.SDK.Item hydra = new EloBuddy.SDK.Item(3074, 400);
-        public static EloBuddy.SDK.Item randuins = new EloBuddy.SDK.Item(3143, 500);
-        public static EloBuddy.SDK.Item odins = new EloBuddy.SDK.Item(3180, 520);
-        public static EloBuddy.SDK.Item bilgewater = new EloBuddy.SDK.Item(3144, 450);
-        public static EloBuddy.SDK.Item hexgun = new EloBuddy.SDK.Item(3146, 700);
-        public static EloBuddy.SDK.Item Dfg = new EloBuddy.SDK.Item(3128, 750);
-        public static EloBuddy.SDK.Item Bft = new EloBuddy.SDK.Item(3188, 750);
-        public static EloBuddy.SDK.Item sheen = new EloBuddy.SDK.Item(3057, player.AttackRange);
-        public static EloBuddy.SDK.Item gaunlet = new EloBuddy.SDK.Item(3025, player.AttackRange);
-        public static EloBuddy.SDK.Item trinity = new EloBuddy.SDK.Item(3078, player.AttackRange);
-        public static EloBuddy.SDK.Item lich = new EloBuddy.SDK.Item(3100, player.AttackRange);
-        public static EloBuddy.SDK.Item youmuu = new EloBuddy.SDK.Item(3142, player.AttackRange);
+        public static EloBuddy.SDK.Item botrk;
+        public static EloBuddy.SDK.Item tiamat;
+        public static EloBuddy.SDK.Item hydra;
+        public static EloBuddy.SDK.Item randuins;
+        public static EloBuddy.SDK.Item odins;
+        public static EloBuddy.SDK.Item bilgewater;
+        public static EloBuddy.SDK.Item hexgun;
+        public static EloBuddy.SDK.Item Dfg;
+        public static EloBuddy.SDK.Item Bft;
+        public static EloBuddy.SDK.Item sheen;
+        public static EloBuddy.SDK.Item gaunlet;
+        public static EloBuddy.SDK.Item trinity;
+        public static EloBuddy.SDK.Item lich;
+        public static EloBuddy.SDK.Item youmuu;
+        public static EloBuddy.SDK.Item Qss;
+        public static EloBuddy.SDK.Item Mercurial;
+        public static EloBuddy.SDK.Item Dervish;
+        public static EloBuddy.SDK.Item Zhonya;
+        public static EloBuddy.SDK.Item Wooglet;
+        public static EloBuddy.SDK.Item locket;
 
-        public static EloBuddy.SDK.Item Qss = new EloBuddy.SDK.Item(3140, 0);
-        public static EloBuddy.SDK.Item Mercurial = new EloBuddy.SDK.Item(3139, 0);
-        public static EloBuddy.SDK.Item Dervish = new EloBuddy.SDK.Item(3137, 0);
-        public static EloBuddy.SDK.Item Zhonya = new EloBuddy.SDK.Item(3157, 0);
-        public static EloBuddy.SDK.Item Wooglet = new EloBuddy.SDK.Item(3090, 0);
-        public static EloBuddy.SDK.Item locket = new EloBuddy.SDK.Item((int)ItemId.Locket_of_the_Iron_Solari, 0);
+        static ItemHandler()
+        {
+            botrk = new EloBuddy.SDK.Item(3153, 450);
+            tiamat = new EloBuddy.SDK.Item(3077, 400);
+            hydra = new EloBuddy.SDK.Item(3074, 400);
+            randuins = new EloBuddy.SDK.Item(3143, 500);
+            odins = new EloBuddy.SDK.Item(3180, 520);
+            bilgewater = new EloBuddy.SDK.Item(3144, 450);
+            hexgun = new EloBuddy.SDK.Item(3146, 700);
+            Dfg = new EloBuddy.SDK.Item(3128, 750);
+            Bft = new EloBuddy.SDK.Item(3188, 750);
+            sheen = new EloBuddy.SDK.Item(3057, player.AttackRange);
+            gaunlet = new EloBuddy.SDK.Item(3025, player.AttackRange);
+            trinity = new EloBuddy.SDK.Item(3078, player.AttackRange);
+            lich = new EloBuddy.SDK.Item(3100, player.AttackRange);
+            youmuu = new EloBuddy.SDK.Item(3142, player.AttackRange);
+            Qss = new EloBuddy.SDK.Item(3140, 0);
+            Mercurial = new EloBuddy.SDK.Item(3139, 0);
+            Dervish = new EloBuddy.SDK.Item(3137, 0);
+            Zhonya = new EloBuddy.SDK.Item(3157, 0);
+            Wooglet = new EloBuddy.SDK.Item(3090, 0);
+            locket = new EloBuddy.SDK.Item((int)ItemId.Locket_of_the_Iron_Solari, 0);
+        }
 
 
         public static void useItems()
         {
             try
             {
-
-                var target = ARAMTargetSelector.getBestTarget(500);
-                if(target != null)
+                var target = TargetSelector.GetTarget(500, TargetSelector.DamageType.Physical);
+                if (target != null && target.IsValidTarget())
                     UseItems(target);
             }
             catch (Exception ex)
@@ -57,57 +81,66 @@ using EloBuddy; namespace ARAMDetFull.Helpers
                 castHydra(target);
             }
 
-            if (EloBuddy.SDK.Item.HasItem(Zhonya.Id) && EloBuddy.SDK.Item.CanUseItem(Zhonya.Id))
+            if (Zhonya.IsOwned() && Zhonya.IsReady())
             {
-                if (player.HealthPercent<30 && ARAMSimulator.balance<-60)
+                if (player.HealthPercent < 30 && ARAMSimulator.balance < -60)
                 {
-                    EloBuddy.SDK.Item.UseItem(Zhonya.Id);
+                    Zhonya.Cast();
                 }
             }
-            if (EloBuddy.SDK.Item.HasItem(locket.Id) && EloBuddy.SDK.Item.CanUseItem(locket.Id))
+
+            if (locket.IsOwned() && locket.IsReady())
             {
-                if (player.HealthPercent < 80 && player.CountEnemiesInRange(550)>0)
+                if (player.HealthPercent < 80 && player.CountEnemiesInRange(550) > 0)
                 {
-                    EloBuddy.SDK.Item.UseItem(locket.Id);
+                    locket.Cast();
                 }
             }
-            if (EloBuddy.SDK.Item.HasItem(randuins.Id) && EloBuddy.SDK.Item.CanUseItem(randuins.Id))
+
+            if (randuins.IsOwned() && randuins.IsReady())
             {
                 if (player.Distance(target) < randuins.Range && player.Distance(target) > player.AttackRange + 100)
                 {
-                    EloBuddy.SDK.Item.UseItem(randuins.Id);
+                    randuins.Cast();
                 }
             }
-            if (EloBuddy.SDK.Item.HasItem(odins.Id) && EloBuddy.SDK.Item.CanUseItem(odins.Id))
+
+            if (odins.IsReady() && odins.IsOwned())
             {
                 if (player.Distance(target) < odins.Range &&
                     (player.CountEnemiesInRange(odins.Range) > 1 ||
                      target.Health < Damage.GetItemDamage(player, target, Damage.DamageItems.OdingVeils)))
                 {
-                    EloBuddy.SDK.Item.UseItem(odins.Id);
+                    odins.Cast();
                 }
             }
-            if (EloBuddy.SDK.Item.HasItem(bilgewater.Id) && EloBuddy.SDK.Item.CanUseItem(bilgewater.Id))
+
+            if (bilgewater.IsOwned() && bilgewater.IsReady())
             {
                 bilgewater.Cast(target);
             }
-            if (EloBuddy.SDK.Item.HasItem(botrk.Id) && EloBuddy.SDK.Item.CanUseItem(botrk.Id) && (player.Health < player.MaxHealth / 2 || Damage.GetItemDamage(player, target, Damage.DamageItems.Botrk) < target.Health))
+
+            if (botrk.IsOwned() && botrk.IsReady() && (player.Health < player.MaxHealth / 2 || Damage.GetItemDamage(player, target, Damage.DamageItems.Botrk) < target.Health))
             {
                 botrk.Cast(target);
             }
-            if (EloBuddy.SDK.Item.HasItem(hexgun.Id) && EloBuddy.SDK.Item.CanUseItem(hexgun.Id))
+
+            if (hexgun.IsOwned() && hexgun.IsReady())
             {
                 hexgun.Cast(target);
             }
-            if (EloBuddy.SDK.Item.HasItem(Dfg.Id) && EloBuddy.SDK.Item.CanUseItem(Dfg.Id))
+
+            if (Dfg.IsOwned() && Dfg.IsReady())
             {
                 Dfg.Cast(target);
             }
-            if (EloBuddy.SDK.Item.HasItem(Bft.Id) && EloBuddy.SDK.Item.CanUseItem(Bft.Id))
+
+            if (Bft.IsOwned() && Bft.IsReady())
             {
                 Bft.Cast(target);
             }
-            if (EloBuddy.SDK.Item.HasItem(youmuu.Id) && EloBuddy.SDK.Item.CanUseItem(youmuu.Id) && player.Distance(target) < player.AttackRange + 50)
+
+            if (youmuu.IsOwned() && youmuu.IsReady() && player.Distance(target) < player.AttackRange + 50)
             {
                 youmuu.Cast();
             }
@@ -117,13 +150,13 @@ using EloBuddy; namespace ARAMDetFull.Helpers
         {
             if (player.Distance(target) < hydra.Range && !LeagueSharp.Common.Orbwalking.CanAttack())
             {
-                if (EloBuddy.SDK.Item.HasItem(tiamat.Id) && EloBuddy.SDK.Item.CanUseItem(tiamat.Id))
+                if (tiamat.IsReady() && tiamat.IsOwned())
                 {
-                    EloBuddy.SDK.Item.UseItem(tiamat.Id);
+                    tiamat.Cast();
                 }
-                if (EloBuddy.SDK.Item.HasItem(hydra.Id) && EloBuddy.SDK.Item.CanUseItem(hydra.Id))
+                if (hydra.IsReady() && hydra.IsOwned())
                 {
-                    EloBuddy.SDK.Item.UseItem(hydra.Id);
+                    hydra.Cast();
                 }
             }
         }
@@ -131,56 +164,56 @@ using EloBuddy; namespace ARAMDetFull.Helpers
         public static float GetItemsDamage(AIHeroClient target)
         {
             double damage = 0;
-            if (EloBuddy.SDK.Item.HasItem(odins.Id) && EloBuddy.SDK.Item.CanUseItem(odins.Id))
-            {
-                damage += Damage.GetItemDamage(player, target, Damage.DamageItems.OdingVeils);
-            }
-            if (EloBuddy.SDK.Item.HasItem(hexgun.Id) && EloBuddy.SDK.Item.CanUseItem(hexgun.Id))
-            {
-                damage += Damage.GetItemDamage(player, target, Damage.DamageItems.Hexgun);
-            }
-            if (EloBuddy.SDK.Item.HasItem(lich.Id) && EloBuddy.SDK.Item.CanUseItem(lich.Id))
-            {
-                damage += player.CalcDamage(target, Damage.DamageType.Magical, player.BaseAttackDamage * 0.75 + player.FlatMagicDamageMod * 0.5);
-            }
-            if (EloBuddy.SDK.Item.HasItem(Dfg.Id) && EloBuddy.SDK.Item.CanUseItem(Dfg.Id))
-            {
-                damage = damage * 1.2;
-                damage += Damage.GetItemDamage(player, target, Damage.DamageItems.Dfg);
-            }
-            if (EloBuddy.SDK.Item.HasItem(Bft.Id) && EloBuddy.SDK.Item.CanUseItem(Bft.Id))
-            {
-                damage = damage * 1.2;
-                damage += Damage.GetItemDamage(player, target, Damage.DamageItems.BlackFireTorch);
-            }
-            if (EloBuddy.SDK.Item.HasItem(tiamat.Id) && EloBuddy.SDK.Item.CanUseItem(tiamat.Id))
-            {
-                damage += Damage.GetItemDamage(player, target, Damage.DamageItems.Tiamat);
-            }
-            if (EloBuddy.SDK.Item.HasItem(hydra.Id) && EloBuddy.SDK.Item.CanUseItem(hydra.Id))
-            {
-                damage += Damage.GetItemDamage(player, target, Damage.DamageItems.Hydra);
-            }
-            if (EloBuddy.SDK.Item.HasItem(bilgewater.Id) && EloBuddy.SDK.Item.CanUseItem(bilgewater.Id))
-            {
-                damage += Damage.GetItemDamage(player, target, Damage.DamageItems.Bilgewater);
-            }
-            if (EloBuddy.SDK.Item.HasItem(botrk.Id) && EloBuddy.SDK.Item.CanUseItem(botrk.Id))
-            {
-                damage += Damage.GetItemDamage(player, target, Damage.DamageItems.Botrk);
-            }
-            if (EloBuddy.SDK.Item.HasItem(sheen.Id) && (EloBuddy.SDK.Item.CanUseItem(sheen.Id) || player.HasBuff("sheen", true)))
-            {
-                damage += player.CalcDamage(target, Damage.DamageType.Physical, player.BaseAttackDamage);
-            }
-            if (EloBuddy.SDK.Item.HasItem(gaunlet.Id) && EloBuddy.SDK.Item.CanUseItem(gaunlet.Id))
-            {
-                damage += player.CalcDamage(target, Damage.DamageType.Physical, player.BaseAttackDamage * 1.25);
-            }
-            if (EloBuddy.SDK.Item.HasItem(trinity.Id) && EloBuddy.SDK.Item.CanUseItem(trinity.Id))
-            {
-                damage += player.CalcDamage(target, Damage.DamageType.Physical, player.BaseAttackDamage * 2);
-            }
+            //if (EloBuddy.SDK.Item.HasItem(odins.Id) && EloBuddy.SDK.Item.CanUseItem(odins.Id))
+            //{
+            //    damage += Damage.GetItemDamage(player, target, Damage.DamageItems.OdingVeils);
+            //}
+            //if (EloBuddy.SDK.Item.HasItem(hexgun.Id) && EloBuddy.SDK.Item.CanUseItem(hexgun.Id))
+            //{
+            //    damage += Damage.GetItemDamage(player, target, Damage.DamageItems.Hexgun);
+            //}
+            //if (EloBuddy.SDK.Item.HasItem(lich.Id) && EloBuddy.SDK.Item.CanUseItem(lich.Id))
+            //{
+            //    damage += player.CalcDamage(target, Damage.DamageType.Magical, player.BaseAttackDamage * 0.75 + player.FlatMagicDamageMod * 0.5);
+            //}
+            //if (EloBuddy.SDK.Item.HasItem(Dfg.Id) && EloBuddy.SDK.Item.CanUseItem(Dfg.Id))
+            //{
+            //    damage = damage * 1.2;
+            //    damage += Damage.GetItemDamage(player, target, Damage.DamageItems.Dfg);
+            //}
+            //if (EloBuddy.SDK.Item.HasItem(Bft.Id) && EloBuddy.SDK.Item.CanUseItem(Bft.Id))
+            //{
+            //    damage = damage * 1.2;
+            //    damage += Damage.GetItemDamage(player, target, Damage.DamageItems.BlackFireTorch);
+            //}
+            //if (EloBuddy.SDK.Item.HasItem(tiamat.Id) && EloBuddy.SDK.Item.CanUseItem(tiamat.Id))
+            //{
+            //    damage += Damage.GetItemDamage(player, target, Damage.DamageItems.Tiamat);
+            //}
+            //if (EloBuddy.SDK.Item.HasItem(hydra.Id) && EloBuddy.SDK.Item.CanUseItem(hydra.Id))
+            //{
+            //    damage += Damage.GetItemDamage(player, target, Damage.DamageItems.Hydra);
+            //}
+            //if (EloBuddy.SDK.Item.HasItem(bilgewater.Id) && EloBuddy.SDK.Item.CanUseItem(bilgewater.Id))
+            //{
+            //    damage += Damage.GetItemDamage(player, target, Damage.DamageItems.Bilgewater);
+            //}
+            //if (EloBuddy.SDK.Item.HasItem(botrk.Id) && EloBuddy.SDK.Item.CanUseItem(botrk.Id))
+            //{
+            //    damage += Damage.GetItemDamage(player, target, Damage.DamageItems.Botrk);
+            //}
+            //if (EloBuddy.SDK.Item.HasItem(sheen.Id) && (EloBuddy.SDK.Item.CanUseItem(sheen.Id) || player.HasBuff("sheen", true)))
+            //{
+            //    damage += player.CalcDamage(target, Damage.DamageType.Physical, player.BaseAttackDamage);
+            //}
+            //if (EloBuddy.SDK.Item.HasItem(gaunlet.Id) && EloBuddy.SDK.Item.CanUseItem(gaunlet.Id))
+            //{
+            //    damage += player.CalcDamage(target, Damage.DamageType.Physical, player.BaseAttackDamage * 1.25);
+            //}
+            //if (EloBuddy.SDK.Item.HasItem(trinity.Id) && EloBuddy.SDK.Item.CanUseItem(trinity.Id))
+            //{
+            //    damage += player.CalcDamage(target, Damage.DamageType.Physical, player.BaseAttackDamage * 2);
+            //}
             return (float)damage;
         }
 

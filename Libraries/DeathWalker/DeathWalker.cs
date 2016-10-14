@@ -207,6 +207,13 @@ namespace DetuksSharp
 
         private static void onStopAutoAttack(Obj_AI_Base sender, SpellbookStopCastEventArgs args)
         {
+            if (sender.IsValid && sender.IsMe && EloBuddy.SDK.Orbwalker.IsRanged && (args.DestroyMissile && args.StopAnimation))
+            {
+                Console.WriteLine("Cancel auto");
+                var resetTo = (menu.Item("betaStut").GetValue<bool>()) ? previousAttack : 0;
+                lastAutoAttack = resetTo;
+                lastAutoAttackMove = resetTo;
+            }
         }
 
         private static void onStartAutoAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -757,6 +764,10 @@ namespace DetuksSharp
             menu = menuIn;
 
             init();
+
+            Obj_AI_Base.OnBasicAttack += onStartAutoAttack;
+            Spellbook.OnStopCast += onStopAutoAttack;
+            Obj_AI_Base.OnSpellCast += onDoCast;
         }
 
 

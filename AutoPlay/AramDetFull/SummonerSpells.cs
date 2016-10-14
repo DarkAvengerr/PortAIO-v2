@@ -14,17 +14,17 @@ namespace ARAMDetFull
     abstract class SumSpell
     {
         public Spell spell;
+        public SpellSlot slot;
         public string spellName;
+
         public abstract void useSpell();
 
-        public SumSpell(Spell spel)
+        public SumSpell(Spell spel, SpellSlot s)
         {
             spell = spel;
+            slot = s;
         }
-
     }
-
-
 
     class SummonerSpells
     {
@@ -108,6 +108,7 @@ namespace ARAMDetFull
         {
             AIHeroClient snowed;
             private int lastCast = 0;
+
             public override void useSpell()
             {
                 if (!spell.IsReady() || lastCast + 700 > DeathWalker.now)
@@ -127,7 +128,7 @@ namespace ARAMDetFull
                 }
                 else
                 {
-                    var tar = ARAMTargetSelector.getBestTarget(spell.Range);
+                    var tar = TargetSelector.GetTarget(spell.Range, TargetSelector.DamageType.Physical);
                     if (tar != null)
                     {
                         spell.Cast(tar);
@@ -138,8 +139,7 @@ namespace ARAMDetFull
 
             }
 
-            public SnowBall(Spell spel)
-                : base(spel)
+            public SnowBall(Spell spel) : base(spel, spel.Slot)
             {
                 spell.Range = 1200f;
                 spell.SetSkillshot(.33f, 50f, 1600, true, SkillshotType.SkillshotLine);
@@ -153,15 +153,15 @@ namespace ARAMDetFull
         {
             public override void useSpell()
             {
-                if (!spell.IsReady())
+                if (!spell.IsReady() || spell.Slot == SpellSlot.Unknown)
                     return;
-                if (player.CountEnemysInRange(600) > 1 && player.HealthPercent < 40)
+                if (player.CountEnemiesInRange(600) > 1 && player.HealthPercent < 40)
                 {
                     spell.Cast(player.Position.Extend(ARAMSimulator.fromNex.Position, 450));
                 }
             }
 
-            public Flash(Spell spel) : base(spel)
+            public Flash(Spell spel) : base(spel, spel.Slot)
             {
                 Console.WriteLine("SummonerSpell Set");
             }
@@ -171,18 +171,20 @@ namespace ARAMDetFull
         {
             public override void useSpell()
             {
-                if (!spell.IsReady())
+                if (!spell.IsReady() || spell.Slot == SpellSlot.Unknown)
                     return;
-                var tar = ARAMTargetSelector.getBestTarget(450);
-                if (tar != null)
+                var tar = TargetSelector.GetTarget(450, TargetSelector.DamageType.Physical);
+                if (tar != null && tar.IsValidTarget())
+                {
                     if (tar.HealthPercent > 20 && tar.HealthPercent < 50)
                     {
                         spell.Cast(tar);
                     }
+                }
             }
 
             public Ignite(Spell spel)
-                : base(spel)
+                : base(spel, spel.Slot)
             {
                 Console.WriteLine("SummonerSpell Set");
             }
@@ -192,7 +194,7 @@ namespace ARAMDetFull
         {
             public override void useSpell()
             {
-                if (!spell.IsReady())
+                if (!spell.IsReady() || spell.Slot == SpellSlot.Unknown)
                     return;
                 if (player.CountEnemiesInRange(600) > 0 && player.HealthPercent < 30)
                 {
@@ -201,7 +203,7 @@ namespace ARAMDetFull
             }
 
             public Heal(Spell spel)
-                : base(spel)
+                : base(spel, spel.Slot)
             {
                 Console.WriteLine("SummonerSpell Set");
             }
@@ -211,7 +213,7 @@ namespace ARAMDetFull
         {
             public override void useSpell()
             {
-                if (!spell.IsReady())
+                if (!spell.IsReady() || spell.Slot == SpellSlot.Unknown)
                     return;
                 if (player.InShop())
                 {
@@ -220,7 +222,7 @@ namespace ARAMDetFull
             }
 
             public Ghost(Spell spel)
-                : base(spel)
+                : base(spel, spel.Slot)
             {
                 Console.WriteLine("SummonerSpell Set");
             }
@@ -230,18 +232,20 @@ namespace ARAMDetFull
         {
             public override void useSpell()
             {
-                if (!spell.IsReady())
+                if (!spell.IsReady() || spell.Slot == SpellSlot.Unknown)
                     return;
-                var tar = ARAMTargetSelector.getBestTarget(300);
-                if (tar != null)
+                var tar = TargetSelector.GetTarget(300, TargetSelector.DamageType.Physical);
+                if (tar != null && tar.IsValidTarget())
+                {
                     if (tar.HealthPercent > 20)
                     {
                         spell.Cast(tar);
                     }
+                }
             }
 
             public Exhoust(Spell spel)
-                : base(spel)
+                : base(spel, spel.Slot)
             {
                 Console.WriteLine("SummonerSpell Set");
             }
@@ -251,16 +255,16 @@ namespace ARAMDetFull
         {
             public override void useSpell()
             {
-                if (!spell.IsReady())
+                if (!spell.IsReady() || spell.Slot == SpellSlot.Unknown)
                     return;
-                if (player.CountEnemysInRange(600) > 0 && player.HealthPercent < 20)
+                if (player.CountEnemiesInRange(600) > 0 && player.HealthPercent < 20)
                 {
                     spell.Cast();
                 }
             }
 
             public Barrier(Spell spel)
-                : base(spel)
+                : base(spel, spel.Slot)
             {
                 Console.WriteLine("SummonerSpell Set");
             }
@@ -270,7 +274,7 @@ namespace ARAMDetFull
         {
             public override void useSpell()
             {
-                if (!spell.IsReady())
+                if (!spell.IsReady() || spell.Slot == SpellSlot.Unknown)
                     return;
                 if (player.ManaPercent < 25)
                 {
@@ -278,8 +282,7 @@ namespace ARAMDetFull
                 }
             }
 
-            public Clarity(Spell spel)
-                : base(spel)
+            public Clarity(Spell spel) : base(spel, spel.Slot)
             {
                 Console.WriteLine("SummonerSpell Set");
             }

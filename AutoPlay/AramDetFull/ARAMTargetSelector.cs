@@ -18,7 +18,7 @@ namespace ARAMDetFull
             try
             {
                 var target = TargetSelector.GetTarget(range, TargetSelector.DamageType.Physical);
-                if (target != null && target.IsValidTarget())
+                if (target != null && target.IsValidTarget() && !target.IsDead)
                 {
                     return target;
                 }

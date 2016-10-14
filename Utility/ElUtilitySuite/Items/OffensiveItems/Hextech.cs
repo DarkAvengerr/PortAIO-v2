@@ -25,6 +25,8 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         /// </value>
         public override string Name => "Hextech Gunblade";
 
+        public static EloBuddy.SDK.Item Hextech_Gunblade;
+
         #endregion
 
         #region Public Methods and Operators
@@ -34,6 +36,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         /// </summary>
         public override void CreateMenu()
         {
+            Hextech_Gunblade = new EloBuddy.SDK.Item(ItemId.Hextech_Gunblade);
             this.Menu.AddItem(new MenuItem("UseHextechCombo", "Use on Combo").SetValue(true));
             this.Menu.AddItem(new MenuItem("HextechEnemyHp", "Use on Enemy Hp %").SetValue(new Slider(70)));
         }
@@ -48,7 +51,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
                    && EloBuddy.SDK.EntityManager.Heroes.Enemies.Any(
                        x =>
                        x.HealthPercent < this.Menu.Item("HextechEnemyHp").GetValue<Slider>().Value
-                       && x.Distance(this.Player) < 700 && !x.IsDead && !x.IsZombie);
+                       && x.Distance(this.Player) < 700 && !x.IsDead && !x.IsZombie) && Hextech_Gunblade.IsReady() && Hextech_Gunblade.IsOwned();
         }
 
         /// <summary>
@@ -56,9 +59,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         /// </summary>
         public override void UseItem()
         {
-            Items.UseItem(
-                (int)this.Id,
-                EloBuddy.SDK.EntityManager.Heroes.Enemies.FirstOrDefault(
+            Hextech_Gunblade.Cast(EloBuddy.SDK.EntityManager.Heroes.Enemies.FirstOrDefault(
                     x =>
                     x.HealthPercent < this.Menu.Item("HextechEnemyHp").GetValue<Slider>().Value
                     && x.Distance(this.Player) < 700 && !x.IsDead && !x.IsZombie && x.IsVisible && x.IsHPBarRendered && x.IsValidTarget()));

@@ -19,6 +19,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
         {
             IncomingDamageManager.RemoveDelay = 500;
             IncomingDamageManager.Skillshots = true;
+            Locket_of_the_Iron_Solari = new EloBuddy.SDK.Item(ItemId.Locket_of_the_Iron_Solari);
             Game.OnUpdate += this.Game_OnUpdate;
         }
 
@@ -41,6 +42,8 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
         ///     The name of the item.
         /// </value>
         public override string Name => "Locket of the Iron Solari";
+
+        public static EloBuddy.SDK.Item Locket_of_the_Iron_Solari;
 
         #endregion
 
@@ -71,7 +74,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
         {
             try
             {
-                if (!this.Menu.Item("UseLocketCombo").IsActive() || !Items.HasItem((int)this.Id) || !Items.CanUseItem((int)this.Id))
+                if (!this.Menu.Item("UseLocketCombo").IsActive() || !Locket_of_the_Iron_Solari.IsOwned() || !Locket_of_the_Iron_Solari.IsReady())
                 {
                     return;
                 }
@@ -93,7 +96,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
                             > this.Menu.Item("locket-min-damage").GetValue<Slider>().Value
                             || ally.HealthPercent < this.Menu.Item("locket-min-health").GetValue<Slider>().Value)
                         {
-                            Items.UseItem((int)this.Id, ally);
+                            Locket_of_the_Iron_Solari.Cast(ally);
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine("[ELUTILITYSUITE - LOCKET] Used for: {0} - health percentage: {1}%", ally.ChampionName, (int)ally.HealthPercent);
                         }

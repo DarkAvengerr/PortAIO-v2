@@ -21,6 +21,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
         {
             IncomingDamageManager.RemoveDelay = 500;
             IncomingDamageManager.Skillshots = true;
+            Seraphs_Embrace = new EloBuddy.SDK.Item(ItemId.Seraphs_Embrace);
             Game.OnUpdate += this.Game_OnUpdate;
         }
 
@@ -43,6 +44,8 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
         ///     The name of the item.
         /// </value>
         public override string Name => "Seraph's embrace";
+
+        public static EloBuddy.SDK.Item Seraphs_Embrace;
 
         #endregion
 
@@ -71,7 +74,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
         {
             try
             {
-                if (!ItemData.Seraphs_Embrace.GetItem().IsOwned() || !this.Menu.Item("UseSeraphsCombo").IsActive() || !Items.CanUseItem((int)ItemId.Seraphs_Embrace))
+                if (!Seraphs_Embrace.IsOwned() || !this.Menu.Item("UseSeraphsCombo").IsActive() || !Seraphs_Embrace.IsReady())
                 {
                     return;
                 }
@@ -90,7 +93,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
                         > this.Menu.Item("seraphs-min-damage").GetValue<Slider>().Value
                         || this.Player.HealthPercent < this.Menu.Item("seraphs-min-health").GetValue<Slider>().Value)
                     {
-                        Items.UseItem((int)this.Id, this.Player);
+                        Seraphs_Embrace.Cast(this.Player);
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("[ELUTILITYSUITE - SERAPHS] Used for: {0} - health percentage: {1}%", this.Player.ChampionName, (int)this.Player.HealthPercent);
                     }

@@ -59,8 +59,15 @@ namespace ARAMDetFull
             get { return (int)DateTime.Now.TimeOfDay.TotalMilliseconds; }
         }
 
+        public static List<int> allyIds;
+        public static List<int> enemyIds;
+
         private static void onLoad()
         {
+            r = new Random();
+            allyIds = new List<int>();
+            enemyIds = new List<int>();
+
             gameStart = now;
 
             Chat.Print("ARAm - Sharp by DeTuKs");
@@ -78,6 +85,7 @@ namespace ARAMDetFull
                 Config.AddToMainMenu();
 
                 Game.OnUpdate += OnGameUpdate;
+                Game.OnNotify += Game_OnNotify;
 
                 var gameEndNotified = false;
 
@@ -103,11 +111,49 @@ namespace ARAMDetFull
                 };
 
                 ARAMSimulator.setupARMASimulator();
+
+                foreach(AIHeroClient ally in EloBuddy.SDK.EntityManager.Heroes.Allies)
+                {
+                    allyIds.Add(ally.NetworkId);
+                }
+
+                foreach (AIHeroClient enemy in EloBuddy.SDK.EntityManager.Heroes.Enemies)
+                {
+                    enemyIds.Add(enemy.NetworkId);
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
+        }
+
+        public static Random r { get; private set; }
+
+        public static int teamKills;
+        public static int enemyKills;
+
+        private static void Game_OnNotify(GameNotifyEventArgs args)
+        {
+            if (args.EventId == GameEventId.OnChampionKill)
+            {
+                if(allyIds.Contains((int)args.NetworkId))
+                {
+                    teamKills++;
+                }
+                else
+                {
+                    enemyKills++;
+                }
+            }
+
+            if (args.EventId == GameEventId.OnChampionPentaKill && allyIds.Contains((int)args.NetworkId))
+            {
+                Chat.Say("ez");
+            }
+
+            if (args.EventId == GameEventId.OnSurrenderVote)
+                EloBuddy.SDK.Core.DelayAction(() => Chat.Say("/ff"), r.Next(2000, 5000));
         }
 
         private static void ARAMDetFull_OnGameEnd(bool win)

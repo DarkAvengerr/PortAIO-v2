@@ -81,14 +81,14 @@ namespace ARAMDetFull
         {
             "Amumu", "DrMundo","Sion", "Galio", "Hecarim", "Rammus", "Sejuani",
             "Shen", "Singed", "Skarner", "Volibear", "Leona",
-             "Yorick", "Zac", "Udyr", "Nasus", "Trundle", "Irelia","Braum", "Vi"
+            "Yorick", "Zac", "Udyr", "Nasus", "Trundle", "Irelia","Braum", "Vi"
         };
 
         public static string[] ad_carries =
         {
             "Ashe", "Caitlyn", "Corki", "Draven", "Ezreal", "Graves",  "KogMaw", "MissFortune",
-              "Sivir", "Jinx","Jayce", "Gangplank",
-            "Talon", "Tristana", "Twitch", "Urgot", "Varus",  "Zed", "Lucian","Yasuo","MasterYi","Quinn","Kalista","Vayne","Kindred"," Jhin"
+             "Sivir", "Jinx", "Jayce", "Gangplank",
+            "Talon", "Tristana", "Twitch", "Urgot", "Varus", "Zed", "Lucian","Yasuo","MasterYi","Quinn","Kalista","Vayne","Kindred", "Jhin"
 
         };
 
@@ -97,7 +97,7 @@ namespace ARAMDetFull
             "Aatrox", "Darius",  "Fiora", "Garen", "JarvanIV", "Jax", "Khazix", "LeeSin",
             "Nautilus", "Nocturne", "Olaf", "Poppy",
             "Renekton", "Rengar", "Riven", "Shyvana", "Tryndamere", "MonkeyKing", "XinZhao","Pantheon",
-            "Rek'Sai","Gnar","Wukong","RekSai"
+            "Rek'Sai","Gnar","Wukong","RekSai", "Kled"
         };
 
         public static string[] mageNoMana =
@@ -148,24 +148,34 @@ namespace ARAMDetFull
             var cName = player.ChampionName;
             if (mages.Contains(cName))
                 return ChampType.Mage;
+
             if (supports.Contains(cName))
                 return ChampType.Support;
+
             if (tanks.Contains(cName))
                 return ChampType.Tank;
+
             if (ad_carries.Contains(cName))
                 return ChampType.Carry;
+
             if (bruisers.Contains(cName))
                 return ChampType.Bruiser;
+
             if (mageNoMana.Contains(cName))
                 return ChampType.MageNoMana;
+
             if (mageTank.Contains(cName))
                 return ChampType.MageTank;
+
             if (mageAS.Contains(cName))
                 return ChampType.MageAS;
+
             if (tankAS.Contains(cName))
                 return ChampType.TankAS;
+
             if (dpsAS.Contains(cName))
                 return ChampType.DpsAS;
+
             return ChampType.Tank;
         }
 
@@ -746,10 +756,10 @@ namespace ARAMDetFull
         {
             try
             {
-                if (sender.IsValid<MissileClient>() && (MissileClient)sender != null)
+                if (sender.IsValid<MissileClient>() && sender.IsValid && (MissileClient)sender != null)
                 {
                     var missile = (MissileClient)sender;
-                    if (missile.SpellCaster.IsValid<Obj_AI_Turret>() && missile.SpellCaster.IsEnemy &&
+                    if (missile.SpellCaster.IsValid<Obj_AI_Turret>() && missile.SpellCaster.IsEnemy && missile.Target != null &&
                         missile.Target.IsValid<AIHeroClient>() && missile.Target.IsAlly)
                     {
                         var turret = (Obj_AI_Turret)missile.SpellCaster;
@@ -908,7 +918,7 @@ namespace ARAMDetFull
                    EloBuddy.SDK.EntityManager.Heroes.Enemies.FirstOrDefault(ene => ene != null && !ene.IsZombie && !ene.IsDead && ene.Distance(player, true) < lookRange * lookRange &&
                                                              !ARAMTargetSelector.IsInvulnerable(ene) && ene.Health / 1.5 < player.GetAutoAttackDamage(ene) && ene.IsHPBarRendered);
 
-                if (easyKill != null)
+                if (easyKill != null && easyKill.IsValidTarget())
                 {
                     Aggresivity.addAgresiveMove(new AgresiveMove(45, 1500, true));
                     DeathWalker.deathWalk(easyKill.Position.To2D().Extend(player.Position.To2D(), player.AttackRange * 0.7f).To3D(), true);
@@ -964,7 +974,7 @@ namespace ARAMDetFull
                     if (player.IsMelee)
                     {
                         var safeMeleeEnem = ARAMTargetSelector.getSafeMeleeTarget();
-                        if (safeMeleeEnem != null)
+                        if (safeMeleeEnem != null && safeMeleeEnem.IsValidTarget())
                         {
                             DeathWalker.deathWalk(safeMeleeEnem.Position.Extend(safeMeleeEnem.Direction, player.AttackRange * 0.3f), true);
                             return;
@@ -1081,6 +1091,10 @@ namespace ARAMDetFull
                 return new Vector2(0, 0);
 
             Vector2 backTo = player.Position.To2D();
+            if (!backTo.IsValid())
+            {
+                return new Vector2(0, 0);
+            }
             int count = 0;
 
             backTo -= (toNex.Position - player.Position).To2D();

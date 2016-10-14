@@ -392,7 +392,7 @@ using EloBuddy;
 
         private void CatchAxe(GameObject Axe)
         {
-            if (Player.Distance(Axe.Position) < 100)
+            if (Player.Distance(Axe.Position) < 50)
             {
                 Orbwalker.SetOrbwalkingPoint(Game.CursorPos);
                 return;

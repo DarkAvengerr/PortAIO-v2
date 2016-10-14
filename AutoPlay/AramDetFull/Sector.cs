@@ -109,7 +109,7 @@ using EloBuddy; namespace ARAMDetFull
 
             foreach (var al_chemp in MapControl.ally_champions)
             {
-                if (al_chemp.hero.IsValidTarget() && !al_chemp.hero.IsDead && polig.pointInside(al_chemp.hero.Position.To2D()))
+                if (al_chemp != null && al_chemp.hero.IsValidTarget() && !al_chemp.hero.IsDead && polig.pointInside(al_chemp.hero.Position.To2D()))
                 {
                     dangLVL--;
                     containsAllyChamp = true;

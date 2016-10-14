@@ -40,8 +40,8 @@ using EloBuddy; namespace ARAMDetFull
 
         public void castIgnite(AIHeroClient target)
         {
-            if (ignite != SpellSlot.Unknown && sumBook.CanUseSpell(ignite) == SpellState.Ready)
-                sumBook.CastSpell(ignite, target);
+            //if (ignite != SpellSlot.Unknown && sumBook.CanUseSpell(ignite) == SpellState.Ready)
+            //    sumBook.CastSpell(ignite, target);
         }
 
         public void castSmite(AIHeroClient target)
@@ -52,9 +52,9 @@ using EloBuddy; namespace ARAMDetFull
 
         public void cast(ItemIds item)
         {
-            var itemId = (int)item;
-            if (LeagueSharp.Common.Items.CanUseItem(itemId))
-                LeagueSharp.Common.Items.UseItem(itemId);
+            //var itemId = (int)item;
+            //if (LeagueSharp.Common.Items.CanUseItem(itemId))
+            //    LeagueSharp.Common.Items.UseItem(itemId);
         }
 
         public void cast(ItemIds item, Vector3 target)
@@ -67,9 +67,9 @@ using EloBuddy; namespace ARAMDetFull
 
         public void cast(ItemIds item, Obj_AI_Base target)
         {
-            var itemId = (int)item;
-            if (LeagueSharp.Common.Items.CanUseItem(itemId))
-                LeagueSharp.Common.Items.UseItem(itemId, target);
+            //var itemId = (int)item;
+            //if (LeagueSharp.Common.Items.CanUseItem(itemId))
+            //    LeagueSharp.Common.Items.UseItem(itemId, target);
         }
 
         private InventorySlot getInvSlot(int id)

@@ -21,7 +21,7 @@ using EloBuddy; namespace ElUtilitySuite.Items
         /// <summary>
         ///     The zhyonya item
         /// </summary>
-        private static Items.Item zhonyaItem;
+        public static EloBuddy.SDK.Item zhonyaItem { get; private set; }
 
         #endregion
 
@@ -593,7 +593,7 @@ using EloBuddy; namespace ElUtilitySuite.Items
         /// </summary>
         public void Load()
         {
-            zhonyaItem = new Items.Item(Game.MapId == GameMapId.SummonersRift ? 3157 : 3090);
+            zhonyaItem = new EloBuddy.SDK.Item(Game.MapId == GameMapId.SummonersRift ? 3157 : 3090);
             IncomingDamageManager.RemoveDelay = 500;
             IncomingDamageManager.Skillshots = true;
 
@@ -734,7 +734,7 @@ using EloBuddy; namespace ElUtilitySuite.Items
         {
             try
             {
-                if (Player.IsDead || Player.InFountain() || Player.IsRecalling() || !Items.HasItem((int)(ItemId.Zhonyas_Hourglass)) || !Items.CanUseItem((int)(ItemId.Zhonyas_Hourglass)))
+                if (Player.IsDead || Player.InFountain() || Player.IsRecalling() || !zhonyaItem.IsOwned() || !zhonyaItem.IsReady())
                 {
                     return;
                 }
