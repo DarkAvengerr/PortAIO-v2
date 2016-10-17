@@ -1,9 +1,10 @@
 using LeagueSharp;
 using LeagueSharp.Common;
+using EloBuddy;
+using EloBuddy.SDK;
+using Damage = LeagueSharp.Common.Damage;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace SyndraL33T
+namespace SyndraL33T
 {
     public static class Damages
     {
@@ -38,12 +39,11 @@ using EloBuddy;
 
         public static double GetUnleashedPowerDamage(this Obj_AI_Base target)
         {
-            return Mechanics.Spells[SpellSlot.R].IsReady()
-                ? EntryPoint.Player.CalcDamage(
-                    target, Damage.DamageType.Magical,
-                    45 + Mechanics.Spells[SpellSlot.R].Level * 45 + EntryPoint.Player.FlatMagicDamageMod * .2f) *
-                  Mechanics.Spells[SpellSlot.R].Instance.Instance.Ammo
-                : 0d;
+            int Ball = Mechanics.Spells[SpellSlot.R].Instance.Instance.Ammo;
+            if (Mechanics.Spells[SpellSlot.R].IsReady())
+                return Player.Instance.CalculateDamageOnUnit(target, DamageType.Magical, new[] { 0f, 90f, 135f, 180f }[Mechanics.Spells[SpellSlot.R].Level] * Ball + 0.2f * Player.Instance.TotalMagicalDamage * Ball);
+            else
+                return 0f;
         }
 
         public static double GetIgniteDamage(this AIHeroClient target)

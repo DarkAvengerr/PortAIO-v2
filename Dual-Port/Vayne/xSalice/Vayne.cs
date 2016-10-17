@@ -1,49 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
-using xSaliceResurrected.Managers;
-using xSaliceResurrected.Utilities;
-using Color = System.Drawing.Color;
-using Geometry = xSaliceResurrected.Utilities.Geometry;
-
-using EloBuddy; namespace xSaliceResurrected.ADC
+﻿namespace xSaliceResurrected_Rework.Pluging
 {
-    class Vayne : Champion
+    using Base;
+    using System;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using SharpDX;
+    using Managers;
+    using Utilities;
+    using Color = System.Drawing.Color;
+    using Geometry = Utilities.Geometry;
+    using Orbwalking = LeagueSharp.Common.Orbwalking;
+    using EloBuddy;
+    using Champion = Base.Champion;
+    using Utility = LeagueSharp.Common.Utility;
+    internal class Vayne : Champion
     {
         public Vayne()
         {
-            SetSpells();
-            LoadMenu();
-        }
-
-        private void SetSpells()
-        {
             SpellManager.Q = new Spell(SpellSlot.Q, 300);
-
             SpellManager.W = new Spell(SpellSlot.W);
-
             SpellManager.E = new Spell(SpellSlot.E, 550);
-
             SpellManager.R = new Spell(SpellSlot.R);
-        }
-
-        private void LoadMenu()
-        {
-            var key = new Menu("Keys", "Key");
-            {
-                key.AddItem(new MenuItem("ComboActive", "Combo!", true).SetValue(new KeyBind(32, KeyBindType.Press)));
-                key.AddItem(new MenuItem("HarassActive", "Harass!", true).SetValue(new KeyBind("C".ToCharArray()[0], KeyBindType.Press)));
-                key.AddItem(new MenuItem("HarassActiveT", "Harass (toggle)!", true).SetValue(new KeyBind("N".ToCharArray()[0], KeyBindType.Toggle, true)));
-                key.AddItem(new MenuItem("LaneClearActive", "Farm!", true).SetValue(new KeyBind("V".ToCharArray()[0], KeyBindType.Press)));
-                key.AddItem(new MenuItem("JungleClearActiveT", "Jungle Clear (toggle)", true).SetValue(new KeyBind("J".ToCharArray()[0], KeyBindType.Toggle, true)));
-                key.AddItem(
-                    new MenuItem("ManualE", "Semi-Manual Condemn").SetValue(new KeyBind('E', KeyBindType.Press)));
-                //add to menu
-                menu.AddSubMenu(key);
-            }
 
             var spellMenu = new Menu("Spell Config", "SpellMenu");
             {
@@ -70,6 +48,8 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                     eMenu.AddItem(
                         new MenuItem("EPushDist", "E Push Distance", true).SetValue(new Slider(450, 300, 475)));
                     eMenu.AddItem(new MenuItem("EHitchance", "E % Hitchance", true).SetValue(new Slider(50)));
+                    eMenu.AddItem(
+                        new MenuItem("ManualE", "Semi-Manual Condemn").SetValue(new KeyBind('E', KeyBindType.Press)));
                     var antigcmenu = eMenu.AddSubMenu(new Menu("Anti-Gapcloser", "antigapcloser"));
                     foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(h => h.IsEnemy))
                     {
@@ -79,7 +59,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                     spellMenu.AddSubMenu(eMenu);
                 }
 
-                menu.AddSubMenu(spellMenu);
+                Menu.AddSubMenu(spellMenu);
             }
 
             var combo = new Menu("Combo", "Combo");
@@ -87,31 +67,29 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                 combo.AddItem(new MenuItem("UseQCombo", "Use Q", true).SetValue(true));
                 combo.AddItem(new MenuItem("UseECombo", "Use E", true).SetValue(true));
                 combo.AddItem(new MenuItem("UseRCombo", "Use R", true).SetValue(false));
-                menu.AddSubMenu(combo);
+                Menu.AddSubMenu(combo);
             }
 
             var harass = new Menu("Harass", "Harass");
             {
                 harass.AddItem(new MenuItem("UseQHarass", "Use Q", true).SetValue(true));
                 harass.AddItem(new MenuItem("UseEHarass", "Use E", true).SetValue(false));
+                harass.AddItem(new MenuItem("FarmT", "Harass (toggle)!", true).SetValue(new KeyBind("N".ToCharArray()[0], KeyBindType.Toggle, true)));
                 ManaManager.AddManaManagertoMenu(harass, "Harass", 30);
-                //add to menu
-                menu.AddSubMenu(harass);
+                Menu.AddSubMenu(harass);
             }
 
             var farm = new Menu("LaneClear", "LaneClear");
             {
                 farm.AddItem(new MenuItem("UseQFarm", "Use Q", true).SetValue(true));
                 ManaManager.AddManaManagertoMenu(farm, "LaneClear", 30);
-                //add to menu
-                menu.AddSubMenu(farm);
+                Menu.AddSubMenu(farm);
             }
 
             var miscMenu = new Menu("Misc", "Misc");
             {
                 miscMenu.AddItem(new MenuItem("UseInt", "Use E to Interrupt", true).SetValue(true));
-                //add to menu
-                menu.AddSubMenu(miscMenu);
+                Menu.AddSubMenu(miscMenu);
             }
 
             var drawMenu = new Menu("Drawing", "Drawing");
@@ -120,8 +98,8 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                 drawMenu.AddItem(new MenuItem("Draw_Q", "Draw Q Spot", true).SetValue(true));
                 drawMenu.AddItem(new MenuItem("Draw_R", "Draw Condemn", true).SetValue(true));
 
-                MenuItem drawComboDamageMenu = new MenuItem("Draw_ComboDamage", "Draw Combo Damage", true).SetValue(true);
-                MenuItem drawFill = new MenuItem("Draw_Fill", "Draw Combo Damage Fill", true).SetValue(new Circle(true, Color.FromArgb(90, 255, 169, 4)));
+                var drawComboDamageMenu = new MenuItem("Draw_ComboDamage", "Draw Combo Damage", true).SetValue(true);
+                var drawFill = new MenuItem("Draw_Fill", "Draw Combo Damage Fill", true).SetValue(new Circle(true, Color.FromArgb(90, 255, 169, 4)));
                 drawMenu.AddItem(drawComboDamageMenu);
                 drawMenu.AddItem(drawFill);
                 DamageIndicator.DamageToUnit = GetComboDamage;
@@ -129,18 +107,18 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                 DamageIndicator.Fill = drawFill.GetValue<Circle>().Active;
                 DamageIndicator.FillColor = drawFill.GetValue<Circle>().Color;
                 drawComboDamageMenu.ValueChanged +=
-                    delegate(object sender, OnValueChangeEventArgs eventArgs)
+                    delegate (object sender, OnValueChangeEventArgs eventArgs)
                     {
                         DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
                     };
                 drawFill.ValueChanged +=
-                    delegate(object sender, OnValueChangeEventArgs eventArgs)
+                    delegate (object sender, OnValueChangeEventArgs eventArgs)
                     {
                         DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
                         DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
                     };
 
-                menu.AddSubMenu(drawMenu);
+                Menu.AddSubMenu(drawMenu);
             }
 
             var customMenu = new Menu("Custom Perma Show", "Custom Perma Show");
@@ -148,18 +126,17 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                 var myCust = new CustomPermaMenu();
                 customMenu.AddItem(new MenuItem("custMenu", "Move Menu", true).SetValue(new KeyBind("L".ToCharArray()[0], KeyBindType.Press)));
                 customMenu.AddItem(new MenuItem("enableCustMenu", "Enabled", true).SetValue(true));
-                customMenu.AddItem(myCust.AddToMenu("Combo Active: ", "ComboActive"));
-                customMenu.AddItem(myCust.AddToMenu("Harass Active: ", "HarassActive"));
-                customMenu.AddItem(myCust.AddToMenu("Harass(T) Active: ", "HarassActiveT"));
-                customMenu.AddItem(myCust.AddToMenu("JungleClear Active: ", "JungleClearActiveT"));
-                customMenu.AddItem(myCust.AddToMenu("Laneclear Active: ", "LaneClearActive"));
-                menu.AddSubMenu(customMenu);
+                customMenu.AddItem(myCust.AddToMenu("Combo Active: ", "Orbwalk"));
+                customMenu.AddItem(myCust.AddToMenu("Harass Active: ", "Farm"));
+                customMenu.AddItem(myCust.AddToMenu("Harass(T) Active: ", "FarmT"));
+                customMenu.AddItem(myCust.AddToMenu("Laneclear Active: ", "LaneClear"));
+                Menu.AddSubMenu(customMenu);
             }
         }
 
         private float GetComboDamage(Obj_AI_Base target)
         {
-            double comboDamage = 0;
+            var comboDamage = 0d;
 
             if (Q.IsReady())
                 comboDamage += Player.GetSpellDamage(target, SpellSlot.Q);
@@ -168,6 +145,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
             return (float)(comboDamage + W.GetDamage(target) + Player.GetAutoAttackDamage(target) * 3);
         }
+
         private void JungleClear()
         {
             var mob =
@@ -176,6 +154,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                         m =>
                             m.Team == GameObjectTeam.Neutral && m.Distance(ObjectManager.Player) < 550 &&
                             m.Name.Contains("SRU_") && !m.Name.Contains("Mini") && !m.Name.Contains("Dragon") && !m.Name.Contains("Baron"));
+
             if (mob != null)
             {
                 if (Q.IsReady())
@@ -189,9 +168,12 @@ using EloBuddy; namespace xSaliceResurrected.ADC
         private Vector3 GetJungleSafeTumblePos(Obj_AI_Minion target)
         {
             var cursorPos = Game.CursorPos;
-            if (IsSafeTumblePos(cursorPos)) return cursorPos;
 
-            if (!target.IsValidTarget()) return Vector3.Zero;
+            if (IsSafeTumblePos(cursorPos))
+                return cursorPos;
+
+            if (!target.IsValidTarget())
+                return Vector3.Zero;
 
             var targetPosition = target.ServerPosition;
 
@@ -201,7 +183,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
             var goodCandidates = from p in myTumbleRangeCircle
                                  select new Vector2(p.X, p.Y).To3D() into v3
                                  let dist = v3.Distance(targetPosition)
-                                 where dist > menu.Item("QMinDist", true).GetValue<Slider>().Value && dist < 500
+                                 where dist > Menu.Item("QMinDist", true).GetValue<Slider>().Value && dist < 500
                                  select v3;
 
             return goodCandidates.OrderByDescending(candidate => candidate.Distance(cursorPos)).FirstOrDefault();
@@ -209,7 +191,8 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
         private Vector3 GetSafeTumblePos(AIHeroClient target)
         {
-            if (!target.IsValidTarget()) return Vector3.Zero;
+            if (!target.IsValidTarget())
+                return Vector3.Zero;
 
             var targetPosition = target.ServerPosition;
 
@@ -219,7 +202,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
             var goodCandidates = from p in myTumbleRangeCircle
                 select new Vector2(p.X, p.Y).To3D() into v3
                 let dist = v3.Distance(targetPosition)
-                where dist > menu.Item("QMinDist", true).GetValue<Slider>().Value && dist < 500
+                where dist > Menu.Item("QMinDist", true).GetValue<Slider>().Value && dist < 500
                 select v3;
 
             return goodCandidates.OrderBy(candidate => candidate.Distance(Game.CursorPos)).FirstOrDefault();
@@ -238,24 +221,26 @@ using EloBuddy; namespace xSaliceResurrected.ADC
         {
             return
                 !ObjectManager.Get<AIHeroClient>()
-                    .Any(e => e.IsEnemy && e.Distance(position) < menu.Item("QMinDist", true).GetValue<Slider>().Value);
+                .Any(e => e.IsEnemy && e.Distance(position) < Menu.Item("QMinDist", true).GetValue<Slider>().Value);
         }
+
         private AIHeroClient GetEnemyWith2W()
         {
             return ObjectManager.Get<AIHeroClient>().FirstOrDefault(h => GetWBuffCount(h) == 2);
         }
+
         private int GetWBuffCount(AIHeroClient target)
         {
             var wBuff = target.Buffs.FirstOrDefault(b => b.Name == "vaynesilvereddebuff");
-            return wBuff != null ? wBuff.Count : 0;
+            return wBuff?.Count ?? 0;
         }
 
         private bool IsCollisionable(Vector3 pos)
         {
-
             return NavMesh.GetCollisionFlags(pos).HasFlag(CollisionFlags.Wall) ||
-                (NavMesh.GetCollisionFlags(pos).HasFlag(CollisionFlags.Building));
+                NavMesh.GetCollisionFlags(pos).HasFlag(CollisionFlags.Building);
         }
+
         public bool UltActive()
         {
             return ObjectManager.Player.Buffs.Any(b => b.Name.ToLower().Contains("vayneinquisition"));
@@ -268,22 +253,20 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
         private bool IsCondemnable(AIHeroClient hero)
         {
-
             if (!hero.IsValidTarget(550f) || hero.HasBuffOfType(BuffType.SpellShield) ||
-                hero.HasBuffOfType(BuffType.SpellImmunity) || hero.IsDashing()) return false;
+                hero.HasBuffOfType(BuffType.SpellImmunity) || hero.IsDashing())
+                return false;
 
-            //values for pred calc pP = player position; p = enemy position; pD = push distance
             var pP = ObjectManager.Player.ServerPosition;
             var p = hero.ServerPosition;
-            var pD = menu.Item("EPushDist", true).GetValue<Slider>().Value;
-            var mode = menu.Item("EMode", true).GetValue<StringList>().SelectedValue;
-
+            var pD = Menu.Item("EPushDist", true).GetValue<Slider>().Value;
+            var mode = Menu.Item("EMode", true).GetValue<StringList>().SelectedValue;
 
             if (mode == "PRADASMART" && (IsCollisionable(p.Extend(pP, -pD)) || IsCollisionable(p.Extend(pP, -pD / 2f)) ||
                  IsCollisionable(p.Extend(pP, -pD / 3f))))
             {
                 if (!hero.CanMove ||
-                    (hero.Spellbook.IsAutoAttacking))
+                    hero.Spellbook.IsAutoAttacking)
                     return true;
 
                 var enemiesCount = ObjectManager.Player.CountEnemiesInRange(1200);
@@ -305,24 +288,22 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                     }
                     return false;
                 }
-                else
-                {
-                    var hitchance = menu.Item("EHitchance", true).GetValue<Slider>().Value;
-                    var angle = 0.20 * hitchance;
-                    const float travelDistance = 0.5f;
-                    var alpha = new Vector2((float)(p.X + travelDistance * Math.Cos(Math.PI / 180 * angle)),
-                        (float)(p.X + travelDistance * Math.Sin(Math.PI / 180 * angle)));
-                    var beta = new Vector2((float)(p.X - travelDistance * Math.Cos(Math.PI / 180 * angle)),
-                        (float)(p.X - travelDistance * Math.Sin(Math.PI / 180 * angle)));
 
-                    for (var i = 15; i < pD; i += 100)
-                    {
-                        if (IsCollisionable(pP.To2D().Extend(alpha,
+                var hitchance = Menu.Item("EHitchance", true).GetValue<Slider>().Value;
+                var angle = 0.20 * hitchance;
+                const float travelDistance = 0.5f;
+                var alpha = new Vector2((float)(p.X + travelDistance * Math.Cos(Math.PI / 180 * angle)),
+                    (float)(p.X + travelDistance * Math.Sin(Math.PI / 180 * angle)));
+                var beta = new Vector2((float)(p.X - travelDistance * Math.Cos(Math.PI / 180 * angle)),
+                    (float)(p.X - travelDistance * Math.Sin(Math.PI / 180 * angle)));
+
+                for (var i = 15; i < pD; i += 100)
+                {
+                    if (IsCollisionable(pP.To2D().Extend(alpha,
                                 i)
                             .To3D()) && IsCollisionable(pP.To2D().Extend(beta, i).To3D())) return true;
-                    }
-                    return false;
                 }
+                return false;
             }
 
             if (mode == "PRADAPERFECT" &&
@@ -333,7 +314,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                     (hero.Spellbook.IsAutoAttacking))
                     return true;
 
-                var hitchance = menu.Item("EHitchance", true).GetValue<Slider>().Value;
+                var hitchance = Menu.Item("EHitchance", true).GetValue<Slider>().Value;
                 var angle = 0.20 * hitchance;
                 const float travelDistance = 0.5f;
                 var alpha = new Vector2((float)(p.X + travelDistance * Math.Cos(Math.PI / 180 * angle)),
@@ -350,129 +331,120 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                 return false;
             }
 
-            if (mode == "OLDPRADA")
+            switch (mode)
             {
-                if (!hero.CanMove ||
-                    (hero.Spellbook.IsAutoAttacking))
-                    return true;
-
-                var hitchance = menu.Item("EHitchance", true).GetValue<Slider>().Value;
-                var angle = 0.20 * hitchance;
-                const float travelDistance = 0.5f;
-                var alpha = new Vector2((float)(p.X + travelDistance * Math.Cos(Math.PI / 180 * angle)),
-                    (float)(p.X + travelDistance * Math.Sin(Math.PI / 180 * angle)));
-                var beta = new Vector2((float)(p.X - travelDistance * Math.Cos(Math.PI / 180 * angle)),
-                    (float)(p.X - travelDistance * Math.Sin(Math.PI / 180 * angle)));
-
-                for (var i = 15; i < pD; i += 100)
-                {
-                    if (IsCollisionable(pP.To2D().Extend(alpha,
-                            i)
-                        .To3D()) || IsCollisionable(pP.To2D().Extend(beta, i).To3D())) return true;
-                }
-                return false;
-            }
-
-            if (mode == "MARKSMAN")
-            {
-                var prediction = E.GetPrediction(hero);
-                return NavMesh.GetCollisionFlags(
-                    prediction.UnitPosition.To2D()
-                        .Extend(
-                            pP.To2D(),
-                            -pD)
-                        .To3D()).HasFlag(CollisionFlags.Wall) ||
-                       NavMesh.GetCollisionFlags(
-                           prediction.UnitPosition.To2D()
-                               .Extend(
-                                   pP.To2D(),
-                                   -pD / 2f)
-                               .To3D()).HasFlag(CollisionFlags.Wall);
-            }
-
-            if (mode == "SHARPSHOOTER")
-            {
-                var prediction = E.GetPrediction(hero);
-                for (var i = 15; i < pD; i += 100)
-                {
-                    var posCF = NavMesh.GetCollisionFlags(
-                        prediction.UnitPosition.To2D()
-                            .Extend(
-                                pP.To2D(),
-                                -i)
-                            .To3D());
-                    if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
-                    {
+                case "OLDPRADA":
+                    if (!hero.CanMove ||
+                        (hero.Spellbook.IsAutoAttacking))
                         return true;
-                    }
-                }
-                return false;
-            }
 
-            if (mode == "GOSU")
-            {
-                var prediction = E.GetPrediction(hero);
-                for (var i = 15; i < pD; i += 75)
-                {
-                    var posCF = NavMesh.GetCollisionFlags(
-                        prediction.UnitPosition.To2D()
-                            .Extend(
-                                pP.To2D(),
-                                -i)
-                            .To3D());
-                    if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
+                    var hitchance = Menu.Item("EHitchance", true).GetValue<Slider>().Value;
+                    var angle = 0.20 * hitchance;
+                    const float travelDistance = 0.5f;
+                    var alpha = new Vector2((float)(p.X + travelDistance * Math.Cos(Math.PI / 180 * angle)),
+                        (float)(p.X + travelDistance * Math.Sin(Math.PI / 180 * angle)));
+                    var beta = new Vector2((float)(p.X - travelDistance * Math.Cos(Math.PI / 180 * angle)),
+                        (float)(p.X - travelDistance * Math.Sin(Math.PI / 180 * angle)));
+
+                    for (var i = 15; i < pD; i += 100)
                     {
-                        return true;
+                        if (IsCollisionable(pP.To2D().Extend(alpha,
+                                    i)
+                                .To3D()) || IsCollisionable(pP.To2D().Extend(beta, i).To3D())) return true;
                     }
-                }
-                return false;
-            }
-
-            if (mode == "VHR")
-            {
-                var prediction = E.GetPrediction(hero);
-                for (var i = 15; i < pD; i += (int)hero.BoundingRadius) //:frosty:
+                    return false;
+                case "MARKSMAN":
                 {
-                    var posCF = NavMesh.GetCollisionFlags(
-                        prediction.UnitPosition.To2D()
-                            .Extend(
-                                pP.To2D(),
-                                -i)
-                            .To3D());
-                    if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
-                    {
-                        return true;
-                    }
+                    var prediction = E.GetPrediction(hero);
+                    return NavMesh.GetCollisionFlags(
+                               prediction.UnitPosition.To2D()
+                                   .Extend(
+                                       pP.To2D(),
+                                       -pD)
+                                   .To3D()).HasFlag(CollisionFlags.Wall) ||
+                           NavMesh.GetCollisionFlags(
+                               prediction.UnitPosition.To2D()
+                                   .Extend(
+                                       pP.To2D(),
+                                       -pD / 2f)
+                                   .To3D()).HasFlag(CollisionFlags.Wall);
                 }
-                return false;
-            }
-
-            if (mode == "PRADALEGACY")
-            {
-                var prediction = E.GetPrediction(hero);
-                for (var i = 15; i < pD; i += 75)
+                case "SHARPSHOOTER":
                 {
-                    var posCF = NavMesh.GetCollisionFlags(
-                        prediction.UnitPosition.To2D()
-                            .Extend(
-                                pP.To2D(),
-                                -i)
-                            .To3D());
-                    if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
+                    var prediction = E.GetPrediction(hero);
+                    for (var i = 15; i < pD; i += 100)
                     {
-                        return true;
+                        var posCF = NavMesh.GetCollisionFlags(
+                            prediction.UnitPosition.To2D()
+                                .Extend(
+                                    pP.To2D(),
+                                    -i)
+                                .To3D());
+                        if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
+                        {
+                            return true;
+                        }
                     }
+                    return false;
                 }
-                return false;
+                case "GOSU":
+                {
+                    var prediction = E.GetPrediction(hero);
+                    for (var i = 15; i < pD; i += 75)
+                    {
+                        var posCF = NavMesh.GetCollisionFlags(
+                            prediction.UnitPosition.To2D()
+                                .Extend(
+                                    pP.To2D(),
+                                    -i)
+                                .To3D());
+                        if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                case "VHR":
+                {
+                    var prediction = E.GetPrediction(hero);
+                    for (var i = 15; i < pD; i += (int)hero.BoundingRadius) //:frosty:
+                    {
+                        var posCF = NavMesh.GetCollisionFlags(
+                            prediction.UnitPosition.To2D()
+                                .Extend(
+                                    pP.To2D(),
+                                    -i)
+                                .To3D());
+                        if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                case "PRADALEGACY":
+                {
+                    var prediction = E.GetPrediction(hero);
+                    for (var i = 15; i < pD; i += 75)
+                    {
+                        var posCF = NavMesh.GetCollisionFlags(
+                            prediction.UnitPosition.To2D()
+                                .Extend(
+                                    pP.To2D(),
+                                    -i)
+                                .To3D());
+                        if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
+                        {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
             }
 
-            if (mode == "FASTEST" && IsCollisionable(p.Extend(pP, -pD)) || IsCollisionable(p.Extend(pP, -pD / 2f)) ||
-                                     IsCollisionable(p.Extend(pP, -pD / 3f)))
-            {
-                return true;
-            }
-
-            return false;
+            return mode == "FASTEST" && IsCollisionable(p.Extend(pP, -pD)) || IsCollisionable(p.Extend(pP, -pD / 2f)) ||
+                   IsCollisionable(p.Extend(pP, -pD / 3f));
         }
 
         private AIHeroClient GetCondemnableTarget()
@@ -482,33 +454,58 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
         protected override void AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (target is AIHeroClient && (menu.Item("UseQCombo", true).GetValue<bool>() &&
-                 menu.Item("ComboActive", true).GetValue<KeyBind>().Active))
+            switch (Orbwalker.ActiveMode)
             {
-                if (Q.IsReady())
-                {
-                    Q.Cast(GetSafeTumblePos((AIHeroClient) target));
-                }
-            }
-            if ((menu.Item("HarassActive", true).GetValue<KeyBind>().Active && menu.Item("UseQHarass", true).GetValue<bool>()))
-            {
-                var tg = target as AIHeroClient;
-                if (Q.IsReady() && target is AIHeroClient)
-                {
-                    var qMin = menu.Item("Q_Min_Stack", true).GetValue<Slider>().Value;
-                    if (qMin <= GetWBuffCount(tg) && IsSafeTumblePos(ObjectManager.Player.Position.Extend(tg.ServerPosition, 300)))
-                        Q.Cast(tg.ServerPosition);
-                }
-                if (E.IsReady() && menu.Item("UseEHarass", true).GetValue<bool>() && target is AIHeroClient && GetWBuffCount(tg) == 2)
-                {
-                    E.Cast(tg);
-                }
+                case Orbwalking.OrbwalkingMode.Combo:
+                    var hero = target as AIHeroClient;
+
+                    if (hero != null && Menu.Item("UseQCombo", true).GetValue<bool>())
+                    {
+                        if (Q.IsReady())
+                        {
+                            Q.Cast(GetSafeTumblePos(hero));
+                        }
+                    }
+                    break;
+                case Orbwalking.OrbwalkingMode.Mixed:
+                    if (Menu.Item("UseQHarass", true).GetValue<bool>())
+                    {
+                        var tg = target as AIHeroClient;
+                        if (Q.IsReady() && target is AIHeroClient)
+                        {
+                            var qMin = Menu.Item("Q_Min_Stack", true).GetValue<Slider>().Value;
+                            if (qMin <= GetWBuffCount(tg) && IsSafeTumblePos(ObjectManager.Player.Position.Extend(tg.ServerPosition, 300)))
+                                Q.Cast(tg.ServerPosition);
+                        }
+                        if (E.IsReady() && Menu.Item("UseEHarass", true).GetValue<bool>() && target is AIHeroClient && GetWBuffCount(tg) == 2)
+                        {
+                            E.Cast(tg);
+                        }
+                    }
+                    break;
+                case Orbwalking.OrbwalkingMode.LastHit:
+                    break;
+                case Orbwalking.OrbwalkingMode.LaneClear:
+                    break;
+                case Orbwalking.OrbwalkingMode.Freeze:
+                    break;
+                case Orbwalking.OrbwalkingMode.CustomMode:
+                    break;
+                case Orbwalking.OrbwalkingMode.None:
+                    break;
+                case Orbwalking.OrbwalkingMode.Flee:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
         protected override void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
-            if (ObjectManager.Player.Buffs.Any(b=>b.Name.ToLower().Contains("tumblefade")) && ObjectManager.Get<AIHeroClient>().Any(h => h.IsEnemy && h.IsValidTarget() && h.IsMelee && h.Distance(ObjectManager.Player) < 325))
+            if (ObjectManager.Player.Buffs.Any(b=>b.Name.ToLower().Contains("tumblefade")) && 
+                ObjectManager.Get<AIHeroClient>().
+                Any(h => h.IsEnemy && h.IsValidTarget() && 
+                h.IsMelee && h.Distance(ObjectManager.Player) < 325))
             {
                 args.Process = false;
             }
@@ -519,10 +516,12 @@ using EloBuddy; namespace xSaliceResurrected.ADC
             if (!ManaManager.HasMana("LaneClear"))
                 return;
 
-            var useQ = menu.Item("UseQFarm", true).GetValue<bool>();
+            var useQ = Menu.Item("UseQFarm", true).GetValue<bool>();
             var cursorPos = Game.CursorPos;
 
-            if (useQ && IsSafeTumblePos(cursorPos) && MinionManager.GetMinions(580, MinionTypes.All, MinionTeam.Enemy).Any(m => m.Health < ObjectManager.Player.GetAutoAttackDamage(m) && m.Health > 13))
+            if (useQ && IsSafeTumblePos(cursorPos) &&
+                MinionManager.GetMinions(580).
+                Any(m => m.Health < ObjectManager.Player.GetAutoAttackDamage(m) && m.Health > 13))
             {
                 Q.Cast(cursorPos);
             }
@@ -530,13 +529,9 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
         protected override void Game_OnGameUpdate(EventArgs args)
         {
-            //check if player is dead
-            if (Player.IsDead) return;
-            if (menu.Item("LaneClearActive", true).GetValue<KeyBind>().Active)
-                Farm();
-            if (menu.Item("JungleClearActiveT", true).GetValue<KeyBind>().Active &&
-                Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
-                JungleClear();
+            if (Player.IsDead)
+                return;
+
             if (E.IsReady())
             {
                 foreach (var en in ObjectManager.Get<AIHeroClient>().Where(h => h.IsEnemy && h.IsValidTarget(550f)))
@@ -544,11 +539,18 @@ using EloBuddy; namespace xSaliceResurrected.ADC
                     AttemptSimpleCondemn(en);
                 }
             }
+
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            {
+                Farm();
+                JungleClear();
+            }
         }
 
         protected override void Interrupter_OnPosibleToInterrupt(AIHeroClient unit, Interrupter2.InterruptableTargetEventArgs spell)
         {
-            if (!menu.Item("UseInt", true).GetValue<bool>()) return;
+            if (!Menu.Item("UseInt", true).GetValue<bool>())
+                return;
 
             if (Player.Distance(unit.Position) < E.Range && spell.DangerLevel >= Interrupter2.DangerLevel.High)
             {
@@ -559,8 +561,7 @@ using EloBuddy; namespace xSaliceResurrected.ADC
 
         protected override void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (menu.Item("antigc" + gapcloser.Sender.ChampionName, true)
-                .GetValue<bool>())
+            if (Menu.Item("antigc" + gapcloser.Sender.ChampionName, true).GetValue<bool>())
             {
                 if (ObjectManager.Player.Distance(gapcloser.End) < 425)
                 {
@@ -569,5 +570,4 @@ using EloBuddy; namespace xSaliceResurrected.ADC
             }
         }
     }
-    
 }

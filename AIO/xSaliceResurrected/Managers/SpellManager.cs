@@ -1,15 +1,16 @@
-using System.Collections.Generic;
-using LeagueSharp;
-using LeagueSharp.Common;
-
-using EloBuddy; namespace xSaliceResurrected.Managers
+﻿namespace xSaliceResurrected_Rework.Managers
 {
-    static class SpellManager
+    using System.Collections.Generic;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using EloBuddy;
+    internal static class SpellManager
     {
         //Spells
         public static readonly List<Spell> SpellList = new List<Spell>();
 
         public static Spell P;
+        public static Spell QE;
         public static Spell Q;
         public static Spell Q2;
         public static Spell QExtend;
@@ -19,6 +20,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
         public static Spell E2;
         public static Spell R;
         public static Spell R2;
+        public static SpellSlot Flash = SpellSlot.Unknown;
         public static readonly SpellDataInst QSpell = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q);
         public static readonly SpellDataInst ESpell = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E);
         public static readonly SpellDataInst WSpell = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W);

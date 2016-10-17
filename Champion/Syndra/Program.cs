@@ -204,10 +204,10 @@ namespace Syndra
                 var dmgAfterComboItem = new MenuItem("DamageAfterCombo", "Draw Damage After Combo").SetValue(true);
                 LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = GetComboDamage;
                 LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = dmgAfterComboItem.GetValue<bool>();
-                dmgAfterComboItem.ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
-                    {
-                        LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
-                    };
+                dmgAfterComboItem.ValueChanged += delegate (object sender, OnValueChangeEventArgs eventArgs)
+                {
+                    LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
+                };
 
                 DrawMenu.AddItem(dmgAfterComboItem);
                 ManaBarIndicator.Initialize();
@@ -339,15 +339,13 @@ namespace Syndra
             }
         }
 
-        private static Vector3 GetGrabableObjectPos(bool onlyOrbs)
+
+        public static Vector3 GetGrabableObjectPos(bool onlyOrbs)
         {
-            if (!onlyOrbs)
-            {
-                foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(W.Range)))
-                {
-                    return minion.ServerPosition;
-                }
-            }
+            if (onlyOrbs)
+                return OrbManager.GetOrbToGrab((int)W.Range);
+            foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(W.Range)))
+                return minion.ServerPosition;
             return OrbManager.GetOrbToGrab((int)W.Range);
         }
 
@@ -357,7 +355,7 @@ namespace Syndra
             damage += Q.IsReady(420) ? Q.GetDamage(enemy) : 0;
             damage += W.IsReady() ? W.GetDamage(enemy) : 0;
             damage += E.IsReady() ? E.GetDamage(enemy) : 0;
-            
+
             if (IgniteSlot != EloBuddy.SpellSlot.Unknown && Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready)
             {
                 damage += ObjectManager.Player.GetSummonerSpellDamage(enemy, Damage.SummonerSpell.Ignite);
@@ -368,6 +366,38 @@ namespace Syndra
                 damage += Math.Min(7, Player.Spellbook.GetSpell(EloBuddy.SpellSlot.R).Ammo) * Player.GetSpellDamage(enemy, EloBuddy.SpellSlot.R, 1);
             }
             return (float)damage;
+        }
+
+        public static void UseW1(Obj_AI_Base grabObject, Obj_AI_Base enemy)
+        {
+            if (grabObject != null && W.IsReady() && Player.Spellbook.GetSpell(EloBuddy.SpellSlot.W).Name == "SyndraW")
+            {
+                var gObjectPos = GetGrabableObjectPos(false);
+
+                if (gObjectPos.To2D().IsValid() && Environment.TickCount - Q.LastCastAttemptT > Game.Ping + 150
+                    && Environment.TickCount - E.LastCastAttemptT > 750 + Game.Ping && Environment.TickCount - W.LastCastAttemptT > 750 + Game.Ping)
+                {
+                    var grabsomething = false;
+                    if (enemy != null)
+                    {
+                        var pos2 = W.GetPrediction(enemy, true);
+                        if (pos2.Hitchance >= HitChance.High) grabsomething = true;
+                    }
+                    if (grabsomething || grabObject.IsStunned)
+                    {
+                        W.Cast(gObjectPos);
+                    }
+
+                }
+            }
+            if (enemy != null && W.IsReady() && Player.Spellbook.GetSpell(EloBuddy.SpellSlot.W).Name == "SyndraWCast")
+            {
+                var pos = W.GetPrediction(enemy, true);
+                if (pos.Hitchance >= HitChance.High)
+                {
+                    W.Cast(pos.CastPosition);
+                }
+            }
         }
 
         private static void UseSpells(bool useQ, bool useW, bool useE, bool useR, bool useQe,
@@ -396,40 +426,25 @@ namespace Syndra
                     }
                 }
             }
-                
 
             //W
-            if (useW)
+            if (wTarget != null && useW)
             {
-                if (Player.Spellbook.GetSpell(EloBuddy.SpellSlot.W).ToggleState == 1 && W.IsReady() && qeTarget != null)
+                if (W.IsReady())
                 {
-                    var gObjectPos = GetGrabableObjectPos(wTarget == null);
-
-                    if (gObjectPos.To2D().IsValid() && LeagueSharp.Common.Utils.TickCount - W.LastCastAttemptT > Game.Ping + 300
-                        && LeagueSharp.Common.Utils.TickCount - E.LastCastAttemptT > Game.Ping + 600)
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range + W.Width) && W.GetPrediction(x).Hitchance >= HitChance.High))
                     {
-                        W.Cast(gObjectPos);
-                        W.LastCastAttemptT = LeagueSharp.Common.Utils.TickCount;
-                    }
-                }
-                else if (wTarget != null && Player.Spellbook.GetSpell(EloBuddy.SpellSlot.W).ToggleState != 1 && W.IsReady()
-                         && LeagueSharp.Common.Utils.TickCount - W.LastCastAttemptT > Game.Ping + 100)
-                {
-                    if (OrbManager.WObject(false) != null)
-                    {
-                        W.From = OrbManager.WObject(false).ServerPosition;
-                        W.Cast(wTarget, false, true);
+                        UseW1(enemy, enemy);
                     }
                 }
             }
-
-
+            
             if (rTarget != null && useR)
             {
                 useR = (Config.Item("DontUlt" + rTarget.CharData.BaseSkinName) != null
                         && Config.Item("DontUlt" + rTarget.CharData.BaseSkinName).GetValue<bool>() == false);
             }
-                
+
 
             if (rTarget != null && useR && R.IsReady() && comboDamage > rTarget.Health && !rTarget.IsZombie && !Q.IsReady())
             {
@@ -580,7 +595,7 @@ namespace Syndra
             var useW = Config.Item("UseWJFarm").GetValue<bool>();
             var useE = Config.Item("UseEJFarm").GetValue<bool>();
 
-            var mobs = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, W.Range, 
+            var mobs = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, W.Range,
                 MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
 
             if (mobs.Count > 0)
@@ -669,7 +684,7 @@ namespace Syndra
             }
 
             if (OrbManager.WObject(false) != null)
-            Render.Circle.DrawCircle(OrbManager.WObject(false).Position, 100, System.Drawing.Color.White);
+                Render.Circle.DrawCircle(OrbManager.WObject(false).Position, 100, System.Drawing.Color.White);
         }
     }
 }

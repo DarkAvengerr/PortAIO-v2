@@ -1,48 +1,32 @@
-using System;
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
-using xSaliceResurrected.Managers;
-using xSaliceResurrected.Utilities;
-using Color = System.Drawing.Color;
-
-using EloBuddy; namespace xSaliceResurrected.Mid
+﻿namespace xSaliceResurrected_Rework.Pluging
 {
-    class Akali : Champion
+    using System;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using Base;
+    using Managers;
+    using Utilities;
+    using Color = System.Drawing.Color;
+    using EloBuddy;
+    using Champion = Base.Champion;
+    internal class Akali : Champion
     {
         public Akali()
         {
-            SetSpells();
-            LoadMenu();
-        }
-
-        private void SetSpells()
-        {
             SpellManager.Q = new Spell(SpellSlot.Q, 600);
-
             SpellManager.W = new Spell(SpellSlot.W, 700);
-
             SpellManager.E = new Spell(SpellSlot.E, 325);
-
             SpellManager.R = new Spell(SpellSlot.R, 700);
-        }
-
-        private void LoadMenu()
-        {
-            var key = new Menu("Key", "Key");
-            {
-                key.AddItem(new MenuItem("ComboActive", "Combo!", true).SetValue(new KeyBind(32, KeyBindType.Press)));
-                key.AddItem(new MenuItem("HarassActive", "Harass!", true).SetValue(new KeyBind("C".ToCharArray()[0], KeyBindType.Press)));
-                key.AddItem(new MenuItem("HarassActiveT", "Harass (toggle)!", true).SetValue(new KeyBind("N".ToCharArray()[0], KeyBindType.Toggle)));
-                key.AddItem(new MenuItem("LaneClearActive", "Farm!", true).SetValue(new KeyBind("V".ToCharArray()[0], KeyBindType.Press)));
-                key.AddItem(new MenuItem("LastHitQ", "Last hit with Q!", true).SetValue(new KeyBind("A".ToCharArray()[0], KeyBindType.Press)));
-                //add to menu
-                menu.AddSubMenu(key);
-            }
 
             var spellMenu = new Menu("SpellMenu", "SpellMenu");
             {
+                var qMenu = new Menu("QMenu", "QMenu");
+                {
+                    qMenu.AddItem(new MenuItem("LastHitQ", "Last hit with Q!", true).SetValue(new KeyBind("A".ToCharArray()[0], KeyBindType.Press)));
+                    spellMenu.AddSubMenu(qMenu);
+                }
+
                 var wMenu = new Menu("WMenu", "WMenu");
                 {
                     wMenu.AddItem(new MenuItem("useW_enemyCount", "Use W if x Enemys Arround", true).SetValue(new Slider(3, 1, 5)));
@@ -65,8 +49,8 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                     rMenu.AddItem(new MenuItem("R_Min", "Min range to use R", true).SetValue(new Slider(400, 50, 700)));
                     spellMenu.AddSubMenu(rMenu);
                 }
-                //add to menu
-                menu.AddSubMenu(spellMenu);
+
+                Menu.AddSubMenu(spellMenu);
             }
 
             var combo = new Menu("Combo", "Combo");
@@ -77,23 +61,23 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 combo.AddItem(new MenuItem("UseWCombo", "Use W", true).SetValue(true));
                 combo.AddItem(new MenuItem("UseECombo", "Use E", true).SetValue(true));
                 combo.AddItem(new MenuItem("UseRCombo", "Use R", true).SetValue(true));
-                //add to menu
-                menu.AddSubMenu(combo);
+
+                Menu.AddSubMenu(combo);
             }
             var harass = new Menu("Harass", "Harass");
             {
                 harass.AddItem(new MenuItem("UseQHarass", "Use Q", true).SetValue(true));
                 harass.AddItem(new MenuItem("UseEHarass", "Use E", true).SetValue(true));
-                //add to menu
-                menu.AddSubMenu(harass);
+                harass.AddItem(new MenuItem("FarmT", "Harass (toggle)!", true).SetValue(new KeyBind("N".ToCharArray()[0], KeyBindType.Toggle)));
+                Menu.AddSubMenu(harass);
             }
             var farm = new Menu("LaneClear", "LaneClear");
             {
                 farm.AddItem(new MenuItem("UseQFarm", "Use Q", true).SetValue(true));
                 farm.AddItem(new MenuItem("UseEFarm", "Use E", true).SetValue(true));
                 farm.AddItem(new MenuItem("LaneClear_useE_minHit", "Use E if min. hit", true).SetValue(new Slider(2, 1, 6)));
-                //add to menu
-                menu.AddSubMenu(farm);
+
+                Menu.AddSubMenu(farm);
             }
             var drawMenu = new Menu("Drawing", "Drawing");
             {
@@ -104,8 +88,8 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 drawMenu.AddItem(new MenuItem("Draw_R", "Draw R", true).SetValue(true));
                 drawMenu.AddItem(new MenuItem("Current_Mode", "Draw current Mode", true).SetValue(true));
 
-                MenuItem drawComboDamageMenu = new MenuItem("Draw_ComboDamage", "Draw Combo Damage", true).SetValue(true);
-                MenuItem drawFill = new MenuItem("Draw_Fill", "Draw Combo Damage Fill", true).SetValue(new Circle(true, Color.FromArgb(90, 255, 169, 4)));
+                var drawComboDamageMenu = new MenuItem("Draw_ComboDamage", "Draw Combo Damage", true).SetValue(true);
+                var drawFill = new MenuItem("Draw_Fill", "Draw Combo Damage Fill", true).SetValue(new Circle(true, Color.FromArgb(90, 255, 169, 4)));
                 drawMenu.AddItem(drawComboDamageMenu);
                 drawMenu.AddItem(drawFill);
                 DamageIndicator.DamageToUnit = GetComboDamage;
@@ -113,19 +97,18 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 DamageIndicator.Fill = drawFill.GetValue<Circle>().Active;
                 DamageIndicator.FillColor = drawFill.GetValue<Circle>().Color;
                 drawComboDamageMenu.ValueChanged +=
-                    delegate(object sender, OnValueChangeEventArgs eventArgs)
+                    delegate (object sender, OnValueChangeEventArgs eventArgs)
                     {
                         DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
                     };
                 drawFill.ValueChanged +=
-                    delegate(object sender, OnValueChangeEventArgs eventArgs)
+                    delegate (object sender, OnValueChangeEventArgs eventArgs)
                     {
                         DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
                         DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
                     };
 
-                //add to menu
-                menu.AddSubMenu(drawMenu);
+                Menu.AddSubMenu(drawMenu);
             }
 
             var customMenu = new Menu("Custom Perma Show", "Custom Perma Show");
@@ -133,12 +116,12 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                 var myCust = new CustomPermaMenu();
                 customMenu.AddItem(new MenuItem("custMenu", "Move Menu", true).SetValue(new KeyBind("L".ToCharArray()[0], KeyBindType.Press)));
                 customMenu.AddItem(new MenuItem("enableCustMenu", "Enabled", true).SetValue(true));
-                customMenu.AddItem(myCust.AddToMenu("Combo Active: ", "ComboActive"));
-                customMenu.AddItem(myCust.AddToMenu("Harass Active: ", "HarassActive"));
-                customMenu.AddItem(myCust.AddToMenu("Harass(T) Active: ", "HarassActiveT"));
-                customMenu.AddItem(myCust.AddToMenu("Laneclear Active: ", "LaneClearActive"));
+                customMenu.AddItem(myCust.AddToMenu("Combo Active: ", "Orbwalk"));
+                customMenu.AddItem(myCust.AddToMenu("Harass Active: ", "Farm"));
+                customMenu.AddItem(myCust.AddToMenu("Harass(T) Active: ", "FarmT"));
+                customMenu.AddItem(myCust.AddToMenu("Laneclear Active: ", "LaneClear"));
                 customMenu.AddItem(myCust.AddToMenu("Lasthit Active: ", "LastHitQ"));
-                menu.AddSubMenu(customMenu);
+                Menu.AddSubMenu(customMenu);
             }
         }
 
@@ -146,7 +129,7 @@ using EloBuddy; namespace xSaliceResurrected.Mid
         {
             var rStacks = GetRStacks();
             var comboDamage = 0d;
-            int mode = menu.Item("Combo_mode", true).GetValue<StringList>().SelectedIndex;
+            int mode = Menu.Item("Combo_mode", true).GetValue<StringList>().SelectedIndex;
 
             if (mode == 0)
             {
@@ -191,19 +174,19 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
         private void Combo()
         {
-            UseSpells(menu.Item("UseQCombo", true).GetValue<bool>(), menu.Item("UseWCombo", true).GetValue<bool>(),
-                menu.Item("UseECombo", true).GetValue<bool>(), menu.Item("UseRCombo", true).GetValue<bool>(), "Combo");
+            UseSpells(Menu.Item("UseQCombo", true).GetValue<bool>(), Menu.Item("UseWCombo", true).GetValue<bool>(),
+                Menu.Item("UseECombo", true).GetValue<bool>(), Menu.Item("UseRCombo", true).GetValue<bool>(), "Combo");
         }
 
         private void Harass()
         {
-            UseSpells(menu.Item("UseQHarass", true).GetValue<bool>(), false,
-                 menu.Item("UseEHarass", true).GetValue<bool>(), false, "Harass");
+            UseSpells(Menu.Item("UseQHarass", true).GetValue<bool>(), false,
+                 Menu.Item("UseEHarass", true).GetValue<bool>(), false, "Harass");
         }
 
         private void UseSpells(bool useQ, bool useW, bool useE, bool useR, string source)
         {
-            int mode = menu.Item("Combo_mode", true).GetValue<StringList>().SelectedIndex;
+            int mode = Menu.Item("Combo_mode", true).GetValue<StringList>().SelectedIndex;
 
             switch (mode)
             {
@@ -248,15 +231,15 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
         private void Farm()
         {
-            if (menu.Item("UseQFarm", true).GetValue<bool>())
+            if (Menu.Item("UseQFarm", true).GetValue<bool>())
                 Cast_Q(false);
-            if (menu.Item("UseEFarm", true).GetValue<bool>())
+            if (Menu.Item("UseEFarm", true).GetValue<bool>())
                 Cast_E(false);
         }
 
         private AIHeroClient CheckMark(float range)
         {
-            return ObjectManager.Get<AIHeroClient>().FirstOrDefault(x => x.IsValidTarget(range) && x.HasBuff("AkaliMota") && x.IsVisible);
+            return HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(range) && x.HasBuff("AkaliMota") && x.IsVisible);
         }
 
         private void Cast_Q(bool combo, int mode = 0)
@@ -312,8 +295,8 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
         private void Cast_W()
         {
-            if (menu.Item("useW_enemyCount", true).GetValue<Slider>().Value > Player.CountEnemiesInRange(400) &&
-                menu.Item("useW_Health", true).GetValue<Slider>().Value < (int)(Player.Health / Player.MaxHealth * 100))
+            if (Menu.Item("useW_enemyCount", true).GetValue<Slider>().Value > Player.CountEnemiesInRange(400) &&
+                Menu.Item("useW_Health", true).GetValue<Slider>().Value < (int)(Player.Health / Player.MaxHealth * 100))
                 return;
             W.Cast(Player.Position);
         }
@@ -334,9 +317,9 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
                 if (mode == 0)
                 {
-                    if (Player.Mana >= menu.Item("E_Energy", true).GetValue<Slider>().Value)
+                    if (Player.Mana >= Menu.Item("E_Energy", true).GetValue<Slider>().Value)
                         E.Cast();
-                    else if (E.IsKillable(target) && menu.Item("E_On_Killable", true).GetValue<bool>())
+                    else if (E.IsKillable(target) && Menu.Item("E_On_Killable", true).GetValue<bool>())
                         E.Cast();
                 }
                 else if (mode == 1)
@@ -345,15 +328,15 @@ using EloBuddy; namespace xSaliceResurrected.Mid
                         return;
                     if (target.HasBuff("AkaliMota") && !Q.IsReady())
                         return;
-                    if (Player.Mana >= menu.Item("E_Energy", true).GetValue<Slider>().Value)
+                    if (Player.Mana >= Menu.Item("E_Energy", true).GetValue<Slider>().Value)
                         E.Cast();
-                    if (E.IsKillable(target) && menu.Item("E_On_Killable", true).GetValue<bool>())
+                    if (E.IsKillable(target) && Menu.Item("E_On_Killable", true).GetValue<bool>())
                         E.Cast();
                 }
             }
             else
             {
-                if (MinionManager.GetMinions(Player.Position, E.Range).Count >= menu.Item("LaneClear_useE_minHit", true).GetValue<Slider>().Value)
+                if (MinionManager.GetMinions(Player.Position, E.Range).Count >= Menu.Item("LaneClear_useE_minHit", true).GetValue<Slider>().Value)
                     E.Cast();
                 foreach (var minion in MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).Where(minion => Player.Distance(minion.Position) <= E.Range))
                     if (E.GetDamage(minion) > minion.Health + 35)
@@ -389,39 +372,40 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
             if (target.IsValidTarget(R.Range) && R.IsReady())
             {
-                if (R.IsKillable(target) && menu.Item("R_If_Killable", true).GetValue<bool>())
+                if (R.IsKillable(target) && Menu.Item("R_If_Killable", true).GetValue<bool>())
                     R.Cast(target);
                 else if (GetSimpleDmg(target) > target.Health && Player.Distance(target.Position) > Q.Range - 50)
                     R.Cast(target);
 
                 if (target.CountEnemiesInRange(500) >=
-                    menu.Item("Dont_R_If", true).GetValue<Slider>().Value)
+                    Menu.Item("Dont_R_If", true).GetValue<Slider>().Value)
                     return;
 
-                if (Player.Distance(target.Position) < menu.Item("R_Min", true).GetValue<Slider>().Value)
+                if (Player.Distance(target.Position) < Menu.Item("R_Min", true).GetValue<Slider>().Value)
                     return;
 
-                if (mode == 0)
+                switch (mode)
                 {
-                    if (menu.Item("R_Wait_For_Q", true).GetValue<bool>())
-                    {
-                        if (target.HasBuff("AkaliMota"))
+                    case 0:
+                        if (Menu.Item("R_Wait_For_Q", true).GetValue<bool>())
+                        {
+                            if (target.HasBuff("AkaliMota"))
+                            {
+                                R.Cast(target);
+                            }
+                        }
+                        else
                         {
                             R.Cast(target);
                         }
-                    }
-                    else
-                    {
-                        R.Cast(target);
-                    }
-                }
-                else if (mode == 1)
-                {
-                    if (target.HasBuff("AkaliMota") && Q.IsReady())
-                    {
-                        R.Cast(target);
-                        menu.Item("Combo_mode", true).SetValue(new StringList(new[] { "Normal", "Q-Delay-R-AA-Q-AA" }));
-                    }
+                        break;
+                    case 1:
+                        if (target.HasBuff("AkaliMota") && Q.IsReady())
+                        {
+                            R.Cast(target);
+                            Menu.Item("Combo_mode", true).SetValue(new StringList(new[] { "Normal", "Q-Delay-R-AA-Q-AA" }));
+                        }
+                        break;
                 }
             }
         }
@@ -430,19 +414,19 @@ using EloBuddy; namespace xSaliceResurrected.Mid
 
         private void ModeSwitch()
         {
-            int mode = menu.Item("Combo_mode", true).GetValue<StringList>().SelectedIndex;
-            int lasttime = Utils.TickCount - _lasttick;
+            var mode = Menu.Item("Combo_mode", true).GetValue<StringList>().SelectedIndex;
+            var lasttime = Utils.TickCount - _lasttick;
 
-            if (menu.Item("Combo_Switch", true).GetValue<KeyBind>().Active && lasttime > Game.Ping)
+            if (Menu.Item("Combo_Switch", true).GetValue<KeyBind>().Active && lasttime > Game.Ping)
             {
                 if (mode == 0)
                 {
-                    menu.Item("Combo_mode", true).SetValue(new StringList(new[] { "Normal", "Q-Delay-R-AA-Q-AA" }, 1));
+                    Menu.Item("Combo_mode", true).SetValue(new StringList(new[] { "Normal", "Q-Delay-R-AA-Q-AA" }, 1));
                     _lasttick = Utils.TickCount + 300;
                 }
                 else
                 {
-                    menu.Item("Combo_mode", true).SetValue(new StringList(new[] { "Normal", "Q-Delay-R-AA-Q-AA" }));
+                    Menu.Item("Combo_mode", true).SetValue(new StringList(new[] { "Normal", "Q-Delay-R-AA-Q-AA" }));
                     _lasttick = Utils.TickCount + 300;
                 }
             }
@@ -452,55 +436,61 @@ using EloBuddy; namespace xSaliceResurrected.Mid
         {
             ModeSwitch();
 
-            if (menu.Item("ComboActive", true).GetValue<KeyBind>().Active)
+            if (Menu.Item("Orbwalk", true).GetValue<KeyBind>().Active)
             {
                 Combo();
             }
             else
             {
-                if (menu.Item("LastHitQ", true).GetValue<KeyBind>().Active)
+                if (Menu.Item("LastHitQ", true).GetValue<KeyBind>().Active)
                     Cast_Q(false);
 
-                if (menu.Item("LaneClearActive", true).GetValue<KeyBind>().Active)
+                if (Menu.Item("LaneClear", true).GetValue<KeyBind>().Active)
                     Farm();
 
-                if (menu.Item("HarassActiveT", true).GetValue<KeyBind>().Active)
+                if (Menu.Item("FarmT", true).GetValue<KeyBind>().Active)
                     Harass();
 
-                if (menu.Item("HarassActive", true).GetValue<KeyBind>().Active)
+                if (Menu.Item("Farm", true).GetValue<KeyBind>().Active)
                     Harass();
             }
         }
 
         protected override void Drawing_OnDraw(EventArgs args)
         {
-            if (menu.Item("Draw_Disabled", true).GetValue<bool>())
+            if (Menu.Item("Draw_Disabled", true).GetValue<bool>())
                 return;
 
-            if (menu.Item("Draw_Q", true).GetValue<bool>())
+            if (Menu.Item("Draw_Q", true).GetValue<bool>())
                 if (Q.Level > 0)
                     Render.Circle.DrawCircle(Player.Position, Q.Range, Q.IsReady() ? Color.Green : Color.Red);
 
-            if (menu.Item("Draw_W", true).GetValue<bool>())
+            if (Menu.Item("Draw_W", true).GetValue<bool>())
                 if (W.Level > 0)
                     Render.Circle.DrawCircle(Player.Position, W.Range - 2, W.IsReady() ? Color.Green : Color.Red);
 
-            if (menu.Item("Draw_E", true).GetValue<bool>())
+            if (Menu.Item("Draw_E", true).GetValue<bool>())
                 if (E.Level > 0)
                     Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.Green : Color.Red);
 
-            if (menu.Item("Draw_R", true).GetValue<bool>())
+            if (Menu.Item("Draw_R", true).GetValue<bool>())
                 if (R.Level > 0)
                     Render.Circle.DrawCircle(Player.Position, R.Range, R.IsReady() ? Color.Green : Color.Red);
 
-            if (menu.Item("Current_Mode", true).GetValue<bool>())
+            if (Menu.Item("Current_Mode", true).GetValue<bool>())
             {
-                Vector2 wts = Drawing.WorldToScreen(Player.Position);
-                int mode = menu.Item("Combo_mode", true).GetValue<StringList>().SelectedIndex;
-                if (mode == 0)
-                    Drawing.DrawText(wts[0] - 20, wts[1], Color.White, "Normal");
-                else if (mode == 1)
-                    Drawing.DrawText(wts[0] - 20, wts[1], Color.White, "Q-Delay-R-AA-Q-AA");
+                var wts = Drawing.WorldToScreen(Player.Position);
+                var mode = Menu.Item("Combo_mode", true).GetValue<StringList>().SelectedIndex;
+
+                switch (mode)
+                {
+                    case 0:
+                        Drawing.DrawText(wts[0] - 20, wts[1], Color.White, "Normal");
+                        break;
+                    case 1:
+                        Drawing.DrawText(wts[0] - 20, wts[1], Color.White, "Q-Delay-R-AA-Q-AA");
+                        break;
+                }
             }
         }
     }

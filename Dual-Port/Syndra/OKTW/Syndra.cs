@@ -150,8 +150,11 @@ using EloBuddy;
             if (Program.LagFree(2) && Q.IsReady() && Config.Item("autoQ", true).GetValue<bool>())
                 LogicQ();
 
-            if (Program.LagFree(3) && W.IsReady() && Config.Item("autoW", true).GetValue<bool>())
-                LogicW();
+            if (Program.LagFree(3) && W.IsReady() && Config.Item("autoW", true).GetValue<bool>() && Program.Combo)
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range + W.Width) && W.GetPrediction(x).Hitchance >= HitChance.High))
+                {
+                    UseW(enemy, enemy);
+                }
 
             if (Program.LagFree(4) && R.IsReady() && Config.Item("autoR", true).GetValue<bool>())
                 LogicR();
@@ -243,54 +246,46 @@ using EloBuddy;
             }
         }
 
-        private void LogicW()
+        public Vector3 GetGrabableObjectPos(bool onlyOrbs)
         {
-            if (W.Instance.ToggleState == 1)
-            {
-                var t = TargetSelector.GetTarget(W.Range - 150, TargetSelector.DamageType.Magical);
-                if (t.IsValidTarget())
-                {
-                    if (Program.Combo && Player.Mana > RMANA + QMANA + WMANA)
-                        CatchW(t);
-                    else if (Program.Farm && Config.Item("harrasW", true).GetValue<bool>() && Config.Item("harras" + t.ChampionName).GetValue<bool>() 
-                        && Player.ManaPercent > Config.Item("QHarassMana", true).GetValue<Slider>().Value && OktwCommon.CanHarras())
-                    {
-                        CatchW(t);
-                    }
-                    else if (OktwCommon.GetKsDamage(t, W) > t.Health)
-                        CatchW(t);
-                    else if (Player.Mana > RMANA + WMANA)
-                    {
-                        foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(W.Range) && !OktwCommon.CanMove(enemy)))
-                            CatchW(t);
-                    }
-                }
-                else if (Program.LaneClear && !Q.IsReady() && Player.ManaPercent > Config.Item("Mana", true).GetValue<Slider>().Value && Config.Item("farmW", true).GetValue<bool>())
-                {
-                    var allMinions = Cache.GetMinions(Player.ServerPosition, W.Range);
-                    var farmPos = W.GetCircularFarmLocation(allMinions, W.Width);
+            if (onlyOrbs)
+                return OrbManager.GetOrbToGrab((int)W.Range);
+            foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(W.Range)))
+                return minion.ServerPosition;
+            return OrbManager.GetOrbToGrab((int)W.Range);
+        }
 
-                    if (farmPos.MinionsHit >= Config.Item("LCminions", true).GetValue<Slider>().Value)
-                        CatchW(allMinions.FirstOrDefault());
+        public void UseW(Obj_AI_Base grabObject, Obj_AI_Base enemy)
+        {
+            if (grabObject != null && W.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "SyndraW")
+            {
+                var gObjectPos = GetGrabableObjectPos(false);
+
+                if (gObjectPos.To2D().IsValid() && Environment.TickCount - Q.LastCastAttemptT > Game.Ping + 150
+                    && Environment.TickCount - E.LastCastAttemptT > 750 + Game.Ping && Environment.TickCount - W.LastCastAttemptT > 750 + Game.Ping)
+                {
+                    var grabsomething = false;
+                    if (enemy != null)
+                    {
+                        var pos2 = W.GetPrediction(enemy, true);
+                        if (pos2.Hitchance >= HitChance.High) grabsomething = true;
+                    }
+                    if (grabsomething || grabObject.IsStunned)
+                    {
+                        W.Cast(gObjectPos);
+                    }
+
                 }
             }
-            else
+            if (enemy != null && W.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "SyndraWCast")
             {
-                var t = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-                if (t.IsValidTarget())
+                var pos = W.GetPrediction(enemy, true);
+                if (pos.Hitchance >= HitChance.High)
                 {
-                    Program.CastSpell(W, t);
-                }
-                else if (Program.LaneClear && Config.Item("farmW", true).GetValue<bool>())
-                {
-                    var allMinions = Cache.GetMinions(Player.ServerPosition, W.Range);
-                    var farmPos = W.GetCircularFarmLocation(allMinions, W.Width);
-
-                    if (farmPos.MinionsHit > 1)
-                        W.Cast(farmPos.Position);
+                    W.Cast(pos.CastPosition);
                 }
             }
-        }   
+        }
 
         private void LogicQ()
         {

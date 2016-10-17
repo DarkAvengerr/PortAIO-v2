@@ -71,24 +71,24 @@ namespace Syndra
             AppDomain.CurrentDomain.ProcessExit += CurrentDomainOnDomainUnload;
 
             Drawing.OnEndScene += eventArgs =>
+            {
+                var color = new ColorBGRA(255, 255, 255, 255);
+
+                var qMana = new[] { 0, 40, 50, 60, 70, 80 };
+                var wMana = new[] { 0, 60, 70, 80, 90, 100 }; // W Mana Cost doesnt works :/
+                var eMana = new[] { 0, 50, 50, 50, 50, 50 };
+                var rMana = new[] { 0, 100, 100, 100 };
+
+                if (manaBarItem.GetValue<bool>())
                 {
-                    var color = new ColorBGRA(255, 255, 255, 255);
+                    var totalCostMana = qMana[Program.Q.Level] + wMana[Program.W.Level] + eMana[Program.E.Level]
+                                        + rMana[Program.R.Level];
+                    DrawManaPercent(
+                        totalCostMana,
+                        totalCostMana > ObjectManager.Player.Mana ? new ColorBGRA(255, 0, 0, 255) : new ColorBGRA(255, 255, 255, 255));
+                }
 
-                    var qMana = new[] { 0, 40, 50, 60, 70, 80 };
-                    var wMana = new[] { 0, 60, 70, 80, 90, 100 }; // W Mana Cost doesnt works :/
-                    var eMana = new[] { 0, 50, 50, 50, 50, 50 };
-                    var rMana = new[] { 0, 100, 100, 100 };
-
-                    if (manaBarItem.GetValue<bool>())
-                    {
-                        var totalCostMana = qMana[Program.Q.Level] + wMana[Program.W.Level] + eMana[Program.E.Level]
-                                            + rMana[Program.R.Level];
-                        DrawManaPercent(
-                            totalCostMana,
-                            totalCostMana > ObjectManager.Player.Mana ? new ColorBGRA(255, 0, 0, 255) : new ColorBGRA(255, 255, 255, 255));
-                    }
-
-                };
+            };
         }
 
         private static Vector2 Offset

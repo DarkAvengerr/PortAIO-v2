@@ -614,6 +614,48 @@ using EloBuddy;
 
             }
         }
+
+        public static Vector3 GetGrabableObjectPos(bool onlyOrbs)
+        {
+            if (onlyOrbs)
+                return OrbManager.GetOrbToGrab((int)W.Range);
+            foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(W.Range)))
+                return minion.ServerPosition;
+            return OrbManager.GetOrbToGrab((int)W.Range);
+        }
+
+        public static void UseW(Obj_AI_Base grabObject, Obj_AI_Base enemy)
+        {
+            if (grabObject != null && W.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "SyndraW")
+            {
+                var gObjectPos = GetGrabableObjectPos(false);
+
+                if (gObjectPos.To2D().IsValid() && Environment.TickCount - Q.LastCastAttemptT > Game.Ping + 150
+                    && Environment.TickCount - E.LastCastAttemptT > 750 + Game.Ping && Environment.TickCount - W.LastCastAttemptT > 750 + Game.Ping)
+                {
+                    var grabsomething = false;
+                    if (enemy != null)
+                    {
+                        var pos2 = W.GetPrediction(enemy, true);
+                        if (pos2.Hitchance >= HitChance.High) grabsomething = true;
+                    }
+                    if (grabsomething || grabObject.IsStunned)
+                    {
+                        W.Cast(gObjectPos);
+                    }
+
+                }
+            }
+            if (enemy != null && W.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "SyndraWCast")
+            {
+                var pos = W.GetPrediction(enemy, true);
+                if (pos.Hitchance >= HitChance.High)
+                {
+                    W.Cast(pos.CastPosition);
+                }
+            }
+        }
+
         private static void Combo()
         {
             // Use R
@@ -683,43 +725,12 @@ using EloBuddy;
                                 ecount = Utils.GameTimeTickCount + 100;
                         }
                     }
-                    if (W.Instance.Name != "SyndraW" && combow)
-                    {
-                        var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-                        if (target.IsValidTarget() && !target.IsZombie)
-                        {
-                            if (Wobject() != null && Utils.GameTimeTickCount >= w1cast + 250)
-                            {
-                                W.UpdateSourcePosition(Wobject().Position, Player.Position);
-                                W.Cast(target);
-                            }
-                        }
-                    }
-                    if (W.IsReady() && Utils.GameTimeTickCount >= ecount + 500 && combow)
-                    {
-                        var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
-                        if (target.IsValidTarget() && !target.IsZombie)
-                        {
-                            if (W.Instance.Name != "SyndraW")
-                            {
-                                if (Wobject() != null && Utils.GameTimeTickCount >= w1cast + 250)
-                                {
-                                    W.UpdateSourcePosition(Wobject().Position, Player.Position);
-                                    W.Cast(target);
-                                }
-                            }
-                            else
-                            {
 
-                                if (PickableOrb != null || PickableMinion != null)
-                                {
-                                    W.Cast(PickableOrb != null
-                                        ? PickableOrb.Position.To2D()
-                                        : PickableMinion.Position.To2D());
-                                    wcount = Utils.GameTimeTickCount + 100;
-                                    ecount = Utils.GameTimeTickCount + 100;
-                                }
-                            }
+                    if (W.IsReady() && combow)
+                    {
+                        foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range + W.Width) && W.GetPrediction(x).Hitchance >= HitChance.High))
+                        {
+                            UseW(enemy, enemy);
                         }
                     }
 

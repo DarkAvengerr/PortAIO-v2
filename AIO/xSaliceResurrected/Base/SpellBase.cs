@@ -1,84 +1,43 @@
-using System.Collections.Generic;
-using LeagueSharp;
-using LeagueSharp.Common;
-using xSaliceResurrected.Managers;
-
-using EloBuddy; namespace xSaliceResurrected.Base
+﻿namespace xSaliceResurrected_Rework.Base
 {
-    abstract class SpellBase
+    using System.Collections.Generic;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using Managers;
+    using EloBuddy;
+
+    public abstract class SpellBase
     {
+        protected static List<Spell> SpellList => SpellManager.SpellList;
 
-        protected static List<Spell> SpellList
-        {
-            get { return SpellManager.SpellList; }
-        }
+        protected static Spell P => SpellManager.P;
 
-        protected static Spell P
-        {
-            get { return SpellManager.P; }
-        }
+        protected static Spell Q => SpellManager.Q;
 
-        protected static Spell Q
-        {
-            get { return SpellManager.Q; }
-        }
+        protected static Spell Q2 => SpellManager.Q2;
 
-        protected static Spell Q2
-        {
-            get { return SpellManager.Q2; }
-        }
+        protected static Spell QExtend => SpellManager.QExtend;
 
-        protected static Spell QExtend
-        {
-            get { return SpellManager.QExtend;  }
-        }
-        protected static Spell W
-        {
-            get { return SpellManager.W; }
-        }
+        protected static Spell W => SpellManager.W;
 
-        protected static Spell W2
-        {
-            get { return SpellManager.W2; }
-        }
+        protected static Spell W2 => SpellManager.W2;
 
-        protected static Spell E
-        {
-            get { return SpellManager.E; }
-        }
+        protected static Spell E => SpellManager.E;
 
-        protected static Spell E2
-        {
-            get { return SpellManager.E2; }
-        }
+        protected static Spell E2 => SpellManager.E2;
 
-        protected static Spell R
-        {
-            get { return SpellManager.R; }
-        }
-        protected static Spell R2
-        {
-            get { return SpellManager.R2; }
-        }
+        protected static Spell R => SpellManager.R;
 
-        protected static SpellDataInst QSpell
-        {
-            get { return SpellManager.QSpell; }
-        }
+        protected static Spell R2 => SpellManager.R2;
 
-        protected static SpellDataInst WSpell
-        {
-            get { return SpellManager.WSpell; }
-        }
+        protected static SpellSlot Flash => SpellManager.Flash;
 
-        protected static SpellDataInst ESpell
-        {
-            get { return SpellManager.ESpell; }
-        }
+        protected static SpellDataInst QSpell => SpellManager.QSpell;
 
-        protected static SpellDataInst RSpell
-        {
-            get { return SpellManager.RSpell; }
-        }
+        protected static SpellDataInst WSpell => SpellManager.WSpell;
+
+        protected static SpellDataInst ESpell => SpellManager.ESpell;
+
+        protected static SpellDataInst RSpell => SpellManager.RSpell;
     }
 }

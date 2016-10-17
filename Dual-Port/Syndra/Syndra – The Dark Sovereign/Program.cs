@@ -247,15 +247,7 @@ namespace Syndra______The_Dark_Sovereign
                 E.Cast(gapcloser.End);
             }
         }
-        private static Vector3 GetGrabableObjectPos(bool onlyOrbs)
-        {
-            if (!onlyOrbs)
-                foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(W.Range))
-                    )
-                    return minion.ServerPosition;
 
-            return OrbManager.GetOrbToGrab((int)W.Range);
-        }
         private static int GetOrbCount()
         {
             OrbManager.GetOrbs().Count();
@@ -277,30 +269,19 @@ namespace Syndra______The_Dark_Sovereign
             {
                 if (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1 && W.IsReady())
                 {
-                    var WGrabObject = GetGrabableObjectPos(target == null);
-
-                    if (WGrabObject.To2D().IsValid() && Utils.TickCount - W.LastCastAttemptT > Game.Ping + 300)
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range + W.Width) && W.GetPrediction(x).Hitchance >= HitChance.High))
                     {
-                        W.Cast(WGrabObject);
-                        W.LastCastAttemptT = Utils.TickCount;
-                    }
-                    else if (target != null && Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && W.IsReady() &&
-                   Utils.TickCount - W.LastCastAttemptT > Game.Ping + 100)
-                    {
-                        if (OrbManager.WObject(false) != null)
-                        {
-                            W.From = OrbManager.WObject(false).ServerPosition;
-                            W.Cast(target, false, true);
-                        }
+                        UseW(enemy, enemy);
                     }
                 }
+                
                 else if (target != null && Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && W.IsReady() &&
                          Utils.TickCount - W.LastCastAttemptT > Game.Ping + 100)
                 {
                     if (OrbManager.WObject(false) != null)
                     {
                         W.From = OrbManager.WObject(false).ServerPosition;
-                        W.Cast(target, false, true);
+                        UseW(target, target);
                     }
                 }
             }
@@ -339,6 +320,47 @@ namespace Syndra______The_Dark_Sovereign
                 }
             }
         }
+
+        public static Vector3 GetGrabableObjectPos(bool onlyOrbs)
+        {
+            if (onlyOrbs)
+                return OrbManager.GetOrbToGrab((int)W.Range);
+            foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(W.Range)))
+                return minion.ServerPosition;
+            return OrbManager.GetOrbToGrab((int)W.Range);
+        }
+
+        public static void UseW(Obj_AI_Base grabObject, Obj_AI_Base enemy)
+        {
+            if (grabObject != null && W.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "SyndraW")
+            {
+                var gObjectPos = GetGrabableObjectPos(false);
+
+                if (gObjectPos.To2D().IsValid() && Environment.TickCount - Q.LastCastAttemptT > Game.Ping + 150
+                    && Environment.TickCount - E.LastCastAttemptT > 750 + Game.Ping && Environment.TickCount - W.LastCastAttemptT > 750 + Game.Ping)
+                {
+                    var grabsomething = false;
+                    if (enemy != null)
+                    {
+                        var pos2 = W.GetPrediction(enemy, true);
+                        if (pos2.Hitchance >= HitChance.High) grabsomething = true;
+                    }
+                    if (grabsomething || grabObject.IsStunned)
+                    {
+                        W.Cast(gObjectPos);
+                    }
+
+                }
+            }
+            if (enemy != null && W.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "SyndraWCast")
+            {
+                var pos = W.GetPrediction(enemy, true);
+                if (pos.Hitchance >= HitChance.High)
+                {
+                    W.Cast(pos.CastPosition);
+                }
+            }
+        }
         private static void Combo()
         {
             var target = TargetSelector.GetTarget(1300, TargetSelector.DamageType.Magical);
@@ -351,32 +373,11 @@ namespace Syndra______The_Dark_Sovereign
                     Q.Cast(Qprediction.CastPosition);
                 }
             }
-            if (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1 && W.IsReady())
+            if (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1 && W.IsReady() && Config.Item("UseWCombo").GetValue<bool>())
             {
-                var WGrabObject = GetGrabableObjectPos(target == null);
-
-                if (WGrabObject.To2D().IsValid() && Utils.TickCount - W.LastCastAttemptT > Game.Ping + 300)
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range + W.Width) && W.GetPrediction(x).Hitchance >= HitChance.High))
                 {
-                    W.Cast(WGrabObject);
-                    W.LastCastAttemptT = Utils.TickCount;
-                }
-                else if (target != null && Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && W.IsReady() &&
-               Utils.TickCount - W.LastCastAttemptT > Game.Ping + 100)
-                {
-                    if (OrbManager.WObject(false) != null)
-                    {
-                        W.From = OrbManager.WObject(false).ServerPosition;
-                        W.Cast(target, false, true);
-                    }
-                }
-            }
-            else if (target != null && Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && W.IsReady() &&
-                     Utils.TickCount - W.LastCastAttemptT > Game.Ping + 100)
-            {
-                if (OrbManager.WObject(false) != null)
-                {
-                    W.From = OrbManager.WObject(false).ServerPosition;
-                    W.Cast(target, false, true);
+                    UseW(enemy, enemy);
                 }
             }
             if (E.IsReady() && (Config.Item("UseECombo").GetValue<bool>()))
@@ -545,7 +546,10 @@ namespace Syndra______The_Dark_Sovereign
                 }
                 if (Config.Item("UseWKS").GetValue<bool>() && target.Health < W.GetDamage(target))
                 {
-                    W.Cast(target);
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range + W.Width) && W.GetPrediction(x).Hitchance >= HitChance.High))
+                    {
+                        UseW(enemy, enemy);
+                    }
                 }
                 if (Config.Item("UseEKS").GetValue<bool>() && target.Health < E.GetDamage(target))
                 {

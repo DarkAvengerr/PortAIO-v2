@@ -31,59 +31,27 @@ namespace SyndraL33T
             }
         }
 
-        public static int tmpQOrbT;
-        public static Vector3 tmpQOrbPos = new Vector3();
-
-        public static int tmpWOrbT;
-        public static Vector3 tmpWOrbPos = new Vector3();
-
         static OrbManager()
         {
-            //Obj_AI_Base.OnPauseAnimation += Obj_AI_Base_OnPauseAnimation;
-            Obj_AI_Base.OnPlayAnimation += Obj_AI_Base_OnPlayAnimation;
-            Obj_AI_Base.OnSpellCast += AIHeroClient_OnProcessSpellCast;
-        }
-
-        private static void Obj_AI_Base_OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
-        {
-            if (sender is Obj_AI_Minion)
-            {
-                // ? berb
-            }
-        }
-
-
-        /*
-        static void Obj_AI_Base_OnPauseAnimation(Obj_AI_Base sender, Obj_AI_BasePauseAnimationEventArgs args)
-        {
-            if (sender is Obj_AI_Minion)
-            {
-                WObjectNetworkId = sender.NetworkId;  
-            }
-        }
-        */
-
-        private static void AIHeroClient_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            if (sender.IsMe && args.SData.Name.Equals("SyndraQ", StringComparison.InvariantCultureIgnoreCase))
-            {
-                tmpQOrbT = LeagueSharp.Common.Utils.TickCount;
-                tmpQOrbPos = args.End;
-            }
-
-            if (sender.IsMe && WObject(true) != null && (args.SData.Name.Equals("SyndraW", StringComparison.InvariantCultureIgnoreCase) || args.SData.Name.Equals("syndraw2", StringComparison.InvariantCultureIgnoreCase)))
-            {
-                tmpWOrbT = LeagueSharp.Common.Utils.TickCount + 250;
-                tmpWOrbPos = args.End;
-            }
+            Game.OnProcessPacket += Game_OnGameProcessPacket;
         }
 
         public static Obj_AI_Minion WObject(bool onlyOrb)
         {
             if (WObjectNetworkId == -1) return null;
-            var obj = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>((uint)WObjectNetworkId);
-            if (obj != null && obj.IsValid<Obj_AI_Minion>() && (obj.Name == "Seed" && onlyOrb || !onlyOrb)) return (Obj_AI_Minion)obj;
+            var obj = ObjectManager.GetUnitByNetworkId<Obj_AI_Minion>((uint)WObjectNetworkId);
+            if (obj != null && obj.IsValid && (obj.Name == "Seed" && onlyOrb || !onlyOrb)) return obj;
             return null;
+        }
+
+        private static void Game_OnGameProcessPacket(GamePacketEventArgs args)
+        {
+            if (args.PacketData[0] == 0x71)
+            {
+                var packet = new GamePacket(args.PacketData) { Position = 1 };
+                var networkId = packet.ReadInteger();
+                WObjectNetworkId = networkId;
+            }
         }
 
         public static List<Vector3> GetOrbs(bool toGrab = false)
@@ -92,9 +60,8 @@ namespace SyndraL33T
             foreach (
                 var obj in
                     ObjectManager.Get<Obj_AI_Minion>()
-                        .Where(obj => obj.IsValid && obj.Team == ObjectManager.Player.Team && !obj.IsDead && obj.Name == "Seed"))
+                        .Where(obj => obj.IsValid && obj.Team == ObjectManager.Player.Team && obj.Name == "Seed"))
             {
-                
                 var valid = false;
                 if (obj.NetworkId != WObjectNetworkId)
                     if (
@@ -104,21 +71,10 @@ namespace SyndraL33T
                                     b.IsValid && b.Name.Contains("_Q_") && b.Name.Contains("Syndra_") &&
                                     b.Name.Contains("idle") && obj.Position.Distance(b.Position) < 50))
                         valid = true;
-               
+
                 if (valid && (!toGrab || !obj.IsMoving))
                     result.Add(obj.ServerPosition);
             }
-
-            if (LeagueSharp.Common.Utils.TickCount - tmpQOrbT < 400)
-            {
-                result.Add(tmpQOrbPos);
-            }
-
-            if (LeagueSharp.Common.Utils.TickCount - tmpWOrbT < 400 && LeagueSharp.Common.Utils.TickCount - tmpWOrbT > 0)
-            {
-                result.Add(tmpWOrbPos);
-            }
-
             return result;
         }
 

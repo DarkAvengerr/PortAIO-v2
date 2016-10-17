@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace xSaliceResurrected.Managers
+using EloBuddy;
+namespace xSaliceResurrected_Rework.Managers
 {
     class AzirManager : Orbwalking.Orbwalker
     {
@@ -163,7 +164,7 @@ using EloBuddy; namespace xSaliceResurrected.Managers
 
             if (sender.Name == "AzirSoldier" && sender.IsAlly)
             {
-                Obj_AI_Minion soldier = (Obj_AI_Minion) sender;
+                Obj_AI_Minion soldier = (Obj_AI_Minion)sender;
                 if (soldier.BaseSkinName == "AzirSoldier")
                     Soldiers.Add(soldier);
             }

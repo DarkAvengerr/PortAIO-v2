@@ -61,7 +61,7 @@
   <ItemGroup>
     <Reference Include="EloBuddy, Version=1.0.0.0, Culture=neutral, PublicKeyToken=7339047cb10f6e86, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Danny\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.dll</HintPath>
+      <HintPath>..\..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.Sandbox, Version=1.0.6084.32288, Culture=neutral, PublicKeyToken=d671ef5d8e7e69a5, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -69,7 +69,7 @@
     </Reference>
     <Reference Include="EloBuddy.SDK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6b574a82b1ea937e, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Danny\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.SDK.dll</HintPath>
+      <HintPath>..\..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.SDK.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -77,16 +77,16 @@
     </Reference>
     <Reference Include="PortAIO.Common, Version=1.0.0.4, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\PortAIO-Common\bin\Debug\PortAIO.Common.dll</HintPath>
+      <HintPath>..\..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\PortAIO.Common.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="SharpDX, Version=2.6.3.0, Culture=neutral, PublicKeyToken=2306ab36a61019a8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Danny\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.dll</HintPath>
+      <HintPath>..\..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9, Version=2.6.3.0, Culture=neutral, PublicKeyToken=2306ab36a61019a8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Danny\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>..\..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.XInput, Version=2.6.3.0, Culture=neutral, PublicKeyToken=2306ab36a61019a8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -662,12 +662,50 @@
     <Compile Include="AIO\XDSharp\Program.cs" />
     <Compile Include="AIO\XDSharp\Utils\TargetSelector.cs" />
     <Compile Include="AIO\XDSharp\Utils\xDMath.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Base\Champion.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Base\SpellBase.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Managers\AOESpellManager.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Managers\AzirManager.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Managers\ItemManager.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Managers\ManaManager.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Managers\SpellCastManager.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Managers\SpellManager.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Managers\SummonerManager.cs" />
+    <Compile Include="AIO\xSaliceResurrected\PlugingLoad\PluginLoader.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Prediction\CommonPredEx.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Prediction\OKTWPrediction.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Prediction\PredictionCommon.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Prediction\SDKPrediction.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Prediction\xcsoftPrediction.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Prediction\YasuoWindWall.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Program.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Utilities\CustomPermaMenu.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Utilities\DamageIndicator.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Utilities\Geometry.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Utilities\Initiator.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Utilities\Util.cs" />
+    <Compile Include="AIO\xSaliceResurrected\Utilities\WardJumper.cs" />
+    <Compile Include="Champion\Varus\DrawDamage.cs" />
+    <Compile Include="Champion\Varus\Drawings.cs" />
+    <Compile Include="Champion\Varus\ElVarusMenu.cs" />
+    <Compile Include="Champion\Varus\Varus.cs" />
     <Compile Include="Core\Humano\Action.cs" />
     <Compile Include="Core\Humano\AttackBlock.cs" />
     <Compile Include="Core\Humano\CameraControling.cs" />
     <Compile Include="Core\Humano\MovementBlock.cs" />
     <Compile Include="Core\Humano\Program.cs" />
     <Compile Include="Core\Humano\SpellBlock.cs" />
+    <Compile Include="Dual-Port\Diana\ElDianaRevamped\Components\MyMenu.cs" />
+    <Compile Include="Dual-Port\Diana\ElDianaRevamped\Components\SpellManager.cs" />
+    <Compile Include="Dual-Port\Diana\ElDianaRevamped\Components\Spells\ISpell.cs" />
+    <Compile Include="Dual-Port\Diana\ElDianaRevamped\Components\Spells\SpellE.cs" />
+    <Compile Include="Dual-Port\Diana\ElDianaRevamped\Components\Spells\SpellQ.cs" />
+    <Compile Include="Dual-Port\Diana\ElDianaRevamped\Components\Spells\SpellR.cs" />
+    <Compile Include="Dual-Port\Diana\ElDianaRevamped\Components\Spells\SpellW.cs" />
+    <Compile Include="Dual-Port\Diana\ElDianaRevamped\Enumerations\LoggingEntryTrype.cs" />
+    <Compile Include="Dual-Port\Diana\ElDianaRevamped\Program.cs" />
+    <Compile Include="Dual-Port\Diana\ElDianaRevamped\Utils\Logging.cs" />
+    <Compile Include="Dual-Port\Diana\ElDianaRevamped\Utils\Misc.cs" />
     <Compile Include="Dual-Port\Diana\Flowers%27 Diana\Common\Common.cs" />
     <Compile Include="Dual-Port\Diana\Flowers%27 Diana\Common\HpBarDraw.cs" />
     <Compile Include="Dual-Port\Diana\Flowers%27 Diana\Common\YasuoWindWall.cs" />
@@ -693,6 +731,19 @@
     <Compile Include="Dual-Port\Karthus\Flowers%27 Karthus\Prediction\SDKPrediction.cs" />
     <Compile Include="Dual-Port\Karthus\Flowers%27 Karthus\Prediction\xcsoftPrediction.cs" />
     <Compile Include="Dual-Port\Karthus\Flowers%27 Karthus\Program.cs" />
+    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Champion\Kennen.cs" />
+    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Core\Configs.cs" />
+    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Core\Drawings.cs" />
+    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Core\ItemsHandler.cs" />
+    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Core\Prediction.cs" />
+    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Core\Spells.cs" />
+    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Modes\Combo.cs" />
+    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Modes\Flee.cs" />
+    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Modes\Harass.cs" />
+    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Modes\JungleClear.cs" />
+    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Modes\LaneClear.cs" />
+    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Modes\LastHit.cs" />
+    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Program.cs" />
     <Compile Include="Dual-Port\Riven\NechritoRiven\Event\Animation.cs" />
     <Compile Include="Dual-Port\Riven\NechritoRiven\Event\OrbwalkingModes\AfterAuto.cs" />
     <Compile Include="Dual-Port\Riven\NechritoRiven\Event\OrbwalkingModes\BurstMode.cs" />
@@ -819,11 +870,36 @@
     <Compile Include="Dual-Port\Riven\NechritoRiven\Orbwalking.cs" />
     <Compile Include="Dual-Port\Riven\NechritoRiven\Program.cs" />
     <Compile Include="Dual-Port\Sivir\Marksman\Sivir.cs" />
+    <Compile Include="Dual-Port\Syndra\BadaoSyndra\OrbManager.cs" />
+    <Compile Include="Dual-Port\Syndra\OKTW\OrbManager.cs" />
+    <Compile Include="Dual-Port\Syndra\SephSyndra\OrbManager.cs" />
+    <Compile Include="Dual-Port\Syndra\xSalice\Orb.cs" />
+    <Compile Include="Dual-Port\Tahm Kench\Tahm\Components\MyMenu.cs" />
+    <Compile Include="Dual-Port\Tahm Kench\Tahm\Components\SpellManager.cs" />
+    <Compile Include="Dual-Port\Tahm Kench\Tahm\Components\Spells\ISpell.cs" />
+    <Compile Include="Dual-Port\Tahm Kench\Tahm\Components\Spells\SpellE.cs" />
+    <Compile Include="Dual-Port\Tahm Kench\Tahm\Components\Spells\SpellQ.cs" />
+    <Compile Include="Dual-Port\Tahm Kench\Tahm\Components\Spells\SpellW.cs" />
+    <Compile Include="Dual-Port\Tahm Kench\Tahm\Enumerations\DevourType.cs" />
+    <Compile Include="Dual-Port\Tahm Kench\Tahm\Enumerations\LoggingEntryType.cs" />
+    <Compile Include="Dual-Port\Tahm Kench\Tahm\Program.cs" />
+    <Compile Include="Dual-Port\Tahm Kench\Tahm\Utils\Logging.cs" />
+    <Compile Include="Dual-Port\Tahm Kench\Tahm\Utils\Misc.cs" />
     <Compile Include="Dual-Port\Teemo\Marksman\Teemo.cs" />
     <Compile Include="Dual-Port\Teemo\OKTW\Teemo.cs" />
     <Compile Include="Dual-Port\Tristana\Marksman\Tristana.cs" />
     <Compile Include="Dual-Port\Twitch\Marksman\Twitch.cs" />
     <Compile Include="Dual-Port\Urgot\Marksman\Urgot.cs" />
+    <Compile Include="Dual-Port\Varus\ElVarusRevamped\ElVarusRevamped\Components\MyMenu.cs" />
+    <Compile Include="Dual-Port\Varus\ElVarusRevamped\ElVarusRevamped\Components\SpellManager.cs" />
+    <Compile Include="Dual-Port\Varus\ElVarusRevamped\ElVarusRevamped\Components\Spells\ISpell.cs" />
+    <Compile Include="Dual-Port\Varus\ElVarusRevamped\ElVarusRevamped\Components\Spells\SpellE.cs" />
+    <Compile Include="Dual-Port\Varus\ElVarusRevamped\ElVarusRevamped\Components\Spells\SpellQ.cs" />
+    <Compile Include="Dual-Port\Varus\ElVarusRevamped\ElVarusRevamped\Components\Spells\SpellR.cs" />
+    <Compile Include="Dual-Port\Varus\ElVarusRevamped\ElVarusRevamped\Enumerations\LoggingEntryTrype.cs" />
+    <Compile Include="Dual-Port\Varus\ElVarusRevamped\ElVarusRevamped\Program.cs" />
+    <Compile Include="Dual-Port\Varus\ElVarusRevamped\ElVarusRevamped\Utils\Logging.cs" />
+    <Compile Include="Dual-Port\Varus\ElVarusRevamped\ElVarusRevamped\Utils\Misc.cs" />
     <Compile Include="Dual-Port\Varus\Marksman\Varus.cs" />
     <Compile Include="Dual-Port\Vayne\hi_im_gosu\Program.cs" />
     <Compile Include="Dual-Port\Vayne\Marksman\Vayne.cs" />
@@ -1030,25 +1106,6 @@
     <Compile Include="AIO\Support Is Easy\Util\Extensions.cs" />
     <Compile Include="AIO\Support Is Easy\Util\Helpers.cs" />
     <Compile Include="AIO\SurvivorSeries\SurviorSeries.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Base\SpellBase.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Champion.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Managers\AOESpellManager.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Managers\AzirManager.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Managers\HitChanceManager.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Managers\ItemManager.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Managers\ManaManager.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Managers\OrbwalkManager.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Managers\SpellCastManager.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Managers\SpellManager.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Managers\SummonerManager.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Persistence\Initiator.cs" />
-    <Compile Include="AIO\xSaliceResurrected\PluginLoader.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Program.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Utilities\CustomPermaMenu.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Utilities\DamageIndicator.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Utilities\Geometry.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Utilities\Util.cs" />
-    <Compile Include="AIO\xSaliceResurrected\Utilities\WardJumper.cs" />
     <Compile Include="AutoPlay\AramDetFull\Aggresivity.cs" />
     <Compile Include="AutoPlay\AramDetFull\ARAMDetFull.cs" />
     <Compile Include="AutoPlay\AramDetFull\ARAMSimulator.cs" />
@@ -1362,7 +1419,6 @@
     <Compile Include="Dual-Port\Fiddlesticks\Support is Easy\Fiddlesticks.cs" />
     <Compile Include="Dual-Port\Fiddlesticks\vSeries Fiddlesticks\Fiddlesticks.cs" />
     <Compile Include="Dual-Port\Fiora\UnderratedAIO\Fiora.cs" />
-    <Compile Include="Dual-Port\Fiora\xSalice\Fiora.cs" />
     <Compile Include="Dual-Port\Fizz\ElFizz\DamageIndicator.cs" />
     <Compile Include="Dual-Port\Fizz\ElFizz\Fizz.cs" />
     <Compile Include="Dual-Port\Fizz\UnderratedAIO\Fizz.cs" />
@@ -1563,12 +1619,6 @@
     <Compile Include="Dual-Port\Kayle\D-Kayle\Program.cs" />
     <Compile Include="Dual-Port\Kayle\OKTW\Kayle.cs" />
     <Compile Include="Dual-Port\Kennen\BrianSharp\Kennen.cs" />
-    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\CommonUtilities.cs" />
-    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\ConfigMenu.cs" />
-    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Drawings.cs" />
-    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Kennen.cs" />
-    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Program.cs" />
-    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Spells.cs" />
     <Compile Include="Dual-Port\Kha%27Zix\KhazixSharpElite\HpBarIndicator.cs" />
     <Compile Include="Dual-Port\Kha%27Zix\KhazixSharpElite\Khazix.cs" />
     <Compile Include="Dual-Port\Kha%27Zix\KhazixSharpElite\KhazixSharp.cs" />
@@ -3201,10 +3251,6 @@
     <Compile Include="Champion\Trundle\ElTrundleMenu.cs" />
     <Compile Include="Champion\TwistedFate\CardSelector.cs" />
     <Compile Include="Champion\TwistedFate\Program.cs" />
-    <Compile Include="Champion\Varus\DrawDamage.cs" />
-    <Compile Include="Champion\Varus\Drawings.cs" />
-    <Compile Include="Champion\Varus\ElVarusMenu.cs" />
-    <Compile Include="Champion\Varus\Varus.cs" />
     <Compile Include="Champion\Vayne\External\Activator\Activator.cs" />
     <Compile Include="Champion\Vayne\External\Activator\ActivatorEnums.cs" />
     <Compile Include="Champion\Vayne\External\Activator\ActivatorSpells\Barrier.cs" />
@@ -5636,6 +5682,8 @@
     <Compile Include="SDK\TroopAIO\_SDK_TroopAIO\Plugins\Evelynn.cs" />
     <Compile Include="SDK\TroopAIO\_SDK_TroopAIO\Plugins\Urgot.cs" />
     <Compile Include="SDK\TroopAIO\_SDK_TroopAIO\Plugins\Vladimir.cs" />
+    <Compile Include="SDK\TRUS in my Viktor\HpBarIndicator.cs" />
+    <Compile Include="SDK\TRUS in my Viktor\Program.cs" />
     <Compile Include="SDK\Tyler1\Program.cs" />
     <Compile Include="SDK\Tyler1\Utils.cs" />
     <Compile Include="SDK\ValvraveSharp\Core\Common.cs" />

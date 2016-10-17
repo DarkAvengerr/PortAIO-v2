@@ -171,7 +171,10 @@ namespace SephSyndra
 
             if (SpellManager.W.IsReady() && GetBool("c.w"))
             {
-                CastW(null);
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(SpellManager.W.Range + SpellManager.W.Width) && SpellManager.W.GetPrediction(x).Hitchance >= HitChance.High))
+                {
+                    UseW(enemy, enemy);
+                }
             }
 
             if (SpellManager.E.IsReady() && GetBool("c.e"))
@@ -193,7 +196,10 @@ namespace SephSyndra
             }
             if (GetBool("h.w"))
             {
-                CastW(null);
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(SpellManager.W.Range + SpellManager.W.Width) && SpellManager.W.GetPrediction(x).Hitchance >= HitChance.High))
+                {
+                    UseW(enemy, enemy);
+                }
             }
             if (GetBool("h.e"))
             {
@@ -304,63 +310,43 @@ namespace SephSyndra
         }
 
 
-        void CastW(AIHeroClient paramtarget)
+        public static Vector3 GetGrabableObjectPos(bool onlyOrbs)
         {
-            var targ = paramtarget == null ? TargetSelector.GetTarget(SpellManager.W.Range, TargetSelector.DamageType.Magical) : paramtarget;
+            if (onlyOrbs)
+                return OrbManager.GetOrbToGrab((int)SpellManager.W.Range);
+            foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(SpellManager.W.Range)))
+                return minion.ServerPosition;
+            return OrbManager.GetOrbToGrab((int)SpellManager.W.Range);
+        }
 
-            if (targ == null)
+        void UseW(Obj_AI_Base grabObject, Obj_AI_Base enemy)
+        {
+            if (grabObject != null && SpellManager.W.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "SyndraW")
             {
-                return;
-            }
+                var gObjectPos = GetGrabableObjectPos(false);
 
-            if (HasSecondW)
-            {
-                var result = SpellManager.W2.GetAoeSPrediction();
-
-                if (result.HitCount > 0)
+                if (gObjectPos.To2D().IsValid() && Environment.TickCount - SpellManager.Q.LastCastAttemptT > Game.Ping + 150
+                    && Environment.TickCount - SpellManager.E.LastCastAttemptT > 750 + Game.Ping && Environment.TickCount - SpellManager.W.LastCastAttemptT > 750 + Game.Ping)
                 {
-                    SpellManager.W2.Cast(result.CastPosition);
-                    return;
-                }
+                    var grabsomething = false;
+                    if (enemy != null)
+                    {
+                        var pos2 = SpellManager.W.GetPrediction(enemy, true);
+                        if (pos2.Hitchance >= HitChance.High) grabsomething = true;
+                    }
+                    if (grabsomething || grabObject.IsStunned)
+                    {
+                        SpellManager.W.Cast(gObjectPos);
+                    }
 
-                else if (result.HitCount == 0)
-                {
-                    var pred = SpellManager.W2.GetSPrediction(targ);
-                    if (pred.HitChance >= HitChance.Low)
-                    {
-                        SpellManager.W2.Cast(pred.CastPosition);
-                        return;
-                    }
-                    //Common if SPrediction cant find
-                    else
-                    {
-                        var predc = SpellManager.W2.GetPrediction(targ);
-                        if (predc.Hitchance >= HitChance.VeryHigh)
-                        {
-                            SpellManager.W2.Cast(predc.CastPosition);
-                            return;
-                        }
-                    }
                 }
             }
-
-
-
-            //Add if W about to run out, throw at closeby minions?
-            //if first W
-            else if (WGood)
+            if (enemy != null && SpellManager.W.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "SyndraWCast")
             {
-                var target = paramtarget == null ? TargetSelector.GetTarget(0.90f * SpellManager.W.Range, TargetSelector.DamageType.Magical) : paramtarget;
-                if (target != null)
+                var pos = SpellManager.W.GetPrediction(enemy, true);
+                if (pos.Hitchance >= HitChance.High)
                 {
-                    var bestmin = GrabbableObjects.MaxOrDefault(x => x.priority).unit;
-                    if (bestmin != null)
-                    {
-                        if (ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W, bestmin))
-                        {
-                            LastWTick = Utils.TickCount;
-                        }
-                    }
+                    SpellManager.W.Cast(pos.CastPosition);
                 }
             }
         }
@@ -460,7 +446,10 @@ namespace SephSyndra
                 var wdmg = SpellManager.W.GetDamage(target);
                 if (target.Health < wdmg)
                 {
-                    CastW(target);
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(SpellManager.W.Range + SpellManager.W.Width) && SpellManager.W.GetPrediction(x).Hitchance >= HitChance.High))
+                    {
+                        UseW(enemy, enemy);
+                    }
                 }
             }
 

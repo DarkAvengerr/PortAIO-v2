@@ -42,10 +42,13 @@ namespace Syndra
             Text = new Font(
                 Drawing.Direct3DDevice,
                 new FontDescription
-                    {
-                        FaceName = "Malgun Gothic", Height = 21, OutputPrecision = FontPrecision.Default,
-                        Weight = FontWeight.Bold, Quality = FontQuality.ClearTypeNatural
-                    });
+                {
+                    FaceName = "Malgun Gothic",
+                    Height = 21,
+                    OutputPrecision = FontPrecision.Default,
+                    Weight = FontWeight.Bold,
+                    Quality = FontQuality.ClearTypeNatural
+                });
 
             this.Config = new Menu("Target Selector", "AssassinTargetSelector").SetFontStyle(
                 FontStyle.Regular,
@@ -61,29 +64,29 @@ namespace Syndra
                     new StringList(new[] { "Syndra Target Selector", "L# Target Selector" })))
                 .SetFontStyle(FontStyle.Regular, SharpDX.Color.GreenYellow)
                 .ValueChanged += (sender, args) =>
-                    {
-                        this.Config.Items.ForEach(
-                            i =>
-                                {
-                                    i.Show();
-                                    switch (args.GetNewValue<StringList>().SelectedIndex)
-                                    {
-                                        case 0:
-                                            if (i.Tag == 22) i.Show(false);
-                                            break;
-                                        case 1:
-                                            if (i.Tag == 11 || i.Tag == 12) i.Show(false);
-                                            break;
-                                    }
-                                });
-                    };
+                {
+                    this.Config.Items.ForEach(
+                        i =>
+                        {
+                            i.Show();
+                            switch (args.GetNewValue<StringList>().SelectedIndex)
+                            {
+                                case 0:
+                                    if (i.Tag == 22) i.Show(false);
+                                    break;
+                                case 1:
+                                    if (i.Tag == 11 || i.Tag == 12) i.Show(false);
+                                    break;
+                            }
+                        });
+                };
 
             menuTargetSelector.Items.ForEach(
                 i =>
-                    {
-                        this.Config.AddItem(i);
-                        i.SetTag(22);
-                    });
+                {
+                    this.Config.AddItem(i);
+                    i.SetTag(22);
+                });
 
             this.Config.AddItem(
                 new MenuItem("Set", "Target Select Mode:").SetValue(
@@ -146,24 +149,24 @@ namespace Syndra
 
             this.Config.Items.ForEach(
                 i =>
+                {
+                    i.Show();
+                    switch (this.Selector)
                     {
-                        i.Show();
-                        switch (this.Selector)
-                        {
-                            case TargetSelect.Syndra:
-                                if (i.Tag == 22)
-                                {
-                                    i.Show(false);
-                                }
-                                break;
-                            case TargetSelect.LeagueSharp:
-                                if (i.Tag == 11)
-                                {
-                                    i.Show(false);
-                                }
-                                break;
-                        }
-                    });
+                        case TargetSelect.Syndra:
+                            if (i.Tag == 22)
+                            {
+                                i.Show(false);
+                            }
+                            break;
+                        case TargetSelect.LeagueSharp:
+                            if (i.Tag == 11)
+                            {
+                                i.Show(false);
+                            }
+                            break;
+                    }
+                });
         }
 
         public void ClearAssassinList()
@@ -347,10 +350,11 @@ namespace Syndra
         internal static void Initialize()
         {
             new Render.Sprite(Resources.selectedchampion, new Vector2())
-                {
-                    PositionUpdate = () => DrawPosition, Scale = new Vector2(1f, 1f),
-                    VisibleCondition = sender => DrawSprite
-                }.Add();
+            {
+                PositionUpdate = () => DrawPosition,
+                Scale = new Vector2(1f, 1f),
+                VisibleCondition = sender => DrawSprite
+            }.Add();
         }
     }
 }

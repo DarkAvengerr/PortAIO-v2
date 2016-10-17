@@ -177,7 +177,7 @@ namespace PortAIO
             // Support.Program.Main(); - Support is Easy Champions
             // ReformedAIO.Program.Main(); - ReformedAIO Champs
             // KappaSeries.Program.OnGameLoad(); - KappaSeries Champions
-            // xSaliceResurrected.Program.LoadReligion(); - xSalice Champs
+            // xSaliceResurrected_Rework.Program.LoadReligion(); - xSalice Champs
             // SurvivorSeries.SurviorSeries.Main(); - SurvivorSeries Champions
             // ADCPackage.Program.Game_OnGameLoad(); - ADCPackage
             // StonedSeriesAIO.Program.Main(); - StonedSeriesAIO - TheKushStyle
@@ -226,7 +226,7 @@ namespace PortAIO
                             KappaSeries.Program.OnGameLoad();
                             break;
                         case 4: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 5: // BadaoSeries
                             BadaoSeries.Program.OnLoad();
@@ -270,7 +270,7 @@ namespace PortAIO
                             AkaliTroop.Program.Game_OnGameLoad();
                             break;
                         case 4: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 5: // StonedSeriesAIO
                             StonedSeriesAIO.Program.Main();
@@ -357,7 +357,7 @@ namespace PortAIO
                             AniviaSharp.Program.Main();
                             break;
                         case 2: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 3: // ExorAIO
                             ExorAIO.Program.Main();
@@ -409,7 +409,7 @@ namespace PortAIO
                             SurvivorSeries.SurviorSeries.Main();
                             break;
                         case 5: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 6: // Marksman#
                             Marksman.Program.Game_OnGameLoad();
@@ -488,7 +488,7 @@ namespace PortAIO
                             SAutoCarry.Program.Game_OnGameLoad();
                             break;
                         case 3: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 4: // Azir by Kortatu
                             AzirKortatu.Program.Main();
@@ -665,7 +665,7 @@ namespace PortAIO
                             Sharpy_AIO.Program.Game_OnGameLoad();
                             break;
                         case 3: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 4: // TheCassiopeia
                             TheCassiopeia.Program.Main();
@@ -697,7 +697,7 @@ namespace PortAIO
                             WindWalker_Cho._._.gath.Program.Game_OnGameLoad();
                             break;
                         case 2: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 3: // Troop Gath
                             TroopChogath.Program.Main();
@@ -732,7 +732,7 @@ namespace PortAIO
                             SharpShooter.Program.Game_OnGameLoad();
                             break;
                         case 8: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 9: // Marksman#
                             Marksman.Program.Game_OnGameLoad();
@@ -822,6 +822,9 @@ namespace PortAIO
                         case 8: // Flowers' Diana
                             Flowers_Diana.Program.Main();
                             break;
+                        case 9: // ElDiana Revamped
+                            ElDianaRevamped.Program.Bootstrap();
+                            break;
                     }
                     break;
                 case Champion.DrMundo:
@@ -901,7 +904,7 @@ namespace PortAIO
                             EloFactory_Ekko.Program.Game_OnGameLoad();
                             break;
                         case 2: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 3: // Ekko Master of Time
                             Ekko_master_of_time.Program.Main();
@@ -1013,7 +1016,7 @@ namespace PortAIO
                             UnderratedAIO.Program.OnGameLoad();
                             break;
                         case 11: //xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 12: // Marksman#
                             Marksman.Program.Game_OnGameLoad();
@@ -1087,9 +1090,6 @@ namespace PortAIO
                             break;
                         case 1: // UnderratedAIO
                             UnderratedAIO.Program.OnGameLoad();
-                            break;
-                        case 2: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
                             break;
                         case 3: // jesuisFiora
                             jesuisFiora.Program.Main();
@@ -1324,7 +1324,7 @@ namespace PortAIO
                             IreliaToTheChallenger.Program.Load();
                             break;
                         case 2: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 3: // ChallengerSeries
                             Challenger_Series.Program.Main();
@@ -1416,7 +1416,7 @@ namespace PortAIO
                             HikiCarry_Jayce___Hammer_of_Justice.Program.OnGameLoad();
                             break;
                         case 2: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 3: // AJayce
                             AJayce.Program.Main();
@@ -1489,7 +1489,7 @@ namespace PortAIO
                             SharpShooter.Program.Game_OnGameLoad();
                             break;
                         case 6: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 7: // Marksman#
                             Marksman.Program.Game_OnGameLoad();
@@ -1635,7 +1635,7 @@ namespace PortAIO
                             SharpShooter.Program.Game_OnGameLoad();
                             break;
                         case 2: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 3: // RAREKarthus
                             RAREKarthus.Program.Main();
@@ -1694,7 +1694,7 @@ namespace PortAIO
                             ElKatarina.Program.OnLoad();
                             break;
                         case 3: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 4: // e.Motion Katarina
                             e.Motion_Katarina.Program.Game_OnGameLoad();
@@ -1755,7 +1755,7 @@ namespace PortAIO
                             BrianSharp.Program.Main();
                             break;
                         case 2: // Hestia's Kennen
-                            Kennen.Program.Main();
+                            Kennen.Program.Game_OnGameLoad();
                             break;
                         case 3: // Valvrave#
                             Valvrave_Sharp.Program.Main();
@@ -1823,7 +1823,7 @@ namespace PortAIO
                             SharpShooter.Program.Game_OnGameLoad();
                             break;
                         case 6: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 7: // Marksman#
                             Marksman.Program.Game_OnGameLoad();
@@ -1926,7 +1926,7 @@ namespace PortAIO
                             SephLissandra.Program.Main();
                             break;
                         case 1: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 2: // Lissandra The Ice Goddess
                             Lissandra_the_Ice_Goddess.Program.Main();
@@ -1967,7 +1967,7 @@ namespace PortAIO
                             SharpShooter.Program.Game_OnGameLoad();
                             break;
                         case 10: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 11: // Marksman#
                             Marksman.Program.Game_OnGameLoad();
@@ -2342,7 +2342,7 @@ namespace PortAIO
                             SFXChallenger.Program.Main();
                             break;
                         case 5: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 6: // ExorAIO
                             ExorAIO.Program.Main();
@@ -2553,7 +2553,7 @@ namespace PortAIO
                             UnderratedAIO.Program.OnGameLoad();
                             break;
                         case 1: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 2: // ElRumble
                             ElRumble.Program.Main();
@@ -2867,7 +2867,7 @@ namespace PortAIO
                             vSupport_Series.Program.Game_OnGameLoad();
                             break;
                         case 7: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 8: // SephSyndra
                             SephSyndra.Syndra.Main();
@@ -2894,6 +2894,9 @@ namespace PortAIO
                             break;
                         case 4: // Hahaha's Tahm Kench
                             Hahaha_s_Tahm_Kench.Program.Main();
+                            break;
+                        case 5:
+                            ElTahmKench.Program.Bootstrap();
                             break;
                     }
                     break;
@@ -3266,7 +3269,7 @@ namespace PortAIO
                             OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
                             break;
                         case 1: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 2: // Marksman#
                             Marksman.Program.Game_OnGameLoad();
@@ -3312,6 +3315,9 @@ namespace PortAIO
                         case 7: // Flowers' ADC Series
                             Flowers_ADC_Series.Program.Main();
                             break;
+                        case 8: // ElVarusRevamped
+                            ElVarusRevamped.Program.Bootstrap();
+                            break;
                     }
                     break;
                 case Champion.Vayne:
@@ -3336,7 +3342,7 @@ namespace PortAIO
                             SharpShooter.Program.Game_OnGameLoad();
                             break;
                         case 6: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 7: // Marksman#
                             Marksman.Program.Game_OnGameLoad();
@@ -3452,13 +3458,16 @@ namespace PortAIO
                             ViktorBadao.Program.Game_OnGameLoad();
                             break;
                         case 6: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 7: // Flowers' Series
                             Flowers_Series.Program.Main();
                             break;
                         case 8: // Flowers' Viktor
                             Flowers_Viktor.Program.Main();
+                            break;
+                        case 9:
+                            TRUStInMyViktor.Program.Main();
                             break;
                     }
                     break;
@@ -3475,7 +3484,7 @@ namespace PortAIO
                             SFXChallenger.Program.Main();
                             break;
                         case 3: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 4: // [SBTW] Vladimir
                             Flowers_Vladimir.Program.Main();
@@ -3713,7 +3722,7 @@ namespace PortAIO
                             Support.Program.Main();
                             break;
                         case 2: // xSalice
-                            xSaliceResurrected.Program.LoadReligion();
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 3: // RAREZyra
                             RAREZyra.Program.Main();

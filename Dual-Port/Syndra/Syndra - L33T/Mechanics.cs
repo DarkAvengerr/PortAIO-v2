@@ -41,7 +41,7 @@ using EloBuddy;
 
             if (useR && Spells[SpellSlot.R].IsReady() && targets[SpellSlot.R].IsValidTarget(Spells[SpellSlot.R].Range))
             {
-                ProcessUltimate(targets[SpellSlot.R]);
+                ProcessUltimate();
             }
 
             if (IgniteSpell.IsReady())
@@ -89,8 +89,10 @@ using EloBuddy;
             }
         }
 
-        private static void ProcessUltimate(AIHeroClient target)
+        private static void ProcessUltimate()
         {
+            var target = TargetSelector.GetTarget(Spells[SpellSlot.R].Range, TargetSelector.DamageType.Magical);
+
             if (!Collision.DetectCollision(target) && Spells[SpellSlot.R].Damage(target) > target.Health &&
                 UnleashedPowerCheck(target) && !target.BuffCheck())
             {
@@ -100,7 +102,7 @@ using EloBuddy;
                       Spells[SpellSlot.Q].Instance.Instance.CooldownExpires - Game.Time >= 0 && target.IsStunned) &&
                     (int) (Game.Time * 0x3E8) - Spells[SpellSlot.Q].LastCastAttemptTick > 500 + Game.Ping)
                 {
-                    Spells[SpellSlot.R].Instance.CastOnUnit(target);
+                    Spells[SpellSlot.R].Instance.Cast(target);
                     Spells[SpellSlot.R].LastCastAttemptTick = (int) (Game.Time * 0x3E8);
                 }
             }

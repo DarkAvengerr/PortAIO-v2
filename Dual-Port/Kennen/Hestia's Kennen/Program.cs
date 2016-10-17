@@ -1,24 +1,23 @@
-using System;
+﻿using System;
+using LeagueSharp.Common;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Kennen
+namespace Kennen
 {
-    public static class Program
+    internal class Program
     {
-        public static void Main()
+
+        public static void Game_OnGameLoad()
         {
             try
             {
                 // ReSharper disable once ObjectCreationAsStatement
-                new Kennen();
+                new Champion.Kennen();
             }
             catch (Exception exception)
             {
-                Console.WriteLine("Could not load the assembly - {0}", exception);
+                Console.WriteLine("Could not load assembly: {0}", exception);
                 throw;
             }
         }
     }
 }
-
