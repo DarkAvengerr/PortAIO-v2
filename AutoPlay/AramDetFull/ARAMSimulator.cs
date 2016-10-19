@@ -695,7 +695,9 @@ namespace ARAMDetFull
             try
             {
                 GameObject.OnCreate += TowerAttackOnCreate;
-                GameObject.OnDelete += onDelete;
+
+                if (ObjectManager.Player.Hero != EloBuddy.Champion.Corki)
+                    GameObject.OnDelete += onDelete;
 
                 foreach (var tur in ObjectManager.Get<Obj_HQ>())
                 {
@@ -1032,6 +1034,8 @@ namespace ARAMDetFull
         {
             try
             {
+                if (ObjectManager.Player.Hero == EloBuddy.Champion.Corki)
+                    return false;
                 var relicHeal = MapControl.ClosestRelic();
                 if (relicHeal != null)
                 {

@@ -58,7 +58,7 @@ using EloBuddy;
             Config.SubMenu("About OKTW©").AddItem(new MenuItem("print", "OKTW NEWS in chat").SetValue(true));
             #endregion
 
-            Config.AddItem(new MenuItem("AIOmode", "AIO mode", true).SetValue(new StringList(new[] { "Utility and champion", "Only Champion", "Only Utility" }, 0)));
+            Config.AddItem(new MenuItem("AIOmode", "AIO mode", true).SetValue(new StringList(new[] { "Utility and champion", "Only Champion", "Only Utility" }, 1)));
 
             AIOmode = Config.Item("AIOmode", true).GetValue<StringList>().SelectedIndex;
 

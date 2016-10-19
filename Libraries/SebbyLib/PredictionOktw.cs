@@ -125,7 +125,7 @@ namespace SebbyLib.Prediction
 
         internal float RealRadius
         {
-            get { return UseBoundingRadius ? Radius + Unit.BoundingRadius   : Radius; }
+            get { return UseBoundingRadius ? Radius : Radius; }
         }
     }
 
@@ -996,7 +996,7 @@ namespace SebbyLib.Prediction
                     {
                         if (
                             GetHits(
-                                input.From.To2D(), candidate, (input.Radius + input.Unit.BoundingRadius / 3 - 10),
+                                input.From.To2D(), candidate, (input.Radius - 10),
                                 new List<Vector2> { posibleTargets[0].Position }).Count() == 1)
                         {
                             var hits = GetHits(input.From.To2D(), candidate, input.Radius, positionsList).ToList();
@@ -1103,7 +1103,7 @@ namespace SebbyLib.Prediction
 
                                 var distanceFromToUnit = minion.ServerPosition.Distance(input.From);
 
-                                if (distanceFromToUnit < 10 + minion.BoundingRadius)
+                                if (distanceFromToUnit < minion.BoundingRadius)
                                 {
                                     if (MinionIsDead(input, minion, distanceFromToUnit))
                                         continue;
@@ -1138,7 +1138,7 @@ namespace SebbyLib.Prediction
                                         bonusRadius = 50 + (int)input.Radius;
                                     }
 
-                                    if (minionPos.To2D().Distance(input.From.To2D(), position.To2D(), true, true) <= Math.Pow((input.Radius + bonusRadius + minion.BoundingRadius), 2))
+                                    if (minionPos.To2D().Distance(input.From.To2D(), position.To2D(), true, true) <= Math.Pow((input.Radius + bonusRadius), 2))
                                     {
                                         if (MinionIsDead(input, minion, distanceFromToUnit))
                                             continue;
@@ -1161,7 +1161,7 @@ namespace SebbyLib.Prediction
                                 if (
                                     prediction.UnitPosition.To2D()
                                         .Distance(input.From.To2D(), position.To2D(), true, true) <=
-                                    Math.Pow((input.Radius + 50 + hero.BoundingRadius), 2))
+                                    Math.Pow((input.Radius + hero.BoundingRadius), 2))
                                 {
                                     return true;
                                 }

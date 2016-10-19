@@ -576,7 +576,7 @@ namespace SPrediction
                 {
                     Vector2 direction = (path[k + 1] - path[k]).Normalized();
                     float distance = width;
-                    float extender = target.BoundingRadius;
+                    float extender = 0;
 
                     if (type == SkillshotType.SkillshotLine)
                         extender = width;

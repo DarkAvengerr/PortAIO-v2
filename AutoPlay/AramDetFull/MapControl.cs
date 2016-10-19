@@ -219,9 +219,17 @@ namespace ARAMDetFull
                     {
                         if (!spell.Value.IsReady() || spell.Value.ManaCost > hero.Mana)
                             continue;
+
+                        if (ObjectManager.Player.Hero == Champion.Corki && spell.Key.Slot == SpellSlot.R)
+                        {
+                            Console.WriteLine("RIP");
+                            continue;
+                        }
+
                         var movementSpells = new List<SpellTags> { SpellTags.Dash, SpellTags.Blink, SpellTags.Teleport };
                         var supportSpells = new List<SpellTags> { SpellTags.Shield, SpellTags.Heal, SpellTags.DamageAmplifier,
                         SpellTags.SpellShield, SpellTags.RemoveCrowdControl, };
+
                         if (spell.Value.IsSkillshot)
                         {
                             if (spell.Key.SpellTags != null && spell.Key.SpellTags.Any(movementSpells.Contains))
@@ -229,7 +237,7 @@ namespace ARAMDetFull
                                 if (hero.HealthPercent < 25 && hero.CountEnemiesInRange(600) > 0)
                                 {
                                     Console.WriteLine("Cast esacpe location: " + spell.Key.Slot);
-                                    spell.Value.Cast(hero.Position.Extend(ARAMSimulator.fromNex.Position, 1235));
+                                    ObjectManager.Player.Spellbook.CastSpell(spell.Key.Slot, hero.Position.Extend(ARAMSimulator.fromNex.Position, 1235));
                                     return;
                                 }
                                 else
@@ -260,36 +268,39 @@ namespace ARAMDetFull
                         }
                         else
                         {
-                            float range = (spell.Value.Range != 0) ? spell.Value.Range : 500;
                             if (spell.Key.CastType.Contains(CastType.Self) || spell.Key.CastType.Contains(CastType.Activate))
                             {
-                                var bTarg = ARAMTargetSelector.getBestTarget(range, true);
-                                if (bTarg != null)
+                                if (ObjectManager.Player.ChampionName.ToLower().Contains("sivir") && spell.Key.Slot == SpellSlot.E)
+                                {
+                                    continue;
+                                }
+                                var bTarg = ARAMTargetSelector.getBestTarget(spell.Value.Range, true);
+                                if (bTarg != null) 
                                 {
                                     Console.WriteLine("Cast self: " + spell.Key.Slot);
-                                    spell.Value.Cast();
+                                    ObjectManager.Player.Spellbook.CastSpell(spell.Key.Slot);
                                     return;
                                 }
                             }
                             else if (spell.Key.CastType.Contains(CastType.AllyChampions) && spell.Key.SpellTags != null && spell.Key.SpellTags.Any(supportSpells.Contains))
                             {
-                                //var bTarg = ARAMTargetSelector.getBestTargetAly(range, false);
-                                //if (bTarg != null)
-                                //{
-                                //    Console.WriteLine("Cast ally: " + spell.Key.Slot);
-                                //    spell.Value.CastOnUnit(bTarg);
-                                //    return;
-                                //}
+                                var bTarg = ARAMTargetSelector.getBestTargetAly(spell.Value.Range, false);
+                                if (bTarg != null && bTarg.IsAlly && bTarg.IsValid<AIHeroClient>())
+                                {
+                                    Console.WriteLine("Cast ally: " + spell.Key.Slot);
+                                    ObjectManager.Player.Spellbook.CastSpell(spell.Key.Slot, bTarg);
+                                    return;
+                                }
                             }
                             else if (spell.Key.CastType.Contains(CastType.EnemyChampions))
                             {
-                                var bTarg = ARAMTargetSelector.getBestTarget(range, true);
+                                var bTarg = ARAMTargetSelector.getBestTarget(spell.Value.Range, true);
                                 if (bTarg != null)
                                 {
                                     if (!(spell.Key.SpellTags != null && spell.Key.SpellTags.Any(movementSpells.Contains)) || safeGap(bTarg))
                                     {
                                         Console.WriteLine("Cast enemy: " + spell.Key.Slot);
-                                        spell.Value.CastOnUnit(bTarg);
+                                        ObjectManager.Player.Spellbook.CastSpell(spell.Key.Slot, bTarg);
                                         return;
                                     }
                                 }

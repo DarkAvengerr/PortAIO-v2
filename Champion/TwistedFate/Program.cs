@@ -144,7 +144,7 @@ namespace TwistedFate
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Drawing.OnEndScene += DrawingOnOnEndScene;
-            Obj_AI_Base.OnSpellCast += AIHeroClient_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
             Orbwalking.BeforeAttack += OrbwalkingOnBeforeAttack;
         }
 
@@ -162,7 +162,7 @@ namespace TwistedFate
                 return;
             }
 
-            if (args.SData.Name.Equals("Gate", StringComparison.InvariantCultureIgnoreCase) && Config.Item("AutoY").GetValue<bool>())
+            if (args.Slot == SpellSlot.R && Config.Item("AutoY").GetValue<bool>())
             {
                 CardSelector.StartSelecting(Cards.Yellow);
             }
