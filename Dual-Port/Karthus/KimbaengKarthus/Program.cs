@@ -91,7 +91,9 @@ using EloBuddy;
             harassMenu.AddItem(new MenuItem("harassmana", "Mana %").SetValue(new Slider(50)));
 
             var LastHitMenu = _menu.AddSubMenu(new Menu("LastHit", "LastHit"));
-            LastHitMenu.AddItem(new MenuItem("useqlasthit", "Use Q").SetValue(true));
+            LastHitMenu.AddItem(new MenuItem("useqlasthit", "Use Q Lasthit").SetValue(true));
+            LastHitMenu.AddItem(new MenuItem("laneq", "Use Q Laneclear").SetValue(true));
+
 
             var MiscMenu = _menu.AddSubMenu(new Menu("Misc", "Misc"));
             var ultMenu = MiscMenu.AddSubMenu(new Menu("Ult", "Ult"));
@@ -243,9 +245,10 @@ using EloBuddy;
                 minions.Where(
                     x => ObjectManager.Player.GetSpellDamage(x, SpellSlot.Q, 1) >=
                     HealthPrediction.GetHealthPrediction(x, (int)(Q.Delay * 1000))))
-            {
-                Q.Cast(minion);
-            }
+                if (_menu.Item("useqlasthit").GetValue<bool>())
+                {
+                    Q.Cast(minion);
+                }
         }
 
         private static void LaneClear()
@@ -257,7 +260,7 @@ using EloBuddy;
 
             var minion = minions.First();
 
-            if (Q.IsReady() && minion.IsValidTarget(Q.Range))
+            if (Q.IsReady() && minion.IsValidTarget(Q.Range) && _menu.Item("laneq").GetValue<bool>())
             {
                 Q.Cast(minion.ServerPosition);
             }
@@ -459,8 +462,7 @@ using EloBuddy;
             else if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
             {
                 var farmQ = _menu.Item("useqlasthit").GetValue<bool>();
-                args.Process =
-                    !(farmQ && Q.IsReady());
+                args.Process = !(farmQ && Q.IsReady());
             }
         }
 
