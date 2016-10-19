@@ -451,7 +451,7 @@ namespace KurisuNidalee
 
                                 // delay the cast .5 seconds
                                 Utils.GameTimeTickCount - (int) (KL.TimeStamp["Javelin"] * 1000) +
-                                ((6 + (6 * KL.Player.PercentCooldownMod)) * 1000) >= 500 &&
+                                ((6 + (6 * KL.PercentCooldownMod)) * 1000) >= 500 &&
 
                                 // if Q is not ready in 2 seconds
                                 !KL.SpellTimer["Javelin"].IsReady(2))
