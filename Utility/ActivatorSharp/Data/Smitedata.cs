@@ -23,6 +23,7 @@ using EloBuddy; namespace Activator.Data
         public SpellDataTargetType Type;
 
         public static List<Smitedata> SpellList = new List<Smitedata>();
+        public static List<Smitedata> CachedSpellList = new List<Smitedata>();
 
         public bool HeroReqs(Obj_AI_Base unit)
         {

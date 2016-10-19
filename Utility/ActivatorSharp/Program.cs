@@ -47,11 +47,10 @@ namespace Activator
 
         private static void Main(string[] args)
         {
-            //Version = Assembly.GetExecutingAssembly().GetName().Version;
-            EloBuddy.SDK.Events.Loading.OnLoadingComplete += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
             try
             {

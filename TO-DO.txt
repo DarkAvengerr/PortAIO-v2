@@ -1,3 +1,13 @@
 ﻿To-Do :
 ------------------------------------------------------------------------------------------------------------------
 Pretty much all done. PortAIO v2 is in a decent, stable state right now apart from the minor utility bugs/crashes.
+
+
+
+http://na.op.gg/summoner/userName=burblish4 - Doing some overnight testing
+
+To-do for ARAMDetFull:
+- Add the rest of the champion plugin files (**just basic casting logic** nothing like Shy Riven Combo or anything)
+- Add custom builds for ALL champions based on LoLFlavor.com
+- Add ingame chat messages (example: saying "rip" after double kill, saying "ez" after penta etc...)
+- Track team/enemy kills & auto surrender logic
