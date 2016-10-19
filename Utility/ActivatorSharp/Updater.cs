@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using LeagueSharp;
+using EloBuddy;
 
-using EloBuddy; namespace Activator
+namespace Activator
 {
     public static class Updater
     {
@@ -37,11 +37,11 @@ using EloBuddy; namespace Activator
                                             match.Groups[2],
                                             match.Groups[3],
                                             match.Groups[4]));
-
+                                /*
                                 if (gitVersion != Activator.Version)
                                 {
                                     Chat.Print("<font color=\"#FF6666\"><b>Activator#</b> - Outdated & newer version available!</font> (" + gitVersion + ")");
-                                }
+                                }//*/
                             }
                         }
                     }

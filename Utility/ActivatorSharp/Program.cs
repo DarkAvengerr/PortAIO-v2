@@ -1,4 +1,4 @@
-#region Copyright © 2015 Kurisu Solutions
+﻿#region Copyright © 2015 Kurisu Solutions
 // All rights are reserved. Transmission or reproduction in part or whole,
 // any form or by any means, mechanical, electronical or otherwise, is prohibited
 // without the prior written consent of the copyright owner.
@@ -13,14 +13,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Security;
-using System.Security.Permissions;
-using LeagueSharp.Data.DataTypes;
-using LeagueSharp.Data.Enumerations;
+using EloBuddy;
+using LeagueSharp.Common;
 
 #region Namespaces © 2015
-using LeagueSharp;
-using LeagueSharp.Common;
 using Activator.Base;
 using Activator.Data;
 using Activator.Handlers;
@@ -29,7 +25,7 @@ using Activator.Spells;
 using Activator.Summoners;
 #endregion
 
-using EloBuddy; namespace Activator
+namespace Activator
 {
     internal class Activator
     {
@@ -46,16 +42,21 @@ using EloBuddy; namespace Activator
         internal static bool TroysInGame;
         internal static bool UseEnemyMenu, UseAllyMenu;
 
-        public static System.Version Version;
+        //public static System.Version Version;
         public static List<Base.Champion> Heroes = new List<Base.Champion>();
 
-        public static void Game_OnGameLoad()
+        private static void Main(string[] args)
         {
-            Version = Assembly.GetExecutingAssembly().GetName().Version;
+            //Version = Assembly.GetExecutingAssembly().GetName().Version;
+            EloBuddy.SDK.Events.Loading.OnLoadingComplete += Game_OnGameLoad;
+        }
+
+        private static void Game_OnGameLoad(EventArgs args)
+        {
             try
             {
-                Player = ObjectManager.Player;
-                MapId = (int) LeagueSharp.Common.Utility.Map.GetMap().Type;
+                Player = EloBuddy.Player.Instance;
+                MapId = (int)LeagueSharp.Common.Utility.Map.GetMap().Type;
                 Rand = new Random();
 
                 GetSpellsInGame();
@@ -64,17 +65,18 @@ using EloBuddy; namespace Activator
                 GetAurasInGame();
                 GetHeroesInGame();
                 GetComboDamage();
+                //Helpers.CreateLogPath();
 
                 Origin = new Menu("Activator", "activator", true);
 
                 Menu cmenu = new Menu("Cleansers", "cmenu");
-                CreateSubMenu(cmenu, false);
                 GetItemGroup("Items.Cleansers").ForEach(t => NewItem((CoreItem) NewInstance(t), cmenu));
+                CreateSubMenu(cmenu, false);
                 Origin.AddSubMenu(cmenu);
 
                 Menu dmenu = new Menu("Defensives", "dmenu");
-                CreateSubMenu(dmenu, false);
                 GetItemGroup("Items.Defensives").ForEach(t => NewItem((CoreItem) NewInstance(t), dmenu));
+                CreateSubMenu(dmenu, false);
                 Origin.AddSubMenu(dmenu);
 
                 Menu smenu = new Menu("Summoners", "smenu");
@@ -83,8 +85,8 @@ using EloBuddy; namespace Activator
                 Origin.AddSubMenu(smenu);
 
                 Menu omenu = new Menu("Offensives", "omenu");
-                CreateSubMenu(omenu, true);
                 GetItemGroup("Items.Offensives").ForEach(t => NewItem((CoreItem) NewInstance(t), omenu));
+                CreateSubMenu(omenu, true);
                 Origin.AddSubMenu(omenu);
 
                 Menu imenu = new Menu("Consumables", "imenu");
@@ -92,12 +94,12 @@ using EloBuddy; namespace Activator
                 Origin.AddSubMenu(imenu);
 
                 Menu amenu = new Menu("Auto Spells", "amenu");
-                CreateSubMenu(amenu, false);
                 GetItemGroup("Spells.Evaders").ForEach(t => NewSpell((CoreSpell) NewInstance(t), amenu));
                 GetItemGroup("Spells.Shields").ForEach(t => NewSpell((CoreSpell) NewInstance(t), amenu));
                 GetItemGroup("Spells.Health").ForEach(t => NewSpell((CoreSpell) NewInstance(t), amenu));
                 GetItemGroup("Spells.Slows").ForEach(t => NewSpell((CoreSpell) NewInstance(t), amenu));
                 GetItemGroup("Spells.Heals").ForEach(t => NewSpell((CoreSpell) NewInstance(t), amenu));
+                CreateSubMenu(amenu, false);
                 Origin.AddSubMenu(amenu);
 
                 Menu zmenu = new Menu("Misc/Settings", "settings");
@@ -111,7 +113,12 @@ using EloBuddy; namespace Activator
                     zmenu.AddSubMenu(ddmenu);
                 }
 
-                zmenu.AddItem(new MenuItem("acdebug", "Debug")).SetValue(false);
+                var bbmenu = new Menu("Debug Tools", "bbmenu");
+                bbmenu.AddItem(new MenuItem("acdebug", "Debug Income Damage")).SetValue(false);
+                bbmenu.AddItem(new MenuItem("acdebug2", "Debug Item Priority")).SetValue(false);
+                bbmenu.AddItem(new MenuItem("dumpdata", "Dump Spell Data")).SetValue(false);
+                zmenu.AddSubMenu(bbmenu);
+
                 zmenu.AddItem(new MenuItem("autolevelup", "Auto Level Ultimate")).SetValue(true).SetTooltip("Level 6 Only");
                 zmenu.AddItem(new MenuItem("autotrinket", "Auto Upgrade Trinket")).SetValue(false);
                 zmenu.AddItem(new MenuItem("healthp", "Ally Priority:")).SetValue(new StringList(new[] { "Low HP", "Most AD/AP", "Most HP" }, 1));
@@ -138,16 +145,17 @@ using EloBuddy; namespace Activator
                 Buffs.StartOnUpdate();
 
                 // tracks gameobjects 
-                Handlers.Gametroys.StartOnUpdate();
+                Gametroys.StartOnUpdate();
 
                 // on bought item
+                //Obj_AI_Base.OnPlaceItemInSlot += Obj_AI_Base_OnPlaceItemInSlot;
                 Shop.OnBuyItem += Obj_AI_Base_OnPlaceItemInSlot;
 
                 // on level up
                 Obj_AI_Base.OnLevelUp += Obj_AI_Base_OnLevelUp;
 
-                Chat.Print("<b>Activator#</b> - Loaded!");
-                Updater.UpdateCheck();
+                Chat.Print("<b><font color=\"#FF3366\">Activator#</font></b> - Loaded!");
+                //Updater.UpdateCheck();
 
                 // init valid auto spells
                 foreach (CoreSpell autospell in Lists.Spells)
@@ -157,7 +165,8 @@ using EloBuddy; namespace Activator
                 // init valid summoners
                 foreach (CoreSum summoner in Lists.Summoners)
                     if (summoner.Slot != SpellSlot.Unknown ||
-                        summoner.ExtraNames.Any(x => Player.GetSpellSlot(x) != SpellSlot.Unknown))
+                        summoner.ExtraNames.Any(x => Player.GetSpellSlot(x) != SpellSlot.Unknown) ||
+                        summoner.Name == "summonerteleport")
                         Game.OnUpdate += summoner.OnTick;
 
                 // find items (if F5)
@@ -177,7 +186,7 @@ using EloBuddy; namespace Activator
                             AntiGapcloser.OnEnemyGapcloser += item.OnEnemyGapcloser;
 
                         Lists.BoughtItems.Add(item);
-                        Chat.Print("<b>Activator#</b> - <font color=\"#FFF280\">" + item.Name + "</font> active!");
+                        Chat.Print("<b><font color=\"#FF3366\">Activator#</font></b> - <font color=\"#FFF280\">" + item.Name + "</font> active!");
                     }
                 }
             }
@@ -240,7 +249,7 @@ using EloBuddy; namespace Activator
                             AntiGapcloser.OnEnemyGapcloser += item.OnEnemyGapcloser;
 
                         Lists.BoughtItems.Add(item);
-                        Chat.Print("<b>Activator#</b> - <font color=\"#FFF280\">" + item.Name + "</font> active!");
+                        Chat.Print("<b><font color=\"#FF3366\">Activator#</font></b> - <font color=\"#FFF280\">" + item.Name + "</font> active!");
                     }
                 }
             }
@@ -286,8 +295,19 @@ using EloBuddy; namespace Activator
                 if (summoner.Name.Contains("smite") && SmiteInGame)
                     Lists.Summoners.Add(summoner.CreateMenu(parent));
 
-                if (!summoner.Name.Contains("smite") && Player.GetSpellSlot(summoner.Name) != SpellSlot.Unknown)
-                    Lists.Summoners.Add(summoner.CreateMenu(parent));
+                if (!summoner.Name.Contains("smite"))
+                {
+                    if (Player.GetSpellSlot(summoner.Name) != SpellSlot.Unknown)
+                    {
+                        if (summoner.Name == "summonerteleport")
+                            Drawing.OnDraw += summoner.OnDraw;
+
+                        Lists.Summoners.Add(summoner.CreateMenu(parent));
+                    }
+
+                    else if (summoner.Name == "summonerteleport")
+                        Lists.Summoners.Add(summoner.CreateMenu(parent));
+                }
             }
 
             catch (Exception e)
@@ -301,7 +321,7 @@ using EloBuddy; namespace Activator
         {
             try
             {
-                Type[] allowedTypes = new[] {typeof (CoreItem), typeof (CoreSpell), typeof (CoreSum)};
+                Type[] allowedTypes = { typeof (CoreItem), typeof (CoreSpell), typeof (CoreSum) };
 
                 return
                     Assembly.GetExecutingAssembly()
@@ -333,7 +353,10 @@ using EloBuddy; namespace Activator
 
         private static void GetHeroesInGame()
         {
-            foreach (AIHeroClient i in ObjectManager.Get<AIHeroClient>())
+            foreach (AIHeroClient i in ObjectManager.Get<AIHeroClient>().Where(h => h.Team != Player.Team))
+                Heroes.Add(new Base.Champion(i, 0));
+
+            foreach (AIHeroClient i in ObjectManager.Get<AIHeroClient>().Where(h => h.Team == Player.Team))
                 Heroes.Add(new Base.Champion(i, 0));
         }
 
@@ -360,7 +383,6 @@ using EloBuddy; namespace Activator
                 {
                     TroysInGame = true;
                     Gametroy.Troys.Add(new Gametroy(i.ChampionName, item.Slot, item.Name, 0, false));
-                    Console.WriteLine("Activator# - SpellList: " + item.Name + " added!");
                 }
             }
         }
@@ -368,31 +390,21 @@ using EloBuddy; namespace Activator
         private static void GetSpellsInGame()
         {
             foreach (AIHeroClient i in ObjectManager.Get<AIHeroClient>().Where(h => h.Team != Player.Team))
-            {
                 foreach (Gamedata item in Gamedata.Spells.Where(x => x.ChampionName == i.ChampionName.ToLower()))
-                {
                     Gamedata.CachedSpells.Add(item);
-                    Console.WriteLine("Activator# - SpellList: " + item.SDataName + " added!");
-                }
-            }
+
+            foreach (var i in Smitedata.SpellList.Where(x => x.Name == Player.ChampionName))
+                Smitedata.CachedSpellList.Add(i);
         }
 
         private static void GetAurasInGame()
         {
             foreach (AIHeroClient i in ObjectManager.Get<AIHeroClient>().Where(h => h.Team != Player.Team))
-            {
                 foreach (Auradata aura in Auradata.BuffList.Where(x => x.Champion == i.ChampionName && x.Champion != null))
-                {
                     Auradata.CachedAuras.Add(aura);
-                    Console.WriteLine("Activator# - AuraList: " + aura.Name + " added!");
-                }
-            }
 
             foreach (Auradata generalaura in Auradata.BuffList.Where(x => string.IsNullOrEmpty(x.Champion)))
-            {
                 Auradata.CachedAuras.Add(generalaura);
-                Console.WriteLine("Activator# - AuraList: " + generalaura.Name + " added!");
-            }
         }
 
         public static IEnumerable<Base.Champion> Allies()
@@ -415,7 +427,7 @@ using EloBuddy; namespace Activator
 
         private static void CreateSubMenu(Menu parent, bool enemy, bool both = false)
         {
-            Menu menu = new Menu("Config", parent.Name + "sub");
+            Menu menu = new Menu("-> Config", parent.Name + "sub");
 
             MenuItem ireset = new MenuItem(parent.Name + "clear", "Deselect [All]");
             menu.AddItem(ireset).SetValue(false);
