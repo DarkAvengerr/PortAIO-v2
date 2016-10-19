@@ -2821,7 +2821,7 @@ namespace PortAIO
                             SorakaSharp.Source.Program.Main();
                             break;
                         case 9: // SorakaToTheChallenger
-                            SorakaToTheChallenger.Program.Main();
+                            SorakaToTheChallenger.Program.Load();
                             break;
                     }
                     break;

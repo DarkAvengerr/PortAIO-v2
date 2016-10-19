@@ -3,10 +3,9 @@ using System.Drawing;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using EloBuddy;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace SorakaToTheChallenger
+namespace SorakaToTheChallenger
 {
     public static class Program
     {
@@ -44,20 +43,13 @@ using EloBuddy;
         public static Menu PriorityMenu;
 
         /// <summary>
-        /// The Frankfurt
+        /// The Load
         /// </summary>
         /// <param name="args">The args</param>
-        public static void Main()
-        {
-            Game_OnGameLoad();
-        }
-
-        static void Game_OnGameLoad()
+        public static void Load()
         {
             if (ObjectManager.Player.CharData.BaseSkinName != "Soraka") return;
-			
-            //Chat.Print("Please switch to Challenger Series AIO, everything is improved there!");
-            //Chat.Print("Open Loader > Install new assembly > GitHub > https://github.com/myo/LeagueSharp");
+
             Q = new Spell(SpellSlot.Q, 800, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 550);
             E = new Spell(SpellSlot.E, 900, TargetSelector.DamageType.Magical);
@@ -82,6 +74,8 @@ using EloBuddy;
                 new MenuItem("sttc.mode", "Play Mode: ").SetValue(new StringList(new[] { "SMART", "AP-SORAKA", "ONLYHEAL" })));
             Menu.AddItem(new MenuItem("sttc.wmyhp", "Don't heal (W) if I'm below HP%").SetValue(new Slider(20, 1)));
             Menu.AddItem(new MenuItem("sttc.dontwtanks", "Don't heal (W) tanks").SetValue(true));
+            Menu.AddItem(new MenuItem("atanktakesxheals", "A TANK takes X Heals (W) to  FULLHP").SetValue(new Slider(15, 5, 30)));
+
             Menu.AddItem(new MenuItem("sttc.ultmyhp", "ULT if I'm below HP%").SetValue(new Slider(20, 1)));
             Menu.AddItem(new MenuItem("sttc.ultallyhp", "ULT if an ally is below HP%").SetValue(new Slider(15)));
             Menu.AddItem(new MenuItem("sttc.blockaa", "Block AutoAttacks?").SetValue(false));
@@ -124,7 +118,7 @@ using EloBuddy;
                     Render.Circle.DrawCircle(ObjectManager.Player.Position, 950,
                         Menu.Item("sttc.drawq").GetValue<Circle>().Color,
                         7);
-                } 
+                }
                 if (Menu.Item("sttc.draww").GetValue<Circle>().Active)
                 {
                     Render.Circle.DrawCircle(ObjectManager.Player.Position, 550, W.IsReady() ?
@@ -211,7 +205,7 @@ using EloBuddy;
         /// </summary>
         public static void QLogic()
         {
-            if (!Q.IsReady() || (ObjectManager.Player.Mana < 3*GetWManaCost() && CanW())) return;
+            if (!Q.IsReady() || (ObjectManager.Player.Mana < 3 * GetWManaCost() && CanW())) return;
             var shouldntKS = Menu.Item("sttc.antiks").GetValue<bool>();
             switch (Menu.Item("sttc.mode").GetValue<StringList>().SelectedValue)
             {
@@ -246,33 +240,37 @@ using EloBuddy;
         /// <summary>
         /// The W Logic
         /// </summary>
-        public static void WLogic()
+        /// 
+
+        public  static void WLogic()
         {
             if (!W.IsReady() || !CanW()) return;
-            var bestHealingCandidate =
+            var ally =
                 HeroManager.Allies.Where(
                     a =>
                         !a.IsMe && a.ServerPosition.Distance(ObjectManager.Player.ServerPosition) < 550 &&
                         a.MaxHealth - a.Health > GetWHealingAmount())
                     .OrderByDescending(TargetSelector.GetPriority)
-                    .ThenBy(ally => ally.Health).FirstOrDefault();
-            if (bestHealingCandidate != null)
+                    .ThenBy(ally1 => ally1.Health).FirstOrDefault();
             {
-                if (Menu.SubMenu("sttc.blacklist").Item("dontheal" + bestHealingCandidate.CharData.BaseSkinName) != null &&
-                    Menu.SubMenu("sttc.blacklist").Item("dontheal" + bestHealingCandidate.CharData.BaseSkinName).GetValue<bool>())
+                if (ally == null || ally.IsDead || ally.IsZombie)
+                if (Menu.SubMenu("sttc.blacklist").Item("dontheal" + ally.CharData.BaseSkinName) != null &&
+                    Menu.SubMenu("sttc.blacklist").Item("dontheal" + ally.CharData.BaseSkinName).GetValue<bool>())
+                    {
+                        Console.WriteLine("STTC: Skipped healing " + ally.CharData.BaseSkinName + " because he is blacklisted.");
+                        return;
+                    }
+
+                if (Menu.Item("sttc.dontwtanks") != null && Menu.Item("sttc.dontwtanks").GetValue<bool>() && ally.Health > 500 &&
+                    Menu.Item("atanktakesxheals").GetValue<Slider>().Value * GetWHealingAmount() <
+                    ally.MaxHealth - ally.Health)
                 {
-                    Console.WriteLine("STTC: Skipped healing " + bestHealingCandidate.CharData.BaseSkinName + " because he is blacklisted.");
-                    return;
+                    W.Cast(ally);
                 }
-                if (Menu.Item("sttc.dontwtanks").GetValue<bool>() &&
-                    10 * GetWHealingAmount() > bestHealingCandidate.Health)
-                {
-                    Console.WriteLine("STTC: Skipped healing " + bestHealingCandidate.CharData.BaseSkinName + " because he is a tank.");
-                    return;
-                }
-                W.Cast(bestHealingCandidate);
+
             }
         }
+
 
         /// <summary>
         /// The E Logic
@@ -295,7 +293,7 @@ using EloBuddy;
                 {
                     E.Cast(goodTarget.ServerPosition);
                 }
-            } 
+            }
             foreach (var enemyMinion in ObjectManager.Get<Obj_AI_Base>().Where(m => m.IsEnemy && m.ServerPosition.Distance(ObjectManager.Player.ServerPosition) < E.Range && m.HasBuff("teleport_target") || m.HasBuff("Pantheon_GrandSkyfall_Jump")))
             {
                 LeagueSharp.Common.Utility.DelayAction.Add(2500, () =>
@@ -337,11 +335,11 @@ using EloBuddy;
         public static double GetQHealingAmount()
         {
             return Math.Min(
-                new double[] {25, 35, 45, 55, 65}[ObjectManager.Player.GetSpell(SpellSlot.W).Level -1] +
-                0.4*ObjectManager.Player.FlatMagicDamageMod +
-                (0.1*(ObjectManager.Player.MaxHealth - ObjectManager.Player.Health)),
-                new double[] {50, 70, 90, 110, 130}[ObjectManager.Player.GetSpell(SpellSlot.W).Level -1] +
-                0.8*ObjectManager.Player.FlatMagicDamageMod);
+                new double[] { 25, 35, 45, 55, 65 }[ObjectManager.Player.GetSpell(SpellSlot.W).Level - 1] +
+                0.4 * ObjectManager.Player.FlatMagicDamageMod +
+                (0.1 * (ObjectManager.Player.MaxHealth - ObjectManager.Player.Health)),
+                new double[] { 50, 70, 90, 110, 130 }[ObjectManager.Player.GetSpell(SpellSlot.W).Level - 1] +
+                0.8 * ObjectManager.Player.FlatMagicDamageMod);
         }
 
         /// <summary>
@@ -350,8 +348,8 @@ using EloBuddy;
         /// <returns>The W Healing Amount</returns>
         public static double GetWHealingAmount()
         {
-            return new double[] {120, 150, 180, 210, 240}[ObjectManager.Player.GetSpell(SpellSlot.W).Level -1] +
-                   0.6*ObjectManager.Player.FlatMagicDamageMod;
+            return new double[] { 120, 150, 180, 210, 240 }[ObjectManager.Player.GetSpell(SpellSlot.W).Level - 1] +
+                   0.6 * ObjectManager.Player.FlatMagicDamageMod;
         }
 
         /// <summary>
@@ -360,24 +358,24 @@ using EloBuddy;
         /// <returns>The R Healing Amount</returns>
         public static double GetRHealingAmount()
         {
-            return new double[] {120, 150, 180, 210, 240}[ObjectManager.Player.GetSpell(SpellSlot.R).Level -1] +
-                   0.6*ObjectManager.Player.FlatMagicDamageMod;
+            return new double[] { 120, 150, 180, 210, 240 }[ObjectManager.Player.GetSpell(SpellSlot.R).Level - 1] +
+                   0.6 * ObjectManager.Player.FlatMagicDamageMod;
         }
 
         public static int GetWManaCost()
         {
-            return new[] {40,45,50,55,60}[ObjectManager.Player.GetSpell(SpellSlot.W).Level - 1];
+            return new[] { 40, 45, 50, 55, 60 }[ObjectManager.Player.GetSpell(SpellSlot.W).Level - 1];
         }
 
         public static double GetWHealthCost()
         {
-            return 0.10*ObjectManager.Player.MaxHealth;
+            return 0.10 * ObjectManager.Player.MaxHealth;
         }
 
         public static bool CanW()
         {
             return !ObjectManager.Player.InFountain() && ObjectManager.Player.Health - GetWHealthCost() >
-            Menu.Item("sttc.wmyhp").GetValue<Slider>().Value/100f*ObjectManager.Player.MaxHealth;
+            Menu.Item("sttc.wmyhp").GetValue<Slider>().Value / 100f * ObjectManager.Player.MaxHealth;
         }
     }
 }
