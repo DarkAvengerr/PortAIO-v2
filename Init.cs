@@ -650,6 +650,9 @@ namespace PortAIO
                         case 7: // Flowers' ADC Series
                             Flowers_ADC_Series.Program.Main();
                             break;
+                        case 8: // ReformedAIO
+                            ReformedAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Cassiopeia:
@@ -1755,12 +1758,10 @@ namespace PortAIO
                             BrianSharp.Program.Main();
                             break;
                         case 2: // Hestia's Kennen
-                            Kennen.Program.Game_OnGameLoad();
+                            Kennen.Champion.Kennen.Kennen_OnLoad();
                             break;
                         case 3: // Valvrave#
                             Valvrave_Sharp.Program.Main();
-                            break;
-                        case 4: // WR-GoFuckYourself Kennen
                             break;
                     }
                     break;
@@ -1989,6 +1990,9 @@ namespace PortAIO
                             break;
                         case 17: // Flowers' ADC Series
                             Flowers_ADC_Series.Program.Main();
+                            break;
+                        case 18: // ReformedAIO
+                            ReformedAIO.Program.Main();
                             break;
                     }
                     break;
