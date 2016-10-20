@@ -1,13 +1,12 @@
 using System;
 using System.Linq;
-using LeagueSharp;
+using EloBuddy;
 using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
+using EloBuddy.SDK.Rendering;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace TheCassiopeia.Commons
+namespace TheCassiopeia.Commons
 {
     /*
         Note: This class is from the xSalice Religion AIO!
@@ -17,8 +16,8 @@ using EloBuddy;
     {
         public delegate float DamageToUnitDelegate(AIHeroClient hero);
 
-        private const int XOffset = 10;
-        private const int YOffset = 20;
+        private const int XOffset = 0;
+        private const int YOffset = 5;
         private const int Width = 103;
         private const int Height = 8;
 
@@ -29,8 +28,8 @@ using EloBuddy;
         public static bool Enabled = true;
         private static DamageToUnitDelegate _damageToUnit;
 
-        private static readonly Render.Text Text = new Render.Text(
-            0, 0, "", 11, new ColorBGRA(255, 0, 0, 255), "monospace");
+        //private static readonly Render.Text Text = new Render.Text(0, 0, "", 11, new ColorBGRA(255, 0, 0, 255), "monospace");
+        private static Text Text = new Text(string.Empty, new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 8, System.Drawing.FontStyle.Regular));
 
         public static DamageToUnitDelegate DamageToUnit
         {
@@ -40,7 +39,7 @@ using EloBuddy;
             {
                 if (_damageToUnit == null)
                 {
-                    Drawing.OnDraw += Drawing_OnDraw;
+                    Drawing.OnPresent += Drawing_OnDraw;
                 }
                 _damageToUnit = value;
             }
@@ -66,8 +65,9 @@ using EloBuddy;
                 {
                     Text.X = (int)barPos.X + XOffset;
                     Text.Y = (int)barPos.Y + YOffset - 13;
-                    Text.text = ((int)(unit.Health - damage)).ToString();
-                    Text.OnEndScene();
+                    Text.TextValue = ((int)(unit.Health - damage)).ToString();
+                    Text.Position = new Vector2(Text.X, Text.Y);
+                    Text.Draw();
                 }
 
                 Drawing.DrawLine(xPosDamage, yPos, xPosDamage, yPos + Height, 2, Color);
