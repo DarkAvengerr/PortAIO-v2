@@ -1,12 +1,10 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.Core.Spells
+﻿namespace ReformedAIO.Champions.Lucian.Core.Spells
 {
     using System;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-
+    using EloBuddy;
     using RethoughtLib.FeatureSystem.Implementations;
     using RethoughtLib.FeatureSystem.Switches;
 
@@ -27,7 +25,7 @@ using EloBuddy;
 
         public Vector2 Deviation(Vector2 point1, Vector2 point2, double angle)
         {
-            angle *= Math.PI / 180.0;
+            angle *= Math.PI / 120.0;
             var temp = Vector2.Subtract(point2, point1);
             var result = new Vector2(0)
             {

@@ -1,20 +1,18 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Jungle
+﻿namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Jungle
 {
     using System;
     using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-
+    using EloBuddy;
     using ReformedAIO.Champions.Caitlyn.Logic;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
     internal sealed class EJungle  : OrbwalkingChild
     {
-        public override string Name { get; set; }
+        public override string Name { get; set; } = "E";
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {

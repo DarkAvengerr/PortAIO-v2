@@ -1,13 +1,11 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Caitlyn.Drawings
+﻿namespace ReformedAIO.Champions.Caitlyn.Drawings
 {
     using System;
     using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-
+    using EloBuddy;
     using ReformedAIO.Champions.Caitlyn.Logic;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
@@ -30,7 +28,7 @@ using EloBuddy;
             {
                 this.drawDamage.Unit = enemy;
 
-                this.drawDamage.DrawDmg(this.ewqrLogic.EwqrDmg(enemy), this.ewqrLogic.CanExecute(enemy) ? Color.Green : Color.LimeGreen);
+                this.drawDamage.DrawDmg(this.ewqrLogic.EwqrDmg(enemy), this.ewqrLogic.CanExecute(enemy) ? Color.LimeGreen: Color.Green);
             }
         }
 

@@ -1,20 +1,18 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Caitlyn.Drawings
+﻿namespace ReformedAIO.Champions.Caitlyn.Drawings
 {
     using System;
     using System.Drawing;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-
+    using EloBuddy;
     using ReformedAIO.Champions.Caitlyn.Logic;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
     internal sealed class QDraw : ChildBase
     {
-        public override string Name { get; set; } = "[Q]";
+        public override string Name { get; set; } = "Q";
 
         public void OnDraw(EventArgs args)
         {
@@ -26,7 +24,7 @@ using EloBuddy;
                  Vars.Player.Position,
                 Spells.Spell[SpellSlot.Q].Range,
                 Spells.Spell[SpellSlot.Q].IsReady()
-                 ? Color.LightSlateGray
+                 ? Color.Cyan
                 : Color.DarkSlateGray);
         }
 

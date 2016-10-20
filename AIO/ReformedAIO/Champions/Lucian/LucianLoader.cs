@@ -1,6 +1,4 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian
+﻿namespace ReformedAIO.Champions.Lucian
 {
     using System.Collections.Generic;
     using System.Drawing;
@@ -20,13 +18,13 @@ using EloBuddy;
     using OrbwalkingMode.Harass;
 
     using Perma_Active.Killsteal;
-    using Perma_Active.AntiGapcloser;
 
     using RethoughtLib.FeatureSystem.Guardians;
     using RethoughtLib.Bootstraps.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Implementations;
     using RethoughtLib.Orbwalker.Implementations;
+    using EloBuddy;
 
     using Color = SharpDX.Color;
 
@@ -71,7 +69,6 @@ using EloBuddy;
             var jungleParent = new OrbwalkingParent("Jungle", orbwalkerModule.OrbwalkerInstance, Orbwalking.OrbwalkingMode.LaneClear);
 
          var killstealParnet = new Parent("Killsteal");
-         var gapcloserParent = new Parent("Gapcloser");
            var drawingParent = new Parent("Drawings");
         
 
@@ -111,18 +108,11 @@ using EloBuddy;
                                         new R(rSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.R))
                                     });
 
-            gapcloserParent.Add(new List<Base>
-                                    {
-                                        new GapcloseFastAsFuckBOi(eSpell)
-                                    });
-
             drawingParent.Add(new List<Base>
                                   {
                                     new DmgDraw(dmg),
                                     new RDraw(rSpell),
-                                    new WDraw(wSpell),
-                                    new QDraw(qSpell),
-
+                                    new WDraw(wSpell)
                                   });
 
             superParent.Add(new List<Base>
@@ -134,7 +124,6 @@ using EloBuddy;
                                      jungleParent,
                                      killstealParnet,
                                      drawingParent,
-                                     gapcloserParent
                                   });
 
             superParent.Load();

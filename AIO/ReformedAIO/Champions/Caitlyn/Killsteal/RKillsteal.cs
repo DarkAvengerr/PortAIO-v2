@@ -1,20 +1,18 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Caitlyn.Killsteal
+﻿namespace ReformedAIO.Champions.Caitlyn.Killsteal
 {
     using System;
 
     using LeagueSharp;
     using LeagueSharp.Common;
     using LeagueSharp.SDK.Utils;
-
+    using EloBuddy;
     using ReformedAIO.Champions.Caitlyn.Logic;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
     internal sealed class RKillsteal : OrbwalkingChild
     {
-        public override string Name { get; set; }
+        public override string Name { get; set; } = "R";
 
         private AIHeroClient Target => TargetSelector.GetTarget(Spells.Spell[SpellSlot.R].Range, TargetSelector.DamageType.Physical);
 

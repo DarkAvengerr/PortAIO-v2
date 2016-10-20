@@ -1,13 +1,11 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
+﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
 {
     using System;
     using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-
+    using EloBuddy;
     using ReformedAIO.Champions.Lucian.Core.Damage;
     using ReformedAIO.Champions.Lucian.Core.Spells;
 
@@ -41,7 +39,7 @@ using EloBuddy;
                 return;
             }
 
-            var heroes = HeroManager.Enemies.Where(x => x.IsValidTarget(Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 400));
+            var heroes = HeroManager.Enemies.Where(x => x.IsValidTarget(Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 425));
 
             foreach (var target in heroes as AIHeroClient[] ?? heroes.ToArray())
             {

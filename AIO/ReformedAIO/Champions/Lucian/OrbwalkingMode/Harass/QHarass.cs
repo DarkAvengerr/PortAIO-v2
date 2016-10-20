@@ -1,12 +1,11 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
+﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
 {
     using System;
     using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
+    using EloBuddy;
 
     using ReformedAIO.Champions.Lucian.Core.Spells;
 
@@ -53,7 +52,6 @@ using EloBuddy;
             if (!sender.IsMe
                 || ObjectManager.Player.HasBuff("LucianPassiveBuff")
                 || !Orbwalking.IsAutoAttack(args.SData.Name)
-                || !qSpell.Spell.IsReady()
                 || Menu.Item("QMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
                 || !CheckGuardians())
             {

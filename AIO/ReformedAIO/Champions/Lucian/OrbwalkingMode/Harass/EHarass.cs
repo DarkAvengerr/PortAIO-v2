@@ -1,12 +1,11 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
+﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
 {
     using System;
     using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
+    using EloBuddy;
 
     using ReformedAIO.Champions.Lucian.Core.Damage;
     using ReformedAIO.Champions.Lucian.Core.Spells;
@@ -30,15 +29,15 @@ using EloBuddy;
         private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!sender.IsMe
+                || !CheckGuardians()
                 || ObjectManager.Player.HasBuff("LucianPassiveBuff")
                 || !Orbwalking.IsAutoAttack(args.SData.Name)
-                || !eSpell.Spell.IsReady()
                 || Menu.Item("EMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
             {
                 return;
             }
 
-            var heroes = HeroManager.Enemies.Where(x => x.IsValidTarget(Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 400));
+            var heroes = HeroManager.Enemies.Where(x => x.IsValidTarget(ObjectManager.Player.AttackRange));
 
             foreach (var target in heroes as AIHeroClient[] ?? heroes.ToArray())
             {

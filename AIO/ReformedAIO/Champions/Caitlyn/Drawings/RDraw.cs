@@ -1,20 +1,18 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Caitlyn.Drawings
+﻿namespace ReformedAIO.Champions.Caitlyn.Drawings
 {
     using System;
     using System.Drawing;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-
+    using EloBuddy;
     using ReformedAIO.Champions.Caitlyn.Logic;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
     internal sealed class RDraw : ChildBase
     {
-        public override string Name { get; set; } = "[R]";
+        public override string Name { get; set; } = "R";
 
         public void OnDraw(EventArgs args)
         {

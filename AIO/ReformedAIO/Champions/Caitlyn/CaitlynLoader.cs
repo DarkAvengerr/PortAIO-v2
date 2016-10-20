@@ -1,13 +1,11 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Caitlyn
+﻿namespace ReformedAIO.Champions.Caitlyn
 {
     using System.Collections.Generic;
     using System.Drawing;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-
+    using EloBuddy;
     using ReformedAIO.Champions.Caitlyn.Drawings;
     using ReformedAIO.Champions.Caitlyn.Killsteal;
     using ReformedAIO.Champions.Caitlyn.Logic;
@@ -52,7 +50,7 @@ using EloBuddy;
 
             comboParent.Add(new List<Base>()
             {
-                new QCombo().Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q)).Guardian(new SpellMustBeReady(SpellSlot.E) {Negated = true}),
+                new QCombo().Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q)),
                 new WCombo().Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.W)),
                 new ECombo().Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.E))
             });
@@ -78,8 +76,6 @@ using EloBuddy;
             {
                 new DmgDraw(),
                 new QDraw(),
-                new WDraw(),
-                new EDraw(),
                 new RDraw()
             });
 

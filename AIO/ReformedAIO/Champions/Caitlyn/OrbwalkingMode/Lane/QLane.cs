@@ -1,13 +1,11 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Lane
+﻿namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Lane
 {
     using System;
     using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-
+    using EloBuddy;
     using ReformedAIO.Champions.Caitlyn.Logic;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
@@ -15,7 +13,7 @@ using EloBuddy;
 
     internal sealed class QLane : OrbwalkingChild
     {
-        public override string Name { get; set; }
+        public override string Name { get; set; } = "Q";
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {

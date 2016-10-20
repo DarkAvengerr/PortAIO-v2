@@ -1,12 +1,10 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Combo
+﻿namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Combo
 {
     using System;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-
+    using EloBuddy;
     using ReformedAIO.Champions.Caitlyn.Logic;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
@@ -14,7 +12,7 @@ using EloBuddy;
 
     internal sealed class ECombo  : OrbwalkingChild
     {
-        public override string Name { get; set; }
+        public override string Name { get; set; } = "E";
 
         private AIHeroClient Target => TargetSelector.GetTarget(Spells.Spell[SpellSlot.E].Range, TargetSelector.DamageType.Physical);
 
@@ -34,7 +32,7 @@ using EloBuddy;
         {
             base.OnLoad(sender, featureBaseEventArgs);
 
-            Menu.AddItem(new MenuItem("EMana", "Mana %").SetValue(new Slider(30, 0, 100)));
+            Menu.AddItem(new MenuItem("EMana", "Mana %").SetValue(new Slider(0, 0, 100)));
 
             Menu.AddItem(new MenuItem("AntiGapcloser", "Anti Gapcloser").SetValue(true));
 
@@ -47,7 +45,7 @@ using EloBuddy;
 
             var target = gapcloser.Sender;
 
-            if (target == null || !target.IsEnemy || !Spells.Spell[SpellSlot.E].IsReady() || !CheckGuardians())
+            if (target == null || !target.IsEnemy || !CheckGuardians())
             {
                 return;
             }
