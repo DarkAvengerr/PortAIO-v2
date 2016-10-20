@@ -86,7 +86,7 @@
                 return GetValue<bool>("Misc", "UsePacket");
             }
         }
-
+// we need disable PacketCast
         #endregion
 
         #region Public Methods and Operators
