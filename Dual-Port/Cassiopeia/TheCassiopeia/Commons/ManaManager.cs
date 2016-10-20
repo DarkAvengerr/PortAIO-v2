@@ -46,10 +46,10 @@ using EloBuddy;
             return ManaSettings.ToList();
         }
 
-        public static bool CanUseMana(Orbwalking.OrbwalkingMode mode)
+      public static bool CanUseMana(Orbwalking.OrbwalkingMode mode)
         {
             //  Console.WriteLine(mode + " " + ObjectManager.Player.ManaPercent + " > " + ManaSettings[mode]);
-            return ObjectManager.Player.ManaPercent >= ManaSettings[mode] || !EnableLimitations;
+            return EloBuddy.Player.Instance.ManaPercent >= ManaSettings[mode] || !EnableLimitations;
         }
 
     }
