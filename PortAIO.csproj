@@ -59,28 +59,28 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EloBuddy">
-      <HintPath>..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.dll</HintPath>
+      <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.Sandbox, Version=1.0.6084.32288, Culture=neutral, PublicKeyToken=d671ef5d8e7e69a5, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\Danny\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.SDK">
-      <HintPath>..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.SDK.dll</HintPath>
+      <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.SDK.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PortAIO.Common">
-      <HintPath>..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\PortAIO.Common.dll</HintPath>
+      <HintPath>..\PortAIO-Common\bin\Debug\PortAIO.Common.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="SharpDX">
-      <HintPath>..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.dll</HintPath>
+      <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.XInput, Version=2.6.3.0, Culture=neutral, PublicKeyToken=2306ab36a61019a8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -714,12 +714,6 @@
     <Compile Include="Champion\Varus\Drawings.cs" />
     <Compile Include="Champion\Varus\ElVarusMenu.cs" />
     <Compile Include="Champion\Varus\Varus.cs" />
-    <Compile Include="Core\Humano\Action.cs" />
-    <Compile Include="Core\Humano\AttackBlock.cs" />
-    <Compile Include="Core\Humano\CameraControling.cs" />
-    <Compile Include="Core\Humano\MovementBlock.cs" />
-    <Compile Include="Core\Humano\Program.cs" />
-    <Compile Include="Core\Humano\SpellBlock.cs" />
     <Compile Include="Dual-Port\Diana\ElDianaRevamped\Components\MyMenu.cs" />
     <Compile Include="Dual-Port\Diana\ElDianaRevamped\Components\SpellManager.cs" />
     <Compile Include="Dual-Port\Diana\ElDianaRevamped\Components\Spells\ISpell.cs" />
@@ -768,6 +762,7 @@
     <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Modes\JungleClear.cs" />
     <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Modes\LaneClear.cs" />
     <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Modes\LastHit.cs" />
+    <Compile Include="Dual-Port\Kennen\Hestia%27s Kennen\Program.cs" />
     <Compile Include="Dual-Port\Riven\NechritoRiven\Event\Animation.cs" />
     <Compile Include="Dual-Port\Riven\NechritoRiven\Event\OrbwalkingModes\AfterAuto.cs" />
     <Compile Include="Dual-Port\Riven\NechritoRiven\Event\OrbwalkingModes\BurstMode.cs" />
@@ -814,10 +809,6 @@
     <Compile Include="Champion\Ahri\Ahri.cs" />
     <Compile Include="Champion\Anivia\Anivia.cs" />
     <Compile Include="Champion\Annie\Annie.cs" />
-    <Compile Include="Core\Anti-Rito\OneTickOneSpell.cs" />
-    <Compile Include="Core\Anti-Rito\Program.cs" />
-    <Compile Include="Core\Humanizer\Extensions.cs" />
-    <Compile Include="Core\Humanizer\Program.cs" />
     <Compile Include="Dual-Port\Aatrox\NoobAatrox\Program.cs" />
     <Compile Include="Dual-Port\Ahri\AhriSharp\Ahri.cs" />
     <Compile Include="Dual-Port\Ahri\AhriSharp\Helper.cs" />
