@@ -19,72 +19,47 @@ namespace PortAIO
         public static bool loaded = false;
         public static int moduleNum = 1;
 
+        public static void Main(string[] args)
+        {
+            Loading.OnLoadingComplete += Loading_OnLoadingComplete;
+        }
+
+        private static void Loading_OnLoadingComplete(System.EventArgs args)
+        {
+            Initialize();
+        }
+
         public static void Initialize()
         {
-            Common.Init.LoadCommon("7E6CBFB7497BE722B8E286ECBDE88");
             Console.WriteLine("[PortAIO] Core loading : Module " + moduleNum + " - Common Loaded");
             moduleNum++;
-            if (Common.Init.isLoaded == "LOADED")
-            {
-                Misc.Load();
-                Console.WriteLine("[PortAIO] Core loading : Module " + moduleNum + " - Misc Loaded");
-                moduleNum++;
-                if (!Misc.menu.Item("UtilityOnly").GetValue<bool>())
-                {
-                    LoadChampion();
-                    Console.WriteLine("[PortAIO] Core loading : Module " + moduleNum + " - Champion Script Loaded");
-                    moduleNum++;
-                    Game.OnUpdate += Game_OnUpdate;
-                    Console.WriteLine("[PortAIO] Core loading : Module " + moduleNum + " - Champion Load Detected, Disabling EB Orbwalker");
-                    moduleNum++;
-                }
-                if (!Misc.menu.Item("ChampsOnly").GetValue<bool>())
-                {
-                    LoadUtility();
-                    Console.WriteLine("[PortAIO] Core loading : Module " + moduleNum + " - Utilities Loaded");
-                    moduleNum++;
-                }
 
-                Console.WriteLine("[PortAIO] Core loading : Module " + moduleNum + " - Checking Version");
+            Misc.Load();
+            Console.WriteLine("[PortAIO] Core loading : Module " + moduleNum + " - Misc Loaded");
+            moduleNum++;
+            if (!Misc.menu.Item("UtilityOnly").GetValue<bool>())
+            {
+                LoadChampion();
+                Console.WriteLine("[PortAIO] Core loading : Module " + moduleNum + " - Champion Script Loaded");
                 moduleNum++;
-                CheckVersion();
-                Console.WriteLine("[PortAIO] Core loaded.");
+                Game.OnUpdate += Game_OnUpdate;
+                Console.WriteLine("[PortAIO] Core loading : Module " + moduleNum + " - Champion Load Detected, Disabling EB Orbwalker");
+                moduleNum++;
             }
+            if (!Misc.menu.Item("ChampsOnly").GetValue<bool>())
+            {
+                LoadUtility();
+                Console.WriteLine("[PortAIO] Core loading : Module " + moduleNum + " - Utilities Loaded");
+                moduleNum++;
+            }
+
+            Console.WriteLine("[PortAIO] Core loaded.");
         }
 
         private static void Game_OnUpdate(EventArgs args)
         {
             EloBuddy.SDK.Orbwalker.DisableAttacking = true;
             EloBuddy.SDK.Orbwalker.DisableMovement = true;
-        }
-
-        private static string DownloadServerVersion
-        {
-            get
-            {
-                using (var wC = new WebClient()) return wC.DownloadString("https://raw.githubusercontent.com/berbb/PortAIO-Updater/master/PortAIO.version");// example link check version
-            }
-        }
-
-        public static void CheckVersion()
-        {
-            try
-            {
-                var match = new Regex(@"(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})").Match(DownloadServerVersion);
-
-                if (!match.Success) return;
-                Chat.Print("<b><font color=\"#FFFFFF\">[</font></b><b><font color=\"#3366CC\">PortAIO-V2</font></b><b><font color=\"#FFFFFF\">]</font></b> <font color=\"#FFFFFF\">You are up-to-date. Enjoy the game.</font></b>");
-
-                var gitVersion = new System.Version($"{match.Groups[1]}.{match.Groups[2]}.{match.Groups[3]}.{match.Groups[4]}");
-
-                if (gitVersion <= System.Reflection.Assembly.GetExecutingAssembly().GetName().Version) return;
-                Chat.Print("<b><font color=\"#FFFFFF\">[</font></b><b><font color=\"#00e5e5\">PortAIO-V2</font></b><b><font color=\"#FFFFFF\">]</font></b> <font color=\"#FFFFFF\">Oudated:</font>You are using {1}, while the latest is {0}, please run the PortAIO-Updater.", gitVersion, System.Reflection.Assembly.GetExecutingAssembly().GetName().Version);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                Chat.Print("<b><font color=\"#FFFFFF\">[</font></b><b><font color=\"#00e5e5\"> PortAIO-V2</font></b><b><font color=\"#FFFFFF\">]</font></b><b><font color=\"#FFFFFF\"> Unable to fetch latest version</font></b>");
-            }
         }
 
         public static void LoadUtility()
@@ -125,6 +100,7 @@ namespace PortAIO
                 {
                     case 0: // AramDetFull
                         ARAMDetFull.Program.Main();
+                        SharpAI.Program.Main();
                         break;
                     case 1: // AutoJungle
                         AutoJungle.Program.OnGameLoad();

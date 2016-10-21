@@ -10,7 +10,14 @@ using EloBuddy; namespace ARAMDetFull
     {
         public static void Main()
         {
-            EloBuddy.SDK.Core.DelayAction(() => { new ARAMDetFull(); }, 3000);
+            if (Game.MapId == GameMapId.HowlingAbyss && Game.MapId != GameMapId.SummonersRift)
+            {
+                EloBuddy.SDK.Core.DelayAction(() => { new ARAMDetFull(); }, 3000);
+            }
+            else
+            {
+                //
+            }
         }
     }
 }
