@@ -30,7 +30,7 @@ namespace Valvrave_Sharp
 
         #region Static Fields
 
-        internal static Items.Item Bilgewater, BotRuinedKing, Youmuu, Tiamat, Hydra, Titanic;
+        internal static Items.Item Bilgewater, BotRuinedKing, Youmuu, Tiamat, Ravenous, Titanic;
 
         internal static SpellSlot Flash = SpellSlot.Unknown, Ignite = SpellSlot.Unknown, Smite = SpellSlot.Unknown;
 
@@ -48,7 +48,7 @@ namespace Valvrave_Sharp
                     { "LeeSin", new Tuple<Func<object>, int>(() => new LeeSin(), 10) },
                     { "Vladimir", new Tuple<Func<object>, int>(() => new Vladimir(), 7) },
                     { "Yasuo", new Tuple<Func<object>, int>(() => new Yasuo(), 8) },
-                    { "Zed", new Tuple<Func<object>, int>(() => new Zed(), 9) }
+                    { "Zed", new Tuple<Func<object>, int>(() => new Zed(), 10) }
                 };
 
         private static bool isSkinReset = true;
@@ -59,33 +59,6 @@ namespace Valvrave_Sharp
 
         private static void CheckVersion()
         {
-            try
-            {
-                using (var web = new WebClient())
-                {
-                    var rawFile =
-                        web.DownloadString(
-                            "https://raw.githubusercontent.com/brian0305/LeagueSharp/master/Valvrave%20Sharp/Valvrave%20Sharp/Properties/AssemblyInfo.cs");
-                    var checkFile =
-                        new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]").Match
-                            (rawFile);
-                    if (!checkFile.Success)
-                    {
-                        return;
-                    }
-                    var gitVersion =
-                        new System.Version(
-                            $"{checkFile.Groups[1]}.{checkFile.Groups[2]}.{checkFile.Groups[3]}.{checkFile.Groups[4]}");
-                    if (gitVersion > Assembly.GetExecutingAssembly().GetName().Version)
-                    {
-                        PrintChat("Outdated! Newest Version: " + gitVersion);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
         }
 
         private static void InitItem()
@@ -94,18 +67,50 @@ namespace Valvrave_Sharp
             BotRuinedKing = new Items.Item(ItemId.Blade_of_the_Ruined_King, 550);
             Youmuu = new Items.Item(ItemId.Youmuus_Ghostblade, 0);
             Tiamat = new Items.Item(ItemId.Tiamat_Melee_Only, 400);
-            Hydra = new Items.Item(ItemId.Ravenous_Hydra_Melee_Only, 400);
+            Ravenous = new Items.Item(ItemId.Ravenous_Hydra_Melee_Only, 400);
             Titanic = new Items.Item(3748, 0);
         }
 
-        private static void InitMenu(bool isSupport = true)
+        private static void InitMenu(bool isSupport)
         {
             MainMenu = new Menu("ValvraveSharp", "Valvrave Sharp", true, Player.ChampionName).Attach();
             MainMenu.Separator("Author: Brian");
             MainMenu.Separator("Paypal: dcbrian01@gmail.com");
             if (isSupport)
             {
+                var skinMenu = MainMenu.Add(new Menu("Skin", "Skin Changer"));
+                {
+                    skinMenu.Slider("Index", "Skin", 0, 0, Plugins[Player.ChampionName].Item2).ValueChanged +=
+                        (sender, args) => { isSkinReset = true; };
+                    skinMenu.Bool("Own", "Keep Your Own Skin").ValueChanged += (sender, args) =>
+                        {
+                            var menuBool = sender as MenuBool;
+                            if (menuBool != null)
+                            {
+                                isSkinReset = false;
+                            }
+                        };
+                }
                 Plugins[Player.ChampionName].Item1.Invoke();
+
+                Game.OnUpdate += args =>
+                    {
+                        if (Player.IsDead)
+                        {
+                            if (!isSkinReset)
+                            {
+                                isSkinReset = true;
+                            }
+                        }
+                        else if (isSkinReset)
+                        {
+                            isSkinReset = false;
+                            if (Player.SkinId == 0 || !MainMenu["Skin"]["Own"])
+                            {
+                                //Player.SetSkin(Player.ChampionName, MainMenu["Skin"]["Index"]);
+                            }
+                        }
+                    };
             }
             else
             {
@@ -130,10 +135,15 @@ namespace Valvrave_Sharp
 
         public static void Main()
         {
-            Bootstrap.Init();
-            Player = ObjectManager.Player;
+            Bootstrap.Init(null);
+            Player = GameObjects.Player;
+            CheckVersion();
             var isSupport = Plugins.ContainsKey(Player.ChampionName);
             InitMenu(isSupport);
+            if (!isSupport)
+            {
+                return;
+            }
             InitItem();
             InitSummonerSpell();
         }

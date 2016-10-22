@@ -68,7 +68,7 @@ using EloBuddy;
                 };
             Obj_AI_Base.OnProcessSpellCast += (sender, args) =>
                 {
-                    if (!sender.IsMe || Variables.Orbwalker.GetActiveMode() != OrbwalkingMode.Combo)
+                    if (!sender.IsMe || Variables.Orbwalker.ActiveMode != OrbwalkingMode.Combo)
                     {
                         return;
                     }
@@ -94,7 +94,7 @@ using EloBuddy;
                         return;
                     }
                     canCast = true;
-                    if (Variables.Orbwalker.GetActiveMode() == OrbwalkingMode.Combo)
+                    if (Variables.Orbwalker.ActiveMode == OrbwalkingMode.Combo)
                     {
                         var target = args.Target as AIHeroClient;
                         if (target != null)
@@ -225,7 +225,7 @@ using EloBuddy;
                     var pred = W.GetPrediction(target, false, -1, CollisionableObjects.YasuoWall);
                     if (pred.Hitchance >= W.MinHitChance)
                     {
-                        var col = pred.GetCollision();
+                        var col = pred.CollisionObjects;
                         if (col.Count == 0)
                         {
                             W.Cast(pred.CastPosition);
@@ -279,12 +279,12 @@ using EloBuddy;
             {
                 return;
             }
-            Variables.Orbwalker.SetAttackState(!haveR);
+            Variables.Orbwalker.AttackState = (!haveR);
             if (haveR)
             {
                 return;
             }
-            switch (Variables.Orbwalker.GetActiveMode())
+            switch (Variables.Orbwalker.ActiveMode)
             {
                 case OrbwalkingMode.Combo:
                     Combo();

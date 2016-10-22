@@ -32,7 +32,7 @@ using EloBuddy;
     {
         #region Constants
 
-        private const float QDelay = 0.39f, Q2Delay = 0.35f, QDelays = 0.22f, Q2Delays = 0.315f;
+        private const float QDelay = 0.4f, Q2Delay = 0.35f, QDelays = 0.21f, Q2Delays = 0.31f;
 
         private const int RWidth = 400;
 
@@ -62,10 +62,9 @@ using EloBuddy;
         {
             Q = new Spell(SpellSlot.Q, 505).SetSkillshot(QDelay, 20, float.MaxValue, false, SkillshotType.SkillshotLine);
             Q2 = new Spell(Q.Slot, 1100).SetSkillshot(Q2Delay, 90, 1200, true, Q.Type);
-            Q3 = new Spell(Q.Slot, 220).SetSkillshot(0, 230, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            Q3 = new Spell(Q.Slot, 220).SetSkillshot(0, 220, float.MaxValue, false, SkillshotType.SkillshotCircle);
             W = new Spell(SpellSlot.W, 400).SetTargetted(0.25f, float.MaxValue);
             E = new Spell(SpellSlot.E, 475).SetTargetted(0, 1200);
-            E2 = new Spell(E.Slot, E.Range).SetTargetted(0, E.Speed);
             R = new Spell(SpellSlot.R, 1200);
             Q.DamageType = Q2.DamageType = R.DamageType = DamageType.Physical;
             E.DamageType = DamageType.Magical;
@@ -152,6 +151,7 @@ using EloBuddy;
             MainMenu.KeyBind("StackQ", "Auto Stack Q", Keys.Z, KeyBindType.Toggle);
             MainMenu.KeyBind("EQ3Flash", "Use E-Q3-Flash", Keys.XButton2);
 
+            Variables.Orbwalker.OnAction += OnAction;
             Game.OnUpdate += OnUpdate;
             Drawing.OnEndScene += OnEndScene;
             Drawing.OnDraw += OnDraw;
@@ -162,7 +162,7 @@ using EloBuddy;
                         if (isDash)
                         {
                             isDash = false;
-                            posDash = new Vector3();
+                            posDash = Vector3.Zero;
                         }
                         return;
                     }
@@ -175,19 +175,23 @@ using EloBuddy;
                                 {
                                     if (!isDash)
                                     {
-                                        posDash = new Vector3();
+                                        posDash = Vector3.Zero;
                                     }
                                 });
                     }
                     Q.Delay = GetQDelay(false);
                     Q2.Delay = GetQDelay(true);
-                    E.Speed = E2.Speed = 1200 + (Player.MoveSpeed - 345);
+                    E.Speed = 1200 + (Player.MoveSpeed - 345);
                 };
             Variables.Orbwalker.OnAction += (sender, args) =>
                 {
                     if (args.Type != OrbwalkingType.AfterAttack
-                        || Variables.Orbwalker.ActiveMode != OrbwalkingMode.LaneClear || !(args.Target is Obj_AI_Turret)
-                        || !Q.IsReady() || haveQ3)
+                        || Variables.Orbwalker.ActiveMode != OrbwalkingMode.LaneClear || !Q.IsReady() || haveQ3)
+                    {
+                        return;
+                    }
+                    var target = args.Target as Obj_AI_Turret;
+                    if (target == null || !target.IsValid)
                     {
                         return;
                     }
@@ -201,20 +205,20 @@ using EloBuddy;
                         Q.Cast(Game.CursorPos);
                     }
                 };
-            Obj_AI_Base.OnProcessSpellCast += (sender, args) =>
+            Obj_AI_Base.OnPlayAnimation += (sender, args) =>
                 {
                     if (!sender.IsMe)
                     {
                         return;
                     }
-                    if (args.Slot == SpellSlot.E)
+                    if (args.Animation == "Spell3")
                     {
                         lastE = Variables.TickCount;
                     }
                 };
             Events.OnDash += (sender, args) =>
                 {
-                    if (!args.Unit.IsMe)
+                    if (!args.Unit.IsMe || Variables.TickCount - lastE > 500)
                     {
                         return;
                     }
@@ -346,13 +350,15 @@ using EloBuddy;
             if (Player.IsDashing())
             {
                 var bestHit = 0;
-                var bestPos = new Vector3();
+                var bestPos = Vector3.Zero;
                 for (var i = 0; i < 360; i += 10)
                 {
                     var pos =
-                        (Player.ServerPosition.ToVector2()
+                        (Player.Position.ToVector2()
                          + FlashRange * new Vector2(1, 0).Rotated((float)(Math.PI * i / 180.0))).ToVector3();
-                    var hits = Variables.TargetSelector.GetTargets(Q3.Width, Q.DamageType, true, pos).Count;
+                    var hits =
+                        Variables.TargetSelector.GetTargets(Q3.Width, Q.DamageType, true, pos)
+                            .Count(a => Q3.WillHit(Q3.GetPredPosition(a), pos));
                     if (hits > bestHit)
                     {
                         bestHit = hits;
@@ -361,7 +367,7 @@ using EloBuddy;
                 }
                 if (bestPos.IsValid() && Q3.Cast(bestPos))
                 {
-                    DelayAction.Add(5, () => Player.Spellbook.CastSpell(Flash, bestPos));
+                    DelayAction.Add(10, () => Player.Spellbook.CastSpell(Flash, bestPos));
                 }
             }
             if (!E.IsReady())
@@ -370,14 +376,15 @@ using EloBuddy;
             }
             var obj =
                 Common.ListEnemies(true)
-                    .Where(i => i.IsValidTarget(E.Range) && !HaveE(i))
-                    .MaxOrDefault(
+                    .Where(i => i.IsValidTarget(E.Range))
+                    .OrderByDescending(
                         i =>
                         Variables.TargetSelector.GetTargets(
                             Q3.Width + FlashRange - 50,
                             Q.DamageType,
                             true,
-                            GetPosAfterDash(i)).Count(a => !a.Compare(i)));
+                            GetPosAfterDash(i)).Count(a => !a.Compare(i)))
+                    .FirstOrDefault(i => !HaveE(i));
             if (obj != null)
             {
                 E.CastOnUnit(obj);
@@ -400,22 +407,20 @@ using EloBuddy;
             bool inQCir = false,
             bool underTower = true,
             Vector3 pos = new Vector3(),
-            bool isAirBlade = false)
+            bool isAirBlade = false,
+            bool checkSafe = true)
         {
-            if (HaveE(target))
-            {
-                return false;
-            }
             if (!pos.IsValid())
             {
-                pos = E.GetPredPosition(target, true);
+                pos = target.ServerPosition;
             }
             var posAfterE = GetPosAfterDash(target);
-            return (underTower || !posAfterE.IsUnderEnemyTurret())
+            return (underTower || !posAfterE.IsUnderEnemyTurret() || Player.IsUnderEnemyTurret())
                    && (inQCir
                            ? Q3.WillHit(pos, posAfterE)
-                           : posAfterE.Distance(pos) < (!isAirBlade ? pos.DistanceToPlayer() : R.Range))
-                   && Evade.IsSafePoint(posAfterE.ToVector2()).IsSafe;
+                           : posAfterE.Distance(pos)
+                             < (isAirBlade ? R.Range : 0.95 * pos.DistanceToPlayer() - Player.BoundingRadius))
+                   && (!checkSafe || Evade.IsSafePoint(posAfterE.ToVector2()).IsSafe);
         }
 
         private static bool CastQ3()
@@ -425,7 +430,7 @@ using EloBuddy;
             {
                 return false;
             }
-            var posCast = new Vector3();
+            var posCast = Vector3.Zero;
             foreach (var pred in
                 targets.Select(i => Q2.GetPrediction(i, true, -1, CollisionableObjects.YasuoWall))
                     .Where(
@@ -447,28 +452,42 @@ using EloBuddy;
 
         private static void Combo()
         {
-            if (MainMenu["Combo"]["E"] && E.IsReady() && wallLeft != null && wallRight != null)
+            if (MainMenu["Combo"]["W"] && W.IsReady())
             {
                 var target = Variables.TargetSelector.GetTarget(E.Range, DamageType.Physical);
                 if (target != null && Math.Abs(target.GetProjectileSpeed() - float.MaxValue) > float.Epsilon
-                    && !HaveE(target) && Evade.IsSafePoint(GetPosAfterDash(target).ToVector2()).IsSafe)
+                    && (target.HealthPercent > Player.HealthPercent
+                            ? Player.CountAllyHeroesInRange(500) <= target.CountEnemyHeroesInRange(700)
+                            : Player.HealthPercent <= 30))
                 {
-                    var listPos =
-                        Common.ListEnemies()
-                            .Where(i => i.IsValidTarget(E.Range * 2) && !HaveE(i))
-                            .Select(GetPosAfterDash)
-                            .Where(
-                                i =>
-                                target.Distance(i) < target.DistanceToPlayer()
-                                || target.Distance(i) < target.GetRealAutoAttackRange() + 100)
-                            .ToList();
-                    if (listPos.Any(i => IsThroughWall(target.ServerPosition, i)) && E.CastOnUnit(target))
+                    var posPred = W.GetPredPosition(target, true);
+                    if (posPred.DistanceToPlayer() > 100 && posPred.DistanceToPlayer() < 330 && W.Cast(posPred))
                     {
                         return;
                     }
                 }
             }
-            var targetE = MainMenu["Combo"]["EGap"] && E.Level > 0 ? GetBestDashObj(MainMenu["Combo"]["ETower"]) : null;
+            if (MainMenu["Combo"]["E"] && E.IsReady() && wallLeft != null && wallRight != null)
+            {
+                var target = Variables.TargetSelector.GetTarget(E.Range, DamageType.Physical);
+                if (target != null && !HaveE(target)
+                    && Math.Abs(target.GetProjectileSpeed() - float.MaxValue) > float.Epsilon
+                    && Evade.IsSafePoint(GetPosAfterDash(target).ToVector2()).IsSafe
+                    && Common.ListEnemies()
+                           .Where(i => i.IsValidTarget(E.Range * 2) && !i.Compare(target) && !HaveE(i))
+                           .Select(GetPosAfterDash)
+                           .Any(
+                               i =>
+                               (target.Distance(i) < target.DistanceToPlayer()
+                                || target.Distance(i) < target.GetRealAutoAttackRange() + 50)
+                               && IsThroughWall(target.ServerPosition, i)) && E.CastOnUnit(target))
+                {
+                    return;
+                }
+            }
+            var targetE = MainMenu["Combo"]["EGap"] && E.IsReady(100)
+                              ? GetBestDashObj(MainMenu["Combo"]["ETower"])
+                              : null;
             if (targetE != null && E.CastOnUnit(targetE))
             {
                 return;
@@ -480,7 +499,7 @@ using EloBuddy;
                     var target = GetRTarget(true);
                     if (target != null && Q3.Cast(target.ServerPosition))
                     {
-                        DelayAction.Add(5, () => R.CastOnUnit(target));
+                        DelayAction.Add(10, () => R.CastOnUnit(target));
                     }
                 }
                 if (IsDashing)
@@ -501,21 +520,6 @@ using EloBuddy;
                 else if (targetE == null && (!haveQ3 ? Q.CastingBestTarget(true).IsCasted() : CastQ3()))
                 {
                     return;
-                }
-            }
-            if (MainMenu["Combo"]["W"] && W.IsReady())
-            {
-                var target = Variables.TargetSelector.GetTarget(E.Range, DamageType.Physical);
-                if (target != null && Math.Abs(target.GetProjectileSpeed() - float.MaxValue) > float.Epsilon
-                    && (target.HealthPercent > Player.HealthPercent
-                            ? Player.CountAllyHeroesInRange(500) < target.CountEnemyHeroesInRange(700)
-                            : Player.HealthPercent <= 30))
-                {
-                    var posPred = W.GetPredPosition(target, true);
-                    if (posPred.DistanceToPlayer() > 100 && posPred.DistanceToPlayer() < 330 && W.Cast(posPred))
-                    {
-                        return;
-                    }
                 }
             }
             if (UseR)
@@ -562,11 +566,16 @@ using EloBuddy;
                 var target = GetRTarget(true);
                 if (target != null)
                 {
-                    return E.IsInRange(target) && CanDash(target, true, underTower, target.ServerPosition, true)
+                    return E.IsInRange(target) && CanDash(target, true, underTower, Vector3.Zero, false, false)
+                           && !HaveE(target)
                                ? target
-                               : (GetBestDashObjToUnit(target, true, underTower, true)
+                               : (GetBestDashObjToUnit(target, true, underTower)
                                   ?? GetBestDashObjToUnit(target, false, underTower, true));
                 }
+            }
+            if (!Common.CantAttack)
+            {
+                return null;
             }
             if (MainMenu["Combo"]["EMode"].GetValue<MenuList>().Index == 0)
             {
@@ -574,41 +583,51 @@ using EloBuddy;
                 if (target != null && haveQ3 && Q.IsReady(50))
                 {
                     var nearObj = GetBestDashObjToUnit(target, true, underTower);
-                    if (nearObj != null
-                        && (GetPosAfterDash(nearObj).CountEnemyHeroesInRange(Q3.Width) > 1
-                            || Player.CountEnemyHeroesInRange(Q.Range + E.Range / 2) == 1))
+                    if (nearObj != null)
                     {
-                        return nearObj;
+                        var posEnd = GetPosAfterDash(nearObj);
+                        if (posEnd.CountEnemyHeroesInRange(Q3.Width) > 1
+                            || posEnd.CountEnemyHeroesInRange(Q.Range + E.Range)
+                            <= posEnd.CountAllyHeroesInRange(Q.Range))
+                        {
+                            return nearObj;
+                        }
                     }
                 }
                 target = E.GetTarget();
                 if (target != null
-                    && ((cDash > 0 && CanDash(target, false, underTower))
-                        || (haveQ3 && Q.IsReady(50) && CanDash(target, true, underTower))))
+                    && ((cDash == 2 && CanDash(target, false, underTower))
+                        || (haveQ3 && Q.IsReady(50) && CanDash(target, true, underTower))) && !HaveE(target))
                 {
                     return target;
                 }
-                target = Q.GetTarget(100) ?? Q2.GetTarget();
-                if (target != null && (!Player.Spellbook.IsAutoAttacking || Player.HealthPercent < 40))
+                target = Q.GetTarget(100) ?? Q2.GetTarget(100);
+                if (target != null)
                 {
                     var nearObj = GetBestDashObjToUnit(target, false, underTower);
-                    var canDash = cDash == 0 && nearObj != null && !HaveE(target);
-                    if (Q.IsReady(50))
+                    var canDash = cDash < 2 && nearObj != null
+                                  && target.DistanceToPlayer() > target.GetRealAutoAttackRange() * 0.4
+                                  && target.Distance(GetPosAfterDash(nearObj)) < E.Range && !HaveE(target);
+                    if (!canDash && Q.IsReady(50))
                     {
-                        var nearObjQ3 = GetBestDashObjToUnit(target, true, underTower);
-                        if (nearObjQ3 != null)
+                        var nearObjQCir = GetBestDashObjToUnit(target, true, underTower);
+                        if (nearObjQCir != null && Player.IsFacing(nearObjQCir)
+                            && GetPosAfterDash(nearObjQCir).CountEnemyHeroesInRange(Q3.Width) > 1)
                         {
-                            nearObj = nearObjQ3;
+                            nearObj = nearObjQCir;
                             canDash = true;
                         }
                     }
-                    if (!canDash && target.DistanceToPlayer() > target.GetRealAutoAttackRange() * 0.7)
+                    if (!canDash
+                        && (nearObj == null || target.DistanceToPlayer() > target.GetRealAutoAttackRange() * 0.6
+                            || Player.CountAllyHeroesInRange(Q.Range) <= target.CountEnemyHeroesInRange(Q.Range)))
                     {
                         canDash = true;
                     }
                     if (canDash)
                     {
-                        if (nearObj == null && E.IsInRange(target) && CanDash(target, false, underTower))
+                        if (nearObj == null && E.IsInRange(target) && CanDash(target, false, underTower)
+                            && Player.IsFacing(target) && !HaveE(target))
                         {
                             nearObj = target;
                         }
@@ -622,8 +641,8 @@ using EloBuddy;
             else
             {
                 var target = Variables.Orbwalker.GetTarget();
-                if (target == null || Player.Distance(target) > target.GetRealAutoAttackRange() * 0.7
-                    || Player.Distance(Game.CursorPos) > E.Range * 1.5)
+                if (target == null || Player.Distance(target) > target.GetRealAutoAttackRange() * 0.6
+                    || Game.CursorPos.DistanceToPlayer() > 250)
                 {
                     var obj = GetBestDashObjToMouse(underTower);
                     if (obj != null)
@@ -640,8 +659,9 @@ using EloBuddy;
             var pos = Game.CursorPos;
             return
                 Common.ListEnemies()
-                    .Where(i => i.IsValidTarget(E.Range) && CanDash(i, false, underTower, pos))
-                    .MinOrDefault(i => GetPosAfterDash(i).Distance(pos));
+                    .Where(i => i.IsValidTarget(E.Range) && CanDash(i, false, underTower, pos, false, false))
+                    .OrderBy(i => GetPosAfterDash(i).Distance(pos))
+                    .FirstOrDefault(i => !HaveE(i));
         }
 
         private static Obj_AI_Base GetBestDashObjToUnit(
@@ -650,14 +670,15 @@ using EloBuddy;
             bool underTower,
             bool isAirBlade = false)
         {
-            var pos = !isAirBlade ? E.GetPredPosition(target, true) : target.ServerPosition;
+            var pos = target.ServerPosition;
             return
                 Common.ListEnemies()
                     .Where(
                         i =>
                         i.IsValidTarget(E.Range) && !i.Compare(target)
                         && CanDash(i, inQCir, underTower, pos, isAirBlade))
-                    .MinOrDefault(i => GetPosAfterDash(i).Distance(pos));
+                    .OrderBy(i => GetPosAfterDash(i).Distance(pos))
+                    .FirstOrDefault(i => !HaveE(i));
         }
 
         private static double GetEDmg(Obj_AI_Base target)
@@ -667,7 +688,9 @@ using EloBuddy;
 
         private static Vector3 GetPosAfterDash(Obj_AI_Base target)
         {
-            return Player.ServerPosition.Extend(target.ServerPosition, E.Range);
+            var from = Player.ServerPosition.ToVector2();
+            var to = E.GetPredPosition(target, true).ToVector2();
+            return from.Extend(to, from.Distance(to) < 410 ? E.Range : from.Distance(to) + 65).ToVector3();
         }
 
         private static float GetQDelay(bool isQ3)
@@ -842,13 +865,12 @@ using EloBuddy;
                 var canQ = MainMenu["KillSteal"]["Q"] && Q.IsReady(50);
                 var target =
                     Variables.TargetSelector.GetTargets(E.Range, E.DamageType)
-                        .FirstOrDefault(
+                        .Where(
                             i =>
-                            !HaveE(i)
-                            && (canQ && Q3.WillHit(Q3.GetPredPosition(i), GetPosAfterDash(i))
-                                    ? i.Health - Math.Max(GetEDmg(i) - i.MagicShield, 0) + i.AttackShield
-                                      <= GetQDmg(i)
-                                    : i.Health + i.MagicShield <= GetEDmg(i)));
+                            canQ && Q3.WillHit(Q3.GetPredPosition(i), GetPosAfterDash(i))
+                                ? i.Health - Math.Max(GetEDmg(i) - i.MagicShield, 0) + i.AttackShield <= GetQDmg(i)
+                                : i.Health + i.MagicShield <= GetEDmg(i))
+                        .FirstOrDefault(i => !HaveE(i));
                 if (target != null && E.CastOnUnit(target))
                 {
                     return;
@@ -878,21 +900,22 @@ using EloBuddy;
                     Common.ListMinions()
                         .Where(
                             i =>
-                            i.IsValidTarget(E.Range) && !HaveE(i)
-                            && (MainMenu["LaneClear"]["ETower"] || !GetPosAfterDash(i).IsUnderEnemyTurret())
+                            i.IsValidTarget(E.Range)
+                            && (MainMenu["LaneClear"]["ETower"] || !GetPosAfterDash(i).IsUnderEnemyTurret()
+                                || Player.IsUnderEnemyTurret())
                             && Evade.IsSafePoint(GetPosAfterDash(i).ToVector2()).IsSafe)
                         .OrderByDescending(i => i.MaxHealth)
                         .ToList();
                 if (minions.Count > 0)
                 {
-                    var minion = minions.FirstOrDefault(i => E.CanLastHit(i, GetEDmg(i)));
-                    if (MainMenu["LaneClear"]["Q"] && minion == null && Q.IsReady(50)
+                    var minion = minions.FirstOrDefault(i => E.CanLastHit(i, GetEDmg(i)) && !HaveE(i));
+                    if (minion == null && MainMenu["LaneClear"]["Q"] && Q.IsReady(50)
                         && (!haveQ3 || MainMenu["LaneClear"]["Q3"]))
                     {
                         var sub = new List<Obj_AI_Minion>();
                         foreach (var mob in minions)
                         {
-                            if ((E2.CanLastHit(mob, GetQDmg(mob), GetEDmg(mob)) || mob.Team == GameObjectTeam.Neutral)
+                            if ((E.CanLastHit(mob, GetQDmg(mob), GetEDmg(mob)) || mob.Team == GameObjectTeam.Neutral)
                                 && mob.Distance(GetPosAfterDash(mob)) < Q3.Width)
                             {
                                 sub.Add(mob);
@@ -910,7 +933,7 @@ using EloBuddy;
                                 sub.Add(mob);
                             }
                         }
-                        minion = sub.FirstOrDefault();
+                        minion = sub.FirstOrDefault(i => !HaveE(i));
                     }
                     if (minion != null && E.CastOnUnit(minion))
                     {
@@ -1004,15 +1027,27 @@ using EloBuddy;
                 var minion =
                     GameObjects.EnemyMinions.Where(
                         i =>
-                        (i.IsMinion() || i.IsPet(false)) && i.IsValidTarget(E.Range) && !HaveE(i)
-                        && E.CanLastHit(i, GetEDmg(i)) && Evade.IsSafePoint(GetPosAfterDash(i).ToVector2()).IsSafe
-                        && (MainMenu["LastHit"]["ETower"] || !GetPosAfterDash(i).IsUnderEnemyTurret()))
-                        .MaxOrDefault(i => i.MaxHealth);
+                        (i.IsMinion() || i.IsPet(false)) && i.IsValidTarget(E.Range) && E.CanLastHit(i, GetEDmg(i))
+                        && Evade.IsSafePoint(GetPosAfterDash(i).ToVector2()).IsSafe
+                        && (MainMenu["LastHit"]["ETower"] || !GetPosAfterDash(i).IsUnderEnemyTurret()
+                            || Player.IsUnderEnemyTurret()))
+                        .OrderByDescending(i => i.MaxHealth)
+                        .FirstOrDefault(i => !HaveE(i));
                 if (minion != null)
                 {
                     E.CastOnUnit(minion);
                 }
             }
+        }
+
+        private static void OnAction(object sender, OrbwalkingActionArgs args)
+        {
+            if (args.Type != OrbwalkingType.AfterAttack || Variables.Orbwalker.ActiveMode != OrbwalkingMode.Combo
+                || !MainMenu["Combo"]["Item"])
+            {
+                return;
+            }
+            Common.CastTiamatHydra();
         }
 
         private static void OnDraw(EventArgs args)
@@ -1157,17 +1192,9 @@ using EloBuddy;
             {
                 Youmuu.Cast();
             }
-            if (Tiamat.IsReady && Player.CountEnemyHeroesInRange(Tiamat.Range) > 0)
+            if (Common.CantAttack)
             {
-                Tiamat.Cast();
-            }
-            if (Hydra.IsReady && Player.CountEnemyHeroesInRange(Hydra.Range) > 0)
-            {
-                Hydra.Cast();
-            }
-            if (Titanic.IsReady && !Player.Spellbook.IsAutoAttacking && Variables.Orbwalker.GetTarget() != null)
-            {
-                Titanic.Cast();
+                Common.CastTiamatHydra();
             }
         }
 

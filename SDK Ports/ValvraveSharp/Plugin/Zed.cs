@@ -33,6 +33,8 @@ using EloBuddy;
 
         private static GameObject deathMark;
 
+        private static bool isWaitAttackAfterR;
+
         private static int lastW;
 
         private static bool wCasted, rCasted;
@@ -53,7 +55,7 @@ using EloBuddy;
             Q2 = new Spell(Q.Slot, Q.Range).SetSkillshot(Q.Delay, Q.Width, Q.Speed, true, Q.Type);
             Q3 = new Spell(Q.Slot, Q.Range).SetSkillshot(Q.Delay, Q.Width, Q.Speed, true, Q.Type);
             W = new Spell(SpellSlot.W, 700).SetSkillshot(0, 0, 1750, false, SkillshotType.SkillshotLine);
-            E = new Spell(SpellSlot.E, 290).SetTargetted(0, float.MaxValue);
+            E = new Spell(SpellSlot.E, 290).SetSkillshot(0, 290, float.MaxValue, false, SkillshotType.SkillshotCircle);
             R = new Spell(SpellSlot.R, 625);
             Q.DamageType = W.DamageType = E.DamageType = R.DamageType = DamageType.Physical;
             Q.MinHitChance = HitChance.VeryHigh;
@@ -96,6 +98,16 @@ using EloBuddy;
                 hybridMenu.Separator("Auto E Settings (Champ/Shadow)");
                 hybridMenu.Bool("AutoE", "Auto", false);
             }
+            var lcMenu = MainMenu.Add(new Menu("LaneClear", "Lane Clear"));
+            {
+                lcMenu.Bool("W", "Use W", false);
+                lcMenu.Separator("Q Settings");
+                lcMenu.Bool("Q", "Use Q");
+                lcMenu.Slider("QCountA", "If Hit >=", 2, 1, 5);
+                lcMenu.Separator("E Settings");
+                lcMenu.Bool("E", "Use E");
+                lcMenu.Slider("ECountA", "If Hit >=", 2, 1, 5);
+            }
             var lhMenu = MainMenu.Add(new Menu("LastHit", "Last Hit"));
             {
                 lhMenu.Bool("Q", "Use Q");
@@ -125,9 +137,18 @@ using EloBuddy;
             }
             MainMenu.KeyBind("FleeW", "Use W To Flee", Keys.C);
 
+            Variables.Orbwalker.OnAction += OnAction;
             Game.OnUpdate += OnUpdate;
             Drawing.OnEndScene += OnEndScene;
             Drawing.OnDraw += OnDraw;
+            Variables.Orbwalker.OnAction += (sender, args) =>
+                {
+                    if (!isWaitAttackAfterR || args.Type != OrbwalkingType.AfterAttack)
+                    {
+                        return;
+                    }
+                    isWaitAttackAfterR = false;
+                };
             Obj_AI_Base.OnProcessSpellCast += (sender, args) =>
                 {
                     if (!sender.IsMe)
@@ -161,7 +182,7 @@ using EloBuddy;
                     else if (rCasted)
                     {
                         rShadowT = Variables.TickCount;
-                        rShadow = minion;
+                        RShadow = minion;
                         wCasted = rCasted = false;
                     }
                 };
@@ -182,10 +203,10 @@ using EloBuddy;
                             }
                             break;
                         case "zedrshadowbuff":
-                            if (!rShadow.Compare(shadow))
+                            if (!RShadow.Compare(shadow))
                             {
                                 rShadowT = Variables.TickCount;
-                                rShadow = shadow;
+                                RShadow = shadow;
                             }
                             break;
                     }
@@ -201,9 +222,9 @@ using EloBuddy;
                     {
                         wShadow = null;
                     }
-                    else if (shadow.Compare(rShadow))
+                    else if (shadow.Compare(RShadow))
                     {
-                        rShadow = null;
+                        RShadow = null;
                     }
                 };
             GameObjectNotifier<MissileClient>.OnCreate += (sender, args) =>
@@ -214,6 +235,7 @@ using EloBuddy;
                         return;
                     }
                     wMissile = args;
+                    lastW = Variables.TickCount;
                 };
             GameObjectNotifier<MissileClient>.OnDelete += (sender, args) =>
                 {
@@ -302,23 +324,39 @@ using EloBuddy;
             get
             {
                 var validW = wShadow.IsValid();
-                var validR = rShadow.IsValid();
-                var posW = validW ? wShadow.ServerPosition : new Vector3();
+                var validR = RShadow.IsValid();
+                var posW = validW ? wShadow.ServerPosition : Vector3.Zero;
                 if (!posW.IsValid() && wMissile != null)
                 {
                     validW = true;
                     posW = wMissile.EndPosition;
                 }
                 return validW && validR
-                           ? Math.Max(rShadow.DistanceToPlayer(), posW.DistanceToPlayer())
+                           ? Math.Max(RShadow.DistanceToPlayer(), posW.DistanceToPlayer())
                            : (WState == 0 && Variables.TickCount - lastW > 150
-                                  ? (validR ? Math.Max(rShadow.DistanceToPlayer(), W.Range) : W.Range)
-                                  : (validW ? posW.DistanceToPlayer() : (validR ? rShadow.DistanceToPlayer() : 0)));
+                                  ? (validR ? Math.Max(RShadow.DistanceToPlayer(), W.Range) : W.Range)
+                                  : (validW ? posW.DistanceToPlayer() : (validR ? RShadow.DistanceToPlayer() : 0)));
+            }
+        }
+
+        private static Obj_AI_Minion RShadow
+        {
+            get
+            {
+                return rShadow;
+            }
+            set
+            {
+                rShadow = value;
+                if (rShadow != null)
+                {
+                    isWaitAttackAfterR = true;
+                }
             }
         }
 
         private static bool RShadowCanQ
-            => rShadow.IsValid() && Variables.TickCount - rShadowT <= 7500 - Q.Delay * 1000 + 50;
+            => RShadow.IsValid() && Variables.TickCount - rShadowT <= 7500 - Q.Delay * 1000 + 50;
 
         private static int RState => R.IsReady() ? (IsROne ? 0 : 1) : (IsROne ? -1 : 2);
 
@@ -377,13 +415,13 @@ using EloBuddy;
             }
         }
 
-        private static void CastQ(AIHeroClient target)
+        private static void CastQ(Obj_AI_Base target, bool isLaneClear = false)
         {
             if (!Q.IsReady())
             {
                 return;
             }
-            var pred = Q.GetPrediction(target, true, -1, CollisionableObjects.YasuoWall);
+            var pred = Q.GetPrediction(target, !isLaneClear, -1, CollisionableObjects.YasuoWall);
             if (pred.Hitchance >= Q.MinHitChance)
             {
                 Q.Cast(pred.CastPosition);
@@ -394,25 +432,21 @@ using EloBuddy;
                 if (WShadowCanQ)
                 {
                     Q2.UpdateSourcePosition(wShadow.ServerPosition, wShadow.ServerPosition);
-                    predShadow = Q2.GetPrediction(target, true, -1, CollisionableObjects.YasuoWall);
+                    predShadow = Q2.GetPrediction(target, !isLaneClear, -1, CollisionableObjects.YasuoWall);
                 }
                 else if (IsCastingW)
                 {
                     Q2.UpdateSourcePosition(wMissile.EndPosition, wMissile.EndPosition);
-                    predShadow = Q2.GetPrediction(target, true, -1, CollisionableObjects.YasuoWall);
+                    predShadow = Q2.GetPrediction(target, !isLaneClear, -1, CollisionableObjects.YasuoWall);
+                }
+                if ((predShadow == null || predShadow.Hitchance < Q.MinHitChance) && RShadowCanQ)
+                {
+                    Q2.UpdateSourcePosition(RShadow.ServerPosition, RShadow.ServerPosition);
+                    predShadow = Q2.GetPrediction(target, !isLaneClear, -1, CollisionableObjects.YasuoWall);
                 }
                 if (predShadow != null && predShadow.Hitchance >= Q.MinHitChance)
                 {
                     Q.Cast(predShadow.CastPosition);
-                }
-                else if (RShadowCanQ)
-                {
-                    Q2.UpdateSourcePosition(rShadow.ServerPosition, rShadow.ServerPosition);
-                    predShadow = Q2.GetPrediction(target, true, -1, CollisionableObjects.YasuoWall);
-                    if (predShadow.Hitchance >= Q.MinHitChance)
-                    {
-                        Q.Cast(predShadow.CastPosition);
-                    }
                 }
             }
         }
@@ -429,43 +463,25 @@ using EloBuddy;
                 false,
                 -1,
                 CollisionableObjects.Heroes | CollisionableObjects.Minions);
-            if (pred2.Hitchance == HitChance.Collision)
-            {
-                switch (target.Type)
-                {
-                    case GameObjectType.AIHeroClient:
-                        return target.Health + target.AttackShield <= Q.GetDamage(target, DamageStage.SecondForm)
-                               && Q.Cast(pred1.CastPosition);
-                    case GameObjectType.obj_AI_Minion:
-                        return Q.CanLastHit(target, Q.GetDamage(target, DamageStage.SecondForm))
-                               && Q.Cast(pred1.CastPosition);
-                }
-                return false;
-            }
-            return pred2.Hitchance >= Q.MinHitChance && Q.Cast(pred2.CastPosition);
+            return pred2.Hitchance == HitChance.Collision
+                       ? ((target.Type == GameObjectType.AIHeroClient
+                           && target.Health + target.AttackShield <= Q.GetDamage(target, DamageStage.SecondForm))
+                          || (target.Type == GameObjectType.obj_AI_Minion
+                              && Q.CanLastHit(target, Q.GetDamage(target, DamageStage.SecondForm))))
+                         && Q.Cast(pred1.CastPosition)
+                       : pred2.Hitchance >= Q.MinHitChance && Q.Cast(pred2.CastPosition);
         }
 
         private static void CastW(AIHeroClient target, SpellSlot slot, bool isRCombo = false)
         {
-            if (slot == SpellSlot.Unknown || Variables.TickCount - lastW <= 500 || wMissile != null)
+            if (WState != 0 || slot == SpellSlot.Unknown || wMissile != null || Variables.TickCount - lastW <= 500)
             {
                 return;
             }
-            switch (slot)
-            {
-                case SpellSlot.Q:
-                    W.Width = Q.Width + 30;
-                    W.Delay = 0;
-                    break;
-                case SpellSlot.E:
-                    W.Width = E.Width / 2;
-                    W.Delay = E.Delay;
-                    break;
-            }
-            var posCast = W.GetPrediction(target).UnitPosition;
+            var posCast = W.GetPredPosition(target, true);
             if (isRCombo)
             {
-                var posEnd = rShadow.ServerPosition;
+                var posEnd = RShadow.ServerPosition;
                 if (posCast.Distance(posEnd) > Q.Range - 50)
                 {
                     posEnd = Player.ServerPosition;
@@ -509,10 +525,56 @@ using EloBuddy;
             W.Cast(posCast);
         }
 
+        private static void CastWLaneClear()
+        {
+            if (WState != 0 || wMissile != null || Variables.TickCount - lastW <= 500)
+            {
+                return;
+            }
+            var minionW =
+                Common.ListMinions()
+                    .Where(i => i.IsValidTarget(E.Range + W.Range))
+                    .MaxOrDefault(
+                        i =>
+                        Common.ListMinions()
+                            .Count(
+                                a =>
+                                a.IsValidTarget(
+                                    E.Range,
+                                    true,
+                                    Player.ServerPosition.Extend(i.ServerPosition, E.Range * 1.5f))));
+            if (minionW == null)
+            {
+                return;
+            }
+            var posW = Player.ServerPosition.Extend(minionW.ServerPosition, E.Range * 1.5f);
+            var canW = MainMenu["LaneClear"]["E"] && E.IsReady()
+                       && Player.Mana >= W.Instance.SData.Mana + E.Instance.SData.Mana
+                       && Common.ListMinions().Count(i => i.IsValidTarget(E.Range, true, posW))
+                       >= MainMenu["LaneClear"]["ECountA"];
+            if (!canW && MainMenu["LaneClear"]["Q"] && Q.IsReady()
+                && Player.Mana >= W.Instance.SData.Mana + Q.Instance.SData.Mana
+                && Common.ListMinions()
+                       .Where(i => i.IsValidTarget(Q.Range, true, posW))
+                       .Select(
+                           i =>
+                           Q.GetCollision(posW.ToVector2(), new List<Vector2> { i.ServerPosition.ToVector2() }, W.Delay))
+                       .Select(i => i.Count)
+                       .Concat(new[] { 0 })
+                       .Max() >= MainMenu["LaneClear"]["QCountA"])
+            {
+                canW = true;
+            }
+            if (canW)
+            {
+                W.Cast(posW);
+            }
+        }
+
         private static void Combo()
         {
             var target = GetTarget;
-            if (target != null)
+            if (target != null && (!isWaitAttackAfterR || !target.InAutoAttackRange()))
             {
                 Swap(target);
                 var useR = MainMenu["Combo"]["R"].GetValue<MenuKeyBind>().Active
@@ -534,14 +596,14 @@ using EloBuddy;
                     var slot = CanW(target);
                     if (slot != SpellSlot.Unknown)
                     {
-                        if (MainMenu["Combo"]["WAdv"].GetValue<MenuList>().Index > 0 && rShadow.IsValid() && useR
+                        if (MainMenu["Combo"]["WAdv"].GetValue<MenuList>().Index > 0 && RShadow.IsValid() && useR
                             && HaveR(target) && !IsKillByMark(target))
                         {
                             CastW(target, slot, true);
                             return;
                         }
                         if (MainMenu["Combo"]["WNormal"]
-                            && ((RState < 1 && canCast) || (rShadow.IsValid() && useR && !HaveR(target))))
+                            && ((RState < 1 && canCast) || (RShadow.IsValid() && useR && !HaveR(target))))
                         {
                             CastW(target, slot);
                             return;
@@ -557,10 +619,13 @@ using EloBuddy;
                         return;
                     }
                 }
-                if (canCast || rShadow.IsValid())
+                if (canCast || RShadow.IsValid())
                 {
                     CastE();
-                    CastQ(target);
+                    if (Common.CantAttack)
+                    {
+                        CastQ(target);
+                    }
                 }
             }
             if (MainMenu["Combo"]["Item"])
@@ -586,7 +651,7 @@ using EloBuddy;
                         DamageType.Physical,
                         Math.Max(target.MaxHealth * 0.1, 100));
                 }
-                if (Tiamat.IsReady || Hydra.IsReady)
+                if (Tiamat.IsReady || Ravenous.IsReady)
                 {
                     dmgTotal += Player.CalculateDamage(target, DamageType.Physical, Player.TotalAttackDamage);
                 }
@@ -671,11 +736,11 @@ using EloBuddy;
             CastQ(target);
         }
 
-        private static bool IsInRangeE(AIHeroClient target)
+        private static bool IsInRangeE(Obj_AI_Base target)
         {
             var pos = E.GetPredPosition(target);
             return pos.DistanceToPlayer() < E.Range || (wShadow.IsValid() && wShadow.Distance(pos) < E.Range)
-                   || (rShadow.IsValid() && rShadow.Distance(pos) < E.Range)
+                   || (RShadow.IsValid() && RShadow.Distance(pos) < E.Range)
                    || (IsCastingW && wMissile.EndPosition.Distance(pos) < E.Range);
         }
 
@@ -718,7 +783,7 @@ using EloBuddy;
                         }
                         if (RShadowCanQ)
                         {
-                            Q3.UpdateSourcePosition(rShadow.ServerPosition, rShadow.ServerPosition);
+                            Q3.UpdateSourcePosition(RShadow.ServerPosition, RShadow.ServerPosition);
                             CastQKill(Q3, target);
                         }
                     }
@@ -727,6 +792,78 @@ using EloBuddy;
             if (MainMenu["KillSteal"]["E"] && E.IsReady())
             {
                 CastE(true);
+            }
+        }
+
+        private static void LaneClear()
+        {
+            if (MainMenu["LaneClear"]["W"])
+            {
+                CastWLaneClear();
+            }
+            if (wMissile != null)
+            {
+                return;
+            }
+            if (MainMenu["LaneClear"]["E"] && E.IsReady())
+            {
+                var minions =
+                    Common.ListMinions().Where(i => i.IsValidTarget(E.Range + RangeTarget) && IsInRangeE(i)).ToList();
+                if ((minions.Count >= MainMenu["LaneClear"]["ECountA"]
+                     || minions.Any(
+                         i =>
+                         i.Team == GameObjectTeam.Neutral
+                             ? i.GetJungleType() == JungleType.Large || i.GetJungleType() == JungleType.Legendary
+                             : i.GetMinionType().HasFlag(MinionTypes.Super)
+                               || i.GetMinionType().HasFlag(MinionTypes.Siege))) && E.Cast())
+                {
+                    return;
+                }
+            }
+            if (MainMenu["LaneClear"]["Q"] && Q.IsReady())
+            {
+                var minions = Common.ListMinions().Where(i => i.IsValidTarget(Q.Range + RangeTarget)).ToList();
+                if (minions.Count == 0)
+                {
+                    return;
+                }
+                var minHit = MainMenu["LaneClear"]["QCountA"].GetValue<MenuSlider>().Value;
+                var pos = Q.GetLineFarmLocation(minions);
+                if (pos.MinionsHit >= minHit)
+                {
+                    Q.Cast(pos.Position);
+                }
+                else
+                {
+                    var posShadow = new FarmLocation();
+                    if (WShadowCanQ)
+                    {
+                        Q2.UpdateSourcePosition(wShadow.ServerPosition, wShadow.ServerPosition);
+                        posShadow = Q2.GetLineFarmLocation(minions);
+                    }
+                    if ((!posShadow.Position.IsValid() || posShadow.MinionsHit < minHit) && RShadowCanQ)
+                    {
+                        Q2.UpdateSourcePosition(RShadow.ServerPosition, RShadow.ServerPosition);
+                        posShadow = Q2.GetLineFarmLocation(minions);
+                    }
+                    if (posShadow.Position.IsValid() && posShadow.MinionsHit >= minHit)
+                    {
+                        Q.Cast(posShadow.Position);
+                    }
+                    else
+                    {
+                        foreach (var target in
+                            minions.Where(
+                                i =>
+                                i.Team == GameObjectTeam.Neutral
+                                    ? i.GetJungleType() == JungleType.Large || i.GetJungleType() == JungleType.Legendary
+                                    : i.GetMinionType().HasFlag(MinionTypes.Super)
+                                      || i.GetMinionType().HasFlag(MinionTypes.Siege)))
+                        {
+                            CastQ(target, true);
+                        }
+                    }
+                }
             }
         }
 
@@ -748,6 +885,16 @@ using EloBuddy;
             minions.ForEach(i => CastQKill(Q, i));
         }
 
+        private static void OnAction(object sender, OrbwalkingActionArgs args)
+        {
+            if (args.Type != OrbwalkingType.AfterAttack || Variables.Orbwalker.ActiveMode != OrbwalkingMode.Combo
+                || !MainMenu["Combo"]["Item"])
+            {
+                return;
+            }
+            Common.CastTiamatHydra();
+        }
+
         private static void OnDraw(EventArgs args)
         {
             if (Player.IsDead)
@@ -765,7 +912,7 @@ using EloBuddy;
                     menu.Active ? Color.White : Color.Gray,
                     text);
             }
-            if (MainMenu["Draw"]["DMark"] && rShadow.IsValid())
+            if (MainMenu["Draw"]["DMark"] && RShadow.IsValid())
             {
                 var target = GameObjects.EnemyHeroes.FirstOrDefault(i => i.IsValidTarget() && IsKillByMark(i));
                 if (target != null)
@@ -780,9 +927,9 @@ using EloBuddy;
                 var pos = Drawing.WorldToScreen(wShadow.Position);
                 Drawing.DrawText(pos.X - (float)Drawing.GetTextEntent(("W"), 15).Width / 2, pos.Y, Color.BlueViolet, "W");
             }
-            if (MainMenu["Draw"]["RPos"] && rShadow.IsValid())
+            if (MainMenu["Draw"]["RPos"] && RShadow.IsValid())
             {
-                var pos = Drawing.WorldToScreen(rShadow.Position);
+                var pos = Drawing.WorldToScreen(RShadow.Position);
                 Drawing.DrawText(pos.X - (float)Drawing.GetTextEntent(("R"), 15).Width / 2, pos.Y, Color.BlueViolet, "R");
             }
         }
@@ -828,7 +975,8 @@ using EloBuddy;
 
         private static void OnUpdate(EventArgs args)
         {
-            if (Player.IsDead || MenuGUI.IsChatOpen || Shop.IsOpen || Player.IsRecalling())
+            if (Player.IsDead || MenuGUI.IsChatOpen || Shop.IsOpen || Player.IsRecalling()
+                || !Player.IsHPBarRendered)
             {
                 return;
             }
@@ -840,6 +988,9 @@ using EloBuddy;
                     break;
                 case OrbwalkingMode.Hybrid:
                     Hybrid();
+                    break;
+                case OrbwalkingMode.LaneClear:
+                    LaneClear();
                     break;
                 case OrbwalkingMode.LastHit:
                     LastHit();
@@ -892,7 +1043,7 @@ using EloBuddy;
             else if (MainMenu["Combo"]["SwapGap"].GetValue<MenuList>().Index > 0 && !E.IsInRange(target) && !markCanKill)
             {
                 var wDist = WState == 1 && wShadow.IsValid() ? wShadow.Distance(target) : float.MaxValue;
-                var rDist = RState == 1 && rShadow.IsValid() ? rShadow.Distance(target) : float.MaxValue;
+                var rDist = RState == 1 && RShadow.IsValid() ? RShadow.Distance(target) : float.MaxValue;
                 var minDist = Math.Min(wDist, rDist);
                 if (minDist.Equals(float.MaxValue) || target.DistanceToPlayer() <= minDist)
                 {
@@ -969,7 +1120,7 @@ using EloBuddy;
         private static void SwapCountEnemy()
         {
             var wCount = WState == 1 && wShadow.IsValid() ? wShadow.CountEnemyHeroesInRange(400) : int.MaxValue;
-            var rCount = RState == 1 && rShadow.IsValid() ? rShadow.CountEnemyHeroesInRange(400) : int.MaxValue;
+            var rCount = RState == 1 && RShadow.IsValid() ? RShadow.CountEnemyHeroesInRange(400) : int.MaxValue;
             var minCount = Math.Min(rCount, wCount);
             if (minCount == int.MaxValue || Player.CountEnemyHeroesInRange(400) <= minCount)
             {
@@ -1002,17 +1153,9 @@ using EloBuddy;
             {
                 Youmuu.Cast();
             }
-            if (Tiamat.IsReady && Player.CountEnemyHeroesInRange(Tiamat.Range) > 0)
+            if (Common.CantAttack)
             {
-                Tiamat.Cast();
-            }
-            if (Hydra.IsReady && Player.CountEnemyHeroesInRange(Hydra.Range) > 0)
-            {
-                Hydra.Cast();
-            }
-            if (Titanic.IsReady && !Player.Spellbook.IsAutoAttacking && Variables.Orbwalker.GetTarget() != null)
-            {
-                Titanic.Cast();
+                Common.CastTiamatHydra();
             }
         }
 

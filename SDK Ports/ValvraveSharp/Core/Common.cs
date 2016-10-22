@@ -27,6 +27,11 @@ using EloBuddy;
 
         internal static bool CanSmite => Program.Smite != SpellSlot.Unknown && Program.Smite.IsReady();
 
+        internal static bool CantAttack
+            =>
+                (Variables.Orbwalker.GetTarget() == null || !Variables.Orbwalker.CanAttack)
+                && Variables.Orbwalker.CanMove;
+
         private static int GetSmiteDmg
             =>
                 new[] { 390, 410, 430, 450, 480, 510, 540, 570, 600, 640, 680, 720, 760, 800, 850, 900, 950, 1000 }[
@@ -95,24 +100,32 @@ using EloBuddy;
             return spell.Casting(spell.GetTarget(spell.Width / 2), aoe, collisionable);
         }
 
-        internal static void CastSpellSmite(this Spell spell, AIHeroClient target, bool smiteCol)
+        internal static bool CastSpellSmite(this Spell spell, AIHeroClient target, bool smiteCol)
         {
             var pred1 = spell.GetPrediction(target, false, -1, CollisionableObjects.YasuoWall);
             if (pred1.Hitchance < spell.MinHitChance)
             {
-                return;
+                return false;
             }
             var pred2 = spell.GetPrediction(target, false, -1, CollisionableObjects.Minions);
-            if (pred2.Hitchance == HitChance.Collision)
+            return pred2.Hitchance == HitChance.Collision
+                       ? smiteCol && CastSmiteKillCollision(pred2.CollisionObjects) && spell.Cast(pred1.CastPosition)
+                       : pred2.Hitchance >= spell.MinHitChance && spell.Cast(pred2.CastPosition);
+        }
+
+        internal static void CastTiamatHydra()
+        {
+            if (Program.Tiamat.IsReady && Program.Player.CountEnemyHeroesInRange(Program.Tiamat.Range) > 0)
             {
-                if (smiteCol && CastSmiteKillCollision(pred2.CollisionObjects))
-                {
-                    spell.Cast(pred1.CastPosition);
-                }
+                Program.Tiamat.Cast();
             }
-            else if (pred2.Hitchance >= spell.MinHitChance)
+            if (Program.Ravenous.IsReady && Program.Player.CountEnemyHeroesInRange(Program.Ravenous.Range) > 0)
             {
-                spell.Cast(pred2.CastPosition);
+                Program.Ravenous.Cast();
+            }
+            if (Program.Titanic.IsReady && Variables.Orbwalker.GetTarget() != null)
+            {
+                Program.Titanic.Cast();
             }
         }
 

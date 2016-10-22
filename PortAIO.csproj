@@ -5724,6 +5724,7 @@
     <Compile Include="SDK Ports\ValvraveSharp\Plugin\DrMundo.cs" />
     <Compile Include="SDK Ports\ValvraveSharp\Plugin\Kennen.cs" />
     <Compile Include="SDK Ports\ValvraveSharp\Plugin\LeeSin.cs" />
+    <Compile Include="SDK Ports\ValvraveSharp\Plugin\Lucian.cs" />
     <Compile Include="SDK Ports\ValvraveSharp\Plugin\Vladimir.cs" />
     <Compile Include="SDK Ports\ValvraveSharp\Plugin\Yasuo.cs" />
     <Compile Include="SDK Ports\ValvraveSharp\Plugin\Zed.cs" />

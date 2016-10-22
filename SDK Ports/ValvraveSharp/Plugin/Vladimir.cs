@@ -247,7 +247,7 @@ using EloBuddy;
                 if (targets.Count > 0)
                 {
                     var hit = 0;
-                    var posCast = new Vector3();
+                    var posCast = Vector3.Zero;
                     foreach (var target in targets)
                     {
                         var pred = R.GetPrediction(target);

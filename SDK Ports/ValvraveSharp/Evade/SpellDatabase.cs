@@ -354,7 +354,7 @@ using EloBuddy;
                 new SpellData
                     {
                         ChampionName = "Cassiopeia", SpellName = "CassiopeiaMiasma", Slot = SpellSlot.W,
-                        Type = SkillShotType.SkillshotCircle, Delay = 250, Range = 900, Radius = 220, MissileSpeed = 2500,
+                        Type = SkillShotType.SkillshotCircle, Delay = 250, Range = 800, Radius = 220, MissileSpeed = 2500,
                         AddHitbox = true, DangerValue = 2, MissileSpellName = "CassiopeiaMiasma",
                         CollisionObjects = CollisionableObjects.YasuoWall
                     });
@@ -836,8 +836,8 @@ using EloBuddy;
                 new SpellData
                     {
                         ChampionName = "Illaoi", SpellName = "IllaoiR", Slot = SpellSlot.R,
-                        Type = SkillShotType.SkillshotCircle, Delay = 500, Range = 0, Radius = 450,
-                        MissileSpeed = int.MaxValue, FixedRange = true, DangerValue = 3, IsDangerous = true
+                        Type = SkillShotType.SkillshotCircle, Delay = 500, Radius = 450, MissileSpeed = int.MaxValue,
+                        FixedRange = true, DangerValue = 3, IsDangerous = true
                     });
 
             #endregion Illaoi
@@ -1397,6 +1397,18 @@ using EloBuddy;
 
             #endregion Malzahar
 
+            #region Maokai
+
+            Spells.Add(
+                new SpellData
+                    {
+                        ChampionName = "Maokai", SpellName = "MaokaiTrunkLine", Slot = SpellSlot.Q,
+                        Type = SkillShotType.SkillshotCircle, Delay = 250, Radius = 100, MissileSpeed = int.MaxValue,
+                        FixedRange = true, DangerValue = 3
+                    });
+
+            #endregion Maokai
+
             #region Morgana
 
             Spells.Add(
@@ -1858,18 +1870,18 @@ using EloBuddy;
                 new SpellData
                     {
                         ChampionName = "Syndra", SpellName = "syndrae5", Slot = SpellSlot.E,
-                        Type = SkillShotType.SkillshotMissileLine, Delay = 0, Range = 950, Radius = 100,
-                        MissileSpeed = 2000, AddHitbox = true, DangerValue = 2, MissileSpellName = "syndrae5",
-                        DisableFowDetection = true, CollisionObjects = CollisionableObjects.YasuoWall
+                        Type = SkillShotType.SkillshotMissileLine, Range = 950, Radius = 100, MissileSpeed = 2000,
+                        AddHitbox = true, DangerValue = 2, MissileSpellName = "syndrae5", DisableFowDetection = true,
+                        CollisionObjects = CollisionableObjects.YasuoWall
                     });
 
             Spells.Add(
                 new SpellData
                     {
                         ChampionName = "Syndra", SpellName = "SyndraE", Slot = SpellSlot.E,
-                        Type = SkillShotType.SkillshotMissileLine, Delay = 0, Range = 950, Radius = 100,
-                        MissileSpeed = 2000, AddHitbox = true, DangerValue = 2, DisableFowDetection = true,
-                        MissileSpellName = "SyndraE", CollisionObjects = CollisionableObjects.YasuoWall
+                        Type = SkillShotType.SkillshotMissileLine, Range = 950, Radius = 100, MissileSpeed = 2000,
+                        AddHitbox = true, DangerValue = 2, DisableFowDetection = true, MissileSpellName = "SyndraE",
+                        CollisionObjects = CollisionableObjects.YasuoWall
                     });
 
             #endregion Syndra
@@ -1946,7 +1958,7 @@ using EloBuddy;
                         ChampionName = "Taric", SpellName = "TaricE", Slot = SpellSlot.E,
                         Type = SkillShotType.SkillshotLine, Delay = 1000, Range = 575, Radius = 140,
                         MissileSpeed = int.MaxValue, FixedRange = true, AddHitbox = true, DangerValue = 3,
-                        IsDangerous = true, MissileSpellName = "TaricE", CollisionObjects = CollisionableObjects.YasuoWall
+                        IsDangerous = true, MissileSpellName = "TaricE"
                     });
 
             #endregion Taric

@@ -245,7 +245,12 @@ using EloBuddy;
 
         private static void OnAction(object sender, OrbwalkingActionArgs args)
         {
-            if (!E.IsReady() || args.Type != OrbwalkingType.AfterAttack || !(args.Target is AIHeroClient))
+            if (!E.IsReady() || args.Type != OrbwalkingType.AfterAttack)
+            {
+                return;
+            }
+            var target = args.Target as AIHeroClient;
+            if (target == null || !target.IsValid)
             {
                 return;
             }

@@ -526,7 +526,7 @@ using EloBuddy;
                 }
                 if (skillshot.SpellData.SpellName == "JarvanIVDragonStrike")
                 {
-                    var endPos = new Vector2();
+                    var endPos = Vector2.Zero;
                     foreach (var s in
                         DetectedSkillshots.Where(i => i.SpellData.Slot == SpellSlot.E))
                     {

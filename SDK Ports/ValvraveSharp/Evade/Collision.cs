@@ -131,7 +131,7 @@ using EloBuddy;
                     }
                 }
             }
-            return collisions.Count > 0 ? collisions.OrderBy(i => i.Distance).First().Position : new Vector2();
+            return collisions.Count > 0 ? collisions.OrderBy(i => i.Distance).First().Position : Vector2.Zero;
         }
 
         internal static void Init()
