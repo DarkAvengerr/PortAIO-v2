@@ -100,10 +100,12 @@ namespace PortAIO
                 {
                     case 0: // AramDetFull
                         ARAMDetFull.Program.Main();
-                        SharpAI.Program.Main();
                         break;
                     case 1: // AutoJungle
                         AutoJungle.Program.OnGameLoad();
+                        break;
+                    case 2: // SharpAI
+                        SharpAI.Program.Main();
                         break;
                 }
             }

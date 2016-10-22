@@ -432,7 +432,7 @@ namespace PortAIO.Dual_Port
 
             var autoPlay = new Menu("Auto Play", "PortAIOAUTOPLAY");
             autoPlay.AddItem(new MenuItem("AutoPlay", "Enable AutoPlay?").SetValue(false));
-            autoPlay.AddItem(new MenuItem("selectAutoPlay", "Which AutoPlay?").SetValue(new StringList(new[] { "AramDETFull", "AutoJungle" })));
+            autoPlay.AddItem(new MenuItem("selectAutoPlay", "Which AutoPlay?").SetValue(new StringList(new[] { "AramDETFull", "AutoJungle", "SharpAI" })));
             menu.AddSubMenu(autoPlay);
 
             var utility = new Menu("Utilities", "Utilitiesports");
