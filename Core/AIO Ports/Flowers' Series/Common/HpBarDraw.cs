@@ -1,6 +1,6 @@
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace Flowers_ADC_Series
+ namespace Flowers_ADC_Series.Common
 {
     using LeagueSharp;
     using SharpDX;
@@ -30,9 +30,7 @@ using EloBuddy;
         }
 
         public static Vector2 StartPosition
-        {
-            get { return new Vector2(Unit.HPBarPosition.X + Offset.X, Unit.HPBarPosition.Y + Offset.Y); }
-        }
+            => new Vector2(Unit.HPBarPosition.X + Offset.X, Unit.HPBarPosition.Y + Offset.Y);
 
         public HpBarDraw()
         {
@@ -59,23 +57,24 @@ using EloBuddy;
             DxLine.OnLostDevice();
         }
 
-
         private static float GetHpProc(float dmg = 0)
         {
-            float Health = ((Unit.Health - dmg) > 0) ? (Unit.Health - dmg) : 0;
-            return (Health / Unit.MaxHealth);
+            var Health = Unit.Health - dmg > 0 ? Unit.Health - dmg : 0;
+
+            return Health / Unit.MaxHealth;
         }
 
         private static Vector2 GetHpPosAfterDmg(float dmg)
         {
-            float w = GetHpProc(dmg) * Width;
+            var w = GetHpProc(dmg) * Width;
+
             return new Vector2(StartPosition.X + w, StartPosition.Y);
         }
 
         public static void DrawDmg(float dmg, ColorBGRA color)
         {
-            Vector2 hpPosNow = GetHpPosAfterDmg(0);
-            Vector2 hpPosAfter = GetHpPosAfterDmg(dmg);
+            var hpPosNow = GetHpPosAfterDmg(0);
+            var hpPosAfter = GetHpPosAfterDmg(dmg);
 
             FullHPBar(hpPosNow, hpPosAfter, color);
         }

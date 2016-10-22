@@ -2,6 +2,7 @@ using EloBuddy;
  using LeagueSharp.Common; 
  namespace Flowers_ADC_Series.Pluging
 {
+    using Common;
     using System;
     using System.Linq;
     using LeagueSharp;
@@ -9,23 +10,12 @@ using EloBuddy;
     using SharpDX;
     using Color = System.Drawing.Color;
     using Orbwalking = Orbwalking;
-    using static Common;
+    using static Common.Common;
 
-    internal class Lucian
+    internal class Lucian : Program
     {
-        private static Spell Q;
-        private static Spell QExtend;
-        private static Spell W;
-        private static Spell E;
-        private static Spell R;
-
-        private static int CastSpellTime;
-
-        private static readonly Menu Menu = Program.Championmenu;
-        private static readonly AIHeroClient Me = Program.Me;
-        private static readonly Orbwalking.Orbwalker Orbwalker = Program.Orbwalker;
-
-        private static HpBarDraw HpBarDraw = new HpBarDraw();
+        private int CastSpellTime;
+        private new readonly Menu Menu = Championmenu;
 
         public Lucian()
         {
@@ -47,6 +37,7 @@ using EloBuddy;
                 ComboMenu.AddItem(new MenuItem("ComboQExtended", "Use Q Extended", true).SetValue(true));
                 ComboMenu.AddItem(new MenuItem("ComboW", "Use W", true).SetValue(true));
                 ComboMenu.AddItem(new MenuItem("ComboE", "Use E", true).SetValue(true));
+                ComboMenu.AddItem(new MenuItem("ComboELogic", "Use E|First E Logic?", true).SetValue(true));
                 ComboMenu.AddItem(new MenuItem("ComboR", "Use R", true).SetValue(true));
             }
 
@@ -82,13 +73,22 @@ using EloBuddy;
                 KillStealMenu.AddItem(new MenuItem("KillStealW", "Use W", true).SetValue(true));
             }
 
-            var EMenu = Menu.AddSubMenu(new Menu("E Menu", "E Menu"));
+            var MiscMenu = Menu.AddSubMenu(new Menu("Misc", "Misc"));
             {
-                EMenu.AddItem(new MenuItem("Anti", "Anti Gapcloser E", true).SetValue(true));
-                EMenu.AddItem(new MenuItem("CheckECast", "   Check E Cast", true));
-                EMenu.AddItem(new MenuItem("underE", "Dont E to Enemy Turret", true).SetValue(true));
-                EMenu.AddItem(new MenuItem("ECheck", "Check Wall/ Building", true).SetValue(true));
-                EMenu.AddItem(new MenuItem("SafeCheck", "Safe Check", true).SetValue(true));
+                var EMenu = MiscMenu.AddSubMenu(new Menu("E Settings", "E Settings"));
+                {
+                    EMenu.AddItem(new MenuItem("Anti", "Anti Gapcloser E", true).SetValue(true));
+                    EMenu.AddItem(new MenuItem("ShortELogic", "Smart Short E Logic", true).SetValue(true));
+                    EMenu.AddItem(new MenuItem("underE", "Dont E to Enemy Turret", true).SetValue(true));
+                    EMenu.AddItem(new MenuItem("ECheck", "Check Wall/ Building", true).SetValue(true));
+                    EMenu.AddItem(new MenuItem("SafeCheck", "Safe Check", true).SetValue(true));
+                }
+
+                var RMenu = MiscMenu.AddSubMenu(new Menu("R Settings", "R Settings"));
+                {
+                    RMenu.AddItem(new MenuItem("RMove", "Auto Move|If R Is Casting?", true).SetValue(true));
+                    RMenu.AddItem(new MenuItem("RYoumuu", "Auto Youmuu|If R Is Casting?", true).SetValue(true));
+                }
             }
 
             var DrawMenu = Menu.AddSubMenu(new Menu("Drawings", "Drawings"));
@@ -110,6 +110,12 @@ using EloBuddy;
         {
             if (Me.IsDead)
             {
+                return;
+            }
+
+            if (Menu.Item("RMove", true).GetValue<bool>() && Me.HasBuff("LucianR"))
+            {
+                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
                 return;
             }
 
@@ -187,14 +193,26 @@ using EloBuddy;
 
         private void Combo()
         {
+            if (Menu.Item("ComboELogic", true).GetValue<bool>() && E.IsReady())
+            {
+                var target = TargetSelector.GetTarget(975f, TargetSelector.DamageType.Physical);
+
+                if (target.IsValidTarget(975f) && !Orbwalker.InAutoAttackRange(target))
+                {
+                    Cast_E(target, true);
+                }
+            }
+
             if (Menu.Item("ComboQExtended", true).GetValue<bool>() && Q.IsReady())
             {
                 var target = TargetSelector.GetTarget(QExtend.Range, TargetSelector.DamageType.Physical);
 
-                if (CheckTarget(target, QExtend.Range) && target.DistanceToPlayer() > Q.Range)
+                if (CheckTarget(target, QExtend.Range) && target.DistanceToPlayer() > Q.Range &&
+                    (!E.IsReady() || (E.IsReady() && target.DistanceToPlayer() > 975f)))
                 {
                     var pred = QExtend.GetPrediction(target, true);
-                    var collisions = MinionManager.GetMinions(Me.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.NotAlly);
+                    var collisions = MinionManager.GetMinions(Me.ServerPosition, Q.Range, MinionTypes.All,
+                        MinionTeam.NotAlly);
 
                     if (!collisions.Any())
                     {
@@ -203,7 +221,8 @@ using EloBuddy;
 
                     foreach (var minion in collisions)
                     {
-                        var poly = new Geometry.Polygon.Rectangle(Me.ServerPosition, Me.ServerPosition.Extend(minion.ServerPosition, QExtend.Range), QExtend.Width);
+                        var poly = new Geometry.Polygon.Rectangle(Me.ServerPosition,
+                            Me.ServerPosition.Extend(minion.ServerPosition, QExtend.Range), QExtend.Width);
 
                         if (poly.IsInside(pred.UnitPosition))
                         {
@@ -235,7 +254,7 @@ using EloBuddy;
 
             if (Me.ManaPercent >= Menu.Item("HarassMana", true).GetValue<Slider>().Value)
             {
-                if (Menu.Item("HarassW", true).GetValue<bool>() && Q.IsReady())
+                if (Menu.Item("HarassQ", true).GetValue<bool>() && Q.IsReady())
                 {
                     var target = TargetSelector.GetTarget(QExtend.Range, TargetSelector.DamageType.Physical);
 
@@ -248,7 +267,8 @@ using EloBuddy;
                         else if (target.IsValidTarget(QExtend.Range) && Menu.Item("HarassQExtended", true).GetValue<bool>())
                         {
                             var pred = QExtend.GetPrediction(target, true);
-                            var collisions = MinionManager.GetMinions(Me.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.NotAlly);
+                            var collisions = MinionManager.GetMinions(Me.ServerPosition, Q.Range, MinionTypes.All,
+                                MinionTeam.NotAlly);
 
                             if (!collisions.Any())
                             {
@@ -257,7 +277,8 @@ using EloBuddy;
 
                             foreach (var minion in collisions)
                             {
-                                var poly = new Geometry.Polygon.Rectangle(Me.ServerPosition, Me.ServerPosition.Extend(minion.ServerPosition, QExtend.Range), QExtend.Width);
+                                var poly = new Geometry.Polygon.Rectangle(Me.ServerPosition,
+                                    Me.ServerPosition.Extend(minion.ServerPosition, QExtend.Range), QExtend.Width);
 
                                 if (poly.IsInside(pred.UnitPosition))
                                 {
@@ -327,6 +348,14 @@ using EloBuddy;
             if (Me.GetSpellSlot(Args.SData.Name) == SpellSlot.Q || Me.GetSpellSlot(Args.SData.Name) == SpellSlot.W)
             {
                 CastSpellTime = Utils.TickCount;
+            }
+
+            if (Me.GetSpellSlot(Args.SData.Name) == SpellSlot.R && Menu.Item("RYoumuu", true).GetValue<bool>())
+            {
+                if (Items.HasItem(3142))
+                {
+                    Items.UseItem(3142);
+                }
             }
         }
 
@@ -419,7 +448,7 @@ using EloBuddy;
                 if (Menu.Item("DrawDamage", true).GetValue<bool>())
                 {
                     foreach (
-                        var x in ObjectManager.Get<AIHeroClient>().Where(e => e.IsValidTarget() && !e.IsDead && !e.IsZombie))
+                        var x in HeroManager.Enemies.Where(e => e.IsValidTarget() && !e.IsDead && !e.IsZombie))
                     {
                         HpBarDraw.Unit = x;
                         HpBarDraw.DrawDmg((float)ComboDamage(x), new ColorBGRA(255, 204, 0, 170));
@@ -428,10 +457,10 @@ using EloBuddy;
             }
         }
 
-        private void Cast_E(AIHeroClient target)
+        private void Cast_E(AIHeroClient target, bool FirstE = false)
         {
-            var castpos = Me.ServerPosition.Extend(Game.CursorPos, 220);
-            var maxepos = Me.ServerPosition.Extend(Game.CursorPos, E.Range);
+            var castpos = Me.ServerPosition.Extend(FirstE ? target.ServerPosition : Game.CursorPos, 220);
+            var maxepos = Me.ServerPosition.Extend(FirstE ? target.ServerPosition : Game.CursorPos, E.Range);
 
             if (castpos.UnderTurret(true) && Menu.Item("underE", true).GetValue<bool>())
             {
@@ -452,18 +481,18 @@ using EloBuddy;
             }
 
             if (Orbwalking.InAutoAttackRange(target) &&
-                target.ServerPosition.Distance(castpos) < Orbwalking.GetAttackRange(Me))
+                target.ServerPosition.Distance(castpos) <= Orbwalking.GetRealAutoAttackRange(Me))
             {
-                E.Cast(castpos, true);
+                E.Cast(Menu.Item("ShortELogic", true).GetValue<bool>() ? castpos : maxepos, true);
             }
-            else if (!Orbwalking.InAutoAttackRange(target) && target.ServerPosition.Distance(castpos) > 
-                Orbwalking.GetAttackRange(Me))
+            else if (!Orbwalking.InAutoAttackRange(target) && target.ServerPosition.Distance(castpos) <= 
+                Orbwalking.GetRealAutoAttackRange(Me))
             {
-                E.Cast(castpos, true);
+                E.Cast(Menu.Item("ShortELogic", true).GetValue<bool>() ? castpos : maxepos, true);
             }
             else if (!Orbwalking.InAutoAttackRange(target) &&
-                     target.ServerPosition.Distance(castpos) > Orbwalking.GetAttackRange(Me) &&
-                     target.ServerPosition.Distance(maxepos) < Orbwalking.GetAttackRange(Me))
+                     target.ServerPosition.Distance(castpos) > Orbwalking.GetRealAutoAttackRange(Me) &&
+                     target.ServerPosition.Distance(maxepos) <= Orbwalking.GetRealAutoAttackRange(Me))
             {
                 E.Cast(maxepos, true);
             }

@@ -2,6 +2,7 @@ using EloBuddy;
  using LeagueSharp.Common; 
  namespace Flowers_ADC_Series.Pluging
 {
+    using Common;
     using System;
     using System.Linq;
     using LeagueSharp;
@@ -9,20 +10,11 @@ using EloBuddy;
     using SharpDX;
     using Color = System.Drawing.Color;
     using Orbwalking = Orbwalking;
-    using static Common;
+    using static Common.Common;
 
-    internal class Quinn
+    internal class Quinn : Program
     {
-        private static Spell Q;
-        private static Spell W;
-        private static Spell E;
-        private static Spell R;
-
-        private static readonly Menu Menu = Program.Championmenu;
-        private static readonly AIHeroClient Me = Program.Me;
-        private static readonly Orbwalking.Orbwalker Orbwalker = Program.Orbwalker;
-
-        private static HpBarDraw HpBarDraw = new HpBarDraw();
+        private new readonly Menu Menu = Championmenu;
 
         public Quinn()
         {
@@ -73,13 +65,21 @@ using EloBuddy;
 
             var MiscMenu = Menu.AddSubMenu(new Menu("Misc", "Misc"));
             {
+                var EMenu = MiscMenu.AddSubMenu(new Menu("E Settings", "E Settings"));
+                {
+                    EMenu.AddItem(new MenuItem("Interrupt", "Interrupt Danger Spells", true).SetValue(true));
+                    EMenu.AddItem(new MenuItem("Gapcloser", "Anti Gapcloser", true).SetValue(true));
+                    EMenu.AddItem(new MenuItem("AntiAlistar", "Anti Alistar", true).SetValue(true));
+                    EMenu.AddItem(new MenuItem("AntiRengar", "Anti Rengar", true).SetValue(true));
+                    EMenu.AddItem(new MenuItem("AntiKhazix", "Anti Khazix", true).SetValue(true));
+                }
+
+                var RMenu = MiscMenu.AddSubMenu(new Menu("R Settings", "R Settings"));
+                {
+                    RMenu.AddItem(new MenuItem("AutoR", "Auto R?", true).SetValue(true));
+                }
+
                 MiscMenu.AddItem(new MenuItem("Forcus", "Forcus Attack Passive Target", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("Interrupt", "Interrupt Danger Spells", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("Gapcloser", "Anti Gapcloser", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("AntiAlistar", "Anti Alistar", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("AntiRengar", "Anti Rengar", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("AntiKhazix", "Anti Khazix", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("AutoR", "Auto R?", true).SetValue(true));
             }
 
             var DrawMenu = Menu.AddSubMenu(new Menu("Drawings", "Drawings"));
@@ -129,8 +129,7 @@ using EloBuddy;
                 {
                     foreach (var enemy in HeroManager.Enemies.Where(x => !x.IsDead && !x.IsZombie && HavePassive(x)))
                     {
-                        TargetSelector.SetTarget(enemy);
-                        return;
+                        Orbwalker.ForceTarget(enemy);
                     }
                 }
                 else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
@@ -327,6 +326,11 @@ using EloBuddy;
 
         private void LaneClear()
         {
+            if (Me.UnderTurret(true))
+            {
+                return;
+            }
+
             if (Me.ManaPercent >= Menu.Item("LaneClearMana", true).GetValue<Slider>().Value)
             {
                 if (Menu.Item("LaneClearQ", true).GetValue<bool>() && Q.IsReady())
@@ -350,7 +354,8 @@ using EloBuddy;
         {
             if (Menu.Item("AutoR", true).GetValue<bool>() && R.IsReady() && R.Instance.Name == "QuinnR")
             {
-                if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen && Me.InFountain())
+                if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen &&
+                    Me.InFountain())
                 {
                     R.Cast();
                 }
@@ -374,7 +379,7 @@ using EloBuddy;
                 if (Menu.Item("DrawDamage", true).GetValue<bool>())
                 {
                     foreach (
-                        var x in ObjectManager.Get<AIHeroClient>().Where(e => e.IsValidTarget() && !e.IsDead && !e.IsZombie))
+                        var x in HeroManager.Enemies.Where(e => e.IsValidTarget() && !e.IsDead && !e.IsZombie))
                     {
                         HpBarDraw.Unit = x;
                         HpBarDraw.DrawDmg((float)ComboDamage(x), new ColorBGRA(255, 204, 0, 170));

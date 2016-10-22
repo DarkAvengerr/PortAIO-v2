@@ -2,6 +2,7 @@ using EloBuddy;
  using LeagueSharp.Common; 
  namespace Flowers_ADC_Series.Pluging
 {
+    using Common;
     using System;
     using System.Linq;
     using LeagueSharp;
@@ -9,20 +10,11 @@ using EloBuddy;
     using SharpDX;
     using Color = System.Drawing.Color;
     using Orbwalking = Orbwalking;
-    using static Common;
+    using static Common.Common;
 
-    internal class Tristana
+    internal class Tristana : Program
     {
-        private static Spell Q;
-        private static Spell W;
-        private static Spell E;
-        private static Spell R;
-
-        private static readonly Menu Menu = Program.Championmenu;
-        private static readonly AIHeroClient Me = Program.Me;
-        private static readonly Orbwalking.Orbwalker Orbwalker = Program.Orbwalker;
-
-        private static HpBarDraw HpBarDraw = new HpBarDraw();
+        private new readonly Menu Menu = Championmenu;
 
         public Tristana()
         {
@@ -83,18 +75,27 @@ using EloBuddy;
 
             var MiscMenu = Menu.AddSubMenu(new Menu("Misc", "Misc"));
             {
-                MiscMenu.AddItem(new MenuItem("Forcustarget", "Forcus Attack Passive Target", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("InterruptR", "Use R Interrupt Spell", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("AntiR", "Use R Anti Gapcloser", true).SetValue(false));
-                MiscMenu.AddItem(new MenuItem("AntiRengar", "Use R Anti Rengar", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("AntiKhazix", "Use R Anti Khazix", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("SemiE", "Semi-manual E Key", true).SetValue(new KeyBind('E', KeyBindType.Press)));
-                foreach (var target in HeroManager.Enemies)
+                var EMenu = MiscMenu.AddSubMenu(new Menu("E Settings", "E Settings"));
                 {
-                    MiscMenu.AddItem(
-                        new MenuItem("Semi" + target.ChampionName.ToLower(), "E target: " + target.ChampionName, true)
-                            .SetValue(AutoEnableList.Contains(target.ChampionName)));
+                    EMenu.AddItem(
+                        new MenuItem("SemiE", "Semi-manual E Key", true).SetValue(new KeyBind('E', KeyBindType.Press)));
+                    foreach (var target in HeroManager.Enemies)
+                    {
+                        EMenu.AddItem(
+                            new MenuItem("Semi" + target.ChampionName.ToLower(), "E target: " + target.ChampionName, true)
+                                .SetValue(true));
+                    }
                 }
+
+                var RMenu = MiscMenu.AddSubMenu(new Menu("R Settings", "R Settings"));
+                {
+                    RMenu.AddItem(new MenuItem("InterruptR", "Use R Interrupt Spell", true).SetValue(true));
+                    RMenu.AddItem(new MenuItem("AntiR", "Use R Anti Gapcloser", true).SetValue(false));
+                    RMenu.AddItem(new MenuItem("AntiRengar", "Use R Anti Rengar", true).SetValue(true));
+                    RMenu.AddItem(new MenuItem("AntiKhazix", "Use R Anti Khazix", true).SetValue(true));
+                }
+
+                MiscMenu.AddItem(new MenuItem("Forcustarget", "Forcus Attack Passive Target", true).SetValue(true));
             }
 
             var DrawMenu = Menu.AddSubMenu(new Menu("Drawings", "Drawings"));
@@ -175,12 +176,14 @@ using EloBuddy;
             {
                 if (Menu.Item("KillStealE", true).GetValue<bool>() && E.IsReady())
                 {
-                    foreach (var target in from x in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && CheckTargetSureCanKill(x))
-                                          let etargetstacks = x.Buffs.Find(buff => buff.Name == "TristanaECharge")
-                                          where
-                                          R.GetDamage(x) + E.GetDamage(x) + etargetstacks?.Count * 0.30 * E.GetDamage(x) >=
-                                          x.Health
-                                          select x)
+                    foreach (
+                        var target in
+                        from x in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && CheckTargetSureCanKill(x))
+                        let etargetstacks = x.Buffs.Find(buff => buff.Name == "TristanaECharge")
+                        where
+                        R.GetDamage(x) + E.GetDamage(x) + etargetstacks?.Count*0.30*E.GetDamage(x) >=
+                        x.Health
+                        select x)
                     {
                         R.CastOnUnit(target);
                         return;
@@ -229,7 +232,8 @@ using EloBuddy;
                     E.CastOnUnit(target, true);
                 }
 
-                if (Menu.Item("ComboR", true).GetValue<bool>() && R.IsReady() && Me.HealthPercent <= Menu.Item("ComboRHp", true).GetValue<Slider>().Value)
+                if (Menu.Item("ComboR", true).GetValue<bool>() && R.IsReady() &&
+                    Me.HealthPercent <= Menu.Item("ComboRHp", true).GetValue<Slider>().Value)
                 {
                     var dangerenemy = HeroManager.Enemies.Where(e => e.IsValidTarget(R.Range)).
                         OrderBy(enemy => enemy.Distance(Me)).FirstOrDefault();
@@ -263,7 +267,7 @@ using EloBuddy;
 
                     if (Menu.Item("HarassEToMinion", true).GetValue<bool>())
                     {
-                        foreach (var minion in MinionManager.GetMinions(E.Range).Where(m => 
+                        foreach (var minion in MinionManager.GetMinions(E.Range).Where(m =>
                         m.Health < Me.GetAutoAttackDamage(m) && m.CountEnemiesInRange(m.BoundingRadius + 150) >= 1))
                         {
                             var etarget = E.GetTarget();
@@ -320,7 +324,7 @@ using EloBuddy;
             )
             {
                 if (target.Health <
-                    Me.GetSpellDamage(target, SpellSlot.E)*(target.GetBuffCount("TristanaECharge")*0.30) +
+                    Me.GetSpellDamage(target, SpellSlot.E) * (target.GetBuffCount("TristanaECharge") * 0.30) +
                     Me.GetSpellDamage(target, SpellSlot.E))
                 {
                     E.CastOnUnit(target, true);
@@ -348,22 +352,25 @@ using EloBuddy;
 
         private void OnCreate(GameObject sender, EventArgs Args)
         {
-            var Rengar = HeroManager.Enemies.Find(heros => heros.ChampionName.Equals("Rengar"));
-            var Khazix = HeroManager.Enemies.Find(heros => heros.ChampionName.Equals("Khazix"));
-
-            if (Menu.Item("AntiRengar", true).GetValue<bool>() && Rengar != null)
+            if (R.IsReady())
             {
-                if (sender.Name == "Rengar_LeapSound.troy" && sender.Position.Distance(Me.Position) < R.Range)
+                var Rengar = HeroManager.Enemies.Find(heros => heros.ChampionName.Equals("Rengar"));
+                var Khazix = HeroManager.Enemies.Find(heros => heros.ChampionName.Equals("Khazix"));
+
+                if (Menu.Item("AntiRengar", true).GetValue<bool>() && Rengar != null)
                 {
-                    R.CastOnUnit(Rengar, true);
+                    if (sender.Name == "Rengar_LeapSound.troy" && sender.Position.Distance(Me.Position) < R.Range)
+                    {
+                        R.CastOnUnit(Rengar, true);
+                    }
                 }
-            }
 
-            if (Menu.Item("AntiKhazix", true).GetValue<bool>() && Khazix != null)
-            {
-                if (sender.Name == "Khazix_Base_E_Tar.troy" && sender.Position.Distance(Me.Position) <= 300)
+                if (Menu.Item("AntiKhazix", true).GetValue<bool>() && Khazix != null)
                 {
-                    R.CastOnUnit(Khazix, true);
+                    if (sender.Name == "Khazix_Base_E_Tar.troy" && sender.Position.Distance(Me.Position) <= 300)
+                    {
+                        R.CastOnUnit(Khazix, true);
+                    }
                 }
             }
         }
@@ -394,12 +401,15 @@ using EloBuddy;
         {
             if (Menu.Item("Forcustarget", true).GetValue<bool>())
             {
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo ||
+                    Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(enemy => Orbwalking.InAutoAttackRange(enemy) && enemy.HasBuff("TristanaEChargeSound")))
+                    foreach (
+                        var enemy in
+                        HeroManager.Enemies.Where(
+                            enemy => Orbwalking.InAutoAttackRange(enemy) && enemy.HasBuff("TristanaEChargeSound")))
                     {
-                        TargetSelector.SetTarget(enemy);
-                        return;
+                        Orbwalker.ForceTarget(enemy);
                     }
                 }
             }
@@ -414,7 +424,9 @@ using EloBuddy;
                             {
                                 if (Menu.Item("ComboQOnlyPassive", true).GetValue<bool>())
                                 {
-                                    var Target = Args.Target.Type == GameObjectType.AIHeroClient ? (AIHeroClient)Args.Target : null;
+                                    var Target = Args.Target.Type == GameObjectType.AIHeroClient
+                                        ? (AIHeroClient) Args.Target
+                                        : null;
 
                                     if (Target != null &&
                                         (Target.HasBuff("TristanaEChargeSound") || Target.HasBuff("TristanaECharge")))
@@ -494,7 +506,7 @@ using EloBuddy;
                 if (Menu.Item("DrawDamage", true).GetValue<bool>())
                 {
                     foreach (
-                        var x in ObjectManager.Get<AIHeroClient>().Where(e => e.IsValidTarget() && !e.IsDead && !e.IsZombie))
+                        var x in HeroManager.Enemies.Where(e => e.IsValidTarget() && !e.IsDead && !e.IsZombie))
                     {
                         HpBarDraw.Unit = x;
                         HpBarDraw.DrawDmg((float)ComboDamage(x), new ColorBGRA(255, 204, 0, 170));

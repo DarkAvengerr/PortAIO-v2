@@ -1,11 +1,10 @@
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace Flowers_ADC_Series
+ namespace Flowers_ADC_Series.Common
 {
     using LeagueSharp;
     using LeagueSharp.Common;
     using SharpDX;
-    using System;
     using System.Linq;
 
     public class YasuoWindWall
@@ -19,7 +18,6 @@ using EloBuddy;
             {
                 if (Yasuo)
                 {
-                    Console.WriteLine("Yasuo In Game!");
                     Enable = true;
                 }
             }
@@ -67,7 +65,8 @@ using EloBuddy;
 
             var level = YasuoWall.WallLvl;
             var wallWidth = (350 + 50 * level);
-            var wallDirection = (YasuoWall.CastPosition.To2D() - YasuoWall.YasuoPosition.To2D()).Normalized().Perpendicular();
+            var wallDirection =
+                (YasuoWall.CastPosition.To2D() - YasuoWall.YasuoPosition.To2D()).Normalized().Perpendicular();
             var wallStart = YasuoWall.CastPosition.To2D() + wallWidth / 2f * wallDirection;
             var wallEnd = wallStart - wallWidth * wallDirection;
 

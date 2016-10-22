@@ -2,6 +2,7 @@ using EloBuddy;
  using LeagueSharp.Common; 
  namespace Flowers_ADC_Series.Pluging
 {
+    using Common;
     using System;
     using System.Linq;
     using LeagueSharp;
@@ -9,27 +10,17 @@ using EloBuddy;
     using SharpDX;
     using Color = System.Drawing.Color;
     using Orbwalking = Orbwalking;
-    using static Common;
+    using static Common.Common;
 
-    internal class Jhin
+    internal class Jhin : Program
     {
-        private static Spell Q;
-        private static Spell W;
-        private static Spell E;
-        private static Spell R;
-
-        public static int LastPingT;
-        public static int LastECast;
-        public static int LastShowNoit;
-        public static bool IsAttack;
-
-        public static Vector2 PingLocation;
-
-        private static readonly Menu Menu = Program.Championmenu;
-        private static readonly AIHeroClient Me = Program.Me;
-        private static readonly Orbwalking.Orbwalker Orbwalker = Program.Orbwalker;
-
-        private static HpBarDraw HpBarDraw = new HpBarDraw();
+        private AIHeroClient rShotTarget;
+        private int LastPingT;
+        private int LastECast;
+        private int LastShowNoit;
+        private bool IsAttack;
+        private Vector2 PingLocation;
+        private new readonly Menu Menu = Championmenu;
 
         public Jhin()
         {
@@ -50,10 +41,7 @@ using EloBuddy;
                 ComboMenu.AddItem(new MenuItem("ComboWOnly", "Use W| Only Use to MarkTarget?", true).SetValue(true));
                 ComboMenu.AddItem(new MenuItem("ComboE", "Use E", true).SetValue(true));
                 ComboMenu.AddItem(new MenuItem("ComboR", "Use R| In Shot Mode", true).SetValue(true));
-                ComboMenu.AddItem(new MenuItem("ComboItem", "Items Setting", true));
                 ComboMenu.AddItem(new MenuItem("ComboYoumuu", "Use Youmuu", true).SetValue(true));
-                ComboMenu.AddItem(new MenuItem("ComboCutlass", "Use Cutlass", true).SetValue(true));
-                ComboMenu.AddItem(new MenuItem("ComboBotrk", "Use Botrk", true).SetValue(true));
             }
 
             var HarassMenu = Menu.AddSubMenu(new Menu("Harass", "Harass"));
@@ -89,27 +77,35 @@ using EloBuddy;
                 KillStealMenu.AddItem(new MenuItem("KillStealW", "Use W", true).SetValue(true));
             }
 
-            var RMenu = Menu.AddSubMenu(new Menu("R Menu", "RMenu"));
-            {
-                RMenu.AddItem(new MenuItem("RMenuAuto", "Auto R?", true).SetValue(true));
-                RMenu.AddItem(
-                    new MenuItem("RMenuSemi", "Semi R Key(One Press One Shot)", true).SetValue(new KeyBind('T',
-                        KeyBindType.Press)));
-                RMenu.AddItem(new MenuItem("RMenuCheck", "Use R| Check is Safe?", true).SetValue(true));
-                RMenu.AddItem(
-                    new MenuItem("RMenuMin", "Use R| Min Range >= x", true).SetValue(new Slider(1000, 500, 2500)));
-                RMenu.AddItem(
-                    new MenuItem("RMenuMax", "Use R| Man Range <= x", true).SetValue(new Slider(3000, 1500, 3500)));
-                RMenu.AddItem(
-                    new MenuItem("RMenuKill", "Use R| Min Shot Can Kill >= x", true).SetValue(new Slider(3, 1, 4)));
-            }
-
             var MiscMenu = Menu.AddSubMenu(new Menu("Misc", "Misc"));
             {
-                MiscMenu.AddItem(new MenuItem("AutoW", "Auto W| When target Cant Move", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("AutoE", "Auto E| When target Cant Move", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("GapW", "Anti GapCloser W| When target HavePassive", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("GapE", "Anti GapCloser E", true).SetValue(true));
+                var WMenu = MiscMenu.AddSubMenu(new Menu("W Settings", "W Settings"));
+                {
+                    WMenu.AddItem(new MenuItem("AutoW", "Auto W| When target Cant Move", true).SetValue(true));
+                    WMenu.AddItem(new MenuItem("GapW", "Anti GapCloser W| When target HavePassive", true).SetValue(true));
+                }
+
+                var EMenu = MiscMenu.AddSubMenu(new Menu("E Settings", "E Settings"));
+                {
+                    EMenu.AddItem(new MenuItem("AutoE", "Auto E| When target Cant Move", true).SetValue(true));
+                    EMenu.AddItem(new MenuItem("GapE", "Anti GapCloser E", true).SetValue(true));
+                }
+
+                var RMenu = MiscMenu.AddSubMenu(new Menu("R Settings", "R Settings"));
+                {
+                    RMenu.AddItem(new MenuItem("RMenuAuto", "Auto R?", true).SetValue(true));
+                    RMenu.AddItem(
+                        new MenuItem("RMenuSemi", "Semi R Key(One Press One Shot)", true).SetValue(new KeyBind('T',
+                            KeyBindType.Press)));
+                    RMenu.AddItem(new MenuItem("RMenuCheck", "Use R| Check is Safe?", true).SetValue(true));
+                    RMenu.AddItem(
+                        new MenuItem("RMenuMin", "Use R| Min Range >= x", true).SetValue(new Slider(1000, 500, 2500)));
+                    RMenu.AddItem(
+                        new MenuItem("RMenuMax", "Use R| Man Range <= x", true).SetValue(new Slider(3000, 1500, 3500)));
+                    RMenu.AddItem(
+                        new MenuItem("RMenuKill", "Use R| Min Shot Can Kill >= x", true).SetValue(new Slider(3, 1, 4)));
+                }
+
                 MiscMenu.AddItem(new MenuItem("PingKill", "Auto Ping Kill Target", true).SetValue(true));
                 MiscMenu.AddItem(new MenuItem("NormalPingKill", "Normal Ping?", true).SetValue(true));
                 MiscMenu.AddItem(new MenuItem("NotificationKill", "Notification Kill Target", true).SetValue(true));
@@ -156,6 +152,11 @@ using EloBuddy;
 
         private void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
+            if (R.Instance.Name == "JhinRShot")
+            {
+                return;
+            }
+
             var target = gapcloser.Sender;
 
             if (target.IsValidTarget(E.Range) &&
@@ -184,7 +185,7 @@ using EloBuddy;
             {
                 case Orbwalking.OrbwalkingMode.Combo:
                     {
-                        var target = (AIHeroClient)Args.Target;
+                        var target = Args.Target as AIHeroClient;
 
                         if (target != null && !target.IsDead && !target.IsZombie)
                         {
@@ -313,7 +314,11 @@ using EloBuddy;
                 {
                     if (Menu.Item("RMenuSemi", true).GetValue<KeyBind>().Active)
                     {
-                        R.Cast(R.GetPrediction(target).UnitPosition, true);
+                        if (R.Cast(R.GetPrediction(target).UnitPosition))
+                        {
+                            rShotTarget = target;
+                            return;
+                        }
                     }
 
                     if (!Menu.Item("RMenuAuto", true).GetValue<bool>())
@@ -341,29 +346,40 @@ using EloBuddy;
                         return;
                     }
 
-                    R.Cast(R.GetPrediction(target).UnitPosition, true);
+                    if (SebbyLib.OktwCommon.IsSpellHeroCollision(target, R))
+                    {
+                        return;
+                    }
+
+                    if (R.Cast(R.GetPrediction(target).UnitPosition))
+                    {
+                        rShotTarget = target;
+                        return;
+                    }
                 }
 
                 if (R.Instance.Name == "JhinRShot")
                 {
-                    foreach (var t in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && InRCone(x)))
+                    if (rShotTarget != null && rShotTarget.IsValidTarget(R.Range))
                     {
-                        if (!InRCone(t))
+                        if (!InRCone(rShotTarget))
                         {
                             return;
                         }
 
                         if (Menu.Item("RMenuSemi", true).GetValue<KeyBind>().Active)
                         {
-                            AutoUse(t);
-                            R.Cast(R.GetPrediction(t).UnitPosition, true);
+                            AutoUse(rShotTarget);
+                            R.CastTo(rShotTarget);
+                            return;
                         }
 
                         if (Menu.Item("ComboR", true).GetValue<bool>() &&
                             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                         {
-                            AutoUse(t);
-                            R.Cast(R.GetPrediction(t).UnitPosition, true);
+                            AutoUse(rShotTarget);
+                            R.CastTo(rShotTarget);
+                            return;
                         }
 
                         if (!Menu.Item("RMenuAuto", true).GetValue<bool>())
@@ -371,8 +387,46 @@ using EloBuddy;
                             return;
                         }
 
-                        AutoUse(t);
-                        R.Cast(R.GetPrediction(t).UnitPosition, true);
+                        AutoUse(rShotTarget);
+                        R.CastTo(rShotTarget);
+
+                    }
+                    else
+                    {
+                        foreach (
+                            var t in
+                            HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && InRCone(x))
+                                .OrderBy(x => x.Health))
+                        {
+                            if (!InRCone(t))
+                            {
+                                return;
+                            }
+
+                            if (Menu.Item("RMenuSemi", true).GetValue<KeyBind>().Active)
+                            {
+                                AutoUse(t);
+                                R.Cast(R.GetPrediction(t).UnitPosition, true);
+                                return;
+                            }
+
+                            if (Menu.Item("ComboR", true).GetValue<bool>() &&
+                                Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                            {
+                                AutoUse(t);
+                                R.Cast(R.GetPrediction(t).UnitPosition, true);
+                                return;
+                            }
+
+                            if (!Menu.Item("RMenuAuto", true).GetValue<bool>())
+                            {
+                                return;
+                            }
+
+                            AutoUse(t);
+                            R.Cast(R.GetPrediction(t).UnitPosition, true);
+                            return;
+                        }
                     }
                 }
             }
@@ -390,6 +444,11 @@ using EloBuddy;
                 !(Q.IsReady() && wTarget.IsValidTarget(Q.Range) &&
                 wTarget.Health < Me.GetSpellDamage(wTarget, SpellSlot.Q)))
             {
+                if (Orbwalker.InAutoAttackRange(wTarget) && wTarget.Health <= Me.GetAutoAttackDamage(wTarget, true))
+                {
+                    return;
+                }
+
                 W.CastTo(wTarget);
                 return;
             }
@@ -433,20 +492,6 @@ using EloBuddy;
             }
 
             var orbTarget = Orbwalker.GetTarget();
-
-            if (CheckTarget((Obj_AI_Base)orbTarget, Orbwalking.GetRealAutoAttackRange(Me)))
-            {
-                if (Menu.Item("ComboCutlass", true).GetValue<bool>() && Items.HasItem(3144) && Items.CanUseItem(3144))
-                {
-                    Items.UseItem(3144, (Obj_AI_Base)orbTarget);
-                }
-
-                if (Menu.Item("ComboBotrk", true).GetValue<bool>() && Items.HasItem(3153) && Items.CanUseItem(3153) &&
-                    (orbTarget.HealthPercent < 80 || Me.HealthPercent < 80))
-                {
-                    Items.UseItem(3153, (Obj_AI_Base)orbTarget);
-                }
-            }
 
             var wTarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
 
@@ -608,7 +653,7 @@ using EloBuddy;
                 if (Menu.Item("DrawDamage", true).GetValue<bool>())
                 {
                     foreach (
-                        var x in ObjectManager.Get<AIHeroClient>().Where(e => e.IsValidTarget() && !e.IsDead && !e.IsZombie))
+                        var x in HeroManager.Enemies.Where(e => e.IsValidTarget() && !e.IsDead && !e.IsZombie))
                     {
                         HpBarDraw.Unit = x;
                         HpBarDraw.DrawDmg((float)ComboDamage(x), new ColorBGRA(255, 204, 0, 170));

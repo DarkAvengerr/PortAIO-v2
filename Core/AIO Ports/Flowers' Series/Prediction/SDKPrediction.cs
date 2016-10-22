@@ -1,9 +1,9 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Flowers_ADC_Series.Prediction
+using LeagueSharp.Common;
+namespace Flowers_ADC_Series.Prediction
 {
+    using EloBuddy;
+    using Common;
     using LeagueSharp;
-    using LeagueSharp.Common;
     using SharpDX;
     using System;
     using System.Collections.Generic;
@@ -95,7 +95,8 @@ using EloBuddy;
                     endP
                 }.To2D(), dashData.Speed);
 
-                if (dashPred.Hitchance >= HitChance.High && dashPred.UnitPosition.To2D().Distance(input.Unit.Position.To2D(), endP.To2D(), true) < 200)
+                if (dashPred.Hitchance >= HitChance.High &&
+                    dashPred.UnitPosition.To2D().Distance(input.Unit.Position.To2D(), endP.To2D(), true) < 200)
                 {
                     dashPred.CastPosition = dashPred.UnitPosition;
                     dashPred.Hitchance = HitChance.Dashing;
@@ -105,7 +106,10 @@ using EloBuddy;
 
                 if (dashData.Path.PathLength() > 200)
                 {
-                    var timeToPoint = input.Delay / 2f + (Math.Abs(input.Speed - float.MaxValue) > float.Epsilon ? input.From.Distance(endP) / input.Speed : 0) - 0.25f;
+                    var timeToPoint = input.Delay/2f +
+                                      (Math.Abs(input.Speed - float.MaxValue) > float.Epsilon
+                                          ? input.From.Distance(endP)/input.Speed
+                                          : 0) - 0.25f;
 
                     if (timeToPoint <= input.Unit.Distance(endP) / dashData.Speed + input.RealRadius / input.Unit.MoveSpeed)
                     {
@@ -136,7 +140,10 @@ using EloBuddy;
                 Hitchance = HitChance.High
             };
 
-            var timeToReachTargetPosition = input.Delay + (Math.Abs(input.Speed - float.MaxValue) > float.Epsilon ? input.Unit.Distance(input.From) / input.Speed : 0);
+            var timeToReachTargetPosition = input.Delay +
+                                            (Math.Abs(input.Speed - float.MaxValue) > float.Epsilon
+                                                ? input.Unit.Distance(input.From)/input.Speed
+                                                : 0);
 
             if (timeToReachTargetPosition <= remainingImmobileT + input.RealRadius / input.Unit.MoveSpeed)
             {
@@ -179,7 +186,11 @@ using EloBuddy;
                     {
                         var direction = (b - a).Normalized();
                         var cp = a + direction * tDistance;
-                        var p = a + direction * (i == path.Count - 2 ? Math.Min(tDistance + input.RealRadius, d) : tDistance + input.RealRadius);
+                        var p = a +
+                                direction*
+                                (i == path.Count - 2
+                                    ? Math.Min(tDistance + input.RealRadius, d)
+                                    : tDistance + input.RealRadius);
 
                         return new PredictionOutput
                         {
@@ -198,7 +209,8 @@ using EloBuddy;
             {
                 var tDistance = dist;
 
-                if ((input.Type == SkillshotType.SkillshotLine || input.Type == SkillshotType.SkillshotCone) && input.Unit.DistanceSquared(input.From) < 200 * 200)
+                if ((input.Type == SkillshotType.SkillshotLine || input.Type == SkillshotType.SkillshotCone) &&
+                    input.Unit.DistanceSquared(input.From) < 200*200)
                 {
                     tDistance += input.RealRadius;
                 }
@@ -270,7 +282,8 @@ using EloBuddy;
                 }
             }
 
-            if (Math.Abs(input.Range - float.MaxValue) > float.Epsilon && input.Unit.DistanceSquared(input.RangeCheckFrom) > Math.Pow(input.Range * 1.5, 2))
+            if (Math.Abs(input.Range - float.MaxValue) > float.Epsilon &&
+                input.Unit.DistanceSquared(input.RangeCheckFrom) > Math.Pow(input.Range*1.5, 2))
             {
                 return new PredictionOutput { Input = input };
             }
@@ -298,19 +311,25 @@ using EloBuddy;
 
             if (Math.Abs(input.Range - float.MaxValue) > float.Epsilon)
             {
-                if (result.Hitchance >= HitChance.High && input.RangeCheckFrom.DistanceSquared(input.Unit.Position) > Math.Pow(input.Range + input.RealRadius * 3 / 4, 2))
+                if (result.Hitchance >= HitChance.High &&
+                    input.RangeCheckFrom.DistanceSquared(input.Unit.Position) >
+                    Math.Pow(input.Range + input.RealRadius*3/4, 2))
                 {
                     result.Hitchance = HitChance.Medium;
                 }
 
-                if (input.RangeCheckFrom.DistanceSquared(result.UnitPosition) > Math.Pow(input.Range + (input.Type == SkillshotType.SkillshotCircle ? input.RealRadius : 0), 2))
+                if (input.RangeCheckFrom.DistanceSquared(result.UnitPosition) >
+                    Math.Pow(input.Range + (input.Type == SkillshotType.SkillshotCircle ? input.RealRadius : 0), 2))
                 {
                     result.Hitchance = HitChance.OutOfRange;
                 }
 
-                if (input.RangeCheckFrom.DistanceSquared(result.CastPosition) > Math.Pow(input.Range, 2) && result.Hitchance != HitChance.OutOfRange)
+                if (input.RangeCheckFrom.DistanceSquared(result.CastPosition) > Math.Pow(input.Range, 2) &&
+                    result.Hitchance != HitChance.OutOfRange)
                 {
-                    result.CastPosition = input.RangeCheckFrom + input.Range * (result.UnitPosition - input.RangeCheckFrom).To2D().Normalized().To3D();
+                    result.CastPosition = input.RangeCheckFrom +
+                                          input.Range*
+                                          (result.UnitPosition - input.RangeCheckFrom).To2D().Normalized().To3D();
                 }
             }
 
@@ -348,26 +367,42 @@ using EloBuddy;
                 switch (input.CollisionObjects)
                 {
                     case CollisionableObjects.Minions:
-                        foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValidTarget(Math.Min(input.Range + input.Radius + 100, 2000), true, input.RangeCheckFrom)))
+                        foreach (
+                            var minion in
+                            ObjectManager.Get<Obj_AI_Minion>()
+                                .Where(
+                                    minion =>
+                                        minion.IsValidTarget(Math.Min(input.Range + input.Radius + 100, 2000), true,
+                                            input.RangeCheckFrom)))
                         {
                             input.Unit = minion;
 
                             var minionPrediction = GetPrediction(input, false, false);
 
-                            if (minionPrediction.UnitPosition.To2D().Distance(input.From.To2D(), position.To2D(), true, true) <= Math.Pow((input.Radius + 15 + minion.BoundingRadius), 2))
+                            if (
+                                minionPrediction.UnitPosition.To2D()
+                                    .Distance(input.From.To2D(), position.To2D(), true, true) <=
+                                Math.Pow((input.Radius + 15 + minion.BoundingRadius), 2))
                             {
                                 result.Add(minion);
                             }
                         }
                         break;
                     case CollisionableObjects.Heroes:
-                        foreach (var hero in HeroManager.Enemies.FindAll(hero => hero.IsValidTarget(Math.Min(input.Range + input.Radius + 100, 2000), true, input.RangeCheckFrom)))
+                        foreach (
+                            var hero in
+                            HeroManager.Enemies.FindAll(
+                                hero =>
+                                    hero.IsValidTarget(Math.Min(input.Range + input.Radius + 100, 2000), true,
+                                        input.RangeCheckFrom)))
                         {
                             input.Unit = hero;
 
                             var prediction = GetPrediction(input, false, false);
 
-                            if (prediction.UnitPosition.To2D().Distance(input.From.To2D(), position.To2D(), true, true) <= Math.Pow((input.Radius + 50 + hero.BoundingRadius), 2))
+                            if (
+                                prediction.UnitPosition.To2D().Distance(input.From.To2D(), position.To2D(), true, true) <=
+                                Math.Pow(input.Radius + 50 + hero.BoundingRadius, 2))
                             {
                                 result.Add(hero);
                             }
@@ -413,7 +448,12 @@ using EloBuddy;
             {
                 var result = new List<PossibleTarget>();
 
-                foreach (var enemy in HeroManager.Enemies.Where(h => !h.Compare(input.Unit) && h.IsValidTarget(input.Range + 200 + input.RealRadius, true, input.RangeCheckFrom)))
+                foreach (
+                    var enemy in
+                    HeroManager.Enemies.Where(
+                        h =>
+                            !h.Compare(input.Unit) &&
+                            h.IsValidTarget(input.Range + 200 + input.RealRadius, true, input.RangeCheckFrom)))
                 {
                     var inputs = input.Clone() as PredictionInput;
 
@@ -577,10 +617,12 @@ using EloBuddy;
                 internal static int GetHits(Vector2 end, double range, float angle, List<Vector2> points)
                 {
                     return (from point in points
-                            let edge1 = end.Rotated(-angle / 2)
-                            let edge2 = edge1.Rotated(angle)
-                            where point.DistanceSquared(default(Vector2)) < range * range && edge1.CrossProduct(point) > 0 && point.CrossProduct(edge2) > 0
-                            select point).Count();
+                        let edge1 = end.Rotated(-angle/2)
+                        let edge2 = edge1.Rotated(angle)
+                        where
+                        point.DistanceSquared(default(Vector2)) < range*range && edge1.CrossProduct(point) > 0 &&
+                        point.CrossProduct(edge2) > 0
+                        select point).Count();
                 }
             }
 
@@ -607,7 +649,10 @@ using EloBuddy;
                     {
                         var candidates = new List<Vector2>();
 
-                        foreach (var targetCandidates in posibleTargets.Select(target => GetCandidates(input.From.To2D(), target.Position, input.Radius, input.Range)))
+                        foreach (
+                            var targetCandidates in
+                            posibleTargets.Select(
+                                target => GetCandidates(input.From.To2D(), target.Position, input.Radius, input.Range)))
                         {
                             candidates.AddRange(targetCandidates);
                         }
@@ -619,7 +664,9 @@ using EloBuddy;
 
                         foreach (var candidate in candidates)
                         {
-                            if (GetHits(input.From.To2D(), candidate, input.Radius + (input.Unit.BoundingRadius / 3) - 10, new List<Vector2> { posibleTargets[0].Position }).Count() == 1)
+                            if (
+                                GetHits(input.From.To2D(), candidate, input.Radius + input.Unit.BoundingRadius/3 - 10,
+                                    new List<Vector2> {posibleTargets[0].Position}).Count() == 1)
                             {
                                 var hits = GetHits(input.From.To2D(), candidate, input.Radius, positionsList).ToList();
                                 var hitsCount = hits.Count;
@@ -646,9 +693,12 @@ using EloBuddy;
                                     var endP = bestCandidate;
                                     var proj1 = positionsList[i].ProjectOn(startP, endP);
                                     var proj2 = positionsList[j].ProjectOn(startP, endP);
-                                    var dist = bestCandidateHitPoints[i].DistanceSquared(proj1.LinePoint) + bestCandidateHitPoints[j].DistanceSquared(proj2.LinePoint);
+                                    var dist = bestCandidateHitPoints[i].DistanceSquared(proj1.LinePoint) +
+                                               bestCandidateHitPoints[j].DistanceSquared(proj2.LinePoint);
 
-                                    if (dist >= maxDistance && (proj1.LinePoint - positionsList[i]).AngleBetween(proj2.LinePoint - positionsList[j]) > 90)
+                                    if (dist >= maxDistance &&
+                                        (proj1.LinePoint - positionsList[i]).AngleBetween(proj2.LinePoint -
+                                                                                          positionsList[j]) > 90)
                                     {
                                         maxDistance = dist;
                                         p1 = positionsList[i];
@@ -725,7 +775,7 @@ using EloBuddy;
                         var testCenter = new Vector2((hull[i].X + hull[j].X) / 2f, (hull[i].Y + hull[j].Y) / 2f);
                         var dx = testCenter.X - hull[i].X;
                         var dy = testCenter.Y - hull[i].Y;
-                        var testRadius2 = (dx * dx) + (dy * dy);
+                        var testRadius2 = dx * dx + dy * dy;
 
                         if (!(testRadius2 < bestRadius2))
                         {
@@ -759,25 +809,19 @@ using EloBuddy;
                                 continue;
                             }
 
-                            // See if this circle encloses all of the points.
                             if (!CircleEnclosesPoints(testCenter, testRadius2, points, i, j, k))
                             {
                                 continue;
                             }
 
-                            // Save this solution.
                             bestCenter = testCenter;
                             bestRadius2 = testRadius2;
                         }
-
-                        // for k
                     }
-
-                    // for i
                 }
 
-                // for j
                 center = bestCenter;
+
                 if (bestRadius2.Equals(float.MaxValue))
                 {
                     radius = 0;
@@ -806,8 +850,13 @@ using EloBuddy;
                 points = HullCull(points);
 
                 Vector2[] bestPt = { points[0] };
-  
-                foreach (var pt in points.Where(pt => (pt.Y < bestPt[0].Y) || ((Math.Abs(pt.Y - bestPt[0].Y) < float.Epsilon) && (pt.X < bestPt[0].X))))
+
+                foreach (
+                    var pt in
+                    points.Where(
+                        pt =>
+                            (pt.Y < bestPt[0].Y) ||
+                            ((Math.Abs(pt.Y - bestPt[0].Y) < float.Epsilon) && (pt.X < bestPt[0].X))))
                 {
                     bestPt[0] = pt;
                 }
@@ -839,7 +888,7 @@ using EloBuddy;
                     {
                         var testAngle = AngleValue(x, y, pt.X, pt.Y);
 
-                        if ((!(testAngle >= sweepAngle)) || (!(bestAngle > testAngle)))
+                        if (!(testAngle >= sweepAngle) || !(bestAngle > testAngle))
                         {
                             continue;
                         }
@@ -894,12 +943,13 @@ using EloBuddy;
                 return t * 90;
             }
 
-            private static bool CircleEnclosesPoints(Vector2 center, float radius2, IEnumerable<Vector2> points, int skip1, int skip2, int skip3)
+            private static bool CircleEnclosesPoints(Vector2 center, float radius2, IEnumerable<Vector2> points,
+                int skip1, int skip2, int skip3)
             {
                 return (from point in points.Where((t, i) => (i != skip1) && (i != skip2) && (i != skip3))
                         let dx = center.X - point.X
                         let dy = center.Y - point.Y
-                        select (dx * dx) + (dy * dy)).All(testRadius2 => !(testRadius2 > radius2));
+                        select dx * dx + dy * dy).All(testRadius2 => !(testRadius2 > radius2));
             }
 
             private static void FindCircle(Vector2 a, Vector2 b, Vector2 c, out Vector2 center, out float radius2)
@@ -912,15 +962,15 @@ using EloBuddy;
                 var y2 = (c.Y + b.Y) / 2;
                 var dy2 = c.X - b.X;
                 var dx2 = -(c.Y - b.Y);
-                var cx = ((y1 * dx1 * dx2) + (x2 * dx1 * dy2) - (x1 * dy1 * dx2) - (y2 * dx1 * dx2)) / ((dx1 * dy2) - (dy1 * dx2));
-                var cy = ((cx - x1) * dy1 / dx1) + y1;
+                var cx = (y1*dx1*dx2 + x2*dx1*dy2 - x1*dy1*dx2 - y2*dx1*dx2)/(dx1*dy2 - dy1*dx2);
+                var cy = (cx - x1)*dy1/dx1 + y1;
 
                 center = new Vector2(cx, cy);
 
                 var dx = cx - a.X;
                 var dy = cy - a.Y;
 
-                radius2 = (dx * dx) + (dy * dy);
+                radius2 = dx * dx + dy * dy;
             }
 
             private static RectangleF GetMinMaxBox(IEnumerable<Vector2> points)
@@ -967,7 +1017,8 @@ using EloBuddy;
                 return result;
             }
 
-            private static MinMaxCornersInfo GetMinMaxCorners(IEnumerable<Vector2> points, Vector2 upperLeft, Vector2 upperRight, Vector2 lowerLeft, Vector2 lowerRight)
+            private static MinMaxCornersInfo GetMinMaxCorners(IEnumerable<Vector2> points, Vector2 upperLeft,
+                Vector2 upperRight, Vector2 lowerLeft, Vector2 lowerRight)
             {
                 foreach (var pt in points)
                 {
@@ -1001,7 +1052,11 @@ using EloBuddy;
             {
                 var cullingBox = GetMinMaxBox(points);
 
-                return points.Where(pt => pt.X <= cullingBox.Left || pt.X >= cullingBox.Right || pt.Y <= cullingBox.Top || pt.Y >= cullingBox.Bottom).ToList();
+                return
+                    points.Where(
+                        pt =>
+                            pt.X <= cullingBox.Left || pt.X >= cullingBox.Right || pt.Y <= cullingBox.Top ||
+                            pt.Y >= cullingBox.Bottom).ToList();
             }
 
             public struct MecCircle
@@ -1047,7 +1102,13 @@ using EloBuddy;
 
         internal static double UnitIsImmobileUntil(Obj_AI_Base unit)
         {
-            var result = unit.Buffs.Where(buff => buff.IsValid && (buff.Type == BuffType.Knockup || buff.Type == BuffType.Snare || buff.Type == BuffType.Stun || buff.Type == BuffType.Suppression)).Aggregate(0f, (current, buff) => Math.Max(buff.EndTime, current));
+            var result =
+                unit.Buffs.Where(
+                        buff =>
+                            buff.IsValid &&
+                            (buff.Type == BuffType.Knockup || buff.Type == BuffType.Snare || buff.Type == BuffType.Stun ||
+                             buff.Type == BuffType.Suppression))
+                    .Aggregate(0f, (current, buff) => Math.Max(buff.EndTime, current));
 
             return result - Game.Time;
         }
@@ -1061,7 +1122,8 @@ using EloBuddy;
                 return HitChance.VeryHigh;
             }
 
-            if (hero.IsCastingInterruptableSpell(true) || hero.IsRecalling() || (UnitTracker.GetLastStopTick(hero) < 0.1d && hero.IsRooted))
+            if (hero.IsCastingInterruptableSpell(true) || hero.IsRecalling() ||
+                (UnitTracker.GetLastStopTick(hero) < 0.1d && hero.IsRooted))
             {
                 return HitChance.VeryHigh;
             }
@@ -1074,7 +1136,8 @@ using EloBuddy;
             var distHeroToFrom = heroServerPos.Distance(input.From);
             var distFromToWaypoint = input.From.To2D().Distance(lastWaypoint);
             var angle = (lastWaypoint - heroPos.To2D()).AngleBetween(input.From.To2D() - heroPos.To2D());
-            var delay = input.Delay + (Math.Abs(input.Speed - float.MaxValue) > float.Epsilon ? distHeroToFrom / input.Speed : 0);
+            var delay = input.Delay +
+                        (Math.Abs(input.Speed - float.MaxValue) > float.Epsilon ? distHeroToFrom/input.Speed : 0);
             var moveArea = hero.MoveSpeed * delay;
             var fixRange = moveArea * 0.35f;
             var minPath = 1000;
@@ -1101,7 +1164,8 @@ using EloBuddy;
                 for (var i = 1; i <= 15; i++)
                 {
                     var circleAngle = i * 2 * Math.PI / 15;
-                    var point = new Vector2(heroPos.X + 350 * (float)Math.Cos(circleAngle), heroPos.Y + 350 * (float)Math.Sin(circleAngle));
+                    var point = new Vector2(heroPos.X + 350*(float) Math.Cos(circleAngle),
+                        heroPos.Y + 350*(float) Math.Sin(circleAngle));
 
                     if (point.IsWall())
                     {
@@ -1150,7 +1214,8 @@ using EloBuddy;
                 return HitChance.VeryHigh;
             }
 
-            if (input.Type == SkillshotType.SkillshotCircle && GamePath.PathTracker.GetCurrentPath(hero).Time < 0.1d && distHeroToWaypoint > fixRange)
+            if (input.Type == SkillshotType.SkillshotCircle && GamePath.PathTracker.GetCurrentPath(hero).Time < 0.1d &&
+                distHeroToWaypoint > fixRange)
             {
                 return HitChance.VeryHigh;
             }
@@ -1170,6 +1235,7 @@ using EloBuddy;
             internal static double GetLastStopTick(AIHeroClient hero)
             {
                 UnitTrackerEntry data;
+
                 return DictData.TryGetValue(hero.NetworkId, out data) ? (Utils.TickCount - data.StopTick) / 1000d : 1;
             }
 
@@ -1196,7 +1262,8 @@ using EloBuddy;
                     var b = Math.Pow(posHero.X - posPath1.X, 2) + Math.Pow(posHero.Y - posPath1.Y, 2);
                     var c = Math.Pow(posPath2.X - posPath1.X, 2) + Math.Pow(posPath2.Y - posPath1.Y, 2);
 
-                    return data.Path[1].Position.Distance(data.Path[2].Position) < 50 || Math.Cos((a + b - c) / (2 * Math.Sqrt(a) * Math.Sqrt(b))) * 180 / Math.PI < 31;
+                    return data.Path[1].Position.Distance(data.Path[2].Position) < 50 ||
+                           Math.Cos((a + b - c)/(2*Math.Sqrt(a)*Math.Sqrt(b)))*180/Math.PI < 31;
                 }
 
                 return false;
@@ -1255,7 +1322,8 @@ using EloBuddy;
 
             public bool Collision { get; set; }
 
-            public CollisionableObjects CollisionObjects { get; set; } = CollisionableObjects.Minions | CollisionableObjects.YasuoWall;
+            public CollisionableObjects CollisionObjects { get; set; } = CollisionableObjects.Minions |
+                                                                         CollisionableObjects.YasuoWall;
 
             public float Delay { get; set; }
 
@@ -1352,7 +1420,9 @@ using EloBuddy;
             public static class PathTracker
             {
                 private const double MaxTime = 1.5d;
-                private static readonly Dictionary<int, List<StoredPath>> StoredPaths = new Dictionary<int, List<StoredPath>>();
+
+                private static readonly Dictionary<int, List<StoredPath>> StoredPaths =
+                    new Dictionary<int, List<StoredPath>>();
 
                 static PathTracker()
                 {
@@ -1382,7 +1452,8 @@ using EloBuddy;
 
                             if (currentPath.WaypointCount > 0)
                             {
-                                distance += Math.Min((currentPath.Time - nextPath.Time) * unit.MoveSpeed, currentPath.Path.PathLength());
+                                distance += Math.Min((currentPath.Time - nextPath.Time)*unit.MoveSpeed,
+                                    currentPath.Path.PathLength());
                             }
                         }
 
@@ -1405,7 +1476,9 @@ using EloBuddy;
                 {
                     List<StoredPath> value;
 
-                    return StoredPaths.TryGetValue(unit.NetworkId, out value) ? value.Where(p => p.Time < maxT).ToList() : new List<StoredPath>();
+                    return StoredPaths.TryGetValue(unit.NetworkId, out value)
+                        ? value.Where(p => p.Time < maxT).ToList()
+                        : new List<StoredPath>();
                 }
 
                 private static void AIHeroClient_OnNewPath(Obj_AI_Base sender, GameObjectNewPathEventArgs args)

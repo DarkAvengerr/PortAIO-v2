@@ -4,7 +4,6 @@ using EloBuddy;
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Lizzaran.SFX.NET;
     using LeagueSharp;
     using LeagueSharp.Common;
     using SharpDX;
@@ -13,7 +12,8 @@ using EloBuddy;
     {
         public static float BoundingRadiusMultiplicator { get; set; } = 0.65f;
 
-        public static Result Circle(Spell spell, AIHeroClient target, HitChance hitChance, bool boundingRadius = true, bool extended = true)
+        public static Result Circle(Spell spell, AIHeroClient target, HitChance hitChance, bool boundingRadius = true,
+            bool extended = true)
         {
             if (spell == null || target == null)
             {
@@ -36,7 +36,7 @@ using EloBuddy;
             {
                 var mainTarget = positions.FirstOrDefault(p => p.Hero.NetworkId == target.NetworkId);
                 var possibilities =
-                    ListExtensions.ProduceEnumeration(
+                    ProduceEnumeration(
                             positions.Where(
                                 p => p.UnitPosition.Distance(mainTarget.UnitPosition) <= spell.Width*0.85f).ToList())
                         .Where(p => p.Count > 0 && p.Any(t => t.Hero.NetworkId == mainTarget.Hero.NetworkId))
@@ -96,7 +96,8 @@ using EloBuddy;
             return new Result(Vector3.Zero, new List<AIHeroClient>());
         }
 
-        public static Result Line(Spell spell, AIHeroClient target, HitChance hitChance, bool boundingRadius = true, bool maxRange = true)
+        public static Result Line(Spell spell, AIHeroClient target, HitChance hitChance, bool boundingRadius = true,
+            bool maxRange = true)
         {
             if (spell == null || target == null)
             {
@@ -147,6 +148,25 @@ using EloBuddy;
             }
 
             return new Result(Vector3.Zero, new List<AIHeroClient>());
+        }
+
+        private static IEnumerable<int> ConstructSetFromBits(int i)
+        {
+            for (var n = 0; i != 0; i /= 2, n++)
+            {
+                if ((i & 1) != 0)
+                {
+                    yield return n;
+                }
+            }
+        }
+
+        private static IEnumerable<List<T>> ProduceEnumeration<T>(List<T> list)
+        {
+            for (var i = 0; i < 1 << list.Count; i++)
+            {
+                yield return ConstructSetFromBits(i).Select(n => list[n]).ToList();
+            }
         }
 
         internal struct Position

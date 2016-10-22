@@ -8,21 +8,24 @@ using EloBuddy;
     using LeagueSharp.Common;
     using Orbwalking = Orbwalking;
 
-    internal class Defensive
+    internal class Cleaness : Program
     {
         private static int UseCleanTime, CleanID;
-        private static int Dervish = 3137, Mercurial = 3139, Quicksilver = 3140, Mikaels = 3222;
+
+        private static readonly int Dervish = 3137;
+        private static readonly int Mercurial = 3139;
+        private static readonly int Quicksilver = 3140;
+        private static readonly int Mikaels = 3222;
+
         private static readonly List<BuffType> DebuffTypes = new List<BuffType>();
 
-        private static readonly Menu Menu = Program.Menu;
-        private static readonly AIHeroClient Me = Program.Me;
-        private static readonly Orbwalking.Orbwalker Orbwalker = Program.Orbwalker;
+        private new static readonly Menu Menu = Utilitymenu;
 
         public static void Init()
         {
             var CleanseMenu = Menu.AddSubMenu(new Menu("Cleanse", "Cleanse"));
             {
-                var Debuff = CleanseMenu.AddSubMenu(new Menu("Debuffs", "Buffs"));
+                var Debuff = CleanseMenu.AddSubMenu(new Menu("Debuffs", "Debuffs"));
                 {
                     Debuff.AddItem(new MenuItem("Cleanblind", "Blind", true).SetValue(true));
                     Debuff.AddItem(new MenuItem("Cleancharm", "Charm", true).SetValue(true));
@@ -36,7 +39,7 @@ using EloBuddy;
                     Debuff.AddItem(new MenuItem("Cleansilence", "Silence", true).SetValue(false));
                     Debuff.AddItem(new MenuItem("Cleanexhaust", "Exhaust", true).SetValue(true));
                 }
-                CleanseMenu.AddItem(new MenuItem("CleanEnable", "Enable!", true).SetValue(true));
+                CleanseMenu.AddItem(new MenuItem("CleanEnable", "Enabled", true).SetValue(true));
                 CleanseMenu.AddItem(new MenuItem("CleanDelay", "Clean Delay(ms)", true).SetValue(new Slider(0, 0, 2000)));
                 CleanseMenu.AddItem(
                     new MenuItem("CleanBuffTime", "Debuff Less End Times(ms)", true).SetValue(new Slider(800, 0, 1000)));
@@ -65,7 +68,7 @@ using EloBuddy;
                 {
                     if (CanUseDervish() || CanUseMercurial() || CanUseMikaels() || CanUseQuicksilver())
                     {
-                        Items.UseItem(CleanID);
+                        LeagueSharp.Common.Items.UseItem(CleanID);
                         UseCleanTime = Utils.TickCount + 2500;
                     }
                 }
@@ -158,7 +161,7 @@ using EloBuddy;
 
         private static bool CanUseQuicksilver()
         {
-            if (Items.HasItem(Quicksilver) && Items.CanUseItem(Quicksilver))
+            if (LeagueSharp.Common.Items.HasItem(Quicksilver) && LeagueSharp.Common.Items.CanUseItem(Quicksilver))
             {
                 CleanID = Quicksilver;
                 return true;
@@ -170,7 +173,7 @@ using EloBuddy;
 
         private static bool CanUseMikaels()
         {
-            if (Items.HasItem(Mikaels) && Items.CanUseItem(Mikaels))
+            if (LeagueSharp.Common.Items.HasItem(Mikaels) && LeagueSharp.Common.Items.CanUseItem(Mikaels))
             {
                 CleanID = Mikaels;
                 return true;
@@ -182,7 +185,7 @@ using EloBuddy;
 
         private static bool CanUseMercurial()
         {
-            if (Items.HasItem(Mercurial) && Items.CanUseItem(Mercurial))
+            if (LeagueSharp.Common.Items.HasItem(Mercurial) && LeagueSharp.Common.Items.CanUseItem(Mercurial))
             {
                 CleanID = Mercurial;
                 return true;
@@ -194,7 +197,7 @@ using EloBuddy;
 
         private static bool CanUseDervish()
         {
-            if (Items.HasItem(Dervish) && Items.CanUseItem(Dervish))
+            if (LeagueSharp.Common.Items.HasItem(Dervish) && LeagueSharp.Common.Items.CanUseItem(Dervish))
             {
                 CleanID = Dervish;
                 return true;

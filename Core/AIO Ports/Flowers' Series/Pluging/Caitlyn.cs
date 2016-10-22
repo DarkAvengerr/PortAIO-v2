@@ -2,6 +2,7 @@ using EloBuddy;
  using LeagueSharp.Common; 
  namespace Flowers_ADC_Series.Pluging
 {
+    using Common;
     using System;
     using System.Linq;
     using System.Collections.Generic;
@@ -10,23 +11,13 @@ using EloBuddy;
     using SharpDX;
     using Color = System.Drawing.Color;
     using Orbwalking = Orbwalking;
-    using static Common;
+    using static Common.Common;
 
-    internal class Caitlyn
+    internal class Caitlyn : Program
     {
-        private static Spell Q;
-        private static Spell W;
-        private static Spell E;
-        private static Spell R;
-
-        private static int LastQTime;
-        private static int LastWTime;
-
-        private static readonly Menu Menu = Program.Championmenu;
-        private static readonly AIHeroClient Me = Program.Me;
-        private static readonly Orbwalking.Orbwalker Orbwalker = Program.Orbwalker;
-
-        private static HpBarDraw HpBarDraw = new HpBarDraw();
+        private int LastQTime;
+        private int LastWTime;
+        private new readonly Menu Menu = Championmenu;
 
         public Caitlyn()
         {
@@ -41,6 +32,8 @@ using EloBuddy;
             var ComboMenu = Menu.AddSubMenu(new Menu("Combo", "Combo"));
             {
                 ComboMenu.AddItem(new MenuItem("ComboQ", "Use Q", true).SetValue(true));
+                ComboMenu.AddItem(
+                    new MenuItem("ComboQCount", "Use Q| Min Hit Count >= x", true).SetValue(new Slider(2, 1, 5)));
                 ComboMenu.AddItem(
                     new MenuItem("ComboQRange", "Use Q| Min Range >= x", true).SetValue(new Slider(700, 500, 1250)));
                 ComboMenu.AddItem(new MenuItem("ComboW", "Use W", true).SetValue(true));
@@ -205,6 +198,11 @@ using EloBuddy;
                     HeroManager.Enemies.Where(
                         x => x.IsValidTarget(Q.Range) && CheckTargetSureCanKill(x) && x.Health < Q.GetDamage(x)))
                 {
+                    if (Orbwalker.InAutoAttackRange(target) && target.Health <= Me.GetAutoAttackDamage(target, true))
+                    {
+                        continue;
+                    }
+
                     Q.CastTo(target);
                 }
             }
@@ -217,24 +215,24 @@ using EloBuddy;
 
             if (CheckTarget(target, R.Range))
             {
+                if (E.CanCast(target) && Menu.Item("ComboE", true).GetValue<bool>() && E.IsReady() &&
+                    Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady())
+                {
+                    E.Cast(target);
+                    Q.Cast(target);
+                }
+
                 if (Menu.Item("ComboE", true).GetValue<bool>() && E.IsReady() && target.IsValidTarget(700) &&
-                    E.GetPrediction(target).CollisionObjects.Count == 0 && E.CanCast(target) && !Me.Spellbook.IsAutoAttacking)
+                    E.GetPrediction(target).CollisionObjects.Count == 0 && E.CanCast(target))
                 {
                     E.Cast(target);
                 }
 
                 if (Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady() && target.IsValidTarget(Q.Range) &&
-                    target.DistanceToPlayer() >= Menu.Item("ComboQRange", true).GetValue<Slider>().Value && !Me.Spellbook.IsAutoAttacking)
+                    target.DistanceToPlayer() >= Menu.Item("ComboQRange", true).GetValue<Slider>().Value)
                 {
                     Q.CastTo(target);
-                }
-
-                if (target.Health <= Q.GetDamage(target) + E.GetDamage(target) + Me.GetAutoAttackDamage(target) + 20 &&
-                    E.CanCast(target) && Menu.Item("ComboE", true).GetValue<bool>() && E.IsReady() &&
-                    Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady() && !Me.Spellbook.IsAutoAttacking)
-                {
-                    E.Cast(target);
-                    Q.Cast(target);
+                    Q.CastIfWillHit(target, Menu.Item("ComboQCount", true).GetValue<Slider>().Value, true);
                 }
 
                 if (Menu.Item("ComboW", true).GetValue<bool>() && W.IsReady() && target.IsValidTarget(W.Range) &&
@@ -246,17 +244,27 @@ using EloBuddy;
                         {
                             if (target.IsMelee && target.DistanceToPlayer() < 250)
                             {
-                                W.Cast(Me, true);
+                                W.Cast(Me.Position);
                             }
-                            else if (target.IsValidTarget(W.Range))
+                            else
                             {
-                                W.CastTo(target);
+                                var wPred = W.GetPrediction(target);
+
+                                if (wPred.Hitchance >= HitChance.VeryHigh && target.IsValidTarget(W.Range))
+                                {
+                                    W.Cast(wPred.CastPosition);
+                                }
                             }
                         }
                         else
                         {
-                            W.Cast(W.GetPrediction(target).CastPosition +
-                                      Vector3.Normalize(target.ServerPosition - Me.ServerPosition) * 150, true);
+                            var wPred = W.GetPrediction(target);
+
+                            if (wPred.Hitchance >= HitChance.VeryHigh && target.IsValidTarget(W.Range))
+                            {
+                                W.Cast(wPred.CastPosition +
+                                       Vector3.Normalize(target.ServerPosition - Me.ServerPosition)*100);
+                            }
                         }
                     }
                 }
@@ -387,8 +395,7 @@ using EloBuddy;
 
                 if (CheckTarget(target, E.Range))
                 {
-                    if (target.Health >= Q.GetDamage(target) + E.GetDamage(target) &&
-                        E.GetPrediction(target).CollisionObjects.Count == 0 && E.CanCast(target))
+                    if (E.GetPrediction(target).CollisionObjects.Count == 0 && E.CanCast(target))
                     {
                         E.Cast(target);
                         Q.CastTo(target);
@@ -424,7 +431,7 @@ using EloBuddy;
                 if (Menu.Item("DrawDamage", true).GetValue<bool>())
                 {
                     foreach (
-                        var x in ObjectManager.Get<AIHeroClient>().Where(e => e.IsValidTarget() && !e.IsDead && !e.IsZombie))
+                        var x in HeroManager.Enemies.Where(e => e.IsValidTarget() && !e.IsDead && !e.IsZombie))
                     {
                         HpBarDraw.Unit = x;
                         HpBarDraw.DrawDmg((float)ComboDamage(x), new ColorBGRA(255, 204, 0, 170));

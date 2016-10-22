@@ -2,41 +2,31 @@ using EloBuddy;
  using LeagueSharp.Common; 
  namespace Flowers_ADC_Series.Pluging
 {
+    using Common;
     using System;
     using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;
-    using SharpDX;
     using Prediction;
+    using SharpDX;
     using Color = System.Drawing.Color;
     using Orbwalking = Orbwalking;
-    using static Common;
+    using static Common.Common;
 
-    internal class MissFortune
+    internal class MissFortune : Program
     {
-        private static Spell Q;
-        private static Spell Q1;
-        private static Spell W;
-        private static Spell E;
-        private static Spell R;
-
         private static int lastRCast;
-
-        private static readonly Menu Menu = Program.Championmenu;
-        private static readonly AIHeroClient Me = Program.Me;
-        private static readonly Orbwalking.Orbwalker Orbwalker = Program.Orbwalker;
-
-        private static HpBarDraw HpBarDraw = new HpBarDraw();
+        private new readonly Menu Menu = Championmenu;
 
         public MissFortune()
         {
             Q = new Spell(SpellSlot.Q, 700f);
-            Q1 = new Spell(SpellSlot.Q, 1300f);
+            QExtend = new Spell(SpellSlot.Q, 1300f);
             W = new Spell(SpellSlot.W);
             E = new Spell(SpellSlot.E, 1000f);
             R = new Spell(SpellSlot.R, 1350f);
 
-            Q1.SetSkillshot(0.25f, 70f, 1500f, true, SkillshotType.SkillshotLine);
+            QExtend.SetSkillshot(0.25f, 70f, 1500f, true, SkillshotType.SkillshotLine);
             Q.SetTargetted(0.25f, 1400f);
             E.SetSkillshot(0.5f, 200f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             R.SetSkillshot(0.25f, 50f, 3000f, false, SkillshotType.SkillshotCircle);
@@ -230,7 +220,9 @@ using EloBuddy;
         {
             if (Menu.Item("KillStealQ", true).GetValue<bool>() && Q.IsReady())
             {
-                foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(Q1.Range) && x.Health < Q.GetDamage(x)))
+                foreach (
+                    var target in
+                    HeroManager.Enemies.Where(x => x.IsValidTarget(QExtend.Range) && x.Health < Q.GetDamage(x)))
                 {
                     QLogic(target, true);
                 }
@@ -240,11 +232,11 @@ using EloBuddy;
         private void Combo()
         {
             var target = TargetSelector.GetSelectedTarget() ??
-                         TargetSelector.GetTarget(Q1.Range, TargetSelector.DamageType.Physical);
+                         TargetSelector.GetTarget(QExtend.Range, TargetSelector.DamageType.Physical);
 
-            if (CheckTarget(target, Q1.Range))
+            if (CheckTarget(target, QExtend.Range))
             {
-                if (Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady() && target.IsValidTarget(Q1.Range))
+                if (Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady() && target.IsValidTarget(QExtend.Range))
                 {
                     QLogic(target, Menu.Item("ComboQ1", true).GetValue<bool>());
                 }
@@ -265,11 +257,11 @@ using EloBuddy;
 
             if (Me.ManaPercent >= Menu.Item("HarassMana", true).GetValue<Slider>().Value)
             {
-                var target = TargetSelector.GetTarget(Q1.Range, TargetSelector.DamageType.Physical);
+                var target = TargetSelector.GetTarget(QExtend.Range, TargetSelector.DamageType.Physical);
 
-                if (CheckTarget(target, Q1.Range))
+                if (CheckTarget(target, QExtend.Range))
                 {
-                    if (Menu.Item("HarassQ", true).GetValue<bool>() && Q.IsReady() && target.IsValidTarget(Q1.Range))
+                    if (Menu.Item("HarassQ", true).GetValue<bool>() && Q.IsReady() && target.IsValidTarget(QExtend.Range))
                     {
                         QLogic(target, Menu.Item("HarassQ1", true).GetValue<bool>());
                     }
@@ -356,7 +348,7 @@ using EloBuddy;
                 if (Menu.Item("DrawDamage", true).GetValue<bool>())
                 {
                     foreach (
-                        var x in ObjectManager.Get<AIHeroClient>().Where(e => e.IsValidTarget() && !e.IsDead && !e.IsZombie))
+                        var x in HeroManager.Enemies.Where(e => e.IsValidTarget() && !e.IsDead && !e.IsZombie))
                     {
                         HpBarDraw.Unit = x;
                         HpBarDraw.DrawDmg((float)ComboDamage(x), new ColorBGRA(255, 204, 0, 170));
@@ -373,17 +365,17 @@ using EloBuddy;
                 {
                     Q.CastOnUnit(target);
                 }
-                else if (UseQ1 && target.IsValidTarget(Q1.Range) && target.DistanceToPlayer() > Q.Range)
+                else if (UseQ1 && target.IsValidTarget(QExtend.Range) && target.DistanceToPlayer() > Q.Range)
                 {
                     var heroPositions = (from t in HeroManager.Enemies
-                                         where t.IsValidTarget(Q1.Range)
+                                         where t.IsValidTarget(QExtend.Range)
                                          let prediction = Q.GetPrediction(t)
                                          select new CPrediction.Position(t, prediction.UnitPosition)).Where(
-                        t => t.UnitPosition.Distance(Me.Position) < Q1.Range).ToList();
+                        t => t.UnitPosition.Distance(Me.Position) < QExtend.Range).ToList();
 
                     if (heroPositions.Any())
                     {
-                        var minions = MinionManager.GetMinions(Q1.Range, MinionTypes.All, MinionTeam.NotAlly);
+                        var minions = MinionManager.GetMinions(QExtend.Range, MinionTypes.All, MinionTeam.NotAlly);
 
                         if (minions.Any(m => m.IsMoving) &&
                             !heroPositions.Any(h => h.Hero.HasBuff("missfortunepassive")))
@@ -400,15 +392,15 @@ using EloBuddy;
                             var coneBuff = new Geometry.Polygon.Sector(
                                 minion.Position,
                                 Me.Position.Extend(minion.Position, Me.Distance(minion) + Q.Range * 0.5f),
-                                (float)(40 * Math.PI / 180), Q1.Range - Q.Range);
+                                (float)(40 * Math.PI / 180), QExtend.Range - Q.Range);
                             var coneNormal = new Geometry.Polygon.Sector(
                                 minion.Position,
                                 Me.Position.Extend(minion.Position, Me.Distance(minion) + Q.Range * 0.5f),
-                                (float)(60 * Math.PI / 180), Q1.Range - Q.Range);
+                                (float)(60 * Math.PI / 180), QExtend.Range - Q.Range);
 
                             foreach (var enemy in
                                 heroPositions.Where(
-                                    m => m.UnitPosition.Distance(lMinion.Position) < Q1.Range - Q.Range))
+                                    m => m.UnitPosition.Distance(lMinion.Position) < QExtend.Range - Q.Range))
                             {
                                 if (coneBuff.IsInside(enemy.Hero) && enemy.Hero.HasBuff("missfortunepassive"))
                                 {

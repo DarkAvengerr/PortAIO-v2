@@ -6,10 +6,9 @@ using EloBuddy;
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    internal class AutoLevels
+    internal class AutoLevels : Program
     {
-        private static readonly Menu Menu = Program.Menu;
-        private static readonly AIHeroClient Me = Program.Me;
+        private new static readonly Menu Menu = Utilitymenu;
 
         public static void Init()
         {

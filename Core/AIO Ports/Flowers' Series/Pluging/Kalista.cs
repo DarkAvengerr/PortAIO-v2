@@ -2,6 +2,7 @@ using EloBuddy;
  using LeagueSharp.Common; 
  namespace Flowers_ADC_Series.Pluging
 {
+    using Common;
     using System;
     using System.Linq;
     using LeagueSharp;
@@ -9,22 +10,12 @@ using EloBuddy;
     using SharpDX;
     using Color = System.Drawing.Color;
     using Orbwalking = Orbwalking;
-    using static Common;
+    using static Common.Common;
 
-    internal class Kalista
+    internal class Kalista : Program
     {
-        private static Spell Q;
-        private static Spell W;
-        private static Spell E;
-        private static Spell R;
-
-        private static int lastWCast, lastECast;
-
-        private static readonly Menu Menu = Program.Championmenu;
-        private static readonly AIHeroClient Me = Program.Me;
-        private static readonly Orbwalking.Orbwalker Orbwalker = Program.Orbwalker;
-
-        private static HpBarDraw HpBarDraw = new HpBarDraw();
+        private int lastWCast;
+        private int lastECast;
 
         public Kalista()
         {
@@ -86,14 +77,22 @@ using EloBuddy;
 
             var MiscMenu = Menu.AddSubMenu(new Menu("Misc", "Misc"));
             {
+                var EMenu = MiscMenu.AddSubMenu(new Menu("E Settings", "E Settings"));
+                {
+                    EMenu.AddItem(new MenuItem("AutoELast", "Auto E LastHit?", true).SetValue(true));
+                    EMenu.AddItem(new MenuItem("EToler", "E Damage Tolerance + -", true).SetValue(new Slider(0, -100)));
+                    EMenu.AddItem(new MenuItem("AutoSteal", "Auto Steal Mobs?", true).SetValue(true));
+                }
+
+                var RMenu = MiscMenu.AddSubMenu(new Menu("R Settings", "R Settings"));
+                {
+                    RMenu.AddItem(new MenuItem("AutoSave", "Auto R Save Ally?", true).SetValue(true));
+                    RMenu.AddItem(
+                        new MenuItem("AutoSaveHp", "Auto R| When Ally Health Percent <= x%", true).SetValue(new Slider(20)));
+                    RMenu.AddItem(new MenuItem("Balista", "Balista?", true).SetValue(true));
+                }
+
                 MiscMenu.AddItem(new MenuItem("Forcus", "Forcus Attack Passive Target", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("AutoELast", "Auto E LastHit?", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("EToler", "E Damage Tolerance + -", true).SetValue(new Slider(0, -100)));
-                MiscMenu.AddItem(new MenuItem("AutoSteal", "Auto Steal Mobs?", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("AutoSave", "Auto R Save Ally?", true).SetValue(true));
-                MiscMenu.AddItem(
-                    new MenuItem("AutoSaveHp", "Auto R| When Ally Health Percent <= x%", true).SetValue(new Slider(20)));
-                MiscMenu.AddItem(new MenuItem("Balista", "Balista?", true).SetValue(true));
             }
 
             var DrawMenu = Menu.AddSubMenu(new Menu("Drawings", "Drawings"));
@@ -146,8 +145,7 @@ using EloBuddy;
                                                                          Orbwalking.InAutoAttackRange(x) &&
                                                                          x.HasBuff("kalistacoopstrikemarkally")))
                     {
-                        TargetSelector.SetTarget(enemy);
-                        return;
+                        Orbwalker.ForceTarget(enemy);
                     }
                 }
                 else if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
@@ -191,11 +189,14 @@ using EloBuddy;
                 {
                     var target = Args.Target as AIHeroClient;
 
-                    if (target != null && !target.IsDead && !target.IsZombie)
+                    if (target != null)
                     {
-                        if (Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady())
+                        if (!target.IsDead && !target.IsZombie)
                         {
-                            Q.CastTo(target);
+                            if (Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady())
+                            {
+                                Q.CastTo(target);
+                            }
                         }
                     }
                 }
@@ -514,7 +515,7 @@ using EloBuddy;
                 if (Menu.Item("DrawDamage", true).GetValue<StringList>().SelectedIndex != 2)
                 {
                     foreach (
-                        var x in ObjectManager.Get<AIHeroClient>().Where(e => e.IsValidTarget() && !e.IsDead && !e.IsZombie))
+                        var x in HeroManager.Enemies.Where(e => e.IsValidTarget() && !e.IsDead && !e.IsZombie))
                     {
                         HpBarDraw.Unit = x;
                         HpBarDraw.DrawDmg(
