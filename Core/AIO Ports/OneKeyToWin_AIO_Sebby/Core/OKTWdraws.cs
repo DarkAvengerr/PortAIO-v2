@@ -8,7 +8,7 @@ using SebbyLib;
 
 using EloBuddy;
 using LeagueSharp.Common;
-using PortAIO.AIO_Ports.OneKeyToWin_AIO_Sebby;
+using PortAIO.Core.AIO_Ports.OneKeyToWin_AIO_Sebby;
 
 namespace OneKeyToWin_AIO_Sebby.Core
 {

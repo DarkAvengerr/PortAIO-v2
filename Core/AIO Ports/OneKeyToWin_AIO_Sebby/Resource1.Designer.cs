@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PortAIO.AIO_Ports.OneKeyToWin_AIO_Sebby {
+namespace PortAIO.Core.AIO_Ports.OneKeyToWin_AIO_Sebby {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace PortAIO.AIO_Ports.OneKeyToWin_AIO_Sebby {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PortAIO.AIO_Ports.OneKeyToWin_AIO_Sebby.Resource1", typeof(Resource1).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PortAIO.Core.AIO_Ports.OneKeyToWin_AIO_Sebby.Resource1", typeof(Resource1).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

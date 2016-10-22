@@ -19,16 +19,6 @@ namespace PortAIO
         public static bool loaded = false;
         public static int moduleNum = 1;
 
-        public static void Main(string[] args)
-        {
-            Loading.OnLoadingComplete += Loading_OnLoadingComplete;
-        }
-
-        private static void Loading_OnLoadingComplete(System.EventArgs args)
-        {
-            Initialize();
-        }
-
         public static void Initialize()
         {
             Console.WriteLine("[PortAIO] Core loading : Module " + moduleNum + " - Common Loaded");
