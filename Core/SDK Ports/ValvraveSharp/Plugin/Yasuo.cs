@@ -1261,8 +1261,8 @@ using EloBuddy;
 
             private static void EvadeTargetOnCreate(object sender, MissileClient missile)
             {
-                var caster = missile.SpellCaster as AIHeroClient;
-                if (caster == null || !caster.IsValid || caster.Team == Player.Team || !missile.Target.IsMe)
+                var caster = missile.SpellCaster as AIHeroClient ?? null;
+                if (caster == null || !caster.IsValid || caster.Team == Player.Team || !missile.Target.IsMe || !caster.IsValidTarget())
                 {
                     return;
                 }
