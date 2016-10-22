@@ -362,10 +362,10 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "OKTW", "xSalice", "Marksman#", "[SDK] Discaste's Urgot", "[SDK] TroopAIO", "TUrgot", "Flowers' ADC Series" };
                     break;
                 case EloBuddy.Champion.Varus:
-                    champ = new string[] { "ElVarus", "OKTW", "SFXChallenger", "SharpShooter", "Marksman#", "Varus God", "Hikicarry ADC", "Flowers' ADC Series" };
+                    champ = new string[] { "ElVarus", "OKTW", "SFXChallenger", "SharpShooter", "Marksman#", "Varus God", "Hikicarry ADC", "Flowers' ADC Series", "ElVarus Revamped" };
                     break;
                 case EloBuddy.Champion.Vayne:
-                    champ = new string[] { "VayneHunterReborn", "hikiMarksman", "iSeriesReborn", "OKTW", "SAutoCarry", "SharpShooter", "xSalice", "Marksman#", "hi im gosu", "[SDK] ChallengerSeriesAIO", "[SDK] ExorAIO", "[SDK] Flowers' Series", "[SDK] hVayne", "HikiCarry Vayne Masterrace", "PRADA Vayne", "SOLO Vayne", "VayneGodMode", "Hikicarry ADC", "Flowers' ADC Series", "ElVarus Revamped" };
+                    champ = new string[] { "VayneHunterReborn", "hikiMarksman", "iSeriesReborn", "OKTW", "SAutoCarry", "SharpShooter", "xSalice", "Marksman#", "hi im gosu", "[SDK] ChallengerSeriesAIO", "[SDK] ExorAIO", "[SDK] Flowers' Series", "[SDK] hVayne", "HikiCarry Vayne Masterrace", "PRADA Vayne", "SOLO Vayne", "VayneGodMode", "Hikicarry ADC", "Flowers' ADC Series" };
                     break;
                 case EloBuddy.Champion.Veigar:
                     champ = new string[] { "UnderratedAIO", "DZAIO", "FreshBooster", "SAutoCarry", "[SDK] ExorAIO", "ElVeigar", "Placebo Veigar", "SluttyVeigar", "BadaoVeigar" };
