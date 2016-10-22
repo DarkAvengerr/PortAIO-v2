@@ -1,12 +1,13 @@
-using System;
-using LeagueSharp;
-using LeagueSharp.Common;
-
 using EloBuddy; 
  using LeagueSharp.Common; 
  namespace Dark_Star_Thresh
 {
-    class Program
+    using System;
+
+    using LeagueSharp;
+    using LeagueSharp.Common;
+
+    internal class Program
     {
         public static void OnLoad()
         {
@@ -15,6 +16,7 @@ using EloBuddy;
                 Chat.Print("Could not load Dark Star Thresh");
                 return;
             }
+
             Load.LoadAssembly();
         }
     }

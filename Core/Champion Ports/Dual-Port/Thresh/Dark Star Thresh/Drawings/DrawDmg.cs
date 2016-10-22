@@ -1,26 +1,30 @@
-using SharpDX;
-using System;
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
-using Dark_Star_Thresh.Core;
-
 using EloBuddy; 
  using LeagueSharp.Common; 
  namespace Dark_Star_Thresh.Drawings
 {
-    class DrawDmg : Core.Core
+    using System;
+    using System.Linq;
+
+    using Dark_Star_Thresh.Core;
+
+    using LeagueSharp;
+    using LeagueSharp.Common;
+
+    using SharpDX;
+
+    internal class DrawDmg : Core
     {
         private static readonly HpBarIndicator Indicator = new HpBarIndicator();
+        private static readonly Dmg Dmg = new Dmg();
 
         public static void OnEndScene(EventArgs args)
         {
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(Spells.Q.Range) && !ene.IsZombie))
+            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1350)))
             {
-                if (!MenuConfig.DrawDmg) continue;
+                if (!MenuConfig.DrawDmg) return;
 
-                Indicator.unit = enemy;
-                Indicator.drawDmg(Dmg.Damage(enemy), new ColorBGRA(255, 204, 0, 170));
+                Indicator.Unit = enemy;
+                Indicator.DrawDmg(Dmg.Damage(enemy), Color.LawnGreen);
             }
         }
     }

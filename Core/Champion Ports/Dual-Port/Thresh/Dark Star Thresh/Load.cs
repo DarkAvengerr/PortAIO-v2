@@ -1,20 +1,22 @@
-using Dark_Star_Thresh.Core;
-using Dark_Star_Thresh.Update;
-using Dark_Star_Thresh.Drawings;
-using LeagueSharp;
-using LeagueSharp.Common;
-
 using EloBuddy; 
  using LeagueSharp.Common; 
  namespace Dark_Star_Thresh
 {
-    class Load
+    using Dark_Star_Thresh.Core;
+    using Dark_Star_Thresh.Drawings;
+    using Dark_Star_Thresh.Update;
+
+    using LeagueSharp;
+    using LeagueSharp.Common;
+
+    internal class Load
     {
         public static void LoadAssembly()
         {
-            Spells.Load();
             MenuConfig.LoadMenu();
+            Spells.Load();
 
+            TacticalMap.OnPing += Mode.OnPing;
             Game.OnUpdate += Misc.Skinchanger;
             Game.OnUpdate += Mode.GetActiveMode;
 

@@ -1,48 +1,37 @@
-using Dark_Star_Thresh.Core;
-using LeagueSharp.Common;
-using LeagueSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SharpDX;
-using LeagueSharp.Common.Data;
-
 using EloBuddy; 
  using LeagueSharp.Common; 
  namespace Dark_Star_Thresh.Update
 {
-    class Mode : Core.Core
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
+    using Dark_Star_Thresh.Core;
+
+    using LeagueSharp;
+    using LeagueSharp.Common;
+
+    using SharpDX;
+
+    using Color = System.Drawing.Color;
+
+    internal class Mode : Core
     {
-        public static Vector3 qPred(AIHeroClient Target)
-        {
-            var pos = Spells.Q.GetPrediction(Target).CastPosition.To2D();
-
-            if(Spells.Q.MinHitChance >= HitChance.High)
-            {
-                return pos.To3D2();
-            }
-           
-            return pos.To3D2();
-        }
-
         public static void GetActiveMode(EventArgs args)
         {
-            switch (_orbwalker.ActiveMode)
+            AutoQ();
+            switch (Orbwalker.ActiveMode)
             {
                 case Orbwalking.OrbwalkingMode.None:
                     FlashCombo();
                     Flee();
-                    _orbwalker.SetAttack(true);
+                    Orbwalker.SetAttack(true);
                     break;
                 case Orbwalking.OrbwalkingMode.Combo:
                     Combo();
                     break;
                 case Orbwalking.OrbwalkingMode.Mixed:
                     Harass();
-                    break;
-                case Orbwalking.OrbwalkingMode.LaneClear:
                     break;
                 case Orbwalking.OrbwalkingMode.LastHit:
                     LastHit();
@@ -55,29 +44,89 @@ using EloBuddy;
             return t.HasBuff("ThreshQ");
         }
 
+        public static void OnPing(TacticalMapPingEventArgs args)
+        {
+            if (!MenuConfig.WJungler || !Spells.W.IsReady())
+            {
+                return;
+            }
+
+            var allyJungler = args.Source as AIHeroClient;
+
+            if (allyJungler == null 
+                || allyJungler.Distance(Player.ServerPosition) <= Spells.W.Range + 550
+                || !allyJungler.Spellbook.GetSpell(SpellSlot.Summoner1).Name.ToLower().Contains("smite")
+                || !allyJungler.Spellbook.GetSpell(SpellSlot.Summoner2).Name.ToLower().Contains("smite")
+                || args.PingType != PingCategory.Fallback 
+                || args.PingType != PingCategory.Danger)
+            {
+                return;
+            }
+
+            LeagueSharp.Common.Utility.DelayAction.Add(330, () => Spells.W.Cast(args.Position.To3D()));   
+        }
+
+        public static void AutoQ()
+        {
+            var qTarget = TargetSelector.GetTarget(MenuConfig.ComboQ, TargetSelector.DamageType.Physical);
+
+            if (!Spells.Q.IsReady() || !qTarget.IsValidTarget(Spells.Q.Range) || qTarget == null)
+            {
+                return; 
+            }
+
+            if (MenuConfig.AutoCC // Hotfix, .IsActive isn't working properly?
+                && GetStunDuration(qTarget) < Spells.Q.Delay
+                && (qTarget.HasBuffOfType(BuffType.Stun)
+                || qTarget.HasBuffOfType(BuffType.Knockback)
+                || qTarget.HasBuffOfType(BuffType.Charm)
+                || qTarget.HasBuffOfType(BuffType.Suppression)
+                || qTarget.HasBuffOfType(BuffType.Snare)))
+            {
+                CastQ(qTarget);
+            }
+
+            if (MenuConfig.AutoDashing && qTarget.IsDashing())
+            {
+                CastQ(qTarget);
+            }
+        }
+
         public static void Combo()
         {
-            var qTarget = TargetSelector.GetTarget(MenuConfig.ComboQ * 10, TargetSelector.DamageType.Physical);
-
-            var eTarget = TargetSelector.GetTarget(Spells.E.Range, TargetSelector.DamageType.Physical);
+            var qTarget = TargetSelector.GetTarget(MenuConfig.ComboQ, TargetSelector.DamageType.Physical);
 
             var rTarget = TargetSelector.GetTarget(Spells.R.Range, TargetSelector.DamageType.Physical);
 
-            // Credits to DanZ for this line of code.
-            var wAlly = Player.GetAlliesInRange(Spells.W.Range).Where(x => !x.IsMe).Where(x => !x.IsDead).Where(x => x.Distance(Player.Position) <= Spells.W.Range + 250).FirstOrDefault();
+            var wAlly =
+                Player.GetAlliesInRange(Spells.W.Range)
+                    .Where(x => !x.IsMe)
+                    .FirstOrDefault(x => x.Distance(Player.Position) <= Spells.W.Range + 375);
 
             if (Spells.E.IsReady())
             {
-                if (eTarget != null && !eTarget.IsDashing() && !eTarget.IsDead && eTarget.IsValidTarget(Spells.E.Range))
+                var eTarget = TargetSelector.GetTarget(Spells.E.Range, TargetSelector.DamageType.Physical);
+
+                if (eTarget != null && eTarget.IsValidTarget(Spells.E.Range))
                 {
-                    if(eTarget.Distance(Player) <= Spells.E.Range)
+                    if (MenuConfig.ESmart && GetStunDuration(eTarget) < Spells.E.Delay)
                     {
-                        if (wAlly == null && !eTarget.UnderAllyTurret())
+                        Spells.E.Cast(eTarget.Position.Extend(Player.Position, Vector3.Distance(eTarget.Position, Player.Position) + 400));
+
+                        if (MenuConfig.Debug)
                         {
-                            if(MenuConfig.Debug)
+                            Chat.Print("Pulling, E Smart Active");
+                        }
+                    }
+                    else
+                    {
+                        if (wAlly == null && !eTarget.UnderTurret(false))
+                        {
+                            if (MenuConfig.Debug)
                             {
                                 Chat.Print("Pushing");
                             }
+
                             Spells.E.Cast(eTarget.Position);
                         }
                         else
@@ -86,101 +135,83 @@ using EloBuddy;
                             {
                                 Chat.Print("Pulling");
                             }
-                            // Might extend it to wAlly
+
                             Spells.E.Cast(eTarget.Position.Extend(Player.Position, Vector3.Distance(eTarget.Position, Player.Position) + 400));
                         }
                     }
                 }
             }
 
-            if(Spells.Q.IsReady())
+            if (Spells.Q.IsReady())
             {
-                if (qTarget != null && !qTarget.IsDashing() && !qTarget.IsDead && qTarget.IsValidTarget())
+                if (qTarget == null)
                 {
-                    var qPrediction = Spells.Q.GetPrediction(qTarget);
-
-                    if (Spells.Q.WillHit(qTarget, qPrediction.CastPosition))
-                    {
-                        Spells.Q.Cast(qPred(qTarget));
-                    }
+                    return;
                 }
 
-                if(MenuConfig.ComboTaxi && Spells.E.IsReady())
+                if (MenuConfig.ComboTaxi && Spells.W.IsReady() && Player.ManaPercent >= 30 && qTarget.Distance(Player) > Player.AttackRange + 200 && wAlly != null)
                 {
-                    if(qTarget != null && qTarget.IsValidTarget())
+                    var minions = MinionManager.GetMinions(Player.Position, Spells.Q.Range + Spells.E.Range);
+
+                    foreach (var m in minions)
                     {
-                        var qPrediction = Spells.Q.GetPrediction(qTarget);
+                        if (m == null
+                            || !m.IsValidTarget()
+                            || !(m.Health > Spells.Q.GetDamage(m))
+                            || !qTarget.IsFacing(Player) 
+                            || qTarget.Distance(m) > 150)
+                            return;
 
-                        if (Player.ManaPercent >= 55 && !Spells.Q.WillHit(qTarget, qPrediction.CastPosition))
+                        Spells.Q.Cast(m);
+
+                        if (MenuConfig.Debug)
                         {
-                            var minions = MinionManager.GetMinions(Player.Position, Spells.Q.Range + Spells.E.Range);
-
-                            foreach (var m in minions)
-                            {
-                                if (m != null && m.IsValidTarget() && m.Health > Spells.Q.GetDamage(m) && qTarget.IsFacing(Player))
-                                {
-                                    if(ThreshQ(m) || m.Distance(Player) >= 900f)
-                                    {
-                                        if (m.Distance(Player) <= Spells.Q.Range && qTarget.Distance(Player) <= Spells.Q.Range + Spells.E.Range - 50)
-                                        {
-                                            if (MenuConfig.Debug) Chat.Print("Taxi Mode Active...");
-
-                                            Spells.Q.Cast(m.ServerPosition);
-                                        }
-                                    }
-                                }
-                            }
+                            Chat.Print("Taxi Mode Active...");
                         }
                     }
                 }
+                else
+                {
+                    CastQ(qTarget);
+                }
             }
 
-            if (wAlly != null)
+            if (wAlly != null && qTarget != null)
             {
-                if(qTarget.IsValidTarget() && qTarget != null && ThreshQ(qTarget))
+                if (ThreshQ(qTarget) || qTarget.Distance(Player) <= Spells.E.Range + 250)
                 {
                     if (Spells.W.IsReady())
                     {
                         Spells.W.Cast(wAlly);
                     }
                 }
-                else if (eTarget.IsValidTarget() && eTarget != null && eTarget.Distance(Player) <= Spells.E.Range)
-                {
-                    if(Spells.W.IsReady())
-                    {
-                        Spells.W.Cast(wAlly);
-                    }
-                }
             }
 
-          if(Spells.R.IsReady())
+            if (!Spells.R.IsReady() || rTarget == null || !rTarget.IsValidTarget())
             {
-                if (rTarget != null && !rTarget.IsDead && rTarget.IsValidTarget())
-                {
-                    if (Player.CountEnemiesInRange(Spells.R.Range - 45) >= MenuConfig.ComboR)
-                    {
-                        Spells.R.Cast();
-                    }
-                }
+                return;
+            }
+
+            if (Player.CountEnemiesInRange(Spells.R.Range - 45) >= MenuConfig.ComboR)
+            {
+                Spells.R.Cast();
             }
         }
 
         public static void Harass()
         {
-            if(_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && MenuConfig.HarassAA)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && MenuConfig.HarassAa)
             {
-                _orbwalker.SetAttack(false);
+                Orbwalker.SetAttack(false);
             }
-            else // Not needed, but you'll never know.
+            else
             {
-                _orbwalker.SetAttack(true);
+                Orbwalker.SetAttack(true);
             }
-
-            var qTarget = TargetSelector.GetTarget(Spells.Q.Range, TargetSelector.DamageType.Physical);
 
             var eTarget = TargetSelector.GetTarget(Spells.E.Range, TargetSelector.DamageType.Physical);
 
-            if(MenuConfig.HarassE)
+            if (MenuConfig.HarassE)
             {
                 if (Spells.E.IsReady())
                 {
@@ -194,47 +225,39 @@ using EloBuddy;
                 }
             }
 
-            // The reason we can return here is because we wont go further. Better code and we don't have to put unecessary if statements
-            if (!MenuConfig.HarassQ) return;
-            
-            if (qTarget == null || qTarget.IsDashing() || qTarget.IsDead || !qTarget.IsValidTarget() || !Spells.Q.IsReady()) return;
+            var qTarget = TargetSelector.GetTarget(Spells.Q.Range, TargetSelector.DamageType.Physical);
 
-            var qPrediction = Spells.Q.GetPrediction(qTarget);
+            if (!MenuConfig.HarassQ || qTarget == null || qTarget.IsDashing() || qTarget.IsDead
+                || !qTarget.IsValidTarget() || !Spells.Q.IsReady()) return;
 
-            if (Spells.Q.WillHit(qTarget, qPrediction.CastPosition))
-            {
-                Spells.Q.Cast(qPred(qTarget));
-            }
+            CastQ(qTarget);
         }
 
         public static void LastHit()
         {
-            var minions = MinionManager.GetMinions(1050f);
+            var minions = MinionManager.GetMinions(Orbwalking.GetAttackRange(Player));
             if (Dmg.TalentReaper == 0) return;
 
             foreach (var m in minions)
             {
-                if (m.IsValidTarget(1050) && m != null && !m.IsDead)
+                if (!m.IsValidTarget(Orbwalking.GetAttackRange(Player)) || m == null)
                 {
-                    var range = Player.GetAlliesInRange(Spells.W.Range).Where(x => !x.IsMe).Where(x => !x.IsDead).Where(x => x.Distance(Player.Position) <= 1050).FirstOrDefault();
-
-                    if (Player.GetAutoAttackDamage(m, true) > m.Health && range != null)
-                    {
-                        if (MenuConfig.Debug)
-                        {
-                            Chat.Print("Damage = " + (float)Player.GetAutoAttackDamage(m, true) + " | Minion Hp = " + m.Health);
-
-                            if (m.Distance(Player) <= 225f)
-                            {
-                                Render.Circle.DrawCircle(m.Position, 75, System.Drawing.Color.Green);
-                            }
-                            else
-                            {
-                                Render.Circle.DrawCircle(m.Position, 75, System.Drawing.Color.Red);
-                            }
-                        }
-                    }
+                    continue;
                 }
+                var range =
+                    Player.GetAlliesInRange(Spells.W.Range)
+                        .Where(x => !x.IsMe)
+                        .Where(x => !x.IsDead)
+                        .FirstOrDefault(x => x.Distance(Player.Position) <= Orbwalking.GetAttackRange(Player));
+
+                if (Player.GetAutoAttackDamage(m, true) < m.Health || range == null || !MenuConfig.Debug)
+                {
+                    continue;
+                }
+               
+                Chat.Print("Damage = " + (float)Player.GetAutoAttackDamage(m, true) + " | Minion Hp = " + m.Health);
+
+                Render.Circle.DrawCircle(m.Position, 75, m.Distance(Player) <= 225f ? Color.Green : Color.Red);
             }
         }
 
@@ -246,43 +269,51 @@ using EloBuddy;
 
             if (!Spells.Q.IsReady()) return;
 
-            var qTarget = TargetSelector.GetTarget(Spells.Q.Range + 300, TargetSelector.DamageType.Physical);
+            var qTarget = TargetSelector.GetTarget(Spells.Q.Range + 420, TargetSelector.DamageType.Physical);
 
-            if(qTarget != null && qTarget.IsValidTarget())
+            if (qTarget == null || !qTarget.IsValidTarget()) return;
+
+            var qPrediction = Spells.Q.GetPrediction(qTarget);
+
+            if (qPrediction == null)
             {
-                var qPrediction = Spells.Q.GetPrediction(qTarget);
-               
-                var wAlly = Player.GetAlliesInRange(Spells.W.Range).Where(x => !x.IsMe).Where(x => !x.IsDead).Where(x => x.Distance(Player.Position) <= Spells.W.Range + 250).FirstOrDefault();
+                return;
+            }
 
-                if (wAlly != null)
-                {
-                    Spells.W.Cast(wAlly);
-                }
-                if (qPrediction.Hitchance == HitChance.Collision) return;
+            if (qPrediction.Hitchance <= HitChance.High) return;
 
-                if (Spells.Flash != SpellSlot.Unknown && Player.Spellbook.CanUseSpell(Spells.Flash) == SpellState.Ready)
-                {
-                    Player.Spellbook.CastSpell(Spells.Flash, qPrediction.CastPosition);
-                    Spells.Q.Cast(qPrediction.CastPosition);
-                } 
-            }   
+            if (Spells.Flash == SpellSlot.Unknown || Player.Spellbook.CanUseSpell(Spells.Flash) != SpellState.Ready) return;
+
+            var wAlly = Player.GetAlliesInRange(Spells.W.Range).Where(x => !x.IsMe).FirstOrDefault(x => x.Distance(Player.Position) <= Spells.W.Range + 500);
+
+            if (wAlly != null)
+            {
+                Spells.W.Cast(wAlly);
+            }
+
+            Player.Spellbook.CastSpell(Spells.Flash, qPrediction.CastPosition);
+
+            CastQ(qTarget);
         }
-        public static void Flee() // Snippet From Nechrito Diana
-        {
-            if (!MenuConfig.Flee) return;
 
-            var jump = JumpPos.Where(x => x.Value.Distance(ObjectManager.Player.Position) < 300f && x.Value.Distance(Game.CursorPos) < Spells.Q.Range).FirstOrDefault();
-            var monster = MinionManager.GetMinions(Spells.Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.Health).FirstOrDefault();
+        public static void Flee()
+        {
+            if (!MenuConfig.Flee || !Spells.Q.IsReady())
+            {
+                return;
+            }
+
+            var jump = JumpPos.FirstOrDefault(x => x.Value.Distance(ObjectManager.Player.Position) < Spells.Q.Range && x.Value.Distance(Game.CursorPos) <= 350);
+
             var mobs = MinionManager.GetMinions(Spells.Q.Range, MinionTypes.All, MinionTeam.NotAlly);
-            
-            if(jump.Value.IsValid() && Spells.Q.IsReady())
+
+            if (jump.Value.IsValid())
             {
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, jump.Value);
 
-
                 foreach (var pos in JunglePos)
                 {
-                    if (Game.CursorPos.Distance(pos) <= 350 && ObjectManager.Player.Position.Distance(pos) <= Spells.Q.Range && Spells.Q.IsReady())
+                    if (Game.CursorPos.Distance(pos) <= 350 && ObjectManager.Player.Position.Distance(pos) <= Spells.Q.Range)
                     {
                         Spells.Q.Cast(pos);
                     }
@@ -293,47 +324,63 @@ using EloBuddy;
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             }
 
-
-            if (!mobs.Any() || !Spells.Q.IsReady()) return;
+            if (!mobs.Any()) return;
 
             var m = mobs.MaxOrDefault(x => x.MaxHealth);
 
-            if(m.Distance(Game.CursorPos) <= Spells.Q.Range && m.Distance(Player) >= 475)
+            if (m.Distance(Game.CursorPos) > Spells.Q.Range || !(m.Distance(Player) >= 475) || m.Health < Spells.Q.GetDamage(m))
             {
-                if(m.Health > Spells.Q.GetDamage(m))
-                {
-                    Spells.Q.Cast(m.Position);
-                }
+                return;
             }
-        }
-        public static readonly Dictionary<String, Vector3> JumpPos = new Dictionary<String, Vector3>()
-        {
-            { "mid_Dragon" , new Vector3 (9122f, 4058f, 53.95995f) },
-            { "left_dragon" , new Vector3 (9088f, 4544f, 52.24316f) },
-            { "baron" , new Vector3 (5774f, 10706f, 55.77578F) },
-            { "red_wolves" , new Vector3 (11772f, 8856f, 50.30728f) },
-            { "blue_wolves" , new Vector3 (3046f, 6132f, 57.04655f) },
-        };
 
-        public static readonly List<Vector3> JunglePos = new List<Vector3>()
-        {
-          new Vector3(6271.479f, 12181.25f, 56.47668f),
-           new Vector3(6971.269f, 10839.12f, 55.2f),
-           new Vector3(8006.336f, 9517.511f, 52.31763f),
-           new Vector3(10995.34f, 8408.401f, 61.61731f),
-          new Vector3(10895.08f, 7045.215f, 51.72278f),
-           new Vector3(12665.45f, 6466.962f, 51.70544f),
-           //pos of baron
-           new Vector3(5048f, 10460f, -71.2406f),
-           new Vector3(39000.529f, 7901.832f, 51.84973f),
-          new Vector3(2106.111f, 8388.643f, 51.77686f),
-           new Vector3(3753.737f, 6454.71f, 52.46301f),
-           new Vector3(6776.247f, 5542.872f, 55.27625f),
-           new Vector3(7811.688f, 4152.602f, 53.79456f),
-          new Vector3(8528.921f, 2822.875f, 50.92188f),
-          //pos of dragon
-           new Vector3(9802f, 4366f, -71.2406f),
-           new Vector3(3926f, 7918f, 51.74162f)
-        };
+            Spells.Q.Cast(m.Position);
+        }
+
+        public static readonly Dictionary<string, Vector3> JumpPos = new Dictionary<string, Vector3>
+                                                                         {
+                                                                             {
+                                                                                 "mid_Dragon",
+                                                                                 new Vector3(9122f, 4058f, 53.95995f)
+                                                                             },
+                                                                             {
+                                                                                 "left_dragon",
+                                                                                 new Vector3(9088f, 4544f, 52.24316f)
+                                                                             },
+                                                                             {
+                                                                                 "baron",
+                                                                                 new Vector3(5774f, 10706f, 55.77578F)
+                                                                             },
+                                                                             {
+                                                                                 "red_wolves",
+                                                                                 new Vector3(11772f, 8856f, 50.30728f)
+                                                                             },
+                                                                             {
+                                                                                 "blue_wolves",
+                                                                                 new Vector3(3046f, 6132f, 57.04655f)
+                                                                             }
+                                                                         };
+
+        public static readonly List<Vector3> JunglePos = new List<Vector3>
+                                                             {
+                                                                 new Vector3(6271.479f, 12181.25f, 56.47668f),
+                                                                 new Vector3(6971.269f, 10839.12f, 55.2f),
+                                                                 new Vector3(8006.336f, 9517.511f, 52.31763f),
+                                                                 new Vector3(10995.34f, 8408.401f, 61.61731f),
+                                                                 new Vector3(10895.08f, 7045.215f, 51.72278f),
+                                                                 new Vector3(12665.45f, 6466.962f, 51.70544f),
+
+                                                                 // pos of baron
+                                                                 new Vector3(5048f, 10460f, -71.2406f),
+                                                                 new Vector3(39000.529f, 7901.832f, 51.84973f),
+                                                                 new Vector3(2106.111f, 8388.643f, 51.77686f),
+                                                                 new Vector3(3753.737f, 6454.71f, 52.46301f),
+                                                                 new Vector3(6776.247f, 5542.872f, 55.27625f),
+                                                                 new Vector3(7811.688f, 4152.602f, 53.79456f),
+                                                                 new Vector3(8528.921f, 2822.875f, 50.92188f),
+
+                                                                 // pos of dragon
+                                                                 new Vector3(9802f, 4366f, -71.2406f),
+                                                                 new Vector3(3926f, 7918f, 51.74162f)
+                                                             };
     }
 }

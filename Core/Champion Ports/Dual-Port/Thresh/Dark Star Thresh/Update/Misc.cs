@@ -1,46 +1,67 @@
-using Dark_Star_Thresh.Core;
-using LeagueSharp;
-using LeagueSharp.Common;
-using System;
-
 using EloBuddy; 
  using LeagueSharp.Common; 
  namespace Dark_Star_Thresh.Update
 {
-    class Misc : Core.Core
+    using System;
+    using System.Linq;
+
+    using Dark_Star_Thresh.Core;
+
+    using LeagueSharp;
+    using LeagueSharp.Common;
+
+    internal class Misc : Core
     {
         public static void Skinchanger(EventArgs args)
         {
-            if (!MenuConfig.UseSkin)
-            {
-                return;
-            }
+            //Player.SetSkin(Player.CharData.BaseSkinName, MenuConfig.UseSkin ? MenuConfig.Config.Item("Skin").GetValue<StringList>().SelectedIndex : Player.SkinId);
         }
 
         public static void OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (!MenuConfig.Interrupt || sender.IsInvulnerable) return;
-
-            if (sender.IsValidTarget(Spells.E.Range))
+            if (!MenuConfig.Interrupt || !sender.IsEnemy)
             {
-                if (Spells.E.IsReady())
-                {
-                    Spells.E.Cast(sender);
-                }
+                return;
+            }
+
+            if (Spells.E.IsReady() && sender.IsValidTarget(Spells.E.Range))
+            {
+                Spells.E.Cast(sender);
+            }
+
+            else if (sender.IsValidTarget(Spells.Q.Range)
+                && Spells.Q.IsReady()
+                && args.DangerLevel == Interrupter2.DangerLevel.High 
+                && args.EndTime > Utils.TickCount + Spells.Q.Delay + Player.Distance(sender.ServerPosition / Spells.Q.Speed))
+            {
+                CastQ(sender);
             }
         }
 
         public static void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (!MenuConfig.Gapcloser) return;
+            if (!MenuConfig.Gapcloser || gapcloser.Sender.IsEnemy) return;
 
             var sender = gapcloser.Sender;
-            if (sender.IsEnemy && Spells.E.IsReady() && sender.IsValidTarget())
+
+            var wAlly =
+               Player.GetAlliesInRange(Spells.W.Range)
+                   .Where(x => !x.IsMe)
+                   .FirstOrDefault(x => x.Distance(gapcloser.End) <= Spells.W.Range + 375);
+
+            if (Spells.W.IsReady() && wAlly != null)
             {
-                if (sender.IsValidTarget(Spells.E.Range))
-                {
-                    Spells.E.Cast(sender);
-                }
+                Spells.W.Cast(wAlly.Position);
+            }
+
+            if (Spells.E.IsReady() && sender.IsValidTarget(Spells.E.Range))
+            {
+                Spells.E.Cast(sender);
+            }
+
+            else if (Spells.Q.IsReady() && sender.IsValidTarget(Spells.Q.Range))
+            {
+                Spells.Q.Cast(gapcloser.End);
             }
         }
     }
