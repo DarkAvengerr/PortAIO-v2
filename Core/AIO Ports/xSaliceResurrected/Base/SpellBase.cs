@@ -1,10 +1,11 @@
-﻿namespace xSaliceResurrected_Rework.Base
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace xSaliceResurrected_Rework.Base
 {
     using System.Collections.Generic;
     using LeagueSharp;
     using LeagueSharp.Common;
     using Managers;
-    using EloBuddy;
 
     public abstract class SpellBase
     {

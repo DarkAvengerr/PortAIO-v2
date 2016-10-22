@@ -1,10 +1,12 @@
-﻿namespace xSaliceResurrected_Rework.Base
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace xSaliceResurrected_Rework.Base
 {
     using LeagueSharp;
     using LeagueSharp.Common;
     using System;
     using Managers;
-    using EloBuddy;
+
     public class Champion : SpellBase
     {
         protected readonly AIHeroClient Player = ObjectManager.Player;
@@ -21,18 +23,19 @@
             GameObject.OnCreate += GameObject_OnCreateEvent;
             GameObject.OnDelete += GameObject_OnDeleteEvent;
 
+            Spellbook.OnUpdateChargeableSpell += Spellbook_OnUpdateChargeableSpellEvent;
             Spellbook.OnCastSpell += SpellbookOnOnCastSpell;
             Spellbook.OnStopCast += SpellbookOnOnStopCast;
 
-            Orbwalking.AfterAttack += AfterAttackEvent;
-            Orbwalking.BeforeAttack += BeforeAttackEvent;
-            Orbwalking.OnAttack += OnAttack;
+            xSaliceResurrected_Rework.Orbwalking.AfterAttack += AfterAttackEvent;
+            xSaliceResurrected_Rework.Orbwalking.BeforeAttack += BeforeAttackEvent;
+            xSaliceResurrected_Rework.Orbwalking.OnAttack += OnAttack;
 
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnDoCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnSpellCast;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCastEvent;
             EloBuddy.Player.OnIssueOrder += ObjAiHeroOnOnIssueOrderEvent;
             Obj_AI_Base.OnBuffGain += ObjAiBaseOnOnBuffAdd;
-            Obj_AI_Base.OnBuffLose += ObjAiBaseOnOnBuffRemove;
+            Obj_AI_Base.OnBuffLose += ObjAiBaseOnOnBuffLose;
         }
 
         public Champion(bool load)
@@ -41,19 +44,18 @@
                 GameOnLoad();
         }
 
-        public static Orbwalking.Orbwalker Orbwalker;
+        public static xSaliceResurrected_Rework.Orbwalking.Orbwalker Orbwalker;
         public static Menu Menu;
 
         private void GameOnLoad()
         {
-            Chat.Print("<font color = \"#FFB6C1\">xSalice's Ressurected AIO</font> by <font color = \"#00FFFF\">xSalice</font>, imsosharp Fix, NightMoon Rework!");
-            Chat.Print("---------------------------------");
-            Chat.Print("Change Log: Rewrite Done! Now just need to fix the question.(Prediction Change in Next Update)");
+            Chat.Print(
+                "<font color = \"#FFB6C1\">xSalice's Ressurected AIO</font> by <font color = \"#00FFFF\">xSalice</font>, imsosharp Update, NightMoon Rework!");
 
             Menu = new Menu("xSalice's " + Player.ChampionName, Player.ChampionName, true);
 
             Menu.AddSubMenu(new Menu("Orbwalker", "Orbwalker"));
-            Orbwalker = new Orbwalking.Orbwalker(Menu.SubMenu("Orbwalker"));
+            Orbwalker = new xSaliceResurrected_Rework.Orbwalking.Orbwalker(Menu.SubMenu("Orbwalker"));
 
             var itemMenu = new Menu("Activator", "Items");
             ItemManager.AddToMenu(itemMenu);
@@ -87,12 +89,12 @@
       
         }
 
-        private void Obj_AI_Base_OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private void Obj_AI_Base_OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            OnDoCast(sender, args);
+            OnSpellCast(sender, args);
         }
 
-        protected virtual void OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        protected virtual void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             
         }
@@ -169,12 +171,12 @@
 
         }
 
-        private void BeforeAttackEvent(Orbwalking.BeforeAttackEventArgs args)
+        private void BeforeAttackEvent(xSaliceResurrected_Rework.Orbwalking.BeforeAttackEventArgs args)
         {
             BeforeAttack(args);
         }
 
-        protected virtual void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
+        protected virtual void BeforeAttack(xSaliceResurrected_Rework.Orbwalking.BeforeAttackEventArgs args)
         {
            
         }
@@ -191,7 +193,7 @@
 
         protected virtual void ObjAiHeroOnOnIssueOrder(Obj_AI_Base sender, PlayerIssueOrderEventArgs args)
         {
-            //for champ use
+           
         }
 
         private void Spellbook_OnUpdateChargeableSpellEvent(Spellbook sender, SpellbookUpdateChargeableSpellEventArgs args)
@@ -201,7 +203,7 @@
 
         protected virtual void Spellbook_OnUpdateChargeableSpell(Spellbook sender, SpellbookUpdateChargeableSpellEventArgs args)
         {
-            //for champ use
+            
         }
 
         protected virtual void SpellbookOnOnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
@@ -211,7 +213,7 @@
 
         protected virtual void SpellbookOnOnStopCast(Obj_AI_Base sender, SpellbookStopCastEventArgs args)
         {
-            //for Champion used
+          
         }
 
         protected virtual void ObjAiBaseOnOnBuffAdd(Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs args)
@@ -219,7 +221,7 @@
 
         }
 
-        protected virtual void ObjAiBaseOnOnBuffRemove(Obj_AI_Base sender, Obj_AI_BaseBuffLoseEventArgs args)
+        protected virtual void ObjAiBaseOnOnBuffLose(Obj_AI_Base sender, Obj_AI_BaseBuffLoseEventArgs args)
         {
 
         }

@@ -1,9 +1,11 @@
-﻿namespace xSaliceResurrected_Rework.Managers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace xSaliceResurrected_Rework.Managers
 {
     using System.Collections.Generic;
     using LeagueSharp;
     using LeagueSharp.Common;
-    using EloBuddy;
+
     internal static class SpellManager
     {
         //Spells

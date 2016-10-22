@@ -1,9 +1,11 @@
-﻿namespace xSaliceResurrected_Rework.Managers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace xSaliceResurrected_Rework.Managers
 {
     using LeagueSharp;
     using LeagueSharp.Common;
     using SharpDX;
-    using EloBuddy;
+
     public class SummonerManager
     {
         private static readonly SpellSlot IgniteSlot = ObjectManager.Player.GetSpellSlot("SummonerDot");

@@ -1,4 +1,6 @@
-﻿namespace xSaliceResurrected_Rework.Managers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace xSaliceResurrected_Rework.Managers
 {
     using Base;
     using System.Linq;
@@ -8,7 +10,7 @@
     using Utilities;
     using Color = System.Drawing.Color;
     using Geometry = LeagueSharp.Common.Geometry;
-    using EloBuddy;
+
     public class SpellCastManager
     {
         private static readonly AIHeroClient Player = ObjectManager.Player;
@@ -204,7 +206,7 @@
                     CastLineSpell(start, end);
                 }
 
-                if (Base.Champion.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo &&
+                if (Champion.Orbwalker.ActiveMode == xSaliceResurrected_Rework.Orbwalking.OrbwalkingMode.Combo &&
                     maxHit >= menu.Item("Line_If_Enemy_Count_Combo", true).GetValue<Slider>().Value)
                 {
                     CastLineSpell(start, end);

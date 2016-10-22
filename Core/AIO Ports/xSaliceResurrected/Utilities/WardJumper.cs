@@ -1,11 +1,13 @@
-﻿namespace xSaliceResurrected_Rework.Utilities
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace xSaliceResurrected_Rework.Utilities
 {
     using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;
     using SharpDX;
     using Base;
-    using EloBuddy;
+
     public class WardJumper : SpellBase
     {
         public static int LastPlaced;

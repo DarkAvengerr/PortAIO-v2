@@ -1,9 +1,11 @@
-﻿namespace xSaliceResurrected_Rework
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace xSaliceResurrected_Rework
 {
     using LeagueSharp;
     using LeagueSharp.Common;
     using Pluging;
-    using EloBuddy;
+
     public class PluginLoader
     {
         private static bool _loaded;
@@ -31,6 +33,10 @@
                         break;
                     case "ashe":
                         var ashe = new Ashe();
+                        _loaded = true;
+                        break;
+                    case "azir":
+                        var azir = new Azir();
                         _loaded = true;
                         break;
                     case "chogath":

@@ -1,4 +1,4 @@
-﻿/*
+/*
 *     ___ _____ _   _   ___ ______   _  _   
 *    |_  |_   _| | | | / _ \|  _  \_| || |_ 
 *      | | | | | |_| |/ /_\ \ | | |_  __  _|
@@ -22,9 +22,10 @@
 *        and everyone using this
 *  
 */
-namespace xSaliceResurrected_Rework.Utilities
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace xSaliceResurrected_Rework.Utilities
 {
-    using EloBuddy;
     using System;
     using System.Collections.Generic;
     using ClipperLib;

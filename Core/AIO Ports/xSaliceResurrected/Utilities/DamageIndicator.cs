@@ -1,4 +1,6 @@
-﻿namespace xSaliceResurrected_Rework.Utilities
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace xSaliceResurrected_Rework.Utilities
 {
     using System;
     using System.Globalization;
@@ -7,7 +9,7 @@
     using LeagueSharp.Common;
     using SharpDX;
     using Color = System.Drawing.Color;
-    using EloBuddy;
+
     public static class DamageIndicator
     {
         public delegate float DamageToUnitDelegate(AIHeroClient hero);

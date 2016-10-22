@@ -1,4 +1,6 @@
-﻿namespace xSaliceResurrected_Rework.Managers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace xSaliceResurrected_Rework.Managers
 {
     using System;
     using System.Linq;
@@ -7,7 +9,6 @@
     using SharpDX;
     using Base;
     using Pluging;
-    using EloBuddy;
 
     internal class AoeSpellManager : SpellBase
     {

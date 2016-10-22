@@ -1,11 +1,13 @@
-﻿namespace xSaliceResurrected_Rework.Utilities
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace xSaliceResurrected_Rework.Utilities
 {
     using Base;
     using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;
     using SharpDX;
-    using EloBuddy;
+
     public static class Util 
     {
         private static readonly AIHeroClient Player = ObjectManager.Player;
@@ -57,7 +59,7 @@
 
         public static AIHeroClient GetTargetFocus(float range)
         {
-            var focusSelected = Base.Champion.Menu.Item("selected", true).GetValue<bool>();
+            var focusSelected = Champion.Menu.Item("selected", true).GetValue<bool>();
 
             if (TargetSelector.GetSelectedTarget() != null)
             {

@@ -1,4 +1,6 @@
-﻿namespace xSaliceResurrected_Rework.Managers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace xSaliceResurrected_Rework.Managers
 {
     using System;
     using System.Collections.Generic;
@@ -6,7 +8,7 @@
     using LeagueSharp;
     using LeagueSharp.Common;
     using ItemData = LeagueSharp.Common.Data.ItemData;
-    using EloBuddy;
+
     internal class ItemManager
     {
         private static Menu _myMenu;

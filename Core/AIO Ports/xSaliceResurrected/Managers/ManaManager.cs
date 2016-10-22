@@ -1,9 +1,11 @@
-﻿namespace xSaliceResurrected_Rework.Managers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace xSaliceResurrected_Rework.Managers
 {
     using Base;
     using LeagueSharp;
     using LeagueSharp.Common;
-    using EloBuddy;
+
     public static class ManaManager
     {
         public static void AddManaManagertoMenu(Menu myMenu, string source, int standard)
@@ -18,7 +20,7 @@
 
         public static bool HasMana(string source)
         {
-            return ObjectManager.Player.ManaPercent > Base.Champion.Menu.Item(source + "_Manamanager", true).GetValue<Slider>().Value;
+            return ObjectManager.Player.ManaPercent > Champion.Menu.Item(source + "_Manamanager", true).GetValue<Slider>().Value;
         }
     }
 }

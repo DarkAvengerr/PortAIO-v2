@@ -1,4 +1,6 @@
-﻿namespace xSaliceResurrected_Rework.Utilities
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace xSaliceResurrected_Rework.Utilities
 {
     using Base;
     using System;
@@ -7,7 +9,7 @@
     using LeagueSharp.Common;
     using SharpDX;
     using PortAIO.Properties;
-    using EloBuddy;
+
     public class CustomPermaMenu
     {
         private static int _menuX = (int)(Drawing.Width * 0.75f);
@@ -41,10 +43,10 @@
 
         protected virtual void Drawing_OnDraw(EventArgs arg)
         {
-            if (!Base.Champion.Menu.Item("enableCustMenu", true).GetValue<bool>())
+            if (!Champion.Menu.Item("enableCustMenu", true).GetValue<bool>())
                 return;
 
-            if (Base.Champion.Menu.Item("custMenu", true).GetValue<KeyBind>().Active)
+            if (Champion.Menu.Item("custMenu", true).GetValue<KeyBind>().Active)
             {
                 _menuX = (int) Drawing.WorldToScreen(Game.CursorPos).X;
                 _menuY = (int) Drawing.WorldToScreen(Game.CursorPos).Y;
@@ -61,7 +63,7 @@
                         obj.RenderTxt.X = _menuX;
                         obj.RenderTxt.Y = _menuY + yOffset;
 
-                        if (Base.Champion.Menu.Item(obj.Source, true).GetValue<KeyBind>().Active)
+                        if (Champion.Menu.Item(obj.Source, true).GetValue<KeyBind>().Active)
                         {
                             obj.RenderTxt.Color = new ColorBGRA(209, 179, 40, 255);
                             obj.RenderTxt.text = obj.Text + "On";
