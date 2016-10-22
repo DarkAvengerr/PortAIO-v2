@@ -3,7 +3,9 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace AutoJungle.Data
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace AutoJungle.Data
 {
     public class Jungle
     {

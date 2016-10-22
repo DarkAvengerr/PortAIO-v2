@@ -1,7 +1,9 @@
 using System;
 using SharpDX;
 
-using EloBuddy; namespace AutoJungle.Data
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace AutoJungle.Data
 {
     internal class Camps
     {

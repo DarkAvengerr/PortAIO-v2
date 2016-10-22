@@ -4,7 +4,9 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace AutoJungle.Data
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace AutoJungle.Data
 {
     internal class ItemHandler
     {
@@ -52,8 +54,32 @@ using EloBuddy; namespace AutoJungle.Data
                     break;
                 case BuildType.KOG:
                     SetlistKOG();
-                    break;                    
+                    break;    
+                case BuildType.Kayle:
+                	SetlistKayle();
+                    break;
             }
+        }
+
+        private void SetlistKayle()
+        {
+            ItemList.Add(new BuyingOrder(1, 1039, "Hunter's Talisman", 350));
+            ItemList.Add(new BuyingOrder(2, 2031, "Refillable Potion", 150));
+            ItemList.Add(new BuyingOrder(3, 3340, "Trinket", 0));
+            ItemList.Add(new BuyingOrder(4, 1041, "Hunter's Machete", 350));
+            ItemList.Add(new BuyingOrder(5, 3715, "Skirmisher's Blade", 700));
+            ItemList.Add(new BuyingOrder(6, 3101, "Stinger", 1300));
+            ItemList.Add(new BuyingOrder(7, 3006, "BKG", 1100));
+            ItemList.Add(new BuyingOrder(8, 3115, "NsT", 1900));
+            ItemList.Add(new BuyingOrder(9, 1037, "十字", 875));
+            ItemList.Add(new BuyingOrder(10, 3124, "怒", 2725));
+            ItemList.Add(new BuyingOrder(11, 1419, "Bloodrazor", 1625));
+            ItemList.Add(new BuyingOrder(12, 3144, "Cutlass", 1500));
+            ItemList.Add(new BuyingOrder(12, 3153, "Blade_of_the_Ruined_King", 1900));
+            ItemList.Add(new BuyingOrder(13, (int) ItemId.Giants_Belt, "Giants Belt", 1435));
+            ItemList.Add(new BuyingOrder(14, 1052, "Blade_of_the_Ruined_King", 435));
+            ItemList.Add(new BuyingOrder(15, 3116, "RCS", 1765));
+            ItemList.Add(new BuyingOrder(18, 2139, "Elixir of Sorcery", 500));
         }
 
         private void SetlistKOG()
@@ -74,7 +100,7 @@ using EloBuddy; namespace AutoJungle.Data
             ItemList.Add(new BuyingOrder(14, (int) ItemId.Blade_of_the_Ruined_King, "破败", 1750));
             ItemList.Add(new BuyingOrder(15, 3044, "Phage", 950));
             ItemList.Add(new BuyingOrder(16, 3071, "tbc", 1950));
-            ItemList.Add(new BuyingOrder(17, 2140, "嗑药", 500));
+            
         }
 
         private void SetlistManwang()
@@ -296,22 +322,21 @@ using EloBuddy; namespace AutoJungle.Data
             ItemList.Add(new BuyingOrder(2, 2031, "Refillable Potion", 150));
             ItemList.Add(new BuyingOrder(3, 3340, "Trinket", 0));
             ItemList.Add(new BuyingOrder(4, 1039, "Hunter's Talisman", 350));
-            ItemList.Add(new BuyingOrder(5, 3706, "Stalker's Blade", 700));
+            ItemList.Add(new BuyingOrder(5, 3715, "Skirmisher's Blade", 700));
             ItemList.Add(new BuyingOrder(6, 1042, "Dagger", 1050));
             ItemList.Add(new BuyingOrder(7, (int) ItemId.Recurve_Bow, "弓", 700));
-            ItemList.Add(new BuyingOrder(8, 1416, "Bloodrazor", 1600));
+            ItemList.Add(new BuyingOrder(8, 1419, "Bloodrazor", 1600));
             ItemList.Add(new BuyingOrder(9, (int) ItemId.Boots_of_Speed, "Boots of Speed", 1500));
             ItemList.Add(new BuyingOrder(10, 3117, "BoM", 600));
             ItemList.Add(new BuyingOrder(11, (int) ItemId.Tiamat_Melee_Only, "Tiamat", 1250));
             ItemList.Add(new BuyingOrder(12, (int) ItemId.Ravenous_Hydra_Melee_Only, "Ravenous Hydra Melee Only", 2350));
             ItemList.Add(new BuyingOrder(13, (int) ItemId.Bilgewater_Cutlass, "Bilgewater Cutlass", 1650));
             ItemList.Add(new BuyingOrder(14, (int) ItemId.Blade_of_the_Ruined_King, "BOTRK", 1750));
-            ItemList.Add(new BuyingOrder(15, 1037, "十字", 875));
-            ItemList.Add(new BuyingOrder(16, 3133, "warhamm", 1100));
-            ItemList.Add(new BuyingOrder(17, 3812, "dance", 1525));
-            ItemList.Add(new BuyingOrder(18, (int) ItemId.Giants_Belt, "Giants Belt", 1000));
-            ItemList.Add(new BuyingOrder(19, 3742, "Dead Mans Plate", 2600));
-            ItemList.Add(new BuyingOrder(20, 2140, "Elixir of Wrath", 500));
+            ItemList.Add(new BuyingOrder(15, 3086, "zeal", 1300));
+            ItemList.Add(new BuyingOrder(16, 3046, "PD", 1250));
+            ItemList.Add(new BuyingOrder(17, (int) ItemId.Giants_Belt, "Giants Belt", 1000));
+            ItemList.Add(new BuyingOrder(18, 3742, "Dead Mans Plate", 2600));
+            ItemList.Add(new BuyingOrder(19, 2140, "Elixir of Wrath", 500));
         }
 
         private void SetlistNu()
@@ -430,6 +455,7 @@ using EloBuddy; namespace AutoJungle.Data
         Bro,
         Nu,
         UD,
+        Kayle,
         KOG
     }
 }

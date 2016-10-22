@@ -2,7 +2,9 @@ using System;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace AutoJungle.Data
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace AutoJungle.Data
 {
     internal class AutoLeveler
     {

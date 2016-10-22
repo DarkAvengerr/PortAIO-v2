@@ -13,7 +13,11 @@ using SharpDX;
 using Color = System.Drawing.Color;
 using System.Resources;
 
-using EloBuddy; namespace AutoJungle
+using EloBuddy;
+using LeagueSharp.Common;
+using System.Threading.Tasks;
+
+namespace AutoJungle
 {
     internal class Program
     {
@@ -59,12 +63,13 @@ using EloBuddy; namespace AutoJungle
             }
 
             if (menu.Item("WaitAtLvlTWO", true).GetValue<bool>() && Jungle.smite != null &&
-                Jungle.smite.Instance.Ammo == 0 && player.Level == 2 && _GameInfo.GameState == State.Positioning &&
-                player.Distance(_GameInfo.MonsterList.First().Position) < 700)
+            Jungle.smite.Instance.Ammo == 0 && player.Level == 2 && _GameInfo.GameState == State.Positioning &&
+            player.HealthPercent < 55 && player.Distance(_GameInfo.MonsterList.First().Position) < 700)
             {
                 _GameInfo.afk = 0;
                 return;
             }
+
             //Checking Afk
             if (CheckAfk())
             {
@@ -137,17 +142,42 @@ using EloBuddy; namespace AutoJungle
                     }
                     break;
 
+                case "Kayle":
+                    var rActive3 = player.HasBuff("JudicatorIntervention");
+                    if (_GameInfo.GameState == State.FightIng)
+                    {
+                        var targetHero = _GameInfo.Target;
+                        if (Champdata.R.IsReady() && targetHero.IsValidTarget(525) &&
+                            player.HealthPercent <= 25 && !rActive3)
+                        {
+                            Champdata.R.Cast();
+                        }
+                        return;
+                    }
+                    if (_GameInfo.GameState == State.Jungling || _GameInfo.GameState == State.LaneClear)
+                    {
+                        var targetMob = _GameInfo.Target;
+                        if (Champdata.R.IsReady() && targetMob.IsValidTarget(525) &&
+                            player.HealthPercent <= 25 && !rActive3)
+                        {
+                            Champdata.R.Cast();
+                        }
+                        return;
+                    }
+                    break;
+/*
                 case "Nunu":
                     var rActive = player.HasBuff("AbsoluteZero");
                     if (_GameInfo.GameState == State.FightIng)
                     {
-                        if (player.Spellbook.IsChanneling && (target.IsValidTarget(650)))
+                        var targetHero = _GameInfo.Target;
+                        if (player.Spellbook.IsChanneling && (targetHero.IsValidTarget(650)))
                         {
                             return;
                         }
                     }
                     break;
-
+*/
                 case "Udyr":
                     var rActive2 = player.HasBuff("UdyrPhoenixStance");
                     if (_GameInfo.GameState == State.Jungling || _GameInfo.GameState == State.LaneClear)
@@ -1326,7 +1356,7 @@ using EloBuddy; namespace AutoJungle
             {
                 if (player.IsMoving)
                 {
-                    EloBuddy.Player.IssueOrder(GameObjectOrder.Stop, player.Position);
+                    EloBuddy.Player.IssueOrder(GameObjectOrder.HoldPosition, player.Position);
                 }
                 return true;
             }
@@ -1487,7 +1517,7 @@ using EloBuddy; namespace AutoJungle
             ItemHandler = new ItemHandler(_GameInfo.Champdata.Type);
             CreateMenu();
             Game.OnUpdate += Game_OnGameUpdate;
-            Obj_AI_Base.OnSpellCast += Game_ProcessSpell;
+            Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
             Drawing.OnDraw += Drawing_OnDraw;
             Obj_AI_Base.OnNewPath += Obj_AI_Base_OnNewPath;
             Game.OnEnd += Game_OnEnd;
@@ -1507,21 +1537,21 @@ using EloBuddy; namespace AutoJungle
                 if (!File.Exists(path + fileName))
                 {
                     File.AppendAllText(path + fileName, "en", Encoding.Default);
-                    resourceM = new ResourceManager("AutoJungle.Resource.en", typeof(Program).Assembly);
+                    resourceM = new ResourceManager("PortAIO.Resources.AutoJungle.en", typeof(Program).Assembly);
                     Console.WriteLine("First start, lang is English");
                 }
                 else
                 {
                     culture = File.ReadLines(path + fileName).First();
                     Console.WriteLine(culture);
-                    resourceM = new ResourceManager("AutoJungle.Resource." + culture, typeof(Program).Assembly);
+                    resourceM = new ResourceManager("PortAIO.Resources.AutoJungle." + culture, typeof(Program).Assembly);
                     Console.WriteLine("Lang set to " + culture);
                 }
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                resourceM = new ResourceManager("AutoJungle.Resource.en", typeof(Program).Assembly);
+                resourceM = new ResourceManager("PortAIO.Resources.AutoJungle.en", typeof(Program).Assembly);
             }
         }
 
@@ -1545,9 +1575,14 @@ using EloBuddy; namespace AutoJungle
         {
             if (menu.Item("AutoClose").GetValue<Boolean>())
             {
-                Console.WriteLine("END");
-                Thread.Sleep(Random.Next(10000, 13000));
-                Game.QuitGame();
+             var random = new Random();
+             var delay = random.Next(10000, 13000);
+             Task.Run(
+               async () =>
+                     {
+                         await Task.Delay(delay);
+                         Game.QuitGame();
+                     });
             }
         }
 
@@ -1611,6 +1646,7 @@ using EloBuddy; namespace AutoJungle
             menuChamps.AddItem(new MenuItem("supportedNunu", resourceM.GetString("supportedNunu")));
             menuChamps.AddItem(new MenuItem("supportedUdyr", resourceM.GetString("supportedUdyr")));
             menuChamps.AddItem(new MenuItem("supportedKogMaw", resourceM.GetString("supportedKogMaw")));
+            menuChamps.AddItem(new MenuItem("supportedKayle", resourceM.GetString("supportedKayle")));
 
             //menuChamps.AddItem(new MenuItem("supportedSkarner", "Skarner"));
             menu.AddSubMenu(menuChamps);

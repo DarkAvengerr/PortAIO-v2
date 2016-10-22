@@ -6,7 +6,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; namespace AutoJungle
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace AutoJungle
 {
     internal class GameInfo
     {

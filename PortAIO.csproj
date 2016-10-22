@@ -678,6 +678,15 @@
     <Compile Include="Core\AIO Ports\xSaliceResurrected\Utilities\Initiator.cs" />
     <Compile Include="Core\AIO Ports\xSaliceResurrected\Utilities\Util.cs" />
     <Compile Include="Core\AIO Ports\xSaliceResurrected\Utilities\WardJumper.cs" />
+    <Compile Include="Core\AutoPlay Ports\AutoJungle\Data\AutoLeveler.cs" />
+    <Compile Include="Core\AutoPlay Ports\AutoJungle\Data\Camps.cs" />
+    <Compile Include="Core\AutoPlay Ports\AutoJungle\Data\Champdata.cs" />
+    <Compile Include="Core\AutoPlay Ports\AutoJungle\Data\GameInfo.cs" />
+    <Compile Include="Core\AutoPlay Ports\AutoJungle\Data\Helpers.cs" />
+    <Compile Include="Core\AutoPlay Ports\AutoJungle\Data\ItemHandler.cs" />
+    <Compile Include="Core\AutoPlay Ports\AutoJungle\Data\Jungle.cs" />
+    <Compile Include="Core\AutoPlay Ports\AutoJungle\Data\OrbwalkingForBots.cs" />
+    <Compile Include="Core\AutoPlay Ports\AutoJungle\Program.cs" />
     <Compile Include="Core\AutoPlay Ports\SharpAI\Enums\Lane.cs" />
     <Compile Include="Core\AutoPlay Ports\SharpAI\Program.cs" />
     <Compile Include="Core\AutoPlay Ports\SharpAI\SummonersRift\Data\Positioning.cs" />
@@ -1244,15 +1253,6 @@
     <Compile Include="Core\AutoPlay Ports\AramDetFull\SpellsSDK\SpellUtility.cs" />
     <Compile Include="Core\AutoPlay Ports\AramDetFull\SummonerItems.cs" />
     <Compile Include="Core\AutoPlay Ports\AramDetFull\SummonerSpells.cs" />
-    <Compile Include="Core\AutoPlay Ports\AutoJungle\Data\AutoLeveler.cs" />
-    <Compile Include="Core\AutoPlay Ports\AutoJungle\Data\Camps.cs" />
-    <Compile Include="Core\AutoPlay Ports\AutoJungle\Data\Champdata.cs" />
-    <Compile Include="Core\AutoPlay Ports\AutoJungle\Data\GameInfo.cs" />
-    <Compile Include="Core\AutoPlay Ports\AutoJungle\Data\Helpers.cs" />
-    <Compile Include="Core\AutoPlay Ports\AutoJungle\Data\ItemHandler.cs" />
-    <Compile Include="Core\AutoPlay Ports\AutoJungle\Data\Jungle.cs" />
-    <Compile Include="Core\AutoPlay Ports\AutoJungle\Data\OrbwalkingForBots.cs" />
-    <Compile Include="Core\AutoPlay Ports\AutoJungle\Program.cs" />
     <Compile Include="Core\Champion Ports\Dual-Port\Aatrox\KappaSeries\Aatrox.cs" />
     <Compile Include="Core\Champion Ports\Dual-Port\Aatrox\SAutoCarry\Aatrox.cs" />
     <Compile Include="Core\Champion Ports\Dual-Port\Ahri\BadaoSeries\Ahri.cs" />
@@ -6166,6 +6166,9 @@
     <Compile Include="Core\Utility Ports\ShadowTracker\OnDraw.cs" />
     <Compile Include="Core\Utility Ports\ShadowTracker\Program.cs" />
     <Compile Include="Core\Utility Ports\TiltSharp\Program.cs" />
+    <EmbeddedResource Include="Resources\AutoJungle\cn.Designer.cs" />
+    <EmbeddedResource Include="Resources\AutoJungle\en.Designer.cs" />
+    <EmbeddedResource Include="Resources\AutoJungle\tw.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -6232,6 +6235,9 @@
     <Content Include="Resources\ElUtility\CD_summonersmite.png" />
     <Content Include="Resources\ElUtility\CD_summonerteleport.png" />
     <Content Include="Resources\ElUtility\Chogath.png" />
+    <EmbeddedResource Include="Resources\AutoJungle\cn.resx" />
+    <EmbeddedResource Include="Resources\AutoJungle\en.resx" />
+    <EmbeddedResource Include="Resources\AutoJungle\tw.resx" />
     <EmbeddedResource Include="Resources\ElUtility\CooldownNotifIcons\AatroxR.png" />
     <EmbeddedResource Include="Resources\ElUtility\CooldownNotifIcons\AbsoluteZero.png" />
     <EmbeddedResource Include="Resources\ElUtility\CooldownNotifIcons\AhriTumble.png" />

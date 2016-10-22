@@ -6,7 +6,9 @@ using LeagueSharp.Common;
 using SharpDX;
 using SharpDX.Direct3D9;
 
-using EloBuddy; namespace AutoJungle.Data
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace AutoJungle.Data
 {
     internal class Helpers
     {

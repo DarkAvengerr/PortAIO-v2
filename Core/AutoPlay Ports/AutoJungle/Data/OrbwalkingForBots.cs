@@ -32,7 +32,9 @@ using Color = System.Drawing.Color;
 
 #endregion
 
-using EloBuddy; namespace AutoJungle.Data
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace AutoJungle.Data
 {
     /// <summary>
     ///     This class offers everything related to auto-attacks and orbwalking.
@@ -246,7 +248,7 @@ using EloBuddy; namespace AutoJungle.Data
             _championName = Player.ChampionName;
             AutoAttack = new Spell(SpellSlot.Unknown, GetRealAutoAttackRange(null));
             AutoAttack.SetTargetted(Player.BasicAttack.SpellCastTime, Player.BasicAttack.MissileSpeed);
-            Obj_AI_Base.OnSpellCast += OnProcessSpell;
+            Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnSpellCast;
             Spellbook.OnStopCast += SpellbookOnStopCast;
             AIHeroClient.OnPlayAnimation += AIHeroClient_OnPlayAnimation;
@@ -455,7 +457,24 @@ using EloBuddy; namespace AutoJungle.Data
         /// <returns><c>true</c> if this instance can attack; otherwise, <c>false</c>.</returns>
         public static bool CanAttack()
         {
-            return EloBuddy.SDK.Orbwalker.CanAutoAttack;
+            if (Player.ChampionName == "Graves")
+            {
+                var attackDelay = 1.0740296828d * 1000 * Player.AttackDelay - 716.2381256175d;
+                if (Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + attackDelay &&
+                    Player.HasBuff("GravesBasicAttackAmmo1"))
+                {
+                    return true;
+                }
+                return false;
+            }
+            if (Player.ChampionName == "Jhin")
+            {
+                if (Player.HasBuff("JhinPassiveReload"))
+                {
+                    return false;
+                }
+            }
+            return Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + Player.AttackDelay * 1000;
         }
 
         /// <summary>
@@ -465,7 +484,18 @@ using EloBuddy; namespace AutoJungle.Data
         /// <returns><c>true</c> if this instance can move the specified extra windup; otherwise, <c>false</c>.</returns>
         public static bool CanMove(float extraWindup, bool disableMissileCheck = false)
         {
-            return EloBuddy.SDK.Orbwalker.CanMove;
+            if (_missileLaunched && Orbwalker.MissileCheck && !disableMissileCheck)
+            {
+                return true;
+            }
+            var localExtraWindup = 0;
+            if (_championName == "Rengar" && (Player.HasBuff("rengarqbase") || Player.HasBuff("rengarqemp")))
+            {
+                localExtraWindup = 200;
+            }
+            return NoCancelChamps.Contains(_championName) ||
+                   (Utils.GameTimeTickCount + Game.Ping / 2 >=
+                    LastAATick + Player.AttackCastDelay * 1000 + extraWindup + localExtraWindup);
         }
 
         /// <summary>
@@ -992,7 +1022,7 @@ using EloBuddy; namespace AutoJungle.Data
                 var mode = ActiveMode;
 
                 //Forced target
-                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget) && _forcedTarget.IsVisible && _forcedTarget.IsHPBarRendered && _forcedTarget.IsTargetable && !_forcedTarget.IsDead)
+                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget))
                 {
                     return _forcedTarget;
                 }
@@ -1000,7 +1030,7 @@ using EloBuddy; namespace AutoJungle.Data
                 if ((mode == OrbwalkingMode.Mixed || mode == OrbwalkingMode.LaneClear))
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target != null && InAutoAttackRange(target) && target.IsVisible && target.IsHPBarRendered && target.IsTargetable && !target.IsDead)
+                    if (target != null && InAutoAttackRange(target))
                     {
                         return target;
                     }
@@ -1011,7 +1041,7 @@ using EloBuddy; namespace AutoJungle.Data
                 {
                     var MinionList =
                         ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead)
+                            .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion))
                             .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                             .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                             .ThenBy(minion => minion.Health)
@@ -1099,7 +1129,7 @@ using EloBuddy; namespace AutoJungle.Data
                 if (mode != OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target.IsValidTarget() && InAutoAttackRange(target) && target.IsVisible && target.IsHPBarRendered && target.IsTargetable && !target.IsDead)
+                    if (target.IsValidTarget() && InAutoAttackRange(target))
                     {
                         return target;
                     }
@@ -1140,7 +1170,7 @@ using EloBuddy; namespace AutoJungle.Data
                             MinionManager.GetMinions(Player.Position, Player.AttackRange + 200)
                                 .Where(
                                     minion =>
-                                        InAutoAttackRange(minion) && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead && closestTower.Distance(minion, true) < 900 * 900)
+                                        InAutoAttackRange(minion) && closestTower.Distance(minion, true) < 900 * 900)
                                 .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                                 .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                                 .ThenByDescending(minion => minion.MaxHealth)
@@ -1316,7 +1346,7 @@ using EloBuddy; namespace AutoJungle.Data
                 {
                     if (!ShouldWait())
                     {
-                        if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion) && _prevMinion.IsVisible && _prevMinion.IsHPBarRendered && _prevMinion.IsTargetable && !_prevMinion.IsDead)
+                        if (_prevMinion.IsValidTarget() && InAutoAttackRange(_prevMinion))
                         {
                             var predHealth = HealthPrediction.LaneClearHealthPrediction(
                                 _prevMinion, (int) (Player.AttackDelay * 1000 * LaneClearWaitTimeMod), FarmDelay);
@@ -1332,7 +1362,7 @@ using EloBuddy; namespace AutoJungle.Data
                                 .Where(
                                     minion =>
                                         minion.IsValidTarget() && InAutoAttackRange(minion) &&
-                                        !MinionManager.IsWard(minion) && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead &&
+                                        !MinionManager.IsWard(minion) &&
                                         minion.CharData.BaseSkinName != "jarvanivstandard" &&
                                         minion.CharData.BaseSkinName != "gangplankbarrel")
                             let predHealth =
