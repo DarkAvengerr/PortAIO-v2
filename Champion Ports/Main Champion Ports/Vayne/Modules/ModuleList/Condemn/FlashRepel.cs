@@ -1,4 +1,3 @@
-﻿using EloBuddy;
 using LeagueSharp;
 using LeagueSharp.Common;
 using VayneHunter_Reborn.Modules.ModuleHelpers;
@@ -6,13 +5,15 @@ using VayneHunter_Reborn.Utility;
 using VayneHunter_Reborn.Utility.Helpers;
 using VayneHunter_Reborn.Utility.MenuUtility;
 
-namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
 {
     class FlashRepel : IModule
     {
         public void OnLoad()
         {
-            Obj_AI_Base.OnSpellCast += OnCast;
+            Obj_AI_Base.OnProcessSpellCast += OnCast;
         }
 
         private void OnCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

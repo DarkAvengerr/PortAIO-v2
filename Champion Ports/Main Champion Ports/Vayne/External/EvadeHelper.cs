@@ -1,13 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using VayneHunter_Reborn.External.Evade;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.External
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External
 {
     class EvadeHelper
     {
@@ -198,7 +199,7 @@ namespace VayneHunter_Reborn.External
             }
         }
 
-        private static void OnDeleteMissile(Skillshot skillshot, Obj_SpellMissile missile)
+        private static void OnDeleteMissile(Skillshot skillshot, MissileClient missile)
         {
             if (skillshot.SpellData.SpellName == "VelkozQ")
             {

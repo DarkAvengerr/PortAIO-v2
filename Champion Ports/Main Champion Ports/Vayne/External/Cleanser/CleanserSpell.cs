@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using LeagueSharp;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.External.Cleanser
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Cleanser
 {
     class CleanserSpell
     {

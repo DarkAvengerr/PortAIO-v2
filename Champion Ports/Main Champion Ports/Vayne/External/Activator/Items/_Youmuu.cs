@@ -1,10 +1,11 @@
-﻿using EloBuddy;
 using LeagueSharp;
 using LeagueSharp.Common;
 using VayneHunter_Reborn.Utility;
 using VayneHunter_Reborn.Utility.MenuUtility;
 
-namespace VayneHunter_Reborn.External.Activator.Items
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Activator.Items
 {
     class _Youmuu : IVHRItem
     {
@@ -31,12 +32,24 @@ namespace VayneHunter_Reborn.External.Activator.Items
 
         public bool ShouldRun()
         {
-            return LeagueSharp.Common.Items.HasItem(3142) && LeagueSharp.Common.Items.CanUseItem(3142);
+            return GetItemObject().IsReady();
         }
 
-        public void Run()
+        public void Run(){}
+
+        public int GetItemId()
         {
-            
+            return 3142;
+        }
+
+        public float GetItemRange()
+        {
+            return ObjectManager.Player.AttackRange + 65f + 65f + 150f;
+        }
+
+        public LeagueSharp.Common.Items.Item GetItemObject()
+        {
+            return new LeagueSharp.Common.Items.Item(GetItemId(), GetItemRange());
         }
 
         private void AfterAttack(AttackableUnit unit, AttackableUnit target)
@@ -52,15 +65,15 @@ namespace VayneHunter_Reborn.External.Activator.Items
 
                 var currentMenuItem =
                     Variables.Menu.Item(
-                        string.Format("dz191.vhr.activator.offensive.youmuu.{0}", Variables.Orbwalker.ActiveMode.ToString().ToLower()));
-                var currentValue = currentMenuItem != null ? currentMenuItem.GetValue<bool>() : false;
+                        $"dz191.vhr.activator.offensive.youmuu.{Variables.Orbwalker.ActiveMode.ToString().ToLower()}");
+                var currentValue = currentMenuItem?.GetValue<bool>() ?? false;
 
 
                 if (currentValue || MenuExtensions.GetItemValue<bool>("dz191.vhr.activator.offensive.youmuu.always"))
                 {
-                    if (TargetHero.IsValidTarget(ObjectManager.Player.AttackRange + 65f + 65f + 150f))
+                    if (TargetHero.IsValidTarget(GetItemRange()))
                     {
-                        LeagueSharp.Common.Items.UseItem(3142);
+                        GetItemObject().Cast();
                     }
                 }
             }

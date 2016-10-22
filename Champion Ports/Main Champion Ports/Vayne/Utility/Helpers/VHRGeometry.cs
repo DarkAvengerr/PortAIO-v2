@@ -1,4 +1,4 @@
-﻿// Copyright 2014 - 2014 Esk0r
+// Copyright 2014 - 2014 Esk0r
 // Geometry.cs is part of Evade.
 // 
 // Evade is free software: you can redistribute it and/or modify
@@ -26,11 +26,12 @@ using Color = System.Drawing.Color;
 using Path = System.Collections.Generic.List<ClipperLib.IntPoint>;
 using Paths = System.Collections.Generic.List<System.Collections.Generic.List<ClipperLib.IntPoint>>;
 using GamePath = System.Collections.Generic.List<SharpDX.Vector2>;
-using EloBuddy;
 
 #endregion
 
-namespace VayneHunter_Reborn.Utility.Helpers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Utility.Helpers
 {
     ///From Evade's Geometry Library. All credits to: https://github.com/Esk0r/LeagueSharp/blob/master/Evade/Geometry.cs
     /// 

@@ -1,8 +1,10 @@
-﻿using LeagueSharp;
+using LeagueSharp;
 using VayneHunter_Reborn.External.Activator;
 using VayneHunter_Reborn.Utility.MenuUtility;
 
-namespace VayneHunter_Reborn.Utility
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Utility
 {
     class VHRBootstrap
     {
@@ -12,8 +14,7 @@ namespace VayneHunter_Reborn.Utility
 
             SPrediction.Prediction.Initialize(Variables.Menu);
             MenuGenerator.OnLoad();
-            //Activator.OnLoad();
-            VayneHunter_Reborn.External.Activator.Activator.OnLoad();
+            External.Activator.Activator.OnLoad();
             VHR.OnLoad();
             DrawManager.OnLoad();
         }

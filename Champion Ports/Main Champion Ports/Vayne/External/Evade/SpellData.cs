@@ -14,10 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with Evade. If not, see <http://www.gnu.org/licenses/>.
 
-using EloBuddy;
 using LeagueSharp;
 
-namespace VayneHunter_Reborn.External.Evade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Evade
 {
     public class SpellData
     {

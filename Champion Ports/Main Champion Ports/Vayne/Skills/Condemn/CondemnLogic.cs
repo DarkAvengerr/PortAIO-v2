@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using iSeriesReborn.Utility.Positioning;
 using LeagueSharp;
@@ -8,9 +8,10 @@ using VayneHunter_Reborn.External.Evade;
 using VayneHunter_Reborn.Skills.Condemn.Methods;
 using VayneHunter_Reborn.Utility;
 using VayneHunter_Reborn.Utility.MenuUtility;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.Skills.Condemn
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Skills.Condemn
 {
     class CondemnLogic
     {
@@ -26,7 +27,7 @@ namespace VayneHunter_Reborn.Skills.Condemn
             Variables.spells[SpellSlot.E].SetTargetted(0.375f, float.MaxValue);
             InterrupterGapcloser.OnLoad();
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
-            Obj_AI_Base.OnSpellCast += WindWall.OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += WindWall.OnProcessSpellCast;
 
         }
 
@@ -160,7 +161,7 @@ namespace VayneHunter_Reborn.Skills.Condemn
                     return VHReborn.GetTarget(fromPosition);
                 case 2:
                     //Marksman / Gosu
-                    return VayneHunter_Reborn.Skills.Condemn.Methods.Marksman.GetTarget(fromPosition);
+                    return Condemn.Methods.Marksman.GetTarget(fromPosition);
                 case 3:
                     //Shine#
                     return Shine.GetTarget(fromPosition);

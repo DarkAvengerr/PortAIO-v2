@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using ClipperLib;
 using iSeriesReborn.Utility.Positioning;
@@ -11,9 +11,10 @@ using VayneHunter_Reborn.Utility.Helpers;
 using VayneHunter_Reborn.Utility.MenuUtility;
 using Color = System.Drawing.Color;
 using Paths = System.Collections.Generic.List<System.Collections.Generic.List<ClipperLib.IntPoint>>;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.Utility
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Utility
 {
     class DrawManager
     {

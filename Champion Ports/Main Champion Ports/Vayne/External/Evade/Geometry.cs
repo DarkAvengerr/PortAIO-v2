@@ -22,9 +22,10 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.External.Evade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Evade
 {
     public static class Geometry
     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using LeagueSharp;
 using VayneHunter_Reborn.External.Cleanser;
@@ -7,10 +7,12 @@ using VayneHunter_Reborn.Skills.Condemn;
 using VayneHunter_Reborn.Skills.Tumble;
 using VayneHunter_Reborn.Skills.Tumble.VHRQ;
 using VayneHunter_Reborn.Utility;
+using VayneHunter_Reborn.Utility.TrapAvoid;
 using Activator = VayneHunter_Reborn.External.Activator.Activator;
-using EloBuddy;
 
-namespace VayneHunter_Reborn
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn
 {
     class VHR
     {
@@ -18,19 +20,19 @@ namespace VayneHunter_Reborn
         {
             TumbleLogic.OnLoad();
             CondemnLogic.OnLoad();
+            TrapAvoider.OnLoad();
 
             foreach (var module in Variables.moduleList)
             {
                 module.OnLoad();
             }
-
             Game.OnUpdate += OnUpdate;
         }
 
         private static void OnUpdate(EventArgs args)
         {
             CondemnLogic.Execute(args);
-            VayneHunter_Reborn.External.Activator.Activator.OnUpdate();
+            External.Activator.Activator.OnUpdate();
             Cleanser.OnUpdate();
 
             foreach (var module in Variables.moduleList.Where(module => module.GetModuleType() == ModuleType.OnUpdate 

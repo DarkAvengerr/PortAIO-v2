@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.Utility.Helpers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Utility.Helpers
 {
     class PlayerHelper
     {

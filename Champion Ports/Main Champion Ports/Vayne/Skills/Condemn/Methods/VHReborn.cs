@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -7,9 +7,10 @@ using SPrediction;
 using VayneHunter_Reborn.Utility;
 using VayneHunter_Reborn.Utility.Helpers;
 using VayneHunter_Reborn.Utility.MenuUtility;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.Skills.Condemn.Methods
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Skills.Condemn.Methods
 {
     class VHReborn
     {

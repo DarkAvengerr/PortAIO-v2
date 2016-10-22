@@ -3306,7 +3306,7 @@ namespace PortAIO
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
                         case 0: // VayneHunterReborn
-                            VayneHunter_Reborn.Program.Game_OnGameLoad();
+                            VayneHunter_Reborn.Program.Main();
                             break;
                         case 1: // hikiMarksman
                             hikiMarksmanRework.Program.Game_OnGameLoad();

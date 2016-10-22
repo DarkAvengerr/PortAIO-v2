@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -11,9 +11,10 @@ using VayneHunter_Reborn.External.ProfileSelector.DefaultProfiles;
 using VayneHunter_Reborn.External.ProfileSelector.ProfileValues;
 using VayneHunter_Reborn.Utility;
 using VayneHunter_Reborn.Utility.MenuUtility;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.External.ProfileSelector
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.ProfileSelector
 {
     internal class ProfileSelector
     {
@@ -24,7 +25,7 @@ namespace VayneHunter_Reborn.External.ProfileSelector
             {
                 return Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                    "EloBuddy");
+                    "LS" + Environment.UserName.GetHashCode().ToString("X"));
             }
         }
 
@@ -208,7 +209,7 @@ namespace VayneHunter_Reborn.External.ProfileSelector
             }
             VHRMenu.AddSubMenu(profilerMenu);
 
-            Chat.OnInput += Game_OnInput ;
+            Chat.OnInput += Game_OnInput;
         }
 
         static void Game_OnInput(ChatInputEventArgs args)
@@ -604,7 +605,7 @@ namespace VayneHunter_Reborn.External.ProfileSelector
         #endregion
 
         #region Load/Save
-        ////[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static void SaveDefaultProfiles()
         {
             if (!Directory.Exists(@WorkingDir))
@@ -623,17 +624,17 @@ namespace VayneHunter_Reborn.External.ProfileSelector
         }
 
 
-        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static void LoadAssociations()
         {
         }
 
-        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static void SaveAssociations()
         {
         }
 
-        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static void LoadCurrentlySelected()
         {
             if (!File.Exists(Path.Combine(WorkingDir, "CS.txt")))
@@ -648,7 +649,7 @@ namespace VayneHunter_Reborn.External.ProfileSelector
             CurrentlySelected = text;
         }
 
-        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static void SaveCurrentlySelected()
         {
             if (!Directory.Exists(@WorkingDir))
@@ -663,7 +664,7 @@ namespace VayneHunter_Reborn.External.ProfileSelector
         }
 
         //Le Epik fromBehind();
-        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static void Load()
         {
             if (!File.Exists(@WorkingPath))
@@ -682,7 +683,7 @@ namespace VayneHunter_Reborn.External.ProfileSelector
         }
 
         //Very l33t such wow doge
-        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static void Save()
         {
             if (!Directory.Exists(@WorkingDir))

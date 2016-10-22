@@ -1,16 +1,21 @@
-﻿using System;
+using System;
 using LeagueSharp;
 using LeagueSharp.Common;
 using VayneHunter_Reborn.Utility;
-using EloBuddy;
 
-namespace VayneHunter_Reborn
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn
 {
     class Program
     {
         private static string ChampionName = "Vayne";
+        public static void Main()
+        {
+            Game_OnGameLoad();
+        }
 
-        public static void Game_OnGameLoad()
+        static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != ChampionName)
             {

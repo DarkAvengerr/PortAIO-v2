@@ -1,11 +1,12 @@
-﻿using EloBuddy;
 using LeagueSharp;
 using LeagueSharp.Common;
 using VayneHunter_Reborn.Modules.ModuleHelpers;
 using VayneHunter_Reborn.Utility.Helpers;
 using VayneHunter_Reborn.Utility.MenuUtility;
 
-namespace VayneHunter_Reborn.Modules.ModuleList.Misc
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Modules.ModuleList.Misc
 {
     class Reveal : IModule
     {

@@ -1,6 +1,8 @@
-﻿using LeagueSharp.Common;
+using LeagueSharp.Common;
 
-namespace VayneHunter_Reborn.External.Activator.ActivatorSpells
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Activator.ActivatorSpells
 {
     interface IVHRSpell
     {

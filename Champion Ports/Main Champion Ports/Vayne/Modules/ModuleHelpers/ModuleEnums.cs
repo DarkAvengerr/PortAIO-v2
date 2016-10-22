@@ -1,4 +1,6 @@
-﻿namespace VayneHunter_Reborn.Modules.ModuleHelpers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Modules.ModuleHelpers
 {
     enum ModuleType
     {

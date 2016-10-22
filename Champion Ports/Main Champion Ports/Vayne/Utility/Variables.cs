@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
@@ -9,9 +9,10 @@ using VayneHunter_Reborn.Modules.ModuleList.Condemn;
 using VayneHunter_Reborn.Modules.ModuleList.Misc;
 using VayneHunter_Reborn.Modules.ModuleList.Tumble;
 using VayneHunter_Reborn.Utility.Helpers;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.Utility
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Utility
 {
     class Variables
     {
@@ -39,13 +40,15 @@ namespace VayneHunter_Reborn.Utility
             new NoAAStealth(),
             new QKS(),
             new AutoQR(),
-            new WallTumble(),
             new Focus2WStacks(),
             new Reveal(),
             new DisableMovement(),
             new CondemnJungleMobs(),
             new FlashRepel(),
             new FlashCondemn(),
+            new TurnAround(),
+            new ThreshLanternCatcher(),
+            new BuyBlueTrinket()
         };
 
         public static List<IVHRLanguage> languageList = new List<IVHRLanguage>()

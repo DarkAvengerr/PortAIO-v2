@@ -1,6 +1,8 @@
-﻿using LeagueSharp.Common;
+using LeagueSharp.Common;
 
-namespace VayneHunter_Reborn.External.Activator.Items
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Activator.Items
 {
     interface IVHRItem
     {
@@ -13,5 +15,11 @@ namespace VayneHunter_Reborn.External.Activator.Items
         bool ShouldRun();
 
         void Run();
+
+        int GetItemId();
+
+        float GetItemRange();
+
+        LeagueSharp.Common.Items.Item GetItemObject();
     }
 }

@@ -1,6 +1,8 @@
-﻿using VayneHunter_Reborn.Modules.ModuleHelpers;
+using VayneHunter_Reborn.Modules.ModuleHelpers;
 
-namespace VayneHunter_Reborn.Modules
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Modules
 {
     interface IModule
     {

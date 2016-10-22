@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
 using VayneHunter_Reborn.Utility;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.External.Translation
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Translation
 {
     class TranslationInterface
     {

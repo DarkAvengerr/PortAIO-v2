@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -6,9 +6,10 @@ using VayneHunter_Reborn.Modules.ModuleHelpers;
 using VayneHunter_Reborn.Utility;
 using VayneHunter_Reborn.Utility.Helpers;
 using VayneHunter_Reborn.Utility.MenuUtility;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.Skills.Tumble
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Skills.Tumble
 {
     class TumbleLogic
     {
@@ -21,10 +22,10 @@ namespace VayneHunter_Reborn.Skills.Tumble
 
         public static void OnLoad()
         {
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnDoCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnSpellCast;
         }
 
-        private static void Obj_AI_Base_OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private static void Obj_AI_Base_OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender.IsMe && Orbwalking.IsAutoAttack(args.SData.Name) && (args.Target is Obj_AI_Base))
             {

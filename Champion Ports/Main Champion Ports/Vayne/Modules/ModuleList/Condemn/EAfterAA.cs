@@ -1,11 +1,12 @@
-﻿using EloBuddy;
 using LeagueSharp;
 using LeagueSharp.Common;
 using VayneHunter_Reborn.Modules.ModuleHelpers;
 using VayneHunter_Reborn.Utility;
 using VayneHunter_Reborn.Utility.MenuUtility;
 
-namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
 {
     class EAfterAA : IModule
     {

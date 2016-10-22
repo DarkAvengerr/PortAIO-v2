@@ -1,9 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using LeagueSharp.Common;
 using VayneHunter_Reborn.External.ProfileSelector.ProfileValues;
 
-namespace VayneHunter_Reborn.External.ProfileSelector.DefaultProfiles
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.ProfileSelector.DefaultProfiles
 {
     class Asuna : IDefaultProfile
     {

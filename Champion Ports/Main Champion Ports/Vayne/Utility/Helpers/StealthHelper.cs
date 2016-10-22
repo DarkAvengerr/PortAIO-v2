@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using LeagueSharp;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.Utility.Helpers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Utility.Helpers
 {
     /// <summary>
     ///     Provides events for OnStealth
@@ -30,7 +31,7 @@ namespace VayneHunter_Reborn.Utility.Helpers
                 return;
             }
 
-            var oldState = (GameObjectCharacterState)args.Value; // to-do
+            var oldState = (GameObjectCharacterState)args.Value;
             var newState = (GameObjectCharacterState)args.Value;
 
             if (!oldState.HasFlag(GameObjectCharacterState.IsStealth) &&

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -8,12 +8,44 @@ using VayneHunter_Reborn.Utility;
 using VayneHunter_Reborn.Utility.Helpers;
 using VayneHunter_Reborn.Utility.MenuUtility;
 using Geometry = VayneHunter_Reborn.Utility.Helpers.Geometry;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.Skills.Tumble
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Skills.Tumble
 {
     static class TumblePositioning
     {
+        public static bool IsGoodEndPosition(this Vector3 position)
+        {
+            for (int i = 1; i <= 300f; i+= 300 / 5)
+            {
+                if (ObjectManager.Player.ServerPosition.Extend(position, i).IsWall())
+                    return false;
+            }
+
+            if (position.UnderTurret(true) && !ObjectManager.Player.UnderTurret(true))
+            {
+                return false;
+            }
+
+            var maxEnemies = 3;
+            var enemiesEndPosition = position.CountEnemiesInRange(600);
+
+            if (maxEnemies > enemiesEndPosition)
+            {
+                return true;
+            }
+
+            var enemiesAtPlayerPosition = ObjectManager.Player.CountEnemiesInRange(400);
+
+            if (enemiesEndPosition <= enemiesAtPlayerPosition)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         public static bool IsSafe(this Vector3 position, bool noQIntoEnemiesCheck = false)
         {
             if (position.UnderTurret(true) && !ObjectManager.Player.UnderTurret(true))

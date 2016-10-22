@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -11,8 +11,9 @@ using Color = System.Drawing.Color;
 using Path = System.Collections.Generic.List<ClipperLib.IntPoint>;
 using Paths = System.Collections.Generic.List<System.Collections.Generic.List<ClipperLib.IntPoint>>;
 using GamePath = System.Collections.Generic.List<SharpDX.Vector2>;
-using EloBuddy;
 
+using EloBuddy;
+using LeagueSharp.Common;
 namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
 {
     class QProvider
@@ -781,6 +782,7 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
             }
 
             initialized = true;
+
 
             Player = ObjectManager.Player;
 

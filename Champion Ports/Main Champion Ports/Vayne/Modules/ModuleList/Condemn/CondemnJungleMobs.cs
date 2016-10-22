@@ -1,13 +1,14 @@
-﻿using System.Linq;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using VayneHunter_Reborn.Modules.ModuleHelpers;
 using VayneHunter_Reborn.Skills.Condemn;
 using VayneHunter_Reborn.Utility;
 using VayneHunter_Reborn.Utility.MenuUtility;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Modules.ModuleList.Condemn
 {
     class CondemnJungleMobs : IModule
     {

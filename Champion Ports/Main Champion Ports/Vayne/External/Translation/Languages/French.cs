@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +10,7 @@ namespace VayneHunter_Reborn.External.Translation.Languages
      * French Translation by Koala974
      * https://www.joduska.me/forum/user/19647-koala974/
      */
+
     class French : IVHRLanguage
     {
         public string GetName()
@@ -35,9 +36,6 @@ namespace VayneHunter_Reborn.External.Translation.Languages
                 {"dz191.vhr.misc.tumble.dynamicqsafety", "Utiliser la vérification de distance de sécurité avant de roulade"},
                 {"dz191.vhr.misc.tumble.qspam", "Ignorer les vérifications du A"},
                 {"dz191.vhr.misc.tumble.qinrange", "A pour KS"},
-                {"dz191.vhr.misc.tumble.walltumble.warning", "Restez appuyer pour dash à travers le mur"},
-                {"dz191.vhr.misc.tumble.walltumble.warning.2", "Il ira vers le spot le plus près et roulade à travers"},
-                {"dz191.vhr.misc.tumble.walltumble", "Roulade à travers le mur (RouladeMur)"},
                 {"dz191.vhr.misc.condemn.condemnmethod", "Méthode Condamn"},
                 {"dz191.vhr.misc.condemn.pushdistance", "Distance Poussée E"},
                 {"dz191.vhr.misc.condemn.accuracy", "Precision(Revolution seulement)"},
@@ -71,4 +69,3 @@ namespace VayneHunter_Reborn.External.Translation.Languages
         }
     }
 }
-

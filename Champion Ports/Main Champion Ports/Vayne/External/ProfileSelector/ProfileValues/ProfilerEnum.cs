@@ -1,4 +1,6 @@
-﻿namespace VayneHunter_Reborn.External.ProfileSelector.ProfileValues
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.ProfileSelector.ProfileValues
 {
     internal enum MenuCategory
     {

@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using iSeriesReborn.Utility.Positioning;
 using LeagueSharp;
@@ -7,9 +7,10 @@ using SharpDX;
 using SPrediction;
 using VayneHunter_Reborn.Utility;
 using VayneHunter_Reborn.Utility.MenuUtility;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.Skills.Condemn.Methods
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Skills.Condemn.Methods
 {
     class VHRevolution
     {

@@ -1,12 +1,13 @@
-﻿using System.Drawing;
+using System.Drawing;
 using LeagueSharp;
 using LeagueSharp.Common;
 using VayneHunter_Reborn.Utility;
 using VayneHunter_Reborn.Utility.MenuUtility;
 using Color = SharpDX.Color;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.External.Activator.Items
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Activator.Items
 {
     class _Cutlass : IVHRItem
     {
@@ -35,7 +36,7 @@ namespace VayneHunter_Reborn.External.Activator.Items
 
         public bool ShouldRun()
         {
-            return LeagueSharp.Common.Items.HasItem(3144) && LeagueSharp.Common.Items.CanUseItem(3144);
+            return GetItemObject().IsReady();
         }
 
         public void Run()
@@ -48,7 +49,7 @@ namespace VayneHunter_Reborn.External.Activator.Items
 
             if (currentValue || MenuExtensions.GetItemValue<bool>("dz191.vhr.activator.offensive.cutlass.always"))
             {
-                var target = TargetSelector.GetTarget(450f, TargetSelector.DamageType.True);
+                var target = TargetSelector.GetTarget(GetItemRange(), TargetSelector.DamageType.True);
                 if (target.IsValidTarget())
                 {
                     if (ObjectManager.Player.HealthPercent <=
@@ -56,10 +57,25 @@ namespace VayneHunter_Reborn.External.Activator.Items
                         target.HealthPercent >=
                         MenuExtensions.GetItemValue<Slider>("dz191.vhr.activator.offensive.cutlass.enemy").Value)
                     {
-                        LeagueSharp.Common.Items.UseItem(3144, target);
+                        GetItemObject().Cast(target);
                     }
                 }
             }
+        }
+
+        public int GetItemId()
+        {
+            return 3144;
+        }
+
+        public float GetItemRange()
+        {
+            return 450f;
+        }
+
+        public LeagueSharp.Common.Items.Item GetItemObject()
+        {
+            return new LeagueSharp.Common.Items.Item(GetItemId(), GetItemRange());
         }
     }
 }

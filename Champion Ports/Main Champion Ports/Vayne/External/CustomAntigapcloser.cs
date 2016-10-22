@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using System;
 using System.Collections.Generic;
@@ -6,11 +6,12 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using EloBuddy;
 
 #endregion
 
-namespace VayneHunter_Reborn.External
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External
 {
     public delegate void OnGapcloseH(ActiveGapcloser gapcloser, SpellSlot skill);
 
@@ -632,7 +633,7 @@ namespace VayneHunter_Reborn.External
             #endregion
 
             Game.OnUpdate += Game_OnGameUpdate;
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
         }
 
         public static void BuildMenu(LeagueSharp.Common.Menu mainMenu, string displayName, string name)

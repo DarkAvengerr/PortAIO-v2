@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VayneHunter_Reborn.External.Translation.Languages
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Translation.Languages
 {
     /// <summary>
     /// Italian by Exory.
@@ -47,14 +49,14 @@ namespace VayneHunter_Reborn.External.Translation.Languages
                 {"dz191.vhr.misc.condemn.lowlifepeel", "AutoPeel con Condanna quando hai poca vita"},
                 {"dz191.vhr.misc.condemn.noeturret", "Non usare Condanna sotto la torre nemica"},
                 {"dz191.vhr.misc.general.antigp", "Anti-Gapcloser"},
-                {"dz191.vhr.misc.general.interrupt", "Interruttore"},
+                {"dz191.vhr.misc.general.interrupt", "Interruttore skill (E)"},
                 {"dz191.vhr.misc.general.antigpdelay", "Anti-Gapcloser (ms)"},
                 {"dz191.vhr.misc.general.specialfocus", "Punta i bersagli che hanno 2 stacks di W"},
                 {"dz191.vhr.misc.general.reveal", "Rivela Invisibili (Ward Rosa / Trinket Rosso)"},
                 {"dz191.vhr.misc.general.disablemovement", "Disabilita Movimenti dell'Orbwalker"},
                 {"dz191.vhr.misc.general.disableattk", "Disabilita Attacchi dell'Orbwalker"},
-                {"dz191.vhr.draw.spots", "Disegna punti di WallTumble"},
-                {"dz191.vhr.draw.range", "Disegna i range dei nemici."},
+                {"dz191.vhr.draw.spots", "Disegna cerchi del WallTumble"},
+                {"dz191.vhr.draw.range", "Disegna il range dei nemici."},
                 {"dz191.vhr.draw.qpos", "Posizione Logica Q Reborn (Debug)"},
                 {"dz191.vhr.activator.onkey", "Tasto Activator"},
                 {"dz191.vhr.activator.always", "Sempre abilitato"},

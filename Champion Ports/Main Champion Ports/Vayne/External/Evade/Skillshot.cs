@@ -20,9 +20,10 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.External.Evade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Evade
 {
     public enum SkillShotType
     {

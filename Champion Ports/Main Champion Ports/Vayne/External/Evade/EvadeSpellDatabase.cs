@@ -18,9 +18,10 @@ using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.External.Evade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Evade
 {
     public class EvadeSpellDatabase
     {

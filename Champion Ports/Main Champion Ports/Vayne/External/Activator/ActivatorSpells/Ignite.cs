@@ -1,11 +1,12 @@
-﻿using System.Linq;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using VayneHunter_Reborn.Utility;
 using VayneHunter_Reborn.Utility.MenuUtility;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.External.Activator.ActivatorSpells
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Activator.ActivatorSpells
 {
     class Ignite : IVHRSpell
     {

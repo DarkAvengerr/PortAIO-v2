@@ -1,4 +1,4 @@
-﻿// Copyright 2014 - 2014 Esk0r
+// Copyright 2014 - 2014 Esk0r
 // SpellDatabase.cs is part of Evade.
 // 
 // Evade is free software: you can redistribute it and/or modify
@@ -20,11 +20,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
-using EloBuddy;
 
 #endregion
 
-namespace VayneHunter_Reborn.External.Evade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Evade
 {
     public static class SpellDatabase
     {
@@ -97,7 +98,7 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "AhriOrbMissile",
                     CanBeRemoved = true,
                     ForceRemove = true,
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall }
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall}
                 });
 
             Spells.Add(
@@ -122,7 +123,7 @@ namespace VayneHunter_Reborn.External.Evade
                     CanBeRemoved = true,
                     ForceRemove = true,
                     MissileSpellName = "AhriOrbReturn",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall }
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall}
                 });
 
             Spells.Add(
@@ -143,7 +144,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "AhriSeduceMissile",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall}
                 });
 
             #endregion Ahri
@@ -168,7 +170,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "SadMummyBandageToss",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall}
                 });
 
             Spells.Add(
@@ -204,13 +207,13 @@ namespace VayneHunter_Reborn.External.Evade
                     Range = 1100,
                     Radius = 110,
                     MissileSpeed = 850,
-                    FixedRange = false,
+                    FixedRange = true,
                     AddHitbox = true,
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "FlashFrostSpell",
                     CanBeRemoved = true,
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall }
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall}
                 });
 
             #endregion Anivia
@@ -261,11 +264,11 @@ namespace VayneHunter_Reborn.External.Evade
                 new SpellData
                 {
                     ChampionName = "Ashe",
-                    SpellName = "VolleyAttack",
+                    SpellName = "Volley",
                     Slot = SpellSlot.W,
                     Type = SkillShotType.SkillshotMissileLine,
                     Delay = 250,
-                    Range = 1200,
+                    Range = 1250,
                     Radius = 60,
                     MissileSpeed = 1500,
                     FixedRange = true,
@@ -273,9 +276,12 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "VolleyAttack",
-                    MultipleNumber = 7,
-                    MultipleAngle = 9.58f * (float)Math.PI / 180,
-                    CanBeRemoved = false,
+                    MultipleNumber = 9,
+                    MultipleAngle = 4.62f*(float) Math.PI/180,
+                    CanBeRemoved = true,
+                    CollisionObjects =
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall, CollisionObjectTypes.Minion}
                 });
 
             Spells.Add(
@@ -295,12 +301,100 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = true,
                     MissileSpellName = "EnchantedCrystalArrow",
                     CanBeRemoved = true,
-                    CollisionObjects = new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.YasuoWall }
+                    CollisionObjects = new[] {CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall}
                 });
 
             #endregion Ashe
 
-            #region Blitzcrank
+            #region Aurelion Sol
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "AurelionSol",
+                    SpellName = "AurelionSolQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 250,
+                    Range = 1500,
+                    Radius = 180,
+                    MissileSpeed = 850,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "AurelionSolQMissile",
+                    CanBeRemoved = true,
+                    CollisionObjects =
+                        new[] { CollisionObjectTypes.YasuoWall}
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "AurelionSol",
+                    SpellName = "AurelionSolR",
+                    Slot = SpellSlot.R,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 300,
+                    Range = 1420,
+                    Radius = 120,
+                    MissileSpeed = 4500,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "AurelionSolRBeamMissile",
+                    CanBeRemoved = true,
+                    CollisionObjects =
+                        new[] { CollisionObjectTypes.YasuoWall}
+                });
+
+            #endregion Aurelion Sol
+
+            #region Bard
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Bard",
+                    SpellName = "BardQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 250,
+                    Range = 950,
+                    Radius = 60,
+                    MissileSpeed = 1600,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "BardQMissile",
+                    CanBeRemoved = true,
+                    CollisionObjects = new[] {CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall}
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Bard",
+                    SpellName = "BardR",
+                    Slot = SpellSlot.R,
+                    Type = SkillShotType.SkillshotCircle,
+                    Delay = 500,
+                    Range = 3400,
+                    Radius = 350,
+                    MissileSpeed = 2100,
+                    FixedRange = false,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "BardR",
+                });
+
+            #endregion
+
+            #region Blatzcrank
 
             Spells.Add(
                 new SpellData
@@ -320,7 +414,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "RocketGrabMissile",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall}
                 });
 
             Spells.Add(
@@ -341,7 +436,7 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "",
                 });
 
-            #endregion Blitzcrank
+            #endregion Blatzcrink
 
             #region Brand
 
@@ -349,7 +444,7 @@ namespace VayneHunter_Reborn.External.Evade
                 new SpellData
                 {
                     ChampionName = "Brand",
-                    SpellName = "BrandBlaze",
+                    SpellName = "BrandQ",
                     Slot = SpellSlot.Q,
                     Type = SkillShotType.SkillshotMissileLine,
                     Delay = 250,
@@ -360,25 +455,26 @@ namespace VayneHunter_Reborn.External.Evade
                     AddHitbox = true,
                     DangerValue = 3,
                     IsDangerous = true,
-                    MissileSpellName = "BrandBlazeMissile",
+                    MissileSpellName = "BrandQMissile",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall}
                 });
 
             Spells.Add(
                 new SpellData
                 {
                     ChampionName = "Brand",
-                    SpellName = "BrandFissure",
+                    SpellName = "BrandW",
                     Slot = SpellSlot.W,
                     Type = SkillShotType.SkillshotCircle,
                     Delay = 850,
                     Range = 900,
-                    Radius = 240,
+                    Radius = 260,
                     MissileSpeed = int.MaxValue,
                     FixedRange = false,
-                    AddHitbox = true,
+                    AddHitbox = false,
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "",
@@ -406,7 +502,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "BraumQMissile",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall}
                 });
 
             Spells.Add(
@@ -425,7 +522,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 4,
                     IsDangerous = true,
                     MissileSpellName = "braumrmissile",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall }
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall}
                 });
 
             #endregion Braum
@@ -448,7 +545,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "CaitlynPiltoverPeacemaker",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall }
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall}
                 });
 
             Spells.Add(
@@ -460,8 +557,8 @@ namespace VayneHunter_Reborn.External.Evade
                     Type = SkillShotType.SkillshotMissileLine,
                     Delay = 125,
                     Range = 1000,
-                    Radius = 80,
-                    MissileSpeed = 2000,
+                    Radius = 70,
+                    MissileSpeed = 1600,
                     FixedRange = true,
                     AddHitbox = true,
                     DangerValue = 1,
@@ -469,7 +566,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "CaitlynEntrapmentMissile",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall}
                 });
 
             #endregion Caitlyn
@@ -480,10 +578,10 @@ namespace VayneHunter_Reborn.External.Evade
                 new SpellData
                 {
                     ChampionName = "Cassiopeia",
-                    SpellName = "CassiopeiaNoxiousBlast",
+                    SpellName = "CassiopeiaQ",
                     Slot = SpellSlot.Q,
                     Type = SkillShotType.SkillshotCircle,
-                    Delay = 600,
+                    Delay = 750,
                     Range = 850,
                     Radius = 150,
                     MissileSpeed = int.MaxValue,
@@ -491,14 +589,14 @@ namespace VayneHunter_Reborn.External.Evade
                     AddHitbox = true,
                     DangerValue = 2,
                     IsDangerous = false,
-                    MissileSpellName = "CassiopeiaNoxiousBlast",
+                    MissileSpellName = "CassiopeiaQ",
                 });
 
             Spells.Add(
                 new SpellData
                 {
                     ChampionName = "Cassiopeia",
-                    SpellName = "CassiopeiaPetrifyingGaze",
+                    SpellName = "CassiopeiaR",
                     Slot = SpellSlot.R,
                     Type = SkillShotType.SkillshotCone,
                     Delay = 600,
@@ -509,7 +607,7 @@ namespace VayneHunter_Reborn.External.Evade
                     AddHitbox = false,
                     DangerValue = 5,
                     IsDangerous = true,
-                    MissileSpellName = "CassiopeiaPetrifyingGaze",
+                    MissileSpellName = "CassiopeiaR",
                 });
 
             #endregion Cassiopeia
@@ -554,7 +652,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "PhosphorusBombMissile",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall }
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall}
                 });
 
             Spells.Add(
@@ -575,7 +673,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "MissileBarrageMissile",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall}
                 });
 
             Spells.Add(
@@ -596,7 +695,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "MissileBarrageMissile2",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall}
                 });
 
             #endregion Corki
@@ -607,10 +707,28 @@ namespace VayneHunter_Reborn.External.Evade
                 new SpellData
                 {
                     ChampionName = "Darius",
+                    SpellName = "DariusCleave",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotCircle,
+                    Delay = 750,
+                    Range = 0,
+                    Radius = 425 - 50,
+                    MissileSpeed = int.MaxValue, 
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = false,
+                    MissileSpellName = "DariusCleave",
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Darius",
                     SpellName = "DariusAxeGrabCone",
                     Slot = SpellSlot.E,
                     Type = SkillShotType.SkillshotCone,
-                    Delay = 300,
+                    Delay = 250,
                     Range = 550,
                     Radius = 80,
                     MissileSpeed = int.MaxValue,
@@ -622,6 +740,49 @@ namespace VayneHunter_Reborn.External.Evade
                 });
 
             #endregion Darius
+
+            #region Diana
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Diana",
+                    SpellName = "DianaArc",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotCircle,
+                    Delay = 250,
+                    Range = 895,
+                    Radius = 195,
+                    MissileSpeed = 1400,
+                    FixedRange = false,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "DianaArcArc",
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall}
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Diana",
+                    SpellName = "DianaArcArc",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotCircle,
+                    Delay = 250,
+                    Range = 895,
+                    Radius = 195,
+                    DontCross = true,
+                    MissileSpeed = 1400,
+                    FixedRange = false,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "DianaArcArc",
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall}
+                });
+
+            #endregion Diana
 
             #region DrMundo
 
@@ -643,7 +804,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "InfectedCleaverMissile",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall}
                 });
 
             #endregion DrMundo
@@ -667,7 +829,7 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = true,
                     MissileSpellName = "DravenDoubleShotMissile",
                     CanBeRemoved = true,
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall }
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall}
                 });
 
             Spells.Add(
@@ -686,10 +848,74 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 5,
                     IsDangerous = true,
                     MissileSpellName = "DravenR",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall }
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall}
                 });
 
             #endregion Draven
+
+            #region Ekko
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Ekko",
+                    SpellName = "EkkoQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 250,
+                    Range = 950,
+                    Radius = 60,
+                    MissileSpeed = 1650,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 4,
+                    IsDangerous = true,
+                    MissileSpellName = "ekkoqmis",
+                    CanBeRemoved = true,
+                    CollisionObjects =
+                        new[] {CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall}
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Ekko",
+                    SpellName = "EkkoW",
+                    Slot = SpellSlot.W,
+                    Type = SkillShotType.SkillshotCircle,
+                    Delay = 3750,
+                    Range = 1600,
+                    Radius = 375,
+                    MissileSpeed = 1650,
+                    FixedRange = false,
+                    AddHitbox = false,
+                    DangerValue = 3,
+                    IsDangerous = false,
+                    MissileSpellName = "EkkoW",
+                    CanBeRemoved = true
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Ekko",
+                    SpellName = "EkkoR",
+                    Slot = SpellSlot.R,
+                    Type = SkillShotType.SkillshotCircle,
+                    Delay = 250,
+                    Range = 1600,
+                    Radius = 375,
+                    MissileSpeed = 1650,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = false,
+                    MissileSpellName = "EkkoR",
+                    CanBeRemoved = true,
+                    FromObjects = new[] {"Ekko_Base_R_TrailEnd.troy"}
+                });
+
+            #endregion Ekko
 
             #region Elise
 
@@ -703,7 +929,7 @@ namespace VayneHunter_Reborn.External.Evade
                     Delay = 250,
                     Range = 1100,
                     Radius = 55,
-                    MissileSpeed = 1450,
+                    MissileSpeed = 1600,
                     FixedRange = true,
                     AddHitbox = true,
                     DangerValue = 4,
@@ -711,7 +937,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "EliseHumanE",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall}
                 });
 
             #endregion Elise
@@ -756,10 +983,11 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "EzrealMysticShotMissile",
-                    ExtraMissileNames = new[] { "EzrealMysticShotPulseMissile" },
+                    ExtraMissileNames = new[] {"EzrealMysticShotPulseMissile"},
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                     Id = 229,
                 });
 
@@ -779,7 +1007,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "EzrealEssenceFluxMissile",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -798,11 +1026,34 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "EzrealTrueshotBarrage",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                     Id = 245,
                 });
 
             #endregion Ezreal
+
+            #region Fiora
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Fiora",
+                    SpellName = "FioraW",
+                    Slot = SpellSlot.W,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 500,
+                    Range = 800,
+                    Radius = 70,
+                    MissileSpeed = 3200,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "FioraWMissile",
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
+                });
+
+            #endregion Fiora
 
             #region Fizz
 
@@ -822,7 +1073,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 5,
                     IsDangerous = true,
                     MissileSpellName = "FizzMarinerDoomMissile",
-                    CollisionObjects = new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall},
                     CanBeRemoved = true,
                 });
 
@@ -864,7 +1115,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "GalioRighteousGust",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -910,7 +1161,7 @@ namespace VayneHunter_Reborn.External.Evade
                     CanBeRemoved = true,
                     ForceRemove = true,
                     MissileSpellName = "gnarqmissile",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -935,7 +1186,7 @@ namespace VayneHunter_Reborn.External.Evade
                     ForceRemove = true,
                     MissileSpellName = "GnarQMissileReturn",
                     DisableFowDetection = false,
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -954,7 +1205,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "GnarBigQMissile",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1050,7 +1301,7 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = false,
                     MissileSpellName = "GragasQMissile",
                     ExtraDuration = 4500,
-                    ToggleParticleName = "Gragas_",
+                    ToggleParticleName = "Gragas_.+_Q_(Enemy|Ally)",
                     DontCross = true,
                 });
 
@@ -1072,7 +1323,7 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "GragasE",
                     CanBeRemoved = true,
                     ExtraRange = 300,
-                    CollisionObjects = new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion },
+                    CollisionObjects = new[] {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion},
                 });
 
             Spells.Add(
@@ -1091,7 +1342,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 5,
                     IsDangerous = true,
                     MissileSpellName = "GragasRBoom",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Gragas
@@ -1102,21 +1353,19 @@ namespace VayneHunter_Reborn.External.Evade
                 new SpellData
                 {
                     ChampionName = "Graves",
-                    SpellName = "GravesClusterShot",
+                    SpellName = "GravesQLineSpell",
                     Slot = SpellSlot.Q,
                     Type = SkillShotType.SkillshotMissileLine,
                     Delay = 250,
-                    Range = 1000,
-                    Radius = 50,
-                    MissileSpeed = 2000,
+                    Range = 808,
+                    Radius = 40,
+                    MissileSpeed = 3000,
                     FixedRange = true,
                     AddHitbox = true,
                     DangerValue = 2,
                     IsDangerous = false,
-                    MissileSpellName = "GravesClusterShotAttack",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
-                    MultipleNumber = 3,
-                    MultipleAngle = 15 * (float)Math.PI / 180,
+                    MissileSpellName = "GravesQLineMis",
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1136,7 +1385,8 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = true,
                     MissileSpellName = "GravesChargeShotShot",
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Graves
@@ -1159,7 +1409,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "HeimerdingerWAttack2",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1178,14 +1428,74 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "heimerdingerespell",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Heimerdinger
 
-            #region Irelia
+            #region Illaoi
 
             Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Illaoi",
+                    SpellName = "IllaoiQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotLine,
+                    Delay = 750,
+                    Range = 850,
+                    Radius = 100,
+                    MissileSpeed = int.MaxValue,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "illaoiemis",
+                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Illaoi",
+                    SpellName = "IllaoiE",
+                    Slot = SpellSlot.E,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 250,
+                    Range = 950,
+                    Radius = 50,
+                    MissileSpeed = 1900,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "illaoiemis",
+                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Illaoi",
+                    SpellName = "IllaoiR",
+                    Slot = SpellSlot.R,
+                    Type = SkillShotType.SkillshotCircle,
+                    Delay = 500,
+                    Range = 0,
+                    Radius = 450,
+                    MissileSpeed = int.MaxValue,
+                    FixedRange = true,
+                    AddHitbox = false,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "",
+                });
+
+            #endregion Illaoi
+
+            #region Irelia
+
+                Spells.Add(
                 new SpellData
                 {
                     ChampionName = "Irelia",
@@ -1201,7 +1511,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "IreliaTranscendentBlades",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Irelia
@@ -1224,7 +1534,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "HowlingGaleSpell",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Janna
@@ -1237,6 +1547,23 @@ namespace VayneHunter_Reborn.External.Evade
                     ChampionName = "JarvanIV",
                     SpellName = "JarvanIVDragonStrike",
                     Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotLine,
+                    Delay = 600,
+                    Range = 770,
+                    Radius = 70,
+                    MissileSpeed = int.MaxValue,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = false,
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "JarvanIV",
+                    SpellName = "JarvanIVEQ",
+                    Slot = SpellSlot.Q,
                     Type = SkillShotType.SkillshotMissileLine,
                     Delay = 250,
                     Range = 880,
@@ -1246,7 +1573,6 @@ namespace VayneHunter_Reborn.External.Evade
                     AddHitbox = true,
                     DangerValue = 3,
                     IsDangerous = true,
-                    MissileSpellName = "JarvanIVDragonStrike",
                 });
 
             Spells.Add(
@@ -1289,7 +1615,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "JayceShockBlastMis",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1310,10 +1637,58 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "JayceShockBlastWallMis",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Jayce
+
+            #region Jhin
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Jhin",
+                    SpellName = "JhinW",
+                    Slot = SpellSlot.W,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 750,
+                    Range = 2550,
+                    Radius = 40,
+                    MissileSpeed = 5000,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "JhinWMissile",
+                    CanBeRemoved = true,
+                    CollisionObjects =
+                        new[] { CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall },
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Jhin",
+                    SpellName = "JhinRShot",
+                    Slot = SpellSlot.R,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 250,
+                    Range = 3500,
+                    Radius = 80,
+                    MissileSpeed = 5000,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "JhinRShotMis",
+                    ExtraMissileNames = new[] { "JhinRShotMis4" },
+                    CanBeRemoved = true,
+                    CollisionObjects =
+                        new[] { CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall },
+                });
+
+            #endregion Jhin
 
             #region Jinx
 
@@ -1336,7 +1711,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "JinxWMissile",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1356,7 +1732,7 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = true,
                     MissileSpellName = "JinxR",
                     CanBeRemoved = true,
-                    CollisionObjects = new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Jinx
@@ -1379,10 +1755,11 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "kalistamysticshotmis",
-                    ExtraMissileNames = new[] { "kalistamysticshotmistrue" },
+                    ExtraMissileNames = new[] {"kalistamysticshotmistrue"},
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Kalista
@@ -1407,7 +1784,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "KarmaQMissile",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             //TODO: add the circle at the end.
@@ -1429,7 +1807,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "KarmaQMissileMantra",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Karma
@@ -1472,7 +1851,7 @@ namespace VayneHunter_Reborn.External.Evade
                     Slot = SpellSlot.R,
                     Type = SkillShotType.SkillshotCircle,
                     Delay = 250,
-                    Range = 700,
+                    Range = 450,
                     Radius = 270,
                     MissileSpeed = int.MaxValue,
                     FixedRange = false,
@@ -1504,7 +1883,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "KennenShurikenHurlMissile1",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Kennen
@@ -1516,7 +1896,7 @@ namespace VayneHunter_Reborn.External.Evade
                 {
                     ChampionName = "Khazix",
                     SpellName = "KhazixW",
-                    ExtraSpellNames = new[] { "khazixwlong" },
+                    ExtraSpellNames = new[] {"khazixwlong"},
                     Slot = SpellSlot.W,
                     Type = SkillShotType.SkillshotMissileLine,
                     Delay = 250,
@@ -1530,9 +1910,10 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "KhazixWMissile",
                     CanBeRemoved = true,
                     MultipleNumber = 3,
-                    MultipleAngle = 22f * (float)Math.PI / 180,
+                    MultipleAngle = 22f*(float) Math.PI/180,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1555,6 +1936,74 @@ namespace VayneHunter_Reborn.External.Evade
 
             #endregion Khazix
 
+            #region Kled
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Kled",
+                    SpellName = "KledQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 250,
+                    Range = 800,
+                    Radius = 45,
+                    MissileSpeed = 1600,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = true,
+                    MissileSpellName = "KledQMissile",
+                    CanBeRemoved = true,
+                    CollisionObjects =
+                        new[] { CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall },
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Kled",
+                    SpellName = "KledE",
+                    Slot = SpellSlot.E,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 0,
+                    Range = 750,
+                    Radius = 125,
+                    MissileSpeed = 945,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = true,
+                    MissileSpellName = "",
+                    CanBeRemoved = true,
+                    CollisionObjects =
+                        new[] { CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall },
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Kled",
+                    SpellName = "KledRiderQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 250,
+                    Range = 700,
+                    Radius = 40,
+                    MissileSpeed = 3000,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "KledRiderQMissile",
+                    MultipleNumber = 5,
+                    MultipleAngle = 5 * (float)Math.PI / 180,
+                    CanBeRemoved = true,
+                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                });
+           
+            #endregion Kled
+
             #region Kogmaw
 
             Spells.Add(
@@ -1572,10 +2021,11 @@ namespace VayneHunter_Reborn.External.Evade
                     AddHitbox = true,
                     DangerValue = 2,
                     IsDangerous = false,
-                    MissileSpellName = "KogMawQMis",
+                    MissileSpellName = "KogMawQ",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1594,7 +2044,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "KogMawVoidOozeMissile",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1606,7 +2056,7 @@ namespace VayneHunter_Reborn.External.Evade
                     Type = SkillShotType.SkillshotCircle,
                     Delay = 1200,
                     Range = 1800,
-                    Radius = 150,
+                    Radius = 225,
                     MissileSpeed = int.MaxValue,
                     FixedRange = false,
                     AddHitbox = true,
@@ -1629,7 +2079,7 @@ namespace VayneHunter_Reborn.External.Evade
                     Delay = 0,
                     Range = 600,
                     Radius = 220,
-                    MissileSpeed = 1500,
+                    MissileSpeed = 1450,
                     FixedRange = false,
                     AddHitbox = true,
                     DangerValue = 2,
@@ -1642,12 +2092,12 @@ namespace VayneHunter_Reborn.External.Evade
                 {
                     ChampionName = "Leblanc",
                     SpellName = "LeblancSlideM",
-                    Slot = SpellSlot.W,
+                    Slot = SpellSlot.R,
                     Type = SkillShotType.SkillshotCircle,
                     Delay = 0,
                     Range = 600,
                     Radius = 220,
-                    MissileSpeed = 1500,
+                    MissileSpeed = 1450,
                     FixedRange = false,
                     AddHitbox = true,
                     DangerValue = 2,
@@ -1664,8 +2114,8 @@ namespace VayneHunter_Reborn.External.Evade
                     Type = SkillShotType.SkillshotMissileLine,
                     Delay = 250,
                     Range = 950,
-                    Radius = 70,
-                    MissileSpeed = 1600,
+                    Radius = 55,
+                    MissileSpeed = 1750,
                     FixedRange = true,
                     AddHitbox = true,
                     DangerValue = 3,
@@ -1673,7 +2123,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "LeblancSoulShackle",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1681,12 +2132,12 @@ namespace VayneHunter_Reborn.External.Evade
                 {
                     ChampionName = "Leblanc",
                     SpellName = "LeblancSoulShackleM",
-                    Slot = SpellSlot.E,
+                    Slot = SpellSlot.R,
                     Type = SkillShotType.SkillshotMissileLine,
                     Delay = 250,
                     Range = 950,
-                    Radius = 70,
-                    MissileSpeed = 1600,
+                    Radius = 55,
+                    MissileSpeed = 1750,
                     FixedRange = true,
                     AddHitbox = true,
                     DangerValue = 3,
@@ -1694,7 +2145,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "LeblancSoulShackleM",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Leblanc
@@ -1719,7 +2171,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "BlindMonkQOne",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion LeeSin
@@ -1735,14 +2188,14 @@ namespace VayneHunter_Reborn.External.Evade
                     Type = SkillShotType.SkillshotMissileLine,
                     Delay = 250,
                     Range = 905,
-                    Radius = 100,
+                    Radius = 70,
                     MissileSpeed = 2000,
                     FixedRange = true,
                     AddHitbox = true,
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "LeonaZenithBladeMissile",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1775,7 +2228,7 @@ namespace VayneHunter_Reborn.External.Evade
                     Slot = SpellSlot.Q,
                     Type = SkillShotType.SkillshotMissileLine,
                     Delay = 250,
-                    Range = 700,
+                    Range = 825,
                     Radius = 75,
                     MissileSpeed = 2200,
                     FixedRange = true,
@@ -1783,7 +2236,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "LissandraQMissile",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1794,7 +2247,7 @@ namespace VayneHunter_Reborn.External.Evade
                     Slot = SpellSlot.Q,
                     Type = SkillShotType.SkillshotMissileLine,
                     Delay = 250,
-                    Range = 700,
+                    Range = 825,
                     Radius = 90,
                     MissileSpeed = 2200,
                     FixedRange = true,
@@ -1802,7 +2255,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "lissandraqshards",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1821,8 +2274,9 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "LissandraEMissile",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
+
             #endregion Lulu
 
             #region Lucian
@@ -1845,6 +2299,43 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "LucianQ",
                 });
 
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Lucian",
+                    SpellName = "LucianW",
+                    Slot = SpellSlot.W,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 250,
+                    Range = 1000,
+                    Radius = 55,
+                    MissileSpeed = 1600,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "lucianwmissile",
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Lucian",
+                    SpellName = "LucianRMis",
+                    Slot = SpellSlot.R,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 500,
+                    Range = 1400,
+                    Radius = 110,
+                    MissileSpeed = 2800,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "lucianrmissileoffhand",
+                    ExtraMissileNames = new[] {"lucianrmissile"},
+                });
+
             #endregion Lucian
 
             #region Lulu
@@ -1865,8 +2356,26 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "LuluQMissile",
-                    ExtraMissileNames = new[] { "LuluQMissileTwo" },
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Lulu",
+                    SpellName = "LuluQPix",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 250,
+                    Range = 950,
+                    Radius = 60,
+                    MissileSpeed = 1450,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "LuluQMissileTwo",
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Lulu
@@ -1890,7 +2399,7 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = true,
                     MissileSpellName = "LuxLightBindingMis",
                     //CanBeRemoved = true,
-                    //CollisionObjects = new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall, },
+                    //CollisionObjects = new[] { CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall, },
                 });
 
             Spells.Add(
@@ -1910,10 +2419,10 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = false,
                     MissileSpellName = "LuxLightStrikeKugel",
                     ExtraDuration = 5500,
-                    ToggleParticleName = "LuxLightstrike_tar",
+                    ToggleParticleName = "Lux_.+_E_tar_aoe_",
                     DontCross = true,
                     CanBeRemoved = true,
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1964,10 +2473,10 @@ namespace VayneHunter_Reborn.External.Evade
                 new SpellData
                 {
                     ChampionName = "Malzahar",
-                    SpellName = "AlZaharCalloftheVoid",
+                    SpellName = "MalzaharQ",
                     Slot = SpellSlot.Q,
                     Type = SkillShotType.SkillshotLine,
-                    Delay = 1000,
+                    Delay = 750,
                     Range = 900,
                     Radius = 85,
                     MissileSpeed = int.MaxValue,
@@ -1976,7 +2485,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     DontCross = true,
-                    MissileSpellName = "AlZaharCalloftheVoid",
+                    MissileSpellName = "MalzaharQ",
                 });
 
             #endregion Malzahar
@@ -2001,7 +2510,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "DarkBindingMissile",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Morgana
@@ -2015,7 +2525,7 @@ namespace VayneHunter_Reborn.External.Evade
                     SpellName = "NamiQ",
                     Slot = SpellSlot.Q,
                     Type = SkillShotType.SkillshotCircle,
-                    Delay = 1000,
+                    Delay = 950,
                     Range = 1625,
                     Radius = 150,
                     MissileSpeed = int.MaxValue,
@@ -2042,7 +2552,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "NamiRMissile",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Nami
@@ -2057,7 +2567,7 @@ namespace VayneHunter_Reborn.External.Evade
                     Slot = SpellSlot.Q,
                     Type = SkillShotType.SkillshotMissileLine,
                     Delay = 250,
-                    Range = 1100,
+                    Range = 1250,
                     Radius = 90,
                     MissileSpeed = 2000,
                     FixedRange = true,
@@ -2067,11 +2577,33 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "NautilusAnchorDragMissile",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                     //walls?
                 });
 
             #endregion Nautilus
+
+            #region Nocturne
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Nocturne",
+                    SpellName = "NocturneDuskbringer",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 250,
+                    Range = 1125,
+                    Radius = 60,
+                    MissileSpeed = 1400,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "NocturneDuskbringer",
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall}
+                });
+
+            #endregion Nocturne
 
             #region Nidalee
 
@@ -2082,7 +2614,7 @@ namespace VayneHunter_Reborn.External.Evade
                     SpellName = "JavelinToss",
                     Slot = SpellSlot.Q,
                     Type = SkillShotType.SkillshotMissileLine,
-                    Delay = 125,
+                    Delay = 250,
                     Range = 1500,
                     Radius = 40,
                     MissileSpeed = 1300,
@@ -2093,7 +2625,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "JavelinToss",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Nidalee
@@ -2118,8 +2651,7 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = false,
                     MissileSpellName = "olafaxethrow",
                     CanBeRemoved = true,
-                    CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall}
                 });
 
             #endregion Olaf
@@ -2142,7 +2674,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "orianaizuna",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -2161,14 +2693,14 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
                 new SpellData
                 {
                     ChampionName = "Orianna",
-                    SpellName = "OrianaDissonanceCommand",
+                    SpellName = "OrianaDissonanceCommand-",
                     Slot = SpellSlot.W,
                     Type = SkillShotType.SkillshotCircle,
                     Delay = 250,
@@ -2179,7 +2711,7 @@ namespace VayneHunter_Reborn.External.Evade
                     AddHitbox = true,
                     DangerValue = 2,
                     IsDangerous = false,
-                    MissileSpellName = "OrianaDissonanceCommand",
+                    MissileSpellName = "OrianaDissonanceCommand-",
                     FromObject = "yomu_ring_",
                 });
 
@@ -2199,14 +2731,14 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "orianaredact",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
                 new SpellData
                 {
                     ChampionName = "Orianna",
-                    SpellName = "OrianaDetonateCommand",
+                    SpellName = "OrianaDetonateCommand-",
                     Slot = SpellSlot.R,
                     Type = SkillShotType.SkillshotCircle,
                     Delay = 700,
@@ -2217,7 +2749,7 @@ namespace VayneHunter_Reborn.External.Evade
                     AddHitbox = true,
                     DangerValue = 5,
                     IsDangerous = true,
-                    MissileSpellName = "OrianaDetonateCommand",
+                    MissileSpellName = "OrianaDetonateCommand-",
                     FromObject = "yomu_ring_",
                 });
 
@@ -2232,21 +2764,65 @@ namespace VayneHunter_Reborn.External.Evade
                     SpellName = "QuinnQ",
                     Slot = SpellSlot.Q,
                     Type = SkillShotType.SkillshotMissileLine,
-                    Delay = 250,
+                    Delay = 313,
                     Range = 1050,
-                    Radius = 80,
+                    Radius = 60,
                     MissileSpeed = 1550,
                     FixedRange = true,
                     AddHitbox = true,
                     DangerValue = 2,
                     IsDangerous = false,
-                    MissileSpellName = "QuinnQMissile",
+                    MissileSpellName = "QuinnQ",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Quinn
+
+            #region Poppy
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Poppy",
+                    SpellName = "PoppyQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotLine,
+                    Delay = 500,
+                    Range = 430,
+                    Radius = 100,
+                    MissileSpeed = int.MaxValue,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "PoppyQ",
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Poppy",
+                    SpellName = "PoppyRSpell",
+                    Slot = SpellSlot.R,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 300,
+                    Range = 1200,
+                    Radius = 100,
+                    MissileSpeed = 1600,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "PoppyRMissile",
+                    CanBeRemoved = true,
+                    CollisionObjects =
+                        new[] { CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                });
+
+            #endregion Poppy
 
             #region Rengar
 
@@ -2268,7 +2844,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "RengarEFinal",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Rengar
@@ -2292,7 +2869,8 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = false,
                     MissileSpellName = "RekSaiQBurrowedMis",
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion RekSai
@@ -2309,15 +2887,15 @@ namespace VayneHunter_Reborn.External.Evade
                     Delay = 250,
                     Range = 1100,
                     Radius = 125,
-                    MissileSpeed = 2200,
+                    MissileSpeed = 1600,
                     FixedRange = false,
                     AddHitbox = false,
                     DangerValue = 5,
                     IsDangerous = true,
                     MultipleNumber = 3,
-                    MultipleAngle = 15 * (float)Math.PI / 180,
+                    MultipleAngle = 15*(float) Math.PI/180,
                     MissileSpellName = "RivenLightsaberMissile",
-                    ExtraMissileNames = new[] { "RivenLightsaberMissileSide" }
+                    ExtraMissileNames = new[] {"RivenLightsaberMissileSide"}
                 });
 
             #endregion Riven
@@ -2342,7 +2920,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "RumbleGrenade",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -2363,10 +2942,36 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = false,
                     MissileSpellName = "RumbleCarpetBombMissile",
                     CanBeRemoved = false,
-                    CollisionObjects = new CollisionObjectTypes[] { },
+                    CollisionObjects = new CollisionObjectTypes[] {},
                 });
 
             #endregion Rumble
+
+            #region Ryze
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Ryze",
+                    SpellName = "RyzeQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 250,
+                    Range = 1000,
+                    Radius = 55,
+                    MissileSpeed = 1700,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "RyzeQ",
+                    CanBeRemoved = true,
+                    CollisionObjects =
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
+                });
+
+            #endregion
 
             #region Sejuani
 
@@ -2388,7 +2993,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "",
                     ExtraRange = 200,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Champions, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall},
                 });
             //TODO: fix?
             Spells.Add(
@@ -2408,7 +3014,7 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = true,
                     MissileSpellName = "sejuaniglacialprison",
                     CanBeRemoved = true,
-                    CollisionObjects = new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Sejuani
@@ -2432,7 +3038,26 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = true,
                     MissileSpellName = "SionEMissile",
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.Minion, CollisionObjectTypes.YasuoWall },
+                        new[] {CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall},
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Sion",
+                    SpellName = "SionR",
+                    Slot = SpellSlot.R,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 500,
+                    Range = 800,
+                    Radius = 120,
+                    MissileSpeed = 1000,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    CollisionObjects =
+                        new[] {CollisionObjectTypes.Champions},
                 });
 
             #endregion Sion
@@ -2455,7 +3080,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Soraka
@@ -2466,7 +3091,7 @@ namespace VayneHunter_Reborn.External.Evade
                 new SpellData
                 {
                     ChampionName = "Shen",
-                    SpellName = "ShenShadowDash",
+                    SpellName = "ShenE",
                     Slot = SpellSlot.E,
                     Type = SkillShotType.SkillshotMissileLine,
                     Delay = 0,
@@ -2477,10 +3102,11 @@ namespace VayneHunter_Reborn.External.Evade
                     AddHitbox = true,
                     DangerValue = 3,
                     IsDangerous = true,
-                    MissileSpellName = "ShenShadowDash",
+                    MissileSpellName = "ShenE",
                     ExtraRange = 200,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Minion, CollisionObjectTypes.Champion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Minion, CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Shen
@@ -2504,7 +3130,8 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = false,
                     MissileSpellName = "ShyvanaFireballMissile",
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Minion, CollisionObjectTypes.Champion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Minion, CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -2524,6 +3151,27 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = true,
                     MissileSpellName = "ShyvanaTransformCast",
                     ExtraRange = 200,
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Shyvana",
+                    SpellName = "shyvanafireballdragon2",
+                    Slot = SpellSlot.R,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 250,
+                    Range = 850,
+                    Radius = 70,
+                    MissileSpeed = 2000,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = false,
+                    MissileSpellName = "ShyvanaFireballDragonFxMissile",
+                    ExtraRange = 200,
+                    MultipleNumber = 5,
+                    MultipleAngle = 10 * (float)Math.PI / 180
                 });
 
             #endregion Shyvana
@@ -2548,7 +3196,7 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "SivirQMissileReturn",
                     DisableFowDetection = false,
                     MissileFollowsUnit = true,
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -2567,7 +3215,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "SivirQMissile",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Sivir
@@ -2590,7 +3238,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "SkarnerFractureMissile",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Skarner
@@ -2613,7 +3261,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 5,
                     IsDangerous = true,
                     MissileSpellName = "SonaR",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Sona
@@ -2685,10 +3333,10 @@ namespace VayneHunter_Reborn.External.Evade
                     SpellName = "syndrae5",
                     Slot = SpellSlot.E,
                     Type = SkillShotType.SkillshotMissileLine,
-                    Delay = 300,
+                    Delay = 0,
                     Range = 950,
-                    Radius = 90,
-                    MissileSpeed = 1601,
+                    Radius = 100,
+                    MissileSpeed = 2000,
                     FixedRange = false,
                     AddHitbox = true,
                     DangerValue = 2,
@@ -2704,10 +3352,10 @@ namespace VayneHunter_Reborn.External.Evade
                     SpellName = "SyndraE",
                     Slot = SpellSlot.E,
                     Type = SkillShotType.SkillshotMissileLine,
-                    Delay = 300,
+                    Delay = 0,
                     Range = 950,
-                    Radius = 90,
-                    MissileSpeed = 1601,
+                    Radius = 100,
+                    MissileSpeed = 2000,
                     FixedRange = false,
                     AddHitbox = true,
                     DangerValue = 2,
@@ -2717,6 +3365,47 @@ namespace VayneHunter_Reborn.External.Evade
                 });
 
             #endregion Syndra
+
+            #region Taliyah
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Taliyah",
+                    SpellName = "TaliyahQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 250,
+                    Range = 1000,
+                    Radius = 100,
+                    MissileSpeed = 3600,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "TaliyahQMis",
+                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall, CollisionObjectTypes.Minion, CollisionObjectTypes.Champions },
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Taliyah",
+                    SpellName = "TaliyahW",
+                    Slot = SpellSlot.W,
+                    Type = SkillShotType.SkillshotCircle,
+                    Delay = 600,
+                    Range = 900,
+                    Radius = 200,
+                    MissileSpeed = int.MaxValue,
+                    FixedRange = false,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = true,
+                    MissileSpellName = "TaliyahW",
+                });
+
+            #endregion Taliyah
 
             #region Talon
 
@@ -2736,7 +3425,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = true,
                     MultipleNumber = 3,
-                    MultipleAngle = 20 * (float)Math.PI / 180,
+                    MultipleAngle = 20*(float) Math.PI/180,
                     MissileSpellName = "talonrakemissileone",
                 });
 
@@ -2756,11 +3445,59 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = true,
                     MultipleNumber = 3,
-                    MultipleAngle = 20 * (float)Math.PI / 180,
+                    MultipleAngle = 20*(float) Math.PI/180,
                     MissileSpellName = "talonrakemissiletwo",
                 });
 
             #endregion Riven
+
+            #region Tahm Kench
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "TahmKench",
+                    SpellName = "TahmKenchQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 250,
+                    Range = 951,
+                    Radius = 90,
+                    MissileSpeed = 2800,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "tahmkenchqmissile",
+                    CanBeRemoved = true,
+                    CollisionObjects =
+                        new[]
+                        {CollisionObjectTypes.Minion, CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall},
+                });
+
+            #endregion Tahm Kench
+
+            #region Taric
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Taric",
+                    SpellName = "TaricE",
+                    Slot = SpellSlot.E,
+                    Type = SkillShotType.SkillshotLine,
+                    Delay = 1000,
+                    Range = 750,
+                    Radius = 100,
+                    MissileSpeed = int.MaxValue,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "TaricE"
+                });
+
+            #endregion Taric
 
             #region Thresh
 
@@ -2782,7 +3519,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "ThreshQMissile",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Minion, CollisionObjectTypes.Champion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Minion, CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -2869,8 +3607,8 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = false,
                     MissileSpellName = "SealFateMissile",
                     MultipleNumber = 3,
-                    MultipleAngle = 28 * (float)Math.PI / 180,
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    MultipleAngle = 28*(float) Math.PI/180,
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion TwistedFate
@@ -2893,7 +3631,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "TwitchVenomCaskMissile",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Twitch
@@ -2957,7 +3695,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "VarusQMissile",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -2987,7 +3725,7 @@ namespace VayneHunter_Reborn.External.Evade
                     Type = SkillShotType.SkillshotMissileLine,
                     Delay = 250,
                     Range = 1200,
-                    Radius = 100,
+                    Radius = 120,
                     MissileSpeed = 1950,
                     FixedRange = true,
                     AddHitbox = true,
@@ -2995,12 +3733,31 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = true,
                     MissileSpellName = "VarusRMissile",
                     CanBeRemoved = true,
-                    CollisionObjects = new[] { CollisionObjectTypes.Champion, CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Varus
 
             #region Veigar
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Veigar",
+                    SpellName = "VeigarBalefulStrike",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 250,
+                    Range = 950,
+                    Radius = 70,
+                    MissileSpeed = 2200,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "VeigarBalefulStrikeMis",
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
+                });
 
             Spells.Add(
                 new SpellData
@@ -3027,8 +3784,8 @@ namespace VayneHunter_Reborn.External.Evade
                     SpellName = "VeigarEventHorizon",
                     Slot = SpellSlot.E,
                     Type = SkillShotType.SkillshotRing,
-                    Delay = 250,
-                    Range = 600,
+                    Delay = 500,
+                    Range = 700,
                     Radius = 80,
                     MissileSpeed = int.MaxValue,
                     FixedRange = false,
@@ -3037,7 +3794,7 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = true,
                     DontAddExtraDuration = true,
                     RingRadius = 350,
-                    ExtraDuration = 3000,
+                    ExtraDuration = 3300,
                     DontCross = true,
                     MissileSpellName = "",
                 });
@@ -3064,7 +3821,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "VelkozQMissile",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Minion, CollisionObjectTypes.Champion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Minion, CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -3075,7 +3833,7 @@ namespace VayneHunter_Reborn.External.Evade
                     Slot = SpellSlot.Q,
                     Type = SkillShotType.SkillshotMissileLine,
                     Delay = 250,
-                    Range = 900,
+                    Range = 1100,
                     Radius = 55,
                     MissileSpeed = 2100,
                     FixedRange = true,
@@ -3085,7 +3843,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "VelkozQMissileSplit",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Minion, CollisionObjectTypes.Champion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Minion, CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -3160,13 +3919,14 @@ namespace VayneHunter_Reborn.External.Evade
                     Delay = 250,
                     Range = 1500,
                     Radius = 80,
-                    MissileSpeed = 780,
+                    MissileSpeed = 1050,
                     FixedRange = false,
                     AddHitbox = true,
                     DangerValue = 2,
                     IsDangerous = false,
-                    MissileSpellName = "ViktorDeathRayFixMissile",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    MissileSpellName = "ViktorDeathRayMissile",
+                    ExtraMissileNames = new[] {"viktoreaugmissile"},
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Viktor
@@ -3182,7 +3942,7 @@ namespace VayneHunter_Reborn.External.Evade
                     Type = SkillShotType.SkillshotLine,
                     Delay = 600,
                     Range = 1600,
-                    Radius = 100,
+                    Radius = 95,
                     MissileSpeed = int.MaxValue,
                     FixedRange = true,
                     AddHitbox = true,
@@ -3227,7 +3987,8 @@ namespace VayneHunter_Reborn.External.Evade
                     MissileSpellName = "XerathMageSpearMissile",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { CollisionObjectTypes.Minion, CollisionObjectTypes.Champion, CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {CollisionObjectTypes.Minion, CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -3239,7 +4000,7 @@ namespace VayneHunter_Reborn.External.Evade
                     Type = SkillShotType.SkillshotCircle,
                     Delay = 700,
                     Range = 5600,
-                    Radius = 120,
+                    Radius = 130,
                     MissileSpeed = int.MaxValue,
                     FixedRange = false,
                     AddHitbox = true,
@@ -3250,7 +4011,7 @@ namespace VayneHunter_Reborn.External.Evade
 
             #endregion Xerath
 
-            #region Yasuo
+            #region Yasuo 
 
             Spells.Add(
                 new SpellData
@@ -3287,7 +4048,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "yasuoq3w",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall }
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall}
                 });
 
             Spells.Add(
@@ -3339,7 +4100,7 @@ namespace VayneHunter_Reborn.External.Evade
                 new SpellData
                 {
                     ChampionName = "Zed",
-                    SpellName = "ZedShuriken",
+                    SpellName = "ZedQ",
                     Slot = SpellSlot.Q,
                     Type = SkillShotType.SkillshotMissileLine,
                     Delay = 250,
@@ -3350,10 +4111,10 @@ namespace VayneHunter_Reborn.External.Evade
                     AddHitbox = true,
                     DangerValue = 2,
                     IsDangerous = false,
-                    MissileSpellName = "zedshurikenmisone",
-                    FromObjects = new[] { "Zed_Clone_idle.troy", "Zed_Clone_Idle.troy" },
-                    ExtraMissileNames = new[] { "zedshurikenmistwo", "zedshurikenmisthree" },
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    MissileSpellName = "ZedQMissile",
+                    //FromObjects = new[] { "Zed_Clone_idle.troy", "Zed_Clone_Idle.troy" },
+                    FromObjects = new[] {"Zed_Base_W_tar.troy", "Zed_Base_W_cloneswap_buf.troy"},
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Zed
@@ -3396,7 +4157,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "ZiggsQSpell2",
-                    ExtraMissileNames = new[] { "ZiggsQSpell2" },
+                    ExtraMissileNames = new[] {"ZiggsQSpell2"},
                     CanBeRemoved = false,
                     DisableFowDetection = true,
                 });
@@ -3417,7 +4178,7 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "ZiggsQSpell3",
-                    ExtraMissileNames = new[] { "ZiggsQSpell3" },
+                    ExtraMissileNames = new[] {"ZiggsQSpell3"},
                     CanBeRemoved = false,
                     DisableFowDetection = true,
                 });
@@ -3439,7 +4200,7 @@ namespace VayneHunter_Reborn.External.Evade
                     IsDangerous = false,
                     MissileSpellName = "ZiggsW",
                     DisableFowDetection = true,
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -3482,31 +4243,53 @@ namespace VayneHunter_Reborn.External.Evade
 
             #endregion Ziggs
 
-            #region Zyra
+            #region Zilean
 
             Spells.Add(
                 new SpellData
                 {
-                    ChampionName = "Zyra",
-                    SpellName = "ZyraQFissure",
+                    ChampionName = "Zilean",
+                    SpellName = "ZileanQ",
                     Slot = SpellSlot.Q,
                     Type = SkillShotType.SkillshotCircle,
-                    Delay = 600,
-                    Range = 800,
-                    Radius = 220,
+                    Delay = 250 + 450,
+                    ExtraDuration = 400,
+                    Range = 900,
+                    Radius = 140,
                     MissileSpeed = int.MaxValue,
                     FixedRange = false,
                     AddHitbox = true,
                     DangerValue = 2,
                     IsDangerous = false,
-                    MissileSpellName = "ZyraQFissure",
+                    MissileSpellName = "ZileanQMissile",
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall}
+                });
+
+            #endregion Zilean
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Zyra",
+                    SpellName = "ZyraQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotLine,
+                    Delay = 850,
+                    Range = 800,
+                    Radius = 140,
+                    MissileSpeed = int.MaxValue,
+                    FixedRange = false,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "ZyraQ",
                 });
 
             Spells.Add(
                 new SpellData
                 {
                     ChampionName = "Zyra",
-                    SpellName = "ZyraGraspingRoots",
+                    SpellName = "ZyraE",
                     Slot = SpellSlot.E,
                     Type = SkillShotType.SkillshotMissileLine,
                     Delay = 250,
@@ -3517,8 +4300,8 @@ namespace VayneHunter_Reborn.External.Evade
                     AddHitbox = true,
                     DangerValue = 3,
                     IsDangerous = true,
-                    MissileSpellName = "ZyraGraspingRoots",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    MissileSpellName = "ZyraE",
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -3528,7 +4311,7 @@ namespace VayneHunter_Reborn.External.Evade
                     SpellName = "zyrapassivedeathmanager",
                     Slot = SpellSlot.E,
                     Type = SkillShotType.SkillshotMissileLine,
-                    Delay = 700,
+                    Delay = 500,
                     Range = 1474,
                     Radius = 70,
                     MissileSpeed = 2000,
@@ -3537,10 +4320,8 @@ namespace VayneHunter_Reborn.External.Evade
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "zyrapassivedeathmanager",
-                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall },
+                    CollisionObjects = new[] {CollisionObjectTypes.YasuoWall},
                 });
-
-            #endregion Zyra
         }
 
         public static SpellData GetByName(string spellName)
@@ -3569,6 +4350,14 @@ namespace VayneHunter_Reborn.External.Evade
                     spellData =>
                         spellData.ChampionName == ChampionName && spellData.MissileSpeed == speed &&
                         (spellData.Id == -1 || id == spellData.Id));
+        }
+
+        public enum EarlyObjects
+        {
+            Allies,
+            Minions,
+            AllyObjects,
+            Wall
         }
     }
 }

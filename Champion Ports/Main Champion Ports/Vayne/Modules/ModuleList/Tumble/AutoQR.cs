@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using DZLib.Positioning;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -6,15 +6,16 @@ using VayneHunter_Reborn.Modules.ModuleHelpers;
 using VayneHunter_Reborn.Skills.Tumble.VHRQ;
 using VayneHunter_Reborn.Utility;
 using VayneHunter_Reborn.Utility.MenuUtility;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.Modules.ModuleList.Tumble
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Modules.ModuleList.Tumble
 {
     class AutoQR : IModule
     {
         public void OnLoad()
         {
-            Obj_AI_Base.OnSpellCast += OnSpellcast;
+            Obj_AI_Base.OnProcessSpellCast += OnSpellcast;
         }
 
         private void OnSpellcast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -33,7 +34,7 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Tumble
         public bool ShouldGetExecuted()
         {
             return Variables.Menu.Item("dz191.vhr.misc.tumble.autoQR") != null
-                && Variables.Menu.Item("dz191.vhr.misc.tumble.autoQR").GetValue<bool>() && Variables.spells[SpellSlot.Q].IsReady();
+                && Variables.Menu.Item("dz191.vhr.misc.tumble.autoQR").GetValue<bool>() && Variables.spells[SpellSlot.R].IsReady();
         }
 
         public ModuleType GetModuleType()

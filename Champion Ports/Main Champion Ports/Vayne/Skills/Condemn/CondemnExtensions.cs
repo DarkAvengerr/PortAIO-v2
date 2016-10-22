@@ -1,10 +1,11 @@
-﻿using EloBuddy;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using VayneHunter_Reborn.Utility.MenuUtility;
 
-namespace VayneHunter_Reborn.Skills.Condemn
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Skills.Condemn
 {
     static class CondemnExtensions
     {

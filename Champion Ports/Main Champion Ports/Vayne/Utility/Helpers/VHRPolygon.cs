@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using LeagueSharp.Common;
 using SharpDX;
 
-namespace iSeriesReborn.Utility.Positioning
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace iSeriesReborn.Utility.Positioning
 {
     class VHRPolygon
     {

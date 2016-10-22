@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using DZLib.Core;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -7,9 +7,10 @@ using VayneHunter_Reborn.Skills.Tumble.VHRQ;
 using VayneHunter_Reborn.Utility;
 using VayneHunter_Reborn.Utility.MenuUtility;
 using ActiveGapcloser = VayneHunter_Reborn.External.ActiveGapcloser;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.Skills.Condemn
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Skills.Condemn
 {
     class InterrupterGapcloser
     {
@@ -17,7 +18,7 @@ namespace VayneHunter_Reborn.Skills.Condemn
         {
             Interrupter2.OnInterruptableTarget += OnInterruptableTarget;
             DZAntigapcloserVHR.OnEnemyGapcloser += OnEnemyGapcloser;
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             GameObject.OnCreate += GameObject_OnCreate;
         }
 

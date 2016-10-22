@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using LeagueSharp.Common;
 using VayneHunter_Reborn.External;
@@ -7,7 +7,9 @@ using VayneHunter_Reborn.External.ProfileSelector;
 using VayneHunter_Reborn.External.Translation;
 using Activator = VayneHunter_Reborn.External.Activator.Activator;
 
-namespace VayneHunter_Reborn.Utility.MenuUtility
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Utility.MenuUtility
 {
     using LeagueSharp;
 
@@ -153,7 +155,10 @@ namespace VayneHunter_Reborn.Utility.MenuUtility
 
                     miscGeneralSubMenu.AddBool("dz191.vhr.misc.general.disablemovement", "Disable Orbwalker Movement").SetTooltip("Disables the Orbwalker movements as long as it's active");
                     miscGeneralSubMenu.AddBool("dz191.vhr.misc.general.disableattk", "Disable Orbwalker Attack").SetTooltip("Disables the Orbwalker attacks as long as it's active");
-
+                    miscGeneralSubMenu.AddBool("dz191.vhr.misc.general.turnaround", "Use Turnaround against Cassio R / Trynda W", true).SetTooltip("Turns around to prevent Slows / Stuns from Cassio R and Trynda W");
+                    miscGeneralSubMenu.AddBool("dz191.vhr.misc.general.threshCatch", "Catch Thresh Lantern", true).SetTooltip("Autocatches Thresh Lantern");
+                    miscGeneralSubMenu.AddSlider("dz191.vhr.misc.general.hpThresh", "^ When HP Below %", new Tuple<int, int, int>(20, 0, 100)).SetTooltip("Autocatches Thresh Lantern at % HP < Value only");
+                    miscGeneralSubMenu.AddBool("dz191.vhr.misc.general.blueTrinket", "Buy Blue Trinket").SetTooltip("Buys Blue trinket automagically at Level 9");
                     miscMenu.AddSubMenu(miscGeneralSubMenu);
                 }
 
@@ -166,13 +171,14 @@ namespace VayneHunter_Reborn.Utility.MenuUtility
                 drawMenu.AddBool("dz191.vhr.draw.range", "Draw Enemy Ranges", true);
                 drawMenu.AddBool("dz191.vhr.draw.condemn", "Draw Condemn Rectangles", true);
                 drawMenu.AddBool("dz191.vhr.draw.qpos", "Reborn Q Position (Debug)");
+                drawMenu.AddBool("dz191.vhr.draw.trapDraw", "Draw Traps (Teemo / Jinx / Cait)").SetTooltip("Draws Traps for Teemo / Jinx / Cait");
 
                 RootMenu.AddSubMenu(drawMenu);
             }
 
             //CustomAntigapcloser.BuildMenu(RootMenu);
             DZAntigapcloserVHR.BuildMenu(RootMenu, "[VHR] AntiGapclosers List", "dz191.vhr.agplist");
-            VayneHunter_Reborn.External.Activator.Activator.LoadMenu();
+            External.Activator.Activator.LoadMenu();
             Cleanser.LoadMenu(RootMenu);
             ProfileSelector.OnLoad(RootMenu);
             TranslationInterface.OnLoad(RootMenu);

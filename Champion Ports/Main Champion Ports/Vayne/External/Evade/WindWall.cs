@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using LeagueSharp;
 using SharpDX;
 using LeagueSharp.Common;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.External.Evade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Evade
 {
     internal class WindWall
     {
@@ -23,7 +24,7 @@ namespace VayneHunter_Reborn.External.Evade
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="args">
-        ///     The <see cref="LeagueSharp.GameObjectProcessSpellCastEventArgs" /> instance containing the event
+        ///     The <see cref="EloBuddy.GameObjectProcessSpellCastEventArgs" /> instance containing the event
         ///     data.
         /// </param>
         internal static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

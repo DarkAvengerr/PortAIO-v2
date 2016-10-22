@@ -1,4 +1,3 @@
-﻿using EloBuddy;
 using LeagueSharp;
 using LeagueSharp.Common;
 using VayneHunter_Reborn.Modules.ModuleHelpers;
@@ -6,7 +5,9 @@ using VayneHunter_Reborn.Skills.Tumble;
 using VayneHunter_Reborn.Utility;
 using VayneHunter_Reborn.Utility.MenuUtility;
 
-namespace VayneHunter_Reborn.Modules.ModuleList.Tumble
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.Modules.ModuleList.Tumble
 {
     class QKS : IModule
     {
@@ -28,29 +29,24 @@ namespace VayneHunter_Reborn.Modules.ModuleList.Tumble
         public void OnExecute()
         {
                 var currentTarget = TargetSelector.GetTarget(Orbwalking.GetRealAutoAttackRange(null) + 240f, TargetSelector.DamageType.Physical);
-                if (!currentTarget.IsValidTarget())
-                {
-                    return;
-                }
 
-                if (currentTarget.ServerPosition.Distance(ObjectManager.Player.ServerPosition) <=
+                if (!currentTarget.IsValidTarget() || currentTarget.ServerPosition.Distance(ObjectManager.Player.ServerPosition) <=
                     Orbwalking.GetRealAutoAttackRange(null))
                 {
                     return;
                 }
 
-                if (HealthPrediction.GetHealthPrediction(currentTarget, (int) (250 + Game.Ping / 2f)) <
+                if (HealthPrediction.GetHealthPrediction(currentTarget, (int) (280f)) <
                     ObjectManager.Player.GetAutoAttackDamage(currentTarget) +
                     Variables.spells[SpellSlot.Q].GetDamage(currentTarget)
-                    && HealthPrediction.GetHealthPrediction(currentTarget, (int)(250 + Game.Ping / 2f)) > 0)
+                    && HealthPrediction.GetHealthPrediction(currentTarget, (int)(280f)) > 0)
                 {
                     var extendedPosition = ObjectManager.Player.ServerPosition.Extend(
                         currentTarget.ServerPosition, 300f);
-                    if (extendedPosition.IsSafe())
+                    if (extendedPosition.IsGoodEndPosition())
                     {
-                        Orbwalking.ResetAutoAttackTimer();
                         Variables.spells[SpellSlot.Q].Cast(extendedPosition);
-                        TargetSelector.SetTarget(currentTarget);
+                        //TargetSelector.SetTarget(currentTarget);
                     }
                 }
         }

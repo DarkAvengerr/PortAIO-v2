@@ -19,20 +19,21 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.External.Evade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Evade
 {
     public static class SkillshotDetector
     {
-        public delegate void OnDeleteMissileH(Skillshot skillshot, Obj_SpellMissile missile);
+        public delegate void OnDeleteMissileH(Skillshot skillshot, MissileClient missile);
 
         public delegate void OnDetectSkillshotH(Skillshot skillshot);
 
         static SkillshotDetector()
         {
             //Detect when the skillshots are created.
-            Obj_AI_Base.OnSpellCast += ObjAiHeroOnOnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += ObjAiHeroOnOnProcessSpellCast;
 
             //Detect when projectiles collide.
             GameObject.OnDelete += ObjSpellMissileOnOnDelete;
@@ -60,12 +61,12 @@ namespace VayneHunter_Reborn.External.Evade
 
         private static void ObjSpellMissileOnOnCreate(GameObject sender, EventArgs args)
         {
-            if (!sender.IsValid || !(sender is Obj_SpellMissile))
+            if (!sender.IsValid || !(sender is MissileClient))
             {
                 return; //not sure if needed
             }
 
-            var missile = (Obj_SpellMissile) sender;
+            var missile = (MissileClient) sender;
 
             var unit = missile.SpellCaster;
             if (!unit.IsValid || (unit.Team == ObjectManager.Player.Team))
@@ -107,12 +108,12 @@ namespace VayneHunter_Reborn.External.Evade
         /// </summary>
         private static void ObjSpellMissileOnOnDelete(GameObject sender, EventArgs args)
         {
-            if (!(sender is Obj_SpellMissile))
+            if (!(sender is MissileClient))
             {
                 return;
             }
 
-            var missile = (Obj_SpellMissile) sender;
+            var missile = (MissileClient) sender;
 
             if (!(missile.SpellCaster is AIHeroClient))
             {

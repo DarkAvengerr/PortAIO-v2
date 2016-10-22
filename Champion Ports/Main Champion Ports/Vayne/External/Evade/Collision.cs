@@ -21,15 +21,17 @@ using System.Text.RegularExpressions;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.External.Evade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Evade
 {
     public enum CollisionObjectTypes
     {
         Minion,
         Champion,
-        YasuoWall
+        YasuoWall,
+        Champions
     }
 
     public class FastPredictionResult
@@ -55,7 +57,7 @@ namespace VayneHunter_Reborn.External.Evade
 
         public static void Init()
         {
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
         }
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

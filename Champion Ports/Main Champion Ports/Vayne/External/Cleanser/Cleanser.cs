@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using VayneHunter_Reborn.Utility.MenuUtility;
-using EloBuddy;
 
-namespace VayneHunter_Reborn.External.Cleanser
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Cleanser
 {
     class Cleanser
     {
@@ -233,8 +234,8 @@ namespace VayneHunter_Reborn.External.Cleanser
                         ObjectManager.Player.HasBuff(spell.SpellBuff) &&
                         (MenuExtensions.GetItemValue<bool>("dz191.vhr.cleanser.spells." + spell.SpellBuff + ".K") ||
                          MenuExtensions.GetItemValue<bool>("dz191.vhr.cleanser.spells." + spell.SpellBuff + ".A")) &&
-                        (HeroManager.Enemies.FirstOrDefault(m => m.ChampionName == spell.ChampName) != null
-                            ? HeroManager.Enemies.FirstOrDefault(m => m.ChampionName == spell.ChampName)
+                        (HeroManager.Enemies.FirstOrDefault(m => m.ChampionName.Equals(spell.ChampName)) != null
+                            ? HeroManager.Enemies.FirstOrDefault(m => m.ChampionName.Equals(spell.ChampName))
                                 .GetSpellDamage(ObjectManager.Player, spell.Slot) >= ObjectManager.Player.Health + 15
                             : false));
 
@@ -246,7 +247,8 @@ namespace VayneHunter_Reborn.External.Cleanser
 
         private static void HandleBuffTypeCleanser(Items.Item CleanseItem)
         {
-            var buffCount = Buffs.Count(buff => ObjectManager.Player.HasBuffOfType(buff) && MenuExtensions.GetItemValue<bool>(string.Format("dz191.vhr.cleanser.bufftype.{0}", buff)));
+            var buffCount = Buffs.Count(buff => ObjectManager.Player.HasBuffOfType(buff) && MenuExtensions.GetItemValue<bool>(
+                $"dz191.vhr.cleanser.bufftype.{buff}"));
             if (buffCount >= MenuExtensions.GetItemValue<Slider>("dz191.vhr.cleanser.bufftype.minbuffs").Value)
             {
                 CastCleanse(CleanseItem);
