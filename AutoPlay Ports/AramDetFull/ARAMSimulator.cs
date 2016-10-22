@@ -928,7 +928,7 @@ namespace ARAMDetFull
 
 
                 if (balance < 0)
-                    DeathWalker.deathWalk(player.Position.To2D().Extend(fromNex.Position.To2D(), 600).To3D(), true);
+                    DeathWalker.deathWalk(player.Position.To2D().Extend(fromNex.Position.To2D(), 632).To3D(), true);
 
                 if ((!player.IsMelee || fightLevel < 2) && EloBuddy.SDK.EntityManager.Heroes.Enemies.Any(h => !h.IsDead) && moveToRelicIfForHeal())
                 {
@@ -1061,11 +1061,16 @@ namespace ARAMDetFull
             }
         }
 
-        public static bool enemIsOnMe(Obj_AI_Base target)
+        public static bool enemIsOnMe(MapControl.ChampControl targetChamp)
         {
+            var target = targetChamp.hero;
             try
             {
                 if (target.IsAlly || target.IsDead || !target.IsValidTarget() || target == null)
+                    return false;
+                if (player.HealthPercent > 40 && !target.IsFacing(player))
+                    return false;
+                if (player.HealthPercent > 50 && targetChamp.lastAttackedUnitId != player.NetworkId)
                     return false;
 
                 float distTo = target.Distance(player, true);
@@ -1091,7 +1096,7 @@ namespace ARAMDetFull
 
         public static Vector2 eAwayFromTo()
         {
-            if (player.IsMelee())
+            if (player.IsMelee() || player.ChampionName == "Kalista")
                 return new Vector2(0, 0);
 
             Vector2 backTo = player.Position.To2D();
@@ -1102,16 +1107,16 @@ namespace ARAMDetFull
             int count = 0;
 
             backTo -= (toNex.Position - player.Position).To2D();
-            foreach (var enem in ObjectManager.Get<AIHeroClient>().Where(enemIsOnMe))
+            foreach (var enem in MapControl.enemy_champions.Where(enemIsOnMe))
             {
                 count++;
-                backTo -= (enem.Position - player.Position).To2D();
+                backTo -= (enem.hero.Position - player.Position).To2D();
             }
 
 
             if (count > 0)
             {
-                var awayTo = player.Position.To2D().Extend(backTo, player.AttackRange * 0.8f);
+                var awayTo = player.Position.To2D().Extend(backTo, player.AttackRange * 0.7f);
                 if (!Sector.inTowerRange(awayTo))
                     return backTo;
             }

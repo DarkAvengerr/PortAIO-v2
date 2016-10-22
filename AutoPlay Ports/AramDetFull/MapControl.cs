@@ -39,6 +39,8 @@ namespace ARAMDetFull
 
             public int activeDangers = 0;
 
+            public int lastAttackedUnitId = -1;
+
             protected List<SpellDatabaseEntry> champSpells = new List<SpellDatabaseEntry>();
 
             public AttackableUnit getFocusTarget()
@@ -46,6 +48,18 @@ namespace ARAMDetFull
                 HealthDeath.DamageMaker dm = null;
                 HealthDeath.activeDamageMakers.TryGetValue(hero.NetworkId, out dm);
                 return dm?.target;
+            }
+
+            public List<Obj_AI_Base> getAttackers()
+            {
+                return HealthDeath.activeDamageMakers.Values.Where(dm => dm.source.IsValid && dm.target != null && dm.target == hero).Select(dm => dm.source).ToList();
+            }
+
+            public bool isTransformChampion()
+            {
+                List<string> transChamps = new List<string>() { "Jayce", "Nidalee", "Nidalee", "Elise", "Gnar" };
+
+                return transChamps.Contains(hero.ChampionName);
             }
 
             public ChampControl(AIHeroClient champ)
@@ -58,7 +72,20 @@ namespace ARAMDetFull
                 {
                     champSpells.Add(spell);
                 }
-
+                Obj_AI_Base.OnSpellCast += (sender, args) =>
+                {
+                    if (sender.NetworkId != hero.NetworkId)
+                        return;
+                    if (args.Target != null && args.Target is Obj_AI_Base)
+                        lastAttackedUnitId = args.Target.NetworkId;
+                };
+                Obj_AI_Base.OnBasicAttack += (sender, args) =>
+                {
+                    if (sender.NetworkId != hero.NetworkId)
+                        return;
+                    if (args != null)
+                        lastAttackedUnitId = args.Target.NetworkId;
+                };
                 getReach();
             }
 
@@ -152,9 +179,12 @@ namespace ARAMDetFull
                     lastMinionSpellUse = DeathWalker.now;
                     if (hero.MaxMana > 300 && hero.ManaPercent < 78)
                         return;
+                    if (hero.MaxMana > 199 && hero.MaxMana < 201 && hero.ManaPercent < 95)
+                        return;
                     foreach (var spell in spells)
                     {
-                        if (spell.Value.Slot == SpellSlot.R || spell.Value.Instance.Cooldown > 10 || !spell.Value.IsReady() || spell.Value.ManaCost > hero.Mana || spell.Key.SpellTags == null || !spell.Key.SpellTags.Contains(SpellTags.Damage))
+                        if (spell.Value.Slot == SpellSlot.R || spell.Value.Instance.Cooldown > 10 || !spell.Value.IsReady() || spell.Value.ManaCost > hero.Mana || spell.Key.SpellTags == null || !spell.Key.SpellTags.Contains(SpellTags.Damage)
+                            || (isTransformChampion() && sBook.GetSpell(spell.Key.Slot).Name.ToLower() != spell.Key.SpellName.ToLower()))
                             continue;
                         var minions = MinionManager.GetMinions((spell.Value.Range != 0) ? spell.Value.Range : 500);
                         foreach (var minion in minions)
@@ -217,7 +247,7 @@ namespace ARAMDetFull
                     lastSpellUse = DeathWalker.now;
                     foreach (var spell in spells)
                     {
-                        if (!spell.Value.IsReady() || spell.Value.ManaCost > hero.Mana)
+                        if (!spell.Value.IsReady() || spell.Value.ManaCost > hero.Mana || (isTransformChampion() && sBook.GetSpell(spell.Key.Slot).Name != spell.Key.SpellName))
                             continue;
 
                         if (ObjectManager.Player.Hero == Champion.Corki && spell.Key.Slot == SpellSlot.R)
@@ -229,6 +259,17 @@ namespace ARAMDetFull
                         var movementSpells = new List<SpellTags> { SpellTags.Dash, SpellTags.Blink, SpellTags.Teleport };
                         var supportSpells = new List<SpellTags> { SpellTags.Shield, SpellTags.Heal, SpellTags.DamageAmplifier,
                         SpellTags.SpellShield, SpellTags.RemoveCrowdControl, };
+
+                        if (spell.Key.SpellTags.Contains(SpellTags.Transformation))
+                        {
+                            var transformPoints = spells.Count(s => !s.Value.IsReady() || spell.Value.ManaCost > hero.Mana);
+                            if (transformPoints >= 3)
+                            {
+                                Console.WriteLine("Cast transfrom self: " + spell.Key.Slot);
+                                spell.Value.Cast();
+                            }
+                            return;
+                        }
 
                         if (spell.Value.IsSkillshot)
                         {
@@ -275,7 +316,7 @@ namespace ARAMDetFull
                                     continue;
                                 }
                                 var bTarg = ARAMTargetSelector.getBestTarget(spell.Value.Range, true);
-                                if (bTarg != null) 
+                                if (bTarg != null)
                                 {
                                     Console.WriteLine("Cast self: " + spell.Key.Slot);
                                     ObjectManager.Player.Spellbook.CastSpell(spell.Key.Slot);
@@ -475,6 +516,11 @@ namespace ARAMDetFull
 
             return false;
         }
+        private static int getMinionImpactOnHero(ChampControl champ)
+        {
+            var minionAttackerCount = champ.getAttackers().Count(att => att is Obj_AI_Minion);
+            return (int)(minionAttackerCount * ((18 - myControler.hero.Level) * 2f));
+        }
 
         public static int balanceAroundPoint(Vector2 point, float range)
         {
@@ -502,8 +548,10 @@ namespace ARAMDetFull
                     {
                         eneBalance = (int)(eneBalance * (focus.IsMe ? 1.20 : 0.80));
                     }
+                    eneBalance += getMinionImpactOnHero(ene);
                 }
                 balance += eneBalance;
+                balance -= getMinionImpactOnHero(myControler);
             }
 
 

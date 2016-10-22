@@ -26,7 +26,7 @@ using EloBuddy; namespace ARAMDetFull
 
     public class AutoShopper
     {
-        private static readonly List<FullItem> itemList = new List<FullItem>();
+        private static readonly Dictionary<int, FullItem> itemList = new Dictionary<int, FullItem>();
 
         public static AIHeroClient player = ObjectManager.Player;
 
@@ -45,14 +45,16 @@ using EloBuddy; namespace ARAMDetFull
 
         private static bool finished = false;
 
+        private static List<int> failedToFindItemList = new List<int>();
+
         public static void init()
         {
-            string itemJson = "http://ddragon.leagueoflegends.com/cdn/6.20.1/data/en_US/item.json";
+            string itemJson = "http://ddragon.leagueoflegends.com/cdn/6.21.1/data/en_US/item.json";
             string itemsData = Request(itemJson);
             string itemArray = itemsData.Split(new[] { "data" }, StringSplitOptions.None)[1];
             MatchCollection itemIdArray = Regex.Matches(itemArray, "[\"]\\d*[\"][:][{].*?(?=},\"\\d)");
             foreach (FullItem item in from object iItem in itemIdArray select new FullItem(iItem.ToString()))
-                itemList.Add(item);
+                itemList.Add(item.Id, item);
             Console.WriteLine("Finished build init");
             finished = true;
         }
@@ -208,13 +210,22 @@ using EloBuddy; namespace ARAMDetFull
             return FullItem.Goldbase + ((FullItem.From != null)?FullItem.From.Sum(req => getItemsPrice(req)):0);
         }
 
-        public static FullItem getData(int id)
+        public static FullItem getData(int id, bool throwIfNotFound = true)
         {
-            //Console.WriteLine("trying to get data: " + id);
-            var item = itemList.FirstOrDefault(it => it.Id == id);
-            //if(item == null)
-                //Console.WriteLine("cant get data " + id);
-            return item;
+            try
+            {
+                return itemList[id];
+            }
+            catch (Exception)
+            {
+                //At this poiunt need to update builds!
+                failedToFindItemList.Add(id);
+                Console.WriteLine("!!!! Bad itemID: " + id);
+                if (throwIfNotFound)
+                    throw;
+                else
+                    return null;
+            }
         }
 
         public static int itemCount(int id, AIHeroClient hero = null)
@@ -222,11 +233,26 @@ using EloBuddy; namespace ARAMDetFull
             return (hero ?? ObjectManager.Player).InventoryItems.Count(slot => (int)slot.Id == id);
         }
 
-        public static bool gotItem(int id, AIHeroClient hero = null)
+        public static bool gotItem(FullItem item, AIHeroClient hero = null)
         {
-            return (hero ?? ObjectManager.Player).InventoryItems.Any(slot => (int)slot.Id == id);
+            //If item is bad we skip it!
+            if (failedToFindItemList.Contains(item.Id))
+                return true;
+
+            var sameItemList = new List<int>();
+            sameItemList.Add(item.Id);
+            //Check if transform item!
+            if (item.Into != null)
+                foreach (var into in item.Into)
+                {
+                    var intoItem = getData(into, false);
+                    if (intoItem == null || intoItem.Ispurchasable)
+                        continue;
+                    sameItemList.Add(into);
+                }
+            return (hero ?? ObjectManager.Player).InventoryItems.Any(slot => sameItemList.Contains((int)slot.Id));
         }
-        
+
     }
 
     public class Build
@@ -283,7 +309,7 @@ using EloBuddy; namespace ARAMDetFull
 
         public bool gotIt()
         {
-            return primary == null || AutoShopper.gotItem(primary.Id) || (secondary != null && AutoShopper.gotItem(secondary.Id));
+            return primary == null || AutoShopper.gotItem(primary) || (secondary != null && AutoShopper.gotItem(secondary));
         }
 
         public FullItem getBest()
@@ -318,12 +344,17 @@ using EloBuddy; namespace ARAMDetFull
             if (condition == ItemCondition.ENEMY_LOSING)
             {
                 var allTowers = ObjectManager.Get<Obj_AI_Turret>().ToList();
-                if (allTowers.Count(tow => tow.IsDead && tow.IsEnemy) < allTowers.Count(tow => tow.IsDead && tow.IsAlly))
+                var eneTowCount = allTowers.Count(tow => !tow.IsDead && tow.IsEnemy);
+                var allyTowCount = allTowers.Count(tow => !tow.IsDead && tow.IsAlly);
+                if (allyTowCount == eneTowCount)
+                {
+                    return HeroManager.Player.Deaths > HeroManager.Player.ChampionsKilled ? secondary : primary;
+                }
+                if (eneTowCount < allyTowCount)
                     selected = primary;
                 else
                     selected = secondary;
             }
-
 
             return selected;
         }
