@@ -8,10 +8,8 @@ using EloBuddy;
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Lucian.Core.Damage;
     using ReformedAIO.Champions.Lucian.Core.Spells;
 
-    using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Implementations;
 
     internal sealed class WCombo : OrbwalkingChild
@@ -35,7 +33,7 @@ using EloBuddy;
             var target = TargetSelector.GetTarget(wSpell.Spell.Range, TargetSelector.DamageType.Physical);
 
             if (target == null
-                || ObjectManager.Player.Distance(target) <= ObjectManager.Player.AttackRange
+                || ObjectManager.Player.Distance(target) <= ObjectManager.Player.AttackRange + 75
                 || Menu.Item("WMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
             {
                 return;
@@ -49,13 +47,11 @@ using EloBuddy;
             }
         }
 
-        private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private void AfterAttack(AttackableUnit unit, AttackableUnit attackableunit)
         {
-            if (!sender.IsMe
-                || !CheckGuardians()
-                || ObjectManager.Player.HasBuff("LucianPassiveBuff")
-                || !Orbwalking.IsAutoAttack(args.SData.Name)
-                || Menu.Item("WMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
+            if (!CheckGuardians()
+               
+               || Menu.Item("WMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
             {
                 return;
             }
@@ -66,7 +62,7 @@ using EloBuddy;
             {
                 if (Menu.Item("WPred").GetValue<bool>())
                 {
-                   wSpell.Spell.Cast(target.Position);
+                    wSpell.Spell.Cast(target.Position);
                 }
                 else
                 {
@@ -74,7 +70,7 @@ using EloBuddy;
 
                     if (wPred.Hitchance > HitChance.Medium)
                     {
-                       wSpell.Spell.Cast(wPred.CastPosition);
+                        wSpell.Spell.Cast(wPred.CastPosition);
                     }
                 }
             }
@@ -92,13 +88,13 @@ using EloBuddy;
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             Game.OnUpdate -= OnUpdate;
-            Obj_AI_Base.OnSpellCast -= OnSpellCast;
+            Orbwalking.AfterAttack -= AfterAttack;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             Game.OnUpdate += OnUpdate;
-            Obj_AI_Base.OnSpellCast += OnSpellCast;
+            Orbwalking.AfterAttack += AfterAttack;
         }
     }
 }

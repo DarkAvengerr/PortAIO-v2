@@ -9,7 +9,6 @@ using EloBuddy;
 
     using Core.Spells;
 
-    using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Implementations;
 
     internal sealed class EJungleClear : OrbwalkingChild
@@ -23,17 +22,14 @@ using EloBuddy;
             this.eSpell = eSpell;
         }
 
-        private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private void AfterAttack(AttackableUnit unit, AttackableUnit attackableunit)
         {
             if (!CheckGuardians())
             {
                 return;
             }
 
-            if (!sender.IsMe 
-                || ObjectManager.Player.HasBuff("LucianPassiveBuff")
-                || !Orbwalking.IsAutoAttack(args.SData.Name) 
-                || !eSpell.Spell.IsReady()
+            if (!eSpell.Spell.IsReady()
                 || Menu.Item("EMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
             {
                 return;
@@ -47,7 +43,7 @@ using EloBuddy;
                     MinionTypes.All,
                     MinionTeam.Neutral).FirstOrDefault();
 
-            if (mob == null || mob.Health < ObjectManager.Player.GetAutoAttackDamage(mob))
+            if (mob == null)
             {
                 return;
             }
@@ -66,12 +62,12 @@ using EloBuddy;
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Obj_AI_Base.OnSpellCast -= OnSpellCast;
+             Orbwalking.AfterAttack -= AfterAttack;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Obj_AI_Base.OnSpellCast += OnSpellCast;
+            Orbwalking.AfterAttack += AfterAttack;
         }
     }
 }

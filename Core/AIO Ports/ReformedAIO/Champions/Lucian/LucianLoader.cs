@@ -75,36 +75,36 @@ using EloBuddy;
 
             comboParent.Add(new List<Base>
                                 {
-                                    new QCombo(qSpell, q2Spell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.E) { Negated = true}).Guardian(new SpellMustBeReady(SpellSlot.Q)),
-                                    new WCombo(wSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q) {Negated = true}).Guardian(new SpellMustBeReady(SpellSlot.W)),
-                                    new ECombo(eSpell, dmg).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.E)),
-                                    new RCombo(rSpell, dmg).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.R)),
+                                    new QCombo(qSpell, q2Spell).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") {Negated = true}).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.E) { Negated = true}).Guardian(new SpellMustBeReady(SpellSlot.Q)),
+                                    new WCombo(wSpell).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") {Negated = true}).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q) {Negated = true}).Guardian(new SpellMustBeReady(SpellSlot.W)),
+                                    new ECombo(eSpell, dmg).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") {Negated = true}).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.E)),
+                                    new RCombo(rSpell, dmg).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") {Negated = true}).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.R)),
                                  });
 
             harassParent.Add(new List<Base>
                                  {
-                                    new QHarass(qSpell, q2Spell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q)),
-                                    new WHarass(wSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q) {Negated = true}).Guardian(new SpellMustBeReady(SpellSlot.W)),
-                                    new EHarass(eSpell, dmg).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.E)),
+                                    new QHarass(qSpell, q2Spell).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") {Negated = true}).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q)),
+                                    new WHarass(wSpell).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") {Negated = true}).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q) {Negated = true}).Guardian(new SpellMustBeReady(SpellSlot.W)),
+                                    new EHarass(eSpell, dmg).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") {Negated = true}).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.E)),
                                  });
 
             laneParent.Add(new List<Base>
                                {
-                                    new QLaneClear(qSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q)),
-                                    new WLaneClear(wSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.W)),
-                                    new ELaneClear(eSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.E)),
+                                    new QLaneClear(qSpell).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") {Negated = true}).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q)),
+                                    new WLaneClear(wSpell).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") {Negated = true}).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.W)).Guardian(new SpellMustBeReady(SpellSlot.E) {Negated = true}),
+                                    new ELaneClear(eSpell).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") {Negated = true}).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.E)),
                                });
 
             jungleParent.Add(new List<Base>
                                  {
-                                     new QJungleClear(qSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.E) {Negated = true}),
-                                     new WJungleClear(wSpell).Guardian(new PlayerMustNotBeWindingUp()),
-                                     new EJungleClear(eSpell).Guardian(new PlayerMustNotBeWindingUp())
+                                     new QJungleClear(qSpell).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") {Negated = true}).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.E) {Negated = true}),
+                                     new WJungleClear(wSpell).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") {Negated = true}).Guardian(new PlayerMustNotBeWindingUp()),
+                                     new EJungleClear(eSpell).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") {Negated = true}).Guardian(new PlayerMustNotBeWindingUp())
                                  });
 
             killstealParnet.Add(new List<Base>
                                     {
-                                        new Q(qSpell, q2Spell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q)),
+                                        new Q(qSpell, q2Spell).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") {Negated = true}).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q)),
                                         new W(wSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.W)),
                                         new R(rSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.R))
                                     });

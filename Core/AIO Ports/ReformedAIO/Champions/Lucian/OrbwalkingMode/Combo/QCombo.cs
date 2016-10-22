@@ -9,8 +9,7 @@ using EloBuddy;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Lucian.Core.Spells;
-   
-    using RethoughtLib.FeatureSystem.Abstract_Classes;
+
     using RethoughtLib.FeatureSystem.Implementations;
 
     internal sealed class QCombo : OrbwalkingChild
@@ -51,12 +50,9 @@ using EloBuddy;
             qSpell.Spell.CastOnUnit(m);
         }
 
-        private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private void AfterAttack(AttackableUnit unit, AttackableUnit attackableunit)
         {
-            if (!sender.IsMe 
-                || ObjectManager.Player.HasBuff("LucianPassiveBuff")
-                || !Orbwalking.IsAutoAttack(args.SData.Name)  
-                || Menu.Item("QMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
+            if (Menu.Item("QMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
                 || !CheckGuardians())
             {
                 return;
@@ -81,13 +77,13 @@ using EloBuddy;
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             Game.OnUpdate -= OnUpdate;
-            Obj_AI_Base.OnSpellCast -= OnSpellCast;
+            Orbwalking.AfterAttack -= AfterAttack;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             Game.OnUpdate += OnUpdate;
-            Obj_AI_Base.OnSpellCast += OnSpellCast;
+            Orbwalking.AfterAttack += AfterAttack;
         }
     }
 }

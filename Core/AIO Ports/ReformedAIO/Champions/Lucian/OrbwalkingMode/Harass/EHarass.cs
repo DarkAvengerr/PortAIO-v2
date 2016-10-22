@@ -27,12 +27,9 @@ using EloBuddy;
             this.damage = damage;
         }
 
-        private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private void AfterAttack(AttackableUnit unit, AttackableUnit attackableunit)
         {
-            if (!sender.IsMe
-                || !CheckGuardians()
-                || ObjectManager.Player.HasBuff("LucianPassiveBuff")
-                || !Orbwalking.IsAutoAttack(args.SData.Name)
+            if (!CheckGuardians()
                 || Menu.Item("EMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
             {
                 return;
@@ -80,12 +77,12 @@ using EloBuddy;
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Obj_AI_Base.OnSpellCast -= OnSpellCast;
+             Orbwalking.AfterAttack -= AfterAttack;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Obj_AI_Base.OnSpellCast += OnSpellCast;
+            Orbwalking.AfterAttack += AfterAttack;
         }
     }
 }
