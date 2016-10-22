@@ -1585,6 +1585,29 @@ namespace Evade
 
             #endregion Irelia
 
+            #region Ivern
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Ivern",
+                    SpellName = "IvernQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillShotType.SkillshotMissileLine,
+                    Delay = 250,
+                    Range = 1100,
+                    Radius = 65,
+                    MissileSpeed = 1300,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "IvernQ",
+                    CollisionObjects = new[] { CollisionObjectTypes.YasuoWall, CollisionObjectTypes.Minion, CollisionObjectTypes.Champions, },
+                });
+
+            #endregion Ivern
+
             #region Janna
 
             Spells.Add(
