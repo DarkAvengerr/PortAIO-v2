@@ -1,10 +1,12 @@
-﻿namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Combo
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Combo
 {
     using System;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-    using EloBuddy;
+
     using ReformedAIO.Champions.Caitlyn.Logic;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;

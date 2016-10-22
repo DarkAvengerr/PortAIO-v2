@@ -1,11 +1,12 @@
-﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
 {
     using System;
     using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-    using EloBuddy;
 
     using ReformedAIO.Champions.Lucian.Core.Spells;
 

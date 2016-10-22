@@ -1,10 +1,11 @@
-﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
 {
     using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-    using EloBuddy;
 
     using ReformedAIO.Champions.Lucian.Core.Spells;
 

@@ -1,11 +1,12 @@
-﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
 {
     using System;
     using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-    using EloBuddy;
 
     using ReformedAIO.Champions.Lucian.Core.Damage;
     using ReformedAIO.Champions.Lucian.Core.Spells;

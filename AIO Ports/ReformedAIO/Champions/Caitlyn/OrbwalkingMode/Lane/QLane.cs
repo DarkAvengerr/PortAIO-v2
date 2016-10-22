@@ -1,11 +1,13 @@
-﻿namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Lane
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Lane
 {
     using System;
     using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-    using EloBuddy;
+
     using ReformedAIO.Champions.Caitlyn.Logic;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;

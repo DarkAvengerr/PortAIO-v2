@@ -1,11 +1,13 @@
-﻿namespace ReformedAIO.Champions.Caitlyn
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Caitlyn
 {
     using System.Collections.Generic;
     using System.Drawing;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-    using EloBuddy;
+
     using ReformedAIO.Champions.Caitlyn.Drawings;
     using ReformedAIO.Champions.Caitlyn.Killsteal;
     using ReformedAIO.Champions.Caitlyn.Logic;

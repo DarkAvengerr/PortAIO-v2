@@ -1,11 +1,13 @@
-﻿namespace ReformedAIO.Champions.Caitlyn.Killsteal
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Caitlyn.Killsteal
 {
     using System;
 
     using LeagueSharp;
     using LeagueSharp.Common;
     using LeagueSharp.SDK.Utils;
-    using EloBuddy;
+
     using ReformedAIO.Champions.Caitlyn.Logic;
 
     using RethoughtLib.FeatureSystem.Implementations;

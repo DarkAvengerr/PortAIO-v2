@@ -1,10 +1,12 @@
-﻿namespace ReformedAIO.Champions.Lucian.Core.Spells
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.Core.Spells
 {
     using System;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-    using EloBuddy;
+
     using RethoughtLib.FeatureSystem.Implementations;
     using RethoughtLib.FeatureSystem.Switches;
 

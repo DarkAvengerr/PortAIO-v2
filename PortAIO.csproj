@@ -477,10 +477,8 @@
     <Compile Include="AIO Ports\ReformedAIO\Champions\Bootstrap.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Caitlyn\CaitlynLoader.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Caitlyn\Drawings\DmgDraw.cs" />
-    <Compile Include="AIO Ports\ReformedAIO\Champions\Caitlyn\Drawings\EDraw.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Caitlyn\Drawings\QDraw.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Caitlyn\Drawings\RDraw.cs" />
-    <Compile Include="AIO Ports\ReformedAIO\Champions\Caitlyn\Drawings\WDraw.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Caitlyn\Killsteal\QKillsteal.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Caitlyn\Killsteal\RKillsteal.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Caitlyn\Logic\EwqrLogic.cs" />
@@ -571,10 +569,8 @@
     <Compile Include="AIO Ports\ReformedAIO\Champions\Lucian\Core\Spells\SpellParent\SpellParent.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Lucian\Core\Spells\WSpell.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Lucian\Drawings\DmgDraw.cs" />
-    <Compile Include="AIO Ports\ReformedAIO\Champions\Lucian\Drawings\QDraw.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Lucian\Drawings\RDraw.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Lucian\Drawings\WDraw.cs" />
-    <Compile Include="AIO Ports\ReformedAIO\Champions\Lucian\Logic\Damage\LucDamage.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Lucian\LucianLoader.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Lucian\OrbwalkingMode\Combo\ECombo.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Lucian\OrbwalkingMode\Combo\QCombo.cs" />
@@ -589,7 +585,6 @@
     <Compile Include="AIO Ports\ReformedAIO\Champions\Lucian\OrbwalkingMode\LaneClear\ELaneClear.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Lucian\OrbwalkingMode\LaneClear\QLaneClear.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Lucian\OrbwalkingMode\LaneClear\WLaneClear.cs" />
-    <Compile Include="AIO Ports\ReformedAIO\Champions\Lucian\Perma Active\AntiGapcloser\GapcloseFastAsFuckBOi.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Lucian\Perma Active\Killsteal\Q.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Lucian\Perma Active\Killsteal\R.cs" />
     <Compile Include="AIO Ports\ReformedAIO\Champions\Lucian\Perma Active\Killsteal\W.cs" />
