@@ -41,6 +41,8 @@ using EloBuddy;
                 if (Spells.E.IsReady() && MenuConfig.LaneE)
                 {
                     Spells.E.Cast(m);
+
+                    LeagueSharp.Common.Utility.DelayAction.Add(10, Usables.CastHydra);
                 }
 
                 if (!MenuConfig.laneQFast)

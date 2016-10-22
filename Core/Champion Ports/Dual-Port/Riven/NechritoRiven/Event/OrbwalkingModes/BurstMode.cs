@@ -19,27 +19,25 @@ using EloBuddy;
 
         public static void Burst()
         {
+            var selectedTarget = TargetSelector.GetSelectedTarget();
+
             if (Spells.Flash.IsReady()
                 && Spells.R.IsReady()
                 && Spells.W.IsReady()
                 && MenuConfig.AlwaysF)
             {
-                var target = TargetSelector.GetSelectedTarget();
-
-                if (target == null
-                    || !target.IsValidTarget(425 + Spells.W.Range)
-                    || target.IsInvulnerable
-                    || Player.Distance(target.Position) < 540)
+                if (selectedTarget == null 
+                    || !selectedTarget.IsValidTarget(410 + Spells.W.Range)
+                    || Player.Distance(selectedTarget.Position) < 400)
                 {
                     return;
                 }
 
                 Usables.CastYoumoo();
 
-                Spells.E.Cast(target.Position);
+                Spells.E.Cast(selectedTarget.Position);
                 Spells.R.Cast();
-                Spells.W.Cast();
-                LeagueSharp.Common.Utility.DelayAction.Add(10, () => Player.Spellbook.CastSpell(Spells.Flash, target.Position));
+                FlashW();
             }
             else
             {
@@ -47,9 +45,12 @@ using EloBuddy;
 
                 if (!target.IsValidTarget(Player.AttackRange + 360) || target == null) return;
 
-                if (Spells.R.IsReady() && Spells.R.Instance.Name == IsSecondR)
+                if (Spells.R.IsReady() && Spells.R.Instance.Name == IsSecondR && Qstack > 1)
                 {
-                    var pred = Spells.R.GetPrediction(target, true, collisionable: new[] { CollisionableObjects.YasuoWall });
+                    var pred = Spells.R.GetPrediction(
+                        target,
+                        true,
+                        collisionable: new[] { CollisionableObjects.YasuoWall });
 
                     if (pred.Hitchance < HitChance.High)
                     {
@@ -61,20 +62,21 @@ using EloBuddy;
 
                 if (Qstack == 3
                     && target.Distance(Player) >= Player.AttackRange
-                    && target.Distance(Player) <= 600 
+                    && target.Distance(Player) <= 600
                     && Spells.R.IsReady()
-                    && Spells.R.Instance.Name == IsFirstR
-                    && MenuConfig.Q3Wall
+                    && Spells.R.Instance.Name == IsFirstR && MenuConfig.Q3Wall
                     && Spells.E.IsReady())
                 {
-                    var wallPoint = FleeLogic.GetFirstWallPoint(Player.Position, Player.Position.Extend(target.Position, 650));
+                    var wallPoint = FleeLogic.GetFirstWallPoint(
+                        Player.Position,
+                        Player.Position.Extend(target.Position, 650));
 
                     Player.GetPath(wallPoint);
 
-                    if (wallPoint.Distance(Player.Position) > 100)
-                    {
-                        EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, wallPoint);
-                    }
+                    //if (wallPoint.Distance(Player.Position) > 100)
+                    //{
+                    //    EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, wallPoint);
+                    //}
 
                     if (Spells.E.IsReady() && wallPoint.Distance(Player.Position) <= Spells.E.Range)
                     {
@@ -93,28 +95,28 @@ using EloBuddy;
                         Spells.Q.Cast(wallPoint);
                     }
                 }
-               else if (Spells.R.IsReady()
-               && Spells.R.Instance.Name == IsFirstR
-               && Spells.E.IsReady()
-               && Spells.Q.IsReady()
-               && Spells.W.IsReady())
+                else if (Spells.R.IsReady()
+                    && Spells.R.Instance.Name == IsFirstR
+                    && Spells.E.IsReady()
+                    && Spells.Q.IsReady()
+                    && Spells.W.IsReady())
                 {
                     Spells.E.Cast(target.Position);
                     LeagueSharp.Common.Utility.DelayAction.Add(15, () => Spells.R.Cast());
                     LeagueSharp.Common.Utility.DelayAction.Add(140, () => CastW(target));
                     LeagueSharp.Common.Utility.DelayAction.Add(220, () => CastQ(target));
                 }
-               else if (Spells.E.IsReady())
+                else if (Spells.E.IsReady())
                 {
                     Spells.E.Cast(target.Position);
                 }
-               else if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR)
+                else if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR)
                 {
                     Spells.R.Cast();
                 }
-               else if (Spells.W.IsReady() && !target.HasBuff("FioraW"))
+                else if (Spells.W.IsReady() && !target.HasBuff("FioraW"))
                 {
-                   CastW(target);
+                    CastW(target);
                 }
             }
         }

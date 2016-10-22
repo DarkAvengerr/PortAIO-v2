@@ -32,6 +32,8 @@ namespace SharpAI
                 return;
             }
 
+            Chat.Print("SharpAI has loaded!");
+
             Bootstrap.Init();
             r = new System.Random();
 

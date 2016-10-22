@@ -40,6 +40,7 @@ using EloBuddy;
                 {
                     if (Spells.Q.IsReady())
                     {
+                        Usables.CastYoumoo();
                         CastQ(target);
                     }
                 }
@@ -67,19 +68,7 @@ using EloBuddy;
 
                 if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Burst) return;
 
-                if (Spells.R.IsReady() && Spells.R.Instance.Name == IsSecondR)
-                {
-                    var pred = Spells.R.GetPrediction(target);
-
-                    if (pred.Hitchance < HitChance.High)
-                    {
-                        return;
-                    }
-
-                    Spells.R.Cast(pred.CastPosition);
-                }
-
-                else if (Spells.Q.IsReady())
+                if (Spells.Q.IsReady())
                 {
                     CastQ(target);
                 }
@@ -145,14 +134,14 @@ using EloBuddy;
 
             if (nexus != null && nexus.IsValid)
             {
-                CastQ(nexus);
+                Spells.Q.Cast(nexus.Position - 500);
             }
 
             var inhib = args.Target as Obj_BarracksDampener;
 
             if (inhib != null && inhib.IsValid)
             {
-                CastQ(inhib);
+                Spells.Q.Cast(inhib.Position - 250);
             }
 
             var turret = args.Target as Obj_AI_Turret;
@@ -162,7 +151,7 @@ using EloBuddy;
                 return;
             }
 
-           CastQ(turret);
+            Spells.Q.Cast(turret.Position - 250);
         }
 
         #endregion

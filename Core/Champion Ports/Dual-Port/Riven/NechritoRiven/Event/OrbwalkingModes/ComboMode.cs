@@ -35,11 +35,10 @@ using EloBuddy;
                 }
 
                 if ((!MenuConfig.OverKillCheck && Qstack > 1)
-
-                    || (MenuConfig.OverKillCheck 
-                    && !Spells.Q.IsReady()
-                    || Qstack >= 3 
-                    || target.Distance(Player) >= Player.AttackRange))
+                    || MenuConfig.OverKillCheck 
+                    && (target.HealthPercent <= 40 
+                    && !Spells.Q.IsReady() && Qstack == 1
+                    || target.Distance(Player) >= Player.AttackRange + 310))
                 {
                     Spells.R.Cast(pred.CastPosition);
                 }
@@ -55,24 +54,27 @@ using EloBuddy;
 
                 Player.GetPath(wallPoint);
 
-                if (wallPoint.Distance(Player.Position) > 100)
+                //if (wallPoint.Distance(Player.Position) > 100)
+                //{
+                //    EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, wallPoint);
+                //}
+
+                if (!Spells.E.IsReady() || wallPoint.Distance(Player.Position) > Spells.E.Range || !wallPoint.IsValid())
                 {
-                    EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, wallPoint);
+                    return;
                 }
 
-                if (Spells.E.IsReady() && wallPoint.Distance(Player.Position) <= Spells.E.Range)
+
+                Spells.E.Cast(wallPoint);
+
+                if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR)
                 {
-                    Spells.E.Cast(wallPoint);
-
-                    if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR)
-                    {
-                        Spells.R.Cast();
-                    }
-
-                    LeagueSharp.Common.Utility.DelayAction.Add(190, () => Spells.Q.Cast(wallPoint));
+                    Spells.R.Cast();
                 }
 
-               else if (wallPoint.Distance(Player.Position) <= 100)
+                LeagueSharp.Common.Utility.DelayAction.Add(190, () => Spells.Q.Cast(wallPoint));
+                
+                if (wallPoint.Distance(Player.Position) <= 100)
                 {
                     Spells.Q.Cast(wallPoint);
                 }

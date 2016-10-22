@@ -136,12 +136,12 @@ using EloBuddy;
             config.AddSubMenu(orbwalker);
 
             var animation = new Menu("Animations", "Animation");
-            animation.AddItem(new MenuItem("QD", "Q1 Delay").SetValue(new Slider(230, 230, 350)));
-            animation.AddItem(new MenuItem("Q2D", "Q2 Delay").SetValue(new Slider(230, 230, 350)));
-            animation.AddItem(new MenuItem("Q3D", "Q3 Delay").SetValue(new Slider(360, 360, 400)));
+            animation.AddItem(new MenuItem("QD", "Q1 Delay").SetValue(new Slider(230, 230, 340)));
+            animation.AddItem(new MenuItem("Q2D", "Q2 Delay").SetValue(new Slider(230, 230, 340)));
+            animation.AddItem(new MenuItem("Q3D", "Q3 Delay").SetValue(new Slider(300, 300, 475)));
             animation.AddItem(new MenuItem("CancelPing", "Include Ping").SetValue(true));
             animation.AddItem(new MenuItem("animSemi", "Semi Manual").SetValue(true));
-            animation.AddItem(new MenuItem("EmoteList", "Emotes").SetValue(new StringList(new[] { "Laugh", "Taunt", "Joke", "Dance" }, 3)));
+            animation.AddItem(new MenuItem("EmoteList", "Emotes").SetValue(new StringList(new[] { "Laugh", "Taunt", "Joke", "Dance", "None" }, 3)));
             config.AddSubMenu(animation);
 
             var combo = new Menu("Combo", "Combo");
@@ -200,13 +200,27 @@ using EloBuddy;
             skin.AddItem(new MenuItem("UseSkin", "Use SkinChanger").SetValue(false)).SetTooltip("Toggles Skinchanger");
             skin.AddItem(new MenuItem("SkinList", "Skin").SetValue(new StringList(new[]
                             {
-                                "Default", "Redeemed", "Crimson Elite", "Battle Bunny", "Championship", "Dragonblade",
-                                "Arcade", "Championship 2016"
+                "Default",
+                "Redeemed",
+                "Crimson Elite",
+                "Battle Bunny",
+                "Championship",
+                "Dragonblade",
+                "Arcade",
+                "Championship 2016",
+                "Chroma 1",
+                "Chroma 2",
+                "Chroma 3",
+                "Chroma 4",
+                "Chroma 5",
+                "Chroma 6",
+                "Chroma 7",
+                "Chroma 8"
                             })));
 
             config.AddSubMenu(skin);
 
-            config.AddItem(new MenuItem("version", "Version: 6.19.2").SetFontStyle(FontStyle.Bold, Color.Cyan));
+            config.AddItem(new MenuItem("version", "Version: 6.21").SetFontStyle(FontStyle.Bold, Color.Cyan));
 
             config.AddItem(new MenuItem("paypal", "Paypal: nechrito@live.se").SetFontStyle(FontStyle.Regular, Color.Cyan));
 

@@ -17,7 +17,7 @@ using EloBuddy;
 
         public static void OnProcessSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsEnemy)
+            if (!sender.IsEnemy || !sender.IsValidTarget(Spells.W.Range + 65) || !InRange(sender))
             {
                 return;
             }
@@ -30,7 +30,7 @@ using EloBuddy;
                 }
             }
 
-            if (!WAntiSpell.Contains(args.SData.Name) || !Spells.W.IsReady() || !InRange(sender))
+            if (!WAntiSpell.Contains(args.SData.Name) || !Spells.W.IsReady())
             {
                 return;
             }

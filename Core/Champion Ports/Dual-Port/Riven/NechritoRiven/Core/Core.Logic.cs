@@ -10,6 +10,8 @@ using EloBuddy;
     using LeagueSharp;
     using LeagueSharp.Common;
 
+    using NechritoRiven.Menus;
+
     #endregion
 
     /// <summary>
@@ -24,8 +26,6 @@ using EloBuddy;
         private static bool canQ;
 
         private static bool canW;
-
-        private static bool canItem;
 
         /// <summary>
         ///     The e anti spell.
@@ -96,8 +96,8 @@ using EloBuddy;
         public static bool InRange(AttackableUnit x)
         {
             return ObjectManager.Player.HasBuff("RivenFengShuiEngine")
-            ? Player.Distance(x) <= 295
-            : Player.Distance(x) <= 235;
+            ? Player.Distance(x) <= 330
+            : Player.Distance(x) <= 265;
         }
         #endregion
 
@@ -112,10 +112,10 @@ using EloBuddy;
 
             if (canQ && Spells.Q.IsReady())
             {
-                if (canItem && Items.CanUseItem(Item) && Item != 0)
+                if (Items.CanUseItem(Item) && Item != 0)
                 {
                     Items.UseItem(Item);
-                    LeagueSharp.Common.Utility.DelayAction.Add(2, () => Spells.Q.Cast(Unit.Position));
+                    LeagueSharp.Common.Utility.DelayAction.Add(1, () => Spells.Q.Cast(Unit.Position));
                 }
                 else
                 {
@@ -123,12 +123,12 @@ using EloBuddy;
                 }
             }
 
-            if (canW && Player.Distance(Unit) <= Spells.W.Range)
+            if (canW)
             {
-                if (canItem && Items.CanUseItem(Item) && Item != 0)
+                if (Items.CanUseItem(Item) && Item != 0)
                 {
                     Items.UseItem(Item);
-                    LeagueSharp.Common.Utility.DelayAction.Add(3, () => Spells.W.Cast());
+                    LeagueSharp.Common.Utility.DelayAction.Add(1, () => Spells.W.Cast());
                 }
                 else
                 {
@@ -148,9 +148,22 @@ using EloBuddy;
             canQ = true;
         }
 
+        public static void CastE(AttackableUnit x)
+        {
+            Unit = x;
+        }
+
+        public static void FlashW()
+        {
+            var target = TargetSelector.GetSelectedTarget();
+
+            Spells.W.Cast();
+            LeagueSharp.Common.Utility.DelayAction.Add(10, () => Player.Spellbook.CastSpell(Spells.Flash, target.Position));
+        }
+
         public static void CastW(Obj_AI_Base x)
         {
-            canW = Spells.W.IsReady();
+            canW = Spells.W.IsReady() && InRange(x);
             LeagueSharp.Common.Utility.DelayAction.Add(500, () => canW = false);
         }
 
@@ -184,15 +197,6 @@ using EloBuddy;
                 R1 = false;
             }
         }
-
-        public void UseItem()
-        {
-            if (Items.CanUseItem(Item) && Item != 0)
-            {
-                canItem = true;
-            }
-        }
-
         #endregion
     }
 }

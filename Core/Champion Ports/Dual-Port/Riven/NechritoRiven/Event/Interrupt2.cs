@@ -19,7 +19,7 @@ using EloBuddy;
 
         public static void OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (!MenuConfig.InterruptMenu || !sender.IsEnemy || !sender.IsValidTarget(Spells.W.Range + sender.BoundingRadius))
+            if (!MenuConfig.InterruptMenu || !sender.IsEnemy || !sender.IsValidTarget(Spells.W.Range))
             {
                 return;
             }

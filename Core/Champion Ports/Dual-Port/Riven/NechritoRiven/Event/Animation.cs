@@ -5,6 +5,7 @@ using EloBuddy;
     #region
 
     using System;
+    using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -27,7 +28,12 @@ using EloBuddy;
                 return;
             }
 
-            Console.WriteLine((Ping() + MenuConfig.Qd - AtkSpeed()).ToString());
+            var target = TargetSelector.GetTarget(ObjectManager.Player.AttackRange + 50, TargetSelector.DamageType.Physical);
+
+            var mob = MinionManager.GetMinions(
+              ObjectManager.Player.AttackRange + 50,
+              MinionTypes.All,
+              MinionTeam.Neutral).FirstOrDefault();
 
             switch (args.Animation)
             {
@@ -36,7 +42,16 @@ using EloBuddy;
                     Qstack = 2;
                     if (SafeReset())
                     {
-                        LeagueSharp.Common.Utility.DelayAction.Add(Ping() + MenuConfig.Qd - AtkSpeed(), Reset);
+                        if ((target != null && target.IsMoving) || (mob != null && mob.IsMoving))
+                        {
+                            LeagueSharp.Common.Utility.DelayAction.Add((int)(MenuConfig.Qd * 1.125), Reset);
+                            Console.WriteLine("Q1 Slow Delay: " + (MenuConfig.Qd * 1.125));
+                        }
+                        else
+                        {
+                            LeagueSharp.Common.Utility.DelayAction.Add(MenuConfig.Qd, Reset);
+                            Console.WriteLine("Q1 Fast Delay: " + MenuConfig.Qd);
+                        }
                     }
 
                     break;
@@ -45,7 +60,16 @@ using EloBuddy;
                     Qstack = 3;
                     if (SafeReset())
                     {
-                        LeagueSharp.Common.Utility.DelayAction.Add(Ping() + MenuConfig.Q2D - AtkSpeed(), Reset);
+                        if ((target != null && target.IsMoving) || (mob != null && mob.IsMoving))
+                        {
+                            LeagueSharp.Common.Utility.DelayAction.Add((int)(MenuConfig.Q2D * 1.125), Reset);
+                            Console.WriteLine("Q2 Slow Delay: " + MenuConfig.Q2D * 1.125);
+                        }
+                        else
+                        {
+                            LeagueSharp.Common.Utility.DelayAction.Add(MenuConfig.Q2D, Reset);
+                            Console.WriteLine("Q2 Fast Delay: " + MenuConfig.Q2D);
+                        }
                     }
 
                     break;
@@ -54,7 +78,19 @@ using EloBuddy;
                     Qstack = 1;
                     if (SafeReset())
                     {
-                        LeagueSharp.Common.Utility.DelayAction.Add(Ping() + MenuConfig.Qld - AtkSpeed(), Reset);
+                        if ((target != null && target.IsMoving) || (mob != null && mob.IsMoving))
+                        {
+                            LeagueSharp.Common.Utility.DelayAction.Add((int)(MenuConfig.Qld * 1.125), Reset);
+                            Console.WriteLine("Q3 Slow Delay: " + MenuConfig.Qld * 1.125);
+                            Console.WriteLine(">----END----<");
+
+                        }
+                        else
+                        {
+                            LeagueSharp.Common.Utility.DelayAction.Add(MenuConfig.Qld, Reset);
+                            Console.WriteLine("Q3 Fast Delay: " + MenuConfig.Qld);
+                            Console.WriteLine(">----END----<");
+                        }
                     }
 
                     break;
@@ -67,6 +103,11 @@ using EloBuddy;
 
         private static void Emotes()
         {
+            if (ObjectManager.Player.HasBuffOfType(BuffType.Stun) || ObjectManager.Player.HasBuffOfType(BuffType.Snare))
+            {
+                return;
+            }
+
             switch (MenuConfig.EmoteList.SelectedIndex)
             {
                 case 0:
@@ -81,13 +122,12 @@ using EloBuddy;
                 case 3:
                     EloBuddy.Player.DoEmote(Emote.Dance);
                     break;
+                case 4:
+                    break;
             }
         }
 
-        private static int AtkSpeed()
-        {
-            return (int)((Player.Level + Player.AttackSpeedMod) * 0.625);
-        }
+        private static int AtkSpeed => (int)(1400 / Player.AttackSpeedMod * 3.75);
 
         private static int Ping()
         {
@@ -95,7 +135,7 @@ using EloBuddy;
 
             if (!MenuConfig.CancelPing)
             {
-                ping = 5;
+                ping = 0;
             }
             else
             {
@@ -108,15 +148,13 @@ using EloBuddy;
         private static void Reset()
         {
             Emotes();
-            Orbwalking.LastAaTick = 0;
+            Orbwalking.ResetAutoAttackTimer();
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
         }
 
         private static bool SafeReset()
         {
-            return Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None
-                || Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Flee
-                || MenuConfig.AnimSemi;
+            return Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None || MenuConfig.AnimSemi;
         }
 
         #endregion
