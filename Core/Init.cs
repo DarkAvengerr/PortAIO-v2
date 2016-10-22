@@ -374,7 +374,7 @@ namespace PortAIO
                             SharpShooter.Program.Game_OnGameLoad();
                             break;
                         case 4: // SurvivorSeries
-                            SurvivorSeries.SurviorSeries.Main();
+                            SurvivorAshe.Program.Game_OnGameLoad();
                             break;
                         case 5: // xSalice
                             xSaliceResurrected_Rework.Program.LoadReligion();
@@ -417,6 +417,9 @@ namespace PortAIO
                             break;
                         case 18: // Flowers' ADC Series
                             Flowers_ADC_Series.Program.Main();
+                            break;
+                        case 19: //SurvivorSeries AIO
+                            SurvivorSeriesAIO.Program.Main();
                             break;
                     }
                     break;
@@ -555,7 +558,7 @@ namespace PortAIO
                             OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
                             break;
                         case 3: // SurvivorSeries
-                            SurvivorSeries.SurviorSeries.Main();
+                            SurvivorBrand.Program.Game_OnGameLoad();
                             break;
                         case 4: // yol0 Brand
                             yol0Brand.Program.Game_OnGameLoad();
@@ -574,6 +577,9 @@ namespace PortAIO
                             break;
                         case 9: // SNBrand
                             SNBrand.Program.Main();
+                            break;
+                        case 10: //SurvivorSeries AIO
+                            SurvivorSeriesAIO.Program.Main();
                             break;
                     }
                     break;
@@ -1312,8 +1318,11 @@ namespace PortAIO
                         case 7: // SluttyIrelia
                             Slutty_Irelia.Program.Main();
                             break;
-                        case 8: // SurvivorSeries Irelia
+                        case 8: // SurvivorSeries
                             SVIrelia.Program.Main();
+                            break;
+                        case 9: //SurvivorSeries AIO
+                            SurvivorSeriesAIO.Program.Main();
                             break;
                     }
                     break;
@@ -2043,13 +2052,16 @@ namespace PortAIO
                             OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
                             break;
                         case 1: // SurvivorSeries
-                            SurvivorSeries.SurviorSeries.Main();
+                            SurvivorMalzahar.Program.Game_OnGameLoad();
                             break;
                         case 2: // M1D 0R F33D
                             Mid_or_Feed.Program.Main();
                             break;
                         case 3: // NoobMalzahar
                             NoobMalzahar.Program.Main();
+                            break;
+                        case 4: //SurvivorSeries AIO
+                            SurvivorSeriesAIO.Program.Main();
                             break;
                     }
                     break;
@@ -2536,7 +2548,7 @@ namespace PortAIO
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
                         case 0: // Survivor Ryze
-                            SurvivorSeries.SurviorSeries.Main();
+                            SurvivorRyze.Program.Game_OnGameLoad();
                             break;
                         case 1: // BrianSharp
                             BrianSharp.Program.Main();
@@ -2585,6 +2597,9 @@ namespace PortAIO
                             break;
                         case 16: // sAIO
                             sAIO.Program.Main();
+                            break;
+                        case 17: //SurvivorSeries AIO
+                            SurvivorSeriesAIO.Program.Main();
                             break;
                     }
                     break;
