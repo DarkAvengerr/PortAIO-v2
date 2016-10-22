@@ -12,7 +12,7 @@ I'd like to welcome everyone to PortAIO v2, a complete reboot of PortAIO. We too
 
 ## - How to report Bugs/Suggestions/Requests/Comments
 1. Make a github account
-2. Go to https://github.com/berbb/PortAIO-Loader/issues
+2. Go to https://github.com/berbb/PortAIO-v2/issues
 3. Make your issue.
 
 ---
