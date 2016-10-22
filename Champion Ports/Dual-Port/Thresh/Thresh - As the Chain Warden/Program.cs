@@ -7,7 +7,7 @@ using LeagueSharp.Common;
 
 using EloBuddy;
 using LeagueSharp.Common;
-namespace ThreshAsurvil
+namespace ThreshAsTheChainWarden
 {
     class Program
     {
@@ -15,5 +15,7 @@ namespace ThreshAsurvil
         {
             Thresh.OnLoad();
         }
+
+
     }
 }

@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace ThreshAsurvil {
+ namespace ThreshAsTheChainWarden
+{
 	public static class Utill {
 
 		#region 一组调试工具

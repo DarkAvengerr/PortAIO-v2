@@ -3000,7 +3000,7 @@ namespace PortAIO
                             Slutty_Thresh.Program.Main();
                             break;
                         case 7: // Thresh as the Chain Warden
-                            Thresh___The_Chain_Warden.Program.Game_OnGameLoad();
+                            ThreshAsTheChainWarden.Program.Main();
                             break;
                         case 8: // Thresh - Catch Fish
                             ThreshCatchFish.Program.Main();

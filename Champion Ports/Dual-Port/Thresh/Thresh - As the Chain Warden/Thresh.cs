@@ -12,7 +12,7 @@ using Orbwalking = SebbyLib.Orbwalking;
 
 using EloBuddy;
 using LeagueSharp.Common;
-namespace ThreshAsurvil
+namespace ThreshAsTheChainWarden
 {
     class Thresh
     {
@@ -382,17 +382,35 @@ namespace ThreshAsurvil
 
         private static void AutoPushTower()
         {
+            var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
+
+            if (target == null) return;
+
+            var tower = target.GetMostCloseTower();
+            if (tower != null && tower.IsAlly)
+            {
+                if (Player.IsInTurret(tower) && target.Distance(tower) < Q.Range / 2 && SpellQ.GetState() == QState.ThreshQ)
+                {
+                    SpellQ.CastQ1(target);
+                }
+
+                if (tower != null && tower.IsAlly && E.CanCast(target) && target.Distance(tower) < tower.AttackRange + E.Range)
+                {
+                    if (target.Distance(tower) < Player.Distance(tower))
+                    {
+                        E.Cast(target);
+                    }
+                    else
+                    {
+                        E.CastToReverse(target);
+                    }
+                }
+            }
         }
 
         private static AIHeroClient GetTarget()
         {
-
-
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical, false, Qignored);
-            var adc = GetAdc();
-            if (adc != null && Config.Item("辅助目标").GetValue<bool>())
-            {
-            }
             DrawTarget = target;
             return target;
         }

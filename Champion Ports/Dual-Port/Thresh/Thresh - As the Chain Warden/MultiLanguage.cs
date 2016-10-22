@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace ThreshAsurvil
+ namespace ThreshAsTheChainWarden
 {
 	public class MultiLanguage {
 		public static Dictionary<string, string> Chinese { get; private set; } = new Dictionary<string, string> {
