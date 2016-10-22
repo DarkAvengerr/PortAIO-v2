@@ -2,7 +2,7 @@
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DZSQBFWWV9WEN)
 
-- https://github.com/berbb/PortAIO-Loader is the official GitHub.
+- https://github.com/berbb/PortAIO-v2 is the official GitHub.
 - https://discord.gg/0zNgmm6ziPDoOfbZ is the official PortAIO discord channel.
 - https://github.com/berbb/PortAIO-v2/wiki/Installation-Guide is the official PortAIO **installation guide**
 
