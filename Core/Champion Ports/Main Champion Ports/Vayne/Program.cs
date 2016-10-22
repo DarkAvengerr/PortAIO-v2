@@ -10,6 +10,7 @@ using EloBuddy;
     class Program
     {
         private static string ChampionName = "Vayne";
+
         public static void Main()
         {
             Game_OnGameLoad();

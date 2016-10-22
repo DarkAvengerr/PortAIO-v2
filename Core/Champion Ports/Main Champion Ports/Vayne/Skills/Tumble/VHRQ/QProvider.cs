@@ -783,7 +783,6 @@ namespace VayneHunter_Reborn.Skills.Tumble.VHRQ
 
             initialized = true;
 
-
             Player = ObjectManager.Player;
 
             HeroesList.AddRange(ObjectManager.Get<AIHeroClient>());

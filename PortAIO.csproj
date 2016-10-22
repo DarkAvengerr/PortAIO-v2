@@ -2369,7 +2369,7 @@
     <Compile Include="Core\Champion Ports\Main Champion Ports\Vayne\External\ProfileSelector\Values\SliderValue.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Vayne\External\Translation\Languages\Chinese.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Vayne\External\Translation\Languages\English.cs" />
-    <Compile Include="Core\Champion Ports\Main Champion Ports\Vayne\External\Translation\Languages\French.cs" />
+    <Compile Include="Core\Champion Ports\Main Champion Ports\Vayne\External\Translation\Languages\French_Test.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Vayne\External\Translation\Languages\German.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Vayne\External\Translation\Languages\Italian.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Vayne\External\Translation\Languages\IVHRLanguage.cs" />

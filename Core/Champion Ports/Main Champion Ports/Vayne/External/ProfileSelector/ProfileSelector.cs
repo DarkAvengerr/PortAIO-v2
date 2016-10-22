@@ -25,7 +25,7 @@ using EloBuddy;
             {
                 return Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                    "LS" + Environment.UserName.GetHashCode().ToString("X"));
+                    "EloBuddy");
             }
         }
 
@@ -605,7 +605,7 @@ using EloBuddy;
         #endregion
 
         #region Load/Save
-        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static void SaveDefaultProfiles()
         {
             if (!Directory.Exists(@WorkingDir))
@@ -624,17 +624,17 @@ using EloBuddy;
         }
 
 
-        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static void LoadAssociations()
         {
         }
 
-        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static void SaveAssociations()
         {
         }
 
-        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static void LoadCurrentlySelected()
         {
             if (!File.Exists(Path.Combine(WorkingDir, "CS.txt")))
@@ -649,7 +649,7 @@ using EloBuddy;
             CurrentlySelected = text;
         }
 
-        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static void SaveCurrentlySelected()
         {
             if (!Directory.Exists(@WorkingDir))
@@ -664,7 +664,7 @@ using EloBuddy;
         }
 
         //Le Epik fromBehind();
-        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static void Load()
         {
             if (!File.Exists(@WorkingPath))
@@ -683,7 +683,7 @@ using EloBuddy;
         }
 
         //Very l33t such wow doge
-        [SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
+        //[SecurityPermission(SecurityAction.Assert, Unrestricted = true)]
         public static void Save()
         {
             if (!Directory.Exists(@WorkingDir))

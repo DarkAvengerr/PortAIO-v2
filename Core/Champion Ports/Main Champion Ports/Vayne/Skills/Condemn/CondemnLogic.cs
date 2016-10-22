@@ -161,7 +161,7 @@ using EloBuddy;
                     return VHReborn.GetTarget(fromPosition);
                 case 2:
                     //Marksman / Gosu
-                    return Condemn.Methods.Marksman.GetTarget(fromPosition);
+                    return Methods.Marksman.GetTarget(fromPosition);
                 case 3:
                     //Shine#
                     return Shine.GetTarget(fromPosition);

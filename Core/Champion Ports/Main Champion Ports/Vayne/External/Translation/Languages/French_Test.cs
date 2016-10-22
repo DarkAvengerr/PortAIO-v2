@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VayneHunter_Reborn.External.Translation.Languages
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace VayneHunter_Reborn.External.Translation.Languages
 {
     /*
      * French Translation by Koala974
@@ -69,3 +71,4 @@ namespace VayneHunter_Reborn.External.Translation.Languages
         }
     }
 }
+
