@@ -194,14 +194,34 @@ namespace SebbyLib
 
         public static int GetBuffCount(Obj_AI_Base target, string buffName)
         {
-            foreach (var buff in target.Buffs.Where(buff => buff.Name.ToLower() == buffName.ToLower()))
+            if (buffName.Equals("TwitchDeadlyVenom")) // ty finn
             {
-                if (buff.Count == 0)
-                    return 1;
-                else
-                    return buff.Count;
+                var twitchECount = 0;
+
+                for (var i = 1; i < 7; i++)
+                {
+                    if (ObjectManager.Get<Obj_GeneralParticleEmitter>()
+                            .Any(e => e.Position.Distance(target.ServerPosition) <= 55 &&
+                                      e.Name == "twitch_poison_counter_0" + i + ".troy"))
+                    {
+                        twitchECount = i;
+                    }
+                }
+                return twitchECount;
             }
-            return 0;
+
+            int stack = 0;
+            foreach (var targetA in ObjectManager.Get<AIHeroClient>().Where(i => i.IsEnemy && i.IsValidTarget() && i.VisibleOnScreen))
+            {
+                foreach (var buff in target.Buffs)
+                {
+                    if(buff.Name.ToLower().Contains(buffName.ToLower()))
+                    {
+                        stack = target.GetBuffCount(buff.Name);
+                    }
+                }
+            }
+            return stack;
         }
 
         public static int CountEnemyMinions(Obj_AI_Base target, float range)

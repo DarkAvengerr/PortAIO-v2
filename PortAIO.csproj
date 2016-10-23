@@ -4936,6 +4936,7 @@
     <Compile Include="Core\Champion Ports\Dual-Port\Zilean\BlackZilean\Utility\ManaManager.cs" />
     <Compile Include="Core\Champion Ports\Dual-Port\Zilean\BlackZilean\Utility\MenuGenerator.cs" />
     <Compile Include="Core\Champion Ports\Dual-Port\Zilean\BlackZilean\Zilean.cs" />
+    <Compile Include="Core\Utility Ports\ElUtilitySuite\Trackers\LastPositionTracker.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\AIO Ports\OneKeyToWin_AIO_Sebby\Core\Activator.cs" />

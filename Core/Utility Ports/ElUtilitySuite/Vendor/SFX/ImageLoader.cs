@@ -40,7 +40,7 @@ using EloBuddy; namespace ElUtilitySuite.Vendor.SFX
         /// <summary>
         ///     The base directory
         /// </summary>
-        public static string BaseDir = AppDomain.CurrentDomain.BaseDirectory;
+        public static string BaseDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EloBuddy\\";
 
         /// <summary>
         ///     The Cache directory
@@ -133,7 +133,7 @@ using EloBuddy; namespace ElUtilitySuite.Vendor.SFX
                 {
                     Directory.CreateDirectory(CacheDir);
                 }
-                string path = Path.Combine(CacheDir, string.Format("{0}", Game.Version.Substring(0, 19)));
+                string path = Path.Combine(CacheDir, string.Format("{0}", Game.Version));
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
