@@ -4,13 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
 
     using ElVarusRevamped.Enumerations;
     using ElVarusRevamped.Utils;
 
-    using LeagueSharp;
-    using LeagueSharp.Common;
     using EloBuddy;
+    using LeagueSharp.Common;
+
     using SharpDX;
 
     /// <summary>
@@ -68,7 +69,7 @@
         /// <summary>
         ///     Gets the delta T
         /// </summary>
-        internal override float DeltaT => 1.5f;
+        internal override float DeltaT => 1.2f;
 
         /// <summary>
         ///     Gets the spellname.
@@ -108,7 +109,7 @@
                     {
                         if (MyMenu.RootMenu.Item("comboqalways").IsActive()
                             || Misc.QIsKillable(target, Misc.GetQCollisionsCount(target, this.SpellObject.GetPrediction(target).CastPosition)) 
-                            || (Misc.BlightedQuiver.Level > 0 && Misc.GetWStacks(target) >= MyMenu.RootMenu.Item("combow.count").GetValue<Slider>().Value))
+                            || (Misc.BlightedQuiver.Level > 0 && Misc.GetWStacks(target) >= MyMenu.RootMenu.Item("combow.count").GetValue<Slider>().Value && Misc.LastE + 1000 < Environment.TickCount))
                         {
                             this.SpellObject.StartCharging();
                         }
@@ -116,27 +117,27 @@
 
                     if (this.SpellObject.IsCharging)
                     {
-                        if (this.Range >= this.MaxRange || target.Distance(ObjectManager.Player) < this.Range + 250
-                            || (this.SpellObject.GetPrediction(target).Hitchance >= HitChance.VeryHigh)
+                        if (MyMenu.RootMenu.Item("comboqalways").IsActive() || this.Range >= this.MaxRange || target.Distance(ObjectManager.Player) < this.Range + 250 || (this.SpellObject.GetPrediction(target).Hitchance >= HitChance.VeryHigh)
                             && target.Distance(ObjectManager.Player) > this.Range + 250
                             && target.Distance(ObjectManager.Player) < this.MaxRange || ObjectManager.Player.HealthPercent <= MyMenu.RootMenu.Item("comboq.fast").GetValue<Slider>().Value)
                         {
-                            if (!this.SpellObject.IsCharging)
-                            {
-                                Logging.AddEntry(LoggingEntryTrype.Info, "Return Charging");
-                                return;
-                            }
-
                             if ((!MyMenu.RootMenu.Item("comboqalways").IsActive()
                                  && Misc.LastE + 200 < Environment.TickCount) || 
                                  Misc.QIsKillable(target, Misc.GetQCollisionsCount(target, this.SpellObject.GetPrediction(target).CastPosition)))
                             {
+
                                 this.SpellObject.Cast(target);
-                                Misc.LastQ = Environment.TickCount;
+                               /*ar prediction = this.SpellObject.GetPrediction(target);
+                                if (prediction.Hitchance >= HitChance.VeryHigh)
+                                {
+                                    this.SpellObject.Cast(target);
+                                }*/
                             }
                             else
                             {
+
                                 this.SpellObject.Cast(target);
+
                             }
                         }
                     }
@@ -154,28 +155,23 @@
         /// </summary>
         internal override void OnMixed()
         {
-            var target = Misc.GetTarget((this.MaxRange + this.Width) * 1.1f, this.DamageType);
-            if (target != null)
+            var target = Misc.GetTarget(this.MaxRange, this.DamageType);
+            if (target == null)
             {
-                if (!this.SpellObject.IsCharging)
-                {
-                    if (MyMenu.RootMenu.Item("mixedqusealways").IsActive()
-                        || target.Distance(ObjectManager.Player) > Orbwalking.GetRealAutoAttackRange(target) * 1.2f
-                        || (Misc.BlightedQuiver.Level > 0 && Misc.GetWStacks(target) >= MyMenu.RootMenu.Item("mixedqusealways.count").GetValue<Slider>().Value))
-                    {
-                        this.SpellObject.StartCharging();
-                    }
-                }
+                return;
+            }
 
-                if (this.SpellObject.IsCharging)
+            if (!this.SpellObject.IsCharging)
+            {
+                this.SpellObject.StartCharging();
+            }
+
+            if (this.SpellObject.IsCharging)
+            {
+                var prediction = this.SpellObject.GetPrediction(target);
+                if (prediction.Hitchance >= HitChance.VeryHigh)
                 {
-                   if(this.Range >= this.MaxRange || target.Distance(ObjectManager.Player) < this.Range + 250 
-                        || (this.SpellObject.GetPrediction(target).Hitchance >= HitChance.VeryHigh)
-                            && target.Distance(ObjectManager.Player) > this.Range + 250
-                            && target.Distance(ObjectManager.Player) < this.MaxRange || target.Distance(ObjectManager.Player) < this.Range)
-                    {
-                        this.SpellObject.Cast(target);
-                    }
+                    this.SpellObject.Cast(prediction.CastPosition);
                 }
             }
         }

@@ -5,8 +5,8 @@
 
     using ElVarusRevamped.Enumerations;
     using ElVarusRevamped.Utils;
+
     using EloBuddy;
-    using LeagueSharp;
     using LeagueSharp.Common;
 
     using SharpDX;
@@ -21,7 +21,7 @@
         /// <summary>
         ///     Gets or sets the damage type.
         /// </summary>
-        internal override TargetSelector.DamageType DamageType => TargetSelector.DamageType.Magical;
+        internal override TargetSelector.DamageType DamageType => TargetSelector.DamageType.Physical;
 
         /// <summary>
         ///     Gets Aoe
@@ -31,7 +31,7 @@
         /// <summary>
         ///     Gets the delay.
         /// </summary>
-        internal override float Delay => 1000f;
+        internal override float Delay => 250f;
 
         /// <summary>
         ///     Gets the range.
@@ -84,7 +84,7 @@
                 {
                     if (MyMenu.RootMenu.Item("comboealways").IsActive() || 
                         this.SpellObject.IsKillable(target) || 
-                        (Misc.BlightedQuiver.Level > 0 && Misc.GetWStacks(target) >= MyMenu.RootMenu.Item("comboew.count").GetValue<Slider>().Value))
+                        (Misc.BlightedQuiver.Level > 0 && Misc.GetWStacks(target) >= MyMenu.RootMenu.Item("comboew.count").GetValue<Slider>().Value && Misc.LastQ + 1000 < Environment.TickCount))
                     {
                         if ((!MyMenu.RootMenu.Item("comboealways").IsActive()
                              && Misc.LastQ + 200 < Environment.TickCount) || this.SpellObject.IsKillable(target))

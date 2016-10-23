@@ -2189,6 +2189,9 @@ namespace PortAIO
                         case 3: // vSeries
                             vSupport_Series.Program.Game_OnGameLoad();
                             break;
+                        case 4: // ElNamiRevamped
+                            ElNamiDecentralized.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Nasus:
@@ -3303,7 +3306,7 @@ namespace PortAIO
                             Flowers_ADC_Series.Program.Main();
                             break;
                         case 8: // ElVarusRevamped
-                            ElVarusRevamped.Program.Bootstrap();
+                            ElVarusRevamped.Program.Main();
                             break;
                     }
                     break;

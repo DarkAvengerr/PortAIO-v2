@@ -1,12 +1,11 @@
-﻿namespace ElVarusRevamped
+﻿namespace ElNamiDecentralized
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
 
-    using ElVarusRevamped.Components;
-    using LeagueSharp;
-    using LeagueSharp.Common;
+    using ElNamiDecentralized.Components;
     using EloBuddy;
+    using LeagueSharp.Common;
 
     /// <summary>
     ///     The program.
@@ -24,6 +23,20 @@
 
         #region Public Methods and Operators
 
+        /// <summary>
+        ///     The EntryPoint of the solution.
+        /// </summary>
+        /// <param name="args">
+        ///     The args.
+        /// </param>
+        public static void Main()
+        {
+            if (ObjectManager.Player.ChampionName.Equals("Nami"))
+            {
+                Bootstrap();
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -32,7 +45,7 @@
         ///     The bootstrapping method for the components.
         /// </summary>
         [SuppressMessage("ReSharper", "ObjectCreationAsStatement", Justification = "They would not be used.")]
-        public static void Bootstrap()
+        private static void Bootstrap()
         {
             try
             {

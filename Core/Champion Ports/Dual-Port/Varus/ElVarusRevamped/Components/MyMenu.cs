@@ -5,8 +5,8 @@
 
     using ElVarusRevamped.Enumerations;
     using ElVarusRevamped.Utils;
+
     using EloBuddy;
-    using LeagueSharp;
     using LeagueSharp.Common;
 
     using Color = SharpDX.Color;
@@ -117,8 +117,15 @@
                         nodeMixed.AddItem(new MenuItem("mixed" + spellSlotNameLower + "use", "Use " + spellSlotName).SetValue(true));
                         nodeMixed.AddItem(new MenuItem("mixed" + spellSlotNameLower + "mana", "Min. Mana").SetValue(new Slider(50)));
 
-                        nodeMixed.AddItem(new MenuItem("mixed" + spellSlotNameLower + "usealways", "Always use " + spellSlotName).SetValue(false));
-                        nodeMixed.AddItem(new MenuItem("mixed" + spellSlotNameLower + "usealways.count", "Minimum W stacks").SetValue(new Slider(3, 1, 3)));
+                        if (spellSlotNameLower.Equals("e", StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            nodeMixed.AddItem(
+                                new MenuItem("mixed" + spellSlotNameLower + "usealways", "Always use " + spellSlotName)
+                                    .SetValue(false));
+                            nodeMixed.AddItem(
+                                new MenuItem("mixed" + spellSlotNameLower + "usealways.count", "Minimum W stacks")
+                                    .SetValue(new Slider(3, 1, 3)));
+                        }
                     }
 
                     node.AddSubMenu(nodeMixed);

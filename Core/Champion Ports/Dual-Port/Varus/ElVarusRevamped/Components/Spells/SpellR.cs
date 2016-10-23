@@ -6,9 +6,9 @@
     using ElVarusRevamped.Enumerations;
     using ElVarusRevamped.Utils;
 
-    using LeagueSharp;
-    using LeagueSharp.Common;
     using EloBuddy;
+    using LeagueSharp.Common;
+
     using SharpDX;
 
     /// <summary>

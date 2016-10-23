@@ -6,8 +6,8 @@
 
     using ElVarusRevamped.Components.Spells;
     using ElVarusRevamped.Enumerations;
+
     using EloBuddy;
-    using LeagueSharp;
     using LeagueSharp.Common;
 
     using SharpDX;
