@@ -1965,10 +1965,13 @@ namespace PortAIO
                         case 16: // Slutty Lucian
                             Slutty_Lucian.Program.Main();
                             break;
-                        case 17: // Flowers' ADC Series
+                        case 17: // Hikicarry ADC
+                            HikiCarry.Program.Main();
+                            break;
+                        case 18: // Flowers' ADC Series
                             Flowers_ADC_Series.Program.Main();
                             break;
-                        case 18: // ReformedAIO
+                        case 19: // ReformedAIO
                             ReformedAIO.Program.Main();
                             break;
                     }

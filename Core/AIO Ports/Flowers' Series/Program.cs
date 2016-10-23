@@ -90,7 +90,7 @@ using EloBuddy;
 
                 if (Menu.Item("Inject SkinChange").GetValue<bool>())
                 {
-                    Utility.SkinChange.Init();
+                    //Utility.SkinChange.Init();
                 }
 
                 if (Menu.Item("Inject Items").GetValue<bool>())
