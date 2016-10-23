@@ -2881,8 +2881,6 @@
     <Compile Include="Core\Library Ports\RethoughtLib\Design\Implementations\Vector3Offset.cs" />
     <Compile Include="Core\Library Ports\RethoughtLib\Design\Implementations\Vector4Offset.cs" />
     <Compile Include="Core\Library Ports\RethoughtLib\Design\Offset.cs" />
-    <Compile Include="Core\Library Ports\RethoughtLib\Drawings\DamageDrawingInformations.cs" />
-    <Compile Include="Core\Library Ports\RethoughtLib\Drawings\DamageDrawingModule.cs" />
     <Compile Include="Core\Library Ports\RethoughtLib\Events\Events.cs" />
     <Compile Include="Core\Library Ports\RethoughtLib\Extensions\Extensions.cs" />
     <Compile Include="Core\Library Ports\RethoughtLib\FeatureSystem\Abstract Classes\Base.cs" />

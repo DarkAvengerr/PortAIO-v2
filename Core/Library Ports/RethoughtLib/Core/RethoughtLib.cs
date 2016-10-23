@@ -69,7 +69,7 @@ using EloBuddy;
 
             Console.WriteLine("Test");
 
-            Game_OnGameLoad();
+            this.Game_OnGameLoad();
         }
 
         #endregion

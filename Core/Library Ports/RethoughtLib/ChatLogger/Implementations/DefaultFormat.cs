@@ -19,9 +19,9 @@ using EloBuddy;
         /// </summary>
         /// <param name="args">The <see cref="GameChatEventArgs" /> instance containing the event data.</param>
         /// <returns></returns>
-        public Message Apply(AIHeroClient sender, ChatMessageEventArgs args)
+        public Message Apply(ChatMessageEventArgs args)
         {
-            var message = new Message(sender, args);
+            var message = new Message(args);
 
             message.FormatedMessage = $"[{message.Time} {message.Sender.Name} ({message.Sender.ChampionName}): {message.Content}";
 

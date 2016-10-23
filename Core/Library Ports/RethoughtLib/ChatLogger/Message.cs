@@ -48,7 +48,7 @@ using EloBuddy;
         ///     Initializes a new instance of the <see cref="Message" /> class.
         /// </summary>
         /// <param name="args">The <see cref="GameChatEventArgs" /> instance containing the event data.</param>
-        public Message(AIHeroClient sender, ChatMessageEventArgs args)
+        public Message(ChatMessageEventArgs args)
         {
             this.Content = args.Message;
             this.Sender = args.Sender;

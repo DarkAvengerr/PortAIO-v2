@@ -14,12 +14,18 @@ using EloBuddy;
     {
         #region Fields
 
+        /// <summary>
+        /// The children
+        /// </summary>
         public readonly Dictionary<Base, Tuple<bool, bool>> Children = new Dictionary<Base, Tuple<bool, bool>>();
 
         #endregion
 
         #region Constructors and Destructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParentBase"/> class.
+        /// </summary>
         protected ParentBase()
         {
             this.OnChildAddEvent += this.OnChildAdd;

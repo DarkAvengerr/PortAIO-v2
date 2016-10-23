@@ -44,7 +44,7 @@ using EloBuddy;
         /// </summary>
         public void Log(AIHeroClient sender, ChatMessageEventArgs args)
         {
-            var message = this.Format.Apply(sender, args);
+            var message = this.Format.Apply(args);
 
             if (!string.IsNullOrWhiteSpace(message.FormatedMessage) && !string.IsNullOrEmpty(message.Content))
             {

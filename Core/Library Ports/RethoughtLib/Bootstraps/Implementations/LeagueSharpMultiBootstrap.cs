@@ -1,6 +1,6 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace RethoughtLib.Bootstraps.Implementations
+using EloBuddy;
+using LeagueSharp.Common;
+namespace RethoughtLib.Bootstraps.Implementations
 {
     #region Using Directives
 
@@ -16,8 +16,6 @@ using EloBuddy;
 
     public class LeagueSharpMultiBootstrap : PlaySharpBootstrapBase
     {
-        public bool LiveVersionSwitching { get; set; } = false;
-
         #region Constructors and Destructors
 
         /// <summary>

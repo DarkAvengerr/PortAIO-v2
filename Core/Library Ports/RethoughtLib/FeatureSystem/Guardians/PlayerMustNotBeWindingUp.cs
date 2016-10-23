@@ -17,7 +17,7 @@ using EloBuddy;
         /// </summary>
         public PlayerMustNotBeWindingUp()
         {
-            this.Func = () => !ObjectManager.Player.Spellbook.IsAutoAttacking;
+            this.Func = () => ObjectManager.Player.Spellbook.IsAutoAttacking;
         }
 
         #endregion

@@ -221,7 +221,6 @@ using EloBuddy;
         {
 #if DEBUG
             Console.WriteLine($"{this}: OnLoad");
-
 #endif
         }
 
@@ -240,7 +239,6 @@ using EloBuddy;
         {
 #if DEBUG
             Console.WriteLine($"{this}: SetMenu");
-
 #endif
             this.Menu = new Menu(this.Path, this.Name);
         }
@@ -252,7 +250,6 @@ using EloBuddy;
         {
 #if DEBUG
             Console.WriteLine($"{this}: SetSwitch");
-
 #endif
             this.Switch = new BoolSwitch(this.Menu, "Enabled", true, this);
         }
