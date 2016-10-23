@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using LeagueSharp;
-using LeagueSharp.Common;
 using EloBuddy;
+using LeagueSharp.Common;
 
 namespace UnderratedAIO.Helpers
 {
@@ -57,11 +56,7 @@ namespace UnderratedAIO.Helpers
 
         public static void UseItems(AIHeroClient target, Menu config, float comboDmg = 0f, bool cleanseSpell = false)
         {
-            if (target == null)
-            {
-                return;
-            }
-            if (config.Item("hyd").GetValue<bool>() && player.BaseSkinName != "Renekton")
+            if (config.Item("hyd").GetValue<bool>() && player.ChampionName != "Renekton")
             {
                 castHydra(target);
             }

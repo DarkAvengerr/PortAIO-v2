@@ -2,16 +2,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
-using LeagueSharp;
+using EloBuddy;
 using LeagueSharp.Common;
 using SharpDX;
-using EloBuddy;
 
 namespace UnderratedAIO.Helpers
 {
     public class Environment
     {
         public static AIHeroClient player = ObjectManager.Player;
+
+        public static List<OrbWalkerBlackList> NetworkIDBlackList = new List<OrbWalkerBlackList>();
+
+        public static void AddToBlackList(int networkID)
+        {
+            if (NetworkIDBlackList.All(e => e.networkId != networkID))
+            {
+                NetworkIDBlackList.Add(new OrbWalkerBlackList(networkID));
+            }
+        }
+
+        public class OrbWalkerBlackList
+        {
+            public int networkId;
+            public float time;
+
+            public OrbWalkerBlackList(int networkId)
+            {
+                this.networkId = networkId;
+                this.time = System.Environment.TickCount;
+            }
+        }
 
         public class Minion
         {
@@ -57,7 +78,7 @@ namespace UnderratedAIO.Helpers
                         .Any(
                             minion =>
                                 HealthPrediction.GetHealthPrediction(minion, 3000) <=
-                                Damage.GetAutoAttackDamage(player, minion, false));
+                                Damage.GetAutoAttackDamage(player, minion, true));
             }
         }
 

@@ -1,16 +1,17 @@
 ﻿using System;
-using System.Drawing;
+using System.Collections.Generic;
 using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
 using EloBuddy;
+using LeagueSharp.Common;
+using SharpDX;
+using Color = System.Drawing.Color;
 
 namespace UnderratedAIO.Helpers
 {
     public class DrawHelper
     {
         public static AIHeroClient player = ObjectManager.Player;
-        public static string[] HeroesWithPet = new string[] { "Shaco", "Mordekaiser", "Yorick" };
+        public static string[] HeroesWithPet = new string[] { "Shaco", "Mordekaiser" };
         public static Menu CommonMenu;
 
         public static void DrawCircle(Circle circle, float spellRange)
@@ -41,6 +42,7 @@ namespace UnderratedAIO.Helpers
             {
                 main = PetHandler.addItemOptons(main);
             }
+            main = Tselector(main);
             return main;
         }
 
@@ -89,6 +91,47 @@ namespace UnderratedAIO.Helpers
             return menu;
         }
 
+        public static Menu Tselector(Menu menu)
+        {
+            Menu rMenu = new Menu("TargetSelector+", "TS");
+            rMenu.AddItem(new MenuItem("TargetSelectorSpellOnlyFocused", "Cast spells only selected target"))
+                .SetValue(true);
+            rMenu.AddItem(new MenuItem("TargetSelectorSpellOnlyRange", "Max range of selected target"))
+                .SetValue(new Slider(10000, 1, 10000));
+            menu.AddSubMenu(rMenu);
+            CommonMenu = menu;
+            return menu;
+        }
+
+        public static AIHeroClient GetBetterTarget(float range,
+            TargetSelector.DamageType damageType,
+            bool ignoreShield = true,
+            IEnumerable<AIHeroClient> ignoredChamps = null,
+            Vector3? rangeCheckFrom = null,
+            TargetSelector.TargetSelectionConditionDelegate conditions = null)
+        {
+            var target = TargetSelector.GetTarget(
+                range, damageType, ignoreShield, ignoredChamps, rangeCheckFrom, conditions);
+            var selected = TargetSelector.GetSelectedTarget();
+            if (CommonMenu.Item("TargetSelectorSpellOnlyFocused").GetValue<bool>() && selected != null &&
+                player.ChampionName != "Gangplank" &&
+                selected.Distance(player) < CommonMenu.Item("TargetSelectorSpellOnlyRange").GetValue<Slider>().Value)
+            {
+                if (selected.Distance(player) < range && selected.IsValidTarget())
+                {
+                    return selected;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return target;
+            }
+        }
+
         public static bool dashEnabled(string championName)
         {
             try
@@ -117,7 +160,7 @@ namespace UnderratedAIO.Helpers
         {
             try
             {
-                return CommonMenu.Item("DamPred" + (int) slot + championName).GetValue<bool>();
+                return CommonMenu.Item("DamPred" + (int)slot + championName).GetValue<bool>();
             }
             catch (Exception e)
             {

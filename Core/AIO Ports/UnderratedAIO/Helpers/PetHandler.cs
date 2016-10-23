@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LeagueSharp;
+using EloBuddy;
 using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
-using EloBuddy;
 
 namespace UnderratedAIO.Helpers
 {
@@ -19,7 +18,7 @@ namespace UnderratedAIO.Helpers
         private static Spell R, FarmL;
         private static readonly int range = 2000;
         private static bool debug = false, PetDelay = false;
-        private static Vector3 movePos;
+        //private static Vector3 movePos;
 
         internal static Menu addItemOptons(Menu menuM)
         {
@@ -68,7 +67,7 @@ namespace UnderratedAIO.Helpers
             }
             if (debug)
             {
-                Render.Circle.DrawCircle(movePos, 60, Color.Aqua, 7);
+            //    Render.Circle.DrawCircle(movePos, 60, Color.Aqua, 7);
             }
         }
 
@@ -138,7 +137,7 @@ namespace UnderratedAIO.Helpers
                 switch (targetMode)
                 {
                     case 0:
-                        gtarget = TargetSelector.GetTarget(range, TargetSelector.DamageType.Magical);
+                        gtarget = DrawHelper.GetBetterTarget(range, TargetSelector.DamageType.Magical);
                         break;
                     case 1:
                         gtarget =

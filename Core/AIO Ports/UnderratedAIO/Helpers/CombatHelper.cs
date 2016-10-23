@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using LeagueSharp;
+using EloBuddy;
 using LeagueSharp.Common;
 using SharpDX;
 using SharpDX.Direct3D9;
 using Collision = LeagueSharp.Common.Collision;
-using EloBuddy;
 
 namespace UnderratedAIO.Helpers
 {
@@ -35,9 +34,7 @@ namespace UnderratedAIO.Helpers
                     "alistartrample", "NocturneShroudofDarknessShield", "SpellShield"
                 });
 
-        public static List<DashData> DashDatas =
-            new List<DashData>(
-                new DashData[]
+        public static List<DashData> DashDatas = new List<DashData>(new DashData[]
                 {
                     new DashData("Aatrox", SpellSlot.Q), new DashData("Ahri", SpellSlot.R),
                     new DashData("Akali", SpellSlot.R), new DashData("Alistar", SpellSlot.W),
@@ -732,10 +729,6 @@ namespace UnderratedAIO.Helpers
 
         public static float GetBuffTime(BuffInstance buff)
         {
-            if (!buff.IsValidBuff() || buff == null)
-            {
-                return 0f;
-            }
             return (float) buff.EndTime - Game.Time;
         }
 
@@ -790,8 +783,8 @@ namespace UnderratedAIO.Helpers
         public static List<BuffData> BuffsList = new List<BuffData>()
         {
             new BuffData("Twitch", "deadlyvenom", SpellSlot.Unknown, 6),
-            new BuffData("Teemo", "toxicshotparticle", SpellSlot.Unknown, 4),
-            new BuffData("Mordekaiser", "MordekaiserChildrenOfTheGrave", SpellSlot.Unknown, 10),
+            new BuffData("Teemo", "toxicshotparticle", SpellSlot.E, 4),
+            new BuffData("Mordekaiser", "MordekaiserChildrenOfTheGrave", SpellSlot.R, 10),
             new BuffData("Darius", "dariushemo", SpellSlot.Unknown, 5),
             new BuffData("Brand", "brandablaze", SpellSlot.Unknown, 4),
             new BuffData("-", "summonerdot", SpellSlot.Unknown, 5),
@@ -960,13 +953,13 @@ namespace UnderratedAIO.Helpers
 
     internal static class Obj_AI_BaseExt
     {
-        public static bool IsInAttackRange(this Obj_AI_Base target)
+        public static bool IsInAttackRange(this Obj_AI_Base target, int bonusTange = 0)
         {
             if (target == null)
             {
                 return false;
             }
-            return Orbwalking.GetRealAutoAttackRange(target) < ObjectManager.Player.Distance(target);
+            return Orbwalking.GetRealAutoAttackRange(target) > ObjectManager.Player.Distance(target) + bonusTange;
         }
     }
 }
