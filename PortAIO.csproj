@@ -2453,6 +2453,8 @@
     <Compile Include="Core\Champion Ports\Main Champion Ports\Vayne\Utility\Variables.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Vayne\Utility\VHRBootstrap.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Vayne\VHR.cs" />
+    <Compile Include="Core\Champion Ports\Main Champion Ports\Zilean\ListExtensions.cs" />
+    <Compile Include="Core\Champion Ports\Main Champion Ports\Zilean\Prediction.cs" />
     <Compile Include="Core\Library Ports\DevCommom\AssemblyUtil.cs" />
     <Compile Include="Core\Library Ports\DevCommom\BarrierManager.cs" />
     <Compile Include="Core\Library Ports\DevCommom\DevHelper.cs" />
