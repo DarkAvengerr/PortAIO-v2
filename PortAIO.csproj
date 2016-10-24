@@ -59,28 +59,28 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EloBuddy">
-      <HintPath>..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.dll</HintPath>
+      <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.Sandbox, Version=1.0.6084.32288, Culture=neutral, PublicKeyToken=d671ef5d8e7e69a5, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Users\Danny\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.SDK">
-      <HintPath>..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.SDK.dll</HintPath>
+      <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.SDK.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PortAIO.Common">
-      <HintPath>..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\PortAIO.Common.dll</HintPath>
+      <HintPath>..\PortAIO-Common\bin\Debug\PortAIO.Common.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="SharpDX">
-      <HintPath>..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.dll</HintPath>
+      <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D9">
-      <HintPath>..\..\..\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.Direct3D9.dll</HintPath>
+      <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.Direct3D9.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.XInput, Version=2.6.3.0, Culture=neutral, PublicKeyToken=2306ab36a61019a8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -200,6 +200,7 @@
     <Compile Include="Core\AIO Ports\Flowers%27 Series\Common\HpBarDraw.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\Common\MultiLanguage.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\Common\YasuoWindWall.cs" />
+    <Compile Include="Core\AIO Ports\Flowers%27 Series\Orbwalking\Orbwalking.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\Pluging\Ashe.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\Pluging\Caitlyn.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\Pluging\Corki.cs" />
@@ -2452,10 +2453,6 @@
     <Compile Include="Core\Champion Ports\Main Champion Ports\Vayne\Utility\Variables.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Vayne\Utility\VHRBootstrap.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Vayne\VHR.cs" />
-    <Compile Include="Core\Champion Ports\Main Champion Ports\Zilean\IncomingDamageManager.cs" />
-    <Compile Include="Core\Champion Ports\Main Champion Ports\Zilean\ListExtensions.cs" />
-    <Compile Include="Core\Champion Ports\Main Champion Ports\Zilean\Prediction.cs" />
-    <Compile Include="Core\Champion Ports\Main Champion Ports\Zilean\Zilean.cs" />
     <Compile Include="Core\Library Ports\DevCommom\AssemblyUtil.cs" />
     <Compile Include="Core\Library Ports\DevCommom\BarrierManager.cs" />
     <Compile Include="Core\Library Ports\DevCommom\DevHelper.cs" />
@@ -3476,6 +3473,8 @@
     <Compile Include="Core\Champion Ports\Main Champion Ports\Zed\ZedSpells.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Zed\ZedUnderTurretFarm.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Ziggs\Program.cs" />
+    <Compile Include="Core\Champion Ports\Main Champion Ports\Zilean\IncomingDamageManager.cs" />
+    <Compile Include="Core\Champion Ports\Main Champion Ports\Zilean\Zilean.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Zyra\Program.cs" />
     <Compile Include="Core\Library Ports\DeathWalker\DeathDraw.cs" />
     <Compile Include="Core\Library Ports\DeathWalker\DeathMath.cs" />

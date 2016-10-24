@@ -1,4 +1,4 @@
-﻿namespace ElZilean
+using EloBuddy; namespace ElZilean
 {
     using System;
     using System.Collections.Generic;
@@ -6,11 +6,8 @@
     using System.Linq;
     using System.Net;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
-    using SebbyLib;
-
-    using Orbwalking = SebbyLib.Orbwalking;
 
     internal class Zilean
     {
@@ -167,7 +164,7 @@
         {
             try
             {
-                if (!Player.IsChampion("Zilean"))
+                if (Player.ChampionName != "Zilean")
                 {
                     return;
                 }
@@ -197,7 +194,7 @@
                 Game.OnUpdate += OnUpdate;
                 Drawing.OnDraw += OnDraw;
                 Interrupter2.OnInterruptableTarget += OnInterruptableTarget;
-                Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
                 Orbwalking.BeforeAttack += BeforeAttack;
             }
             catch (Exception exception)
@@ -209,23 +206,6 @@
         #endregion
 
         #region Methods
-
-        private static HitChance GetHitchance()
-        {
-            switch (Menu.Item("Prediction.Hitchance").GetValue<StringList>().SelectedIndex)
-            {
-                case 0:
-                    return HitChance.Low;
-                case 1:
-                    return HitChance.Medium;
-                case 2:
-                    return HitChance.High;
-                case 3:
-                    return HitChance.VeryHigh;
-                default:
-                    return HitChance.Medium;
-            }
-        }
 
         /// <summary>
         ///     Creates the menu
@@ -253,29 +233,13 @@
 
                 Menu.AddSubMenu(orbwalkMenu);
 
-
-                var predictionMenu = new Menu("Prediction", "Prediction");
-                {
-                    predictionMenu.AddItem(
-                        new MenuItem("Prediction.Hitchance", "Hitchance: ").SetValue(
-                            new StringList(new[] { "Low", "Medium", "High", "Very High" }, 3)))
-                        .SetTooltip("Setting for the common prediction");
-                    predictionMenu.AddItem(new MenuItem("Prediction.type", "Prediction: ")).SetValue(new StringList(new[] { "Common", "Rewinding", "Sebby" }, 1));
-                }
-
-                Menu.AddSubMenu(predictionMenu);
-
                 var comboMenu = new Menu("Combo", "Combo");
                 {
-                    comboMenu.SubMenu("Q Manager").AddItem(new MenuItem("ElZilean.Combo.Q", "Use Q").SetValue(true));
-                    comboMenu.SubMenu("Q Manager").AddItem(new MenuItem("ElZilean.Combo.Focus.Bomb", "Focus target with Q").SetValue(true));
-                    comboMenu.SubMenu("Q Manager").AddItem(new MenuItem("ElZilean.Combo.W2", "Always reset Q").SetValue(false)).SetTooltip("Always reset Q even when the target is not marked");
-
-                    comboMenu.SubMenu("Q Manager")
-                        .AddItem(new MenuItem("Q.Automatically", "Automatically cast Q if 2 or more").SetValue(new StringList(new[] { "Never", "Always", "Combo"}, 0))).SetTooltip("This option is only available for the 'Rewinding' prediction");
-
-
-                    comboMenu.AddItem(new MenuItem("ElZilean.Combo.W", "Use W").SetValue(true));   
+                    comboMenu.AddItem(new MenuItem("ElZilean.Combo.Q", "Use Q").SetValue(true));
+                    comboMenu.AddItem(new MenuItem("ElZilean.Combo.Focus.Bomb", "Focus target with Q").SetValue(true));
+                    comboMenu.AddItem(new MenuItem("ElZilean.Combo.W", "Use W").SetValue(true));
+                    comboMenu.AddItem(new MenuItem("ElZilean.Combo.W2", "Always reset Q").SetValue(false))
+                        .SetTooltip("Always reset Q even when the target is not marked");
                     comboMenu.AddItem(new MenuItem("ElZilean.Combo.E", "Use E").SetValue(true));
                     comboMenu.AddItem(new MenuItem("ElZilean.Ignite", "Use Ignite").SetValue(true));
                     comboMenu.AddItem(
@@ -440,9 +404,13 @@
                 return;
             }
 
-            if (IsActive("ElZilean.Combo.Q"))
+            if (IsActive("ElZilean.Combo.Q") && Q.IsReady() && target.IsValidTarget(Q.Range))
             {
-                QCast(target);
+                var pred = Q.GetPrediction(target);
+                if (pred.Hitchance >= HitChance.VeryHigh)
+                {
+                    Q.Cast(pred.CastPosition);
+                }
             }
 
             // Check if target has a bomb
@@ -458,9 +426,6 @@
                 {
                     return;
                 }
-
-                TargetSelector.SetTarget(isBombed);
-                Orbwalker.ForceTarget(isBombed);
 
                 if (IsActive("ElZilean.Combo.W"))
                 {
@@ -509,56 +474,6 @@
                     {
                         Player.Spellbook.CastSpell(IgniteSpell.Slot, isBombed);
                     }
-                }
-            }
-        }
-
-        /// <summary>
-        ///     Cast the Q
-        /// </summary>
-        /// <param name="target"></param>
-        private static void QCast(AIHeroClient target)
-        {
-            if (!Q.IsReady() || !target.IsValidTarget(Q.Range))
-            {
-                return;
-            }
-
-            if (Menu.Item("Prediction.type").GetValue<StringList>().SelectedIndex == 0)
-            {
-                var pred = Q.GetPrediction(target);
-                if (pred.Hitchance >= GetHitchance())
-                {
-                    Q.Cast(pred.CastPosition);
-                }
-            }
-            if (Menu.Item("Prediction.type").GetValue<StringList>().SelectedIndex == 1)
-            {
-                var pred = CPrediction.Circle(Q, target, HitChance.VeryHigh, true);
-                if (pred.TotalHits > 0)
-                {
-                    Q.Cast(pred.CastPosition);
-                }
-            }
-            else if (Menu.Item("Prediction.type").GetValue<StringList>().SelectedIndex == 2)
-            {
-                var predictionInput = new SebbyLib.Prediction.PredictionInput
-                {
-                    Aoe = false,
-                    Collision = false,
-                    Speed = int.MaxValue,
-                    Delay = 0.7f,
-                    Range = 900f - 100f,
-                    From = Player.ServerPosition,
-                    Radius = 140f - 25f,
-                    Unit = target,
-                    Type = SebbyLib.Prediction.SkillshotType.SkillshotCircle
-                };
-
-                var predictionOutput = SebbyLib.Prediction.Prediction.GetPrediction(predictionInput);
-                if (predictionOutput.Hitchance == (SebbyLib.Prediction.HitChance)(6))
-                {
-                    Q.Cast(predictionOutput.CastPosition);
                 }
             }
         }
@@ -619,7 +534,11 @@
 
             if (IsActive("ElZilean.Harass.Q") && Q.IsReady() && target.IsValidTarget(Q.Range))
             {
-                QCast(target);
+                var pred = Q.GetPrediction(target);
+                if (pred.Hitchance >= HitChance.VeryHigh)
+                {
+                    Q.Cast(pred.UnitPosition);
+                }
             }
 
             if (IsActive("ElZilean.Harass.W") && W.IsReady() && !Q.IsReady())
@@ -650,9 +569,13 @@
 
             if (sender.IsValid && args.DangerLevel == Interrupter2.DangerLevel.High && IsActive("ElZilean.Q.Interrupt"))
             {
-                if (Q.IsReady())
+                if (Q.IsReady() && sender.IsValidTarget(Q.Range))
                 {
-                    QCast(sender);
+                    var prediction = Q.GetPrediction(sender);
+                    if (prediction.Hitchance >= HitChance.VeryHigh)
+                    {
+                        Q.Cast(prediction.CastPosition);
+                    }
                 }
                 LeagueSharp.Common.Utility.DelayAction.Add(100, () => W.Cast());
             }
@@ -740,15 +663,6 @@
         }
 
         /// <summary>
-        ///     Gets a value indicating whether the combo mode is active.
-        /// </summary>
-        /// <value>
-        ///     <c>true</c> if combo mode is active; otherwise, <c>false</c>.
-        /// </value>
-        public static bool ComboModeActive => Orbwalking.Orbwalker.Instances.Any(x => x.ActiveMode == Orbwalking.OrbwalkingMode.Combo);
-
-
-        /// <summary>
         ///     Called when the game updates
         /// </summary>
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
@@ -761,6 +675,17 @@
                     return;
                 }
 
+                if (IsActive("ElZilean.Combo.Focus.Bomb"))
+                {
+                    var passiveTarget = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget() && x.HasBuff("ZileanQEnemyBomb") && x.IsValidTarget(Q.Range + 100));
+
+                    if (passiveTarget != null)
+                    {
+                        Orbwalker.ForceTarget(passiveTarget);
+                    }
+                }
+
+
                 switch (Orbwalker.ActiveMode)
                 {
                     case Orbwalking.OrbwalkingMode.Combo:
@@ -772,64 +697,6 @@
                     case Orbwalking.OrbwalkingMode.LaneClear:
                         OnLaneclear();
                         break;
-                }
-
-                if (Menu.Item("Q.Automatically").GetValue<StringList>().SelectedIndex == 1 || (Menu.Item("Q.Automatically").GetValue<StringList>().SelectedIndex == 2 && ComboModeActive))
-                {
-                    if (Menu.Item("Prediction.type").GetValue<StringList>().SelectedIndex == 1)
-                    {
-                        var target = Q.GetTarget();
-                        var pred = CPrediction.Circle(Q, target, HitChance.VeryHigh, true);
-                        if (pred.TotalHits >= 2 && Q.IsReady())
-                        {
-                            Q.Cast(pred.CastPosition);
-                            LeagueSharp.Common.Utility.DelayAction.Add(600, () => W.Cast());
-                        }
-                    }
-                    else if (Menu.Item("Prediction.type").GetValue<StringList>().SelectedIndex == 2)
-                    {
-                        var target = Q.GetTarget();
-
-
-                        var predictionInput = new SebbyLib.Prediction.PredictionInput
-                                                  {
-                                                      Aoe = false, Collision = false, Speed = int.MaxValue, Delay = 0.7f,
-                                                      Range = 900f - 100f, From = Player.ServerPosition,
-                                                      Radius = 140f - 25f, Unit = target,
-                                                      Type = SebbyLib.Prediction.SkillshotType.SkillshotCircle
-                                                  };
-
-                        var predictionOutput = SebbyLib.Prediction.Prediction.GetPrediction(predictionInput);
-                        if (predictionOutput.Hitchance == (SebbyLib.Prediction.HitChance)(6)
-                            && predictionOutput.AoeTargetsHitCount >= 2)
-                        {
-                            Q.Cast(predictionOutput.CastPosition);
-                            LeagueSharp.Common.Utility.DelayAction.Add(600, () => W.Cast());
-                        }
-                    }
-                    else
-                    {
-                        var target = Q.GetTarget();
-                        var pred = Q.GetPrediction(target);
-                        if (pred.AoeTargetsHitCount >= 2 && Q.IsReady())
-                        {
-                            Q.Cast(pred.CastPosition);
-                            LeagueSharp.Common.Utility.DelayAction.Add(600, () => W.Cast());
-                        }
-                    }
-                }
-
-                if (IsActive("ElZilean.Combo.Focus.Bomb"))
-                {
-                    var passiveTarget = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget() && x.HasBuff("ZileanQEnemyBomb"));
-                    if (passiveTarget != null)
-                    {
-                        if (passiveTarget.IsValidTarget(Q.Range + 100))
-                        {
-                            TargetSelector.SetTarget(passiveTarget);
-                            Orbwalker.ForceTarget(passiveTarget);
-                        }
-                    }
                 }
 
                 if (IsActive("ElZilean.Ignite"))
@@ -873,8 +740,12 @@
                     {
                         if (Q.IsReady() && target.IsValidTarget(Q.Range))
                         {
-                            QCast(target);
-                            LeagueSharp.Common.Utility.DelayAction.Add(100, () => W.Cast());
+                            var prediction = Q.GetPrediction(target);
+                            if (prediction.Hitchance >= HitChance.VeryHigh)
+                            {
+                                Q.Cast(prediction.CastPosition);
+                                LeagueSharp.Common.Utility.DelayAction.Add(100, () => W.Cast());
+                            }
                         }
                     }
                 }
