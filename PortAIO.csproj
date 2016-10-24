@@ -200,7 +200,6 @@
     <Compile Include="Core\AIO Ports\Flowers%27 Series\Common\HpBarDraw.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\Common\MultiLanguage.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\Common\YasuoWindWall.cs" />
-    <Compile Include="Core\AIO Ports\Flowers%27 Series\Orbwalking\Orbwalking.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\Pluging\Ashe.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\Pluging\Caitlyn.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\Pluging\Corki.cs" />
