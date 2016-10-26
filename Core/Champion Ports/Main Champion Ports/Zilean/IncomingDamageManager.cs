@@ -1,10 +1,10 @@
-using EloBuddy; namespace ElZilean
+﻿namespace ElZilean
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     public static class IncomingDamageManager
@@ -14,7 +14,7 @@ using EloBuddy; namespace ElZilean
 
         static IncomingDamageManager()
         {
-            Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
         }
 
         public static bool Skillshots { get; set; }
