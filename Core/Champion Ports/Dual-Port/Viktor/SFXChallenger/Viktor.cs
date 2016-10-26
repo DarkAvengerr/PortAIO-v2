@@ -87,10 +87,10 @@ using EloBuddy; namespace SFXChallenger.Champions
             Q.SetTargetted(0.15f, 2050f);
 
             W = new Spell(SpellSlot.W, 700f, DamageType.Magical);
-            W.SetSkillshot(1f, 300f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            W.SetSkillshot(1f, 150f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 
-            E = new Spell(SpellSlot.E, 525f, DamageType.Magical);
-            E.SetSkillshot(0f, 90f, 800f, false, SkillshotType.SkillshotLine);
+            E = new Spell(SpellSlot.E, 520, DamageType.Magical);
+            E.SetSkillshot(0f, 70f, 1200f, false, SkillshotType.SkillshotLine);
 
             R = new Spell(SpellSlot.R, 700f, DamageType.Magical);
             R.SetSkillshot(0.2f, 300f, float.MaxValue, false, SkillshotType.SkillshotCircle);
@@ -254,9 +254,9 @@ using EloBuddy; namespace SFXChallenger.Champions
             BestTargetOnlyManager.AddToMenu(wGapcloserMenu, "w-gapcloser");
 
             miscMenu.AddItem(
-                new MenuItem(miscMenu.Name + ".e-logic", "E Logic").SetValue(new StringList(new[] { "Old", "New" }, 1)))
+                new MenuItem(miscMenu.Name + ".e-logic", "E Logic").SetValue(new StringList(new[] { "Old", "New", "Beta xQx" }, 1)))
                 .ValueChanged +=
-                delegate(object sender, OnValueChangeEventArgs args)
+                delegate (object sender, OnValueChangeEventArgs args)
                 {
                     Menu.Item(Menu.Name + ".miscellaneous.e-new-distance").ShowItem =
                         args.GetNewValue<StringList>().SelectedIndex == 1;
@@ -269,7 +269,7 @@ using EloBuddy; namespace SFXChallenger.Champions
 
             IndicatorManager.AddToMenu(DrawingManager.Menu, true);
             IndicatorManager.Add(
-                "Q", delegate(AIHeroClient hero)
+                "Q", delegate (AIHeroClient hero)
                 {
                     var damage = 0f;
                     if (Q.IsReady())
@@ -290,7 +290,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                 });
             IndicatorManager.Add(E);
             IndicatorManager.Add(
-                "R Burst", delegate(AIHeroClient hero)
+                "R Burst", delegate (AIHeroClient hero)
                 {
                     if (R.IsReady() && (_rObject == null || !_rObject.IsValid))
                     {
@@ -299,9 +299,10 @@ using EloBuddy; namespace SFXChallenger.Champions
                     return 0f;
                 });
             IndicatorManager.Finale();
+
         }
 
-        protected override void OnPreUpdate() {}
+        protected override void OnPreUpdate() { }
 
         protected override void OnPostUpdate()
         {
@@ -351,7 +352,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                         foreach (var minion in minions)
                         {
                             var health = HealthPrediction.GetHealthPrediction(
-                                minion, (int) (Q.ArrivalTime(minion) * 1000));
+                                minion, (int)(Q.ArrivalTime(minion) * 1000));
                             if (health > 0 && Math.Abs(health - minion.Health) > 10 &&
                                 Q.GetDamage(minion) * 0.85f > health)
                             {
@@ -472,7 +473,7 @@ using EloBuddy; namespace SFXChallenger.Champions
                     var minion = args.Target as Obj_AI_Minion;
                     if (minion != null &&
                         HealthPrediction.LaneClearHealthPrediction(
-                            minion, (int) (Player.AttackDelay * 1000), Game.Ping / 2) <
+                            minion, (int)(Player.AttackDelay * 1000), Game.Ping / 2) <
                         Player.GetAutoAttackDamage(minion))
                     {
                         _lastBeforeFarmTarget = minion;
@@ -600,18 +601,22 @@ using EloBuddy; namespace SFXChallenger.Champions
             var qCasted = false;
             if (e)
             {
+
                 var target = TargetSelector.GetTarget((E.Range + ELength + E.Width) * 1.1f, E.DamageType);
                 if (target != null)
                 {
-                    var eLogicNew =
-                        Menu.Item(Menu.Name + ".miscellaneous.e-logic").GetValue<StringList>().SelectedIndex == 1;
-                    if (eLogicNew)
+                    var eLogicNew = Menu.Item(Menu.Name + ".miscellaneous.e-logic").GetValue<StringList>();
+                    if (eLogicNew.SelectedIndex == 1)
                     {
                         ELogicNew(target, E.GetHitChance("combo"));
                     }
-                    else
+                    else if (eLogicNew.SelectedIndex == 0)
                     {
                         ELogic(target, GameObjects.EnemyHeroes.ToList(), E.GetHitChance("combo"));
+                    }
+                    else
+                    {
+                        ELogicBeta();
                     }
                 }
             }
@@ -681,15 +686,18 @@ using EloBuddy; namespace SFXChallenger.Champions
                 var target = TargetSelector.GetTarget((E.Range + ELength + E.Width) * 1.1f, E.DamageType);
                 if (target != null)
                 {
-                    var eLogicNew =
-                        Menu.Item(Menu.Name + ".miscellaneous.e-logic").GetValue<StringList>().SelectedIndex == 1;
-                    if (eLogicNew)
+                    var eLogicNew = Menu.Item(Menu.Name + ".miscellaneous.e-logic").GetValue<StringList>();
+                    if (eLogicNew.SelectedIndex == 1)
                     {
                         ELogicNew(target, E.GetHitChance("harass"));
                     }
-                    else
+                    else if (eLogicNew.SelectedIndex == 0)
                     {
                         ELogic(target, GameObjects.EnemyHeroes.ToList(), E.GetHitChance("harass"));
+                    }
+                    else
+                    {
+                        ELogicBeta();
                     }
                 }
             }
@@ -929,6 +937,37 @@ using EloBuddy; namespace SFXChallenger.Champions
             }
         }
 
+        private void ELogicBeta()
+        {
+            var t = TargetSelector.GetTarget(E.Range, DamageType.Magical);
+            if (!t.IsValidTarget()) { return; }
+
+            var endPos = Vector3.Zero;
+            var startPos = Vector3.Zero;
+
+            if (t.IsValidTarget(525))
+            {
+                startPos = t.Position;
+                endPos = t.Path[0];
+            }
+            else
+            {
+                if (t.Path.Count() > 0)
+                {
+                    endPos = t.Position + (t.Position - t.Path[0]).Normalized() * (t.IsFacing(Player) ? -120 : -60);
+                }
+                else
+                {
+                    endPos = t.Position + (t.Position - Player.Position).Normalized() * (t.IsFacing(Player) ? 60 : 120);
+                }
+                startPos = Player.Position.Extend(endPos, 505);
+            }
+            if (E.IsReady() && Player.Distance(endPos) <= E.Range)
+            {
+                E.Cast(startPos, endPos);
+            }
+        }
+
         private bool ELogic(AIHeroClient target, List<AIHeroClient> targets, HitChance hitChance, int minHits = 1)
         {
             return ELogic(
@@ -984,22 +1023,12 @@ using EloBuddy; namespace SFXChallenger.Champions
                                 {
                                     containsTarget = t.NetworkId == mainTarget.NetworkId;
                                 }
-                                var rect = new Geometry.Polygon.Rectangle(
-                                    cCastPos.To2D(), cCastPos.Extend(pred.CastPosition, ELength).To2D(), E.Width);
-                                foreach (var c in
-                                    targets.Where(
-                                        c => c.NetworkId != cTarget.NetworkId && c.NetworkId != lTarget.NetworkId))
+                                var rect = new Geometry.Polygon.Rectangle(cCastPos.To2D(), cCastPos.Extend(pred.CastPosition, ELength).To2D(), E.Width);
+                                foreach (var c in targets.Where(c => c.NetworkId != cTarget.NetworkId && c.NetworkId != lTarget.NetworkId))
                                 {
                                     input.Unit = c;
-                                    var cPredPos = c.Type == GameObjectType.obj_AI_Minion
-                                        ? c.Position
-                                        : Prediction.GetPrediction(input).UnitPosition;
-                                    if (
-                                        new Geometry.Polygon.Circle(
-                                            cPredPos,
-                                            c.Type == GameObjectType.obj_AI_Minion && c.IsMoving
-                                                ? c.BoundingRadius / 2f
-                                                : c.BoundingRadius * 0.9f).Points.Any(p => rect.IsInside(p)))
+                                    var cPredPos = c.Type == GameObjectType.obj_AI_Minion ? c.Position : Prediction.GetPrediction(input).UnitPosition;
+                                    if (new Geometry.Polygon.Circle(cPredPos, c.Type == GameObjectType.obj_AI_Minion && c.IsMoving ? c.BoundingRadius / 2f : c.BoundingRadius * 0.9f).Points.Any(p => rect.IsInside(p)))
                                     {
                                         count++;
                                         if (!containsTarget && c.NetworkId == mainTarget.NetworkId)
