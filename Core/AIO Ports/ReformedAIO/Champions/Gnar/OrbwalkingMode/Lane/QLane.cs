@@ -1,11 +1,9 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Gnar.OrbwalkingMode.Lane
+﻿namespace ReformedAIO.Champions.Gnar.OrbwalkingMode.Lane
 {
     using System;
     using System.Collections.Generic;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Gnar.Core;

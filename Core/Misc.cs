@@ -121,7 +121,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "UnderratedAIO", "TheGaren", "TroopGaren", "yol0 Garen" };
                     break;
                 case EloBuddy.Champion.Gnar:
-                    champ = new string[] { "Hellsing's Gnar", "SluttyGnar", "Marksman#", "hGnar" };
+                    champ = new string[] { "Hellsing's Gnar", "SluttyGnar", "Marksman#", "hGnar", "ReformedAIO" };
                     break;
                 case EloBuddy.Champion.Gragas:
                     champ = new string[] { "The Drunk Carry", "ReformedAIO", "UnderratedAIO", "LadyGragas", "NechritoGragas", "OriginalGragas" };

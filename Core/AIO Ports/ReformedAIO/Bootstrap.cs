@@ -1,6 +1,4 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions
+﻿namespace ReformedAIO
 {
     #region Using Directives
 

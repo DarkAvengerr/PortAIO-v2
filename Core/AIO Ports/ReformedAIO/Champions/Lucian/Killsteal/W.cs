@@ -1,14 +1,11 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.Perma_Active.Killsteal
+﻿namespace ReformedAIO.Champions.Lucian.Killsteal
 {
     using System;
-    using System.Linq;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Lucian.Core.Spells;
+    using ReformedAIO.Champions.Lucian.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;
 

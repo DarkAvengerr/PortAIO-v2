@@ -1,14 +1,13 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Caitlyn.Drawings
+﻿namespace ReformedAIO.Champions.Caitlyn.Drawings
 {
     using System;
     using System.Linq;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Caitlyn.Logic;
+    using ReformedAIO.Core.Drawings;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 

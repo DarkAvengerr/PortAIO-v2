@@ -1,16 +1,15 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Diana.Menus.Draw
+﻿namespace ReformedAIO.Champions.Diana.Menus.Draw
 {
     #region Using Directives
 
     using System;
     using System.Linq;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Diana.Logic;
+    using ReformedAIO.Core.Drawings;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 

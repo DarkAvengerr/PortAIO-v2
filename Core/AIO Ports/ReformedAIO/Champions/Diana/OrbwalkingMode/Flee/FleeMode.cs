@@ -1,13 +1,11 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Flee
+﻿namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Flee
 {
     #region Using Directives
 
     using System;
     using System.Linq;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Diana.Logic;

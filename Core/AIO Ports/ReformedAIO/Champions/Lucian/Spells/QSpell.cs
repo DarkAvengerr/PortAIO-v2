@@ -1,16 +1,14 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.Core.Spells
+﻿namespace ReformedAIO.Champions.Lucian.Spells
 {
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     using RethoughtLib.FeatureSystem.Implementations;
     using RethoughtLib.FeatureSystem.Switches;
 
-    class WSpell : SpellChild
+    class QSpell : SpellChild
     {
-        public override string Name { get; set; } = "Ardent Blaze";
+        public override string Name { get; set; } = "Piercing Light";
 
         public override Spell Spell { get; set; }
 
@@ -23,8 +21,8 @@ using EloBuddy;
         {
             base.OnLoad(sender, featureBaseEventArgs);
 
-            Spell = new Spell(SpellSlot.W, 900);
-            Spell.SetSkillshot(.3f, 80f, 1600f, true, SkillshotType.SkillshotLine);
+            Spell = new Spell(SpellSlot.Q, 630);
+            Spell.SetTargetted(.25f, 1400f);
         }
 
         protected override void SetSwitch()

@@ -1,13 +1,11 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.LaneClear
+﻿namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.LaneClear
 {
     #region Using Directives
 
     using System;
     using System.Linq;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;

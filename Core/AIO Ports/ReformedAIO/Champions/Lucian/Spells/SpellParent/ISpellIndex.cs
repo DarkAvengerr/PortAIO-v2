@@ -1,10 +1,8 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.Core.Spells.SpellParent
+﻿namespace ReformedAIO.Champions.Lucian.Spells.SpellParent
 {
     using System.Collections.Generic;
 
-    using LeagueSharp;
+    using EloBuddy;
 
     using RethoughtLib.FeatureSystem.Implementations;
 

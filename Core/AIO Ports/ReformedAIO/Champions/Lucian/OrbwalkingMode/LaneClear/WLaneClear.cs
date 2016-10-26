@@ -1,13 +1,11 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.LaneClear
+﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.LaneClear
 {
     using System;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Lucian.Core.Spells;
+    using ReformedAIO.Champions.Lucian.Spells;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Implementations;

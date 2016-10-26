@@ -1,20 +1,18 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.Perma_Active.Killsteal
+﻿namespace ReformedAIO.Champions.Lucian.Killsteal
 {
     using System;
     using System.Linq;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Lucian.Core.Spells;
+    using ReformedAIO.Champions.Lucian.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
     internal sealed class Q : OrbwalkingChild
    {
-       public override string Name { get; set; } = nameof(Q); // ty reth0ught
+       public override string Name { get; set; } = nameof(Q);
 
        private readonly QSpell qSpell;
 
@@ -39,21 +37,31 @@ using EloBuddy;
             {
                 qSpell.Spell.CastOnUnit(Target);
             }
-           else if (this.Target.Distance(ObjectManager.Player) > ObjectManager.Player.AttackRange && q2Spell.QMinionExtend() && Menu.Item("Extend").GetValue<bool>())
+           else if (this.Target.Distance(ObjectManager.Player) > ObjectManager.Player.AttackRange && Menu.Item("Extend").GetValue<bool>())
             {
-                var m = MinionManager.GetMinions(qSpell.Spell.Range).FirstOrDefault();
+                var minions = MinionManager.GetMinions(qSpell.Spell.Range);
 
-                qSpell.Spell.CastOnUnit(m);
+                foreach (var m in minions)
+                {
+                    if (q2Spell.QMinionExtend(m))
+                    {
+                        qSpell.Spell.Cast(m);
+                    }
+                }
             }
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnDisable(sender, featureBaseEventArgs);
+
             Game.OnUpdate -= this.OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Game.OnUpdate += this.OnUpdate;
         }
 

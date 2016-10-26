@@ -1,10 +1,8 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Combo
+﻿namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Combo
 {
     using System;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Caitlyn.Logic;
@@ -20,11 +18,15 @@ using EloBuddy;
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnDisable(sender, featureBaseEventArgs);
+
             Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Game.OnUpdate += OnUpdate;
         }
 

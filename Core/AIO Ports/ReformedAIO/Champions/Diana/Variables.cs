@@ -1,12 +1,10 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Diana
+﻿namespace ReformedAIO.Champions.Diana
 {
     #region Using Directives
 
     using System.Collections.Generic;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     #endregion

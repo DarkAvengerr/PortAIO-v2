@@ -1162,6 +1162,9 @@ namespace PortAIO
                         case 3: // hGnar
                             hGnar.Program.Main();
                             break;
+                        case 4: // ReformedAIO
+                            ReformedAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Gragas:

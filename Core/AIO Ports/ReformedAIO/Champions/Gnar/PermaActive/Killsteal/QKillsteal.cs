@@ -1,10 +1,8 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Gnar.PermaActive.Killsteal
+﻿namespace ReformedAIO.Champions.Gnar.PermaActive.Killsteal
 {
     using System;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Gnar.Core;

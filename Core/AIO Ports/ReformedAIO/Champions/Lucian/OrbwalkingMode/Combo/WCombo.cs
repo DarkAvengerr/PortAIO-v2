@@ -1,14 +1,12 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
+﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
 {
     using System;
     using System.Linq;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Lucian.Core.Spells;
+    using ReformedAIO.Champions.Lucian.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;
 

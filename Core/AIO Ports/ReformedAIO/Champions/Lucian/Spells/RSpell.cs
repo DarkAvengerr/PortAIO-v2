@@ -1,14 +1,10 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.Core.Spells
+﻿namespace ReformedAIO.Champions.Lucian.Spells
 {
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     using RethoughtLib.FeatureSystem.Implementations;
     using RethoughtLib.FeatureSystem.Switches;
-
-    using SharpDX;
 
     class RSpell : SpellChild
     {

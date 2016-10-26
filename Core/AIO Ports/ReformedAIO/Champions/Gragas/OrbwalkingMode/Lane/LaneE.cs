@@ -1,13 +1,11 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Lane
+﻿namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Lane
 {
     #region Using Directives
 
     using System;
     using System.Linq;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;

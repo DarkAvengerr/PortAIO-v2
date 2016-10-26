@@ -1,14 +1,12 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
+﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
 {
     using System;
     using System.Linq;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Lucian.Core.Spells;
+    using ReformedAIO.Champions.Lucian.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
@@ -40,14 +38,20 @@ using EloBuddy;
                 return;
             }
 
-            if (!Menu.Item("ExtendedQ").GetValue<bool>() || target.Distance(ObjectManager.Player) <= qSpell.Spell.Range || !q2Spell.QMinionExtend())
+            if (!Menu.Item("ExtendedQ").GetValue<bool>() || target.Distance(ObjectManager.Player) <= qSpell.Spell.Range)
             {
                 return;
             }
 
-            var m = MinionManager.GetMinions(qSpell.Spell.Range).FirstOrDefault();
+            var minions = MinionManager.GetMinions(qSpell.Spell.Range);
 
-            qSpell.Spell.CastOnUnit(m);
+            foreach (var m in minions)
+            {
+                if (q2Spell.QMinionExtend(m))
+                {
+                    qSpell.Spell.Cast(m);
+                }
+            }
         }
 
         private void AfterAttack(AttackableUnit unit, AttackableUnit attackableunit)

@@ -1,14 +1,13 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.Drawings
+﻿namespace ReformedAIO.Champions.Lucian.Drawings
 {
     using System;
     using System.Linq;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Lucian.Core.Damage;
+    using ReformedAIO.Champions.Lucian.Damage;
+    using ReformedAIO.Core.Drawings;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 

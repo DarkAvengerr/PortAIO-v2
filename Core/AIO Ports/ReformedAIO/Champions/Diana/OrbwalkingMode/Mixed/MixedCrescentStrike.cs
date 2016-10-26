@@ -1,12 +1,10 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Mixed
+﻿namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Mixed
 {
     #region Using Directives
 
     using System;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Diana.Logic;

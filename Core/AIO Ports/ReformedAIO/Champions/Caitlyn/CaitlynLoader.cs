@@ -1,11 +1,9 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Caitlyn
+﻿namespace ReformedAIO.Champions.Caitlyn
 {
     using System.Collections.Generic;
     using System.Drawing;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Caitlyn.Drawings;

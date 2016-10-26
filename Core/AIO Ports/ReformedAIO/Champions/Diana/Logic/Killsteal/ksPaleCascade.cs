@@ -1,13 +1,11 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Diana.Logic.Killsteal
+﻿namespace ReformedAIO.Champions.Diana.Logic.Killsteal
 {
     #region Using Directives
 
     using System;
     using System.Linq;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;

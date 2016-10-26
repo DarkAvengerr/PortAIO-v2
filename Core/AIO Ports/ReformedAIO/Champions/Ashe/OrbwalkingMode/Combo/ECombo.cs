@@ -1,6 +1,4 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
+﻿namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
 {
     #region Using Directives
 
@@ -8,7 +6,7 @@ using EloBuddy;
     using System.Drawing;
     using System.Linq;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Ashe.Logic;

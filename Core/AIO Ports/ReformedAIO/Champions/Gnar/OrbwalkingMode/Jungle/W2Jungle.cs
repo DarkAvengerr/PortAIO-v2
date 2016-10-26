@@ -1,10 +1,8 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Gnar.OrbwalkingMode.Jungle
+﻿namespace ReformedAIO.Champions.Gnar.OrbwalkingMode.Jungle
 {
     using System;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Gnar.Core;

@@ -1,12 +1,10 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Caitlyn.Killsteal
+﻿namespace ReformedAIO.Champions.Caitlyn.Killsteal
 {
     using System;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
-    using LeagueSharp.SDK.Utils;
+    using EloBuddy.SDK.Utils;
 
     using ReformedAIO.Champions.Caitlyn.Logic;
 
@@ -20,11 +18,15 @@ using EloBuddy;
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnDisable(sender, featureBaseEventArgs);
+
             Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Game.OnUpdate += OnUpdate;
         }
 
@@ -36,7 +38,7 @@ using EloBuddy;
         {
             if (Target == null
                 || Target.Health > Spells.Spell[SpellSlot.Q].GetDamage(Target)
-                || Target.Distance(Vars.Player) < Vars.Player.GetRealAutoAttackRange()
+                || Target.Distance(Vars.Player) < Orbwalking.GetRealAutoAttackRange(Vars.Player)
                 || Spells.Spell[SpellSlot.Q].Delay + Spells.Spell[SpellSlot.Q].Speed < Target.MoveSpeed
                 || !CheckGuardians())
             {

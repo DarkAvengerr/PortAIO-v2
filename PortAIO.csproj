@@ -463,6 +463,7 @@
     <Compile Include="Core\AIO Ports\ProjectGeass\Module\Core\OnLevel\Events\Abilities.cs" />
     <Compile Include="Core\AIO Ports\ProjectGeass\Module\Core\OnLevel\Menus\Abilities.cs" />
     <Compile Include="Core\AIO Ports\ProjectGeass\Program.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Bootstrap.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Ashe\AsheLoader.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Ashe\Core\SetSpells.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Ashe\Drawings\DmgDraw.cs" />
@@ -482,7 +483,6 @@
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Ashe\OrbwalkingMode\Mixed\QMixed.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Ashe\OrbwalkingMode\Mixed\WMixed.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Ashe\Variable.cs" />
-    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Bootstrap.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Caitlyn\CaitlynLoader.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Caitlyn\Drawings\DmgDraw.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Caitlyn\Drawings\QDraw.cs" />
@@ -568,17 +568,13 @@
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Gragas\OrbwalkingMode\Lane\LaneW.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Gragas\OrbwalkingMode\Mixed\QMixed.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Gragas\Variable.cs" />
-    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Core\Damage\LucDamage.cs" />
-    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Core\Spells\ESpell.cs" />
-    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Core\Spells\Q2Spell.cs" />
-    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Core\Spells\QSpell.cs" />
-    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Core\Spells\RSpell.cs" />
-    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Core\Spells\SpellParent\ISpellIndex.cs" />
-    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Core\Spells\SpellParent\SpellParent.cs" />
-    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Core\Spells\WSpell.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Damage\LucDamage.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Drawings\DmgDraw.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Drawings\RDraw.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Drawings\WDraw.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Killsteal\Q.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Killsteal\R.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Killsteal\W.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\LucianLoader.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\OrbwalkingMode\Combo\ECombo.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\OrbwalkingMode\Combo\QCombo.cs" />
@@ -593,14 +589,20 @@
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\OrbwalkingMode\LaneClear\ELaneClear.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\OrbwalkingMode\LaneClear\QLaneClear.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\OrbwalkingMode\LaneClear\WLaneClear.cs" />
-    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Perma Active\Killsteal\Q.cs" />
-    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Perma Active\Killsteal\R.cs" />
-    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Perma Active\Killsteal\W.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Spells\ESpell.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Spells\Q2Spell.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Spells\QSpell.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Spells\RSpell.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Spells\SpellParent\ISpellIndex.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Spells\SpellParent\SpellParent.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Lucian\Spells\WSpell.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\OrbwalkerModule.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Vars.cs" />
-    <Compile Include="Core\AIO Ports\ReformedAIO\HpBarIndicator.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Core\Dash Handler\DashSmart.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Core\Drawings\HpBarIndicator.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Core\WallExtension\WallExtension.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Program.cs" />
-    <Compile Include="Core\AIO Ports\ReformedAIO\Utilities\UtilityLoader.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Utilities\ReformedUtlity.cs" />
     <Compile Include="Core\AIO Ports\sAIO\Champions\Akali.cs" />
     <Compile Include="Core\AIO Ports\sAIO\Champions\Blitzcrank.cs" />
     <Compile Include="Core\AIO Ports\sAIO\Champions\Cassiopeia.cs" />
@@ -6219,6 +6221,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Core\AIO Ports\ReformedAIO\Core\Activator\" />
+    <Folder Include="Core\AIO Ports\ReformedAIO\Utilities\Modules\" />
     <Folder Include="Core\Champion Ports\Dual-Port\Caitlyn\ReformedAIO\" />
     <Folder Include="Core\Champion Ports\Dual-Port\Diana\ReformedAIO\" />
     <Folder Include="Core\Champion Ports\Dual-Port\Gnar\ReformedAIO\" />

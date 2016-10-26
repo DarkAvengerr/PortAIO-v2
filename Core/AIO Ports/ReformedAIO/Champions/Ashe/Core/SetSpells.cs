@@ -1,10 +1,8 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ashe.Core
+﻿namespace ReformedAIO.Champions.Ashe.Core
 {
     using System;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     internal class SetSpells

@@ -1,6 +1,4 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions
+﻿namespace ReformedAIO.Champions
 {
     using LeagueSharp.Common;
 

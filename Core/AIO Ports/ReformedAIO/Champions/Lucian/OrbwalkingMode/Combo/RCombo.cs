@@ -1,14 +1,12 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
+﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
 {
     using System;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Lucian.Core.Damage;
-    using ReformedAIO.Champions.Lucian.Core.Spells;
+    using ReformedAIO.Champions.Lucian.Damage;
+    using ReformedAIO.Champions.Lucian.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
@@ -65,11 +63,15 @@ using EloBuddy;
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnDisable(sender, featureBaseEventArgs);
+
             Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Game.OnUpdate += OnUpdate;
         }
     }

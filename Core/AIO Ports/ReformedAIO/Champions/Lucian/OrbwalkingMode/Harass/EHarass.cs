@@ -1,15 +1,14 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
+﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
 {
     using System;
     using System.Linq;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Lucian.Core.Damage;
-    using ReformedAIO.Champions.Lucian.Core.Spells;
+    using ReformedAIO.Champions.Lucian.Damage;
+    using ReformedAIO.Champions.Lucian.Spells;
+    using ReformedAIO.Core.Dash_Handler;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
@@ -21,10 +20,13 @@ using EloBuddy;
 
         private readonly ESpell eSpell;
 
-        public EHarass(ESpell eSpell, LucDamage damage)
+        private readonly DashSmart dashSmart;
+
+        public EHarass(ESpell eSpell, LucDamage damage, DashSmart dashSmart)
         {
             this.eSpell = eSpell;
             this.damage = damage;
+            this.dashSmart = dashSmart;
         }
 
         private void AfterAttack(AttackableUnit unit, AttackableUnit attackableunit)
@@ -56,10 +58,10 @@ using EloBuddy;
                             eSpell.Spell.Cast(ObjectManager.Player.Position.Extend(Game.CursorPos, Menu.Item("EDistance").GetValue<Slider>().Value));
                             break;
                         case 1:
-                            eSpell.Spell.Cast(ObjectManager.Player.Position.Extend(target.Position, Menu.Item("EDistance").GetValue<Slider>().Value));
+                            eSpell.Spell.Cast(dashSmart.Deviation(ObjectManager.Player.Position.To2D(), target.Position.To2D(), Menu.Item("EDistance").GetValue<Slider>().Value).To3D());
                             break;
                         case 2:
-                            eSpell.Spell.Cast(eSpell.Deviation(ObjectManager.Player.Position.To2D(), target.Position.To2D(), Menu.Item("EDistance").GetValue<Slider>().Value).To3D());
+                            eSpell.Spell.Cast(dashSmart.ToSafePosition(target, target.Position, Menu.Item("EDistance").GetValue<Slider>().Value));
                             break;
                     }
                 }
@@ -70,18 +72,22 @@ using EloBuddy;
         {
             base.OnLoad(sender, featureBaseEventArgs);
 
-            Menu.AddItem(new MenuItem("EMode", "Mode").SetValue(new StringList(new[] { "Cursor", "Target Position", "Side" })));
+            Menu.AddItem(new MenuItem("EMode", "Mode").SetValue(new StringList(new[] { "Cursor", "Side", "Automatic" })));
             Menu.AddItem(new MenuItem("EDistance", "E Distance").SetValue(new Slider(65, 1, 425)).SetTooltip("Less = Faster"));
             Menu.AddItem(new MenuItem("EMana", "Min Mana %").SetValue(new Slider(5, 0, 100)));
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-             Orbwalking.AfterAttack -= AfterAttack;
+            base.OnDisable(sender, featureBaseEventArgs);
+
+            Orbwalking.AfterAttack -= AfterAttack;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Orbwalking.AfterAttack += AfterAttack;
         }
     }

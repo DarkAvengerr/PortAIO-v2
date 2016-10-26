@@ -1,14 +1,12 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
+﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
 {
     using System;
     using System.Linq;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Lucian.Core.Spells;
+    using ReformedAIO.Champions.Lucian.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
@@ -35,16 +33,22 @@ using EloBuddy;
 
             var target = TargetSelector.GetTarget(q2Spell.Spell.Range, TargetSelector.DamageType.Physical);
 
-            if (target == null || ObjectManager.Player.IsDashing())
+            if (target == null
+                || ObjectManager.Player.IsDashing()
+                || !Menu.Item("ExtendedQ").GetValue<bool>()
+                || target.Distance(ObjectManager.Player) < qSpell.Spell.Range)
             {
                 return;
             }
 
-            if (Menu.Item("ExtendedQ").GetValue<bool>() && target.Distance(ObjectManager.Player) > qSpell.Spell.Range && q2Spell.QMinionExtend())
-            {
-                var m = MinionManager.GetMinions(qSpell.Spell.Range).FirstOrDefault();
+            var minions = MinionManager.GetMinions(qSpell.Spell.Range);
 
-                qSpell.Spell.CastOnUnit(m);
+            foreach (var m in minions)
+            {
+                if (q2Spell.QMinionExtend(m))
+                {
+                    qSpell.Spell.Cast(m);
+                }
             }
         }
 
@@ -74,13 +78,16 @@ using EloBuddy;
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnDisable(sender, featureBaseEventArgs);
+
             Game.OnUpdate -= OnUpdate;
-             Orbwalking.AfterAttack -= AfterAttack;
+            Orbwalking.AfterAttack -= AfterAttack;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Game.OnUpdate += OnUpdate;
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Orbwalking.AfterAttack += AfterAttack;
         }
     }

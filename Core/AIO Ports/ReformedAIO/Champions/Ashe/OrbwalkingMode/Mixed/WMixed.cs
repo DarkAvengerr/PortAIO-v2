@@ -1,12 +1,10 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Mixed
+﻿namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Mixed
 {
     #region Using Directives
 
     using System;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;

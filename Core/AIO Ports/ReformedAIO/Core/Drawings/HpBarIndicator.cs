@@ -1,12 +1,10 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO
+﻿namespace ReformedAIO.Core.Drawings
 {
     #region Using Directives
 
     using System;
 
-    using LeagueSharp;
+    using EloBuddy;
 
     using SharpDX;
     using SharpDX.Direct3D9;

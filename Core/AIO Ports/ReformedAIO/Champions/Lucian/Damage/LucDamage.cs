@@ -1,15 +1,13 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.Core.Damage
+﻿namespace ReformedAIO.Champions.Lucian.Damage
 {
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Lucian.Core.Spells;
+    using ReformedAIO.Champions.Lucian.Spells;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
-   internal sealed class LucDamage : ChildBase
+    internal sealed class LucDamage : ChildBase
     {
         private readonly QSpell qSpell;
 

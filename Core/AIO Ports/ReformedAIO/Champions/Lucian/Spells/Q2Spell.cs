@@ -1,10 +1,8 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.Core.Spells
+﻿namespace ReformedAIO.Champions.Lucian.Spells
 {
     using System.Linq;
 
-    using LeagueSharp;
+    using EloBuddy;
     using LeagueSharp.Common;
 
     using RethoughtLib.FeatureSystem.Implementations;
@@ -30,18 +28,23 @@ using EloBuddy;
             return pos.UnitPosition;
         }
 
-        public bool QMinionExtend()
+        public bool QMinionExtend(Obj_AI_Base minion)
         {
-            var m = MinionManager.GetMinions(Spell.Range).FirstOrDefault();
-
             var target = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(Spell.Range));
 
-            if (m == null || target == null)
+            if (minion == null || target == null)
             {
                 return false;
             }
 
-            var hit = new Geometry.Polygon.Rectangle(ObjectManager.Player.Position, ObjectManager.Player.Position.Extend(m.Position, Spell.Range), Spell.Width);
+            var prediction = Spell.GetPrediction(target);
+
+            if (prediction.Hitchance < HitChance.Medium)
+            {
+                return false;
+            }
+
+            var hit = new Geometry.Polygon.Rectangle(ObjectManager.Player.Position, ObjectManager.Player.Position.Extend(minion.Position, Spell.Range), Spell.Width);
 
             return !hit.IsOutside(QPred(target).To2D());
         }
@@ -50,8 +53,8 @@ using EloBuddy;
         {
             base.OnLoad(sender, featureBaseEventArgs);
 
-            Spell = new Spell(SpellSlot.Q, 950);
-            Spell.SetSkillshot(.5f, 60, float.MaxValue, false, SkillshotType.SkillshotLine);
+            Spell = new Spell(SpellSlot.Q, 980);
+            Spell.SetSkillshot(.5f, 50, float.MaxValue, false, SkillshotType.SkillshotLine);
         }
 
         protected override void SetSwitch()
