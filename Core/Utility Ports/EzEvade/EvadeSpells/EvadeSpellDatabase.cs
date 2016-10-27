@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,9 +7,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ezEvade
+using EloBuddy;
+
+namespace ezEvade
 {
     class EvadeSpellDatabase
     {
@@ -891,7 +891,7 @@ using EloBuddy;
                 charName = "Sona",
                 dangerlevel = 3,
                 name = "Song of Celerity",
-                spellName = "SonaW",
+                spellName = "SonaE",
                 spellDelay = 50,
                 spellKey = SpellSlot.E,
                 speedArray = new[] { 13f, 14f, 15f, 16f, 25f },

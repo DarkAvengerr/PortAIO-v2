@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,9 +7,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ezEvade
+using EloBuddy;
+
+namespace ezEvade
 {
     class EvadeSpell
     {
@@ -263,7 +263,7 @@ using EloBuddy;
                         if (posInfo != null)
                         {
                             CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, posInfo.position), processSpell);
-                            //DelayAction.Add(50, () => EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
+                            //DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
                             return true;
                         }
                     }
@@ -273,7 +273,7 @@ using EloBuddy;
                         if (posInfo != null && posInfo.target != null && posInfo.posDangerLevel == 0)
                         {
                             CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, posInfo.target), processSpell);
-                            //DelayAction.Add(50, () => EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
+                            //DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
                             return true;
                         }
                     }
@@ -295,7 +295,7 @@ using EloBuddy;
                             }
 
                             CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, posInfo.position), processSpell);
-                            //DelayAction.Add(50, () => EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
+                            //DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
                             return true;
                         }
                     }
@@ -305,7 +305,7 @@ using EloBuddy;
                         if (posInfo != null && posInfo.target != null && posInfo.posDangerLevel == 0)
                         {
                             CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, posInfo.target), processSpell);
-                            //DelayAction.Add(50, () => EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
+                            //DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
                             return true;
                         }
                     }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +8,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ezEvade.SpecialSpells
+using EloBuddy;
+
+namespace ezEvade.SpecialSpells
 {
     class Jayce : ChampionPlugin
     {
@@ -23,14 +23,14 @@ using EloBuddy;
         {
             /*if (spellData.spellName == "JayceShockBlastWall")
             {
-                AIHeroClient hero = HeroManager.Enemies.FirstOrDefault(h => h.ChampionName == "Jayce");
+                Obj_AI_Hero hero = HeroManager.Enemies.FirstOrDefault(h => h.ChampionName == "Jayce");
                 if (hero == null)
                 {
                     return;
                 }
 
                 //Obj_AI_Minion.OnCreate += (obj, args) => OnCreateObj_jayceshockblast(obj, args, hero, spellData);
-                //AIHeroClient.OnProcessSpellCast += OnProcessSpell_jayceshockblast;
+                //Obj_AI_Hero.OnProcessSpellCast += OnProcessSpell_jayceshockblast;
                 //SpellDetector.OnProcessSpecialSpell += ProcessSpell_jayceshockblast;
             }*/
         }

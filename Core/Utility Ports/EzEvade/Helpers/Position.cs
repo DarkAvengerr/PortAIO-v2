@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +8,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ezEvade
+using EloBuddy;
+
+namespace ezEvade
 {
     public static class Position
     {
@@ -38,25 +38,20 @@ using EloBuddy;
                 Vector2 spellPos = spell.currentSpellPosition;
                 Vector2 spellEndPos = predictCollision ? spell.GetSpellEndPosition() : spell.endPos;
 
-                //spellPos = spellPos - spell.direction * radius; //leave some space at back of spell
-                //spellEndPos = spellEndPos + spell.direction * radius; //leave some space at the front of spell
-
-                /*if (spell.info.projectileSpeed == float.MaxValue
-                    && Evade.GetTickCount - spell.startTime > spell.info.spellDelay)
-                {
-                    return false;
-                }*/
-
                 var projection = position.ProjectOn(spellPos, spellEndPos);
-
-                /*if (projection.SegmentPoint.Distance(spellEndPos) < 100) //Check Skillshot endpoints
-                {
-                    //unfinished
-                }*/
-
                 return projection.IsOnSegment && projection.SegmentPoint.Distance(position) <= spell.radius + radius;
             }
-            else if (spell.spellType == SpellType.Circular)
+
+            if (spell.spellType == SpellType.Circular && spell.info.name.Contains("_exp"))
+            {
+                Vector2 spellPos = spell.currentSpellPosition;
+                Vector2 spellEndPos = predictCollision ? spell.GetSpellEndPosition() : spell.endPos;
+
+                var projection = position.ProjectOn(spellPos, spellEndPos);
+                return projection.IsOnSegment && projection.SegmentPoint.Distance(position) <= spell.info.secondaryRadius + radius;
+            }
+
+            if (spell.spellType == SpellType.Circular)
             {
                 if (spell.info.spellName == "VeigarEventHorizon")
                 {
@@ -66,7 +61,8 @@ using EloBuddy;
 
                 return position.Distance(spell.endPos) <= spell.radius + radius - ObjectCache.myHeroCache.boundingRadius;
             }
-            else if (spell.spellType == SpellType.Arc)
+
+            if (spell.spellType == SpellType.Arc)
             {
                 if (position.isLeftOfLineSegment(spell.startPos, spell.endPos))
                 {
@@ -78,7 +74,8 @@ using EloBuddy;
 
                 return position.Distance(midPoint) <= spell.radius + radius - ObjectCache.myHeroCache.boundingRadius;
             }
-            else if (spell.spellType == SpellType.Cone)
+
+            if (spell.spellType == SpellType.Cone)
             {
 
             }

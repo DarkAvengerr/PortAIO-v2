@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,9 +7,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ezEvade
+using EloBuddy;
+
+namespace ezEvade
 {
     public enum SpellType
     {
@@ -24,9 +24,10 @@ using EloBuddy;
     {
         EnemyChampions,
         EnemyMinions,
+        YasuoWall
     }
 
-    public class SpellData
+    public class SpellData : ICloneable
     {            
         public string charName;
         public SpellSlot spellKey = SpellSlot.Q;
@@ -44,7 +45,7 @@ using EloBuddy;
         public bool useEndPosition = false;
         public float angle;
         public float sideRadius;
-        public int splits;
+        //public int splits; no idea when this was added xd
         public bool usePackets = false;
         public bool invert = false;
         public float extraDelay = 0;
@@ -56,10 +57,12 @@ using EloBuddy;
         public bool isPerpendicular = false;
         public float extraEndTime = 0;
         public bool hasEndExplosion = false;
+        public bool dontcheckDuplicates = false;
         public bool isSpecial = false;
+        public bool updatePosition = true;
         public float extraDrawHeight = 0;
-        public string[] extraSpellNames;
-        public string[] extraMissileNames;
+        public string[] extraSpellNames = { };
+        public string[] extraMissileNames = { };
         public CollisionObjectType[] collisionObjects = { };
 
         public SpellData()
@@ -84,6 +87,11 @@ using EloBuddy;
             this.radius = radius;
             this.dangerlevel = dangerlevel;
             this.spellType = spellType;
+        }
+
+        public object Clone()
+        {
+            return MemberwiseClone();
         }
     }
 }

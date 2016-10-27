@@ -1,4 +1,4 @@
-// Copyright 2001 softSurfer, 2012 Dan Sunday
+﻿// Copyright 2001 softSurfer, 2012 Dan Sunday
 // This code may be freely used and modified for any purpose
 // providing that this copyright notice is included with it.
 // SoftSurfer makes no warranty for this code, and cannot be held
@@ -27,9 +27,7 @@ using System.Text;
 using SharpDX;
 using LeagueSharp.Common;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ezEvade
+namespace ezEvade
 {
 
     class MathUtilsCPA

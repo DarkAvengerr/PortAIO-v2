@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,9 +7,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ezEvade
+using EloBuddy;
+
+namespace ezEvade
 {
     class PingTester
     {
@@ -68,7 +68,7 @@ using EloBuddy;
                 timestamp = EvadeUtils.TickCount,
                 isProcessed = false
             };
-            EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D(), true);
+            Player.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D(), true);
 
             if (recursionCount > 1)
             {

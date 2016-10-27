@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +8,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ezEvade.SpecialSpells
+using EloBuddy;
+
+namespace ezEvade.SpecialSpells
 {
     class Azir : ChampionPlugin
     {
@@ -97,7 +97,14 @@ using EloBuddy;
                                 continue;
                             }
 
-                            SpellDetector.CreateSpellData(hero, soldier.Position, args.End, spellData);
+                            var maxsliderange = 875 + hero.Distance(soldier.Position);
+                            var start = soldier.Position;
+                            var end = args.End;
+
+                            if (start.Distance(end) > maxsliderange)
+                                end = start + (end - start).Normalized() * maxsliderange;
+
+                            SpellDetector.CreateSpellData(hero, start, end, spellData, soldier);
                         }
                     }
                 }
