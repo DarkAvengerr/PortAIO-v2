@@ -89,6 +89,7 @@
             base.OnEnable(sender, featureBaseEventArgs);
 
             Orbwalking.AfterAttack += AfterAttack;
+            Game.OnUpdate += OnUpdate;
         }
     }
 }
