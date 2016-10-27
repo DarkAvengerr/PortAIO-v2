@@ -4,6 +4,7 @@ using System.Linq;
 using SharpDX;
 using LeagueSharp;
 using LeagueSharp.Common;
+
 using EloBuddy;
 
 namespace SebbyLib.Movement
@@ -1134,7 +1135,7 @@ namespace SebbyLib.Movement
                 UnitTrackerInfoList.Add(new UnitTrackerInfo() { NetworkId = hero.NetworkId, AaTick = Utils.TickCount, StopMoveTick = Utils.TickCount, NewPathTick = Utils.TickCount, SpecialSpellFinishTick = Utils.TickCount, LastInvisableTick = Utils.TickCount });
             }
 
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Obj_AI_Base.OnNewPath += AIHeroClient_OnNewPath;
             AttackableUnit.OnCreate += Obj_AI_Base_OnEnterLocalVisiblityClient;
         }
