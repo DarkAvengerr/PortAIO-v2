@@ -1,16 +1,15 @@
-using System;
+﻿using System;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ezEvade
+using EloBuddy;
+
+namespace ezEvade
 {
     internal class Evade
     {
@@ -90,15 +89,20 @@ using EloBuddy;
                 SpellDetector.OnProcessDetectedSpells += SpellDetector_OnProcessDetectedSpells;
                 Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
 
+                /*Console.WriteLine("<font color=\"#66CCFF\" >Yomie's </font><font color=\"#CCFFFF\" >ezEvade</font> - " +
+                   "<font color=\"#FFFFFF\" >Version " + Assembly.GetExecutingAssembly().GetName().Version + "</font>");
+                */
+
                 menu = new Menu("ezEvade", "ezEvade", true);
 
                 Menu mainMenu = new Menu("Main", "Main");
                 mainMenu.AddItem(new MenuItem("DodgeSkillShots", "Dodge SkillShots").SetValue(new KeyBind('K', KeyBindType.Toggle, true)));
                 mainMenu.Item("DodgeSkillShots").Permashow();
                 mainMenu.AddItem(new MenuItem("ActivateEvadeSpells", "Use Evade Spells").SetValue(new KeyBind('K', KeyBindType.Toggle, true)));
+                mainMenu.Item("ActivateEvadeSpells").Permashow();
                 mainMenu.AddItem(new MenuItem("DodgeDangerous", "Dodge Only Dangerous").SetValue(false));
                 mainMenu.AddItem(new MenuItem("DodgeFOWSpells", "Dodge FOW SkillShots").SetValue(true));
-                mainMenu.AddItem(new MenuItem("DodgeCircularSpells", "Dodge Circular SkillShots").SetValue(true));                
+                mainMenu.AddItem(new MenuItem("DodgeCircularSpells", "Dodge Circular SkillShots").SetValue(true));
                 menu.AddSubMenu(mainMenu);
 
                 //var keyBind = mainMenu.Item("DodgeSkillShots").GetValue<KeyBind>();
@@ -117,25 +121,20 @@ using EloBuddy;
                 keyMenu.AddItem(new MenuItem("DontDodgeKey", "Don't Dodge Key").SetValue(new KeyBind('Z', KeyBindType.Press)));
                 menu.AddSubMenu(keyMenu);
 
-                Menu miscMenu = new Menu("Misc Settings", "MiscSettings");
+                Menu miscMenu = new Menu("Misc Settings", "MiscSettings");               
                 miscMenu.AddItem(new MenuItem("HigherPrecision", "Enhanced Dodge Precision").SetValue(false));
                 miscMenu.AddItem(new MenuItem("RecalculatePosition", "Recalculate Path").SetValue(true));
                 miscMenu.AddItem(new MenuItem("ContinueMovement", "Continue Last Movement").SetValue(true));
                 miscMenu.AddItem(new MenuItem("CalculateWindupDelay", "Calculate Windup Delay").SetValue(true));
                 miscMenu.AddItem(new MenuItem("CheckSpellCollision", "Check Spell Collision").SetValue(false));
-                miscMenu.AddItem(new MenuItem("DodgeCheckHP", "Check My Hero HP%")
-                    .SetValue(false)).SetTooltip("Enabling this will check if above X HP % and ignore spells.");
                 miscMenu.AddItem(new MenuItem("PreventDodgingUnderTower", "Prevent Dodging Under Tower").SetValue(false));
                 miscMenu.AddItem(new MenuItem("PreventDodgingNearEnemy", "Prevent Dodging Near Enemies").SetValue(true));
                 miscMenu.AddItem(new MenuItem("AdvancedSpellDetection", "Advanced Spell Detection").SetValue(false));
                 //miscMenu.AddItem(new MenuItem("AllowCrossing", "Allow Crossing").SetValue(false));
                 //miscMenu.AddItem(new MenuItem("CalculateHeroPos", "Calculate Hero Position").SetValue(false));
-
-                Menu evadeModeMenu = new Menu("Mode", "EvadeModeSettings");
-                evadeModeMenu.AddItem(new MenuItem("EvadeMode", "Evade Profile")
-                    .SetValue(new StringList(new[] { "Smooth", "Fastest", "Very Smooth", "Hawk", "Kurisu" }, 0)));
-                miscMenu.AddSubMenu(evadeModeMenu);
-
+                miscMenu.AddItem(new MenuItem("ResetConfig", "Reset Evade Config").SetValue(false));
+                miscMenu.AddItem(new MenuItem("EvadeMode", "Evade Profile")
+                    .SetValue(new StringList(new[] {"Smooth", "Very Smooth", "Fastest", "Hawk", "Kurisu", "GuessWho"}, 0)));
                 miscMenu.Item("EvadeMode").ValueChanged += OnEvadeModeChange;
 
                 Menu limiterMenu = new Menu("Humanizer", "Limiter");
@@ -172,12 +171,6 @@ using EloBuddy;
 
                 miscMenu.AddSubMenu(bufferMenu);
 
-                Menu resetMenu = new Menu("Reset Config", "ResetConfig");
-                resetMenu.AddItem(new MenuItem("ResetConfig", "Reset Config").SetValue(false));
-                resetMenu.AddItem(new MenuItem("ResetConfig200", "Set Patch Config").SetValue(true));
-
-                miscMenu.AddSubMenu(resetMenu);
-
                 Menu loadTestMenu = new Menu("Tests", "LoadTests");
 
                 loadTestMenu.AddItem(new MenuItem("LoadPingTester", "Load Ping Tester").SetValue(false));
@@ -197,10 +190,9 @@ using EloBuddy;
                 var initCache = ObjectCache.myHeroCache;
 
                 //evadeTester = new EvadeTester(menu);
-                //LeagueSharp.Common.Utility.DelayAction.Add(100, () => loadTestMenu.Item("LoadSpellTester").SetValue(true));
+                //Utility.DelayAction.Add(100, () => loadTestMenu.Item("LoadSpellTester").SetValue(true));
 
                 Console.WriteLine("ezEvade Loaded");
-
             }
             catch (Exception e)
             {
@@ -208,17 +200,13 @@ using EloBuddy;
             }
         }
 
-        public static void ResetConfig()
+        public static void ResetConfig(bool kappa = true)
         {
             menu.Item("DodgeSkillShots").SetValue(new KeyBind('K', KeyBindType.Toggle, true));
             menu.Item("ActivateEvadeSpells").SetValue(new KeyBind('K', KeyBindType.Toggle, true));
             menu.Item("DodgeDangerous").SetValue(false);
             menu.Item("DodgeFOWSpells").SetValue(true);
             menu.Item("DodgeCircularSpells").SetValue(true);
-
-            menu.Item("DodgeDangerousKeyEnabled").SetValue(false);
-            menu.Item("DodgeDangerousKey").SetValue(new KeyBind(32, KeyBindType.Press));
-            menu.Item("DodgeDangerousKey2").SetValue(new KeyBind('V', KeyBindType.Press));
 
             menu.Item("HigherPrecision").SetValue(false);
             menu.Item("RecalculatePosition").SetValue(true);
@@ -230,13 +218,14 @@ using EloBuddy;
             menu.Item("AdvancedSpellDetection").SetValue(false);
             menu.Item("LoadPingTester").SetValue(true);
 
-            menu.Item("EvadeMode").SetValue(new StringList(new[] { "Smooth", "Fastest", "Very Smooth", "Hawk", "Kurisu" }, 0));
-
+            menu.Item("ClickOnlyOnce").SetValue(true);
+            menu.Item("EnableEvadeDistance").SetValue(false);
             menu.Item("TickLimiter").SetValue(new Slider(100, 0, 500));
             menu.Item("SpellDetectionTime").SetValue(new Slider(0, 0, 1000));
             menu.Item("ReactionTime").SetValue(new Slider(0, 0, 500));
             menu.Item("DodgeInterval").SetValue(new Slider(0, 0, 2000));
 
+            menu.Item("FastMovementBlock").SetValue(false);
             menu.Item("FastEvadeActivationTime").SetValue(new Slider(65, 0, 500));
             menu.Item("SpellActivationTime").SetValue(new Slider(200, 0, 1000));
             menu.Item("RejectMinDistance").SetValue(new Slider(10, 0, 100));
@@ -247,28 +236,56 @@ using EloBuddy;
             menu.Item("ExtraEvadeDistance").SetValue(new Slider(100, 0, 300));
             menu.Item("ExtraAvoidDistance").SetValue(new Slider(50, 0, 300));
             menu.Item("MinComfortZone").SetValue(new Slider(550, 0, 1000));
-        }
 
-        public static void SetPatchConfig()
-        {
-            menu.Item("ReactionTime").SetValue(new Slider(0, 0, 500));
-            //menu.Item("ExtraAvoidDistance").SetValue(new Slider(0, 0, 300));
-            //menu.Item("TickLimiter").SetValue(new Slider(100, 0, 500));
+            // drawings
+            menu.Item("DrawSkillShots").SetValue(true);
+            menu.Item("ShowStatus").SetValue(true);
+            menu.Item("DrawSpellPos").SetValue(false);
+            menu.Item("DrawEvadePosition").SetValue(false);
+
+            if (kappa)
+            {
+                // profiles
+                menu.Item("EvadeMode")
+                    .SetValue(new StringList(new[] { "Smooth", "Very Smooth", "Fastest", "Hawk", "Kurisu", "GuessWho" }, 0));
+
+                // keys
+                menu.Item("DodgeDangerousKeyEnabled").SetValue(false);
+                menu.Item("DodgeDangerousKey").SetValue(new KeyBind(32, KeyBindType.Press));
+                menu.Item("DodgeDangerousKey2").SetValue(new KeyBind('V', KeyBindType.Press));
+                menu.Item("DodgeOnlyOnComboKeyEnabled").SetValue(false);
+                menu.Item("DodgeComboKey").SetValue(new KeyBind(32, KeyBindType.Press));
+                menu.Item("DontDodgeKeyEnabled").SetValue(false);
+                menu.Item("DontDodgeKey").SetValue(new KeyBind('Z', KeyBindType.Press));
+            }
         }
 
         private void OnEvadeModeChange(object sender, OnValueChangeEventArgs e)
         {
             var mode = e.GetNewValue<StringList>().SelectedValue;
 
-            if (mode == "Very Smooth")
+            if (mode == "Fastest")
             {
+                ResetConfig(false);
+                menu.Item("FastMovementBlock").SetValue(true);
+                menu.Item("FastEvadeActivationTime").SetValue(new Slider(120, 0, 500));
+                menu.Item("RejectMinDistance").SetValue(new Slider(25, 0, 100));
+                menu.Item("ExtraCPADistance").SetValue(new Slider(25, 0, 150));
+                menu.Item("ExtraPingBuffer").SetValue(new Slider(80, 0, 200));
+            }
+            else if (mode == "Very Smooth")
+            {
+                ResetConfig(false);
                 menu.Item("FastEvadeActivationTime").SetValue(new Slider(0, 0, 500));
                 menu.Item("RejectMinDistance").SetValue(new Slider(0, 0, 100));
                 menu.Item("ExtraCPADistance").SetValue(new Slider(0, 0, 150));
                 menu.Item("ExtraPingBuffer").SetValue(new Slider(40, 0, 200));
+                menu.Item("AdvancedSpellDetection").SetValue(true);
             }
             else if (mode == "Smooth")
             {
+                ResetConfig(false);
+                menu.Item("FastMovementBlock").SetValue(true);
                 menu.Item("FastEvadeActivationTime").SetValue(new Slider(65, 0, 500));
                 menu.Item("RejectMinDistance").SetValue(new Slider(10, 0, 100));
                 menu.Item("ExtraCPADistance").SetValue(new Slider(10, 0, 150));
@@ -277,6 +294,7 @@ using EloBuddy;
 
             else if (mode == "Hawk")
             {
+                ResetConfig(false);
                 menu.Item("DodgeDangerous").SetValue(false);
                 menu.Item("DodgeFOWSpells").SetValue(false);
                 menu.Item("DodgeCircularSpells").SetValue(false);
@@ -308,6 +326,7 @@ using EloBuddy;
 
             else if (mode == "Kurisu")
             {
+                ResetConfig(false);
                 menu.Item("DodgeDangerous").SetValue(false);
                 menu.Item("DodgeFOWSpells").SetValue(false);
                 menu.Item("DodgeCircularSpells").SetValue(true);
@@ -317,6 +336,7 @@ using EloBuddy;
                 menu.Item("ContinueMovement").SetValue(true);
                 menu.Item("CalculateWindupDelay").SetValue(true);
                 menu.Item("CheckSpellCollision").SetValue(true);
+                menu.Item("FastMovementBlock").SetValue(true);
                 menu.Item("PreventDodgingUnderTower").SetValue(true);
                 menu.Item("PreventDodgingNearEnemy").SetValue(true);
                 menu.Item("AdvancedSpellDetection").SetValue(false);
@@ -325,16 +345,28 @@ using EloBuddy;
                 menu.Item("TickLimiter").SetValue(new Slider(100, 0, 500));
                 menu.Item("SpellDetectionTime").SetValue(new Slider(0, 0, 1000));
                 menu.Item("ReactionTime").SetValue(new Slider(0, 0, 500));
-                menu.Item("DodgeInterval").SetValue(new Slider(250, 0, 2000));
-                menu.Item("FastEvadeActivationTime").SetValue(new Slider(45, 0, 500));
+                menu.Item("DodgeInterval").SetValue(new Slider(0, 0, 2000));
+                menu.Item("FastEvadeActivationTime").SetValue(new Slider(60, 0, 500));
                 menu.Item("SpellActivationTime").SetValue(new Slider(200, 0, 1000));
-                menu.Item("RejectMinDistance").SetValue(new Slider(0, 0, 100));
+                menu.Item("RejectMinDistance").SetValue(new Slider(10, 0, 100));
                 menu.Item("ExtraPingBuffer").SetValue(new Slider(65, 0, 200));
                 menu.Item("ExtraCPADistance").SetValue(new Slider(10, 0, 150));
                 menu.Item("ExtraSpellRadius").SetValue(new Slider(0, 0, 100));
                 menu.Item("ExtraEvadeDistance").SetValue(new Slider(165, 0, 300));
-                menu.Item("ExtraAvoidDistance").SetValue(new Slider(20, 0, 300));
-                menu.Item("MinComfortZone").SetValue(new Slider(330, 0, 1000));
+                menu.Item("ExtraAvoidDistance").SetValue(new Slider(60, 0, 300));
+                menu.Item("MinComfortZone").SetValue(new Slider(420, 0, 1000));
+            }
+            
+            else if (mode == "GuessWho")
+            {
+                ResetConfig(false);
+                menu.Item("DodgeDangerousKeyEnabled").SetValue(true);
+                menu.Item("DodgeDangerousKey2").SetValue(new KeyBind(109, KeyBindType.Press));
+                menu.Item("HigherPrecision").SetValue(true);
+                menu.Item("CheckSpellCollision").SetValue(true);
+                menu.Item("PreventDodgingUnderTower").SetValue(true);
+                menu.Item("ShowStatus").SetValue(false);
+                menu.Item("DrawSpellPos").SetValue(true);
             }
         }
 
@@ -684,12 +716,6 @@ using EloBuddy;
                     menu.Item("ResetConfig").SetValue(false);
                 }
 
-                if (ObjectCache.menuCache.cache["ResetConfig200"].GetValue<bool>())
-                {
-                    SetPatchConfig();
-                    menu.Item("ResetConfig200").SetValue(false);
-                }
-
                 var limitDelay = ObjectCache.menuCache.cache["TickLimiter"].GetValue<Slider>().Value; //Tick limiter                
                 if (EvadeHelper.fastEvadeMode || EvadeUtils.TickCount - lastTickCount > limitDelay&& EvadeUtils.TickCount > lastStopEvadeTime)
                 {
@@ -765,7 +791,7 @@ using EloBuddy;
                     if (!EvadeHelper.CheckMovePath(movePos, ObjectCache.gamePing + extraDelay))
                     {
                         //Console.WriteLine("Continue Movement");
-                        //EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D());
+                        //myHero.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D());
                         EvadeCommand.MoveTo(movePos);
                         lastBlockedUserMoveTo.isProcessed = true;
                     }
@@ -820,7 +846,7 @@ using EloBuddy;
             /*
             if (isDodging && playerInDanger == false) //serverpos test
             {
-                EloBuddy.Player.IssueOrder(GameObjectOrder.HoldPosition, myHero, false);
+                myHero.IssueOrder(GameObjectOrder.HoldPosition, myHero, false);
             }*/
 
             if (isDodging)
@@ -887,12 +913,16 @@ using EloBuddy;
         {
             if (EvadeHelper.fastEvadeMode || ObjectCache.menuCache.cache["FastMovementBlock"].GetValue<bool>())
             {
-                if (isDodging == false && lastIssueOrderArgs != null
-                && lastIssueOrderArgs.Order == GameObjectOrder.MoveTo
-                && Game.Time * 1000 - lastIssueOrderGameTime < 500)
+                if (isDodging == false)
                 {
-                    Game_OnIssueOrder(myHero, lastIssueOrderArgs);
-                    lastIssueOrderArgs = null;
+                    if (lastIssueOrderArgs != null && lastIssueOrderArgs.Order == GameObjectOrder.MoveTo)
+                    {
+                        if (Game.Time * 1000 - lastIssueOrderGameTime < 500)
+                        {
+                            Game_OnIssueOrder(myHero, lastIssueOrderArgs);
+                            lastIssueOrderArgs = null;
+                        }
+                    }
                 }
             }
         }

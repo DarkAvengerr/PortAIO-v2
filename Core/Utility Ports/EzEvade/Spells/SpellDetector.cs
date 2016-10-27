@@ -1,18 +1,15 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
 using System.Reflection;
 using System.Reflection.Emit;
-
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ezEvade
+using EloBuddy;
+
+namespace ezEvade
 {
     public class SpecialSpellEventArgs : EventArgs
     {
@@ -21,9 +18,6 @@ using EloBuddy;
 
     internal class SpellDetector
     {
-        //public delegate void OnCreateSpellHandler(Spell spell);
-        //public static event OnCreateSpellHandler OnCreateSpell;
-
         public delegate void OnProcessDetectedSpellsHandler();
         public static event OnProcessDetectedSpellsHandler OnProcessDetectedSpells;
 
@@ -63,8 +57,6 @@ using EloBuddy;
 
             AIHeroClient.OnProcessSpellCast += Game_ProcessSpell;
 
-            //AIHeroClient.OnEnterVisiblityClient += Game_OnEnterVisiblity;
-
             Game.OnUpdate += Game_OnGameUpdate;
 
             menu = mainMenu;
@@ -76,11 +68,6 @@ using EloBuddy;
             InitChannelSpells();
         }
 
-        private void Game_OnEnterVisiblity(AttackableUnit sender, EventArgs args)
-        {
-            Console.WriteLine(sender.Name);
-        }
-
         private void SpellMissile_OnCreate(GameObject obj, EventArgs args)
         {
             if (!obj.IsValid<MissileClient>())
@@ -88,17 +75,12 @@ using EloBuddy;
 
             MissileClient missile = (MissileClient) obj;
 
-            // todo: keepo
-            //if (missile.SpellCaster.IsMe)
-            //    Console.WriteLine("Missile: " + missile.SData.Name);
-
             SpellData spellData;
 
-            if (missile.SpellCaster != null && missile.SpellCaster.Team != myHero.Team &&
-                missile.SData.Name != null && onMissileSpells.TryGetValue(missile.SData.Name, out spellData)
+            if (missile.SpellCaster != null && missile.SpellCaster.Team != myHero.Team && 
+                missile.SData.Name != null && onMissileSpells.TryGetValue(missile.SData.Name.ToLower(), out spellData)
                 && missile.StartPosition != null && missile.EndPosition != null)
             {
-
                 if (missile.StartPosition.Distance(myHero.Position) < spellData.range + 1000)
                 {
                     var hero = missile.SpellCaster;
@@ -119,37 +101,16 @@ using EloBuddy;
 
                             var dir = (missile.EndPosition.To2D() - missile.StartPosition.To2D()).Normalized();
 
-                            if (spell.info.missileName.Equals(missile.SData.Name, StringComparison.InvariantCultureIgnoreCase) ||
-                               (spell.info.missileName + "_urf").Equals(missile.SData.Name, StringComparison.InvariantCultureIgnoreCase)
-                                && spell.heroID == missile.SpellCaster.NetworkId
-                                && dir.AngleBetween(spell.direction) < 10)
+                            if (spell.info.missileName.ToLower() == missile.SData.Name.ToLower()) // todo: fix urf spells
                             {
-
-                                if (spell.info.isThreeWay == false
-                                    && spell.info.isSpecial == false)
+                                if (spell.heroID == hero.NetworkId && dir.AngleBetween(spell.direction) < 10)
                                 {
-                                    spell.spellObject = obj;
-                                    objectAssigned = true;
-                                    break;
-
-                                    /*if(spell.spellType == SpellType.Line)
+                                    if (spell.info.isThreeWay == false && spell.info.isSpecial == false)
                                     {
-                                        if (missile.SData.LineWidth != spell.info.radius)
-                                        {
-                                            Console.WriteLine("Wrong radius " + spell.info.spellName + ": "
-                                            + spell.info.radius + " vs " + missile.SData.LineWidth);
-                                        }
-
-                                        if (missile.SData.MissileSpeed != spell.info.projectileSpeed)
-                                        {
-                                            Console.WriteLine("Wrong speed " + spell.info.spellName + ": "
-                                            + spell.info.projectileSpeed + " vs " + missile.SData.MissileSpeed);
-                                        }
-                                        
-                                    }*/
-
-                                    //var acquisitionTime = EvadeUtils.TickCount - spell.startTime;
-                                    //Console.WriteLine("AcquiredTime: " + acquisitionTime);
+                                        spell.spellObject = obj;
+                                        objectAssigned = true;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -185,77 +146,7 @@ using EloBuddy;
 
                 DelayAction.Add(1, () => DeleteSpell(spell.spellID));
             }
-        }
-
-        private void SpellMissile_OnCreateOld(GameObject obj, EventArgs args)
-        {
-
-            if (!obj.IsValid<MissileClient>())
-                return;
-
-            MissileClient missile = (MissileClient)obj;
-
-            SpellData spellData;
-
-            if (missile.SpellCaster != null && missile.SpellCaster.Team != myHero.Team &&
-                missile.SData.Name != null && onMissileSpells.TryGetValue(missile.SData.Name, out spellData)
-                && missile.StartPosition != null && missile.EndPosition != null)
-            {
-
-                if (missile.StartPosition.Distance(myHero.Position) < spellData.range + 1000)
-                {
-                    var hero = missile.SpellCaster;
-
-                    if (hero.IsVisible)
-                    {
-                        if (spellData.usePackets)
-                        {
-                            CreateSpellData(hero, missile.StartPosition, missile.EndPosition, spellData, obj);
-                            return;
-                        }
-
-                        foreach (KeyValuePair<int, Spell> entry in spells)
-                        {
-                            Spell spell = entry.Value;
-
-                            var dir = (missile.EndPosition.To2D() - missile.StartPosition.To2D()).Normalized();
-
-                            if (spell.info.missileName == missile.SData.Name
-                                && spell.heroID == missile.SpellCaster.NetworkId
-                                && dir.AngleBetween(spell.direction) < 10)
-                            {
-                                if (spell.info.isThreeWay == false && spell.info.isSpecial == false)
-                                {
-                                    spell.spellObject = obj;
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (ObjectCache.menuCache.cache["DodgeFOWSpells"].GetValue<bool>())
-                        {
-                            CreateSpellData(hero, missile.StartPosition, missile.EndPosition, spellData, obj);
-                        }
-                    }
-                }
-            }
-        }
-
-        private void SpellMissile_OnDeleteOld(GameObject obj, EventArgs args)
-        {
-            if (!obj.IsValid<MissileClient>())
-                return;
-
-            MissileClient missile = (MissileClient)obj;
-            //SpellData spellData;
-
-            foreach (var spell in spells.Values.ToList().Where(
-                    s => (s.spellObject != null && s.spellObject.NetworkId == obj.NetworkId))) //isAlive
-            {
-                DelayAction.Add(1, () => DeleteSpell(spell.spellID));
-            }
-        }
+        }      
 
         public void RemoveNonDangerousSpells()
         {
@@ -270,27 +161,13 @@ using EloBuddy;
         {
             try
             {
-                /*var castTime2 = (hero.Spellbook.CastTime - Game.Time) * 1000;
-                if (castTime2 > 0)
-                {
-                    Console.WriteLine(args.SData.Name + ": " + castTime2);
-                }*/
-
-                // todo: keepo
-                //if (hero.IsMe)
-                //    Console.WriteLine("Spell: " + args.SData.Name);
-
                 SpellData spellData;
-
-                if (hero.Team != myHero.Team && onProcessSpells.TryGetValue(args.SData.Name, out spellData))
+                if (hero.Team != myHero.Team && onProcessSpells.TryGetValue(args.SData.Name.ToLower(), out spellData))
                 {
                     if (spellData.usePackets == false)
                     {
                         var specialSpellArgs = new SpecialSpellEventArgs();
-                        if (OnProcessSpecialSpell != null)
-                        {
-                            OnProcessSpecialSpell(hero, args, spellData, specialSpellArgs);
-                        }
+                        OnProcessSpecialSpell?.Invoke(hero, args, spellData, specialSpellArgs);
 
                         if (specialSpellArgs.noProcess == false && spellData.noProcess == false)
                         {
@@ -303,35 +180,24 @@ using EloBuddy;
                                     Spell spell = entry.Value;
 
                                     var dir = (args.End.To2D() - args.Start.To2D()).Normalized();
-
-                                    if (spell.spellObject != null
-                                        && (spell.info.spellName.Equals(args.SData.Name, StringComparison.InvariantCultureIgnoreCase) ||
-                                           (spell.info.spellName.ToLower() + "_urf").Equals(args.SData.Name, StringComparison.InvariantCultureIgnoreCase))
-                                        && spell.heroID == hero.NetworkId
-                                        && dir.AngleBetween(spell.direction) < 10)
+                                    if (spell.spellObject != null)
                                     {
-                                        foundMissile = true;
-                                        break;
+                                        if (spell.info.spellName.ToLower() == args.SData.Name.ToLower()) // todo: fix urf spells
+                                        {
+                                            if (spell.heroID == hero.NetworkId && dir.AngleBetween(spell.direction) < 10)
+                                            {
+                                                foundMissile = true;
+                                                break;
+                                            }
+                                        }
                                     }
                                 }
                             }
 
-                            if (foundMissile == false)
+                            if (foundMissile == false || spellData.dontcheckDuplicates)
                             {
-                                CreateSpellData(hero, hero.ServerPosition, args.End, spellData, null);
+                                CreateSpellData(hero, hero.ServerPosition, args.End, spellData);
                             }
-
-                            /*if (spellData.spellType == SpellType.Line)
-                            {
-                                var castTime = (hero.Spellbook.CastTime - Game.Time) * 1000;
-
-                                if (Math.Abs(castTime - spellData.spellDelay) > 5)
-                                {
-                                    Console.WriteLine("Wrong delay " + spellData.spellName + ": "
-                                        + spellData.spellDelay + " vs " + castTime);
-                                }
-                            }*/
-
                         }
                     }
                 }
@@ -344,27 +210,30 @@ using EloBuddy;
 
         public static void CreateSpellData(Obj_AI_Base hero, Vector3 spellStartPos, Vector3 spellEndPos,
             SpellData spellData, GameObject obj = null, float extraEndTick = 0.0f, bool processSpell = true,
-            SpellType spellType = SpellType.None, bool checkEndExplosion = true, float spellRadius = 0)
+            SpellType spellType = SpellType.None, bool checkEndExplosion = true,  float spellRadius = 0)
         {
             if (checkEndExplosion && spellData.hasEndExplosion)
             {
-                CreateSpellData(hero, spellStartPos, spellEndPos,
-            spellData, obj, extraEndTick, false,
-            spellData.spellType, false);
+                CreateSpellData(hero, spellStartPos, spellEndPos, spellData,
+                    obj, extraEndTick, false, spellData.spellType, false);
 
-                CreateSpellData(hero, spellStartPos, spellEndPos,
-            spellData, obj, extraEndTick, true,
-            SpellType.Circular, false);
+                var expData = (SpellData) spellData.Clone();
+
+                if (expData.spellType == SpellType.Line && !expData.name.Contains("_exp"))
+                    expData.name = spellData.name + "_exp";
+
+                CreateSpellData(hero, spellStartPos, spellEndPos, expData,
+                    obj, extraEndTick, true, SpellType.Circular, false);
 
                 return;
             }
 
             if (spellStartPos.Distance(myHero.Position) < spellData.range + 1000)
             {
-                Vector2 startPosition = spellStartPos.To2D();
-                Vector2 endPosition = spellEndPos.To2D();
-                Vector2 direction = (endPosition - startPosition).Normalized();
-                float endTick = 0;
+                var startPosition = spellStartPos.To2D();
+                var endPosition = spellEndPos.To2D();
+                var direction = (endPosition - startPosition).Normalized();
+                var endTick = 0f;
 
                 if (spellType == SpellType.None)
                 {
@@ -374,17 +243,22 @@ using EloBuddy;
                 if (spellData.fixedRange) //for diana q
                 {
                     if (endPosition.Distance(startPosition) > spellData.range)
-                    {
-                        //var heroCastPos = hero.ServerPosition.To2D();
-                        //direction = (endPosition - heroCastPos).Normalized();
                         endPosition = startPosition + direction * spellData.range;
-                    }
                 }
 
                 if (spellType == SpellType.Line)
                 {
                     endTick = spellData.spellDelay + (spellData.range / spellData.projectileSpeed) * 1000;
                     endPosition = startPosition + direction * spellData.range;
+
+                    if (spellData.fixedRange) // for all lines
+                    {
+                        if (endPosition.Distance(startPosition) > spellData.range)
+                            endPosition = startPosition + direction * spellData.range;
+
+                        if (endPosition.Distance(startPosition) < spellData.range)
+                            endPosition = startPosition + direction * spellData.range;
+                    }
 
                     if (spellData.useEndPosition)
                     {
@@ -406,14 +280,15 @@ using EloBuddy;
                     }
                     else if (spellData.projectileSpeed > 0)
                     {
-                        if (spellData.spellType == SpellType.Line &&
-                            spellData.hasEndExplosion &&
-                            spellData.useEndPosition == false)
-                        {
-                            endPosition = startPosition + direction * spellData.range;
-                        }
-
                         endTick = endTick + 1000 * startPosition.Distance(endPosition) / spellData.projectileSpeed;
+
+                        if (spellData.spellType == SpellType.Line && spellData.hasEndExplosion && !spellData.useEndPosition)
+                        {
+                            if (ObjectCache.menuCache.cache["CheckSpellCollision"].GetValue<bool>())
+                                endPosition = startPosition;
+                            else
+                                endPosition = startPosition + direction * spellData.range;
+                        }
                     }
                 }
                 else if (spellType == SpellType.Arc)
@@ -533,13 +408,16 @@ using EloBuddy;
                 Spell spell = entry.Value;
 
                 var collisionObject = spell.CheckSpellCollision();
-
                 if (collisionObject != null)
                 {
                     spell.predictedEndPos = spell.GetSpellProjection(collisionObject.ServerPosition.To2D());
 
-                    if (spell.currentSpellPosition.Distance(collisionObject.ServerPosition)
-                        < collisionObject.BoundingRadius + spell.radius)
+                    var radius = spell.info.name.Contains("_exp") && spell.spellType == SpellType.Circular
+                        ? spell.info.secondaryRadius / 2f
+                        : spell.radius;
+
+                    if (spell.currentSpellPosition.Distance(collisionObject.ServerPosition) <
+                        collisionObject.BoundingRadius + radius)
                     {
                         DelayAction.Add(1, () => DeleteSpell(entry.Key));
                     }
@@ -662,9 +540,8 @@ using EloBuddy;
                                 continue;
                             }
 
-                            if (myHero.HealthPercent <=
-                                ObjectCache.menuCache.cache[spell.info.spellName + "DodgeIgnoreHP"].GetValue<Slider>()
-                                    .Value || !ObjectCache.menuCache.cache["DodgeCheckHP"].GetValue<bool>())
+                            var healthThreshold =ObjectCache.menuCache.cache[spell.info.spellName + "DodgeIgnoreHP"].GetValue<Slider>() .Value;
+                            if (myHero.HealthPercent <= healthThreshold)
                             {
                                 spells.Add(spellID, newSpell);
                                 spellAdded = true;
@@ -680,9 +557,9 @@ using EloBuddy;
                 }
             }
 
-            if (spellAdded && OnProcessDetectedSpells != null)
+            if (spellAdded)
             {
-                OnProcessDetectedSpells();
+                OnProcessDetectedSpells?.Invoke();
             }
         }
 
@@ -814,11 +691,11 @@ using EloBuddy;
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeSpell", "Dodge Spell").SetValue(enableSpell)).SetTooltip(spell.name);
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DrawSpell", "Draw Spell").SetValue(enableSpell));
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "SpellRadius", "Spell Radius")
-                .SetValue(new Slider((int)spell.radius, (int)spell.radius - 100, (int)spell.radius + 100)));
+                .SetValue(new Slider((int) spell.radius, (int) spell.radius - 100, (int) spell.radius + 100)));
             newSpellMenu.AddItem(new MenuItem(spell.spellName+ "FastEvade", "Force Fast Evade"))
                 .SetValue(spell.dangerlevel == 4).SetTooltip("Ignores Humanizer Settings & Forces Fast Moveblock.");
-            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeIgnoreHP", "Ignore above HP %"))
-                .SetValue(new Slider(spell.dangerlevel == 1 ? 80 : 100)).SetTooltip("Check My Hero HP% must be enabled.");
+            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeIgnoreHP", "Dodge Only Below HP % <="))
+                .SetValue(new Slider(spell.dangerlevel == 1 ? 90 : 100));
             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DangerLevel", "Danger Level")
                 .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel - 1)));
 
@@ -916,19 +793,19 @@ using EloBuddy;
                             }
                         }
 
-                        if (!onProcessSpells.ContainsKey(spell.spellName))
+                        if (!onProcessSpells.ContainsKey(spell.spellName.ToLower()))
                         {
                             if (spell.missileName == "")
                                 spell.missileName = spell.spellName;
 
-                            onProcessSpells.Add(spell.spellName, spell);
-                            onMissileSpells.Add(spell.missileName, spell);
+                            onProcessSpells.Add(spell.spellName.ToLower(), spell);
+                            onMissileSpells.Add(spell.missileName.ToLower(), spell);
 
                             if (spell.extraSpellNames != null)
                             {
                                 foreach (string spellName in spell.extraSpellNames)
                                 {
-                                    onProcessSpells.Add(spellName, spell);
+                                    onProcessSpells.Add(spellName.ToLower(), spell);
                                 }
                             }
 
@@ -936,7 +813,7 @@ using EloBuddy;
                             {
                                 foreach (string spellName in spell.extraMissileNames)
                                 {
-                                    onMissileSpells.Add(spellName, spell);
+                                    onMissileSpells.Add(spellName.ToLower(), spell);
                                 }
                             }
 
@@ -952,9 +829,10 @@ using EloBuddy;
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "SpellRadius", "Spell Radius")
                                 .SetValue(new Slider((int)spell.radius, (int)spell.radius - 100, (int)spell.radius + 100)));
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "FastEvade", "Force Fast Evade"))
-                                .SetValue(spell.dangerlevel == 4).SetTooltip("Ignores Humanizer Settings & Forces Fast Moveblock.");
-                            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeIgnoreHP", "Ignore above HP %"))
-                                .SetValue(new Slider(spell.dangerlevel == 1 ? 80 : 100)).SetTooltip("Check My Hero HP% must be enabled.");
+                                .SetValue(spell.dangerlevel == 4);
+                            newSpellMenu.AddItem(new MenuItem(spell.spellName + "DodgeIgnoreHP",
+                                "Dodge Only Below HP % <="))
+                                .SetValue(new Slider(spell.dangerlevel == 1 ? 90 : 100));
                             newSpellMenu.AddItem(new MenuItem(spell.spellName + "DangerLevel", "Danger Level")
                                 .SetValue(new StringList(new[] { "Low", "Normal", "High", "Extreme" }, spell.dangerlevel - 1)));
 

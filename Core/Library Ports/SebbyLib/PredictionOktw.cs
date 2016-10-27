@@ -4,6 +4,7 @@ using System.Linq;
 using SharpDX;
 using LeagueSharp;
 using LeagueSharp.Common;
+
 using EloBuddy;
 
 namespace SebbyLib.Prediction
@@ -125,7 +126,7 @@ namespace SebbyLib.Prediction
 
         internal float RealRadius
         {
-            get { return UseBoundingRadius ? Radius : Radius; }
+            get { return UseBoundingRadius ? Radius + Unit.BoundingRadius   : Radius; }
         }
     }
 
@@ -275,6 +276,19 @@ namespace SebbyLib.Prediction
                 result = GetPositionOnPath(input, input.Unit.GetWaypoints(), input.Unit.MoveSpeed);
             }
 
+            if (input.Unit is AIHeroClient && input.Radius > 1 && result.Hitchance <= HitChance.VeryHigh)
+            {
+                var moveOutWall = input.Unit.BoundingRadius + input.Radius / 2 + 10;
+                if (input.Type == SkillshotType.SkillshotCircle)
+                    moveOutWall = input.Unit.BoundingRadius;
+
+                var wallPoint = GetWallPoint(result.CastPosition, moveOutWall);
+                if (!wallPoint.IsZero)
+                {
+                    result.CastPosition = wallPoint.Extend(result.CastPosition, moveOutWall);
+                }
+            }
+
             //Check if the unit position is in range
             if (Math.Abs(input.Range - float.MaxValue) > float.Epsilon)
             {
@@ -306,7 +320,8 @@ namespace SebbyLib.Prediction
                     }
                 }
             }
-
+           
+           
             //Check for collision
             if (checkCollision && input.Collision && result.Hitchance > HitChance.Impossible)
             {
@@ -361,7 +376,6 @@ namespace SebbyLib.Prediction
                 result.Hitchance = HitChance.VeryHigh;
                 return result;
             }
-            OktwCommon.debug("WAIT.....");
             // CAN'T MOVE SPELLS ///////////////////////////////////////////////////////////////////////////////////
 
             if (UnitTracker.GetSpecialSpellEndTime(input.Unit) > 100 || input.Unit.HasBuff("Recall") || (UnitTracker.GetLastStopMoveTime(input.Unit) < 100 && input.Unit.IsRooted))
@@ -416,6 +430,8 @@ namespace SebbyLib.Prediction
                 result.Hitchance = HitChance.Medium;
                 return result; 
             }
+            
+
 
             if (distanceUnitToWaypoint > 0)
             {
@@ -624,6 +640,53 @@ namespace SebbyLib.Prediction
             };
         }
 
+        internal static Vector3 GetWallPoint(Vector3 from, float range)
+        {
+            var count = 30;
+            var points = OktwCommon.CirclePoints(count, range, from);
+            Vector3 first = Vector3.Zero, last = Vector3.Zero;
+
+            for (int i = 0; i<count; i ++ )
+            {
+                if (points[i].IsWall())
+                {
+                    if (first.IsZero)
+                    {
+                        if (i == count - 1)
+                        {
+                            if (!points[0].IsWall())
+                                first = points[i];
+                        }
+                        else
+                        {
+                            if (!points[i + 1].IsWall())
+                                first = points[i];
+                        }
+                    }
+                    if (last.IsZero)
+                    {
+                        if (i == 0)
+                        {
+                            if (!points[count - 1].IsWall())
+                                last = points[i];
+                        }
+                        else
+                        {
+                            if (!points[i - 1].IsWall())
+                                last = points[i];
+                        }
+                    }
+                } 
+            }
+            if (!first.IsZero && !last.IsZero)
+            {
+                var finnaly = new Vector3((last.X + first.X) / 2, (last.Y + first.Y) / 2, (last.Z + first.Z) / 2);
+                return finnaly;
+            }
+            else
+                return Vector3.Zero;
+        }
+
         internal static double UnitIsImmobileUntil(Obj_AI_Base unit)
         {
             var result =
@@ -661,10 +724,9 @@ namespace SebbyLib.Prediction
             var pLength = path.PathLength();
 
             //Skillshots with only a delay
-            if (pLength >= input.Delay * speed - input.RealRadius && Math.Abs(input.Speed - float.MaxValue) < float.Epsilon)
+            var tDistance = input.Delay * speed - input.RealRadius;
+            if (pLength >= tDistance && Math.Abs(input.Speed - float.MaxValue) < float.Epsilon)
             {
-                var tDistance = input.Delay * speed - input.RealRadius;
-
                 for (var i = 0; i < path.Count - 1; i++)
                 {
                     var a = path[i];
@@ -696,10 +758,9 @@ namespace SebbyLib.Prediction
             }
 
             //Skillshot with a delay and speed.
-            if (pLength >= input.Delay * speed - input.RealRadius &&
-                Math.Abs(input.Speed - float.MaxValue) > float.Epsilon)
+            if (pLength >= tDistance && Math.Abs(input.Speed - float.MaxValue) > float.Epsilon)
             {
-                var d = input.Delay * speed - input.RealRadius;
+                var d = tDistance;
                 if (input.Type == SkillshotType.SkillshotLine || input.Type == SkillshotType.SkillshotCone)
                 {
                     if (input.From.Distance(input.Unit.ServerPosition, true) < 200 * 200)
@@ -996,7 +1057,7 @@ namespace SebbyLib.Prediction
                     {
                         if (
                             GetHits(
-                                input.From.To2D(), candidate, (input.Radius - 10),
+                                input.From.To2D(), candidate, (input.Radius + input.Unit.BoundingRadius / 3 - 10),
                                 new List<Vector2> { posibleTargets[0].Position }).Count() == 1)
                         {
                             var hits = GetHits(input.From.To2D(), candidate, input.Radius, positionsList).ToList();
@@ -1103,7 +1164,7 @@ namespace SebbyLib.Prediction
 
                                 var distanceFromToUnit = minion.ServerPosition.Distance(input.From);
 
-                                if (distanceFromToUnit < minion.BoundingRadius)
+                                if (distanceFromToUnit < 10 + minion.BoundingRadius)
                                 {
                                     if (MinionIsDead(input, minion, distanceFromToUnit))
                                         continue;
@@ -1138,7 +1199,7 @@ namespace SebbyLib.Prediction
                                         bonusRadius = 50 + (int)input.Radius;
                                     }
 
-                                    if (minionPos.To2D().Distance(input.From.To2D(), position.To2D(), true, true) <= Math.Pow((input.Radius + bonusRadius), 2))
+                                    if (minionPos.To2D().Distance(input.From.To2D(), position.To2D(), true, true) <= Math.Pow((input.Radius + bonusRadius + minion.BoundingRadius), 2))
                                     {
                                         if (MinionIsDead(input, minion, distanceFromToUnit))
                                             continue;
@@ -1161,7 +1222,7 @@ namespace SebbyLib.Prediction
                                 if (
                                     prediction.UnitPosition.To2D()
                                         .Distance(input.From.To2D(), position.To2D(), true, true) <=
-                                    Math.Pow((input.Radius + hero.BoundingRadius), 2))
+                                    Math.Pow((input.Radius + 50 + hero.BoundingRadius), 2))
                                 {
                                     return true;
                                 }
@@ -1249,7 +1310,7 @@ namespace SebbyLib.Prediction
                 UnitTrackerInfoList.Add(new UnitTrackerInfo() { NetworkId = hero.NetworkId, AaTick = Utils.TickCount, StopMoveTick = Utils.TickCount, NewPathTick = Utils.TickCount, SpecialSpellFinishTick = Utils.TickCount, LastInvisableTick = Utils.TickCount });
             }
 
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Obj_AI_Base.OnNewPath += AIHeroClient_OnNewPath;
             AttackableUnit.OnCreate += Obj_AI_Base_OnEnterLocalVisiblityClient;
         }

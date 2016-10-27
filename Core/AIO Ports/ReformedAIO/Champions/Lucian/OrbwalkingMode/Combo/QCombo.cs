@@ -38,12 +38,12 @@
                 return;
             }
 
-            if (!Menu.Item("ExtendedQ").GetValue<bool>() || target.Distance(ObjectManager.Player) <= qSpell.Spell.Range)
+            if (!Menu.Item("ExtendedQ").GetValue<bool>() || target.Distance(ObjectManager.Player) <= q2Spell.Spell.Range)
             {
                 return;
             }
 
-            var minions = MinionManager.GetMinions(qSpell.Spell.Range);
+            var minions = MinionManager.GetMinions(q2Spell.Spell.Range);
 
             foreach (var m in minions)
             {

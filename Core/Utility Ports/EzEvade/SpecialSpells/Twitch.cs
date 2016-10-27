@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,15 +8,14 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ezEvade.SpecialSpells
+using EloBuddy;
+
+namespace ezEvade.SpecialSpells
 {
     class Twitch : ChampionPlugin
     {
         static Twitch()
         {
-
         }
 
         public void LoadSpecialSpell(SpellData spellData)
@@ -31,7 +30,16 @@ using EloBuddy;
         {
             if (spellData.spellName == "TwitchSprayandPrayAttack")
             {
-                spellData.spellDelay = hero.AttackCastDelay * 1000;
+                if (args.Target != null)
+                {
+                    var start = hero.ServerPosition;
+                    var end = hero.ServerPosition + (args.Target.Position - hero.ServerPosition) * spellData.range;
+
+                    var data = (SpellData) spellData.Clone();
+                    data.spellDelay = hero.AttackCastDelay * 1000;
+
+                    SpellDetector.CreateSpellData(hero, start, end, data);
+                }
             }
         }
     }

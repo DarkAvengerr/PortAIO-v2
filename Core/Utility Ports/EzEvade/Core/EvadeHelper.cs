@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +9,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ezEvade
+using EloBuddy;
+
+namespace ezEvade
 {
     class EvadeHelper
     {
@@ -144,7 +144,7 @@ using EloBuddy;
                 var extraWindupDelay = Evade.lastWindupTime - EvadeUtils.TickCount;
                 if (extraWindupDelay > 0)
                 {
-                    extraDelayBuffer += (int)extraWindupDelay;
+                    extraDelayBuffer += (int) extraWindupDelay;
                 }
             }
 
@@ -171,17 +171,6 @@ using EloBuddy;
                 posTable.Add(InitPositionInfo(pos, extraDelayBuffer, extraEvadeDistance, lastMovePos, lowestEvadeTimeSpell));
             }
 
-            /*if (SpellDetector.spells.Count() == 1)
-            {
-                var sortedFastestTable =
-                posTable.OrderBy(p => p.posDangerLevel);
-
-                if (sortedFastestTable.First() != null && sortedFastestTable.First().posDangerLevel > 0)
-                {
-                    //use fastest
-                }
-            }*/
-
             while (posChecked < maxPosToCheck)
             {
                 radiusIndex++;
@@ -194,8 +183,6 @@ using EloBuddy;
                     posChecked++;
                     var cRadians = (2 * Math.PI / (curCircleChecks - 1)) * i; //check decimals
                     var pos = new Vector2((float)Math.Floor(heroPoint.X + curRadius * Math.Cos(cRadians)), (float)Math.Floor(heroPoint.Y + curRadius * Math.Sin(cRadians)));
-
-
                     posTable.Add(InitPositionInfo(pos, extraDelayBuffer, extraEvadeDistance, lastMovePos, lowestEvadeTimeSpell));
                 }
             }
@@ -205,19 +192,26 @@ using EloBuddy;
             if (ObjectCache.menuCache.cache["EvadeMode"].GetValue<StringList>().SelectedValue == "Fastest")
             {
                 sortedPosTable =
-                posTable.OrderBy(p => p.isDangerousPos)
+                    posTable.OrderBy(p => p.isDangerousPos)
                         .ThenByDescending(p => p.intersectionTime)
                         .ThenBy(p => p.posDangerLevel)
                         .ThenBy(p => p.posDangerCount);
 
                 fastEvadeMode = true;
-
             }
-            else if (ObjectCache.menuCache.cache["FastEvadeActivationTime"].GetValue<Slider>().Value > 0
-               && ObjectCache.menuCache.cache["FastEvadeActivationTime"].GetValue<Slider>().Value + ObjectCache.gamePing + extraDelayBuffer > lowestEvadeTime)
+            else if (fastEvadeMode)
             {
                 sortedPosTable =
-                posTable.OrderBy(p => p.isDangerousPos)
+                    posTable.OrderBy(p => p.isDangerousPos)
+                        .ThenByDescending(p => p.intersectionTime)
+                        .ThenBy(p => p.posDangerLevel)
+                        .ThenBy(p => p.posDangerCount);
+            }
+            else if (ObjectCache.menuCache.cache["FastEvadeActivationTime"].GetValue<Slider>().Value > 0
+                     && ObjectCache.menuCache.cache["FastEvadeActivationTime"].GetValue<Slider>().Value + ObjectCache.gamePing + extraDelayBuffer > lowestEvadeTime)
+            {
+                sortedPosTable =
+                    posTable.OrderBy(p => p.isDangerousPos)
                         .ThenByDescending(p => p.intersectionTime)
                         .ThenBy(p => p.posDangerLevel)
                         .ThenBy(p => p.posDangerCount);
@@ -227,7 +221,7 @@ using EloBuddy;
             else
             {
                 sortedPosTable =
-                posTable.OrderBy(p => p.rejectPosition)
+                    posTable.OrderBy(p => p.rejectPosition)
                         .ThenBy(p => p.posDangerLevel)
                         .ThenBy(p => p.posDangerCount)
                         .ThenBy(p => p.distanceToMouse);
@@ -235,10 +229,10 @@ using EloBuddy;
                 if (sortedPosTable.First().posDangerCount != 0) //if can't dodge smoothly, dodge fast
                 {
                     var sortedPosTableFastest =
-                    posTable.OrderBy(p => p.isDangerousPos)
-                        .ThenByDescending(p => p.intersectionTime)
-                        .ThenBy(p => p.posDangerLevel)
-                        .ThenBy(p => p.posDangerCount);
+                        posTable.OrderBy(p => p.isDangerousPos)
+                            .ThenByDescending(p => p.intersectionTime)
+                            .ThenBy(p => p.posDangerLevel)
+                            .ThenBy(p => p.posDangerCount);
 
                     if (sortedPosTableFastest.First().posDangerCount == 0)
                     {
@@ -334,7 +328,7 @@ using EloBuddy;
             int posRadius = 50;
             int radiusIndex = 0;
 
-            var extraEvadeDistance = 100;//Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraAvoidDistance").GetValue<Slider>().Value;
+            var extraEvadeDistance = Math.Max(100, ObjectCache.menuCache.cache["ExtraEvadeDistance"].GetValue<Slider>().Value);
 
             Vector2 heroPoint = ObjectCache.myHeroCache.serverPos2DPing;
             Vector2 lastMovePos = Game.CursorPos.To2D();
@@ -393,7 +387,7 @@ using EloBuddy;
             int radiusIndex = 0;
 
             var extraDelayBuffer = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
-            var extraEvadeDistance = 100;// Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraEvadeDistance").GetValue<Slider>().Value;
+            var extraEvadeDistance = Math.Max(100, ObjectCache.menuCache.cache["ExtraEvadeDistance"].GetValue<Slider>().Value);
             var extraDist = ObjectCache.menuCache.cache["ExtraCPADistance"].GetValue<Slider>().Value;
 
             Vector2 heroPoint = ObjectCache.myHeroCache.serverPos2DPing;
@@ -461,16 +455,8 @@ using EloBuddy;
 
         public static PositionInfo GetBestPositionTargetedDash(EvadeSpellData spell)
         {
-            /*if (spell.spellDelay > 0)
-            {
-                if (CheckWindupTime(spell.spellDelay))
-                {
-                    return null;
-                }
-            }*/
-
             var extraDelayBuffer = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
-            var extraEvadeDistance = 100;// Evade.menu.SubMenu("MiscSettings").SubMenu("ExtraBuffers").Item("ExtraEvadeDistance").GetValue<Slider>().Value;
+            var extraEvadeDistance = Math.Max(100, ObjectCache.menuCache.cache["ExtraEvadeDistance"].GetValue<Slider>().Value);
             var extraDist = ObjectCache.menuCache.cache["ExtraCPADistance"].GetValue<Slider>().Value;
 
             Vector2 heroPoint = ObjectCache.myHeroCache.serverPos2DPing;
@@ -799,6 +785,38 @@ using EloBuddy;
             return sumIntersectDist;
         }
 
+        public static Vector3 GetNearWallPoint(Vector3 start, Vector3 end)
+        {
+            var direction = (end - start).Normalized();
+            var distance = start.Distance(end);
+            for (var i = 20; i < distance; i += 20)
+            {
+                var v = end - direction * i;
+                if (!v.IsWall())
+                {
+                    return v;
+                }
+            }
+
+            return Vector3.Zero;
+        }
+
+        public static Vector3 GetNearWallPoint(Vector2 start, Vector2 end)
+        {
+            var direction = (end - start).Normalized();
+            var distance = start.Distance(end);
+            for (var i = 20; i < distance; i += 20)
+            {
+                var v = end - direction * i;
+                if (!v.IsWall())
+                {
+                    return v.To3D();
+                }
+            }
+
+            return Vector3.Zero;
+        }
+
         public static float GetIntersectDistance(Spell spell, Vector2 start, Vector2 end)
         {
             if (spell == null)
@@ -861,15 +879,9 @@ using EloBuddy;
             {
                 Spell spell = entry.Value;
 
-                var moveBuff = EvadeSpell.evadeSpells.OrderBy(s => s.dangerlevel).FirstOrDefault(s => s.evadeType == EvadeType.MovementSpeedBuff);
-                if (moveBuff != null && EvadeSpell.ShouldUseMovementBuff(spell))
-                {
-                    speed += speed * moveBuff.speedArray[myHero.GetSpell(moveBuff.spellKey).Level - 1] / 100;
-                }
-
                 closestDistance = Math.Min(closestDistance, GetClosestDistanceApproach(spell, pos, speed, delay, heroPos, extraDist));
 
-                if (pos.InSkillShot(spell, ObjectCache.myHeroCache.boundingRadius - 6)
+                if (pos.InSkillShot(spell, ObjectCache.myHeroCache.boundingRadius - 6) 
                     || PredictSpellCollision(spell, pos, speed, delay, heroPos, extraDist, useServerPosition)
                     || (spell.info.spellType != SpellType.Line && pos.isNearEnemy(minComfortDistance)))
                 {

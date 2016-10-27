@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,57 +8,54 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ezEvade.SpecialSpells
+using EloBuddy;
+
+namespace ezEvade.SpecialSpells
 {
     class Sion : ChampionPlugin
     {
         static Sion()
         {
-
+            // todo: fix for multiple sions on same team (e.g one for all)
         }
 
         public void LoadSpecialSpell(SpellData spellData)
         {
-            /*if (spellData.spellName == "SionE")
+            if (spellData.spellName == "SionR")
             {
-                SpellDetector.OnProcessSpecialSpell += ProcessSpell_SionE;
-            }*/
+                Game.OnUpdate += Game_OnUpdate;
+                SpellDetector.OnProcessSpecialSpell += SpellDetector_OnProcessSpecialSpell;
+            }
         }
 
-        private static void ProcessSpell_SionE(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData,
-            SpecialSpellEventArgs specialSpellArgs)
+        private void SpellDetector_OnProcessSpecialSpell(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args, SpellData spellData, SpecialSpellEventArgs specialSpellArgs)
         {
-            if (spellData.spellName == "SionE")
+            if (spellData.spellName == "SionR")
             {
-                var objList = new List<Obj_AI_Minion>();
-                foreach (var obj in ObjectManager.Get<Obj_AI_Minion>())
+                spellData.projectileSpeed = hero.MoveSpeed;
+            }
+        }
+
+        private void Game_OnUpdate(EventArgs args)
+        {
+            var sion = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Sion");
+            if (sion != null && sion.HasBuff("SionR"))
+            {
+                foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == sion.NetworkId && x.Value.info.spellName == "SionR"))
                 {
-                    if (obj != null && obj.IsValid && !obj.IsDead && obj.IsAlly)
+                    var facingPos = sion.ServerPosition.To2D() + sion.Direction.To2D().Perpendicular();
+                    var endPos = sion.ServerPosition.To2D() + (facingPos - sion.ServerPosition.To2D()).Normalized() * 450;
+
+                    spell.Value.startPos = sion.ServerPosition.To2D();
+                    spell.Value.endPos = endPos;
+
+                    if (EvadeUtils.TickCount - spell.Value.startTime >= 1000)
                     {
-                        objList.Add(obj);
+                        SpellDetector.CreateSpellData(sion, sion.ServerPosition, endPos.To3D(), spell.Value.info, null, 0, false, SpellType.Line, false);
+                        spell.Value.startTime = EvadeUtils.TickCount;
+                        break;
                     }
                 }
-
-                objList.OrderBy(o => o.Distance(hero.ServerPosition));
-
-                var spellStart = args.Start.To2D();
-                var dir = (args.End.To2D() - spellStart).Normalized();
-                var spellEnd = spellStart + dir * spellData.range;
-
-                foreach (var obj in objList)
-                {
-                    var objProjection = obj.ServerPosition.To2D().ProjectOn(spellStart, spellEnd);
-
-                    if (objProjection.IsOnSegment && objProjection.SegmentPoint.Distance(obj.ServerPosition.To2D()) < obj.BoundingRadius + spellData.radius)
-                    {
-                        //sth happens
-                    }
-                }
-
-
-                //specialSpellArgs.noProcess = true;
             }
         }
     }
