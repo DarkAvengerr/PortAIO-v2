@@ -1,4 +1,6 @@
-﻿namespace ElLeeSin
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ElLeeSin
 {
     using System;
     using System.Collections.Generic;
@@ -10,7 +12,6 @@
     using SharpDX;
 
     using Color = System.Drawing.Color;
-    using EloBuddy;
 
     internal class JumpHandler
     {
@@ -138,20 +139,24 @@
                 Player.Position.To2D().Extend(Game.CursorPos.To2D(), 1050),
                 100);
 
-            if (Program.QState && Program.spells[Program.Spells.Q].IsReady())
+
+            if (Program.IsQOne)
             {
-                foreach (var pos in JunglePos)
+                if (Program.spells[Program.Spells.Q].IsReady())
                 {
-                    if (rect.IsOutside(pos.To2D()))
+                    foreach (var pos in JunglePos)
                     {
-                        continue;
+                        if (rect.IsOutside(pos.To2D()))
+                        {
+                            continue;
+                        }
+                        InitQ = true;
+                        Program.spells[Program.Spells.Q].Cast(pos);
+                        return;
                     }
-                    InitQ = true;
-                    Program.spells[Program.Spells.Q].Cast(pos);
-                    return;
                 }
             }
-            else if (Program.spells[Program.Spells.Q].IsReady() && !Program.QState)
+            else
             {
                 Program.spells[Program.Spells.Q].Cast();
                 InitQ = true;
