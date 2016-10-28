@@ -62,11 +62,11 @@ using EloBuddy;
 
         public static Dictionary<Spells, Spell> spells = new Dictionary<Spells, Spell>
                                                              {
-                                                                     { Spells.Q, new Spell(SpellSlot.Q, 1100f) },
-                                                                     { Spells.W, new Spell(SpellSlot.W, 700f) },
-                                                                     { Spells.E, new Spell(SpellSlot.E, 425f) },
-                                                                     { Spells.R, new Spell(SpellSlot.R, 375f) },
-                                                                     { Spells.R2, new Spell(SpellSlot.R, 800f) }
+                                                                     { Spells.Q, new Spell(SpellSlot.Q, 1100) },
+                                                                     { Spells.W, new Spell(SpellSlot.W, 700) },
+                                                                     { Spells.E, new Spell(SpellSlot.E, 425) },
+                                                                     { Spells.R, new Spell(SpellSlot.R, 375) },
+                                                                     { Spells.R2, new Spell(SpellSlot.R, 800) }
                                                              };
 
         public static int Wcasttime;
