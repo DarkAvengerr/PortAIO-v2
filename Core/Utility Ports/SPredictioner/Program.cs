@@ -13,7 +13,7 @@ using EloBuddy;
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
             EventHandlers.Game_OnGameLoad();
         }

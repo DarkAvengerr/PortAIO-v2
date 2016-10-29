@@ -433,12 +433,18 @@ namespace PortAIO.Dual_Port
             var dutility = new Menu("Dual-Utilities", "Utilitiesports");
             dutility.AddItem(new MenuItem("enableActivator", "Enable Activator?").SetValue(false));
             dutility.AddItem(new MenuItem("Activator", "Which Activator?").SetValue(new StringList(new[] { "ElUtilitySuite", "Activator#", "NabbActivator" })));
+
             dutility.AddItem(new MenuItem("enableTracker", "Enable Tracker?").SetValue(false));
             dutility.AddItem(new MenuItem("Tracker", "Which Tracker?").SetValue(new StringList(new[] { "SFXUtility", "Tracker#", "NabbTracker" })));
+
             dutility.AddItem(new MenuItem("enableEvade", "Enable Evade?").SetValue(false));
             dutility.AddItem(new MenuItem("Evade", "Which Evade?").SetValue(new StringList(new[] { "EzEvade", "Evade" })));
+
             dutility.AddItem(new MenuItem("enableHuman", "Enable Humanizer?").SetValue(false));
             dutility.AddItem(new MenuItem("Humanizer", "Which Humanizer?").SetValue(new StringList(new[] { "Humanizer#", "Sebby Ban Wars" })));
+
+            dutility.AddItem(new MenuItem("enablePredictioner", "Enable Predictioner?").SetValue(false));
+            dutility.AddItem(new MenuItem("Predictioner", "Which Predictioner?").SetValue(new StringList(new[] { "SPredictioner", "OKTWPredictioner" })));
             menu.AddSubMenu(dutility);
 
             var utility = new Menu("Standalone Utilities", "PortAIOuTILITIESS");

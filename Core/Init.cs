@@ -116,6 +116,19 @@ namespace PortAIO
                 }
             }
 
+            if (Misc.menu.Item("enablePredictioner").GetValue<bool>())
+            {
+                switch (Misc.menu.Item("Predictioner").GetValue<StringList>().SelectedIndex)
+                {
+                    case 0: // SPredictioner
+                        SPredictioner.Program.Main();
+                        break;
+                    case 1: // OKTW Predictioner
+                        OKTWPredictioner.Program.Main();
+                        break;
+                }
+            }
+
             if (Misc.menu.Item("enableActivator").GetValue<bool>())
             {
                 switch (Misc.menu.Item("Activator").GetValue<StringList>().SelectedIndex)
