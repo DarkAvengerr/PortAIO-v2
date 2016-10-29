@@ -55,6 +55,11 @@ namespace PortAIO
             EloBuddy.SDK.Orbwalker.DisableMovement = true;
         }
 
+        public static void PortAIOMsg(string msg)
+        {
+            Chat.Print("<font color=\"#43ddaa\">[PortAIO] </font><font color=\"#ff9999\">" + msg + "</font>");
+        }
+
         public static void LoadUtility()
         {
             if (Misc.menu.Item("enableEvade").GetValue<bool>())
@@ -99,6 +104,7 @@ namespace PortAIO
                         break;
                     case 2: // NabbTracker
                         NabbTracker.Program.Main();
+                        PortAIOMsg("You're running an SDK utility. If you're using a champion port that uses the LeagueSharp-Common Orbwalker, then please disable the L# SDK Orbwalker by going into the menu and unchecking 'Enabled'.");
                         break;
                 }
             }
@@ -141,6 +147,7 @@ namespace PortAIO
                         break;
                     case 2: // NabbActivator
                         NabbActivator.Program.Main();
+                        PortAIOMsg("You're running an SDK utility. If you're using a champion port that uses the LeagueSharp-Common Orbwalker, then please disable the L# SDK Orbwalker by going into the menu and unchecking 'Enabled'.");
                         break;
                 }
             }
