@@ -41,30 +41,32 @@ using EloBuddy;
                             actualExp -= (280 + 80 + 100 * unit.Level) / 2 * (unit.Level - 1);
                         }
                         var expPercent = (int)(actualExp / neededExp * 100);
-                        if (unit.Level < 18 || GameObjects.Player.HasBuff("AwesomeBuff") && unit.Level < 30)
+                        if (unit.Level < 18 || (GameObjects.Player.HasBuff("AwesomeBuff") && unit.Level < 30))
                         {
                             Drawing.DrawLine(
                                 Vars.ExpX - 76,
-                                Vars.ExpY + 20,
+                                Vars.ExpY - 5,
                                 Vars.ExpX + 56,
-                                Vars.ExpY + 20,
+                                Vars.ExpY - 5,
                                 7,
                                 Colors.Convert(Color.Purple));
+
                             if (expPercent > 0)
                             {
                                 Drawing.DrawLine(
                                     Vars.ExpX - 76,
-                                    Vars.ExpY + 20,
+                                    Vars.ExpY - 5,
                                     Vars.ExpX - 76 + (float)(1.32 * expPercent),
-                                    Vars.ExpY + 20,
+                                    Vars.ExpY - 5,
                                     7,
                                     Colors.Convert(Color.Red));
                             }
+
                             Vars.DisplayTextFont.DrawText(
                                 null,
                                 expPercent > 0 ? $"{expPercent}%" : "0%",
                                 Vars.ExpX - 13,
-                                Vars.ExpY + 17,
+                                Vars.ExpY - 13,
                                 Colors.Convert(SharpDX.Color.Yellow));
                         }
                     }

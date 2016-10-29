@@ -142,12 +142,12 @@ using EloBuddy;
         {
             if (SpecialChampions.Contains(target.ChampionName))
             {
-                return Menu["miscellaneous"]["name"].GetValue<MenuBool>().Value ? -47 : -38;
+                return Menu["miscellaneous"]["name"].GetValue<MenuBool>().Value ? -67 : -58;
             }
 
             return target.IsMe
-                       ? Menu["miscellaneous"]["name"].GetValue<MenuBool>().Value ? -40 : -30
-                       : Menu["miscellaneous"]["name"].GetValue<MenuBool>().Value ? -33 : -22;
+                       ? Menu["miscellaneous"]["name"].GetValue<MenuBool>().Value ? -60 : -50
+                       : Menu["miscellaneous"]["name"].GetValue<MenuBool>().Value ? -53 : -42;
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ using EloBuddy;
                 return target.IsMe ? 34 : 17;
             }
 
-            return target.IsMe ? 55 : 10;
+            return target.IsMe ? 30 : 10;
         }
 
         /// <summary>
@@ -173,7 +173,7 @@ using EloBuddy;
                 return 25;
             }
 
-            return target.IsMe ? 25 : 35;
+            return target.IsMe ? 25 : 25;
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ using EloBuddy;
                 return 2;
             }
 
-            return 10;
+            return 2;
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ using EloBuddy;
                 return -12;
             }
 
-            return target.IsMe ? -4 : 4;
+            return target.IsMe ? -35 : -35;
         }
 
         #endregion
