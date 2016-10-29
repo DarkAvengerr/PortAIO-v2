@@ -659,7 +659,7 @@ using EloBuddy;
             }
         }
 
-        private static void Game_OnGameLoad(EventArgs args)
+        public static void Game_OnGameLoad()
         {
             try
             {
