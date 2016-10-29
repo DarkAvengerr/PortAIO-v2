@@ -95,9 +95,9 @@ using EloBuddy;
 
         public static bool InRange(AttackableUnit x)
         {
-            return ObjectManager.Player.HasBuff("RivenFengShuiEngine")
-            ? Player.Distance(x) <= 330
-            : Player.Distance(x) <= 265;
+            if (x == null)
+                return false;
+            return ObjectManager.Player.HasBuff("RivenFengShuiEngine") ? Player.Distance(x) <= 330 : Player.Distance(x) <= 265;
         }
         #endregion
 
