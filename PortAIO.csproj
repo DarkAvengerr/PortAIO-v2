@@ -860,6 +860,14 @@
     <Compile Include="Core\Champion Ports\Dual-Port\Varus\ElVarusRevamped\Program.cs" />
     <Compile Include="Core\Champion Ports\Dual-Port\Varus\ElVarusRevamped\Utils\Logging.cs" />
     <Compile Include="Core\Champion Ports\Dual-Port\Varus\ElVarusRevamped\Utils\Misc.cs" />
+    <Compile Include="Core\Champion Ports\Main Champion Ports\LeeSin\Drawings.cs" />
+    <Compile Include="Core\Champion Ports\Main Champion Ports\LeeSin\EscapeHandler.cs" />
+    <Compile Include="Core\Champion Ports\Main Champion Ports\LeeSin\InitMenu.cs" />
+    <Compile Include="Core\Champion Ports\Main Champion Ports\LeeSin\Program.cs" />
+    <Compile Include="Core\Champion Ports\Main Champion Ports\LeeSin\Utilities\Geometry.cs" />
+    <Compile Include="Core\Champion Ports\Main Champion Ports\LeeSin\Utilities\Misc.cs" />
+    <Compile Include="Core\Champion Ports\Main Champion Ports\LeeSin\Utilities\PassiveManager.cs" />
+    <Compile Include="Core\Champion Ports\Main Champion Ports\LeeSin\Utilities\Wardmanager.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Varus\DrawDamage.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Varus\Drawings.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Varus\ElVarusMenu.cs" />
@@ -3122,11 +3130,6 @@
     <Compile Include="Core\Champion Ports\Main Champion Ports\LeBlanc\Modes\ModeLane.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\LeBlanc\Modes\ModePerma.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\LeBlanc\Modes\ModeSettings.cs" />
-    <Compile Include="Core\Champion Ports\Main Champion Ports\LeeSin\Drawings.cs" />
-    <Compile Include="Core\Champion Ports\Main Champion Ports\LeeSin\EscapeHandler.cs" />
-    <Compile Include="Core\Champion Ports\Main Champion Ports\LeeSin\Geometry.cs" />
-    <Compile Include="Core\Champion Ports\Main Champion Ports\LeeSin\InitMenu.cs" />
-    <Compile Include="Core\Champion Ports\Main Champion Ports\LeeSin\Program.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Lissandra\DamageIndicator.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Lissandra\Lissandra.cs" />
     <Compile Include="Core\Champion Ports\Main Champion Ports\Lissandra\LissMenu.cs" />

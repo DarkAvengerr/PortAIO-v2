@@ -1,4 +1,6 @@
-﻿namespace ElLeeSin
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ElLeeSin
 {
     using System.Drawing;
 
@@ -22,17 +24,14 @@
             Menu.AddSubMenu(new Menu("Orbwalker", "Orbwalker"));
             Program.Orbwalker = new Orbwalking.Orbwalker(Menu.SubMenu("Orbwalker"));
 
-            var ts = new Menu("Target Selector", "Target Selector");
-            TargetSelector.AddToMenu(ts);
-            Menu.AddSubMenu(ts);
-
             Menu.AddSubMenu(new Menu("Combo", "Combo"));
             Menu.SubMenu("Combo").AddItem(new MenuItem("ElLeeSin.Combo.Q", "Use Q").SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("ElLeeSin.Combo.Q2", "Use Q2").SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("ElLeeSin.Combo.W2", "Use W").SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("ElLeeSin.Combo.E", "Use E").SetValue(true));
             Menu.SubMenu("Combo").AddItem(new MenuItem("ElLeeSin.Combo.R", "Use R").SetValue(true));
-            Menu.SubMenu("Combo").AddItem(new MenuItem("ElLeeSin.Combo.StarKill1", "Use starcombo to kill").SetValue(false));
+            Menu.SubMenu("Combo")
+                .AddItem(new MenuItem("ElLeeSin.Combo.StarKill1", "Use starcombo to kill").SetValue(false));
             Menu.SubMenu("Combo")
                 .AddItem(new MenuItem("ElLeeSin.Combo.PassiveStacks", "Min Stacks").SetValue(new Slider(1, 1, 2)));
 
@@ -92,7 +91,7 @@
                 insecMenu.AddItem(new MenuItem("insecOrbwalk", "Orbwalking").SetValue(true));
                 insecMenu.AddItem(new MenuItem("ElLeeSin.Flash.Insec", "Flash Insec when no ward").SetValue(false));
                 insecMenu.AddItem(new MenuItem("waitForQBuff", "Wait For Q").SetValue(false));
-                insecMenu.AddItem(new MenuItem("checkOthers1", "Check for units to Insec").SetValue(true));
+                insecMenu.AddItem(new MenuItem("checkOthers2", "Use units to insec").SetValue(true));
                 insecMenu.AddItem(new MenuItem("clickInsec", "Click Insec").SetValue(true));
                 insecMenu.AddItem(new MenuItem("bonusRangeA", "Ally Bonus Range").SetValue(new Slider(0, 0, 1000)));
                 insecMenu.AddItem(new MenuItem("bonusRangeT", "Towers Bonus Range").SetValue(new Slider(0, 0, 1000)));

@@ -3,7 +3,6 @@ using EloBuddy;
  namespace ElLeeSin
 {
     using System;
-    using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -19,14 +18,13 @@ using EloBuddy;
         public static void OnDraw(EventArgs args)
         {
             var newTarget = Program.ParamBool("insecMode")
-                                 ? (TargetSelector.GetSelectedTarget()
-                                    ?? TargetSelector.GetTarget(
-                                         Program.spells[Program.Spells.Q].Range,
-                                        TargetSelector.DamageType.Physical))
-                                 : TargetSelector.GetTarget(
-                                      Program.spells[Program.Spells.Q].Range,
-                                     TargetSelector.DamageType.Physical);
-
+                                ? (TargetSelector.GetSelectedTarget()
+                                   ?? TargetSelector.GetTarget(
+                                       Program.spells[Program.Spells.Q].Range,
+                                       TargetSelector.DamageType.Physical))
+                                : TargetSelector.GetTarget(
+                                    Program.spells[Program.Spells.Q].Range,
+                                    TargetSelector.DamageType.Physical);
 
             if (Program.ClicksecEnabled && Program.ParamBool("clickInsec"))
             {
@@ -39,9 +37,10 @@ using EloBuddy;
                 Drawing.DrawText(playerPos.X, playerPos.Y + 40, Color.White, "Flash Insec enabled");
             }
 
-            if (Program.ParamBool("Draw.Insec.Lines")) //&& Program.spells[Program.Spells.R].IsReady()
+            if (Program.ParamBool("Draw.Insec.Lines"))
             {
-                if (newTarget != null && newTarget.IsVisible && newTarget.IsValidTarget() && !newTarget.IsDead && ObjectManager.Player.Distance(newTarget) < 3000)
+                if ((newTarget != null) && newTarget.IsVisible && newTarget.IsValidTarget() && !newTarget.IsDead
+                    && (ObjectManager.Player.Distance(newTarget) < 3000))
                 {
                     Vector2 targetPos = Drawing.WorldToScreen(newTarget.Position);
                     Drawing.DrawLine(
@@ -59,10 +58,9 @@ using EloBuddy;
                         "Selected Target");
 
                     Drawing.DrawCircle(Program.GetInsecPos(newTarget), 100, Color.DeepSkyBlue);
-
                 }
             }
-    
+
             if (!Program.ParamBool("DrawEnabled"))
             {
                 return;

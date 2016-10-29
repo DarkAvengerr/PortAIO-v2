@@ -6,16 +6,21 @@ using EloBuddy;
     using System.Collections.Generic;
     using System.Linq;
 
+    using ElLeeSin.Utilities;
+
     using LeagueSharp;
     using LeagueSharp.Common;
 
     using SharpDX;
 
-    using ItemData = LeagueSharp.Common.Data.ItemData;
-
     internal static class Program
     {
         #region Constants
+
+        /// <summary>
+        ///     The ward range
+        /// </summary>
+        public const int WardRange = 600;
 
         private const int FlashRange = 425;
 
@@ -29,14 +34,11 @@ using EloBuddy;
         /// </summary>
         private const float LeeSinRKickWidth = 100;
 
-        /// <summary>
-        ///     The ward range
-        /// </summary>
-        private const int WardRange = 600;
-
         #endregion
 
         #region Static Fields
+
+        public static readonly bool castWardAgain = true;
 
         public static bool CheckQ = true;
 
@@ -52,21 +54,23 @@ using EloBuddy;
 
         public static float LastWard;
 
+        public static Vector3 lastWardPos;
+
         public static Orbwalking.Orbwalker Orbwalker;
 
-        //public static int LastQ, LastQ2, LastW, LastW2, LastE, LastE2, LastR, LastSpell, PassiveStacks;
-
         public static int PassiveStacks, LastW;
+
+        public static bool reCheckWard = true;
 
         public static Spell smite = null;
 
         public static Dictionary<Spells, Spell> spells = new Dictionary<Spells, Spell>
                                                              {
-                                                                     { Spells.Q, new Spell(SpellSlot.Q, 1100) },
-                                                                     { Spells.W, new Spell(SpellSlot.W, 700) },
-                                                                     { Spells.E, new Spell(SpellSlot.E, 425) },
-                                                                     { Spells.R, new Spell(SpellSlot.R, 375) },
-                                                                     { Spells.R2, new Spell(SpellSlot.R, 800) }
+                                                                     { Spells.Q, new Spell(SpellSlot.Q, 1100f) },
+                                                                     { Spells.W, new Spell(SpellSlot.W, 700f) },
+                                                                     { Spells.E, new Spell(SpellSlot.E, 425f) },
+                                                                     { Spells.R, new Spell(SpellSlot.R, 375f) },
+                                                                     { Spells.R2, new Spell(SpellSlot.R, 800f) }
                                                              };
 
         public static int Wcasttime;
@@ -87,18 +91,9 @@ using EloBuddy;
                         "blindmonketwo", "blindmonkrkick"
                     });
 
-        private static readonly bool castWardAgain = true;
-
         private static readonly int[] SmiteBlue = { 3706, 1403, 1402, 1401, 1400 };
 
         private static readonly int[] SmiteRed = { 3715, 1415, 1414, 1413, 1412 };
-
-        private static readonly string[] SpellNames =
-            {
-                "blindmonkqone", "blindmonkwone", "blindmonkeone",
-                "blindmonkwtwo", "blindmonkqtwo", "blindmonketwo",
-                "blindmonkrkick"
-            };
 
         private static bool castQAgain;
 
@@ -114,7 +109,7 @@ using EloBuddy;
 
         private static Vector3 insecPos;
 
-        private static bool isInQ2;
+        public static bool isInQ2;
 
         private static bool isNullInsecPos = true;
 
@@ -124,15 +119,11 @@ using EloBuddy;
 
         private static float lastPlaced;
 
-        private static Vector3 lastWardPos;
-
         private static Vector3 mouse = Game.CursorPos;
 
         private static bool q2Done;
 
         private static float q2Timer;
-
-        private static bool reCheckWard = true;
 
         private static float resetTime;
 
@@ -143,6 +134,15 @@ using EloBuddy;
         #endregion
 
         #region Enums
+
+        public enum WCastStage
+        {
+            First,
+
+            Second,
+
+            Cooldown
+        }
 
         internal enum Spells
         {
@@ -168,110 +168,6 @@ using EloBuddy;
             Pressr
         }
 
-        private enum WCastStage
-        {
-            First,
-
-            Second,
-
-            Cooldown
-        }
-
-        #endregion
-
-        #region Public Properties
-
-        /// <summary>
-        ///     Gets the Q Instance name
-        /// </summary>
-        /// <value>
-        ///     Q instance name
-        /// </value>
-        public static bool IsQOne
-            => spells[Spells.Q].Instance.Name.Equals("BlindMonkQOne", StringComparison.InvariantCultureIgnoreCase);
-
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        ///     Gets Ravenous Hydra
-        /// </summary>
-        /// <value>
-        ///     Ravenous Hydra
-        /// </value>
-        private static Items.Item Hydra => ItemData.Ravenous_Hydra_Melee_Only.GetItem();
-
-        /// <summary>
-        ///     Gets the E Instance name
-        /// </summary>
-        /// <value>
-        ///     E instance name
-        /// </value>
-        private static bool IsEOne
-            => spells[Spells.E].Instance.Name.Equals("BlindMonkEOne", StringComparison.InvariantCultureIgnoreCase);
-
-        /// <summary>
-        ///     Gets the W Instance name
-        /// </summary>
-        /// <value>
-        ///     W instance name
-        /// </value>
-        private static bool IsWOne
-            => spells[Spells.W].Instance.Name.Equals("BlindMonkWOne", StringComparison.InvariantCultureIgnoreCase);
-
-        /// <summary>
-        ///     Gets Tiamat Item
-        /// </summary>
-        /// <value>
-        ///     Tiamat Item
-        /// </value>
-        private static Items.Item Tiamat => ItemData.Tiamat_Melee_Only.GetItem();
-
-        /// <summary>
-        ///     Gets Titanic Hydra
-        /// </summary>
-        /// <value>
-        ///     Titanic Hydra
-        /// </value>
-        private static Items.Item Titanic => ItemData.Titanic_Hydra_Melee_Only.GetItem();
-
-        /// <summary>
-        ///     The ward flash range.
-        /// </summary>
-        private static float WardFlashRange => WardRange + spells[Spells.R].Range - 100;
-
-        /// <summary>
-        ///     Gets the W Instance name
-        /// </summary>
-        /// QState
-        /// <value>
-        ///     W instance name
-        /// </value>
-        private static WCastStage WStage
-        {
-            get
-            {
-                if (!spells[Spells.W].IsReady())
-                {
-                    return WCastStage.Cooldown;
-                }
-
-                return ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W)
-                           .Name.Equals("blindmonkwtwo", StringComparison.InvariantCultureIgnoreCase)
-                           ? WCastStage.Second
-                           : WCastStage.First;
-            }
-        }
-
-        /// <summary>
-        ///     Gets Youmuus Ghostblade
-        /// </summary>
-        /// <value>
-        ///     Youmuus Ghostblade
-        /// </value>
-        private static Items.Item Youmuu => ItemData.Youmuus_Ghostblade.GetItem();
-
         #endregion
 
         #region Public Methods and Operators
@@ -291,27 +187,38 @@ using EloBuddy;
             var heroes = ObjectManager.Player.GetEnemiesInRange(385).Count;
             var count = heroes;
 
-            var tiamat = Tiamat;
+            var tiamat = Misc.Tiamat;
             if (tiamat.IsReady() && (count > 0) && tiamat.Cast())
             {
                 return true;
             }
 
-            var hydra = Hydra;
-            if (Hydra.IsReady() && (count > 0) && hydra.Cast())
+            var hydra = Misc.Hydra;
+            if (Misc.Hydra.IsReady() && (count > 0) && hydra.Cast())
             {
                 return true;
             }
 
-            var youmuus = Youmuu;
-            if ((Youmuu.IsReady() && (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo))
+            var youmuus = Misc.Youmuu;
+            if ((Misc.Youmuu.IsReady() && (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo))
                 || ((Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed) && youmuus.Cast()))
             {
                 return true;
             }
 
-            var titanic = Titanic;
+            var titanic = Misc.Titanic;
             return titanic.IsReady() && (count > 0) && titanic.Cast();
+        }
+
+        public static void CastW(Obj_AI_Base obj)
+        {
+            if ((500 >= Utils.TickCount - Wcasttime) || (Misc.WStage != WCastStage.First))
+            {
+                return;
+            }
+
+            spells[Spells.W].CastOnUnit(obj);
+            Wcasttime = Utils.TickCount;
         }
 
         public static InventorySlot FindBestWardItem()
@@ -395,12 +302,6 @@ using EloBuddy;
             return new Vector3();
         }
 
-        public static bool HasQBuff(this Obj_AI_Base unit)
-        {
-            return unit.HasAnyBuffs("BlindMonkQOne") || unit.HasAnyBuffs("blindmonkqonechaos")
-                   || unit.HasAnyBuffs("BlindMonkSonicWave");
-        }
-
         public static void Orbwalk(Vector3 pos, AIHeroClient target = null)
         {
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, pos);
@@ -436,13 +337,6 @@ using EloBuddy;
 
         #region Methods
 
-        /// <summary>
-        ///     Checks if a target has the BlindMonkTempest buff.
-        /// </summary>
-        /// <param name="target"></param>
-        /// <returns></returns>
-        internal static bool HasBlindMonkTempest(Obj_AI_Base target) => target.HasBuff("BlindMonkTempest");
-
         private static void AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             var targ = target as Obj_AI_Base;
@@ -464,7 +358,7 @@ using EloBuddy;
                 return;
             }
 
-            if (spells[Spells.E].IsReady() && (target.Type == GameObjectType.AIHeroClient) && IsEOne)
+            if (spells[Spells.E].IsReady() && (target.Type == GameObjectType.AIHeroClient) && Misc.IsEOne)
             {
                 spells[Spells.E].Cast();
             }
@@ -494,7 +388,7 @@ using EloBuddy;
 
                 if (spells[Spells.Q].IsReady() && ParamBool("ElLeeSin.Lane.Q"))
                 {
-                    if (IsQOne)
+                    if (Misc.IsQOne)
                     {
                         if (minions.Distance(ObjectManager.Player) < spells[Spells.Q].Range)
                         {
@@ -521,7 +415,7 @@ using EloBuddy;
 
                 if (spells[Spells.E].IsReady() && ParamBool("ElLeeSin.Lane.E"))
                 {
-                    if (IsEOne)
+                    if (Misc.IsEOne)
                     {
                         if (PassiveStacks > 0)
                         {
@@ -537,7 +431,7 @@ using EloBuddy;
                     else
                     {
                         if ((PassiveStacks == 0) && (minions.Distance(ObjectManager.Player) < spells[Spells.E].Range)
-                            && HasBlindMonkTempest(minions))
+                            && Misc.HasBlindMonkTempest(minions))
                         {
                             if (Environment.TickCount - lastSpellCastTime <= 500)
                             {
@@ -585,7 +479,7 @@ using EloBuddy;
                 return;
             }
 
-            if (IsEOne)
+            if (Misc.IsEOne)
             {
                 var target =
                     HeroManager.Enemies.Where(x => x.IsValidTarget(spells[Spells.E].Range) && !x.IsDead && !x.IsZombie)
@@ -636,7 +530,7 @@ using EloBuddy;
             }
 
             var prediction = spells[Spells.Q].GetPrediction(target);
-            spells[Spells.Q].CastIfHitchanceEquals(target, HitChance.Medium);
+            spells[Spells.Q].CastIfHitchanceEquals(target, HitChance.VeryHigh);
 
             if (smiteQ && ParamBool("ElLeeSin.Smite.Q"))
             {
@@ -652,17 +546,6 @@ using EloBuddy;
                     spells[Spells.Q].Cast(prediction.CastPosition);
                 }
             }
-        }
-
-        private static void CastW(Obj_AI_Base obj)
-        {
-            if ((500 >= Utils.TickCount - Wcasttime) || (WStage != WCastStage.First))
-            {
-                return;
-            }
-
-            spells[Spells.W].CastOnUnit(obj);
-            Wcasttime = Utils.TickCount;
         }
 
         private static void Combo()
@@ -694,13 +577,13 @@ using EloBuddy;
                             && (target.Distance(ObjectManager.Player) < 600 + spells[Spells.R].Range - 50)
                             && (ObjectManager.Player.Mana >= 80) && !ObjectManager.Player.IsDashing())
                         {
-                            WardJump(target.Position, false, true);
+                            Wardmanager.WardJump(target.Position, false, true);
                         }
                     }
                 }
             }
 
-            if (ParamBool("ElLeeSin.Combo.Q") && spells[Spells.Q].IsReady() && IsQOne)
+            if (ParamBool("ElLeeSin.Combo.Q") && spells[Spells.Q].IsReady() && Misc.IsQOne)
             {
                 CastQ(target, ParamBool("ElLeeSin.Smite.Q"));
             }
@@ -709,7 +592,7 @@ using EloBuddy;
                 && target.IsValidTarget(1300f) && !isInQ2)
             {
                 if (castQAgain || (spells[Spells.Q].GetDamage(target, 1) > target.Health + target.AttackShield)
-                    || ((ReturnQBuff()?.Distance(target) < ObjectManager.Player.Distance(target))
+                    || ((Misc.ReturnQBuff()?.Distance(target) < ObjectManager.Player.Distance(target))
                         && !target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(ObjectManager.Player))))
                 {
                     spells[Spells.Q].Cast();
@@ -734,13 +617,13 @@ using EloBuddy;
                 if (ParamBool("ElLeeSin.Combo.Mode.WW")
                     && (target.Distance(ObjectManager.Player) > Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)))
                 {
-                    WardJump(target.Position, false, true);
+                    Wardmanager.WardJump(target.Position, false, true);
                 }
 
                 if (!ParamBool("ElLeeSin.Combo.Mode.WW")
                     && (target.Distance(ObjectManager.Player) > spells[Spells.Q].Range))
                 {
-                    WardJump(target.Position, false, true);
+                    Wardmanager.WardJump(target.Position, false, true);
                 }
             }
 
@@ -757,7 +640,7 @@ using EloBuddy;
                     return;
                 }
 
-                if (IsWOne)
+                if (Misc.IsWOne)
                 {
                     if (target.IsValidTarget(ObjectManager.Player.AttackRange + 50))
                     {
@@ -776,7 +659,7 @@ using EloBuddy;
             }
         }
 
-        public static void Game_OnGameLoad()
+        private static void Game_OnGameLoad(EventArgs args)
         {
             try
             {
@@ -796,16 +679,17 @@ using EloBuddy;
 
                 InitMenu.Initialize();
 
+                GameObject.OnCreate += OnCreate;
+                Game.OnWndProc += Game_OnWndProc;
                 Drawing.OnDraw += Drawings.OnDraw;
                 Game.OnUpdate += Game_OnGameUpdate;
-                Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
-                GameObject.OnCreate += OnCreate;
                 Orbwalking.AfterAttack += AfterAttack;
                 Orbwalking.BeforeAttack += BeforeAttack;
                 GameObject.OnDelete += GameObject_OnDelete;
-                Game.OnWndProc += Game_OnWndProc;
-                Obj_AI_Base.OnBuffGain += OnBuffAdd;
-                Obj_AI_Base.OnBuffLose += OnBuffLose;
+                Obj_AI_Base.OnBuffGain += PassiveManager.OnBuffAdd;
+                Obj_AI_Base.OnBuffLose += PassiveManager.OnBuffLose;
+                Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+
             }
             catch (Exception e)
             {
@@ -920,7 +804,7 @@ using EloBuddy;
 
                 if (InitMenu.Menu.Item("ElLeeSin.Wardjump").GetValue<KeyBind>().Active)
                 {
-                    WardjumpToMouse();
+                    Wardmanager.WardjumpToMouse();
                 }
 
                 if (InitMenu.Menu.Item("ElLeeSin.Insec.UseInstaFlash").GetValue<KeyBind>().Active)
@@ -1038,14 +922,14 @@ using EloBuddy;
             foreach (var hero in heroes)
             {
                 var localTemp =
-                    GetAllyHeroes(hero, 500 + InitMenu.Menu.Item("bonusRangeA").GetValue<Slider>().Value).Count;
+                    GetAllyHeroes(hero, 750 + InitMenu.Menu.Item("bonusRangeA").GetValue<Slider>().Value).Count;
                 if (localTemp > alliesAround)
                 {
                     tempObject = hero;
                     alliesAround = (byte)localTemp;
                 }
             }
-            return GetAllyHeroes(tempObject, 500 + InitMenu.Menu.Item("bonusRangeA").GetValue<Slider>().Value);
+            return GetAllyHeroes(tempObject, 750 + InitMenu.Menu.Item("bonusRangeA").GetValue<Slider>().Value);
         }
 
         private static SpellDataInst GetItemSpell(InventorySlot invSlot)
@@ -1063,7 +947,7 @@ using EloBuddy;
                     return;
                 }
 
-                if (!IsQOne && ParamBool("ElLeeSin.Harass.Q1") && !IsQOne && spells[Spells.Q].IsReady()
+                if (!Misc.IsQOne && ParamBool("ElLeeSin.Harass.Q1") && !Misc.IsQOne && spells[Spells.Q].IsReady()
                     && target.HasQBuff()
                     && ((spells[Spells.Q].GetDamage(target, 1) > target.Health)
                         || (target.Distance(ObjectManager.Player)
@@ -1081,7 +965,7 @@ using EloBuddy;
 
                 if (spells[Spells.Q].IsReady() && ParamBool("ElLeeSin.Harass.Q1"))
                 {
-                    if (IsQOne && (target.Distance(ObjectManager.Player) < spells[Spells.Q].Range))
+                    if (Misc.IsQOne && (target.Distance(ObjectManager.Player) < spells[Spells.Q].Range))
                     {
                         CastQ(target, ParamBool("ElLeeSin.Smite.Q"));
                     }
@@ -1089,13 +973,13 @@ using EloBuddy;
 
                 if (spells[Spells.E].IsReady() && ParamBool("ElLeeSin.Harass.E1"))
                 {
-                    if (IsEOne && (target.Distance(ObjectManager.Player) < spells[Spells.E].Range))
+                    if (Misc.IsEOne && (target.Distance(ObjectManager.Player) < spells[Spells.E].Range))
                     {
                         spells[Spells.E].Cast();
                         return;
                     }
 
-                    if (!IsEOne
+                    if (!Misc.IsEOne
                         && (target.Distance(ObjectManager.Player)
                             > Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 50))
                     {
@@ -1105,8 +989,8 @@ using EloBuddy;
 
                 if (ParamBool("ElLeeSin.Harass.Wardjump") && (ObjectManager.Player.Distance(target) < 50)
                     && !target.HasQBuff()
-                    && (IsEOne || (!spells[Spells.E].IsReady() && ParamBool("ElLeeSin.Harass.E1")))
-                    && (IsQOne || (!spells[Spells.Q].IsReady() && ParamBool("ElLeeSin.Harass.Q1"))))
+                    && (Misc.IsEOne || (!spells[Spells.E].IsReady() && ParamBool("ElLeeSin.Harass.E1")))
+                    && (Misc.IsQOne || (!spells[Spells.Q].IsReady() && ParamBool("ElLeeSin.Harass.Q1"))))
                 {
                     var min =
                         ObjectManager.Get<Obj_AI_Minion>()
@@ -1121,13 +1005,6 @@ using EloBuddy;
             {
                 Console.WriteLine("An error occurred: '{0}'", e);
             }
-        }
-
-        private static bool HasAnyBuffs(this Obj_AI_Base unit, string s)
-        {
-            return
-                unit.Buffs.Any(
-                    a => a.Name.ToLower().Contains(s.ToLower()) || a.DisplayName.ToLower().Contains(s.ToLower()));
         }
 
         /// <summary>
@@ -1162,61 +1039,43 @@ using EloBuddy;
             switch (insecComboStep)
             {
                 case InsecComboStepSelect.Qgapclose:
-                    if (IsQOne)
+                    if (Misc.IsQOne)
                     {
                         var pred1 = spells[Spells.Q].GetPrediction(target);
-                        if (pred1.Hitchance >= HitChance.Medium)
+                        if (pred1.Hitchance >= HitChance.High)
                         {
-                            if (pred1.CollisionObjects.Count == 0)
-                            {
-                                if (spells[Spells.Q].Cast(pred1.CastPosition))
-                                {
-                                    return;
-                                }
-                            }
-                            else
-                            {
-                                CastQ(target, ParamBool("ElLeeSin.Smite.Q"));
-                            }
+                            CastQ(target, ParamBool("ElLeeSin.Smite.Q"));
                         }
 
-                        if (!ParamBool("checkOthers1"))
+                        if (!ParamBool("checkOthers2"))
                         {
                             return;
                         }
 
-                        if (ObjectManager.Player.Distance(target) > 700f)
-                        {
-                            var insectObjects =
-                                HeroManager.Enemies.Where(
-                                        i =>
-                                            i.IsValidTarget(spells[Spells.Q].Range)
-                                            && (spells[Spells.Q].GetHealthPrediction(i) > spells[Spells.Q].GetDamage(i))
-                                            && (i.Distance(target) < target.Distance(ObjectManager.Player))
-                                            && (i.Distance(target) < 550))
-                                    .Concat(
-                                        MinionManager.GetMinions(
-                                            ObjectManager.Player.ServerPosition,
-                                            spells[Spells.Q].Range))
+                        var insectObjects =
+                            HeroManager.Enemies.Where(
+                                    x =>
+                                        x.IsValidTarget(spells[Spells.Q].Range) && !x.Compare(target)
+                                        && (spells[Spells.Q].GetHealthPrediction(x) > spells[Spells.Q].GetDamage(x))
+                                        && (x.Distance(target) < target.DistanceToPlayer()) && (x.Distance(target) < 750))
+                                .Concat(MinionManager.GetMinions(ObjectManager.Player.ServerPosition, spells[Spells.Q].Range, MinionTypes.All, MinionTeam.NotAlly))
                                     .Where(
                                         m =>
-                                            m.IsValidTarget(spells[Spells.Q].Range)
-                                            && (spells[Spells.Q].GetHealthPrediction(m) > spells[Spells.Q].GetDamage(m))
-                                            && (m.Distance(target) < 400f))
-                                    .OrderBy(i => i.Distance(target))
-                                    .ThenByDescending(i => i.Health)
+                                        m.IsValidTarget(spells[Spells.Q].Range)
+                                        && spells[Spells.Q].GetHealthPrediction(m) > spells[Spells.Q].GetDamage(m)
+                                        && m.Distance(target) < 400f)
+                                        .OrderBy(i => i.Distance(target))
                                     .ToList();
 
-                            if (insectObjects.Count == 0)
-                            {
-                                return;
-                            }
-
-                            insectObjects.ForEach(i => spells[Spells.Q].Cast(i));
+                        if (insectObjects.Count == 0)
+                        {
+                            return;
                         }
+
+                        insectObjects.ForEach(i => spells[Spells.Q].Cast(i));
                     }
 
-                    if (!target.HasQBuff() && IsQOne)
+                    if (!target.HasQBuff() && Misc.IsQOne)
                     {
                         CastQ(target, ParamBool("ElLeeSin.Smite.Q"));
                     }
@@ -1229,7 +1088,8 @@ using EloBuddy;
                     {
                         if (spells[Spells.Q].Instance.Name.Equals(
                                 "blindmonkqtwo",
-                                StringComparison.InvariantCultureIgnoreCase) && (ReturnQBuff()?.Distance(target) <= 600))
+                                StringComparison.InvariantCultureIgnoreCase)
+                            && (Misc.ReturnQBuff()?.Distance(target) <= 600))
                         {
                             spells[Spells.Q].Cast();
                         }
@@ -1240,7 +1100,7 @@ using EloBuddy;
 
                     if (ObjectManager.Player.Distance(target) < WardRange)
                     {
-                        WardJump(GetInsecPos(target), false, true, true);
+                        Wardmanager.WardJump(GetInsecPos(target), false, true, true);
 
                         if ((FindBestWardItem() == null) && spells[Spells.R].IsReady()
                             && ParamBool("ElLeeSin.Flash.Insec")
@@ -1253,9 +1113,9 @@ using EloBuddy;
                             }
                         }
                     }
-                    else if (ObjectManager.Player.Distance(target) < WardFlashRange)
+                    else if (ObjectManager.Player.Distance(target) < Misc.WardFlashRange)
                     {
-                        WardJump(target.Position);
+                        Wardmanager.WardJump(target.Position);
 
                         if (spells[Spells.R].IsReady() && ParamBool("ElLeeSin.Flash.Insec")
                             && (ObjectManager.Player.Spellbook.CanUseSpell(flashSlot) == SpellState.Ready))
@@ -1305,7 +1165,7 @@ using EloBuddy;
                     return;
                 }
 
-                if (IsEOne)
+                if (Misc.IsEOne)
                 {
                     if (spells[Spells.E].IsReady() && ParamBool("ElLeeSin.Jungle.E"))
                     {
@@ -1324,7 +1184,7 @@ using EloBuddy;
                 else
                 {
                     if ((PassiveStacks == 0) && (minion.Distance(ObjectManager.Player) < spells[Spells.E].Range)
-                        && HasBlindMonkTempest(minion))
+                        && Misc.HasBlindMonkTempest(minion))
                     {
                         if (Environment.TickCount - lastSpellCastTime <= 500)
                         {
@@ -1335,7 +1195,7 @@ using EloBuddy;
                     }
                 }
 
-                if (IsQOne)
+                if (Misc.IsQOne)
                 {
                     if (spells[Spells.Q].IsReady() && ParamBool("ElLeeSin.Jungle.Q"))
                     {
@@ -1365,14 +1225,14 @@ using EloBuddy;
 
                 if (spells[Spells.W].IsReady() && ParamBool("ElLeeSin.Jungle.W"))
                 {
-                    if (IsWOne)
+                    if (Misc.IsWOne)
                     {
                         if (PassiveStacks == 2)
                         {
                             return;
                         }
 
-                        if (IsWOne && minion.IsValidTarget(ObjectManager.Player.AttackRange + 50))
+                        if (Misc.IsWOne && minion.IsValidTarget(ObjectManager.Player.AttackRange + 50))
                         {
                             spells[Spells.W].Cast();
                             lastSpellCastTime = Environment.TickCount;
@@ -1390,9 +1250,9 @@ using EloBuddy;
             }
         }
 
-        private static void Main()
+        private static void Main(string[] args)
         {
-            Game_OnGameLoad();
+            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
         }
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -1492,57 +1352,7 @@ using EloBuddy;
             }
         }
 
-        private static void OnBuffAdd(Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs args)
-        {
-            try
-            {
-                if (!sender.IsMe)
-                {
-                    return;
-                }
-
-                if (args.Buff.DisplayName.Equals("BlindMonkFlurry", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    PassiveStacks = 2;
-                }
-
-                if (args.Buff.DisplayName.Equals("BlindMonkQTwoDash", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    isInQ2 = true;
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("@PassiveManager.cs: Can not {0} -", e);
-                throw;
-            }
-        }
-
-        private static void OnBuffLose(Obj_AI_Base sender, Obj_AI_BaseBuffLoseEventArgs args)
-        {
-            try
-            {
-                if (!sender.IsMe)
-                {
-                    return;
-                }
-
-                if (args.Buff.DisplayName.Equals("BlindMonkFlurry", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    PassiveStacks = 0;
-                }
-
-                if (args.Buff.DisplayName.Equals("BlindMonkQTwoDash", StringComparison.InvariantCultureIgnoreCase))
-                {
-                    isInQ2 = false;
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("@PassiveManager.cs: Can not {0} -", e);
-                throw;
-            }
-        }
+       
 
         private static void OnCreate(GameObject sender, EventArgs args)
         {
@@ -1555,22 +1365,6 @@ using EloBuddy;
                     spells[Spells.W].Cast(ward);
                 }
             }
-        }
-
-        private static Obj_AI_Base ReturnQBuff()
-        {
-            try
-            {
-                return
-                    ObjectManager.Get<Obj_AI_Base>()
-                        .Where(a => a.IsValidTarget(1300))
-                        .FirstOrDefault(unit => unit.HasQBuff());
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("An error occurred: '{0}'", e);
-            }
-            return null;
         }
 
         private static string SmiteSpellName()
@@ -1595,8 +1389,8 @@ using EloBuddy;
                 return false;
             }
 
-            var youmuus = Youmuu;
-            if (Youmuu.IsReady() && youmuus.Cast())
+            var youmuus = Misc.Youmuu;
+            if (Misc.Youmuu.IsReady() && youmuus.Cast())
             {
                 return true;
             }
@@ -1604,19 +1398,19 @@ using EloBuddy;
             var heroes = ObjectManager.Player.GetEnemiesInRange(385).Count;
             var count = heroes;
 
-            var tiamat = Tiamat;
+            var tiamat = Misc.Tiamat;
             if (tiamat.IsReady() && (count > 0) && tiamat.Cast())
             {
                 return true;
             }
 
-            var hydra = Hydra;
-            if (Hydra.IsReady() && (count > 0) && hydra.Cast())
+            var hydra = Misc.Hydra;
+            if (Misc.Hydra.IsReady() && (count > 0) && hydra.Cast())
             {
                 return true;
             }
 
-            var titanic = Titanic;
+            var titanic = Misc.Titanic;
             return titanic.IsReady() && (count > 0) && titanic.Cast();
         }
 
@@ -1648,7 +1442,7 @@ using EloBuddy;
 
                 if (spells[Spells.Q].IsReady())
                 {
-                    if (IsQOne)
+                    if (Misc.IsQOne)
                     {
                         if (spells[Spells.R].IsReady() && spells[Spells.Q].Cast(target).IsCasted())
                         {
@@ -1668,7 +1462,7 @@ using EloBuddy;
 
                 if (spells[Spells.E].IsReady())
                 {
-                    if (IsEOne)
+                    if (Misc.IsEOne)
                     {
                         if (spells[Spells.E].IsInRange(target) && target.HasQBuff() && !spells[Spells.R].IsReady()
                             && (Utils.TickCount - spells[Spells.R].LastCastAttemptT < 1500)
@@ -1679,7 +1473,7 @@ using EloBuddy;
                     }
                 }
 
-                if (!spells[Spells.Q].IsReady() || !spells[Spells.R].IsReady() || IsQOne || !target.HasQBuff())
+                if (!spells[Spells.Q].IsReady() || !spells[Spells.R].IsReady() || Misc.IsQOne || !target.HasQBuff())
                 {
                     return;
                 }
@@ -1693,7 +1487,7 @@ using EloBuddy;
                     if ((target.Distance(ObjectManager.Player) > spells[Spells.R].Range)
                         && (target.Distance(ObjectManager.Player) < spells[Spells.R].Range + 580) && target.HasQBuff())
                     {
-                        WardJump(target.Position, false);
+                        Wardmanager.WardJump(target.Position, false);
                     }
                 }
             }
@@ -1701,158 +1495,6 @@ using EloBuddy;
             {
                 Console.WriteLine("An error occurred: '{0}'", e);
             }
-        }
-
-        private static void WardJump(
-            Vector3 pos,
-            bool m2M = true,
-            bool maxRange = false,
-            bool reqinMaxRange = false,
-            bool minions = true,
-            bool champions = true)
-        {
-            if (WStage != WCastStage.First)
-            {
-                return;
-            }
-
-            var basePos = ObjectManager.Player.Position.To2D();
-            var newPos = pos.To2D() - ObjectManager.Player.Position.To2D();
-
-            if (JumpPos == new Vector2())
-            {
-                if (reqinMaxRange)
-                {
-                    JumpPos = pos.To2D();
-                }
-                else if (maxRange || (ObjectManager.Player.Distance(pos) > 590))
-                {
-                    JumpPos = basePos + newPos.Normalized() * 590;
-                }
-                else
-                {
-                    JumpPos = basePos + newPos.Normalized() * ObjectManager.Player.Distance(pos);
-                }
-            }
-            if ((JumpPos != new Vector2()) && reCheckWard)
-            {
-                reCheckWard = false;
-                LeagueSharp.Common.Utility.DelayAction.Add(
-                    20,
-                    () =>
-                        {
-                            if (JumpPos != new Vector2())
-                            {
-                                JumpPos = new Vector2();
-                                reCheckWard = true;
-                            }
-                        });
-            }
-            if (m2M)
-            {
-                Orbwalk(pos);
-            }
-            if (!spells[Spells.W].IsReady() || (WStage != WCastStage.First)
-                || (reqinMaxRange && (ObjectManager.Player.Distance(pos) > spells[Spells.W].Range)))
-            {
-                return;
-            }
-
-            if (minions || champions)
-            {
-                if (champions)
-                {
-                    var wardJumpableChampion =
-                        ObjectManager.Get<AIHeroClient>()
-                            .Where(
-                                x =>
-                                    x.IsAlly && (x.Distance(ObjectManager.Player) < spells[Spells.W].Range)
-                                    && (x.Distance(pos) < 200) && !x.IsMe)
-                            .OrderByDescending(i => i.Distance(ObjectManager.Player))
-                            .ToList()
-                            .FirstOrDefault();
-
-                    if ((wardJumpableChampion != null) && (WStage == WCastStage.First))
-                    {
-                        if ((500 >= Utils.TickCount - Wcasttime) || (WStage != WCastStage.First))
-                        {
-                            return;
-                        }
-
-                        CastW(wardJumpableChampion);
-                        return;
-                    }
-                }
-                if (minions)
-                {
-                    var wardJumpableMinion =
-                        ObjectManager.Get<Obj_AI_Minion>()
-                            .Where(
-                                m =>
-                                    m.IsAlly && (m.Distance(ObjectManager.Player) < spells[Spells.W].Range)
-                                    && (m.Distance(pos) < 200) && !m.Name.ToLower().Contains("ward"))
-                            .OrderByDescending(i => i.Distance(ObjectManager.Player))
-                            .ToList()
-                            .FirstOrDefault();
-
-                    if ((wardJumpableMinion != null) && (WStage == WCastStage.First))
-                    {
-                        if ((500 >= Utils.TickCount - Wcasttime) || (WStage != WCastStage.First))
-                        {
-                            return;
-                        }
-
-                        CastW(wardJumpableMinion);
-                        return;
-                    }
-                }
-            }
-
-            var isWard = false;
-
-            var wardObject =
-                ObjectManager.Get<Obj_AI_Base>()
-                    .Where(o => o.IsAlly && o.Name.ToLower().Contains("ward") && (o.Distance(JumpPos) < 200))
-                    .ToList()
-                    .FirstOrDefault();
-
-            if (wardObject != null)
-            {
-                isWard = true;
-                if ((500 >= Utils.TickCount - Wcasttime) || (WStage != WCastStage.First))
-                {
-                    return;
-                }
-
-                CastW(wardObject);
-            }
-
-            if (!isWard && castWardAgain)
-            {
-                var ward = FindBestWardItem();
-                if (ward == null)
-                {
-                    return;
-                }
-
-                if (spells[Spells.W].IsReady() && IsWOne && (LastWard + 400 < Utils.TickCount))
-                {
-                    ObjectManager.Player.Spellbook.CastSpell(ward.SpellSlot, JumpPos.To3D());
-                    lastWardPos = JumpPos.To3D();
-                    LastWard = Utils.TickCount;
-                }
-            }
-        }
-
-        private static void WardjumpToMouse()
-        {
-            WardJump(
-                Game.CursorPos,
-                ParamBool("ElLeeSin.Wardjump.Mouse"),
-                false,
-                false,
-                ParamBool("ElLeeSin.Wardjump.Minions"),
-                ParamBool("ElLeeSin.Wardjump.Champions"));
         }
 
         #endregion
