@@ -5,9 +5,9 @@ using LeagueSharp.Common;
 using VayneHunter_Reborn.Modules.ModuleHelpers;
 using VayneHunter_Reborn.Utility.MenuUtility;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace VayneHunter_Reborn.Modules.ModuleList.Misc
+using EloBuddy;
+using LeagueSharp.Common;
+namespace VayneHunter_Reborn.Modules.ModuleList.Misc
 {
     class ThreshLanternCatcher : IModule
     {
@@ -30,8 +30,8 @@ using EloBuddy;
 
         private void OnObjCreate(GameObject sender, System.EventArgs args)
         {
-            if (sender.IsValid<Obj_AI_Minion>() 
-                && sender.IsAlly 
+            if (sender.IsValid<Obj_AI_Minion>()
+                && sender.IsAlly
                 && sender.Name.Equals("ThreshLantern", StringComparison.OrdinalIgnoreCase))
             {
                 LanternObject = sender;
@@ -40,7 +40,7 @@ using EloBuddy;
 
         public bool ShouldGetExecuted()
         {
-            return (MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.general.threshCatch") 
+            return (MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.general.threshCatch")
                 && ObjectManager.Player.HealthPercent < MenuExtensions.GetItemValue<Slider>("dz191.vhr.misc.general.hpThresh").Value);
         }
 
@@ -51,10 +51,13 @@ using EloBuddy;
 
         public void OnExecute()
         {
+            if (LanternObject == null)
+                return;
+
             if (ObjectManager.Player.ServerPosition.Distance(LanternObject.Position) <= 500f)
             {
                 //Cast Interact spell
-                ObjectManager.Player.Spellbook.CastSpell((SpellSlot) 62, LanternObject);
+                ObjectManager.Player.Spellbook.CastSpell((SpellSlot)62, LanternObject);
             }
         }
     }
