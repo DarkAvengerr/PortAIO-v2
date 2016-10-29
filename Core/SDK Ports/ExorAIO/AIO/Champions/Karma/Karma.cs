@@ -63,6 +63,11 @@ using EloBuddy;
         /// <param name="args">The <see cref="Events.GapCloserEventArgs" /> instance containing the event data.</param>
         public static void OnGapCloser(object sender, Events.GapCloserEventArgs args)
         {
+            if (GameObjects.Player.IsDead)
+            {
+                return;
+            }
+
             if (Vars.E.IsReady() && GameObjects.Player.Distance(args.End) < 750
                 && Vars.Menu["spells"]["e"]["gapcloser"].GetValue<MenuBool>().Value)
             {

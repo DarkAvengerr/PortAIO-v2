@@ -18,8 +18,8 @@ using EloBuddy;
         public static void Initialize()
         {
             Game.OnUpdate += Jinx.OnUpdate;
-            Spellbook.OnCastSpell += Jinx.OnCastSpell;
             Events.OnGapCloser += Jinx.OnGapCloser;
+            Variables.Orbwalker.OnAction += Jinx.OnAction;
         }
 
         #endregion

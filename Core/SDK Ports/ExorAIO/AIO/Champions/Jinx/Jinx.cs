@@ -6,6 +6,7 @@ using EloBuddy;
  namespace ExorAIO.Champions.Jinx
 {
     using System;
+    using System.Linq;
 
     using ExorAIO.Utilities;
 
@@ -23,18 +24,50 @@ using EloBuddy;
         #region Public Methods and Operators
 
         /// <summary>
-        ///     Called upon calling a spellaneclearast.
+        ///     Called on orbwalker action.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="args">The <see cref="SpellbookCastSpellEventArgs" /> instance containing the event data.</param>
-        public static void OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
+        /// <param name="sender">The object.</param>
+        /// <param name="args">The <see cref="OrbwalkingActionArgs" /> instance containing the event data.</param>
+        public static void OnAction(object sender, OrbwalkingActionArgs args)
         {
-            if (sender.Owner.IsMe && args.Slot == SpellSlot.Q)
+            if (Variables.Orbwalker.ActiveMode != OrbwalkingMode.LastHit &&
+                Variables.Orbwalker.ActiveMode != OrbwalkingMode.LaneClear)
             {
-                /// <summary>
-                ///     Initializes the action blocking process.
-                /// </summary>
-                Logics.Automatic(sender, args);
+                return;
+            }
+
+            switch (args.Type)
+            {
+                case OrbwalkingType.BeforeAttack:
+                    var canLastHit = Vars.Menu["spells"]["q"]["lasthit"].GetValue<MenuSliderButton>().BValue
+                                     && GameObjects.Player.ManaPercent
+                                     > ManaManager.GetNeededMana(Vars.W.Slot, Vars.Menu["spells"]["q"]["lasthit"]);
+                    var canLaneClear = Vars.Menu["spells"]["q"]["clear"].GetValue<MenuSliderButton>().BValue
+                                       && GameObjects.Player.ManaPercent
+                                       > ManaManager.GetNeededMana(Vars.W.Slot, Vars.Menu["spells"]["q"]["lasthit"]);
+
+                    if (Vars.Q.IsReady() && args.Target != null)
+                    {
+                        var isUsingFishBones = GameObjects.Player.HasBuff("JinxQ");
+                        var minionsInRange = GameObjects.EnemyMinions.Count(m => m.Distance(args.Target) < 160f);
+                        if (isUsingFishBones)
+                        {
+                            if (minionsInRange < 3)
+                            {
+                                Vars.Q.Cast();
+                            }
+                        }
+                        else
+                        {
+                            if (minionsInRange >= 3
+                                && (Variables.Orbwalker.ActiveMode == OrbwalkingMode.LastHit && canLastHit
+                                    || Variables.Orbwalker.ActiveMode == OrbwalkingMode.LaneClear && canLaneClear))
+                            {
+                                Vars.Q.Cast();
+                            }
+                        }
+                    }
+                    break;
             }
         }
 
@@ -45,8 +78,12 @@ using EloBuddy;
         /// <param name="args">The <see cref="Events.GapCloserEventArgs" /> instance containing the event data.</param>
         public static void OnGapCloser(object sender, Events.GapCloserEventArgs args)
         {
+            if (GameObjects.Player.IsDead || !Invulnerable.Check(args.Sender, DamageType.Magical, false))
+            {
+                return;
+            }
+
             if (Vars.E.IsReady() && args.Sender.IsValidTarget(Vars.E.Range)
-                && !Invulnerable.Check(args.Sender, DamageType.Magical, false)
                 && Vars.Menu["spells"]["e"]["gapcloser"].GetValue<MenuBool>().Value)
             {
                 Vars.E.Cast(args.IsDirectedToPlayer ? GameObjects.Player.ServerPosition : args.End);

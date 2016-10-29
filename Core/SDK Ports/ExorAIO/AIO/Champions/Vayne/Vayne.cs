@@ -119,8 +119,12 @@ using EloBuddy;
         /// <param name="args">The <see cref="Events.GapCloserEventArgs" /> instance containing the event data.</param>
         public static void OnGapCloser(object sender, Events.GapCloserEventArgs args)
         {
-            if (Vars.E.IsReady() && args.Sender.IsValidTarget(Vars.E.Range)
-                && !Invulnerable.Check(args.Sender, DamageType.Magical, false))
+            if (GameObjects.Player.IsDead || Invulnerable.Check(args.Sender, DamageType.Magical, false))
+            {
+                return;
+            }
+
+            if (Vars.E.IsReady() && args.Sender.IsValidTarget(Vars.E.Range))
             {
                 /// <summary>
                 ///     The Anti-GapCloser E Logic.
@@ -148,7 +152,6 @@ using EloBuddy;
                         if ((args.End + vector * (float)(i * 42.5)).IsWall()
                             && (args.End + vector * (float)(i * 44.5)).IsWall())
                         {
-                            Console.WriteLine("DASHPREDICTION CONDEMN!!1!11");
                             Vars.E.CastOnUnit(args.Sender);
                         }
                     }
@@ -163,8 +166,12 @@ using EloBuddy;
         /// <param name="args">The <see cref="Events.InterruptableTargetEventArgs" /> instance containing the event data.</param>
         public static void OnInterruptableTarget(object sender, Events.InterruptableTargetEventArgs args)
         {
+            if (GameObjects.Player.IsDead || Invulnerable.Check(args.Sender, DamageType.Magical, false))
+            {
+                return;
+            }
+
             if (Vars.E.IsReady() && args.Sender.IsValidTarget(Vars.E.Range)
-                && !Invulnerable.Check(args.Sender, DamageType.Magical, false)
                 && Vars.Menu["spells"]["e"]["interrupter"].GetValue<MenuBool>().Value)
             {
                 Vars.E.CastOnUnit(args.Sender);
@@ -183,14 +190,19 @@ using EloBuddy;
             }
 
             /// <summary>
-            ///     Initializes the Automatic actions.
-            /// </summary>
-            Logics.Automatic(args);
-
-            /// <summary>
             ///     Initializes the Killsteal events.
             /// </summary>
             Logics.Killsteal(args);
+
+            /// <summary>
+            ///     Initializes the orbwalkingmodes.
+            /// </summary>
+            switch (Variables.Orbwalker.ActiveMode)
+            {
+                case OrbwalkingMode.Combo:
+                    Logics.Combo(args);
+                    break;
+            }
         }
 
         /// <summary>

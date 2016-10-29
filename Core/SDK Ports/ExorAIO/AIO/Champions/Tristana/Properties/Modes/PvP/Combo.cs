@@ -27,8 +27,7 @@ using EloBuddy;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Combo(EventArgs args)
         {
-            var target = Variables.Orbwalker.GetTarget() as AIHeroClient;
-            if (Bools.HasSheenBuff() || target == null || !target.IsValidTarget() || Invulnerable.Check(target))
+            if (Bools.HasSheenBuff())
             {
                 return;
             }
@@ -40,6 +39,12 @@ using EloBuddy;
                 && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuBool>().Value)
             {
                 Vars.Q.Cast();
+            }
+
+            var target = Variables.Orbwalker.GetTarget() as AIHeroClient;
+            if (target == null || !target.IsValidTarget() || Invulnerable.Check(target))
+            {
+                return;
             }
 
             /// <summary>

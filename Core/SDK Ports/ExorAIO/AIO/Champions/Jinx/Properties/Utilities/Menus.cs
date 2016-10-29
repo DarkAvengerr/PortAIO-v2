@@ -37,7 +37,13 @@ using EloBuddy;
                 /// </summary>
                 Vars.QMenu = new Menu("q", "Use Q to:");
                 {
-                    Vars.QMenu.Add(new MenuBool("combo", "Combo", true));
+                    Vars.QMenu.Add(
+                        new MenuSeparator(
+                            "separator",
+                            "The Combo slider only sets the necessary number of hittable enemies"));
+                    Vars.QMenu.Add(new MenuSeparator("separator1", "Distance Q will be automatically used."));
+                    Vars.QMenu.Add(new MenuSliderButton("combo", "Combo / if Hittable Enemies >= x", 3, 2, 5, true));
+                    Vars.QMenu.Add(new MenuSeparator("separator2", " "));
                     Vars.QMenu.Add(new MenuSliderButton("clear", "Clear / if Mana >= x%", 50, 0, 99, true));
                     Vars.QMenu.Add(new MenuSliderButton("harass", "Harass / if Mana >= x%", 50, 0, 99, true));
                     Vars.QMenu.Add(new MenuSliderButton("lasthit", "LastHit / if Mana >= x%", 50, 0, 99, true));
@@ -103,16 +109,6 @@ using EloBuddy;
             }
 
             Vars.Menu.Add(Vars.SpellsMenu);
-
-            /// <summary>
-            ///     Sets the miscellaneous menu.
-            /// </summary>
-            Vars.MiscMenu = new Menu("miscellaneous", "Miscellaneous", true);
-            {
-                Vars.MiscMenu.Add(
-                    new MenuBool("blockq", "Disable/Block Manual PowPow->FishBones Casting when low Mana", true));
-            }
-            Vars.Menu.Add(Vars.MiscMenu);
 
             /// <summary>
             ///     Sets the drawings menu.

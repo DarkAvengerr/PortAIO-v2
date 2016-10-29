@@ -91,7 +91,8 @@ using EloBuddy;
         /// <param name="args">The <see cref="Events.GapCloserEventArgs" /> instance containing the event data.</param>
         public static void OnGapCloser(object sender, Events.GapCloserEventArgs args)
         {
-            if (GameObjects.Player.HealthPercent
+            if (GameObjects.Player.IsDead || !Invulnerable.Check(args.Sender, DamageType.Magical, false)
+                || GameObjects.Player.HealthPercent
                 <= Vars.Menu["spells"]["q"]["shield"].GetValue<MenuSliderButton>().SValue
                 && Vars.Menu["spells"]["q"]["shield"].GetValue<MenuSliderButton>().BValue)
             {
@@ -99,7 +100,6 @@ using EloBuddy;
             }
 
             if (Vars.W.IsReady() && args.Sender.IsValidTarget(Vars.W.Range)
-                && !Invulnerable.Check(args.Sender, DamageType.Magical, false)
                 && Vars.Menu["spells"]["w"]["gapcloser"].GetValue<MenuBool>().Value)
             {
                 Vars.W.CastOnUnit(args.Sender);

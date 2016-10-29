@@ -10,6 +10,7 @@ using EloBuddy;
     using ExorAIO.Utilities;
 
     using LeagueSharp;
+    using LeagueSharp.Data.Enumerations;
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.UI;
@@ -29,18 +30,6 @@ using EloBuddy;
         /// <param name="args">The args.</param>
         public static void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            /*
-            if (sender.IsMe && (AutoAttack.IsAutoAttack(args.SData.Name) || args.Slot.Equals(SpellSlot.Q)))
-            {
-
-                if (!Vars.Q.IsReady() && GameObjects.Player.Spellbook.GetSpell(SpellSlot.Q).Level > 0
-                    && GameObjects.Player.Spellbook.GetSpell(SpellSlot.E).Level == 0)
-                {
-                    //Vars.E.Cast(Game.CursorPos);
-                    ObjectManager.Player.Spellbook.CastSpell(SpellSlot.E, Game.CursorPos);
-                }
-            }
-            */
             if (sender.IsMe && AutoAttack.IsAutoAttack(args.SData.Name))
             {
                 /// <summary>
@@ -66,8 +55,27 @@ using EloBuddy;
         /// <param name="args">The <see cref="Events.GapCloserEventArgs" /> instance containing the event data.</param>
         public static void OnGapCloser(object sender, Events.GapCloserEventArgs args)
         {
+            if (GameObjects.Player.IsDead)
+            {
+                return;
+            }
+
+            if (Vars.E.IsReady() && args.Sender.IsMelee && args.Sender.IsValidTarget(Vars.E.Range)
+                && args.SkillType == GapcloserType.Targeted
+                && Vars.Menu["spells"]["e"]["gapcloser"].GetValue<MenuBool>().Value)
+            {
+                if (args.Target.IsMe)
+                {
+                    Vars.E.Cast(GameObjects.Player.ServerPosition.Extend(args.Sender.ServerPosition, -475f));
+                }
+            }
+
+            if (Invulnerable.Check(args.Sender, DamageType.Magical, false))
+            {
+                return;
+            }
+
             if (Vars.W.IsReady() && args.IsDirectedToPlayer && args.Sender.IsValidTarget(Vars.W.Range)
-                && !Invulnerable.Check(args.Sender, DamageType.Magical, false)
                 && Vars.Menu["spells"]["w"]["gapcloser"].GetValue<MenuBool>().Value)
             {
                 Vars.W.Cast(args.End);

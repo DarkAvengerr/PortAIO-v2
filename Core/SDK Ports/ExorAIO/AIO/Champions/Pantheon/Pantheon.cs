@@ -52,8 +52,12 @@ using EloBuddy;
         /// <param name="args">The <see cref="Events.InterruptableTargetEventArgs" /> instance containing the event data.</param>
         public static void OnInterruptableTarget(object sender, Events.InterruptableTargetEventArgs args)
         {
+            if (GameObjects.Player.IsDead || !Invulnerable.Check(args.Sender, DamageType.Magical, false))
+            {
+                return;
+            }
+
             if (Vars.W.IsReady() && args.Sender.IsValidTarget(Vars.W.Range)
-                && !Invulnerable.Check(args.Sender, DamageType.Physical, false)
                 && Vars.Menu["spells"]["w"]["interrupter"].GetValue<MenuBool>().Value)
             {
                 Vars.W.CastOnUnit(args.Sender);

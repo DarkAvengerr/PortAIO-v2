@@ -26,11 +26,6 @@ using EloBuddy;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Harass(EventArgs args)
         {
-            if (!Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target))
-            {
-                return;
-            }
-
             /// <summary>
             ///     The Q Harass Logic.
             /// </summary>
@@ -38,6 +33,11 @@ using EloBuddy;
                 && Vars.Menu["spells"]["q"]["harass"].GetValue<MenuBool>().Value)
             {
                 Vars.Q.Cast();
+            }
+
+            if (!Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target))
+            {
+                return;
             }
 
             /// <summary>

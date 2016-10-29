@@ -9,6 +9,7 @@ using EloBuddy;
 
     using ExorAIO.Utilities;
 
+    using LeagueSharp;
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.UI;
@@ -28,8 +29,12 @@ using EloBuddy;
         /// <param name="args">The <see cref="Events.GapCloserEventArgs" /> instance containing the event data.</param>
         public static void OnGapCloser(object sender, Events.GapCloserEventArgs args)
         {
-            if (Vars.Q.IsReady() && args.IsDirectedToPlayer && !Invulnerable.Check(args.Sender)
-                && args.Sender.IsValidTarget(Vars.Q.Range)
+            if (GameObjects.Player.IsDead || !Invulnerable.Check(args.Sender, DamageType.Magical, false))
+            {
+                return;
+            }
+
+            if (Vars.Q.IsReady() && !Invulnerable.Check(args.Sender) && args.Sender.IsValidTarget(Vars.Q.Range)
                 && Vars.Menu["spells"]["q"]["gapcloser"].GetValue<MenuBool>().Value)
             {
                 Vars.Q.Cast(args.End);

@@ -96,8 +96,14 @@ using EloBuddy;
                 > ManaManager.GetNeededMana(Vars.E.Slot, Vars.Menu["spells"]["e"]["jungleclear"])
                 && Vars.Menu["spells"]["e"]["jungleclear"].GetValue<MenuSliderButton>().BValue)
             {
-                Vars.E.CastOnUnit(Variables.Orbwalker.GetTarget() as Obj_AI_Minion);
-                return;
+                var target = (Obj_AI_Minion)Variables.Orbwalker.GetTarget();
+                if (!target.CharData.BaseSkinName.Contains("SRU_Dragon")
+                    && !target.CharData.BaseSkinName.Equals("SRU_Baron")
+                    && !target.CharData.BaseSkinName.Equals("SRU_Riftherald"))
+                {
+                    Vars.E.CastOnUnit(Variables.Orbwalker.GetTarget() as Obj_AI_Minion);
+                    return;
+                }
             }
 
             /// <summary>

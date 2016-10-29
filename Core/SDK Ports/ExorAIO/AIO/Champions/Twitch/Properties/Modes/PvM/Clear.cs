@@ -61,16 +61,15 @@ using EloBuddy;
             /// <summary>
             ///     The LaneClear W Logic.
             /// </summary>
-            if (Vars.W.IsReady() && !GameObjects.Player.HasBuff("TwitchFullAutomatic")
-                && GameObjects.Player.ManaPercent
-                > ManaManager.GetNeededMana(Vars.W.Slot, Vars.Menu["spells"]["w"]["clear"])
-                && Vars.Menu["spells"]["w"]["clear"].GetValue<MenuSliderButton>().BValue)
+            if (Vars.W.IsReady() && !GameObjects.Player.HasBuff("TwitchFullAutomatic"))
             {
                 /// <summary>
                 ///     The W LaneClear Logic.
                 /// </summary>
-                if (
-                    Vars.W.GetCircularFarmLocation(
+                if (GameObjects.Player.ManaPercent
+                    > ManaManager.GetNeededMana(Vars.W.Slot, Vars.Menu["spells"]["w"]["laneclear"])
+                    && Vars.Menu["spells"]["w"]["laneclear"].GetValue<MenuSliderButton>().BValue
+                    && Vars.W.GetCircularFarmLocation(
                         Targets.Minions.Where(m => m.GetBuffCount("twitchdeadlyvenom") <= 4).ToList(),
                         Vars.W.Width).MinionsHit >= 3)
                 {
@@ -83,11 +82,16 @@ using EloBuddy;
                 /// <summary>
                 ///     The W JungleClear Logic.
                 /// </summary>
-                else
+                else if (GameObjects.Player.ManaPercent
+                         > ManaManager.GetNeededMana(Vars.W.Slot, Vars.Menu["spells"]["w"]["jungleclear"])
+                         && Vars.Menu["spells"]["w"]["jungleclear"].GetValue<MenuSliderButton>().BValue)
                 {
-                    var objAiMinion = Targets.JungleMinions.FirstOrDefault(
-                        m => m.GetBuffCount("twitchdeadlyvenom") <= 4);
-                    if (objAiMinion != null) Vars.W.Cast(objAiMinion.ServerPosition);
+                    var objAiMinion =
+                        Targets.JungleMinions.FirstOrDefault(m => m.GetBuffCount("twitchdeadlyvenom") <= 4);
+                    if (objAiMinion != null)
+                    {
+                        Vars.W.Cast(objAiMinion.ServerPosition);
+                    }
                 }
             }
 

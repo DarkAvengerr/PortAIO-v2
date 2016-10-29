@@ -34,7 +34,7 @@ using EloBuddy;
             /// <summary>
             ///     The E Combo Logic.
             /// </summary>
-            if (Vars.E.IsReady() && Vars.Menu["spells"]["e"]["mode"].GetValue<MenuList>().Index != 2)
+            if (Vars.E.IsReady())
             {
                 if (!Game.CursorPos.IsUnderEnemyTurret()
                     || ((AIHeroClient)args.Target).Health
@@ -53,6 +53,9 @@ using EloBuddy;
                             break;
                         case 1:
                             Vars.E.Cast(GameObjects.Player.ServerPosition.Extend(Game.CursorPos, 475f));
+                            break;
+                        case 2:
+                            Vars.E.Cast(GameObjects.Player.ServerPosition.Extend(Game.CursorPos, GameObjects.Player.BoundingRadius));
                             break;
                     }
 

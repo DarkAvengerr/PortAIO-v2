@@ -15,6 +15,8 @@ using EloBuddy;
     using LeagueSharp.SDK.UI;
     using LeagueSharp.SDK.Utils;
 
+    using SharpDX;
+
     /// <summary>
     ///     The logics class.
     /// </summary>
@@ -41,10 +43,16 @@ using EloBuddy;
                 foreach (var target in
                     GameObjects.EnemyHeroes.Where(
                         t =>
-                        Bools.IsImmobile(t) && t.IsValidTarget(Vars.W.Range)
-                        && !Invulnerable.Check(t, DamageType.Magical, false)))
+                        Bools.IsImmobile(t) && t.IsValidTarget(Vars.W.Range) && !t.HasBuff("caitlynyordletrapinternal"))
+                    )
                 {
-                    Vars.W.Cast(target.ServerPosition);
+                    if (Vars.GetImmobileBuffEndTime(target) >= Vars.W.Delay + Game.Ping)
+                    {
+                        Vars.W.Cast(
+                            ((Vector2)GameObjects.Player.ServerPosition).Extend(
+                                (Vector2)target.ServerPosition,
+                                (float)(GameObjects.Player.Distance(target) + Vars.W.Width / 1.5)));
+                    }
                 }
             }
 

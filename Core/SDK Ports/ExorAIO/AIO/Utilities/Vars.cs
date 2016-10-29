@@ -6,6 +6,7 @@ using EloBuddy;
  namespace ExorAIO.Utilities
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.SDK;
@@ -307,6 +308,39 @@ using EloBuddy;
         #endregion
 
         #region Public Methods and Operators
+
+        /// <summary>
+        ///     Returns true if there is a Wall between X pos and Y pos.
+        /// </summary>
+        public static bool AnyWall(Vector3 startPos, Vector3 endPos)
+        {
+            for (var i = 0; i < startPos.Distance(endPos); i++)
+            {
+                if (NavMesh.GetCollisionFlags(startPos.Extend(endPos, i)) == CollisionFlags.Wall)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        ///     Gets the buff end time for the immobilized enemies.
+        /// </summary>
+        /// <param name="target">
+        ///     The target.
+        /// </param>
+        public static float GetImmobileBuffEndTime(Obj_AI_Base target)
+        {
+            return
+                target.Buffs.OrderByDescending(buff => buff.EndTime - Game.Time)
+                    .Where(
+                        buff =>
+                        buff.Type == BuffType.Stun || buff.Type == BuffType.Snare || buff.Type == BuffType.Charm
+                        || buff.Type == BuffType.Flee || buff.Type == BuffType.Taunt)
+                    .Select(buff => buff.EndTime)
+                    .FirstOrDefault();
+        }
 
         /// <summary>
         ///     Gets the health with Blitzcrank's Shield support.

@@ -96,6 +96,11 @@ using EloBuddy;
         /// <param name="args">The <see cref="Events.GapCloserEventArgs" /> instance containing the event data.</param>
         public static void OnGapCloser(object sender, Events.GapCloserEventArgs args)
         {
+            if (GameObjects.Player.IsDead)
+            {
+                return;
+            }
+
             if (Vars.W.IsReady() && args.IsDirectedToPlayer && args.Sender.IsValidTarget(Vars.W.Range)
                 && Vars.Menu["spells"]["w"]["gapcloser"].GetValue<MenuBool>().Value)
             {
@@ -113,6 +118,11 @@ using EloBuddy;
         /// <param name="args">The <see cref="Events.InterruptableTargetEventArgs" /> instance containing the event data.</param>
         public static void OnInterruptableTarget(object sender, Events.InterruptableTargetEventArgs args)
         {
+            if (GameObjects.Player.IsDead)
+            {
+                return;
+            }
+
             if (Vars.W.IsReady() && args.Sender.IsValidTarget(Vars.W.Range)
                 && Vars.Menu["spells"]["w"]["interrupter"].GetValue<MenuBool>().Value)
             {

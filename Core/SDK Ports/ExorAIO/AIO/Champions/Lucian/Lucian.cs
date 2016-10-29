@@ -74,7 +74,12 @@ using EloBuddy;
         /// <param name="args">The <see cref="Events.GapCloserEventArgs" /> instance containing the event data.</param>
         public static void OnGapCloser(object sender, Events.GapCloserEventArgs args)
         {
-            if (Vars.E.IsReady() && args.Sender.IsMelee && args.Sender.IsValidTarget(Vars.E.Range)
+            if (GameObjects.Player.IsDead)
+            {
+                return;
+            }
+
+            if (Vars.E.IsReady() && args.Sender.IsMelee
                 && args.SkillType == GapcloserType.Targeted
                 && Vars.Menu["spells"]["e"]["gapcloser"].GetValue<MenuBool>().Value)
             {
@@ -116,16 +121,12 @@ using EloBuddy;
             ///     Initializes the Automatic actions.
             /// </summary>
             Logics.Automatic(args);
-            if (GameObjects.Player.HasBuff("LucianR") || GameObjects.Player.HasBuff("LucianPassiveBuff"))
-            {
-                return;
-            }
 
             /// <summary>
             ///     Initializes the Killsteal events.
             /// </summary>
             Logics.Killsteal(args);
-            if (GameObjects.Player.Spellbook.IsAutoAttacking)
+            if (GameObjects.Player.Spellbook.IsAutoAttacking || GameObjects.Player.HasBuff("LucianR"))
             {
                 return;
             }

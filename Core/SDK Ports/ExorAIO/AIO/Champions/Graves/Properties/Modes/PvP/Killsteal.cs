@@ -56,6 +56,7 @@ using EloBuddy;
                         t =>
                         !Invulnerable.Check(t) && t.IsValidTarget(Vars.Q.Range)
                         && !t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
+                        && !Vars.AnyWall(GameObjects.Player.ServerPosition, Vars.Q.GetPrediction(t).UnitPosition)
                         && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.Q)))
                 {
                     Vars.Q.Cast(Vars.Q.GetPrediction(target).UnitPosition);
@@ -71,8 +72,7 @@ using EloBuddy;
                 foreach (var target in
                     GameObjects.EnemyHeroes.Where(
                         t =>
-                        !Invulnerable.Check(t)
-                        && t.IsValidTarget(Vars.R.Range + 150f)
+                        !Invulnerable.Check(t) && t.IsValidTarget(Vars.R.Range + 150f)
                         && Vars.GetRealHealth(t)
                         < (float)
                           GameObjects.Player.GetSpellDamage(

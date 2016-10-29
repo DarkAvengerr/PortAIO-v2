@@ -86,6 +86,28 @@ using EloBuddy;
         }
 
         /// <summary>
+        ///     Fired on an incoming gapcloser.
+        /// </summary>
+        /// <param name="sender">The object.</param>
+        /// <param name="args">The <see cref="Events.GapCloserEventArgs" /> instance containing the event data.</param>
+        public static void OnGapCloser(object sender, Events.GapCloserEventArgs args)
+        {
+            if (GameObjects.Player.IsDead)
+            {
+                return;
+            }
+
+            /// <summary>
+            ///     The Anti-Gapcloser W Logic.
+            /// </summary>
+            if (Vars.W.IsReady() && GameObjects.Player.Distance(args.End) < Vars.W.Range
+                && Vars.Menu["spells"]["w"]["gapcloser"].GetValue<MenuBool>().Value)
+            {
+                Vars.W.Cast(args.End);
+            }
+        }
+
+        /// <summary>
         ///     Fired when the game is updated.
         /// </summary>
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>

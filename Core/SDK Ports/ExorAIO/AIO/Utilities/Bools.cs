@@ -42,9 +42,9 @@ using EloBuddy;
                 target.InventoryItems.Any(
                     item =>
                     item.Id.Equals(ItemId.Tear_of_the_Goddess) || item.Id.Equals(ItemId.Archangels_Staff)
-                    || item.Id.Equals(ItemId.Manamune) || item.Id.Equals(ItemId.Tear_of_the_Goddess)
-                    || item.Id.Equals(ItemId.Archangels_Staff)
-                    || item.Id.Equals(ItemId.Manamune));
+                    || item.Id.Equals(ItemId.Manamune) || item.Id.Equals(ItemId.Tear_of_the_Goddess_Quick_Charge)
+                    || item.Id.Equals(ItemId.Archangels_Staff_Quick_Charge)
+                    || item.Id.Equals(ItemId.Manamune_Quick_Charge));
 
         /// <summary>
         ///     Gets a value indicating whether a determined champion can move or not.

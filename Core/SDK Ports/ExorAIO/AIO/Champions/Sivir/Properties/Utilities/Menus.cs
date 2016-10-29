@@ -119,6 +119,7 @@ using EloBuddy;
                                             $"Shield: {enemy.ChampionName}'s E",
                                             true));
                                 }
+
                                 foreach (var spell in
                                     SpellDatabase.Get()
                                         .Where(
@@ -126,12 +127,13 @@ using EloBuddy;
                                             !s.SpellName.Equals("KatarinaE") && !s.SpellName.Equals("TalonCutthroat")
                                             && s.ChampionName.Equals(enemy.ChampionName)))
                                 {
-                                    if (enemy.IsMelee && spell.CastType.Contains(CastType.Activate)
+                                    if (enemy.IsMelee && spell.CastType != null
+                                        && spell.CastType.Contains(CastType.Activate)
                                         && spell.SpellType.HasFlag(SpellType.Activated)
                                         && AutoAttack.IsAutoAttackReset(spell.SpellName)
-                                        || (spell.SpellType.HasFlag(SpellType.Targeted)
-                                            || spell.SpellType.HasFlag(SpellType.TargetedMissile))
-                                        && spell.CastType.Contains(CastType.EnemyChampions))
+                                        || spell.CastType != null && spell.CastType.Contains(CastType.EnemyChampions)
+                                        && (spell.SpellType.HasFlag(SpellType.Targeted)
+                                            || spell.SpellType.HasFlag(SpellType.TargetedMissile)))
                                     {
                                         Vars.WhiteListMenu.Add(
                                             new MenuBool(

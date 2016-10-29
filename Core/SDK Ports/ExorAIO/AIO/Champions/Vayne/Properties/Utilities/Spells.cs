@@ -26,8 +26,8 @@ using EloBuddy;
             Vars.E = new Spell(SpellSlot.E, 550f + GameObjects.Player.BoundingRadius);
             Vars.E2 = new Spell(SpellSlot.E, 550f + GameObjects.Player.BoundingRadius);
             Vars.R = new Spell(SpellSlot.R);
-            Vars.E.SetSkillshot(0.45f, 50f, 1000f, false, SkillshotType.SkillshotLine);
-            Vars.E2.SetSkillshot(0.60f, 50f, 1000f, false, SkillshotType.SkillshotLine);
+            Vars.E.SetSkillshot(0.50f, 50f, 1000f, false, SkillshotType.SkillshotLine);
+            Vars.E2.SetSkillshot(0.65f, 50f, 1000f, false, SkillshotType.SkillshotLine);
         }
 
         #endregion

@@ -102,7 +102,8 @@ using EloBuddy;
         /// <param name="args">The <see cref="Events.GapCloserEventArgs" /> instance containing the event data.</param>
         public static void OnGapCloser(object sender, Events.GapCloserEventArgs args)
         {
-            if (Vars.R.Instance.Name.Equals("JhinRShot"))
+            if (GameObjects.Player.IsDead || Vars.R.Instance.Name.Equals("JhinRShot")
+                || Invulnerable.Check(args.Sender, DamageType.Magical, false))
             {
                 return;
             }
