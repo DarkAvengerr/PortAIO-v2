@@ -1250,9 +1250,9 @@ using EloBuddy;
             }
         }
 
-        private static void Main(string[] args)
+        private static void Main()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad();
         }
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
