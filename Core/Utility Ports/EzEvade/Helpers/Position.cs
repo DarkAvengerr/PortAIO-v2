@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +8,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy;
-
-namespace ezEvade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade
 {
     public static class Position
     {
@@ -42,21 +42,17 @@ namespace ezEvade
                 return projection.IsOnSegment && projection.SegmentPoint.Distance(position) <= spell.radius + radius;
             }
 
-            if (spell.spellType == SpellType.Circular && spell.info.name.Contains("_exp"))
-            {
-                Vector2 spellPos = spell.currentSpellPosition;
-                Vector2 spellEndPos = predictCollision ? spell.GetSpellEndPosition() : spell.endPos;
-
-                var projection = position.ProjectOn(spellPos, spellEndPos);
-                return projection.IsOnSegment && projection.SegmentPoint.Distance(position) <= spell.info.secondaryRadius + radius;
-            }
-
             if (spell.spellType == SpellType.Circular)
             {
                 if (spell.info.spellName == "VeigarEventHorizon")
                 {
                     return position.Distance(spell.endPos) <= spell.radius + radius - ObjectCache.myHeroCache.boundingRadius
                         && position.Distance(spell.endPos) >= spell.radius + radius - ObjectCache.myHeroCache.boundingRadius - 125;
+                }
+                if (spell.info.spellName == "DariusCleave")
+                {
+                    return position.Distance(spell.endPos) <= spell.radius + radius - ObjectCache.myHeroCache.boundingRadius
+                           && position.Distance(spell.endPos) >= spell.radius + radius - ObjectCache.myHeroCache.boundingRadius - 220;
                 }
 
                 return position.Distance(spell.endPos) <= spell.radius + radius - ObjectCache.myHeroCache.boundingRadius;

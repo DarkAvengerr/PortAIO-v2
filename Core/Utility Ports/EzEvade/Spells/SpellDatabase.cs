@@ -7,9 +7,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy;
-
-namespace ezEvade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade
 {
     public static class SpellDatabase
     {
@@ -196,7 +196,6 @@ namespace ezEvade
                 range = 1250,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
-                hasEndExplosion = true,
                 secondaryRadius = 210,
                 extraDrawHeight = 165,
                 spellName = "FlashFrostSpell",
@@ -663,6 +662,20 @@ namespace ezEvade
             #endregion Corki
 
             #region Darius
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Darius",
+                dangerlevel = 2,
+                name = "Decimate",
+                radius = 425,
+                range = 425,
+                spellDelay = 750,
+                spellKey = SpellSlot.Q,
+                spellName = "DariusCleave",
+                spellType = SpellType.Circular,
+                defaultOff = true
+            });
 
             Spells.Add(
             new SpellData
@@ -711,7 +724,7 @@ namespace ezEvade
             new SpellData
             {
                 charName = "DrMundo",
-                dangerlevel = 1,
+                dangerlevel = 2,
                 missileName = "InfectedCleaverMissile",
                 name = "Infected Cleaver",
                 projectileSpeed = 2000,
@@ -1147,7 +1160,6 @@ namespace ezEvade
                 projectileSpeed = 1000,
                 radius = 250,
                 range = 975,
-                extraEndTime = 1000,
                 spellDelay = 500,
                 spellKey = SpellSlot.Q,
                 spellName = "GragasQ",
@@ -1231,14 +1243,13 @@ namespace ezEvade
             new SpellData
             {
                 charName = "Graves",
-                dangerlevel = 3,
+                dangerlevel = 1,
                 defaultOff = true,
                 missileName = "GravesSmokeGrenadeBoom",
                 name = "Smoke Screen",
                 projectileSpeed = 1500,
                 radius = 250,
                 range = 900,
-                extraEndTime = 4000,
                 spellDelay = 250,
                 spellKey = SpellSlot.W,
                 spellName = "GravesSmokeGrenade",
@@ -1289,16 +1300,15 @@ namespace ezEvade
             {
                 charName = "Hecarim",
                 dangerlevel = 4,
-                missileName = "HecarimUlt",
-                extraMissileNames = new[] { "hecarimultmissileskn4r1", "hecarimultmissileskn4r2", "hecarimultmissileskn411", "hecarimultmissileskn412" },
                 name = "Onslaught of Shadows",
-                projectileSpeed = 1100,
-                radius = 400,
+                projectileSpeed = 1250,
+                radius = 40,
                 range = 1500,
-                spellDelay = 10,
+                spellDelay = 100,
                 spellKey = SpellSlot.R,
-                spellName = "HecarimUlt",
+                spellName = "HecarimUltMissile",
                 spellType = SpellType.Line,
+                usePackets = true,
                 fixedRange = true
             });
 
@@ -1562,7 +1572,6 @@ namespace ezEvade
             {
                 charName = "Jayce",
                 dangerlevel = 2,
-                missileName = "jayceshockblastmis",
                 name = "Shock Blast",
                 projectileSpeed = 1450,
                 radius = 70,
@@ -1570,7 +1579,7 @@ namespace ezEvade
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 hasEndExplosion = true,
-                spellName = "jayceshockblast",
+                spellName = "jayceshockblastmis",
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
                 secondaryRadius = 210
@@ -2314,7 +2323,7 @@ namespace ezEvade
                 radius = 330,
                 range = 1100,
                 spellDelay = 250,
-                extraEndTime = 1000,
+                extraEndTime = 500,
                 spellKey = SpellSlot.E,
                 spellName = "LuxLightStrikeKugel",
                 spellType = SpellType.Circular
@@ -3340,7 +3349,6 @@ namespace ezEvade
             {
                 charName = "Taliyah",
                 dangerlevel = 3,
-                missileName = "TaliyahWVC",
                 name = "Seismic Shove",
                 radius = 165,
                 range = 900,
@@ -3348,7 +3356,7 @@ namespace ezEvade
                 extraEndTime = 1000,
                 spellKey = SpellSlot.W,
                 spellName = "TaliyahWVC",
-                extraSpellNames =  new []{ "TaliyahW", },
+                extraSpellNames =  new []{ "TaliyahW" },
                 spellType = SpellType.Circular
             });
 
@@ -3683,7 +3691,7 @@ namespace ezEvade
                 name = "Void Rift",
                 projectileSpeed = 1700,
                 radius = 90,
-                range = 1200,
+                range = 1150,
                 extraEndTime = 1000,
                 spellDelay = 250,
                 spellKey = SpellSlot.W,

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +9,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy;
-
-namespace ezEvade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade
 {
     class EvadeHelper
     {
@@ -990,6 +990,26 @@ namespace ezEvade
                     }
                 }
 
+                if (spell.info.spellName == "DariusCleave")
+                {
+                    var wallRadius = 225;
+                    var midRadius = spell.radius - wallRadius;
+
+                    if (spellHitTime == 0)
+                    {
+                        return 0;
+                    }
+
+                    if (tHeroPos.Distance(spell.endPos) >= spell.radius)
+                    {
+                        return Math.Max(0, tHeroPos.Distance(spell.endPos) - midRadius - wallRadius);
+                    }
+                    else
+                    {
+                        return Math.Max(0, midRadius - tHeroPos.Distance(spell.endPos) - wallRadius);
+                    }
+                }
+
                 var closestDist = Math.Max(0, tHeroPos.Distance(spell.endPos) - (spell.radius + extraDist));
                 if (spell.info.extraEndTime > 0 && closestDist != 0)
                 {
@@ -1130,6 +1150,7 @@ namespace ezEvade
                     return CheckMoveToDirection(EvadeSpell.lastSpellEvadeCommand.targetPosition, movePos);
                 }
             }*/
+
             var startPoint = myHero.Position;
             
             if (myHero.IsDashing())
@@ -1194,6 +1215,21 @@ namespace ezEvade
                                 return true;
                             }
                             else if (from.Distance(spell.endPos) > spell.radius && cpa2 < spell.radius + 10)
+                            {
+                                return true;
+                            }
+                        }
+                        else if (spell.info.spellName == "DariusCleave")
+                        {
+                            var cpa3 = MathUtilsCPA.CPAPointsEx(from, dir * ObjectCache.myHeroCache.moveSpeed, spell.endPos, new Vector2(0, 0), movePos, spell.endPos);
+
+                            if (from.Distance(spell.endPos) < spell.radius &&
+                                !(from.Distance(spell.endPos) < spell.radius - 230 &&
+                                  movePos.Distance(spell.endPos) < spell.radius - 230))
+                            {
+                                return true;
+                            }
+                            else if (from.Distance(spell.endPos) > spell.radius && cpa3 < spell.radius + 10)
                             {
                                 return true;
                             }

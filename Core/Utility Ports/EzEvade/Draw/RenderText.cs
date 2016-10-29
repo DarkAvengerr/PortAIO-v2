@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +10,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy;
-
-namespace ezEvade.Draw
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade.Draw
 {
     class RenderText : RenderObject
     {
@@ -46,7 +46,7 @@ namespace ezEvade.Draw
         {
             if (renderPosition.IsOnScreen())
             {
-                var textDimension = Drawing.GetTextEntent(text,15);
+                var textDimension = Drawing.GetTextEntent((text), 15);
                 var wardScreenPos = Drawing.WorldToScreen(renderPosition.To3D());
 
                 Drawing.DrawText(wardScreenPos.X - textDimension.Width / 2, wardScreenPos.Y, color, text);

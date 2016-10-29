@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +7,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy;
-
-namespace ezEvade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade
 {
     internal class Evade
     {
@@ -89,9 +89,9 @@ namespace ezEvade
                 SpellDetector.OnProcessDetectedSpells += SpellDetector_OnProcessDetectedSpells;
                 Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
 
-                /*Console.WriteLine("<font color=\"#66CCFF\" >Yomie's </font><font color=\"#CCFFFF\" >ezEvade</font> - " +
+                Chat.Print("<font color=\"#66CCFF\" >Yomie's </font><font color=\"#CCFFFF\" >ezEvade</font> - " +
                    "<font color=\"#FFFFFF\" >Version " + Assembly.GetExecutingAssembly().GetName().Version + "</font>");
-                */
+
 
                 menu = new Menu("ezEvade", "ezEvade", true);
 
@@ -190,7 +190,7 @@ namespace ezEvade
                 var initCache = ObjectCache.myHeroCache;
 
                 //evadeTester = new EvadeTester(menu);
-                //Utility.DelayAction.Add(100, () => loadTestMenu.Item("LoadSpellTester").SetValue(true));
+                //LeagueSharp.Common.Utility.DelayAction.Add(100, () => loadTestMenu.Item("LoadSpellTester").SetValue(true));
 
                 Console.WriteLine("ezEvade Loaded");
             }
@@ -791,7 +791,7 @@ namespace ezEvade
                     if (!EvadeHelper.CheckMovePath(movePos, ObjectCache.gamePing + extraDelay))
                     {
                         //Console.WriteLine("Continue Movement");
-                        //myHero.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D());
+                        //EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, movePos.To3D());
                         EvadeCommand.MoveTo(movePos);
                         lastBlockedUserMoveTo.isProcessed = true;
                     }
@@ -846,7 +846,7 @@ namespace ezEvade
             /*
             if (isDodging && playerInDanger == false) //serverpos test
             {
-                myHero.IssueOrder(GameObjectOrder.HoldPosition, myHero, false);
+                EloBuddy.Player.IssueOrder(GameObjectOrder.HoldPosition, myHero, false);
             }*/
 
             if (isDodging)

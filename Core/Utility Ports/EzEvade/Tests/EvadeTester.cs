@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +9,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy;
-
-namespace ezEvade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade
 {
     class EvadeTester
     {
@@ -91,7 +91,7 @@ namespace ezEvade
 
             Game.OnWndProc += Game_OnWndProc;
 
-            Obj_AI_Base.OnSpellCast += Game_OnDoCast;
+            Obj_AI_Base.OnSpellCast += Game_OnSpellCast;
 
             AIHeroClient.OnNewPath += ObjAiHeroOnOnNewPath;
 
@@ -119,7 +119,7 @@ namespace ezEvade
             Game_OnGameLoad();
         }
 
-        private void Game_OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private void Game_OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!testMenu.Item("ShowDoCastInfo").GetValue<bool>())
             {
@@ -566,7 +566,7 @@ namespace ezEvade
             if (args.Property != "mExp" && args.Property != "mGold" && args.Property != "mGoldTotal"
                 && args.Property != "mMP" && args.Property != "mPARRegenRate")
             {
-                //ConsolePrinter.Print(args.Property + ": " + args.NewValue);
+                //ConsolePrinter.Print(args.Property + ": " + args.Value);
             }
         }
 
@@ -595,7 +595,7 @@ namespace ezEvade
             }
         }
 
-        private void Game_OnIssueOrder(Obj_AI_Base hero,PlayerIssueOrderEventArgs args)
+        private void Game_OnIssueOrder(Obj_AI_Base hero, PlayerIssueOrderEventArgs args)
         {
             if (!hero.IsMe)
                 return;
@@ -782,7 +782,7 @@ namespace ezEvade
                     Render.Circle.DrawCircle(new Vector3(myHero.ServerPosition.X, myHero.ServerPosition.Y, myHero.ServerPosition.Z), ObjectCache.myHeroCache.boundingRadius, Color.White, 3);
 
                     var heroPos = Drawing.WorldToScreen(ObjectManager.Player.Position);
-                    var dimension = Drawing.GetTextEntent("Evade: ON", 15);
+                    var dimension = Drawing.GetTextEntent(("Evade: ON"), 15);
                     Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Red, "" + (int)(heroPos2.Distance(heroPos1)));
 
                     Render.Circle.DrawCircle(new Vector3(circleRenderPos.X, circleRenderPos.Y, myHero.ServerPosition.Z), 10, Color.Red, 3);
@@ -800,9 +800,9 @@ namespace ezEvade
                 testMenu.Item("TestMoveTo").SetValue(new KeyBind(keyBind.Key, KeyBindType.Toggle, false));
 
                 /*lastRightMouseClickTime = EvadeUtils.TickCount;
-                myHero.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos,false);*/
+                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos,false);*/
 
-                Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
                 var dir = (Game.CursorPos - myHero.Position).Normalized();
                 //var pos2 = myHero.Position - dir * Game.CursorPos.Distance(myHero.Position);
@@ -812,8 +812,8 @@ namespace ezEvade
 
                 //Console.WriteLine(myHero.BBox.Maximum.Distance(myHero.Position));
 
-                DelayAction.Add(20, () => Player.IssueOrder(GameObjectOrder.MoveTo, pos2.To3D(), false));
-                //myHero.IssueOrder(GameObjectOrder.MoveTo, pos2, false);
+                DelayAction.Add(20, () => EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, pos2.To3D(), false));
+                //EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, pos2, false);
             }
 
             if (testMenu.Item("TestPath").GetValue<bool>())

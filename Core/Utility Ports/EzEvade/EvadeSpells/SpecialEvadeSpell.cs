@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +8,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy;
-
-namespace ezEvade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade
 {
     class SpecialEvadeSpell
     {
@@ -76,7 +76,7 @@ namespace ezEvade
                 if (posInfo != null && posInfo.target != null)
                 {
                     EvadeSpell.CastEvadeSpell(() => EvadeCommand.Attack(evadeSpell, posInfo.target), process);
-                    //DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
+                    //DelayAction.Add(50, () => EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
                     return true;
                 }
             }
@@ -94,7 +94,7 @@ namespace ezEvade
                     if (!blinkPos.CheckDangerousPos(10))
                     {
                         EvadeSpell.CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell), process);
-                        //DelayAction.Add(50, () => myHero.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
+                        //DelayAction.Add(50, () => EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, posInfo.position.To3D()));
                         return true;
                     }
 

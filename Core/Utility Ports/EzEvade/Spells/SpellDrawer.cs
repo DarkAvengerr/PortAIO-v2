@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +9,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy;
-
-namespace ezEvade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade
 {
     internal class SpellDrawer
     {
@@ -96,7 +96,7 @@ namespace ezEvade
             if (ObjectCache.menuCache.cache["ShowStatus"].GetValue<bool>())
             {
                 var heroPos = Drawing.WorldToScreen(ObjectManager.Player.Position);
-                var dimension = Drawing.GetTextEntent("Evade: ON", 15);
+                var dimension = Drawing.GetTextEntent(("Evade: ON"), 15);
 
                 if (ObjectCache.menuCache.cache["DodgeSkillShots"].GetValue<KeyBind>().Active)
                 {                    
@@ -225,6 +225,10 @@ namespace ezEvade
                         if (spell.info.spellName == "VeigarEventHorizon")
                         {
                             Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, spell.height), (int) spell.radius - 125, !canEvade ? Color.Yellow : spellDrawingConfig.Color, spellDrawingWidth);
+                        }
+                        else if (spell.info.spellName == "DariusCleave")
+                        {
+                            Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, spell.height), (int) spell.radius - 220, !canEvade ? Color.Yellow : spellDrawingConfig.Color, spellDrawingWidth);
                         }
                     }
                     else if (spell.spellType == SpellType.Arc)

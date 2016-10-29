@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,9 +7,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy;
-
-namespace ezEvade
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ezEvade
 {
     public class Spell
     {
@@ -133,57 +133,6 @@ namespace ezEvade
             }
 
             return Vector2.Zero;
-        }
-
-        public static Obj_AI_Base CheckPositionCollision(this Vector3 currentSpellPosition, Vector3 endPos, SpellData data, bool ignoreSelf = true, float extraRadius = 0f)
-        {
-            var currentPos = currentSpellPosition;
-            var distToHero = currentPos.To2D().Distance(ObjectCache.myHeroCache.serverPos2D);
-
-            List<Obj_AI_Base> collisionCandidates = new List<Obj_AI_Base>();
-
-            if (data.collisionObjects.Contains(CollisionObjectType.EnemyChampions))
-            {
-                foreach (var hero in HeroManager.Allies
-                    .Where(h => h.IsValidTarget(distToHero, false, currentSpellPosition)))
-                {
-                    if (ignoreSelf && hero.IsMe)
-                    {
-                        continue;
-                    }
-
-                    collisionCandidates.Add(hero);
-                }
-            }
-
-            if (data.collisionObjects.Contains(CollisionObjectType.EnemyMinions))
-            {
-                foreach (var minion in ObjectManager.Get<Obj_AI_Minion>()
-                    .Where(h => h.Team == Evade.myHero.Team && h.IsValidTarget(distToHero, false, currentSpellPosition)))
-                {
-                    if (minion.CharData.BaseSkinName.ToLower() == "teemomushroom"
-                        || minion.CharData.BaseSkinName.ToLower() == "shacobox")
-                    {
-                        continue;
-                    }
-
-                    collisionCandidates.Add(minion);
-                }
-            }
-
-            var sortedCandidates = collisionCandidates.OrderBy(h => h.Distance(currentSpellPosition));
-
-            foreach (var candidate in sortedCandidates)
-            {
-                var projection = candidate.ServerPosition.To2D().ProjectOn(currentSpellPosition.To2D(), endPos.To2D());
-                if (projection.IsOnSegment && projection.SegmentPoint.Distance(candidate.ServerPosition.To2D()) <= 
-                    candidate.BoundingRadius + data.radius + extraRadius)
-                {
-                    return candidate;
-                }
-            }
-
-            return null;
         }
 
         public static Obj_AI_Base CheckSpellCollision(this Spell spell, bool ignoreSelf = true)
@@ -321,26 +270,6 @@ namespace ezEvade
             spell.dangerlevel = spell.GetSpellDangerLevel();
         }
 
-        public static Vector2 GetLinearSpellPosition(this Vector2 startPos, Vector2 endPos, float startTick, SpellData data, bool allowNegative = false, float processDelay = 0f)
-        {
-            Vector2 spellPos = startPos;
-
-            var spellTime = EvadeUtils.TickCount - startTick - data.spellDelay;
-
-            if (spellTime >= 0 || allowNegative)
-            {
-                spellPos = startPos + (endPos - startPos).Normalized() * data.projectileSpeed * (spellTime / 1000);
-            }
-
-            if (processDelay > 0)
-            {
-                spellPos = startPos +
-                           (endPos - startPos).Normalized() * data.projectileSpeed * (spellTime + processDelay / 1000);
-            }
-
-            return spellPos;
-        }
-
         public static Vector2 GetCurrentSpellPosition(this Spell spell, bool allowNegative = false, float delay = 0, 
             float extraDistance = 0)
         {
@@ -366,22 +295,7 @@ namespace ezEvade
                     spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * (spellTime / 1000);
                 }
             }
-            else if (spell.info.name.Contains("_exp") && spell.spellType == SpellType.Circular)
-            {
-                var spellTime = EvadeUtils.TickCount - spell.startTime - 
-                                spell.info.spellDelay - Math.Max(0, spell.info.extraEndTime);
-
-                if (spell.info.projectileSpeed == float.MaxValue)
-                {
-                    return spell.startPos;
-                }
-
-                if (spellTime >= 0 || allowNegative)
-                {
-                    spellPos = spell.startPos + spell.direction * spell.info.projectileSpeed * (spellTime / 1000);
-                }
-            }
-            else if (spell.spellType == SpellType.Circular && !spell.info.name.Contains("_exp"))
+            else if (spell.spellType == SpellType.Circular)
             {
                 spellPos = spell.endPos;
             }
