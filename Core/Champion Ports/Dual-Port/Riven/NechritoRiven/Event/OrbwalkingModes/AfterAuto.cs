@@ -53,6 +53,7 @@ using EloBuddy;
                     }
                 }
 
+                /*
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.FastHarass)
                 {
                     if (Spells.Q.IsReady())
@@ -65,6 +66,7 @@ using EloBuddy;
                         CastW(target);
                     }
                 }
+                */
 
                 if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Burst) return;
 

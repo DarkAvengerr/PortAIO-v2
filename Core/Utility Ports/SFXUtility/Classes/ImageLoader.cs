@@ -29,11 +29,12 @@ using System.IO;
 using LeagueSharp;
 using SFXUtility.Library.Extensions.NET;
 using SFXUtility.Library.Logger;
+using EloBuddy;
 using PortAIO.Properties;
 
 #endregion
 
-using EloBuddy; namespace SFXUtility.Classes
+namespace SFXUtility.Classes
 {
     internal class ImageLoader
     {
@@ -42,6 +43,11 @@ using EloBuddy; namespace SFXUtility.Classes
             try
             {
                 uniqueId = uniqueId.ToUpper();
+                var cachePath = GetCachePath(uniqueId, name);
+                if (File.Exists(cachePath))
+                {
+                    return new Bitmap(cachePath);
+                }
                 var bitmap = Resources.ResourceManager.GetObject(name) as Bitmap;
                 if (bitmap != null)
                 {
@@ -53,6 +59,10 @@ using EloBuddy; namespace SFXUtility.Classes
                         case "SB":
                             bitmap = CreateSidebarImage(bitmap);
                             break;
+                    }
+                    if (bitmap != null)
+                    {
+                        bitmap.Save(cachePath);
                     }
                 }
                 return bitmap;
@@ -72,8 +82,7 @@ using EloBuddy; namespace SFXUtility.Classes
                 {
                     Directory.CreateDirectory(Global.CacheDir);
                 }
-
-                var path = Path.Combine(Global.CacheDir, string.Format("{0}", "6.12"));
+                var path = Path.Combine(Global.CacheDir, string.Format("{0}", Game.Version));
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);

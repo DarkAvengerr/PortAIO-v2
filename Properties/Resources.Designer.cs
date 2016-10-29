@@ -2210,6 +2210,16 @@ namespace PortAIO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap hud {
+            get {
+                object obj = ResourceManager.GetObject("hud", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Illaoi {
             get {
                 object obj = ResourceManager.GetObject("Illaoi", resourceCulture);
@@ -2321,6 +2331,16 @@ namespace PortAIO.Properties {
         internal static System.Drawing.Bitmap Irelia1 {
             get {
                 object obj = ResourceManager.GetObject("Irelia1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap itemsmiteaoe {
+            get {
+                object obj = ResourceManager.GetObject("itemsmiteaoe", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -3588,6 +3608,26 @@ namespace PortAIO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Minimap_Ward_Green_Enemy {
+            get {
+                object obj = ResourceManager.GetObject("Minimap_Ward_Green_Enemy", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Minimap_Ward_Pink_Enemy {
+            get {
+                object obj = ResourceManager.GetObject("Minimap_Ward_Pink_Enemy", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap MissFortune {
             get {
                 object obj = ResourceManager.GetObject("MissFortune", resourceCulture);
@@ -4686,6 +4726,36 @@ namespace PortAIO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap s5_summonersmiteduel {
+            get {
+                object obj = ResourceManager.GetObject("s5_summonersmiteduel", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap s5_summonersmiteplayerganker {
+            get {
+                object obj = ResourceManager.GetObject("s5_summonersmiteplayerganker", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap s5_summonersmitequick {
+            get {
+                object obj = ResourceManager.GetObject("s5_summonersmitequick", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Sadism {
             get {
                 object obj = ResourceManager.GetObject("Sadism", resourceCulture);
@@ -5359,6 +5429,106 @@ namespace PortAIO.Properties {
         internal static System.Drawing.Bitmap StunON {
             get {
                 object obj = ResourceManager.GetObject("StunON", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SummonerBarrier {
+            get {
+                object obj = ResourceManager.GetObject("SummonerBarrier", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SummonerBoost {
+            get {
+                object obj = ResourceManager.GetObject("SummonerBoost", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SummonerDot {
+            get {
+                object obj = ResourceManager.GetObject("SummonerDot", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SummonerExhaust {
+            get {
+                object obj = ResourceManager.GetObject("SummonerExhaust", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SummonerFlash {
+            get {
+                object obj = ResourceManager.GetObject("SummonerFlash", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SummonerHaste {
+            get {
+                object obj = ResourceManager.GetObject("SummonerHaste", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SummonerHeal {
+            get {
+                object obj = ResourceManager.GetObject("SummonerHeal", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SummonerOdinGarrison {
+            get {
+                object obj = ResourceManager.GetObject("SummonerOdinGarrison", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SummonerSmite {
+            get {
+                object obj = ResourceManager.GetObject("SummonerSmite", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SummonerTeleport {
+            get {
+                object obj = ResourceManager.GetObject("SummonerTeleport", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

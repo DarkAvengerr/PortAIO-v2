@@ -1,5 +1,8 @@
 ﻿#region
 
+
+//Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EloBuddy\\"
+
 using System;
 using EloBuddy;
 using EloBuddy.SDK.Events;
@@ -54,22 +57,6 @@ namespace PortAIO
 
         public static void LoadUtility()
         {
-            //Anti_Rito.Program.Main();
-            //Console.WriteLine("[PortAIO] Core loading : Utility Load #1");
-            //PortAIOHuman.Program.Game_OnGameLoad();
-            //Console.WriteLine("[PortAIO] Core loading : Utility Load #1");
-            //BadaoActionsLimiter.Program.Main();
-            //Console.WriteLine("[PortAIO] Core loading : Utility Load #3");
-
-            //ProFlash.Program.Main();
-            //TiltSharp.Program.Main();
-            //new SFXHumanizer_Pro.SFXHumanizerPro().OnGameLoad();
-
-            //imAsharpHuman.Program.Main();
-            //imAsharpHumanPro.Program.Main();
-
-            //RandomUlt.Program.Game_OnGameLoad();
-
             if (Misc.menu.Item("enableEvade").GetValue<bool>())
             {
                 switch (Misc.menu.Item("Evade").GetValue<StringList>().SelectedIndex)
@@ -107,8 +94,11 @@ namespace PortAIO
                     case 0: // SFXUtility
                         SFXUtility.Program.Main();
                         break;
-                    case 1: // ShadowTracker
-                        ShadowTracker.Program.Game_OnGameLoad();
+                    case 1: // Tracker#
+                        Tracker.Program.Main();
+                        break;
+                    case 2: // NabbTracker
+                        NabbTracker.Program.Main();
                         break;
                 }
             }
@@ -136,7 +126,15 @@ namespace PortAIO
                     case 1: // Activator#
                         Activator.Activator.Game_OnGameLoad();
                         break;
+                    case 2: // NabbActivator
+                        NabbActivator.Program.Main();
+                        break;
                 }
+            }
+
+            if (Misc.menu.Item("ShadowTracker").GetValue<bool>())
+            {
+                ShadowTracker.Program.Game_OnGameLoad();
             }
         }
 

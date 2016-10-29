@@ -39,7 +39,7 @@ using EloBuddy; namespace SFXUtility
         public static string DefaultFont = "Calibri";
         public static string Name = "SFXUtility";
         public static string UpdatePath = "Lizzaran/LeagueSharp-Dev/master/SFXUtility";
-        public static string BaseDir = ProgramFilesx86(); //+ "\\Lizzaran\"; //AppDomain.CurrentDomain.BaseDirectory;
+        public static string BaseDir = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EloBuddy\\";
         public static string LogDir = Path.Combine(BaseDir, Name + " - Logs");
         public static string CacheDir = Path.Combine(BaseDir, Name + " - Cache");
         public static SFXUtility SFX = null;
@@ -47,25 +47,10 @@ using EloBuddy; namespace SFXUtility
 
         static string ProgramFilesx86()
         {
-            return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\SFXUtility";
+            return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\EloBuddy\SFXUtility";
         }
         static Global()
         {
-            /*
-            Logger = new SimpleFileLogger(LogDir) { LogLevel = LogLevel.High };
-            try
-            {
-                Directory.GetFiles(LogDir)
-                    .Select(f => new FileInfo(f))
-                    .Where(f => f.CreationTime < DateTime.Now.AddDays(-7))
-                    .ToList()
-                    .ForEach(f => f.Delete());
-            }
-            catch (Exception ex)
-            {
-                Logger.AddItem(new LogItem(ex));
-            }
-            */
         }
 
         public class Reset

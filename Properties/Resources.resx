@@ -2429,4 +2429,55 @@
   <data name="zyra_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\elosharp\zyra_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="hud" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trackersharp\hud.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="itemsmiteaoe" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trackersharp\itemsmiteaoe.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Minimap_Ward_Green_Enemy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trackersharp\minimap_ward_green_enemy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Minimap_Ward_Pink_Enemy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trackersharp\minimap_ward_pink_enemy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="s5_summonersmiteduel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trackersharp\s5_summonersmiteduel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="s5_summonersmiteplayerganker" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trackersharp\s5_summonersmiteplayerganker.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="s5_summonersmitequick" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trackersharp\s5_summonersmitequick.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SummonerBarrier" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trackersharp\summonerbarrier.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SummonerBoost" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trackersharp\summonerboost.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SummonerDot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trackersharp\summonerdot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SummonerExhaust" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trackersharp\summonerexhaust.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SummonerFlash" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trackersharp\summonerflash.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SummonerHaste" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trackersharp\summonerhaste.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SummonerHeal" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trackersharp\summonerheal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SummonerOdinGarrison" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trackersharp\summonerodingarrison.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SummonerSmite" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trackersharp\summonersmite.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SummonerTeleport" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\trackersharp\summonerteleport.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

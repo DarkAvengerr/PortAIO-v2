@@ -430,24 +430,25 @@ namespace PortAIO.Dual_Port
                 dualPort.AddItem(new MenuItem(ObjectManager.Player.Hero.ToString(), "Which dual-port?").SetValue(new StringList(champ)));
             }
 
+            var dutility = new Menu("Dual-Utilities", "Utilitiesports");
+            dutility.AddItem(new MenuItem("enableActivator", "Enable Activator?").SetValue(false));
+            dutility.AddItem(new MenuItem("Activator", "Which Activator?").SetValue(new StringList(new[] { "ElUtilitySuite", "Activator#", "NabbActivator" })));
+            dutility.AddItem(new MenuItem("enableTracker", "Enable Tracker?").SetValue(false));
+            dutility.AddItem(new MenuItem("Tracker", "Which Tracker?").SetValue(new StringList(new[] { "SFXUtility", "Tracker#", "NabbTracker" })));
+            dutility.AddItem(new MenuItem("enableEvade", "Enable Evade?").SetValue(false));
+            dutility.AddItem(new MenuItem("Evade", "Which Evade?").SetValue(new StringList(new[] { "EzEvade", "Evade" })));
+            dutility.AddItem(new MenuItem("enableHuman", "Enable Humanizer?").SetValue(false));
+            dutility.AddItem(new MenuItem("Humanizer", "Which Humanizer?").SetValue(new StringList(new[] { "Humanizer#", "Sebby Ban Wars" })));
+            menu.AddSubMenu(dutility);
+
+            var utility = new Menu("Standalone Utilities", "PortAIOuTILITIESS");
+            utility.AddItem(new MenuItem("ShadowTracker", "Enable ShadowTracker?").SetValue(false));
+            menu.AddSubMenu(utility);
+
             var autoPlay = new Menu("Auto Play", "PortAIOAUTOPLAY");
             autoPlay.AddItem(new MenuItem("AutoPlay", "Enable AutoPlay?").SetValue(false));
             autoPlay.AddItem(new MenuItem("selectAutoPlay", "Which AutoPlay?").SetValue(new StringList(new[] { "AramDETFull", "AutoJungle", "SharpAI" })));
             menu.AddSubMenu(autoPlay);
-
-            var utility = new Menu("Utilities", "Utilitiesports");
-            utility.AddItem(new MenuItem("enableActivator", "Enable Activator?").SetValue(false));
-            utility.AddItem(new MenuItem("Activator", "Which Activator?").SetValue(new StringList(new[] { "ElUtilitySuite", "Activator#" })));
-
-            utility.AddItem(new MenuItem("enableTracker", "Enable Tracker?").SetValue(false));
-            utility.AddItem(new MenuItem("Tracker", "Which Tracker?").SetValue(new StringList(new[] { "SFXUtility", "ShadowTracker" })));
-
-            utility.AddItem(new MenuItem("enableEvade", "Enable Evade?").SetValue(false));
-            utility.AddItem(new MenuItem("Evade", "Which Evade?").SetValue(new StringList(new[] { "EzEvade", "Evade" })));
-
-            utility.AddItem(new MenuItem("enableHuman", "Enable Humanizer?").SetValue(false));
-            utility.AddItem(new MenuItem("Humanizer", "Which Humanizer?").SetValue(new StringList(new[] { "Humanizer#", "Sebby Ban Wars" })));
-            menu.AddSubMenu(utility);
 
             menu.AddItem(new MenuItem("UtilityOnly", "Utility Only?").SetValue(false));
             menu.AddItem(new MenuItem("ChampsOnly", "Champs Only?").SetValue(false));

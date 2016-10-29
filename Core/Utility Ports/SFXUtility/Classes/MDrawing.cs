@@ -28,10 +28,11 @@ using System.Linq;
 using LeagueSharp;
 using SFXUtility.Library.Logger;
 using SharpDX.Direct3D9;
+using EloBuddy;
 
 #endregion
 
-using EloBuddy; namespace SFXUtility.Classes
+namespace SFXUtility.Classes
 {
     internal class MDrawing
     {

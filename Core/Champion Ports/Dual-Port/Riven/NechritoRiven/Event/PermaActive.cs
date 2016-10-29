@@ -65,9 +65,9 @@ using EloBuddy;
                 case Orbwalking.OrbwalkingMode.Flee:
                     FleeMode.Flee();
                     break;
-                case Orbwalking.OrbwalkingMode.FastHarass:
-                    FastHarassMode.FastHarass();
-                    break;
+                //case Orbwalking.OrbwalkingMode.FastHarass:
+                    //FastHarassMode.FastHarass();
+                    //break;
                 case Orbwalking.OrbwalkingMode.Mixed:
                     Mixed.Harass();
                     break;

@@ -18,7 +18,7 @@ namespace NabbTracker
         /// <summary>
         ///     The entry point of the application.
         /// </summary>
-        private static void Main()
+        public static void Main()
         {
             /// <summary>
             ///     Loads the Bootstrap.
