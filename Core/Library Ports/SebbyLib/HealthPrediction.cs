@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-
 using EloBuddy;
 
 namespace SebbyLib
@@ -23,7 +22,7 @@ namespace SebbyLib
         /// </summary>
         static HealthPrediction()
         {
-            Obj_AI_Base.OnProcessSpellCast += ObjAiBaseOnOnProcessSpellCast;
+            Obj_AI_Base.OnBasicAttack += ObjAiBaseOnOnProcessSpellCast;
             Game.OnUpdate += Game_OnGameUpdate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
             MissileClient.OnDelete += MissileClient_OnDelete;
@@ -90,7 +89,7 @@ namespace SebbyLib
         /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs"/> instance containing the event data.</param>
         private static void ObjAiBaseOnOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if ( sender.Team != ObjectManager.Player.Team || !sender.IsValidTarget(3000, false) || !Orbwalking.IsAutoAttack(args.SData.Name) || !(args.Target is Obj_AI_Base))
+            if (sender.Team != ObjectManager.Player.Team || !sender.IsValidTarget(3000, false) || !(args.Target is Obj_AI_Base))
             {
                 return;
             }
@@ -122,12 +121,12 @@ namespace SebbyLib
                 {
 
                     float bonding = Math.Max(attack.Target.BoundingRadius, unit.Distance(attack.StartPos) - attack.Source.BoundingRadius);
-                    if(attack.Source.IsMelee )
+                    if (attack.Source.IsMelee)
                     {
                         bonding = 0;
                     }
 
-                    var landTime = attack.StartTick + attack.Delay + 1000 *  bonding / attack.ProjectileSpeed + delay;
+                    var landTime = attack.StartTick + attack.Delay + 1000 * bonding / attack.ProjectileSpeed + delay;
 
                     if (/*Utils.GameTimeTickCount < landTime - delay &&*/ landTime < Utils.GameTimeTickCount + time)
                     {
