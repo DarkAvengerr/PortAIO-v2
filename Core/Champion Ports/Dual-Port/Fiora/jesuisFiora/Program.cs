@@ -163,14 +163,13 @@ using EloBuddy;
                 return false;
             }
 
-            var forcePassive = Menu.Item("QPassive").IsActive();
             var passiveType = qPos.Type.ToString();
 
             // passive type is none, no special checks needed
             if (passiveType.Equals("None"))
             {
                 //  Console.WriteLine("NO PASSIVE");
-                return !forcePassive && Q.Cast(qPos.Position);
+                return Q.Cast(qPos.Position);
             }
 
             if (Menu.Item("QInVitalBlock").IsActive() && qPos.SimplePolygon.IsInside(Player.ServerPosition))
@@ -195,7 +194,7 @@ using EloBuddy;
             }
 
             //Console.WriteLine("DEFAULT CAST");
-            return !forcePassive && Q.Cast(qPos.Position);
+            return Q.Cast(qPos.Position);
         }
 
         public static bool CastR(Obj_AI_Base target)
