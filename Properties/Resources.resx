@@ -2033,4 +2033,400 @@
   <data name="RecallBar" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\recallbar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="aatrox_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\aatrox_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ahri_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\ahri_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="akali_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\akali_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="alistar_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\alistar_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="amumu_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\amumu_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="anivia_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\anivia_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="annie_passive" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\annie_passive.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="annie_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\annie_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ashe_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\ashe_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="azir_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\azir_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="blacky" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\blacky.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="blacky1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\blacky1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="blacky2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\blacky2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="blacky3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\blacky3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="blitzcrank_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\blitzcrank_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="brand_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\brand_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="braum_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\braum_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="caitlyn_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\caitlyn_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cassiopeia_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\cassiopeia_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="cc_tracker_hud" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\cc tracker hud.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="chogath_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\chogath_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="corki_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\corki_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="darius_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\darius_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="diana_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\diana_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="draven_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\draven_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="drmundo_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\drmundo_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="elise_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\elise_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="elosharp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\elosharp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="evelynn_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\evelynn_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ezreal_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\ezreal_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fiddlesticks_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\fiddlesticks_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fiora_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\fiora_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="fizz_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\fizz_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="galio_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\galio_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="gangplank_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\gangplank_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="garen_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\garen_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="gnar_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\gnar_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="gragas_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\gragas_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="graves_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\graves_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="hecarim_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\hecarim_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="heimerdinger_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\heimerdinger_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="irelia_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\irelia_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="janna_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\janna_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="jarvaniv_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\jarvaniv_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="jax_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\jax_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="jayce_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\jayce_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="jinx_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\jinx_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="kalista_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\kalista_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="karma_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\karma_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="karthus_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\karthus_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="kassadin_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\kassadin_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="katarina_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\katarina_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="kayle_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\kayle_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="kennen_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\kennen_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="khazix_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\khazix_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="kogmaw_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\kogmaw_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="leblanc_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\leblanc_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="leesin_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\leesin_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="leona_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\leona_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lissandra_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\lissandra_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lucian_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\lucian_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lulu_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\lulu_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lux_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\lux_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="malphite_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\malphite_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="malzahar_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\malzahar_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="maokai_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\maokai_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="masteryi_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\masteryi_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="missfortune_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\missfortune_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="monkeyking_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\monkeyking_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mordekaiser_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\mordekaiser_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="morgana_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\morgana_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="nami_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\nami_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="nasus_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\nasus_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="nautilus_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\nautilus_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="nidalee_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\nidalee_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="nocturne_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\nocturne_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="nunu_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\nunu_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="olaf_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\olaf_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="orianna_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\orianna_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pantheon_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\pantheon_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="poppy_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\poppy_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="quinn_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\quinn_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="rammus_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\rammus_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="reksai_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\reksai_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="renekton_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\renekton_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="rengar_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\rengar_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="riven_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\riven_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="rumble_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\rumble_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ryze_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\ryze_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sejuani_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\sejuani_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="shaco_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\shaco_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="shen_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\shen_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="shyvana_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\shyvana_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="singed_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\singed_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sion_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\sion_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sivir_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\sivir_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="skarner_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\skarner_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sona_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\sona_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="soraka_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\soraka_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="swain_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\swain_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="syndra_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\syndra_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="talon_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\talon_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="taric_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\taric_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="teemo_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\teemo_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="thresh_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\thresh_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tristana_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\tristana_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="trundle_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\trundle_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="tryndamere_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\tryndamere_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="twistedfate_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\twistedfate_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="twitch_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\twitch_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="udyr_bearstance" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\udyr_bearstance.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="udyr_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\udyr_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="urgot_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\urgot_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="varus_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\varus_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="vayne_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\vayne_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="veigar_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\veigar_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="velkoz_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\velkoz_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="viktor_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\viktor_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="vi_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\vi_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="vladimir_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\vladimir_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="volibear_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\volibear_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="warwick_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\warwick_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="wukong_square_0" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\wukong_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="xerath_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\xerath_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="xinzhao_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\xinzhao_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="yasuo_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\yasuo_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="yorick_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\yorick_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="zac_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\zac_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="zed_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\zed_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ziggs_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\ziggs_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="zilean_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\zilean_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="zyra_square_01" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\elosharp\zyra_square_0.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
