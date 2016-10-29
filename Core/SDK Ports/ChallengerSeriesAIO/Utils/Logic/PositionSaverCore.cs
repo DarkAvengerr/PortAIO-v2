@@ -44,7 +44,7 @@ using EloBuddy;
         /// <summary>
         /// The root of the folder.
         /// </summary>
-        private static string PositionSaverDirectory = FileOperations.AppDataDirectory + @"\Challenger Series\"+ObjectManager.Player.CharData.BaseSkinName+@"\Position Saver\";
+        private static string PositionSaverDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\EloBuddy\Challenger Series\"+ObjectManager.Player.CharData.BaseSkinName+@"\Position Saver\";
 
         /// <summary>
         /// File Location for X
