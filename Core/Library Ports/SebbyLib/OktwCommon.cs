@@ -4,7 +4,6 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-
 using EloBuddy;
 
 namespace SebbyLib
@@ -34,21 +33,12 @@ namespace SebbyLib
                 if (hero.IsEnemy && hero.ChampionName == "Yasuo")
                     YasuoInGame = true;
             }
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             EloBuddy.Player.OnIssueOrder += Obj_AI_Base_OnIssueOrder;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
-            Obj_AI_Base.OnDamage += Obj_AI_Base_OnDamage;
+            Game.OnUpdate += OnUpdate;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnDoCast;
             Game.OnWndProc += Game_OnWndProc;
-        }
-
-        private static void Obj_AI_Base_OnDamage(AttackableUnit sender, AttackableUnitDamageEventArgs args)
-        {
-            if (sender is AIHeroClient)
-            {
-                float time = Game.Time - 2;
-                IncomingDamageList.RemoveAll(damage => time < damage.Time || ((int)damage.Damage == (int)args.Damage && damage.TargetNetworkId == sender.NetworkId));
-            }
         }
 
         public static void debug(string msg)
@@ -193,8 +183,8 @@ namespace SebbyLib
 
         public static bool CanMove(AIHeroClient target)
         {
-            if (target.MoveSpeed < 50 || ((!target.CanMove || target.IsRooted || target.CanMove) && !target.Spellbook.IsAutoAttacking) || target.IsStunned || target.HasBuffOfType(BuffType.Stun) || target.HasBuffOfType(BuffType.Fear) || target.HasBuffOfType(BuffType.Snare) || target.HasBuffOfType(BuffType.Knockup) || target.HasBuff("Recall") ||
-                target.HasBuffOfType(BuffType.Knockback) || target.HasBuffOfType(BuffType.Charm) || target.HasBuffOfType(BuffType.Taunt) || target.HasBuffOfType(BuffType.Suppression))
+            if (target.MoveSpeed < 50 || target.IsStunned || target.HasBuffOfType(BuffType.Stun) || target.HasBuffOfType(BuffType.Fear) || target.HasBuffOfType(BuffType.Snare) || target.HasBuffOfType(BuffType.Knockup) || target.HasBuff("Recall") ||
+                target.HasBuffOfType(BuffType.Knockback) || target.HasBuffOfType(BuffType.Charm) || target.HasBuffOfType(BuffType.Taunt) || target.HasBuffOfType(BuffType.Suppression) || (target.IsChannelingImportantSpell() && !target.IsMoving))
             {
                 return false;
             }
@@ -204,14 +194,34 @@ namespace SebbyLib
 
         public static int GetBuffCount(Obj_AI_Base target, string buffName)
         {
-            foreach (var buff in target.Buffs.Where(buff => buff.Name.ToLower() == buffName.ToLower()))
+            if (buffName.Equals("TwitchDeadlyVenom")) // ty finn
             {
-                if (buff.Count == 0)
-                    return 1;
-                else
-                    return buff.Count;
+                var twitchECount = 0;
+
+                for (var i = 1; i < 7; i++)
+                {
+                    if (ObjectManager.Get<Obj_GeneralParticleEmitter>()
+                            .Any(e => e.Position.Distance(target.ServerPosition) <= 55 &&
+                                      e.Name == "twitch_poison_counter_0" + i + ".troy"))
+                    {
+                        twitchECount = i;
+                    }
+                }
+                return twitchECount;
             }
-            return 0;
+
+            int stack = 0;
+            foreach (var targetA in ObjectManager.Get<AIHeroClient>().Where(i => i.IsEnemy && i.IsValidTarget() && i.VisibleOnScreen))
+            {
+                foreach (var buff in target.Buffs)
+                {
+                    if(buff.Name.ToLower().Contains(buffName.ToLower()))
+                    {
+                        stack = target.GetBuffCount(buff.Name);
+                    }
+                }
+            }
+            return stack;
         }
 
         public static int CountEnemyMinions(Obj_AI_Base target, float range)
@@ -267,7 +277,7 @@ namespace SebbyLib
             Vector2 pos2 = targetLW.To2D() - target.Position.To2D();
             var getAngle = pos1.AngleBetween(pos2);
 
-            if(getAngle < 25)
+            if (getAngle < 25)
                 return true;
             else
                 return false;
@@ -364,6 +374,12 @@ namespace SebbyLib
             }
         }
 
+        private static void OnUpdate(EventArgs args)
+        {
+            float time = Game.Time - 2;
+            IncomingDamageList.RemoveAll(damage => time < damage.Time);
+        }
+
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (args.SData == null)
@@ -375,9 +391,8 @@ namespace SebbyLib
             
             if (targed != null)
             {
-                if (targed.Type == GameObjectType.AIHeroClient && targed.Team != sender.Team && (sender.IsMelee || !args.SData.IsAutoAttack()))
+                if (targed.Type == GameObjectType.AIHeroClient && targed.Team != sender.Team && sender.IsMelee)
                 {
-
                     IncomingDamageList.Add(new UnitIncomingDamage { Damage = sender.GetSpellDamage(targed, args.SData.Name), TargetNetworkId = args.Target.NetworkId, Time = Game.Time, Skillshot = false });
                 }
             }
