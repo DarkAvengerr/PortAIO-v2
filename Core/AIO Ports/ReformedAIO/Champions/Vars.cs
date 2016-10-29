@@ -1,6 +1,8 @@
-﻿namespace ReformedAIO.Champions
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions
 {
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     internal class Vars

@@ -1,10 +1,13 @@
-﻿namespace ReformedAIO.Champions.Ashe
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ashe
 {
     #region Using Directives
 
     using System.Collections.Generic;
+    using System.Drawing;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using Core;
@@ -17,7 +20,10 @@
     using RethoughtLib.Bootstraps.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Implementations;
+    using RethoughtLib.Orbwalker.Implementations;
     using RethoughtLib.Utility;
+
+    using Color = SharpDX.Color;
 
     #endregion
 
@@ -25,11 +31,11 @@
     {
         #region Public Properties
 
-        public override string DisplayName { get; set; } = String.ToTitleCase("Reformed Ashe");
+        public override string DisplayName { get; set; } = "Reformed Ashe";
 
         public override string InternalName { get; set; } = "Ashe";
 
-        public override IEnumerable<string> Tags { get; set; } = new List<string> { "Ashe" };
+        public override IEnumerable<string> Tags { get; set; } = new[] { "Ashe" };
 
         #endregion
 
@@ -40,12 +46,13 @@
             var superParent = new SuperParent(DisplayName);
             superParent.Initialize();
 
-            var orbwalker = new Orbwalking.Orbwalker(superParent.Menu.SubMenu("Orbwalker"));
+            var orbwalkerModule = new OrbwalkerModule();
+            orbwalkerModule.Load();
 
-            var comboParent = new OrbwalkingParent("Combo", orbwalker, Orbwalking.OrbwalkingMode.Combo);
-            var laneParent = new OrbwalkingParent("Lane", orbwalker, Orbwalking.OrbwalkingMode.LaneClear);
-            var jungleParent = new OrbwalkingParent("Jungle", orbwalker, Orbwalking.OrbwalkingMode.LaneClear);
-            var mixedParent = new OrbwalkingParent("Mixed", orbwalker, Orbwalking.OrbwalkingMode.Mixed);
+            var comboParent = new OrbwalkingParent("Combo", orbwalkerModule.OrbwalkerInstance, Orbwalking.OrbwalkingMode.Combo);
+            var laneParent = new OrbwalkingParent("Lane", orbwalkerModule.OrbwalkerInstance, Orbwalking.OrbwalkingMode.LaneClear);
+            var jungleParent = new OrbwalkingParent("Jungle", orbwalkerModule.OrbwalkerInstance, Orbwalking.OrbwalkingMode.LaneClear);
+            var mixedParent = new OrbwalkingParent("Mixed", orbwalkerModule.OrbwalkerInstance, Orbwalking.OrbwalkingMode.Mixed);
             var drawingParent = new Parent("Drawings");
 
             var setSpell = new SetSpells();
@@ -53,37 +60,38 @@
 
             comboParent.Add(new ChildBase[]
             {
-                new QCombo("[Q]", orbwalker),
-                new WCombo("[W]", orbwalker),
-                new ECombo("[E]", orbwalker),
-                new RCombo("[R]", orbwalker)
+                new QCombo(),
+                new WCombo(),
+                new ECombo(),
+                new RCombo()
             });
 
             mixedParent.Add(new ChildBase[]
             {
-                new QMixed("[Q]", orbwalker),
-                new WMixed("[W]", orbwalker) 
+                new QMixed(),
+                new WMixed() 
             });
 
             jungleParent.Add(new ChildBase[]
             {
-                new QJungle("[Q]", orbwalker),
-                new WJungle("[W]", orbwalker)
+                new QJungle(),
+                new WJungle()
             });
 
            laneParent.Add(new ChildBase[]
            {
-               new QLane("[Q]", orbwalker),
-               new WLane("[W]", orbwalker)  
+               new QLane(),
+               new WLane()  
            });
 
             drawingParent.Add(new ChildBase[]
             {
-               new WDraw("[W]"),
-               new DmgDraw("Damage Indicator") 
+               new WDraw(),
+               new DmgDraw() 
             });
            
             superParent.Add(new Base[] {
+                orbwalkerModule,
                 comboParent,
                 mixedParent,
                 laneParent,
@@ -93,10 +101,8 @@
 
             superParent.Load();
 
-            if (superParent.Loaded)
-            {
-                Chat.Print(DisplayName + " - Loaded");
-            }
+            superParent.Menu.Style = FontStyle.Bold;
+            superParent.Menu.Color = Color.Cyan;
         }
         #endregion
     }

@@ -1,8 +1,10 @@
-﻿namespace ReformedAIO.Champions.Lucian.Killsteal
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.Killsteal
 {
     using System;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Lucian.Spells;
@@ -45,18 +47,20 @@
         {
             base.OnDisable(sender, featureBaseEventArgs);
 
-            Game.OnUpdate -= this.OnUpdate;
+            Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             base.OnEnable(sender, featureBaseEventArgs);
 
-            Game.OnUpdate += this.OnUpdate;
+            Game.OnUpdate += OnUpdate;
         }
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnLoad(sender, featureBaseEventArgs);
+
             Menu.AddItem(new MenuItem("Safety", "Safety Check").SetValue(true));
         }
     }

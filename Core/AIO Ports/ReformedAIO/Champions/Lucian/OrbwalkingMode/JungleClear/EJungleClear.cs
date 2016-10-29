@@ -1,8 +1,10 @@
-﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
 {
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Lucian.Spells;
@@ -20,19 +22,12 @@
             this.eSpell = eSpell;
         }
 
-        private void AfterAttack(AttackableUnit unit, AttackableUnit attackableunit)
+        private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!CheckGuardians())
+            if (!CheckGuardians() || !sender.IsMe || Menu.Item("EMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
             {
                 return;
             }
-
-            if (!eSpell.Spell.IsReady()
-                || Menu.Item("EMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
-            {
-                return;
-            }
-
 
             var mob =
                 MinionManager.GetMinions(
@@ -60,12 +55,16 @@
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-             Orbwalking.AfterAttack -= AfterAttack;
+             base.OnDisable(sender, featureBaseEventArgs);
+
+            Obj_AI_Base.OnSpellCast -= OnSpellCast;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Orbwalking.AfterAttack += AfterAttack;
+            base.OnEnable(sender, featureBaseEventArgs);
+
+            Obj_AI_Base.OnSpellCast += OnSpellCast;
         }
     }
 }

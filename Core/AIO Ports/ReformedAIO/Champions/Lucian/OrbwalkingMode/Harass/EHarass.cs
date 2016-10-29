@@ -1,14 +1,15 @@
-﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
 {
-    using System;
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Lucian.Damage;
     using ReformedAIO.Champions.Lucian.Spells;
-    using ReformedAIO.Core.Dash_Handler;
+    using ReformedAIO.Library.Dash_Handler;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
@@ -58,7 +59,7 @@
                             eSpell.Spell.Cast(ObjectManager.Player.Position.Extend(Game.CursorPos, Menu.Item("EDistance").GetValue<Slider>().Value));
                             break;
                         case 1:
-                            eSpell.Spell.Cast(dashSmart.Deviation(ObjectManager.Player.Position.To2D(), target.Position.To2D(), Menu.Item("EDistance").GetValue<Slider>().Value).To3D());
+                            eSpell.Spell.Cast(dashSmart.Kite(target.Position.To2D(), Menu.Item("EDistance").GetValue<Slider>().Value).To3D());
                             break;
                         case 2:
                             eSpell.Spell.Cast(dashSmart.ToSafePosition(target, target.Position, Menu.Item("EDistance").GetValue<Slider>().Value));

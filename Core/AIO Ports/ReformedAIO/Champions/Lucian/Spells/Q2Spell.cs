@@ -1,8 +1,10 @@
-﻿namespace ReformedAIO.Champions.Lucian.Spells
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.Spells
 {
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using RethoughtLib.FeatureSystem.Implementations;
@@ -10,7 +12,7 @@
 
     using SharpDX;
 
-    class Q2Spell : SpellChild
+    internal class Q2Spell : SpellChild
     {
         public override string Name { get; set; } = "Piercing Light";
 

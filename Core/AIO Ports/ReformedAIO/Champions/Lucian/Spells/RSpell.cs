@@ -1,12 +1,14 @@
-﻿namespace ReformedAIO.Champions.Lucian.Spells
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.Spells
 {
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using RethoughtLib.FeatureSystem.Implementations;
     using RethoughtLib.FeatureSystem.Switches;
 
-    class RSpell : SpellChild
+    internal class RSpell : SpellChild
     {
         public override string Name { get; set; } = "The Culling";
 
@@ -21,7 +23,7 @@
         {
             base.OnLoad(sender, featureBaseEventArgs);
 
-            Spell = new Spell(SpellSlot.R, 1400);
+            Spell = new Spell(SpellSlot.R, 1200);
             Spell.SetSkillshot(.2f, 110f, 2500f, true, SkillshotType.SkillshotLine);
         }
 

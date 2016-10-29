@@ -1,32 +1,28 @@
-﻿namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 {
     #region Using Directives
 
     using System;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Diana.Logic;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
+    using RethoughtLib.FeatureSystem.Implementations;
 
     #endregion
 
-    internal class LunarRush : ChildBase
+    internal class LunarRush : OrbwalkingChild
     {
         #region Fields
 
         private LogicAll logic;
 
         #endregion
-
-        private readonly Orbwalking.Orbwalker orbwalker;
-
-        public LunarRush(Orbwalking.Orbwalker orbwalker)
-        {
-            this.orbwalker = orbwalker;
-        }
 
         #region Public Properties
 
@@ -48,21 +44,13 @@
             
         }
 
-        //protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
-        //{
-        //    logic = new LogicAll();
-        //}
-
-        protected override sealed void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             Menu = new Menu(Name, Name);
 
-            Menu.AddItem(new MenuItem(Name + "WKillable", "Use Only If Killable By Combo").SetValue(false));
+            Menu.AddItem(new MenuItem("WKillable", "Use Only If Killable By Combo").SetValue(false));
 
-            //   Menu.AddItem(new MenuItem(Name + "WMana", "Mana %")
-            //       .SetValue(new Slider(15, 100)));
-
-            Menu.AddItem(new MenuItem(Name + "Enabled", "Enabled").SetValue(true));
+            Menu.AddItem(new MenuItem("Enabled", "Enabled").SetValue(true));
 
             logic = new LogicAll();
         }
@@ -75,7 +63,7 @@
 
             if (target == null || !target.IsValid) return;
 
-            if (Menu.Item(Menu.Name + "WKillable").GetValue<bool>() && logic.ComboDmg(target) < target.Health)
+            if (Menu.Item("WKillable").GetValue<bool>() && logic.ComboDmg(target) < target.Health)
             {
                 return;
             }
@@ -85,8 +73,10 @@
 
         private void OnUpdate(EventArgs args)
         {
-            if (this.orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
-                || !Variables.Spells[SpellSlot.W].IsReady()) return;
+            if (!CheckGuardians())
+            {
+                return;
+            }
 
             Lunarrush();
         }

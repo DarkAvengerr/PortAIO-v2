@@ -1,8 +1,10 @@
-﻿namespace ReformedAIO.Champions.Ashe.Core
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ashe.Core
 {
     using System;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     internal class SetSpells
@@ -19,6 +21,7 @@
                     1500f,
                     true,
                     SkillshotType.SkillshotCone);
+
                 Variable.Spells[SpellSlot.E].SetSkillshot(0.25f, 130f, 1600f, false, SkillshotType.SkillshotLine);
                 Variable.Spells[SpellSlot.R].SetSkillshot(0.25f, 130f, 1600f, false, SkillshotType.SkillshotLine);
             }

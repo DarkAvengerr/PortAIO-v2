@@ -1,6 +1,8 @@
-﻿namespace ReformedAIO.Champions.Caitlyn.Logic
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Caitlyn.Logic
 {
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     internal sealed class EwqrLogic

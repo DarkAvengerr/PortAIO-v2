@@ -1,8 +1,10 @@
-﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
 {
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Lucian.Spells;
@@ -20,9 +22,10 @@
             this.wSpell = wSpell;
         }
 
-        private void AfterAttack(AttackableUnit unit, AttackableUnit attackableunit)
+        private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (Menu.Item("WMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
+            if (!sender.IsMe
+                || Menu.Item("WMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
                 || !CheckGuardians())
             {
                 return;
@@ -33,14 +36,17 @@
                     ObjectManager.Player.Position,
                     wSpell.Spell.Range,
                     MinionTypes.All,
-                    MinionTeam.Neutral).FirstOrDefault();
+                    MinionTeam.Neutral);
 
             if (mob == null)
             {
                 return;
             }
 
-            wSpell.Spell.Cast(mob);
+            foreach (var m in mob)
+            {
+                wSpell.Spell.Cast(m.Position);
+            }
         }
 
 
@@ -48,18 +54,21 @@
         {
             base.OnLoad(sender, featureBaseEventArgs);
 
-         //   Menu.AddItem(new MenuItem("MinHit", "Min Hit").SetValue(new Slider(2, 0, 3)));
             Menu.AddItem(new MenuItem("WMana", "Min Mana %").SetValue(new Slider(5, 0, 100)));
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-             Orbwalking.AfterAttack -= AfterAttack;
+            base.OnDisable(sender, featureBaseEventArgs);
+
+            Obj_AI_Base.OnSpellCast -= OnSpellCast;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Orbwalking.AfterAttack += AfterAttack;
+            base.OnEnable(sender, featureBaseEventArgs);
+
+            Obj_AI_Base.OnSpellCast += OnSpellCast;
         }
     }
 }

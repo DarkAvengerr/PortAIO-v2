@@ -1,10 +1,12 @@
-﻿namespace ReformedAIO.Champions.Caitlyn.Killsteal
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Caitlyn.Killsteal
 {
     using System;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
-    using EloBuddy.SDK.Utils;
+    using LeagueSharp.SDK.Utils;
 
     using ReformedAIO.Champions.Caitlyn.Logic;
 
@@ -38,7 +40,7 @@
         {
             if (Target == null
                 || Target.Health > Spells.Spell[SpellSlot.Q].GetDamage(Target)
-                || Target.Distance(Vars.Player) < Orbwalking.GetRealAutoAttackRange(Vars.Player)
+                || Target.Distance(Vars.Player) < Vars.Player.GetRealAutoAttackRange()
                 || Spells.Spell[SpellSlot.Q].Delay + Spells.Spell[SpellSlot.Q].Speed < Target.MoveSpeed
                 || !CheckGuardians())
             {

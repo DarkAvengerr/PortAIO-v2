@@ -1,10 +1,12 @@
-﻿namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
 {
     #region Using Directives
 
     using System;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
@@ -13,21 +15,9 @@
 
     internal sealed class WCombo : ChildBase
     {
-        #region Constructors and Destructors
-
-        private readonly Orbwalking.Orbwalker orbwalker;
-
-        public WCombo(string name, Orbwalking.Orbwalker orbwalker)
-        {
-            Name = name;
-            this.orbwalker = orbwalker;
-        }
-
-        #endregion
-
         #region Public Properties
 
-        public override string Name { get; set; }
+        public override string Name { get; set; } = "[W]";
 
         #endregion
 
@@ -35,11 +25,15 @@
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnDisable(sender, featureBaseEventArgs);
+
             Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Game.OnUpdate += OnUpdate;
         }
 
@@ -47,15 +41,14 @@
         {
             base.OnLoad(sender, featureBaseEventArgs);
 
-            Menu.AddItem(new MenuItem(Menu.Name + "WDistance", "Max Distance").SetValue(new Slider(1100, 0, 1200)));
+            Menu.AddItem(new MenuItem("WDistance", "Max Distance").SetValue(new Slider(1100, 0, 1200)));
 
-            Menu.AddItem(new MenuItem(Menu.Name + "WMana", "Mana %").SetValue(new Slider(10, 0, 100)));
+            Menu.AddItem(new MenuItem("WMana", "Mana %").SetValue(new Slider(10, 0, 100)));
         }
 
         private void OnUpdate(EventArgs args)
         {
-            if (this.orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
-                || !Variable.Spells[SpellSlot.W].IsReady()
+            if (!Variable.Spells[SpellSlot.W].IsReady()
                 || Variable.Player.Spellbook.IsAutoAttacking)
             {
                 return;
@@ -67,7 +60,7 @@
         private void Volley()
         {
             var target = TargetSelector.GetTarget(
-                Menu.Item(Menu.Name + "WDistance").GetValue<Slider>().Value,
+                Menu.Item("WDistance").GetValue<Slider>().Value,
                 TargetSelector.DamageType.Physical);
 
             if (target == null || !target.IsValid) return;

@@ -1,59 +1,51 @@
-﻿namespace ReformedAIO.Champions.Gnar.OrbwalkingMode.Combo
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Gnar.OrbwalkingMode.Combo
 {
     using System;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Gnar.Core;
     using ReformedAIO.Champions.Gnar.Logic;
+    using ReformedAIO.Library.Get_Information.HeroInfo;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
+    using RethoughtLib.FeatureSystem.Implementations;
 
-    internal sealed class RCombo : ChildBase
+    using SharpDX;
+
+    internal sealed class RCombo : OrbwalkingChild
     {
-        private WallDetection wallDetection;
+        private readonly GnarWallDetection gnarWallDetection = new GnarWallDetection();
 
-        private GnarState gnarState;
+        private readonly GnarState gnarState = new GnarState();
+
+        private readonly HeroInfo heroInfo = new HeroInfo();
 
         public override string Name { get; set; } = "R";
 
-        private readonly Orbwalking.Orbwalker orbwalker;
-
-        public RCombo(Orbwalking.Orbwalker orbwalker)
-        {
-            this.orbwalker = orbwalker;
-        }
-
-        private AIHeroClient Target => TargetSelector.GetTarget(Spells.R2.Range, TargetSelector.DamageType.Physical);
+        private static AIHeroClient Target => TargetSelector.GetTarget(Spells.R2.Range, TargetSelector.DamageType.Physical);
 
         private void GameOnUpdate(EventArgs args)
         {
-            if (Menu.Item("ForceDisable").GetValue<bool>()
-                || Target == null 
-                || Target.HasBuffOfType(BuffType.SpellShield)
-                || Target.IsZombie
-                || Target.IsInvulnerable
-                || !Spells.R2.IsReady()
-                || gnarState.Mini)
+            if (Target == null 
+                || heroInfo.HasSpellShield(Target) 
+                || heroInfo.Unkillable(Target) 
+                || gnarState.Mini
+                || !CheckGuardians())
             {
                 return;
             }
 
-            var prediction = Spells.R2.GetPrediction(Target, true);
+            var wall = gnarWallDetection.Wall(Target.Position, Menu.Item("Range").GetValue<Slider>().Value);
 
-            if (prediction.Hitchance < HitChance.High)
+            Vars.Player.GetPath(wall);
+
+            if (wall != Vector3.Zero && heroInfo.GetStunDuration(Target) < Spells.R2.Delay)
             {
-                return;
-            }
-
-            var wallPoint = wallDetection.GetFirstWallPoint(Vars.Player.Position, Target.Position);
-            Vars.Player.GetPath(wallPoint);
-
-            if (wallDetection.IsWallDash(Target.Position, Menu.Item("RRange").GetValue<Slider>().Value))
-            {
-                Console.WriteLine("Walldetection: Casting R");
-                Spells.R2.Cast(wallDetection.Wall(Target.Position, 590));
+                Spells.R2.Cast(wall);
             }
         }
 
@@ -61,23 +53,20 @@
         {
             base.OnLoad(sender, featureBaseEventArgs);
 
-            Menu.AddItem(new MenuItem("RRange", "Range").SetValue(new Slider(590, 0, 590)));
-
-            Menu.AddItem(new MenuItem("ForceDisable", "Force DISABLE").SetValue(false));
-
-            // Menu.AddItem(new MenuItem("HitCount", "Auto If x Count").SetValue(new Slider(2, 0, 5)));
-
-            gnarState = new GnarState();
-            wallDetection = new WallDetection();
+            Menu.AddItem(new MenuItem("Range", "Range").SetValue(new Slider(590, 0, 590)));
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnDisable(sender, featureBaseEventArgs);
+
             Game.OnUpdate -= GameOnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Game.OnUpdate += GameOnUpdate;
         }
     }

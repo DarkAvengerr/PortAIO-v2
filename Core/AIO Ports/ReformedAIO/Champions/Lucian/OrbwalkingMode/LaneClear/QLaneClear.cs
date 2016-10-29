@@ -1,15 +1,16 @@
-﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.LaneClear
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.LaneClear
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Lucian.Spells;
 
-    using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Implementations;
 
     using SharpDX;
@@ -28,9 +29,8 @@
         private void OnUpdate(EventArgs args)
         {
               if ((Menu.Item("EnemiesCheck").GetValue<bool>()
-                && ObjectManager.Player.CountEnemiesInRange(1500) >= 1)
+                && ObjectManager.Player.CountEnemiesInRange(1750) >= 1)
                 || (ObjectManager.Player.ManaPercent <= Menu.Item("QMana").GetValue<Slider>().Value)
-                 
                 || !CheckGuardians())
             {
                 return;
@@ -64,11 +64,15 @@
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnDisable(sender, featureBaseEventArgs);
+
             Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Game.OnUpdate += OnUpdate;
         }
     }

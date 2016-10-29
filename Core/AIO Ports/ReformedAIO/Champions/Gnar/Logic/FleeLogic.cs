@@ -1,4 +1,6 @@
-﻿namespace ReformedAIO.Champions.Gnar.Logic
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Gnar.Logic
 {
     using System.Collections.Generic;
 

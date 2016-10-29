@@ -1,14 +1,16 @@
-﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
 {
     using System;
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Lucian.Damage;
     using ReformedAIO.Champions.Lucian.Spells;
-    using ReformedAIO.Core.Dash_Handler;
+    using ReformedAIO.Library.Dash_Handler;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
@@ -49,10 +51,11 @@
             }
         }
 
-        private void AfterAttack(AttackableUnit unit, AttackableUnit attackableunit)
+        private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (Menu.Item("EMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent 
-                || !CheckGuardians())
+            if (!sender.IsMe
+                || !CheckGuardians()
+                || Menu.Item("EMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
             {
                 return;
             }
@@ -67,7 +70,7 @@
                         eSpell.Spell.Cast(ObjectManager.Player.Position.Extend(Game.CursorPos, Menu.Item("EDistance").GetValue<Slider>().Value));
                         break;
                     case 1:
-                        eSpell.Spell.Cast(dashSmart.Deviation(ObjectManager.Player.Position.To2D(), target.Position.To2D(), Menu.Item("EDistance").GetValue<Slider>().Value).To3D());
+                        eSpell.Spell.Cast(dashSmart.Kite(target.Position.To2D(), Menu.Item("EDistance").GetValue<Slider>().Value).To3D());
                         break;
                     case 2:
                         eSpell.Spell.Cast(dashSmart.ToSafePosition(target, target.Position, Menu.Item("EDistance").GetValue<Slider>().Value));
@@ -75,8 +78,6 @@
                 }
             }
         }
-
-
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
@@ -93,7 +94,7 @@
             base.OnDisable(sender, featureBaseEventArgs);
 
             Game.OnUpdate -= OnUpdate;
-            Orbwalking.AfterAttack -= AfterAttack;
+            Obj_AI_Base.OnSpellCast -= OnSpellCast;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
@@ -101,7 +102,7 @@
             base.OnEnable(sender, featureBaseEventArgs);
 
             Game.OnUpdate += OnUpdate;
-            Orbwalking.AfterAttack += AfterAttack;
+            Obj_AI_Base.OnSpellCast += OnSpellCast;
         }
     }
 }

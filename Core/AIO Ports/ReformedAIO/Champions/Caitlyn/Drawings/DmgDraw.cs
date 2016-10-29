@@ -1,13 +1,15 @@
-﻿namespace ReformedAIO.Champions.Caitlyn.Drawings
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Caitlyn.Drawings
 {
     using System;
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Caitlyn.Logic;
-    using ReformedAIO.Core.Drawings;
+    using ReformedAIO.Library.Drawings;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
@@ -15,7 +17,7 @@
 
     internal sealed class DmgDraw : ChildBase
     {
-        private HpBarIndicator drawDamage;
+        private HeroHealthBarIndicator drawDamage;
 
         private EwqrLogic ewqrLogic;
 
@@ -46,7 +48,7 @@
         protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             this.ewqrLogic = new EwqrLogic();
-            this.drawDamage = new HpBarIndicator();
+            this.drawDamage = new HeroHealthBarIndicator();
             base.OnLoad(sender, featureBaseEventArgs);
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
 {
     #region Using Directives
 
@@ -6,7 +8,7 @@
     using System.Drawing;
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Ashe.Logic;
@@ -23,21 +25,9 @@
 
         #endregion
 
-        #region Constructors and Destructors
-
-        private readonly Orbwalking.Orbwalker orbwalker;
-
-        public ECombo(string name, Orbwalking.Orbwalker orbwalker)
-        {
-            Name = name;
-            this.orbwalker = orbwalker;
-        }
-
-        #endregion
-
         #region Public Properties
 
-        public override string Name { get; set; }
+        public override string Name { get; set; } = "[E]";
 
         #endregion
 
@@ -45,37 +35,36 @@
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnDisable(sender, featureBaseEventArgs);
+
             Drawing.OnDraw -= OnDraw;
             Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Drawing.OnDraw += OnDraw;
             Game.OnUpdate += OnUpdate;
         }
 
-        //protected override void OnInitalize(object sender, FeatureBaseEventArgs featureBaseEventArgs)
-        //{
-        //    eLogic = new ELogic();
-        //}
-
         protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Menu.AddItem(new MenuItem(Menu.Name + "EDistance", "Distance").SetValue(new Slider(2500, 0, 2500)).SetTooltip("Only for enemeis & not objectives"));
+            Menu.AddItem(new MenuItem("EDistance", "Distance").SetValue(new Slider(2500, 0, 2500)).SetTooltip("Only for enemeis & not objectives"));
 
-            Menu.AddItem(new MenuItem(Menu.Name + "ECount", "Save 1 Charge").SetValue(true));
+            Menu.AddItem(new MenuItem("ECount", "Save 1 Charge").SetValue(true));
 
-            Menu.AddItem(new MenuItem(Name + "EToVector", "E To Objectives").SetValue(true));
+            Menu.AddItem(new MenuItem("EToVector", "E To Objectives").SetValue(true));
 
-            Menu.AddItem(new MenuItem(Name + "VectorDraw", "Draw Objective Position").SetValue(true));
+            Menu.AddItem(new MenuItem("VectorDraw", "Draw Objective Position").SetValue(true));
 
             eLogic = new ELogic();
         }
 
         private void EToCamp()
         {
-            if(!Menu.Item(Menu.Name + "EToVector").GetValue<bool>()) return;
+            if(!Menu.Item("EToVector").GetValue<bool>()) return;
 
             var pos =  eLogic.Camp.FirstOrDefault(x => x.Value.Distance(Variable.Player.Position) > 1500 && x.Value.Distance(Variable.Player.Position) < 7000);
 
@@ -86,21 +75,15 @@
 
         private void Hawkshot()
         {
-            var target = TargetSelector.GetTarget(Variable.Player.AttackRange, TargetSelector.DamageType.Physical);
+            var target = TargetSelector.GetTarget(Variable.Player.AttackRange, TargetSelector.DamageType.True);
 
-            if (target == null) return;
+            if (target == null || !eLogic.ComboE(target)) return;
 
-            if (!eLogic.ComboE(target)) return;
-
-            foreach (var position in HeroManager.Enemies.Where(x => !x.IsDead && x.Distance(Variable.Player) < Menu.Item(Menu.Name + "EDistance").GetValue<Slider>().Value))
+            foreach (var position in HeroManager.Enemies.Where(x => !x.IsDead && x.Distance(Variable.Player) < Menu.Item("EDistance").GetValue<Slider>().Value))
             {
-                var path = position.GetWaypoints().LastOrDefault().To3D();
+                var path = position.GetWaypoints().FirstOrDefault().To3D();
 
-                if (!NavMesh.IsWallOfGrass(path, 1)) return;
-
-                //if (position.Distance(path) > 1500) return;
-
-               // if (NavMesh.IsWallOfGrass(Variable.Player.Position, 1)) return; // Stil no proof wether or not this work yet.
+                if (!NavMesh.IsWallOfGrass(path, 50)) return;
 
                 Variable.Spells[SpellSlot.E].Cast(path);
             }
@@ -108,7 +91,7 @@
 
         private void OnDraw(EventArgs args)
         {
-            if (Variable.Player.IsDead || !Menu.Item(Menu.Name + "VectorDraw").GetValue<bool>()) return;
+            if (!Menu.Item("VectorDraw").GetValue<bool>()) return;
 
             var pos = eLogic.Camp.FirstOrDefault(x => x.Value.Distance(Variable.Player.Position) > 2500 && x.Value.Distance(Variable.Player.Position) < 5500);
 
@@ -119,16 +102,14 @@
 
         private void OnUpdate(EventArgs args)
         {
-            if (!Variable.Spells[SpellSlot.E].IsReady() || Variable.Player.IsRecalling() || Variable.Player.InShop()) return;
+            if (!Variable.Spells[SpellSlot.E].IsReady()
+                || Variable.Player.IsRecalling() 
+                || Variable.Player.InShop()
+                || (Menu.Item("ECount").GetValue<bool>() 
+                && eLogic.GetEAmmo() == 1))
+                return;
 
-            if (Menu.Item(Menu.Name + "ECount").GetValue<bool>() && eLogic.GetEAmmo() == 1) return;
-
-            if (this.orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None)
-            {
-                EToCamp();
-            }
-
-            if (this.orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo) return;
+            EToCamp();
 
             Hawkshot();
         }

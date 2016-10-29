@@ -1,17 +1,19 @@
-﻿namespace ReformedAIO.Champions.Caitlyn
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Caitlyn
 {
     using System.Collections.Generic;
     using System.Drawing;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Caitlyn.Drawings;
-    using ReformedAIO.Champions.Caitlyn.Killsteal;
-    using ReformedAIO.Champions.Caitlyn.Logic;
-    using ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Combo;
-    using ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Jungle;
-    using ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Lane;
+    using Caitlyn.Drawings;
+    using Caitlyn.Killsteal;
+    using Caitlyn.Logic;
+    using Caitlyn.OrbwalkingMode.Combo;
+    using Caitlyn.OrbwalkingMode.Jungle;
+    using Caitlyn.OrbwalkingMode.Lane;
 
     using RethoughtLib.FeatureSystem.Guardians;
     using RethoughtLib.Bootstraps.Abstract_Classes;
@@ -92,11 +94,6 @@
 
             superParent.Menu.Style = FontStyle.Bold;
             superParent.Menu.Color = Color.Cyan;
-
-            if (superParent.Loaded)
-            {
-                Chat.Print(DisplayName + " - Loaded");
-            }
         }
     }
 }

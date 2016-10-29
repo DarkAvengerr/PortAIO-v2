@@ -1,8 +1,10 @@
-﻿namespace ReformedAIO.Champions.Diana.Logic
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Diana.Logic
 {
     #region Using Directives
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     #endregion

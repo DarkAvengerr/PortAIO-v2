@@ -1,10 +1,12 @@
-﻿namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Mixed
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Mixed
 {
     #region Using Directives
 
     using System;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Ashe.Logic;
@@ -21,21 +23,9 @@
 
         #endregion
 
-        #region Constructors and Destructors
-
-        private readonly Orbwalking.Orbwalker orbwalker;
-
-        public QMixed(string name, Orbwalking.Orbwalker orbwalker)
-        {
-            Name = name;
-            this.orbwalker = orbwalker;
-        }
-
-        #endregion
-
         #region Public Properties
 
-        public override string Name { get; set; }
+        public override string Name { get; set; } = "[Q]";
 
         #endregion
 
@@ -43,36 +33,32 @@
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnDisable(sender, featureBaseEventArgs);
+
             Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Game.OnUpdate += OnUpdate;
         }
-
-        //protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
-        //{
-        //    qLogic = new QLogic();
-        //}
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             base.OnLoad(sender, featureBaseEventArgs);
 
-            Menu.AddItem(new MenuItem(Menu.Name + "QMana", "Mana %").SetValue(new Slider(80, 0, 100)));
+            Menu.AddItem(new MenuItem("QMana", "Mana %").SetValue(new Slider(80, 0, 100)));
 
-            Menu.AddItem(new MenuItem(Name + "AAQ", "AA Before Q").SetValue(true).SetTooltip("AA Q Reset"));
+            Menu.AddItem(new MenuItem("AAQ", "AA Before Q").SetValue(true).SetTooltip("AA Q Reset"));
 
             qLogic = new QLogic();
         }
 
         private void OnUpdate(EventArgs args)
         {
-            if (this.orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed
-                || !Variable.Spells[SpellSlot.Q].IsReady()) return;
-
-            if (Menu.Item(Menu.Name + "QMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
+            if (!Variable.Spells[SpellSlot.Q].IsReady() || Menu.Item("QMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
 
             RangersFocus();
         }
@@ -85,7 +71,7 @@
 
             if (target == null || !target.IsValid) return;
 
-            if (Menu.Item(Menu.Name + "AAQ").GetValue<bool>() && Variable.Player.Spellbook.IsAutoAttacking) return;
+            if (Menu.Item("AAQ").GetValue<bool>() && Variable.Player.Spellbook.IsAutoAttacking) return;
 
             Variable.Spells[SpellSlot.Q].Cast();
 

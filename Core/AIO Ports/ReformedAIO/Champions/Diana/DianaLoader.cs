@@ -1,14 +1,15 @@
-﻿namespace ReformedAIO.Champions.Diana
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Diana
 {
     #region Using Directives
 
     using System.Collections.Generic;
+    using System.Drawing;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
-    using Logic.Killsteal;
-    using Menus.Draw;
     using OrbwalkingMode.Combo;
     using OrbwalkingMode.Flee;
     using OrbwalkingMode.Jungleclear;
@@ -16,10 +17,16 @@
     using OrbwalkingMode.Misaya;
     using OrbwalkingMode.Mixed;
 
+    using Diana.Draw;
+    using Diana.Killsteal;
+
     using RethoughtLib.Bootstraps.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
+    using RethoughtLib.FeatureSystem.Guardians;
     using RethoughtLib.FeatureSystem.Implementations;
     using RethoughtLib.Utility;
+
+    using Color = SharpDX.Color;
 
     #endregion
 
@@ -54,6 +61,60 @@
             var drawParent = new Parent("Drawings");
             var fleeParent = new Parent("Flee");
 
+            var qReady = new SpellMustBeReady(SpellSlot.Q);
+            var wReady = new SpellMustBeReady(SpellSlot.W);
+            var eReady = new SpellMustBeReady(SpellSlot.E);
+            var rReady = new SpellMustBeReady(SpellSlot.R);
+            var rMustNotBeReady = new SpellMustBeReady(SpellSlot.R) {Negated = true};
+
+            comboParent.Add(new Base[]
+            {
+                new CrescentStrike().Guardian(qReady).Guardian(rMustNotBeReady), 
+                new LunarRush().Guardian(wReady),
+                new Moonfall().Guardian(eReady),
+                new PaleCascade().Guardian(rReady), 
+            });
+
+            misayaParent.Add(new MisayaCombo());
+
+            mixedParent.Add(new Base[]
+            {
+                new MixedCrescentStrike().Guardian(qReady)
+            });
+            
+            laneParent.Add(new Base[]
+            {
+                new LaneCrescentStrike().Guardian(qReady), 
+                new LaneLunarRush().Guardian(wReady) 
+            });
+            
+            jungleParent.Add(new Base[]
+            {
+                new JungleCrescentStrike().Guardian(qReady), 
+                new JungleLunarRush().Guardian(wReady), 
+                new JungleMoonfall().Guardian(eReady), 
+                new JunglePaleCascade().Guardian(rReady) 
+            });
+         
+            ksParent.Add(new Base[]
+            {
+                new KsPaleCascade(), 
+                new KsCrescentStrike() 
+            });
+            
+            drawParent.Add(new Base[]
+            {
+                new DrawQ(), 
+                new DrawE(), 
+                new DrawDmg(), 
+                new DrawPred() 
+            });
+            
+            fleeParent.Add(new Base[]
+            {
+                new FleeMode() 
+            });
+
             superParent.Add(new Base[] {
 
                 comboParent,
@@ -66,60 +127,10 @@
                 fleeParent
             });
 
-            comboParent.Add(new ChildBase[]
-            {
-                new CrescentStrike(orbwalker), 
-                new Moonfall(orbwalker), 
-                new LunarRush(orbwalker), 
-                new PaleCascade(orbwalker), 
-            });
-
-            misayaParent.Add(new MisayaCombo(orbwalker));
-
-            mixedParent.Add(new ChildBase[]
-            {
-                new MixedCrescentStrike(orbwalker)
-            });
-            
-            laneParent.Add(new ChildBase[]
-            {
-                new LaneCrescentStrike(orbwalker), 
-                new LaneLunarRush(orbwalker) 
-            });
-            
-            jungleParent.Add(new ChildBase[]
-            {
-                new JungleCrescentStrike(orbwalker), 
-                new JungleLunarRush(orbwalker), 
-                new JungleMoonfall(orbwalker), 
-                new JunglePaleCascade(orbwalker) 
-            });
-         
-            ksParent.Add(new ChildBase[]
-            {
-                new KsPaleCascade(), 
-                new KsCrescentStrike() 
-            });
-            
-            drawParent.Add(new ChildBase[]
-            {
-                new DrawQ(), 
-                new DrawE(), 
-                new DrawDmg(), 
-                new DrawPred() 
-            });
-            
-            fleeParent.Add(new ChildBase[]
-            {
-                new FleeMode() 
-            });
-
             superParent.Load();
 
-            if (superParent.Loaded)
-            {
-                Chat.Print(DisplayName + " - Loaded");
-            }
+            superParent.Menu.Style = FontStyle.Bold;
+            superParent.Menu.Color = Color.Cyan;
         }
         #endregion
     }

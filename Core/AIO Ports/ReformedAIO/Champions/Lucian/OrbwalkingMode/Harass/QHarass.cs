@@ -1,9 +1,11 @@
-﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
 {
     using System;
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Lucian.Spells;
@@ -88,8 +90,8 @@
         {
             base.OnEnable(sender, featureBaseEventArgs);
 
-            Orbwalking.AfterAttack += AfterAttack;
             Game.OnUpdate += OnUpdate;
+            Orbwalking.AfterAttack += AfterAttack;
         }
     }
 }

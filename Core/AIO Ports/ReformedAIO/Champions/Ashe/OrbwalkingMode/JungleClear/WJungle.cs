@@ -1,11 +1,13 @@
-﻿namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.JungleClear
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.JungleClear
 {
     #region Using Directives
 
     using System;
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
@@ -14,21 +16,9 @@
 
     internal sealed class WJungle : ChildBase
     {
-        #region Constructors and Destructors
-
-        private readonly Orbwalking.Orbwalker orbwalker;
-
-        public WJungle(string name, Orbwalking.Orbwalker orbwalker)
-        {
-            Name = name;
-            this.orbwalker = orbwalker;
-        }
-
-        #endregion
-
         #region Public Properties
 
-        public override string Name { get; set; }
+        public override string Name { get; set; } = "[W]";
 
         #endregion
 
@@ -36,11 +26,15 @@
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnDisable(sender, featureBaseEventArgs);
+
             Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Game.OnUpdate += OnUpdate;
         }
 
@@ -48,17 +42,16 @@
         {
             base.OnLoad(sender, featureBaseEventArgs);
 
-            Menu.AddItem(new MenuItem(Menu.Name + "WRange", "W Range ").SetValue(new Slider(600, 0, 700)));
+            Menu.AddItem(new MenuItem("WRange", "W Range ").SetValue(new Slider(600, 0, 700)));
 
-            Menu.AddItem(new MenuItem(Menu.Name + "WMana", "Mana %").SetValue(new Slider(7, 0, 100)));
+            Menu.AddItem(new MenuItem("WMana", "Mana %").SetValue(new Slider(7, 0, 100)));
         }
 
         private void OnUpdate(EventArgs args)
         {
-            if (this.orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
-                || !Variable.Spells[SpellSlot.W].IsReady()) return;
+            if (!Variable.Spells[SpellSlot.W].IsReady()) return;
 
-            if (Menu.Item(Menu.Name + "WMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
+            if (Menu.Item("WMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
 
             Volley();
         }
@@ -67,7 +60,7 @@
         {
             var mobs =
                 MinionManager.GetMinions(
-                    Menu.Item(Menu.Name + "WRange").GetValue<Slider>().Value,
+                    Menu.Item("WRange").GetValue<Slider>().Value,
                     MinionTypes.All,
                     MinionTeam.Neutral,
                     MinionOrderTypes.MaxHealth).FirstOrDefault();

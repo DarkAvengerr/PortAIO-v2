@@ -1,9 +1,11 @@
-﻿namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Jungle
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Jungle
 {
     using System;
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Caitlyn.Logic;

@@ -1,7 +1,9 @@
-﻿namespace ReformedAIO.Champions.Caitlyn.Logic
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Caitlyn.Logic
 {
-    using EloBuddy;
-    using EloBuddy.SDK;
+    using LeagueSharp;
+    using LeagueSharp.SDK;
 
     internal class QLogic
     {

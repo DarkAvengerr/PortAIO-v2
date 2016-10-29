@@ -1,15 +1,16 @@
-﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.LaneClear
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.LaneClear
 {
     using System;
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Lucian.Spells;
-    using ReformedAIO.Core.Dash_Handler;
+    using ReformedAIO.Library.Dash_Handler;
 
-    using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Implementations;
 
     internal sealed class ELaneClear : OrbwalkingChild
@@ -26,9 +27,11 @@
             this.dashSmart = dashSmart;
         }
 
-        private void OnUpdate(EventArgs args)
+        private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if ((Menu.Item("EnemiesCheck").GetValue<bool>()
+            if (!sender.IsMe
+                || !Orbwalking.IsAutoAttack(args.SData.Name)
+                || (Menu.Item("EnemiesCheck").GetValue<bool>()
                 && ObjectManager.Player.CountEnemiesInRange(1500) >= 1)
                 || (ObjectManager.Player.ManaPercent <= Menu.Item("EMana").GetValue<Slider>().Value)
                 || !CheckGuardians())
@@ -43,7 +46,7 @@
                 return;
             }
 
-            eSpell.Spell.Cast(dashSmart.Deviation(ObjectManager.Player.Position.To2D(), minion.Position.To2D(), Menu.Item("Range").GetValue<Slider>().Value));
+            eSpell.Spell.Cast(dashSmart.Kite(minion.Position.To2D(), Menu.Item("Range").GetValue<Slider>().Value));
         }
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
@@ -57,12 +60,16 @@
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Game.OnUpdate -= OnUpdate;
+            base.OnDisable(sender, featureBaseEventArgs);
+
+            Obj_AI_Base.OnSpellCast -= OnSpellCast;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Game.OnUpdate += OnUpdate;
+            base.OnEnable(sender, featureBaseEventArgs);
+
+            Obj_AI_Base.OnSpellCast += OnSpellCast;
         }
     }
 }

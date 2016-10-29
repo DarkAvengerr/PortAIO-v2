@@ -1,4 +1,6 @@
-﻿namespace ReformedAIO
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO
 {
     #region Using Directives
 
@@ -8,10 +10,10 @@
     using ReformedAIO.Champions.Ashe;
     using ReformedAIO.Champions.Caitlyn;
     using ReformedAIO.Champions.Diana;
+    using ReformedAIO.Champions.Ezreal;
     using ReformedAIO.Champions.Gnar;
     using ReformedAIO.Champions.Gragas;
     using ReformedAIO.Champions.Lucian;
-    using ReformedAIO.Utilities;
 
     using RethoughtLib.Bootstraps.Abstract_Classes;
 
@@ -28,9 +30,10 @@
                 new AsheLoader(),
                 new CaitlynLoader(),
                 new DianaLoader(),
-                new LucianLoader(),
                 new GragasLoader(),
                 new GnarLoader(),
+                new EzrealLoader(),
+                new LucianLoader(),
             });
 
             bootstrap.Run();

@@ -1,31 +1,27 @@
-﻿namespace ReformedAIO.Champions.Gnar.OrbwalkingMode.Jungle
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Gnar.OrbwalkingMode.Jungle
 {
     using System;
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Gnar.Core;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
+    using RethoughtLib.FeatureSystem.Implementations;
 
-    internal sealed class EJungle : ChildBase
+    internal sealed class EJungle : OrbwalkingChild
     {
         private GnarState gnarState;
 
         public override string Name { get; set; } = "E";
-
-        private readonly Orbwalking.Orbwalker orbwalker;
-
-        public EJungle(Orbwalking.Orbwalker orbwalker)
-        {
-            this.orbwalker = orbwalker;
-        }
-
+     
         private void GameOnUpdate(EventArgs args)
         {
-            if (this.orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear)
+            if (!CheckGuardians())
             {
                 return;
             }

@@ -1,8 +1,10 @@
-﻿namespace ReformedAIO.Champions.Caitlyn.Logic
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Caitlyn.Logic
 {
     using System.Collections.Generic;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     internal class Spells

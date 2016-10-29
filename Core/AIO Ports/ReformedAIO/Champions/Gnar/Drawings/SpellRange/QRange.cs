@@ -1,9 +1,11 @@
-﻿namespace ReformedAIO.Champions.Gnar.Drawings.SpellRange
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Gnar.Drawings.SpellRange
 {
     using System;
     using System.Drawing;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Gnar.Core;

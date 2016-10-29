@@ -1,9 +1,11 @@
-﻿namespace ReformedAIO.Champions.Gnar.Drawings.SpellRange
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Gnar.Drawings.SpellRange
 {
     using System;
     using System.Drawing;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Gnar.Core;
@@ -56,7 +58,7 @@
             Drawing.OnDraw += OnDraw;
         }
 
-        protected override sealed void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             gnarState = new GnarState();
         }

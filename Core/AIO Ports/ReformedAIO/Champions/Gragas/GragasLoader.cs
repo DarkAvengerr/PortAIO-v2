@@ -1,23 +1,29 @@
-﻿namespace ReformedAIO.Champions.Gragas
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Gragas
 {
     #region Using Directives
 
     using System.Collections.Generic;
+    using System.Drawing;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Gragas.Logic;
-    using ReformedAIO.Champions.Gragas.Menus.Draw;
-    using ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo;
-    using ReformedAIO.Champions.Gragas.OrbwalkingMode.Jungle;
-    using ReformedAIO.Champions.Gragas.OrbwalkingMode.Lane;
-    using ReformedAIO.Champions.Gragas.OrbwalkingMode.Mixed;
+   using Draw;
+   using Logic;
+   using OrbwalkingMode.Combo;
+   using OrbwalkingMode.Jungle;
+   using OrbwalkingMode.Lane;
+   using OrbwalkingMode.Mixed;
 
     using RethoughtLib.Bootstraps.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
+    using RethoughtLib.FeatureSystem.Guardians;
     using RethoughtLib.FeatureSystem.Implementations;
+    using RethoughtLib.Orbwalker.Implementations;
 
+    using Color = SharpDX.Color;
     using Prediction = SPrediction.Prediction;
 
     #endregion
@@ -41,42 +47,48 @@
             var superParent = new SuperParent(DisplayName);
             superParent.Initialize();
 
-            var orbwalker = new Orbwalking.Orbwalker(superParent.Menu.SubMenu("Orbwalker"));
+            var orbwalker = new OrbwalkerModule();
+            orbwalker.Load();
 
-            var comboParent = new OrbwalkingParent("Combo", orbwalker, Orbwalking.OrbwalkingMode.Combo);
-            var laneParent = new OrbwalkingParent("Lane", orbwalker, Orbwalking.OrbwalkingMode.LaneClear);
-            var jungleParent = new OrbwalkingParent("Jungle", orbwalker, Orbwalking.OrbwalkingMode.LaneClear);
-            var mixedParent = new OrbwalkingParent("Mixed", orbwalker, Orbwalking.OrbwalkingMode.Mixed);
+            var comboParent = new OrbwalkingParent("Combo", orbwalker.OrbwalkerInstance, Orbwalking.OrbwalkingMode.Combo);
+            var laneParent = new OrbwalkingParent("Lane", orbwalker.OrbwalkerInstance, Orbwalking.OrbwalkingMode.LaneClear);
+            var jungleParent = new OrbwalkingParent("Jungle", orbwalker.OrbwalkerInstance, Orbwalking.OrbwalkingMode.LaneClear);
+            var mixedParent = new OrbwalkingParent("Mixed", orbwalker.OrbwalkerInstance, Orbwalking.OrbwalkingMode.Mixed);
             var draw = new Parent("Drawings");
 
             var qLogic = new QLogic();
             qLogic.Load();
 
+            var qReady = new SpellMustBeReady(SpellSlot.Q);
+            var wReady = new SpellMustBeReady(SpellSlot.W);
+            var eReady = new SpellMustBeReady(SpellSlot.E);
+            var rReady = new SpellMustBeReady(SpellSlot.R);
+
             comboParent.Add(new ChildBase[]
             {
-                new QCombo(orbwalker), 
-                new WCombo(orbwalker), 
-                new ECombo(orbwalker), 
-                new RCombo(orbwalker)
+                new QCombo().Guardian(qReady).Guardian(new SpellMustBeReady(SpellSlot.R) { Negated = true }), 
+                new WCombo().Guardian(wReady), 
+                new ECombo().Guardian(eReady), 
+                new RCombo().Guardian(rReady)
             });
            
             laneParent.Add(new ChildBase[]
             {
-                new LaneQ(orbwalker), 
-                new LaneW(orbwalker), 
-                new LaneE(orbwalker) 
+                new LaneQ().Guardian(qReady), 
+                new LaneW().Guardian(wReady), 
+                new LaneE().Guardian(eReady) 
             });
           
             mixedParent.Add(new ChildBase[]
             {
-                new QMixed(orbwalker)
+                new QMixed().Guardian(qReady)
             });
            
             jungleParent.Add(new ChildBase[]
             {
-                new QJungle(orbwalker), 
-                new WJungle(orbwalker), 
-                new EJungle(orbwalker)
+                new QJungle().Guardian(qReady), 
+                new WJungle().Guardian(wReady), 
+                new EJungle().Guardian(eReady)
             });
             
             draw.Add(new ChildBase[]
@@ -89,17 +101,20 @@
           
             superParent.Add(new Base[]
             {
-                comboParent, mixedParent, laneParent, jungleParent, draw
+                orbwalker,
+                comboParent,
+                mixedParent,
+                laneParent,
+                jungleParent,
+                draw
             });
 
             Prediction.Initialize(superParent.Menu);
 
             superParent.Load();
 
-            if (superParent.Loaded)
-            {
-                Chat.Print("Reformed Gragas - Loaded");
-            }
+            superParent.Menu.Style = FontStyle.Bold;
+            superParent.Menu.Color = Color.Cyan;
         }
 
         #endregion

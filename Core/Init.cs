@@ -1041,6 +1041,9 @@ namespace PortAIO
                         case 27: // Flowers' ADC Series
                             Flowers_ADC_Series.Program.Main();
                             break;
+                        case 28: // ReformedAIO
+                            ReformedAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.FiddleSticks:
@@ -2563,49 +2566,46 @@ namespace PortAIO
                         case 2: // FreshBooster
                             FreshBooster.Program.Game_OnGameLoad();
                             break;
-                        case 3: // ReformedAIO
-                            ReformedAIO.Program.Main();
-                            break;
-                        case 4: // SharpShooter
+                        case 3: // SharpShooter
                             SharpShooter.Program.Game_OnGameLoad();
                             break;
-                        case 5: // StonedSeriesAIO
+                        case 4: // StonedSeriesAIO
                             StonedSeriesAIO.Program.Main();
                             break;
-                        case 6: // ArcaneRyze
+                        case 5: // ArcaneRyze
                             Arcane_Ryze.Program.Main();
                             break;
-                        case 7: // EvictRyze
+                        case 6: // EvictRyze
                             EvictRyze.Program.Main();
                             break;
-                        case 8: // ExorAIO
+                        case 7: // ExorAIO
                             ExorAIO.Program.Main();
                             break;
-                        case 9: // Flowers' Series
+                        case 8: // Flowers' Series
                             Flowers_Series.Program.Main();
                             break;
-                        case 10: // BurstRyze
+                        case 9: // BurstRyze
                             RyzeAssembly.Program.Main();
                             break;
-                        case 11: // HeavenStrikeRyze
+                        case 10: // HeavenStrikeRyze
                             HeavenStrikeRyze.Program.Main();
                             break;
-                        case 12: // JustRyze
+                        case 11: // JustRyze
                             JustRyze.Program.Main();
                             break;
-                        case 13: // Ryze#
+                        case 12: // Ryze#
                             RyzeSharp.Program.Main();
                             break;
-                        case 14: // SluttyRyze
+                        case 13: // SluttyRyze
                             Slutty_ryze.Program.Main();
                             break;
-                        case 15: // TRUSt in my Ryze
+                        case 14: // TRUSt in my Ryze
                             TrusRyze.Program.Main();
                             break;
-                        case 16: // sAIO
+                        case 15: // sAIO
                             sAIO.Program.Main();
                             break;
-                        case 17: //SurvivorSeries AIO
+                        case 16: //SurvivorSeries AIO
                             SurvivorSeriesAIO.Program.Main();
                             break;
                     }

@@ -1,6 +1,8 @@
-﻿namespace ReformedAIO.Champions.Gnar.Core
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Gnar.Core
 {
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     internal sealed class Spells

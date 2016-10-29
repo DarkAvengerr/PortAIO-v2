@@ -1,8 +1,10 @@
-﻿namespace ReformedAIO.Champions.Lucian.Killsteal
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.Killsteal
 {
     using System;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Lucian.Spells;
@@ -24,14 +26,14 @@
 
         private void OnUpdate(EventArgs args)
         {
-            if (this.Target == null || this.Target.Health > wSpell.GetDamage(Target) || !CheckGuardians())
+            if (Target == null || Target.Health > wSpell.GetDamage(Target) || !CheckGuardians())
             {
                 return;
             }
 
-            if (this.Target.Distance(ObjectManager.Player) <= wSpell.Spell.Range)
+            if (Target.Distance(ObjectManager.Player) <= wSpell.Spell.Range)
             {
-                var wPred = wSpell.Spell.GetPrediction(this.Target, true);
+                var wPred = wSpell.Spell.GetPrediction(Target, true);
 
                 if (wPred.Hitchance > HitChance.Medium)
                 {
@@ -42,16 +44,21 @@
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Game.OnUpdate -= this.OnUpdate;
+            base.OnDisable(sender, featureBaseEventArgs);
+
+            Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Game.OnUpdate += this.OnUpdate;
+            base.OnEnable(sender, featureBaseEventArgs);
+
+            Game.OnUpdate += OnUpdate;
         }
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnLoad(sender, featureBaseEventArgs);
         }
     }
 }

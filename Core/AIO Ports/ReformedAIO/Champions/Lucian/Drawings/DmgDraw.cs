@@ -1,13 +1,15 @@
-﻿namespace ReformedAIO.Champions.Lucian.Drawings
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.Drawings
 {
     using System;
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Lucian.Damage;
-    using ReformedAIO.Core.Drawings;
+    using ReformedAIO.Library.Drawings;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
@@ -19,37 +21,46 @@
 
         public DmgDraw(LucDamage damage)
         {
-            this.damage = damage;
+            this.Damage = damage;
         }
 
-        private HpBarIndicator hpBarIndicator;
+        private HeroHealthBarIndicator heroHealthBarIndicator;
 
-        public readonly LucDamage damage;
+        public readonly LucDamage Damage;
 
         public void OnDraw(EventArgs args)
         {
             if (ObjectManager.Player.IsDead) return;
 
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1500)))
+            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1500) && ene.IsVisible))
             {
-                this.hpBarIndicator.Unit = enemy;
-                this.hpBarIndicator.DrawDmg(this.damage.GetComboDamage(enemy), enemy.Health <= this.damage.GetComboDamage(enemy) * 1.25 ? Color.LawnGreen : Color.Yellow);
+                heroHealthBarIndicator.Unit = enemy;
+
+                heroHealthBarIndicator.DrawDmg(Damage.GetComboDamage(enemy), enemy.Health <= Damage.GetComboDamage(enemy) * 1.25 
+                    ? Color.LawnGreen
+                    : Color.Yellow);
             }
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnDisable(sender, featureBaseEventArgs);
+
             Drawing.OnDraw -= OnDraw;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Drawing.OnDraw += OnDraw;
         }
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            this.hpBarIndicator = new HpBarIndicator();
+            base.OnLoad(sender, featureBaseEventArgs);
+
+            heroHealthBarIndicator = new HeroHealthBarIndicator();
         }
     }
 }

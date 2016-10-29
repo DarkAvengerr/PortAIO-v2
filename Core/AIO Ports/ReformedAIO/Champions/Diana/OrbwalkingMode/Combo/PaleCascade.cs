@@ -1,19 +1,22 @@
-﻿namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 {
     #region Using Directives
 
     using System;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Diana.Logic;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
+    using RethoughtLib.FeatureSystem.Implementations;
 
     #endregion
 
-    internal class PaleCascade : ChildBase
+    internal class PaleCascade : OrbwalkingChild
     {
         #region Fields
 
@@ -22,13 +25,6 @@
         private PaleCascadeLogic rLogic;
 
         #endregion
-
-        private readonly Orbwalking.Orbwalker orbwalker;
-
-        public PaleCascade(Orbwalking.Orbwalker orbwalker)
-        {
-            this.orbwalker = orbwalker;
-        }
 
         #region Public Properties
 
@@ -40,35 +36,26 @@
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Game.OnUpdate -= OnUpdate;
+            base.OnDisable(sender, featureBaseEventArgs);
 
+            Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Game.OnUpdate += OnUpdate;
-            
         }
 
-        //protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
-        //{
-        //    rLogic = new PaleCascadeLogic();
-        //    logic = new LogicAll();
-        //    base.OnLoad(sender, featureBaseEventArgs);
-        //}
-
-        protected override sealed void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Menu = new Menu(Name, Name);
-
             Menu.AddItem(
-                new MenuItem(Name + "REnemies", "Don't R Into >= x Enemies").SetValue(new Slider(2, 0, 5)));
+                new MenuItem("Enemies", "Don't R Into >= x Enemies").SetValue(new Slider(2, 0, 5)));
 
-            Menu.AddItem(new MenuItem(Name + "RTurret", "Don't R Into Turret").SetValue(true));
+            Menu.AddItem(new MenuItem("Turret", "Don't R Into Turret").SetValue(true));
 
-            Menu.AddItem(new MenuItem(Name + "RKillable", "Only If Killable").SetValue(true));
-
-            Menu.AddItem(new MenuItem(Name + "Enabled", "Enabled").SetValue(true));
+            Menu.AddItem(new MenuItem("Killable", "Only If Killable").SetValue(true));
 
             rLogic = new PaleCascadeLogic();
             logic = new LogicAll();
@@ -76,8 +63,10 @@
 
         private void OnUpdate(EventArgs args)
         {
-            if (this.orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
-                || !Variables.Spells[SpellSlot.R].IsReady()) return;
+            if (!CheckGuardians())
+            {
+                return;
+            }
 
             paleCascade();
         }
@@ -86,13 +75,13 @@
         {
             var target = TargetSelector.GetTarget(825, TargetSelector.DamageType.Magical);
 
-            if (target == null || !target.IsValid) return;
-
-            if (target.CountEnemiesInRange(1400) >= Menu.Item(Menu.Name + "REnemies").GetValue<Slider>().Value) return;
-
-            if (Menu.Item(Menu.Name + "RTurret").GetValue<bool>() && target.UnderTurret()) return;
-
-            if (Menu.Item(Menu.Name + "RKillable").GetValue<bool>() && logic.ComboDmg(target) < target.Health) return;
+            if (target == null || !target.IsValid
+                || target.CountEnemiesInRange(1400) >= Menu.Item("REnemies").GetValue<Slider>().Value
+                || (Menu.Item("Turret").GetValue<bool>() && target.UnderTurret())
+                || (Menu.Item("Killable").GetValue<bool>() && logic.ComboDmg(target) < target.Health))
+            {
+                return;
+            }
 
             if (rLogic.Buff(target))
             {

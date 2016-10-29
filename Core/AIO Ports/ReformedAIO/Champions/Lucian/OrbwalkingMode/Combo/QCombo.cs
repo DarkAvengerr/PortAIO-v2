@@ -1,9 +1,11 @@
-﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
 {
     using System;
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Lucian.Spells;
@@ -54,9 +56,10 @@
             }
         }
 
-        private void AfterAttack(AttackableUnit unit, AttackableUnit attackableunit)
+        private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (Menu.Item("QMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
+            if (!sender.IsMe
+                ||Menu.Item("QMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
                 || !CheckGuardians())
             {
                 return;
@@ -80,14 +83,18 @@
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnDisable(sender, featureBaseEventArgs);
+
             Game.OnUpdate -= OnUpdate;
-            Orbwalking.AfterAttack -= AfterAttack;
+            Obj_AI_Base.OnSpellCast -= OnSpellCast;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Game.OnUpdate += OnUpdate;
-            Orbwalking.AfterAttack += AfterAttack;
+            Obj_AI_Base.OnSpellCast += OnSpellCast;
         }
     }
 }

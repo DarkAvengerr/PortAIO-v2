@@ -1,12 +1,14 @@
-﻿namespace ReformedAIO.Champions.Lucian.Spells
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.Spells
 {
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using RethoughtLib.FeatureSystem.Implementations;
     using RethoughtLib.FeatureSystem.Switches;
 
-    class QSpell : SpellChild
+    internal class QSpell : SpellChild
     {
         public override string Name { get; set; } = "Piercing Light";
 

@@ -1,4 +1,6 @@
-﻿namespace ReformedAIO.Champions.Gnar.Core
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Gnar.Core
 {
     using System.Linq;
 

@@ -1,13 +1,15 @@
-﻿namespace ReformedAIO.Champions.Gnar.Drawings.Damage
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Gnar.Drawings.Damage
 {
     using System;
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Gnar.Core;
-    using ReformedAIO.Core.Drawings;
+    using ReformedAIO.Library.Drawings;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
@@ -24,7 +26,7 @@
 
         private Dmg dmg;
 
-        private HpBarIndicator hpBarIndicator;
+        private HeroHealthBarIndicator heroHealthBarIndicator;
 
         public void OnDraw(EventArgs args)
         {
@@ -33,8 +35,8 @@
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1500)))
             {
 
-                this.hpBarIndicator.Unit = enemy;
-                this.hpBarIndicator.DrawDmg(this.dmg.GetDamage(enemy), enemy.Health <= this.dmg.GetDamage(enemy) * 1.25 ? Color.LawnGreen : Color.Yellow);
+                this.heroHealthBarIndicator.Unit = enemy;
+                this.heroHealthBarIndicator.DrawDmg(this.dmg.GetDamage(enemy), enemy.Health <= this.dmg.GetDamage(enemy) * 1.25 ? Color.LawnGreen : Color.Yellow);
             }
         }
 
@@ -48,9 +50,9 @@
             Drawing.OnDraw += OnDraw;
         }
 
-        protected override sealed void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            this.hpBarIndicator = new HpBarIndicator();
+            this.heroHealthBarIndicator = new HeroHealthBarIndicator();
             this.dmg = new Dmg();
         }
     }

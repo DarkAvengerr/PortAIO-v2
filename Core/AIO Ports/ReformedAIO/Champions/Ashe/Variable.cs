@@ -1,10 +1,12 @@
-﻿namespace ReformedAIO.Champions.Ashe
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ashe
 {
     #region Using Directives
 
     using System.Collections.Generic;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     #endregion

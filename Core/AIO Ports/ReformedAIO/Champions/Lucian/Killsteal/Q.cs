@@ -1,9 +1,10 @@
-﻿namespace ReformedAIO.Champions.Lucian.Killsteal
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.Killsteal
 {
     using System;
-    using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Lucian.Spells;
@@ -28,16 +29,17 @@
 
         private void OnUpdate(EventArgs args)
         {
-            if (this.Target == null || this.Target.Health > qSpell.GetDamage(Target) || !CheckGuardians())
+
+            if (Target == null || Target.Health > qSpell.GetDamage(Target) || !CheckGuardians())
             {
                 return;
             }
 
-            if (this.Target.Distance(ObjectManager.Player) <= qSpell.Spell.Range)
+            if (Target.Distance(ObjectManager.Player) <= qSpell.Spell.Range)
             {
                 qSpell.Spell.CastOnUnit(Target);
             }
-           else if (this.Target.Distance(ObjectManager.Player) > ObjectManager.Player.AttackRange && Menu.Item("Extend").GetValue<bool>())
+           else if (Target.Distance(ObjectManager.Player) > ObjectManager.Player.AttackRange && Menu.Item("Extend").GetValue<bool>())
             {
                 var minions = MinionManager.GetMinions(qSpell.Spell.Range);
 
@@ -55,18 +57,20 @@
         {
             base.OnDisable(sender, featureBaseEventArgs);
 
-            Game.OnUpdate -= this.OnUpdate;
+            Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             base.OnEnable(sender, featureBaseEventArgs);
 
-            Game.OnUpdate += this.OnUpdate;
+            Game.OnUpdate += OnUpdate;
         }
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnLoad(sender, featureBaseEventArgs);
+
             Menu.AddItem(new MenuItem("Extend", "Allow Extended Q").SetValue(true));
         }
     }

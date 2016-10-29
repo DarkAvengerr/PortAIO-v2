@@ -1,11 +1,13 @@
-﻿namespace ReformedAIO.Champions.Ashe.Logic
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Ashe.Logic
 {
     #region Using Directives
 
     using System.Collections.Generic;
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using SharpDX;

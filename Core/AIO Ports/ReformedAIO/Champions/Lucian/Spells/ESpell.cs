@@ -1,6 +1,8 @@
-﻿namespace ReformedAIO.Champions.Lucian.Spells
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.Spells
 {
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using RethoughtLib.FeatureSystem.Implementations;

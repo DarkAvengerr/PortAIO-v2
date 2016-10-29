@@ -1,7 +1,11 @@
-﻿namespace ReformedAIO.Utilities
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Utilities
 {
     using System.Collections.Generic;
     using System.Drawing;
+
+    using ReformedAIO.Utilities.Modules.Skinchanger;
 
     using RethoughtLib.Bootstraps.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
@@ -20,6 +24,12 @@
         public override void Load()
         {
             var superParent = new SuperParent(DisplayName);
+
+            superParent.Add(new List<Base>()
+                                {
+                                    new Skinchanger()
+                                });
+
 
             superParent.Load();
 

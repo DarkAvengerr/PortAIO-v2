@@ -1,8 +1,10 @@
-﻿namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
 {
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Lucian.Spells;
@@ -20,9 +22,10 @@
             this.qSpell = qSpell;
         }
 
-        private void AfterAttack(AttackableUnit unit, AttackableUnit attackableunit)
+        private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (Menu.Item("QMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
+            if (!sender.IsMe
+                ||Menu.Item("QMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
                 || !CheckGuardians())
             {
                 return;
@@ -33,7 +36,7 @@
                     ObjectManager.Player.Position,
                     ObjectManager.Player.AttackRange,
                     MinionTypes.All,
-                    MinionTeam.Neutral).FirstOrDefault();
+                    MinionTeam.Neutral).OrderBy(x => x.MaxHealth).FirstOrDefault();
 
             if (mob == null)
             {
@@ -53,12 +56,16 @@
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-             Orbwalking.AfterAttack -= AfterAttack;
+            base.OnDisable(sender, featureBaseEventArgs);
+
+            Obj_AI_Base.OnSpellCast -= OnSpellCast;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Orbwalking.AfterAttack += AfterAttack;
+            base.OnEnable(sender, featureBaseEventArgs);
+
+            Obj_AI_Base.OnSpellCast += OnSpellCast;
         }
     }
 }

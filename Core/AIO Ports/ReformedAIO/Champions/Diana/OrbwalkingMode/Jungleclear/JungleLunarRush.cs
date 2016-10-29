@@ -1,18 +1,21 @@
-﻿namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Jungleclear
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Jungleclear
 {
     #region Using Directives
 
     using System;
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
+    using RethoughtLib.FeatureSystem.Implementations;
 
     #endregion
 
-    internal class JungleLunarRush : ChildBase
+    internal class JungleLunarRush : OrbwalkingChild
     {
         #region Public Properties
 
@@ -20,39 +23,34 @@
 
         #endregion
 
-        private readonly Orbwalking.Orbwalker orbwalker;
-
-        public JungleLunarRush(Orbwalking.Orbwalker orbwalker)
-        {
-            this.orbwalker = orbwalker;
-        }
-
         #region Methods
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Game.OnUpdate -= OnUpdate;
+            base.OnDisable(sender, featureBaseEventArgs);
 
+            Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Game.OnUpdate += OnUpdate;
-            
         }
 
-        protected override sealed void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
             Menu = new Menu(Name, Name);
 
-            Menu.AddItem(new MenuItem(Name + "JungleWMana", "Mana %").SetValue(new Slider(10, 0, 50)));
+            Menu.AddItem(new MenuItem("JungleWMana", "Mana %").SetValue(new Slider(10, 0, 50)));
 
-            Menu.AddItem(new MenuItem(Name + "Enabled", "Enabled").SetValue(true));
+            Menu.AddItem(new MenuItem("Enabled", "Enabled").SetValue(true));
 
             
         }
 
-        private void GetMob()
+        private static void GetMob()
         {
             var mobs =
                 MinionManager.GetMinions(
@@ -68,10 +66,10 @@
 
         private void OnUpdate(EventArgs args)
         {
-            if (this.orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear
-                || !Variables.Spells[SpellSlot.W].IsReady()) return;
-
-            if (Menu.Item(Menu.Name + "JungleWMana").GetValue<Slider>().Value > Variables.Player.ManaPercent) return;
+            if (!CheckGuardians() || Menu.Item("JungleWMana").GetValue<Slider>().Value > Variables.Player.ManaPercent)
+            {
+                return;
+            }
 
             GetMob();
         }

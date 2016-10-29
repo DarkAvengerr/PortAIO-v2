@@ -1,34 +1,34 @@
-﻿namespace ReformedAIO.Champions.Gnar.OrbwalkingMode.Harass
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Gnar.OrbwalkingMode.Harass
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
-    using EloBuddy;
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Gnar.Core;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
+    using RethoughtLib.FeatureSystem.Implementations;
     using RethoughtLib.Menu;
     using RethoughtLib.Menu.Presets;
 
-    internal sealed class QHarass: ChildBase
+    internal sealed class QHarass: OrbwalkingChild
     {
         private GnarState gnarState;
 
-
         public override string Name { get; set; } = "Q";
-
-        private readonly Orbwalking.Orbwalker orbwalker;
-
-        public QHarass(Orbwalking.Orbwalker orbwalker)
-        {
-            this.orbwalker = orbwalker;
-        }
 
         private void GameOnUpdate(EventArgs args)
         {
+            if (!CheckGuardians())
+            {
+                return;
+            }
+
             var menu = Menu.SubMenu(Menu.Name + "Dynamic Menu");
 
             if (Menu.Item(menu.Name + "BlockIfTransforming").GetValue<bool>() && gnarState.TransForming)
