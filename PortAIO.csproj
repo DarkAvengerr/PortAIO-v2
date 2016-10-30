@@ -5641,7 +5641,7 @@
     <Compile Include="Core\Utility Ports\`WIP\UniversalMinimapHack\Menu.cs" />
     <Compile Include="Core\Utility Ports\`WIP\UniversalMinimapHack\MinimapHack.cs" />
     <Compile Include="Core\Utility Ports\`WIP\UniversalMinimapHack\Program.cs" />
-    <Compile Include="Core\Utility Ports\`WIP\UniversalPings\Program.cs" />
+    <Compile Include="Core\Utility Ports\UniversalPings\Program.cs" />
     <Compile Include="Core\Utility Ports\`WIP\UniversalRecallTracker\Program.cs" />
     <Compile Include="Core\Utility Ports\`WIP\xAwareness\ExtendedAwareness.cs" />
     <Compile Include="Core\Utility Ports\`WIP\xAwareness\HelperUtils.cs" />
