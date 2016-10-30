@@ -156,6 +156,11 @@ namespace PortAIO
             {
                 ShadowTracker.Program.Game_OnGameLoad();
             }
+
+            if (Misc.menu.Item("UniversalPings").GetValue<bool>())
+            {
+                UniversalPings.Program.Main();
+            }
         }
 
         public static void LoadChampion()

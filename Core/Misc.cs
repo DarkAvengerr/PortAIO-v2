@@ -449,6 +449,7 @@ namespace PortAIO.Dual_Port
 
             var utility = new Menu("Standalone Utilities", "PortAIOuTILITIESS");
             utility.AddItem(new MenuItem("ShadowTracker", "Enable ShadowTracker?").SetValue(false));
+            utility.AddItem(new MenuItem("UniversalPings", "Enable UniversalPings?").SetValue(false));
             menu.AddSubMenu(utility);
 
             var autoPlay = new Menu("Auto Play", "PortAIOAUTOPLAY");

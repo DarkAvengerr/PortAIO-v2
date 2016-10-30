@@ -15,7 +15,7 @@ using EloBuddy;
         private readonly IList<Ping> _pings = new List<Ping>();
         private Menu _menu;
 
-        private static void Main(string[] args)
+        public static void Main()
         {
             _instance = new Program();
         }
