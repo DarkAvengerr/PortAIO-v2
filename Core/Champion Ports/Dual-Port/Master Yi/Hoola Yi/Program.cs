@@ -8,9 +8,9 @@ using ItemData = LeagueSharp.Common.Data.ItemData;
 using SharpDX;
 
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace HoolaMasterYi
+using EloBuddy;
+using LeagueSharp.Common;
+namespace HoolaMasterYi
 {
     public class Program
     {
@@ -85,8 +85,9 @@ using EloBuddy;
         private static void DetectSpell(EventArgs args)
         {
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
-            if (target.IsDashing() && (((Player.Distance(target.GetWaypoints().Last()) >= Q.Range) && AutoQOnly) || !AutoQOnly) && Q.IsReady() && AutoQ && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
-                Q.Cast(target);
+            if (target != null)
+                if (target.IsDashing() && (((Player.Distance(target.GetWaypoints().Last()) >= Q.Range) && AutoQOnly) || !AutoQOnly) && Q.IsReady() && AutoQ && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                    Q.Cast(target);
         }
 
         static void OnDraw(EventArgs args)
@@ -309,7 +310,7 @@ using EloBuddy;
                 var targets = HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && !x.IsZombie);
                 foreach (var target in targets)
                 {
-                    if (target.IsValid && target.Health < Q.GetDamage(target) && (!target.HasBuff("kindrednodeathbuff") || !target.HasBuff("Undying Rage") || !target.HasBuff("JudicatorIntervention")) && (!Orbwalking.InAutoAttackRange(target) || !Orbwalking.CanAttack))
+                    if (target.IsValid && target.Health < Q.GetDamage(target) && (!target.HasBuff("kindrednodeathbuff") || !target.HasBuff("Undying Rage") || !target.HasBuff("JudicatorIntervention")) && (!Orbwalking.InAutoAttackRange(target) || !Orbwalking.CanAttack()))
                         Q.Cast(target);
                 }
             }

@@ -1915,7 +1915,6 @@
     <Compile Include="Core\Champion Ports\Dual-Port\Malzahar\SurvivorSeries\Program.cs" />
     <Compile Include="Core\Champion Ports\Dual-Port\Mao%27Kai\BrianSharp\Maokai.cs" />
     <Compile Include="Core\Champion Ports\Dual-Port\Master Yi\Hoola Yi\HpBarIndicator.cs" />
-    <Compile Include="Core\Champion Ports\Dual-Port\Master Yi\Hoola Yi\Orbwalk.cs" />
     <Compile Include="Core\Champion Ports\Dual-Port\Master Yi\Hoola Yi\Program.cs" />
     <Compile Include="Core\Champion Ports\Dual-Port\Master Yi\Hoola Yi\Spelldatabase.cs" />
     <Compile Include="Core\Champion Ports\Dual-Port\Master Yi\SAutoCarry\MasterYi.cs" />
