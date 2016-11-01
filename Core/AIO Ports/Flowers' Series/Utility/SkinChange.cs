@@ -60,8 +60,7 @@ using EloBuddy;
 
             var SkinMenu = Menu.AddSubMenu(new Menu("Skin Change", "Skin Change"));
             {
-                SkinMenu.AddItem(new MenuItem("EnableSkin", "Enabled", true).SetValue(false))
-                    .DontSave().ValueChanged += EnbaleSkin;
+                SkinMenu.AddItem(new MenuItem("EnableSkin", "Enabled", true).SetValue(false)).ValueChanged += EnbaleSkin;
                 SkinMenu.AddItem(
                     new MenuItem("SelectSkin", "Select Skin: ", true).SetValue(
                         new StringList(SkinList.Select(x => x.Name).ToArray())));

@@ -1,8 +1,10 @@
-﻿using Kennen.Core;
+using Kennen.Core;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
-namespace Kennen.Modes
+
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Kennen.Modes
 {
     internal class Flee
     {

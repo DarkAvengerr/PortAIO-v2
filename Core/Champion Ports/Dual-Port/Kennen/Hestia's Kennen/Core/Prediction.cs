@@ -1,7 +1,9 @@
-﻿using LeagueSharp;
+using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
-namespace Kennen.Core
+
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Kennen.Core
 {
     internal static class Prediction
     {

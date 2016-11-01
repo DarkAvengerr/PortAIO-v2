@@ -31,6 +31,7 @@ using EloBuddy;
                 ComboMenu.AddItem(new MenuItem("ComboQ", "Use Q", true).SetValue(true));
                 ComboMenu.AddItem(new MenuItem("ComboQOnlyPassive", "Use Q | Only target Have E Buff", true).SetValue(true));
                 ComboMenu.AddItem(new MenuItem("ComboE", "Use E", true).SetValue(true));
+                ComboMenu.AddItem(new MenuItem("ComboEOnlyAfterAA", "Use E| Only After Attack", true).SetValue(true));
                 ComboMenu.AddItem(new MenuItem("ComboR", "Use R| Save MySelf", true).SetValue(true));
                 ComboMenu.AddItem(
                     new MenuItem("ComboRHp", "Use R| When Player HealthPercent <= x%", true).SetValue(new Slider(20)));
@@ -227,7 +228,8 @@ using EloBuddy;
                     }
                 }
 
-                if (Menu.Item("ComboE", true).GetValue<bool>() && E.IsReady() && target.IsValidTarget(E.Range))
+                if (Menu.Item("ComboE", true).GetValue<bool>() && E.IsReady() &&
+                    !Menu.Item("ComboEOnlyAfterAA", true).GetValue<bool>() && target.IsValidTarget(E.Range))
                 {
                     E.CastOnUnit(target, true);
                 }
@@ -320,8 +322,7 @@ using EloBuddy;
 
         private void OneKeyCastE()
         {
-            foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && CheckTargetSureCanKill(x))
-            )
+            foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && CheckTargetSureCanKill(x)))
             {
                 if (target.Health <
                     Me.GetSpellDamage(target, SpellSlot.E) * (target.GetBuffCount("TristanaECharge") * 0.30) +
@@ -464,29 +465,50 @@ using EloBuddy;
 
         private void AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear &&
-                Me.ManaPercent >= Menu.Item("LaneClearMana", true).GetValue<Slider>().Value)
+            if (!unit.IsMe)
             {
-                if (unit.IsMe && target != null &&
-                    (target.Type == GameObjectType.obj_AI_Turret || target.Type == GameObjectType.obj_Turret))
-                {
-                    if (Menu.Item("LaneClearE", true).GetValue<bool>() && E.IsReady())
-                    {
-                        E.CastOnUnit(target as Obj_AI_Base, true);
+                return;
+            }
 
-                        if (!Me.Spellbook.IsAutoAttacking && Me.CountEnemiesInRange(1000) == 0 &&
-                            Menu.Item("LaneClearQ", true).GetValue<bool>())
+            switch (Orbwalker.ActiveMode)
+            {
+                case Orbwalking.OrbwalkingMode.Combo:
+                    if (Menu.Item("ComboE", true).GetValue<bool>() && E.IsReady() &&
+                        Menu.Item("ComboEOnlyAfterAA", true).GetValue<bool>())
+                    {
+                        var t = target as AIHeroClient;
+
+                        if (t != null && t.IsValidTarget(E.Range))
                         {
-                            Q.Cast();
+                            E.CastOnUnit(t, true);
                         }
                     }
-                }
+                    break;
+                case Orbwalking.OrbwalkingMode.LaneClear:
+                    if (Me.ManaPercent >= Menu.Item("LaneClearMana", true).GetValue<Slider>().Value)
+                    {
+                        if (target != null &&
+                            (target.Type == GameObjectType.obj_AI_Turret || target.Type == GameObjectType.obj_Turret))
+                        {
+                            if (Menu.Item("LaneClearE", true).GetValue<bool>() && E.IsReady())
+                            {
+                                E.CastOnUnit(target as Obj_AI_Base, true);
+
+                                if (!Me.Spellbook.IsAutoAttacking && Me.CountEnemiesInRange(1000) == 0 &&
+                                    Menu.Item("LaneClearQ", true).GetValue<bool>())
+                                {
+                                    Q.Cast();
+                                }
+                            }
+                        }
+                    }
+                    break;
             }
         }
 
         private void OnDraw(EventArgs Args)
         {
-            if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen)
+            if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen )
             {
                 if (Menu.Item("DrawW", true).GetValue<bool>() && W.IsReady())
                 {

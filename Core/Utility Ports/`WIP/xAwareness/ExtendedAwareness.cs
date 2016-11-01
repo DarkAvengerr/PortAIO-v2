@@ -10,9 +10,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace xAwareness
+using EloBuddy;
+using LeagueSharp.Common;
+namespace xAwareness
 {
     class PositionInfo
     {
@@ -55,14 +55,7 @@ using EloBuddy;
             {
                 LeagueSharp.Common.Utility.DelayAction.Add(250, () =>
                 {
-                    if (EloBuddy.Game.Mode == GameMode.Running)
-                    {
-                        Game_OnGameLoad(new EventArgs());
-                    }
-                    else
-                    {
-                        Game.OnLoad += Game_OnGameLoad;
-                    }
+                    Game.OnLoad += Game_OnGameLoad;
                 });
             }
             catch (Exception e)
@@ -74,7 +67,7 @@ using EloBuddy;
         private void Game_OnGameLoad(EventArgs args)
         {
             //menu = mainMenu;
-
+            Chat.Print("<font size='30'>xAwareness</font> <font color='#b756c5'>by LordZEDith</font>");
             Menu positionAwarenessMenu = new Menu("xAwareness", "xAwareness", true);
             positionAwarenessMenu.AddItem(new MenuItem("ShowAllyPosition", "Show Ally").SetValue(false));
             positionAwarenessMenu.AddItem(new MenuItem("ShowEnemyPosition", "Show Enemy").SetValue(true));
@@ -176,7 +169,7 @@ using EloBuddy;
 
             return topLeftWorld.To2D() + screenOffset;
         }
-                
+
         public static PositionInfo GetScreenPosition(Vector3 position3D)
         {
             var position = position3D.To2D();
@@ -190,10 +183,10 @@ using EloBuddy;
 
                 return new PositionInfo
                 {
-                screenPosition = screenPosition,
-                direction = (screenPosition - screenCenter).Normalized(),
-                distance = worldCenter.Distance(position),
-                screenCollisionDistance = worldCenter.Distance(position)
+                    screenPosition = screenPosition,
+                    direction = (screenPosition - screenCenter).Normalized(),
+                    distance = worldCenter.Distance(position),
+                    screenCollisionDistance = worldCenter.Distance(position)
                 };
             }
 

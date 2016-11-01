@@ -892,6 +892,9 @@ namespace PortAIO
                         case 9: // Hikicarry ADC
                             HikiCarry.Program.Main();
                             break;
+                        case 10: // Flowers' ADC_Series
+                            Flowers_ADC_Series.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Ekko:
@@ -1530,6 +1533,9 @@ namespace PortAIO
                         case 16: // Hikicarry ADC
                             HikiCarry.Program.Main();
                             break;
+                        case 17: // Flowers' ADC_Series
+                            Flowers_ADC_Series.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Kalista:
@@ -1802,6 +1808,9 @@ namespace PortAIO
                             break;
                         case 5: // Slutty Kindred
                             Slutty_Kindred.Program.Main();
+                            break;
+                        case 6: // Flowers' ADC Series
+                            Flowers_ADC_Series.Program.Main();
                             break;
                     }
                     break;

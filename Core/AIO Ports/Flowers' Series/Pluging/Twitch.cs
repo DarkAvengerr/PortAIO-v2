@@ -48,6 +48,15 @@ using EloBuddy;
                 HarassMenu.AddItem(new MenuItem("HarassMana", "When Player ManaPercent >= x%", true).SetValue(new Slider(60)));
             }
 
+            var LaneClearMenu = Menu.AddSubMenu(new Menu("LaneClear", "LaneClear"));
+            {
+                LaneClearMenu.AddItem(new MenuItem("LaneClearE", "Use E", true).SetValue(true));
+                LaneClearMenu.AddItem(
+                    new MenuItem("LaneClearECount", "If E CanHit Counts >= x", true).SetValue(new Slider(3, 1, 5)));
+                LaneClearMenu.AddItem(
+                    new MenuItem("LaneClearMana", "If Player ManaPercent >= %", true).SetValue(new Slider(60)));
+            }
+
             var JungleClearMenu = Menu.AddSubMenu(new Menu("JungleClear", "JungleClear"));
             {
                 JungleClearMenu.AddItem(new MenuItem("JungleStealE", "Use E", true).SetValue(true));
@@ -116,8 +125,30 @@ using EloBuddy;
                     Harass();
                     break;
                 case Orbwalking.OrbwalkingMode.LaneClear:
+                    LaneClear();
                     JungleClear();
                     break;
+            }
+        }
+
+        private void LaneClear()
+        {
+            if (Me.ManaPercent >= Menu.Item("LaneClearMana", true).GetValue<Slider>().Value)
+            {
+                if (Menu.Item("LaneClearE", true).GetValue<bool>() && E.IsReady())
+                {
+                    var eKillMinionsCount =
+                        MinionManager.GetMinions(Me.Position, E.Range)
+                            .Count(
+                                x =>
+                                    x.DistanceToPlayer() <= E.Range && x.HasBuff("TwitchDeadlyVenom") &&
+                                    x.Health < E.GetDamage(x));
+
+                    if (eKillMinionsCount >= Menu.Item("LaneClearECount", true).GetValue<Slider>().Value)
+                    {
+                        E.Cast();
+                    }
+                }
             }
         }
 
@@ -274,7 +305,7 @@ using EloBuddy;
 
         private void OnDraw(EventArgs Args)
         {
-            if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen)
+            if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen )
             {
                 if (Menu.Item("DrawW", true).GetValue<bool>() && W.IsReady())
                 {

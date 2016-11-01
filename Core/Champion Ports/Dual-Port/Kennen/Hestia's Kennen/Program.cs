@@ -1,10 +1,16 @@
-﻿using System;
+using System;
 using LeagueSharp.Common;
 
-namespace Kennen
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Kennen
 {
     internal class Program
     {
+        public static void Main()
+        {
+            Game_OnGameLoad();
+        }
 
         public static void Game_OnGameLoad()
         {

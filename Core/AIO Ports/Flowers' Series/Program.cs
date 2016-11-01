@@ -71,6 +71,7 @@ using EloBuddy;
                     EnabledMenu.AddItem(new MenuItem("Inject SkinChange", "Inject SkinChange").SetValue(true));
                     EnabledMenu.AddItem(new MenuItem("Inject Items", "Inject Items").SetValue(true));
                     EnabledMenu.AddItem(new MenuItem("Inject Cleanese", "Inject Cleanese").SetValue(true));
+                    EnabledMenu.AddItem(new MenuItem("Inject Humanizer", "Inject Humanizer").SetValue(true));
                 }
 
                 if (Menu.Item("Inject AutoLevels").GetValue<bool>())
@@ -90,7 +91,7 @@ using EloBuddy;
 
                 if (Menu.Item("Inject SkinChange").GetValue<bool>())
                 {
-                    //Utility.SkinChange.Init();
+                    Utility.SkinChange.Init();
                 }
 
                 if (Menu.Item("Inject Items").GetValue<bool>())
@@ -101,6 +102,11 @@ using EloBuddy;
                 if (Menu.Item("Inject Cleanese").GetValue<bool>())
                 {
                     Utility.Cleaness.Init();
+                }
+
+                if (Menu.Item("Inject Humanizer").GetValue<bool>())
+                {
+                    Utility.Humanizer.Init();
                 }
             }
 
@@ -185,8 +191,8 @@ using EloBuddy;
             }
 
             Chat.Print("Flowers' ADC Series: " + Me.ChampionName + (SupportList.Contains(Me.ChampionName)
-                               ? " Load!"
-                               : " Not Support!") + " Credit: NightMoon");
+                               ? " Load! Credit: NightMoon"
+                               : " Not Support!"));
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
-namespace Kennen.Core
+
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Kennen.Core
 {
     internal class Drawings
     {

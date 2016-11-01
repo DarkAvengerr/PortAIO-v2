@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Kennen.Core;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
 
-namespace Kennen.Modes
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Kennen.Modes
 {
     internal class Combo
     {
@@ -22,10 +18,10 @@ namespace Kennen.Modes
             var castQ = Configs.config.Item("useQ").GetValue<bool>() && Spells.Q.IsReady();
             var castW = Configs.config.Item("useW").GetValue<bool>() && Spells.W.IsReady();
             var modeW = Configs.config.Item("useWmodeCombo").GetValue<StringList>();
-            //var castR = Configs.config.Item("useR").GetValue<bool>() && Spells.R.IsReady();
-            var castProto = Configs.config.Item("useProto").GetValue<bool>() && Spells.R.IsReady();
+            var castR = Configs.config.Item("useR").GetValue<bool>() && Spells.R.IsReady();
+            var castProto = Configs.config.Item("useProto").GetValue<bool>();
 
-            if (castProto && target.IsValidTarget())
+            if (castProto && target.IsValidTarget() && !Spells.R.IsReady())
             {
                 ItemsHandler.UseProtobelt(target);
             }
@@ -53,6 +49,17 @@ namespace Kennen.Modes
                         }
                         break;
                 }
+            }
+            if (castR && !ObjectManager.Player.HasBuffOfType(BuffType.Snare) && target.Health < Champion.Kennen.ComboDamage(target))
+            {
+                Spells.R.Cast();
+
+                if (ObjectManager.Player.HasBuff("KennenShurikenStorm") && castProto)
+                {
+                    ItemsHandler.UseProtobelt(target);
+                }
+
+                Spells.W.Cast();
             }
         }
     }

@@ -329,7 +329,7 @@ using EloBuddy;
 
         private void OnDraw(EventArgs Args)
         {
-            if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen)
+            if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen )
             {
                 if (Menu.Item("DrawQ", true).GetValue<bool>() && Q.IsReady())
                 {

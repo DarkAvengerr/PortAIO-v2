@@ -14,6 +14,7 @@ using EloBuddy;
 
         static void Main(string[] args)
         {
+
             extendedAwareness = new ExtendedAwareness();
         }
     }

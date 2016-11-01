@@ -1,15 +1,20 @@
-﻿using System;
+using System;
 using System.Linq;
 using Kennen.Core;
 using Kennen.Modes;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
-namespace Kennen.Champion
+
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Kennen.Champion
 {
     internal class Kennen
     {
-
+        public Kennen()
+        {
+            Kennen_OnLoad();
+        }
 
         public static void Kennen_OnLoad()
         {
@@ -54,6 +59,18 @@ namespace Kennen.Champion
 
             KillSteal();
             AutoQ();
+            CastMultiR();
+        }
+
+        private static void CastMultiR()
+        {
+            var castRmulti = Configs.config.Item("useRmulti").GetValue<bool>() && Spells.R.IsReady();
+            var multiRtargets = Configs.config.Item("multiRtargets").GetValue<Slider>().Value;
+
+            if (castRmulti && ObjectManager.Player.CountEnemiesInRange(Spells.R.Range + ItemsHandler.ProtoBelt.Range) > multiRtargets)
+            {
+                Spells.R.Cast();
+            }
         }
 
         private static void KillSteal()
@@ -134,6 +151,30 @@ namespace Kennen.Champion
         public static bool IsRushing()
         {
             return ObjectManager.Player.HasBuff("KennenLightningRush");
+        }
+
+        public static float ComboDamage(Obj_AI_Base enemy)
+        {
+            double damage = 0;
+            if (Spells.Q.IsReady())
+            {
+                damage += Spells.Q.GetDamage(enemy);
+            }
+            if (Spells.W.IsReady())
+            {
+                damage += Spells.W.GetDamage(enemy);
+            }
+            if (Spells.R.IsReady())
+            {
+                damage += Spells.R.GetDamage(enemy);
+            }
+            var igniteDamage = ObjectManager.Player.GetSummonerSpellDamage(enemy, Damage.SummonerSpell.Ignite);
+            if (ObjectManager.Player.Spellbook.CanUseSpell(ObjectManager.Player.GetSpellSlot("summonerdot")) == SpellState.Ready)
+            {
+                damage += igniteDamage;
+            }
+
+            return (float) damage;
         }
     }
 }

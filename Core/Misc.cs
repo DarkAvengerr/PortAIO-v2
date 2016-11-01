@@ -88,7 +88,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "Hestia's Mundo", "BrianSharp", "KappaSeries", "SAutoCarry", "SharpyAIO", "StonedSeriesAIO", "[SDK] ExorAIO", "[SDK] Valvrave#", "MundoSharpy" };
                     break;
                 case EloBuddy.Champion.Draven:
-                    champ = new string[] { "OKTW", "hikiMarksman", "SharpShooter", "Marksman#", "M00N Draven", "[SDK] ExorAIO", "[SDK] Tyler1.exe", "badaoDraven", "myWorld AIO", "Hikicarry ADC" };
+                    champ = new string[] { "OKTW", "hikiMarksman", "SharpShooter", "Marksman#", "M00N Draven", "[SDK] ExorAIO", "[SDK] Tyler1.exe", "badaoDraven", "myWorld AIO", "Hikicarry ADC", "Flowers' ADC Series" };
                     break;
                 case EloBuddy.Champion.Ekko:
                     champ = new string[] { "OKTW", "EloFactory Ekko", "xSalice", "Ekko Master of Time", "Ekko The Boy Who Shattered Time", "EkkoGod", "ElEkko", "HikiCarry Ekko", "TheEkko" };
@@ -157,7 +157,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "OKTW", "Hikigaya's Jhin", "SAutoCarry", "Marksman#", "[SDK] ExorAIO", "[SDK] hJhin", "Jhin as the Virtuoso", "BadaoJhin", "[SDK] Tc_SDKexAIO", "Flowers' Jhin", "Hikicarry ADC", "Flowers' ADC Series" };
                     break;
                 case EloBuddy.Champion.Jinx:
-                    champ = new string[] { "OKTW", "ADCPackage", "GENESIS Jinx", "iSeriesReborn", "ProSeries", "SharpShooter", "xSalice", "Marksman#", "[SDK] ExorAIO", "CjShu Jinx", "EasyJinx", "EloFactory Jinx", "GenerationJinx", "PennyJinxReborn", "myWorld AIO", "[SDK] Tc_SDKexAIO", "Hikicarry ADC" };
+                    champ = new string[] { "OKTW", "ADCPackage", "GENESIS Jinx", "iSeriesReborn", "ProSeries", "SharpShooter", "xSalice", "Marksman#", "[SDK] ExorAIO", "CjShu Jinx", "EasyJinx", "EloFactory Jinx", "GenerationJinx", "PennyJinxReborn", "myWorld AIO", "[SDK] Tc_SDKexAIO", "Hikicarry ADC", "Flowers' ADC Series" };
                     break;
                 case EloBuddy.Champion.Kalista:
                     champ = new string[] { "S+ Class Kalista", "DZAIO", "HERMES Kalista", "Hikicarry Kalista", "iSeriesReborn", "OKTW", "SAutoCarry", "SFXChallenger", "SharpShooter", "Marksman#", "[SDK] ChallengerSeriesAIO", "[SDK] ExorAIO", "[SDK] xcsoft's Kalista", "DonguKalista", "EasyKalista", "ElKalista", "iKalista", "iKalista:Reborn", "Kalima", "KAPPALISTAXD", "Hikicarry ADC", "Flowers' ADC Series" };
@@ -184,7 +184,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "Seph Kha'Zix", "KhaZix#" };
                     break;
                 case EloBuddy.Champion.Kindred:
-                    champ = new string[] { "Yin & Yang", "OKTW", "SharpShooter", "Marksman#", "KindredSpirits", "SluttyKindred" };
+                    champ = new string[] { "Yin & Yang", "OKTW", "SharpShooter", "Marksman#", "KindredSpirits", "SluttyKindred", "Flowers' ADC Series" };
                     break;
                 // Kled - HikiKled
                 case EloBuddy.Champion.KogMaw:
