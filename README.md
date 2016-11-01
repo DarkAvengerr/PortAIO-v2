@@ -20,7 +20,7 @@ I'd like to welcome everyone to PortAIO v2, a complete reboot of PortAIO. We too
 ## - Frequently Asked Questions :
 1. What is a port? : A 'port' is converting a script from one community (in our case L#) and making it compatible with another community (in our case EB).
 
-2. Does PortAIO support all the champions? : As of 6.21 we support every champion up to Kled but do not support Ivern (yet).
+2. Does PortAIO support all the champions? : As of 6.21 we support every champion up to Ivern.
 
 3. Will PortAIO ever have BoL scripts? : No. Most likely not, most BoL Scripts are encrypted which increases the difficulty of it ever being ported.
 
