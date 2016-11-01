@@ -2,6 +2,9 @@
 ------------------------------------------------------------------------------------------------------------------
 Pretty much all done. PortAIO v2 is in a decent, stable state right now apart from the minor utility bugs/crashes.
 
+- Fix all Syndra scripts
+- Make the SDK Orbwalker have the same performance as the common orbwalker
+
 
 
 http://na.op.gg/summoner/userName=burblish4 - Doing some overnight testing
