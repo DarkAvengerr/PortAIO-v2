@@ -79,8 +79,7 @@ using EloBuddy;
                 return;
             }
 
-            if (Vars.E.IsReady() && args.Sender.IsMelee
-                && args.SkillType == GapcloserType.Targeted
+            if (Vars.E.IsReady() && args.Sender.IsMelee && args.SkillType == GapcloserType.Targeted
                 && Vars.Menu["spells"]["e"]["gapcloser"].GetValue<MenuBool>().Value)
             {
                 if (args.Target.IsMe)

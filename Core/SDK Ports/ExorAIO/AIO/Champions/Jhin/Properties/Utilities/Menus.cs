@@ -34,7 +34,7 @@ using EloBuddy;
                 {
                     Vars.QMenu.Add(new MenuBool("combo", "Combo", true));
                     Vars.QMenu.Add(new MenuBool("killsteal", "KillSteal", true));
-                    Vars.QMenu.Add(new MenuSliderButton("lasthit", "Auto-LastHit / if Mana >= x%", 0, 0, 99, true));
+                    //Vars.QMenu.Add(new MenuSliderButton("lasthit", "Auto-LastHit / if Mana >= x%", 0, 0, 99, true));
                     Vars.QMenu.Add(new MenuSliderButton("harass", "Harass / if Mana >= x%", 50, 0, 99, true));
                     Vars.QMenu.Add(new MenuSliderButton("laneclear", "LaneClear / if Mana >= x%", 50, 0, 99, true));
                     Vars.QMenu.Add(new MenuSliderButton("jungleclear", "JungleClear / if Mana >= x%", 50, 0, 99, true));
@@ -89,10 +89,10 @@ using EloBuddy;
                 /// </summary>
                 Vars.RMenu = new Menu("r", "Use R to:");
                 {
-                    Vars.RMenu.Add(new MenuBool("logical", "Automatic", true));
+                    Vars.RMenu.Add(new MenuSeparator("separator", "- You need to manually start the Ultimate. -"));
+                    Vars.RMenu.Add(new MenuBool("combo", "Combo", true));
                     Vars.RMenu.Add(new MenuBool("killsteal", "KillSteal", true));
                     Vars.RMenu.Add(new MenuBool("nearmouse", "Focus the enemy nearest to your cursor"));
-                    Vars.RMenu.Add(new MenuSeparator("separator", "- You need to manually start the Ultimate. -"));
                     {
                         /// <summary>
                         ///     Sets the menu for the R Whitelist.

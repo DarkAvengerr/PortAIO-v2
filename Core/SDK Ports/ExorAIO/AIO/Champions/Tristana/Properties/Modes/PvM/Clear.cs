@@ -36,7 +36,8 @@ using EloBuddy;
             /// <summary>
             ///     The Q BuildingClear Logic.
             /// </summary>
-            if (Vars.Q.IsReady() && GameObjects.Player.Spellbook.IsAutoAttacking && Vars.Menu["spells"]["q"]["buildings"].GetValue<MenuBool>().Value)
+            if (Vars.Q.IsReady() && GameObjects.Player.Spellbook.IsAutoAttacking
+                && Vars.Menu["spells"]["q"]["buildings"].GetValue<MenuBool>().Value)
             {
                 Vars.Q.Cast();
             }

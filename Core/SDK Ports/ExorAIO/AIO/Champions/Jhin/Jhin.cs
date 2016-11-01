@@ -157,7 +157,7 @@ using EloBuddy;
             /// </summary>
             Logics.Automatic(args);
 
-            if (GameObjects.Player.Spellbook.IsAutoAttacking || Vars.R.Instance.Name.Equals("JhinRShot"))
+            if (GameObjects.Player.Spellbook.IsAutoAttacking)
             {
                 return;
             }

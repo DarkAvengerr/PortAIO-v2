@@ -25,7 +25,7 @@ using EloBuddy;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Harass(EventArgs args)
         {
-            if (!Targets.Target.IsValidTarget())
+            if (!Targets.Target.IsValidTarget() || Vars.R.Instance.Name.Equals("JhinRShot"))
             {
                 return;
             }

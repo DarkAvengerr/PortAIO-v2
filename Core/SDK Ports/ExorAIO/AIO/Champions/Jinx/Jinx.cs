@@ -30,8 +30,8 @@ using EloBuddy;
         /// <param name="args">The <see cref="OrbwalkingActionArgs" /> instance containing the event data.</param>
         public static void OnAction(object sender, OrbwalkingActionArgs args)
         {
-            if (Variables.Orbwalker.ActiveMode != OrbwalkingMode.LastHit &&
-                Variables.Orbwalker.ActiveMode != OrbwalkingMode.LaneClear)
+            if (Variables.Orbwalker.ActiveMode != OrbwalkingMode.LastHit
+                && Variables.Orbwalker.ActiveMode != OrbwalkingMode.LaneClear)
             {
                 return;
             }

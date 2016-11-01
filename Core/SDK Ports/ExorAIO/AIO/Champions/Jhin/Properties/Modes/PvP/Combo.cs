@@ -15,6 +15,8 @@ using EloBuddy;
     using LeagueSharp.SDK.UI;
     using LeagueSharp.SDK.Utils;
 
+    using SharpDX;
+
     /// <summary>
     ///     The logics class.
     /// </summary>
@@ -28,6 +30,40 @@ using EloBuddy;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Combo(EventArgs args)
         {
+            /// <summary>
+            ///     The R Logic.
+            /// </summary>
+            if (Vars.R.IsReady() && Vars.R.Instance.Name.Equals("JhinRShot")
+                && Vars.Menu["spells"]["r"]["combo"].GetValue<MenuBool>().Value)
+            {
+                if (
+                    GameObjects.EnemyHeroes.Any(
+                        t => t.IsValidTarget(Vars.R.Range) && !Jhin.Cone.IsOutside((Vector2)t.ServerPosition)))
+                {
+                    foreach (var target in
+                        GameObjects.EnemyHeroes.Where(
+                            t => t.IsValidTarget(Vars.R.Range) && !Jhin.Cone.IsOutside((Vector2)t.ServerPosition)))
+                    {
+                        if (Vars.Menu["spells"]["r"]["nearmouse"].GetValue<MenuBool>().Value)
+                        {
+                            Vars.R.Cast(
+                                Vars.R.GetPrediction(
+                                    GameObjects.EnemyHeroes.Where(
+                                        t =>
+                                        t.IsValidTarget(Vars.R.Range) && !Jhin.Cone.IsOutside((Vector2)t.ServerPosition))
+                                        .OrderBy(o => o.Distance(Game.CursorPos))
+                                        .First()).UnitPosition);
+                            return;
+                        }
+
+                        Vars.R.Cast(Vars.R.GetPrediction(target).UnitPosition);
+                        return;
+                    }
+                }
+
+                Vars.R.Cast(Game.CursorPos);
+            }
+
             if (Bools.HasSheenBuff() && Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
                 || !Targets.Target.IsValidTarget() || Vars.R.Instance.Name.Equals("JhinRShot"))
             {

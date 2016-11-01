@@ -130,7 +130,11 @@ using EloBuddy;
                         new MenuSeparator(
                             "esep5",
                             "None: This Logic will prevent the assembly from using E automatically in combo."));
-                    Vars.EMenu.Add(new MenuList<string>("mode", "E Mode", new[] { "Exory", "Always Long", "Always Short", "Don't use E in Combo" }));
+                    Vars.EMenu.Add(
+                        new MenuList<string>(
+                            "mode",
+                            "E Mode",
+                            new[] { "Exory", "Always Long", "Always Short", "Don't use E in Combo" }));
                     Vars.EMenu.Add(new MenuBool("engager", "Engager", true));
                     Vars.EMenu.Add(new MenuBool("gapcloser", "Anti-Gapcloser", true));
                     Vars.EMenu.Add(new MenuSliderButton("buildings", "Buildings / if Mana >= x%", 50, 0, 99, true));

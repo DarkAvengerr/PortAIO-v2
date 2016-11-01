@@ -58,7 +58,7 @@ using EloBuddy;
                    || IsValidSnare(target as AIHeroClient) || target.HasBuffOfType(BuffType.Flee)
                    || target.HasBuffOfType(BuffType.Taunt) || target.HasBuffOfType(BuffType.Charm)
                    || target.HasBuffOfType(BuffType.Knockup) || target.HasBuffOfType(BuffType.Suppression)
-                   || (target as AIHeroClient).IsCastingInterruptableSpell();
+                   || (target as AIHeroClient).IsCastingInterruptableSpell(true);
         }
 
         /// <summary>
