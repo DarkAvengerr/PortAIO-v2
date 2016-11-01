@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -10,10 +10,11 @@ using LeagueSharp.Common;
 using SharpDX;
 using UnderratedAIO.Helpers.SkillShot;
 using Color = System.Drawing.Color;
-using Orbwalking = UnderratedAIO.Helpers.Orbwalking;
-using EloBuddy;
 
-namespace UnderratedAIO.Helpers
+
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace UnderratedAIO.Helpers
 {
     internal class IncomingDamage
     {
@@ -49,7 +50,7 @@ namespace UnderratedAIO.Helpers
 
         public IncomingDamage()
         {
-            Obj_AI_Base.OnSpellCast += Game_ProcessSpell;
+            Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
             Game.OnUpdate += Game_OnGameUpdate;
             // from H3h3 SpellDetector Lib
             SkillshotDetector.Init();

@@ -36,6 +36,11 @@ using EloBuddy;
 
             foreach (var target in targets)
             {
+                if (target.HasBuff("FioraW") && Qstack == 3)
+                {
+                    return;
+                }
+
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                 {
                     if (Spells.Q.IsReady())
@@ -53,8 +58,7 @@ using EloBuddy;
                     }
                 }
 
-                /*
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.FastHarass)
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.QuickHarass)
                 {
                     if (Spells.Q.IsReady())
                     {
@@ -66,7 +70,6 @@ using EloBuddy;
                         CastW(target);
                     }
                 }
-                */
 
                 if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Burst) return;
 
@@ -88,12 +91,11 @@ using EloBuddy;
                     return;
                 }
 
-                var minions = MinionManager.GetMinions(Player.AttackRange + 360).Where(x => x != null);
-                    // Redundant af?? whatever
+                var minions = MinionManager.GetMinions(Player.AttackRange + 360);
 
                 foreach (var m in minions)
                 {
-                    if (!MenuConfig.LaneQ || m.UnderTurret(true))
+                    if (!MenuConfig.LaneQ || (m.UnderTurret(true) && ObjectManager.Player.CountEnemiesInRange(1500) >= 1))
                     {
                         return;
                     }

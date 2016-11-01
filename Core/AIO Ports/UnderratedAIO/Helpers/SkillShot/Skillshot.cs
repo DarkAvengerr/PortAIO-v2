@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using System;
 using System.Collections.Generic;
@@ -9,11 +9,12 @@ using SharpDX;
 using UnderratedAIO.Helpers.SkillShot;
 using Collision = UnderratedAIO.Helpers.SkillShot.Collision;
 using Color = System.Drawing.Color;
-using EloBuddy;
 
 #endregion
 
-namespace UnderratedAIO.Helpers.SkillShot
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace UnderratedAIO.Helpers.SkillShot
 {
     public enum SkillShotType
     {

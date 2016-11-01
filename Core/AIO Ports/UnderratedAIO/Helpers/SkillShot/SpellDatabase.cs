@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using System;
 using System.Collections.Generic;
@@ -7,11 +7,12 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using UnderratedAIO.Helpers.SkillShot;
-using EloBuddy;
 
 #endregion
 
-namespace UnderratedAIO.Helpers.SkillShot
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace UnderratedAIO.Helpers.SkillShot
 {
     public static class SpellDatabase
     {

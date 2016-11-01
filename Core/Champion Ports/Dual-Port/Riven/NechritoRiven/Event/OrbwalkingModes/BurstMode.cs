@@ -37,7 +37,7 @@ using EloBuddy;
 
                 Spells.E.Cast(selectedTarget.Position);
                 Spells.R.Cast();
-                FlashW();
+                LeagueSharp.Common.Utility.DelayAction.Add(170, FlashW);
             }
             else
             {

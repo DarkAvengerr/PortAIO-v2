@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,11 +9,12 @@ using LeagueSharp.Common;
 using SharpDX;
 using UnderratedAIO.Helpers;
 using Collision = LeagueSharp.Common.Collision;
-using EloBuddy;
 
 // using Beaving.s.Baseult;
 
-namespace UnderratedAIO.Helpers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace UnderratedAIO.Helpers
 {
     internal class LastPositions
     {

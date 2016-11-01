@@ -1,38 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
-using EloBuddy;
+using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-namespace UnderratedAIO.Helpers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace UnderratedAIO.Helpers
 {
     public class Environment
     {
         public static AIHeroClient player = ObjectManager.Player;
-
-        public static List<OrbWalkerBlackList> NetworkIDBlackList = new List<OrbWalkerBlackList>();
-
-        public static void AddToBlackList(int networkID)
-        {
-            if (NetworkIDBlackList.All(e => e.networkId != networkID))
-            {
-                NetworkIDBlackList.Add(new OrbWalkerBlackList(networkID));
-            }
-        }
-
-        public class OrbWalkerBlackList
-        {
-            public int networkId;
-            public float time;
-
-            public OrbWalkerBlackList(int networkId)
-            {
-                this.networkId = networkId;
-                this.time = System.Environment.TickCount;
-            }
-        }
 
         public class Minion
         {

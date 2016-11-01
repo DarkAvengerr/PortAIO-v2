@@ -40,11 +40,10 @@ using EloBuddy;
                 return;
             }
 
-            if (Utils.GameTimeTickCount - LastQ >= 3650
-                && !Player.InFountain()
-                && !Player.InShop()
-                && !Player.IsRecalling()
+            if (Utils.GameTimeTickCount - LastQ >= 3600 + Game.Ping / 2
                 && MenuConfig.KeepQ
+                && !Player.InFountain()
+                && !Player.HasBuff("Recall")
                 && Player.HasBuff("RivenTriCleave"))
             {
                 Spells.Q.Cast(Game.CursorPos);
@@ -65,9 +64,9 @@ using EloBuddy;
                 case Orbwalking.OrbwalkingMode.Flee:
                     FleeMode.Flee();
                     break;
-                //case Orbwalking.OrbwalkingMode.FastHarass:
-                    //FastHarassMode.FastHarass();
-                    //break;
+                case Orbwalking.OrbwalkingMode.QuickHarass:
+                    FastHarassMode.FastHarass();
+                    break;
                 case Orbwalking.OrbwalkingMode.Mixed:
                     Mixed.Harass();
                     break;

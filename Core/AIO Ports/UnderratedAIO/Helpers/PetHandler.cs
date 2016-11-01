@@ -1,14 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EloBuddy;
+using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
 
-namespace UnderratedAIO.Helpers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace UnderratedAIO.Helpers
 {
     internal class PetHandler
     {
@@ -18,7 +20,7 @@ namespace UnderratedAIO.Helpers
         private static Spell R, FarmL;
         private static readonly int range = 2000;
         private static bool debug = false, PetDelay = false;
-        //private static Vector3 movePos;
+        private static Vector3 movePos;
 
         internal static Menu addItemOptons(Menu menuM)
         {
@@ -67,7 +69,7 @@ namespace UnderratedAIO.Helpers
             }
             if (debug)
             {
-            //    Render.Circle.DrawCircle(movePos, 60, Color.Aqua, 7);
+                Render.Circle.DrawCircle(movePos, 60, Color.Aqua, 7);
             }
         }
 
@@ -92,7 +94,8 @@ namespace UnderratedAIO.Helpers
                     {
                         Console.WriteLine("follow");
                     }
-                    if (player.IsMoving && options.Item("petFollow", true).GetValue<bool>())
+                    if (player.IsMoving && options.Item("petFollow", true).GetValue<bool>() &&
+                        player.ChampionName != "Ivern")
                     {
                         var movePos = player.Position.Extend(Prediction.GetPrediction(player, 0.5f).UnitPosition, -250);
                         MoveTo(movePos);
@@ -101,9 +104,9 @@ namespace UnderratedAIO.Helpers
                 }
                 else if (gtarget.IsValid && !Pet.Spellbook.IsAutoAttacking)
                 {
-                    if (CanPetAttack() ||
-                        options.Item("petMovementType", true).GetValue<StringList>().SelectedIndex == 1 ||
-                        player.HealthPercent < 25)
+                    if ((CanPetAttack() ||
+                         options.Item("petMovementType", true).GetValue<StringList>().SelectedIndex == 1 ||
+                         player.HealthPercent < 25) && player.ChampionName != "Ivern")
                     {
                         if (Pet.Distance(gtarget) < Pet.AttackRange + gtarget.BoundingRadius + Pet.BoundingRadius)
                         {

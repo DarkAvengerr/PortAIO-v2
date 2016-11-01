@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.PerformanceData;
 using System.Linq;
@@ -9,9 +9,10 @@ using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
 using UnderratedAIO.Helpers;
-using EloBuddy;
 
-namespace UnderratedAIO
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace UnderratedAIO
 {
     internal class Program
     {

@@ -79,7 +79,8 @@ using EloBuddy;
            : Items.CanUseItem(3074) && Items.HasItem(3074)
            ? 3074
            : Items.CanUseItem(3748) && Items.HasItem(3748)
-           ? 3748 : 0;
+           ? 3748 
+           : 0;
 
         public static bool R1 { get; set; }
 
@@ -95,9 +96,9 @@ using EloBuddy;
 
         public static bool InRange(AttackableUnit x)
         {
-            if (x == null)
-                return false;
-            return ObjectManager.Player.HasBuff("RivenFengShuiEngine") ? Player.Distance(x) <= 330 : Player.Distance(x) <= 265;
+            return ObjectManager.Player.HasBuff("RivenFengShuiEngine")
+            ? Player.Distance(x) <= 330
+            : Player.Distance(x) <= 265;
         }
         #endregion
 
@@ -112,7 +113,7 @@ using EloBuddy;
 
             if (canQ && Spells.Q.IsReady())
             {
-                if (Items.CanUseItem(Item) && Item != 0)
+                if (Items.CanUseItem(Item) && Item != 0 && Qstack > 1)
                 {
                     Items.UseItem(Item);
                     LeagueSharp.Common.Utility.DelayAction.Add(1, () => Spells.Q.Cast(Unit.Position));
@@ -136,10 +137,11 @@ using EloBuddy;
                 }
             }
 
-            if (R1 && Spells.R.Instance.Name == IsFirstR)
+            if (!R1 || Spells.R.Instance.Name != IsFirstR)
             {
-                Spells.R.Cast();
+                return;
             }
+            Spells.R.Cast();
         }
 
         public static void CastQ(AttackableUnit x)

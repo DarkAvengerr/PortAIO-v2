@@ -1,7 +1,9 @@
-﻿using System;
+using System;
 using System.Reflection.Emit;
 
-namespace UnderratedAIO.Helpers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace UnderratedAIO.Helpers
 {
     public class DynamicInitializer
     {

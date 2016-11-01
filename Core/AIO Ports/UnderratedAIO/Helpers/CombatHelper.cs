@@ -1,14 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using EloBuddy;
+using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using SharpDX.Direct3D9;
 using Collision = LeagueSharp.Common.Collision;
 
-namespace UnderratedAIO.Helpers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace UnderratedAIO.Helpers
 {
     public class CombatHelper
     {
@@ -34,7 +36,9 @@ namespace UnderratedAIO.Helpers
                     "alistartrample", "NocturneShroudofDarknessShield", "SpellShield"
                 });
 
-        public static List<DashData> DashDatas = new List<DashData>(new DashData[]
+        public static List<DashData> DashDatas =
+            new List<DashData>(
+                new DashData[]
                 {
                     new DashData("Aatrox", SpellSlot.Q), new DashData("Ahri", SpellSlot.R),
                     new DashData("Akali", SpellSlot.R), new DashData("Alistar", SpellSlot.W),
@@ -959,7 +963,7 @@ namespace UnderratedAIO.Helpers
             {
                 return false;
             }
-            return Orbwalking.GetRealAutoAttackRange(target) > ObjectManager.Player.Distance(target) + bonusTange;
+            return Orbwalking.GetRealAutoAttackRange(target) + bonusTange > ObjectManager.Player.Distance(target);
         }
     }
 }

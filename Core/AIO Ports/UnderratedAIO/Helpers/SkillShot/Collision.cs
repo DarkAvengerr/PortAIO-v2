@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using System;
 using System.Collections.Generic;
@@ -9,11 +9,12 @@ using LeagueSharp.Common;
 using SharpDX;
 using UnderratedAIO.Helpers.SkillShot;
 using Environment = System.Environment;
-using EloBuddy;
 
 #endregion
 
-namespace UnderratedAIO.Helpers.SkillShot
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace UnderratedAIO.Helpers.SkillShot
 {
     public enum CollisionObjectTypes
     {
@@ -46,7 +47,7 @@ namespace UnderratedAIO.Helpers.SkillShot
 
         public static void Init()
         {
-            Obj_AI_Base.OnSpellCast += AIHeroClient_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
         }
 
 

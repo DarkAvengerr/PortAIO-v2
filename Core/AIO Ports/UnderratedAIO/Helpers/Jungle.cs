@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using EloBuddy;
 
-namespace UnderratedAIO.Helpers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace UnderratedAIO.Helpers
 {
     public class Jungle
     {

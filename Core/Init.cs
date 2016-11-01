@@ -1358,6 +1358,9 @@ namespace PortAIO
                             break;
                     }
                     break;
+                case Champion.Ivern:
+                    UnderratedAIO.Program.OnGameLoad();
+                    break;
                 case Champion.Janna:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
@@ -2968,6 +2971,9 @@ namespace PortAIO
                             break;
                         case 7: // sAIO
                             sAIO.Program.Main();
+                            break;
+                        case 8: // Flowers' Talon
+                            Flowers_Talon.Program.Main();
                             break;
                     }
                     break;

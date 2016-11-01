@@ -37,15 +37,23 @@ using EloBuddy;
                 return;
             }
 
-            var allies = ObjectManager.Player.GetAlliesInRange(wSpell.Spell.Range)
-                    .Where(x => !x.IsMe)
-                    .FirstOrDefault(x => x.Distance(ObjectManager.Player.Position) <= wSpell.Spell.Range);
-
-            var prediction = wSpell.Spell.GetPrediction(allies);
-
-            if (allies != null && prediction.Hitchance >= HitChance.Medium)
+            foreach (var m in mob)
             {
-                wSpell.Spell.Cast(prediction.CastPosition);
+                if (!m.IsValidTarget(900))
+                {
+                    return;
+                }
+
+                var allies = ObjectManager.Player.GetAlliesInRange(wSpell.Spell.Range)
+                     .Where(x => !x.IsMe)
+                     .FirstOrDefault(x => x.Distance(ObjectManager.Player.Position) <= wSpell.Spell.Range);
+
+                var prediction = wSpell.Spell.GetPrediction(allies);
+
+                if (allies != null && prediction.Hitchance >= HitChance.Medium)
+                {
+                    wSpell.Spell.Cast(prediction.CastPosition);
+                }
             }
         }
 

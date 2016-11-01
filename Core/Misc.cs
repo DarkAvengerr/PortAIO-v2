@@ -329,7 +329,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "Toph#", "[SDK] ExorAIO", "[SDK] StoneWeaver" };
                     break;
                 case EloBuddy.Champion.Talon:
-                    champ = new string[] { "GFUEL Talon", "Hoola Talon", "Badao Talon", "ElTalon", "HeavenStrikeTalon", "MistakenTalon", "TrooplonRewritten", "sAIO" };
+                    champ = new string[] { "GFUEL Talon", "Hoola Talon", "Badao Talon", "ElTalon", "HeavenStrikeTalon", "MistakenTalon", "TrooplonRewritten", "sAIO", "Flowers' Talon" };
                     break;
                 case EloBuddy.Champion.Taric:
                     champ = new string[] { "SkyLv_Taric", "ElEasy", "PippyTaric", "Support is Easy", "vSeries" };

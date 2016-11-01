@@ -13,7 +13,6 @@ using EloBuddy;
     using FontStyle = System.Drawing.FontStyle;
     using SharpDX;
     using SColor = SharpDX.Color;
-    using Flowers_Commom;
 
     class Program
     {

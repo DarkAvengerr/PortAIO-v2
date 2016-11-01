@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,9 @@ using SharpDX;
 
 #endregion
 
-namespace UnderratedAIO.Helpers.SkillShot
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace UnderratedAIO.Helpers.SkillShot
 {
     /// <summary>
     ///     Class that contains the geometry related methods.

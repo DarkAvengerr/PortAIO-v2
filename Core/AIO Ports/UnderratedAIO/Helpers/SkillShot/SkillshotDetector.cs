@@ -1,13 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using EloBuddy;
+using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using UnderratedAIO.Helpers.SkillShot;
 using Collision = UnderratedAIO.Helpers.SkillShot.Collision;
 
-namespace UnderratedAIO.Helpers.SkillShot
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace UnderratedAIO.Helpers.SkillShot
 {
     public static class SkillshotDetector
     {

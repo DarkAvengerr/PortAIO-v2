@@ -1,13 +1,14 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using UnderratedAIO.Helpers;
-using Orbwalking = UnderratedAIO.Helpers.Orbwalking;
-using EloBuddy;
 
-namespace UnderratedAIO.Champions
+
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace UnderratedAIO.Champions
 {
     internal class Other
     {
@@ -28,14 +29,6 @@ namespace UnderratedAIO.Champions
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if (config.Item("Enabledorb", true).GetValue<bool>())
-            {
-                orbwalker.Enabled = true;
-            }
-            else
-            {
-                orbwalker.Enabled = false;
-            }
             if (FpsBalancer.CheckCounter())
             {
                 return;
@@ -61,7 +54,7 @@ namespace UnderratedAIO.Champions
 
         private void Combo()
         {
-            AIHeroClient target = TargetSelector.GetTarget(900, TargetSelector.DamageType.Physical);
+            AIHeroClient target = DrawHelper.GetBetterTarget(900, TargetSelector.DamageType.Physical);
             if (target == null)
             {
                 return;
@@ -98,7 +91,7 @@ namespace UnderratedAIO.Champions
             menuM = DrawHelper.AddMisc(menuM);
             config.AddSubMenu(menuM);
             config.AddItem(new MenuItem("Enabledcomm", "Enable Utilies")).SetValue(true);
-            config.AddItem(new MenuItem("Enabledorb", "Enable OrbWalker", true)).SetValue(false);
+            //config.AddItem(new MenuItem("Enabledorb", "Enable OrbWalker", true)).SetValue(false);
             config.AddItem(new MenuItem("UnderratedAIO", "by Soresu v" + Program.version.ToString().Replace(",", ".")));
             config.AddToMainMenu();
         }

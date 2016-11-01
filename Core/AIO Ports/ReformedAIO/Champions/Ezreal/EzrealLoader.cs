@@ -18,7 +18,8 @@ using EloBuddy;
     using Ezreal.OrbwalkingMode.Harass;
     using Ezreal.OrbwalkingMode.JungleClear;
     using Ezreal.OrbwalkingMode.LaneClear;
-    using Ezreal.OrbwalkingMode.None;
+
+    using ReformedAIO.Champions.Ezreal.OrbwalkingMode.Stack;
     using ReformedAIO.Library.Dash_Handler;
     using ReformedAIO.Library.SpellParent;
 

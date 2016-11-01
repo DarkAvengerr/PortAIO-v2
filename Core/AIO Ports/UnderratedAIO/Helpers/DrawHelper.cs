@@ -1,17 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using EloBuddy;
+using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
 
-namespace UnderratedAIO.Helpers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace UnderratedAIO.Helpers
 {
     public class DrawHelper
     {
         public static AIHeroClient player = ObjectManager.Player;
-        public static string[] HeroesWithPet = new string[] { "Shaco", "Mordekaiser" };
+        public static string[] HeroesWithPet = new string[] { "Shaco", "Mordekaiser", "Ivern" };
         public static Menu CommonMenu;
 
         public static void DrawCircle(Circle circle, float spellRange)
@@ -160,7 +162,7 @@ namespace UnderratedAIO.Helpers
         {
             try
             {
-                return CommonMenu.Item("DamPred" + (int)slot + championName).GetValue<bool>();
+                return CommonMenu.Item("DamPred" + (int) slot + championName).GetValue<bool>();
             }
             catch (Exception e)
             {

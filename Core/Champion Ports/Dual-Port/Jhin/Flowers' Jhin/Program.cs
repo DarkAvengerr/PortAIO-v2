@@ -18,6 +18,7 @@ using EloBuddy;
         public static Spell R;
         public static Menu Menu;
         public static AIHeroClient Me;
+        public static AIHeroClient rShotTarget;
         public static int SkinID;
         public static int LastPingT;
         public static int LastECast;
@@ -32,7 +33,7 @@ using EloBuddy;
             OnGameLoad();
         }
 
-        private static void OnGameLoad()
+        public static void OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName.ToLower() != "jhin")
             {
@@ -79,14 +80,16 @@ using EloBuddy;
                 HarassMenu.AddItem(new MenuItem("HarassW", "Use W", true).SetValue(true));
                 HarassMenu.AddItem(new MenuItem("HarassWOnly", "Use W| Only Use to MarkTarget?", true).SetValue(true));
                 HarassMenu.AddItem(new MenuItem("HarassE", "Use E", true).SetValue(true));
-                HarassMenu.AddItem(new MenuItem("HarassMana", "When Player ManaPercent >= x%", true).SetValue(new Slider(60)));
+                HarassMenu.AddItem(
+                    new MenuItem("HarassMana", "When Player ManaPercent >= x%", true).SetValue(new Slider(60)));
             }
 
             var LaneClearMenu = Menu.AddSubMenu(new Menu("LaneClear", "LaneClear"));
             {
                 LaneClearMenu.AddItem(new MenuItem("LaneClearQ", "Use Q", true).SetValue(true));
                 LaneClearMenu.AddItem(new MenuItem("LaneClearW", "Use W", true).SetValue(true));
-                LaneClearMenu.AddItem(new MenuItem("LaneClearMana", "When Player ManaPercent >= x%", true).SetValue(new Slider(60)));
+                LaneClearMenu.AddItem(
+                    new MenuItem("LaneClearMana", "When Player ManaPercent >= x%", true).SetValue(new Slider(60)));
             }
 
             var JungleClearMenu = Menu.AddSubMenu(new Menu("JungleClear", "JungleClear"));
@@ -94,7 +97,15 @@ using EloBuddy;
                 JungleClearMenu.AddItem(new MenuItem("JungleClearQ", "Use Q", true).SetValue(true));
                 JungleClearMenu.AddItem(new MenuItem("JungleClearW", "Use W", true).SetValue(true));
                 JungleClearMenu.AddItem(new MenuItem("JungleClearE", "Use E", true).SetValue(true));
-                JungleClearMenu.AddItem(new MenuItem("JungleClearMana", "When Player ManaPercent >= x%", true).SetValue(new Slider(30)));
+                JungleClearMenu.AddItem(
+                    new MenuItem("JungleClearMana", "When Player ManaPercent >= x%", true).SetValue(new Slider(30)));
+            }
+
+            var LastHitMenu = Menu.AddSubMenu(new Menu("LastHit", "LastHit"));
+            {
+                LastHitMenu.AddItem(new MenuItem("LastHitQ", "Use Q", true).SetValue(true));
+                LastHitMenu.AddItem(
+                    new MenuItem("LastHitMana", "When Player ManaPercent >= x%", true).SetValue(new Slider(60)));
             }
 
             var KillStealMenu = Menu.AddSubMenu(new Menu("KillSteal", "KillSteal"));
@@ -106,11 +117,19 @@ using EloBuddy;
             var RMenu = Menu.AddSubMenu(new Menu("R Menu", "RMenu"));
             {
                 RMenu.AddItem(new MenuItem("RMenuAuto", "Auto R?", true).SetValue(true));
-                RMenu.AddItem(new MenuItem("RMenuSemi", "Semi R Key(One Press One Shot)", true).SetValue(new KeyBind('T', KeyBindType.Press)));
+                RMenu.AddItem(
+                    new MenuItem("RMenuSemi", "Semi R Key(One Press One Shot)", true).SetValue(new KeyBind('T',
+                        KeyBindType.Press)));
                 RMenu.AddItem(new MenuItem("RMenuCheck", "Use R| Check is Safe?", true).SetValue(true));
-                RMenu.AddItem(new MenuItem("RMenuMin", "Use R| Min Range >= x", true).SetValue(new Slider(1000, 500, 2500)));
-                RMenu.AddItem(new MenuItem("RMenuMax", "Use R| Man Range <= x", true).SetValue(new Slider(3000, 1500, 3500)));
-                RMenu.AddItem(new MenuItem("RMenuKill", "Use R| Min Shot Can Kill >= x", true).SetValue(new Slider(3, 1, 4)));
+                RMenu.AddItem(
+                    new MenuItem("RMenuMin", "Use R| Min Range >= x", true).SetValue(new Slider(1000, 500, 2500)));
+                RMenu.AddItem(
+                    new MenuItem("RMenuMax", "Use R| Man Range <= x", true).SetValue(new Slider(3000, 1500, 3500)));
+                RMenu.AddItem(
+                    new MenuItem("RMenuKill", "Use R| Min Shot Can Kill >= x", true).SetValue(new Slider(3, 1, 4)));
+                RMenu.AddItem(new MenuItem("PingKill", "Auto Ping Kill Target", true).SetValue(true));
+                RMenu.AddItem(new MenuItem("NormalPingKill", "Normal Ping?", true).SetValue(true));
+                RMenu.AddItem(new MenuItem("NotificationKill", "Notification Kill Target", true).SetValue(true));
             }
 
             var MiscMenu = Menu.AddSubMenu(new Menu("Misc", "Misc"));
@@ -119,9 +138,6 @@ using EloBuddy;
                 MiscMenu.AddItem(new MenuItem("AutoE", "Auto E| When target Cant Move", true).SetValue(true));
                 MiscMenu.AddItem(new MenuItem("GapW", "Anti GapCloser W| When target HavePassive", true).SetValue(true));
                 MiscMenu.AddItem(new MenuItem("GapE", "Anti GapCloser E", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("PingKill", "Auto Ping Kill Target", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("NormalPingKill", "Normal Ping?", true).SetValue(true));
-                MiscMenu.AddItem(new MenuItem("NotificationKill", "Notification Kill Target", true).SetValue(true));
             }
 
             var PredMenu = Menu.AddSubMenu(new Menu("Prediction", "Prediction"));
@@ -134,17 +150,14 @@ using EloBuddy;
                 PredMenu.AddItem(
                     new MenuItem("SetHitchance", "HitChance: ", true).SetValue(
                         new StringList(new[] {"VeryHigh", "High", "Medium", "Low"})));
-                PredMenu.AddItem(new MenuItem("AboutCommonPred", "Common Prediction -> LeagueSharp.Commmon Prediction"));
-                PredMenu.AddItem(new MenuItem("AboutOKTWPred", "OKTW Prediction -> Sebby' Prediction"));
-                PredMenu.AddItem(new MenuItem("AboutSDKPred", "SDK Prediction -> LeagueSharp.SDKEx Prediction"));
-                PredMenu.AddItem(new MenuItem("AboutSPred", "SPrediction -> Shine' Prediction"));
-                PredMenu.AddItem(new MenuItem("AboutxcsoftAIOPred", "xcsoft AIO Prediction -> xcsoft ALL In One Prediction"));
             }
 
             var SkinMenu = Menu.AddSubMenu(new Menu("SkinChance", "SkinChance"));
             {
                 SkinMenu.AddItem(new MenuItem("EnableSkin", "Enabled", true).SetValue(false)).ValueChanged += EnbaleSkin;
-                SkinMenu.AddItem(new MenuItem("SelectSkin", "Select Skin: ", true).SetValue(new StringList(new[] { "Classic", "High Noon Jhin" })));
+                SkinMenu.AddItem(
+                    new MenuItem("SelectSkin", "Select Skin: ", true).SetValue(
+                        new StringList(new[] {"Classic", "High Noon Jhin"})));
             }
 
             var DrawMenu = Menu.AddSubMenu(new Menu("Drawings", "Drawings"));
@@ -179,11 +192,11 @@ using EloBuddy;
         private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs Args)
         {
             if (!sender.IsMe)
+            {
                 return;
+            }
 
-            var spellslot = Me.GetSpellSlot(Args.SData.Name);
-
-            if (spellslot == SpellSlot.E)
+            if (Me.GetSpellSlot(Args.SData.Name) == SpellSlot.E)
             {
                 LastECast = Utils.TickCount;
             }
@@ -210,7 +223,8 @@ using EloBuddy;
             if (target.IsValidTarget(E.Range) &&
                 (gapcloser.End.DistanceToPlayer() <= 300 || target.DistanceToPlayer() <= 300))
             {
-                if (Menu.Item("GapE", true).GetValue<bool>() && E.IsReady() && Utils.TickCount - LastECast > 2500 && !IsAttack)
+                if (Menu.Item("GapE", true).GetValue<bool>() && E.IsReady() && Utils.TickCount - LastECast > 2500 &&
+                    !IsAttack)
                 {
                     E.CastTo(target);
                 }
@@ -249,8 +263,9 @@ using EloBuddy;
                                 Q.CastOnUnit(target, true);
                             }
 
-                            if (Menu.Item("ComboW", true).GetValue<bool>() && Menu.Item("ComboWAA", true).GetValue<bool>() &&
-                                W.IsReady() && target.IsValidTarget(W.Range) && target.HasBuff("jhinespotteddebuff"))
+                            if (Menu.Item("ComboW", true).GetValue<bool>() 
+                                && Menu.Item("ComboWAA", true).GetValue<bool>() && W.IsReady() && 
+                                target.IsValidTarget(W.Range) && target.HasBuff("jhinespotteddebuff"))
                             {
                                 W.CastTo(target);
                             }
@@ -282,20 +297,6 @@ using EloBuddy;
                         }
                     }
                     break;
-                case Orbwalking.OrbwalkingMode.LastHit:
-                    break;
-                case Orbwalking.OrbwalkingMode.LaneClear:
-                    break;
-                case Orbwalking.OrbwalkingMode.Freeze:
-                    break;
-                case Orbwalking.OrbwalkingMode.CustomMode:
-                    break;
-                case Orbwalking.OrbwalkingMode.None:
-                    break;
-                case Orbwalking.OrbwalkingMode.Flee:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -307,8 +308,9 @@ using EloBuddy;
             }
 
             foreach (var enemy in HeroManager.Enemies.Where(h => R.IsReady() && h.IsValidTarget(R.Range) &&
-            Me.GetSpellDamage(h, SpellSlot.R) * Menu.Item("RMenuKill", true).GetValue<Slider>().Value >
-            h.Health + h.HPRegenRate * 3))
+                                                                 Me.GetSpellDamage(h, SpellSlot.R)*
+                                                                 Menu.Item("RMenuKill", true).GetValue<Slider>().Value >
+                                                                 h.Health + h.HPRegenRate*3))
             {
                 if (Menu.Item("PingKill", true).GetValue<bool>())
                 {
@@ -317,37 +319,36 @@ using EloBuddy;
 
                 if (Menu.Item("NotificationKill", true).GetValue<bool>() && Utils.TickCount - LastShowNoit > 10000)
                 {
-                    Notifications.AddNotification(new Notification("R Kill: " + enemy.ChampionName + "!", 3000, true).SetTextColor(Color.FromArgb(255, 0, 0)));
+                    Notifications.AddNotification(
+                        new Notification("R Kill: " + enemy.ChampionName + "!", 3000, true).SetTextColor(
+                            Color.FromArgb(255, 0, 0)));
                     LastShowNoit = Utils.TickCount;
                 }
             }
+
+            RLogic();
 
             if (R.Instance.Name == "JhinRShot")
             {
                 Orbwalker.SetAttack(false);
                 Orbwalker.SetMovement(false);
-            }
-            else //if (R.Instance.Name == "JhinR")
-            {
-                Orbwalker.SetAttack(true);
-                Orbwalker.SetMovement(true);
+                return;
             }
 
-            RLogic();
+            Orbwalker.SetAttack(true);
+            Orbwalker.SetMovement(true);
+
             KillSteal();
             Auto();
 
             if (Menu.Item("EnableSkin", true).GetValue<bool>())
             {
-                //ObjectManager.//Player.SetSkin(ObjectManager.Player.ChampionName, Menu.Item("SelectSkin", true).GetValue<StringList>().SelectedIndex);
             }
 
             switch (Orbwalker.ActiveMode)
             {
                 case Orbwalking.OrbwalkingMode.Combo:
                     Combo();
-                    break;
-                case Orbwalking.OrbwalkingMode.LastHit:
                     break;
                 case Orbwalking.OrbwalkingMode.Mixed:
                     Harass();
@@ -356,16 +357,57 @@ using EloBuddy;
                     LaneClear();
                     JungleClear();
                     break;
-                case Orbwalking.OrbwalkingMode.Freeze:
+                case Orbwalking.OrbwalkingMode.LastHit:
+                    LastHit();
                     break;
-                case Orbwalking.OrbwalkingMode.CustomMode:
-                    break;
-                case Orbwalking.OrbwalkingMode.None:
-                    break;
-                case Orbwalking.OrbwalkingMode.Flee:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private static void LastHit()
+        {
+            if (Me.ManaPercent >= Menu.Item("LastHitMana", true).GetValue<Slider>().Value)
+            {
+                if (Menu.Item("LastHitQ", true).GetValue<bool>() && Q.IsReady())
+                {
+                    if (Me.CountEnemiesInRange(Q.Range + 300) > 0)
+                    {
+                        var target = TargetSelector.GetTarget(Q.Range + 300, TargetSelector.DamageType.Physical);
+
+                        if (CheckTarget(target, Q.Range + 300))
+                        {
+                            if (Me.HasBuff("JhinPassiveReload") ||
+                                (!Me.HasBuff("JhinPassiveReload") &&
+                                 Me.CountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(Me)) == 0))
+                            {
+                                var qPred = LeagueSharp.Common.Prediction.GetPrediction(target, 0.25f);
+                                var bestQMinion =
+                                    MinionManager.GetMinions(qPred.CastPosition, 300)
+                                        .Where(x => x.IsValidTarget(Q.Range))
+                                        .OrderBy(x => x.Distance(target))
+                                        .ThenBy(x => x.Health)
+                                        .FirstOrDefault();
+
+                                if (bestQMinion != null)
+                                {
+                                    Q.CastOnUnit(bestQMinion, true);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var minion =
+                            MinionManager.GetMinions(Me.Position, Q.Range)
+                                .Where(x => x.IsValidTarget(Q.Range) && HealthPrediction.GetHealthPrediction(x, 250) > 0)
+                                .OrderBy(x => x.Health)
+                                .FirstOrDefault(x => x.Health < Q.GetDamage(x));
+
+                        if (minion != null)
+                        {
+                            Q.CastOnUnit(minion, true);
+                        }
+                    }
+                }
             }
         }
 
@@ -390,7 +432,11 @@ using EloBuddy;
                 {
                     if (Menu.Item("RMenuSemi", true).GetValue<KeyBind>().Active)
                     {
-                        R.Cast(R.GetPrediction(target).UnitPosition, true);
+                        if (R.Cast(R.GetPrediction(target).UnitPosition))
+                        {
+                            rShotTarget = target;
+                            return;
+                        }
                     }
 
                     if (!Menu.Item("RMenuAuto", true).GetValue<bool>())
@@ -413,34 +459,46 @@ using EloBuddy;
                         return;
                     }
 
-                    if (target.Health > Me.GetSpellDamage(target, SpellSlot.R) * Menu.Item("RMenuKill", true).GetValue<Slider>().Value)
+                    if (target.Health >
+                        Me.GetSpellDamage(target, SpellSlot.R)*Menu.Item("RMenuKill", true).GetValue<Slider>().Value)
                     {
                         return;
                     }
 
-                    R.Cast(R.GetPrediction(target).UnitPosition, true);
+                    if (SebbyLib.OktwCommon.IsSpellHeroCollision(target, R))
+                    {
+                        return;
+                    }
+
+                    if (R.Cast(R.GetPrediction(target).UnitPosition))
+                    {
+                        rShotTarget = target;
+                        return;
+                    }
                 }
 
                 if (R.Instance.Name == "JhinRShot")
                 {
-                    foreach (var t in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && InRCone(x)))
+                    if (rShotTarget != null && rShotTarget.IsValidTarget(R.Range))
                     {
-                        if (!InRCone(t))
+                        if (!InRCone(rShotTarget))
                         {
                             return;
                         }
 
                         if (Menu.Item("RMenuSemi", true).GetValue<KeyBind>().Active)
                         {
-                            AutoUse(t);
-                            R.Cast(R.GetPrediction(t).UnitPosition, true);
+                            AutoUse(rShotTarget);
+                            R.CastTo(rShotTarget);
+                            return;
                         }
 
                         if (Menu.Item("ComboR", true).GetValue<bool>() &&
                             Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                         {
-                            AutoUse(t);
-                            R.Cast(R.GetPrediction(t).UnitPosition, true);
+                            AutoUse(rShotTarget);
+                            R.CastTo(rShotTarget);
+                            return;
                         }
 
                         if (!Menu.Item("RMenuAuto", true).GetValue<bool>())
@@ -448,8 +506,46 @@ using EloBuddy;
                             return;
                         }
 
-                        AutoUse(t);
-                        R.Cast(R.GetPrediction(t).UnitPosition, true);
+                        AutoUse(rShotTarget);
+                        R.CastTo(rShotTarget);
+
+                    }
+                    else
+                    {
+                        foreach (
+                            var t in
+                            HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && InRCone(x))
+                                .OrderBy(x => x.Health))
+                        {
+                            if (!InRCone(t))
+                            {
+                                return;
+                            }
+
+                            if (Menu.Item("RMenuSemi", true).GetValue<KeyBind>().Active)
+                            {
+                                AutoUse(t);
+                                R.Cast(R.GetPrediction(t).UnitPosition, true);
+                                return;
+                            }
+
+                            if (Menu.Item("ComboR", true).GetValue<bool>() &&
+                                Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                            {
+                                AutoUse(t);
+                                R.Cast(R.GetPrediction(t).UnitPosition, true);
+                                return;
+                            }
+
+                            if (!Menu.Item("RMenuAuto", true).GetValue<bool>())
+                            {
+                                return;
+                            }
+
+                            AutoUse(t);
+                            R.Cast(R.GetPrediction(t).UnitPosition, true);
+                            return;
+                        }
                     }
                 }
             }
@@ -503,23 +599,11 @@ using EloBuddy;
         private static void Combo()
         {
             if (R.Instance.Name == "JhinRShot")
+            {
                 return;
+            }
 
             var orbTarget = Orbwalker.GetTarget();
-
-            if (CheckTarget((Obj_AI_Base)orbTarget, Orbwalking.GetRealAutoAttackRange(Me)))
-            {
-                if (Menu.Item("ComboCutlass", true).GetValue<bool>() && Items.HasItem(3144) && Items.CanUseItem(3144))
-                {
-                    Items.UseItem(3144, (Obj_AI_Base)orbTarget);
-                }
-
-                if (Menu.Item("ComboBotrk", true).GetValue<bool>() && Items.HasItem(3153) && Items.CanUseItem(3153) &&
-                    (orbTarget.HealthPercent < 80 || Me.HealthPercent < 80))
-                {
-                    Items.UseItem(3153, (Obj_AI_Base)orbTarget);
-                }
-            }
 
             var wTarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
 
@@ -538,17 +622,40 @@ using EloBuddy;
                 }
             }
 
-            var qTarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
-
-            if (Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady() &&
-                CheckTarget(qTarget, Q.Range) && !Orbwalking.CanAttack())
+            if (Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady())
             {
-                Q.CastOnUnit(qTarget, true);
+                var target = TargetSelector.GetTarget(Q.Range + 300, TargetSelector.DamageType.Physical);
+                var qTarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
+
+                if (CheckTarget(qTarget, Q.Range) && !Orbwalking.CanAttack())
+                {
+                    Q.CastOnUnit(qTarget, true);
+                }
+                else if (CheckTarget(target, Q.Range + 300))
+                {
+                    if (Me.HasBuff("JhinPassiveReload") ||
+                        (!Me.HasBuff("JhinPassiveReload") &&
+                         Me.CountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(Me)) == 0))
+                    {
+                        var qPred = LeagueSharp.Common.Prediction.GetPrediction(target, 0.25f);
+                        var bestQMinion =
+                            MinionManager.GetMinions(qPred.CastPosition, 300)
+                                .Where(x => x.IsValidTarget(Q.Range))
+                                .OrderBy(x => x.Distance(target))
+                                .ThenBy(x => x.Health)
+                                .FirstOrDefault();
+
+                        if (bestQMinion != null)
+                        {
+                            Q.CastOnUnit(bestQMinion, true);
+                        }
+                    }
+                }
             }
 
             var eTarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
 
-            if (Menu.Item("ComboE", true).GetValue<bool>() && E.IsReady() 
+            if (Menu.Item("ComboE", true).GetValue<bool>() && E.IsReady()
                 && CheckTarget(eTarget, E.Range) && Utils.TickCount - LastECast > 2500 && !IsAttack)
             {
                 if (!eTarget.CanMove())
@@ -563,13 +670,38 @@ using EloBuddy;
                     }
                 }
             }
-
         }
 
         private static void Harass()
         {
             if (Me.ManaPercent >= Menu.Item("HarassMana", true).GetValue<Slider>().Value)
             {
+                if (Menu.Item("HarassQ", true).GetValue<bool>() && Q.IsReady())
+                {
+                    var target = TargetSelector.GetTarget(Q.Range + 300, TargetSelector.DamageType.Physical);
+
+                    if (CheckTarget(target, Q.Range + 300))
+                    {
+                        if (Me.HasBuff("JhinPassiveReload") ||
+                            (!Me.HasBuff("JhinPassiveReload") &&
+                             Me.CountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(Me)) == 0))
+                        {
+                            var qPred = LeagueSharp.Common.Prediction.GetPrediction(target, 0.25f);
+                            var bestQMinion =
+                                MinionManager.GetMinions(qPred.CastPosition, 300)
+                                    .Where(x => x.IsValidTarget(Q.Range))
+                                    .OrderBy(x => x.Distance(target))
+                                    .ThenBy(x => x.Health)
+                                    .FirstOrDefault();
+
+                            if (bestQMinion != null)
+                            {
+                                Q.CastOnUnit(bestQMinion, true);
+                            }
+                        }
+                    }
+                }
+
                 var wTarget = TargetSelector.GetTarget(1500f, TargetSelector.DamageType.Physical);
 
                 if (Menu.Item("HarassW", true).GetValue<bool>() && W.IsReady() && CheckTarget(wTarget, W.Range))
@@ -605,10 +737,38 @@ using EloBuddy;
 
                 var minion = minions.MinOrDefault(x => x.Health);
 
-                if (Menu.Item("LaneClearQ", true).GetValue<bool>() && Q.IsReady() && minion != null &&
-                    minion.IsValidTarget(Q.Range) && minions.Count > 2)
+
+                if (Menu.Item("LaneClearQ", true).GetValue<bool>() && Q.IsReady())
                 {
-                    Q.Cast(minion, true);
+                    if (Me.CountEnemiesInRange(Q.Range + 300) > 0)
+                    {
+                        var target = TargetSelector.GetTarget(Q.Range + 300, TargetSelector.DamageType.Physical);
+
+                        if (CheckTarget(target, Q.Range + 300))
+                        {
+                            if (Me.HasBuff("JhinPassiveReload") ||
+                                (!Me.HasBuff("JhinPassiveReload") &&
+                                 Me.CountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(Me)) == 0))
+                            {
+                                var qPred = LeagueSharp.Common.Prediction.GetPrediction(target, 0.25f);
+                                var bestQMinion =
+                                    MinionManager.GetMinions(qPred.CastPosition, 300)
+                                        .Where(x => x.IsValidTarget(Q.Range))
+                                        .OrderBy(x => x.Distance(target))
+                                        .ThenBy(x => x.Health)
+                                        .FirstOrDefault();
+
+                                if (bestQMinion != null)
+                                {
+                                    Q.CastOnUnit(bestQMinion, true);
+                                }
+                            }
+                        }
+                    }
+                    else if (minion != null && minion.IsValidTarget(Q.Range) && minions.Count > 2)
+                    {
+                        Q.Cast(minion, true);
+                    }
                 }
 
                 if (Menu.Item("LaneClearW", true).GetValue<bool>() && W.IsReady() && minion != null)

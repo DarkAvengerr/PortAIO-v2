@@ -20,7 +20,7 @@ using EloBuddy;
             OnLoad();
         }
 
-        private static void OnLoad()
+        public static void OnLoad()
         {
             if (ObjectManager.Player.ChampionName != "Riven")
             {

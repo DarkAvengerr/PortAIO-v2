@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Drawing;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
 
-namespace UnderratedAIO.Helpers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace UnderratedAIO.Helpers
 {
     internal class FpsBalancer
     {

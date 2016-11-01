@@ -54,16 +54,10 @@ using EloBuddy;
 
                 Player.GetPath(wallPoint);
 
-                //if (wallPoint.Distance(Player.Position) > 100)
-                //{
-                //    EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, wallPoint);
-                //}
-
                 if (!Spells.E.IsReady() || wallPoint.Distance(Player.Position) > Spells.E.Range || !wallPoint.IsValid())
                 {
                     return;
                 }
-
 
                 Spells.E.Cast(wallPoint);
 

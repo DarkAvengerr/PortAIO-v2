@@ -35,6 +35,8 @@ using EloBuddy;
               MinionTypes.All,
               MinionTeam.Neutral).FirstOrDefault();
 
+            var isMoving = (target != null && target.IsMoving) || (mob != null && mob.IsMoving);
+
             switch (args.Animation)
             {
                 case "Spell1a":
@@ -42,15 +44,15 @@ using EloBuddy;
                     Qstack = 2;
                     if (SafeReset())
                     {
-                        if ((target != null && target.IsMoving) || (mob != null && mob.IsMoving))
+                        if (isMoving)
                         {
-                            LeagueSharp.Common.Utility.DelayAction.Add((int)(MenuConfig.Qd * 1.125), Reset);
-                            Console.WriteLine("Q1 Slow Delay: " + (MenuConfig.Qd * 1.125));
+                            LeagueSharp.Common.Utility.DelayAction.Add((int)((MenuConfig.Qd + Ping)* 1.133), Reset);
+                            Console.WriteLine("Q1 Slow Delay: " + (MenuConfig.Qd + Ping) * 1.133);
                         }
                         else
                         {
-                            LeagueSharp.Common.Utility.DelayAction.Add(MenuConfig.Qd, Reset);
-                            Console.WriteLine("Q1 Fast Delay: " + MenuConfig.Qd);
+                            LeagueSharp.Common.Utility.DelayAction.Add(MenuConfig.Qd + Ping, Reset);
+                            Console.WriteLine("Q1 Fast Delay: " + (MenuConfig.Qd + Ping));
                         }
                     }
 
@@ -60,15 +62,15 @@ using EloBuddy;
                     Qstack = 3;
                     if (SafeReset())
                     {
-                        if ((target != null && target.IsMoving) || (mob != null && mob.IsMoving))
+                        if (isMoving)
                         {
-                            LeagueSharp.Common.Utility.DelayAction.Add((int)(MenuConfig.Q2D * 1.125), Reset);
-                            Console.WriteLine("Q2 Slow Delay: " + MenuConfig.Q2D * 1.125);
+                            LeagueSharp.Common.Utility.DelayAction.Add((int)((MenuConfig.Q2D + Ping)* 1.133), Reset);
+                            Console.WriteLine("Q2 Slow Delay: " + (MenuConfig.Q2D + Ping)* 1.133);
                         }
                         else
                         {
-                            LeagueSharp.Common.Utility.DelayAction.Add(MenuConfig.Q2D, Reset);
-                            Console.WriteLine("Q2 Fast Delay: " + MenuConfig.Q2D);
+                            LeagueSharp.Common.Utility.DelayAction.Add(MenuConfig.Q2D + Ping, Reset);
+                            Console.WriteLine("Q2 Fast Delay: " + (Ping + MenuConfig.Q2D));
                         }
                     }
 
@@ -78,17 +80,17 @@ using EloBuddy;
                     Qstack = 1;
                     if (SafeReset())
                     {
-                        if ((target != null && target.IsMoving) || (mob != null && mob.IsMoving))
+                        if (isMoving)
                         {
-                            LeagueSharp.Common.Utility.DelayAction.Add((int)(MenuConfig.Qld * 1.125), Reset);
-                            Console.WriteLine("Q3 Slow Delay: " + MenuConfig.Qld * 1.125);
+                            LeagueSharp.Common.Utility.DelayAction.Add((int)((MenuConfig.Qld + Ping)* 1.133), Reset);
+                            Console.WriteLine("Q3 Slow Delay: " + (MenuConfig.Qld + Ping)* 1.133);
                             Console.WriteLine(">----END----<");
 
                         }
                         else
                         {
-                            LeagueSharp.Common.Utility.DelayAction.Add(MenuConfig.Qld, Reset);
-                            Console.WriteLine("Q3 Fast Delay: " + MenuConfig.Qld);
+                            LeagueSharp.Common.Utility.DelayAction.Add(MenuConfig.Qld + Ping, Reset);
+                            Console.WriteLine("Q3 Fast Delay: " + (MenuConfig.Qld + Ping));
                             Console.WriteLine(">----END----<");
                         }
                     }
@@ -103,7 +105,9 @@ using EloBuddy;
 
         private static void Emotes()
         {
-            if (ObjectManager.Player.HasBuffOfType(BuffType.Stun) || ObjectManager.Player.HasBuffOfType(BuffType.Snare))
+            if (ObjectManager.Player.HasBuffOfType(BuffType.Stun) 
+                || ObjectManager.Player.HasBuffOfType(BuffType.Snare)
+                || ObjectManager.Player.HasBuffOfType(BuffType.Knockback))
             {
                 return;
             }
@@ -127,29 +131,18 @@ using EloBuddy;
             }
         }
 
-        private static int AtkSpeed => (int)(1400 / Player.AttackSpeedMod * 3.75);
+       // private static int AtkSpeed => (int)(1400 / Player.AttackSpeedMod * 3.75);
 
-        private static int Ping()
-        {
-            int ping;
-
-            if (!MenuConfig.CancelPing)
-            {
-                ping = 0;
-            }
-            else
-            {
-                ping = Game.Ping / 2;
-            }
-
-            return ping;
-        }
-
+        private static int Ping => MenuConfig.CancelPing 
+                                   ? Game.Ping / 2
+                                   : 0;
+        
         private static void Reset()
         {
             Emotes();
             Orbwalking.ResetAutoAttackTimer();
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+            EloBuddy.Player.IssueOrder(GameObjectOrder.AttackTo, ObjectManager.Player.Position.Extend(ObjectManager.Player.Direction, 400));
         }
 
         private static bool SafeReset()
