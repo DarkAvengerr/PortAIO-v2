@@ -1072,6 +1072,9 @@ namespace PortAIO
                         case 28: // ReformedAIO
                             ReformedAIO.Program.Main();
                             break;
+                        case 29: // HandicAPEzreal
+                            HandicapEzreal.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.FiddleSticks:

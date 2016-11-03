@@ -866,6 +866,16 @@
     <Compile Include="Core\Champion Ports\Dual-Port\Brand\Flowers%27 Brand\Prediction\SDKPrediction.cs" />
     <Compile Include="Core\Champion Ports\Dual-Port\Brand\Flowers%27 Brand\Prediction\xcsoftPrediction.cs" />
     <Compile Include="Core\Champion Ports\Dual-Port\Brand\Flowers%27 Brand\Program.cs" />
+    <Compile Include="Core\Champion Ports\Dual-Port\Ezreal\HandicAPEzreal\Components\MyMenu.cs" />
+    <Compile Include="Core\Champion Ports\Dual-Port\Ezreal\HandicAPEzreal\Components\SpellManager.cs" />
+    <Compile Include="Core\Champion Ports\Dual-Port\Ezreal\HandicAPEzreal\Components\Spells\ISpell.cs" />
+    <Compile Include="Core\Champion Ports\Dual-Port\Ezreal\HandicAPEzreal\Components\Spells\SpellQ.cs" />
+    <Compile Include="Core\Champion Ports\Dual-Port\Ezreal\HandicAPEzreal\Components\Spells\SpellR.cs" />
+    <Compile Include="Core\Champion Ports\Dual-Port\Ezreal\HandicAPEzreal\Components\Spells\SpellW.cs" />
+    <Compile Include="Core\Champion Ports\Dual-Port\Ezreal\HandicAPEzreal\Enumerations\LoggingEntryType.cs" />
+    <Compile Include="Core\Champion Ports\Dual-Port\Ezreal\HandicAPEzreal\Program.cs" />
+    <Compile Include="Core\Champion Ports\Dual-Port\Ezreal\HandicAPEzreal\Utils\Logging.cs" />
+    <Compile Include="Core\Champion Ports\Dual-Port\Ezreal\HandicAPEzreal\Utils\Misc.cs" />
     <Compile Include="Core\Champion Ports\Dual-Port\Jhin\Flowers%27 Jhin\Common\Common.cs" />
     <Compile Include="Core\Champion Ports\Dual-Port\Jhin\Flowers%27 Jhin\Common\HpBarDraw.cs" />
     <Compile Include="Core\Champion Ports\Dual-Port\Jhin\Flowers%27 Jhin\Common\YasuoWindWall.cs" />
