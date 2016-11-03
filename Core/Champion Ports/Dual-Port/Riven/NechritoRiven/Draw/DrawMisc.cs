@@ -12,11 +12,9 @@ using EloBuddy;
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using Menus;
-
     #endregion
 
-    internal class DrawRange : Core
+    internal class DrawMisc : Core
     {
         #region Public Methods and Operators
 
@@ -37,7 +35,7 @@ using EloBuddy;
                         Spells.Q.IsReady()
                         ? Color.DodgerBlue
                         : Color.DarkSlateGray,
-                        5,
+                        3,
                         true);
                 }
                 else
@@ -47,21 +45,18 @@ using EloBuddy;
                         Player.AttackRange,
                         Spells.Q.IsReady() 
                         ? Color.LightBlue 
-                        : Color.DarkSlateGray);
+                        : Color.DarkSlateGray,
+                        3);
                 }
             }
 
-            if (MenuConfig.DrawBt && Spells.Flash != SpellSlot.Unknown)
+            if (MenuConfig.DrawBt && Spells.Flash != SpellSlot.Unknown && Spells.Flash.IsReady())
             {
                 Render.Circle.DrawCircle(
-                    Player.Position,
-                    425 + Spells.W.Range,
-                    Spells.R.IsReady() 
-                    && Spells.Flash.IsReady()
-                    ? Color.Orange
-                    : Color.DarkSlateGray,
-                    5,
-                    true);
+                     Player.Position,
+                     Player.AttackRange + 625,
+                     Color.Orange,
+                    3);
             }
 
             if (MenuConfig.DrawFh)
@@ -71,7 +66,8 @@ using EloBuddy;
                     450 + Player.AttackRange + 70,
                     Spells.E.IsReady() && Spells.Q.IsReady()
                     ? Color.LightBlue 
-                    : Color.DarkSlateGray);
+                    : Color.DarkSlateGray,
+                    3);
             }
 
             if (MenuConfig.DrawHs)
@@ -81,7 +77,8 @@ using EloBuddy;
                     400,
                     Spells.Q.IsReady() && Spells.W.IsReady()
                     ? Color.LightBlue 
-                    : Color.DarkSlateGray);
+                    : Color.DarkSlateGray,
+                    3);
             }
 
             var pos = Drawing.WorldToScreen(Player.Position);
@@ -90,11 +87,13 @@ using EloBuddy;
             {
                 Drawing.DrawText(pos.X - 20, pos.Y + 20, Color.DodgerBlue, "Use R1  (     )");
 
-                Drawing.DrawText(
-                    pos.X + 43,
-                    pos.Y + 20,
-                    MenuConfig.AlwaysR ? Color.Yellow : Color.Red,
-                    MenuConfig.AlwaysR ? "On" : "Off");
+                Drawing.DrawText(pos.X + 43, pos.Y + 20, MenuConfig.AlwaysR 
+                     ? Color.Yellow
+                       : Color.Red,
+
+                    MenuConfig.AlwaysR 
+                     ? "On"
+                       : "Off");
             }
 
             if (!MenuConfig.ForceFlash)
@@ -104,7 +103,12 @@ using EloBuddy;
 
             Drawing.DrawText(pos.X - 20, pos.Y + 40, Color.DodgerBlue, "Use Flash  (     )");
 
-            Drawing.DrawText(pos.X + 64, pos.Y + 40, MenuConfig.AlwaysF ? Color.Yellow : Color.Red, MenuConfig.AlwaysF ? "On" : "Off");
+            Drawing.DrawText(pos.X + 64, pos.Y + 40, MenuConfig.AlwaysF 
+                ? Color.Yellow
+                : Color.Red,
+                MenuConfig.AlwaysF
+                ? "On"
+                : "Off");
         }
 
         #endregion

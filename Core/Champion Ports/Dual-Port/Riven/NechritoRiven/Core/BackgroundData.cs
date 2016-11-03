@@ -4,24 +4,23 @@ using EloBuddy;
 {
     #region
 
-    using System;
     using System.Collections.Generic;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-
-    using NechritoRiven.Menus;
 
     #endregion
 
     /// <summary>
     /// The core.
     /// </summary>
-    internal partial class Core
+    internal class BackgroundData : Core
     {
         #region Static Fields
 
         private static AttackableUnit Unit { get; set; }
+
+        private static bool doublecastQ;
 
         private static bool canQ;
 
@@ -30,7 +29,7 @@ using EloBuddy;
         /// <summary>
         ///     The e anti spell.
         /// </summary>
-        public static List<string> EAntiSpell = new List<string>
+        public static List<string> AntigapclosingSpells = new List<string>
                                                     {
                                                         "MonkeyKingSpinToWin", "KatarinaRTrigger", "HungeringStrike",
                                                         "TwitchEParticle", "RengarPassiveBuffDashAADummy",
@@ -41,12 +40,10 @@ using EloBuddy;
                                                         "vaynesilvereddebuff"
                                                     };
 
-        public static float LastQ;
-
         /// <summary>
         ///     The targeted anti spell.
         /// </summary>
-        public static List<string> TargetedAntiSpell = new List<string>
+        public static List<string> TargetedSpells = new List<string>
                                                            {
                                                                "MonkeyKingQAttack", "YasuoDash", "FizzPiercingStrike",
                                                                "RengarQ", "GarenQAttack", "GarenRPreCast",
@@ -57,14 +54,13 @@ using EloBuddy;
         /// <summary>
         ///     The w anti spell.
         /// </summary>
-        public static List<string> WAntiSpell = new List<string>
+        public static List<string> InterrupterSpell = new List<string>
                                                     {
                                                         "RenektonPreExecute", "TalonCutthroat", "IreliaEquilibriumStrike",
                                                         "XenZhaoThrust3", "KatarinaRTrigger", "KatarinaE",
-                                                        "MonkeyKingSpinToWin"
                                                     };
 
-        public static List<string> NoRList = new List<string>
+        public static List<string> InvulnerableList = new List<string>
                                                            {
                                                                "FioraW", "kindrednodeathbuff", "Undying Rage", "JudicatorIntervention"
                                                            };
@@ -75,30 +71,18 @@ using EloBuddy;
 
         private static int Item =>
              Items.CanUseItem(3077) && Items.HasItem(3077)
-           ? 3077
-           : Items.CanUseItem(3074) && Items.HasItem(3074)
-           ? 3074
-           : Items.CanUseItem(3748) && Items.HasItem(3748)
-           ? 3748 
-           : 0;
+            ? 3077
+             : Items.CanUseItem(3074) && Items.HasItem(3074)
+              ? 3074
+               : Items.CanUseItem(3748) && Items.HasItem(3748)
+                ? 3748 
+                 : 0;
 
         public static bool R1 { get; set; }
 
-        private static bool CanQ(AttackableUnit x)
-        {
-            return canQ && InRange(x);  
-        }
-
-        private static bool CanW(AttackableUnit x)
-        {
-            return canW && InRange(x);
-        }
-
         public static bool InRange(AttackableUnit x)
         {
-            return ObjectManager.Player.HasBuff("RivenFengShuiEngine")
-            ? Player.Distance(x) <= 330
-            : Player.Distance(x) <= 265;
+            return Player.Distance(x) <= ObjectManager.Player.AttackRange;
         }
         #endregion
 
@@ -135,13 +119,28 @@ using EloBuddy;
                 {
                     Spells.W.Cast();
                 }
+
+                if (doublecastQ && Spells.Q.IsReady() && Qstack == 1)
+                {
+                    var delay = Spells.R.IsReady() ? 240 : 175;
+
+                    LeagueSharp.Common.Utility.DelayAction.Add(delay, () => Spells.Q.Cast(Unit.Position));
+                }
             }
 
             if (!R1 || Spells.R.Instance.Name != IsFirstR)
             {
                 return;
             }
+
             Spells.R.Cast();
+        }
+
+        public static void DoubleCastQ(AttackableUnit x)
+        {
+            Unit = x;
+            doublecastQ = true;
+            LeagueSharp.Common.Utility.DelayAction.Add(300, () => doublecastQ = false);
         }
 
         public static void CastQ(AttackableUnit x)
@@ -161,11 +160,12 @@ using EloBuddy;
 
             Spells.W.Cast();
             LeagueSharp.Common.Utility.DelayAction.Add(10, () => Player.Spellbook.CastSpell(Spells.Flash, target.Position));
+            LeagueSharp.Common.Utility.DelayAction.Add(30, ()=> DoubleCastQ(target));
         }
 
         public static void CastW(Obj_AI_Base x)
         {
-            canW = Spells.W.IsReady() && InRange(x);
+            canW = Spells.W.IsReady() && InRange(x) && !x.HasBuff("FioraW");
             LeagueSharp.Common.Utility.DelayAction.Add(500, () => canW = false);
         }
 
@@ -187,11 +187,14 @@ using EloBuddy;
             if (argsName.Contains("RivenTriCleave"))
             {
                 canQ = false;
+                doublecastQ = false;
             }
 
             if (argsName.Contains("RivenMartyr"))
             {
                 canW = false;
+                doublecastQ = true;
+                LeagueSharp.Common.Utility.DelayAction.Add(300, () => doublecastQ = false);
             }
 
             if (argsName == IsFirstR)

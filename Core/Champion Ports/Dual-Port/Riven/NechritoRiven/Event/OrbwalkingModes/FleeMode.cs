@@ -4,15 +4,12 @@ using EloBuddy;
 {
     #region
 
-    using System;
     using System.Linq;
 
     using Core;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-
-    using Menus;
 
     #endregion
 
@@ -56,7 +53,7 @@ using EloBuddy;
             }
             else
             {
-                var enemy = HeroManager.Enemies.Where(target => InRange(target) && Spells.W.IsReady());
+                var enemy = HeroManager.Enemies.Where(target => BackgroundData.InRange(target) && Spells.W.IsReady());
 
                 var x = Player.Position.Extend(Game.CursorPos, 300);
 
@@ -66,7 +63,7 @@ using EloBuddy;
                 {
                     foreach (var target in targets)
                     {
-                        if (InRange(target))
+                        if (BackgroundData.InRange(target))
                         {
                             Spells.W.Cast();
                         }

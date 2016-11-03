@@ -1,15 +1,13 @@
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace NechritoRiven.Event
+ namespace NechritoRiven.Event.Interrupters_Etc
 {
     #region
-
-    using Core;
 
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using Menus;
+    using NechritoRiven.Core;
 
     #endregion
 

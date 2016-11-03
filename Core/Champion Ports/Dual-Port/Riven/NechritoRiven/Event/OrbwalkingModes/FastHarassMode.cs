@@ -18,17 +18,17 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(450 + Player.AttackRange + 70, TargetSelector.DamageType.Physical);
 
-            if (!Spells.E.IsReady())
+            if (!Spells.E.IsReady() || target == null)
             {
                 return;
             }
 
-            if (!InRange(target))
+            if (!BackgroundData.InRange(target))
             {
                 Spells.E.Cast(target.Position);
             }
 
-            LeagueSharp.Common.Utility.DelayAction.Add(170, () => CastQ(target));
+            LeagueSharp.Common.Utility.DelayAction.Add(170, () => BackgroundData.CastQ(target));
         }
 
         #endregion

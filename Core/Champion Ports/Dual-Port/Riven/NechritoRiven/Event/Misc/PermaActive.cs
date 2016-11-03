@@ -1,19 +1,16 @@
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace NechritoRiven.Event
+ namespace NechritoRiven.Event.Misc
 {
     #region
 
     using System;
 
-    using Core;
-
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using Menus;
-
-    using OrbwalkingModes;
+    using NechritoRiven.Core;
+    using NechritoRiven.Event.OrbwalkingModes;
 
     using Orbwalking = Orbwalking;
 
@@ -40,7 +37,7 @@ using EloBuddy;
                 return;
             }
 
-            if (Utils.GameTimeTickCount - LastQ >= 3600 + Game.Ping / 2
+            if (Utils.GameTimeTickCount - LastQ >= 3650 - Game.Ping
                 && MenuConfig.KeepQ
                 && !Player.InFountain()
                 && !Player.HasBuff("Recall")
@@ -51,7 +48,7 @@ using EloBuddy;
 
             QMove();
 
-            ForceSkill();
+            BackgroundData.ForceSkill();
 
             switch (Orbwalker.ActiveMode)
             {

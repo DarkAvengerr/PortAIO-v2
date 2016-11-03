@@ -11,7 +11,7 @@ using EloBuddy;
     /// <summary>
     /// The core.
     /// </summary>
-    internal partial class Core
+    internal class Core
     {
         #region Constants
 
@@ -26,6 +26,8 @@ using EloBuddy;
         public static Orbwalking.Orbwalker Orbwalker;
 
         public static int Qstack = 1;
+
+        public static float LastQ;
 
         #endregion
 

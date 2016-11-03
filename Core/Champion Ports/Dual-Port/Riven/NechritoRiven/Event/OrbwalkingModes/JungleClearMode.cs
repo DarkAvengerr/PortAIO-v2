@@ -8,8 +8,6 @@ using EloBuddy;
 
     using LeagueSharp.Common;
 
-    using Menus;
-
     #endregion
 
     internal class JungleClearMode : Core

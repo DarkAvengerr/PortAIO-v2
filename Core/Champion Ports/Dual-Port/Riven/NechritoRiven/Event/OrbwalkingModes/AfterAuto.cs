@@ -4,15 +4,12 @@ using EloBuddy;
 {
     #region
 
-    using System;
     using System.Linq;
 
     using Core;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-
-    using Menus;
 
     using Orbwalking = Orbwalking;
 
@@ -46,7 +43,7 @@ using EloBuddy;
                     if (Spells.Q.IsReady())
                     {
                         Usables.CastYoumoo();
-                        CastQ(target);
+                        BackgroundData.CastQ(target);
                     }
                 }
 
@@ -54,7 +51,7 @@ using EloBuddy;
                 {
                     if (Qstack == 2)
                     {
-                        CastQ(target);
+                        BackgroundData.CastQ(target);
                     }
                 }
 
@@ -62,12 +59,12 @@ using EloBuddy;
                 {
                     if (Spells.Q.IsReady())
                     {
-                        CastQ(target);
+                        BackgroundData.CastQ(target);
                     }
 
                     if (!Spells.Q.IsReady())
                     {
-                        CastW(target);
+                        BackgroundData.CastW(target);
                     }
                 }
 
@@ -75,7 +72,7 @@ using EloBuddy;
 
                 if (Spells.Q.IsReady())
                 {
-                    CastQ(target);
+                    BackgroundData.CastQ(target);
                 }
             }
 
@@ -102,7 +99,7 @@ using EloBuddy;
 
                     if (Spells.Q.IsReady())
                     {
-                        CastQ(m);
+                        BackgroundData.CastQ(m);
                     }
                 }
 
@@ -117,7 +114,7 @@ using EloBuddy;
                 {
                     if (MenuConfig.JnglQ && Spells.Q.IsReady())
                     {
-                        CastQ(m);
+                        BackgroundData.CastQ(m);
                     }
 
                     if (!Spells.W.IsReady() || !MenuConfig.JnglW || Player.HasBuff("RivenFeint"))
@@ -125,7 +122,7 @@ using EloBuddy;
                         return;
                     }
 
-                    CastW(m);
+                    BackgroundData.CastW(m);
                 }
             }
 

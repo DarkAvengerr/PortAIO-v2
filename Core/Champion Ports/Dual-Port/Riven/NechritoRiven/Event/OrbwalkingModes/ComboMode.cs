@@ -4,14 +4,9 @@ using EloBuddy;
 {
     #region
 
-    using System;
-
     using Core;
 
-    using LeagueSharp;
     using LeagueSharp.Common;
-
-    using Menus;
 
     #endregion
 
@@ -23,13 +18,13 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(Player.AttackRange + 310, TargetSelector.DamageType.Physical);
 
-            if (target == null || !target.IsValidTarget()) return;
+            if (target == null || !target.IsValidTarget(Player.AttackRange + 310)) return;
 
             if (Spells.R.IsReady() && Spells.R.Instance.Name == IsSecondR)
             {
                 var pred = Spells.R.GetPrediction(target, true, collisionable: new[] { CollisionableObjects.YasuoWall });
 
-                if (pred.Hitchance < HitChance.High || target.HasBuff(NoRList.ToString()))
+                if (pred.Hitchance < HitChance.High || target.HasBuff(BackgroundData.InvulnerableList.ToString()) || Player.Spellbook.IsAutoAttacking)
                 {
                     return;
                 }
@@ -44,7 +39,9 @@ using EloBuddy;
                 }
             }
 
-           if (Qstack == 3
+            #region Q3 Wall
+
+            if (Qstack == 3
                     && target.Distance(Player) >= Player.AttackRange
                     && target.Distance(Player) <= 650
                     && MenuConfig.Q3Wall
@@ -72,37 +69,37 @@ using EloBuddy;
                 {
                     Spells.Q.Cast(wallPoint);
                 }
-            }
+            } 
+            #endregion
+
            else if (Spells.E.IsReady()) 
             {
                 Spells.E.Cast(target.Position);
 
-                if (Spells.R.IsReady())
-                {
-                    return;
-                }
-
-                LeagueSharp.Common.Utility.DelayAction.Add(10, Usables.CastHydra);
-            }
-           else if (MenuConfig.AlwaysR
+                if (MenuConfig.AlwaysR
                 && Spells.R.IsReady()
                 && Spells.R.Instance.Name == IsFirstR)
-            {
-                Spells.R.Cast();
+                {
+                    Spells.R.Cast();
+                }
+                else
+                {
+                    LeagueSharp.Common.Utility.DelayAction.Add(10, Usables.CastHydra);
+                }
             }
-           else if (!Spells.W.IsReady() || target.HasBuff("FioraW"))
+           else if (!Spells.W.IsReady() || !BackgroundData.InRange(target))
             {
                 return;
             }
 
-            if (MenuConfig.NechLogic && (Qstack > 1 || !Spells.Q.IsReady()))
+            if (MenuConfig.Doublecast && Spells.Q.IsReady() && Qstack == 1)
             {
-                CastW(target);
+                BackgroundData.CastW(target);
+                BackgroundData.DoubleCastQ(target);
             }
-
-            if (!MenuConfig.NechLogic && (Player.HasBuff("RivenFeint") || target.IsFacing(Player)))
+            else
             {
-                CastW(target);
+                BackgroundData.CastW(target);
             }
         }
 

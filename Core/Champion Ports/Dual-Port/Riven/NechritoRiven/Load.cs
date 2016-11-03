@@ -10,13 +10,14 @@ using EloBuddy;
 
     using Draw;
 
-    using Event;
     using Event.OrbwalkingModes;
 
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using Menus;
+    using NechritoRiven.Event.Animation;
+    using NechritoRiven.Event.Interrupters_Etc;
+    using NechritoRiven.Event.Misc;
 
     #endregion
 
@@ -31,11 +32,11 @@ using EloBuddy;
 
             Obj_AI_Base.OnSpellCast += AfterAuto.OnSpellCast;
             Obj_AI_Base.OnProcessSpellCast += ProcessSpell.OnProcessSpell;
-            Obj_AI_Base.OnProcessSpellCast += Core.Core.OnCast;
+            Obj_AI_Base.OnProcessSpellCast += BackgroundData.OnCast;
             Obj_AI_Base.OnPlayAnimation += Animation.OnPlay;
 
             Drawing.OnEndScene += DrawDmg.DmgDraw;
-            Drawing.OnDraw += DrawRange.RangeDraw;
+            Drawing.OnDraw += DrawMisc.RangeDraw;
             Drawing.OnDraw += DrawWallSpot.WallDraw;
 
             Game.OnUpdate += KillSteal.Update;

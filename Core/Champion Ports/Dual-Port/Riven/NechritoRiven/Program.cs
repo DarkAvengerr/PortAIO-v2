@@ -27,7 +27,6 @@ using EloBuddy;
                 return;
             }
 
-            Console.WriteLine("Loading...");
             Load.LoadAssembly();
         }
 

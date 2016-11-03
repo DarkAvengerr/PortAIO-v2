@@ -1,16 +1,14 @@
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace NechritoRiven.Event
+ namespace NechritoRiven.Event.Misc
 {
     #region
 
     using System;
 
-    using Core;
-
     using LeagueSharp.Common;
 
-    using Menus;
+    using NechritoRiven.Core;
 
     #endregion
 
@@ -22,7 +20,7 @@ using EloBuddy;
         {
             var target = TargetSelector.GetTarget(Spells.R.Range, TargetSelector.DamageType.Physical);
 
-            if (target == null || target.HasBuff(NoRList.ToString()))
+            if (target == null || target.HasBuff(BackgroundData.InvulnerableList.ToString()))
             {
                 return;
             }
@@ -31,7 +29,7 @@ using EloBuddy;
                 && MenuConfig.KsW 
                 && target.Health <= Spells.W.GetDamage(target))
             {
-                CastW(target);
+                BackgroundData.CastW(target);
             }
 
             if (Spells.R.IsReady()
@@ -46,9 +44,9 @@ using EloBuddy;
                 }
             }
 
-            if (target.Health < Spells.Q.GetDamage(target) && Spells.Q.IsReady())
+            if (target.Health < Spells.Q.GetDamage(target) && Spells.Q.IsReady() && Qstack != 3)
             {
-                Spells.Q.Cast(target);
+                Spells.Q.Cast(target.Position);
             }
 
             if (!Spells.Ignite.IsReady() || !MenuConfig.Ignite)

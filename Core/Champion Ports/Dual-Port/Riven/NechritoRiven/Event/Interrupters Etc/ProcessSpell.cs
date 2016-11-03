@@ -1,13 +1,13 @@
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace NechritoRiven.Event
+ namespace NechritoRiven.Event.Interrupters_Etc
 {
     #region
 
-    using Core;
-
     using LeagueSharp;
     using LeagueSharp.Common;
+
+    using NechritoRiven.Core;
 
     #endregion
 
@@ -24,18 +24,18 @@ using EloBuddy;
 
             if (Spells.E.IsReady())
             {
-                if (EAntiSpell.Contains(args.SData.Name) || (TargetedAntiSpell.Contains(args.SData.Name) && args.Target.IsMe))
+                if (BackgroundData.AntigapclosingSpells.Contains(args.SData.Name) || (BackgroundData.TargetedSpells.Contains(args.SData.Name) && args.Target.IsMe))
                 {
-                    Spells.E.Cast(Game.CursorPos);
+                    LeagueSharp.Common.Utility.DelayAction.Add(90, ()=> Spells.E.Cast(Game.CursorPos));
                 }
             }
 
-            if (!WAntiSpell.Contains(args.SData.Name) || !Spells.W.IsReady() || !InRange(sender))
+            if (!BackgroundData.InterrupterSpell.Contains(args.SData.Name) || !Spells.W.IsReady() || !BackgroundData.InRange(sender))
             {
                 return;
             }
 
-            CastW(sender);
+            BackgroundData.CastW(sender);
         }
 
         #endregion

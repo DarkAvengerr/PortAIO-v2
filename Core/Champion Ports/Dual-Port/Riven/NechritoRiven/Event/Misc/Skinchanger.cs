@@ -1,13 +1,12 @@
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace NechritoRiven.Event
+ namespace NechritoRiven.Event.Misc
 {
     #region
 
     using System;
 
-    using Core;
-    using Menus;
+    using NechritoRiven.Core;
 
     #endregion
 

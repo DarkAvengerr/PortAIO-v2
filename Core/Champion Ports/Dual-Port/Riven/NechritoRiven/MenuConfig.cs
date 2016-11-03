@@ -1,21 +1,18 @@
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace NechritoRiven.Menus
+ namespace NechritoRiven
 {
     #region
 
     using System.Drawing;
 
-     using Core;
-
     using LeagueSharp.Common;
 
     using Color = SharpDX.Color;
-    using Orbwalking = Orbwalking;
 
     #endregion
 
-    internal class MenuConfig : Core
+    internal class MenuConfig : Core.Core
     {
         #region Constants
 
@@ -37,7 +34,7 @@ using EloBuddy;
 
         public static bool AnimSemi => config.Item("animSemi").GetValue<bool>();
 
-        public static bool laneQFast => config.Item("laneQFast").GetValue<bool>();
+        public static bool LaneQFast => config.Item("laneQFast").GetValue<bool>();
 
         public static bool AnimDance => config.Item("animDance").GetValue<bool>();
 
@@ -99,7 +96,9 @@ using EloBuddy;
 
         public static bool LaneW => config.Item("LaneW").GetValue<bool>();
 
-        public static bool NechLogic => config.Item("NechWLogic").GetValue<bool>();
+        public static bool Doublecast => config.Item("Doublecast").GetValue<bool>();
+
+        public static bool Flash => config.Item("FlashOften").GetValue<bool>();
 
         public static bool OverKillCheck => config.Item("OverKillCheck").GetValue<bool>();
 
@@ -136,9 +135,9 @@ using EloBuddy;
             config.AddSubMenu(orbwalker);
 
             var animation = new Menu("Animations", "Animation");
-            animation.AddItem(new MenuItem("QD", "Q1 Ping").SetValue(new Slider(240, 240, 340)));
-            animation.AddItem(new MenuItem("Q2D", "Q2 Ping").SetValue(new Slider(240, 240, 340)));
-            animation.AddItem(new MenuItem("Q3D", "Q3 Ping").SetValue(new Slider(320, 320, 475)));
+            animation.AddItem(new MenuItem("QD", "Q1 Ping").SetValue(new Slider(245, 245, 340)));
+            animation.AddItem(new MenuItem("Q2D", "Q2 Ping").SetValue(new Slider(245, 245, 340)));
+            animation.AddItem(new MenuItem("Q3D", "Q3 Ping").SetValue(new Slider(325, 325, 475)));
             animation.AddItem(new MenuItem("CancelPing", "Include Ping").SetValue(true));
             animation.AddItem(new MenuItem("animSemi", "Semi Manual").SetValue(true));
             animation.AddItem(new MenuItem("EmoteList", "Emotes").SetValue(new StringList(new[] { "Laugh", "Taunt", "Joke", "Dance", "None" }, 3)));
@@ -146,8 +145,9 @@ using EloBuddy;
 
             var combo = new Menu("Combo", "Combo");
             combo.AddItem(new MenuItem("Q3Wall", "Q3 Over Wall").SetValue(true));
+            combo.AddItem(new MenuItem("FlashOften", "Flash Burst Frequently").SetValue(false).SetTooltip("Will flash if killable, always."));
             combo.AddItem(new MenuItem("OverKillCheck", "R2 Max Damage").SetValue(true));
-            combo.AddItem(new MenuItem("NechWLogic", "Nechrito W Logic").SetValue(true)).SetTooltip("E AA Q AA W...");
+            combo.AddItem(new MenuItem("Doublecast", "Doublecast").SetValue(true)).SetTooltip("Fast Combo, less dmg");
             combo.AddItem(new MenuItem("AlwaysR", "Use R").SetValue(new KeyBind('G', KeyBindType.Toggle)));
             combo.AddItem(new MenuItem("AlwaysF", "Use Flash").SetValue(new KeyBind('L', KeyBindType.Toggle)));
             config.AddSubMenu(combo);

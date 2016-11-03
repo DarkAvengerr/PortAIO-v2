@@ -9,8 +9,6 @@ using EloBuddy;
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using Menus;
-
     #endregion
 
     internal class LaneclearMode : Core
@@ -45,14 +43,14 @@ using EloBuddy;
                     LeagueSharp.Common.Utility.DelayAction.Add(10, Usables.CastHydra);
                 }
 
-                if (!MenuConfig.laneQFast)
+                if (!MenuConfig.LaneQFast)
                 {
                     return;
                 }
 
                 if (m.Health < Spells.Q.GetDamage(m) && Spells.Q.IsReady())
                 {
-                    CastQ(m);
+                    BackgroundData.CastQ(m);
                 }
                 else if (!Spells.W.IsReady()
                          || !MenuConfig.LaneW
@@ -62,7 +60,7 @@ using EloBuddy;
                     return;
                 }
 
-                CastW(m);
+                BackgroundData.CastW(m);
             }
         }
 
