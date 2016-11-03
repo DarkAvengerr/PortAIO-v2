@@ -435,8 +435,8 @@ using EloBuddy;
             LeagueSharp.Common.Utility.DelayAction.Add(time, () =>
             {
                 EloBuddy.Player.DoEmote(Emote.Dance);
-                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Me.Position.Extend(Game.CursorPos, -10));
                 Orbwalking.ResetAutoAttackTimer();
+                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Me.Position.Extend(Game.CursorPos, +10));
             });
         }
 
@@ -474,9 +474,11 @@ using EloBuddy;
                     {
                         CastQ(target);
                     }
-                    else if (W.IsReady() && target.IsValidTarget(W.Range))
+                    else if (W.IsReady() && target.IsValidTarget(W.Range) && !target.HasBuffOfType(BuffType.SpellShield) &&
+                             (target.IsMelee || target.IsFacing(Me) || !Q.IsReady() || Me.HasBuff("RivenFeint") ||
+                              QStack != 0))
                     {
-                        W.Cast(target.Position);
+                        W.Cast();
                     }
                 }
             }
@@ -495,7 +497,7 @@ using EloBuddy;
                     }
                     else if (W.IsReady() && target.IsValidTarget(W.Range))
                     {
-                        W.Cast(target.Position);
+                        W.Cast();
                     }
                 }
             }
@@ -586,7 +588,7 @@ using EloBuddy;
                     else if (Menu.Item("JungleClearW", true).GetValue<bool>() && W.IsReady() &&
                              mob.IsValidTarget(W.Range))
                     {
-                        W.Cast(mob.Position);
+                        W.Cast();
                     }
                     else if (Menu.Item("JungleClearE", true).GetValue<bool>() && E.IsReady())
                     {
@@ -606,7 +608,9 @@ using EloBuddy;
         private static void OnUpdate(EventArgs args)
         {
             if (Me.IsDead)
+            {
                 return;
+            }
 
             Autobool();
             KeelQLogic();
@@ -722,19 +726,15 @@ using EloBuddy;
 
             if (target.IsValidTarget())
             {
-                if (Menu.Item("ComboIgnite", true).GetValue<bool>() && Ignite != SpellSlot.Unknown)
+                if (Menu.Item("ComboIgnite", true).GetValue<bool>() && Ignite != SpellSlot.Unknown && 
+                    Ignite.IsReady() && target.HealthPercent < 20)
                 {
-                    if (target.HealthPercent < 50)
-                    {
-                        if (Ignite.IsReady())
-                        {
-                            Me.Spellbook.CastSpell(Ignite, target);
-                        }
-                    }
+                    Me.Spellbook.CastSpell(Ignite, target);
                 }
 
                 if (Menu.Item("ComboW", true).GetValue<bool>() && W.IsReady() &&
-                    target.IsValidTarget(W.Range))
+                    target.IsValidTarget(W.Range) && !target.HasBuffOfType(BuffType.SpellShield) && 
+                    (target.IsMelee || target.IsFacing(Me) || !Q.IsReady() || Me.HasBuff("RivenFeint") || QStack != 0))
                 {
                     W.Cast();
                 }
@@ -748,28 +748,23 @@ using EloBuddy;
                     }
                 }
 
-                if (Menu.Item("ComboR", true).GetValue<bool>())
+                if (Menu.Item("ComboR", true).GetValue<bool>() && R.IsReady())
                 {
-                    if (R.IsReady())
+                    switch (R.Instance.Name)
                     {
-                        switch (R.Instance.Name)
-                        {
-                            case "RivenFengShuiEngine":
-                                if (Menu.Item("R1Combo", true).GetValue<KeyBind>().Active)
+                        case "RivenFengShuiEngine":
+                            if (Menu.Item("R1Combo", true).GetValue<KeyBind>().Active)
+                            {
+                                if (target.Distance(Me.ServerPosition) < E.Range + Me.AttackRange && 
+                                    Me.CountEnemiesInRange(500) >= 1 && !target.IsDead)
                                 {
-                                    if (target.Distance(Me.ServerPosition) <
-                                        E.Range + Me.AttackRange &&
-                                        Me.CountEnemiesInRange(500) >= 1 &&
-                                        !target.IsDead)
-                                    {
-                                        R.Cast();
-                                    }
+                                    R.Cast();
                                 }
-                                break;
-                            case "RivenIzunaBlade":
-                                R2Logic(target);
-                                break;
-                        }
+                            }
+                            break;
+                        case "RivenIzunaBlade":
+                            R2Logic(target);
+                            break;
                     }
                 }
             }
@@ -777,6 +772,11 @@ using EloBuddy;
 
         private static void R2Logic(AIHeroClient target)
         {
+            if (target == null)
+            {
+                return; 
+            }
+
             if (R.Instance.Name != "RivenIzunaBlade")
             {
                 return;
@@ -819,9 +819,9 @@ using EloBuddy;
             {
                 BurstTarget = target;
 
-                if (R.IsReady())
+                if (R.IsReady() && R.Instance.Name == "RivenFengShuiEngine")
                 {
-                    if (Me.HasBuff("RivenFengShuiEngine") & Q.IsReady() && E.IsReady() &&
+                    if (Q.IsReady() && E.IsReady() &&
                         W.IsReady() &&
                         target.Distance(Me.ServerPosition) < E.Range + Me.AttackRange + 100)
                     {
@@ -836,27 +836,21 @@ using EloBuddy;
                     }
                 }
 
-                if (W.IsReady() && HeroManager.Enemies.Any(x => x.IsValidTarget(W.Range)))
+                if (W.IsReady() && target.IsValidTarget(W.Range))
                 {
                     W.Cast();
                 }
 
-                if (QStack == 1 || QStack == 2 || target.HealthPercent < 50)
+                if ((QStack == 1 || QStack == 2 || target.HealthPercent < 50) && R.Instance.Name == "RivenIzunaBlade")
                 {
-                    if (Me.HasBuff("RivenWindScarReady"))
-                    {
-                        R.Cast(target);
-                    }
+                    R.Cast(target.ServerPosition);
                 }
 
-                if (Menu.Item("BurstIgnite", true).GetValue<bool>() && Ignite != SpellSlot.Unknown)
+                if (Menu.Item("BurstIgnite", true).GetValue<bool>() && Ignite != SpellSlot.Unknown && Ignite.IsReady())
                 {
                     if (target.HealthPercent < 50)
                     {
-                        if (Ignite.IsReady())
-                        {
-                            Me.Spellbook.CastSpell(Ignite, target);
-                        }
+                        Me.Spellbook.CastSpell(Ignite, target);
                     }
                 }
 
@@ -894,28 +888,27 @@ using EloBuddy;
 
         private static void QuickHarass()
         {
-            var t = TargetSelector.GetSelectedTarget();
+            var target = TargetSelector.GetSelectedTarget();
 
-            if (t != null && t.IsValidTarget())
+            if (target != null && target.IsValidTarget())
             {
                 if (QStack == 2)
                 {
                     if (E.IsReady())
                     {
                         E.Cast(Me.ServerPosition +
-                                       (Me.ServerPosition - t.ServerPosition).Normalized() * E.Range);
+                                       (Me.ServerPosition - target.ServerPosition).Normalized() * E.Range);
                     }
-
-                    if (!E.IsReady())
+                    else
                     {
                         Q.Cast(Me.ServerPosition +
-                                       (Me.ServerPosition - t.ServerPosition).Normalized() * E.Range);
+                                       (Me.ServerPosition - target.ServerPosition).Normalized() * E.Range);
                     }
                 }
 
                 if (W.IsReady())
                 {
-                    if (t.IsValidTarget(W.Range) && QStack == 1)
+                    if (target.IsValidTarget(W.Range) && QStack == 1)
                     {
                         W.Cast();
                     }
@@ -925,9 +918,9 @@ using EloBuddy;
                 {
                     if (QStack == 0)
                     {
-                        if (t.IsValidTarget(Me.AttackRange + Me.BoundingRadius + 150))
+                        if (target.IsValidTarget(Me.AttackRange + Me.BoundingRadius + 150))
                         {
-                            CastQ(t);
+                            CastQ(target);
                         }
                     }
                 }
@@ -940,7 +933,7 @@ using EloBuddy;
             {
                 var minions = MinionManager.GetMinions(Me.ServerPosition, W.Range);
 
-                if (W.IsReady() && minions.Count >= 3)
+                if (W.IsReady() && minions.Count >= 3 && (!Q.IsReady() || QStack == 0))
                 {
                     W.Cast();
                 }
@@ -970,7 +963,19 @@ using EloBuddy;
 
         private static void WallJump()
         {
+            if (QStack != 2 && Q.IsReady())
+            {
+                Q.Cast(Game.CursorPos);
+            }
+            else
+            {
+                var dashEndPos = Me.Position.Extend(Game.CursorPos, Q.Range);
 
+                if (Common.Common.CanWallJump(dashEndPos, E.Range))
+                {
+                    Q.Cast(dashEndPos);
+                }
+            }
         }
 
         private static void OnDraw(EventArgs Args)
@@ -984,8 +989,7 @@ using EloBuddy;
             {
                 if (E.IsReady() && Flash != SpellSlot.Unknown && Flash.IsReady())
                 {
-                    Render.Circle.DrawCircle(Me.Position, 465 +
-                                                                  E.Range, Color.FromArgb(253, 3, 3));
+                    Render.Circle.DrawCircle(Me.Position, 465 + E.Range, Color.FromArgb(253, 3, 3));
                 }
             }
 
@@ -993,24 +997,22 @@ using EloBuddy;
             {
                 if (E.IsReady() && Flash != SpellSlot.Unknown && Flash.IsReady())
                 {
-                    Render.Circle.DrawCircle(Me.Position, E.Range +
-                                                                  Me.BoundingRadius, Color.FromArgb(243, 253, 3));
+                    Render.Circle.DrawCircle(Me.Position, E.Range + Me.BoundingRadius, Color.FromArgb(243, 253, 3));
                 }
             }
 
             if (Menu.Item("DrawDamage", true).GetValue<bool>())
             {
-                foreach (var e in ObjectManager.Get<AIHeroClient>().Where(e => e.IsValidTarget() && !e.IsZombie))
+                foreach (var target in ObjectManager.Get<AIHeroClient>().Where(e => e.IsValidTarget() && !e.IsZombie))
                 {
-                    DrawHpBar.Unit = e;
-                    DrawHpBar.DrawDmg((float)GetComboDamage(e), new ColorBGRA(255, 204, 0, 170));
+                    DrawHpBar.Unit = target;
+                    DrawHpBar.DrawDmg((float)GetComboDamage(target), new ColorBGRA(255, 204, 0, 170));
                 }
             }
 
             if (Menu.Item("QuickHarassRange", true).GetValue<bool>())
             {
-                Render.Circle.DrawCircle(Me.Position, E.Range +
-                                                              Me.BoundingRadius, Color.FromArgb(237, 7, 246));
+                Render.Circle.DrawCircle(Me.Position, E.Range + Me.BoundingRadius, Color.FromArgb(237, 7, 246));
             }
 
             if (Menu.Item("ShowR1", true).GetValue<bool>())
@@ -1019,10 +1021,8 @@ using EloBuddy;
 
                 text = Menu.Item("R1Combo", true).GetValue<KeyBind>().Active ? "Enable" : "Off";
 
-                Drawing.DrawText(Me.HPBarPosition.X + 30,
-                    Me.HPBarPosition.Y - 40, Color.Red, "Use R1: ");
-                Drawing.DrawText(Me.HPBarPosition.X + 90,
-                    Me.HPBarPosition.Y - 40, Color.FromArgb(238, 242, 7), text);
+                Drawing.DrawText(Me.HPBarPosition.X + 30, Me.HPBarPosition.Y - 40, Color.Red, "Use R1: ");
+                Drawing.DrawText(Me.HPBarPosition.X + 90, Me.HPBarPosition.Y - 40, Color.FromArgb(238, 242, 7), text);
 
                 Menu.Item("R1Combo", true).Permashow();
             }
@@ -1034,15 +1034,15 @@ using EloBuddy;
                     var text = "";
                     var text2 = "";
                     var Mepos = Drawing.WorldToScreen(Me.Position);
-                    var hero = TargetSelector.GetSelectedTarget();
+                    var target = TargetSelector.GetSelectedTarget();
 
-                    if (hero == null)
+                    if (target == null)
                     {
                         text = "Lock Target Is Null!";
                     }
                     else
                     {
-                        text = "Lock Target is : " + hero.ChampionName;
+                        text = "Lock Target is : " + target.ChampionName;
                         text2 = "Can Flash : " + CanFlash;
                     }
 
@@ -1063,8 +1063,13 @@ using EloBuddy;
             }
         }
 
-        private static double GetComboDamage(AIHeroClient e)
+        private static double GetComboDamage(AIHeroClient target)
         {
+            if (target == null)
+            {
+                return 0;
+            }
+
             //Thanks Asuvril
             double passive = 0;
 
@@ -1103,23 +1108,23 @@ using EloBuddy;
             {
                 var qhan = 3 - QStack;
 
-                damage += Q.GetDamage(e) * qhan + Me.GetAutoAttackDamage(e) * qhan * (1 + passive);
+                damage += Q.GetDamage(target) * qhan + Me.GetAutoAttackDamage(target) * qhan * (1 + passive);
             }
 
             if (W.IsReady())
             {
-                damage += W.GetDamage(e);
+                damage += W.GetDamage(target);
             }
 
             if (R.IsReady() && Me.HasBuff("RivenFengShuiEngine"))
             {
-                damage += Me.CalcDamage(e, Damage.DamageType.Physical,
+                damage += Me.CalcDamage(target, Damage.DamageType.Physical,
                     (new double[] { 80, 120, 160 }[R.Level - 1] +
                      0.6 * Me.FlatPhysicalDamageMod) *
-                    (1 + (e.MaxHealth - e.Health) /
-                     e.MaxHealth > 0.75
+                    (1 + (target.MaxHealth - target.Health) /
+                     target.MaxHealth > 0.75
                         ? 0.75
-                        : (e.MaxHealth - e.Health) / e.MaxHealth) * 8 / 3);
+                        : (target.MaxHealth - target.Health) / target.MaxHealth) * 8 / 3);
             }
 
             return damage;

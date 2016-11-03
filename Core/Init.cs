@@ -1789,6 +1789,9 @@ namespace PortAIO
                         case 1: // KhaZix#
                             KhazixSharp.Program.Main();
                             break;
+                        case 2: // SSKha'Zix
+                            SSKhaZix.SSKhaXiz.Main();
+                            break;
                     }
                     break;
                 case Champion.Kindred:
