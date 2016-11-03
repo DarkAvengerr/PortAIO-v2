@@ -221,7 +221,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "UnderratedAIO", "BrianSharp", "JustMaokai" };
                     break;
                 case EloBuddy.Champion.MasterYi:
-                    champ = new string[] { "MasterSharp", "Hoola Yi", "SAutoCarry", "MasterYi by Prunes", "xQx Yi", "Yi by Crisdmc" };
+                    champ = new string[] { "MasterSharp", "Hoola Yi", "SAutoCarry", "MasterYi by Prunes", "xQx Yi", "Yi by Crisdmc", "[SDK] ChallengerYi" };
                     break;
                 case EloBuddy.Champion.MissFortune:
                     champ = new string[] { "OKTW", "Alex's MissFortune", "D-MissFortune", "SAutoCarry", "SFXChallenger", "SharpShooter", "Marksman#", "[SDK] ExorAIO", "BadaoMissfortune", "Flowers' ADC Series" };

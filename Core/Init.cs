@@ -2147,6 +2147,9 @@ namespace PortAIO
                         case 5: // Yi by Crisdmc
                             crisMasterYi.Program.Main();
                             break;
+                        case 6: // ChallengerYi
+                            ChallengerYi.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.MissFortune:
