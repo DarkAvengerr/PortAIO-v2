@@ -9,6 +9,11 @@ using EloBuddy;
 
     internal class Program
     {
+        private static void Main()
+        {
+            OnLoad();
+        }
+
         public static void OnLoad()
         {
             if (ObjectManager.Player.ChampionName != "Thresh")

@@ -18,6 +18,13 @@ using EloBuddy;
 
             var pos = Drawing.WorldToScreen(Player.Position);
 
+            Drawing.DrawText(pos.X - 20, pos.Y + 40, Color.DodgerBlue, "Use Q2 (     )");
+
+            Drawing.DrawText(pos.X + 42, pos.Y + 40, MenuConfig.Q2 
+                ? Color.White
+                : Color.Red,
+                MenuConfig.Q2 ? "On" : "Off");
+
             if (MenuConfig.DrawQ)
             {
                 Render.Circle.DrawCircle(

@@ -23,6 +23,7 @@ using EloBuddy;
 
             var spell = new Menu("Q Spell", "Spell");
             spell.AddItem(new MenuItem("blank", "F8 To Reload Values"));
+            spell.AddItem(new MenuItem("Q2", "Use Q2").SetValue(new KeyBind('G', KeyBindType.Toggle)));
             spell.AddItem(new MenuItem("Prediction", "Prediction").SetValue(new StringList(new[] { "OKTW", "Common" })));
             spell.AddItem(new MenuItem("Hitchance", "Hitchance").SetValue(new StringList(new[] { "High", "Very High" })));
             spell.AddItem(new MenuItem("Speed", "Speed").SetValue(new Slider(1500, 1000, 1750)));
@@ -89,6 +90,9 @@ using EloBuddy;
         public static int Speed => Config.Item("Speed").GetValue<Slider>().Value;
         public static int Range => Config.Item("Range").GetValue<Slider>().Value;
         public static int Width => Config.Item("Width").GetValue<Slider>().Value;
+
+        public static bool Q2 => Config.Item("Q2").GetValue<KeyBind>().Active;
+
 
         // Array
         public static StringList PredMode => Config.Item("Prediction").GetValue<StringList>();

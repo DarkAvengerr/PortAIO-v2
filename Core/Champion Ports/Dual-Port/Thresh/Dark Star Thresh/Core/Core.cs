@@ -5,6 +5,8 @@ using EloBuddy;
     using System;
     using System.Linq;
 
+    using Dark_Star_Thresh.Update;
+
     using LeagueSharp;
     using LeagueSharp.Common;
 
@@ -31,12 +33,7 @@ using EloBuddy;
 
         public static void CastQ(AIHeroClient target)
         {
-            if (target == null)
-            {
-                return;
-            }
-
-            if (MenuConfig.Config.Item("blacklist" + target.CharData.BaseSkinName).GetValue<bool>())
+            if (target == null || MenuConfig.Config.Item("blacklist" + target.CharData.BaseSkinName).GetValue<bool>() || (!MenuConfig.Q2 && Mode.ThreshQ(target)))
             {
                 return;
             }
