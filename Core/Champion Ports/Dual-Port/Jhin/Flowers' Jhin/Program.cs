@@ -33,7 +33,7 @@ using EloBuddy;
             OnGameLoad();
         }
 
-        public static void OnGameLoad()
+        private static void OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName.ToLower() != "jhin")
             {
@@ -479,13 +479,8 @@ using EloBuddy;
 
                 if (R.Instance.Name == "JhinRShot")
                 {
-                    if (rShotTarget != null && rShotTarget.IsValidTarget(R.Range))
+                    if (rShotTarget != null && rShotTarget.IsValidTarget(R.Range) && InRCone(rShotTarget))
                     {
-                        if (!InRCone(rShotTarget))
-                        {
-                            return;
-                        }
-
                         if (Menu.Item("RMenuSemi", true).GetValue<KeyBind>().Active)
                         {
                             AutoUse(rShotTarget);
@@ -517,11 +512,6 @@ using EloBuddy;
                             HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && InRCone(x))
                                 .OrderBy(x => x.Health))
                         {
-                            if (!InRCone(t))
-                            {
-                                return;
-                            }
-
                             if (Menu.Item("RMenuSemi", true).GetValue<KeyBind>().Active)
                             {
                                 AutoUse(t);
@@ -811,7 +801,7 @@ using EloBuddy;
 
         private static void OnDraw(EventArgs Args)
         {
-            if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen)
+            if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen  )
             {
                 if (Menu.Item("DrawQ", true).GetValue<bool>() && Q.IsReady())
                 {
@@ -847,7 +837,7 @@ using EloBuddy;
 
         private static void OnEndScene(EventArgs Args)
         {
-            if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen)
+            if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen  )
             {
 #pragma warning disable 618
                 if (Menu.Item("DrawRMin", true).GetValue<bool>() && R.IsReady())

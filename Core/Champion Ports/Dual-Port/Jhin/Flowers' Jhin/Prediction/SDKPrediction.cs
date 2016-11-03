@@ -3,7 +3,6 @@ using EloBuddy;
  namespace Flowers_Jhin.Prediction
 {
     using Common;
-    using LeagueSharp;
     using SharpDX;
     using System;
     using System.Collections.Generic;
