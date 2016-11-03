@@ -423,7 +423,7 @@ using EloBuddy;
 
         private void OnDraw(EventArgs Args)
         {
-            if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen )
+            if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen  )
             {
                 if (Menu.Item("DrawQ", true).GetValue<bool>() && Q.IsReady())
                 {
@@ -459,7 +459,7 @@ using EloBuddy;
 
         private void OnEndScene(EventArgs Args)
         {
-            if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen )
+            if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen  )
             {
 #pragma warning disable 618
                 if (Menu.Item("DrawRMin", true).GetValue<bool>() && R.IsReady())

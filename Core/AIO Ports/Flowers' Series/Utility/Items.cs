@@ -1,11 +1,9 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Flowers_ADC_Series.Utility
+﻿namespace Flowers_ADC_Series.Utility
 {
     using System;
     using LeagueSharp;
     using LeagueSharp.Common;
-    using Orbwalking = Orbwalking;
+    using EloBuddy;
 
     internal class Items : Program
     {

@@ -1,6 +1,4 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Flowers_ADC_Series.Utility
+﻿namespace Flowers_ADC_Series.Utility
 {
     using System;
     using LeagueSharp;
@@ -10,6 +8,7 @@ using EloBuddy;
     using System.Linq;
     using System.Net;
     using System.Web.Script.Serialization;
+    using EloBuddy;
 
     internal class SkinChange : Program
     {

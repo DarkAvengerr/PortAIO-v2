@@ -354,7 +354,7 @@ using EloBuddy;
         {
             if (Menu.Item("AutoR", true).GetValue<bool>() && R.IsReady() && R.Instance.Name == "QuinnR")
             {
-                if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen  &&
+                if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen   &&
                     Me.InFountain())
                 {
                     R.Cast();
@@ -364,7 +364,7 @@ using EloBuddy;
 
         private void OnDraw(EventArgs Args)
         {
-            if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen )
+            if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen  )
             {
                 if (Menu.Item("DrawQ", true).GetValue<bool>() && Q.IsReady())
                 {
