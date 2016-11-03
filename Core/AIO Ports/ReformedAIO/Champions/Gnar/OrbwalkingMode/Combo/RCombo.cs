@@ -41,7 +41,7 @@ using EloBuddy;
 
             var wall = gnarWallDetection.Wall(Target.Position, Menu.Item("Range").GetValue<Slider>().Value);
 
-            Vars.Player.GetPath(wall);
+            ObjectManager.Player.GetPath(wall);
 
             if (wall != Vector3.Zero && heroInfo.GetStunDuration(Target) < Spells.R2.Delay)
             {

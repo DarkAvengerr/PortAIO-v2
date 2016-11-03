@@ -49,7 +49,7 @@ using EloBuddy;
 
         private void Mini()
         {
-            if (!Spells.Q.IsReady() || Vars.Player.Spellbook.IsAutoAttacking)
+            if (!Spells.Q.IsReady() || ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
                 return;
             }

@@ -9,6 +9,7 @@ using EloBuddy;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Caitlyn.Logic;
+    using ReformedAIO.Champions.Caitlyn.Spells;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
@@ -16,37 +17,43 @@ using EloBuddy;
     {
         public override string Name { get; set; } = "R";
 
+        public readonly RSpell rSpell;
+
+        public RDraw(RSpell rSpell)
+        {
+            this.rSpell = rSpell;
+        }
+
         public void OnDraw(EventArgs args)
         {
-            if (Vars.Player.IsDead) return;
-
-            if (Menu.Item("RReady").GetValue<bool>() && !Spells.Spell[SpellSlot.R].IsReady())
-            {
-                return;
-            }
+            if (ObjectManager.Player.IsDead) return;
 
             Render.Circle.DrawCircle(
-                 Vars.Player.Position,
-                Spells.Spell[SpellSlot.R].Range,
-                Spells.Spell[SpellSlot.R].IsReady()
-                ? Color.LightSlateGray
+                 ObjectManager.Player.Position,
+                rSpell.Spell.Range,
+                rSpell.Spell.IsReady()
+                ? Color.SlateBlue
                 : Color.DarkSlateGray
-                , 1);
+                , 4);
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnDisable(sender, featureBaseEventArgs);
+
             Drawing.OnDraw -= OnDraw;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Drawing.OnDraw += OnDraw;
         }
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            Menu.AddItem(new MenuItem("RReady", "Only If Ready").SetValue(false));
+            base.OnLoad(sender, featureBaseEventArgs);
         }
     }
 }

@@ -38,7 +38,7 @@ using EloBuddy;
 
         private void Mini()
         {
-            if (!Spells.E.IsReady() || Vars.Player.Spellbook.IsAutoAttacking || (Menu.Item("BlockIfTransforming").GetValue<bool>()
+            if (!Spells.E.IsReady() || ObjectManager.Player.Spellbook.IsAutoAttacking || (Menu.Item("BlockIfTransforming").GetValue<bool>()
                 && this.gnarState.TransForming))
             {
                 return;

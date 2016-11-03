@@ -11,13 +11,13 @@ using EloBuddy;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
-    internal sealed class QCombo  : OrbwalkingChild
+    internal sealed class QHarass : OrbwalkingChild
     {
         public override string Name { get; set; } = "Q";
 
         private readonly QSpell qSpell;
 
-        public QCombo(QSpell qSpell)
+        public QHarass(QSpell qSpell)
         {
             this.qSpell = qSpell;
         }
@@ -53,7 +53,7 @@ using EloBuddy;
         {
             if (Target == null
                 || Menu.Item("Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
-                || !CheckGuardians() 
+                || !CheckGuardians()
                 || Target.Distance(ObjectManager.Player) < ObjectManager.Player.AttackRange + 50)
             {
                 return;

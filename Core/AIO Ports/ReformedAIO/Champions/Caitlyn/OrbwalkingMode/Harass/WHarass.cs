@@ -12,13 +12,13 @@ using EloBuddy;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
-    internal sealed class WCombo : OrbwalkingChild
+    internal sealed class WHarass : OrbwalkingChild
     {
         public override string Name { get; set; } = "W";
 
         private readonly WSpell wSpell;
 
-        public WCombo(WSpell wSpell)
+        public WHarass(WSpell wSpell)
         {
             this.wSpell = wSpell;
         }
@@ -66,7 +66,7 @@ using EloBuddy;
             {
                 return;
             }
-          
+
             this.ewq = args.SData.Name == "CaitlynPiltoverPeacemaker";
         }
 
@@ -77,7 +77,7 @@ using EloBuddy;
             wSpell.Spell.Cast(gapcloser.End);
         }
 
-      
+
         private void OnUpdate(EventArgs args)
         {
             if (!CheckGuardians())
@@ -86,7 +86,7 @@ using EloBuddy;
             }
 
             if (Menu.Item("Bush").GetValue<bool>()
-                && Utils.TickCount - wSpell.Spell.LastCastAttemptT < 2500
+                && Utils.TickCount - wSpell.Spell.LastCastAttemptT > 5000
                 && !ObjectManager.Player.IsRecalling())
             {
                 // Beta
@@ -96,19 +96,19 @@ using EloBuddy;
 
                 if (!NavMesh.IsWallOfGrass(path, 0)) return;
 
-                LeagueSharp.Common.Utility.DelayAction.Add(100, ()=> wSpell.Spell.Cast(path));
+                LeagueSharp.Common.Utility.DelayAction.Add(350, () => wSpell.Spell.Cast(path));
             }
 
-            if (Target == null 
+            if (Target == null
                 || Menu.Item("Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
-                || Utils.TickCount - wSpell.Spell.LastCastAttemptT < 1100)
+                || Utils.TickCount - wSpell.Spell.LastCastAttemptT < 500)
             {
                 return;
             }
 
             var wPrediction = wSpell.Spell.GetPrediction(Target);
 
-            if (Menu.Item("Target").GetValue<bool>()) 
+            if (Menu.Item("Target").GetValue<bool>() && Utils.TickCount - wSpell.Spell.LastCastAttemptT < 1250)
             {
                 if (wPrediction.Hitchance < HitChance.VeryHigh)
                 {

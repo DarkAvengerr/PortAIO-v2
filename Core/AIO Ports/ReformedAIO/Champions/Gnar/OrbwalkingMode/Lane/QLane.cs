@@ -30,7 +30,7 @@ using EloBuddy;
 
             var menu = Menu.SubMenu(Menu.Name + "Dynamic Menu");
 
-            if (Vars.Player.Spellbook.IsAutoAttacking)
+            if (ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
                 return;
             }
@@ -49,7 +49,7 @@ using EloBuddy;
         {
             var menu = Menu.SubMenu(Menu.Name + "Dynamic Menu");
 
-            if (!Spells.Q.IsReady() || (Menu.Item(menu.Name + "Q1Enemy").GetValue<bool>() && Vars.Player.CountEnemiesInRange(1100) > 0))
+            if (!Spells.Q.IsReady() || (Menu.Item(menu.Name + "Q1Enemy").GetValue<bool>() && ObjectManager.Player.CountEnemiesInRange(1100) > 0))
             {
                 return;
             }
@@ -68,7 +68,7 @@ using EloBuddy;
         {
             var menu = Menu.SubMenu(Menu.Name + "Dynamic Menu");
 
-            if (!Spells.Q2.IsReady() || (Menu.Item(menu.Name + "Q2Enemy").GetValue<bool>() && Vars.Player.CountEnemiesInRange(1100) > 0))
+            if (!Spells.Q2.IsReady() || (Menu.Item(menu.Name + "Q2Enemy").GetValue<bool>() && ObjectManager.Player.CountEnemiesInRange(1100) > 0))
             {
                 return;
             }

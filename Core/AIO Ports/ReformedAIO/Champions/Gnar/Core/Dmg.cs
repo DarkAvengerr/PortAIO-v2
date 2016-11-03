@@ -19,9 +19,9 @@ using EloBuddy;
 
             float dmg = 0;
 
-            if (!Vars.Player.Spellbook.IsAutoAttacking)
+            if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
-                dmg += (float)Vars.Player.GetAutoAttackDamage(x);
+                dmg += (float)ObjectManager.Player.GetAutoAttackDamage(x);
             }
 
             if (Spells.Q.IsReady())

@@ -4,14 +4,16 @@ using EloBuddy;
 {
     using System.Linq;
 
+    using LeagueSharp;
+
     internal sealed class GnarState
     {
-        public bool Mini => Vars.Player.CharData.BaseSkinName == "Gnar";
+        public bool Mini => ObjectManager.Player.CharData.BaseSkinName == "Gnar";
         
-        public bool Mega => Vars.Player.CharData.BaseSkinName == "gnarbig";
+        public bool Mega => ObjectManager.Player.CharData.BaseSkinName == "gnarbig";
 
-        public bool TransForming => Vars.Player.Buffs.Any(x => x.DisplayName.Contains("gnartransformsoon"))
-            || (Mini && Vars.Player.ManaPercent >= 95)
-            || (Mega && Vars.Player.ManaPercent <= 10);   
+        public bool TransForming => ObjectManager.Player.Buffs.Any(x => x.DisplayName.Contains("gnartransformsoon"))
+            || (Mini && ObjectManager.Player.ManaPercent >= 95)
+            || (Mega && ObjectManager.Player.ManaPercent <= 10);   
     }
 }

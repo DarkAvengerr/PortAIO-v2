@@ -27,7 +27,6 @@ using EloBuddy;
         {
             if (ObjectManager.Player.IsDead) return;
 
-
             Render.Circle.DrawCircle(ObjectManager.Player.Position, rSpell.Spell.Range, rSpell.Spell.IsReady()
                 ? Color.SlateBlue
                 : Color.DarkSlateGray,

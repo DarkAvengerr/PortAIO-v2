@@ -35,7 +35,7 @@ using EloBuddy;
                 if (gnarState.TransForming
                     || target.Health < dmg.GetDamage(target) * 1.35 
                     || (Menu.Item("EOnGanked").GetValue<bool>()
-                    && Vars.Player.CountAlliesInRange(900) > Vars.Player.CountEnemiesInRange(900))
+                    && ObjectManager.Player.CountAlliesInRange(900) > ObjectManager.Player.CountEnemiesInRange(900))
                     || Spells.R2.IsReady())
                 {
                     var ePred = Spells.E.GetPrediction(target);
@@ -49,7 +49,7 @@ using EloBuddy;
                             return;
                         }
 
-                        if (Vars.Player.IsFacing(m) && m.Distance(Vars.Player) >= 350)
+                        if (ObjectManager.Player.IsFacing(m) && m.Distance(ObjectManager.Player) >= 350)
                         {
                             Spells.E.Cast(m);
                         }
@@ -82,7 +82,7 @@ using EloBuddy;
 
             var ePred = Spells.E.GetPrediction(target);
 
-            if (ePred.CollisionObjects[0].Position.Distance(Vars.Player.Position) > 425)
+            if (ePred.CollisionObjects[0].Position.Distance(ObjectManager.Player.Position) > 425)
             {
                 return;
             }

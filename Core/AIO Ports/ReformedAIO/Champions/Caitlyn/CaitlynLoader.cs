@@ -15,6 +15,9 @@ using EloBuddy;
     using Caitlyn.OrbwalkingMode.Jungle;
     using Caitlyn.OrbwalkingMode.Lane;
 
+    using ReformedAIO.Champions.Caitlyn.Spells;
+    using ReformedAIO.Library.SpellParent;
+
     using RethoughtLib.FeatureSystem.Guardians;
     using RethoughtLib.Bootstraps.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
@@ -36,8 +39,20 @@ using EloBuddy;
             var superParent = new SuperParent(DisplayName);
             superParent.Initialize();
 
-            var spells = new Spells();
-            spells.OnLoad();
+            var qSpell = new QSpell();
+            var wSpell = new WSpell();
+            var eSpell = new ESpell();
+            var rSpell = new RSpell();
+
+            var spellParent = new SpellParent();
+            spellParent.Add(new List<Base>
+                                  {
+                                     qSpell,
+                                     wSpell,
+                                     eSpell,
+                                     rSpell
+                                  });
+            spellParent.Load();
 
             var orbwalkerModule = new OrbwalkerModule();
             orbwalkerModule.Load();
@@ -50,40 +65,50 @@ using EloBuddy;
             var killstealParent = new Parent("Killsteal");
             var drawParent = new Parent("Drawings");
 
+            var logic = new ComboLogic(eSpell, wSpell, qSpell, rSpell);
+
             comboParent.Add(new List<Base>()
             {
-                new QCombo().Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q)),
-                new WCombo().Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.W)),
-                new ECombo().Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.E))
+                new QCombo(qSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q)),
+                new WCombo(wSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.W)),
+                new ECombo(eSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.E))
+            });
+
+            harassParent.Add(new List<Base>()
+            {
+                new QHarass(qSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q)),
+                new WHarass(wSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.W)),
+                new EHarass(eSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.E))
             });
 
             laneParent.Add(new List<Base>
             {
-                new QLane().Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q))
+                new QLane(qSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q))
             });
 
             jungleParent.Add(new List<Base>
             {
-                new QJungle().Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q)).Guardian(new SpellMustBeReady(SpellSlot.E) {Negated = true}),
-                new EJungle().Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.E))
+                new QJungle(qSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q)).Guardian(new SpellMustBeReady(SpellSlot.E) {Negated = true}),
+                new EJungle(eSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.E))
             });
 
             killstealParent.Add(new List<Base>
             {
-                new QKillsteal().Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q)),
-                new RKillsteal().Guardian(new SpellMustBeReady(SpellSlot.R))
+                new QKillsteal(qSpell).Guardian(new PlayerMustNotBeWindingUp()).Guardian(new SpellMustBeReady(SpellSlot.Q)),
+                new RKillsteal(rSpell).Guardian(new SpellMustBeReady(SpellSlot.R))
             });
 
             drawParent.Add(new List<Base>
             {
-                new DmgDraw(),
-                new QDraw(),
-                new RDraw()
+                new DmgDraw(logic),
+                new QDraw(qSpell),
+                new RDraw(rSpell)
             });
 
             superParent.Add(new List<Base> {
                 orbwalkerModule,
                 comboParent,
+                harassParent,
                 laneParent,
                 jungleParent,
                 killstealParent,

@@ -19,35 +19,45 @@ using EloBuddy;
     {
         private HeroHealthBarIndicator drawDamage;
 
-        private EwqrLogic ewqrLogic;
+        private readonly ComboLogic logic;
+
+        public DmgDraw(ComboLogic logic)
+        {
+            this.logic = logic;
+        }
 
         public override string Name { get; set; } = "Damage";
 
         public void OnDraw(EventArgs args)
         {
-            if (Vars.Player.IsDead) return;
+            if (ObjectManager.Player.IsDead) return;
 
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1500)))
             {
-                this.drawDamage.Unit = enemy;
+                drawDamage.Unit = enemy;
 
-                this.drawDamage.DrawDmg(this.ewqrLogic.EwqrDmg(enemy), this.ewqrLogic.CanExecute(enemy) ? Color.LimeGreen: Color.Green);
+                drawDamage.DrawDmg(logic.EwqrDmg(enemy), logic.CanExecute(enemy) 
+                    ? Color.LimeGreen 
+                    : Color.Green);
             }
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnDisable(sender, featureBaseEventArgs);
+
             Drawing.OnDraw -= OnDraw;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Drawing.OnDraw += OnDraw;
         }
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
-            this.ewqrLogic = new EwqrLogic();
             this.drawDamage = new HeroHealthBarIndicator();
             base.OnLoad(sender, featureBaseEventArgs);
         }

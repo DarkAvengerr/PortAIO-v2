@@ -8,7 +8,7 @@ using EloBuddy;
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Caitlyn.Logic;
+    using ReformedAIO.Champions.Caitlyn.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
@@ -16,13 +16,24 @@ using EloBuddy;
     {
         public override string Name { get; set; } = "Q";
 
+        private readonly QSpell qSpell;
+
+        public QLane(QSpell qSpell)
+        {
+            this.qSpell = qSpell;
+        }
+
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnDisable(sender, featureBaseEventArgs);
+
             Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Game.OnUpdate += OnUpdate;
         }
 
@@ -40,25 +51,25 @@ using EloBuddy;
       
         private void OnUpdate(EventArgs args)
         {
-            if (Menu.Item("LaneQMana").GetValue<Slider>().Value > Vars.Player.ManaPercent)
+            if (Menu.Item("LaneQMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
             {
                 return;
             }
 
-            var minions = MinionManager.GetMinions(Spells.Spell[SpellSlot.Q].Range);
+            var minions = MinionManager.GetMinions(qSpell.Spell.Range);
 
             if (minions == null) return;
 
-            if (Menu.Item("LaneQEnemy").GetValue<bool>() && minions.Any(m => m.CountEnemiesInRange(2000) > 0))
+            if (Menu.Item("LaneQEnemy").GetValue<bool>() && ObjectManager.Player.CountEnemiesInRange(2000) >= 1)
             {
                 return;
             }
 
-            var pos = Spells.Spell[SpellSlot.Q].GetLineFarmLocation(minions);
+            var pos = qSpell.Spell.GetLineFarmLocation(minions);
 
             if(pos.MinionsHit >= Menu.Item("MinQHit").GetValue<Slider>().Value)
 
-            Spells.Spell[SpellSlot.Q].Cast(pos.Position);
+            qSpell.Spell.Cast(pos.Position);
         }
     }
 }

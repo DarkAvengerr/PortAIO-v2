@@ -8,7 +8,7 @@ using EloBuddy;
     using LeagueSharp.Common;
     using LeagueSharp.SDK.Utils;
 
-    using ReformedAIO.Champions.Caitlyn.Logic;
+    using ReformedAIO.Champions.Caitlyn.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
@@ -16,7 +16,14 @@ using EloBuddy;
     {
         public override string Name { get; set; } = "Q";
 
-        private AIHeroClient Target => TargetSelector.GetTarget(Spells.Spell[SpellSlot.Q].Range, TargetSelector.DamageType.Physical);
+        public readonly QSpell qSpell;
+
+        public QKillsteal(QSpell qSpell)
+        {
+            this.qSpell = qSpell;
+        }
+
+        private AIHeroClient Target => TargetSelector.GetTarget(qSpell.Spell.Range, TargetSelector.DamageType.Physical);
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
@@ -34,22 +41,22 @@ using EloBuddy;
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnLoad(sender, featureBaseEventArgs);
         }
 
         private void OnUpdate(EventArgs args)
         {
             if (Target == null
-                || Target.Health > Spells.Spell[SpellSlot.Q].GetDamage(Target)
-                || Target.Distance(Vars.Player) < Vars.Player.GetRealAutoAttackRange()
-                || Spells.Spell[SpellSlot.Q].Delay + Spells.Spell[SpellSlot.Q].Speed < Target.MoveSpeed
+                || Target.Health > qSpell.Spell.GetDamage(Target)
+                || Target.Distance(ObjectManager.Player) < ObjectManager.Player.GetRealAutoAttackRange()
                 || !CheckGuardians())
             {
                 return;
             }
 
-            var pos = Spells.Spell[SpellSlot.Q].GetPrediction(Target);
+            var pos = qSpell.Spell.GetPrediction(Target);
 
-            Spells.Spell[SpellSlot.Q].Cast(pos.CastPosition);
+            qSpell.Spell.Cast(pos.CastPosition);
         }
     }
 }

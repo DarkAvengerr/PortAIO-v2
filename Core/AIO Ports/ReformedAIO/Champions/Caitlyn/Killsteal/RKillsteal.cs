@@ -9,6 +9,7 @@ using EloBuddy;
     using LeagueSharp.SDK.Utils;
 
     using ReformedAIO.Champions.Caitlyn.Logic;
+    using ReformedAIO.Champions.Caitlyn.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
@@ -16,40 +17,50 @@ using EloBuddy;
     {
         public override string Name { get; set; } = "R";
 
-        private AIHeroClient Target => TargetSelector.GetTarget(Spells.Spell[SpellSlot.R].Range, TargetSelector.DamageType.Physical);
+        public readonly RSpell rSpell;
+
+        public RKillsteal(RSpell rSpell)
+        {
+            this.rSpell = rSpell;
+        }
+
+        private AIHeroClient Target => TargetSelector.GetTarget(rSpell.Spell.Range, TargetSelector.DamageType.Physical);
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnDisable(sender, featureBaseEventArgs);
+
             Game.OnUpdate -= OnUpdate;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
         {
+            base.OnEnable(sender, featureBaseEventArgs);
+
             Game.OnUpdate += OnUpdate;
         }
 
         private void OnUpdate(EventArgs args)
         {
-             // Brian if you see this i'm sorry XD
-            if (Spells.Spell[SpellSlot.R].Level < 2)
+            if (rSpell.Spell.Level <= 1)
             {
-                Spells.Spell[SpellSlot.R].Range = 2000;
+                rSpell.Spell.Range = 2000;
             }
             else
             {
-                Spells.Spell[SpellSlot.R].Range = 1500 + 500 * Spells.Spell[SpellSlot.R].Level;
+                rSpell.Spell.Range = 1500 + 500 * rSpell.Spell.Level;
             }
 
             if (Target == null
-                || Vars.Player.Distance(Target) < Vars.Player.GetRealAutoAttackRange() + 450
-                || Target.Health > Spells.Spell[SpellSlot.R].GetDamage(Target)
-                || Target.CountEnemiesInRange(Spells.Spell[SpellSlot.R].Range) > 1
+                || ObjectManager.Player.Distance(Target) < ObjectManager.Player.GetRealAutoAttackRange() + 300
+                || Target.Health > rSpell.Spell.GetDamage(Target)
+                || Target.CountEnemiesInRange(rSpell.Spell.Range) > 1
                 || !CheckGuardians())
             {
                 return;
             }
 
-            Spells.Spell[SpellSlot.R].Cast(Target);
+            rSpell.Spell.Cast(Target);
         }
     }
 }
