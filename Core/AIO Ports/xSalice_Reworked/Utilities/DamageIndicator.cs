@@ -1,16 +1,16 @@
-using System;
-using System.Globalization;
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
-using Color = System.Drawing.Color;
-
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace xSaliceResurrected.Utilities
+ namespace xSaliceResurrected_Rework.Utilities
 {
-    static class DamageIndicator
+    using System;
+    using System.Globalization;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using SharpDX;
+    using Color = System.Drawing.Color;
+
+    public static class DamageIndicator
     {
         public delegate float DamageToUnitDelegate(AIHeroClient hero);
 
@@ -69,10 +69,10 @@ using EloBuddy;
 
                 if (Fill)
                 {
-                    float differenceInHp = xPosCurrentHp - xPosDamage;
+                    var differenceInHp = xPosCurrentHp - xPosDamage;
                     var pos1 = barPos.X + 9 + (107 * percentHealthAfterDamage);
 
-                    for (int i = 0; i < differenceInHp; i++)
+                    for (var i = 0; i < differenceInHp; i++)
                     {
                         Drawing.DrawLine(pos1 + i, yPos, pos1 + i, yPos + Height, 1, FillColor);
                     }

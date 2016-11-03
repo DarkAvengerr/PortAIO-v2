@@ -1,19 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
-using LeagueSharp.Common.Data;
-using xSaliceResurrected.Utilities;
-using ItemData = LeagueSharp.Common.Data.ItemData;
-
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace xSaliceResurrected.Managers
+ namespace xSaliceResurrected_Rework.Managers
 {
-    class ItemManager
-    {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using ItemData = LeagueSharp.Common.Data.ItemData;
 
+    internal class ItemManager
+    {
         private static Menu _myMenu;
 
         private string ActiveName { get; set; }
@@ -24,20 +21,14 @@ using EloBuddy;
 
         private string BuffName { get; set; }
 
-        private int Mode { get; set; } // 0 = target, 1 = on click, 2 = toggle
+        private int Mode { get; set; }
 
         private static readonly List<ItemManager> ItemList = new List<ItemManager>();
 
-        //summoners
         private static readonly SpellSlot IgniteSlot = ObjectManager.Player.GetSpellSlot("SummonerDot");
-
         public static bool UseTargetted;
-
         public static bool KillableTarget;
-
         public static AIHeroClient Target;
-
-        private static int _lastMura;
 
         private static void CreateList()
         {
@@ -113,7 +104,6 @@ using EloBuddy;
                 Mode = 1,
             });
 
-            //Mode 3 = flask
             ItemList.Add(new ItemManager
             {
                 ActiveId = ItemData.Refillable_Potion.Id,
@@ -123,7 +113,6 @@ using EloBuddy;
                 Mode = 3,
             });
 
-            //Mode 4 = Health
             ItemList.Add(new ItemManager
             {
                 ActiveId = ItemData.Health_Potion.Id,
@@ -139,7 +128,6 @@ using EloBuddy;
         {
             _myMenu = theMenu;
 
-            //add item list to menu
             CreateList();
 
             var offensiveItem = new Menu("Offensive Items", "Offensive Items");
@@ -171,10 +159,8 @@ using EloBuddy;
                 }
                 _myMenu.AddSubMenu(summoners);
             }
-                Orbwalking.AfterAttack += AfterAttack;
-                Orbwalking.OnAttack += OnAttack;
 
-            Obj_AI_Base.OnProcessSpellCast += SpellbookOnOnCastSpell;
+            Orbwalking.AfterAttack += AfterAttack;
             Game.OnUpdate += Game_OnGameUpdate;
         }
 
@@ -209,13 +195,6 @@ using EloBuddy;
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            //muramana
-            if (ObjectManager.Player.HasBuff("Muramana") && Items.CanUseItem(3042) && Utils.TickCount - _lastMura > 5000)
-            {
-                CastMuraMana();
-            }
-
-            //Health
             if (!IsUsingHealthPot)
             {
                 foreach (var potion in from potion in ItemList.Where(x => (x.Mode == 3 || x.Mode == 4) &&
@@ -229,7 +208,7 @@ using EloBuddy;
                     Items.UseItem(potion.ActiveId);
                 }
             }
-            //Mana
+
             if (!IsUsingManaPot)
             {
                 foreach (var potion in from potion in ItemList.Where(x => (x.Mode == 3 || x.Mode == 5) &&
@@ -244,33 +223,44 @@ using EloBuddy;
                 }
             }
 
-            //offensive
             if (Target == null || ObjectManager.Player.IsDead)
+            {
                 return;
+            }
 
             if (_myMenu.Item("ignite", true).GetValue<bool>())
             {
-                //ignite
-                int igniteMode = _myMenu.Item("igniteMode", true).GetValue<StringList>().SelectedIndex;
+                var igniteMode = _myMenu.Item("igniteMode", true).GetValue<StringList>().SelectedIndex;
 
                 if (KillableTarget && igniteMode == 0 && Ignite_Ready())
+                {
                     Use_Ignite(Target);
-                else if (ObjectManager.Player.GetSummonerSpellDamage(Target, Damage.SummonerSpell.Ignite) > Target.Health + 20 && Ignite_Ready())
+                }
+                else if (ObjectManager.Player.GetSummonerSpellDamage(Target, Damage.SummonerSpell.Ignite) >
+                         Target.Health + 20 && Ignite_Ready())
+                {
                     Use_Ignite(Target);
+                }
             }
 
             if (!UseTargetted)
+            {
                 return;
+            }
 
             foreach (var item in ItemList.Where(x => x.Mode == 0 && Items.HasItem(x.ActiveId) && ShouldUse(x.ActiveName)))
             {
                 if (Target != null && Items.CanUseItem(item.ActiveId))
                 {
                     if (AlwaysUse(item.ActiveName))
+                    {
                         Items.UseItem(item.ActiveId, Target);
+                    }
 
                     if (KillableTarget)
+                    {
                         Items.UseItem(item.ActiveId, Target);
+                    }
 
                     if (ObjectManager.Player.HealthPercent <= UseAtMyHp(item.ActiveName) && !OnlyIfKillable(item.ActiveName))
                     {
@@ -284,7 +274,6 @@ using EloBuddy;
                 }
             }
 
-            //reset mode
             UseTargetted = false;
             Target = null;
             KillableTarget = false;
@@ -298,10 +287,14 @@ using EloBuddy;
             foreach (var item in ItemList.Where(x => x.Mode == 1 && Items.CanUseItem(x.ActiveId) && ShouldUse(x.ActiveName)))
             {
                 if (AlwaysUse(item.ActiveName))
+                {
                     Items.UseItem(item.ActiveId);
+                }
 
                 if (KillableTarget)
+                {
                     Items.UseItem(item.ActiveId);
+                }
 
                 if (ObjectManager.Player.HealthPercent <= UseAtMyHp(item.ActiveName) && !OnlyIfKillable(item.ActiveName))
                 {
@@ -315,94 +308,12 @@ using EloBuddy;
             }
         }
 
-        private static void OnAttack(AttackableUnit unit, AttackableUnit target)
-        {
-            if (!unit.IsMe || !(target is AIHeroClient))
-                return;
-
-            foreach (var item in ItemList.Where(x => x.Mode == 2 && Items.CanUseItem(x.ActiveId) && ShouldUse(x.ActiveName)))
-            {
-                if (!ObjectManager.Player.HasBuff("Muramana"))
-                {
-                    //Chat.Print("RAWR");
-                    if (AlwaysUse(item.ActiveName))
-                    {
-                        CastMuraMana();
-                        _lastMura = Utils.TickCount;
-                    }
-
-                    if (KillableTarget)
-                    {
-                        CastMuraMana();
-                        _lastMura = Utils.TickCount;
-                    }
-
-                    if (ObjectManager.Player.HealthPercent <= UseAtMyHp(item.ActiveName) && !OnlyIfKillable(item.ActiveName))
-                    {
-                        CastMuraMana();
-                        _lastMura = Utils.TickCount;
-                    }
-
-                    if (Target.HealthPercent <= UseAtEnemyHp(item.ActiveName) && !OnlyIfKillable(item.ActiveName))
-                    {
-                        CastMuraMana();
-                        _lastMura = Utils.TickCount;
-                    }
-                }
-                else if (ObjectManager.Player.HasBuff("Muramana"))
-                {
-                    _lastMura = Utils.TickCount;
-                }
-            }
-        }
-
-        private static void SpellbookOnOnCastSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            if (!sender.IsMe || !(args.Target is AIHeroClient))
-                return;
-
-            if (!args.SData.HaveHitEffect && !args.SData.IsAutoAttack())
-                return;
-
-            foreach (var item in ItemList.Where(x => x.Mode == 2 && Items.CanUseItem(x.ActiveId) && ShouldUse(x.ActiveName)))
-            {
-                if (!ObjectManager.Player.HasBuff("Muramana"))
-                {
-                    if (AlwaysUse(item.ActiveName))
-                    {
-                        CastMuraMana();
-                        _lastMura = Utils.TickCount;
-                    }
-
-                    if (KillableTarget)
-                    {
-                        CastMuraMana();
-                        _lastMura = Utils.TickCount;
-                    }
-
-                    if (ObjectManager.Player.HealthPercent <= UseAtMyHp(item.ActiveName) && !OnlyIfKillable(item.ActiveName))
-                    {
-                        CastMuraMana();
-                        _lastMura = Utils.TickCount;
-                    }
-
-                    if (Target.HealthPercent <= UseAtEnemyHp(item.ActiveName) && !OnlyIfKillable(item.ActiveName))
-                    {
-                        CastMuraMana();
-                        _lastMura = Utils.TickCount;
-                    }
-                }
-                else if (ObjectManager.Player.HasBuff("Muramana"))
-                {
-                    _lastMura = Utils.TickCount;
-                }
-            }
-        }
-
         public static float CalcDamage(Obj_AI_Base target, double currentDmg)
         {
             if (target == null)
+            {
                 return 0;
+            }
 
             double dmg = currentDmg;
 
@@ -412,36 +323,52 @@ using EloBuddy;
                 {
                     //bilge
                     if (item.ActiveId == 3144)
+                    {
                         dmg += ObjectManager.Player.GetItemDamage(target, Damage.DamageItems.Bilgewater);
+                    }
 
                     //Botrk
                     if (item.ActiveId == 3153)
+                    {
                         dmg += ObjectManager.Player.GetItemDamage(target, Damage.DamageItems.Botrk);
+                    }
 
                     //hextech
                     if (item.ActiveId == 3146)
+                    {
                         dmg += ObjectManager.Player.GetItemDamage(target, Damage.DamageItems.Hexgun);
+                    }
 
                     //hydra
                     if (item.ActiveId == 3074)
+                    {
                         dmg += ObjectManager.Player.GetItemDamage(target, Damage.DamageItems.Hydra);
+                    }
 
                     //tiamat
                     if (item.ActiveId == 3077)
+                    {
                         dmg += ObjectManager.Player.GetItemDamage(target, Damage.DamageItems.Tiamat);
+                    }
 
                     //sheen
                     if (Items.HasItem(3057))
+                    {
                         dmg += ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical, SheenDamage());
+                    }
 
                     //lich bane
                     if (Items.HasItem(3100))
+                    {
                         dmg += ObjectManager.Player.CalcDamage(target, Damage.DamageType.Magical, LichDamage());
+                    }
                 }
             }
 
             if (Ignite_Ready())
+            {
                 dmg += ObjectManager.Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
+            }
 
             return (float)dmg;
         }
@@ -451,6 +378,7 @@ using EloBuddy;
             double dmg = 0;
 
             dmg += ObjectManager.Player.FlatPhysicalDamageMod;
+
             return dmg;
         }
 
@@ -460,28 +388,22 @@ using EloBuddy;
 
             dmg += .75 * ObjectManager.Player.FlatPhysicalDamageMod;
             dmg += .5 * ObjectManager.Player.FlatMagicDamageMod;
+
             return dmg;
         }
 
         private static bool Ignite_Ready()
         {
-            if (IgniteSlot != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready)
-                return true;
-            return false;
+            return IgniteSlot != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready;
         }
 
         private static void Use_Ignite(AIHeroClient target)
         {
-            if (target != null && IgniteSlot != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready && ObjectManager.Player.Distance(target.Position) < 650)
-                ObjectManager.Player.Spellbook.CastSpell(IgniteSlot, target);
-        }
-
-        private static void CastMuraMana()
-        {
-            var mura = ObjectManager.Player.GetSpellSlot("Muramana");
-            if (mura != SpellSlot.Unknown && mura.IsReady())
+            if (target != null && IgniteSlot != SpellSlot.Unknown &&
+                ObjectManager.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready &&
+                ObjectManager.Player.Distance(target.Position) < 650)
             {
-                ObjectManager.Player.Spellbook.CastSpell(mura);
+                ObjectManager.Player.Spellbook.CastSpell(IgniteSlot, target);
             }
         }
 

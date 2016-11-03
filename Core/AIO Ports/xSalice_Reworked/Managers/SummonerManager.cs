@@ -1,12 +1,12 @@
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
-
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace xSaliceResurrected.Managers
+ namespace xSaliceResurrected_Rework.Managers
 {
-    class SummonerManager
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using SharpDX;
+
+    public class SummonerManager
     {
         private static readonly SpellSlot IgniteSlot = ObjectManager.Player.GetSpellSlot("SummonerDot");
         private static readonly SpellSlot FlashSlot = ObjectManager.Player.GetSpellSlot("SummonerFlash");
@@ -26,6 +26,5 @@ using EloBuddy;
         {
             Player.Spellbook.CastSpell(FlashSlot, pos);
         }
-
     }
 }

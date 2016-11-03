@@ -1,16 +1,16 @@
-using System;
-using System.Collections.Generic;
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
-using xSaliceResurrected.Managers;
-using PortAIO.Properties;
-
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace xSaliceResurrected.Utilities
+ namespace xSaliceResurrected_Rework.Utilities
 {
-    class CustomPermaMenu
+    using Base;
+    using System;
+    using System.Collections.Generic;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using SharpDX;
+    using PortAIO.Properties;
+
+    public class CustomPermaMenu
     {
         private static int _menuX = (int)(Drawing.Width * 0.75f);
         private static int _menuY = (int)(Drawing.Height * 0.75f);
@@ -26,22 +26,27 @@ using EloBuddy;
         public CustomPermaMenu()
         {
             Drawing.OnDraw += Drawing_OnDraw;
-
         }
 
-        public MenuItem AddToMenu(String text, String source)
+        public MenuItem AddToMenu(string text, string source)
         {
+            if (text == null)
+                throw new ArgumentNullException(nameof(text));
+
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+
             var newMenu = new PermaMenu(text, source);
             MyPermaMenus.Add(newMenu);
             return newMenu.MenuItem;
         }
 
-        private void Drawing_OnDraw(EventArgs arg)
+        protected virtual void Drawing_OnDraw(EventArgs arg)
         {
-            if (!Champion.menu.Item("enableCustMenu", true).GetValue<bool>())
+            if (!Champion.Menu.Item("enableCustMenu", true).GetValue<bool>())
                 return;
 
-            if (Champion.menu.Item("custMenu", true).GetValue<KeyBind>().Active)
+            if (Champion.Menu.Item("custMenu", true).GetValue<KeyBind>().Active)
             {
                 _menuX = (int) Drawing.WorldToScreen(Game.CursorPos).X;
                 _menuY = (int) Drawing.WorldToScreen(Game.CursorPos).Y;
@@ -58,7 +63,7 @@ using EloBuddy;
                         obj.RenderTxt.X = _menuX;
                         obj.RenderTxt.Y = _menuY + yOffset;
 
-                        if (Champion.menu.Item(obj.Source, true).GetValue<KeyBind>().Active)
+                        if (Champion.Menu.Item(obj.Source, true).GetValue<KeyBind>().Active)
                         {
                             obj.RenderTxt.Color = new ColorBGRA(209, 179, 40, 255);
                             obj.RenderTxt.text = obj.Text + "On";
@@ -105,12 +110,12 @@ using EloBuddy;
     internal class PermaMenu : IDisposable
     {
         internal readonly Render.Text RenderTxt;
-        internal readonly String Text;
-        internal readonly String Source;
+        internal readonly string Text;
+        internal readonly string Source;
         internal readonly MenuItem MenuItem;
             
 
-        public PermaMenu(String text,  string source)
+        public PermaMenu(string text,  string source)
         {
             Source = source;
             Text = text;

@@ -1,11 +1,12 @@
-using System;
-using LeagueSharp.Common;
-
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace xSaliceResurrected
+ namespace xSaliceResurrected_Rework
 {
-    class Program
+    using Base;
+    using System;
+    using LeagueSharp.Common;
+
+    public class Program
     {
         public static void Main()
         {
@@ -14,7 +15,7 @@ using EloBuddy;
 
         public static void LoadReligion()
         {
-            Champion champs = new Champion(true);
+            var champs = new Champion(true);
         }
     }
 }
