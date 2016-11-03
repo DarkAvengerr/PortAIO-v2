@@ -3578,6 +3578,9 @@ namespace PortAIO
                         case 4: // ExorAIO
                             ExorAIO.Program.Main();
                             break;
+                        case 5: // Warwick II
+                            WarwickII.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.MonkeyKing:

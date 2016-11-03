@@ -7,7 +7,8 @@ using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
 
-using EloBuddy; namespace Warwick
+using EloBuddy;
+namespace Warwick
 {
     internal class Program
     {
