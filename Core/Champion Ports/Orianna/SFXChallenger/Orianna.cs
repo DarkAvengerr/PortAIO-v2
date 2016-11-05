@@ -41,7 +41,7 @@ using MinionManager = SFXChallenger.Library.MinionManager;
 using MinionOrderTypes = SFXChallenger.Library.MinionOrderTypes;
 using MinionTeam = SFXChallenger.Library.MinionTeam;
 using MinionTypes = SFXChallenger.Library.MinionTypes;
-using Orbwalking = SFXChallenger.SFXTargetSelector.Orbwalking;
+
 using Spell = SFXChallenger.Wrappers.Spell;
 using TargetSelector = SFXChallenger.SFXTargetSelector.TargetSelector;
 using Utils = SFXChallenger.Helpers.Utils;
@@ -407,7 +407,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             {
                 if (Ultimate.ShouldMove(UltimateModeType.Flash))
                 {
-                    Orbwalking.MoveTo(Game.CursorPos, Orbwalker.HoldAreaRadius);
+                    Orbwalking.MoveTo(Game.CursorPos);
                 }
                 if (Ball.Status != BallStatus.Me)
                 {
@@ -457,7 +457,7 @@ using EloBuddy; namespace SFXChallenger.Champions
             {
                 if (Ultimate.ShouldMove(UltimateModeType.Assisted))
                 {
-                    Orbwalking.MoveTo(Game.CursorPos, Orbwalker.HoldAreaRadius);
+                    Orbwalking.MoveTo(Game.CursorPos);
                 }
                 if (!RLogic(UltimateModeType.Assisted))
                 {

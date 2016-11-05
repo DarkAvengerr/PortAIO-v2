@@ -32,7 +32,7 @@ using SFXChallenger.Library;
 using SFXChallenger.Library.Logger;
 using SFXChallenger.SFXTargetSelector.Others;
 using ItemData = LeagueSharp.Common.Data.ItemData;
-using Orbwalking = SFXChallenger.SFXTargetSelector.Orbwalking;
+
 using Utils = SFXChallenger.Helpers.Utils;
 
 #endregion

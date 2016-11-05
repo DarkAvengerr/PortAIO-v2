@@ -24,7 +24,7 @@
 
 using System.Collections.Generic;
 using LeagueSharp.Common;
-using Orbwalking = SFXChallenger.SFXTargetSelector.Orbwalking;
+
 using Spell = SFXChallenger.Wrappers.Spell;
 
 #endregion

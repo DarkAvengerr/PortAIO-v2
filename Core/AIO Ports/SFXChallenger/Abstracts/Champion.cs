@@ -36,7 +36,7 @@ using MinionManager = SFXChallenger.Library.MinionManager;
 using MinionOrderTypes = SFXChallenger.Library.MinionOrderTypes;
 using MinionTeam = SFXChallenger.Library.MinionTeam;
 using MinionTypes = SFXChallenger.Library.MinionTypes;
-using Orbwalking = SFXChallenger.SFXTargetSelector.Orbwalking;
+
 using Spell = SFXChallenger.Wrappers.Spell;
 using TargetSelector = SFXChallenger.SFXTargetSelector.TargetSelector;
 
@@ -134,7 +134,7 @@ using EloBuddy; namespace SFXChallenger.Abstracts
             try
             {
                 Orbwalker.SetAttack(false);
-                Orbwalking.MoveTo(Game.CursorPos, Orbwalker.HoldAreaRadius);
+                Orbwalking.MoveTo(Game.CursorPos);
                 Flee();
                 LeagueSharp.Common.Utility.DelayAction.Add(
                     750, delegate
