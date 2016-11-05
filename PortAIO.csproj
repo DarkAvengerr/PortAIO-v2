@@ -2131,7 +2131,6 @@
     <Compile Include="Core\Champion Ports\Swain\SluttySwain\Swain.cs" />
     <Compile Include="Core\Champion Ports\Swain\The Mocking Swain\Program.cs" />
     <Compile Include="Core\Champion Ports\Syndra\BadaoSyndra\Syndra.cs" />
-    <Compile Include="Core\Champion Ports\Syndra\ElEasy\Syndra.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Hikigaya Syndra\DamageIndicator.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Hikigaya Syndra\Helper.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Hikigaya Syndra\OrbManager.cs" />
