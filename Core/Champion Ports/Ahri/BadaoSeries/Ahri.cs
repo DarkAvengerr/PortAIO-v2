@@ -10,7 +10,7 @@ using Color = System.Drawing.Color;
 using LeagueSharp.Common.Data;
 using ItemData = LeagueSharp.Common.Data.ItemData;
 using BadaoSeries.CustomOrbwalker;
-using Orbwalking = BadaoSeries.CustomOrbwalker.Orbwalking;
+
 using EloBuddy; 
  using LeagueSharp.Common; 
  namespace BadaoSeries.Plugin
@@ -292,7 +292,7 @@ using EloBuddy;
                 CustomDamageIndicator.Enabled = false;
                 return;
             }
-            if ((IsCombo || IsHarass) && Orbwalking.CanMove(Orbwalking.Orbwalker._config.Item("ExtraWindup").GetValue<Slider>().Value)
+            if ((IsCombo || IsHarass) && Orbwalking.CanMove(50)
                 && (Q.IsReady() || E.IsReady()) )
             {
                 Orbwalker.SetAttack(false);
@@ -486,7 +486,7 @@ using EloBuddy;
         private static void AssasinMode()
         {
             var target = TargetSelector.GetSelectedTarget();
-            if (Orbwalking.CanMove(Orbwalking.Orbwalker._config.Item("ExtraWindup").GetValue<Slider>().Value))
+            if (Orbwalking.CanMove(50))
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             if (target.IsValidTarget() && !target.IsZombie)
             {
@@ -547,7 +547,7 @@ using EloBuddy;
                 if (Orbwalking.CanAttack() && Orbwalking.InAutoAttackRange(target))
                 {
                     EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, target);
-                    Orbwalking.LastAACommandTick = Utils.GameTimeTickCount - 4;
+                    Orbwalking.LastAttackCommandT = Utils.GameTimeTickCount - 4;
                 }
             }
         }

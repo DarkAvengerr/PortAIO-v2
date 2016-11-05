@@ -11,11 +11,11 @@ using Color = System.Drawing.Color;
 using LeagueSharp.Common.Data;
 using ItemData = LeagueSharp.Common.Data.ItemData;
 using BadaoSeries.CustomOrbwalker;
-using Orbwalking = BadaoSeries.CustomOrbwalker.Orbwalking;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace BadaoSeries.Plugin
+
+using EloBuddy;
+using LeagueSharp.Common;
+namespace BadaoSeries.Plugin
 {
     class SyndraOrbs
     {
@@ -77,7 +77,7 @@ using EloBuddy;
         {
             get
             {
-                var firstOrDefault =  ObjectManager.Get<Obj_AI_Minion>()
+                var firstOrDefault = ObjectManager.Get<Obj_AI_Minion>()
                         .FirstOrDefault(
                             x => x.IsEnemy && x.IsValid && x.Position.To2D().Distance(Player.Position.To2D()) <= 950);
                 return firstOrDefault;
@@ -247,7 +247,7 @@ using EloBuddy;
                 Bool(Combo, "Ec", "E", true);
                 Bool(Combo, "QEc", "QE", true);
                 Bool(Combo, "Rc", "R", true);
-                Separator(Combo,"Rbc","cast R target:");
+                Separator(Combo, "Rbc", "cast R target:");
                 foreach (var hero in HeroManager.Enemies)
                 {
                     Bool(Combo, hero.ChampionName + "c", hero.ChampionName, true);
@@ -282,7 +282,7 @@ using EloBuddy;
                 Bool(drawMenu, "Ed", "E");
                 Bool(drawMenu, "QEd", "QE");
                 Bool(drawMenu, "Rd", "R");
-                Bool(drawMenu, "Hpd", "Damage Indicator").ValueChanged+= Syndra_ValueChanged;
+                Bool(drawMenu, "Hpd", "Damage Indicator").ValueChanged += Syndra_ValueChanged;
                 MainMenu.AddSubMenu(drawMenu);
             }
 
@@ -301,7 +301,7 @@ using EloBuddy;
             CustomDamageIndicator.Enabled = drawhp;
             Obj_AI_Base.OnLevelUp += Obj_AI_Base_OnLevelUp;
         }
-        private static bool castRtarget (AIHeroClient target)
+        private static bool castRtarget(AIHeroClient target)
         {
             return MainMenu.Item(target.ChampionName + "c").GetValue<bool>();
         }
@@ -626,7 +626,7 @@ using EloBuddy;
 
         public static void UseW(Obj_AI_Base grabObject, Obj_AI_Base enemy)
         {
-            if (grabObject != null && W.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "SyndraW")
+            if (grabObject != null && W.IsReady() && Player.Spellbook.GetSpell(EloBuddy.SpellSlot.W).Name == "SyndraW")
             {
                 var gObjectPos = GetGrabableObjectPos(false);
 
@@ -646,7 +646,7 @@ using EloBuddy;
 
                 }
             }
-            if (enemy != null && W.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "SyndraWCast")
+            if (enemy != null && W.IsReady() && Player.Spellbook.GetSpell(EloBuddy.SpellSlot.W).Name == "SyndraWCast")
             {
                 var pos = W.GetPrediction(enemy, true);
                 if (pos.Hitchance >= HitChance.High)
@@ -721,7 +721,7 @@ using EloBuddy;
                             : StunAbleOrb.First().Value;
                         if (Orb != null)
                         {
-                            if(E.Cast(Orb.Position.To2D()))
+                            if (E.Cast(Orb.Position.To2D()))
                                 ecount = Utils.GameTimeTickCount + 100;
                         }
                     }

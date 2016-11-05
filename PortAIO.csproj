@@ -175,7 +175,6 @@
     <Compile Include="Core\AIO Ports\BadaoSeries\CustomOrbwalker\BadaoPrediction.cs" />
     <Compile Include="Core\AIO Ports\BadaoSeries\CustomOrbwalker\FakeClicks.cs" />
     <Compile Include="Core\AIO Ports\BadaoSeries\CustomOrbwalker\Helper.cs" />
-    <Compile Include="Core\AIO Ports\BadaoSeries\CustomOrbwalker\Orbwalker.cs" />
     <Compile Include="Core\AIO Ports\BadaoSeries\Program.cs" />
     <Compile Include="Core\AIO Ports\DZAIO\Core\Bootstrap.cs" />
     <Compile Include="Core\AIO Ports\DZAIO\Core\ChampionHelper\ChampionLoader.cs" />

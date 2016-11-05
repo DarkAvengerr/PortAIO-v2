@@ -2891,28 +2891,25 @@ namespace PortAIO
                         case 1: // BadaoSeries
                             BadaoSeries.Program.OnLoad();
                             break;
-                        case 2: // ElEasy
-                            ElEasy.Entry.OnLoad();
-                            break;
-                        case 3: // Hikigaya Syndra
+                        case 2: // Hikigaya Syndra
                             Hikigaya_Syndra.Program.OnLoad();
                             break;
-                        case 4: // OKTW
+                        case 3: // OKTW
                             OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
                             break;
-                        case 5: // Syndra by L33T
+                        case 4: // Syndra by L33T
                             SyndraL33T.Bootstrap.Main();
                             break;
-                        case 6: // vSeries
+                        case 5: // vSeries
                             vSupport_Series.Program.Game_OnGameLoad();
                             break;
-                        case 7: // xSalice
+                        case 6: // xSalice
                             xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
-                        case 8: // SephSyndra
+                        case 7: // SephSyndra
                             SephSyndra.Syndra.Main();
                             break;
-                        case 9: // Syndra - The Dark Sovereign
+                        case 8: // Syndra - The Dark Sovereign
                             Syndra______The_Dark_Sovereign.Program.Main();
                             break;
                     }

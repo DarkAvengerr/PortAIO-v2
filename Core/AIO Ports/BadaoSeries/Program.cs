@@ -22,7 +22,7 @@ using EloBuddy;
         public static SpellSlot Smite, Ignite, Flash;
         public static Items.Item Bilgewater, BotRK, Youmuu, Tiamat, Hydra, Sheen, LichBane, IcebornGauntlet, TrinityForce, LudensEcho;
         public static LeagueSharp.Common.Menu MainMenu;
-        public static BadaoSeries.CustomOrbwalker.Orbwalking.Orbwalker Orbwalker;
+        public static Orbwalking.Orbwalker Orbwalker;
         public static bool enabled = true;
 
         public static bool Enable
@@ -55,13 +55,7 @@ using EloBuddy;
                 return;
             }
             AddUI.Notif(Player.ChampionName + ": Loaded !", 10000);
-            //Bootstrap.Init(null);
-            //if (Player.ChampionName == "Rammus")
-            //{
-            //    LeagueSharp.SDK.Core.Orbwalker.Enabled = false;
-            //    Menu Orb = new Menu("Orbwalker", "Orbwalker", true).Attach();
-            //    Orbwalker.Orbwalker.Initialize(Orb);
-            //}
+
             Bilgewater = new Items.Item(ItemData.Bilgewater_Cutlass.Id, 550);
             BotRK = new Items.Item(ItemData.Blade_of_the_Ruined_King.Id, 550);
             Youmuu = new Items.Item(ItemData.Youmuus_Ghostblade.Id, 0);
@@ -95,7 +89,7 @@ using EloBuddy;
             if (sender != null)
             {
                 enabled = e.GetNewValue<bool>();
-                CustomOrbwalker.Orbwalking.Orbwalker.Enabled = e.GetNewValue<bool>();
+                //CustomOrbwalker.Orbwalking.Orbwalker.Enabled = e.GetNewValue<bool>();
                 if (e.GetNewValue<bool>())
                     AddUI.Notif(Player.ChampionName + ": Enabled !", 4000);
                 else

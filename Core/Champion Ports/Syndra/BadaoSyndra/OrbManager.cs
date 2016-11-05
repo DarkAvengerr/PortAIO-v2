@@ -1,9 +1,14 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using EloBuddy;
+
+#endregion
 
 namespace BadaoSeries.Plugin
 {
@@ -15,7 +20,7 @@ namespace BadaoSeries.Plugin
         {
             get
             {
-                if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1)
+                if (ObjectManager.Player.Spellbook.GetSpell(EloBuddy.SpellSlot.W).ToggleState == 1)
                     return -1;
 
                 return _wobjectnetworkid;
