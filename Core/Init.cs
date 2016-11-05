@@ -3625,13 +3625,10 @@ namespace PortAIO
                         case 3: // M1D 0R F33D
                             Mid_or_Feed.Program.Main();
                             break;
-                        case 4: // ChallengerSeries
-                            Challenger_Series.Program.Main();
-                            break;
-                        case 5: // ElXerath
+                        case 4: // ElXerath
                             ElXerath.Program.Main();
                             break;
-                        case 6: // Xerath - Magnus Ascendant
+                        case 5: // Xerath - Magnus Ascendant
                             Xerath___The_Magus_Ascendant.Program.Main();
                             break;
                     }
