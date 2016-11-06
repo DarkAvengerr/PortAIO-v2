@@ -1362,7 +1362,15 @@ namespace PortAIO
                     }
                     break;
                 case Champion.Ivern:
-                    UnderratedAIO.Program.OnGameLoad();
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // UnderratedAIO
+                            UnderratedAIO.Program.OnGameLoad();
+                            break;
+                        case 1: // SSIvern
+                            SSIvern.SSIvernInit.Main();
+                            break;
+                    }
                     break;
                 case Champion.Janna:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)

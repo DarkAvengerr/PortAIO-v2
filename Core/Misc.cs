@@ -141,6 +141,9 @@ namespace PortAIO.Dual_Port
                 case EloBuddy.Champion.Irelia:
                     champ = new string[] { "Irelia II", "Irelia to the Challenger", "xSalice", "[SDK] ChallengerSeriesAIO", "Irelia God", "Irelia Reloaded", "Rethought Irelia", "SluttyIrelia", "[SA] SurvivorSeries Irelia", "SurvivorSeriesAIO" };
                     break;
+                case EloBuddy.Champion.Ivern:
+                    champ = new string[] { "UnderratedAIO", "SSIvern" };
+                    break;
                 case EloBuddy.Champion.Janna:
                     champ = new string[] { "LCS Janna", "FreshBooster", "Support is Easy", "vSeries" };
                     break;

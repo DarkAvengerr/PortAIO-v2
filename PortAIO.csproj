@@ -875,6 +875,8 @@
     <Compile Include="Core\Champion Ports\Ezreal\HandicAPEzreal\Program.cs" />
     <Compile Include="Core\Champion Ports\Ezreal\HandicAPEzreal\Utils\Logging.cs" />
     <Compile Include="Core\Champion Ports\Ezreal\HandicAPEzreal\Utils\Misc.cs" />
+    <Compile Include="Core\Champion Ports\Ivern\SSIvern\DrawDamage.cs" />
+    <Compile Include="Core\Champion Ports\Ivern\SSIvern\Program.cs" />
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Common\Common.cs" />
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Common\HpBarDraw.cs" />
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Common\YasuoWindWall.cs" />
