@@ -89,11 +89,6 @@ using EloBuddy;
                     Utility.TurnAround.Init();
                 }
 
-                if (Menu.Item("Inject SkinChange").GetValue<bool>())
-                {
-                    Utility.SkinChange.Init();
-                }
-
                 if (Menu.Item("Inject Items").GetValue<bool>())
                 {
                     Utility.Items.Init();

@@ -228,7 +228,6 @@
     <Compile Include="Core\AIO Ports\Flowers%27 Series\Utility\Cleaness.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\Utility\Humanizer.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\Utility\Items.cs" />
-    <Compile Include="Core\AIO Ports\Flowers%27 Series\Utility\SkinChange.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\Utility\TurnAround.cs" />
     <Compile Include="Core\AIO Ports\FreshBooster\FreshCommon.cs" />
     <Compile Include="Core\AIO Ports\FreshBooster\HpBarIndicator.cs" />
