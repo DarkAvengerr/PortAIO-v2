@@ -1103,6 +1103,9 @@ namespace PortAIO
                         case 2: // jesuisFiora
                             jesuisFiora.Program.Main();
                             break;
+                        case 3: // Flowers' Fiora
+                            Flowers_Fiora.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Fizz:
