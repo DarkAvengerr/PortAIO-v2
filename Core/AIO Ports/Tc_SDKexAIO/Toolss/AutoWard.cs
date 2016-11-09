@@ -23,7 +23,7 @@ using EloBuddy;
         public static List<HiddenObj> HiddenObjList = new List<HiddenObj>();
 
         private Items.Item VisionWard = new Items.Item(ItemId.Oracle_Alteration, 550f);
-        private Items.Item OracleLens = new Items.Item(ItemId.Vision_Ward, 550f);
+        private Items.Item OracleLens = new Items.Item(ItemId.Control_Ward, 550f);
         private Items.Item WardN = new Items.Item(ItemId.Warding_Totem_Trinket, 600f);
         private Items.Item TrinketN = new Items.Item(ItemId.Warding_Totem_Trinket, 600f);
         private Items.Item SightStone = new Items.Item(ItemId.Sightstone, 600f);

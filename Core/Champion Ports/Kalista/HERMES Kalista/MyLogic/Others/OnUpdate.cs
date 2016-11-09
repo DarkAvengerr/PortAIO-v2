@@ -23,9 +23,9 @@ using EloBuddy;
                 {
                     Items.UseItem(ItemData.Oracle_Alteration.Id, Heroes.Player.Position);
                 }
-                else if (Items.HasItem((int)ItemId.Vision_Ward, Heroes.Player))
+                else if (Items.HasItem((int)ItemId.Control_Ward, Heroes.Player))
                 {
-                    Items.UseItem((int)ItemId.Vision_Ward, Heroes.Player.Position.Randomize(0, 125));
+                    Items.UseItem((int)ItemId.Control_Ward, Heroes.Player.Position.Randomize(0, 125));
                 }
             }
 
@@ -36,9 +36,9 @@ using EloBuddy;
                 {
                     Items.UseItem(ItemData.Oracle_Alteration.Id, Heroes.Player.Position);
                 }
-                else if (Items.HasItem((int)ItemId.Vision_Ward, Heroes.Player))
+                else if (Items.HasItem((int)ItemId.Control_Ward, Heroes.Player))
                 {
-                    Items.UseItem((int)ItemId.Vision_Ward, Heroes.Player.Position.Randomize(0, 125));
+                    Items.UseItem((int)ItemId.Control_Ward, Heroes.Player.Position.Randomize(0, 125));
                 }
             }
 

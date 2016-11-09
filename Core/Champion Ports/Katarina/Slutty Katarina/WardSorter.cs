@@ -22,7 +22,7 @@ using EloBuddy;
             WardingTotem = (int)ItemId.Warding_Totem_Trinket;
             SightStone = (int)ItemId.Sightstone;
             RubySightStone = (int)ItemId.Ruby_Sightstone;
-            VisionWard = (int)ItemId.Vision_Ward;
+            VisionWard = (int)ItemId.Control_Ward;
             Poachers = 3711;
             Poachers1 = 1408;
             Poachers2 = 1409;

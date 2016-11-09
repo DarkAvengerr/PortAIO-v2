@@ -14,7 +14,7 @@ namespace Staberina
         private static readonly ItemId[] WardIds =
         {
             ItemId.Warding_Totem_Trinket, ItemId.Greater_Stealth_Totem_Trinket,
-            ItemId.Greater_Vision_Totem_Trinket, ItemId.Sightstone, ItemId.Ruby_Sightstone, ItemId.Vision_Ward,
+            ItemId.Greater_Vision_Totem_Trinket, ItemId.Sightstone, ItemId.Ruby_Sightstone, ItemId.Control_Ward,
             (ItemId) 3711, (ItemId) 1411, (ItemId) 1410, (ItemId) 1408, (ItemId) 1409
         };
 

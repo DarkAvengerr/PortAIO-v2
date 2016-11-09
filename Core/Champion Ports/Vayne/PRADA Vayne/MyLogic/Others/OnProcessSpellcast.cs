@@ -53,9 +53,9 @@ using EloBuddy;
                     {
                         Items.UseItem((int)ItemId.Oracle_Alteration, Heroes.Player.Position);
                     }
-                    else if (Items.HasItem((int)ItemId.Vision_Ward, Heroes.Player))
+                    else if (Items.HasItem((int)ItemId.Control_Ward, Heroes.Player))
                     {
-                        Items.UseItem((int)ItemId.Vision_Ward, Heroes.Player.Position.Randomize(0, 125));
+                        Items.UseItem((int)ItemId.Control_Ward, Heroes.Player.Position.Randomize(0, 125));
                     }
                 }
                  */
