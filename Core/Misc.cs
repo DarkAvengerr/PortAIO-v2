@@ -380,7 +380,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "ElVi", "xQx Vi" };
                     break;
                 case EloBuddy.Champion.Viktor:
-                    champ = new string[] { "TRUSt in my Viktor", "Hikicarry Viktor", "Perplexed Viktor", "SAutoCarry", "SFXChallenger", "Badao's Viktor", "xSalice", "[SDK] Flowers' Series", "[SDK] Flowers' Viktor", "[SDK] TRUSt in my Viktor" };
+                    champ = new string[] { "TRUSt in my Viktor", "Hikicarry Viktor", "Perplexed Viktor", "SAutoCarry", "SFXChallenger", "Badao's Viktor", "xSalice", "[SDK] Flowers' Series", "[SDK] Flowers' Viktor", "[SDK] TRUSt in my Viktor", "King Lazer" };
                     break;
                 case EloBuddy.Champion.Vladimir:
                     champ = new string[] { "ElVladimir", "DZAIO", "SFXChallenger", "xSalice", "[SDK] The Rivers will Run Red", "[SDK] Flowers' Series", "[SDK] TroopAIO", "[SDK] Valvrave#" };

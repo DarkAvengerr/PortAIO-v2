@@ -1101,6 +1101,13 @@
     <Compile Include="Core\Champion Ports\Varus\ElVarusRevamped\Program.cs" />
     <Compile Include="Core\Champion Ports\Varus\ElVarusRevamped\Utils\Logging.cs" />
     <Compile Include="Core\Champion Ports\Varus\ElVarusRevamped\Utils\Misc.cs" />
+    <Compile Include="Core\Champion Ports\Viktor\[2HAM Viktor] King Lazer\Champions\Viktor.cs" />
+    <Compile Include="Core\Champion Ports\Viktor\[2HAM Viktor] King Lazer\Extensions\DrawingDamage.cs" />
+    <Compile Include="Core\Champion Ports\Viktor\[2HAM Viktor] King Lazer\Extensions\Menus.cs" />
+    <Compile Include="Core\Champion Ports\Viktor\[2HAM Viktor] King Lazer\Extensions\Prediction.cs" />
+    <Compile Include="Core\Champion Ports\Viktor\[2HAM Viktor] King Lazer\Extensions\Utilities.cs" />
+    <Compile Include="Core\Champion Ports\Viktor\[2HAM Viktor] King Lazer\Extensions\VSpells.cs" />
+    <Compile Include="Core\Champion Ports\Viktor\[2HAM Viktor] King Lazer\Program.cs" />
     <Compile Include="Core\Champion Ports\Warwick\Warwick ll\Champion\PlayerSpells.cs" />
     <Compile Include="Core\Champion Ports\Warwick\Warwick ll\Common\CommonAutoBush.cs" />
     <Compile Include="Core\Champion Ports\Warwick\Warwick ll\Common\CommonAutoLevel.cs" />

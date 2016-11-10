@@ -3527,8 +3527,11 @@ namespace PortAIO
                         case 8: // Flowers' Viktor
                             Flowers_Viktor.Program.Main();
                             break;
-                        case 9:
+                        case 9: // TRUStInMyViktor SDK
                             TRUStInMyViktor.Program.Main();
+                            break;
+                        case 10: // King Lazer
+                            KingLazerViktor.Program.Main();
                             break;
                     }
                     break;
