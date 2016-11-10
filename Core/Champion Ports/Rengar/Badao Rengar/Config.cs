@@ -22,7 +22,8 @@ using EloBuddy;
         private static AIHeroClient Player { get { return ObjectManager.Player; } }
         public static void BadaoActivate()
         {
-            Variables.Q = new Spell(SpellSlot.Q);
+            Variables.Q = new Spell(SpellSlot.Q,625);
+            Variables.Q.SetSkillshot(0.25f, 70, float.MaxValue,false, SkillshotType.SkillshotLine);
             Variables.W = new Spell(SpellSlot.W, 300);
             Variables.E = new Spell(SpellSlot.E, 1000);
             Variables.R = new Spell(SpellSlot.R);
@@ -47,7 +48,7 @@ using EloBuddy;
             Menu = new Menu("The Lazy Cat", Player.ChampionName, true);
 
             var orbwalkerMenu = new Menu("Orbwalker", "Orbwalker");
-            Variables.Orbwalker = new BadaoRengar.Orbwalking.Orbwalker(orbwalkerMenu);
+            Variables.Orbwalker = new Orbwalking.Orbwalker(orbwalkerMenu);
             Menu.AddSubMenu(orbwalkerMenu);
             var ts = Menu.AddSubMenu(new Menu("Target Selector", "Target Selector")); ;
             TargetSelector.AddToMenu(ts);
@@ -58,10 +59,8 @@ using EloBuddy;
             // Combo
             Combo = Modes.AddSubMenu(new Menu("Combo", "Combo"));
             Variables.ComboSmite = Combo.AddItem(new MenuItem("comboUseSmite", "Use Smite").SetValue(true));
-            Variables.ComboYoumuu = Combo.AddItem(new MenuItem("comboUseYoumuu", "Use Youmuu's while steath").SetValue(true));
-            Variables.ComboMode = Combo.AddItem(new MenuItem("comboMode", "Combo Mode").SetValue(new StringList(new[] { "Snare", "Burst", "Auto", "Always Q", "AP mode" }, 0)));
+            Variables.ComboMode = Combo.AddItem(new MenuItem("comboMode", "Combo Mode").SetValue(new StringList(new[] { "Q","W","E" }, 0)));
             Variables.ComboSwitchKey = Combo.AddItem(new MenuItem("ComboSwitch", "ComboModeSwitch").SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press)));
-            Variables.ComboResetAA = Combo.AddItem(new MenuItem("ComboResetAA", "Always Reset AA with Q").SetValue(false));
 
             //Harass
             //Harass = Modes.AddSubMenu(new Menu("Harass", "Harass"));
@@ -85,7 +84,6 @@ using EloBuddy;
             Variables.LaneW = LaneClear.AddItem(new MenuItem("laneUseW", "Use W").SetValue(true));
             Variables.LaneE = LaneClear.AddItem(new MenuItem("laneUseE", "Use E").SetValue(true));
             Variables.LaneTiamat = LaneClear.AddItem(new MenuItem("laneUseTiamat", "Use Tiamat/Hydra").SetValue(true));
-            Variables.LaneSave = LaneClear.AddItem(new MenuItem("laneSave", "Save 5  FEROCITY").SetValue(false));
 
             //JungleClear
             JungleClear = Modes.AddSubMenu(new Menu("JungleClear", "JungleClear"));
@@ -93,11 +91,9 @@ using EloBuddy;
             Variables.JungW = JungleClear.AddItem(new MenuItem("jungUseW", "Use W").SetValue(true));
             Variables.JungE = JungleClear.AddItem(new MenuItem("jungUseE", "Use E").SetValue(true));
             Variables.JungTiamat = JungleClear.AddItem(new MenuItem("jungUseTiamat", "Use Tiamat/Hydra").SetValue(true));
-            Variables.JungSave = JungleClear.AddItem(new MenuItem("jungSave", "Save 5  FEROCITY").SetValue(false));
 
             //Auto
             Auto = Modes.AddSubMenu(new Menu("Auto", "Auto"));
-            Variables.AutoWHeal = Auto.AddItem(new MenuItem("autoWHeal", "W Heal if HP <").SetValue(new Slider(20, 0, 100)));
             Variables.AutoEInterrupt = Auto.AddItem(new MenuItem("autoEInterrupt", "Interrupt with E").SetValue(true));
             Variables.AutoSmiteKS = Auto.AddItem(new MenuItem("autoSmiteKS", "Smite KS(blue / red)").SetValue(true));
             Variables.AutoESK = Auto.AddItem(new MenuItem("autoEKS", "E Ks").SetValue(true));
@@ -144,27 +140,18 @@ using EloBuddy;
             {
                 return;
             }
-
             switch (comboMode)
             {
-                case "Snare":
-                    Variables.ComboMode.SetValue(new StringList(new[] { "Snare", "Burst", "Auto", "Always Q", "AP mode" }, 1));
+                case "Q":
+                    Variables.ComboMode.SetValue(new StringList(new[] { "Q", "W", "E" }, 1));
                     _lastSwitchTick = Utils.GameTimeTickCount + 300;
                     break;
-                case "Burst":
-                    Variables.ComboMode.SetValue(new StringList(new[] { "Snare", "Burst", "Auto", "Always Q", "AP mode" }, 2));
+                case "W":
+                    Variables.ComboMode.SetValue(new StringList(new[] { "Q", "W", "E" }, 2));
                     _lastSwitchTick = Utils.GameTimeTickCount + 300;
                     break;
-                case "Auto":
-                    Variables.ComboMode.SetValue(new StringList(new[] { "Snare", "Burst", "Auto", "Always Q", "AP mode" }, 3));
-                    _lastSwitchTick = Utils.GameTimeTickCount + 300;
-                    break;
-                case "Always Q":
-                    Variables.ComboMode.SetValue(new StringList(new[] { "Snare", "Burst", "Auto", "Always Q", "AP mode" }, 4));
-                    _lastSwitchTick = Utils.GameTimeTickCount + 300;
-                    break;
-                case "AP mode":
-                    Variables.ComboMode.SetValue(new StringList(new[] { "Snare", "Burst", "Auto", "Always Q", "AP mode" }, 0));
+                case "E":
+                    Variables.ComboMode.SetValue(new StringList(new[] { "Q", "W", "E" }, 0));
                     _lastSwitchTick = Utils.GameTimeTickCount + 300;
                     break;
             }

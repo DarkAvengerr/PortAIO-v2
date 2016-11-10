@@ -40,7 +40,6 @@ using EloBuddy;
                 return;
             if (!sender.IsMe)
                 return;
-
             var mode = Variables.ComboMode.GetValue<StringList>().SelectedValue;
             if (Helper.HasItem())
             {
@@ -54,16 +53,16 @@ using EloBuddy;
                 }
             }
 
-            if (Player.Mana < 5)
+            if (Player.Mana < 4)
             {
                 if (Variables.E.IsReady() && AssassinateTarget.IsValidTarget(Variables.E.Range) && !AssassinateTarget.IsZombie)
                 {
                     Helper.CastE(AssassinateTarget);
                 }
             }
-            if (mode == "Auto" || mode == "Snare")
+            if (mode == "E")
             {
-                if (Player.Mana == 5)
+                if (Player.Mana == 4)
                 {
                     if (Variables.E.IsReady() && AssassinateTarget.IsValidTarget(Variables.E.Range) && !AssassinateTarget.IsZombie)
                     {
@@ -71,15 +70,7 @@ using EloBuddy;
                     }
                 }
             }
-            if (mode == "Always Q" || mode == "Burst")
-            {
-                if (Player.Mana == 5)
-                {
-                    Variables.Q.Cast();
-                }
-            }
-
-            //Chat.Say("dash");
+           
         }
 
         private static void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
@@ -87,31 +78,25 @@ using EloBuddy;
             if (!Variables.AssassinateKey.GetValue<KeyBind>().Active)
                 return;
 
-            if (args.Unit.IsMe && Variables.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            if (args.Unit.IsMe)
             {
                 if (ItemData.Youmuus_Ghostblade.GetItem().IsReady())
                     ItemData.Youmuus_Ghostblade.GetItem().Cast();
             }
-
-            if (!Variables.ComboResetAA.GetValue<bool>())
-                return;
-
-            Helper.QbeforeAttack(args.Target);
         }
 
         private static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             if (!Variables.AssassinateKey.GetValue<KeyBind>().Active)
                 return;
-
-            if (Variables.ComboMode.GetValue<StringList>().SelectedIndex == 0 && Player.Mana == 5)
+            if (Variables.ComboMode.GetValue<StringList>().SelectedValue != "Q" && Player.Mana == 4)
             {
                 if (Helper.HasItem())
                     Helper.CastItem();
             }
             else if (Variables.Q.IsReady())
             {
-                Variables.Q.Cast();
+                Variables.Q.Cast(target as Obj_AI_Base);
             }
             else if (Helper.HasItem())
             {
@@ -132,8 +117,8 @@ using EloBuddy;
                 return;
             
             Orbwalking.Orbwalk((AssassinateTarget != null && Orbwalking.InAutoAttackRange(AssassinateTarget))? AssassinateTarget : null,
-                Variables.Orbwalker._orbwalkingPoint.To2D().IsValid() ?
-                Variables.Orbwalker._orbwalkingPoint : Game.CursorPos, 90, 50, false, false);
+                Variables.Orbwalker.GetOrbwalkingPoint().To2D().IsValid() ?
+                Variables.Orbwalker.GetOrbwalkingPoint() : Game.CursorPos, 90, 50, false, false);
 
             if (!AssassinateTarget.IsValidTarget())
                 return;
@@ -148,95 +133,38 @@ using EloBuddy;
                     }
                 }
             }
-
-            if (ItemData.Youmuus_Ghostblade.GetItem().IsReady() && Variables.ComboYoumuu.GetValue<bool>()
-                && Player.HasBuff("RengarR"))
-            {
-                ItemData.Youmuus_Ghostblade.GetItem().Cast();
-            }
             if (!Player.HasBuff("RengarR"))
             {
-                if (Variables.ComboMode.GetValue<StringList>().SelectedIndex == 0) // snare
+                if (Player.Mana < 4)
                 {
-                    if (Player.Mana < 5)
+                    if (Variables.Q.IsReady() && AssassinateTarget.IsValidTarget(Variables.Q.Range) && !AssassinateTarget.IsZombie)
                     {
-                        if (Variables.W.IsReady() && AssassinateTarget.IsValidTarget(Variables.W.Range) && !AssassinateTarget.IsZombie)
+                        if (!Player.IsDashing() && Orbwalking.CanMove(90)
+                           && !(Orbwalking.CanAttack() && Orbwalking.InAutoAttackRange(AssassinateTarget)))
                         {
-                            Variables.W.Cast(AssassinateTarget);
-                        }
-                        if (Player.IsDashing() || Orbwalking.CanMove(90)
-                            && !(Orbwalking.CanAttack() && Orbwalking.InAutoAttackRange(AssassinateTarget)))
-                        {
-                            if (Variables.E.IsReady() && AssassinateTarget.IsValidTarget(Variables.E.Range) && !AssassinateTarget.IsZombie)
-                            {
-                                Helper.CastE(AssassinateTarget);
-                            }
+                            Variables.Q.Cast(AssassinateTarget);
                         }
                     }
-                    else
+                    if (Variables.W.IsReady() && AssassinateTarget.IsValidTarget(500) && !AssassinateTarget.IsZombie)
                     {
-                        if (Player.IsDashing() || Orbwalking.CanMove(90)
-                            && !(Orbwalking.CanAttack() && Orbwalking.InAutoAttackRange(AssassinateTarget)))
+                        Variables.W.Cast(AssassinateTarget);
+                    }
+                    if (Player.IsDashing() || Orbwalking.CanMove(90)
+                        && !(Orbwalking.CanAttack() && Orbwalking.InAutoAttackRange(AssassinateTarget)))
+                    {
+                        if (Variables.E.IsReady() && AssassinateTarget.IsValidTarget(Variables.E.Range) && !AssassinateTarget.IsZombie)
                         {
-                            if (Variables.E.IsReady() && AssassinateTarget.IsValidTarget(Variables.E.Range) && !AssassinateTarget.IsZombie)
-                            {
-                                Helper.CastE(AssassinateTarget);
-                            }
+                            Helper.CastE(AssassinateTarget);
                         }
                     }
-                }
-                else if (Variables.ComboMode.GetValue<StringList>().SelectedIndex == 1) // burst
-                {
-                    if (Player.Mana < 5)
-                    {
-                        if (Variables.W.IsReady() && AssassinateTarget.IsValidTarget(Variables.W.Range) && !AssassinateTarget.IsZombie)
-                        {
-                            Variables.W.Cast(AssassinateTarget);
-                        }
-                        if (Player.IsDashing() || Orbwalking.CanMove(90)
-                            && !(Orbwalking.CanAttack() && Orbwalking.InAutoAttackRange(AssassinateTarget)))
-                        {
-                            if (Variables.E.IsReady() && AssassinateTarget.IsValidTarget(Variables.E.Range) && !AssassinateTarget.IsZombie)
-                            {
-                                Helper.CastE(AssassinateTarget);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (Variables.Q.IsReady() && Orbwalking.InAutoAttackRange(AssassinateTarget) && !Player.HasBuff("rengarpassivebuff"))
-                        {
-                            if (Orbwalking.CanMove(90) && !Orbwalking.CanAttack())
-                            {
-                                Variables.Q.Cast();
-                            }
-                        }
-                        if (Variables.Q.IsReady() && Player.IsDashing())
-                        {
-                            Variables.Q.Cast();
-                        }
 
-                        if (!Player.HasBuff("rengarpassivebuff") && !Player.IsDashing()
-                            && Orbwalking.CanMove(90)
-                            && !Orbwalking.InAutoAttackRange(AssassinateTarget))
-                        {
-                            if (Variables.E.IsReady() && AssassinateTarget.IsValidTarget(Variables.E.Range) && !AssassinateTarget.IsZombie)
-                            {
-                                Helper.CastE(AssassinateTarget);
-                            }
-                        }
-                    }
                 }
-                else if (Variables.ComboMode.GetValue<StringList>().SelectedIndex == 2) // auto
+                if (Player.Mana == 4)
                 {
-                    if (Player.Mana < 5)
+                    if (Variables.ComboMode.GetValue<StringList>().SelectedValue == "E")
                     {
-                        if (Variables.W.IsReady() && AssassinateTarget.IsValidTarget(Variables.W.Range) && !AssassinateTarget.IsZombie)
-                        {
-                            Variables.W.Cast(AssassinateTarget);
-                        }
                         if (Player.IsDashing() || Orbwalking.CanMove(90)
-                            && !(Orbwalking.CanAttack() && Orbwalking.InAutoAttackRange(AssassinateTarget)))
+                         && !(Orbwalking.CanAttack() && Orbwalking.InAutoAttackRange(AssassinateTarget)))
                         {
                             if (Variables.E.IsReady() && AssassinateTarget.IsValidTarget(Variables.E.Range) && !AssassinateTarget.IsZombie)
                             {
@@ -244,85 +172,25 @@ using EloBuddy;
                             }
                         }
                     }
-                    else
+                    if (Variables.ComboMode.GetValue<StringList>().SelectedValue == "W")
                     {
-                        if (Variables.Q.IsReady() && Orbwalking.InAutoAttackRange(AssassinateTarget) && !Player.HasBuff("rengarpassivebuff"))
+                        if (Variables.W.IsReady() && AssassinateTarget.IsValidTarget(500) && !AssassinateTarget.IsZombie)
                         {
-                            if (Orbwalking.CanMove(90) && !Orbwalking.CanAttack())
-                            {
-                                Variables.Q.Cast();
-                            }
-
+                            Variables.W.Cast(AssassinateTarget);
                         }
-                        if (!Player.HasBuff("rengarpassivebuff") && !Player.IsDashing()
-                            && Orbwalking.CanMove(90)
-                            && !Orbwalking.InAutoAttackRange(AssassinateTarget))
+                    }
+                    if (Variables.ComboMode.GetValue<StringList>().SelectedValue == "Q")
+                    {
+                        if (Variables.Q.IsReady() && AssassinateTarget.IsValidTarget(Variables.Q.Range) && !AssassinateTarget.IsZombie)
                         {
-                            if (Variables.E.IsReady() && AssassinateTarget.IsValidTarget(Variables.E.Range) && !AssassinateTarget.IsZombie)
+                            if (!Player.IsDashing() && Orbwalking.CanMove(90)
+                               && !(Orbwalking.CanAttack() && Orbwalking.InAutoAttackRange(AssassinateTarget)))
                             {
-                                Helper.CastE(AssassinateTarget);
+                                Variables.Q.Cast(AssassinateTarget);
                             }
                         }
                     }
                 }
-                else if (Variables.ComboMode.GetValue<StringList>().SelectedIndex == 3) // always Q
-                {
-                    if (Player.Mana < 5)
-                    {
-                        if (Variables.W.IsReady() && AssassinateTarget.IsValidTarget(Variables.W.Range) && !AssassinateTarget.IsZombie)
-                        {
-                            Variables.W.Cast(AssassinateTarget);
-                        }
-                        if (Player.IsDashing() || Orbwalking.CanMove(90)
-                            && !(Orbwalking.CanAttack() && Orbwalking.InAutoAttackRange(AssassinateTarget)))
-                        {
-                            if (Variables.E.IsReady() && AssassinateTarget.IsValidTarget(Variables.E.Range) && !AssassinateTarget.IsZombie)
-                            {
-                                Helper.CastE(AssassinateTarget);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (Variables.Q.IsReady() && Orbwalking.InAutoAttackRange(AssassinateTarget) && !Player.HasBuff("rengarpassivebuff"))
-                        {
-                            if (Orbwalking.CanMove(90) && !Orbwalking.CanAttack())
-                            {
-                                Variables.Q.Cast();
-                            }
-                        }
-                        if (Variables.Q.IsReady() && Player.IsDashing())
-                        {
-                            Variables.Q.Cast();
-                        }
-                    }
-                }
-                else if (Variables.ComboMode.GetValue<StringList>().SelectedIndex == 4) // ap mode
-                {
-                    if (Player.Mana < 5)
-                    {
-                        if (Variables.W.IsReady() && AssassinateTarget.IsValidTarget(Variables.W.Range) && !AssassinateTarget.IsZombie)
-                        {
-                            Variables.W.Cast(AssassinateTarget);
-                        }
-                        if (Player.IsDashing() || Orbwalking.CanMove(90)
-                            && !(Orbwalking.CanAttack() && Orbwalking.InAutoAttackRange(AssassinateTarget)))
-                        {
-                            if (Variables.E.IsReady() && AssassinateTarget.IsValidTarget(Variables.E.Range) && !AssassinateTarget.IsZombie)
-                            {
-                                Helper.CastE(AssassinateTarget);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (Variables.W.IsReady() && AssassinateTarget.IsValidTarget(Variables.W.Range) && !AssassinateTarget.IsZombie)
-                        {
-                            Variables.W.Cast(AssassinateTarget);
-                        }
-                    }
-                }
-                else Chat.Say("stupid");
             }
         }
 

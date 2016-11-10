@@ -27,32 +27,20 @@ using EloBuddy;
         {
             if (Variables.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear)
                 return;
+            if (!(target is Obj_AI_Base))
+                return;
 
-            if (Player.Mana < 5 || 
-                (Player.Mana == 5 && 
-                ((!Variables.LaneSave.GetValue<bool>() && target.IsValidTarget() && target.Team != GameObjectTeam.Neutral) 
-                || (!Variables.JungSave.GetValue<bool>() && target.IsValidTarget() && target.Team == GameObjectTeam.Neutral)))
-                )
+            if (Variables.Q.IsReady() 
+                && ((Variables.LaneQ.GetValue<bool>() && target.IsValidTarget() && target.Team != GameObjectTeam.Neutral) 
+                || (Variables.JungQ.GetValue<bool>() && target.IsValidTarget() && target.Team == GameObjectTeam.Neutral)))
             {
-                if (Variables.Q.IsReady() 
-                    && ((Variables.LaneQ.GetValue<bool>() && target.IsValidTarget() && target.Team != GameObjectTeam.Neutral) 
-                    || (Variables.JungQ.GetValue<bool>() && target.IsValidTarget() && target.Team == GameObjectTeam.Neutral)))
-                {
-                    Variables.Q.Cast();
-                }
-                else
-                {
-                    if (Helper.HasItem() &&
-                        (Variables.LaneTiamat.GetValue<bool>() && target.IsValidTarget() && target.Team != GameObjectTeam.Neutral)
-                        ||(Variables.JungTiamat.GetValue<bool>() && target.IsValidTarget() && target.Team == GameObjectTeam.Neutral))
-                        Helper.CastItem();
-                }
+                Variables.Q.Cast(target as Obj_AI_Base);
             }
             else
             {
                 if (Helper.HasItem() &&
                     (Variables.LaneTiamat.GetValue<bool>() && target.IsValidTarget() && target.Team != GameObjectTeam.Neutral)
-                    || (Variables.JungTiamat.GetValue<bool>() && target.IsValidTarget() && target.Team == GameObjectTeam.Neutral))
+                    ||(Variables.JungTiamat.GetValue<bool>() && target.IsValidTarget() && target.Team == GameObjectTeam.Neutral))
                     Helper.CastItem();
             }
        
@@ -62,13 +50,31 @@ using EloBuddy;
         {
             if (Variables.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear)
                 return;
-
-            if ((Player.Mana < 5))
+            var targetQ1 = MinionManager.GetMinions(Player.Position, Variables.Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health).FirstOrDefault();
+            var targetW1 = MinionManager.GetMinions(Player.Position, 500, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health).FirstOrDefault();
+            var targetE1 = MinionManager.GetMinions(Player.Position, Variables.E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health).FirstOrDefault();
+            var targetQ2 = MinionManager.GetMinions(Player.Position, Variables.Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
+            var targetW2 = MinionManager.GetMinions(Player.Position, 500, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
+            var targetE2 = MinionManager.GetMinions(Player.Position, Variables.E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
+            if ((Player.Mana < 4))
             {
-                var targetW1 = MinionManager.GetMinions(Player.Position, 500, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health).FirstOrDefault();
-                var targetE1 = MinionManager.GetMinions(Player.Position, Variables.E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health).FirstOrDefault();
-                var targetW2 = MinionManager.GetMinions(Player.Position, 500, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
-                var targetE2 = MinionManager.GetMinions(Player.Position, Variables.E.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
+                
+                if (Variables.Q.IsReady() && targetQ1.IsValidTarget() && Variables.LaneQ.GetValue<bool>())
+                {
+                    if (!Player.IsDashing() && Orbwalking.CanMove(90)
+                       && !(Orbwalking.CanAttack() && Orbwalking.InAutoAttackRange(targetQ1)))
+                    {
+                        Variables.Q.Cast(targetQ1);
+                    }
+                }
+                if (Variables.Q.IsReady() && targetQ2.IsValidTarget() && Variables.JungQ.GetValue<bool>())
+                {
+                    if (!Player.IsDashing() && Orbwalking.CanMove(90)
+                       && !(Orbwalking.CanAttack() && Orbwalking.InAutoAttackRange(targetQ2)))
+                    {
+                        Variables.Q.Cast(targetQ2);
+                    }
+                }
                 if (Variables.W.IsReady() && targetW1 != null && Variables.LaneW.GetValue<bool>())
                 {
                     Variables.W.Cast(targetW1);
@@ -84,6 +90,25 @@ using EloBuddy;
                 if (Variables.E.IsReady() && targetE2 != null && Variables.JungE.GetValue<bool>())
                 {
                     Helper.CastE(targetE2);
+                }
+            }
+            else
+            {
+                if (Variables.Q.IsReady() && targetQ1.IsValidTarget() && Variables.LaneQ.GetValue<bool>())
+                {
+                    if (!Player.IsDashing() && Orbwalking.CanMove(90)
+                       && !(Orbwalking.CanAttack() && Orbwalking.InAutoAttackRange(targetQ1)))
+                    {
+                        Variables.Q.Cast(targetQ1);
+                    }
+                }
+                if (Variables.Q.IsReady() && targetQ2.IsValidTarget() && Variables.JungQ.GetValue<bool>())
+                {
+                    if (!Player.IsDashing() && Orbwalking.CanMove(90)
+                       && !(Orbwalking.CanAttack() && Orbwalking.InAutoAttackRange(targetQ2)))
+                    {
+                        Variables.Q.Cast(targetQ2);
+                    }
                 }
             }
         }

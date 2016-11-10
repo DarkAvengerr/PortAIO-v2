@@ -40,7 +40,7 @@ using EloBuddy;
             {
                 MagnetTarget = null;
                 IsDoingMagnet = false;
-                Variables.Orbwalker._orbwalkingPoint = Game.CursorPos;
+                Variables.Orbwalker.SetOrbwalkingPoint(Game.CursorPos);
                 return;
             }
 
@@ -49,19 +49,19 @@ using EloBuddy;
             {
                 MagnetTarget = TargetSelector.GetSelectedTarget();
                 IsDoingMagnet = true;
-                Variables.Orbwalker._orbwalkingPoint = TargetSelector.GetSelectedTarget().Position.Extend(ObjectManager.Player.Position, - 200);
+                Variables.Orbwalker.SetOrbwalkingPoint(TargetSelector.GetSelectedTarget().Position.Extend(ObjectManager.Player.Position, - 200));
             }
             else if (Variables.AssassinateKey.GetValue<KeyBind>().Active && Assasinate.AssassinateTarget.IsValidTarget(Variables.MagnetRange.GetValue<Slider>().Value))
             {
                 MagnetTarget = Assasinate.AssassinateTarget;
                 IsDoingMagnet = true;
-                Variables.Orbwalker._orbwalkingPoint = Assasinate.AssassinateTarget.Position.Extend(ObjectManager.Player.Position, -200);
+                Variables.Orbwalker.SetOrbwalkingPoint(Assasinate.AssassinateTarget.Position.Extend(ObjectManager.Player.Position, -200));
             }
             else
             {
                 MagnetTarget = null;
                 IsDoingMagnet = false;
-                Variables.Orbwalker._orbwalkingPoint = Game.CursorPos;
+                Variables.Orbwalker.SetOrbwalkingPoint(Game.CursorPos);
             }
         }
     }

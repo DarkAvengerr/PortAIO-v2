@@ -24,7 +24,7 @@ using EloBuddy;
 
         private static void Interrupter2_OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (Variables.AutoEInterrupt.GetValue<bool>() && Player.Mana == 5 && Variables.E.IsReady())
+            if (Variables.AutoEInterrupt.GetValue<bool>() && Player.Mana == 4 && Variables.E.IsReady())
             {
                 if (sender.IsValidTarget(Variables.E.Range))
                 {
@@ -35,11 +35,6 @@ using EloBuddy;
 
         private static void Game_OnUpdate(EventArgs args)
         {
-            if (Player.Health * 100 / Player.MaxHealth <= Variables.AutoWHeal.GetValue<Slider>().Value && Player.Mana == 5 && Variables.W.IsReady()
-                          && (Player.Health * 100 / Player.MaxHealth <= 10 || Player.CountEnemiesInRange(1000) > 0))
-            {
-                Variables.W.Cast();
-            }
 
             if (Variables.AutoWKS.GetValue<bool>() && Variables.W.IsReady() && Player.Mana != 5)
             {
