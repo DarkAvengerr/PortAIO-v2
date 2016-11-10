@@ -419,7 +419,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "ElZilean", "Support is Easy", "BlackZilean" };
                     break;
                 case EloBuddy.Champion.Zyra:
-                    champ = new string[] { "D-Zyra", "Support is Easy", "xSalice", "[SDK] RAREZyra" };
+                    champ = new string[] { "D-Zyra", "Support is Easy", "xSalice", "[SDK] RAREZyra", "MasterOfPlants" };
                     break;
                 default:
                     hasDualPort = false;

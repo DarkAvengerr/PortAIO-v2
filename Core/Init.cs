@@ -3785,6 +3785,9 @@ namespace PortAIO
                         case 3: // RAREZyra
                             RAREZyra.Program.Main();
                             break;
+                        case 4: // MasterOfPlants
+                            MasterOfThorns.Program.Main();
+                            break;
                     }
                     break;
             }
