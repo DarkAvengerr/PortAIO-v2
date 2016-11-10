@@ -1,17 +1,22 @@
-﻿#region
+#region
 using System;
 using System.Reflection;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
 
 #endregion
 
-namespace Leblanc
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc
 {
     internal class Leblanc
     {
         public static string ChampionName => "Leblanc";
+        public static void Init()
+        {
+            Game_OnGameLoad();
+        }
 
         public static void Game_OnGameLoad()
         {
@@ -28,7 +33,7 @@ namespace Leblanc
                 "<font color='#ff3232'>Successfully Loaded: </font><font color='#d4d4d4'><font color='#FFFFFF'>Leblanc II </font>" +
                 fVersion);
 
-            //Console.Clear();
+            Console.Clear();
         }
     }
 }

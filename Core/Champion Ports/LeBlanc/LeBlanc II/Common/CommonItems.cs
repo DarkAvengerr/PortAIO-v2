@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
 
-namespace Leblanc.Common
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Common
 {
     internal class CommonItems
     {

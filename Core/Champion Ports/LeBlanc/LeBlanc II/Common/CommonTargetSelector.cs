@@ -3,9 +3,11 @@ using System.Drawing;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
+using PortAIO.Properties;
 
-namespace Leblanc.Common
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Common
 {
     using System.Collections.Generic;
     using System.Xml;

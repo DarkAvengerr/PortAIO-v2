@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -7,9 +7,10 @@ using LeagueSharp.Common;
 using Leblanc.Modes;
 using SharpDX;
 using Color = SharpDX.Color;
-using EloBuddy;
 
-namespace Leblanc.Common
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Common
 {
     internal static class CommonManaManager
     {

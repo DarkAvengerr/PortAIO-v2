@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -6,9 +6,10 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using Color = SharpDX.Color;
-using EloBuddy;
 
-namespace Leblanc.Common
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Common
 {
     internal class EnemyHeros
     {

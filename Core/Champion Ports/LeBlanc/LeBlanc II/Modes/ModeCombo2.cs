@@ -1,4 +1,4 @@
-﻿//using System;
+//using System;
 //using System.Collections.Generic;
 //using System.Drawing;
 //using System.Linq;
@@ -9,7 +9,7 @@
 //using Leblanc.Common;
 //using SharpDX;
 
-//namespace Leblanc.Modes
+//using EloBuddy; 
 //{
 
 //    enum ActiveComboMode

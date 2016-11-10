@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Policy;
@@ -8,9 +8,10 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using Leblanc.Champion;
 using Leblanc.Common;
-using EloBuddy;
 
-namespace Leblanc.Modes
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Modes
 {
     internal static class ModeChain
     {

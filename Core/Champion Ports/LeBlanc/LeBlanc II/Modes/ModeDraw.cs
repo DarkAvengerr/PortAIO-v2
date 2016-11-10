@@ -1,21 +1,22 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using LeagueSharp.Common;
 using Leblanc.Champion;
 using Leblanc.Common;
+using PortAIO.Properties;
 using SharpDX;
 using SharpDX.Direct3D9;
 using Color = System.Drawing.Color;
 using CommonGeometry = Leblanc.Common.CommonGeometry;
 using Font = SharpDX.Direct3D9.Font;
-using EloBuddy;
 
-namespace Leblanc.Modes
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Modes
 {
     using System.Linq;
     using LeagueSharp;
-
     internal class LeblancQ
     {
         public GameObject Object { get; set; }
@@ -138,7 +139,7 @@ namespace Leblanc.Modes
                     {
                         MenuLocal.AddItem(dmgAfterComboItem);
 
-                        //Utility.HpBarDamageIndicator.DamageToUnit = Common.CommonMath.GetComboDamage;
+                        //LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = Common.CommonMath.GetComboDamage;
                         LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = Modes.ModeCombo.GetComboDamage;
                         LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = dmgAfterComboItem.GetValue<bool>();
                         dmgAfterComboItem.ValueChanged += delegate (object sender, OnValueChangeEventArgs eventArgs)

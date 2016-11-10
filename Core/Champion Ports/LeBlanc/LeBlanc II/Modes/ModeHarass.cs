@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Linq;
 using LeagueSharp;
@@ -6,9 +6,10 @@ using LeagueSharp.Common;
 using Leblanc.Champion;
 using Color = SharpDX.Color;
 using Leblanc.Common;
-using EloBuddy;
 
-namespace Leblanc.Modes
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Modes
 {
 
     internal class ModeHarass

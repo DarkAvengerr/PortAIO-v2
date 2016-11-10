@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
@@ -6,9 +6,10 @@ using LeagueSharp.Common;
 using SharpDX;
 using SharpDX.Direct3D9;
 using Font = SharpDX.Direct3D9.Font;
-using EloBuddy;
 
-namespace Leblanc.Common
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Common
 {
 
     public static class CommonBuffs

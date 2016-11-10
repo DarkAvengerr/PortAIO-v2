@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -7,9 +7,10 @@ using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
 using Geometry = Leblanc.Common.CommonGeometry;
-using EloBuddy;
 
-namespace Leblanc.Champion
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Champion
 {
     internal static class PlayerObjects
     {

@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using System.Collections.Generic;
 using SharpDX;
@@ -6,7 +6,9 @@ using SharpDX.Direct3D9;
 
 #endregion
 
-namespace Leblanc.Common
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Common
 {
     public static class CommonFontExtension
     {

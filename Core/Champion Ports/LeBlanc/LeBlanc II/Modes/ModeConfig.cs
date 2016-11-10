@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -8,9 +8,10 @@ using Leblanc.Common;
 using LeagueSharp;
 using LeagueSharp.Common;
 using Color = SharpDX.Color;
-using EloBuddy;
 
-namespace Leblanc.Modes
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Modes
 {
     internal class ModeConfig
     {

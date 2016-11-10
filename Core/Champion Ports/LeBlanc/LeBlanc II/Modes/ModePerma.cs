@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using Leblanc.Common;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
 
-namespace Leblanc.Modes
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Modes
 {
     internal class ModePerma
     {

@@ -10,7 +10,7 @@ using Color = System.Drawing.Color;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace Leblanc
+ namespace BadaoLeblanc
 {
     public static class TwoChains
     {

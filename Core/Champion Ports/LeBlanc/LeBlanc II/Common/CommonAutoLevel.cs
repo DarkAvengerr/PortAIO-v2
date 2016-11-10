@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Drawing;
 using System.Linq;
 using LeagueSharp;
@@ -6,9 +6,10 @@ using System.Collections.Generic;
 using LeagueSharp.Common;
 using Color = SharpDX.Color;
 using System.Windows.Input;
-using EloBuddy;
 
-namespace Leblanc.Common
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Common
 {
     internal class CommonAutoLevel
     {
@@ -92,7 +93,7 @@ namespace Leblanc.Common
 
             if (qLevel < level[0])
             {
-
+                
                 LeagueSharp.Common.Utility.DelayAction.Add(GetRandomDelay, () => ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.Q));
             }
 

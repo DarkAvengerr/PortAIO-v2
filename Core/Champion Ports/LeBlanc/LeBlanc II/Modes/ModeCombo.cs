@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -9,9 +9,10 @@ using Leblanc.Champion;
 using Color = SharpDX.Color;
 using Leblanc.Common;
 using SharpDX;
-using EloBuddy;
 
-namespace Leblanc.Modes
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Modes
 {
 
     enum ActiveComboMode
@@ -602,8 +603,9 @@ namespace Leblanc.Modes
                 return;
             }
 
-            Champion.PlayerSpells.CastQ(Target);
             Champion.PlayerSpells.CastQ2(Target);
+            Champion.PlayerSpells.CastQ(Target);
+            
         }
 
         private static void ExecuteCompleteCombo()
@@ -631,8 +633,9 @@ namespace Leblanc.Modes
                 return;
             }
 
-            Champion.PlayerSpells.CastW(Target);
             Champion.PlayerSpells.CastW2(Target.Position);
+            Champion.PlayerSpells.CastW(Target);
+            
             //Champion.PlayerSpells.CastW2(Target);
         }
 

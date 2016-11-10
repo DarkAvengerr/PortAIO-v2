@@ -1,4 +1,4 @@
-﻿// Copyright 2014 - 2014 Esk0r
+// Copyright 2014 - 2014 Esk0r
 // Geometry.cs is part of Evade.
 // 
 // Evade is free software: you can redistribute it and/or modify
@@ -24,7 +24,9 @@ using GamePath = System.Collections.Generic.List<SharpDX.Vector2>;
 
 #endregion
 
-namespace Leblanc.Common
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Common
 {
     using System;
     using System.Collections.Generic;
@@ -37,7 +39,6 @@ namespace Leblanc.Common
     using SharpDX;
 
     using Color = System.Drawing.Color;
-    using EloBuddy;
 
     /// <summary>
     ///     Class that contains the geometry related methods.

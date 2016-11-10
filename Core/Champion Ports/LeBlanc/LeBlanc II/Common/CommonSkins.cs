@@ -1,13 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
-
-namespace Leblanc.Common
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Common
 {
     internal class CommonSkins
     {
@@ -22,6 +22,7 @@ namespace Leblanc.Common
                     {
                         if (!args.GetNewValue<bool>())
                         {
+                            //ObjectManager.//Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, ObjectManager.Player.SkinId);
                         }
                     };
 
@@ -38,6 +39,7 @@ namespace Leblanc.Common
         {
             if (MenuLocal.Item("Settings.Skin").GetValue<bool>())
             {
+                //ObjectManager.//Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, MenuLocal.Item("Settings.SkinID").GetValue<StringList>().SelectedIndex);
             }
         }
     }

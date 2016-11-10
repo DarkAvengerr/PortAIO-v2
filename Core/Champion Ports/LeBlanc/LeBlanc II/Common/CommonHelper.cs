@@ -1,13 +1,14 @@
-﻿using System;
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using SharpDX.Direct3D9;
 using Font = SharpDX.Direct3D9.Font;
-using EloBuddy;
 
-namespace Leblanc.Common
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Common
 {
 
     public static class CommonHelper
@@ -118,23 +119,24 @@ namespace Leblanc.Common
 
         public static bool StillJumped(this Spell spell)
         {
+            
             if (spell == Champion.PlayerSpells.W)
             {
-                return 
+                return
                        ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W)
-                           .Name.Equals("Leblancslidereturn", StringComparison.InvariantCultureIgnoreCase);
+                           .Name.Equals("LeblancWReturn", StringComparison.InvariantCultureIgnoreCase);
             }
 
             if (spell == Champion.PlayerSpells.W2)
             {
-                return 
+                return
                        ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R)
-                           .Name.Equals("Leblancslidereturnm", StringComparison.InvariantCultureIgnoreCase);
+                           .Name.Equals("LeblancRWReturn", StringComparison.InvariantCultureIgnoreCase);
             }
 
             return false;
             //    return spell == Champion.PlayerSpells.W2 &&
-            //           ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R)
+            //           Player.Spellbook.GetSpell(SpellSlot.R)
             //               .Name.ToLower()
             //               .Equals("Leblancslidereturnm", StringComparison.InvariantCultureIgnoreCase);
         }

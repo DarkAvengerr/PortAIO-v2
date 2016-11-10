@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Drawing;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using SharpDX.Direct3D9;
-using EloBuddy;
 
-namespace Leblanc.Common
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Leblanc.Common
 {
     using System.Linq;
 
