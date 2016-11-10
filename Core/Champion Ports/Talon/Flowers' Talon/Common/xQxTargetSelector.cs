@@ -9,9 +9,9 @@ using EloBuddy;
     using System;
     using System.Drawing;
     using System.Linq;
-    using PortAIO.Properties;
     using Color = System.Drawing.Color;
     using Font = SharpDX.Direct3D9.Font;
+    using PortAIO.Properties;
 
     internal enum TargetSelect
     {
