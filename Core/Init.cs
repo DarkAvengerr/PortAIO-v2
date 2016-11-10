@@ -2554,6 +2554,9 @@ namespace PortAIO
                         case 7: // NechritoRengar
                             Nechrito_Rengar.MAIN.Main();
                             break;
+                        case 8: // ElRengarDecentralized
+                            ElRengarDecentralized.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Riven:
