@@ -1746,6 +1746,9 @@ namespace PortAIO
                         case 9: // sAIO
                             sAIO.Program.Main();
                             break;
+                        case 10: // ElKatarinaDecentralized
+                            ElKatarinaDecentralized.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Kayle:
