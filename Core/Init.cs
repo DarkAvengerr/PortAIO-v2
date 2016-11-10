@@ -2930,6 +2930,9 @@ namespace PortAIO
                         case 8: // Syndra - The Dark Sovereign
                             Syndra______The_Dark_Sovereign.Program.Main();
                             break;
+                        case 9: // DarkMage
+                            DarkMage.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.TahmKench:

@@ -1065,6 +1065,17 @@
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Load.cs" />
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\MenuConfig.cs" />
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Program.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Champion.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\GameEvents.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Menu\DrawDamage.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Menu\Menu.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Menu\SyndraMenu.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Modes\Modes.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Modes\SyndraModes.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\OrbManager.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Program.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Spells.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\SyndraCore.cs" />
     <Compile Include="Core\Champion Ports\Talon\Flowers%27 Talon\Common\Common.cs" />
     <Compile Include="Core\Champion Ports\Talon\Flowers%27 Talon\Common\HpBarDraw.cs" />
     <Compile Include="Core\Champion Ports\Talon\Flowers%27 Talon\Common\xQxTargetSelector.cs" />
