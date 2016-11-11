@@ -27,7 +27,7 @@ using EloBuddy;
             if (useW)
                 core.GetSpells.CastW();
             if (useE)
-                core.GetSpells.CastE();
+                core.GetSpells.CastE(core);
             if (useR)
                 core.GetSpells.CastR(core);
             base.Combo(core);
@@ -42,7 +42,7 @@ using EloBuddy;
             if (useW)
                 core.GetSpells.CastW();
             if (useE)
-                core.GetSpells.CastE();
+                core.GetSpells.CastE(core);
             base.Harash(core);
         }
         bool QE,AutoQE;
@@ -53,13 +53,32 @@ using EloBuddy;
                 QE = false;
                 AutoQE = false;
             }
+            if (core.GetMenu.GetMenu.Item("RKey").GetValue<KeyBind>().Active)
+            {
+                if (core.GetSpells.GetR.IsReady())
+                {
+                    var rTarget = TargetSelector.GetTarget(core.GetSpells.GetR.Range, TargetSelector.DamageType.Magical);
+                    if(rTarget!=null)
+                    core.GetSpells.GetR.Cast(rTarget);
+                }
+
+            }
+            if (core.GetMenu.GetMenu.Item("HKey").GetValue<KeyBind>().Active)
+            {
+               // if (!HeroManager.Player.CanAttack)
+               // {
+                    core.GetSpells.CastQ();
+               // }
+
+
+            }
             if (core.GetMenu.GetMenu.Item("QEkey").GetValue<KeyBind>().Active)
             {
                 if (!QE)
                 {
                     var gameCursor = Game.CursorPos;
                     core.GetSpells.GetQ.Cast(core.Hero.Position.Extend(Game.CursorPos, core.GetSpells.GetQ.Range));
-                    LeagueSharp.Common.Utility.DelayAction.Add(500 + Game.Ping, () => core.GetSpells.GetE.Cast(gameCursor));
+                    LeagueSharp.Common.Utility.DelayAction.Add(250 + Game.Ping, () => core.GetSpells.GetE.Cast(gameCursor));
                     QE = true;
                 }
             }
@@ -67,16 +86,16 @@ using EloBuddy;
             {
                 if (!AutoQE)
                 {
-                    var qeRange = core.GetSpells.GetE.Range + 500;
+                    var qeRange = core.GetSpells.GetQ.Range + 500;
                     var qeTarget = TargetSelector.GetTarget(qeRange, TargetSelector.DamageType.Magical);
                     if (qeTarget != null)
                     {
                         var predpos = Prediction.GetPrediction(qeTarget, 700);
-                        if (predpos.UnitPosition.Distance(core.Hero.Position) < qeRange)
+                        if (predpos.UnitPosition.Distance(core.Hero.Position) < qeRange)    
                         {
                             var ballPos = core.Hero.Position.Extend(qeTarget.Position, core.GetSpells.GetQ.Range);
                             core.GetSpells.GetQ.Cast(ballPos);
-                            LeagueSharp.Common.Utility.DelayAction.Add(500 + Game.Ping, () => core.GetSpells.GetE.Cast(ballPos));
+                            LeagueSharp.Common.Utility.DelayAction.Add(250 + Game.Ping, () => core.GetSpells.GetE.Cast(ballPos));
                             AutoQE = true;
                         }
                     }
@@ -191,7 +210,8 @@ MinionManager.GetMinions(
      MinionTeam.Neutral,
      MinionOrderTypes.MaxHealth);
                 if(minionE!=null)
-                foreach (Vector3 pos in core.GetSpells.GetOrbs.GetOrbs())
+                    Console.WriteLine(minionE.FirstOrDefault().Name);
+                foreach (Vector3 pos in core.GetOrbs)
                 {
                     var result = minionE.Where(x => x.Position.Distance(pos) < 50);
                     if (result != null)

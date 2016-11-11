@@ -1,9 +1,11 @@
 using LeagueSharp.Common;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Color = SharpDX.Color;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
@@ -23,7 +25,7 @@ using EloBuddy;
         }
         public virtual void LoadMenu(SyndraCore azir)
         {
-            GetMenu = new LeagueSharp.Common.Menu(_menuName, _menuName, true);
+            GetMenu = new LeagueSharp.Common.Menu(_menuName, _menuName, true).SetFontStyle(FontStyle.Regular, Color.YellowGreen); ;
             _orbWalkerMenu = new LeagueSharp.Common.Menu("Orbwalker", "Orbwalker");
             Orb = new Orbwalking.Orbwalker(_orbWalkerMenu);
             _targetSelectorMenu = new LeagueSharp.Common.Menu("TargetSelector", "TargetSelector");

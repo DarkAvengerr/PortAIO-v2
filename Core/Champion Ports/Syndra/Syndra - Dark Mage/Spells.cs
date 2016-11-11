@@ -38,33 +38,38 @@ using EloBuddy;
             if (qTarget != null)
             {
                 var predictQ=GetQ.GetPrediction(qTarget, true);
-                if (predictQ.Hitchance >= HitChance.High)
+                if (predictQ.Hitchance >= HitChance.VeryHigh)
                     return GetQ.Cast(predictQ.CastPosition);
             }
             return false;
         }
+
+ 
+
         public bool CastW()
         {
             if (!GetW.IsReady()) return false;
             var wTarget = TargetSelector.GetTarget(GetW.Range, TargetSelector.DamageType.Magical);
             if (wTarget == null) return false;
-            if (HeroManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1 && GetW.IsReady())
+            if(GetW.IsInRange(wTarget))
+            if (HeroManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState ==1&& GetW.IsReady())
             {
                 var orb = GetOrbs.GetOrbToGrab((int) GetW.Range);
-                if (orb == null) return false;
                 GetW.Cast(orb);
             }
-            else if (HeroManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && GetW.IsReady())
+            else if (HeroManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && HeroManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && GetW.IsReady())
             {
-                if (GetOrbs.WObject(false) == null) return false;
-                GetW.From = GetOrbs.WObject(false).ServerPosition;
-                GetW.Cast(wTarget, true);
-                return true;
+                if (GetW.IsInRange(wTarget))
+                {
+                        if (GetOrbs.WObject(false) == null) return false;
+                    GetW.From = GetOrbs.WObject(false).ServerPosition;                   
+                    GetW.Cast(wTarget.Position, true);
+                    return true;
+                }
             }
             return false;
 
         }
-
         public bool CastWToPos(Vector2 pos)
         {
             if (GetW.IsReady())
@@ -72,8 +77,7 @@ using EloBuddy;
                 if (HeroManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1 && GetW.IsReady())
                 {
                     var orb = GetOrbs.GetOrbToGrab((int) GetW.Range);
-                    if (orb != null)
-                        GetW.Cast(orb);
+                    GetW.Cast(orb);
                 }
                 else if (HeroManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && GetW.IsReady())
                 {
@@ -87,34 +91,46 @@ using EloBuddy;
             }
             return false;
         }
-
-        public bool CalcE(Vector3 initialPoint , Vector3 finalPoint)
+        public bool CalcE(Vector3 initialPoint , Vector3 finalPoint,AIHeroClient hero)
         {
 
-            for (var i = 0; i <= 500; i += 10)
-            {
-                var result = initialPoint.Extend(finalPoint, i);
-                if (result.GetEnemiesInRange(10)!=null) return true;
+            /*  for (var i = 25; i <= 500; i += 10)
+              {
+                  var result = initialPoint.Extend(finalPoint, i);
 
-            }
+                  if (hero.Distance(result)<=50) return true;
+              }*/
+            var ePred = GetE.GetPrediction(hero);
+            if (ePred.Hitchance < HitChance.High) return false;
+            var pt = HeroManager.Player.Distance(ePred.CastPosition);
+               
+            var ballFinalPos = HeroManager.Player.ServerPosition.Extend(initialPoint, pt);
+            if (ballFinalPos.Distance(ePred.CastPosition) < 50)
+                return true;
             return false;
         }
-        public bool CastE()
+        public bool CastE(SyndraCore core)
         {
-            if (!GetE.IsReady()) return false;
-            foreach (var orb in GetOrbs.GetOrbs())
-            {
-                foreach (var tar in HeroManager.Enemies)
-                {
-                    //500 extended range.
-                    if (GetE.IsInRange(orb))
-                    {
-                        var finalBallPos = HeroManager.Player.Position.Extend(orb, 500);
 
-                        if (CalcE(orb, finalBallPos))
-                        {
-                            GetE.Cast(orb);
-                        }
+            var eTarget = TargetSelector.GetTarget(GetQ.Range, TargetSelector.DamageType.Magical);
+            if(eTarget!=null)
+            if (!GetE.IsReady()) return false;
+            if (GetW.IsReady()) return false;
+            if (GetOrbs.WObject(false) != null) return false;
+            for (var index = 0; index < core.GetOrbs.Count; index++)
+            {
+                var orb = core.GetOrbs[index];
+                if(orb.IsValid())
+                if (!GetE.IsInRange(orb)) continue;
+                for (var i = 0; i < HeroManager.Enemies.Count; i++)
+                {
+                    var tar = HeroManager.Enemies[i];
+                    //500 extended range. 
+                    var finalBallPos = HeroManager.Player.Position.Extend(orb, 500);
+
+                    if (CalcE(orb, finalBallPos, eTarget))
+                    {
+                        GetE.Cast(orb);
                     }
                 }
             }
@@ -124,33 +140,34 @@ using EloBuddy;
 
         public bool CastR(SyndraCore core)
         {
-            if (GetR.IsReady())
-            {
-                var rTarget = TargetSelector.GetTarget(GetR.Range, TargetSelector.DamageType.Magical);
-                if (rTarget != null)
-                {
+            if (!GetR.IsReady()) return false;
 
-                    if (CastRCheck(rTarget, core))
-                        if (NotKilleableWithOtherSpells(rTarget))
-                        {
-                            var totalDamageR = RDamage(rTarget);
-                            if (rTarget.Health <= totalDamageR)
-                            {
-                                GetR.Cast(rTarget);
-                            }
-                        }
-                }
+            var rTarget = TargetSelector.GetTarget(GetR.Range, TargetSelector.DamageType.Magical);
+
+            if (rTarget == null) return false;
+            if (!CastRCheck(rTarget, core)) return false;
+            if (!NotKilleableWithOtherSpells(rTarget,core)) return false;
+
+            var totalDamageR = RDamage(rTarget,core);
+            if (rTarget.Health <= totalDamageR)
+            {
+                GetR.Cast(rTarget);
             }
             return false;
         }
 
-        public float RDamage(AIHeroClient target)
+        public float RDamage(AIHeroClient target,SyndraCore core)
         {
             float damagePerBall = (GetR.GetDamage(target)/3);
-            float totalDamageR = GetR.GetDamage(target) + damagePerBall*GetOrbs.GetOrbs().Count;
+            float totalDamageR = GetR.GetDamage(target) + damagePerBall*core.GetOrbs.Count;
             return totalDamageR;
         }
-
+        public float RDamage(AIHeroClient target,int NSpeheres)
+        {
+            float damagePerBall = (GetR.GetDamage(target) / 3);
+            float totalDamageR = GetR.GetDamage(target) + damagePerBall * NSpeheres;
+            return totalDamageR;
+        }
         public bool CastRCheck(AIHeroClient target, SyndraCore core)
         {
             var checkZhoniaMenu = core.GetMenu.GetMenu.Item("DONTRZHONYA").GetValue<bool>();
@@ -158,14 +175,11 @@ using EloBuddy;
             {
                 //Zhonias lol
                 const string zhonyaName = "ZhonyasHourglass";
-                SpellSlot slot;
                 for (var i = 1; i <= 6; i++)
                 {
-                    slot = core.Events.intToSpellSlot(i);
-                    if (target.GetSpell(slot).Name == zhonyaName)
-                    {
-                        if (target.GetSpell(slot).IsReady()) return false;
-                    }
+                    var slot = core.Events.intToSpellSlot(i);
+                    if (target.GetSpell(slot).Name != zhonyaName) continue;
+                    if (target.GetSpell(slot).IsReady()) return false;
                 }
             }
             if (target.IsInvulnerable)
@@ -174,24 +188,19 @@ using EloBuddy;
             }
             foreach (var tar in core.championsWithDodgeSpells)
             {
-
-
                 var tarslo = tar.SpellSlot;
-
                 var result = tar.Name + "-" + SpellSlotToString(tarslo);
                 var checkFirst = core.GetMenu.GetMenu.Item(result).GetValue<bool>();
-                if (checkFirst)
-                    if (target.ChampionName == tar.Name)
-                    {
-                        if (core.GetMenu.GetMenu.Item(target.ChampionName).GetValue<bool>())
-                            return tar.CastRToDat();
-                    }
+                if (!checkFirst) continue;
+                if (target.ChampionName != tar.Name) continue;
+                if (core.GetMenu.GetMenu.Item(target.ChampionName).GetValue<bool>())
+                    return tar.CastRToDat();
             }
             return core.GetMenu.GetMenu.Item(target.ChampionName).GetValue<bool>();
 
         }
 
-        private bool NotKilleableWithOtherSpells(AIHeroClient target)
+        private bool NotKilleableWithOtherSpells(AIHeroClient target,SyndraCore core)
         {
             if (GetQ.IsReady() && GetQ.IsKillable(target))
             {
@@ -205,7 +214,7 @@ using EloBuddy;
             }
             if (GetE.IsReady() && GetE.IsKillable(target))
             {
-                CastE();
+                CastE(core);
                 return false;
             }
             return true;

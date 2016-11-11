@@ -20,17 +20,16 @@ using EloBuddy;
         public GameEvents Events { get; }
         public Spells GetSpells { get; private set; }
         private Modes _modes;
+        public List<Vector3> GetOrbs { get; private set; }
 
         private DrawDamage drawDamage;
         public List<Champion> championsWithDodgeSpells;
-
         public SyndraCore()
         {
             _tittle = "[Syndra]Dark Mage";
             _version = "1.0.0.0";
             OnLoad();
         }
-
         private void OnLoad()
         {
             if (Hero.ChampionName != "Syndra") return;
@@ -38,7 +37,7 @@ using EloBuddy;
             var events = new GameEvents(this);
             GetMenu = new SyndraMenu("Dark.Mage", this);
             GetSpells = new Spells();
-          //  drawDamage = new DrawDamage(this);
+            drawDamage = new DrawDamage(this);
             _modes = new SyndraModes();
             Game.OnUpdate += OnUpdate;
             EloBuddy.Drawing.OnDraw += Ondraw;
@@ -65,17 +64,20 @@ using EloBuddy;
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, GetSpells.GetE.Range, System.Drawing.Color.DarkCyan, 2);
             if (GetSpells.GetR.IsReady() && drawR)
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, GetSpells.GetR.Range, System.Drawing.Color.DarkCyan, 2);
-            if(drawOrb)
-            foreach (var b in GetSpells.GetOrbs.GetOrbs())
-            {
-                Render.Circle.DrawCircle(b, 50, System.Drawing.Color.DarkRed, 2);
-                var wts = Drawing.WorldToScreen(Hero.Position);
-                var wtssxt = Drawing.WorldToScreen(b);
-                Drawing.DrawLine(wts,wtssxt,2,System.Drawing.Color.DarkRed);
-            }
+
+            Render.Circle.DrawCircle(ObjectManager.Player.Position, GetSpells.GetQ.Range+500, System.Drawing.Color.Red, 2);
+            var orbs = GetOrbs;
+            if (drawOrb)
+                foreach (var b in orbs)
+                {
+                    Render.Circle.DrawCircle(b, 50, System.Drawing.Color.DarkRed, 2);
+                    var wts = Drawing.WorldToScreen(Hero.Position);
+                    var wtssxt = Drawing.WorldToScreen(b);
+                    Drawing.DrawLine(wts, wtssxt, 2, System.Drawing.Color.DarkRed);
+                }
             if (drawOrbText)
             {
-                var orbsTotal = "Active Orbs R : " + (GetSpells.GetOrbs.GetOrbs().Count + 4);
+                var orbsTotal = "Active Orbs R : " + (orbs.Count + 4);
                 Drawing.DrawText(0, 200, System.Drawing.Color.Yellow, orbsTotal);
             }
            
@@ -83,7 +85,7 @@ using EloBuddy;
 
         private void OnUpdate(EventArgs args)
         {
- 
+            GetOrbs = GetSpells.GetOrbs.GetOrbs();
             _modes.Update(this);
         }
     }

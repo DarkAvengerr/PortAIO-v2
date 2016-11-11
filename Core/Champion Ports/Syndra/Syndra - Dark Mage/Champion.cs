@@ -45,12 +45,11 @@ using EloBuddy;
             var spell = Hero.GetSpell(SpellSlot);
             if (!(spell.CooldownExpires - Game.Time > 0))
             {
-                Console.WriteLine("Spell Ready");
+
                 InvunerableSpellReady = true;
             }
             else
             {
-                Console.WriteLine(Hero.GetSpell(SpellSlot).Cooldown); 
                 InvunerableSpellReady = false;
             }
         }

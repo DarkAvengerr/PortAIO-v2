@@ -11,7 +11,7 @@ using EloBuddy;
     {
         public static  string[] DontRSpellList = new[]
         {
-      "Fizz-E","Vladimir-W","Ekkko-R","Zed-R","Yi-Q","Zilean-R","Shaco-R","Kalista-R","Lissandra-R","Kindred-R","Kayle-R","Taric-R"
+      "Fizz-E","Vladimir-W","Ekkko-R","Zed-R","Yi-Q","Zilean-R","Shaco-R","Kalista-R","Lissandra-R","Kindred-R","Kayle-R","Fiora-W","Sivir-E"
         };
     }
     public class GameEvents
@@ -30,16 +30,12 @@ using EloBuddy;
             loadNotRSpells(core);
         }
         public List<Champion> listChampions;
-        public readonly string[] DontRSpellList = new[]
-        {
-      "Fizz-E","Vladimir-W","Ekkko-R","Zed-R","MasterYi-Q","Zilean-R","Shaco-R","Kalista-R","Lissandra-R","Kindred-R","Kayle-R","Taric-R"
-        };
         public void loadNotRSpells(SyndraCore core)
         {
 
             foreach (var tar in HeroManager.Enemies)
             {
-                foreach (var s in DontRSpellList)
+                foreach (var s in Lists.DontRSpellList)
                 {
                     var result = s.Split('-');
                     var championName = result[0];
