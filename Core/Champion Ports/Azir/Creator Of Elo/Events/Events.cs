@@ -17,7 +17,7 @@ using EloBuddy;
         public Events(AzirMain azir)
         {
             this.azir = azir;
-            Obj_AI_Base.OnSpellCast += Game_ProcessSpell;
+            Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
             AntiGapcloser.OnEnemyGapcloser += OnGapClose;
 
         }

@@ -57,7 +57,6 @@ using EloBuddy;
 
         public AzirMain()
         {
-
             tittle = "[Azir]Azir Updated June 2016";
             version = "1.0.1.2";
             OnLoad();

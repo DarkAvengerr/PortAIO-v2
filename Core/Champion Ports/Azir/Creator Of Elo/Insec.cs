@@ -99,87 +99,9 @@ using EloBuddy;
         {
 
                if (!azir.Spells.R.IsReady()) return;
-            var insecPoint = new Vector3(0, 2, 3);
-            if (Clickposition == new Vector3(0, 0, 0))
-                insecPoint = Game.CursorPos;
-            else
-                insecPoint = Clickposition;
-     
-            if (!azir.Menu.GetMenu.Item("inseckey").GetValue<KeyBind>().Active)
-            {
-                steps = Steps.firstCalcs;
-                soldier = null;
-                return;
-            }
+         //We have to code it.
 
-            azir.Orbwalk(Game.CursorPos);
- 
-            if (!insecPoint.IsValid())
-                return;
-            var target = TargetSelector.GetSelectedTarget();
-            if (target == null) return;
-            if (!target.IsValidTarget() || target.IsZombie)
-            {
-
-                steps = Steps.firstCalcs;
-                return;
-            }
-
-            var insecPos = new Vector3(0, 0, 0);
-            if (Clickposition == new Vector3(0, 0, 0))
-            {
-
-                insecPos = Game.CursorPos;
-            }
-            else
-            {
-                insecPos = insecPoint;
-            }
-         var postoGo = target.ServerPosition;
-            switch (steps)
-            {
-        
-                case Steps.firstCalcs:
-                    if (target.Distance(HeroManager.Player) <= azir.Spells.W.Range + azir.Spells.Q.Range-100)
-                    {
-
-                        steps = Steps.jump;
-                    }
-                    break;
-                case Steps.jump:
-                    if (HeroManager.Player.ServerPosition.Distance(postoGo) <= 220)
-                    {
-                        steps = Steps.R;
-                    }
-                    else
-                    {
-               
-                        azir._modes._jump.updateLogicJumpInsec(postoGo);
-                    }
-                    break;
-                case Steps.R:
-                    if (azir.Hero.Distance(target) < 220)
-                    {
-                        var tower  = ObjectManager.Get<Obj_AI_Turret>().FirstOrDefault(it => it.IsValidTarget(1000));
-
-                        if (tower != null)
-                        {
-                            azir.Spells.R.Cast(tower.ServerPosition);
-                            steps = Steps.firstCalcs;
-                        }
-
-                        else
-                        {
-                          
-                            azir.Spells.R.Cast(insecPoint);
-                            steps = Steps.firstCalcs;
-                        }
-                    }
-
-
-                    break;
-            }
-  
+            
 
         }
 
