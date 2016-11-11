@@ -83,27 +83,8 @@ using EloBuddy;
         public static double GetTowerDamage(AIHeroClient target)
         {
             double tower_damage = 0f;
-            /*
-            foreach (Obj_AI_Turret turret in ObjectManager.Get<Obj_AI_Turret>())
-            {
-                if (target.Distance(turret) <= turret.AttackRange)
-                {
-                    if (turret == target)
-                    {
-                        for (int i = 0; i <= 10; i++)
-                        {
-                            var posintime = Prediction.GetPrediction(target, turret.AttackDelay*i);
-
-                            if (posintime.UnitPosition.Distance(turret.Position) <= turret.AttackRange)
-                            {
-                                tower_damage += turret.TotalAttackDamage;
-                            }
-                        }
-                    }
-                }
-            }
-            */
             return tower_damage;
+            
         }
     }
 }

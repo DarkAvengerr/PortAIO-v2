@@ -18,7 +18,7 @@ using EloBuddy;
 
             tittle = "[Ekko] Master of time Updated June 2016.";
             version = "1.0.0.0";
-            OnLoad();
+            CustomEvents.Game.OnGameLoad += OnLoad;
         }
         public Modes _modes;
         public AIHeroClient Hero
@@ -39,7 +39,7 @@ using EloBuddy;
         {
             get { return _menu; }
         }
-        private void OnLoad()
+        private void OnLoad(EventArgs args)
         {
             if (Hero.ChampionName != "Ekko") return;
             Chat.Print("<b><font color =\"#FF33D6\">"+tittle+ "</font></b> Loaded have fun :)!");

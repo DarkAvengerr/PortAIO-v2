@@ -10,7 +10,7 @@ using EloBuddy;
 {
     class Program
     {
-        public static void Main()
+        static void Main(string[] args)
         {
             new Core();
         }
