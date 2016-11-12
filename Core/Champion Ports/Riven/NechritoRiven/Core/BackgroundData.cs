@@ -98,7 +98,7 @@ using EloBuddy;
                 return;
             }
 
-            if (canQ && Spells.Q.IsReady())
+            if (canQ)
             {
                 if (Items.CanUseItem(Item) && Item != 0 && Qstack == 3)
                 {
@@ -113,22 +113,13 @@ using EloBuddy;
 
             if (canW)
             {
-                if (Items.CanUseItem(Item) && Item != 0)
-                {
-                    Items.UseItem(Item);
-                    LeagueSharp.Common.Utility.DelayAction.Add(5, () => Spells.W.Cast());
-                }
-                else
-                {
-                    Spells.W.Cast();
-                }
+                Spells.W.Cast();
 
                 if (doublecastQ && Spells.Q.IsReady() && Qstack == 1)
                 {
-                     var delay = Spells.R.IsReady() ? 190 : 90;
+                    var delay = Spells.R.IsReady() ? 190 : 90;
 
-                     LeagueSharp.Common.Utility.DelayAction.Add(delay, () => Spells.Q.Cast(Unit.Position));
-                    //Spells.Q.Cast(Unit.Position);
+                    LeagueSharp.Common.Utility.DelayAction.Add(delay, () => Spells.Q.Cast(Unit.Position));
                 }
             }
 

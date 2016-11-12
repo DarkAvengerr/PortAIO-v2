@@ -6,6 +6,7 @@ using EloBuddy;
 
     using Core;
 
+    using LeagueSharp;
     using LeagueSharp.Common;
 
     #endregion
@@ -16,19 +17,26 @@ using EloBuddy;
 
         public static void FastHarass()
         {
-            var target = TargetSelector.GetTarget(450 + Player.AttackRange + 70, TargetSelector.DamageType.Physical);
+            var target = TargetSelector.GetTarget(400, TargetSelector.DamageType.Physical);
 
-            if (!Spells.E.IsReady() || target == null)
+            if (target == null || !Spells.Q.IsReady() || !Spells.E.IsReady())
             {
                 return;
             }
 
-            if (!BackgroundData.InRange(target))
+            if (Spells.Q.IsReady() && Spells.W.IsReady() && Spells.E.IsReady() && Qstack == 1)
             {
-                Spells.E.Cast(target.Position);
+                BackgroundData.CastQ(target);
             }
 
-            LeagueSharp.Common.Utility.DelayAction.Add(170, () => BackgroundData.CastQ(target));
+            if (Qstack == 3 && !Orbwalking.CanAttack() && Orbwalking.CanMove(5))
+            {
+                Spells.E.Cast(Game.CursorPos);
+
+                LeagueSharp.Common.Utility.DelayAction.Add(170, () => Spells.W.Cast());
+
+                LeagueSharp.Common.Utility.DelayAction.Add(190, () => Spells.Q.Cast(Game.CursorPos));
+            }
         }
 
         #endregion

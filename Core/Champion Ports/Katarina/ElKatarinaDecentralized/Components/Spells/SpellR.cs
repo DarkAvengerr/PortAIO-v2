@@ -84,7 +84,7 @@ using EloBuddy;
             }
             catch (Exception e)
             {
-                Logging.AddEntry(LoggingEntryTrype.Error, "@SpellR.cs: Can not run OnCombo - {0}", e);
+                Logging.AddEntry(LoggingEntryType.Error, "@SpellR.cs: Can not run OnCombo - {0}", e);
                 throw;
             }
         }
@@ -112,10 +112,9 @@ using EloBuddy;
                        300, () =>
                        {
                            CancellingUlt = false;
-                           if (ObjectManager.Player.CountEnemiesInRange(550f) == 0) // use max range
+                           if (ObjectManager.Player.CountEnemiesInRange(550f) == 0)
                            {
                                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, ObjectManager.Player.ServerPosition.Randomize(10, 20), false);
-                               Logging.AddEntry(LoggingEntryTrype.Debug, "Cancel R");
                            }
                        });
                 }
@@ -129,7 +128,6 @@ using EloBuddy;
             if (MyMenu.RootMenu.Item("combo.disable.evade").IsActive() && EvadeDisabler.EvadeDisabled)
             {
                 EvadeDisabler.EnableEvade();
-                Logging.AddEntry(LoggingEntryTrype.Debug, "@SpellR.CS: Enable Evade");
             }
         }
 

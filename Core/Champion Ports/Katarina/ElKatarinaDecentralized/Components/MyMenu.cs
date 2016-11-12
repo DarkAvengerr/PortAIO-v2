@@ -66,9 +66,16 @@ using EloBuddy;
                 {
                     nodeCombo.AddItem(new MenuItem("combo" + spellSlotNameLower + "use", "Use " + spellSlotName).SetValue(true));
 
+                    if (spellSlotNameLower.Equals("q", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        nodeCombo.AddItem(new MenuItem("combo.q.units", "Cast Q on minions").SetValue(true));
+                    }
+
                     if (spellSlotNameLower.Equals("e", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        nodeCombo.AddItem(new MenuItem("combo.e.tower", "E under tower").SetValue(false));
+                        nodeCombo.AddItem(new MenuItem("combo.e.tower", "Block E under tower").SetValue(false));
+                        nodeCombo.AddItem(new MenuItem("combo.e.daggers", "Cast E on daggers only").SetValue(true))
+                            .SetTooltip("When disabled E will cast on daggers and on champions. Daggers prioritized. ");
                     }
 
                     if (spellSlotNameLower.Equals("r", StringComparison.InvariantCultureIgnoreCase))
@@ -121,11 +128,20 @@ using EloBuddy;
                     node.AddSubMenu(nodeLaneClear);
                 }
 
+                var nodeDrawings = new Menu("Drawings", spellSlotNameLower + "drawingsmenu");
+                {
+                    nodeDrawings.AddItem(
+                        new MenuItem("draw" + spellSlotNameLower, "Draw " + spellSlotName).SetValue(
+                            new Circle(true, System.Drawing.Color.DeepSkyBlue)));
+                }
+
+                node.AddSubMenu(nodeDrawings);
+
                 RootMenu.AddSubMenu(node);
             }
             catch (Exception e)
             {
-                Logging.AddEntry(LoggingEntryTrype.Error, "@MyMenu.cs: Can not generate menu for spell - {0}", e);
+                Logging.AddEntry(LoggingEntryType.Error, "@MyMenu.cs: Can not generate menu for spell - {0}", e);
                 throw;
             }
         }
@@ -144,26 +160,25 @@ using EloBuddy;
             return node;
         }
 
-
-    /// <summary>
-    ///     The get items node.
-    /// </summary>
-    private static Menu GetFleeNode()
-    {
-        var node = new Menu("Flee", "Flee").SetFontStyle(FontStyle.Bold, Color.BlueViolet);
+        /// <summary>
+        ///     The get items node.
+        /// </summary>
+        private static Menu GetFleeNode()
         {
-            node.AddItem(
-                    new MenuItem("wardjump.key", "Flee key").SetValue(new KeyBind("Z".ToCharArray()[0], KeyBindType.Press)))
-                .SetTooltip("Jump to minions and allies");
+            var node = new Menu("Flee", "Flee").SetFontStyle(FontStyle.Bold, Color.BlueViolet);
+            {
+                node.AddItem(
+                        new MenuItem("wardjump.key", "Flee key").SetValue(new KeyBind("Z".ToCharArray()[0], KeyBindType.Press)))
+                    .SetTooltip("Jump to minions and allies");
+            }
+
+            return node;
         }
 
-        return node;
-    }
-
-    /// <summary>
-    ///     The get items node.
-    /// </summary>
-    private static Menu GetKillstealNode()
+        /// <summary>
+        ///     The get items node.
+        /// </summary>
+        private static Menu GetKillstealNode()
         {
             var node = new Menu("Killsteal", "Killsteal").SetFontStyle(FontStyle.Bold, Color.Pink);
             {

@@ -13,6 +13,8 @@ using EloBuddy;
 
     using SharpDX;
 
+    using Color = System.Drawing.Color;
+
     /// <summary>
     ///     The spell Q.
     /// </summary>
@@ -40,11 +42,6 @@ using EloBuddy;
         /// </summary>
         internal override SpellSlot SpellSlot => SpellSlot.Q;
 
-        /// <summary>
-        ///     The last spell casting.
-        /// </summary>
-        internal int lastSpellCastTime;
-
         #endregion
 
         #region Methods
@@ -66,16 +63,55 @@ using EloBuddy;
                     return;
                 }
 
-                var target = Misc.GetTarget(this.Range, this.DamageType);
+                var target =
+                    HeroManager.Enemies.Where(x => x.IsValidTarget(this.Range) && !x.IsDead && !x.IsZombie)
+                        .OrderBy(x => x.Health)
+                        .FirstOrDefault();
+
                 if (target != null)
                 {
-                    this.SpellObject.CastOnUnit(target);
-                    this.lastSpellCastTime = Utils.TickCount;
+                    if (MyMenu.RootMenu.Item("combo.q.units").IsActive())
+                    {
+                        var minions = MinionManager.GetMinions(850f);
+                        var countCloseToTarget = minions.Count(m => m.Distance(target) <= 570f);
+
+                        if (target.Distance(ObjectManager.Player) < 450f)
+                        {
+                            this.SpellObject.CastOnUnit(target);
+                        }
+
+                        if (countCloseToTarget >= 3)
+                        {
+                            var bestMinion =
+                                MinionManager.GetMinions(target.ServerPosition, 550f)
+                                    .OrderBy(x => x.Distance(target))
+                                    .FirstOrDefault();
+
+                            if (bestMinion != null)
+                            {
+                                this.SpellObject.CastOnUnit(bestMinion);
+                            }
+                        }
+
+                        if (countCloseToTarget < 3)
+                        {
+                            this.SpellObject.CastOnUnit(target);
+                        }
+
+                        if (target.CountEnemiesInRange(600f) >= 2)
+                        {
+                            this.SpellObject.CastOnUnit(target);
+                        }
+                    }
+                    else
+                    {
+                        this.SpellObject.CastOnUnit(target);
+                    }
                 }
             }
             catch (Exception e)
             {
-                Logging.AddEntry(LoggingEntryTrype.Error, "@SpellQ.cs: Can not run OnCombo - {0}", e);
+                Logging.AddEntry(LoggingEntryType.Error, "@SpellQ.cs: Can not run OnCombo - {0}", e);
                 throw;
             }
         }
@@ -87,7 +123,6 @@ using EloBuddy;
         {
             this.OnCombo();
         }
-
 
         /// <summary>
         ///     The on last hit callback.

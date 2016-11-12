@@ -43,27 +43,27 @@ using EloBuddy;
         /// <param name="args">
         ///     The args.
         /// </param>
-        internal static void AddEntry(LoggingEntryTrype type, string message, params object[] args)
+        internal static void AddEntry(LoggingEntryType type, string message, params object[] args)
         {
             switch (type)
             {
-                case LoggingEntryTrype.Debug:
+                case LoggingEntryType.Debug:
                     AddEntryColored(GetFormattedEntry(type, message, args), ConsoleColor.Green);
                     break;
 
-                case LoggingEntryTrype.Error:
+                case LoggingEntryType.Error:
                     AddEntryColored(GetFormattedEntry(type, message, args), ConsoleColor.DarkRed);
                     break;
 
-                case LoggingEntryTrype.Generic:
+                case LoggingEntryType.Generic:
                     AddEntryColored(GetFormattedEntry(type, message, args), ConsoleColor.White);
                     break;
 
-                case LoggingEntryTrype.Info:
+                case LoggingEntryType.Info:
                     AddEntryColored(GetFormattedEntry(type, message, args), ConsoleColor.Yellow);
                     break;
 
-                case LoggingEntryTrype.Warning:
+                case LoggingEntryType.Warning:
                     AddEntryColored(GetFormattedEntry(type, message, args), ConsoleColor.Red);
                     break;
             }
@@ -108,7 +108,7 @@ using EloBuddy;
         /// <returns>
         ///     <see cref="string" />
         /// </returns>
-        private static string GetFormattedEntry(LoggingEntryTrype type, string message, params object[] args)
+        private static string GetFormattedEntry(LoggingEntryType type, string message, params object[] args)
         {
             try
             {

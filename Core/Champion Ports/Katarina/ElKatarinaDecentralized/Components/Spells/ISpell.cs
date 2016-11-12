@@ -149,5 +149,5 @@ using EloBuddy;
         }
 
         #endregion
-    }
+        }
 }

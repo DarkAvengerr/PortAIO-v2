@@ -5,7 +5,7 @@ using EloBuddy;
     /// <summary>
     ///     The entry type.
     /// </summary>
-    internal enum LoggingEntryTrype
+    internal enum LoggingEntryType
     {
         /// <summary>
         ///     A debug entry.

@@ -16,9 +16,11 @@ using EloBuddy;
 
         public static void Combo()
         {
-            var target = TargetSelector.GetTarget(Player.AttackRange + 310, TargetSelector.DamageType.Physical);
+            var targetAquireRange = Spells.R.IsReady() ? Player.AttackRange + 390 : Player.AttackRange + 370;
 
-            if (target == null || !target.IsValidTarget(Player.AttackRange + 310)) return;
+            var target = TargetSelector.GetTarget(targetAquireRange, TargetSelector.DamageType.Physical);
+
+            if (target == null || !target.IsValidTarget()) return;
 
             if (Spells.R.IsReady() && Spells.R.Instance.Name == IsSecondR)
             {
@@ -91,7 +93,7 @@ using EloBuddy;
                 return;
             }
 
-            if (MenuConfig.Doublecast && Spells.Q.IsReady() && Qstack == 1)
+            if (MenuConfig.Doublecast && Spells.Q.IsReady() && Qstack != 2)
             {
                 BackgroundData.CastW(target);
                 BackgroundData.DoubleCastQ(target);

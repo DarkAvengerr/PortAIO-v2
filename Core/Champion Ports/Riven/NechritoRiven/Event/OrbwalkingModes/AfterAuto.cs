@@ -57,15 +57,9 @@ using EloBuddy;
 
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.QuickHarass)
                 {
-                    if (Spells.Q.IsReady() && Qstack == 1)
+                    if (Spells.Q.IsReady() && Qstack == 2)
                     {
                         BackgroundData.CastQ(target);
-                    }
-
-                    if (Spells.W.IsReady() && BackgroundData.InRange(target))
-                    {
-                        BackgroundData.CastW(target);
-                        BackgroundData.DoubleCastQ(target);
                     }
                 }
 

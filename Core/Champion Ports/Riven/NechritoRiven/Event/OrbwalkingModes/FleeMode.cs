@@ -19,7 +19,7 @@ using EloBuddy;
 
         public static void Flee()
         {
-            if (MenuConfig.WallFlee && ObjectManager.Player.CountEnemiesInRange(1500) == 0)
+            if (MenuConfig.WallFlee && ObjectManager.Player.CountEnemiesInRange(1200) == 0)
             {
                 var end = Player.ServerPosition.Extend(Game.CursorPos, 350);
                 var isWallDash = FleeLogic.IsWallDash(end, 350);
@@ -37,18 +37,19 @@ using EloBuddy;
 
                 if (Qstack != 3 || !isWallDash) return;
 
-                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, wallPoint);
-
                 if (Spells.E.IsReady() && wallPoint.Distance(Player.ServerPosition) <= Spells.E.Range)
                 {
                     Spells.E.Cast(wallE);
 
                     LeagueSharp.Common.Utility.DelayAction.Add(190, () => Spells.Q.Cast(wallPoint));
                 }
-
-                if (wallPoint.Distance(Player.ServerPosition) <= 65)
+               else if (wallPoint.Distance(Player.ServerPosition) <= 65)
                 {
                     Spells.Q.Cast(wallPoint);
+                }
+                else
+                {
+                    EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, wallPoint);
                 }
             }
             else

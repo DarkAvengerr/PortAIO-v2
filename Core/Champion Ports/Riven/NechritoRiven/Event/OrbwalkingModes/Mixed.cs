@@ -19,7 +19,7 @@ using EloBuddy;
 
         public static void Harass()
         {
-            var target = TargetSelector.GetTarget(400, TargetSelector.DamageType.Physical);
+            var target = TargetSelector.GetTarget(360, TargetSelector.DamageType.Physical);
 
             if (target == null)
             {

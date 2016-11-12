@@ -72,29 +72,46 @@ using EloBuddy;
 
                     if (DaggerManager.ExistingDaggers != null)
                     {
-                        var dagger =
-                            DaggerManager.ExistingDaggers
-                                .FirstOrDefault(
-                                    d =>
-                                        d.DaggerPos.Distance(target.ServerPosition)
-                                        <= d.Object.BoundingRadius + 175 && d.Object.IsValid);
+                        var dagger = DaggerManager.ExistingDaggers;
+                        var closestDagger = dagger.FirstOrDefault(
+                                d =>
+                                    d.DaggerPos.Distance(target.ServerPosition) <= d.Object.BoundingRadius + 200
+                                    && d.Object.IsValid && d.Object.IsVisible);
 
                         if (dagger != null)
                         {
-                            Logging.AddEntry(LoggingEntryTrype.Debug, "Dash to dagger position.");
-                            this.SpellObject.Cast(dagger.DaggerPos);
+                            if (closestDagger != null && Utils.TickCount - this.SpellObject.LastCastAttemptT > 0)
+                            {
+                                this.SpellObject.Cast(closestDagger.DaggerPos);
+                                this.SpellObject.LastCastAttemptT = Utils.TickCount;
+
+                                if (!MyMenu.RootMenu.Item("combo.e.daggers").IsActive())
+                                {
+                                    if (target.Distance(closestDagger.DaggerPos) > 500f)
+                                    {
+                                        this.SpellObject.Cast(target.Position);
+                                        this.SpellObject.LastCastAttemptT = Utils.TickCount;
+                                    }
+                                }
+                            }
                         }
-                        else
+                    }
+                    else
+                    {
+                        if (DaggerManager.ExistingDaggers == null)
                         {
-                            Logging.AddEntry(LoggingEntryTrype.Debug, "Dash to target position.");
-                            this.SpellObject.Cast(target.Position);
+                            if (!MyMenu.RootMenu.Item("combo.e.daggers").IsActive())
+                            {
+                                this.SpellObject.Cast(target.Position);
+                                this.SpellObject.LastCastAttemptT = Utils.TickCount;
+                            }
                         }
                     }
                 }
             }
             catch (Exception e)
             {
-                Logging.AddEntry(LoggingEntryTrype.Error, "@SpellE.cs: Can not run OnCombo - {0}", e);
+                Logging.AddEntry(LoggingEntryType.Error, "@SpellE.cs: Can not run OnCombo - {0}", e);
                 throw;
             }
         }
@@ -104,7 +121,34 @@ using EloBuddy;
         /// </summary>
         internal override void OnMixed()
         {
-            this.OnCombo();
+            var target = Misc.GetTarget(this.Range, this.DamageType);
+            if (target != null)
+            {
+                if (MyMenu.RootMenu.Item("combo.e.tower").IsActive() && target.UnderTurret(true))
+                {
+                    return;
+                }
+
+                if (ObjectManager.Player.IsChannelingImportantSpell())
+                {
+                    return;
+                }
+
+                if (DaggerManager.ExistingDaggers != null)
+                {
+                    var dagger =
+                        DaggerManager.ExistingDaggers
+                            .FirstOrDefault(
+                                d =>
+                                    d.DaggerPos.Distance(target.ServerPosition)
+                                    <= d.Object.BoundingRadius + 200 && d.Object.IsValid);
+
+                    if (dagger != null)
+                    {
+                        this.SpellObject.Cast(dagger.DaggerPos);
+                    }
+                }
+            }
         }
 
         /// <summary>

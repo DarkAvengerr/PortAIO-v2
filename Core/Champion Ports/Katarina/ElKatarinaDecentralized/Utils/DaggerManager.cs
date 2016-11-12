@@ -54,7 +54,7 @@ using EloBuddy;
         /// <param name="args"></param>
         public static void OnCreate(GameObject obj, EventArgs args)
         {
-            if (!obj.Name.Contains("Katarina_Base_Q_Dagger_Land_Dirt"))
+            if (!obj.Name.Contains("Katarina_Base_Q_Dagger_Land_"))
             {
                 return;
             }
@@ -65,7 +65,7 @@ using EloBuddy;
                        Object = obj,
                        NetworkId = obj.NetworkId,
                        DaggerPos = obj.Position,
-                       ExpireTime = Game.Time + 1.25
+                       ExpireTime = Game.Time + 3
                    });
         }
 
@@ -76,17 +76,15 @@ using EloBuddy;
         /// <param name="args"></param>
         public static void OnDelete(GameObject obj, EventArgs args)
         {
-            if (!obj.Name.Contains("Katarina_Base_Q_Dagger_Land_Dirt"))
+            if (obj.Name.Contains("Katarina_Base_Q_Dagger_Land_") || obj.Name.Contains("PickUp"))
             {
-                return;
-            }
-
-            for (var i = 0; i < ExistingDaggers.Count; i++)
-            {
-                if (ExistingDaggers[i].NetworkId == obj.NetworkId)
+                for (var i = 0; i < ExistingDaggers.Count; i++)
                 {
-                    ExistingDaggers.RemoveAt(i);
-                    return;
+                    if (ExistingDaggers[i].NetworkId == obj.NetworkId)
+                    {
+                        ExistingDaggers.RemoveAt(i);
+                        return;
+                    }
                 }
             }
         }

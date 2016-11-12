@@ -60,11 +60,6 @@ using EloBuddy;
             return thickness;
         }
 
-        public static bool IsWallDash(Obj_AI_Base unit, float dashRange, float minWallWidth = 100)
-        {
-            return IsWallDash(unit.ServerPosition, dashRange, minWallWidth);
-        }
-
         public static bool IsWallDash(Vector3 position, float dashRange, float minWallWidth = 100)
         {
             var dashEndPos = ObjectManager.Player.Position.Extend(position, dashRange);
@@ -73,13 +68,11 @@ using EloBuddy;
 
             if (firstWallPoint.Equals(Vector3.Zero))
             {
-                // No Wall
                 return false;
             }
 
             if (dashEndPos.IsWall())
             {
-                // End Position is in Wall
                 var wallWidth = GetWallWidth(firstWallPoint, dashEndPos);
 
                 if (wallWidth > minWallWidth && wallWidth < dashRange)
@@ -89,13 +82,10 @@ using EloBuddy;
             }
             else
             {
-                // End Position is not a Wall
                 return true;
             }
-
             return false;
         }
-
         #endregion
     }
 }

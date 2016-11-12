@@ -33,7 +33,7 @@ using EloBuddy;
 
             switch (args.Animation)
             {
-                case "Spell1a":
+                case "c29a362b":
                     LastQ = Utils.GameTimeTickCount;
                     Qstack = 2;
 
@@ -44,7 +44,7 @@ using EloBuddy;
                         Console.WriteLine("Q1 Delay: " + ResetDelay(MenuConfig.Qd));
                     }
                     break;
-                case "Spell1b":
+                case "c39a37be":
                     LastQ = Utils.GameTimeTickCount;
                     Qstack = 3;
 
@@ -55,7 +55,7 @@ using EloBuddy;
                         Console.WriteLine("Q2 Delay: " + ResetDelay(MenuConfig.Q2D));
                     }
                     break;
-                case "Spell1c":
+                case "c49a3951":
                     LastQ = Utils.GameTimeTickCount;
                     Qstack = 1;
 
@@ -77,29 +77,19 @@ using EloBuddy;
 
         private static void Emotes()
         {
-            if (ObjectManager.Player.HasBuffOfType(BuffType.Stun) 
-                || ObjectManager.Player.HasBuffOfType(BuffType.Snare)
-                || ObjectManager.Player.HasBuffOfType(BuffType.Knockback)
-                || ObjectManager.Player.HasBuffOfType(BuffType.Knockup))
-            {
-                return;
-            }
-
             switch (MenuConfig.EmoteList.SelectedIndex)
             {
                 case 0:
-                    EloBuddy.Player.DoEmote(Emote.Laugh);
+                    Chat.Say("/l");
                     break;
                 case 1:
-                    EloBuddy.Player.DoEmote(Emote.Taunt);
+                    Chat.Say("/t");
                     break;
                 case 2:
-                    EloBuddy.Player.DoEmote(Emote.Joke);
+                    Chat.Say("/j");
                     break;
                 case 3:
-                    EloBuddy.Player.DoEmote(Emote.Dance);
-                    break;
-                case 4:
+                    Chat.Say("/d");
                     break;
             }
         }
@@ -108,10 +98,10 @@ using EloBuddy;
         {
             if (MenuConfig.CancelPing)
             {
-               return qDelay + Game.Ping / 2 - ObjectManager.Player.Level / 2;
+                return qDelay + Game.Ping / 2;
             }
-           
-            if((Target != null && Target.IsMoving) || (Mob != null && Mob.IsMoving) || IsGameObject)
+
+            if ((Target != null && Target.IsMoving) || (Mob != null && Mob.IsMoving) || IsGameObject)
             {
                 return (int)(qDelay * 1.15);
             }
@@ -124,12 +114,20 @@ using EloBuddy;
             Emotes();
             Orbwalking.ResetAutoAttackTimer();
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-           // EloBuddy.Player.IssueOrder(GameObjectOrder.AttackTo, ObjectManager.Player.Position.Extend(ObjectManager.Player.Direction, 50));
         }
 
         private static bool SafeReset()
         {
-            return Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None || MenuConfig.AnimSemi;
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Flee
+                || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None)
+            {
+                return false;
+            }
+
+            return !ObjectManager.Player.HasBuffOfType(BuffType.Stun)
+                && !ObjectManager.Player.HasBuffOfType(BuffType.Snare) 
+                && !ObjectManager.Player.HasBuffOfType(BuffType.Knockback)
+                && !ObjectManager.Player.HasBuffOfType(BuffType.Knockup);
         }
 
         #endregion
