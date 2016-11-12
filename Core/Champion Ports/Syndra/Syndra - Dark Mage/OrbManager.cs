@@ -19,7 +19,7 @@ using EloBuddy;
         {
             get
             {
-                if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1)
+                if (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1)
                     return -1;
 
                 return _wobjectnetworkid;

@@ -37,7 +37,7 @@ using EloBuddy;
             var qTarget = TargetSelector.GetTarget(GetQ.Range, TargetSelector.DamageType.Magical);
             if (qTarget != null)
             {
-                var predictQ=GetQ.GetPrediction(qTarget, true);
+                var predictQ = GetQ.GetPrediction(qTarget, true);
                 if (predictQ.Hitchance >= HitChance.VeryHigh)
                     return GetQ.Cast(predictQ.CastPosition);
             }
@@ -62,8 +62,11 @@ using EloBuddy;
                 if (GetW.IsInRange(wTarget))
                 {
                         if (GetOrbs.WObject(false) == null) return false;
-                    GetW.From = GetOrbs.WObject(false).ServerPosition;                   
-                    GetW.Cast(wTarget.Position, true);
+                    GetW.From = GetOrbs.WObject(false).ServerPosition;
+
+                        var predictW = GetQ.GetPrediction(wTarget, true);
+                        if (predictW.Hitchance >= HitChance.VeryHigh)
+                            GetW.Cast(predictW.CastPosition, true);
                     return true;
                 }
             }

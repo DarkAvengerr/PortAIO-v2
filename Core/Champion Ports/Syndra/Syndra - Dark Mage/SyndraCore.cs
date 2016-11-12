@@ -49,6 +49,7 @@ using EloBuddy;
             var drawQ = GetMenu.GetMenu.Item("DQ").GetValue<bool>();
             var drawW = GetMenu.GetMenu.Item("DW").GetValue<bool>();
             var drawE = GetMenu.GetMenu.Item("DE").GetValue<bool>();
+            var drawQE = GetMenu.GetMenu.Item("DQE").GetValue<bool>();
             var drawR = GetMenu.GetMenu.Item("DR").GetValue<bool>();
             var drawOrb = GetMenu.GetMenu.Item("DO").GetValue<bool>();
             var drawOrbText = GetMenu.GetMenu.Item("DST").GetValue<bool>();
@@ -64,23 +65,27 @@ using EloBuddy;
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, GetSpells.GetE.Range, System.Drawing.Color.DarkCyan, 2);
             if (GetSpells.GetR.IsReady() && drawR)
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, GetSpells.GetR.Range, System.Drawing.Color.DarkCyan, 2);
-
+            if(drawQE&&GetSpells.GetE.IsReady()&&GetSpells.GetQ.IsReady())
             Render.Circle.DrawCircle(ObjectManager.Player.Position, GetSpells.GetQ.Range+500, System.Drawing.Color.Red, 2);
             var orbs = GetOrbs;
-            if (drawOrb)
-                foreach (var b in orbs)
-                {
-                    Render.Circle.DrawCircle(b, 50, System.Drawing.Color.DarkRed, 2);
-                    var wts = Drawing.WorldToScreen(Hero.Position);
-                    var wtssxt = Drawing.WorldToScreen(b);
-                    Drawing.DrawLine(wts, wtssxt, 2, System.Drawing.Color.DarkRed);
-                }
-            if (drawOrbText)
+            if (orbs != null)
             {
-                var orbsTotal = "Active Orbs R : " + (orbs.Count + 4);
-                Drawing.DrawText(0, 200, System.Drawing.Color.Yellow, orbsTotal);
+                if (drawOrb)
+                    foreach (var b in orbs)
+                    {
+                        Render.Circle.DrawCircle(b, 50, System.Drawing.Color.DarkRed, 2);
+                        var wts = Drawing.WorldToScreen(Hero.Position);
+                        var wtssxt = Drawing.WorldToScreen(b);
+                        Drawing.DrawLine(wts, wtssxt, 2, System.Drawing.Color.DarkRed);
+                    }
+                if (drawOrbText)
+                {
+
+                    var orbsTotal = "Active Orbs R : " + (orbs.Count + 4);
+                    Drawing.DrawText(0, 200, System.Drawing.Color.Yellow, orbsTotal);
+                }
             }
-           
+
         }
 
         private void OnUpdate(EventArgs args)

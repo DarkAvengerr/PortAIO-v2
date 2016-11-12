@@ -42,6 +42,7 @@ using EloBuddy;
                 _drawingMenu.AddItem(new MenuItem("DQ", "Draw Q Range").SetValue(true));
                 _drawingMenu.AddItem(new MenuItem("DW", "Draw W Range").SetValue(true));
                 _drawingMenu.AddItem(new MenuItem("DE", "Draw E Range").SetValue(true));
+                _drawingMenu.AddItem(new MenuItem("DQE", "Draw QE Range").SetValue(true));
                 _drawingMenu.AddItem(new MenuItem("DR", "Draw R Range").SetValue(true));
                 _drawingMenu.AddItem(new MenuItem("DTD", "Draw Total Damage").SetValue(true).SetTooltip("Q=Blue W=Orange E=Green Red=R"));
                 _drawingMenu.AddItem(new MenuItem("DO", "Draw Orbs").SetValue(true));
