@@ -453,6 +453,8 @@ namespace PortAIO.Dual_Port
             var utility = new Menu("Standalone Utilities", "PortAIOuTILITIESS");
             utility.AddItem(new MenuItem("ShadowTracker", "Enable ShadowTracker?").SetValue(false));
             utility.AddItem(new MenuItem("UniversalPings", "Enable UniversalPings?").SetValue(false));
+            utility.AddItem(new MenuItem("PerfectWardReborn", "Enable PerfectWardReborn?").SetValue(false));
+            utility.AddItem(new MenuItem("GodJungleTrackerReborn", "Enable GodJungleTrackerReborn?").SetValue(false));
             menu.AddSubMenu(utility);
 
             var autoPlay = new Menu("Auto Play", "PortAIOAUTOPLAY");
