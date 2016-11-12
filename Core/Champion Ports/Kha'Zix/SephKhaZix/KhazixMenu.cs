@@ -1,15 +1,20 @@
-﻿using LeagueSharp;
+using LeagueSharp;
 using LeagueSharp.Common;
+using System.Drawing;
 
-namespace SephKhazix
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace SephKhazix
 {
     class KhazixMenu
     {
         internal Menu menu;
         internal Orbwalking.Orbwalker Orbwalker;
+        internal Khazix K6;
 
-        public KhazixMenu()
+        public KhazixMenu(Khazix k6)
         {
+            K6 = k6;
             menu = new Menu("SephKhazix", "SephKhazix", true);
 
             var ow = menu.AddSubMenu("Orbwalking");
@@ -33,10 +38,14 @@ namespace SephKhazix
             combo.AddSList("WHitchance", "W Hit Chance", new[] { HitChance.Low.ToString(), HitChance.Medium.ToString(), HitChance.High.ToString() }, 1);
             combo.AddBool("UseECombo", "Use E");
             combo.AddBool("UseEGapclose", "Use E To Gapclose for Q");
-            combo.AddBool("UseEGapcloseW", "Use E To Gapclose For W");
+            combo.AddBool("UseEGapcloseW", "Use E To Gapclose For W", false);
             combo.AddBool("UseRGapcloseW", "Use R after long gapcloses");
             combo.AddBool("UseRCombo", "Use R");
             combo.AddBool("UseItems", "Use Items");
+
+
+            var assasination = menu.AddSubMenu("Assasination");
+            assasination.AddSList("AssMode", "Return Point", new[] { "Old Position", "Mouse Pos" }, 0);
 
             //Farm
             var farm = menu.AddSubMenu("Farm");
@@ -45,6 +54,7 @@ namespace SephKhazix
             farm.AddBool("UseWFarm", "Use W");
             farm.AddSlider("Farm.WHealth", "Health % to use W", 80, 0, 100);
             farm.AddBool("UseItemsFarm", "Use Items").SetValue(true);
+            harass.AddBool("Farm.InMixed", "Farm in Mixed Mode", true);
 
             //Kill Steal
             var ks = menu.AddSubMenu("KillSteal");
@@ -56,7 +66,7 @@ namespace SephKhazix
             ks.AddBool("UseEQKs", "Use EQ in KS");
             ks.AddBool("UseEWKs", "Use EW in KS");
             ks.AddBool("UseTiamatKs", "Use items");
-            ks.AddSlider("Edelay", "E Delay (ms)", 0, 0, 300);
+            ks.AddSlider("EDelay", "E Delay (ms)", 0, 0, 300);
             ks.AddBool("UseIgnite", "Use Ignite");
 
             var safety = menu.AddSubMenu("Safety Menu");
@@ -88,6 +98,30 @@ namespace SephKhazix
             draw.AddCircle("DrawQ", "Draw Q", 0, System.Drawing.Color.White);
             draw.AddCircle("DrawW", "Draw W", 0, System.Drawing.Color.Red);
             draw.AddCircle("DrawE", "Draw E", 0, System.Drawing.Color.Green);
+
+            var dmgAfterE = new MenuItem("DrawComboDamage", "Draw combo damage").SetValue(true);
+            var drawFill =
+                new MenuItem("DrawColour", "Fill colour", true).SetValue(
+                    new Circle(true, Color.Goldenrod));
+            draw.AddItem(drawFill);
+            draw.AddItem(dmgAfterE);
+
+            DamageIndicator.DamageToUnit = K6.GetBurstDamage;
+            DamageIndicator.Enabled = dmgAfterE.GetValue<bool>() && !GetBool("Drawings.Disable");
+            DamageIndicator.Fill = drawFill.GetValue<Circle>().Active;
+            DamageIndicator.FillColor = drawFill.GetValue<Circle>().Color;
+
+            dmgAfterE.ValueChanged +=
+                delegate (object sender, OnValueChangeEventArgs eventArgs)
+                {
+                    DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
+                };
+
+            drawFill.ValueChanged += delegate (object sender, OnValueChangeEventArgs eventArgs)
+            {
+                DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
+                DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
+            };
 
 
             //Debug
@@ -145,6 +179,26 @@ namespace SephKhazix
                     return HitChance.High;
             }
             return HitChance.Medium;
+        }
+
+        internal AssasinationMode GetAssinationMode()
+        {
+            var mode = menu.Item("AssMode").GetValue<StringList>().SelectedIndex;
+            if (mode == 0)
+            {
+                return AssasinationMode.ToOldPos;
+            }
+
+            else
+            {
+                return AssasinationMode.ToMousePos;
+            }
+        }
+
+        internal enum AssasinationMode
+        {
+            ToOldPos,
+            ToMousePos
         }
     }
 }

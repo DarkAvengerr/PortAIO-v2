@@ -1,12 +1,13 @@
-﻿using LeagueSharp;
+using LeagueSharp;
 using LeagueSharp.Common;
 using System;
 using System.Collections.Generic;
 using SharpDX;
 using System.Linq;
-using EloBuddy;
 
-namespace SephKhazix
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace SephKhazix
 {
     class Helper
     {
@@ -20,7 +21,9 @@ namespace SephKhazix
 
         internal const float Wangle = 22 * (float) Math.PI / 180;
 
-        internal static bool EvolvedQ, EvolvedW, EvolvedE, EvolvedR;
+        internal bool EvolvedQ, EvolvedW, EvolvedE, EvolvedR;
+
+        internal JumpManager jumpManager;
 
         internal static SpellSlot IgniteSlot;
         internal static List<AIHeroClient> HeroList;
@@ -41,11 +44,11 @@ namespace SephKhazix
             Q = new Spell(SpellSlot.Q, 325f);
             W = new Spell(SpellSlot.W, 1000f);
             WE = new Spell(SpellSlot.W, 1000f);
-            E = new Spell(SpellSlot.E, 700f);
+            E = new Spell(SpellSlot.E, 600f);
             R = new Spell(SpellSlot.R, 0);
             W.SetSkillshot(0.225f, 80f, 828.5f, true, SkillshotType.SkillshotLine);
             WE.SetSkillshot(0.225f, 100f, 828.5f, true, SkillshotType.SkillshotLine);
-            E.SetSkillshot(0.25f, 100f, 1000f, false, SkillshotType.SkillshotCircle);
+            E.SetSkillshot(0.25f, 300f, 1500f, false, SkillshotType.SkillshotCircle);
             Ignite = new Spell(IgniteSlot, 550f);
 
             Hydra = new Items.Item(3074, 225f);
@@ -110,20 +113,45 @@ namespace SephKhazix
 
         internal double GetQDamage(Obj_AI_Base target)
         {
-            if (Q.Range < 326)
+            return Khazix.GetSpellDamage(target, SpellSlot.Q, target.IsIsolated() ? 1 : 0);
+        }
+
+        internal float GetBurstDamage(Obj_AI_Base target)
+        {
+            double totaldmg = 0;
+
+            if (SpellSlot.Q.IsReady())
             {
-                return 0.984 * Khazix.GetSpellDamage(target, SpellSlot.Q, target.IsIsolated() ? 1 : 0);
+                totaldmg += GetQDamage(target);
             }
-            if (Q.Range > 325)
+
+            if (SpellSlot.E.IsReady())
             {
-                var isolated = target.IsIsolated();
-                if (isolated)
-                {
-                    return 0.984 * Khazix.GetSpellDamage(target, SpellSlot.Q, 3);
-                }
-                return Khazix.GetSpellDamage(target, SpellSlot.Q, 0);
+                double EDmg = Khazix.GetSpellDamage(target, SpellSlot.E);
+                totaldmg += EDmg;
             }
-            return 0;
+
+            if (SpellSlot.W.IsReady())
+            {
+                double WDmg = Khazix.GetSpellDamage(target, SpellSlot.W);
+                totaldmg += WDmg;
+            }
+
+
+            if (Tiamat.IsReady())
+            {
+                double Tiamatdmg = Khazix.GetItemDamage(target, Damage.DamageItems.Tiamat);
+                totaldmg += Khazix.GetItemDamage(target, Damage.DamageItems.Tiamat);
+            }
+
+            else if (Hydra.IsReady())
+            {
+                double hydradmg = Khazix.GetItemDamage(target, Damage.DamageItems.Hydra);
+                totaldmg += hydradmg;
+            }
+
+            return (float) totaldmg;
+
         }
 
         internal List<AIHeroClient> GetIsolatedTargets()
@@ -147,9 +175,9 @@ namespace SephKhazix
             return HitChance.Medium;
         }
 
-        internal KhazixMenu GenerateMenu()
+        internal KhazixMenu GenerateMenu(Khazix K6)
         {
-            Config = new KhazixMenu();
+            Config = new KhazixMenu(K6);
             return Config;
         }
 

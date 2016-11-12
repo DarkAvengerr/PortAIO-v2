@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp.Common;
 using LeagueSharp;
 
-using EloBuddy;
-using LeagueSharp.Common;
-namespace SephKayle
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace SephKayle
 {
     class Program
     {
@@ -80,7 +80,7 @@ namespace SephKayle
             UltimateManager.AddItem(new MenuItem("onlyuincdmg", "Only ult if incoming damage").SetValue(true));
             UltimateManager.AddItem(new MenuItem("udamagedetection", "Disable damage detection").SetValue(false));
             UltimateManager.AddItem(new MenuItem("ucheckdmgafter", "Take HP after damage into consideration").SetValue(true));
-
+            
             foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(h => h.IsAlly))
             {
                 UltimateManager.AddItem(new MenuItem("ult" + hero.ChampionName, "Ultimate " + hero.ChampionName).SetValue(true));
@@ -256,7 +256,7 @@ namespace SephKayle
                 {
                     var etarget = TargetSelector.GetTarget(incrange, TargetSelector.DamageType.Magical);
                     var dist = etarget.Distance(Player);
-                    if (etarget != null && dist >= normrange && dist <= incrange * 1.2)
+                    if (etarget != null && dist <= incrange * 1.2)
                     {
                         E.Cast(Player);
                     }
@@ -391,8 +391,7 @@ namespace SephKayle
 
         static void HealUltManager(bool forceheal = false, bool forceult = false, AIHeroClient target = null)
         {
-            if (W.IsReady())
-            {
+            if (W.IsReady()) {
                 if (Utils.TickCount - LastHealDetection < 1000 && HealTarget.IsValidTarget(W.Range, false))
                 {
                     var setvaluehealt = Getslider("hpct" + HealTarget.ChampionName);
@@ -650,7 +649,7 @@ namespace SephKayle
             W = new Spell(SpellSlot.W, 900);
             E = new Spell(SpellSlot.E, 0);
             R = new Spell(SpellSlot.R, 900);
-            SpellDataInst ignite = ObjectManager.Player.Spellbook.GetSpell(ObjectManager.Player.GetSpellSlot("summonerdot"));
+            SpellDataInst ignite = Player.Spellbook.GetSpell(ObjectManager.Player.GetSpellSlot("summonerdot"));
             if (ignite.Slot != SpellSlot.Unknown)
             {
                 Ignite = new Spell(ignite.Slot, 600);

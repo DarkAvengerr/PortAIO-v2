@@ -1,12 +1,13 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Reflection;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using System;
-using EloBuddy;
 
-namespace SephKhazix
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace SephKhazix
 {
     static class Extensions
     {

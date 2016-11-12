@@ -1,15 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using EloBuddy;
 
-namespace SephKhazix
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace SephKhazix
 {
     class Khazix : Helper
     {
+
         public static void Main()
         {
             Khazix K6 = new Khazix();
@@ -20,7 +22,7 @@ namespace SephKhazix
             OnLoad();
         }
 
-        public void OnLoad()
+        void OnLoad()
         {
             if (ObjectManager.Player.ChampionName != "Khazix")
             {
@@ -28,7 +30,7 @@ namespace SephKhazix
             }
             Chat.Print("<font color='#1d87f2'>SephKhazix Loaded </font>");
             Init();
-            GenerateMenu();
+            GenerateMenu(this);
             Game.OnUpdate += OnUpdate;
             Game.OnUpdate += DoubleJump;
             Drawing.OnDraw += OnDraw;
@@ -53,6 +55,8 @@ namespace SephKhazix
             }
 
             HeroList = HeroManager.AllHeroes;
+
+            jumpManager = new JumpManager(this);
         }
 
 
@@ -64,6 +68,8 @@ namespace SephKhazix
             }
 
             EvolutionCheck();
+
+            AutoEscape(); 
 
             if (Config.GetBool("Kson"))
             {
@@ -89,6 +95,9 @@ namespace SephKhazix
                 case Orbwalking.OrbwalkingMode.LastHit:
                     LH();
                     break;
+                case Orbwalking.OrbwalkingMode.Burst:
+                    jumpManager.Assasinate();
+                    break;
             }
         }
 
@@ -99,7 +108,11 @@ namespace SephKhazix
             {
                 Harass();
             }
-            LH();
+
+            if (Config.GetBool("Farm.InMixed"))
+            {
+                LH();
+            }
         }
 
         void Harass()
@@ -231,7 +244,7 @@ namespace SephKhazix
 
         void Waveclear()
         {
-            List<Obj_AI_Minion> allMinions = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsValidTarget(W.Range) && !MinionManager.IsWard(x)).ToList();
+            List<Obj_AI_Minion> allMinions = ObjectManager.Get<Obj_AI_Minion>().OrderBy(x=>x.Health).Where(x => x.IsValidTarget(W.Range) && !MinionManager.IsWard(x)).ToList();
 
             if (Config.GetBool("UseQFarm") && Q.IsReady())
             {
@@ -312,16 +325,35 @@ namespace SephKhazix
         {
             AIHeroClient target = null;
 
-            if (SpellSlot.E.IsReady() && SpellSlot.Q.IsReady())
+            TargetSelector.TargetSelectionConditionDelegate conditions = targ => targ.IsIsolated() || target.Health <= GetBurstDamage(target);
+
+            float targetSelectionRange = Khazix.AttackRange;
+
+            if (SpellSlot.Q.IsReady())
             {
-                target = TargetSelector.GetTarget((E.Range + Q.Range) * 0.95f, TargetSelector.DamageType.Physical);
+                targetSelectionRange += Q.Range;
             }
 
+            if (SpellSlot.E.IsReady())
+            {
+                targetSelectionRange += E.Range;
+            }
+
+            else if (SpellSlot.W.IsReady())
+            {
+                targetSelectionRange += W.Range;
+            }
+
+            //Get Optimal target if available
+            target = TargetSelector.GetTarget(targetSelectionRange, TargetSelector.DamageType.Physical, true, null, null, conditions);
+
+            //If could not find then settle for anything
             if (target == null)
             {
-                target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
+                target = TargetSelector.GetTarget(targetSelectionRange, TargetSelector.DamageType.Physical, true, null, null);
             }
 
+            //If a target has been found
             if ((target != null))
             {
                 var dist = Khazix.Distance(target);
@@ -355,7 +387,7 @@ namespace SephKhazix
                 }
 
                 // Use EQ AND EW Synergy
-                if ((dist <= E.Range + Q.Range + (0.7 * Khazix.MoveSpeed) && dist > Q.Range && E.IsReady() &&
+                if ((dist <= E.Range + (Q.Range * 0.80f) && dist > Q.Range && E.IsReady() &&
                     Config.GetBool("UseEGapclose")) || (dist <= E.Range + W.Range && dist > Q.Range && E.IsReady() && W.IsReady() &&
                     Config.GetBool("UseEGapcloseW")))
                 {
@@ -373,10 +405,11 @@ namespace SephKhazix
 
                 // Ult Usage
                 if (R.IsReady() && !Q.IsReady() && !W.IsReady() && !E.IsReady() &&
-                    Config.GetBool("UseRCombo"))
+                    Config.GetBool("UseRCombo") && Khazix.CountEnemiesInRange(500) > 0)
                 {
                     R.Cast();
                 }
+
                 // Evolved
 
                 if (W.IsReady() && EvolvedW && dist <= WE.Range && Config.GetBool("UseWCombo"))
@@ -397,11 +430,11 @@ namespace SephKhazix
                     }
                 }
 
-                if (dist <= E.Range + (0.7 * Khazix.MoveSpeed) && dist > Q.Range &&
+                if (dist <= E.Range && dist > Q.Range + (0.5 * Khazix.MoveSpeed) &&
                     Config.GetBool("UseECombo") && E.IsReady())
                 {
                     PredictionOutput pred = E.GetPrediction(target);
-                    if (target.IsValid && !target.IsDead && ShouldJump(pred.CastPosition))
+                    if (target.IsValidTarget() && ShouldJump(pred.CastPosition))
                     {
                         E.Cast(pred.CastPosition);
                     }
@@ -414,9 +447,41 @@ namespace SephKhazix
             }
         }
 
+        void AutoEscape()
+        {
+            //Avoid interrupting our assasination attempt
+            if (jumpManager.MidAssasination)
+            {
+                return;
+            }
+
+            if (Config.GetBool("Safety.autoescape") && !IsHealthy)
+            {
+                var ally =
+                    HeroList.FirstOrDefault(h => h.HealthPercent > 40 && h.CountEnemiesInRange(400) == 0 && !h.ServerPosition.PointUnderEnemyTurret());
+                if (ally != null && ally.IsValid)
+                {
+                    E.Cast(ally.ServerPosition);
+                    return;
+                }
+                var underTurret = EnemyTurrets.Any(x => x.Distance(Khazix.ServerPosition) <= 900f && !x.IsDead && x.IsValid);
+                if (underTurret || Khazix.CountEnemiesInRange(500) >= 1)
+                {
+                    var bestposition = Khazix.ServerPosition.Extend(NexusPosition, E.Range);
+                    E.Cast(bestposition);
+                    return;
+                }
+            }
+        }
 
         void KillSteal()
         {
+            //Avoid interrupting our assasination attempt
+            if (jumpManager.MidAssasination)
+            {
+                return;
+            }
+
             AIHeroClient target = HeroList
                 .Where(x => x.IsValidTarget() && x.Distance(Khazix.Position) < 1375f && !x.IsZombie)
                 .MinOrDefault(x => x.Health);
@@ -430,24 +495,6 @@ namespace SephKhazix
                     if (igniteDmg > target.Health)
                     {
                         Khazix.Spellbook.CastSpell(IgniteSlot, target);
-                        return;
-                    }
-                }
-
-                if (Config.GetBool("Safety.autoescape") && !IsHealthy)
-                {
-                    var ally =
-                        HeroList.FirstOrDefault(h => h.HealthPercent > 40 && h.CountEnemiesInRange(400) == 0 && !h.ServerPosition.PointUnderEnemyTurret());
-                    if (ally != null && ally.IsValid)
-                    {
-                        E.Cast(ally.ServerPosition);
-                        return;
-                    }
-                    var underTurret = EnemyTurrets.Any(x => x.Distance(Khazix.ServerPosition) <= 900f && !x.IsDead && x.IsValid);
-                    if (underTurret || Khazix.CountEnemiesInRange(500) >= 1)
-                    {
-                        var bestposition = Khazix.ServerPosition.Extend(NexusPosition, E.Range);
-                        E.Cast(bestposition);
                         return;
                     }
                 }
@@ -736,7 +783,7 @@ namespace SephKhazix
 
         void DoubleJump(EventArgs args)
         {
-            if (!E.IsReady() || !EvolvedE || !Config.GetBool("djumpenabled") || Khazix.IsDead || Khazix.IsRecalling())
+            if (!E.IsReady() || !EvolvedE || !Config.GetBool("djumpenabled") || Khazix.IsDead || Khazix.IsRecalling() || jumpManager.MidAssasination)
             {
                 return;
             }
@@ -849,6 +896,42 @@ namespace SephKhazix
                 }
             }
         }
+
+        internal void AssasinationCombo(AIHeroClient target)
+        {
+            if ((target != null))
+            {
+                var dist = Khazix.Distance(target);
+
+                // Normal abilities
+
+                if (Q.IsReady() && dist <= Q.Range)
+                {
+                    Q.Cast(target);
+                }
+
+                if (W.IsReady() && !EvolvedW && dist <= W.Range)
+                {
+                    var pred = W.GetPrediction(target);
+                    if (pred.Hitchance >= Config.GetHitChance("WHitchance"))
+                    {
+                        W.Cast(pred.CastPosition);
+                    }
+                }
+
+                else if (W.IsReady() && EvolvedW && dist <= WE.Range)
+                {
+                    PredictionOutput pred = WE.GetPrediction(target);
+                    CastWE(target, pred.UnitPosition.To2D(), 0);
+                }
+
+                if (Config.GetBool("UseItems"))
+                {
+                    UseItems(target);
+                }
+            }
+        }
+
 
         void OnDraw(EventArgs args)
         {

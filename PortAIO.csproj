@@ -1135,6 +1135,13 @@
     <Compile Include="Core\Champion Ports\Kennen\Hestia%27s Kennen\Modes\LaneClear.cs" />
     <Compile Include="Core\Champion Ports\Kennen\Hestia%27s Kennen\Modes\LastHit.cs" />
     <Compile Include="Core\Champion Ports\Kennen\Hestia%27s Kennen\Program.cs" />
+    <Compile Include="Core\Champion Ports\Kha%27Zix\SephKhaZix\DamageIndicator.cs" />
+    <Compile Include="Core\Champion Ports\Kha%27Zix\SephKhaZix\Damages.cs" />
+    <Compile Include="Core\Champion Ports\Kha%27Zix\SephKhaZix\Extensions.cs" />
+    <Compile Include="Core\Champion Ports\Kha%27Zix\SephKhaZix\Helper.cs" />
+    <Compile Include="Core\Champion Ports\Kha%27Zix\SephKhaZix\JumpManager.cs" />
+    <Compile Include="Core\Champion Ports\Kha%27Zix\SephKhaZix\Khazix.cs" />
+    <Compile Include="Core\Champion Ports\Kha%27Zix\SephKhaZix\KhazixMenu.cs" />
     <Compile Include="Core\Champion Ports\Kha%27Zix\SSKhaZix\DrawDamage.cs" />
     <Compile Include="Core\Champion Ports\Kha%27Zix\SSKhaZix\Program.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\LeBlanc II\Champion\PlayerObjects.cs" />
@@ -3455,10 +3462,6 @@
     <Compile Include="Core\Champion Ports\Katarina\Staberina\SpellManager.cs" />
     <Compile Include="Core\Champion Ports\Katarina\Staberina\Utility.cs" />
     <Compile Include="Core\Champion Ports\Kayle\SephKayle\Program.cs" />
-    <Compile Include="Core\Champion Ports\Kha%27Zix\SephKhaZix\Extensions.cs" />
-    <Compile Include="Core\Champion Ports\Kha%27Zix\SephKhaZix\Helper.cs" />
-    <Compile Include="Core\Champion Ports\Kha%27Zix\SephKhaZix\Khazix.cs" />
-    <Compile Include="Core\Champion Ports\Kha%27Zix\SephKhaZix\KhazixMenu.cs" />
     <Compile Include="Core\Champion Ports\Kindred\Kindred YinYang\Helper.cs" />
     <Compile Include="Core\Champion Ports\Kindred\Kindred YinYang\Language.cs" />
     <Compile Include="Core\Champion Ports\Kindred\Kindred YinYang\Program.cs" />
