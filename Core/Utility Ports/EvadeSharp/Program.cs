@@ -163,7 +163,7 @@ namespace Evade
             //Check if the skillshot is already added.
             var alreadyAdded = false;
 
-            if (Config.Menu.Item("DisableFow").GetValue<bool>() && !skillshot.Unit.IsHPBarRendered)
+            if (Config.Menu.Item("DisableFow").GetValue<bool>() && !skillshot.Unit.IsVisible)
             {
                 return;
             }
@@ -252,7 +252,7 @@ namespace Evade
 
                     if (skillshot.SpellData.SpellName == "TaricE" && (skillshot.Unit as AIHeroClient).ChampionName == "Taric")
                     {
-                        var target = HeroManager.AllHeroes.FirstOrDefault(h => h.Team == skillshot.Unit.Team && h.IsHPBarRendered && h.HasBuff("taricwleashactive"));
+                        var target = HeroManager.AllHeroes.FirstOrDefault(h => h.Team == skillshot.Unit.Team && h.IsVisible && h.HasBuff("taricwleashactive"));
                         if (target != null)
                         {
                             var start = target.ServerPosition.To2D();

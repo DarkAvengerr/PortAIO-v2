@@ -402,7 +402,7 @@ using EloBuddy;
             var missile = sender as MissileClient;
 
             if (missile == null || !missile.IsValid || !missile.SpellCaster.IsValid<AIHeroClient>() ||
-                missile.SpellCaster.IsAlly && !TrackAllies || missile.SpellCaster.IsHPBarRendered ||
+                missile.SpellCaster.IsAlly && !TrackAllies || missile.SpellCaster.IsVisible ||
                 missile.SData.Name != "itemplacementmissile")
             {
                 return;

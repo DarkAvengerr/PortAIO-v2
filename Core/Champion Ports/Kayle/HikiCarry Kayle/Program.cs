@@ -434,7 +434,7 @@ using EloBuddy;
             {
                 if (ObjectManager.Player.HasBuff("rengarralertsound") &&
                 !CheckWard() &&
-                !Rengar.IsHPBarRendered &&
+                !Rengar.IsVisible &&
                 !Rengar.IsDead &&
                     CheckSlot() != SpellSlot.Unknown)
                 {

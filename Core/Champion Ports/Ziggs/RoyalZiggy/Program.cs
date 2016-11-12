@@ -171,7 +171,7 @@ using EloBuddy;
 			string additional = "";
             foreach (AIHeroClient hero in ObjectManager.Get<AIHeroClient>())
             {
-                if (hero.IsEnemy && hero.IsHPBarRendered && hero.IsTargetable && player.GetSpellDamage(hero, SpellSlot.R) > hero.Health && !hero.IsDead && R.IsReady())
+                if (hero.IsEnemy && hero.IsVisible && hero.IsTargetable && player.GetSpellDamage(hero, SpellSlot.R) > hero.Health && !hero.IsDead && R.IsReady())
                 {
 				additional += hero.BaseSkinName + " ";
                     foreach(FEnemy enemy in lastTimePinged)

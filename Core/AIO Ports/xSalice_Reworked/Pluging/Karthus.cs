@@ -361,7 +361,7 @@ using EloBuddy;
 
         private void CheckUnderTower()
         {
-            foreach (var enemy in HeroManager.Enemies.Where(x => Player.Distance(x.Position) < W.Range && x.IsValidTarget(W.Range) && !x.IsDead && x.IsHPBarRendered))
+            foreach (var enemy in HeroManager.Enemies.Where(x => Player.Distance(x.Position) < W.Range && x.IsValidTarget(W.Range) && !x.IsDead && x.IsVisible))
             {
                 if (ObjectManager.Get<Obj_AI_Turret>().Where(turret => turret != null && turret.IsValid &&
                 turret.IsAlly && turret.Health > 0).Any(turret => Vector2.Distance(enemy.Position.To2D(), turret.Position.To2D()) < 750 && W.IsReady()))

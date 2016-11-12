@@ -51,7 +51,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
                    && HeroManager.Enemies.Any(
                        x =>
                        x.HealthPercent < this.Menu.Item("Hextech800EnemyHp").GetValue<Slider>().Value
-                       && x.Distance(this.Player) < 700 && !x.IsDead && !x.IsZombie && x.IsHPBarRendered && x.IsHPBarRendered && x.IsValidTarget()) && Hextech_GLP_800.IsReady() && Hextech_GLP_800.IsOwned();
+                       && x.Distance(this.Player) < 700 && !x.IsDead && !x.IsZombie && x.IsVisible && x.IsHPBarRendered && x.IsValidTarget()) && Hextech_GLP_800.IsReady() && Hextech_GLP_800.IsOwned();
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         {
             var objAiHero = HeroManager.Enemies.FirstOrDefault(
                 x => x.HealthPercent < this.Menu.Item("Hextech800EnemyHp").GetValue<Slider>().Value 
-                && x.Distance(this.Player) < 500 && !x.IsDead && !x.IsZombie && x.IsHPBarRendered && x.IsHPBarRendered && x.IsValidTarget());
+                && x.Distance(this.Player) < 500 && !x.IsDead && !x.IsZombie && x.IsVisible && x.IsHPBarRendered && x.IsValidTarget());
 
             if (objAiHero != null)
             {

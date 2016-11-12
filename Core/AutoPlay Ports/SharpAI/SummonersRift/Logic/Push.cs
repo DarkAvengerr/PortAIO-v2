@@ -18,7 +18,7 @@ using EloBuddy;
         static bool ShouldTakeAction()
         {
             return GameObjects.AllyMinions.Count(m=>!m.IsDead && m.Distance(ObjectManager.Player.Position) < 800) == 0 || Minions.GetMinionsInLane(SessionBasedData.MyTeam, SessionBasedData.CurrentLane).Count() <
-                   Minions.GetMinionsInLane(SessionBasedData.EnemyTeam, SessionBasedData.CurrentLane).Count() || ObjectManager.Get<AIHeroClient>().Count(e=>e.IsEnemy && !e.IsDead && e.IsHPBarRendered && e.Distance(ObjectManager.Player) < 1600) < 1;
+                   Minions.GetMinionsInLane(SessionBasedData.EnemyTeam, SessionBasedData.CurrentLane).Count() || ObjectManager.Get<AIHeroClient>().Count(e=>e.IsEnemy && !e.IsDead && e.IsVisible && e.Distance(ObjectManager.Player) < 1600) < 1;
         }
 
         static TreeSharp.Action TakeAction()

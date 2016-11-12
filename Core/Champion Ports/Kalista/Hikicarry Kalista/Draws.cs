@@ -35,7 +35,7 @@ using EloBuddy;
                     ObjectManager.Get<Obj_AI_Minion>()
                         .Where(
                             o =>
-                                o.IsValidTarget(Program.E.Range) && o.Team == GameObjectTeam.Neutral && o.IsHPBarRendered && !o.IsDead)
+                                o.IsValidTarget(Program.E.Range) && o.Team == GameObjectTeam.Neutral && o.IsVisible && !o.IsDead)
                 )
             {
                 float tDamage = Calculators.JungleTotalDamage(jungleMobs) * 100 / jungleMobs.Health;

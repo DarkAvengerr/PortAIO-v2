@@ -188,12 +188,12 @@ namespace Syndra
             {
                 foreach (var objAiHero in from hero in HeroManager.Enemies
                                           where
-                                              hero.Distance(Game.CursorPos) < 150f && hero != null && hero.IsHPBarRendered
+                                              hero.Distance(Game.CursorPos) < 150f && hero != null && hero.IsVisible
                                               && !hero.IsDead
                                           orderby hero.Distance(Game.CursorPos) descending
                                           select hero)
                 {
-                    if (objAiHero != null && objAiHero.IsHPBarRendered && !objAiHero.IsDead)
+                    if (objAiHero != null && objAiHero.IsVisible && !objAiHero.IsDead)
                     {
                         var xSelect = Program.Config.Item("Set").GetValue<StringList>().SelectedIndex;
 
@@ -277,7 +277,7 @@ namespace Syndra
                 foreach (var e in
                     HeroManager.Enemies.Where(
                         e =>
-                        e.IsHPBarRendered && !e.IsDead && this.Config.Item("enemy." + e.ChampionName) != null
+                        e.IsVisible && !e.IsDead && this.Config.Item("enemy." + e.ChampionName) != null
                         && this.Config.Item("enemy." + e.ChampionName).GetValue<bool>()))
                 {
                     DrawText(

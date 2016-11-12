@@ -44,7 +44,7 @@ using EloBuddy;
                     ObjectManager.Get<AIHeroClient>()
                         .Where(
                             e =>
-                                e.IsEnemy && !e.IsDead && e.IsHPBarRendered &&
+                                e.IsEnemy && !e.IsDead && e.IsVisible &&
                                 ObjectManager.Player.Distance(e) < Modes.ModeSettings.MaxERange && !e.HasSoulShackle()))
                 {
                     PlayerSpells.CastE(e);

@@ -15,7 +15,7 @@ using EloBuddy; namespace YasuoPro
 
         internal static bool IsDashable(this Obj_AI_Base unit, float range = 475)
         {
-            if (!SpellSlot.E.IsReady() || unit == null || unit.Team == Player.Team || unit.Distance(Player) > range || !unit.IsValid || unit.IsDead || !unit.IsHPBarRendered || !unit.IsTargetable)
+            if (!SpellSlot.E.IsReady() || unit == null || unit.Team == Player.Team || unit.Distance(Player) > range || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable)
             {
                 return false;
             }
@@ -35,7 +35,7 @@ using EloBuddy; namespace YasuoPro
 
         internal static bool IsDashableFrom(this Obj_AI_Base unit, Vector2 fromPos, float range = 475)
         {
-            if (unit == null || unit.Team == Player.Team || unit.Distance(fromPos) > range || !unit.IsValid || unit.IsDead || !unit.IsHPBarRendered || !unit.IsTargetable)
+            if (unit == null || unit.Team == Player.Team || unit.Distance(fromPos) > range || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable)
             {
                 return false;
             }
@@ -62,12 +62,12 @@ using EloBuddy; namespace YasuoPro
             }
 
             var name = minion.CharData.BaseSkinName.ToLower();
-            return (Player.Distance(minion) <= range && minion.IsValid && minion.IsTargetable && !minion.IsInvulnerable && minion.IsHPBarRendered && minion.Team != Player.Team && minion.IsHPBarRendered && !MinionManager.IsWard(minion) && !name.Contains("gangplankbarrel"));
+            return (Player.Distance(minion) <= range && minion.IsValid && minion.IsTargetable && !minion.IsInvulnerable && minion.IsVisible && minion.Team != Player.Team && minion.IsHPBarRendered && !MinionManager.IsWard(minion) && !name.Contains("gangplankbarrel"));
         }
 
         internal static bool IsValidAlly(this Obj_AI_Base unit, float range = 2000)
         {
-            if (unit == null || unit.Distance(Player) > range || unit.Team != Player.Team || !unit.IsValid || unit.IsDead || !unit.IsHPBarRendered || unit.IsTargetable)
+            if (unit == null || unit.Distance(Player) > range || unit.Team != Player.Team || !unit.IsValid || unit.IsDead || !unit.IsVisible || unit.IsTargetable)
             {
                 return false;
             }
@@ -76,7 +76,7 @@ using EloBuddy; namespace YasuoPro
 
         internal static bool IsValidEnemy(this Obj_AI_Base unit, float range = 2000)
         {
-            if (unit == null || !unit.IsHPBarRendered || unit.IsZombie || unit.Distance(Player) > range || unit.Team == Player.Team || !unit.IsValid || unit.IsDead || !unit.IsHPBarRendered || !unit.IsTargetable)
+            if (unit == null || !unit.IsHPBarRendered || unit.IsZombie || unit.Distance(Player) > range || unit.Team == Player.Team || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable)
             {
                 return false;
             }

@@ -135,7 +135,7 @@ using EloBuddy; namespace YasuoPro
         {
             try
             {
-                if (!Helper.GetBool("Evade.WTS") || sender.IsAlly || !SpellSlot.W.IsReady() || (!Helper.GetBool("Evade.FOW") && !sender.IsHPBarRendered))
+                if (!Helper.GetBool("Evade.WTS") || sender.IsAlly || !SpellSlot.W.IsReady() || (!Helper.GetBool("Evade.FOW") && !sender.IsVisible))
                 {
                     return;
                 }

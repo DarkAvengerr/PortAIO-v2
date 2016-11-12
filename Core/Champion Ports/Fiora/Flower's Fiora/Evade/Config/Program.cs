@@ -71,7 +71,7 @@ using EloBuddy;
         {
             var alreadyAdded = false;
 
-            if (Config.Menu.Item("DisableFow").GetValue<bool>() && !skillshot.Unit.IsHPBarRendered)
+            if (Config.Menu.Item("DisableFow").GetValue<bool>() && !skillshot.Unit.IsVisible)
             {
                 return;
             }
@@ -158,7 +158,7 @@ using EloBuddy;
                     {
                         var target =
                             HeroManager.AllHeroes.FirstOrDefault(
-                                h => h.Team == skillshot.Unit.Team && h.IsHPBarRendered && h.HasBuff("taricwleashactive"));
+                                h => h.Team == skillshot.Unit.Team && h.IsVisible && h.HasBuff("taricwleashactive"));
 
                         if (target != null)
                         {

@@ -133,7 +133,7 @@ using EloBuddy;
         {
             var alreadyAdded = false;
 
-            if (Config.Menu["Misc"]["DisableFow"] && !skillshot.Unit.IsHPBarRendered)
+            if (Config.Menu["Misc"]["DisableFow"] && !skillshot.Unit.IsVisible)
             {
                 return;
             }
@@ -222,7 +222,7 @@ using EloBuddy;
 
                     if (skillshot.SpellData.SpellName == "TaricE" && (skillshot.Unit as AIHeroClient).ChampionName == "Taric")
                     {
-                        var target = GameObjects.AllyHeroes.FirstOrDefault(h => h.Team == skillshot.Unit.Team && h.IsHPBarRendered && h.HasBuff("taricwleashactive"));
+                        var target = GameObjects.AllyHeroes.FirstOrDefault(h => h.Team == skillshot.Unit.Team && h.IsVisible && h.HasBuff("taricwleashactive"));
                         if (target != null)
                         {
                             var start = target.ServerPosition.ToVector2();

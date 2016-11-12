@@ -447,7 +447,7 @@ namespace SharpShooter.Plugins
 
                 if (MenuProvider.Champion.Drawings.GetBoolValue("Draw E Damage Percent"))
                 {
-                    foreach (var target in HeroManager.Enemies.Where(x => !x.IsDead && x.IsHPBarRendered))
+                    foreach (var target in HeroManager.Enemies.Where(x => !x.IsDead && x.IsVisible))
                     {
                         if (_e.GetDamage(target) > 2)
                         {
@@ -463,7 +463,7 @@ namespace SharpShooter.Plugins
                     foreach (
                         var target in
                             MinionManager.GetMinions(float.MaxValue, MinionTypes.All, MinionTeam.Neutral)
-                                .Where(x => !x.IsDead && x.IsHPBarRendered))
+                                .Where(x => !x.IsDead && x.IsVisible))
                     {
                         if (_e.GetDamage(target) > 2)
                         {

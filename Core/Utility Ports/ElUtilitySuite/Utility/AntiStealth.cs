@@ -205,7 +205,7 @@ using EloBuddy; namespace ElUtilitySuite.Utility
                 {
                     if (sender.Name.ToLower().Contains("Rengar_Base_R_Alert"))
                     {
-                        if (this.Player.HasBuff("rengarralertsound") && !this.rengar.IsHPBarRendered && !this.rengar.IsDead)
+                        if (this.Player.HasBuff("rengarralertsound") && !this.rengar.IsVisible && !this.rengar.IsDead)
                         {
                             var item = this.GetBestWardItem();
                             if (item != null)

@@ -199,7 +199,7 @@ namespace SAutoCarry.Champions
             {
                 foreach (var enemy in HeroManager.Enemies)
                 {
-                    if (!enemy.IsDead && enemy.IsHPBarRendered)
+                    if (!enemy.IsDead && enemy.IsVisible)
                     {
                         var text_pos = Drawing.WorldToScreen(enemy.Position);
                         Drawing.DrawText((int)text_pos.X - 20, (int)text_pos.Y + 35, System.Drawing.Color.Aqua, ConfigMenu.Item(String.Format("CMETHOD{0}", enemy.ChampionName)).GetValue<StringList>().SelectedValue);

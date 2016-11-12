@@ -285,7 +285,7 @@
             var drawE = ElTrundleMenu.Menu.Item("ElTrundle.Draw.E").GetValue<Circle>();
             var drawR = ElTrundleMenu.Menu.Item("ElTrundle.Draw.R").GetValue<Circle>();
 
-            if (newTarget != null && newTarget.IsHPBarRendered && newTarget.IsValidTarget() && !newTarget.IsDead
+            if (newTarget != null && newTarget.IsVisible && newTarget.IsValidTarget() && !newTarget.IsDead
                 && Player.Distance(newTarget) < 3000)
             {
                 Drawing.DrawCircle(GetPillarPosition(newTarget), 188, Color.DeepPink);

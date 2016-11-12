@@ -312,7 +312,7 @@ using EloBuddy;
                 UltimateTarget = null;
                 foreach (AIHeroClient enemy in HeroManager.Enemies)
                 {
-                    if (enemy.IsTargetable && !enemy.IsZombie && enemy.IsHPBarRendered && !enemy.IsDead)
+                    if (enemy.IsTargetable && !enemy.IsZombie && enemy.IsVisible && !enemy.IsDead)
                     {
                         int killWave = 1 + (int)((enemy.Health - (Player.HasBuff("GangplankRUpgrade2")?(R.Instance.Level + 20 + Player.TotalMagicalDamage*0.1)*3:0))/R.GetDamage(enemy));
                         if (killWave < minKillWave)

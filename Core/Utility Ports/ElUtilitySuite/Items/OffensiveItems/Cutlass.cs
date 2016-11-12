@@ -57,7 +57,7 @@ namespace ElUtilitySuite.Items.OffensiveItems
         public override void UseItem()
         {
             var targ = TargetSelector.GetTarget(550, TargetSelector.DamageType.Physical);
-            if (targ != null && targ.IsHPBarRendered && targ.IsHPBarRendered)
+            if (targ != null && targ.IsHPBarRendered && targ.IsVisible)
                 Bilgewater_Cutlass.Cast(targ);
         }
 

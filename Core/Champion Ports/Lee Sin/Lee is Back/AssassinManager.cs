@@ -177,13 +177,13 @@ using EloBuddy;
             {
                 foreach (var objAiHero in from hero in HeroManager.Enemies
                                           where
-                                              hero.Distance(Game.CursorPos) < 150f && hero != null && hero.IsHPBarRendered && !hero.IsDead
+                                              hero.Distance(Game.CursorPos) < 150f && hero != null && hero.IsVisible && !hero.IsDead
                                           orderby
                                               hero.Distance(Game.CursorPos) descending
                                           select
                                               hero)
                 {
-                    if (objAiHero != null && objAiHero.IsHPBarRendered && !objAiHero.IsDead)
+                    if (objAiHero != null && objAiHero.IsVisible && !objAiHero.IsDead)
                     {
                         int set = Program.Config.Item("Set").GetValue<StringList>().SelectedIndex;
 
@@ -281,7 +281,7 @@ using EloBuddy;
                     var e in
                         HeroManager.Enemies.Where(
                             e =>
-                                e.IsHPBarRendered && !e.IsDead && LocalMenu.Item("enemy_" + e.ChampionName) != null &&
+                                e.IsVisible && !e.IsDead && LocalMenu.Item("enemy_" + e.ChampionName) != null &&
                                 LocalMenu.Item("enemy_" + e.ChampionName).GetValue<bool>()))
                 {
                     DrawText(Text, "1st Priority Target",
@@ -300,7 +300,7 @@ using EloBuddy;
                     LeagueSharp.Common.Geometry.Polygon.Line line in
                         HeroManager.Enemies.Where(
                             e =>
-                                e.IsHPBarRendered && !e.IsDead && LocalMenu.Item("enemy_" + e.ChampionName) != null &&
+                                e.IsVisible && !e.IsDead && LocalMenu.Item("enemy_" + e.ChampionName) != null &&
                                 LocalMenu.Item("enemy_" + e.ChampionName).GetValue<bool>())
                             .Select(
                                 e =>

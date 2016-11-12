@@ -166,7 +166,7 @@ using EloBuddy;
             }
 
             if (Config.Item("drawFull").GetValue<bool>())
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsHPBarRendered))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
                 {
                     hpi.unit = enemy;
                     hpi.drawDmg(Jayce.getJayceFullComoDmg(enemy), Color.Yellow);

@@ -132,7 +132,7 @@ using EloBuddy;
         {
             int time = Utils.TickCount;
 
-            foreach (EnemyInfo enemyInfo in EnemyInfo.Where(x => x.Player.IsHPBarRendered))
+            foreach (EnemyInfo enemyInfo in EnemyInfo.Where(x => x.Player.IsVisible))
                 enemyInfo.LastSeen = time;
 
             if (!MenuLocal.Item("baseUlt").GetValue<bool>())
@@ -330,7 +330,7 @@ using EloBuddy;
 
         static float GetTargetHealth(EnemyInfo enemyInfo, int additionalTime)
         {
-            if (enemyInfo.Player.IsHPBarRendered)
+            if (enemyInfo.Player.IsVisible)
                 return enemyInfo.Player.Health;
 
             float predictedHealth = enemyInfo.Player.Health +

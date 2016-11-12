@@ -183,7 +183,7 @@ using EloBuddy;
             if (_menu.Item("drawingsdrawHP").GetValue<bool>())
             {
                 foreach (var enemy in
-                    ObjectManager.Get<AIHeroClient>().Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsHPBarRendered))
+                    ObjectManager.Get<AIHeroClient>().Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
                 {
                     Hpi.unit = enemy;
                     Hpi.DrawDmg(CalcDamage(enemy), Color.Green);

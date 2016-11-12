@@ -90,7 +90,7 @@ using EloBuddy;
                                                   where enemy.Distance(Game.CursorPos) < 150f
                                                   select enemy)
                 {
-                    if (objAiHero != null && objAiHero.IsHPBarRendered && !objAiHero.IsDead)
+                    if (objAiHero != null && objAiHero.IsVisible && !objAiHero.IsDead)
                     {
                         var xSelect =
                             Program.TargetSelectorMenu.Item("AssassinSelectOption").GetValue<StringList>().SelectedIndex;
@@ -140,7 +140,7 @@ using EloBuddy;
                         .Where(enemy => enemy.Team != ObjectManager.Player.Team)
                         .Where(
                             enemy =>
-                                enemy.IsHPBarRendered &&
+                                enemy.IsVisible &&
                                 Program.TargetSelectorMenu.Item("Assassin" + enemy.BaseSkinName) != null &&
                                 !enemy.IsDead)
                         .Where(

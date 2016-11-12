@@ -67,7 +67,7 @@ using EloBuddy;
             try
             {
                 foreach (var passive in
-                    PassiveList.Where(kvp => kvp.Key.IsValid && kvp.Key.IsHPBarRendered && kvp.Key.IsHPBarRendered)
+                    PassiveList.Where(kvp => kvp.Key.IsValid && kvp.Key.IsVisible && kvp.Key.IsHPBarRendered)
                         .SelectMany(keyValue => keyValue.Value.Where(p => p.IsValid && p.IsVisible)))
                 {
                     if (Menu.Item("DrawPolygon").IsActive() && passive.SimplePolygon != null)

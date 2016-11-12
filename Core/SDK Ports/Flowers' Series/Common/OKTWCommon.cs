@@ -59,7 +59,7 @@ using EloBuddy;
             }
             else
             {
-                foreach (var champion in ChampionList.Where(champion => !champion.IsDead && champion.IsHPBarRendered && champion.Team != sender.Team && champion.Distance(sender) < 2000))
+                foreach (var champion in ChampionList.Where(champion => !champion.IsDead && champion.IsVisible && champion.Team != sender.Team && champion.Distance(sender) < 2000))
                 {
                     if (CanHitSkillShot(champion, Args))
                     {

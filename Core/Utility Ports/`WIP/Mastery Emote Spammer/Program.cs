@@ -147,7 +147,7 @@ using EloBuddy;
             }
             if (Menu.Item("neardead").GetValue<bool>() &&
                 ObjectManager.Get<AIHeroClient>()
-                    .Any(h => h.IsEnemy && h.IsHPBarRendered && h.IsDead && ObjectManager.Player.Distance(h) < 300))
+                    .Any(h => h.IsEnemy && h.IsVisible && h.IsDead && ObjectManager.Player.Distance(h) < 300))
             {
                 DoEmote();
             }

@@ -198,7 +198,7 @@
                     && (CurrentMode == Mode.Harass || CurrentMode == Mode.Clear))
                 {
                     var hero = GetBestHeroTarget;
-                    if (hero.IsValidTarget() && hero != null && hero.IsHPBarRendered && hero.IsHPBarRendered && hero.IsTargetable)
+                    if (hero.IsValidTarget() && hero != null && hero.IsVisible && hero.IsHPBarRendered && hero.IsTargetable)
                     {
                         Console.WriteLine("1");
                         return hero;
@@ -239,7 +239,7 @@
                         }
                     }
                 }
-                if (InAutoAttackRange(ForcedTarget) && ForcedTarget != null && ForcedTarget.IsHPBarRendered && ForcedTarget.IsHPBarRendered)
+                if (InAutoAttackRange(ForcedTarget) && ForcedTarget != null && ForcedTarget.IsVisible && ForcedTarget.IsHPBarRendered)
                 {
                     return ForcedTarget;
                 }
@@ -261,7 +261,7 @@
                 if (CurrentMode != Mode.LastHit)
                 {
                     var hero = GetBestHeroTarget;
-                    if (hero.IsValidTarget() && hero != null && hero.IsHPBarRendered && hero.IsHPBarRendered && hero.IsTargetable)
+                    if (hero.IsValidTarget() && hero != null && hero.IsVisible && hero.IsHPBarRendered && hero.IsTargetable)
                     {
                         return hero;
                     }

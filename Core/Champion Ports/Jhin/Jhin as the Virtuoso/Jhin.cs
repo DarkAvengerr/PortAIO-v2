@@ -125,7 +125,7 @@ namespace Jhin_As_The_Virtuoso
             if (sender.IsMe
                 && IsCastingR && Config.Item("禁止移动").GetValue<bool>()
                 && Player.CountEnemiesInRange(Config.Item("禁止距离").GetValue<Slider>().Value) == 0
-                && HeroManager.Enemies.Any(e => e.InRCone() && !e.IsDead && e.IsValid && e.IsHPBarRendered)
+                && HeroManager.Enemies.Any(e => e.InRCone() && !e.IsDead && e.IsValid && e.IsVisible)
             )
             {
                 args.Process = false;
@@ -610,7 +610,7 @@ namespace Jhin_As_The_Virtuoso
             {
                 if (Config.Item("R放眼").GetValue<bool>() && ScryingOrb.IsReady())
                 {
-                    var pistionList = VectorHelper.GetLastPositionInRCone().Where(m => !m.Hero.IsHPBarRendered && !m.Hero.IsDead && Game.Time - m.LastSeen < 7 * 1000).OrderByDescending(m => m.LastSeen);
+                    var pistionList = VectorHelper.GetLastPositionInRCone().Where(m => !m.Hero.IsVisible && !m.Hero.IsDead && Game.Time - m.LastSeen < 7 * 1000).OrderByDescending(m => m.LastSeen);
 
                     if (RCharge.Target == null && pistionList.Count() > 0)
                     {
@@ -625,7 +625,7 @@ namespace Jhin_As_The_Virtuoso
                             ScryingOrb.Cast(MissPosition.LastPosition);
                         }
                     }
-                    else if (RCharge.Target != null && !RCharge.Target.IsHPBarRendered && !RCharge.Target.IsDead)
+                    else if (RCharge.Target != null && !RCharge.Target.IsVisible && !RCharge.Target.IsDead)
                     {
                         var RTargetLastPosition = pistionList?.Find(m => m.Hero == RCharge.Target && Game.Time - m.LastSeen < 3 * 1000);
                         if (RTargetLastPosition != null)

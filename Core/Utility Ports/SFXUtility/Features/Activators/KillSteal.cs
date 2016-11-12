@@ -97,7 +97,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
                         return;
                     }
 
-                    foreach (var enemy in GameObjects.EnemyHeroes.Where(e => e.IsHPBarRendered && !e.IsDead))
+                    foreach (var enemy in GameObjects.EnemyHeroes.Where(e => e.IsVisible && !e.IsDead))
                     {
                         var itemDamage = (items ? Items.CalculateComboDamage(enemy) : 0) - 20;
                         var summonerDamage = (items ? Summoners.CalculateComboDamage(enemy, true, true) : 0) - 20;

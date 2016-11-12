@@ -174,7 +174,7 @@ using EloBuddy;
                     var EPred = E.GetPrediction(target);
                     var Col = NavMesh.GetCollisionFlags(EPred.CastPosition);
 
-                    if (Col == CollisionFlags.Grass && !target.IsHPBarRendered)
+                    if (Col == CollisionFlags.Grass && !target.IsVisible)
                     {
                         E.Cast(EPred.CastPosition);
                     }

@@ -89,7 +89,7 @@ using EloBuddy;
             {
                 distance += 300;
             }
-            return hero.IsHPBarRendered &&
+            return hero.IsVisible &&
                    ObjectManager.Get<Obj_SpawnPoint>()
                        .Any(sp => sp.Team == hero.Team && hero.Distance(sp.Position, true) < distance * distance);
         }

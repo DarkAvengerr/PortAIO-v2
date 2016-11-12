@@ -277,7 +277,7 @@ using EloBuddy;
         private static void OnEndScene(EventArgs args)
         {
             if (Config.Item("drawFullDmg").GetValue<bool>())
-                foreach (var enemy in DeathWalker.AllEnemys.Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsHPBarRendered))
+                foreach (var enemy in DeathWalker.AllEnemys.Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
                 {
                     hpi.unit = enemy;
                     hpi.drawDmg(Azir.getFullDmgOn(enemy), Color.Yellow);

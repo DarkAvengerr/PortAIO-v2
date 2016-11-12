@@ -179,7 +179,7 @@ using EloBuddy;
             //Check if the skillshot is already added.
             var alreadyAdded = false;
 
-            if (Config.Menu.Item("DisableFow").GetValue<bool>() && !skillshot.Unit.IsHPBarRendered)
+            if (Config.Menu.Item("DisableFow").GetValue<bool>() && !skillshot.Unit.IsVisible)
             {
                 return;
             }

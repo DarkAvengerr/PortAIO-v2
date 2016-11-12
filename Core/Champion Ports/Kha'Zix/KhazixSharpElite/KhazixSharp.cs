@@ -134,7 +134,7 @@ using EloBuddy;
             foreach (
                             var enemy in
                                 ObjectManager.Get<AIHeroClient>()
-                                    .Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsHPBarRendered))
+                                    .Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
             {
                 hpi.unit = enemy;
                 hpi.drawDmg(Khazix.fullComboDmgOn(enemy), Color.Yellow);

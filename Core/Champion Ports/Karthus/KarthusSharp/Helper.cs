@@ -43,7 +43,7 @@ using EloBuddy;
         {
             var time = Utils.TickCount;
 
-            foreach (EnemyInfo enemyInfo in EnemyInfo.Where(x => x.Player.IsHPBarRendered))
+            foreach (EnemyInfo enemyInfo in EnemyInfo.Where(x => x.Player.IsVisible))
                 enemyInfo.LastSeen = time;
         }
 
@@ -54,7 +54,7 @@ using EloBuddy;
 
         public float GetTargetHealth(EnemyInfo playerInfo, int additionalTime)
         {
-            if (playerInfo.Player.IsHPBarRendered)
+            if (playerInfo.Player.IsVisible)
                 return playerInfo.Player.Health;
 
             var predictedhealth = playerInfo.Player.Health + playerInfo.Player.HPRegenRate * ((Utils.TickCount - playerInfo.LastSeen + additionalTime) / 1000f);

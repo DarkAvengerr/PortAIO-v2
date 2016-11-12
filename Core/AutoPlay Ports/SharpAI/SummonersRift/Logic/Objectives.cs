@@ -30,7 +30,7 @@ using EloBuddy;
             {
                 var turret =
                     ObjectManager.Get<Obj_AI_Turret>()
-                        .FirstOrDefault(t => t.IsEnemy && !t.IsDead && t.IsHPBarRendered && t.Distance(ObjectManager.Player) < 1250);
+                        .FirstOrDefault(t => t.IsEnemy && !t.IsDead && t.IsVisible && t.Distance(ObjectManager.Player) < 1250);
                 if (turret != null)
                 {
                     if (!turret.Position.IsDangerousPosition())

@@ -227,7 +227,7 @@ using EloBuddy;
                     HeroManager.Enemies.Where(
                         e =>
                             e.IsValid && e.Distance(ObjectManager.Player) < Orbwalking.GetRealAutoAttackRange(null) + 65 &&
-                            e.IsHPBarRendered).Where(target => target.HasBuff("kindredcharge")))
+                            e.IsVisible).Where(target => target.HasBuff("kindredcharge")))
             {
                 Orbwalker.ForceTarget(target);
             }

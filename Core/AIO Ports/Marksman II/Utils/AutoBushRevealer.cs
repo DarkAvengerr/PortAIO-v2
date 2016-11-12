@@ -40,7 +40,7 @@ using EloBuddy;
         private void Game_OnGameUpdate(EventArgs args)
         {
             var time = Environment.TickCount;
-            foreach (EnemyHeros enemyInfo in EnemyInfo.Where(x => x.Player.IsHPBarRendered))
+            foreach (EnemyHeros enemyInfo in EnemyInfo.Where(x => x.Player.IsVisible))
             {
                 enemyInfo.LastSeen = time;
             }
@@ -53,7 +53,7 @@ using EloBuddy;
 
         public float GetTargetHealth(EnemyHeros playerHeros, int additionalTime)
         {
-            if (playerHeros.Player.IsHPBarRendered) return playerHeros.Player.Health;
+            if (playerHeros.Player.IsVisible) return playerHeros.Player.Health;
 
             var predictedhealth = playerHeros.Player.Health
                                   + playerHeros.Player.HPRegenRate
@@ -205,7 +205,7 @@ using EloBuddy;
                 foreach (AIHeroClient enemy in
                     Helper.EnemyInfo.Where(
                         x =>
-                        x.Player.IsValid && !x.Player.IsHPBarRendered && !x.Player.IsDead
+                        x.Player.IsValid && !x.Player.IsVisible && !x.Player.IsDead
                         && x.Player.Distance(ObjectManager.Player.ServerPosition) < 1000 && time - x.LastSeen < 2500)
                         .Select(x => x.Player))
                 {

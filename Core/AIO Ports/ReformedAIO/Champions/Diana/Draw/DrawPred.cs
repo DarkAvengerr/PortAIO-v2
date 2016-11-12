@@ -39,7 +39,7 @@ using EloBuddy;
 
             var target = TargetSelector.GetTarget(825, TargetSelector.DamageType.Magical);
 
-            if (target != null && target.IsHPBarRendered)
+            if (target != null && target.IsVisible)
             {
                 Render.Circle.DrawCircle(qLogic.QPred(target), 50, Color.Aqua);
             }

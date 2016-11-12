@@ -100,7 +100,7 @@ using EloBuddy;
             {
                 if (enemy == null) return;
 
-                if (enemy.IsHPBarRendered && !enemy.IsDead)
+                if (enemy.IsVisible && !enemy.IsDead)
                 {
                     if (Config.Item("drawing.indicator").GetValue<bool>())
                     {
@@ -149,7 +149,7 @@ using EloBuddy;
                 {
                     if (enemy == null) return;
 
-                    if (enemy.IsHPBarRendered && !enemy.IsDead)
+                    if (enemy.IsVisible && !enemy.IsDead)
                     {
 
                         var combodamage = (CalcDamage(enemy));

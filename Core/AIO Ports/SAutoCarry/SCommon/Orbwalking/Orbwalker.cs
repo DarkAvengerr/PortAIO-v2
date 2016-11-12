@@ -666,7 +666,7 @@ namespace SCommon.Orbwalking
                     return null;
                 }
                 var killableMinion = FindKillableMinion();
-                if (killableMinion != null && !killableMinion.IsDead && killableMinion.IsHPBarRendered && killableMinion.IsHPBarRendered && killableMinion.IsTargetable)
+                if (killableMinion != null && !killableMinion.IsDead && killableMinion.IsVisible && killableMinion.IsHPBarRendered && killableMinion.IsTargetable)
                     return killableMinion;
             }
 
@@ -713,7 +713,7 @@ namespace SCommon.Orbwalking
                     var target = TargetSelector.GetTarget(range, LeagueSharp.Common.TargetSelector.DamageType.Physical);
                     if (target != null)
                     {
-                        if (!target.IsDead && target.IsHPBarRendered && target.IsHPBarRendered && target.IsTargetable && target.IsValidTarget() && (Utility.InAARange(target) || (ActiveMode != Mode.LaneClear && ObjectManager.Player.IsMelee && m_Configuration.MagnetMelee && target.IsValidTarget(m_Configuration.StickRange))))
+                        if (!target.IsDead && target.IsVisible && target.IsHPBarRendered && target.IsTargetable && target.IsValidTarget() && (Utility.InAARange(target) || (ActiveMode != Mode.LaneClear && ObjectManager.Player.IsMelee && m_Configuration.MagnetMelee && target.IsValidTarget(m_Configuration.StickRange))))
                             return target;
                     }
                 }
@@ -724,7 +724,7 @@ namespace SCommon.Orbwalking
                 if (ActiveMode == Mode.LaneClear)
                 {
                     var minion = GetLaneClearTarget();
-                    if (minion != null && minion.IsValidTarget() && Utility.InAARange(minion) && !minion.IsDead && minion.IsHPBarRendered && minion.IsTargetable)
+                    if (minion != null && minion.IsValidTarget() && Utility.InAARange(minion) && !minion.IsDead && minion.IsVisible && minion.IsTargetable)
                         return minion;
                 }
             }

@@ -198,7 +198,7 @@ using EloBuddy;
             {
                 if (spells[Spells.E].Level > 0
                     && newTarget != null
-                    && newTarget.IsHPBarRendered
+                    && newTarget.IsVisible
                     && newTarget.IsValidTarget()
                     && !newTarget.IsDead
                     && Player.Distance(newTarget) < 3000)

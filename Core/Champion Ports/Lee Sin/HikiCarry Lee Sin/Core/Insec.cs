@@ -36,7 +36,7 @@ using EloBuddy;
         /// <returns></returns>
         public static Vector3 AllyInsec(float distance, AIHeroClient enemy)
         {
-            var ally = ObjectManager.Get<AIHeroClient>().Where(x => !x.IsMe && !x.IsDead && x.IsHPBarRendered && x.IsAlly).OrderBy(o => o.Distance(ObjectManager.Player.Position)).FirstOrDefault();
+            var ally = ObjectManager.Get<AIHeroClient>().Where(x => !x.IsMe && !x.IsDead && x.IsVisible && x.IsAlly).OrderBy(o => o.Distance(ObjectManager.Player.Position)).FirstOrDefault();
             return ally != null ? enemy.Position.To2D().Extend(ally.Position.To2D(), -distance).To3D() : new Vector3(0,0,0);
         }
         /// <summary>

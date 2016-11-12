@@ -33,7 +33,7 @@ using EloBuddy;
 
         private static void OnCreateObj_LuxMaliceCannon(GameObject obj, EventArgs args, AIHeroClient hero, SpellData spellData)
         {
-            if (obj.IsEnemy && !hero.IsHPBarRendered &&
+            if (obj.IsEnemy && !hero.IsVisible &&
                 obj.Name.Contains("Lux") && obj.Name.Contains("R_mis_beam_middle"))
             {
                 var objList = ObjectTracker.objTracker.Values.Where(o => o.Name == "hiu");

@@ -48,7 +48,7 @@ using EloBuddy;
 
             if (allyTurret.Active)
             {
-                foreach (Obj_AI_Turret turret in ObjectManager.Get<Obj_AI_Turret>().Where(turret => turret.IsHPBarRendered && !turret.IsDead && turret.IsValid && turret.IsAlly))
+                foreach (Obj_AI_Turret turret in ObjectManager.Get<Obj_AI_Turret>().Where(turret => turret.IsVisible && !turret.IsDead && turret.IsValid && turret.IsAlly))
                 {
                     if (turret.Distance(ObjectManager.Player.Position) < turretRangeDistance)
                     {

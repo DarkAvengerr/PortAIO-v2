@@ -250,7 +250,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
                         if (greenCircle || ward.Data.Type != WardType.Green)
                         {
                             if (ward.Object == null || !ward.Object.IsValid ||
-                                (ward.Object != null && ward.Object.IsValid && !ward.Object.IsHPBarRendered))
+                                (ward.Object != null && ward.Object.IsValid && !ward.Object.IsVisible))
                             {
                                 Render.Circle.DrawCircle(ward.Position, circleRadius, color, circleThickness);
                             }
@@ -327,7 +327,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
                     if (missile.SpellCaster != null && !missile.SpellCaster.IsAlly && missile.SData != null)
                     {
                         if (missile.SData.Name.Equals("itemplacementmissile", StringComparison.OrdinalIgnoreCase) &&
-                            !missile.SpellCaster.IsHPBarRendered)
+                            !missile.SpellCaster.IsVisible)
                         {
                             var sPos = missile.StartPosition;
                             var ePos = missile.EndPosition;
@@ -481,7 +481,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
                         (w.Object != null && !w.Object.IsValid));
                 foreach (var hw in _heroNoWards.ToArray())
                 {
-                    if (hw.Hero.IsHPBarRendered)
+                    if (hw.Hero.IsVisible)
                     {
                         hw.LastVisible = Game.Time;
                     }
@@ -571,7 +571,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
             {
                 get
                 {
-                    if (Object != null && Object.IsValid && Object.IsHPBarRendered)
+                    if (Object != null && Object.IsValid && Object.IsVisible)
                     {
                         _position = Object.Position;
                     }

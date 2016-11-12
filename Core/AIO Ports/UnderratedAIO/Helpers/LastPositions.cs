@@ -102,7 +102,7 @@ using EloBuddy;
                 var line = getpos(enemy, dist);
                 dist = enemy.Player.Distance(line);
                 Vector3 pos = line;
-                if (enemy.Player.IsHPBarRendered)
+                if (enemy.Player.IsVisible)
                 {
                     pos = enemy.Player.Position;
                 }
@@ -140,7 +140,7 @@ using EloBuddy;
         private void Game_OnUpdate(EventArgs args)
         {
             float time = System.Environment.TickCount;
-            foreach (Positions enemyInfo in Enemies.Where(x => x.Player.IsHPBarRendered && !x.Player.IsDead && !player.IsDead)
+            foreach (Positions enemyInfo in Enemies.Where(x => x.Player.IsVisible && !x.Player.IsDead && !player.IsDead)
                 )
             {
                 enemyInfo.LastSeen = time;
@@ -171,7 +171,7 @@ using EloBuddy;
                            enemy.Player.MoveSpeed / 3;
                 var line = getpos(enemy, dist);
                 Vector3 pos = line;
-                if (enemy.Player.IsHPBarRendered)
+                if (enemy.Player.IsVisible)
                 {
                     pos = enemy.Player.Position;
                 }

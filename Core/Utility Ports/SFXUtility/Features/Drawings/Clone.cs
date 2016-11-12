@@ -72,7 +72,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                 var thickness = Menu.Item(Name + "DrawingCircleThickness").GetValue<Slider>().Value;
 
                 foreach (var hero in
-                    _heroes.Where(hero => !hero.IsDead && hero.IsHPBarRendered && hero.Position.IsOnScreen()))
+                    _heroes.Where(hero => !hero.IsDead && hero.IsVisible && hero.Position.IsOnScreen()))
                 {
                     Render.Circle.DrawCircle(hero.Position, hero.BoundingRadius + radius, color, thickness);
                 }

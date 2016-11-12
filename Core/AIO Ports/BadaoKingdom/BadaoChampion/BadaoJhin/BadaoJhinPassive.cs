@@ -25,7 +25,7 @@ using EloBuddy;
         {
             get
             {
-                return  jhintrap.Where(x => x.IsValid && x.IsHPBarRendered).ToList();
+                return  jhintrap.Where(x => x.IsValid && x.IsVisible).ToList();
             }
         }
         public static List<GameObject> jhinpassive = new List<GameObject>();

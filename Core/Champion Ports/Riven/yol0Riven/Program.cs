@@ -115,7 +115,7 @@ using EloBuddy;
         {
             foreach (var enemy in HeroManager.Enemies)
             {
-                if (!enemy.IsDead && enemy.IsHPBarRendered)
+                if (!enemy.IsDead && enemy.IsVisible)
                 {
                     if (ultiReady && _menu.SubMenu("KS").Item("ksR").GetValue<bool>() && qCount == 2 && _Q.IsReady() &&
                         enemy.IsValidTarget(_Q.Range) && GetRDamage(enemy) + GetUltiQDamage(enemy) - 40 >= enemy.Health &&
@@ -207,7 +207,7 @@ using EloBuddy;
                     _target = TargetSelector.GetTarget(_E.Range + _Q.Range, TargetSelector.DamageType.Physical);
 
                 if (_target != null &&
-                    (_target.IsDead || !_target.IsHPBarRendered ||
+                    (_target.IsDead || !_target.IsVisible ||
                      !_target.IsValidTarget(_E.Range + _Q.Range + Player.AttackRange)))
                     _orbwalker.SetMovement(true);
 
@@ -215,7 +215,7 @@ using EloBuddy;
                     _orbwalker.SetMovement(true);
                 else
                 {
-                    if (!_target.IsHPBarRendered)
+                    if (!_target.IsVisible)
                         _target = TargetSelector.GetTarget(_E.Range + _Q.Range, TargetSelector.DamageType.Physical);
 
                     if (_target.IsDead)
@@ -224,7 +224,7 @@ using EloBuddy;
                     if (!_target.IsValidTarget(_E.Range + _Q.Range + Player.AttackRange))
                         _target = TargetSelector.GetTarget(_E.Range + _Q.Range, TargetSelector.DamageType.Physical);
 
-                    if (TargetSelector.SelectedTarget != null && TargetSelector.SelectedTarget != _target && TargetSelector.SelectedTarget.IsHPBarRendered &&
+                    if (TargetSelector.SelectedTarget != null && TargetSelector.SelectedTarget != _target && TargetSelector.SelectedTarget.IsVisible &&
                         TargetSelector.SelectedTarget is AIHeroClient)
                     {
                         var unit = (AIHeroClient)TargetSelector.SelectedTarget;
@@ -233,13 +233,13 @@ using EloBuddy;
                     }
 
                     if (TargetSelector.GetSelectedTarget() != null && TargetSelector.GetSelectedTarget() != _target &&
-                        TargetSelector.GetSelectedTarget().IsHPBarRendered &&
+                        TargetSelector.GetSelectedTarget().IsVisible &&
                         TargetSelector.GetSelectedTarget().IsValidTarget())
                     {
                         _target = TargetSelector.GetSelectedTarget();
                     }
 
-                    if (_target != null && !_target.IsDead && _target.IsHPBarRendered)
+                    if (_target != null && !_target.IsDead && _target.IsVisible)
                     {
                         GapClose(_target);
                         Combo(_target);
@@ -342,7 +342,7 @@ using EloBuddy;
                     _menu.SubMenu("Draw").Item("drawRange").GetValue<Circle>().Color);
 
             if (_menu.SubMenu("Draw").Item("drawTarget").GetValue<Circle>().Active && _target != null &&
-                _target.IsHPBarRendered)
+                _target.IsVisible)
             {
                 Render.Circle.DrawCircle(_target.Position, _target.BoundingRadius + 10,
                     _menu.SubMenu("Draw").Item("drawTarget").GetValue<Circle>().Color);

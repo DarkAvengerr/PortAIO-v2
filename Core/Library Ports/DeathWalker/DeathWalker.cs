@@ -329,7 +329,7 @@ namespace DetuksSharp
 
             if (ForcedTarget != null && !onlySolider)
             {
-                if (inAutoAttackRange(ForcedTarget) && !ForcedTarget.IsDead && ForcedTarget.IsHPBarRendered && ForcedTarget.IsHPBarRendered)
+                if (inAutoAttackRange(ForcedTarget) && !ForcedTarget.IsDead && ForcedTarget.IsHPBarRendered && ForcedTarget.IsVisible)
                     return ForcedTarget;
                 ForcedTarget = null;
             }

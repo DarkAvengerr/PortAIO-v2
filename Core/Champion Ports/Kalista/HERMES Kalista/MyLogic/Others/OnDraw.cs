@@ -29,7 +29,7 @@ using EloBuddy;
 
             if (Program.DrawingsMenu.Item("drawenemywaypoints").GetValue<bool>())
             {
-                foreach (var e in HeroManager.Enemies.Where(en => en.IsHPBarRendered && !en.IsDead && en.Distance(Heroes.Player) < 2500))
+                foreach (var e in HeroManager.Enemies.Where(en => en.IsVisible && !en.IsDead && en.Distance(Heroes.Player) < 2500))
                 {
                     var ip = Drawing.WorldToScreen(e.Position); //start pos
 

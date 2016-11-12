@@ -200,7 +200,7 @@ namespace LCS_Janna
                 HeroManager.Allies.Count(
                     x =>
                         HighChamps.Contains(x.ChampionName) &&
-                        x.Distance(ObjectManager.Player.Position) < R.Range && !x.IsDead && x.IsHPBarRendered && !x.IsZombie);
+                        x.Distance(ObjectManager.Player.Position) < R.Range && !x.IsDead && x.IsVisible && !x.IsZombie);
         }
         private static void OnProcess(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {

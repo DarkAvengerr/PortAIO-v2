@@ -112,7 +112,7 @@ namespace SFXUtility.Features.Trackers
                         lp.LastSeen = Game.Time;
                     }
                     lp.LastPosition = lp.Hero.Position;
-                    if (lp.Hero.IsHPBarRendered)
+                    if (lp.Hero.IsVisible)
                     {
                         lp.Teleported = false;
                         if (!lp.Hero.IsDead)
@@ -120,7 +120,7 @@ namespace SFXUtility.Features.Trackers
                             lp.LastSeen = Game.Time;
                         }
                     }
-                    if (!lp.Hero.IsHPBarRendered && !lp.Hero.IsDead)
+                    if (!lp.Hero.IsVisible && !lp.Hero.IsDead)
                     {
                         var pos = lp.Teleported ? _spawnPoint : lp.LastPosition;
                         var mpPos = Drawing.WorldToMinimap(pos);

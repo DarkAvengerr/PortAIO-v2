@@ -18,7 +18,7 @@ using EloBuddy;
 
         public static void PierceCombo()
         {
-            foreach (var enemy in HeroManager.Enemies.Where(hero => hero.IsValidTarget(Kalista.Q.Range) && hero.IsHPBarRendered))
+            foreach (var enemy in HeroManager.Enemies.Where(hero => hero.IsValidTarget(Kalista.Q.Range) && hero.IsVisible))
             {
                 Kalista.Q.Do(enemy,Utilities.HikiChance("hitchance"),true);
             }

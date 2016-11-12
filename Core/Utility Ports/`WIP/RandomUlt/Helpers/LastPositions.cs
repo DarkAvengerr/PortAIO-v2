@@ -202,7 +202,7 @@ namespace RandomUlt.Helpers
                 }
                 var line = getpos(enemy, trueDist);
                 Vector3 pos = line;
-                if (enemy.Player.IsHPBarRendered)
+                if (enemy.Player.IsVisible)
                 {
                     pos = enemy.Player.Position;
                 }
@@ -228,7 +228,7 @@ namespace RandomUlt.Helpers
                 {
                     Render.Circle.DrawCircle(pos, 50, Color.Red, 8);
                 }
-                if (!enemy.Player.IsHPBarRendered)
+                if (!enemy.Player.IsVisible)
                 {
                     if (pos != null)
                     {
@@ -271,7 +271,7 @@ namespace RandomUlt.Helpers
         {
             float time = System.Environment.TickCount;
             foreach (Positions enemyInfo in
-                Enemies.Where(x => x.Player.IsHPBarRendered && !x.Player.IsDead && x.Player.IsValidTarget()))
+                Enemies.Where(x => x.Player.IsVisible && !x.Player.IsDead && x.Player.IsValidTarget()))
             {
                 enemyInfo.LastSeen = time;
                 var prediction = Prediction.GetPrediction(enemyInfo.Player, 10);
@@ -293,7 +293,7 @@ namespace RandomUlt.Helpers
                 else
                 {
                     var target =
-                        HeroManager.Enemies.Where(h => player.Distance(h) < xerathUltRange[R.Level - 1] && h.IsHPBarRendered)
+                        HeroManager.Enemies.Where(h => player.Distance(h) < xerathUltRange[R.Level - 1] && h.IsVisible)
                             .OrderBy(h => h.Health)
                             .FirstOrDefault();
                     if (target != null)
@@ -352,32 +352,32 @@ namespace RandomUlt.Helpers
                     case 1:
                         break;
                     case 2:
-                        if (trueDist > 1000 && !enemy.Player.IsHPBarRendered)
+                        if (trueDist > 1000 && !enemy.Player.IsVisible)
                         {
                             continue;
                         }
                         break;
                     case 3:
-                        if (trueDist > 850 && !enemy.Player.IsHPBarRendered)
+                        if (trueDist > 850 && !enemy.Player.IsVisible)
                         {
                             continue;
                         }
                         break;
                     case 4:
-                        if (trueDist > 700 && !enemy.Player.IsHPBarRendered)
+                        if (trueDist > 700 && !enemy.Player.IsVisible)
                         {
                             continue;
                         }
                         break;
                     case 5:
-                        if (trueDist > 500 && !enemy.Player.IsHPBarRendered)
+                        if (trueDist > 500 && !enemy.Player.IsVisible)
                         {
                             continue;
                         }
                         break;
                 }
                 Vector3 pos = line;
-                if (enemy.Player.IsHPBarRendered)
+                if (enemy.Player.IsVisible)
                 {
                     pos = enemy.Player.Position;
                 }
@@ -540,7 +540,7 @@ namespace RandomUlt.Helpers
             }
             else
             {
-                if (positions.Player.IsHPBarRendered)
+                if (positions.Player.IsVisible)
                 {
                     xerathUltActivated = true;
                     xerathUltTarget = positions.Player;

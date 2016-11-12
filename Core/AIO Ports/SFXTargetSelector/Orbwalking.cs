@@ -1336,7 +1336,7 @@ namespace SFXTargetSelector
                     !_config.Item("PriorizeFarm").GetValue<bool>())
                 {
                     var target = TargetSelector.GetTarget(-1, DamageType.Physical);
-                    if (target != null && target.IsHPBarRendered && target.IsHPBarRendered && target.IsTargetable && !target.IsDead && InAutoAttackRange(target))
+                    if (target != null && target.IsVisible && target.IsHPBarRendered && target.IsTargetable && !target.IsDead && InAutoAttackRange(target))
                     {
                         return target;
                     }
@@ -1353,7 +1353,7 @@ namespace SFXTargetSelector
                     ActiveMode == OrbwalkingMode.LastHit)
                 {
                     var minionList =
-                        minions.Where(minion => minion.IsValidTarget() && minion.IsHPBarRendered && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead && InAutoAttackRange(minion))
+                        minions.Where(minion => minion.IsValidTarget() && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead && InAutoAttackRange(minion))
                             .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                             .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                             .ThenBy(minion => minion.Health)
@@ -1388,7 +1388,7 @@ namespace SFXTargetSelector
                 }
 
                 //Forced target
-                if (_forcedTarget.IsValidTarget() && _forcedTarget.IsHPBarRendered && _forcedTarget.IsHPBarRendered && _forcedTarget.IsTargetable && !_forcedTarget.IsDead && InAutoAttackRange(_forcedTarget))
+                if (_forcedTarget.IsValidTarget() && _forcedTarget.IsVisible && _forcedTarget.IsHPBarRendered && _forcedTarget.IsTargetable && !_forcedTarget.IsDead && InAutoAttackRange(_forcedTarget))
                 {
                     return _forcedTarget;
                 }
@@ -1423,7 +1423,7 @@ namespace SFXTargetSelector
                 if (ActiveMode != OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, DamageType.Physical);
-                    if (target.IsValidTarget() && target.IsHPBarRendered && target.IsHPBarRendered && target.IsTargetable && !target.IsDead && InAutoAttackRange(target))
+                    if (target.IsValidTarget() && target.IsVisible && target.IsHPBarRendered && target.IsTargetable && !target.IsDead && InAutoAttackRange(target))
                     {
                         return target;
                     }
@@ -1451,7 +1451,7 @@ namespace SFXTargetSelector
                     // return all the minions underturret in auto attack range
                     var turretMinions =
                         minions.Where(
-                            minion => minion.MaxHealth > 10 && InAutoAttackRange(minion) && minion.IsHPBarRendered && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead && minion.UnderAllyTurret())
+                            minion => minion.MaxHealth > 10 && InAutoAttackRange(minion) && minion.IsVisible && minion.IsHPBarRendered && minion.IsTargetable && !minion.IsDead && minion.UnderAllyTurret())
                             .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                             .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                             .ThenByDescending(minion => minion.MaxHealth);
@@ -1583,7 +1583,7 @@ namespace SFXTargetSelector
                 {
                     if (!ShouldWait())
                     {
-                        if (_prevMinion.IsValidTarget() && _prevMinion.IsHPBarRendered && _prevMinion.IsHPBarRendered && _prevMinion.IsTargetable && !_prevMinion.IsDead && InAutoAttackRange(_prevMinion))
+                        if (_prevMinion.IsValidTarget() && _prevMinion.IsVisible && _prevMinion.IsHPBarRendered && _prevMinion.IsTargetable && !_prevMinion.IsDead && InAutoAttackRange(_prevMinion))
                         {
                             if (_prevMinion.MaxHealth <= 10)
                             {
@@ -1629,7 +1629,7 @@ namespace SFXTargetSelector
                     if (
                         !GameObjects.EnemyHeroes.Any(
                             e =>
-                                e.IsValid && !e.IsDead && e.IsHPBarRendered && e.IsTargetable && e.IsHPBarRendered &&
+                                e.IsValid && !e.IsDead && e.IsVisible && e.IsTargetable && e.IsHPBarRendered &&
                                 e.Distance(Player) <= GetRealAutoAttackRange(e) * 2f))
                     {
                         return minions.FirstOrDefault();
@@ -1648,7 +1648,7 @@ namespace SFXTargetSelector
                 var units = IsAttackableObject("ward")
                     ? GameObjects.EnemyMinions.Concat(GameObjects.EnemyWards)
                     : GameObjects.EnemyMinions;
-                foreach (var unit in units.Where(u => u.IsValidTarget() && InAutoAttackRange(u) && u.IsHPBarRendered && u.IsHPBarRendered && u.IsTargetable && !u.IsDead))
+                foreach (var unit in units.Where(u => u.IsValidTarget() && InAutoAttackRange(u) && u.IsVisible && u.IsHPBarRendered && u.IsTargetable && !u.IsDead))
                 {
                     var baseName = unit.CharData.BaseSkinName.ToLower();
                     if (minion) //minions
@@ -1761,7 +1761,7 @@ namespace SFXTargetSelector
                 {
                     finalTargets =
                         finalTargets.Concat(minions)
-                            .Concat(GameObjects.Jungle.Where(u => u.IsValidTarget() && InAutoAttackRange(u) && u.IsHPBarRendered && u.IsHPBarRendered && u.IsTargetable && !u.IsDead))
+                            .Concat(GameObjects.Jungle.Where(u => u.IsValidTarget() && InAutoAttackRange(u) && u.IsVisible && u.IsHPBarRendered && u.IsTargetable && !u.IsDead))
                             .ToList();
                 }
                 return finalTargets.Concat(clones).ToList();

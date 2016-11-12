@@ -60,7 +60,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot1.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot1.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -81,7 +81,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot2.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot2.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -102,7 +102,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot3.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot3.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -123,7 +123,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot4.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot4.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -144,7 +144,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot5.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot5.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -168,7 +168,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot6.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot6.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -189,7 +189,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot7.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot7.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -210,7 +210,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot8.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot8.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -231,7 +231,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot9.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot9.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -252,7 +252,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot10.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot10.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -273,7 +273,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot11.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot11.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -294,7 +294,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot12.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot12.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -315,7 +315,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot13.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot13.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -336,7 +336,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot14.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot14.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -357,7 +357,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot15.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot15.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -378,7 +378,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spot16.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spot16.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -403,7 +403,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotA.To3D()) && jungleMobs.CharData.BaseSkinName == "SRU_Blue" && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotA.To3D()) && jungleMobs.CharData.BaseSkinName == "SRU_Blue" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -420,7 +420,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotB.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Red" && jungleMobs.CharData.BaseSkinName != "SRU_RedMini4.1.3" && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotB.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Red" && jungleMobs.CharData.BaseSkinName != "SRU_RedMini4.1.3" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -437,7 +437,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotC.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotC.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -454,7 +454,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotD.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Razorbreak" && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini3.1.2" && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini3.1.4" && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotD.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Razorbreak" && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini3.1.2" && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini3.1.4" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -471,7 +471,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotE.To3D()) && jungleMobs.CharData.BaseSkinName == "SRU_KrugMini" && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotE.To3D()) && jungleMobs.CharData.BaseSkinName == "SRU_KrugMini" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -488,7 +488,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotF.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Blue" && jungleMobs.CharData.BaseSkinName != "SRU_BlueMini1.1.2" && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotF.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Blue" && jungleMobs.CharData.BaseSkinName != "SRU_BlueMini1.1.2" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -505,7 +505,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotG.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Murkwolf" && jungleMobs.CharData.BaseSkinName != "SRU_MurkwolfMini2.1.3" && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotG.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Murkwolf" && jungleMobs.CharData.BaseSkinName != "SRU_MurkwolfMini2.1.3" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -522,7 +522,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotH.To3D()) && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotH.To3D()) && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -539,7 +539,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotI.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Murkwolf" && jungleMobs.CharData.BaseSkinName != "SRU_MurkwolfMini8.1.3" && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotI.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Murkwolf" && jungleMobs.CharData.BaseSkinName != "SRU_MurkwolfMini8.1.3" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -556,7 +556,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotJ.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Murkwolf" && jungleMobs.CharData.BaseSkinName != "SRU_MurkwolfMini8.1.2" && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotJ.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Murkwolf" && jungleMobs.CharData.BaseSkinName != "SRU_MurkwolfMini8.1.2" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -573,7 +573,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotL.To3D()) && jungleMobs.CharData.BaseSkinName == "SRU_KrugMini" && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotL.To3D()) && jungleMobs.CharData.BaseSkinName == "SRU_KrugMini" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -590,7 +590,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotM.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Red" && jungleMobs.CharData.BaseSkinName != "SRU_RedMini10.1.3" && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotM.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Red" && jungleMobs.CharData.BaseSkinName != "SRU_RedMini10.1.3" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -607,7 +607,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotN.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini9.1.2" && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini9.1.4" && jungleMobs.CharData.BaseSkinName != "SRU_Razorbreak" && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotN.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini9.1.2" && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini9.1.4" && jungleMobs.CharData.BaseSkinName != "SRU_Razorbreak" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }
@@ -624,7 +624,7 @@ using EloBuddy;
                     {
                         return;
                     }
-                    if (Program.myHero.ServerPosition.Equals(spotO.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Red" && jungleMobs.CharData.BaseSkinName != "SRU_RedMini10.1.2" && jungleMobs.IsHPBarRendered && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
+                    if (Program.myHero.ServerPosition.Equals(spotO.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Red" && jungleMobs.CharData.BaseSkinName != "SRU_RedMini10.1.2" && jungleMobs.IsVisible && Program.E.IsReady() && jungleMobs != null && jungleMobs.IsValidTarget(Program.E.Range) && Program.CanCastE(jungleMobs))
                     {
                         Program.E.CastOnUnit(jungleMobs);
                     }

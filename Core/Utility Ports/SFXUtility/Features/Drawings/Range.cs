@@ -71,7 +71,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                 var selfColor = Menu.Item(Name + "AttackColorSelf").GetValue<Color>();
 
                 foreach (var hero in
-                    GameObjects.Heroes.Where(hero => !hero.IsDead && hero.IsHPBarRendered)
+                    GameObjects.Heroes.Where(hero => !hero.IsDead && hero.IsVisible)
                         .Where(
                             hero =>
                                 (hero.IsAlly && drawAlly || hero.IsMe && drawSelf || hero.IsEnemy && drawEnemy) &&
@@ -114,7 +114,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                 var selfColor = Menu.Item(Name + "ExperienceColorSelf").GetValue<Color>();
 
                 foreach (var hero in
-                    GameObjects.Heroes.Where(hero => !hero.IsDead && hero.IsHPBarRendered)
+                    GameObjects.Heroes.Where(hero => !hero.IsDead && hero.IsVisible)
                         .Where(
                             hero =>
                                 (hero.IsAlly && drawAlly || hero.IsMe && drawSelf || hero.IsEnemy && drawEnemy) &&
@@ -162,7 +162,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
 
                 var spellMaxRange = Menu.Item(Name + "SpellMaxRange").GetValue<Slider>().Value;
 
-                foreach (var hero in GameObjects.Heroes.Where(hero => !hero.IsDead && hero.IsHPBarRendered))
+                foreach (var hero in GameObjects.Heroes.Where(hero => !hero.IsDead && hero.IsVisible))
                 {
                     if ((hero.IsAlly && drawAllyQ || hero.IsEnemy && drawEnemyQ || hero.IsMe && drawSelfQ) &&
                         !(hero.IsMe && !drawSelfQ))
@@ -243,7 +243,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                 foreach (var turret in
                     GameObjects.Turrets.Where(
                         t =>
-                            t.IsValid && !t.IsDead && t.Health > 1f && t.IsHPBarRendered &&
+                            t.IsValid && !t.IsDead && t.Health > 1f && t.IsVisible &&
                             (t.IsAlly && drawAlly || t.IsEnemy && drawEnemy) && t.Position.IsOnScreen(TurretRange)))
                 {
                     Render.Circle.DrawCircle(

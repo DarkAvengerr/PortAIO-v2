@@ -200,7 +200,7 @@ namespace DZLib.EvadeIntegration
             //Spells that update to the Caster position.
             if (SpellData.MissileFollowsUnit)
             {
-                if (Caster.IsHPBarRendered)
+                if (Caster.IsVisible)
                 {
                     End = Caster.ServerPosition.To2D();
                     Direction = (End - Start).Normalized();

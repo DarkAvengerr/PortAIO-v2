@@ -411,7 +411,7 @@
                     this.SpellData.Radius);
                 this.UpdatePolygon();
             }
-            if (this.SpellData.MissileFollowsUnit && this.Unit.IsHPBarRendered)
+            if (this.SpellData.MissileFollowsUnit && this.Unit.IsVisible)
             {
                 this.End = this.Unit.ServerPosition.To2D();
                 this.Direction = (this.End - this.Start).Normalized();

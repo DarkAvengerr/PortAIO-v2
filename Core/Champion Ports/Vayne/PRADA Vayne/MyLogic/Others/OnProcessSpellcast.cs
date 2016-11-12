@@ -24,7 +24,7 @@ using EloBuddy;
                 /*if (sender.IsMe && args.SData.Name.ToLower().Contains("condemn") && args.Target.IsValid<AIHeroClient>())
                 {
                     var target = (AIHeroClient)args.Target;
-                    if (Program.ComboMenu.Item("EQ").GetValue<bool>() && target.IsHPBarRendered && !target.HasBuffOfType(BuffType.Stun) && Program.Q.IsReady()) //#TODO: fix
+                    if (Program.ComboMenu.Item("EQ").GetValue<bool>() && target.IsVisible && !target.HasBuffOfType(BuffType.Stun) && Program.Q.IsReady()) //#TODO: fix
                     {
                         var tumblePos = target.GetTumblePos();
                         Tumble.Cast(tumblePos);

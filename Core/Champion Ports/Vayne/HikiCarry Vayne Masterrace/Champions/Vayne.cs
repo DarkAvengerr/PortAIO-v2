@@ -548,7 +548,7 @@ using EloBuddy;
         }
         public void CondemnJungleMobs()
         {
-            foreach (var jungleMobs in ObjectManager.Get<Obj_AI_Minion>().Where(o => o.IsValidTarget(Spells[E].Range) && o.Team == GameObjectTeam.Neutral && o.IsHPBarRendered && !o.IsDead))  
+            foreach (var jungleMobs in ObjectManager.Get<Obj_AI_Minion>().Where(o => o.IsValidTarget(Spells[E].Range) && o.Team == GameObjectTeam.Neutral && o.IsVisible && !o.IsDead))  
             {
                 if (jungleMobs.CharData.BaseSkinName == "SRU_Razorbeak" || jungleMobs.CharData.BaseSkinName == "SRU_Red" ||
                     jungleMobs.CharData.BaseSkinName == "SRU_Blue" || jungleMobs.CharData.BaseSkinName == "SRU_Dragon" ||
@@ -641,7 +641,7 @@ using EloBuddy;
         }
         public void HowManyAa()
         {
-            foreach (var enemy in HeroManager.Enemies.Where(o=> o.IsValidTarget(1000) && o.IsHPBarRendered && !o.IsDead && !o.IsZombie))
+            foreach (var enemy in HeroManager.Enemies.Where(o=> o.IsValidTarget(1000) && o.IsVisible && !o.IsDead && !o.IsZombie))
             {
                 var basicDamage = ObjectManager.Player.GetAutoAttackDamage(enemy);
                 var hikiX1 = new float[] { 0, 20, 30, 40, 50, 60 };

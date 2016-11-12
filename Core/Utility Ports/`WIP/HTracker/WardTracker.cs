@@ -359,7 +359,7 @@ using EloBuddy;
                             wardData,
                             obj.Position,
                             obj,
-                            !obj.IsHPBarRendered && args == null,
+                            !obj.IsVisible && args == null,
                             timestamp
                             );
 
@@ -397,7 +397,7 @@ using EloBuddy;
 
             if (missile != null && missile.SpellCaster.IsEnemy)
             {
-                if (missile.SData.Name.ToLower() == "itemplacementmissile")// && !missile.SpellCaster.IsHPBarRendered)
+                if (missile.SData.Name.ToLower() == "itemplacementmissile")// && !missile.SpellCaster.IsVisible)
                 {
                     var dir = (missile.EndPosition.ToVector2() - missile.StartPosition.ToVector2()).Normalized();
                     var pos = missile.StartPosition.ToVector2() + dir * 500;

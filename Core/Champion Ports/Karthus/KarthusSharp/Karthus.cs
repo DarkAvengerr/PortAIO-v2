@@ -365,12 +365,12 @@ using EloBuddy;
                             !x.Player.IsDead &&
                             x.Player.IsEnemy &&
                             //!(x.RecallInfo.Recall.Status == Packet.S2C.Recall.RecallStatus.RecallStarted && x.RecallInfo.GetRecallCountdown() < 3100) && //let BaseUlt handle this one
-                            ((!x.Player.IsHPBarRendered && time - x.LastSeen < 10000) ||
-                             (x.Player.IsHPBarRendered && x.Player.IsValidTarget())) &&
+                            ((!x.Player.IsVisible && time - x.LastSeen < 10000) ||
+                             (x.Player.IsVisible && x.Player.IsValidTarget())) &&
                             ObjectManager.Player.GetSpellDamage(x.Player, SpellSlot.R) >=
                             Program.Helper.GetTargetHealth(x, (int) (_spellR.Delay*1000f))))
             {
-                if (target.Player.IsHPBarRendered || (!target.Player.IsHPBarRendered && time - target.LastSeen < 2750))
+                if (target.Player.IsVisible || (!target.Player.IsVisible && time - target.LastSeen < 2750))
                     //allies still attacking target? prevent overkill
                     if (Program.Helper.OwnTeam.Any(x => !x.IsMe && x.Distance(target.Player) < 1600))
                         continue;
@@ -379,7 +379,7 @@ using EloBuddy;
                     !Program.Helper.EnemyTeam.Any(
                         x =>
                             x.IsValid && !x.IsDead &&
-                            (x.IsHPBarRendered || (!x.IsHPBarRendered && time - Program.Helper.GetPlayerInfo(x).LastSeen < 2750)) &&
+                            (x.IsVisible || (!x.IsVisible && time - Program.Helper.GetPlayerInfo(x).LastSeen < 2750)) &&
                             ObjectManager.Player.Distance(x) < 1600))
                     //any other enemies around? dont ult unless in passive form
                     ultTargets.Add(target.Player);
@@ -394,7 +394,7 @@ using EloBuddy;
                     Program.Helper.EnemyTeam.FirstOrDefault(
                         x =>
                             x.ChampionName == "Zilean" &&
-                            (x.IsHPBarRendered || (!x.IsHPBarRendered && time - Program.Helper.GetPlayerInfo(x).LastSeen < 3000)) &&
+                            (x.IsVisible || (!x.IsVisible && time - Program.Helper.GetPlayerInfo(x).LastSeen < 3000)) &&
                             (x.Spellbook.CanUseSpell(SpellSlot.R) == SpellState.Ready ||
                              (x.Spellbook.GetSpell(SpellSlot.R).Level > 0 &&
                               x.Spellbook.CanUseSpell(SpellSlot.R) == SpellState.Surpressed &&
@@ -491,8 +491,8 @@ using EloBuddy;
                     Program.Helper.EnemyInfo.Where(
                         x =>
                             x.Player.IsValid && !x.Player.IsDead && x.Player.IsEnemy &&
-                            ((!x.Player.IsHPBarRendered && time - x.LastSeen < 10000) ||
-                             (x.Player.IsHPBarRendered && x.Player.IsValidTarget())) &&
+                            ((!x.Player.IsVisible && time - x.LastSeen < 10000) ||
+                             (x.Player.IsVisible && x.Player.IsValidTarget())) &&
                             ObjectManager.Player.GetSpellDamage(x.Player, SpellSlot.R) >=
                             Program.Helper.GetTargetHealth(x, (int) (_spellR.Delay*1000f)))
                         .Aggregate("", (current, target) => current + (target.Player.ChampionName + " "));

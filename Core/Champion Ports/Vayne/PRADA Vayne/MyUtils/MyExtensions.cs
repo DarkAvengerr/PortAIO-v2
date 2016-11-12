@@ -363,7 +363,7 @@ using EloBuddy;
         {
             return
                 HeroManager.Enemies.Any(
-                    e => e.IsValidTarget() && e.IsHPBarRendered &&
+                    e => e.IsValidTarget() && e.IsVisible &&
                         e.Distance(pos) < 375) ||
                 Traps.EnemyTraps.Any(t => pos.Distance(t.Position) < 125) ||
                 (pos.UnderTurret(true) && !Player.UnderTurret(true)) || pos.IsWall();

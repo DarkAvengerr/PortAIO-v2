@@ -100,7 +100,7 @@ using EloBuddy;
             }
 
             if (Menu.Item("DrawDamage").IsActive() && Minion != null && Minion.IsValid && !Minion.IsDead &&
-                Minion.IsHPBarRendered && Minion.IsHPBarRendered)
+                Minion.IsVisible && Minion.IsHPBarRendered)
             {
                 DrawMinion(Minion);
             }

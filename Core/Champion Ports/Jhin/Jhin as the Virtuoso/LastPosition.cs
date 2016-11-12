@@ -56,7 +56,7 @@ using EloBuddy;
 					
 				}
 				lp.LastPosition = lp.Hero.Position;
-				if (lp.Hero.IsHPBarRendered)
+				if (lp.Hero.IsVisible)
 				{
 					lp.Teleported = false;
 					if (!lp.Hero.IsDead)

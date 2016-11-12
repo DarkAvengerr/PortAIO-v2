@@ -281,7 +281,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
                             spell.CanCast(_currentMinion) ? spell.UseableColor : spell.UnusableColor, spell.Thickness);
                     }
                 }
-                if (minion && _currentMinion.IsHPBarRendered && Menu.Item(Name + "DrawingDamageIndicator").GetValue<bool>())
+                if (minion && _currentMinion.IsVisible && Menu.Item(Name + "DrawingDamageIndicator").GetValue<bool>())
                 {
                     var damage = 0d;
                     if (Menu.Item(Name + "Spell" + ObjectManager.Player.ChampionName + "Enabled").GetValue<bool>())

@@ -272,7 +272,7 @@ using EloBuddy;
            var WCC = Config.Item("WCC").GetValue<bool>();
            if (WCC)
            {
-               foreach (var target in HeroManager.Enemies.Where(enemy => enemy.IsHPBarRendered && !enemy.IsDead && Player.Distance(enemy.Position) <= W.Range && W.IsReady() && Player.Distance(enemy.Position) < W.Range))
+               foreach (var target in HeroManager.Enemies.Where(enemy => enemy.IsVisible && !enemy.IsDead && Player.Distance(enemy.Position) <= W.Range && W.IsReady() && Player.Distance(enemy.Position) < W.Range))
                {
                    if (target.HasBuffOfType(BuffType.Taunt) || target.HasBuffOfType(BuffType.Suppression) || target.HasBuffOfType(BuffType.Snare) || target.HasBuffOfType(BuffType.Knockup) || target.HasBuffOfType(BuffType.Fear) || target.HasBuffOfType(BuffType.Charm) || target.HasBuffOfType(BuffType.Stun))
                    {
@@ -287,7 +287,7 @@ using EloBuddy;
            var KS = Config.Item("Killsteal").GetValue<bool>();
            if (KS)
            {
-               foreach (var target in HeroManager.Enemies.Where(enemy => enemy.IsHPBarRendered && enemy.IsValidTarget() && GetDamageQ(enemy) > enemy.Health && Player.Distance(enemy.Position) <= Q.Range && Q.IsReady()))
+               foreach (var target in HeroManager.Enemies.Where(enemy => enemy.IsVisible && enemy.IsValidTarget() && GetDamageQ(enemy) > enemy.Health && Player.Distance(enemy.Position) <= Q.Range && Q.IsReady()))
                {
                    Q.Cast(target);
                }
@@ -537,14 +537,14 @@ using EloBuddy;
             {
                 foreach (var enemy in HeroManager.Enemies)
                 {
-                    if (enemy.Buffs.Any(buff1 => buff1.Name == "EkkoStacks" && buff1.Count == 2) && enemy.IsHPBarRendered)
+                    if (enemy.Buffs.Any(buff1 => buff1.Name == "EkkoStacks" && buff1.Count == 2) && enemy.IsVisible)
                     {
                         var enemypos = Drawing.WorldToScreen(enemy.Position);
                         Render.Circle.DrawCircle(enemy.Position, 150, Color.Red);
                         Drawing.DrawText(enemypos.X, enemypos.Y + 15, Color.Red, "2 Stacks");
                     }
 
-                    else if (enemy.Buffs.Any(buff1 => buff1.Name == "EkkoStacks" && buff1.Count == 1) && enemy.IsHPBarRendered)
+                    else if (enemy.Buffs.Any(buff1 => buff1.Name == "EkkoStacks" && buff1.Count == 1) && enemy.IsVisible)
                     {
                         var enemypos = Drawing.WorldToScreen(enemy.Position);
                         Render.Circle.DrawCircle(enemy.Position, 150, drawPassive.Color);

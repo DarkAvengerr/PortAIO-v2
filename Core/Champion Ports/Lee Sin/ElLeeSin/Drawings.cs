@@ -39,7 +39,7 @@ using EloBuddy;
 
             if (Program.ParamBool("Draw.Insec.Lines"))
             {
-                if ((newTarget != null) && newTarget.IsHPBarRendered && newTarget.IsValidTarget() && !newTarget.IsDead
+                if ((newTarget != null) && newTarget.IsVisible && newTarget.IsValidTarget() && !newTarget.IsDead
                     && (ObjectManager.Player.Distance(newTarget) < 3000))
                 {
                     Vector2 targetPos = Drawing.WorldToScreen(newTarget.Position);

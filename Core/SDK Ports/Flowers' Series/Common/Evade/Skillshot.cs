@@ -245,7 +245,7 @@ using EloBuddy;
 
             if (SpellData.MissileFollowsUnit)
             {
-                if (Unit.IsHPBarRendered)
+                if (Unit.IsVisible)
                 {
                     End = Unit.ServerPosition.ToVector2();
                     Direction = (End - Start).Normalized();

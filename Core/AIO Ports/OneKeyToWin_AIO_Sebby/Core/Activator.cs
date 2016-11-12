@@ -97,7 +97,7 @@ using EloBuddy;
             if (heal != SpellSlot.Unknown)
             {
                 Config.SubMenu("Activator OKTW©").SubMenu("Summoners").SubMenu("Heal").AddItem(new MenuItem("Heal", "Heal").SetValue(true));
-                Config.SubMenu("Activator OKTW©").SubMenu("Summoners").SubMenu("Heal").AddItem(new MenuItem("AllyHeal", "Ally Heal").SetValue(true));
+                Config.SubMenu("Activator OKTW©").SubMenu("Summoners").SubMenu("Heal").AddItem(new MenuItem("AllyHeal", "AllyHeal").SetValue(true));
             }
             if (barrier != SpellSlot.Unknown)
             {
@@ -113,7 +113,7 @@ using EloBuddy;
                 Config.SubMenu("Activator OKTW©").SubMenu("Summoners").AddItem(new MenuItem("Cleanse", "Cleanse").SetValue(true));
             }
 
-            Config.SubMenu("Activator OKTW©").AddItem(new MenuItem("pots", "Potion, Flask, Biscuit").SetValue(true));
+            Config.SubMenu("Activator OKTW©").AddItem(new MenuItem("pots", "Potion, ManaPotion, Flask, Biscuit").SetValue(true));
 
             Config.SubMenu("Activator OKTW©").SubMenu("Offensives").SubMenu("Botrk").AddItem(new MenuItem("Botrk", "Botrk").SetValue(true));
             Config.SubMenu("Activator OKTW©").SubMenu("Offensives").SubMenu("Botrk").AddItem(new MenuItem("BotrkKS", "Botrk KS").SetValue(true));
@@ -179,23 +179,25 @@ using EloBuddy;
             Game.OnUpdate += Game_OnGameUpdate;
             SebbyLib.Orbwalking.AfterAttack += Orbwalking_AfterAttack;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             //Drawing.OnDraw += Drawing_OnDraw;
         }
 
         private void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (target is AIHeroClient && Config.Item("HydraTitanic").GetValue<bool>() && HydraTitanic.IsReady() && target.IsValid<AIHeroClient>())
+            if (Config.Item("HydraTitanic").GetValue<bool>() && Program.Combo && HydraTitanic.IsReady() && target.IsValid<AIHeroClient>())
             {
                 HydraTitanic.Cast();
+                SebbyLib.Orbwalking.ResetAutoAttackTimer();
             }
         }
 
         private void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!(sender is AIHeroClient) || !sender.IsEnemy)
+            if (!sender.IsEnemy || sender.Type != GameObjectType.AIHeroClient)
                 return;
 
+            
             if (sender.Distance(Player.Position) > 1600)
                 return;
 
@@ -209,8 +211,8 @@ using EloBuddy;
                     }
                     else
                     {
-                        ;
-                        if (OktwCommon.CanHitSkillShot(Player, args.Start, args.End, args.SData))
+                        var castArea = Player.Distance(args.End) * (args.End - Player.ServerPosition).Normalized() + Player.ServerPosition;
+                        if (castArea.Distance(Player.ServerPosition) < Player.BoundingRadius / 2)
                             ZhonyaTryCast();
                     }
                 }
@@ -227,7 +229,8 @@ using EloBuddy;
                     }
                     else
                     {
-                        if (OktwCommon.CanHitSkillShot(ally, args.Start, args.End, args.SData))
+                        var castArea = ally.Distance(args.End) * (args.End - ally.ServerPosition).Normalized() + ally.ServerPosition;
+                        if (castArea.Distance(ally.ServerPosition) < ally.BoundingRadius / 2)
                             dmg = dmg + sender.GetSpellDamage(ally, args.SData.Name);
                         else
                             continue;
@@ -387,6 +390,27 @@ using EloBuddy;
             Offensive();
             Defensive();
             ZhonyaCast();
+        }
+
+        private void Teleport()
+        {
+            if (CanUse(teleport) && !Player.HasBuff("teleport"))
+            {
+                foreach (var ally in HeroManager.Allies.Where(ally => ally.IsValid && !ally.IsDead  && ally.CountEnemiesInRange(1000) > 0 ))
+                {
+                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValid && !enemy.IsDead))
+                    {
+                        var distanceEA = enemy.Distance(ally);
+                        if (distanceEA < 1000)
+                        {
+                            foreach (var obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.IsAlly &&  distanceEA < obj.Position.Distance(ally.Position)))
+                            {
+                                Player.Spellbook.CastSpell(teleport, obj);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private void Smite()

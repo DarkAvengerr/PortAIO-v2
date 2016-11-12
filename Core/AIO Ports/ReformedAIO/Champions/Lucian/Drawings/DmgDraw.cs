@@ -32,7 +32,7 @@ using EloBuddy;
         {
             if (ObjectManager.Player.IsDead) return;
 
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1500) && ene.IsHPBarRendered))
+            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1500) && ene.IsVisible))
             {
                 heroHealthBarIndicator.Unit = enemy;
 

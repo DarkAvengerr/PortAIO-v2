@@ -40,7 +40,7 @@ using EloBuddy;
             HealText.PositionUpdate += () =>
             {
                 var pos = Drawing.WorldToScreen(ObjectManager.Player.Position);
-                if (Wolf != null && Wolf.IsValid && Wolf.IsHPBarRendered)
+                if (Wolf != null && Wolf.IsValid && Wolf.IsVisible)
                 {
                     pos = Drawing.WorldToScreen(Wolf.Position);
                 }
@@ -58,7 +58,7 @@ using EloBuddy;
 
             TimeText = new Render.Text("", 0, 0, 40, Color.Purple.ToBGRA());
             TimeText.VisibleCondition +=
-                sender => Menu.Item("DrawWolfTime").IsActive() && Wolf != null && Wolf.IsValid && Wolf.IsHPBarRendered;
+                sender => Menu.Item("DrawWolfTime").IsActive() && Wolf != null && Wolf.IsValid && Wolf.IsVisible;
             TimeText.PositionUpdate += () => Wolf.HPBarPosition + new Vector2(30, -10);
             TimeText.TextUpdate += () =>
             {
@@ -102,7 +102,7 @@ using EloBuddy;
 
         private static void Drawing_OnDraw(EventArgs args)
         {
-            if (!Menu.Item("DrawWolfAARange").IsActive() || Wolf == null || !Wolf.IsValid || !Wolf.IsHPBarRendered)
+            if (!Menu.Item("DrawWolfAARange").IsActive() || Wolf == null || !Wolf.IsValid || !Wolf.IsVisible)
             {
                 return;
             }
@@ -114,7 +114,7 @@ using EloBuddy;
 
         public static bool IsInWolfRange(this Obj_AI_Base unit)
         {
-            return Wolf != null && Wolf.IsValid && Wolf.IsHPBarRendered && WolfSpawnLocation.Distance(unit.Position) < 850;
+            return Wolf != null && Wolf.IsValid && Wolf.IsVisible && WolfSpawnLocation.Distance(unit.Position) < 850;
         }
 
         public static int GetWPassiveCount()

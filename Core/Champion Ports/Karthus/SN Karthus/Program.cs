@@ -223,7 +223,7 @@ using EloBuddy;
 
                 var time = Utils.TickCount;
 
-                foreach (TI target in Program.Check.TI.Where(x => x.Player.IsValid && !x.Player.IsDead && x.Player.IsEnemy && (Program.Check.recalltc(x) /*|| (x.Player.IsHPBarRendered && Utility.IsValidTarget(x.Player))*/) && Player.GetSpellDamage(x.Player, SpellSlot.R) >= Program.Check.GetTargetHealth(x, (int)(R.Delay * 1000f))))
+                foreach (TI target in Program.Check.TI.Where(x => x.Player.IsValid && !x.Player.IsDead && x.Player.IsEnemy && (Program.Check.recalltc(x) /*|| (x.Player.IsVisible && Utility.IsValidTarget(x.Player))*/) && Player.GetSpellDamage(x.Player, SpellSlot.R) >= Program.Check.GetTargetHealth(x, (int)(R.Delay * 1000f))))
                 {
                     killable += target.Player.ChampionName + " ";
                 }

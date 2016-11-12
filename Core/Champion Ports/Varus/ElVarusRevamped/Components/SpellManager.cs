@@ -157,7 +157,7 @@
             if (MyMenu.RootMenu.Item("forceqalways").IsActive())
             {
                 var target = HeroManager.Enemies.Find(x => x.IsValidTarget(ObjectManager.Player.AttackRange + 150) 
-                    && Misc.GetWStacks(x) > 0 && !x.IsDead && x.IsHPBarRendered);
+                    && Misc.GetWStacks(x) > 0 && !x.IsDead && x.IsVisible);
 
                 if (target != null)
                 {

@@ -56,9 +56,9 @@ namespace SFXChallenger.SFXTargetSelector
 
             private static void OnGameUpdate(EventArgs args)
             {
-                foreach (var item in PItems.Where(item => item.Visible != !item.Hero.IsHPBarRendered))
+                foreach (var item in PItems.Where(item => item.Visible != !item.Hero.IsVisible))
                 {
-                    item.Visible = item.Hero.IsHPBarRendered;
+                    item.Visible = item.Hero.IsVisible;
                     item.LastVisibleChange = Game.Time;
                 }
             }

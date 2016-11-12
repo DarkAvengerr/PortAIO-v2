@@ -217,7 +217,7 @@ using EloBuddy;
                     float dist = _hero.Distance(ObjectManager.Player.Position);
                     return Program.Instance().ShowChampionNames && !_hero.IsDead &&
                            Game.Time - _lineStart < Program.Instance().LineDuration &&
-                           (!_hero.IsHPBarRendered || !Render.OnScreen(Drawing.WorldToScreen(_hero.Position))) &&
+                           (!_hero.IsVisible || !Render.OnScreen(Drawing.WorldToScreen(_hero.Position))) &&
                            dist < Program.Instance().Radius && dist > 300 + textoffset;
                 },
                 Centered = true,
@@ -300,7 +300,7 @@ using EloBuddy;
                 }
             }
 
-            if (newDistance < Program.Instance().Radius && _hero.IsHPBarRendered)
+            if (newDistance < Program.Instance().Radius && _hero.IsVisible)
             {
                 if (_distance >= Program.Instance().Radius || !_visible)
                 {
@@ -315,7 +315,7 @@ using EloBuddy;
                 }
             }
             _distance = newDistance;
-            _visible = _hero.IsHPBarRendered;
+            _visible = _hero.IsVisible;
         }
 
         private bool IsJungler(AIHeroClient hero)

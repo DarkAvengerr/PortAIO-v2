@@ -10,7 +10,6 @@ namespace SebbyLib
 {
     public class Cache
     {
-        public static List<MissileClient> MissileList = new List<MissileClient>();
         public static List<Obj_AI_Base> AllMinionsObj = new List<Obj_AI_Base>();
         public static List<Obj_AI_Base> MinionsListEnemy = new List<Obj_AI_Base>();
         public static List<Obj_AI_Base> MinionsListAlly = new List<Obj_AI_Base>();
@@ -27,6 +26,7 @@ namespace SebbyLib
                 if (!minion.IsAlly)
                     AllMinionsObj.Add(minion);
             }
+
             GameObject.OnCreate += Obj_AI_Base_OnCreate;
             Game.OnUpdate += Game_OnUpdate;
         }
@@ -37,7 +37,6 @@ namespace SebbyLib
             MinionsListNeutral.RemoveAll(minion => !IsValidMinion(minion));
             MinionsListAlly.RemoveAll(minion => !IsValidMinion(minion));
             AllMinionsObj.RemoveAll(minion => !IsValidMinion(minion));
-            MissileList.RemoveAll(missile => !missile.IsValid);
         }
 
         private static void Obj_AI_Base_OnCreate(GameObject sender, EventArgs args)
@@ -46,13 +45,8 @@ namespace SebbyLib
             if (minion != null)
             {
                 AddMinionObject(minion);
-                if (!minion.IsAlly)
+                if (!minion.IsAlly )
                     AllMinionsObj.Add(minion);
-            }
-            var missile = sender as MissileClient;
-            if (missile != null)
-            {
-                MissileList.Add(missile);
             }
         }
 
@@ -80,22 +74,18 @@ namespace SebbyLib
         {
             if (team == MinionTeam.Enemy)
             {
-
+                
                 return MinionsListEnemy.FindAll(minion => CanReturn(minion, from, range));
             }
             else if (team == MinionTeam.Ally)
             {
-
+                
                 return MinionsListAlly.FindAll(minion => CanReturn(minion, from, range));
             }
-            else if (team == MinionTeam.Neutral)
+            else if(team == MinionTeam.Neutral)
             {
-
+                
                 return MinionsListNeutral.Where(minion => CanReturn(minion, from, range)).OrderByDescending(minion => minion.MaxHealth).ToList();
-            }
-            else if (team == MinionTeam.NotAlly)
-            {
-                return AllMinionsObj.FindAll(minion => CanReturn(minion, from, range));
             }
             else
             {
@@ -113,8 +103,8 @@ namespace SebbyLib
 
         private static bool CanReturn(Obj_AI_Base minion, Vector3 from, float range)
         {
-
-            if (minion != null && minion.IsValid && !minion.IsDead && minion.IsVisible && minion.IsTargetable)
+            
+            if (minion != null && minion.IsValid && !minion.IsDead && minion.IsVisible && minion.IsTargetable && minion.IsHPBarRendered)
             {
                 if (range == float.MaxValue)
                     return true;

@@ -64,7 +64,7 @@ using EloBuddy;
 			if (target.IsDead) return null;
 
 			foreach (var turret in ObjectManager.Get<Obj_AI_Turret>().Where(t =>
-				t.IsValid && !t.IsDead && t.Health > 1f && t.IsHPBarRendered && t.Distance(target) < 1000))
+				t.IsValid && !t.IsDead && t.Health > 1f && t.IsVisible && t.Distance(target) < 1000))
 			{
 				if (turret != null)
 				{

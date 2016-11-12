@@ -151,12 +151,12 @@ namespace JaxQx
             {
                 foreach (var objAiHero in from hero in HeroManager.Enemies
                                           where
-                                              hero.Distance(Game.CursorPos) < 150f && hero != null && hero.IsHPBarRendered
+                                              hero.Distance(Game.CursorPos) < 150f && hero != null && hero.IsVisible
                                               && !hero.IsDead
                                           orderby hero.Distance(Game.CursorPos) descending
                                           select hero)
                 {
-                    if (objAiHero != null && objAiHero.IsHPBarRendered && !objAiHero.IsDead)
+                    if (objAiHero != null && objAiHero.IsVisible && !objAiHero.IsDead)
                     {
                         var xSelect =
                             Program.Config.Item("Set").GetValue<StringList>().SelectedIndex;
@@ -190,7 +190,7 @@ namespace JaxQx
 
             var vEnemy =
                 ObjectManager.Get<AIHeroClient>()
-                    .Where(e => e.Team != Program.Player.Team && !e.IsDead && e.IsHPBarRendered)
+                    .Where(e => e.Team != Program.Player.Team && !e.IsDead && e.IsVisible)
                     .Where(e => this.Config.Item("enemy_" + e.ChampionName) != null)
                     .Where(e => this.Config.Item("enemy_" + e.ChampionName).GetValue<bool>())
                     .Where(e => Program.Player.Distance(e) < vDefaultRange)
@@ -239,7 +239,7 @@ namespace JaxQx
                 foreach (var e in
                     HeroManager.Enemies.Where(
                         e =>
-                        e.IsHPBarRendered && !e.IsDead && this.Config.Item("enemy_" + e.ChampionName) != null
+                        e.IsVisible && !e.IsDead && this.Config.Item("enemy_" + e.ChampionName) != null
                         && this.Config.Item("enemy_" + e.ChampionName).GetValue<bool>()))
                 {
                     DrawText(

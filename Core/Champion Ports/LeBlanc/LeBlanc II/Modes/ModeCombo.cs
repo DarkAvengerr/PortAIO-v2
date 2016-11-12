@@ -61,9 +61,9 @@ using EloBuddy;
         public static SpellSlot IgniteSlot = ObjectManager.Player.GetSpellSlot("SummonerDot");
 
         //public static AIHeroClient Target => GetTarget ?? TargetSelector.GetTarget(Q.Range * 2, TargetSelector.DamageType.Magical);
-        //public static AIHeroClient Target => HeroManager.Enemies.Where(e => !e.IsDead && e.IsHPBarRendered && e.IsValidTarget(E.Range) && !e.HasImmortalBuff()).OrderBy(e => e.Health - GetComboDamage(e)).FirstOrDefault();
+        //public static AIHeroClient Target => HeroManager.Enemies.Where(e => !e.IsDead && e.IsVisible && e.IsValidTarget(E.Range) && !e.HasImmortalBuff()).OrderBy(e => e.Health - GetComboDamage(e)).FirstOrDefault();
         public static AIHeroClient Target => CommonTargetSelector.GetTarget(E.Range);
-        //public static AIHeroClient Target => HeroManager.Enemies.Where(e => !e.IsDead && e.IsHPBarRendered && e.IsValidTarget(E.Range)).OrderBy(e => e.Health - GetComboDamage(e)).FirstOrDefault();
+        //public static AIHeroClient Target => HeroManager.Enemies.Where(e => !e.IsDead && e.IsVisible && e.IsValidTarget(E.Range)).OrderBy(e => e.Health - GetComboDamage(e)).FirstOrDefault();
 
 
         //public static AIHeroClient Target => TargetSelector.GetTarget(Q.Range * 2, TargetSelector.DamageType.Magical);
@@ -193,7 +193,7 @@ using EloBuddy;
             }
 
 
-            foreach (var e in HeroManager.Enemies.Where(e => !e.IsDead && e.IsHPBarRendered))
+            foreach (var e in HeroManager.Enemies.Where(e => !e.IsDead && e.IsVisible))
             {
                 //if (MenuHunt.Item("Hunt." + e.ChampionName).GetValue<bool>())
                 //{

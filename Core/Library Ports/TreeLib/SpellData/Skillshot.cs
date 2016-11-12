@@ -493,7 +493,7 @@ namespace TreeLib.SpellData
                 Rectangle = new Geometry.Rectangle(GetMissilePosition(0), CollisionEnd, SpellData.Radius);
                 UpdatePolygon();
             }
-            if (SpellData.MissileFollowsUnit && Unit.IsHPBarRendered)
+            if (SpellData.MissileFollowsUnit && Unit.IsVisible)
             {
                 End = Unit.ServerPosition.To2D();
                 Direction = (End - Start).Normalized();

@@ -116,7 +116,7 @@ using EloBuddy;
                 return;
             }
 
-            if (sender.IsEnemy && sender is AIHeroClient && !sender.IsHPBarRendered)
+            if (sender.IsEnemy && sender is AIHeroClient && !sender.IsVisible)
             {
                 foreach (
                     var ws in

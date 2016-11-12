@@ -219,12 +219,12 @@ namespace Olaf.Common
             {
                 foreach (var objAiHero in from hero in HeroManager.Enemies
                     where
-                        hero.Distance(Game.CursorPos) < 150f && hero != null && hero.IsHPBarRendered
+                        hero.Distance(Game.CursorPos) < 150f && hero != null && hero.IsVisible
                         && !hero.IsDead
                     orderby hero.Distance(Game.CursorPos) descending
                     select hero)
                 {
-                    if (objAiHero != null && objAiHero.IsHPBarRendered && !objAiHero.IsDead)
+                    if (objAiHero != null && objAiHero.IsVisible && !objAiHero.IsDead)
                     {
                         var xSelect =
                             MenuLocal.Item("Set").GetValue<StringList>().SelectedIndex;
@@ -259,7 +259,7 @@ namespace Olaf.Common
 
             var vEnemy =
                 ObjectManager.Get<AIHeroClient>()
-                    .Where(e => e.Team != ObjectManager.Player.Team && !e.IsDead && e.IsHPBarRendered)
+                    .Where(e => e.Team != ObjectManager.Player.Team && !e.IsDead && e.IsVisible)
                     .Where(e => MenuLocal.Item("enemy_" + e.ChampionName) != null)
                     .Where(e => MenuLocal.Item("enemy_" + e.ChampionName).GetValue<bool>())
                     .Where(e => ObjectManager.Player.Distance(e) < vDefaultRange)
@@ -314,7 +314,7 @@ namespace Olaf.Common
                 foreach (var e in
                     HeroManager.Enemies.Where(
                         e =>
-                            e.IsHPBarRendered && !e.IsDead && MenuLocal.Item("enemy_" + e.ChampionName) != null
+                            e.IsVisible && !e.IsDead && MenuLocal.Item("enemy_" + e.ChampionName) != null
                             && MenuLocal.Item("enemy_" + e.ChampionName).GetValue<bool>()))
                 {
                     DrawText(

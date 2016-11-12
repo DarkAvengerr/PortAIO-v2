@@ -152,7 +152,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
 
         public float GetTargetHealth(EnemyInfo playerInfo, int additionalTime)
         {
-            if (playerInfo.Player.IsHPBarRendered)
+            if (playerInfo.Player.IsVisible)
                 return playerInfo.Player.Health;
 
             var predictedhealth = playerInfo.Player.Health + playerInfo.Player.HPRegenRate * ((DeathWalker.now - playerInfo.LastSeen + additionalTime) / 1000f);

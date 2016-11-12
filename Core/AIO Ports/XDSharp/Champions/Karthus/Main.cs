@@ -49,11 +49,11 @@ using EloBuddy;
 
         private static AIHeroClient GetQTarget()
         {
-            if (MainTarget == null || MainTarget.IsDead || !MainTarget.IsHPBarRendered)
+            if (MainTarget == null || MainTarget.IsDead || !MainTarget.IsVisible)
             {
                 foreach (var target in Targets)
                 {
-                    if (target != null && target.IsHPBarRendered && !target.IsDead)
+                    if (target != null && target.IsVisible && !target.IsDead)
                     {
                         if (Player.ServerPosition.Distance(PreCastPos(target, (QsDelay / 1000), Q.Width, varRange)) < Q.Range)
                         {
@@ -69,11 +69,11 @@ using EloBuddy;
 
         private static AIHeroClient GetWTarget()
         {
-            if (MainTarget == null || MainTarget.IsDead || !MainTarget.IsHPBarRendered)
+            if (MainTarget == null || MainTarget.IsDead || !MainTarget.IsVisible)
             {
                 foreach (var target in Targets)
                 {
-                    if (target != null && target.IsHPBarRendered && !target.IsDead)
+                    if (target != null && target.IsVisible && !target.IsDead)
                     {
                         if (Player.ServerPosition.Distance(PreCastPos(target, 0.0f, 1, 0)) < W.Range)
                         {
@@ -89,11 +89,11 @@ using EloBuddy;
 
         private static AIHeroClient GetETarget()
         {
-            if (MainTarget == null || MainTarget.IsDead || !MainTarget.IsHPBarRendered)
+            if (MainTarget == null || MainTarget.IsDead || !MainTarget.IsVisible)
             {
                 foreach (var target in Targets)
                 {
-                    if (target != null && target.IsHPBarRendered && !target.IsDead)
+                    if (target != null && target.IsVisible && !target.IsDead)
                     {
 
                         if (target.IsValidTarget(E.Range))
@@ -592,7 +592,7 @@ using EloBuddy;
                 {
                     foreach (var enemy in Targets)
                     {
-                        if (enemy.IsHPBarRendered && !enemy.IsDead)
+                        if (enemy.IsVisible && !enemy.IsDead)
                         {
                             Render.Circle.DrawCircle(PreCastPos(enemy, (QsDelay / 1000), Q.Width, varRange), Q.Width, System.Drawing.Color.Red);
                             Render.Circle.DrawCircle(PreCastPos(enemy, 0.625f - (QsDelay / 1000), Q.Width, varRange), Q.Width, System.Drawing.Color.Green);
@@ -609,7 +609,7 @@ using EloBuddy;
                     Drawing.DrawText(100, 250, System.Drawing.Color.White, "Enemy Waypoint + Predicted Position Color");
 
                 }
-                if (MainTarget != null && MainTarget.IsHPBarRendered)
+                if (MainTarget != null && MainTarget.IsVisible)
                 {
                     Render.Circle.DrawCircle(MainTarget.ServerPosition, 100, System.Drawing.Color.Red);
                 }

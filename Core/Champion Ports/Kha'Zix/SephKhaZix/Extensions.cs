@@ -20,12 +20,12 @@ using EloBuddy;
 
         internal static bool IsValidMinion(this Obj_AI_Minion minion)
         {
-            return (minion != null && minion.IsValid && minion.IsHPBarRendered && minion.Team != Player.Team && minion.IsHPBarRendered && !minion.CharData.BaseSkinName.ToLower().Contains("ward"));
+            return (minion != null && minion.IsValid && minion.IsVisible && minion.Team != Player.Team && minion.IsHPBarRendered && !minion.CharData.BaseSkinName.ToLower().Contains("ward"));
         }
 
         internal static bool IsValidAlly(this Obj_AI_Base unit, float range = 50000)
         {
-            if (unit == null || unit.Distance(Player) > range || unit.Team != Player.Team || !unit.IsValid || unit.IsDead || !unit.IsHPBarRendered || unit.IsTargetable)
+            if (unit == null || unit.Distance(Player) > range || unit.Team != Player.Team || !unit.IsValid || unit.IsDead || !unit.IsVisible || unit.IsTargetable)
             {
                 return false;
             }
@@ -34,7 +34,7 @@ using EloBuddy;
 
         internal static bool IsValidEnemy(this Obj_AI_Base unit, float range = 50000)
         {
-            if (unit == null || !unit.IsHPBarRendered || unit.IsZombie || unit.Distance(Player) > range || unit.Team == Player.Team || !unit.IsValid || unit.IsDead || !unit.IsHPBarRendered || !unit.IsTargetable)
+            if (unit == null || !unit.IsHPBarRendered || unit.IsZombie || unit.Distance(Player) > range || unit.Team == Player.Team || !unit.IsValid || unit.IsDead || !unit.IsVisible || !unit.IsTargetable)
             {
                 return false;
             }

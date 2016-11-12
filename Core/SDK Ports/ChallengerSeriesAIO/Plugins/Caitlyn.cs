@@ -118,7 +118,7 @@ using EloBuddy;
                    GameObjects.EnemyHeroes.Where(
                        x =>
                            x.IsValid && !x.IsDead && x.IsEnemy &&
-                           (x.IsHPBarRendered && x.IsValidTarget()) &&
+                           (x.IsVisible && x.IsValidTarget()) &&
                            R.GetDamage(x) > x.Health - 100)
                        .Aggregate("", (current, target) => current + (target.ChampionName + " " + (target.Spellbook.Spells.Any(s => s.Name.Contains("heal") && s.IsReady()) ? "(Has Heal) " : "") + (target.Spellbook.Spells.Any(s=>s.Name.Contains("barrier") && s.IsReady()) ? "(Has Barrier)" : "")));
 

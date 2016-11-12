@@ -99,7 +99,7 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                         foreach (var target in
                             Weights.DrawingTargets.Where(
                                 target =>
-                                    !target.Hero.IsDead && target.Hero.IsHPBarRendered && target.Hero.Position.IsOnScreen()))
+                                    !target.Hero.IsDead && target.Hero.IsVisible && target.Hero.Position.IsOnScreen()))
                         {
                             Drawing.DrawText(
                                 target.Hero.HPBarPosition.X + 55f, target.Hero.HPBarPosition.Y - 20f, Color.White,
@@ -107,9 +107,9 @@ using EloBuddy; namespace SFXChallenger.SFXTargetSelector
                         }
                     }
                     if (Weights.BestTarget.Enabled && Weights.BestTarget.Unit != null &&
-                        !Weights.BestTarget.Unit.Hero.IsDead && Weights.BestTarget.Unit.Hero.IsHPBarRendered &&
+                        !Weights.BestTarget.Unit.Hero.IsDead && Weights.BestTarget.Unit.Hero.IsVisible &&
                         Weights.DrawingTargets.Count(
-                            e => !e.Hero.IsDead && e.Hero.IsHPBarRendered && e.Hero.Position.IsOnScreen()) >= 2)
+                            e => !e.Hero.IsDead && e.Hero.IsVisible && e.Hero.Position.IsOnScreen()) >= 2)
                     {
                         Render.Circle.DrawCircle(
                             Weights.BestTarget.Unit.Hero.Position,

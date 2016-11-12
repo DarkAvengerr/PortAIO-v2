@@ -240,7 +240,7 @@ using EloBuddy;
 
         private AIHeroClient CheckMark(float range)
         {
-            return HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(range) && x.HasBuff("AkaliMota") && x.IsHPBarRendered);
+            return HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(range) && x.HasBuff("AkaliMota") && x.IsVisible);
         }
 
         private void Cast_Q(bool combo, int mode = 0)

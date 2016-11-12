@@ -25,7 +25,7 @@ using EloBuddy;
 
             var enemyHero = HeroManager.Enemies.FirstOrDefault(x => x.Distance(ObjectManager.Player) <= 1000);
 
-            if (enemyHero == null || !enemyHero.IsHPBarRendered)
+            if (enemyHero == null || !enemyHero.IsVisible)
             {
                 return;
             }

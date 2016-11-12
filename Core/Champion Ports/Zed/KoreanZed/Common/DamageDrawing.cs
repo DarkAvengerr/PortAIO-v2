@@ -78,7 +78,7 @@ using EloBuddy; namespace KoreanZed.Common
                 foreach (
                     AIHeroClient champ in
                         ObjectManager.Get<AIHeroClient>()
-                            .Where(h => h.IsHPBarRendered && h.IsEnemy && h.IsValid && h.IsHPBarRendered))
+                            .Where(h => h.IsVisible && h.IsEnemy && h.IsValid && h.IsHPBarRendered))
                 {
                     float damage = amountOfDamage(champ);
 

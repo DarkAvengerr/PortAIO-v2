@@ -260,7 +260,7 @@ using EloBuddy;
             }
 
             if (currentTarget != null &&
-                (Config.SubMenu("Draw").Item("drawTargetC").GetValue<bool>() && currentTarget.IsHPBarRendered &&
+                (Config.SubMenu("Draw").Item("drawTargetC").GetValue<bool>() && currentTarget.IsVisible &&
                  !currentTarget.IsDead))
             {
                 Render.Circle.DrawCircle(currentTarget.Position, currentTarget.BoundingRadius + 10, Color.Red);

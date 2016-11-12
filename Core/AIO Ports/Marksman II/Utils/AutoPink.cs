@@ -110,7 +110,7 @@ using EloBuddy;
                 if (sender.IsEnemy && sender.Name.Contains("Rengar_Base_R_Alert"))
                 {
                     if (ObjectManager.Player.HasBuff("rengarralertsound") &&
-                        !Rengar.IsHPBarRendered &&
+                        !Rengar.IsVisible &&
                         !Rengar.IsDead &&
                         CheckSlot() != SpellSlot.Unknown)
                     {
@@ -125,7 +125,7 @@ using EloBuddy;
                 if (ObjectManager.Player.Distance(sender.Position) > 600) return;
                 if (sender.IsEnemy && sender.Name == "LeBlanc_Base_P_poof.troy")
                 {
-                    if (!leBlanc.IsHPBarRendered && !leBlanc.IsDead && CheckSlot() != SpellSlot.Unknown)
+                    if (!leBlanc.IsVisible && !leBlanc.IsDead && CheckSlot() != SpellSlot.Unknown)
                     {
                         ObjectManager.Player.Spellbook.CastSpell(CheckSlot(), ObjectManager.Player.Position);
                     }

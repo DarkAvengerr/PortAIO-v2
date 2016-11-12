@@ -212,7 +212,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         public  List<AIHeroClient> getEnemiesInSolRange()
         {
             List<Obj_AI_Minion> solis = getUsableSoliders();
-            List<AIHeroClient> enemies = ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsEnemy && ene.IsHPBarRendered && !ene.IsDead).ToList();
+            List<AIHeroClient> enemies = ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsEnemy && ene.IsVisible && !ene.IsDead).ToList();
             List<AIHeroClient> inRange = new List<AIHeroClient>();
 
             if (solis.Count == 0)

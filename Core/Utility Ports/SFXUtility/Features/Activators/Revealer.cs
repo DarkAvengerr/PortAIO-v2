@@ -161,7 +161,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
 
             _lastCheck = Environment.TickCount;
 
-            foreach (var championObject in _championObjects.Where(c => c.Hero.IsHPBarRendered))
+            foreach (var championObject in _championObjects.Where(c => c.Hero.IsVisible))
             {
                 championObject.LastSeen = Game.Time;
             }
@@ -173,7 +173,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
             foreach (var championObject in
                 _championObjects.Where(
                     c =>
-                        !c.Hero.IsHPBarRendered && !c.Hero.IsDead && Game.Time - c.LastSeen <= 2 &&
+                        !c.Hero.IsVisible && !c.Hero.IsDead && Game.Time - c.LastSeen <= 2 &&
                         c.Hero.Distance(ObjectManager.Player) < 1000))
             {
                 var pos = GetWardPos(championObject.Hero.ServerPosition, 165, 2);
@@ -360,7 +360,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
                 {
                     if (sender.Name.Contains("Rengar_Base_R_Alert"))
                     {
-                        if (ObjectManager.Player.HasBuff("rengarralertsound") && !_rengar.IsHPBarRendered && !_rengar.IsDead)
+                        if (ObjectManager.Player.HasBuff("rengarralertsound") && !_rengar.IsVisible && !_rengar.IsDead)
                         {
                             CastLogic(ObjectManager.Player.Position, false);
                         }
@@ -371,7 +371,7 @@ using EloBuddy; namespace SFXUtility.Features.Activators
                     if (sender.Name == "LeBlanc_Base_P_poof.troy" &&
                         ObjectManager.Player.Distance(sender.Position) <= MaxRange)
                     {
-                        if (!_leBlanc.IsHPBarRendered && !_leBlanc.IsDead)
+                        if (!_leBlanc.IsVisible && !_leBlanc.IsDead)
                         {
                             CastLogic(sender.Position, false);
                         }

@@ -1,13 +1,12 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using SharpDX;
 using LeagueSharp;
 using LeagueSharp.Common;
+using EloBuddy;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace SebbyLib.Prediction
+namespace SebbyLib.Prediction
 {
     public enum HitChance
     {
@@ -126,7 +125,7 @@ using EloBuddy;
 
         internal float RealRadius
         {
-            get { return UseBoundingRadius ? Radius + Unit.BoundingRadius   : Radius; }
+            get { return UseBoundingRadius ? Radius : Radius; }
         }
     }
 
@@ -276,20 +275,6 @@ using EloBuddy;
                 result = GetPositionOnPath(input, input.Unit.GetWaypoints(), input.Unit.MoveSpeed);
             }
 
-            if (input.Unit is AIHeroClient && input.Radius > 1 && result.Hitchance <= HitChance.VeryHigh)
-            {
-                var moveOutWall = input.Unit.BoundingRadius + input.Radius / 2 + 10;
-                if (input.Type == SkillshotType.SkillshotCircle)
-                    moveOutWall = input.Unit.BoundingRadius;
-
-                var wallPoint = GetWallPoint(result.CastPosition, moveOutWall);
-                if (!wallPoint.IsZero)
-                {
-                    result.CastPosition = wallPoint.Extend(result.CastPosition, moveOutWall);
-                    OktwCommon.debug("PRED: Near WALL");
-                }
-            }
-
             //Check if the unit position is in range
             if (Math.Abs(input.Range - float.MaxValue) > float.Epsilon)
             {
@@ -321,8 +306,7 @@ using EloBuddy;
                     }
                 }
             }
-           
-           
+
             //Check for collision
             if (checkCollision && input.Collision && result.Hitchance > HitChance.Impossible)
             {
@@ -333,14 +317,32 @@ using EloBuddy;
             }
 
             //Set hit chance
-            if (result.Hitchance == HitChance.High)
+            if (result.Hitchance == HitChance.High || result.Hitchance == HitChance.VeryHigh)
             {
 
                 result = WayPointAnalysis(result, input);
                 //.debug(input.Unit.BaseSkinName + result.Hitchance);
 
             }
-            
+            if (result.Hitchance >= HitChance.VeryHigh && input.Unit is AIHeroClient && input.Radius > 1)
+            {
+
+                var lastWaypiont = input.Unit.GetWaypoints().Last().To3D();
+                var distanceUnitToWaypoint = lastWaypiont.Distance(input.Unit.ServerPosition);
+                var distanceFromToUnit = input.From.Distance(input.Unit.ServerPosition);
+                var distanceFromToWaypoint = lastWaypiont.Distance(input.From);
+                float speedDelay = distanceFromToUnit / input.Speed;
+
+                if (Math.Abs(input.Speed - float.MaxValue) < float.Epsilon)
+                    speedDelay = 0;
+
+                float totalDelay = speedDelay + input.Delay;
+                float moveArea = input.Unit.MoveSpeed * totalDelay;
+                float fixRange = moveArea * 0.35f;
+                float pathMinLen = 800 + moveArea;
+
+                OktwCommon.debug(input.Radius + " RES Ways: " + input.Unit.GetWaypoints().Count + " W " + input.Unit.Spellbook.IsAutoAttacking + " D " + distanceUnitToWaypoint + " T " + UnitTracker.GetLastNewPathTime(input.Unit) + " " + result.Hitchance);
+            }
             return result;
         }
 
@@ -359,6 +361,7 @@ using EloBuddy;
                 result.Hitchance = HitChance.VeryHigh;
                 return result;
             }
+            OktwCommon.debug("WAIT.....");
             // CAN'T MOVE SPELLS ///////////////////////////////////////////////////////////////////////////////////
 
             if (UnitTracker.GetSpecialSpellEndTime(input.Unit) > 100 || input.Unit.HasBuff("Recall") || (UnitTracker.GetLastStopMoveTime(input.Unit) < 100 && input.Unit.IsRooted))
@@ -412,13 +415,6 @@ using EloBuddy;
             {
                 result.Hitchance = HitChance.Medium;
                 return result; 
-            }
-
-            if ( totalDelay - input.Radius / 2 / input.Speed > 0.6 && (input.Unit.Spellbook.IsAutoAttacking || !input.Unit.CanMove || input.Unit.IsRooted))
-            {
-                OktwCommon.debug("PRED: After CC detection " + totalDelay);
-                result.Hitchance = HitChance.High;
-                return result;
             }
 
             if (distanceUnitToWaypoint > 0)
@@ -623,56 +619,9 @@ using EloBuddy;
                 Input = input,
                 CastPosition = input.Unit.ServerPosition,
                 UnitPosition = input.Unit.ServerPosition,
-                Hitchance = HitChance.VeryHigh
+                Hitchance = HitChance.High
                 /*timeToReachTargetPosition - remainingImmobileT + input.RealRadius / input.Unit.MoveSpeed < 0.4d ? HitChance.High : HitChance.Medium*/
             };
-        }
-
-        internal static Vector3 GetWallPoint(Vector3 from, float range)
-        {
-            var count = 30;
-            var points = OktwCommon.CirclePoints(count, range, from);
-            Vector3 first = Vector3.Zero, last = Vector3.Zero;
-
-            for (int i = 0; i<count; i ++ )
-            {
-                if (points[i].IsWall())
-                {
-                    if (first.IsZero)
-                    {
-                        if (i == count - 1)
-                        {
-                            if (!points[0].IsWall())
-                                first = points[i];
-                        }
-                        else
-                        {
-                            if (!points[i + 1].IsWall())
-                                first = points[i];
-                        }
-                    }
-                    if (last.IsZero)
-                    {
-                        if (i == 0)
-                        {
-                            if (!points[count - 1].IsWall())
-                                last = points[i];
-                        }
-                        else
-                        {
-                            if (!points[i - 1].IsWall())
-                                last = points[i];
-                        }
-                    }
-                } 
-            }
-            if (!first.IsZero && !last.IsZero)
-            {
-                var finnaly = new Vector3((last.X + first.X) / 2, (last.Y + first.Y) / 2, (last.Z + first.Z) / 2);
-                return finnaly;
-            }
-            else
-                return Vector3.Zero;
         }
 
         internal static double UnitIsImmobileUntil(Obj_AI_Base unit)
@@ -712,9 +661,10 @@ using EloBuddy;
             var pLength = path.PathLength();
 
             //Skillshots with only a delay
-            var tDistance = input.Delay * speed - input.RealRadius;
-            if (pLength >= tDistance && Math.Abs(input.Speed - float.MaxValue) < float.Epsilon)
+            if (pLength >= input.Delay * speed - input.RealRadius && Math.Abs(input.Speed - float.MaxValue) < float.Epsilon)
             {
+                var tDistance = input.Delay * speed - input.RealRadius;
+
                 for (var i = 0; i < path.Count - 1; i++)
                 {
                     var a = path[i];
@@ -746,9 +696,10 @@ using EloBuddy;
             }
 
             //Skillshot with a delay and speed.
-            if (pLength >= tDistance && Math.Abs(input.Speed - float.MaxValue) > float.Epsilon)
+            if (pLength >= input.Delay * speed - input.RealRadius &&
+                Math.Abs(input.Speed - float.MaxValue) > float.Epsilon)
             {
-                var d = tDistance;
+                var d = input.Delay * speed - input.RealRadius;
                 if (input.Type == SkillshotType.SkillshotLine || input.Type == SkillshotType.SkillshotCone)
                 {
                     if (input.From.Distance(input.Unit.ServerPosition, true) < 200 * 200)
@@ -1045,7 +996,7 @@ using EloBuddy;
                     {
                         if (
                             GetHits(
-                                input.From.To2D(), candidate, (input.Radius + input.Unit.BoundingRadius / 3 - 10),
+                                input.From.To2D(), candidate, (input.Radius - 10),
                                 new List<Vector2> { posibleTargets[0].Position }).Count() == 1)
                         {
                             var hits = GetHits(input.From.To2D(), candidate, input.Radius, positionsList).ToList();
@@ -1152,7 +1103,7 @@ using EloBuddy;
 
                                 var distanceFromToUnit = minion.ServerPosition.Distance(input.From);
 
-                                if (distanceFromToUnit < 10 + minion.BoundingRadius)
+                                if (distanceFromToUnit < minion.BoundingRadius)
                                 {
                                     if (MinionIsDead(input, minion, distanceFromToUnit))
                                         continue;
@@ -1187,7 +1138,7 @@ using EloBuddy;
                                         bonusRadius = 50 + (int)input.Radius;
                                     }
 
-                                    if (minionPos.To2D().Distance(input.From.To2D(), position.To2D(), true, true) <= Math.Pow((input.Radius + bonusRadius + minion.BoundingRadius), 2))
+                                    if (minionPos.To2D().Distance(input.From.To2D(), position.To2D(), true, true) <= Math.Pow((input.Radius + bonusRadius), 2))
                                     {
                                         if (MinionIsDead(input, minion, distanceFromToUnit))
                                             continue;
@@ -1210,7 +1161,7 @@ using EloBuddy;
                                 if (
                                     prediction.UnitPosition.To2D()
                                         .Distance(input.From.To2D(), position.To2D(), true, true) <=
-                                    Math.Pow((input.Radius + 50 + hero.BoundingRadius), 2))
+                                    Math.Pow((input.Radius + hero.BoundingRadius), 2))
                                 {
                                     return true;
                                 }
@@ -1298,12 +1249,12 @@ using EloBuddy;
                 UnitTrackerInfoList.Add(new UnitTrackerInfo() { NetworkId = hero.NetworkId, AaTick = Utils.TickCount, StopMoveTick = Utils.TickCount, NewPathTick = Utils.TickCount, SpecialSpellFinishTick = Utils.TickCount, LastInvisableTick = Utils.TickCount });
             }
 
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Obj_AI_Base.OnNewPath += AIHeroClient_OnNewPath;
-            AttackableUnit.OnCreate += Obj_AI_Base_OnCreate;
+            AttackableUnit.OnCreate += Obj_AI_Base_OnEnterLocalVisiblityClient;
         }
 
-        private static void Obj_AI_Base_OnCreate(GameObject sender, EventArgs args)
+        private static void Obj_AI_Base_OnEnterLocalVisiblityClient(GameObject sender, EventArgs args)
         {
             if (sender is AIHeroClient)
                 UnitTrackerInfoList.Find(x => x.NetworkId == sender.NetworkId).LastInvisableTick = Utils.TickCount;

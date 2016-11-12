@@ -79,7 +79,7 @@
             {
                 if (sender.Name.Contains("Rengar_Base_R_Alert"))
                 {
-                    if (ObjectManager.Player.HasBuff("rengarralertsound") && !Rengar.IsHPBarRendered && !Rengar.IsDead)
+                    if (ObjectManager.Player.HasBuff("rengarralertsound") && !Rengar.IsVisible && !Rengar.IsDead)
                     {
                         CastWard(ObjectManager.Player.Position, false);
                     }
@@ -150,14 +150,14 @@
 
             lastCheckTime = Environment.TickCount;
 
-            foreach (var obj in championObject.Where(c => c.Hero.IsHPBarRendered))
+            foreach (var obj in championObject.Where(c => c.Hero.IsVisible))
             {
                 obj.LastSeen = Game.Time;
             }
 
             foreach (var obj in 
                 championObject.Where(c =>
-                    !c.Hero.IsHPBarRendered && !c.Hero.IsDead && Game.Time - c.LastSeen <= 2 &&
+                    !c.Hero.IsVisible && !c.Hero.IsDead && Game.Time - c.LastSeen <= 2 &&
                     c.Hero.Distance(Me) < 1000))
             {
                 var pos = GetWardPos(obj.Hero.ServerPosition, 165, 2);

@@ -12,8 +12,9 @@ using EloBuddy;
  namespace OneKeyToWin_AIO_Sebby.Core
 {
 
-    class AutoLvlUp : Program
+    class AutoLvlUp
     {
+        private Menu Config = Program.Config;
         int lvl1, lvl2, lvl3, lvl4;
         public void LoadOKTW()
         {
@@ -74,11 +75,11 @@ using EloBuddy;
         {
             if (ObjectManager.Player.Level < 4)
             {
-                if (indx == 0 && Player.Spellbook.GetSpell(SpellSlot.Q).Level == 0)
+                if (indx == 0 && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level == 0)
                     ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.Q);
-                if (indx == 1 && Player.Spellbook.GetSpell(SpellSlot.W).Level == 0)
+                if (indx == 1 && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level == 0)
                     ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.W);
-                if (indx == 2 && Player.Spellbook.GetSpell(SpellSlot.E).Level == 0)
+                if (indx == 2 && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level == 0)
                     ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.E);
             }
             else

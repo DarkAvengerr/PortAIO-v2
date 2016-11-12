@@ -195,7 +195,7 @@ using EloBuddy;
             if (!Menu["Draw"]["DrawDamage"].GetValue<MenuBool>())
                 return;
 
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(e => e.IsValidTarget(1500) && !e.IsDead && e.IsHPBarRendered))
+            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(e => e.IsValidTarget(1500) && !e.IsDead && e.IsVisible))
             {
                 HpBarDraw.Unit = enemy;
                 HpBarDraw.DrawDmg(GetDamage(enemy), SharpDX.Color.LightCyan);

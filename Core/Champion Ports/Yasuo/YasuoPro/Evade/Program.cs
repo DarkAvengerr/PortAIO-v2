@@ -188,7 +188,7 @@ using EloBuddy; namespace EvadeYas
             //Check if the skillshot is already added.
             var alreadyAdded = false;
 
-            if (!Helper.GetBool("Evade.FOW") && !skillshot.Unit.IsHPBarRendered)
+            if (!Helper.GetBool("Evade.FOW") && !skillshot.Unit.IsVisible)
             {
                 return;
             }

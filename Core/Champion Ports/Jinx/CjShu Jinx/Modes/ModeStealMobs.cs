@@ -113,7 +113,7 @@ using EloBuddy;
             get
             {
                 // Return EntityManager.MinionsAndMonsters.Monsters.Where(m => m.MaxHealth >= 3500 && m.IsGettingAttacked());
-                return MinionManager.GetMinions(40000).Where(m => m.MaxHealth >= 3500 && m.IsHPBarRendered);
+                return MinionManager.GetMinions(40000).Where(m => m.MaxHealth >= 3500 && m.IsVisible);
             }
         }
 

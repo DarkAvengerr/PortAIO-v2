@@ -304,7 +304,7 @@ using EloBuddy;
                 foreach (
                     var e in
                         HeroManager.Enemies.Where(
-                            e => e.IsHPBarRendered && !e.IsDead && !e.IsZombie && e.Health < Common.CommonMath.GetComboDamage(e)))
+                            e => e.IsVisible && !e.IsDead && !e.IsZombie && e.Health < Common.CommonMath.GetComboDamage(e)))
                 {
                     if ((int) Game.Time%2 == 1)
                     {
@@ -382,7 +382,7 @@ using EloBuddy;
             {
                 if (MenuLocal.Item(GetPcModeStringValue + "DrawKillableEnemy").GetValue<bool>())
                 {
-                    return HeroManager.Enemies.FirstOrDefault(e => e.IsHPBarRendered && !e.IsDead && !e.IsZombie && e.Health < Common.CommonMath.GetComboDamage(e));
+                    return HeroManager.Enemies.FirstOrDefault(e => e.IsVisible && !e.IsDead && !e.IsZombie && e.Health < Common.CommonMath.GetComboDamage(e));
                 }
                 return null;
             }
