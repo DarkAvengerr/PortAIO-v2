@@ -28,7 +28,7 @@ using EloBuddy;
         /// <summary>
         ///     Gets the range.
         /// </summary>
-        internal override float Range => Misc.RengarAutoAttackRange + 350f;
+        internal override float Range => Misc.RengarAutoAttackRange + 325f;
 
         /// <summary>
         ///     Gets the spell slot.
