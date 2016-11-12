@@ -64,10 +64,10 @@ using EloBuddy;
 
                 if (Fill)
                 {
-                    var differenceInHP = xPosCurrentHp - xPosDamage;
+                    var differenceInHp = xPosCurrentHp - xPosDamage;
                     var pos1 = barPos.X + 9 + 107*percentHealthAfterDamage;
 
-                    for (var i = 0; i < differenceInHP; i++)
+                    for (var i = 0; i < differenceInHp; i++)
                         Drawing.DrawLine(pos1 + i, yPos, pos1 + i, yPos + Height, 1, FillColor);
                 }
             }

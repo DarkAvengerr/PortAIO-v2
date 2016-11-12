@@ -10,21 +10,22 @@ using Orbwalking = SebbyLib.Orbwalking;
 using Prediction = SebbyLib.Prediction.Prediction;
 using PredictionInput = SebbyLib.Prediction.PredictionInput;
 
-using EloBuddy;
-using LeagueSharp.Common;
-namespace SSKhaZix
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace SSKhaZix
 {
-    internal class SSKhaXiz
+    internal class SsKhaXiz
     {
         protected static Spell Q, W, E, R, Ignite, Smite;
         protected static Orbwalking.Orbwalker Orbwalker;
         protected static Menu Config;
+        protected bool _isMidAir;
 
         //protected static int lvl1, lvl2, lvl3, lvl4;
         protected bool BoolEvolvedQ, BoolEvolvedW, BoolEvolvedE;
-        private bool IsMidAir;
+        protected Obj_AI_Base KhaETrail, KhaELand;
 
-        public SSKhaXiz()
+        public SsKhaXiz()
         {
             GameOnGameLoad();
         }
@@ -45,10 +46,10 @@ namespace SSKhaZix
 
         public static void Main()
         {
-            var KhaXiz = new SSKhaXiz();
+            var khaXiz = new SsKhaXiz();
         }
 
-        public void GameOnGameLoad()
+        private void GameOnGameLoad()
         {
             if (Player.ChampionName != "Khazix")
                 return;
@@ -81,88 +82,88 @@ namespace SSKhaZix
 
             Config = new Menu("SurvivorKhaZix", "SurvivorKhaZix", true).SetFontStyle(FontStyle.Bold, Color.Crimson);
 
-            var OrbwalkerMenu = Config.AddSubMenu(new Menu(":: Orbwalker", "Orbwalker"));
-            Orbwalker = new Orbwalking.Orbwalker(OrbwalkerMenu);
+            var orbwalkerMenu = Config.AddSubMenu(new Menu(":: Orbwalker", "Orbwalker"));
+            Orbwalker = new Orbwalking.Orbwalker(orbwalkerMenu);
 
-            var TargetSelectorMenu = Config.AddSubMenu(new Menu(":: Target Selector", "TargetSelector"));
+            var targetSelectorMenu = Config.AddSubMenu(new Menu(":: Target Selector", "TargetSelector"));
 
-            TargetSelector.AddToMenu(TargetSelectorMenu);
+            TargetSelector.AddToMenu(targetSelectorMenu);
 
             #endregion
 
             #region Config Items
 
-            var ComboMenu = Config.AddSubMenu(new Menu(":: Combo", "Combo"));
-            ComboMenu.AddItem(new MenuItem("ComboUseQ", "Use Q").SetValue(true));
-            ComboMenu.AddItem(new MenuItem("ComboUseW", "Use W").SetValue(true));
-            ComboMenu.AddItem(new MenuItem("ComboUseE", "Use E").SetValue(true));
-            ComboMenu.AddItem(new MenuItem("DontAAInInvisible", "Don't AA while Invisible?").SetValue(true));
-            ComboMenu.AddItem(
+            var comboMenu = Config.AddSubMenu(new Menu(":: Combo", "Combo"));
+            comboMenu.AddItem(new MenuItem("ComboUseQ", "Use Q").SetValue(true));
+            comboMenu.AddItem(new MenuItem("ComboUseW", "Use W").SetValue(true));
+            comboMenu.AddItem(new MenuItem("ComboUseE", "Use E").SetValue(true));
+            comboMenu.AddItem(new MenuItem("DontAAInInvisible", "Don't AA while Invisible?").SetValue(true));
+            comboMenu.AddItem(
                 new MenuItem("ComboDontEUnderTurret", "Don't E (Jump) under Turret?").SetValue(true)
                     .SetTooltip("Set it to 'true' to be Safe."));
-            ComboMenu.AddItem(
+            comboMenu.AddItem(
                 new MenuItem("ComboMinimumREnemies", "Minimum Enemies in E Range Before Casting R").SetValue(
                     new Slider(2, 1, 5)));
-            ComboMenu.AddItem(
+            comboMenu.AddItem(
                 new MenuItem("ComboUseR", "Use R").SetValue(true)
                     .SetTooltip(
                         "Will use R if there's more than 1 target, or if Low HP will go into Survive(Fight) or Die mode."));
 
-            var LaneClearMenu = Config.AddSubMenu(new Menu(":: LaneClear", "LaneClear"));
-            LaneClearMenu.AddItem(new MenuItem("LaneClearQ", "Use Q").SetValue(true));
-            LaneClearMenu.AddItem(new MenuItem("LaneClearW", "Use W").SetValue(true));
-            LaneClearMenu.AddItem(new MenuItem("LaneClearE", "Use E").SetValue(false));
-            LaneClearMenu.AddItem(new MenuItem("LaneClearItems", "Use Hydra/Tiamat to LaneClear?").SetValue(true));
-            LaneClearMenu.AddItem(
+            var laneClearMenu = Config.AddSubMenu(new Menu(":: LaneClear", "LaneClear"));
+            laneClearMenu.AddItem(new MenuItem("LaneClearQ", "Use Q").SetValue(true));
+            laneClearMenu.AddItem(new MenuItem("LaneClearW", "Use W").SetValue(true));
+            laneClearMenu.AddItem(new MenuItem("LaneClearE", "Use E").SetValue(false));
+            laneClearMenu.AddItem(new MenuItem("LaneClearItems", "Use Hydra/Tiamat to LaneClear?").SetValue(true));
+            laneClearMenu.AddItem(
                 new MenuItem("LaneClearManaManager", "LaneClear Mana Manager").SetValue(new Slider(50, 0, 100)));
-            LaneClearMenu.AddItem(
+            laneClearMenu.AddItem(
                 new MenuItem("MinimumEMinions", "Minimum Minions To Hit Using E?").SetValue(new Slider(3, 0, 10)));
 
-            var JungleClearMenu = Config.AddSubMenu(new Menu(":: JungleClear", "JungleClear"));
-            JungleClearMenu.AddItem(new MenuItem("JungleClearQ", "Use Q").SetValue(true));
-            JungleClearMenu.AddItem(new MenuItem("JungleClearW", "Use W").SetValue(true));
-            JungleClearMenu.AddItem(new MenuItem("JungleClearE", "Use E").SetValue(false));
-            JungleClearMenu.AddItem(new MenuItem("JungleClearItems", "Use Hydra/Tiamat to JungleClear?").SetValue(true));
-            JungleClearMenu.AddItem(
+            var jungleClearMenu = Config.AddSubMenu(new Menu(":: JungleClear", "JungleClear"));
+            jungleClearMenu.AddItem(new MenuItem("JungleClearQ", "Use Q").SetValue(true));
+            jungleClearMenu.AddItem(new MenuItem("JungleClearW", "Use W").SetValue(true));
+            jungleClearMenu.AddItem(new MenuItem("JungleClearE", "Use E").SetValue(false));
+            jungleClearMenu.AddItem(new MenuItem("JungleClearItems", "Use Hydra/Tiamat to JungleClear?").SetValue(true));
+            jungleClearMenu.AddItem(
                 new MenuItem("JungleClearDontEQRange", "Don't Use E if Mobs are in Q Range?").SetValue(true));
-            JungleClearMenu.AddItem(
+            jungleClearMenu.AddItem(
                 new MenuItem("JungleClearManaManager", "JungleClear Mana Manager").SetValue(new Slider(50, 0, 100)));
-            JungleClearMenu.AddItem(
+            jungleClearMenu.AddItem(
                 new MenuItem("MinimumEJungleMobs", "Minimum Mobs in E before Jumping?").SetValue(new Slider(2, 1, 4)));
 
-            var LastHitMenu = Config.AddSubMenu(new Menu(":: LastHit", "LastHit"));
-            LastHitMenu.AddItem(new MenuItem("LastHitQ", "Use Q").SetValue(true));
-            LastHitMenu.AddItem(new MenuItem("LastHitW", "Use W").SetValue(false));
-            LastHitMenu.AddItem(
+            var lastHitMenu = Config.AddSubMenu(new Menu(":: LastHit", "LastHit"));
+            lastHitMenu.AddItem(new MenuItem("LastHitQ", "Use Q").SetValue(true));
+            lastHitMenu.AddItem(new MenuItem("LastHitW", "Use W").SetValue(false));
+            lastHitMenu.AddItem(
                 new MenuItem("LastHitManaManager", "LastHit Mana Manager Mana Manager").SetValue(new Slider(50, 0, 100)));
 
-            var HarassMenu = Config.AddSubMenu(new Menu(":: Harass", "Harass"));
-            HarassMenu.AddItem(new MenuItem("HarassQ", "Use Q").SetValue(true));
-            HarassMenu.AddItem(new MenuItem("HarassW", "Use W").SetValue(true));
-            HarassMenu.AddItem(
+            var harassMenu = Config.AddSubMenu(new Menu(":: Harass", "Harass"));
+            harassMenu.AddItem(new MenuItem("HarassQ", "Use Q").SetValue(true));
+            harassMenu.AddItem(new MenuItem("HarassW", "Use W").SetValue(true));
+            harassMenu.AddItem(
                 new MenuItem("HarassManaManager", "Harass Mana Manager Mana Manager").SetValue(new Slider(50, 0, 100)));
 
-            var KillStealMenu = Config.AddSubMenu(new Menu(":: Killsteal", "Killsteal"));
-            KillStealMenu.AddItem(new MenuItem("EnableKS", "Enable Killsteal?").SetValue(true));
-            KillStealMenu.AddItem(new MenuItem("KSQ", "KS with Q?").SetValue(true));
-            KillStealMenu.AddItem(new MenuItem("KSW", "KS with W").SetValue(true));
-            KillStealMenu.AddItem(new MenuItem("KSE", "KS with E").SetValue(true));
-            KillStealMenu.AddItem(new MenuItem("UnavailableService",
+            var killStealMenu = Config.AddSubMenu(new Menu(":: Killsteal", "Killsteal"));
+            killStealMenu.AddItem(new MenuItem("EnableKS", "Enable Killsteal?").SetValue(true));
+            killStealMenu.AddItem(new MenuItem("KSQ", "KS with Q?").SetValue(true));
+            killStealMenu.AddItem(new MenuItem("KSW", "KS with W").SetValue(true));
+            killStealMenu.AddItem(new MenuItem("KSE", "KS with E").SetValue(true));
+            killStealMenu.AddItem(new MenuItem("UnavailableService",
                 "KS with Ignite/Smite is currently (Temporary) Unavailable."));
-            KillStealMenu.AddItem(new MenuItem("KSIgnite", "KS with Ignite").SetValue(false));
-            KillStealMenu.AddItem(new MenuItem("KSSmite", "KS with Smite").SetValue(false));
+            killStealMenu.AddItem(new MenuItem("KSIgnite", "KS with Ignite").SetValue(false));
+            killStealMenu.AddItem(new MenuItem("KSSmite", "KS with Smite").SetValue(false));
 
-            var DrawingMenu = Config.AddSubMenu(new Menu(":: Drawings", "Drawings"));
-            DrawingMenu.AddItem(new MenuItem("DrawQ", "Draw Q Range").SetValue(true));
-            DrawingMenu.AddItem(new MenuItem("DrawW", "Draw W Range").SetValue(false));
-            DrawingMenu.AddItem(new MenuItem("DrawE", "Draw E Range").SetValue(true));
-            DrawingMenu.AddItem(
+            var drawingMenu = Config.AddSubMenu(new Menu(":: Drawings", "Drawings"));
+            drawingMenu.AddItem(new MenuItem("DrawQ", "Draw Q Range").SetValue(true));
+            drawingMenu.AddItem(new MenuItem("DrawW", "Draw W Range").SetValue(false));
+            drawingMenu.AddItem(new MenuItem("DrawE", "Draw E Range").SetValue(true));
+            drawingMenu.AddItem(
                 new MenuItem("DrawIsolated", "Draw Isolated?").SetValue(true).SetTooltip("Preferably set to 'true'."));
-            DrawingMenu.AddItem(new MenuItem("DrawIsMidAirDebug", "Draw isMidAir (Debug)").SetValue(false));
+            drawingMenu.AddItem(new MenuItem("DrawIsMidAirDebug", "Draw isMidAir (Debug)").SetValue(false));
 
-            var MiscMenu = Config.AddSubMenu(new Menu(":: Misc", "Misc"));
-            MiscMenu.AddItem(
-                new MenuItem("HitChance", "Hit Chance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 1)));
+            var miscMenu = Config.AddSubMenu(new Menu(":: Misc", "Misc"));
+            miscMenu.AddItem(
+                new MenuItem("HitChance", "Hit Chance").SetValue(new StringList(new[] {"Medium", "High", "Very High"}, 1)));
 
             #region DrawDamage
 
@@ -180,12 +181,12 @@ namespace SSKhaZix
                 DrawDamage.Fill = drawFill.GetValue<Circle>().Active;
                 DrawDamage.FillColor = drawFill.GetValue<Circle>().Color;
                 dmgAfterShave.ValueChanged +=
-                    delegate (object sender, OnValueChangeEventArgs eventArgs)
+                    delegate(object sender, OnValueChangeEventArgs eventArgs)
                     {
                         DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
                     };
 
-                drawFill.ValueChanged += delegate (object sender, OnValueChangeEventArgs eventArgs)
+                drawFill.ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
                 {
                     DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
                     DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
@@ -203,13 +204,80 @@ namespace SSKhaZix
 
             Game.OnUpdate += GameOnUpdate;
             Drawing.OnDraw += DrawingOnOnDraw;
-            Obj_AI_Base.OnProcessSpellCast += ObjAiHeroOnOnProcessSpellCast;
+            //Obj_AI_Base.OnProcessSpellCast += ObjAiHeroOnOnProcessSpellCast;
+            GameObject.OnCreate += GameObjectOnOnCreate;
+            GameObject.OnDelete += GameObjectOnOnDelete;
+            //Obj_AI_Base.OnBuffGain += ObjAiBaseOnOnBuffAdd;
             Chat.Print("<font color='#800040'>[SurvivorSeries] Kha'Zix</font> <font color='#ff6600'>Loaded.</font>");
 
             #endregion
         }
 
-        private void ObjAiHeroOnOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private void GameObjectOnOnDelete(GameObject sender, EventArgs args)
+        {
+            if (sender.Name == "Khazix_Base_E_WeaponTrails.troy")
+            {
+                KhaETrail = null;
+                _isMidAir = false;
+            }
+            if (sender.Name == "Khazix_Base_E_Land.troy")
+            {
+                KhaELand = null;
+                _isMidAir = false;
+            }
+            /*if (!sender.IsMe && Player.Distance(sender.Position) < 400 && sender.Name.ToLower().Contains(".troy"))
+            {
+                Console.WriteLine("DELETE:"+sender.Name + " | " + sender.Flags + " | " + sender.Position);
+                if (sender.Name == "Khazix_Base_E_WeaponTrails.troy")
+                {
+                    KhaETrail = null;
+                    _isMidAir = false;
+                }
+                if (sender.Name == "Khazix_Base_E_Land.troy")
+                {
+                    KhaELand = null;
+                    _isMidAir = false;
+                }
+            }*/
+        }
+
+        /*private void ObjAiBaseOnOnBuffAdd(Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs args)
+        {
+            if (!sender.IsMe)
+            {
+                Console.WriteLine(args.Buff.Name + " | " + args.Buff.EndTime + " | " + args.Buff.SourceName);
+            }
+        }*/
+
+        private void GameObjectOnOnCreate(GameObject sender, EventArgs args)
+        {
+            if (sender.Name == "Khazix_Base_E_WeaponTrails.troy")
+            {
+                KhaETrail = sender as Obj_AI_Base;
+                _isMidAir = true;
+            }
+            if (sender.Name == "Khazix_Base_E_Land.troy")
+            {
+                KhaELand = sender as Obj_AI_Base;
+                _isMidAir = false;
+            }
+            /*if (!sender.IsMe && Player.Distance(sender.Position) < 400 && sender.Name.ToLower().Contains(".troy"))
+            {
+                //Console.WriteLine(sender.Name + " | " + sender.Flags + " | " + sender.Position);
+                if (sender.Name == "Khazix_Base_E_WeaponTrails.troy")
+                {
+                    KhaETrail = sender as Obj_AI_Base;
+                    _isMidAir = true;
+                }
+                if (sender.Name == "Khazix_Base_E_Land.troy")
+                {
+                    KhaELand = sender as Obj_AI_Base;
+                    _isMidAir = false;
+                }
+            }*/
+        }
+
+        /*private void ObjAiHeroOnOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!sender.IsMe)
                 return;
@@ -217,62 +285,62 @@ namespace SSKhaZix
             if ((sender.IsMe && (args.SData.Name == "KhazixE")) || (args.SData.DisplayName == "KhazixE") ||
                 (args.SData.Name == "KhazixELong") || (args.SData.DisplayName == "KhazixELong"))
             {
-                IsMidAir = true;
+                _isMidAir = true;
                 if (BoolEvolvedE)
-                    LeagueSharp.Common.Utility.DelayAction.Add(1500, () => IsMidAir = false);
+                    LeagueSharp.Common.Utility.DelayAction.Add(1500, () => _isMidAir = false);
                 else
-                    LeagueSharp.Common.Utility.DelayAction.Add(1200, () => IsMidAir = false);
+                    LeagueSharp.Common.Utility.DelayAction.Add(1200, () => _isMidAir = false);
             }
-        }
+        }*/
 
-        private void SebbySpell(Spell W, Obj_AI_Base target)
+        private void SebbySpell(Spell w, Obj_AI_Base target)
         {
-            var CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotLine;
+            var coreType2 = SebbyLib.Prediction.SkillshotType.SkillshotLine;
             var aoe2 = false;
 
-            if (W.Type == SkillshotType.SkillshotCircle)
+            if (w.Type == SkillshotType.SkillshotCircle)
             {
-                CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotCircle;
+                coreType2 = SebbyLib.Prediction.SkillshotType.SkillshotCircle;
                 aoe2 = true;
             }
 
-            if ((W.Width > 80) && !W.Collision)
+            if ((w.Width > 80) && !w.Collision)
                 aoe2 = true;
 
             var predInput2 = new PredictionInput
             {
                 Aoe = aoe2,
-                Collision = W.Collision,
-                Speed = W.Speed,
-                Delay = W.Delay,
-                Range = W.Range,
+                Collision = w.Collision,
+                Speed = w.Speed,
+                Delay = w.Delay,
+                Range = w.Range,
                 From = Player.ServerPosition,
-                Radius = W.Width,
+                Radius = w.Width,
                 Unit = target,
-                Type = CoreType2
+                Type = coreType2
             };
             var poutput2 = Prediction.GetPrediction(predInput2);
 
             if (OktwCommon.CollisionYasuo(Player.ServerPosition, poutput2.CastPosition))
                 return;
 
-            if ((W.Speed != float.MaxValue) && OktwCommon.CollisionYasuo(Player.ServerPosition, poutput2.CastPosition))
+            if ((w.Speed != float.MaxValue) && OktwCommon.CollisionYasuo(Player.ServerPosition, poutput2.CastPosition))
                 return;
 
             if (Config.Item("HitChance").GetValue<StringList>().SelectedIndex == 0)
             {
                 if (poutput2.Hitchance >= HitChance.Medium)
-                    W.Cast(poutput2.CastPosition);
+                    w.Cast(poutput2.CastPosition);
             }
             else if (Config.Item("HitChance").GetValue<StringList>().SelectedIndex == 1)
             {
                 if (poutput2.Hitchance >= HitChance.High)
-                    W.Cast(poutput2.CastPosition);
+                    w.Cast(poutput2.CastPosition);
             }
             else if (Config.Item("HitChance").GetValue<StringList>().SelectedIndex == 2)
             {
                 if (poutput2.Hitchance >= HitChance.VeryHigh)
-                    W.Cast(poutput2.CastPosition);
+                    w.Cast(poutput2.CastPosition);
             }
         }
 
@@ -289,23 +357,23 @@ namespace SSKhaZix
                 Render.Circle.DrawCircle(Player.Position, E.Range, System.Drawing.Color.Chartreuse);
 
             if (Config.Item("DrawIsMidAirDebug").GetValue<bool>())
-                switch (IsMidAir)
+                switch (_isMidAir)
                 {
                     case true:
-                        {
-                            var drawPos = Drawing.WorldToScreen(Player.Position);
-                            var textSize = Drawing.GetTextEntent(("IsMidAir: True"), 15);
-                            Drawing.DrawText(drawPos.X - textSize.Width - 70f, drawPos.Y, System.Drawing.Color.Chartreuse,
-                                "IsMidAir: True");
-                        }
+                    {
+                        var drawPos = Drawing.WorldToScreen(Player.Position);
+                        var textSize = Drawing.GetTextEntent(("IsMidAir: True"), 15);
+                        Drawing.DrawText(drawPos.X - textSize.Width - 70f, drawPos.Y, System.Drawing.Color.Chartreuse,
+                            "IsMidAir: True");
+                    }
                         break;
                     case false:
-                        {
-                            var drawPos = Drawing.WorldToScreen(Player.Position);
-                            var textSize = Drawing.GetTextEntent(("IsMidAir: False"), 15);
-                            Drawing.DrawText(drawPos.X - textSize.Width - 70f, drawPos.Y, System.Drawing.Color.DeepPink,
-                                "IsMidAir: False");
-                        }
+                    {
+                        var drawPos = Drawing.WorldToScreen(Player.Position);
+                        var textSize = Drawing.GetTextEntent(("IsMidAir: False"), 15);
+                        Drawing.DrawText(drawPos.X - textSize.Width - 70f, drawPos.Y, System.Drawing.Color.DeepPink,
+                            "IsMidAir: False");
+                    }
                         break;
                 }
 
@@ -319,7 +387,7 @@ namespace SSKhaZix
             {
                 var drawPos = Drawing.WorldToScreen(enemy.Position);
                 var textSize = Drawing.GetTextEntent(("Isolated!"), 15);
-                Drawing.DrawText(drawPos.X - textSize.Width / 2f, drawPos.Y, System.Drawing.Color.Chartreuse, "Isolated!");
+                Drawing.DrawText(drawPos.X - textSize.Width/2f, drawPos.Y, System.Drawing.Color.Chartreuse, "Isolated!");
             }
         }
 
@@ -405,29 +473,29 @@ namespace SSKhaZix
 
         private void Combo()
         {
-            var UseQ = Config.Item("ComboUseQ").GetValue<bool>();
-            var UseW = Config.Item("ComboUseW").GetValue<bool>();
-            var UseE = Config.Item("ComboUseE").GetValue<bool>();
-            var UseR = Config.Item("ComboUseR").GetValue<bool>();
-            var DontEUnderTurret = Config.Item("ComboDontEUnderTurret").GetValue<bool>();
-            var ComboMinimumREnemies = Config.Item("ComboMinimumREnemies").GetValue<Slider>().Value;
+            var useQ = Config.Item("ComboUseQ").GetValue<bool>();
+            var useW = Config.Item("ComboUseW").GetValue<bool>();
+            var useE = Config.Item("ComboUseE").GetValue<bool>();
+            var useR = Config.Item("ComboUseR").GetValue<bool>();
+            var dontEUnderTurret = Config.Item("ComboDontEUnderTurret").GetValue<bool>();
+            var comboMinimumREnemies = Config.Item("ComboMinimumREnemies").GetValue<Slider>().Value;
 
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
             if ((target == null) || !target.IsValidTarget())
                 return;
 
-            if (UseR && (Player.CountEnemiesInRange(E.Range) >= ComboMinimumREnemies) && R.Instance.IsReady())
+            if (useR && (Player.CountEnemiesInRange(E.Range) >= comboMinimumREnemies) && R.Instance.IsReady())
                 R.Cast();
 
-            if (UseE && E.Instance.IsReady() && !Q.IsInRange(target))
+            if (useE && E.Instance.IsReady() && !Q.IsInRange(target))
             {
-                if (target.UnderTurret() && DontEUnderTurret)
+                if (target.UnderTurret() && dontEUnderTurret)
                     return;
                 E.Cast(target.Position);
             }
-            if (UseQ && Q.Instance.IsReady())
+            if (useQ && Q.Instance.IsReady())
                 Q.CastOnUnit(target);
-            if ((IsMidAir && target.IsValidTarget(Hydra.Range)) || target.IsValidTarget(Tiamat.Range) ||
+            if ((_isMidAir && target.IsValidTarget(Hydra.Range)) || target.IsValidTarget(Tiamat.Range) ||
                 target.IsValidTarget(TitanicHydra.Range))
             {
                 if (Hydra.IsReady())
@@ -437,7 +505,7 @@ namespace SSKhaZix
                 if (Tiamat.IsReady())
                     Tiamat.Cast();
             }
-            if (UseW && W.Instance.IsReady())
+            if (useW && W.Instance.IsReady())
                 SebbySpell(W, target);
 
             if (Youmuu.IsReady() && target.IsValidTarget(Player.AttackRange + 400))
@@ -452,11 +520,11 @@ namespace SSKhaZix
 
         private void HarassMode()
         {
-            var UseQ = Config.Item("HarassQ").GetValue<bool>();
-            var UseW = Config.Item("HarassW").GetValue<bool>();
-            var HarassManaManager = Config.Item("HarassManaManager").GetValue<Slider>().Value;
+            var useQ = Config.Item("HarassQ").GetValue<bool>();
+            var useW = Config.Item("HarassW").GetValue<bool>();
+            var harassManaManager = Config.Item("HarassManaManager").GetValue<Slider>().Value;
 
-            if (Player.ManaPercent < HarassManaManager)
+            if (Player.ManaPercent < harassManaManager)
                 return;
 
             var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
@@ -464,48 +532,48 @@ namespace SSKhaZix
             if ((target == null) || !target.IsValidTarget())
                 return;
 
-            if (UseQ && Q.Instance.IsReady() && target.IsValidTarget(Q.Range))
+            if (useQ && Q.Instance.IsReady() && target.IsValidTarget(Q.Range))
                 Q.CastOnUnit(target);
 
-            if (UseW && W.Instance.IsReady() && target.IsValidTarget(W.Range))
+            if (useW && W.Instance.IsReady() && target.IsValidTarget(W.Range))
                 SebbySpell(W, target);
         }
 
         private void LastHit()
         {
-            var UseQ = Config.Item("LastHitQ").GetValue<bool>();
-            var UseW = Config.Item("LastHitW").GetValue<bool>();
-            var LastHitManaManager = Config.Item("LastHitManaManager").GetValue<Slider>().Value;
+            var useQ = Config.Item("LastHitQ").GetValue<bool>();
+            var useW = Config.Item("LastHitW").GetValue<bool>();
+            var lastHitManaManager = Config.Item("LastHitManaManager").GetValue<Slider>().Value;
 
-            if (Player.ManaPercent < LastHitManaManager)
+            if (Player.ManaPercent < lastHitManaManager)
                 return;
 
             var minion = Cache.GetMinions(Player.Position, W.Range, MinionTeam.Enemy).FirstOrDefault();
             if ((minion == null) || !minion.IsValidTarget())
                 return;
 
-            if (UseQ && Q.Instance.IsReady() && (minion.Health < Q.GetDamage(minion)))
+            if (useQ && Q.Instance.IsReady() && (minion.Health < Q.GetDamage(minion)))
                 Q.CastOnUnit(minion);
 
-            if (UseW && W.Instance.IsReady() && (minion.Health < W.GetDamage(minion)))
+            if (useW && W.Instance.IsReady() && (minion.Health < W.GetDamage(minion)))
                 W.Cast(minion.Position);
         }
 
         private void LaneClear()
         {
-            var UseQ = Config.Item("LaneClearQ").GetValue<bool>();
-            var UseW = Config.Item("LaneClearW").GetValue<bool>();
-            var UseE = Config.Item("LaneClearE").GetValue<bool>();
-            var UseItems = Config.Item("LaneClearItems").GetValue<bool>();
-            var LaneClearManaManager = Config.Item("LaneClearManaManager").GetValue<Slider>().Value;
-            var MinimumEMinions = Config.Item("MinimumEMinions").GetValue<Slider>().Value;
+            var useQ = Config.Item("LaneClearQ").GetValue<bool>();
+            var useW = Config.Item("LaneClearW").GetValue<bool>();
+            var useE = Config.Item("LaneClearE").GetValue<bool>();
+            var useItems = Config.Item("LaneClearItems").GetValue<bool>();
+            var laneClearManaManager = Config.Item("LaneClearManaManager").GetValue<Slider>().Value;
+            var minimumEMinions = Config.Item("MinimumEMinions").GetValue<Slider>().Value;
 
             var minionsq =
                 Cache.GetMinions(Player.ServerPosition, Q.Range, MinionTeam.Enemy)
                     .OrderByDescending(x => x.Distance(Player.Position))
                     .FirstOrDefault();
 
-            if (UseItems)
+            if (useItems)
             {
                 if (Hydra.IsReady() && minionsq.IsValidTarget(Hydra.Range))
                     Hydra.Cast();
@@ -514,41 +582,41 @@ namespace SSKhaZix
                     Tiamat.Cast();
             }
 
-            if (Player.ManaPercent < LaneClearManaManager)
+            if (Player.ManaPercent < laneClearManaManager)
                 return;
 
             var minionselist = Cache.GetMinions(Player.ServerPosition, E.Range, MinionTeam.Enemy);
             var minionsw = minionselist.OrderByDescending(x => x.Distance(Player.Position)).FirstOrDefault();
             var minionse = E.GetCircularFarmLocation(minionselist);
 
-            if (UseQ && Q.Instance.IsReady() && minionsq.IsValidTarget() && (minionsq != null) &&
+            if (useQ && Q.Instance.IsReady() && minionsq.IsValidTarget() && (minionsq != null) &&
                 (minionsq.Health < GetRealQDamage(minionsq)))
                 Q.CastOnUnit(minionsq);
 
-            if (UseW && W.Instance.IsReady() && minionsw.IsValidTarget() && (minionsw != null) &&
+            if (useW && W.Instance.IsReady() && minionsw.IsValidTarget() && (minionsw != null) &&
                 (minionsw.Health < W.GetDamage(minionsw)))
                 W.Cast(minionsw.ServerPosition);
 
-            if ((minionse.MinionsHit >= MinimumEMinions) && UseE &&
+            if ((minionse.MinionsHit >= minimumEMinions) && useE &&
                 E.Instance.IsReady())
                 E.Cast(minionse.Position);
         }
 
         private void JungleClear()
         {
-            var UseQ = Config.Item("JungleClearQ").GetValue<bool>();
-            var UseW = Config.Item("JungleClearW").GetValue<bool>();
-            var UseE = Config.Item("JungleClearE").GetValue<bool>();
-            var UseItems = Config.Item("JungleClearItems").GetValue<bool>();
-            var JungleClearManaManager = Config.Item("JungleClearManaManager").GetValue<Slider>().Value;
-            var MinimumEJungleMobs = Config.Item("MinimumEJungleMobs").GetValue<Slider>().Value;
+            var useQ = Config.Item("JungleClearQ").GetValue<bool>();
+            var useW = Config.Item("JungleClearW").GetValue<bool>();
+            var useE = Config.Item("JungleClearE").GetValue<bool>();
+            var useItems = Config.Item("JungleClearItems").GetValue<bool>();
+            var jungleClearManaManager = Config.Item("JungleClearManaManager").GetValue<Slider>().Value;
+            var minimumEJungleMobs = Config.Item("MinimumEJungleMobs").GetValue<Slider>().Value;
 
             var junglemobsq =
                 Cache.GetMinions(Player.Position, Q.Range, MinionTeam.Neutral)
                     .OrderByDescending(x => x.MaxHealth)
                     .FirstOrDefault();
 
-            if (UseItems)
+            if (useItems)
             {
                 if (Hydra.IsReady() && junglemobsq.IsValidTarget(Hydra.Range))
                     Hydra.Cast();
@@ -557,7 +625,7 @@ namespace SSKhaZix
                     Tiamat.Cast();
             }
 
-            if (Player.ManaPercent < JungleClearManaManager)
+            if (Player.ManaPercent < jungleClearManaManager)
                 return;
 
             var minionselist = Cache.GetMinions(Player.ServerPosition, E.Range, MinionTeam.Neutral);
@@ -568,19 +636,19 @@ namespace SSKhaZix
 
             if (Config.Item("JungleClearDontEQRange").GetValue<bool>() && (Player.Distance(minionse.Position) > Q.Range))
             {
-                if ((minionse.MinionsHit >= MinimumEJungleMobs) && UseE && E.Instance.IsReady())
+                if ((minionse.MinionsHit >= minimumEJungleMobs) && useE && E.Instance.IsReady())
                     E.Cast(minionse.Position);
             }
             else if (!Config.Item("JungleClearDontEQRange").GetValue<bool>())
             {
-                if ((minionse.MinionsHit >= MinimumEJungleMobs) && UseE && E.Instance.IsReady())
+                if ((minionse.MinionsHit >= minimumEJungleMobs) && useE && E.Instance.IsReady())
                     E.Cast(minionse.Position);
             }
 
-            if (junglemobsq.IsValidTarget() && UseQ && Q.Instance.IsReady())
+            if (junglemobsq.IsValidTarget() && useQ && Q.Instance.IsReady())
                 Q.CastOnUnit(junglemobsq);
 
-            if (minionsw.IsValidTarget() && UseW && W.Instance.IsReady())
+            if (minionsw.IsValidTarget() && useW && W.Instance.IsReady())
                 W.Cast(minionsw.Position);
         }
 
@@ -598,12 +666,12 @@ namespace SSKhaZix
         private double GetRealQDamage(Obj_AI_Base enemy)
         {
             if (Q.Range < 326)
-                return 0.984 * Player.GetSpellDamage(enemy, SpellSlot.Q, IsIsolated(enemy) ? 1 : 0);
+                return 0.984*Player.GetSpellDamage(enemy, SpellSlot.Q, IsIsolated(enemy) ? 1 : 0);
             if (Q.Range > 325)
             {
                 var isolated = IsIsolated(enemy);
                 if (isolated)
-                    return 0.984 * Player.GetSpellDamage(enemy, SpellSlot.Q, 3);
+                    return 0.984*Player.GetSpellDamage(enemy, SpellSlot.Q, 3);
                 return Player.GetSpellDamage(enemy, SpellSlot.Q, 0);
             }
             return 0;
@@ -628,7 +696,7 @@ namespace SSKhaZix
             else if (Hydra.IsReady())
                 damage += Player.GetItemDamage(enemy, Damage.DamageItems.Hydra);
 
-            return (float)damage;
+            return (float) damage;
         }
     }
 }

@@ -1810,7 +1810,7 @@ namespace PortAIO
                             KhazixSharp.Program.Main();
                             break;
                         case 2: // SSKha'Zix
-                            SSKhaZix.SSKhaXiz.Main();
+                            SSKhaZix.SsKhaXiz.Main();
                             break;
                     }
                     break;
