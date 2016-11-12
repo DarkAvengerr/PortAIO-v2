@@ -16,7 +16,6 @@ using EloBuddy;
         {
             try
             {
-                // ReSharper disable once ObjectCreationAsStatement
                 new Champion.Kennen();
             }
             catch (Exception exception)
