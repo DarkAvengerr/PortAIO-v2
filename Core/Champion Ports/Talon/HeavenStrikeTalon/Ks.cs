@@ -19,20 +19,13 @@ using EloBuddy;
     {
         public static void UpdateKs()
         {
+            if (Player.HasBuff("TalonRStealth"))
+                return;
             foreach (var hero in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range) && !x.IsZombie))
             {
                 if (WKs && W.IsReady() && W.GetDamage(hero)*2 >= hero.Health)
                 {
                     W.Cast(hero);
-                }
-                if (RKs && R1IsReady() && R.GetDamage(hero) >= hero.Health)
-                {
-                    var pred = R.GetPrediction(hero);
-                    if (!pred.CastPosition.IsWall() && pred.Hitchance >= HitChance.Medium)
-                    {
-                        R.Cast(pred.CastPosition);
-                        LastUltPos = Player.Position.To2D();
-                    }
                 }
                 if (BotrkKs && ItemData.Blade_of_the_Ruined_King.GetItem().IsReady()
                     && ItemData.Blade_of_the_Ruined_King.GetItem().IsInRange(hero) &&
@@ -66,20 +59,6 @@ using EloBuddy;
                         {
                             ItemData.Ravenous_Hydra_Melee_Only.GetItem().Cast();
                         }
-                    }
-                }
-            }
-            if (Player.HasBuff("talonshadowassaultbuff"))
-            {
-                foreach (var hero in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range, true, 
-                    LastUltPos.IsValid() ? LastUltPos.To3D() : default(Vector3)) && !x.IsZombie))
-                {
-                    if (R.GetDamage(hero) >= hero.Health)
-                    {
-                        if (R2IsReady())
-                            R.Cast();
-                        else if (HasItem())
-                            CastItem();
                     }
                 }
             }

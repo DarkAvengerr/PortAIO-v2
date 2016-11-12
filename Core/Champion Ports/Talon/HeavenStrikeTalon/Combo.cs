@@ -20,105 +20,39 @@ using EloBuddy;
     {
         public static void UpdateCombo()
         {
-            if(WCasted)
+            //Q dash
+            if (Q.IsReady() && Q1Combo)
             {
-                if (R1IsReady() && RCombo)
-                    R.Cast();
-                else if (Q.IsReady() && Player.HasBuff("talonshadowassaultbuff") && !Orbwalking.CanAttack()
-                    && !HasItem() && !OutOfAA(TargetSelect(Player.BoundingRadius + Player.AttackRange + 70)))
-                    Q.Cast();
-                else if (HasItem() && WCasted && (!R1IsReady() || !RCombo))
-                    CastItem();
-            }
-            if (W.IsReady() && WCombo)
-            {
-                var targetW = TargetSelect(W.Range);
-                if (targetW.IsValidTarget() && !targetW.IsZombie && !OutOfAA(targetW) && !Q.IsReady()
-                    && Orbwalking.CanMove(80) && !Orbwalking.CanAttack())
+                var target = TargetSelect(Q.Range);
+                if (target != null && !Orbwalking.InAutoAttackRange(target) && Orbwalking.CanMove(90))
                 {
-                    W.Cast(targetW);
-                }
-                else if (targetW.IsValidTarget() && !targetW.IsZombie && OutOfAA(targetW)
-                    && Orbwalking.CanMove(80) && (!E.IsReady() || !ECombo))
-                {
-                    W.Cast(targetW);
+                    Q.Cast(target);
                 }
             }
-            if (E.IsReady() && ECombo)
+            //W
+            if (W.IsReady() && WCombo && !Player.HasBuff("TalonRStealth"))
             {
-                var targetE = TargetSelect(E.Range);
-                if (targetE.IsValidTarget() && !targetE.IsZombie && OutOfAA(targetE) && Orbwalking.CanAttack())
+                var target = TargetSelect(W.Range);
+                if (target != null && Orbwalking.CanMove(90) && !(Orbwalking.CanAttack() && Orbwalking.InAutoAttackRange(target)))
                 {
-                    E.Cast(targetE);
-                }
-                else if (targetE.IsValidTarget() && !targetE.IsZombie && OutOfAA(targetE) && !Orbwalking.CanAttack() && Orbwalking.CanMove(80))
-                {
-                    var x = Prediction.GetPrediction(targetE, Player.AttackDelay - (Utils.GameTimeTickCount - Orbwalking.LastAATick));
-                    var y = Prediction.GetPrediction(Player, Player.AttackDelay - (Utils.GameTimeTickCount - Orbwalking.LastAATick));
-                    if (x.UnitPosition.To2D().Distance(y.UnitPosition.To2D()) > E.Range)
-                        E.Cast(targetE);
+                    W.Cast(target);
                 }
             }
+            //R1
             if (R1IsReady() && RCombo)
             {
-                var targetR = TargetSelect(R.Range);
-                if (targetR.IsValidTarget() && !targetR.IsZombie && OutOfAA(targetR) && (!E.IsReady() || !ECombo) && (!W.IsReady() || !WCombo))
+                var target = TargetSelect(R.Range);
+                if (target != null && Orbwalking.CanMove(90) && (Orbwalking.InAutoAttackRange(target) || Q.IsReady()))
                 {
                     R.Cast();
-                    LastUltPos = Player.Position.To2D();
-                }
-                else if (targetR.IsValidTarget() && !targetR.IsZombie && !OutOfAA(targetR)
-                    && (!W.IsReady() || !WCombo) && !Orbwalking.CanAttack() && Orbwalking.CanMove(80))
-                {
-                    R.Cast();
-                    LastUltPos = Player.Position.To2D();
-                }
-            }
-            if (Player.HasBuff("talonshadowassaultbuff") && RCombo)
-            {
-                var targetR2 = TargetSelect(R.Range, LastUltPos.IsValid() ? LastUltPos.To3D() : (Vector3?)null);
-                if (targetR2.IsValidTarget() && !targetR2.IsZombie && targetR2.Position.To2D().Distance(LastUltPos) >= 450 &&
-                    (OutOfAA(targetR2) || (!OutOfAA(targetR2) && !Orbwalking.CanAttack() && Orbwalking.CanMove(80))))
-                {
-                    if (R2IsReady())
-                        R.Cast();
-                    else if (HasItem())
-                        CastItem();
-                }
-            }
-            if (ItemData.Blade_of_the_Ruined_King.GetItem().IsReady() || ItemData.Bilgewater_Cutlass.GetItem().IsReady() ||
-                ItemData.Youmuus_Ghostblade.GetItem().IsReady())
-            {
-                var targetA = TargetSelect(550);
-                if (targetA.IsValidTarget() && !targetA.IsZombie)
-                {
-                    if (BotrkCombo)
-                    {
-                        ItemData.Blade_of_the_Ruined_King.GetItem().Cast(targetA);
-                        ItemData.Bilgewater_Cutlass.GetItem().Cast(targetA);
-                    }
-                    if (YoumuuCombo)
-                        ItemData.Youmuus_Ghostblade.GetItem().Cast(targetA);
                 }
             }
         }
         public static void AfterAttackCombo(AttackableUnit unit, AttackableUnit target)
         {
-            if (W.IsReady() && WCombo && R1IsReady() && RCombo)
+            if (Q.IsReady())
             {
-                W.Cast(target as Obj_AI_Base);
-                WCasted = true;
-                WCount = Utils.GameTimeTickCount;
-            }
-            else if (Q.IsReady())
-            {
-                Q.Cast();
-            }
-            else if (W.IsReady() && WCombo)
-            {
-                W.Cast(target as Obj_AI_Base);
-                WCasted = true;
-                WCount = Utils.GameTimeTickCount;
+                Q.Cast(target as Obj_AI_Base);
             }
             else if (HasItem())
             {
@@ -127,17 +61,15 @@ using EloBuddy;
         }
         public static void BeforeAttackCombo(Orbwalking.BeforeAttackEventArgs args)
         {
-            var target = args.Target as Obj_AI_Base;
-            var x = Prediction.GetPrediction(args.Target as Obj_AI_Base, Player.AttackCastDelay);
-            var chasedis = (Player.Position.To2D().Distance(x.UnitPosition.To2D())
-                - Player.BoundingRadius - target.BoundingRadius - Player.AttackRange);
-            var chasespeed = (Player.MoveSpeed - target.MoveSpeed);
-            var chasetime = chasedis / chasespeed;
-            if (Q.IsReady() && (!E.IsReady() || !ECombo) && OutOfAA(x.UnitPosition.To2D(),target)
-                && (chasetime >= Player.AttackDelay || chasetime < 0))
+
+            if (args.Unit.IsMe )
+
             {
-                args.Process = false;
-                Q.Cast();
+
+                if (ItemData.Youmuus_Ghostblade.GetItem().IsReady())
+
+                    ItemData.Youmuus_Ghostblade.GetItem().Cast();
+
             }
         }
     }

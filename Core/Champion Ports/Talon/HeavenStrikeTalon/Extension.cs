@@ -48,11 +48,11 @@ using EloBuddy;
         }
         public static bool R1IsReady()
         {
-            return R.IsReady() && !Player.HasBuff("talonshadowassaultbuff") ;
+            return R.IsReady() && !Player.HasBuff("TalonRStealth") ;
         }
         public static bool R2IsReady()
         {
-            return R.IsReady() && Player.HasBuff("talonshadowassaultbuff") ;
+            return R.IsReady() && Player.HasBuff("TalonRStealth") ;
         }
 
     }

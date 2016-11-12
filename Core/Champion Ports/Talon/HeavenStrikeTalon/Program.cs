@@ -14,6 +14,7 @@ using EloBuddy;
 {
     using static Gettarget;
     using static Extension;
+    // TalonRStealth , TalonRHaste;
     public static class Program
     {
         public static AIHeroClient Player { get { return ObjectManager.Player; } }
@@ -31,13 +32,13 @@ using EloBuddy;
             Game_OnGameLoad();
         }
 
-        static void Game_OnGameLoad()
+        private static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Talon")
                 return;
             // spells
-            Q = new Spell(SpellSlot.Q);
-            W = new Spell(SpellSlot.W, 650);
+            Q = new Spell(SpellSlot.Q, 550);
+            W = new Spell(SpellSlot.W, 750);
             W.SetSkillshot(0.25f, 60, 1850, false, SkillshotType.SkillshotCone);
             W.MinHitChance = HitChance.Low;
             E = new Spell(SpellSlot.E, 700);
@@ -69,11 +70,9 @@ using EloBuddy;
 
             Harass.AddItem(new MenuItem("harass w", "W").SetValue(true));
 
-            Combo.AddItem(new MenuItem("combo e", "E").SetValue(true));
+            Combo.AddItem(new MenuItem("combo q1", "Q dash").SetValue(true));
             Combo.AddItem(new MenuItem("combo w", "W").SetValue(true));
             Combo.AddItem(new MenuItem("combo r", "R").SetValue(true));
-            Combo.AddItem(new MenuItem("combo youmuu", "Youmuu").SetValue(true));
-            Combo.AddItem(new MenuItem("combo botrk", "Bilgewater/Botrk").SetValue(true));
 
             LaneClear.AddItem(new MenuItem("laneclear q", "Q").SetValue(true));
             LaneClear.AddItem(new MenuItem("laneclear w", "W").SetValue(false));
@@ -84,7 +83,6 @@ using EloBuddy;
             JungClear.AddItem(new MenuItem("jungleclear tiamat", "Tiamat/Ravenous Hydra").SetValue(true));
 
             Ks.AddItem(new MenuItem("ks w", "W").SetValue(true));
-            Ks.AddItem(new MenuItem("ks r", "R").SetValue(true));
             Ks.AddItem(new MenuItem("ks tiamat", "Tiamat-Ravenous Hydra").SetValue(true));
             Ks.AddItem(new MenuItem("ks botrk", "Botrk").SetValue(true));
             Ks.AddItem(new MenuItem("ks cutlass", "Bilgewater Cutlass").SetValue(true));
@@ -198,11 +196,9 @@ using EloBuddy;
         public static bool WCasted = false;
         //menu variables
         public static bool WHarass => Menu.Item("harass w").GetValue<bool>();
+        public static bool Q1Combo => Menu.Item("combo q1").GetValue<bool>();
         public static bool WCombo => Menu.Item("combo w").GetValue<bool>();
-        public static bool ECombo => Menu.Item("combo e").GetValue<bool>();
         public static bool RCombo => Menu.Item("combo r").GetValue<bool>();
-        public static bool YoumuuCombo => Menu.Item("combo youmuu").GetValue<bool>();
-        public static bool BotrkCombo => Menu.Item("combo botrk").GetValue<bool>();
         public static bool QLaneClear => Menu.Item("laneclear q").GetValue<bool>();
         public static bool WLaneClear => Menu.Item("laneclear w").GetValue<bool>();
         public static bool TiamatLaneClear => Menu.Item("laneclear tiamat").GetValue<bool>();
@@ -210,7 +206,6 @@ using EloBuddy;
         public static bool WJungleClear => Menu.Item("jungleclear w").GetValue<bool>();
         public static bool TiamatJungleClear => Menu.Item("jungleclear tiamat").GetValue<bool>();
         public static bool WKs => Menu.Item("ks w").GetValue<bool>();
-        public static bool RKs => Menu.Item("ks r").GetValue<bool>();
         public static bool TiamatKs => Menu.Item("ks tiamat").GetValue<bool>();
         public static bool BotrkKs => Menu.Item("ks botrk").GetValue<bool>();
         public static bool CutlassKs => Menu.Item("ks cutlass").GetValue<bool>();

@@ -33,7 +33,7 @@ using EloBuddy;
                 return;
             if (QLaneClear && Q.IsReady())
             {
-                Q.Cast();
+                Q.Cast(target as Obj_AI_Base);
             }
             else if (TiamatLaneClear && HasItem())
             {
