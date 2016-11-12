@@ -38,7 +38,7 @@ using EloBuddy;
         {
             try
             {
-                var baseDir = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory);
+                var baseDir = Directory.GetParent(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EloBuddy\\");
                 if (baseDir != null && baseDir.Exists)
                 {
                     var lsharpDir = Directory.GetParent(baseDir.FullName);

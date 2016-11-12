@@ -546,7 +546,7 @@ namespace NLog.Targets
             }
 
             // Support for Virtual Paths
-            var root = AppDomain.CurrentDomain.BaseDirectory;
+            var root = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EloBuddy\\";
             var directory = pickupDirectoryLocation.Substring(virtualPathPrefix.Length).Replace('/', Path.DirectorySeparatorChar);
             var pickupRoot = Path.Combine(root, directory);
             return pickupRoot;

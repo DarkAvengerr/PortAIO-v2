@@ -171,6 +171,11 @@ namespace PortAIO
             {
                 PerfectWardReborn.Program.Main();
             }
+
+            if (Misc.menu.Item("xAwareness").GetValue<bool>())
+            {
+                xAwareness.Program.Main();
+            }
         }
 
         public static void LoadChampion()

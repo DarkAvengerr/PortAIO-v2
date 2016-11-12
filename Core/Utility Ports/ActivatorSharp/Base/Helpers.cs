@@ -361,7 +361,7 @@ using EloBuddy;
 
         public static void CreateLogPath()
         {
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cache", "activator");
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EloBuddy\\", "Cache", "activator");
 
             if (!Directory.Exists(path))
                  Directory.CreateDirectory(path);
@@ -370,7 +370,7 @@ using EloBuddy;
 
         public static void ExportSpellData(Gamedata data, string type = null)
         {
-            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cache", "activator",
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EloBuddy\\", "Cache", "activator",
                 $"activator_{data.ChampionName.ToLower()}.txt");
 
             var file = new StreamWriter(path, true);

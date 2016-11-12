@@ -48,7 +48,7 @@ using EloBuddy;
 
         private static string GetCachedPath(string championName)
         {
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cache", "xAwareness");
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\EloBuddy\\", "Cache", "xAwareness");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);

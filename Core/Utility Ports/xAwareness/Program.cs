@@ -12,7 +12,7 @@ using EloBuddy;
     {
         private static ExtendedAwareness extendedAwareness;
 
-        static void Main(string[] args)
+        public static void Main()
         {
 
             extendedAwareness = new ExtendedAwareness();

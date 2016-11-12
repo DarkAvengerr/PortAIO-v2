@@ -53,10 +53,7 @@ namespace xAwareness
         {
             try
             {
-                LeagueSharp.Common.Utility.DelayAction.Add(250, () =>
-                {
-                    Game.OnLoad += Game_OnGameLoad;
-                });
+                Game_OnGameLoad();
             }
             catch (Exception e)
             {
@@ -64,7 +61,7 @@ namespace xAwareness
             }
         }
 
-        private void Game_OnGameLoad(EventArgs args)
+        private void Game_OnGameLoad()
         {
             //menu = mainMenu;
             Chat.Print("<font size='30'>xAwareness</font> <font color='#b756c5'>by LordZEDith</font>");
