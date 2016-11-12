@@ -46,26 +46,6 @@ using EloBuddy;
                 return;
             }
 
-            if (E.IsReady() && Q.IsReady())
-            {
-                var position = Player.ServerPosition +
-                                   Vector3.Normalize(target.ServerPosition - Player.ServerPosition) * 590;
-
-                if (target.Distance(position) < Q.Range)
-                {
-                    var invSlot = FindBestWardItem();
-
-                    if (invSlot == null)
-                    {
-                        return;
-                    }
-
-                    Player.Spellbook.CastSpell(invSlot.SpellSlot, position);
-                    LastWardPos = position;
-                    LastPlaced = Utils.TickCount;
-                }
-            }
-
             if (Player.Distance(target.Position) < Q.Range)
             {
                 Q.Cast(target);
@@ -74,16 +54,6 @@ using EloBuddy;
 
         public static void WardJump()
         {
-            foreach (var ward in ObjectManager.Get<Obj_AI_Minion>().Where(ward =>
-                ward.Name.ToLower().Contains("ward") && ward.Distance(Game.CursorPos) < 250))
-            {
-                if (E.IsReady())
-                {
-                    E.Cast(ward);
-                    return;
-                }
-            }
-
             foreach (
                 var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.Distance(Game.CursorPos) < 250 && !hero.IsDead))
             {
@@ -103,36 +73,6 @@ using EloBuddy;
                     return;
                 }
             }
-
-            if (Utils.TickCount <= LastPlaced + 3000 || !E.IsReady())
-            {
-                return;
-            }
-
-            var cursorPos = Game.CursorPos;
-            var myPos = Player.ServerPosition;
-            var delta = cursorPos - myPos;
-
-            delta.Normalize();
-
-            var wardPosition = myPos + delta * (600 - 5);
-            var invSlot = FindBestWardItem();
-
-            if (invSlot == null)
-            {
-                return;
-            }
-
-            Items.UseItem((int)invSlot.Id, wardPosition);
-            LastWardPos = wardPosition;
-            LastPlaced = Utils.TickCount;
-        }
-
-        private static InventorySlot FindBestWardItem()
-        {
-            var slot = Items.GetWardSlot();
-
-            return slot == default(InventorySlot) ? null : slot;
         }
     }
 }

@@ -69,59 +69,70 @@ using EloBuddy;
                 Menu.AddSubMenu(farm);
             }
 
-            var initator = new Menu("Initiator", "Initiator");
+            var lasthit = new Menu("LastHit", "LastHit");
             {
-                foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsAlly))
+                farm.AddItem(new MenuItem("UseQLH", "Use Q", true).SetValue(false));
+                ManaManager.AddManaManagertoMenu(farm, "LastHit", 50);
+                Menu.AddSubMenu(lasthit);
+            }
+
+            var misc = new Menu("Misc", "Misc");
+            {
+                var initator = new Menu("Initiator", "Initiator");
                 {
-                    foreach (var intiator in Initiator.InitatorList)
+                    foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsAlly))
                     {
-                        if (intiator.HeroName == hero.CharData.BaseSkinName)
+                        foreach (var intiator in Initiator.InitatorList)
                         {
-                            initator.AddItem(new MenuItem(intiator.SpellName, intiator.SpellName, true)).SetValue(false);
+                            if (intiator.HeroName == hero.CharData.BaseSkinName)
+                            {
+                                initator.AddItem(new MenuItem(intiator.SpellName, intiator.SpellName, true)).SetValue(false);
+                            }
                         }
                     }
+                    misc.AddSubMenu(initator);
                 }
-                Menu.AddSubMenu(initator);
-            }
 
-            var wMenu = new Menu("W Settings", "WSettings");
-            {
-                wMenu.AddItem(new MenuItem("autoW", "Use W if hit", true).SetValue(new Slider(2, 1, 5)));
-                Menu.AddSubMenu(wMenu);
-            }
-
-            var eMenu = new Menu("E Settings", "ESettings");
-            {
-                eMenu.AddItem(new MenuItem("saveEMana", "Do not E To save Mana for Q+W", true).SetValue(true));
-                eMenu.AddItem(new MenuItem("UseEDmg", "Use E to Dmg", true).SetValue(true));
-                eMenu.AddSubMenu(new Menu("E Ally Inc Spell", "shield"));
-                eMenu.SubMenu("shield").AddItem(new MenuItem("eAllyIfHP", "If HP < %", true).SetValue(new Slider(40)));
-                foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(ally => ally.IsAlly))
+                var wMenu = new Menu("W Settings", "WSettings");
                 {
-                    eMenu.SubMenu("shield").AddItem(new MenuItem("shield" + ally.CharData.BaseSkinName, ally.CharData.BaseSkinName, true).SetValue(true));
+                    wMenu.AddItem(new MenuItem("autoW", "Use W if hit", true).SetValue(new Slider(2, 1, 5)));
+                    misc.AddSubMenu(wMenu);
                 }
 
-                Menu.AddSubMenu(eMenu);
-            }
-
-            var rMenu = new Menu("R Settings", "RSettings");
-            {
-                rMenu.AddItem(new MenuItem("RFlash", "R Flash Key", true).SetValue(new KeyBind('G', KeyBindType.Press)));
-                rMenu.AddItem(
-                    new MenuItem("RFlashCount", "Min RFlash Hit Count >= x", true).SetValue(new Slider(3, 1, 5)));
-                rMenu.AddItem(new MenuItem("UseInt", "Use R to Interrupt", true).SetValue(true));
-                rMenu.AddItem(new MenuItem("autoR", "Use R if hit (Global check)", true).SetValue(new Slider(3, 1, 5)));
-                rMenu.AddItem(new MenuItem("blockR", "Block R if no enemy", true).SetValue(true));
-                rMenu.AddItem(new MenuItem("overK", "OverKill Check", true).SetValue(true));
-                rMenu.AddItem(new MenuItem("killR", "Use R only if it hits multiple target", true).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Toggle)));
-                rMenu.AddSubMenu(new Menu("Auto use R on", "intR"));
-                rMenu.SubMenu("intR").AddItem(new MenuItem("AdditonalTargets", "Require Addition targets", true).SetValue(new Slider(1, 0, 4)));
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.Team != Player.Team))
+                var eMenu = new Menu("E Settings", "ESettings");
                 {
-                    rMenu.SubMenu("intR").AddItem(new MenuItem("intR" + enemy.CharData.BaseSkinName, enemy.CharData.BaseSkinName, true).SetValue(false));
+                    eMenu.AddItem(new MenuItem("saveEMana", "Do not E To save Mana for Q+W", true).SetValue(true));
+                    eMenu.AddItem(new MenuItem("UseEDmg", "Use E to Dmg", true).SetValue(true));
+                    eMenu.AddSubMenu(new Menu("E Ally Inc Spell", "shield"));
+                    eMenu.SubMenu("shield").AddItem(new MenuItem("eAllyIfHP", "If HP < %", true).SetValue(new Slider(40)));
+                    foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(ally => ally.IsAlly))
+                    {
+                        eMenu.SubMenu("shield").AddItem(new MenuItem("shield" + ally.CharData.BaseSkinName, ally.CharData.BaseSkinName, true).SetValue(true));
+                    }
+
+                    misc.AddSubMenu(eMenu);
                 }
 
-                Menu.AddSubMenu(rMenu);
+                var rMenu = new Menu("R Settings", "RSettings");
+                {
+                    rMenu.AddItem(new MenuItem("RFlash", "R Flash Key", true).SetValue(new KeyBind('G', KeyBindType.Press)));
+                    rMenu.AddItem(
+                        new MenuItem("RFlashCount", "Min RFlash Hit Count >= x", true).SetValue(new Slider(3, 1, 5)));
+                    rMenu.AddItem(new MenuItem("UseInt", "Use R to Interrupt", true).SetValue(true));
+                    rMenu.AddItem(new MenuItem("autoR", "Use R if hit (Global check)", true).SetValue(new Slider(3, 1, 5)));
+                    rMenu.AddItem(new MenuItem("blockR", "Block R if no enemy", true).SetValue(true));
+                    rMenu.AddItem(new MenuItem("overK", "OverKill Check", true).SetValue(true));
+                    rMenu.AddItem(new MenuItem("killR", "Use R only if it hits multiple target", true).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Toggle)));
+                    rMenu.AddSubMenu(new Menu("Auto use R on", "intR"));
+                    rMenu.SubMenu("intR").AddItem(new MenuItem("AdditonalTargets", "Require Addition targets", true).SetValue(new Slider(1, 0, 4)));
+                    foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.Team != Player.Team))
+                    {
+                        rMenu.SubMenu("intR").AddItem(new MenuItem("intR" + enemy.CharData.BaseSkinName, enemy.CharData.BaseSkinName, true).SetValue(false));
+                    }
+
+                    misc.AddSubMenu(rMenu);
+                }
+                Menu.AddSubMenu(misc);
             }
 
             var drawing = new Menu("Drawings", "Drawings");
@@ -559,17 +570,23 @@ using EloBuddy;
 
         private void LastHit()
         {
-            var allMinions = MinionManager.GetMinions(Player.ServerPosition, Q.Range);
-
-            if (Q.IsReady())
+            if (!ManaManager.HasMana("LastHit"))
             {
+                return;
+            }
+
+            if (Menu.Item("UseQLH", true).GetValue<bool>() && Q.IsReady())
+            {
+                var allMinions = MinionManager.GetMinions(Player.ServerPosition, Q.Range);
+
                 foreach (var minion in allMinions)
                 {
                     if (minion.IsValidTarget() &&
-                        HealthPrediction.GetHealthPrediction(minion, (int)(Player.Distance(minion.Position) * 1000 / 1400)) <
+                        HealthPrediction.GetHealthPrediction(minion, (int) (Player.Distance(minion.Position)*1000/1400)) <
                         Player.GetSpellDamage(minion, SpellSlot.Q) - 10)
                     {
-                        var prediction = xSaliceResurrected_Rework.Prediction.CommonPredEx.GetP(_currentBallPosition, Q, minion, true);
+                        var prediction = xSaliceResurrected_Rework.Prediction.CommonPredEx.GetP(_currentBallPosition, Q,
+                            minion, true);
 
                         if (prediction.Hitchance >= HitChance.High && Q.IsReady())
                         {
@@ -664,10 +681,6 @@ using EloBuddy;
                 case Orbwalking.OrbwalkingMode.LaneClear:
                     Farm();
                     break;
-                case Orbwalking.OrbwalkingMode.Freeze:
-                    break;
-                case Orbwalking.OrbwalkingMode.CustomMode:
-                    break;
                 case Orbwalking.OrbwalkingMode.None:
                     if (Menu.Item("RFlash", true).GetValue<KeyBind>().Active)
                     {
@@ -677,8 +690,6 @@ using EloBuddy;
                 case Orbwalking.OrbwalkingMode.Flee:
                     Escape();
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
         }
 

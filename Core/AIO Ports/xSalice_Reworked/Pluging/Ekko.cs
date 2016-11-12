@@ -236,7 +236,12 @@ using EloBuddy;
                     }
                 }
 
-                W.Cast(target.Position);
+                var wPred = W.GetPrediction(target);
+
+                if (wPred.Hitchance >= HitChance.VeryHigh)
+                {
+                    W.Cast(wPred.CastPosition);
+                }
             }
 
             if (Menu.Item("UseECombo", true).GetValue<bool>() && E.IsReady() && target.IsValidTarget(Q.Range))
@@ -488,7 +493,7 @@ using EloBuddy;
         {
             foreach (
                 var target in
-                HeroManager.Enemies.Where(x => x.IsValidTarget(Q2.Range)).OrderByDescending(GetComboDamage))
+                HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)).OrderByDescending(GetComboDamage))
             {
                 if (Menu.Item("Auto_Q_Kill", true).GetValue<bool>() && Q.IsReady())
                 {
@@ -600,7 +605,7 @@ using EloBuddy;
                     Render.Circle.DrawCircle(Player.Position, E.Range, E.IsReady() ? Color.Green : Color.Red);
             
             if (Menu.Item("Draw_R", true).GetValue<bool>())
-                if (R.Level > 0 && rMissile != null)
+                if (R.Level > 0 && rMissile != null && rMissile.IsValid)
                     Render.Circle.DrawCircle(rMissile.Position, R.Width,
                         R.IsReady() ? Color.FromArgb(29, 238, 64) : Color.RoyalBlue);
 

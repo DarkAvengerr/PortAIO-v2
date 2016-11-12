@@ -20,7 +20,6 @@ using EloBuddy;
         private Vector3 _flashVec;
         private int _lastE;
         private int _lastNotification;
-        private readonly List<AIHeroClient> _poisonTargets = new List<AIHeroClient>();
 
         public Cassiopeia()
         {
@@ -180,7 +179,6 @@ using EloBuddy;
                 customMenu.AddItem(myCust.AddToMenu("Harass Active: ", "Farm"));
                 customMenu.AddItem(myCust.AddToMenu("Harass(T) Active: ", "FarmT"));
                 customMenu.AddItem(myCust.AddToMenu("Laneclear Active: ", "LaneClear"));
-                customMenu.AddItem(myCust.AddToMenu("JungleClear Active: ", "Jungle"));
                 customMenu.AddItem(myCust.AddToMenu("LastHitE Active: ", "LastHitE"));
                 customMenu.AddItem(myCust.AddToMenu("Ult help Active: ", "forceUlt"));
                 customMenu.AddItem(myCust.AddToMenu("Ult Flash Active: ", "flashUlt"));
@@ -306,8 +304,7 @@ using EloBuddy;
                 return;
             }
 
-            if (Q.IsReady() || W.IsReady() ||
-                (E.IsReady() && _poisonTargets.Any(x => x.NetworkId == args.Target.NetworkId)))
+            if (Q.IsReady() || E.IsReady())
             {
                 args.Process = false;
             }
@@ -417,10 +414,12 @@ using EloBuddy;
                 return;
             }
 
-            if (_poisonTargets.Count > 0)
+            var targets = HeroManager.Enemies.Where(x => x.IsValidTarget(E.Range) && x.HasBuffOfType(BuffType.Poison));
+
+            if (targets.Any())
             {
                 var target =
-                    _poisonTargets.Where(x => x.IsValidTarget(E.Range))
+                    targets.Where(x => x.IsValidTarget(E.Range))
                         .Where(x => PoisonDuration(x) > E.Delay)
                         .OrderByDescending(GetComboDamage)
                         .FirstOrDefault();
@@ -432,32 +431,6 @@ using EloBuddy;
             }
         }
 
-        protected override void ObjAiBaseOnOnBuffAdd(Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs args)
-        {
-            if (sender.IsMe || !(sender is AIHeroClient) || !sender.IsEnemy)
-            {
-                return;
-            }
-
-            if (args.Buff.Type == BuffType.Poison)
-            {
-                _poisonTargets.Add((AIHeroClient)sender);
-            }
-        }
-
-        protected override void ObjAiBaseOnOnBuffLose(Obj_AI_Base sender, Obj_AI_BaseBuffLoseEventArgs args)
-        {
-            if (sender.IsMe || !(sender is AIHeroClient) || !sender.IsEnemy)
-            {
-                return;
-            }
-
-            if (args.Buff.Type == BuffType.Poison)
-            {
-                _poisonTargets.RemoveAll(
-                    x => x.NetworkId == sender.NetworkId && x.Buffs.Count(y => y.Type == BuffType.Poison) == 1);
-            }
-        }
 
         private void ImmobileCast()
         {

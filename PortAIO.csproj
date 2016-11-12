@@ -962,8 +962,10 @@
     <Compile Include="Core\AIO Ports\xSalice_Reworked\Pluging\Syndra.cs" />
     <Compile Include="Core\AIO Ports\xSalice_Reworked\Pluging\Urgot.cs" />
     <Compile Include="Core\AIO Ports\xSalice_Reworked\Pluging\Vayne.cs" />
+    <Compile Include="Core\AIO Ports\xSalice_Reworked\Pluging\Veigar.cs" />
     <Compile Include="Core\AIO Ports\xSalice_Reworked\Pluging\Viktor.cs" />
     <Compile Include="Core\AIO Ports\xSalice_Reworked\Pluging\Vladimir.cs" />
+    <Compile Include="Core\AIO Ports\xSalice_Reworked\Pluging\Zed.cs" />
     <Compile Include="Core\AIO Ports\xSalice_Reworked\Pluging\Zyra.cs" />
     <Compile Include="Core\AIO Ports\xSalice_Reworked\Program.cs" />
     <Compile Include="Core\AIO Ports\xSalice_Reworked\Utilities\CommonPredEx.cs" />
