@@ -136,13 +136,13 @@ using EloBuddy;
                 var damage = 0d;
 
                 damage += ObjectManager.Player.GetAutoAttackDamage(target) +
-                          (Player.Instance.Spellbook.GetSpell(SpellSlot.Q).IsReady()
+                          (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).IsReady()
                               ? ObjectManager.Player.GetSpellDamage(target, SpellSlot.Q)
                               : 0d) +
-                          (Player.Instance.Spellbook.GetSpell(SpellSlot.W).IsReady()
+                          (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).IsReady()
                               ? ObjectManager.Player.GetSpellDamage(target, SpellSlot.W)
                               : 0d) +
-                          (Player.Instance.Spellbook.GetSpell(SpellSlot.E).IsReady()
+                          (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).IsReady()
                               ? ObjectManager.Player.GetSpellDamage(target, SpellSlot.E)
                               : 0d) +
                           ((ObjectManager.Player.GetSpellSlot("SummonerDot") != SpellSlot.Unknown &&

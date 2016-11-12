@@ -161,6 +161,17 @@ using EloBuddy;
 
             #endregion Karthus
 
+            #region Kayle
+
+            Spells.Add(
+                new WSpellData
+                {
+                    ChampionName = "Kayle",
+                    SpellSlot = SpellSlot.Q
+                });
+
+            #endregion Kayle
+
             #region Leesin
 
             Spells.Add(

@@ -220,7 +220,7 @@ using EloBuddy;
                             {
                                 if (Args.Target.IsMe)
                                 {
-                                    CastW("Gangplank", x.SpellSlot);
+                                    CastW("Elise", x.SpellSlot);
                                 }
                             }
                             break;
@@ -285,6 +285,15 @@ using EloBuddy;
                                     ObjectManager.Player.Distance(target) <= 950f)
                                 {
                                     CastW("Kalista", x.SpellSlot);
+                                }
+                            }
+                            break;
+                        case "Kayle":
+                            if (x.SpellSlot == SpellSlot.Q)
+                            {
+                                if (Args.Target.IsMe)
+                                {
+                                    CastW("Kayle", x.SpellSlot);
                                 }
                             }
                             break;
