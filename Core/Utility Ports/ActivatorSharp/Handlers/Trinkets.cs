@@ -4,7 +4,9 @@ using Activator.Base;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Handlers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Handlers
 {
     internal class Trinkets
     {
@@ -32,7 +34,7 @@ using EloBuddy; namespace Activator.Handlers
             {
                 TrinketId = (int) item.Id;
 
-                if ((TrinketId == 3340 || TrinketId == 3341) && Player.Level >= 9)
+                if ((TrinketId == 3340 || TrinketId == 3341) && Player.Level >= 11)
                 {
                     Upgrade = true;
                 }
@@ -64,7 +66,7 @@ using EloBuddy; namespace Activator.Handlers
             var hero = sender as AIHeroClient;
             if (hero != null && hero.IsMe)
             {
-                if (Player.Level == 9)
+                if (Player.Level == 11)
                 {
                     Upgrade = true;
                 }

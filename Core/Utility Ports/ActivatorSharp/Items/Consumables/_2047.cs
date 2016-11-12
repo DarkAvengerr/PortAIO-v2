@@ -3,7 +3,9 @@ using Activator.Base;
 using Activator.Handlers;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Items.Consumables
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Items.Consumables
 {
     class _2047 : CoreItem
     {

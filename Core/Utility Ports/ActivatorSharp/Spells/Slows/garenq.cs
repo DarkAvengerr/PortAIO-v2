@@ -3,13 +3,16 @@ using Activator.Base;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Spells.Slows
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Spells.Slows
 {
     class garenq : CoreSpell
     {
         internal override string Name => "garenq";
         internal override string DisplayName => "Decisive Strike| Q";
         internal override MenuType[] Category => new[] { MenuType.SlowRemoval, MenuType.ActiveCheck };
+        internal override int Priority => 2;
 
         public override void OnTick(EventArgs args)
         {

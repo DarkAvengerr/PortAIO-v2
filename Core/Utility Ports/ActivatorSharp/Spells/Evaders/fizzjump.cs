@@ -3,16 +3,19 @@ using Activator.Base;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Spells.Evaders
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Spells.Evaders
 {
     class fizzjump : CoreSpell
     {
         internal override string Name => "fizzjump";
         internal override string DisplayName => "Playful / Trickster | E";
-        internal override float Range => float.MaxValue;
-        internal override MenuType[] Category => new[] { MenuType.SelfMuchHP, MenuType.Zhonyas, MenuType.SelfMinMP };
+        internal override float Range => 1000f;
+        internal override MenuType[] Category => new[] { MenuType.Zhonyas, MenuType.SelfMinMP };
         internal override int DefaultHP => 30;
         internal override int DefaultMP => 45;
+        internal override int Priority => 5;
 
         public override void OnTick(EventArgs args)
         {
@@ -32,15 +35,11 @@ using EloBuddy; namespace Activator.Spells.Evaders
 
                     if (Menu.Item("use" + Name + "norm").GetValue<bool>())
                         if (hero.IncomeDamage > 0 && hero.HitTypes.Contains(HitType.Danger))
-                            UseSpellTowards(Game.CursorPos);
+                            UseSpellTo(Game.CursorPos);
 
                     if (Menu.Item("use" + Name + "ulti").GetValue<bool>())
                         if (hero.IncomeDamage > 0 && hero.HitTypes.Contains(HitType.Ultimate))
-                            UseSpellTowards(Game.CursorPos);
-
-                    if (hero.IncomeDamage / Player.MaxHealth * 100 >=
-                        Menu.Item("selfmuchhp" + Name + "pct").GetValue<Slider>().Value)
-                            UseSpellTowards(Game.CursorPos);
+                            UseSpellTo(Game.CursorPos);
                 }
             }
         }

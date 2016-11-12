@@ -8,13 +8,17 @@
 // Author:		Robin Kurisu
 #endregion
 
+using System;
+using System.IO;
 using System.Linq;
 using Activator.Data;
 using Activator.Handlers;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Base
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Base
 {
     internal class Helpers
     {
@@ -79,24 +83,18 @@ using EloBuddy; namespace Activator.Base
         /// Will try to Reset income damage if target is not valid.
         /// </summary>
         /// <param name="hero">The hero to reset damage. </param>
-        public static void ResetIncomeDamage(AIHeroClient hero)
+        public static void ResetIncomeDamage(Champion hero)
         {
-            foreach (var unit in Activator.Heroes.Where(x => x.Player.NetworkId == hero.NetworkId))
+            if (hero.Player.IsZombie || hero.Immunity || !hero.Player.IsValidTarget(float.MaxValue, false))
             {
-                if (unit.IncomeDamage != 0 && unit.IncomeDamage.ToString().Contains("E")) // Check Expo
-                {
-                    unit.Attacker = null;
-                    unit.IncomeDamage = 0;
-                    unit.HitTypes.Clear();
-                }
-
-                if (unit.Player.IsZombie || unit.Immunity || !unit.Player.IsValidTarget(float.MaxValue, false))
-                {
-                    unit.Attacker = null;
-                    unit.IncomeDamage = 0;
-                    unit.HitTypes.Clear();
-                }
-            }
+                hero.Attacker = null;
+                hero.BuffDamage = 0;
+                hero.TroyDamage = 0;
+                hero.AbilityDamage = 0;
+                hero.MinionDamage = 0;
+                hero.TowerDamage = 0;
+                hero.HitTypes.Clear();
+            }            
         }
 
         /// <summary>
@@ -106,25 +104,25 @@ using EloBuddy; namespace Activator.Base
         /// <returns></returns>
         public static PrimaryRole GetRole(AIHeroClient hero)
         {
-            var assassins = new[] // heroes who use sweepers
+            var assassins = new[] // heroes who may use sweepers
             {
-                "Ahri", "Akali", "Annie", "Diana", "Ekko", "Elise", "Evelynn", "Fiddlesticks", "Fizz", "Gragas", "Kassadin", "Katarina",
-                "Khazix", "Leblanc", "Lissandra", "MasterYi", "Nidalee", "Nocturne", "Rengar", "Shaco",
-                "Syndra", "Talon", "Zed", "Kindred"
+                "Ahri", "Akali", "Annie", "Diana", "Ekko", "Elise", "Evelynn", "Fiddlesticks", "Fizz", "Gragas", "Kassadin",
+                "Khazix", "Leblanc", "Lissandra", "Nidalee", "Nocturne", "Rengar", "Shaco",
+                "Syndra", "Talon", "Zed", "Kindred", "Twistedfate"
             };
 
             var fighters = new[] // heroes who may not upgrade trinket
             {
                 "Aatrox", "Darius", "DrMundo", "Fiora", "Gangplank", "Garen", "Gnar", "Hecarim",
-                "Illaoi", "Irelia", "Jax", "Jayce", "Kayle", "Kennen", "LeeSin", "Mordekaiser", "Nasus", "Olaf", "Pantheon",
+                "Illaoi", "Irelia", "Jax", "Jayce", "Kayle", "Kennen", "LeeSin", "MasterYi", "Mordekaiser", "Nasus", "Olaf", "Pantheon",
                 "RekSai", "Renekton", "Riven", "Rumble", "Shyvana", "Skarner", "Teemo", "Trundle", "Tryndamere", "Udyr", "Vi", "Vladimir",
-                "Volibear", "Warwick", "Wukong", "XinZhao", "Yasuo", "Yorick"
+                "Volibear", "Warwick", "Wukong", "XinZhao", "Yasuo", "Yorick", "Katarina"
             };
 
             var mages = new[] // mage heroes who may prefer farsight orb
             {
                 "Anivia", "AurelionSol", "Azir", "Brand", "Cassiopeia", "Heimerdinger", "Karma",
-                "Karthus", "Lux", "Malzahar", "Orianna", "Ryze", "Swain", "Twistedfate",
+                "Karthus", "Lux", "Malzahar", "Orianna", "Ryze", "Swain", 
                 "Veigar", "Velkoz", "Viktor", "Xerath", "Ziggs", "Taliyah"
             };
 
@@ -132,7 +130,7 @@ using EloBuddy; namespace Activator.Base
             {
                 "Alistar", "Bard", "Blitzcrank", "Braum", "Janna", "Leona", "Lulu", "Morgana", "Nami", "Nunu",
                 "Sona", "Soraka", "TahmKench", "Taric", "Thresh",
-                "Zilean", "Zyra"
+                "Zilean", "Zyra", "Ivern"
             };
 
             var tanks = new[]
@@ -208,7 +206,7 @@ using EloBuddy; namespace Activator.Base
                 else
                 {
                     if (hero.CleanseHighestBuffTime > 0)
-                        hero.CleanseHighestBuffTime -= hero.QSSHighestBuffTime;
+                        hero.CleanseHighestBuffTime -= hero.CleanseHighestBuffTime;
                     else
                         hero.CleanseHighestBuffTime = 0;
                 }
@@ -359,6 +357,50 @@ using EloBuddy; namespace Activator.Base
                         hero.MercurialHighestBuffTime = 0;
                 }
             }
+        }
+
+        public static void CreateLogPath()
+        {
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cache", "activator");
+
+            if (!Directory.Exists(path))
+                 Directory.CreateDirectory(path);
+        }
+
+
+        public static void ExportSpellData(Gamedata data, string type = null)
+        {
+            var path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Cache", "activator",
+                $"activator_{data.ChampionName.ToLower()}.txt");
+
+            var file = new StreamWriter(path, true);
+            if (data.SDataName.Contains("attack"))
+            {
+                return;
+            }
+
+            file.WriteLine(@"#region Spelldata dumper © 2015 Kurisu Solutions");
+            file.WriteLine(@"// Dumps spell data from the client into a text file.");
+            file.WriteLine(@"// {0}", DateTime.Now.ToString("F"));
+            file.WriteLine(@"#endregion");
+            file.WriteLine(@"");
+            file.WriteLine(@"Spells.Add(new Gamedata");
+            file.WriteLine(@"{");
+            file.WriteLine(@"    // TargetingType = ""{0}"",", type);
+            file.WriteLine(@"    SDataName = ""{0}"",", data.SDataName.ToLower());
+            file.WriteLine(@"    ChampionName = ""{0}"",", data.ChampionName.ToLower());
+            file.WriteLine(@"    Slot = SpellSlot.{0},", data.Slot);
+            file.WriteLine(@"    CastRange = ""{0}"",", data.CastRange);
+            file.WriteLine(@"    Radius = ""{0}"",", data.Radius);
+            file.WriteLine(@"    Delay = {0}f,", data.Delay);
+            file.WriteLine(@"    HitTypes = new[] {{ }},");
+            file.WriteLine(@"    FixedRange = true,");
+            file.WriteLine(@"    MissileName = """",");
+            file.WriteLine(@"    HitTypes = new HitType[] {{ }},");
+            file.WriteLine(@"    MissileSpeed = {0},", data.MissileSpeed);
+            file.WriteLine(@"});");
+            file.WriteLine(@"");
+            file.Close();
         }
     }
 }

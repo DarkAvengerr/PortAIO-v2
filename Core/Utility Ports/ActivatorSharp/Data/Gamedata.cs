@@ -8,13 +8,15 @@
 // Author:		Robin Kurisu
 #endregion
 
-using System.Collections.Generic;
 using System.Linq;
-using Activator.Base;
+using System.Collections.Generic;
 using LeagueSharp;
 using LeagueSharp.Common;
+using Activator.Base;
 
-using EloBuddy; namespace Activator.Data
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Data
 {
     public class Gamedata
     {
@@ -22,14 +24,14 @@ using EloBuddy; namespace Activator.Data
         public string ChampionName { get; set; }
         public SpellSlot Slot { get; set; }
         public float CastRange { get; set; }
-        public float Radius { get; set; } = 0f;
+        public float Radius { get; set; } 
         public bool Global { get; set; }
-        public float Delay { get; set; }
+        public float Delay { get; set; } = 250f;
         public bool FixedRange { get; set; }
         public string MissileName { get; set; }
-        public string[] ExtraMissileNames { get; set; }
-        public int MissileSpeed { get; set; }
-        public string[] FromObject { get; set; }
+        public string[] ExtraMissileNames { get; set; } = { "" };
+        public int MissileSpeed { get; set; } = int.MaxValue;
+        public string[] FromObject { get; set; } 
         public HitType[] HitTypes { get; set; }
 
         static Gamedata()
@@ -40,10 +42,11 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "aatrox",
                 Slot = SpellSlot.Q,
                 CastRange = 875f,
+                Radius = 200f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.Danger, HitType.CrowdControl },
                 MissileName = "",
-                MissileSpeed = 2000
+                MissileSpeed = 1750
             });
 
             Spells.Add(new Gamedata
@@ -58,7 +61,7 @@ using EloBuddy; namespace Activator.Data
             });
 
             Spells.Add(new Gamedata
-            {
+            {   
                 SDataName = "aatroxw2",
                 ChampionName = "aatrox",
                 Slot = SpellSlot.W,
@@ -75,6 +78,7 @@ using EloBuddy; namespace Activator.Data
                 Slot = SpellSlot.E,
                 FixedRange = true,
                 CastRange = 1025f,
+                Radius = 150f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.CrowdControl },
                 MissileName = "aatroxeconemissile",
@@ -99,6 +103,7 @@ using EloBuddy; namespace Activator.Data
                 Slot = SpellSlot.Q,
                 FixedRange = true,
                 CastRange = 900f,
+                Radius = 80f,
                 Delay = 250f,
                 HitTypes = new HitType[] { },
                 MissileName = "ahriorbmissile",
@@ -112,7 +117,8 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "ahri",
                 Slot = SpellSlot.W,
                 FixedRange = true,
-                CastRange = 550f,
+                CastRange = 600f,
+                Radius = 600f,
                 Delay = 250f,
                 HitTypes = new HitType[] { },
                 MissileSpeed = 1800
@@ -125,6 +131,7 @@ using EloBuddy; namespace Activator.Data
                 Slot = SpellSlot.E,
                 FixedRange = true,
                 CastRange = 975f,
+                Radius = 60f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.Danger, HitType.CrowdControl },
                 MissileName = "ahriseducemissile",
@@ -136,7 +143,8 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "ahritumble",
                 ChampionName = "ahri",
                 Slot = SpellSlot.R,
-                CastRange = 600f,
+                CastRange = 450f,
+                Radius = 600f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.Initiator },
                 MissileSpeed = 2200
@@ -147,6 +155,7 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "akalimota",
                 ChampionName = "akali",
                 Slot = SpellSlot.Q,
+                Radius = 171.9f,
                 CastRange = 600f,
                 Delay = 650f,
                 HitTypes = new HitType[] { },
@@ -159,7 +168,7 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "akali",
                 Slot = SpellSlot.W,
                 CastRange = 1000f, // Range: 700 + additional for stealth detection
-                Delay = 250f,
+                Delay = 500f,
                 HitTypes = new[] { HitType.Stealth },
                 MissileSpeed = int.MaxValue
             });
@@ -169,6 +178,7 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "akalishadowswipe",
                 ChampionName = "akali",
                 Slot = SpellSlot.E,
+                Radius = 325f,
                 CastRange = 325f,
                 Delay = 250f,
                 HitTypes = new HitType[] { },
@@ -180,7 +190,8 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "akalishadowdance",
                 ChampionName = "akali",
                 Slot = SpellSlot.R,
-                CastRange = 710f,
+                Radius = 300f,
+                CastRange = 800f,
                 Delay = 250f,
                 HitTypes = new HitType[] { },
                 MissileSpeed = 2200
@@ -193,6 +204,7 @@ using EloBuddy; namespace Activator.Data
                 Slot = SpellSlot.Q,
                 FixedRange = true,
                 CastRange = 365f,
+                Radius = 365f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.Danger, HitType.CrowdControl },
                 MissileSpeed = int.MaxValue
@@ -206,7 +218,7 @@ using EloBuddy; namespace Activator.Data
                 CastRange = 660f,
                 Delay = 250f,
                 HitTypes = new HitType[] { },
-                MissileSpeed = 1200
+                MissileSpeed = 2200
             });
 
             Spells.Add(new Gamedata
@@ -238,6 +250,7 @@ using EloBuddy; namespace Activator.Data
                 Slot = SpellSlot.Q,
                 FixedRange = true,
                 CastRange = 1100f,
+                Radius = 80f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.Danger, HitType.CrowdControl },
                 MissileName = "sadmummybandagetoss",
@@ -272,6 +285,7 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "amumu",
                 Slot = SpellSlot.R,
                 CastRange = 560f,
+                Radius = 560f,
                 Delay = 250f,
                 HitTypes =
                     new[]
@@ -289,6 +303,7 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "anivia",
                 Slot = SpellSlot.Q,
                 CastRange = 1150f, // 1075 + Shatter Radius
+                Radius = 110f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.CrowdControl },
                 MissileName = "flashfrostspell",
@@ -334,6 +349,7 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "annie",
                 Slot = SpellSlot.Q,
                 CastRange = 625f,
+                Radius = 710f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.Danger },
                 MissileSpeed = 1400
@@ -345,6 +361,7 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "annie",
                 Slot = SpellSlot.W,
                 CastRange = 625f,
+                Radius = 210f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.Danger },
                 MissileSpeed = int.MaxValue
@@ -406,6 +423,7 @@ using EloBuddy; namespace Activator.Data
                 Slot = SpellSlot.W,
                 FixedRange = true,
                 CastRange = 1200f,
+                Radius = 250f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.CrowdControl },
                 MissileName = "volleyattack",
@@ -582,12 +600,14 @@ using EloBuddy; namespace Activator.Data
 
             Spells.Add(new Gamedata
             {
-                SDataName = "rocketgrabmissile",
+                SDataName = "rocketgrab",
                 ChampionName = "blitzcrank",
                 Slot = SpellSlot.Q,
                 FixedRange = true,
                 CastRange = 1050f,
+                Radius = 70f,
                 Delay = 250f,
+                MissileName = "rocketgrabmissile",
                 HitTypes = new[] { HitType.CrowdControl, HitType.Danger },
                 MissileSpeed = 1800
             });
@@ -598,6 +618,7 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "blitzcrank",
                 Slot = SpellSlot.W,
                 CastRange = 0f,
+                Radius = 100f,
                 Delay = 0f,
                 HitTypes = new HitType[] { },
                 MissileSpeed = int.MaxValue
@@ -608,7 +629,8 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "powerfist",
                 ChampionName = "blitzcrank",
                 Slot = SpellSlot.E,
-                CastRange = 100f,
+                CastRange = 300f,
+                Radius = 210f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.CrowdControl },
                 MissileSpeed = int.MaxValue
@@ -745,8 +767,9 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "caitlyn",
                 Slot = SpellSlot.Q,
                 FixedRange = true,
-                CastRange = 2000f,
-                Delay = 625f,
+                Radius = 60f,
+                CastRange = 1300f,
+                Delay = 450f,
                 HitTypes = new HitType[] { },
                 MissileName = "caitlynpiltoverpeacemaker",
                 MissileSpeed = 2200
@@ -757,10 +780,11 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "caitlynyordletrap",
                 ChampionName = "caitlyn",
                 Slot = SpellSlot.W,
+                Radius = 75f,
                 CastRange = 800f,
-                Delay = 550f,
+                Delay = 250f,
                 HitTypes = new HitType[] { },
-                MissileSpeed = 1400
+                MissileSpeed = 1450
             });
 
             Spells.Add(new Gamedata
@@ -769,11 +793,12 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "caitlyn",
                 Slot = SpellSlot.E,
                 FixedRange = true,
+                Radius = 70f,
                 CastRange = 1050f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.CrowdControl },
                 MissileName = "caitlynentrapmentmissile",
-                MissileSpeed = 2000
+                MissileSpeed = 1600
             });
 
             Spells.Add(new Gamedata
@@ -786,6 +811,20 @@ using EloBuddy; namespace Activator.Data
                 HitTypes = new HitType[] { },
                 MissileName = "cassiopeianoxiousblast",
                 MissileSpeed = int.MaxValue
+            });
+
+            Spells.Add(new Gamedata
+            {
+                SDataName = "caitlynaceinthehole",
+                ChampionName = "caitlyn",
+                Slot = SpellSlot.R,
+                CastRange = 2000f,
+                Radius = 100f,
+                Delay = 900f,
+                FixedRange = false,
+                MissileName = "",
+                HitTypes = new HitType[] {},
+                MissileSpeed = 1500,
             });
 
             Spells.Add(new Gamedata
@@ -824,7 +863,25 @@ using EloBuddy; namespace Activator.Data
                         HitType.Danger, HitType.Ultimate,
                         HitType.CrowdControl, HitType.Initiator
                     },
-                MissileName = "cassiopeiapetrifyinggaze",
+                MissileName = "cassiopeiar",
+                MissileSpeed = int.MaxValue
+            });
+
+            Spells.Add(new Gamedata
+            {
+                SDataName = "cassiopeiarstun",
+                ChampionName = "cassiopeia",
+                Slot = SpellSlot.R,
+                FixedRange = true,
+                CastRange = 875f,
+                Delay = 350f,
+                HitTypes =
+                    new[]
+                    {
+                        HitType.Danger, HitType.Ultimate,
+                        HitType.CrowdControl, HitType.Initiator
+                    },
+                MissileName = "cassiopeiarstun",
                 MissileSpeed = int.MaxValue
             });
 
@@ -834,9 +891,10 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "chogath",
                 Slot = SpellSlot.Q,
                 CastRange = 950f,
-                Delay = 1000f,
+                Radius = 250f,
+                Delay = 900f,
                 HitTypes = new[] { HitType.Danger, HitType.CrowdControl },
-                MissileName = "rupture",
+                MissileName = "",
                 MissileSpeed = int.MaxValue
             });
 
@@ -846,8 +904,9 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "chogath",
                 Slot = SpellSlot.W,
                 FixedRange = true,
-                CastRange = 675f,
-                Delay = 175f,
+                CastRange = 300f,
+                Radius = 210f,
+                Delay = 250f,
                 HitTypes = new[] { HitType.CrowdControl },
                 MissileSpeed = int.MaxValue
             });
@@ -868,7 +927,7 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "feast",
                 ChampionName = "chogath",
                 Slot = SpellSlot.R,
-                CastRange = 500f,
+                CastRange = 300f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.Danger, HitType.Ultimate },
                 MissileSpeed = int.MaxValue
@@ -928,6 +987,7 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "darius",
                 Slot = SpellSlot.Q,
                 FixedRange = true,
+                Radius = 425f,
                 CastRange = 425f,
                 Delay = 750f,
                 HitTypes = new HitType[] { },
@@ -963,7 +1023,8 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "dariusexecute",
                 ChampionName = "darius",
                 Slot = SpellSlot.R,
-                CastRange = 465f,
+                Radius = 475f,
+                CastRange = 475f,
                 Delay = 450f,
                 HitTypes = new[] { HitType.Danger, HitType.Ultimate },
                 MissileSpeed = int.MaxValue
@@ -975,6 +1036,7 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "diana",
                 Slot = SpellSlot.Q,
                 CastRange = 830f,
+                Radius = 195f,
                 Delay = 300f,
                 HitTypes = new HitType[] { },
                 MissileName = "dianaarc",
@@ -997,7 +1059,8 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "dianavortex",
                 ChampionName = "diana",
                 Slot = SpellSlot.E,
-                CastRange = 350f,
+                CastRange = 450f,
+                Radius = 450f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.CrowdControl, HitType.Danger },
                 MissileSpeed = int.MaxValue
@@ -1009,6 +1072,7 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "diana",
                 Slot = SpellSlot.R,
                 CastRange = 825f,
+                Radius = 250f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.Danger, HitType.Initiator },
                 MissileSpeed = 2200
@@ -1115,6 +1179,7 @@ using EloBuddy; namespace Activator.Data
                 Slot = SpellSlot.Q,
                 FixedRange = true,
                 CastRange = 1075f,
+                Radius = 60f,
                 Delay = 66f,
                 HitTypes = new[] { HitType.CrowdControl },
                 MissileName = "ekkoqmis",
@@ -1723,7 +1788,7 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "garene",
                 ChampionName = "garen",
                 Slot = SpellSlot.E,
-                CastRange = 300f,
+                CastRange = 660f,
                 Delay = 250f,
                 HitTypes = new HitType[] { },
                 MissileSpeed = int.MaxValue
@@ -1735,6 +1800,7 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "garen",
                 Slot = SpellSlot.R,
                 CastRange = 400f,
+                Radius = 100f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.Danger, HitType.Ultimate },
                 MissileSpeed = int.MaxValue
@@ -1750,6 +1816,17 @@ using EloBuddy; namespace Activator.Data
                 HitTypes = new HitType[] { },
                 MissileName = "gragasqmissile",
                 MissileSpeed = 1000
+            });
+
+            Spells.Add(new Gamedata
+            {
+                SDataName = "gragasqtoggle",
+                ChampionName = "gragas",
+                Slot = SpellSlot.Q,
+                CastRange = 1000, // 850f + Radius
+                Delay = 0f,
+                HitTypes = new HitType[] { },
+                MissileName = "gragasq",
             });
 
             Spells.Add(new Gamedata
@@ -2352,12 +2429,13 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "jinxw",
                 ChampionName = "jinx",
                 Slot = SpellSlot.W,
+                Radius = 60f,
                 FixedRange = true,
-                CastRange = 1550f,
-                Delay = 600f,
+                CastRange = 1500f,
+                Delay = 450f,
                 HitTypes = new[] { HitType.CrowdControl },
                 MissileName = "jinxwmissile",
-                MissileSpeed = 2200
+                MissileSpeed = 3300
             });
 
             Spells.Add(new Gamedata
@@ -2366,9 +2444,10 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "jinx",
                 Slot = SpellSlot.E,
                 CastRange = 900f,
+                Radius = 315f,
                 Delay = 250f,
                 HitTypes = new HitType[] { },
-                MissileSpeed = 1000
+                MissileSpeed = 1750
             });
 
             Spells.Add(new Gamedata
@@ -2378,8 +2457,8 @@ using EloBuddy; namespace Activator.Data
                 Slot = SpellSlot.R,
                 FixedRange = true,
                 CastRange = 25000f,
-                Global = true,
-                Delay = 600f,
+                Radius = 140f,
+                Delay = 450f,
                 MissileName = "jinxr",
                 ExtraMissileNames = new[] { "jinxrwrapper" },
                 HitTypes = new[] { HitType.Danger, HitType.Ultimate },
@@ -3144,11 +3223,12 @@ using EloBuddy; namespace Activator.Data
                 Slot = SpellSlot.R,
                 FixedRange = true,
                 CastRange = 1400f,
-                Delay = 250f,
+                Radius = 110,
+                Delay = 500f,
                 HitTypes = new[] { HitType.Danger },
                 MissileName = "lucianrmissileoffhand",
                 ExtraMissileNames = new[] { "lucianrmissile" },
-                MissileSpeed = int.MaxValue
+                MissileSpeed = 2800
             });
 
             Spells.Add(new Gamedata
@@ -3158,6 +3238,7 @@ using EloBuddy; namespace Activator.Data
                 Slot = SpellSlot.Q,
                 FixedRange = true,
                 CastRange = 925f,
+                Radius = 60,
                 Delay = 250f,
                 HitTypes = new[] { HitType.CrowdControl },
                 MissileName = "luluqmissile",
@@ -3227,6 +3308,7 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "lux",
                 Slot = SpellSlot.E,
                 CastRange = 1100f,
+                Radius = 330f,
                 Delay = 250f,
                 HitTypes = new HitType[] { },
                 MissileName = "luxlightstrikekugel",
@@ -3238,10 +3320,10 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "luxlightstriketoggle",
                 ChampionName = "lux",
                 Slot = SpellSlot.E,
-                CastRange = 1100f,
+                CastRange = 1200f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.CrowdControl },
-                MissileSpeed = int.MaxValue
+                MissileSpeed = 1400
             });
 
             Spells.Add(new Gamedata
@@ -3250,11 +3332,12 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "lux",
                 Slot = SpellSlot.R,
                 FixedRange = true,
-                CastRange = 3340f,
+                CastRange = 3500f,
+                Radius = 299.3f,
                 Delay = 1000f,
                 HitTypes = new[] { HitType.Danger, HitType.Ultimate },
                 MissileName = "luxmalicecannonmis",
-                MissileSpeed = int.MaxValue
+                MissileSpeed = 3000
             });
 
             Spells.Add(new Gamedata
@@ -3563,17 +3646,6 @@ using EloBuddy; namespace Activator.Data
 
             Spells.Add(new Gamedata
             {
-                SDataName = "monkeykingdecoyswipe",
-                ChampionName = "monkeyking",
-                Slot = SpellSlot.W,
-                CastRange = 325f,
-                Delay = 250f,
-                HitTypes = new HitType[] { },
-                MissileSpeed = int.MaxValue
-            });
-
-            Spells.Add(new Gamedata
-            {
                 SDataName = "monkeykingnimbus",
                 ChampionName = "monkeyking",
                 Slot = SpellSlot.E,
@@ -3845,6 +3917,7 @@ using EloBuddy; namespace Activator.Data
                 Slot = SpellSlot.Q,
                 FixedRange = true,
                 CastRange = 1500f,
+                Radius = 299.3f,
                 Delay = 125f,
                 HitTypes = new[] { HitType.Danger },
                 MissileName = "javelintoss",
@@ -3856,7 +3929,7 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "takedown",
                 ChampionName = "nidalee",
                 Slot = SpellSlot.Q,
-                CastRange = 150f,
+                CastRange = 500f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.Danger },
                 MissileSpeed = int.MaxValue
@@ -3879,9 +3952,10 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "nidalee",
                 Slot = SpellSlot.W,
                 CastRange = 375f,
+                Radius = 210f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.Danger, HitType.Initiator },
-                MissileSpeed = 1500
+                MissileSpeed = 1750
             });
 
             Spells.Add(new Gamedata
@@ -5263,6 +5337,44 @@ using EloBuddy; namespace Activator.Data
 
             Spells.Add(new Gamedata
             {
+                SDataName = "taliyahq",
+                ChampionName = "taliyah",
+                Slot = SpellSlot.Q,
+                CastRange = 1000f,
+                Radius = 80f,
+                Delay = 250f,
+                FixedRange = true,
+                MissileName = "taliyahqmis",
+                MissileSpeed = 1750,
+            });
+
+            Spells.Add(new Gamedata
+            {
+                SDataName = "taliyahwvc",
+                ChampionName = "taliyah",
+                Slot = SpellSlot.W,
+                CastRange = 900f,
+                Radius = 150f,
+                Delay = 900f,
+                HitTypes = new [] { HitType.CrowdControl },
+                MissileSpeed = int.MaxValue
+            });
+
+            Spells.Add(new Gamedata
+            {
+                SDataName = "taliyahe",
+                ChampionName = "taliyah",
+                Slot = SpellSlot.E,
+                CastRange = 500f,
+                Radius = 165f,
+                Delay = 250f,
+                FixedRange = true,
+                HitTypes = new HitType[] { },
+                MissileSpeed = 1650,
+            });
+
+            Spells.Add(new Gamedata
+            {
                 SDataName = "talonnoxiandiplomacy",
                 ChampionName = "talon",
                 Slot = SpellSlot.Q,
@@ -5458,10 +5570,11 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "tristanaw",
                 ChampionName = "tristana",
                 Slot = SpellSlot.W,
+                Radius = 270f,
                 CastRange = 900f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.CrowdControl, HitType.Danger },
-                MissileSpeed = 1150
+                MissileSpeed = 1450
             });
 
             Spells.Add(new Gamedata
@@ -5469,10 +5582,11 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "tristanae",
                 ChampionName = "tristana",
                 Slot = SpellSlot.E,
-                CastRange = 625f,
+                Radius = 210f,
+                CastRange = 700f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.Danger },
-                MissileSpeed = 1400
+                MissileSpeed = 2400
             });
 
             Spells.Add(new Gamedata
@@ -5480,10 +5594,23 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "tristanar",
                 ChampionName = "tristana",
                 Slot = SpellSlot.R,
+                Radius = 200f,
                 CastRange = 700f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.Danger },
-                MissileSpeed = 1600
+                MissileSpeed = 2000
+            });
+
+            Spells.Add(new Gamedata
+            {
+                SDataName = "trundleq",
+                ChampionName = "trundle",
+                Slot = (SpellSlot) 45,
+                CastRange = 800f,
+                Radius = 210f,
+                Delay = 250f,
+                HitTypes = new HitType[] { },
+                MissileSpeed = int.MaxValue
             });
 
             Spells.Add(new Gamedata
@@ -5491,7 +5618,8 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "trundletrollsmash",
                 ChampionName = "trundle",
                 Slot = SpellSlot.Q,
-                CastRange = 275f,
+                Radius = 210f,
+                CastRange = 300f,
                 Delay = 250f,
                 HitTypes = new HitType[] { },
                 MissileSpeed = int.MaxValue
@@ -5513,9 +5641,10 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "trundlecircle",
                 ChampionName = "trundle",
                 Slot = SpellSlot.E,
-                CastRange = 1100f,
+                CastRange = 1000f,
+                Radius = 340f,
                 Delay = 250f,
-                HitTypes = new[] { HitType.CrowdControl },
+                HitTypes = new HitType[] { },
                 MissileSpeed = 1600
             });
 
@@ -5524,8 +5653,9 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "trundlepain",
                 ChampionName = "trundle",
                 Slot = SpellSlot.R,
-                CastRange = 700f,
-                Delay = 500f,
+                CastRange = 650f,
+                Radius = 300f,
+                Delay = 250f,
                 HitTypes = new[] { HitType.Danger },
                 MissileSpeed = int.MaxValue
             });
@@ -6165,7 +6295,7 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "vladimir",
                 Slot = SpellSlot.E,
                 CastRange = 610f,
-                Delay = 250f,
+                Delay = 800f,
                 HitTypes = new HitType[] { },
                 MissileSpeed = 2200
             });
@@ -6231,6 +6361,7 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "warwick",
                 Slot = SpellSlot.Q,
                 CastRange = 400f,
+                Radius = 210f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.Danger },
                 MissileSpeed = int.MaxValue
@@ -6261,6 +6392,22 @@ using EloBuddy; namespace Activator.Data
             Spells.Add(new Gamedata
             {
                 SDataName = "infiniteduress",
+                ChampionName = "warwick",
+                Slot = SpellSlot.R,
+                CastRange = 700f,
+                Delay = 250f,
+                HitTypes =
+                    new[]
+                    {
+                        HitType.Danger, HitType.Ultimate,
+                        HitType.CrowdControl, HitType.Initiator
+                    },
+                MissileSpeed = int.MaxValue
+            });
+
+            Spells.Add(new Gamedata
+            {
+                SDataName = "infiniteduresschannel",
                 ChampionName = "warwick",
                 Slot = SpellSlot.R,
                 CastRange = 700f,
@@ -6324,13 +6471,50 @@ using EloBuddy; namespace Activator.Data
 
             Spells.Add(new Gamedata
             {
+                SDataName = "xenzhaocombotarget",
+                ChampionName = "xinzhao",
+                Slot = SpellSlot.Q,
+                CastRange = 375,
+                Radius = 210f,
+                Delay = 250f,
+                HitTypes = new HitType[] { },
+                MissileSpeed = int.MaxValue
+            });
+
+            Spells.Add(new Gamedata
+            {
+                SDataName = "xenzhaothrust",
+                ChampionName = "xinzhao",
+                Slot = SpellSlot.Q,
+                CastRange = 625f,
+                Radius = 225f,
+                Delay = 250f,
+                HitTypes = new HitType[] { },
+                MissileSpeed = int.MaxValue
+            });
+
+            Spells.Add(new Gamedata
+            {
+                SDataName = "xenzhaothrust2",
+                ChampionName = "xinzhao",
+                Slot = SpellSlot.Q,
+                CastRange = 625f,
+                Radius = 225f,
+                Delay = 250f,
+                HitTypes = new HitType[] { },
+                MissileSpeed = int.MaxValue
+            });
+
+            Spells.Add(new Gamedata
+            {
                 SDataName = "xenzhaothrust3",
                 ChampionName = "xinzhao",
                 Slot = SpellSlot.Q,
-                CastRange = 400f,
+                CastRange = 625f,
+                Radius = 225f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.CrowdControl },
-                MissileSpeed = int.MaxValue
+                MissileSpeed = 1500
             });
 
             Spells.Add(new Gamedata
@@ -6339,9 +6523,10 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "xinzhao",
                 Slot = SpellSlot.W,
                 CastRange = 0f,
-                Delay = 0f,
+                Radius = 210f,
+                Delay = 250f,
                 HitTypes = new HitType[] { },
-                MissileSpeed = 2000
+                MissileSpeed = int.MaxValue
             });
 
             Spells.Add(new Gamedata
@@ -6352,7 +6537,7 @@ using EloBuddy; namespace Activator.Data
                 CastRange = 600f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.CrowdControl, HitType.Danger, HitType.Initiator },
-                MissileSpeed = 1750
+                MissileSpeed = 2400
             });
 
             Spells.Add(new Gamedata
@@ -6360,7 +6545,8 @@ using EloBuddy; namespace Activator.Data
                 SDataName = "xenzhaoparry",
                 ChampionName = "xinzhao",
                 Slot = SpellSlot.R,
-                CastRange = 375f,
+                CastRange = 500f,
+                Radius = 210f,
                 Delay = 250f,
                 HitTypes =
                     new[]
@@ -6585,6 +6771,7 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "ziggs",
                 Slot = SpellSlot.Q,
                 CastRange = 850f,
+                Radius = 100f,
                 Delay = 250f,
                 HitTypes = new HitType[] { },
                 MissileName = "ziggsqspell",
@@ -6656,7 +6843,7 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "zilean",
                 Slot = SpellSlot.Q,
                 CastRange = 900f,
-                Delay = 300f,
+                Delay = 250f,
                 HitTypes = new HitType[] { },
                 MissileName = "zileanqmissile",
                 MissileSpeed = 2000
@@ -6701,10 +6888,24 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "zyra",
                 Slot = SpellSlot.Q,
                 CastRange = 800f,
+                Radius = 430f,
                 Delay = 250f,
                 HitTypes = new HitType[] { },
                 MissileName = "zyraqmissile",
                 MissileSpeed = 1400
+            });
+
+            Spells.Add(new Gamedata
+            {
+                SDataName = "zyraqplantmissile",
+                ChampionName = "zyra",
+                Slot = SpellSlot.Q,
+                CastRange = 675f,
+                Radius = 710f,
+                Delay = 250f,
+                HitTypes = new HitType[] { },
+                MissileName = "zyraqplantmissile",
+                MissileSpeed = 1200
             });
 
             Spells.Add(new Gamedata
@@ -6724,11 +6925,12 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "zyra",
                 Slot = SpellSlot.E,
                 FixedRange = true,
-                CastRange = 1100f,
+                CastRange = 1150f,
+                Radius = 70f,
                 Delay = 250f,
                 HitTypes = new[] { HitType.CrowdControl },
                 MissileName = "zyraemissile",
-                MissileSpeed = 1400
+                MissileSpeed = 1150,
             });
 
             Spells.Add(new Gamedata
@@ -6737,6 +6939,7 @@ using EloBuddy; namespace Activator.Data
                 ChampionName = "zyra",
                 Slot = SpellSlot.R,
                 CastRange = 700f,
+                Radius = 500f,
                 Delay = 500f,
                 HitTypes =
                     new[]

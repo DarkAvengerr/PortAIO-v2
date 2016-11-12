@@ -5,45 +5,79 @@ using Activator.Data;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Summoners
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Summoners
 {
     internal class smite : CoreSum
     {
         internal override string Name => "summonersmite";
         internal override string DisplayName => "Smite";
-        internal override float Range => 500f;
+        internal override float Range => 500f + 1f;
         internal override int Duration => 0;
+        internal override int Priority => 7;
+
         internal override string[] ExtraNames => new[]
         {
             "s5_summonersmiteplayerganker", "s5_summonersmiteduel",
             "s5_summonersmitequick", "itemsmiteaoe"
         };
 
-        internal static int Limiter;
-        internal static void L33TSmite(Obj_AI_Base unit, float smitedmg)
+        public override void AttachMenu(Menu menu)
         {
-            foreach (var hero in Smitedata.SpellList.Where(x => x.Name == Activator.Player.ChampionName))
+            Activator.UseEnemyMenu = true;
+            var smiteCombo = Smitedata.CachedSpellList.FirstOrDefault();
+
+            menu.AddItem(new MenuItem("usesmite", "Use Smite")).SetValue(new KeyBind('M', KeyBindType.Toggle, true)).Permashow();
+            if (smiteCombo != null)
+                menu.AddItem(new MenuItem("smiteskill",
+                    "-> Smite + " + smiteCombo.Name + " (" + smiteCombo.Slot + ")")).SetValue(true);
+
+            menu.AddItem(new MenuItem("smitesmall", "Smite Small Camps")).SetValue(true);
+            // Menu.AddItem(new MenuItem("smitekrug", "-> Krug")).SetValue(true);
+            // Menu.AddItem(new MenuItem("smitewolve", "-> Wolves")).SetValue(true);
+            // Menu.AddItem(new MenuItem("smiterazor", "-> Razorbeak")).SetValue(true);
+            menu.AddItem(new MenuItem("smitelarge", "Smite Large Camps")).SetValue(true);
+            // Menu.AddItem(new MenuItem("smiteblu", "-> Blu")).SetValue(true);
+            // Menu.AddItem(new MenuItem("smitered", "-> Red")).SetValue(true);
+            menu.AddItem(new MenuItem("smitesuper", "Smite Epic Camps")).SetValue(true);
+            // Menu.AddItem(new MenuItem("smitebaron", "-> Baron")).SetValue(true);
+            // Menu.AddItem(new MenuItem("smitedragon", "-> Dragon")).SetValue(true);
+            // Menu.AddItem(new MenuItem("smiterift", "-> Rift Herald")).SetValue(true);
+            menu.AddItem(new MenuItem("smitemode", "Smite Enemies: "))
+                .SetValue(new StringList(new[] { "Killsteal", "Combo", "Nope" }, 1));
+            menu.AddItem(new MenuItem("savesmite", "-> Save a Smite Charge")
+                .SetValue(true).SetTooltip("Will only combo smite if Ammo > 1"));
+            // Menu.AddItem(new MenuItem("savesmite2", "-> Dont Smite Near Camps")
+            // .SetValue(true).SetTooltip("Wont smite enemies near camps"));
+        }
+
+        internal static int Limiter;
+        internal static void ComboSmite(Obj_AI_Base unit, float smitedmg)
+        {
+            AIHeroClient player = Activator.Player;
+            foreach (var spell in Smitedata.CachedSpellList)
             {
-                if (Activator.Player.GetSpellDamage(unit, hero.Slot, hero.Stage) + smitedmg >= unit.Health)
+                if (player.GetSpellDamage(unit, spell.Slot, spell.Stage) + smitedmg >= unit.Health)
                 {
-                    if (unit.Distance(Activator.Player.ServerPosition) <= hero.CastRange + 
-                        unit.BoundingRadius + Activator.Player.BoundingRadius)
+                    if (unit.Distance(player.ServerPosition) <= spell.CastRange +
+                        unit.BoundingRadius + player.BoundingRadius)
                     {
-                        if (hero.HeroReqs(unit))
+                        if (spell.HeroReqs(unit))
                         {
-                            switch (hero.Type)
+                            switch (spell.Type)
                             {
                                 case SpellDataTargetType.Location:
-                                    Activator.Player.Spellbook.CastSpell(hero.Slot, unit.ServerPosition);
+                                    player.Spellbook.CastSpell(spell.Slot, unit.ServerPosition);
                                     break;
                                 case SpellDataTargetType.Unit:
-                                    Activator.Player.Spellbook.CastSpell(hero.Slot, unit);
+                                    player.Spellbook.CastSpell(spell.Slot, unit);
                                     break;
                                 case SpellDataTargetType.Self:
-                                    Activator.Player.Spellbook.CastSpell(hero.Slot);
+                                    player.Spellbook.CastSpell(spell.Slot);
                                     break;
                                 case SpellDataTargetType.SelfAndUnit:
-                                    Activator.Player.Spellbook.CastSpell(hero.Slot);
+                                    player.Spellbook.CastSpell(spell.Slot);
 
                                     if (Utils.GameTimeTickCount - Limiter >= 200 && Orbwalking.InAutoAttackRange(unit))
                                     {
@@ -72,12 +106,16 @@ using EloBuddy; namespace Activator.Summoners
                     ? (float) Player.GetSummonerSpellDamage(minion, Damage.SummonerSpell.Smite)
                     : 0;
 
-                if (minion.Distance(Player.ServerPosition) <= 500 + minion.BoundingRadius + Player.BoundingRadius)
+                if (minion.Distance(Player.ServerPosition) <= 500 + minion.BoundingRadius + Player.BoundingRadius + 5)
                 {
                     if (Helpers.IsLargeMinion(minion) && Menu.Item("smitelarge").GetValue<bool>())
                     {
-                        if (Menu.Item("smiteskill").GetValue<bool>())
-                            L33TSmite(minion, damage);
+                        var smiteCombo = Smitedata.CachedSpellList.FirstOrDefault();
+                        if (smiteCombo != null)
+                        {
+                            if (Menu.Item("smiteskill").GetValue<bool>())
+                                ComboSmite(minion, damage);
+                        }
 
                         if (damage >= minion.Health && IsReady())
                         {
@@ -87,24 +125,28 @@ using EloBuddy; namespace Activator.Summoners
 
                     if (Helpers.IsSmallMinion(minion) && Menu.Item("smitesmall").GetValue<bool>())
                     {
-                        if (Menu.Item("smiteskill").GetValue<bool>())
-                            L33TSmite(minion, damage);
+                        var smiteCombo = Smitedata.CachedSpellList.FirstOrDefault();
+                        if (smiteCombo != null)
+                        {
+                            if (Menu.Item("smiteskill").GetValue<bool>())
+                                ComboSmite(minion, damage);
+                        }
 
                         if (damage >= minion.Health && IsReady())
-                        {
                             Player.Spellbook.CastSpell(Activator.Smite, minion);
-                        }
                     }
 
                     if (Helpers.IsEpicMinion(minion) && Menu.Item("smitesuper").GetValue<bool>())
                     {
-                        if (Menu.Item("smiteskill").GetValue<bool>())
-                            L33TSmite(minion, damage);
+                        var smiteCombo = Smitedata.CachedSpellList.FirstOrDefault();
+                        if (smiteCombo != null)
+                        {
+                            if (Menu.Item("smiteskill").GetValue<bool>())
+                                ComboSmite(minion, damage);
+                        }
 
                         if (damage >= minion.Health && IsReady())
-                        {
                             Player.Spellbook.CastSpell(Activator.Smite, minion);
-                        }
                     }
                 }
             }
@@ -117,7 +159,8 @@ using EloBuddy; namespace Activator.Summoners
                      Menu.Item("savesmite").GetValue<bool>() && Player.GetSpell(Activator.Smite).Ammo > 1)
                 {
                     // KS Smite
-                    if (Menu.Item("smitemode").GetValue<StringList>().SelectedIndex == 0 &&
+                    if (Menu.Item("smitemode").GetValue<StringList>().SelectedIndex == 0 ||
+                        Menu.Item("smitemode").GetValue<StringList>().SelectedIndex == 1 &&
                         Player.GetSpell(Activator.Smite).Name.ToLower() == "s5_summonersmiteplayerganker")
                     {
                         foreach (
@@ -141,7 +184,7 @@ using EloBuddy; namespace Activator.Summoners
                             var t = TargetSelector.GetTarget(700f, TargetSelector.DamageType.True);
                             if (t.IsValidTarget(500))
                             {
-                                Player.Spellbook.CastSpell(Activator.Smite, t);                            
+                                Player.Spellbook.CastSpell(Activator.Smite, t);
                             }
                         }
                     }

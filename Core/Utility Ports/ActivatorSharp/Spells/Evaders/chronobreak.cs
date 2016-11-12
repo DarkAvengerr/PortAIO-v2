@@ -2,7 +2,9 @@ using System;
 using Activator.Base;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Spells.Evaders
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Spells.Evaders
 {
     class chronobreak : CoreSpell
     {
@@ -12,6 +14,7 @@ using EloBuddy; namespace Activator.Spells.Evaders
         internal override MenuType[] Category => new[] { MenuType.SelfLowHP, MenuType.Zhonyas };
         internal override int DefaultHP => 20;
         internal override int DefaultMP => 0;
+        internal override int Priority => 5;
 
         public override void OnTick(EventArgs args)
         {

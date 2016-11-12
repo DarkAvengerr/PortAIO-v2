@@ -1,4 +1,4 @@
-﻿#region Copyright © 2015 Kurisu Solutions
+#region Copyright © 2015 Kurisu Solutions
 // All rights are reserved. Transmission or reproduction in part or whole,
 // any form or by any means, mechanical, electronical or otherwise, is prohibited
 // without the prior written consent of the copyright owner.
@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using EloBuddy;
+using LeagueSharp;
 using LeagueSharp.Common;
 
 #region Namespaces © 2015
@@ -25,7 +25,9 @@ using Activator.Spells;
 using Activator.Summoners;
 #endregion
 
-namespace Activator
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator
 {
     internal class Activator
     {
@@ -42,11 +44,12 @@ namespace Activator
         internal static bool TroysInGame;
         internal static bool UseEnemyMenu, UseAllyMenu;
 
-        //public static System.Version Version;
+        public static System.Version Version;
         public static List<Base.Champion> Heroes = new List<Base.Champion>();
 
-        private static void Main(string[] args)
+        public static void Main()
         {
+            Version = Assembly.GetExecutingAssembly().GetName().Version;
             Game_OnGameLoad();
         }
 
@@ -54,8 +57,8 @@ namespace Activator
         {
             try
             {
-                Player = EloBuddy.Player.Instance;
-                MapId = (int)LeagueSharp.Common.Utility.Map.GetMap().Type;
+                Player = ObjectManager.Player;
+                MapId = (int) LeagueSharp.Common.Utility.Map.GetMap().Type;
                 Rand = new Random();
 
                 GetSpellsInGame();
@@ -64,7 +67,7 @@ namespace Activator
                 GetAurasInGame();
                 GetHeroesInGame();
                 GetComboDamage();
-                //Helpers.CreateLogPath();
+                Helpers.CreateLogPath();
 
                 Origin = new Menu("Activator", "activator", true);
 
@@ -100,6 +103,8 @@ namespace Activator
                 GetItemGroup("Spells.Heals").ForEach(t => NewSpell((CoreSpell) NewInstance(t), amenu));
                 CreateSubMenu(amenu, false);
                 Origin.AddSubMenu(amenu);
+                
+                GetPriority();
 
                 Menu zmenu = new Menu("Misc/Settings", "settings");
 
@@ -124,7 +129,10 @@ namespace Activator
                 zmenu.AddItem(new MenuItem("weightdmg", "Weight Income Damage (%)"))
                     .SetValue(new Slider(115, 100, 150))
                     .SetTooltip("Make Activator# think you are taking more damage than calulated.");
-                zmenu.AddItem(new MenuItem("usecombo", "Combo (active)")).SetValue(new KeyBind(32, KeyBindType.Press, true));
+                zmenu.AddItem(new MenuItem("lagtolerance", "Lag Tolerance (%)"))
+                    .SetValue(new Slider(25))
+                    .SetTooltip("Make Activator# think you are taking damage longer than intended");
+                zmenu.AddItem(new MenuItem("usecombo", "Combo (active)")).SetValue(new KeyBind(32, KeyBindType.Press, true)).Permashow();
 
                 Menu uumenu = new Menu("Spell Database", "evadem");
                 LoadSpellMenu(uumenu);
@@ -137,6 +145,7 @@ namespace Activator
                 Drawings.Init();
 
                 // handlers
+
                 Projections.Init();
                 Trinkets.Init();
 
@@ -147,14 +156,17 @@ namespace Activator
                 Gametroys.StartOnUpdate();
 
                 // on bought item
-                //Obj_AI_Base.OnPlaceItemInSlot += Obj_AI_Base_OnPlaceItemInSlot;
                 Shop.OnBuyItem += Obj_AI_Base_OnPlaceItemInSlot;
 
                 // on level up
                 Obj_AI_Base.OnLevelUp += Obj_AI_Base_OnLevelUp;
 
+                // on predict damage
+                Projections.OnPredictDamage += Projections_OnPredictDamage;
+
                 Chat.Print("<b><font color=\"#FF3366\">Activator#</font></b> - Loaded!");
-                //Updater.UpdateCheck();
+                Updater.UpdateCheck();
+
 
                 // init valid auto spells
                 foreach (CoreSpell autospell in Lists.Spells)
@@ -164,8 +176,7 @@ namespace Activator
                 // init valid summoners
                 foreach (CoreSum summoner in Lists.Summoners)
                     if (summoner.Slot != SpellSlot.Unknown ||
-                        summoner.ExtraNames.Any(x => Player.GetSpellSlot(x) != SpellSlot.Unknown) ||
-                        summoner.Name == "summonerteleport")
+                        summoner.ExtraNames.Any(x => Player.GetSpellSlot(x) != SpellSlot.Unknown))
                         Game.OnUpdate += summoner.OnTick;
 
                 // find items (if F5)
@@ -194,6 +205,17 @@ namespace Activator
             {
                 Console.WriteLine(e);
                 Chat.Print("Exception thrown at <font color=\"#FFF280\">Activator.OnGameLoad</font>");
+            }
+        }
+
+        private static void Projections_OnPredictDamage()
+        {
+            foreach (var hero in Allies())
+            {
+                // if needed
+                Helpers.ResetIncomeDamage(hero);
+
+                // todo
             }
         }
 
@@ -303,9 +325,6 @@ namespace Activator
 
                         Lists.Summoners.Add(summoner.CreateMenu(parent));
                     }
-
-                    else if (summoner.Name == "summonerteleport")
-                        Lists.Summoners.Add(summoner.CreateMenu(parent));
                 }
             }
 
@@ -406,6 +425,35 @@ namespace Activator
                 Auradata.CachedAuras.Add(generalaura);
         }
 
+        private static void GetPriority()
+        {
+            foreach (var item in Lists.Items)
+            {
+                var p = new Priority { ItemId = item.Id, Position = item.Priority, Type = item };
+
+                if (!Lists.Priorities.ContainsKey(item.Name))
+                {
+                    Lists.Priorities.Add(item.Name, p);
+                }
+            }
+
+            foreach (var spell in Lists.Spells)
+            {
+                var p = new Priority { ItemId = 0, Position = spell.Priority, Type = spell };
+
+                if (!Lists.Priorities.ContainsKey(spell.Name))
+                     Lists.Priorities.Add(spell.Name, p);
+            }
+
+            foreach (var summoner in Lists.Summoners)
+            {
+                var p = new Priority { ItemId = 0, Position = summoner.Priority, Type = summoner};
+
+                if (!Lists.Priorities.ContainsKey(summoner.Name))
+                     Lists.Priorities.Add(summoner.Name, p);
+            }
+        }
+  
         public static IEnumerable<Base.Champion> Allies()
         {
             switch (Origin.Item("healthp").GetValue<StringList>().SelectedIndex)

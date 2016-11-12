@@ -5,15 +5,15 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace Activator.Items.Offensives
+ namespace Activator.Items.Defensives
 {
-    class _3050 : CoreItem
+    class _3109 : CoreItem
     {
-        internal override int Id => 3050;
-        internal override string Name => "Zekes";
-        internal override string DisplayName => "Zeke's Harbringer";
-        internal override int Duration => 100;
-        internal override int Priority => 5;
+        internal override int Id => 3109;
+        internal override string Name => "Knights";
+        internal override string DisplayName => "Knight's Vow";
+        internal override int Duration => 250;
+        internal override int Priority => 2;
         internal override float Range => 1000f;
         internal override MenuType[] Category => new[] { MenuType.ActiveCheck };
         internal override MapType[] Maps => new[] { MapType.Common };
@@ -30,9 +30,9 @@ using EloBuddy;
                     .OrderByDescending(x => x.Player.FlatPhysicalDamageMod + x.Player.BaseAttackDamage)
                     .FirstOrDefault();
 
-            if (!highadhero.Player.IsMe && highadhero.Player.Distance(Player.ServerPosition) <= Range)
+            if (highadhero != null && (!highadhero.Player.IsMe && highadhero.Player.Distance(Player.ServerPosition) <= Range))
             {
-                if (!highadhero.Player.HasBuff("rallyingbanneraurafriend"))
+                if (!highadhero.Player.HasBuff("itemknightsvowliege"))
                 {
                     UseItem(highadhero.Player, Menu.Item("mode" + Name).GetValue<StringList>().SelectedIndex == 1);
                 }

@@ -1,10 +1,12 @@
 using System;
+using System.Linq;
 using Activator.Base;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
 
-using EloBuddy; namespace Activator.Summoners
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Summoners
 {
     class teleport : CoreSum
     {
@@ -13,65 +15,62 @@ using EloBuddy; namespace Activator.Summoners
         internal override string[] ExtraNames => new[] { "" };
         internal override float Range => float.MaxValue;
         internal override int Duration => 3500;
+        internal override int Priority => 3;
 
-        private static int _lastPing;
-        private static Random _rand => new Random();
-        private static Vector3 _lastPingLocation;
-
-        // ping credits to Honda :^)
-        private static void Ping(Vector3 pos, bool sound = false)
+        static bool IsLethal(Base.Champion hero)
         {
-            if (Utils.GameTimeTickCount - _lastPing < 5000)
-            {
-                return;
-            }
-
-            _lastPing = Utils.GameTimeTickCount;
-            _lastPingLocation = pos;
-
-            SimplePing(sound);
-            LeagueSharp.Common.Utility.DelayAction.Add(109 + _rand.Next(90, 300), () => SimplePing(sound));
+            return hero.Player.Health/hero.Player.MaxHealth * 100 <= 35 && hero.IncomeDamage > 0 ||
+                   hero.HitTypes.Contains(HitType.Ultimate) && hero.IncomeDamage > 0;
         }
 
-        private static void SimplePing(bool sound = false)
-        {   
-            TacticalMap.ShowPing(PingCategory.Fallback, _lastPingLocation, sound);
-        }
-
-        public override void OnTick(EventArgs args)
+        public override void AttachMenu(Menu menu)
         {
-            if (!IsReady())
-            {
-                return;
-            }
-
-            foreach (var hero in Activator.Allies())
-            {
-                if (!Parent.Item(Parent.Name + "useon" + hero.Player.NetworkId).GetValue<bool>())
-                    continue;
-
-                if (hero.Player.IsDead || !hero.Player.IsValid || hero.Player.IsZombie)
-                    continue;
-
-                if (hero.Player.Distance(Player.ServerPosition) > 3000 && hero.Player.Distance(Game.CursorPos) > 3000)
+            menu.AddItem(new MenuItem("teleqq2", "Show Recent Event"))
+                .SetTooltip("Move camera to the most recent event")
+                .SetValue(new KeyBind(222, KeyBindType.Press));
+            menu.AddItem(new MenuItem("teleqq", "Show Recent Event (Lock to Me)"))
+                .SetTooltip("Move camera between you and the most recent event")
+                .SetValue(new KeyBind(192, KeyBindType.Press))
+                .ValueChanged += (sender, e) =>
                 {
-                    if (hero.HitTypes.Contains(HitType.Ultimate) && Menu.Item("teleulthp2").GetValue<bool>())
-                    {
-                        if (hero.IncomeDamage > 0)
-                        {
-                            Ping(hero.Player.ServerPosition, Menu.Item("telesound").GetValue<bool>());
-                        }
-                    }
+                    if (e.GetNewValue<KeyBind>().Active == e.GetOldValue<KeyBind>().Active) return;
+                    if (e.GetNewValue<KeyBind>().Active == false) Camera.ScreenPosition = Player.Position.To2D();
+                };
+            menu.AddItem(new MenuItem("teledraw", "Outline Ally in Danger (Minimap)")).SetValue(true);
+        }
 
-                    if (hero.Player.Health / hero.Player.MaxHealth * 100 <= 35 && Menu.Item("telelowhp2").GetValue<bool>())
+        public override void OnTick(EventArgs args) 
+        {
+            if (Menu.Item("teleqq").GetValue<KeyBind>().Active || Menu.Item("teleqq2").GetValue<KeyBind>().Active)
+            {
+                var p = Activator.Allies().Where(h => h.Player.NetworkId != Player.NetworkId)
+                        .OrderByDescending(h => h.Player.CountEnemiesInRange(1450))
+                        .ThenByDescending(h => h.IncomeDamage).FirstOrDefault();
+
+                if (p != null)
+                {
+                    var speed = Math.Max(0.2f, Math.Min(80, Camera.ScreenPosition.Distance(p.Player.Position) * 0.0007f * 95));
+                    var direction = (p.Player.Position.To2D() - Camera.ScreenPosition).Normalized() * speed;
+                    Camera.ScreenPosition = Camera.ScreenPosition + direction;
+                }
+            }
+        }
+
+        public override void OnDraw(EventArgs args)
+        {                       
+            if (IsReady() && Menu.Item("teledraw").GetValue<bool>())
+            {
+                foreach (var hero in Activator.Allies())
+                {
+                    if (hero.Player.IsValid && !hero.Player.IsZombie && !hero.Player.IsDead)
                     {
-                        if (hero.IncomeDamage > 0)
+                        if (IsLethal(hero) && !hero.Player.IsMe)
                         {
-                            Ping(hero.Player.ServerPosition, Menu.Item("telesound").GetValue<bool>());
+                            LeagueSharp.Common.Utility.DrawCircle(hero.Player.Position, 850f, System.Drawing.Color.Crimson, 3, 30, true);
                         }
                     }
                 }
-            }
+            }          
         }
     }
 }

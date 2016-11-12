@@ -1,8 +1,11 @@
 using System;
 using Activator.Base;
+using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Items.Defensives
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Items.Defensives
 {
     class _3157 : CoreItem
     {
@@ -14,7 +17,7 @@ using EloBuddy; namespace Activator.Items.Defensives
         internal override float Range => 750f;
         internal override MenuType[] Category => new[] { MenuType.SelfLowHP, MenuType.SelfMuchHP, MenuType.Zhonyas };
         internal override MapType[] Maps => new[] { MapType.SummonersRift, MapType.HowlingAbyss };
-        internal override int DefaultHP => 35;  
+        internal override int DefaultHP => 40;  
         internal override int DefaultMP => 0;
 
         public override void OnTick(EventArgs args)
@@ -29,8 +32,9 @@ using EloBuddy; namespace Activator.Items.Defensives
                     if (!Parent.Item(Parent.Name + "useon" + hero.Player.NetworkId).GetValue<bool>())
                         continue;
 
-                    if (hero.IncomeDamage / hero.Player.MaxHealth * 100 >=
-                        Menu.Item("selfmuchhp" + Name + "pct").GetValue<Slider>().Value)
+                    if (hero.Player.Health / hero.Player.MaxHealth * 100 <=
+                        Menu.Item("selflowhp" + Name + "pct").GetValue<Slider>().Value && 
+                        hero.IncomeDamage > 0)
                         UseItem();
 
                     if (Menu.Item("use" + Name + "norm").GetValue<bool>() &&
@@ -41,10 +45,8 @@ using EloBuddy; namespace Activator.Items.Defensives
                         hero.IncomeDamage > 0 && hero.HitTypes.Contains(HitType.Ultimate))
                         UseItem();
 
-                    if (hero.Player.Health/hero.Player.Health*100 <=
-                        Menu.Item("selflowhp" + Name + "pct").GetValue<Slider>().Value)
-                        if (hero.IncomeDamage > 0 || hero.MinionDamage > hero.Player.Health)
-                            UseItem();
+                    if (ShouldUseOnMany(hero))
+                        UseItem();
                 }
             }
         }

@@ -3,7 +3,9 @@ using Activator.Base;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Items.Cleansers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Items.Cleansers
 {
     class _3222 : CoreItem
     {
@@ -11,7 +13,7 @@ using EloBuddy; namespace Activator.Items.Cleansers
         internal override string Name => "Mikaels";
         internal override string DisplayName => "Mikael's Crucible";
         internal override int Priority => 7;
-        internal override int Duration => 1000;
+        internal override int Duration => 250;
         internal override float Range => 750f;
         internal override MenuType[] Category => new[] { MenuType.SelfLowHP, MenuType.Cleanse, MenuType.ActiveCheck  };
         internal override MapType[] Maps => new[] { MapType.Common };
@@ -45,12 +47,12 @@ using EloBuddy; namespace Activator.Items.Cleansers
                 {
                     if (!Menu.Item("use" + Name + "od").GetValue<bool>())
                     {
-                        LeagueSharp.Common.Utility.DelayAction.Add(Game.Ping + Menu.Item("use" + Name + "delay").GetValue<Slider>().Value, delegate
-                            {
-                                UseItem(hero.Player, Menu.Item("mode" + Name).GetValue<StringList>().SelectedIndex == 1);
-                                hero.MikaelsBuffCount = 0;
-                                hero.MikaelsHighestBuffTime = 0;
-                            });
+                        LeagueSharp.Common.Utility.DelayAction.Add(Menu.Item("use" + Name + "delay").GetValue<Slider>().Value, () =>
+                        {
+                            UseItem(hero.Player, Menu.Item("mode" + Name).GetValue<StringList>().SelectedIndex == 1);
+                            hero.MikaelsBuffCount = 0;
+                            hero.MikaelsHighestBuffTime = 0;
+                        });
                     }
                 }
 

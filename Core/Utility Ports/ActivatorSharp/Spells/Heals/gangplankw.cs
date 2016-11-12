@@ -2,7 +2,9 @@ using System;
 using Activator.Base;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Spells.Heals
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Spells.Heals
 {
     class gangplankw : CoreSpell
     {
@@ -12,6 +14,7 @@ using EloBuddy; namespace Activator.Spells.Heals
         internal override MenuType[] Category => new[] { MenuType.SelfLowHP, MenuType.SelfMinMP };
         internal override int DefaultHP => 20;
         internal override int DefaultMP => 55;
+        internal override int Priority => 4;
 
         public override void OnTick(EventArgs args)
         {

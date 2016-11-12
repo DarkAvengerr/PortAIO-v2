@@ -2,14 +2,18 @@ using System;
 using System.Linq;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Summoners
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Summoners
 {
     class poro : CoreSum
     {
-        internal override string Name => "summonerporothrow";
+        internal override sealed string Name => "summonerporothrow";
         internal override string DisplayName => "Poro Toss";
-        internal override float Range => 1500f;
+        internal override string[] ExtraNames => new[] { "" };
+        internal override sealed float Range => 1500f;
         internal override int Duration => 100;
+        internal override int Priority => 3;
 
         private static Spell mark;
 
@@ -17,6 +21,11 @@ using EloBuddy; namespace Activator.Summoners
         {
             mark = new Spell(Player.GetSpellSlot(Name), Range);
             mark.SetSkillshot(0f, 60f, 1500f, true, SkillshotType.SkillshotLine);
+        }
+
+        public override void AttachMenu(Menu menu)
+        {
+            Activator.UseEnemyMenu = true;
         }
 
         public override void OnTick(EventArgs args)

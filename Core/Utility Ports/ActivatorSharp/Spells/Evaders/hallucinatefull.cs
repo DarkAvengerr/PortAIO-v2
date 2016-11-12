@@ -1,7 +1,9 @@
 using System;
 using Activator.Base;
 
-using EloBuddy; namespace Activator.Spells.Evaders
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Spells.Evaders
 {
     internal class hallucinatefull : CoreSpell
     {
@@ -9,6 +11,7 @@ using EloBuddy; namespace Activator.Spells.Evaders
         internal override string DisplayName => "Hallucinate | R";
         internal override float Range => float.MaxValue;
         internal override MenuType[] Category => new[] { MenuType.Zhonyas };
+        internal override int Priority => 5;
 
         public override void OnTick(EventArgs args)
         {

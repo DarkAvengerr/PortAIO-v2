@@ -1,7 +1,9 @@
 using System;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Summoners
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Summoners
 {
     internal class mana : CoreSum
     {
@@ -9,7 +11,14 @@ using EloBuddy; namespace Activator.Summoners
         internal override string DisplayName => "Clarity";
         internal override string[] ExtraNames => new[] { "" };
         internal override float Range => 600f;
-        internal override int Duration => 1000;
+        internal override int Duration => 100;
+        internal override int Priority => 3;
+
+        public override void AttachMenu(Menu menu)
+        {
+            Activator.UseAllyMenu = true;
+            menu.AddItem(new MenuItem("selflowmp" + Name + "pct", "Minimum Mana (%) <=")).SetValue(new Slider(40));
+        }
 
         public override void OnTick(EventArgs args)
         {

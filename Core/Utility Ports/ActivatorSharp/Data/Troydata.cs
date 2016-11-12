@@ -12,7 +12,9 @@ using LeagueSharp;
 using Activator.Base;
 using System.Collections.Generic;
 
-using EloBuddy; namespace Activator.Data
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Data
 {
     public class Troydata
     {

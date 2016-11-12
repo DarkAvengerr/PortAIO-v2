@@ -2,7 +2,9 @@ using System;
 using Activator.Base;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Items.Consumables
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Items.Consumables
 {
     class _2033 : CoreItem
     {
@@ -12,7 +14,7 @@ using EloBuddy; namespace Activator.Items.Consumables
         internal override string DisplayName => "Corrupting Pot";
         internal override int Duration => 101;
         internal override float Range => float.MaxValue;
-        internal override MenuType[] Category => new[] { MenuType.SelfLowMP, MenuType.SelfLowHP, MenuType.SelfMuchHP };
+        internal override MenuType[] Category => new[] { MenuType.SelfLowMP, MenuType.SelfLowHP };
         internal override MapType[] Maps => new[] { MapType.Common };
         internal override int DefaultHP => 55;
         internal override int DefaultMP => 25;
@@ -29,7 +31,7 @@ using EloBuddy; namespace Activator.Items.Consumables
                     if (hero.Player.HasBuff("ItemDarkCrystalFlask"))
                         return;
 
-                    if (hero.Player.MaxHealth - hero.Player.Health + hero.IncomeDamage > 120)
+                    if (hero.Player.MaxHealth - hero.Player.Health - hero.IncomeDamage > 120)
                     {
                         if (hero.Player.Health / hero.Player.MaxHealth * 100 <=
                             Menu.Item("selflowhp" + Name + "pct").GetValue<Slider>().Value)
@@ -40,13 +42,6 @@ using EloBuddy; namespace Activator.Items.Consumables
                                 if (!hero.Player.IsRecalling() && !hero.Player.InFountain())
                                     UseItem();
                             }
-                        }
-
-                        if (hero.IncomeDamage / hero.Player.MaxHealth * 100 >=
-                            Menu.Item("selfmuchhp" + Name + "pct").GetValue<Slider>().Value)
-                        {
-                            if (!hero.Player.IsRecalling() && !hero.Player.InFountain())
-                                UseItem();
                         }
                     }
 

@@ -11,7 +11,9 @@
 using LeagueSharp;
 using System.Collections.Generic;
 
-using EloBuddy; namespace Activator.Base
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Base
 {
     public class Gametroy
     {

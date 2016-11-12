@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Activator.Base;
 using LeagueSharp.Common;
 
@@ -6,16 +10,16 @@ using EloBuddy;
  using LeagueSharp.Common; 
  namespace Activator.Items.Defensives
 {
-    class _3190 : CoreItem
+    class _3107 : CoreItem 
     {
-        internal override int Id => 3190;
+        internal override int Id => 3107;
         internal override int Priority => 5;
-        internal override string Name => "Locket";
-        internal override string DisplayName => "Locket of Iron Solari";
+        internal override string Name => "Redemption";
+        internal override string DisplayName => "Redemption";
         internal override int Duration => 250;
-        internal override float Range => 600f;
-        internal override MenuType[] Category => new[] { MenuType.SelfLowHP, MenuType.SelfMuchHP, MenuType.Zhonyas };
-        internal override MapType[] Maps => new[] { MapType.Common };
+        internal override float Range => float.MaxValue;
+        internal override MenuType[] Category => new[] { MenuType.SelfLowHP, MenuType.SelfMuchHP };
+        internal override MapType[] Maps => new[] { MapType.SummonersRift, MapType.HowlingAbyss };
         internal override int DefaultHP => 55;
         internal override int DefaultMP => 0;
 
@@ -31,24 +35,16 @@ using EloBuddy;
 
                 if (hero.Player.Distance(Player.ServerPosition) <= Range)
                 {
-                    if (Menu.Item("use" + Name + "norm").GetValue<bool>())
-                        if (hero.IncomeDamage > 0 && hero.HitTypes.Contains(HitType.Danger))
-                            UseItem();
-
-                    if (Menu.Item("use" + Name + "ulti").GetValue<bool>())
-                        if (hero.IncomeDamage > 0 && hero.HitTypes.Contains(HitType.Ultimate))
-                            UseItem();
-
-                    if (hero.Player.Health/hero.Player.MaxHealth * 100 <=
+                    if (hero.Player.Health / hero.Player.MaxHealth * 100 <=
                         Menu.Item("selflowhp" + Name + "pct").GetValue<Slider>().Value)
                     {
-                        if (hero.TowerDamage > 0  || hero.IncomeDamage > 0 || 
+                        if (hero.TowerDamage > 0 || hero.IncomeDamage > 0 ||
                             hero.MinionDamage > hero.Player.Health)
-                            UseItem();
+                            UseItem(Prediction.GetPrediction(hero.Player, 2500f).UnitPosition);
                     }
 
                     if (ShouldUseOnMany(hero))
-                        UseItem();
+                        UseItem(Prediction.GetPrediction(hero.Player, 2500f).UnitPosition);
                 }
             }
         }

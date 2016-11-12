@@ -5,40 +5,40 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace Activator.Items.Offensives
+ namespace Activator.Items.Defensives
 {
-    class _3153 : CoreItem
+    class _3814 : CoreItem 
     {
-        internal override int Id => 3153;
-        internal override int Priority => 5;
-        internal override string Name => "Botrk";
-        internal override string DisplayName => "Blade of the Ruined King";
-        internal override int Duration => 100;
-        internal override float Range => 550f;
-        internal override MenuType[] Category => new[] { MenuType.SelfLowHP, MenuType.EnemyLowHP, MenuType.Gapcloser };
+        internal override int Id => 3814;
+        internal override int Priority => 6;
+        internal override string Name => "Edge";
+        internal override string DisplayName => "Edge of Night";
+        internal override int Duration => 250;
+        internal override float Range => 600f;
+        internal override MenuType[] Category => new[] { MenuType.SelfMuchHP, MenuType.SelfCount, MenuType.ActiveCheck, MenuType.Gapcloser };
         internal override MapType[] Maps => new[] { MapType.Common };
-        internal override int DefaultHP => 90;
+        internal override int DefaultHP => 85;
         internal override int DefaultMP => 0;
-
 
         public override void OnTick(EventArgs args)
         {
             if (!Menu.Item("use" + Name).GetValue<bool>() || !IsReady())
                 return;
 
-            if (Tar != null)
+            foreach (var hero in Activator.Allies())
             {
-                if (!Parent.Item(Parent.Name + "useon" + Tar.Player.NetworkId).GetValue<bool>())
-                    return;
+                if (!Parent.Item(Parent.Name + "useon" + hero.Player.NetworkId).GetValue<bool>())
+                    continue;
 
-                if ((Tar.Player.Health / Tar.Player.MaxHealth * 100) <= Menu.Item("enemylowhp" + Name + "pct").GetValue<Slider>().Value)
+                if (hero.Player.Distance(Player.ServerPosition) <= Range)
                 {
-                    UseItem(Tar.Player, true);
+                    if (ShouldUseOnMany(hero))
+                        UseItem();
                 }
 
-                if ((Player.Health / Player.MaxHealth * 100) <= Menu.Item("selflowhp" + Name + "pct").GetValue<Slider>().Value)
+                if (Player.CountEnemiesInRange(Range) >= Menu.Item("selfcount" + Name).GetValue<Slider>().Value)
                 {
-                    UseItem(Tar.Player, true);
+                    UseItem(Menu.Item("mode" + Name).GetValue<StringList>().SelectedIndex == 1);
                 }
             }
         }
@@ -47,10 +47,8 @@ using EloBuddy;
         {
             AIHeroClient attacker = gapcloser.Sender;
 
-            if (!Menu.Item("use" + Name).GetValue<bool>())
-                return;
-
-            if (!Menu.Item("enemygap" + Name).GetValue<bool>() || !IsReady())
+            if (!Menu.Item("use" + Name).GetValue<bool>() ||
+                !Menu.Item("enemygap" + Name).GetValue<bool>() || !IsReady())
                 return;
 
             foreach (var hero in Activator.Allies())
@@ -68,7 +66,7 @@ using EloBuddy;
                 {
                     if (attacker.Distance(hero.Player) <= Range / 2f)
                     {
-                        UseItem(Tar.Player, true);
+                        UseItem();
                     }
                 }
 
@@ -76,7 +74,7 @@ using EloBuddy;
                 {
                     if (attacker.Distance(hero.Player) <= Range / 2f)
                     {
-                        UseItem(Tar.Player, true);
+                        UseItem();
                     }
                 }
             }

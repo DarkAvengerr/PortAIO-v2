@@ -7,7 +7,9 @@ using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
 
-using EloBuddy; namespace Activator.Handlers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Handlers
 {
     struct Offset
     {
@@ -27,7 +29,7 @@ using EloBuddy; namespace Activator.Handlers
 
     class Drawings
     {
-        private static Dictionary<string, Offset> Offsets = new Dictionary<string, Offset>
+        private static readonly Dictionary<string, Offset> Offsets = new Dictionary<string, Offset>
         {
             { "SRU_Blue1.1.1" , new Offset(new Vector2(-2, 23), 150, 6) },
             { "SRU_Red4.1.1" , new Offset(new Vector2(-2, 23), 150, 6) },
@@ -54,22 +56,29 @@ using EloBuddy; namespace Activator.Handlers
 
                         if (!hero.Player.IsDead)
                         {
-                            Drawing.DrawText(mpos[0] - 40, mpos[1] - 15, Color.White, "Income Damage: " + hero.IncomeDamage);
-                            Drawing.DrawText(mpos[0] - 40, mpos[1] + 0, Color.White, "Income Percent: " + hero.IncomeDamage / hero.Player.MaxHealth * 100);
-                            Drawing.DrawText(mpos[0] - 40, mpos[1] + 15, Color.White, "QSSBuffCount: " + hero.QSSBuffCount);
-                            Drawing.DrawText(mpos[0] - 40, mpos[1] + 30, Color.White, "QSSHighestBuffTime: " + hero.QSSHighestBuffTime);
+                            Drawing.DrawText(mpos[0] - 40, mpos[1] - 15, Color.White, "Ability Damage: " + hero.AbilityDamage);
+                            Drawing.DrawText(mpos[0] - 40, mpos[1] + 0, Color.White, "Tower Damage: " + hero.TowerDamage);
+                            Drawing.DrawText(mpos[0] - 40, mpos[1] + 15, Color.White, "Buff Damage: " + hero.BuffDamage);
+                            Drawing.DrawText(mpos[0] - 40, mpos[1] + 30, Color.White, "Troy Damage: " + hero.TroyDamage);
+                            Drawing.DrawText(mpos[0] - 40, mpos[1] + 45, Color.White, "Minion Damage: " + hero.MinionDamage);
                         }
+                    }
+                }
 
+                if (Activator.Origin.Item("acdebug2").GetValue<bool>())
+                {
+                    Drawing.DrawText(200f, 250f, Color.Wheat, "Item Priority (Debug)");
 
-                        Drawing.DrawText(200f, 250f, Color.Wheat, "Item Priority (Debug)");
-                        foreach (var item in Items.CoreItem.PriorityList().OrderByDescending(a => a.Priority))
+                    var prior = Lists.Priorities.Values.Where(ii => ii.Needed())
+                                .OrderByDescending(ii => ii.Menu().Item("prior" + ii.Name()).GetValue<Slider>().Value);
+
+                    foreach (var item in prior)
+                    {
+                        for (int i = 0; i < prior.Count(); i++)
                         {
-                            for (int i = 0; i < Items.CoreItem.PriorityList().Count(); i++)
-                            {
-                                Drawing.DrawText(200, 265 + 5 * (i * 3), Color.White, item.DisplayName + " : " + item.Priority);
-                            }
+                            Drawing.DrawText(200, 265 + 5 * (i * 3), Color.White, item.Name() + " / Needed: " 
+                                + item.Needed() + " / Ready: " + item.Ready() + " :: " + item.Position);
                         }
-
                     }
                 }
 
@@ -105,12 +114,10 @@ using EloBuddy; namespace Activator.Handlers
                         return;
                     }
 
-                    var smitespell = Data.Smitedata.SpellList
-                        .FirstOrDefault(s => s.Name == Activator.Player.ChampionName);
+                    var spell = Data.Smitedata.CachedSpellList.FirstOrDefault();
+                    var minionlist = MinionManager.GetMinions(Activator.Player.Position, 1200f, MinionTypes.All, MinionTeam.Neutral);
 
-                    foreach (var minion in
-                        MinionManager.GetMinions(Activator.Player.Position, 1200f, MinionTypes.All, MinionTeam.Neutral)
-                            .Where(th => Helpers.IsEpicMinion(th) || Helpers.IsLargeMinion(th)))
+                    foreach (var minion in minionlist.Where(th => Helpers.IsEpicMinion(th) || Helpers.IsLargeMinion(th)))
                     {
                         var yoffset = Offsets[minion.Name].Y;
                         var xoffset = Offsets[minion.Name].X;
@@ -124,8 +131,8 @@ using EloBuddy; namespace Activator.Handlers
 
                         var barPos = minion.HPBarPosition;
 
-                        var sdamage = smitespell != null && Activator.Player.GetSpell(smitespell.Slot).State == SpellState.Ready
-                            ? Activator.Player.GetSpellDamage(minion, smitespell.Slot, smitespell.Stage)
+                        var sdamage = spell != null && Activator.Player.GetSpell(spell.Slot).State == SpellState.Ready
+                            ? Activator.Player.GetSpellDamage(minion, spell.Slot, spell.Stage)
                             : 0;
 
                         var smite = Activator.Player.GetSpell(Activator.Smite).State == SpellState.Ready

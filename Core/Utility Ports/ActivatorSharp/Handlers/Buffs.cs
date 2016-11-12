@@ -16,7 +16,9 @@ using Activator.Data;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Handlers
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Handlers
 {
     public static class Buffs
     {
@@ -36,8 +38,7 @@ using EloBuddy; namespace Activator.Handlers
                 {
                     if (args.Buff.Name == "rengarralertsound")
                     {
-                        ally.HitTypes.Add(HitType.Stealth);
-                        LeagueSharp.Common.Utility.DelayAction.Add(200, () => ally.HitTypes.Remove(HitType.Stealth));
+                        Projections.PredictTheDamage(sender, ally, new Gamedata(), HitType.Stealth, "handlers.OnBuffGain");
                     }
                 }
             }
@@ -51,19 +52,8 @@ using EloBuddy; namespace Activator.Handlers
             {
                 var aura = Auradata.CachedAuras.Find(au => hero.Player.HasBuff(au.Name));
                 if (aura == null)
-                {
-                    if (hero.DotTicks > 0)
-                    {
-                        hero.IncomeDamage -= 1;
-                        hero.DotTicks -= 1;
-                    }
-
-                    if (hero.IncomeDamage < 0)
-                        hero.IncomeDamage = 0;
-
                     continue;
-                }
-
+                
                 if (aura.Cleanse)
                 {
                     LeagueSharp.Common.Utility.DelayAction.Add(aura.CleanseTimer,
@@ -78,26 +68,37 @@ using EloBuddy; namespace Activator.Handlers
                         });
                 }
 
+                var owner = hero.Player.GetBuff(aura.Name).Caster as AIHeroClient;
+                if (owner == null || !owner.IsEnemy)
+                {
+                    continue;
+                }
+
+                Gamedata data = null;
+
+                if (aura.Champion == null && aura.Slot == SpellSlot.Unknown)
+                    data = new Gamedata();
+
+                if (aura.Champion != null && aura.Slot != SpellSlot.Unknown)
+                    data = Gamedata.CachedSpells.Find(x => x.ChampionName.ToLower() == aura.Champion.ToLower());
+
                 if (aura.Evade)
                 {
                     LeagueSharp.Common.Utility.DelayAction.Add(aura.EvadeTimer,
                         () =>
-                        {                           
+                        {
                             // double check after delay incase we no longer have the buff
                             if (hero.Player.HasBuff(aura.Name) && hero.Player.IsValidTarget(float.MaxValue, false))
                             {
                                 if (!hero.Player.IsZombie && !hero.Immunity)
                                 {
                                     if (!hero.HitTypes.Contains(HitType.Ultimate))
-                                    {
-                                        LeagueSharp.Common.Utility.DelayAction.Add(500, () => hero.HitTypes.Remove(HitType.Ultimate));
-                                        hero.HitTypes.Add(HitType.Ultimate);
-                                    }
+                                         hero.HitTypes.Add(HitType.Ultimate);
 
                                     if (Utils.GameTimeTickCount - aura.TickLimiter >= 100)
                                     {
-                                        hero.DotTicks += 1;
-                                        hero.IncomeDamage += 1; // todo: get actuall damage
+                                        // ReSharper disable once PossibleNullReferenceException
+                                        Projections.PredictTheDamage(owner, hero, data, HitType.Buff, "aura.Evade");
                                         aura.TickLimiter = Utils.GameTimeTickCount;
                                     }
                                 }
@@ -109,19 +110,12 @@ using EloBuddy; namespace Activator.Handlers
                 {
                     if (Utils.GameTimeTickCount - aura.TickLimiter >= aura.Interval * 1000)
                     {
-                        if (hero.Player.IsValidTarget(float.MaxValue, false))
-                        {
-                            if (!hero.Player.IsZombie && !hero.Immunity)
-                            {
-                                if (aura.Name == "velkozresearchstack" &&
-                                    !hero.Player.HasBuffOfType(BuffType.Slow))
-                                    continue;
+                        if (aura.Name == "velkozresearchstack" && !hero.Player.HasBuffOfType(BuffType.Slow))
+                            continue;
 
-                                hero.DotTicks += 1;
-                                hero.IncomeDamage += 1; // todo: get actuall damage
-                                aura.TickLimiter = Utils.GameTimeTickCount;
-                            }
-                        }
+                        // ReSharper disable once PossibleNullReferenceException
+                        Projections.PredictTheDamage(owner, hero, data, HitType.Buff, "aura.Dot");
+                        aura.TickLimiter = Utils.GameTimeTickCount;
                     }
                 }            
             }

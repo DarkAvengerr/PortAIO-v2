@@ -1,16 +1,19 @@
 using System;
 using Activator.Base;
 
-using EloBuddy; namespace Activator.Spells.Evaders
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Spells.Evaders
 {
     class vladimirsanguinepool : CoreSpell
     {
         internal override string Name => "vladimirsanguinepool";
         internal override string DisplayName => "Sanguine Pool | W";
         internal override float Range => float.MaxValue;
-        internal override MenuType[] Category => new[] { MenuType.Zhonyas };
+        internal override MenuType[] Category => new[] { MenuType.Zhonyas, MenuType.SelfMuchHP };
         internal override int DefaultHP => 0;
         internal override int DefaultMP => 45;
+        internal override int Priority => 7;
 
         public override void OnTick(EventArgs args)
         {
@@ -36,6 +39,9 @@ using EloBuddy; namespace Activator.Spells.Evaders
                     if (hero.IncomeDamage > 0 && hero.HitTypes.Contains(HitType.Ultimate))
                         UseSpell();
                 }
+
+                if (ShouldUseOnMany(hero))
+                    UseSpell();
             }
         }
     }

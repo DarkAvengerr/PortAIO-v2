@@ -11,8 +11,11 @@
 using System;
 using LeagueSharp;
 using System.Collections.Generic;
+using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Data
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Data
 {
     public class Smitedata
     {
@@ -24,33 +27,58 @@ using EloBuddy; namespace Activator.Data
 
         public static List<Smitedata> SpellList = new List<Smitedata>();
         public static List<Smitedata> CachedSpellList = new List<Smitedata>();
+        private static AIHeroClient Player => Activator.Player;
 
         public bool HeroReqs(Obj_AI_Base unit)
         {
             if (unit == null)
                 return false;
 
-            switch (Activator.Player.ChampionName)
+            switch (Player.ChampionName)
             {
                 case "Twitch":
                     if (!unit.HasBuff("twitchdeadlyvenom"))
                         return false;
                     break;
                 case "LeeSin":
-                    if (!unit.HasBuff("blindmonkqonechaos"))
+                    if (!unit.HasBuff("blindmonkqone"))
+                    {
+                        var q = new Spell(SpellSlot.Q, true);
+                        if (q.Instance.IsReady() && q.Instance.Name.ToLower() == "blindmonkqone")
+                        {
+                            q.Cast(unit);
+                        }
+
                         return false;
+                    }
                     break;
                 case "Diana":
                     if (!unit.HasBuff("dianamoonlight"))
                         return false;
                     break;
                 case "Elise":
-                    if (Activator.Player.CharData.BaseSkinName != "elisespider")
+                    if (Player.CharData.BaseSkinName != "elisespider")
+                    {
+                        var r = new Spell(SpellSlot.R);
+                        if (r.Instance.IsReady())
+                        {
+                            r.Cast();
+                        }
+
                         return false;
+                    }
                     break;
                 case "Nidalee":
-                    if (Activator.Player.CharData.BaseSkinName == "Nidalee")
+                    if (Player.CharData.BaseSkinName == "Nidalee")
+                    {
+                        var r = new Spell(SpellSlot.R);
+                        if (r.Instance.IsReady())
+                        {
+                            r.Cast();
+                        }
+
                         return false;
+                    }
                     break;
             }
 
@@ -396,7 +424,7 @@ using EloBuddy; namespace Activator.Data
             SpellList.Add(new Smitedata
             {
                 Name = "Chogath",
-                CastRange =  175 + new [] { 23f, 37f, 50f} [Math.Min(Activator.Player.Level, 18) / 6],
+                CastRange =  175 + new [] { 23f, 37f, 50f, 50f } [Math.Min(Activator.Player.Level, 18) / 6],
                 Slot = SpellSlot.R,
                 Stage = 0,
                 Type = SpellDataTargetType.Unit

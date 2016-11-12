@@ -3,14 +3,17 @@ using Activator.Base;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Spells.Evaders
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Spells.Evaders
 {
     class alphastrike : CoreSpell
     {
         internal override string Name => "alphastrike";
         internal override string DisplayName => "Alpha Strike | Q";
         internal override float Range => 600f;
-        internal override MenuType[] Category => new[] { MenuType.SpellShield, MenuType.Zhonyas };
+        internal override MenuType[] Category => new[] { MenuType.Zhonyas, MenuType.SelfMuchHP };
+        internal override int Priority => 5;
 
         public override void OnTick(EventArgs args)
         {
@@ -44,6 +47,9 @@ using EloBuddy; namespace Activator.Spells.Evaders
                         if (Menu.Item("use" + Name + "ulti").GetValue<bool>())
                             if (hero.IncomeDamage > 0 && hero.HitTypes.Contains(HitType.Ultimate))
                                 CastOnBestTarget((AIHeroClient) hero.Attacker);
+
+                        if (ShouldUseOnMany(hero))
+                            CastOnBestTarget((AIHeroClient)hero.Attacker);
                     }
                 }
             }

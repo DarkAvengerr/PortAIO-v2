@@ -3,7 +3,9 @@ using Activator.Base;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Items.Defensives
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Items.Defensives
 {
     class _3143 : CoreItem
     {
@@ -11,7 +13,7 @@ using EloBuddy; namespace Activator.Items.Defensives
         internal override int Priority => 4;
         internal override string Name => "Randuins";
         internal override string DisplayName => "Randuin's Omen";
-        internal override int Duration => 1000;
+        internal override int Duration => 250;
         internal override float Range => 500f;
         internal override MenuType[] Category => new[] { MenuType.SelfLowHP, MenuType.SelfCount, MenuType.Gapcloser  };
         internal override MapType[] Maps => new[] { MapType.Common };

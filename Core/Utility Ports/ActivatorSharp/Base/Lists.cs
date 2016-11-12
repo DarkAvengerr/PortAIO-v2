@@ -13,7 +13,9 @@ using Activator.Spells;
 using Activator.Summoners;
 using System.Collections.Generic;
 
-using EloBuddy; namespace Activator.Base
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Base
 {
     public class Lists
     {
@@ -25,10 +27,36 @@ using EloBuddy; namespace Activator.Base
             HitType.ForceExhaust
         };
 
+        internal static List<string> YoumuuBuffs = new List<string>
+        {
+            "aatroxr",
+            "evelynnrshield",
+            "ireliatranscendentbladesspell",
+            "khazixr",
+            "khazixrstealth",
+            "lucianr",
+            "highlander",
+            "missfortunebulletsound",
+            "rengarr",
+            "rivenfengshuiengine",
+            "sivirr",
+            "vayneinquistion"
+
+            // todo buffs:
+            // talon r
+            // zed r
+            // vi r
+            // twitch r
+            // nassus r
+            // nocturne r
+            // kled r
+        };
+
         public static List<CoreItem> Items = new List<CoreItem>();
         public static List<CoreItem> BoughtItems = new List<CoreItem>();
         public static List<CoreSpell> Spells = new List<CoreSpell>();
         public static List<CoreSum> Summoners = new List<CoreSum>();
+        public static Dictionary<string, Priority> Priorities = new Dictionary<string, Priority>();
     }
 
     public enum HitType
@@ -43,7 +71,18 @@ using EloBuddy; namespace Activator.Base
         CrowdControl,
         Stealth,
         ForceExhaust,
-        Initiator
+        Initiator,
+        Troy,
+        Item,
+        Buff
+    }
+
+    public enum LogType
+    {
+        Info,
+        Warning,
+        Action,
+        Error
     }
 
     public enum MapType
@@ -63,7 +102,6 @@ using EloBuddy; namespace Activator.Base
         Cleanse,
         Gapcloser,
         SlowRemoval,
-        SpellShield,
         ActiveCheck,
         SelfCount,
         SelfMuchHP,

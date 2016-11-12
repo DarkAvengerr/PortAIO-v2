@@ -2,7 +2,9 @@ using System;
 using Activator.Base;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Items.Defensives
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Items.Defensives
 {
     class _3180 : CoreItem
     {
@@ -10,7 +12,7 @@ using EloBuddy; namespace Activator.Items.Defensives
         internal override int Priority => 4;
         internal override string Name => "Odyns";
         internal override string DisplayName => "Odyn's Veil";
-        internal override int Duration => 1000;
+        internal override int Duration => 250;
         internal override float Range => 525f;
         internal override MenuType[] Category => new[] { MenuType.SelfLowHP, MenuType.SelfCount };
         internal override MapType[] Maps => new[] { MapType.CrystalScar };
@@ -25,7 +27,7 @@ using EloBuddy; namespace Activator.Items.Defensives
             if (!Parent.Item(Parent.Name + "useon" + Player.NetworkId).GetValue<bool>())
                 return;
 
-            if (Player.Health/Player.MaxHealth*100 <= Menu.Item("selflowhp" + Name + "pct").GetValue<Slider>().Value)
+            if (Player.Health/Player.MaxHealth * 100 <= Menu.Item("selflowhp" + Name + "pct").GetValue<Slider>().Value)
             {
                 UseItem();
             }

@@ -4,7 +4,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using Activator.Data;
     
-using EloBuddy; namespace Activator.Summoners
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Summoners
 {
     internal class dot : CoreSum
     {
@@ -13,11 +15,41 @@ using EloBuddy; namespace Activator.Summoners
         internal override string[] ExtraNames => new[] { "" };
         internal override float Range => 600f;
         internal override int Duration => 100;
+        internal override int Priority => 4;
 
         internal Spell Q => new Spell(SpellSlot.Q);
         internal Spell W => new Spell(SpellSlot.W);
         internal Spell E => new Spell(SpellSlot.E);
         internal Spell R => new Spell(SpellSlot.R);
+
+        public override void AttachMenu(Menu menu)
+        {
+            Activator.UseEnemyMenu = true;
+            menu.AddItem(new MenuItem("idmgcheck", "Combo Damage Check (%)", true)).SetValue(95)
+                .SetValue(new Slider(100, 1, 200)).SetTooltip("Lower if Igniting to early. Increase if opposite.");
+
+            switch (Player.ChampionName)
+            {
+                case "Ahri":
+                    Menu.AddItem(new MenuItem("ii" + Player.ChampionName, Player.ChampionName + ": Check Charm"))
+                        .SetValue(false).SetTooltip("Only ignite if target is charmed?");
+                    break;
+                case "Cassiopeia":
+                    Menu.AddItem(new MenuItem("ii" + Player.ChampionName, Player.ChampionName + ": Check Poison"))
+                        .SetValue(false).SetTooltip("Only ignite if target is poisoned?");
+                    break;
+                case "Diana":
+                    Menu.AddItem(new MenuItem("ii" + Player.ChampionName, Player.ChampionName + ": Check Moonlight?"))
+                        .SetValue(false).SetTooltip("Only ignite if target has moonlight debuff?");
+                    break;
+            }
+
+            menu.AddItem(new MenuItem("itu", "Dont Ignite Near Turret")).SetValue(true);
+            menu.AddItem(new MenuItem("igtu", "-> Ignore after Level")).SetValue(new Slider(11, 1, 18));
+            menu.AddItem(new MenuItem("idraw", "Draw Combo Damage (%)")).SetValue(true);
+            menu.AddItem(new MenuItem("mode" + Name, "Mode: "))
+                .SetValue(new StringList(new[] { "Killsteal", "Combo" }, 0));
+        }
 
         public override void OnTick(EventArgs args)
         {
@@ -76,7 +108,7 @@ using EloBuddy; namespace Activator.Summoners
                         case "Cassiopeia":
                             if (!tar.Player.HasBuffOfType(BuffType.Poison) &&
                                 Menu.Item("ii" + Player.ChampionName).GetValue<bool>() &&
-                                (Q.IsReady() || W.IsReady()))
+                                (Q.IsReady()))
                                 continue;
 
                             var dmg = Math.Min(6, Player.Mana / E.ManaCost) * E.GetDamage(tar.Player);

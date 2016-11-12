@@ -3,7 +3,9 @@ using Activator.Base;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Items.Offensives
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Items.Offensives
 {
     class _3042 : CoreItem
     {
@@ -20,7 +22,7 @@ using EloBuddy; namespace Activator.Items.Offensives
 
         public _3042()
         {
-            // Obj_AI_Base.OnSpellCast += OnCast;
+            // Obj_AI_Base.OnProcessSpellCast += OnCast;
         }
 
         private bool muramana;
@@ -58,6 +60,8 @@ using EloBuddy; namespace Activator.Items.Offensives
 
         private void OnCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
+            return;
+
             if (!sender.IsMe || !IsReady() || Game.Version.Contains("6.4"))
             {
                 return;

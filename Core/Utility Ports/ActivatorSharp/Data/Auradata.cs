@@ -11,7 +11,9 @@
 using LeagueSharp;
 using System.Collections.Generic;
 
-using EloBuddy; namespace Activator.Data
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Data
 {
     public class Auradata
     {
@@ -45,7 +47,7 @@ using EloBuddy; namespace Activator.Data
                 EvadeTimer = 0,
                 Cleanse = true,
                 CleanseTimer = 0,
-                Slot = SpellSlot.R,
+                Slot = SpellSlot.Unknown,
                 Interval = 1.0
             });
 
@@ -56,7 +58,7 @@ using EloBuddy; namespace Activator.Data
                 Evade = false,
                 DoT = true,
                 EvadeTimer = 0,
-                Cleanse = false,
+                Cleanse = true,
                 CleanseTimer = 0,
                 Slot = SpellSlot.Unknown,
                 Interval = 1.0
@@ -93,7 +95,7 @@ using EloBuddy; namespace Activator.Data
                 Name = "itemdusknightfall",
                 MenuName = "Duskblade (Nightfall)",
                 Evade = false,
-                DoT = false,
+                DoT = true,
                 EvadeTimer = 0,
                 Cleanse = true,
                 CleanseTimer = 1650,
@@ -541,7 +543,7 @@ using EloBuddy; namespace Activator.Data
                 Cleanse = false,
                 CleanseTimer = 0,
                 Slot = SpellSlot.Q,
-                Interval = 3.8
+                Interval = 1.5
             });
 
             BuffList.Add(new Auradata
@@ -588,7 +590,7 @@ using EloBuddy; namespace Activator.Data
             BuffList.Add(new Auradata
             {
                 Champion = "Cassiopeia",
-                Name = "cassiopeianoxiousblastpoison",
+                Name = "cassiopeiaqdebuff",
                 MenuName = "Cassio Noxious Blast",
                 Evade = false,
                 Cleanse = false,
@@ -602,21 +604,7 @@ using EloBuddy; namespace Activator.Data
             BuffList.Add(new Auradata
             {
                 Champion = "Cassiopeia",
-                Name = "cassiopeiamiasmapoison",
-                MenuName = "Cassio Miasma",
-                Evade = false,
-                Cleanse = false,
-                DoT = true,
-                EvadeTimer = 0,
-                CleanseTimer = 0,
-                Slot = SpellSlot.Q,
-                Interval = 1.0
-            });
-
-            BuffList.Add(new Auradata
-            {
-                Champion = "Cassiopeia",
-                Name = "cassiopeiapetrifyinggazestun",
+                Name = "cassiopeiarstun",
                 MenuName = "Cassio Petrifying Gaze",
                 Evade = false,
                 DoT = false,
@@ -699,6 +687,34 @@ using EloBuddy; namespace Activator.Data
 
             BuffList.Add(new Auradata
             {
+                Champion = "Swain",
+                Name = "swainqtraptarget",
+                MenuName = "Swain Decrepify",
+                Evade = false,
+                DoT = true,
+                EvadeTimer = 0,
+                Cleanse = false,
+                CleanseTimer = 0,
+                Slot = SpellSlot.Q,
+                Interval = 0.5
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Swain",
+                Name = "swaintorment",
+                MenuName = "Swain Torment",
+                Evade = false,
+                DoT = true,
+                EvadeTimer = 0,
+                Cleanse = false,
+                CleanseTimer = 0,
+                Slot = SpellSlot.Q,
+                Interval = 0.5
+            });
+
+            BuffList.Add(new Auradata
+            {
                 Champion = "Urgot",
                 Name = "urgotcorrosivedebuff",
                 MenuName = "Urgot Corrosive Charge",
@@ -737,18 +753,6 @@ using EloBuddy; namespace Activator.Data
                 CleanseTimer = 0,
                 Slot = SpellSlot.Unknown,
                 Interval = 1.5
-            });
-
-            BuffList.Add(new Auradata
-            {
-                Name = "burningagony",
-                Evade = false,
-                DoT = true,
-                EvadeTimer = 0,
-                Cleanse = false,
-                CleanseTimer = 0,
-                Slot = SpellSlot.Unknown,
-                Interval = 1.0
             });
 
             BuffList.Add(new Auradata

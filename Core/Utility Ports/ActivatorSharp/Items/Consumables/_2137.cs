@@ -2,7 +2,9 @@ using System;
 using Activator.Base;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Items.Consumables
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Items.Consumables
 {
     class _2137 : CoreItem
     {
@@ -32,13 +34,12 @@ using EloBuddy; namespace Activator.Items.Consumables
                     if (hero.Player.IsRecalling() || hero.Player.InFountain())
                         return;
 
-                    if (hero.Player.Health/hero.Player.MaxHealth*100 <=
+                    if (hero.Player.Health/hero.Player.MaxHealth * 100 <=
                         Menu.Item("selflowhp" + Name + "pct").GetValue<Slider>().Value && hero.IncomeDamage > 0)
                         UseItem();
 
-                    if (hero.IncomeDamage / hero.Player.MaxHealth * 100 >=
-                        Menu.Item("selfmuchhp" + Name + "pct").GetValue<Slider>().Value)
-                        UseItem();                  
+                    if (ShouldUseOnMany(hero))
+                        UseItem();
                 }
             }
         }

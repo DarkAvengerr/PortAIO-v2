@@ -4,7 +4,9 @@ using Activator.Base;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Summoners
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Summoners
 {
     internal class exhuast : CoreSum
     {
@@ -13,6 +15,20 @@ using EloBuddy; namespace Activator.Summoners
         internal override string[] ExtraNames => new[] { "" };
         internal override float Range => 650f;
         internal override int Duration => 100;
+        internal override int Priority => 5;
+
+        public override void AttachMenu(Menu menu)
+        {
+            Activator.UseEnemyMenu = true;
+            menu.AddItem(new MenuItem("a" + Name + "pct", "Exhaust on ally HP (%)")).SetValue(new Slider(35));
+            menu.AddItem(new MenuItem("e" + Name + "pct", "Exhaust on enemy HP (%)")).SetValue(new Slider(45));
+            menu.AddItem(new MenuItem("use" + Name + "ulti", "Use on Dangerous (Utimates Only)"))
+                .SetValue(true).SetTooltip("Or spells with \"Force Exhaust\"");
+            menu.AddItem(new MenuItem("f" + Name, "-> Force Exhaust"))
+               .SetValue(true).SetTooltip("Will force exhaust ultimates ignoring HP% & income damage");
+            menu.AddItem(new MenuItem("mode" + Name, "Mode: ")).SetValue(new StringList(new[] { "Always", "Combo" }));
+        }
+
         public override void OnTick(EventArgs args)
         {
             if (!Menu.Item("use" + Name).GetValue<bool>() || !IsReady())

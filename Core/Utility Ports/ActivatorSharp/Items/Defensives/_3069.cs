@@ -2,7 +2,9 @@ using System;
 using Activator.Base;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Items.Defensives
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Items.Defensives
 {
     class _3069 : CoreItem
     {
@@ -10,7 +12,7 @@ using EloBuddy; namespace Activator.Items.Defensives
         internal override int Priority => 4;
         internal override string Name => "Talisman";
         internal override string DisplayName => "Talisman of Ascension";
-        internal override int Duration => 1000;
+        internal override int Duration => 250;
         internal override float Range => 600f;
         internal override MenuType[] Category => new[] { MenuType.EnemyLowHP, MenuType.SelfLowHP, MenuType.Zhonyas };
         internal override MapType[] Maps => new[] { MapType.Common };
@@ -37,7 +39,7 @@ using EloBuddy; namespace Activator.Items.Defensives
                         if (hero.IncomeDamage > 0 && hero.HitTypes.Contains(HitType.Ultimate))
                             UseItem();
 
-                    if (hero.Player.Health/hero.Player.MaxHealth*100 <=
+                    if (hero.Player.Health/hero.Player.MaxHealth * 100 <=
                         Menu.Item("selflowhp" + Name + "pct").GetValue<Slider>().Value)
                     {
                         if (hero.IncomeDamage > 0 && hero.Attacker != null &&

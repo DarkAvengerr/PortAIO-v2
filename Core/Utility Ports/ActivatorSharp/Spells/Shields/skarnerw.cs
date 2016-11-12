@@ -2,16 +2,19 @@ using System;
 using Activator.Base;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace Activator.Spells.Shields
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace Activator.Spells.Shields
 {
     class skarnerw : CoreSpell
     {
         internal override string Name => "skarnerexoskeleton";
         internal override string DisplayName => "Exoskeleton | W";
         internal override float Range => float.MaxValue;
-        internal override MenuType[] Category => new[] { MenuType.SelfLowHP, MenuType.SelfMuchHP, MenuType.SelfMinMP };
+        internal override MenuType[] Category => new[] { MenuType.SelfLowHP, MenuType.SelfMinMP };
         internal override int DefaultHP => 95;
         internal override int DefaultMP => 45;
+        internal override int Priority => 3;
 
         public override void OnTick(EventArgs args)
         {
@@ -28,10 +31,6 @@ using EloBuddy; namespace Activator.Spells.Shields
                     continue;
                 if (hero.Player.NetworkId == Player.NetworkId)
                 {
-                    if (hero.IncomeDamage / hero.Player.MaxHealth * 100 >=
-                        Menu.Item("selfmuchhp" + Name + "pct").GetValue<Slider>().Value)
-                            UseSpell();
-
                     if (hero.Player.Health / hero.Player.MaxHealth * 100 <=
                         Menu.Item("selflowhp" + Name + "pct").GetValue<Slider>().Value)
                     {
