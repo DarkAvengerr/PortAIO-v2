@@ -122,27 +122,27 @@ namespace SebbyLib
             return false;
         }
 
-        public static bool CanHitSkillShot(Obj_AI_Base target, GameObjectProcessSpellCastEventArgs args)
+        public static bool CanHitSkillShot(Obj_AI_Base target, Vector3 Start, Vector3 End, SpellData SData)
         {
-            if (args.Target == null && target.IsValidTarget(float.MaxValue,false))
+            if (target.IsValidTarget(float.MaxValue, false))
             {
 
                 var pred = Prediction.Prediction.GetPrediction(target, 0.25f).CastPosition;
                 if (pred == null)
                     return false;
 
-                if (args.SData.LineWidth > 0)
+                if (SData.LineWidth > 0)
                 {
-                    var powCalc = Math.Pow(args.SData.LineWidth + target.BoundingRadius, 2);
-                    if (pred.To2D().Distance(args.End.To2D(), args.Start.To2D(), true, true) <= powCalc || target.ServerPosition.To2D().Distance(args.End.To2D(), args.Start.To2D(), true, true) <= powCalc)
+                    var powCalc = Math.Pow(SData.LineWidth + target.BoundingRadius, 2);
+                    if (pred.To2D().Distance(End.To2D(), Start.To2D(), true, true) <= powCalc || target.ServerPosition.To2D().Distance(End.To2D(), Start.To2D(), true, true) <= powCalc)
                     {
                         return true;
-                    } 
+                    }
                 }
-                else if (target.Distance(args.End) < 50 + target.BoundingRadius || pred.Distance(args.End) < 50 + target.BoundingRadius)
+                else if (target.Distance(End) < 50 + target.BoundingRadius || pred.Distance(End) < 50 + target.BoundingRadius)
                 {
                     return true;
-                }  
+                }
             }
             return false;
         }
@@ -400,7 +400,7 @@ namespace SebbyLib
             {
                 foreach (var champion in ChampionList.Where(champion => !champion.IsDead && champion.IsVisible && champion.Team != sender.Team && champion.Distance(sender) < 2000))
                 {
-                    if (CanHitSkillShot(champion,args))
+                    if (CanHitSkillShot(champion, args.Start, args.End, args.SData))
                     {
                         IncomingDamageList.Add(new UnitIncomingDamage { Damage = sender.GetSpellDamage(champion, args.SData.Name), TargetNetworkId = champion.NetworkId, Time = Game.Time, Skillshot = true });
                     }
