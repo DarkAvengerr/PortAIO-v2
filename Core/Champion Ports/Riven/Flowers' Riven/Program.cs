@@ -36,7 +36,7 @@ using EloBuddy;
             OnLoad();
         }
 
-        public static void OnLoad()
+        private static void OnLoad()
         {
             if (ObjectManager.Player.ChampionName != "Riven")
             {
@@ -409,20 +409,20 @@ using EloBuddy;
                 return;
             }
 
-            switch (Args.Animation)
+            if (Args.Animation.Contains("c29"))
             {
-                case "Spell1a":
-                    QStack = 1;
-                    ResetQA(Menu.Item("Q1Delay", true).GetValue<Slider>().Value);
-                    break;
-                case "Spell1b":
-                    QStack = 2;
-                    ResetQA(Menu.Item("Q2Delay", true).GetValue<Slider>().Value);
-                    break;
-                case "Spell1c":
-                    QStack = 0;
-                    ResetQA(Menu.Item("Q3Delay", true).GetValue<Slider>().Value);
-                    break;
+                QStack = 1;
+                ResetQA(Menu.Item("Q1Delay", true).GetValue<Slider>().Value);
+            }
+            else if (Args.Animation.Contains("c39"))
+            {
+                QStack = 2;
+                ResetQA(Menu.Item("Q2Delay", true).GetValue<Slider>().Value);
+            }
+            else if (Args.Animation.Contains("c49"))
+            {
+                QStack = 0;
+                ResetQA(Menu.Item("Q3Delay", true).GetValue<Slider>().Value);
             }
         }
 
