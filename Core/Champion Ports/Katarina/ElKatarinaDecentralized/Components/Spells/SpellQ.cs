@@ -63,6 +63,7 @@ using EloBuddy;
                     return;
                 }
 
+
                 var target =
                     HeroManager.Enemies.Where(x => x.IsValidTarget(this.Range) && !x.IsDead && !x.IsZombie)
                         .OrderBy(x => x.Health)
@@ -75,9 +76,10 @@ using EloBuddy;
                         var minions = MinionManager.GetMinions(850f);
                         var countCloseToTarget = minions.Count(m => m.Distance(target) <= 570f);
 
-                        if (target.Distance(ObjectManager.Player) < 450f)
+                        if (target.Distance(ObjectManager.Player) < 750f)
                         {
                             this.SpellObject.CastOnUnit(target);
+                            this.SpellObject.LastCastAttemptT = Utils.TickCount;
                         }
 
                         if (countCloseToTarget >= 3)
@@ -90,6 +92,7 @@ using EloBuddy;
                             if (bestMinion != null)
                             {
                                 this.SpellObject.CastOnUnit(bestMinion);
+                                this.SpellObject.LastCastAttemptT = Utils.TickCount;
                             }
                         }
 
@@ -101,11 +104,13 @@ using EloBuddy;
                         if (target.CountEnemiesInRange(600f) >= 2)
                         {
                             this.SpellObject.CastOnUnit(target);
+                            this.SpellObject.LastCastAttemptT = Utils.TickCount;
                         }
                     }
                     else
                     {
                         this.SpellObject.CastOnUnit(target);
+                        this.SpellObject.LastCastAttemptT = Utils.TickCount;
                     }
                 }
             }
@@ -121,7 +126,12 @@ using EloBuddy;
         /// </summary>
         internal override void OnMixed()
         {
-            this.OnCombo();
+            var target = Misc.GetTarget(this.Range, this.DamageType);
+            if (target != null)
+            {
+                this.SpellObject.CastOnUnit(target);
+                this.SpellObject.LastCastAttemptT = Utils.TickCount;
+            }
         }
 
         /// <summary>

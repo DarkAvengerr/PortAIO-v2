@@ -1161,6 +1161,8 @@
     <Compile Include="Core\Champion Ports\Katarina\ElKatarinaDecentralized\Components\Spells\SpellQ.cs" />
     <Compile Include="Core\Champion Ports\Katarina\ElKatarinaDecentralized\Components\Spells\SpellR.cs" />
     <Compile Include="Core\Champion Ports\Katarina\ElKatarinaDecentralized\Components\Spells\SpellW.cs" />
+    <Compile Include="Core\Champion Ports\Katarina\ElKatarinaDecentralized\Damages\DrawDamage.cs" />
+    <Compile Include="Core\Champion Ports\Katarina\ElKatarinaDecentralized\Damages\RealDamages.cs" />
     <Compile Include="Core\Champion Ports\Katarina\ElKatarinaDecentralized\Enumerations\LoggingEntryType.cs" />
     <Compile Include="Core\Champion Ports\Katarina\ElKatarinaDecentralized\Program.cs" />
     <Compile Include="Core\Champion Ports\Katarina\ElKatarinaDecentralized\Utils\DaggerManager.cs" />
