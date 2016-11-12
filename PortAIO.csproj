@@ -1192,6 +1192,7 @@
     <Compile Include="Core\Champion Ports\Kha%27Zix\SephKhaZix\KhazixMenu.cs" />
     <Compile Include="Core\Champion Ports\Kha%27Zix\SSKhaZix\DrawDamage.cs" />
     <Compile Include="Core\Champion Ports\Kha%27Zix\SSKhaZix\Program.cs" />
+    <Compile Include="Core\Champion Ports\LeBlanc\BadaoLeBlanc\Program.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\LeBlanc II\Champion\PlayerObjects.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\LeBlanc II\Champion\PlayerSpells.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\LeBlanc II\Common\CommonAutoBush.cs" />
@@ -4496,8 +4497,6 @@
     <Compile Include="Core\Champion Ports\Kindred\Slutty Kindred\MenuConfig.cs" />
     <Compile Include="Core\Champion Ports\Kindred\Slutty Kindred\Program.cs" />
     <Compile Include="Core\Champion Ports\Kog%27Maw\EasyKogMaw\EasyKogMaw.cs" />
-    <Compile Include="Core\Champion Ports\LeBlanc\BadaoLeBlanc\Program.cs" />
-    <Compile Include="Core\Champion Ports\LeBlanc\BadaoLeBlanc\TwoChains.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\PopBlanc\ItemManager.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\PopBlanc\LeBlanc.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\PopBlanc\PassiveManager.cs" />
