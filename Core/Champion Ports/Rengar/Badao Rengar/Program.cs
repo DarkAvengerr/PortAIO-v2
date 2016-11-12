@@ -18,11 +18,13 @@ using EloBuddy;
     class Program
     {
         private static AIHeroClient Player { get { return ObjectManager.Player; } }
+
         public static void Main()
         {
             Game_OnGameLoad();
         }
-        private static void Game_OnGameLoad()
+
+        public static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Rengar")
                 return;
