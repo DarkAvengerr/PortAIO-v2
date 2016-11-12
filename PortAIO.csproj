@@ -1272,6 +1272,7 @@
     <Compile Include="Core\Champion Ports\Riven\Flowers%27 Riven\Evade\SpellDatabase.cs" />
     <Compile Include="Core\Champion Ports\Riven\Flowers%27 Riven\Evade\Utils.cs" />
     <Compile Include="Core\Champion Ports\Riven\Flowers%27 Riven\Program.cs" />
+    <Compile Include="Core\Champion Ports\Riven\HeavenStrikeRiven\Program.cs" />
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Core\BackgroundData.cs" />
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Core\Core.cs" />
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Core\Dmg.cs" />
@@ -4701,8 +4702,6 @@
     <Compile Include="Core\Champion Ports\Riven\EasyPeasyRivenSqueezy\RivenCombo.cs" />
     <Compile Include="Core\Champion Ports\Riven\EasyPeasyRivenSqueezy\WallJumper.cs" />
     <Compile Include="Core\Champion Ports\Riven\EloFactory Riven\Program.cs" />
-    <Compile Include="Core\Champion Ports\Riven\HeavenStrikeRiven\Orb.cs" />
-    <Compile Include="Core\Champion Ports\Riven\HeavenStrikeRiven\Program.cs" />
     <Compile Include="Core\Champion Ports\Riven\RivenSharpV2\HpBarIndicator.cs" />
     <Compile Include="Core\Champion Ports\Riven\RivenSharpV2\LXOrbwalker.cs" />
     <Compile Include="Core\Champion Ports\Riven\RivenSharpV2\Program.cs" />

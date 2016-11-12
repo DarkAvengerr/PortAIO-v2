@@ -35,14 +35,15 @@ using EloBuddy;
 
         public static float cE, cQ, cAA, cW, cTiamt, cR1, cR2, Wind, countforce, Rstate, R2countdonw;
         public static int Qstate = 1;
-        public static int Windup { get { return Orbwalking.Orbwalker._config.Item("ExtraWindup").GetValue<Slider>().Value; } }
+
+        public static int Windup { get { return Orbwalking.Orbwalker.getWindUp(); } }
 
         public static void Main()
         {
-            Game_OnGameLoad();
+            OnStart();
         }
 
-        static void Game_OnGameLoad()
+        private static void OnStart()
         {
             if (Player.ChampionName != "Riven")
                 return;
@@ -106,7 +107,7 @@ using EloBuddy;
         {
             if (!sender.IsMe)
                 return;
-            if (args.Animation == "Spell1a")
+            if (args.Animation.Contains("c29"))
             {
                 if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
                 {
@@ -114,13 +115,13 @@ using EloBuddy;
                 }
                 Qstate = 2;
             }
-            else if (args.Animation == "Spell1b")
+            else if (args.Animation.Contains("c39"))
             {
                 if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
                     LeagueSharp.Common.Utility.DelayAction.Add(300 - Game.Ping, () => EloBuddy.Player.DoEmote(Emote.Dance));
                 Qstate = 3;
             }
-            else if (args.Animation == "Spell1c")
+            else if (args.Animation.Contains("c49"))
             {
                 if (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
                     LeagueSharp.Common.Utility.DelayAction.Add(380 - Game.Ping, () => EloBuddy.Player.DoEmote(Emote.Dance));
@@ -161,7 +162,7 @@ using EloBuddy;
                 Combo();
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Burst)
                 Burst();
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.FastHarass)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.QuickHarass)
                 fastharass();
             if (WallJumpHelperActive)
                 walljump();
@@ -297,7 +298,7 @@ using EloBuddy;
                     E.Cast(target.Position);
                 }
             }
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.FastHarass)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.QuickHarass)
             {
                 if (HasItem())
                 {
@@ -346,7 +347,7 @@ using EloBuddy;
             }
             if (spell.Name.Contains("ItemTiamatCleave"))
             {
-                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.FastHarass)
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.QuickHarass)
                 {
                     if (Q.IsReady())
                     {
