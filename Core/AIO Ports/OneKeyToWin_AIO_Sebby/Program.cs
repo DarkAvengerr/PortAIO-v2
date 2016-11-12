@@ -593,56 +593,6 @@ namespace OneKeyToWin_AIO_Sebby
             if (!SPredictionLoad && (int)Game.Time % 2 == 0 && (Config.Item("Qpred", true).GetValue<StringList>().SelectedIndex == 2 || Config.Item("Wpred", true).GetValue<StringList>().SelectedIndex == 2
                 || Config.Item("Epred", true).GetValue<StringList>().SelectedIndex == 2 || Config.Item("Rpred", true).GetValue<StringList>().SelectedIndex == 2))
                 drawText("PRESS F5 TO LOAD SPREDICTION", Player.Position, System.Drawing.Color.Yellow, -300);
-
-            if (Program.AIOmode != 2 && spellFarmTimer + 1 > Game.Time && Config.Item("showNot").GetValue<bool>() && Config.Item("spellFarm") != null)
-            {
-                if (Config.Item("spellFarm").GetValue<bool>())
-                    DrawFontTextScreen(TextBold, "SPELLS FARM ON", Drawing.Width * 0.5f, Drawing.Height * 0.4f, Color.GreenYellow);
-                else
-                    DrawFontTextScreen(TextBold, "SPELLS FARM OFF", Drawing.Width * 0.5f, Drawing.Height * 0.4f, Color.OrangeRed);
-            }
-
-            if (AIOmode == 1 || Config.Item("disableDraws").GetValue<bool>())
-                return;
-
-            if (Game.Time - dodgeTime < 0.01 && (int)(Game.Time * 10) % 2 == 0 && !Player.IsMelee && Config.Item("positioningAssistant").GetValue<bool>() && Config.Item("positioningAssistantDraw").GetValue<bool>())
-            {
-                Render.Circle.DrawCircle(Player.Position, dodgeRange, System.Drawing.Color.DimGray, 1);
-                drawText("Anti-Melle Positioning Assistant", Player.Position, System.Drawing.Color.Gray);
-            }
-
-            if (Game.Time - DrawSpellTime < 0.5 && Config.Item("debugPred").GetValue<bool>() && (Config.Item("Qpred", true).GetValue<StringList>().SelectedIndex == 1 || Config.Item("Wpred", true).GetValue<StringList>().SelectedIndex == 1
-                || Config.Item("Epred", true).GetValue<StringList>().SelectedIndex == 1 || Config.Item("Rpred", true).GetValue<StringList>().SelectedIndex == 1))
-            {
-                if (DrawSpell.Type == SkillshotType.SkillshotLine)
-                    OktwCommon.DrawLineRectangle(DrawSpellPos.CastPosition, Player.Position, (int)DrawSpell.Width, 1, System.Drawing.Color.DimGray);
-                if (DrawSpell.Type == SkillshotType.SkillshotCircle)
-                    Render.Circle.DrawCircle(DrawSpellPos.CastPosition, DrawSpell.Width, System.Drawing.Color.DimGray, 1);
-
-                drawText("Aiming " + DrawSpellPos.Hitchance, Player.Position.Extend(DrawSpellPos.CastPosition, 400), System.Drawing.Color.Gray);
-            }
-
-            if (AIOmode != 1 && Config.Item("timer").GetValue<bool>() && jungler != null)
-            {
-                if (jungler == Player)
-                    drawText("Jungler not detected", Player.Position, System.Drawing.Color.Yellow, 100);
-                else if (jungler.IsDead)
-                    drawText("Jungler dead " + timer, Player.Position, System.Drawing.Color.Cyan, 100);
-                else if (jungler.IsVisible)
-                    drawText("Jungler visable " + timer, Player.Position, System.Drawing.Color.GreenYellow, 100);
-                else
-                {
-                    if (timer > 0)
-                        drawText("Jungler in jungle " + timer, Player.Position, System.Drawing.Color.Orange, 100);
-                    else if ((int)(Game.Time * 10) % 2 == 0)
-                        drawText("BE CAREFUL " + timer, Player.Position, System.Drawing.Color.OrangeRed, 100);
-                    if (Game.Time - JungleTime >= 1)
-                    {
-                        timer = timer - 1;
-                        JungleTime = Game.Time;
-                    }
-                }
-            }
         }
     }
 }
