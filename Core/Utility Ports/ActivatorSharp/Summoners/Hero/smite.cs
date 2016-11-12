@@ -29,6 +29,7 @@ using EloBuddy;
             var smiteCombo = Smitedata.CachedSpellList.FirstOrDefault();
 
             menu.AddItem(new MenuItem("usesmite", "Use Smite")).SetValue(new KeyBind('M', KeyBindType.Toggle, true)).Permashow();
+
             if (smiteCombo != null)
                 menu.AddItem(new MenuItem("smiteskill",
                     "-> Smite + " + smiteCombo.Name + " (" + smiteCombo.Slot + ")")).SetValue(true);
@@ -152,8 +153,8 @@ using EloBuddy;
             }
 
             // smite hero blu/red
-            if (Player.GetSpell(Activator.Smite).Name.ToLower() == "s5_summonersmiteduel" ||
-                Player.GetSpell(Activator.Smite).Name.ToLower() == "s5_summonersmiteplayerganker")
+            if (Activator.SmiteName.ToLower() == "s5_summonersmiteduel" ||
+                Activator.SmiteName.ToLower() == "s5_summonersmiteplayerganker")
             {
                 if (!Menu.Item("savesmite").GetValue<bool>() ||
                      Menu.Item("savesmite").GetValue<bool>() && Player.GetSpell(Activator.Smite).Ammo > 1)
@@ -161,7 +162,7 @@ using EloBuddy;
                     // KS Smite
                     if (Menu.Item("smitemode").GetValue<StringList>().SelectedIndex == 0 ||
                         Menu.Item("smitemode").GetValue<StringList>().SelectedIndex == 1 &&
-                        Player.GetSpell(Activator.Smite).Name.ToLower() == "s5_summonersmiteplayerganker")
+                        Activator.SmiteName.ToLower() == "s5_summonersmiteplayerganker")
                     {
                         foreach (
                             var hero in
@@ -176,8 +177,8 @@ using EloBuddy;
 
                     // Combo Smite
                     if (Menu.Item("smitemode").GetValue<StringList>().SelectedIndex == 1 &&
-                       (Player.GetSpell(Activator.Smite).Name.ToLower() == "s5_summonersmiteduel" ||
-                        Player.GetSpell(Activator.Smite).Name.ToLower() == "s5_summonersmiteplayerganker"))
+                       (Activator.SmiteName.ToLower() == "s5_summonersmiteduel" ||
+                        Activator.SmiteName.ToLower() == "s5_summonersmiteplayerganker"))
                     {
                         if (Activator.Origin.Item("usecombo").GetValue<KeyBind>().Active)
                         {

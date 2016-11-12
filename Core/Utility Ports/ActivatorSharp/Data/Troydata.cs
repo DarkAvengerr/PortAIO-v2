@@ -33,6 +33,61 @@ using EloBuddy;
         {
             Troys.Add(new Troydata
             {
+                Name = "R_buf",
+                ChampionName = "Renekton",
+                Radius = 266f,
+                Slot = SpellSlot.R,
+                HitTypes = new[] { HitType.None },
+                PredictDmg = true,
+                Interval = 0.75
+            });
+
+            Troys.Add(new Troydata
+            {
+                Name = "SpiritFire",
+                ChampionName = "Nasus",
+                Radius = 400f,
+                Slot = SpellSlot.E,
+                HitTypes = new[] { HitType.None },
+                PredictDmg = true,
+                Interval = 0.75
+            });
+
+            Troys.Add(new Troydata
+            {
+                Name = "R_Avatar",
+                ChampionName = "Nasus",
+                Radius = 266f,
+                Slot = SpellSlot.R,
+                HitTypes = new[] { HitType.None },
+                PredictDmg = true,
+                Interval = 0.75
+            });
+
+            Troys.Add(new Troydata
+            {
+                Name = "AnnieTibbers",
+                ChampionName = "Annie",
+                Radius = 266f,
+                Slot = SpellSlot.R,
+                HitTypes = new[] { HitType.None },
+                PredictDmg = true,
+                Interval = 0.5
+            });
+
+            Troys.Add(new Troydata
+            {
+                Name = "E_TrampleAOE",
+                ChampionName = "Alistar",
+                Radius = 266f,
+                Slot = SpellSlot.E,
+                HitTypes = new[] { HitType.None },
+                PredictDmg = true,
+                Interval = 0.5
+            });
+
+            Troys.Add(new Troydata
+            {
                 Name = "MonkeyKing_Base_R",
                 ChampionName = "MonkeyKing",
                 Radius = 165 + 100 + 0 + 1,

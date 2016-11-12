@@ -78,9 +78,9 @@ using EloBuddy;
                     continue;
                 }
 
-                foreach (var entry in Troydata.Troys.Where(x => x.Name == troy.Name))
+                foreach (var entry in Troydata.Troys.Where(x => x.Name.ToLower() == troy.Name.ToLower()))
                 {
-                    var owner = Activator.Heroes.FirstOrDefault(x => x.Player.ChampionName == entry.ChampionName);
+                    var owner = Activator.Heroes.FirstOrDefault(x => x.Player.ChampionName.ToLower() == entry.ChampionName.ToLower());
                     if (owner == null || !owner.Player.IsEnemy)
                     {
                         continue;
@@ -89,7 +89,7 @@ using EloBuddy;
                     Gamedata data = null;
 
                     if (entry.ChampionName == null && entry.Slot == SpellSlot.Unknown)
-                        data = new Gamedata();
+                        data = new Gamedata { SDataName = troy.Obj.Name };
 
                     if (entry.ChampionName != null && entry.Slot != SpellSlot.Unknown)
                         data = Gamedata.CachedSpells.Find(x => x.ChampionName.ToLower() == entry.ChampionName.ToLower());

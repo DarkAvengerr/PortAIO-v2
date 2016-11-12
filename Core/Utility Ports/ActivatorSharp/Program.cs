@@ -40,6 +40,7 @@ using EloBuddy;
         internal static int LastUsedDuration;
 
         internal static SpellSlot Smite;
+        internal static string SmiteName;
         internal static bool SmiteInGame;
         internal static bool TroysInGame;
         internal static bool UseEnemyMenu, UseAllyMenu;
@@ -255,7 +256,21 @@ using EloBuddy;
                 return;
             }
 
+            // original itemid's that i obtained kappa
+            int[] jungleItems =
+            {
+                3713, 3726, 3725, 3724, 3723,
+                3711, 3722, 3721, 3720, 3719,
+                3715, 3718, 3717, 3716, 3714,
+                3706, 3710, 3709, 3708, 3707,
+                1041 // machete
+            };
+
             int itemid = (int) args.Id;
+            if (jungleItems.Any(x => itemid.Equals(x)))
+            {
+                SmiteName = Player.GetSpell(SpellSlot.Summoner2).Name;
+            }
 
             foreach (CoreItem item in Lists.Items)
             {
@@ -384,12 +399,14 @@ using EloBuddy;
             {
                 SmiteInGame = true;
                 Smite = SpellSlot.Summoner1;
+                SmiteName = Player.GetSpell(SpellSlot.Summoner1).Name;
             }
 
             if (Player.GetSpell(SpellSlot.Summoner2).Name.ToLower().Contains("smite"))
             {
                 SmiteInGame = true;
                 Smite = SpellSlot.Summoner2;
+                SmiteName = Player.GetSpell(SpellSlot.Summoner2).Name;
             }
         }
 
