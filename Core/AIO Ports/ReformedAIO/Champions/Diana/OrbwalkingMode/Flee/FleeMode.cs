@@ -34,23 +34,23 @@ using EloBuddy;
 
         #region Methods
 
-        protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
             Game.OnUpdate -= OnUpdate;
         }
 
-        protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
             Game.OnUpdate += OnUpdate;
         }
 
-        //protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        //protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         //{
         //    fleeLogic = new FleeLogic();
-        //    base.OnLoad(sender, featureBaseEventArgs);
+        //    base.OnLoad(sender, eventArgs);
         //}
 
-        protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected sealed override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             Menu.AddItem(
                 new MenuItem(Name + "FleeKey", "Flee Key").SetValue(new KeyBind('A', KeyBindType.Press)));

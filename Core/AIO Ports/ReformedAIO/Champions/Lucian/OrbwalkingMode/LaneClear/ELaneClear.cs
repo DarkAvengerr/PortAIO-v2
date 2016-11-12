@@ -49,25 +49,25 @@ using EloBuddy;
             eSpell.Spell.Cast(dashSmart.Kite(minion.Position.To2D(), Menu.Item("Range").GetValue<Slider>().Value));
         }
 
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnLoad(sender, featureBaseEventArgs);
+            base.OnLoad(sender, eventArgs);
 
             Menu.AddItem(new MenuItem("EnemiesCheck", "Check Enemies First").SetValue(true).SetTooltip("Wont E If Nearby Enemies"));
             Menu.AddItem(new MenuItem("Range", "E Range").SetValue(new Slider(65, 1, 425)));
             Menu.AddItem(new MenuItem("EMana", "Min Mana %").SetValue(new Slider(60, 0, 100)));
         }
 
-        protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnDisable(sender, featureBaseEventArgs);
+            base.OnDisable(sender, eventArgs);
 
             Obj_AI_Base.OnSpellCast -= OnSpellCast;
         }
 
-        protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnEnable(sender, featureBaseEventArgs);
+            base.OnEnable(sender, eventArgs);
 
             Obj_AI_Base.OnSpellCast += OnSpellCast;
         }

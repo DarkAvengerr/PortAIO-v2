@@ -32,17 +32,17 @@ using EloBuddy;
 
         }
 
-        protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
             Drawing.OnDraw -= OnDraw;
         }
 
-        protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
             Drawing.OnDraw += OnDraw;
         }
 
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
         }
     }

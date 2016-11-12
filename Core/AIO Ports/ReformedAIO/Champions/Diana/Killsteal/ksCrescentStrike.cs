@@ -32,23 +32,23 @@ using EloBuddy;
 
         #region Methods
 
-        protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
             Game.OnUpdate -= OnUpdate;
         }
 
-        protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
             Game.OnUpdate += OnUpdate;
         }
 
-        //protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        //protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         //{
         //    qLogic = new CrescentStrikeLogic();
-        //    base.OnLoad(sender, featureBaseEventArgs);
+        //    base.OnLoad(sender, eventArgs);
         //}
 
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs) // TODO Add Dmg Multiplier(?)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs) // TODO Add Dmg Multiplier(?)
         {
             Menu.AddItem(new MenuItem(Menu.Name + "QRange", "Q Range ").SetValue(new Slider(820, 0, 825)));
 

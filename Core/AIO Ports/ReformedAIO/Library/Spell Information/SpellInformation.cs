@@ -2,6 +2,8 @@ using EloBuddy;
  using LeagueSharp.Common; 
  namespace ReformedAIO.Library.Spell_Information
 {
+    using System.Linq;
+
     using LeagueSharp;
     using LeagueSharp.Common;
 
@@ -12,6 +14,9 @@ using EloBuddy;
             return ObjectManager.Player.Distance(target.Position) / (speed + delay);
         }
 
-
+        public int SpellBuffCount(string buffName)
+        {
+            return ObjectManager.Player.Buffs.Count(x => x.Name == buffName);
+        }
     }
 }

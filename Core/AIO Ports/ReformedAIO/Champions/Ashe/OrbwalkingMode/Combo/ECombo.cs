@@ -33,23 +33,23 @@ using EloBuddy;
 
         #region Methods
 
-        protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnDisable(sender, featureBaseEventArgs);
+            base.OnDisable(sender, eventArgs);
 
             Drawing.OnDraw -= OnDraw;
             Game.OnUpdate -= OnUpdate;
         }
 
-        protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnEnable(sender, featureBaseEventArgs);
+            base.OnEnable(sender, eventArgs);
 
             Drawing.OnDraw += OnDraw;
             Game.OnUpdate += OnUpdate;
         }
 
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             Menu.AddItem(new MenuItem("EDistance", "Distance").SetValue(new Slider(2500, 0, 2500)).SetTooltip("Only for enemeis & not objectives"));
 

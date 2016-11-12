@@ -19,7 +19,6 @@ using EloBuddy;
 
         public Bootstrap(IEnumerable<LoadableBase> modules, IEnumerable<string> additionalStrings = null) : base(modules, additionalStrings)
         {
-            Chat.Print("<b><font color=\"#FFFFFF\">[</font></b><b><font color=\"#00e5e5\">Reformed AIO</font></b><b><font color=\"#FFFFFF\">]</font></b><b><font color=\"#FFFFFF\"> - Loaded!</font></b>");
         }
 
         #endregion

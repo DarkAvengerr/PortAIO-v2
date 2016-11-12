@@ -18,12 +18,11 @@ using EloBuddy;
     using Damage;
     using Killsteal;
 
+    using ReformedAIO.Champions.Lucian.Utility;
     using ReformedAIO.Library.Dash_Handler;
     using ReformedAIO.Library.SpellParent;
 
     using Spells;
-
-    using Utilities.Modules.Skinchanger;
 
     using RethoughtLib.FeatureSystem.Guardians;
     using RethoughtLib.Bootstraps.Abstract_Classes;
@@ -79,7 +78,7 @@ using EloBuddy;
             var drawingParent = new Parent("Drawings");
             var reformedUtilityParent = new Parent("Reformed Utility");
 
-            reformedUtilityParent.Add(new Skinchanger());
+            reformedUtilityParent.Add(new LucianSkinchanger());
 
            // var new PlayerMustHaveBuff("LucianPassiveBuff") { Negated = true } = new PlayerMustHaveBuff("LucianPassiveBuff") { Negated = true };
             var eMustNotBeReadyGuardian = new SpellMustBeReady(SpellSlot.E) { Negated = true };

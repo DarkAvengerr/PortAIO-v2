@@ -76,7 +76,7 @@ using EloBuddy;
             }
         }
 
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             Menu.AddItem(new MenuItem("FleeKey", "Flee Key").SetValue(new KeyBind('A', KeyBindType.Press)));
 
@@ -89,12 +89,12 @@ using EloBuddy;
             fleeLogic = new FleeLogic();
         }
 
-        protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
             Game.OnUpdate -= OnUpdate;
         }
 
-        protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
             Game.OnUpdate += OnUpdate;
         }

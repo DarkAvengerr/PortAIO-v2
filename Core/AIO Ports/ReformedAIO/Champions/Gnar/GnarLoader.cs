@@ -18,6 +18,8 @@ using EloBuddy;
     using PermaActive;
     using PermaActive.Killsteal;
 
+    using ReformedAIO.Champions.Gnar.Utility;
+
     using RethoughtLib.Bootstraps.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Guardians;
@@ -52,6 +54,10 @@ using EloBuddy;
             var killstealParent = new Parent("Killsteal");
             var fleeParent = new Parent("Flee");
             var drawingParent = new Parent("Drawing");
+
+            var reformedUtilityParent = new Parent("Reformed Utility");
+
+            reformedUtilityParent.Add(new GnarSkinchanger());
 
             var mustNotBeWindingUp = new PlayerMustNotBeWindingUp();
             var qReady = new SpellMustBeReady(SpellSlot.Q);
@@ -107,6 +113,7 @@ using EloBuddy;
 
             superParent.Add(new Base[]
             {
+                reformedUtilityParent,
                 orbwalker,
                 comboParent,
                 harassParent,
@@ -120,8 +127,13 @@ using EloBuddy;
             superParent.Load();
 
 
+            reformedUtilityParent.Menu.Style = FontStyle.Bold;
+            reformedUtilityParent.Menu.Color = Color.Cyan;
+
             superParent.Menu.Style = FontStyle.Bold;
             superParent.Menu.Color = Color.Cyan;
+
+            Chat.Print("<b><font color=\"#FFFFFF\">[</font></b><b><font color=\"#00e5e5\">Reformed AIO</font></b><b><font color=\"#FFFFFF\">]</font></b><b><font color=\"#FFFFFF\"> - Gnar!</font></b>");
         }
     }
 }

@@ -1,11 +1,9 @@
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace ReformedAIO.Utilities
+ namespace ReformedAIO.Utility
 {
     using System.Collections.Generic;
     using System.Drawing;
-
-    using ReformedAIO.Utilities.Modules.Skinchanger;
 
     using RethoughtLib.Bootstraps.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
@@ -27,7 +25,7 @@ using EloBuddy;
 
             superParent.Add(new List<Base>()
                                 {
-                                    new Skinchanger()
+                                 
                                 });
 
 

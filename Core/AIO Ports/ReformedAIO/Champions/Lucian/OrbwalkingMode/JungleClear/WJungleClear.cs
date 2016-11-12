@@ -50,23 +50,23 @@ using EloBuddy;
         }
 
 
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnLoad(sender, featureBaseEventArgs);
+            base.OnLoad(sender, eventArgs);
 
             Menu.AddItem(new MenuItem("WMana", "Min Mana %").SetValue(new Slider(5, 0, 100)));
         }
 
-        protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnDisable(sender, featureBaseEventArgs);
+            base.OnDisable(sender, eventArgs);
 
             Obj_AI_Base.OnSpellCast -= OnSpellCast;
         }
 
-        protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnEnable(sender, featureBaseEventArgs);
+            base.OnEnable(sender, eventArgs);
 
             Obj_AI_Base.OnSpellCast += OnSpellCast;
         }

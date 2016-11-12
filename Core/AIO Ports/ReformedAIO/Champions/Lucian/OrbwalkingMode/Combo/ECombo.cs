@@ -40,7 +40,7 @@ using EloBuddy;
 
             var target = TargetSelector.GetTarget(ObjectManager.Player.AttackRange + Menu.Item("EDistance").GetValue<Slider>().Value, TargetSelector.DamageType.Physical);
 
-            if (!Menu.Item("Execute").GetValue<bool>() || target == null || target.Health > (damage.GetComboDamage(target) * 1.3))
+            if (!Menu.Item("Execute").GetValue<bool>() || target == null || target.Health > damage.GetComboDamage(target) * 1.1)
             {
                 return;
             }
@@ -79,9 +79,9 @@ using EloBuddy;
             }
         }
 
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnLoad(sender, featureBaseEventArgs);
+            base.OnLoad(sender, eventArgs);
 
             Menu.AddItem(new MenuItem("EMode", "Mode").SetValue(new StringList(new [] {"Cursor", "Kite", "Automatic"}, 2)));
             Menu.AddItem(new MenuItem("Execute", "Dive E If Killable").SetValue(true));
@@ -89,17 +89,17 @@ using EloBuddy;
             Menu.AddItem(new MenuItem("EMana", "Min Mana %").SetValue(new Slider(5, 0, 100)));
         }
 
-        protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnDisable(sender, featureBaseEventArgs);
+            base.OnDisable(sender, eventArgs);
 
             Game.OnUpdate -= OnUpdate;
             Obj_AI_Base.OnSpellCast -= OnSpellCast;
         }
 
-        protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnEnable(sender, featureBaseEventArgs);
+            base.OnEnable(sender, eventArgs);
 
             Game.OnUpdate += OnUpdate;
             Obj_AI_Base.OnSpellCast += OnSpellCast;

@@ -43,7 +43,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "OKTW", "Anivia#", "xSalice", "[SDK] ExorAIO" };
                     break;
                 case EloBuddy.Champion.Annie:
-                    champ = new string[] { "OKTW", "Korean Annie", "SharpyAIO", "Support is Easy", "EloFactory Annie", "Flowers' Annie", "OAnnie" };
+                    champ = new string[] { "OKTW", "Korean Annie", "SharpyAIO", "Support is Easy", "EloFactory Annie", "Flowers' Annie", "OAnnie", "ReformedAIO" };
                     break;
                 case EloBuddy.Champion.Ashe:
                     champ = new string[] { "OKTW", "ProSeries", "ReformedAIO", "SharpShooter", "[SA] SurvivorSeries", "xSalice", "Marksman#", "[SDK] The Queen of the Ice", "[SDK] ChallengerSeriesAIO", "[SDK] Dicaste's Ashe", "[SDK] ExorAIO", "[SDK] Flowers' Series", "[SDK] xcsoft's Ashe", "Ashe#", "CarryAshe", "SNAshe", "ProjectGeass", "Hikicarry ADC", "Flowers' ADC Series", "SurvivorSeriesAIO" };
@@ -254,7 +254,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "Nunu by Alqohol", "Support Is Easy", "[SDK] ExorAIO" };
                     break;
                 case EloBuddy.Champion.Olaf:
-                    champ = new string[] { "Olaf is Back II", "UnderratedAIO", "[SDK] ExorAIO", "JustOlaf - Reborn", "Korean Olaf" };
+                    champ = new string[] { "Olaf is Back II", "UnderratedAIO", "[SDK] ExorAIO", "JustOlaf - Reborn", "Korean Olaf", "ReformedAIO" };
                     break;
                 case EloBuddy.Champion.Orianna:
                     champ = new string[] { "Kortatu Orianna", "DZAIO", "OKTW", "SAutoCarry", "SFXChallenger", "xSalice", "[SDK] ExorAIO", "Orianna - the Ruler of Ball", "Orianna by Trelli", "Orianna Grande", "Midlane#" };

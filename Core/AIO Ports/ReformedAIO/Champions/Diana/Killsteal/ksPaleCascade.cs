@@ -32,23 +32,23 @@ using EloBuddy;
 
         #region Methods
 
-        protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
             Game.OnUpdate -= OnUpdate;
         }
 
-        protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
             Game.OnUpdate += OnUpdate;
         }
 
-        //protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        //protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         //{
         //    rLogic = new PaleCascadeLogic();
-        //    base.OnLoad(sender, featureBaseEventArgs);
+        //    base.OnLoad(sender, eventArgs);
         //}
 
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             Menu.AddItem(new MenuItem(Menu.Name + "RRange", "R Range ").SetValue(new Slider(825, 0, 825)));
 

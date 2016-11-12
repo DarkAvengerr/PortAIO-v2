@@ -24,25 +24,25 @@ using EloBuddy;
 
         private AIHeroClient Target => TargetSelector.GetTarget(eSpell.Spell.Range, TargetSelector.DamageType.Physical);
 
-        protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnDisable(sender, featureBaseEventArgs);
+            base.OnDisable(sender, eventArgs);
 
             AntiGapcloser.OnEnemyGapcloser -= Gapcloser;
             Game.OnUpdate -= OnUpdate;
         }
 
-        protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnEnable(sender, featureBaseEventArgs);
+            base.OnEnable(sender, eventArgs);
 
             AntiGapcloser.OnEnemyGapcloser += Gapcloser;
             Game.OnUpdate += OnUpdate;
         }
 
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnLoad(sender, featureBaseEventArgs);
+            base.OnLoad(sender, eventArgs);
 
             Menu.AddItem(new MenuItem("Mana", "Mana %").SetValue(new Slider(0, 0, 100)));
 
@@ -72,14 +72,14 @@ using EloBuddy;
                 return;
             }
 
-            if (ObjectManager.Player.Distance(Target) < ObjectManager.Player.AttackRange / 2 && Menu.Item("AntiMelee").GetValue<bool>())
+            var ePrediction = eSpell.Spell.GetPrediction(Target);
+
+            if (ObjectManager.Player.Distance(Target) < ObjectManager.Player.AttackRange / 2 && Menu.Item("AntiMelee").GetValue<bool>() && ePrediction.Hitchance >= HitChance.High)
             {
                 eSpell.Spell.Cast(Target.Position);
             }
 
-            var ePrediction = eSpell.Spell.GetPrediction(Target);
-
-            if (ePrediction.Hitchance < HitChance.High)
+            if (ePrediction.Hitchance < HitChance.VeryHigh)
             {
                 return;
             }

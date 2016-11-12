@@ -32,9 +32,9 @@ using EloBuddy;
 
         #region Methods
 
-        protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnDisable(sender, featureBaseEventArgs);
+            base.OnDisable(sender, eventArgs);
 
             Interrupter2.OnInterruptableTarget -= Interrupt;
 
@@ -43,9 +43,9 @@ using EloBuddy;
             Game.OnUpdate -= OnUpdate;
         }
 
-        protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnEnable(sender, featureBaseEventArgs);
+            base.OnEnable(sender, eventArgs);
 
             Interrupter2.OnInterruptableTarget += Interrupt;
 
@@ -54,7 +54,7 @@ using EloBuddy;
             Game.OnUpdate += OnUpdate;
         }
 
-        protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected sealed override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             Menu.AddItem(new MenuItem(Name + "EInterrupt", "Interrupt").SetValue(true));
 

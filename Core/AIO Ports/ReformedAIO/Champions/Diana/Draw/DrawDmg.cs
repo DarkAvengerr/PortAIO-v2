@@ -56,26 +56,26 @@ using EloBuddy;
 
         #region Methods
 
-        protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
             Drawing.OnEndScene -= OnEndScene;
 
         }
 
-        protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
             Drawing.OnEndScene += OnEndScene;
             
         }
 
-        //protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        //protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         //{
         //    logic = new LogicAll();
         //    drawDamage = new HeroHealthBarIndicator();
-        //    base.OnLoad(sender, featureBaseEventArgs);
+        //    base.OnLoad(sender, eventArgs);
         //}
 
-        protected sealed override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected sealed override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             Menu = new Menu(Name, Name);
 
@@ -83,7 +83,7 @@ using EloBuddy;
 
             logic = new LogicAll();
             drawDamage = new HeroHealthBarIndicator();
-            base.OnLoad(sender, featureBaseEventArgs);
+            base.OnLoad(sender, eventArgs);
         }
 
         #endregion

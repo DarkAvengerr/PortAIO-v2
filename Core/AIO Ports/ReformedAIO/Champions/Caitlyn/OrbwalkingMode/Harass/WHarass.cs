@@ -1,6 +1,6 @@
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Combo
+ namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Harass
 {
     using System;
     using System.Linq;
@@ -27,27 +27,27 @@ using EloBuddy;
 
         private bool ewq;
 
-        protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnDisable(sender, featureBaseEventArgs);
+            base.OnDisable(sender, eventArgs);
 
             Obj_AI_Base.OnProcessSpellCast -= OnProcessSpellCast;
             AntiGapcloser.OnEnemyGapcloser -= Gapcloser;
             Game.OnUpdate -= OnUpdate;
         }
 
-        protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnEnable(sender, featureBaseEventArgs);
+            base.OnEnable(sender, eventArgs);
 
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
             AntiGapcloser.OnEnemyGapcloser += Gapcloser;
             Game.OnUpdate += OnUpdate;
         }
 
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnLoad(sender, featureBaseEventArgs);
+            base.OnLoad(sender, eventArgs);
 
             Menu.AddItem(new MenuItem("Mana", "Mana %").SetValue(new Slider(5, 0, 100)));
 

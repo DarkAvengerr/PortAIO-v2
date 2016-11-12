@@ -17,6 +17,8 @@ using EloBuddy;
    using OrbwalkingMode.Lane;
    using OrbwalkingMode.Mixed;
 
+    using ReformedAIO.Champions.Gragas.Utility;
+
     using RethoughtLib.Bootstraps.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Guardians;
@@ -55,6 +57,10 @@ using EloBuddy;
             var jungleParent = new OrbwalkingParent("Jungle", orbwalker.OrbwalkerInstance, Orbwalking.OrbwalkingMode.LaneClear);
             var mixedParent = new OrbwalkingParent("Mixed", orbwalker.OrbwalkerInstance, Orbwalking.OrbwalkingMode.Mixed);
             var draw = new Parent("Drawings");
+
+            var reformedUtilityParent = new Parent("Reformed Utility");
+
+            reformedUtilityParent.Add(new GragasSkinchanger());
 
             var qLogic = new QLogic();
             qLogic.Load();
@@ -101,6 +107,7 @@ using EloBuddy;
           
             superParent.Add(new Base[]
             {
+                reformedUtilityParent,
                 orbwalker,
                 comboParent,
                 mixedParent,
@@ -113,8 +120,13 @@ using EloBuddy;
 
             superParent.Load();
 
+            reformedUtilityParent.Menu.Style = FontStyle.Bold;
+            reformedUtilityParent.Menu.Color = Color.Cyan;
+
             superParent.Menu.Style = FontStyle.Bold;
             superParent.Menu.Color = Color.Cyan;
+
+            Chat.Print("<b><font color=\"#FFFFFF\">[</font></b><b><font color=\"#00e5e5\">Reformed AIO</font></b><b><font color=\"#FFFFFF\">]</font></b><b><font color=\"#FFFFFF\"> - Gragas!</font></b>");
         }
 
         #endregion

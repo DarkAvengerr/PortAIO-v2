@@ -90,9 +90,9 @@ using EloBuddy;
             Spells.E.Cast(ePred.CollisionObjects[0].Position);
         }
 
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnLoad(sender, featureBaseEventArgs);
+            base.OnLoad(sender, eventArgs);
 
             Menu.AddItem(new MenuItem("E1Range", "Range").SetValue(new Slider(475, 0, 475)));
             Menu.AddItem(new MenuItem("EAwayMelee", "E Away From Melee's").SetValue(false));
@@ -103,17 +103,17 @@ using EloBuddy;
             gnarState = new GnarState();
         }
 
-        protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnDisable(sender, featureBaseEventArgs);
+            base.OnDisable(sender, eventArgs);
 
             AntiGapcloser.OnEnemyGapcloser -= Gapcloser;
             Game.OnUpdate -= GameOnUpdate;
         }
 
-        protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnEnable(sender, featureBaseEventArgs);
+            base.OnEnable(sender, eventArgs);
 
             AntiGapcloser.OnEnemyGapcloser += Gapcloser;
             Game.OnUpdate += GameOnUpdate;

@@ -15,7 +15,9 @@ using EloBuddy;
     using Caitlyn.OrbwalkingMode.Jungle;
     using Caitlyn.OrbwalkingMode.Lane;
 
+    using ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Harass;
     using ReformedAIO.Champions.Caitlyn.Spells;
+    using ReformedAIO.Champions.Caitlyn.Utility;
     using ReformedAIO.Library.SpellParent;
 
     using RethoughtLib.FeatureSystem.Guardians;
@@ -65,6 +67,10 @@ using EloBuddy;
             var killstealParent = new Parent("Killsteal");
             var drawParent = new Parent("Drawings");
 
+            var utilityParent = new Parent("Reformed Utility");
+
+            utilityParent.Add(new CaitlynSkinchanger());
+
             var logic = new ComboLogic(eSpell, wSpell, qSpell, rSpell);
 
             comboParent.Add(new List<Base>()
@@ -106,6 +112,7 @@ using EloBuddy;
             });
 
             superParent.Add(new List<Base> {
+                utilityParent,
                 orbwalkerModule,
                 comboParent,
                 harassParent,
@@ -117,8 +124,13 @@ using EloBuddy;
 
             superParent.Load();
 
+            utilityParent.Menu.Style = FontStyle.Bold;
+            utilityParent.Menu.Color = Color.Cyan;
+
             superParent.Menu.Style = FontStyle.Bold;
             superParent.Menu.Color = Color.Cyan;
+
+            Chat.Print("<b><font color=\"#FFFFFF\">[</font></b><b><font color=\"#00e5e5\">Reformed AIO</font></b><b><font color=\"#FFFFFF\">]</font></b><b><font color=\"#FFFFFF\"> - Caitlyn!</font></b>");
         }
     }
 }

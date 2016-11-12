@@ -1,6 +1,6 @@
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace ReformedAIO.Utilities.Modules.Skinchanger
+ namespace ReformedAIO.Champions.Ezreal.Utility
 {
     using System;
 
@@ -9,7 +9,7 @@ using EloBuddy;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
-    internal class Skinchanger : ChildBase
+    internal class EzrealSkinchanger : ChildBase
     {
         public override string Name { get; set; } = "Skinchanger";
 
@@ -18,13 +18,15 @@ using EloBuddy;
             //ObjectManager.//Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, Menu.Item("Skin").GetValue<StringList>().SelectedIndex);
         }
 
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnLoad(sender, featureBaseEventArgs);
+            base.OnLoad(sender, eventArgs);
+            var a = ObjectManager.Player.CharData.BaseSkinName;
 
-            Menu.AddItem(new MenuItem("Skin", "Skin")).SetValue(new StringList(new []
+            Menu.AddItem(new MenuItem("Skin", "Skin")).SetValue(new StringList(new[]
                                                                                    {
-            "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"
+            "Classic Ezreal",  "Nottingham Ezreal", "Frosted Ezreal", "Striker Ezreal", "Pulsefire Ezreal", "Explorer Ezreal", "Debonair Ezreal", "TPA Ezreal",
+                "Ace of Spades Ezreal", "Arcade Ezreal"
                                                                                    }));
         }
 
@@ -32,6 +34,7 @@ using EloBuddy;
         {
             base.OnDisable(sender, eventArgs);
             Game.OnUpdate -= OnUpdate;
+            //ObjectManager.//Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, ObjectManager.Player.SkinId);
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)

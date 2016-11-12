@@ -379,6 +379,9 @@ namespace PortAIO
                         case 6: // OAnnie
                             OAnnie.Program.Main();
                             break;
+                        case 7: // ReformedAIO
+                            ReformedAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Ashe:
@@ -2375,6 +2378,9 @@ namespace PortAIO
                             break;
                         case 4: // Korean Olaf
                             KoreanOlaf.Program.Main();
+                            break;
+                        case 5: // ReformedAIO
+                            ReformedAIO.Program.Main();
                             break;
                     }
                     break;

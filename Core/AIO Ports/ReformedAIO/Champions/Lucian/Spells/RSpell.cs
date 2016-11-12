@@ -19,9 +19,9 @@ using EloBuddy;
             return !Spell.IsReady() ? 0 : Spell.GetDamage(target);
         }
 
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnLoad(sender, featureBaseEventArgs);
+            base.OnLoad(sender, eventArgs);
 
             Spell = new Spell(SpellSlot.R, 1200);
             Spell.SetSkillshot(.2f, 110f, 2500f, true, SkillshotType.SkillshotLine);
