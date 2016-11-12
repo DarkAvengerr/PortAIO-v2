@@ -62,7 +62,11 @@ using EloBuddy;
 
             if (MenuLocal.Item("Flee.UseR").GetValue<bool>())
             {
-                Champion.PlayerSpells.CastW2(Game.CursorPos);
+                if (Champion.PlayerSpells.W2.IsReady() && !Champion.PlayerSpells.W2.StillJumped())
+                {
+                    Champion.PlayerSpells.W2.Cast(Game.CursorPos);
+                }
+                //Champion.PlayerSpells.CastW2(Game.CursorPos);
             }
         }
     }

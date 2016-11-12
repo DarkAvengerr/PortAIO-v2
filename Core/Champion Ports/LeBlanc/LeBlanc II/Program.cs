@@ -7,7 +7,7 @@ using EloBuddy;
     internal class Program
     {
         
-        private static void Main(string[] args)
+        public static void Main()
         {
             Leblanc.Init();
         }
