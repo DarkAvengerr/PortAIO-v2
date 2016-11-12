@@ -3479,6 +3479,9 @@ namespace PortAIO
                         case 8: // BadaoVeigar
                             BadaoKingdom.Program.Main();
                             break;
+                        case 9: // xSalice
+                            xSaliceResurrected_Rework.Program.LoadReligion();
+                            break;
                     }
                     break;
                 case Champion.Velkoz:
@@ -3757,6 +3760,9 @@ namespace PortAIO
                             break;
                         case 4: // Ze-D Is Back
                             zedisback.Program.Main();
+                            break;
+                        case 5: // xSalice
+                            xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                     }
                     break;

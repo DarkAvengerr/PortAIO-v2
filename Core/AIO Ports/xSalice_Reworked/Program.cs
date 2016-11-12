@@ -8,11 +8,6 @@ using EloBuddy;
 
     public class Program
     {
-        public static void Main()
-        {
-            LoadReligion();
-        }
-
         public static void LoadReligion()
         {
             var champs = new Champion(true);

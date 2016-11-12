@@ -228,6 +228,27 @@ using EloBuddy;
                         Q.Cast(target);
                     }
 
+                    if (Menu.Item("UseEDaggerCombo", true).GetValue<bool>() && Dagger != null 
+                        && Dagger.Distance(Player) <= E.Range)
+                    {
+                        if (Menu.Item("smartE", true).GetValue<bool>() &&
+                            Player.CountEnemiesInRange(500) > 2 &&
+                            (!R.IsReady() || !(RSpell.State == SpellState.Surpressed && R.Level > 0)))
+                        {
+                            return;
+                        }
+
+                        var delay = Menu.Item("E_Delay_Slider", true).GetValue<Slider>().Value;
+
+                        if (Dagger.Position.CountEnemiesInRange(400) > 0)
+                        {
+                            Orbwalker.SetAttack(false);
+                            Orbwalker.SetMovement(false);
+                            E.Cast(Dagger, true);
+                            E.LastCastAttemptT = Utils.TickCount + delay;
+                        }
+                    }
+
                     if (Menu.Item("UseECombo", true).GetValue<bool>() && E.IsReady() &&
                         target.IsValidTarget(E.Range) &&
                         Utils.TickCount - E.LastCastAttemptT > 0 &&
@@ -240,21 +261,10 @@ using EloBuddy;
 
                         var delay = Menu.Item("E_Delay_Slider", true).GetValue<Slider>().Value;
 
-                        if (Menu.Item("UseEDaggerCombo", true).GetValue<bool>() && Dagger != null 
-                            && Dagger.Position.CountEnemiesInRange(400) > 0)
-                        {
-                            Orbwalker.SetAttack(false);
-                            Orbwalker.SetMovement(false);
-                            E.Cast(Dagger, true);
-                            E.LastCastAttemptT = Utils.TickCount + delay;
-                        }
-                        else
-                        {
-                            Orbwalker.SetAttack(false);
-                            Orbwalker.SetMovement(false);
-                            E.Cast(target, true);
-                            E.LastCastAttemptT = Utils.TickCount + delay;
-                        }
+                        Orbwalker.SetAttack(false);
+                        Orbwalker.SetMovement(false);
+                        E.Cast(target, true);
+                        E.LastCastAttemptT = Utils.TickCount + delay;
                     }
                 }
                 else if (mode == 1)
@@ -273,10 +283,31 @@ using EloBuddy;
                         ItemManager.UseTargetted = true;
                     }
 
+                    if (Menu.Item("UseEDaggerCombo", true).GetValue<bool>() && Dagger != null
+                        && Dagger.Distance(Player) <= E.Range)
+                    {
+                        if (Menu.Item("smartE", true).GetValue<bool>() &&
+                            Player.CountEnemiesInRange(500) > 2 &&
+                            (!R.IsReady() || !(RSpell.State == SpellState.Surpressed && R.Level > 0)))
+                        {
+                            return;
+                        }
+
+                        var delay = Menu.Item("E_Delay_Slider", true).GetValue<Slider>().Value;
+
+                        if (Dagger.Position.CountEnemiesInRange(400) > 0)
+                        {
+                            Orbwalker.SetAttack(false);
+                            Orbwalker.SetMovement(false);
+                            E.Cast(Dagger, true);
+                            E.LastCastAttemptT = Utils.TickCount + delay;
+                        }
+                    }
+
                     if (Menu.Item("UseECombo", true).GetValue<bool>() && E.IsReady() &&
                         target.IsValidTarget(E.Range) &&
                         Utils.TickCount - E.LastCastAttemptT > 0 &&
-                        Player.Distance(target.Position) > eDis)
+                        Player.Distance(target.Position) > eDis && !Q.IsReady())
                     {
                         if (Menu.Item("smartE", true).GetValue<bool>() &&
                             Player.CountEnemiesInRange(500) > 2 &&
@@ -285,21 +316,10 @@ using EloBuddy;
 
                         var delay = Menu.Item("E_Delay_Slider", true).GetValue<Slider>().Value;
 
-                        if (Menu.Item("UseEDaggerCombo", true).GetValue<bool>() && Dagger != null
-                            && Dagger.Position.CountEnemiesInRange(400) > 0)
-                        {
-                            Orbwalker.SetAttack(false);
-                            Orbwalker.SetMovement(false);
-                            E.Cast(Dagger, true);
-                            E.LastCastAttemptT = Utils.TickCount + delay;
-                        }
-                        else
-                        {
-                            Orbwalker.SetAttack(false);
-                            Orbwalker.SetMovement(false);
-                            E.Cast(target, true);
-                            E.LastCastAttemptT = Utils.TickCount + delay;
-                        }
+                        Orbwalker.SetAttack(false);
+                        Orbwalker.SetMovement(false);
+                        E.Cast(target, true);
+                        E.LastCastAttemptT = Utils.TickCount + delay;
                     }
 
                     if (Menu.Item("UseQCombo", true).GetValue<bool>() && Q.IsReady() &&

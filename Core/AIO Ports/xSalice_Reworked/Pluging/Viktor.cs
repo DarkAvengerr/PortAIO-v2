@@ -12,7 +12,6 @@ using EloBuddy;
     using Managers;
     using Utilities;
     using Color = System.Drawing.Color;
-    using Orbwalking = Orbwalking;
 
     internal class Viktor : Champion
     {

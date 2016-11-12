@@ -119,10 +119,10 @@ using EloBuddy;
                         var zyra = new Zyra();
                         _loaded = true;
                         break;
-                    case "veigar":
-                        var veigar = new Veigar();
-                        _loaded = true;
-                        break;
+                    //case "veigar":
+                    //    var veigar = new Veigar();
+                    //    _loaded = true;
+                    //    break;
                     case "zed":
                         var zed = new Zed();
                         _loaded = true;

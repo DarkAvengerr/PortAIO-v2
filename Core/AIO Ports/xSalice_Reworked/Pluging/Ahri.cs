@@ -12,7 +12,6 @@ using EloBuddy;
     using Managers;
     using Utilities;
     using Color = System.Drawing.Color;
-    using Prediction;
 
     internal class Ahri : Champion
     {
@@ -362,7 +361,7 @@ using EloBuddy;
                 {
                     var dashVector = Player.Position + Vector3.Normalize(Game.CursorPos - Player.Position) * 425;
                     var addedDelay = Player.Distance(dashVector) / 2200;
-                    var pred = CommonPredEx.GetP(Game.CursorPos, E, target, addedDelay, false);
+                    var pred = xSaliceResurrected_Rework.Prediction.CommonPredEx.GetP(Game.CursorPos, E, target, addedDelay, false);
 
                     if (pred.Hitchance >= HitChance.Medium && R.IsReady())
                     {

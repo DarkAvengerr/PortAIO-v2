@@ -12,7 +12,6 @@ using EloBuddy;
     using Utilities;
     using Color = System.Drawing.Color;
     using Geometry = Utilities.Geometry;
-    using Orbwalking = Orbwalking;
 
     internal class Vayne : Champion
     {
