@@ -26,7 +26,7 @@ using EloBuddy;
         {
             get
             {
-                return ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(x => x.IsVisible && x.IsAlly && x.Name == "Shadow" && !x.IsDead);
+                return ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(x => x.IsHPBarRendered && x.IsAlly && x.Name == "Shadow" && !x.IsDead);
             }
         }
 

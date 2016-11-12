@@ -40,7 +40,7 @@ using EloBuddy;
         }
         public static void PierceCombo(int collisionObject, HitChance hChance)
         {
-            foreach (var enemy in HeroManager.Enemies.Where(hero => hero.IsValidTarget(Program.Q.Range) && hero.IsVisible && !hero.IsDead && !hero.IsZombie))
+            foreach (var enemy in HeroManager.Enemies.Where(hero => hero.IsValidTarget(Program.Q.Range) && hero.IsHPBarRendered && !hero.IsDead && !hero.IsZombie))
             {
                 if (Program.Q.GetPrediction(enemy).Hitchance >= hChance && Program.Q.GetPrediction(enemy).CollisionObjects.Count == 0)
                 {

@@ -365,7 +365,7 @@ using EloBuddy;
                 {
                     var hero = missile.SpellCaster;
 
-                    if (hero.IsVisible)
+                    if (hero.IsHPBarRendered)
                     {
                         foreach (KeyValuePair<int, Spell> entry in SpellDetector.spells)
                         {

@@ -113,7 +113,7 @@
 
         private void ProcessPrediction(EventArgs args)
         {
-            if (!Target.IsVisible && Target.IsDead
+            if (!Target.IsHPBarRendered && Target.IsDead
                 && Target.Distance(ObjectManager.Player.Position) > PredictionSpell.Range + 150f)
             {
                 predictionList.Clear();

@@ -261,7 +261,7 @@ using EloBuddy;
 
             Orbwalker.SetMovement(Menu.Item("NoMovementDuringW").GetValue<bool>() && 
                 Player.HasBuff("KogMawBioArcaneBarrage") && HeroManager.Enemies
-                .Count(h=> !h.IsDead && h.IsVisible && h.CanAttack &&
+                .Count(h=> !h.IsDead && h.IsHPBarRendered && h.CanAttack &&
                 h.Distance(Player) < h.AttackRange) == 0);
 
             if (Menu.Item("smartKS", true).GetValue<bool>())

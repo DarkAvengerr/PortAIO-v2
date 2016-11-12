@@ -295,7 +295,7 @@ using EloBuddy;
                     var WPred = W.GetPrediction(target);
 
                     if ((NavMesh.GetCollisionFlags(WPred.CastPosition) == CollisionFlags.Grass ||
-                         NavMesh.IsWallOfGrass(target.ServerPosition, 20)) && !target.IsVisible)
+                         NavMesh.IsWallOfGrass(target.ServerPosition, 20)) && !target.IsHPBarRendered)
                     {
                         W.Cast();
                     }

@@ -85,7 +85,7 @@ using EloBuddy;
                 {
                     var hero = missile.SpellCaster;
 
-                    if (hero.IsVisible)
+                    if (hero.IsHPBarRendered)
                     {
                         if (spellData.usePackets)
                         {

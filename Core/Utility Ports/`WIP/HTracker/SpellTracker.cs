@@ -83,7 +83,7 @@ using EloBuddy;
 
         public static void PlayerTracker()
         {
-            foreach (var ally in GameObjects.AllyHeroes.Where(x => x.IsVisible && x.IsValid && !x.IsDead && x.IsMe))
+            foreach (var ally in GameObjects.AllyHeroes.Where(x => x.IsHPBarRendered && x.IsValid && !x.IsDead && x.IsMe))
             {
                 for (var i = 0; i < Spells.Length; i++)
                 {
@@ -121,7 +121,7 @@ using EloBuddy;
 
         public static void EnemyTracker()
         {
-            foreach (var ally in GameObjects.EnemyHeroes.Where(x => x.IsVisible && x.IsValid && !x.IsDead))
+            foreach (var ally in GameObjects.EnemyHeroes.Where(x => x.IsHPBarRendered && x.IsValid && !x.IsDead))
             {
                 for (var i = 0; i < Spells.Length; i++)
                 {
@@ -159,7 +159,7 @@ using EloBuddy;
 
         public static void AllyTracker()
         {
-            foreach (var ally in GameObjects.AllyHeroes.Where(x => x.IsVisible && x.IsValid && !x.IsDead && !x.IsMe))
+            foreach (var ally in GameObjects.AllyHeroes.Where(x => x.IsHPBarRendered && x.IsValid && !x.IsDead && !x.IsMe))
             {
                 for (var i = 0; i < Spells.Length; i++)
                 {

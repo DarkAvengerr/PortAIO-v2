@@ -44,7 +44,7 @@ using EloBuddy;
         {
             var time = Utils.TickCount;
 
-            foreach (TI ti in TI.Where(x => x.Player.IsVisible && !x.Player.IsRecalling()))
+            foreach (TI ti in TI.Where(x => x.Player.IsHPBarRendered && !x.Player.IsRecalling()))
                 ti.timeCheck = time;
         }
 
@@ -55,7 +55,7 @@ using EloBuddy;
 
         public float GetTargetHealth(TI ti, int addTime)
         {
-            if (ti.Player.IsVisible)
+            if (ti.Player.IsHPBarRendered)
                 return ti.Player.Health;
 
             var predhealth = ti.Player.Health + ti.Player.HPRegenRate * ((Utils.TickCount - ti.timeCheck + addTime) / 1000f);

@@ -3704,16 +3704,13 @@ namespace PortAIO
                         case 6: //YasuoMemeBender
                             YasuoTheLastMemebender.Program.Game_OnGameLoad();
                             break;
-                        case 7: // Media's Yasuo
-                            YasuoMedia.Program.Main();
-                            break;
-                        case 8: // Valvrave#
+                        case 7: // Valvrave#
                             Valvrave_Sharp.Program.Main();
                             break;
-                        case 9: // Badaos Yasuo
+                        case 8: // Badaos Yasuo
                             BadaoYasuo.Program.Main();
                             break;
-                        case 10: // hYasuo
+                        case 9: // hYasuo
                             hYasuo.Program.Main();
                             break;
                     }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using EloBuddy;
-
-namespace SebbyLib
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace SebbyLib
 {
     public class HealthPrediction
     {
@@ -25,8 +25,8 @@ namespace SebbyLib
             Obj_AI_Base.OnBasicAttack += ObjAiBaseOnOnProcessSpellCast;
             Game.OnUpdate += Game_OnGameUpdate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
-            MissileClient.OnDelete += MissileClient_OnDelete;
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnDoCast;
+            GameObject.OnDelete += MissileClient_OnDelete;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnSpellCast;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace SebbyLib
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs"/> instance containing the event data.</param>
-        private static void Obj_AI_Base_OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private static void Obj_AI_Base_OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (ActiveAttacks.ContainsKey(sender.NetworkId) && sender.IsMelee)
             {
@@ -89,7 +89,7 @@ namespace SebbyLib
         /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs"/> instance containing the event data.</param>
         private static void ObjAiBaseOnOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if ( sender.Team != ObjectManager.Player.Team || !sender.IsValidTarget(3000, false) || !(args.Target is Obj_AI_Base))
+            if ( sender.Team != ObjectManager.Player.Team || !sender.IsValidTarget(3000, false) || !Orbwalking.IsAutoAttack(args.SData.Name) || !(args.Target is Obj_AI_Base))
             {
                 return;
             }

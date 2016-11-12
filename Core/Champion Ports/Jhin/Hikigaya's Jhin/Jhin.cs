@@ -91,7 +91,7 @@ using EloBuddy;
             }
             if (Menus.Config.Item("aa.indicator").GetValue<Circle>().Active)
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(1500) && x.IsValid && x.IsVisible && !x.IsDead && !x.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(1500) && x.IsValid && x.IsHPBarRendered && !x.IsDead && !x.IsZombie))
                 {
                     Drawing.DrawText(enemy.HPBarPosition.X, enemy.HPBarPosition.Y, Menus.Config.Item("aa.indicator").GetValue<Circle>().Color, string.Format("{0} Basic Attack = Kill", Provider.BasicAttackIndicator(enemy)));
                 }

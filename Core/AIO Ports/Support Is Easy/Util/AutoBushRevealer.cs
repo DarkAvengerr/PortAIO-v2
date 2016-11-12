@@ -53,7 +53,7 @@ using EloBuddy; namespace Support.Util
         {
             var time = Environment.TickCount;
 
-            foreach (var enemyInfo in this._enemyInfo.Where(x => x.Player.IsVisible))
+            foreach (var enemyInfo in this._enemyInfo.Where(x => x.Player.IsHPBarRendered))
             {
                 enemyInfo.LastSeen = time;
             }
@@ -68,7 +68,7 @@ using EloBuddy; namespace Support.Util
                 foreach (var enemy in
                     this._enemyInfo.Where(
                         x =>
-                        x.Player.IsValid && !x.Player.IsVisible && !x.Player.IsDead
+                        x.Player.IsValid && !x.Player.IsHPBarRendered && !x.Player.IsDead
                         && x.Player.Distance(ObjectManager.Player.ServerPosition) < 1000 && time - x.LastSeen < 2500)
                         .Select(x => x.Player))
                 {

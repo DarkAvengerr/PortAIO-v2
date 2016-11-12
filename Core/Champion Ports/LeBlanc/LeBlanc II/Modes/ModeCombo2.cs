@@ -58,8 +58,8 @@
 //        public static SpellSlot IgniteSlot = ObjectManager.Player.GetSpellSlot("SummonerDot");
 
 //        //public static AIHeroClient Target => GetTarget ?? TargetSelector.GetTarget(Q.Range * 2, TargetSelector.DamageType.Magical);
-//        //public static AIHeroClient Target => HeroManager.Enemies.Where(e => !e.IsDead && e.IsVisible && e.IsValidTarget(E.Range) && !e.HasImmortalBuff()).OrderBy(e => e.Health - GetComboDamage(e)).FirstOrDefault();
-//        public static AIHeroClient Target => HeroManager.Enemies.Where(e => !e.IsDead && e.IsVisible && e.IsValidTarget(E.Range)).OrderBy(e => e.Health - GetComboDamage(e)).FirstOrDefault();
+//        //public static AIHeroClient Target => HeroManager.Enemies.Where(e => !e.IsDead && e.IsHPBarRendered && e.IsValidTarget(E.Range) && !e.HasImmortalBuff()).OrderBy(e => e.Health - GetComboDamage(e)).FirstOrDefault();
+//        public static AIHeroClient Target => HeroManager.Enemies.Where(e => !e.IsDead && e.IsHPBarRendered && e.IsValidTarget(E.Range)).OrderBy(e => e.Health - GetComboDamage(e)).FirstOrDefault();
 
 
 //        //public static AIHeroClient Target => TargetSelector.GetTarget(Q.Range * 2, TargetSelector.DamageType.Magical);
@@ -168,7 +168,7 @@
 //                var enemy =
 //                    HeroManager.Enemies.FirstOrDefault(
 //                        e =>
-//                            !e.IsDead && e.IsVisible && e.IsValidTarget(W.Range*2 + Q.Range) &&
+//                            !e.IsDead && e.IsHPBarRendered && e.IsValidTarget(W.Range*2 + Q.Range) &&
 //                            MenuHunt.Item("Hunt." + e.ChampionName).GetValue<bool>());
 
 //                if (enemy != null)
@@ -179,7 +179,7 @@
 //                var killableEnemy =
 //                    HeroManager.Enemies.FirstOrDefault(
 //                        e =>
-//                            !e.IsDead && e.IsVisible && e.IsValidTarget(W.Range) &&
+//                            !e.IsDead && e.IsHPBarRendered && e.IsValidTarget(W.Range) &&
 //                            e.Health < GetComboDamage(e));
 
 //                if (killableEnemy != null)
@@ -202,13 +202,13 @@
 
 //                //var x= HeroManager.Enemies.Where(
 //                //    e =>
-//                //        !e.IsDead && e.IsVisible && e.IsValidTarget(W.Range * 2 + Q.Range) &&
+//                //        !e.IsDead && e.IsHPBarRendered && e.IsValidTarget(W.Range * 2 + Q.Range) &&
 //                //        MenuHunt.Item("Hunt." + e.ChampionName).GetValue<bool>()).OrderByDescending(e => e.Health).FirstOrDefault();
 //                //return x;
 //                var enemy =
 //                    HeroManager.Enemies.Where(
 //                        e =>
-//                            !e.IsDead && e.IsVisible &&
+//                            !e.IsDead && e.IsHPBarRendered &&
 //                            e.IsValidTarget(ActiveComboMode == ActiveComboMode.Mode2xQ
 //                                ? Q.Range
 //                                : (ActiveComboMode == ActiveComboMode.Mode2xW ? W.Range : E.Range)) &&
@@ -221,7 +221,7 @@
 //                //var killableEnemy =
 //                //    HeroManager.Enemies.FirstOrDefault(
 //                //        e =>
-//                //            !e.IsDead && e.IsVisible && e.IsValidTarget(W.Range) &&
+//                //            !e.IsDead && e.IsHPBarRendered && e.IsValidTarget(W.Range) &&
 //                //            e.Health < GetComboDamage(e));
 
 //                //if (killableEnemy != null)
@@ -238,7 +238,7 @@
 //                return;
 //            }
 
-//            foreach (var e in HeroManager.Enemies.Where(e => !e.IsDead && e.IsVisible))
+//            foreach (var e in HeroManager.Enemies.Where(e => !e.IsDead && e.IsHPBarRendered))
 //            {
 //                if (MenuHunt.Item("Hunt." + e.ChampionName).GetValue<bool>())
 //                {

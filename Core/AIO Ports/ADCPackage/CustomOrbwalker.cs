@@ -725,7 +725,7 @@ using EloBuddy; namespace ADCPackage
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 minion =>
-                                    minion.IsValidTarget() && InAutoAttackRange(minion) && !minion.IsDead && minion.IsTargetable && minion.IsHPBarRendered && minion.IsVisible)
+                                    minion.IsValidTarget() && InAutoAttackRange(minion) && !minion.IsDead && minion.IsTargetable && minion.IsHPBarRendered && minion.IsHPBarRendered)
                                     .OrderByDescending(minion => minion.CharData.BaseSkinName.Contains("Siege"))
                                     .ThenBy(minion => minion.CharData.BaseSkinName.Contains("Super"))
                                     .ThenBy(minion => minion.Health)
@@ -753,7 +753,7 @@ using EloBuddy; namespace ADCPackage
                 }
 
                 //Forced target
-                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget) && _forcedTarget.IsVisible && !_forcedTarget.IsDead && _forcedTarget.IsHPBarRendered && _forcedTarget.IsTargetable)
+                if (_forcedTarget.IsValidTarget() && InAutoAttackRange(_forcedTarget) && _forcedTarget.IsHPBarRendered && !_forcedTarget.IsDead && _forcedTarget.IsHPBarRendered && _forcedTarget.IsTargetable)
                 {
                     return _forcedTarget;
                 }
@@ -787,7 +787,7 @@ using EloBuddy; namespace ADCPackage
                 if (ActiveMode != OrbwalkingMode.LastHit)
                 {
                     var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-                    if (target.IsValidTarget() && InAutoAttackRange(target) && !target.IsDead && target.IsVisible && target.IsHPBarRendered && target.IsTargetable)
+                    if (target.IsValidTarget() && InAutoAttackRange(target) && !target.IsDead && target.IsHPBarRendered && target.IsHPBarRendered && target.IsTargetable)
                     {
                         return target;
                     }
@@ -829,7 +829,7 @@ using EloBuddy; namespace ADCPackage
 
                         result = (from minion in
                                       ObjectManager.Get<Obj_AI_Minion>()
-                                          .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) && minion.IsHPBarRendered && !minion.IsDead && minion.IsVisible && minion.IsTargetable &&
+                                          .Where(minion => minion.IsValidTarget() && InAutoAttackRange(minion) && minion.IsHPBarRendered && !minion.IsDead && minion.IsHPBarRendered && minion.IsTargetable &&
                                           (_config.Item("AttackWards").GetValue<bool>() || !MinionManager.IsWard(minion.CharData.BaseSkinName.ToLower())) &&
                                           (_config.Item("AttackPetsnTraps").GetValue<bool>() && minion.CharData.BaseSkinName != "jarvanivstandard" || MinionManager.IsMinion(minion, _config.Item("AttackWards").GetValue<bool>())) &&
                                           minion.CharData.BaseSkinName != "gangplankbarrel")

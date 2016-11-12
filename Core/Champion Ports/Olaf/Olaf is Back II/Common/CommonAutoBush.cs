@@ -44,12 +44,12 @@ namespace Olaf.Common
         {
             foreach (EnemyHeros e in EnemyInfo)
             {
-                if (e.Player.IsVisible)
+                if (e.Player.IsHPBarRendered)
                 {
                     e.LastSeen = Environment.TickCount;
                 }
 
-                if (!e.Player.IsVisible || e.Player.IsDead)
+                if (!e.Player.IsHPBarRendered || e.Player.IsDead)
                 {
                     e.LastSeenForE = Environment.TickCount;
                 }
@@ -63,7 +63,7 @@ namespace Olaf.Common
 
         public float GetTargetHealth(EnemyHeros playerHeros, int additionalTime)
         {
-            if (playerHeros.Player.IsVisible) return playerHeros.Player.Health;
+            if (playerHeros.Player.IsHPBarRendered) return playerHeros.Player.Health;
 
             var predictedhealth = playerHeros.Player.Health
                                   + playerHeros.Player.HPRegenRate
@@ -221,7 +221,7 @@ namespace Olaf.Common
                 foreach (AIHeroClient enemy in
                     AutoBushHelper.EnemyInfo.Where(
                         x =>
-                            x.Player.IsValid && !x.Player.IsVisible && !x.Player.IsDead
+                            x.Player.IsValid && !x.Player.IsHPBarRendered && !x.Player.IsDead
                             && x.Player.Distance(ObjectManager.Player.ServerPosition) < 1000 && time - x.LastSeen < 2500)
                         .Select(x => x.Player))
                 {

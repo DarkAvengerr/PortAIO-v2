@@ -295,7 +295,7 @@ using EloBuddy;
 
             if (_menu.SubMenu("Draw").Item("drawCombo").GetValue<bool>())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(hero => hero.IsVisible && !hero.IsDead))
+                foreach (var enemy in HeroManager.Enemies.Where(hero => hero.IsHPBarRendered && !hero.IsDead))
                 {
                     var pos = enemy.HPBarPosition;
                     pos.Y += 35;

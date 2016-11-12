@@ -44,7 +44,7 @@ using EloBuddy;
 
                 Obj_AI_Base axe =
                     ObjectManager.Get<Obj_AI_Base>()
-                        .FirstOrDefault(obj => obj.BaseSkinName.ToLowerInvariant().Contains("olafaxe") && obj.IsVisible);
+                        .FirstOrDefault(obj => obj.BaseSkinName.ToLowerInvariant().Contains("olafaxe") && obj.IsHPBarRendered);
 
                 if (axe != null)
                 {

@@ -398,7 +398,7 @@ using EloBuddy; namespace SFXUtility.Features.Trackers
                     {
                         destination.Casted = false;
                     }
-                    if (destination.Hero.IsVisible)
+                    if (destination.Hero.IsHPBarRendered)
                     {
                         destination.EndPos = destination.Hero.Position;
                     }

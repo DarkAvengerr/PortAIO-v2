@@ -137,7 +137,7 @@ namespace Akali
                                                   where enemy.Distance(Game.CursorPos) < 150f
                                                   select enemy)
                 {
-                    if (objAiHero != null && objAiHero.IsVisible && !objAiHero.IsDead)
+                    if (objAiHero != null && objAiHero.IsHPBarRendered && !objAiHero.IsDead)
                     {
                         var xSelect =
                             Program.Config.Item("AssassinSelectOption").GetValue<StringList>().SelectedIndex;
@@ -214,7 +214,7 @@ namespace Akali
                         .Where(enemy => enemy.Team != ObjectManager.Player.Team)
                         .Where(
                             enemy =>
-                                enemy.IsVisible &&
+                                enemy.IsHPBarRendered &&
                                 Program.Config.Item("Assassin" + enemy.ChampionName) != null &&
                                 !enemy.IsDead)
                         .Where(

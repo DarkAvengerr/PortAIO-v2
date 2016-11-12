@@ -527,7 +527,7 @@ using EloBuddy;
             }
 
             var minHit = Menu.Item("autoRCombo", true).GetValue<Slider>().Value;
-            var hit = (from x in HeroManager.Enemies.Where(champ => champ.IsValidTarget(1500) && champ.IsVisible && !champ.IsZombie)
+            var hit = (from x in HeroManager.Enemies.Where(champ => champ.IsValidTarget(1500) && champ.IsHPBarRendered && !champ.IsZombie)
                        select xSaliceResurrected_Rework.Prediction.CommonPredEx.GetPCircle(_currentBallPosition, R, x, true))
                        .Count(prediction => R.IsReady() && prediction.UnitPosition.Distance(_currentBallPosition) < R.Width);
 
@@ -546,7 +546,7 @@ using EloBuddy;
 
             var minHit = Menu.Item("autoR", true).GetValue<Slider>().Value;
 
-            var hit = (from x in HeroManager.Enemies.Where(champ => champ.IsValidTarget(1500) && champ.IsVisible && !champ.IsZombie)
+            var hit = (from x in HeroManager.Enemies.Where(champ => champ.IsValidTarget(1500) && champ.IsHPBarRendered && !champ.IsZombie)
                        select xSaliceResurrected_Rework.Prediction.CommonPredEx.GetPCircle(_currentBallPosition, R, x, true))
                        .Count(prediction => R.IsReady() && prediction.UnitPosition.Distance(_currentBallPosition) < R.Width);
 
@@ -563,7 +563,7 @@ using EloBuddy;
                 return 0;
             }
 
-            return (from enemy in HeroManager.Enemies.Where(champ => champ.IsValidTarget(1500) && champ.IsVisible && !champ.IsZombie)
+            return (from enemy in HeroManager.Enemies.Where(champ => champ.IsValidTarget(1500) && champ.IsHPBarRendered && !champ.IsZombie)
                     select xSaliceResurrected_Rework.Prediction.CommonPredEx.GetPCircle(_currentBallPosition, R, enemy, true))
                     .Count(prediction => R.IsReady() && prediction.UnitPosition.Distance(_currentBallPosition) <= R.Width);
         }

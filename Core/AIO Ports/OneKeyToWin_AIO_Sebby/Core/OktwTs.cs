@@ -11,16 +11,13 @@ using EloBuddy;
  using LeagueSharp.Common; 
  namespace OneKeyToWin_AIO_Sebby.Core
 {
-    class OktwTs
+    class OktwTs : Base
     {
-        private Menu Config = Program.Config;
-        private static SebbyLib.Orbwalking.Orbwalker Orbwalker = Program.Orbwalker;
-        private AIHeroClient Player { get { return ObjectManager.Player; } }
 
-        private AIHeroClient FocusTarget, DrawInfo = null;
-        private float LatFocusTime = Game.Time;
+        private static AIHeroClient FocusTarget, DrawInfo = null;
+        private static float LatFocusTime = Game.Time;
 
-        public void LoadOKTW()
+        static OktwTs()
         {
             Config.SubMenu("Target Selector OKTW©").AddItem(new MenuItem("TsAa", "Auto-attack MODE:").SetValue(new StringList(new[] { "Fast kill", "Priority", "Common TS" }, 2)));
 
@@ -44,7 +41,7 @@ using EloBuddy;
             Drawing.OnDraw += OnDraw;
         }
 
-        private void OnDraw(EventArgs args)
+        private static void OnDraw(EventArgs args)
         {
             if (Config.Item("TsAa").GetValue<StringList>().SelectedIndex == 2)
             {
@@ -64,10 +61,10 @@ using EloBuddy;
             Drawing.DrawText(wts[0] - (msg.Length) * 5, wts[1] + weight, color, msg);
         }
 
-        private void Game_OnWndProc(WndEventArgs args)
+        private static void Game_OnWndProc(WndEventArgs args)
         {
             //Program.debug("WND: " + args.WParam);
-            if(args.WParam == 16)
+            if (args.WParam == 16)
             {
                 var priority = Config.Item("TsAa").GetValue<StringList>().SelectedIndex == 1;
                 foreach (var enemy in HeroManager.Enemies)
@@ -81,7 +78,7 @@ using EloBuddy;
                 Config.Item("extraTime").Show(!priority && Config.Item("extraFocus").GetValue<bool>());
                 Config.Item("drawFocus").Show(!priority && Config.Item("extraFocus").GetValue<bool>());
 
-                if(Config.Item("TsAa").GetValue<StringList>().SelectedIndex == 2)
+                if (Config.Item("TsAa").GetValue<StringList>().SelectedIndex == 2)
                 {
                     foreach (var enemy in HeroManager.Enemies)
                     {
@@ -96,16 +93,16 @@ using EloBuddy;
             }
         }
 
-        private void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
+        private static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if(target is AIHeroClient)
+            if (target is AIHeroClient)
             {
                 FocusTarget = (AIHeroClient)target;
                 LatFocusTime = Game.Time;
             }
         }
 
-        private void Orbwalking_BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private static void Orbwalking_BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
         {
             if (Config.Item("TsAa").GetValue<StringList>().SelectedIndex != 0 || !Config.Item("extraFocus").GetValue<bool>() || !Program.Combo)
             {
@@ -113,19 +110,13 @@ using EloBuddy;
                 return;
             }
 
-            if (args.Target is AIHeroClient )
+            var newTarget = args.Target as AIHeroClient;
+
+            if (newTarget != null)
             {
-                var newTarget = (AIHeroClient)args.Target;
                 var forceFocusEnemy = newTarget;
-               // if (newTarget.Health / Player.GetAutoAttackDamage(newTarget) > FocusTarget.Health / Player.GetAutoAttackDamage(FocusTarget))
-                {
-
-                }
-               // else
-                {
-                    var aaRange = Player.AttackRange + Player.BoundingRadius + Config.Item("extraRang").GetValue<Slider>().Value;
-
-                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(aaRange)))
+                {    
+                    foreach (var enemy in HeroManager.Enemies.Where(enemy => newTarget.NetworkId != enemy.NetworkId && enemy.IsValidTarget(Player.AttackRange + Player.BoundingRadius + Config.Item("extraRang").GetValue<Slider>().Value)))
                     {
                         if (enemy.Health / Player.GetAutoAttackDamage(enemy) + 1 < forceFocusEnemy.Health / Player.GetAutoAttackDamage(forceFocusEnemy))
                         {
@@ -133,7 +124,7 @@ using EloBuddy;
                         }
                     }
                 }
-                if(forceFocusEnemy.NetworkId != newTarget.NetworkId && Game.Time - LatFocusTime < Config.Item("extraTime").GetValue<Slider>().Value /1000)
+                if (forceFocusEnemy.NetworkId != newTarget.NetworkId && Game.Time - LatFocusTime < Config.Item("extraTime").GetValue<Slider>().Value / 1000)
                 {
                     args.Process = false;
                     Program.debug("Focus: " + forceFocusEnemy.ChampionName);
@@ -144,25 +135,24 @@ using EloBuddy;
             DrawInfo = null;
         }
 
-        private void OnUpdate(EventArgs args)
+        private static void OnUpdate(EventArgs args)
         {
             if (Config.Item("TsAa").GetValue<StringList>().SelectedIndex == 2 || !SebbyLib.Orbwalking.CanAttack() || !Program.Combo)
             {
                 return;
             }
 
-            var orbT = Orbwalker.GetTarget();
-           
+            var orbT = Orbwalker.GetTarget() as AIHeroClient;
+
             if (orbT != null)
             {
-                var bestTarget = (AIHeroClient)orbT;
-                var hitToBestTarget = bestTarget.Health / Player.GetAutoAttackDamage(bestTarget);
+                var bestTarget = orbT;
 
                 if (Config.Item("TsAa").GetValue<StringList>().SelectedIndex == 0)
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget() && Orbwalker.InAutoAttackRange(enemy)))
+                    foreach (var enemy in HeroManager.Enemies.Where(enemy => orbT.NetworkId != enemy.NetworkId && enemy.IsValidTarget() && Orbwalker.InAutoAttackRange(enemy)))
                     {
-                        if (enemy.Health / Player.GetAutoAttackDamage(enemy) < hitToBestTarget)
+                        if (enemy.Health / Player.GetAutoAttackDamage(enemy) < bestTarget.Health / Player.GetAutoAttackDamage(bestTarget))
                         {
                             bestTarget = enemy;
                         }
@@ -170,10 +160,10 @@ using EloBuddy;
                 }
                 else
                 {
-                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget() && Orbwalker.InAutoAttackRange(enemy)))
+                    foreach (var enemy in HeroManager.Enemies.Where(enemy => orbT.NetworkId != enemy.NetworkId && enemy.IsValidTarget() && Orbwalker.InAutoAttackRange(enemy)))
                     {
 
-                        if(enemy.Health / Player.GetAutoAttackDamage(enemy) < 3)
+                        if (enemy.Health / Player.GetAutoAttackDamage(enemy) < 3)
                         {
                             bestTarget = enemy;
                             break;
@@ -182,7 +172,7 @@ using EloBuddy;
                         {
                             bestTarget = enemy;
                         }
-                        
+
                     }
                 }
                 if (bestTarget.NetworkId != orbT.NetworkId)

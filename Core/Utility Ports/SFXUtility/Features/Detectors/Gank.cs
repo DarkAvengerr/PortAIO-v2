@@ -137,7 +137,7 @@ using EloBuddy; namespace SFXUtility.Features.Detectors
                 var range = Menu.Item(Name + "Range").GetValue<Slider>().Value;
                 var ping = Menu.Item(Name + "Ping").GetValue<bool>();
 
-                foreach (var obj in _championObjects.Where(c => c.Enabled && !c.Hero.IsDead && c.Hero.IsVisible))
+                foreach (var obj in _championObjects.Where(c => c.Enabled && !c.Hero.IsDead && c.Hero.IsHPBarRendered))
                 {
                     var distance = obj.Hero.Distance(ObjectManager.Player);
                     if (obj.Distance > range && distance <= range && Game.Time > obj.LastTrigger + cooldown)

@@ -50,7 +50,7 @@ using EloBuddy;
             {
                 if (target != null)
                 {
-                    if (target.IsVisible && target.IsValid)
+                    if (target.IsHPBarRendered && target.IsValid)
                     {
                  //       var pos = target.ServerPosition.Extend(Game.CursorPos, -300);
                    //     Render.Circle.DrawCircle(pos, 100, System.Drawing.Color.GreenYellow);

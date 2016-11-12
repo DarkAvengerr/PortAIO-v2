@@ -115,7 +115,7 @@ using EloBuddy;
 
             foreach (var hero in HeroManager.Enemies)
             {
-                if (hero != null && hero.IsValid && !hero.IsDead && hero.IsVisible)
+                if (hero != null && hero.IsValid && !hero.IsDead && hero.IsHPBarRendered)
                 {
                     var heroPos = hero.ServerPosition.To2D();
                     var dist = heroPos.Distance(pos);
@@ -154,7 +154,7 @@ using EloBuddy;
 
                 foreach (var hero in HeroManager.Enemies)
                 {
-                    if (hero != null && hero.IsValid && !hero.IsDead && hero.IsVisible)
+                    if (hero != null && hero.IsValid && !hero.IsDead && hero.IsHPBarRendered)
                     {
                         var heroPos = hero.ServerPosition.To2D();
                         var dist = heroPos.Distance(pos);

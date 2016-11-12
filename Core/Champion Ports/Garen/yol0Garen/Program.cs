@@ -138,7 +138,7 @@ using EloBuddy;
 
             if (_menu.SubMenu("Drawing").Item("drawKillability").GetValue<bool>())
             {
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(unit => unit.IsEnemy && unit.IsVisible && !unit.IsDead))
+                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(unit => unit.IsEnemy && unit.IsHPBarRendered && !unit.IsDead))
                 {
                     var wts = Drawing.WorldToScreen(enemy.Position);
                     if (GetComboDamage(enemy) > enemy.Health)
@@ -396,7 +396,7 @@ using EloBuddy;
 
         private static Vector2 GetFarmLocation()
         {
-            var minions = ObjectManager.Get<Obj_AI_Minion>().Where(minion => Player.Distance(minion) < 600 && !minion.IsDead && minion.IsVisible);
+            var minions = ObjectManager.Get<Obj_AI_Minion>().Where(minion => Player.Distance(minion) < 600 && !minion.IsDead && minion.IsHPBarRendered);
             var minionLocations = new List<Vector2>();
             foreach (var minion in minions)
             {

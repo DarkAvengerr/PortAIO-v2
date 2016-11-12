@@ -588,7 +588,7 @@ using EloBuddy;
             foreach (Info info in Ranks)
             {
                 //  System.IO.File.WriteAllText(@"C:\Users\Laptop\Desktop\" + info.Name + ".txt", info.Ranking);
-                if ((!info.herohandle.IsDead) && (info.herohandle.IsVisible))
+                if ((!info.herohandle.IsDead) && (info.herohandle.IsHPBarRendered))
                 {
                     // var wts = Drawing.WorldToScreen(info.herohandle.Position);
                     var indicator = new Misc.HpBarIndicator { Unit = info.herohandle };

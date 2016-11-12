@@ -18,7 +18,7 @@ using EloBuddy;
     {
         static bool ShouldTakeAction()
         {
-            return Hotfixes.AttackedByTurretFlag || (Hotfixes.AttackedByMinionsFlag && Variables.Orbwalker.ActiveMode != OrbwalkingMode.Combo) || ObjectManager.Player.Position.IsDangerousPosition() || ObjectManager.Get<AIHeroClient>().Any(h=>h.IsEnemy && !h.IsDead && h.IsVisible && h.Level > ObjectManager.Player.Level + 1 && h.Distance(ObjectManager.Player) < h.AttackRange + 50*h.Level-ObjectManager.Player.Level) ||  ObjectManager.Get<AIHeroClient>().Count(h => h.IsEnemy && !h.IsDead && h.Distance(ObjectManager.Player) < 850) > ObjectManager.Get<AIHeroClient>().Count(h=>h.IsAlly && !h.IsDead && h.Distance(ObjectManager.Player) < 850);
+            return Hotfixes.AttackedByTurretFlag || (Hotfixes.AttackedByMinionsFlag && Variables.Orbwalker.ActiveMode != OrbwalkingMode.Combo) || ObjectManager.Player.Position.IsDangerousPosition() || ObjectManager.Get<AIHeroClient>().Any(h=>h.IsEnemy && !h.IsDead && h.IsHPBarRendered && h.Level > ObjectManager.Player.Level + 1 && h.Distance(ObjectManager.Player) < h.AttackRange + 50*h.Level-ObjectManager.Player.Level) ||  ObjectManager.Get<AIHeroClient>().Count(h => h.IsEnemy && !h.IsDead && h.Distance(ObjectManager.Player) < 850) > ObjectManager.Get<AIHeroClient>().Count(h=>h.IsAlly && !h.IsDead && h.Distance(ObjectManager.Player) < 850);
         }
 
         static TreeSharp.Action TakeAction()

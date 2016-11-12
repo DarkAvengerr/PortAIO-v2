@@ -188,7 +188,7 @@ using EloBuddy;
                 return;
             }
 
-            foreach (var shield in ObjectManager.Get<AIHeroClient>().Where(x => x.IsAlly && !x.IsMe && x.Distance(ObjectManager.Player.Position) < W.Range && !x.IsDead && x.IsVisible && !x.IsZombie))
+            foreach (var shield in ObjectManager.Get<AIHeroClient>().Where(x => x.IsAlly && !x.IsMe && x.Distance(ObjectManager.Player.Position) < W.Range && !x.IsDead && x.IsHPBarRendered && !x.IsZombie))
             {
                 if (MenuCheck("lux.shield" + shield.ChampionName, Config) && shield.HealthPercent < SliderCheck("lux.shield.percent" + shield.ChampionName, Config)
                     && ObjectManager.Player.HealthPercent > SliderCheck("lux.shield.limit", Config))

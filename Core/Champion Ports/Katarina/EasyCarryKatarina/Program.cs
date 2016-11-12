@@ -211,7 +211,7 @@ using EloBuddy;
         private static void Killsteal()
         {
             
-            var e = HeroManager.Enemies.Where(x => x.IsVisible && x.IsValidTarget());
+            var e = HeroManager.Enemies.Where(x => x.IsHPBarRendered && x.IsValidTarget());
             var useq = _config.Item("killsteal.useQ").GetValue<bool>();
             var usew = _config.Item("killsteal.useW").GetValue<bool>();
             var usee = _config.Item("killsteal.useE").GetValue<bool>();
@@ -418,7 +418,7 @@ using EloBuddy;
                     break;
                 case 1: //Auto
                     var jumpobjects = ObjectManager.Get<GameObject>().Where(p => spells[Spells.E].IsInRange(p) && U.CanJumpTo(p));
-                    var enemies = HeroManager.Enemies.Where(e => e.IsVisible);
+                    var enemies = HeroManager.Enemies.Where(e => e.IsHPBarRendered);
                     var best = jumpobjects.OrderByDescending(l => enemies.OrderByDescending(e => e.Distance(l.Position)).FirstOrDefault().Distance(l.Position)).FirstOrDefault();
                     if (best != null && spells[Spells.E].IsReady())
                         spells[Spells.E].Cast((Obj_AI_Base)best);

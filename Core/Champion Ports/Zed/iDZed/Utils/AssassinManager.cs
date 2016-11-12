@@ -144,7 +144,7 @@ using EloBuddy;
                     where enemy.Distance(Game.CursorPos) < 150f
                     select enemy)
                 {
-                    if (objAiHero != null && objAiHero.IsVisible && !objAiHero.IsDead)
+                    if (objAiHero != null && objAiHero.IsHPBarRendered && !objAiHero.IsDead)
                     {
                         var xSelect = Zed.Menu.Item("AssassinSelectOption").GetValue<StringList>().SelectedIndex;
                         switch (xSelect)
@@ -213,7 +213,7 @@ using EloBuddy;
                     .Where(enemy => enemy.Team != ObjectManager.Player.Team)
                     .Where(
                         enemy =>
-                            enemy.IsVisible && Zed.Menu.Item("Assassin" + enemy.ChampionName) != null && !enemy.IsDead)
+                            enemy.IsHPBarRendered && Zed.Menu.Item("Assassin" + enemy.ChampionName) != null && !enemy.IsDead)
                     .Where(enemy => Zed.Menu.Item("Assassin" + enemy.ChampionName).GetValue<bool>()))
             {
                 if (ObjectManager.Player.Distance(enemy) < drawSearchRange)

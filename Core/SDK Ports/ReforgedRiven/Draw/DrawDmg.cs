@@ -18,7 +18,7 @@ using EloBuddy;
         {
             if (!MenuConfig.Dind) return;
 
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1500) && !ene.IsDead && ene.IsVisible))
+            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1500) && !ene.IsDead && ene.IsHPBarRendered))
             {
                 Indicator.Unit = enemy;
                 Indicator.DrawDmg(Dmg.GetComboDamage(enemy), Color.LawnGreen);

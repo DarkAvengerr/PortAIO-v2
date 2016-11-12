@@ -62,7 +62,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
             Hextech_Gunblade.Cast(EloBuddy.SDK.EntityManager.Heroes.Enemies.FirstOrDefault(
                     x =>
                     x.HealthPercent < this.Menu.Item("HextechEnemyHp").GetValue<Slider>().Value
-                    && x.Distance(this.Player) < 700 && !x.IsDead && !x.IsZombie && x.IsVisible && x.IsHPBarRendered && x.IsValidTarget()));
+                    && x.Distance(this.Player) < 700 && !x.IsDead && !x.IsZombie && x.IsHPBarRendered && x.IsHPBarRendered && x.IsValidTarget()));
         }
 
         #endregion

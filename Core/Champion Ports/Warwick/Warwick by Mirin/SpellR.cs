@@ -60,7 +60,7 @@ using EloBuddy; namespace Warwick
             {
                 var vMax = HeroManager.Enemies.Where(
                     e =>
-                        !e.IsDead && e.IsVisible && e.IsValidTarget(SelectorRange) && !e.IsZombie)
+                        !e.IsDead && e.IsHPBarRendered && e.IsValidTarget(SelectorRange) && !e.IsZombie)
                     .Max(
                         h => Program.rMenu.Item("Selected" + h.ChampionName).GetValue<StringList>().SelectedIndex);
 
@@ -68,7 +68,7 @@ using EloBuddy; namespace Warwick
                 {
                     var enemy = HeroManager.Enemies.Where(
                         e =>
-                            !e.IsDead && e.IsVisible && e.IsValidTarget(SelectorRange) && !e.IsZombie &&
+                            !e.IsDead && e.IsHPBarRendered && e.IsValidTarget(SelectorRange) && !e.IsZombie &&
                             Program.rMenu.Item("Selected" + e.ChampionName).GetValue<StringList>().SelectedIndex == vMax);
 
                     return enemy.MinOrDefault(hero => hero.Health);
@@ -165,7 +165,7 @@ using EloBuddy; namespace Warwick
                         .OrderBy(h => h.Distance(Game.CursorPos, true))
                         .FirstOrDefault();
                 {
-                    if (selectedTarget != null && selectedTarget.IsVisible)
+                    if (selectedTarget != null && selectedTarget.IsHPBarRendered)
                     {
                         var vSelected =
                             Program.rMenu.Item("Selected" + selectedTarget.ChampionName)
@@ -245,7 +245,7 @@ using EloBuddy; namespace Warwick
 
             if (Program.rMenu.Item("Draw.Status").GetValue<bool>())
             {
-                foreach (var a in HeroManager.Enemies.Where(e => e.IsVisible && !e.IsDead && !e.IsZombie))
+                foreach (var a in HeroManager.Enemies.Where(e => e.IsHPBarRendered && !e.IsDead && !e.IsZombie))
                 {
                     var vSelected =
                         (Program.rMenu.Item("Selected" + a.ChampionName).GetValue<StringList>().SelectedIndex);

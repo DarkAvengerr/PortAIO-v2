@@ -33,7 +33,7 @@ using EloBuddy;
 
         private static void OnCreateObj_JinxWMissile(GameObject obj, EventArgs args, AIHeroClient hero, SpellData spellData)
         {
-            if (hero != null && !hero.IsVisible
+            if (hero != null && !hero.IsHPBarRendered
                 && obj.IsEnemy && obj.Name.Contains("Jinx") && obj.Name.Contains("W_Cas"))
             {
                 var pos1 = hero.Position;

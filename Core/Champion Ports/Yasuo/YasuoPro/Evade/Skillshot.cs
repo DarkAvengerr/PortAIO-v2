@@ -283,7 +283,7 @@ using EloBuddy; namespace EvadeYas
             //Spells that update to the unit position.
             if (SpellData.MissileFollowsUnit)
             {
-                if (Unit.IsVisible)
+                if (Unit.IsHPBarRendered)
                 {
                     End = Unit.ServerPosition.To2D();
                     Direction = (End - Start).Normalized();

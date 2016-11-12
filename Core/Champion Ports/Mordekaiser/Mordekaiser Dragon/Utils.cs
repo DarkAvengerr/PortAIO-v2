@@ -171,7 +171,7 @@ namespace Mordekaiser
 
                         var vMax =
                             HeroManager.Enemies.Where(
-                                e => !e.IsDead && e.IsVisible && e.IsValidTarget(Spells.R.Range) && !e.IsZombie)
+                                e => !e.IsDead && e.IsHPBarRendered && e.IsValidTarget(Spells.R.Range) && !e.IsZombie)
                                 .Max(
                                     h =>
                                         Menu.MenuR.Item("Selected" + h.ChampionName)
@@ -183,7 +183,7 @@ namespace Mordekaiser
                             var enemy =
                                 HeroManager.Enemies.Where(
                                     e =>
-                                        !e.IsDead && e.IsVisible && e.IsValidTarget(Spells.R.Range) && !e.IsZombie
+                                        !e.IsDead && e.IsHPBarRendered && e.IsValidTarget(Spells.R.Range) && !e.IsZombie
                                         &&
                                         Menu.MenuR.Item("Selected" + e.ChampionName)
                                             .GetValue<StringList>()

@@ -77,7 +77,7 @@ using EloBuddy;
                     }
                 case TargetingMode.FastKill:
                     {
-                        if (enemy.IsValid && enemy != null && enemy.IsVisible && !enemy.IsDead)
+                        if (enemy.IsValid && enemy != null && enemy.IsHPBarRendered && !enemy.IsDead)
                             return (enemy.Health / Player.GetSpellDamage(enemy, XDSharp.Champions.Main.TSSpell()));
                         else
                             return 1000000;

@@ -630,20 +630,20 @@ using EloBuddy;
                         continue;
                     }
 
-                    if (ult.target.IsVisible &&
+                    if (ult.target.IsHPBarRendered &&
                         R.GetDamage(ult.target) >
                         ult.target.Health + ult.target.MagicShield + ult.target.HPRegenRate*2)
                     {
                         targets.Add(ult.target);
                     }
 
-                    if (!ult.target.IsVisible && Utils.TickCount > ult.LastSeen + 5000 &&
+                    if (!ult.target.IsHPBarRendered && Utils.TickCount > ult.LastSeen + 5000 &&
                         R.GetDamage(ult.target) > EnemyTracker.GetTargetHealth(ult, R.Delay))
                     {
                         targets.Add(ult.target);
                     }
 
-                    if (!ult.target.IsVisible && Utils.TickCount < ult.LastSeen + 5000 && targets.Contains(ult.target))
+                    if (!ult.target.IsHPBarRendered && Utils.TickCount < ult.LastSeen + 5000 && targets.Contains(ult.target))
                     {
                         targets.Remove(ult.target);
                     }
@@ -738,20 +738,20 @@ using EloBuddy;
                             continue;
                         }
 
-                        if (ult.target.IsVisible &&
+                        if (ult.target.IsHPBarRendered &&
                             R.GetDamage(ult.target) >
                             ult.target.Health + ult.target.MagicShield + ult.target.HPRegenRate * 2)
                         {
                             targets.Add(ult.target);
                         }
 
-                        if (!ult.target.IsVisible && Utils.TickCount > ult.LastSeen + 5000 &&
+                        if (!ult.target.IsHPBarRendered && Utils.TickCount > ult.LastSeen + 5000 &&
                             R.GetDamage(ult.target) > EnemyTracker.GetTargetHealth(ult, R.Delay))
                         {
                             targets.Add(ult.target);
                         }
 
-                        if (!ult.target.IsVisible && Utils.TickCount < ult.LastSeen + 5000 && targets.Contains(ult.target))
+                        if (!ult.target.IsHPBarRendered && Utils.TickCount < ult.LastSeen + 5000 && targets.Contains(ult.target))
                         {
                             targets.Remove(ult.target);
                         }

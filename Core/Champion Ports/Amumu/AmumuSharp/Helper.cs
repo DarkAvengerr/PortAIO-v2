@@ -42,7 +42,7 @@ namespace AmumuSharp
         {
             var time = Utils.TickCount;
 
-            foreach (EnemyInfo enemyInfo in EnemyInfo.Where(x => x.Player.IsVisible))
+            foreach (EnemyInfo enemyInfo in EnemyInfo.Where(x => x.Player.IsHPBarRendered))
                 enemyInfo.LastSeen = time;
         }
 
@@ -53,7 +53,7 @@ namespace AmumuSharp
 
         public float GetTargetHealth(EnemyInfo playerInfo, int additionalTime)
         {
-            if (playerInfo.Player.IsVisible)
+            if (playerInfo.Player.IsHPBarRendered)
                 return playerInfo.Player.Health;
 
             var predictedhealth = playerInfo.Player.Health + playerInfo.Player.HPRegenRate * ((Utils.TickCount - playerInfo.LastSeen + additionalTime) / 1000f);

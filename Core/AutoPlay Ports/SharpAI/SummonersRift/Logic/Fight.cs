@@ -26,11 +26,11 @@ using EloBuddy;
                 return false;
             }
             if (ObjectManager.Get<AIHeroClient>()
-                .Any(h => h.IsEnemy && !h.IsDead && h.IsVisible && h.Distance(ObjectManager.Player) < 1650) &&
+                .Any(h => h.IsEnemy && !h.IsDead && h.IsHPBarRendered && h.Distance(ObjectManager.Player) < 1650) &&
                 ObjectManager.Get<AIHeroClient>()
                     .Count(h => h.IsAlly && !h.IsDead && h.Distance(ObjectManager.Player) < 1650) >
                 ObjectManager.Get<AIHeroClient>()
-                    .Count(h => h.IsEnemy && !h.IsDead && h.IsVisible && h.Distance(ObjectManager.Player) < 1650))
+                    .Count(h => h.IsEnemy && !h.IsDead && h.IsHPBarRendered && h.Distance(ObjectManager.Player) < 1650))
             {
                 return true;
             }

@@ -276,7 +276,7 @@ using EloBuddy;
                         ObjectManager.Get<Obj_AI_Turret>()
                             .Where(
                                 turret =>
-                                    (turret.Distance(target) - 725 <= 950) && turret.IsAlly && turret.IsVisible
+                                    (turret.Distance(target) - 725 <= 950) && turret.IsAlly && turret.IsHPBarRendered
                                     && (turret.Health > 0) && (turret.Distance(target) <= 1300)
                                     && (turret.Distance(target) > 400))
                             .MinOrDefault(i => target.Distance(ObjectManager.Player));

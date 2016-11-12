@@ -666,7 +666,7 @@ using EloBuddy;
 
         private static bool CastIgnite(AIHeroClient enemy)
         {
-            if (!enemy.IsValid || !enemy.IsVisible || !enemy.IsTargetable || enemy.IsDead)
+            if (!enemy.IsValid || !enemy.IsHPBarRendered || !enemy.IsTargetable || enemy.IsDead)
             {
                 return false;
             }

@@ -232,7 +232,7 @@ using EloBuddy; namespace Support.Evade
             //Spells that update to the unit position.
             if (this.SpellData.MissileFollowsUnit)
             {
-                if (this.Unit.IsVisible)
+                if (this.Unit.IsHPBarRendered)
                 {
                     this.End = this.Unit.ServerPosition.To2D();
                     this.Direction = (this.End - this.Start).Normalized();

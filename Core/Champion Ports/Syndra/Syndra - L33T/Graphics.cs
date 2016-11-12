@@ -53,7 +53,7 @@ using EloBuddy;
                     }
                 }
 
-                foreach (var enemy in ObjectCache.GetHeroes().Where(e => e.IsVisible && !e.IsDead))
+                foreach (var enemy in ObjectCache.GetHeroes().Where(e => e.IsHPBarRendered && !e.IsDead))
                 {
                     DrawEnemyInfo(enemy);
                 }

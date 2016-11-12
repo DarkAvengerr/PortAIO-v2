@@ -382,7 +382,7 @@ namespace Akali
                 ObjectManager.Get<AIHeroClient>()
                     .Where(
                         enemy =>
-                            enemy.Team != Player.Team && !enemy.IsDead && enemy.IsVisible &&
+                            enemy.Team != Player.Team && !enemy.IsDead && enemy.IsHPBarRendered &&
                             Config.Item("Assassin" + enemy.ChampionName) != null &&
                             Config.Item("Assassin" + enemy.ChampionName).GetValue<bool>() &&
                             Player.Distance(enemy) < assassinRange);

@@ -117,7 +117,7 @@ using EloBuddy; namespace YasuoPro
             if (Jumping && jumpspot != null)
             {
                 LeagueSharp.Common.Utility.DelayAction.Add(500, delegate { Jumping = false;  });
-                var minion = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsValid && x.Team == GameObjectTeam.Neutral && x.IsVisible).MinOrDefault(x => x.Distance(jumpspot.From));
+                var minion = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsValid && x.Team == GameObjectTeam.Neutral && x.IsHPBarRendered).MinOrDefault(x => x.Distance(jumpspot.From));
                 if (minion == null && !player.IsMoving && player.Distance(jumpspot.From) <= 0.25 * player.BoundingRadius)
                 {
                     if (getItem != null && getItem.SpellSlot.IsReady() && jumpspot.CastPos.Distance(jumpspot.From) <= 400)

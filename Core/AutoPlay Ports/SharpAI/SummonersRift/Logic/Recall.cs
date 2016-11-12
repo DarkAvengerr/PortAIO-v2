@@ -28,9 +28,9 @@ using EloBuddy;
             return new TreeSharp.Action(a =>
             {
                 Logging.Log("SWITCHED MODE TO RECALL");
-                if (ObjectManager.Get<AIHeroClient>().Count(h=> h.IsEnemy && !h.IsDead && h.IsVisible && h.Distance(ObjectManager.Player) < 1250) == 0 &&
+                if (ObjectManager.Get<AIHeroClient>().Count(h=> h.IsEnemy && !h.IsDead && h.IsHPBarRendered && h.Distance(ObjectManager.Player) < 1250) == 0 &&
                     ObjectManager.Get<Obj_AI_Minion>()
-                        .Count(m => m.IsEnemy && !m.IsDead && m.IsVisible && m.Distance(ObjectManager.Player) < 500) < 1)
+                        .Count(m => m.IsEnemy && !m.IsDead && m.IsHPBarRendered && m.Distance(ObjectManager.Player) < 500) < 1)
                 {
                     Variables.Orbwalker.ActiveMode = OrbwalkingMode.None;
                     if (!ObjectManager.Player.IsRecalling())
@@ -43,7 +43,7 @@ using EloBuddy;
                     Variables.Orbwalker.ActiveMode = OrbwalkingMode.None;
                     if (!ObjectManager.Player.IsRecalling() ||
                         ObjectManager.Get<AIHeroClient>()
-                            .Any(h => h.IsEnemy && !h.IsDead && h.IsVisible && h.Distance(ObjectManager.Player) < 1250))
+                            .Any(h => h.IsEnemy && !h.IsDead && h.IsHPBarRendered && h.Distance(ObjectManager.Player) < 1250))
                     {
                         ObjectManager.Player.Position.Extend(GameObjects.AllyNexus.Position,
                                 Random.GetRandomInteger(400, 600)).WalkToPoint(OrbwalkingMode.None, true);

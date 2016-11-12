@@ -140,7 +140,7 @@ using EloBuddy;
                     HeroManager.Enemies.Where(
                         x =>
                             x.IsValid && x.Distance(Player) < Player.AttackRange &&
-                            x.IsVisible))
+                            x.IsHPBarRendered))
             {
                 if (!target.HasBuff("kindredcharge")) return;
                 if (GetBool("forceetarget", typeof (bool)))
@@ -302,7 +302,7 @@ using EloBuddy;
 //            
 
             if (!R.IsReady()) return;
-            foreach (var hero in HeroManager.Allies.Where(x => x.IsValid && x.IsVisible && x.Distance(Player) < R.Range
+            foreach (var hero in HeroManager.Allies.Where(x => x.IsValid && x.IsHPBarRendered && x.Distance(Player) < R.Range
                                                                &&
                                                                x.CountEnemiesInRange(R.Range) <=
                                                                GetValue("minenemies") &&

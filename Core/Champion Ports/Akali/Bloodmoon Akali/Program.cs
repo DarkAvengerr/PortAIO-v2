@@ -176,7 +176,7 @@ using EloBuddy;
             if (Config.Item("drawdmg").GetValue<bool>())
             {
                 foreach (var enemy in
-                    ObjectManager.Get<AIHeroClient>().Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
+                    ObjectManager.Get<AIHeroClient>().Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsHPBarRendered))
                 {
                     Hpi.unit = enemy;
                     Hpi.drawDmg(CalcDamage(enemy), System.Drawing.Color.IndianRed);
@@ -1052,7 +1052,7 @@ using EloBuddy;
 
             //DRAW POTENTIAL DMG IN NUMBERS
             foreach (var enemy in
-                ObjectManager.Get<AIHeroClient>().Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
+                ObjectManager.Get<AIHeroClient>().Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsHPBarRendered))
             {
                 var epos = Drawing.WorldToScreen(enemy.Position);
                 if (Config.Item("drawpotential").GetValue<bool>())

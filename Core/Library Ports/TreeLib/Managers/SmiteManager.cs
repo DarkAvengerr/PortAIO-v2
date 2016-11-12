@@ -100,7 +100,7 @@ namespace TreeLib.Managers
             }
 
             if (Menu.Item("DrawDamage").IsActive() && Minion != null && Minion.IsValid && !Minion.IsDead &&
-                Minion.IsVisible && Minion.IsHPBarRendered)
+                Minion.IsHPBarRendered && Minion.IsHPBarRendered)
             {
                 DrawMinion(Minion);
             }

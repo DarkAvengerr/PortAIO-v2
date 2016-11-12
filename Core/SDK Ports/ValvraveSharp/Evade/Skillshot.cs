@@ -497,7 +497,7 @@ using EloBuddy;
                     this.SpellData.Radius);
                 this.UpdatePolygon();
             }
-            if (this.SpellData.MissileFollowsUnit && this.Unit.IsVisible)
+            if (this.SpellData.MissileFollowsUnit && this.Unit.IsHPBarRendered)
             {
                 this.End = this.Unit.ServerPosition.ToVector2();
                 this.Direction = (this.End - this.Start).Normalized();

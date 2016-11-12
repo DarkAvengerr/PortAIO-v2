@@ -238,14 +238,14 @@ namespace SFXUtility.Features.Trackers
                     _text14.DrawTextCentered(
                         enemy.Unit.Level.ToStringLookUp(),
                         new Vector2(offsetRight + hudWidth * 0.075f, offsetTop + hudHeight * 0.045f + offset),
-                        !enemy.Unit.IsVisible || enemy.Unit.IsDead
+                        !enemy.Unit.IsHPBarRendered || enemy.Unit.IsDead
                             ? new Color(255, 255, 255, 215)
                             : new Color(255, 255, 255, 240));
 
                     _text14.DrawTextLeft(
                         enemy.Unit.Name,
                         new Vector2(offsetRight + hudWidth * 0.52f, offsetTop - hudHeight * 0.57f + offset),
-                        !enemy.Unit.IsVisible || enemy.Unit.IsDead
+                        !enemy.Unit.IsHPBarRendered || enemy.Unit.IsDead
                             ? new Color(255, 255, 255, 215)
                             : new Color(255, 255, 255, 240));
 
@@ -295,7 +295,7 @@ namespace SFXUtility.Features.Trackers
                             Color.DarkRed);
                     }
 
-                    if (!enemy.Unit.IsVisible || enemy.Unit.IsDead)
+                    if (!enemy.Unit.IsHPBarRendered || enemy.Unit.IsDead)
                     {
                         _sprite.Begin(SpriteFlags.AlphaBlend);
                         _sprite.DrawCentered(
@@ -309,12 +309,12 @@ namespace SFXUtility.Features.Trackers
                         enemy.LastVisible = Game.Time;
                     }
                     enemy.LastPosition = enemy.Unit.Position;
-                    if (enemy.Unit.IsVisible || enemy.Unit.IsDead)
+                    if (enemy.Unit.IsHPBarRendered || enemy.Unit.IsDead)
                     {
                         enemy.LastVisible = Game.Time;
                     }
 
-                    if (!enemy.Unit.IsVisible && !enemy.Unit.IsDead && Game.Time - enemy.LastVisible > 3)
+                    if (!enemy.Unit.IsHPBarRendered && !enemy.Unit.IsDead && Game.Time - enemy.LastVisible > 3)
                     {
                         _text18.DrawTextCentered(
                             ((int) (Game.Time - enemy.LastVisible)).ToStringLookUp(),
@@ -566,7 +566,7 @@ namespace SFXUtility.Features.Trackers
                         }
                         else
                         {
-                            if (enemy.Unit.IsVisible && !enemy.Unit.IsDead &&
+                            if (enemy.Unit.IsHPBarRendered && !enemy.Unit.IsDead &&
                                 Utils.IsUnderRectangle(
                                     pos, offsetRight - hudWidth / 2f + hudWidth * 0.1f,
                                     offsetTop + offset - hudHeight / 2f, hudWidth, hudHeight))

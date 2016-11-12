@@ -57,7 +57,7 @@ using EloBuddy;
                     .Where(
                         obj =>
                         ((obj.BaseSkinName.ToLowerInvariant() == "sru_dragon"
-                          || obj.BaseSkinName.ToLowerInvariant() == "sru_baron") && obj.IsVisible && obj.HealthPercent < 100
+                          || obj.BaseSkinName.ToLowerInvariant() == "sru_baron") && obj.IsHPBarRendered && obj.HealthPercent < 100
                          && obj.HealthPercent > 0))
                     .ToList();
 
@@ -83,7 +83,7 @@ using EloBuddy;
                           || obj.BaseSkinName.ToLowerInvariant() == "sru_razorbeak"
                           || obj.BaseSkinName.ToLowerInvariant() == "sru_red"
                           || obj.BaseSkinName.ToLowerInvariant() == "sru_krug")
-                         && (obj.IsVisible && obj.HealthPercent < 100) && (obj.HealthPercent > 0) && (obj.IsVisible)))
+                         && (obj.IsHPBarRendered && obj.HealthPercent < 100) && (obj.HealthPercent > 0) && (obj.IsHPBarRendered)))
                     .ToList();
 
             return (jungleMob.Count > 0) ? jungleMob[0] : null;

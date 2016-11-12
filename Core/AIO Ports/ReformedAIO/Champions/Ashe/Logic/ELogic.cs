@@ -66,7 +66,7 @@ using EloBuddy;
 
         public bool ComboE(AIHeroClient target)
         {
-            return !target.IsVisible && !target.IsDead && target.Distance(Variable.Player) < 1500f;
+            return !target.IsHPBarRendered && !target.IsDead && target.Distance(Variable.Player) < 1500f;
         }
 
         public int GetEAmmo()

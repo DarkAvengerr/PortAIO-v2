@@ -64,7 +64,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
             Blade_of_the_Ruined_King.Cast(EloBuddy.SDK.EntityManager.Heroes.Enemies.FirstOrDefault(
                     x =>
                     x.HealthPercent < this.Menu.Item("BotrkEnemyHp").GetValue<Slider>().Value
-                    && x.Distance(this.Player) < 550 && x.IsValidTarget() && x.IsHPBarRendered && x.IsVisible));
+                    && x.Distance(this.Player) < 550 && x.IsValidTarget() && x.IsHPBarRendered && x.IsHPBarRendered));
         }
 
         #endregion

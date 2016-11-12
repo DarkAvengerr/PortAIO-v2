@@ -196,7 +196,7 @@ using EloBuddy; namespace SFXUtility.Features.Timers
                 var bCamp = _camps.FirstOrDefault(c => c.Mobs.Any(m => m.Name.Contains("Baron")));
                 if (bCamp != null && !bCamp.Dead)
                 {
-                    var heroes = GameObjects.EnemyHeroes.Where(e => e.IsVisible);
+                    var heroes = GameObjects.EnemyHeroes.Where(e => e.IsHPBarRendered);
                     foreach (var hero in heroes)
                     {
                         var buff =

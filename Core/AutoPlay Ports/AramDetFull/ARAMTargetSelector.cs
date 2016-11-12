@@ -40,7 +40,7 @@ namespace ARAMDetFull
         {
             try
             {
-                return EloBuddy.SDK.EntityManager.Heroes.Allies.Where(x => !x.IsDead && x.IsVisible && x.IsHPBarRendered && ObjectManager.Player.Distance(x) < range).OrderBy(x => x.Health).FirstOrDefault();
+                return EloBuddy.SDK.EntityManager.Heroes.Allies.Where(x => !x.IsDead && x.IsHPBarRendered && x.IsHPBarRendered && ObjectManager.Player.Distance(x) < range).OrderBy(x => x.Health).FirstOrDefault();
             }
             catch (Exception e)
             {

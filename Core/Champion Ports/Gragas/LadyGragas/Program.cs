@@ -377,7 +377,7 @@ using EloBuddy;
                 if (Config.SubMenu("Gragas: Misc Settings").Item("DrawD").GetValue<bool>())
                 {
                     foreach (var enemy in
-                        ObjectManager.Get<AIHeroClient>().Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
+                        ObjectManager.Get<AIHeroClient>().Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsHPBarRendered))
                     {
                         Hpi.unit = enemy;
                         Hpi.drawDmg(CalcDamage(enemy), Color.Gold);

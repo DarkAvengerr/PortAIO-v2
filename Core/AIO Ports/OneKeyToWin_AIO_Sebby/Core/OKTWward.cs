@@ -22,13 +22,10 @@ using EloBuddy;
         public Vector3 pos { get; set; }
     }
 
-    class OKTWward
+    class OKTWward : Program
     {
-        public AIHeroClient Player { get { return ObjectManager.Player; } }
-        private Menu Config = Program.Config;
         private bool rengar = false;
         AIHeroClient Vayne = null;
-        private static Spell Q, W, E, R;
 
         public static List<HiddenObj> HiddenObjList = new List<HiddenObj>();
 
@@ -46,10 +43,6 @@ using EloBuddy;
 
         public void LoadOKTW()
         {
-            Q = new Spell(SpellSlot.Q);
-            E = new Spell(SpellSlot.E);
-            W = new Spell(SpellSlot.W);
-            R = new Spell(SpellSlot.R);
 
             Config.SubMenu("AutoWard OKTW©").AddItem(new MenuItem("AutoWard", "Auto Ward").SetValue(true));
             Config.SubMenu("AutoWard OKTW©").AddItem(new MenuItem("autoBuy", "Auto buy blue trinket after lvl 9").SetValue(false));
@@ -66,7 +59,7 @@ using EloBuddy;
             }
             
             Game.OnUpdate += Game_OnUpdate;
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             GameObject.OnCreate +=GameObject_OnCreate;
             GameObject.OnDelete += GameObject_OnDelete;
         }
@@ -99,12 +92,9 @@ using EloBuddy;
 
         private void AutoWardLogic()
         {
-            foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValid && !enemy.IsVisible && !enemy.IsDead))
+            foreach (var need in OKTWtracker.ChampionInfoList.Where(x => x.Hero.IsValid && x.PredictedPos != null && !x.Hero.IsHPBarRendered && !x.Hero.IsDead))
             {
-                var need = OKTWtracker.ChampionInfoList.Find(x => x.NetworkId == enemy.NetworkId);
-
-                if (need == null || need.PredictedPos == null)
-                    continue;
+                //var need = OKTWtracker.ChampionInfoList.Find(x => x.NetworkId == enemy.NetworkId);
 
                 var PPDistance = need.PredictedPos.Distance(Player.Position);
 
@@ -151,7 +141,7 @@ using EloBuddy;
 
                 if (timer < 4)
                 {
-                    if (Config.Item("AutoWardCombo").GetValue<bool>() && Program.AIOmode != 2 && !Program.Combo)
+                    if (Config.Item("AutoWardCombo").GetValue<bool>() && Program.AioModeSet != Program.AioMode.ChampionOnly && !Program.Combo)
                         return;
 
                     if (NavMesh.IsWallOfGrass(need.PredictedPos, 0))
@@ -215,9 +205,8 @@ using EloBuddy;
             var missile = sender as MissileClient;
             if (missile != null)
             {
-                if ( !missile.SpellCaster.IsVisible)
+                if ( !missile.SpellCaster.IsHPBarRendered)
                 {
-
                     if ((missile.SData.Name == "BantamTrapShort" || missile.SData.Name == "BantamTrapBounceSpell") && !HiddenObjList.Exists(x => missile.EndPosition == x.pos))
                         AddWard("teemorcast", missile.EndPosition);
                 }
@@ -349,20 +338,20 @@ using EloBuddy;
                     break;
                 //SIGH WARD
                 case "itemghostward":
-                    HiddenObjList.Add(new HiddenObj() { type = 1, pos = posCast, endTime = Game.Time + 180 });
+                    HiddenObjList.Add(new HiddenObj() { type = 1, pos = posCast, endTime = Game.Time + 150 });
                     break;
                 case "wrigglelantern":
-                    HiddenObjList.Add(new HiddenObj() { type = 1, pos = posCast, endTime = Game.Time + 180 });
+                    HiddenObjList.Add(new HiddenObj() { type = 1, pos = posCast, endTime = Game.Time + 150 });
                     break;
                 case "sightward":
-                    HiddenObjList.Add(new HiddenObj() { type = 1, pos = posCast, endTime = Game.Time + 180 });
+                    HiddenObjList.Add(new HiddenObj() { type = 1, pos = posCast, endTime = Game.Time + 150 });
                     break;
                 case "itemferalflare":
-                    HiddenObjList.Add(new HiddenObj() { type = 1, pos = posCast, endTime = Game.Time + 180 });
+                    HiddenObjList.Add(new HiddenObj() { type = 1, pos = posCast, endTime = Game.Time + 150 });
                     break;
                 //TRINKET
                 case "trinkettotemlvl1":
-                    HiddenObjList.Add(new HiddenObj() { type = 1, pos = posCast, endTime = Game.Time + 60 });
+                    HiddenObjList.Add(new HiddenObj() { type = 1, pos = posCast, endTime = Game.Time + 60 + Player.Level * 3.3f });
                     break;
                 case "trinkettotemlvl2":
                     HiddenObjList.Add(new HiddenObj() { type = 1, pos = posCast, endTime = Game.Time + 120 });

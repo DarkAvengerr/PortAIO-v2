@@ -309,7 +309,7 @@ using EloBuddy;
             {
                 Obj_AI_Minion shadow;
                 shadow = ObjectManager.Get<Obj_AI_Minion>()
-                        .FirstOrDefault(minion => minion.IsVisible && minion.IsAlly && minion.Name == "Shadow");
+                        .FirstOrDefault(minion => minion.IsHPBarRendered && minion.IsAlly && minion.Name == "Shadow");
 
                 rpos = shadow.ServerPosition;
             }
@@ -615,7 +615,7 @@ using EloBuddy;
                 var vEnemy = ObjectManager.Get<AIHeroClient>()
                     .Where(
                         enemy =>
-                            enemy.Team != ObjectManager.Player.Team && !enemy.IsDead && enemy.IsVisible &&
+                            enemy.Team != ObjectManager.Player.Team && !enemy.IsDead && enemy.IsHPBarRendered &&
                             TargetSelectorMenu.Item("Assassin" + enemy.ChampionName) != null &&
                             TargetSelectorMenu.Item("Assassin" + enemy.ChampionName).GetValue<bool>() &&
                             ObjectManager.Player.Distance(enemy.ServerPosition) < assassinRange);
@@ -708,7 +708,7 @@ using EloBuddy;
             {
                 return
                     ObjectManager.Get<Obj_AI_Minion>()
-                        .FirstOrDefault(minion => minion.IsVisible && minion.IsAlly && (minion.ServerPosition != rpos) && minion.Name == "Shadow");
+                        .FirstOrDefault(minion => minion.IsHPBarRendered && minion.IsAlly && (minion.ServerPosition != rpos) && minion.Name == "Shadow");
             }
         }
         private static Obj_AI_Minion RShadow
@@ -717,7 +717,7 @@ using EloBuddy;
             {
                 return
                     ObjectManager.Get<Obj_AI_Minion>()
-                        .FirstOrDefault(minion => minion.IsVisible && minion.IsAlly && (minion.ServerPosition == rpos) && minion.Name == "Shadow");
+                        .FirstOrDefault(minion => minion.IsHPBarRendered && minion.IsAlly && (minion.ServerPosition == rpos) && minion.Name == "Shadow");
             }
         }
 

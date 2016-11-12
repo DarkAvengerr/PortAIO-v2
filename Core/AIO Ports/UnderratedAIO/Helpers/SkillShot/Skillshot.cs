@@ -279,7 +279,7 @@ using EloBuddy;
             //Spells that update to the Caster position.
             if (SkillshotData.MissileFollowsUnit)
             {
-                if (Caster.IsVisible)
+                if (Caster.IsHPBarRendered)
                 {
                     EndPosition = Caster.ServerPosition.To2D();
                     Direction = (EndPosition - StartPosition).Normalized();

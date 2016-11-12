@@ -25,7 +25,7 @@ namespace DevCommom
 
         public bool Cast(AIHeroClient enemy)
         {
-            if (!enemy.IsValid || !enemy.IsVisible || !enemy.IsTargetable || enemy.IsDead)
+            if (!enemy.IsValid || !enemy.IsHPBarRendered || !enemy.IsTargetable || enemy.IsDead)
                 return false;
 
             if (HasIgnite && IsReady() && enemy.IsValidTarget(600))

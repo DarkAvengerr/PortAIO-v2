@@ -197,7 +197,7 @@ using EloBuddy;
                         var distToDash = Player.Distance(closeDash.from);
 
                         if (W.IsReady() && distToDash < 136f && jumps.Count == 0 && NavMesh.LineOfSightTest(closeDash.to, closeDash.to)
-                           && MinionManager.GetMinions(Game.CursorPos, 350).Where(min => min.IsVisible).Count() < 2)
+                           && MinionManager.GetMinions(Game.CursorPos, 350).Where(min => min.IsHPBarRendered).Count() < 2)
                         {
                             W.Cast(closeDash.to);
                         }

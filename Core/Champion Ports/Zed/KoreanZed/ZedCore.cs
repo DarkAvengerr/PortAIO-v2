@@ -240,13 +240,13 @@ using EloBuddy; namespace KoreanZed
         {
             actionQueue.EnqueueAction(
                 comboQueue,
-                () => r.IsReady() && r.Instance.ToggleState == 0 && player.IsVisible,
+                () => r.IsReady() && r.Instance.ToggleState == 0 && player.IsHPBarRendered,
                 () =>
                     {
                         zedComboSelector.AllStarAnimation();
                         r.Cast(target);
                     },
-                () => r.IsReady() && r.Instance.ToggleState != 0 && player.IsVisible);
+                () => r.IsReady() && r.Instance.ToggleState != 0 && player.IsHPBarRendered);
             actionQueue.EnqueueAction(
                 comboQueue, 
                 () => true, 
@@ -273,13 +273,13 @@ using EloBuddy; namespace KoreanZed
         {
             actionQueue.EnqueueAction(
                 comboQueue,
-                () => r.IsReady() && r.Instance.ToggleState == 0 && player.IsVisible,
+                () => r.IsReady() && r.Instance.ToggleState == 0 && player.IsHPBarRendered,
                 () =>
                 {
                     zedComboSelector.TheLineAnimation();
                     r.Cast(target);
                 },
-                () => r.IsReady() && r.Instance.ToggleState != 0 && player.IsVisible);
+                () => r.IsReady() && r.Instance.ToggleState != 0 && player.IsHPBarRendered);
             actionQueue.EnqueueAction(
                 comboQueue, 
                 () => true, 

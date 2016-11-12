@@ -456,7 +456,7 @@ namespace ARAMDetFull
         public static int fightLevel()
         {
             int count = 0;
-            foreach (var enem in enemy_champions.Where(ene => !ene.hero.IsDead && ene.hero.IsVisible && ene.hero.IsHPBarRendered).OrderBy(ene => ene.hero.Distance(ObjectManager.Player, true)))
+            foreach (var enem in enemy_champions.Where(ene => !ene.hero.IsDead && ene.hero.IsHPBarRendered && ene.hero.IsHPBarRendered).OrderBy(ene => ene.hero.Distance(ObjectManager.Player, true)))
             {
                 if (myControler.canDoDmgTo(enem.hero) * 0.7f > enem.hero.Health)
                     count++;
@@ -471,7 +471,7 @@ namespace ARAMDetFull
 
         public static AIHeroClient fightIsOn()
         {
-            foreach (var enem in enemy_champions.Where(ene => !ene.hero.IsDead && ene.hero.IsVisible && ene.hero.IsHPBarRendered && !ene.hero.IsZombie).OrderBy(ene => ene.hero.Distance(ObjectManager.Player, true)))
+            foreach (var enem in enemy_champions.Where(ene => !ene.hero.IsDead && ene.hero.IsHPBarRendered && ene.hero.IsHPBarRendered && !ene.hero.IsZombie).OrderBy(ene => ene.hero.Distance(ObjectManager.Player, true)))
             {
                 if (myControler.canDoDmgTo(enem.hero) * 0.7f > enem.hero.Health)
                     return enem.hero;
@@ -487,7 +487,7 @@ namespace ARAMDetFull
 
         public static bool fightIsClose()
         {
-            foreach (var enem in enemy_champions.Where(ene => !ene.hero.IsDead && ene.hero.IsVisible && ene.hero.IsHPBarRendered).OrderBy(ene => ene.hero.Distance(ObjectManager.Player, true)))
+            foreach (var enem in enemy_champions.Where(ene => !ene.hero.IsDead && ene.hero.IsHPBarRendered && ene.hero.IsHPBarRendered).OrderBy(ene => ene.hero.Distance(ObjectManager.Player, true)))
             {
 
                 if (ally_champions.Where(ene => !ene.hero.IsDead && !ene.hero.IsMe && ene.hero.IsHPBarRendered).Any(ally => enem.hero.Distance(ally.hero, true) < 550 * 550))
@@ -637,7 +637,7 @@ namespace ARAMDetFull
         {
             return
                 EloBuddy.SDK.EntityManager.Heroes.Enemies
-                    .Where(h => h.IsValid && !h.IsDead && h.IsVisible && h.IsEnemy)
+                    .Where(h => h.IsValid && !h.IsDead && h.IsHPBarRendered && h.IsEnemy)
                     .OrderBy(h => h.Distance(ARAMSimulator.fromNex.Position, true))
                     .FirstOrDefault();
         }

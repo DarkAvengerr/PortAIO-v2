@@ -250,7 +250,7 @@ using EloBuddy;
             {
                 var e = Variables.TargetSelector.GetTarget(2000, DamageType.Magical);
 
-                if (e != null && e.IsValid && e.IsVisible && e.IsHPBarRendered)
+                if (e != null && e.IsValid && e.IsHPBarRendered && e.IsHPBarRendered)
                 {
                     R.Cast(e.ServerPosition);
                     tick = Variables.TickCount;

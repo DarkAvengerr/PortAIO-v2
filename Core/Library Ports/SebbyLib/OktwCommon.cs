@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using EloBuddy;
 
-namespace SebbyLib
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace SebbyLib
 {
     public class OktwCommon
     {
@@ -33,12 +34,21 @@ namespace SebbyLib
                 if (hero.IsEnemy && hero.ChampionName == "Yasuo")
                     YasuoInGame = true;
             }
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             EloBuddy.Player.OnIssueOrder += Obj_AI_Base_OnIssueOrder;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
-            Game.OnUpdate += OnUpdate;
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnDoCast;
+            Obj_AI_Base.OnDamage += Obj_AI_Base_OnDamage;
+            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnSpellCast;
             Game.OnWndProc += Game_OnWndProc;
+        }
+
+        private static void Obj_AI_Base_OnDamage(AttackableUnit sender, AttackableUnitDamageEventArgs args)
+        {
+            if (sender is AIHeroClient)
+            {
+                float time = Game.Time - 2;
+                IncomingDamageList.RemoveAll(damage => time < damage.Time || ((int)damage.Damage == (int)args.Damage && damage.TargetNetworkId == sender.NetworkId));
+            }
         }
 
         public static void debug(string msg)
@@ -53,25 +63,7 @@ namespace SebbyLib
             }
         }
 
-        public static double GetIncomingDamage(AIHeroClient target, float time = 0.5f, bool skillshots = true)
-        {
-            double totalDamage = 0;
-
-            foreach (var damage in IncomingDamageList.Where(damage => damage.TargetNetworkId == target.NetworkId && Game.Time - time < damage.Time))
-            {
-                if (skillshots)
-                {
-                    totalDamage += damage.Damage;
-                }
-                else
-                {
-                    if (!damage.Skillshot)
-                        totalDamage += damage.Damage;
-                }
-            }
-
-            return totalDamage;
-        }
+       
 
         public static bool CanHarras()
         {
@@ -122,24 +114,24 @@ namespace SebbyLib
             return false;
         }
 
-        public static bool CanHitSkillShot(Obj_AI_Base target, GameObjectProcessSpellCastEventArgs args)
+        public static bool CanHitSkillShot(Obj_AI_Base target, Vector3 Start, Vector3 End, SpellData SData)
         {
-            if (args.Target == null && target.IsValidTarget(float.MaxValue,false))
+            if (target.IsValidTarget(float.MaxValue,false))
             {
 
                 var pred = Prediction.Prediction.GetPrediction(target, 0.25f).CastPosition;
                 if (pred == null)
                     return false;
 
-                if (args.SData.LineWidth > 0)
+                if (SData.LineWidth > 0)
                 {
-                    var powCalc = Math.Pow(args.SData.LineWidth + target.BoundingRadius, 2);
-                    if (pred.To2D().Distance(args.End.To2D(), args.Start.To2D(), true, true) <= powCalc || target.ServerPosition.To2D().Distance(args.End.To2D(), args.Start.To2D(), true, true) <= powCalc)
+                    var powCalc = Math.Pow(SData.LineWidth + target.BoundingRadius, 2);
+                    if (pred.To2D().Distance(End.To2D(), Start.To2D(), true, true) <= powCalc || target.ServerPosition.To2D().Distance(End.To2D(), Start.To2D(), true, true) <= powCalc)
                     {
                         return true;
                     } 
                 }
-                else if (target.Distance(args.End) < 50 + target.BoundingRadius || pred.Distance(args.End) < 50 + target.BoundingRadius)
+                else if (target.Distance(End) < 50 + target.BoundingRadius || pred.Distance(End) < 50 + target.BoundingRadius)
                 {
                     return true;
                 }  
@@ -150,6 +142,7 @@ namespace SebbyLib
         public static float GetKsDamage(AIHeroClient t, Spell QWER)
         {
             var totalDmg = QWER.GetDamage(t);
+            totalDmg += OktwCommon.GetEchoLudenDamage(t);
             totalDmg -= t.HPRegenRate;
 
             if (totalDmg > t.Health)
@@ -183,8 +176,8 @@ namespace SebbyLib
 
         public static bool CanMove(AIHeroClient target)
         {
-            if (target.MoveSpeed < 50 || target.IsStunned || target.HasBuffOfType(BuffType.Stun) || target.HasBuffOfType(BuffType.Fear) || target.HasBuffOfType(BuffType.Snare) || target.HasBuffOfType(BuffType.Knockup) || target.HasBuff("Recall") ||
-                target.HasBuffOfType(BuffType.Knockback) || target.HasBuffOfType(BuffType.Charm) || target.HasBuffOfType(BuffType.Taunt) || target.HasBuffOfType(BuffType.Suppression) || (target.IsChannelingImportantSpell() && !target.IsMoving))
+            if ( (!target.Spellbook.IsAutoAttacking && target.IsRooted && !target.CanMove) || target.MoveSpeed < 50 || target.IsStunned || target.HasBuffOfType(BuffType.Stun) || target.HasBuffOfType(BuffType.Fear) || target.HasBuffOfType(BuffType.Snare) || target.HasBuffOfType(BuffType.Knockup)  || target.HasBuff("Recall") ||
+                target.HasBuffOfType(BuffType.Knockback) || target.HasBuffOfType(BuffType.Charm) || target.HasBuffOfType(BuffType.Taunt) || target.HasBuffOfType(BuffType.Suppression))
             {
                 return false;
             }
@@ -194,34 +187,14 @@ namespace SebbyLib
 
         public static int GetBuffCount(Obj_AI_Base target, string buffName)
         {
-            if (buffName.Equals("TwitchDeadlyVenom")) // ty finn
+            foreach (var buff in target.Buffs.Where(buff => buff.Name.ToLower() == buffName.ToLower()))
             {
-                var twitchECount = 0;
-
-                for (var i = 1; i < 7; i++)
-                {
-                    if (ObjectManager.Get<Obj_GeneralParticleEmitter>()
-                            .Any(e => e.Position.Distance(target.ServerPosition) <= 55 &&
-                                      e.Name == "twitch_poison_counter_0" + i + ".troy"))
-                    {
-                        twitchECount = i;
-                    }
-                }
-                return twitchECount;
+                if (buff.Count == 0)
+                    return 1;
+                else
+                    return buff.Count;
             }
-
-            int stack = 0;
-            foreach (var targetA in ObjectManager.Get<AIHeroClient>().Where(i => i.IsEnemy && i.IsValidTarget() && i.VisibleOnScreen))
-            {
-                foreach (var buff in target.Buffs)
-                {
-                    if(buff.Name.ToLower().Contains(buffName.ToLower()))
-                    {
-                        stack = target.GetBuffCount(buff.Name);
-                    }
-                }
-            }
-            return stack;
+            return 0;
         }
 
         public static int CountEnemyMinions(Obj_AI_Base target, float range)
@@ -277,7 +250,7 @@ namespace SebbyLib
             Vector2 pos2 = targetLW.To2D() - target.Position.To2D();
             var getAngle = pos1.AngleBetween(pos2);
 
-            if (getAngle < 25)
+            if(getAngle < 25)
                 return true;
             else
                 return false;
@@ -363,7 +336,58 @@ namespace SebbyLib
             }
         }
 
-        private static void Obj_AI_Base_OnDoCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        public static double GetIncomingDamage(AIHeroClient target, float time = 0.5f, bool skillshots = true)
+        {
+            double totalDamage = 0;
+
+            foreach (var damage in IncomingDamageList.Where(damage => damage.TargetNetworkId == target.NetworkId && Game.Time - time < damage.Time))
+            {
+                if (skillshots)
+                {
+                    totalDamage += damage.Damage;
+                }
+                else
+                {
+                    if (!damage.Skillshot)
+                        totalDamage += damage.Damage;
+                }
+            }
+            double damage2 = 0;
+            
+            foreach (var missile in Cache.MissileList.Where(missile => missile.IsValid && missile.SpellCaster != null && missile.SData != null && missile.SpellCaster.Team != target.Team))
+            {
+                if (missile.Target != null)
+                {
+                    if (missile.Target.NetworkId == target.NetworkId)
+                    {
+                        var damageExtra = missile.SpellCaster.GetSpellDamage((Obj_AI_Base)missile.Target, missile.SData.Name);
+                        if(damageExtra == 0)
+                            damageExtra += target.Level * 3;
+                        damage2 = damageExtra;
+                    }
+                }
+                else if(skillshots)
+                {
+                    if (CanHitSkillShot(target, missile.StartPosition, missile.EndPosition, missile.SData))
+                    {
+                        damage2 += missile.SpellCaster.GetSpellDamage((Obj_AI_Base)missile.Target, missile.SData.Name);
+                    }
+                }
+            }
+
+            if (damage2 > totalDamage)
+                totalDamage = damage2;
+
+            if (target.HasBuffOfType(BuffType.Poison))
+                totalDamage += target.Level * 5;
+            if (target.HasBuffOfType(BuffType.Damage))
+                totalDamage += target.Level * 6;
+
+            return totalDamage;
+        }
+
+
+        private static void Obj_AI_Base_OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (args.Target != null && args.SData != null)
             {
@@ -372,12 +396,6 @@ namespace SebbyLib
                     IncomingDamageList.Add(new UnitIncomingDamage { Damage = sender.GetSpellDamage((Obj_AI_Base)args.Target, args.SData.Name), TargetNetworkId = args.Target.NetworkId, Time = Game.Time, Skillshot = false });
                 }
             }
-        }
-
-        private static void OnUpdate(EventArgs args)
-        {
-            float time = Game.Time - 2;
-            IncomingDamageList.RemoveAll(damage => time < damage.Time);
         }
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -391,28 +409,28 @@ namespace SebbyLib
             
             if (targed != null)
             {
-                if (targed.Type == GameObjectType.AIHeroClient && targed.Team != sender.Team && sender.IsMelee)
+                if (targed.Type == GameObjectType.AIHeroClient && targed.Team != sender.Team && (sender.IsMelee || !args.SData.IsAutoAttack()))
                 {
                     IncomingDamageList.Add(new UnitIncomingDamage { Damage = sender.GetSpellDamage(targed, args.SData.Name), TargetNetworkId = args.Target.NetworkId, Time = Game.Time, Skillshot = false });
                 }
             }
             else
             {
-                foreach (var champion in ChampionList.Where(champion => !champion.IsDead && champion.IsVisible && champion.Team != sender.Team && champion.Distance(sender) < 2000))
+                foreach (var champion in ChampionList.Where(champion => !champion.IsDead && champion.IsHPBarRendered && champion.Team != sender.Team && champion.Distance(sender) < 2000))
                 {
-                    if (CanHitSkillShot(champion,args))
+                    if (CanHitSkillShot(champion, args.Start, args.End, args.SData))
                     {
                         IncomingDamageList.Add(new UnitIncomingDamage { Damage = sender.GetSpellDamage(champion, args.SData.Name), TargetNetworkId = champion.NetworkId, Time = Game.Time, Skillshot = true });
                     }
                 }
-
+                
                 if (!YasuoInGame)
                     return;
 
                 if (!sender.IsEnemy || sender.IsMinion || args.SData.IsAutoAttack() || sender.Type != GameObjectType.AIHeroClient)
                     return;
 
-                if (args.SData.Name == "YasuoWMovingWall")
+                if (args.SData.Name.Contains("YasuoWMovingWall"))
                 {
                     yasuoWall.CastTime = Game.Time;
                     yasuoWall.CastPosition = sender.Position.Extend(args.End, 400);

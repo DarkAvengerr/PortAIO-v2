@@ -161,7 +161,7 @@ namespace RivenSharp
                 foreach (
                     var enemy in
                         ObjectManager.Get<AIHeroClient>()
-                            .Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
+                            .Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsHPBarRendered))
                 {
                     hpi.unit = enemy;
                     hpi.drawDmg(Riven.rushDmgBasedOnDist(enemy), Color.Yellow);
@@ -224,7 +224,7 @@ namespace RivenSharp
                         foreach (
                             var enemy in
                                 ObjectManager.Get<AIHeroClient>()
-                                    .Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
+                                    .Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsHPBarRendered))
                         {
                             hpi.unit = enemy;
                             hpi.drawDmg(Riven.rushDmgBasedOnDist(enemy), Color.Yellow);

@@ -255,7 +255,7 @@ using EloBuddy;
             if (Menu.Item("com.itwitch.drawing.drawEStacks").GetValue<bool>())
             {
                 foreach (var source in
-                    HeroManager.Enemies.Where(x => x.HasBuff("TwitchDeadlyVenom") && !x.IsDead && x.IsVisible))
+                    HeroManager.Enemies.Where(x => x.HasBuff("TwitchDeadlyVenom") && !x.IsDead && x.IsHPBarRendered))
                 {
                     var position = new Vector3(source.Position.X, source.Position.Y + 10, source.Position.Z);
                     position.DrawTextOnScreen($"{"Stacks: " + source.GetPoisonStacks()}", Color.AntiqueWhite);
@@ -265,7 +265,7 @@ using EloBuddy;
             if (Menu.Item("com.itwitch.drawing.drawEStackT").GetValue<bool>())
             {
                 foreach (var source in
-                    HeroManager.Enemies.Where(x => x.HasBuff("TwitchDeadlyVenom") && !x.IsDead && x.IsVisible))
+                    HeroManager.Enemies.Where(x => x.HasBuff("TwitchDeadlyVenom") && !x.IsDead && x.IsHPBarRendered))
                 {
                     var position = new Vector3(source.Position.X, source.Position.Y - 30, source.Position.Z);
                     position.DrawTextOnScreen(

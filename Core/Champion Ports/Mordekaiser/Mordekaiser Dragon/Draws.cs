@@ -61,7 +61,7 @@ namespace Mordekaiser
 
             if (Menu.MenuR.Item("DrawR.Status.Show").GetValue<StringList>().SelectedIndex == 1)
             {
-                foreach (var a in HeroManager.Enemies.Where(e => e.IsVisible && !e.IsDead && !e.IsZombie))
+                foreach (var a in HeroManager.Enemies.Where(e => e.IsHPBarRendered && !e.IsDead && !e.IsZombie))
                 {
                     var vSelected = (Menu.MenuR.Item("Selected" + a.ChampionName).GetValue<StringList>().SelectedIndex);
 

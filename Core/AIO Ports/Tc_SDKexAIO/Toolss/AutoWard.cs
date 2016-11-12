@@ -76,7 +76,7 @@ using EloBuddy;
 
             if (missile != null)
             {
-                if (!missile.SpellCaster.IsVisible)
+                if (!missile.SpellCaster.IsHPBarRendered)
                     if ((missile.SData.Name == "BantamTrapShort" || missile.SData.Name == "BantamTrapBounceSpell") && !HiddenObjList.Exists(x => missile.EndPosition == x.pos))
                         AddWard("teemorcast", missile.EndPosition);
             }
@@ -209,7 +209,7 @@ using EloBuddy;
                         ChampionInfoOne.PredictedPos = EnemySpawn;
                     }
                 }
-                else if (enemy.IsVisible)
+                else if (enemy.IsHPBarRendered)
                 {
                     Vector3 prepos = enemy.Position;
 
@@ -245,7 +245,7 @@ using EloBuddy;
             if (Vayne != null && Vayne.IsValidTarget(1000) && Vayne.HasBuff("vaynetumblefade"))
                 CastVisionWards(Vayne.ServerPosition);
 
-            foreach (var enemy in GameObjects.EnemyHeroes.Where(enemy => enemy.IsValid && !enemy.IsVisible && !enemy.IsDead))
+            foreach (var enemy in GameObjects.EnemyHeroes.Where(enemy => enemy.IsValid && !enemy.IsHPBarRendered && !enemy.IsDead))
             {
                 var need = ChampionInfoList.Find(x => x.NetworkId == enemy.NetworkId);
 

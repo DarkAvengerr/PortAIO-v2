@@ -116,7 +116,7 @@ using EloBuddy;
                     float scale = Math.Max((minScale / 100.0f), 1 - (lastPosInfo.distance - 2000) / 5000);
                     //scale = scale > (maxScale / 100.0f) ? (maxScale / 100.0f) : scale;
 
-                    /*if (!hero.IsVisible)
+                    /*if (!hero.IsHPBarRendered)
                     {
                         scale = fowScale / 100.0f;
                     }*/
@@ -209,7 +209,7 @@ using EloBuddy;
                     && !(hero.IsEnemy && ExtendedAwareness.menu.Item("ShowEnemyPosition").GetValue<bool>() == false)
                     && lastPosInfo.distance < ExtendedAwareness.menu.Item("PositionAwarenessRange").GetValue<Slider>().Value
                     && hero.IsMoving
-                    && hero.IsVisible && !hero.IsDead
+                    && hero.IsHPBarRendered && !hero.IsDead
                     && !hero.Position.IsOnScreen();
             }
             catch (Exception e)
@@ -254,7 +254,7 @@ using EloBuddy;
 
         private void Hero_OnProcessSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (hero.IsVisible)
+            if (hero.IsHPBarRendered)
             {
                 return;
             }
@@ -269,7 +269,7 @@ using EloBuddy;
 
         private void OnCreate_MissileClient(GameObject sender, EventArgs args)
         {
-            if (sender == null || hero.IsVisible)
+            if (sender == null || hero.IsHPBarRendered)
             {
                 return;
             }
@@ -314,7 +314,7 @@ using EloBuddy;
             {
                 position = teleportInfo.position;
             }
-            else if (!hero.IsVisible)
+            else if (!hero.IsHPBarRendered)
             {
                 pathPosition = WaypointTracker.GetHeroCurrentPosition(hero);
                 if (pathPosition != Vector2.Zero)
@@ -333,7 +333,7 @@ using EloBuddy;
                 lastPosInfo = posInfo;
             }
 
-            /*if (!hero.IsVisible && hero.ServerPosition.To2D().Distance(leaveVisiblityPosition) > 5)
+            /*if (!hero.IsHPBarRendered && hero.ServerPosition.To2D().Distance(leaveVisiblityPosition) > 5)
             {
                 renderFOWTime = HelperUtils.TickCount + 1000;
                 leaveVisiblityPosition = hero.ServerPosition.To2D();
@@ -343,8 +343,8 @@ using EloBuddy;
         private bool ShouldShowIconFow()
         {
             return renderFOWTime - HelperUtils.TickCount > 0
-                || (hero.IsVisible && !IsOnScreen(hero.Position))
-                || (!hero.IsVisible && pathPosition != Vector2.Zero && !leaveVisiblityOnScreen);
+                || (hero.IsHPBarRendered && !IsOnScreen(hero.Position))
+                || (!hero.IsHPBarRendered && pathPosition != Vector2.Zero && !leaveVisiblityOnScreen);
         }
 
         public bool IsOnScreen(Vector3 position)

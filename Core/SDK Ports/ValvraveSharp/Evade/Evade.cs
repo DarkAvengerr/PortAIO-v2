@@ -296,7 +296,7 @@ using EloBuddy;
 
         private static void OnDetectSkillshot(Skillshot skillshot)
         {
-            if (!skillshot.Unit.IsVisible)
+            if (!skillshot.Unit.IsHPBarRendered)
             {
                 var preventDodgeFoW = Program.MainMenu["Evade"]["DisableFoW"];
                 if (!preventDodgeFoW && !skillshot.SpellData.DisableFowDetection
@@ -397,7 +397,7 @@ using EloBuddy;
                     {
                         var target =
                             GameObjects.Heroes.FirstOrDefault(
-                                h => h.Team == source.Team && h.IsVisible && h.HasBuff("taricwleashactive"));
+                                h => h.Team == source.Team && h.IsHPBarRendered && h.HasBuff("taricwleashactive"));
                         if (target != null)
                         {
                             var start = target.ServerPosition.ToVector2();

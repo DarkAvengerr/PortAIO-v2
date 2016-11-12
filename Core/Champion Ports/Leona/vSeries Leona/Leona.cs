@@ -102,7 +102,7 @@ using EloBuddy;
                         )
                         .FirstOrDefault(
                             x =>
-                                x.IsEnemy && x.IsVisible && x.Distance(Player) < Player.AttackRange + x.BoundingRadius + Player.BoundingRadius &&
+                                x.IsEnemy && x.IsHPBarRendered && x.Distance(Player) < Player.AttackRange + x.BoundingRadius + Player.BoundingRadius &&
                                 (x.Name.ToLower().Contains("ward") || x.Name.ToLower().Contains("sight") ||
                                  x.Name.ToLower().Contains("vision"))); 
 

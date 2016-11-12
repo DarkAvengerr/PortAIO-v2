@@ -20,7 +20,7 @@ using EloBuddy;
                 ObjectManager.Get<Obj_AI_Minion>()
                     .Where(
                         t =>
-                            t.IsValid && t.IsVisible && t.IsAlly &&
+                            t.IsValid && t.IsHPBarRendered && t.IsAlly &&
                             t.CharData.BaseSkinName.ToLower().Equals("illaoiminion")))
             {
                 TentacleList.Add(tentacle);
@@ -33,7 +33,7 @@ using EloBuddy;
 
         private static void Drawing_OnDraw(EventArgs args)
         {
-            foreach (var tentacle in TentacleList.Where(t => t.IsValid && t.IsVisible && t.IsHPBarRendered))
+            foreach (var tentacle in TentacleList.Where(t => t.IsValid && t.IsHPBarRendered && t.IsHPBarRendered))
             {
                 Render.Circle.DrawCircle(tentacle.ServerPosition, TentacleAutoAttackRange, Color.DarkBlue);
             }

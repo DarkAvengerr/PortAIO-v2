@@ -72,7 +72,7 @@ using EloBuddy;
             }
 
 
-            if (target == null || target.IsDead || !target.IsVisible) return;
+            if (target == null || target.IsDead || !target.IsHPBarRendered) return;
             
             
             var objAiHero = InsecPos.WardJumpInsecPosition.GetAllyHeroes(target, 1200).FirstOrDefault();

@@ -1003,7 +1003,7 @@ using EloBuddy;
                 ObjectManager.Get<AIHeroClient>()
                     .Where(
                         enemy =>
-                            enemy.Team != ObjectManager.Player.Team && !enemy.IsDead && enemy.IsVisible &&
+                            enemy.Team != ObjectManager.Player.Team && !enemy.IsDead && enemy.IsHPBarRendered &&
                             Config.Item("Assassin" + enemy.ChampionName) != null &&
                             Config.Item("Assassin" + enemy.ChampionName).GetValue<bool>() &&
                             ObjectManager.Player.Distance(enemy) < assassinRange);

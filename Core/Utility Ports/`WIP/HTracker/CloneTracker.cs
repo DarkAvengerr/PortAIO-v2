@@ -26,7 +26,7 @@ using EloBuddy;
         {
             if (!Tracker.Menu["clone.track"]["show.clone"]) return;
 
-            foreach (var hero in GameObjects.Get<AIHeroClient>().Where(o => o.IsVisible && o.IsEnemy && !o.IsDead && (o.ChampionName.ToLower().Contains("yorick") 
+            foreach (var hero in GameObjects.Get<AIHeroClient>().Where(o => o.IsHPBarRendered && o.IsEnemy && !o.IsDead && (o.ChampionName.ToLower().Contains("yorick") 
                 || o.ChampionName.ToLower().Contains("leblanc") || o.ChampionName.ToLower().Contains("monkeyking") || o.ChampionName.ToLower().Contains("shaco"))
                 && o.ServerPosition.IsOnScreen()))
             {

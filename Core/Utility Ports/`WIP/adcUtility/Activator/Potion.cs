@@ -38,7 +38,7 @@ using EloBuddy;
                 && x.CharData.BaseSkinName.Contains("Dragon")
                 || x.CharData.BaseSkinName.Contains("Baron")
                 || x.CharData.BaseSkinName.Contains("SRU_Blue")
-                || x.CharData.BaseSkinName.Contains("SRU_Red") && x.IsVisible && !x.IsDead);
+                || x.CharData.BaseSkinName.Contains("SRU_Red") && x.IsHPBarRendered && !x.IsDead);
             if (adCarry != null)
             {
                 Console.Write(adCarry.CharData.BaseSkinName);

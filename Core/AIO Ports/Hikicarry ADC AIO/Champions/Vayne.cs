@@ -262,7 +262,7 @@ using EloBuddy;
         }
         public static void CondemnJungleMobs()
         {
-            foreach (var jungleMobs in ObjectManager.Get<Obj_AI_Minion>().Where(o => o.IsValidTarget(E.Range) && o.Team == GameObjectTeam.Neutral && o.IsVisible && !o.IsDead))
+            foreach (var jungleMobs in ObjectManager.Get<Obj_AI_Minion>().Where(o => o.IsValidTarget(E.Range) && o.Team == GameObjectTeam.Neutral && o.IsHPBarRendered && !o.IsDead))
             {
                 if (jungleMobs.CharData.BaseSkinName == "SRU_Razorbeak" || jungleMobs.CharData.BaseSkinName == "SRU_Red" ||
                     jungleMobs.CharData.BaseSkinName == "SRU_Blue" || jungleMobs.CharData.BaseSkinName == "SRU_Dragon" ||

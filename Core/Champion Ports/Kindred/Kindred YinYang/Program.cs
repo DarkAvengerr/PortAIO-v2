@@ -244,7 +244,7 @@ namespace Kindred___YinYang
             }
             if (menuItem4.Active)
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(1500)  && x.IsValid && x.IsVisible && !x.IsDead && !x.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(1500)  && x.IsValid && x.IsHPBarRendered && !x.IsDead && !x.IsZombie))
                 {
                     Drawing.DrawText(enemy.HPBarPosition.X, enemy.HPBarPosition.Y, menuItem5.Color,
                                         string.Format("{0} Basic Attack = Kill", Helper.AaIndicator(enemy)));

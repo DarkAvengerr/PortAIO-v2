@@ -27,7 +27,7 @@ using EloBuddy;
                 foreach (var targets in
                     HeroManager.Enemies.Where(
                         x =>
-                            !x.IsDead && x.IsValidTarget() && x.IsVisible && x.Distance(unit) < 1000 &&
+                            !x.IsDead && x.IsValidTarget() && x.IsHPBarRendered && x.Distance(unit) < 1000 &&
                             x.Distance(unit) > 300 && x.NetworkId != unit.NetworkId && x.Health < R.GetDamage(x)))
                 {
                     var prediction = Prediction.GetPrediction(targets, 0.1f);

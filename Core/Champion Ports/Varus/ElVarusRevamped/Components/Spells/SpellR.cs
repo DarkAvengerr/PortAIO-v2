@@ -104,7 +104,7 @@
                             var enemiesCount =
                                 HeroManager.Enemies.Count(
                                     h =>
-                                        h.IsValid && !h.IsDead && h.IsVisible && h.NetworkId != target.NetworkId
+                                        h.IsValid && !h.IsDead && h.IsHPBarRendered && h.NetworkId != target.NetworkId
                                         && h.Distance(
                                             ObjectManager.Player.Position.Extend(
                                                 target.Position,

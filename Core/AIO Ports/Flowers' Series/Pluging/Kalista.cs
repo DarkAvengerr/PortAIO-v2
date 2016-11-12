@@ -257,7 +257,7 @@ using EloBuddy;
                     HeroManager.Allies.FirstOrDefault(
                         x => !x.IsMe && !x.IsDead && !x.IsZombie && x.HasBuff("kalistacoopstrikeally"));
 
-                if (ally != null && ally.IsVisible && ally.DistanceToPlayer() <= R.Range)
+                if (ally != null && ally.IsHPBarRendered && ally.DistanceToPlayer() <= R.Range)
                 {
                     if (Menu.Item("AutoSave", true).GetValue<bool>() && Me.CountEnemiesInRange(R.Range) > 0 &&
                         ally.CountEnemiesInRange(R.Range) > 0 &&
@@ -349,7 +349,7 @@ using EloBuddy;
 
                 if (Menu.Item("ComboW", true).GetValue<bool>() && W.IsReady() && Utils.TickCount - lastWCast > 2000)
                 {
-                    if (NavMesh.IsWallOfGrass(target.ServerPosition, 20) && !target.IsVisible)
+                    if (NavMesh.IsWallOfGrass(target.ServerPosition, 20) && !target.IsHPBarRendered)
                     {
                         W.Cast(target.ServerPosition);
                     }

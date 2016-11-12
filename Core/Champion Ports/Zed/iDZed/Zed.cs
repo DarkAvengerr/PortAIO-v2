@@ -649,7 +649,7 @@ using EloBuddy;
             var vEnemy =
                 HeroManager.Enemies.Where(
                     enemy =>
-                    enemy.Team != Player.Team && !enemy.IsDead && enemy.IsVisible
+                    enemy.Team != Player.Team && !enemy.IsDead && enemy.IsHPBarRendered
                     && Menu.Item("Assassin" + enemy.ChampionName) != null
                     && Menu.Item("Assassin" + enemy.ChampionName).GetValue<bool>()
                     && Player.Distance(enemy) < assassinRange);
@@ -699,7 +699,7 @@ using EloBuddy;
                 HeroManager.Enemies.FirstOrDefault(
                     x =>
                     x.IsValidTarget(_spells[SpellSlot.W].Range + _spells[SpellSlot.Q].Range)
-                    && x.HasBuff("zedulttargetmark") && x.IsVisible);
+                    && x.HasBuff("zedulttargetmark") && x.IsHPBarRendered);
         }
 
         /// <summary>

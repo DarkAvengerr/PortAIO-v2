@@ -456,7 +456,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                     var eCount =
                         GameObjects.EnemyHeroes.Count(
                             h =>
-                                h.IsValid && !h.IsDead && h.IsVisible && h.NetworkId != target.NetworkId &&
+                                h.IsValid && !h.IsDead && h.IsHPBarRendered && h.NetworkId != target.NetworkId &&
                                 h.Distance(pos) <= enemiesRange);
 
                     if (aCount > alliesMax || eCount > enemiesMax)
@@ -521,7 +521,7 @@ using EloBuddy; namespace SFXChallenger.Managers
                             {
                                 var count =
                                     enabledHeroes.Where(
-                                        e => !e.IsDead && e.IsVisible && e.Distance(ObjectManager.Player) <= 2000)
+                                        e => !e.IsDead && e.IsHPBarRendered && e.Distance(ObjectManager.Player) <= 2000)
                                         .Count(e => hits.Any(h => h.NetworkId.Equals(e.NetworkId)));
                                 if (count < minReq)
                                 {

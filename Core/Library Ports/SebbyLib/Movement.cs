@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SharpDX;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
 
-namespace SebbyLib.Movement
+using EloBuddy; 
+ using LeagueSharp.Common; 
+ namespace SebbyLib.Movement
 {
     public enum HitChance
     {
@@ -1134,12 +1135,12 @@ namespace SebbyLib.Movement
                 UnitTrackerInfoList.Add(new UnitTrackerInfo() { NetworkId = hero.NetworkId, AaTick = Utils.TickCount, StopMoveTick = Utils.TickCount, NewPathTick = Utils.TickCount, SpecialSpellFinishTick = Utils.TickCount, LastInvisableTick = Utils.TickCount });
             }
 
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Obj_AI_Base.OnNewPath += AIHeroClient_OnNewPath;
-            AttackableUnit.OnCreate += Obj_AI_Base_OnEnterLocalVisiblityClient;
+            AttackableUnit.OnCreate += Obj_AI_Base_OnCreate;
         }
 
-        private static void Obj_AI_Base_OnEnterLocalVisiblityClient(GameObject sender, EventArgs args)
+        private static void Obj_AI_Base_OnCreate(GameObject sender, EventArgs args)
         {
             if (sender.Type != GameObjectType.AIHeroClient) return;
 
