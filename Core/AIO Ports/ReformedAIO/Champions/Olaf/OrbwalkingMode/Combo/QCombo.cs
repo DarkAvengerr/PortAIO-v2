@@ -30,23 +30,33 @@ using EloBuddy;
 
         private void OnUpdate(EventArgs args)
         {
-            if (Target == null
-                || !CheckGuardians()
+            if (Target == null || !CheckGuardians()
                 || (Menu.Item("Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent))
             {
                 return;
             }
 
+            var pred = spell.Spell.GetPrediction(Target);
+
             switch (Menu.Item("Hitchance").GetValue<StringList>().SelectedIndex)
             {
                 case 0:
-                    spell.Spell.CastIfHitchanceEquals(Target, HitChance.Medium);
+                    if (pred.Hitchance >= HitChance.Medium)
+                    {
+                        spell.Spell.Cast(pred.CastPosition + 30);
+                    }
                     break;
                 case 1:
-                    spell.Spell.CastIfHitchanceEquals(Target, HitChance.High);
+                    if (pred.Hitchance >= HitChance.High)
+                    {
+                        spell.Spell.Cast(pred.CastPosition + 30);
+                    }
                     break;
                 case 2:
-                    spell.Spell.CastIfHitchanceEquals(Target, HitChance.VeryHigh);
+                    if (pred.Hitchance >= HitChance.VeryHigh)
+                    {
+                        spell.Spell.Cast(pred.CastPosition + 30);
+                    }
                     break;
             }
         }
@@ -69,9 +79,11 @@ using EloBuddy;
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("Hitchance", "Hitchance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 1)));
+            Menu.AddItem(
+                new MenuItem("Hitchance", "Hitchance").SetValue(
+                    new StringList(new[] { "Medium", "High", "Very High" }, 1)));
 
-           // Menu.AddItem(new MenuItem("Distance", "Shortened Throw Distance").SetValue(new Slider(10, 0, 50)));
+            // Menu.AddItem(new MenuItem("Distance", "Shortened Throw Distance").SetValue(new Slider(10, 0, 50)));
 
             Menu.AddItem(new MenuItem("Mana", "Min Mana %").SetValue(new Slider(0, 0, 100)));
 

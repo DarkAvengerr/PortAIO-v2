@@ -3734,6 +3734,9 @@ namespace PortAIO
                         case 10: // hYasuo
                             hYasuo.Program.Main();
                             break;
+                        case 11: // ReformedAIO
+                            ReformedAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Yorick:

@@ -17,6 +17,7 @@ using EloBuddy;
     using ReformedAIO.Champions.Gragas;
     using ReformedAIO.Champions.Lucian;
     using ReformedAIO.Champions.Olaf;
+    using ReformedAIO.Champions.Yasuo;
 
     using RethoughtLib.Bootstraps.Abstract_Classes;
 
@@ -38,7 +39,8 @@ using EloBuddy;
                 new GnarLoader(),
                 new EzrealLoader(),
                 new LucianLoader(),
-                new OlafLoader()
+                new OlafLoader(),
+                new YasuoLoader()
             });
 
             bootstrap.Run();

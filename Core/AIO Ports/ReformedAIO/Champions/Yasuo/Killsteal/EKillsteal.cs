@@ -1,23 +1,23 @@
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Annie.OrbwalkingMode.Harass
+ namespace ReformedAIO.Champions.Yasuo.Killsteal
 {
     using System;
 
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Annie.Core.Spells;
+    using Core.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
-    internal sealed class WHarass : OrbwalkingChild
+    internal sealed class EKillsteal : OrbwalkingChild
     {
-        public override string Name { get; set; } = "W";
+        public override string Name { get; set; } = "E";
 
-        private readonly WSpell spell;
-
-        public WHarass(WSpell spell)
+        private readonly ESpell spell;
+      
+        public EKillsteal(ESpell spell)
         {
             this.spell = spell;
         }
@@ -26,9 +26,7 @@ using EloBuddy;
 
         private void OnUpdate(EventArgs args)
         {
-            if (Target == null
-                || !CheckGuardians()
-                || (Menu.Item("Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent))
+            if (Target == null || Target.Health > spell.GetDamage(Target) || !CheckGuardians())
             {
                 return;
             }
@@ -53,10 +51,6 @@ using EloBuddy;
         protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnLoad(sender, eventArgs);
-
-
-
-            Menu.AddItem(new MenuItem("Mana", "Min Mana %").SetValue(new Slider(0, 0, 100)));
         }
     }
 }
