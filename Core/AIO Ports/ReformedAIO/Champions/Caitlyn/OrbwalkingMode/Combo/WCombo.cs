@@ -90,7 +90,7 @@ using EloBuddy;
                 && !ObjectManager.Player.IsRecalling())
             {
                 // Beta
-                if (Player.Spellbook.GetSpell(SpellSlot.W).Ammo < 2) return;
+                if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Ammo < 2) return;
 
                 var path = ObjectManager.Player.GetWaypoints().LastOrDefault().To3D();
 
