@@ -20,9 +20,17 @@ using EloBuddy;
         protected static Spell Q, W, E, R;
         protected static Orbwalking.Orbwalker Orbwalker;
         protected static Obj_AI_Base Daisy;
+        protected static bool DaisyStatus = false;
         protected static Menu Config;
         private static bool SPredictionLoaded;
-
+        public static string[] HighChamps =
+            {
+                "Ahri", "Anivia", "Annie", "Ashe", "Azir", "Brand", "Caitlyn", "Cassiopeia", "Corki", "Draven",
+                "Ezreal", "Graves", "Jinx", "Kalista", "Karma", "Karthus", "Katarina", "Kennen", "KogMaw", "Leblanc",
+                "Lucian", "Lux", "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra", "Talon",
+                "Teemo", "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne", "Veigar", "VelKoz", "Viktor", "Xerath",
+                "Zed", "Ziggs","Kindred","Jhin"
+            };
         //protected static int lvl1, lvl2, lvl3, lvl4;
 
         public SSIvernInit()
@@ -70,6 +78,10 @@ using EloBuddy;
 
             #endregion
 
+            #region SpellDatabase Initializing
+
+            #endregion
+
             #region Config
 
             Config = new Menu("SurvivorIvern", "SurvivorIvern", true).SetFontStyle(FontStyle.Bold, Color.Chartreuse);
@@ -105,6 +117,15 @@ using EloBuddy;
             var DaisyMenu = Config.AddSubMenu(new Menu(":: Daisy", "Daisy"));
             DaisyMenu.AddItem(new MenuItem("AutoDaisy", "Auto-Play Daisy?").SetValue(true));
             DaisyMenu.AddItem(new MenuItem("DaisyFooter", ":: Soon More Options! <3"));
+
+            var EWhitelistMenu = Config.AddSubMenu(new Menu(":: (E) Protector", "Protector").SetFontStyle(FontStyle.Bold, Color.HotPink));
+            {
+                //EWhitelistMenu.AddItem(new MenuItem("EProtectionAlly", "Use (E) to Protect?").SetValue(true));
+                foreach (var ally in HeroManager.Allies.Where(x => x.IsValid))
+                {
+                    EWhitelistMenu.AddItem(new MenuItem("EProtectionAlly." + ally.ChampionName, "Protect with (E): " + ally.ChampionName).SetValue(HighChamps.Contains(ally.ChampionName)));
+                }
+            }
 
             var LaneClearMenu = Config.AddSubMenu(new Menu(":: LaneClear", "LaneClear"));
             LaneClearMenu.AddItem(new MenuItem("LaneClearQ", "Use Q").SetValue(true));
@@ -142,6 +163,7 @@ using EloBuddy;
             DrawingMenu.AddItem(new MenuItem("DrawE", "Draw E Range").SetValue(true));
             DrawingMenu.AddItem(new MenuItem("DrawR", "Draw R Range").SetValue(false));
             DrawingMenu.AddItem(new MenuItem("DrawDaisy", "Draw Daisy Attack Range").SetValue(true));
+            DrawingMenu.AddItem(new MenuItem("DrawDaisyStatus", "Draw Daisy Status/Mode!").SetValue(true));
             DrawingMenu.AddItem(new MenuItem("DrawJungleMobPassive", "Draw Jungle Mob Ready!").SetValue(true));
 
             var GapCloserInterrupter =
@@ -186,6 +208,7 @@ using EloBuddy;
                         SPredictionLoaded = true;
                     }
             };
+            MiscMenu.AddItem(new MenuItem("UseENearbyEnemy", "[Auto] Use (E) Nearby Enemies").SetValue(false));
             MiscMenu.AddItem(
                 new MenuItem("MinimumEnemiesNearEDistance", "Distance between You and Enemies before E-ing?").SetValue(
                     new Slider(700, 1, 2000)));
@@ -235,7 +258,7 @@ using EloBuddy;
             GameObject.OnDelete += GameObjectOnOnDelete;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
-            //Obj_AI_Base.OnProcessSpellCast += ObjAiHeroOnOnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += ObjAiHeroOnOnProcessSpellCast;
             Chat.Print("<font color='#800040'>[SurvivorSeries] Ivern</font> <font color='#ff6600'>Loaded.</font>");
 
             #endregion
@@ -269,38 +292,49 @@ using EloBuddy;
 
         private void ObjAiHeroOnOnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsMe)
+            if (args.Target is Obj_AI_Minion || !(sender is AIHeroClient))
                 return;
-
-            Chat.Print("Spell: " + args.SData.Name + " | Width: " + args.SData.LineWidth + " | Speed: " +
-                           args.SData.MissileSpeed + " | Delay: " + args.SData.DelayCastOffsetPercent);
+            /*Chat.Print("Spell: " + args.SData.Name + " | Width: " + args.SData.LineWidth + " | Speed: " +
+                           args.SData.MissileSpeed + " | Delay: " + args.SData.DelayCastOffsetPercent);*/
+            if (E.Instance.IsReady() && sender.IsEnemy && args.Target != null && ((Obj_AI_Base)args.Target).IsValidTarget(E.Range))
+            {
+                //Chat.Print(sender.Target.Name + " | " + args.Target.Type + " | " + args.SData.Name + " | " + sender.Name + " | " + (AIHeroClient)args.Target);
+                if (args.Target is AIHeroClient && Config.Item("EProtectionAlly."+((AIHeroClient)args.Target).ChampionName).GetValue<bool>()
+                    && sender.GetSpellDamage(((Obj_AI_Base)args.Target), args.SData.Name) + 150 > ((Obj_AI_Base)args.Target).Health)
+                {
+                    E.CastOnUnit((Obj_AI_Base)args.Target);
+                    Notifications.AddNotification(
+                        new Notification("Successfully protected " + ((AIHeroClient)args.Target).ChampionName, 3000).SetTextColor(
+                            System.Drawing.Color.Chartreuse));
+                }
+            }
         }
 
-        private void SebbySpell(Spell QWR, Obj_AI_Base target)
+        private void SebbySpell(Spell QW, Obj_AI_Base target)
         {
             if (Config.Item("Prediction").GetValue<StringList>().SelectedIndex == 1)
             {
                 var CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotLine;
                 var aoe2 = false;
 
-                if (QWR.Type == SkillshotType.SkillshotCircle)
+                if (QW.Type == SkillshotType.SkillshotCircle)
                 {
                     CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotLine;
                     aoe2 = true;
                 }
 
-                if ((QWR.Width > 80) && !QWR.Collision)
+                if ((QW.Width > 80) && !QW.Collision)
                     aoe2 = true;
 
                 var predInput2 = new PredictionInput
                 {
                     Aoe = aoe2,
-                    Collision = QWR.Collision,
-                    Speed = QWR.Speed,
-                    Delay = QWR.Delay,
-                    Range = QWR.Range,
+                    Collision = QW.Collision,
+                    Speed = QW.Speed,
+                    Delay = QW.Delay,
+                    Range = QW.Range,
                     From = Player.ServerPosition,
-                    Radius = QWR.Width,
+                    Radius = QW.Width,
                     Unit = target,
                     Type = CoreType2
                 };
@@ -309,36 +343,36 @@ using EloBuddy;
                 if (OktwCommon.CollisionYasuo(Player.ServerPosition, poutput2.CastPosition))
                     return;
 
-                if ((QWR.Speed != float.MaxValue) &&
+                if ((QW.Speed != float.MaxValue) &&
                     OktwCommon.CollisionYasuo(Player.ServerPosition, poutput2.CastPosition))
                     return;
 
                 if (Config.Item("HitChance").GetValue<StringList>().SelectedIndex == 0)
                 {
                     if (poutput2.Hitchance >= HitChance.Medium)
-                        QWR.Cast(poutput2.CastPosition);
+                        QW.Cast(poutput2.CastPosition);
                     else if (predInput2.Aoe && (poutput2.AoeTargetsHitCount > 1) && (poutput2.Hitchance >= HitChance.Medium))
-                        QWR.Cast(poutput2.CastPosition);
+                        QW.Cast(poutput2.CastPosition);
                 }
                 else if (Config.Item("HitChance").GetValue<StringList>().SelectedIndex == 1)
                 {
                     if (poutput2.Hitchance >= HitChance.High)
-                        QWR.Cast(poutput2.CastPosition);
+                        QW.Cast(poutput2.CastPosition);
                 }
                 else if (Config.Item("HitChance").GetValue<StringList>().SelectedIndex == 2)
                 {
                     if (poutput2.Hitchance >= HitChance.VeryHigh)
-                        QWR.Cast(poutput2.CastPosition);
+                        QW.Cast(poutput2.CastPosition);
                 }
             }
             else if (Config.Item("Prediction").GetValue<StringList>().SelectedIndex == 0)
             {
                 if (Config.Item("HitChance").GetValue<StringList>().SelectedIndex == 0)
-                    QWR.CastIfHitchanceEquals(target, LeagueSharp.Common.HitChance.Medium);
+                    QW.CastIfHitchanceEquals(target, LeagueSharp.Common.HitChance.Medium);
                 else if (Config.Item("HitChance").GetValue<StringList>().SelectedIndex == 1)
-                    QWR.CastIfHitchanceEquals(target, LeagueSharp.Common.HitChance.High);
+                    QW.CastIfHitchanceEquals(target, LeagueSharp.Common.HitChance.High);
                 else if (Config.Item("HitChance").GetValue<StringList>().SelectedIndex == 2)
-                    QWR.CastIfHitchanceEquals(target, LeagueSharp.Common.HitChance.VeryHigh);
+                    QW.CastIfHitchanceEquals(target, LeagueSharp.Common.HitChance.VeryHigh);
             }
             else if (Config.Item("Prediction").GetValue<StringList>().SelectedIndex == 2)
             {
@@ -346,15 +380,15 @@ using EloBuddy;
                 {
                     var t = target as AIHeroClient;
                     if (Config.Item("HitChance").GetValue<StringList>().SelectedIndex == 0)
-                        QWR.SPredictionCast(t, LeagueSharp.Common.HitChance.Medium);
+                        QW.SPredictionCast(t, LeagueSharp.Common.HitChance.Medium);
                     else if (Config.Item("HitChance").GetValue<StringList>().SelectedIndex == 1)
-                        QWR.SPredictionCast(t, LeagueSharp.Common.HitChance.High);
+                        QW.SPredictionCast(t, LeagueSharp.Common.HitChance.High);
                     else if (Config.Item("HitChance").GetValue<StringList>().SelectedIndex == 2)
-                        QWR.SPredictionCast(t, LeagueSharp.Common.HitChance.VeryHigh);
+                        QW.SPredictionCast(t, LeagueSharp.Common.HitChance.VeryHigh);
                 }
                 else
                 {
-                    QWR.CastIfHitchanceEquals(target, LeagueSharp.Common.HitChance.High);
+                    QW.CastIfHitchanceEquals(target, LeagueSharp.Common.HitChance.High);
                 }
             }
         }
@@ -391,7 +425,33 @@ using EloBuddy;
                 Render.Circle.DrawCircle(Player.Position, R.Range, System.Drawing.Color.DarkOrange);
             if (Config.Item("DrawDaisy").GetValue<bool>() && R.IsReady())
                 if ((Daisy != null) && Daisy.IsValid)
+                {
                     Render.Circle.DrawCircle(Daisy.Position, 200f, System.Drawing.Color.Chartreuse);
+                    if (Config.Item("DrawDaisyStatus").GetValue<bool>())
+                    {
+                        switch (DaisyStatus)
+                        {
+                            case false:
+                            {
+                                var drawPos = Drawing.WorldToScreen(Player.Position);
+                                var textSize = Drawing.GetTextEntent(("Daisy: Following Player"), 15);
+                                Drawing.DrawText(drawPos.X - textSize.Width - 70f, drawPos.Y,
+                                    System.Drawing.Color.Chartreuse,
+                                    "Daisy: Following Player");
+                            }
+                                break;
+                            case true:
+                            {
+                                var drawPos = Drawing.WorldToScreen(Player.Position);
+                                var textSize = Drawing.GetTextEntent(("Daisy: Engaging!"), 15);
+                                Drawing.DrawText(drawPos.X - textSize.Width - 70f, drawPos.Y,
+                                    System.Drawing.Color.DeepPink,
+                                    "Daisy: Engaging!");
+                            }
+                                break;
+                        }
+                    }
+                }
             if (Config.Item("DrawJungleMobPassive").GetValue<bool>())
                 foreach (var junglemob in ObjectManager.Get<Obj_AI_Minion>().Where(x => x.HasBuff("ivernpmanager")))
                     if (!junglemob.HasBuff("ivernpmonsterready"))
@@ -493,13 +553,22 @@ using EloBuddy;
 
         private void TakingFatalDamageCheck()
         {
-            foreach (var allyprotector in HeroManager.Allies.Where(x => x.Health <= OktwCommon.GetIncomingDamage(x) && x.IsValidTarget(E.Range))
-            )
-                if (E.Instance.IsReady())
+            /*foreach (var allyprotector in HeroManager.Allies.Where(x => x.IsValidTarget(E.Range)))
+                if (E.Instance.IsReady() && allyprotector.Health < OktwCommon.GetIncomingDamage(allyprotector, 6))
+                {
                     E.CastOnUnit(allyprotector);
-            if (Player.Health <= OktwCommon.GetIncomingDamage(Player) && E.IsReady())
+                    Notifications.AddNotification(
+                        new Notification("Successfully protected " + allyprotector.ChampionName, 3000).SetTextColor(
+                            System.Drawing.Color.Chartreuse));
+                }
+            if (Player.Health < OktwCommon.GetIncomingDamage(Player, 6) && E.IsReady())
+            {
                 E.CastOnUnit(Player);
-            if (Player.CountEnemiesInRange(Config.Item("MinimumEnemiesNearEDistance").GetValue<Slider>().Value) >=
+                Notifications.AddNotification(
+                        new Notification("Successfully Protected Yourself", 3000).SetTextColor(
+                            System.Drawing.Color.Chartreuse));
+            }*/
+            if (Config.Item("UseENearbyEnemy").GetValue<bool>() && Player.CountEnemiesInRange(Config.Item("MinimumEnemiesNearEDistance").GetValue<Slider>().Value) >=
                 Config.Item("MinimumEnemiesNearE").GetValue<Slider>().Value && E.IsReady())
                 E.CastOnUnit(Player);
         }
@@ -548,10 +617,14 @@ using EloBuddy;
                     if (enemy != null)
                     {
                         if (Daisy.Distance(enemy.Position) > 200)
+                        {
                             EloBuddy.Player.IssueOrder(GameObjectOrder.MovePet, enemy);
+                            DaisyStatus = true;
+                        }
                         else
                         {
                             EloBuddy.Player.IssueOrder(GameObjectOrder.AutoAttackPet, enemy);
+                            DaisyStatus = true;
                             E.CastOnUnit(Daisy);
                         }
                     }
@@ -560,14 +633,21 @@ using EloBuddy;
                         var iverntarget = Orbwalker.GetTarget() as Obj_AI_Base;
                         if (iverntarget != null)
                             if (Daisy.Distance(iverntarget.Position) > 200)
+                            {
                                 EloBuddy.Player.IssueOrder(GameObjectOrder.MovePet, iverntarget);
+                                DaisyStatus = true;
+                            }
                             else
                             {
                                 EloBuddy.Player.IssueOrder(GameObjectOrder.AutoAttackPet, iverntarget);
+                                DaisyStatus = true;
                                 E.CastOnUnit(Daisy);
                             }
                         else if (Daisy.UnderTurret(true))
+                        {
                             EloBuddy.Player.IssueOrder(GameObjectOrder.MovePet, Player);
+                            DaisyStatus = false;
+                        }
                     }
                 }
                 else
