@@ -15,7 +15,7 @@
 // along with Evade. If not, see <http://www.gnu.org/licenses/>.
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_Riven.Evade
 {
     using System.Collections.Generic;
@@ -214,7 +214,7 @@ using EloBuddy;
                     "Shyvana W", SpellSlot.W, 100, 4,
                     () =>
                         ObjectManager.Player.MoveSpeed*
-                        (1 + 0.25f + 0.05f* ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level))
+                        (1 + 0.25f + 0.05f*ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level))
                 {
                     CheckSpellName = "ShyvanaImmolationAura"
                 };

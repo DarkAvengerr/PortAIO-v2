@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_Riven
 {
     using Common;
@@ -109,9 +109,9 @@ using EloBuddy;
             var MiscMenu = Menu.AddSubMenu(new Menu("Misc", "Misc"));
             {
                 MiscMenu.AddItem(new MenuItem("Q Setting", "Q Setting"));
-                MiscMenu.AddItem(new MenuItem("Q1Delay", "Q1 Delay: ", true).SetValue(new Slider(281, 200, 300)));
-                MiscMenu.AddItem(new MenuItem("Q2Delay", "Q2 Delay: ", true).SetValue(new Slider(281, 200, 300)));
-                MiscMenu.AddItem(new MenuItem("Q3Delay", "Q3 Delay: ", true).SetValue(new Slider(381, 300, 400)));
+                MiscMenu.AddItem(new MenuItem("Q1Delay", "Q1 Delay: ", true).SetValue(new Slider(262, 200, 300)));
+                MiscMenu.AddItem(new MenuItem("Q2Delay", "Q2 Delay: ", true).SetValue(new Slider(262, 200, 300)));
+                MiscMenu.AddItem(new MenuItem("Q3Delay", "Q3 Delay: ", true).SetValue(new Slider(362, 300, 400)));
                 MiscMenu.AddItem(new MenuItem("KeepQALive", "Keep Q alive", true).SetValue(true));
                 MiscMenu.AddItem(new MenuItem("Dance", "Dance Emote in QA", true).SetValue(false));
                 MiscMenu.AddItem(new MenuItem("W Setting", "W Setting"));
