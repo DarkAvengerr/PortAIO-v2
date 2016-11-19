@@ -3746,6 +3746,9 @@ namespace PortAIO
                         case 11: // ReformedAIO
                             ReformedAIO.Program.Main();
                             break;
+                        case 12: // Flowers' Yasuo
+                            Flowers_Yasuo.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Yorick:
