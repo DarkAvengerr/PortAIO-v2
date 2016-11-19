@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace HandicapEzreal.Components.Spells
 {
     using System;
@@ -75,7 +75,7 @@ using EloBuddy;
                 if (target != null)
                 {
                     var prediction = this.SpellObject.GetPrediction(target);
-                    if (prediction.Hitchance >= HitChance.Medium)
+                    if (prediction.Hitchance >= HitChance.High)
                     {
                         this.SpellObject.Cast(prediction.CastPosition);
                     }
