@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_Fiora.Manager.Spells
 {
     using System;

@@ -1,9 +1,10 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_Fiora.Evade
 {
     using LeagueSharp.Common;
     using SharpDX;
+
     public struct FoundIntersection
     {
         public Vector2 ComingFrom;
@@ -17,7 +18,7 @@ using EloBuddy;
             Distance = distance;
             ComingFrom = comingFrom;
             Valid = (point.X != 0) && (point.Y != 0);
-            Point = point + Config.GridSize * (ComingFrom - point).Normalized();
+            Point = point + EvadeManager.GridSize * (ComingFrom - point).Normalized();
             Time = time;
         }
     }

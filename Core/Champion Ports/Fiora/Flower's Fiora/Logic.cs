@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_Fiora
 {
     using Common;
@@ -17,6 +17,7 @@ using EloBuddy;
         public static Spell E;
         public static Spell R;
         public static SpellSlot Ignite = SpellSlot.Unknown;
+        public static int SkinID;
         public static Menu Menu;
         public static AIHeroClient Me;
         public static Orbwalking.Orbwalker Orbwalker;
@@ -25,14 +26,25 @@ using EloBuddy;
         internal static void Load()
         {
             Me = ObjectManager.Player;
+            SkinID = ObjectManager.Player.SkinId;
 
             SpellManager.Init();
             MenuManager.Init();
             PassiveManager.Init();
+            Evade.EvadeManager.Init();
+            Evade.EvadeTargetManager.Init();
 
             Obj_AI_Base.OnSpellCast += DoCastManager.Init;
             Game.OnUpdate += UpdateManager.Init;
             Drawing.OnDraw += DrawManager.Init;
+        }
+
+        internal static void EnbaleSkin(object obj, OnValueChangeEventArgs Args)
+        {
+            if (!Args.GetNewValue<bool>())
+            {
+                //ObjectManager.//Player.SetSkin(ObjectManager.Player.ChampionName, SkinID);
+            }
         }
 
         internal static void ItemsUse(bool UseYoumuu = false, bool UseTiamat = false, bool UseHydra = false, bool LaneClear = false)

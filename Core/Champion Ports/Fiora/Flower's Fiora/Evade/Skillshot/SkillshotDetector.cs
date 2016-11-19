@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_Fiora.Evade
 {
     using System;
@@ -11,17 +11,16 @@ using EloBuddy;
 
     internal static class SkillshotDetector
     {
-        public static event OnDetectSkillshotH OnDetectSkillshot;
-        public static event OnDeleteMissileH OnDeleteMissile;
-
         public delegate void OnDeleteMissileH(Skillshot skillshot, MissileClient missile);
         public delegate void OnDetectSkillshotH(Skillshot skillshot);
+        public static event OnDetectSkillshotH OnDetectSkillshot;
+        public static event OnDeleteMissileH OnDeleteMissile;
 
         static SkillshotDetector()
         {
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
-            GameObject.OnDelete += SpellMissileOnDelete;
-            GameObject.OnCreate += SpellMissileOnCreate;
+            GameObject.OnDelete += MissileOnDelete;
+            GameObject.OnCreate += MissileOnCreate;
             GameObject.OnCreate += OnCreate;
             GameObject.OnDelete += OnDelete;
         }
@@ -35,12 +34,12 @@ using EloBuddy;
                 return;
             }
             
-            if (Config.Menu.Item("Enabled" + spellData.MenuItemName) == null)
+            if (EvadeManager.Menu.Item("Enabled" + spellData.MenuItemName) == null)
             {
                 return;
             }
 
-            TriggerOnDetectSkillshot(DetectionType.ProcessSpell, spellData, Utils.TickCount - Game.Ping/2,
+            TriggerOnDetectSkillshot(DetectionType.ProcessSpell, spellData, Utils.GameTimeTickCount - Game.Ping/2,
                 sender.Position.To2D(), sender.Position.To2D(), sender.Position.To2D(),
                 HeroManager.AllHeroes.MinOrDefault(h => h.IsAlly ? 1 : 0));
         }
@@ -52,19 +51,19 @@ using EloBuddy;
                 return;
             }
 
-            for (var i = Program.DetectedSkillshots.Count - 1; i >= 0; i--)
+            for (var i = EvadeManager.DetectedSkillshots.Count - 1; i >= 0; i--)
             {
-                var skillshot = Program.DetectedSkillshots[i];
+                var skillshot = EvadeManager.DetectedSkillshots[i];
 
                 if (skillshot.SpellData.ToggleParticleName != "" &&
                     new Regex(skillshot.SpellData.ToggleParticleName).IsMatch(sender.Name))
                 {
-                    Program.DetectedSkillshots.RemoveAt(i);
+                    EvadeManager.DetectedSkillshots.RemoveAt(i);
                 }
             }
         }
 
-        private static void SpellMissileOnCreate(GameObject sender, EventArgs args)
+        private static void MissileOnCreate(GameObject sender, EventArgs args)
         {
             var missile = sender as MissileClient;
 
@@ -75,7 +74,7 @@ using EloBuddy;
 
             var unit = missile.SpellCaster as AIHeroClient;
 
-            if (unit == null || !unit.IsValid)
+            if (unit == null || !unit.IsValid || unit.Team == ObjectManager.Player.Team )
             {
                 return;
             }
@@ -104,7 +103,7 @@ using EloBuddy;
 
             var unit = missile.SpellCaster as AIHeroClient;
 
-            if (unit == null || !unit.IsValid)
+            if (unit == null || !unit.IsValid || unit.Team == ObjectManager.Player.Team)
             {
                 return;
             }
@@ -132,13 +131,13 @@ using EloBuddy;
                          Math.Min(spellData.ExtraRange, spellData.Range - endPos.Distance(unitPosition)) * direction;
             }
 
-            var castTime = Utils.TickCount - Game.Ping / 2 - (spellData.MissileDelayed ? 0 : spellData.Delay) -
+            var castTime = Utils.GameTimeTickCount - Game.Ping / 2 - (spellData.MissileDelayed ? 0 : spellData.Delay) -
                            (int)(1000f * missilePosition.Distance(unitPosition) / spellData.MissileSpeed);
 
             TriggerOnDetectSkillshot(DetectionType.RecvPacket, spellData, castTime, unitPosition, endPos, endPos, unit);
         }
 
-        private static void SpellMissileOnDelete(GameObject sender, EventArgs args)
+        private static void MissileOnDelete(GameObject sender, EventArgs args)
         {
             var missile = sender as MissileClient;
 
@@ -149,7 +148,7 @@ using EloBuddy;
 
             var caster = missile.SpellCaster as AIHeroClient;
 
-            if (caster == null || !caster.IsValid)
+            if (caster == null || !caster.IsValid || caster.Team == ObjectManager.Player.Team)
             {
                 return;
             }
@@ -158,12 +157,13 @@ using EloBuddy;
 
             if (OnDeleteMissile != null)
             {
-                foreach (var skillshot in Program.DetectedSkillshots)
+                foreach (var skillshot in EvadeManager.DetectedSkillshots)
                 {
-                    if (skillshot.SpellData.MissileSpellName.Equals(spellName, StringComparison.InvariantCultureIgnoreCase) &&
-                        (skillshot.Unit.NetworkId == caster.NetworkId &&
-                         (missile.EndPosition.To2D() - missile.StartPosition.To2D()).AngleBetween(skillshot.Direction) <
-                         10) && skillshot.SpellData.CanBeRemoved)
+                    if (
+                        skillshot.SpellData.MissileSpellName.Equals(spellName,
+                            StringComparison.InvariantCultureIgnoreCase) && skillshot.Unit.NetworkId == caster.NetworkId &&
+                        (missile.EndPosition.To2D() - missile.StartPosition.To2D()).AngleBetween(skillshot.Direction) <
+                        10 && skillshot.SpellData.CanBeRemoved)
                     {
                         OnDeleteMissile(skillshot, missile);
                         break;
@@ -171,7 +171,7 @@ using EloBuddy;
                 }
             }
 
-            Program.DetectedSkillshots.RemoveAll(
+            EvadeManager.DetectedSkillshots.RemoveAll(
                 skillshot =>
                     (skillshot.SpellData.MissileSpellName.Equals(spellName, StringComparison.InvariantCultureIgnoreCase) ||
                      skillshot.SpellData.ExtraMissileNames.Contains(spellName, StringComparer.InvariantCultureIgnoreCase)) &&
@@ -180,8 +180,7 @@ using EloBuddy;
                      skillshot.SpellData.CanBeRemoved || skillshot.SpellData.ForceRemove));
         }
 
-        internal static void TriggerOnDetectSkillshot(DetectionType detectionType, SpellData spellData,
-            int startT, Vector2 start, Vector2 end, Vector2 originalEnd, Obj_AI_Base unit)
+        internal static void TriggerOnDetectSkillshot(DetectionType detectionType, SpellData spellData, int startT, Vector2 start, Vector2 end, Vector2 originalEnd, Obj_AI_Base unit)
         {
             var skillshot = new Skillshot(detectionType, spellData, startT, start, end, unit)
             {
@@ -200,11 +199,11 @@ using EloBuddy;
 
             if (args.SData.Name == "dravenrdoublecast")
             {
-                Program.DetectedSkillshots.RemoveAll(
+                EvadeManager.DetectedSkillshots.RemoveAll(
                     s => s.Unit.NetworkId == sender.NetworkId && s.SpellData.SpellName == "DravenRCast");
             }
 
-            if (!sender.IsValid)
+            if (!sender.IsValid || sender.Team == ObjectManager.Player.Team)
             {
                 return;
             }
@@ -243,7 +242,7 @@ using EloBuddy;
                         var end = start + spellData.Range * (args.End.To2D() - obj.Position.To2D()).Normalized();
 
                         TriggerOnDetectSkillshot(
-                            DetectionType.ProcessSpell, spellData, Utils.TickCount - Game.Ping / 2, start, end, end,
+                            DetectionType.ProcessSpell, spellData, Utils.GameTimeTickCount - Game.Ping / 2, start, end, end,
                             sender);
                     }
                 }
@@ -276,8 +275,8 @@ using EloBuddy;
             }
 
             TriggerOnDetectSkillshot(
-                DetectionType.ProcessSpell, spellData, Utils.TickCount - Game.Ping/2, startPos, endPos, args.End.To2D(),
-                sender);
+                DetectionType.ProcessSpell, spellData, Utils.GameTimeTickCount - Game.Ping/2, startPos, endPos,
+                args.End.To2D(), sender);
         }
     }
 }
