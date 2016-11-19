@@ -7,12 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace DarkMage
 {
    public class SyndraMenu : Menu
     {
-        private LeagueSharp.Common.Menu _comboMenu,_drawingMenu, _harassMenu, _keyMenu,_targetsRMe, _dontRIfSpellReady,_farmMenu,_laneClearMenu,_JungleClearMenu;
+        private LeagueSharp.Common.Menu _comboMenu,_drawingMenu, _harassMenu, _keyMenu,_targetsRMe, _dontRIfSpellReady,_farmMenu,_laneClearMenu,_JungleClearMenu,_miscMenu;
         public SyndraMenu(string menuName, SyndraCore core) : base(menuName, core)
         {
         }
@@ -47,6 +47,7 @@ using EloBuddy;
                 _drawingMenu.AddItem(new MenuItem("DTD", "Draw Total Damage").SetValue(true).SetTooltip("Q=Blue W=Orange E=Green Red=R"));
                 _drawingMenu.AddItem(new MenuItem("DO", "Draw Orbs").SetValue(true));
                 _drawingMenu.AddItem(new MenuItem("DST", "Draw Sphere Text").SetValue(true));
+                _drawingMenu.AddItem(new MenuItem("DHT", "Draw Harass Togle").SetValue(true));
             }
             _targetsRMe = new LeagueSharp.Common.Menu("Targets R", "Targets R");
             {
@@ -118,8 +119,20 @@ using EloBuddy;
             GetMenu.AddSubMenu(_targetsRMe);
             GetMenu.AddSubMenu(_dontRIfSpellReady);
             GetMenu.AddSubMenu(_keyMenu);
+            GetMenu.AddSubMenu(_miscMenu);
             GetMenu.AddSubMenu(_drawingMenu);
             base.CloseMenu();
+        }
+
+        public override void LoadMiscMenu()
+        {
+            _miscMenu = new LeagueSharp.Common.Menu("Misc", "Misc Menu");
+            {
+                _miscMenu.AddItem(new MenuItem("AE", "Use E Antigapclose").SetValue(true));
+                _miscMenu.AddItem(new MenuItem("IE", "Use E Interrupt").SetValue(true));
+       
+            }
+            base.LoadMiscMenu();
         }
     }
 }

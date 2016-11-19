@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Color = SharpDX.Color;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace DarkMage
 {
     public class Menu
@@ -36,13 +36,13 @@ using EloBuddy;
             LoadDrawings();
             LoadkeyMenu();
           //  LoadMiscInterrupt(azir);
-          //  LoadMiscMenu(azir);
+            LoadMiscMenu();
 
         }
 
-        private void LoadMiscMenu(SyndraCore azir)
+      public virtual void LoadMiscMenu()
         {
-            throw new NotImplementedException();
+         
         }
 
         private void LoadMiscInterrupt(SyndraCore azir)

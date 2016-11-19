@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace DarkMage
 {
     class DrawDamage
@@ -19,7 +19,6 @@ using EloBuddy;
             this.core = core;
             EloBuddy.Drawing.OnDraw += Ondraw;
         }
-
         private void Ondraw(EventArgs args)
         {
             var  DrawTotalDamage = core.GetMenu.GetMenu.Item("DTD").GetValue<bool>();
@@ -86,9 +85,9 @@ using EloBuddy;
                     var totalPossibleSpheres = 7;
                     for (var i = countCurrentSpheres; i < totalPossibleSpheres; i++)
                     {
-                        if (core.GetSpells.RDamage(tar, i) >= tar.Health&& i-countCurrentSpheres >0)
+                        if (core.GetSpells.RDamage(tar, i) >= tar.Health&& i-countCurrentSpheres-4 >0)
                         {
-                                Drawing.DrawText(hpPos.X, hpPos.Y - 20, Color.CornflowerBlue, "Cast "+ (i-countCurrentSpheres ) + " spheres to Kill With R and ");
+                                Drawing.DrawText(hpPos.X, hpPos.Y - 20, Color.CornflowerBlue, "Cast "+ (i-countCurrentSpheres-4 ) + " spheres to Kill With R");
                             break;
                         }
                     }

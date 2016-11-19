@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace DarkMage
 {
     public static class Lists

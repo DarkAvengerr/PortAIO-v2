@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace DarkMage
 {
     public class Spells
@@ -114,28 +114,26 @@ using EloBuddy;
         }
         public bool CastE(SyndraCore core)
         {
-
-            var eTarget = TargetSelector.GetTarget(GetQ.Range, TargetSelector.DamageType.Magical);
-            if(eTarget!=null)
             if (!GetE.IsReady()) return false;
             if (GetW.IsReady()) return false;
             if (GetOrbs.WObject(false) != null) return false;
             for (var index = 0; index < core.GetOrbs.Count; index++)
             {
-                var orb = core.GetOrbs[index];
-                if(orb.IsValid())
-                if (!GetE.IsInRange(orb)) continue;
-                for (var i = 0; i < HeroManager.Enemies.Count; i++)
+                foreach (AIHeroClient tar in HeroManager.Enemies)
                 {
-                    var tar = HeroManager.Enemies[i];
+                    if (!(tar.Distance(core.Hero) <= GetE.Range)) continue;
+                    var orb = core.GetOrbs[index];
+                    if (orb.IsValid())
+                        if (!GetE.IsInRange(orb)) continue;
                     //500 extended range. 
                     var finalBallPos = HeroManager.Player.Position.Extend(orb, 500);
 
-                    if (CalcE(orb, finalBallPos, eTarget))
+                    if (CalcE(orb, finalBallPos, tar))
                     {
                         GetE.Cast(orb);
                     }
                 }
+
             }
             return false;
 
@@ -161,8 +159,8 @@ using EloBuddy;
 
         public float RDamage(AIHeroClient target,SyndraCore core)
         {
-            float damagePerBall = (GetR.GetDamage(target)/3);
-            float totalDamageR = GetR.GetDamage(target) + damagePerBall*core.GetOrbs.Count;
+            var damagePerBall = (GetR.GetDamage(target)/3);
+            var totalDamageR = GetR.GetDamage(target) + damagePerBall*core.GetOrbs.Count;
             return totalDamageR;
         }
         public float RDamage(AIHeroClient target,int NSpeheres)

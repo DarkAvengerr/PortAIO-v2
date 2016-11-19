@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace DarkMage
 {
     public class SyndraCore
@@ -28,8 +28,35 @@ using EloBuddy;
         {
             _tittle = "[Syndra]Dark Mage";
             _version = "1.0.0.0";
+            AntiGapcloser.OnEnemyGapcloser += OnGapcloser;
+            Interrupter2.OnInterruptableTarget += OnInterrupt;
             OnLoad();
         }
+
+        private void OnInterrupt(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
+        {
+            bool onI = GetMenu.GetMenu.Item("IE").GetValue<bool>();
+            if (onI)
+            {
+                if (sender.IsValidTarget(300)&&GetSpells.GetE.IsInRange(sender))
+                {
+                    GetSpells.GetE.Cast(sender.Position);
+                }
+            }
+        }
+
+        private void OnGapcloser(ActiveGapcloser gapcloser)
+        {
+            bool onGap=GetMenu.GetMenu.Item("AE").GetValue<bool>();
+            if (onGap)
+            {
+                if (gapcloser.Sender.IsValidTarget(300))
+                {
+                    GetSpells.GetE.Cast(gapcloser.Sender);
+                }
+            }
+        }
+
         private void OnLoad()
         {
             if (Hero.ChampionName != "Syndra") return;
@@ -53,11 +80,21 @@ using EloBuddy;
             var drawR = GetMenu.GetMenu.Item("DR").GetValue<bool>();
             var drawOrb = GetMenu.GetMenu.Item("DO").GetValue<bool>();
             var drawOrbText = GetMenu.GetMenu.Item("DST").GetValue<bool>();
+            var drawHarassTogle = GetMenu.GetMenu.Item("DHT").GetValue<bool>();
+
             if (ObjectManager.Player.IsDead)
             {
                 return;
             }
-            if(GetSpells.GetQ.IsReady()&&drawQ)
+            if (drawHarassTogle)
+            {
+                var HKey = GetMenu.GetMenu.Item("HKey").GetValue<KeyBind>().Active;
+                if(HKey)
+                Drawing.DrawText(0, 250, System.Drawing.Color.Yellow, "Harass Toggle : True");
+                else
+                    Drawing.DrawText(0, 250, System.Drawing.Color.Yellow, "Harass Toggle : False");
+            }
+                if (GetSpells.GetQ.IsReady()&&drawQ)
             Render.Circle.DrawCircle(ObjectManager.Player.Position, GetSpells.GetQ.Range, System.Drawing.Color.DarkCyan, 2);
             if (GetSpells.GetW.IsReady() && drawW)
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, GetSpells.GetW.Range, System.Drawing.Color.DarkCyan, 2);
@@ -81,7 +118,7 @@ using EloBuddy;
                 if (drawOrbText)
                 {
 
-                    var orbsTotal = "Active Orbs R : " + (orbs.Count + 4);
+                    var orbsTotal = "Active Orbs R : " + (orbs.Count);
                     Drawing.DrawText(0, 200, System.Drawing.Color.Yellow, orbsTotal);
                 }
             }

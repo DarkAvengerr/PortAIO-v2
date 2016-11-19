@@ -1329,8 +1329,8 @@
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\MenuConfig.cs" />
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Program.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Champion.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\DrawDamage.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\GameEvents.cs" />
-    <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Menu\DrawDamage.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Menu\Menu.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Menu\SyndraMenu.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Modes\Modes.cs" />
