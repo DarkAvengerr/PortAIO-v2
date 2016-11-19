@@ -11,7 +11,7 @@ using LeagueSharp.Common;
 using UnderratedAIO.Helpers;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace UnderratedAIO
 {
     internal class Program
@@ -24,6 +24,11 @@ using EloBuddy;
         public static bool IsSPrediction
         {
             get { return SPredictionMenu.Item("PREDICTONLIST").GetValue<StringList>().SelectedIndex == 0; }
+        }
+
+        public static void Main()
+        {
+            OnGameLoad();
         }
 
         public static void OnGameLoad()

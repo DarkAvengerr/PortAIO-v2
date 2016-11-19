@@ -10,7 +10,7 @@ using Environment = UnderratedAIO.Helpers.Environment;
 
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace UnderratedAIO.Champions
 {
     internal class Yorick
@@ -129,7 +129,8 @@ using EloBuddy;
             }
             var nearestMob = Jungle.GetNearest(player.Position);
             if (unit.IsMe && Q.IsReady() &&
-                (((orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && config.Item("useq", true).GetValue<bool>()) ||
+                (((orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && config.Item("useq", true).GetValue<bool>() &&
+                   !Orbwalking.CanAttack()) ||
                   (orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed &&
                    config.Item("useqH", true).GetValue<bool>())) && target is AIHeroClient) ||
                 (config.Item("useqLC", true).GetValue<bool>() && nearestMob != null &&
@@ -148,6 +149,7 @@ using EloBuddy;
                 return;
             }
             var target = args.Target as Obj_AI_Base;
+            Console.WriteLine(target.Health + " -> " + player.GetAutoAttackDamage(target));
             if (args.Unit.IsMe && Q.IsReady() && orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear &&
                 config.Item("useqLC", true).GetValue<bool>() && !(target is AIHeroClient) && (args.Target.Health > 700))
             {
@@ -157,11 +159,18 @@ using EloBuddy;
             }
 
             if (Q.IsReady() && target != null && config.Item("useqLH", true).GetValue<bool>() &&
-                target.Health < Q.GetDamage(target) + player.GetAutoAttackDamage(target, true))
+                target.Health < GetQDamage(target) + player.GetAutoAttackDamage(target))
             {
                 Q.Cast();
                 Orbwalking.ResetAutoAttackTimer();
             }
+        }
+
+        private float GetQDamage(Obj_AI_Base target)
+        {
+            var dmg = new double[] { 30, 55, 80, 105, 130 }[Q.Level - 1] + player.TotalAttackDamage * 0.4f;
+
+            return (float) player.CalcDamage(target, Damage.DamageType.Physical, dmg);
         }
 
         private void Combo()
@@ -240,8 +249,7 @@ using EloBuddy;
                     .FirstOrDefault(
                         o =>
                             o.IsInAttackRange(50) && o.IsValidTarget() &&
-                            HealthPrediction.GetHealthPrediction(o, 600) <
-                            Q.GetDamage(o) + player.GetAutoAttackDamage(o, true));
+                            HealthPrediction.GetHealthPrediction(o, 600) < GetQDamage(o) + player.GetAutoAttackDamage(o));
 
             if (targ != null)
             {
@@ -250,7 +258,8 @@ using EloBuddy;
                     Q.Cast();
                     Orbwalking.ResetAutoAttackTimer();
                 }
-                else if (targ.Health < Q.GetDamage(targ) + player.GetAutoAttackDamage(targ, true))
+                else if (targ.Health <
+                         (player.HasBuff("yorickqbuff") ? GetQDamage(targ) : 0) + player.GetAutoAttackDamage(targ))
                 {
                     orbwalker.ForceTarget(targ);
                 }

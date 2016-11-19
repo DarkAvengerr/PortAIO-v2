@@ -8,7 +8,7 @@ using UnderratedAIO.Helpers;
 
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace UnderratedAIO.Champions
 {
     internal class Jax

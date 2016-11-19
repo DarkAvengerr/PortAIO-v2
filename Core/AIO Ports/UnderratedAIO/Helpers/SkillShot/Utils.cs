@@ -7,7 +7,7 @@ using LeagueSharp;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace UnderratedAIO.Helpers.SkillShot
 {
     public static class Extensions {}

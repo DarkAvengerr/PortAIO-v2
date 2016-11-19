@@ -7,7 +7,7 @@ using UnderratedAIO.Helpers;
 
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace UnderratedAIO.Champions
 {
     internal class Other
@@ -91,7 +91,7 @@ using EloBuddy;
             menuM = DrawHelper.AddMisc(menuM);
             config.AddSubMenu(menuM);
             config.AddItem(new MenuItem("Enabledcomm", "Enable Utilies")).SetValue(true);
-            //config.AddItem(new MenuItem("Enabledorb", "Enable OrbWalker", true)).SetValue(false);
+            config.AddItem(new MenuItem("Enabledorb", "Enable OrbWalker", true)).SetValue(false);
             config.AddItem(new MenuItem("UnderratedAIO", "by Soresu v" + Program.version.ToString().Replace(",", ".")));
             config.AddToMainMenu();
         }

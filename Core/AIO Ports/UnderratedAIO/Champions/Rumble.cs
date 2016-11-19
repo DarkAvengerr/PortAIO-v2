@@ -14,7 +14,7 @@ using Environment = UnderratedAIO.Helpers.Environment;
 using Prediction = LeagueSharp.Common.Prediction;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace UnderratedAIO.Champions
 {
     internal class Rumble

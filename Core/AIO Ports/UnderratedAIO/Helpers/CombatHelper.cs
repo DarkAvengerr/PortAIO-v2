@@ -9,7 +9,7 @@ using SharpDX.Direct3D9;
 using Collision = LeagueSharp.Common.Collision;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace UnderratedAIO.Helpers
 {
     public class CombatHelper

@@ -8,7 +8,7 @@ using UnderratedAIO.Helpers.SkillShot;
 using Collision = UnderratedAIO.Helpers.SkillShot.Collision;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace UnderratedAIO.Helpers.SkillShot
 {
     public static class SkillshotDetector

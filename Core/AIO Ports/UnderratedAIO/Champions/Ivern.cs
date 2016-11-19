@@ -13,7 +13,7 @@ using SPrediction;
 using Prediction = LeagueSharp.Common.Prediction;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace UnderratedAIO.Champions
 {
     internal class Ivern
@@ -105,6 +105,7 @@ using EloBuddy;
                     var ally =
                         HeroManager.Allies.Where(
                             a =>
+                                a.Distance(player) < E.Range &&
                                 Program.IncDamages.GetAllyData(a.NetworkId).DamageTaken >
                                 getEShield() / 100f * config.Item("useeDmg", true).GetValue<Slider>().Value ||
                                 Program.IncDamages.GetAllyData(a.NetworkId).IsAboutToDie)
@@ -117,7 +118,7 @@ using EloBuddy;
                     if (config.Item("useeNearEnemy", true).GetValue<bool>())
                     {
                         var allyNearTarget =
-                            HeroManager.Allies.Where(a => a.Distance(target) < 400)
+                            HeroManager.Allies.Where(a => a.Distance(player) < E.Range && a.Distance(target) < 400)
                                 .OrderBy(a => a.Health)
                                 .FirstOrDefault();
                         if (allyNearTarget != null)
@@ -136,7 +137,9 @@ using EloBuddy;
                     {
                         var rengar =
                             HeroManager.Allies.FirstOrDefault(
-                                a => a.ChampionName == "Rengar" && a.Distance(target) > 150 && a.Distance(target) < 600);
+                                a =>
+                                    a.Distance(player) < W.Range && a.Distance(target) < 600 && a.Distance(target) > 150 &&
+                                    a.ChampionName == "Rengar");
                         if (rengar != null && !NavMesh.GetCollisionFlags(rengar.Position).HasFlag(CollisionFlags.Grass) &&
                             !Bushes.Any(b => b.Position.Distance(rengar.Position) < 300))
                         {
@@ -148,6 +151,7 @@ using EloBuddy;
                         var ally =
                             HeroManager.Allies.FirstOrDefault(
                                 a =>
+                                    a.Distance(player) < W.Range &&
                                     Program.IncDamages.GetAllyData(a.NetworkId).DamageTaken > a.Health * 0.4f &&
                                     Program.IncDamages.GetAllyData(a.NetworkId).AnyCC);
                         if (ally != null && !NavMesh.GetCollisionFlags(ally.Position).HasFlag(CollisionFlags.Grass) &&

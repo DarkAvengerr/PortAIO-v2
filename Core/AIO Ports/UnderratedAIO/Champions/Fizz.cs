@@ -14,7 +14,7 @@ using Geometry = LeagueSharp.Common.Geometry;
 
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace UnderratedAIO.Champions
 {
     internal class Fizz

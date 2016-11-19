@@ -10,7 +10,7 @@ using SharpDX;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace UnderratedAIO.Helpers.SkillShot
 {
     /// <summary>
