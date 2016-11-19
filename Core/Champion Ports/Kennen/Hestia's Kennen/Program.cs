@@ -2,7 +2,7 @@ using System;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Kennen
 {
     internal class Program
@@ -16,6 +16,7 @@ using EloBuddy;
         {
             try
             {
+                // ReSharper disable once ObjectCreationAsStatement
                 new Champion.Kennen();
             }
             catch (Exception exception)

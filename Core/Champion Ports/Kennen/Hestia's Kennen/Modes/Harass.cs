@@ -3,7 +3,7 @@ using Kennen.Core;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Kennen.Modes
 {
     internal class Harass
