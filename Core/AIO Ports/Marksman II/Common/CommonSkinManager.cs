@@ -8,7 +8,7 @@ using LeagueSharp.Common;
 using Marksman.Champions;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Common
 {
     internal class CommonSkinManager

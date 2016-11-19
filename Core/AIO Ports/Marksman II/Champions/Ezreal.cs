@@ -11,7 +11,7 @@ using Marksman.Common;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Champions
 {
     using Marksman.Utils;

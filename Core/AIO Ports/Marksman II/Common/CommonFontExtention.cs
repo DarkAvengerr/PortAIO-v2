@@ -7,7 +7,7 @@ using SharpDX.Direct3D9;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Common
 {
     public static class CommonFontExtension

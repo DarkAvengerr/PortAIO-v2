@@ -28,7 +28,7 @@ using System.ComponentModel;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Library.Logger
 {
     public interface ILogger

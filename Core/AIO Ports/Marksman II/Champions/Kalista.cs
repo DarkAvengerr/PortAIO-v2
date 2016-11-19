@@ -12,7 +12,7 @@ using Collision = LeagueSharp.Common.Collision;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Champions
 {
     using System.Runtime.Remoting.Messaging;

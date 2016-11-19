@@ -21,7 +21,7 @@
 #endregion License
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Library.Extensions.NET
 {
     public static class CharExtensions

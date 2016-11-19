@@ -5,12 +5,12 @@ using System.Drawing;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
-
+using Orbwalking = LeagueSharp.Common.Orbwalking;
 
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Champions
 {
     internal class Teemo : Champion

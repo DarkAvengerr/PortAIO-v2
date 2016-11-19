@@ -11,7 +11,7 @@ using Marksman.Champions;
 using SharpDX.Direct3D9;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Common
 {
     internal static class CommonSettings
@@ -57,6 +57,7 @@ using EloBuddy;
 
             return System.Activator.CreateInstance(type);
         }
+
         static void LoadMenuSpellRanges()
         {
 

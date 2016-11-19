@@ -8,11 +8,11 @@ using Marksman.Common;
 
 using SharpDX;
 using Color = System.Drawing.Color;
-
+using Orbwalking = LeagueSharp.Common.Orbwalking;
 
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Champions
 {
     internal class Reticles

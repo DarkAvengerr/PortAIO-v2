@@ -8,7 +8,7 @@ using LeagueSharp.Common;
 using Marksman.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Champions
 {
     internal static class PlayerSpells

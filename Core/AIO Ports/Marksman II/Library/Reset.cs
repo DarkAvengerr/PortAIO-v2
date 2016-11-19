@@ -29,7 +29,7 @@ using System.Linq;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Library
 {
     internal class Reset

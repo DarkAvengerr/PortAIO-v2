@@ -30,7 +30,7 @@ using Marksman.Library.Logger;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Wrappers
 {
     public class Spell : LeagueSharp.Common.Spell

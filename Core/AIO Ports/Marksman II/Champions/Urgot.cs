@@ -10,7 +10,7 @@ using Color = System.Drawing.Color;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Champions
 {
     internal class Urgot : Champion

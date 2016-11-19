@@ -431,17 +431,6 @@
     <Compile Include="Core\AIO Ports\Marksman II\Library\Update.cs" />
     <Compile Include="Core\AIO Ports\Marksman II\Library\Utils.cs" />
     <Compile Include="Core\AIO Ports\Marksman II\Program.cs" />
-    <Compile Include="Core\AIO Ports\Marksman II\Utils\Activator.cs" />
-    <Compile Include="Core\AIO Ports\Marksman II\Utils\AutoBushRevealer.cs" />
-    <Compile Include="Core\AIO Ports\Marksman II\Utils\AutoLevel.cs" />
-    <Compile Include="Core\AIO Ports\Marksman II\Utils\AutoPink.cs" />
-    <Compile Include="Core\AIO Ports\Marksman II\Utils\CData.cs" />
-    <Compile Include="Core\AIO Ports\Marksman II\Utils\EarlyEvade.cs" />
-    <Compile Include="Core\AIO Ports\Marksman II\Utils\ExecutedTime.cs" />
-    <Compile Include="Core\AIO Ports\Marksman II\Utils\IncomingDangerous.cs" />
-    <Compile Include="Core\AIO Ports\Marksman II\Utils\OnDraw.cs" />
-    <Compile Include="Core\AIO Ports\Marksman II\Utils\PotionManager.cs" />
-    <Compile Include="Core\AIO Ports\Marksman II\Utils\SpellList.cs" />
     <Compile Include="Core\AIO Ports\Marksman II\Utils\Utils.cs" />
     <Compile Include="Core\AIO Ports\Marksman II\Wrappers\Spell.cs" />
     <Compile Include="Core\AIO Ports\MidlaneSharp\BaseChamp.cs" />

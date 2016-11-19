@@ -32,7 +32,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Library.Extensions.NET
 {
     public static class ListExtensions

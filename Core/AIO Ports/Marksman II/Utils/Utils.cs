@@ -12,12 +12,12 @@ using SharpDX;
 using SharpDX.Direct3D9;
 using static LeagueSharp.Common.Packet;
 using Collision = LeagueSharp.Common.Collision;
-
+using Orbwalking = LeagueSharp.Common.Orbwalking;
 
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Utils
 {
     using System.Security.Cryptography;
@@ -67,8 +67,9 @@ using EloBuddy;
 
             private static void SimplePing(PingCategory pingCategory = PingCategory.Fallback)
             {
-                //S2C.Ping.Encoded(new S2C.Ping.Struct(PingLocation.X, PingLocation.Y, 0, 0, PingType.Fallback)).Process();
-                //TacticalMap.ShowPing(pingCategory, PingLocation, true);
+                S2C.Ping.Encoded(new S2C.Ping.Struct(PingLocation.X, PingLocation.Y, 0, 0, Packet.PingType.Fallback)).Process();
+                TacticalMap.ShowPing(pingCategory, PingLocation, true);
+
             }
         }
 

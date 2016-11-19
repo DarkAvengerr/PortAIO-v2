@@ -32,7 +32,7 @@ using System.Threading.Tasks;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Library
 {
     public abstract class ProducerConsumer<T> : IDisposable

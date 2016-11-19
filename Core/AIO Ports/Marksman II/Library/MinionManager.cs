@@ -31,7 +31,7 @@ using SharpDX;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Library
 {
     public enum MinionOrderTypes

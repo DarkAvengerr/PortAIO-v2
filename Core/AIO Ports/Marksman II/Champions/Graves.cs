@@ -10,12 +10,12 @@ using Marksman.Common;
 using Marksman.Utils;
 using SharpDX;
 using Color = System.Drawing.Color;
-
+using Orbwalking = LeagueSharp.Common.Orbwalking;
 
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Champions
 {
     //gravesbasicattackammo1
@@ -550,7 +550,7 @@ using EloBuddy;
             var useQ = GetValue<StringList>("Jungle.Q.Use").SelectedIndex;
             if (useQ != 0 && Q.IsReady() && isReloading)
             {
-                var jungleMobs = Utils.Utils.GetMobs(E.Range);
+                var jungleMobs = Utils.Utils.GetMobs(Q.Range);
 
                 if (useQ == 1 && !CommonUtils.IsWallBetween(ObjectManager.Player.Position, jungleMobs.Position))
                 {

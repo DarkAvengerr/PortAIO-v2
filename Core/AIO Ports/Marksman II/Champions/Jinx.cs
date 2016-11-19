@@ -10,12 +10,12 @@ using Marksman.Utils;
 using Marksman.Common;
 using SharpDX;
 using Collision = LeagueSharp.Common.Collision;
-
+using Orbwalking = LeagueSharp.Common.Orbwalking;
 
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Champions
 {
     internal class Jinx : Champion

@@ -13,7 +13,7 @@ using GamePath = System.Collections.Generic.List<SharpDX.Vector2>;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Evade
 {
     /// <summary>

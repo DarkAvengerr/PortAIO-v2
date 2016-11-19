@@ -5,7 +5,7 @@ using LeagueSharp.Common;
 using Color = SharpDX.Color;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Common
 {
     using System.Linq;

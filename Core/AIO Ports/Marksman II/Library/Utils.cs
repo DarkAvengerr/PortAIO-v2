@@ -32,7 +32,7 @@ using LeagueSharp;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Library
 {
     public class Utils

@@ -5,12 +5,12 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using Marksman.Utils;
-
+using Orbwalking = LeagueSharp.Common.Orbwalking;
 
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Champions
 {
     using System.Collections.Generic;

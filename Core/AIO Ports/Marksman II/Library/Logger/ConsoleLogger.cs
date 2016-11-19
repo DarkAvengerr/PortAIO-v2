@@ -30,7 +30,7 @@ using Marksman.Library.Extensions.NET;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Library.Logger
 {
     public class ConsoleLogger : ILogger

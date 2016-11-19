@@ -6,15 +6,14 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using Marksman.Common;
-
 using SharpDX;
 using SharpDX.Direct3D9;
-
+using Orbwalking = LeagueSharp.Common.Orbwalking;
 
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Champions
 {
     internal class Ashe : Champion

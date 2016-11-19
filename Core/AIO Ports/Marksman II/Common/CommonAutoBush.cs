@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Common
 {
     using System.Net;

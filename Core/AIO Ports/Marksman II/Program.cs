@@ -12,12 +12,12 @@ using Marksman.Common;
 using Marksman.Utils;
 using SharpDX;
 using Color = System.Drawing.Color;
-
+using Orbwalking = LeagueSharp.Common.Orbwalking;
 
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman
 {
     internal class Program
@@ -105,10 +105,10 @@ using EloBuddy;
                     ChampionClass = new Graves();
                     break;
                 case "gnar":
-                    ChampionClass = new Marksman.Champions.Gnar();
+                    ChampionClass = new Champions.Gnar();
                     break;
                 case "jhin":
-                    ChampionClass = new Marksman.Champions.Jhin();
+                    ChampionClass = new Jhin();
                     break;
                 case "jinx":
                     ChampionClass = new Jinx();

@@ -8,7 +8,7 @@ using SharpDX;
 using Color = System.Drawing.Color;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Common.CommonAllySupport
 {
     public static class AllyThreshLantern

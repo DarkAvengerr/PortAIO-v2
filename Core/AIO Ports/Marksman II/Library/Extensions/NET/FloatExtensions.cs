@@ -27,7 +27,7 @@ using System;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Library.Extensions.NET
 {
     public static class FloatExtensions

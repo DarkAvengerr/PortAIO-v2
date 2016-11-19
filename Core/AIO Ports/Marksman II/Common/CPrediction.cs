@@ -36,7 +36,7 @@ using Spell = Marksman.Wrappers.Spell;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Common
 {
     internal class CPrediction

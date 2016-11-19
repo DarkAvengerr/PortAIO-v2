@@ -31,7 +31,7 @@ using LeagueSharp.Common;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Library
 {
     /// <summary>

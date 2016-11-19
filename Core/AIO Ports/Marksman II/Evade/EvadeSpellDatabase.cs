@@ -9,7 +9,7 @@ using LeagueSharp.Common;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Evade
 {
     internal class EvadeSpellDatabase

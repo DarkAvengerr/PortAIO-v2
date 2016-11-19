@@ -32,7 +32,7 @@ using Version = System.Version;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman.Library
 {
     public class Update

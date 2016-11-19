@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using LeagueSharp;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Marksman
 {
     public class DangerousTargets
