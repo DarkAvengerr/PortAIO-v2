@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_ADC_Series.Pluging
 {
     using Common;
@@ -131,27 +131,6 @@ using EloBuddy;
             }
         }
 
-        private void LaneClear()
-        {
-            if (Me.ManaPercent >= Menu.Item("LaneClearMana", true).GetValue<Slider>().Value)
-            {
-                if (Menu.Item("LaneClearE", true).GetValue<bool>() && E.IsReady())
-                {
-                    var eKillMinionsCount =
-                        MinionManager.GetMinions(Me.Position, E.Range)
-                            .Count(
-                                x =>
-                                    x.DistanceToPlayer() <= E.Range && x.HasBuff("TwitchDeadlyVenom") &&
-                                    x.Health < E.GetDamage(x));
-
-                    if (eKillMinionsCount >= Menu.Item("LaneClearECount", true).GetValue<Slider>().Value)
-                    {
-                        E.Cast();
-                    }
-                }
-            }
-        }
-
         private void KillSteal()
         {
             if (Menu.Item("KillStealE", true).GetValue<bool>() && E.IsReady())
@@ -267,11 +246,32 @@ using EloBuddy;
             }
         }
 
+        private void LaneClear()
+        {
+            if (Me.ManaPercent >= Menu.Item("LaneClearMana", true).GetValue<Slider>().Value)
+            {
+                if (Menu.Item("LaneClearE", true).GetValue<bool>() && E.IsReady())
+                {
+                    var eKillMinionsCount =
+                        MinionManager.GetMinions(Me.Position, E.Range)
+                            .Count(
+                                x =>
+                                    x.DistanceToPlayer() <= E.Range && x.HasBuff("TwitchDeadlyVenom") &&
+                                    x.Health < E.GetDamage(x));
+
+                    if (eKillMinionsCount >= Menu.Item("LaneClearECount", true).GetValue<Slider>().Value)
+                    {
+                        E.Cast();
+                    }
+                }
+            }
+        }
+
         private void JungleClear()
         {
             if (Menu.Item("JungleStealE", true).GetValue<bool>() && E.IsReady())
             {
-                var mobs = MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.Neutral,
+                var mobs = MinionManager.GetMinions(Me.Position, E.Range, MinionTypes.All, MinionTeam.Neutral,
                     MinionOrderTypes.MaxHealth);
 
                 foreach (

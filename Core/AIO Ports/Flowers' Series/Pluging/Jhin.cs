@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_ADC_Series.Pluging
 {
     using Common;
@@ -82,6 +82,7 @@ using EloBuddy;
             {
                 KillStealMenu.AddItem(new MenuItem("KillStealQ", "Use Q", true).SetValue(true));
                 KillStealMenu.AddItem(new MenuItem("KillStealW", "Use W", true).SetValue(true));
+                KillStealMenu.AddItem(new MenuItem("KillStealWInAttackRange", "Use W| Target In Attack Range", true).SetValue(true));
             }
 
             var MiscMenu = Menu.AddSubMenu(new Menu("Misc", "Misc"));
@@ -376,72 +377,16 @@ using EloBuddy;
 
             if (R.IsReady() && CheckTarget(target, R.Range))
             {
-                if (R.Instance.Name == "JhinR")
+                switch (R.Instance.Name)
                 {
-                    if (Menu.Item("RMenuSemi", true).GetValue<KeyBind>().Active)
-                    {
-                        if (R.Cast(R.GetPrediction(target).UnitPosition))
-                        {
-                            rShotTarget = target;
-                            return;
-                        }
-                    }
-
-                    if (!Menu.Item("RMenuAuto", true).GetValue<bool>())
-                    {
-                        return;
-                    }
-
-                    if (Menu.Item("RMenuCheck", true).GetValue<bool>() && Me.CountEnemiesInRange(800f) > 0)
-                    {
-                        return;
-                    }
-
-                    if (target.DistanceToPlayer() <= Menu.Item("RMenuMin", true).GetValue<Slider>().Value)
-                    {
-                        return;
-                    }
-
-                    if (target.DistanceToPlayer() > Menu.Item("RMenuMax", true).GetValue<Slider>().Value)
-                    {
-                        return;
-                    }
-
-                    if (target.Health >
-                        Me.GetSpellDamage(target, SpellSlot.R)*Menu.Item("RMenuKill", true).GetValue<Slider>().Value)
-                    {
-                        return;
-                    }
-
-                    if (SebbyLib.OktwCommon.IsSpellHeroCollision(target, R))
-                    {
-                        return;
-                    }
-
-                    if (R.Cast(R.GetPrediction(target).UnitPosition))
-                    {
-                        rShotTarget = target;
-                        return;
-                    }
-                }
-
-                if (R.Instance.Name == "JhinRShot")
-                {
-                    if (rShotTarget != null && rShotTarget.IsValidTarget(R.Range) && InRCone(rShotTarget))
-                    {
+                    case "JhinR":
                         if (Menu.Item("RMenuSemi", true).GetValue<KeyBind>().Active)
                         {
-                            AutoUse(rShotTarget);
-                            R.CastTo(rShotTarget);
-                            return;
-                        }
-
-                        if (Menu.Item("ComboR", true).GetValue<bool>() &&
-                            Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-                        {
-                            AutoUse(rShotTarget);
-                            R.CastTo(rShotTarget);
-                            return;
+                            if (R.Cast(R.GetPrediction(target).UnitPosition))
+                            {
+                                rShotTarget = target;
+                                return;
+                            }
                         }
 
                         if (!Menu.Item("RMenuAuto", true).GetValue<bool>())
@@ -449,12 +394,67 @@ using EloBuddy;
                             return;
                         }
 
-                        AutoUse(rShotTarget);
-                        R.CastTo(rShotTarget);
+                        if (Menu.Item("RMenuCheck", true).GetValue<bool>() && Me.CountEnemiesInRange(800f) > 0)
+                        {
+                            return;
+                        }
 
-                    }
-                    else
-                    {
+                        if (target.DistanceToPlayer() <= Menu.Item("RMenuMin", true).GetValue<Slider>().Value)
+                        {
+                            return;
+                        }
+
+                        if (target.DistanceToPlayer() > Menu.Item("RMenuMax", true).GetValue<Slider>().Value)
+                        {
+                            return;
+                        }
+
+                        if (target.Health >
+                            Me.GetSpellDamage(target, SpellSlot.R) * Menu.Item("RMenuKill", true).GetValue<Slider>().Value)
+                        {
+                            return;
+                        }
+
+                        if (SebbyLibIsSpellHeroCollision(target, R))
+                        {
+                            return;
+                        }
+
+                        if (R.Cast(R.GetPrediction(target).UnitPosition))
+                        {
+                            rShotTarget = target;
+                        }
+                        break;
+                    case "JhinRShot":
+                        var selectTarget = TargetSelector.GetSelectedTarget();
+
+                        if (selectTarget != null && selectTarget.IsValidTarget(R.Range) && InRCone(selectTarget))
+                        {
+                            if (Menu.Item("RMenuSemi", true).GetValue<KeyBind>().Active)
+                            {
+                                AutoUse(rShotTarget);
+                                R.CastTo(rShotTarget);
+                                return;
+                            }
+
+                            if (Menu.Item("ComboR", true).GetValue<bool>() &&
+                                Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+                            {
+                                AutoUse(rShotTarget);
+                                R.CastTo(rShotTarget);
+                                return;
+                            }
+
+                            if (!Menu.Item("RMenuAuto", true).GetValue<bool>())
+                            {
+                                return;
+                            }
+
+                            AutoUse(rShotTarget);
+                            R.CastTo(rShotTarget);
+                            return;
+                        }
+
                         foreach (
                             var t in
                             HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && InRCone(x))
@@ -484,7 +484,7 @@ using EloBuddy;
                             R.Cast(R.GetPrediction(t).UnitPosition, true);
                             return;
                         }
-                    }
+                        break;
                 }
             }
         }
@@ -492,30 +492,54 @@ using EloBuddy;
         private void KillSteal()
         {
             if (R.Instance.Name == "JhinRShot")
-                return;
-
-            var wTarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
-
-            if (Menu.Item("KillStealW", true).GetValue<bool>() && CheckTarget(wTarget, Q.Range) && W.IsReady() &&
-                wTarget.Health < Me.GetSpellDamage(wTarget, SpellSlot.W) &&
-                !(Q.IsReady() && wTarget.IsValidTarget(Q.Range) &&
-                wTarget.Health < Me.GetSpellDamage(wTarget, SpellSlot.Q)))
             {
-                if (Orbwalker.InAutoAttackRange(wTarget) && wTarget.Health <= Me.GetAutoAttackDamage(wTarget, true))
-                {
-                    return;
-                }
-
-                W.CastTo(wTarget);
                 return;
             }
 
-            var qTarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
-
-            if (Menu.Item("KillStealQ", true).GetValue<bool>() && CheckTarget(qTarget, Q.Range) &&
-                Q.IsReady() && qTarget.Health < Me.GetSpellDamage(qTarget, SpellSlot.Q))
+            if (Menu.Item("KillStealQ", true).GetValue<bool>() && Q.IsReady())
             {
-                Q.CastOnUnit(qTarget, true);
+                foreach (
+                    var target in
+                    HeroManager.Enemies.Where(
+                        x => x.IsValidTarget(Q.Range) && x.Health < Me.GetSpellDamage(x, SpellSlot.Q)))
+                {
+                    if (CheckTarget(target, Q.Range))
+                    {
+                        Q.CastOnUnit(target, true);
+                    }
+                }
+            }
+
+            if (Menu.Item("KillStealW", true).GetValue<bool>() && W.IsReady())
+            {
+                foreach (
+                    var target in
+                    HeroManager.Enemies.Where(
+                        x => x.IsValidTarget(W.Range) && x.Health < Me.GetSpellDamage(x, SpellSlot.W)))
+                {
+                    if (CheckTarget(target, W.Range))
+                    {
+                        if (target.Health < Me.GetSpellDamage(target, SpellSlot.Q) && Q.IsReady() &&
+                            target.IsValidTarget(Q.Range))
+                        {
+                            return;
+                        }
+
+                        if (Menu.Item("KillStealWInAttackRange", true).GetValue<bool>() && Orbwalker.InAutoAttackRange(target))
+                        {
+                            W.CastTo(target);
+                            return;
+                        }
+
+                        if (Orbwalker.InAutoAttackRange(target) && target.Health <= Me.GetAutoAttackDamage(target, true))
+                        {
+                            return;
+                        }
+
+                        W.CastTo(target);
+                        return;
+                    }
+                }
             }
         }
 

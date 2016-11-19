@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_ADC_Series.Pluging
 {
     using Common;
@@ -391,7 +391,8 @@ using EloBuddy;
             {
                 var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
 
-                if (CheckTarget(target, W.Range) && target.DistanceToPlayer() > Q.Range)
+                if (CheckTarget(target, W.Range) && target.DistanceToPlayer() > Q.Range
+                    && Me.CountEnemiesInRange(W.Range - 300) <= 3)
                 {
                     W.OktwCast(target);
                 }

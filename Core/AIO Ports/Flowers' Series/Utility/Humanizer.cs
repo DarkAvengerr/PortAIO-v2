@@ -1,10 +1,11 @@
-﻿namespace Flowers_ADC_Series.Utility
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace Flowers_ADC_Series.Utility
 {
     using System;
     using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;
-    using EloBuddy;
 
     internal class Humanizer : Program
     {

@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_ADC_Series.Pluging
 {
     using Common;
@@ -34,6 +34,7 @@ using EloBuddy;
                 ComboMenu.AddItem(new MenuItem("ComboE", "Use E", true).SetValue(true));
                 ComboMenu.AddItem(
                     new MenuItem("ComboEUse", "Use E| If Can Kill Minion And Slow Target", true).SetValue(true));
+                ComboMenu.AddItem(new MenuItem("ComboMana", "Save Mana to Cast E", true).SetValue(true));
                 ComboMenu.AddItem(new MenuItem("ComboAttack", "Auto Attack Minion To Dash?", true).SetValue(true));
             }
 
@@ -129,7 +130,7 @@ using EloBuddy;
             var minion = (Obj_AI_Minion)sender;
 
             if (minion != null && minion.IsValidTarget(E.Range) && minion.Health < GetRealEDamage(minion) &&
-                Me.CountEnemiesInRange(600) == 0)
+                Me.CountEnemiesInRange(600) == 0 && Me.ManaPercent >= 60)
             {
                 E.Cast();
             }
@@ -196,7 +197,17 @@ using EloBuddy;
                         {
                             if (Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady())
                             {
-                                Q.CastTo(target);
+                                if (Menu.Item("ComboMana", true).GetValue<bool>())
+                                {
+                                    if (Me.Mana > Q.ManaCost + E.ManaCost)
+                                    {
+                                        Q.CastTo(target);
+                                    }
+                                }
+                                else
+                                {
+                                    Q.CastTo(target);
+                                }
                             }
                         }
                     }
@@ -344,14 +355,34 @@ using EloBuddy;
                 if (Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady() && target.IsValidTarget(Q.Range) &&
                     !Orbwalking.InAutoAttackRange(target))
                 {
-                    Q.CastTo(target);
+                    if (Menu.Item("ComboMana", true).GetValue<bool>())
+                    {
+                        if (Me.Mana > Q.ManaCost + E.ManaCost)
+                        {
+                            Q.CastTo(target);
+                        }
+                    }
+                    else
+                    {
+                        Q.CastTo(target);
+                    }
                 }
 
                 if (Menu.Item("ComboW", true).GetValue<bool>() && W.IsReady() && Utils.TickCount - lastWCast > 2000)
                 {
                     if (NavMesh.IsWallOfGrass(target.ServerPosition, 20) && !target.IsVisible)
                     {
-                        W.Cast(target.ServerPosition);
+                        if (Menu.Item("ComboMana", true).GetValue<bool>())
+                        {
+                            if (Me.Mana > Q.ManaCost + E.ManaCost*2 + W.ManaCost + R.ManaCost)
+                            {
+                                W.Cast(target.ServerPosition);
+                            }
+                        }
+                        else
+                        {
+                            W.Cast(target.ServerPosition);
+                        }
                     }
                 }
 

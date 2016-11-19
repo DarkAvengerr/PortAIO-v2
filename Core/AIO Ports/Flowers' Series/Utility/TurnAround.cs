@@ -1,11 +1,12 @@
-﻿namespace Flowers_ADC_Series.Utility
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace Flowers_ADC_Series.Utility
 {
     using System.Linq;
     using SharpDX;
     using LeagueSharp;
     using LeagueSharp.Common;
     using System.Collections.Generic;
-    using EloBuddy;
 
     internal class TurnAround : Program //This Part From SFX Utility 
     {
@@ -30,7 +31,7 @@
                         : new MenuItem("NotSupport", "Not Have Support Champion", true));
             }
 
-            Player.OnIssueOrder += OnIssueOrder;
+            EloBuddy.Player.OnIssueOrder += OnIssueOrder;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
         }
 
@@ -86,14 +87,14 @@
                 {
                     var moveTo = lastMove;
 
-                    Player.IssueOrder(GameObjectOrder.MoveTo,
+                    EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo,
                         sender.ServerPosition.Extend(Me.ServerPosition,
                             Me.ServerPosition.Distance(sender.ServerPosition) + (spellInfo.TurnOpposite ? 100 : -100)));
 
                     blockMovementTime = Game.Time + spellInfo.CastTime;
 
                     LeagueSharp.Common.Utility.DelayAction.Add((int) ((spellInfo.CastTime + 0.1)*1000),
-                        () => Player.IssueOrder(GameObjectOrder.MoveTo, moveTo));
+                        () => EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, moveTo));
                 }
             }
         }

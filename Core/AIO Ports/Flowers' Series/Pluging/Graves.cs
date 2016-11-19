@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_ADC_Series.Pluging
 {
     using Common;
@@ -153,7 +153,7 @@ using EloBuddy;
                         x => x.IsValidTarget(R.Range) && CheckTargetSureCanKill(x) && 
                         Menu.Item("KillStealR" + x.ChampionName.ToLower(), true).GetValue<bool>()
                         && x.Health < R.GetDamage(x) &&
-                        x.DistanceToPlayer() > Orbwalking.GetRealAutoAttackRange(Me) + 100))
+                        x.DistanceToPlayer() > Orbwalking.GetRealAutoAttackRange(Me) + E.Range - 100))
                 {
                     R.CastTo(target);
                 }
@@ -220,7 +220,9 @@ using EloBuddy;
 
                     if (Minions.Any())
                     {
-                        var QFarm = Q.GetLineFarmLocation(Minions);
+                        var QFarm =
+                            MinionManager.GetBestLineFarmLocation(Minions.Select(x => x.Position.To2D()).ToList(),
+                                Q.Width, Q.Range);
 
                         if (QFarm.MinionsHit >= Menu.Item("LaneClearQCount", true).GetValue<Slider>().Value)
                         {
@@ -243,9 +245,14 @@ using EloBuddy;
 
                     if (mobs.Any())
                     {
-                        var mob = mobs.FirstOrDefault();
+                        var QFarm =
+                            MinionManager.GetBestLineFarmLocation(mobs.Select(x => x.Position.To2D()).ToList(),
+                                Q.Width, Q.Range);
 
-                        Q.Cast(mob, true);
+                        if (QFarm.MinionsHit >= 1)
+                        {
+                            Q.Cast(QFarm.Position);
+                        }
                     }
                 }
             }

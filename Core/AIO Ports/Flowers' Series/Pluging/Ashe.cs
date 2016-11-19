@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_ADC_Series.Pluging
 {
     using Common;
@@ -201,6 +201,11 @@ using EloBuddy;
                 return;
             }
 
+            if (Menu.Item("SemiR", true).GetValue<KeyBind>().Active)
+            {
+                OneKeyR();
+            }
+
             AutoRLogic();
             KillSteal();
 
@@ -215,12 +220,6 @@ using EloBuddy;
                 case Orbwalking.OrbwalkingMode.LaneClear:
                     LaneClear();
                     JungleClear();
-                    break;
-                case Orbwalking.OrbwalkingMode.None:
-                    if (Menu.Item("SemiR", true).GetValue<KeyBind>().Active)
-                    {
-                        OneKeyR();
-                    }
                     break;
             }
         }
@@ -387,7 +386,8 @@ using EloBuddy;
                 return;
             }
 
-            var WFarm = W.GetLineFarmLocation(Minions);
+            var WFarm = MinionManager.GetBestCircularFarmLocation(Minions.Select(x => x.Position.To2D()).ToList(),
+                W.Width, W.Range);
 
             if (WFarm.MinionsHit >= Menu.Item("LaneClearWCount", true).GetValue<Slider>().Value)
             {

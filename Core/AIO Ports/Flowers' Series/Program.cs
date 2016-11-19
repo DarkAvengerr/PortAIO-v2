@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_ADC_Series
 {
     using Common;
@@ -38,7 +38,7 @@ using EloBuddy;
             OnGameLoad();
         }
 
-        private static void OnGameLoad()
+        public static void OnGameLoad()
         {
             Me = ObjectManager.Player;
 
@@ -87,6 +87,11 @@ using EloBuddy;
                 if (Menu.Item("Inject TurnAround").GetValue<bool>())
                 {
                     Utility.TurnAround.Init();
+                }
+
+                if (Menu.Item("Inject SkinChange").GetValue<bool>())
+                {
+                    Utility.SkinChange.Init();
                 }
 
                 if (Menu.Item("Inject Items").GetValue<bool>())

@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_ADC_Series.Pluging
 {
     using Common;
@@ -90,6 +90,9 @@ using EloBuddy;
                 {
                     EMenu.AddItem(new MenuItem("Gapcloser", "Anti GapCloser", true).SetValue(true));
                     EMenu.AddItem(new MenuItem("AntiMelee", "Anti Melee", true).SetValue(true));
+                    EMenu.AddItem(
+                        new MenuItem("AntiMeleeHp", "Anti Melee|When Player HealthPercent <= x%", true).SetValue(
+                            new Slider(50)));
                 }
 
                 var RMenu = MiscMenu.AddSubMenu(new Menu("R Settings", "R Settings"));
@@ -351,9 +354,10 @@ using EloBuddy;
                                 x.IsValidTarget(R.Range) &&
                                 target.DistanceToPlayer() > Orbwalking.GetRealAutoAttackRange(Me) &&
                                 CheckTargetSureCanKill(x) &&
-                                HealthPrediction.GetHealthPrediction(x, 2000) > 0))
+                                HealthPrediction.GetHealthPrediction(x, 3000) > 0))
                     {
-                        if (target.Health < R.GetDamage(rTarget) && R.GetPrediction(rTarget).Hitchance >= HitChance.High)
+                        if (target.Health < R.GetDamage(rTarget) && R.GetPrediction(rTarget).Hitchance >= HitChance.High &&
+                            target.DistanceToPlayer() > Q.Range + E.Range/2)
                         {
                             R.Cast(rTarget, true);
                         }
@@ -567,7 +571,8 @@ using EloBuddy;
 
         private void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs Args)
         {
-            if (Menu.Item("AntiMelee", true).GetValue<bool>() && E.IsReady())
+            if (Menu.Item("AntiMelee", true).GetValue<bool>() && E.IsReady() &&
+                Me.HealthPercent <= Menu.Item("AntiMeleeHp", true).GetValue<Slider>().Value)
             {
                 if (sender != null && sender.IsEnemy && Args.Target != null && Args.Target.IsMe)
                 {

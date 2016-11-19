@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_ADC_Series.Common
 {
     using LeagueSharp;
@@ -8,9 +8,78 @@ using EloBuddy;
     using SharpDX;
     using SPrediction;
     using System;
+    using System.Linq;
+    using System.Collections.Generic;
 
     public static class Common
     {
+        public static bool SebbyLibIsSpellHeroCollision(AIHeroClient t, Spell QWER, int extraWith = 50)
+        {
+            foreach (
+                var hero in
+                HeroManager.Enemies.FindAll(
+                    hero =>
+                        hero.IsValidTarget(QWER.Range + QWER.Width, true, QWER.RangeCheckFrom) &&
+                        t.NetworkId != hero.NetworkId))
+            {
+                var prediction = QWER.GetPrediction(hero);
+                var powCalc = Math.Pow(QWER.Width + extraWith + hero.BoundingRadius, 2);
+
+                if (prediction.UnitPosition.To2D()
+                        .Distance(QWER.From.To2D(), QWER.GetPrediction(t).CastPosition.To2D(), true, true) <= powCalc)
+                {
+                    return true;
+                }
+
+                if (prediction.UnitPosition.To2D().Distance(QWER.From.To2D(), t.ServerPosition.To2D(), true, true) <=
+                    powCalc)
+                {
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
+        public static bool SebbyLibIsMovingInSameDirection(Obj_AI_Base source, Obj_AI_Base target)
+        {
+            var sourceLW = source.GetWaypoints().Last().To3D();
+
+            if (sourceLW == source.Position || !source.IsMoving)
+            {
+                return false;
+            }
+
+            var targetLW = target.GetWaypoints().Last().To3D();
+
+            if (targetLW == target.Position || !target.IsMoving)
+            {
+                return false;
+            }
+
+            var pos1 = sourceLW.To2D() - source.Position.To2D();
+            var pos2 = targetLW.To2D() - target.Position.To2D();
+            var getAngle = pos1.AngleBetween(pos2);
+
+            return getAngle < 25;
+        }
+
+        public static List<Vector3> SebbyLibCirclePoints(float CircleLineSegmentN, float radius, Vector3 position)
+        {
+            var points = new List<Vector3>();
+
+            for (var i = 1; i <= CircleLineSegmentN; i++)
+            {
+                var angle = i * 2 * Math.PI / CircleLineSegmentN;
+                var point = new Vector3(position.X + radius*(float) Math.Cos(angle),
+                    position.Y + radius*(float) Math.Sin(angle), position.Z);
+
+                points.Add(point);
+            }
+
+            return points;
+        }
+
         public static HitChance MinCommonHitChance
         {
             get
@@ -39,31 +108,31 @@ using EloBuddy;
             }
         }
 
-        public static SebbyLib.Prediction.HitChance MinOKTWHitChance
+        public static OktwPrediction.HitChance MinOKTWHitChance
         {
             get
             {
                 if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 0)
                 {
-                    return SebbyLib.Prediction.HitChance.VeryHigh;
+                    return OktwPrediction.HitChance.VeryHigh;
                 }
 
                 if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 1)
                 {
-                    return SebbyLib.Prediction.HitChance.High;
+                    return OktwPrediction.HitChance.High;
                 }
 
                 if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 2)
                 {
-                    return SebbyLib.Prediction.HitChance.Medium;
+                    return OktwPrediction.HitChance.Medium;
                 }
 
                 if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 3)
                 {
-                    return SebbyLib.Prediction.HitChance.Low;
+                    return OktwPrediction.HitChance.Low;
                 }
 
-                return SebbyLib.Prediction.HitChance.VeryHigh;
+                return OktwPrediction.HitChance.VeryHigh;
             }
         }
 
@@ -111,14 +180,14 @@ using EloBuddy;
                     break;
                 case 1:
                     {
-                        SebbyLib.Prediction.SkillshotType CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotLine;
+                        var CoreType2 = OktwPrediction.SkillshotType.SkillshotLine;
 
                         if (Spells.Type == SkillshotType.SkillshotCircle)
                         {
-                            CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotCircle;
+                            CoreType2 = OktwPrediction.SkillshotType.SkillshotCircle;
                         }
 
-                        var predInput2 = new SebbyLib.Prediction.PredictionInput
+                        var predInput2 = new OktwPrediction.PredictionInput
                         {
                             Aoe = AOE,
                             Collision = Spells.Collision,
@@ -131,7 +200,7 @@ using EloBuddy;
                             Type = CoreType2
                         };
 
-                        var poutput2 = SebbyLib.Prediction.Prediction.GetPrediction(predInput2);
+                        var poutput2 = OktwPrediction.Prediction.GetPrediction(predInput2);
 
                         if (Spells.Speed != float.MaxValue &&
                             YasuoWindWall.CollisionYasuo(ObjectManager.Player.ServerPosition, poutput2.CastPosition))
@@ -152,7 +221,7 @@ using EloBuddy;
                     break;
                 case 2:
                     {
-                        SDKPrediction.SkillshotType CoreType2 = SDKPrediction.SkillshotType.SkillshotLine;
+                        var CoreType2 = SDKPrediction.SkillshotType.SkillshotLine;
 
                         var predInput2 = new SDKPrediction.PredictionInput
                         {
@@ -179,7 +248,8 @@ using EloBuddy;
                         {
                             Spells.Cast(poutput2.CastPosition, true);
                         }
-                        else if (predInput2.AoE && poutput2.AoeTargetsHitCount > 1 && poutput2.Hitchance >= MinSDKHitChance - 1)
+                        else if (predInput2.AoE && poutput2.AoeTargetsHitCount > 1 &&
+                                 poutput2.Hitchance >= MinSDKHitChance - 1)
                         {
                             Spells.Cast(poutput2.CastPosition, true);
                         }
@@ -225,14 +295,14 @@ using EloBuddy;
 
         public static void OktwCast(this Spell Spells, Obj_AI_Base target, bool AOE = false)
         {
-            SebbyLib.Prediction.SkillshotType CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotLine;
+            OktwPrediction.SkillshotType CoreType2 = OktwPrediction.SkillshotType.SkillshotLine;
 
             if (Spells.Type == SkillshotType.SkillshotCircle)
             {
-                CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotCircle;
+                CoreType2 = OktwPrediction.SkillshotType.SkillshotCircle;
             }
 
-            var predInput2 = new SebbyLib.Prediction.PredictionInput
+            var predInput2 = new OktwPrediction.PredictionInput
             {
                 Aoe = AOE,
                 Collision = Spells.Collision,
@@ -245,9 +315,10 @@ using EloBuddy;
                 Type = CoreType2
             };
 
-            var poutput2 = SebbyLib.Prediction.Prediction.GetPrediction(predInput2);
+            var poutput2 = OktwPrediction.Prediction.GetPrediction(predInput2);
 
-            if (Spells.Speed != float.MaxValue && YasuoWindWall.CollisionYasuo(ObjectManager.Player.ServerPosition, poutput2.CastPosition))
+            if (Spells.Speed != float.MaxValue &&
+                YasuoWindWall.CollisionYasuo(ObjectManager.Player.ServerPosition, poutput2.CastPosition))
             {
                 return;
             }
@@ -261,7 +332,6 @@ using EloBuddy;
                 Spells.Cast(poutput2.CastPosition, true);
             }
         }
-
 
         public static bool CheckTarget(Obj_AI_Base target, float range = float.MaxValue)
         {

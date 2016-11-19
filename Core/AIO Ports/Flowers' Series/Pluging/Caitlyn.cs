@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_ADC_Series.Pluging
 {
     using Common;
@@ -35,7 +35,7 @@ using EloBuddy;
                 ComboMenu.AddItem(
                     new MenuItem("ComboQCount", "Use Q| Min Hit Count >= x", true).SetValue(new Slider(2, 1, 5)));
                 ComboMenu.AddItem(
-                    new MenuItem("ComboQRange", "Use Q| Min Range >= x", true).SetValue(new Slider(700, 500, 1250)));
+                    new MenuItem("ComboQRange", "Use Q| Min Range >= x", true).SetValue(new Slider(750, 500, 1000)));
                 ComboMenu.AddItem(new MenuItem("ComboW", "Use W", true).SetValue(true));
                 ComboMenu.AddItem(
                     new MenuItem("ComboWCount", "Use W| Min Count >= x", true).SetValue(new Slider(1, 1, 3)));
@@ -225,8 +225,10 @@ using EloBuddy;
                     {
                         if (Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady())
                         {
-                            E.Cast(target);
-                            Q.Cast(target);
+                            if (E.Cast(target).IsCasted())
+                            {
+                                Q.Cast(target);
+                            }
                         }
                         else
                         {
@@ -235,11 +237,18 @@ using EloBuddy;
                     }
                     else
                     {
-                        if (Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady() && target.IsValidTarget(Q.Range) &&
-                            target.DistanceToPlayer() >= Menu.Item("ComboQRange", true).GetValue<Slider>().Value)
+                        if (Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady() && target.IsValidTarget(Q.Range))
                         {
-                            Q.CastTo(target);
-                            Q.CastIfWillHit(target, Menu.Item("ComboQCount", true).GetValue<Slider>().Value, true);
+                            if (target.DistanceToPlayer() >= Menu.Item("ComboQRange", true).GetValue<Slider>().Value)
+                            {
+                                Q.CastTo(target);
+
+                                if (Me.CountEnemiesInRange(Q.Range) >=
+                                    Menu.Item("ComboQCount", true).GetValue<Slider>().Value)
+                                {
+                                    Q.CastIfWillHit(target, Menu.Item("ComboQCount", true).GetValue<Slider>().Value, true);
+                                }
+                            }
                         }
                     }
                 }
@@ -248,8 +257,16 @@ using EloBuddy;
                     target.IsValidTarget(Q.Range) &&
                     target.DistanceToPlayer() >= Menu.Item("ComboQRange", true).GetValue<Slider>().Value)
                 {
-                    Q.CastTo(target);
-                    Q.CastIfWillHit(target, Menu.Item("ComboQCount", true).GetValue<Slider>().Value, true);
+                    if (target.DistanceToPlayer() >= Menu.Item("ComboQRange", true).GetValue<Slider>().Value)
+                    {
+                        Q.CastTo(target);
+
+                        if (Me.CountEnemiesInRange(Q.Range) >=
+                            Menu.Item("ComboQCount", true).GetValue<Slider>().Value)
+                        {
+                            Q.CastIfWillHit(target, Menu.Item("ComboQCount", true).GetValue<Slider>().Value, true);
+                        }
+                    }
                 }
 
                 if (Menu.Item("ComboW", true).GetValue<bool>() && W.IsReady() && target.IsValidTarget(W.Range) &&
@@ -365,7 +382,9 @@ using EloBuddy;
 
                     if (minions.Any())
                     {
-                        var QFarm = Q.GetLineFarmLocation(minions, Q.Width);
+                        var QFarm =
+                            MinionManager.GetBestLineFarmLocation(minions.Select(x => x.Position.To2D()).ToList(),
+                                Q.Width, Q.Range);
 
                         if (QFarm.MinionsHit >= Menu.Item("LaneClearQCount", true).GetValue<Slider>().Value)
                         {
