@@ -1077,6 +1077,8 @@
     <Compile Include="Core\AutoPlay Ports\SharpAI\Utility\Misc.cs" />
     <Compile Include="Core\AutoPlay Ports\SharpAI\Utility\Pathfinding.cs" />
     <Compile Include="Core\AutoPlay Ports\SharpAI\Utility\Random.cs" />
+    <Compile Include="Core\Champion Ports\Akali\QuantumAkali\DrawDamage.cs" />
+    <Compile Include="Core\Champion Ports\Akali\QuantumAkali\Program.cs" />
     <Compile Include="Core\Champion Ports\Azir\Creator Of Elo\AzirMain.cs" />
     <Compile Include="Core\Champion Ports\Azir\Creator Of Elo\AzirWalker.cs" />
     <Compile Include="Core\Champion Ports\Azir\Creator Of Elo\Events\Events.cs" />

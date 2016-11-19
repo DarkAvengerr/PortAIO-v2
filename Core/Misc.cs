@@ -31,7 +31,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "OKTW", "DZAhri", "EloFactory Ahri", "KappaSeries", "xSalice", "BadaoSeries", "DZAIO", "M1D 0R F33D", "AhriSharp", "[SDK] Flowers' Series", "Babehri", "EasyAhri", "SenseAhri" };
                     break;
                 case EloBuddy.Champion.Akali:
-                    champ = new string[] { "xQx Akali", "Kappa Series", "Korean Akali", "Trookali", "xSalice", "StonedSeriesAIO", "M1D 0R F33D", "[SDK] ExorAIO", "[SDK] Flowers' Akali", "[SDK] Flowers' Series", "[SDK] TroopAIO", "Bloodmoon Akali", "Royal Rapist Akali", "sAIO" };
+                    champ = new string[] { "xQx Akali", "Kappa Series", "Korean Akali", "Trookali", "xSalice", "StonedSeriesAIO", "M1D 0R F33D", "[SDK] ExorAIO", "[SDK] Flowers' Akali", "[SDK] Flowers' Series", "[SDK] TroopAIO", "Bloodmoon Akali", "Royal Rapist Akali", "sAIO", "QuantumAkali" };
                     break;
                 case EloBuddy.Champion.Alistar:
                     champ = new string[] { "ElAlistar", "Support Is Easy", "FreshBooster", "vSeries", "SkyAlistar" };

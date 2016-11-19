@@ -308,6 +308,9 @@ namespace PortAIO
                         case 13: // sAIO
                             sAIO.Program.Main();
                             break;
+                        case 14: // QuantumAkali
+                            QuantumAkali.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Alistar:
