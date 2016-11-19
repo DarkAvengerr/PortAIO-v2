@@ -73,6 +73,9 @@ namespace PortAIO
                     case 1: // Evade# - Done
                         Evade.Program.Game_OnGameStart();
                         break;
+                    case 2: // vEvade
+                        vEvade.Program.Main();
+                        break;
                 }
             }
 
