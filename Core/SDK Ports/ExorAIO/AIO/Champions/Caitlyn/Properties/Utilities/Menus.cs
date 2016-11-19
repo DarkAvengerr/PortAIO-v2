@@ -2,7 +2,7 @@
 #pragma warning disable 1587
 
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Caitlyn
 {
     using System.Windows.Forms;
@@ -40,7 +40,8 @@ using EloBuddy;
                     Vars.QMenu.Add(new MenuBool("combo", "Combo", true));
                     Vars.QMenu.Add(new MenuBool("logical", "Logical", true));
                     Vars.QMenu.Add(new MenuBool("killsteal", "KillSteal", true));
-                    Vars.QMenu.Add(new MenuSliderButton("clear", "Clear / if Mana >= x%", 50, 0, 99, true));
+                    Vars.QMenu.Add(new MenuSliderButton("laneclear", "LaneClear / if Mana >= x%", 50, 0, 99, true));
+                    Vars.QMenu.Add(new MenuSliderButton("jungleclear", "JungleClear / if Mana >= x%", 50, 0, 99, true));
                 }
                 Vars.SpellsMenu.Add(Vars.QMenu);
 

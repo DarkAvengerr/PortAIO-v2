@@ -1,10 +1,8 @@
 
 #pragma warning disable 1587
 
-// ReSharper disable once CheckNamespace
-
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Kalista
 {
     using System;

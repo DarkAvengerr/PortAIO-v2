@@ -2,7 +2,7 @@
 #pragma warning disable 1587
 
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Sivir
 {
     using System;
@@ -37,7 +37,7 @@ using EloBuddy;
             {
                 foreach (var target in
                     GameObjects.EnemyHeroes.Where(
-                        t => Bools.IsImmobile(t) && !Invulnerable.Check(t) && t.IsValidTarget(Vars.Q.Range)))
+                        t => Bools.IsImmobile(t) && !Invulnerable.Check(t) && t.IsValidTarget(Vars.Q.Range - 50f)))
                 {
                     Vars.Q.Cast(target.ServerPosition);
                 }
@@ -91,7 +91,7 @@ using EloBuddy;
             switch (sender.Type)
             {
                 case GameObjectType.AIHeroClient:
-                    if (Invulnerable.Check(GameObjects.Player, DamageType.True, false))
+                    if (Invulnerable.Check(GameObjects.Player, DamageType.Magical, false))
                     {
                         return;
                     }
@@ -111,15 +111,25 @@ using EloBuddy;
 
                             if (AutoAttack.IsAutoAttack(args.SData.Name) || args.SData.Name.Equals("GangplankQProceed"))
                             {
-                                if (Math.Abs(((Obj_AI_Minion)args.Target).Health - 1) <= 0
-                                    && ((Obj_AI_Minion)args.Target).DistanceToPlayer() < 450
-                                    && ((Obj_AI_Minion)args.Target).CharData.BaseSkinName.Equals("gangplankbarrel"))
+                                var target = (Obj_AI_Minion)args.Target;
+                                if ((int)target.Health == 1 && target.DistanceToPlayer() < 450
+                                    && target.CharData.BaseSkinName.Equals("gangplankbarrel"))
                                 {
                                     Vars.E.Cast();
                                     return;
                                 }
                             }
                         }
+
+                        var spellMenu =
+                            Vars.Menu["spells"]["e"]["whitelist"][
+                                $"{hero.ChampionName.ToLower()}.{args.SData.Name.ToLower()}"];
+
+                        var resetMenu = hero.Buffs.Any(b => AutoAttack.IsAutoAttackReset(b.Name))
+                                            ? Vars.Menu["spells"]["e"]["whitelist"][
+                                                $"{hero.ChampionName.ToLower()}.{hero.Buffs.First(b => AutoAttack.IsAutoAttackReset(b.Name)).Name.ToLower()}"
+                                                  ]
+                                            : null;
 
                         /// <summary>
                         ///     Check for Special On-Hit CC AutoAttacks & Melee AutoAttack Resets.
@@ -135,21 +145,12 @@ using EloBuddy;
                             {
                                 case "UdyrBearAttack":
                                 case "BraumBasicAttackPassiveOverride":
-
-                                    /// <summary>
-                                    ///     Whitelist Block.
-                                    /// </summary>
-                                    if (
-                                        Vars.Menu["spells"]["e"]["whitelist"][
-                                            $"{hero.ChampionName.ToLower()}.{args.SData.Name.ToLower()}"] == null
-                                        || !Vars.Menu["spells"]["e"]["whitelist"][
-                                            $"{hero.ChampionName.ToLower()}.{args.SData.Name.ToLower()}"]
-                                                .GetValue<MenuBool>().Value)
-                                    {
-                                        return;
-                                    }
-                                    if (GameObjects.Player.HasBuff("udyrbearstuncheck")
-                                        && hero.ChampionName.Equals("Udyr"))
+                                case "GoldCardPreAttack":
+                                case "RedCardPreAttack":
+                                case "BlueCardPreAttack":
+                                    if (spellMenu == null || !spellMenu.GetValue<MenuBool>().Value
+                                        || (hero.ChampionName.Equals("Udyr")
+                                            && GameObjects.Player.HasBuff("udyrbearstuncheck")))
                                     {
                                         return;
                                     }
@@ -157,13 +158,8 @@ using EloBuddy;
                                     Vars.E.Cast();
                                     break;
                                 default:
-                                    if (!hero.Buffs.Any(b => AutoAttack.IsAutoAttackReset(b.Name))
-                                        || Vars.Menu["spells"]["e"]["whitelist"][
-                                            $"{hero.ChampionName.ToLower()}.{hero.Buffs.First(b => AutoAttack.IsAutoAttackReset(b.Name)).Name.ToLower()}"
-                                               ] == null
-                                        || !Vars.Menu["spells"]["e"]["whitelist"][
-                                            $"{hero.ChampionName.ToLower()}.{hero.Buffs.First(b => AutoAttack.IsAutoAttackReset(b.Name)).Name.ToLower()}"
-                                                ].GetValue<MenuBool>().Value)
+                                    if (!hero.Buffs.Any(b => AutoAttack.IsAutoAttackReset(b.Name)) || resetMenu == null
+                                        || !resetMenu.GetValue<MenuBool>().Value)
                                     {
                                         return;
                                     }
@@ -178,15 +174,7 @@ using EloBuddy;
                         /// </summary>
                         else if (SpellDatabase.GetByName(args.SData.Name) != null)
                         {
-                            /// <summary>
-                            ///     Whitelist Block.
-                            /// </summary>
-                            if (
-                                Vars.Menu["spells"]["e"]["whitelist"][
-                                    $"{hero.ChampionName.ToLower()}.{args.SData.Name.ToLower()}"] == null
-                                || !Vars.Menu["spells"]["e"]["whitelist"][
-                                    $"{hero.ChampionName.ToLower()}.{args.SData.Name.ToLower()}"].GetValue<MenuBool>()
-                                        .Value)
+                            if (spellMenu == null || !spellMenu.GetValue<MenuBool>().Value)
                             {
                                 return;
                             }
@@ -198,31 +186,26 @@ using EloBuddy;
                                 /// </summary>
                                 case SpellType.Targeted:
                                 case SpellType.TargetedMissile:
-                                    if (!args.Target.IsMe
-                                        || !SpellDatabase.GetByName(args.SData.Name)
-                                                .CastType.Contains(CastType.EnemyChampions))
+                                    if (!args.Target.IsMe)
                                     {
                                         return;
                                     }
 
+                                    var delay = Vars.Menu["spells"]["e"]["delay"].GetValue<MenuSlider>().Value;
                                     switch (hero.ChampionName)
                                     {
                                         case "Caitlyn":
-                                            DelayAction.Add(1050, () => { Vars.E.Cast(); });
+                                            delay = 1050;
                                             break;
                                         case "Nocturne":
-                                            DelayAction.Add(350, () => { Vars.E.Cast(); });
+                                            delay = 350;
                                             break;
                                         case "Zed":
-                                            DelayAction.Add(200, () => { Vars.E.Cast(); });
-                                            break;
-                                        default:
-                                            DelayAction.Add(
-                                                Vars.Menu["spells"]["e"]["delay"].GetValue<MenuSlider>().Value,
-                                                () => { Vars.E.Cast(); });
+                                            delay = 200;
                                             break;
                                     }
 
+                                    DelayAction.Add(delay, () => { Vars.E.Cast(); });
                                     break;
 
                                 /// <summary>
@@ -238,7 +221,6 @@ using EloBuddy;
                                             }
                                             break;
                                     }
-
                                     break;
                             }
                         }

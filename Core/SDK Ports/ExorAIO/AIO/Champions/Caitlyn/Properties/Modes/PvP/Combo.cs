@@ -2,7 +2,7 @@
 #pragma warning disable 1587
 
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Caitlyn
 {
     using System;
@@ -40,18 +40,13 @@ using EloBuddy;
             {
                 foreach (var target in
                     GameObjects.EnemyHeroes.Where(
-                        t => t.IsValidTarget(650f) && !Invulnerable.Check(t) && !t.HasBuff("caitlynyordletrapinternal"))
+                        t => t.IsValidTarget(600f) && !Invulnerable.Check(t) && !t.HasBuff("caitlynyordletrapinternal"))
                     )
                 {
                     if (!Vars.E.GetPrediction(target).CollisionObjects.Any()
                         && Vars.E.GetPrediction(target).Hitchance >= HitChance.Medium)
                     {
-                        Vars.E.Cast(
-                            GameObjects.Player.ServerPosition.Extend(
-                                Vars.E.GetPrediction(target).CastPosition,
-                                (float)
-                                (GameObjects.Player.Distance(Vars.E.GetPrediction(target).CastPosition)
-                                 + Vars.E.Width / 1.5)));
+                        Vars.E.Cast(Vars.E.GetPrediction(target).UnitPosition);
                     }
                 }
             }

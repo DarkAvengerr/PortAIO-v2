@@ -2,7 +2,7 @@
 #pragma warning disable 1587
 
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Jhin
 {
     using System;
@@ -29,7 +29,7 @@ using EloBuddy;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Automatic(EventArgs args)
         {
-            if (GameObjects.Player.IsRecalling())
+            if (GameObjects.Player.IsRecalling() || Vars.R.Instance.Name.Equals("JhinRShot"))
             {
                 return;
             }
@@ -37,7 +37,7 @@ using EloBuddy;
             /// <summary>
             ///     The Automatic Q LastHit Logic.
             /// </summary>
-            /*if (Vars.Q.IsReady() && GameObjects.Player.HasBuff("JhinPassiveReload")
+            if (Vars.Q.IsReady() && GameObjects.Player.HasBuff("JhinPassiveReload")
                 && Variables.Orbwalker.ActiveMode != OrbwalkingMode.Combo
                 && GameObjects.Player.ManaPercent
                 > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["lasthit"])
@@ -51,7 +51,7 @@ using EloBuddy;
                 {
                     Vars.Q.CastOnUnit(minion);
                 }
-            }*/
+            }
 
             /// <summary>
             ///     The Automatic E Logic.

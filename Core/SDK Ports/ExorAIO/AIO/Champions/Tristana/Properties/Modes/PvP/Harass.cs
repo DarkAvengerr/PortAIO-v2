@@ -2,10 +2,11 @@
 #pragma warning disable 1587
 
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Tristana
 {
     using System;
+    using System.Linq;
 
     using ExorAIO.Utilities;
 
@@ -29,7 +30,8 @@ using EloBuddy;
             /// <summary>
             ///     The Q Harass Logic.
             /// </summary>
-            if (Vars.Q.IsReady() && GameObjects.Player.Spellbook.IsAutoAttacking
+            if (Vars.Q.IsReady()
+                && GameObjects.EnemyHeroes.Any(t => t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange()))
                 && Vars.Menu["spells"]["q"]["harass"].GetValue<MenuBool>().Value)
             {
                 Vars.Q.Cast();

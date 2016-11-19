@@ -2,7 +2,7 @@
 #pragma warning disable 1587
 
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Sivir
 {
     using System;
@@ -14,8 +14,6 @@ using EloBuddy;
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.UI;
     using LeagueSharp.SDK.Utils;
-
-    using SharpDX;
 
     /// <summary>
     ///     The logics class.
@@ -40,11 +38,16 @@ using EloBuddy;
                         t =>
                         !Invulnerable.Check(t) && !t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
                         && t.IsValidTarget(Vars.Q.Range - 100f)
-                        && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.Q) * 2))
+                        && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.Q) * 1.5))
                 {
-                    Vars.Q.Cast(
-                        Vars.Q.GetPrediction(target)
-                            .UnitPosition.Extend((Vector2)GameObjects.Player.ServerPosition, -140));
+                    if (GameObjects.Player.Distance(Vars.Q.GetPrediction(target).UnitPosition) < Vars.Q.Range - 50f)
+                    {
+                        Vars.Q.Cast(
+                            target.IsValidTarget(300f)
+                                ? target.ServerPosition
+                                : Vars.Q.GetPrediction(target)
+                                      .UnitPosition.Extend(GameObjects.Player.ServerPosition, -140f));
+                    }
                 }
             }
         }

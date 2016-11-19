@@ -2,7 +2,7 @@
 #pragma warning disable 1587
 
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Jinx
 {
     using System;
@@ -49,7 +49,7 @@ using EloBuddy;
                         Vars.E.Cast(
                             GameObjects.Player.ServerPosition.Extend(
                                 target.ServerPosition,
-                                (float)(GameObjects.Player.Distance(target) + Vars.E.Width)));
+                                GameObjects.Player.Distance(target) + Vars.E.Width));
                     }
                 }
             }

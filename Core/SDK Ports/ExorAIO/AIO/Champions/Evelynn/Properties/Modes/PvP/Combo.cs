@@ -2,13 +2,14 @@
 #pragma warning disable 1587
 
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Evelynn
 {
     using System;
 
     using ExorAIO.Utilities;
 
+    using LeagueSharp;
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.UI;
     using LeagueSharp.SDK.Utils;
@@ -26,7 +27,8 @@ using EloBuddy;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Combo(EventArgs args)
         {
-            if (Bools.HasSheenBuff() || !Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target))
+            if (Bools.HasSheenBuff() || !Targets.Target.IsValidTarget()
+                || Invulnerable.Check(Targets.Target, DamageType.Magical))
             {
                 return;
             }
@@ -38,6 +40,7 @@ using EloBuddy;
                 && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuBool>().Value)
             {
                 Vars.Q.Cast();
+                return;
             }
 
             /// <summary>
@@ -48,6 +51,7 @@ using EloBuddy;
                 && Vars.Menu["spells"]["w"]["combo"].GetValue<MenuBool>().Value)
             {
                 Vars.W.Cast();
+                return;
             }
 
             /// <summary>
@@ -57,6 +61,7 @@ using EloBuddy;
                 && Vars.Menu["spells"]["e"]["combo"].GetValue<MenuBool>().Value)
             {
                 Vars.E.CastOnUnit(Targets.Target);
+                return;
             }
 
             /// <summary>
@@ -66,7 +71,7 @@ using EloBuddy;
             {
                 Vars.R.CastIfWillHit(
                     Targets.Target,
-                    Vars.Menu["spells"]["r"]["combo"].GetValue<MenuSliderButton>().SValue);
+                    Vars.Menu["spells"]["r"]["combo"].GetValue<MenuSliderButton>().SValue - 1);
             }
         }
 

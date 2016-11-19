@@ -2,7 +2,7 @@
 #pragma warning disable 1587
 
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Akali
 {
     using System;
@@ -79,11 +79,6 @@ using EloBuddy;
             {
                 return;
             }
-
-            /// <summary>
-            ///     Initializes the Automatic actions.
-            /// </summary>
-            Logics.Automatic(args);
 
             /// <summary>
             ///     Initializes the Killsteal events.

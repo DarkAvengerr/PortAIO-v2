@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Jhin
 {
     using ExorAIO.Utilities;
@@ -7,7 +7,6 @@ using EloBuddy;
     using LeagueSharp;
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.Enumerations;
-    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     The settings class.
@@ -21,7 +20,7 @@ using EloBuddy;
         /// </summary>
         public static void Initialize()
         {
-            Vars.Q = new Spell(SpellSlot.Q, GameObjects.Player.GetRealAutoAttackRange());
+            Vars.Q = new Spell(SpellSlot.Q);
             Vars.W = new Spell(SpellSlot.W, 2500f);
             Vars.E = new Spell(SpellSlot.E, 750f);
             Vars.R = new Spell(SpellSlot.R, 3500f);

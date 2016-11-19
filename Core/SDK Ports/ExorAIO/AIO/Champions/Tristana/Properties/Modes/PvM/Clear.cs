@@ -2,7 +2,7 @@
 #pragma warning disable 1587
 
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Tristana
 {
     using System;
@@ -36,7 +36,8 @@ using EloBuddy;
             /// <summary>
             ///     The Q BuildingClear Logic.
             /// </summary>
-            if (Vars.Q.IsReady() && GameObjects.Player.Spellbook.IsAutoAttacking
+            if (Vars.Q.IsReady()
+                && GameObjects.EnemyTurrets.Any(t => t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange()))
                 && Vars.Menu["spells"]["q"]["buildings"].GetValue<MenuBool>().Value)
             {
                 Vars.Q.Cast();
@@ -69,7 +70,7 @@ using EloBuddy;
             ///     The Clear Q Logics.
             /// </summary>
             var objAiBase = Variables.Orbwalker.GetTarget() as Obj_AI_Minion;
-            if (Vars.Q.IsReady() && GameObjects.Player.Spellbook.IsAutoAttacking && objAiBase != null)
+            if (Vars.Q.IsReady() && objAiBase != null)
             {
                 /// <summary>
                 ///     The LaneClear & JungleClear Q Logics.

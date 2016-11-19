@@ -2,7 +2,7 @@
 #pragma warning disable 1587
 
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Caitlyn
 {
     using System;
@@ -14,8 +14,6 @@ using EloBuddy;
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.UI;
     using LeagueSharp.SDK.Utils;
-
-    using SharpDX;
 
     /// <summary>
     ///     The logics class.
@@ -48,10 +46,9 @@ using EloBuddy;
                 {
                     if (Vars.GetImmobileBuffEndTime(target) >= Vars.W.Delay + Game.Ping)
                     {
-                        Vars.W.Cast(
-                            ((Vector2)GameObjects.Player.ServerPosition).Extend(
-                                (Vector2)target.ServerPosition,
-                                (float)(GameObjects.Player.Distance(target) + Vars.W.Width / 1.5)));
+                        Vars.W.Cast(GameObjects.Player.ServerPosition.Extend(
+                                target.ServerPosition,
+                                (float)(GameObjects.Player.Distance(target) + Vars.W.Width*1.5)));
                     }
                 }
             }
@@ -79,13 +76,17 @@ using EloBuddy;
             if (Vars.R.IsReady() && Vars.Menu["spells"]["r"]["bool"].GetValue<MenuBool>().Value
                 && Vars.Menu["spells"]["r"]["key"].GetValue<MenuKeyBind>().Active)
             {
-                Vars.R.CastOnUnit(
+                var target =
                     GameObjects.EnemyHeroes.Where(
                         t =>
-                        t != null && !Invulnerable.Check(t) && t.IsValidTarget(Vars.R.Range)
+                        !Invulnerable.Check(t) && t.IsValidTarget(Vars.R.Range)
                         && Vars.Menu["spells"]["r"]["whitelist"][t.ChampionName.ToLower()].GetValue<MenuBool>().Value)
                         .OrderBy(o => o.Health)
-                        .First());
+                        .FirstOrDefault();
+                if (target != null)
+                {
+                    Vars.R.CastOnUnit(target);
+                }
             }
         }
 

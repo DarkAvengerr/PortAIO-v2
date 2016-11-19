@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Utilities
 {
     using System.Linq;
@@ -14,16 +14,6 @@ using EloBuddy;
     internal class Bools
     {
         #region Public Methods and Operators
-
-        /// <summary>
-        ///     Defines whether the player has a deadly mark.
-        /// </summary>
-        public static bool HasDeadlyMark()
-            =>
-                !Invulnerable.Check(GameObjects.Player, DamageType.True, false)
-                && GameObjects.Player.HasBuff("zedrtargetmark") || GameObjects.Player.HasBuff("summonerexhaust")
-                || GameObjects.Player.HasBuff("fizzmarinerdoombomb") || GameObjects.Player.HasBuff("vladimirhemoplague")
-                || GameObjects.Player.HasBuff("mordekaiserchildrenofthegrave");
 
         /// <summary>
         ///     Gets a value indicating whether the player has a sheen-like buff.
@@ -67,12 +57,8 @@ using EloBuddy;
         public static bool IsPerfectRendTarget(Obj_AI_Base target)
         {
             var hero = target as AIHeroClient;
-            if (hero != null && Invulnerable.Check(hero))
-            {
-                return false;
-            }
-
-            return target.IsValidTarget(Vars.E.Range) && target.HasBuff("kalistaexpungemarker");
+            return (hero == null || !Invulnerable.Check(hero)) && target.IsValidTarget(Vars.E.Range)
+                   && target.HasBuff("kalistaexpungemarker");
         }
 
         /// <summary>
@@ -80,10 +66,13 @@ using EloBuddy;
         /// </summary>
         public static bool IsValidSnare(AIHeroClient target)
         {
-            return
-                target.Buffs.Any(
-                    b =>
-                    b.Type == BuffType.Snare && !Vars.InvalidSnareCasters.Contains(((AIHeroClient)b.Caster).ChampionName));
+            return target.Buffs.Any(
+                b =>
+                    {
+                        var objAiHero = b.Caster as AIHeroClient;
+                        return objAiHero != null && b.Type == BuffType.Snare
+                               && !Vars.InvalidSnareCasters.Contains(objAiHero.ChampionName);
+                    });
         }
 
         /// <summary>
@@ -91,10 +80,13 @@ using EloBuddy;
         /// </summary>
         public static bool IsValidStun(AIHeroClient target)
         {
-            return
-                target.Buffs.Any(
-                    b =>
-                    b.Type == BuffType.Stun && !Vars.InvalidStunCasters.Contains(((AIHeroClient)b.Caster).ChampionName));
+            return target.Buffs.Any(
+                b =>
+                    {
+                        var objAiHero = b.Caster as AIHeroClient;
+                        return objAiHero != null && b.Type == BuffType.Stun
+                               && !Vars.InvalidStunCasters.Contains(objAiHero.ChampionName);
+                    });
         }
 
         /// <summary>

@@ -2,7 +2,7 @@
 #pragma warning disable 1587
 
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Sivir
 {
     using System.Linq;
@@ -40,7 +40,8 @@ using EloBuddy;
                     Vars.QMenu.Add(new MenuBool("killsteal", "KillSteal", true));
                     Vars.QMenu.Add(new MenuBool("logical", "Logical", true));
                     Vars.QMenu.Add(new MenuSliderButton("harass", "Harass / if Mana >= x%", 50, 0, 99, true));
-                    Vars.QMenu.Add(new MenuSliderButton("clear", "Clear / if Mana >= x%", 50, 0, 99, true));
+                    Vars.QMenu.Add(new MenuSliderButton("laneclear", "LaneClear / if Mana >= x%", 50, 0, 99, true));
+                    Vars.QMenu.Add(new MenuSliderButton("jungleclear", "JungleClear / if Mana >= x%", 50, 0, 99, true));
                 }
                 Vars.SpellsMenu.Add(Vars.QMenu);
 
@@ -50,7 +51,8 @@ using EloBuddy;
                 Vars.WMenu = new Menu("w", "Use W to:");
                 {
                     Vars.WMenu.Add(new MenuBool("combo", "Combo", true));
-                    Vars.WMenu.Add(new MenuSliderButton("clear", "Clear / if Mana >= x%", 50, 0, 99, true));
+                    Vars.WMenu.Add(new MenuSliderButton("laneclear", "LaneClear / if Mana >= x%", 50, 0, 99, true));
+                    Vars.WMenu.Add(new MenuSliderButton("jungleclear", "JungleClear / if Mana >= x%", 50, 0, 99, true));
                     Vars.WMenu.Add(new MenuSliderButton("buildings", "Buildings / if Mana >= x%", 50, 0, 99, true));
                 }
                 Vars.SpellsMenu.Add(Vars.WMenu);
@@ -60,14 +62,8 @@ using EloBuddy;
                 /// </summary>
                 Vars.EMenu = new Menu("e", "Use E to:");
                 {
-                    Vars.EMenu.Add(
-                        new MenuSeparator(
-                            "separator",
-                            "It has to be used in conjunction with Evade, else it will not shield Skillshots"));
-                    Vars.EMenu.Add(
-                        new MenuSeparator(
-                            "separator2",
-                            "It is meant to shield what Evade doesn't support, like targetted spells."));
+                    Vars.EMenu.Add(new MenuSeparator("separator", "Evade#/EzEvade: Can shield skillshots."));
+                    Vars.EMenu.Add(new MenuSeparator("separator2", "ExorSivir: Can shield everything else."));
                     Vars.EMenu.Add(new MenuBool("logical", "Logical", true));
                     Vars.EMenu.Add(new MenuSlider("delay", "E Delay (ms)", 0, 0, 250));
                     {

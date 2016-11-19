@@ -2,7 +2,7 @@
 #pragma warning disable 1587
 
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Evelynn
 {
     using System;
@@ -30,10 +30,7 @@ using EloBuddy;
             /// <summary>
             ///     The Q LastHit Logic.
             /// </summary>
-            if (Vars.Q.IsReady()
-                && GameObjects.Player.ManaPercent
-                > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["lasthit"])
-                && Vars.Menu["spells"]["q"]["lasthit"].GetValue<MenuSliderButton>().BValue)
+            if (Vars.Q.IsReady() && Vars.Menu["spells"]["q"]["lasthit"].GetValue<MenuBool>().Value)
             {
                 if (
                     Targets.Minions.Any(

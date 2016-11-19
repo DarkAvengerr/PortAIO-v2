@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Corki
 {
     using LeagueSharp;

@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Nautilus
 {
     using ExorAIO.Utilities;
@@ -21,7 +21,7 @@ using EloBuddy;
         public static void Initialize()
         {
             Vars.Q = new Spell(SpellSlot.Q, 950f);
-            Vars.W = new Spell(SpellSlot.W, GameObjects.Player.BoundingRadius * 2 + 175f);
+            Vars.W = new Spell(SpellSlot.W);
             Vars.E = new Spell(SpellSlot.E, 600f);
             Vars.R = new Spell(SpellSlot.R, 825f);
             Vars.Q.SetSkillshot(0.25f, 90f, 2000f, true, SkillshotType.SkillshotLine);

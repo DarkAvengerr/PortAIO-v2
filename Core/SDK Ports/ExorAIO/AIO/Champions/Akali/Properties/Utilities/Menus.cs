@@ -2,7 +2,7 @@
 #pragma warning disable 1587
 
 using EloBuddy; 
- using LeagueSharp.SDK; 
+using LeagueSharp.SDK; 
  namespace ExorAIO.Champions.Akali
 {
     using ExorAIO.Utilities;
@@ -38,15 +38,6 @@ using EloBuddy;
                     Vars.QMenu.Add(new MenuSliderButton("jungleclear", "JungleClear / if Mana >= x%", 50, 0, 99, true));
                 }
                 Vars.SpellsMenu.Add(Vars.QMenu);
-
-                /// <summary>
-                ///     Sets the menu for the W.
-                /// </summary>
-                Vars.WMenu = new Menu("w", "Use W to:");
-                {
-                    Vars.WMenu.Add(new MenuBool("logical", "Logical", true));
-                }
-                Vars.SpellsMenu.Add(Vars.WMenu);
 
                 /// <summary>
                 ///     Sets the menu for the E.
