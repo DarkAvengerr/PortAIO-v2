@@ -6,7 +6,7 @@ using SharpDX;
 using SebbyLib;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace OneKeyToWin_AIO_Sebby.Champions
 {
     class Varus : Base

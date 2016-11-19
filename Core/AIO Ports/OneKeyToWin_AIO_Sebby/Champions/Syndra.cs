@@ -7,7 +7,7 @@ using SharpDX;
 using SebbyLib;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace OneKeyToWin_AIO_Sebby.Champions
 {
     class Syndra : Base
@@ -21,8 +21,8 @@ using EloBuddy;
             Q = new Spell(SpellSlot.Q, 790);
             W = new Spell(SpellSlot.W, 950);
             E = new Spell(SpellSlot.E, 700);
-            EQ = new Spell(SpellSlot.Q, Q.Range + 400);
-            Eany = new Spell(SpellSlot.Q, Q.Range + 400);
+            EQ = new Spell(SpellSlot.Q, Q.Range + 500);
+            Eany = new Spell(SpellSlot.Q, Q.Range + 500);
             R = new Spell(SpellSlot.R, 675);
 
             Q.SetSkillshot(0.6f, 125f, float.MaxValue, false, SkillshotType.SkillshotCircle);

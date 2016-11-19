@@ -4,7 +4,7 @@ using LeagueSharp.Common;
 using SebbyLib;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace OneKeyToWin_AIO_Sebby.Champions
 {
     class Kindred : Base
@@ -161,19 +161,14 @@ using EloBuddy;
         {
             var rEnemy = Config.Item("Renemy", true).GetValue<Slider>().Value;
 
-            double dmg = OktwCommon.GetIncomingDamage(Player, 1);
-            var enemys = Player.CountEnemiesInRange(900);
+            double dmg = OktwCommon.GetIncomingDamage(Player);
 
-            if (dmg == 0 && enemys == 0)
+            if (dmg == 0 )
                 return;
 
-            if (Player.CountEnemiesInRange(500) < rEnemy)
-            {
-                if (Player.Health - dmg < enemys * Player.Level * 15)
-                    R.Cast(Player);
-                else if (Player.Health - dmg < Player.Level * 15)
-                    R.Cast(Player);
-            }
+            if (Player.Health - dmg <  Player.Level * 10 && Player.CountEnemiesInRange(500) < rEnemy)
+                R.Cast(Player);
+            
         }
 
         private void Jungle()

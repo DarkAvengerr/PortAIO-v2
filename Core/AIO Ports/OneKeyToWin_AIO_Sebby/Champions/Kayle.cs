@@ -6,7 +6,7 @@ using SharpDX;
 using SebbyLib;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace OneKeyToWin_AIO_Sebby.Champions
 {
     class Kayle : Base
@@ -111,15 +111,13 @@ using EloBuddy;
 
         private void LogicR()
         {
-            foreach (var ally in HeroManager.Allies.Where(ally => ally.IsValid && !ally.IsDead && ally.HealthPercent < 70 && Player.ServerPosition.Distance(ally.ServerPosition) < R.Range && Config.Item("Rally" + ally.ChampionName).GetValue<bool>() ))
+            foreach (var ally in HeroManager.Allies.OrderBy(x => x.Health).Where(ally => ally.IsValid && !ally.IsDead && ally.HealthPercent < 70 && Player.ServerPosition.Distance(ally.ServerPosition) < R.Range && Config.Item("Rally" + ally.ChampionName).GetValue<bool>() ))
             {
-                double dmg = OktwCommon.GetIncomingDamage(ally, 0.75f);
-                var enemys = ally.CountEnemiesInRange(800);
-               
-                if (dmg == 0 && enemys == 0)
+                double dmg = OktwCommon.GetIncomingDamage(ally);
+                if (dmg == 0)
                     continue;
 
-                if (ally.Health - dmg <  ally.Level * 20)
+                if (ally.Health - dmg <  ally.Level * 10)
                     R.CastOnUnit(ally);
             }
         }

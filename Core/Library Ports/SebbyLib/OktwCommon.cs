@@ -147,9 +147,10 @@ namespace SebbyLib
             return false;
         }
 
-        public static float GetKsDamage(AIHeroClient t, Spell QWER)
+        public static float GetKsDamage(AIHeroClient t, Spell QWER, bool includeIncomingDamage = true)
         {
-            var totalDmg = QWER.GetDamage(t);
+            var totalDmg = QWER.GetDamage(t) - t.AllShield;
+            totalDmg += GetEchoLudenDamage(t);
             totalDmg -= t.HPRegenRate;
 
             if (totalDmg > t.Health)
@@ -167,7 +168,8 @@ namespace SebbyLib
             }
             //if (Thunderlord && !Player.HasBuff( "masterylordsdecreecooldown"))
             //totalDmg += (float)Player.CalcDamage(t, Damage.DamageType.Magical, 10 * Player.Level + 0.1 * Player.FlatMagicDamageMod + 0.3 * Player.FlatPhysicalDamageMod);
-            totalDmg += (float)GetIncomingDamage(t);
+            if (includeIncomingDamage)
+                totalDmg += (float)GetIncomingDamage(t);
             return totalDmg;
         }
 

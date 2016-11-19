@@ -5,7 +5,7 @@ using LeagueSharp.Common;
 using SebbyLib;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace OneKeyToWin_AIO_Sebby.Champions
 {
     class Morgana : Base
@@ -106,7 +106,7 @@ using EloBuddy;
                     return;
                     //dmg = dmg + sender.GetSpellDamage(ally, args.SData.Name);
                 }
-                else if (Config.Item("skillshot" + ally.ChampionName ,true).GetValue<bool>())
+                else if (args.Target == null && Config.Item("skillshot" + ally.ChampionName ,true).GetValue<bool>())
                 {
                     if (!OktwCommon.CanHitSkillShot(ally, args.Start, args.End, args.SData))
                         continue;
