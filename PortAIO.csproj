@@ -1198,6 +1198,7 @@
     <Compile Include="Core\Champion Ports\Kha%27Zix\SephKhaZix\JumpManager.cs" />
     <Compile Include="Core\Champion Ports\Kha%27Zix\SephKhaZix\Khazix.cs" />
     <Compile Include="Core\Champion Ports\Kha%27Zix\SephKhaZix\KhazixMenu.cs" />
+    <Compile Include="Core\Champion Ports\Kha%27Zix\SephKhaZix\SmiteManager.cs" />
     <Compile Include="Core\Champion Ports\Kha%27Zix\SSKhaZix\DrawDamage.cs" />
     <Compile Include="Core\Champion Ports\Kha%27Zix\SSKhaZix\Program.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\BadaoLeBlanc\Program.cs" />

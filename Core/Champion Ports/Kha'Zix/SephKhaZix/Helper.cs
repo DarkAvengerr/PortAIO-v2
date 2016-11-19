@@ -6,7 +6,7 @@ using SharpDX;
 using System.Linq;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace SephKhazix
 {
     class Helper
@@ -25,7 +25,10 @@ using EloBuddy;
 
         internal JumpManager jumpManager;
 
+        internal SmiteManager SmiteManager;
+
         internal static SpellSlot IgniteSlot;
+        internal static SpellSlot Smiteslot;
         internal static List<AIHeroClient> HeroList;
         internal static List<Obj_AI_Turret> EnemyTurrets = new List<Obj_AI_Turret>();
         internal static Vector3 NexusPosition;
@@ -44,12 +47,12 @@ using EloBuddy;
             Q = new Spell(SpellSlot.Q, 325f);
             W = new Spell(SpellSlot.W, 1000f);
             WE = new Spell(SpellSlot.W, 1000f);
-            E = new Spell(SpellSlot.E, 600f);
+            E = new Spell(SpellSlot.E, 700f);
             R = new Spell(SpellSlot.R, 0);
             W.SetSkillshot(0.225f, 80f, 828.5f, true, SkillshotType.SkillshotLine);
             WE.SetSkillshot(0.225f, 100f, 828.5f, true, SkillshotType.SkillshotLine);
             E.SetSkillshot(0.25f, 300f, 1500f, false, SkillshotType.SkillshotCircle);
-            Ignite = new Spell(IgniteSlot, 550f);
+            Ignite = new Spell(ObjectManager.Player.GetSpellSlot("summonerdot"), 550, TargetSelector.DamageType.True);
 
             Hydra = new Items.Item(3074, 225f);
             Tiamat = new Items.Item(3077, 225f);
@@ -57,8 +60,9 @@ using EloBuddy;
             Bilgewater = new Items.Item(3144, 450f);
             Youmu = new Items.Item(3142, 185f);
             Titanic = new Items.Item(3748, 225f);
-
         }
+
+
 
         internal void EvolutionCheck()
         {
@@ -75,7 +79,7 @@ using EloBuddy;
 
             if (!EvolvedE && Khazix.HasBuff("khazixeevo"))
             {
-                E.Range = 1000;
+                E.Range = 900;
                 EvolvedE = true;
             }
         }
@@ -137,6 +141,10 @@ using EloBuddy;
                 totaldmg += WDmg;
             }
 
+            if (SmiteManager.CanCast(target))
+            {
+                totaldmg += SmiteManager.GetSmiteDamage(target);
+            }
 
             if (Tiamat.IsReady())
             {
@@ -149,6 +157,8 @@ using EloBuddy;
                 double hydradmg = Khazix.GetItemDamage(target, Damage.DamageItems.Hydra);
                 totaldmg += hydradmg;
             }
+
+            
 
             return (float) totaldmg;
 

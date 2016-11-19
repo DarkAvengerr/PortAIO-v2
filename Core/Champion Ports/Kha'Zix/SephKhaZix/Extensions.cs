@@ -6,7 +6,7 @@ using SharpDX;
 using System;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace SephKhazix
 {
     static class Extensions

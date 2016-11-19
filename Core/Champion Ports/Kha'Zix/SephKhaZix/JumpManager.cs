@@ -4,7 +4,7 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace SephKhazix
 {
     class JumpManager
