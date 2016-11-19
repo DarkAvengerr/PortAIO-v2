@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ElKatarinaDecentralized.Utils
 {
     using LeagueSharp;

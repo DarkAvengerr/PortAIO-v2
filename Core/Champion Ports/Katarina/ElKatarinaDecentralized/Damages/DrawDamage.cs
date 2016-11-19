@@ -1,7 +1,7 @@
 using Color = System.Drawing.Color;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ElKatarinaDecentralized.Damages
 {
     using System;

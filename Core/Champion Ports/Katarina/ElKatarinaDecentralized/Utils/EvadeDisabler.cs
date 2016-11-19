@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ElKatarinaDecentralized.Utils
 {
     using System;
@@ -26,7 +26,7 @@ using EloBuddy;
 
         private static Menu EzEvadeMenu
         {
-            get { return Menu.GetMenu("ezEvade", "ezEvade"); }
+            get { return Menu.GetMenu("EzEvade", "ezEvade"); }
         }
 
         public static Menu EvadeMenu
