@@ -12,7 +12,7 @@ using Prediction = SPrediction.Prediction;
 using PredictionInput = SebbyLib.Prediction.PredictionInput;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace SSIvern
 {
     internal class SSIvernInit
@@ -20,17 +20,19 @@ using EloBuddy;
         protected static Spell Q, W, E, R;
         protected static Orbwalking.Orbwalker Orbwalker;
         protected static Obj_AI_Base Daisy;
-        protected static bool DaisyStatus = false;
+        protected static bool DaisyStatus;
         protected static Menu Config;
         private static bool SPredictionLoaded;
+
         public static string[] HighChamps =
-            {
-                "Ahri", "Anivia", "Annie", "Ashe", "Azir", "Brand", "Caitlyn", "Cassiopeia", "Corki", "Draven",
-                "Ezreal", "Graves", "Jinx", "Kalista", "Karma", "Karthus", "Katarina", "Kennen", "KogMaw", "Leblanc",
-                "Lucian", "Lux", "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra", "Talon",
-                "Teemo", "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne", "Veigar", "VelKoz", "Viktor", "Xerath",
-                "Zed", "Ziggs","Kindred","Jhin"
-            };
+        {
+            "Ahri", "Anivia", "Annie", "Ashe", "Azir", "Brand", "Caitlyn", "Cassiopeia", "Corki", "Draven",
+            "Ezreal", "Graves", "Jinx", "Kalista", "Karma", "Karthus", "Katarina", "Kennen", "KogMaw", "Leblanc",
+            "Lucian", "Lux", "Malzahar", "MasterYi", "MissFortune", "Orianna", "Quinn", "Sivir", "Syndra", "Talon",
+            "Teemo", "Tristana", "TwistedFate", "Twitch", "Varus", "Vayne", "Veigar", "VelKoz", "Viktor", "Xerath",
+            "Zed", "Ziggs", "Kindred", "Jhin"
+        };
+
         //protected static int lvl1, lvl2, lvl3, lvl4;
 
         public SSIvernInit()
@@ -102,6 +104,7 @@ using EloBuddy;
             ComboMenu.AddItem(new MenuItem("ComboUseW", "Use W").SetValue(true));
             ComboMenu.AddItem(new MenuItem("ComboUseE", "Use E").SetValue(true));
             ComboMenu.AddItem(new MenuItem("ComboUseItems", "Use Items?").SetValue(true));
+            ComboMenu.AddItem(new MenuItem("ComboDashIfPossibleQ", "Use Q Again to Dash/Gapclose?").SetValue(false).SetTooltip("Will Use Q in Combo Mode again if, Near enemy, there is no more than 1 enemy => Range (1500)", Color.Chartreuse));
             ComboMenu.AddItem(
                 new MenuItem("SemiManualR", "Semi-Manual R Casting?").SetValue(false)
                     .SetTooltip("True - Script will Auto R | False - You will R when you decide - preferably",
@@ -115,16 +118,17 @@ using EloBuddy;
                         "Will use R if there's more than 1 target"));
 
             var DaisyMenu = Config.AddSubMenu(new Menu(":: Daisy", "Daisy"));
-            DaisyMenu.AddItem(new MenuItem("AutoDaisy", "Auto-Play Daisy?").SetValue(true));
+            DaisyMenu.AddItem(new MenuItem("AutoDaisy", "Auto-Play Daisy?").SetValue(false));
             DaisyMenu.AddItem(new MenuItem("DaisyFooter", ":: Soon More Options! <3"));
 
-            var EWhitelistMenu = Config.AddSubMenu(new Menu(":: (E) Protector", "Protector").SetFontStyle(FontStyle.Bold, Color.HotPink));
+            var EWhitelistMenu =
+                Config.AddSubMenu(new Menu(":: (E) Protector", "Protector").SetFontStyle(FontStyle.Bold, Color.HotPink));
             {
                 //EWhitelistMenu.AddItem(new MenuItem("EProtectionAlly", "Use (E) to Protect?").SetValue(true));
                 foreach (var ally in HeroManager.Allies.Where(x => x.IsValid))
-                {
-                    EWhitelistMenu.AddItem(new MenuItem("EProtectionAlly." + ally.ChampionName, "Protect with (E): " + ally.ChampionName).SetValue(HighChamps.Contains(ally.ChampionName)));
-                }
+                    EWhitelistMenu.AddItem(
+                        new MenuItem("EProtectionAlly." + ally.ChampionName, "Protect with (E): " + ally.ChampionName)
+                            .SetValue(HighChamps.Contains(ally.ChampionName)));
             }
 
             var LaneClearMenu = Config.AddSubMenu(new Menu(":: LaneClear", "LaneClear"));
@@ -165,11 +169,13 @@ using EloBuddy;
             DrawingMenu.AddItem(new MenuItem("DrawDaisy", "Draw Daisy Attack Range").SetValue(true));
             DrawingMenu.AddItem(new MenuItem("DrawDaisyStatus", "Draw Daisy Status/Mode!").SetValue(true));
             DrawingMenu.AddItem(new MenuItem("DrawJungleMobPassive", "Draw Jungle Mob Ready!").SetValue(true));
+            DrawingMenu.AddItem(new MenuItem("NotifyProtectedAlly", "Notify when Protected Ally?").SetValue(true));
 
             var GapCloserInterrupter =
                 Config.AddSubMenu(
                     new Menu(":: Anti-GapCloser/Interrupter", "GapCloserInterrupter").SetFontStyle(FontStyle.Bold,
                         Color.Chartreuse));
+            GapCloserInterrupter.AddItem(new MenuItem("EnableAntiGapCloser", "Enable Anti-GapCloser?").SetValue(true));
             GapCloserInterrupter.AddItem(new MenuItem("QToInterrupt", "Q to Interrupt?").SetValue(true));
             GapCloserInterrupter.AddItem(new MenuItem("GapCloserAutoE", "E on Gapclose enemy near you?").SetValue(false));
             GapCloserInterrupter.AddItem(new MenuItem("GapCloserInfo",
@@ -217,15 +223,14 @@ using EloBuddy;
 
             #region DrawDamage
 
-            var drawdamage = new Menu(":: Draw Damage", "drawdamage");
+            var drawdamage = DrawingMenu.AddSubMenu(new Menu(":: Draw Damage", "drawdamage"));
             {
                 var dmgAfterShave =
-                    new MenuItem("SurvivorIvern.DrawComboDamage", "Draw Damage on Enemy's HP Bar").SetValue(true);
+                    drawdamage.AddItem(
+                        new MenuItem("SurvivorIvern.DrawComboDamage", "Draw Damage on Enemy's HP Bar").SetValue(true));
                 var drawFill =
-                    new MenuItem("SurvivorIvern.DrawColour", "Fill Color", true).SetValue(
-                        new Circle(true, System.Drawing.Color.Chartreuse));
-                drawdamage.AddItem(drawFill);
-                drawdamage.AddItem(dmgAfterShave);
+                    drawdamage.AddItem(new MenuItem("SurvivorIvern.DrawColour", "Fill Color", true).SetValue(
+                        new Circle(true, System.Drawing.Color.Chartreuse)));
                 DrawDamage.DamageToUnit = CalculateDamage;
                 DrawDamage.Enabled = dmgAfterShave.GetValue<bool>();
                 DrawDamage.Fill = drawFill.GetValue<Circle>().Active;
@@ -272,12 +277,14 @@ using EloBuddy;
 
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
+            if (!Config.Item("EnableAntiGapCloser").GetValue<bool>())
+                return;
             if (Q.Instance.IsReady())
             {
                 var GapCloser = gapcloser.Sender;
                 if (Config.Item("GapCloserEnemies" + GapCloser.ChampionName).GetValue<bool>() &&
-                    GapCloser.IsValidTarget(400))
-                    Q.Cast(GapCloser.ServerPosition);
+                    GapCloser.IsValidTarget(400) && !Player.HasBuff("ivernqallyjump"))
+                    Q.Cast(gapcloser.End);
                 if (Config.Item("GapCloserAutoE").GetValue<bool>() && GapCloser.IsValidTarget(200))
                     E.CastOnUnit(Player);
             }
@@ -286,7 +293,7 @@ using EloBuddy;
         private void Interrupter2_OnInterruptableTarget(AIHeroClient sender,
             Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (Config.Item("QToInterrupt").GetValue<bool>() && sender.IsValidTarget(Q.Range) && Q.IsReady())
+            if (Config.Item("QToInterrupt").GetValue<bool>() && !Player.HasBuff("ivernqallyjump") && sender.IsValidTarget(Q.Range) && Q.IsReady())
                 Q.Cast(sender);
         }
 
@@ -294,19 +301,70 @@ using EloBuddy;
         {
             if (args.Target is Obj_AI_Minion || !(sender is AIHeroClient))
                 return;
+
+            #region Spell Data Grab
+
             /*Chat.Print("Spell: " + args.SData.Name + " | Width: " + args.SData.LineWidth + " | Speed: " +
                            args.SData.MissileSpeed + " | Delay: " + args.SData.DelayCastOffsetPercent);*/
-            if (E.Instance.IsReady() && sender.IsEnemy && args.Target != null && ((Obj_AI_Base)args.Target).IsValidTarget(E.Range))
+
+            #endregion
+
+            if (E.Instance.IsReady())
             {
+                foreach (var hero in HeroManager.Allies)
+                    if (Config.Item("EProtectionAlly." + hero.ChampionName).GetValue<bool>())
+                        if (hero.Distance(Player.ServerPosition) <= E.Range)
+                            if (OktwCommon.GetIncomingDamage(hero, 2, true) > 0)
+                            {
+                                E.CastOnUnit(hero);
+                                if (Config.Item("NotifyProtectedAlly").GetValue<bool>())
+                                    Notifications.AddNotification(
+                                        new Notification("Protected " + "Ally (" + hero.ChampionName + ")", 4000)
+                                            .SetTextColor(
+                                                System.Drawing.Color.Chartreuse));
+                            }
+
+                #region Useless Stuff
+
+/*if (AllyTarget != null && AllyTarget is AIHeroClient && sender.Target.HealthPercent <= 50 && SpellDamage + 1000 < sender.Target.Health && AllyTarget.IsValidTarget(E.Range))
+                                                                {
+                                                                    if (hero.IncomeDamage > 0 || hero.MinionDamage > hero.Player.Health)
+                                                                        E.CastOnUnit();
+                                                                    E.CastOnUnit((Obj_AI_Base)AllyTarget);
+                                                                    if (Config.Item("NotifyProtectedAlly").GetValue<bool>())
+                                                                    {
+                                                                        Notifications.AddNotification(
+                                                                            new Notification("Protected " + "(" + AllyTarget.Name + ")", 3000).SetTextColor(
+                                                                                System.Drawing.Color.Chartreuse));
+                                                                    }
+                                                                }*/
+
+                #region Other Logic
+
                 //Chat.Print(sender.Target.Name + " | " + args.Target.Type + " | " + args.SData.Name + " | " + sender.Name + " | " + (AIHeroClient)args.Target);
-                if (args.Target is AIHeroClient && Config.Item("EProtectionAlly."+((AIHeroClient)args.Target).ChampionName).GetValue<bool>()
-                    && sender.GetSpellDamage(((Obj_AI_Base)args.Target), args.SData.Name) + 150 > ((Obj_AI_Base)args.Target).Health)
+                /*if (args.Target.Type == GameObjectType.AIHeroClient && Config.Item("EProtectionAlly."+((AIHeroClient)args.Target).ChampionName).GetValue<bool>()
+                    &&  > ((Obj_AI_Base)args.Target).Health)
                 {
-                    E.CastOnUnit((Obj_AI_Base)args.Target);
+                    E.Cast((Obj_AI_Base)args.Target);
                     Notifications.AddNotification(
                         new Notification("Successfully protected " + ((AIHeroClient)args.Target).ChampionName, 3000).SetTextColor(
                             System.Drawing.Color.Chartreuse));
-                }
+                }*/
+
+                #endregion
+
+/*if (AllyProtect != null)
+                                                {
+                                                    E.CastOnUnit(AllyProtect);
+                                                    if (Config.Item("NotifyProtectedAlly").GetValue<bool>())
+                                                    {
+                                                        Notifications.AddNotification(
+                                                            new Notification("Protected " + "(" + AllyProtect.ChampionName + ")", 3000).SetTextColor(
+                                                                System.Drawing.Color.Chartreuse));
+                                                    }
+                                                }*/
+
+                #endregion
             }
         }
 
@@ -396,17 +454,13 @@ using EloBuddy;
         private void Obj_AI_Base_OnCreate(GameObject obj, EventArgs args)
         {
             if (obj.Name == "Ivern_Base_P_cas.troy")
-            {
                 Notifications.AddNotification(
                     new Notification("Jungle Camp claiming.", 4000).SetTextColor(
                         System.Drawing.Color.Chartreuse));
-            }
             if (obj.Name == "Ivern_Base_P_FinishedGround.troy")
-            {
                 Notifications.AddNotification(
                     new Notification("Jungle Camp is now ready.", 4000).SetTextColor(
                         System.Drawing.Color.Chartreuse));
-            }
             if (obj.IsValid && obj.IsAlly && obj is Obj_AI_Minion && (obj.Name.ToLower() == "ivernminion"))
                 Daisy = obj as Obj_AI_Base;
         }
@@ -428,7 +482,6 @@ using EloBuddy;
                 {
                     Render.Circle.DrawCircle(Daisy.Position, 200f, System.Drawing.Color.Chartreuse);
                     if (Config.Item("DrawDaisyStatus").GetValue<bool>())
-                    {
                         switch (DaisyStatus)
                         {
                             case false:
@@ -450,7 +503,6 @@ using EloBuddy;
                             }
                                 break;
                         }
-                    }
                 }
             if (Config.Item("DrawJungleMobPassive").GetValue<bool>())
                 foreach (var junglemob in ObjectManager.Get<Obj_AI_Minion>().Where(x => x.HasBuff("ivernpmanager")))
@@ -529,11 +581,11 @@ using EloBuddy;
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
             if ((target == null) || !target.IsValidTarget())
                 return;
-            if (Player.HasBuff("ivernqallyjump") && (target.CountEnemiesInRange(1000) <= 1))
+            if (Player.HasBuff("ivernqallyjump") && Config.Item("ComboDashIfPossibleQ").GetValue<bool>() && (target.CountEnemiesInRange(1500) <= 1))
                 Q.Cast();
             if (UseE && E.Instance.IsReady() && target.IsValidTarget(E.Range))
                 E.CastOnUnit(Player);
-            if (UseQ && Q.Instance.IsReady())
+            if (UseQ && Q.Instance.IsReady() && !Player.HasBuff("ivernqallyjump"))
                 SebbySpell(Q, target);
             if (!Config.Item("SemiManualR").GetValue<bool>())
                 if (UseR && (Player.CountEnemiesInRange(E.Range) >= ComboMinimumREnemies) && R.Instance.IsReady())
@@ -568,8 +620,8 @@ using EloBuddy;
                         new Notification("Successfully Protected Yourself", 3000).SetTextColor(
                             System.Drawing.Color.Chartreuse));
             }*/
-            if (Config.Item("UseENearbyEnemy").GetValue<bool>() && Player.CountEnemiesInRange(Config.Item("MinimumEnemiesNearEDistance").GetValue<Slider>().Value) >=
-                Config.Item("MinimumEnemiesNearE").GetValue<Slider>().Value && E.IsReady())
+            if (Config.Item("UseENearbyEnemy").GetValue<bool>() && (Player.CountEnemiesInRange(Config.Item("MinimumEnemiesNearEDistance").GetValue<Slider>().Value) >=
+                                                                    Config.Item("MinimumEnemiesNearE").GetValue<Slider>().Value) && E.IsReady())
                 E.CastOnUnit(Player);
         }
 
