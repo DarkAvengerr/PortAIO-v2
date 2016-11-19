@@ -2798,6 +2798,7 @@
     <Compile Include="Core\Champion Ports\Ziggs\RoyalZiggy\Program.cs" />
     <Compile Include="Core\Champion Ports\Ziggs\RoyalZiggy\SmoothMouse.cs" />
     <Compile Include="Core\Champion Ports\Zilean\Support is Easy\Zilean.cs" />
+    <Compile Include="Core\Champion Ports\Zyra\MasterOfPlants\DamageIndicator.cs" />
     <Compile Include="Core\Champion Ports\Zyra\MasterOfPlants\Modes.cs" />
     <Compile Include="Core\Champion Ports\Zyra\MasterOfPlants\Program.cs" />
     <Compile Include="Core\Champion Ports\Zyra\MasterOfPlants\Skills.cs" />

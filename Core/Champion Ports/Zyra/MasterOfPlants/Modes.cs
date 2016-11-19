@@ -7,7 +7,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace MasterOfThorns
 {
     class Modes
@@ -46,6 +46,7 @@ using EloBuddy;
         public void laneClear()
         {          
             var minion = MinionManager.GetMinions(skills.getQ().Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth).FirstOrDefault();
+            if (minion == null) return;
             var useQ = p.getMenu().Item("QL").GetValue<bool>();
             var useW = p.getMenu().Item("WL").GetValue<bool>();
             var useE = p.getMenu().Item("EL").GetValue<bool>();
@@ -54,35 +55,35 @@ using EloBuddy;
             int q = p.getMenu().Item("sethQ").GetValue<Slider>().Value;
        //     Chat.Print("q: " + q + " w: " + w + " e: " + min);
             //    if (!useQ && !useW && !useE) return;
-            if (useQ && !useW && !useE)  skills.qCast(minion,q);
-            else if (!useQ && useW && !useE) skills.wCast(minion,w);
-            else if (!useQ && !useW && useE) skills.eCast(minion, min);
+            if (useQ && !useW && !useE)  skills.qCast(minion,q,p);
+            else if (!useQ && useW && !useE) skills.wCast(minion,w,p);
+            else if (!useQ && !useW && useE) skills.eCast(minion, min,p);
             else if (!useQ && useW && useE) 
             {
-                  skills.eCast(minion, min);
+                  skills.eCast(minion, min,p);
                   if (skills.getE().IsReady() && skills.getE().IsInRange(minion))
-                      skills.wCast(minion,w);
+                      skills.wCast(minion,w,p);
             }
             else if (useQ && !useW && useE) 
             {
-                skills.eCast(minion, min);
-                skills.qCast(minion,q);
+                skills.eCast(minion, min,p);
+                skills.qCast(minion,q,p);
             }
             else if (useQ && useW && !useE) 
             {
-                skills.qCast(minion,q);
+                skills.qCast(minion,q,p);
                 if (skills.getQ().IsReady() && skills.getQ().IsInRange(minion))
-                    skills.wCast(minion,w);
+                    skills.wCast(minion,w,p);
             }
             else if (useQ && useW && useE)
             {
-                skills.eCast(minion, min);
+                skills.eCast(minion, min,p);
                 if (skills.getE().IsReady() && skills.getE().IsInRange(minion))
                 {
-                    skills.wCast(minion,w);
-                    LeagueSharp.Common.Utility.DelayAction.Add(delay, () => skills.qCast(minion,q));
+                    skills.wCast(minion,w,p);
+                    LeagueSharp.Common.Utility.DelayAction.Add(delay, () => skills.qCast(minion,q,p));
                     if (skills.getQ().IsReady() && skills.getQ().IsInRange(minion))                    
-                        LeagueSharp.Common.Utility.DelayAction.Add(delay, () => skills.wCast(minion,w));                                    
+                        LeagueSharp.Common.Utility.DelayAction.Add(delay, () => skills.wCast(minion,w,p));                                    
                 }
             }
             else
@@ -92,6 +93,7 @@ using EloBuddy;
         public void jungleClear()
         {
             var minion = MinionManager.GetMinions(skills.getQ().Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
+            if (minion == null) return;
             var useQ = p.getMenu().Item("QJ").GetValue<bool>();
             var useW =p.getMenu().Item("WJ").GetValue<bool>();
             var useE =p.getMenu().Item("EJ").GetValue<bool>();
@@ -100,37 +102,37 @@ using EloBuddy;
             int w = p.getMenu().Item("sethW").GetValue<Slider>().Value;
          //    Chat.Print("min: " + min);
         //    if (!useQ && !useW && !useE) return;
-            if (useQ && !useW && !useE) skills.qCast(minion,q);
-            else if (!useQ && useW && !useE) skills.wCast(minion,w);
-            else if (!useQ && !useW && useE) skills.eCast(minion,min);           
+            if (useQ && !useW && !useE) skills.qCast(minion,q,p);
+            else if (!useQ && useW && !useE) skills.wCast(minion,w,p);
+            else if (!useQ && !useW && useE) skills.eCast(minion,min,p);           
             else if (!useQ && useW && useE) 
             {
-                skills.eCast(minion, min);       
+                skills.eCast(minion, min,p);       
                 if (skills.getE().IsReady() && skills.getE().IsInRange(minion))
-                    skills.wCast(minion,w);
+                    skills.wCast(minion,w,p);
               
             }
             else if (useQ && !useW && useE) 
             {
-                skills.eCast(minion, min);        
-                skills.qCast(minion,q);             
+                skills.eCast(minion, min,p);        
+                skills.qCast(minion,q,p);             
             }
             else if (useQ && useW && !useE) 
             {
-                skills.qCast(minion,q);
+                skills.qCast(minion,q,p);
                 if (skills.getQ().IsReady() && skills.getQ().IsInRange(minion)) 
-                    skills.wCast(minion,w);                
+                    skills.wCast(minion,w,p);                
             }
             else if (useQ && useW && useE)
             {
             //    Chat.Print("juhngle: ");
-                skills.eCast(minion, min);
+                skills.eCast(minion, min,p);
                 if (skills.getE().IsReady() && skills.getE().IsInRange(minion))
                 {
-                    skills.wCast(minion,w);                   
-                        LeagueSharp.Common.Utility.DelayAction.Add(delay, () => skills.qCast(minion,q));
+                    skills.wCast(minion,w,p);                   
+                        LeagueSharp.Common.Utility.DelayAction.Add(delay, () => skills.qCast(minion,q,p));
                         if (skills.getQ().IsReady() && skills.getQ().IsInRange(minion))                        
-                            LeagueSharp.Common.Utility.DelayAction.Add(delay, () => skills.wCast(minion,w));                                          
+                            LeagueSharp.Common.Utility.DelayAction.Add(delay, () => skills.wCast(minion,w,p));                                          
                 }               
             }
             else
@@ -164,17 +166,17 @@ using EloBuddy;
             int q = p.getMenu().Item("sethQ").GetValue<Slider>().Value;
             int w = p.getMenu().Item("sethW").GetValue<Slider>().Value;
          
-            Chat.Print("haras useQ: "+useQ);
+           // Chat.Print("haras useQ: "+useQ);
             //    if (!useQ && !useW && !useE) return;
             if (useQ && !useW)
-                skills.qCast(getTarget(),q);
+                skills.qCast(getTarget(),q,p);
             else if (!useQ && useW)
-                skills.wCast(getTarget(),w);
+                skills.wCast(getTarget(),w,p);
             else if (useQ && useW)
             {
-                skills.qCast(getTarget(),q);
+                skills.qCast(getTarget(),q,p);
                 if (skills.getQ().IsReady())
-                    skills.wCast(getTarget(),w);
+                    skills.wCast(getTarget(),w,p);
             }
             else
                 return;     
@@ -187,7 +189,7 @@ using EloBuddy;
             {
                 int min = p.getMenu().Item("seth").GetValue<Slider>().Value;
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, p.getPlayer().Position.Extend(Game.CursorPos, 150));
-              p.cast(target,skills.getE(),min);
+                skills.eCast(target, min, p);
             }
             else
                 return;
@@ -197,16 +199,16 @@ using EloBuddy;
         {          
             if (skills.getR().IsReady()) //Añadir para cuantos campeones
             {
-                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, p.getPlayer().Position.Extend(Game.CursorPos, 150));
+          //      EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, p.getPlayer().Position.Extend(Game.CursorPos, 150));
                 var min = p.getMenu().Item("minEnemys").GetValue<Slider>().Value;
                 skills.rCastHit(target,min);
             }
         }
         public void Eplant(int min , int w)
         {
-            p.cast(this.getTarget(), this.skills.getE(), min);
+        skills.eCast(target, min, p);
             if (this.skills.getE().IsReady())
-                this.skills.wCast(target, w);
+                this.skills.wCast(target, w,p);
         }
         public void Qplant(int q , int w)
         {
@@ -217,38 +219,41 @@ using EloBuddy;
             var useQ = p.getMenu().Item("QC").GetValue<bool>();
             var useW = p.getMenu().Item("WC").GetValue<bool>();
             var useE = p.getMenu().Item("EC").GetValue<bool>();
+            var useRkill = p.getMenu().Item("comboR").GetValue<bool>();
             var min = p.getMenu().Item("seth").GetValue<Slider>().Value;
             int q = p.getMenu().Item("sethQ").GetValue<Slider>().Value;
             int w = p.getMenu().Item("sethW").GetValue<Slider>().Value;
+            int r= p.getMenu().Item("sethR").GetValue<Slider>().Value;
+            int minr = p.getMenu().Item("minEnemys").GetValue<Slider>().Value;
             //    if (!useQ && !useW && !useE) return;
-            if (useQ && !useW && !useE)  skills.qCast(getTarget(),q);            
-            else if (!useQ && useW && !useE) skills.wCast(getTarget(),w);             
-            else if (!useQ && !useW && useE) skills.eCast(getTarget(), min);
+            if (useQ && !useW && !useE)  skills.qCast(getTarget(),q,p);            
+            else if (!useQ && useW && !useE) skills.wCast(getTarget(),w,p);             
+            else if (!useQ && !useW && useE) skills.eCast(getTarget(), min,p);
             else if (!useQ && useW && useE)
-            {                
-        p.cast(this.getTarget(), this.skills.getE(), min);
+            {
+                skills.eCast(target, min, p);
                 if (skills.getE().IsReady() && skills.getE().IsInRange(getTarget()))
-                    skills.wCast(getTarget(),w); 
+                    skills.wCast(getTarget(),w,p); 
             }
             else if (useQ && !useW && useE) 
             {
-                p.cast(this.getTarget(), this.skills.getE(), min);
-                skills.qCast(getTarget(),q);
+                skills.eCast(target, min, p);
+                skills.qCast(getTarget(),q,p);
             }
             else if (useQ && useW && !useE) 
             {
-                skills.qCast(getTarget(),q);
+                skills.qCast(getTarget(),q,p);
                 if (skills.getQ().IsReady() && skills.getQ().IsInRange(getTarget()))
-                    skills.wCast(getTarget(),w); 
+                    skills.wCast(getTarget(),w,p); 
             }
             else if (useQ && useW && useE)
             {
-                p.cast(this.getTarget(), this.skills.getE(), min);
+                skills.eCast(target,min, p);
             if (skills.getE().IsReady())
-            skills.wCast(target,w);
-            skills.qCast(target,q);
+            skills.wCast(target,w,p);
+            skills.qCast(target,q,p);
            if(skills.getQ().IsReady())
-             skills.wCast(target,w);
+             skills.wCast(target,w,p);
             /*    skills.eCast(getTarget(), min);
                 if (skills.getE().IsReady() && skills.getE().IsInRange(getTarget()))
                     skills.wCast(getTarget(), w);
@@ -265,7 +270,16 @@ using EloBuddy;
                 //        LeagueSharp.Common.Utility.DelayAction.Add(delay, () => skills.wCast(getTarget(),w));         
                 
             }
-            else
+            if (useRkill)
+            {
+              if(target!=null)
+                if (target.Health <= getSkills().getR().GetDamage(target))
+                {
+                    skills.rCast(target, r, p);
+                }
+            }
+            getSkills().rCastHit(target, minr);
+            
                 return;
         }
 
@@ -281,29 +295,29 @@ using EloBuddy;
             //    if (!useQ && !useW && !useE) return;
             if (useQ && !useE) 
             {
-                p.cast(this.getTarget(), this.skills.getE(), min);
-                skills.rCast(getTarget(),r);
-                skills.qCast(getTarget(),q);
+                skills.eCast(target, min, p);
+                skills.rCast(getTarget(),r,p);
+                skills.qCast(getTarget(),q,p);
             }
             else if (!useQ && useE)
             {
-                skills.rCast(getTarget(),r);
-                p.cast(this.getTarget(), this.skills.getE(), min);
+                skills.rCast(getTarget(),r,p);
+                skills.eCast(target, min, p);
                 if (skills.getE().IsReady() && skills.getE().IsInRange(getTarget()))
-                    skills.wCast(getTarget(),w);                 
+                    skills.wCast(getTarget(),w,p);                 
             }
             else if (useQ && useE)
             {
 
-                p.cast(this.getTarget(), this.skills.getE(), min);
+                skills.eCast(target, min, p);
                 if (skills.getE().IsReady() && skills.getE().IsInRange(getTarget()))
                 {
-                    skills.wCast(getTarget(),w);
-                    LeagueSharp.Common.Utility.DelayAction.Add(delay, () => skills.qCast(getTarget(),q));
+                    skills.wCast(getTarget(),w,p);
+                    LeagueSharp.Common.Utility.DelayAction.Add(delay, () => skills.qCast(getTarget(),q,p));
                     if (skills.getQ().IsReady() && skills.getQ().IsInRange(getTarget()))
-                        LeagueSharp.Common.Utility.DelayAction.Add(delay, () => skills.wCast(getTarget(),w));
+                        LeagueSharp.Common.Utility.DelayAction.Add(delay, () => skills.wCast(getTarget(),w,p));
                 }
-                skills.rCast(getTarget(),r);               
+                skills.rCast(getTarget(),r,p);               
             }
             else
                 return;   
