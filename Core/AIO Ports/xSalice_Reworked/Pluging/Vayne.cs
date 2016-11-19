@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace xSaliceResurrected_Rework.Pluging
 {
     using Base;
@@ -12,6 +12,7 @@ using EloBuddy;
     using Utilities;
     using Color = System.Drawing.Color;
     using Geometry = Utilities.Geometry;
+    using Orbwalking = Orbwalking;
 
     internal class Vayne : Champion
     {

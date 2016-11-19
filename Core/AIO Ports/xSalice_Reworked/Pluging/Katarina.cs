@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace xSaliceResurrected_Rework.Pluging
 {
     using Base;
@@ -14,13 +14,15 @@ using EloBuddy;
 
     internal class Katarina : Champion
     {
+        private int LastCastW;
+
         public Katarina()
         {
-            SpellManager.Q = new Spell(SpellSlot.Q, 625);
-            SpellManager.E = new Spell(SpellSlot.E, 720);
-            SpellManager.R = new Spell(SpellSlot.R, 550);
+            SpellManager.Q = new Spell(SpellSlot.Q, 625f);
+            SpellManager.E = new Spell(SpellSlot.E, 720f);
+            SpellManager.R = new Spell(SpellSlot.R, 550f);
 
-            SpellManager.Q.SetTargetted(400, 1400);
+            SpellManager.Q.SetTargetted(400f, 1400f);
             SpellManager.R.SetCharged("KatarinaR", "KatarinaR", 550, 550, 1.0f);
 
             SpellManager.SpellList.Add(Q);
@@ -36,7 +38,8 @@ using EloBuddy;
                 combo.AddItem(new MenuItem("eDis", "E only if >", true).SetValue(new Slider(0, 0, 700)));
                 combo.AddItem(new MenuItem("smartE", "Smart E with R CD ", true).SetValue(false));
                 combo.AddItem(new MenuItem("UseRCombo", "Use R", true).SetValue(true));
-                combo.AddItem(new MenuItem("comboMode", "Mode", true).SetValue(new StringList(new[] {"QE", "EQ"})));
+                combo.AddItem(
+                    new MenuItem("comboMode", "Mode", true).SetValue(new StringList(new[] {"Beta(QWEE)", "QEW", "EQW"}, 1)));
                 Menu.AddSubMenu(combo);
             }
 
@@ -47,7 +50,8 @@ using EloBuddy;
                 harass.AddItem(new MenuItem("UseEHarass", "Use E", true).SetValue(false));
                 harass.AddItem(new MenuItem("UseEDaggerHarass", "Use E to Dagger", true).SetValue(true));
                 harass.AddItem(
-                    new MenuItem("harassMode", "Mode", true).SetValue(new StringList(new[] {"QE", "EQ", "Q"}, 2)));
+                    new MenuItem("harassMode", "Mode", true).SetValue(
+                        new StringList(new[] {"Beta(QWEE)", "QEW", "EQW", "Q"}, 3)));
                 harass.AddItem(
                     new MenuItem("FarmT", "Harass (toggle)!", true).SetValue(new KeyBind("N".ToCharArray()[0],
                         KeyBindType.Toggle)));
@@ -82,11 +86,11 @@ using EloBuddy;
 
             var drawing = new Menu("Drawings", "Drawings");
             {
-                drawing.AddItem(new MenuItem("QRange", "Q range", true).SetValue(new Circle(false, Color.FromArgb(100, 255, 0, 255))));
-                drawing.AddItem(new MenuItem("ERange", "E range", true).SetValue(new Circle(false, Color.FromArgb(100, 255, 0, 255))));
-                drawing.AddItem(new MenuItem("RRange", "R range", true).SetValue(new Circle(false, Color.FromArgb(100, 255, 0, 255))));
-                drawing.AddItem(new MenuItem("Draw_Mode", "Draw E Mode", true).SetValue(new Circle(false, Color.FromArgb(100, 255, 0, 255))));
-
+                drawing.AddItem(new MenuItem("QRange", "Q range", true).SetValue(false));
+                drawing.AddItem(new MenuItem("ERange", "E range", true).SetValue(false));
+                drawing.AddItem(new MenuItem("RRange", "R range", true).SetValue(false));
+                drawing.AddItem(new MenuItem("Draw_Mode", "Draw E Mode", true).SetValue(true));
+                
                 var drawComboDamageMenu = new MenuItem("Draw_ComboDamage", "Draw Combo Damage", true).SetValue(true);
                 var drawFill = new MenuItem("Draw_Fill", "Draw Combo Damage Fill", true).SetValue(new Circle(true, Color.FromArgb(90, 255, 169, 4)));
                 drawing.AddItem(drawComboDamageMenu);
@@ -193,147 +197,273 @@ using EloBuddy;
             }
 
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-            var Dagger =
-                ObjectManager.Get<Obj_AI_Minion>()
-                    .FirstOrDefault(x => x.CharData.BaseSkinName == "testcuberender" && x.Health > 1 && x.IsValid);
-            var mode = Menu.Item("comboMode", true).GetValue<StringList>().SelectedIndex;
-
-            var eDis = Menu.Item("eDis", true).GetValue<Slider>().Value;
 
             if (!target.IsValidTarget(E.Range))
+            {
                 return;
+            }
 
             if (!target.HasBuffOfType(BuffType.Invulnerability) && !target.IsZombie)
             {
-                if (mode == 0)
+                switch (Menu.Item("comboMode", true).GetValue<StringList>().SelectedIndex)
                 {
-                    var itemTarget = TargetSelector.GetTarget(750, TargetSelector.DamageType.Physical);
-
-                    if (itemTarget != null && E.IsReady())
-                    {
-                        var dmg = GetComboDamage(itemTarget);
-
-                        ItemManager.Target = itemTarget;
-
-                        if (dmg > itemTarget.Health - 50)
-                            ItemManager.KillableTarget = true;
-
-                        ItemManager.UseTargetted = true;
-                    }
-
-
-                    if (Menu.Item("UseQCombo", true).GetValue<bool>() && Q.IsReady() &&
-                        target.IsValidTarget(Q.Range))
-                    {
-                        Q.Cast(target);
-                    }
-
-                    if (Menu.Item("UseEDaggerCombo", true).GetValue<bool>() && Dagger != null 
-                        && Dagger.Distance(Player) <= E.Range)
-                    {
-                        if (Menu.Item("smartE", true).GetValue<bool>() &&
-                            Player.CountEnemiesInRange(500) > 2 &&
-                            (!R.IsReady() || !(RSpell.State == SpellState.Surpressed && R.Level > 0)))
+                    case 0:
                         {
-                            return;
+                            var itemTarget = TargetSelector.GetTarget(750, TargetSelector.DamageType.Physical);
+
+                            if (itemTarget != null && E.IsReady())
+                            {
+                                var dmg = GetComboDamage(itemTarget);
+
+                                ItemManager.Target = itemTarget;
+
+                                if (dmg > itemTarget.Health - 50)
+                                    ItemManager.KillableTarget = true;
+
+                                ItemManager.UseTargetted = true;
+                            }
+
+                            if (Menu.Item("UseQCombo", true).GetValue<bool>() && Q.IsReady() && 
+                                target.IsValidTarget(Q.Range))
+                            {
+                                Q.Cast(target);
+                            }
+
+                            var targetDagger =
+                                ObjectManager
+                                    .Get<Obj_AI_Minion>()
+                                    .FirstOrDefault(
+                                        x => x.CharData.BaseSkinName == "testcuberender" && x.Health > 1
+                                        && x.IsValid && x.Distance(Player) <= E.Range
+                                        && x.Distance(target) <= 400);
+
+                            if (Utils.TickCount - Q.LastCastAttemptT > 800 && targetDagger != null)
+                            {
+                                if (Menu.Item("UseWCombo", true).GetValue<bool>() &&
+                                    Player.GetSpell(SpellSlot.W).IsReady())
+                                {
+                                    if (Player.Spellbook.CastSpell(SpellSlot.W))
+                                    {
+                                        LastCastW = Utils.TickCount;
+                                    }
+                                }
+
+                                if (Utils.TickCount - LastCastW > 1000)
+                                {
+                                    if (Menu.Item("UseEDaggerCombo", true).GetValue<bool>()
+                                        && targetDagger.Distance(Player) <= E.Range)
+                                    {
+                                        if (Menu.Item("smartE", true).GetValue<bool>() &&
+                                            Player.CountEnemiesInRange(500) > 2 &&
+                                            (!R.IsReady() || !(RSpell.State == SpellState.Surpressed && R.Level > 0)))
+                                        {
+                                            return;
+                                        }
+
+                                        var delay = Menu.Item("E_Delay_Slider", true).GetValue<Slider>().Value;
+
+                                        if (targetDagger.Position.CountEnemiesInRange(400) > 0)
+                                        {
+                                            Orbwalker.SetAttack(false);
+                                            Orbwalker.SetMovement(false);
+                                            E.Cast(targetDagger, true);
+                                            E.LastCastAttemptT = Utils.TickCount + delay;
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (Menu.Item("UseWCombo", true).GetValue<bool>() && 
+                                    Player.GetSpell(SpellSlot.W).IsReady())
+                                {
+                                    if (Player.Spellbook.CastSpell(SpellSlot.W))
+                                    {
+                                        LastCastW = Utils.TickCount;
+                                    }
+                                }
+
+                                if (Utils.TickCount - LastCastW > 1000)
+                                {
+                                    if (Menu.Item("UseECombo", true).GetValue<bool>() && E.IsReady() &&
+                                        target.IsValidTarget(E.Range) &&
+                                        Utils.TickCount - E.LastCastAttemptT > 0 &&
+                                        Player.Distance(target.Position) > Menu.Item("eDis", true).GetValue<Slider>().Value
+                                        && !Q.IsReady())
+                                    {
+                                        if (Menu.Item("smartE", true).GetValue<bool>() &&
+                                            Player.CountEnemiesInRange(500) > 2 &&
+                                            (!R.IsReady() || !(RSpell.State == SpellState.Surpressed && R.Level > 0)))
+                                            return;
+
+                                        var delay = Menu.Item("E_Delay_Slider", true).GetValue<Slider>().Value;
+
+                                        Orbwalker.SetAttack(false);
+                                        Orbwalker.SetMovement(false);
+                                        E.Cast(target, true);
+                                        E.LastCastAttemptT = Utils.TickCount + delay;
+                                    }
+                                }
+                            }
                         }
-
-                        var delay = Menu.Item("E_Delay_Slider", true).GetValue<Slider>().Value;
-
-                        if (Dagger.Position.CountEnemiesInRange(400) > 0)
+                        break;
+                    case 1:
                         {
-                            Orbwalker.SetAttack(false);
-                            Orbwalker.SetMovement(false);
-                            E.Cast(Dagger, true);
-                            E.LastCastAttemptT = Utils.TickCount + delay;
+                            var itemTarget = TargetSelector.GetTarget(750, TargetSelector.DamageType.Physical);
+
+                            if (itemTarget != null && E.IsReady())
+                            {
+                                var dmg = GetComboDamage(itemTarget);
+
+                                ItemManager.Target = itemTarget;
+
+                                if (dmg > itemTarget.Health - 50)
+                                    ItemManager.KillableTarget = true;
+
+                                ItemManager.UseTargetted = true;
+                            }
+
+
+                            if (Menu.Item("UseQCombo", true).GetValue<bool>() && Q.IsReady() &&
+                                target.IsValidTarget(Q.Range))
+                            {
+                                Q.Cast(target);
+                            }
+
+                            if (Menu.Item("UseEDaggerCombo", true).GetValue<bool>())
+                            {
+                                var Dagger =
+                                    ObjectManager.Get<Obj_AI_Minion>()
+                                        .FirstOrDefault(
+                                            x =>
+                                                x.CharData.BaseSkinName == "testcuberender" && x.Health > 1 &&
+                                                x.IsValid);
+
+                                if (Dagger != null && Dagger.Distance(Player) <= E.Range)
+                                {
+                                    if (Menu.Item("smartE", true).GetValue<bool>() &&
+                                        Player.CountEnemiesInRange(500) > 2 &&
+                                        (!R.IsReady() || !(RSpell.State == SpellState.Surpressed && R.Level > 0)))
+                                    {
+                                        return;
+                                    }
+
+                                    var delay = Menu.Item("E_Delay_Slider", true).GetValue<Slider>().Value;
+
+                                    if (Dagger.Position.CountEnemiesInRange(400) > 0)
+                                    {
+                                        Orbwalker.SetAttack(false);
+                                        Orbwalker.SetMovement(false);
+                                        E.Cast(Dagger, true);
+                                        E.LastCastAttemptT = Utils.TickCount + delay;
+                                    }
+                                }
+                            }
+
+                            if (Menu.Item("UseECombo", true).GetValue<bool>() && E.IsReady() &&
+                                target.IsValidTarget(E.Range) &&
+                                Utils.TickCount - E.LastCastAttemptT > 0 &&
+                                Player.Distance(target.Position) > Menu.Item("eDis", true).GetValue<Slider>().Value
+                                && !Q.IsReady())
+                            {
+                                if (Menu.Item("smartE", true).GetValue<bool>() &&
+                                    Player.CountEnemiesInRange(500) > 2 &&
+                                    (!R.IsReady() || !(RSpell.State == SpellState.Surpressed && R.Level > 0)))
+                                    return;
+
+                                var delay = Menu.Item("E_Delay_Slider", true).GetValue<Slider>().Value;
+
+                                Orbwalker.SetAttack(false);
+                                Orbwalker.SetMovement(false);
+                                E.Cast(target, true);
+                                E.LastCastAttemptT = Utils.TickCount + delay;
+                            }
                         }
-                    }
+                        break;
+                    case 2:
+                        {
+                            var itemTarget = TargetSelector.GetTarget(750, TargetSelector.DamageType.Physical);
 
-                    if (Menu.Item("UseECombo", true).GetValue<bool>() && E.IsReady() &&
-                        target.IsValidTarget(E.Range) &&
-                        Utils.TickCount - E.LastCastAttemptT > 0 &&
-                        Player.Distance(target.Position) > eDis && !Q.IsReady())
-                    {
-                        if (Menu.Item("smartE", true).GetValue<bool>() &&
-                            Player.CountEnemiesInRange(500) > 2 &&
-                            (!R.IsReady() || !(RSpell.State == SpellState.Surpressed && R.Level > 0)))
-                            return;
+                            if (itemTarget != null && E.IsReady())
+                            {
+                                var dmg = GetComboDamage(itemTarget);
 
-                        var delay = Menu.Item("E_Delay_Slider", true).GetValue<Slider>().Value;
+                                ItemManager.Target = itemTarget;
 
-                        Orbwalker.SetAttack(false);
-                        Orbwalker.SetMovement(false);
-                        E.Cast(target, true);
-                        E.LastCastAttemptT = Utils.TickCount + delay;
-                    }
+                                if (dmg > itemTarget.Health - 50)
+                                    ItemManager.KillableTarget = true;
+
+                                ItemManager.UseTargetted = true;
+                            }
+
+                            if (Menu.Item("UseEDaggerCombo", true).GetValue<bool>())
+                            {
+                                var Dagger =
+                                    ObjectManager.Get<Obj_AI_Minion>()
+                                        .FirstOrDefault(
+                                            x =>
+                                                x.CharData.BaseSkinName == "testcuberender" && x.Health > 1 &&
+                                                x.IsValid);
+
+                                if (Dagger != null && Dagger.Distance(Player) <= E.Range)
+                                {
+                                    if (Menu.Item("smartE", true).GetValue<bool>() &&
+                                        Player.CountEnemiesInRange(500) > 2 &&
+                                        (!R.IsReady() || !(RSpell.State == SpellState.Surpressed && R.Level > 0)))
+                                    {
+                                        return;
+                                    }
+
+                                    var delay = Menu.Item("E_Delay_Slider", true).GetValue<Slider>().Value;
+
+                                    if (Dagger.Position.CountEnemiesInRange(400) > 0)
+                                    {
+                                        Orbwalker.SetAttack(false);
+                                        Orbwalker.SetMovement(false);
+                                        E.Cast(Dagger, true);
+                                        E.LastCastAttemptT = Utils.TickCount + delay;
+                                    }
+                                }
+                            }
+
+                            if (Menu.Item("UseECombo", true).GetValue<bool>() && E.IsReady() &&
+                                target.IsValidTarget(E.Range) &&
+                                Utils.TickCount - E.LastCastAttemptT > 0 &&
+                                Player.Distance(target.Position) > Menu.Item("eDis", true).GetValue<Slider>().Value
+                                && !Q.IsReady())
+                            {
+                                if (Menu.Item("smartE", true).GetValue<bool>() &&
+                                    Player.CountEnemiesInRange(500) > 2 &&
+                                    (!R.IsReady() || !(RSpell.State == SpellState.Surpressed && R.Level > 0)))
+                                    return;
+
+                                var delay = Menu.Item("E_Delay_Slider", true).GetValue<Slider>().Value;
+
+                                Orbwalker.SetAttack(false);
+                                Orbwalker.SetMovement(false);
+                                E.Cast(target, true);
+                                E.LastCastAttemptT = Utils.TickCount + delay;
+                            }
+
+                            if (Menu.Item("UseQCombo", true).GetValue<bool>() && Q.IsReady() &&
+                                target.IsValidTarget(Q.Range))
+                            {
+                                Q.Cast(target, true);
+                            }
+                        }
+                        break;
                 }
-                else if (mode == 1)
+
+                if (Menu.Item("comboMode", true).GetValue<StringList>().SelectedIndex != 0 &&
+                    Menu.Item("UseWCombo", true).GetValue<bool>() && Player.GetSpell(SpellSlot.W).IsReady() &&
+                    (target.IsValidTarget(300) ||
+                     (!E.IsReady() && target.IsValidTarget(E.Range))))
+
                 {
-                    var itemTarget = TargetSelector.GetTarget(750, TargetSelector.DamageType.Physical);
-
-                    if (itemTarget != null && E.IsReady())
+                    if (Player.Spellbook.CastSpell(SpellSlot.W))
                     {
-                        var dmg = GetComboDamage(itemTarget);
-
-                        ItemManager.Target = itemTarget;
-
-                        if (dmg > itemTarget.Health - 50)
-                            ItemManager.KillableTarget = true;
-
-                        ItemManager.UseTargetted = true;
+                        LastCastW = Utils.TickCount;
                     }
-
-                    if (Menu.Item("UseEDaggerCombo", true).GetValue<bool>() && Dagger != null
-                        && Dagger.Distance(Player) <= E.Range)
-                    {
-                        if (Menu.Item("smartE", true).GetValue<bool>() &&
-                            Player.CountEnemiesInRange(500) > 2 &&
-                            (!R.IsReady() || !(RSpell.State == SpellState.Surpressed && R.Level > 0)))
-                        {
-                            return;
-                        }
-
-                        var delay = Menu.Item("E_Delay_Slider", true).GetValue<Slider>().Value;
-
-                        if (Dagger.Position.CountEnemiesInRange(400) > 0)
-                        {
-                            Orbwalker.SetAttack(false);
-                            Orbwalker.SetMovement(false);
-                            E.Cast(Dagger, true);
-                            E.LastCastAttemptT = Utils.TickCount + delay;
-                        }
-                    }
-
-                    if (Menu.Item("UseECombo", true).GetValue<bool>() && E.IsReady() &&
-                        target.IsValidTarget(E.Range) &&
-                        Utils.TickCount - E.LastCastAttemptT > 0 &&
-                        Player.Distance(target.Position) > eDis && !Q.IsReady())
-                    {
-                        if (Menu.Item("smartE", true).GetValue<bool>() &&
-                            Player.CountEnemiesInRange(500) > 2 &&
-                            (!R.IsReady() || !(RSpell.State == SpellState.Surpressed && R.Level > 0)))
-                            return;
-
-                        var delay = Menu.Item("E_Delay_Slider", true).GetValue<Slider>().Value;
-
-                        Orbwalker.SetAttack(false);
-                        Orbwalker.SetMovement(false);
-                        E.Cast(target, true);
-                        E.LastCastAttemptT = Utils.TickCount + delay;
-                    }
-
-                    if (Menu.Item("UseQCombo", true).GetValue<bool>() && Q.IsReady() &&
-                        target.IsValidTarget(Q.Range))
-                    {
-                        Q.Cast(target, true);
-                    }
-                }
-
-                if (Menu.Item("UseWCombo", true).GetValue<bool>() && Player.GetSpell(SpellSlot.W).IsReady() &&
-                    (target.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)) || 
-                    (!E.IsReady() && target.IsValidTarget(E.Range))))
-                {
-                    Player.Spellbook.CastSpell(SpellSlot.W);
                 }
 
                 if (Menu.Item("UseRCombo", true).GetValue<bool>() && R.IsReady() &&
@@ -360,71 +490,148 @@ using EloBuddy;
             var Dagger =
                 ObjectManager.Get<Obj_AI_Minion>()
                     .FirstOrDefault(x => x.CharData.BaseSkinName == "testcuberender" && x.Health > 1 && x.IsValid);
+            var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
 
-            var qTarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-            var wTarget = TargetSelector.GetTarget(Orbwalking.GetRealAutoAttackRange(Player),
-                TargetSelector.DamageType.Magical);
-            var eTarget = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-            var mode = Menu.Item("harassMode", true).GetValue<StringList>().SelectedIndex;
-
-            if (mode == 0)
+            switch (Menu.Item("harassMode", true).GetValue<StringList>().SelectedIndex)
             {
-                if (Menu.Item("UseQHarass", true).GetValue<bool>() && Q.IsReady() && 
-                    qTarget != null && qTarget.IsValidTarget(Q.Range))
-                {
-                    Q.Cast(qTarget, true);
-                }
+                case 0:
+                    {
+                        if (Menu.Item("UseQHarass", true).GetValue<bool>() && Q.IsReady() &&
+                            target.IsValidTarget(Q.Range))
+                        {
+                            Q.Cast(target);
+                        }
 
-                if (Menu.Item("UseEHarass", true).GetValue<bool>() && eTarget != null && E.IsReady() &&
-                    !Q.IsReady() && eTarget.IsValidTarget(E.Range))
-                {
-                    if (Menu.Item("UseEDaggerHarass", true).GetValue<bool>() && Dagger != null 
-                        && eTarget.Distance(Dagger) <= 400)
-                    {
-                        E.Cast(Dagger, true);
-                    }
-                    else
-                    {
-                        E.Cast(eTarget, true);
-                    }
-                }
-            }
-            else if (mode == 1)
-            {
-                if (Menu.Item("UseEHarass", true).GetValue<bool>() && eTarget != null &&
-                    E.IsReady() && eTarget.IsValidTarget(E.Range))
-                {
-                    if (Menu.Item("UseEDaggerHarass", true).GetValue<bool>() && Dagger != null
-                        && eTarget.Distance(Dagger) <= 400)
-                    {
-                        E.Cast(Dagger, true);
-                    }
-                    else
-                    {
-                        E.Cast(eTarget, true);
-                    }
-                }
+                        var targetDagger =
+                            ObjectManager
+                                .Get<Obj_AI_Minion>()
+                                .FirstOrDefault(
+                                    x => x.CharData.BaseSkinName == "testcuberender" && x.Health > 1
+                                    && x.IsValid && x.Distance(Player) <= E.Range
+                                    && x.Distance(target) <= 400);
 
-                if (Menu.Item("UseQHarass", true).GetValue<bool>() && Q.IsReady() && qTarget != null &&
-                    qTarget.IsValidTarget(Q.Range))
-                {
-                    Q.Cast(qTarget, true);
-                }
-            }
-            else if (mode == 2)
-            {
-                if (Menu.Item("UseQHarass", true).GetValue<bool>() && Q.IsReady() && qTarget != null &&
-                    qTarget.IsValidTarget(Q.Range))
-                {
-                    Q.Cast(qTarget, true);
-                }
-            }
+                        if (Utils.TickCount - Q.LastCastAttemptT > 800 && targetDagger != null)
+                        {
+                            if (Menu.Item("UseWHarass", true).GetValue<bool>() &&
+                                Player.GetSpell(SpellSlot.W).IsReady())
+                            {
+                                if (Player.Spellbook.CastSpell(SpellSlot.W))
+                                {
+                                    LastCastW = Utils.TickCount;
+                                }
+                            }
 
-            if (Menu.Item("UseWHarass", true).GetValue<bool>() && wTarget != null 
-                && Player.GetSpell(SpellSlot.W).IsReady() &&
-                wTarget.IsValidTarget(Orbwalking.GetRealAutoAttackRange(Player)))
-            {
-                Player.Spellbook.CastSpell(SpellSlot.W);
+                            if (Utils.TickCount - LastCastW > 1000)
+                            {
+                                if (Menu.Item("UseEDaggerHarass", true).GetValue<bool>()
+                                    && targetDagger.Distance(Player) <= E.Range)
+                                {
+                                    if (targetDagger.Position.CountEnemiesInRange(400) > 0)
+                                    {
+                                        Orbwalker.SetAttack(false);
+                                        Orbwalker.SetMovement(false);
+                                        E.Cast(targetDagger, true);
+                                        E.LastCastAttemptT = Utils.TickCount;
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (Menu.Item("UseWHarass", true).GetValue<bool>() &&
+                                Player.GetSpell(SpellSlot.W).IsReady())
+                            {
+                                if (Player.Spellbook.CastSpell(SpellSlot.W))
+                                {
+                                    LastCastW = Utils.TickCount;
+                                }
+                            }
+
+                            if (Utils.TickCount - LastCastW > 1000)
+                            {
+                                if (Menu.Item("UseEHarass", true).GetValue<bool>() && E.IsReady() &&
+                                    target.IsValidTarget(E.Range) &&
+                                    Utils.TickCount - E.LastCastAttemptT > 0 &&
+                                    Player.Distance(target.Position) > 0 && !Q.IsReady())
+                                {
+                                    Orbwalker.SetAttack(false);
+                                    Orbwalker.SetMovement(false);
+                                    E.Cast(target, true);
+                                    E.LastCastAttemptT = Utils.TickCount;
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 1:
+                    {
+                        if (Menu.Item("UseQHarass", true).GetValue<bool>() && Q.IsReady() &&
+                            target != null && target.IsValidTarget(Q.Range))
+                        {
+                            Q.Cast(target, true);
+                        }
+
+                        if (Menu.Item("UseEHarass", true).GetValue<bool>() && target != null && E.IsReady() &&
+                            !Q.IsReady() && target.IsValidTarget(E.Range))
+                        {
+                            if (Menu.Item("UseEDaggerHarass", true).GetValue<bool>() && Dagger != null
+                                && target.Distance(Dagger) <= 400)
+                            {
+                                E.Cast(Dagger, true);
+                            }
+                            else
+                            {
+                                E.Cast(target, true);
+                            }
+                        }
+
+                        if (Menu.Item("UseWHarass", true).GetValue<bool>() && target != null
+                            && Player.GetSpell(SpellSlot.W).IsReady() &&
+                            target.IsValidTarget(300))
+                        {
+                            Player.Spellbook.CastSpell(SpellSlot.W);
+                        }
+                    }
+                    break;
+                case 2:
+                    {
+                        if (Menu.Item("UseEHarass", true).GetValue<bool>() && target != null &&
+                            E.IsReady() && target.IsValidTarget(E.Range))
+                        {
+                            if (Menu.Item("UseEDaggerHarass", true).GetValue<bool>() && Dagger != null
+                                && target.Distance(Dagger) <= 400)
+                            {
+                                E.Cast(Dagger, true);
+                            }
+                            else
+                            {
+                                E.Cast(target, true);
+                            }
+                        }
+
+                        if (Menu.Item("UseQHarass", true).GetValue<bool>() && Q.IsReady() && target != null &&
+                            target.IsValidTarget(Q.Range))
+                        {
+                            Q.Cast(target, true);
+                        }
+
+                        if (Menu.Item("UseWHarass", true).GetValue<bool>() && target != null
+                            && Player.GetSpell(SpellSlot.W).IsReady() &&
+                            target.IsValidTarget(300))
+                        {
+                            Player.Spellbook.CastSpell(SpellSlot.W);
+                        }
+                    }
+                    break;
+                case 3:
+                    {
+                        if (Menu.Item("UseQHarass", true).GetValue<bool>() && Q.IsReady() && target != null &&
+                            target.IsValidTarget(Q.Range))
+                        {
+                            Q.Cast(target, true);
+                        }
+                    }
+                    break;
             }
         }
 
@@ -482,29 +689,45 @@ using EloBuddy;
                 Q.Cast(allMinionsQ[0]);
             }
 
-            if (useE && allMinionsQ.Count > 0 && E.IsReady() && allMinionsQ[0].IsValidTarget(E.Range))
-            {
-                E.Cast(allMinionsE[0]);
-            }
-
-            if (useEDagger && Dagger != null && E.IsReady())
+            if (Dagger != null && Dagger.Distance(Player) <= E.Range)
             {
                 var daggerMinions = MinionManager.GetMinions(Dagger.Position, 400);
 
-                if (daggerMinions.Count > 2)
+                if (daggerMinions.Count >= 2)
                 {
-                    E.CastOnUnit(Dagger);
+                    if (useW && Player.GetSpell(SpellSlot.W).IsReady())
+                    {
+                        if (allMinionsW.Count >= 2)
+                        {
+                            foreach (var minion in allMinionsW)
+                            {
+                                if (Player.Spellbook.CastSpell(SpellSlot.W))
+                                {
+                                    LastCastW = Utils.TickCount;
+                                }
+                            }
+                        }
+                    }
+
+                    if (useE && Utils.TickCount - LastCastW > 1000 && E.IsReady() && Dagger.Distance(Player) <= E.Range)
+                    {
+                        E.CastOnUnit(Dagger);
+                    }
                 }
             }
-
-            if (useW && Player.GetSpell(SpellSlot.W).IsReady())
+            else
             {
-                if (allMinionsW.Count > 2)
+                if (useW && Player.GetSpell(SpellSlot.W).IsReady())
                 {
-                    foreach (var minion in allMinionsW)
+                    if (allMinionsW.Count >= 2)
                     {
-                        if (!Q.IsReady())
-                            Player.Spellbook.CastSpell(SpellSlot.W);
+                        foreach (var minion in allMinionsW)
+                        {
+                            if (Player.Spellbook.CastSpell(SpellSlot.W))
+                            {
+                                LastCastW = Utils.TickCount;
+                            }
+                        }
                     }
                 }
             }
@@ -537,25 +760,47 @@ using EloBuddy;
                 Q.Cast(allMinionsQ[0]);
             }
 
-            if (useE && allMinionsQ.Count > 0 && E.IsReady() && allMinionsQ[0].IsValidTarget(E.Range))
+            if (Dagger != null && Dagger.Distance(Player) <= E.Range)
             {
-                E.Cast(allMinionsE[0]);
-            }
-
-            if (useEDagger && Dagger != null && E.IsReady())
-            {
-                var daggerMinions = MinionManager.GetMinions(Dagger.Position, 400);
+                var daggerMinions = MinionManager.GetMinions(Dagger.Position, 400, MinionTypes.All, MinionTeam.Neutral,
+                    MinionOrderTypes.MaxHealth);
 
                 if (daggerMinions.Count >= 1)
                 {
-                    E.CastOnUnit(Dagger);
+                    if (useW && Player.GetSpell(SpellSlot.W).IsReady())
+                    {
+                        if (Player.Spellbook.CastSpell(SpellSlot.W))
+                        {
+                            LastCastW = Utils.TickCount;
+                        }
+                    }
+
+                    if (useEDagger && E.IsReady() && Utils.TickCount - LastCastW > 1000)
+                    {
+                        if (daggerMinions.Count >= 1)
+                        {
+                            E.CastOnUnit(Dagger);
+                        }
+                    }
                 }
             }
-
-            if (useW && Player.GetSpell(SpellSlot.W).IsReady())
+            else
             {
-                if (allMinionsW.Count > 0)
-                    Player.Spellbook.CastSpell(SpellSlot.W);
+                if (useE && allMinionsQ.Count > 0 && E.IsReady() && allMinionsQ[0].IsValidTarget(E.Range))
+                {
+                    E.Cast(allMinionsE[0]);
+                }
+
+                if (useW && Player.GetSpell(SpellSlot.W).IsReady())
+                {
+                    if (allMinionsW.Count > 0)
+                    {
+                        if (Player.Spellbook.CastSpell(SpellSlot.W))
+                        {
+                            LastCastW = Utils.TickCount;
+                        }
+                    }
+                }
             }
         }
 
@@ -729,14 +974,22 @@ using EloBuddy;
 
         protected override void Drawing_OnDraw(EventArgs args)
         {
-            foreach (var spell in SpellList)
+            if (Menu.Item("QRange", true).GetValue<bool>() && Q.Level > 0)
             {
-                var menuItem = Menu.Item(spell.Slot + "Range", true).GetValue<Circle>();
-                if (menuItem.Active)
-                    Render.Circle.DrawCircle(Player.Position, spell.Range, (spell.IsReady()) ? Color.Cyan : Color.DarkRed);
+                Render.Circle.DrawCircle(Player.Position, Q.Range, (Q.IsReady()) ? Color.Cyan : Color.DarkRed);
             }
 
-            if (Menu.Item("Draw_Mode", true).GetValue<Circle>().Active)
+            if (Menu.Item("ERange", true).GetValue<bool>() && E.Level > 0)
+            {
+                Render.Circle.DrawCircle(Player.Position, E.Range, (E.IsReady()) ? Color.Cyan : Color.DarkRed);
+            }
+
+            if (Menu.Item("RRange", true).GetValue<bool>() && R.Level > 0)
+            {
+                Render.Circle.DrawCircle(Player.Position, R.Range, (R.IsReady()) ? Color.Cyan : Color.DarkRed);
+            }
+
+            if (Menu.Item("Draw_Mode", true).GetValue<bool>())
             {
                 var wts = Drawing.WorldToScreen(Player.Position);
 

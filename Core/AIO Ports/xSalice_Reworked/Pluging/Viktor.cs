@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace xSaliceResurrected_Rework.Pluging
 {
     using System;
@@ -12,6 +12,7 @@ using EloBuddy;
     using Managers;
     using Utilities;
     using Color = System.Drawing.Color;
+    using Orbwalking = Orbwalking;
 
     internal class Viktor : Champion
     {

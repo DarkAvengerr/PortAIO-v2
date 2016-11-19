@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace xSaliceResurrected_Rework.Pluging
 {
     using Base;
@@ -67,6 +67,27 @@ using EloBuddy;
                 Menu.AddSubMenu(harass);
             }
 
+            var farm = new Menu("LaneClear", "LaneClear");
+            {
+                farm.AddItem(new MenuItem("UseQFarm", "Use Q", true).SetValue(true));
+                farm.AddItem(new MenuItem("UseRFarm", "Use R to switch", true).SetValue(true));
+                ManaManager.AddManaManagertoMenu(farm, "LaneClear", 30);
+                Menu.AddSubMenu(farm);
+            }
+
+            var jungle = new Menu("JungleClear", "JungleClear");
+            {
+                jungle.AddItem(new MenuItem("UseQJungle", "Use Q", true).SetValue(true));
+                jungle.AddItem(new MenuItem("UseWJungle", "Use W", true).SetValue(true));
+                jungle.AddItem(new MenuItem("UseEJungle", "Use E", true).SetValue(true));
+                jungle.AddItem(new MenuItem("UseQJungleHam", "Use Q Hammer", true).SetValue(true));
+                jungle.AddItem(new MenuItem("UseWJungleHam", "Use W Hammer", true).SetValue(true));
+                jungle.AddItem(new MenuItem("UseEJungleHam", "Use E Hammer", true).SetValue(true));
+                jungle.AddItem(new MenuItem("UseRJungle", "Use R to switch", true).SetValue(true));
+                ManaManager.AddManaManagertoMenu(jungle, "JungleClear", 30);
+                Menu.AddSubMenu(jungle);
+            }
+
             var misc = new Menu("Misc", "Misc");
             {
                 misc.AddSubMenu(AoeSpellManager.AddHitChanceMenuCombo(false, false, false, false, true));
@@ -121,7 +142,9 @@ using EloBuddy;
                 customMenu.AddItem(myCust.AddToMenu("Combo Active: ", "Orbwalk"));
                 customMenu.AddItem(myCust.AddToMenu("Harass Active: ", "Farm"));
                 customMenu.AddItem(myCust.AddToMenu("Harass(T) Active: ", "FarmT"));
-                customMenu.AddItem(myCust.AddToMenu("Shoot QE ", "shoottheQE"));
+                customMenu.AddItem(myCust.AddToMenu("LaneClear Active: ", "LaneClear"));
+                customMenu.AddItem(myCust.AddToMenu("Flee Active: ", "Flee"));
+                customMenu.AddItem(myCust.AddToMenu("Shoot QE: ", "shoottheQE"));
                 Menu.AddSubMenu(customMenu);
             }
         }
@@ -159,6 +182,13 @@ using EloBuddy;
             var qTarget = TargetSelector.GetTarget(QExtend.Range, TargetSelector.DamageType.Physical);
             var q2Target = TargetSelector.GetTarget(Q2.Range, TargetSelector.DamageType.Physical);
             var e2Target = TargetSelector.GetTarget(E2.Range, TargetSelector.DamageType.Physical);
+
+            if (Menu.Item("UseRCombo", true).GetValue<bool>() && IsMelee &&
+                Player.CountEnemiesInRange(Q2.Range + 100) == 0)
+            {
+                R.Cast();
+                return;
+            }
 
             if (qTarget != null)
             {
@@ -402,6 +432,12 @@ using EloBuddy;
 
             if (target.Health > 80)
             {
+                if (target.Distance(Player) > 650 && R.IsReady() && Qcd == 0 && Wcd == 0 && Ecd == 0 && IsMelee)
+                {
+                    R.Cast();
+                    return;
+                }
+
                 //switch to hammer
                 if ((Qcd != 0 || !useQ) && (Wcd != 0 && !HyperCharged() || !useW) && R.IsReady() && HammerAllReady() &&
                     !IsMelee && Player.Distance(target.ServerPosition) < 650 && (useQ2 || useW2 || useE2))
@@ -410,6 +446,16 @@ using EloBuddy;
                     return;
                 }
             }
+
+            if (!IsMelee && target.Distance(Player) <= Q2.Range + 150 &&
+                target.Health <=
+                GetEHumanizerDamage(target) + GetQHumanizerDamage(target) + Player.GetAutoAttackDamage(target) &&
+                Q1Cd == 0 && E1Cd == 0)
+            {
+                R.Cast();
+                return;
+            }
+
 
             //switch to cannon
             if (((Qcd == 0 && useQ) || Wcd == 0 && useW && R.IsReady()) && IsMelee)
@@ -422,6 +468,22 @@ using EloBuddy;
             {
                 R.Cast();
             }
+        }
+
+        private float GetQHumanizerDamage(Obj_AI_Base target)
+        {
+            return (float)Player.CalcDamage(target, Damage.DamageType.Physical,
+                                -25 + Player.Spellbook.GetSpell(SpellSlot.Q).Level * 45 +
+                                1.0 * Player.FlatPhysicalDamageMod);
+        }
+
+        private float GetEHumanizerDamage(Obj_AI_Base target)
+        {
+            if (target == null)
+                return 0f;
+            double percentage = 5 + 3 * Player.Spellbook.GetSpell(SpellSlot.E).Level;
+            return (float)Player.CalcDamage(target, Damage.DamageType.Magical,
+                    target.MaxHealth / 100 * percentage + ObjectManager.Player.FlatPhysicalDamageMod);
         }
 
         private bool HyperCharged()
@@ -562,13 +624,9 @@ using EloBuddy;
                 case Orbwalking.OrbwalkingMode.Mixed:
                     Harass();
                     break;
-                case Orbwalking.OrbwalkingMode.LastHit:
-                    break;
                 case Orbwalking.OrbwalkingMode.LaneClear:
-                    break;
-                case Orbwalking.OrbwalkingMode.Freeze:
-                    break;
-                case Orbwalking.OrbwalkingMode.CustomMode:
+                    LaneClear();
+                    JungleClear();
                     break;
                 case Orbwalking.OrbwalkingMode.None:
                     if (Menu.Item("shoottheQE", true).GetValue<KeyBind>().Active)
@@ -579,8 +637,120 @@ using EloBuddy;
                 case Orbwalking.OrbwalkingMode.Flee:
                     Flee();
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void LaneClear()
+        {
+            if (!ManaManager.HasMana("LaneClear"))
+            {
+                return;
+            }
+
+            if (IsMelee && Menu.Item("UseRFarm", true).GetValue<bool>())
+            {
+                R.Cast();
+                return;
+            }
+
+            if (Menu.Item("UseQFarm", true).GetValue<bool>() && Q.IsReady())
+            {
+                var qminions = MinionManager.GetMinions(Player.Position, Q.Range);
+
+                if (qminions.Any())
+                {
+                    var qFarm = MinionManager.GetBestLineFarmLocation(qminions.Select(x => x.Position.To2D()).ToList(),
+                        Q.Width, Q.Range);
+
+                    if (qFarm.MinionsHit >= 3)
+                    {
+                        Q.Cast(qFarm.Position, true);
+                    }
+                }
+            }
+        }
+
+        private void JungleClear()
+        {
+            if (!ManaManager.HasMana("JungleClear"))
+            {
+                return;
+            }
+
+            var mobs = MinionManager.GetMinions(Player.Position, 800, MinionTypes.All, MinionTeam.Neutral,
+                MinionOrderTypes.MaxHealth);
+
+            if (mobs.Any())
+            {
+                var mob = mobs.FirstOrDefault();
+
+                if (!IsMelee)
+                {
+                    if (Menu.Item("UseEJungle", true).GetValue<bool>() && E.IsReady() &&
+                        Menu.Item("UseQJungle", true).GetValue<bool>() && Q.IsReady())
+                    {
+                        var gateVector = Player.ServerPosition +
+                                         Vector3.Normalize(Game.CursorPos - Player.ServerPosition)*50;
+
+                        if (mob.IsValidTarget(QExtend.Range))
+                        {
+                            E.Cast(gateVector);
+                            QExtend.Cast(mob.Position);
+                        }
+                    }
+
+                    if (Menu.Item("UseQJungle", true).GetValue<bool>() && Q.IsReady())
+                    {
+                        var qFarm = MinionManager.GetBestLineFarmLocation(mobs.Select(x => x.Position.To2D()).ToList(),
+                            Q.Width, Q.Range);
+
+                        if (qFarm.MinionsHit >= 1)
+                        {
+                            Q.Cast(qFarm.Position);
+                        }
+                    }
+
+                    if (Menu.Item("UseWJungle", true).GetValue<bool>() && W.IsReady())
+                    {
+                        if (mob.Distance(Player) <= 550)
+                        {
+                            W.Cast();
+                        }
+                    }
+
+                    if (Menu.Item("UseRJungle", true).GetValue<bool>() && R.IsReady())
+                    {
+                        if (Qcd != 0 && Wcd != 0 && Ecd != 0)
+                        {
+                            R.Cast();
+                        }
+                    }
+                }
+                else
+                {
+                    if (Menu.Item("UseWJungleHam", true).GetValue<bool>() && W2.IsReady() && mob.IsValidTarget(300))
+                    {
+                        W2.Cast();
+                    }
+
+                    if (Menu.Item("UseQJungleHam", true).GetValue<bool>() && Q2.IsReady() && mob.IsValidTarget(Q2.Range))
+                    {
+                        Q2.CastOnUnit(mob);
+                    }
+
+                    if (Menu.Item("UseEJungleHam", true).GetValue<bool>() && E2.IsReady() && mob.IsValidTarget(E2.Range))
+                    {
+                        E2.CastOnUnit(mob);
+                    }
+
+                    if (Menu.Item("UseRJungle", true).GetValue<bool>() && R.IsReady())
+                    {
+                        if (Q1Cd != 0 && W1Cd != 0 && E1Cd != 0)
+                        {
+                            R.Cast();
+                        }
+                    }
+                }
             }
         }
 
