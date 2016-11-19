@@ -353,7 +353,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "BrianSharp", "The Lich King", "UnderratedAIO", "[SDK] ExorAIO", "HaxDeTryndamere" };
                     break;
                 case EloBuddy.Champion.TwistedFate:
-                    champ = new string[] { "TwistedFate by Kortatu", "SharpShooter", "BadaoSeries", "EloFactory TF", "OKTW", "SAutoCarry", "SFXChallenger", "Twisted Fate - Danz", "[SDK] Flowers' Series", "[SDK] RARETwistedFate", "Diabath's TwistedFate", "Flowers' TwistedFate", "mztikk's TwistedFate" };
+                    champ = new string[] { "TwistedFate by Kortatu", "SharpShooter", "BadaoSeries", "EloFactory TF", "OKTW", "SAutoCarry", "SFXChallenger", "Twisted Fate - Danz", "[SDK] Flowers' Series", "[SDK] RARETwistedFate", "Diabath's TwistedFate", "Flowers' TwistedFate", "mztikk's TwistedFate", "GrossGore - Fate" };
                     break;
                 case EloBuddy.Champion.Twitch:
                     champ = new string[] { "OKTW", "iSeriesReborn", "iTwitch 2.0", "SAutoCarry", "SharpShooter", "Marksman#", "[SDK] ExorAIO", "[SDK] Flowers' Series", "[SDK] InfectedTwitch", "Flowers' Twitch", "NechritoTwitch", "SNTwitch", "theobjops's Twitch", "TheTwitch", "Twitch#", "Flowers' ADC Series" };

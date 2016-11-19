@@ -3263,6 +3263,9 @@ namespace PortAIO
                         case 12: // mztikks Twisted Fate
                             mztikksTwistedFate.Program.Main();
                             break;
+                        case 13: // Gross Gore - Fate
+                            GrossGoreTwistedFate.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Twitch:
