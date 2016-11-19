@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Combo
 {
     using System;
@@ -19,8 +19,6 @@ using EloBuddy;
     {
         public override string Name { get; set; } = "R";
 
-        private HeroInfo heroInfo;
-
         private readonly RSpell spell;
 
         private readonly YasuoDamage damage;
@@ -39,7 +37,7 @@ using EloBuddy;
                 || !CheckGuardians()
                 || (Menu.Item("Turret").GetValue<bool>() && Target.UnderTurret(true))
                 || (Menu.Item("Enemies").GetValue<Slider>().Value < ObjectManager.Player.CountEnemiesInRange(spell.Spell.Range))
-                || (Menu.Item("Killable").GetValue<bool>() && Target.Health < damage.GetComboDamage(Target) && !Menu.Item("Always").GetValue<bool>()))
+                || (Menu.Item("Killable").GetValue<bool>() && Target.Health > damage.GetComboDamage(Target) && !Menu.Item("Always").GetValue<bool>()))
             {
                 return;
             }
@@ -48,7 +46,7 @@ using EloBuddy;
 
             if (validtargets)
             {
-                spell.Spell.Cast();
+                LeagueSharp.Common.Utility.DelayAction.Add(Menu.Item("cDelay").GetValue<Slider>().Value, ()=> spell.Spell.Cast());
             }
         }
 
@@ -70,8 +68,6 @@ using EloBuddy;
         {
             base.OnLoad(sender, eventArgs);
 
-            heroInfo = new HeroInfo();
-
             Menu.AddItem(new MenuItem("Always", "Use Always (1v1)").SetValue(true));
 
             Menu.AddItem(new MenuItem("Killable", "Force When Killable").SetValue(true));
@@ -79,6 +75,8 @@ using EloBuddy;
             Menu.AddItem(new MenuItem("Turret", "Don't R Into Turret").SetValue(true));
 
             Menu.AddItem(new MenuItem("Enemies", "Use When X Enemies").SetValue(new Slider(3, 1, 5)));
+
+            Menu.AddItem(new MenuItem("cDelay", "Combo Delay (Hotfix)").SetValue(new Slider(200, 50, 400)));
         }
     }
 }

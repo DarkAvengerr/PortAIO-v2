@@ -836,6 +836,9 @@
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Yasuo\OrbwalkingMode\Jungle\QJungle.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Yasuo\OrbwalkingMode\Lane\ELane.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Yasuo\OrbwalkingMode\Lane\QLane.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Yasuo\OrbwalkingMode\Lasthit\ELasthit.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Yasuo\OrbwalkingMode\Lasthit\QLasthit.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Yasuo\Stack\YasuoQStack.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Yasuo\Utility\YasuoSkinchanger.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Yasuo\YasuoLoader.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Library\Dash Handler\DashPosition.cs" />

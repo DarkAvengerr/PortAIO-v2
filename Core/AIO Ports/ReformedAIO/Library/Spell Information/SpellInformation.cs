@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ReformedAIO.Library.Spell_Information
 {
     using System.Linq;

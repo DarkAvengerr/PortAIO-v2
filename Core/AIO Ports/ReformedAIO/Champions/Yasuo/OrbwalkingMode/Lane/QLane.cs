@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Lane
 {
     using System;
@@ -9,6 +9,7 @@ using EloBuddy;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Yasuo.Core.Spells;
+    using ReformedAIO.Library.Dash_Handler;
     using ReformedAIO.Library.Get_Information.HeroInfo;
 
     using RethoughtLib.FeatureSystem.Implementations;
@@ -20,6 +21,8 @@ using EloBuddy;
         private readonly Q1Spell qSpell;
 
         private readonly Q3Spell q3Spell;
+
+        private DashPosition dashPos;
 
         public QLane(Q1Spell qSpell, Q3Spell q3Spell)
         {
@@ -40,40 +43,23 @@ using EloBuddy;
 
             foreach (var m in Minion)
             {
-                if (ObjectManager.Player.IsDashing() && ObjectManager.Player.Distance(m) > 475)
-                {
-                    return;
-                }
-
                 if (q3Spell.Active)
                 {
-                    switch (Menu.Item("Hitchance").GetValue<StringList>().SelectedIndex)
+                    var pred = q3Spell.Spell.GetLineFarmLocation(Minion);
+
+                    if (ObjectManager.Player.IsDashing() && (m.Health < qSpell.GetDamage(m) || !qSpell.EqRange(dashPos.DashEndPosition(m, 475))))
                     {
-                        case 0:
-                            q3Spell.Spell.CastIfHitchanceEquals(m, HitChance.Medium);
-                            break;
-                        case 1:
-                            q3Spell.Spell.CastIfHitchanceEquals(m, HitChance.High);
-                            break;
-                        case 2:
-                            q3Spell.Spell.CastIfHitchanceEquals(m, HitChance.VeryHigh);
-                            break;
+                        return;
+                    }
+
+                    if (pred.MinionsHit >= Menu.Item("LQ3").GetValue<Slider>().Value)
+                    {
+                        q3Spell.Spell.Cast(pred.Position);
                     }
                 }
                 else
                 {
-                    switch (Menu.Item("Hitchance").GetValue<StringList>().SelectedIndex)
-                    {
-                        case 0:
-                            qSpell.Spell.CastIfHitchanceEquals(m, HitChance.Medium);
-                            break;
-                        case 1:
-                            qSpell.Spell.CastIfHitchanceEquals(m, HitChance.High);
-                            break;
-                        case 2:
-                            qSpell.Spell.CastIfHitchanceEquals(m, HitChance.VeryHigh);
-                            break;
-                    }
+                    qSpell.Spell.Cast(m);
                 }
             }
         }
@@ -96,7 +82,11 @@ using EloBuddy;
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("Hitchance", "Hitchance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 1)));
+            dashPos = new DashPosition();
+
+            Menu.AddItem(new MenuItem("LQ3", "Use Q3 If X Hit Count").SetValue(new Slider(4, 0, 7)));
+
+           // Menu.AddItem(new MenuItem("LHitchance", "Hitchance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 1)));
         }
     }
 }

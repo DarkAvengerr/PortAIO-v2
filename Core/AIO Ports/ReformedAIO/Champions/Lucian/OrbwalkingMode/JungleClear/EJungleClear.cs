@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
 {
     using System.Linq;

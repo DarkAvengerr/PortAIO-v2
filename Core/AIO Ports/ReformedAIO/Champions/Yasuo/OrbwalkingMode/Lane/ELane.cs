@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Lane
 {
     using System;
@@ -27,29 +27,15 @@ using EloBuddy;
 
         private DashPosition dashPos;
 
-        private WallExtension wall;
-
-        private Obj_AI_Base Minion => MinionManager.GetMinions(ObjectManager.Player.Position,
-                 spell.Spell.Range).LastOrDefault(m => m.Distance(Game.CursorPos) <= spell.Spell.Range);
+        private Obj_AI_Base Minion => MinionManager.GetMinions(ObjectManager.Player.Position, spell.Spell.Range).FirstOrDefault(m => m.Distance(Game.CursorPos) <= 475);
 
         private void OnUpdate(EventArgs args)
         {
             if (Minion == null
                 || !CheckGuardians()
-                || (Menu.Item("Turret").GetValue<bool>() && dashPos.DashEndPosition(Minion, spell.Spell.Range).UnderTurret(true))
-                || (Menu.Item("Enemies").GetValue<Slider>().Value < ObjectManager.Player.CountEnemiesInRange(750)))
-            {
-                return;
-            }
-
-            var wallPoint = wall.FirstWallPoint(ObjectManager.Player.Position, Minion.Position);
-
-            if (wall.IsWallDash(wallPoint, spell.Spell.Range))
-            {
-                return;
-            }
-
-            if (Menu.Item("Killable").GetValue<bool>() && Minion.Health > spell.Spell.GetDamage(Minion) + ObjectManager.Player.GetAutoAttackDamage(Minion))
+                || (Menu.Item("ETurret").GetValue<bool>() && (dashPos.DashEndPosition(Minion, spell.Spell.Range).UnderTurret(true) || Minion.UnderTurret(true)))
+                || (Menu.Item("EEnemies").GetValue<Slider>().Value < dashPos.DashEndPosition(Minion, spell.Spell.Range).CountEnemiesInRange(500))
+                || (Menu.Item("EKillable").GetValue<bool>() && Minion.Health > spell.Spell.GetDamage(Minion)))
             {
                 return;
             }
@@ -77,13 +63,11 @@ using EloBuddy;
 
             dashPos = new DashPosition();
 
-            wall = new WallExtension();
+            Menu.AddItem(new MenuItem("EKillable", "Only Killable Minions").SetValue(true));
 
-            Menu.AddItem(new MenuItem("Killable", "Only Killable Minions").SetValue(true));
+            Menu.AddItem(new MenuItem("EEnemies", "Don't E Into X Enemies").SetValue(new Slider(1, 0, 5)));
 
-            Menu.AddItem(new MenuItem("Enemies", "Don't E Into X Enemies").SetValue(new Slider(1, 0, 5)));
-
-            Menu.AddItem(new MenuItem("Turret", "Turret Check").SetValue(true));
+            Menu.AddItem(new MenuItem("ETurret", "Turret Check").SetValue(true));
         }
     }
 }

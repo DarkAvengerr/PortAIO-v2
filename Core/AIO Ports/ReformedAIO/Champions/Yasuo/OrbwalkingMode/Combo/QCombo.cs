@@ -1,8 +1,10 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Combo
 {
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -23,6 +25,8 @@ using EloBuddy;
 
         private readonly Q3Spell q3Spell;
 
+        private DashPosition dashPos;
+
         public QCombo(Q1Spell qSpell, Q3Spell q3Spell)
         {
             this.qSpell = qSpell;
@@ -33,21 +37,18 @@ using EloBuddy;
 
         private AIHeroClient Target => TargetSelector.GetTarget(Range, TargetSelector.DamageType.Physical);
 
+       // private Obj_AI_Base Minion => MinionManager.GetMinions(ObjectManager.Player.Position, Range).FirstOrDefault();
+
         private void OnUpdate(EventArgs args)
         {
-            if (Target == null || !CheckGuardians())
-            {
-                return;
-            }
-
-            if (ObjectManager.Player.IsDashing() && ObjectManager.Player.Distance(Target) > 475)
+            if (Target == null || !CheckGuardians() || (ObjectManager.Player.IsDashing() && !qSpell.EqRange(Target.Position)))
             {
                 return;
             }
 
             if (q3Spell.Active)
             {
-                var pred = q3Spell.Spell.GetPrediction(Target, true);
+                var pred = q3Spell.Spell.GetPrediction(Target);
 
                 switch (Menu.Item("Hitchance").GetValue<StringList>().SelectedIndex)
                 {
@@ -73,18 +74,7 @@ using EloBuddy;
             }
             else
             {
-                switch (Menu.Item("Hitchance").GetValue<StringList>().SelectedIndex)
-                {
-                    case 0:
-                        qSpell.Spell.CastIfHitchanceEquals(Target, HitChance.Medium);
-                        break;
-                    case 1:
-                        qSpell.Spell.CastIfHitchanceEquals(Target, HitChance.High);
-                        break;
-                    case 2:
-                        qSpell.Spell.CastIfHitchanceEquals(Target, HitChance.VeryHigh);
-                        break;
-                }
+                LeagueSharp.Common.Utility.DelayAction.Add(2, ()=> qSpell.Spell.CastOnUnit(Target));
             }
         }
 
@@ -105,6 +95,8 @@ using EloBuddy;
         protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnLoad(sender, eventArgs);
+
+            dashPos = new DashPosition();
 
             Menu.AddItem(new MenuItem("Hitchance", "Hitchance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 1)));
         }

@@ -1,8 +1,9 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Combo
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using LeagueSharp;
@@ -25,25 +26,23 @@ using EloBuddy;
             this.spell = spell;
         }
 
-        private WallExtension wall;
-
         private DashPosition dashPos;
 
-        private static AIHeroClient Target => TargetSelector.GetTarget(1500, TargetSelector.DamageType.Physical);
+        private AIHeroClient Target => TargetSelector.GetTarget(1250, TargetSelector.DamageType.Physical);
 
-        private Obj_AI_Base Minion => MinionManager.GetMinions(ObjectManager.Player.Position,
-                 spell.Spell.Range).LastOrDefault(m => m.Distance(ObjectManager.Player.Position.Extend(Target.Position, 475)) <= 400);
+        private Obj_AI_Base Minion => MinionManager.GetMinions(ObjectManager.Player.Position, 1000).
+            FirstOrDefault(m => dashPos.DashEndPosition(m, spell.Spell.Range).Distance(Target.Position) <= ObjectManager.Player.Distance(Target));
 
         private void OnUpdate(EventArgs args)
         {
             if (Target == null || !CheckGuardians()
-                || (Menu.Item("Turret").GetValue<bool>() && dashPos.DashEndPosition(Target, spell.Spell.Range).UnderTurret(true))
-                || (Menu.Item("Enemies").GetValue<Slider>().Value < ObjectManager.Player.CountEnemiesInRange(1000)))
+                || (Menu.Item("CTurret").GetValue<bool>() && dashPos.DashEndPosition(Target, spell.Spell.Range).UnderTurret(true))
+                || (Menu.Item("CEnemies").GetValue<Slider>().Value < ObjectManager.Player.CountEnemiesInRange(1000)))
             {
                 return;
             }
-
-            if(Minion != null && (ObjectManager.Player.Position.Distance(Target.Position) > ObjectManager.Player.AttackRange || Target.HasBuff("YasuoDashWrapper")))
+        
+            if(Minion != null && ObjectManager.Player.Position.Distance(Target.Position) > 85)
             {
                 spell.Spell.CastOnUnit(Minion);
             }
@@ -72,11 +71,12 @@ using EloBuddy;
             base.OnLoad(sender, eventArgs);
 
             dashPos = new DashPosition();
-            wall = new WallExtension();
 
-            Menu.AddItem(new MenuItem("Enemies", "Don't E Into X Enemies").SetValue(new Slider(3, 1, 5)));
+         //   Menu.AddItem(new MenuItem("DistanceRange", "Target Radius").SetValue(new Slider(125, 0, 600)));
 
-            Menu.AddItem(new MenuItem("Turret", "Turret Check").SetValue(true));
+            Menu.AddItem(new MenuItem("CEnemies", "Don't E Into X Enemies").SetValue(new Slider(3, 0, 5)));
+
+            Menu.AddItem(new MenuItem("CTurret", "Turret Check").SetValue(true));
         }
     }
 }

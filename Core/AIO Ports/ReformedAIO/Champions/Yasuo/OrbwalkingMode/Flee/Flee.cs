@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Lane
+using LeagueSharp.Common; 
+ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Flee
 {
     using System;
     using System.Linq;
@@ -32,7 +32,7 @@ using EloBuddy;
         private Obj_AI_Base Minion
             =>
                 MinionManager.GetMinions(ObjectManager.Player.Position, spell.Spell.Range)
-                    .LastOrDefault(m => m.Distance(Game.CursorPos) <= 600);
+                    .LastOrDefault(m => m.Distance(Game.CursorPos) <= 400 && m.CountEnemiesInRange(475) == 0);
 
         private IOrderedEnumerable<Obj_AI_Base> Mob
             =>
@@ -44,15 +44,17 @@ using EloBuddy;
 
         private void OnUpdate(EventArgs args)
         {
-            if (!CheckGuardians()
-                || (Menu.Item("Turret").GetValue<bool>() && Minion.UnderTurret(true))
-                || (Menu.Item("Enemies").GetValue<Slider>().Value < ObjectManager.Player.CountEnemiesInRange(750))
-                || !Menu.Item("Keybind").GetValue<KeyBind>().Active)
+            if (!Menu.Item("Keybind").GetValue<KeyBind>().Active)
             {
                 return;
             }
 
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+
+            if (Menu.Item("Turret").GetValue<bool>() && Minion != null && dashPos.DashEndPosition(Minion, 475).UnderTurret(true))
+            {
+                return;
+            }
 
             if (Mob != null)
             {

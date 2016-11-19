@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ReformedAIO.Champions.Yasuo.Core.Spells
 {
     using System;
@@ -29,7 +29,7 @@ using EloBuddy;
 
             Spell = new Spell(SpellSlot.Q, 1000);
 
-            Spell.SetSkillshot(.4f, 90, float.MaxValue, false, SkillshotType.SkillshotLine);
+            Spell.SetSkillshot(.35f, 90, 1200, false, SkillshotType.SkillshotLine);
         }
 
         protected override void SetSwitch()
