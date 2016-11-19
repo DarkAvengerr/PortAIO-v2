@@ -3,7 +3,7 @@ using LeagueSharp.Common;
 using System.Collections.Generic;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Viktor.Extensions
 {
     internal class VSpells

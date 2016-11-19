@@ -3555,7 +3555,7 @@ namespace PortAIO
                             TRUStInMyViktor.Program.Main();
                             break;
                         case 10: // King Lazer
-                            KingLazerViktor.Program.Main();
+                            HamViktor.Program.Main();
                             break;
                     }
                     break;

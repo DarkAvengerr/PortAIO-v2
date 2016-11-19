@@ -3,7 +3,7 @@ using System.Drawing;
 using Color = SharpDX.Color;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Viktor.Extensions
 {
     internal class Menus
@@ -67,6 +67,7 @@ using EloBuddy;
                 var MiscMenu = new Menu("..:: Misc Config", "misc.config");
                 {
                     MiscMenu.AddItem(new MenuItem("q.misc", "Disabe Auto Attack").SetValue(true));
+                    menuCfg.AddSubMenu(MiscMenu);
                 }
                 var DrawMenu = new Menu("..:: Drawming Config", "draw.config");
                 {

@@ -4,7 +4,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Viktor.Extensions
 {
     internal static class Prediction

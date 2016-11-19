@@ -3,8 +3,8 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace KingLazerViktor
+using LeagueSharp.Common; 
+ namespace HamViktor
 {
     class Program
     {

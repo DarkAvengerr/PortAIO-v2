@@ -7,7 +7,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Viktor.Extensions
 {
    internal static class Utilities
@@ -41,7 +41,7 @@ using EloBuddy;
                    unit.HasBuffOfType(BuffType.Knockback)   || unit.HasBuffOfType(BuffType.Silence)         ||
                    unit.HasBuffOfType(BuffType.Taunt)       || unit.HasBuffOfType(BuffType.Suppression)     ||
                    unit.HasBuffOfType(BuffType.Slow)        || unit.IsStunned                               ||
-                   unit.IsChannelingImportantSpell()        || unit.IsMovementImpaired()                    || 
+                   unit.IsChannelingImportantSpell()        || !unit.CanMove                                || 
                    unit.IsRecalling();
         }
     }

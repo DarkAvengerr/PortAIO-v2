@@ -8,7 +8,7 @@ using SharpDX;
 using Utilities = Viktor.Extensions.Utilities;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Viktor.Champions
 {
     internal class Viktor : VSpells
@@ -27,7 +27,7 @@ using EloBuddy;
             AntiGapcloser.OnEnemyGapcloser += OnAntiGapCloser;
             Orbwalking.OnNonKillableMinion += Orbwalking_OnNonKillableMinion;
             Interrupter2.OnInterruptableTarget += OnInterruptableTarget;
-            Orbwalking.BeforeAttack += OrbwalkingOnBeforeAttack;
+            //Orbwalking.BeforeAttack += OrbwalkingOnBeforeAttack;
         }
 
         private static void Game_OnUpdate(EventArgs args)
@@ -73,20 +73,28 @@ using EloBuddy;
             CastQUnkillabeMinion();
         }
 
-        private static void OrbwalkingOnBeforeAttack(Orbwalking.BeforeAttackEventArgs args)
+        /*private static void OrbwalkingOnBeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if (Utilities.IsEnabled("q.misc"))
             {
-                if (args.Target.Type == GameObjectType.AIHeroClient && Utilities.Player.HasBuff("viktorpowertransferreturn"))
+                switch (Menus.Orbwalker.ActiveMode)
                 {
-                    args.Process = true;
+                    case Orbwalking.OrbwalkingMode.Combo:
+                        if (args.Target.Type == GameObjectType.AIHeroClient && Utilities.Player.HasBuff("viktorpowertransferreturn"))
+                        {
+                            args.Process = true;
+                        }
+                        else
+                        {
+                            args.Process = false;
+                        }
+                        break;
+                    default:
+                        return;
                 }
-                else
-                {
-                    args.Process = false;
-                }
+            
             }
-        }
+        }*/
 
         public static void OnCombo()
         {
@@ -463,7 +471,6 @@ using EloBuddy;
 
         private static void UberMode()
         {
-            Orbwalking.MoveTo(Game.CursorPos);
             if (!spells[Spells.Q].IsReady() 
                 || !(Utilities.Player.HasBuff("viktorqaug") 
                 || Utilities.Player.HasBuff("viktorqeaug") 
