@@ -3176,6 +3176,9 @@ namespace PortAIO
                         case 18: // Flowers' ADC Series
                             Flowers_ADC_Series.Program.Main();
                             break;
+                        case 19: // Tristana Hawk Mode
+                            HawkTristana.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Trundle:

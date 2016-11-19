@@ -1346,6 +1346,7 @@
     <Compile Include="Core\Champion Ports\Thresh\Dark Star Thresh\Program.cs" />
     <Compile Include="Core\Champion Ports\Thresh\Dark Star Thresh\Update\Misc.cs" />
     <Compile Include="Core\Champion Ports\Thresh\Dark Star Thresh\Update\Mode.cs" />
+    <Compile Include="Core\Champion Ports\Tristana\Tristana - HawkMode\Program.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\CardSelector.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Computed.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Config.cs" />

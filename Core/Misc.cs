@@ -344,7 +344,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "Danz - Chain Warden", "FreshBooster", "OKTW", "Support is Easy", "vSeries", "Dark Star Thresh", "SluttyThresh", "Thresh as The Chain Warden", "Thresh - Catch Fish", "Thresh - the Ruler of the Soul", "Thresh the Flay Maker", "yol0 Thresh" };
                     break;
                 case EloBuddy.Champion.Tristana:
-                    champ = new string[] { "ElTristana", "ADCPackage", "D-Tristana", "iSeriesReborn", "OKTW", "PewPewTristana", "ProSeries", "SharpShooter", "Marksman#", "[SDK] ExorAIO", "[SDK] Flowers' Series", "Flowers' Tristana", "Geass Tristana", "SkyLV Tristana", "Tristana#", "TrooperTristana", "ProjectGeass", "Hikicarry ADC", "Flowers' ADC Series" };
+                    champ = new string[] { "ElTristana", "ADCPackage", "D-Tristana", "iSeriesReborn", "OKTW", "PewPewTristana", "ProSeries", "SharpShooter", "Marksman#", "[SDK] ExorAIO", "[SDK] Flowers' Series", "Flowers' Tristana", "Geass Tristana", "SkyLV Tristana", "Tristana#", "TrooperTristana", "ProjectGeass", "Hikicarry ADC", "Flowers' ADC Series", "Tristana Hawk Mode" };
                     break;
                 case EloBuddy.Champion.Trundle:
                     champ = new string[] { "ElTrundle", "DZAIO", "UnderratedAIO", "vSeries", "[SDK] xD Trundle", "FastTrundle", "JustTrundle" };
