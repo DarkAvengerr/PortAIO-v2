@@ -10,7 +10,6 @@ using LeagueSharp.Common;
     using LeagueSharp.Common;
     using SharpDX;
     using Manager.Spells;
-    using static Common.Common;
 
     // Credit: Brian
     internal class EvadeTargetManager
@@ -329,10 +328,10 @@ using LeagueSharp.Common;
                         obj.Where(
                             i =>
                             SpellManager.CanCastE(i) && EvadeManager.IsSafe(i.ServerPosition.To2D()).IsSafe
-                            && EvadeManager.IsSafe(PosAfterE(i).To2D()).IsSafe
-                            && (!UnderTower(PosAfterE(i)) || Menu.Item("EvadeTargetETower", true).GetValue<bool>())
-                            && GoThroughWall(ObjectManager.Player.ServerPosition.To2D(), PosAfterE(i).To2D()))
-                            .OrderBy(i => PosAfterE(i).Distance(Game.CursorPos))
+                            && EvadeManager.IsSafe(Logic.PosAfterE(i).To2D()).IsSafe
+                            && (!Logic.UnderTower(Logic.PosAfterE(i)) || Menu.Item("EvadeTargetETower", true).GetValue<bool>())
+                            && GoThroughWall(ObjectManager.Player.ServerPosition.To2D(), Logic.PosAfterE(i).To2D()))
+                            .OrderBy(i => Logic.PosAfterE(i).Distance(Game.CursorPos))
                             .Any(i => Logic.E.CastOnUnit(i, true)))
                     {
                         return;

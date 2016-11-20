@@ -32,7 +32,7 @@ using LeagueSharp.Common;
                     }
                 }
 
-                if (Menu.Item("LastHitQ3", true).GetValue<bool>() && Q.IsReady() && !SpellManager.HaveQ3)
+                if (Menu.Item("LastHitQ3", true).GetValue<bool>() && Q.IsReady() && SpellManager.HaveQ3)
                 {
                     if (minion.IsValidTarget(Q3.Range) && minion.Health < Q3.GetDamage(minion))
                     {

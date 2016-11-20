@@ -3,12 +3,15 @@ using LeagueSharp.Common;
  namespace Flowers_Yasuo
 {
     using Evade;
+    using System.Linq;
+    using System.Collections.Generic;
     using Manager.Menu;
     using Manager.Events;
     using Manager.Spells;
     using LeagueSharp;
     using LeagueSharp.Common;
     using SharpDX;
+    using Common;
 
     internal class Logic
     {
@@ -22,11 +25,14 @@ using LeagueSharp.Common;
         internal static Menu Menu;
         internal static bool isDashing;
         internal static int SkinID;
+        internal static int lastCheckTime;
+        internal static float lastWardCast;
         internal static int lastECast;
         internal static int lastHarassTime;
         internal static Vector3 lastEPos;       
         internal static AIHeroClient Me;
         internal static Orbwalking.Orbwalker Orbwalker;
+        internal static readonly List<ChampionObject> championObject = new List<ChampionObject>();
 
         internal static void LoadYasuo()
         {
@@ -51,40 +57,26 @@ using LeagueSharp.Common;
             }
         }
 
-        internal static void UseItems(Obj_AI_Base target, bool IsCombo = false)
+        public static bool CanCastDelayR(AIHeroClient target)
         {
-            if (IsCombo)
-            {
-                if (Items.HasItem(3153, Me) && Items.CanUseItem(3153) && Me.HealthPercent <= 80)
-                {
-                    Items.UseItem(3153, target);
-                }
+            //copy from valvesharp
+            var buff = target.Buffs.FirstOrDefault(i => i.Type == BuffType.Knockback || i.Type == BuffType.Knockup);
 
-                if (Items.HasItem(3143, Me) && Items.CanUseItem(3143) && Me.Distance(target.Position) <= 400)
-                {
-                    Items.UseItem(3143);
-                }
+            return buff != null &&
+                   buff.EndTime - Game.Time <=
+                   (buff.EndTime - buff.StartTime) / (buff.EndTime - buff.StartTime <= 0.5 ? 1.5 : 3);
+        }
 
-                if (Items.HasItem(3144, Me) && Items.CanUseItem(3144) && target.IsValidTarget(Q.Range))
-                {
-                    Items.UseItem(3144, target);
-                }
+        public static bool UnderTower(Vector3 pos)
+        {
+            return ObjectManager.Get<Obj_AI_Turret>().Any(turret => turret.Health > 1 && turret.IsValidTarget(950, true, pos));
+        }
 
-                if (Items.HasItem(3142, Me) && Items.CanUseItem(3142) && Me.Distance(target.Position) <= Q.Range)
-                {
-                    Items.UseItem(3142);
-                }
-            }
-
-            if (Items.HasItem(3074, Me) && Items.CanUseItem(3074) && Me.Distance(target.Position) <= 400)
-            {
-                Items.UseItem(3074);
-            }
-
-            if (Items.HasItem(3077, Me) && Items.CanUseItem(3077) && Me.Distance(target.Position) <= 400)
-            {
-                Items.UseItem(3077);
-            }
+        public static Vector3 PosAfterE(Obj_AI_Base target)
+        {
+            return ObjectManager.Player.IsFacing(target)
+                ? ObjectManager.Player.ServerPosition.Extend(target.ServerPosition, 475f)
+                : ObjectManager.Player.ServerPosition.Extend(Prediction.GetPrediction(target, 350f).UnitPosition, 475f);
         }
     }
 }

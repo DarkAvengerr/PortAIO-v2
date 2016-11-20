@@ -1,10 +1,9 @@
-using SharpDX;
-
 using EloBuddy; 
 using LeagueSharp.Common; 
  namespace Flowers_Yasuo.Manager.Menu
 {
     using Evade;
+    using SharpDX;
     using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -233,6 +232,12 @@ using LeagueSharp.Common;
                                 "Classic", "High Noon", "Project: Yasuo", "Blood Moon", "Others", "Others1", "Others2",
                                 "Others3", "Others4"
                             })));
+                }
+
+                var autoWardMenu = miscMenu.AddSubMenu(new Menu("Auto Ward", "Auto Ward"));
+                {
+                    autoWardMenu.AddItem(new MenuItem("AutoWardEnable", "Enabled", true).SetValue(true));
+                    autoWardMenu.AddItem(new MenuItem("OnlyCombo", "Only Combo Mode Active", true).SetValue(true));
                 }
 
                 miscMenu.AddItem(new MenuItem("EQFlash", "EQFlash", true).SetValue(new KeyBind('A', KeyBindType.Press)));

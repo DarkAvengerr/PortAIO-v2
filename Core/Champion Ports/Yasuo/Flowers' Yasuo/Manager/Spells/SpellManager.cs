@@ -83,7 +83,7 @@ using LeagueSharp.Common;
                 if (dash != null && dash.DistanceToPlayer() <= E.Range && CanCastE(dash) &&
                     target.DistanceToPlayer() >= GapcloserDis &&
                     target.Position.Distance(PosAfterE(dash)) <= target.DistanceToPlayer() && 
-                    (UnderTurret || !UnderTower(PosAfterE(dash))))
+                    Me.IsFacing(dash) && (UnderTurret || !UnderTower(PosAfterE(dash))))
                 {
                     E.CastOnUnit(dash, true);
                 }
@@ -113,7 +113,7 @@ using LeagueSharp.Common;
                             .MinOrDefault(x => PosAfterE(x).Distance(Game.CursorPos));
 
                     if (dash != null && dash.DistanceToPlayer() <= E.Range && CanCastE(dash) &&
-                        target.DistanceToPlayer() >= GapcloserDis &&
+                        target.DistanceToPlayer() >= GapcloserDis && Me.IsFacing(dash) &&
                         (UnderTurret || !UnderTower(PosAfterE(dash))))
                     {
                         E.CastOnUnit(dash, true);
@@ -199,6 +199,42 @@ using LeagueSharp.Common;
             var damage = (E.Level * 20 + 50) * (1 + 0.25 * Estacks) + Me.FlatMagicDamageMod * 0.6;
 
             return Me.CalcDamage(target, Damage.DamageType.Magical, damage);
+        }
+
+        internal static void UseItems(Obj_AI_Base target, bool IsCombo = false)
+        {
+            if (IsCombo)
+            {
+                if (Items.HasItem(3153, Me) && Items.CanUseItem(3153) && Me.HealthPercent <= 80)
+                {
+                    Items.UseItem(3153, target);
+                }
+
+                if (Items.HasItem(3143, Me) && Items.CanUseItem(3143) && Me.Distance(target.Position) <= 400)
+                {
+                    Items.UseItem(3143);
+                }
+
+                if (Items.HasItem(3144, Me) && Items.CanUseItem(3144) && target.IsValidTarget(Q.Range))
+                {
+                    Items.UseItem(3144, target);
+                }
+
+                if (Items.HasItem(3142, Me) && Items.CanUseItem(3142) && Me.Distance(target.Position) <= Q.Range)
+                {
+                    Items.UseItem(3142);
+                }
+            }
+
+            if (Items.HasItem(3074, Me) && Items.CanUseItem(3074) && Me.Distance(target.Position) <= 400)
+            {
+                Items.UseItem(3074);
+            }
+
+            if (Items.HasItem(3077, Me) && Items.CanUseItem(3077) && Me.Distance(target.Position) <= 400)
+            {
+                Items.UseItem(3077);
+            }
         }
     }
 }

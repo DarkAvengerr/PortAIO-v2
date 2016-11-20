@@ -18,12 +18,13 @@ using LeagueSharp.Common;
 
             DashReset.Init();
             Skin.Init();
-
+            
             if (Me.IsDead || Me.IsRecalling())
             {
                 return;
             }
 
+            Ward.Init();
             KillSteal.Init();
             Auto.Init();
 

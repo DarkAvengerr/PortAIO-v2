@@ -2622,7 +2622,10 @@
     <Compile Include="Core\Champion Ports\Xin Zhao\Xin Zhao God\Orbwalking.cs" />
     <Compile Include="Core\Champion Ports\Xin Zhao\Xin Zhao God\Program.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\BrianSharp\Yasuo.cs" />
+    <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Common\ChampionObject.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Common\Common.cs" />
+    <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Common\GrassLocation.cs" />
+    <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Common\WardLocation.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Evade\Collision\Collision.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Evade\Collision\CollisionObjectTypes.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Evade\Collision\DetectedCollision.cs" />
@@ -2657,6 +2660,7 @@
     <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Manager\Events\Games\Mode\LastHit.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Manager\Events\Games\Mode\Skin.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Manager\Events\Games\Mode\WallJump.cs" />
+    <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Manager\Events\Games\Mode\Ward.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Manager\Events\Gapcloser\GapcloserManager.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Manager\Events\Interrupt\InterruptManager.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Manager\Events\SpellCast\SpellCastManager.cs" />

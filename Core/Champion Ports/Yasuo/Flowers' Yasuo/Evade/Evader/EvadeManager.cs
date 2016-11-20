@@ -116,15 +116,15 @@ using LeagueSharp.Common;
                                     GetEvadeTargets(evadeSpell)
                                         .Where(
                                             x =>
-                                                IsSafe(PosAfterE(x).To2D()).IsSafe &&
-                                                (!UnderTower(PosAfterE(x)) ||
+                                                IsSafe(Logic.PosAfterE(x).To2D()).IsSafe &&
+                                                (!Logic.UnderTower(Logic.PosAfterE(x)) ||
                                                  Menu.Item("ETower", true).GetValue<bool>()));
 
                                 if (dodgeList.Any())
                                 {
                                     var dodgeTarget =
                                         dodgeList.Where(x => !x.HasBuff("YasuoDashWrapper"))
-                                            .MinOrDefault(i => PosAfterE(i).Distance(Pos.To3D()));
+                                            .MinOrDefault(i => Logic.PosAfterE(i).Distance(Pos.To3D()));
 
                                     if (dodgeTarget != null && dodgeTarget.DistanceToPlayer() <= Logic.E.Range &&
                                         SpellManager.CanCastE(dodgeTarget))

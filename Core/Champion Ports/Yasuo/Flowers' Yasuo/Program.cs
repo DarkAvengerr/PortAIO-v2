@@ -13,7 +13,7 @@ using LeagueSharp.Common;
             Game_OnGameLoad();
         }
 
-        public static void Game_OnGameLoad()
+        private static void Game_OnGameLoad()
         {
             if (ObjectManager.Player.ChampionName != "Yasuo")
             {
