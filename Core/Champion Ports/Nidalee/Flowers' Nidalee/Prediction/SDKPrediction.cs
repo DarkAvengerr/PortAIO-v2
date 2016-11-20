@@ -1,8 +1,8 @@
-using LeagueSharp.Common;
-namespace Flowers_Nidalee.Prediction
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace Flowers_Nidalee.Prediction
 {
     using Common;
-    using EloBuddy;
     using LeagueSharp;
     using SharpDX;
     using System;
@@ -1011,8 +1011,8 @@ namespace Flowers_Nidalee.Prediction
 
                 internal MecCircle(Vector2 center, float radius)
                 {
-                    this.Center = center;
-                    this.Radius = radius;
+                    Center = center;
+                    Radius = radius;
                 }
             }
 
@@ -1025,10 +1025,10 @@ namespace Flowers_Nidalee.Prediction
 
                 public MinMaxCornersInfo(Vector2 upperLeft, Vector2 upperRight, Vector2 lowerLeft, Vector2 lowerRight)
                 {
-                    this.UpperLeft = upperLeft;
-                    this.UpperRight = upperRight;
-                    this.LowerLeft = lowerLeft;
-                    this.LowerRight = lowerRight;
+                    UpperLeft = upperLeft;
+                    UpperRight = upperRight;
+                    LowerLeft = lowerLeft;
+                    LowerRight = lowerRight;
                 }
             }
         }
@@ -1263,11 +1263,11 @@ namespace Flowers_Nidalee.Prediction
             {
                 get
                 {
-                    return this.from.IsValid() ? this.from : ObjectManager.Player.ServerPosition;
+                    return from.IsValid() ? from : ObjectManager.Player.ServerPosition;
                 }
                 set
                 {
-                    this.from = value;
+                    from = value;
                 }
             }
 
@@ -1279,11 +1279,11 @@ namespace Flowers_Nidalee.Prediction
             {
                 get
                 {
-                    return this.rangeCheckFrom.IsValid() ? this.rangeCheckFrom : this.From;
+                    return rangeCheckFrom.IsValid() ? rangeCheckFrom : From;
                 }
                 set
                 {
-                    this.rangeCheckFrom = value;
+                    rangeCheckFrom = value;
                 }
             }
 
@@ -1295,11 +1295,11 @@ namespace Flowers_Nidalee.Prediction
 
             public bool UseBoundingRadius { get; set; } = true;
 
-            internal float RealRadius => this.UseBoundingRadius ? this.Radius + this.Unit.BoundingRadius : this.Radius;
+            internal float RealRadius => UseBoundingRadius ? Radius + Unit.BoundingRadius : Radius;
 
             public object Clone()
             {
-                return this.MemberwiseClone();
+                return MemberwiseClone();
             }
         }
 
@@ -1312,17 +1312,17 @@ namespace Flowers_Nidalee.Prediction
 
             public List<AIHeroClient> AoeTargetsHit { get; set; } = new List<AIHeroClient>();
 
-            public int AoeTargetsHitCount => Math.Max(this.AoeHitCount, this.AoeTargetsHit.Count);
+            public int AoeTargetsHitCount => Math.Max(AoeHitCount, AoeTargetsHit.Count);
 
             public Vector3 CastPosition
             {
                 get
                 {
-                    return this.castPosition.IsValid() ? this.castPosition.SetZ() : this.Input.Unit.ServerPosition;
+                    return castPosition.IsValid() ? castPosition.SetZ() : Input.Unit.ServerPosition;
                 }
                 set
                 {
-                    this.castPosition = value;
+                    castPosition = value;
                 }
             }
 
@@ -1336,22 +1336,13 @@ namespace Flowers_Nidalee.Prediction
             {
                 get
                 {
-                    Vector3 pos = Vector3.Zero;
-
-                    if(this.unitPosition.IsValid())
-                    {
-                        pos = this.unitPosition.SetZ();
-                    }
-                    else
-                    {
-                        pos = this.Input.Unit.ServerPosition;
-                    }
+                    var pos = unitPosition.IsValid() ? unitPosition.SetZ() : Input.Unit.ServerPosition;
 
                     return pos;
                 }
                 set
                 {
-                    this.unitPosition = value;
+                    unitPosition = value;
                 }
             }
         }
@@ -1442,17 +1433,17 @@ namespace Flowers_Nidalee.Prediction
 
             public class StoredPath
             {
-                public Vector2 EndPoint => this.Path.LastOrDefault();
+                public Vector2 EndPoint => Path.LastOrDefault();
 
                 public List<Vector2> Path { get; set; }
 
-                public Vector2 StartPoint => this.Path.FirstOrDefault();
+                public Vector2 StartPoint => Path.FirstOrDefault();
 
                 public int Tick { get; set; }
 
-                public double Time => (Utils.TickCount - this.Tick) / 1000d;
+                public double Time => (Utils.TickCount - Tick) / 1000d;
 
-                public int WaypointCount => this.Path.Count;
+                public int WaypointCount => Path.Count;
             }
         }
     }

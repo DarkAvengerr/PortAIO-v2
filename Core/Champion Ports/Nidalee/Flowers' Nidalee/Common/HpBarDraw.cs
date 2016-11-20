@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_Nidalee.Common
 {
     using LeagueSharp;
@@ -78,16 +78,6 @@ using EloBuddy;
             Vector2 hpPosAfter = GetHpPosAfterDmg(dmg);
 
             FullHPBar(hpPosNow, hpPosAfter, color);
-        }
-
-        private void FullHPBar(int to, int from, System.Drawing.Color color)
-        {
-            var sPos = StartPosition;
-
-            for (var i = from; i < to; i++)
-            {
-                Drawing.DrawLine(sPos.X + i, sPos.Y, sPos.X + i, sPos.Y + 9, 1, color);
-            }
         }
 
         private static void FullHPBar(Vector2 from, Vector2 to, ColorBGRA color)

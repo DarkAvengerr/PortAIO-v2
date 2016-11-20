@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_Nidalee.Prediction
 {
     using System;
@@ -41,11 +41,10 @@ using EloBuddy;
 
         public class PredictionInput
         {
-
             private Vector3 _from;
             private Vector3 _rangeCheckFrom;
             public bool Aoe = false;
-            public bool Collision = false;
+            public bool Collision;
             public CollisionableObjects[] CollisionObjects =
             {
                 CollisionableObjects.Minions, CollisionableObjects.YasuoWall
@@ -66,9 +65,6 @@ using EloBuddy;
                 set { _from = value; }
             }
 
-            /// <summary>
-            ///     The position from where the range is checked.
-            /// </summary>
             public Vector3 RangeCheckFrom
             {
                 get
@@ -80,10 +76,7 @@ using EloBuddy;
                 set { _rangeCheckFrom = value; }
             }
 
-            internal float RealRadius
-            {
-                get { return UseBoundingRadius ? Radius + Unit.BoundingRadius : Radius; }
-            }
+            internal float RealRadius => UseBoundingRadius ? Radius + Unit.BoundingRadius : Radius;
         }
 
         public class PredictionOutput
@@ -91,27 +84,11 @@ using EloBuddy;
             internal int _aoeTargetsHitCount;
             private Vector3 _castPosition;
             private Vector3 _unitPosition;
-
-            /// <summary>
-            ///     The list of the targets that the spell will hit (only if aoe was enabled).
-            /// </summary>
             public List<AIHeroClient> AoeTargetsHit = new List<AIHeroClient>();
-
-            /// <summary>
-            ///     The list of the units that the skillshot will collide with.
-            /// </summary>
             public List<Obj_AI_Base> CollisionObjects = new List<Obj_AI_Base>();
-
-            /// <summary>
-            ///     Returns the hitchance.
-            /// </summary>
             public HitChance Hitchance = HitChance.Impossible;
-
             internal PredictionInput Input;
 
-            /// <summary>
-            ///     The position where the skillshot should be casted to increase the accuracy.
-            /// </summary>
             public Vector3 CastPosition
             {
                 get
@@ -123,17 +100,8 @@ using EloBuddy;
                 set { _castPosition = value; }
             }
 
-            /// <summary>
-            ///     The number of targets the skillshot will hit (only if aoe was enabled).
-            /// </summary>
-            public int AoeTargetsHitCount
-            {
-                get { return Math.Max(_aoeTargetsHitCount, AoeTargetsHit.Count); }
-            }
+            public int AoeTargetsHitCount => Math.Max(_aoeTargetsHitCount, AoeTargetsHit.Count);
 
-            /// <summary>
-            ///     The position where the unit is going to be when the skillshot reaches his position.
-            /// </summary>
             public Vector3 UnitPosition
             {
                 get { return _unitPosition.To2D().IsValid() ? _unitPosition.SetZ() : Input.Unit.ServerPosition; }
@@ -192,7 +160,6 @@ using EloBuddy;
 
                 if (ft)
                 {
-                    //Increase the delay due to the latency and server tick:
                     input.Delay += Game.Ping / 2000f + 0.06f;
 
                     if (input.Aoe)
@@ -201,35 +168,31 @@ using EloBuddy;
                     }
                 }
 
-                //Target too far away.
                 if (Math.Abs(input.Range - float.MaxValue) > float.Epsilon &&
                     input.Unit.Distance(input.RangeCheckFrom, true) > Math.Pow(input.Range * 1.5, 2))
                 {
                     return new PredictionOutput { Input = input };
                 }
 
-                //Unit is dashing.
                 if (input.Unit.IsDashing())
                 {
                     result = GetDashingPrediction(input);
                 }
                 else
                 {
-                    //Unit is immobile.
                     var remainingImmobileT = UnitIsImmobileUntil(input.Unit);
+
                     if (remainingImmobileT >= 0d)
                     {
                         result = GetImmobilePrediction(input, remainingImmobileT);
                     }
                 }
 
-                //Normal prediction
                 if (result == null)
                 {
                     result = GetPositionOnPath(input, input.Unit.GetWaypoints(), input.Unit.MoveSpeed);
                 }
 
-                //Check if the unit position is in range
                 if (Math.Abs(input.Range - float.MaxValue) > float.Epsilon)
                 {
                     if (result.Hitchance >= HitChance.High &&
@@ -244,8 +207,6 @@ using EloBuddy;
                     {
                         result.Hitchance = HitChance.OutOfRange;
                     }
-
-                    /* This does not need to be handled for the updated predictions, but left as a reference.*/
                     if (input.RangeCheckFrom.Distance(result.CastPosition, true) > Math.Pow(input.Range, 2))
                     {
                         if (result.Hitchance != HitChance.OutOfRange)
@@ -261,40 +222,36 @@ using EloBuddy;
                     }
                 }
 
-                //Check for collision
                 if (checkCollision && input.Collision && result.Hitchance > HitChance.Impossible)
                 {
                     var positions = new List<Vector3> { result.CastPosition };
-                    var originalUnit = input.Unit;
+
                     if (Collision.GetCollision(positions, input))
+                    {
                         result.Hitchance = HitChance.Collision;
+                    }
                 }
 
-                //Set hit chance
                 if (result.Hitchance == HitChance.High || result.Hitchance == HitChance.VeryHigh)
                 {
-
                     result = WayPointAnalysis(result, input);
-                    //.debug(input.Unit.BaseSkinName + result.Hitchance);
-
                 }
-                if (result.Hitchance >= HitChance.VeryHigh && input.Unit is AIHeroClient && input.Radius > 1)
+
+                if (result.Hitchance < HitChance.VeryHigh || !(input.Unit is AIHeroClient) || !(input.Radius > 1))
                 {
-
-                    var lastWaypiont = input.Unit.GetWaypoints().Last().To3D();
-                    var distanceUnitToWaypoint = lastWaypiont.Distance(input.Unit.ServerPosition);
-                    var distanceFromToUnit = input.From.Distance(input.Unit.ServerPosition);
-                    var distanceFromToWaypoint = lastWaypiont.Distance(input.From);
-                    float speedDelay = distanceFromToUnit / input.Speed;
-
-                    if (Math.Abs(input.Speed - float.MaxValue) < float.Epsilon)
-                        speedDelay = 0;
-
-                    float totalDelay = speedDelay + input.Delay;
-                    float moveArea = input.Unit.MoveSpeed * totalDelay;
-                    float fixRange = moveArea * 0.35f;
-                    float pathMinLen = 800 + moveArea;
+                    return result;
                 }
+
+                var lastWaypiont = input.Unit.GetWaypoints().Last().To3D();
+                lastWaypiont.Distance(input.Unit.ServerPosition);
+                var distanceFromToUnit = input.From.Distance(input.Unit.ServerPosition);
+                lastWaypiont.Distance(input.From);
+                var speedDelay = distanceFromToUnit / input.Speed;
+
+                if (Math.Abs(input.Speed - float.MaxValue) < float.Epsilon)
+                    speedDelay = 0;
+
+                var totalDelay = speedDelay + input.Delay;
 
                 return result;
             }
@@ -676,19 +633,6 @@ using EloBuddy;
                                 break;
                             var p = pos + input.RealRadius * direction;
 
-                            if (input.Type == SkillshotType.SkillshotLine && false)
-                            {
-                                var alpha = (input.From.To2D() - p).AngleBetween(a - b);
-                                if (alpha > 30 && alpha < 180 - 30)
-                                {
-                                    var beta = (float)Math.Asin(input.RealRadius / p.Distance(input.From));
-                                    var cp1 = input.From.To2D() + (p - input.From.To2D()).Rotated(beta);
-                                    var cp2 = input.From.To2D() + (p - input.From.To2D()).Rotated(-beta);
-
-                                    pos = cp1.Distance(pos, true) < cp2.Distance(pos, true) ? cp1 : cp2;
-                                }
-                            }
-
                             return new PredictionOutput
                             {
                                 Input = input,
@@ -1010,32 +954,16 @@ using EloBuddy;
 
         public static class Collision
         {
-            static Collision()
-            {
-
-            }
-
-            /// <summary>
-            ///     Returns the list of the units that the skillshot will hit before reaching the set positions.
-            /// </summary>
-            /// 
             private static bool MinionIsDead(PredictionInput input, Obj_AI_Base minion, float distance)
             {
-                float delay = (distance / input.Speed) + input.Delay;
+                var delay = (distance / input.Speed) + input.Delay;
 
                 if (Math.Abs(input.Speed - float.MaxValue) < float.Epsilon)
                     delay = input.Delay;
 
-                int convert = (int)(delay * 1000);
+                var convert = (int)(delay * 1000);
 
-                if (HealthPrediction.LaneClearHealthPrediction(minion, convert, 0) <= 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                return HealthPrediction.LaneClearHealthPrediction(minion, convert, 0) <= 0;
             }
             public static bool GetCollision(List<Vector3> positions, PredictionInput input)
             {
@@ -1055,44 +983,38 @@ using EloBuddy;
                                     {
                                         if (MinionIsDead(input, minion, distanceFromToUnit))
                                             continue;
-                                        else
-                                            return true;
+                                        return true;
                                     }
-                                    else if (minion.ServerPosition.Distance(position) < minion.BoundingRadius)
+                                    if (minion.ServerPosition.Distance(position) < minion.BoundingRadius)
                                     {
                                         if (MinionIsDead(input, minion, distanceFromToUnit))
                                             continue;
-                                        else
-                                            return true;
+                                        return true;
                                     }
-                                    else
+                                    var minionPos = minion.ServerPosition;
+                                    var bonusRadius = 15;
+                                    if (minion.IsMoving)
                                     {
-                                        var minionPos = minion.ServerPosition;
-                                        int bonusRadius = 15;
-                                        if (minion.IsMoving)
+                                        var predInput2 = new PredictionInput
                                         {
-                                            var predInput2 = new PredictionInput
-                                            {
-                                                Collision = false,
-                                                Speed = input.Speed,
-                                                Delay = input.Delay,
-                                                Range = input.Range,
-                                                From = input.From,
-                                                Radius = input.Radius,
-                                                Unit = minion,
-                                                Type = input.Type
-                                            };
-                                            minionPos = Prediction.GetPrediction(predInput2).CastPosition;
-                                            bonusRadius = 50 + (int)input.Radius;
-                                        }
+                                            Collision = false,
+                                            Speed = input.Speed,
+                                            Delay = input.Delay,
+                                            Range = input.Range,
+                                            From = input.From,
+                                            Radius = input.Radius,
+                                            Unit = minion,
+                                            Type = input.Type
+                                        };
+                                        minionPos = Prediction.GetPrediction(predInput2).CastPosition;
+                                        bonusRadius = 50 + (int)input.Radius;
+                                    }
 
-                                        if (minionPos.To2D().Distance(input.From.To2D(), position.To2D(), true, true) <= Math.Pow((input.Radius + bonusRadius + minion.BoundingRadius), 2))
-                                        {
-                                            if (MinionIsDead(input, minion, distanceFromToUnit))
-                                                continue;
-                                            else
-                                                return true;
-                                        }
+                                    if (minionPos.To2D().Distance(input.From.To2D(), position.To2D(), true, true) <= Math.Pow((input.Radius + bonusRadius + minion.BoundingRadius), 2))
+                                    {
+                                        if (MinionIsDead(input, minion, distanceFromToUnit))
+                                            continue;
+                                        return true;
                                     }
                                 }
                                 break;
@@ -1160,36 +1082,37 @@ using EloBuddy;
         public static class UnitTracker
         {
             public static List<UnitTrackerInfo> UnitTrackerInfoList = new List<UnitTrackerInfo>();
-            private static List<AIHeroClient> Champion = new List<AIHeroClient>();
-            private static List<Spells> spells = new List<Spells>();
+            private static readonly List<AIHeroClient> Champion = new List<AIHeroClient>();
+            private static readonly List<Spells> spells = new List<Spells>();
             private static List<PathInfo> PathBank = new List<PathInfo>();
+
             static UnitTracker()
             {
-                spells.Add(new Spells() { name = "katarinar", duration = 1 }); //Katarinas R
-                spells.Add(new Spells() { name = "drain", duration = 1 }); //Fiddle W
-                spells.Add(new Spells() { name = "crowstorm", duration = 1 }); //Fiddle R
-                spells.Add(new Spells() { name = "consume", duration = 0.5 }); //Nunu Q
-                spells.Add(new Spells() { name = "absolutezero", duration = 1 }); //Nunu R
-                spells.Add(new Spells() { name = "staticfield", duration = 0.5 }); //Blitzcrank R
-                spells.Add(new Spells() { name = "cassiopeiapetrifyinggaze", duration = 0.5 }); //Cassio's R
-                spells.Add(new Spells() { name = "ezrealtrueshotbarrage", duration = 1 }); //Ezreal's R
-                spells.Add(new Spells() { name = "galioidolofdurand", duration = 1 }); //Ezreal's R                                                                   
-                spells.Add(new Spells() { name = "luxmalicecannon", duration = 1 }); //Lux R
-                spells.Add(new Spells() { name = "reapthewhirlwind", duration = 1 }); //Jannas R
-                spells.Add(new Spells() { name = "jinxw", duration = 0.6 }); //jinxW
-                spells.Add(new Spells() { name = "jinxr", duration = 0.6 }); //jinxR
-                spells.Add(new Spells() { name = "missfortunebullettime", duration = 1 }); //MissFortuneR
-                spells.Add(new Spells() { name = "shenstandunited", duration = 1 }); //ShenR
-                spells.Add(new Spells() { name = "threshe", duration = 0.4 }); //ThreshE
-                spells.Add(new Spells() { name = "threshrpenta", duration = 0.75 }); //ThreshR
-                spells.Add(new Spells() { name = "threshq", duration = 0.75 }); //ThreshQ
-                spells.Add(new Spells() { name = "infiniteduress", duration = 1 }); //Warwick R
-                spells.Add(new Spells() { name = "meditate", duration = 1 }); //yi W
-                spells.Add(new Spells() { name = "alzaharnethergrasp", duration = 1 }); //Malza R
-                spells.Add(new Spells() { name = "lucianq", duration = 0.5 }); //Lucian Q
-                spells.Add(new Spells() { name = "caitlynpiltoverpeacemaker", duration = 0.5 }); //Caitlyn Q
-                spells.Add(new Spells() { name = "velkozr", duration = 0.5 }); //Velkoz R 
-                spells.Add(new Spells() { name = "jhinr", duration = 2 }); //Velkoz R 
+                spells.Add(new Spells { name = "katarinar", duration = 1 }); //Katarinas R
+                spells.Add(new Spells { name = "drain", duration = 1 }); //Fiddle W
+                spells.Add(new Spells { name = "crowstorm", duration = 1 }); //Fiddle R
+                spells.Add(new Spells { name = "consume", duration = 0.5 }); //Nunu Q
+                spells.Add(new Spells { name = "absolutezero", duration = 1 }); //Nunu R
+                spells.Add(new Spells { name = "staticfield", duration = 0.5 }); //Blitzcrank R
+                spells.Add(new Spells { name = "cassiopeiapetrifyinggaze", duration = 0.5 }); //Cassio's R
+                spells.Add(new Spells { name = "ezrealtrueshotbarrage", duration = 1 }); //Ezreal's R
+                spells.Add(new Spells { name = "galioidolofdurand", duration = 1 }); //Ezreal's R                                                                   
+                spells.Add(new Spells { name = "luxmalicecannon", duration = 1 }); //Lux R
+                spells.Add(new Spells { name = "reapthewhirlwind", duration = 1 }); //Jannas R
+                spells.Add(new Spells { name = "jinxw", duration = 0.6 }); //jinxW
+                spells.Add(new Spells { name = "jinxr", duration = 0.6 }); //jinxR
+                spells.Add(new Spells { name = "missfortunebullettime", duration = 1 }); //MissFortuneR
+                spells.Add(new Spells { name = "shenstandunited", duration = 1 }); //ShenR
+                spells.Add(new Spells { name = "threshe", duration = 0.4 }); //ThreshE
+                spells.Add(new Spells { name = "threshrpenta", duration = 0.75 }); //ThreshR
+                spells.Add(new Spells { name = "threshq", duration = 0.75 }); //ThreshQ
+                spells.Add(new Spells { name = "infiniteduress", duration = 1 }); //Warwick R
+                spells.Add(new Spells { name = "meditate", duration = 1 }); //yi W
+                spells.Add(new Spells { name = "alzaharnethergrasp", duration = 1 }); //Malza R
+                spells.Add(new Spells { name = "lucianq", duration = 0.5 }); //Lucian Q
+                spells.Add(new Spells { name = "caitlynpiltoverpeacemaker", duration = 0.5 }); //Caitlyn Q
+                spells.Add(new Spells { name = "velkozr", duration = 0.5 }); //Velkoz R 
+                spells.Add(new Spells { name = "jhinr", duration = 2 }); //Velkoz R 
 
                 foreach (var hero in ObjectManager.Get<AIHeroClient>())
                 {
@@ -1214,11 +1137,18 @@ using EloBuddy;
                 {
 
                     var item = UnitTrackerInfoList.Find(x => x.NetworkId == sender.NetworkId);
-                    if (args.Path.Count() == 1) // STOP MOVE DETECTION
+                    var count = 0;
+
+                    foreach (var vector3 in args.Path)
+                    {
+                        count++;
+                    }
+
+                    if (count == 1)
                         item.StopMoveTick = Utils.TickCount;
 
                     item.NewPathTick = Utils.TickCount;
-                    item.PathBank.Add(new PathInfo() { Position = args.Path.Last().To2D(), Time = Utils.TickCount });
+                    item.PathBank.Add(new PathInfo { Position = args.Path.Last().To2D(), Time = Utils.TickCount });
 
                     if (item.PathBank.Count > 3)
                         item.PathBank.RemoveAt(0);
@@ -1269,23 +1199,23 @@ using EloBuddy;
                         Console.WriteLine("SPAM PLACE");
                         return true;
                     }
-                    else if (Math.Cos((AB + BC - AC) / (2 * Math.Sqrt(AB) * Math.Sqrt(BC))) * 180 / Math.PI < 31)
+
+                    if (!(Math.Cos((AB + BC - AC)/(2*Math.Sqrt(AB)*Math.Sqrt(BC)))*180/Math.PI < 31))
                     {
-                        Console.WriteLine("SPAM ANGLE");
-                        return true;
-                    }
-                    else
                         return false;
+                    }
+
+                    Console.WriteLine("SPAM ANGLE");
+
+                    return true;
                 }
-                else
-                    return false;
+                return false;
             }
 
             public static List<Vector2> GetPathWayCalc(Obj_AI_Base unit)
             {
                 var TrackerUnit = UnitTrackerInfoList.Find(x => x.NetworkId == unit.NetworkId);
-                List<Vector2> points = new List<Vector2>();
-                points.Add(unit.ServerPosition.To2D());
+                var points = new List<Vector2> {unit.ServerPosition.To2D()};
                 return points;
             }
 

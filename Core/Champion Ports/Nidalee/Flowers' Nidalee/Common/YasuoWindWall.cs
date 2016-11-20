@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_Nidalee.Common
 {
     using LeagueSharp;
@@ -10,8 +10,8 @@ using EloBuddy;
 
     public class YasuoWindWall
     {
-        private static bool Enable = false;
-        private static YasuoWall YasuoWall = new YasuoWall();
+        private static readonly bool Enable;
+        private static readonly YasuoWall YasuoWall = new YasuoWall();
 
         static YasuoWindWall()
         {

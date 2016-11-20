@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Flowers_Nidalee.Common
 {
     using LeagueSharp;
@@ -8,10 +8,65 @@ using EloBuddy;
     using SharpDX;
     using SPrediction;
     using System;
-    using Prediction = Flowers_Nidalee.Prediction;
 
     public static class Common
     {
+        public static HitChance MinCommonHitChance
+        {
+            get
+            {
+                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 0)
+                {
+                    return HitChance.VeryHigh;
+                }
+
+                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 1)
+                {
+                    return HitChance.High;
+                }
+
+                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 2)
+                {
+                    return HitChance.Medium;
+                }
+
+                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 3)
+                {
+                    return HitChance.Low;
+                }
+
+                return HitChance.VeryHigh;
+            }
+        }
+
+        public static OKTWPrediction.HitChance MinOKTWHitChance
+        {
+            get
+            {
+                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 0)
+                {
+                    return OKTWPrediction.HitChance.VeryHigh;
+                }
+
+                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 1)
+                {
+                    return OKTWPrediction.HitChance.High;
+                }
+
+                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 2)
+                {
+                    return OKTWPrediction.HitChance.Medium;
+                }
+
+                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 3)
+                {
+                    return OKTWPrediction.HitChance.Low;
+                }
+
+                return OKTWPrediction.HitChance.VeryHigh;
+            }
+        }
+
         public static void CastTo(this Spell Spells, Obj_AI_Base target, bool AOE = false)
         {
             switch (Program.Menu.Item("SelectPred", true).GetValue<StringList>().SelectedIndex)
@@ -20,7 +75,7 @@ using EloBuddy;
                     {
                         var SpellPred = Spells.GetPrediction(target, AOE);
 
-                        if (SpellPred.Hitchance >= HitChance.VeryHigh)
+                        if (SpellPred.Hitchance >= MinCommonHitChance)
                         {
                             Spells.Cast(SpellPred.CastPosition, true);
                         }
@@ -28,14 +83,14 @@ using EloBuddy;
                     break;
                 case 1:
                     {
-                        Prediction.OKTWPrediction.SkillshotType CoreType2 = Prediction.OKTWPrediction.SkillshotType.SkillshotLine;
+                        OKTWPrediction.SkillshotType CoreType2 = OKTWPrediction.SkillshotType.SkillshotLine;
 
                         if (Spells.Type == SkillshotType.SkillshotCircle)
                         {
-                            CoreType2 = Prediction.OKTWPrediction.SkillshotType.SkillshotCircle;
+                            CoreType2 = OKTWPrediction.SkillshotType.SkillshotCircle;
                         }
 
-                        var predInput2 = new Prediction.OKTWPrediction.PredictionInput
+                        var predInput2 = new OKTWPrediction.PredictionInput
                         {
                             Aoe = AOE,
                             Collision = Spells.Collision,
@@ -48,18 +103,18 @@ using EloBuddy;
                             Type = CoreType2
                         };
 
-                        var poutput2 = Prediction.OKTWPrediction.Prediction.GetPrediction(predInput2);
+                        var poutput2 = OKTWPrediction.Prediction.GetPrediction(predInput2);
 
                         if (Spells.Speed != float.MaxValue && YasuoWindWall.CollisionYasuo(ObjectManager.Player.ServerPosition, poutput2.CastPosition))
                         {
                             return;
                         }
 
-                        if (poutput2.Hitchance >= Prediction.OKTWPrediction.HitChance.VeryHigh)
+                        if (poutput2.Hitchance >= MinOKTWHitChance)
                         {
                             Spells.Cast(poutput2.CastPosition, true);
                         }
-                        else if (predInput2.Aoe && poutput2.AoeTargetsHitCount > 1 && poutput2.Hitchance >= Prediction.OKTWPrediction.HitChance.High)
+                        else if (predInput2.Aoe && poutput2.AoeTargetsHitCount > 1 && poutput2.Hitchance >= MinOKTWHitChance - 1)
                         {
                             Spells.Cast(poutput2.CastPosition, true);
                         }
@@ -67,9 +122,9 @@ using EloBuddy;
                     break;
                 case 2:
                     {
-                        Prediction.SDKPrediction.SkillshotType CoreType2 = Prediction.SDKPrediction.SkillshotType.SkillshotLine;
+                        SDKPrediction.SkillshotType CoreType2 = SDKPrediction.SkillshotType.SkillshotLine;
 
-                        var predInput2 = new Prediction.SDKPrediction.PredictionInput
+                        var predInput2 = new SDKPrediction.PredictionInput
                         {
                             AoE = AOE,
                             Collision = Spells.Collision,
@@ -82,38 +137,42 @@ using EloBuddy;
                             Type = CoreType2
                         };
 
-                        var poutput2 = Prediction.SDKPrediction.GetPrediction(predInput2);
+                        var poutput2 = SDKPrediction.GetPrediction(predInput2);
 
                         if (Spells.Speed != float.MaxValue && YasuoWindWall.CollisionYasuo(ObjectManager.Player.ServerPosition, poutput2.CastPosition))
                         {
                             return;
                         }
 
-                        if (poutput2.Hitchance >= Prediction.SDKPrediction.HitChance.VeryHigh)
-                        {
-                            Spells.Cast(poutput2.CastPosition, true);
-                        }
-                        else if (predInput2.AoE && poutput2.AoeTargetsHitCount > 1 && poutput2.Hitchance >= Prediction.SDKPrediction.HitChance.High)
-                        {
-                            Spells.Cast(poutput2.CastPosition, true);
-                        }
+                        //test
+                        Spells.Cast(poutput2.UnitPosition, true);
+
+                        //if (poutput2.Hitchance >= SDKPrediction.HitChance.VeryHigh)
+                        //{
+                        //    Spells.Cast(poutput2.CastPosition, true);
+                        //}
+                        //else if (predInput2.AoE && poutput2.AoeTargetsHitCount > 1 && poutput2.Hitchance >= SDKPrediction.HitChance.High)
+                        //{
+                        //    Spells.Cast(poutput2.CastPosition, true);
+                        //}
                     }
                     break;
                 case 3:
                     {
-                        if (target is AIHeroClient && target.IsValid)
+                        var hero = target as AIHeroClient;
+
+                        if (hero != null && hero.IsValid)
                         {
-                            var t = target as AIHeroClient;
+                            var t = hero;
 
                             if (t.IsValidTarget())
                             {
-                                Spells.SPredictionCast(t, HitChance.VeryHigh);
-                                return;
+                                Spells.SPredictionCast(t, MinCommonHitChance);
                             }
                         }
                         else
                         {
-                            Spells.CastIfHitchanceEquals(target, HitChance.VeryHigh);
+                            Spells.CastIfHitchanceEquals(target, MinCommonHitChance);
                         }
                     }
                     break;
@@ -133,11 +192,8 @@ using EloBuddy;
                         }
                     }
                     break;
-                default:
-                    break;
             }
         }
-
         public static float DistanceSquared(this Obj_AI_Base source, Vector3 position)
         {
             return source.DistanceSquared(position.To2D());
@@ -301,11 +357,11 @@ using EloBuddy;
 
             internal MovementCollisionInfo(float collisionTime, Vector2 collisionPosition)
             {
-                this.CollisionTime = collisionTime;
-                this.CollisionPosition = collisionPosition;
+                CollisionTime = collisionTime;
+                CollisionPosition = collisionPosition;
             }
 
-            public object this[int i] => i == 0 ? this.CollisionTime : (object)this.CollisionPosition;
+            public object this[int i] => i == 0 ? CollisionTime : (object)CollisionPosition;
         }
 
         public static float DistanceToPlayer(this Obj_AI_Base source)
