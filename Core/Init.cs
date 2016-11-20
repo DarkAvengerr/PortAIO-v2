@@ -1153,6 +1153,9 @@ namespace PortAIO
                         case 5: // OneKeyToFish
                             OneKeyToFish.Program.Main();
                             break;
+                        case 6: // Lord's Fizz
+                            LordsFizz.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Galio:

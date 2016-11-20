@@ -109,7 +109,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "Project Fiora", "UnderratedAIO", "jesuisFiora", "Flowers' Fiora" };
                     break;
                 case EloBuddy.Champion.Fizz:
-                    champ = new string[] { "Math Fizz", "ElFizz", "UnderratedAIO", "HeavenStrikeFizz", "NoobFizz", "OneKeyToFish" };
+                    champ = new string[] { "Math Fizz", "ElFizz", "UnderratedAIO", "HeavenStrikeFizz", "NoobFizz", "OneKeyToFish", "Lord's Fizz" };
                     break;
                 case EloBuddy.Champion.Galio:
                     champ = new string[] { "UnderratedAIO", "Desomond Galio", "Galio#" };

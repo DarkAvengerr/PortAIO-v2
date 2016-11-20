@@ -1155,6 +1155,7 @@
     <Compile Include="Core\Champion Ports\Fiora\Flower%27s Fiora\Manager\Passive\PassiveType.cs" />
     <Compile Include="Core\Champion Ports\Fiora\Flower%27s Fiora\Manager\Spells\SpellManager.cs" />
     <Compile Include="Core\Champion Ports\Fiora\Flower%27s Fiora\Program.cs" />
+    <Compile Include="Core\Champion Ports\Fizz\Lord%27s Fizz\Program.cs" />
     <Compile Include="Core\Champion Ports\Ivern\SSIvern\DrawDamage.cs" />
     <Compile Include="Core\Champion Ports\Ivern\SSIvern\Program.cs" />
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Common\Common.cs" />
