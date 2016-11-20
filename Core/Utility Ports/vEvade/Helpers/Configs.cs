@@ -105,6 +105,11 @@ using LeagueSharp.Common;
                         Evade.OnMissileSpells.Add(name, spell);
                     }
 
+                    if (spell.TrapName != "")
+                    {
+                        Evade.OnTrapSpells.Add(spell.TrapName, spell);
+                    }
+
                     LoadSpecialSpell(spell);
 
                     var subMenu =
@@ -163,6 +168,7 @@ using LeagueSharp.Common;
             misc.AddItem(new MenuItem("DodgeLine", "Dodge Line Spells").SetValue(true));
             misc.AddItem(new MenuItem("DodgeCircle", "Dodge Circle Spells").SetValue(true));
             misc.AddItem(new MenuItem("DodgeCone", "Dodge Cone Spells").SetValue(true));
+            misc.AddItem(new MenuItem("DodgeTrap", "Dodge Traps").SetValue(true));
             Menu.AddSubMenu(misc);
 
             var draw = new Menu("Draw", "Draw");

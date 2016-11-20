@@ -32,6 +32,8 @@ using LeagueSharp.Common;
 
         public static readonly Dictionary<string, SpellData> OnProcessSpells = new Dictionary<string, SpellData>();
 
+        public static readonly Dictionary<string, SpellData> OnTrapSpells = new Dictionary<string, SpellData>();
+
         public static int LastWardJumpTick;
 
         public static SpellList<int, SpellInstance> SpellsDetected = new SpellList<int, SpellInstance>();
@@ -162,8 +164,13 @@ using LeagueSharp.Common;
         {
             foreach (var spell in SpellsDetected.Values)
             {
-                if (spell.MissileObject == null && spell.ToggleObject == null
+                if (spell.MissileObject == null && spell.ToggleObject == null && spell.TrapObject == null
                     && HeroManager.AllHeroes.Any(i => i.IsValid() && i.IsDead && i.NetworkId == spell.Unit.NetworkId))
+                {
+                    LeagueSharp.Common.Utility.DelayAction.Add(1, () => SpellsDetected.Remove(spell.SpellId));
+                }
+
+                if (spell.TrapObject != null && spell.TrapObject.IsDead)
                 {
                     LeagueSharp.Common.Utility.DelayAction.Add(1, () => SpellsDetected.Remove(spell.SpellId));
                 }
@@ -174,7 +181,7 @@ using LeagueSharp.Common;
 
                     if (Configs.Debug)
                     {
-                        Chat.Print("=> D1: {0} | {1}", spell.SpellId, Utils.GameTimeTickCount);
+                        Console.WriteLine($"=> D: {spell.SpellId} | {Utils.GameTimeTickCount}");
                     }
                 }
             }
@@ -189,11 +196,8 @@ using LeagueSharp.Common;
 
             if (Configs.Debug)
             {
-                Chat.Print(
-                    "{0} Dash => Speed: {1}, Dist: {2}",
-                    Utils.GameTimeTickCount,
-                    args.Speed,
-                    args.EndPos.Distance(args.StartPos));
+                Console.WriteLine(
+                    $"{Utils.GameTimeTickCount} Dash => Speed: {args.Speed}, Dist: {args.EndPos.Distance(args.StartPos)}");
             }
 
             evadeToPos = args.EndPos;
@@ -419,9 +423,8 @@ using LeagueSharp.Common;
             }
 
             var newPath = ObjectManager.Player.GetPath(evadeToPos.To3D()).ToList().To2D();
-            var checkNewPath = IsSafePath(newPath, 100);
 
-            if (checkNewPath.IsSafe)
+            if (IsSafePath(newPath, 100).IsSafe)
             {
                 if (evadeToPos.Distance(PlayerPosition) > 75)
                 {

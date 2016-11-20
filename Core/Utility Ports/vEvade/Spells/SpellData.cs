@@ -19,6 +19,8 @@ using LeagueSharp.Common;
 
         public bool AddHitbox = true;
 
+        public int BehindStart;
+
         public bool CanBeRemoved = true;
 
         public CollisionableObjects[] CollisionObjects = { };
@@ -50,6 +52,8 @@ using LeagueSharp.Common;
         public bool HasEndExplosion;
 
         public bool HasStartExplosion;
+
+        public int InfrontStart;
 
         public bool Invert;
 
@@ -95,6 +99,8 @@ using LeagueSharp.Common;
 
         public SpellType Type = SpellType.MissileLine;
 
+        public string TrapName = "";
+
         public bool UseEndPosition;
 
         #endregion
@@ -106,7 +112,10 @@ using LeagueSharp.Common;
             get
             {
                 return this.RawRadius + Configs.SpellExtraRadius
-                       + (!this.AddHitbox ? 0 : (int)ObjectManager.Player.BoundingRadius);
+                       + (this.AddHitbox && this.Type != SpellType.Ring && this.Type != SpellType.Cone
+                          && this.Type != SpellType.MissileCone
+                              ? (int)ObjectManager.Player.BoundingRadius
+                              : 0);
             }
             set
             {

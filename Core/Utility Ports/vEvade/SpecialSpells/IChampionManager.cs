@@ -69,16 +69,6 @@ using LeagueSharp.Common;
                         newData.MissileSpeed = 500;
                     }
                     break;
-                case "CorkiQ":
-                    if (missile.SData.Name.EndsWith("Min"))
-                    {
-                        canCheck = true;
-                        newData.DelayEx = 200;
-                    }
-                    break;
-                case "EkkoW":
-                    canCheck = true;
-                    break;
             }
 
             if (!canCheck)
@@ -89,10 +79,7 @@ using LeagueSharp.Common;
             var oldSpell =
                 Evade.SpellsDetected.Values.FirstOrDefault(
                     i =>
-                    i.MissileObject == null
-                    && (i.Data.MissileName == missile.SData.Name
-                        || i.Data.ExtraMissileNames.Contains(missile.SData.Name))
-                    && i.Unit.NetworkId == sender.NetworkId);
+                    i.MissileObject == null && i.Data.MenuName == data.MenuName && i.Unit.NetworkId == sender.NetworkId);
 
             if (oldSpell == null)
             {
@@ -104,12 +91,12 @@ using LeagueSharp.Common;
             Evade.SpellsDetected[oldSpell.SpellId] = new SpellInstance(
                 newData,
                 oldSpell.StartTick,
-                newData.Delay + newData.DelayEx
-                + (int)(oldSpell.Start.Distance(oldSpell.End) / newData.MissileSpeed * 1000),
+                newData.Delay + (int)(oldSpell.Start.Distance(oldSpell.End) / newData.MissileSpeed * 1000)
+                + newData.DelayEx,
                 oldSpell.Start,
                 oldSpell.End,
                 oldSpell.Unit,
-                oldSpell.Type) { MissileObject = missile, SpellId = oldSpell.SpellId };
+                oldSpell.Type) { SpellId = oldSpell.SpellId, MissileObject = missile };
             spellArgs.NoProcess = true;
         }
 
@@ -119,9 +106,6 @@ using LeagueSharp.Common;
             SpellData data,
             SpellArgs spellArgs)
         {
-            var startPos = sender.ServerPosition;
-            var endPos = args.End;
-            var dir = (endPos - startPos).To2D().Normalized();
             var newData = (SpellData)data.Clone();
 
             switch (data.MenuName)
@@ -136,23 +120,26 @@ using LeagueSharp.Common;
                     break;
             }
 
-            if (data.MultipleNumber == -1)
+            if (data.MultipleNumber == -1 || (data.MenuName == "KhazixW" && args.SData.Name == data.SpellName))
             {
                 return;
             }
 
-            if (data.MenuName == "KhazixW" && args.SData.Name == data.SpellName)
-            {
-                return;
-            }
+            var startPos = sender.ServerPosition;
+            var dir = (args.End - startPos).To2D().Normalized();
+            var startTick = Utils.GameTimeTickCount;
 
             for (var i = -(data.MultipleNumber - 1) / 2; i <= (data.MultipleNumber - 1) / 2; i++)
             {
                 SpellDetector.AddSpell(
                     sender,
                     startPos,
-                    startPos + data.Range * dir.Rotated(data.MultipleAngle * i).To3D(),
-                    data);
+                    startPos + data.Range / 2f * dir.Rotated(data.MultipleAngle * i).To3D(),
+                    data,
+                    null,
+                    SpellType.None,
+                    true,
+                    startTick);
             }
 
             spellArgs.NoProcess = true;

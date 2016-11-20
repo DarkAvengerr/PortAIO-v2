@@ -4,10 +4,14 @@ using LeagueSharp.Common;
 {
     #region
 
+    using System;
     using System.Linq;
+    using System.Text.RegularExpressions;
 
     using LeagueSharp;
+    using LeagueSharp.Common;
 
+    using vEvade.Core;
     using vEvade.Managers;
     using vEvade.Spells;
 
@@ -34,6 +38,7 @@ using LeagueSharp.Common;
 
             init = true;
             SpellDetector.OnProcessSpell += EkkoR;
+            GameObject.OnCreate += EkkoWDetonate;
         }
 
         #endregion
@@ -59,6 +64,26 @@ using LeagueSharp.Common;
             }
 
             spellArgs.NoProcess = true;
+        }
+
+        private static void EkkoWDetonate(GameObject sender, EventArgs args)
+        {
+            var toggle = sender as Obj_GeneralParticleEmitter;
+
+            if (toggle == null || !toggle.IsValid || !new Regex("Ekko_.+_W_Detonate").IsMatch(toggle.Name)
+                || toggle.Name.Contains("Slow"))
+            {
+                return;
+            }
+
+            var spell =
+                Evade.SpellsDetected.Values.FirstOrDefault(
+                    i => i.Data.MenuName == "EkkoW" && i.End.Distance(toggle.Position) < 100);
+
+            if (spell != null)
+            {
+                Evade.SpellsDetected.Remove(spell.SpellId);
+            }
         }
 
         #endregion

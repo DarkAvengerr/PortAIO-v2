@@ -4,6 +4,7 @@ using LeagueSharp.Common;
 {
     #region
 
+    using System;
     using System.Collections.Generic;
 
     using LeagueSharp;
@@ -61,7 +62,8 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Aatrox", MenuName = "AatroxQ", SpellName = "AatroxQ", DangerValue = 3, Range = 650,
-                        Delay = 600, Radius = 265, MissileSpeed = 3050, Type = SpellType.Circle, IsDangerous = true
+                        Delay = 600, Radius = 285, MissileSpeed = 3050, Type = SpellType.Circle, IsDangerous = true,
+                        AddHitbox = false
                     });
 
             Spells.Add(
@@ -112,19 +114,28 @@ using LeagueSharp.Common;
 
             #endregion Ahri
 
+            #region Akali
+
+            Spells.Add(
+                new SpellData
+                    {
+                        ChampName = "Akali", MenuName = "AkaliE", SpellName = "AkaliShadowSwipe", DangerValue = 2,
+                        Slot = SpellSlot.E, Radius = 325, Type = SpellType.Circle, AddHitbox = false
+                    });
+
+            #endregion Akali
+
             #region Alistar
 
             Spells.Add(
                 new SpellData
                     {
                         ChampName = "Alistar", MenuName = "AlistarQ", SpellName = "Pulverize", DangerValue = 3,
-                        Radius = 365, Type = SpellType.Circle
+                        Radius = 365, Type = SpellType.Circle, IsDangerous = true, AddHitbox = false
                     });
 
             #endregion Alistar
 
-            //Todo: next time
-            /*
             #region Amumu
 
             Spells.Add(
@@ -145,8 +156,15 @@ using LeagueSharp.Common;
             Spells.Add(
                 new SpellData
                     {
-                        ChampName = "Amumu", MenuName = "AmumuR", SpellName = "CurseoftheSadMummy", DangerValue = 4,
-                        Slot = SpellSlot.R, Radius = 550, Type = SpellType.Circle, IsDangerous = true
+                        ChampName = "Amumu", MenuName = "AmumuE", SpellName = "Tantrum", DangerValue = 2,
+                        Slot = SpellSlot.E, Radius = 350, Type = SpellType.Circle, AddHitbox = false
+                    });
+
+            Spells.Add(
+                new SpellData
+                    {
+                        ChampName = "Amumu", MenuName = "AmumuR", SpellName = "CurseoftheSadMummy", DangerValue = 5,
+                        Slot = SpellSlot.R, Radius = 550, Type = SpellType.Circle, IsDangerous = true, AddHitbox = false
                     });
 
             #endregion Amumu
@@ -158,8 +176,7 @@ using LeagueSharp.Common;
                     {
                         ChampName = "Anivia", MenuName = "AniviaQ", SpellName = "FlashFrostSpell",
                         MissileName = "FlashFrostSpell", DangerValue = 3, Range = 1100, Radius = 110, MissileSpeed = 850,
-                        CollisionObjects = new[] { CollisionableObjects.YasuoWall }, FixedRange = true, IsDangerous = true,
-                        HasEndExplosion = true, RadiusEx = 210
+                        CollisionObjects = new[] { CollisionableObjects.YasuoWall }, FixedRange = true, IsDangerous = true
                     });
 
             #endregion Anivia
@@ -176,7 +193,7 @@ using LeagueSharp.Common;
             Spells.Add(
                 new SpellData
                     {
-                        ChampName = "Annie", MenuName = "AnnieR", SpellName = "InfernalGuardian", DangerValue = 4,
+                        ChampName = "Annie", MenuName = "AnnieR", SpellName = "InfernalGuardian", DangerValue = 5,
                         Slot = SpellSlot.R, Range = 600, Radius = 250, Type = SpellType.Circle, IsDangerous = true
                     });
 
@@ -188,7 +205,7 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Ashe", MenuName = "AsheW", SpellName = "Volley", MissileName = "VolleyAttack",
-                        DangerValue = 2, Slot = SpellSlot.W, Range = 1200, Radius = 20, MissileSpeed = 1500,
+                        DangerValue = 2, Slot = SpellSlot.W, Range = 1150, Radius = 20, MissileSpeed = 1500,
                         CollisionObjects =
                             new[]
                                 {
@@ -196,14 +213,14 @@ using LeagueSharp.Common;
                                     CollisionableObjects.YasuoWall
                                 },
                         FixedRange = true, MultipleNumber = 9,
-                        MultipleAngle = 4.97f * (float)Math.PI / 180
+                        MultipleAngle = 4.97f * (float)Math.PI / 180, InfrontStart = 72
                     });
 
             Spells.Add(
                 new SpellData
                     {
                         ChampName = "Ashe", MenuName = "AsheR", SpellName = "EnchantedCrystalArrow",
-                        MissileName = "EnchantedCrystalArrow", DangerValue = 3, Slot = SpellSlot.R, Range = 25000,
+                        MissileName = "EnchantedCrystalArrow", DangerValue = 5, Slot = SpellSlot.R, Range = 25000,
                         Radius = 130, MissileSpeed = 1600,
                         CollisionObjects = new[] { CollisionableObjects.Heroes, CollisionableObjects.YasuoWall },
                         FixedRange = true, IsDangerous = true
@@ -214,6 +231,7 @@ using LeagueSharp.Common;
             #region Aurelion Sol
 
             Spells.Add(
+                //Todo: Radius
                 new SpellData
                     {
                         ChampName = "AurelionSol", MenuName = "AurelionSolQ", SpellName = "AurelionSolQ",
@@ -225,9 +243,9 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "AurelionSol", MenuName = "AurelionSolR", SpellName = "AurelionSolR",
-                        MissileName = "AurelionSolRBeamMissile", DangerValue = 4, Slot = SpellSlot.R, Range = 1500,
+                        MissileName = "AurelionSolRBeamMissile", DangerValue = 3, Slot = SpellSlot.R, Range = 1500,
                         Delay = 350, Radius = 120, MissileSpeed = 4500,
-                        CollisionObjects = new[] { CollisionableObjects.YasuoWall }, FixedRange = true
+                        CollisionObjects = new[] { CollisionableObjects.YasuoWall }, FixedRange = true, IsDangerous = true
                     });
 
             #endregion Aurelion Sol
@@ -238,7 +256,7 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Azir", MenuName = "AzirQ", SpellName = "AzirQWrapper",
-                        MissileName = "AzirSoldierMissile", DangerValue = 2, Range = 25000, Delay = 0, Radius = 70,
+                        MissileName = "AzirSoldierMissile", DangerValue = 2, Range = 20000, Delay = 0, Radius = 70,
                         MissileSpeed = 1600, MissileOnly = true
                     });
 
@@ -246,8 +264,8 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Azir", MenuName = "AzirR", SpellName = "AzirR", DangerValue = 3, Slot = SpellSlot.R,
-                        Range = 760, Radius = 60, MissileSpeed = 1400,
-                        CollisionObjects = new[] { CollisionableObjects.YasuoWall }, FixedRange = true
+                        Range = 750, Radius = 150, MissileSpeed = 1400,
+                        CollisionObjects = new[] { CollisionableObjects.YasuoWall }, FixedRange = true, BehindStart = 300
                     });
 
             #endregion Azir
@@ -259,7 +277,7 @@ using LeagueSharp.Common;
                     {
                         ChampName = "Bard", MenuName = "BardQ", SpellName = "BardQ", MissileName = "BardQMissile",
                         DangerValue = 3, Range = 950, Radius = 60, MissileSpeed = 1500,
-                        CollisionObjects = new[] { CollisionableObjects.YasuoWall }, FixedRange = true
+                        CollisionObjects = new[] { CollisionableObjects.YasuoWall }, FixedRange = true, IsDangerous = true
                     });
 
             Spells.Add(
@@ -285,21 +303,21 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Blitzcrank", MenuName = "BlitzcrankQ", SpellName = "RocketGrab",
-                        MissileName = "RocketGrabMissile", DangerValue = 3, Range = 1050, Radius = 70, MissileSpeed = 1800,
+                        MissileName = "RocketGrabMissile", DangerValue = 4, Range = 1050, Radius = 70, MissileSpeed = 1800,
                         CollisionObjects =
                             new[]
                                 {
                                     CollisionableObjects.Heroes, CollisionableObjects.Minions,
                                     CollisionableObjects.YasuoWall
                                 },
-                        FixedRange = true
+                        FixedRange = true, IsDangerous = true
                     });
 
             Spells.Add(
                 new SpellData
                     {
                         ChampName = "Blitzcrank", MenuName = "BlitzcrankR", SpellName = "StaticField", DangerValue = 2,
-                        Slot = SpellSlot.R, Radius = 600, Type = SpellType.Circle
+                        Slot = SpellSlot.R, Radius = 600, Type = SpellType.Circle, AddHitbox = false
                     });
 
             #endregion Blitzcrank
@@ -317,14 +335,15 @@ using LeagueSharp.Common;
                                     CollisionableObjects.Heroes, CollisionableObjects.Minions,
                                     CollisionableObjects.YasuoWall
                                 },
-                        FixedRange = true
+                        FixedRange = true, IsDangerous = true
                     });
 
             Spells.Add(
                 new SpellData
                     {
-                        ChampName = "Brand", MenuName = "BrandW", SpellName = "BrandW", DangerValue = 3,
-                        Slot = SpellSlot.W, Range = 900, Delay = 850, Radius = 240, Type = SpellType.Circle
+                        ChampName = "Brand", MenuName = "BrandW", SpellName = "BrandW", DangerValue = 2,
+                        Slot = SpellSlot.W, Range = 900, Delay = 850, Radius = 240, Type = SpellType.Circle,
+                        AddHitbox = false
                     });
 
             #endregion Brand
@@ -342,7 +361,7 @@ using LeagueSharp.Common;
                                     CollisionableObjects.Heroes, CollisionableObjects.Minions,
                                     CollisionableObjects.YasuoWall
                                 },
-                        FixedRange = true
+                        FixedRange = true, IsDangerous = true
                     });
 
             Spells.Add(
@@ -351,7 +370,7 @@ using LeagueSharp.Common;
                         ChampName = "Braum", MenuName = "BraumR", SpellName = "BraumRWrapper",
                         MissileName = "BraumRMissile", DangerValue = 4, Slot = SpellSlot.R, Range = 1200, Delay = 500,
                         Radius = 115, MissileSpeed = 1400, CollisionObjects = new[] { CollisionableObjects.YasuoWall },
-                        FixedRange = true, HasStartExplosion = true, RadiusEx = 240
+                        FixedRange = true, IsDangerous = true, HasStartExplosion = true, RadiusEx = 330
                     });
 
             #endregion Braum
@@ -362,7 +381,7 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Caitlyn", MenuName = "CaitlynQ", SpellName = "CaitlynPiltoverPeacemaker",
-                        MissileName = "CaitlynPiltoverPeacemaker", Range = 1300, Delay = 625, Radius = 60,
+                        MissileName = "CaitlynPiltoverPeacemaker", DangerValue = 2, Range = 1300, Delay = 625, Radius = 60,
                         MissileSpeed = 2200, CollisionObjects = new[] { CollisionableObjects.YasuoWall },
                         FixedRange = true
                     });
@@ -378,9 +397,17 @@ using LeagueSharp.Common;
             Spells.Add(
                 new SpellData
                     {
+                        ChampName = "Caitlyn", MenuName = "CaitlynW", SpellName = "CaitlynW", TrapName = "caitlyntrap",
+                        Slot = SpellSlot.W, Delay = 1000, Radius = 65, Type = SpellType.Circle, IsDangerous = true,
+                        ExtraDuration = 90000, DontCross = true
+                    });
+
+            Spells.Add(
+                new SpellData
+                    {
                         ChampName = "Caitlyn", MenuName = "CaitlynE", SpellName = "CaitlynEntrapment",
-                        MissileName = "CaitlynEntrapmentMissile", DangerValue = 3, Slot = SpellSlot.E, Range = 800,
-                        Delay = 150, Radius = 70, MissileSpeed = 1600,
+                        MissileName = "CaitlynEntrapmentMissile", Slot = SpellSlot.E, Range = 800, Delay = 160,
+                        Radius = 70, MissileSpeed = 1600,
                         CollisionObjects =
                             new[]
                                 {
@@ -397,15 +424,25 @@ using LeagueSharp.Common;
             Spells.Add(
                 new SpellData
                     {
-                        ChampName = "Cassiopeia", MenuName = "CassiopeiaQ", SpellName = "CassiopeiaQ", Range = 850,
-                        Delay = 750, Radius = 160, Type = SpellType.Circle
+                        ChampName = "Cassiopeia", MenuName = "CassiopeiaQ", SpellName = "CassiopeiaQ", DangerValue = 2,
+                        Range = 850, Delay = 750, Radius = 160, Type = SpellType.Circle
                     });
 
             Spells.Add(
                 new SpellData
                     {
-                        ChampName = "Cassiopeia", MenuName = "CassiopeiaR", SpellName = "CassiopeiaR", DangerValue = 4,
-                        Slot = SpellSlot.R, Range = 770, Delay = 500, Radius = 80, Type = SpellType.Cone
+                        ChampName = "Cassiopeia", MenuName = "CassiopeiaW", SpellName = "CassiopeiaW",
+                        MissileName = "CassiopeiaWMissile", DangerValue = 2, Slot = SpellSlot.W, Range = 20000,
+                        Radius = 180, MissileSpeed = 3000, Type = SpellType.Circle, MissileOnly = true,
+                        CanBeRemoved = false, ExtraDuration = 5000, DontCross = true
+                    });
+
+            Spells.Add(
+                new SpellData
+                    {
+                        ChampName = "Cassiopeia", MenuName = "CassiopeiaR", SpellName = "CassiopeiaR", DangerValue = 5,
+                        Slot = SpellSlot.R, Range = 770, Delay = 500, Radius = 80, Type = SpellType.Cone,
+                        IsDangerous = true
                     });
 
             #endregion Cassiopeia
@@ -423,7 +460,7 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Chogath", MenuName = "ChogathW", SpellName = "FeralScream", DangerValue = 2,
-                        Slot = SpellSlot.W, Range = 620, Delay = 500, Radius = 55, Type = SpellType.Cone
+                        Slot = SpellSlot.W, Range = 630, Delay = 500, Radius = 55, Type = SpellType.Cone
                     });
 
             #endregion Chogath
@@ -435,16 +472,16 @@ using LeagueSharp.Common;
                     {
                         ChampName = "Corki", MenuName = "CorkiQ", SpellName = "PhosphorusBomb",
                         MissileName = "PhosphorusBombMissile", ExtraMissileNames = new[] { "PhosphorusBombMissileMin" },
-                        DangerValue = 2, Range = 825, Radius = 250, MissileSpeed = 1000, Type = SpellType.Circle,
-                        CollisionObjects = new[] { CollisionableObjects.YasuoWall }
+                        DangerValue = 2, Range = 825, Delay = 300, Radius = 250, MissileSpeed = 1000,
+                        Type = SpellType.Circle, CollisionObjects = new[] { CollisionableObjects.YasuoWall }
                     });
 
             Spells.Add(
                 new SpellData
                     {
                         ChampName = "Corki", MenuName = "CorkiR", SpellName = "MissileBarrageMissile",
-                        MissileName = "MissileBarrageMissile", Slot = SpellSlot.R, Range = 1300, Delay = 175, Radius = 40,
-                        MissileSpeed = 2000,
+                        MissileName = "MissileBarrageMissile", DangerValue = 2, Slot = SpellSlot.R, Range = 1300,
+                        Delay = 180, Radius = 40, MissileSpeed = 2000,
                         CollisionObjects =
                             new[]
                                 {
@@ -458,8 +495,8 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Corki", MenuName = "CorkiREmpower", SpellName = "MissileBarrageMissile2",
-                        MissileName = "MissileBarrageMissile2", DangerValue = 3, Slot = SpellSlot.R, Range = 1500,
-                        Delay = 175, Radius = 40, MissileSpeed = 2000,
+                        MissileName = "MissileBarrageMissile2", DangerValue = 2, Slot = SpellSlot.R, Range = 1500,
+                        Delay = 180, Radius = 40, MissileSpeed = 2000,
                         CollisionObjects =
                             new[]
                                 {
@@ -476,16 +513,16 @@ using LeagueSharp.Common;
             Spells.Add(
                 new SpellData
                     {
-                        ChampName = "Darius", MenuName = "DariusQ", SpellName = "DariusCleave", DangerValue = 2,
-                        Delay = 700, Radius = 425, Type = SpellType.Ring, MissileToUnit = true, RadiusEx = 205,
-                        ExtraDuration = 350
+                        ChampName = "Darius", MenuName = "DariusQ", SpellName = "DariusCleave", DangerValue = 3,
+                        Delay = 750, Radius = 205, Type = SpellType.Ring, MissileToUnit = true, RadiusEx = 425,
+                        DisabledByDefault = true, DontAddExtraDuration = true, DontCross = true
                     });
 
             Spells.Add(
                 new SpellData
                     {
                         ChampName = "Darius", MenuName = "DariusE", SpellName = "DariusAxeGrabCone", DangerValue = 3,
-                        Slot = SpellSlot.E, Range = 490, Delay = 260, Radius = 50, Type = SpellType.Cone
+                        Slot = SpellSlot.E, Range = 500, Radius = 50, Type = SpellType.Cone, IsDangerous = true
                     });
 
             #endregion Darius
@@ -496,9 +533,9 @@ using LeagueSharp.Common;
                 //Todo: Arc
                 new SpellData
                     {
-                        ChampName = "Diana", MenuName = "DianaQ", SpellName = "DianaArc", DangerValue = 3, Range = 850,
-                        Delay = 250, Radius = 50, MissileSpeed = 1400, Type = SpellType.Arc, FixedRange = true,
-                        HasEndExplosion = true, RadiusEx = 195, ExtraDuration = 250
+                        ChampName = "Diana", MenuName = "DianaQ", SpellName = "DianaArc", DangerValue = 3, Range = 900,
+                        Radius = 195, MissileSpeed = 1400, Type = SpellType.Circle,
+                        CollisionObjects = new[] { CollisionableObjects.YasuoWall }, IsDangerous = true
                     });
 
             #endregion Diana
@@ -528,17 +565,18 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Draven", MenuName = "DravenE", SpellName = "DravenDoubleShot",
-                        MissileName = "DravenDoubleShotMissile", DangerValue = 2, Slot = SpellSlot.E, Range = 1100,
+                        MissileName = "DravenDoubleShotMissile", DangerValue = 3, Slot = SpellSlot.E, Range = 1100,
                         Radius = 130, MissileSpeed = 1400, CollisionObjects = new[] { CollisionableObjects.YasuoWall },
-                        FixedRange = true
+                        FixedRange = true, IsDangerous = true
                     });
 
             Spells.Add(
+                //Todo: Recheck
                 new SpellData
                     {
                         ChampName = "Draven", MenuName = "DravenR", SpellName = "DravenRCast", MissileName = "DravenR",
-                        DangerValue = 2, Slot = SpellSlot.R, Range = 25000, Delay = 500, Radius = 160, MissileSpeed = 2000,
-                        CollisionObjects = new[] { CollisionableObjects.YasuoWall }, FixedRange = true
+                        DangerValue = 5, Slot = SpellSlot.R, Range = 25000, Delay = 525, Radius = 160, MissileSpeed = 2000,
+                        CollisionObjects = new[] { CollisionableObjects.YasuoWall }, FixedRange = true, IsDangerous = true
                     });
 
             #endregion Draven
@@ -549,16 +587,16 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Ekko", MenuName = "EkkoQ", SpellName = "EkkoQ", MissileName = "EkkoQMis",
-                        DangerValue = 3, Range = 950, Radius = 60, MissileSpeed = 1650,
+                        DangerValue = 4, Range = 950, Radius = 60, MissileSpeed = 1650,
                         CollisionObjects = new[] { CollisionableObjects.Heroes, CollisionableObjects.YasuoWall },
-                        FixedRange = true
+                        FixedRange = true, IsDangerous = true
                     });
 
             Spells.Add(
                 new SpellData
                     {
                         ChampName = "Ekko", MenuName = "EkkoQReturn", SpellName = "EkkoQReturn",
-                        MissileName = "EkkoQReturn", DangerValue = 3, Range = 25000, Delay = 0, Radius = 100,
+                        MissileName = "EkkoQReturn", DangerValue = 3, Range = 20000, Delay = 0, Radius = 100,
                         MissileSpeed = 2300, CollisionObjects = new[] { CollisionableObjects.YasuoWall },
                         MissileToUnit = true
                     });
@@ -567,15 +605,16 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Ekko", MenuName = "EkkoW", SpellName = "EkkoW", MissileName = "EkkoWMis",
-                        DangerValue = 2, Slot = SpellSlot.W, Range = 25000, Delay = 2200, Radius = 375,
-                        MissileSpeed = 1500, Type = SpellType.Circle, DelayEx = 700
+                        DangerValue = 3, Slot = SpellSlot.W, Range = 20000, Delay = 1050, Radius = 375,
+                        Type = SpellType.Circle, MissileOnly = true, MissileDelayed = true, CanBeRemoved = false,
+                        AddHitbox = false, DisabledByDefault = true, ExtraDuration = 1600
                     });
 
             Spells.Add(
                 new SpellData
                     {
                         ChampName = "Ekko", MenuName = "EkkoR", SpellName = "EkkoR", DangerValue = 3, Slot = SpellSlot.R,
-                        Range = 25000, Radius = 375, MissileSpeed = 5000, Type = SpellType.Circle
+                        Range = 20000, Radius = 375, MissileSpeed = 1650, Type = SpellType.Circle
                     });
 
             #endregion Ekko
@@ -586,7 +625,7 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Elise", MenuName = "EliseHumanE", SpellName = "EliseHumanE",
-                        MissileName = "EliseHumanE", DangerValue = 3, Slot = SpellSlot.E, Range = 1100, Radius = 55,
+                        MissileName = "EliseHumanE", DangerValue = 4, Slot = SpellSlot.E, Range = 1100, Radius = 55,
                         MissileSpeed = 1600,
                         CollisionObjects =
                             new[]
@@ -594,7 +633,7 @@ using LeagueSharp.Common;
                                     CollisionableObjects.Heroes, CollisionableObjects.Minions,
                                     CollisionableObjects.YasuoWall
                                 },
-                        FixedRange = true
+                        FixedRange = true, IsDangerous = true
                     });
 
             #endregion Elise
@@ -604,8 +643,8 @@ using LeagueSharp.Common;
             Spells.Add(
                 new SpellData
                     {
-                        ChampName = "Evelynn", MenuName = "EvelynnR", SpellName = "EvelynnR", DangerValue = 3,
-                        Slot = SpellSlot.R, Range = 650, Delay = 200, Radius = 350, Type = SpellType.Circle
+                        ChampName = "Evelynn", MenuName = "EvelynnR", SpellName = "EvelynnR", DangerValue = 5,
+                        Slot = SpellSlot.R, Range = 650, Radius = 350, Type = SpellType.Circle, IsDangerous = true
                     });
 
             #endregion Evelynn
@@ -631,8 +670,8 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Ezreal", MenuName = "EzrealW", SpellName = "EzrealEssenceFlux",
-                        MissileName = "EzrealEssenceFluxMissile", Slot = SpellSlot.W, Range = 1050, Radius = 80,
-                        MissileSpeed = 1600, CollisionObjects = new[] { CollisionableObjects.YasuoWall },
+                        MissileName = "EzrealEssenceFluxMissile", DangerValue = 2, Slot = SpellSlot.W, Range = 1050,
+                        Radius = 80, MissileSpeed = 1600, CollisionObjects = new[] { CollisionableObjects.YasuoWall },
                         FixedRange = true
                     });
 
@@ -642,7 +681,7 @@ using LeagueSharp.Common;
                         ChampName = "Ezreal", MenuName = "EzrealR", SpellName = "EzrealTrueshotBarrage",
                         MissileName = "EzrealTrueshotBarrage", DangerValue = 3, Slot = SpellSlot.R, Range = 25000,
                         Delay = 1000, Radius = 160, MissileSpeed = 2000,
-                        CollisionObjects = new[] { CollisionableObjects.YasuoWall }, FixedRange = true
+                        CollisionObjects = new[] { CollisionableObjects.YasuoWall }, FixedRange = true, IsDangerous = true
                     });
 
             #endregion Ezreal
@@ -653,8 +692,8 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Fiora", MenuName = "FioraW", SpellName = "FioraW", MissileName = "FioraWMissile",
-                        DangerValue = 2, Slot = SpellSlot.W, Range = 750, Delay = 500, Radius = 70, MissileSpeed = 3200,
-                        CollisionObjects = new[] { CollisionableObjects.YasuoWall }, FixedRange = true
+                        DangerValue = 2, Slot = SpellSlot.W, Range = 750, Delay = 475, Radius = 70, MissileSpeed = 3200,
+                        CollisionObjects = new[] { CollisionableObjects.YasuoWall }, FixedRange = true, BehindStart = 50
                     });
 
             #endregion Fiora
@@ -664,19 +703,18 @@ using LeagueSharp.Common;
             Spells.Add(
                 new SpellData
                     {
-                        ChampName = "Fizz", MenuName = "FizzQ", SpellName = "FizzPiercingStrike", DangerValue = 2,
-                        Range = 550, Delay = 0, Radius = 120, MissileSpeed = 1400, FixedRange = true
+                        ChampName = "Fizz", MenuName = "FizzQ", SpellName = "FizzQ", DangerValue = 2, Range = 550,
+                        Delay = 0, Radius = 60, MissileSpeed = 1400, FixedRange = true
                     });
 
             Spells.Add(
-                //Todo: End Exp
                 new SpellData
                     {
-                        ChampName = "Fizz", MenuName = "FizzR", SpellName = "FizzMarinerDoom",
-                        MissileName = "FizzMarinerDoomMissile", DangerValue = 3, Slot = SpellSlot.R, Range = 1250,
-                        Radius = 120, MissileSpeed = 1350,
+                        ChampName = "Fizz", MenuName = "FizzR", SpellName = "FizzR", MissileName = "FizzRMissile",
+                        ToggleName = "Fizz_.+_R_OrbitFish", DangerValue = 5, Slot = SpellSlot.R, Range = 20000,
+                        Radius = 80, MissileSpeed = 1300,
                         CollisionObjects = new[] { CollisionableObjects.Heroes, CollisionableObjects.YasuoWall },
-                        RadiusEx = 200
+                        IsDangerous = true, ExtraDuration = 2000, UseEndPosition = true, RadiusEx = 1
                     });
 
             #endregion Fizz
@@ -725,9 +763,10 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Gnar", MenuName = "GnarQReturn", SpellName = "GnarQMissileReturn",
-                        MissileName = "GnarQMissileReturn", DangerValue = 2, Range = 25000, Delay = 0, Radius = 75,
+                        MissileName = "GnarQMissileReturn", DangerValue = 2, Range = 3000, Delay = 0, Radius = 75,
                         MissileSpeed = 60, CollisionObjects = new[] { CollisionableObjects.YasuoWall }, FixedRange = true,
-                        MissileAccel = 800, MissileMinSpeed = 60, MissileMaxSpeed = 2600
+                        MissileAccel = 800, MissileMinSpeed = 60, MissileMaxSpeed = 2600, Invert = true,
+                        DisabledByDefault = true
                     });
 
             Spells.Add(
@@ -742,14 +781,16 @@ using LeagueSharp.Common;
                                     CollisionableObjects.Heroes, CollisionableObjects.Minions,
                                     CollisionableObjects.YasuoWall
                                 },
-                        FixedRange = true
+                        FixedRange = true, UseEndPosition = true,
+                        RadiusEx = 210
                     });
 
             Spells.Add(
                 new SpellData
                     {
-                        ChampName = "Gnar", MenuName = "GnarWBig", SpellName = "GnarBigW", DangerValue = 3,
-                        Slot = SpellSlot.W, Range = 600, Delay = 600, Radius = 80, FixedRange = true
+                        ChampName = "Gnar", MenuName = "GnarWBig", SpellName = "GnarBigW", DangerValue = 2,
+                        Slot = SpellSlot.W, Range = 600, Delay = 600, Radius = 80, Type = SpellType.Line,
+                        FixedRange = true
                     });
 
             Spells.Add(
@@ -770,8 +811,8 @@ using LeagueSharp.Common;
             Spells.Add(
                 new SpellData
                     {
-                        ChampName = "Gnar", MenuName = "GnarR", SpellName = "GnarR", DangerValue = 4, Slot = SpellSlot.R,
-                        Radius = 500, Type = SpellType.Circle
+                        ChampName = "Gnar", MenuName = "GnarR", SpellName = "GnarR", DangerValue = 5, Slot = SpellSlot.R,
+                        Delay = 275, Radius = 500, Type = SpellType.Circle, IsDangerous = true, AddHitbox = false
                     });
 
             #endregion Gnar
@@ -783,14 +824,14 @@ using LeagueSharp.Common;
                     {
                         ChampName = "Gragas", MenuName = "GragasQ", SpellName = "GragasQ", MissileName = "GragasQMissile",
                         ToggleName = "Gragas_.+_Q_(Enemy|Ally)", DangerValue = 2, Range = 850, Radius = 250,
-                        MissileSpeed = 1000, Type = SpellType.Circle, ExtraDuration = 4000
+                        MissileSpeed = 1000, Type = SpellType.Circle, ExtraDuration = 4250, DontCross = true
                     });
 
             Spells.Add(
                 new SpellData
                     {
-                        ChampName = "Gragas", MenuName = "GragasE", SpellName = "GragasE", DangerValue = 3,
-                        Slot = SpellSlot.E, Range = 700, Delay = 0, Radius = 200, MissileSpeed = 900,
+                        ChampName = "Gragas", MenuName = "GragasE", SpellName = "GragasE", DangerValue = 2,
+                        Slot = SpellSlot.E, Range = 600, Delay = 0, Radius = 200, MissileSpeed = 910,
                         CollisionObjects = new[] { CollisionableObjects.Heroes, CollisionableObjects.Minions },
                         FixedRange = true
                     });
@@ -799,9 +840,9 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Gragas", MenuName = "GragasR", SpellName = "GragasR", MissileName = "GragasRBoom",
-                        DangerValue = 4, Slot = SpellSlot.R, Range = 1000, Radius = 350, MissileSpeed = 1800,
+                        DangerValue = 5, Slot = SpellSlot.R, Range = 1050, Radius = 350, MissileSpeed = 1800,
                         Type = SpellType.Circle, CollisionObjects = new[] { CollisionableObjects.YasuoWall },
-                        DelayEx = 150
+                        IsDangerous = true
                     });
 
             #endregion Gragas
@@ -813,15 +854,16 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Graves", MenuName = "GravesQ", SpellName = "GravesQLineSpell",
-                        MissileName = "GravesQLineMis", DangerValue = 3, Range = 800, Radius = 40, MissileSpeed = 3000,
+                        MissileName = "GravesQLineMis", DangerValue = 2, Range = 808, Radius = 40, MissileSpeed = 3000,
                         CollisionObjects = new[] { CollisionableObjects.YasuoWall }, FixedRange = true
                     });
 
             Spells.Add(
+                //Todo: Split
                 new SpellData
                     {
                         ChampName = "Graves", MenuName = "GravesQReturn", SpellName = "GravesQReturn",
-                        MissileName = "GravesQReturn", DangerValue = 2, Range = 800, Delay = 0, Radius = 100,
+                        MissileName = "GravesQReturn", DangerValue = 2, Range = 808, Delay = 0, Radius = 100,
                         MissileSpeed = 1600, CollisionObjects = new[] { CollisionableObjects.YasuoWall },
                         FixedRange = true
                     });
@@ -830,31 +872,33 @@ using LeagueSharp.Common;
                 new SpellData
                     {
                         ChampName = "Graves", MenuName = "GravesW", SpellName = "GravesSmokeGrenade",
-                        MissileName = "GravesSmokeGrenadeBoom", ToggleName = "Graves_SmokeGrenade_.+_Team_",
-                        Slot = SpellSlot.W, Range = 950, Radius = 250, MissileSpeed = 1500, Type = SpellType.Circle,
-                        ExtraDuration = 4000
+                        MissileName = "GravesSmokeGrenadeBoom", ToggleName = "Graves_SmokeGrenade_.+_Team_(Green|Red)",
+                        Slot = SpellSlot.W, Range = 950, Radius = 225, MissileSpeed = 1500, Type = SpellType.Circle,
+                        ExtraDuration = 4250, DontCross = true
                     });
 
             Spells.Add(
                 new SpellData
                     {
                         ChampName = "Graves", MenuName = "GravesR", SpellName = "GravesChargeShot",
-                        MissileName = "GravesChargeShotShot", DangerValue = 4, Slot = SpellSlot.R, Range = 1000,
+                        MissileName = "GravesChargeShotShot", DangerValue = 5, Slot = SpellSlot.R, Range = 1000,
                         Radius = 100, MissileSpeed = 2100, CollisionObjects = new[] { CollisionableObjects.YasuoWall },
-                        FixedRange = true
+                        FixedRange = true, IsDangerous = true
                     });
 
             Spells.Add(
                 new SpellData
                     {
                         ChampName = "Graves", MenuName = "GravesRExplosion", SpellName = "GravesRExplosion",
-                        MissileName = "GravesChargeShotFxMissile",
-                        ExtraMissileNames = new[] { "GravesChargeShotFxMissile2" }, DangerValue = 4, Slot = SpellSlot.R,
-                        Range = 650, Delay = 0, Radius = 80, MissileSpeed = 2000, FixedRange = true
+                        MissileName = "GravesChargeShotFxMissile2", DangerValue = 5, Slot = SpellSlot.R, Range = 800,
+                        Delay = 50, Radius = 45, Type = SpellType.Cone, IsDangerous = true, MissileDelayed = true
                     });
 
             #endregion Graves
 
+            //Todo: next time
+
+            /*
             #region Hecarim
 
             Spells.Add(
