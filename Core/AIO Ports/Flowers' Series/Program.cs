@@ -38,7 +38,7 @@ using LeagueSharp.Common;
             OnGameLoad();
         }
 
-        public static void OnGameLoad()
+        private static void OnGameLoad()
         {
             Me = ObjectManager.Player;
 

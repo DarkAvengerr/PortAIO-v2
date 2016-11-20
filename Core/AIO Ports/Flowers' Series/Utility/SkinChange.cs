@@ -32,24 +32,10 @@ using LeagueSharp.Common;
 
         private static void EnbaleSkin(object obj, OnValueChangeEventArgs Args)
         {
-            if (!Args.GetNewValue<bool>())
-            {
-                Me.SetSkin(Me.ChampionName, SkinID);
-            }
         }
 
         private static void OnUpdate(EventArgs Args)
         {
-            if (Me.IsDead)
-            {
-                return;
-            }
-
-            if (Menu.Item("EnableSkin", true).GetValue<bool>())
-            {
-                Me.SetSkin(Me.ChampionName,
-                    Menu.Item("SelectSkin", true).GetValue<StringList>().SelectedIndex);
-            }
         }
     }
 }
