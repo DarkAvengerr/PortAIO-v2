@@ -9,7 +9,7 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade.SpecialSpells
 {
     class Lux : ChampionPlugin
@@ -23,8 +23,8 @@ using EloBuddy;
         {
             if (spellData.spellName == "LuxMaliceCannon")
             {
-                var hero = HeroManager.Enemies.FirstOrDefault(h => h.ChampionName == "Lux");
-                if (hero != null)
+                var hero = HeroManager.AllHeroes.FirstOrDefault(h => h.ChampionName == "Lux");
+                if (hero != null && hero.CheckTeam())
                 {
                     GameObject.OnCreate += (obj, args) => OnCreateObj_LuxMaliceCannon(obj, args, hero, spellData);
                 }

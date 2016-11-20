@@ -9,7 +9,7 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade.SpecialSpells
 {
     class Zed : ChampionPlugin

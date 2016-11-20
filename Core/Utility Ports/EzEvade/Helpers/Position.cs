@@ -9,7 +9,7 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade
 {
     public static class Position
@@ -73,8 +73,13 @@ using EloBuddy;
 
             if (spell.spellType == SpellType.Cone)
             {
+                var a = spell.startPos + spell.direction;
+                var ab = spell.endPos + spell.direction.Perpendicular() * spell.radius;
+                var ac = spell.endPos - spell.direction.Perpendicular() * spell.radius;
 
+                return !position.isLeftOfLineSegment(a, ab) && !position.isLeftOfLineSegment(ab, ac) && !position.isLeftOfLineSegment(ac, a);
             }
+
             return false;
         }
 

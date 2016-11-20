@@ -8,7 +8,7 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade
 {
     class EvadeSpellDatabase
@@ -81,9 +81,9 @@ using EloBuddy;
                 dangerlevel = 3,
                 name = "CaitlynEntrapment",
                 spellName = "CaitlynEntrapment",
-                range = 490,
+                range = 400,
                 spellDelay = 50,
-                speed = 1000,
+                speed = 975,
                 isReversed = true,
                 fixedRange = true,
                 spellKey = SpellSlot.E,

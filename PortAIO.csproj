@@ -5965,6 +5965,7 @@
     <Compile Include="Core\Utility Ports\EzEvade\Helpers\PositionInfo.cs" />
     <Compile Include="Core\Utility Ports\EzEvade\Helpers\Situation.cs" />
     <Compile Include="Core\Utility Ports\EzEvade\Program.cs" />
+    <Compile Include="Core\Utility Ports\EzEvade\SpecialSpells\Ahri.cs" />
     <Compile Include="Core\Utility Ports\EzEvade\SpecialSpells\AllChampions.cs" />
     <Compile Include="Core\Utility Ports\EzEvade\SpecialSpells\Ashe.cs" />
     <Compile Include="Core\Utility Ports\EzEvade\SpecialSpells\Azir.cs" />

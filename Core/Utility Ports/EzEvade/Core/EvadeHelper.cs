@@ -10,7 +10,7 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade
 {
     class EvadeHelper
@@ -881,9 +881,9 @@ using EloBuddy;
 
                 closestDistance = Math.Min(closestDistance, GetClosestDistanceApproach(spell, pos, speed, delay, heroPos, extraDist));
 
-                if (pos.InSkillShot(spell, ObjectCache.myHeroCache.boundingRadius - 6) 
-                    || PredictSpellCollision(spell, pos, speed, delay, heroPos, extraDist, useServerPosition)
-                    || (spell.info.spellType != SpellType.Line && pos.isNearEnemy(minComfortDistance)))
+                if (pos.InSkillShot(spell, ObjectCache.myHeroCache.boundingRadius - 8)
+                   || PredictSpellCollision(spell, pos, speed, delay, heroPos, extraDist, useServerPosition)
+                   || (spell.info.spellType != SpellType.Line && pos.isNearEnemy(minComfortDistance)))
                 {
                     posDangerLevel = Math.Max(posDangerLevel, spell.dangerlevel);
                     posDangerCount += spell.dangerlevel;
@@ -912,7 +912,6 @@ using EloBuddy;
             if (spell.spellType == SpellType.Line && spell.info.projectileSpeed != float.MaxValue)
             {
                 var spellPos = spell.GetCurrentSpellPosition(true, delay);
-                var spellStartPos = spell.currentSpellPosition;
                 var spellEndPos = spell.GetSpellEndPosition();
                 var extendedPos = pos.ExtendDir(walkDir, ObjectCache.myHeroCache.boundingRadius + speed * delay / 1000);
 
@@ -932,7 +931,9 @@ using EloBuddy;
                     return 0;
                 }
 
-                var cpa = MathUtilsCPA.CPAPointsEx(heroPos, walkDir * speed, spellPos, spell.direction * spell.info.projectileSpeed, pos, spellEndPos, out cHeroPos, out cSpellPos);
+                var cpa = MathUtilsCPA.CPAPointsEx(
+                    heroPos, walkDir * speed, spellPos, spell.direction * spell.info.projectileSpeed,
+                    pos, spellEndPos, out cHeroPos, out cSpellPos);
 
                 cHeroPosProjection = cHeroPos.ProjectOn(heroPos, extendedPos);
                 cSpellPosProjection = cSpellPos.ProjectOn(spellPos, spellEndPos);
@@ -943,11 +944,8 @@ using EloBuddy;
                 {
                     return Math.Max(0, cpa - checkDist);
                 }
-                else
-                {
-                    return checkDist;
-                }
 
+                return checkDist;
 
                 //return MathUtils.ClosestTimeOfApproach(heroPos, walkDir * speed, spellPos, spell.direction * spell.info.projectileSpeed);
             }
@@ -980,19 +978,14 @@ using EloBuddy;
                         return 0;
                     }
 
-                    if (tHeroPos.Distance(spell.endPos) >= spell.radius)
-                    {
-                        return Math.Max(0, tHeroPos.Distance(spell.endPos) - midRadius - wallRadius);
-                    }
-                    else
-                    {
-                        return Math.Max(0, midRadius - tHeroPos.Distance(spell.endPos) - wallRadius);
-                    }
+                    return tHeroPos.Distance(spell.endPos) >= spell.radius
+                        ? Math.Max(0, tHeroPos.Distance(spell.endPos) - midRadius - wallRadius)
+                        : Math.Max(0, midRadius - tHeroPos.Distance(spell.endPos) - wallRadius);
                 }
 
                 if (spell.info.spellName == "DariusCleave")
                 {
-                    var wallRadius = 225;
+                    var wallRadius = 115;
                     var midRadius = spell.radius - wallRadius;
 
                     if (spellHitTime == 0)
@@ -1000,14 +993,9 @@ using EloBuddy;
                         return 0;
                     }
 
-                    if (tHeroPos.Distance(spell.endPos) >= spell.radius)
-                    {
-                        return Math.Max(0, tHeroPos.Distance(spell.endPos) - midRadius - wallRadius);
-                    }
-                    else
-                    {
-                        return Math.Max(0, midRadius - tHeroPos.Distance(spell.endPos) - wallRadius);
-                    }
+                    return tHeroPos.Distance(spell.endPos) >= spell.radius
+                        ? Math.Max(0, tHeroPos.Distance(spell.endPos) - midRadius - wallRadius)
+                        : Math.Max(0, midRadius - tHeroPos.Distance(spell.endPos) - wallRadius);
                 }
 
                 var closestDist = Math.Max(0, tHeroPos.Distance(spell.endPos) - (spell.radius + extraDist));
@@ -1088,9 +1076,6 @@ using EloBuddy;
             {
                 return ObjectCache.myHeroCache.serverPos2D;
             }
-
-            //if (!myHero.IsMoving)
-            //    return myHero.Position.To2D();
 
             var serverPos = ObjectCache.myHeroCache.serverPos2D;
             var heroPos = myHero.Position.To2D();
@@ -1244,19 +1229,16 @@ using EloBuddy;
                                 spell.endPos, new Vector2(0, 0), spell.radius,
                                 out cHeroPos, out cSpellPos);
 
-                            var cHeroPosProjection = cHeroPos.ProjectOn(from, movePos);
+                            if (spell.info.spellName.Contains("_trap") && !(cpa2 < spell.radius + 10))
+                            {
+                                continue;
+                            }
 
+                            var cHeroPosProjection = cHeroPos.ProjectOn(from, movePos);
                             if (cHeroPosProjection.IsOnSegment && cpa2 != float.MaxValue)
                             {
                                 return true;
                             }
-
-                            /*var cpa = MathUtilsCPA.CPAPointsEx(from, dir * ObjectCache.myHeroCache.moveSpeed, spell.endPos, new Vector2(0, 0), movePos, spell.endPos);
-
-                            if (cpa < spell.radius + 10)
-                            {
-                                return true;
-                            }*/
                         }
                     }
                     else if (spell.spellType == SpellType.Arc)

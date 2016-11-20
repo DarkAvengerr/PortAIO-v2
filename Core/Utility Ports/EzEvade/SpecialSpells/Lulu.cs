@@ -9,7 +9,7 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade.SpecialSpells
 {
     class Lulu : ChampionPlugin
@@ -34,7 +34,7 @@ using EloBuddy;
 
             foreach (var obj in ObjectManager.Get<Obj_AI_Minion>())
             {
-                if (obj != null && obj.IsValid && obj.CharData.BaseSkinName == "lulufaerie" && obj.IsEnemy)
+                if (obj != null && obj.IsValid && obj.CharData.BaseSkinName == "lulufaerie" && obj.CheckTeam())
                 {
                     gotObj = true;
 

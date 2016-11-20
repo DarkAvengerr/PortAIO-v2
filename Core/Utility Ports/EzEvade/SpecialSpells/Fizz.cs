@@ -9,7 +9,7 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade.SpecialSpells
 {
     class Fizz : ChampionPlugin
@@ -55,7 +55,7 @@ using EloBuddy;
 
             MissileClient missile = (MissileClient)obj;
 
-            if (missile.SpellCaster != null && missile.SpellCaster.Team != ObjectManager.Player.Team &&
+            if (missile.SpellCaster != null && missile.SpellCaster.CheckTeam() &&
                 missile.SData.Name == "FizzMarinerDoomMissile")
             {
                 SpellDetector.CreateSpellData(missile.SpellCaster, missile.StartPosition, missile.EndPosition,
@@ -70,7 +70,7 @@ using EloBuddy;
 
             MissileClient missile = (MissileClient)obj;
 
-            if (missile.SpellCaster != null && missile.SpellCaster.Team != ObjectManager.Player.Team &&
+            if (missile.SpellCaster != null && missile.SpellCaster.CheckTeam() &&
                 missile.SData.Name == "FizzMarinerDoomMissile")
             {
                 SpellDetector.CreateSpellData(missile.SpellCaster, missile.StartPosition, missile.EndPosition,

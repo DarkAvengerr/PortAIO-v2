@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade
 {
     class Program

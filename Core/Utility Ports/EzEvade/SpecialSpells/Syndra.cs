@@ -9,7 +9,7 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade.SpecialSpells
 {
     class Syndra : ChampionPlugin
@@ -52,7 +52,7 @@ using EloBuddy;
         {
             var sphere = sender as Obj_AI_Minion;
             if (sphere != null && sphere.CharData.BaseSkinName == _sphereName &&
-                sphere.Team != ObjectManager.Player.Team)
+                sphere.CheckTeam())
             {
                 if (args.Animation == "Death")
                 {
@@ -65,7 +65,7 @@ using EloBuddy;
         {
             var sphere = sender as Obj_AI_Minion;
             if (sphere != null && sphere.CharData.BaseSkinName == _sphereName &&
-                sphere.Team != ObjectManager.Player.Team) 
+                sphere.CheckTeam()) 
             {
                 if (!_spheres.Contains(sphere))
                 {
@@ -79,7 +79,7 @@ using EloBuddy;
         {
             var sphere = sender as Obj_AI_Minion;
             if (sphere != null && sphere.CharData.BaseSkinName == _sphereName &&
-                sphere.Team != ObjectManager.Player.Team)
+                sphere.CheckTeam())
             {
                 _spheres.RemoveAll(i => i.NetworkId == sphere.NetworkId);
             }

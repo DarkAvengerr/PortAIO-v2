@@ -8,7 +8,7 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade
 {
     public enum SpellType
@@ -57,6 +57,7 @@ using EloBuddy;
         public bool isPerpendicular = false;
         public float extraEndTime = 0;
         public bool hasEndExplosion = false;
+        public bool hasTrap = false;
         public bool dontcheckDuplicates = false;
         public bool isSpecial = false;
         public bool updatePosition = true;
@@ -64,6 +65,8 @@ using EloBuddy;
         public string[] extraSpellNames = { };
         public string[] extraMissileNames = { };
         public CollisionObjectType[] collisionObjects = { };
+        public string trapBaseName = "";
+        public string trapTroyName = "";
 
         public SpellData()
         {

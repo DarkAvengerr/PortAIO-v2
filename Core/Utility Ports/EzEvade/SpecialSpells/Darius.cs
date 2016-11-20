@@ -4,7 +4,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade.SpecialSpells
 {
     class Darius : ChampionPlugin
@@ -25,13 +25,16 @@ using EloBuddy;
 
         private void Game_OnUpdate(EventArgs args)
         {
-            var darius = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Darius");
-            if (darius != null)
+            var darius = HeroManager.AllHeroes.FirstOrDefault(x => x.ChampionName == "Darius");
+            if (darius != null && darius.CheckTeam())
             {
                 foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == darius.NetworkId))
                 {
-                    spell.Value.startPos = darius.ServerPosition.To2D();
-                    spell.Value.endPos = darius.ServerPosition.To2D() + spell.Value.direction * spell.Value.info.range;
+                    if (spell.Value.info.spellName == "DariusCleave")
+                    {
+                        spell.Value.startPos = darius.ServerPosition.To2D();
+                        spell.Value.endPos = darius.ServerPosition.To2D() + spell.Value.direction * spell.Value.info.range;                   
+                    }
                 }
             }
         }

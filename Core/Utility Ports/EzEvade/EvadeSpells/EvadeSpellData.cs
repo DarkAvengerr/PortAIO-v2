@@ -8,7 +8,7 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade
 {
     public delegate bool UseSpellFunc(EvadeSpellData evadeSpell, bool process = true);

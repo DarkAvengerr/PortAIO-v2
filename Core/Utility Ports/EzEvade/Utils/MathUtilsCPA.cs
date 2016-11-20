@@ -28,7 +28,7 @@ using SharpDX;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade
 {
 

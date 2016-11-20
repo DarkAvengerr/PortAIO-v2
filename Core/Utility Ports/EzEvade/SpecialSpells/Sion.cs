@@ -9,7 +9,7 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade.SpecialSpells
 {
     class Sion : ChampionPlugin
@@ -38,8 +38,8 @@ using EloBuddy;
 
         private void Game_OnUpdate(EventArgs args)
         {
-            var sion = HeroManager.Enemies.FirstOrDefault(x => x.ChampionName == "Sion");
-            if (sion != null && sion.HasBuff("SionR"))
+            var sion = HeroManager.AllHeroes.FirstOrDefault(x => x.ChampionName == "Sion");
+            if (sion != null && sion.CheckTeam() && sion.HasBuff("SionR"))
             {
                 foreach (var spell in SpellDetector.detectedSpells.Where(x => x.Value.heroID == sion.NetworkId && x.Value.info.spellName == "SionR"))
                 {

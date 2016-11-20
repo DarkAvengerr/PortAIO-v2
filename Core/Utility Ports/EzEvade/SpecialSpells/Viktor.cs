@@ -9,7 +9,7 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade.SpecialSpells
 {
     class Viktor : ChampionPlugin
@@ -36,7 +36,7 @@ using EloBuddy;
 
             SpellData spellData;
 
-            if (missile.SpellCaster != null && missile.SpellCaster.Team != ObjectManager.Player.Team &&
+            if (missile.SpellCaster != null && missile.SpellCaster.CheckTeam() &&
                 missile.SData.Name != null && missile.SData.Name.ToLower() == "viktoreaugmissile"
                 && SpellDetector.onMissileSpells.TryGetValue("viktordeathray3", out spellData)
                 && missile.StartPosition != null && missile.EndPosition != null)

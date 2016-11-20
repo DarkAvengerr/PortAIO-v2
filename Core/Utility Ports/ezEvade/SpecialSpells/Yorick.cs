@@ -7,7 +7,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade.SpecialSpells
 {
     class Yorick : ChampionPlugin

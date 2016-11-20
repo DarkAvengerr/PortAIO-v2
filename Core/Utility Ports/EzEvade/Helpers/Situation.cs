@@ -9,16 +9,31 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade
 {
     public static class Situation
     {
-        private static AIHeroClient myHero { get { return ObjectManager.Player; } }
-        
+        private static AIHeroClient myHero => ObjectManager.Player;
+
         static Situation()
         {
 
+        }
+
+        public static bool CheckTeam(this Obj_AI_Base unit)
+        {
+            return unit.Team != myHero.Team || Evade.devModeOn;
+        }
+
+        public static bool CheckTeam(this Obj_GeneralParticleEmitter emitter)
+        {
+            return emitter.Name.ToLower().Contains("red") || Evade.devModeOn && emitter.Name.ToLower().Contains("green");
+        }
+
+        public static string EmitterTeam()
+        {
+            return Evade.devModeOn ? "green" : "red";
         }
 
         public static bool isNearEnemy(this Vector2 pos, float distance, bool alreadyNear = true)

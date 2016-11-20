@@ -10,7 +10,7 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade
 {
     internal class SpellDrawer
@@ -91,6 +91,24 @@ using EloBuddy;
             Drawing.DrawLine(lEndPos, rEndPos, width, color);
         }
 
+        private void DrawLineTriangle(Vector2 start, Vector2 end, int radius, int width, Color color)
+        {
+            var dir = (end - start).Normalized();
+            var pDir = dir.Perpendicular();
+
+            var initStartPos = start + dir;
+            var rightEndPos = end + pDir * radius;
+            var leftEndPos = end - pDir * radius;
+
+            var iStartPos = Drawing.WorldToScreen(new Vector3(initStartPos.X, initStartPos.Y, myHero.Position.Z));
+            var rEndPos = Drawing.WorldToScreen(new Vector3(rightEndPos.X, rightEndPos.Y, myHero.Position.Z));
+            var lEndPos = Drawing.WorldToScreen(new Vector3(leftEndPos.X, leftEndPos.Y, myHero.Position.Z));
+
+            Drawing.DrawLine(iStartPos, rEndPos, width, color);
+            Drawing.DrawLine(iStartPos, lEndPos, width, color);
+            Drawing.DrawLine(rEndPos, lEndPos, width, color);
+        }
+
         private void DrawEvadeStatus()
         {
             if (ObjectCache.menuCache.cache["ShowStatus"].GetValue<bool>())
@@ -99,7 +117,7 @@ using EloBuddy;
                 var dimension = Drawing.GetTextEntent(("Evade: ON"), 15);
 
                 if (ObjectCache.menuCache.cache["DodgeSkillShots"].GetValue<KeyBind>().Active)
-                {                    
+                {
                     if (Evade.isDodging)
                     {
                         Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Red, "Evade: ON");
@@ -113,11 +131,14 @@ using EloBuddy;
                         }
                         else
                         {
-                            if (Evade.isDodgeDangerousEnabled())
+                            if (ObjectCache.menuCache.cache["DontDodgeKeyEnabled"].GetValue<bool>() == true
+                         && ObjectCache.menuCache.cache["DontDodgeKey"].GetValue<KeyBind>().Active == true)
+                                Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Gray, "Evade: OFF");
+                            else if (Evade.isDodgeDangerousEnabled())
                                 Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Yellow, "Evade: ON");
                             else
                                 Drawing.DrawText(heroPos.X - dimension.Width / 2, heroPos.Y, Color.Lime, "Evade: ON");
-                        }                        
+                        }
                     }
                 }
                 else
@@ -181,46 +202,41 @@ using EloBuddy;
                 var dangerStr = spell.GetSpellDangerString();
                 var spellDrawingConfig = ObjectCache.menuCache.cache[dangerStr + "Color"].GetValue<Circle>();
                 var spellDrawingWidth = ObjectCache.menuCache.cache[dangerStr + "Width"].GetValue<Slider>().Value;
+                var avoidRadius = ObjectCache.menuCache.cache["ExtraAvoidDistance"].GetValue<Slider>().Value;
 
                 if (ObjectCache.menuCache.cache[spell.info.spellName + "DrawSpell"].GetValue<bool>()
                     && spellDrawingConfig.Active)
                 {
-                    bool canEvade = true;
-                    //bool canEvade = !(Evade.lastPosInfo != null && Evade.lastPosInfo.undodgeableSpells.Contains(spell.spellID));
-             
+
+                    bool canEvade = !(Evade.lastPosInfo != null && Evade.lastPosInfo.undodgeableSpells.Contains(spell.spellID)) || !Evade.devModeOn;
+
                     if (spell.spellType == SpellType.Line)
                     {
                         Vector2 spellPos = spell.currentSpellPosition;
                         Vector2 spellEndPos = spell.GetSpellEndPosition();
 
-                        
-                        DrawLineRectangle(spellPos, spellEndPos, (int)spell.radius, spellDrawingWidth, !canEvade ? Color.Yellow : spellDrawingConfig.Color);
+                        DrawLineRectangle(spellPos, spellEndPos, (int) spell.radius, 
+                            spellDrawingWidth, !canEvade ? Color.Yellow : spellDrawingConfig.Color);
 
-                        /*foreach (var hero in ObjectManager.Get<AIHeroClient>())
-                        {
-                            Render.Circle.DrawCircle(new Vector3(hero.ServerPosition.X, hero.ServerPosition.Y, myHero.Position.Z), (int)spell.radius, Color.Red, 5);
-                        }*/
+                        if (Evade.devModeOn)
+                            DrawLineRectangle(spellPos, spellEndPos, (int) spell.radius + avoidRadius,
+                                Math.Max(spellDrawingWidth - 1, 1), !canEvade ? Color.Yellow : spellDrawingConfig.Color);
 
                         if (ObjectCache.menuCache.cache["DrawSpellPos"].GetValue<bool>())// && spell.spellObject != null)
                         {
-                            //spellPos = SpellDetector.GetCurrentSpellPosition(spell, true, ObjectCache.gamePing);
-
-                            /*if (true)
-                            {
-                                var spellPos2 = spell.startPos + spell.direction * spell.info.projectileSpeed * (Evade.GetTickCount - spell.startTime - spell.info.spellDelay) / 1000 + spell.direction * spell.info.projectileSpeed * ((float)ObjectCache.gamePing / 1000);
-                                Render.Circle.DrawCircle(new Vector3(spellPos2.X, spellPos2.Y, myHero.Position.Z), (int)spell.radius, Color.Red, 8);
-                            }*/
-
-                            /*if (spell.spellObject != null && spell.spellObject.IsValid && spell.spellObject.IsVisible &&
-                                  spell.spellObject.Position.To2D().Distance(ObjectCache.myHeroCache.serverPos2D) < spell.info.range + 1000)*/
-
                             Render.Circle.DrawCircle(new Vector3(spellPos.X, spellPos.Y, spell.height), (int) spell.radius, !canEvade ? Color.Yellow : spellDrawingConfig.Color, spellDrawingWidth);
                         }
 
                     }
                     else if (spell.spellType == SpellType.Circular)
                     {
+
                         Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, spell.height), (int) spell.radius, !canEvade ? Color.Yellow : spellDrawingConfig.Color, spellDrawingWidth);
+
+                        if (Evade.devModeOn)
+                            Render.Circle.DrawCircle(new Vector3(spell.endPos.X, spell.endPos.Y, spell.height),
+                                (int) spell.radius + avoidRadius, !canEvade ? Color.Yellow : spellDrawingConfig.Color,
+                                Math.Max(spellDrawingWidth - 1, 1));
 
                         if (spell.info.spellName == "VeigarEventHorizon")
                         {
@@ -232,7 +248,7 @@ using EloBuddy;
                         }
                     }
                     else if (spell.spellType == SpellType.Arc)
-                    {                      
+                    {
                         /*var spellRange = spell.startPos.Distance(spell.endPos);
                         var midPoint = spell.startPos + spell.direction * (spellRange / 2);
 
@@ -244,7 +260,7 @@ using EloBuddy;
                     }
                     else if (spell.spellType == SpellType.Cone)
                     {
-
+                        DrawLineTriangle(spell.startPos, spell.endPos, (int) spell.radius, spellDrawingWidth, spellDrawingConfig.Color);
                     }
                 }
             }

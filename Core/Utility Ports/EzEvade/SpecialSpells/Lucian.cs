@@ -9,7 +9,7 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace ezEvade.SpecialSpells
 {
     class Lucian : ChampionPlugin
@@ -31,7 +31,6 @@ using EloBuddy;
         {
             if (spellData.spellName == "LucianQ")
             {
-
                 if (args.Target.IsValid<Obj_AI_Base>())
                 {
                     var target = args.Target as Obj_AI_Base;
