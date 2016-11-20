@@ -1323,6 +1323,14 @@
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Load.cs" />
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\MenuConfig.cs" />
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Program.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\Drawings.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\GetDamage.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\OrbManager.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\OrbWalker.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\PlaySound.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\Program.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\Spells.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\Utils.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Champion.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\DrawDamage.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\GameEvents.cs" />

@@ -2963,6 +2963,9 @@ namespace PortAIO
                         case 9: // DarkMage
                             DarkMage.Program.Main();
                             break;
+                        case 10: // Lord's Syndra
+                            LordsSyndra.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.TahmKench:
