@@ -77,12 +77,9 @@ using LeagueSharp.Common;
                     var potentialTarget =
                         HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(this.Range) && !x.IsDead && !x.IsZombie && this.SpellObject.GetDamage(x) > x.Health);
 
-                    if (potentialTarget != null)
+                    if (potentialTarget?.CountAlliesInRange(850) == 0 && ObjectManager.Player.Distance(target) > 900)
                     {
-                        if (potentialTarget.CountAlliesInRange(850) == 0 && ObjectManager.Player.Distance(target) > 900)
-                        {
-                            this.SpellObject.Cast(potentialTarget);
-                        }   
+                        this.SpellObject.Cast(potentialTarget);
                     }
 
                     if (MyMenu.RootMenu.Item("raoe").IsActive() && ObjectManager.Player.CountEnemiesInRange(1150) == 0)

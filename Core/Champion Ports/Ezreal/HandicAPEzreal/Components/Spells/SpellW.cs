@@ -75,7 +75,7 @@ using LeagueSharp.Common;
                 if (target != null)
                 {
                     var prediction = this.SpellObject.GetPrediction(target);
-                    if (prediction.Hitchance >= HitChance.High)
+                    if (prediction.Hitchance >= HitChance.VeryHigh)
                     {
                         this.SpellObject.Cast(prediction.CastPosition);
                     }

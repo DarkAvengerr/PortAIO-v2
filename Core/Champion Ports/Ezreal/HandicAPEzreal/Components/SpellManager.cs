@@ -147,6 +147,7 @@ using LeagueSharp.Common;
             this.spells.ToList().ForEach(spell => spell.OnUpdate());
         }
 
+
         /// <summary>
         ///     The load spells method.
         /// </summary>
