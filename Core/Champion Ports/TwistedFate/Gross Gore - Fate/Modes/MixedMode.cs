@@ -20,10 +20,15 @@ using LeagueSharp.Common;
                 return;
             }
 
-            if (target.Distance(ObjectManager.Player) <= ObjectManager.Player.AttackRange + 150 
-                && Spells.W.IsReady())
+            if (target.Distance(ObjectManager.Player) <= ObjectManager.Player.AttackRange + Config.GetSliderValue("wHRange")
+                && Spells.W.IsReady() && ObjectManager.Player.ManaPercent >= Config.GetSliderValue("wHMana"))
             {
-                CardSelector.StartSelecting(Cards.First);
+                CardSelector.ShuffleCards();
+            }
+
+            if(target.Distance(ObjectManager.Player) <= ObjectManager.Player.AttackRange + 100)
+            {
+                CardSelector.LockCard();
             }
         }
 

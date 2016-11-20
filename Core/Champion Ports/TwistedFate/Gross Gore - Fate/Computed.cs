@@ -85,7 +85,7 @@ using LeagueSharp.Common;
                 && targetDis.IsValidTarget()
                 && !targetDis.IsZombie
                 && Mainframe.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed
-                && (ObjectManager.Player.Distance(targetDis) < Orbwalking.GetAttackRange(ObjectManager.Player) + 300))
+                && (ObjectManager.Player.Distance(targetDis) < Orbwalking.GetAttackRange(ObjectManager.Player) + 250))
             {
                 args.Process = false;
 
@@ -116,14 +116,20 @@ using LeagueSharp.Common;
 
         public static void YellowIntoQ(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsMe || args.SData.Name.ToLower() != "goldcardpreattack" || !Spells.Q.IsReady())
+            var canWKill =
+            HeroManager.Enemies.FirstOrDefault(
+                h =>
+                !h.IsDead && h.IsValidTarget(Spells.Q.Range)
+                && h.Health < ObjectManager.Player.GetSpellDamage(h, SpellSlot.W));
+
+            if (!sender.IsMe || args.SData.Name.ToLower() != "goldcardpreattack" || !Spells.Q.IsReady() || canWKill != null || ObjectManager.Player.ManaPercent < Config.GetSliderValue("qAMana"))
             {
                 return;
             }
 
-            var qTarget = args.Target as Obj_AI_Base;
+            var targetDis = TargetSelector.GetTarget(Spells.Q.Range, TargetSelector.DamageType.Magical);
 
-            if (qTarget == null || !qTarget.IsValidTarget(Spells.Q.Range))
+            if (targetDis == null || !targetDis.IsValidTarget(Spells.Q.Range / 2))
             {
                 return;
             }
@@ -131,12 +137,11 @@ using LeagueSharp.Common;
             if (Mainframe.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
                 || Mainframe.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                var target = TargetSelector.GetTarget(Spells.Q.Range, TargetSelector.DamageType.Magical);
-
-                if (target.IsValidTarget(Spells.Q.Range))
+                if (targetDis.IsValidTarget(Spells.Q.Range))
                 {
-                    var qPred = Spells.Q.GetPrediction(target);
-                    if (qPred.Hitchance >= HitChance.High)
+                    var qPred = Spells.Q.GetPrediction(targetDis);
+
+                    if (qPred.Hitchance >= HitChance.VeryHigh)
                     {
                         Spells.Q.Cast(qPred.CastPosition);
                     }
@@ -146,14 +151,20 @@ using LeagueSharp.Common;
 
         public static void RedIntoQ(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!Config.IsChecked("qRed") || !sender.IsMe || args.SData.Name.ToLower() != "redcardpreattack" || !Spells.Q.IsReady())
+            var canWKill =
+                HeroManager.Enemies.FirstOrDefault(
+                h =>
+                !h.IsDead && h.IsValidTarget(Spells.Q.Range)
+                && h.Health < ObjectManager.Player.GetSpellDamage(h, SpellSlot.W));
+
+            if (!sender.IsMe || args.SData.Name.ToLower() != "redcardpreattack" || !Spells.Q.IsReady() || canWKill != null || ObjectManager.Player.ManaPercent < Config.GetSliderValue("qAMana"))
             {
                 return;
             }
 
-            var qTarget = args.Target as Obj_AI_Base;
+            var targetDis = TargetSelector.GetTarget(Spells.Q.Range, TargetSelector.DamageType.Magical);
 
-            if (qTarget == null || !qTarget.IsValidTarget(Spells.Q.Range))
+            if (targetDis == null || !targetDis.IsValidTarget(Spells.Q.Range / 2))
             {
                 return;
             }
@@ -161,12 +172,11 @@ using LeagueSharp.Common;
             if (Mainframe.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
                 || Mainframe.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                var target = TargetSelector.GetTarget(Spells.Q.Range, TargetSelector.DamageType.Magical);
-
-                if (target.IsValidTarget(Spells.Q.Range))
+                if (targetDis.IsValidTarget(Spells.Q.Range))
                 {
-                    var qPred = Spells.Q.GetPrediction(target);
-                    if (qPred.Hitchance >= HitChance.High)
+                    var qPred = Spells.Q.GetPrediction(targetDis);
+
+                    if (qPred.Hitchance >= HitChance.VeryHigh)
                     {
                         Spells.Q.Cast(qPred.CastPosition);
                     }

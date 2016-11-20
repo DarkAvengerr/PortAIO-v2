@@ -4,6 +4,7 @@ using LeagueSharp.Common;
 {
     using LeagueSharp;
     using LeagueSharp.Common;
+    using System.Linq;
 
     using Config = GrossGoreTwistedFate.Config;
 
@@ -13,10 +14,45 @@ using LeagueSharp.Common;
 
         internal static void Execute()
         {
-            if (Spells.W.IsReady())
+            var wMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).SData.Mana;
+
+            if (ObjectManager.Player.Mana >= wMana)
             {
-                CardSelector.StartSelecting(Cards.Yellow);
+                var entKs =
+                    HeroManager.Enemies.FirstOrDefault(
+                        h =>
+                        !h.IsDead && h.IsValidTarget()
+                        && (ObjectManager.Player.Distance(h) < Orbwalking.GetAttackRange(ObjectManager.Player) + 200)
+                        && h.Health < ObjectManager.Player.GetSpellDamage(h, SpellSlot.W));
+
+                if (Config.IsChecked("wKS") && entKs != null)
+                {
+                    if(Spells.W.IsReady() && CardSelector.Status == SelectStatus.Ready)
+                    {
+                        CardSelector.StartSelecting(Cards.First);
+
+                    }else if(CardSelector.Status == SelectStatus.Selecting)
+                    {
+                        CardSelector.GoToKey(Cards.First);
+                    }
+                }else
+                {
+                    if (Config.IsChecked("wCGold"))
+                    {
+                        if (Spells.W.IsReady() && CardSelector.Status == SelectStatus.Ready)
+                        {
+                            CardSelector.StartSelecting(Cards.Yellow);
+
+                        }
+                        else if (CardSelector.Status == SelectStatus.Selecting)
+                        {
+                            CardSelector.GoToKey(Cards.Yellow);
+                        }
+                    }
+                }
             }
+
+
         }
 
         #endregion

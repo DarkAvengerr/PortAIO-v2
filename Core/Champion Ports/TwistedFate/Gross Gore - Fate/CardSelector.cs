@@ -11,7 +11,7 @@ using LeagueSharp.Common;
  namespace GrossGoreTwistedFate
 {
     /// <summary>
-    /// Kortatu's W Helper
+    /// Kortatu's W Helper - Edited by grossgore
     /// </summary>
 
     public enum Cards
@@ -61,6 +61,37 @@ using LeagueSharp.Common;
                 {
                     ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W, ObjectManager.Player);
                     LastWSent = Utils.TickCount;
+                }
+            }
+        }
+
+        public static void GoToKey(Cards card)
+        {
+            if (Status == SelectStatus.Selecting)
+            {
+                Select = card;
+            }
+        }
+
+        public static void ShuffleCards()
+        {
+            if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "PickACard" && Status == SelectStatus.Ready)
+            {
+                if (Utils.TickCount - LastWSent > 170 + Game.Ping / 2)
+                {
+                    ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W, ObjectManager.Player);
+                    LastWSent = Utils.TickCount;
+                }
+            }
+        }
+
+        public static void LockCard()
+        {
+            if (Status == SelectStatus.Selecting)
+            {
+                if (Utils.TickCount - LastWSent > 170 + Game.Ping / 2)
+                {
+                    ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W, ObjectManager.Player);
                 }
             }
         }

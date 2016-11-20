@@ -29,16 +29,36 @@ using LeagueSharp.Common;
 
             var qMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana;
 
-            if (ObjectManager.Player.Mana >= qMana && Spells.Q.IsReady())
+            var wMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).SData.Mana;
+
+            if (Config.IsChecked("qKS") && ObjectManager.Player.ManaPercent >= Config.GetSliderValue("qAMana") && ObjectManager.Player.Mana >= qMana && Spells.Q.IsReady())
             {
+                var target = TargetSelector.GetTarget(Spells.Q.Range, TargetSelector.DamageType.Magical);
+
+                var canWKill =
+                    HeroManager.Enemies.FirstOrDefault(
+                    h =>
+                    !h.IsDead && h.IsValidTarget()
+                    && (ObjectManager.Player.Distance(h) < Orbwalking.GetAttackRange(ObjectManager.Player) + 250)
+                    && h.Health < ObjectManager.Player.GetSpellDamage(h, SpellSlot.W));
+
                 var entKs =
                     HeroManager.Enemies.FirstOrDefault(
                         h =>
-                        !h.IsDead && h.IsValidTarget(Spells.Q.Range)
+                        !h.IsDead && h.IsValidTarget(1000)
                         && h.Health < ObjectManager.Player.GetSpellDamage(h, SpellSlot.Q));
-                if (entKs != null)
+
+                if (entKs != null
+                    && (canWKill == null
+                        && ObjectManager.Player.Mana < wMana
+                        && !Spells.W.IsReady()))
                 {
-                    Spells.Q.Cast(entKs);
+                    var qPred = Spells.Q.GetPrediction(entKs);
+
+                    if (qPred.Hitchance >= HitChance.High)
+                    {
+                        Spells.Q.Cast(qPred.CastPosition);
+                    }
                 }
             }
         }
@@ -149,7 +169,7 @@ using LeagueSharp.Common;
                 {
                     var pred = Spells.Q.GetPrediction(enemy);
 
-                    if (pred.Hitchance == HitChance.Immobile || (Config.IsChecked("qDashing") && pred.Hitchance == HitChance.Dashing))
+                    if ((Config.IsChecked("qImmobile") && ObjectManager.Player.ManaPercent >= Config.GetSliderValue("qAMana") && pred.Hitchance == HitChance.Immobile) || (Config.IsChecked("qDashing") && ObjectManager.Player.ManaPercent >= Config.GetSliderValue("qAMana") && pred.Hitchance == HitChance.Dashing))
                     {
                         CastQ(enemy, pred.UnitPosition.To2D());
                     }
@@ -158,10 +178,8 @@ using LeagueSharp.Common;
 
             var qTarget = TargetSelector.GetTarget(Spells.Q.Range, TargetSelector.DamageType.Magical);
 
-            if (qTarget.IsValidTarget(Spells.Q.Range) && ((Config.IsChecked("qSlowed") && qTarget.MoveSpeed <= 275)
-                || qTarget.IsRooted
-                || qTarget.IsCharmed
-                || !qTarget.CanMove))
+            if (qTarget.IsValidTarget(Spells.Q.Range) && ObjectManager.Player.ManaPercent >= Config.GetSliderValue("qAMana") && ((Config.IsChecked("qSlowed") && qTarget.MoveSpeed <= 275)
+                || qTarget.IsCharmed))
             {
                 var qPred = Spells.Q.GetPrediction(qTarget);
 
