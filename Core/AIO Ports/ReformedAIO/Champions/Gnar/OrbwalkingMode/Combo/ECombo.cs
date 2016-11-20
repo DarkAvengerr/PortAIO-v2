@@ -80,14 +80,9 @@ using LeagueSharp.Common;
                 return;
             }
 
-            var ePred = Spells.E.GetPrediction(target);
+            var epos = ObjectManager.Player.ServerPosition + (ObjectManager.Player.ServerPosition - target.ServerPosition).Normalized() * 300;
 
-            if (ePred.CollisionObjects[0].Position.Distance(ObjectManager.Player.Position) > 425)
-            {
-                return;
-            }
-
-            Spells.E.Cast(ePred.CollisionObjects[0].Position);
+            Spells.E.Cast(epos);
         }
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
@@ -95,7 +90,7 @@ using LeagueSharp.Common;
             base.OnLoad(sender, eventArgs);
 
             Menu.AddItem(new MenuItem("E1Range", "Range").SetValue(new Slider(475, 0, 475)));
-            Menu.AddItem(new MenuItem("EAwayMelee", "E Away From Melee's").SetValue(false));
+            Menu.AddItem(new MenuItem("EAwayMelee", "Antigapcloser").SetValue(true));
             Menu.AddItem(new MenuItem("EonTransform", "E On Transformation").SetValue(true));
             Menu.AddItem(new MenuItem("EOnGanked", "E If Ganked Or Teamfight").SetValue(true));
 

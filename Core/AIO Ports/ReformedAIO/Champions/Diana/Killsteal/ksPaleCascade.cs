@@ -50,7 +50,7 @@ using LeagueSharp.Common;
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            Menu.AddItem(new MenuItem(Menu.Name + "RRange", "R Range ").SetValue(new Slider(825, 0, 825)));
+            Menu.AddItem(new MenuItem("RRange", "R Range ").SetValue(new Slider(825, 0, 825)));
 
             rLogic = new PaleCascadeLogic();
         }
@@ -60,7 +60,7 @@ using LeagueSharp.Common;
             var target =
                 HeroManager.Enemies.FirstOrDefault(
                     x =>
-                    !x.IsDead && x.IsValidTarget(Menu.Item(Menu.Name + "RRange").GetValue<Slider>().Value));
+                    !x.IsDead && x.IsValidTarget(Menu.Item("RRange").GetValue<Slider>().Value));
 
             if (target == null || target.Health > rLogic.GetDmg(target)) return;
 

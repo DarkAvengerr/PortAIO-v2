@@ -18,6 +18,7 @@ using LeagueSharp.Common;
     using PermaActive;
     using PermaActive.Killsteal;
 
+    using ReformedAIO.Champions.Gnar.PermaActive.Interrupter;
     using ReformedAIO.Champions.Gnar.Utility;
 
     using RethoughtLib.Bootstraps.Abstract_Classes;
@@ -54,10 +55,6 @@ using LeagueSharp.Common;
             var killstealParent = new Parent("Killsteal");
             var fleeParent = new Parent("Flee");
             var drawingParent = new Parent("Drawing");
-
-            var reformedUtilityParent = new Parent("Reformed Utility");
-
-            reformedUtilityParent.Add(new GnarSkinchanger());
 
             var mustNotBeWindingUp = new PlayerMustNotBeWindingUp();
             var qReady = new SpellMustBeReady(SpellSlot.Q);
@@ -113,22 +110,20 @@ using LeagueSharp.Common;
 
             superParent.Add(new Base[]
             {
-                reformedUtilityParent,
+               // reformedUtilityParent,
                 orbwalker,
                 comboParent,
                 harassParent,
                 laneParent,
                 jungleParent,
                 killstealParent,
+                new W(),
+                new PermaActive.Antigapcloser.W(),  
                 fleeParent,
                 drawingParent
             });
 
             superParent.Load();
-
-
-            reformedUtilityParent.Menu.Style = FontStyle.Bold;
-            reformedUtilityParent.Menu.Color = Color.Cyan;
 
             superParent.Menu.Style = FontStyle.Bold;
             superParent.Menu.Color = Color.Cyan;

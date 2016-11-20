@@ -13,18 +13,14 @@ using LeagueSharp.Common;
     {
         public Vector3 GetFirstWallPoint(Vector3 start, Vector3 end, float range)
         {
-            if (!start.IsValid() || !end.IsValid() || start.Distance(end) > range)
+            if (end.IsValid() && start.Distance(end) <= range)
             {
-                return Vector3.Zero;
+                var newPoint = start.Extend(end, range);
+
+                return NavMesh.GetCollisionFlags(newPoint) == CollisionFlags.Wall || newPoint.IsWall()
+                           ? newPoint
+                           : Vector3.Zero;
             }
-
-            var newPoint = start.Extend(end, range);
-
-            if (NavMesh.GetCollisionFlags(newPoint) == CollisionFlags.Wall || newPoint.IsWall())
-            {
-                return newPoint;
-            }
-
             return Vector3.Zero;
         }
 
@@ -32,9 +28,7 @@ using LeagueSharp.Common;
         {
             var firstWallPoint = GetFirstWallPoint(ObjectManager.Player.Position, position, range);
 
-            return !firstWallPoint.IsWall() 
-                ? Vector3.Zero
-                : firstWallPoint;
+            return firstWallPoint;
         }
     }
 }

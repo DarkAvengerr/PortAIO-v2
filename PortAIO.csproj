@@ -737,7 +737,9 @@
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Gnar\OrbwalkingMode\Jungle\W2Jungle.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Gnar\OrbwalkingMode\Lane\QLane.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Gnar\OrbwalkingMode\Lane\W2Lane.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Gnar\PermaActive\Antigapcloser\W.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Gnar\PermaActive\Flee.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Gnar\PermaActive\Interrupter\W.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Gnar\PermaActive\Killsteal\QKillsteal.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Gnar\PermaActive\Killsteal\WKillsteal.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Gnar\Utility\GnarSkinchanger.cs" />

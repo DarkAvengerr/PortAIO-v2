@@ -32,7 +32,6 @@ using LeagueSharp.Common;
         {
             if (Target == null 
                 || heroInfo.HasSpellShield(Target) 
-                || heroInfo.Unkillable(Target) 
                 || gnarState.Mini
                 || !CheckGuardians())
             {
@@ -43,7 +42,7 @@ using LeagueSharp.Common;
 
             ObjectManager.Player.GetPath(wall);
 
-            if (wall != Vector3.Zero && heroInfo.GetStunDuration(Target) < Spells.R2.Delay)
+            if (wall != Vector3.Zero)
             {
                 Spells.R2.Cast(wall);
             }

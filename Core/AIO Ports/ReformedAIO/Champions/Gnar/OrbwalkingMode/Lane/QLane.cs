@@ -34,7 +34,7 @@ using LeagueSharp.Common;
             {
                 return;
             }
-          
+
             if (this.gnarState.Mini)
             {
                 Mini();

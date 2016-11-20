@@ -74,7 +74,7 @@ using LeagueSharp.Common;
 
         private void Gapcloser(ActiveGapcloser gapcloser)
         {
-            if (!Menu.Item(Menu.Name + "EGapcloser").GetValue<bool>()) return;
+            if (!Menu.Item("EGapcloser").GetValue<bool>()) return;
 
             var target = gapcloser.Sender;
 
@@ -90,7 +90,7 @@ using LeagueSharp.Common;
 
         private void Interrupt(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
         {
-            if (!Menu.Item(Menu.Name + "EInterrupt").GetValue<bool>()) return;
+            if (!Menu.Item("EInterrupt").GetValue<bool>()) return;
 
             if (!sender.IsEnemy || !Variables.Spells[SpellSlot.E].IsReady() || !sender.IsValidTarget()
                 || sender.IsZombie) return;
@@ -101,15 +101,15 @@ using LeagueSharp.Common;
         private void moonfall()
         {
             var target = TargetSelector.GetTarget(
-                Menu.Item(Menu.Name + "ERange").GetValue<Slider>().Value,
+                Menu.Item("ERange").GetValue<Slider>().Value,
                 TargetSelector.DamageType.Magical);
 
             if (target == null || !target.IsValid) return;
 
-            if (Menu.Item(Menu.Name + "MinTargets").GetValue<Slider>().Value
-                > target.CountEnemiesInRange(Menu.Item(Menu.Name + "ERange").GetValue<Slider>().Value)) return;
+            if (Menu.Item("MinTargets").GetValue<Slider>().Value
+                > target.CountEnemiesInRange(Menu.Item("ERange").GetValue<Slider>().Value)) return;
 
-            if (Menu.Item(Menu.Name + "EKillable").GetValue<bool>()
+            if (Menu.Item("EKillable").GetValue<bool>()
                 && logic.ComboDmg(target) * 1.2 < target.Health)
             {
                 return;

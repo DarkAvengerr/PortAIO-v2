@@ -23,7 +23,7 @@ using LeagueSharp.Common;
     internal sealed class QCombo : OrbwalkingChild
     {
         private GnarState gnarState;
-      
+
         public override string Name { get; set; } = "Q";
 
         private void GameOnUpdate(EventArgs args)
@@ -86,7 +86,7 @@ using LeagueSharp.Common;
             {
                 var prediction = Spells.Q2.GetPrediction(target, true);
 
-                if (prediction.Hitchance >= HitChance.Medium)
+                if (prediction.Hitchance >= HitChance.High)
                 {
                     LeagueSharp.Common.Utility.DelayAction.Add(1, () => Spells.Q2.Cast(prediction.CastPosition));
                 }

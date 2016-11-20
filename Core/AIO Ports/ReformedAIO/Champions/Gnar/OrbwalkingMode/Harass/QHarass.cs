@@ -16,7 +16,7 @@ using LeagueSharp.Common;
     using RethoughtLib.Menu;
     using RethoughtLib.Menu.Presets;
 
-    internal sealed class QHarass: OrbwalkingChild
+    internal sealed class QHarass : OrbwalkingChild
     {
         private GnarState gnarState;
 
