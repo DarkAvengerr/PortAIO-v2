@@ -18,7 +18,7 @@ using LeagueSharp.Common;
           { "s5_summonersmiteduel", SmiteType.ChallengingSmite},
         };
 
-        public SmiteType CurrentSmiteType = SmiteType.RegularSmite;
+        public SmiteType CurrentSmiteType = SmiteType.NotChosen;
 
         public Spell Smite = null;
 
@@ -36,7 +36,6 @@ using LeagueSharp.Common;
             //Smite is not chosen
             if (SmiteInstance == null)
             {
-                CurrentSmiteType = SmiteType.NotChosen;
                 return;
             }
 

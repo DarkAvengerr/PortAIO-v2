@@ -21,7 +21,7 @@ using LeagueSharp.Common;
             OnLoad();
         }
 
-        void OnLoad()
+        public void OnLoad()
         {
             if (ObjectManager.Player.ChampionName != "Khazix")
             {
