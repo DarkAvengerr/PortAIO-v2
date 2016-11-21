@@ -1104,6 +1104,17 @@
     <Compile Include="Core\Champion Ports\Brand\Flowers%27 Brand\Prediction\SDKPrediction.cs" />
     <Compile Include="Core\Champion Ports\Brand\Flowers%27 Brand\Prediction\xcsoftPrediction.cs" />
     <Compile Include="Core\Champion Ports\Brand\Flowers%27 Brand\Program.cs" />
+    <Compile Include="Core\Champion Ports\Brand\SergixBrand\BramdModes.cs" />
+    <Compile Include="Core\Champion Ports\Brand\SergixBrand\Brand.cs" />
+    <Compile Include="Core\Champion Ports\Brand\SergixBrand\BrandMenu.cs" />
+    <Compile Include="Core\Champion Ports\Brand\SergixBrand\Core.cs" />
+    <Compile Include="Core\Champion Ports\Brand\SergixBrand\Damage.cs" />
+    <Compile Include="Core\Champion Ports\Brand\SergixBrand\DrawDamage.cs" />
+    <Compile Include="Core\Champion Ports\Brand\SergixBrand\Menu.cs" />
+    <Compile Include="Core\Champion Ports\Brand\SergixBrand\Modes.cs" />
+    <Compile Include="Core\Champion Ports\Brand\SergixBrand\Program.cs" />
+    <Compile Include="Core\Champion Ports\Brand\SergixBrand\Spells.cs" />
+    <Compile Include="Core\Champion Ports\Brand\SergixBrand\Spells1.cs" />
     <Compile Include="Core\Champion Ports\Ekko\Ekko - Master of Time\Core.cs" />
     <Compile Include="Core\Champion Ports\Ekko\Ekko - Master of Time\EkkoMenu.cs" />
     <Compile Include="Core\Champion Ports\Ekko\Ekko - Master of Time\EkkoModes.cs" />

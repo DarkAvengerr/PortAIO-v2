@@ -61,7 +61,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "OKTW", "FreshBooster", "KurisuBlitz", "SAutoCarry", "SharpShooter", "ShineAIO", "Support is Easy", "vSeries", "[SDK] Flowers' Series", "[SDK] xcsoft's Blitzcrank", "JustBlitzcrank", "MoonBlitz", "SluttyBlitz", "sAIO" };
                     break;
                 case EloBuddy.Champion.Brand:
-                    champ = new string[] { "The Brand", "Hikicarry Brand", "OKTW", "[SA] SurvivorSeries", "yol0 Brand", "DevBrand", "Flowers' Brand", "Kimbaeng Brand", "sBrand", "SN Brand", "SurvivorSeriesAIO" };
+                    champ = new string[] { "The Brand", "Hikicarry Brand", "OKTW", "[SA] SurvivorSeries", "yol0 Brand", "DevBrand", "Flowers' Brand", "Kimbaeng Brand", "sBrand", "SN Brand", "SurvivorSeriesAIO", "SergixBrand" };
                     break;
                 case EloBuddy.Champion.Braum:
                     champ = new string[] { "OKTW", "FreshBooster", "Support is Easy" };

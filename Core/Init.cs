@@ -628,6 +628,9 @@ namespace PortAIO
                         case 10: //SurvivorSeries AIO
                             SurvivorSeriesAIO.Program.Main();
                             break;
+                        case 11: // SergixBrand
+                            SergixBrand.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Braum:
