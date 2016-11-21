@@ -12,7 +12,7 @@ using LeagueSharp;
 using System.Collections.Generic;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Data
 {
     public class Auradata

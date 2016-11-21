@@ -4,7 +4,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Items.Defensives
 {
     class _3157 : CoreItem
@@ -17,7 +17,7 @@ using EloBuddy;
         internal override float Range => 750f;
         internal override MenuType[] Category => new[] { MenuType.SelfLowHP, MenuType.SelfMuchHP, MenuType.Zhonyas };
         internal override MapType[] Maps => new[] { MapType.SummonersRift, MapType.HowlingAbyss };
-        internal override int DefaultHP => 40;  
+        internal override int DefaultHP => 35;  
         internal override int DefaultMP => 0;
 
         public override void OnTick(EventArgs args)

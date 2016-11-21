@@ -14,7 +14,7 @@ using Activator.Summoners;
 using System.Collections.Generic;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Base
 {
     public class Lists

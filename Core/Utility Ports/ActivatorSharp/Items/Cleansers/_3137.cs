@@ -5,7 +5,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Items.Cleansers
 {
     class _3137 : CoreItem
@@ -20,6 +20,7 @@ using EloBuddy;
         internal override MapType[] Maps => new[] { MapType.CrystalScar, MapType.TwistedTreeline };
         internal override int DefaultHP => 5;
         internal override int DefaultMP => 0;
+
         public override void OnTick(EventArgs args)
         {
             if (!Menu.Item("use" + Name).GetValue<bool>() || !IsReady())

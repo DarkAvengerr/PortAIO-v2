@@ -6,7 +6,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Summoners
 {
     internal class smite : CoreSum

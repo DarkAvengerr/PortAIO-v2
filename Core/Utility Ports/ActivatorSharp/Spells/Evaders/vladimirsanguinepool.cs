@@ -2,7 +2,7 @@ using System;
 using Activator.Base;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Spells.Evaders
 {
     class vladimirsanguinepool : CoreSpell

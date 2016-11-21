@@ -17,7 +17,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Base
 {
     internal class Helpers
@@ -85,7 +85,7 @@ using EloBuddy;
         /// <param name="hero">The hero to reset damage. </param>
         public static void ResetIncomeDamage(Champion hero)
         {
-            if (hero.Player.IsZombie || hero.Immunity || !hero.Player.IsValidTarget(float.MaxValue, false))
+            if (hero.Player.IsZombie || !hero.Player.IsValidTarget(float.MaxValue, false))
             {
                 hero.Attacker = null;
                 hero.BuffDamage = 0;

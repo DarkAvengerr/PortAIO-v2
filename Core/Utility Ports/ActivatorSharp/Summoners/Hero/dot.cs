@@ -5,7 +5,7 @@ using LeagueSharp.Common;
 using Activator.Data;
     
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Summoners
 {
     internal class dot : CoreSum

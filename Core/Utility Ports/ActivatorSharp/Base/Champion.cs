@@ -17,7 +17,7 @@ using Activator.Spells;
 using Activator.Summoners;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Base
 {
     public class Champion
@@ -33,13 +33,7 @@ using EloBuddy;
         public Obj_AI_Base Attacker;
 
         public bool ForceQSS;
-        public bool Immunity;
-        public bool WalkedInTroy;
-        public bool HasRecentAura;
-        public string LastDebuff;
 
-        public int DotTicks;
-        public int TroyTicks;
         public int QSSBuffCount;
         public int CleanseBuffCount;
         public int DervishBuffCount;

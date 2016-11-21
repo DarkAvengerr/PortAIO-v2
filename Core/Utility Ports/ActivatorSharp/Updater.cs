@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using LeagueSharp;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator
 {
     public static class Updater

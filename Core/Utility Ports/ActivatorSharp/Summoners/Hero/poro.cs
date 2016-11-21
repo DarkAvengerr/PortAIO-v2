@@ -3,7 +3,7 @@ using System.Linq;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Summoners
 {
     class poro : CoreSum

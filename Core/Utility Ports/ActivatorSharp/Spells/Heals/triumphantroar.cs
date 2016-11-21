@@ -3,7 +3,7 @@ using Activator.Base;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Spells.Heals
 {
     class triumphantroar : CoreSpell

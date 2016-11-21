@@ -15,7 +15,7 @@ using LeagueSharp.Common;
 using Activator.Base;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Data
 {
     public class Gamedata

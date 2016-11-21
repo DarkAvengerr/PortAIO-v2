@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Data
 {
     public class Smitedata

@@ -17,7 +17,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Handlers
 {
     public static class Buffs
@@ -90,7 +90,7 @@ using EloBuddy;
                             // double check after delay incase we no longer have the buff
                             if (hero.Player.HasBuff(aura.Name) && hero.Player.IsValidTarget(float.MaxValue, false))
                             {
-                                if (!hero.Player.IsZombie && !hero.Immunity)
+                                if (!hero.Player.IsZombie)
                                 {
                                     if (!hero.HitTypes.Contains(HitType.Ultimate))
                                          hero.HitTypes.Add(HitType.Ultimate);

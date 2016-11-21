@@ -16,7 +16,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Handlers
 {
     public class Gametroys
@@ -99,16 +99,13 @@ using EloBuddy;
                         // check delay (e.g fizz bait)
                         if (Utils.GameTimeTickCount - troy.Start >= entry.DelayFromStart)
                         {
-                            if (hero.Player.IsValidTarget(float.MaxValue, false))
+                            if (hero.Player.IsValidTarget(float.MaxValue, false) && !hero.Player.IsZombie)
                             {
-                                if (!hero.Player.IsZombie && !hero.Immunity)
+                                // limit the damage using an interval
+                                if (Utils.GameTimeTickCount - troy.Limiter >= entry.Interval * 1000)
                                 {
-                                    // limit the damage using an interval
-                                    if (Utils.GameTimeTickCount - troy.Limiter >= entry.Interval * 1000)
-                                    {
-                                        Projections.PredictTheDamage(owner.Player, hero, data, HitType.Troy, "troy.OnUpdate");
-                                        troy.Limiter = Utils.GameTimeTickCount;
-                                    }
+                                    Projections.PredictTheDamage(owner.Player, hero, data, HitType.Troy, "troy.OnUpdate");
+                                    troy.Limiter = Utils.GameTimeTickCount;
                                 }
                             }
                         }

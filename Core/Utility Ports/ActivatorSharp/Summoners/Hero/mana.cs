@@ -2,7 +2,7 @@ using System;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Summoners
 {
     internal class mana : CoreSum

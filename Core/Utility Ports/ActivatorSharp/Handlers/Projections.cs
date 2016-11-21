@@ -7,7 +7,7 @@ using Activator.Base;
 using Activator.Data;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Handlers
 {
     public class HPInstance
@@ -574,12 +574,8 @@ using EloBuddy;
                             if (turret.Distance(hero.Player.ServerPosition) <= 900 &&
                                 Player.Distance(hero.Player.ServerPosition) <= 1000)
                             {
-                                if (!hero.Immunity)
-                                {
-                                    PredictTheDamage(turret, hero, new Gamedata(), HitType.TurretAttack, "enemy.Turret");
-                                }
-                            }
-                            
+                                PredictTheDamage(turret, hero, new Gamedata(), HitType.TurretAttack, "enemy.Turret");
+                            }                         
                         }
                     }
                 }
@@ -598,13 +594,10 @@ using EloBuddy;
                     {
                         if (hero.Player.NetworkId == args.Target.NetworkId)
                         {
-                            if (!hero.Immunity)
+                            if (hero.Player.Distance(minion.ServerPosition) <= 750 &&
+                                Player.Distance(hero.Player.ServerPosition) <= 1000)
                             {
-                                if (hero.Player.Distance(minion.ServerPosition) <= 750 &&
-                                    Player.Distance(hero.Player.ServerPosition) <= 1000)
-                                {
-                                    PredictTheDamage(minion, hero, new Gamedata(), HitType.MinionAttack, "enemy.Minion");
-                                }
+                                PredictTheDamage(minion, hero, new Gamedata(), HitType.MinionAttack, "enemy.Minion");
                             }
                         }
                     }

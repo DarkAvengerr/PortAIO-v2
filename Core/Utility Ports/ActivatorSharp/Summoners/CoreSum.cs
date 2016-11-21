@@ -16,7 +16,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Activator.Summoners
 {
     public class CoreSum
@@ -35,6 +35,10 @@ using EloBuddy;
         public Menu Parent => Menu.Parent;
         public SpellSlot Slot => Player.GetSpellSlot(Name);
         public AIHeroClient Player => ObjectManager.Player;
+
+        public bool ComboActive
+            => Activator.Origin.Item("usecombo").GetValue<KeyBind>().Active ||
+               Orbwalking.Orbwalker.Instances.Any(x => x.ActiveMode == Orbwalking.OrbwalkingMode.Combo);
 
         public IEnumerable<Priority> PriorityList
             =>
@@ -75,34 +79,48 @@ using EloBuddy;
                 ExtraNames.Any(exname => Player.GetSpellSlot(exname).IsReady());
         }
 
-        public string[] HumanizerEx = { "summonerexhaust" };
-        public string[] PriorityEx = {"summonersmite", "summonerteleport"};
+        public string[] HumanizerEx = { "summonerexhaust", "summonerdot", "summonersmite" };
+        public string[] PriorityEx = {"summonersmite", "summonerteleport", "summonerdot" };
 
         public void UseSpell(bool combo = false)
         {
-            if (!combo || Activator.Origin.Item("usecombo").GetValue<KeyBind>().Active)
+            if (combo && !ComboActive)
             {
-                if (IsReady())
-                {
-                    LeagueSharp.Common.Utility.DelayAction.Add(80 - Priority * 10, () => Needed = true);
-                    LeagueSharp.Common.Utility.DelayAction.Add(1000 + Duration, () => Needed = false);
-                }
+                return;
+            }
 
-                if (PriorityList.Any() && Name == PriorityList.First().Name() || PriorityEx.Any(ex => Name.Equals(ex)))
+            if (IsReady())
+            {
+                LeagueSharp.Common.Utility.DelayAction.Add(80 - Priority * 10, () => Needed = true);
+                LeagueSharp.Common.Utility.DelayAction.Add(1000 + Duration, () => Needed = false);
+            }
+
+            if (PriorityList.Any() && Name == PriorityList.First().Name() || PriorityEx.Any(ex => Name.Equals(ex)))
+            {
+                if (HumanizerEx.Any(ex => Name.Equals(ex)))
                 {
-                    if (HumanizerEx.Any(ex => Name.Equals(ex)) || // ignore limit
-                        Utils.GameTimeTickCount - Activator.LastUsedTimeStamp > Activator.LastUsedDuration)
+                    if (Player.HasBuffOfType(BuffType.Invulnerability) ||
+                        Player.HasBuffOfType(BuffType.Invisibility))
+                        return;
+
+                    if (Player.GetSpell(Slot).State == SpellState.Ready)
                     {
-                        if (Player.HasBuffOfType(BuffType.Invulnerability) ||
-                            Player.HasBuffOfType(BuffType.Invisibility))
-                            return;
+                        Player.Spellbook.CastSpell(Slot);
+                        Activator.LastUsedTimeStamp = Utils.GameTimeTickCount;
+                        Activator.LastUsedDuration = Duration;
+                    }
+                }
+                else if (Utils.GameTimeTickCount - Activator.LastUsedTimeStamp > Activator.LastUsedDuration)
+                {
+                    if (Player.HasBuffOfType(BuffType.Invulnerability) ||
+                        Player.HasBuffOfType(BuffType.Invisibility))
+                        return;
 
-                        if (Player.GetSpell(Slot).State == SpellState.Ready)
-                        {
-                            Player.Spellbook.CastSpell(Slot);
-                            Activator.LastUsedTimeStamp = Utils.GameTimeTickCount;
-                            Activator.LastUsedDuration = Duration;
-                        }
+                    if (Player.GetSpell(Slot).State == SpellState.Ready)
+                    {
+                        Player.Spellbook.CastSpell(Slot);
+                        Activator.LastUsedTimeStamp = Utils.GameTimeTickCount;
+                        Activator.LastUsedDuration = Duration;
                     }
                 }
             }
@@ -110,29 +128,43 @@ using EloBuddy;
 
         public void UseSpellOn(Obj_AI_Base target, bool combo = false)
         {
-            if (!combo || Activator.Origin.Item("usecombo").GetValue<KeyBind>().Active)
+            if (combo && !ComboActive)
             {
-                if (IsReady())
-                {
-                    LeagueSharp.Common.Utility.DelayAction.Add(80 - Priority * 10, () => Needed = true);
-                    LeagueSharp.Common.Utility.DelayAction.Add(1000 + Duration, () => Needed = false);
-                }
+                return;
+            }
 
-                if (PriorityList.Any() && Name == PriorityList.First().Name() || PriorityEx.Any(ex => Name.Equals(ex)))
+            if (IsReady())
+            {
+                LeagueSharp.Common.Utility.DelayAction.Add(80 - Priority * 10, () => Needed = true);
+                LeagueSharp.Common.Utility.DelayAction.Add(1000 + Duration, () => Needed = false);
+            }
+
+            if (PriorityList.Any() && Name == PriorityList.First().Name() || PriorityEx.Any(ex => Name.Equals(ex)))
+            {
+                if (HumanizerEx.Any(ex => Name.Equals(ex)))
                 {
-                    if (HumanizerEx.Any(ex => Name.Equals(ex)) || // ignore limit
-                        Utils.GameTimeTickCount - Activator.LastUsedTimeStamp > Activator.LastUsedDuration)
+                    if (Player.HasBuffOfType(BuffType.Invulnerability) ||
+                        Player.HasBuffOfType(BuffType.Invisibility))
+                        return;
+
+                    if (Player.GetSpell(Slot).State == SpellState.Ready)
                     {
-                        if (Player.HasBuffOfType(BuffType.Invulnerability) ||
-                            Player.HasBuffOfType(BuffType.Invisibility))
-                            return;
+                        Player.Spellbook.CastSpell(Slot, target);
+                        Activator.LastUsedTimeStamp = Utils.GameTimeTickCount;
+                        Activator.LastUsedDuration = Duration;
+                    }
+                }
+                else if (Utils.GameTimeTickCount - Activator.LastUsedTimeStamp > Activator.LastUsedDuration)
+                {
+                    if (Player.HasBuffOfType(BuffType.Invulnerability) ||
+                        Player.HasBuffOfType(BuffType.Invisibility))
+                        return;
 
-                        if (Player.GetSpell(Slot).State == SpellState.Ready)
-                        {
-                            Player.Spellbook.CastSpell(Slot, target);
-                            Activator.LastUsedTimeStamp = Utils.GameTimeTickCount;
-                            Activator.LastUsedDuration = Duration;
-                        }
+                    if (Player.GetSpell(Slot).State == SpellState.Ready)
+                    {
+                        Player.Spellbook.CastSpell(Slot, target);
+                        Activator.LastUsedTimeStamp = Utils.GameTimeTickCount;
+                        Activator.LastUsedDuration = Duration;
                     }
                 }
             }
