@@ -726,7 +726,7 @@ using LeagueSharp.Common;
                         continue;
                     }
 
-                    if (this.Menu.Item(mob.CharData.BaseSkinName).IsActive())
+                    if (this.Menu.Item(mob.BaseSkinName).IsActive())
                     {
                         if (this.Menu.Item("Smite.Spell").IsActive())
                         {

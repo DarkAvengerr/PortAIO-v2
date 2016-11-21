@@ -1,5 +1,6 @@
-using EloBuddy;
-namespace ElUtilitySuite.Trackers
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Trackers
 {
     using System;
     using System.Collections.Generic;
@@ -50,7 +51,7 @@ namespace ElUtilitySuite.Trackers
         /// <summary>
         ///     The move right speed
         /// </summary>
-        private const int MoveRightSpeed = 1000;
+        private const int MoveRightSpeed = 1500;
 
         #endregion
 
@@ -207,7 +208,7 @@ namespace ElUtilitySuite.Trackers
 
             JungleTracker.CampDied += this.JungleTrackerCampDied;
             Teleport.OnTeleport += this.OnTeleport;
-            Obj_AI_Base.OnBuffLose += this.OnBuffLose;
+            //Obj_AI_Base.OnBuffLose += this.OnBuffLose;
 
             Drawing.OnPreReset += args =>
             {
@@ -223,7 +224,8 @@ namespace ElUtilitySuite.Trackers
                 this.Sprite.OnResetDevice();
             };
 
-            var names = Assembly.GetExecutingAssembly().GetManifestResourceNames().Skip(1).ToList();
+            var names = this.GetType().GetTypeInfo().Assembly.GetManifestResourceNames();
+
             var neededSpells =
                  Data.Get<SpellDatabase>().Spells.Where(
                         x =>
@@ -235,10 +237,9 @@ namespace ElUtilitySuite.Trackers
                 try
                 {
                     var spellName = name.Split('.')[3];
-                    if (spellName != "Dragon" && spellName != "Baron" && spellName != "Teleport" && spellName != "Rebirthready" && spellName != "Zacrebirthready")
+                    if (spellName != "Dragon" && spellName != "Baron" && spellName != "Teleport"  && spellName != "Rebirthready" && spellName != "Zacrebirthready")
                     {
                         this.Spells.Add(Data.Get<SpellDatabase>().Spells.First(x => x.SpellName.Equals(spellName)));
-
                         if (!neededSpells.Contains(spellName))
                         {
                             continue;
@@ -249,10 +250,11 @@ namespace ElUtilitySuite.Trackers
                         spellName,
                         Texture.FromStream(
                             Drawing.Direct3DDevice,
-                            Assembly.GetExecutingAssembly().GetManifestResourceStream(name)));
+                            this.GetType().GetTypeInfo().Assembly.GetManifestResourceStream(name)));
                 }
                 catch (Exception)
                 {
+                    //Console.WriteLine($"Failed to find load image for {name}. Please notify jQuery/ChewyMoon!");
                 }
             }
 
@@ -426,11 +428,11 @@ namespace ElUtilitySuite.Trackers
                     continue;
                 }
 
-                foreach (var spell in slots.Select(x => enemy.GetSpell(x)).Where(x => x.Level > 0 && x.CooldownExpires > 0
+                foreach (var spell in slots.Select(x => enemy.GetSpell(x)).Where(x => x.Level > 0 && x.CooldownExpires > 0 
                 && x.CooldownExpires - Game.Time <= Countdown))
                 {
-                    if (spell.CooldownExpires - Game.Time <= -5
-                        && this.StartX + (int)((-(spell.CooldownExpires - Game.Time) - 5) * MoveRightSpeed)
+                    if (spell.CooldownExpires - Game.Time <= -3
+                        && this.StartX + (int)((-(spell.CooldownExpires - Game.Time) - 3) * MoveRightSpeed)
                         >= Drawing.Width + i * MoveRightSpeed)
                     {
                         continue;
@@ -448,9 +450,9 @@ namespace ElUtilitySuite.Trackers
                     var boxY = this.StartY - i * BoxSpacing - (i * BoxHeight);
                     var boxX = this.StartX;
 
-                    if (remainingTime <= -5)
+                    if (remainingTime <= -3)
                     {
-                        boxX += (int)((-remainingTime - 5) * MoveRightSpeed);
+                        boxX += (int)((-remainingTime - 3) * MoveRightSpeed);
                     }
 
                     var lineStart = new Vector2(boxX, boxY);
@@ -534,9 +536,9 @@ namespace ElUtilitySuite.Trackers
                 var boxY = this.StartY - i * BoxSpacing - (i * BoxHeight);
                 var boxX = this.StartX;
 
-                if (remainingTime <= -5)
+                if (remainingTime <= -3)
                 {
-                    boxX += (int)((-remainingTime - 5) * MoveRightSpeed);
+                    boxX += (int)((-remainingTime - 3) * MoveRightSpeed);
                 }
 
                 var lineStart = new Vector2(boxX, boxY);
@@ -615,8 +617,8 @@ namespace ElUtilitySuite.Trackers
         {
             this.Cards.RemoveAll(
                 x =>
-                x.EndTime - Game.Time <= -5
-                && this.StartX + (int)((-(x.EndTime - Game.Time) - 5) * MoveRightSpeed)
+                x.EndTime - Game.Time <= -3
+                && this.StartX + (int)((-(x.EndTime - Game.Time) - 3) * MoveRightSpeed)
                 >= Drawing.Width + this.Cards.Count * MoveRightSpeed);
         }
 

@@ -1,4 +1,6 @@
-using EloBuddy; namespace ElUtilitySuite.Utility
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Utility
 {
     using System;
     using System.Linq;
@@ -96,7 +98,7 @@ using EloBuddy; namespace ElUtilitySuite.Utility
         {
             try
             {
-                if (!sender.IsValid || !sender.IsAlly || sender.Type != GameObjectType.obj_AI_Minion)
+                if (!sender.IsValid || this.Player.IsChampion("Thresh") || !sender.IsAlly || sender.Type != GameObjectType.obj_AI_Minion)
                 {
                     return;
                 }
@@ -154,7 +156,7 @@ using EloBuddy; namespace ElUtilitySuite.Utility
                 if (this.Menu.Item("ThreshHawkMode").IsActive() ? this.Menu.Item("ThreshLanternHotkey").GetValue<KeyBind>().Active :
                     this.Menu.Item("ThreshLanternHotkey").GetValue<KeyBind>().Active || this.Player.HealthPercent < this.ClickBelowHp)
                 {
-                    if (this.ThreshLantern.Position.Distance(this.Player.Position) <= 500 && ObjectManager.Player.Hero != Champion.Thresh)
+                    if (this.ThreshLantern.Position.Distance(this.Player.Position) <= 500)
                     {
                         this.Player.Spellbook.CastSpell((SpellSlot)62, this.ThreshLantern);
                     }
@@ -162,7 +164,7 @@ using EloBuddy; namespace ElUtilitySuite.Utility
             }
             catch (Exception e)
             {
-                Console.WriteLine("An error occurred: '{0}'", e);
+                Console.WriteLine(@"An error occurred: '{0}'", e);
             }
         }
 

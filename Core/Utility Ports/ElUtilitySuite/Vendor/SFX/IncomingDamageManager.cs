@@ -26,7 +26,9 @@
 
 #endregion
 
-using EloBuddy; namespace ElUtilitySuite.Vendor.SFX
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Vendor.SFX
 {
     using System;
     using System.Collections.Generic;
@@ -42,7 +44,7 @@ using EloBuddy; namespace ElUtilitySuite.Vendor.SFX
 
         static IncomingDamageManager()
         {
-            Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
         }
 
         public static bool Skillshots { get; set; }
@@ -83,8 +85,7 @@ using EloBuddy; namespace ElUtilitySuite.Vendor.SFX
                                     hero, (int)(GetTime(sender, hero, args.SData) * 0.3f),
                                     (float)sender.GetAutoAttackDamage(hero, true));
                             }
-                            else if (args.SData.TargettingType == SpellDataTargetType.Unit ||
-                                     args.SData.TargettingType == SpellDataTargetType.SelfAndUnit)
+                            else if (args.SData.TargettingType == SpellDataTargetType.Unit || args.SData.TargettingType == SpellDataTargetType.SelfAndUnit)
                             {
                                 AddDamage(
                                     hero, (int)(GetTime(sender, hero, args.SData) * 0.3f),

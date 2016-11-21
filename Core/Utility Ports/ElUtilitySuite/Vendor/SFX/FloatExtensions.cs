@@ -26,7 +26,9 @@
 
 #endregion
 
-using EloBuddy; namespace ElUtilitySuite.Vendor.SFX
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Vendor.SFX
 {
     using System;
 

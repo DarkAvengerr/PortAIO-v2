@@ -20,7 +20,9 @@
 
 #endregion License
 
-using EloBuddy; namespace ElUtilitySuite.Trackers
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Trackers
 {
     using System;
     using System.Collections.Generic;

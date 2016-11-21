@@ -1,4 +1,6 @@
-using EloBuddy; namespace ElUtilitySuite.Utility
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Utility
 {
     using System;
     using System.Collections.Generic;
@@ -180,7 +182,7 @@ using EloBuddy; namespace ElUtilitySuite.Utility
                     e => e.ChampionName.Equals("Vayne", StringComparison.InvariantCultureIgnoreCase));
 
             GameObject.OnCreate += this.GameObject_OnCreate;
-            Obj_AI_Base.OnSpellCast += this.OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += this.OnProcessSpellCast;
         }
 
         #endregion
