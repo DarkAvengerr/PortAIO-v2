@@ -46,9 +46,10 @@ using LeagueSharp.SDK;
                 {
                     if (Vars.GetImmobileBuffEndTime(target) >= Vars.W.Delay + Game.Ping)
                     {
-                        Vars.W.Cast(GameObjects.Player.ServerPosition.Extend(
+                        Vars.W.Cast(
+                            GameObjects.Player.ServerPosition.Extend(
                                 target.ServerPosition,
-                                (float)(GameObjects.Player.Distance(target) + Vars.W.Width*1.5)));
+                                (float)(GameObjects.Player.Distance(target) + Vars.W.Width * 1.25)));
                     }
                 }
             }

@@ -44,7 +44,8 @@ using LeagueSharp.SDK;
                 /// <summary>
                 ///     The JungleClear Q Logic.
                 /// </summary>
-                if (Targets.JungleMinions.Any() && GameObjects.Player.ManaPercent
+                if (Targets.JungleMinions.Any()
+                    && GameObjects.Player.ManaPercent
                     > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["jungleclear"])
                     && Vars.Menu["spells"]["q"]["jungleclear"].GetValue<MenuSliderButton>().BValue)
                 {

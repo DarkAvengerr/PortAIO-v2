@@ -39,7 +39,7 @@ using LeagueSharp.SDK;
                     /// </summary>
                     if (
                         GameObjects.EnemyHeroes.Any(
-                            t => Vars.GetRealHealth(t) < GameObjects.Player.GetAutoAttackDamage(t)))
+                            t => t.IsValidTarget() && Vars.GetRealHealth(t) < GameObjects.Player.GetAutoAttackDamage(t)))
                     {
                         return;
                     }

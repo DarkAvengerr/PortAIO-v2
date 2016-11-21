@@ -57,10 +57,7 @@ using LeagueSharp.SDK;
                         && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.Q)
                         && !Invulnerable.Check(t, DamageType.Magical)))
                 {
-                    if (
-                        !Vars.Q.GetPrediction(target)
-                             .CollisionObjects.Any(
-                                 c => GameObjects.EnemyHeroes.Contains(c) || GameObjects.EnemyMinions.Contains(c)))
+                    if (!Vars.Q.GetPrediction(target).CollisionObjects.Any())
                     {
                         Vars.Q.Cast(Vars.Q.GetPrediction(target).UnitPosition);
                         return;

@@ -41,7 +41,8 @@ using LeagueSharp.SDK;
             ///     The W Combo Logic.
             /// </summary>
             if (Vars.W.IsReady()
-                && GameObjects.EnemyHeroes.Any(t => t.Distance((Vector2)Orianna.BallPosition) < Vars.W.Range)
+                && GameObjects.EnemyHeroes.Any(
+                    t => t.IsValidTarget() && t.Distance((Vector2)Orianna.BallPosition) < Vars.W.Range)
                 && Vars.Menu["spells"]["w"]["combo"].GetValue<MenuBool>().Value)
             {
                 Vars.W.Cast();
@@ -77,22 +78,6 @@ using LeagueSharp.SDK;
                         return;
                     }
                 }
-            }
-
-            /// <summary>
-            ///     The Combo R Logic.
-            /// </summary>
-            if (Vars.R.IsReady()
-                && GameObjects.EnemyHeroes.Any(
-                    t =>
-                    t.Distance((Vector2)Orianna.BallPosition) < Vars.R.Range - 25f
-                    && Vars.GetRealHealth(t)
-                    < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.R)
-                    + (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.Q) * 2
-                    && Vars.Menu["spells"]["r"]["whitelist"][t.ChampionName.ToLower()].GetValue<MenuBool>().Value)
-                && Vars.Menu["spells"]["r"]["combo"].GetValue<MenuBool>().Value)
-            {
-                Vars.R.Cast();
             }
 
             if (Bools.HasSheenBuff() && Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())

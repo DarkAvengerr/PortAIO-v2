@@ -6,17 +6,12 @@ using LeagueSharp.SDK;
  namespace ExorAIO.Champions.Caitlyn
 {
     using System;
-    using System.Linq;
 
     using ExorAIO.Utilities;
 
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.UI;
     using LeagueSharp.SDK.Utils;
-
-    using SharpDX;
-
-    using Geometry = ExorAIO.Utilities.Geometry;
 
     /// <summary>
     ///     The logics class.
@@ -31,31 +26,20 @@ using LeagueSharp.SDK;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Harass(EventArgs args)
         {
-            /// <summary>
-            ///     The Harass Q Logic.
-            /// </summary>
-            if (Vars.Q.IsReady()
-                && GameObjects.Player.ManaPercent
-                > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["clear"])
-                && Vars.Menu["spells"]["q"]["clear"].GetValue<MenuSliderButton>().BValue)
+            if (!Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target))
             {
-                if (GameObjects.EnemyHeroes.Any(t => !Invulnerable.Check(t) && t.IsValidTarget(Vars.Q.Range)))
-                {
-                    if (Vars.Q.GetLineFarmLocation(Targets.Minions, Vars.Q.Width).MinionsHit >= 3
-                        && !new Geometry.Rectangle(
-                                GameObjects.Player.ServerPosition,
-                                GameObjects.Player.ServerPosition.Extend(
-                                    Targets.Minions[0].ServerPosition,
-                                    Vars.Q.Range),
-                                Vars.Q.Width).IsOutside(
-                                    (Vector2)
-                                    Vars.Q.GetPrediction(
-                                        GameObjects.EnemyHeroes.FirstOrDefault(
-                                            t => !Invulnerable.Check(t) && t.IsValidTarget(Vars.Q.Range))).UnitPosition))
-                    {
-                        Vars.Q.Cast(Vars.Q.GetLineFarmLocation(Targets.Minions, Vars.Q.Width).Position);
-                    }
-                }
+                return;
+            }
+
+            /// <summary>
+            ///     The Q Harass Logic.
+            /// </summary>
+            if (Vars.Q.IsReady() && Targets.Target.IsValidTarget(Vars.Q.Range)
+                && GameObjects.Player.ManaPercent
+                > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["harass"])
+                && Vars.Menu["spells"]["q"]["harass"].GetValue<MenuSliderButton>().BValue)
+            {
+                Vars.Q.Cast(Vars.Q.GetPrediction(Targets.Target).UnitPosition);
             }
         }
 

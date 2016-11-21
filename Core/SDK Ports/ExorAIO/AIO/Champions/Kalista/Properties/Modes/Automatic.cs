@@ -6,6 +6,7 @@ using LeagueSharp.SDK;
  namespace ExorAIO.Champions.Kalista
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
 
     using ExorAIO.Utilities;
@@ -90,67 +91,60 @@ using LeagueSharp.SDK;
                     Vars.E.Cast();
                 }
 
-                /// <summary>
-                ///     The E Minion Harass Logic.
-                /// </summary>
-                if (GameObjects.EnemyHeroes.Any(Bools.IsPerfectRendTarget)
-                    && Vars.Menu["spells"]["e"]["harass"].GetValue<MenuSliderButton>().BValue
-                    && Targets.Minions.Any(
+                var validMinions =
+                    Targets.Minions.Where(
                         m =>
                         Bools.IsPerfectRendTarget(m)
                         && Vars.GetRealHealth(m)
                         < (float)GameObjects.Player.GetSpellDamage(m, SpellSlot.E)
-                        + (float)GameObjects.Player.GetSpellDamage(m, SpellSlot.E, DamageStage.Buff)))
-                {
-                    /// <summary>
-                    ///     Check for Mana Manager if not in combo mode and the killable minion is only one, else do not use it.
-                    /// </summary>
-                    if (Variables.Orbwalker.ActiveMode != OrbwalkingMode.Combo
-                        && Targets.Minions.Count(
-                            m =>
-                            Bools.IsPerfectRendTarget(m)
-                            && Vars.GetRealHealth(m)
-                            < (float)GameObjects.Player.GetSpellDamage(m, SpellSlot.E)
-                            + (float)GameObjects.Player.GetSpellDamage(m, SpellSlot.E, DamageStage.Buff)) == 1)
-                    {
-                        if (GameObjects.Player.ManaPercent
-                            < ManaManager.GetNeededMana(Vars.E.Slot, Vars.Menu["spells"]["e"]["harass"]))
-                        {
-                            return;
-                        }
-                    }
+                        + (float)GameObjects.Player.GetSpellDamage(m, SpellSlot.E, DamageStage.Buff));
 
-                    /// <summary>
-                    ///     Check for E Whitelist if the harassable target is only one and there is only one killable minion, else do not use the whitelist.
-                    /// </summary>
-                    if (GameObjects.EnemyHeroes.Count(Bools.IsPerfectRendTarget) == 1
-                        && Targets.Minions.Count(
-                            m =>
-                            Bools.IsPerfectRendTarget(m)
-                            && Vars.GetRealHealth(m)
-                            < (float)GameObjects.Player.GetSpellDamage(m, SpellSlot.E)
-                            + (float)GameObjects.Player.GetSpellDamage(m, SpellSlot.E, DamageStage.Buff)) == 1)
+                var validTargets = GameObjects.EnemyHeroes.Where(Bools.IsPerfectRendTarget);
+
+                /// <summary>
+                ///     The E Minion Harass Logic.
+                /// </summary>
+                var objAiMinions = validMinions as IList<Obj_AI_Minion> ?? validMinions.ToList();
+                var objAiHeroes = validTargets as IList<AIHeroClient> ?? validTargets.ToList();
+                if (objAiMinions.Any() && objAiHeroes.Any()
+                    && Vars.Menu["spells"]["e"]["harass"].GetValue<MenuSliderButton>().BValue)
+                {
+                    if (objAiMinions.Count == 1)
                     {
-                        var hero = GameObjects.EnemyHeroes.FirstOrDefault(Bools.IsPerfectRendTarget);
-                        if (hero != null
-                            && !Vars.Menu["spells"]["e"]["whitelist"][hero.ChampionName.ToLower()].GetValue<MenuBool>()
-                                    .Value)
+                        /// <summary>
+                        ///     Check for Mana Manager if not in combo mode and the killable minion is only one, else do not use it.
+                        /// </summary>
+                        if (Variables.Orbwalker.ActiveMode != OrbwalkingMode.Combo)
                         {
-                            return;
+                            if (GameObjects.Player.ManaPercent
+                                < ManaManager.GetNeededMana(Vars.E.Slot, Vars.Menu["spells"]["e"]["harass"]))
+                            {
+                                return;
+                            }
+                        }
+
+                        /// <summary>
+                        ///     Check for E Whitelist if the harassable target is only one and there is only one killable minion, else do not use the whitelist.
+                        /// </summary>
+                        else if (objAiHeroes.Count == 1)
+                        {
+                            var hero = objAiHeroes.FirstOrDefault();
+                            if (hero != null
+                                && !Vars.Menu["spells"]["e"]["whitelist"][hero.ChampionName.ToLower()]
+                                        .GetValue<MenuBool>().Value)
+                            {
+                                return;
+                            }
                         }
                     }
 
                     /// <summary>
                     ///     Check for invulnerability through all the harassable targets.
                     /// </summary>
-                    if (
-                        GameObjects.EnemyHeroes.Where(Bools.IsPerfectRendTarget)
-                            .Any(target => Invulnerable.Check(target)))
+                    if (objAiHeroes.All(t => !Invulnerable.Check(t)))
                     {
-                        return;
+                        Vars.E.Cast();
                     }
-
-                    Vars.E.Cast();
                 }
 
                 /// <summary>
