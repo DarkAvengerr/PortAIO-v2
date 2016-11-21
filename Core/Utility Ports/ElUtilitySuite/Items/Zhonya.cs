@@ -1,4 +1,6 @@
-using EloBuddy; namespace ElUtilitySuite.Items
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Items
 {
     using System;
     using System.Collections.Generic;
@@ -21,7 +23,7 @@ using EloBuddy; namespace ElUtilitySuite.Items
         /// <summary>
         ///     The zhyonya item
         /// </summary>
-        public static EloBuddy.SDK.Item zhonyaItem { get; private set; }
+        private static Items.Item zhonyaItem;
 
         #endregion
 
@@ -210,11 +212,6 @@ using EloBuddy; namespace ElUtilitySuite.Items
                                      ChampionName = "jayce", SDataName = "jayceshockblast",
                                      MissileName = "jayceshockblastmis", Delay = 250, MissileSpeed = 2350,
                                      CastRange = 1570f
-                                 },
-                             new ZhonyaSpell
-                                 {
-                                     ChampionName = "kassadin", SDataName = "nulllance", MissileName = "", Delay = 250,
-                                     MissileSpeed = 1900, CastRange = 650f
                                  },
                              new ZhonyaSpell
                                  {
@@ -593,13 +590,13 @@ using EloBuddy; namespace ElUtilitySuite.Items
         /// </summary>
         public void Load()
         {
-            zhonyaItem = new EloBuddy.SDK.Item(Game.MapId == GameMapId.SummonersRift ? 3157 : 3090);
+            zhonyaItem = new Items.Item(Game.MapId == GameMapId.SummonersRift ? 3157 : 3090);
             IncomingDamageManager.RemoveDelay = 500;
             IncomingDamageManager.Skillshots = true;
 
             Game.OnUpdate += this.OnUpdate;
             GameObject.OnCreate += this.GameObjectOnCreate;
-            Obj_AI_Base.OnSpellCast += this.ObjAiBaseOnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += this.ObjAiBaseOnProcessSpellCast;
         }
 
         #endregion
@@ -734,7 +731,7 @@ using EloBuddy; namespace ElUtilitySuite.Items
         {
             try
             {
-                if (Player.IsDead || Player.InFountain() || Player.IsRecalling() || !zhonyaItem.IsOwned() || !zhonyaItem.IsReady())
+                if (Player.IsDead || Player.InFountain() || Player.IsRecalling())
                 {
                     return;
                 }

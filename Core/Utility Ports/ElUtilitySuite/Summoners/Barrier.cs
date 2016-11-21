@@ -1,4 +1,6 @@
-using EloBuddy; namespace ElUtilitySuite.Summoners
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Summoners
 {
     using System;
     using System.Linq;
@@ -6,8 +8,6 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
     using ElUtilitySuite.Vendor.SFX;
 
     using LeagueSharp;
-    using EloBuddy.SDK;
-
     using LeagueSharp.Common;
 
     public class Barrier : IPlugin
@@ -20,7 +20,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         /// <value>
         ///     The barrier spell.
         /// </value>
-        public EloBuddy.SDK.Spell.Active BarrierSpell { get; private set; }
+        public Spell BarrierSpell { get; set; }
 
         /// <summary>
         /// Gets or sets the menu.
@@ -28,7 +28,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         /// <value>
         /// The menu.
         /// </value>
-        public LeagueSharp.Common.Menu Menu { get; set; }
+        public Menu Menu { get; set; }
 
         #endregion
 
@@ -51,23 +51,23 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         /// </summary>
         /// <param name="rootMenu">The root menu.</param>
         /// <returns></returns>
-        public void CreateMenu(LeagueSharp.Common.Menu rootMenu)
+        public void CreateMenu(Menu rootMenu)
         {
-            if (this.Player.GetSpellSlotFromName("SummonerBarrier") == SpellSlot.Unknown)
+            if (this.Player.GetSpellSlot("summonerbarrier") == SpellSlot.Unknown)
             {
                 return;
             }
 
-            var predicate = new Func<LeagueSharp.Common.Menu, bool>(x => x.Name == "SummonersMenu");
+            var predicate = new Func<Menu, bool>(x => x.Name == "SummonersMenu");
             var menu = !rootMenu.Children.Any(predicate)
-                           ? rootMenu.AddSubMenu(new LeagueSharp.Common.Menu("Summoners", "SummonersMenu"))
+                           ? rootMenu.AddSubMenu(new Menu("Summoners", "SummonersMenu"))
                            : rootMenu.Children.First(predicate);
 
-                var barrierMenu = menu.AddSubMenu(new LeagueSharp.Common.Menu("Barrier", "Barrier"));
+                var barrierMenu = menu.AddSubMenu(new Menu("Barrier", "Barrier"));
             {
-                barrierMenu.AddItem(new LeagueSharp.Common.MenuItem("Barrier.Activated", "Barrier activated").SetValue(true));
-                barrierMenu.AddItem(new LeagueSharp.Common.MenuItem("barrier.min-health", "Health percentage").SetValue(new LeagueSharp.Common.Slider(20, 1)));
-                barrierMenu.AddItem(new LeagueSharp.Common.MenuItem("barrier.min-damage", "Heal on % incoming damage").SetValue(new LeagueSharp.Common.Slider(20, 1)));
+                barrierMenu.AddItem(new MenuItem("Barrier.Activated", "Barrier activated").SetValue(true));
+                barrierMenu.AddItem(new MenuItem("barrier.min-health", "Health percentage").SetValue(new Slider(20, 1)));
+                barrierMenu.AddItem(new MenuItem("barrier.min-damage", "Heal on % incoming damage").SetValue(new Slider(20, 1)));
                 }
 
             this.Menu = barrierMenu;
@@ -78,19 +78,15 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         /// </summary>
         public void Load()
         {
-            var slot = EloBuddy.Player.Instance.GetSpellSlotFromName("SummonerBarrier");
-            if (slot != SpellSlot.Unknown)
-            {
-                BarrierSpell = new EloBuddy.SDK.Spell.Active(slot);
-            }
+            var barrierSlot = this.Player.GetSpellSlot("summonerbarrier");
 
-            if (slot == SpellSlot.Unknown)
+            if (barrierSlot == SpellSlot.Unknown)
             {
                 return;
             }
-
             IncomingDamageManager.RemoveDelay = 500;
             IncomingDamageManager.Skillshots = true;
+            this.BarrierSpell = new Spell(barrierSlot, 550);
             Game.OnUpdate += this.OnUpdate;
         }
 
@@ -106,7 +102,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         {
             try
             {
-                if (this.Player.IsDead || this.Player.HasBuff("ChronoShift") ||  !this.BarrierSpell.IsReady() || this.Player.InFountain() || this.Player.HasBuff("recall") || !this.Menu.Item("Barrier.Activated").IsActive())
+                if (this.Player.IsDead || this.Player.HasBuff("ChronoShift") ||  !this.BarrierSpell.IsReady() || this.Player.InFountain() || this.Player.IsRecalling() || !this.Menu.Item("Barrier.Activated").IsActive())
                 {
                     return;
                 }
@@ -120,7 +116,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                     if ((int)(totalDamage / this.Player.Health) > this.Menu.Item("barrier.min-damage").GetValue<Slider>().Value
                         || this.Player.HealthPercent < this.Menu.Item("barrier.min-health").GetValue<Slider>().Value)
                     {
-                        BarrierSpell.Cast();
+                        this.Player.Spellbook.CastSpell(this.BarrierSpell.Slot);
                     }
                 }
             }

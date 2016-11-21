@@ -1,4 +1,6 @@
-using EloBuddy; namespace ElUtilitySuite.Others
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Others
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +19,8 @@ using EloBuddy; namespace ElUtilitySuite.Others
 
         private readonly List<SpellInfo> _spellInfos = new List<SpellInfo>
         {
-            new SpellInfo("Cassiopeia", "CassiopeiaR", 825f, false, true, 0.85f),
+            new SpellInfo("Cassiopeia", "CassiopeiaR", 1000f, false, true, 0.85f),
+            new SpellInfo("Cassiopeia", "cassiopeiapetrifyinggaze", 1000f, false, true, 0.85f),
             new SpellInfo("Tryndamere", "MockingShout", 900f, false, false, 0.65f)
         };
 
@@ -81,7 +84,7 @@ using EloBuddy; namespace ElUtilitySuite.Others
         /// </summary>
         public void Load()
         {
-            Obj_AI_Base.OnSpellCast += this.OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += this.OnProcessSpellCast;
             EloBuddy.Player.OnIssueOrder += this.OnObjAiBaseIssueOrder;
         }
 

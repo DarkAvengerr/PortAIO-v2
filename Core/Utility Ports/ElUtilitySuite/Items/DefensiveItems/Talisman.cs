@@ -1,4 +1,6 @@
-using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Items.DefensiveItems
 {
     using System.Linq;
     using System.Runtime.CompilerServices;
@@ -30,14 +32,11 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
 
         #region Public Methods and Operators
 
-        public static EloBuddy.SDK.Item Talisman_of_Ascension;
-
         /// <summary>
         ///     Creates the menu.
         /// </summary>
         public override void CreateMenu()
         {
-            Talisman_of_Ascension = new EloBuddy.SDK.Item(ItemId.Talisman_of_Ascension);
             this.Menu.AddItem(new MenuItem("UseTalismanCombo", "Activated").SetValue(true));
             this.Menu.AddItem(new MenuItem("Mode-talisman", "Activation mode: ")).SetValue(new StringList(new[] { "Use always", "Use in combo" }, 1));
             this.Menu.AddItem(new MenuItem("TalismanEnemyHp", "Use on Enemy Hp %").SetValue(new Slider(70)));
@@ -55,7 +54,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
                       x =>
                       x.HealthPercent < this.Menu.Item("TalismanEnemyHp").GetValue<Slider>().Value
                       && x.Distance(this.Player) < 550)
-                      || this.Player.HealthPercent < this.Menu.Item("TalismanMyHp").GetValue<Slider>().Value) && Talisman_of_Ascension.IsOwned() && Talisman_of_Ascension.IsReady();
+                      || this.Player.HealthPercent < this.Menu.Item("TalismanMyHp").GetValue<Slider>().Value);
         }
 
         /// <summary>
@@ -68,7 +67,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
                 return;
             }
 
-            Talisman_of_Ascension.Cast();
+            Items.UseItem((int)this.Id);
         }
 
         #endregion

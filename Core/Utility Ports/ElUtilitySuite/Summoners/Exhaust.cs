@@ -1,4 +1,6 @@
-using EloBuddy; namespace ElUtilitySuite.Summoners
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Summoners
 {
     using System;
     using System.Collections.Generic;
@@ -71,12 +73,13 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
 
             var exhaustMenu = menu.AddSubMenu(new Menu("Exhaust", "Exhaust"));
             {
-                exhaustMenu.AddItem(new MenuItem("Exhaust.Activated", "Exhaust activated").SetValue(false));
+                exhaustMenu.AddItem(new MenuItem("Exhaust.Activated", "Exhaust activated").SetValue(false))
+                    .SetTooltip("Will only exhaust on dangerous spells.");
                 exhaustMenu.AddItem(new MenuItem("blank_line3000", ""));
                 foreach (var x in HeroManager.Enemies)
                 {
                     exhaustMenu.AddItem(
-                        new MenuItem($"exhauston{x.CharData.BaseSkinName}", "Use for " + x.ChampionName)).SetValue(true);
+                        new MenuItem($"exhauston{x.CharData.BaseSkinName}", "Use on " + x.ChampionName)).SetValue(true);
                 }
             }
 
@@ -98,7 +101,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
 
                 this.ExhaustSpell = new Spell(exhaustSlot, 550f);
 
-                Obj_AI_Base.OnSpellCast += this.ObjAiBaseOnProcessSpellCast;
+                Obj_AI_Base.OnProcessSpellCast += this.ObjAiBaseOnProcessSpellCast;
 
                 var dangerousSpells =
                     Data.Get<SpellDatabase>()
@@ -160,7 +163,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                 return;
             }
 
-            if (this.ExhaustSpell.IsReady() && sender.IsValidTarget())
+            if (this.ExhaustSpell.IsReady())
             {
                LeagueSharp.Common.Utility.DelayAction.Add(Random.Next(50, 100), () => this.ExhaustSpell.Cast(sender));
                Console.WriteLine($"Use exhaust on: {sender.CharData.BaseSkinName} - for spell {args.SData.Name}");

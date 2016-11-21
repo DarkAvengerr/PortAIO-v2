@@ -1,4 +1,6 @@
-using EloBuddy; namespace ElUtilitySuite.Items
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Items
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +19,7 @@ using EloBuddy; namespace ElUtilitySuite.Items
         ///     Gets an health item
         /// </summary>
         /// <returns></returns>
-        private delegate EloBuddy.SDK.Item GetHealthItemDelegate();
+        private delegate Items.Item GetHealthItemDelegate();
 
         #endregion
 
@@ -64,12 +66,6 @@ using EloBuddy; namespace ElUtilitySuite.Items
         /// <returns></returns>
         public void CreateMenu(Menu rootMenu)
         {
-            Refillable_Potion = new EloBuddy.SDK.Item(ItemId.Refillable_Potion);
-            Hunter_s_Potion = new EloBuddy.SDK.Item(ItemId.Hunters_Potion);
-            Corrupting_Potion = new EloBuddy.SDK.Item(ItemId.Corrupting_Potion);
-            Total_Biscuit_of_Rejuvenation = new EloBuddy.SDK.Item(ItemId.Total_Biscuit_of_Rejuvenation);
-            HealthPotion = new EloBuddy.SDK.Item(ItemId.Health_Potion);
-
             var predicate = new Func<Menu, bool>(x => x.Name == "MiscMenu");
             var menu = !rootMenu.Children.Any(predicate)
                            ? rootMenu.AddSubMenu(new Menu("Misc", "MiscMenu"))
@@ -91,13 +87,6 @@ using EloBuddy; namespace ElUtilitySuite.Items
             this.Menu = potionsMenu;
         }
 
-        public static EloBuddy.SDK.Item Refillable_Potion { get; private set; }
-        public static EloBuddy.SDK.Item Hunter_s_Potion { get; private set; }
-        public static EloBuddy.SDK.Item Total_Biscuit_of_Rejuvenation { get; private set; }
-        public static EloBuddy.SDK.Item HealthPotion { get; private set; }
-        public static EloBuddy.SDK.Item Corrupting_Potion { get; private set; }
-
-
         /// <summary>
         ///     Loads this instance.
         /// </summary>
@@ -105,11 +94,11 @@ using EloBuddy; namespace ElUtilitySuite.Items
         {
             this.Items = new List<HealthItem>
                              {
-                                 new HealthItem { GetItem = () => HealthPotion, BuffName = "RegenerationPotion" },
-                                 new HealthItem { GetItem = () => Total_Biscuit_of_Rejuvenation, BuffName = "ItemMiniRegenPotion"},
-                                 new HealthItem { GetItem = () => Refillable_Potion, BuffName = "ItemCrystalFlask" }, 
-                                 new HealthItem { GetItem = () => Hunter_s_Potion, BuffName = "ItemCrystalFlaskJungle"},
-                                 new HealthItem { GetItem = () => Corrupting_Potion, BuffName = "ItemDarkCrystalFlask"}
+                                 new HealthItem { GetItem = () => ItemData.Health_Potion.GetItem(), BuffName = "RegenerationPotion" },
+                                 new HealthItem { GetItem = () => ItemData.Total_Biscuit_of_Rejuvenation2.GetItem(), BuffName = "ItemMiniRegenPotion"},
+                                 new HealthItem { GetItem = () => ItemData.Refillable_Potion.GetItem(), BuffName = "ItemCrystalFlask" }, 
+                                 new HealthItem { GetItem = () => ItemData.Hunters_Potion.GetItem(), BuffName = "ItemCrystalFlaskJungle"},
+                                 new HealthItem { GetItem = () => ItemData.Corrupting_Potion.GetItem(), BuffName = "ItemDarkCrystalFlask"}
                              };
 
             Game.OnUpdate += this.OnUpdate;
@@ -130,33 +119,26 @@ using EloBuddy; namespace ElUtilitySuite.Items
             return
                 this.Items.Any(
                     potion => this.Player.Buffs.Any(
-                        b => b.Name.Equals(potion.BuffName, StringComparison.OrdinalIgnoreCase)));
+                        b => b.Name.Equals(potion.BuffName, StringComparison.InvariantCultureIgnoreCase)));
         }
 
         private void OnUpdate(EventArgs args)
         {
-            try
+            if (!this.Menu.Item("Potions.Activated").IsActive() || this.Player.IsDead || this.Player.InFountain() || this.Player.Buffs.Any(
+                        b => b.Name.ToLower().Contains("recall") || b.Name.ToLower().Contains("teleport")))
             {
-                if (!this.Menu.Item("Potions.Activated").IsActive() || this.Player.IsDead || this.Player.InFountain() || this.Player.Buffs.Any(
-                        b => b.Name.ToLower().Contains("Recall") || b.Name.ToLower().Contains("Teleport")))
+                return;
+            }
+
+            if (this.Player.HealthPercent <= this.PlayerHp)
+            {
+                if (this.IsBuffActive())
                 {
                     return;
                 }
 
-                if (this.Player.HealthPercent < this.PlayerHp)
-                {
-                    if (this.IsBuffActive())
-                    {
-                        return;
-                    }
-
-                    var item = this.Items.Select(x => x.Item).FirstOrDefault(x => x.IsReady() && x.IsOwned());
-                    item?.Cast();
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("An error occurred: '{0}'", e);
+                var item = this.Items.Select(x => x.Item).FirstOrDefault(x => x.IsReady() && x.IsOwned());
+                item?.Cast();
             }
         }
 
@@ -191,7 +173,7 @@ using EloBuddy; namespace ElUtilitySuite.Items
             /// <value>
             ///     The item.
             /// </value>
-            public EloBuddy.SDK.Item Item => this.GetItem();
+            public Items.Item Item => this.GetItem();
 
             #endregion
         }

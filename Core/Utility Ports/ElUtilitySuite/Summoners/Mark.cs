@@ -1,4 +1,6 @@
-using EloBuddy; namespace ElUtilitySuite.Summoners
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Summoners
 {
     using System;
     using System.Linq;

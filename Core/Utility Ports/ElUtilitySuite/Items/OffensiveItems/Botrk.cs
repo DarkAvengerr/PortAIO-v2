@@ -1,4 +1,6 @@
-using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Items.OffensiveItems
 {
     using System.Linq;
 
@@ -25,8 +27,6 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         /// </value>
         public override string Name => "Blade of the Ruined King";
 
-        public static EloBuddy.SDK.Item Blade_of_the_Ruined_King;
-
         #endregion
 
         #region Public Methods and Operators
@@ -36,7 +36,6 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         /// </summary>
         public override void CreateMenu()
         {
-            Blade_of_the_Ruined_King = new EloBuddy.SDK.Item(ItemId.Blade_of_the_Ruined_King);
             this.Menu.AddItem(new MenuItem("UseBotrkCombo", "Use on Combo").SetValue(true));
             this.Menu.AddItem(new MenuItem("BotrkEnemyHp", "Use on Enemy Hp %").SetValue(new Slider(100))); //for myo
             this.Menu.AddItem(new MenuItem("BotrkMyHp", "Use on My Hp %").SetValue(new Slider(100))); //for myo
@@ -49,11 +48,10 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         public override bool ShouldUseItem()
         {
             return this.Menu.Item("UseBotrkCombo").IsActive() && this.ComboModeActive
-                   && (EloBuddy.SDK.EntityManager.Heroes.Enemies.Any(
-                       x =>
-                       x.HealthPercent < this.Menu.Item("BotrkEnemyHp").GetValue<Slider>().Value
-                       && x.Distance(this.Player) < 550)
-                       || this.Player.HealthPercent < this.Menu.Item("BotrkMyHp").GetValue<Slider>().Value) && Blade_of_the_Ruined_King.IsOwned() && Blade_of_the_Ruined_King.IsReady();
+                   && (HeroManager.Enemies.Any(
+                       x => (x.Distance(this.Player) < 550) &&
+                       x.HealthPercent < this.Menu.Item("BotrkEnemyHp").GetValue<Slider>().Value)
+                       || this.Player.HealthPercent < this.Menu.Item("BotrkMyHp").GetValue<Slider>().Value);
         }
 
         /// <summary>
@@ -61,10 +59,12 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         /// </summary>
         public override void UseItem()
         {
-            Blade_of_the_Ruined_King.Cast(EloBuddy.SDK.EntityManager.Heroes.Enemies.FirstOrDefault(
+            Items.UseItem(
+                (int)this.Id,
+                HeroManager.Enemies.FirstOrDefault(
                     x =>
                     x.HealthPercent < this.Menu.Item("BotrkEnemyHp").GetValue<Slider>().Value
-                    && x.Distance(this.Player) < 550 && x.IsValidTarget() && x.IsHPBarRendered && x.IsVisible));
+                    && x.Distance(this.Player) < 550));
         }
 
         #endregion

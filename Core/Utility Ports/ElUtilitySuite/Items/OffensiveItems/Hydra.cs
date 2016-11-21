@@ -1,4 +1,6 @@
-using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Items.OffensiveItems
 {
     using System.Linq;
 
@@ -35,8 +37,8 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         /// <returns></returns>
         public override bool ShouldUseItem()
         {
-            return this.Menu.Item("Hydracombo").IsActive() && this.ComboModeActive
-                   && EloBuddy.SDK.EntityManager.Heroes.Enemies.Any(x => x.Distance(this.Player) < 400 && !x.IsDead && !x.IsZombie);
+            return (!ObjectManager.Player.IsChampion("RekSai") || !ObjectManager.Player.IsChampion("Riven")) && this.Menu.Item("Hydracombo").IsActive() && this.ComboModeActive
+                   && HeroManager.Enemies.Any(x => x.IsValidTarget(385) && !x.IsDead && !x.IsZombie);
         }
 
         #endregion

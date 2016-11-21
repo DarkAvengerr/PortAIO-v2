@@ -1,4 +1,6 @@
-using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Items.OffensiveItems
 {
     using System.Linq;
 
@@ -36,9 +38,10 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         public override bool ShouldUseItem()
         {
             return this.Menu.Item("Youmuucombo").IsActive() && this.ComboModeActive
-                   && EloBuddy.SDK.EntityManager.Heroes.Enemies.Any(
-                       x => x.Distance(this.Player) < Orbwalking.GetRealAutoAttackRange(this.Player));
+                   && HeroManager.Enemies.Any(
+                       x => x.Distance(this.Player) < (ObjectManager.Player.IsChampion("Jhin") ? 550f : Orbwalking.GetRealAutoAttackRange(this.Player)));
         }
+
 
         #endregion
     }

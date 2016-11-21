@@ -1,4 +1,6 @@
-using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Items.OffensiveItems
 {
     using System.Linq;
 
@@ -15,7 +17,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         /// <value>
         ///     The identifier.
         /// </value>
-        public override ItemId Id => (ItemId)3053;
+        public override ItemId Id => (ItemId)3748;
 
         /// <summary>
         ///     Gets or sets the name of the item.
@@ -35,7 +37,8 @@ using EloBuddy; namespace ElUtilitySuite.Items.OffensiveItems
         /// <returns></returns>
         public override bool ShouldUseItem()
         {
-            return this.Menu.Item("Titanic Hydracombo").IsActive() && this.ComboModeActive && !Orbwalking.CanAttack();
+            return this.Menu.Item("Titanic Hydracombo").IsActive() && this.ComboModeActive
+                  && HeroManager.Enemies.Any(x => x.Distance(this.Player) < 385 && !x.IsDead && !x.IsZombie);
         }
 
         #endregion

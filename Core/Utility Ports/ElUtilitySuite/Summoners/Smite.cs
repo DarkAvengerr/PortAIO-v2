@@ -1,10 +1,14 @@
-using EloBuddy; namespace ElUtilitySuite.Summoners
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Summoners
 {
     using System;
     using System.Collections.Generic;
     using System.Drawing;
     using System.Globalization;
     using System.Linq;
+
+    using ElUtilitySuite.Logging;
 
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -437,7 +441,8 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
             }
             catch (Exception e)
             {
-                Console.WriteLine($"An error occurred: {e}");
+                Logging.AddEntry(LoggingEntryType.Error, "@Smite.cs: An error occurred: {0}", e);
+                throw;
             }
         }
 
@@ -453,7 +458,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                         x =>
                         x.ChampionName.Equals(this.Player.ChampionName, StringComparison.InvariantCultureIgnoreCase)))
                 {
-                    if (this.Player.GetSpellDamage(mob, spell.Slot, spell.Stage) + damage >= mob.Health && this.Player.Spellbook.GetSpell(spell.Slot).State == SpellState.Ready)
+                    if (this.Player.GetSpellDamage(mob, spell.Slot, spell.Stage) + damage >= mob.Health && !mob.CharData.BaseSkinName.ToLower().Contains("crab") && this.Player.Spellbook.GetSpell(spell.Slot).State == SpellState.Ready)
                     {
                         if (mob.IsValidTarget(this.SmiteSpell.Range))
                         {
@@ -475,7 +480,8 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
             }
             catch (Exception e)
             {
-                Console.WriteLine($"An error occurred: {e}");
+                Logging.AddEntry(LoggingEntryType.Error, "@Smite.cs: An error occurred: {0}", e);
+                throw;
             }
         }
 
@@ -516,27 +522,15 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                             ObjectManager.Get<Obj_AI_Minion>()
                                 .Where(
                                     m =>
-                                    m.Team == GameObjectTeam.Neutral && m.IsValidTarget()   );
+                                    m.Team == GameObjectTeam.Neutral && m.IsValidTarget());
 
                         foreach (var minion in minions.Where(m => m.IsHPBarRendered))
                         {
                             var hpBarPosition = minion.HPBarPosition;
                             var maxHealth = minion.MaxHealth;
                             var sDamage = this.SmiteDamage();
-                            //SmiteDamage : MaxHealth = x : 100
-                            //Ratio math for this ^
                             var x = this.SmiteDamage() / maxHealth;
                             var barWidth = 0;
-
-                            /*
-                        * DON'T STEAL THE OFFSETS FOUND BY ASUNA DON'T STEAL THEM JUST GET OUT WTF MAN.
-                        * EL SMITE IS THE BEST SMITE ASSEMBLY ON LEAGUESHARP AND YOU WILL NOT FIND A BETTER ONE.
-                        * THE DRAWINGS ACTUALLY MAKE FUCKING SENSE AND THEY ARE FUCKING GOOD
-                        * GTFO HERE SERIOUSLY OR I CALL DETUKS FOR YOU GUYS
-                        * NO STEAL OR DMC FUCKING A REPORT.
-                        * HELLO COPYRIGHT BY ASUNA 2015 ALL AUSTRALIAN RIGHTS RESERVED BY UNIVERSAL GTFO SERIOUSLY THO
-                        * NO ALSO NO CREDITS JUST GET OUT DUDE GET OUTTTTTTTTTTTTTTTTTTTTTTT
-                        */
 
                             switch (minion.CharData.BaseSkinName)
                             {
@@ -703,9 +697,12 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
             }
             catch (Exception e)
             {
-                Console.WriteLine($"An error occurred: {e}");
+                Logging.AddEntry(LoggingEntryType.Error, "@Smite.cs: An error occurred: {0}", e);
+                throw;
             }
         }
+
+
 
         /// <summary>
         ///     Fired when the game is updated.
@@ -720,16 +717,16 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                     return;
                 }
 
-                foreach (var mob in EloBuddy.SDK.EntityManager.MinionsAndMonsters.Monsters
+                foreach (var mob in MinionManager.GetMinions(950f, MinionTypes.All, MinionTeam.Neutral)
                     .Where(m => !m.Name.Contains("Mini") && !m.Name.Contains("Respawn")))
                 {
                     if (mob.Distance(this.Player, false) - (this.Player.BoundingRadius)
-                        > 500)
+                        > 520)
                     {
                         continue;
                     }
 
-                    if (this.Menu.Item(mob.BaseSkinName).IsActive())
+                    if (this.Menu.Item(mob.CharData.BaseSkinName).IsActive())
                     {
                         if (this.Menu.Item("Smite.Spell").IsActive())
                         {
@@ -746,14 +743,18 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                     }
                 }
 
+                if (this.Menu.Item("ElSmite.Combo.Mode").GetValue<StringList>().SelectedIndex == 2)
+                {
+                    return;
+                }
+
                 if (!this.Menu.Item("Smite.Ammo").IsActive() || this.Menu.Item("Smite.Ammo").IsActive() && this.Player.GetSpell(this.SmiteSpell.Slot).Ammo > 1)
                 {
                     if (this.Menu.Item("ElSmite.Combo.Mode").GetValue<StringList>().SelectedIndex == 0
                         && this.Player.GetSpell(this.SmiteSpell.Slot)
                                .Name.Equals("s5_summonersmiteplayerganker", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        var kSableEnemy = EloBuddy.SDK.EntityManager.Heroes.Enemies.FirstOrDefault(hero => hero.IsValidTarget(SmiteRange) && SmiteDmg(hero) >= hero.Health);
-
+                        var kSableEnemy = HeroManager.Enemies.FirstOrDefault(hero => hero.IsValidTarget(SmiteRange) && hero.Health <= 20 + 8 * this.Player.Level);
                         if (kSableEnemy != null)
                         {
                             this.Player.Spellbook.CastSpell(this.SmiteSpell.Slot, kSableEnemy);
@@ -761,7 +762,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                     }
 
                     if (this.Menu.Item("ElSmite.Combo.Mode").GetValue<StringList>().SelectedIndex == 1
-                        && this.Player.GetSpell(this.SmiteSpell.Slot).Name.Equals("s5_summonersmiteduel", StringComparison.InvariantCultureIgnoreCase) || this.Player.GetSpell(this.SmiteSpell.Slot).Name.Equals("s5_summonersmiteduel", StringComparison.InvariantCultureIgnoreCase))
+                        && this.Player.GetSpell(this.SmiteSpell.Slot).Name.Equals("s5_summonersmiteplayerganker", StringComparison.InvariantCultureIgnoreCase) || this.Player.GetSpell(this.SmiteSpell.Slot).Name.Equals("s5_summonersmiteduel", StringComparison.InvariantCultureIgnoreCase))
                     {
                         if (this.ComboModeActive)
                         {
@@ -776,13 +777,9 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
             }
             catch (Exception e)
             {
-                Console.WriteLine($"An error occurred: {e}");
+                Logging.AddEntry(LoggingEntryType.Error, "@Smite.cs: An error occurred: {0}", e);
+                throw;
             }
-        }
-
-        public static float SmiteDmg(AIHeroClient target)
-        {
-            return (float)ObjectManager.Player.CalcDamage(target, Damage.DamageType.True, (20 + ObjectManager.Player.Level * 8));
         }
 
         private float SmiteDamage()
@@ -795,10 +792,9 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
             }
             catch (Exception e)
             {
-                Console.WriteLine($"An error occurred: {e}");
+                Logging.AddEntry(LoggingEntryType.Error, "@Smite.cs: An error occurred: {0}", e);
+                throw;
             }
-
-            return 0;
         }
 
         #endregion

@@ -1,4 +1,6 @@
-using EloBuddy; namespace ElUtilitySuite.Summoners
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Summoners
 {
     using System;
     using System.Collections.Generic;
@@ -814,7 +816,8 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
 
                 cleanseOldMenu.AddItem(new MenuItem("CleanseActivatedHumanize", "Use humanizer")
                    .SetValue(false)).SetTooltip("This can cause QSS to cast late! (Keep this disabled)", Color.Pink);
-                cleanseOldMenu.AddItem(new MenuItem("CleanseActivated", "Use Cleanse").SetValue(true));
+                cleanseOldMenu.AddItem(new MenuItem("CleanseActivated", "Use Cleanse").SetValue(true))
+                    .SetTooltip("Settings also apply on mikael's crucible.");
                 cleanseOldMenu.AddItem(new MenuItem("seperator211", ""));
                 foreach (var x in HeroManager.Allies)
                 {
@@ -885,7 +888,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                 return;
             }
 
-            foreach (var ally in EloBuddy.SDK.EntityManager.Heroes.Allies.Where(x => x.IsValidTarget(800f, false)))
+            foreach (var ally in HeroManager.Allies.Where(x => x.IsValidTarget(800f, false)))
             {
                 foreach (var spell in Spells.Where(x => ally.HasBuff(x.Name) || ally.HasBuffOfType(x.BuffType)))
                 {
@@ -906,7 +909,7 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                     }
 
                     var item = GetBestCleanseItem(ally, buff);
-                    if (item == null || !item.IsReady())
+                    if (item == null)
                     {
                         continue;
                     }

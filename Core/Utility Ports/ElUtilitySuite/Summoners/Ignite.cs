@@ -1,4 +1,6 @@
-using EloBuddy; namespace ElUtilitySuite.Summoners
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Summoners
 {
     using System;
     using System.Linq;
@@ -125,13 +127,20 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
                 }
 
                 var kSableEnemy =
-                    EloBuddy.SDK.EntityManager.Heroes.Enemies.FirstOrDefault(
+                    HeroManager.Enemies.FirstOrDefault(
                         hero =>
-                        hero.IsValidTarget(600) && !hero.IsZombie && hero.IsVisible && hero.IsHPBarRendered
+                        hero.IsValidTarget(600) && !hero.IsZombie
                         && this.Player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite) > hero.Health);
+
 
                 if (kSableEnemy != null)
                 {
+                   /* if (this.Player.CanAttack && this.Player.Distance(kSableEnemy) < Orbwalking.GetAttackRange(this.Player) 
+                        && this.Player.GetAutoAttackDamage(kSableEnemy) * 2 > kSableEnemy.Health)
+                    {
+                        return;
+                    }
+                    */
                     if (!Menu.Item($"igniteon{kSableEnemy.ChampionName}").IsActive())
                     {
                         return;

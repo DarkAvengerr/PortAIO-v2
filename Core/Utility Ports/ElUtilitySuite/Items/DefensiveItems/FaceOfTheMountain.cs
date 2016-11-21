@@ -1,4 +1,6 @@
-using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Items.DefensiveItems
 {
     using System;
     using System.Linq;
@@ -19,7 +21,6 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
         {
             IncomingDamageManager.RemoveDelay = 500;
             IncomingDamageManager.Skillshots = true;
-            Face_of_the_moutain = new EloBuddy.SDK.Item(ItemId.Face_of_the_Mountain);
             Game.OnUpdate += this.Game_OnUpdate;
         }
 
@@ -42,8 +43,6 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
         ///     The name of the item.
         /// </value>
         public override string Name => "Face of the Mountain";
-
-        public static EloBuddy.SDK.Item Face_of_the_moutain;
 
         #endregion
 
@@ -79,7 +78,8 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
         {
             try
             {
-                if (!Face_of_the_moutain.IsOwned() || !Face_of_the_moutain.IsReady() || !this.Menu.Item("UseFaceCombo").IsActive())
+                if (!Items.HasItem((int)this.Id) || !Items.CanUseItem((int)this.Id)
+                    || !this.Menu.Item("UseFaceCombo").IsActive())
                 {
                     return;
                 }
@@ -89,7 +89,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
                     return;
                 }
 
-                foreach (var ally in EloBuddy.SDK.EntityManager.Heroes.Allies.Where(a => a.IsValidTarget(850f, false) && !a.IsDead && !a.IsRecalling()))
+                foreach (var ally in HeroManager.Allies.Where(a => a.IsValidTarget(850f, false) && !a.IsRecalling()))
                 {
                     if (!this.Menu.Item(string.Format("Faceon{0}", ally.ChampionName)).IsActive())
                     {
@@ -105,7 +105,7 @@ using EloBuddy; namespace ElUtilitySuite.Items.DefensiveItems
                             > this.Menu.Item("face-min-damage").GetValue<Slider>().Value
                             || ally.HealthPercent < this.Menu.Item("face-min-health").GetValue<Slider>().Value)
                         {
-                            Face_of_the_moutain.Cast(ally);
+                            Items.UseItem((int)this.Id, ally);
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine("[ELUTILITYSUITE - FACE OF THE MOUNTAIN] Used for: {0} - health percentage: {1}%", ally.ChampionName, (int)ally.HealthPercent);
                         }

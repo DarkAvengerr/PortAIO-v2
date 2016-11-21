@@ -1,4 +1,6 @@
-using EloBuddy; namespace ElUtilitySuite.Summoners
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ElUtilitySuite.Summoners
 {
     using System;
     using System.Drawing;
@@ -110,19 +112,19 @@ using EloBuddy; namespace ElUtilitySuite.Summoners
         {
             try
             {
-                if (HealSpell == null || HealSpell.Slot == SpellSlot.Unknown)
-                {
-                    return;
-                }
-
                 if (this.Player.IsDead || !this.HealSpell.IsReady() || this.Player.InFountain() || this.Player.IsRecalling() || !this.Menu.Item("Heal.Activated").IsActive() || this.Menu.Item("PauseHealHotkey").GetValue<KeyBind>().Active)
                 {
                     return;
                 }
 
-                foreach (var ally in EloBuddy.SDK.EntityManager.Heroes.Allies.Where(x => !x.IsDead && x.IsHPBarRendered && x.IsVisible))
+                foreach (var ally in HeroManager.Allies)
                 {
-                    if (!this.Menu.Item($"healon{ally.ChampionName}").IsActive() || ally.IsRecalling() || ally.IsInvulnerable || ally.HasBuff("ChronoShift"))
+                    if (!this.Menu.Item($"healon{ally.ChampionName}").IsActive())
+                    {
+                        return;
+                    }
+
+                    if (ally.IsRecalling() || ally.IsInvulnerable || ally.HasBuff("ChronoShift"))
                     {
                         return;
                     }
