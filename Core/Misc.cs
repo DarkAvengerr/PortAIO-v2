@@ -456,6 +456,7 @@ namespace PortAIO.Dual_Port
             utility.AddItem(new MenuItem("PerfectWardReborn", "Enable PerfectWardReborn?").SetValue(false));
             utility.AddItem(new MenuItem("GodJungleTrackerReborn", "Enable GodJungleTrackerReborn?").SetValue(false));
             utility.AddItem(new MenuItem("xAwareness", "Enable xAwareness?").SetValue(false));
+            utility.AddItem(new MenuItem("RandomUlt", "Enable RandomUlt?").SetValue(false));
             menu.AddSubMenu(utility);
 
             var autoPlay = new Menu("Auto Play", "PortAIOAUTOPLAY");

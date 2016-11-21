@@ -202,7 +202,8 @@ namespace RandomUlt.Helpers
                 }
                 var line = getpos(enemy, trueDist);
                 Vector3 pos = line;
-                if (enemy.Player.IsVisible)
+
+                if (enemy.Player.IsHPBarRendered)
                 {
                     pos = enemy.Player.Position;
                 }
@@ -228,7 +229,7 @@ namespace RandomUlt.Helpers
                 {
                     Render.Circle.DrawCircle(pos, 50, Color.Red, 8);
                 }
-                if (!enemy.Player.IsVisible)
+                if (!enemy.Player.IsHPBarRendered)
                 {
                     if (pos != null)
                     {
@@ -305,12 +306,10 @@ namespace RandomUlt.Helpers
             if (!SupportedChamps() || !configMenu.Item("UseR").GetValue<bool>() || !R.IsReady() || !enabled ||
                 configMenu.Item("ComboBlock").GetValue<KeyBind>().Active)
             {
-                Console.WriteLine("1");
                 return;
             }
             if (player.CountEnemiesInRange(configMenu.Item("EnemiesAroundYou").GetValue<Slider>().Value) >= 1)
             {
-                Console.WriteLine("2");
                 return;
             }
             if (!configMenu.Item("OnlyCombo").GetValue<bool>() &&
@@ -318,7 +317,6 @@ namespace RandomUlt.Helpers
                  configMenu.Item("OrbBlock2").GetValue<KeyBind>().Active ||
                  configMenu.Item("OrbBlock3").GetValue<KeyBind>().Active))
             {
-                Console.WriteLine("3");
                 return;
             }
             if (player.ChampionName == "Draven" && player.Spellbook.GetSpell(SpellSlot.R).Name != "DravenRCast")
@@ -339,7 +337,6 @@ namespace RandomUlt.Helpers
                     !(Environment.TickCount - enemy.RecallData.RecallStartTime >
                       configMenu.Item("waitBeforeUlt").GetValue<Slider>().Value))
                 {
-                    Console.WriteLine("5");
                     continue;
                 }
                 var dist = (Math.Abs(enemy.LastSeen - enemy.RecallData.RecallStartTime) / 1000 * enemy.Player.MoveSpeed) -
@@ -510,12 +507,12 @@ namespace RandomUlt.Helpers
         {
             if (R.IsReady() && pos.Distance(positions.Player.Position) < 1200 && ObjectManager.Get<AIHeroClient>().Count(o => o.IsAlly && o.Distance(pos) < configMenu.Item("Alliesrange").GetValue<Slider>().Value) < 1)
             {
-                Console.WriteLine("Check 1 : " + checkdmg(positions.Player, pos));
-                Console.WriteLine("Check 2 : " + (UltTime(pos) < positions.RecallData.GetRecallTime()) + " | UltTime(pos) : " + UltTime(pos) + " | GetRecallTime() : " + positions.RecallData.GetRecallTime());
-                Console.WriteLine("Check 3 : " + !isColliding(pos));
+                //Console.WriteLine("Check 1 : " + checkdmg(positions.Player, pos));
+                //Console.WriteLine("Check 2 : " + (UltTime(pos) < positions.RecallData.GetRecallTime()) + " | UltTime(pos) : " + UltTime(pos) + " | GetRecallTime() : " + positions.RecallData.GetRecallTime());
+                //Console.WriteLine("Check 3 : " + !isColliding(pos));
                 if (checkdmg(positions.Player, pos) && UltTime(pos) < positions.RecallData.GetRecallTime() && !isColliding(pos))
                 {
-                    Console.WriteLine("Why no ult");
+                    //Console.WriteLine("Why no ult");
                     if (player.ChampionName == "Xerath")
                     {
                         xerathUlt(positions, pos);
@@ -665,7 +662,6 @@ namespace RandomUlt.Helpers
             {
                 if (dmg * (collision ? 0.7f : 1f) - 10 - bonuShieldNearTowers > target.Health)
                 {
-                    Console.WriteLine(dmg + " Ult Damage");
                     return true;
                 }
             }
@@ -746,23 +742,20 @@ namespace RandomUlt.Helpers
 
         public float GetRecallTime()
         {
-            float time = System.Environment.TickCount;
+            float time = EloBuddy.SDK.Core.GameTickCount;
             float countdown = 0;
 
             if (time - AbortTime < 2000)
             {
                 countdown = Aborted.Duration - (AbortTime - Aborted.Start);
-                Console.WriteLine("Always hit this 1");
             }
             else if (AbortTime > 0)
             {
                 countdown = 0;
-                Console.WriteLine("Always hit this 2");
             }
             else
             {
                 countdown = Recall.Start + Recall.Duration - time;
-                Console.WriteLine("Always hit this 3");
             }
 
             return countdown < 0 ? 0 : countdown;

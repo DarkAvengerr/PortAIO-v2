@@ -179,6 +179,11 @@ namespace PortAIO
             {
                 xAwareness.Program.Main();
             }
+
+            if (Misc.menu.Item("RandomUlt").GetValue<bool>())
+            {
+                RandomUlt.Program.Game_OnGameLoad();
+            }
         }
 
         public static void LoadChampion()
