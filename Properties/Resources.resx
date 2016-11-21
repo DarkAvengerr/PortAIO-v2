@@ -2480,4 +2480,34 @@
   <data name="SummonerTeleport" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\trackersharp\summonerteleport.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="BallsToTheFace1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\lord's syndra\ballstotheface.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="DieFucker1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\lord's syndra\diefucker.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="GoingSomewhereAsshole1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\lord's syndra\goingsomewhereasshole.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ILoveThisGame1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\lord's syndra\ilovethisgame.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="ImKillingTheBitch1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\lord's syndra\imkillingthebitch.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="OhDontYouDare1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\lord's syndra\ohdontyoudare.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="OhIdiot1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\lord's syndra\ohidiot.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Welcome1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\lord's syndra\welcome.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="WhosTheBitchNow1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\lord's syndra\whosthebitchnow.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="YourDeadMeatAsshole1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\lord's syndra\yourdeadmeatasshole.wav;System.IO.MemoryStream, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
 </root>

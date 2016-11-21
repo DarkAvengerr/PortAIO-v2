@@ -6906,6 +6906,16 @@
     <Content Include="Resources\EloSharp\ziggs_square_0.png" />
     <Content Include="Resources\EloSharp\zilean_square_0.png" />
     <Content Include="Resources\EloSharp\zyra_square_0.png" />
+    <Content Include="Resources\Lord%27s Syndra\BallsToTheFace.wav" />
+    <Content Include="Resources\Lord%27s Syndra\DieFucker.wav" />
+    <Content Include="Resources\Lord%27s Syndra\GoingSomewhereAsshole.wav" />
+    <Content Include="Resources\Lord%27s Syndra\ILoveThisGame.wav" />
+    <Content Include="Resources\Lord%27s Syndra\ImKillingTheBitch.wav" />
+    <Content Include="Resources\Lord%27s Syndra\OhDontYouDare.wav" />
+    <Content Include="Resources\Lord%27s Syndra\OhIdiot.wav" />
+    <Content Include="Resources\Lord%27s Syndra\Welcome.wav" />
+    <Content Include="Resources\Lord%27s Syndra\WhosTheBitchNow.wav" />
+    <Content Include="Resources\Lord%27s Syndra\YourDeadMeatAsshole.wav" />
     <Content Include="Resources\MiniMap\Aatrox_Square_0.png" />
     <Content Include="Resources\MiniMap\Ahri_Square_0.png" />
     <Content Include="Resources\MiniMap\Akali_Square_0.png" />

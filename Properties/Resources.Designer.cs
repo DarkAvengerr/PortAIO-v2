@@ -500,6 +500,15 @@ namespace PortAIO.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream BallsToTheFace1 {
+            get {
+                return ResourceManager.GetStream("BallsToTheFace1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap banner {
@@ -1309,6 +1318,15 @@ namespace PortAIO.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream DieFucker1 {
+            get {
+                return ResourceManager.GetStream("DieFucker1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap Dragon {
@@ -1988,6 +2006,15 @@ namespace PortAIO.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream GoingSomewhereAsshole1 {
+            get {
+                return ResourceManager.GetStream("GoingSomewhereAsshole1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap GoldeneKarte_jpg {
@@ -2269,9 +2296,27 @@ namespace PortAIO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
+        internal static System.IO.UnmanagedMemoryStream ILoveThisGame1 {
+            get {
+                return ResourceManager.GetStream("ILoveThisGame1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
         internal static System.IO.UnmanagedMemoryStream ImKillingTheBitch {
             get {
                 return ResourceManager.GetStream("ImKillingTheBitch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream ImKillingTheBitch1 {
+            get {
+                return ResourceManager.GetStream("ImKillingTheBitch1", resourceCulture);
             }
         }
         
@@ -4127,9 +4172,27 @@ namespace PortAIO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
+        internal static System.IO.UnmanagedMemoryStream OhDontYouDare1 {
+            get {
+                return ResourceManager.GetStream("OhDontYouDare1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
         internal static System.IO.UnmanagedMemoryStream OhIdiot {
             get {
                 return ResourceManager.GetStream("OhIdiot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream OhIdiot1 {
+            get {
+                return ResourceManager.GetStream("OhIdiot1", resourceCulture);
             }
         }
         
@@ -6645,9 +6708,27 @@ namespace PortAIO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
         /// </summary>
+        internal static System.IO.UnmanagedMemoryStream Welcome1 {
+            get {
+                return ResourceManager.GetStream("Welcome1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
         internal static System.IO.UnmanagedMemoryStream WhosTheBitchNow {
             get {
                 return ResourceManager.GetStream("WhosTheBitchNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream WhosTheBitchNow1 {
+            get {
+                return ResourceManager.GetStream("WhosTheBitchNow1", resourceCulture);
             }
         }
         
@@ -6887,6 +6968,15 @@ namespace PortAIO.Properties {
         internal static System.IO.UnmanagedMemoryStream YourDeadMeatAsshole {
             get {
                 return ResourceManager.GetStream("YourDeadMeatAsshole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.IO.UnmanagedMemoryStream similar to System.IO.MemoryStream.
+        /// </summary>
+        internal static System.IO.UnmanagedMemoryStream YourDeadMeatAsshole1 {
+            get {
+                return ResourceManager.GetStream("YourDeadMeatAsshole1", resourceCulture);
             }
         }
         

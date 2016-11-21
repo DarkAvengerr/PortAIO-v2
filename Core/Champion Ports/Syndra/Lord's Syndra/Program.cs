@@ -33,10 +33,10 @@ using LeagueSharp.Common;
 
         public static void Main()
         {
-            Game_OnGameLoad();
+            Game_OnGameLoad(new EventArgs());
         }
 
-        public static void Game_OnGameLoad()
+        public static void Game_OnGameLoad(EventArgs args)
         {
             if (Player.ChampionName != ChampionName)
             {
@@ -47,7 +47,7 @@ using LeagueSharp.Common;
             Spells.Spellsdata();
             SyndraMenu();
 
-            //if (Menu.Item("Sound1").GetValue<bool>()) PlaySound.PlatSounds(PlaySound.welcome);
+            if (Menu.Item("Sound1").GetValue<bool>()) PlaySound.PlatSounds(PlaySound.welcome);
             GameObject.OnCreate += OnCreate;
             GameObject.OnDelete += OnDelete;
             Game.OnUpdate += Game_OnGameUpdate;
@@ -581,7 +581,7 @@ using LeagueSharp.Common;
                     enemy.Health && Player.Distance(enemy, true) <= Math.Pow(Spells.QE.Range, 2))
                 {
                     Spells.UseSpells(false, false, false, false, UseQEKS);
-                    
+                    PlaySound.PlatSounds();
                     //Chat.Print("QEKS " + enemy.Name);
                 }
                     //Use W KS
@@ -589,7 +589,7 @@ using LeagueSharp.Common;
                     Player.Distance(enemy, true) <= Math.Pow(Spells.W.Range, 2))
                 {
                     Spells.UseSpells(false, UseWKS, false, false, false);
-                    
+                    PlaySound.PlatSounds();
                     //Chat.Print("WKS " + enemy.Name);
                 }
                     //Use Q E KS 
@@ -597,7 +597,7 @@ using LeagueSharp.Common;
                     Player.Distance(enemy, true) <= Math.Pow(Spells.Q.Range + 25f, 2))
                 {
                     Spells.UseSpells(UseQKS, false, UseEKS, false, false);
-                    
+                    PlaySound.PlatSounds();
                     //Chat.Print("QEKSC " + enemy.Name);
                 }
                     //Use QWER QE KS
@@ -605,7 +605,7 @@ using LeagueSharp.Common;
                     Player.Distance(enemy, true) <= Math.Pow(Spells.R.Range, 2))
                 {
                     Spells.UseSpells(UseQKS, UseWKS, UseEKS, UseRKS, UseQEKS);
-                    
+                    PlaySound.PlatSounds();
                     //Chat.Print("QWERKS " + enemy.Name);
                 }
 
@@ -677,7 +677,7 @@ using LeagueSharp.Common;
                         //Use Ult after flash if can't be killed by QE
                         Player.Spellbook.CastSpell(Spells.FlashSlot, flashPos);
                         Spells.UseSpells(false, false, false, UseRKS, false);
-                        
+                        PlaySound.PlatSounds();
                     }
                 }
                 else

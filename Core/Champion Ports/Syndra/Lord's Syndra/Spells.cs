@@ -112,7 +112,7 @@ using LeagueSharp.Common;
                     (sPos - ObjectManager.Player.ServerPosition) * Spells.E.Range;
                 Spells.QE.Delay = Spells.Q.Delay + Spells.E.Delay + ObjectManager.Player.Distance(orb) / Spells.E.Speed;
                 var pos = Spells.QE.GetPrediction(target);
-                if (pos.Hitchance >= HitChance.Medium)
+                if (pos.Hitchance >= HitChance.High)
                 {
                     UseQe2Spell(target, orb);
                 }
