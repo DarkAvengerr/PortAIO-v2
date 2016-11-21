@@ -1,10 +1,12 @@
+#region Use
+using LeagueSharp;
+using LeagueSharp.Common;
+
+#endregion
 using EloBuddy; 
 using LeagueSharp.Common; 
  namespace GrossGoreTwistedFate.Modes
 {
-    using LeagueSharp;
-    using LeagueSharp.Common;
-
     using Config = GrossGoreTwistedFate.Config;
 
     internal static class MixedMode
@@ -13,20 +15,25 @@ using LeagueSharp.Common;
 
         internal static void Execute()
         {
-            var target = TargetSelector.GetTarget(Spells.Q.Range, TargetSelector.DamageType.Magical);
+            var target = TargetSelector.GetTarget(Spells._q.Range, Spells._q.DamageType);
 
-            if (!Config.IsChecked("wHarass") || target == null || !target.IsValidTarget(Spells.Q.Range))
+            if (!Config.Rotate || target == null || !target.IsValidTarget(Spells._q.Range))
             {
                 return;
             }
 
-            if (target.Distance(ObjectManager.Player) <= ObjectManager.Player.AttackRange + Config.GetSliderValue("wHRange")
-                && Spells.W.IsReady() && ObjectManager.Player.ManaPercent >= Config.GetSliderValue("wHMana"))
+            if(Spells._w.IsReadyPerfectly())
             {
-                CardSelector.ShuffleCards();
+                if(target.Distance(ObjectManager.Player) <= (ObjectManager.Player.AttackRange + Config.RotateRange))
+                {
+                    if(ObjectManager.Player.ManaPercent >= Config.RotateMana)
+                    {
+                        CardSelector.RotateCards();
+                    }
+                }
             }
 
-            if(target.Distance(ObjectManager.Player) <= ObjectManager.Player.AttackRange + 100)
+            if(target.Distance(ObjectManager.Player) <= (ObjectManager.Player.AttackRange + 100))
             {
                 CardSelector.LockCard();
             }

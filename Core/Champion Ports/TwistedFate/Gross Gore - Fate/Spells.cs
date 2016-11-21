@@ -1,43 +1,37 @@
 #region Use
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using LeagueSharp;
+using LeagueSharp.Common;
 #endregion
 
 using EloBuddy; 
 using LeagueSharp.Common; 
  namespace GrossGoreTwistedFate
 {
-    #region Libs
-
-    using LeagueSharp;
-    using LeagueSharp.Common;
-
-    #endregion
 
     internal static class Spells
     {
         #region Spells
 
-        internal static Spell Q { get; private set; }
-        internal static Spell W { get; private set; }
-        internal static Spell E { get; private set; }
-        internal static Spell R { get; private set; }
+        internal static Spell _q { get; private set; }
+        internal static Spell _w { get; private set; }
+        internal static Spell _e { get; private set; }
+        internal static Spell _r { get; private set; }
 
         #endregion
 
         internal static void LoadSpells()
         {
-            Q = new Spell(SpellSlot.Q, 1450);
-            W = new Spell(SpellSlot.W);
-            E = new Spell(SpellSlot.E);
-            R = new Spell(SpellSlot.R, 5500);
+            _q = new Spell(SpellSlot.Q, 1450f, TargetSelector.DamageType.Magical) { MinHitChance = HitChance.VeryHigh };
+            _w = new Spell(SpellSlot.W, 1200f, TargetSelector.DamageType.Magical);
+            _e = new Spell(SpellSlot.E);
+            _r = new Spell(SpellSlot.R, 5500f);
 
-            Q.SetSkillshot(0.25f, 40f, 1000f, false, SkillshotType.SkillshotLine);
+            _q.SetSkillshot(0.25f, 40f, 1000f, false, SkillshotType.SkillshotLine);
         }
     }
 }

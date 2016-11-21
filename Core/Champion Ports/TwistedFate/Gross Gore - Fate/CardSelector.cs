@@ -1,9 +1,7 @@
-#region
-
+#region Use
 using System;
 using LeagueSharp;
 using LeagueSharp.Common;
-
 #endregion
 
 using EloBuddy; 
@@ -65,7 +63,7 @@ using LeagueSharp.Common;
             }
         }
 
-        public static void GoToKey(Cards card)
+        public static void JumpToCard(Cards card)
         {
             if (Status == SelectStatus.Selecting)
             {
@@ -73,7 +71,7 @@ using LeagueSharp.Common;
             }
         }
 
-        public static void ShuffleCards()
+        public static void RotateCards()
         {
             if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "PickACard" && Status == SelectStatus.Ready)
             {

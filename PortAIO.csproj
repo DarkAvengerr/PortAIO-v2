@@ -1381,13 +1381,13 @@
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\CardSelector.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Computed.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Config.cs" />
-    <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\CustomDamageIndicator.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Extensions\HeroExts.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Extensions\VectorExts.cs" />
+    <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Extra.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Mainframe.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Modes\Automated.cs" />
+    <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Modes\Clear.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Modes\ComboMode.cs" />
-    <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Modes\JungleLogic.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Modes\ManualCards.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Modes\MixedMode.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Modes\QChampions.cs" />

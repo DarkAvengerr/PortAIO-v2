@@ -1,14 +1,12 @@
+#region Use
+using System.Drawing;
+using LeagueSharp.Common; 
+#endregion
+
 using EloBuddy; 
 using LeagueSharp.Common; 
  namespace GrossGoreTwistedFate
 {
-    #region Use
-
-    using LeagueSharp.Common;
-    using System.Drawing;
-
-    #endregion
-
     internal static class Config
     {
         #region Properties
@@ -75,11 +73,9 @@ using LeagueSharp.Common;
                 new MenuItem("csRed", "RED").SetValue(new KeyBind("I".ToCharArray()[0], KeyBindType.Press)));
             WMenu.AddItem(new MenuItem("wMiscs", "Miscs")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
             WMenu.AddItem(new MenuItem("wCGold", "Always pick GOLD in COMBO").SetValue(true));
-            WMenu.AddItem(new MenuItem("wKS", "Pick the first card if can kill").SetValue(true));
             TwistedFateMenu.AddSubMenu(WMenu);
 
             ExtraMenu = new Menu("More+", "extraMenu");
-            ExtraMenu.AddItem(new MenuItem("moreDesc", "Need a ready GOLD card")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
             ExtraMenu.AddItem(new MenuItem("goldInter", "Interrupter").SetValue(true));
             ExtraMenu.AddItem(new MenuItem("goldGap", "Anti-GapCloser").SetValue(true));
             TwistedFateMenu.AddSubMenu(ExtraMenu);
@@ -88,7 +84,6 @@ using LeagueSharp.Common;
             DrawMenu.AddItem(new MenuItem("drawQrange", "Q Range").SetValue(true));
             DrawMenu.AddItem(new MenuItem("drawRrange", "R Range").SetValue(true));
             DrawMenu.AddItem(new MenuItem("drawRmap", "R Range Minimap").SetValue(true));
-            DrawMenu.AddItem(new MenuItem("drawOnlyReady", "Only if spells are ready").SetValue(true));
             TwistedFateMenu.AddSubMenu(DrawMenu);
 
             TwistedFateMenu.AddToMainMenu();
@@ -115,6 +110,46 @@ using LeagueSharp.Common;
         {
             return TwistedFateMenu.Item(itemName).GetValue<KeyBind>().Active;
         }
+
+        internal static bool DrawQ { get { return Config.IsChecked("drawQrange"); } }
+
+        internal static bool DrawR { get { return IsChecked("drawRrange"); } }
+
+        internal static bool DrawRm { get { return IsChecked("drawRmap"); } }
+
+        internal static bool UseInterrupter { get { return IsChecked("goldInter"); } }
+
+        internal static bool UseAntiGapCloser { get { return IsChecked("goldGap"); } }
+
+        internal static bool GoldKey { get { return TwistedFateMenu.Item("csGold").GetValue<KeyBind>().Active; } }
+
+        internal static bool BlueKey { get { return TwistedFateMenu.Item("csBlue").GetValue<KeyBind>().Active; } }
+
+        internal static bool RedKey { get { return TwistedFateMenu.Item("csRed").GetValue<KeyBind>().Active; } }
+
+        internal static bool UseClearQ { get { return TwistedFateMenu.Item("qClear").GetValue<KeyBind>().Active; } }
+
+        internal static int ClearQCount { get { return TwistedFateMenu.Item("qClearCount").GetValue<Slider>().Value; } }
+
+        internal static bool UseQEnemy { get { return TwistedFateMenu.Item("qEnemy").GetValue<KeyBind>().Active; } }
+
+        internal static bool Rotate { get { return IsChecked("wHarass"); } }
+
+        internal static int RotateRange { get { return TwistedFateMenu.Item("wHRange").GetValue<Slider>().Value; } }
+
+        internal static int RotateMana { get { return TwistedFateMenu.Item("wHMana").GetValue<Slider>().Value; } }
+
+        internal static bool UseGoldCombo { get { return IsChecked("wCGold"); } }
+
+        internal static int AutoqMana { get { return TwistedFateMenu.Item("qAMana").GetValue<Slider>().Value; } }
+
+        internal static bool IsImmobile { get { return IsChecked("qImmobile"); } }
+
+        internal static bool IsDashing { get { return IsChecked("qDashing"); } }
+
+        internal static bool IsSlowed { get { return IsChecked("qSlowed"); } }
+
+        internal static bool CanqKS { get { return IsChecked("qKS"); } }
 
         #endregion
 
