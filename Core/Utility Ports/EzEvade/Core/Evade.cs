@@ -75,11 +75,11 @@ namespace ezEvade
         {
             DelayAction.Add(0, () =>
             {
-                Game_OnGameLoad();
+                Game_OnGameLoad(new EventArgs());
             });
         }
 
-        private void Game_OnGameLoad()
+        private void Game_OnGameLoad(EventArgs args)
         {
             try
             {
@@ -198,10 +198,7 @@ namespace ezEvade
 
                 if (devModeOn)
                 {
-                    var rootTestMenu = new Menu("ezEvade Tester", "ezEvadeTester", true);
-                    evadeTester = new EvadeTester(rootTestMenu);
                     LeagueSharp.Common.Utility.DelayAction.Add(100, () => loadTestMenu.Item("LoadSpellTester").SetValue(true));
-                    rootTestMenu.AddToMainMenu();
                 }
 
                 Console.WriteLine("ezEvade Loaded");

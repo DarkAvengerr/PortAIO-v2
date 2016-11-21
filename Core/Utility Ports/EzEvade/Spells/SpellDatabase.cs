@@ -570,25 +570,25 @@ using LeagueSharp.Common;
                 spellType = SpellType.Cone
             });
 
-            Spells.Add(
-            new SpellData
-            {
-                charName = "Cassiopeia",
-                dangerlevel = 2,
-                name = "Miasama",
-                //missileName = "CassiopeiaWMissile",
-                //projectileSpeed = 2800,
-                radius = 200,
-                range = 900,
-                spellDelay = 250,
-                extraEndTime = 500,
-                spellKey = SpellSlot.W,
-                spellName = "CassiopeiaW",
-                spellType = SpellType.Circular,
-                trapTroyName = "cassiopeia_base_w_wcircle_tar_" + Situation.EmitterTeam() + ".troy",
-                //updatePosition = false,
-                hasTrap = true
-            });
+            //Spells.Add(
+            //new SpellData
+            //{
+            //    charName = "Cassiopeia",
+            //    dangerlevel = 1,
+            //    name = "Miasama",
+            //    //missileName = "CassiopeiaWMissile",
+            //    //projectileSpeed = 2800,
+            //    radius = 200,
+            //    range = 900,
+            //    spellDelay = 250,
+            //    extraEndTime = 500,
+            //    spellKey = SpellSlot.W,
+            //    spellName = "CassiopeiaW",
+            //    spellType = SpellType.Circular,
+            //    trapTroyName = "cassiopeia_base_w_wcircle_tar_" + Situation.EmitterTeam() + ".troy",
+            //    //updatePosition = false,
+            //    hasTrap = true
+            //});
 
             Spells.Add(
             new SpellData
@@ -1195,13 +1195,29 @@ using LeagueSharp.Common;
                 missileName = "GragasQMissile",
                 name = "Barrel Roll",
                 projectileSpeed = 1000,
-                radius = 250,
+                radius = 260,
                 range = 975,
                 spellDelay = 500,
                 spellKey = SpellSlot.Q,
                 spellName = "GragasQ",
                 spellType = SpellType.Circular,
                 extraDrawHeight = 50
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Gragas",
+                dangerlevel = 2,
+                name = "Barrel Roll",
+                radius = 270,
+                range = 975,
+                spellKey = SpellSlot.Q,
+                spellName = "GragasQ",
+                spellType = SpellType.Circular,
+                extraDrawHeight = 45,
+                trapTroyName = "gragas_base_q_" + Situation.EmitterTeam() + ".troy",
+                hasTrap = true
             });
 
             Spells.Add(
@@ -2357,7 +2373,7 @@ using LeagueSharp.Common;
             new SpellData
             {
                 charName = "Lux",
-                dangerlevel = 3,
+                dangerlevel = 2,
                 name = "Lucent Singularity",
                 radius = 330,
                 range = 1100,
@@ -2365,7 +2381,7 @@ using LeagueSharp.Common;
                 spellKey = SpellSlot.E,
                 spellName = "LuxLightStrikeKugel",
                 spellType = SpellType.Circular,
-                trapTroyName = "lux_base_e_tar_aoe_" + Situation.EmitterTeam() + ".troy",
+                trapTroyName = "lux_base_e_tar_aoe_" + Situation.EmitterColor() + ".troy",
                 extraDrawHeight = -100,
                 hasTrap = true
             });
@@ -2553,6 +2569,21 @@ using LeagueSharp.Common;
                 fixedRange = true
             });
 
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Morgana",
+                dangerlevel = 2,
+                name = "Tormented Soil",
+                radius = 279,
+                range = 1300,
+                spellKey = SpellSlot.W,
+                spellName = "TormentedSoil",
+                spellType = SpellType.Circular,
+                trapTroyName = "morgana_base_w_tar_" + Situation.EmitterColor() + ".troy",
+                hasTrap = true
+            });
+
             #endregion Morgana
 
             #region Nami
@@ -2632,6 +2663,21 @@ using LeagueSharp.Common;
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
                 fixedRange = true
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Nidalee",
+                dangerlevel = 3,
+                name = "Bushwhack",
+                radius = 80,
+                range = 1500,
+                spellKey = SpellSlot.W,
+                spellName = "Bushwhack",
+                spellType = SpellType.Circular,
+                trapTroyName = "nidalee_base_w_tc_" + Situation.EmitterColor() + ".troy",
+                hasTrap = true
             });
 
             #endregion Nidalee
@@ -4211,6 +4257,22 @@ using LeagueSharp.Common;
                 spellName = "ZileanQ",
                 spellType = SpellType.Circular,
                 isSpecial = true
+            });
+
+            Spells.Add(
+            new SpellData
+            {
+                charName = "Zilean",
+                dangerlevel = 3,
+                spellName = "ZileanQ",
+                name = "Time Bomb",
+                radius = 160,
+                range = 900,
+                spellKey = SpellSlot.Q,
+                spellType = SpellType.Circular,
+                trapTroyName = "zilean_base_q_timebombground" + Situation.EmitterColor() + ".troy",
+                extraDrawHeight = -100,
+                hasTrap = true
             });
 
             #endregion Zilean

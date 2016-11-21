@@ -822,6 +822,12 @@ using LeagueSharp.Common;
 
                             if (!onProcessSpells.ContainsKey(spell.spellName.ToLower() + "trap"))
                             {
+                                if (spell.trapBaseName == "")
+                                    spell.trapBaseName = spell.spellName + "1";
+  
+                                if (spell.trapTroyName == "")
+                                    spell.trapTroyName = spell.spellName + "2";
+
                                 onProcessTraps.Add(spell.trapBaseName.ToLower(), spell);
                                 onProcessTraps.Add(spell.trapTroyName.ToLower(), spell);
                                 onProcessSpells.Add(spell.spellName.ToLower() + "trap", spell);
