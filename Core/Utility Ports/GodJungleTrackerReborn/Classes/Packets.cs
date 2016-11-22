@@ -16,7 +16,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace GodJungleTracker.Classes
 {
     public class Packets

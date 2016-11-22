@@ -18,7 +18,7 @@ using Vector2 = SharpDX.Vector2;
 using GodJungleTracker.Classes;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace GodJungleTracker
 {
     class Program
@@ -85,12 +85,12 @@ using EloBuddy;
 
         public static void Main()
         {
-            OnGameLoad();
+            OnGameLoad(new EventArgs());
         }
 
-        public static void OnGameLoad()
+        public static void OnGameLoad(EventArgs args)
         {
-            GameVersion = Game.Version.Split(' ')[1];
+            GameVersion = "6.22";
 
             LoadMenu();
 
