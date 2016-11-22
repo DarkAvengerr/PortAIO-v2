@@ -5972,6 +5972,8 @@
     <Compile Include="Core\Utility Ports\ActivatorSharp\Summoners\Hero\snowball.cs" />
     <Compile Include="Core\Utility Ports\ActivatorSharp\Summoners\Hero\teleport.cs" />
     <Compile Include="Core\Utility Ports\ActivatorSharp\Updater.cs" />
+    <Compile Include="Core\Utility Ports\BaseUlt3\BaseUlt.cs" />
+    <Compile Include="Core\Utility Ports\BaseUlt3\Program.cs" />
     <Compile Include="Core\Utility Ports\ElUtilitySuite\Items\Defensive2.cs" />
     <Compile Include="Core\Utility Ports\ElUtilitySuite\Items\DefensiveItems\FaceOfTheMountain.cs" />
     <Compile Include="Core\Utility Ports\ElUtilitySuite\Items\DefensiveItems\Locket.cs" />

@@ -184,6 +184,11 @@ namespace PortAIO
             {
                 RandomUlt.Program.Game_OnGameLoad();
             }
+
+            if (Misc.menu.Item("BaseUlt3").GetValue<bool>())
+            {
+                BaseUlt3.Program.Main();
+            }
         }
 
         public static void LoadChampion()
