@@ -71,7 +71,7 @@ using LeagueSharp.SDK;
                         l =>
                         GameObjects.Player.Distance(l) < Vars.W.Range
                         && !ObjectManager.Get<Obj_AI_Minion>()
-                                .Any(m => m.Distance(l) < 1000f && m.CharData.BaseSkinName.Equals("kalistaspawn"))))
+                                .Any(m => m.Distance(l) < 1000f && m.BaseSkinName.Equals("kalistaspawn"))))
                 {
                     Vars.W.Cast(loc);
                 }

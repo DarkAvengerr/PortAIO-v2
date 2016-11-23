@@ -31,7 +31,7 @@ using LeagueSharp.SDK;
         {
             var ball =
                 ObjectManager.Get<Obj_AI_Minion>()
-                    .FirstOrDefault(m => Math.Abs(m.Health) > 0 && m.CharData.BaseSkinName.Equals("oriannaball"));
+                    .FirstOrDefault(m => Math.Abs(m.Health) > 0 && m.BaseSkinName.Equals("oriannaball"));
             var ball3 =
                 GameObjects.AllyHeroes.FirstOrDefault(
                     a => a.Buffs.Any(b => b.Caster.IsMe && b.Name.Equals("orianaghost")));

@@ -24,7 +24,7 @@ using LeagueSharp.SDK;
                 GameObjects.Jungle.Where(
                     m =>
                     m.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
-                    && (!GameObjects.JungleSmall.Contains(m) || m.CharData.BaseSkinName.Equals("Sru_Crab"))).ToList();
+                    && (!GameObjects.JungleSmall.Contains(m) || m.BaseSkinName.Equals("Sru_Crab"))).ToList();
 
         /// <summary>
         ///     The minions target.

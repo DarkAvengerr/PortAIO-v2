@@ -113,7 +113,7 @@ using LeagueSharp.SDK;
                             {
                                 var target = (Obj_AI_Minion)args.Target;
                                 if ((int)target.Health == 1 && target.DistanceToPlayer() < 450
-                                    && target.CharData.BaseSkinName.Equals("gangplankbarrel"))
+                                    && target.BaseSkinName.Equals("gangplankbarrel"))
                                 {
                                     Vars.E.Cast();
                                     return;
@@ -236,7 +236,7 @@ using LeagueSharp.SDK;
                     /// <summary>
                     ///     Block Dragon/Baron/RiftHerald's AutoAttacks.
                     /// </summary>
-                    if (sender.CharData.BaseSkinName.Contains("SRU_Dragon")
+                    if (sender.BaseSkinName.Contains("SRU_Dragon")
                         && Vars.Menu["spells"]["e"]["whitelist"]["minions"].GetValue<MenuBool>().Value)
                     {
                         Vars.E.Cast();

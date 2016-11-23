@@ -117,7 +117,7 @@ using LeagueSharp.SDK;
                         {
                             if (Math.Abs(((Obj_AI_Minion)args.Target).Health - 1) <= 0
                                 && ((Obj_AI_Minion)args.Target).DistanceToPlayer() < 450
-                                && ((Obj_AI_Minion)args.Target).CharData.BaseSkinName.Equals("gangplankbarrel"))
+                                && ((Obj_AI_Minion)args.Target).BaseSkinName.Equals("gangplankbarrel"))
                             {
                                 Vars.W.Cast();
                             }
@@ -261,9 +261,9 @@ using LeagueSharp.SDK;
                     /// </summary>
                     if (Vars.Menu["spells"]["e"]["whitelist"]["minions"].GetValue<MenuBool>().Value)
                     {
-                        if (sender.CharData.BaseSkinName.Equals("SRU_Baron")
-                            || sender.CharData.BaseSkinName.Contains("SRU_Dragon")
-                            || sender.CharData.BaseSkinName.Equals("SRU_RiftHerald"))
+                        if (sender.BaseSkinName.Equals("SRU_Baron")
+                            || sender.BaseSkinName.Contains("SRU_Dragon")
+                            || sender.BaseSkinName.Equals("SRU_RiftHerald"))
                         {
                             Vars.W.Cast();
                         }

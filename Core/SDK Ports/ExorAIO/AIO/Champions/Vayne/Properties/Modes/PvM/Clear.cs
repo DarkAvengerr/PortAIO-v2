@@ -99,9 +99,9 @@ using LeagueSharp.SDK;
                 && Vars.Menu["spells"]["e"]["jungleclear"].GetValue<MenuSliderButton>().BValue)
             {
                 var target = (Obj_AI_Minion)Variables.Orbwalker.GetTarget();
-                if (!target.CharData.BaseSkinName.Contains("SRU_Dragon")
-                    && !target.CharData.BaseSkinName.Equals("SRU_Baron")
-                    && !target.CharData.BaseSkinName.Equals("SRU_Riftherald"))
+                if (!target.BaseSkinName.Contains("SRU_Dragon")
+                    && !target.BaseSkinName.Equals("SRU_Baron")
+                    && !target.BaseSkinName.Equals("SRU_Riftherald"))
                 {
                     for (var i = 1; i < 10; i++)
                     {
@@ -113,7 +113,7 @@ using LeagueSharp.SDK;
                             && (prediction + vector * (i * 42)).IsWall() && (prediction + vector * (i * 45)).IsWall()
                             && (prediction2 + vector * (i * 42)).IsWall() && (prediction2 + vector * (i * 45)).IsWall())
                         {
-                            Vars.E.CastOnUnit(Variables.Orbwalker.GetTarget() as Obj_AI_Minion);
+                            Vars.E.CastOnUnit(target);
                             return;
                         }
                     }

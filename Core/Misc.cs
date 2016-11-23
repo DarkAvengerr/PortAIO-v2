@@ -458,6 +458,7 @@ namespace PortAIO.Dual_Port
             utility.AddItem(new MenuItem("xAwareness", "Enable xAwareness?").SetValue(false));
             utility.AddItem(new MenuItem("RandomUlt", "Enable RandomUlt?").SetValue(false));
             utility.AddItem(new MenuItem("BaseUlt3", "Enable BaseUlt3?").SetValue(false));
+            utility.AddItem(new MenuItem("ControlSharp", "Enable ControlSharp?").SetValue(false));
             menu.AddSubMenu(utility);
 
             var autoPlay = new Menu("Auto Play", "PortAIOAUTOPLAY");

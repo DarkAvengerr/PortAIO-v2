@@ -109,8 +109,8 @@ using LeagueSharp.SDK;
             if (sender is AIHeroClient || sender is Obj_AI_Turret
                 || GameObjects.Jungle.Any(
                     m =>
-                    m.CharData.BaseSkinName == sender.CharData.BaseSkinName
-                    && GameObjects.JungleSmall.All(m2 => m2.CharData.BaseSkinName != sender.CharData.BaseSkinName)))
+                    m.BaseSkinName == sender.BaseSkinName
+                    && GameObjects.JungleSmall.All(m2 => m2.BaseSkinName != sender.BaseSkinName)))
             {
                 if (args.SData.Name.Equals("GangplankE"))
                 {

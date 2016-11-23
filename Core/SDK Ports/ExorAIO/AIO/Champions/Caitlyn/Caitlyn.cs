@@ -79,7 +79,7 @@ using LeagueSharp.SDK;
                             ObjectManager.Get<Obj_AI_Minion>()
                                 .Any(
                                     m =>
-                                    m.Distance(args.EndPosition) < 200 && m.CharData.BaseSkinName.Equals("caitlyntrap")))
+                                    m.Distance(args.EndPosition) < 200 && m.BaseSkinName.Equals("caitlyntrap")))
                         {
                             args.Process = false;
                         }

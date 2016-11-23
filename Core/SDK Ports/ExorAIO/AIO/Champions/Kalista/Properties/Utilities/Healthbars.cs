@@ -38,7 +38,7 @@ using LeagueSharp.SDK;
                         .Where(
                             h =>
                             h.IsValidTarget() && Bools.IsPerfectRendTarget(h)
-                            && (h is AIHeroClient || Vars.JungleList.Contains(h.CharData.BaseSkinName)))
+                            && (h is AIHeroClient || Vars.JungleList.Contains(h.BaseSkinName)))
                         .ToList()
                         .ForEach(
                             unit =>
@@ -48,18 +48,18 @@ using LeagueSharp.SDK;
                                     /// </summary>
                                     var mobOffset =
                                         Vars.JungleHpBarOffsetList.FirstOrDefault(
-                                            x => x.BaseSkinName.Equals(unit.CharData.BaseSkinName));
+                                            x => x.BaseSkinName.Equals(unit.BaseSkinName));
 
-                                    var width = Vars.JungleList.Contains(unit.CharData.BaseSkinName)
+                                    var width = Vars.JungleList.Contains(unit.BaseSkinName)
                                                     ? mobOffset?.Width ?? Vars.SWidth
                                                     : Vars.SWidth;
-                                    var height = Vars.JungleList.Contains(unit.CharData.BaseSkinName)
+                                    var height = Vars.JungleList.Contains(unit.BaseSkinName)
                                                      ? mobOffset?.Height ?? Vars.SHeight
                                                      : Vars.SHeight;
-                                    var xOffset = Vars.JungleList.Contains(unit.CharData.BaseSkinName)
+                                    var xOffset = Vars.JungleList.Contains(unit.BaseSkinName)
                                                       ? mobOffset?.XOffset ?? Vars.SxOffset((AIHeroClient)unit)
                                                       : Vars.SxOffset((AIHeroClient)unit);
-                                    var yOffset = Vars.JungleList.Contains(unit.CharData.BaseSkinName)
+                                    var yOffset = Vars.JungleList.Contains(unit.BaseSkinName)
                                                       ? mobOffset?.YOffset ?? Vars.SyOffset((AIHeroClient)unit)
                                                       : Vars.SyOffset((AIHeroClient)unit);
                                     var barPos = unit.HPBarPosition;

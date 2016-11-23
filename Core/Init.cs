@@ -189,6 +189,11 @@ namespace PortAIO
             {
                 BaseUlt3.Program.Main();
             }
+
+            if (Misc.menu.Item("ControlSharp").GetValue<bool>())
+            {
+                ControlSharp.Program.Main();
+            }
         }
 
         public static void LoadChampion()
