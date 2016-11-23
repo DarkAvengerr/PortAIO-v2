@@ -75,7 +75,7 @@ using LeagueSharp.Common;
             {
                 var minion = obj as Obj_AI_Minion;
 
-                if (minion.CharData.BaseSkinName.Contains("testcube"))
+                if (minion.BaseSkinName.Contains("testcube"))
                 {
                     ObjectTracker.objTracker.Add(obj.NetworkId, new ObjectTrackerInfo(obj, "hiu"));
                     DelayAction.Add(250, () => ObjectTracker.objTracker.Remove(obj.NetworkId));

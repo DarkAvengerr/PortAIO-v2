@@ -34,7 +34,7 @@ using LeagueSharp.Common;
 
             foreach (var obj in ObjectManager.Get<Obj_AI_Minion>())
             {
-                if (obj != null && obj.IsValid && obj.CharData.BaseSkinName == "lulufaerie" && obj.CheckTeam())
+                if (obj != null && obj.IsValid && obj.BaseSkinName == "lulufaerie" && obj.CheckTeam())
                 {
                     gotObj = true;
 

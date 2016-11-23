@@ -77,7 +77,7 @@ using LeagueSharp.Common;
             {
                 SpellData spellData;
 
-                if (SpellDetector.onProcessTraps.TryGetValue(aiBase.CharData.BaseSkinName.ToLower(), out spellData))
+                if (SpellDetector.onProcessTraps.TryGetValue(aiBase.BaseSkinName.ToLower(), out spellData))
                 {
                     var trapData = (SpellData) spellData.Clone();
 
@@ -111,9 +111,9 @@ using LeagueSharp.Common;
             {
                 SpellData spellData;
 
-                if (SpellDetector.onProcessTraps.TryGetValue(aiBase.CharData.BaseSkinName.ToLower(), out spellData))
+                if (SpellDetector.onProcessTraps.TryGetValue(aiBase.BaseSkinName.ToLower(), out spellData))
                 {
-                    foreach (var entry in SpellDetector.detectedSpells.Where(x => x.Value.info.trapBaseName.ToLower() == aiBase.CharData.BaseSkinName.ToLower()))
+                    foreach (var entry in SpellDetector.detectedSpells.Where(x => x.Value.info.trapBaseName.ToLower() == aiBase.BaseSkinName.ToLower()))
                     {
                         DelayAction.Add(1, () => SpellDetector.DeleteSpell(entry.Key));
                         entry.Value.spellObject = null;

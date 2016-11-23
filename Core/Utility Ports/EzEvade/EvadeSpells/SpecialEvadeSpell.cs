@@ -41,7 +41,7 @@ using LeagueSharp.Common;
 
         public static bool UsePounce(EvadeSpellData evadeSpell, bool process = true)
         {
-            if (myHero.CharData.BaseSkinName != "Nidalee")
+            if (myHero.BaseSkinName != "Nidalee")
             {
                 var posInfo = EvadeHelper.GetBestPositionDash(evadeSpell);
                 if (posInfo != null)

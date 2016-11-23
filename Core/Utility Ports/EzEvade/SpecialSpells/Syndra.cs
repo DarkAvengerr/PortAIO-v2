@@ -51,7 +51,7 @@ using LeagueSharp.Common;
         private static void Obj_AI_Base_OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
         {
             var sphere = sender as Obj_AI_Minion;
-            if (sphere != null && sphere.CharData.BaseSkinName == _sphereName &&
+            if (sphere != null && sphere.BaseSkinName == _sphereName &&
                 sphere.CheckTeam())
             {
                 if (args.Animation == "Death")
@@ -64,7 +64,7 @@ using LeagueSharp.Common;
         private static void GameObject_OnCreate(GameObject sender, EventArgs args)
         {
             var sphere = sender as Obj_AI_Minion;
-            if (sphere != null && sphere.CharData.BaseSkinName == _sphereName &&
+            if (sphere != null && sphere.BaseSkinName == _sphereName &&
                 sphere.CheckTeam()) 
             {
                 if (!_spheres.Contains(sphere))
@@ -78,7 +78,7 @@ using LeagueSharp.Common;
         private static void GameObject_OnDelete(GameObject sender, EventArgs args)
         {
             var sphere = sender as Obj_AI_Minion;
-            if (sphere != null && sphere.CharData.BaseSkinName == _sphereName &&
+            if (sphere != null && sphere.BaseSkinName == _sphereName &&
                 sphere.CheckTeam())
             {
                 _spheres.RemoveAll(i => i.NetworkId == sphere.NetworkId);
