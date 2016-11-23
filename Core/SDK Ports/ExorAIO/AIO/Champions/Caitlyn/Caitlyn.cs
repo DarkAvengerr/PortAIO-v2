@@ -123,7 +123,7 @@ using LeagueSharp.SDK;
                         {
                             case "CaitlynEntrapment":
                             case "CaitlynEntrapmentMissile":
-                                if (Vars.W.IsReady() && Vars.Menu["spells"]["w"]["combo"].GetValue<MenuBool>().Value)
+                                if (Vars.W.IsReady() && Vars.Menu["spells"]["w"]["triplecombo"].GetValue<MenuBool>().Value)
                                 {
                                     foreach (var target in
                                         GameObjects.EnemyHeroes.Where(
@@ -157,8 +157,8 @@ using LeagueSharp.SDK;
             {
                 if (!Vars.E.GetPrediction(args.Sender).CollisionObjects.Any())
                 {
-                    Vars.E.Cast(args.Sender.ServerPosition);
-                    return;
+                    //Vars.E.Cast(args.Sender.ServerPosition);
+                    Vars.E.Cast(args.End);
                 }
             }
 
@@ -187,7 +187,6 @@ using LeagueSharp.SDK;
                 if (!Vars.E.GetPrediction(args.Sender).CollisionObjects.Any())
                 {
                     Vars.E.Cast(Vars.E.GetPrediction(args.Sender).UnitPosition);
-                    return;
                 }
             }
 

@@ -38,7 +38,7 @@ using LeagueSharp.SDK;
                 Vars.QMenu = new Menu("q", "Use Q to:");
                 {
                     Vars.QMenu.Add(new MenuBool("combo", "Combo", true));
-                    Vars.QMenu.Add(new MenuBool("logical", "Logical", true));
+                    Vars.QMenu.Add(new MenuBool("logical", "Logical (On Trapped Enemies)", true));
                     Vars.QMenu.Add(new MenuBool("killsteal", "KillSteal", true));
                     Vars.QMenu.Add(new MenuSliderButton("harass", "Harass / if Mana >= x%", 50, 0, 99, true));
                     Vars.QMenu.Add(new MenuSliderButton("laneclear", "LaneClear / if Mana >= x%", 50, 0, 99, true));
@@ -52,7 +52,8 @@ using LeagueSharp.SDK;
                 Vars.WMenu = new Menu("w", "Use W to:");
                 {
                     Vars.WMenu.Add(new MenuBool("combo", "Combo", true));
-                    Vars.WMenu.Add(new MenuBool("logical", "Logical", true));
+                    Vars.WMenu.Add(new MenuBool("triplecombo", "Try Double/Triple HeadShot Combo", true));
+                    Vars.WMenu.Add(new MenuBool("logical", "Logical (On CC'd Enemies)", true));
                     Vars.WMenu.Add(new MenuBool("gapcloser", "Anti-Gapcloser", true));
                     Vars.WMenu.Add(new MenuBool("interrupter", "Channelling Targets", true));
                 }

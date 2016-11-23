@@ -129,12 +129,9 @@ using LeagueSharp.SDK;
                 /// <summary>
                 ///     The Anti-GapCloser E Logic.
                 /// </summary>
-                if (args.Sender.IsMelee)
+                if (args.Sender.IsMelee && args.IsDirectedToPlayer && Vars.Menu["spells"]["e"]["gapcloser"].GetValue<MenuBool>().Value)
                 {
-                    if (args.IsDirectedToPlayer && Vars.Menu["spells"]["e"]["gapcloser"].GetValue<MenuBool>().Value)
-                    {
-                        Vars.E.CastOnUnit(args.Sender);
-                    }
+                    Vars.E.CastOnUnit(args.Sender);
                 }
 
                 /// <summary>

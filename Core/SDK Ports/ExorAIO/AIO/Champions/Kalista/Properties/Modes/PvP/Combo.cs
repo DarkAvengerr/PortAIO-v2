@@ -40,8 +40,9 @@ using LeagueSharp.SDK;
                     GameObjectOrder.AttackUnit,
                     Targets.Minions.FirstOrDefault(m => m.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())));
             }
+
             if (Bools.HasSheenBuff() && !Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
-                || !Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target))
+                || !Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target) || GameObjects.Player.Mana < Vars.E.Instance.SData.Mana + Vars.Q.Instance.SData.Mana)
             {
                 return;
             }

@@ -3890,7 +3890,6 @@
     <Compile Include="Core\Champion Ports\Yasuo\YasuoPro\Helper.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\YasuoPro\Init.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\YasuoPro\ItemManager.cs" />
-    <Compile Include="Core\Champion Ports\Yasuo\YasuoPro\Orbwalking.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\YasuoPro\TargettedDanger.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\YasuoPro\WallJump.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\YasuoPro\Yasuo.cs" />

@@ -14,6 +14,8 @@ using LeagueSharp.SDK;
     using LeagueSharp.SDK.UI;
     using LeagueSharp.SDK.Utils;
 
+    using SharpDX;
+
     /// <summary>
     ///     The logics class.
     /// </summary>
@@ -101,8 +103,20 @@ using LeagueSharp.SDK;
                     && !target.CharData.BaseSkinName.Equals("SRU_Baron")
                     && !target.CharData.BaseSkinName.Equals("SRU_Riftherald"))
                 {
-                    Vars.E.CastOnUnit(Variables.Orbwalker.GetTarget() as Obj_AI_Minion);
-                    return;
+                    for (var i = 1; i < 10; i++)
+                    {
+                        var position = target.ServerPosition;
+                        var prediction = Vars.E.GetPrediction(target).UnitPosition;
+                        var prediction2 = Vars.E2.GetPrediction(target).UnitPosition;
+                        var vector = Vector3.Normalize(target.ServerPosition - GameObjects.Player.ServerPosition);
+                        if ((position + vector * (i * 42)).IsWall() && (position + vector * (i * 45)).IsWall()
+                            && (prediction + vector * (i * 42)).IsWall() && (prediction + vector * (i * 45)).IsWall()
+                            && (prediction2 + vector * (i * 42)).IsWall() && (prediction2 + vector * (i * 45)).IsWall())
+                        {
+                            Vars.E.CastOnUnit(Variables.Orbwalker.GetTarget() as Obj_AI_Minion);
+                            return;
+                        }
+                    }
                 }
             }
 
