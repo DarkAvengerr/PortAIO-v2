@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using Color = System.Drawing.Color;
-using EloBuddy;
 
-namespace LCS_Lucian
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace LCS_Lucian
 {
     class DamageIndicator
     {

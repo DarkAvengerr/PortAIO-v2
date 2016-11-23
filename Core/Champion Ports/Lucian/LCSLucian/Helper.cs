@@ -1,9 +1,10 @@
-﻿using System.Linq;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
 
-namespace LCS_Lucian
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace LCS_Lucian
 {
     class Helper
     {

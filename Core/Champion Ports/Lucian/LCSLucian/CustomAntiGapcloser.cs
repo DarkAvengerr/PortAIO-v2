@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
 
-namespace LCS_Lucian
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace LCS_Lucian
 {
     public enum SpellType
     {

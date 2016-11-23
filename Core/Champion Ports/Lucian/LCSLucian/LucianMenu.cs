@@ -1,11 +1,11 @@
-﻿using System.Drawing;
+using System.Drawing;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
-using Font = SharpDX.Direct3D9.Font;
 
-namespace LCS_Lucian
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace LCS_Lucian
 {
     class LucianMenu
     {
@@ -22,6 +22,7 @@ namespace LCS_Lucian
                 comboMenu.AddItem(new MenuItem("lucian.disable.w.prediction", "Disable W Prediction").SetValue(true)).SetTooltip("10/10 for speed combo!", SharpDX.Color.GreenYellow);
                 comboMenu.AddItem(new MenuItem("lucian.r.combo", "Use R").SetValue(true)).SetTooltip("Uses R in Combo (Only Casting If Enemy Killable)", SharpDX.Color.GreenYellow);
                 comboMenu.AddItem(new MenuItem("lucian.combo.start.e", "Start Combo With E").SetValue(true)).SetTooltip("Starting Combo With E", SharpDX.Color.GreenYellow);
+                comboMenu.AddItem(new MenuItem("lucian.e.range", "(E) Range").SetValue(new Slider(475,1,475))).SetTooltip("If you wanna do short dash just set that slider to 1");
                 Config.AddSubMenu(comboMenu);
             }
 
@@ -69,7 +70,7 @@ namespace LCS_Lucian
                 Config.AddSubMenu(killStealMenu);
             }
 
-            var eqMenu = new Menu(":: E+Q KS Settings", ":: E+Q KS Settings").SetFontStyle(FontStyle.Bold, SharpDX.Color.Crimson);
+            var eqMenu = new Menu(":: E+Q KS Settings", ":: E+Q KS Settings").SetFontStyle(FontStyle.Bold,SharpDX.Color.Crimson);
             {
                 eqMenu.AddItem(new MenuItem("use.eq", "Use E+Q").SetValue(true));
                 eqMenu.AddItem(new MenuItem("eq.safety.check", "Safety Check?").SetValue(true));
@@ -91,7 +92,7 @@ namespace LCS_Lucian
                     }
                     miscMenu.AddSubMenu(gapcloseSet);
                 }
-
+                miscMenu.AddItem(new MenuItem("dodge.jarvan.ult", "Dodge JarvanIV Ult ?")).SetValue(true);
                 Config.AddSubMenu(miscMenu);
             }
             var drawMenu = new Menu(":: Draw Settings", ":: Draw Settings");
@@ -108,7 +109,6 @@ namespace LCS_Lucian
                 }
                 Config.AddSubMenu(drawMenu);
             }
-            //Config.AddItem(new MenuItem("lucian.ult.lock", "(R) Lock Target").SetValue(true));
             Config.AddItem(new MenuItem("lucian.semi.manual.ult", "Semi-Manual (R)!").SetValue(new KeyBind("A".ToCharArray()[0], KeyBindType.Press)));
             var drawDamageMenu = new MenuItem("RushDrawEDamage", "Combo Damage").SetValue(true);
             var drawFill = new MenuItem("RushDrawEDamageFill", "Combo Damage Fill").SetValue(new Circle(true, Color.Gold));

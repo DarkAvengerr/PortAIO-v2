@@ -2032,7 +2032,7 @@ namespace PortAIO
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
                         case 0: // LCS Lucian
-                            LCS_Lucian.Program.OnLoad();
+                            LCS_Lucian.Program.Main();
                             break;
                         case 1: // BrianSharp
                             BrianSharp.Program.Main();
