@@ -80,14 +80,14 @@ using LeagueSharp.SDK;
                                     Vars.WhiteListMenu.Add(
                                         new MenuBool(
                                             $"{enemy.ChampionName.ToLower()}.pulverize",
-                                            $"Shield: {enemy.ChampionName}'s Q",
+                                            $"Shield: {enemy.ChampionName}'s Pulverize (Q)",
                                             true));
                                 }
                                 if (enemy.ChampionName.Equals("Braum"))
                                 {
                                     Vars.WhiteListMenu.Add(
                                         new MenuBool(
-                                            $"{enemy.ChampionName.ToLower()}.braumbasicattackpassiveoverride",
+                                            $"{enemy.ChampionName.ToLower()}.passive",
                                             $"Shield: {enemy.ChampionName}'s Passive",
                                             true));
                                 }
@@ -96,7 +96,7 @@ using LeagueSharp.SDK;
                                     Vars.WhiteListMenu.Add(
                                         new MenuBool(
                                             $"{enemy.ChampionName.ToLower()}.jaxcounterstrike",
-                                            $"Shield: {enemy.ChampionName}'s E",
+                                            $"Shield: {enemy.ChampionName}'s JaxCounterStrike (E)",
                                             true));
                                 }
                                 if (enemy.ChampionName.Equals("KogMaw"))
@@ -104,7 +104,15 @@ using LeagueSharp.SDK;
                                     Vars.WhiteListMenu.Add(
                                         new MenuBool(
                                             $"{enemy.ChampionName.ToLower()}.kogmawicathiansurprise",
-                                            $"Shield: {enemy.ChampionName}'s Passive",
+                                            $"Shield: {enemy.ChampionName}'s KogMawIcathianSurprise (Passive)",
+                                            true));
+                                }
+                                if (enemy.ChampionName.Equals("Nautilus"))
+                                {
+                                    Vars.WhiteListMenu.Add(
+                                        new MenuBool(
+                                            $"{enemy.ChampionName.ToLower()}.nautilusravagestrikeattack",
+                                            $"Shield: {enemy.ChampionName}'s NautilusRavageStrikeAttack (Passive)",
                                             true));
                                 }
                                 if (enemy.ChampionName.Equals("Udyr"))
@@ -112,30 +120,36 @@ using LeagueSharp.SDK;
                                     Vars.WhiteListMenu.Add(
                                         new MenuBool(
                                             $"{enemy.ChampionName.ToLower()}.udyrbearattack",
-                                            $"Shield: {enemy.ChampionName}'s E",
+                                            $"Shield: {enemy.ChampionName}'s UdyrBearAttack (E)",
                                             true));
                                 }
+
+                                string[] excludedSpellsList = { "KatarinaE", "nautiluspiercinggaze" };
+                                string[] assassinList = { "Akali", "Leblanc", "Talon" };
 
                                 foreach (var spell in
                                     SpellDatabase.Get()
                                         .Where(
                                             s =>
-                                            !s.SpellName.Equals("KatarinaE") && !s.SpellName.Equals("TalonCutthroat")
+                                            !excludedSpellsList.Contains(s.SpellName)
                                             && s.ChampionName.Equals(enemy.ChampionName)))
                                 {
-                                    if (enemy.IsMelee && spell.CastType != null
-                                        && spell.CastType.Contains(CastType.Activate)
-                                        && spell.SpellType.HasFlag(SpellType.Activated)
-                                        && AutoAttack.IsAutoAttackReset(spell.SpellName)
-                                        || spell.CastType != null && spell.CastType.Contains(CastType.EnemyChampions)
-                                        && (spell.SpellType.HasFlag(SpellType.Targeted)
-                                            || spell.SpellType.HasFlag(SpellType.TargetedMissile)))
+                                    if (spell.CastType != null)
                                     {
-                                        Vars.WhiteListMenu.Add(
-                                            new MenuBool(
-                                                $"{enemy.ChampionName.ToLower()}.{spell.SpellName.ToLower()}",
-                                                $"Shield: {enemy.ChampionName}'s {(enemy.ChampionName.Equals("TwistedFate") ? spell.MissileSpellName : spell.Slot.ToString())}",
-                                                true));
+                                        if (enemy.IsMelee && spell.CastType.Contains(CastType.Activate)
+                                            && spell.SpellType.HasFlag(SpellType.Activated)
+                                            && AutoAttack.IsAutoAttackReset(spell.SpellName)
+                                            || spell.CastType.Contains(CastType.EnemyChampions)
+                                            && (spell.SpellType.HasFlag(SpellType.Targeted)
+                                                || spell.SpellType.HasFlag(SpellType.TargetedMissile)))
+                                        {
+                                            Vars.WhiteListMenu.Add(
+                                                new MenuBool(
+                                                    $"{enemy.ChampionName.ToLower()}.{spell.SpellName.ToLower()}",
+                                                    $"Shield: {enemy.ChampionName}'s {spell.SpellName} ({spell.Slot})"
+                                                    + (assassinList.Contains(enemy.ChampionName) ? "[May not work]" : ""),
+                                                    true));
+                                        }
                                     }
                                 }
                             }

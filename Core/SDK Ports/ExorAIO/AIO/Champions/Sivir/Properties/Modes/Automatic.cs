@@ -48,30 +48,17 @@ using LeagueSharp.SDK;
             /// </summary>
             foreach (var target in GameObjects.EnemyHeroes)
             {
-                var buff1 = target.GetBuff("jaxcounterstrike");
-                var buff2 = target.GetBuff("kogmawicathiansurprise");
-                switch (target.ChampionName)
+                var shieldMenu = Vars.Menu["spells"]["e"]["whitelist"];
+                var buff = target.GetBuff("jaxcounterstrike") ?? target.GetBuff("kogmawicathiansurprise");
+                if (buff != null)
                 {
-                    case "Jax":
-                        if (target.HasBuff("jaxcounterstrike")
-                            && target.IsValidTarget(355 + GameObjects.Player.BoundingRadius)
-                            && buff1.EndTime - Game.Time > buff1.EndTime - buff1.StartTime - 1
-                            && Vars.Menu["spells"]["e"]["whitelist"][$"{target.ChampionName.ToLower()}.jaxcounterstrike"
-                                   ].GetValue<MenuBool>().Value)
-                        {
-                            Vars.E.Cast();
-                        }
-                        break;
-                    case "KogMaw":
-                        if (target.HasBuff("kogmawicathiansurprise")
-                            && target.IsValidTarget(355 + GameObjects.Player.BoundingRadius)
-                            && buff2.EndTime - Game.Time > buff2.EndTime - buff2.StartTime - 4
-                            && Vars.Menu["spells"]["e"]["whitelist"][
-                                $"{target.ChampionName.ToLower()}.kogmawicathiansurprise"].GetValue<MenuBool>().Value)
-                        {
-                            Vars.E.Cast();
-                        }
-                        break;
+                    if (target.DistanceToPlayer() < 355 + GameObjects.Player.BoundingRadius
+                        && buff.EndTime - Game.Time <= 750
+                        && shieldMenu[$"{target.ChampionName.ToLower()}.{buff.Name}"].GetValue<MenuBool>().Value)
+                    {
+                        Vars.E.Cast();
+                    }
+                    break;
                 }
             }
         }
@@ -121,6 +108,7 @@ using LeagueSharp.SDK;
                             }
                         }
 
+                        var braumMenu = Vars.Menu["spells"]["e"]["whitelist"]["braum.passive"];
                         var spellMenu =
                             Vars.Menu["spells"]["e"]["whitelist"][
                                 $"{hero.ChampionName.ToLower()}.{args.SData.Name.ToLower()}"];
@@ -131,54 +119,57 @@ using LeagueSharp.SDK;
                                                   ]
                                             : null;
 
-                        /// <summary>
-                        ///     Check for Special On-Hit CC AutoAttacks & Melee AutoAttack Resets.
-                        /// </summary>
-                        if (AutoAttack.IsAutoAttack(args.SData.Name))
+                        if (args.Target != null && args.Target.IsMe)
                         {
-                            if (!args.Target.IsMe)
+                            /// <summary>
+                            ///     Check for Special On-Hit CC AutoAttacks.
+                            /// </summary>
+                            if (AutoAttack.IsAutoAttack(args.SData.Name))
                             {
-                                return;
-                            }
+                                switch (args.SData.Name)
+                                {
+                                    case "UdyrBearAttack":
+                                    case "GoldCardPreAttack":
+                                    case "RedCardPreAttack":
+                                    case "BlueCardPreAttack":
+                                    case "NautilusRavageStrikeAttack":
+                                        if (spellMenu != null && spellMenu.GetValue<MenuBool>().Value
+                                            && (!hero.ChampionName.Equals("Udyr")
+                                                || !GameObjects.Player.HasBuff("udyrbearstuncheck")))
+                                        {
+                                            Vars.E.Cast();
+                                        }
+                                        break;
+                                }
 
-                            switch (args.SData.Name)
-                            {
-                                case "UdyrBearAttack":
-                                case "BraumBasicAttackPassiveOverride":
-                                case "GoldCardPreAttack":
-                                case "RedCardPreAttack":
-                                case "BlueCardPreAttack":
-                                    if (spellMenu == null || !spellMenu.GetValue<MenuBool>().Value
-                                        || (hero.ChampionName.Equals("Udyr")
-                                            && GameObjects.Player.HasBuff("udyrbearstuncheck")))
-                                    {
-                                        return;
-                                    }
-
+                                /// <summary>
+                                ///     Check for Melee AutoAttack Resets.
+                                /// </summary>
+                                if (resetMenu != null && resetMenu.GetValue<MenuBool>().Value
+                                    && hero.Buffs.Any(b => AutoAttack.IsAutoAttackReset(b.Name)))
+                                {
                                     Vars.E.Cast();
-                                    break;
-                                default:
-                                    if (!hero.Buffs.Any(b => AutoAttack.IsAutoAttackReset(b.Name)) || resetMenu == null
-                                        || !resetMenu.GetValue<MenuBool>().Value)
-                                    {
-                                        return;
-                                    }
+                                    return;
+                                }
 
+                                /// <summary>
+                                ///     Check for Braum Passive.
+                                /// </summary>
+                                if (braumMenu != null && braumMenu.GetValue<MenuBool>().Value
+                                    && GameObjects.Player.GetBuffCount("BraumMark") == 3)
+                                {
                                     Vars.E.Cast();
-                                    break;
+                                    return;
+                                }
                             }
                         }
 
                         /// <summary>
                         ///     Shield all the Targetted Spells.
                         /// </summary>
-                        else if (SpellDatabase.GetByName(args.SData.Name) != null)
+                        if (spellMenu != null && spellMenu.GetValue<MenuBool>().Value
+                            && SpellDatabase.GetByName(args.SData.Name) != null)
                         {
-                            if (spellMenu == null || !spellMenu.GetValue<MenuBool>().Value)
-                            {
-                                return;
-                            }
-
                             switch (SpellDatabase.GetByName(args.SData.Name).SpellType)
                             {
                                 /// <summary>
@@ -186,26 +177,27 @@ using LeagueSharp.SDK;
                                 /// </summary>
                                 case SpellType.Targeted:
                                 case SpellType.TargetedMissile:
-                                    if (!args.Target.IsMe)
+                                    if (args.Target != null && args.Target.IsMe)
                                     {
-                                        return;
-                                    }
+                                        var delay = Vars.Menu["spells"]["e"]["delay"].GetValue<MenuSlider>().Value;
+                                        switch (hero.ChampionName)
+                                        {
+                                            case "Caitlyn":
+                                                delay = 1050;
+                                                break;
+                                            case "Nocturne":
+                                                delay = 350;
+                                                break;
+                                            case "Zed":
+                                                delay = 200;
+                                                break;
+                                            case "Nautilus":
+                                                delay = (int)GameObjects.Player.Distance(hero);
+                                                break;
+                                        }
 
-                                    var delay = Vars.Menu["spells"]["e"]["delay"].GetValue<MenuSlider>().Value;
-                                    switch (hero.ChampionName)
-                                    {
-                                        case "Caitlyn":
-                                            delay = 1050;
-                                            break;
-                                        case "Nocturne":
-                                            delay = 350;
-                                            break;
-                                        case "Zed":
-                                            delay = 200;
-                                            break;
+                                        DelayAction.Add(delay, () => { Vars.E.Cast(); });
                                     }
-
-                                    DelayAction.Add(delay, () => { Vars.E.Cast(); });
                                     break;
 
                                 /// <summary>
@@ -228,15 +220,10 @@ using LeagueSharp.SDK;
 
                     break;
                 case GameObjectType.obj_AI_Minion:
-                    if (args.Target == null || !args.Target.IsMe)
-                    {
-                        return;
-                    }
-
                     /// <summary>
                     ///     Block Dragon/Baron/RiftHerald's AutoAttacks.
                     /// </summary>
-                    if (sender.BaseSkinName.Contains("SRU_Dragon")
+                    if (args.Target != null && args.Target.IsMe && sender.BaseSkinName.Contains("SRU_Dragon")
                         && Vars.Menu["spells"]["e"]["whitelist"]["minions"].GetValue<MenuBool>().Value)
                     {
                         Vars.E.Cast();
