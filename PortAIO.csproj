@@ -6746,8 +6746,8 @@
     <Compile Include="Core\Utility Ports\HumanizerSharp\Program.cs" />
     <Compile Include="Core\Utility Ports\`WIP\imAsharpHuman Pro\Program.cs" />
     <Compile Include="Core\Utility Ports\`WIP\imAsharpHuman\Program.cs" />
-    <Compile Include="Core\Utility Ports\`WIP\RandomUlt\Helpers\LastPositions.cs" />
-    <Compile Include="Core\Utility Ports\`WIP\RandomUlt\Program.cs" />
+    <Compile Include="Core\Utility Ports\RandomUlt\Helpers\LastPositions.cs" />
+    <Compile Include="Core\Utility Ports\RandomUlt\Program.cs" />
     <Compile Include="Core\Utility Ports\SebbyBanWars\Program.cs" />
     <Compile Include="Core\Utility Ports\`WIP\SFXHumanizer\CryptoRandom.cs" />
     <Compile Include="Core\Utility Ports\`WIP\SFXHumanizer\Helpers.cs" />

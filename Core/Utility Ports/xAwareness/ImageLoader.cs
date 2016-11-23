@@ -53,7 +53,7 @@ using EloBuddy;
             {
                 Directory.CreateDirectory(path);
             }
-            path = Path.Combine(path, Game.Version.Split(' ')[1]);
+            path = Path.Combine(path, "6.22");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
