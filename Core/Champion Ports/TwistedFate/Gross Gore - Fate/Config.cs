@@ -76,12 +76,12 @@ using LeagueSharp.Common;
 
             WMenu = new Menu("W Spell", "wSpellMenu");
             WSHMenu = new Menu("Smart Harass", "smarth.menu");
-            WSHMenu.AddItem(new MenuItem("wQuick", "Smart Harass")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
-            WSHMenu.AddItem(new MenuItem("wHarass", "Rotate cards").SetValue(true));
-            WSHMenu.AddItem(new MenuItem("wHMana", "Min Mana % to Rotate cards").SetValue(new Slider(20, 0, 100)));
+            WSHMenu.AddItem(new MenuItem("wQuick", "Threatening Harass")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
+            WSHMenu.AddItem(new MenuItem("wHarass", "Shuffle cards").SetValue(true));
+            WSHMenu.AddItem(new MenuItem("wHMana", "Min Mana % to Shuffle cards").SetValue(new Slider(20, 0, 100)));
             WSHMenu.AddItem(
                 new MenuItem("rotate.prioritize", "Prioritizer").SetValue(
-                    new StringList(new[] { "Smart", "BLUE > GOLD > RED", "RED > BLUE > GOLD", "GOLD > BLUE > RED", "GOLD > RED > BLUE", "RED > GOLD > BLUE" })));
+                    new StringList(new[] { "Dopa", "BLUE > GOLD > RED", "RED > BLUE > GOLD", "GOLD > BLUE > RED", "GOLD > RED > BLUE", "RED > GOLD > BLUE" })));
             WKSMenu = new Menu("Kortatu's Cards Selector", "kcards.menu");
             WKSMenu.AddItem(new MenuItem("wSelector", "Koratu's Cards Selector")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
             WKSMenu.AddItem(
@@ -103,7 +103,7 @@ using LeagueSharp.Common;
 
             ExtraMenu = new Menu("Settings", "extraMenu");
             ExtraMenu.AddItem(new MenuItem("extra.menu.warning", "Recommended: Default")).SetFontStyle(FontStyle.Bold, SharpDX.Color.OrangeRed);
-            ExtraMenu.AddItem(new MenuItem("extra.menu.harass", "Harass [Rotate]")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
+            ExtraMenu.AddItem(new MenuItem("extra.menu.harass", "Harass [Shuffle]")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
             ExtraMenu.AddItem(new MenuItem("wHRange", "Extra AA Range to start W").SetValue(new Slider(250, 100, 300)));
             ExtraMenu.AddItem(new MenuItem("wHLock", "Extra AA Range to lock card").SetValue(new Slider(100, 0, 200)));
             ExtraMenu.AddItem(new MenuItem("extra.menu.pred", "Prediction [OKTW]")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
