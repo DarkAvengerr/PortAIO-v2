@@ -702,6 +702,9 @@ namespace PortAIO
                         case 8: // ReformedAIO
                             ReformedAIO.Program.Main();
                             break;
+                        case 9: // Caitlyn Master Headshot
+                            Caitlyn_Master_Headshot.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Cassiopeia:

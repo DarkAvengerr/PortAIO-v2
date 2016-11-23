@@ -1115,6 +1115,7 @@
     <Compile Include="Core\Champion Ports\Brand\SergixBrand\Program.cs" />
     <Compile Include="Core\Champion Ports\Brand\SergixBrand\Spells.cs" />
     <Compile Include="Core\Champion Ports\Brand\SergixBrand\Spells1.cs" />
+    <Compile Include="Core\Champion Ports\Caitlyn\Caitlyn_Master_Headshot\Program.cs" />
     <Compile Include="Core\Champion Ports\Ekko\Ekko - Master of Time\Core.cs" />
     <Compile Include="Core\Champion Ports\Ekko\Ekko - Master of Time\EkkoMenu.cs" />
     <Compile Include="Core\Champion Ports\Ekko\Ekko - Master of Time\EkkoModes.cs" />
