@@ -31,56 +31,14 @@ using Version = System.Version;
 
 #endregion
 
-using EloBuddy; 
-using LeagueSharp.Common; 
- namespace Marksman.Library
+using EloBuddy;
+using LeagueSharp.Common;
+namespace Marksman.Library
 {
     public class Update
     {
         public static void Check(string name, Version version, string path, int displayTime)
         {
-            try
-            {
-                Task.Factory.StartNew(
-                    () =>
-                    {
-                        try
-                        {
-                            using (var client = new WebClient())
-                            {
-                                var data =
-                                    client.DownloadString(
-                                        string.Format(
-                                            "https://raw.githubusercontent.com/{0}/Properties/AssemblyInfo.cs", path));
-
-                                var gVersion =
-                                    Version.Parse(
-                                        new Regex("AssemblyFileVersion\\((\"(.+?)\")\\)").Match(data).Groups[1].Value
-                                            .Replace("\"", ""));
-
-                                if (gVersion > version)
-                                {
-                                    CustomEvents.Game.OnGameLoad +=
-                                        delegate
-                                        {
-                                            Notifications.AddNotification(
-                                                string.Format(
-                                                    "[{0}] Update available: {1} => {2}!", name, version, gVersion),
-                                                displayTime);
-                                        };
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine(ex);
-                        }
-                    });
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
         }
     }
 }

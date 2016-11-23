@@ -143,7 +143,7 @@ using EloBuddy; namespace SFXChallenger
                 Game.OnUpdate -= OnGameUpdate;
                 AppDomain.CurrentDomain.DomainUnload -= OnExit;
                 AppDomain.CurrentDomain.ProcessExit -= OnExit;
-                CustomEvents.Game.OnGameEnd -= OnGameEnd;
+                EloBuddy.Game.OnEnd -= OnGameEnd;
                 _started = false;
             }
         }
@@ -156,7 +156,7 @@ using EloBuddy; namespace SFXChallenger
                 Game.OnUpdate += OnGameUpdate;
                 AppDomain.CurrentDomain.DomainUnload += OnExit;
                 AppDomain.CurrentDomain.ProcessExit += OnExit;
-                CustomEvents.Game.OnGameEnd += OnGameEnd;
+                EloBuddy.Game.OnEnd += OnGameEnd;
                 _started = true;
             }
         }

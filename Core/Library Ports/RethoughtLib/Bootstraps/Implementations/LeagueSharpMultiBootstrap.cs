@@ -48,7 +48,7 @@ using LeagueSharp.Common;
 
             if (additionalStrings != null) this.Strings = new List<string>(additionalStrings);
 
-            CustomEvents.Game.OnGameLoad += delegate { this.AddString(ObjectManager.Player.ChampionName); };
+            this.AddString(ObjectManager.Player.ChampionName);
         }
 
         #endregion

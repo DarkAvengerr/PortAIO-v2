@@ -26,7 +26,7 @@ using LeagueSharp.Common;
 
         public SmiteManager()
         {
-            CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
+            Game_OnGameLoad(new EventArgs());
         }
 
         private void Game_OnGameLoad(EventArgs args)

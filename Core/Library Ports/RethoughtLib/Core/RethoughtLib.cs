@@ -76,7 +76,7 @@ using LeagueSharp.Common;
 
             Console.WriteLine("Test");
 
-            CustomEvents.Game.OnGameLoad += this.Game_OnGameLoad;
+            this.Game_OnGameLoad(new EventArgs());
         }
 
         #endregion
