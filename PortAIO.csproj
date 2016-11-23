@@ -1381,6 +1381,8 @@
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\CardSelector.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Computed.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Config.cs" />
+    <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\DrawingDamage.cs" />
+    <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Drawings.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Extensions\HeroExts.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Extensions\VectorExts.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Extra.cs" />
@@ -1392,6 +1394,7 @@
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Modes\MixedMode.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Modes\QChampions.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Modes\QWaveClear.cs" />
+    <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Pred.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Program.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Spells.cs" />
     <Compile Include="Core\Champion Ports\Varus\ElVarusRevamped\Components\MyMenu.cs" />

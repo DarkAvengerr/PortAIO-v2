@@ -18,29 +18,26 @@ using LeagueSharp.Common;
         {
             var wMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).SData.Mana;
 
-            if (ObjectManager.Player.Mana >= wMana)
+            foreach (var enemy in HeroManager.Enemies)
             {
-                var entKs = HeroManager.Enemies.FirstOrDefault(
-                x => !x.IsDead && x.IsValidTarget()
-                && (ObjectManager.Player.Distance(x) < Orbwalking.GetAttackRange(ObjectManager.Player) + 200)
-                && x.Health < ObjectManager.Player.GetSpellDamage(x, SpellSlot.W));
-
-                if (entKs != null)
+                if (!enemy.IsDead && enemy != null)
                 {
-                    if (Spells._w.IsReadyPerfectly())
+                    if (enemy.IsKillableAndValidTarget(Spells._w.GetDamage(enemy), Spells._w.DamageType, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 200))
                     {
-                        if (CardSelector.Status == SelectStatus.Ready)
+                        if (Spells._w.IsReadyPerfectly())
                         {
-                            CardSelector.StartSelecting(Cards.First);
+                            if (CardSelector.Status == SelectStatus.Ready)
+                            {
+                                CardSelector.StartSelecting(Cards.First);
+                            }
                         }
-                        else if (CardSelector.Status == SelectStatus.Selecting)
+
+                        if (CardSelector.Status == SelectStatus.Selecting)
                         {
                             CardSelector.JumpToCard(Cards.First);
                         }
                     }
-                }else
-                {
-                    if(Config.UseGoldCombo)
+                    else if (Config.UseGoldCombo)
                     {
                         if (Spells._w.IsReadyPerfectly())
                         {
@@ -50,7 +47,7 @@ using LeagueSharp.Common;
                             }
                         }
 
-                        else if (CardSelector.Status == SelectStatus.Selecting)
+                        if (CardSelector.Status == SelectStatus.Selecting)
                         {
                             CardSelector.JumpToCard(Cards.Yellow);
                         }

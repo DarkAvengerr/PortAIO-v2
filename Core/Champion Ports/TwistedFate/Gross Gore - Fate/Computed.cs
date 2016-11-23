@@ -2,7 +2,8 @@
 using System;
 using System.Linq;
 using LeagueSharp;
-using LeagueSharp.Common; 
+using LeagueSharp.Common;
+using ItemData = LeagueSharp.Common.Data.ItemData;
 #endregion
 
 using EloBuddy; 
@@ -44,6 +45,8 @@ using LeagueSharp.Common;
 
             if (Config.UseInterrupter)
             {
+                var wMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).SData.Mana;
+
                 if (sender.IsValidTarget(Spells._w.Range))
                 {
                     switch(CardSelector.Status)
@@ -55,7 +58,10 @@ using LeagueSharp.Common;
                         }
                         case SelectStatus.Ready:
                         {
-                            CardSelector.StartSelecting(Cards.Yellow);
+                            if(ObjectManager.Player.ManaPercent >= wMana)
+                            {
+                                CardSelector.StartSelecting(Cards.Yellow);
+                            }
                             return;
                         }
                     }
@@ -83,6 +89,8 @@ using LeagueSharp.Common;
 
             if (Config.UseAntiGapCloser)
             {
+                var wMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).SData.Mana;
+
                 if (gapcloser.Sender.IsValidTarget(Spells._w.Range))
                 {
                     switch (CardSelector.Status)
@@ -94,7 +102,10 @@ using LeagueSharp.Common;
                         }
                         case SelectStatus.Ready:
                         {
-                            CardSelector.StartSelecting(Cards.Yellow);
+                            if (ObjectManager.Player.ManaPercent >= wMana)
+                            {
+                                CardSelector.StartSelecting(Cards.Yellow);
+                            }
                             return;
                         }
                     }
@@ -147,7 +158,7 @@ using LeagueSharp.Common;
                         {
                             if(!targetDis.IsZombie)
                             {
-                                if((ObjectManager.Player.Distance(targetDis) < Orbwalking.GetAttackRange(ObjectManager.Player) + 175))
+                                if((ObjectManager.Player.Distance(targetDis) <= Orbwalking.GetAttackRange(ObjectManager.Player) + 150))
                                 {
                                     args.Process = false;
 
@@ -204,46 +215,30 @@ using LeagueSharp.Common;
 
         public static void YellowIntoQ(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            var wMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).SData.Mana;
-            var qMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana;
-
-            if (ObjectManager.Player.IsDead || (ObjectManager.Player.ManaPercent - qMana < wMana))
+            if (!Config.PredictQ || ObjectManager.Player.IsDead
+                || (Mainframe.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
+                && Mainframe.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed))
             {
                 return;
             }
 
-            if(sender.IsMe)
+            if (sender.IsMe)
             {
-                if(args.SData.Name.ToLower() == "goldcardpreattack")
+                if (args.SData.Name.ToLower() == "goldcardpreattack")
                 {
-                    if(Spells._q.IsReadyPerfectly())
+                    if (Spells._q.IsReadyPerfectly())
                     {
-                        if(ObjectManager.Player.ManaPercent >= Config.AutoqMana)
+                        if (ObjectManager.Player.ManaPercent >= Config.AutoqMana)
                         {
-                            var canWKill = HeroManager.Enemies.FirstOrDefault(
-                                   h => !h.IsDead&& h.IsValidTarget(Spells._q.Range)
-                                   && h.Health < ObjectManager.Player.GetSpellDamage(h, SpellSlot.W));
-
-                            if (canWKill == null)
+                            foreach (var enemy in HeroManager.Enemies)
                             {
-                                var targetDis = TargetSelector.GetTarget(Spells._q.Range, Spells._q.DamageType);
-
-                                if(targetDis != null)
+                                if (!enemy.IsDead && enemy != null)
                                 {
-                                    if(targetDis.IsValidTarget(Spells._q.Range / 2))
+                                    if (!enemy.IsKillableAndValidTarget(Spells._w.GetDamage(enemy), Spells._w.DamageType, Spells._q.Range))
                                     {
-                                        if(Mainframe.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
-                                            || Mainframe.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                                        if (enemy.IsValidTarget(Spells._q.Range / 2))
                                         {
-                                            if (targetDis.IsValidTarget(Spells._q.Range))
-                                            {
-                                                var qPred = Spells._q.GetPrediction(targetDis);
-
-                                                if (qPred.Hitchance >= HitChance.VeryHigh)
-                                                {
-                                                    Spells._q.Cast(qPred.CastPosition);
-                                                }
-                                            }
+                                            Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
                                         }
                                     }
                                 }
@@ -256,10 +251,9 @@ using LeagueSharp.Common;
 
         public static void RedIntoQ(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            var wMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).SData.Mana;
-            var qMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana;
-
-            if (ObjectManager.Player.IsDead || (ObjectManager.Player.ManaPercent - qMana < wMana))
+            if (!Config.PredictQ || ObjectManager.Player.IsDead
+                || (Mainframe.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
+                && Mainframe.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed))
             {
                 return;
             }
@@ -272,30 +266,15 @@ using LeagueSharp.Common;
                     {
                         if (ObjectManager.Player.ManaPercent >= Config.AutoqMana)
                         {
-                            var canWKill = HeroManager.Enemies.FirstOrDefault(
-                                   h => !h.IsDead && h.IsValidTarget(Spells._q.Range)
-                                   && h.Health < ObjectManager.Player.GetSpellDamage(h, SpellSlot.W));
-
-                            if (canWKill == null)
+                            foreach (var enemy in HeroManager.Enemies)
                             {
-                                var targetDis = TargetSelector.GetTarget(Spells._q.Range, Spells._q.DamageType);
-
-                                if (targetDis != null)
+                                if (!enemy.IsDead && enemy != null)
                                 {
-                                    if (targetDis.IsValidTarget(Spells._q.Range / 2))
+                                    if(!enemy.IsKillableAndValidTarget(Spells._w.GetDamage(enemy), Spells._w.DamageType, Spells._q.Range))
                                     {
-                                        if (Mainframe.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
-                                            || Mainframe.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+                                        if (enemy.IsValidTarget(Spells._q.Range / 2))
                                         {
-                                            if (targetDis.IsValidTarget(Spells._q.Range))
-                                            {
-                                                var qPred = Spells._q.GetPrediction(targetDis);
-
-                                                if (qPred.Hitchance >= HitChance.VeryHigh)
-                                                {
-                                                    Spells._q.Cast(qPred.CastPosition);
-                                                }
-                                            }
+                                            Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
                                         }
                                     }
                                 }
@@ -304,6 +283,59 @@ using LeagueSharp.Common;
                     }
                 }
             }
+        }
+
+        public static float GetComboDamage(Obj_AI_Base enemy)
+        {
+            float damage = 0;
+
+            if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
+            {
+                damage += (float)ObjectManager.Player.GetAutoAttackDamage(enemy, true);
+            }
+
+            if (Spells._q.IsReadyPerfectly())
+            {
+                damage += Spells._q.GetDamage(enemy);
+            }
+
+            if (Spells._w.IsReadyPerfectly())
+            {
+                damage += Spells._w.GetDamage(enemy, 3);
+            }
+
+            if (ObjectManager.Player.HasBuff("cardmasterstackparticle"))
+            {
+                damage += Spells._e.GetDamage(enemy, 1);
+            }
+
+            /*
+             * Luden
+             * */
+            if (Items.HasItem(ItemData.Ludens_Echo.Id))
+                damage += (float)ObjectManager.Player.CalcDamage(enemy, Damage.DamageType.Magical, 100 + ObjectManager.Player.FlatMagicDamageMod * 0.1);
+            /*
+            * Sheen
+            * */
+            if (Items.HasItem(ItemData.Sheen.Id))
+                damage += (float)ObjectManager.Player.CalcDamage(enemy, Damage.DamageType.Physical, 0.5 * ObjectManager.Player.BaseAttackDamage);
+            /*
+            * Lich
+            * */
+            if (Items.HasItem(ItemData.Lich_Bane.Id))
+                damage += (float)ObjectManager.Player.CalcDamage(enemy, Damage.DamageType.Magical, 0.5 * ObjectManager.Player.FlatMagicDamageMod + 0.75 * ObjectManager.Player.BaseAttackDamage);
+            /*
+            * IB Gauntlet
+            * */
+            if (Items.HasItem(ItemData.Iceborn_Gauntlet.Id))
+                damage += (float)ObjectManager.Player.CalcDamage(enemy, Damage.DamageType.Magical, 1.25 * ObjectManager.Player.BaseAttackDamage);
+            /*
+            * Trinity Force
+            * */
+            if (Items.HasItem(ItemData.Trinity_Force.Id))
+                damage += (float)ObjectManager.Player.CalcDamage(enemy, Damage.DamageType.Magical, 2 * ObjectManager.Player.BaseAttackDamage);
+
+            return (float)damage;
         }
 
         #endregion

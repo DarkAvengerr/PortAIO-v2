@@ -30,6 +30,13 @@ using LeagueSharp.Common;
             AutoKillsteal();
         }
 
+        private static void checkbuff()
+        {
+            var temp = ObjectManager.Player.Buffs.Aggregate("", (current, buff) => current + ("( " + buff.Name + " , " + buff.Count + " )"));
+            if (temp != null)
+                Chat.Print(temp);
+        }
+
         private static int CountHits(Vector2 position, List<Vector2> points, List<int> hitBoxes)
         {
             var result = 0;
@@ -132,7 +139,7 @@ using LeagueSharp.Common;
 
             foreach (var enemy in HeroManager.Enemies)
             {
-                if(!enemy.IsDead)
+                if(!enemy.IsDead && enemy != null)
                 {
                     if(enemy.IsValidTarget(Spells._q.Range * 2))
                     {
@@ -142,10 +149,7 @@ using LeagueSharp.Common;
                         {
                             if(ObjectManager.Player.ManaPercent >= Config.AutoqMana)
                             {
-                                if(pred.Hitchance == HitChance.Immobile)
-                                {
-                                    CastQ(enemy, pred.UnitPosition.To2D());
-                                }
+                                Pred.CastSebbyPredict(Spells._q, enemy, HitChance.Immobile);
                             }
                         }else if(Config.IsDashing)
                         {
@@ -166,23 +170,13 @@ using LeagueSharp.Common;
                     {
                         if(Config.IsSlowed)
                         {
-                            if(enemy.MoveSpeed <= 275)
+                            if(enemy.MoveSpeed <= 270)
                             {
-                                var qPred = Spells._q.GetPrediction(enemy);
-
-                                if (qPred.Hitchance >= Spells._q.MinHitChance)
-                                {
-                                    Spells._q.Cast(qPred.CastPosition);
-                                }
+                                Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
                             }
                         }else if(enemy.IsCharmed)
                         {
-                            var qPred = Spells._q.GetPrediction(enemy);
-
-                            if (qPred.Hitchance >= Spells._q.MinHitChance)
-                            {
-                                Spells._q.Cast(qPred.CastPosition);
-                            }
+                            Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
                         }
                     }
                 }
@@ -191,47 +185,24 @@ using LeagueSharp.Common;
 
         private static void AutoKillsteal()
         {
-            if (!Spells._q.IsReadyPerfectly() || ObjectManager.Player.IsDead)
+            if (!Spells._q.IsReadyPerfectly() || ObjectManager.Player.IsDead || !Config.CanqKS)
             {
                 return;
             }
-            
-            if(Config.CanqKS)
+
+            var qMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana;
+
+            foreach (var enemy in HeroManager.Enemies)
             {
-                var qMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana;
-
-                if (ObjectManager.Player.ManaPercent >= Config.AutoqMana)
+                if (!enemy.IsDead && enemy != null)
                 {
-                    if(ObjectManager.Player.Mana >= qMana)
+                    if (enemy.IsKillableAndValidTarget(Spells._q.GetDamage(enemy), Spells._q.DamageType, Spells._q.Range))
                     {
-                        var entKs = HeroManager.Enemies.FirstOrDefault(
-                                h => !h.IsDead && h.IsValidTarget(1000)
-                                && h.Health < ObjectManager.Player.GetSpellDamage(h, SpellSlot.Q));
-
-                        if(entKs != null)
+                        if (ObjectManager.Player.Distance(enemy) >= Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)
+                            || !Spells._w.IsReadyPerfectly() || CardSelector.Status != SelectStatus.Selecting
+                            || CardSelector.Status != SelectStatus.Selected)
                         {
-                            var canWKill = HeroManager.Enemies.FirstOrDefault(
-                                    h => !h.IsDead && h.IsValidTarget()
-                                    && (ObjectManager.Player.Distance(h) < Orbwalking.GetAttackRange(ObjectManager.Player) + 250)
-                                    && h.Health < ObjectManager.Player.GetSpellDamage(h, SpellSlot.W));
-
-                            if (canWKill == null)
-                            {
-                                if(!Spells._w.IsReadyPerfectly())
-                                {
-                                    var wMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).SData.Mana;
-
-                                    if (ObjectManager.Player.Mana < wMana)
-                                    {
-                                        var qPred = Spells._q.GetPrediction(entKs);
-
-                                        if (qPred.Hitchance >= HitChance.High)
-                                        {
-                                            Spells._q.Cast(qPred.CastPosition);
-                                        }
-                                    }
-                                }
-                            }
+                            Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
                         }
                     }
                 }

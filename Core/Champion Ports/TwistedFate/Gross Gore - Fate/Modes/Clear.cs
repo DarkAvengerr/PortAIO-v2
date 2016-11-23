@@ -21,7 +21,7 @@ using LeagueSharp.Common;
 
             var qMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana;
 
-            if ((ObjectManager.Player.ManaPercent - wMana) < wMana)
+            if (ObjectManager.Player.ManaPercent < 15)
             {
                 return;
             }

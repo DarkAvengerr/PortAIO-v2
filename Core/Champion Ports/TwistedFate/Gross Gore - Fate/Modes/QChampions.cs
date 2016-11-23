@@ -40,15 +40,14 @@ using LeagueSharp.Common;
 
             if (Utils.TickCount - CastQTick < 500)
             {
-                var qTarget = TargetSelector.GetTarget(Spells._q.Range, Spells._q.DamageType);
-
-                if (qTarget.IsValidTarget(Spells._q.Range))
+                foreach (var enemy in HeroManager.Enemies)
                 {
-                    var qPred = Spells._q.GetPrediction(qTarget);
-
-                    if (qPred.Hitchance >= Spells._q.MinHitChance)
+                    if (!enemy.IsDead && enemy != null)
                     {
-                        Spells._q.Cast(qPred.CastPosition);
+                        if(enemy.IsValidTarget(Spells._q.Range))
+                        {
+                            Pred.CastSebbyPredict(Spells._q, enemy, HitChance.VeryHigh);
+                        }
                     }
                 }
             }

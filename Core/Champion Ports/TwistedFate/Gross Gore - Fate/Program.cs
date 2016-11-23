@@ -1,12 +1,12 @@
 #region Use
 using System;
 using LeagueSharp;
-using LeagueSharp.Common;
+using LeagueSharp.Common; 
 #endregion
 
-using EloBuddy;
-using LeagueSharp.Common;
-namespace GrossGoreTwistedFate
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace GrossGoreTwistedFate
 {
     class Program
     {
@@ -24,7 +24,7 @@ namespace GrossGoreTwistedFate
                 return;
             }
 
-            Spells.LoadSpells(); Config.BuildConfig(); Mainframe.Init();
+            Spells.LoadSpells(); Config.BuildConfig(); Drawings.Draw();  Mainframe.Init();
         }
 
         #endregion
