@@ -1,5 +1,23 @@
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:44 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.Extensions
 {
     #region Using Directives
@@ -50,13 +68,26 @@ using EloBuddy;
         public static bool IsAirbone(this Obj_AI_Base unit)
             => unit.HasBuffOfType(BuffType.Knockup) || unit.HasBuffOfType(BuffType.Knockback);
 
-        /// <exception cref="Exception">A delegate callback throws an exception. </exception>
+        /// <summary>
+        ///     Raises the event.
+        /// </summary>
+        /// <param name="event">The event.</param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        /// <exception cref="Exception">A delegate callback throws an exception.</exception>
         public static void RaiseEvent(this EventHandler @event, object sender, EventArgs e)
         {
             @event?.Invoke(sender, e);
         }
 
-        /// <exception cref="Exception">A delegate callback throws an exception. </exception>
+        /// <summary>
+        ///     Raises the event.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="event">The event.</param>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The e.</param>
+        /// <exception cref="Exception">A delegate callback throws an exception.</exception>
         public static void RaiseEvent<T>(this EventHandler<T> @event, object sender, T e) where T : EventArgs
         {
             @event?.Invoke(sender, e);
@@ -71,16 +102,13 @@ using EloBuddy;
         {
             float result = 0;
 
-            foreach (
-                var buff in unit.Buffs.Where(buff => buff.Type == BuffType.Knockback || buff.Type == BuffType.Knockup))
-            {
-                result = buff.EndTime - Game.Time;
-            }
+            foreach (var buff in
+                unit.Buffs.Where(buff => (buff.Type == BuffType.Knockback) || (buff.Type == BuffType.Knockup))) result = buff.EndTime - Game.Time;
             return result * 1000;
         }
 
         /// <summary>
-        /// To the color of the sharp dx.
+        ///     To the color of the sharp dx.
         /// </summary>
         /// <param name="color">The color.</param>
         /// <returns></returns>

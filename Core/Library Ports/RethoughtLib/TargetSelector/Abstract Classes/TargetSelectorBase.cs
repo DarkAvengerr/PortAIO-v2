@@ -1,5 +1,23 @@
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:44 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.TargetSelector.Abstract_Classes
 {
     #region Using Directives
@@ -7,10 +25,10 @@ using EloBuddy;
     using System;
     using System.Collections.Generic;
 
-    using global::RethoughtLib.TargetSelector.Interfaces;
-
     using LeagueSharp;
     using LeagueSharp.Common;
+
+    using RethoughtLib.TargetSelector.Interfaces;
 
     #endregion
 
@@ -30,6 +48,8 @@ using EloBuddy;
 
         #region Constructors and Destructors
 
+        #region Constructors
+
         protected TargetSelectorBase(Menu menu)
         {
             this.RootMenu = menu;
@@ -40,6 +60,8 @@ using EloBuddy;
 
             this.Initialize();
         }
+
+        #endregion
 
         #endregion
 
@@ -63,7 +85,7 @@ using EloBuddy;
 
         public void AddMode(ITargetSelectionMode mode)
         {
-            this.OnModeAddedInvoker(new TargetSelectorEventArgs() { AddedMode = mode });
+            this.OnModeAddedInvoker(new TargetSelectorEventArgs { AddedMode = mode });
         }
 
         // TODO
@@ -74,18 +96,15 @@ using EloBuddy;
 
         public void RemoveMode(ITargetSelectionMode mode)
         {
-            this.OnModeRemovedInvoker(new TargetSelectorEventArgs() { RemovedMode = mode });
+            this.OnModeRemovedInvoker(new TargetSelectorEventArgs { RemovedMode = mode });
         }
 
         public void SetMode(ITargetSelectionMode mode)
         {
-            if (mode.Equals(this.activeSelectionMode))
-            {
-                return;
-            }
+            if (mode.Equals(this.activeSelectionMode)) return;
 
             this.OnModeChangedInvoker(
-                new ValueChangedEventArgs() { NewValue = mode, OldValue = this.activeSelectionMode });
+                new ValueChangedEventArgs { NewValue = mode, OldValue = this.activeSelectionMode });
         }
 
         #endregion
@@ -101,10 +120,7 @@ using EloBuddy;
 
         protected void OnModeAdded(object sender, TargetSelectorEventArgs targetSelectorEventArgs)
         {
-            if (this.Modes.Contains(targetSelectorEventArgs.AddedMode))
-            {
-                return;
-            }
+            if (this.Modes.Contains(targetSelectorEventArgs.AddedMode)) return;
 
             this.Modes.Add(targetSelectorEventArgs.AddedMode);
         }
@@ -114,6 +130,11 @@ using EloBuddy;
             this.ModeAdded?.Invoke(this, eventArgs);
         }
 
+        protected void OnModeChanged(object sender, ValueChangedEventArgs valueChangedEventArgs)
+        {
+            if (this.Modes.Contains(valueChangedEventArgs.NewValue)) this.activeSelectionMode = valueChangedEventArgs.NewValue;
+        }
+
         protected void OnModeChangedInvoker(ValueChangedEventArgs eventArgs)
         {
             this.ModeChanged?.Invoke(this, eventArgs);
@@ -121,23 +142,12 @@ using EloBuddy;
 
         protected void OnModeRemoved(object sender, TargetSelectorEventArgs targetSelectorEventArgs)
         {
-            if (this.Modes.Contains(targetSelectorEventArgs.RemovedMode))
-            {
-                this.Modes.Remove(targetSelectorEventArgs.RemovedMode);
-            }
+            if (this.Modes.Contains(targetSelectorEventArgs.RemovedMode)) this.Modes.Remove(targetSelectorEventArgs.RemovedMode);
         }
 
         protected void OnModeRemovedInvoker(TargetSelectorEventArgs eventArgs)
         {
             this.ModeRemoved?.Invoke(this, eventArgs);
-        }
-
-        protected void OnModeChanged(object sender, ValueChangedEventArgs valueChangedEventArgs)
-        {
-            if (this.Modes.Contains(valueChangedEventArgs.NewValue))
-            {
-                this.activeSelectionMode = valueChangedEventArgs.NewValue;
-            }
         }
 
         #endregion

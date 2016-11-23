@@ -1,9 +1,28 @@
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:43 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.Algorithm.Pathfinding.AStar
 {
     #region Using Directives
 
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -19,7 +38,7 @@ using EloBuddy;
     {
         #region Fields
 
-        private readonly List<IHeuristic> heuristics = new List<IHeuristic>()
+        private readonly List<IHeuristic> heuristics = new List<IHeuristic>
                                                            {
                                                                new HeuristicEuclidean(),
                                                                new HeuristicManhattan(),
@@ -74,7 +93,7 @@ using EloBuddy;
         }
 
         /// <summary>
-        /// Gets the path. Returns null if no path found.
+        ///     Gets the path. Returns null if no path found.
         /// </summary>
         /// <param name="edges">The edges.</param>
         /// <param name="start">The start.</param>
@@ -101,6 +120,8 @@ using EloBuddy;
                                      TieBreaker = allowTieBreaking
                                  };
 
+            if (Math.Abs(predefinedHeuristicEstimate) > 0) this.algorithm.HeuristicEstimate = predefinedHeuristicEstimate;
+
             return this.algorithm.GetPath(start, end);
         }
 
@@ -111,6 +132,8 @@ using EloBuddy;
         /// <summary>
         ///     Called when [disable].
         /// </summary>
+        /// <param name="sender">the sender of the input</param>
+        /// <param name="eventArgs">the contextual information</param>
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnDisable(sender, eventArgs);
@@ -119,6 +142,8 @@ using EloBuddy;
         /// <summary>
         ///     Called when [enable]
         /// </summary>
+        /// <param name="sender">the sender of the input</param>
+        /// <param name="eventArgs">the contextual information</param>
         protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnEnable(sender, eventArgs);
@@ -127,9 +152,11 @@ using EloBuddy;
         /// <summary>
         ///     Called when [load].
         /// </summary>
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        /// <param name="sender">the sender of the input</param>
+        /// <param name="eventArgs">the contextual information</param>
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnLoad(sender, featureBaseEventArgs);
+            base.OnLoad(sender, eventArgs);
 
             var stringArray = new string[] { };
 
@@ -142,12 +169,12 @@ using EloBuddy;
             }
 
             this.Menu.AddItem(
-                new MenuItem("HeuristicFormula", "Heuristic Formula: ").SetValue(new StringList(stringArray)))
+                    new MenuItem("HeuristicFormula", "Heuristic Formula: ").SetValue(new StringList(stringArray)))
                 .ValueChanged += (o, args) =>
-                    {
-                        var heuristic = args.GetNewValue<StringList>().SelectedValue;
-                        this.heuristicFormula = this.heuristics.FirstOrDefault(x => nameof(x) == heuristic);
-                    };
+                {
+                    var heuristic = args.GetNewValue<StringList>().SelectedValue;
+                    this.heuristicFormula = this.heuristics.FirstOrDefault(x => nameof(x) == heuristic);
+                };
             var heuristic2 = this.Menu.Item("HeuristicFormula").GetValue<StringList>().SelectedValue;
             this.heuristicFormula = this.heuristics.FirstOrDefault(x => nameof(x) == heuristic2);
 

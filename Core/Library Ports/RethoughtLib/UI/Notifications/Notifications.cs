@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.UI.Notifications
 {
     #region Using Directives
@@ -8,9 +8,9 @@ using EloBuddy;
     using System.Collections.Generic;
     using System.Linq;
 
-    using global::RethoughtLib.PriorityQuequeV2;
-    using global::RethoughtLib.UI.Core.Displayer;
-    using global::RethoughtLib.UI.DefaultImplementations.Displayer;
+    using PriorityQuequeV2;
+    using Core.Displayer;
+    using DefaultImplementations.Displayer;
 
     #endregion
 

@@ -1,15 +1,33 @@
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:43 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.ChatLogger.Implementations
 {
     #region Using Directives
 
     using System;
 
-    using global::RethoughtLib.ChatLogger.Abstract_Classes;
-    using global::RethoughtLib.ChatLogger.Interfaces;
-
     using LeagueSharp;
+
+    using RethoughtLib.ChatLogger.Abstract_Classes;
+    using RethoughtLib.ChatLogger.Interfaces;
 
     #endregion
 
@@ -27,10 +45,7 @@ using EloBuddy;
         /// <exception cref="System.InvalidOperationException">Can't add multiple similar instances of IChatLogger</exception>
         public override void Add(IChatLogger logger)
         {
-            if (this.ChatLoggers.Contains(logger))
-            {
-                throw new InvalidOperationException("Can't add multiple similar instances of IChatLogger");
-            }
+            if (this.ChatLoggers.Contains(logger)) throw new InvalidOperationException("Can't add multiple similar instances of IChatLogger");
 
             this.ChatLoggers.Add(logger);
         }
@@ -42,10 +57,7 @@ using EloBuddy;
         /// <exception cref="System.InvalidOperationException">Can't remove an IChatLogger that is not added.</exception>
         public override void Remove(IChatLogger logger)
         {
-            if (!this.ChatLoggers.Contains(logger))
-            {
-                throw new InvalidOperationException("Can't remove an IChatLogger that is not added.");
-            }
+            if (!this.ChatLoggers.Contains(logger)) throw new InvalidOperationException("Can't remove an IChatLogger that is not added.");
 
             this.ChatLoggers.Remove(logger);
         }
@@ -76,18 +88,13 @@ using EloBuddy;
         protected override void UpdateLogged(IChatLogger logger)
         {
             foreach (var messageToAdd in logger.Logged)
-            {
                 foreach (var existingMessage in this.LoggedMessages)
                 {
-                    if (messageToAdd.Equals(existingMessage))
-                    {
-                        continue;
-                    }
+                    if (messageToAdd.Equals(existingMessage)) continue;
 
                     this.OnMessageLogged();
                     this.LoggedMessages.Add(messageToAdd);
                 }
-            }
         }
 
         #endregion

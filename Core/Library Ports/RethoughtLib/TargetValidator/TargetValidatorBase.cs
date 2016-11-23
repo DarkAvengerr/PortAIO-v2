@@ -1,5 +1,23 @@
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:44 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.TargetValidator
 {
     #region Using Directives
@@ -7,9 +25,9 @@ using EloBuddy;
     using System;
     using System.Collections.Generic;
 
-    using global::RethoughtLib.TargetValidator.Interfaces;
-
     using LeagueSharp;
+
+    using RethoughtLib.TargetValidator.Interfaces;
 
     #endregion
 
@@ -51,10 +69,7 @@ using EloBuddy;
         /// <param name="checks">The checks.</param>
         public virtual void AddChecks(IEnumerable<ICheckable> checks)
         {
-            foreach (var check in checks)
-            {
-                this.AddCheck(check);
-            }
+            foreach (var check in checks) this.AddCheck(check);
         }
 
         /// <summary>
@@ -86,10 +101,7 @@ using EloBuddy;
         /// </summary>
         public virtual void RemoveChecks()
         {
-            foreach (var check in this.ChecksList)
-            {
-                this.RemoveCheck(check);
-            }
+            foreach (var check in this.ChecksList) this.RemoveCheck(check);
         }
 
         /// <summary>
@@ -104,10 +116,7 @@ using EloBuddy;
                 return;
             }
 
-            foreach (var check in checks)
-            {
-                this.RemoveCheck(check);
-            }
+            foreach (var check in checks) this.RemoveCheck(check);
         }
 
         /// <summary>
@@ -146,10 +155,7 @@ using EloBuddy;
 
             foreach (var check in this.ChecksList)
             {
-                if (this.Valid == false)
-                {
-                    break;
-                }
+                if (this.Valid == false) break;
 
                 this.Valid = check.Check(this.Target);
 

@@ -1,17 +1,13 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.UI
 {
     #region Using Directives
 
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using global::RethoughtLib.UI.Core;
-    using global::RethoughtLib.UI.Core.Designs;
-    using global::RethoughtLib.UI.DefaultImplementations.Displayer;
-    using global::RethoughtLib.UI.Notifications;
-    using global::RethoughtLib.UI.Notifications.Designs;
+    using Core;
+    using DefaultImplementations.Displayer;
+    using Notifications;
+    using Notifications.Designs;
 
     #endregion
 

@@ -1,6 +1,24 @@
-using EloBuddy;
-using LeagueSharp.Common;
-namespace RethoughtLib.Bootstraps.Abstract_Classes
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:43 PM
+
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace RethoughtLib.Bootstraps.Abstract_Classes
 {
     #region Using Directives
 
@@ -8,9 +26,9 @@ namespace RethoughtLib.Bootstraps.Abstract_Classes
     using System.Collections.Generic;
     using System.Linq;
 
-    using global::RethoughtLib.Bootstraps.Interfaces;
-
     using LeagueSharp.Common;
+
+    using RethoughtLib.Bootstraps.Interfaces;
 
     #endregion
 
@@ -23,8 +41,6 @@ namespace RethoughtLib.Bootstraps.Abstract_Classes
         /// </summary>
         public List<LoadableBase> Modules = new List<LoadableBase>();
 
-        protected List<LoadableBase> LoadedModules = new List<LoadableBase>();
-
         /// <summary>
         ///     Gets or sets the string that gets checked for check for.
         /// </summary>
@@ -32,6 +48,8 @@ namespace RethoughtLib.Bootstraps.Abstract_Classes
         ///     The check for.
         /// </value>
         protected internal List<string> Strings = new List<string>();
+
+        protected List<LoadableBase> LoadedModules = new List<LoadableBase>();
 
         #endregion
 
@@ -44,10 +62,7 @@ namespace RethoughtLib.Bootstraps.Abstract_Classes
         /// <exception cref="ArgumentException">There can't be multiple similar modules in the PlaySharpBootstrap.</exception>
         public virtual void AddModule(LoadableBase module)
         {
-            if (this.Modules.Contains(module))
-            {
-                throw new ArgumentException("There can't be multiple similar modules in the PlaySharpBootstrap.");
-            }
+            if (this.Modules.Contains(module)) throw new ArgumentException("There can't be multiple similar modules in the PlaySharpBootstrap.");
 
             this.Modules.Add(module);
         }
@@ -64,10 +79,7 @@ namespace RethoughtLib.Bootstraps.Abstract_Classes
             if ((from moduleToAdd in loadables
                  from existingModule in this.Modules
                  where moduleToAdd.Equals(existingModule)
-                 select moduleToAdd).Any())
-            {
-                throw new ArgumentException("There can't be multiple similar modules in the PlaySharpBootstrap.");
-            }
+                 select moduleToAdd).Any()) throw new ArgumentException("There can't be multiple similar modules in the PlaySharpBootstrap.");
 
             this.Modules.AddRange(loadables);
         }
@@ -78,10 +90,7 @@ namespace RethoughtLib.Bootstraps.Abstract_Classes
         /// <param name="value">The value.</param>
         public virtual void AddString(string value)
         {
-            if (string.IsNullOrEmpty(value) || this.Strings == null || this.Strings.Contains(value))
-            {
-                return;
-            }
+            if (string.IsNullOrEmpty(value) || (this.Strings == null) || this.Strings.Contains(value)) return;
 
             this.Strings.Add(value);
         }
@@ -107,10 +116,7 @@ namespace RethoughtLib.Bootstraps.Abstract_Classes
         /// <param name="module">The module.</param>
         public virtual void RemoveModule(LoadableBase module)
         {
-            if (!this.Modules.Contains(module))
-            {
-                return;
-            }
+            if (!this.Modules.Contains(module)) return;
 
             this.Modules.Remove(module);
         }
@@ -121,10 +127,7 @@ namespace RethoughtLib.Bootstraps.Abstract_Classes
         /// <param name="value">The value.</param>
         public virtual void RemoveString(string value)
         {
-            if (!this.Strings.Contains(value))
-            {
-                return;
-            }
+            if (!this.Strings.Contains(value)) return;
 
             this.Strings.Remove(value);
         }
@@ -137,16 +140,7 @@ namespace RethoughtLib.Bootstraps.Abstract_Classes
         {
             var strings = values as IList<string> ?? values.ToList();
 
-            foreach (var @string in this.Strings)
-            {
-                foreach (var value in strings)
-                {
-                    if (@string.Equals(value))
-                    {
-                        this.Strings.Remove(value);
-                    }
-                }
-            }
+            foreach (var @string in this.Strings) foreach (var value in strings) if (@string.Equals(value)) this.Strings.Remove(value);
         }
 
         /// <summary>
@@ -154,52 +148,45 @@ namespace RethoughtLib.Bootstraps.Abstract_Classes
         /// </summary>
         public virtual void Run()
         {
-            if (!this.Modules.Any())
-            {
-                throw new InvalidOperationException("There are no modules in the Bootstrap to load.");
-            }
-
-            if (!this.Strings.Any())
-            {
-                throw new InvalidOperationException(
-                    "There are no strings in the Bootstrap to make a check with modules.");
-            }
-
-            var unknownModulesCount = 0;
-
-            foreach (var module in this.Modules)
-            {
-                if (string.IsNullOrWhiteSpace(module.DisplayName) || !module.Tags.Any())
+            CustomEvents.Game.OnGameLoad += delegate(EventArgs args)
                 {
-                    unknownModulesCount++;
-                    continue;
-                }
+                    if (!this.Modules.Any()) throw new InvalidOperationException("There are no modules in the Bootstrap to load.");
 
-                foreach (var @string in this.Strings)
-                {
-                    Console.WriteLine(@string);
-                    foreach (var tag in module.Tags)
+                    if (!this.Strings.Any())
+                        throw new InvalidOperationException(
+                                  "There are no strings in the Bootstrap to make a check with modules.");
+
+                    var unknownModulesCount = 0;
+
+                    foreach (var module in this.Modules)
                     {
-                        Console.WriteLine(tag);
-                        if (!tag.Equals(@string))
+                        if (string.IsNullOrWhiteSpace(module.DisplayName) || !module.Tags.Any())
                         {
+                            unknownModulesCount++;
                             continue;
                         }
 
-                        module.Load();
-                        this.LoadedModules.Add(module);
+                        foreach (var @string in this.Strings)
+                        {
+                            Console.WriteLine(@string);
+                            foreach (var tag in module.Tags)
+                            {
+                                Console.WriteLine(tag);
+                                if (!tag.Equals(@string)) continue;
+
+                                module.Load();
+                                this.LoadedModules.Add(module);
+                            }
+                        }
                     }
-                }
-            }
 
-            Console.WriteLine(
-                $"[{this}] {unknownModulesCount} unknown Modules, {this.LoadedModules.Count} loaded Modules");
+                    Console.WriteLine(
+                        $"[{this}] {unknownModulesCount} unknown Modules, {this.LoadedModules.Count} loaded Modules");
 
-            if (unknownModulesCount > 0)
-            {
-                Console.WriteLine(
-                    $"[{this}] Please consider tagging and naming your unknown modules. The name must not be null or whitespace.");
-            }
+                    if (unknownModulesCount > 0)
+                        Console.WriteLine(
+                            $"[{this}] Please consider tagging and naming your unknown modules. The name must not be null or whitespace.");
+                };
         }
 
         #endregion

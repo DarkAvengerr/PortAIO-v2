@@ -1,5 +1,23 @@
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:44 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.LogicProvider.Modules
 {
     #region Using Directives
@@ -49,10 +67,7 @@ using EloBuddy;
                 {
                     var newPoint = start.Extend(end, i - stepOffset * step);
 
-                    if (NavMesh.GetCollisionFlags(newPoint) == CollisionFlags.Wall || newPoint.IsWall())
-                    {
-                        return newPoint;
-                    }
+                    if ((NavMesh.GetCollisionFlags(newPoint) == CollisionFlags.Wall) || newPoint.IsWall()) return newPoint;
                 }
             }
 
@@ -70,23 +85,12 @@ using EloBuddy;
         {
             var thickness = 0f;
 
-            if (!start.IsValid() || !direction.IsValid())
-            {
-                return thickness;
-            }
+            if (!start.IsValid() || !direction.IsValid()) return thickness;
 
             for (var i = 0; i < this.Menu.Item("MaxWallWidth").GetValue<Slider>().Value; i = i + step)
-            {
-                if (NavMesh.GetCollisionFlags(start.Extend(direction, i)) == CollisionFlags.Wall
-                    || start.Extend(direction, i).IsWall())
-                {
-                    thickness += step;
-                }
-                else
-                {
-                    return thickness;
-                }
-            }
+                if ((NavMesh.GetCollisionFlags(start.Extend(direction, i)) == CollisionFlags.Wall)
+                    || start.Extend(direction, i).IsWall()) thickness += step;
+                else return thickness;
 
             return thickness;
         }
@@ -113,25 +117,18 @@ using EloBuddy;
             var dashEndPos = start.Extend(direction, dashRange);
             var firstWallPoint = this.GetFirstWallPoint(start, dashEndPos);
 
-            if (firstWallPoint.Equals(Vector3.Zero))
-            {
-                // No Wall
-                return false;
-            }
+            if (firstWallPoint.Equals(Vector3.Zero)) return false;
 
             if (dashEndPos.IsWall())
                 // End Position is in Wall
             {
                 var wallWidth = this.GetWallWidth(firstWallPoint, dashEndPos);
 
-                if (wallWidth > this.Menu.Item("MinWallWidth").GetValue<Slider>().Value
-                    && wallWidth - firstWallPoint.Distance(dashEndPos) < wallWidth * 0.6f)
-                {
-                    return true;
-                }
+                if ((wallWidth > this.Menu.Item("MinWallWidth").GetValue<Slider>().Value)
+                    && (wallWidth - firstWallPoint.Distance(dashEndPos) < wallWidth * 0.6f)) return true;
             }
             else
-            // End Position is not a Wall
+                // End Position is not a Wall
             {
                 return true;
             }
@@ -149,10 +146,7 @@ using EloBuddy;
         /// <returns></returns>
         public Vector3 PositionAfterDash(Vector3 start, Vector3 end, int step = 1, int stepOffset = 0)
         {
-            if (this.IsWallDash(start, end, start.Distance(end)))
-            {
-                return end;
-            }
+            if (this.IsWallDash(start, end, start.Distance(end))) return end;
 
             return this.GetFirstWallPoint(start, end, step, stepOffset);
         }
@@ -164,7 +158,9 @@ using EloBuddy;
         /// <summary>
         ///     Called when [load].
         /// </summary>
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        /// <param name="sender">the sender of the input</param>
+        /// <param name="eventArgs">the contextual information</param>
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             this.Menu.AddItem(
                 new MenuItem("MinWallWidth", "Min. Wall-width before a wall is recognized").SetValue(

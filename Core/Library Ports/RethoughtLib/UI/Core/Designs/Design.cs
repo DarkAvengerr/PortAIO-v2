@@ -1,11 +1,10 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.UI.Core.Designs
 {
     #region Using Directives
 
-    using global::RethoughtLib.Transitions;
-    using global::RethoughtLib.Transitions.Abstract_Base;
+    using Transitions.Abstract_Base;
 
     #endregion
 

@@ -1,10 +1,10 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.UI.Core
 {
     #region Using Directives
 
-    using global::RethoughtLib.UI.Core.Designs;
+    using Designs;
 
     using SharpDX;
 

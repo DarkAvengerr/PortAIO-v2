@@ -1,5 +1,23 @@
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:44 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.Utility
 {
     #region Using Directives
@@ -8,9 +26,6 @@ using EloBuddy;
     using System.Collections.Generic;
     using System.Threading;
 
-    using global::RethoughtLib.Design;
-
-    using SharpDX;
     using SharpDX.Direct3D9;
 
     #endregion
@@ -42,94 +57,6 @@ using EloBuddy;
         }
 
         /// <summary>
-        ///     Shortens the specified string.
-        ///     IE: I'm a long sentence > I'm a long sen...
-        /// </summary>
-        /// <param name="str">The string.</param>
-        /// <param name="length">The length.</param>
-        /// <returns></returns>
-        public static string Shorten(string str, int length)
-        {
-            if (str.Length < length + 2)
-            {
-                return str;
-            }
-
-            if (str.Length <= 3)
-            {
-                return "...";
-            }
-
-            var removedResult = str.Remove(length - 3, str.Length - length);
-
-            return removedResult + "...";
-        }
-
-        /// <summary>
-        ///     Formats the string into all first letters uppercase.
-        ///     Won't work if title is all uppercase.
-        /// </summary>
-        /// <param name="str">the string</param>
-        /// <returns></returns>
-        public static string ToTitleCase(string str)
-        {
-            var textInfo = Thread.CurrentThread.CurrentCulture.TextInfo;
-            return textInfo.ToTitleCase(str);
-        }
-
-        public static List<string> WrapIntoRectangle(
-            string str,
-            Sprite sprite,
-            Rectangle rectangle,
-            Offset<int> offset,
-            Font font = default(Font))
-        {
-            //var sb = new StringBuilder();
-
-            //var availableWidth = rectangle.Width - (offset.Left + offset.Right);
-            //var availableHeight = rectangle.Height - (offset.Top + offset.Bottom);
-
-            //if (font == null) return new List<string>() { str };
-
-            //var expectedRawRec = font.MeasureText(sprite, str, rectangle, FontDrawFlags.WordBreak);
-            ////font.DrawText(sprite, str, rectangle, FontDrawFlags.WordBreak, ColorBGRA.FromRgba(5));
-
-            //if (expectedRawRec.Height > rectangle.Height) return new List<string>() {str};
-
-            //int next;
-
-            //// Parse each line of text
-            //for (var pos = 0; pos < str.Length; pos = next)
-            //{
-            //    // Find end of line
-            //    var eol = str.IndexOf(Environment.NewLine, pos, StringComparison.Ordinal);
-            //    if (eol == -1) next = eol = text.Length;
-            //    else next = eol + Environment.NewLine.Length;
-
-            //    // Copy this line of text, breaking into smaller lines as needed
-            //    if (eol > pos)
-            //    {
-            //        do
-            //        {
-            //            var len = eol - pos;
-            //            if (len > width) len = BreakLine(str, pos, width);
-            //            sb.Append(str, pos, len);
-            //            sb.Append(Environment.NewLine);
-
-            //            // Trim whitespace following break
-            //            pos += len;
-            //            while (pos < eol && char.IsWhiteSpace(str[pos])) pos++;
-            //        }
-            //        while (eol > pos);
-            //    }
-            //    else sb.Append(Environment.NewLine); // Empty line
-            //}
-            //return sb.ToString();
-
-            return null;
-        }
-
-        /// <summary>
         ///     Formats the given text into lines.
         /// </summary>
         /// <param name="text">
@@ -154,7 +81,13 @@ using EloBuddy;
         ///     The formatted list.
         /// </returns>
         /// <remarks>L33T</remarks>
-        public static List<string> FormatText(string text, Font font, int width, int height, Sprite sprite, bool htmlSupport)
+        public static List<string> FormatText(
+            string text,
+            Font font,
+            int width,
+            int height,
+            Sprite sprite,
+            bool htmlSupport)
         {
             var lineAmount = font.MeasureText(sprite, text, 0).Width / width + 1;
 
@@ -192,19 +125,13 @@ using EloBuddy;
 
                     for (var j = line.Length; j > -1; --j)
                     {
-                        if (j - 1 > -1 && line.Length - lastIndex - j >= 0
-                            && font.MeasureText(sprite, line.Substring(lastIndex, line.Length - lastIndex - j), 0).Width
-                            < width)
-                        {
-                            continue;
-                        }
+                        if ((j - 1 > -1) && (line.Length - lastIndex - j >= 0)
+                            && (font.MeasureText(sprite, line.Substring(lastIndex, line.Length - lastIndex - j), 0)
+                                    .Width < width)) continue;
 
                         var original = line.Substring(lastIndex, line.Length - lastIndex - j);
 
-                        if (!string.IsNullOrEmpty(original))
-                        {
-                            linesList.Add(original);
-                        }
+                        if (!string.IsNullOrEmpty(original)) linesList.Add(original);
 
                         lastIndex = line.Length - j;
                     }
@@ -216,33 +143,52 @@ using EloBuddy;
             }
 
             if (!format)
-            {
                 for (var j = text.Length; j > -1; --j)
                 {
-                    if (j - 1 > -1 && text.Length - lastIndex - j >= 0
-                        && font.MeasureText(sprite, text.Substring(lastIndex, text.Length - lastIndex - j), 0).Width
-                        < width)
-                    {
-                        continue;
-                    }
+                    if ((j - 1 > -1) && (text.Length - lastIndex - j >= 0)
+                        && (font.MeasureText(sprite, text.Substring(lastIndex, text.Length - lastIndex - j), 0).Width
+                            < width)) continue;
 
                     var original = text.Substring(lastIndex, text.Length - lastIndex - j);
 
-                    if (!string.IsNullOrEmpty(original))
-                    {
-                        linesList.Add(original);
-                    }
+                    if (!string.IsNullOrEmpty(original)) linesList.Add(original);
 
                     lastIndex = text.Length - j;
                 }
-            }
 
-            if (lineAmount > 4)
-            {
-                height += font.Description.Height * (lineAmount - 4);
-            }
+            if (lineAmount > 4) height += font.Description.Height * (lineAmount - 4);
 
             return linesList;
+        }
+
+        /// <summary>
+        ///     Shortens the specified string.
+        ///     IE: I'm a long sentence > I'm a long sen...
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="length">The length.</param>
+        /// <returns></returns>
+        public static string Shorten(string str, int length)
+        {
+            if (str.Length < length + 2) return str;
+
+            if (str.Length <= 3) return "...";
+
+            var removedResult = str.Remove(length - 3, str.Length - length);
+
+            return removedResult + "...";
+        }
+
+        /// <summary>
+        ///     Formats the string into all first letters uppercase.
+        ///     Won't work if title is all uppercase.
+        /// </summary>
+        /// <param name="str">the string</param>
+        /// <returns></returns>
+        public static string ToTitleCase(string str)
+        {
+            var textInfo = Thread.CurrentThread.CurrentCulture.TextInfo;
+            return textInfo.ToTitleCase(str);
         }
 
         #endregion

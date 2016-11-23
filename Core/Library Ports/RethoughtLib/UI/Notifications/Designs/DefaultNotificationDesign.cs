@@ -1,5 +1,5 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.UI.Notifications.Designs
 {
     #region Using Directives
@@ -8,11 +8,10 @@ using EloBuddy;
 
     using LeagueSharp;
 
-    using global::RethoughtLib.Classes.Observer;
-    using global::RethoughtLib.Transitions;
-    using global::RethoughtLib.Transitions.Abstract_Base;
-    using global::RethoughtLib.Transitions.Implementations;
-    using global::RethoughtLib.Utility;
+    using Classes.Observer;
+    using Transitions.Abstract_Base;
+    using Transitions.Implementations;
+    using Utility;
 
     using SharpDX.Direct3D9;
 

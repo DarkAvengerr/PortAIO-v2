@@ -1,5 +1,23 @@
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:44 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.Transitions.Abstract_Base
 {
     #region Using Directives
@@ -48,6 +66,8 @@ using EloBuddy;
 
         #region Constructors and Destructors
 
+        #region Constructors
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="TransitionBase" /> class.
         /// </summary>
@@ -59,6 +79,8 @@ using EloBuddy;
             this.Duration = duration;
             this.StartTime = -9999999;
         }
+
+        #endregion
 
         #endregion
 
@@ -120,10 +142,7 @@ using EloBuddy;
         /// </returns>
         public Vector3 GetPosition()
         {
-            if (!this.Moving)
-            {
-                return this.endPosition;
-            }
+            if (!this.Moving) return this.endPosition;
 
             return this.startPosition.Extend(
                 this.endPosition,
@@ -143,7 +162,7 @@ using EloBuddy;
         /// </returns>
         public float GetValue()
         {
-            if (Math.Abs(this.startValue) < 0.1f && Math.Abs(this.finalValue) < 0.1f)
+            if ((Math.Abs(this.startValue) < 0.1f) && (Math.Abs(this.finalValue) < 0.1f))
             {
                 this.lastValue =
                     (float)
@@ -155,10 +174,7 @@ using EloBuddy;
                 return this.lastValue;
             }
 
-            if (!this.Moving && this.StartTime > 0)
-            {
-                return this.lastValue;
-            }
+            if (!this.Moving && (this.StartTime > 0)) return this.lastValue;
 
             this.lastValue =
                 (float)this.Equation(this.Time - this.StartTime, this.startValue, this.finalValue, this.Duration);
@@ -177,10 +193,7 @@ using EloBuddy;
         /// <param name="startTime"></param>
         public void Start(Vector3 from, Vector3 to, int startTime = -1)
         {
-            if (startTime == -1)
-            {
-                this.StartTime = Utils.TickCount;
-            }
+            if (startTime == -1) this.StartTime = Utils.TickCount;
             else this.StartTime = startTime;
 
             this.startPosition = from;

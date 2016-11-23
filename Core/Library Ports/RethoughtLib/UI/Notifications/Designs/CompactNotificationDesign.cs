@@ -1,11 +1,9 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.UI.Notifications.Designs
 {
     using System;
-
-    using global::RethoughtLib.Transitions;
-    using global::RethoughtLib.Transitions.Abstract_Base;
+    using Transitions.Abstract_Base;
 
     internal class CompactNotificationDesign : NotificationDesign
     {

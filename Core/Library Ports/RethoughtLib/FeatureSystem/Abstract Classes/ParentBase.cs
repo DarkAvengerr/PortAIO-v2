@@ -1,5 +1,23 @@
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:44 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.FeatureSystem.Abstract_Classes
 {
     #region Using Directives
@@ -15,7 +33,7 @@ using EloBuddy;
         #region Fields
 
         /// <summary>
-        /// The children
+        ///     The children
         /// </summary>
         public readonly Dictionary<Base, Tuple<bool, bool>> Children = new Dictionary<Base, Tuple<bool, bool>>();
 
@@ -23,13 +41,17 @@ using EloBuddy;
 
         #region Constructors and Destructors
 
+        #region Constructors
+
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParentBase"/> class.
+        ///     Initializes a new instance of the <see cref="ParentBase" /> class.
         /// </summary>
         protected ParentBase()
         {
             this.OnChildAddEvent += this.OnChildAdd;
         }
+
+        #endregion
 
         #endregion
 
@@ -55,7 +77,7 @@ using EloBuddy;
         /// <param name="child">The child.</param>
         public void Add(Base child)
         {
-            this.OnChildAddInvoker(new ParentBaseEventArgs() { Child = child });
+            this.OnChildAddInvoker(new ParentBaseEventArgs { Child = child });
         }
 
         /// <summary>
@@ -64,10 +86,7 @@ using EloBuddy;
         /// <param name="children">The children.</param>
         public void Add(IEnumerable<Base> children)
         {
-            foreach (var child in children)
-            {
-                this.Add(child);
-            }
+            foreach (var child in children) this.Add(child);
         }
 
         /// <summary>
@@ -133,10 +152,10 @@ using EloBuddy;
         ///     Called when [child add].
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="parentBaseEventArgs">The <see cref="ParentBaseEventArgs" /> instance containing the event data.</param>
-        protected virtual void OnChildAdd(object sender, ParentBaseEventArgs parentBaseEventArgs)
+        /// <param name="eventArgs">The <see cref="ParentBaseEventArgs" /> instance containing the event data.</param>
+        protected virtual void OnChildAdd(object sender, ParentBaseEventArgs eventArgs)
         {
-            var child = parentBaseEventArgs.Child;
+            var child = eventArgs.Child;
 
             this.Children.Add(child, new Tuple<bool, bool>(false, false));
         }
@@ -157,15 +176,12 @@ using EloBuddy;
         ///     > else if the sender is a child and all children are disabled then the parent will get disabled if it was enabled
         /// </summary>
         /// <param name="o">The sender.</param>
-        /// <param name="featureBaseEventArgs"></param>
-        protected virtual void OnChildDisabled(object o, FeatureBaseEventArgs featureBaseEventArgs)
+        /// <param name="eventArgs"></param>
+        protected virtual void OnChildDisabled(object o, FeatureBaseEventArgs eventArgs)
         {
-            var sender = featureBaseEventArgs.Sender;
+            var sender = eventArgs.Sender;
 
-            if (sender == null || sender == this)
-            {
-                return;
-            }
+            if ((sender == null) || (sender == this)) return;
 
             this.Children[sender] = new Tuple<bool, bool>(false, false);
 
@@ -181,15 +197,12 @@ using EloBuddy;
         ///     > else if the sender is a child enable the parent if the parent was disabled
         /// </summary>
         /// <param name="o">The o.</param>
-        /// <param name="featureBaseEventArgs"></param>
-        protected virtual void OnChildEnabled(object o, FeatureBaseEventArgs featureBaseEventArgs)
+        /// <param name="eventArgs"></param>
+        protected virtual void OnChildEnabled(object o, FeatureBaseEventArgs eventArgs)
         {
-            var sender = featureBaseEventArgs.Sender;
+            var sender = eventArgs.Sender;
 
-            if (sender == null || sender == this)
-            {
-                return;
-            }
+            if ((sender == null) || (sender == this)) return;
 
             this.Children[sender] = new Tuple<bool, bool>(true, false);
 
@@ -208,9 +221,11 @@ using EloBuddy;
         /// <summary>
         ///     Called when [disable].
         /// </summary>
-        protected override void OnDisable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        /// <param name="sender">The sender of the input</param>
+        /// <param name="eventArgs">the contextual information</param>
+        protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnDisable(sender, featureBaseEventArgs);
+            base.OnDisable(sender, eventArgs);
 
             foreach (var keyValuePair in this.Children.ToList())
             {
@@ -225,22 +240,23 @@ using EloBuddy;
         /// <summary>
         ///     Called when [enable]
         /// </summary>
-        protected override void OnEnable(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        /// <param name="sender">the sender of the input</param>
+        /// <param name="eventArgs">the contextual information</param>
+        protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnEnable(sender, featureBaseEventArgs);
+            base.OnEnable(sender, eventArgs);
 
             foreach (var keyValuePair in this.Children.ToList())
             {
-                if (!keyValuePair.Value.Item1 || !keyValuePair.Value.Item2)
-                {
-                    continue;
-                }
+                if (!keyValuePair.Value.Item1 || !keyValuePair.Value.Item2) continue;
 
                 keyValuePair.Key.Enable(this);
             }
         }
 
         #endregion
+
+        #region Nested type: ParentBaseEventArgs
 
         /// <summary>
         ///     Custom Event Args.
@@ -254,5 +270,7 @@ using EloBuddy;
 
             #endregion
         }
+
+        #endregion
     }
 }

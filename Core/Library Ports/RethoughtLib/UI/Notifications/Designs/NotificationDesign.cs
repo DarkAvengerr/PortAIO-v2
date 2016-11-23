@@ -1,8 +1,8 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.UI.Notifications.Designs
 {
-    using global::RethoughtLib.UI.Core.Designs;
+    using Core.Designs;
 
     #region Using Directives
 

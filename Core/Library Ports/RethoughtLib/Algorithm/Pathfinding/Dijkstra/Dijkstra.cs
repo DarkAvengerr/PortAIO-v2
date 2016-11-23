@@ -1,5 +1,23 @@
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:43 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.Algorithm.Pathfinding.Dijkstra
 {
     #region Using Directives
@@ -23,64 +41,6 @@ using EloBuddy;
         #region Fields
 
         public List<T> Base = new List<T>();
-
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="Dijkstra{T,TV}" /> class.
-        /// </summary>
-        /// <param name="tvlist">The list of edges.</param>
-        public Dijkstra(List<TV> tvlist)
-        {
-            try
-            {
-                this.Connections = tvlist;
-
-                foreach (var connection in this.Connections)
-                {
-                    if (!this.Base.Contains(connection.Start))
-                    {
-                        this.Base.Add(connection.Start);
-                    }
-
-                    if (!this.Base.Contains(connection.End))
-                    {
-                        this.Base.Add(connection.End);
-                    }
-                }
-
-                foreach (var point in this.Base.Where(x => !this.Costs.ContainsKey(x)))
-                {
-                    this.Costs.Add(point, float.MaxValue);
-                    this.Previous.Add(point, default(T));
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-        }
-
-        /// <summary>
-        ///     Initializes a new instance of the <see cref="Dijkstra{T,TV}" /> class.
-        /// </summary>
-        /// <param name="tlist">The tlist.</param>
-        /// <param name="tvlist">The tvlist.</param>
-        public Dijkstra(List<T> tlist, List<TV> tvlist)
-            : this(tvlist)
-        {
-            try
-            {
-                this.Base = tlist;
-                this.Connections = tvlist;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-        }
 
         #endregion
 
@@ -137,13 +97,7 @@ using EloBuddy;
         {
             var neighbors = new List<T>();
 
-            foreach (var connection in this.Connections)
-            {
-                if (connection.Start.Equals(point) && this.Base.Contains(point) && this.Base.Contains(connection.End))
-                {
-                    neighbors.Add(connection.End);
-                }
-            }
+            foreach (var connection in this.Connections) if (connection.Start.Equals(point) && this.Base.Contains(point) && this.Base.Contains(connection.End)) neighbors.Add(connection.End);
 
             return neighbors;
         }
@@ -182,7 +136,7 @@ using EloBuddy;
 
             path.Insert(0, node);
 
-            while (this.Previous.ContainsKey(node) && this.Previous[node] != null)
+            while (this.Previous.ContainsKey(node) && (this.Previous[node] != null))
             {
                 node = this.Previous[node];
                 path.Insert(0, node);
@@ -223,6 +177,58 @@ using EloBuddy;
                     }
                     this.Base.Remove(point);
                 }
+            }
+        }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Dijkstra{T,TV}" /> class.
+        /// </summary>
+        /// <param name="tvlist">The list of edges.</param>
+        public Dijkstra(List<TV> tvlist)
+        {
+            try
+            {
+                this.Connections = tvlist;
+
+                foreach (var connection in this.Connections)
+                {
+                    if (!this.Base.Contains(connection.Start)) this.Base.Add(connection.Start);
+
+                    if (!this.Base.Contains(connection.End)) this.Base.Add(connection.End);
+                }
+
+                foreach (var point in this.Base.Where(x => !this.Costs.ContainsKey(x)))
+                {
+                    this.Costs.Add(point, float.MaxValue);
+                    this.Previous.Add(point, default(T));
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Dijkstra{T,TV}" /> class.
+        /// </summary>
+        /// <param name="tlist">The tlist.</param>
+        /// <param name="tvlist">The tvlist.</param>
+        public Dijkstra(List<T> tlist, List<TV> tvlist)
+            : this(tvlist)
+        {
+            try
+            {
+                this.Base = tlist;
+                this.Connections = tvlist;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
 

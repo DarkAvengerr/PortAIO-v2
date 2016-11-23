@@ -1,5 +1,23 @@
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:43 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.Algorithm.Pathfinding.AStar
 {
     #region Using Directives
@@ -37,6 +55,8 @@ using EloBuddy;
 
         #region Constructors and Destructors
 
+        #region Constructors
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="AStar" /> class.
         /// </summary>
@@ -45,6 +65,8 @@ using EloBuddy;
         {
             this.edges = edges;
         }
+
+        #endregion
 
         #endregion
 
@@ -82,6 +104,10 @@ using EloBuddy;
 
         #region Public Methods and Operators
 
+        #region IPathfinder<TNode> Members
+
+        #region Public Methods and Operators
+
         /// <summary>
         ///     Gets the Path from start to end
         /// </summary>
@@ -114,28 +140,23 @@ using EloBuddy;
                 }
 
                 // Foreach Connection
-                foreach (
-                    var edge in
-                        this.edges.Where(
-                            x =>
-                            x.Start == parentNode || x.Start.Equals(parentNode)
+                foreach (var edge in
+                    this.edges.Where(
+                        x =>
+                            (x.Start == parentNode) || x.Start.Equals(parentNode)
                             || x.Start.Position.Equals(parentNode.Position)))
                 {
                     var newNode = edge.End;
 
                     newNode.G = edge.Cost;
 
-                    if (Math.Abs(newNode.G - parentNode.G) < 0.1f)
-                    {
-                        continue;
-                    }
+                    if (Math.Abs(newNode.G - parentNode.G) < 0.1f) continue;
 
                     var iOpen = -1;
 
                     AStarNode resultNodeOpen = null;
 
                     foreach (var queque in this.openNodes.Dictionary.Values)
-                    {
                         foreach (var node in queque.Reverse())
                         {
                             if (node.Position != newNode.Position) continue;
@@ -145,9 +166,8 @@ using EloBuddy;
 
                             break;
                         }
-                    }
 
-                    if (resultNodeOpen != null && iOpen != -1 && resultNodeOpen.G <= newNode.G) continue;
+                    if ((resultNodeOpen != null) && (iOpen != -1) && (resultNodeOpen.G <= newNode.G)) continue;
 
                     var iClosed = -1;
 
@@ -162,8 +182,8 @@ using EloBuddy;
                         break;
                     }
 
-                    if (resultNodeClosed != null
-                        && (this.ReopenCloseNodes || iClosed != -1 && resultNodeClosed.G <= newNode.G)) continue;
+                    if ((resultNodeClosed != null)
+                        && (this.ReopenCloseNodes || ((iClosed != -1) && (resultNodeClosed.G <= newNode.G)))) continue;
 
                     newNode.ParentNode = parentNode;
 
@@ -196,19 +216,19 @@ using EloBuddy;
                 var node = this.closedNodes[i];
                 var parent = fNode.ParentNode;
 
-                if (node == null || parent == null) continue;
+                if ((node == null) || (parent == null)) continue;
 
-                if (Math.Abs(parent.Position.X - node.Position.X) < 0.1f
-                    && Math.Abs(parent.Position.Y - node.Position.Y) < 0.1f
-                    || i == this.closedNodes.Count - 1)
-                {
-                    fNode = this.closedNodes[i];
-                }
+                if (((Math.Abs(parent.Position.X - node.Position.X) < 0.1f)
+                     && (Math.Abs(parent.Position.Y - node.Position.Y) < 0.1f)) || (i == this.closedNodes.Count - 1)) fNode = this.closedNodes[i];
                 else this.closedNodes.RemoveAt(i);
             }
 
             return this.closedNodes;
         }
+
+        #endregion
+
+        #endregion
 
         #endregion
     }

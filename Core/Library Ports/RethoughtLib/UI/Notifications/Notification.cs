@@ -1,19 +1,16 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.UI.Notifications
 {
     #region Using Directives
 
     using LeagueSharp.Common;
-
-    using global::RethoughtLib.Transitions;
-    using global::RethoughtLib.Transitions.Abstract_Base;
-    using global::RethoughtLib.Transitions.Implementations;
-    using global::RethoughtLib.UI.Core;
-    using global::RethoughtLib.UI.Notifications.Designs;
+    using Transitions.Abstract_Base;
+    using Transitions.Implementations;
+    using Core;
+    using Designs;
 
     using SharpDX;
-    using SharpDX.Direct3D9;
 
     #endregion
 

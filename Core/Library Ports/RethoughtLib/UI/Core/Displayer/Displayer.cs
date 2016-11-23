@@ -1,15 +1,13 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.UI.Core.Displayer
 {
     #region Using Directives
 
+    using Design;
+    using SharpDX;
     using System;
     using System.Collections.Generic;
-
-    using global::RethoughtLib.Design;
-
-    using SharpDX;
 
     #endregion
 
@@ -170,8 +168,9 @@ using EloBuddy;
         #region Methods
 
         /// <summary>
-        ///     Gets the position for an element in the dictionary.
+        /// Gets the position for an element in the dictionary.
         /// </summary>
+        /// <param name="element">The element.</param>
         /// <returns></returns>
         protected virtual Vector2 GetPosition(T element)
         {
@@ -191,10 +190,9 @@ using EloBuddy;
         /// <summary>
         ///     Raises the <see cref="E:Add" /> event.
         /// </summary>
-        /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         /// <param name="object">The object.</param>
         /// <exception cref="ArgumentException">ElementsDictionary already contains this element.</exception>
-        protected virtual void OnAdd(EventArgs args, T @object)
+        protected virtual void OnAdd(T @object)
         {
             if (this.ElementsDictionary.ContainsKey(@object))
             {

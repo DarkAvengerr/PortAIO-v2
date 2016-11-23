@@ -1,10 +1,26 @@
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:44 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace RethoughtLib.FeatureSystem.Switches
 {
     #region Using Directives
-
-    using System;
 
     using LeagueSharp.Common;
 
@@ -25,9 +41,13 @@ using EloBuddy;
         /// </summary>
         private readonly Base owner;
 
+        private Base.FeatureBaseEventArgs Cache;
+
         #endregion
 
         #region Constructors and Destructors
+
+        #region Constructors
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="BoolSwitch" /> class.
@@ -42,6 +62,8 @@ using EloBuddy;
             this.Key = key;
             this.owner = owner;
         }
+
+        #endregion
 
         #endregion
 
@@ -63,7 +85,9 @@ using EloBuddy;
         /// </value>
         public char Key { get; set; }
 
-        private Base.FeatureBaseEventArgs Cache;
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         ///     Raises the <see cref="E:OnDisableEvent" /> event.
@@ -115,36 +139,22 @@ using EloBuddy;
             this.Menu.Item(this.owner.Path + "." + this.BoolName).SetValue(keybind);
         }
 
-        #endregion
-
-        #region Public Methods and Operators
-
         /// <summary>
         ///     Setups this instance.
         /// </summary>
         public override void Setup()
         {
-            this.Menu.AddItem(new MenuItem(this.owner.Path + "." + this.BoolName, this.BoolName).SetValue(new KeyBind(this.Key, KeyBindType.Toggle)))
-                .ValueChanged += delegate(object sender, OnValueChangeEventArgs args)
+            this.Menu.AddItem(
+                    new MenuItem(this.owner.Path + "." + this.BoolName, this.BoolName).SetValue(
+                        new KeyBind(this.Key, KeyBindType.Toggle))).ValueChanged +=
+                delegate(object sender, OnValueChangeEventArgs args)
                     {
-                        if (args.GetNewValue<KeyBind>().Active)
-                        {
-                            this.Enable(new Base.FeatureBaseEventArgs(this.owner));
-                        }
-                        else
-                        {
-                            this.Disable(new Base.FeatureBaseEventArgs(this.owner));
-                        }
+                        if (args.GetNewValue<KeyBind>().Active) this.Enable(new Base.FeatureBaseEventArgs(this.owner));
+                        else this.Disable(new Base.FeatureBaseEventArgs(this.owner));
                     };
 
-            if (this.Menu.Item(this.owner.Path +"."+ this.BoolName).GetValue<KeyBind>().Active)
-            {
-                this.Enable(new Base.FeatureBaseEventArgs(this.owner));
-            }
-            else
-            {
-                this.Disable(new Base.FeatureBaseEventArgs(this.owner));
-            }
+            if (this.Menu.Item(this.owner.Path + "." + this.BoolName).GetValue<KeyBind>().Active) this.Enable(new Base.FeatureBaseEventArgs(this.owner));
+            else this.Disable(new Base.FeatureBaseEventArgs(this.owner));
         }
 
         #endregion
