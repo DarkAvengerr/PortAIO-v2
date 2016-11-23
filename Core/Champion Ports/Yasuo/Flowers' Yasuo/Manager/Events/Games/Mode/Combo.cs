@@ -13,7 +13,8 @@ using LeagueSharp.Common;
     {
         internal static void Init()
         {
-            var target = TargetSelector.GetTarget(1200f, TargetSelector.DamageType.Physical);
+            var target = TargetSelector.GetSelectedTarget() ??
+                         TargetSelector.GetTarget(1200f, TargetSelector.DamageType.Physical);
 
             if (target == null)
             {
@@ -112,6 +113,55 @@ using LeagueSharp.Common;
                     if (target.IsValidTarget(Q.Range))
                     {
                         Q.Cast(target, true);
+                    }
+                }
+            }
+
+            if (Me.IsDashing() && Menu.Item("ComboEQFlash", true).GetValue<KeyBind>().Active && Flash != SpellSlot.Unknown &&
+                Flash.IsReady() && SpellManager.HaveQ3 && Q3.IsReady() && R.IsReady())
+            {
+                if (Menu.Item("ComboEQFlashSolo", true).GetValue<bool>() &&
+                    !HeroManager.Enemies.Any(x => x.IsValidTarget(1200) && x.NetworkId != target.NetworkId) &&
+                    !HeroManager.Allies.Any(x => x.IsValidTarget(1200, false) && x.NetworkId != Me.NetworkId))
+                {
+                    if (target.Health + target.HPRegenRate * 2 <
+                        SpellManager.GetQDmg(target) +
+                        (SpellManager.CanCastE(target) ? SpellManager.GetEDmg(target) : 0) +
+                        Me.GetAutoAttackDamage(target) * 2 + R.GetDamage(target) &&
+                        !HeroManager.Enemies.Any(x => x.IsValidTarget(1200) && x.NetworkId != target.NetworkId) &&
+                        !HeroManager.Allies.Any(x => x.IsValidTarget(1200, false) && x.NetworkId != Me.NetworkId))
+                    {
+                        var bestPos = FlashPoints().FirstOrDefault(x => target.Distance(x) <= 220);
+
+                        if (bestPos.IsValid() && bestPos.CountEnemiesInRange(220) > 0 && Q3.Cast(bestPos, true))
+                        {
+                            LeagueSharp.Common.Utility.DelayAction.Add(10 + (Game.Ping / 2 - 5),
+                                               () => Me.Spellbook.CastSpell(Flash, bestPos));
+                        }
+                    }
+                }
+
+                if (Menu.Item("ComboEQFlashTeam", true).GetValue<bool>() &&
+                    HeroManager.Enemies.Count(x => x.IsValidTarget(1200)) >=
+                    Menu.Item("ComboEQFlashTeamCount", true).GetValue<Slider>().Value &&
+                    HeroManager.Allies.Count(x => x.IsValidTarget(1200, false) && x.NetworkId != Me.NetworkId) >=
+                    Menu.Item("ComboEQFlashTeamAlly", true).GetValue<Slider>().Value)
+                {
+                    var bestPos =
+                        FlashPoints()
+                            .Where(
+                                x =>
+                                    HeroManager.Enemies.Count(a => a.IsValidTarget(600f, true, x)) >=
+                                    Menu.Item("ComboEQFlashTeamCount", true).GetValue<Slider>().Value)
+                            .OrderByDescending(x => HeroManager.Enemies.Count(i => i.Distance(x) <= 220))
+                            .FirstOrDefault();
+
+                    if (bestPos.IsValid() &&
+                        bestPos.CountEnemiesInRange(220) >=
+                        Menu.Item("ComboEQFlashTeamCount", true).GetValue<Slider>().Value && Q3.Cast(bestPos, true))
+                    {
+                        LeagueSharp.Common.Utility.DelayAction.Add(10 + (Game.Ping / 2 - 5),
+                                           () => Me.Spellbook.CastSpell(Flash, bestPos));
                     }
                 }
             }

@@ -69,14 +69,24 @@ using LeagueSharp.Common;
                     Drawing.DrawText(MePos[0] + 29, MePos[1] + 45, Color.Orange, "): " + (autoQ.Active ? "On" : "Off"));
                 }
 
+                if (Menu.Item("DrawComboEQStatus", true).GetValue<bool>() && R.Level > 0)
+                {
+                    var comboEQFlash = Menu.Item("ComboEQFlash", true).GetValue<KeyBind>();
+                    var MePos = Drawing.WorldToScreen(Me.Position);
+
+                    Drawing.DrawText(MePos[0] - 100, MePos[1] + 65, Color.Pink,
+                        "Combo EQFlash(" + new string(System.Text.Encoding.Default.GetChars(BitConverter.GetBytes(comboEQFlash.Key))));
+                    Drawing.DrawText(MePos[0] + 29, MePos[1] + 65, Color.Pink, "): " + (comboEQFlash.Active ? "On" : "Off"));
+                }
+
                 if (Menu.Item("DrawRStatus", true).GetValue<bool>() && R.Level > 0)
                 {
                     var comboR = Menu.Item("ComboR", true).GetValue<KeyBind>();
                     var MePos = Drawing.WorldToScreen(Me.Position);
 
-                    Drawing.DrawText(MePos[0] - 50, MePos[1] + 65, Color.PowderBlue,
+                    Drawing.DrawText(MePos[0] - 50, MePos[1] + 85, Color.PowderBlue,
                         "Combo R(" + new string(System.Text.Encoding.Default.GetChars(BitConverter.GetBytes(comboR.Key))));
-                    Drawing.DrawText(MePos[0] + 29, MePos[1] + 65, Color.PowderBlue, "): " + (comboR.Active ? "On" : "Off"));
+                    Drawing.DrawText(MePos[0] + 29, MePos[1] + 85, Color.PowderBlue, "): " + (comboR.Active ? "On" : "Off"));
                 }
             }
         }

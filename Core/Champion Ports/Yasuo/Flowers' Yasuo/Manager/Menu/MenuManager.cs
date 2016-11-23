@@ -46,6 +46,18 @@ using LeagueSharp.Common;
                         new Slider(2, 1, 5)));
                 comboMenu.AddItem(
                     new MenuItem("ComboRAlly", "Use R| When Have Ally In Range", true).SetValue(true));
+                comboMenu.AddItem(
+                    new MenuItem("ComboEQFlash", "Use EQ Flash?", true).SetValue(new KeyBind('E', KeyBindType.Toggle)));
+                comboMenu.AddItem(
+                    new MenuItem("ComboEQFlashSolo", "Use EQ Flash|Solo Mode", true).SetValue(true));
+                comboMenu.AddItem(
+                    new MenuItem("ComboEQFlashTeam", "Use EQ Flash|Team Fight", true).SetValue(true));
+                comboMenu.AddItem(
+                    new MenuItem("ComboEQFlashTeamCount", "Use EQ Flash|Hit Count >= x", true).SetValue(
+                        new Slider(3, 1, 5)));
+                comboMenu.AddItem(
+                    new MenuItem("ComboEQFlashTeamAlly", "Use EQ Flash|Ally Count >= x", true).SetValue(
+                        new Slider(2, 0, 5)));
                 comboMenu.AddItem(new MenuItem("ComboIgnite", "Use Ignite", true).SetValue(true));
                 comboMenu.AddItem(new MenuItem("ComboItems", "Use Items", true).SetValue(true));
             }
@@ -254,11 +266,14 @@ using LeagueSharp.Common;
                 drawMenu.AddItem(new MenuItem("DrawSpots", "Draw WallJump Spots", true).SetValue(true));
                 drawMenu.AddItem(new MenuItem("DrawStackQ", "Draw Stack Q Status", true).SetValue(true));
                 drawMenu.AddItem(new MenuItem("DrawAutoQ", "Draw Auto Q Status", true).SetValue(true));
+                drawMenu.AddItem(new MenuItem("DrawComboEQStatus", "Draw Combo EQ Flash Status", true).SetValue(true));
                 drawMenu.AddItem(new MenuItem("DrawRStatus", "Draw Combo R Status", true).SetValue(true));
                 drawMenu.AddItem(new MenuItem("DrawStackQPerma", "Draw Stack Q PermaShow", true).SetValue(true))
                     .ValueChanged += StackQChanged;
                 drawMenu.AddItem(new MenuItem("DrawAutoQPerma", "Draw Auto Q PermaShow", true).SetValue(true))
                     .ValueChanged += AutoQChanged;
+                drawMenu.AddItem(new MenuItem("DrawComboEQPerma", "Draw Combo EQFlash PermaShow", true).SetValue(true))
+                    .ValueChanged += ComboEQFlashChanged;
                 drawMenu.AddItem(new MenuItem("DrawRStatusPerma", "Draw Combo R PermaShow", true).SetValue(true))
                     .ValueChanged += ComboRChanged;
             }
@@ -278,10 +293,20 @@ using LeagueSharp.Common;
                 Menu.Item("AutoQ", true).Permashow(true, "Auto Q Active", Color.Orange);
             }
 
+            if (Menu.Item("DrawComboEQPerma", true).GetValue<bool>())
+            {
+                Menu.Item("ComboEQFlash", true).Permashow(true, "Combo EQFlash Active", Color.Pink);
+            }
+
             if (Menu.Item("DrawRStatusPerma", true).GetValue<bool>())
             {
                 Menu.Item("ComboR", true).Permashow(true, "Combo R Active", Color.PowderBlue);
             }
+        }
+
+        private static void ComboEQFlashChanged(object obj, OnValueChangeEventArgs Args)
+        {
+            Menu.Item("ComboEQFlash", true).Permashow(Args.GetNewValue<bool>(), "Combo EQFlash Active", Color.Pink);
         }
 
         private static void ComboRChanged(object obj, OnValueChangeEventArgs Args)

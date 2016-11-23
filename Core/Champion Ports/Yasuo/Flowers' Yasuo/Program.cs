@@ -10,10 +10,10 @@ using LeagueSharp.Common;
     {
         public static void Main()
         {
-            Game_OnGameLoad();
+            Game_OnGameLoad(new EventArgs());
         }
 
-        private static void Game_OnGameLoad()
+        private static void Game_OnGameLoad(EventArgs args)
         {
             if (ObjectManager.Player.ChampionName != "Yasuo")
             {

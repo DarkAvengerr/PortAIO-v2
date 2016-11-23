@@ -26,9 +26,8 @@ using LeagueSharp.Common;
                 }
             }
 
-            if (Menu.Item("AutoQ", true).GetValue<KeyBind>().Active &&
-                Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed &&
-                Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && !Me.UnderTurret(true))
+            if (Menu.Item("AutoQ", true).GetValue<KeyBind>().Active && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None &&
+                !Me.UnderTurret(true))
             {
                 if (Menu.Item("AutoQ3", true).GetValue<bool>() && Q3.IsReady() && SpellManager.HaveQ3)
                 {

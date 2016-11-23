@@ -544,9 +544,9 @@ using LeagueSharp.Common;
                 {
                     if (jungleMobs != null)
                     {
-                        if (Me.ServerPosition.Equals(spotD.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Razorbreak"
-                            && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini3.1.2"
-                            && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini3.1.4"
+                        if (Me.ServerPosition.Equals(spotD.To3D()) && jungleMobs.BaseSkinName != "SRU_Razorbreak"
+                            && jungleMobs.BaseSkinName != "SRU_RazorbreakMini3.1.2"
+                            && jungleMobs.BaseSkinName != "SRU_RazorbreakMini3.1.4"
                             && jungleMobs.IsVisible && E.IsReady() && jungleMobs.IsValidTarget(E.Range)
                             && SpellManager.CanCastE(jungleMobs))
                         {
@@ -566,7 +566,7 @@ using LeagueSharp.Common;
                 {
                     if (jungleMobs != null)
                     {
-                        if (Me.ServerPosition.Equals(spotE.To3D()) && jungleMobs.CharData.BaseSkinName == "SRU_KrugMini"
+                        if (Me.ServerPosition.Equals(spotE.To3D()) && jungleMobs.BaseSkinName == "SRU_KrugMini"
                             && jungleMobs.IsVisible && E.IsReady() && jungleMobs.IsValidTarget(E.Range)
                             && SpellManager.CanCastE(jungleMobs))
                         {
@@ -586,8 +586,8 @@ using LeagueSharp.Common;
                 {
                     if (jungleMobs != null)
                     {
-                        if (Me.ServerPosition.Equals(spotG.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Murkwolf"
-                            && jungleMobs.CharData.BaseSkinName != "SRU_MurkwolfMini2.1.3" && jungleMobs.IsVisible
+                        if (Me.ServerPosition.Equals(spotG.To3D()) && jungleMobs.BaseSkinName != "SRU_Murkwolf"
+                            && jungleMobs.BaseSkinName != "SRU_MurkwolfMini2.1.3" && jungleMobs.IsVisible
                             && E.IsReady() && jungleMobs.IsValidTarget(E.Range) && SpellManager.CanCastE(jungleMobs))
                         {
                             E.CastOnUnit(jungleMobs);
@@ -625,8 +625,8 @@ using LeagueSharp.Common;
                 {
                     if (jungleMobs != null)
                     {
-                        if (Me.ServerPosition.Equals(spotI.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Murkwolf"
-                            && jungleMobs.CharData.BaseSkinName != "SRU_MurkwolfMini8.1.3"
+                        if (Me.ServerPosition.Equals(spotI.To3D()) && jungleMobs.BaseSkinName != "SRU_Murkwolf"
+                            && jungleMobs.BaseSkinName != "SRU_MurkwolfMini8.1.3"
                             && jungleMobs.IsVisible && E.IsReady() && jungleMobs.IsValidTarget(E.Range)
                             && SpellManager.CanCastE(jungleMobs))
                         {
@@ -646,8 +646,8 @@ using LeagueSharp.Common;
                 {
                     if (jungleMobs != null)
                     {
-                        if (Me.ServerPosition.Equals(spotJ.To3D()) && jungleMobs.CharData.BaseSkinName != "SRU_Murkwolf"
-                            && jungleMobs.CharData.BaseSkinName != "SRU_MurkwolfMini8.1.2"
+                        if (Me.ServerPosition.Equals(spotJ.To3D()) && jungleMobs.BaseSkinName != "SRU_Murkwolf"
+                            && jungleMobs.BaseSkinName != "SRU_MurkwolfMini8.1.2"
                             && jungleMobs.IsVisible && E.IsReady() && jungleMobs.IsValidTarget(E.Range)
                             && SpellManager.CanCastE(jungleMobs))
                         {
@@ -667,7 +667,7 @@ using LeagueSharp.Common;
                 {
                     if (jungleMobs != null)
                     {
-                        if (Me.ServerPosition.Equals(spotL.To3D()) && jungleMobs.CharData.BaseSkinName == "SRU_KrugMini"
+                        if (Me.ServerPosition.Equals(spotL.To3D()) && jungleMobs.BaseSkinName == "SRU_KrugMini"
                             && jungleMobs.IsVisible && E.IsReady() && jungleMobs.IsValidTarget(E.Range)
                             && SpellManager.CanCastE(jungleMobs))
                         {
@@ -688,9 +688,9 @@ using LeagueSharp.Common;
                     if (jungleMobs != null)
                     {
                         if (Me.ServerPosition.Equals(spotN.To3D())
-                            && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini9.1.2"
-                            && jungleMobs.CharData.BaseSkinName != "SRU_RazorbreakMini9.1.4"
-                            && jungleMobs.CharData.BaseSkinName != "SRU_Razorbreak" && jungleMobs.IsVisible
+                            && jungleMobs.BaseSkinName != "SRU_RazorbreakMini9.1.2"
+                            && jungleMobs.BaseSkinName != "SRU_RazorbreakMini9.1.4"
+                            && jungleMobs.BaseSkinName != "SRU_Razorbreak" && jungleMobs.IsVisible
                             && E.IsReady() && SpellManager.CanCastE(jungleMobs))
                         {
                             E.CastOnUnit(jungleMobs);
