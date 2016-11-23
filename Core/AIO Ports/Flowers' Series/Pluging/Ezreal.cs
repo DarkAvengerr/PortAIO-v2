@@ -116,6 +116,8 @@ using LeagueSharp.Common;
                     stackMenu.AddItem(
                         new MenuItem("AutoStackMana", "When Player ManaPercent >= x%", true).SetValue(new Slider(80)));
                 }
+
+                MiscMenu.AddItem(new MenuItem("PlayMode", "Play Mode: ", true).SetValue(new StringList(new[] {"AD", "AP"})));
             }
 
             var DrawMenu = Menu.AddSubMenu(new Menu("Drawings", "Drawings"));
@@ -274,7 +276,9 @@ using LeagueSharp.Common;
         private void Combo()
         {
             var target = TargetSelector.GetSelectedTarget() ??
-                         TargetSelector.GetTarget(EQ.Range, TargetSelector.DamageType.Physical);
+                         (Menu.Item("PlayMode", true).GetValue<StringList>().SelectedIndex == 0
+                             ? TargetSelector.GetTarget(EQ.Range, TargetSelector.DamageType.Physical)
+                             : TargetSelector.GetTarget(EQ.Range, TargetSelector.DamageType.Magical));
 
             if (CheckTarget(target, EQ.Range))
             {

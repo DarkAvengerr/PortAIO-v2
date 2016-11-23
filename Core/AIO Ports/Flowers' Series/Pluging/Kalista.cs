@@ -604,7 +604,7 @@ using LeagueSharp.Common;
                     ? E.GetDamage(target)
                     : 0d + Menu.Item("EToler", true).GetValue<Slider>().Value - target.HPRegenRate;
 
-                if (target.CharData.BaseSkinName == "Moredkaiser")
+                if (target.BaseSkinName == "Moredkaiser")
                 {
                     damage -= target.Mana;
                 }

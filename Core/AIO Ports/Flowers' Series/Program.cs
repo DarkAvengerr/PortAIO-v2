@@ -35,10 +35,10 @@ using LeagueSharp.Common;
 
         public static void Main()
         {
-            OnGameLoad();
+            OnGameLoad(new EventArgs());
         }
 
-        private static void OnGameLoad()
+        private static void OnGameLoad(EventArgs Args)
         {
             Me = ObjectManager.Player;
 
