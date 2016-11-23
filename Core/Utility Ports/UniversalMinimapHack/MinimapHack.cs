@@ -2,9 +2,11 @@ using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace UniversalMinimapHack
+using EloBuddy;
+using LeagueSharp.Common;
+using System;
+
+namespace UniversalMinimapHack
 {
     public class MinimapHack
     {
@@ -22,8 +24,7 @@ using EloBuddy;
         public void Load()
         {
             Menu = new Menu();
-            foreach (AIHeroClient hero in
-                ObjectManager.Get<AIHeroClient>().Where(hero => hero.Team != ObjectManager.Player.Team))
+            foreach (AIHeroClient hero in EloBuddy.SDK.EntityManager.Heroes.Enemies)
             {
                 _heroTrackers.Add(new HeroTracker(hero, ImageLoader.Load(hero.ChampionName)));
             }

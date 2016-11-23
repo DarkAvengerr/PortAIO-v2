@@ -25,7 +25,7 @@ namespace UniversalMinimapHack
             var image = new Render.Sprite(bmp, new Vector2(0, 0));
             image.GrayScale();
             image.Scale = new Vector2(MinimapHack.Instance().Menu.IconScale, MinimapHack.Instance().Menu.IconScale);
-            image.VisibleCondition = sender => !hero.IsVisible && !hero.IsDead;
+            image.VisibleCondition = sender => !hero.IsHPBarRendered && !hero.IsDead;
             image.PositionUpdate = delegate
             {
                 Vector2 v2 = Drawing.WorldToMinimap(LastLocation);
@@ -43,7 +43,7 @@ namespace UniversalMinimapHack
             {
                 VisibleCondition =
                     sender =>
-                        !hero.IsVisible && !Hero.IsDead && MinimapHack.Instance().Menu.SSTimer && LastSeen > 20f &&
+                        !hero.IsHPBarRendered && !Hero.IsDead && MinimapHack.Instance().Menu.SSTimer && LastSeen > 20f &&
                         MinimapHack.Instance().Menu.SSTimerStart <= Game.Time - LastSeen,
                 PositionUpdate = delegate
                 {
@@ -73,7 +73,7 @@ namespace UniversalMinimapHack
 
         private void Drawing_OnEndScene(EventArgs args)
         {
-            if (!Hero.IsVisible && !Hero.IsDead)
+            if (!Hero.IsHPBarRendered && !Hero.IsDead)
             {
                 float radius = Math.Abs(LastLocation.X - PredictedLocation.X);
                 if (radius < MinimapHack.Instance().Menu.SSCircleSize && MinimapHack.Instance().Menu.SSCircle)
@@ -102,19 +102,19 @@ namespace UniversalMinimapHack
                 LastSeen = Game.Time;
             }
 
-            if (!Hero.IsVisible && RecallStatus != TeleportStatus.Start)
+            if (!Hero.IsHPBarRendered && RecallStatus != TeleportStatus.Start)
             {
                 PredictedLocation = new Vector3(
                     LastLocation.X + ((Game.Time - LastSeen) * Hero.MoveSpeed), LastLocation.Y, LastLocation.Z);
             }
 
-            if (Hero.IsVisible && !Hero.IsDead)
+            if (Hero.IsHPBarRendered && !Hero.IsDead)
             {
                 Pinged = false;
                 LastSeen = Game.Time;
             }
 
-            if (LastSeen > 0f && MinimapHack.Instance().Menu.Ping && !Hero.IsVisible)
+            if (LastSeen > 0f && MinimapHack.Instance().Menu.Ping && !Hero.IsHPBarRendered)
             {
                 if (Game.Time - LastSeen >= MinimapHack.Instance().Menu.MinPing && !Pinged)
                 {
