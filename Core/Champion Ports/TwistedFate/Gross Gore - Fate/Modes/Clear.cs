@@ -18,15 +18,15 @@ using LeagueSharp.Common;
         internal static void Execute()
         {
             var wMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).SData.Mana;
-
             var qMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana;
 
-            if (ObjectManager.Player.ManaPercent < 15)
+            if (ObjectManager.Player.Mana < (wMana*2) + qMana)
             {
                 return;
             }
 
-            var jungle = MinionManager.GetMinions(ObjectManager.Player.Position, ObjectManager.Player.AttackRange + 200, MinionTypes.All, MinionTeam.Neutral)
+            var jungle = MinionManager.GetMinions(ObjectManager.Player.Position,
+                            ObjectManager.Player.AttackRange + 200, MinionTypes.All, MinionTeam.Neutral)
                         .Where(x => x.Team == GameObjectTeam.Neutral)
                         .OrderByDescending(x => x.MaxHealth);
 
@@ -66,33 +66,33 @@ using LeagueSharp.Common;
                             switch (CardSelector.Status)
                             {
                                 case SelectStatus.Ready:
-                                    {
-                                        CardSelector.StartSelecting(Cards.Red);
-                                        return;
-                                    }
+                                {
+                                    CardSelector.StartSelecting(Cards.Red);
+                                    return;
+                                }
                                 case SelectStatus.Selecting:
-                                    {
-                                        CardSelector.JumpToCard(Cards.Red);
-                                        return;
-                                    }
+                                {
+                                    CardSelector.JumpToCard(Cards.Red);
+                                    return;
+                                }
                             }
                         }
                         else
                         {
-                            if (jungle.FirstOrDefault().HealthPercent >= 40 && ObjectManager.Player.HealthPercent < 75)
+                            if (jungle.FirstOrDefault().HealthPercent >= 50 && ObjectManager.Player.HealthPercent < 50)
                             {
                                 switch (CardSelector.Status)
                                 {
                                     case SelectStatus.Ready:
-                                        {
-                                            CardSelector.StartSelecting(Cards.Yellow);
-                                            return;
-                                        }
+                                    {
+                                        CardSelector.StartSelecting(Cards.Yellow);
+                                        return;
+                                    }
                                     case SelectStatus.Selecting:
-                                        {
-                                            CardSelector.JumpToCard(Cards.Yellow);
-                                            return;
-                                        }
+                                    {
+                                        CardSelector.JumpToCard(Cards.Yellow);
+                                        return;
+                                    }
                                 }
                             }
                             else
@@ -111,14 +111,11 @@ using LeagueSharp.Common;
 
             if(Spells._q.IsReadyPerfectly())
             {
-                if ((ObjectManager.Player.ManaPercent - qMana) > wMana)
-                {
-                    var target = jungle.FirstOrDefault(x => x.IsValidTarget(Spells._q.Range));
+                var target = jungle.FirstOrDefault(x => x.IsValidTarget(Spells._q.Range));
 
-                    if (target != null)
-                    {
-                        Spells._q.Cast(target);
-                    }
+                if (target != null)
+                {
+                    Spells._q.Cast(target);
                 }
             }
         }

@@ -21,6 +21,8 @@ using LeagueSharp.Common;
 
         internal static Menu WSHMenu { get; private set; }
 
+        internal static Menu WGCMenu { get; private set; }
+
         internal static Menu WKSMenu { get; private set; }
 
         internal static Menu ExtraMenu { get; private set; }
@@ -61,13 +63,13 @@ using LeagueSharp.Common;
                     new KeyBind("C".ToCharArray()[0], KeyBindType.Press)));
             QAutoMenu = new Menu("Q - Automated", "qauto.menu");
             QAutoMenu.AddItem(new MenuItem("qAuto", "Q - Automated")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
-            QAutoMenu.AddItem(new MenuItem("qAMana", "X min Mana to use Auto Q").SetValue(new Slider(10, 0, 100)));
+            QAutoMenu.AddItem(new MenuItem("qAMana", "Min Mana % to use Auto Q").SetValue(new Slider(10, 0, 100)));
             QAutoMenu.AddItem(new MenuItem("qDashing", "if target is dashing").SetValue(false));
             QAutoMenu.AddItem(new MenuItem("qSlowed", "if target is slowed").SetValue(true));
             QAutoMenu.AddItem(new MenuItem("qImmobile", "if target is immobile").SetValue(true));
             QAutoMenu.AddItem(new MenuItem("qKS", "killsteal").SetValue(true));
-            QMenu.AddItem(new MenuItem("qOptimize", "Fast W->Q Combo")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
-            QMenu.AddItem(new MenuItem("qAfterW", "Predict Gold/Red into Q").SetValue(true));
+            QMenu.AddItem(new MenuItem("qOptimize", "Combo/Mixed Fast W->Q")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
+            QMenu.AddItem(new MenuItem("qAfterW", "Predict Gold-Red into Q").SetValue(true));
             QMenu.AddSubMenu(QKBMenu);
             QMenu.AddSubMenu(QAutoMenu);
             TwistedFateMenu.AddSubMenu(QMenu);
@@ -76,11 +78,10 @@ using LeagueSharp.Common;
             WSHMenu = new Menu("Smart Harass", "smarth.menu");
             WSHMenu.AddItem(new MenuItem("wQuick", "Smart Harass")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
             WSHMenu.AddItem(new MenuItem("wHarass", "Rotate cards").SetValue(true));
-            WSHMenu.AddItem(new MenuItem("wHMana", "X min Mana to Rotate cards").SetValue(new Slider(20, 0, 100)));
-            WSHMenu.AddItem(new MenuItem("wHRange", "Rotate if target in AA range + X").SetValue(new Slider(250, 100, 250)));
+            WSHMenu.AddItem(new MenuItem("wHMana", "Min Mana % to Rotate cards").SetValue(new Slider(20, 0, 100)));
             WSHMenu.AddItem(
                 new MenuItem("rotate.prioritize", "Prioritizer").SetValue(
-                    new StringList(new[] { "Disabled", "BLUE > GOLD > RED", "RED > BLUE > GOLD", "GOLD > BLUE > RED", "GOLD > RED > BLUE", "RED > GOLD > BLUE" })));
+                    new StringList(new[] { "Smart", "BLUE > GOLD > RED", "RED > BLUE > GOLD", "GOLD > BLUE > RED", "GOLD > RED > BLUE", "RED > GOLD > BLUE" })));
             WKSMenu = new Menu("Kortatu's Cards Selector", "kcards.menu");
             WKSMenu.AddItem(new MenuItem("wSelector", "Koratu's Cards Selector")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
             WKSMenu.AddItem(
@@ -90,15 +91,31 @@ using LeagueSharp.Common;
                     new KeyBind("U".ToCharArray()[0], KeyBindType.Press)));
             WKSMenu.AddItem(
                 new MenuItem("csRed", "RED").SetValue(new KeyBind("I".ToCharArray()[0], KeyBindType.Press)));
-            WMenu.AddItem(new MenuItem("wMiscs", "Miscs")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
-            WMenu.AddItem(new MenuItem("wCGold", "Always pick GOLD in Combo").SetValue(true));
+            WGCMenu = new Menu("Gold Card", "gold.menu");
+            WGCMenu.AddItem(new MenuItem("wmenu.menu.goldtitle", "Gold Card")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
+            WGCMenu.AddItem(new MenuItem("wCGold", "Always: Spacebar").SetValue(true));
+            WGCMenu.AddItem(new MenuItem("goldInter", "Interrupter").SetValue(true));
+            WGCMenu.AddItem(new MenuItem("goldGap", "Anti-GapCloser").SetValue(true));  
             WMenu.AddSubMenu(WSHMenu);
             WMenu.AddSubMenu(WKSMenu);
+            WMenu.AddSubMenu(WGCMenu);
             TwistedFateMenu.AddSubMenu(WMenu);
 
-            ExtraMenu = new Menu("More+", "extraMenu");
-            ExtraMenu.AddItem(new MenuItem("goldInter", "Interrupter").SetValue(true));
-            ExtraMenu.AddItem(new MenuItem("goldGap", "Anti-GapCloser").SetValue(true));
+            ExtraMenu = new Menu("Settings", "extraMenu");
+            ExtraMenu.AddItem(new MenuItem("extra.menu.warning", "Recommended: Default")).SetFontStyle(FontStyle.Bold, SharpDX.Color.OrangeRed);
+            ExtraMenu.AddItem(new MenuItem("extra.menu.harass", "Harass [Rotate]")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
+            ExtraMenu.AddItem(new MenuItem("wHRange", "Extra AA Range to start W").SetValue(new Slider(250, 100, 300)));
+            ExtraMenu.AddItem(new MenuItem("wHLock", "Extra AA Range to lock card").SetValue(new Slider(100, 0, 200)));
+            ExtraMenu.AddItem(new MenuItem("extra.menu.pred", "Prediction [OKTW]")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
+            ExtraMenu.AddItem(
+                new MenuItem("extra.menu.pred.semiq", "Semi-Auto Q").SetValue(
+                    new StringList(new[] { "VeryHigh", "High", "Medium" })));
+            ExtraMenu.AddItem(
+               new MenuItem("extra.menu.pred.autoq", "Automated Q").SetValue(
+                   new StringList(new[] { "High", "VeryHigh", "Medium" })));
+            ExtraMenu.AddItem(
+               new MenuItem("extra.menu.pred.wqc", "Fast W->Q").SetValue(
+                   new StringList(new[] { "VeryHigh", "High", "Medium" })));
             TwistedFateMenu.AddSubMenu(ExtraMenu);
 
             DrawMenu = new Menu("Drawings", "drawings");
@@ -183,6 +200,8 @@ using LeagueSharp.Common;
 
         internal static int RotateRange { get { return TwistedFateMenu.Item("wHRange").GetValue<Slider>().Value; } }
 
+        internal static int RotateLock { get { return TwistedFateMenu.Item("wHLock").GetValue<Slider>().Value; } }
+
         internal static int RotateMana { get { return TwistedFateMenu.Item("wHMana").GetValue<Slider>().Value; } }
 
         internal static bool UseGoldCombo { get { return IsChecked("wCGold"); } }
@@ -200,6 +219,12 @@ using LeagueSharp.Common;
         internal static bool PredictQ { get { return IsChecked("qAfterW"); } }
 
         internal static int Prioritize { get { return TwistedFateMenu.Item("rotate.prioritize").GetValue<StringList>().SelectedIndex; } }
+
+        internal static int PredSemiQ { get { return TwistedFateMenu.Item("extra.menu.pred.semiq").GetValue<StringList>().SelectedIndex; } }
+
+        internal static int PredAutoQ { get { return TwistedFateMenu.Item("extra.menu.pred.autoq").GetValue<StringList>().SelectedIndex; } }
+
+        internal static int PredFastQW { get { return TwistedFateMenu.Item("extra.menu.pred.wqc").GetValue<StringList>().SelectedIndex; } }
 
         #endregion
 

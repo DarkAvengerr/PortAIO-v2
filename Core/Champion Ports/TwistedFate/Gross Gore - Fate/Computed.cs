@@ -152,23 +152,22 @@ using LeagueSharp.Common;
                 {
                     if(!HeroManager.Enemies.Contains(args.Target))
                     {
-                        var targetDis = TargetSelector.GetTarget(Spells._q.Range, Spells._q.DamageType);
-
-                        if (targetDis.IsValidTarget(Spells._q.Range))
+                        foreach (var enemy in HeroManager.Enemies)
                         {
-                            if(!targetDis.IsZombie)
+                            if (!enemy.IsDead && enemy != null && !enemy.IsZombie)
                             {
-                                if((ObjectManager.Player.Distance(targetDis) <= Orbwalking.GetAttackRange(ObjectManager.Player) + 150))
+                                if (enemy.IsValidTarget(Spells._q.Range))
                                 {
-                                    args.Process = false;
-
-                                    var target = TargetSelector.GetTarget(Orbwalking.GetRealAutoAttackRange(ObjectManager.Player), Spells._w.DamageType);
-
-                                    if(target.IsValidTarget(Spells._w.Range))
+                                    if((ObjectManager.Player.Distance(enemy) <= Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 125))
                                     {
-                                        if(!target.IsZombie)
+                                        args.Process = false;
+
+                                        if(Orbwalking.InAutoAttackRange(enemy))
                                         {
-                                            EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, target);
+                                            if (Orbwalking.CanAttack())
+                                            {
+                                                EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, enemy);
+                                            }
                                         }
                                     }
                                 }
@@ -238,7 +237,27 @@ using LeagueSharp.Common;
                                     {
                                         if (enemy.IsValidTarget(Spells._q.Range / 2))
                                         {
-                                            Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
+                                            switch (Config.PredFastQW)
+                                            {
+                                                //VeryHigh
+                                                case 0:
+                                                {
+                                                    Pred.CastSebbyPredict(Spells._q, enemy, HitChance.VeryHigh);
+                                                    return;
+                                                }
+                                                //High
+                                                case 1:
+                                                {
+                                                    Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
+                                                    return;
+                                                }
+                                                //Medium
+                                                case 2:
+                                                {
+                                                    Pred.CastSebbyPredict(Spells._q, enemy, HitChance.Medium);
+                                                    return;
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -270,11 +289,31 @@ using LeagueSharp.Common;
                             {
                                 if (!enemy.IsDead && enemy != null)
                                 {
-                                    if(!enemy.IsKillableAndValidTarget(Spells._w.GetDamage(enemy), Spells._w.DamageType, Spells._q.Range))
+                                    if (!enemy.IsKillableAndValidTarget(Spells._w.GetDamage(enemy), Spells._w.DamageType, Spells._q.Range))
                                     {
                                         if (enemy.IsValidTarget(Spells._q.Range / 2))
                                         {
-                                            Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
+                                            switch (Config.PredFastQW)
+                                            {
+                                                //VeryHigh
+                                                case 0:
+                                                {
+                                                    Pred.CastSebbyPredict(Spells._q, enemy, HitChance.VeryHigh);
+                                                    return;
+                                                }
+                                                //High
+                                                case 1:
+                                                {
+                                                    Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
+                                                    return;
+                                                }
+                                                //Medium
+                                                case 2:
+                                                {
+                                                    Pred.CastSebbyPredict(Spells._q, enemy, HitChance.Medium);
+                                                    return;
+                                                }
+                                            }
                                         }
                                     }
                                 }
